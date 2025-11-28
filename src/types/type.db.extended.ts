@@ -133,6 +133,16 @@ type ViewExtensions = {
       id: number;
       name: string;
     }[];
+    number_of_seasons: number;
+    number_of_episodes: number;
+    in_production: boolean;
+    original_language: string;
+    original_name: string;
+    status: string;
+    type: string;
+    popularity: number;
+    vote_average: number;
+    vote_count: number;
   };
   media_tv_series_aggregate_credits: {
     tv_series: Database['public']['Views']['media_tv_series']['Row'];
