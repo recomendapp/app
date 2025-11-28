@@ -44,9 +44,10 @@ export class PlaylistsSearchController {
   ): Promise<SearchPlaylistsResponseDto> {
     const userId = req?.user?.sub;
 
-    return this.playlistsSearchService.search({
+    const result = await this.playlistsSearchService.search({
       ...query,
       userId,
     });
+    return new SearchPlaylistsResponseDto(result);
   }
 }

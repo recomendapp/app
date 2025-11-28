@@ -37,6 +37,7 @@ export class UsersSearchController {
   async search(
     @Query() query: SearchUsersQueryDto,
   ): Promise<SearchUsersResponseDto> {
-    return this.usersSearchService.search(query);
+    const result = await this.usersSearchService.search(query);
+    return new SearchUsersResponseDto(result);
   }
 }

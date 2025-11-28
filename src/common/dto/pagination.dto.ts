@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Exclude, Expose, Type } from 'class-transformer';
 import { IsInt, IsOptional, Max, Min } from 'class-validator';
 
 export class PaginationQueryDto {
@@ -32,22 +32,34 @@ export class PaginationQueryDto {
 
 export class PaginationMetaDto {
   @ApiProperty()
+  @Expose()
   total_results: number;
 
   @ApiProperty()
+  @Expose()
   total_pages: number;
 
   @ApiProperty()
+  @Expose()
   current_page: number;
 
   @ApiProperty()
+  @Expose()
   per_page: number;
 }
 
+@Exclude()
 export class PaginatedResponseDto<T> {
   @ApiProperty({ isArray: true })
+  @Expose()
   data: T[];
 
   @ApiProperty({ type: PaginationMetaDto })
+  @Expose()
+  @Type(() => PaginationMetaDto)
   pagination: PaginationMetaDto;
+
+  constructor(partial: Partial<PaginatedResponseDto<T>>) {
+    Object.assign(this, partial);
+  }
 }
