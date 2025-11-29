@@ -85,13 +85,13 @@ export class TvSeriesSearchService {
     if (first_air_date_min && first_air_date_max) {
       const minDate = new Date(first_air_date_min).getTime() / 1000;
       const maxDate = new Date(first_air_date_max).getTime() / 1000;
-      filters.push(`first_air_date_timestamp:[${minDate}..${maxDate}]`);
+      filters.push(`first_air_date:[${minDate}..${maxDate}]`);
     } else if (first_air_date_min) {
       const minDate = new Date(first_air_date_min).getTime() / 1000;
-      filters.push(`first_air_date_timestamp:>=${minDate}`);
+      filters.push(`first_air_date:>=${minDate}`);
     } else if (first_air_date_max) {
       const maxDate = new Date(first_air_date_max).getTime() / 1000;
-      filters.push(`first_air_date_timestamp:<=${maxDate}`);
+      filters.push(`first_air_date:<=${maxDate}`);
     }
 
     if (filters.length > 0) {

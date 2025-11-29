@@ -61,13 +61,13 @@ export class MoviesSearchService {
     if (release_date_min && release_date_max) {
       const minDate = new Date(release_date_min).getTime() / 1000;
       const maxDate = new Date(release_date_max).getTime() / 1000;
-      filters.push(`release_date_timestamp:[${minDate}..${maxDate}]`);
+      filters.push(`release_date:[${minDate}..${maxDate}]`);
     } else if (release_date_min) {
       const minDate = new Date(release_date_min).getTime() / 1000;
-      filters.push(`release_date_timestamp:>=${minDate}`);
+      filters.push(`release_date:>=${minDate}`);
     } else if (release_date_max) {
       const maxDate = new Date(release_date_max).getTime() / 1000;
-      filters.push(`release_date_timestamp:<=${maxDate}`);
+      filters.push(`release_date:<=${maxDate}`);
     }
 
     if (filters.length > 0) {
