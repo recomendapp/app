@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { HelloWorldModule } from './hello-world/hello-world.module';
 import { AuthModule } from './auth/auth.module';
 import { SearchModule } from './search/search.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
-  imports: [HelloWorldModule, AuthModule, SearchModule],
+  imports: [HealthModule, AuthModule, SearchModule],
   controllers: [],
   providers: [],
 })
