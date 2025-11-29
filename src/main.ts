@@ -43,6 +43,16 @@ async function bootstrap() {
     .setTitle('Recomend API')
     .setDescription('The API documentation for the Recomend application')
     .setVersion('1.0')
+    .addGlobalParameters({
+      in: 'header',
+      name: 'language',
+      description: 'The language for the response. Defaults to "en-US".',
+      required: false,
+      schema: {
+        type: 'string',
+        default: 'en-US',
+      },
+    })
     .addBearerAuth(
       {
         type: 'http',
