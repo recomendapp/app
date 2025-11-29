@@ -19,6 +19,20 @@ type PostgresFunctions = PostgresSchema['public']['Functions'];
 
 // THIS IS THE ONLY THING YOU EDIT
 // <START>
+
+// FIX: To automatically fix nullability issues in views,
+// map your views to their underlying base tables.
+// The key is the view name, and the value is the Row type of the source table.
+// You can use intersections for views based on multiple tables.
+// Example:
+// my_view: PostgresTables['table1']['Row'] & PostgresTables['table2']['Row'];
+type ViewToTableMapping = {
+  profile: PostgresTables['user']['Row'];
+  media_movie: PostgresTables['tmdb_movie']['Row'];
+  media_tv_series: PostgresTables['tmdb_tv_series']['Row'];
+  media_person: PostgresTables['tmdb_person']['Row'];
+};
+
 type TableExtensions = {
   /**
   my_existing_table_name: {
@@ -48,20 +62,11 @@ type ViewExtensions = {
   };
   **/
   profile: {
-    id: string;
-    username: string;
-    full_name: string;
-    followers_count: number;
-    following_count: number;
-    premium: boolean;
-    private: boolean;
     visible: boolean;
-    created_at: string;
   };
 
   /* ------------------------------- ACTIVITIES ------------------------------- */
   user_activities: {
-    id: number;
     type: Database['public']['Enums']['user_activity_type'];
     media:
       | Database['public']['Views']['media_movie']['Row']
@@ -75,7 +80,6 @@ type ViewExtensions = {
   /* -------------------------------------------------------------------------- */
   /* ------------------------------- WATCHLISTS ------------------------------- */
   user_watchlists: {
-    id: number;
     type: Database['public']['Enums']['user_watchlist_type'];
     media:
       | Database['public']['Views']['media_movie']['Row']
@@ -111,7 +115,6 @@ type ViewExtensions = {
   /* -------------------------------------------------------------------------- */
   /* ---------------------------------- MEDIA --------------------------------- */
   media_movie: {
-    id: number;
     directors?: Database['public']['Views']['media_person']['Row'][];
     genres?: {
       id: number;
@@ -127,22 +130,11 @@ type ViewExtensions = {
     }[];
   };
   media_tv_series: {
-    id: number;
     created_by?: Database['public']['Views']['media_person']['Row'][];
     genres?: {
       id: number;
       name: string;
     }[];
-    number_of_seasons: number;
-    number_of_episodes: number;
-    in_production: boolean;
-    original_language: string;
-    original_name: string;
-    status: string;
-    type: string;
-    popularity: number;
-    vote_average: number;
-    vote_count: number;
   };
   media_tv_series_aggregate_credits: {
     tv_series: Database['public']['Views']['media_tv_series']['Row'];
@@ -155,13 +147,6 @@ type ViewExtensions = {
       season_id: number;
       season_number: number;
     }[];
-  };
-  media_person: {
-    id: number;
-  };
-  media_genre: {
-    id: number;
-    name: string;
   };
   /* -------------------------------------------------------------------------- */
 
@@ -284,6 +269,24 @@ type FunctionExtensions = {
 // <END>
 // ☝️ this is the only thing you edit
 
+// Helper to correct view nullability based on table schema
+type CorrectedView<Table, View> = View extends object
+  ? {
+      [K in keyof View]: K extends keyof Table ? Table[K] : View[K];
+    }
+  : View;
+
+// Corrected views with types inferred from tables in ViewToTableMapping
+type CorrectedPostgresViews = {
+  [K in keyof PostgresViews]: {
+    Row: CorrectedView<
+      K extends keyof ViewToTableMapping ? ViewToTableMapping[K] : object,
+      PostgresViews[K]['Row']
+    >;
+    Relationships: PostgresViews[K]['Relationships'];
+  };
+};
+
 type TakeDefinitionFromSecond<T extends object, P extends object> = Omit<
   T,
   keyof P
@@ -314,11 +317,14 @@ type NewTables = {
 };
 
 type NewViews = {
-  [k in keyof PostgresViews]: {
+  [k in keyof CorrectedPostgresViews]: {
     Row: k extends keyof ViewExtensions
-      ? TakeDefinitionFromSecond<PostgresViews[k]['Row'], ViewExtensions[k]>
-      : PostgresViews[k]['Row'];
-    Relationships: PostgresViews[k]['Relationships'];
+      ? TakeDefinitionFromSecond<
+          CorrectedPostgresViews[k]['Row'],
+          ViewExtensions[k]
+        >
+      : CorrectedPostgresViews[k]['Row'];
+    Relationships: CorrectedPostgresViews[k]['Relationships'];
   };
 };
 

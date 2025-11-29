@@ -91,13 +91,15 @@ export class TvSeriesDto {
 
   @ApiProperty({ description: 'Number of seasons in the TV series' })
   @Expose()
+  @IsOptional()
   @IsInt()
-  number_of_seasons: number;
+  number_of_seasons?: number | null;
 
   @ApiProperty({ description: 'Number of episodes in the TV series' })
   @Expose()
+  @IsOptional()
   @IsInt()
-  number_of_episodes: number;
+  number_of_episodes?: number | null;
 
   @ApiProperty({ description: 'Is it in production?' })
   @Expose()
@@ -105,23 +107,27 @@ export class TvSeriesDto {
 
   @ApiProperty({ description: 'Original language of the TV series' })
   @Expose()
+  @IsOptional()
   @IsString()
-  original_language: string;
+  original_language?: string | null;
 
   @ApiProperty({ description: 'Original name of the TV series' })
   @Expose()
+  @IsOptional()
   @IsString()
-  original_name: string;
+  original_name?: string | null;
 
   @ApiProperty({ description: 'Status of the TV series' })
   @Expose()
+  @IsOptional()
   @IsString()
-  status: string;
+  status?: string | null;
 
   @ApiProperty({ description: 'Type of the TV series' })
   @Expose()
+  @IsOptional()
   @IsString()
-  type: string;
+  type?: string | null;
 
   @ApiProperty({ description: 'Popularity score of the TV series' })
   @Expose()
