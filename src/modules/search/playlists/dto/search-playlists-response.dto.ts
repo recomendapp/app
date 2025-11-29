@@ -1,15 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Type } from 'class-transformer';
 import { PaginatedResponseDto } from 'src/common/dto/pagination.dto';
-import { PlaylistDto } from 'src/common/dto/playlist.dto';
+import { Playlist } from 'src/common/dto/playlist.dto';
 
 @Exclude()
-export class SearchPlaylistsResponseDto extends PaginatedResponseDto<PlaylistDto> {
-  @ApiProperty({ type: [PlaylistDto] })
-  @Type(() => PlaylistDto)
-  declare data: PlaylistDto[];
+export class SearchPlaylistsResponse extends PaginatedResponseDto<Playlist> {
+  @ApiProperty({ type: [Playlist] })
+  @Type(() => Playlist)
+  declare data: Playlist[];
 
-  constructor(partial: Partial<SearchPlaylistsResponseDto>) {
+  constructor(partial: Partial<SearchPlaylistsResponse>) {
     super(partial);
     Object.assign(this, partial);
   }

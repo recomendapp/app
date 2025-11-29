@@ -9,11 +9,11 @@ import {
   IsArray,
   IsDateString,
 } from 'class-validator';
-import { GenreDto } from './genre.dto';
-import { PersonDto } from './person.dto';
+import { Genre } from './genre.dto';
+import { Person } from './person.dto';
 
 @Exclude()
-export class MovieDto {
+export class Movie {
   @ApiProperty({
     description: "The movie's unique identifier",
     example: 157336,
@@ -70,26 +70,26 @@ export class MovieDto {
   backdrop_url?: string | null;
 
   @ApiProperty({
-    type: () => PersonDto,
+    type: () => Person,
     isArray: true,
     description: 'Directors of the movie',
   })
   @Expose()
   @IsOptional()
   @IsArray()
-  @Type(() => PersonDto)
-  directors?: PersonDto[];
+  @Type(() => Person)
+  directors?: Person[];
 
   @ApiProperty({
-    type: () => GenreDto,
+    type: () => Genre,
     isArray: true,
     description: 'Genres of the movie',
   })
   @Expose()
   @IsOptional()
   @IsArray()
-  @Type(() => GenreDto)
-  genres?: GenreDto[];
+  @Type(() => Genre)
+  genres?: Genre[];
 
   @ApiProperty({
     description: 'Release date of the movie',

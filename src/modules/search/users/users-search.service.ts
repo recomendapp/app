@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { TypedSupabaseClient } from 'src/common/supabase/typed-supabase-client';
 import { TYPESENSE_CLIENT } from 'src/common/typesense/typesense.module';
 import { Client as TypesenseClient } from 'typesense';
-import { SearchUsersResponseDto } from './dto/search-users-response.dto';
+import { SearchUsersResponse } from './dto/search-users-response.dto';
 import { SearchUsersQueryDto } from './dto/search-users-query.dto';
 import { SearchParams } from 'typesense/lib/Typesense/Types';
 
@@ -18,7 +18,7 @@ export class UsersSearchService {
     page = 1,
     per_page = 10,
     exclude_ids,
-  }: SearchUsersQueryDto): Promise<SearchUsersResponseDto> {
+  }: SearchUsersQueryDto): Promise<SearchUsersResponse> {
     const searchParameters: SearchParams<{ id: string }> = {
       q: query,
       query_by: 'username,full_name',

@@ -12,12 +12,12 @@ import {
   IsUrl,
 } from 'class-validator';
 import { Exclude, Expose, Type } from 'class-transformer';
-import { ProfileDto } from './profile.dto';
+import { Profile } from './profile.dto';
 
 export type PlaylistType = 'movie' | 'tv_series';
 
 @Exclude()
-export class PlaylistDto {
+export class Playlist {
   @ApiProperty({
     description: 'The unique identifier of the playlist',
     example: 461,
@@ -131,9 +131,9 @@ export class PlaylistDto {
   @IsNotEmpty()
   type: PlaylistType;
 
-  @ApiProperty({ type: () => ProfileDto, description: 'The user object' })
+  @ApiProperty({ type: () => Profile, description: 'The user object' })
   @Expose()
   @ValidateNested()
-  @Type(() => ProfileDto)
-  user: ProfileDto;
+  @Type(() => Profile)
+  user: Profile;
 }

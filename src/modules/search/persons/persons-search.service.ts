@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { TypedSupabaseClient } from 'src/common/supabase/typed-supabase-client';
 import { TYPESENSE_CLIENT } from 'src/common/typesense/typesense.module';
 import { Client as TypesenseClient } from 'typesense';
-import { SearchPersonsResponseDto } from './dto/search-persons-response.dto';
+import { SearchPersonsResponse } from './dto/search-persons-response.dto';
 import { SearchPersonsQueryDto } from './dto/search-persons-query.dto';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class PersonsSearchService {
     page = 1,
     per_page = 10,
     sort_by = 'popularity',
-  }: SearchPersonsQueryDto): Promise<SearchPersonsResponseDto> {
+  }: SearchPersonsQueryDto): Promise<SearchPersonsResponse> {
     const sortOrder = `${sort_by}:desc`;
 
     const searchParameters = {

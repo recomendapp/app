@@ -1,23 +1,18 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Exclude, Expose, Type } from 'class-transformer';
-import { MovieDto } from 'src/common/dto/movie.dto';
-import { PersonDto } from 'src/common/dto/person.dto';
-import { PlaylistDto } from 'src/common/dto/playlist.dto';
-import { ProfileDto } from 'src/common/dto/profile.dto';
-import { TvSeriesDto } from 'src/common/dto/tv-series.dto';
-import { SearchMoviesResponseDto } from '../../movies/dto/search-movies-response.dto';
-import { SearchTvSeriesResponseDto } from '../../tv-series/dto/search-tv-series-response.dto';
-import { SearchPersonsResponseDto } from '../../persons/dto/search-persons-response.dto';
-import { SearchUsersResponseDto } from '../../users/dto/search-users-response.dto';
-import { SearchPlaylistsResponseDto } from '../../playlists/dto/search-playlists-response.dto';
+import { Movie } from 'src/common/dto/movie.dto';
+import { Person } from 'src/common/dto/person.dto';
+import { Playlist } from 'src/common/dto/playlist.dto';
+import { Profile } from 'src/common/dto/profile.dto';
+import { TvSeries } from 'src/common/dto/tv-series.dto';
+import { SearchMoviesResponse } from '../../movies/dto/search-movies-response.dto';
+import { SearchTvSeriesResponse } from '../../tv-series/dto/search-tv-series-response.dto';
+import { SearchPersonsResponse } from '../../persons/dto/search-persons-response.dto';
+import { SearchUsersResponse } from '../../users/dto/search-users-response.dto';
+import { SearchPlaylistsResponse } from '../../playlists/dto/search-playlists-response.dto';
 
 // Define a union type for the data in BestResultItem for documentation purposes
-type BestResultItemDataType =
-  | MovieDto
-  | TvSeriesDto
-  | PersonDto
-  | ProfileDto
-  | PlaylistDto;
+type BestResultItemDataType = Movie | TvSeries | Person | Profile | Playlist;
 
 // DTO for a single best result item (e.g., movie, TV series, etc.)
 @Exclude()
@@ -31,24 +26,24 @@ export class BestResultItem {
 
   @ApiProperty({
     oneOf: [
-      { $ref: '#/components/schemas/MovieDto' },
-      { $ref: '#/components/schemas/TvSeriesDto' },
-      { $ref: '#/components/schemas/PersonDto' },
-      { $ref: '#/components/schemas/ProfileDto' },
-      { $ref: '#/components/schemas/PlaylistDto' },
+      { $ref: '#/components/schemas/Movie' },
+      { $ref: '#/components/schemas/TvSeries' },
+      { $ref: '#/components/schemas/Person' },
+      { $ref: '#/components/schemas/Profile' },
+      { $ref: '#/components/schemas/Playlist' },
     ],
     description:
       'The data for the best result item. The actual schema depends on the `type` field.',
   })
   @Expose()
   // No @Type decorator is needed here for serialization if the `data` property
-  // is already an instance of the correct DTO class (e.g., MovieDto, PersonDto).
+  // is already an instance of the correct DTO class (e.g., Movie, Person).
   // The ClassSerializerInterceptor will handle it correctly.
   data: BestResultItemDataType;
 }
 
 @Exclude()
-export class BestResultSearchResponseDto {
+export class SearchBestResultResponse {
   @ApiPropertyOptional({
     type: BestResultItem,
     description:
@@ -59,62 +54,62 @@ export class BestResultSearchResponseDto {
   bestResult?: BestResultItem | null;
 
   @ApiProperty({
-    type: SearchMoviesResponseDto,
+    type: SearchMoviesResponse,
     description: 'Paginated movie search results',
   })
   @Expose()
-  @Type(() => SearchMoviesResponseDto)
-  declare movies: SearchMoviesResponseDto;
+  @Type(() => SearchMoviesResponse)
+  declare movies: SearchMoviesResponse;
 
   @ApiProperty({
-    type: SearchTvSeriesResponseDto,
+    type: SearchTvSeriesResponse,
     description: 'Paginated TV series search results',
   })
   @Expose()
-  @Type(() => SearchTvSeriesResponseDto)
-  declare tv_series: SearchTvSeriesResponseDto;
+  @Type(() => SearchTvSeriesResponse)
+  declare tv_series: SearchTvSeriesResponse;
 
   @ApiProperty({
-    type: SearchPersonsResponseDto,
+    type: SearchPersonsResponse,
     description: 'Paginated person search results',
   })
   @Expose()
-  @Type(() => SearchPersonsResponseDto)
-  declare persons: SearchPersonsResponseDto;
+  @Type(() => SearchPersonsResponse)
+  declare persons: SearchPersonsResponse;
 
   @ApiProperty({
-    type: SearchUsersResponseDto,
+    type: SearchUsersResponse,
     description: 'Paginated user search results',
   })
   @Expose()
-  @Type(() => SearchUsersResponseDto)
-  declare users: SearchUsersResponseDto;
+  @Type(() => SearchUsersResponse)
+  declare users: SearchUsersResponse;
 
   @ApiProperty({
-    type: SearchPlaylistsResponseDto,
+    type: SearchPlaylistsResponse,
     description: 'Paginated playlist search results',
   })
   @Expose()
-  @Type(() => SearchPlaylistsResponseDto)
-  declare playlists: SearchPlaylistsResponseDto;
+  @Type(() => SearchPlaylistsResponse)
+  declare playlists: SearchPlaylistsResponse;
 
-  constructor(partial: Partial<BestResultSearchResponseDto>) {
+  constructor(partial: Partial<SearchBestResultResponse>) {
     // This constructor will now correctly instantiate the nested DTOs
     // if the partial object contains plain objects for them.
     if (partial.movies) {
-      this.movies = new SearchMoviesResponseDto(partial.movies);
+      this.movies = new SearchMoviesResponse(partial.movies);
     }
     if (partial.tv_series) {
-      this.tv_series = new SearchTvSeriesResponseDto(partial.tv_series);
+      this.tv_series = new SearchTvSeriesResponse(partial.tv_series);
     }
     if (partial.persons) {
-      this.persons = new SearchPersonsResponseDto(partial.persons);
+      this.persons = new SearchPersonsResponse(partial.persons);
     }
     if (partial.users) {
-      this.users = new SearchUsersResponseDto(partial.users);
+      this.users = new SearchUsersResponse(partial.users);
     }
     if (partial.playlists) {
-      this.playlists = new SearchPlaylistsResponseDto(partial.playlists);
+      this.playlists = new SearchPlaylistsResponse(partial.playlists);
     }
     if (partial.bestResult) {
       this.bestResult = partial.bestResult;

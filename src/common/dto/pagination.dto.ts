@@ -30,7 +30,7 @@ export class PaginationQueryDto {
   per_page?: number = 10;
 }
 
-export class PaginationMetaDto {
+export class PaginationMeta {
   @ApiProperty()
   @Expose()
   total_results: number;
@@ -54,10 +54,10 @@ export class PaginatedResponseDto<T> {
   @Expose()
   data: T[];
 
-  @ApiProperty({ type: PaginationMetaDto })
+  @ApiProperty({ type: PaginationMeta })
   @Expose()
-  @Type(() => PaginationMetaDto)
-  pagination: PaginationMetaDto;
+  @Type(() => PaginationMeta)
+  pagination: PaginationMeta;
 
   constructor(partial: Partial<PaginatedResponseDto<T>>) {
     Object.assign(this, partial);

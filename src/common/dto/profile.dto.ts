@@ -13,7 +13,7 @@ import {
 } from 'class-validator';
 
 @Exclude()
-export class ProfileDto {
+export class Profile {
   @ApiProperty({
     description: "The user's unique identifier",
     example: 'f022c2ec-f97c-4c20-888c-afd801b4b1d4',

@@ -8,7 +8,7 @@ import {
 } from '@nestjs/swagger';
 import { UsersSearchService } from './users-search.service';
 import { SearchUsersQueryDto } from './dto/search-users-query.dto';
-import { SearchUsersResponseDto } from './dto/search-users-response.dto';
+import { SearchUsersResponse } from './dto/search-users-response.dto';
 
 @ApiTags('Search')
 @Controller({
@@ -28,7 +28,7 @@ export class UsersSearchController {
   @ApiResponse({
     status: 200,
     description: 'Users found successfully',
-    type: SearchUsersResponseDto,
+    type: SearchUsersResponse,
   })
   @ApiResponse({
     status: 400,
@@ -36,8 +36,8 @@ export class UsersSearchController {
   })
   async search(
     @Query() query: SearchUsersQueryDto,
-  ): Promise<SearchUsersResponseDto> {
+  ): Promise<SearchUsersResponse> {
     const result = await this.usersSearchService.search(query);
-    return new SearchUsersResponseDto(result);
+    return new SearchUsersResponse(result);
   }
 }

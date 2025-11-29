@@ -8,7 +8,7 @@ import {
 } from '@nestjs/swagger';
 import { PlaylistsSearchService } from './playlists-search.service';
 import { SearchPlaylistsQueryDto } from './dto/search-playlists-query.dto';
-import { SearchPlaylistsResponseDto } from './dto/search-playlists-response.dto';
+import { SearchPlaylistsResponse } from './dto/search-playlists-response.dto';
 import type { FastifyRequest } from 'fastify';
 
 @ApiTags('Search')
@@ -32,7 +32,7 @@ export class PlaylistsSearchController {
   @ApiResponse({
     status: 200,
     description: 'Playlists found successfully',
-    type: SearchPlaylistsResponseDto,
+    type: SearchPlaylistsResponse,
   })
   @ApiResponse({
     status: 400,
@@ -41,13 +41,13 @@ export class PlaylistsSearchController {
   async search(
     @Query() query: SearchPlaylistsQueryDto,
     @Request() req: FastifyRequest,
-  ): Promise<SearchPlaylistsResponseDto> {
+  ): Promise<SearchPlaylistsResponse> {
     const userId = req?.user?.sub;
 
     const result = await this.playlistsSearchService.search({
       ...query,
       userId,
     });
-    return new SearchPlaylistsResponseDto(result);
+    return new SearchPlaylistsResponse(result);
   }
 }

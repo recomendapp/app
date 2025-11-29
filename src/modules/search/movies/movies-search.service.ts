@@ -2,9 +2,9 @@ import { Inject, Injectable } from '@nestjs/common';
 import { TypedSupabaseClient } from 'src/common/supabase/typed-supabase-client';
 import { TYPESENSE_CLIENT } from 'src/common/typesense/typesense.module';
 import { Client as TypesenseClient } from 'typesense';
-import { SearchMoviesResponseDto } from './dto/search-movies-response.dto';
+import { SearchMoviesResponse } from './dto/search-movies-response.dto';
 import { SearchMoviesQueryDto } from './dto/search-movies-query.dto';
-import { MovieDto } from 'src/common/dto/movie.dto';
+import { Movie } from 'src/common/dto/movie.dto';
 
 @Injectable()
 export class MoviesSearchService {
@@ -23,7 +23,7 @@ export class MoviesSearchService {
     runtime_max,
     release_date_min,
     release_date_max,
-  }: SearchMoviesQueryDto): Promise<SearchMoviesResponseDto> {
+  }: SearchMoviesQueryDto): Promise<SearchMoviesResponse> {
     const sortOrder = `${sort_by}:desc`;
 
     const searchParameters = {
@@ -100,7 +100,7 @@ export class MoviesSearchService {
     const movieMap = new Map(hydratedMovies.map((m) => [String(m.id), m]));
     const sortedMovies = movieIds
       .map((id) => movieMap.get(id))
-      .filter(Boolean) as MovieDto[];
+      .filter(Boolean) as Movie[];
 
     return {
       data: sortedMovies,
@@ -113,7 +113,7 @@ export class MoviesSearchService {
     };
   }
 
-  private async hydrateMovies(ids: number[]): Promise<MovieDto[]> {
+  private async hydrateMovies(ids: number[]): Promise<Movie[]> {
     if (ids.length === 0) return [];
 
     const { data, error } = await this.supabaseClient
@@ -123,6 +123,6 @@ export class MoviesSearchService {
 
     if (error) throw new Error(`Failed to hydrate movies: ${error.message}`);
 
-    return data as MovieDto[];
+    return data as Movie[];
   }
 }

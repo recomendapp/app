@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { TypedSupabaseClient } from 'src/common/supabase/typed-supabase-client';
 import { TYPESENSE_CLIENT } from 'src/common/typesense/typesense.module';
 import { Client as TypesenseClient } from 'typesense';
-import { SearchTvSeriesResponseDto } from './dto/search-tv-series-response.dto';
+import { SearchTvSeriesResponse } from './dto/search-tv-series-response.dto';
 import { SearchTvSeriesQueryDto } from './dto/search-tv-series-query.dto';
 
 @Injectable()
@@ -26,7 +26,7 @@ export class TvSeriesSearchService {
     vote_average_max,
     first_air_date_min,
     first_air_date_max,
-  }: SearchTvSeriesQueryDto): Promise<SearchTvSeriesResponseDto> {
+  }: SearchTvSeriesQueryDto): Promise<SearchTvSeriesResponse> {
     const sortOrder = `${sort_by}:desc`;
 
     const searchParameters = {

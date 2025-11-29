@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { TypedSupabaseClient } from 'src/common/supabase/typed-supabase-client';
 import { TYPESENSE_CLIENT } from 'src/common/typesense/typesense.module';
 import { Client as TypesenseClient } from 'typesense';
-import { SearchPlaylistsResponseDto } from './dto/search-playlists-response.dto';
+import { SearchPlaylistsResponse } from './dto/search-playlists-response.dto';
 import { SearchPlaylistsQueryDto } from './dto/search-playlists-query.dto';
 
 @Injectable()
@@ -20,7 +20,7 @@ export class PlaylistsSearchService {
     userId,
   }: SearchPlaylistsQueryDto & {
     userId?: string;
-  }): Promise<SearchPlaylistsResponseDto> {
+  }): Promise<SearchPlaylistsResponse> {
     const sortOrder = `${sort_by}:desc`;
 
     const searchParameters = {

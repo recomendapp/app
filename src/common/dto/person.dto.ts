@@ -3,7 +3,7 @@ import { Exclude, Expose } from 'class-transformer';
 import { IsInt, IsString, IsOptional, IsUrl, IsNumber } from 'class-validator';
 
 @Exclude()
-export class PersonDto {
+export class Person {
   @ApiProperty({ description: "The person's unique identifier", example: 525 })
   @Expose()
   @IsInt()

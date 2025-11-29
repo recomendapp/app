@@ -9,8 +9,8 @@ import {
   IsArray,
   IsDateString,
 } from 'class-validator';
-import { PersonDto } from './person.dto';
-import { GenreDto } from './genre.dto';
+import { Person } from './person.dto';
+import { Genre } from './genre.dto';
 
 // "id": 89905,
 //       "name": "Normal People",
@@ -43,7 +43,7 @@ import { GenreDto } from './genre.dto';
 //       "follower_avg_rating": null
 
 @Exclude()
-export class TvSeriesDto {
+export class TvSeries {
   @ApiProperty({
     description: "The TV series' unique identifier",
     example: 89905,
@@ -100,7 +100,7 @@ export class TvSeriesDto {
   backdrop_url?: string | null;
 
   @ApiProperty({
-    type: () => PersonDto,
+    type: () => Person,
     isArray: true,
     description: 'Creators of the TV series',
     example: null,
@@ -108,11 +108,11 @@ export class TvSeriesDto {
   @Expose()
   @IsOptional()
   @IsArray()
-  @Type(() => PersonDto)
-  created_by?: PersonDto[];
+  @Type(() => Person)
+  created_by?: Person[];
 
   @ApiProperty({
-    type: () => GenreDto,
+    type: () => Genre,
     isArray: true,
     description: 'Genres of the TV series',
     example: [
@@ -125,8 +125,8 @@ export class TvSeriesDto {
   @Expose()
   @IsOptional()
   @IsArray()
-  @Type(() => GenreDto)
-  genres?: GenreDto[];
+  @Type(() => Genre)
+  genres?: Genre[];
 
   @ApiProperty({
     description: 'First air date of the TV series',

@@ -1,15 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Type } from 'class-transformer';
 import { PaginatedResponseDto } from 'src/common/dto/pagination.dto';
-import { ProfileDto } from 'src/common/dto/profile.dto';
+import { Profile } from 'src/common/dto/profile.dto';
 
 @Exclude()
-export class SearchUsersResponseDto extends PaginatedResponseDto<ProfileDto> {
-  @ApiProperty({ type: [ProfileDto] })
-  @Type(() => ProfileDto)
-  declare data: ProfileDto[];
+export class SearchUsersResponse extends PaginatedResponseDto<Profile> {
+  @ApiProperty({ type: [Profile] })
+  @Type(() => Profile)
+  declare data: Profile[];
 
-  constructor(partial: Partial<SearchUsersResponseDto>) {
+  constructor(partial: Partial<SearchUsersResponse>) {
     super(partial);
     Object.assign(this, partial);
   }

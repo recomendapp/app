@@ -4,14 +4,14 @@ import { TYPESENSE_CLIENT } from 'src/common/typesense/typesense.module';
 import { Client as TypesenseClient } from 'typesense';
 import { BestResultSearchQueryDto } from './dto/best-result-search-query.dto';
 import {
-  BestResultSearchResponseDto,
+  SearchBestResultResponse,
   BestResultItem,
 } from './dto/best-result-search-response.dto';
-import { MovieDto } from 'src/common/dto/movie.dto';
-import { TvSeriesDto } from 'src/common/dto/tv-series.dto';
-import { PersonDto } from 'src/common/dto/person.dto';
-import { PlaylistDto } from 'src/common/dto/playlist.dto';
-import { ProfileDto } from 'src/common/dto/profile.dto';
+import { Movie } from 'src/common/dto/movie.dto';
+import { TvSeries } from 'src/common/dto/tv-series.dto';
+import { Person } from 'src/common/dto/person.dto';
+import { Playlist } from 'src/common/dto/playlist.dto';
+import { Profile } from 'src/common/dto/profile.dto';
 import { TypesenseSearchResult } from 'src/types/typesense';
 
 type TypesenseHitDocument = {
@@ -34,7 +34,7 @@ export class BestResultSearchService {
     userId,
   }: BestResultSearchQueryDto & {
     userId?: string;
-  }): Promise<BestResultSearchResponseDto> {
+  }): Promise<SearchBestResultResponse> {
     const commonSearchParams = {
       q: query,
       page: 1,
@@ -103,22 +103,22 @@ export class BestResultSearchService {
       hydratedUsers,
       hydratedPlaylists,
     ] = await Promise.all([
-      this.hydrateByIds<MovieDto>(
+      this.hydrateByIds<Movie>(
         this.supabaseClient,
         'media_movie',
         movieIds.map((id) => parseInt(id, 10)),
       ),
-      this.hydrateByIds<TvSeriesDto>(
+      this.hydrateByIds<TvSeries>(
         this.supabaseClient,
         'media_tv_series',
         tvSeriesIds.map((id) => parseInt(id, 10)),
       ),
-      this.hydrateByIds<PersonDto>(
+      this.hydrateByIds<Person>(
         this.supabaseClient,
         'media_person',
         personIds.map((id) => parseInt(id, 10)),
       ),
-      this.hydrateByIds<ProfileDto>(this.supabaseClient, 'profile', userIds), // userIds are strings
+      this.hydrateByIds<Profile>(this.supabaseClient, 'profile', userIds), // userIds are strings
       this.hydratePlaylists(
         this.supabaseClient,
         playlistIds.map((id) => parseInt(id, 10)),
@@ -178,11 +178,11 @@ export class BestResultSearchService {
     let bestResult: BestResultItem | null = null;
     if (bestResultMeta) {
       let bestResultData:
-        | MovieDto
-        | TvSeriesDto
-        | PersonDto
-        | ProfileDto
-        | PlaylistDto
+        | Movie
+        | TvSeries
+        | Person
+        | Profile
+        | Playlist
         | null = null;
       switch (bestResultMeta.type) {
         case 'movie':
@@ -298,7 +298,7 @@ export class BestResultSearchService {
   private async hydratePlaylists(
     supabaseClient: TypedSupabaseClient,
     ids: number[],
-  ): Promise<PlaylistDto[]> {
+  ): Promise<Playlist[]> {
     if (ids.length === 0) return [];
 
     const { data, error } = await supabaseClient
@@ -308,6 +308,6 @@ export class BestResultSearchService {
 
     if (error) throw new Error(`Failed to hydrate playlists: ${error.message}`);
 
-    return data as PlaylistDto[];
+    return data as Playlist[];
   }
 }

@@ -3,7 +3,7 @@ import { Exclude, Expose } from 'class-transformer';
 import { IsInt, IsString } from 'class-validator';
 
 @Exclude()
-export class GenreDto {
+export class Genre {
   @ApiProperty({ description: "The genre's ID" })
   @Expose()
   @IsInt()

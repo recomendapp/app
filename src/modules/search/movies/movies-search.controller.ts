@@ -2,7 +2,7 @@ import { Controller, Get, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { MoviesSearchService } from './movies-search.service';
 import { SearchMoviesQueryDto } from './dto/search-movies-query.dto';
-import { SearchMoviesResponseDto } from './dto/search-movies-response.dto';
+import { SearchMoviesResponse } from './dto/search-movies-response.dto';
 
 @ApiTags('Search')
 @Controller({
@@ -21,7 +21,7 @@ export class MoviesSearchController {
   @ApiResponse({
     status: 200,
     description: 'Movies found successfully',
-    type: SearchMoviesResponseDto,
+    type: SearchMoviesResponse,
   })
   @ApiResponse({
     status: 400,
@@ -29,8 +29,8 @@ export class MoviesSearchController {
   })
   async search(
     @Query() query: SearchMoviesQueryDto,
-  ): Promise<SearchMoviesResponseDto> {
+  ): Promise<SearchMoviesResponse> {
     const result = await this.moviesSearchService.search(query);
-    return new SearchMoviesResponseDto(result);
+    return new SearchMoviesResponse(result);
   }
 }

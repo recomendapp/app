@@ -8,7 +8,7 @@ import {
 } from '@nestjs/swagger';
 import { BestResultSearchService } from './best-result-search.service';
 import { BestResultSearchQueryDto } from './dto/best-result-search-query.dto';
-import { BestResultSearchResponseDto } from './dto/best-result-search-response.dto';
+import { SearchBestResultResponse } from './dto/best-result-search-response.dto';
 import type { FastifyRequest } from 'fastify';
 
 @ApiTags('Search')
@@ -32,17 +32,17 @@ export class BestResultSearchController {
   @ApiResponse({
     status: 200,
     description: 'Best results found successfully',
-    type: BestResultSearchResponseDto,
+    type: SearchBestResultResponse,
   })
   async search(
     @Query() query: BestResultSearchQueryDto,
     @Request() req: FastifyRequest,
-  ): Promise<BestResultSearchResponseDto> {
+  ): Promise<SearchBestResultResponse> {
     const userId = req?.user?.sub;
     const result = await this.bestResultSearchService.search({
       ...query,
       userId,
     });
-    return new BestResultSearchResponseDto(result);
+    return new SearchBestResultResponse(result);
   }
 }

@@ -11,7 +11,10 @@ import { Database } from 'src/types/type.db.extended';
       provide: TypedSupabaseClient,
       scope: Scope.REQUEST,
       useFactory: (req: FastifyRequest): TypedSupabaseClient => {
-        const accessToken = req.headers.authorization?.replace('Bearer ', '');
+        const rawToken = req.headers.authorization?.replace('Bearer ', '');
+        const accessToken =
+          rawToken && rawToken.split('.').length === 3 ? rawToken : null;
+
         const language = (req.headers['language'] as string) || 'en-US';
 
         const headers = {

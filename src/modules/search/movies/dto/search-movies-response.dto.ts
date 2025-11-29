@@ -1,14 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { PaginatedResponseDto } from 'src/common/dto/pagination.dto';
-import { MovieDto } from 'src/common/dto/movie.dto';
+import { Movie } from 'src/common/dto/movie.dto';
 import { Type } from 'class-transformer';
 
-export class SearchMoviesResponseDto extends PaginatedResponseDto<MovieDto> {
-  @ApiProperty({ type: [MovieDto] })
-  @Type(() => MovieDto)
-  declare data: MovieDto[];
+export class SearchMoviesResponse extends PaginatedResponseDto<Movie> {
+  @ApiProperty({ type: [Movie] })
+  @Type(() => Movie)
+  declare data: Movie[];
 
-  constructor(partial: Partial<SearchMoviesResponseDto>) {
+  constructor(partial: Partial<SearchMoviesResponse>) {
     super(partial);
     Object.assign(this, partial);
   }
