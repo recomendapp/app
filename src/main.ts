@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import validateEnv from './utils/validateEnv';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { apiReference } from '@scalar/nestjs-api-reference';
 
 validateEnv();
 
@@ -54,7 +55,15 @@ async function bootstrap() {
     )
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document);
+  // SwaggerModule.setup('api-docs', app, document);
+  app.use(
+    '/api-docs',
+    apiReference({
+      content: document,
+      withFastify: true,
+      theme: 'purple',
+    }),
+  );
 
   await app.listen(process.env.PORT ?? 3000);
 }
