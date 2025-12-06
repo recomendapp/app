@@ -1,16 +1,17 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class CreateReviewDto {
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'The title of the review',
     example: 'An amazing cinematic experience',
     nullable: true,
+    maxLength: 50,
   })
   @IsOptional()
   @IsString()
   @MaxLength(50)
-  title?: string | null;
+  title?: string;
 
   @ApiProperty({
     description: 'The body of the review, in HTML format',

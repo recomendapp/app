@@ -2,7 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsDateString,
   IsInt,
-  IsOptional,
   IsString,
   MaxLength,
   MinLength,
@@ -42,10 +41,8 @@ export class ReviewMovieDto {
     type: String,
     maxLength: 50,
     nullable: true,
-    required: false,
     example: 'A fantastic movie!',
   })
-  @IsOptional()
   @IsString()
   @MaxLength(50)
   title: string | null;
