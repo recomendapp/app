@@ -6,6 +6,9 @@ function validateEnv() {
     PORT: port({ default: 3000 }),
     HOST: str({ default: '0.0.0.0' }),
 
+    // Web App
+    WEB_APP_URL: url({ default: 'http://localhost:3000' }),
+
     // Typesense
     TYPESENSE_HOST: str(),
     TYPESENSE_PORT: port(),
