@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { TypedSupabaseClient } from 'src/common/supabase/typed-supabase-client';
+import { SupabaseUserClient } from 'src/common/supabase/supabase-user-client';
 import { TYPESENSE_CLIENT } from 'src/common/typesense/typesense.module';
 import { Client as TypesenseClient } from 'typesense';
 import { SearchMoviesResponse } from './dto/search-movies-response.dto';
@@ -9,7 +9,7 @@ import { Movie } from 'src/common/dto/movie.dto';
 @Injectable()
 export class MoviesSearchService {
   constructor(
-    private readonly supabaseClient: TypedSupabaseClient,
+    private readonly supabaseClient: SupabaseUserClient,
     @Inject(TYPESENSE_CLIENT) private readonly typesenseClient: TypesenseClient,
   ) {}
 

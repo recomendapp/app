@@ -10,6 +10,7 @@ import { BestResultSearchService } from './best-result-search.service';
 import { BestResultSearchQueryDto } from './dto/best-result-search-query.dto';
 import { SearchBestResultResponse } from './dto/best-result-search-response.dto';
 import type { FastifyRequest } from 'fastify';
+import { ApiLanguageHeader } from 'src/common/decorators/api-language-header.decorator';
 
 @ApiTags('Search')
 @Controller({
@@ -34,6 +35,7 @@ export class BestResultSearchController {
     description: 'Best results found successfully',
     type: SearchBestResultResponse,
   })
+  @ApiLanguageHeader()
   async search(
     @Query() query: BestResultSearchQueryDto,
     @Request() req: FastifyRequest,

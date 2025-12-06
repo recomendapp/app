@@ -2,15 +2,16 @@ import { Module, Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { createClient } from '@supabase/supabase-js';
 import { FastifyRequest } from 'fastify';
-import { TypedSupabaseClient } from './typed-supabase-client';
 import { Database } from 'src/types/type.db.extended';
+import { SupabaseAdminClient } from './supabase-admin-client';
+import { SupabaseUserClient } from './supabase-user-client';
 
 @Module({
   providers: [
     {
-      provide: TypedSupabaseClient,
+      provide: SupabaseUserClient,
       scope: Scope.REQUEST,
-      useFactory: (req: FastifyRequest): TypedSupabaseClient => {
+      useFactory: (req: FastifyRequest) => {
         const rawToken = req.headers.authorization?.replace('Bearer ', '');
         const accessToken =
           rawToken && rawToken.split('.').length === 3 ? rawToken : null;
@@ -35,7 +36,22 @@ import { Database } from 'src/types/type.db.extended';
       },
       inject: [REQUEST],
     },
+    {
+      provide: SupabaseAdminClient,
+      useFactory: () => {
+        const client = createClient<Database>(
+          process.env.SUPABASE_URL!,
+          process.env.SUPABASE_SERVICE_ROLE_KEY!,
+          {
+            auth: {
+              persistSession: false,
+            },
+          },
+        );
+        return client;
+      },
+    },
   ],
-  exports: [TypedSupabaseClient],
+  exports: [SupabaseUserClient, SupabaseAdminClient],
 })
 export class SupabaseModule {}

@@ -1,18 +1,5 @@
 import { Database as PostgresSchema } from './__generated__/type.db';
 
-export type JSONContent = {
-  [key: string]: any;
-  type?: string;
-  attrs?: Record<string, any>;
-  content?: JSONContent[];
-  marks?: {
-    type: string;
-    attrs?: Record<string, any>;
-    [key: string]: any;
-  }[];
-  text?: string;
-};
-
 type PostgresTables = PostgresSchema['public']['Tables'];
 type PostgresViews = PostgresSchema['public']['Views'];
 type PostgresFunctions = PostgresSchema['public']['Functions'];
@@ -43,13 +30,7 @@ type TableExtensions = {
     };
   };
   **/
-  user_reviews_movie: {
-    body: JSONContent;
-  };
-  user_reviews_tv_series: {
-    body: JSONContent;
-  };
-};
+} & object;
 
 type ViewExtensions = {
   /**

@@ -15,11 +15,11 @@ function validateEnv() {
     // Supabase
     SUPABASE_URL: url(),
     SUPABASE_ANON_KEY: str(),
+    SUPABASE_SERVICE_ROLE_KEY: str(),
     SUPABASE_JWT_SECRET: str(),
 
     // Optional
     LOG_LEVEL: str({ default: 'info' }),
-    NPM_TOKEN: str({ default: undefined }),
   });
 }
 

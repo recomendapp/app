@@ -3,6 +3,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TvSeriesSearchService } from './tv-series-search.service';
 import { SearchTvSeriesQueryDto } from './dto/search-tv-series-query.dto';
 import { SearchTvSeriesResponse } from './dto/search-tv-series-response.dto';
+import { ApiLanguageHeader } from 'src/common/decorators/api-language-header.decorator';
 
 @ApiTags('Search')
 @Controller({
@@ -27,6 +28,7 @@ export class TvSeriesSearchController {
     status: 400,
     description: 'Invalid query parameters',
   })
+  @ApiLanguageHeader()
   async search(
     @Query() query: SearchTvSeriesQueryDto,
   ): Promise<SearchTvSeriesResponse> {

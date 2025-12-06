@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { TypedSupabaseClient } from 'src/common/supabase/typed-supabase-client';
+import { SupabaseUserClient } from 'src/common/supabase/supabase-user-client';
 import { TYPESENSE_CLIENT } from 'src/common/typesense/typesense.module';
 import { Client as TypesenseClient } from 'typesense';
 import { BestResultSearchQueryDto } from './dto/best-result-search-query.dto';
@@ -24,7 +24,7 @@ type TypesenseHitDocument = {
 @Injectable()
 export class BestResultSearchService {
   constructor(
-    private readonly supabaseClient: TypedSupabaseClient,
+    private readonly supabaseClient: SupabaseUserClient,
     @Inject(TYPESENSE_CLIENT) private readonly typesenseClient: TypesenseClient,
   ) {}
 
@@ -278,7 +278,7 @@ export class BestResultSearchService {
   };
 
   private async hydrateByIds<T>(
-    supabaseClient: TypedSupabaseClient,
+    supabaseClient: SupabaseUserClient,
     tableName: 'media_movie' | 'media_tv_series' | 'media_person' | 'profile',
     ids: (number | string)[],
   ): Promise<T[]> {
@@ -296,7 +296,7 @@ export class BestResultSearchService {
   }
 
   private async hydratePlaylists(
-    supabaseClient: TypedSupabaseClient,
+    supabaseClient: SupabaseUserClient,
     ids: number[],
   ): Promise<Playlist[]> {
     if (ids.length === 0) return [];
