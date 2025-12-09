@@ -19,7 +19,8 @@ validateEnv();
 async function bootstrap() {
   const adapter = new FastifyAdapter();
   adapter.enableCors({
-    origin: [process.env.WEB_APP_URL || 'http://localhost:3000'],
+    origin: true,
+    // origin: [process.env.WEB_APP_URL || 'http://localhost:3000'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   });
   const app = await NestFactory.create<NestFastifyApplication>(
