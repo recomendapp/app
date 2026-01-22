@@ -1,27 +1,22 @@
-import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { AuthModule } from './auth.module';
-import { join } from 'path';
 
-const protoPath =
-  process.env.NODE_ENV === 'production'
-    ? join(__dirname, 'protos/auth.proto')
-    : join(process.cwd(), 'libs/shared/src/protos/auth.proto');
+import { SharedService } from '@app/shared';
+
+import { AuthModule } from './auth.module';
+import { AUTH_PACKAGE_NAME } from '@app/shared/protos/__generated__/auth';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AuthModule,
-    {
-      transport: Transport.GRPC,
-      options: {
-        package: 'auth',
-        protoPath,
-        url: process.env.AUTH_GRPC_URL || '0.0.0.0:50051',
-      },
-    },
-  );
-  await app.listen();
-}
+  const app = await NestFactory.create(AuthModule);
 
-bootstrap();
+  const sharedService = app.get(SharedService);
+
+  app.connectMicroservice(
+    sharedService.getGrpcOptions('auth', AUTH_PACKAGE_NAME),
+  );
+
+  await app.startAllMicroservices();
+}
+bootstrap().catch((err) => {
+  console.error('Error starting Auth microservice:', err);
+  process.exit(1);
+});

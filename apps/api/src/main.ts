@@ -13,7 +13,6 @@ import {
 import validateEnv from './utils/validateEnv';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { apiReference } from '@scalar/nestjs-api-reference';
-import { startMicroservices } from './microservices';
 
 validateEnv();
 
@@ -75,8 +74,6 @@ async function bootstrap() {
       theme: 'purple',
     }),
   );
-
-  await startMicroservices(app);
 
   await app.listen({
     port: Number(process.env.PORT) || 3000,

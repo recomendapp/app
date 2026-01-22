@@ -17,10 +17,9 @@
       "sourceRoot": "apps/api/src",
       "compilerOptions": {
         "tsConfigPath": "apps/api/tsconfig.app.json",
-        "assets": [{
-          "include": "libs/shared/src/protos/*.proto",
-          "outDir": "protos"
-        }],
+        "assets": [
+          { "include": "**/*.proto", "outDir": "dist/apps/api" }
+        ],
         "watchAssets": true
       }
     },
@@ -31,10 +30,9 @@
       "sourceRoot": "apps/auth/src",
       "compilerOptions": {
         "tsConfigPath": "apps/auth/tsconfig.app.json",
-        "assets": [{
-          "include": "libs/shared/src/protos/*.proto",
-          "outDir": "protos"
-        }],
+        "assets": [
+          { "include": "**/*.proto", "outDir": "dist/apps/auth" }
+        ],
         "watchAssets": true
       }
     },

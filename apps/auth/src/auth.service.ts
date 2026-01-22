@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ValidateTokenResponse } from '@app/shared/auth/auth';
+import { ValidateTokenResponse } from '@app/shared/protos/__generated__/auth';
+import { JwtPayload } from '@supabase/supabase-js';
 
 @Injectable()
 export class AuthService {
@@ -8,19 +9,18 @@ export class AuthService {
 
   validateToken = async (token: string): Promise<ValidateTokenResponse> => {
     try {
-      const payload = await this.jwtService.verifyAsync(token);
+      const payload = await this.jwtService.verifyAsync<JwtPayload>(token);
       return {
-        id: payload.sub,
-        email: payload.email,
-        exp: payload.exp,
+        user: {
+          id: payload.sub,
+          email: payload.email,
+          exp: payload.exp,
+        },
       };
-    } catch (e) {
+    } catch {
       return {
-        id: '',
-        email: '',
-        exp: 0,
         error: 'Invalid token',
       };
     }
-  }
+  };
 }

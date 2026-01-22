@@ -46,9 +46,9 @@ export class OptionalAuthGuard implements CanActivate, OnModuleInit {
       );
 
       if (!res.error) {
-        request.user = { id: res.id, email: res.email, exp: res.exp } as any; // Cast to any to avoid immediate type error if FastifyRequest doesn't have `user`
+        request.user = res.user;
       }
-    } catch (e) {
+    } catch {
       // Do nothing, user remains unauthenticated
     }
   }

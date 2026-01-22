@@ -1,7 +1,7 @@
 import { Controller, Get, UseGuards, Request } from '@nestjs/common';
 import { AuthGuard, OptionalAuthGuard } from '@app/shared';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
 
 @ApiTags('Test Auth')
 @Controller({
@@ -20,16 +20,18 @@ export class TestAuthController {
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Protected route, requires a valid JWT' })
   getProtected(@Request() req: FastifyRequest): string {
-    const userId = req.user?.sub; // Using sub as per JwtPayload
+    const userId = req.user?.id; // Using sub as per JwtPayload
     return `This is a protected route. User ID: ${userId}`;
   }
 
   @Get('optional')
   @UseGuards(OptionalAuthGuard)
   @ApiBearerAuth('access-token')
-  @ApiOperation({ summary: 'Optional auth route, attaches user if JWT is valid' })
+  @ApiOperation({
+    summary: 'Optional auth route, attaches user if JWT is valid',
+  })
   getOptional(@Request() req: FastifyRequest): string {
-    const userId = req.user?.sub; // Using sub as per JwtPayload
+    const userId = req.user?.id; // Using sub as per JwtPayload
     return `This is an optional auth route. User ID: ${userId || 'Guest'}`;
   }
 }

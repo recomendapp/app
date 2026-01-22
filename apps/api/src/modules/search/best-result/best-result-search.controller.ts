@@ -40,7 +40,7 @@ export class BestResultSearchController {
     @Query() query: BestResultSearchQueryDto,
     @Request() req: FastifyRequest,
   ): Promise<SearchBestResultResponse> {
-    const userId = req?.user?.sub;
+    const userId = req?.user?.id;
     const result = await this.bestResultSearchService.search({
       ...query,
       userId,

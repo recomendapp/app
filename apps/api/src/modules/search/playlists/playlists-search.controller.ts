@@ -42,7 +42,7 @@ export class PlaylistsSearchController {
     @Query() query: SearchPlaylistsQueryDto,
     @Request() req: FastifyRequest,
   ): Promise<SearchPlaylistsResponse> {
-    const userId = req?.user?.sub;
+    const userId = req?.user?.id;
 
     const result = await this.playlistsSearchService.search({
       ...query,

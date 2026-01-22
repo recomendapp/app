@@ -10,10 +10,15 @@ message ValidateTokenRequest {
   string token = 1;
 }
 
-message ValidateTokenResponse {
+message SessionUser {
   string id = 1;
-  string email = 2;
+  optional string email = 2;
   int64 exp = 3;
-  // An optional error message. If present, validation failed.
-  optional string error = 4;
+}
+
+message ValidateTokenResponse {
+  oneof result {
+    SessionUser user = 1;
+    string error = 2;
+  }
 }

@@ -14,11 +14,14 @@ export interface ValidateTokenRequest {
   token: string;
 }
 
-export interface ValidateTokenResponse {
+export interface SessionUser {
   id: string;
-  email: string;
+  email?: string | undefined;
   exp: number;
-  /** An optional error message. If present, validation failed. */
+}
+
+export interface ValidateTokenResponse {
+  user?: SessionUser | undefined;
   error?: string | undefined;
 }
 

@@ -41,7 +41,7 @@ export class TvSeriesReviewsController {
     @Param('tvSeriesId', ParseIntPipe) tvSeriesId: number,
     @Body() createReviewDto: CreateReviewDto,
   ): Promise<ReviewTvSeriesDto> {
-    const userId = req.user?.sub;
+    const userId = req.user?.id;
     if (!userId) {
       throw new Error('User ID not found in request.');
     }

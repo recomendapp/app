@@ -60,7 +60,7 @@ export class AuthGuard implements CanActivate, OnModuleInit {
       // Assign to request.user. NestJS will merge this into the original request object.
       // The `user` property in FastifyRequest needs to be defined in `fastify.d.ts` for type safety.
       // For now, we are assigning a generic object.
-      request.user = { id: res.id, email: res.email, exp: res.exp } as any; // Cast to any to avoid immediate type error if FastifyRequest doesn't have `user`
+      request.user = res.user;
 
       return true;
     } catch (e) {
