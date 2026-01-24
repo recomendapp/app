@@ -31,17 +31,18 @@ jobs:
         with:
           list-files: none
           filters: |
-            all: &all
-              - 'libs/shared/**'
-              - '.github/workflows/**'
-              - 'package.json'
-              - 'pnpm-lock.yaml'
             gateway:
               - 'apps/gateway/**'
-              - *all
+              - 'libs/shared/**'
+              - '.github/workflows/build-and-deploy.yml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
             auth:
               - 'apps/auth/**'
-              - *all
+              - 'libs/shared/**'
+              - '.github/workflows/build-and-deploy.yml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
 
   # =================================================================================
   #  JOB 2: Build and push Docker images (in parallel via matrix)
