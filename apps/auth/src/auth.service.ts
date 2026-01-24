@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ValidateTokenResponse } from '@app/shared/protos/__generated__/auth';
+import { ValidateTokenResponse } from '@app/shared/protos/__generated__';
 import { JwtPayload } from '@supabase/supabase-js';
 
 @Injectable()

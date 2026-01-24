@@ -5,7 +5,7 @@ import {
   AuthServiceControllerMethods,
   ValidateTokenRequest,
   ValidateTokenResponse,
-} from '@app/shared/protos/__generated__/auth';
+} from '@app/shared/protos/__generated__';
 import { Observable } from 'rxjs';
 
 @Controller()

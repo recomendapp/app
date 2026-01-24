@@ -27,16 +27,15 @@ export class SharedModule {
         provide: serviceName,
         useFactory: (configService: ConfigService) => {
           const url = configService.get<string>('AUTH_GRPC_URL');
-          const protoPath = join(
-            process.cwd(),
-            `libs/shared/src/protos/${protoName}.proto`,
-          );
 
           return ClientProxyFactory.create({
             transport: Transport.GRPC,
             options: {
               package: servicePackage,
-              protoPath,
+              protoPath: join(
+                process.cwd(),
+                `libs/shared/src/protos/${protoName}.proto`,
+              ),
               url: url || '0.0.0.0:50051',
             },
           });

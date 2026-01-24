@@ -64,7 +64,10 @@ export class AuthGuard implements CanActivate, OnModuleInit {
 
       return true;
     } catch (e) {
-      throw new UnauthorizedException(e.message);
+      if (e instanceof UnauthorizedException) {
+        throw e;
+      }
+      throw new UnauthorizedException('Token validation failed');
     }
   }
 }

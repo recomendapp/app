@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { ValidateTokenResponse } from '@app/shared/protos/__generated__/auth';
+import { ValidateTokenResponse } from '@app/shared/protos/__generated__';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -34,9 +34,11 @@ describe('AuthController', () => {
     it('should return a user payload for a valid token', async () => {
       const token = 'valid-token';
       const expectedResponse: ValidateTokenResponse = {
-        id: 'user-id',
-        email: 'test@example.com',
-        exp: 1234567890,
+        user: {
+          id: 'user-id',
+          email: 'test@example.com',
+          exp: 1234567890,
+        },
       };
 
       mockAuthService.validateToken.mockResolvedValue(expectedResponse);
@@ -50,9 +52,6 @@ describe('AuthController', () => {
     it('should return an error for an invalid token', async () => {
       const token = 'invalid-token';
       const expectedResponse: ValidateTokenResponse = {
-        id: '',
-        email: '',
-        exp: 0,
         error: 'Invalid token',
       };
 

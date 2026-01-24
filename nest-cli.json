@@ -1,24 +1,24 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/api/src",
+  "sourceRoot": "apps/gateway/src",
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/api/tsconfig.app.json"
+    "tsConfigPath": "apps/gateway/tsconfig.app.json"
   },
   "monorepo": true,
-  "root": "apps/api",
+  "root": "apps/gateway",
   "projects": {
-    "api": {
+    "gateway": {
       "type": "application",
-      "root": "apps/api",
+      "root": "apps/gateway",
       "entryFile": "main",
-      "sourceRoot": "apps/api/src",
+      "sourceRoot": "apps/gateway/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/api/tsconfig.app.json",
+        "tsConfigPath": "apps/gateway/tsconfig.app.json",
         "assets": [
-          { "include": "**/*.proto", "outDir": "dist/apps/api" }
+          { "include": "**/*.proto", "outDir": "dist/apps/gateway" }
         ],
         "watchAssets": true
       }
