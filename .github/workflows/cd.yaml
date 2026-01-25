@@ -1,0 +1,194 @@
+name: 🚀 Build & Deploy (Production)
+
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  # =================================================================================
+  #  JOB 1: Build & Push Docker Images
+  #  Optimized: Builds and Pushes in parallel within a single runner using Nx & Background jobs
+  # =================================================================================
+  build-and-push:
+    name: 🐳 Build & Push Images
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # Required to push to GHCR
+    outputs:
+      version: ${{ steps.prep.outputs.VERSION }}
+      affected_projects: ${{ steps.affected.outputs.PROJECTS }}
+    steps:
+      # 1. Checkout with full history for Nx Affected analysis
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 2. Setup Environment (PNPM & Node)
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      # 3. Install Dependencies (Cached)
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      # 4. Nx Setup: Calculate SHAs for "affected" detection
+      # This action automatically determines the base and head commits
+      - name: Initialize Nx SHAs
+        uses: nrwl/nx-set-shas@v4
+
+      # 5. Login to GitHub Container Registry
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # 6. Generate Version Tag (Hybrid Strategy)
+      # Format: b<RunNumber>-<ShortSHA> (e.g., b842-a1b2c3d)
+      # This provides both sequence order and commit traceability.
+      - name: Generate Version Tag
+        id: prep
+        run: |
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          VERSION="b${{ github.run_number }}-${SHORT_SHA}"
+          
+          echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+          echo "🚀 Build Version: ${VERSION}"
+
+      # 7. Build Docker Images (Parallel Build)
+      # Nx handles parallelism based on CPU cores available in the runner
+      - name: Build Docker Images (Nx Affected)
+        run: npx nx affected -t docker-build --parallel=3
+
+      # 8. Tag and Push to GHCR (Parallel Push via Bash)
+      # We use Bash background processes (&) to push all images simultaneously
+      - name: Retag and Push to GHCR
+        id: affected
+        run: |
+          # Get list of affected projects with a 'docker-build' target as JSON
+          AFFECTED=$(npx nx show projects --affected --with-target=docker-build --json)
+          echo "Affected projects (JSON): $AFFECTED"
+          
+          # Parse JSON to a space-separated string for the loop
+          PROJECTS=$(echo $AFFECTED | jq -r '.[]')
+          
+          # Exit early if no projects are affected
+          if [ -z "$PROJECTS" ]; then
+            echo "No docker projects affected."
+            echo "PROJECTS=[]" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          VERSION="${{ steps.prep.outputs.VERSION }}"
+          # Ensure owner is lowercase for Docker tags
+          OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          
+          # Array to track background process IDs
+          PIDS=""
+
+          for PROJECT in $PROJECTS; do
+            (
+              echo "🚀 [${PROJECT}] Processing..."
+              
+              # Local image built by Nx
+              LOCAL_IMAGE="api-${PROJECT}:latest"
+              # Remote image for GHCR
+              REMOTE_IMAGE="ghcr.io/${OWNER}/api-${PROJECT}"
+              
+              # Re-tag local image for registry
+              docker tag "${LOCAL_IMAGE}" "${REMOTE_IMAGE}:${VERSION}"
+              docker tag "${LOCAL_IMAGE}" "${REMOTE_IMAGE}:latest"
+              
+              # Push to registry (Specific version + Latest)
+              echo "⬆️ [${PROJECT}] Pushing..."
+              docker push "${REMOTE_IMAGE}:${VERSION}"
+              docker push "${REMOTE_IMAGE}:latest"
+              
+              echo "✅ [${PROJECT}] Done."
+            ) &
+            
+            # Capture the PID of the background process
+            PIDS="$PIDS $!"
+          done
+
+          # Wait for all background pushes to finish
+          FAIL=0
+          for PID in $PIDS; do
+            wait $PID || FAIL=1
+          done
+
+          if [ "$FAIL" -eq 1 ]; then
+            echo "❌ One or more images failed to push."
+            exit 1
+          fi
+          
+          # Export affected list for the next job
+          echo "PROJECTS=$AFFECTED" >> $GITHUB_OUTPUT
+
+  # =================================================================================
+  #  JOB 2: Update Infrastructure Repo (GitOps)
+  #  Updates deployment.yaml files with the new version tag
+  # =================================================================================
+  update-infra:
+    name: 🏗️ Update Infra Manifests
+    needs: build-and-push
+    # Only run if projects were actually built/pushed
+    if: needs.build-and-push.outputs.affected_projects != '[]' && needs.build-and-push.outputs.affected_projects != ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Clone Infra Repository
+        run: |
+          git clone https://ci-bot:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository_owner }}/infra.git
+
+      - name: Update Deployment Manifests
+        run: |
+          cd infra
+          
+          SERVICES_JSON='${{ needs.build-and-push.outputs.affected_projects }}'
+          VERSION='${{ needs.build-and-push.outputs.version }}'
+          OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          
+          echo "Updates to apply: $SERVICES_JSON -> $VERSION"
+          
+          # Loop through each affected service and update its yaml
+          for service in $(echo $SERVICES_JSON | jq -r '.[]'); do
+            IMAGE_NAME="api-$service"
+            # WARNING: Adjust this path to match your actual infra repo structure!
+            DEPLOYMENT_PATH="apps/services/api/$service/deployment.yaml"
+            
+            if [ -f "$DEPLOYMENT_PATH" ]; then
+              echo "✅ Updating $service -> $VERSION"
+              # Regex replacement for the image tag
+              sed -i "s|image: ghcr.io.*/${IMAGE_NAME}:.*|image: ghcr.io/${OWNER}/${IMAGE_NAME}:${VERSION}|" "$DEPLOYMENT_PATH"
+            else
+              echo "⚠️ File not found: $DEPLOYMENT_PATH (Skipping update for $service)"
+            fi
+          done
+
+      - name: Commit and Push Changes
+        run: |
+          cd infra
+          git config user.name "ci-bot"
+          git config user.email "ci-bot@users.noreply.github.com"
+          
+          git add .
+          
+          # Only commit if something actually changed
+          if git diff --staged --quiet; then
+            echo "No changes detected."
+          else
+            git commit -m "deploy(api): update images to version ${{ needs.build-and-push.outputs.version }}"
+            git push
+          fi
