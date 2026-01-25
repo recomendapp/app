@@ -11,11 +11,11 @@ async function bootstrap() {
       packageName: 'auth',
       protoDomain: 'auth',
       protoFile: 'auth.proto',
-      url: env.AUTH_GRPC_URL,
+      url: env.AUTH_GRPC_BIND,
     }),
   );
   await app.listen();
-  Logger.log(`🚀 Auth microservice is running on gRPC: ${env.AUTH_GRPC_URL}`);
+  Logger.log(`🚀 Auth microservice is running on gRPC: ${env.AUTH_GRPC_BIND}`);
 }
 
 bootstrap();

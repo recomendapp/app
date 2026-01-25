@@ -5,11 +5,11 @@ export const commonSchema = z.object({
     .enum(['development', 'production', 'test'])
     .default('development'),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
-
-  AUTH_GRPC_URL: z.string().default('localhost:50051'),
 });
 
 export const gatewaySchema = commonSchema.extend({
+  AUTH_GRPC_URL: z.string().default('localhost:50051'),
+
   WEB_APP_URL: z.url().default('http://localhost:3000'),
   PORT: z.coerce.number().default(3000),
   HOST: z.string().default('0.0.0.0'),
@@ -26,7 +26,7 @@ export const gatewaySchema = commonSchema.extend({
 
 export const authSchema = commonSchema.extend({
   SUPABASE_JWT_SECRET: z.string(),
-  AUTH_GRPC_URL: z.string().default('0.0.0.0:50051'), // override default for auth service
+  AUTH_GRPC_BIND: z.string().default('0.0.0.0:50051'),
 });
 
 export function validateEnv<T extends z.ZodType>(schema: T): z.infer<T> {
