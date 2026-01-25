@@ -40,12 +40,18 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      # 4. Nx Setup: Calculate SHAs for "affected" detection
+      # 4. Install Protoc (for gRPC builds)
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # 5. Nx Setup: Calculate SHAs for "affected" detection
       # This action automatically determines the base and head commits
       - name: Initialize Nx SHAs
         uses: nrwl/nx-set-shas@v4
 
-      # 5. Login to GitHub Container Registry
+      # 6. Login to GitHub Container Registry
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -53,7 +59,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # 6. Generate Version Tag (Hybrid Strategy)
+      # 7. Generate Version Tag (Hybrid Strategy)
       # Format: b<RunNumber>-<ShortSHA> (e.g., b842-a1b2c3d)
       # This provides both sequence order and commit traceability.
       - name: Generate Version Tag
@@ -65,12 +71,12 @@ jobs:
           echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
           echo "🚀 Build Version: ${VERSION}"
 
-      # 7. Build Docker Images (Parallel Build)
+      # 8. Build Docker Images (Parallel Build)
       # Nx handles parallelism based on CPU cores available in the runner
       - name: Build Docker Images (Nx Affected)
         run: npx nx affected -t docker-build --parallel=3
 
-      # 8. Tag and Push to GHCR (Parallel Push via Bash)
+      # 9. Tag and Push to GHCR (Parallel Push via Bash)
       # We use Bash background processes (&) to push all images simultaneously
       - name: Retag and Push to GHCR
         id: affected
