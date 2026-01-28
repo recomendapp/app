@@ -11,10 +11,12 @@ const intlMiddleware = createIntlMiddleware(routing);
 export async function proxy(request: NextRequest) {
   const response = intlMiddleware(request);
 
-  const [, locale, ...rest] = new URL(
+  const [, maybeLocale, ...rest] = new URL(
     response.headers.get('x-middleware-rewrite') || request.url
   ).pathname.split('/');
-  const pathname = '/' + rest.join('/');
+  const isValidLocale = ([...routing.locales] as string[]).includes(maybeLocale);
+  const locale = isValidLocale ? maybeLocale : routing.defaultLocale;
+  const pathname = '/' + (isValidLocale ? rest.join('/') : [maybeLocale, ...rest].join('/'));
 
   const isBrowser =
     request.headers.get("accept")?.includes("text/html") &&
