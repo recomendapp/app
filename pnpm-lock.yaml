@@ -120,8 +120,8 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2
       '@recomendapp/types':
-        specifier: ^1.0.35
-        version: 1.0.35
+        specifier: ^1.0.37
+        version: 1.0.37
       '@revenuecat/purchases-js':
         specifier: ^1.20.1
         version: 1.22.0
@@ -2358,8 +2358,8 @@ packages:
   '@recomendapp/api-js@1.0.2':
     resolution: {integrity: sha512-OxklSor70FIDtn7VdgQ/+Feqs09EAluWtxD4jHdYP8NcJEXaO6p7AAX0UN+gx+cXp41MFU7cRCsn7Poxm2SpDg==, tarball: https://npm.pkg.github.com/download/@recomendapp/api-js/1.0.2/da3a377730601b6375ac1692786f596d1b7dc9c5}
 
-  '@recomendapp/types@1.0.35':
-    resolution: {integrity: sha512-Wl83pxDm+d2UQO0xc/7ZDt/M4ijxmnjiPinFjLyYgZTo3uLPw81qQNyaSZTuHQn03fHf/3aoUq4HtFqZSu9Ynw==, tarball: https://npm.pkg.github.com/download/@recomendapp/types/1.0.35/e6e61f5ed17ba5d1c0fc4b83ed50c58823eedb1b}
+  '@recomendapp/types@1.0.37':
+    resolution: {integrity: sha512-f2f/zejENyHJB+rG4bvw92bmERfulQYZu/yN6SiJmSKut3GVne/cDt+DlbPJkQVY4IFr3DLsN+n5ENeOZnoQeA==, tarball: https://npm.pkg.github.com/download/@recomendapp/types/1.0.37/184483241edc6c17bbba45957e25072ee0b900e1}
 
   '@remirror/core-constants@3.0.0':
     resolution: {integrity: sha512-42aWfPrimMfDKDi4YegyS7x+/0tlzaqwPQCULLanv3DMIlu96KTJR0fM5isWX2UViOqlGnX6YFgqWepcX+XMNg==}
@@ -8464,7 +8464,7 @@ snapshots:
     dependencies:
       '@hey-api/client-fetch': 0.6.0
 
-  '@recomendapp/types@1.0.35':
+  '@recomendapp/types@1.0.37':
     dependencies:
       zod: 3.25.76
 
