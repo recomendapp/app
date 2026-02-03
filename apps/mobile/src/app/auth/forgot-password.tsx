@@ -1,0 +1,219 @@
+import { useAuth } from '@/providers/AuthProvider';
+import { useCallback, useState } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Button } from '@/components/ui/Button';
+import { Link, useNavigation } from 'expo-router';
+import tw from '@/lib/tw';
+import { useTheme } from '@/providers/ThemeProvider';
+import { GroupedInput, GroupedInputItem } from '@/components/ui/Input';
+import { upperFirst } from 'lodash';
+import { Icons } from '@/constants/Icons';
+import { useTranslations } from 'use-intl';
+import * as z from 'zod';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { AuthError } from '@supabase/supabase-js';
+import { Text } from '@/components/ui/text';
+import { useSupabaseClient } from '@/providers/SupabaseProvider';
+import { InputOTP } from '@/components/ui/input-otp';
+import { KeyboardAwareScrollView } from '@/components/ui/KeyboardAwareScrollView';
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '@/theme/globals';
+import { View } from '@/components/ui/view';
+import { KeyboardToolbar } from '@/components/ui/KeyboardToolbar';
+import { useToast } from '@/components/Toast';
+import { logger } from '@/logger';
+import { LoopCarousel } from '@/components/ui/LoopCarousel';
+import { Image } from 'expo-image';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useUIBackgroundsQuery } from '@/api/ui/uiQueries';
+
+const ForgotPasswordScreen = () => {
+	const supabase = useSupabaseClient();
+	const { resetPasswordForEmail } = useAuth();
+	const { colors } = useTheme();
+	const insets = useSafeAreaInsets();
+	const toast = useToast();
+	const t = useTranslations();
+	const [ isLoading, setIsLoading ] = useState(false);
+	const navigation = useNavigation();
+	const routes = navigation.getState()?.routes;
+	const prevRoute = routes? routes[routes.length - 2] : null;
+	// OTP
+	const numberOfDigits = 6;
+	const [showOtp, setShowOtp] = useState<boolean>(false);
+	const [otp, setOtp] = useState('');
+
+	const {
+		data: backgrounds,
+	} = useUIBackgroundsQuery();
+
+	/* ------------------------------- FORM SCHEMA ------------------------------ */
+	const forgotPasswordSchema = z.object({
+		email: z.email({
+			error: t('common.form.email.error.invalid')
+		})
+	});
+	type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
+	const defaultValues: Partial<ForgotPasswordFormValues> = {
+		email: '',
+	};
+	const form = useForm<ForgotPasswordFormValues>({
+		resolver: zodResolver(forgotPasswordSchema),
+		defaultValues: defaultValues,
+		mode: 'onChange',
+	});
+	/* -------------------------------------------------------------------------- */
+
+	// Handlers
+	const handleSubmit = useCallback(async (data: ForgotPasswordFormValues) => {
+		try {
+			setIsLoading(true);
+			await resetPasswordForEmail(data.email);
+			toast.success(upperFirst(t('common.form.code_sent')));
+			setShowOtp(true);
+		} catch (error) {
+			if (error instanceof AuthError) {
+				if (error.code === 'over_email_send_rate_limit') {
+					logger.metric('account:forgotPasswordFailed', {
+						logContext: 'ForgotPasswordScreen',
+						reason: error.code,
+					});
+					return toast.error(t('common.form.error.too_many_attempts'));
+				}
+			}
+			toast.error(upperFirst(t('common.messages.an_error_occurred')));
+			logger.error('forgot password error', { error });
+		} finally {
+			setIsLoading(false);
+		}
+	}, [resetPasswordForEmail, t, toast]);
+	const handleVerifyOtp = useCallback(async (otp: string) => {
+		try {
+			setIsLoading(true);
+			const { error } = await supabase.auth.verifyOtp({
+				email: form.getValues('email'),
+				token: otp,
+				type: 'recovery',
+			});
+			if (error) throw error;
+			toast.success(upperFirst(t('common.form.code_verified')));
+		} catch (error) {
+			if (error instanceof AuthError) {
+				if (error.code === 'otp_expired') {
+					logger.metric('account:forgotPasswordFailed', {
+						logContext: 'ForgotPasswordOtpScreen',
+						reason: error.code,
+					});
+					return toast.error(t('common.form.error.invalid_code'));
+				}
+			}
+			toast.error(upperFirst(t('common.messages.an_error_occurred')));
+			logger.error('otp verification error', { error });
+		} finally {
+			setIsLoading(false);
+		}
+	}, [supabase, form, t, toast]);
+	return (
+	<>
+		{backgrounds && (
+			<LoopCarousel
+			items={backgrounds}
+			containerStyle={tw`absolute inset-0`}
+			renderItem={(item) => (
+				<Image source={item.localUri} contentFit="cover" style={tw`w-full h-full`} />
+			)}
+			/>
+		)}
+		<LinearGradient
+		colors={['transparent', 'rgba(0, 0, 0, 0.8)']}
+		start={{
+			x: 0,
+			y: 0,
+		}}
+		end={{
+			x: 0,
+			y: 0.7,
+		}}
+		style={tw`flex-1`}
+		>
+			<KeyboardAwareScrollView
+			contentContainerStyle={[
+				tw`flex-1 justify-end items-center`,
+				{
+					gap: GAP,
+					paddingLeft: insets.left + PADDING_HORIZONTAL,
+					paddingRight: insets.right + PADDING_HORIZONTAL,
+					paddingBottom: insets.bottom + PADDING_VERTICAL,
+				}
+			]}
+			keyboardShouldPersistTaps='handled'
+			>
+				{!showOtp ? (
+					<>
+						<View style={[tw`w-full`, { gap: GAP }]}>
+							<GroupedInput title={t('pages.auth.forgot_password.label')} titleStyle={tw`text-center text-xl font-bold`}>
+								<Controller
+									name="email"
+									control={form.control}
+									render={({field: { onChange, onBlur, value }}) => (
+										<GroupedInputItem
+										icon={Icons.Mail}
+										nativeID="email"
+										placeholder={upperFirst(t('common.form.email.label'))}
+										autoComplete='email'
+										autoCapitalize='none'
+										value={value}
+										onChangeText={onChange}
+										onBlur={onBlur}
+										disabled={isLoading}
+										keyboardType='email-address'
+										error={form.formState.errors.email?.message}
+										/>
+									)}
+								/>
+							</GroupedInput>
+							{/* SUBMIT BUTTON */}
+							<Button loading={isLoading} onPress={form.handleSubmit(handleSubmit)} style={tw`w-full rounded-xl`}>{t('pages.auth.forgot_password.form.submit')}</Button>
+						</View>
+						<Text textColor='muted' style={tw`text-center`}>{t('pages.auth.forgot_password.return_to_login')} <Link href={prevRoute?.name === 'login/index' ? '../' : '/auth/login'} style={{ color: colors.accentYellow }}>{upperFirst(t('common.messages.login'))}</Link></Text>
+					</>
+				) : (
+					<>
+					<View style={tw`gap-2 items-center`}>
+						<Text variant='title'>
+							{t('pages.auth.forgot_password.confirm_form.label')}
+						</Text>
+						<Text textColor='muted'>
+							{t('pages.auth.forgot_password.confirm_form.description', { email: form.getValues('email') })}
+						</Text>
+					</View>
+					<InputOTP
+					length={numberOfDigits}
+					value={otp}
+					onChangeText={setOtp}
+					onComplete={handleVerifyOtp}
+					/>
+					<View style={tw`items-center`}>
+						<Text textColor='muted'>
+							{t('common.form.error.not_received_code')}{' '}
+						</Text>
+						<Button
+						variant="ghost"
+						className='p-0'
+						disabled={isLoading}
+						onPress={form.handleSubmit(handleSubmit)}
+						>
+							{t('common.form.resend_code')}
+						</Button>
+					</View>
+					</>
+				)}
+				{/* RETURNS TO LOGIN */}
+			</KeyboardAwareScrollView>
+			<KeyboardToolbar />
+		</LinearGradient>
+	</>
+	)
+};
+
+export default ForgotPasswordScreen;
