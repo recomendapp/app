@@ -1,0 +1,37 @@
+{
+  "name": "protos",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/protos/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "proto-gen": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash libs/protos/scripts/proto-gen.sh",
+        "cwd": "."
+      },
+      "outputs": ["{projectRoot}/src/__generated__"],
+      "cache": true
+    },
+    "build": {
+      "executor": "@nx/js:tsc",
+      "dependsOn": ["proto-gen"],
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/protos",
+        "tsConfig": "libs/protos/tsconfig.lib.json",
+        "packageJson": "libs/protos/package.json",
+        "main": "libs/protos/src/index.ts",
+        "assets": [
+          "libs/protos/*.md",
+          {
+            "input": "libs/protos/src/lib",
+            "glob": "**/*.proto",
+            "output": "./protos"
+          }
+        ]
+      }
+    }
+  }
+}
