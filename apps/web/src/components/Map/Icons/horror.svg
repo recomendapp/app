@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 166.2 248">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fcbe15;
+      }
+    </style>
+  </defs>
+  <rect class="cls-1" x="67.02" width="32.16" height="248"/>
+  <rect class="cls-1" x="67.02" y="-2.02" width="32.16" height="166.2" transform="translate(2.02 164.18) rotate(-90)"/>
+</svg>

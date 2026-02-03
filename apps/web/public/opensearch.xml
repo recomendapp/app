@@ -1,0 +1,8 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+  <ShortName>Recomend</ShortName>
+  <Description>Search Recomend</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image width="16" height="16" type="image/x-icon">https://recomend.app/favicon.ico</Image>
+  <Url type="text/html" method="get" template="https://recomend.app/search?q={searchTerms}&amp;ref=opensearch"/>
+  <moz:SearchForm>https://recomend.app/search</moz:SearchForm>
+</OpenSearchDescription>
