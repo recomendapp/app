@@ -1,7 +1,7 @@
 'use server'
 
-import { createServerClient } from "@/lib/supabase/server";
-import { SupportedLocale } from "@/translations/locales";
+import { createServerClient } from "../../lib/supabase/server";
+import { SupportedLocale } from "@libs/i18n";
 import { cache } from "react";
 
 export const getReviewMovieSeo = cache(async (id: number, lang: SupportedLocale) => {

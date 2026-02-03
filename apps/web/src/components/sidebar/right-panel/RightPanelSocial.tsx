@@ -5,11 +5,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserAvatar } from "@/components/User/UserAvatar";
 import { Icons } from "@/config/icons";
 import { useAuth } from "@/context/auth-context";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { createRightPanel } from "./RightPanelUtils";
 import Fuse from "fuse.js";
-import { Database, UserFollower } from "@recomendapp/types";
 import { Input } from "@/components/ui/input";
 import { useUserFolloweesOptions, useUserFollowersRequestsOptions } from "@/api/client/options/userOptions";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -40,7 +39,7 @@ const RightPanelSocialContent = () => {
 }
 
 const RightPanelSocialFollows = () => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const [search, setSearch] = useState('');
 	// const [results, setResults] = useState<{ id: number, followee: Database['public']['Views']['profile']['Row'] }[] | undefined>(undefined);
 	const {
@@ -48,7 +47,7 @@ const RightPanelSocialFollows = () => {
 		isLoading,
 		isError,
 	} = useInfiniteQuery(useUserFolloweesOptions({
-		userId: session?.user.id,
+		userId: user?.id,
 	}));
 	const fuse = useMemo(() => {
 		if (!followees?.pages.length) return null;
@@ -88,13 +87,13 @@ const RightPanelSocialFollows = () => {
 }
 
 const RightPanelSocialRequests = () => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const {
 		data: requests,
 		isLoading,
 		isError,
 	} = useInfiniteQuery(useUserFollowersRequestsOptions({
-		userId: session?.user.id,
+		userId: user?.id,
 	}));
 
 	const { mutateAsync: acceptRequest } = useUserAcceptFollowerRequestMutation();

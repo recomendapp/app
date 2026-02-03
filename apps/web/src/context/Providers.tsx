@@ -5,7 +5,6 @@ import { NextIntlClientProvider } from 'next-intl';
 import { SupabaseProvider } from '@/context/supabase-context';
 import { NotificationsProvider } from '@/context/notifications-context';
 import { cookies } from 'next/headers';
-import { createServerClient } from '@/lib/supabase/server';
 import { Icons } from '@/config/icons';
 import { getServerDevice } from '@/utils/get-device';
 import { ThemeProvider } from 'next-themes';
@@ -14,9 +13,10 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { ModalProvider } from './modal-context';
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
-import { SupportedLocale } from '@/translations/locales';
+import { SupportedLocale } from '@libs/i18n';
 import { ApiProvider } from './api-context';
 import { checkMaintenance } from '@/api/server/utils';
+import { getMe } from '@/lib/auth/server';
 
 export const Providers = async ({
   children,
@@ -25,19 +25,19 @@ export const Providers = async ({
   children: React.ReactNode;
   locale: SupportedLocale;
 }) => {
-  const supabase = await createServerClient({ locale: locale });
   const [
-    sessionRes,
+    { data: session },
     isMaintenanceMode,
     cookiesStore,
     device,
   ] = await Promise.all([
-    supabase.auth.getSession(),
+    getMe({
+      locale,
+    }),
     checkMaintenance(),
     cookies(),
     getServerDevice(),
   ]);
-  const session = sessionRes.data.session;
   // UI
   const layout = cookiesStore.get("ui:layout");
   const sidebarOpen = cookiesStore.get("ui-sidebar:open");
@@ -48,8 +48,8 @@ export const Providers = async ({
     <NextIntlClientProvider locale={locale}>
       <SupabaseProvider>
         <ReactQueryProvider>
-          <AuthProvider session={session}>
-            <ApiProvider>
+          <ApiProvider>
+            <AuthProvider session={session || null}>
               <NotificationsProvider>
                 <MapContext>
                   <ThemeProvider attribute={'class'} defaultTheme='dark' enableSystem>
@@ -84,8 +84,8 @@ export const Providers = async ({
                   </ThemeProvider>
                 </MapContext> 
               </NotificationsProvider>
-            </ApiProvider>
-          </AuthProvider>
+            </AuthProvider>
+          </ApiProvider>
         </ReactQueryProvider>
       </SupabaseProvider>
     </NextIntlClientProvider>

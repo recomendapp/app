@@ -26,7 +26,7 @@ export function LoginOtpForm({
   const t = useTranslations('pages.auth.login');
   const common = useTranslations('common');
   const router = useRouter();
-  const { loginWithOtp } = useAuth();
+  const { loginWithMagicLink } = useAuth();
   const [email, setEmail] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   // OTP
@@ -44,8 +44,7 @@ export function LoginOtpForm({
     try {
       setIsLoading(true);
       emailSchema.parse(email);
-      await loginWithOtp(email, redirectTo);
-      toast.success(common('form.code_sent'));
+      await loginWithMagicLink(email, redirectTo);
       setShowOtp(true);
     } catch (error) {
       if (error instanceof z.ZodError) {

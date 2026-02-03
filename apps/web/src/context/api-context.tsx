@@ -1,11 +1,15 @@
 'use client'
 
-import createClient from "@recomendapp/api-js";
+import { client } from "@packages/api-js";
 import { useLocale } from "next-intl";
 import { createContext, use, useMemo } from "react";
-import { useAuth } from "./auth-context";
 
-const ApiContext = createContext<ReturnType<typeof createClient> | undefined>(undefined);
+client.setConfig({
+	baseUrl: process.env.NEXT_PUBLIC_API_URL || 'https://api.woodn.fr',
+	credentials: 'include',
+});
+
+const ApiContext = createContext<typeof client | undefined>(undefined);
 
 export const ApiProvider = ({
 	children,
@@ -13,13 +17,13 @@ export const ApiProvider = ({
 	children: React.ReactNode;
 }) => {
 	const locale = useLocale();
-	const { session } = useAuth();
 	const api = useMemo(() => {
-		return createClient({
-			token: session?.access_token,
-			language: locale,
-		});
-	}, [session, locale]);
+		// return createClient({
+		// 	token: session?.access_token,
+		// 	language: locale,
+		// });
+		return client;
+	}, [locale]);
 	return (
 		<ApiContext.Provider value={api}>
 			{children}

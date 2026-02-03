@@ -9,7 +9,7 @@ import { generateAlternates } from '@/lib/i18n/routing';
 import { notFound } from 'next/navigation';
 import { ActiveFilters } from './_components/ActiveFilters';
 import { DEFAULT_PER_PAGE, getValidatedDisplay, getValidateDepartment, getValidatedSortBy, getValidatedSortOrder, getValidateJob, getValidatePage } from './_components/constants';
-import { SupportedLocale } from '@/translations/locales';
+import { SupportedLocale } from '@libs/i18n';
 import { getPerson, getPersonFilmsPagination } from '@/api/server/medias';
 import { PersonFilms } from './_components/PersonFilms';
 import { redirect } from '@/lib/i18n/navigation';

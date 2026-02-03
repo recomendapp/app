@@ -11,16 +11,15 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Link, useRouter } from "@/lib/i18n/navigation";
+import { Link } from "@/lib/i18n/navigation";
 import { useAuth } from '@/context/auth-context';
 import { UserAvatar } from './UserAvatar';
 import { useTranslations } from 'next-intl';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Icons } from '@/config/icons';
 import { upperFirst } from 'lodash';
 import { cn } from '@/lib/utils';
 import { Spinner } from '../ui/spinner';
-import toast from 'react-hot-toast';
 
 type Route = {
   icon: React.ElementType;
@@ -37,9 +36,9 @@ export function UserNav({
 } : {
   className?: string;
 }) {
-  const router = useRouter();
   const { user, customerInfo, logout } = useAuth();
   const t = useTranslations();
+  const [isLoading, setIsLoading] = useState(false);
 
   const routes = useMemo((): Route[] => [
     {
@@ -82,12 +81,12 @@ export function UserNav({
 
   const handleLogout = useCallback(async () => {
     try {
+      setIsLoading(true);
       await logout();
-      router.refresh();
-    } catch (error) {
-      toast.error(upperFirst(t('common.messages.an_error_occurred')));
+    } finally {
+      setIsLoading(false);
     }
-  }, [logout, router, t]);
+  }, [logout]);
 
   if (!user) {
     return (
@@ -101,17 +100,17 @@ export function UserNav({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className={cn("relative", className)}>
-          <UserAvatar className='h-6 w-6' avatarUrl={user.avatar_url} username={user.username} />
+          <UserAvatar className='h-6 w-6' avatarUrl={user.avatar} username={user.username} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <DropdownMenuItem asChild>
             <Link href={'/@' + user?.username} className="flex gap-2">
-              <UserAvatar avatarUrl={user.avatar_url} username={user.username} />
+              <UserAvatar avatarUrl={user.avatar} username={user.username} />
               <div className="flex flex-col space-y-1 items-start!">
                 <p className="text-sm font-medium leading-none line-clamp-1">
-                  {user?.full_name}
+                  {user?.name}
                 </p>
                 <p className="text-xs leading-none text-muted-foreground">
                   @{user?.username}
@@ -133,7 +132,7 @@ export function UserNav({
           ))}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout} variant="destructive">
+        <DropdownMenuItem onClick={handleLogout} variant="destructive" disabled={isLoading}>
           <Icons.logout className="w-4" />
           {upperFirst(t('common.messages.logout'))}
           </DropdownMenuItem>

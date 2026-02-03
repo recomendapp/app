@@ -1,0 +1,28 @@
+import * as React from 'react';
+import { Html, Button, Container, Text, Heading } from '@react-email/components';
+
+interface VerificationEmailProps {
+  url: string;
+  dictionary: {
+    title: string;
+    text: string;
+    button: string;
+  };
+}
+
+export const VerificationEmail = ({ url, dictionary }: VerificationEmailProps) => {
+  return (
+    <Html lang="fr">
+      <Container>
+        <Heading>{dictionary.title}</Heading>
+        <Text>{dictionary.text}</Text>
+        <Button 
+          href={url}
+          style={{ background: '#000', color: '#fff', padding: '12px 20px' }}
+        >
+          {dictionary.button}
+        </Button>
+      </Container>
+    </Html>
+  );
+};

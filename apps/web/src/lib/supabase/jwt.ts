@@ -3,7 +3,7 @@ import { SUPABASE_JWT_SECRET } from "../env";
 import { JwtPayload } from "@supabase/supabase-js";
 import { NextRequest } from "next/server";
 import { createServerClient } from "./server";
-import { SupportedLocale } from "@/translations/locales";
+import { SupportedLocale } from "@libs/i18n";
 
 const JWT_SECRET = new TextEncoder().encode(SUPABASE_JWT_SECRET);
 

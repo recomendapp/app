@@ -32,6 +32,7 @@ import { useUsernameAvailability } from '@/hooks/use-username-availability';
 import { InputPassword } from '@/components/ui/input-password';
 import { Turnstile } from "next-turnstile";
 import { upperFirst } from 'lodash';
+import { authClient } from '@/lib/auth/client';
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 15;
@@ -41,7 +42,7 @@ const PASSWORD_MIN_LENGTH = 8;
 
 export default function Signup() {
 	const supabase = useSupabaseClient();
-	const { signup, loginWithOtp } = useAuth();
+	const { signup } = useAuth();
 	const t = useTranslations('pages.auth.signup');
 	const common = useTranslations('common');
 
@@ -151,7 +152,7 @@ export default function Signup() {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [usernameAvailability.isAvailable, common]);
 	
-	const handleSubmit = useCallback(async (data: SignupFormValues) => {
+	const handleSubmit = useCallback(async (submitData: SignupFormValues) => {
 		try {
 			setIsLoading(true);
 			if (turnstileStatus !== 'success') {
@@ -159,38 +160,22 @@ export default function Signup() {
 				return;
 			}
 			await signup({
-				email: data.email,
-				name: data.full_name,
-				username: data.username,
-				password: data.password,
-				language: locale,
-			});
-			toast.success(t('form.success', { email: data.email }));
+				email: submitData.email,
+				name: submitData.full_name,
+				username: submitData.username,
+				password: submitData.password,
+				redirectTo,
+			})
 			setShowOtp(true);
-		} catch (error) {
-			if (error instanceof AuthError) {
-				switch (error.status) {
-					case 422:
-						toast.error(common('form.email.error.unavailable'));
-						break;
-					case 500:
-						toast.error(common('form.username.schema.unavailable'));
-						break;
-					default:
-						toast.error(error.message);
-				}
-			} else {
-				toast.error(upperFirst(common('messages.an_error_occurred')));
-			}
 		} finally {
 			setIsLoading(false);
 		}
-	}, [signup, t, common, locale, turnstileStatus]);
+	}, [signup, common, turnstileStatus, redirectTo]);
 
 	const resendOtp = useCallback(async () => {
 		try {
 			setIsLoading(true);
-			await loginWithOtp(form.getValues('email'), redirectTo);
+			// await loginWithOtp(form.getValues('email'), redirectTo);
 			toast.success(common('form.code_sent'));
 		} catch (error) {
 			if (error instanceof AuthError) {
@@ -207,7 +192,7 @@ export default function Signup() {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [loginWithOtp, redirectTo, form, common]);
+	}, [redirectTo, form, common]);
 
 	const handleVerifyOtp = useCallback(async (otp: string) => {
 		try {

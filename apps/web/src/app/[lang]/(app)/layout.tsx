@@ -1,6 +1,6 @@
 import { AppLayout } from "@/layouts/app-layout/AppLayout";
 import { routing } from "@/lib/i18n/routing";
-import { SupportedLocale } from "@/translations/locales";
+import { SupportedLocale } from "@libs/i18n";
 import { notFound } from "next/navigation";
 
 interface AppLayoutProps {

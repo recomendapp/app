@@ -4,7 +4,7 @@ import { upperFirst } from 'lodash';
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import { TvSeriesCreateReview } from './_components/TvSeriesCreateReview';
-import { SupportedLocale } from '@/translations/locales';
+import { SupportedLocale } from '@libs/i18n';
 import { getTvSeries } from '@/api/server/medias';
 import { Database } from '@recomendapp/types';
 

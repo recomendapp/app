@@ -4,7 +4,7 @@ import { createServerClient } from '@/lib/supabase/server';
 import { ProfileHeader } from './_components/ProfileHeader';
 import { ProfileNavbar } from './_components/ProfileNavbar';
 import { ProfilePrivateAccountCard } from './_components/ProfilePrivateAccountCard';
-import { SupportedLocale } from '@/translations/locales';
+import { SupportedLocale } from '@libs/i18n';
 
 export default async function Layout(
   props: {

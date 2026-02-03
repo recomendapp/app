@@ -1,6 +1,6 @@
 export type SiteConfig = typeof siteConfig;
+import { getURL } from '../lib/utils';
 import { Icons } from './icons';
-import { getURL } from '@/lib/utils';
 
 export const siteConfig = {
   name: 'Recomend',

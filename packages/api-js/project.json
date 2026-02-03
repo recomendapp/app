@@ -1,0 +1,45 @@
+{
+  "name": "api-js",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/api-js/src",
+  "projectType": "library",
+  "release": {
+    "version": {
+      "manifestRootsToUpdate": ["dist/{projectRoot}"],
+      "currentVersionResolver": "git-tag",
+      "fallbackCurrentVersionResolver": "disk"
+    }
+  },
+  "tags": [],
+  "targets": {
+    "codegen": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "npx openapi-ts"
+      },
+      "dependsOn": [
+        {
+          "target": "generate-openapi",
+          "projects": "api"
+        }
+      ]
+    },
+    "build": {
+      "executor": "@nx/js:tsc",
+      "dependsOn": ["codegen"],
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/api-js",
+        "main": "packages/api-js/src/index.ts",
+        "tsConfig": "packages/api-js/tsconfig.lib.json",
+        "assets": ["packages/api-js/*.md"]
+      }
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/{projectRoot}"
+      }
+    }
+  }
+}

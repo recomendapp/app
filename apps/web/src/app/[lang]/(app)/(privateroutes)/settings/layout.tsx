@@ -2,7 +2,7 @@ import { SettingsNav } from '@/app/[lang]/(app)/(privateroutes)/settings/_compon
 import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
 import { Metadata } from 'next';
-import { SupportedLocale } from '@/translations/locales';
+import { SupportedLocale } from '@libs/i18n';
 
 export const generateMetadata = async (
   props: {

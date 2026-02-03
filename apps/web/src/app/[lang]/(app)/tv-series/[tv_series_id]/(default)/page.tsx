@@ -6,7 +6,7 @@ import { truncate, upperFirst } from 'lodash';
 import { siteConfig } from '@/config/site';
 import { generateAlternates } from '@/lib/i18n/routing';
 import { TVSeries, WithContext } from 'schema-dts';
-import { SupportedLocale } from '@/translations/locales';
+import { SupportedLocale } from '@libs/i18n';
 import { getTvSeries } from '@/api/server/medias';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { Database } from '@recomendapp/types';

@@ -5,7 +5,7 @@ import { truncate, upperFirst } from 'lodash';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { MoviePlaylists } from './_components/MoviePlaylists';
-import { SupportedLocale } from '@/translations/locales';
+import { SupportedLocale } from '@libs/i18n';
 import { getMovie } from '@/api/server/medias';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { Database } from '@recomendapp/types';

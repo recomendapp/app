@@ -6,7 +6,7 @@ import { generateAlternates } from '@/lib/i18n/routing';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { DEFAULT_PER_PAGE, getValidatedDisplay, getValidateDepartment, getValidatedSortBy, getValidatedSortOrder, getValidateJob, getValidatePage } from './_components/constants';
-import { SupportedLocale } from '@/translations/locales';
+import { SupportedLocale } from '@libs/i18n';
 import { Filters } from './_components/Filters';
 import { Pagination } from './_components/Pagination';
 import { ActiveFilters } from './_components/ActiveFilters';

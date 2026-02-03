@@ -1,17 +1,17 @@
 'use client'
 
 import { CustomerInfo, LogLevel, Purchases } from "@revenuecat/purchases-js";
-import { Session } from "@supabase/supabase-js";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import { authKeys } from "@/api/client/keys/authKeys";
 import { REVENUECAT_API_KEY } from "../env";
+import { UserMe } from "@packages/api-js/src";
 
-export const useRevenueCat = (session: Session | null | undefined) => {
+export const useRevenueCat = (user: UserMe | null | undefined) => {
   const queryClient = useQueryClient();
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo | undefined>(undefined);
   
-  const init = useCallback(async (session: Session) => {
+  const init = useCallback(async (user: UserMe) => {
     if (process.env.NODE_ENV === 'development') {
       Purchases.setLogLevel(LogLevel.Verbose);
     }
@@ -20,11 +20,11 @@ export const useRevenueCat = (session: Session | null | undefined) => {
     }
     const purchases = Purchases.configure({
       apiKey: REVENUECAT_API_KEY,
-      appUserId: session.user.id,
+      appUserId: user.id,
     });
     const customerInfo = await purchases.getCustomerInfo();
     await purchases.setAttributes({
-      $email: session.user.email || null,
+      $email: user.email,
     })
     return customerInfo;
   }, []);
@@ -34,12 +34,12 @@ export const useRevenueCat = (session: Session | null | undefined) => {
 
     const run = async () => {
       try {
-        if (!session) {
+        if (!user) {
           queryClient.setQueryData(authKeys.customerInfo(), null);
           setCustomerInfo(undefined);
           return;
         }
-        const info = await init(session);
+        const info = await init(user);
         if (!cancelled) {
           queryClient.setQueryData(authKeys.customerInfo(), info);
           setCustomerInfo(info);
@@ -54,7 +54,7 @@ export const useRevenueCat = (session: Session | null | undefined) => {
     return () => {
       cancelled = true;
     };
-  }, [session, init, queryClient]);
+  }, [user, init, queryClient]);
 
   return { customerInfo };
 };

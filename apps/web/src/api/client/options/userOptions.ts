@@ -1181,15 +1181,15 @@ export const useUserPlaylistsFriendOptions = ({
 	}
 }) => {
 	const perPage = 20;
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const supabase = useSupabaseClient();
 	return infiniteQueryOptions({
 		queryKey: userKeys.playlistsFriends({
-			userId: session?.user.id!,
+			userId: user?.id!,
 			filters: filters,
 		}),
 		queryFn: async ({ pageParam = 1 }) => {
-			if (!session?.user.id) return null;
+			if (!user?.id) return null;
 			
 			let from = (pageParam - 1) * perPage;
 			let to = from + perPage - 1;
@@ -1222,7 +1222,7 @@ export const useUserPlaylistsFriendOptions = ({
 		getNextPageParam: (lastPage, pages) => {
 			return lastPage?.length == perPage ? pages.length + 1 : undefined;
 		},
-		enabled: !!session?.user.id,
+		enabled: !!user?.id,
 	})
 }
 /* -------------------------------------------------------------------------- */

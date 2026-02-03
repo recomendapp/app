@@ -4,7 +4,7 @@ import { getTranslations } from 'next-intl/server';
 import { truncate } from 'lodash';
 import { siteConfig } from '@/config/site';
 import { generateAlternates } from '@/lib/i18n/routing';
-import { SupportedLocale } from '@/translations/locales';
+import { SupportedLocale } from '@libs/i18n';
 
 export async function generateMetadata(
   props: {

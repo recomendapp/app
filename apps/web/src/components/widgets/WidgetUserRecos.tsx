@@ -17,11 +17,11 @@ import { PropsWithChildren } from "react";
 export const WidgetUserRecos = ({
   className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
-  const { session } = useAuth();
+  const { user } = useAuth();
   const t = useTranslations('common');
 
   const { data: recos } = useQuery(useUserRecosOptions({
-    userId: session?.user.id,
+    userId: user?.id,
     filters: {
       sortBy: 'created_at',
       sortOrder: 'random',
@@ -31,7 +31,7 @@ export const WidgetUserRecos = ({
 
   const sendersShow = 3;
 
-  if (!session) return null;
+  if (!user) return null;
 
   if (!recos || !recos.length) return null;
 

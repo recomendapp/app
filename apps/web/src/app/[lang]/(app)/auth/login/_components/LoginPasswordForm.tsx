@@ -1,25 +1,21 @@
 'use client'
 
-import { Link, useRouter } from "@/lib/i18n/navigation";
+import { Link } from "@/lib/i18n/navigation";
 import { Icons } from '@/config/icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import toast from 'react-hot-toast';
 import * as z from 'zod';
-import { AuthError } from '@supabase/supabase-js';
 import { useAuth } from '@/context/auth-context';
 import { useCallback, useMemo, useState } from 'react';
 import { InputPassword } from '@/components/ui/input-password';
 import { useTranslations } from 'next-intl';
-import { upperFirst } from "lodash";
 
 export function LoginPasswordForm({
   className,
   redirectTo,
   ...props
 } : React.HTMLAttributes<HTMLDivElement> & { redirectTo: string | null }) {
-  const router = useRouter();
   const { login } = useAuth();
   const t = useTranslations('pages.auth.login');
   const common = useTranslations('common');
@@ -37,28 +33,15 @@ export function LoginPasswordForm({
       const emailForm = (event.target as HTMLFormElement).email.value;
       const passwordForm = (event.target as HTMLFormElement).password.value;
       const { email, password } = loginSchema.parse({ email: emailForm, password: passwordForm });
-      await login(email, password, redirectTo);
-      router.push(redirectTo || '/');
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        error.errors.map((currError) => {
-          toast.error(currError.message);
-        });
-      } else if (error instanceof AuthError) {
-        switch (error.status) {
-          case 400:
-            toast.error(t('form.wrong_credentials'));
-            break;
-          default:
-            toast.error(error.message);
-        }
-      } else {
-        toast.error(upperFirst(common('messages.an_error_occurred')));
-      }
+      await login({
+        email,
+        password,
+        redirectTo,
+      });
     } finally {
       setIsLoading(false);
     }
-  }, [login, redirectTo, router, loginSchema, t, common]);
+  }, [login, redirectTo, loginSchema]);
 
   return (
     <form onSubmit={onSubmit}>

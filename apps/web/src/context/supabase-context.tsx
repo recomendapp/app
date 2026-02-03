@@ -5,7 +5,7 @@ import { Database } from "@recomendapp/types";
 import { createBrowserClient } from "@supabase/ssr";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, use, useMemo } from "react";
-import { defaultSupportedLocale } from "@/translations/locales";
+import { defaultSupportedLocale } from "@libs/i18n";
 import { useLocale } from "next-intl";
 
 const SupabaseContext = createContext<SupabaseClient<Database> | undefined>(undefined);

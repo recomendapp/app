@@ -7,7 +7,7 @@ import { Metadata } from 'next';
 import { generateAlternates } from '@/lib/i18n/routing';
 import { Movie, WithContext } from 'schema-dts';
 import { toISO8601Duration } from '@/lib/utils';
-import { SupportedLocale } from '@/translations/locales';
+import { SupportedLocale } from '@libs/i18n';
 import { getMovie } from '@/api/server/medias';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { Database } from '@recomendapp/types';

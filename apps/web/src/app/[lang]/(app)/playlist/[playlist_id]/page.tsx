@@ -5,7 +5,7 @@ import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
 import { generateAlternates } from '@/lib/i18n/routing';
 import { Playlist } from './_components/Playlist';
-import { SupportedLocale } from '@/translations/locales';
+import { SupportedLocale } from '@libs/i18n';
 import { getPlaylist } from '@/api/server/playlists';
 
 export async function generateMetadata(

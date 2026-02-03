@@ -1,0 +1,31 @@
+import { client } from '@packages/api-js';
+import { getLocale } from 'next-intl/server';
+import { headers } from 'next/headers';
+import { HEADER_LANGUAGE_KEY } from '@libs/i18n';
+import { SupportedLocale } from '@libs/i18n/src';
+
+export interface GetApiOptions {
+  headers?: Headers;
+  locale?: SupportedLocale;
+}
+
+export const getApi = async ({
+  headers: customHeaders,
+  locale,
+}: GetApiOptions = {}) => {
+  const [h, l] = await Promise.all([
+    customHeaders || headers(),
+    locale || getLocale(),
+  ]);
+
+  client.setConfig({
+    baseUrl: process.env.NEXT_PUBLIC_API_URL,
+    headers: {
+      cookie: h.get('cookie') || '',
+      [HEADER_LANGUAGE_KEY]: l,
+    },
+    
+  });
+
+  return client;
+};

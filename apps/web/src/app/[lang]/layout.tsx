@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { Providers } from '@/context/Providers';
 import Script from 'next/script';
 import { generateAlternates } from '@/lib/i18n/routing';
-import { SupportedLocale } from '@/translations/locales';
+import { SupportedLocale } from '@libs/i18n';
 import { getTranslations } from 'next-intl/server';
 
 export const viewport: Viewport = {

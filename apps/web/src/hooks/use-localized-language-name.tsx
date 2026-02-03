@@ -1,7 +1,7 @@
 import { useLocale } from "next-intl";
 import getUnicodeFlagIcon from 'country-flag-icons/unicode'
 import { capitalize } from "lodash";
-import { SupportedLocale } from "@/translations/locales";
+import { SupportedLocale } from "@libs/i18n";
 
 export const useLocalizedLanguageName = (locales: SupportedLocale[]) => {
 	const currentLocale = useLocale();

@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "verify_email": {
+      "subject": "Vérifiez votre compte",
+      "title": "Bienvenue sur Recomend !",
+      "text": "Cliquez ci-dessous pour valider votre compte.",
+      "button": "Vérifier mon email"
+    }
+  }
+}

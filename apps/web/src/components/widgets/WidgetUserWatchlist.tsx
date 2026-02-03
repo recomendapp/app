@@ -15,11 +15,11 @@ import { useQuery } from "@tanstack/react-query";
 export const WidgetUserWatchlist = ({
   className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
-  const { session } = useAuth();
+  const { user } = useAuth();
   const t = useTranslations();
 
   const { data: watchlist } = useQuery(useUserWatchlistOptions({
-    userId: session?.user.id,
+    userId: user?.id,
     filters: {
       sortBy: 'created_at',
       sortOrder: 'random',
@@ -27,7 +27,7 @@ export const WidgetUserWatchlist = ({
     }
   }));
 
-  if (!session) return null;
+  if (!user) return null;
 
   if (!watchlist || !watchlist.length) return (null);
 

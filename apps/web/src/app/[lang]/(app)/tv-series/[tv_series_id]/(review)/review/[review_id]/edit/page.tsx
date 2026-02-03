@@ -3,7 +3,7 @@ import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { upperFirst } from 'lodash';
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
-import { SupportedLocale } from '@/translations/locales';
+import { SupportedLocale } from '@libs/i18n';
 import { TvSeriesEditReview } from './_components/TvSeriesEditReview';
 import { getTvSeries } from '@/api/server/medias';
 

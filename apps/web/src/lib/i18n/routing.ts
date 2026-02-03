@@ -1,7 +1,7 @@
 import { defineRouting } from 'next-intl/routing';
 import { AlternateURLs } from 'next/dist/lib/metadata/types/alternative-urls-types';
 import { siteConfig } from '@/config/site';
-import { defaultSupportedLocale, supportedLocales } from '@/translations/locales';
+import { defaultSupportedLocale, supportedLocales } from '@libs/i18n';
 
 export const localeCookieName = 'LOCALE';
 

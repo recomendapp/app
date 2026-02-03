@@ -6,7 +6,7 @@ import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
 import { TVSeason, WithContext } from "schema-dts";
 import { generateAlternates } from "@/lib/i18n/routing";
-import { SupportedLocale } from "@/translations/locales";
+import { SupportedLocale } from "@libs/i18n";
 import { getTvSeason } from "@/api/server/medias";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 import { Database } from "@recomendapp/types";

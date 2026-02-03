@@ -5,7 +5,7 @@ import { TvSeriesPlaylists } from './_components/TvSeriesPlaylists';
 import { truncate, upperFirst } from 'lodash';
 import { generateAlternates } from '@/lib/i18n/routing';
 import { getTranslations } from 'next-intl/server';
-import { SupportedLocale } from '@/translations/locales';
+import { SupportedLocale } from '@libs/i18n';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { Database } from '@recomendapp/types';
 import { notFound } from 'next/navigation';

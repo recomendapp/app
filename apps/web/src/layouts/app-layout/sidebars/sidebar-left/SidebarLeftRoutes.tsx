@@ -45,7 +45,7 @@ const SidebarCollectionContainerIcon = ({
 }
 
 export const SidebarLeftRoutes = () => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const { open } = useSidebar();
 	const { isMobile } = useUI();
 	const t = useTranslations('common');
@@ -148,7 +148,7 @@ export const SidebarLeftRoutes = () => {
 		isFetchingNextPage,
 		hasNextPage,
 	} = useInfiniteQuery(useUserPlaylistsInfiniteOptions({
-		userId: session?.user.id,
+		userId: user?.id,
 		filters: {
 			sortBy: 'updated_at',
 			sortOrder: 'desc',
@@ -194,7 +194,7 @@ export const SidebarLeftRoutes = () => {
 		</SidebarGroup>
 		<SidebarSeparator />
 		<SidebarGroup className="overflow-hidden">
-			{session ? (
+			{user ? (
 			<SidebarMenu className="h-full">
 				<SidebarMenuItem>
 					<SidebarMenuButton tooltip={upperFirst(t('messages.library'))} isActive={pathname === '/collection'} asChild>

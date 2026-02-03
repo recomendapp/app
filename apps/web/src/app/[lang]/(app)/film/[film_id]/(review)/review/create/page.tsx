@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';import { Metadata } from 'next';
 import { MovieCreateReview } from './_components/MovieCreateReview';
 import { notFound } from 'next/navigation';
-import { SupportedLocale } from '@/translations/locales';
+import { SupportedLocale } from '@libs/i18n';
 import { getMovie } from '@/api/server/medias';
 import { Database } from '@recomendapp/types';
 

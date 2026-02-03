@@ -1,0 +1,20 @@
+{
+  "name": "shared-mailer",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/mailer/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/mailer",
+        "tsConfig": "libs/shared/mailer/tsconfig.lib.json",
+        "packageJson": "libs/shared/mailer/package.json",
+        "main": "libs/shared/mailer/src/index.ts",
+        "assets": ["libs/shared/mailer/*.md"]
+      }
+    }
+  }
+}

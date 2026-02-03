@@ -1,9 +1,7 @@
 import { getRequestConfig } from 'next-intl/server';
 import { routing } from './routing';
 import deepmerge from 'deepmerge';
-import { getFallbackLocale } from '@/translations/utils/getFallbackLocale';
-import { getDictionary } from '@/translations/utils/getDictionary';
-import { SupportedLocale } from '@/translations/locales';
+import { SupportedLocale, getFallbackLocale, getDictionary } from '@libs/i18n';
 
 const loadMessagesRecursive = async (locale: SupportedLocale): Promise<Record<string, any>> => {
   const fallback = getFallbackLocale({ locale });

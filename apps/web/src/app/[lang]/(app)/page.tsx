@@ -18,7 +18,7 @@ import { WidgetUserWatchlist } from "@/components/widgets/WidgetUserWatchlist";
 import { useMemo } from "react";
 
 export default function Home() {
-	const { session, user, customerInfo } = useAuth();
+	const { user } = useAuth();
 	const { device } = useUI();
 	const t = useTranslations();
 	const now = useNow({ updateInterval: 1000 * 60 });
@@ -34,12 +34,12 @@ export default function Home() {
 		<div className="p-4 gap-4 gap-x-8 grid grid-cols-1 @4xl/main:grid-cols-2">
 			<div className="flex justify-between items-center w-full">
 				<h2 className="text-xl md:text-4xl break-all line-clamp-2">
-					{session ? upperFirst(t('common.messages.greeting_with_name', { timeOfDay: getTimeOfDay, name: user?.full_name! })) : upperFirst(t('common.messages.welcome_to_app', { app: siteConfig.name }))}
+					{user ? upperFirst(t('common.messages.greeting_with_name', { timeOfDay: getTimeOfDay, name: user.name })) : upperFirst(t('common.messages.welcome_to_app', { app: siteConfig.name }))}
 				</h2>
 				{device === "mobile" ? <HeaderRightSide /> : null}
 			</div>
 			<WidgetMostRecommended className='col-span-full' />
-			{!session ? (
+			{!user ? (
 				// Only non-logged users
 				<>
 				<Button className="col-span-full m-auto max-w-lg" asChild>
@@ -48,7 +48,7 @@ export default function Home() {
 				<WidgetRecomendShowcase className='col-span-full'/>
 				</>
 			) : null}
-			{session ? (
+			{user ? (
 				// Only logged users
 				<>
 				<WidgetUserRecos />

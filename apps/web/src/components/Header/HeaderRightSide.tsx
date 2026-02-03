@@ -12,12 +12,12 @@ import { upperFirst } from 'lodash';
 import { ButtonGroup } from '../ui/button-group';
 
 export default function HeaderRightSide() {
-  const { session } = useAuth();
+  const { user } = useAuth();
   const { state } = useNotifications();
   const t = useTranslations();
   return (
     <ButtonGroup>
-      {session ? (
+      {user ? (
         <>
           <ButtonGroup>
             {state === 'success' && <NotificationsButton />}

@@ -5,7 +5,7 @@ import {
 import { Database } from '@recomendapp/types';
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from '../env';
 import { cache } from 'react';
-import { SupportedLocale } from '@/translations/locales';
+import { SupportedLocale } from '@libs/i18n';
 import { NextRequest } from 'next/server';
 import { routing } from '../i18n/routing';
 

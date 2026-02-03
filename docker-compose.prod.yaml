@@ -1,0 +1,22 @@
+services:
+  api:
+    image: api:latest
+    env_file:
+      - .env
+    ports:
+      - '3000:3000'
+    environment:
+      - AUTH_HOST=auth
+      - AUTH_GRPC_PORT=50051
+    depends_on:
+      - auth
+    restart: unless-stopped
+
+  auth:
+    image: api-auth:latest
+    env_file:
+      - .env
+    environment:
+      - AUTH_GRPC_HOST=0.0.0.0
+      - AUTH_GRPC_PORT=50051
+    restart: unless-stopped

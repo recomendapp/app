@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "verify_email": {
+      "subject": "Verify your account",
+      "title": "Welcome to Recomend!",
+      "text": "Click below to validate your account.",
+      "button": "Verify my email"
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import { composePlugins, withNx } from "@nx/next";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
@@ -10,23 +11,29 @@ const withPWA = require('@ducanh2912/next-pwa').default({
 
 const withNextIntl = createNextIntlPlugin('./src/lib/i18n/request.ts');
 
+/**
+ * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
+ **/
 const nextConfig: NextConfig = {
+  // nx: {},
+
   reactStrictMode: true,
   reactCompiler: true,
   output: 'standalone',
   // https://github.com/vercel/next.js/issues/79313#issuecomment-2892288965
   htmlLimitedBots: /Googlebot|Bingbot|DuckDuckBot|YandexBot|Slurp|facebookexternalhit|Twitterbot|LinkedInBot|Slackbot/i,
+
   images: {
-    // unoptimized: true, // Issue: https://github.com/vercel/next.js/issues/54482
     remotePatterns: [
-      new URL('https://supabase.recomend.app/**'),
-      new URL('https://api.recomend.app/**'),
-      new URL('https://image.tmdb.org/**'),
-      new URL('https://images.justwatch.com/**'),
-      new URL('https://s.ltrbxd.com/**'),
-      new URL('https://media.giphy.com/**'),
-    ]
+      { protocol: 'https', hostname: 'supabase.recomend.app' },
+      { protocol: 'https', hostname: 'api.recomend.app' },
+      { protocol: 'https', hostname: 'image.tmdb.org' },
+      { protocol: 'https', hostname: 'images.justwatch.com' },
+      { protocol: 'https', hostname: 's.ltrbxd.com' },
+      { protocol: 'https', hostname: 'media.giphy.com' },
+    ],
   },
+
   async redirects() {
     return [
       {
@@ -51,6 +58,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+
   async rewrites() {
     return [
       {
@@ -61,4 +69,10 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withPWA(withNextIntl(nextConfig));
+const plugins = [
+  withNx,
+  withPWA,
+  withNextIntl,
+];
+
+module.exports = composePlugins(...plugins)(nextConfig);

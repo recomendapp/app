@@ -4,7 +4,7 @@ import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
 import { generateAlternates } from '@/lib/i18n/routing';
 import { getTranslations } from 'next-intl/server';
-import { SupportedLocale } from '@/translations/locales';
+import { SupportedLocale } from '@libs/i18n';
 import { ProfileFeed } from './_components/ProfileFeed';
 import { getProfile } from '@/api/server/users';
 

@@ -16,7 +16,6 @@ import {
 import { Provider } from '@supabase/supabase-js';
 import { useAuth } from '@/context/auth-context';
 import { useState } from 'react';
-import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { useRandomImage } from '@/hooks/use-random-image';
 import { RectangleEllipsisIcon } from 'lucide-react';
@@ -36,8 +35,6 @@ export default function Login() {
     try {
       setIsLoading(true);
       await loginOAuth2(provider, redirectTo);
-    } catch (error) {
-      toast.error(upperFirst(common('messages.an_error_occurred')));
     } finally {
       setIsLoading(false);
     }

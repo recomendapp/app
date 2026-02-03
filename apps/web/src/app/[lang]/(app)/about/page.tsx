@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { Link } from "@/lib/i18n/navigation";
 import { upperFirst } from 'lodash';
 import { Metadata } from 'next';
-import { SupportedLocale } from "@/translations/locales";
+import { SupportedLocale } from "@libs/i18n";
 
 export const generateMetadata = async (
   props: {

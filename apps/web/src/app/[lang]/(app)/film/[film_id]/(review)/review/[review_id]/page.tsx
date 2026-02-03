@@ -6,7 +6,7 @@ import { MovieReview } from './_components/MovieReview';
 import { Review, WithContext } from 'schema-dts';
 import { siteConfig } from '@/config/site';
 import { generateAlternates } from '@/lib/i18n/routing';
-import { SupportedLocale } from '@/translations/locales';
+import { SupportedLocale } from '@libs/i18n';
 import { generateText } from '@tiptap/core';
 import { generateJSON } from '@tiptap/html';
 import { EDITOR_EXTENSIONS } from '@/components/tiptap/TiptapExtensions';

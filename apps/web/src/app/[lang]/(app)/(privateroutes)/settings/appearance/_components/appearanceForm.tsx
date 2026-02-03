@@ -34,7 +34,7 @@ import { useLocalizedLanguageName } from '@/hooks/use-localized-language-name';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ChevronsUpDown } from 'lucide-react';
 import { upperFirst } from 'lodash';
-import { supportedLocales } from '@/translations/locales';
+import { supportedLocales } from '@libs/i18n';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
 import { useUserUpdateMutation } from '@/api/client/mutations/userMutations';
 

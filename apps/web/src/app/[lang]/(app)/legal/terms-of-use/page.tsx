@@ -1,6 +1,6 @@
 import { siteConfig } from "@/config/site";
 import { Link } from "@/lib/i18n/navigation";
-import { SupportedLocale } from "@/translations/locales";
+import { SupportedLocale } from "@libs/i18n";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
