@@ -1,8 +1,10 @@
 import { createAuthClient } from 'better-auth/react';
 import { magicLinkClient, usernameClient } from "better-auth/client/plugins";
+import { API_URL } from '../env';
 
 export const authClient = createAuthClient({
-  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/auth`,
+  baseURL: API_URL,
+  basePath: '/auth',
   plugins: [
     usernameClient(),
     magicLinkClient(),

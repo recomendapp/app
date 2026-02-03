@@ -3,6 +3,7 @@ import { getLocale } from 'next-intl/server';
 import { headers } from 'next/headers';
 import { HEADER_LANGUAGE_KEY } from '@libs/i18n';
 import { SupportedLocale } from '@libs/i18n/src';
+import { API_ENDPOINT } from '../env';
 
 export interface GetApiOptions {
   headers?: Headers;
@@ -19,7 +20,7 @@ export const getApi = async ({
   ]);
 
   client.setConfig({
-    baseUrl: process.env.NEXT_PUBLIC_API_URL,
+    baseUrl: API_ENDPOINT,
     headers: {
       cookie: h.get('cookie') || '',
       [HEADER_LANGUAGE_KEY]: l,

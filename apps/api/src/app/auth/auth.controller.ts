@@ -4,10 +4,7 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { AUTH_SERVICE, AuthService } from './auth.service';
 
 @ApiExcludeController()
-@Controller({
-  path: 'auth',
-  version: '1',
-})
+@Controller('auth')
 export class AuthController {
   constructor(
     @Inject(AUTH_SERVICE) private readonly auth: AuthService,

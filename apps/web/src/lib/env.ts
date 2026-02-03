@@ -4,3 +4,6 @@ export const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 export const SUPABASE_JWT_SECRET = process.env.SUPABASE_JWT_SECRET!;
 
 export const REVENUECAT_API_KEY = process.env.NEXT_PUBLIC_REVENUECAT_API_KEY!;
+
+export const API_URL = process.env.NEXT_PUBLIC_API_URL!;
+export const API_ENDPOINT = `${API_URL}/v1`;

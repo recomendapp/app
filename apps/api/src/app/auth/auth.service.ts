@@ -6,7 +6,7 @@ import { ENV_SERVICE, EnvService } from '@libs/env'; // Ton token
 import { DRIZZLE_SERVICE, DrizzleService } from '@libs/core';
 import { MailerClient } from '@shared/mailer';
 import { profile } from '@libs/core/schemas';
-import { v7 as uuidv7 } from "uuid";
+import { v7 as uuidv7 } from 'uuid';
 
 export const AUTH_SERVICE = 'AUTH_SERVICE';
 

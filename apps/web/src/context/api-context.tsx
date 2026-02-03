@@ -1,11 +1,12 @@
 'use client'
 
+import { API_ENDPOINT } from "@/lib/env";
 import { client } from "@packages/api-js";
 import { useLocale } from "next-intl";
 import { createContext, use, useMemo } from "react";
 
 client.setConfig({
-	baseUrl: process.env.NEXT_PUBLIC_API_URL || 'https://api.woodn.fr',
+	baseUrl: API_ENDPOINT || 'https://api.recomend.app/v1',
 	credentials: 'include',
 });
 
