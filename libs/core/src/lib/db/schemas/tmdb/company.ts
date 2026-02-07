@@ -33,7 +33,7 @@ export const tmdbCompanyAlternativeName = tmdbSchema.table(
   'company_alternative_name',
   {
     id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
-    companyId: bigint({ mode: 'number' })
+    companyId: bigint('company_id', { mode: 'number' })
       .notNull()
       .references(() => tmdbCompany.id, { onDelete: 'cascade' }),
     name: text().notNull(),
@@ -47,7 +47,7 @@ export const tmdbCompanyImage = tmdbSchema.table(
   'company_image',
   {
     id: text().primaryKey(),
-    companyId: bigint({ mode: 'number' })
+    companyId: bigint('company_id', { mode: 'number' })
       .notNull()
       .references(() => tmdbCompany.id, { onDelete: 'cascade' }),
     filePath: text('file_path').notNull(),

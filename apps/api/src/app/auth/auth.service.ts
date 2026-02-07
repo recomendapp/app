@@ -7,6 +7,8 @@ import { DRIZZLE_SERVICE, DrizzleService } from '@libs/core';
 import { MailerClient } from '@shared/mailer';
 import { profile } from '@libs/core/schemas';
 import { v7 as uuidv7 } from 'uuid';
+import { USER_RULES } from '../../config/validation-rules';
+import bcrypt from "bcrypt"; 
 
 export const AUTH_SERVICE = 'AUTH_SERVICE';
 
@@ -37,13 +39,10 @@ const createBetterAuth = ({
 		},
 		plugins: [
 			username({
-				minUsernameLength: 3,
-				maxUsernameLength: 15,
-				usernameValidator: (username) => {
-					const usernameRegex = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{2,14}$/;
-					return usernameRegex.test(username);
-				},
-				usernameNormalization: (username) => username.trim().toLowerCase(),
+				minUsernameLength: USER_RULES.USERNAME.MIN,
+				maxUsernameLength: USER_RULES.USERNAME.MAX,
+				usernameValidator: (username) => USER_RULES.USERNAME.REGEX.test(username),
+				usernameNormalization: USER_RULES.USERNAME.normalization,
 			}),
 			openAPI(),
 			magicLink({
@@ -64,6 +63,9 @@ const createBetterAuth = ({
 				}
 			}
 		},
+		disabledPaths: [
+			'/update-user',
+		],
 		hooks: {
 			before: createAuthMiddleware(async (ctx) => {
 				if (ctx.path !== '/sign-up/email' && ctx.path !== '/update-user') return
@@ -81,6 +83,14 @@ const createBetterAuth = ({
 		emailAndPassword: {
 			enabled: true,
 			requireEmailVerification: true,
+			password: { 
+				hash: async (password) => { 
+					return await bcrypt.hash(password, 10); 
+				}, 
+				verify: async ({ hash, password }) => { 
+					return await bcrypt.compare(password, hash); 
+				} 
+			} 
 		},
 		emailVerification: {
 			autoSignInAfterVerification: true,
@@ -94,6 +104,17 @@ const createBetterAuth = ({
 			},
 		},
 		user: {
+			deleteUser: {
+				enabled: true,
+				sendDeleteAccountVerification: async ({ user, token, url }) => {
+					await mailer.emit('auth:delete-account-email', {
+						email: user.email,
+						token,
+						url,
+						lang: 'en',
+					});
+				},
+			},
 			additionalFields: {
 				usernameUpdatedAt: {
 					type: 'date',
@@ -116,6 +137,9 @@ const createBetterAuth = ({
 };
 
 export type AuthService = ReturnType<typeof createBetterAuth>;
+
+export type Session = AuthService['$Infer']['Session']['session'];
+export type User = AuthService['$Infer']['Session']['user'];
 
 export const AuthProvider: Provider = {
   provide: AUTH_SERVICE,

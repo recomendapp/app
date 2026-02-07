@@ -13,7 +13,7 @@ export const tmdbNetworkImage = tmdbSchema.table(
   'network_image',
   {
     id: text().primaryKey(),
-    networkId: bigint({ mode: 'number' })
+    networkId: bigint('network_id', { mode: 'number' })
       .notNull()
       .references(() => tmdbNetwork.id, { onDelete: 'cascade' }),
     filePath: text('file_path').notNull(),
@@ -34,7 +34,7 @@ export const tmdbNetworkAlternativeName = tmdbSchema.table(
   'network_alternative_name',
   {
     id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
-    networkId: bigint({ mode: 'number' })
+    networkId: bigint('network_id', { mode: 'number' })
       .notNull()
       .references(() => tmdbNetwork.id, { onDelete: 'cascade' }),
     name: text().notNull(),

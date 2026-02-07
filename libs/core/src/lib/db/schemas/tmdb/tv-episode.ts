@@ -16,7 +16,7 @@ export const tmdbTvEpisode = tmdbSchema.table(
   'tv_episode',
   {
     id: bigint({ mode: 'number' }).primaryKey(),
-    seasonId: bigint('season_id', { mode: 'number' })
+    tvSeasonId: bigint('tv_season_id', { mode: 'number' })
       .notNull()
       .references(() => tmdbTvSeason.id, { onDelete: 'cascade' }),
     airDate: timestamp('air_date', { withTimezone: true, mode: 'string' }),
@@ -33,9 +33,9 @@ export const tmdbTvEpisode = tmdbSchema.table(
     voteCount: integer('vote_count').default(0).notNull(),
   },
   (table) => [
-    unique('unique_tv_episodes').on(table.seasonId, table.episodeNumber),
+    unique('unique_tv_episodes').on(table.tvSeasonId, table.episodeNumber),
     index('idx_tmdb_tv_episode_episode_number').on(table.episodeNumber),
-    index('idx_tmdb_tv_episode_season_id').on(table.seasonId),
+    index('idx_tmdb_tv_episode_tv_season_id').on(table.tvSeasonId),
   ],
 );
 
@@ -46,13 +46,13 @@ export const tmdbTvEpisodeCredit = tmdbSchema.table(
     creditId: text('credit_id')
       .notNull()
       .references(() => tmdbTvSeriesCredit.id, { onDelete: 'cascade' }),
-    episodeId: bigint('episode_id', { mode: 'number' })
+    tvEpisodeId: bigint('tv_episode_id', { mode: 'number' })
       .notNull()
       .references(() => tmdbTvEpisode.id, { onDelete: 'cascade' }),
   },
   (table) => [
-    unique('unique_tv_episode_credit').on(table.creditId, table.episodeId),
+    unique('unique_tv_episode_credit').on(table.creditId, table.tvEpisodeId),
     index('idx_tmdb_tv_episode_credit_credit_id').on(table.creditId),
-    index('idx_tmdb_tv_episode_credit_episode_id').on(table.episodeId),
+    index('idx_tmdb_tv_episode_credit_tv_episode_id').on(table.tvEpisodeId),
   ],
 );

@@ -23,18 +23,18 @@ import { useCallback, useEffect, useState } from 'react';
 import Loader from '@/components/Loader';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import { useUserUpdateMutation } from '@/api/client/mutations/userMutations';
+import { useUserMeUpdateMutation } from '@libs/query-client';
 
 export function ProfileForm() {
   const t = useTranslations();
   const { user } = useAuth();
 
-  const { mutateAsync: updateProfile, isPending: isUpdating } = useUserUpdateMutation();
+  const { mutateAsync: updateProfile, isPending: isUpdating } = useUserMeUpdateMutation();
 
   const [newAvatar, setNewAvatar] = useState<File>();
 
   const profileFormSchema = z.object({
-    full_name: z
+    name: z
       .string()
       .min(1, {
         message: t('pages.settings.profile.full_name.form.min_length'),
@@ -48,22 +48,14 @@ export function ProfileForm() {
       .max(150, {
         message: t('pages.settings.profile.bio.form.max_length'),
       })
-      .optional(),
-    website: z
-      .string()
-      .url({
-        message: t('pages.settings.profile.url.form.invalid'),
-      })
-      .or(z.literal(''))
-      .optional(),
+      .optional()
   });
 
   type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
   const defaultValues: Partial<ProfileFormValues> = {
-    full_name: user?.full_name,
+    name: user?.name,
     bio: user?.bio ?? undefined,
-    website: user?.website ?? undefined,
   };
 
   const form = useForm<ProfileFormValues>({
@@ -74,12 +66,13 @@ export function ProfileForm() {
 
   const handleSubmit = useCallback(async (data: ProfileFormValues) => {
     if (!user) return;
-    if (!newAvatar && user.full_name === data.full_name && user.bio === data.bio && user.website === data.website) return;
+    if (!newAvatar && user.name === data.name && user.bio === data.bio) return;
     await updateProfile({
-      full_name: data.full_name,
-      bio: data.bio?.trim() || null,
-      website: data.website?.trim() || null,
-      avatar: newAvatar,
+      body: {
+        name: data.name?.trim(),
+        bio: data.bio?.trim() || null,
+        // avatar: newAvatar,
+      }
     }, {
       onSuccess: () => {
         toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
@@ -106,9 +99,8 @@ export function ProfileForm() {
   useEffect(() => {
     if (user)
     {
-      form.setValue('full_name', user.full_name);
+      form.setValue('name', user.name);
       form.setValue('bio', user?.bio ?? undefined);
-      form.setValue('website', user?.website ?? undefined);
     }
   }, [form, user]);
 
@@ -124,7 +116,7 @@ export function ProfileForm() {
             newAvatar={newAvatar}
             setNewAvatar={setNewAvatar}
           />
-          {user.avatar_url && (
+          {user.avatar && (
             <Button type='button' variant={'destructive'} onClick={handleDeleteAvatar}>
               {t('pages.settings.profile.avatar.delete')}
             </Button>
@@ -132,7 +124,7 @@ export function ProfileForm() {
         </div>
         <FormField
           control={form.control}
-          name="full_name"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="flex justify-between gap-4">
@@ -165,24 +157,6 @@ export function ProfileForm() {
                   {...field}
                 />
               </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name={'website'}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t('pages.settings.profile.url.label')}</FormLabel>
-              <FormControl>
-                <Input
-                  type="text"
-                  placeholder="https://examples.com"
-                  {...field}
-                />
-              </FormControl>
-
-              <FormMessage />
             </FormItem>
           )}
         />

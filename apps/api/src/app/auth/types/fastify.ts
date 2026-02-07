@@ -1,5 +1,5 @@
-import { Session, User } from 'better-auth/types';
 import { FastifyRequest } from 'fastify';
+import { Session, User } from '../auth.service';
 
 export interface AuthenticatedRequest extends FastifyRequest {
 	session: Session;

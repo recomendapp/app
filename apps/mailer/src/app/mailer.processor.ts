@@ -5,6 +5,7 @@ import { MailerService } from './mailer.service';
 import { I18nService } from 'nestjs-i18n';
 import { render } from '@react-email/render';
 import { VerificationEmail } from '../templates/auth/verification-email';
+import { DeleteAccount } from '../templates/auth/delete-account';
 
 @Processor(MAILER_QUEUE)
 export class MailProcessor extends WorkerHost {
@@ -38,8 +39,24 @@ export class MailProcessor extends WorkerHost {
           );
           break;
         }
+        case 'auth:delete-account-email': {
+          const { email, url, lang } = job.data;
+          await this.mailerService.sendEmail(
+            email,
+            this.i18n.t('auth.delete_account_email.subject', { lang }),
+            await render(DeleteAccount({
+              url,
+              dictionary: {
+                title: this.i18n.t('auth.delete_account_email.title', { lang }),
+                text: this.i18n.t('auth.delete_account_email.text', { lang }),
+                button: this.i18n.t('auth.delete_account_email.button', { lang }),
+              },
+            }))
+          );
+          break;
+        }
         default:
-          this.logger.warn(`Unhandled job type: ${job.name}`);
+          this.logger.warn(`Unhandled job`);
       }
     } catch (error) {
       this.logger.error(`Failed to process job ${job.name}: ${error}`);

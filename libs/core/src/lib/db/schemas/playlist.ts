@@ -1,7 +1,9 @@
-import { bigint, boolean, check, index, integer, pgEnum, pgTable, text, timestamp, unique, uuid } from "drizzle-orm/pg-core";
+import { bigint, check, index, integer, pgEnum, pgTable, text, timestamp, unique, uuid } from "drizzle-orm/pg-core";
 import { user } from "./auth";
 import { relations, sql } from "drizzle-orm";
 import { tmdbMovie, tmdbTvSeries } from "./tmdb";
+
+export const playlistVisibilityEnum = pgEnum('playlist_visibility_enum', ['public', 'private', 'followers']);
 
 // Playlist
 export const playlist = pgTable(
@@ -20,9 +22,9 @@ export const playlist = pgTable(
 			.references(() => user.id, { onDelete: 'cascade' }),
 		title: text().notNull(),
 		description: text(),
-		posterUrl: text('poster_url'),
+		poster: text('poster'),
 		// States
-		isPrivate: boolean().default(false).notNull(),
+		visibility: playlistVisibilityEnum('visibility').default('public').notNull(),
 		// Counts
 		itemsCount: bigint('items_count', { mode: 'number' })
 			.default(0)
@@ -36,6 +38,7 @@ export const playlist = pgTable(
 	},
 	(table) => [
 		index('idx_playlist_created_at').on(table.createdAt),
+		index('idx_playlist_visibility').on(table.visibility),
 		index('idx_playlist_items_count').on(table.itemsCount),
 		index('idx_playlist_likes_count').on(table.likesCount),
 		index('idx_playlist_saved_count').on(table.savedCount),

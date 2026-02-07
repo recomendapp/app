@@ -16,7 +16,7 @@ import { user } from './auth';
 export const recoStatusEnum = pgEnum('reco_status', [
   'active',
   'completed',
-  'delete',
+  'deleted',
 ]);
 export const recoTypeEnum = pgEnum('reco_type', ['movie', 'tv_series']);
 

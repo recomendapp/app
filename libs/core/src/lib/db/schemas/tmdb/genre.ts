@@ -8,7 +8,7 @@ export const tmdbGenre = tmdbSchema.table('genre', {
 export const tmdbGenreTranslation = tmdbSchema.table(
   'genre_translation',
   {
-    genreId: bigint({ mode: 'number' })
+    genreId: bigint('genre_id', { mode: 'number' })
       .notNull()
       .references(() => tmdbGenre.id, { onDelete: 'cascade' }),
     language: text().notNull(),

@@ -27,7 +27,7 @@ import {
 import { useTheme } from 'next-themes';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { Icons } from '@/config/icons';
 import Loader from '@/components/Loader';
 import { useLocalizedLanguageName } from '@/hooks/use-localized-language-name';
@@ -36,19 +36,7 @@ import { ChevronsUpDown } from 'lucide-react';
 import { upperFirst } from 'lodash';
 import { supportedLocales } from '@libs/i18n';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
-import { useUserUpdateMutation } from '@/api/client/mutations/userMutations';
-
-const appearanceFormSchema = z.object({
-  theme: z.enum(['light', 'dark'], {
-    required_error: 'Please select a theme.',
-  }),
-  language: z.enum([...supportedLocales], {
-    invalid_type_error: 'Select a language',
-    required_error: 'Please select a language.',
-  }),
-});
-
-type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
+import { useUserMeUpdateMutation } from '@libs/query-client/src';
 
 export function AppearanceForm() {
   const t = useTranslations();
@@ -59,7 +47,19 @@ export function AppearanceForm() {
   const { user } = useAuth();
   const locales = useLocalizedLanguageName([...supportedLocales]);
 
-  const { mutateAsync: updateProfile, isPending } = useUserUpdateMutation();
+  const { mutateAsync: updateProfile, isPending } = useUserMeUpdateMutation();
+
+  const appearanceFormSchema = z.object({
+    theme: z.enum(['light', 'dark'], {
+      required_error: 'Please select a theme.',
+    }),
+    language: z.enum([...supportedLocales], {
+      invalid_type_error: 'Select a language',
+      required_error: 'Please select a language.',
+    }),
+  });
+
+  type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
 
   const defaultValues = useMemo(() => ({
     language: locale,
@@ -82,7 +82,9 @@ export function AppearanceForm() {
     }
     if (data.language !== locale) {
       await updateProfile({
-        language: data.language,
+        body: {
+          language: data.language,
+        },
       }, {
         onSuccess: () => {
           router.replace(

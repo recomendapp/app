@@ -1,30 +1,84 @@
-import { ApiProperty, ApiSchema } from "@nestjs/swagger";
-import { Expose, Type } from "class-transformer";
+import { ApiProperty, ApiSchema, PartialType, PickType } from "@nestjs/swagger";
+import { USER_RULES } from '../../../config/validation-rules';
+import { Expose, Transform, Type } from "class-transformer";
+import { IsLocale, IsString, IsUrl, Length, Matches } from "class-validator";
 
-class BaseUser {
+@ApiSchema({ name: 'User' })
+export class UserDTO {
 	@ApiProperty({ example: "ciud123", description: 'The unique ID of the user' })
 	@Expose()
 	id: string;
 
-	@ApiProperty({ example: "loup", description: 'The username of the user' })
+	@ApiProperty({
+		example: "Loooooup",
+		description: 'The display name of the user',
+		minLength: USER_RULES.NAME.MIN,
+        maxLength: USER_RULES.NAME.MAX,
+	})
 	@Expose()
+	@IsString()
+	@Length(USER_RULES.NAME.MIN, USER_RULES.NAME.MAX)
+	@Matches(USER_RULES.NAME.REGEX, {
+		message: 'Invalid name format'
+	})
+	name: string;
+
+	@ApiProperty({
+		example: "loup",
+		description: 'The username of the user',
+		minLength: USER_RULES.USERNAME.MIN,
+        maxLength: USER_RULES.USERNAME.MAX,
+	})
+	@Expose()
+	@Transform(({ value }) => typeof value === 'string' ? USER_RULES.USERNAME.normalization(value) : value)
+	@IsString()
+	@Length(USER_RULES.USERNAME.MIN, USER_RULES.USERNAME.MAX)
+	@Matches(USER_RULES.USERNAME.REGEX, {
+		message: "Invalid username format (3-15 characters, letters, numbers, dots, no consecutive dots)"
+	})
 	username: string;
 
-	@ApiProperty({ example: "Loup", description: 'The display username' })
+	@ApiProperty()
 	@Expose()
-	displayUsername: string;
+	@Type(() => Date)
+	usernameUpdatedAt?: Date | null;
 
-	@ApiProperty({ example: "Just a movie lover.", description: 'The bio of the user', nullable: true })
+	@ApiProperty({ example: 'loup@recomend.com' })
 	@Expose()
+	email: string;
+
+	@ApiProperty()
+	@Expose()
+	emailVerified: boolean;
+
+	@ApiProperty({
+		example: "Just a movie lover.",
+		description: 'The bio of the user',
+		nullable: true,
+		maxLength: USER_RULES.BIO.MAX,
+	})
+	@Expose()
+	@IsString()
+	@Length(0, USER_RULES.BIO.MAX)
+	@Matches(USER_RULES.BIO.REGEX, {
+		message: "The bio cannot be empty or contain too many line breaks"
+	})
 	bio: string | null;
 
 	@ApiProperty({ example: "https://example.com/avatar.jpg", description: 'The URL of the user avatar', nullable: true })
 	@Expose()
+	@IsUrl()
 	avatar: string | null;
 
 	@ApiProperty({ example: "https://example.com/background.jpg", description: 'The URL of the user background image', nullable: true })
 	@Expose()
+	@IsUrl()
 	backgroundImage: string | null;
+
+	@ApiProperty({ example: 'fr-FR' })
+	@Expose()
+	@IsLocale()
+	language: string;
 
 	@ApiProperty({ description: 'Whether the user has a premium account' })
 	@Expose()
@@ -34,6 +88,18 @@ class BaseUser {
 	@Expose()
 	isPrivate: boolean;
 
+	// Dates
+	@ApiProperty()
+	@Expose()
+	@Type(() => Date)
+	createdAt: Date;
+
+	@ApiProperty()
+	@Expose()
+	@Type(() => Date)
+	updatedAt: Date;
+
+	// Counts
 	@ApiProperty({ description: 'The number of followers the user has' })
 	@Expose()
 	followersCount: number;
@@ -41,41 +107,15 @@ class BaseUser {
 	@ApiProperty({ description: 'The number of users this user is following' })
 	@Expose()
 	followingCount: number;
-
-	@ApiProperty()
-	@Expose()
-	@Type(() => Date)
-	createdAt: Date;
 }
 
-@ApiSchema({ name: 'UserMe' })
-export class UserMeDto extends BaseUser {
-	@ApiProperty({ example: 'loup@recomend.com' })
-	@Expose()
-	email: string;
-
-	@ApiProperty()
-	@Expose()
-	emailVerified: boolean;
-
-	@ApiProperty({ example: 'fr-FR' })
-	@Expose()
-	language: string;
-
-	@ApiProperty()
-	@Expose()
-	@Type(() => Date)
-	updatedAt: Date;
-
-	@ApiProperty()
-	@Expose()
-	@Type(() => Date)
-	usernameUpdatedAt?: Date | null;
-}
-
-@ApiSchema({ name: 'UserPublic' })
-export class UserPublicDto extends BaseUser {
+@ApiSchema({ name: 'Profile' })
+export class ProfileDto extends PickType(UserDTO, ['id', 'name', 'username', 'avatar', 'bio', 'backgroundImage', 'isPrivate', 'isPremium', 'createdAt', 'followersCount', 'followingCount'] as const) {
 	@ApiProperty({ description: 'Whether the user profile is visilble by current user (if target user is private)' })
 	@Expose()
 	isVisible: boolean;
 }
+
+@ApiSchema({ name: 'UpdateUser' })
+export class UpdateUserDto extends PartialType(PickType(UserDTO, ['name', 'username', 'bio', 'isPrivate', 'language'] as const)) {}
+

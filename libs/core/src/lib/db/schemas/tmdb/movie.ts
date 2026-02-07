@@ -52,30 +52,78 @@ export const tmdbMovie = tmdbSchema.table(
   (table) => [index('idx_tmdb_movie_popularity').on(table.popularity)],
 );
 
-export const tmdbMovieTranslation = tmdbSchema.table(
-  'movie_translation',
+export const tmdbMovieAlternativeTitle = tmdbSchema.table(
+  'movie_alternative_title',
   {
-    id: bigint({ mode: 'number' }).primaryKey(),
+    id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
     movieId: bigint('movie_id', { mode: 'number' })
       .notNull()
       .references(() => tmdbMovie.id, { onDelete: 'cascade' }),
-    overview: text(),
-    tagline: text(),
-    title: text(),
-    homepage: text(),
-    runtime: integer().default(0).notNull(),
-    iso6391: text('iso_639_1').notNull(),
     iso31661: text('iso_3166_1').notNull(),
+    title: text().notNull(),
+    type: text(),
   },
   (table) => [
-    unique('unique_movie_translation').on(
-      table.movieId,
-      table.iso6391,
-      table.iso31661,
-    ),
-    index('idx_tmdb_movie_translation_movie_id').on(table.movieId),
-    index('idx_tmdb_movie_translation_iso_3166_1').on(table.iso31661),
-    index('idx_tmdb_movie_translation_iso_639_1').on(table.iso6391),
+    index('idx_tmdb_movie_alternative_title_iso_3166_1').on(table.iso31661),
+    index('idx_tmdb_movie_alternative_title_movie_id').on(table.movieId),
+  ],
+);
+
+export const tmdbMovieCredit = tmdbSchema.table(
+  'movie_credit',
+  {
+    id: char('id', { length: 24 }).primaryKey(),
+    movieId: bigint('movie_id', { mode: 'number' })
+      .notNull()
+      .references(() => tmdbMovie.id, { onDelete: 'cascade' }),
+    personId: bigint('person_id', { mode: 'number' })
+      .notNull()
+      .references(() => tmdbPerson.id, { onDelete: 'cascade' }),
+    department: text().notNull(),
+    job: text().notNull(),
+  },
+  (table) => [
+    index('idx_tmdb_movie_credit_job').on(table.job),
+    index('idx_tmdb_movie_credit_movie_id_director')
+      .on(table.movieId)
+      .where(sql`(job = 'Director'::text)`),
+    index('idx_tmdb_movie_credit_department').on(table.department),
+    index('idx_tmdb_movie_credit_movie_id').on(table.movieId),
+    index('idx_tmdb_movie_credit_person_id').on(table.personId),
+  ],
+);
+
+export const tmdbMovieExternalId = tmdbSchema.table(
+  'movie_external_id',
+  {
+    id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
+    movieId: bigint('movie_id', { mode: 'number' })
+      .notNull()
+      .references(() => tmdbMovie.id, { onDelete: 'cascade' }),
+    source: text().notNull(),
+    value: text().notNull(),
+  },
+  (table) => [
+    unique('unique_movie_external_id').on(table.movieId, table.source),
+    index('idx_tmdb_movie_external_id_movie_id').on(table.movieId),
+  ],
+);
+
+export const tmdbMovieGenre = tmdbSchema.table(
+  'movie_genre',
+  {
+    id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
+    movieId: bigint('movie_id', { mode: 'number' })
+      .notNull()
+      .references(() => tmdbMovie.id, { onDelete: 'cascade' }),
+    genreId: bigint('genre_id', { mode: 'number' })
+      .notNull()
+      .references(() => tmdbGenre.id, { onDelete: 'cascade' }),
+  },
+  (table) => [
+    unique('unique_movie_genre').on(table.movieId, table.genreId),
+    index('idx_tmdb_movie_genre_genre_id').on(table.genreId),
+    index('idx_tmdb_movie_genre_movie_id').on(table.movieId),
   ],
 );
 
@@ -107,52 +155,6 @@ export const tmdbMovieImage = tmdbSchema.table(
   ],
 );
 
-export const tmdbMovieVideo = tmdbSchema.table(
-  'movie_video',
-  {
-    id: char('id', { length: 24 }).primaryKey(),
-    movieId: bigint('movie_id', { mode: 'number' })
-      .notNull()
-      .references(() => tmdbMovie.id, { onDelete: 'cascade' }),
-    iso6391: text('iso_639_1'),
-    iso31661: text('iso_3166_1'),
-    name: text(),
-    key: text().notNull(),
-    site: text().notNull(),
-    size: smallint(),
-    type: text(),
-    official: boolean().notNull(),
-    publishedAt: timestamp('published_at', {
-      withTimezone: true,
-      mode: 'string',
-    }).notNull(),
-  },
-  (table) => [
-    index('idx_tmdb_movie_video_iso_3166_1').on(table.iso31661),
-    index('idx_tmdb_movie_video_iso_639_1').on(table.iso6391),
-    index('idx_tmdb_movie_video_movie_id').on(table.movieId),
-    index('idx_tmdb_movie_video_type').on(table.type),
-  ],
-);
-
-export const tmdbMovieGenre = tmdbSchema.table(
-  'movie_genre',
-  {
-    id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
-    movieId: bigint('movie_id', { mode: 'number' })
-      .notNull()
-      .references(() => tmdbMovie.id, { onDelete: 'cascade' }),
-    genreId: bigint('genre_id', { mode: 'number' })
-      .notNull()
-      .references(() => tmdbGenre.id, { onDelete: 'cascade' }),
-  },
-  (table) => [
-    unique('unique_movie_genre').on(table.movieId, table.genreId),
-    index('idx_tmdb_movie_genre_genre_id').on(table.genreId),
-    index('idx_tmdb_movie_genre_movie_id').on(table.movieId),
-  ],
-);
-
 export const tmdbMovieKeyword = tmdbSchema.table(
   'movie_keyword',
   {
@@ -168,6 +170,24 @@ export const tmdbMovieKeyword = tmdbSchema.table(
     unique('unique_movie_keyword').on(table.movieId, table.keywordId),
     index('idx_tmdb_movie_keyword_keyword_id').on(table.keywordId),
     index('idx_tmdb_movie_keyword_movie_id').on(table.movieId),
+  ],
+);
+
+export const tmdbMovieOriginCountry = tmdbSchema.table(
+  'movie_origin_country',
+  {
+    id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
+    movieId: bigint('movie_id', { mode: 'number' })
+      .notNull()
+      .references(() => tmdbMovie.id, { onDelete: 'cascade' }),
+    iso31661: text('iso_3166_1')
+      .notNull()
+      .references(() => tmdbCountry.iso31661, { onDelete: 'cascade' }),
+  },
+  (table) => [
+    unique('unique_movie_origin_country').on(table.movieId, table.iso31661),
+    index('idx_tmdb_movie_origin_country_country_id_idx').on(table.iso31661),
+    index('idx_tmdb_movie_origin_country_movie_id_idx').on(table.movieId),
   ],
 );
 
@@ -210,42 +230,6 @@ export const tmdbMovieProductionCountry = tmdbSchema.table(
   ],
 );
 
-export const tmdbMovieOriginCountry = tmdbSchema.table(
-  'movie_origin_country',
-  {
-    id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
-    movieId: bigint('movie_id', { mode: 'number' })
-      .notNull()
-      .references(() => tmdbMovie.id, { onDelete: 'cascade' }),
-    iso31661: text('iso_3166_1')
-      .notNull()
-      .references(() => tmdbCountry.iso31661, { onDelete: 'cascade' }),
-  },
-  (table) => [
-    unique('unique_movie_origin_country').on(table.movieId, table.iso31661),
-    index('idx_tmdb_movie_origin_country_country_id_idx').on(table.iso31661),
-    index('idx_tmdb_movie_origin_country_movie_id_idx').on(table.movieId),
-  ],
-);
-
-export const tmdbMovieSpokenLanguage = tmdbSchema.table(
-  'movie_spoken_language',
-  {
-    id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
-    movieId: bigint('movie_id', { mode: 'number' })
-      .notNull()
-      .references(() => tmdbMovie.id, { onDelete: 'cascade' }),
-    iso6391: text('iso_639_1')
-      .notNull()
-      .references(() => tmdbLanguage.iso6391, { onDelete: 'cascade' }),
-  },
-  (table) => [
-    unique('unique_movie_spoken_language').on(table.movieId, table.iso6391),
-    index('idx_tmdb_movie_language_language_id').on(table.iso6391),
-    index('idx_tmdb_movie_language_movie_id').on(table.movieId),
-  ],
-);
-
 export const tmdbMovieReleaseDate = tmdbSchema.table(
   'movie_release_date',
   {
@@ -276,63 +260,6 @@ export const tmdbMovieReleaseDate = tmdbSchema.table(
   ],
 );
 
-export const tmdbMovieExternalId = tmdbSchema.table(
-  'movie_external_id',
-  {
-    id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
-    movieId: bigint('movie_id', { mode: 'number' })
-      .notNull()
-      .references(() => tmdbMovie.id, { onDelete: 'cascade' }),
-    source: text().notNull(),
-    value: text().notNull(),
-  },
-  (table) => [
-    unique('unique_movie_external_id').on(table.movieId, table.source),
-    index('idx_tmdb_movie_external_id_movie_id').on(table.movieId),
-  ],
-);
-
-export const tmdbMovieAlternativeTitle = tmdbSchema.table(
-  'movie_alternative_title',
-  {
-    id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
-    movieId: bigint('movie_id', { mode: 'number' })
-      .notNull()
-      .references(() => tmdbMovie.id, { onDelete: 'cascade' }),
-    iso31661: text('iso_3166_1').notNull(),
-    title: text().notNull(),
-    type: text(),
-  },
-  (table) => [
-    index('idx_tmdb_movie_alternative_title_iso_3166_1').on(table.iso31661),
-    index('idx_tmdb_movie_alternative_title_movie_id').on(table.movieId),
-  ],
-);
-
-export const tmdbMovieCredit = tmdbSchema.table(
-  'movie_credit',
-  {
-    id: char('id', { length: 24 }).primaryKey(),
-    movieId: bigint('movie_id', { mode: 'number' })
-      .notNull()
-      .references(() => tmdbMovie.id, { onDelete: 'cascade' }),
-    personId: bigint('person_id', { mode: 'number' })
-      .notNull()
-      .references(() => tmdbPerson.id, { onDelete: 'cascade' }),
-    department: text().notNull(),
-    job: text().notNull(),
-  },
-  (table) => [
-    index('idx_tmdb_movie_credit_job').on(table.job),
-    index('idx_tmdb_movie_credit_movie_id_director')
-      .on(table.movieId)
-      .where(sql`(job = 'Director'::text)`),
-    index('idx_tmdb_movie_credit_department').on(table.department),
-    index('idx_tmdb_movie_credit_movie_id').on(table.movieId),
-    index('idx_tmdb_movie_credit_person_id').on(table.personId),
-  ],
-);
-
 export const tmdbMovieRole = tmdbSchema.table('movie_role', {
   creditId: char('credit_id', { length: 24 })
     .notNull()
@@ -340,3 +267,76 @@ export const tmdbMovieRole = tmdbSchema.table('movie_role', {
   character: text(),
   order: smallint().notNull(),
 });
+
+export const tmdbMovieSpokenLanguage = tmdbSchema.table(
+  'movie_spoken_language',
+  {
+    id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
+    movieId: bigint('movie_id', { mode: 'number' })
+      .notNull()
+      .references(() => tmdbMovie.id, { onDelete: 'cascade' }),
+    iso6391: text('iso_639_1')
+      .notNull()
+      .references(() => tmdbLanguage.iso6391, { onDelete: 'cascade' }),
+  },
+  (table) => [
+    unique('unique_movie_spoken_language').on(table.movieId, table.iso6391),
+    index('idx_tmdb_movie_language_language_id').on(table.iso6391),
+    index('idx_tmdb_movie_language_movie_id').on(table.movieId),
+  ],
+);
+
+export const tmdbMovieTranslation = tmdbSchema.table(
+  'movie_translation',
+  {
+    id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
+    movieId: bigint('movie_id', { mode: 'number' })
+      .notNull()
+      .references(() => tmdbMovie.id, { onDelete: 'cascade' }),
+    overview: text(),
+    tagline: text(),
+    title: text(),
+    homepage: text(),
+    runtime: integer().default(0).notNull(),
+    iso6391: text('iso_639_1').notNull(),
+    iso31661: text('iso_3166_1').notNull(),
+  },
+  (table) => [
+    unique('unique_movie_translation').on(
+      table.movieId,
+      table.iso6391,
+      table.iso31661,
+    ),
+    index('idx_tmdb_movie_translation_movie_id').on(table.movieId),
+    index('idx_tmdb_movie_translation_iso_3166_1').on(table.iso31661),
+    index('idx_tmdb_movie_translation_iso_639_1').on(table.iso6391),
+  ],
+);
+
+export const tmdbMovieVideo = tmdbSchema.table(
+  'movie_video',
+  {
+    id: char('id', { length: 24 }).primaryKey(),
+    movieId: bigint('movie_id', { mode: 'number' })
+      .notNull()
+      .references(() => tmdbMovie.id, { onDelete: 'cascade' }),
+    iso6391: text('iso_639_1'),
+    iso31661: text('iso_3166_1'),
+    name: text(),
+    key: text().notNull(),
+    site: text().notNull(),
+    size: smallint(),
+    type: text(),
+    official: boolean().notNull(),
+    publishedAt: timestamp('published_at', {
+      withTimezone: true,
+      mode: 'string',
+    }).notNull(),
+  },
+  (table) => [
+    index('idx_tmdb_movie_video_iso_3166_1').on(table.iso31661),
+    index('idx_tmdb_movie_video_iso_639_1').on(table.iso6391),
+    index('idx_tmdb_movie_video_movie_id').on(table.movieId),
+    index('idx_tmdb_movie_video_type').on(table.type),
+  ],
+);

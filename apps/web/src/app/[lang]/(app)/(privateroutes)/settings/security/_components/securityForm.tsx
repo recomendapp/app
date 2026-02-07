@@ -3,7 +3,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -16,15 +15,24 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import toast from 'react-hot-toast';
-import { useSupabaseClient } from '@/context/supabase-context';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
+import { authClient } from '@/lib/auth/client';
+import { useState } from 'react';
 
 export function SecurityForm() {
-  const supabase = useSupabaseClient();
   const t = useTranslations('pages.settings');
   const common = useTranslations('common');
+  const [isLoading, setIsLoading] = useState(false);
+
   const profileFormSchema = z.object({
+    currentPassword: z
+      .string({
+        message: t('security.current_password.form.invalid'),
+      })
+      .min(1, {
+        message: t('security.current_password.form.required'),
+      }),
     newpassword: z
       .string()
       .min(8, {
@@ -63,20 +71,54 @@ export function SecurityForm() {
 
   async function onSubmit(data: ProfileFormValues) {
     try {
-      const { error } = await supabase.auth.updateUser({
-        password: data.newpassword,
+      setIsLoading(true);
+      const { error } = await authClient.changePassword({
+        currentPassword: data.currentPassword,
+        newPassword: data.newpassword,
+        revokeOtherSessions: true,
       });
-      if (error) throw error;
+      if (error) {
+        switch (error.code) {
+          case 'INVALID_PASSWORD':
+            form.setError('currentPassword', {
+              message: t('security.current_password.form.invalid'),
+            });
+            break;
+          default:
+            toast.error(upperFirst(common('messages.an_error_occurred')));
+            break;
+        }
+        throw error;
+      };
       toast.success(upperFirst(common('messages.saved', { gender: 'male', count: 1 })));
       form.reset();
-    } catch (error) {
-      toast.error(upperFirst(common('messages.an_error_occurred')));
+    } finally {
+      setIsLoading(false);
     }
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="currentPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('security.current_password.label')}</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  autoComplete="current-password"
+                  placeholder={t('security.current_password.placeholder')}
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription></FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="newpassword"
@@ -115,7 +157,7 @@ export function SecurityForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">{upperFirst(common('messages.save'))}</Button>
+        <Button type="submit" disabled={isLoading}>{upperFirst(common('messages.save'))}</Button>
       </form>
     </Form>
   );

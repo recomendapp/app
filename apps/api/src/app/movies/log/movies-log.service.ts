@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '@libs/core';
-import { User } from 'better-auth/types';
 import { LogMovieRequestDto, LogMovieDto } from './dto/log-movie.dto';
 import { and, eq, sql } from 'drizzle-orm';
 import { WatchedDateDto } from './dto/watched-date.dto';
 import { logMovie, logMovieWatchedDate } from '@libs/core/schemas';
+import { User } from '../../auth/auth.service';
 
 @Injectable()
 export class MoviesLogService {

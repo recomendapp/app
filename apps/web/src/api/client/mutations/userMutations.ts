@@ -1,5 +1,5 @@
 import { useSupabaseClient } from "@/context/supabase-context";
-import { useUserHeartPicksMovieOptions, useUserHeartPicksTvSeriesOptions, useUserMyFeedInfiniteOptions, useUserOptions, useUserWatchlistMoviesOptions, useUserWatchlistOptions, useUserWatchlistTvSeriesOptions } from "../options/userOptions";
+import { useUserHeartPicksMovieOptions, useUserHeartPicksTvSeriesOptions, useUserMyFeedInfiniteOptions, useUserWatchlistMoviesOptions, useUserWatchlistOptions, useUserWatchlistTvSeriesOptions } from "../options/userOptions";
 import { useAuth } from "@/context/auth-context";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Database, UserRecosMovieAggregated, UserRecosTvSeriesAggregated } from "@recomendapp/types";
@@ -9,71 +9,71 @@ import { userKeys } from "../keys/userKeys";
 import { useApiClient } from "@/context/api-context";
 import { mediaKeys } from "../keys/mediaKeys";
 
-export const useUserUpdateMutation = () => {
-	const { session } = useAuth();
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	const userOptions = useUserOptions({
-		userId: session?.user.id,
-	})
-	return useMutation({
-		mutationFn: async ({
-			username,
-			full_name,
-			bio,
-			website,
-			private: isPrivate,
-			language,
-			avatar,
-		} : Partial<Pick<Database['public']['Tables']['user']['Row'], 'username' | 'full_name' | 'bio' | 'website' | 'private' | 'language'> & { avatar: File | null }>) => {
-			if (!session?.user.id) throw new Error('No user id');
+// export const useUserUpdateMutation = () => {
+// 	const { session } = useAuth();
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	const userOptions = useUserOptions({
+// 		userId: session?.user.id,
+// 	})
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			username,
+// 			full_name,
+// 			bio,
+// 			website,
+// 			private: isPrivate,
+// 			language,
+// 			avatar,
+// 		} : Partial<Pick<Database['public']['Tables']['user']['Row'], 'username' | 'full_name' | 'bio' | 'website' | 'private' | 'language'> & { avatar: File | null }>) => {
+// 			if (!session?.user.id) throw new Error('No user id');
 
-			let avatar_url: string | null | undefined = avatar === null ? null : undefined;
-			if (avatar) {
-				const fileExt = avatar.name.split('.').pop();
-				const filePath = `${session.user.id}.${v4()}.${fileExt}`;
-				const avatarCompressed = await compressPicture(avatar, filePath, 400, 400);
-				const { data, error } = await supabase.storage
-					.from('avatars')
-					.upload(filePath, avatarCompressed, {
-						upsert: true
-					});
-				if (error) throw error;
-				if (!data) throw new Error('No data returned from upload');
-				const { data: { publicUrl } } = supabase.storage
-					.from('avatars')
-					.getPublicUrl(data.path);
-				avatar_url = publicUrl;
-			}
+// 			let avatar_url: string | null | undefined = avatar === null ? null : undefined;
+// 			if (avatar) {
+// 				const fileExt = avatar.name.split('.').pop();
+// 				const filePath = `${session.user.id}.${v4()}.${fileExt}`;
+// 				const avatarCompressed = await compressPicture(avatar, filePath, 400, 400);
+// 				const { data, error } = await supabase.storage
+// 					.from('avatars')
+// 					.upload(filePath, avatarCompressed, {
+// 						upsert: true
+// 					});
+// 				if (error) throw error;
+// 				if (!data) throw new Error('No data returned from upload');
+// 				const { data: { publicUrl } } = supabase.storage
+// 					.from('avatars')
+// 					.getPublicUrl(data.path);
+// 				avatar_url = publicUrl;
+// 			}
 
 
-			const { data, error } = await supabase
-				.from('user')
-				.update({
-					username,
-					full_name,
-					bio,
-					website,
-					private: isPrivate,
-					language,
-					avatar_url,
-				})
-				.eq('id', session.user.id)
-				.select('*')
-				.single();
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(userOptions.queryKey, (oldData) => {
-				return {
-					...oldData,
-					...data,
-				};
-			});
-		},
-	})
-};
+// 			const { data, error } = await supabase
+// 				.from('user')
+// 				.update({
+// 					username,
+// 					full_name,
+// 					bio,
+// 					website,
+// 					private: isPrivate,
+// 					language,
+// 					avatar_url,
+// 				})
+// 				.eq('id', session.user.id)
+// 				.select('*')
+// 				.single();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(userOptions.queryKey, (oldData) => {
+// 				return {
+// 					...oldData,
+// 					...data,
+// 				};
+// 			});
+// 		},
+// 	})
+// };
 
 /* --------------------------------- FOLLOWS -------------------------------- */
 export const useUserFollowProfileInsertMutation = () => {
@@ -1566,58 +1566,6 @@ export const useUserPlaylistSavedDeleteMutation = () => {
 					userId: data.user_id,
 				})
 			})
-		}
-	});
-};
-/* -------------------------------------------------------------------------- */
-
-
-/* --------------------------------- ACCOUNT -------------------------------- */
-export const useUserDeleteRequestInsertMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			userId,
-		} : {
-			userId: string;
-		}) => {
-			const { data, error } = await supabase
-				.from('user_deletion_requests')
-				.insert({
-					user_id: userId,
-				})
-				.select()
-				.single();
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(userKeys.deleteRequest({ userId: data.user_id }), data);
-		}
-	});
-};
-
-export const useUserDeleteRequestDeleteMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			userId,
-		} : {
-			userId: string;
-		}) => {
-			const { data, error } = await supabase
-				.from('user_deletion_requests')
-				.delete()
-				.eq('user_id', userId)
-				.select()
-				.single();
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(userKeys.deleteRequest({ userId: data.user_id }), null);
 		}
 	});
 };

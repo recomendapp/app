@@ -802,13 +802,11 @@
           }
         },
         "delete_account": {
-          "label": "Delete account ?",
-          "description": "Once you request deletion, your account will be scheduled for permanent removal in 30 days. All your data will be permanently erased. We do not retain any user information after deletion. You can cancel the request at any time before this deadline by returning to this page.",
-          "button": "Request account deletion",
+          "button": "Delete my account",
           "confirm": {
-            "description": "Your account will be permanently deleted on <strong>{date}</strong>. Once this date has passed, you will no longer be able to recover it."
-          },
-          "deletion_requested": "A deletion request has been made and will be effective on <strong>{date}</strong>."
+            "description": "Are you sure you want to delete your account? This action is irreversible.",
+            "confirm_email_sent": "A verification email has been sent to your email address"
+          }
         }
       },
       "appearance": {
@@ -836,6 +834,14 @@
       "security": {
         "label": "Security",
         "description": "Changing your password will log you out of all devices except the one you are currently using.",
+        "current_password": {
+          "label": "Current password",
+          "placeholder": "Enter your current password",
+          "form": {
+            "required": "Please enter your current password",
+            "invalid": "The current password is incorrect"
+          }
+        },
         "new_password": {
           "label": "New password",
           "placeholder": "Enter your new password",

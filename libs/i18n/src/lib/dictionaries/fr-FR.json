@@ -802,13 +802,11 @@
           }
         },
         "delete_account": {
-          "label": "Supprimer le compte ?",
-          "description": "Une fois que vous demandez la suppression, votre compte sera programmé pour une suppression définitive dans 30 jours. Toutes vos données seront définitivement effacées. Nous ne conservons aucune information utilisateur après la suppression. Vous pouvez annuler la demande à tout moment avant cette date limite en revenant sur cette page.",
-          "button": "Demander la suppression de mon compte",
+          "button": "Supprimer mon compte",
           "confirm": {
-            "description": "Votre compte sera supprimé définitivement le <strong>{date}</strong>. Une fois cette date passée, vous ne pourrez plus le récupérer."
-          },
-          "deletion_requested": "Une demande de suppression de compte a été effectuée et sera effective le <strong>{date}</strong>."
+            "description": "Votre compte sera supprimé définitivement et vous ne pourrez plus le récupérer.",
+            "confirm_email_sent": "Un email de vérification a été envoyé à votre adresse email"
+          }
         }
       },
       "appearance": {
@@ -836,6 +834,14 @@
       "security": {
         "label": "Sécurité",
         "description": "La modification de votre mot de passe vous déconnectera de tous les appareils à l'exception de celui que vous utilisez actuellement.",
+        "current_password": {
+          "label": "Mot de passe actuel",
+          "placeholder": "Entrez votre mot de passe actuel",
+          "form": {
+            "required": "Le mot de passe actuel est requis",
+            "invalid": "Le mot de passe actuel est incorrect"
+          }
+        },
         "new_password": {
           "label": "Nouveau mot de passe",
           "placeholder": "Entrez votre nouveau mot de passe",

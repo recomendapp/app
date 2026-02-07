@@ -67,7 +67,7 @@ export const reviewMovieRelations = relations(reviewMovie, ({ one }) => ({
 export const reviewMovieLike = pgTable(
 	'review_movie_like',
 	{
-		reviewId: bigint({ mode: 'number' })
+		reviewId: bigint('review_id', { mode: 'number' })
 			.notNull()
 			.references(() => reviewMovie.id, { onDelete: 'cascade' }),
 		userId: uuid('user_id')
@@ -145,7 +145,7 @@ export const reviewTvSeriesRelations = relations(reviewTvSeries, ({ one }) => ({
 export const reviewTvSeriesLike = pgTable(
 	'review_tv_series_like',
 	{
-		reviewId: bigint({ mode: 'number' })
+		reviewId: bigint('review_id', { mode: 'number' })
 			.notNull()
 			.references(() => reviewTvSeries.id, { onDelete: 'cascade' }),
 		userId: uuid('user_id')

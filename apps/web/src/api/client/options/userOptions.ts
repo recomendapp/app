@@ -4,28 +4,6 @@ import { useSupabaseClient } from "@/context/supabase-context";
 import { useAuth } from "@/context/auth-context";
 import { UserRecosAggregated, UserRecosMovieAggregated, UserRecosTvSeriesAggregated } from "@recomendapp/types";
 
-export const useUserOptions = ({
-	userId,
-} : {
-	userId?: string
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: userKeys.details({ userId: userId!}),
-		queryFn: async () => {
-			if (!userId) return null;
-			const { data, error } = await supabase
-				.from('user')
-				.select('*')
-				.eq('id', userId)
-				.single();
-			if (error) throw error;
-			return data;	
-		},
-		enabled: !!userId,
-	});
-};
-
 /* --------------------------------- FOLLOWS -------------------------------- */
 export const useUserFollowersOptions = ({
 	userId,
@@ -1225,28 +1203,4 @@ export const useUserPlaylistsFriendOptions = ({
 		enabled: !!user?.id,
 	})
 }
-/* -------------------------------------------------------------------------- */
-
-/* --------------------------------- ACCOUNT -------------------------------- */
-export const useUserDeleteRequestOptions = ({
-	userId,
-} : {
-	userId?: string;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: userKeys.deleteRequest({ userId: userId! }),
-		queryFn: async () => {
-			if (!userId) throw Error('Missing user id');
-			const { data, error } = await supabase
-				.from('user_deletion_requests')
-				.select('*')
-				.eq('user_id', userId)
-				.maybeSingle();
-			if (error) throw error;
-			return data;
-		},
-		enabled: !!userId,
-	});
-};
 /* -------------------------------------------------------------------------- */

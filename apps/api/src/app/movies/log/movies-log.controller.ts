@@ -2,9 +2,9 @@ import { Controller, Post, Param, Body, UseGuards, Get } from '@nestjs/common';
 import { MoviesLogService } from './movies-log.service';
 import { LogMovieRequestDto, LogMovieDto } from './dto/log-movie.dto';
 import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { User } from 'better-auth/types';
 import { AuthGuard } from '../../auth/guards';
 import { CurrentUser } from '../../auth/decorators';
+import { User } from '../../auth/auth.service';
 
 @ApiTags('Movies')
 @Controller({

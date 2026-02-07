@@ -24,20 +24,19 @@ import { useTranslations } from 'next-intl';
 import { useUsernameAvailability } from '@/hooks/use-username-availability';
 import useDebounce from '@/hooks/use-debounce';
 import { upperFirst } from 'lodash';
-import { useUserUpdateMutation } from '@/api/client/mutations/userMutations';
+import { useUserMeUpdateMutation } from '@libs/query-client';
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 15;
 
 export function AccountForm() {
   const t = useTranslations();
-  const { user, session } = useAuth();
-  const { mutateAsync: updateProfile, isPending } = useUserUpdateMutation();
+  const { user } = useAuth();
+  const { mutateAsync: updateProfile, isPending } = useUserMeUpdateMutation();
 
   const date = new Date();
-
-  const dateLastUsernameUpdate = user?.username_updated_at
-    ? new Date(user.username_updated_at)
+  const dateLastUsernameUpdate = user?.usernameUpdatedAt
+    ? new Date(user.usernameUpdatedAt)
     : new Date('01/01/1970');
 
   const accountFormSchema = z.object({
@@ -61,9 +60,8 @@ export function AccountForm() {
       .regex(/^[\w.]+$/, {
         message: t('common.form.username.schema.format'),
       }),
-    private: z.boolean(),
-    email: z.string()
-      .email({
+    isPrivate: z.boolean(),
+    email: z.email({
         message: t('common.form.email.error.invalid'),
       })
   });
@@ -72,8 +70,7 @@ export function AccountForm() {
 
   const defaultValues: Partial<AccountFormValues> = {
     username: user?.username,
-    private: user?.private,
-    email: session?.user.email,
+    isPrivate: user?.isPrivate,
   };
 
   const form = useForm<AccountFormValues>({
@@ -86,8 +83,10 @@ export function AccountForm() {
 
   const handleSubmit = useCallback(async (data: AccountFormValues) => {
     await updateProfile({
-      username: data.username,
-      private: data.private,
+      body: {
+        username: data.username,
+        isPrivate: data.isPrivate,
+      }
     }, {
       onSuccess: () => {
         toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
@@ -102,10 +101,10 @@ export function AccountForm() {
     user &&
       form.reset({
         username: user.username,
-        private: user.private,
-        email: session?.user.email,
+        isPrivate: user.isPrivate,
+        email: user.email,
       });
-  }, [form, session?.user.email, user]);
+  }, [form, user]);
 
   useEffect(() => {
 		if (!form.formState.errors.username?.message && usernameToCheck && usernameToCheck !== user?.username) {
@@ -157,7 +156,7 @@ export function AccountForm() {
         />
         <FormField
           control={form.control}
-          name="private"
+          name="isPrivate"
           render={({ field }) => (
             <FormItem className='flex items-center gap-2'>
               <FormLabel>{t('pages.settings.account.private.label')}</FormLabel>

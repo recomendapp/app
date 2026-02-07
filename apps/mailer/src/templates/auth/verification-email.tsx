@@ -3,6 +3,7 @@ import { Html, Button, Container, Text, Heading } from '@react-email/components'
 
 interface VerificationEmailProps {
   url: string;
+  locale?: string;
   dictionary: {
     title: string;
     text: string;
@@ -10,9 +11,9 @@ interface VerificationEmailProps {
   };
 }
 
-export const VerificationEmail = ({ url, dictionary }: VerificationEmailProps) => {
+export const VerificationEmail = ({ url, dictionary, locale = 'en' }: VerificationEmailProps) => {
   return (
-    <Html lang="fr">
+    <Html lang={locale}>
       <Container>
         <Heading>{dictionary.title}</Heading>
         <Text>{dictionary.text}</Text>

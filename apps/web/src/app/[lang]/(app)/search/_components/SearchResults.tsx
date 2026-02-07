@@ -13,7 +13,6 @@ import { useTranslations } from "next-intl";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CardMovie } from "@/components/Card/CardMovie";
-// import { SearchPersonsResponse, SearchMoviesResponse, SearchPlaylistsResponse, SearchTvSeriesResponse, SearchUsersResponse, BestResultItem } from "@packages/api-js";
 import { CardTvSeries } from "@/components/Card/CardTvSeries";
 import { CardPlaylist } from "@/components/Card/CardPlaylist";
 import { CardPerson } from "@/components/Card/CardPerson";

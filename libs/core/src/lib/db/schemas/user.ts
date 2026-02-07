@@ -12,6 +12,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { relations, sql } from 'drizzle-orm';
 import { user } from './auth';
+import { tmdbPerson } from './tmdb';
 
 // Profile
 export const profile = pgTable(
@@ -37,10 +38,10 @@ export const profile = pgTable(
   (table) => [
     check('check_profile_followers_count', sql`${table.followersCount} >= 0`),
     check('check_profile_following_count', sql`${table.followingCount} >= 0`),
-    check(
-      'check_profile_bio',
-      sql`bio ~* '^(?!\s+$)(?!.*\n\s*\n)[\s\S]{1,150}$'::text`,
-    ),
+    // check(
+    //   'check_profile_bio',
+    //   sql`bio ~* '^(?!\s+$)(?!.*\n\s*\n)[\s\S]{1,150}$'::text`,
+    // ),
   ],
 );
 export const profileRelations = relations(profile, ({ one }) => ({
@@ -73,6 +74,30 @@ export const followRelations = relations(follow, ({ one }) => ({
   following: one(user, {
     fields: [follow.followingId],
     references: [user.id],
+  }),
+}));
+
+export const followPerson = pgTable('follow_person', {
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  personId: bigint('person_id', { mode: 'number' })
+    .notNull()
+    .references(() => tmdbPerson.id, { onDelete: 'cascade' }),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  primaryKey({ columns: [table.userId, table.personId] }),
+  index('idx_follow_person_user_id').on(table.userId),
+  index('idx_follow_person_person_id').on(table.personId),
+]);
+export const followPersonRelations = relations(followPerson, ({ one }) => ({
+  user: one(user, {
+    fields: [followPerson.userId],
+    references: [user.id],
+  }),
+  person: one(tmdbPerson, {
+    fields: [followPerson.personId],
+    references: [tmdbPerson.id],
   }),
 }));
 

@@ -11,7 +11,8 @@ import toast from 'react-hot-toast';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/lib/i18n/navigation';
-import { UserMe, usersControllerGetMeOptions } from '@packages/api-js';
+import { useUserMeOptions } from '@libs/query-client';
+import { UserMe } from '@packages/api-js/src';
 
 export interface UserState {
   user: UserMe | null | undefined;
@@ -54,9 +55,10 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
   const router = useRouter();
   const queryClient = useQueryClient();
   const { data: user } = useQuery({
-    ...usersControllerGetMeOptions({}),
+    ...useUserMeOptions(),
     initialData: initialSession || undefined,
   });
+
   const [pushToken, setPushToken] = useState<string | null>(null);
   const { customerInfo: initCustomerInfo } = useRevenueCat(user);
   const {
@@ -104,7 +106,7 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
         throw error;
       };
     }
-    await queryClient.invalidateQueries({ queryKey: usersControllerGetMeOptions({}).queryKey });
+    await queryClient.invalidateQueries({ queryKey: useUserMeOptions().queryKey });
     router.push(credentials.redirectTo || '/');
   }, [t, router, queryClient]);
 
@@ -124,7 +126,7 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
       }
       throw error;
     }
-    queryClient.setQueryData(usersControllerGetMeOptions({}).queryKey, undefined);
+    queryClient.setQueryData(useUserMeOptions().queryKey, undefined);
     router.refresh();
   }, [user, pushToken, t, router, queryClient]);
 

@@ -10,7 +10,7 @@ export const tmdbCollectionImage = tmdbSchema.table(
   'collection_image',
   {
     id: bigint({ mode: 'number' }),
-    collectionId: bigint({ mode: 'number' })
+    collectionId: bigint('collection_id', { mode: 'number' })
       .notNull()
       .references(() => tmdbCollection.id, { onDelete: 'cascade' }),
     filePath: text('file_path').notNull(),
@@ -34,7 +34,7 @@ export const tmdbCollectionTranslation = tmdbSchema.table(
   'collection_translation',
   {
     id: bigint({ mode: 'number' }),
-    collection_id: bigint({ mode: 'number' })
+    collection_id: bigint('collection_id', { mode: 'number' })
       .notNull()
       .references(() => tmdbCollection.id, { onDelete: 'cascade' }),
     iso6391: text('iso_639_1').notNull(),
