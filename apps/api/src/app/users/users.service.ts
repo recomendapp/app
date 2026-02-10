@@ -1,11 +1,13 @@
-import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '@libs/core';
 import { and, asc, desc, eq, exists, or, sql, SQL } from 'drizzle-orm';
 import { playlist, profile, user, follow, playlistMember } from '@libs/core/schemas';
-import { UserDTO, UpdateUserDto } from './dto/users.dto';
+import { UserDto, UpdateUserDto, GetUsersQueryDto, ListUsersDto } from './dto/users.dto';
 import { User } from '../auth/auth.service';
 import { GetUserPlaylistsQueryDto } from './dto/get-user-playlists.dto';
 import { ListPlaylistsDto } from '../playlists/dto/playlists.dto';
+import { FollowDto } from './dto/user-follow.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UsersService {
@@ -13,7 +15,7 @@ export class UsersService {
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
   ) {}
 
-  async getMe(loggedUser: User): Promise<UserDTO> {
+  async getMe(loggedUser: User): Promise<UserDto> {
     const fullUser = await this.db.query.user.findFirst({
       where: eq(user.id, loggedUser.id),
       with: {
@@ -49,7 +51,7 @@ export class UsersService {
     loggedUser: User,
     dto: UpdateUserDto,
     avatar?: File, 
-  ): Promise<UserDTO> {
+  ): Promise<UserDto> {
     const userUpdates: Partial<typeof user.$inferSelect> = {};
     if (dto.name !== undefined) userUpdates.name = dto.name;
     if (dto.username !== undefined && dto.username !== loggedUser.username) {
@@ -171,4 +173,291 @@ export class UsersService {
       },
     };
   }
+
+  /* --------------------------------- Follows -------------------------------- */
+  async getFollowers(
+    targetUserId: string, 
+    query: GetUsersQueryDto, 
+    currentUser: User | null
+  ): Promise<ListUsersDto> {
+    const { per_page, page, sort_by, sort_order } = query;
+    const offset = (page - 1) * per_page;
+  
+    const targetProfile = await this.db.query.profile.findFirst({
+      where: eq(profile.id, targetUserId),
+      columns: { isPrivate: true },
+    });
+
+    if (!targetProfile) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (targetProfile.isPrivate && currentUser?.id !== targetUserId) {
+      if (!currentUser) {
+        throw new ForbiddenException('This account is private');
+      }
+
+      const amIFollowing = await this.db.query.follow.findFirst({
+        where: and(
+          eq(follow.followerId, currentUser.id),
+          eq(follow.followingId, targetUserId),
+          eq(follow.status, 'accepted')
+        ),
+      });
+
+      if (!amIFollowing) {
+        throw new ForbiddenException('This account is private. Follow this user to see their followers.');
+      }
+    }
+
+    const whereClause = and(
+      eq(follow.followingId, targetUserId),
+      eq(follow.status, 'accepted')
+    );
+
+    const direction = sort_order === 'asc' ? asc : desc;
+    
+    const orderBy = (() => {
+      switch (sort_by) {
+        case 'followers_count':
+          return direction(profile.followersCount);
+        case 'created_at':
+        default:
+          return direction(follow.createdAt);
+      }
+    })();
+    const [followers, totalCount] = await Promise.all([
+      this.db.query.follow.findMany({
+        where: whereClause,
+        orderBy,
+        limit: per_page,
+        offset,
+        with: {
+          follower: {
+            columns: {
+              id: true,
+              name: true,
+              username: true,
+              image: true,
+            },
+            with: {
+              profile: { columns: { isPremium: true } }
+            } 
+          },
+        }
+      }),
+      this.db.$count(follow, whereClause),
+    ]);
+
+    const totalPages = Math.ceil(totalCount / per_page);
+
+    return {
+      data: followers.map((row) => ({
+        id: row.follower.id,
+        name: row.follower.name,
+        username: row.follower.username,
+        avatar: row.follower.image,
+        isPremium: row.follower.profile.isPremium,
+      })),
+      meta: {
+        total_results: totalCount,
+        total_pages: totalPages,
+        current_page: page,
+        per_page,
+      },
+    };
+  }
+
+  async getFollowing(
+    targetUserId: string, 
+    query: GetUsersQueryDto, 
+    currentUser: User | null
+  ): Promise<ListUsersDto> {
+    const { per_page, page, sort_by, sort_order } = query;
+    const offset = (page - 1) * per_page;
+
+    const targetProfile = await this.db.query.profile.findFirst({
+      where: eq(profile.id, targetUserId),
+      columns: { isPrivate: true },
+    });
+
+    if (!targetProfile) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (targetProfile.isPrivate && currentUser?.id !== targetUserId) {
+      if (!currentUser) {
+        throw new ForbiddenException('This account is private');
+      }
+
+      const amIFollowing = await this.db.query.follow.findFirst({
+        where: and(
+          eq(follow.followerId, currentUser.id),
+          eq(follow.followingId, targetUserId),
+          eq(follow.status, 'accepted')
+        ),
+      });
+
+      if (!amIFollowing) {
+        throw new ForbiddenException('This account is private. Follow this user to see who they are following.');
+      }
+    }
+
+    const whereClause = and(
+      eq(follow.followerId, targetUserId),
+      eq(follow.status, 'accepted')
+    );
+
+    const direction = sort_order === 'asc' ? asc : desc;
+    
+    const orderBy = (() => {
+      switch (sort_by) {
+        case 'followers_count':
+          return direction(profile.followersCount);
+        case 'created_at':
+        default:
+          return direction(follow.createdAt);
+      }
+    })();
+    const [following, totalCount] = await Promise.all([
+      this.db.query.follow.findMany({
+        where: whereClause,
+        orderBy,
+        limit: per_page,
+        offset,
+        with: {
+          following: {
+            columns: {
+              id: true,
+              name: true,
+              username: true,
+              image: true,
+            },
+            with: {
+              profile: { columns: { isPremium: true } }
+            } 
+          },
+        }
+      }),
+      this.db.$count(follow, whereClause),
+    ]);
+
+    const totalPages = Math.ceil(totalCount / per_page);
+
+    return {
+      data: following.map((row) => ({
+        id: row.following.id,
+        name: row.following.name,
+        username: row.following.username,
+        avatar: row.following.image,
+        isPremium: row.following.profile.isPremium,
+      })),
+      meta: {
+        total_results: totalCount,
+        total_pages: totalPages,
+        current_page: page,
+        per_page,
+      },
+    };
+  }
+
+  async getFollowStatus(currentUserId: string, targetUserId: string): Promise<FollowDto | null> {
+    if (currentUserId === targetUserId) {
+      throw new BadRequestException('You cannot follow yourself');
+    }
+    const followRecord = await this.db.query.follow.findFirst({
+      where: and(
+        eq(follow.followerId, currentUserId),
+        eq(follow.followingId, targetUserId)
+      )
+    });
+
+    if (!followRecord) {
+      return null;
+    }
+
+    return plainToInstance(FollowDto, followRecord, {
+      excludeExtraneousValues: true,
+    });
+  }
+
+  async followUser(currentUserId: string, targetUserId: string): Promise<FollowDto> {
+    if (currentUserId === targetUserId) {
+      throw new BadRequestException('You cannot follow yourself');
+    }
+
+    return this.db.transaction(async (tx) => {
+      const [newFollow] = await tx
+        .insert(follow)
+        .select(
+          tx
+            .select({
+              followerId: sql`${currentUserId}::uuid`.as('follower_id'),
+              followingId: profile.id,
+              status: sql`
+                CASE 
+                  WHEN ${profile.isPrivate} THEN 'pending' 
+                  ELSE 'accepted' 
+                END::follow_status_enum
+              `.as('status'),
+              createdAt: sql`now()`.as('created_at'), 
+            })
+            .from(profile)
+            .where(eq(profile.id, targetUserId))
+        )
+        .onConflictDoNothing()
+        .returning();
+      if (newFollow) {
+        if (newFollow.status === 'accepted') {
+          // TODO:
+          // - Update followers_count and following_count in profile table
+          // - Send notification to the followed user
+        }
+        return plainToInstance(FollowDto, newFollow, {
+          excludeExtraneousValues: true,
+        });
+      } else {
+        const existingFollow = await tx.query.follow.findFirst({
+          where: and(
+            eq(follow.followerId, currentUserId),
+            eq(follow.followingId, targetUserId)
+          )
+        });
+        if (!existingFollow) {
+          throw new NotFoundException('User to follow not found');
+        }
+        return plainToInstance(FollowDto, existingFollow, {
+          excludeExtraneousValues: true,
+        });
+      }
+    });
+  }
+
+  async unfollowUser(currentUserId: string, targetUserId: string): Promise<FollowDto> {
+    if (currentUserId === targetUserId) {
+      throw new BadRequestException('You cannot unfollow yourself');
+    }
+  
+    const [deletedFollow] = await this.db
+      .delete(follow)
+      .where(
+        and(
+          eq(follow.followerId, currentUserId),
+          eq(follow.followingId, targetUserId)
+        )
+      )
+      .returning();
+
+    if (!deletedFollow) {
+      throw new NotFoundException('Follow relationship not found');
+    }
+
+    // TODO:
+    // - Update followers_count and following_count in profile table
+
+    return plainToInstance(FollowDto, deletedFollow, {
+      excludeExtraneousValues: true,
+    });
+  }
+  /* -------------------------------------------------------------------------- */
 }

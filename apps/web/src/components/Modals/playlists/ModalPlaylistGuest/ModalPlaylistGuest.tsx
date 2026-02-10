@@ -10,8 +10,6 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeftIcon, Check } from 'lucide-react';
 import { UserAvatar } from '@/components/User/UserAvatar';
 import { Icons } from '@/config/icons';
-import { usePlaylistGuestsInsertMutation } from '@/api/client/mutations/playlistMutations';
-import { InputSearch } from '@/components/ui/input-search';
 import useDebounce from '@/hooks/use-debounce';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useInView } from 'react-intersection-observer';
@@ -19,15 +17,17 @@ import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { usePlaylistGuestsAddOptions, usePlaylistGuestsOptions } from '@/api/client/options/playlistOptions';
+import { usePlaylistGuestsAddOptions } from '@/api/client/options/playlistOptions';
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
+import { playlistMembersOptions } from '@libs/query-client/src';
+import { PlaylistMemberList } from '@packages/api-js';
 
 export const PlaylistGuestView = ({
   playlistGuest,
   playlistId,
   setView
 } : {
-  playlistGuest: PlaylistGuest[],
+  playlistGuest: PlaylistMemberList,
   playlistId: number,
   setView: (view: 'guests' | 'add') => void
 }) => {
@@ -43,9 +43,9 @@ export const PlaylistGuestView = ({
         </ModalDescription>
       </ModalHeader>
       <ModalBody>
-        {playlistGuest ? (
+        {/* {playlistGuest ? (
           <PlaylistGuestTable playlistId={playlistId} guests={playlistGuest} setView={setView} />
-        ) : null}
+        ) : null} */}
       </ModalBody>
     </>
   )
@@ -61,7 +61,7 @@ export const PlaylistGuestAddView = ({
   setView: (view: 'guests' | 'add') => void
 }) => {
   const t = useTranslations();
-  const { session } = useAuth();
+  const { user } = useAuth();
   const [selectedUsers, setSelectedUsers] = useState<Profile[]>([]);
   const [search, setSearch] = useState<string>('');
   const searchQuery = useDebounce(search, 500);
@@ -235,12 +235,12 @@ export function ModalPlaylistGuest({
   ...props
 } : PlaylistGuestModalProps) {
   const t = useTranslations();
-  const { session } = useAuth();
-  const { data: playlistGuest, isError } = useQuery(usePlaylistGuestsOptions({ playlistId }));
+  const { user } = useAuth();
+  const { data: playlistGuest, isError } = useQuery(playlistMembersOptions({ playlistId }));
   const { closeModal } = useModal();
   const [view, setView] = useState<'guests' | 'add'>('guests');
 
-  if (!session) return null;
+  if (!user) return null;
   return (
     <Modal
     open={props.open}

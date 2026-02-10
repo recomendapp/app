@@ -9,14 +9,14 @@ import { useInView } from 'react-intersection-observer';
 import { CardPlaylist } from '@/components/Card/CardPlaylist';
 import Loader from '@/components/Loader';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useUserPlaylistsInfiniteOptions } from '@/api/client/options/userOptions';
+import { userPlaylistsInfiniteOptions } from '@libs/query-client/src';
 
 export function UserPlaylists({
   grid = false,
 }: {
   grid?: boolean;
 }) {
-  const { session } = useAuth();
+  const { user } = useAuth();
 	const pathname = usePathname();
 	const { ref, inView } = useInView();
 
@@ -25,12 +25,8 @@ export function UserPlaylists({
     isLoading,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery(useUserPlaylistsInfiniteOptions({
-    userId: session?.user.id,
-    filters: {
-			sortBy: 'updated_at',
-			sortOrder: 'desc',
-		}
+  } = useInfiniteQuery(userPlaylistsInfiniteOptions({
+    userId: user?.id,
   }));
   const loading = playlists === undefined || isLoading;
 
@@ -40,18 +36,18 @@ export function UserPlaylists({
 
   if (loading) return <Loader />;
 
-  if (playlists?.pages[0]?.length === 0) return null;
+  if (playlists?.pages[0]?.data.length === 0) return null;
 
   if (grid) {
     return (
       <Fragment>
         {playlists?.pages.map((page, i) => (
-          page?.map((playlist, index) => (
+          page?.data.map((playlist, index) => (
             <CardPlaylist
-            ref={(i === playlists.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
+            ref={(i === playlists.pages?.length - 1) && (index === page?.data.length - 1) ? ref : undefined }
             key={playlist?.id}
             playlist={playlist}
-            showByUser={false}
+            owner={user ? { username: user.username } : undefined}
             showItemCount={true}
             />
           ))
@@ -62,25 +58,25 @@ export function UserPlaylists({
   return (
     <Fragment>
       {playlists?.pages.map((page, i) => (
-        page?.map((playlist, index) => (
+        page?.data.map((playlist, index) => (
           <Button
-            key={playlist?.id}
+            key={playlist.id}
             variant={
-              pathname === `/playlist/${playlist?.id}` ? 'secondary' : 'ghost'
+              pathname === `/playlist/${playlist.id}` ? 'secondary' : 'ghost'
             }
             className={`justify-start p-2`}
-            ref={(i === playlists.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
+            ref={(i === playlists.pages?.length - 1) && (index === page?.data.length - 1) ? ref : undefined }
             asChild
           >
             <Link
-              href={'/playlist/' + playlist?.id}
+              href={'/playlist/' + playlist.id}
               className="h-fit w-full flex gap-4"
             >
               <div className={`w-12 shadow-2xl shrink-0`}>
                 <AspectRatio ratio={1 / 1}>
                   <ImageWithFallback
-                  src={playlist?.poster_url ?? ''}
-                  alt={playlist?.title ?? ''}
+                  src={playlist.poster}
+                  alt={playlist.title}
                   fill
                   className="rounded-md object-cover"
                   type="playlist"
@@ -88,8 +84,8 @@ export function UserPlaylists({
                 </AspectRatio>
               </div>
               <div>
-                <p className="line-clamp-1">{playlist?.title}</p>
-                <p>{playlist?.items_count} films</p>
+                <p className="line-clamp-1">{playlist.title}</p>
+                <p>{playlist.itemsCount} films</p>
               </div>
             </Link>
           </Button>

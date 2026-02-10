@@ -13,7 +13,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Database } from '@recomendapp/types';
 import { Badge } from '@/components/ui/badge';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../Modal';
-import { usePlaylistInsertMutation, usePlaylistTvSeriesInsertMutation } from '@/api/client/mutations/playlistMutations';
+import { usePlaylistTvSeriesInsertMutation } from '@/api/client/mutations/playlistMutations';
 import { Icons } from '@/config/icons';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
 import { Label } from '@/components/ui/label';
@@ -22,6 +22,7 @@ import { TooltipBox } from '@/components/Box/TooltipBox';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { usePlaylistTvSeriesAddToOptions } from '@/api/client/options/playlistOptions';
+import { usePlaylistInsertMutation } from '@libs/query-client';
 
 const COMMENT_MAX_LENGTH = 180;
 

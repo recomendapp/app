@@ -13,7 +13,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Database } from '@recomendapp/types';
 import { Badge } from '@/components/ui/badge';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../Modal';
-import { usePlaylistInsertMutation, usePlaylistMovieInsertMutation } from '@/api/client/mutations/playlistMutations';
+import { usePlaylistMovieInsertMutation } from '@/api/client/mutations/playlistMutations';
 import { Icons } from '@/config/icons';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
 import { Label } from '@/components/ui/label';
@@ -22,6 +22,7 @@ import { TooltipBox } from '@/components/Box/TooltipBox';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { usePlaylistMovieAddToOptions } from '@/api/client/options/playlistOptions';
+import { usePlaylistInsertMutation } from '@libs/query-client';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -35,7 +36,7 @@ export function ModalPlaylistMovieAdd({
 	movieTitle,
 	...props
 } : ModalPlaylistMovieAddProps) {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const t = useTranslations();
 	const queryClient = useQueryClient();
 	const { closeModal } = useModal();
@@ -46,7 +47,7 @@ export function ModalPlaylistMovieAdd({
 	const [createPlaylistName, setCreatePlaylistName] = useState<string>('');
 	const addToSourceOptions = usePlaylistMovieAddToOptions({
 		movieId: movieId,
-		userId: session?.user.id,
+		userId: user?.id,
 		source: source,
 	});
 	const {
@@ -61,11 +62,11 @@ export function ModalPlaylistMovieAdd({
 	const { mutateAsync: insertPlaylist } = usePlaylistInsertMutation()
 
 	const handleSubmit = useCallback(async () => {
-		if (!session) return;
+		if (!user) return;
 		await addMovieToPlaylist({
 			playlists: selectedPlaylists,
 			movieId: movieId,
-			userId: session.user.id,
+			userId: user.id,
 			comment: comment,
 		}, {
 			onSuccess: () => {
@@ -76,14 +77,17 @@ export function ModalPlaylistMovieAdd({
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}, [addMovieToPlaylist, comment, closeModal, props.id, selectedPlaylists, session, t, movieId]);
+	}, [addMovieToPlaylist, comment, closeModal, props.id, selectedPlaylists, user, t, movieId]);
 
 
 	const handleCreatePlaylist = useCallback(async () => {
 		if (!createPlaylistName || !createPlaylistName.length) return
 		await insertPlaylist({
-			title: createPlaylistName,
-			type: 'movie',
+			body: {
+				title: createPlaylistName,
+				description: null,
+				visibility: 'public',
+			}
 		}, {
 			onSuccess: (playlist) => {
 				queryClient.setQueryData(addToSourceOptions.queryKey, (oldData) => {

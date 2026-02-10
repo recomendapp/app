@@ -13,7 +13,7 @@ import { Link } from "@/lib/i18n/navigation";
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useUserFolloweesOptions } from '@/api/client/options/userOptions';
+import { userFollowingOptions } from '@libs/query-client/src';
 
 export function ProfileFolloweesModal({
 	userId,
@@ -25,20 +25,20 @@ export function ProfileFolloweesModal({
 	const debouncedSearch = useDebounce(search);
 	const { ref, inView } = useInView();
 	const {
-		data: followees,
+		data: following,
 		isLoading: loading,
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useInfiniteQuery(useUserFolloweesOptions({
-		userId: userId,
+	} = useInfiniteQuery(userFollowingOptions({
+		profileId: userId,
 	}));
 
 	useEffect(() => {
 		if (inView && hasNextPage) {
 			fetchNextPage();
 		}
-	}, [inView, hasNextPage, followees, fetchNextPage]);
+	}, [inView, hasNextPage, following, fetchNextPage]);
 
 	return (
 		<>
@@ -53,31 +53,31 @@ export function ProfileFolloweesModal({
 				/>
 			</div>
 			<ScrollArea className="flex flex-col gap-2 border-2 rounded-md h-[60vh]">
-			{followees?.pages[0]?.length ? (
-				followees?.pages.map((page, i) => (
-					page?.map(({ followee }, index) => (
+			{following?.pages[0]?.data.length ? (
+				following?.pages.map((page, i) => (
+					page?.data.map((followee, index) => (
 						<Link
-							href={`/@${followee?.username}`}
-							key={followee?.id}
+							href={`/@${followee.username}`}
+							key={followee.id}
 							className='flex items-center w-full gap-2 p-2 hover:bg-muted'
-							{...(i === followees.pages.length - 1 &&
-								index === page.length - 1
+							{...(i === following.pages.length - 1 &&
+								index === page.data.length - 1
 									? { ref: ref }
 									: {})}
 					>
 							<Avatar className="h-10 w-10 shadow-2xl">
 								<AvatarImage
-									src={followee?.avatar_url ?? ''}
-									alt={followee?.username!}
+									src={followee.avatar ?? undefined}
+									alt={followee.username}
 								/>
 								<AvatarFallback className="text-primary-foreground bg-muted text-[20px]">
-									{getInitiales(followee?.username ?? '')}
+									{getInitiales(followee.username ?? '')}
 								</AvatarFallback>
 							</Avatar>
 							<div>
-								<p className="line-clamp-1">{followee?.full_name}</p>
+								<p className="line-clamp-1">{followee.name}</p>
 								<p className="text-muted-foreground line-clamp-1">
-									@{followee?.username}
+									@{followee.username}
 								</p>
 							</div>
 						</Link>
@@ -85,7 +85,7 @@ export function ProfileFolloweesModal({
 				))
 			) : (debouncedSearch && !loading && !isFetchingNextPage) ? (
 				<p className="text-center p-2">{upperFirst(t('common.messages.no_results'))}</p>
-			) : followees != null ? (
+			) : following != null ? (
 				<p className="text-center p-2">{upperFirst(t('common.messages.no_followees'))}</p>
 			) : (
 				<></>

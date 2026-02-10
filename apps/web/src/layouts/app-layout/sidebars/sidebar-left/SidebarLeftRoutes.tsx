@@ -15,7 +15,7 @@ import { ContextMenuPlaylist } from "@/components/ContextMenu/ContextMenuPlaylis
 import { useModal } from "@/context/modal-context";
 import { PlaylistModal } from "@/components/Modals/playlists/PlaylistModal";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useUserPlaylistsInfiniteOptions } from "@/api/client/options/userOptions";
+import { userPlaylistsInfiniteOptions } from "@libs/query-client/src";
 
 const SidebarCollectionContainerIcon = ({
 	className,
@@ -147,12 +147,8 @@ export const SidebarLeftRoutes = () => {
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useInfiniteQuery(useUserPlaylistsInfiniteOptions({
+	} = useInfiniteQuery(userPlaylistsInfiniteOptions({
 		userId: user?.id,
-		filters: {
-			sortBy: 'updated_at',
-			sortOrder: 'desc',
-		}
 	}));
 
 	// Fix for sidebar issue with mobile and desktop using different open state
@@ -230,12 +226,12 @@ export const SidebarLeftRoutes = () => {
 								</SidebarMenuButton>
 							</SidebarMenuItem>
 						))}
-						{playlists?.pages[0]?.length ? (
-							playlists?.pages.map((page, i) => (
-								page?.map((playlist, index) => (
+						{playlists?.pages[0]?.data.length ? (
+							playlists?.pages.map(({ data }, i) => (
+								data?.map((playlist, index) => (
 								<SidebarMenuItem
 								key={index}
-								ref={(i === playlists.pages.length - 1 && index === page.length - 1) ? ref : undefined }
+								ref={(i === playlists.pages.length - 1 && index === data.length - 1) ? ref : undefined }
 								>
 									<ContextMenuPlaylist playlist={playlist}>
 										<SidebarMenuButton
@@ -244,7 +240,7 @@ export const SidebarLeftRoutes = () => {
 													<>
 														{playlist.title}
 														<span className="ml-4 text-muted-foreground">
-															{playlist.items_count}
+															{playlist.itemsCount}
 														</span>
 													</>
 												)
@@ -256,7 +252,7 @@ export const SidebarLeftRoutes = () => {
 											<Link href={`/playlist/${playlist.id}`}>
 												<SidebarCollectionContainerIcon className={`${sidebarOpen ? "w-12" : "w-8"}`}>
 													<ImageWithFallback
-														src={playlist.poster_url ?? ''}
+														src={playlist.poster ?? ''}
 														alt={playlist.title ?? ''}
 														fill
 														className='object-cover'
@@ -266,11 +262,7 @@ export const SidebarLeftRoutes = () => {
 												<div>
 													<p className="line-clamp-1">{playlist.title}</p>
 													<p className='text-muted-foreground line-clamp-1'>
-														{playlist.type === 'movie' ? (
-															t('messages.film_count', { count: playlist.items_count ?? 0 })
-														) : playlist.type === 'tv_series' ? (
-															t('messages.tv_series_count', { count: playlist.items_count ?? 0 })
-														) : t('messages.item_count', { count: playlist.items_count ?? 0 })}
+														{t('messages.item_count', { count: playlist.itemsCount ?? 0 })}
 													</p>
 												</div>
 											</Link>

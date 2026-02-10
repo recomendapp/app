@@ -1,4 +1,3 @@
-import { Playlist } from "@recomendapp/types"
 import { Icons } from "@/config/icons";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuTrigger } from "../ui/context-menu";
 import { WithLink } from "../utils/WithLink";
@@ -10,9 +9,10 @@ import { upperFirst } from "lodash";
 import { useAuth } from "@/context/auth-context";
 import { PlaylistModal } from "../Modals/playlists/PlaylistModal";
 import { ModalPlaylistGuest } from "../Modals/playlists/ModalPlaylistGuest/ModalPlaylistGuest";
-import { usePlaylistDeleteMutation } from "@/api/client/mutations/playlistMutations";
 import toast from "react-hot-toast";
 import { usePathname, useRouter } from "@/lib/i18n/navigation";
+import { Playlist, User } from "@packages/api-js";
+import { usePlaylistDeleteMutation } from "@libs/query-client/src";
 
 interface Item {
 	icon: React.ElementType;
@@ -26,15 +26,17 @@ interface Item {
 export const ContextMenuPlaylist = ({
 	children,
 	playlist,
+	owner,
 }: {
 	children: React.ReactNode,
 	playlist: Playlist,
+	owner?: Pick<User, 'username'>,
 }) => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const router = useRouter();
 	const pathname = usePathname();
 	const { openModal, createConfirmModal } = useModal();
-	const playlistDeleteMutation = usePlaylistDeleteMutation()
+	const { mutateAsync: playlistDeleteMutation } = usePlaylistDeleteMutation();
 	const t = useTranslations();
 	const items = useMemo((): Item[][] => {
 		return [
@@ -44,12 +46,14 @@ export const ContextMenuPlaylist = ({
 				href: `/playlist/${playlist.id}`,
 				label: upperFirst(t('common.messages.go_to_playlist')),
 			},
-			{
-				icon: Icons.user,
-				href: `/@${playlist.user?.username}`,
-				label: upperFirst(t('common.messages.go_to_user')),
-			},
-			...(session?.user.id === playlist.user_id ? [
+			...(owner ? [
+				{
+					icon: Icons.user,
+					href: `/@${owner.username}`,
+					label: upperFirst(t('common.messages.go_to_user')),
+				},
+			] : []),
+			...(user?.id === playlist.userId ? [
 				{
 					icon: Icons.users,
 					onClick: () => openModal(ModalPlaylistGuest, {
@@ -78,7 +82,7 @@ export const ContextMenuPlaylist = ({
 				}),
 				label: upperFirst(t('common.messages.share')),
 			},
-			...(session?.user.id === playlist.user_id ? [
+			...(user?.id === playlist.userId ? [
 				{
 					icon: Icons.delete,
 					onClick: () => {
@@ -89,20 +93,21 @@ export const ContextMenuPlaylist = ({
 								important: (chunk) => <b>{chunk}</b>,
 							}),
 							onConfirm: async () => {
-								await playlistDeleteMutation.mutateAsync(
-									{ playlistId: playlist.id, userId: session.user.id },
-									{
-										onSuccess: async () => {
-											toast.success(upperFirst(t('common.messages.deleted')));
-											if (pathname.startsWith(`/playlist/${playlist.id}`)) {
-												router.replace('/collection');
-											}
-										},
-										onError: () => {
-											toast.error(upperFirst(t('common.messages.an_error_occurred')));
-										},
+								await playlistDeleteMutation({
+									path: {
+										playlist_id: playlist.id,
 									}
-								);
+								}, {
+									onSuccess: async () => {
+										toast.success(upperFirst(t('common.messages.deleted')));
+										if (pathname.startsWith(`/playlist/${playlist.id}`)) {
+											router.replace('/collection');
+										}
+									},
+									onError: () => {
+										toast.error(upperFirst(t('common.messages.an_error_occurred')));
+									},
+								});
 							},
 						});
 					},
@@ -111,7 +116,7 @@ export const ContextMenuPlaylist = ({
 				}
 			] : []),
 		],
-	]}, [playlist, session, t, openModal, createConfirmModal, playlistDeleteMutation, pathname, router]);
+	]}, [playlist, user, t, openModal, createConfirmModal, playlistDeleteMutation, pathname, router]);
 	return (
 		<ContextMenu>
 			<ContextMenuTrigger>

@@ -1,17 +1,8 @@
 import { ApiPropertyOptional, ApiSchema } from '@nestjs/swagger';
 import { PaginationQueryDto } from '../../../common/dto/pagination.dto';
 import { IsEnum, IsOptional } from 'class-validator';
-
-export enum PlaylistSortBy {
-  CREATED_AT = 'created_at',
-  UPDATED_AT = 'updated_at',
-  LIKES_COUNT = 'likes_count',
-}
-
-export enum SortOrder {
-  ASC = 'asc',
-  DESC = 'desc',
-}
+import { PlaylistSortBy } from '../../playlists/dto/playlists.dto';
+import { SortOrder } from '../../../common/dto/sort.dto';
 
 @ApiSchema({ name: 'GetUserPlaylistsQuery' })
 export class GetUserPlaylistsQueryDto extends PaginationQueryDto {

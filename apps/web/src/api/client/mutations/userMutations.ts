@@ -76,96 +76,96 @@ import { mediaKeys } from "../keys/mediaKeys";
 // };
 
 /* --------------------------------- FOLLOWS -------------------------------- */
-export const useUserFollowProfileInsertMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	const userMyFeedOptions = useUserMyFeedInfiniteOptions();
-	return useMutation({
-		mutationFn: async ({
-			userId,
-			followeeId,
-		} : {
-			userId?: string;
-			followeeId?: string;
-		}) => {
-			if (!userId || !followeeId) throw Error('Missing user id or followee id');
-			const { data, error } = await supabase
-				.from('user_follower')
-				.insert({
-					user_id: userId,
-					followee_id: followeeId,
-				})
-				.select('*, followee:followee_id(*)')
-				.single();
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(userKeys.followProfile({
-				userId: data.user_id,
-				profileId: data.followee_id,
-			}), data);
-			queryClient.invalidateQueries({
-				queryKey: userKeys.followers({
-					userId: data.followee_id,
-				})
-			})
-			queryClient.invalidateQueries({
-				queryKey: userKeys.followees({
-					userId: data.user_id,
-				})
-			})
-			queryClient.invalidateQueries({
-				queryKey: userMyFeedOptions.queryKey,
-			});
-		},
-	});
-};
+// export const useUserFollowProfileInsertMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	const userMyFeedOptions = useUserMyFeedInfiniteOptions();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			userId,
+// 			followeeId,
+// 		} : {
+// 			userId?: string;
+// 			followeeId?: string;
+// 		}) => {
+// 			if (!userId || !followeeId) throw Error('Missing user id or followee id');
+// 			const { data, error } = await supabase
+// 				.from('user_follower')
+// 				.insert({
+// 					user_id: userId,
+// 					followee_id: followeeId,
+// 				})
+// 				.select('*, followee:followee_id(*)')
+// 				.single();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(userKeys.followProfile({
+// 				userId: data.user_id,
+// 				profileId: data.followee_id,
+// 			}), data);
+// 			queryClient.invalidateQueries({
+// 				queryKey: userKeys.followers({
+// 					userId: data.followee_id,
+// 				})
+// 			})
+// 			queryClient.invalidateQueries({
+// 				queryKey: userKeys.followees({
+// 					userId: data.user_id,
+// 				})
+// 			})
+// 			queryClient.invalidateQueries({
+// 				queryKey: userMyFeedOptions.queryKey,
+// 			});
+// 		},
+// 	});
+// };
 
-export const useUserUnfollowProfileDeleteMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	const userMyFeedOptions = useUserMyFeedInfiniteOptions();
-	return useMutation({
-		mutationFn: async ({
-			userId,
-			followeeId,
-		} : {
-			userId?: string;
-			followeeId?: string;
-		}) => {
-			if (!userId || !followeeId) throw Error('Missing user id or followee id');
-			const { data, error } = await supabase
-				.from('user_follower')
-				.delete()
-				.eq('user_id', userId)
-				.eq('followee_id', followeeId)
-				.select()
-				.single();
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(userKeys.followProfile({
-				userId: data.user_id,
-				profileId: data.followee_id,
-			}), null);
-			queryClient.invalidateQueries({
-				queryKey: userKeys.followers({
-					userId: data.followee_id,
-				})
-			});
-			queryClient.invalidateQueries({
-				queryKey: userKeys.followees({
-					userId: data.user_id,
-				})
-			});
-			queryClient.invalidateQueries({
-				queryKey: userMyFeedOptions.queryKey,
-			});
-		},
-	});
-};
+// export const useUserUnfollowProfileDeleteMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	const userMyFeedOptions = useUserMyFeedInfiniteOptions();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			userId,
+// 			followeeId,
+// 		} : {
+// 			userId?: string;
+// 			followeeId?: string;
+// 		}) => {
+// 			if (!userId || !followeeId) throw Error('Missing user id or followee id');
+// 			const { data, error } = await supabase
+// 				.from('user_follower')
+// 				.delete()
+// 				.eq('user_id', userId)
+// 				.eq('followee_id', followeeId)
+// 				.select()
+// 				.single();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(userKeys.followProfile({
+// 				userId: data.user_id,
+// 				profileId: data.followee_id,
+// 			}), null);
+// 			queryClient.invalidateQueries({
+// 				queryKey: userKeys.followers({
+// 					userId: data.followee_id,
+// 				})
+// 			});
+// 			queryClient.invalidateQueries({
+// 				queryKey: userKeys.followees({
+// 					userId: data.user_id,
+// 				})
+// 			});
+// 			queryClient.invalidateQueries({
+// 				queryKey: userMyFeedOptions.queryKey,
+// 			});
+// 		},
+// 	});
+// };
 
 export const useUserFollowPersonInsertMutation = () => {
 	const supabase = useSupabaseClient();

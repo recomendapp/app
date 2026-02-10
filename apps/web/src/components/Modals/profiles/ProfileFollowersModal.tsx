@@ -13,7 +13,7 @@ import { Link } from "@/lib/i18n/navigation";
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useUserFollowersOptions } from '@/api/client/options/userOptions';
+import { userFollowersOptions } from '@libs/query-client/src';
 
 export function ProfileFollowersModal({
 	userId,
@@ -30,8 +30,8 @@ export function ProfileFollowersModal({
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useInfiniteQuery(useUserFollowersOptions({
-		userId: userId,
+	} = useInfiniteQuery(userFollowersOptions({
+		profileId: userId,
 	}));
 
 	useEffect(() => {
@@ -53,31 +53,31 @@ export function ProfileFollowersModal({
 				/>
 			</div>
 			<ScrollArea className="flex flex-col gap-2 border-2 rounded-md h-[60vh]">
-			{followers?.pages[0]?.length ? (
+			{followers?.pages[0]?.data.length ? (
 				followers?.pages.map((page, i) => (
-					page?.map(({ follower }, index) => (
+					page?.data.map((follower, index) => (
 						<Link
-							href={`/@${follower?.username}`}
-							key={follower?.id}
+							href={`/@${follower.username}`}
+							key={follower.id}
 							className='flex items-center w-full gap-2 p-2 hover:bg-muted'
 							{...(i === followers.pages.length - 1 &&
-								index === page.length - 1
+								index === page.data.length - 1
 									? { ref: ref }
 									: {})}
 						>
 							<Avatar className="h-10 w-10 shadow-2xl">
 								<AvatarImage
-									src={follower?.avatar_url ?? ''}
-									alt={follower?.username!}
+								src={follower.avatar ?? undefined}
+								alt={follower.username}
 								/>
 								<AvatarFallback className="text-primary-foreground bg-muted text-[20px]">
-									{getInitiales(follower?.username ?? '')}
+									{getInitiales(follower.username ?? '')}
 								</AvatarFallback>
 							</Avatar>
 							<div>
-								<p className="line-clamp-1">{follower?.full_name}</p>
+								<p className="line-clamp-1">{follower.name}</p>
 								<p className="text-muted-foreground line-clamp-1">
-									@{follower?.username}
+									@{follower.username}
 								</p>
 							</div>
 						</Link>

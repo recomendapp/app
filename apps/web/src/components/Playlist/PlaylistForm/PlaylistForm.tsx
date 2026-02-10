@@ -26,22 +26,19 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Playlist } from '@recomendapp/types';
 import { useAuth } from '@/context/auth-context';
-import { useSupabaseClient } from '@/context/supabase-context';
-import { usePlaylistDeleteMutation, usePlaylistInsertMutation, usePlaylistUpdateMutation } from '@/api/client/mutations/playlistMutations';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import { v4 as uuidv4 } from "uuid";
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
+import { usePlaylistDeleteMutation, usePlaylistInsertMutation, usePlaylistUpdateMutation } from '@libs/query-client';
+import { Playlist, PlaylistCreate } from '@packages/api-js';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   success: () => void;
@@ -54,8 +51,7 @@ export function PlaylistForm({
   filmId,
   playlist,
 }: PlaylistFormProps) {
-  const supabase = useSupabaseClient();
-  const { session } = useAuth();
+  const { user } = useAuth();
   const t = useTranslations();
   const router = useRouter();
   const pathname = usePathname();
@@ -67,9 +63,10 @@ export function PlaylistForm({
   const { mutateAsync: deletePlaylistMutation, isPending: deletePending } = usePlaylistDeleteMutation();
 
   // Form
-  const typeOptions = [
-    { value: 'movie', label: upperFirst(t('common.messages.film', { count: 2 })) },
-    { value: 'tv_series', label: upperFirst(t('common.messages.tv_series', { count: 2 })) },
+  const visibilityOptions: { value: Playlist['visibility'], label: string }[] = [
+    { value: 'public', label: upperFirst(t('common.messages.public')) },
+    { value: 'followers', label: upperFirst(t('common.messages.follower', { count: 2 })) },
+    { value: 'private', label: upperFirst(t('common.messages.private', { count: 1, gender: 'female' })) },
   ];
   const CreatePlaylistFormSchema = z.object({
     title: z
@@ -89,15 +86,13 @@ export function PlaylistForm({
         message: t('common.form.length.char_max', { count: 300 }),
       })
       .optional(),
-    type: z.enum(['movie', 'tv_series']),
-    private: z.boolean(),
+    visibility: z.enum(['public', 'private', 'followers']),
   });
   type PlaylistFormValues = z.infer<typeof CreatePlaylistFormSchema>;
   const defaultValues: Partial<PlaylistFormValues> = {
     title: playlist?.title ?? '',
     description: playlist?.description ?? '',
-    private: playlist?.private ?? false,
-    type: playlist?.type ?? 'movie',
+    visibility: playlist?.visibility ?? (user?.isPrivate ? 'followers' : 'public'),
   };
   const form = useForm<PlaylistFormValues>({
     resolver: zodResolver(CreatePlaylistFormSchema),
@@ -107,13 +102,13 @@ export function PlaylistForm({
 
   // Handlers
   const handleInsert = useCallback(async (data: PlaylistFormValues) => {
-    if (!session) return;
+    if (!user) return;
     await insertPlaylistMutation({
-      title: data.title.replace(/\s+/g, ' ').trim(),
-      description: data.description?.trim() || null,
-      private: data.private,
-      type: data.type,
-      poster: newPoster
+      body: {
+        title: data.title.replace(/\s+/g, ' ').trim(),
+        description: data.description?.trim() || null,
+        visibility: data.visibility,
+      }
     }, {
       onSuccess: async () => {
         toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
@@ -123,16 +118,19 @@ export function PlaylistForm({
         toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
-  }, [newPoster, insertPlaylistMutation, session, success, t]);
+  }, [newPoster, insertPlaylistMutation, user, success, t]);
 
   const handleUpdate = useCallback(async (data: PlaylistFormValues) => {
-    if (!session || !playlist) return;
+    if (!user || !playlist) return;
     await updatePlaylistMutation({
-      id: playlist.id,
-      title: data.title.replace(/\s+/g, ' ').trim(),
-      description: data.description?.trim() || null,
-      private: data.private,
-      poster: newPoster
+      path: {
+        playlist_id: playlist.id,
+      },
+      body: {
+        title: data.title.replace(/\s+/g, ' ').trim(),
+        description: data.description?.trim() || null,
+        visibility: data.visibility,
+      },
     }, {
       onSuccess: async () => {
         toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
@@ -142,13 +140,14 @@ export function PlaylistForm({
         toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
-  }, [newPoster, updatePlaylistMutation, playlist, session, success, t]);
+  }, [newPoster, updatePlaylistMutation, playlist, user, success, t]);
 
   const handleDeletePlaylist = useCallback(async () => {
     if (!playlist) return;
     await deletePlaylistMutation({
-      playlistId: playlist.id,
-      userId: session?.user.id
+      path: {
+          playlist_id: playlist.id,
+      },
     }, {
       onSuccess: () => {
         if (pathname.startsWith(`/playlist/${playlist.id}`)) router.push('/');
@@ -159,7 +158,7 @@ export function PlaylistForm({
         toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
-  }, [deletePlaylistMutation, playlist, router, pathname, session, success, t]);
+  }, [deletePlaylistMutation, playlist, router, pathname, user, success, t]);
 
   return (
     <Form {...form}>
@@ -216,15 +215,14 @@ export function PlaylistForm({
             />
             <FormField
               control={form.control}
-              name="type"
-              disabled={!!playlist}
+              name="visibility"
               render={({ field }) => (
-                <TooltipBox tooltip={!!playlist ? upperFirst(t('common.messages.cannot_be_changed')) : undefined}>
+                <TooltipBox>
                   <FormItem className={field.disabled ? 'text-muted-foreground cursor-not-allowed' : ''}>
-                    <FormLabel>{upperFirst(t('common.messages.universe'))}</FormLabel>
+                    <FormLabel>{upperFirst(t('common.messages.visibility'))}</FormLabel>
                     <FormControl className="grid grid-cols-2 gap-2">
                       <RadioGroup value={field.value} onValueChange={field.onChange} disabled={field.disabled}>
-                      {typeOptions.map((option, index) => (
+                      {visibilityOptions.map((option, index) => (
                           <div key={index} className="flex items-center space-x-2">
                             <RadioGroupItem value={option.value} id={`option-${index}`} />
                             <Label htmlFor={`option-${index}`}>{option.label}</Label>
@@ -235,27 +233,6 @@ export function PlaylistForm({
                     <FormMessage />
                   </FormItem>
                 </TooltipBox>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="private"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{upperFirst(t('common.messages.visibility'))}</FormLabel>
-                  <FormControl className="flex items-center space-x-2">
-                    <div className="flex items-center space-x-2">
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                      <Label htmlFor="airplane-mode">
-                        {field.value ? upperFirst(t('common.messages.private', { count: 1, gender: 'female' })) : upperFirst(t('common.messages.public'))}
-                      </Label>
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
               )}
             />
           </div>

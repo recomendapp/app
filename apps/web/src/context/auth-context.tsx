@@ -11,11 +11,11 @@ import toast from 'react-hot-toast';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/lib/i18n/navigation';
-import { useUserMeOptions } from '@libs/query-client';
-import { UserMe } from '@packages/api-js/src';
+import { userMeOptions } from '@libs/query-client';
+import { User } from '@packages/api-js/src';
 
 export interface UserState {
-  user: UserMe | null | undefined;
+  user: User | null | undefined;
   customerInfo: CustomerInfo | undefined;
   login: (credentials: { 
     password: string, 
@@ -46,17 +46,17 @@ export interface UserState {
 const AuthContext = createContext<UserState | undefined>(undefined);
 
 interface AuthProviderProps {
-  session: UserMe | null;
+  user: User | null;
   children: React.ReactNode;
 }
 
-export const AuthProvider = ({ session: initialSession, children }: AuthProviderProps) => {
+export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps) => {
   const t = useTranslations();
   const router = useRouter();
   const queryClient = useQueryClient();
   const { data: user } = useQuery({
-    ...useUserMeOptions(),
-    initialData: initialSession || undefined,
+    ...userMeOptions(),
+    initialData: initialUser || undefined,
   });
 
   const [pushToken, setPushToken] = useState<string | null>(null);
@@ -106,7 +106,7 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
         throw error;
       };
     }
-    await queryClient.invalidateQueries({ queryKey: useUserMeOptions().queryKey });
+    await queryClient.invalidateQueries({ queryKey: userMeOptions().queryKey });
     router.push(credentials.redirectTo || '/');
   }, [t, router, queryClient]);
 
@@ -126,7 +126,7 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
       }
       throw error;
     }
-    queryClient.setQueryData(useUserMeOptions().queryKey, undefined);
+    queryClient.setQueryData(userMeOptions().queryKey, undefined);
     router.refresh();
   }, [user, pushToken, t, router, queryClient]);
 

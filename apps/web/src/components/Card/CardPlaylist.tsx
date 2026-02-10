@@ -4,34 +4,24 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { cn } from '@/lib/utils';
 import { ImageWithFallback } from '../utils/ImageWithFallback';
 import { Link } from "@/lib/i18n/navigation";
-import { Playlist } from '@recomendapp/types';
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { ContextMenuPlaylist } from '../ContextMenu/ContextMenuPlaylist';
+import { Playlist, User } from '@packages/api-js';
 
 interface CardPlaylistProps
 	extends React.HTMLAttributes<HTMLDivElement> {
 		variant?: "default";
 		playlist: Playlist;
-		showByUser?: boolean;
+		owner?: Pick<User, 'username'>;
 		showItemCount?: boolean;
 	}
 
 const CardPlaylistDefault = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardPlaylistProps, "variant">
->(({ className, playlist, showItemCount, showByUser = true, children, ...props }, ref) => {
+>(({ className, playlist, owner, showItemCount, children, ...props }, ref) => {
 	const t = useTranslations();
-	const renderItemsCount = () => {
-		switch (playlist.type) {
-			case 'movie':
-				return t('common.messages.film_count', { count: playlist?.items_count ?? 0 });
-			case 'tv_series':
-				return t('common.messages.tv_series_count', { count: playlist?.items_count ?? 0 });
-			default:
-				return t('common.messages.item_count', { count: playlist?.items_count ?? 0 });
-		}
-	}
 	return (
 		<div
 			ref={ref}
@@ -44,8 +34,8 @@ const CardPlaylistDefault = React.forwardRef<
 			<div className='p-0'>
 				<AspectRatio ratio={1 / 1} className='w-full rounded-xl overflow-hidden'>
 					<ImageWithFallback
-						src={playlist?.poster_url ?? ''}
-						alt={playlist?.title ?? ''}
+						src={playlist.poster}
+						alt={playlist.title}
 						fill
 						sizes={`
 						(max-width: 640px) 96px,
@@ -59,11 +49,11 @@ const CardPlaylistDefault = React.forwardRef<
 				</AspectRatio>
 			</div>
 			<div className='p-0'>
-				<p className="line-clamp-2 wrap-break-word group-hover:text-primary/80">{playlist?.title}</p>
-				{showByUser && <p className="line-clamp-1 text-sm italic text-muted-foreground">{t('common.messages.by_name', { name: playlist.user?.username! })}</p>}
+				<p className="line-clamp-2 wrap-break-word group-hover:text-primary/80">{playlist.title}</p>
+				{owner && <p className="line-clamp-1 text-sm italic text-muted-foreground">{t('common.messages.by_name', { name: owner.username })}</p>}
 				{showItemCount && (
 					<p className="line-clamp-1 text-sm italic text-muted-foreground">
-					{renderItemsCount()}
+					{t('common.messages.item_count', { count: playlist.itemsCount ?? 0 })}
 					</p>
 				)}
 			</div>
@@ -75,12 +65,12 @@ CardPlaylistDefault.displayName = "CardPlaylistDefault";
 const CardPlaylist = React.forwardRef<
 	HTMLDivElement,
 	CardPlaylistProps
->(({ className, playlist, variant = "default", ...props }, ref) => {
+>(({ className, variant = "default", ...props }, ref) => {
 	return (
-	<ContextMenuPlaylist playlist={playlist}>
-		<Link href={`/playlist/${playlist?.id}`}>
+	<ContextMenuPlaylist playlist={props.playlist} owner={props.owner}>
+		<Link href={`/playlist/${props.playlist.id}`}>
 			{variant === "default" ? (
-				<CardPlaylistDefault ref={ref} className={className} playlist={playlist} {...props} />
+				<CardPlaylistDefault ref={ref} className={className} {...props} />
 			) : null}
 		</Link>
 	</ContextMenuPlaylist>

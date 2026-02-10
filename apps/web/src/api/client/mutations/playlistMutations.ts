@@ -1,183 +1,169 @@
 import { useSupabaseClient } from '@/context/supabase-context';
 import { Database, Playlist, PlaylistItemMovie, PlaylistItemTvSeries } from '@recomendapp/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useUserPlaylistsInfiniteOptions } from '../options/userOptions';
+// import { useUserPlaylistsInfiniteOptions } from '../options/userOptions';
 import { useAuth } from '@/context/auth-context';
 import { mediaKeys } from '../keys/mediaKeys';
 import { playlistKeys } from '../keys/playlistKeys';
-import { usePlaylistDetailsOptions, usePlaylistGuestsOptions, usePlaylistMovieItemsOptions, usePlaylistTvSeriesItemsOptions } from '../options/playlistOptions';
+import { usePlaylistDetailsOptions, usePlaylistMovieItemsOptions, usePlaylistTvSeriesItemsOptions } from '../options/playlistOptions';
 import { v4 } from 'uuid';
 import compressPicture from '@/lib/utils/compressPicture';
+import { userPlaylistsInfiniteOptions } from '@libs/query-client/src';
 
-export const usePlaylistInsertMutation = () => {
-	const { session } = useAuth();
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	const userPlaylistsOptions = useUserPlaylistsInfiniteOptions({
-		userId: session?.user.id,
-		filters: {
-			sortBy: 'updated_at',
-			sortOrder: 'desc',
-		}
-	});
-	return useMutation({
-		mutationFn: async ({
-			title,
-			type,
-			description,
-			private: isPrivate,
-			poster,
-		} : Pick<Database['public']['Tables']['playlists']['Insert'], 'title' | 'type' | 'description' | 'private'> & { poster?: File | null }) => {
-			if (!session) throw Error('No session found');
+// export const usePlaylistInsertMutation = () => {
+// 	const { session } = useAuth();
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			title,
+// 			type,
+// 			description,
+// 			private: isPrivate,
+// 			poster,
+// 		} : Pick<Database['public']['Tables']['playlists']['Insert'], 'title' | 'type' | 'description' | 'private'> & { poster?: File | null }) => {
+// 			if (!session) throw Error('No session found');
 
-			let poster_url: string | null | undefined = poster === null ? null : undefined;
-			const { data, error } = await supabase
-				.from('playlists')
-				.insert({
-					title,
-					type,
-					description,
-					private: isPrivate,
-					poster_url,
-					user_id: session.user.id,
-				})
-				.select('*, user:profile(*)')
-				.single();
-			if (error) throw error;
+// 			let poster_url: string | null | undefined = poster === null ? null : undefined;
+// 			const { data, error } = await supabase
+// 				.from('playlists')
+// 				.insert({
+// 					title,
+// 					type,
+// 					description,
+// 					private: isPrivate,
+// 					poster_url,
+// 					user_id: session.user.id,
+// 				})
+// 				.select('*, user:profile(*)')
+// 				.single();
+// 			if (error) throw error;
 
-			if (poster) {
-				const fileExt = poster.name.split('.').pop();
-				const filePath = `${data.id}.${v4()}.${fileExt}`;
-				const posterCompressed = await compressPicture(poster, filePath, 400, 400);
-				const { data: uploadData, error: uploadError } = await supabase.storage
-					.from('playlist_posters')
-					.upload(filePath, posterCompressed, {
-						upsert: true
-					});
-				if (uploadError) throw uploadError;
-				if (!uploadData) throw new Error('No data returned from upload');
-				const { data: { publicUrl } } = supabase.storage
-					.from('playlist_posters')
-					.getPublicUrl(uploadData.path);
-				poster_url = publicUrl;
+// 			if (poster) {
+// 				const fileExt = poster.name.split('.').pop();
+// 				const filePath = `${data.id}.${v4()}.${fileExt}`;
+// 				const posterCompressed = await compressPicture(poster, filePath, 400, 400);
+// 				const { data: uploadData, error: uploadError } = await supabase.storage
+// 					.from('playlist_posters')
+// 					.upload(filePath, posterCompressed, {
+// 						upsert: true
+// 					});
+// 				if (uploadError) throw uploadError;
+// 				if (!uploadData) throw new Error('No data returned from upload');
+// 				const { data: { publicUrl } } = supabase.storage
+// 					.from('playlist_posters')
+// 					.getPublicUrl(uploadData.path);
+// 				poster_url = publicUrl;
 
-				const { error: updateError } = await supabase
-					.from('playlists')
-					.update({ poster_url })
-					.eq('id', data.id);
-				if (updateError) throw updateError;
-			}
+// 				const { error: updateError } = await supabase
+// 					.from('playlists')
+// 					.update({ poster_url })
+// 					.eq('id', data.id);
+// 				if (updateError) throw updateError;
+// 			}
 
-			return {
-				...data,
-				poster_url: poster_url ?? data.poster_url,
-			};
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(playlistKeys.details({ playlistId: data.id }), data);
-			queryClient.invalidateQueries({
-				queryKey: userPlaylistsOptions.queryKey
-			});
-		}
-	});
-};
+// 			return {
+// 				...data,
+// 				poster_url: poster_url ?? data.poster_url,
+// 			};
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(playlistKeys.details({ playlistId: data.id }), data);
+// 			queryClient.invalidateQueries({
+// 				queryKey: userPlaylistsInfiniteOptions({
+// 					userId: data.user_id,
+// 				}).queryKey
+// 			});
+// 		}
+// 	});
+// };
 
-export const usePlaylistUpdateMutation = () => {
-	const { session } = useAuth();
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	const userPlaylistsOptions = useUserPlaylistsInfiniteOptions({
-		userId: session?.user.id,
-		filters: {
-			sortBy: 'updated_at',
-			sortOrder: 'desc',
-		}
-	});
-	return useMutation({
-		mutationFn: async ({
-			id,
-			title,
-			description,
-			private: isPrivate,
-			poster,
-		} : Partial<Pick<Database['public']['Tables']['playlists']['Row'], 'title' | 'description' | 'private'> & { poster: File | null }> & { id: number }) => {
-			let poster_url: string | null | undefined = poster === null ? null : undefined;
-			if (poster) {
-				const fileExt = poster.name.split('.').pop();
-				const filePath = `${id}.${v4()}.${fileExt}`;
-				const posterCompressed = await compressPicture(poster, filePath, 400, 400);
-				const { data: uploadData, error: uploadError } = await supabase.storage
-					.from('playlist_posters')
-					.upload(filePath, posterCompressed, {
-						upsert: true
-					});
-				if (uploadError) throw uploadError;
-				if (!uploadData) throw new Error('No data returned from upload');
-				const { data: { publicUrl } } = supabase.storage
-					.from('playlist_posters')
-					.getPublicUrl(uploadData.path);
-				poster_url = publicUrl;
-			}
-			const { data, error } = await supabase
-				.from('playlists')
-				.update({
-					title,
-					description,
-					private: isPrivate,
-					poster_url,
-				})
-				.eq('id', id)
-				.select('*, user:profile(*)')
-				.single();
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(playlistKeys.details({ playlistId: data.id }), data);
-			queryClient.invalidateQueries({
-				queryKey: userPlaylistsOptions.queryKey
-			});
-		}
-	});
-};
+// export const usePlaylistUpdateMutation = () => {
+// 	const { session } = useAuth();
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			id,
+// 			title,
+// 			description,
+// 			private: isPrivate,
+// 			poster,
+// 		} : Partial<Pick<Database['public']['Tables']['playlists']['Row'], 'title' | 'description' | 'private'> & { poster: File | null }> & { id: number }) => {
+// 			let poster_url: string | null | undefined = poster === null ? null : undefined;
+// 			if (poster) {
+// 				const fileExt = poster.name.split('.').pop();
+// 				const filePath = `${id}.${v4()}.${fileExt}`;
+// 				const posterCompressed = await compressPicture(poster, filePath, 400, 400);
+// 				const { data: uploadData, error: uploadError } = await supabase.storage
+// 					.from('playlist_posters')
+// 					.upload(filePath, posterCompressed, {
+// 						upsert: true
+// 					});
+// 				if (uploadError) throw uploadError;
+// 				if (!uploadData) throw new Error('No data returned from upload');
+// 				const { data: { publicUrl } } = supabase.storage
+// 					.from('playlist_posters')
+// 					.getPublicUrl(uploadData.path);
+// 				poster_url = publicUrl;
+// 			}
+// 			const { data, error } = await supabase
+// 				.from('playlists')
+// 				.update({
+// 					title,
+// 					description,
+// 					private: isPrivate,
+// 					poster_url,
+// 				})
+// 				.eq('id', id)
+// 				.select('*, user:profile(*)')
+// 				.single();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(playlistKeys.details({ playlistId: data.id }), data);
+// 			queryClient.invalidateQueries({
+// 				queryKey: userPlaylistsInfiniteOptions({
+// 					userId: data.user_id,
+// 				}).queryKey
+// 			});
+// 		}
+// 	});
+// };
 
-export const usePlaylistDeleteMutation = () => {
-	const { session } = useAuth();
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	const userPlaylistsOptions = useUserPlaylistsInfiniteOptions({
-		userId: session?.user.id,
-		filters: {
-			sortBy: 'updated_at',
-			sortOrder: 'desc',
-		}
-	});
-	return useMutation({
-		mutationFn: async ({
-			playlistId,
-			userId,
-		} : {
-			playlistId: number;
-			userId?: string;
-		}) => {
-			if (!userId) throw Error('User id is missing');
-			const { data, error } = await supabase
-				.from('playlists')
-				.delete()
-				.eq('id', playlistId)
-				.select()
-				.single();
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(playlistKeys.details({ playlistId: data.id }), null);
-			queryClient.invalidateQueries({
-				queryKey: userPlaylistsOptions.queryKey
-			});
-		}
-	});
-};
+// export const usePlaylistDeleteMutation = () => {
+// 	const { session } = useAuth();
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			playlistId,
+// 			userId,
+// 		} : {
+// 			playlistId: number;
+// 			userId?: string;
+// 		}) => {
+// 			if (!userId) throw Error('User id is missing');
+// 			const { data, error } = await supabase
+// 				.from('playlists')
+// 				.delete()
+// 				.eq('id', playlistId)
+// 				.select()
+// 				.single();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(playlistKeys.details({ playlistId: data.id }), null);
+// 			queryClient.invalidateQueries({
+// 				queryKey: userPlaylistsInfiniteOptions({
+// 					userId: data.user_id,
+// 				}).queryKey
+// 			});
+// 		}
+// 	});
+// };
 
 // Realtime
 export const usePlaylistItemsMovieRealtimeMutation = ({
@@ -709,120 +695,120 @@ export const usePlaylistTvSeriesMultiInsertMutation = ({
 	});
 };
 /* --------------------------------- GUESTS --------------------------------- */
-export const usePlaylistGuestUpdateMutation = ({
-	playlistId,
-} : {
-	playlistId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	const playlistGuestsOptions = usePlaylistGuestsOptions({ playlistId });
-	return useMutation({
-		mutationFn: async ({
-			guestId,
-			edit,
-		} : {
-			guestId: number;
-			edit: boolean;
-		}) => {
-			const { data, error } = await supabase
-				.from('playlist_guests')
-				.update({
-					edit,
-				})
-				.eq('id', guestId)
-				.select('*')
-				.single();
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(playlistGuestsOptions.queryKey, (oldData) => {
-				if (!oldData) return oldData;
-				return oldData.map((guest) => {
-					if (guest?.id === data.id) {
-						return {
-							...guest,
-							edit: data.edit,
-						};
-					}
-					return guest;
-				});
-			});
-		}
-	});
-};
+// export const usePlaylistGuestUpdateMutation = ({
+// 	playlistId,
+// } : {
+// 	playlistId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	const playlistGuestsOptions = usePlaylistGuestsOptions({ playlistId });
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			guestId,
+// 			edit,
+// 		} : {
+// 			guestId: number;
+// 			edit: boolean;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('playlist_guests')
+// 				.update({
+// 					edit,
+// 				})
+// 				.eq('id', guestId)
+// 				.select('*')
+// 				.single();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(playlistGuestsOptions.queryKey, (oldData) => {
+// 				if (!oldData) return oldData;
+// 				return oldData.map((guest) => {
+// 					if (guest?.id === data.id) {
+// 						return {
+// 							...guest,
+// 							edit: data.edit,
+// 						};
+// 					}
+// 					return guest;
+// 				});
+// 			});
+// 		}
+// 	});
+// };
 
-export const usePlaylistGuestsDeleteMutation = ({
-	playlistId,
-} : {
-	playlistId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	const playlistGuestsOptions = usePlaylistGuestsOptions({ playlistId });
-	return useMutation({
-		mutationFn: async ({
-			ids,
-			playlistId,
-		} : {
-			ids: number[];
-			playlistId: number;
-		}) => {
-			const { data, error } = await supabase
-				.from('playlist_guests')
-				.delete()
-				.in('id', ids)
-				.select('id')
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(playlistGuestsOptions.queryKey, (oldData) => {
-				if (!oldData) return oldData;
-				return oldData.filter((guest) => !data.find((deleted) => deleted.id === guest?.id));
-			});
-		}
-	});
-};
+// export const usePlaylistGuestsDeleteMutation = ({
+// 	playlistId,
+// } : {
+// 	playlistId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	const playlistGuestsOptions = usePlaylistGuestsOptions({ playlistId });
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			ids,
+// 			playlistId,
+// 		} : {
+// 			ids: number[];
+// 			playlistId: number;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('playlist_guests')
+// 				.delete()
+// 				.in('id', ids)
+// 				.select('id')
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(playlistGuestsOptions.queryKey, (oldData) => {
+// 				if (!oldData) return oldData;
+// 				return oldData.filter((guest) => !data.find((deleted) => deleted.id === guest?.id));
+// 			});
+// 		}
+// 	});
+// };
 
-export const usePlaylistGuestsInsertMutation = ({
-	playlistId,
-} : {
-	playlistId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	const playlistGuestsOptions = usePlaylistGuestsOptions({ playlistId });
-	return useMutation({
-		mutationFn: async ({
-			playlistId,
-			userIds,
-		} : {
-			playlistId: number;
-			userIds: string[];
-		}) => {
-			const { data, error } = await supabase
-				.from('playlist_guests')
-				.insert(
-					userIds.map((userId) => ({
-						playlist_id: playlistId,
-						user_id: userId,
-					}))
-				)
-				.select(`
-					*,
-					user:profile(*)
-				`)
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(playlistGuestsOptions.queryKey, (oldData) => {
-				if (!oldData) return data;
-				return [...oldData, ...data];
-			});
-		}
-	});
-};
+// export const usePlaylistGuestsInsertMutation = ({
+// 	playlistId,
+// } : {
+// 	playlistId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	const playlistGuestsOptions = usePlaylistGuestsOptions({ playlistId });
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			playlistId,
+// 			userIds,
+// 		} : {
+// 			playlistId: number;
+// 			userIds: string[];
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('playlist_guests')
+// 				.insert(
+// 					userIds.map((userId) => ({
+// 						playlist_id: playlistId,
+// 						user_id: userId,
+// 					}))
+// 				)
+// 				.select(`
+// 					*,
+// 					user:profile(*)
+// 				`)
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(playlistGuestsOptions.queryKey, (oldData) => {
+// 				if (!oldData) return data;
+// 				return [...oldData, ...data];
+// 			});
+// 		}
+// 	});
+// };
 /* -------------------------------------------------------------------------- */

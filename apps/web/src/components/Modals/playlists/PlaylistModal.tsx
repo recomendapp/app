@@ -2,7 +2,6 @@
 
 import { useAuth } from '@/context/auth-context';
 import { useModal } from '@/context/modal-context';
-import { Playlist } from '@recomendapp/types';
 import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from '../Modal';
 import { Button } from '@/components/ui/button';
 import { UserCogIcon } from 'lucide-react';
@@ -11,6 +10,7 @@ import { ModalPlaylistGuest } from './ModalPlaylistGuest/ModalPlaylistGuest';
 import { PlaylistForm } from '@/components/Playlist/PlaylistForm/PlaylistForm';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
+import { Playlist } from '@packages/api-js/src';
 
 interface PlaylistModalProps extends ModalType {
   playlist?: Playlist;
@@ -48,9 +48,9 @@ export function PlaylistModal({
       </ModalHeader>
       <ModalBody>
         <PlaylistForm
-          success={() => closeModal(props.id)}
-          filmId={filmId}
-          playlist={playlist}
+        success={() => closeModal(props.id)}
+        filmId={filmId}
+        playlist={playlist}
         />
       </ModalBody>
     </Modal>

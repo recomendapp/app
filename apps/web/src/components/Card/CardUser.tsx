@@ -1,15 +1,15 @@
 import * as React from "react"
 import { cn } from "@/lib/utils";
 import { Card } from "../ui/card";
-import { Profile, User } from "@recomendapp/types";
 import { UserAvatar } from "../User/UserAvatar";
 import { WithLink } from "../utils/WithLink";
 import { Icons } from "@/config/icons";
+import { UserSummary } from "@packages/api-js";
 
 interface CardUserProps
 	extends React.ComponentProps<typeof Card> {
 		variant?: "default" | "vertical" | "icon" | "username" | "inline";
-		user: User | Profile
+		user: UserSummary;
 		linked?: boolean;
 		width?: number;
 		height?: number;
@@ -22,7 +22,7 @@ const CardUserDefault = React.forwardRef<
 	return (
 		<WithLink
 			ref={ref}
-			href={linked ? `/@${user?.username}` : undefined}
+			href={linked ? `/@${user.username}` : undefined}
 			as={Card}
 			className={cn(
 				"flex items-center rounded-xl h-20 bg-muted hover:bg-muted-hover p-1",
@@ -30,10 +30,10 @@ const CardUserDefault = React.forwardRef<
 			)}
 			{...props}
 		>
-			<UserAvatar username={user?.username ?? ''} avatarUrl={user?.avatar_url} className="h-full w-auto aspect-square" />
+			<UserAvatar username={user.username ?? ''} avatarUrl={user.avatar} className="h-full w-auto aspect-square" />
 			<div className='px-2 py-1 space-y-1'>
-				<p className='line-clamp-2 wrap-break-word'>{user?.full_name}</p>
-				<p className="text-muted-foreground">@{user?.username}</p>
+				<p className='line-clamp-2 wrap-break-word'>{user.name}</p>
+				<p className="text-muted-foreground">@{user.username}</p>
 				{children}
 			</div>
 		</WithLink>
@@ -48,7 +48,7 @@ const CardUserVertical = React.forwardRef<
 	return (
 		<WithLink
 			ref={ref}
-			href={linked ? `/@${user?.username}` : undefined}
+			href={linked ? `/@${user.username}` : undefined}
 			as={Card}
 			className={cn(
 				"items-center justify-center w-32 rounded-xl bg-muted hover:bg-muted-hover p-2",
@@ -56,10 +56,10 @@ const CardUserVertical = React.forwardRef<
 			)}
 			{...props}
 		>
-			<UserAvatar username={user?.username ?? ''} avatarUrl={user?.avatar_url} className="w-full h-fit aspect-square" />
+			<UserAvatar username={user.username ?? ''} avatarUrl={user.avatar} className="w-full h-fit aspect-square" />
 			<div className='flex flex-col items-center px-2 py-1 space-y-1'>
-				<p className='line-clamp-2 wrap-break-word text-center'>{user?.full_name}</p>
-				<p className="text-muted-foreground text-center">@{user?.username}</p>
+				<p className='line-clamp-2 wrap-break-word text-center'>{user.name}</p>
+				<p className="text-muted-foreground text-center">@{user.username}</p>
 				{children}
 			</div>
 		</WithLink>
@@ -74,7 +74,7 @@ const CardUserIcon = React.forwardRef<
 	return (
 		<WithLink
 			ref={ref}
-			href={linked ? `/@${user?.username}` : undefined}
+			href={linked ? `/@${user.username}` : undefined}
 			className={cn(
 				"",
 				className
@@ -83,8 +83,8 @@ const CardUserIcon = React.forwardRef<
 		>
 			<UserAvatar
 			className={`w-[${width || 25}px] h-[${height || 25}px]`}
-			username={user?.username ?? ''}
-			avatarUrl={user?.avatar_url}
+			username={user.username ?? ''}
+			avatarUrl={user.avatar}
 			/>
 		</WithLink>
 	);
@@ -98,15 +98,15 @@ const CardUserUsername = React.forwardRef<
 	return (
 		<WithLink
 			ref={ref}
-			href={linked ? `/@${user?.username}` : undefined}
+			href={linked ? `/@${user.username}` : undefined}
 			className={cn(
 				"flex-row items-center gap-1 text-foreground font-bold hover:underline",
 				className
 			)}
 			{...props}
 		>
-			{user?.username}
-			{user?.premium && (
+			{user.username}
+			{user.isPremium && (
 				<Icons.premium className='fill-blue-400 inline w-3'/>
 			)}
 		</WithLink>

@@ -10,8 +10,7 @@ import { upperFirst } from 'lodash';
 import { useCallback } from 'react';
 import { useModal } from '@/context/modal-context';
 import { useQuery } from '@tanstack/react-query';
-import { useUserFollowProfileOptions } from '@/api/client/options/userOptions';
-import { useUserFollowProfileInsertMutation, useUserUnfollowProfileDeleteMutation } from '@/api/client/mutations/userMutations';
+import { userFollowOptions, useUserFollowMutation, useUserUnfollowMutation } from '@libs/query-client';
 
 interface UserFollowButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   profileId: string;
@@ -22,51 +21,51 @@ export const ProfileFollowButton = ({
   profileId,
 }: UserFollowButtonProps) => {
   const t = useTranslations();
-  const { session } = useAuth();
+  const { user } = useAuth();
   const { createConfirmModal } = useModal();
 
   const {
     data: isFollow,
     isLoading,
-  } = useQuery(useUserFollowProfileOptions({
-    userId: session?.user.id,
+  } = useQuery(userFollowOptions({
+    userId: user?.id,
     profileId: profileId,
   }));
 
-  const { mutateAsync: insertFollow } = useUserFollowProfileInsertMutation();
-  const { mutateAsync: deleteFollow } = useUserUnfollowProfileDeleteMutation();
+  const { mutateAsync: insertFollow } = useUserFollowMutation();
+  const { mutateAsync: deleteFollow } = useUserUnfollowMutation();
 
   const followUser = useCallback(async () => {
-    if (!session?.user.id) return;
     await insertFollow({
-      userId: session?.user.id,
-      followeeId: profileId,
+      path: {
+        user_id: profileId,
+      }
     }, {
-      onError: (error) => {
+      onError: () => {
         toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
-  }, [insertFollow, profileId, session, t]);
+  }, [insertFollow, profileId, t]);
 
   const unfollowUser = useCallback(async () => {
-    if (!session?.user.id) return;
     createConfirmModal({
       title: upperFirst(t('common.messages.are_u_sure')),
       confirmLabel: upperFirst(t('common.messages.unfollow')),
       onConfirm: async () => {
         await deleteFollow({
-          userId: session?.user.id,
-          followeeId: profileId,
+          path: {
+            user_id: profileId,
+          }
         }, {
-          onError: (error) => {
+          onError: () => {
             toast.error(upperFirst(t('common.messages.an_error_occurred')));
           }
         });
       },
     });
-  }, [deleteFollow, profileId, session, t, createConfirmModal]);
+  }, [deleteFollow, profileId, t, createConfirmModal]);
 
-  if (!session || session.user.id == profileId) return null;
+  if (!user || user.id == profileId) return null;
 
   return (
     <div className={cn('flex items-center', className)}>
@@ -79,7 +78,7 @@ export const ProfileFollowButton = ({
         className="rounded-full"
         >
           {isFollow ? (
-            isFollow.is_pending ? upperFirst(t('common.messages.request_sent')) : upperFirst(t('common.messages.followed'))
+            isFollow.status === 'pending' ? upperFirst(t('common.messages.request_sent')) : upperFirst(t('common.messages.followed'))
           ) : upperFirst(t('common.messages.follow'))}
         </Button>
       )}

@@ -1,10 +1,17 @@
-import { ApiProperty, ApiSchema, PartialType, PickType } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional, ApiSchema, PartialType, PickType } from "@nestjs/swagger";
 import { USER_RULES } from '../../../config/validation-rules';
 import { Expose, Transform, Type } from "class-transformer";
-import { IsLocale, IsString, IsUrl, Length, Matches } from "class-validator";
+import { IsEnum, IsLocale, IsOptional, IsString, IsUrl, Length, Matches } from "class-validator";
+import { PaginatedResponseDto, PaginationQueryDto } from "../../../common/dto/pagination.dto";
+import { SortOrder } from "../../../common/dto/sort.dto";
+
+export enum UserSortBy {
+  CREATED_AT = 'created_at',
+  FOLLOWERS_COUNT = 'followers_count',
+}
 
 @ApiSchema({ name: 'User' })
-export class UserDTO {
+export class UserDto {
 	@ApiProperty({ example: "ciud123", description: 'The unique ID of the user' })
 	@Expose()
 	id: string;
@@ -109,13 +116,57 @@ export class UserDTO {
 	followingCount: number;
 }
 
+@ApiSchema({ name: 'UserSummary' })
+export class UserSummaryDto extends PickType(UserDto, [
+  'id', 
+  'name', 
+  'username', 
+  'avatar', 
+  'isPremium'
+] as const) {}
+
 @ApiSchema({ name: 'Profile' })
-export class ProfileDto extends PickType(UserDTO, ['id', 'name', 'username', 'avatar', 'bio', 'backgroundImage', 'isPrivate', 'isPremium', 'createdAt', 'followersCount', 'followingCount'] as const) {
+export class ProfileDto extends PickType(UserDto, ['id', 'name', 'username', 'avatar', 'bio', 'backgroundImage', 'isPrivate', 'isPremium', 'createdAt', 'followersCount', 'followingCount'] as const) {
 	@ApiProperty({ description: 'Whether the user profile is visilble by current user (if target user is private)' })
 	@Expose()
 	isVisible: boolean;
 }
 
 @ApiSchema({ name: 'UpdateUser' })
-export class UpdateUserDto extends PartialType(PickType(UserDTO, ['name', 'username', 'bio', 'isPrivate', 'language'] as const)) {}
+export class UpdateUserDto extends PartialType(PickType(UserDto, ['name', 'username', 'bio', 'isPrivate', 'language'] as const)) {}
+
+@ApiSchema({ name: 'GetUsersQuery' })
+export class GetUsersQueryDto extends PaginationQueryDto {
+	@ApiPropertyOptional({
+		description: 'Field to sort followers by',
+		default: UserSortBy.CREATED_AT,
+		example: UserSortBy.CREATED_AT,
+		enum: UserSortBy,
+	})
+	@IsOptional()
+	@IsEnum(UserSortBy)
+	sort_by: UserSortBy = UserSortBy.CREATED_AT;
+
+	@ApiPropertyOptional({
+		description: 'Sort order',
+		default: SortOrder.DESC,
+		example: SortOrder.DESC,
+		enum: SortOrder,
+	})
+	@IsOptional()
+	@IsEnum(SortOrder)
+	sort_order: SortOrder = SortOrder.DESC;
+}
+
+@ApiSchema({ name: 'ListUsers' })
+export class ListUsersDto extends PaginatedResponseDto<UserSummaryDto> {
+	@ApiProperty({ type: () => [UserSummaryDto] })
+	@Type(() => UserSummaryDto)
+	data: UserSummaryDto[];
+
+	constructor(partial: Partial<ListUsersDto>) {
+		super(partial);
+		Object.assign(this, partial);
+	}
+}
 

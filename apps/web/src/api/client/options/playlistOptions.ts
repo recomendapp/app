@@ -74,27 +74,6 @@ export const usePlaylistTvSeriesItemsOptions = ({
 }
 
 // Guests
-export const usePlaylistGuestsOptions = ({
-	playlistId,
-} : {
-	playlistId?: number;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: playlistKeys.guests({ playlistId: playlistId! }),
-		queryFn: async () => {
-			if (!playlistId) throw Error('Missing playlist id');
-			const { data, error } = await supabase
-				.from('playlist_guests')
-				.select('*, user:profile(*)')
-				.eq('playlist_id', playlistId)
-			if (error) throw error;
-			return data;
-		},
-		enabled: !!playlistId,
-		structuralSharing: false,
-	})
-}
 
 export const usePlaylistGuestsAddOptions = ({
 	playlistId,

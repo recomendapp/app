@@ -10,9 +10,10 @@ import toast from "react-hot-toast";
 import { createRightPanel } from "./RightPanelUtils";
 import Fuse from "fuse.js";
 import { Input } from "@/components/ui/input";
-import { useUserFolloweesOptions, useUserFollowersRequestsOptions } from "@/api/client/options/userOptions";
+import { useUserFollowersRequestsOptions } from "@/api/client/options/userOptions";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useUserAcceptFollowerRequestMutation, useUserDeclineFollowerRequestMutation } from "@/api/client/mutations/userMutations";
+import { userFollowingOptions } from "@libs/query-client/src";
 
 export const RightPanelSocial = () => createRightPanel({
 	title: 'Social',
@@ -41,24 +42,23 @@ const RightPanelSocialContent = () => {
 const RightPanelSocialFollows = () => {
 	const { user } = useAuth();
 	const [search, setSearch] = useState('');
-	// const [results, setResults] = useState<{ id: number, followee: Database['public']['Views']['profile']['Row'] }[] | undefined>(undefined);
 	const {
 		data: followees,
 		isLoading,
 		isError,
-	} = useInfiniteQuery(useUserFolloweesOptions({
-		userId: user?.id,
+	} = useInfiniteQuery(userFollowingOptions({
+		profileId: user?.id,
 	}));
 	const fuse = useMemo(() => {
 		if (!followees?.pages.length) return null;
-		return new Fuse(followees.pages.flat(), {
-			keys: ['followee.username', 'followee.full_name'],
+		return new Fuse(followees.pages.flatMap(page => page.data), {
+			keys: ['username', 'name'],
 			threshold: 0.3,
 		});
 	}, [followees]);
 	const results = useMemo(() => {
 		if (!followees?.pages) return [];
-		const items = followees.pages.flat();
+		const items = followees.pages.flatMap(page => page.data);
 
 		if (search === '') return items;
 		if (!fuse) return [];
@@ -74,8 +74,8 @@ const RightPanelSocialFollows = () => {
 		<>
 			<Input placeholder="Rechercher" value={search} onChange={(e) => setSearch(e.target.value)} />
 			{results?.length ?
-				results.map(({ followee }, i) => (
-					<CardUser key={i} user={followee} />
+				results.map((user, i) => (
+					<CardUser key={i} user={user} />
 				))
 			: search ? (
 				<div></div>

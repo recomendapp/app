@@ -5,69 +5,6 @@ import { useAuth } from "@/context/auth-context";
 import { UserRecosAggregated, UserRecosMovieAggregated, UserRecosTvSeriesAggregated } from "@recomendapp/types";
 
 /* --------------------------------- FOLLOWS -------------------------------- */
-export const useUserFollowersOptions = ({
-	userId,
-} : {
-	userId?: string;
-}) => {
-	const PER_PAGE = 20;
-	const supabase = useSupabaseClient();
-	return infiniteQueryOptions({
-		queryKey: userKeys.followers({
-			userId: userId!,
-		}),
-		queryFn: async ({ pageParam = 1 }) => {
-			if (!userId) throw Error('Missing user id');
-			let from = (pageParam - 1) * PER_PAGE;
-			let to = from - 1 + PER_PAGE;
-
-			const { data, error } = await supabase
-				.from('user_follower')
-				.select('id, follower:profile!user_follower_user_id_fkey!inner(*)')
-				.eq('followee_id', userId)
-				.eq('is_pending', false)
-				.range(from, to);
-			if (error) throw error;
-			return data;
-		},
-		initialPageParam: 1,
-		getNextPageParam: (data, pages) => {
-			return data?.length == PER_PAGE ? pages.length + 1 : undefined;
-		},
-		enabled: !!userId,
-	});
-};
-export const useUserFolloweesOptions = ({
-	userId,
-} : {
-	userId?: string;
-}) => {
-	const PER_PAGE = 20;
-	const supabase = useSupabaseClient();
-	return infiniteQueryOptions({
-		queryKey: userKeys.followees({
-			userId: userId!,
-		}),
-		queryFn: async ({ pageParam = 1 }) => {
-			if (!userId) throw Error('Missing user id');
-			const from = (pageParam - 1) * PER_PAGE;
-			const to = from + PER_PAGE - 1;
-			const { data, error } = await supabase
-				.from('user_follower')
-				.select('id, followee:profile!user_follower_followee_id_fkey!inner(*)')
-				.eq('user_id', userId)
-				.eq('is_pending', false)
-				.range(from, to);
-			if (error) throw error;
-			return data;
-		},
-		initialPageParam: 1,
-		getNextPageParam: (lastPage, pages) => {
-			return lastPage?.length == PER_PAGE ? pages.length + 1 : undefined;
-		},
-		enabled: !!userId,
-	});
-};
 export const useUserFollowersRequestsOptions = ({
 	userId,
 } : {
@@ -97,34 +34,6 @@ export const useUserFollowersRequestsOptions = ({
 			return lastPage?.length == PER_PAGE ? pages.length + 1 : undefined;
 		},
 		enabled: !!userId,
-	});
-};
-
-export const useUserFollowProfileOptions = ({
-	userId,
-	profileId,
-} : {
-	userId?: string;
-	profileId?: string;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: userKeys.followProfile({
-			userId: userId!,
-			profileId: profileId!,
-		}),
-		queryFn: async () => {
-			if (!userId || !profileId) throw Error('Missing user id or profile id');
-			const { data, error } = await supabase
-				.from('user_follower')
-				.select('*')
-				.eq('user_id', userId)
-				.eq('followee_id', profileId)
-				.maybeSingle();
-			if (error) throw error;
-			return data;
-		},
-		enabled: !!userId && !!profileId,
 	});
 };
 
@@ -1037,55 +946,55 @@ export const useUserHeartPicksTvSeriesOptions = ({
 /* -------------------------------------------------------------------------- */
 
 /* ------------------------------- Playlists ------------------------------- */
-export const useUserPlaylistsInfiniteOptions = ({
-	userId,
-	filters,
-} : {
-	userId?: string;
-	filters: {
-		sortBy: 'updated_at';
-		sortOrder: 'asc' | 'desc';	}
-}) => {
-	const PER_PAGE = 20;
-	const supabase = useSupabaseClient();
-	return infiniteQueryOptions({
-		queryKey: userKeys.playlists({
-			userId: userId!,
-			filters: filters,
-		}),
-		queryFn: async ({ pageParam = 1 }) => {
-			if (!userId) return null;
+// export const useUserPlaylistsInfiniteOptions = ({
+// 	userId,
+// 	filters,
+// } : {
+// 	userId?: string;
+// 	filters: {
+// 		sortBy: 'updated_at';
+// 		sortOrder: 'asc' | 'desc';	}
+// }) => {
+// 	const PER_PAGE = 20;
+// 	const supabase = useSupabaseClient();
+// 	return infiniteQueryOptions({
+// 		queryKey: userKeys.playlists({
+// 			userId: userId!,
+// 			filters: filters,
+// 		}),
+// 		queryFn: async ({ pageParam = 1 }) => {
+// 			if (!userId) return null;
 			
-			let from = (pageParam - 1) * PER_PAGE;
-			let to = from + PER_PAGE - 1;
+// 			let from = (pageParam - 1) * PER_PAGE;
+// 			let to = from + PER_PAGE - 1;
 
-			let request = supabase
-				.from('playlists')
-				.select('*')
-				.eq('user_id', userId)
-				.range(from, to);
+// 			let request = supabase
+// 				.from('playlists')
+// 				.select('*')
+// 				.eq('user_id', userId)
+// 				.range(from, to);
 			
-			if (filters) {
-				if (filters.sortBy && filters.sortOrder) {
-					switch (filters.sortBy) {
-						case 'updated_at':
-							request = request.order('updated_at', { ascending: filters.sortOrder === 'asc' });
-							break;
-					}
-				}
-			}
+// 			if (filters) {
+// 				if (filters.sortBy && filters.sortOrder) {
+// 					switch (filters.sortBy) {
+// 						case 'updated_at':
+// 							request = request.order('updated_at', { ascending: filters.sortOrder === 'asc' });
+// 							break;
+// 					}
+// 				}
+// 			}
 
-			const { data, error } = await request;
-			if (error) throw error;
-			return data;
-		},
-		initialPageParam: 1,
-		getNextPageParam: (lastPage, pages) => {
-			return lastPage?.length == PER_PAGE ? pages.length + 1 : undefined;
-		},
-		enabled: !!userId,
-	})
-};
+// 			const { data, error } = await request;
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		initialPageParam: 1,
+// 		getNextPageParam: (lastPage, pages) => {
+// 			return lastPage?.length == PER_PAGE ? pages.length + 1 : undefined;
+// 		},
+// 		enabled: !!userId,
+// 	})
+// };
 
 export const useUserPlaylistsSavedOptions = ({
 	userId,

@@ -1,9 +1,17 @@
 import { ApiProperty, ApiSchema, PartialType, PickType } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
-import { IsIn, IsString, IsUrl, Length, Matches } from "class-validator";
+import { IsIn, IsString, IsUrl, Length, Matches, ValidateNested } from "class-validator";
 import { PLAYLIST_RULES } from "../../../config/validation-rules";
 import { playlistVisibilityEnum } from "@libs/core/schemas";
 import { PaginatedResponseDto } from "../../../common/dto/pagination.dto";
+import { UserSummaryDto } from "../../users/dto/users.dto";
+import { IsNullable } from "../../../../src/common/decorators/is-nullable.decorator";
+
+export enum PlaylistSortBy {
+  CREATED_AT = 'created_at',
+  UPDATED_AT = 'updated_at',
+  LIKES_COUNT = 'likes_count',
+}
 
 @ApiSchema({ name: 'Playlist' })
 export class PlaylistDTO {
@@ -37,6 +45,7 @@ export class PlaylistDTO {
     })
     @Expose()
     @IsString()
+    @IsNullable()
     @Length(PLAYLIST_RULES.DESCRIPTION.MIN, PLAYLIST_RULES.DESCRIPTION.MAX)
     @Matches(PLAYLIST_RULES.DESCRIPTION.REGEX, {
         message: 'Description cannot be empty or contain excessive line breaks'
@@ -53,7 +62,7 @@ export class PlaylistDTO {
     @IsIn(playlistVisibilityEnum.enumValues, {
         message: `Visibility must be one of: ${playlistVisibilityEnum.enumValues.join(', ')}`
     })
-    visibility: string;
+    visibility: typeof playlistVisibilityEnum.enumValues[number];
 
 	@ApiProperty({ 
         example: "https://example.com/poster.jpg", 
@@ -89,8 +98,20 @@ export class PlaylistDTO {
 	likesCount: number;
 }
 
-@ApiSchema({ name: 'UpdatePlaylist' })
-export class UpdatePlaylistDto extends PartialType(PickType(PlaylistDTO, ['title', 'description', 'visibility'] as const)) {}
+@ApiSchema({ name: 'PlaylistGet' })
+export class PlaylistGetDTO extends PlaylistDTO {
+    @ApiProperty({ type: () => UserSummaryDto, description: 'The user object' })
+    @Expose()
+    @ValidateNested()
+    @Type(() => UserSummaryDto)
+    owner: UserSummaryDto;
+}
+
+@ApiSchema({ name: 'PlaylistCreate' })
+export class PlaylistCreateDto extends PickType(PlaylistDTO, ['title', 'description', 'visibility'] as const) {}
+
+@ApiSchema({ name: 'PlaylistUpdate' })
+export class PlaylistUpdateDto extends PartialType(PlaylistCreateDto) {}
 
 @ApiSchema({ name: 'ListPlaylists' })
 export class ListPlaylistsDto extends PaginatedResponseDto<PlaylistDTO> {

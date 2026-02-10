@@ -26,7 +26,7 @@ export const Providers = async ({
   locale: SupportedLocale;
 }) => {
   const [
-    { data: session },
+    { data: user },
     isMaintenanceMode,
     cookiesStore,
     device,
@@ -49,7 +49,7 @@ export const Providers = async ({
       <SupabaseProvider>
         <ReactQueryProvider>
           <ApiProvider>
-            <AuthProvider session={session || null}>
+            <AuthProvider user={user || null}>
               <NotificationsProvider>
                 <MapContext>
                   <ThemeProvider attribute={'class'} defaultTheme='dark' enableSystem>
