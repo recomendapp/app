@@ -3,7 +3,7 @@ import { SupabaseUserClient } from '../../common/supabase/supabase-user-client';
 import { Client as TypesenseClient } from 'typesense';
 import { SearchTvSeriesResponse } from './dto/search-tv-series-response.dto';
 import { SearchTvSeriesQueryDto } from './dto/search-tv-series-query.dto';
-import { TYPESENSE_CLIENT } from '@libs/core';
+import { TYPESENSE_CLIENT } from '../../../common/modules/typesense.module';
 
 @Injectable()
 export class TvSeriesSearchService {

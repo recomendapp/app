@@ -6,12 +6,12 @@ import { execSync } from 'node:child_process';
 const ROOT_DIR = process.cwd();
 const SCHEMA_INDEX_PATH = path.join(
   ROOT_DIR,
-  'libs/core/src/lib/db/schemas/index.ts',
+  'libs/db/src/lib/schemas/index.ts',
 );
-const AUTH_CONFIG_PATH = path.join(ROOT_DIR, 'libs/core/src/lib/auth.ts');
+const AUTH_CONFIG_PATH = path.join(ROOT_DIR, 'libs/db/src/lib/auth.ts');
 const OUTPUT_SCHEMA_PATH = path.join(
   ROOT_DIR,
-  'libs/core/src/lib/db/schemas/auth.ts',
+  'libs/db/src/lib/schemas/auth.ts',
 );
 
 function toggleIndexExport(shouldComment: boolean) {

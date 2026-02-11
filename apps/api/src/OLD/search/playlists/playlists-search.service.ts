@@ -3,7 +3,7 @@ import { SupabaseUserClient } from '../../common/supabase/supabase-user-client';
 import { Client as TypesenseClient } from 'typesense';
 import { SearchPlaylistsResponse } from './dto/search-playlists-response.dto';
 import { SearchPlaylistsQueryDto } from './dto/search-playlists-query.dto';
-import { TYPESENSE_CLIENT } from '@libs/core';
+import { TYPESENSE_CLIENT } from '../../../common/modules/typesense.module';
 
 @Injectable()
 export class PlaylistsSearchService {

@@ -1,8 +1,8 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '@libs/core';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
 import { User } from '../auth/auth.service';
 import { PlaylistCreateDto, PlaylistDTO, PlaylistGetDTO, PlaylistUpdateDto } from './dto/playlists.dto';
-import { follow, playlist, playlistMember } from '@libs/core/schemas';
+import { follow, playlist, playlistMember } from '@libs/db/schemas';
 import { and, eq, exists, notInArray, or, sql, SQL } from 'drizzle-orm';
 import { PlaylistMemberListDto, PlaylistMemberUpdateDto } from './dto/playlists-members.dto';
 

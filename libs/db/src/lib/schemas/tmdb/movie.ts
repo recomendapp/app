@@ -340,3 +340,5 @@ export const tmdbMovieVideo = tmdbSchema.table(
     index('idx_tmdb_movie_video_type').on(table.type),
   ],
 );
+
+

@@ -1,7 +1,7 @@
 import { ApiProperty, ApiSchema } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import { IsIn, IsString } from "class-validator";
-import { followStatusEnum } from "@libs/core/schemas";
+import { followStatusEnum } from "@libs/db/schemas";
 
 @ApiSchema({ name: 'Follow' })
 export class FollowDto {

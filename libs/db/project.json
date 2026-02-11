@@ -1,0 +1,67 @@
+{
+  "name": "db",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/db/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "auth-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx libs/db/scripts/generate-auth.ts",
+        "cwd": "."
+      },
+      "inputs": [
+        "{projectRoot}/src/lib/auth.ts",
+        "{projectRoot}/scripts/generate-auth.ts"
+      ],
+      "outputs": ["{projectRoot}/src/lib/schemas/auth.ts"]
+    },
+    "db-seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json libs/db/scripts/seed.ts",
+        "cwd": "."
+      }
+    },
+    "db-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "drizzle-kit generate --config=libs/db/drizzle.config.ts",
+        "cwd": "."
+      }
+    },
+    "db-push": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "drizzle-kit push --config=libs/db/drizzle.config.ts",
+        "cwd": "."
+      }
+    },
+    "db-migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "drizzle-kit migrate --config=libs/db/drizzle.config.ts",
+        "cwd": "."
+      }
+    },
+    "db-studio": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "drizzle-kit studio --config=libs/db/drizzle.config.ts --port 4984",
+        "cwd": "."
+      }
+    },
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/db",
+        "tsConfig": "libs/db/tsconfig.lib.json",
+        "packageJson": "libs/db/package.json",
+        "main": "libs/db/src/index.ts",
+        "assets": ["libs/db/*.md"]
+      }
+    }
+  }
+}

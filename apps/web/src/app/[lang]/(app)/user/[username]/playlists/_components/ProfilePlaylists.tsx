@@ -15,12 +15,12 @@ import { useSearchParams } from 'next/navigation';
 import { z } from "zod";
 import { CardPlaylist } from '@/components/Card/CardPlaylist';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useUserPlaylistsInfiniteOptions } from '@/api/client/options/userOptions';
 import { upperFirst } from 'lodash';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/config/icons';
+import { userPlaylistsInfiniteOptions } from '@libs/query-client';
 
 const DISPLAY = ["grid", "row"] as const;
 type SortBy = "updated_at";
@@ -64,11 +64,11 @@ export default function ProfilePlaylists({ userId }: UserPlaylistsProps) {
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useInfiniteQuery(useUserPlaylistsInfiniteOptions({
+  } = useInfiniteQuery(userPlaylistsInfiniteOptions({
     userId: userId,
     filters: {
-      sortBy: sortBy,
-      sortOrder: sortOrder,
+      sort_by: sortBy,
+      sort_order: sortOrder,
     }
   }))
 
@@ -114,7 +114,7 @@ export default function ProfilePlaylists({ userId }: UserPlaylistsProps) {
         <div className="flex justify-center h-full">
           <Loader />
         </div>
-      ) : !isLoading && playlists?.pages[0]?.length ? (
+      ) : !isLoading && playlists?.pages[0]?.data.length ? (
         <div
           className={` gap-2
               ${
@@ -125,13 +125,12 @@ export default function ProfilePlaylists({ userId }: UserPlaylistsProps) {
           `}
         >
           {playlists.pages.map((page, i) => (
-            page?.map((playlist, index) => (
+            page?.data.map((playlist, index) => (
               <CardPlaylist
               key={playlist.id}
-              ref={(i === playlists.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
+              ref={(i === playlists.pages?.length - 1) && (index === page?.data.length - 1) ? ref : undefined }
               playlist={playlist}
               className={'w-full'}
-              showByUser={false}
               showItemCount={true}
               />
             ))

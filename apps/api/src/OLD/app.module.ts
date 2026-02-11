@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { DrizzleModule } from '@libs/core';
 import { SearchModule } from './search/search.module';
 import { HealthModule } from './health/health.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { EnvModule } from '@libs/env';
 import { AuthModule } from '../app/auth/auth.module';
+import { DrizzleModule } from '../common/modules/drizzle.module';
 
 @Module({
   imports: [

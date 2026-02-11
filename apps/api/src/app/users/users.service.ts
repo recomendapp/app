@@ -1,7 +1,7 @@
 import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '@libs/core';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
 import { and, asc, desc, eq, exists, or, sql, SQL } from 'drizzle-orm';
-import { playlist, profile, user, follow, playlistMember } from '@libs/core/schemas';
+import { playlist, profile, user, follow, playlistMember } from '@libs/db/schemas';
 import { UserDto, UpdateUserDto, GetUsersQueryDto, ListUsersDto } from './dto/users.dto';
 import { User } from '../auth/auth.service';
 import { GetUserPlaylistsQueryDto } from './dto/get-user-playlists.dto';

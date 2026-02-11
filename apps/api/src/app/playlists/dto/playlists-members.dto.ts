@@ -1,7 +1,7 @@
 import { ApiProperty, ApiSchema } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import { IsIn, IsString, ValidateNested } from "class-validator";
-import { playlistMemberRoleEnum } from "@libs/core/schemas";
+import { playlistMemberRoleEnum } from "@libs/db/schemas";
 import { UserSummaryDto } from "../../users/dto/users.dto";
 
 @ApiSchema({ name: 'PlaylistMember' })

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { BestResultSearchController } from './best-result-search.controller';
 import { BestResultSearchService } from './best-result-search.service';
 import { SupabaseModule } from '../../common/supabase/supabase.module';
-import { TypesenseModule } from '@libs/core';
+import { TypesenseModule } from '../../../common/modules/typesense.module';
 
 @Module({
   imports: [SupabaseModule, TypesenseModule],

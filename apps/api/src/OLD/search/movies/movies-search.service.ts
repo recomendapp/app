@@ -4,7 +4,7 @@ import { Client as TypesenseClient } from 'typesense';
 import { SearchMoviesResponse } from './dto/search-movies-response.dto';
 import { SearchMoviesQueryDto } from './dto/search-movies-query.dto';
 import { Movie } from '../../common/dto/movie.dto';
-import { TYPESENSE_CLIENT } from '@libs/core';
+import { TYPESENSE_CLIENT } from '../../../common/modules/typesense.module';
 
 @Injectable()
 export class MoviesSearchService {

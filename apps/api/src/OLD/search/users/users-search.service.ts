@@ -4,7 +4,7 @@ import { Client as TypesenseClient } from 'typesense';
 import { SearchUsersResponse } from './dto/search-users-response.dto';
 import { SearchUsersQueryDto } from './dto/search-users-query.dto';
 import { SearchParams } from 'typesense/lib/Typesense/Types';
-import { TYPESENSE_CLIENT } from '@libs/core';
+import { TYPESENSE_CLIENT } from '../../../common/modules/typesense.module';
 
 @Injectable()
 export class UsersSearchService {

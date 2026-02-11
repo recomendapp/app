@@ -1,5 +1,5 @@
 // import { Inject, Injectable } from '@nestjs/common';
-// import { DRIZZLE_SERVICE, DrizzleService } from '@libs/core';
+// import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
 // import { eq, and } from 'drizzle-orm';
 
 // @Injectable()

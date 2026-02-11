@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '@libs/core';
 import { LogMovieRequestDto, LogMovieDto } from './dto/log-movie.dto';
 import { and, eq, sql } from 'drizzle-orm';
 import { WatchedDateDto } from './dto/watched-date.dto';
-import { logMovie, logMovieWatchedDate } from '@libs/core/schemas';
+import { logMovie, logMovieWatchedDate } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
 
 @Injectable()
 export class MoviesLogService {

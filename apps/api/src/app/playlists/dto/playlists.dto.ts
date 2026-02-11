@@ -2,7 +2,7 @@ import { ApiProperty, ApiSchema, PartialType, PickType } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import { IsIn, IsString, IsUrl, Length, Matches, ValidateNested } from "class-validator";
 import { PLAYLIST_RULES } from "../../../config/validation-rules";
-import { playlistVisibilityEnum } from "@libs/core/schemas";
+import { playlistVisibilityEnum } from "@libs/db/schemas";
 import { PaginatedResponseDto } from "../../../common/dto/pagination.dto";
 import { UserSummaryDto } from "../../users/dto/users.dto";
 import { IsNullable } from "../../../../src/common/decorators/is-nullable.decorator";

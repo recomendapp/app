@@ -3,12 +3,12 @@ import { APIError, betterAuth } from 'better-auth';
 import { createAuthMiddleware, magicLink, openAPI, username } from 'better-auth/plugins';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { ENV_SERVICE, EnvService } from '@libs/env'; // Ton token
-import { DRIZZLE_SERVICE, DrizzleService } from '@libs/core';
 import { MailerClient } from '@shared/mailer';
-import { profile } from '@libs/core/schemas';
+import { profile } from '@libs/db/schemas';
 import { v7 as uuidv7 } from 'uuid';
 import { USER_RULES } from '../../config/validation-rules';
 import bcrypt from "bcrypt"; 
+import { DrizzleService } from '../../common/modules/drizzle.module';
 
 export const AUTH_SERVICE = 'AUTH_SERVICE';
 

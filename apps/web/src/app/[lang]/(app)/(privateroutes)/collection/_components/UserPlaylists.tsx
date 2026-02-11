@@ -27,6 +27,10 @@ export function UserPlaylists({
     hasNextPage,
   } = useInfiniteQuery(userPlaylistsInfiniteOptions({
     userId: user?.id,
+    filters: {
+      sort_by: "updated_at",
+      sort_order: "desc",
+    }
   }));
   const loading = playlists === undefined || isLoading;
 
