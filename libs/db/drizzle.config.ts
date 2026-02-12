@@ -8,7 +8,7 @@ const config = defineConfig({
   dbCredentials: {
     url: process.env.DATABASE_URL!,
   },
-  schemaFilter: ['public', 'auth', 'tmdb', 'i18n', 'ui'],
+  schemaFilter: ['public', 'extensions', 'auth', 'tmdb', 'i18n', 'ui'],
 });
 
 export default config;

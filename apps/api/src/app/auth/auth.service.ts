@@ -8,7 +8,7 @@ import { profile } from '@libs/db/schemas';
 import { v7 as uuidv7 } from 'uuid';
 import { USER_RULES } from '../../config/validation-rules';
 import bcrypt from "bcrypt"; 
-import { DrizzleService } from '../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
 
 export const AUTH_SERVICE = 'AUTH_SERVICE';
 
