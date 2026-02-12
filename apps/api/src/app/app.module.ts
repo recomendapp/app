@@ -7,6 +7,7 @@ import { MoviesModule } from './movies/movies.module';
 import { UsersModule } from './users/users.module';
 import { PlaylistsModule } from './playlists/playlists.module';
 import { DrizzleModule } from '../common/modules/drizzle.module';
+import { PersonsModule } from './persons/persons.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { DrizzleModule } from '../common/modules/drizzle.module';
     UsersModule,
     PlaylistsModule,
     MoviesModule,
+    PersonsModule,
   ],
   controllers: [],
   providers: [],

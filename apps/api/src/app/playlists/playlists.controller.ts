@@ -5,7 +5,9 @@ import { PlaylistDTO, PlaylistCreateDto, PlaylistUpdateDto } from './dto/playlis
 import { AuthGuard, OptionalAuthGuard } from '../auth/guards';
 import { User } from '../auth/auth.service';
 import { CurrentOptionalUser, CurrentUser } from '../auth/decorators';
-import { PlaylistMemberListDto, PlaylistMemberUpdateDto } from './dto/playlists-members.dto';
+import { PlaylistMemberListDto, PlaylistMemberUpdateDto } from './dto/playlist-members.dto';
+import { PlaylistSavedDto } from './dto/playlist-saved.dto';
+import { PlaylistLikeDto } from './dto/playlist-likes.dto';
 
 @ApiTags('Playlists')
 @Controller({
@@ -112,4 +114,102 @@ export class PlaylistsController {
       updateMembersDto,
     });
   };
+
+  // Save
+  @Get(':playlist_id/save')
+  @UseGuards(AuthGuard)
+  @ApiOkResponse({
+    description: 'Get save status of the playlist for the current user.',
+    type: Boolean,
+  })
+  getSaveStatus(
+    @CurrentUser() user: User,
+    @Param('playlist_id', ParseIntPipe) playlistId: number,
+  ) {
+    return this.playlistsService.getSaveStatus({
+      user,
+      playlistId,
+    });
+  }
+
+  @Post(':playlist_id/save')
+  @UseGuards(AuthGuard)
+  @ApiOkResponse({
+    description: 'Save the playlist for the current user.',
+    type: PlaylistSavedDto,
+  })
+  save(
+    @CurrentUser() user: User,
+    @Param('playlist_id', ParseIntPipe) playlistId: number,
+  ) {
+    return this.playlistsService.save({
+      user,
+      playlistId,
+    });
+  }
+
+  @Delete(':playlist_id/save')
+  @UseGuards(AuthGuard)
+  @ApiOkResponse({
+    description: 'Unsave the playlist for the current user.',
+    type: PlaylistSavedDto,
+  })
+  unsave(
+    @CurrentUser() user: User,
+    @Param('playlist_id', ParseIntPipe) playlistId: number,
+  ) {
+    return this.playlistsService.unsave({
+      user,
+      playlistId,
+    });
+  }
+
+  // Like
+  @Get(':playlist_id/like')
+  @UseGuards(AuthGuard)
+  @ApiOkResponse({
+    description: 'Get like status of the playlist for the current user.',
+    type: Boolean,
+  })
+  getLikeStatus(
+    @CurrentUser() user: User,
+    @Param('playlist_id', ParseIntPipe) playlistId: number,
+  ) {
+    return this.playlistsService.getLikeStatus({
+      user,
+      playlistId,
+    });
+  }
+
+  @Post(':playlist_id/like')
+  @UseGuards(AuthGuard)
+  @ApiOkResponse({
+    description: 'Like the playlist for the current user.',
+    type: PlaylistLikeDto,
+  })
+  like(
+    @CurrentUser() user: User,
+    @Param('playlist_id', ParseIntPipe) playlistId: number,
+  ) {
+    return this.playlistsService.like({
+      user,
+      playlistId,
+    });
+  }
+
+  @Delete(':playlist_id/like')
+  @UseGuards(AuthGuard)
+  @ApiOkResponse({
+    description: 'Unlike the playlist for the current user.',
+    type: PlaylistLikeDto,
+  })
+  unlike(
+    @CurrentUser() user: User,
+    @Param('playlist_id', ParseIntPipe) playlistId: number,
+  ) {
+    return this.playlistsService.unlike({
+      user,
+      playlistId,
+    });
+  }
 }

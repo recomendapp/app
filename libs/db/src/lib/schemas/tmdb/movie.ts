@@ -366,6 +366,7 @@ export const tmdbMovieView = tmdbSchema.view('movie_view', {
   voteCount: real('vote_count'),
   slug: text(),
   url: text(),
+  followerAvgRating: real('follower_avg_rating'),
 }).as(
   sql`SELECT 
     movie.id, 
@@ -387,7 +388,16 @@ export const tmdbMovieView = tmdbSchema.view('movie_view', {
     movie.vote_average, 
     movie.vote_count, 
     (movie.id || '-'::text) || public.slugify(movie.title) AS slug, 
-    ('/film/'::text || (movie.id || '-'::text)) || public.slugify(movie.title) AS url
+    ('/film/'::text || (movie.id || '-'::text)) || public.slugify(movie.title) AS url,
+    (
+      SELECT AVG(lm.rating)
+      FROM public.log_movie lm
+      JOIN public.follow f ON f.following_id = lm.user_id
+      WHERE 
+        lm.movie_id = movie.id 
+        AND f.status = 'accepted'
+        AND f.follower_id = (NULLIF(current_setting('app.current_user_id', true), '')::uuid)
+    ) AS follower_avg_rating
   FROM ( 
     SELECT 
       m.id,

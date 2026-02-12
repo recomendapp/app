@@ -167,73 +167,73 @@ import { mediaKeys } from "../keys/mediaKeys";
 // 	});
 // };
 
-export const useUserFollowPersonInsertMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			personId,
-			userId,
-		} : {
-			personId: number;
-			userId: string;
-		}) => {
-			const { data, error } = await supabase
-				.from('user_person_follower')
-				.insert({
-					person_id: personId,
-					user_id: userId,
-				})
-				.select('*')
-				.single();
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(userKeys.followPerson({
-				userId: data.user_id,
-				personId: data.person_id,
-			}), data);
-			queryClient.invalidateQueries({
-				queryKey: userKeys.myFeedCastCrew(),
-			});
-		},
-	});
-};
+// export const useUserFollowPersonInsertMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			personId,
+// 			userId,
+// 		} : {
+// 			personId: number;
+// 			userId: string;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('user_person_follower')
+// 				.insert({
+// 					person_id: personId,
+// 					user_id: userId,
+// 				})
+// 				.select('*')
+// 				.single();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(userKeys.followPerson({
+// 				userId: data.user_id,
+// 				personId: data.person_id,
+// 			}), data);
+// 			queryClient.invalidateQueries({
+// 				queryKey: userKeys.myFeedCastCrew(),
+// 			});
+// 		},
+// 	});
+// };
 
-export const useUserUnfollowPersonDeleteMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			personId,
-			userId,
-		} : {
-			personId: number;
-			userId: string;
-		}) => {
-			if (!userId || !personId) throw new Error('Invalid userId or personId');
-			const { data, error } = await supabase
-				.from('user_person_follower')
-				.delete()
-				.eq('person_id', personId)
-				.eq('user_id', userId)
-				.select('*')
-				.single();
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(userKeys.followPerson({
-				userId: data.user_id,
-				personId: data.person_id,
-			}), null);
-			queryClient.invalidateQueries({
-				queryKey: userKeys.myFeedCastCrew(),
-			});
-		},
-	});
-};
+// export const useUserUnfollowPersonDeleteMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			personId,
+// 			userId,
+// 		} : {
+// 			personId: number;
+// 			userId: string;
+// 		}) => {
+// 			if (!userId || !personId) throw new Error('Invalid userId or personId');
+// 			const { data, error } = await supabase
+// 				.from('user_person_follower')
+// 				.delete()
+// 				.eq('person_id', personId)
+// 				.eq('user_id', userId)
+// 				.select('*')
+// 				.single();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(userKeys.followPerson({
+// 				userId: data.user_id,
+// 				personId: data.person_id,
+// 			}), null);
+// 			queryClient.invalidateQueries({
+// 				queryKey: userKeys.myFeedCastCrew(),
+// 			});
+// 		},
+// 	});
+// };
 
 export const useUserAcceptFollowerRequestMutation = () => {
 	const supabase = useSupabaseClient();
@@ -1500,73 +1500,73 @@ export const useUserRecosTvSeriesCompleteMutation = () => {
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------- PLAYLISTS ------------------------------- */
-export const useUserPlaylistSavedInsertMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			userId,
-			playlistId,
-		} : {
-			userId: string;
-			playlistId: number;
-		}) => {
-			const { data, error } = await supabase
-				.from('playlists_saved')
-				.insert({
-					user_id: userId,
-					playlist_id: playlistId,
-				})
-				.select()
-				.single()
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(userKeys.playlistSaved({
-				userId: data.user_id,
-				playlistId: data.playlist_id,
-			}), data);
+// export const useUserPlaylistSavedInsertMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			userId,
+// 			playlistId,
+// 		} : {
+// 			userId: string;
+// 			playlistId: number;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('playlists_saved')
+// 				.insert({
+// 					user_id: userId,
+// 					playlist_id: playlistId,
+// 				})
+// 				.select()
+// 				.single()
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(userKeys.playlistSaved({
+// 				userId: data.user_id,
+// 				playlistId: data.playlist_id,
+// 			}), data);
 
-			queryClient.invalidateQueries({
-				queryKey: userKeys.playlistsSaved({
-					userId: data.user_id,
-				})
-			})
-		}
-	});
-};
+// 			queryClient.invalidateQueries({
+// 				queryKey: userKeys.playlistsSaved({
+// 					userId: data.user_id,
+// 				})
+// 			})
+// 		}
+// 	});
+// };
 
-export const useUserPlaylistSavedDeleteMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			savedId,
-		} : {
-			savedId: number;
-		}) => {
-			const { data, error } = await supabase
-				.from('playlists_saved')
-				.delete()
-				.eq('id', savedId)
-				.select()
-				.single();
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(userKeys.playlistSaved({
-				userId: data.user_id,
-				playlistId: data.playlist_id,
-			}), null);
+// export const useUserPlaylistSavedDeleteMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			savedId,
+// 		} : {
+// 			savedId: number;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('playlists_saved')
+// 				.delete()
+// 				.eq('id', savedId)
+// 				.select()
+// 				.single();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(userKeys.playlistSaved({
+// 				userId: data.user_id,
+// 				playlistId: data.playlist_id,
+// 			}), null);
 
-			queryClient.invalidateQueries({
-				queryKey: userKeys.playlistsSaved({
-					userId: data.user_id,
-				})
-			})
-		}
-	});
-};
+// 			queryClient.invalidateQueries({
+// 				queryKey: userKeys.playlistsSaved({
+// 					userId: data.user_id,
+// 				})
+// 			})
+// 		}
+// 	});
+// };
 /* -------------------------------------------------------------------------- */

@@ -2,9 +2,12 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
 import { User } from '../auth/auth.service';
 import { PlaylistCreateDto, PlaylistDTO, PlaylistGetDTO, PlaylistUpdateDto } from './dto/playlists.dto';
-import { follow, playlist, playlistMember } from '@libs/db/schemas';
+import { follow, playlist, playlistLike, playlistMember, playlistSaved } from '@libs/db/schemas';
 import { and, eq, exists, notInArray, or, sql, SQL } from 'drizzle-orm';
-import { PlaylistMemberListDto, PlaylistMemberUpdateDto } from './dto/playlists-members.dto';
+import { PlaylistMemberListDto, PlaylistMemberUpdateDto } from './dto/playlist-members.dto';
+import { plainToInstance } from 'class-transformer';
+import { PlaylistSavedDto } from './dto/playlist-saved.dto';
+import { PlaylistLikeDto } from './dto/playlist-likes.dto';
 
 @Injectable()
 export class PlaylistsService {
@@ -272,5 +275,152 @@ export class PlaylistsService {
         }
       })),
     };
+  }
+
+  // Save
+  async getSaveStatus({
+    user,
+    playlistId,
+  }: {
+    user: User;
+    playlistId: number;
+  }): Promise<boolean> {
+    const save = await this.db.query.playlistSaved
+      .findFirst({
+        where: and(
+          eq(playlistSaved.playlistId, playlistId),
+          eq(playlistSaved.userId, user.id)
+        )
+      });
+    
+    return !!save;
+  }
+
+  async save({
+    user,
+    playlistId,
+  }: {
+    user: User;
+    playlistId: number;
+  }): Promise<PlaylistSavedDto> {
+    const [save] = await this.db
+      .insert(playlistSaved)
+      .values({
+        playlistId,
+        userId: user.id,
+      })
+      .onConflictDoNothing()
+      .returning();
+    
+    if (!save) {
+      const existingSave = await this.db.query.playlistSaved
+        .findFirst({
+          where: and(
+            eq(playlistSaved.playlistId, playlistId),
+            eq(playlistSaved.userId, user.id)
+          )
+        });
+      if (!existingSave) {
+        throw new NotFoundException('Playlist not found');
+      }
+      return plainToInstance(PlaylistSavedDto, existingSave, { excludeExtraneousValues: true });
+    }
+
+    return plainToInstance(PlaylistSavedDto, save, { excludeExtraneousValues: true });
+  }
+
+  async unsave({
+    user,
+    playlistId,
+  }: {
+    user: User;
+    playlistId: number;
+  }): Promise<PlaylistSavedDto | null> {
+    const [deleted] = await this.db
+      .delete(playlistSaved)
+      .where(and(
+        eq(playlistSaved.playlistId, playlistId),
+        eq(playlistSaved.userId, user.id)
+      ))
+      .returning();
+    
+    if (!deleted) {
+      return null;
+    }
+
+    return plainToInstance(PlaylistSavedDto, deleted, { excludeExtraneousValues: true });
+  }
+
+  // Like
+  async getLikeStatus({
+    user,
+    playlistId,
+  }: {
+    user: User;
+    playlistId: number;
+  }): Promise<boolean> {
+    const like = await this.db.query.playlistLike
+      .findFirst({
+        where: and(
+          eq(playlistLike.playlistId, playlistId),
+          eq(playlistLike.userId, user.id)
+        )
+      });
+    return !!like;
+  }
+
+  async like({
+    user,
+    playlistId,
+  }: {
+    user: User;
+    playlistId: number;
+  }): Promise<PlaylistLikeDto> {
+    const [like] = await this.db
+      .insert(playlistLike)
+      .values({
+        playlistId,
+        userId: user.id,
+      })
+      .onConflictDoNothing()
+      .returning();
+    
+    if (!like) {
+      const existingLike = await this.db.query.playlistLike
+        .findFirst({
+          where: and(
+            eq(playlistLike.playlistId, playlistId),
+            eq(playlistLike.userId, user.id)
+          )
+        });
+      if (!existingLike) {
+        throw new NotFoundException('Playlist not found');
+      }
+      return plainToInstance(PlaylistLikeDto, existingLike, { excludeExtraneousValues: true });
+    }
+
+    return plainToInstance(PlaylistLikeDto, like, { excludeExtraneousValues: true });
+  }
+
+  async unlike({
+    user,
+    playlistId,
+  }: {
+    user: User;
+    playlistId: number;
+  }): Promise<PlaylistLikeDto | null> {
+    const [deleted] = await this.db
+      .delete(playlistLike)
+      .where(and(
+        eq(playlistLike.playlistId, playlistId),
+        eq(playlistLike.userId, user.id)
+      ))
+      .returning();
+    
+    if (!deleted) {
+      return null;
+    }
+
+    return plainToInstance(PlaylistLikeDto, deleted, { excludeExtraneousValues: true });
   }
 }

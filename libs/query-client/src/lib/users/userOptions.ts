@@ -1,4 +1,4 @@
-import { usersControllerGetFollowers, UsersControllerGetFollowersData, usersControllerGetFollowing, UsersControllerGetFollowingData, usersControllerGetFollowStatus, usersControllerGetMe, usersControllerGetPlaylists, UsersControllerGetPlaylistsData } from "@packages/api-js";
+import { personsControllerGetFollowStatus, playlistsControllerGetLikeStatus, playlistsControllerGetSaveStatus, usersControllerGetFollowers, UsersControllerGetFollowersData, usersControllerGetFollowing, UsersControllerGetFollowingData, usersControllerGetFollowStatus, usersControllerGetMe, usersControllerGetPlaylists, UsersControllerGetPlaylistsData } from "@packages/api-js";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { userKeys } from "./userKeys";
 
@@ -113,6 +113,32 @@ export const userFollowOptions = ({
 	});
 };
 
+export const userPersonFollowOptions = ({
+	userId,
+	personId,
+} : {
+	userId?: string;
+	personId?: number;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.personFollow({
+			userId: userId!,
+			personId: personId!,
+		}),
+		queryFn: async () => {
+			if (!personId) throw new Error('Person ID is required');
+			const { data, error } = await personsControllerGetFollowStatus({
+				path: {
+					person_id: personId,
+				}
+			});
+			if (error) throw error;
+			return data;
+		},
+		enabled: !!userId && !!personId,
+	});
+};
+
 /* -------------------------------- Playlists ------------------------------- */
 export const userPlaylistsInfiniteOptions = ({
 	userId,
@@ -150,4 +176,58 @@ export const userPlaylistsInfiniteOptions = ({
 		},
 		enabled: !!userId,
 	})
+};
+
+export const userPlaylistLikeOptions = ({
+	userId,
+	playlistId,
+} : {
+	userId?: string;
+	playlistId?: number;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.playlistLike({
+			userId: userId!,
+			playlistId: playlistId!,
+		}),
+		queryFn: async () => {
+			if (!playlistId) throw Error('Missing playlist id');
+			const { data, error } = await playlistsControllerGetLikeStatus({
+				path: {
+					playlist_id: playlistId,
+				}
+			});
+			if (error) throw error;
+			if (data === undefined) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId && !!playlistId,
+	});
+};
+
+export const userPlaylistSavedOptions = ({
+	userId,
+	playlistId,
+} : {
+	userId?: string;
+	playlistId?: number;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.playlistSaved({
+			userId: userId!,
+			playlistId: playlistId!,
+		}),
+		queryFn: async () => {
+			if (!playlistId) throw Error('Missing playlist id');
+			const { data, error } = await playlistsControllerGetSaveStatus({
+				path: {
+					playlist_id: playlistId,
+				}
+			});
+			if (error) throw error;
+			if (data === undefined) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId && !!playlistId,
+	});
 };
