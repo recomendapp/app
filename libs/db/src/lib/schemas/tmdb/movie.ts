@@ -241,10 +241,7 @@ export const tmdbMovieReleaseDate = tmdbSchema.table(
     iso31661: text('iso_3166_1')
       .notNull()
       .references(() => tmdbCountry.iso31661, { onDelete: 'cascade' }),
-    releaseDate: timestamp('release_date', {
-      withTimezone: true,
-      mode: 'string',
-    }).notNull(),
+    releaseDate: date('release_date', { mode: 'string' }).notNull(),
     certification: text(),
     iso6391: text('iso_639_1').references(() => tmdbLanguage.iso6391, {
       onDelete: 'cascade',
@@ -347,12 +344,11 @@ export const tmdbMovieView = tmdbSchema.view('movie_view', {
   id: bigint({ mode: 'number' }),
   title: text(),
   posterPath: text('poster_path'),
-  posterUrl: text('poster_url'),
   backdropPath: text('backdrop_path'),
-  backdropUrl: text('backdrop_url'),
   directors: jsonb().$type<Pick<typeof tmdbPersonView.$inferSelect, 'id' | 'name' | 'profilePath' | 'slug' | 'url'>[]>(),
   genres: jsonb().$type<(typeof tmdbGenre.$inferSelect & { name: string })[]>(),
-  releaseDate: timestamp('release_date', { withTimezone: true, mode: 'string' }),
+  trailers: jsonb().$type<Pick<typeof tmdbMovieVideo.$inferSelect, 'id' | 'name' | 'key' | 'site' | 'size' | 'type' | 'official' | 'publishedAt' | 'iso6391' | 'iso31661'>[]>(),
+  releaseDate: date('release_date', { mode: 'string' }),
   overview: text(),
   budget: bigint({ mode: 'number' }),
   homepage: text(),
@@ -374,8 +370,9 @@ export const tmdbMovieView = tmdbSchema.view('movie_view', {
     movie.poster_path, 
     movie.backdrop_path, 
     movie.directors, 
-    movie.genres, 
-    movie.release_date, 
+    movie.genres,
+    movie.trailers,
+    movie.release_date,
     movie.overview, 
     movie.budget, 
     movie.homepage, 
@@ -517,7 +514,46 @@ export const tmdbMovieView = tmdbSchema.view('movie_view', {
         JOIN tmdb.genre_translation gt ON g.id = gt.genre_id 
         WHERE mg.movie_id = m.id 
         AND gt.language = (language.requested_language).iso_639_1 || '-' || (language.requested_language).iso_3166_1
-      ) AS genres
+      ) AS genres,
+      ( SELECT jsonb_agg(
+          jsonb_build_object(
+            'id', t.id,
+            'name', t.name,
+            'key', t.key,
+            'site', t.site,
+            'size', t.size,
+            'type', t.type,
+            'official', t.official,
+            'publishedAt', t.published_at,
+            'iso6391', t.iso_639_1,
+            'iso31661', t.iso_3166_1
+          ) ORDER BY t.lang_priority, t.published_at
+        )
+        FROM (
+          SELECT 
+            x.id, x.name, x.key, x.site, x.size, x.type, x.official, x.published_at, x.iso_639_1, x.iso_3166_1, x.lang_priority
+          FROM (
+            SELECT 
+              v.id, v.name, v.key, v.site, v.size, v.type, v.official, v.published_at, v.iso_639_1, v.iso_3166_1,
+              CASE
+                WHEN v.iso_639_1 = (language.requested_language).iso_639_1 THEN 1
+                WHEN v.iso_639_1 = m.original_language THEN 2
+                WHEN v.iso_639_1 = (language.default_language).iso_639_1 THEN 3
+                ELSE 4
+              END AS lang_priority,
+              row_number() OVER (PARTITION BY v.iso_639_1 ORDER BY v.published_at DESC) AS rn
+            FROM tmdb.movie_video v
+            WHERE v.movie_id = m.id
+              AND v.type = 'Trailer'::text
+              AND (
+                v.iso_639_1 = (language.requested_language).iso_639_1 OR
+                v.iso_639_1 = m.original_language OR
+                (v.iso_639_1 = (language.default_language).iso_639_1 AND (language.default_language).iso_639_1 <> m.original_language)
+              )
+          ) x
+          WHERE x.rn <= 2
+        ) t
+      ) AS trailers
     FROM tmdb.movie m, 
     LATERAL i18n.language() language(requested_language, fallback_language, default_language)
   ) movie`

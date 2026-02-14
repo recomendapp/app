@@ -30,3 +30,20 @@ export const getApi = async ({
 
   return client;
 };
+
+export const getAnonApi = async ({
+  locale,
+}: {
+  locale?: SupportedLocale;
+} = {}) => {
+  const l = locale || await getLocale();
+
+  client.setConfig({
+    baseUrl: API_ENDPOINT,
+    headers: {
+      [HEADER_LANGUAGE_KEY]: l,
+    },
+  });
+
+  return client;
+};

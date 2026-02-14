@@ -1,3 +1,3 @@
 export * from './supportedLocales';
 
-export const HEADER_LANGUAGE_KEY = 'Accept-Language';
+export const HEADER_LANGUAGE_KEY = 'x-language';

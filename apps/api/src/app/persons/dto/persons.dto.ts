@@ -32,7 +32,7 @@ export class PersonDto {
   })
   @Expose()
   @IsString()
-  profile_path: string | null;
+  profilePath: string | null;
 
   @ApiProperty({
 	description: "The person's birthday",
@@ -72,7 +72,7 @@ export class PersonDto {
   })
   @Expose()
   @IsString()
-  imdb_id: string | null;
+  imdbId: string | null;
 
   @ApiProperty({
 	description: "The person's kown for department",
@@ -82,7 +82,7 @@ export class PersonDto {
   })
   @Expose()
   @IsString()
-  known_for_department: string | null;
+  knownForDepartment: string | null;
 
   @ApiProperty({
 	description: "The person's place of birth",
@@ -92,7 +92,7 @@ export class PersonDto {
   })
   @Expose()
   @IsString()
-  place_of_birth: string | null;
+  placeOfBirth: string | null;
 
   @ApiProperty({
 	description:
@@ -152,7 +152,7 @@ export class PersonDto {
 export class PersonCompactDto extends PickType(PersonDto, [
   'id',
   'name',
-  'profile_path',
+  'profilePath',
   'slug',
   'url',
 ] as const) {}

@@ -1,15 +1,14 @@
 'use client'
 
-import { Database, Playlist as TPlaylist } from "@recomendapp/types";
-import { PlaylistMovie } from "./PlaylistMovie/PlaylistMovie";
-import { PlaylistTvSeries } from "./PlaylistTvSeries/PlaylistTvSeries";
 import { useQuery } from "@tanstack/react-query";
 import { usePlaylistDetailsOptions } from "@/api/client/options/playlistOptions";
+import { PlaylistGet as TPlaylist } from "@packages/api-js";
+import { PlaylistHeader } from "./PlaylistHeader";
 
 export const Playlist = ({
 	playlist: playlistProps,
 } : {
-	playlist: Database['public']['Tables']['playlists']['Row'] & { user: Database['public']['Views']['profile']['Row'] };
+	playlist: TPlaylist;
 }) => {
 	const {
 		data: playlist,
@@ -20,11 +19,16 @@ export const Playlist = ({
 	if (!playlist) return null;
 	return (
 		<div className="h-full">
-			{playlist.type === 'movie' ? (
+			<PlaylistHeader
+			playlist={playlist}
+			numberItems={0}
+			backdrops={[]}
+			/>
+			{/* {playlist.type === 'movie' ? (
 				<PlaylistMovie playlist={playlist} />
 			) : playlist.type === 'tv_series' ? (
 				<PlaylistTvSeries playlist={playlist} />
-			) : null}
+			) : null} */}
 		</div>
 	)
 };

@@ -1,29 +1,28 @@
 import { notFound } from 'next/navigation';
-import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getTvSeries } from '@/api/server/medias';
 import { TvSeriesHeader } from './_components/TvSeriesHeader';
 import { TvSeriesNavbar } from './_components/TvSeriesNavbar';
+import { SupportedLocale } from '@libs/i18n';
+import { getIdFromSlug } from '@/utils/get-id-from-slug';
 
 export default async function Layout(
   props: {
       children: React.ReactNode;
       params: Promise<{
-        lang: string;
+        lang: SupportedLocale;
         tv_series_id: string;
       }>;
   }
 ) {
-  const params = await props.params;
+  const { tv_series_id, lang } = await props.params;
 
   const {
       children
   } = props;
-  const { id: tvSeriesId } = getIdFromSlug(params.tv_series_id);
 
-  let tvSeries: Awaited<ReturnType<typeof getTvSeries>>;
-  try {
-    tvSeries = await getTvSeries(params.lang, tvSeriesId);
-  } catch {
+  const { id: tvSeriesId } = getIdFromSlug(tv_series_id);
+  const { data: tvSeries, error } = await getTvSeries(lang, tvSeriesId);
+  if (error || !tvSeries) {
     return notFound();
   }
 

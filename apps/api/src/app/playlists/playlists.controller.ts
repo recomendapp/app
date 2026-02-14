@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { PlaylistsService } from './playlists.service';
-import { PlaylistDTO, PlaylistCreateDto, PlaylistUpdateDto } from './dto/playlists.dto';
+import { PlaylistDTO, PlaylistCreateDto, PlaylistUpdateDto, PlaylistGetDTO } from './dto/playlists.dto';
 import { AuthGuard, OptionalAuthGuard } from '../auth/guards';
 import { User } from '../auth/auth.service';
 import { CurrentOptionalUser, CurrentUser } from '../auth/decorators';
@@ -21,7 +21,7 @@ export class PlaylistsController {
   @UseGuards(OptionalAuthGuard)
   @ApiOkResponse({
     description: 'The playlist details.',
-    type: PlaylistDTO,
+    type: PlaylistGetDTO,
   })
   get(
     @CurrentOptionalUser() user: User | null,

@@ -5,7 +5,6 @@ import { FastifyRequest } from 'fastify';
 import { SupabaseAdminClient } from './supabase-admin-client';
 import { SupabaseUserClient } from './supabase-user-client';
 import { Database } from '../../types/type.db.extended';
-import { env } from '../../../env';
 
 @Module({
   providers: [
@@ -24,8 +23,8 @@ import { env } from '../../../env';
           language,
         };
         const client = createClient<Database>(
-          env.SUPABASE_URL,
-          env.SUPABASE_ANON_KEY,
+          '',
+          '',
           {
             global: { headers },
             auth: {
@@ -41,8 +40,8 @@ import { env } from '../../../env';
       provide: SupabaseAdminClient,
       useFactory: () => {
         const client = createClient<Database>(
-          env.SUPABASE_URL,
-          env.SUPABASE_SERVICE_ROLE_KEY,
+          '',
+          '',
           {
             auth: {
               persistSession: false,

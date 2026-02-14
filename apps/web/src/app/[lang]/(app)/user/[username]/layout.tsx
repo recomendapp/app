@@ -23,7 +23,7 @@ export default async function Layout(
   return (
     <>
       <ProfileHeader profile={profile} session={session} />
-      {profile.visible ? (
+      {profile.isVisible ? (
         <div className="flex flex-col items-center p-4 gap-2">
           <div className='max-w-7xl w-full space-y-4'>
             <ProfileNavbar username={profile.username} />

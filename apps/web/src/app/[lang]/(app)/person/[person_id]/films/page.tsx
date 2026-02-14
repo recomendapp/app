@@ -13,39 +13,39 @@ import { SupportedLocale } from '@libs/i18n';
 import { getPerson, getPersonFilmsPagination } from '@/api/server/medias';
 import { PersonFilms } from './_components/PersonFilms';
 import { redirect } from '@/lib/i18n/navigation';
+import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 
 export async function generateMetadata(
 	props: {
 		params: Promise<{
-			lang: string;
+			lang: SupportedLocale;
 			person_id: string;
 		}>;
 	}
 ): Promise<Metadata> {
-	const params = await props.params;
-	const t = await getTranslations({ locale: params.lang as SupportedLocale });
-	const { id } = getIdFromSlug(params.person_id);
-	try {
-		const person = await getPerson(params.lang, id);
-		return {
-			title: t('pages.person.films.metadata.title', { name: person.name! }),
-			description: truncate(t('pages.person.films.metadata.description', { name: person.name! }), { length: siteConfig.seo.description.limit }),
-			alternates: generateAlternates(params.lang, `/person/${person.slug}/films`),
-			openGraph: {
-			siteName: siteConfig.name,
-			title: `${t('pages.person.films.metadata.title', { name: person.name! })} • ${siteConfig.name}`,
-			description: truncate(t('pages.person.films.metadata.description', { name: person.name! }), { length: siteConfig.seo.description.limit }),
-			url: `${siteConfig.url}/${params.lang}/person/${person.slug}/films`,
-			images: person.profile_url ? [
-				{ url: person.profile_url },
-			] : undefined,
-			type: 'profile',
-			locale: params.lang,
-			}
-		};
-  	} catch {
+	const { lang, person_id } = await props.params;
+	const t = await getTranslations({ locale: lang });
+	const { id } = getIdFromSlug(person_id);
+	const { data: person, error } = await getPerson(lang, id);
+	if (error || !person) {
 		return { title: upperFirst(t('common.messages.person_not_found')) };
 	}
+	return {
+		title: t('pages.person.films.metadata.title', { name: person.name! }),
+		description: truncate(t('pages.person.films.metadata.description', { name: person.name! }), { length: siteConfig.seo.description.limit }),
+		alternates: generateAlternates(lang, `/person/${person.slug}/films`),
+		openGraph: {
+		siteName: siteConfig.name,
+		title: `${t('pages.person.films.metadata.title', { name: person.name! })} • ${siteConfig.name}`,
+		description: truncate(t('pages.person.films.metadata.description', { name: person.name! }), { length: siteConfig.seo.description.limit }),
+		url: `${siteConfig.url}/${lang}/person/${person.slug}/films`,
+		images: person.profilePath ? [
+			{ url: getTmdbImage({ path: person.profilePath, size: 'w500'}) },
+		] : undefined,
+		type: 'profile',
+		locale: lang,
+		}
+	};
 }
 
 export default async function PersonFilmsPage(
@@ -65,12 +65,10 @@ export default async function PersonFilmsPage(
 		}>;
 	}
 ) {
-	const params = await props.params;
-	const { id } = getIdFromSlug(params.person_id);
-	let person: Awaited<ReturnType<typeof getPerson>>;
-	try {
-		person = await getPerson(params.lang, id);
-	} catch {
+	const { lang, person_id } = await props.params;
+	const { id } = getIdFromSlug(person_id);
+	const { data: person, error } = await getPerson(lang, id);
+	if (error || !person) {
 		return notFound();
 	}
 	const searchParams = await props.searchParams;
@@ -101,7 +99,7 @@ export default async function PersonFilmsPage(
 				<div className='space-y-2'>
 					<div className='flex flex-col @3xl/person-films:flex-row @3xl/person-films:justify-between items-center gap-2'>
 						<Filters
-						knownForDepartment={person.known_for_department!}
+						knownForDepartment={person.knownForDepartment}
 						jobs={person.media_person_jobs}
 						sortBy={sortBy}
 						sortOrder={sortOrder}

@@ -18,13 +18,13 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/auth-context';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Link } from '@/lib/i18n/navigation';
-import { Database, MediaTvSeries } from '@recomendapp/types';
 import { CardReviewTvSeries } from '@/components/Card/CardReviewTvSeries';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { useMediaTvSeriesReviewsOptions } from '@/api/client/options/mediaOptions';
 import { useUserActivityTvSeriesOptions } from '@/api/client/options/userOptions';
+import { TvSeries } from '@packages/api-js';
 
 type SortBy = "updated_at" | "created_at";
 const DEFAULT_PER_PAGE = 20;
@@ -47,7 +47,7 @@ const getValidatePerPage = (perPage?: number | null): number => {
 export const TvSeriesReviews = ({
 	tvSeries,
 } : {
-	tvSeries: Database['public']['Views']['media_tv_series_full']['Row'];
+	tvSeries: TvSeries;
 }) => {
 	const t = useTranslations();
 	const searchParams = useSearchParams();
@@ -149,19 +149,19 @@ export const TvSeriesReviews = ({
 const MyReviewButton = ({
 	tvSeries,
  } : {
-	tvSeries: MediaTvSeries;
+	tvSeries: TvSeries;
 }) => {
 	const t = useTranslations();
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const {
 	  data: activity,
 	  isLoading,  
 	} = useQuery(useUserActivityTvSeriesOptions({
 		tvSeriesId: tvSeries.id,
-		userId: session?.user.id,
+		userId: user?.id,
 	}));
 
-	if (!session) return;
+	if (!user) return;
 
 	if (isLoading || activity === undefined) return <Skeleton className="w-36 h-10 rounded-full"/>;
   

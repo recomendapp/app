@@ -4,17 +4,17 @@ import { HeaderBox } from '@/components/Box/HeaderBox';
 import PersonPoster from './PersonPoster';
 import { PersonFollowButton } from './PersonFollowButton';
 import { PersonAbout } from './PersonAbout';
-import { Database } from '@recomendapp/types';
 import { useQuery } from '@tanstack/react-query';
 import { useMediaPersonFilmsOptions } from '@/api/client/options/mediaOptions';
 import { DEFAULT_PER_PAGE, DEFAULT_SORT_BY, DEFAULT_SORT_ORDER } from '../films/_components/constants';
 import { useRandomImage } from '@/hooks/use-random-image';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
+import { Person } from '@packages/api-js';
 
 export const PersonHeader = ({
   person,
 } : {
-  person: Database['public']['Views']['media_person']['Row'];
+  person: Person;
 }) => {
   const {
     data
@@ -36,18 +36,20 @@ export const PersonHeader = ({
       <div className="max-w-7xl flex flex-col w-full gap-4 items-center @2xl/header-box:flex-row">
         {/* MOVIE POSTER */}
         <PersonPoster
-          className="w-[280px]"
-          poster_path={person.profile_path ?? ''}
-          alt={person.name ?? ''}
+        className="w-[280px]"
+        poster_path={person.profilePath ?? ''}
+        alt={person.name ?? ''}
         />
         {/* MOVIE MAIN DATA */}
         <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
           {/* TYPE */}
           <div>
             <span className='text-accent-yellow'>Personnalité</span>
-            <span className=" before:content-['_|_']">
-              {person.known_for_department}
-            </span>
+            {person.knownForDepartment && (
+              <span className=" before:content-['_|_']">
+                {person.knownForDepartment}
+              </span>
+            )}
           </div>
           {/* NAME */}
           <div className="text-xl select-text @xl/header-box:text-6xl font-bold line-clamp-2">

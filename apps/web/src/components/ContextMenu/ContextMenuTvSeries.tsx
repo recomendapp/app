@@ -1,5 +1,4 @@
 "use client";
-import { MediaTvSeries } from "@recomendapp/types"
 import { Icons } from "@/config/icons";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuTrigger } from "../ui/context-menu";
 import { WithLink } from "../utils/WithLink";
@@ -13,6 +12,7 @@ import { createShareController } from "../ShareController/ShareController";
 import { ShareControllerTvSeries } from "../ShareController/ShareControllerTvSeries";
 import { ModalUserRecosTvSeriesSend } from "../Modals/recos/ModalUserRecosTvSeriesSend";
 import { ModalPlaylistTvSeriesAdd } from "../Modals/playlists/ModalPlaylistTvSeriesAdd";
+import { TvSeries } from "@packages/api-js";
 
 interface Item {
 	icon: React.ElementType;
@@ -29,11 +29,11 @@ export const ContextMenuTvSeries = ({
 	additionalItemsBottom = [],
 }: {
 	children: React.ReactNode,
-	tvSeries: MediaTvSeries,
+	tvSeries: TvSeries,
 	additionalItemsTop?: Item[],
 	additionalItemsBottom?: Item[],
 }) => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const { openModal } = useModal();
 	const t = useTranslations();
 	const items: Item[][] = useMemo(() => {
@@ -45,7 +45,7 @@ export const ContextMenuTvSeries = ({
 				href: tvSeries.url ?? '',
 				label: upperFirst(t('common.messages.go_to_tv_series'))
 			},
-			...(session ? [
+			...(user ? [
 				{
 					icon: Icons.addPlaylist,
 					onClick: () => openModal(ModalPlaylistTvSeriesAdd, { tvSeriesId: tvSeries.id, tvSeriesTitle: tvSeries.name! }),
@@ -73,7 +73,7 @@ export const ContextMenuTvSeries = ({
 			},
 			...additionalItemsBottom
 		],
-	]}, [tvSeries, session, t, openModal, additionalItemsTop, additionalItemsBottom]);
+	]}, [tvSeries, user, t, openModal, additionalItemsTop, additionalItemsBottom]);
 	return (
 		<ContextMenu>
 			<ContextMenuTrigger>

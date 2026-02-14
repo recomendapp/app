@@ -7,6 +7,8 @@ import {
   IsNumber,
   IsArray,
   IsDateString,
+  IsBoolean,
+  ValidateNested,
 } from 'class-validator';
 import { PersonCompactDto } from '../../persons/dto/persons.dto';
 import { GenreDto } from './genres.dto';
@@ -39,7 +41,7 @@ export class MovieDto {
   })
   @Expose()
   @IsString()
-  poster_path: string | null;
+  posterPath: string | null;
 
   @ApiProperty({
     description: 'Backdrop path of the movie',
@@ -49,7 +51,7 @@ export class MovieDto {
   })
   @Expose()
   @IsString()
-  backdrop_path: string | null;
+  backdropPath: string | null;
 
   @ApiProperty({
     type: () => PersonCompactDto,
@@ -58,6 +60,7 @@ export class MovieDto {
   })
   @Expose()
   @IsArray()
+  @ValidateNested({ each: true })
   @Type(() => PersonCompactDto)
   directors: PersonCompactDto[];
 
@@ -68,18 +71,30 @@ export class MovieDto {
   })
   @Expose()
   @IsArray()
+  @ValidateNested({ each: true })
   @Type(() => GenreDto)
   genres: GenreDto[];
 
   @ApiProperty({
+    type: () => MovieTrailerDto,
+    isArray: true,
+    description: 'Trailers of the movie',
+  })
+  @Expose()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => MovieTrailerDto)
+  trailers: MovieTrailerDto[];
+
+  @ApiProperty({
     description: 'Release date of the movie',
-    example: '2014-11-05T00:00:00+00:00',
+    example: '2014-11-05',
     type: String,
     nullable: true,
   })
   @Expose()
   @IsDateString()
-  release_date: string | null;
+  releaseDate: string | null;
 
   @ApiProperty({
     description: 'Overview of the movie',
@@ -140,7 +155,7 @@ export class MovieDto {
   })
   @Expose()
   @IsString()
-  original_language: string | null;
+  originalLanguage: string | null;
 
   @ApiProperty({
     description: 'Original title of the movie',
@@ -150,7 +165,7 @@ export class MovieDto {
   })
   @Expose()
   @IsString()
-  original_title: string | null;
+  originalTitle: string | null;
 
   @ApiProperty({
     description: 'Status of the movie',
@@ -180,7 +195,7 @@ export class MovieDto {
   })
   @Expose()
   @IsNumber()
-  vote_average: number;
+  voteAverage: number;
 
   @ApiProperty({
     description: 'Vote count of the movie',
@@ -190,7 +205,7 @@ export class MovieDto {
   })
   @Expose()
   @IsInt()
-  vote_count: number;
+  voteCount: number;
 
   @ApiProperty({
     description: 'Slug of the movie',
@@ -220,5 +235,58 @@ export class MovieDto {
   })
   @Expose()
   @IsNumber()
-  follower_avg_rating: number | null;
+  followerAvgRating: number | null;
+}
+
+@ApiSchema({ name: 'MovieTrailer' })
+export class MovieTrailerDto {
+  @ApiProperty({ example: '5c9294240e0a267cd516835f' })
+  @Expose()
+  @IsString()
+  id: string;
+
+  @ApiProperty({ example: 'Official Trailer' })
+  @Expose()
+  @IsString()
+  name: string;
+
+  @ApiProperty({ example: 'zSWdZVtXT7E', description: 'YouTube video key' })
+  @Expose()
+  @IsString()
+  key: string;
+
+  @ApiProperty({ example: 'YouTube' })
+  @Expose()
+  @IsString()
+  site: string;
+
+  @ApiProperty({ example: 1080, description: 'Resolution (e.g., 1080, 720)' })
+  @Expose()
+  @IsInt()
+  size: number;
+
+  @ApiProperty({ example: 'Trailer' })
+  @Expose()
+  @IsString()
+  type: string;
+
+  @ApiProperty({ example: true })
+  @Expose()
+  @IsBoolean()
+  official: boolean;
+
+  @ApiProperty({ example: '2014-10-01T17:55:04Z' })
+  @Expose()
+  @IsDateString()
+  publishedAt: string;
+
+  @ApiProperty({ example: 'en', nullable: true })
+  @Expose()
+  @IsString()
+  iso6391: string | null;
+
+  @ApiProperty({ example: 'US', nullable: true })
+  @Expose()
+  @IsString()
+  iso31661: string | null;
 }

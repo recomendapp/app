@@ -1,10 +1,13 @@
 import { Controller, UseGuards, Get, Param, Post, Delete, ParseIntPipe } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { PersonsService } from './persons.service';
-import { AuthGuard } from '../auth/guards';
-import { CurrentUser } from '../auth/decorators';
+import { AuthGuard, OptionalAuthGuard } from '../auth/guards';
+import { CurrentOptionalUser, CurrentUser } from '../auth/decorators';
 import { User } from '../auth/auth.service';
 import { PersonFollowDto } from './dto/person-follow.dto';
+import { PersonDto } from './dto/persons.dto';
+import { CurrentLocale } from '../../common/decorators/current-locale.decorator';
+import { SupportedLocale } from '@libs/i18n';
 
 @ApiTags('Persons')
 @Controller({
@@ -13,6 +16,24 @@ import { PersonFollowDto } from './dto/person-follow.dto';
 })
 export class PersonsController {
   constructor(private readonly personsService: PersonsService) {}
+
+  @Get(':person_id')
+  @UseGuards(OptionalAuthGuard)
+  @ApiOkResponse({
+    description: 'Get the person details',
+    type: PersonDto,
+  })
+  async getPerson(
+    @Param('person_id', ParseIntPipe) personId: number,
+    @CurrentOptionalUser() currentUser: User | null,
+    @CurrentLocale() locale: SupportedLocale,
+  ): Promise<PersonDto> {
+    return this.personsService.get({
+      personId,
+      currentUser,
+      locale,
+    });
+  }
 
   /* --------------------------------- Follows -------------------------------- */
 

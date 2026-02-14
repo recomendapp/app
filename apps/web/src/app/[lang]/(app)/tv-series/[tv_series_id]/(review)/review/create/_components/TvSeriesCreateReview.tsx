@@ -5,17 +5,17 @@ import { useRouter } from "@/lib/i18n/navigation";
 import ReviewForm from '@/components/Review/ReviewForm';
 import { useCallback, useEffect } from 'react';
 import { Spinner } from '@/components/ui/spinner';
-import { Database } from '@recomendapp/types';
 import { useQuery } from '@tanstack/react-query';
 import { useUserActivityTvSeriesOptions } from '@/api/client/options/userOptions';
 import { useUserReviewTvSeriesUpsertMutation } from '@/api/client/mutations/userMutations';
+import { TvSeries } from '@packages/api-js';
 
 export const TvSeriesCreateReview = ({
 	tvSeries,
 }: {
-	tvSeries: Database['public']['Views']['media_tv_series']['Row'];
+	tvSeries: TvSeries;
 }) => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const router = useRouter();
 
 	const {
@@ -23,7 +23,7 @@ export const TvSeriesCreateReview = ({
 		isLoading,
 	} = useQuery(useUserActivityTvSeriesOptions({
 		tvSeriesId: tvSeries.id,
-		userId: session?.user.id,
+		userId: user?.id,
 	}));
 	const { mutateAsync: upsertReview } = useUserReviewTvSeriesUpsertMutation({
 		tvSeriesId: tvSeries.id,

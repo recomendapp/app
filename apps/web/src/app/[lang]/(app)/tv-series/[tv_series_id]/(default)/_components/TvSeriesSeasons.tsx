@@ -8,16 +8,16 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { Link } from "@/lib/i18n/navigation";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
-import { Database } from "@recomendapp/types";
 import { useQuery } from "@tanstack/react-query";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 import { cn } from '@/lib/utils';
+import { TvSeries } from "@packages/api-js";
 
 export const TvSeriesSeasons = ({
 	tvSeries,
 }: {
-	tvSeries: Database['public']['Views']['media_tv_series_full']['Row'];
+	tvSeries: TvSeries;
 }) => {
 	const t = useTranslations();
 
@@ -32,11 +32,11 @@ export const TvSeriesSeasons = ({
 		<ScrollArea>
 			<div className="flex space-x-4 pb-4">
 				{isLoading ? (
-					Array.from({ length: tvSeries.number_of_seasons || 5 }).map((_, i) => (
+					Array.from({ length: tvSeries.numberOfSeasons || 5 }).map((_, i) => (
 						<Skeleton key={i} className="w-32 aspect-2/3 rounded-md" style={{ animationDelay: `${i * 0.12}s` }} />
 					))
 				) : data?.map((season, i) => (
-					<Link key={i} href={`/tv-series/${tvSeries.slug || tvSeries.id}/${season.season_number}`}>
+					<Link key={i} href={`/tv-series/${tvSeries.slug || tvSeries.id}/season/${season.season_number}`}>
 						<Card className={cn("flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover", season.season_number === 0 ? 'opacity-70' : '')}>
 							<div className="relative w-full aspect-3/4 rounded-md overflow-hidden">
 								<ImageWithFallback

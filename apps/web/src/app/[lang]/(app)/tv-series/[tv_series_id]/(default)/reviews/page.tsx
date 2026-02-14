@@ -14,61 +14,58 @@ import { Database } from '@recomendapp/types';
 export async function generateMetadata(
   props: {
     params: Promise<{
-      lang: string;
+      lang: SupportedLocale;
       tv_series_id: string;
     }>;
   }
 ): Promise<Metadata> {
-  const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale });
-  const { id: serieId } = getIdFromSlug(params.tv_series_id);
-  try {
-    const serie = await getTvSeries(params.lang, serieId);
-    return {
-      title: t('pages.tv_series.reviews.metadata.title', { title: serie.name!, year: new Date(String(serie.first_air_date)).getFullYear() }),
+  const { lang, tv_series_id } = await props.params;
+  const t = await getTranslations({ locale: lang });
+  const { id: serieId } = getIdFromSlug(tv_series_id);
+  const { data: tvSeries, error } = await getTvSeries(lang, serieId);
+  if (error || !tvSeries) {
+    return { title: upperFirst(t('common.messages.tv_series_not_found')) };
+  }
+  return {
+    title: t('pages.tv_series.reviews.metadata.title', { title: tvSeries.name!, year: new Date(String(tvSeries.firstAirDate)).getFullYear() }),
+    description: truncate(
+      t('pages.tv_series.reviews.metadata.description', {
+        title: tvSeries.name!,
+      }),
+      { length: siteConfig.seo.description.limit }
+    ),
+    alternates: generateAlternates(lang, `/tv-series/${tvSeries.slug}/reviews`),
+    openGraph: {
+      siteName: siteConfig.name,
+      title: `${t('pages.tv_series.reviews.metadata.title', { title: tvSeries.name!, year: new Date(String(tvSeries.firstAirDate)).getFullYear() })} • ${siteConfig.name}`,
       description: truncate(
         t('pages.tv_series.reviews.metadata.description', {
-          title: serie.name!,
+          title: tvSeries.name!,
         }),
         { length: siteConfig.seo.description.limit }
       ),
-      alternates: generateAlternates(params.lang, `/tv-series/${serie.slug}/reviews`),
-      openGraph: {
-        siteName: siteConfig.name,
-        title: `${t('pages.tv_series.reviews.metadata.title', { title: serie.name!, year: new Date(String(serie.first_air_date)).getFullYear() })} • ${siteConfig.name}`,
-        description: truncate(
-          t('pages.tv_series.reviews.metadata.description', {
-            title: serie.name!,
-          }),
-          { length: siteConfig.seo.description.limit }
-        ),
-        url: `${siteConfig.url}/${params.lang}/tv-series/${serie.slug}/reviews`,
-        images: serie.poster_path ? [
-          { url: getTmdbImage({ path: serie.poster_path, size: 'w500' }) }
-        ] : undefined,
-        type: 'video.tv_show',
-        locale: params.lang,
-      },
-    };
-  } catch {
-    return { title: upperFirst(t('common.messages.tv_series_not_found')) };
-  }
+      url: `${siteConfig.url}/${lang}/tv-series/${tvSeries.slug}/reviews`,
+      images: tvSeries.posterPath ? [
+        { url: getTmdbImage({ path: tvSeries.posterPath, size: 'w500' }) }
+      ] : undefined,
+      type: 'video.tv_show',
+      locale: lang,
+    },
+  };
 }
 
 export default async function MovieReviewsPage(
   props: {
     params: Promise<{
-      lang: string;
+      lang: SupportedLocale;
       tv_series_id: string;
     }>;
   }
 ) {
-  const params = await props.params;
-  const { id: tvSeriesId } = getIdFromSlug(params.tv_series_id);
-  let tvSeries: Database['public']['Views']['media_tv_series_full']['Row'];
-  try {
-    tvSeries = await getTvSeries(params.lang, tvSeriesId);
-  } catch {
+  const { lang, tv_series_id } = await props.params;
+  const { id: tvSeriesId } = getIdFromSlug(tv_series_id);
+  const { data: tvSeries, error } = await getTvSeries(lang, tvSeriesId);
+  if (error || !tvSeries) {
     return notFound();
   }
   return <TvSeriesReviews tvSeries={tvSeries} />;

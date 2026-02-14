@@ -2,7 +2,6 @@
 
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { upperFirst } from 'lodash';
-import { Database } from '@recomendapp/types';
 import { Link } from "@/lib/i18n/navigation";
 import { buttonVariants } from '@/components/ui/button';
 import { CardMovie } from '@/components/Card/CardMovie';
@@ -12,9 +11,10 @@ import { useQuery } from '@tanstack/react-query';
 import { useMediaPersonFilmsOptions } from '@/api/client/options/mediaOptions';
 import { DEFAULT_PER_PAGE, DEFAULT_SORT_BY, DEFAULT_SORT_ORDER } from '../films/_components/constants';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Person } from '@packages/api-js';
 
 interface WidgetPersonFilmsProps extends React.HTMLAttributes<HTMLDivElement> {
-	person: Database['public']['Views']['media_person']['Row'];
+	person: Person;
 }
 
 export const WidgetPersonFilms = ({

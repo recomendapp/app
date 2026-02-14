@@ -18,13 +18,13 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/auth-context';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Link } from '@/lib/i18n/navigation';
-import { Database, MediaMovie } from '@recomendapp/types';
 import { CardReviewMovie } from '@/components/Card/CardReviewMovie';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { useMediaMovieReviewsOptions } from '@/api/client/options/mediaOptions';
 import { useUserActivityMovieOptions } from '@/api/client/options/userOptions';
+import { Movie } from '@packages/api-js';
 
 type SortBy =  "updated_at" | "created_at";
 const DEFAULT_PER_PAGE = 20;
@@ -47,7 +47,7 @@ const getValidatePerPage = (perPage?: number | null): number => {
 export const MovieReviews = ({
 	movie,
 } : {
-	movie: Database['public']['Views']['media_movie_full']['Row'];
+	movie: Movie;
 }) => {
 	const t = useTranslations();
 	const searchParams = useSearchParams();
@@ -149,19 +149,19 @@ export const MovieReviews = ({
 const MyReviewButton = ({
 	movie,
  } : {
-	movie: MediaMovie;
+	movie: Movie;
 }) => {
 	const t = useTranslations();
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const {
 	  data: activity,
 	  isLoading,  
 	} = useQuery(useUserActivityMovieOptions({
 		movieId: movie.id,
-		userId: session?.user.id,
+		userId: user?.id,
 	}));
 
-	if (!session) return;
+	if (!user) return;
 
 	if (isLoading || activity === undefined) return <Skeleton className="w-36 h-10 rounded-full"/>;
 

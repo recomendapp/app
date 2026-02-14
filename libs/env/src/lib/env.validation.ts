@@ -1,22 +1,31 @@
 import { z } from 'zod';
 
 /* --------------------------------- MODULES -------------------------------- */
-export const commonSchema = z.object({
+export const redisSchema = z.object({
+  REDIS_HOST: z.string().default('localhost'),
+  REDIS_PORT: z.coerce.number().default(6379),
+  REDIS_PASSWORD: z.string().optional(),
+});
+
+export const typesenseSchema = z.object({
+  TYPESENSE_HOST: z.string(),
+  TYPESENSE_PORT: z.coerce.number().default(8108),
+  TYPESENSE_PROTOCOL: z.enum(['http', 'https']).default('http'),
+  TYPESENSE_API_KEY: z.string(),
+});
+
+export const extensionSchema = redisSchema.extend(typesenseSchema.shape);
+
+export const commonSchema = extensionSchema.extend({
   NODE_ENV: z
     .enum(['development', 'production', 'test'])
     .default('development'),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
   WEB_APP_URL: z.url().default('http://localhost:3000'),
 });
-
-export const redisSchema = z.object({
-  REDIS_HOST: z.string().default('localhost'),
-  REDIS_PORT: z.coerce.number().default(6379),
-  REDIS_PASSWORD: z.string().optional(),
-});
 /* -------------------------------------------------------------------------- */
 
-export const apiSchema = commonSchema.extend(redisSchema.shape).extend({
+export const apiSchema = commonSchema.extend({
   PORT: z.coerce.number().default(9000),
   HOST: z.string().default('0.0.0.0'),
   API_URL: z.url().default('http://localhost:9000'),
@@ -28,18 +37,9 @@ export const apiSchema = commonSchema.extend(redisSchema.shape).extend({
   // OAuth
   AUTH_GITHUB_CLIENT_ID: z.string(),
   AUTH_GITHUB_CLIENT_SECRET: z.string(),
-
-  SUPABASE_URL: z.url(),
-  SUPABASE_ANON_KEY: z.string(),
-  SUPABASE_SERVICE_ROLE_KEY: z.string(),
-
-  TYPESENSE_HOST: z.string(),
-  TYPESENSE_PORT: z.coerce.number().default(8108),
-  TYPESENSE_PROTOCOL: z.enum(['http', 'https']).default('http'),
-  TYPESENSE_API_KEY: z.string(),
 });
 
-export const mailerSchema = commonSchema.extend(redisSchema.shape).extend({
+export const mailerSchema = commonSchema.extend({
   PORT: z.coerce.number().default(9001),
   HOST: z.string().default('0.0.0.0'),
 

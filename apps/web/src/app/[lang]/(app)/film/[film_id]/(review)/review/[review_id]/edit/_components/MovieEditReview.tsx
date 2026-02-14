@@ -5,26 +5,26 @@ import { useRouter } from "@/lib/i18n/navigation";
 import ReviewForm from '@/components/Review/ReviewForm';
 import { Spinner } from '@/components/ui/spinner';
 import { useCallback, useEffect } from 'react';
-import { Database } from '@recomendapp/types';
 import { useQuery } from '@tanstack/react-query';
 import { useUserActivityMovieOptions, useUserReviewMovieOptions } from '@/api/client/options/userOptions';
 import { useUserReviewMovieUpsertMutation } from '@/api/client/mutations/userMutations';
+import { Movie } from '@packages/api-js';
 
 export const MovieEditReview = ({
 	movie,
 	reviewId,
 }: {
-	movie: Database['public']['Views']['media_movie']['Row'];
+	movie: Movie;
 	reviewId: number;
 }) => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const router = useRouter();
 
 	const {
 		data: activity,
 	} = useQuery(useUserActivityMovieOptions({
 		movieId: movie.id,
-		userId: session?.user.id,
+		userId: user?.id,
 	}));
 	const {
 		data: review,
@@ -56,12 +56,12 @@ export const MovieEditReview = ({
 	useEffect(() => {
 		if (
 			review
-			&& session
-			&& review?.activity?.user_id !== session?.user.id
+			&& user
+			&& review?.activity?.user_id !== user.id
 		) {
 			router.replace(`/film/${movie.slug || movie.id}/review/${review.id}`);
 		}
-	}, [review, session, router, movie]);
+	}, [review, user, router, movie]);
 
 	if (isLoading || !review) {
 		return (

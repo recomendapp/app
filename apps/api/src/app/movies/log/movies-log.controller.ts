@@ -14,20 +14,20 @@ import { User } from '../../auth/auth.service';
 export class MoviesLogController {
   constructor(private readonly logService: MoviesLogService) {}
 
-  @Get(':movieId/log')
+  @Get(':movie_id/log')
   @UseGuards(AuthGuard)
   @ApiOkResponse({
     description: 'Get the movie log for the authenticated user',
     type: LogMovieDto || null,
   })
   async getMovieLog(
-    @Param('movieId') movieId: string,
+    @Param('movie_id') movieId: string,
     @CurrentUser() user: User,
   ): Promise<LogMovieDto | null> {
     return this.logService.getLog(user, Number(movieId));
   }
 
-  @Post(':movieId/log')
+  @Post(':movie_id/log')
   @UseGuards(AuthGuard)
   @ApiResponse({
     status: 200,
@@ -36,7 +36,7 @@ export class MoviesLogController {
   })
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   async postMovieLog(
-    @Param('movieId') movieId: string,
+    @Param('movie_id') movieId: string,
     @Body() dto: LogMovieRequestDto,
 	  @CurrentUser() user: User,
   ): Promise<LogMovieDto> {

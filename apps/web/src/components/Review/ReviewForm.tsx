@@ -14,7 +14,7 @@ import {
 } from 'react';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
-import { MediaMovie, MediaTvSeries, UserReview } from '@recomendapp/types';
+import { UserReview } from '@recomendapp/types';
 import { cn } from '@/lib/utils';
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useFormatter, useNow, useTranslations } from 'next-intl';
@@ -41,6 +41,7 @@ import { CardTvSeries } from '../Card/CardTvSeries';
 import ButtonUserActivityMovieRating from '../buttons/ButtonUserActivityMovieRating';
 import ButtonUserActivityTvSeriesRating from '../buttons/ButtonUserActivityTvSeriesRating';
 import { Spinner } from '../ui/spinner';
+import { Movie, TvSeries } from '@packages/api-js';
 
 const MAX_TITLE_LENGTH = 50;
 const MAX_BODY_LENGTH = 5000;
@@ -64,13 +65,13 @@ interface ReviewFormBase extends React.HTMLAttributes<HTMLDivElement> {
 
 type ReviewMovie = {
 	type: 'movie';
-	movie: MediaMovie;
+	movie: Movie;
 	tvSeries?: never;
 }
 
 type ReviewTvSeries = {
 	type: 'tv_series';
-	tvSeries: MediaTvSeries;
+	tvSeries: TvSeries;
 	movie?: never;
 }
 

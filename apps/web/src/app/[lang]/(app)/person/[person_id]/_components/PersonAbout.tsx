@@ -1,12 +1,12 @@
 'use client'
-import { MediaPerson } from "@recomendapp/types";
 import { useModal } from "@/context/modal-context";
 import { PersonAboutModal } from "@/components/Modals/persons/PersonAboutModal";
+import { Person } from "@packages/api-js";
 
 export function PersonAbout({
   person,
 }: {
-  person?: MediaPerson;
+  person?: Person;
 }) {
   const { openModal } = useModal();
   return (

@@ -56,11 +56,15 @@ export const playlist = pgTable(
 		),
 	]
 );
-export const playlistRelations = relations(playlist, ({ one }) => ({
+export const playlistRelations = relations(playlist, ({ one, many }) => ({
 	user: one(user, {
 		fields: [playlist.userId],
 		references: [user.id],
 	}),
+	members: many(playlistMember),
+	items: many(playlistItem),
+	likes: many(playlistLike),
+	saved: many(playlistSaved),
 }));
 
 // Item
@@ -180,6 +184,16 @@ export const playlistLike = pgTable(
 	unique('unique_playlist_like_playlist_user').on(table.playlistId, table.userId),
   ],
 );
+export const playlistLikeRelations = relations(playlistLike, ({ one }) => ({
+	user: one(user, {
+		fields: [playlistLike.userId],
+		references: [user.id],
+	}),
+	playlist: one(playlist, {
+		fields: [playlistLike.playlistId],
+		references: [playlist.id],
+	}),
+}));
 
 // Saved
 export const playlistSaved = pgTable(
@@ -202,3 +216,13 @@ export const playlistSaved = pgTable(
 	unique('unique_playlist_saved_playlist_user').on(table.playlistId, table.userId),
   ],
 );
+export const playlistSavedRelations = relations(playlistSaved, ({ one }) => ({
+	user: one(user, {
+		fields: [playlistSaved.userId],
+		references: [user.id],
+	}),
+	playlist: one(playlist, {
+		fields: [playlistSaved.playlistId],
+		references: [playlist.id],
+	}),
+}));

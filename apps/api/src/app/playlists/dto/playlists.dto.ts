@@ -2,7 +2,7 @@ import { ApiProperty, ApiSchema, PartialType, PickType } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import { IsIn, IsString, IsUrl, Length, Matches, ValidateNested } from "class-validator";
 import { PLAYLIST_RULES } from "../../../config/validation-rules";
-import { playlistVisibilityEnum } from "@libs/db/schemas";
+import { playlistMemberRoleEnum, playlistVisibilityEnum } from "@libs/db/schemas";
 import { PaginatedResponseDto } from "../../../common/dto/pagination.dto";
 import { UserSummaryDto } from "../../users/dto/users.dto";
 import { IsNullable } from "../../../../src/common/decorators/is-nullable.decorator";
@@ -105,6 +105,17 @@ export class PlaylistGetDTO extends PlaylistDTO {
     @ValidateNested()
     @Type(() => UserSummaryDto)
     owner: UserSummaryDto;
+
+    @ApiProperty({ 
+        description: 'The role of the current user for this playlist (owner, editor, viewer, or null)', 
+        enum: [...playlistMemberRoleEnum.enumValues, 'owner'], 
+        example: 'owner',
+        nullable: true 
+    })
+    @Expose()
+    @IsString()
+    @IsNullable()
+    role: typeof playlistMemberRoleEnum.enumValues[number] | 'owner' | null;
 }
 
 @ApiSchema({ name: 'PlaylistCreate' })

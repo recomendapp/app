@@ -2,7 +2,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils";
 import { Card } from "../ui/card";
-import { MediaPerson, MediaTvSeries, UserActivityTvSeries } from "@recomendapp/types";
+import { UserActivityTvSeries } from "@recomendapp/types";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Link, useRouter } from "@/lib/i18n/navigation";
 import { TooltipBox } from "../Box/TooltipBox";
@@ -17,11 +17,12 @@ import ButtonUserActivityTvSeriesWatch from "../buttons/ButtonUserActivityTvSeri
 import ButtonUserWatchlistTvSeries from "../buttons/ButtonUserWatchlistTvSeries";
 import { ContextMenuTvSeries } from "../ContextMenu/ContextMenuTvSeries";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import { PersonCompact, TvSeries } from "@packages/api-js";
 
 interface CardTvSeriesProps
 	extends React.ComponentProps<typeof Card> {
 		variant?: "default" | "poster" | "row";
-		tvSeries: MediaTvSeries;
+		tvSeries: TvSeries;
 		activity?: UserActivityTvSeries;
 		profileActivity?: UserActivityTvSeries;
 		linked?: boolean;
@@ -49,7 +50,7 @@ const CardTvSeriesDefault = React.forwardRef<
 			className={cn('relative h-full shrink-0 rounded-md overflow-hidden aspect-2/3', posterClassName)}
 			>
 				<ImageWithFallback
-				src={getTmdbImage({ path: tvSeries.poster_path, size: 'w342' })}
+				src={getTmdbImage({ path: tvSeries.posterPath, size: 'w342' })}
 				alt={tvSeries.name ?? ''}
 				fill
 				className="object-cover"
@@ -74,7 +75,7 @@ const CardTvSeriesPoster = React.forwardRef<
 	const { device } = useUI();
 	const [isHovered, setIsHovered] = React.useState(false);
 	return (
-		<TooltipBox tooltip={`${tvSeries.name}${tvSeries.first_air_date ? ` (${(new Date(tvSeries.first_air_date)).getFullYear()})` : ''}`} side='top'>
+		<TooltipBox tooltip={`${tvSeries.name}${tvSeries.firstAirDate ? ` (${(new Date(tvSeries.firstAirDate)).getFullYear()})` : ''}`} side='top'>
 			<Card
 				ref={ref}
 				className={cn(
@@ -88,23 +89,23 @@ const CardTvSeriesPoster = React.forwardRef<
 				{...props}
 			>
 				<ImageWithFallback
-				src={getTmdbImage({ path: tvSeries.poster_path, size: 'w342' })}
+				src={getTmdbImage({ path: tvSeries.posterPath, size: 'w342' })}
 				alt={tvSeries.name ?? ''}
 				fill
 				className="object-cover"
 				type='tv_series'
 				unoptimized
 				/>
-				{(tvSeries.vote_average
+				{(tvSeries.voteAverage
 				|| profileActivity?.rating
 				|| profileActivity?.is_liked
 				|| profileActivity?.review
 				) ? (
 					<div className='absolute top-1 right-1 flex flex-col gap-1'>
-						{tvSeries.vote_average ?
+						{tvSeries.voteAverage ?
 						<IconMediaRating
 						disableTooltip
-						rating={tvSeries.vote_average}
+						rating={tvSeries.voteAverage}
 						/> : null}
 						{(profileActivity?.is_liked
 						|| profileActivity?.rating
@@ -149,7 +150,7 @@ const CardTvSeriesRow = React.forwardRef<
 		>
 			<div className={cn("relative w-24 aspect-2/3 rounded-md overflow-hidden", posterClassName)}>
 				<ImageWithFallback
-				src={getTmdbImage({ path: tvSeries.poster_path, size: 'w342' })}
+				src={getTmdbImage({ path: tvSeries.posterPath, size: 'w342' })}
 				alt={tvSeries.name ?? ''}
 				fill
 				className="object-cover"
@@ -204,11 +205,11 @@ const CardTvSeriesRow = React.forwardRef<
 							</Link>
 						)}
 					</div>
-					{tvSeries.created_by && <Credits credits={tvSeries.created_by} linked={linked} className="line-clamp-2"/>}
+					{tvSeries.createdBy && <Credits credits={tvSeries.createdBy} linked={linked} className="line-clamp-2"/>}
 					{!hideMediaType && <BadgeMedia type='tv_series' />}
 				</div>
-				{tvSeries.first_air_date ? (
-					<DateOnlyYearTooltip date={tvSeries.first_air_date} className="text-xs text-muted-foreground"/>
+				{tvSeries.firstAirDate ? (
+					<DateOnlyYearTooltip date={tvSeries.firstAirDate} className="text-xs text-muted-foreground"/>
 				) : null}
 			</div>
 		</Card>
@@ -255,7 +256,7 @@ const Credits = ({
 	linked,
 	className,
 } : {
-	credits: MediaPerson[];
+	credits: PersonCompact[];
 	linked?: boolean;
 	className?: string;
 }) => {

@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { Link } from "@/lib/i18n/navigation";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
-import { Database } from "@recomendapp/types";
+import { TvSeries } from "@packages/api-js";
 import { useQuery } from "@tanstack/react-query";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
@@ -15,7 +15,7 @@ import { useTranslations } from "next-intl";
 export const TvSeriesCasting = ({
 	tvSeries,
 }: {
-	tvSeries: Database['public']['Views']['media_tv_series_full']['Row'];
+	tvSeries: TvSeries;
 }) => {
 	const t = useTranslations();
 

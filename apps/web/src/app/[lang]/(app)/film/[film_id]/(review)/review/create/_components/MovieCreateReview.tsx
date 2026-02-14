@@ -5,17 +5,17 @@ import { useRouter } from "@/lib/i18n/navigation";
 import ReviewForm from '@/components/Review/ReviewForm';
 import { Spinner } from '@/components/ui/spinner';
 import { useCallback, useEffect } from 'react';
-import { Database } from '@recomendapp/types';
 import { useUserActivityMovieOptions } from '@/api/client/options/userOptions';
 import { useQuery } from '@tanstack/react-query';
 import { useUserReviewMovieUpsertMutation } from '@/api/client/mutations/userMutations';
+import { Movie } from '@packages/api-js';
 
 export const MovieCreateReview = ({
 	movie,
 }: {
-	movie: Database['public']['Views']['media_movie']['Row'];
+	movie: Movie;
 }) => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const router = useRouter();
 
 	const {
@@ -23,7 +23,7 @@ export const MovieCreateReview = ({
 		isLoading,
 	} = useQuery(useUserActivityMovieOptions({
 		movieId: movie.id,
-		userId: session?.user.id,
+		userId: user?.id,
 	}));
 	const { mutateAsync: upsertReview } = useUserReviewMovieUpsertMutation({
 		movieId: movie.id,

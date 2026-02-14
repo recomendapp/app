@@ -17,97 +17,94 @@ import { TvSeriesCasting } from './_components/TvSeriesCasting';
 export async function generateMetadata(
   props: {
     params: Promise<{
-      lang: string;
+      lang: SupportedLocale;
       tv_series_id: string;
     }>;
   }
 ): Promise<Metadata> {
-  const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale });
-  const { id: tvSeriesId } = getIdFromSlug(params.tv_series_id);
-  try {
-    const tvSeries = await getTvSeries(params.lang, tvSeriesId);
-    return {
-      title: t('pages.tv_series.metadata.title', { title: tvSeries.name!, year: new Date(String(tvSeries.first_air_date)).getFullYear() }),
+  const { lang, tv_series_id } = await props.params;
+  const t = await getTranslations({ locale: lang });
+  const { id: tvSeriesId } = getIdFromSlug(tv_series_id);
+  const { data: tvSeries, error } = await getTvSeries(lang, tvSeriesId);
+  if (error || !tvSeries) {
+    return { title: upperFirst(t('common.messages.tv_series_not_found')) };
+  }
+  return {
+    title: t('pages.tv_series.metadata.title', { title: tvSeries.name!, year: new Date(String(tvSeries.firstAirDate)).getFullYear() }),
+    description: truncate(
+      tvSeries.createdBy
+        ? t('pages.tv_series.metadata.description', {
+          title: tvSeries.name!,
+          creators: new Intl.ListFormat(lang, { style: 'long', type: 'conjunction' }).format(tvSeries.createdBy.map((creator) => creator.name ?? '')),
+          year: new Date(String(tvSeries.firstAirDate)).getFullYear(),
+          overview: tvSeries.overview!,
+        }) : t('pages.tv_series.metadata.description_no_creator', {
+          title: tvSeries.name!,
+          year: new Date(String(tvSeries.firstAirDate)).getFullYear(),
+          overview: tvSeries.overview!,
+        }),
+      { length: siteConfig.seo.description.limit }
+    ),
+    alternates: generateAlternates(lang, `/tv-series/${tvSeries.slug}`),
+    openGraph: {
+      siteName: siteConfig.name,
+      title: `${t('pages.tv_series.metadata.title', { title: tvSeries.name!, year: new Date(String(tvSeries.firstAirDate)).getFullYear() })} • ${siteConfig.name}`,
       description: truncate(
-        tvSeries.created_by
+        tvSeries.createdBy
           ? t('pages.tv_series.metadata.description', {
             title: tvSeries.name!,
-            creators: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(tvSeries.created_by.map((creator) => creator.name ?? '')),
-            year: new Date(String(tvSeries.first_air_date)).getFullYear(),
+            creators: new Intl.ListFormat(lang, { style: 'long', type: 'conjunction' }).format(tvSeries.createdBy.map((creator) => creator.name ?? '')),
+            year: new Date(String(tvSeries.firstAirDate)).getFullYear(),
             overview: tvSeries.overview!,
           }) : t('pages.tv_series.metadata.description_no_creator', {
             title: tvSeries.name!,
-            year: new Date(String(tvSeries.first_air_date)).getFullYear(),
+            year: new Date(String(tvSeries.firstAirDate)).getFullYear(),
             overview: tvSeries.overview!,
           }),
         { length: siteConfig.seo.description.limit }
       ),
-      alternates: generateAlternates(params.lang, `/tv-series/${tvSeries.slug}`),
-      openGraph: {
-        siteName: siteConfig.name,
-        title: `${t('pages.tv_series.metadata.title', { title: tvSeries.name!, year: new Date(String(tvSeries.first_air_date)).getFullYear() })} • ${siteConfig.name}`,
-        description: truncate(
-          tvSeries.created_by
-            ? t('pages.tv_series.metadata.description', {
-              title: tvSeries.name!,
-              creators: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(tvSeries.created_by.map((creator) => creator.name ?? '')),
-              year: new Date(String(tvSeries.first_air_date)).getFullYear(),
-              overview: tvSeries.overview!,
-            }) : t('pages.tv_series.metadata.description_no_creator', {
-              title: tvSeries.name!,
-              year: new Date(String(tvSeries.first_air_date)).getFullYear(),
-              overview: tvSeries.overview!,
-            }),
-          { length: siteConfig.seo.description.limit }
-        ),
-        url: `${siteConfig.url}/${params.lang}/tv-series/${tvSeries.slug}`,
-        images: tvSeries.poster_path ? [
-          { url: getTmdbImage({ path: tvSeries.poster_path, size: 'w500' }) }
-        ] : undefined,
-        type: 'video.tv_show',
-        locale: params.lang,
-      },
-    };
-  } catch {
-    return { title: upperFirst(t('common.messages.tv_series_not_found')) };
-  }
+      url: `${siteConfig.url}/${lang}/tv-series/${tvSeries.slug}`,
+      images: tvSeries.posterPath ? [
+        { url: getTmdbImage({ path: tvSeries.posterPath, size: 'w500' }) }
+      ] : undefined,
+      type: 'video.tv_show',
+      locale: lang,
+    },
+  };
 }
 
 export default async function TvSeriesPage(
   props: {
     params: Promise<{
-      lang: string;
+      lang: SupportedLocale;
       tv_series_id: string;
     }>;
   }
 ) {
-  const params = await props.params;
-  const { id: tvSeriesId } = getIdFromSlug(params.tv_series_id);
-  let tvSeries: Database['public']['Views']['media_tv_series']['Row'];
-  try {
-    tvSeries = await getTvSeries(params.lang, tvSeriesId);
-  } catch {
+  const { lang, tv_series_id } = await props.params;
+  const { id: tvSeriesId } = getIdFromSlug(tv_series_id);
+  const { data: tvSeries, error } = await getTvSeries(lang, tvSeriesId);
+  if (error || !tvSeries) {
     return notFound();
   }
   const jsonLd: WithContext<TVSeries> = {
     '@context': 'https://schema.org',
     '@type': 'TVSeries',
     name: tvSeries.name?? undefined,
-    image: tvSeries.poster_path ? getTmdbImage({ path: tvSeries.poster_path, size: 'w500' }) : undefined,
+    image: tvSeries.posterPath ? getTmdbImage({ path: tvSeries.posterPath, size: 'w500' }) : undefined,
     description: tvSeries.overview ?? undefined,
-    datePublished: tvSeries.first_air_date ?? undefined,
+    datePublished: tvSeries.firstAirDate ?? undefined,
     dateModified: new Date().toISOString(),
-    director: tvSeries.created_by
+    director: tvSeries.createdBy
       ?.map(director => ({
         '@type': 'Person',
         name: director.name ?? undefined,
-        image: director.profile_path ? getTmdbImage({ path: director.profile_path, size: 'w500' }) : undefined,
+        image: director.profilePath ? getTmdbImage({ path: director.profilePath, size: 'w500' }) : undefined,
       })),
-    aggregateRating: tvSeries.vote_average ? {
+    aggregateRating: tvSeries.voteAverage ? {
       '@type': 'AggregateRating',
-      ratingValue: tvSeries.vote_average ?? undefined,
-      ratingCount: tvSeries.vote_count ?? 0,
+      ratingValue: tvSeries.voteAverage ?? undefined,
+      ratingCount: tvSeries.voteCount ?? 0,
       bestRating: 10,
       worstRating: 1,
     } : undefined,
@@ -134,7 +131,7 @@ export default async function TvSeriesPage(
         <div>
           <h2 className="text-lg font-medium">
             {upperFirst(t('common.messages.tv_season', { count: 2 }))}
-            <span className="text-muted-foreground">{` ${tvSeries.number_of_seasons}`}</span>
+            <span className="text-muted-foreground">{` ${tvSeries.numberOfSeasons}`}</span>
           </h2>
           <TvSeriesSeasons tvSeries={tvSeries} />
         </div>

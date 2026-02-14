@@ -26,7 +26,6 @@ import { HeaderBox } from '@/components/Box/HeaderBox';
 import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { Database } from '@recomendapp/types';
 import { useLocale, useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
@@ -41,38 +40,39 @@ import ButtonUserRecosMovieSend from '@/components/buttons/ButtonUserRecosMovieS
 import ButtonPlaylistMovieAdd from '@/components/buttons/ButtonPlaylistMovieAdd';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import ButtonFollowersAvgRatingMovie from '@/components/buttons/ButtonFollowersAvgRatingMovie';
+import { Genre, Movie, MovieTrailer } from '@packages/api-js';
 
 export const MovieHeader = ({
   movie,
 }: {
-  movie: Database['public']['Views']['media_movie_full']['Row'];
+  movie: Movie;
 }) => {
   const t = useTranslations();
   return (
     <div>
       <ContextMenuMovie movie={movie}>
-        <HeaderBox background={movie.backdrop_path ? { src: `${TMDB_IMAGE_BASE_URL}/w1280${movie.backdrop_path}`, alt: movie.title ?? '', unoptimized: true } : undefined}>
+        <HeaderBox background={movie.backdropPath ? { src: `${TMDB_IMAGE_BASE_URL}/w1280${movie.backdropPath}`, alt: movie.title ?? '', unoptimized: true } : undefined}>
           <div className="max-w-7xl flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
             {/* MOVIE POSTER */}
             <MediaPoster
               className="w-[200px]"
-              src={getTmdbImage({ path: movie?.poster_path, size: 'w1280' })}
+              src={getTmdbImage({ path: movie.posterPath, size: 'w1280' })}
               alt={movie.title ?? ''}
               fill
               unoptimized
             >
               <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
-                {movie.vote_average ? <IconMediaRating
-                  rating={movie.vote_average}
+                {movie.voteAverage ? <IconMediaRating
+                  rating={movie.voteAverage}
                   variant="general"
                   className="w-full"
                 /> : null}
                 <ButtonFollowersAvgRatingMovie movieId={movie.id} />
               </div>
-              {(movie?.trailers && movie.trailers.length > 0) ? (
+              {(movie.trailers && movie.trailers.length > 0) ? (
                 <MovieTrailerButton
-                  videos={movie.trailers}
-                  className="absolute bottom-2 right-2"
+                videos={movie.trailers}
+                className="absolute bottom-2 right-2"
                 />
               ) : null}
             </MediaPoster>
@@ -87,10 +87,12 @@ export const MovieHeader = ({
               <h1 className="text-clamp space-x-1">
                 <span className='font-bold select-text'>{movie.title}</span>
                 {/* DATE */}
-                <sup>
-                  <DateOnlyYearTooltip date={movie.release_date ?? ''} className=' text-base font-medium'/>
-                </sup>
-                {movie.original_title !== movie.title ? <div className='text-base font-semibold text-muted-foreground'>{movie.original_title}</div> : null}
+                {movie.releaseDate && (
+                  <sup>
+                    <DateOnlyYearTooltip date={movie.releaseDate} className=' text-base font-medium'/>
+                  </sup>
+                )}
+                {movie.originalTitle !== movie.title ? <div className='text-base font-semibold text-muted-foreground'>{movie.originalTitle}</div> : null}
               </h1>
               <div className=" space-y-2">
                 <div>
@@ -139,7 +141,7 @@ export const MovieTrailerButton = ({
   videos,
   className,
 } : {
-  videos: Database['public']['Tables']['tmdb_movie_videos']['Row'][];
+  videos: MovieTrailer[];
   className?: string;
 }) => {
   const [selectedTrailer, setSelectedTailer] = useState<string>(
@@ -195,10 +197,7 @@ const Genres = ({
   genres,
   className,
 } : {
-  genres: {
-    id: number;
-    name: string;
-  }[];
+  genres: Genre[];
   className?: string;
 }) => {
   const locale = useLocale();

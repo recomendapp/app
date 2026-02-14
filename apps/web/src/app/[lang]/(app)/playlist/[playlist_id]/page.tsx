@@ -10,39 +10,47 @@ import { getPlaylist } from '@/api/server/playlists';
 
 export async function generateMetadata(
     props: {
-        params: Promise<{lang: string, playlist_id: number }>;
-    }
+        params: Promise<{lang: SupportedLocale, playlist_id: number }>;
+}
 ): Promise<Metadata> {
-    const params = await props.params;
-    const t = await getTranslations({ locale: params.lang as SupportedLocale });
-    const playlist = await getPlaylist(params.playlist_id);
-    if (!playlist) return { title: upperFirst(t('common.messages.playlist_not_found')) }
+    const { lang, playlist_id} = await props.params;
+    const t = await getTranslations({ locale: lang });
+    if (isNaN(playlist_id)) {
+        return { title: upperFirst(t('common.messages.playlist_not_found')) };
+    }
+    const { data: playlist, error } = await getPlaylist(playlist_id);
+    if (error || !playlist) {
+        return { title: upperFirst(t('common.messages.playlist_not_found')) };
+    }
     return {
-		title: t('pages.playlist.metadata.title', { title: playlist.title, username: playlist.user?.username! }),
-		description: truncate(t('pages.playlist.metadata.description', { username: playlist.user?.username!, app: siteConfig.name }), { length: siteConfig.seo.description.limit }),
-        alternates: generateAlternates(params.lang, `/playlist/${playlist.id}`),
+		title: t('pages.playlist.metadata.title', { title: playlist.title, username: playlist.owner.username }),
+		description: truncate(t('pages.playlist.metadata.description', { username: playlist.owner.username, app: siteConfig.name }), { length: siteConfig.seo.description.limit }),
+        alternates: generateAlternates(lang, `/playlist/${playlist.id}`),
         openGraph: {
             siteName: siteConfig.name,
-            title: `${t('pages.playlist.metadata.title', { title: playlist.title, username: playlist.user?.username! })} • ${siteConfig.name}`,
-            description: truncate(t('pages.playlist.metadata.description', { username: playlist.user?.username!, app: siteConfig.name }), { length: siteConfig.seo.description.limit }),
-            url: `${siteConfig.url}/${params.lang}/playlist/${playlist.id}`,
-            images: playlist.poster_url ? [
-                { url: playlist.poster_url },
+            title: `${t('pages.playlist.metadata.title', { title: playlist.title, username: playlist.owner.username })} • ${siteConfig.name}`,
+            description: truncate(t('pages.playlist.metadata.description', { username: playlist.owner.username, app: siteConfig.name }), { length: siteConfig.seo.description.limit }),
+            url: `${siteConfig.url}/${lang}/playlist/${playlist.id}`,
+            images: playlist.poster ? [
+                { url: playlist.poster },
             ] : undefined,
             type: 'video.other',
-            locale: params.lang,
+            locale: lang,
         },
 	};
 }
 
 export default async function PlaylistPage(
     props: {
-        params: Promise<{lang: string, playlist_id: number }>;
+        params: Promise<{lang: SupportedLocale, playlist_id: number }>;
     }
 ) {
-    const params = await props.params;
-    const playlist = await getPlaylist(params.playlist_id);
-    if (!playlist) return notFound();
+    const { playlist_id } = await props.params;
+    if (isNaN(playlist_id)) {
+        return notFound();
+    }
+    const { data: playlist, error } = await getPlaylist(playlist_id);
+    if (error || !playlist) return notFound();
     return <Playlist playlist={playlist} />;
 };
 

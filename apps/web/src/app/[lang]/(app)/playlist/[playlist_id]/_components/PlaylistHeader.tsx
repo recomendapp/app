@@ -1,0 +1,109 @@
+import { HeaderBox } from "@/components/Box/HeaderBox";
+import { CardUser } from "@/components/Card/CardUser";
+import { ContextMenuPlaylist } from "@/components/ContextMenu/ContextMenuPlaylist";
+import { PlaylistModal } from "@/components/Modals/playlists/PlaylistModal";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
+import { useAuth } from "@/context/auth-context";
+import { useModal } from "@/context/modal-context";
+import { useRandomImage } from "@/hooks/use-random-image";
+import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import { ConvertHoursMinutes } from "@/lib/utils";
+import { PlaylistGet } from "@packages/api-js";
+import { upperFirst } from "lodash";
+import { useTranslations } from "next-intl";
+
+interface PlaylistHeaderProps
+  extends React.HTMLAttributes<HTMLDivElement> {
+    playlist: PlaylistGet;
+    numberItems: number;
+    totalRuntime?: number;
+    backdrops?: string[];
+    skeleton?: boolean;
+}
+
+export function PlaylistHeader({
+  playlist,
+  numberItems,
+  totalRuntime,
+  backdrops,
+  skeleton,
+} : PlaylistHeaderProps) {
+  const { user } = useAuth();
+  const t = useTranslations();
+  const { openModal, createModal } = useModal();
+  const backdrop = useRandomImage(
+    backdrops?.map(src => ({ src, alt: playlist.title })) || []
+  );
+  
+  const openPlaylistModal = () => {
+    if (playlist.userId !== user?.id) return;
+    openModal(PlaylistModal, {
+      playlist,
+    })
+  }
+
+  return (
+  <ContextMenuPlaylist playlist={playlist}>
+    <HeaderBox background={(!skeleton && backdrop?.src) ? { src: getTmdbImage({ path: backdrop.src, size: 'w1280' }), alt: 'Likes Header Background', unoptimized: true } : undefined} className="flex-col items-center">
+      <div className="flex flex-col w-full gap-4 items-center md:flex-row">
+        <div
+          className="w-[250px] shadow-md cursor-pointer shrink-0 aspect-square"
+          onClick={() => openPlaylistModal()}
+        >
+          <AspectRatio ratio={1 / 1}>
+            <ImageWithFallback
+            src={playlist.poster ?? ''}
+            alt={playlist.title ?? ''}
+            fill
+            className="rounded-md object-cover"
+            type="playlist"
+            />
+          </AspectRatio>
+        </div>
+        <div className="flex flex-col justify-between gap-2 w-full">
+          {/* TYPE & GENRES */}
+          <div>
+            <span className='text-accent-yellow'>{upperFirst(t('common.messages.playlist', {count: 1}))}</span>
+            <span className=" before:content-['_|_']">
+              {playlist.visibility !== 'public' ? upperFirst(t('common.messages.private', {gender: 'female', count: 1})) : upperFirst(t('common.messages.public'))}
+            </span>
+          </div>
+          <div>
+            <h1
+              onClick={() => openPlaylistModal()}
+              className="w-fit text-clamp font-bold line-clamp-2 cursor-pointer"
+            >
+              {playlist.title}
+            </h1>
+          </div>
+          <div className='space-y-2'>
+            {/* DESCRIPTION */}
+            <p
+              className='cursor-pointer text-muted-foreground font-light line-clamp-2'
+              onClick={() => createModal({
+                header: {
+                  title: upperFirst(t('common.messages.description')),
+                },
+                content: <p className='p-4 bg-muted rounded-md'>{playlist.description}</p>
+              })}
+            >
+              {playlist.description}
+            </p>
+            {/* ITEMS & TOTAL RUNTIME */}
+            <div className="flex gap-1 font-light">
+              {playlist.owner ? <CardUser user={playlist.owner} variant='inline' /> : null}
+              <span className=" before:content-['_•_']" >
+                {`${numberItems} ${t('common.messages.film', { count: numberItems })}`}
+              </span>
+              {totalRuntime && <span className=" before:content-['_•_']" >
+                {ConvertHoursMinutes(totalRuntime)}
+              </span>}
+            </div>
+          </div>
+        </div>
+      </div>
+    </HeaderBox>
+  </ContextMenuPlaylist>
+  )
+}

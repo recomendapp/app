@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { PlaylistsModule } from './playlists/playlists.module';
 import { DrizzleModule } from '../common/modules/drizzle.module';
 import { PersonsModule } from './persons/persons.module';
+import { TvSeriesModule } from './tv-series/tv-series.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { PersonsModule } from './persons/persons.module';
     UsersModule,
     PlaylistsModule,
     MoviesModule,
+    TvSeriesModule,
     PersonsModule,
   ],
   controllers: [],

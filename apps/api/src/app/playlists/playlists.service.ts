@@ -76,6 +76,12 @@ export class PlaylistsService {
             profile: { columns: { isPremium: true } }
           } 
         },
+        ...(currentUser ? {
+          members: {
+            where: eq(playlistMember.userId, currentUser.id),
+            columns: { role: true }, 
+          }
+        } : {})
       }
     });
 
@@ -83,10 +89,15 @@ export class PlaylistsService {
       throw new NotFoundException('Playlist not found');
     }
 
-    const { user, ...playlistData } = result;
+    const { user, members, ...playlistData } = result;
 
     return {
       ...playlistData,
+      role: currentUser?.id === playlistData.userId
+        ? 'owner'
+        : members && members.length > 0
+          ? members[0].role
+          : null,
       owner: {
         id: user.id,
         name: user.name,

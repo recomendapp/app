@@ -1,4 +1,4 @@
-import { ApiProperty, ApiSchema } from "@nestjs/swagger";
+import { ApiProperty, ApiSchema, PickType } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import { IsIn, IsString, ValidateNested } from "class-validator";
 import { playlistMemberRoleEnum } from "@libs/db/schemas";
@@ -45,15 +45,21 @@ class PlaylistMemberFullDto extends PlaylistMemberDto {
 	user: UserSummaryDto;
 }
 
+@ApiSchema({ name: 'PlaylistMemberInput' })
+export class PlaylistMemberInputDto extends PickType(PlaylistMemberDto, [
+    'userId',
+    'role'
+] as const) {}
+
 @ApiSchema({ name: 'PlaylistMemberUpdate' })
 export class PlaylistMemberUpdateDto {
 	@ApiProperty({
 		description: 'The list of members to update, add or remove from the playlist. To remove a member, simply exclude them from the list.',
-		type: [PlaylistMemberDto],
+		type: [PlaylistMemberInputDto],
 	})
 	@ValidateNested({ each: true })
-	@Type(() => PlaylistMemberDto)
-	members: PlaylistMemberDto[];
+	@Type(() => PlaylistMemberInputDto)
+	members: PlaylistMemberInputDto[];
 }
 
 @ApiSchema({ name: 'PlaylistMemberList' })

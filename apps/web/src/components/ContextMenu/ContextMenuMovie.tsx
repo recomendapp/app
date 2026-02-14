@@ -1,5 +1,4 @@
 "use client";
-import { MediaMovie } from "@recomendapp/types"
 import { Icons } from "@/config/icons";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuTrigger } from "../ui/context-menu";
 import { WithLink } from "../utils/WithLink";
@@ -13,6 +12,7 @@ import { createShareController } from "../ShareController/ShareController";
 import { ShareControllerMovie } from "../ShareController/ShareControllerMovie";
 import { ModalUserRecosMovieSend } from "../Modals/recos/ModalUserRecosMovieSend";
 import { ModalPlaylistMovieAdd } from "../Modals/playlists/ModalPlaylistMovieAdd";
+import { Movie } from "@packages/api-js";
 
 interface Item {
 	icon: React.ElementType;
@@ -29,11 +29,11 @@ export const ContextMenuMovie = ({
 	additionalItemsBottom = [],
 }: {
 	children: React.ReactNode,
-	movie: MediaMovie,
+	movie: Movie,
 	additionalItemsTop?: Item[],
 	additionalItemsBottom?: Item[],
 }) => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const { openModal } = useModal();
 	const t = useTranslations();
 	const items: Item[][] = useMemo(() => {
@@ -45,7 +45,7 @@ export const ContextMenuMovie = ({
 				href: movie.url ?? '',
 				label: upperFirst(t('common.messages.go_to_film'))
 			},
-			...(session ? [
+			...(user ? [
 				{
 					icon: Icons.addPlaylist,
 					onClick: () => openModal(ModalPlaylistMovieAdd, { movieId: movie.id, movieTitle: movie.title! }),
@@ -73,7 +73,7 @@ export const ContextMenuMovie = ({
 			},
 			...additionalItemsBottom
 		],
-	]}, [movie, session, t, openModal, additionalItemsTop, additionalItemsBottom]);
+	]}, [movie, user, t, openModal, additionalItemsTop, additionalItemsBottom]);
 	return (
 		<ContextMenu>
 			<ContextMenuTrigger>

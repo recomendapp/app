@@ -20,16 +20,16 @@ export async function generateMetadata(
       title: upperFirst(t('common.messages.user_not_found')),
   };
   return {
-    title: upperFirst(t('pages.user.metadata.title', { full_name: profile.full_name!, username: profile.username! })),
+    title: upperFirst(t('pages.user.metadata.title', { full_name: profile.name, username: profile.username })),
     description: truncate(upperFirst(t('pages.user.metadata.description', { username: profile.username!, app: siteConfig.name })), { length: siteConfig.seo.description.limit }),
     alternates: generateAlternates(params.lang, `/@${profile.username}`),
     openGraph: {
       siteName: siteConfig.name,
-      title: `${upperFirst(t('pages.user.metadata.title', { full_name: profile.full_name!, username: profile.username! }))} • ${siteConfig.name}`,
+      title: `${upperFirst(t('pages.user.metadata.title', { full_name: profile.name, username: profile.username }))} • ${siteConfig.name}`,
       description: truncate(upperFirst(t('pages.user.metadata.description', { username: profile.username!, app: siteConfig.name })), { length: siteConfig.seo.description.limit }),
       url: `${siteConfig.url}/${params.lang}/@${profile.username}`,
-      images: profile.avatar_url ? [
-        { url: profile.avatar_url },
+      images: profile.avatar ? [
+        { url: profile.avatar },
       ] : undefined,
       type: 'profile',
       locale: params.lang,

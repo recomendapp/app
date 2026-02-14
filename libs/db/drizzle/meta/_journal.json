@@ -43,6 +43,34 @@
       "when": 1770923431977,
       "tag": "0005_aberrant_liz_osborn",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1771019711504,
+      "tag": "0006_empty_xorn",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1771025272840,
+      "tag": "0007_gigantic_wiccan",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1771062764828,
+      "tag": "0008_fancy_otto_octavius",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1771066668980,
+      "tag": "0009_majestic_lady_ursula",
+      "breakpoints": true
     }
   ]
 }

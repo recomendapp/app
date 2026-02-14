@@ -1,3 +1,4 @@
+import { defaultSupportedLocale, supportedLocales } from '@libs/i18n';
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { SwaggerModule, DocumentBuilder, OpenAPIObject } from '@nestjs/swagger';
 import { apiReference } from '@scalar/nestjs-api-reference';
@@ -17,6 +18,17 @@ export const createDocument = (app: NestFastifyApplication): OpenAPIObject => {
       },
       'access-token', // This name is important for referencing this security scheme
     )
+    .addGlobalParameters({
+      in: 'header',
+      required: false,
+      name: 'x-language',
+      description: 'Preferred language for the response',
+      schema: {
+        type: 'string',
+        default: defaultSupportedLocale,
+        enum: [...supportedLocales],
+      },
+    })
     .build();
   const document = SwaggerModule.createDocument(app, config);
   return document;
@@ -39,6 +51,17 @@ export const createVersionedDocument = (
       },
       'access-token',
     )
+    .addGlobalParameters({
+      in: 'header',
+      required: false,
+      name: 'x-language',
+      description: 'Preferred language for the response',
+      schema: {
+        type: 'string',
+        default: defaultSupportedLocale,
+        enum: [...supportedLocales],
+      },
+    })
     .build();
 
   const document = SwaggerModule.createDocument(app, config, {

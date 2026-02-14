@@ -5,26 +5,26 @@ import { useRouter } from "@/lib/i18n/navigation";
 import ReviewForm from '@/components/Review/ReviewForm';
 import { Spinner } from '@/components/ui/spinner';
 import { useCallback, useEffect } from 'react';
-import { Database } from '@recomendapp/types';
 import { useUserActivityTvSeriesOptions, useUserReviewTvSeriesOptions } from '@/api/client/options/userOptions';
 import { useQuery } from '@tanstack/react-query';
 import { useUserReviewTvSeriesUpsertMutation } from '@/api/client/mutations/userMutations';
+import { TvSeries } from '@packages/api-js';
 
 export const TvSeriesEditReview = ({
 	tvSeries,
 	reviewId,
 }: {
-	tvSeries: Database['public']['Views']['media_tv_series']['Row'];
+	tvSeries: TvSeries;
 	reviewId: number;
 }) => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const router = useRouter();
 
 	const {
 		data: activity,
 	} = useQuery(useUserActivityTvSeriesOptions({
 		tvSeriesId: tvSeries.id,
-		userId: session?.user.id,
+		userId: user?.id,
 	}));
 	const {
 		data: review,
@@ -56,12 +56,12 @@ export const TvSeriesEditReview = ({
 	useEffect(() => {
 		if (
 			review
-			&& session
-			&& review?.activity?.user_id !== session?.user.id
+			&& user
+			&& review?.activity?.user_id !== user?.id
 		) {
 			router.replace(`/tv-series/${tvSeries.slug || tvSeries.id}/review/${review.id}`);
 		}
-	}, [review, session, router, tvSeries]);
+	}, [review, user, router, tvSeries]);
 
 	if (isLoading || !review) {
 		return (

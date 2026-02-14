@@ -141,7 +141,7 @@ export const tmdbPersonView = tmdbSchema.view('person_view', {
     person.biography, 
     person.popularity, 
     (person.id || '-'::text) || public.slugify(person.name) AS slug, 
-    ('/personne/'::text || (person.id || '-'::text)) || public.slugify(person.name) AS url 
+    ('/person/'::text || (person.id || '-'::text)) || public.slugify(person.name) AS url 
   FROM ( 
     SELECT 
       c.id, 

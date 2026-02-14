@@ -30,7 +30,7 @@ export const Filters = ({
 	department,
 	job,
 } : {
-	knownForDepartment: String;
+	knownForDepartment: string | null;
 	jobs: Database['public']['Views']['media_person_jobs']['Row'][];
 	sortBy: typeof SORT_BY[number];
 	sortOrder: 'asc' | 'desc';

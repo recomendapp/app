@@ -1,15 +1,17 @@
 'use server'
 
-import { createServerClient } from "@/lib/supabase/server";
+import { getApi } from "@/lib/api/server";
+import { usersControllerGetProfile } from "@packages/api-js/src";
 import { cache } from "react";
 
 export const getProfile = cache(async (username: string) => {
-	const supabase = await createServerClient();
-	const { data: user, error } = await supabase
-		.from('profile'	)
-		.select('*')
-		.eq('username', username)
-		.single();
+	const client = await getApi();
+	const { data: user, error } = await usersControllerGetProfile({
+		path: {
+			identifier: `@${username}`,
+		},
+		client,
+	})
 	if (error) throw error;
 	return user;
 });

@@ -11,41 +11,38 @@ import { Database } from '@recomendapp/types';
 export async function generateMetadata(
   props: {
     params: Promise<{
-      lang: string;
+      lang: SupportedLocale;
       film_id: string;
     }>;
   }
 ): Promise<Metadata> {
-  const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale });
-  const { id: movieId } = getIdFromSlug(params.film_id);
-  try {
-    const movie = await getMovie(params.lang, movieId);
-    return {
-      title: t('pages.review.create.metadata.title', { title: movie.title! }),
-      description: t('pages.review.create.metadata.description', { title: movie.title! }),
-    };
-  } catch {
-    return { title: upperFirst(t('common.messages.film_not_found')) };
+  const { lang, film_id } = await props.params;
+  const t = await getTranslations({ locale: lang });
+  const { id: movieId } = getIdFromSlug(film_id);
+  const { data: movie, error } = await getMovie(lang, movieId);
+  if (error || !movie) {
+    return { title: upperFirst(t('common.messages.film_not_found')) }
   }
+  return {
+    title: t('pages.review.create.metadata.title', { title: movie.title! }),
+    description: t('pages.review.create.metadata.description', { title: movie.title! }),
+  };
 }
 
 export default async function EditReview(
   props: {
     params: Promise<{
-      lang: string;
+      lang: SupportedLocale;
       film_id: string;
-	  review_id: string;
+	    review_id: string;
     }>;
   }
 ) {
-  const params = await props.params;
-  const { id: movieId } = getIdFromSlug(params.film_id);
-  let movie: Database['public']['Views']['media_movie']['Row'];
-  try {
-    movie = await getMovie(params.lang, movieId);
-  } catch {
+  const { lang, film_id, review_id } = await props.params;
+  const { id: movieId } = getIdFromSlug(film_id);
+  const { data: movie, error } = await getMovie(lang, movieId);
+  if (error || !movie) {
     return notFound();
   }
-  return <MovieEditReview movie={movie} reviewId={parseInt(params.review_id)} />;
+  return <MovieEditReview movie={movie} reviewId={parseInt(review_id)} />;
 }

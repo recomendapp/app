@@ -39,28 +39,29 @@ import ButtonUserRecosTvSeriesSend from '@/components/buttons/ButtonUserRecosTvS
 import ButtonPlaylistTvSeriesAdd from '@/components/buttons/ButtonPlaylistTvSeriesAdd';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import ButtonFollowersAvgRatingTvSeries from '@/components/buttons/ButtonFollowersAvgRatingTvSeries';
+import { TvSeries, TvSeriesTrailer } from '@packages/api-js';
 
 export const TvSeriesHeader = ({
   tvSeries,
 }: {
-  tvSeries: Database['public']['Views']['media_tv_series_full']['Row'];
+  tvSeries: TvSeries;
 }) => {
   const t = useTranslations();
   return (
     <div>
       <ContextMenuTvSeries tvSeries={tvSeries}>
-        <HeaderBox background={tvSeries.backdrop_path ? { src: getTmdbImage({ path: tvSeries.backdrop_path, size: 'w1280' }), alt: tvSeries.name ?? '', unoptimized: true } : undefined}>
+        <HeaderBox background={tvSeries.backdropPath ? { src: getTmdbImage({ path: tvSeries.backdropPath, size: 'w1280' }), alt: tvSeries.name ?? '', unoptimized: true } : undefined}>
           <div className="max-w-7xl flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
             <MediaPoster
               className="w-[200px]"
-              src={getTmdbImage({ path: tvSeries?.poster_path, size: 'w1280' })}
+              src={getTmdbImage({ path: tvSeries?.posterPath, size: 'w1280' })}
               alt={tvSeries.name ?? ''}
               fill
               unoptimized
             >
                 <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
-                  {tvSeries.vote_average ? <IconMediaRating
-                    rating={tvSeries.vote_average}
+                  {tvSeries.voteAverage ? <IconMediaRating
+                    rating={tvSeries.voteAverage}
                     variant="general"
                     className="w-full"
                   /> : null}
@@ -68,8 +69,8 @@ export const TvSeriesHeader = ({
                 </div>
               {(tvSeries?.trailers && tvSeries.trailers.length > 0) ? (
                 <SerieTrailerButton
-                  videos={tvSeries.trailers}
-                  className="absolute bottom-2 right-2"
+                videos={tvSeries.trailers}
+                className="absolute bottom-2 right-2"
                 />
               ) : null}
             </MediaPoster>
@@ -85,15 +86,15 @@ export const TvSeriesHeader = ({
                 <span className='font-bold select-text'>{tvSeries.name}</span>
                 {/* DATE */}
                 <sup>
-                  <DateOnlyYearTooltip date={tvSeries.first_air_date ?? ''} className=' text-base font-medium'/>
+                  <DateOnlyYearTooltip date={tvSeries.firstAirDate ?? ''} className=' text-base font-medium'/>
                 </sup>
-                {tvSeries.original_name !== tvSeries.name && (
-                  <div className='text-base font-semibold text-muted-foreground'>{tvSeries.original_name}</div>
+                {tvSeries.originalName !== tvSeries.name && (
+                  <div className='text-base font-semibold text-muted-foreground'>{tvSeries.originalName}</div>
                 )}
               </h1>
               <div className=" space-y-2">
                 <div>
-                  {tvSeries.created_by?.map((director, index: number) => (
+                  {tvSeries.createdBy?.map((creator, index: number) => (
                     <Fragment key={index}>
                       {index > 0 && <span>, </span>}
                       <span key={index}>
@@ -102,14 +103,16 @@ export const TvSeriesHeader = ({
                           className="w-fit p-0 h-full"
                           asChild
                         >
-                          <Link href={director.url ?? ''}>{director?.name}</Link>
+                          <Link href={creator.url ?? ''}>{creator?.name}</Link>
                         </Button>
                       </span>
                     </Fragment>
                   )) ?? <span className="text-muted-foreground italic">{upperFirst(t('common.messages.unknown'))}</span>}
-                  <span className="before:content-['_•_']">
-                    {t('common.messages.tv_season_count', { count: tvSeries.number_of_seasons! })}
-                  </span>
+                  {tvSeries.numberOfSeasons ? (
+                    <span className="before:content-['_•_']">
+                      {t('common.messages.tv_season_count', { count: tvSeries.numberOfSeasons })}
+                    </span>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -139,7 +142,7 @@ export const SerieTrailerButton = ({
   videos,
   className,
 } : {
-  videos: Database['public']['Tables']['tmdb_tv_series_videos']['Row'][];
+  videos: TvSeriesTrailer[];
   className?: string;
 }) => {
   const [selectedTrailer, setSelectedTailer] = useState<string>(

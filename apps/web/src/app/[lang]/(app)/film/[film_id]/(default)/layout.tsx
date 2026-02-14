@@ -1,15 +1,15 @@
 import { notFound } from 'next/navigation';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getMovie } from '@/api/server/medias';
-import { Database } from '@recomendapp/types';
 import { MovieHeader } from './_components/MovieHeader';
 import { MovieNavbar } from './_components/MovieNavbar';
+import { SupportedLocale } from '@libs/i18n';
 
 export default async function Layout(
   props: {
       children: React.ReactNode;
       params: Promise<{
-        lang: string;
+        lang: SupportedLocale;
         film_id: string;
       }>;
   }
@@ -21,10 +21,8 @@ export default async function Layout(
   } = props;
   const { id: movieId } = getIdFromSlug(params.film_id);
 
-  let movie: Database['public']['Views']['media_movie']['Row'];
-  try {
-    movie = await getMovie(params.lang, movieId);
-  } catch {
+  const { data: movie, error } = await getMovie(params.lang, movieId);
+  if (error || !movie) {
     return notFound();
   }
   return (

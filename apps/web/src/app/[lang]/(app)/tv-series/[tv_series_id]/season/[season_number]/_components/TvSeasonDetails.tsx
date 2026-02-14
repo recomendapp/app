@@ -5,7 +5,8 @@ import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
-import { Database } from '@recomendapp/types';
+import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
+import { TvSeasonGet } from '@packages/api-js';
 import { useQuery } from '@tanstack/react-query';
 import { upperFirst } from 'lodash';
 import { useFormatter, useTranslations } from 'next-intl';
@@ -13,7 +14,7 @@ import { useFormatter, useTranslations } from 'next-intl';
 export const TvSeasonDetails = ({
   season,
 }: {
-  season: Database['public']['Views']['media_tv_series_seasons']['Row'];
+  season: TvSeasonGet;
 }) => {
   const t = useTranslations();
   const format = useFormatter();
@@ -21,26 +22,26 @@ export const TvSeasonDetails = ({
     data,
     isLoading,
   } = useQuery(useMediaTvSeasonEpisodesOptions({
-    tvSeriesId: season.serie_id,
-    seasonNumber: season.season_number,
+    tvSeriesId: season.tvSeriesId,
+    seasonNumber: season.seasonNumber,
   }));
 
   return (
 	<div className="@container/tv_season-details flex flex-col gap-4 max-w-7xl w-full">
 		<div>
 			<h2 className="text-lg font-medium">
-        {upperFirst(t('common.messages.tv_episode', { count: season.episode_count! }))}
+        {upperFirst(t('common.messages.tv_episode', { count: season.episodeCount }))}
       </h2>
       <div className='mx-auto max-w-xl space-y-2'>
         {isLoading ? (
-          Array.from({ length: season.episode_count || 5 }).map((_, i) => (
+          Array.from({ length: season.episodeCount || 5 }).map((_, i) => (
             <Skeleton key={i} className="h-24 w-full rounded-md" style={{ animationDelay: `${i * 0.12}s` }} />
           ))
         ) : data?.map((episode, i) => (
           <Card key={i} className="@container/episode-card flex flex-row items-center gap-2 p-2 hover:bg-muted-hover hover:cursor-pointer">
             <div className="shrink-0 relative w-32 @sm/episode-card:w-40 @md/episode-card:w-48 aspect-video rounded-md overflow-hidden">
               <ImageWithFallback
-                src={episode.still_url ?? ''}
+                src={getTmdbImage({ path: episode.still_path, size: 'w342' })}
                 alt={upperFirst(t('common.messages.tv_episode_value', { number: episode.episode_number! }))}
                 fill
                 className="object-cover"
@@ -61,7 +62,7 @@ export const TvSeasonDetails = ({
             </div>
             <div className='space-y-2'>
               <h3 className="line-clamp-2 wrap-break-word font-bold">
-                <span className='text-accent-yellow font-normal'>{upperFirst(t('common.messages.tv_episode_short', { seasonNumber: season.season_number!, episodeNumber: episode.episode_number! }))}</span>
+                <span className='text-accent-yellow font-normal'>{upperFirst(t('common.messages.tv_episode_short', { seasonNumber: season.seasonNumber, episodeNumber: episode.episode_number! }))}</span>
                 {" • "}
                 {episode.name ?? upperFirst(t('common.messages.tv_episode_value', { number: episode.episode_number! }))}
               </h3>

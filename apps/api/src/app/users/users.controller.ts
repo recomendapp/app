@@ -1,7 +1,7 @@
 import { Controller, UseGuards, Get, Patch, UseInterceptors, Body, UploadedFile, Param, Query, ParseUUIDPipe, Post, Delete } from '@nestjs/common';
 import { ApiConsumes, ApiExtraModels, ApiOkResponse, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { UsersService } from './users.service';
-import { UserDto, UpdateUserDto, ListUsersDto, GetUsersQueryDto } from './dto/users.dto';
+import { UserDto, UpdateUserDto, ListUsersDto, GetUsersQueryDto, ProfileDto } from './dto/users.dto';
 import { AuthGuard, OptionalAuthGuard } from '../auth/guards';
 import { CurrentOptionalUser, CurrentUser } from '../auth/decorators';
 import { User } from '../auth/auth.service';
@@ -46,6 +46,19 @@ export class UsersController {
   ): Promise<UserDto> {
     const avatar = undefined; // TODO: handle avatar upload
     return this.usersService.updateMe(user, dto, avatar);
+  }
+
+  @Get(':identifier')
+  @UseGuards(OptionalAuthGuard)
+  @ApiOkResponse({
+    description: 'Get user profile by UUID or @username',
+    type: ProfileDto,
+  })
+  async getProfile(
+    @Param('identifier') identifier: string,
+    @CurrentOptionalUser() currentUser: User | null,
+  ): Promise<ProfileDto> {
+    return this.usersService.getProfile(decodeURIComponent(identifier), currentUser);
   }
 
   @Get(':user_id/playlists')

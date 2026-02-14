@@ -6,11 +6,11 @@ import { useModal } from "@/context/modal-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
 import { useFormatter, useTranslations } from "next-intl";
 import { TbGrave } from "react-icons/tb";
-import { MediaPerson } from "@recomendapp/types";
 import { upperFirst } from "lodash";
+import { Person } from "@packages/api-js";
 
 interface PersonAboutModalProps extends ModalType {
-	person?: MediaPerson;
+	person?: Person;
 }
 
 export const PersonAboutModal = ({
@@ -85,7 +85,7 @@ export const PersonAboutModal = ({
 							</span>
 							</div>
 						)}
-						{person?.place_of_birth && (
+						{person?.placeOfBirth && (
 							<div className="flex items-center gap-2">
 							<TooltipBox tooltip={upperFirst(t('common.messages.place_of_birth', { count: 1 }))}>
 								<div className="shrink-0">
@@ -94,11 +94,11 @@ export const PersonAboutModal = ({
 								</div>
 							</TooltipBox>
 							<span className="">
-								{person?.place_of_birth}
+								{person?.placeOfBirth}
 							</span>
 							</div>
 						)}
-						{!person?.gender && !person?.birthday && !person?.deathday && !person?.place_of_birth && upperFirst(t('common.messages.no_information_available'))}
+						{!person?.gender && !person?.birthday && !person?.deathday && !person?.placeOfBirth && upperFirst(t('common.messages.no_information_available'))}
 					</div>
 				</div>
 				{/* BIOGRAPHY */}
