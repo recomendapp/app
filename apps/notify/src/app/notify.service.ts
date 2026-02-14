@@ -3,9 +3,9 @@ import { Resend } from 'resend';
 import { env } from '../env';
 
 @Injectable()
-export class MailerService {
+export class NotifyService {
   private readonly resend: Resend;
-  private readonly logger = new Logger(MailerService.name);
+  private readonly logger = new Logger(NotifyService.name);
 
   constructor() {
     this.resend = new Resend(env.RESEND_API_KEY);

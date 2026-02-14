@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import { BullModule } from '@nestjs/bullmq';
-import { MailerSharedModule } from '@shared/mailer';
+import { NotifySharedModule } from '@shared/notify';
 import { env } from '../env';
-import { MailProcessor } from './mailer.processor';
-import { MailerService } from './mailer.service';
+import { NotifyProcessor } from './notify.processor';
+import { NotifyService } from './notify.service';
 import * as path from 'path';
 
 @Module({
@@ -22,17 +22,17 @@ import * as path from 'path';
     }),
     BullModule.forRoot({
       connection: {
-        host: env.REDIS_HOST,
+      host: env.REDIS_HOST,
         port: env.REDIS_PORT,
         password: env.REDIS_PASSWORD,
       },
     }),
-    MailerSharedModule
+    NotifySharedModule
   ],
   controllers: [],
   providers: [
-    MailerService,
-    MailProcessor,
+    NotifyService,
+    NotifyProcessor,
   ],
 })
-export class MailerModule {}
+export class NotifyModule {}

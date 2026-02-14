@@ -1,21 +1,21 @@
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
 import { Queue, JobsOptions } from 'bullmq';
-import { MAILER_QUEUE } from './shared-mailer.constants';
-import { MailerJobName, MailerRegistry } from './shared-mailer.definitions';
+import { NOTIFY_QUEUE } from './shared-notify.constants';
+import { NotifyJobName, NotifyRegistry } from './shared-notify.definitions';
 
 @Injectable()
-export class MailerClient {
-    constructor(@InjectQueue(MAILER_QUEUE) private readonly queue: Queue) {}
+export class NotifyClient {
+    constructor(@InjectQueue(NOTIFY_QUEUE) private readonly queue: Queue) {}
 
     /**
      * @param jobName
      * @param data
      * @param options
      */
-    async emit<K extends MailerJobName>(
+    async emit<K extends NotifyJobName>(
         jobName: K, 
-        data: MailerRegistry[K],
+        data: NotifyRegistry[K],
         options?: JobsOptions,
     ) {
         const defaultOptions: JobsOptions = {

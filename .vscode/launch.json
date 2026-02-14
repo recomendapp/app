@@ -22,9 +22,9 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug mailer with Nx",
+      "name": "Debug notify with Nx",
       "runtimeExecutable": "pnpm exec",
-      "runtimeArgs": ["nx", "serve", "mailer"],
+      "runtimeArgs": ["nx", "serve", "notify"],
       "env": {
         "NODE_OPTIONS": "--inspect=9233"
       },
@@ -33,7 +33,7 @@
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
       "outFiles": [
-        "${workspaceFolder}/apps/mailer/dist/**/*.(m|c|)js",
+        "${workspaceFolder}/apps/notify/dist/**/*.(m|c|)js",
         "!**/node_modules/**"
       ]
     }

@@ -21,7 +21,7 @@
       "@libs/db": ["libs/db/src/index.ts"],
       "@libs/db/schemas": ["libs/db/src/lib/schemas/index.ts"],
       "@packages/api-js": ["packages/api-js/src/index.ts"],
-      "@shared/mailer": ["libs/shared/mailer/src/index.ts"],
+      "@shared/notify": ["libs/shared/notify/src/index.ts"],
       "@libs/i18n": ["libs/i18n/src/index.ts"],
       "@api/query-client": ["libs/query-client/src/index.ts"]
     }

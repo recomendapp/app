@@ -39,7 +39,7 @@ export const apiSchema = commonSchema.extend({
   AUTH_GITHUB_CLIENT_SECRET: z.string(),
 });
 
-export const mailerSchema = commonSchema.extend({
+export const notifySchema = commonSchema.extend({
   PORT: z.coerce.number().default(9001),
   HOST: z.string().default('0.0.0.0'),
 

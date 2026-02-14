@@ -3,7 +3,7 @@ import { APIError, betterAuth } from 'better-auth';
 import { createAuthMiddleware, magicLink, openAPI, username } from 'better-auth/plugins';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { ENV_SERVICE, EnvService } from '@libs/env'; // Ton token
-import { MailerClient } from '@shared/mailer';
+import { NotifyClient } from '@shared/notify';
 import { profile } from '@libs/db/schemas';
 import { v7 as uuidv7 } from 'uuid';
 import { USER_RULES } from '../../config/validation-rules';
@@ -19,7 +19,7 @@ const createBetterAuth = ({
 }: {
 	env: EnvService;
 	db: DrizzleService;
-	mailer: MailerClient;
+	mailer: NotifyClient;
 }) => {
 	return betterAuth({
 		database: drizzleAdapter(db, {
@@ -143,8 +143,8 @@ export type User = AuthService['$Infer']['Session']['user'];
 
 export const AuthProvider: Provider = {
   provide: AUTH_SERVICE,
-  inject: [ENV_SERVICE, DRIZZLE_SERVICE, MailerClient],
-  useFactory: (env: EnvService, db: DrizzleService, mailer: MailerClient) => { 
+  inject: [ENV_SERVICE, DRIZZLE_SERVICE, NotifyClient],
+  useFactory: (env: EnvService, db: DrizzleService, mailer: NotifyClient) => { 
     return createBetterAuth({ env, db, mailer });
   },
 };

@@ -1,1 +1,0 @@
-export const MAILER_QUEUE = 'mailer_queue';
