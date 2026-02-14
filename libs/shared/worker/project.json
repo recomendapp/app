@@ -1,0 +1,20 @@
+{
+  "name": "shared-worker",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/shared-worker/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/shared-worker",
+        "tsConfig": "libs/shared/shared-worker/tsconfig.lib.json",
+        "packageJson": "libs/shared/shared-worker/package.json",
+        "main": "libs/shared/shared-worker/src/index.ts",
+        "assets": ["libs/shared/shared-worker/*.md"]
+      }
+    }
+  }
+}

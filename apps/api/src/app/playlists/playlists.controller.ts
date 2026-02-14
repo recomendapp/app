@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { PlaylistsService } from './playlists.service';
-import { PlaylistDTO, PlaylistCreateDto, PlaylistUpdateDto, PlaylistGetDTO } from './dto/playlists.dto';
+import { PlaylistDto, PlaylistCreateDto, PlaylistUpdateDto, PlaylistGetDTO } from './dto/playlists.dto';
 import { AuthGuard, OptionalAuthGuard } from '../auth/guards';
 import { User } from '../auth/auth.service';
 import { CurrentOptionalUser, CurrentUser } from '../auth/decorators';
@@ -37,7 +37,7 @@ export class PlaylistsController {
   @UseGuards(AuthGuard)
   @ApiCreatedResponse({ 
     description: 'The playlist has been successfully created.',
-    type: PlaylistDTO
+    type: PlaylistDto
   }) 
   create(
     @CurrentUser() user: User,
@@ -50,7 +50,7 @@ export class PlaylistsController {
   @UseGuards(AuthGuard)
   @ApiOkResponse({
     description: 'The playlist has been successfully updated.',
-    type: PlaylistDTO,
+    type: PlaylistDto,
   })
   update(
     @CurrentUser() user: User,
@@ -68,7 +68,7 @@ export class PlaylistsController {
   @UseGuards(AuthGuard)
   @ApiOkResponse({
     description: 'The playlist has been successfully deleted.',
-    type: PlaylistDTO,
+    type: PlaylistDto,
   })
   delete(
     @CurrentUser() user: User,

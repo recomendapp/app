@@ -14,7 +14,7 @@ export enum PlaylistSortBy {
 }
 
 @ApiSchema({ name: 'Playlist' })
-export class PlaylistDTO {
+export class PlaylistDto {
 	@ApiProperty({ example: "123456", description: 'The unique ID of the Playlist' })
 	@Expose()
 	id: number;
@@ -99,7 +99,7 @@ export class PlaylistDTO {
 }
 
 @ApiSchema({ name: 'PlaylistGet' })
-export class PlaylistGetDTO extends PlaylistDTO {
+export class PlaylistGetDTO extends PlaylistDto {
     @ApiProperty({ type: () => UserSummaryDto, description: 'The user object' })
     @Expose()
     @ValidateNested()
@@ -119,16 +119,16 @@ export class PlaylistGetDTO extends PlaylistDTO {
 }
 
 @ApiSchema({ name: 'PlaylistCreate' })
-export class PlaylistCreateDto extends PickType(PlaylistDTO, ['title', 'description', 'visibility'] as const) {}
+export class PlaylistCreateDto extends PickType(PlaylistDto, ['title', 'description', 'visibility'] as const) {}
 
 @ApiSchema({ name: 'PlaylistUpdate' })
 export class PlaylistUpdateDto extends PartialType(PlaylistCreateDto) {}
 
 @ApiSchema({ name: 'ListPlaylists' })
-export class ListPlaylistsDto extends PaginatedResponseDto<PlaylistDTO> {
-	@ApiProperty({ type: () => [PlaylistDTO] })
-	@Type(() => PlaylistDTO)
-	data: PlaylistDTO[];
+export class ListPlaylistsDto extends PaginatedResponseDto<PlaylistDto> {
+	@ApiProperty({ type: () => [PlaylistDto] })
+	@Type(() => PlaylistDto)
+	data: PlaylistDto[];
 
 	constructor(partial: Partial<ListPlaylistsDto>) {
 		super(partial);

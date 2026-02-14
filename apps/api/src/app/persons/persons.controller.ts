@@ -1,5 +1,5 @@
 import { Controller, UseGuards, Get, Param, Post, Delete, ParseIntPipe } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiExtraModels, ApiOkResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { PersonsService } from './persons.service';
 import { AuthGuard, OptionalAuthGuard } from '../auth/guards';
 import { CurrentOptionalUser, CurrentUser } from '../auth/decorators';
@@ -39,9 +39,15 @@ export class PersonsController {
 
   @Get(':person_id/follow')
   @UseGuards(AuthGuard)
+  @ApiExtraModels(PersonFollowDto)
   @ApiOkResponse({
-    description: 'Get follow relationship with the target user',
-    type: PersonFollowDto,
+    description: 'Get follow relationship with the target person',
+    schema: {
+      nullable: true,
+      allOf: [
+        { $ref: getSchemaPath(PersonFollowDto) }
+      ]
+    }
   })
   async getFollowStatus(
     @Param('person_id', ParseIntPipe) personId: number,
@@ -53,7 +59,7 @@ export class PersonsController {
   @Post(':person_id/follow')
   @UseGuards(AuthGuard)
   @ApiOkResponse({
-    description: 'Follow a user',
+    description: 'Follow a person',
     type: PersonFollowDto,
   })
   async follow(
@@ -66,7 +72,7 @@ export class PersonsController {
   @Delete(':person_id/follow')
   @UseGuards(AuthGuard)
   @ApiOkResponse({
-    description: 'Unfollow a user',
+    description: 'Unfollow a person',
     type: PersonFollowDto,
   })
   async unfollow(

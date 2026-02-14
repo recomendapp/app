@@ -8,7 +8,6 @@ export const usePlaylistInsertMutation = () => {
 	return useMutation({
 		...playlistsControllerCreateMutation(),
 		onSuccess: (data) => {
-			queryClient.setQueryData(playlistOptions({ playlistId: data.id }).queryKey, data);
 			queryClient.invalidateQueries({
 				queryKey: userPlaylistsInfiniteOptions({ userId: data.userId }).queryKey,
 			})
@@ -22,7 +21,7 @@ export const usePlaylistUpdateMutation = () => {
 		...playlistsControllerUpdateMutation(),
 		onSuccess: (data) => {
 			queryClient.setQueryData(playlistOptions({ playlistId: data.id }).queryKey, (old) => {
-				if (!old) return data;
+				if (!old) return undefined;
 				return {
 					...old,
 					...data,

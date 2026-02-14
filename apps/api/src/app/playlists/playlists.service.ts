@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
 import { User } from '../auth/auth.service';
-import { PlaylistCreateDto, PlaylistDTO, PlaylistGetDTO, PlaylistUpdateDto } from './dto/playlists.dto';
+import { PlaylistCreateDto, PlaylistDto, PlaylistGetDTO, PlaylistUpdateDto } from './dto/playlists.dto';
 import { follow, playlist, playlistLike, playlistMember, playlistSaved } from '@libs/db/schemas';
 import { and, eq, exists, notInArray, or, sql, SQL } from 'drizzle-orm';
 import { PlaylistMemberListDto, PlaylistMemberUpdateDto } from './dto/playlist-members.dto';
@@ -108,12 +108,12 @@ export class PlaylistsService {
     };
   }
 
-  async create(user: User, createPlaylistDto: PlaylistCreateDto): Promise<PlaylistDTO> {
-    const [newPlaylist] = await this.db.insert(playlist).values({
-      userId: user.id,
+  async create(currentUser: User, createPlaylistDto: PlaylistCreateDto): Promise<PlaylistDto> {
+    const [insertedPlaylist] = await this.db.insert(playlist).values({
+      userId: currentUser.id,
       ...createPlaylistDto,
     }).returning();
-    return newPlaylist;
+    return insertedPlaylist;
   }
 
   async update({
@@ -124,7 +124,7 @@ export class PlaylistsService {
     user: User;
     playlistId: number;
     updatePlaylistDto: PlaylistUpdateDto;
-  }): Promise<PlaylistDTO> {
+  }): Promise<PlaylistDto> {
     const [updatedPlaylist] = await this.db.update(playlist)
       .set(updatePlaylistDto)
       .where(
@@ -135,7 +135,7 @@ export class PlaylistsService {
       )
       .returning();
     if (!updatedPlaylist) {
-      throw new NotFoundException()
+      throw new NotFoundException();
     }
     return updatedPlaylist;
   }
@@ -146,7 +146,7 @@ export class PlaylistsService {
   }: {
     user: User;
     playlistId: number;
-  }): Promise<PlaylistDTO> {
+  }): Promise<PlaylistDto> {
     const [deletedPlaylist] = await this.db.delete(playlist)
       .where(
         and(

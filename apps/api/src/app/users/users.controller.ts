@@ -1,5 +1,5 @@
-import { Controller, UseGuards, Get, Patch, UseInterceptors, Body, UploadedFile, Param, Query, ParseUUIDPipe, Post, Delete } from '@nestjs/common';
-import { ApiConsumes, ApiExtraModels, ApiOkResponse, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { Controller, UseGuards, Get, Patch, Body, Param, Query, ParseUUIDPipe, Post, Delete } from '@nestjs/common';
+import { ApiExtraModels, ApiOkResponse, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { UserDto, UpdateUserDto, ListUsersDto, GetUsersQueryDto, ProfileDto } from './dto/users.dto';
 import { AuthGuard, OptionalAuthGuard } from '../auth/guards';
@@ -19,9 +19,15 @@ export class UsersController {
 
   @Get('me')
   @UseGuards(OptionalAuthGuard)
+  @ApiExtraModels(UserDto)
   @ApiOkResponse({
     description: 'Get the current logged-in user information, null if not authenticated',
-    type: UserDto,
+    schema: {
+      nullable: true,
+      allOf: [
+        { $ref: getSchemaPath(UserDto) }
+      ]
+    }
   })
   async getMe(
     @CurrentOptionalUser() user: User | null,
@@ -107,9 +113,15 @@ export class UsersController {
 
   @Get(':user_id/follow')
   @UseGuards(AuthGuard)
+  @ApiExtraModels(FollowDto)
   @ApiOkResponse({
     description: 'Get follow relationship with the target user',
-    type: FollowDto,
+    schema: {
+      nullable: true,
+      allOf: [
+        { $ref: getSchemaPath(FollowDto) }
+      ]
+    }
   })
   async getFollowStatus(
     @Param('user_id', ParseUUIDPipe) targetUserId: string,
