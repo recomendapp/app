@@ -395,6 +395,8 @@ export class PlaylistsService {
       })
       .onConflictDoNothing()
       .returning();
+
+    // TODO: update likes count
     
     if (!like) {
       const existingLike = await this.db.query.playlistLike
@@ -431,6 +433,8 @@ export class PlaylistsService {
     if (!deleted) {
       return null;
     }
+
+    // TODO: update likes count
 
     return plainToInstance(PlaylistLikeDto, deleted, { excludeExtraneousValues: true });
   }

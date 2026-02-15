@@ -3,7 +3,7 @@ import { and, eq } from 'drizzle-orm';
 import { logMovie, reviewMovie } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
-import { ReviewMovieDto, ReviewMovieInputDto } from './dto/reviews-movie.dto';
+import { ReviewMovieDto, ReviewMovieInputDto } from '../../reviews/movie/dto/reviews-movie.dto';
 import DOMPurify from 'isomorphic-dompurify';
 
 @Injectable()
@@ -36,10 +36,6 @@ export class MoviesReviewService {
       throw new NotFoundException('Log entry not found');
     }
 
-    if (logEntry.rating === null) {
-      throw new BadRequestException('Rating is required');
-    }
-
     const sanitizedBody = DOMPurify.sanitize(dto.body);
     const wrappedHtml = `<html>${sanitizedBody}</html>`;
 
@@ -60,7 +56,11 @@ export class MoviesReviewService {
       })
       .returning();
 
-    return upsertedReview;
+    return {
+      ...upsertedReview,
+      userId: user.id,
+      movieId: movieId,
+    };
   }
 
   async delete({
@@ -92,6 +92,10 @@ export class MoviesReviewService {
       throw new NotFoundException('Review not found');
     }
 
-    return deletedReview;
+    return {
+      ...deletedReview,
+      userId: user.id,
+      movieId: movieId,
+    };
   }
 }

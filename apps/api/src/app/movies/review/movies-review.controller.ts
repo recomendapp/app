@@ -4,7 +4,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../../auth/guards';
 import { CurrentUser } from '../../auth/decorators';
 import { User } from '../../auth/auth.service';
-import { ReviewMovieDto, ReviewMovieInputDto } from './dto/reviews-movie.dto';
+import { ReviewMovieDto, ReviewMovieInputDto } from '../../reviews/movie/dto/reviews-movie.dto';
 
 @ApiTags('Movies')
 @Controller({

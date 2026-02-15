@@ -17,12 +17,12 @@ import ButtonUserActivityMovieWatch from "../buttons/ButtonUserActivityMovieWatc
 import ButtonUserWatchlistMovie from "../buttons/ButtonUserWatchlistMovie";
 import { ContextMenuMovie } from "../ContextMenu/ContextMenuMovie";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
-import { Movie, PersonCompact } from "@packages/api-js";
+import { Movie, MovieCompact, PersonCompact } from "@packages/api-js";
 
 interface CardMovieProps
 	extends React.ComponentProps<typeof Card> {
 		variant?: "default" | "poster" | "row";
-		movie: Movie;
+		movie: Movie | MovieCompact;
 		activity?: UserActivityMovie;
 		profileActivity?: UserActivityMovie;
 		linked?: boolean;

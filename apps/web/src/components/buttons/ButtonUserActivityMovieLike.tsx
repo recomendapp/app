@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useQuery } from "@tanstack/react-query";
-import { userMovieLogOptions, useUserMovieLogSetMutation } from "@libs/query-client";
+import { movieLogOptions, useMovieLogSetMutation } from "@libs/query-client";
 
 interface ButtonUserActivityMovieLikeProps
 	extends React.ComponentProps<typeof Button> {
@@ -31,12 +31,12 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 		data: activity,
 		isLoading,
 		isError,
-	} = useQuery(userMovieLogOptions({
+	} = useQuery(movieLogOptions({
 		userId: user?.id,
 		movieId: movieId,
 	}));
 
-	const { mutateAsync: handleLog, isPending } = useUserMovieLogSetMutation();
+	const { mutateAsync: handleLog, isPending } = useMovieLogSetMutation();
 
 	const handleToggle = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();

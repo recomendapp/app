@@ -5,8 +5,7 @@ import { UserDto, UpdateUserDto, ListUsersDto, GetUsersQueryDto, ProfileDto } fr
 import { AuthGuard, OptionalAuthGuard } from '../auth/guards';
 import { CurrentOptionalUser, CurrentUser } from '../auth/decorators';
 import { User } from '../auth/auth.service';
-import { ListPlaylistsDto } from '../playlists/dto/playlists.dto';
-import { GetUserPlaylistsQueryDto } from './dto/get-user-playlists.dto';
+import { GetPlaylistsQueryDto, ListPlaylistsDto } from '../playlists/dto/playlists.dto';
 import { FollowDto } from './dto/user-follow.dto';
 
 @ApiTags('Users')
@@ -75,7 +74,7 @@ export class UsersController {
   })
   async getPlaylists(
     @Param('user_id', ParseUUIDPipe) targetUserId: string,
-    @Query() query: GetUserPlaylistsQueryDto,
+    @Query() query: GetPlaylistsQueryDto,
     @CurrentOptionalUser() currentUser: User | null,
   ): Promise<ListPlaylistsDto> {
     return this.usersService.getPlaylists(targetUserId, query, currentUser);

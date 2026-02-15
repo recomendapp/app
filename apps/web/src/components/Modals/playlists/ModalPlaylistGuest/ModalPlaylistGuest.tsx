@@ -19,7 +19,7 @@ import { upperFirst } from 'lodash';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { usePlaylistGuestsAddOptions } from '@/api/client/options/playlistOptions';
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
-import { playlistMembersOptions } from '@libs/query-client/src';
+import { playlistMembersOptions } from '@libs/query-client';
 import { PlaylistMemberList } from '@packages/api-js';
 
 export const PlaylistGuestView = ({

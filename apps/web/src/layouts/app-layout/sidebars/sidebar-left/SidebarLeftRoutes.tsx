@@ -6,7 +6,7 @@ import { useAuth } from "@/context/auth-context";
 import { Link, usePathname } from "@/lib/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { upperFirst } from "lodash";
-import { BookmarkIcon, HeartIcon, SendIcon } from "lucide-react";
+import { BookmarkIcon, SendIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
@@ -15,7 +15,7 @@ import { ContextMenuPlaylist } from "@/components/ContextMenu/ContextMenuPlaylis
 import { useModal } from "@/context/modal-context";
 import { PlaylistModal } from "@/components/Modals/playlists/PlaylistModal";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { userPlaylistsInfiniteOptions } from "@libs/query-client/src";
+import { userPlaylistsInfiniteOptions } from "@libs/query-client";
 
 const SidebarCollectionContainerIcon = ({
 	className,
@@ -99,14 +99,6 @@ export const SidebarLeftRoutes = () => {
 			label: upperFirst(t('messages.watchlist')),
 			active: pathname.startsWith('/collection/watchlist'),
 			href: '/collection/watchlist',
-		},
-		{
-			icon: <HeartIcon fill="#fff" className="w-2/5 h-2/5" />,
-			bgFrom: '#e6619b',
-			bgTo: '#e84749',
-			label: upperFirst(t('messages.heart_pick', { count: 0 })),
-			active: pathname.startsWith('/collection/heart-picks'),
-			href: '/collection/heart-picks',
 		},
 	], [pathname, t]);
 

@@ -10,13 +10,14 @@ import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import ButtonUserReviewMovieLike from "../buttons/ButtonUserReviewMovieLike";
 import { generateJSON } from "@tiptap/html";
 import { EDITOR_EXTENSIONS } from "../tiptap/TiptapExtensions";
+import { ReviewMovie, UserSummary } from "@packages/api-js";
 
 interface CardReviewMovieProps
 	extends React.ComponentProps<typeof Card> {
 		variant?: "default";
-		review: UserReviewMovie;
-		activity: UserActivityMovie;
-		author: Profile;
+		review: ReviewMovie;
+		author: UserSummary;
+		rating: number | null;
 		linked?: boolean;
 		url: string;
 	}
@@ -24,7 +25,7 @@ interface CardReviewMovieProps
 const CardReviewMovieDefault = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardReviewMovieProps, "variant" | "url">
->(({ className, review, activity, author, linked, children, ...props }, ref) => {
+>(({ className, review, author, rating, linked, children, ...props }, ref) => {
 	const now = useNow({ updateInterval: 1000 * 10 });
 	const format = useFormatter();
 	return (
@@ -36,18 +37,20 @@ const CardReviewMovieDefault = React.forwardRef<
 			)}
 			{...props}
 		>
-			<div className="flex flex-col items-center gap-1">
-				<IconMediaRating
-				rating={activity?.rating}
-				className="h-fit"
-				/>
-				<div className="bg-muted-hover h-full w-0.5 rounded-full"></div>
-			</div>
+			{rating !== null && (
+				<div className="flex flex-col items-center gap-1">
+					<IconMediaRating
+					rating={rating}
+					className="h-fit"
+					/>
+					<div className="bg-muted-hover h-full w-0.5 rounded-full"></div>
+				</div>
+			)}
 			<div className="w-full flex flex-col gap-1">
 				<div className="w-full flex justify-between items-center gap-2">
 					<CardUser variant="inline" user={author} />
 					<div className='text-sm text-muted-foreground'>
-					{format.relativeTime(new Date(review?.created_at ?? ''), now)}
+					{format.relativeTime(new Date(review?.createdAt ?? ''), now)}
 					</div>
 				</div>
 				{review?.title ? (
@@ -57,7 +60,7 @@ const CardReviewMovieDefault = React.forwardRef<
 				) : null}
 				<Overview data={review?.body} />
 				<div className="flex items-center justify-end m-1">
-					<ButtonUserReviewMovieLike reviewId={review?.id} reviewLikesCount={review.likes_count} />
+					<ButtonUserReviewMovieLike reviewId={review?.id} reviewLikesCount={review.likesCount} />
 				</div>
 			</div>
 		</Card>

@@ -1,4 +1,4 @@
-import { moviesLogControllerGet, personsControllerGetFollowStatus, playlistsControllerGetLikeStatus, playlistsControllerGetSaveStatus, usersControllerGetFollowers, UsersControllerGetFollowersData, usersControllerGetFollowing, UsersControllerGetFollowingData, usersControllerGetFollowStatus, usersControllerGetMe, usersControllerGetPlaylists, UsersControllerGetPlaylistsData } from "@packages/api-js";
+import { personsControllerGetFollowStatus, playlistsControllerGetLikeStatus, playlistsControllerGetSaveStatus, usersControllerGetFollowers, UsersControllerGetFollowersData, usersControllerGetFollowing, UsersControllerGetFollowingData, usersControllerGetFollowStatus, usersControllerGetMe, usersControllerGetPlaylists, UsersControllerGetPlaylistsData, usersMovieControllerGet } from "@packages/api-js";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { userKeys } from "./userKeys";
 
@@ -24,9 +24,11 @@ export const userMovieLogOptions = ({
 	return queryOptions({
 		queryKey: userKeys.log({ userId: userId!, id: movieId!, type: 'movie' }),
 		queryFn: async () => {
+			if (!userId) throw new Error ('User ID is required');
 			if (!movieId) throw new Error('Movie ID is required');
-			const { data, error } = await moviesLogControllerGet({
+			const { data, error } = await usersMovieControllerGet({
 				path: {
+					user_id: userId,
 					movie_id: movieId,
 				},
 			});
@@ -44,7 +46,7 @@ export const userFollowersOptions = ({
 	filters,
 }: {
 	profileId?: string;
-	filters?: Omit<UsersControllerGetFollowersData['query'], 'page' | 'per_page'>;
+	filters?: Omit<NonNullable<UsersControllerGetFollowersData['query']>, 'page' | 'per_page'>;
 }) => {
 	return infiniteQueryOptions({
 		queryKey: userKeys.followers({
@@ -82,7 +84,7 @@ export const userFollowingOptions = ({
 	filters,
 }: {
 	profileId?: string;
-	filters?: Omit<UsersControllerGetFollowingData['query'], 'page' | 'per_page'>;
+	filters?: Omit<NonNullable<UsersControllerGetFollowingData['query']>, 'page' | 'per_page'>;
 }) => {
 	return infiniteQueryOptions({
 		queryKey: userKeys.following({
@@ -172,7 +174,7 @@ export const userPlaylistsInfiniteOptions = ({
 	filters,
 }: {
 	userId?: string;
-	filters?: Omit<UsersControllerGetPlaylistsData['query'], 'page' | 'per_page'>;
+	filters?: Omit<NonNullable<UsersControllerGetPlaylistsData['query']>, 'page' | 'per_page'>;
 }) => {
 	return infiniteQueryOptions({
 		queryKey: userKeys.playlists({

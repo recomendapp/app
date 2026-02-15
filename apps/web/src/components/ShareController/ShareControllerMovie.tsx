@@ -8,11 +8,11 @@ import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Icons } from "@/config/icons";
 import toast from "react-hot-toast";
 import { domToBlob } from "modern-screenshot";
-import { Movie } from "@packages/api-js";
+import { Movie, MovieCompact } from "@packages/api-js";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
 interface ShareControllerMovieProps extends ShareControllerProps {
-	movie: Movie;
+	movie: Movie | MovieCompact;
 }
 
 export const ShareControllerMovie: React.FC<ShareControllerMovieProps> = ({ movie, onFileReady }) => {

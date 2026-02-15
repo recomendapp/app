@@ -10,7 +10,7 @@ import { useTranslations } from 'next-intl';
 import { useCallback } from 'react';
 import { useModal } from '@/context/modal-context';
 import { useQuery } from '@tanstack/react-query';
-import { userPersonFollowOptions, useUserPersonFollowMutation, useUserPersonUnfollowMutation } from '@libs/query-client/src';
+import { userPersonFollowOptions, useUserPersonFollowMutation, useUserPersonUnfollowMutation } from '@libs/query-client';
 
 interface PersonFollowButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   personId: number;

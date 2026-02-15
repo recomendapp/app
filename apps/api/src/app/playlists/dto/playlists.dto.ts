@@ -1,11 +1,12 @@
-import { ApiProperty, ApiSchema, PartialType, PickType } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional, ApiSchema, PartialType, PickType } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
-import { IsIn, IsString, IsUrl, Length, Matches, ValidateNested } from "class-validator";
+import { IsEnum, IsIn, IsOptional, IsString, IsUrl, Length, Matches, ValidateNested } from "class-validator";
 import { PLAYLIST_RULES } from "../../../config/validation-rules";
 import { playlistMemberRoleEnum, playlistVisibilityEnum } from "@libs/db/schemas";
-import { PaginatedResponseDto } from "../../../common/dto/pagination.dto";
+import { PaginatedResponseDto, PaginationQueryDto } from "../../../common/dto/pagination.dto";
 import { UserSummaryDto } from "../../users/dto/users.dto";
-import { IsNullable } from "../../../../src/common/decorators/is-nullable.decorator";
+import { IsNullable } from "../../../common/decorators/is-nullable.decorator";
+import { SortOrder } from "../../../common/dto/sort.dto";
 
 export enum PlaylistSortBy {
   CREATED_AT = 'created_at',
@@ -98,14 +99,19 @@ export class PlaylistDto {
 	likesCount: number;
 }
 
-@ApiSchema({ name: 'PlaylistGet' })
-export class PlaylistGetDTO extends PlaylistDto {
+@ApiSchema({ name: 'PlaylistWithOwner' })
+export class PlaylistWithOwnerDTO extends PlaylistDto {
     @ApiProperty({ type: () => UserSummaryDto, description: 'The user object' })
     @Expose()
     @ValidateNested()
     @Type(() => UserSummaryDto)
     owner: UserSummaryDto;
+}
 
+
+
+@ApiSchema({ name: 'PlaylistGet' })
+export class PlaylistGetDTO extends PlaylistWithOwnerDTO {
     @ApiProperty({ 
         description: 'The role of the current user for this playlist (owner, editor, viewer, or null)', 
         enum: [...playlistMemberRoleEnum.enumValues, 'owner'], 
@@ -116,6 +122,29 @@ export class PlaylistGetDTO extends PlaylistDto {
     @IsString()
     @IsNullable()
     role: typeof playlistMemberRoleEnum.enumValues[number] | 'owner' | null;
+}
+
+@ApiSchema({ name: 'GetPlaylistsQuery' })
+export class GetPlaylistsQueryDto extends PaginationQueryDto {
+    @ApiPropertyOptional({
+        description: 'Field to sort playlists by',
+        default: PlaylistSortBy.UPDATED_AT,
+        example: PlaylistSortBy.UPDATED_AT,
+        enum: PlaylistSortBy,
+    })
+    @IsOptional()
+    @IsEnum(PlaylistSortBy)
+    sort_by: PlaylistSortBy = PlaylistSortBy.UPDATED_AT;
+
+    @ApiPropertyOptional({
+        description: 'Sort order',
+        default: SortOrder.DESC,
+        example: SortOrder.DESC,
+        enum: SortOrder,
+    })
+    @IsOptional()
+    @IsEnum(SortOrder)
+    sort_order: SortOrder = SortOrder.DESC;
 }
 
 @ApiSchema({ name: 'PlaylistCreate' })
@@ -131,6 +160,18 @@ export class ListPlaylistsDto extends PaginatedResponseDto<PlaylistDto> {
 	data: PlaylistDto[];
 
 	constructor(partial: Partial<ListPlaylistsDto>) {
+		super(partial);
+		Object.assign(this, partial);
+	}
+}
+
+@ApiSchema({ name: 'ListPlaylistsWithOwner' })
+export class ListPlaylistsWithOwnerDto extends PaginatedResponseDto<PlaylistWithOwnerDTO> {
+	@ApiProperty({ type: () => [PlaylistWithOwnerDTO] })
+	@Type(() => PlaylistWithOwnerDTO)
+	data: PlaylistWithOwnerDTO[];
+
+	constructor(partial: Partial<ListPlaylistsWithOwnerDto>) {
 		super(partial);
 		Object.assign(this, partial);
 	}

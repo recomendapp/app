@@ -29,7 +29,7 @@
       "no_followees": "no followees",
       "no_followers": "no followers",
       "no_rating": "no rating",
-      "a_rating_is_required_to_add_a_review": "a rating is required to add a review",
+      "must_watch_to_review": "you must watch this content to review it",
       "review_cannot_be_empty": "review cannot be empty",
       "no_activity": "no activity",
       "followers_ratings": "follower's ratings",
@@ -1156,11 +1156,6 @@
         "watch": {
           "remove_from_watched": {
             "description": "Are you sure you want to remove this work from your watched list? If you have a rating or a review, they will also be deleted."
-          }
-        },
-        "rating": {
-          "remove_rating": {
-            "has_review": "You cannot remove a rating associated with a review."
           }
         }
       }

@@ -12,7 +12,7 @@ import { createShareController } from "../ShareController/ShareController";
 import { ShareControllerMovie } from "../ShareController/ShareControllerMovie";
 import { ModalUserRecosMovieSend } from "../Modals/recos/ModalUserRecosMovieSend";
 import { ModalPlaylistMovieAdd } from "../Modals/playlists/ModalPlaylistMovieAdd";
-import { Movie } from "@packages/api-js";
+import { Movie, MovieCompact } from "@packages/api-js";
 
 interface Item {
 	icon: React.ElementType;
@@ -29,7 +29,7 @@ export const ContextMenuMovie = ({
 	additionalItemsBottom = [],
 }: {
 	children: React.ReactNode,
-	movie: Movie,
+	movie: Movie | MovieCompact,
 	additionalItemsTop?: Item[],
 	additionalItemsBottom?: Item[],
 }) => {

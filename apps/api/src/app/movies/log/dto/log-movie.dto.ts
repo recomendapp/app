@@ -2,7 +2,8 @@ import { ApiSchema, ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsDate, IsDateString, IsInt, IsNumber, IsOptional, Max, Min, ValidateNested } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { WatchedDateDto } from './watched-date.dto';
-import { ReviewMovieDto } from '../../review/dto/reviews-movie.dto';
+import { ReviewMovieDto } from '../../../reviews/movie/dto/reviews-movie.dto';
+import { IsNullable } from '../../../../common/decorators/is-nullable.decorator';
 
 /* -------------------------------- REQUESTS -------------------------------- */
 
@@ -85,6 +86,11 @@ export class LogMovieDto {
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
   @IsDate()
+  createdAt: Date;
+
+  @ApiProperty({ example: '2024-01-30T12:00:00Z' })
+  @Expose()
+  @IsDate()
   updatedAt: Date;
 
   @ApiProperty({ 
@@ -95,8 +101,13 @@ export class LogMovieDto {
   @Type(() => WatchedDateDto)
   watchedDates: WatchedDateDto[];
 
-  @ApiProperty({ type: () => ReviewMovieDto, description: 'The user object' })
+  @ApiProperty({
+    type: () => ReviewMovieDto,
+    description: 'The user object',
+    nullable: true,
+  })
   @Expose()
+  @IsNullable()
   @ValidateNested({ each: true })
   @Type(() => ReviewMovieDto)
   review: ReviewMovieDto;

@@ -9,7 +9,7 @@ import { useInView } from 'react-intersection-observer';
 import { CardPlaylist } from '@/components/Card/CardPlaylist';
 import Loader from '@/components/Loader';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { userPlaylistsInfiniteOptions } from '@libs/query-client/src';
+import { userPlaylistsInfiniteOptions } from '@libs/query-client';
 
 export function UserPlaylists({
   grid = false,

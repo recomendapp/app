@@ -13,7 +13,7 @@ import { Link } from "@/lib/i18n/navigation";
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { userFollowingOptions } from '@libs/query-client/src';
+import { userFollowingOptions } from '@libs/query-client';
 
 export function ProfileFolloweesModal({
 	userId,

@@ -2,194 +2,142 @@ import { useSupabaseClient } from "@/context/supabase-context";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { mediaKeys } from "../keys/mediaKeys";
 
-export const useMediaMovieDetailsOptions = ({
-	id,
-} : {
-	id?: number;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: mediaKeys.details({
-			type: 'movie',
-			id: id!,
-		}),
-		queryFn: async () => {
-			if (!id) throw new Error('No id provided');
-			const { data, error } = await supabase
-				.from('media_movie_full')
-				.select('*')
-				.eq('id', id)
-				.maybeSingle();
-			if (error) throw error;
-			return data;
-		},
-		enabled: !!id,
-		staleTime: 1000 * 60 * 60 * 24 // 24 hours
-	})
-}
-
-export const useMediaTvSeriesDetailsOptions = ({
-	id,
-} : {
-	id?: number;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: mediaKeys.details({
-			type: 'tv_series',
-			id: id!,
-		}),
-		queryFn: async () => {
-			if (!id) throw new Error('No id provided');
-			const { data, error } = await supabase
-				.from('media_tv_series_full')
-				.select('*')
-				.eq('id', id)
-				.maybeSingle();
-			if (error) throw error;
-			return data;
-		},
-		enabled: !!id,
-		staleTime: 1000 * 60 * 60 * 24 // 24 hours
-	})
-}
-
 /* --------------------------------- MOVIES --------------------------------- */
-export const useMediaMovieCastingOptions = ({
-	movieId,
-} : {
-	movieId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: mediaKeys.movieCasting({
-			movieId: movieId,
-		}),
-		queryFn: async () => {
-			const { data, error } = await supabase
-				.from('media_movie_casting')
-				.select(`
-					*,
-					media_person(*)
-				`)
-				.eq('movie_id', movieId)
-				.order('order', { ascending: true });
-			if (error) throw error;
-			return data;
-		},
-		staleTime: 1000 * 60 * 60 * 24 // 24 hours
-	})
-} 
+// export const useMediaMovieCastingOptions = ({
+// 	movieId,
+// } : {
+// 	movieId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return queryOptions({
+// 		queryKey: mediaKeys.movieCasting({
+// 			movieId: movieId,
+// 		}),
+// 		queryFn: async () => {
+// 			const { data, error } = await supabase
+// 				.from('media_movie_casting')
+// 				.select(`
+// 					*,
+// 					media_person(*)
+// 				`)
+// 				.eq('movie_id', movieId)
+// 				.order('order', { ascending: true });
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		staleTime: 1000 * 60 * 60 * 24 // 24 hours
+// 	})
+// } 
 
-export const useMediaMovieReviewsOptions = ({
-	movieId,
-	filters,
-} : {
-	movieId: number;
-	filters: {
-		perPage: number;
-		sortBy: 'updated_at' | 'created_at';
-		sortOrder: 'asc' | 'desc';
-	};
-}) => {
-	const supabase = useSupabaseClient();
-	return infiniteQueryOptions({
-		queryKey: mediaKeys.movieReviews({
-			movieId: movieId,
-			filters: filters,
-		}),
-		queryFn: async ({ pageParam = 1 }) => {
-			let from = (pageParam - 1) * filters.perPage;
-	  		let to = from + filters.perPage - 1;
-			let request = supabase
-				.from('user_reviews_movie')
-				.select(`
-					*,
-					user_activities_movie!inner(*, profile(*))
-				`)
-				.eq('user_activities_movie.movie_id', movieId)
-				.range(from, to)
+// export const useMediaMovieReviewsOptions = ({
+// 	movieId,
+// 	filters,
+// } : {
+// 	movieId: number;
+// 	filters: {
+// 		perPage: number;
+// 		sortBy: 'updated_at' | 'created_at';
+// 		sortOrder: 'asc' | 'desc';
+// 	};
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return infiniteQueryOptions({
+// 		queryKey: mediaKeys.movieReviews({
+// 			movieId: movieId,
+// 			filters: filters,
+// 		}),
+// 		queryFn: async ({ pageParam = 1 }) => {
+// 			let from = (pageParam - 1) * filters.perPage;
+// 	  		let to = from + filters.perPage - 1;
+// 			let request = supabase
+// 				.from('user_reviews_movie')
+// 				.select(`
+// 					*,
+// 					user_activities_movie!inner(*, profile(*))
+// 				`)
+// 				.eq('user_activities_movie.movie_id', movieId)
+// 				.range(from, to)
 
-			if (filters.sortBy && filters.sortOrder) {
-				switch (filters.sortBy) {
-					case 'updated_at':
-						request = request.order('updated_at', { ascending: filters.sortOrder === 'asc' });
-						break;
-					case 'created_at':
-						request = request.order('created_at', { ascending: filters.sortOrder === 'asc' });
-						break;
-					default:
-						break;
-				}
-			}
+// 			if (filters.sortBy && filters.sortOrder) {
+// 				switch (filters.sortBy) {
+// 					case 'updated_at':
+// 						request = request.order('updated_at', { ascending: filters.sortOrder === 'asc' });
+// 						break;
+// 					case 'created_at':
+// 						request = request.order('created_at', { ascending: filters.sortOrder === 'asc' });
+// 						break;
+// 					default:
+// 						break;
+// 				}
+// 			}
 
-			const { data, error } = await request;
-			if (error) throw error;
-			return data;
-		},
-		initialPageParam: 1,
-		getNextPageParam: (lastPage, pages) => {
-			return lastPage?.length == filters.perPage ? pages.length + 1 : undefined;
-		},
-		enabled: !!movieId,
-		staleTime: 1000 * 60 * 60 // 1 hour
-	})
-}
+// 			const { data, error } = await request;
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		initialPageParam: 1,
+// 		getNextPageParam: (lastPage, pages) => {
+// 			return lastPage?.length == filters.perPage ? pages.length + 1 : undefined;
+// 		},
+// 		enabled: !!movieId,
+// 		staleTime: 1000 * 60 * 60 // 1 hour
+// 	})
+// }
 
-export const useMediaMoviePlaylistsOptions = ({
-	movieId,
-	filters,
-} : {
-	movieId: number;
-	filters: {
-		perPage: number;
-		sortBy: 'created_at' | 'updated_at' | 'likes_count';
-		sortOrder: 'asc' | 'desc';
-	};
-}) => {
-	const supabase = useSupabaseClient();
-	return infiniteQueryOptions({
-		queryKey: mediaKeys.moviePlaylists({
-			movieId: movieId,
-			filters: filters,
-		}),
-		queryFn: async ({ pageParam = 1 }) => {
-			let from = (pageParam - 1) * filters.perPage;
-	  		let to = from + filters.perPage - 1;
-			let request = supabase
-				.from('playlists')
-				.select('*, user:profile(*), playlist_items_movie!inner(*)')
-				.match({
-					'type': 'movie',
-					'playlist_items_movie.movie_id': movieId,
-				})
-				.range(from, to);
+// export const useMediaMoviePlaylistsOptions = ({
+// 	movieId,
+// 	filters,
+// } : {
+// 	movieId: number;
+// 	filters: {
+// 		perPage: number;
+// 		sortBy: 'created_at' | 'updated_at' | 'likes_count';
+// 		sortOrder: 'asc' | 'desc';
+// 	};
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return infiniteQueryOptions({
+// 		queryKey: mediaKeys.moviePlaylists({
+// 			movieId: movieId,
+// 			filters: filters,
+// 		}),
+// 		queryFn: async ({ pageParam = 1 }) => {
+// 			let from = (pageParam - 1) * filters.perPage;
+// 	  		let to = from + filters.perPage - 1;
+// 			let request = supabase
+// 				.from('playlists')
+// 				.select('*, user:profile(*), playlist_items_movie!inner(*)')
+// 				.match({
+// 					'type': 'movie',
+// 					'playlist_items_movie.movie_id': movieId,
+// 				})
+// 				.range(from, to);
 
-			if (filters.sortBy && filters.sortOrder) {
-				switch (filters.sortBy) {
-					case 'updated_at':
-						request = request.order('updated_at', { ascending: filters.sortOrder === 'asc' });
-						break;
-					case 'likes_count':
-						request = request.order('likes_count', { ascending: filters.sortOrder === 'asc' });
-						break;
-					default:
-						request = request.order('created_at', { ascending: filters.sortOrder === 'asc' });
-						break;
-				}
-			}
-			const { data, error } = await request;
-			if (error) throw error;
-			return data;
-		},
-		initialPageParam: 1,
-		getNextPageParam: (lastPage, pages) => {
-			return lastPage?.length == filters.perPage ? pages.length + 1 : undefined;
-		},
-		enabled: !!movieId,
-		staleTime: 1000 * 60 * 60 // 1 hour
-	})
-}
+// 			if (filters.sortBy && filters.sortOrder) {
+// 				switch (filters.sortBy) {
+// 					case 'updated_at':
+// 						request = request.order('updated_at', { ascending: filters.sortOrder === 'asc' });
+// 						break;
+// 					case 'likes_count':
+// 						request = request.order('likes_count', { ascending: filters.sortOrder === 'asc' });
+// 						break;
+// 					default:
+// 						request = request.order('created_at', { ascending: filters.sortOrder === 'asc' });
+// 						break;
+// 				}
+// 			}
+// 			const { data, error } = await request;
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		initialPageParam: 1,
+// 		getNextPageParam: (lastPage, pages) => {
+// 			return lastPage?.length == filters.perPage ? pages.length + 1 : undefined;
+// 		},
+// 		enabled: !!movieId,
+// 		staleTime: 1000 * 60 * 60 // 1 hour
+// 	})
+// }
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------- TV SERIES ------------------------------- */

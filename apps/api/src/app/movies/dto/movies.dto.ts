@@ -1,4 +1,4 @@
-import { ApiProperty, ApiSchema } from '@nestjs/swagger';
+import { ApiProperty, ApiSchema, PickType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import {
   IsInt,
@@ -237,7 +237,6 @@ export class MovieDto {
   @IsNumber()
   followerAvgRating: number | null;
 }
-
 @ApiSchema({ name: 'MovieTrailer' })
 export class MovieTrailerDto {
   @ApiProperty({ example: '5c9294240e0a267cd516835f' })
@@ -290,3 +289,18 @@ export class MovieTrailerDto {
   @IsString()
   iso31661: string | null;
 }
+
+@ApiSchema({ name: 'MovieCompact' })
+export class MovieCompactDto extends PickType(MovieDto, [
+  'id',
+  'title',
+  'slug',
+  'url',
+  'posterPath',
+  'directors',
+  'releaseDate',
+  'voteAverage',
+  'voteCount',
+  'genres',
+  'followerAvgRating',
+] as const) {}

@@ -12,7 +12,7 @@ import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useModal } from "@/context/modal-context";
 import { useQuery } from "@tanstack/react-query";
-import { userMovieLogOptions, useUserMovieLogDeleteMutation, useUserMovieLogSetMutation } from "@libs/query-client/src";
+import { movieLogOptions, useMovieLogDeleteMutation, useMovieLogSetMutation } from "@libs/query-client";
 
 interface ButtonUserActivityMovieWatchProps
 	extends React.ComponentProps<typeof Button> {
@@ -32,12 +32,12 @@ const ButtonUserActivityMovieWatch = React.forwardRef<
 		data: activity,
 		isLoading,
 		isError,
-	} = useQuery(userMovieLogOptions({
+	} = useQuery(movieLogOptions({
 		userId: user?.id,
 		movieId: movieId,
 	}));
-	const { mutateAsync: handleLog, isPending: isLogPending } = useUserMovieLogSetMutation();
-	const { mutateAsync: handleUnlog, isPending: isUnlogPending } = useUserMovieLogDeleteMutation();
+	const { mutateAsync: handleLog, isPending: isLogPending } = useMovieLogSetMutation();
+	const { mutateAsync: handleUnlog, isPending: isUnlogPending } = useMovieLogDeleteMutation();
 
 	const handleInsertActivity = React.useCallback(async (e?: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e?.stopPropagation();

@@ -9,6 +9,7 @@ import { PlaylistsModule } from './playlists/playlists.module';
 import { DrizzleModule } from '../common/modules/drizzle.module';
 import { PersonsModule } from './persons/persons.module';
 import { TvSeriesModule } from './tv-series/tv-series.module';
+import { ReviewsModule } from './reviews/reviews.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { TvSeriesModule } from './tv-series/tv-series.module';
     MoviesModule,
     TvSeriesModule,
     PersonsModule,
+    ReviewsModule,
   ],
   controllers: [],
   providers: [],

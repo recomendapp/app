@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { useMap } from "../../../context/map-context"
 import { TriangleAlert, XIcon } from "lucide-react";
 import MediaPoster from "@/components/Media/MediaPoster";
-import { useLocale } from "next-intl";
 import Loader from "@/components/Loader";
 import { MovieTrailerButton } from "@/app/[lang]/(app)/film/[film_id]/(default)/_components/MovieHeader";
 import { Link } from "@/lib/i18n/navigation";
@@ -17,8 +16,8 @@ import ButtonUserActivityMovieWatchedDate from "@/components/buttons/ButtonUserA
 import ButtonUserRecosMovieSend from "@/components/buttons/ButtonUserRecosMovieSend";
 import ButtonPlaylistMovieAdd from "@/components/buttons/ButtonPlaylistMovieAdd";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
-import { useMediaMovieDetailsOptions } from "@/api/client/options/mediaOptions";
 import { useQuery } from "@tanstack/react-query";
+import { movieOptions } from "@libs/query-client/src";
 
 export const MovieWidget = () => {
 	const {
@@ -26,14 +25,12 @@ export const MovieWidget = () => {
 		setSelectedMovie,
 	} = useMap();
 
-	const locale = useLocale();
-
 	const {
 		data: movie,
 		isLoading,
 		isError,
-	} = useQuery(useMediaMovieDetailsOptions({
-		id: selectedMovie?.movie.id,
+	} = useQuery(movieOptions({
+		movieId: selectedMovie?.movie.id,
 	}));
 
 	if (!selectedMovie?.movie.id) return null;
@@ -62,21 +59,21 @@ export const MovieWidget = () => {
 					<div className="w-full h-full flex gap-2 items-center">
 						<MediaPoster
 						className="h-full w-fit"
-						src={getTmdbImage({ path: movie.poster_path, size: 'w342' })}
+						src={getTmdbImage({ path: movie.posterPath, size: 'w342' })}
 						alt={movie.title ?? ''}
 						width={96}
 						height={144}
 						unoptimized
 						>
-							{movie.vote_count && (
+							{movie.voteCount && (
 							<div className='absolute flex flex-col gap-2 top-1 right-1 w-10'>
-								{movie.vote_average ? <IconMediaRating
-									rating={movie.vote_average}
+								{movie.voteAverage ? <IconMediaRating
+									rating={movie.voteAverage}
 									variant="general"
 									className="w-full"
 								/> : null}
-								{movie.follower_avg_rating ? <IconMediaRating
-									rating={movie.follower_avg_rating}
+								{movie.followerAvgRating ? <IconMediaRating
+									rating={movie.followerAvgRating}
 									variant="follower"
 									className="w-full"
 								/> : null}
@@ -94,21 +91,21 @@ export const MovieWidget = () => {
 							<div className=" line-clamp-1">
 							<span className='text-accent-yellow'>Film</span>
 							<span className=" before:content-['_|_']">
-								{movie.genres?.map((genre: any, index: number) => (
-								<span key={index}>
-									<Button
-										variant="link"
-										className="w-fit p-0 h-full font-normal"
-										asChild
-									>
-									<Link href={`/genre/${genre.id}`}>
-										{genre.name}
-									</Link>
-									</Button>
-									{index !== movie.genres?.length! - 1 && (
-									<span>, </span>
-									)}
-								</span>
+								{movie.genres?.map((genre, index) => (
+									<span key={index}>
+										<Button
+											variant="link"
+											className="w-fit p-0 h-full font-normal"
+											asChild
+										>
+										<Link href={`/genre/${genre.id}`}>
+											{genre.name}
+										</Link>
+										</Button>
+										{index !== movie.genres.length - 1 && (
+										<span>, </span>
+										)}
+									</span>
 								))}
 							</span>
 							</div>
@@ -121,14 +118,15 @@ export const MovieWidget = () => {
 									{movie.title}
 								</Link>
 								{/* DATE */}
-								<sup>
-									<DateOnlyYearTooltip date={movie.release_date ?? ''} className=' text-xs font-medium'/>
-								</sup>
-								{movie.original_title !== movie.title && (
-									<div className='text-xs ml-0! font-semibold text-muted-foreground line-clamp-1'>{movie.original_title}</div>
+								{movie.releaseDate && (
+									<sup>
+										<DateOnlyYearTooltip date={movie.releaseDate ?? ''} className=' text-xs font-medium'/>
+									</sup>
+								)}
+								{movie.originalTitle !== movie.title && (
+									<div className='text-xs ml-0! font-semibold text-muted-foreground line-clamp-1'>{movie.originalTitle}</div>
 								)}
 							</div>
-							<div className=" space-y-2">
 							<div className="line-clamp-1">
 								{movie.directors?.map((person, index) => (
 								<>
@@ -148,12 +146,6 @@ export const MovieWidget = () => {
 								)) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}
 								{/* RUNTIME */}
 								<RuntimeTooltip runtime={movie.runtime ?? 0} className=" before:content-['_•_']" />
-							</div>
-							{/* <div>
-								{movie?.videos?.length > 0 && (
-								<MovieTrailerButton videos={movie.videos} />
-								)} 
-							</div> */}
 							</div>
 						</div>
 					</div>

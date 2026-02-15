@@ -20,10 +20,9 @@ import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useMediaMoviePlaylistsOptions } from '@/api/client/options/mediaOptions';
+import { moviePlaylistsOptions } from '@libs/query-client/src';
 
 type SortBy = "created_at" | "updated_at" | "likes_count";
-const DEFAULT_PER_PAGE = 20;
 const DEFAULT_SORT_BY: SortBy = "updated_at";
 const DEFAULT_SORT_ORDER = "desc";
 
@@ -35,10 +34,6 @@ const orderSchema = z.enum(["asc", "desc"]);
 const getValidatedSortOrder = (order?: string | null): z.infer<typeof orderSchema> => {
   return orderSchema.safeParse(order).success ? order! as z.infer<typeof orderSchema> : DEFAULT_SORT_ORDER;
 };
-const perPageSchema = z.number().int().positive();
-const getValidatePerPage = (perPage?: number | null): number => {
-  return perPageSchema.safeParse(perPage).success ? perPage! : DEFAULT_PER_PAGE;
-}
 
 interface MoviePlaylistsProps {
   movieId: number;
@@ -51,7 +46,6 @@ export function MoviePlaylists({
   const searchParams = useSearchParams();
   const sortBy = getValidatedSortBy(searchParams.get('sort_by'));
   const sortOrder = getValidatedSortOrder(searchParams.get('sort_order'));
-  const perPage = getValidatePerPage(Number(searchParams.get('per_page')));
   const { ref, inView } = useInView();
   const router = useRouter();
 
@@ -61,12 +55,11 @@ export function MoviePlaylists({
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useInfiniteQuery(useMediaMoviePlaylistsOptions({
+  } = useInfiniteQuery(moviePlaylistsOptions({
     movieId: movieId,
     filters: {
-      sortBy: sortBy,
-      sortOrder: sortOrder,
-      perPage: perPage,
+      sort_by: sortBy,
+      sort_order: sortOrder,
     }
   }));
 
@@ -108,7 +101,7 @@ export function MoviePlaylists({
         </ButtonGroup>
       </div>
       {/* PLAYLISTS */}
-      {(isLoading || playlists === undefined || playlists?.pages[0]?.length) ? (
+      {(isLoading || playlists === undefined || playlists?.pages[0]?.data.length) ? (
         <div className="w-full grid gap-2 grid-cols-2 @xs/movie-playlists:grid-cols-3 @md/movie-playlists:grid-cols-4 @lg/movie-playlists:grid-cols-5 @2xl/movie-playlists:grid-cols-6 @4xl/movie-playlists:grid-cols-7 @5xl/movie-playlists:grid-cols-8 @7xl/movie-playlists:grid-cols-10">
           {isLoading || playlists === undefined ? (
             Array.from({ length: 40 }).map((_, i) => (
@@ -116,12 +109,15 @@ export function MoviePlaylists({
             ))
           ) : (
             playlists?.pages.map((page, i) => (
-              page?.map((playlist, index) => (
+              page?.data.map(({ owner, ...playlist}, index) => (
                 <CardPlaylist
                 key={index}
                 playlist={playlist}
+                owner={{
+                  username: owner.username
+                }}
                 {...(i === playlists.pages.length - 1 &&
-                  index === page.length - 1
+                  index === page.data.length - 1
                     ? { ref: ref }
                     : {})}
                 />

@@ -8,14 +8,14 @@ DropdownMenuTrigger,
 import { useAuth } from '@/context/auth-context';
 import { LucideIcon, MoreVertical } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { MediaMovie, Profile, UserReviewMovie } from '@recomendapp/types';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { Icons } from '@/config/icons';
 import { useModal } from '@/context/modal-context';
-import { usePathname, useRouter } from '@/lib/i18n/navigation';
+import { useRouter } from '@/lib/i18n/navigation';
 import { useCallback, useMemo } from 'react';
-import { useUserReviewMovieDeleteMutation } from '@/api/client/mutations/userMutations';
+import { useMovieReviewDeleteMutation } from '@libs/query-client/src';
+import { MovieCompact, ReviewMovie, UserSummary } from '@packages/api-js';
 
 type OptionItem = {
 	variant?: 'destructive';
@@ -31,44 +31,38 @@ export function ReviewMovieSettings({
 	author,
 } : {
 	movieId: number;
-	movie: MediaMovie;
-	review: UserReviewMovie;
-	author: Profile;
+	movie: MovieCompact;
+	review: ReviewMovie;
+	author: UserSummary;
 }) {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const t = useTranslations();
 	const { createConfirmModal } = useModal();
-	const pathname = usePathname();
 	const router = useRouter();
-	const { mutateAsync: deleteReview } = useUserReviewMovieDeleteMutation({
-		userId: session?.user.id,
-		movieId,
-	});
+	const { mutateAsync: deleteReview } = useMovieReviewDeleteMutation();
 
 	const handleDeleteReview = useCallback(async () => {
 		await deleteReview({
-			id: review.id,
+			path: {
+				movie_id: movieId,
+			}
 		}, {
 			onSuccess: () => {
 				toast.success(upperFirst(t('common.messages.deleted')));
-				const regex = new RegExp(`^\/film\/[^/]+\/review\/${review.id}$`);
-				if (pathname.match(regex)) {
-					router.replace(`/film/${movie.slug || movieId}`);
-				}
 			},
 			onError: () => {
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}, [deleteReview, review.id, t, pathname, router, movie.slug, movieId]);
+	}, [deleteReview, review.id, t, movie.slug, movieId]);
 
 	const options = useMemo<OptionItem[]>(() => [
-		...(session?.user.id && session?.user.id == author?.id ? [
+		...(user?.id && user.id == author?.id ? [
 			{
 				label: upperFirst(t('common.messages.edit')),
 				icon: Icons.edit,
 				onSelect: () => {
-					router.push(`/film/${movie.slug || movieId}/review/${review.id}/edit`);
+					router.push(`/film/${movie.slug || movieId}/review`);
 				},
 			},
 			{
@@ -82,7 +76,7 @@ export function ReviewMovieSettings({
 				variant: 'destructive' as const,
 			}
 		] : []),
-	], [session, t, createConfirmModal, handleDeleteReview, author, movie.slug, movieId, review.id, router]);
+	], [user, t, createConfirmModal, handleDeleteReview, author, movie.slug, movieId, review.id, router]);
 
 	if (!options.length) return null;
 

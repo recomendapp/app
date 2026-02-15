@@ -10,9 +10,8 @@ import { AlertCircleIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { useUserReviewMovieLikeDeleteMutation, useUserReviewMovieLikeInsertMutation } from "@/api/client/mutations/userMutations";
-import { useUserReviewMovieLikeOptions } from "@/api/client/options/userOptions";
 import { useQuery } from "@tanstack/react-query";
+import { reviewMovieLikeOptions, useReviewMovieLikeMutation, useReviewMovieUnlikeMutation } from "@libs/query-client";
 
 interface ButtonUserReviewMovieLikeProps
 	extends React.ComponentProps<typeof Button> {
@@ -24,30 +23,31 @@ const ButtonUserReviewMovieLike = React.forwardRef<
 	React.ComponentRef<typeof Button>,
 	ButtonUserReviewMovieLikeProps
 >(({ reviewId, reviewLikesCount, className, ...props }, ref) => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const t = useTranslations();
 	const pathname = usePathname();
 	const {
 		data: like,
 		isLoading,
 		isError,
-	} = useQuery(useUserReviewMovieLikeOptions({
+	} = useQuery(reviewMovieLikeOptions({
 		reviewId: reviewId,
-		userId: session?.user.id,
+		userId: user?.id,
 	}));
 	const [likeCount, setLikeCount] = React.useState(reviewLikesCount ?? undefined);
-	const { mutateAsync: insertLike, isPending: isInsertPending } = useUserReviewMovieLikeInsertMutation();
-	const { mutateAsync: deleteLike, isPending: isDeletePending } = useUserReviewMovieLikeDeleteMutation();
+	const { mutateAsync: insertLike, isPending: isInsertPending } = useReviewMovieLikeMutation({
+		userId: user?.id,
+	});
+	const { mutateAsync: deleteLike, isPending: isDeletePending } = useReviewMovieUnlikeMutation({
+		userId: user?.id,
+	});
 
 	const handleLike = React.useCallback(async (e: React.MouseEvent) => {
 		e.stopPropagation();
-		if (!session) {
-			toast.error(upperFirst(t('common.messages.not_logged_in')));
-			return;
-		}
 		await insertLike({
-			userId: session.user.id,
-			reviewId: reviewId,
+			path: {
+				review_id: reviewId,
+			}
 		}, {
 			onSuccess: () => {
 				setLikeCount((prev) => (prev ?? 0) + 1);
@@ -56,16 +56,14 @@ const ButtonUserReviewMovieLike = React.forwardRef<
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}, [insertLike, reviewId, session, t]);
+	}, [insertLike, reviewId, t]);
 
 	const handleUnlike = React.useCallback(async (e: React.MouseEvent) => {
 		e.stopPropagation();
-		if (!like) {
-			toast.error(upperFirst(t('common.messages.an_error_occurred')));
-			return;
-		}
 		await deleteLike({
-			likeId: like.id
+			path: {
+				review_id: reviewId,
+			}
 		}, {
 			onSuccess: () => {
 				setLikeCount((prev) => (prev ?? 0) - 1);
@@ -74,9 +72,9 @@ const ButtonUserReviewMovieLike = React.forwardRef<
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}, [deleteLike, like, t]);
+	}, [deleteLike, reviewId, t]);
 
-	if (session == null) {
+	if (user == null) {
 		return (
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button
@@ -108,7 +106,7 @@ const ButtonUserReviewMovieLike = React.forwardRef<
 			size="sm"
 			variant={'outline'}
 			className={cn(
-				"rounded-full",
+				'rounded-full',
 				like ? 'text-accent-pink hover:text-accent-pink/50' : 'text-muted-foreground hover:text-accent-pink',
 				className
 			)}

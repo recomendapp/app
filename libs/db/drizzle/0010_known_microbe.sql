@@ -1,0 +1,1 @@
+ALTER TABLE "tmdb"."movie_role" ADD PRIMARY KEY ("credit_id");

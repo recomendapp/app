@@ -36,7 +36,7 @@ import { ChevronsUpDown } from 'lucide-react';
 import { upperFirst } from 'lodash';
 import { supportedLocales } from '@libs/i18n';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
-import { useUserMeUpdateMutation } from '@libs/query-client/src';
+import { useUserMeUpdateMutation } from '@libs/query-client';
 
 export function AppearanceForm() {
   const t = useTranslations();

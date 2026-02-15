@@ -20,7 +20,7 @@ import {
 	DialogTrigger,
   } from '@/components/ui/dialog';
 import { useQuery } from "@tanstack/react-query";
-import { userMovieLogOptions, useUserMovieLogSetMutation } from "@libs/query-client";
+import { movieLogOptions, useMovieLogSetMutation } from "@libs/query-client";
 
 interface ButtonUserActivityMovieRatingProps
 	extends React.ComponentProps<typeof Button> {
@@ -41,12 +41,12 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 		data: activity,
 		isLoading,
 		isError,
-	} = useQuery(userMovieLogOptions({
+	} = useQuery(movieLogOptions({
 		userId: user?.id,
 		movieId: movieId,
 	}));
 
-	const { mutateAsync: handleLog, isPending } = useUserMovieLogSetMutation();	
+	const { mutateAsync: handleLog, isPending } = useMovieLogSetMutation();	
 
 	const handleRate = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();
@@ -62,12 +62,9 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}, [activity, movieId, ratingValue, stopPropagation, t]);
+	}, [movieId, ratingValue, stopPropagation, t]);
 	const handleUnrate = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();
-		if (activity?.review) {
-			return toast.error(t('components.media.actions.rating.remove_rating.has_review'));
-		}
 		await handleLog({
 			path: {
 				movie_id: movieId,
@@ -80,7 +77,7 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}, [activity, movieId, stopPropagation, t]);
+	}, [movieId, stopPropagation, t]);
 
 	React.useEffect(() => {
 		activity?.rating && setRatingValue(activity?.rating);

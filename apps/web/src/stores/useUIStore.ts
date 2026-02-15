@@ -7,9 +7,6 @@ interface UIStore {
   watchlistTab: UserWatchlistType;
   setWatchlistTab: (tab: UserWatchlistType) => void;
 
-  heartPickTab: UserActivityType;
-  setHeartPickTab: (tab: UserActivityType) => void;
-
   myRecosTab: UserRecosType;
   setMyRecosTab: (tab: UserRecosType) => void;
 
@@ -22,9 +19,6 @@ export const useUIStore = create<UIStore>()(
 		(set) => ({
 			watchlistTab: 'movie',
 			setWatchlistTab: (tab) => set({ watchlistTab: tab }),
-
-			heartPickTab: 'movie',
-			setHeartPickTab: (tab) => set({ heartPickTab: tab }),
 
 			myRecosTab: 'movie',
 			setMyRecosTab: (tab) => set({ myRecosTab: tab }),

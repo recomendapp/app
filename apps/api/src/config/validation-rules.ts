@@ -36,8 +36,7 @@ export const REVIEW_RULES = {
     REGEX: /^[a-zA-Z0-9\s\S]*$/,
   },
   BODY: {
-    MIN: 13,
+    MIN: 1,
     MAX: 50000,
-    REGEX: /^<html>[\s\S]*<\/html>$/,
   }
 }

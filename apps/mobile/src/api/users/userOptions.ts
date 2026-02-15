@@ -565,38 +565,38 @@ export const userReviewMovieOptions = ({
 	});
 };
 
-export const userReviewMovieLikeOptions = ({
-	supabase,
-	userId,
-	reviewId,
-} : {
-	supabase: SupabaseClient;
-	userId?: string;
-	reviewId?: number;
-}) => {
-	return queryOptions({
-		queryKey: userKeys.reviewLike({
-			reviewId: reviewId!,
-			type: 'movie',
-			userId: userId!,
-		}),
-		queryFn: async () => {
-			if (!userId) throw Error('Missing user id');
-			if (!reviewId) throw Error('Missing review id');
-			const { data, error } = await supabase
-				.from('user_review_movie_likes')
-				.select('*')
-				.match({
-					'user_id': userId,
-					'review_id': reviewId,
-				})
-				.maybeSingle();
-			if (error) throw error;
-			return !!data;
-		},
-		enabled: !!userId && !!reviewId,
-	});
-};
+// export const userReviewMovieLikeOptions = ({
+// 	supabase,
+// 	userId,
+// 	reviewId,
+// } : {
+// 	supabase: SupabaseClient;
+// 	userId?: string;
+// 	reviewId?: number;
+// }) => {
+// 	return queryOptions({
+// 		queryKey: userKeys.reviewLike({
+// 			reviewId: reviewId!,
+// 			type: 'movie',
+// 			userId: userId!,
+// 		}),
+// 		queryFn: async () => {
+// 			if (!userId) throw Error('Missing user id');
+// 			if (!reviewId) throw Error('Missing review id');
+// 			const { data, error } = await supabase
+// 				.from('user_review_movie_likes')
+// 				.select('*')
+// 				.match({
+// 					'user_id': userId,
+// 					'review_id': reviewId,
+// 				})
+// 				.maybeSingle();
+// 			if (error) throw error;
+// 			return !!data;
+// 		},
+// 		enabled: !!userId && !!reviewId,
+// 	});
+// };
 
 export const userReviewTvSeriesOptions = ({
 	supabase,

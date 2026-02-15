@@ -14,7 +14,6 @@ import {
 } from 'react';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
-import { UserReview } from '@recomendapp/types';
 import { cn } from '@/lib/utils';
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useFormatter, useNow, useTranslations } from 'next-intl';
@@ -41,7 +40,9 @@ import { CardTvSeries } from '../Card/CardTvSeries';
 import ButtonUserActivityMovieRating from '../buttons/ButtonUserActivityMovieRating';
 import ButtonUserActivityTvSeriesRating from '../buttons/ButtonUserActivityTvSeriesRating';
 import { Spinner } from '../ui/spinner';
-import { Movie, TvSeries } from '@packages/api-js';
+import { Movie, TvSeries, ReviewMovie as TReviewMovie } from '@packages/api-js';
+import { UserReview } from '@recomendapp/types';
+import ButtonUserActivityMovieWatch from '../buttons/ButtonUserActivityMovieWatch';
 
 const MAX_TITLE_LENGTH = 50;
 const MAX_BODY_LENGTH = 5000;
@@ -56,21 +57,21 @@ type EditorState = {
 };
 
 interface ReviewFormBase extends React.HTMLAttributes<HTMLDivElement> {
-	review?: UserReview;
-	rating?: number;
-	onUpdate?: (data: { title?: string; body: string }) => Promise<void>;
-	onCreate?: (data: { title?: string; body: string }) => Promise<void>;
+	isWatched: boolean;
+	onSave?: (data: { title?: string; body: string }) => Promise<void>;
 	onCancel?: () => void;
 }
 
 type ReviewMovie = {
 	type: 'movie';
+	review?: TReviewMovie | null;
 	movie: Movie;
 	tvSeries?: never;
 }
 
 type ReviewTvSeries = {
 	type: 'tv_series';
+	review?: UserReview | null;
 	tvSeries: TvSeries;
 	movie?: never;
 }
@@ -78,11 +79,10 @@ type ReviewTvSeries = {
 type ReviewFormProps = ReviewFormBase & (ReviewMovie | ReviewTvSeries);
 
 export default function ReviewForm({
+	isWatched,
 	review,
-	rating,
 	className,
-	onUpdate,
-	onCreate,
+	onSave,
 	onCancel,
 	type,
 	movie,
@@ -146,7 +146,7 @@ export default function ReviewForm({
 				return;
 			}
 
-			await onUpdate?.({
+			await onSave?.({
 				title: title?.trim(),
 				body: body,
 			});
@@ -156,14 +156,14 @@ export default function ReviewForm({
 		} finally {
 			setIsLoading(false);
 		}
-	}, [bodyLength, editor, onUpdate, review?.body, review?.title, t, title]);
+	}, [bodyLength, editor, onSave, review?.body, review?.title, t, title]);
 
 	const handleCreateReview = useCallback(async () => {
 		try {
 			setIsLoading(true);
 			const body = editor?.getHTML();
-			if (!rating) {
-				toast.error(upperFirst(t('common.messages.a_rating_is_required_to_add_a_review')))
+			if (!isWatched) {
+				toast.error(upperFirst(t('common.messages.must_watch_to_review')))
 				return;
 			}
 			if (!body || bodyLength == 0) {
@@ -171,7 +171,7 @@ export default function ReviewForm({
 				return;
 			}
 	
-			await onCreate?.({
+			await onSave?.({
 				title: title?.trim(),
 				body: body,
 			});
@@ -179,7 +179,7 @@ export default function ReviewForm({
 		} finally {
 			setIsLoading(false);
 		}
-	}, [bodyLength, editor, onCreate, rating, t, title]);
+	}, [bodyLength, editor, onSave, t, title, isWatched]);
 
 	const handleCancel = useCallback(() => {
 		const body = editor?.getHTML();
@@ -218,7 +218,7 @@ export default function ReviewForm({
 				{type === 'movie' ? (
 				<>
 					<CardMovie movie={movie} linked={false} />
-					<ButtonUserActivityMovieRating movieId={movie.id} />
+					<ButtonUserActivityMovieWatch movieId={movie.id} />
 				</>
 				) : type === 'tv_series' && (
 				<>

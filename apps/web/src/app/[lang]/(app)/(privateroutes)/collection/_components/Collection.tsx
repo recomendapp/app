@@ -3,7 +3,7 @@
 import React, { useMemo } from 'react';
 import { PlaylistCreateButton } from '@/components/Playlist/Button/PlaylistCreateButton';
 import { Link } from "@/lib/i18n/navigation";
-import { Bookmark, Heart, Send } from 'lucide-react';
+import { Bookmark, Send } from 'lucide-react';
 import {
   Tabs,
   TabsContent,
@@ -40,15 +40,6 @@ const Collection = () => {
 		),
 		label: upperFirst(t('messages.watchlist')),
 		href: '/collection/watchlist',
-	  },
-	  {
-		icon: (
-		  <CollectionIcon from="#e6619b" to="#e84749">
-			<Heart fill="#fff" className="w-2/5 h-2/5" />
-		  </CollectionIcon>
-		),
-		label: upperFirst(t('messages.heart_pick', { count: 2 })),
-		href: '/collection/heart-picks',
 	  },
 	],
 	[t]

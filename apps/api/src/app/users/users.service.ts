@@ -4,8 +4,7 @@ import { and, asc, desc, eq, exists, or, sql, SQL } from 'drizzle-orm';
 import { playlist, profile, user, follow, playlistMember } from '@libs/db/schemas';
 import { UserDto, UpdateUserDto, GetUsersQueryDto, ListUsersDto, ProfileDto } from './dto/users.dto';
 import { User } from '../auth/auth.service';
-import { GetUserPlaylistsQueryDto } from './dto/get-user-playlists.dto';
-import { ListPlaylistsDto } from '../playlists/dto/playlists.dto';
+import { GetPlaylistsQueryDto, ListPlaylistsDto } from '../playlists/dto/playlists.dto';
 import { FollowDto } from './dto/user-follow.dto';
 import { plainToInstance } from 'class-transformer';
 import { isUUID } from 'class-validator';
@@ -181,7 +180,7 @@ export class UsersService {
     });
   }
 
-  async getPlaylists(targetUserId: string, query: GetUserPlaylistsQueryDto, currentUser: User | null): Promise<ListPlaylistsDto> {
+  async getPlaylists(targetUserId: string, query: GetPlaylistsQueryDto, currentUser: User | null): Promise<ListPlaylistsDto> {
     const { per_page, sort_order, sort_by, page } = query;
     const direction = sort_order === 'asc' ? asc : desc;
     const orderBy = (() => {

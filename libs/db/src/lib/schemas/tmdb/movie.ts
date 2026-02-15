@@ -260,7 +260,7 @@ export const tmdbMovieReleaseDate = tmdbSchema.table(
 
 export const tmdbMovieRole = tmdbSchema.table('movie_role', {
   creditId: char('credit_id', { length: 24 })
-    .notNull()
+    .primaryKey()
     .references(() => tmdbMovieCredit.id, { onDelete: 'cascade' }),
   character: text(),
   order: smallint().notNull(),

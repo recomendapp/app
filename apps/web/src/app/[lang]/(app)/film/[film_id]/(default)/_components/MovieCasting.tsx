@@ -1,12 +1,12 @@
 'use client'
 
-import { useMediaMovieCastingOptions } from "@/api/client/options/mediaOptions";
 import { Card } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { Link } from "@/lib/i18n/navigation";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import { movieCastingOptions } from "@libs/query-client/src";
 import { Movie } from "@packages/api-js";
 import { useQuery } from "@tanstack/react-query";
 import { upperFirst } from "lodash";
@@ -22,7 +22,7 @@ export const MovieCasting = ({
 	const {
 		data,
 		isLoading,
-	} = useQuery(useMediaMovieCastingOptions({
+	} = useQuery(movieCastingOptions({
 		movieId: movie.id,
 	}));
 
@@ -41,27 +41,25 @@ export const MovieCasting = ({
 					Array.from({ length: 5 }).map((_, i) => (
 						<Skeleton key={i} className="h-48 w-32 rounded-md" style={{ animationDelay: `${i * 0.12}s` }} />
 					))
-				) : data?.map(({ media_person }, i) => (
-					media_person && (
-						<Link key={i} href={media_person.url ?? ''}>
-							<Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
-								<div className="relative w-full aspect-3/4 rounded-md overflow-hidden">
-								<ImageWithFallback
-								src={getTmdbImage({ path: media_person.profile_path, size: 'w342' })}
-								alt={media_person.name ?? ''}
-								fill
-								className="object-cover"
-								type="person"
-								unoptimized
-								/>
-								</div>
-								<div className="text-center">
-								<p className="line-clamp-2 wrap-break-word">{media_person.name}</p>
-								{/* {characters ? <p className="line-clamp-2 text-accent-yellow italic text-sm">{characters.join(', ')}</p> : null} */}
-								</div>
-							</Card>
-						</Link>
-					)
+				) : data?.map(({ person, roles }, i) => (
+					<Link key={i} href={person.url ?? ''}>
+						<Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
+							<div className="relative w-full aspect-3/4 rounded-md overflow-hidden">
+							<ImageWithFallback
+							src={getTmdbImage({ path: person.profilePath, size: 'w342' })}
+							alt={person.name ?? ''}
+							fill
+							className="object-cover"
+							type="person"
+							unoptimized
+							/>
+							</div>
+							<div className="text-center">
+							<p className="line-clamp-2 wrap-break-word">{person.name}</p>
+							{roles && roles.length > 0 ? <p className="line-clamp-2 text-accent-yellow italic text-sm">{roles.map(role => role.character).join(', ')}</p> : null}
+							</div>
+						</Card>
+					</Link>
 				))}
 			</div>
 			<ScrollBar orientation="horizontal" />

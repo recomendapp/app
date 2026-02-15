@@ -889,62 +889,6 @@ export const useUserWatchlistTvSeriesItemOptions = ({
 };
 /* -------------------------------------------------------------------------- */
 
-/* ------------------------------- HEART PICKS ------------------------------ */
-export const useUserHeartPicksMovieOptions = ({
-	userId,
-} : {
-	userId?: string;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: userKeys.heartPicks({
-			userId: userId!,
-			type: 'movie',
-		}),
-		queryFn: async () => {
-			if (!userId) throw Error('Missing user id');
-			const { data, error } = await supabase
-				.from('user_activities_movie')
-				.select(`*, movie:media_movie(*)`)
-				.match({
-					'user_id': userId,
-					'is_liked': true,
-				});
-			if (error) throw error;
-			return data;
-		},
-		enabled: !!userId,
-	});
-};
-
-export const useUserHeartPicksTvSeriesOptions = ({
-	userId,
-} : {
-	userId?: string;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: userKeys.heartPicks({
-			userId: userId!,
-			type: 'tv_series',
-		}),
-		queryFn: async () => {
-			if (!userId) throw Error('Missing user id');
-			const { data, error } = await supabase
-				.from('user_activities_tv_series')
-				.select(`*, tv_series:media_tv_series(*)`)
-				.match({
-					'user_id': userId,
-					'is_liked': true,
-				});
-			if (error) throw error;
-			return data;
-		},
-		enabled: !!userId,
-	});
-};
-/* -------------------------------------------------------------------------- */
-
 /* ------------------------------- Playlists ------------------------------- */
 // export const useUserPlaylistsInfiniteOptions = ({
 // 	userId,

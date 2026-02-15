@@ -12,7 +12,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { fr, enUS } from 'date-fns/locale';
 import { useQuery } from "@tanstack/react-query";
 import { useUserActivityMovieUpdateMutation } from "@/api/client/mutations/userMutations";
-import { userMovieLogOptions } from "@libs/query-client/src";
+import { movieLogOptions } from "@libs/query-client";
 
 interface ButtonUserActivityMovieWatchedDateProps
 	extends React.ComponentProps<typeof Button> {
@@ -32,7 +32,7 @@ const ButtonUserActivityMovieWatchedDate = React.forwardRef<
 		data: activity,
 		isLoading,
 		isError,
-	} = useQuery(userMovieLogOptions({
+	} = useQuery(movieLogOptions({
 		userId: user?.id,
 		movieId: movieId,
 	}));

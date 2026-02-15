@@ -12,7 +12,7 @@ import { ModalPlaylistGuest } from "../Modals/playlists/ModalPlaylistGuest/Modal
 import toast from "react-hot-toast";
 import { usePathname, useRouter } from "@/lib/i18n/navigation";
 import { Playlist, User } from "@packages/api-js";
-import { usePlaylistDeleteMutation } from "@libs/query-client/src";
+import { usePlaylistDeleteMutation } from "@libs/query-client";
 
 interface Item {
 	icon: React.ElementType;

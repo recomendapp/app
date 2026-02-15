@@ -31,7 +31,7 @@
       "no_followees": "aucun suivi(e)",
       "no_followers": "aucun follower",
       "no_rating": "aucune note",
-      "a_rating_is_required_to_add_a_review": "une note est requise pour ajouter une critique",
+      "must_watch_to_review": "vous devez avoir vu cette oeuvre pour la noter",
       "review_cannot_be_empty": "la critique ne peut pas être vide",
       "no_activity": "aucune activité",
       "followers_ratings": "notes des followers",
@@ -1156,11 +1156,6 @@
         "watch": {
           "remove_from_watched": {
             "description": "Êtes-vous sûr de vouloir retirer cette oeuvre de votre liste de vues ? Si vous avez une note ou une critique, elles seront également supprimées."
-          }
-        },
-        "rating": {
-          "remove_rating": {
-            "has_review": "Vous ne pouvez pas retirer une note associée à une critique."
           }
         }
       }

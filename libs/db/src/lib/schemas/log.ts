@@ -11,7 +11,7 @@ import {
   unique,
   uuid,
 } from 'drizzle-orm/pg-core';
-import { tmdbMovie, tmdbTvSeries } from './tmdb';
+import { tmdbMovie, tmdbMovieView, tmdbTvSeries } from './tmdb';
 import { user } from './auth';
 import { relations, sql } from 'drizzle-orm';
 import { reviewMovie, reviewTvSeries } from './review';
@@ -70,6 +70,10 @@ export const logMovieRelations = relations(logMovie, ({ many, one }) => ({
   movie: one(tmdbMovie, {
     fields: [logMovie.movieId],
     references: [tmdbMovie.id],
+  }),
+  user: one(user, {
+    fields: [logMovie.userId],
+    references: [user.id],
   }),
   watchedDates: many(logMovieWatchedDate),
   review: one(reviewMovie, {

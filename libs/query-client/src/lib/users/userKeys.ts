@@ -28,14 +28,14 @@ export const userKeys = {
 		filters,
 	}: {
 		userId: string;
-		filters?: Omit<UsersControllerGetFollowersData['query'], 'page' | 'per_page'>;
+		filters?: Omit<NonNullable<UsersControllerGetFollowersData['query']>, 'page' | 'per_page'>;
 	}) => filters ? [...userKeys.details({ userId }), 'followers', filters] as const : [...userKeys.details({ userId }), 'followers'] as const,
 	following: ({
 		userId,
 		filters,
 	}: {
 		userId: string;
-		filters?: Omit<UsersControllerGetFollowingData['query'], 'page' | 'per_page'>;
+		filters?: Omit<NonNullable<UsersControllerGetFollowingData['query']>, 'page' | 'per_page'>;
 	}) => filters ? [...userKeys.details({ userId }), 'following', filters] as const : [...userKeys.details({ userId }), 'following'] as const,
 	follow: ({
 		userId,
@@ -59,7 +59,7 @@ export const userKeys = {
 		filters,
 	}: {
 		userId: string;
-		filters?: Omit<UsersControllerGetPlaylistsData['query'], 'page' | 'per_page'>;
+		filters?: Omit<NonNullable<UsersControllerGetPlaylistsData['query']>, 'page' | 'per_page'>;
 	}) => filters ? [...userKeys.details({ userId }), 'playlists', filters] as const : [...userKeys.details({ userId }), 'playlists'] as const,
 
 	playlistLike: ({

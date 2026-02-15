@@ -8,7 +8,7 @@ DropdownMenuTrigger,
 import { useAuth } from '@/context/auth-context';
 import { LucideIcon, MoreVertical } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { MediaTvSeries, Profile, UserReviewTvSeries } from '@recomendapp/types';
+import { MediaTvSeries, UserReviewTvSeries } from '@recomendapp/types';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { Icons } from '@/config/icons';
@@ -16,6 +16,7 @@ import { useModal } from '@/context/modal-context';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
 import { useCallback, useMemo } from 'react';
 import { useUserReviewTvSeriesDeleteMutation } from '@/api/client/mutations/userMutations';
+import { UserSummary } from '@packages/api-js';
 
 type OptionItem = {
 	variant?: 'destructive';
@@ -33,7 +34,7 @@ export function ReviewTvSeriesSettings({
 	tvSeriesId: number;
 	tvSeries: MediaTvSeries;
 	review: UserReviewTvSeries;
-	author: Profile;
+	author: UserSummary;
 }) {
 	const { session } = useAuth();
 	const t = useTranslations();

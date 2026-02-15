@@ -281,8 +281,8 @@ export const tmdbTvSeriesProductionCountry = tmdbSchema.table(
 
 export const tmdbTvSeriesRole = tmdbSchema.table('tv_series_role', {
   creditId: text('credit_id')
-    .references(() => tmdbTvSeriesCredit.id, { onDelete: 'cascade' })
-    .primaryKey(),
+    .primaryKey()
+    .references(() => tmdbTvSeriesCredit.id, { onDelete: 'cascade' }),
   character: text(),
   episodeCount: integer('episode_count'),
   order: smallint().notNull(),

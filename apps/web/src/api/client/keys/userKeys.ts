@@ -184,16 +184,6 @@ export const userKeys = {
 	}) => [...userKeys.details({ userId }), 'watchlist-item', type, id] as const,
 	/* -------------------------------------------------------------------------- */
 
-	/* ------------------------------- HEART PICKS ------------------------------ */
-	heartPicks: ({
-		userId,
-		type,
-	} : {
-		userId: string;
-		type: 'movie' | 'tv_series';
-	}) => [...userKeys.details({ userId }), 'heart-picks', type] as const,
-	/* -------------------------------------------------------------------------- */
-
 	/* -------------------------------- Playlists ------------------------------- */
 	playlists: ({
 		userId,

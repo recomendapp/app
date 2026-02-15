@@ -8,7 +8,7 @@ import { playlistKeys } from '../keys/playlistKeys';
 import { usePlaylistDetailsOptions, usePlaylistMovieItemsOptions, usePlaylistTvSeriesItemsOptions } from '../options/playlistOptions';
 import { v4 } from 'uuid';
 import compressPicture from '@/lib/utils/compressPicture';
-import { userPlaylistsInfiniteOptions } from '@libs/query-client/src';
+import { userPlaylistsInfiniteOptions } from '@libs/query-client';
 
 // export const usePlaylistInsertMutation = () => {
 // 	const { session } = useAuth();
