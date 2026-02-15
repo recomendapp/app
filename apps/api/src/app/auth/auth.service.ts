@@ -4,6 +4,7 @@ import { createAuthMiddleware, magicLink, openAPI, username } from 'better-auth/
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { ENV_SERVICE, EnvService } from '@libs/env'; // Ton token
 import { NotifyClient } from '@shared/notify';
+import { WorkerClient } from '@shared/worker';
 import { profile } from '@libs/db/schemas';
 import { v7 as uuidv7 } from 'uuid';
 import { USER_RULES } from '../../config/validation-rules';
@@ -15,11 +16,13 @@ export const AUTH_SERVICE = 'AUTH_SERVICE';
 const createBetterAuth = ({
 	env,
 	db,
-	mailer,
+	notify,
+	worker,
 }: {
 	env: EnvService;
 	db: DrizzleService;
-	mailer: NotifyClient;
+	notify: NotifyClient;
+	worker: WorkerClient;
 }) => {
 	return betterAuth({
 		database: drizzleAdapter(db, {
@@ -59,6 +62,13 @@ const createBetterAuth = ({
 						await db.insert(profile).values({
 							id: user.id,
 						});
+
+						await worker.emit('search:sync-user', { userId: user.id})
+					},
+				},
+				update: {
+					after: async (user) => {
+						await worker.emit('search:sync-user', { userId: user.id });
 					},
 				}
 			}
@@ -95,7 +105,7 @@ const createBetterAuth = ({
 		emailVerification: {
 			autoSignInAfterVerification: true,
 			sendVerificationEmail: async ({ user, token, url }) => {
-				await mailer.emit('auth:verification-email', {
+				await notify.emit('auth:verification-email', {
 					email: user.email,
 					token,
 					url,
@@ -107,7 +117,7 @@ const createBetterAuth = ({
 			deleteUser: {
 				enabled: true,
 				sendDeleteAccountVerification: async ({ user, token, url }) => {
-					await mailer.emit('auth:delete-account-email', {
+					await notify.emit('auth:delete-account-email', {
 						email: user.email,
 						token,
 						url,
@@ -142,9 +152,14 @@ export type Session = AuthService['$Infer']['Session']['session'];
 export type User = AuthService['$Infer']['Session']['user'];
 
 export const AuthProvider: Provider = {
-  provide: AUTH_SERVICE,
-  inject: [ENV_SERVICE, DRIZZLE_SERVICE, NotifyClient],
-  useFactory: (env: EnvService, db: DrizzleService, mailer: NotifyClient) => { 
-    return createBetterAuth({ env, db, mailer });
-  },
+	provide: AUTH_SERVICE,
+	inject: [ENV_SERVICE, DRIZZLE_SERVICE, NotifyClient, WorkerClient],
+	useFactory: (
+		env: EnvService,
+		db: DrizzleService,
+		notify: NotifyClient,
+		worker: WorkerClient,
+	) => { 
+		return createBetterAuth({ env, db, notify, worker });
+	},
 };

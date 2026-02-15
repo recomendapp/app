@@ -10,11 +10,13 @@ import { FollowDto } from './dto/user-follow.dto';
 import { plainToInstance } from 'class-transformer';
 import { isUUID } from 'class-validator';
 import { USER_RULES } from '../../config/validation-rules';
+import { WorkerClient } from '@shared/worker';
 
 @Injectable()
 export class UsersService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
+    private readonly workerClient: WorkerClient,
   ) {}
 
   async getMe(loggedUser: User): Promise<UserDto> {
@@ -55,7 +57,13 @@ export class UsersService {
     avatar?: File, 
   ): Promise<UserDto> {
     const userUpdates: Partial<typeof user.$inferSelect> = {};
-    if (dto.name !== undefined) userUpdates.name = dto.name;
+    let shouldSyncSearch = false;
+
+    if (dto.name !== undefined) {
+      userUpdates.name = dto.name;
+      shouldSyncSearch = true;
+    }
+
     if (dto.username !== undefined && dto.username !== loggedUser.username) {
       if (loggedUser.usernameUpdatedAt) {
         const now = new Date();
@@ -67,6 +75,7 @@ export class UsersService {
       }
       userUpdates.username = dto.username;
       userUpdates.usernameUpdatedAt = new Date();
+      shouldSyncSearch = true;
     }
 
     const profileUpdates: Partial<typeof profile.$inferSelect> = {};
@@ -75,8 +84,7 @@ export class UsersService {
     if (dto.language !== undefined) profileUpdates.language = dto.language;
 
     if (avatar) {
-      // TODO:
-      // upload avatar and get URL (implementation depends on your storage solution)
+      // TODO: upload avatar
     }
 
     await this.db.transaction(async (tx) => {
@@ -91,6 +99,10 @@ export class UsersService {
           .where(eq(profile.id, loggedUser.id));
       }
     });
+
+    if (shouldSyncSearch) {
+      await this.workerClient.emit('search:sync-user', { userId: loggedUser.id });
+    }
 
     return this.getMe(loggedUser);
   }

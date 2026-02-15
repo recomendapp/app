@@ -1,4 +1,4 @@
-import { Global, Module } from '@nestjs/common';
+import { DynamicModule, Global, Module } from '@nestjs/common';
 import { apiSchema, validateEnv } from './env.validation'
 import z from 'zod';
 
@@ -7,15 +7,20 @@ export const ENV_SERVICE = Symbol('ENV_SERVICE');
 export type EnvService = z.infer<typeof apiSchema>;
 
 @Global()
-@Module({
-  providers: [
-    {
-      provide: ENV_SERVICE,
-      useFactory: () => {
-        return validateEnv(apiSchema);
-      },
-    },
-  ],
-  exports: [ENV_SERVICE],
-})
-export class EnvModule {}
+@Module({})
+export class EnvModule {
+  static forRoot(schema: z.ZodType): DynamicModule {
+    return {
+      module: EnvModule,
+      providers: [
+        {
+          provide: ENV_SERVICE,
+          useFactory: () => {
+            return validateEnv(schema);
+          },
+        },
+      ],
+      exports: [ENV_SERVICE],
+    };
+  }
+}

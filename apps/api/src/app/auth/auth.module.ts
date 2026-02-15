@@ -3,11 +3,13 @@ import { AuthController } from './auth.controller';
 import { AuthGuard, OptionalAuthGuard } from './guards';
 import { AUTH_SERVICE, AuthProvider } from './auth.service';
 import { NotifySharedModule } from '@shared/notify';
+import { SharedWorkerModule } from '@shared/worker';
 
 @Global()
 @Module({
   imports: [
-    NotifySharedModule
+    NotifySharedModule,
+    SharedWorkerModule,
   ],
   controllers: [AuthController],
   providers: [

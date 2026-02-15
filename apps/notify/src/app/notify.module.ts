@@ -22,7 +22,7 @@ import * as path from 'path';
     }),
     BullModule.forRoot({
       connection: {
-      host: env.REDIS_HOST,
+        host: env.REDIS_HOST,
         port: env.REDIS_PORT,
         password: env.REDIS_PASSWORD,
       },

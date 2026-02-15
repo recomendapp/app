@@ -47,6 +47,12 @@ export const notifySchema = commonSchema.extend({
   RESEND_FROM_EMAIL: z.string().default('Recomend <hello@recomend.app>'),
 });
 
+export const workerSchema = commonSchema.extend({
+  PORT: z.coerce.number().default(9002),
+  HOST: z.string().default('0.0.0.0'),
+  DATABASE_URL: z.string(),
+});
+
 export function validateEnv<T extends z.ZodType>(schema: T): z.infer<T> {
   const parsed = schema.safeParse(process.env);
 
