@@ -20,8 +20,7 @@ import {
 	DialogTrigger,
   } from '@/components/ui/dialog';
 import { useQuery } from "@tanstack/react-query";
-import { useUserActivityMovieOptions } from "@/api/client/options/userOptions";
-import { useUserActivityMovieInsertMutation, useUserActivityMovieUpdateMutation } from "@/api/client/mutations/userMutations";
+import { userMovieLogOptions, useUserMovieLogSetMutation } from "@libs/query-client";
 
 interface ButtonUserActivityMovieRatingProps
 	extends React.ComponentProps<typeof Button> {
@@ -33,7 +32,7 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 	React.ComponentRef<typeof Button>,
 	ButtonUserActivityMovieRatingProps
 >(({ movieId, stopPropagation = true, className, ...props }, ref) => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const t = useTranslations();
 	const pathname = usePathname();
 	const [ratingValue, setRatingValue] = React.useState(5);
@@ -42,59 +41,52 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 		data: activity,
 		isLoading,
 		isError,
-	} = useQuery(useUserActivityMovieOptions({
-		userId: session?.user.id,
+	} = useQuery(userMovieLogOptions({
+		userId: user?.id,
 		movieId: movieId,
 	}));
 
-	const { mutateAsync: insertActivity, isPending: isInsertPending } = useUserActivityMovieInsertMutation();
-	const { mutateAsync: updateActivity, isPending: isUpdatePending } = useUserActivityMovieUpdateMutation();
-	
+	const { mutateAsync: handleLog, isPending } = useUserMovieLogSetMutation();	
 
 	const handleRate = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();
-		if (!session?.user.id) return;
-		if (activity) {
-			await updateActivity({
-				activityId: activity.id,
+		await handleLog({
+			path: {
+				movie_id: movieId,
+			},
+			body: {
 				rating: ratingValue,
-			}, {
-				onError: () => {
-					toast.error(upperFirst(t('common.messages.an_error_occurred')));
-				}
-			});
-		} else {
-			await insertActivity({
-				userId: session?.user.id,
-				movieId: movieId,
-				rating: ratingValue,
-			}, {
-				onError: () => {
-					toast.error(upperFirst(t('common.messages.an_error_occurred')));
-				}
-			});
-		}
-	}, [activity, insertActivity, movieId, ratingValue, session, stopPropagation, t, updateActivity]);
-	const handleUnrate = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
-		stopPropagation && e.stopPropagation();
-		if (activity?.review) {
-			return toast.error(t('components.media.actions.rating.remove_rating.has_review'));
-		}
-		await updateActivity({
-		  activityId: activity!.id!,
-		  rating: null,
+			}
 		}, {
 			onError: () => {
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}, [activity, updateActivity, stopPropagation, t]);
+	}, [activity, movieId, ratingValue, stopPropagation, t]);
+	const handleUnrate = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
+		stopPropagation && e.stopPropagation();
+		if (activity?.review) {
+			return toast.error(t('components.media.actions.rating.remove_rating.has_review'));
+		}
+		await handleLog({
+			path: {
+				movie_id: movieId,
+			},
+			body: {
+				rating: null,
+			}
+		}, {
+			onError: () => {
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
+			}
+		});
+	}, [activity, movieId, stopPropagation, t]);
 
 	React.useEffect(() => {
 		activity?.rating && setRatingValue(activity?.rating);
 	  }, [activity]);
 
-	if (session == null) {
+	if (user == null) {
 		return (
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button
@@ -119,7 +111,7 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 			<DialogTrigger asChild>
 				<Button
 				ref={ref}
-				disabled={isLoading || isError || activity === undefined || isInsertPending || isUpdatePending}
+				disabled={isLoading || isError || activity === undefined || isPending}
 				variant={'outline'}
 				size={activity?.rating ? 'default' : 'icon'}
 				className={cn(

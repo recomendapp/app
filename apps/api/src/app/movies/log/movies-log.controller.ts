@@ -1,33 +1,39 @@
-import { Controller, Post, Param, Body, UseGuards, Get } from '@nestjs/common';
+import { Controller, Post, Param, Body, UseGuards, Get, Delete, ParseIntPipe } from '@nestjs/common';
 import { MoviesLogService } from './movies-log.service';
 import { LogMovieRequestDto, LogMovieDto } from './dto/log-movie.dto';
-import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiExtraModels, ApiOkResponse, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { AuthGuard } from '../../auth/guards';
 import { CurrentUser } from '../../auth/decorators';
 import { User } from '../../auth/auth.service';
 
 @ApiTags('Movies')
 @Controller({
-  path: 'movie',
+  path: 'movie/:movie_id/log',
   version: '1',
 })
 export class MoviesLogController {
   constructor(private readonly logService: MoviesLogService) {}
 
-  @Get(':movie_id/log')
+  @Get()
   @UseGuards(AuthGuard)
+  @ApiExtraModels(LogMovieDto)
   @ApiOkResponse({
     description: 'Get the movie log for the authenticated user',
-    type: LogMovieDto || null,
+    schema: {
+      nullable: true,
+      allOf: [
+        { $ref: getSchemaPath(LogMovieDto) }
+      ]
+    }
   })
-  async getMovieLog(
-    @Param('movie_id') movieId: string,
+  async get(
+    @Param('movie_id', ParseIntPipe) movieId: number,
     @CurrentUser() user: User,
   ): Promise<LogMovieDto | null> {
-    return this.logService.getLog(user, Number(movieId));
+    return this.logService.get(user, movieId);
   }
 
-  @Post(':movie_id/log')
+  @Post()
   @UseGuards(AuthGuard)
   @ApiResponse({
     status: 200,
@@ -35,11 +41,25 @@ export class MoviesLogController {
     type: LogMovieDto,
   })
   @ApiResponse({ status: 400, description: 'Invalid request data' })
-  async postMovieLog(
-    @Param('movie_id') movieId: string,
+  async set(
+    @Param('movie_id', ParseIntPipe) movieId: number,
     @Body() dto: LogMovieRequestDto,
 	  @CurrentUser() user: User,
   ): Promise<LogMovieDto> {
-    return this.logService.setLog(user, Number(movieId), dto);
+    return this.logService.set(user, movieId, dto);
+  }
+
+  @Delete()
+  @UseGuards(AuthGuard)
+  @ApiResponse({
+    status: 200,
+    description: 'Movie log deleted successfully',
+    type: LogMovieDto,
+  })
+  async delete(
+    @Param('movie_id', ParseIntPipe) movieId: number,
+    @CurrentUser() user: User,
+  ): Promise<LogMovieDto> {
+    return this.logService.delete(user, movieId);
   }
 }

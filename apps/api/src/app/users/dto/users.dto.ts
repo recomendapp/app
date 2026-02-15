@@ -45,7 +45,9 @@ export class UserDto {
 	})
 	username: string;
 
-	@ApiProperty()
+	@ApiProperty({
+		nullable: true,
+	})
 	@Expose()
 	@Type(() => Date)
 	usernameUpdatedAt?: Date | null;

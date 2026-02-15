@@ -1,4 +1,4 @@
-import { personsControllerGetFollowStatus, playlistsControllerGetLikeStatus, playlistsControllerGetSaveStatus, usersControllerGetFollowers, UsersControllerGetFollowersData, usersControllerGetFollowing, UsersControllerGetFollowingData, usersControllerGetFollowStatus, usersControllerGetMe, usersControllerGetPlaylists, UsersControllerGetPlaylistsData } from "@packages/api-js";
+import { moviesLogControllerGet, personsControllerGetFollowStatus, playlistsControllerGetLikeStatus, playlistsControllerGetSaveStatus, usersControllerGetFollowers, UsersControllerGetFollowersData, usersControllerGetFollowing, UsersControllerGetFollowingData, usersControllerGetFollowStatus, usersControllerGetMe, usersControllerGetPlaylists, UsersControllerGetPlaylistsData } from "@packages/api-js";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { userKeys } from "./userKeys";
 
@@ -10,6 +10,31 @@ export const userMeOptions = () => {
 			if (error) throw error;
 			return data;
 		},
+	});
+};
+
+/* ---------------------------------- Logs ---------------------------------- */
+export const userMovieLogOptions = ({
+	userId,
+	movieId,
+}: {
+	userId?: string;
+	movieId?: number;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.log({ userId: userId!, id: movieId!, type: 'movie' }),
+		queryFn: async () => {
+			if (!movieId) throw new Error('Movie ID is required');
+			const { data, error } = await moviesLogControllerGet({
+				path: {
+					movie_id: movieId,
+				},
+			});
+			if (error) throw error;
+			if (data === undefined) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId && !!movieId,
 	});
 };
 
@@ -107,6 +132,7 @@ export const userFollowOptions = ({
 				}
 			});
 			if (error) throw error;
+			if (data === undefined) throw new Error('No data');
 			return data;
 		},
 		enabled: !!userId && !!profileId && userId !== profileId,
@@ -133,6 +159,7 @@ export const userPersonFollowOptions = ({
 				}
 			});
 			if (error) throw error;
+			if (data === undefined) throw new Error('No data');
 			return data;
 		},
 		enabled: !!userId && !!personId,

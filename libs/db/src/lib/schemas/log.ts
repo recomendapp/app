@@ -7,7 +7,6 @@ import {
   pgEnum,
   pgTable,
   real,
-  text,
   timestamp,
   unique,
   uuid,
@@ -15,6 +14,7 @@ import {
 import { tmdbMovie, tmdbTvSeries } from './tmdb';
 import { user } from './auth';
 import { relations, sql } from 'drizzle-orm';
+import { reviewMovie, reviewTvSeries } from './review';
 
 /* -------------------------------------------------------------------------- */
 /*                                    MOVIE                                   */
@@ -72,6 +72,10 @@ export const logMovieRelations = relations(logMovie, ({ many, one }) => ({
     references: [tmdbMovie.id],
   }),
   watchedDates: many(logMovieWatchedDate),
+  review: one(reviewMovie, {
+    fields: [logMovie.id],
+    references: [reviewMovie.id],
+  })
 }));
 
 export const logMovieWatchedDate = pgTable(
@@ -156,5 +160,15 @@ export const logTvSeries = pgTable(
     ),
   ],
 );
+export const logTvSeriesRelations = relations(logTvSeries, ({ one }) => ({
+  tvSeries: one(tmdbTvSeries, {
+    fields: [logTvSeries.tvSeriesId],
+    references: [tmdbTvSeries.id],
+  }),
+  review: one(reviewTvSeries, {
+    fields: [logTvSeries.id],
+    references: [reviewTvSeries.id],
+  })
+}));
 
 /* -------------------------------------------------------------------------- */

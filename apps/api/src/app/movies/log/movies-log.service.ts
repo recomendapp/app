@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { LogMovieRequestDto, LogMovieDto } from './dto/log-movie.dto';
 import { and, eq, sql } from 'drizzle-orm';
 import { WatchedDateDto } from './dto/watched-date.dto';
@@ -12,7 +12,7 @@ export class MoviesLogService {
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
   ) {}
 
-  async getLog(user: User, movieId: number, targetUserId?: string): Promise<LogMovieDto | null> {
+  async get(user: User, movieId: number): Promise<LogMovieDto | null> {
     const logEntry = await this.db.query.logMovie.findFirst({
       where: and(
         eq(logMovie.userId, user.id),
@@ -25,14 +25,15 @@ export class MoviesLogService {
             watchedDate: true,
           },
         },
+        review: true
       }
     })
 
     if (!logEntry) return null;
-    return new LogMovieDto(logEntry);
+    return logEntry
   }
 
-  async setLog(user: User, movieId: number, dto: LogMovieRequestDto): Promise<LogMovieDto> {
+  async set(user: User, movieId: number, dto: LogMovieRequestDto): Promise<LogMovieDto> {
     const now = new Date();
     const watchedDate = dto.watchedAt ? new Date(dto.watchedAt) : now;
     return await this.db.transaction(async (tx) => {
@@ -42,7 +43,7 @@ export class MoviesLogService {
           userId: user.id,
           movieId: movieId,
           rating: dto.rating,
-          ratedAt: dto.rating ? now : null,
+          ratedAt: dto.rating != null ? now : null,
           isLiked: dto.isLiked || false,
           likedAt: dto.isLiked ? now : null,
           watchCount: 1,
@@ -55,7 +56,7 @@ export class MoviesLogService {
           target: [logMovie.movieId, logMovie.userId],
           set: {
             rating: dto.rating !== undefined ? dto.rating : sql`${logMovie.rating}`,
-            ratedAt: dto.rating !== undefined ? now : sql`${logMovie.ratedAt}`,
+            ratedAt: dto.rating !== undefined ? (dto.rating === null ? null : now) : sql`${logMovie.ratedAt}`,
             isLiked: dto.isLiked !== undefined ? dto.isLiked : sql`${logMovie.isLiked}`,
             likedAt: dto.isLiked === true ? now : (dto.isLiked === false ? null : sql`${logMovie.likedAt}`),
             updatedAt: now,
@@ -88,12 +89,44 @@ export class MoviesLogService {
           }));
       }
 
-      return new LogMovieDto({
+      return {
         ...logEntry,
-        id: Number(logEntry.id),
-        movieId: Number(logEntry.movieId),
-        watchedDates: responseDates, 
+        watchedDates: responseDates,
+        review: null,
+      };
+    });
+  }
+
+  async delete(user: User, movieId: number): Promise<LogMovieDto> {
+    return await this.db.transaction(async (tx) => {
+      const logEntry = await tx.query.logMovie.findFirst({
+        where: and(
+          eq(logMovie.userId, user.id),
+          eq(logMovie.movieId, movieId),
+        ),
+        with: {
+          watchedDates: {
+            columns: {
+              id: true,
+              watchedDate: true,
+            },
+          },
+          review: true,
+        }
       });
+
+      if (!logEntry) {
+        throw new NotFoundException('Log entry not found');
+      }
+
+      await tx.delete(logMovie).where(
+        and(
+          eq(logMovie.userId, user.id),
+          eq(logMovie.movieId, movieId),
+        )
+      );
+
+      return logEntry;
     });
   }
 }

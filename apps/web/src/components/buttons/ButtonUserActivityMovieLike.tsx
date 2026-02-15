@@ -10,10 +10,8 @@ import { AlertCircleIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useUserActivityMovieOptions } from "@/api/client/options/userOptions";
-import { userKeys } from "@/api/client/keys/userKeys";
-import { useUserActivityMovieInsertMutation, useUserActivityMovieUpdateMutation } from "@/api/client/mutations/userMutations";
+import { useQuery } from "@tanstack/react-query";
+import { userMovieLogOptions, useUserMovieLogSetMutation } from "@libs/query-client";
 
 interface ButtonUserActivityMovieLikeProps
 	extends React.ComponentProps<typeof Button> {
@@ -25,77 +23,38 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 	React.ComponentRef<typeof Button>,
 	ButtonUserActivityMovieLikeProps
 >(({ movieId, stopPropagation = true, className, ...props }, ref) => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const t = useTranslations();
 	const pathname = usePathname();
-	const queryClient = useQueryClient();
 
 	const {
 		data: activity,
 		isLoading,
 		isError,
-	} = useQuery(useUserActivityMovieOptions({
-		userId: session?.user.id,
+	} = useQuery(userMovieLogOptions({
+		userId: user?.id,
 		movieId: movieId,
 	}));
 
-	const { mutateAsync: insertActivity, isPending: isInsertPending } = useUserActivityMovieInsertMutation();
-	const { mutateAsync: updateActivity, isPending: isUpdatePending } = useUserActivityMovieUpdateMutation();
+	const { mutateAsync: handleLog, isPending } = useUserMovieLogSetMutation();
 
-	const handleLike = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
+	const handleToggle = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();
-		if (!session?.user.id) return;
-		if (activity) {
-			await updateActivity({
-				activityId: activity.id,
-				isLiked: true,
-			}, {
-				onSuccess: () => {
-					queryClient.invalidateQueries({
-						queryKey: userKeys.heartPicks({ userId: session.user.id, type: 'movie' })
-					});
-				},
-				onError: () => {
-					toast.error(upperFirst(t('common.messages.an_error_occurred')));
-				}
-			});
-		} else {
-			await insertActivity({
-				userId: session?.user.id,
-				movieId: movieId,
-				isLiked: true,
-			}, {
-				onSuccess: (data) => {
-					queryClient.invalidateQueries({
-						queryKey: userKeys.heartPicks({ userId: session.user.id, type: 'movie' })
-					});
-				},
-				onError: () => {
-					toast.error(upperFirst(t('common.messages.an_error_occurred')));
-				}
-			});
-		}
-	}, [activity, insertActivity, movieId, queryClient, session, stopPropagation, t, updateActivity]);
-	const handleUnlike = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
-		stopPropagation && e.stopPropagation();
-		if (!session?.user.id) return;
-		if (!activity) return;
-		await updateActivity({
-			activityId: activity.id,
-			isLiked: false,
-		}, {
-			onSuccess: () => {
-				queryClient.invalidateQueries({
-					queryKey: userKeys.heartPicks({ userId: session.user.id, type: 'movie' })
-				});
+		await handleLog({
+			path: {
+				movie_id: movieId,
 			},
+			body: {
+				isLiked: activity?.isLiked !== undefined ? !activity.isLiked : true,
+			}
+		}, {
 			onError: () => {
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}, [activity, queryClient, session, stopPropagation, t, updateActivity]);
+	}, [activity, movieId, stopPropagation, t]);
 
-	if (session == null) {
+	if (user == null) {
 		return (
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button
@@ -115,16 +74,16 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 	}
 
 	return (
-		<TooltipBox tooltip={activity?.is_liked ? upperFirst(t('common.messages.remove_from_heart_picks')) : upperFirst(t('common.messages.add_to_heart_picks'))}>
+		<TooltipBox tooltip={activity?.isLiked ? upperFirst(t('common.messages.remove_from_heart_picks')) : upperFirst(t('common.messages.add_to_heart_picks'))}>
 			<Button
 			ref={ref}
-			onClick={(e) => activity?.is_liked ? handleUnlike(e) : handleLike(e)}
-			disabled={isLoading || isError || activity === undefined || isInsertPending || isUpdatePending}
+			onClick={handleToggle}
+			disabled={isLoading || isError || activity === undefined || isPending}
 			size="icon"
 			variant={'outline'}
 			className={cn(
 				'rounded-full',
-				activity?.is_liked ? 'bg-accent-pink!' : '',
+				activity?.isLiked ? 'bg-accent-pink!' : '',
 				className
 			)}
 			{...props}
@@ -135,7 +94,7 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 				<AlertCircleIcon />
 				) : (
 				<Icons.like
-				className={`${activity?.is_liked ? 'fill-foreground' : ''}`}
+				className={`${activity?.isLiked ? 'fill-foreground' : ''}`}
 				/>
 				)}
 			</Button>

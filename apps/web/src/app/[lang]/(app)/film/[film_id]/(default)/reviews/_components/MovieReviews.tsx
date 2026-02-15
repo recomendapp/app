@@ -23,8 +23,8 @@ import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { useMediaMovieReviewsOptions } from '@/api/client/options/mediaOptions';
-import { useUserActivityMovieOptions } from '@/api/client/options/userOptions';
 import { Movie } from '@packages/api-js';
+import { userMovieLogOptions } from '@libs/query-client/src';
 
 type SortBy =  "updated_at" | "created_at";
 const DEFAULT_PER_PAGE = 20;
@@ -156,7 +156,7 @@ const MyReviewButton = ({
 	const {
 	  data: activity,
 	  isLoading,  
-	} = useQuery(useUserActivityMovieOptions({
+	} = useQuery(userMovieLogOptions({
 		movieId: movie.id,
 		userId: user?.id,
 	}));

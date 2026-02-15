@@ -5,10 +5,10 @@ import { useRouter } from "@/lib/i18n/navigation";
 import ReviewForm from '@/components/Review/ReviewForm';
 import { Spinner } from '@/components/ui/spinner';
 import { useCallback, useEffect } from 'react';
-import { useUserActivityMovieOptions } from '@/api/client/options/userOptions';
 import { useQuery } from '@tanstack/react-query';
 import { useUserReviewMovieUpsertMutation } from '@/api/client/mutations/userMutations';
 import { Movie } from '@packages/api-js';
+import { userMovieLogOptions } from '@libs/query-client/src';
 
 export const MovieCreateReview = ({
 	movie,
@@ -21,7 +21,7 @@ export const MovieCreateReview = ({
 	const {
 		data: activity,
 		isLoading,
-	} = useQuery(useUserActivityMovieOptions({
+	} = useQuery(userMovieLogOptions({
 		movieId: movie.id,
 		userId: user?.id,
 	}));

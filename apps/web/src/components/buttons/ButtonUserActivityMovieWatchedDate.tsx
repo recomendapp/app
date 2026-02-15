@@ -10,9 +10,9 @@ import { upperFirst } from "lodash";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { fr, enUS } from 'date-fns/locale';
-import { useUserActivityMovieOptions } from "@/api/client/options/userOptions";
 import { useQuery } from "@tanstack/react-query";
 import { useUserActivityMovieUpdateMutation } from "@/api/client/mutations/userMutations";
+import { userMovieLogOptions } from "@libs/query-client/src";
 
 interface ButtonUserActivityMovieWatchedDateProps
 	extends React.ComponentProps<typeof Button> {
@@ -24,7 +24,7 @@ const ButtonUserActivityMovieWatchedDate = React.forwardRef<
 	React.ComponentRef<typeof Button>,
 	ButtonUserActivityMovieWatchedDateProps
 >(({ movieId, stopPropagation = true, className, ...props }, ref) => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const locale = useLocale();
 	const format = useFormatter();
 	const t = useTranslations();
@@ -32,8 +32,8 @@ const ButtonUserActivityMovieWatchedDate = React.forwardRef<
 		data: activity,
 		isLoading,
 		isError,
-	} = useQuery(useUserActivityMovieOptions({
-		userId: session?.user.id,
+	} = useQuery(userMovieLogOptions({
+		userId: user?.id,
 		movieId: movieId,
 	}));
 	const { mutateAsync: updateDate, isPending: isUpdatePending } = useUserActivityMovieUpdateMutation();

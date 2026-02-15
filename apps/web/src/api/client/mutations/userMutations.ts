@@ -305,107 +305,107 @@ export const useUserDeclineFollowerRequestMutation = () => {
 /* -------------------------------------------------------------------------- */
 
 /* ------------------------------- ACTIVITIES ------------------------------- */
-export const useUserActivityMovieInsertMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	const userMyFeedOptions = useUserMyFeedInfiniteOptions();
-	return useMutation({
-		mutationFn: async ({
-			userId,
-			movieId,
-			rating,
-			isLiked,
-		} : {
-			userId: string;
-			movieId: number;
-			rating?: number;
-			isLiked?: boolean;
-		}) => {
-			const { data, error } = await supabase
-				.from('user_activities_movie')
-				.insert({
-					user_id: userId,
-					movie_id: movieId,
-					rating: rating,
-					is_liked: isLiked,
-				})
-				.select(`*, review:user_reviews_movie(*)`)
-				.single()
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(userKeys.activity({
-				id: data.movie_id,
-				type: 'movie',
-				userId: data.user_id,
-			}), data);
+// export const useUserActivityMovieInsertMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	const userMyFeedOptions = useUserMyFeedInfiniteOptions();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			userId,
+// 			movieId,
+// 			rating,
+// 			isLiked,
+// 		} : {
+// 			userId: string;
+// 			movieId: number;
+// 			rating?: number;
+// 			isLiked?: boolean;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('user_activities_movie')
+// 				.insert({
+// 					user_id: userId,
+// 					movie_id: movieId,
+// 					rating: rating,
+// 					is_liked: isLiked,
+// 				})
+// 				.select(`*, review:user_reviews_movie(*)`)
+// 				.single()
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(userKeys.activity({
+// 				id: data.movie_id,
+// 				type: 'movie',
+// 				userId: data.user_id,
+// 			}), data);
 
-			// Watchlist
-			queryClient.setQueryData(userKeys.watchlistItem({
-				id: data.movie_id,
-				type: 'movie',
-				userId: data.user_id,
-			}), null);
+// 			// Watchlist
+// 			queryClient.setQueryData(userKeys.watchlistItem({
+// 				id: data.movie_id,
+// 				type: 'movie',
+// 				userId: data.user_id,
+// 			}), null);
 
-			// Heart picks
-			if (data.is_liked) {
-				queryClient.invalidateQueries({
-					queryKey: userKeys.heartPicks({
-						userId: data.user_id,
-						type: 'movie',
-					})
-				});
-			}
-			queryClient.invalidateQueries({
-				queryKey: userMyFeedOptions.queryKey,
-			})
-		}
-	});
-};
-export const useUserActivityMovieDeleteMutation = () => {
-	const { session } = useAuth();
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	const userMyFeedOptions = useUserMyFeedInfiniteOptions();
-	const heartPicksOptions = useUserHeartPicksMovieOptions({
-		userId: session?.user.id,
-	})
-	return useMutation({
-		mutationFn: async ({
-			activityId,
-		} : {
-			activityId: number;
-		}) => {
-			const { data, error } = await supabase
-				.from('user_activities_movie')
-				.delete()
-				.eq('id', activityId)
-				.select(`*, review:user_reviews_movie(*)`)
-				.single();
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(userKeys.activity({
-				id: data.movie_id,
-				type: 'movie',
-				userId: data.user_id,
-			}), null);
+// 			// Heart picks
+// 			if (data.is_liked) {
+// 				queryClient.invalidateQueries({
+// 					queryKey: userKeys.heartPicks({
+// 						userId: data.user_id,
+// 						type: 'movie',
+// 					})
+// 				});
+// 			}
+// 			queryClient.invalidateQueries({
+// 				queryKey: userMyFeedOptions.queryKey,
+// 			})
+// 		}
+// 	});
+// };
+// export const useUserActivityMovieDeleteMutation = () => {
+// 	const { session } = useAuth();
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	const userMyFeedOptions = useUserMyFeedInfiniteOptions();
+// 	const heartPicksOptions = useUserHeartPicksMovieOptions({
+// 		userId: session?.user.id,
+// 	})
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			activityId,
+// 		} : {
+// 			activityId: number;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('user_activities_movie')
+// 				.delete()
+// 				.eq('id', activityId)
+// 				.select(`*, review:user_reviews_movie(*)`)
+// 				.single();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(userKeys.activity({
+// 				id: data.movie_id,
+// 				type: 'movie',
+// 				userId: data.user_id,
+// 			}), null);
 
-			if (data.is_liked) {
-				queryClient.setQueryData(heartPicksOptions.queryKey, (oldData) => {
-					if (!oldData) return oldData;
-					return oldData.filter((pick) => pick.id !== data.id);
-				})
-			}
+// 			if (data.is_liked) {
+// 				queryClient.setQueryData(heartPicksOptions.queryKey, (oldData) => {
+// 					if (!oldData) return oldData;
+// 					return oldData.filter((pick) => pick.id !== data.id);
+// 				})
+// 			}
 
-			queryClient.invalidateQueries({
-				queryKey: userMyFeedOptions.queryKey,
-			})
-		}
-	});
-};
+// 			queryClient.invalidateQueries({
+// 				queryKey: userMyFeedOptions.queryKey,
+// 			})
+// 		}
+// 	});
+// };
 export const useUserActivityMovieUpdateMutation = () => {
 	const { session } = useAuth();
 	const supabase = useSupabaseClient();

@@ -11,6 +11,17 @@ export const userKeys = {
 		userId: string;
 	}) => [...userKeys.base, userId] as const,
 
+	/* ---------------------------------- Logs ---------------------------------- */
+	log: ({
+		id,
+		type,
+		userId,
+	}: {
+		id: number;
+		type: 'movie' | 'tv_series';
+		userId: string;
+	}) => [...userKeys.details({ userId }), 'log', type, id] as const,
+
 	/* --------------------------------- Follows -------------------------------- */
 	followers: ({
 		userId,

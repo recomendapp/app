@@ -1,7 +1,8 @@
 import { ApiSchema, ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsDateString, IsNumber, IsOptional, Max, Min } from 'class-validator';
-import { Exclude, Expose, Type } from 'class-transformer';
+import { IsBoolean, IsDate, IsDateString, IsInt, IsNumber, IsOptional, Max, Min, ValidateNested } from 'class-validator';
+import { Expose, Type } from 'class-transformer';
 import { WatchedDateDto } from './watched-date.dto';
+import { ReviewMovieDto } from '../../review/dto/reviews-movie.dto';
 
 /* -------------------------------- REQUESTS -------------------------------- */
 
@@ -41,51 +42,64 @@ export class LogMovieRequestDto {
 /* -------------------------------- RESPONSES ------------------------------- */
 
 @ApiSchema({ name: 'LogMovie' })
-@Exclude()
 export class LogMovieDto {
-  @Expose()
   @ApiProperty({ example: 42 })
-  id!: number;
-
   @Expose()
+  @IsInt()
+  id: number;
+
   @ApiProperty({ example: 550 })
-  movieId!: number;
-
   @Expose()
+  @IsInt()
+  movieId: number;
+
   @ApiProperty({ example: 'user-uuid-123' })
-  userId!: string;
-
   @Expose()
+  userId: string;
+
   @ApiProperty({ example: 8.5, nullable: true })
-  rating!: number | null;
-
   @Expose()
+  @IsNumber()
+  rating: number | null;
+
   @ApiProperty({ example: true })
-  isLiked!: boolean;
-
   @Expose()
+  @IsBoolean()
+  isLiked: boolean;
+
   @ApiProperty({ example: 1, description: 'Total number of times watched' })
-  watchCount!: number;
-
   @Expose()
+  @IsInt()
+  watchCount: number;
+
   @ApiProperty({ example: '2024-01-15T14:30:00Z' })
-  firstWatchedAt!: Date;
-
   @Expose()
+  @IsDateString()
+  firstWatchedAt: Date;
+
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
-  lastWatchedAt!: Date;
-
   @Expose()
+  @IsDateString()
+  lastWatchedAt: Date;
+
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
-  updatedAt!: Date;
-
   @Expose()
+  @IsDate()
+  updatedAt: Date;
+
   @ApiProperty({ 
     type: [WatchedDateDto], 
     description: 'List of all dates this movie was watched' 
   })
+  @Expose()
   @Type(() => WatchedDateDto)
-  watchedDates!: WatchedDateDto[];
+  watchedDates: WatchedDateDto[];
+
+  @ApiProperty({ type: () => ReviewMovieDto, description: 'The user object' })
+  @Expose()
+  @ValidateNested({ each: true })
+  @Type(() => ReviewMovieDto)
+  review: ReviewMovieDto;
 
   constructor(data: LogMovieDto) {
     Object.assign(this, data);

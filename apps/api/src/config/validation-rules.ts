@@ -28,3 +28,16 @@ export const PLAYLIST_RULES = {
     REGEX: /^(?!\s+$)(?!.*\n\s*\n)[\s\S]*$/, 
   }
 }
+
+export const REVIEW_RULES = {
+  TITLE: {
+    MIN: 1,
+    MAX: 50,
+    REGEX: /^[a-zA-Z0-9\s\S]*$/,
+  },
+  BODY: {
+    MIN: 13,
+    MAX: 50000,
+    REGEX: /^<html>[\s\S]*<\/html>$/,
+  }
+}

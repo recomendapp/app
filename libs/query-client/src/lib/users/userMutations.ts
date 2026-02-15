@@ -1,16 +1,57 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { personsControllerFollowMutation, personsControllerUnfollowMutation, playlistsControllerLikeMutation, playlistsControllerSaveMutation, playlistsControllerUnlikeMutation, playlistsControllerUnsaveMutation, usersControllerFollowUserMutation, usersControllerGetMeQueryKey, usersControllerUnfollowUserMutation, usersControllerUpdateMeMutation } from '@packages/api-js';
-import { userFollowersOptions, userFollowingOptions, userFollowOptions, userPersonFollowOptions, userPlaylistLikeOptions, userPlaylistSavedOptions } from './userOptions';
+import { moviesLogControllerDeleteMutation, moviesLogControllerSetMutation, personsControllerFollowMutation, personsControllerUnfollowMutation, playlistsControllerLikeMutation, playlistsControllerSaveMutation, playlistsControllerUnlikeMutation, playlistsControllerUnsaveMutation, usersControllerFollowUserMutation, usersControllerUnfollowUserMutation, usersControllerUpdateMeMutation } from '@packages/api-js';
+import { userFollowersOptions, userFollowingOptions, userFollowOptions, userMeOptions, userMovieLogOptions, userPersonFollowOptions, userPlaylistLikeOptions, userPlaylistSavedOptions } from './userOptions';
 
 export const useUserMeUpdateMutation = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
 		...usersControllerUpdateMeMutation(),
 		onSuccess: (data) => {
-			queryClient.setQueryData(usersControllerGetMeQueryKey(), data);
+			queryClient.setQueryData(userMeOptions().queryKey, data);
 		}
 	});
 };
+
+/* ---------------------------------- Logs ---------------------------------- */
+export const useUserMovieLogSetMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		...moviesLogControllerSetMutation(),
+		onSuccess: (data) => {
+			queryClient.setQueryData(userMovieLogOptions({
+				userId: data.userId,
+				movieId: data.movieId,
+			}).queryKey, data);
+
+			// TODO: remove from bookmark
+
+			if (data.isLiked) {
+				// TODO: invalidate heart picks
+			}
+
+			// TODO: invalidate feed
+		}
+	});
+}
+
+export const useUserMovieLogDeleteMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		...moviesLogControllerDeleteMutation(),
+		onSuccess: (data) => {
+			queryClient.setQueryData(userMovieLogOptions({
+				userId: data.userId,
+				movieId: data.movieId,
+			}).queryKey, null);
+
+			if (data.isLiked) {
+				// TODO: delete items from heart picks
+			}
+
+			// TODO: invalidate feed
+		}
+	});
+}
 
 /* --------------------------------- Follows -------------------------------- */
 export const useUserFollowMutation = () => {
@@ -76,6 +117,8 @@ export const useUserPersonFollowMutation = () => {
 				userId: data.userId,
 				personId: data.personId,
 			}).queryKey, data);
+
+			// TODO: Invalidate followed persons queries
 		}
 	});
 }
@@ -89,6 +132,8 @@ export const useUserPersonUnfollowMutation = () => {
 				userId: data.userId,
 				personId: data.personId,
 			}).queryKey, null);
+
+			// TODO: Invalidate followed persons queries
 		}
 	});
 }

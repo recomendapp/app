@@ -11,9 +11,8 @@ import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useModal } from "@/context/modal-context";
-import { useUserActivityMovieOptions } from "@/api/client/options/userOptions";
 import { useQuery } from "@tanstack/react-query";
-import { useUserActivityMovieDeleteMutation, useUserActivityMovieInsertMutation } from "@/api/client/mutations/userMutations";
+import { userMovieLogOptions, useUserMovieLogDeleteMutation, useUserMovieLogSetMutation } from "@libs/query-client/src";
 
 interface ButtonUserActivityMovieWatchProps
 	extends React.ComponentProps<typeof Button> {
@@ -25,7 +24,7 @@ const ButtonUserActivityMovieWatch = React.forwardRef<
 	React.ComponentRef<typeof Button>,
 	ButtonUserActivityMovieWatchProps
 >(({ movieId, stopPropagation = true, className, ...props }, ref) => {
-	const { session } = useAuth();
+	const { user } = useAuth();
   	const { createConfirmModal } = useModal();
 	const t = useTranslations();
 	const pathname = usePathname();
@@ -33,45 +32,47 @@ const ButtonUserActivityMovieWatch = React.forwardRef<
 		data: activity,
 		isLoading,
 		isError,
-	} = useQuery(useUserActivityMovieOptions({
-		userId: session?.user.id,
+	} = useQuery(userMovieLogOptions({
+		userId: user?.id,
 		movieId: movieId,
 	}));
-	const { mutateAsync: insertActivity, isPending: isInsertPending } = useUserActivityMovieInsertMutation();
-	const { mutateAsync: deleteActivity, isPending: isDeletePending } = useUserActivityMovieDeleteMutation();
+	const { mutateAsync: handleLog, isPending: isLogPending } = useUserMovieLogSetMutation();
+	const { mutateAsync: handleUnlog, isPending: isUnlogPending } = useUserMovieLogDeleteMutation();
 
 	const handleInsertActivity = React.useCallback(async (e?: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e?.stopPropagation();
-		if (activity || !session?.user.id) return;
-		await insertActivity({
-		userId: session?.user.id,
-		movieId: movieId,
-		}), {
-		onError: () => {
-			toast.error(upperFirst(t('common.messages.an_error_occurred')));
-		}
-		};
-	}, [activity, insertActivity, movieId, session, stopPropagation, t]);
+		await handleLog({
+			path: {
+				movie_id: movieId,
+			},
+			body: {}
+		}, {
+			onError: () => {
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
+			}
+		});
+	}, [handleLog, movieId, stopPropagation, t]);
 
 	const handleDeleteActivity = React.useCallback(async (e?: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e?.stopPropagation();
-		if (!activity) return;
 		createConfirmModal({
 			title: upperFirst(t('common.messages.remove_from_watched')),
 			description: t('components.media.actions.watch.remove_from_watched.description'),
 			onConfirm: async () => {
-				await deleteActivity({
-					activityId: activity.id,
-				}), {
-					onError: () => {
-					toast.error(upperFirst(t('common.messages.an_error_occurred')));
+				await handleUnlog({
+					path: {
+						movie_id: movieId,
 					}
-				};
+				}, {
+					onError: () => {
+						toast.error(upperFirst(t('common.messages.an_error_occurred')));
+					}
+				});
 			}
 		});
-	}, [activity, deleteActivity, stopPropagation, t, createConfirmModal]);
+	}, [handleUnlog, movieId, stopPropagation, t, createConfirmModal]);
 
-	if (session === null) {
+	if (user === null) {
 		return (
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button
@@ -95,7 +96,7 @@ const ButtonUserActivityMovieWatch = React.forwardRef<
 			<Button
 			ref={ref}
 			onClick={activity ? handleDeleteActivity : handleInsertActivity}
-			disabled={isLoading || isError || activity === undefined || isInsertPending || isDeletePending}
+			disabled={isLoading || isError || activity === undefined || isLogPending || isUnlogPending}
 			size="icon"
 			variant={'outline'}
 			className={cn(

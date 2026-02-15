@@ -6,9 +6,10 @@ import ReviewForm from '@/components/Review/ReviewForm';
 import { Spinner } from '@/components/ui/spinner';
 import { useCallback, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useUserActivityMovieOptions, useUserReviewMovieOptions } from '@/api/client/options/userOptions';
+import { useUserReviewMovieOptions } from '@/api/client/options/userOptions';
 import { useUserReviewMovieUpsertMutation } from '@/api/client/mutations/userMutations';
 import { Movie } from '@packages/api-js';
+import { userMovieLogOptions } from '@libs/query-client/src';
 
 export const MovieEditReview = ({
 	movie,
@@ -22,7 +23,7 @@ export const MovieEditReview = ({
 
 	const {
 		data: activity,
-	} = useQuery(useUserActivityMovieOptions({
+	} = useQuery(userMovieLogOptions({
 		movieId: movie.id,
 		userId: user?.id,
 	}));
