@@ -23,7 +23,7 @@ export class PersonsController {
     description: 'Get the person details',
     type: PersonDto,
   })
-  async getPerson(
+  async get(
     @Param('person_id', ParseIntPipe) personId: number,
     @CurrentOptionalUser() currentUser: User | null,
     @CurrentLocale() locale: SupportedLocale,

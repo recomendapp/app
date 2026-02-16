@@ -3,8 +3,8 @@ import { Expose, Type } from 'class-transformer';
 import { IsInt, IsString, ValidateNested } from 'class-validator';
 import { PersonCompactDto } from '../../persons/dto/persons.dto';
 
-@ApiSchema({ name: 'MovieRole' })
-export class MovieRoleDto {
+@ApiSchema({ name: 'TvSeriesRole' })
+export class TvSeriesRoleDto {
   @ApiProperty()
   @Expose()
   @IsString()
@@ -16,12 +16,12 @@ export class MovieRoleDto {
   order: number;
 }
 
-@ApiSchema({ name: 'MovieCasting' })
-export class MovieCastingDto {
+@ApiSchema({ name: 'TvSeriesCasting' })
+export class TvSeriesCastingDto {
   @ApiProperty()
   @Expose()
   @IsInt()
-  movieId: number;
+  tvSeriesId: number;
 
   @ApiProperty()
   @Expose()
@@ -39,9 +39,9 @@ export class MovieCastingDto {
   @Type(() => PersonCompactDto)
   person: PersonCompactDto;
 
-  @ApiProperty({ type: () => [MovieRoleDto] })
+  @ApiProperty({ type: () => [TvSeriesRoleDto] })
   @Expose()
   @ValidateNested({ each: true })
-  @Type(() => MovieRoleDto)
-  roles: MovieRoleDto[];
+  @Type(() => TvSeriesRoleDto)
+  roles: TvSeriesRoleDto[];
 }

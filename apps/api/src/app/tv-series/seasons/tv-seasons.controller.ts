@@ -22,7 +22,7 @@ export class TvSeasonsController {
     description: 'Get the tv season details',
     type: TvSeasonGetDTO,
   })
-  async getTvSeason(
+  async get(
     @Param('tv_series_id', ParseIntPipe) tvSeriesId: number,
     @Param('season_number', ParseIntPipe) seasonNumber: number,
     @CurrentOptionalUser() currentUser: User | null,

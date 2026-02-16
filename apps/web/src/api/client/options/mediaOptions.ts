@@ -197,31 +197,31 @@ export const useMediaTvSeasonEpisodesOptions = ({
 	})
 }
 
-export const useMediaTvSeriesCastingOptions = ({
-	tvSeriesId,
-} : {
-	tvSeriesId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: mediaKeys.tvSeriesCasting({
-			tvSeriesId: tvSeriesId,
-		}),
-		queryFn: async () => {
-			const { data, error } = await supabase
-				.from('media_tv_series_casting')
-				.select(`
-					*,
-					media_person(*)
-				`)
-				.eq('serie_id', tvSeriesId)
-				.order('order', { ascending: true });
-			if (error) throw error;
-			return data;
-		},
-		staleTime: 1000 * 60 * 60 * 24 // 24 hours
-	})
-}
+// export const useMediaTvSeriesCastingOptions = ({
+// 	tvSeriesId,
+// } : {
+// 	tvSeriesId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return queryOptions({
+// 		queryKey: mediaKeys.tvSeriesCasting({
+// 			tvSeriesId: tvSeriesId,
+// 		}),
+// 		queryFn: async () => {
+// 			const { data, error } = await supabase
+// 				.from('media_tv_series_casting')
+// 				.select(`
+// 					*,
+// 					media_person(*)
+// 				`)
+// 				.eq('serie_id', tvSeriesId)
+// 				.order('order', { ascending: true });
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		staleTime: 1000 * 60 * 60 * 24 // 24 hours
+// 	})
+// }
 
 export const useMediaTvSeriesReviewsOptions = ({
 	tvSeriesId,

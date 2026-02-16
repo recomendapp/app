@@ -56,7 +56,7 @@ export const MovieCasting = ({
 							</div>
 							<div className="text-center">
 							<p className="line-clamp-2 wrap-break-word">{person.name}</p>
-							{roles && roles.length > 0 ? <p className="line-clamp-2 text-accent-yellow italic text-sm">{roles.map(role => role.character).join(', ')}</p> : null}
+								{roles && roles.length > 0 ? <p className="line-clamp-2 text-accent-yellow italic text-sm">{roles.map(role => role.character).join(', ')}</p> : null}
 							</div>
 						</Card>
 					</Link>

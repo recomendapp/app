@@ -531,9 +531,9 @@ export const useUserActivityTvSeriesDeleteMutation = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
 	const userMyFeedOptions = useUserMyFeedInfiniteOptions();
-	const heartPicksOptions = useUserHeartPicksTvSeriesOptions({
-		userId: session?.user.id,
-	});
+	// const heartPicksOptions = useUserHeartPicksTvSeriesOptions({
+	// 	userId: session?.user.id,
+	// });
 	return useMutation({
 		mutationFn: async ({
 			activityId,
@@ -556,12 +556,12 @@ export const useUserActivityTvSeriesDeleteMutation = () => {
 				userId: data.user_id,
 			}), null);
 
-			if (data.is_liked) {
-				queryClient.setQueryData(heartPicksOptions.queryKey, (oldData) => {
-					if (!oldData) return oldData;
-					return oldData.filter((pick) => pick.id !== data.id);
-				})
-			}
+			// if (data.is_liked) {
+			// 	queryClient.setQueryData(heartPicksOptions.queryKey, (oldData) => {
+			// 		if (!oldData) return oldData;
+			// 		return oldData.filter((pick) => pick.id !== data.id);
+			// 	})
+			// }
 
 			queryClient.invalidateQueries({
 				queryKey: userMyFeedOptions.queryKey,
@@ -574,9 +574,9 @@ export const useUserActivityTvSeriesUpdateMutation = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
 	const userMyFeedOptions = useUserMyFeedInfiniteOptions();
-	const heartPicksOptions = useUserHeartPicksTvSeriesOptions({
-		userId: session?.user.id,
-	});
+	// const heartPicksOptions = useUserHeartPicksTvSeriesOptions({
+	// 	userId: session?.user.id,
+	// });
 	return useMutation({
 		mutationFn: async ({
 			activityId,
@@ -612,21 +612,21 @@ export const useUserActivityTvSeriesUpdateMutation = () => {
 				userId: data.user_id,
 			}), data);
 
-			if (isLikedChange !== undefined) {
-				if (isLikedChange) {
-					queryClient.invalidateQueries({
-						queryKey: userKeys.heartPicks({
-							userId: data.user_id,
-							type: 'tv_series',
-						})
-					});
-				} else {
-					queryClient.setQueryData(heartPicksOptions.queryKey, (oldData) => {
-						if (!oldData) return oldData;
-						return oldData.filter((pick) => pick.id !== data.id);
-					});
-				}
-			}
+			// if (isLikedChange !== undefined) {
+			// 	if (isLikedChange) {
+			// 		queryClient.invalidateQueries({
+			// 			queryKey: userKeys.heartPicks({
+			// 				userId: data.user_id,
+			// 				type: 'tv_series',
+			// 			})
+			// 		});
+			// 	} else {
+			// 		queryClient.setQueryData(heartPicksOptions.queryKey, (oldData) => {
+			// 			if (!oldData) return oldData;
+			// 			return oldData.filter((pick) => pick.id !== data.id);
+			// 		});
+			// 	}
+			// }
 
 			queryClient.invalidateQueries({
 				queryKey: userMyFeedOptions.queryKey,

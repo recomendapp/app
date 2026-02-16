@@ -4,7 +4,7 @@ import { getAnonApi } from "@/lib/api/server";
 import { createAnonClient } from "@/lib/supabase/anon";
 import { cache } from "@/lib/utils/cache";
 import { SupportedLocale } from "@libs/i18n";
-import { moviesControllerGet, personsControllerGetPerson, tvSeasonsControllerGetTvSeason, tvSeriesControllerGetTvSeries } from "@packages/api-js";
+import { moviesControllerGet, personsControllerGet, tvSeasonsControllerGet, tvSeriesControllerGet } from "@packages/api-js";
 
 const MEDIA_REVALIDATE_TIME = 60 * 60 * 24; // 24 hours
 
@@ -29,7 +29,7 @@ export const getTvSeries = cache(
 		const client = await getAnonApi({
 			locale,
 		});
-		return await tvSeriesControllerGetTvSeries({
+		return await tvSeriesControllerGet({
 			path: {
 				tv_series_id: id
 			},
@@ -45,7 +45,7 @@ export const getTvSeason = cache(
 		const client = await getAnonApi({
 			locale,
 		});
-		return await tvSeasonsControllerGetTvSeason({
+		return await tvSeasonsControllerGet({
 			path: {
 				tv_series_id: serieId,
 				season_number: seasonNumber,
@@ -62,7 +62,7 @@ export const getPerson = cache(
 		const client = await getAnonApi({
 			locale,
 		});
-		return await personsControllerGetPerson({
+		return await personsControllerGet({
 			path: {
 				person_id: id
 			},
