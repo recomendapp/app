@@ -5,8 +5,8 @@ import { follow, logMovie, playlist, playlistItem, playlistMember, profile, revi
 import { and, asc, desc, eq, exists, or, SQL, sql } from 'drizzle-orm';
 import { User } from '../auth/auth.service';
 import { SupportedLocale } from '@libs/i18n';
-import { GetReviewsMovieQueryDto, ListReviewMovieDto } from '../reviews/movie/dto/reviews-movie.dto';
-import { GetPlaylistsQueryDto, ListPlaylistsWithOwnerDto } from '../playlists/dto/playlists.dto';
+import { GetReviewsMovieQueryDto, ListReviewMovieDto, ReviewMovieSortBy } from '../reviews/movie/dto/reviews-movie.dto';
+import { GetPlaylistsQueryDto, ListPlaylistsWithOwnerDto, PlaylistSortBy } from '../playlists/dto/playlists.dto';
 import { MovieCastingDto } from './dto/movie-credits.dto';
 
 @Injectable()
@@ -151,13 +151,15 @@ export class MoviesService {
     const direction = sort_order === 'asc' ? asc : desc;
     const orderBy = (() => {
       switch (sort_by) {
-        case 'likes_count':
+        case ReviewMovieSortBy.RANDOM:
+          return sql`RANDOM()`;
+        case ReviewMovieSortBy.LIKES_COUNT:
           return direction(reviewMovie.likesCount);
-        case 'updated_at':
+        case ReviewMovieSortBy.UPDATED_AT:
           return direction(reviewMovie.updatedAt);
-        case 'rating':
+        case ReviewMovieSortBy.RATING:
           return direction(logMovie.rating); 
-        case 'created_at':
+        case ReviewMovieSortBy.CREATED_AT:
         default:
           return direction(reviewMovie.createdAt);
       }
@@ -278,11 +280,13 @@ export class MoviesService {
     const direction = sort_order === 'asc' ? asc : desc;
     const orderBy = (() => {
       switch (sort_by) {
-        case 'likes_count':
+        case PlaylistSortBy.RANDOM:
+          return sql`RANDOM()`;
+        case PlaylistSortBy.LIKES_COUNT:
           return direction(playlist.likesCount);
-        case 'updated_at':
+        case PlaylistSortBy.UPDATED_AT:
           return direction(playlist.updatedAt);
-        case 'created_at':
+        case PlaylistSortBy.CREATED_AT:
         default:
           return direction(playlist.createdAt);
       }

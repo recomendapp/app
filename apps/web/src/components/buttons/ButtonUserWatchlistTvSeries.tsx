@@ -12,8 +12,7 @@ import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { ContextMenuWatchlistTvSeries } from "../ContextMenu/ContextMenuWatchlistTvSeries";
 import { useQuery } from "@tanstack/react-query";
-import { useUserWatchlistTvSeriesItemOptions } from "@/api/client/options/userOptions";
-import { useUserWatchlistTvSeriesDeleteMutation, useUserWatchlistTvSeriesInsertMutation } from "@/api/client/mutations/userMutations";
+import { tvSeriesBookmarkOptions, useTvSeriesBookmarkDeleteMutation, useTvSeriesBookmarkSetMutation } from "@libs/query-client";
 
 interface ButtonUserWatchlistTvSeriesProps
 	extends React.ComponentProps<typeof Button> {
@@ -25,7 +24,7 @@ const ButtonUserWatchlistTvSeries = React.forwardRef<
 	React.ComponentRef<typeof Button>,
 	ButtonUserWatchlistTvSeriesProps
 >(({ tvSeriesId, stopPropagation = true, className, ...props }, ref) => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const t = useTranslations();
 	const pathname = usePathname();
 
@@ -33,47 +32,43 @@ const ButtonUserWatchlistTvSeries = React.forwardRef<
 		data: watchlist,
 		isLoading,
 		isError,
-	} = useQuery(useUserWatchlistTvSeriesItemOptions({
+	} = useQuery(tvSeriesBookmarkOptions({
 		tvSeriesId: tvSeriesId,
-		userId: session?.user.id,
+		userId: user?.id,
 	}));
-	const { mutateAsync: insertWatchlist, isPending: isInsertPending } = useUserWatchlistTvSeriesInsertMutation();
-	const { mutateAsync: deleteWatchlist, isPending: isDeletePending } = useUserWatchlistTvSeriesDeleteMutation();
+	const { mutateAsync: addBookmark, isPending: isAddPending } = useTvSeriesBookmarkSetMutation();
+	const { mutateAsync: deleteBookmark, isPending: isDeletePending } = useTvSeriesBookmarkDeleteMutation();
 
 	const handleWatchlist = React.useCallback(async (e: React.MouseEvent) => {
 		stopPropagation && e.stopPropagation();
 		if (watchlist) return;
-		if (!session || !tvSeriesId) {
-			toast.error(upperFirst(t('common.messages.an_error_occurred')));
-			return;
-		}
-		await insertWatchlist({
-			tvSeriesId: tvSeriesId,
-		  	userId: session.user.id,
+		await addBookmark({
+			path: {
+				tv_series_id: tvSeriesId,
+			},
+			body: {}
 		}, {
 		  onError: () => {
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 		  }
 		});
-	}, [insertWatchlist, tvSeriesId, session, stopPropagation, t, watchlist]);
+	}, [addBookmark, tvSeriesId, stopPropagation, t, watchlist]);
 
 	const handleUnwatchlist = React.useCallback(async (e: React.MouseEvent) => {
 		stopPropagation && e.stopPropagation();
 		if (!watchlist) return;
-		if (!watchlist.id) {
-			toast.error(upperFirst(t('common.messages.an_error_occurred')));
-			return;
-		}
-		await deleteWatchlist({
-		  watchlistId: watchlist.id,
+		await deleteBookmark({
+			path: {
+				tv_series_id: tvSeriesId,
+			}
 		}, {
 		  onError: () => {
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 		  }
 		});
-	}, [deleteWatchlist, stopPropagation, t, watchlist]);
+	}, [deleteBookmark, tvSeriesId, stopPropagation, t, watchlist]);
 
-	if (session == null) {
+	if (user == null) {
 		return (
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button
@@ -98,7 +93,7 @@ const ButtonUserWatchlistTvSeries = React.forwardRef<
 				<Button
 					ref={ref}
 					onClick={watchlist ? handleUnwatchlist : handleWatchlist}
-					disabled={isLoading || isError || watchlist === undefined || isInsertPending || isDeletePending}
+					disabled={isLoading || isError || watchlist === undefined || isAddPending || isDeletePending}
 					size="icon"
 					variant={'outline'}
 					className={cn(`rounded-full`, className)}

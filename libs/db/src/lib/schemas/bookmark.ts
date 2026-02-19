@@ -53,9 +53,13 @@ export const bookmark = pgTable(
         (type = 'tv_series'::bookmark_type AND tv_series_id IS NOT NULL AND movie_id IS NULL)
       )`,
     ),
-    uniqueIndex('unique_active_bookmark')
-      .on(table.userId, table.type, table.movieId, table.tvSeriesId)
-      .where(sql`${table.status} = 'active'::bookmark_status`),
+    uniqueIndex('unique_active_bookmark_movie')
+      .on(table.userId, table.movieId)
+      .where(sql`${table.status} = 'active'::bookmark_status AND ${table.type} = 'movie'::bookmark_type`),
+
+    uniqueIndex('unique_active_bookmark_tv_series')
+      .on(table.userId, table.tvSeriesId)
+      .where(sql`${table.status} = 'active'::bookmark_status AND ${table.type} = 'tv_series'::bookmark_type`),
   ],
 );
 export const bookmarkRelations = relations(bookmark, ({ one }) => ({

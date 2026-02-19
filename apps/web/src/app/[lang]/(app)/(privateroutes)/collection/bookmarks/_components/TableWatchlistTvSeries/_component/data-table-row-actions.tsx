@@ -22,8 +22,8 @@ import { createShareController } from "@/components/ShareController/ShareControl
 import { ModalUserWatchlistTvSeriesComment } from "@/components/Modals/watchlist/ModalUserWatchlistTvSeriesComment";
 import { ModalUserRecosTvSeriesSend } from "@/components/Modals/recos/ModalUserRecosTvSeriesSend";
 import { ShareControllerTvSeries } from "@/components/ShareController/ShareControllerTvSeries";
-import { useUserWatchlistTvSeriesDeleteMutation } from "@/api/client/mutations/userMutations";
 import { useCallback } from "react";
+import { useTvSeriesBookmarkDeleteMutation } from "@libs/query-client/src";
 
 interface DataTableRowActionsProps {
   table: Table<UserWatchlistTvSeries>;
@@ -40,12 +40,14 @@ export function DataTableRowActions({
 }: DataTableRowActionsProps) {
   const t = useTranslations();
   const { openModal, createConfirmModal } = useModal();
-  const { mutateAsync: deleteWatchlistTvSeries } = useUserWatchlistTvSeriesDeleteMutation();
+  const { mutateAsync: deleteWatchlistTvSeries } = useTvSeriesBookmarkDeleteMutation();
 
   const handleUnwatchlist = useCallback(async () => {
     if (!data) return;
     await deleteWatchlistTvSeries({
-      watchlistId: data.id,
+      path: {
+        tv_series_id: data.tv_series_id,
+      },
     }, {
       onSuccess: () => {
         toast.success(upperFirst(t('common.messages.deleted')));

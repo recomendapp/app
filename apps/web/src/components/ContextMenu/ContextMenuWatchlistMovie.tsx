@@ -5,14 +5,14 @@ import { Fragment, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { ModalUserWatchlistMovieComment } from "../Modals/watchlist/ModalUserWatchlistMovieComment";
-import { UserWatchlistMovie } from "@recomendapp/types";
+import { Bookmark } from "@packages/api-js";
 
 export const ContextMenuWatchlistMovie = ({
 	children,
 	watchlistItem,
 }: {
 	children: React.ReactNode,
-	watchlistItem?: UserWatchlistMovie | null,
+	watchlistItem?: Bookmark | null,
 }) => {
 	const { openModal } = useModal();
 	const t = useTranslations();

@@ -10,9 +10,8 @@ import { AlertCircleIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { useUserReviewTvSeriesLikeDeleteMutation, useUserReviewTvSeriesLikeInsertMutation } from "@/api/client/mutations/userMutations";
-import { useUserReviewTvSeriesLikeOptions } from "@/api/client/options/userOptions";
 import { useQuery } from "@tanstack/react-query";
+import { reviewTvSeriesLikeOptions, useReviewTvSeriesLikeMutation, useReviewTvSeriesUnlikeMutation } from "@libs/query-client";
 
 interface ButtonUserReviewTvSeriesLikeProps
 	extends React.ComponentProps<typeof Button> {
@@ -24,30 +23,31 @@ const ButtonUserReviewTvSeriesLike = React.forwardRef<
 	React.ComponentRef<typeof Button>,
 	ButtonUserReviewTvSeriesLikeProps
 >(({ reviewId, reviewLikesCount, className, ...props }, ref) => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const t = useTranslations();
 	const pathname = usePathname();
 	const {
 		data: like,
 		isLoading,
 		isError,
-	} = useQuery(useUserReviewTvSeriesLikeOptions({
+	} = useQuery(reviewTvSeriesLikeOptions({
 		reviewId: reviewId,
-		userId: session?.user.id,
+		userId: user?.id,
 	}));
 	const [likeCount, setLikeCount] = React.useState(reviewLikesCount ?? undefined);
-	const { mutateAsync: insertLike, isPending: isInsertPending } = useUserReviewTvSeriesLikeInsertMutation();
-	const { mutateAsync: deleteLike, isPending: isDeletePending } = useUserReviewTvSeriesLikeDeleteMutation();
+	const { mutateAsync: insertLike, isPending: isInsertPending } = useReviewTvSeriesLikeMutation({
+		userId: user?.id,
+	});
+	const { mutateAsync: deleteLike, isPending: isDeletePending } = useReviewTvSeriesUnlikeMutation({
+		userId: user?.id,
+	});
 
 	const handleLike = React.useCallback(async (e: React.MouseEvent) => {
 		e.stopPropagation();
-		if (!session) {
-			toast.error(upperFirst(t('common.messages.not_logged_in')));
-			return;
-		}
 		await insertLike({
-			userId: session.user.id,
-			reviewId: reviewId,
+			path: {
+				review_id: reviewId,
+			}
 		}, {
 			onSuccess: () => {
 				setLikeCount((prev) => (prev ?? 0) + 1);
@@ -56,7 +56,7 @@ const ButtonUserReviewTvSeriesLike = React.forwardRef<
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}, [insertLike, reviewId, session, t]);
+	}, [insertLike, reviewId, t]);
 
 	const handleUnlike = React.useCallback(async (e: React.MouseEvent) => {
 		e.stopPropagation();
@@ -65,7 +65,9 @@ const ButtonUserReviewTvSeriesLike = React.forwardRef<
 			return;
 		}
 		await deleteLike({
-			likeId: like.id
+			path: {
+				review_id: reviewId,
+			}
 		}, {
 			onSuccess: () => {
 				setLikeCount((prev) => (prev ?? 0) - 1);
@@ -74,9 +76,9 @@ const ButtonUserReviewTvSeriesLike = React.forwardRef<
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}, [deleteLike, like, t]);
+	}, [deleteLike, reviewId, t]);
 
-	if (session == null) {
+	if (user == null) {
 		return (
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button

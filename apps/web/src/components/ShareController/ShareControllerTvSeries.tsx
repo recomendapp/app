@@ -8,18 +8,18 @@ import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Icons } from "@/config/icons";
 import toast from "react-hot-toast";
 import { domToBlob } from "modern-screenshot";
-import { TvSeries } from "@packages/api-js/src";
+import { TvSeries, TvSeriesCompact } from "@packages/api-js/src";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
 interface ShareControllerTvSeriesProps extends ShareControllerProps {
-	tvSeries: TvSeries;
+	tvSeries: TvSeries | TvSeriesCompact;
 }
 
 export const ShareControllerTvSeries: React.FC<ShareControllerTvSeriesProps> = ({ tvSeries, onFileReady }) => {
 	const t = useTranslations();
 
 	const captureRef = useRef<HTMLDivElement>(null);
-	const directorsText = useMemo(() => tvSeries.createdBy?.map(d => d.name!).join(', '), [tvSeries.createdBy]);
+	const directorsText = useMemo(() => tvSeries.createdBy?.map(d => d.name).join(', '), [tvSeries.createdBy]);
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [isBackdropLoaded, setIsBackdropLoaded] = useState(false);

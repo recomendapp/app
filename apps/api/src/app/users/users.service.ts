@@ -1,15 +1,17 @@
 import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
 import { and, asc, desc, eq, exists, or, sql, SQL } from 'drizzle-orm';
-import { playlist, profile, user, follow, playlistMember } from '@libs/db/schemas';
-import { UserDto, UpdateUserDto, GetUsersQueryDto, ListUsersDto, ProfileDto } from './dto/users.dto';
+import { playlist, profile, user, follow, playlistMember, bookmark, tmdbMovieView, tmdbTvSeriesView } from '@libs/db/schemas';
+import { UserDto, UpdateUserDto, GetUsersQueryDto, ListUsersDto, ProfileDto, UserSortBy } from './dto/users.dto';
 import { User } from '../auth/auth.service';
-import { GetPlaylistsQueryDto, ListPlaylistsDto } from '../playlists/dto/playlists.dto';
+import { GetPlaylistsQueryDto, ListPlaylistsDto, PlaylistSortBy } from '../playlists/dto/playlists.dto';
 import { FollowDto } from './dto/user-follow.dto';
 import { plainToInstance } from 'class-transformer';
 import { isUUID } from 'class-validator';
 import { USER_RULES } from '../../config/validation-rules';
 import { WorkerClient } from '@shared/worker';
+import { BookmarkSortBy, GetBookmarksQueryDto, ListBookmarksDto } from '../bookmark/dto/bookmark.dto';
+import { SupportedLocale } from '@libs/i18n';
 
 @Injectable()
 export class UsersService {
@@ -180,16 +182,184 @@ export class UsersService {
     });
   }
 
+  /* -------------------------------- Bookmarks ------------------------------- */
+  async getBookmarks({
+    targetUserId,
+    query,
+    currentUser,
+    locale,
+  }: {
+    targetUserId: string;
+    query: GetBookmarksQueryDto;
+    currentUser: User | null;
+    locale: SupportedLocale;
+  }): Promise<ListBookmarksDto> {
+    return await this.db.transaction(async (tx) => {
+      await tx.execute(
+        sql`SELECT set_config('app.current_language', ${locale}, true)`
+      );
+      if (currentUser) {
+        await tx.execute(
+          sql`SELECT set_config('app.current_user_id', ${currentUser.id}, true)`
+        );
+      } else {
+        await tx.execute(
+          sql`SELECT set_config('app.current_user_id', '', true)`
+        );
+      }
+      const { per_page, sort_order, sort_by, page } = query;
+      const offset = (page - 1) * per_page;
+      const direction = sort_order === 'asc' ? asc : desc;
+      const orderBy = (() => {
+        switch (sort_by) {
+          case BookmarkSortBy.RANDOM:
+            return sql`RANDOM()`;
+          case BookmarkSortBy.UPDATED_AT:
+            return direction(bookmark.updatedAt);
+          case BookmarkSortBy.CREATED_AT:
+          default:
+            return direction(bookmark.createdAt);
+        }
+      })();
+
+      let privacyClause: SQL | undefined;
+
+      if (currentUser?.id === targetUserId) {
+        privacyClause = undefined;
+      } else if (!currentUser) {
+        privacyClause = exists(
+          tx.select({ id: profile.id })
+            .from(profile)
+            .where(and(eq(profile.id, targetUserId), eq(profile.isPrivate, false)))
+        );
+      } else {
+        privacyClause = or(
+          exists(
+            tx.select({ id: profile.id })
+              .from(profile)
+              .where(and(eq(profile.id, targetUserId), eq(profile.isPrivate, false)))
+          ),
+          exists(
+            tx.select({ id: follow.followerId })
+              .from(follow)
+              .where(
+                and(
+                  eq(follow.followerId, currentUser.id),
+                  eq(follow.followingId, targetUserId),
+                  eq(follow.status, 'accepted')
+                )
+              )
+          )
+        );
+      }
+
+      const baseWhereConditions: SQL[] = [
+        eq(bookmark.userId, targetUserId),
+      ];
+
+      if (query.status === 'active') {
+        baseWhereConditions.push(eq(bookmark.status, 'active'));
+      }
+
+      if (query.status === 'completed') {
+        baseWhereConditions.push(eq(bookmark.status, 'completed'));
+      }
+
+      if (query.type) {
+        baseWhereConditions.push(eq(bookmark.type, query.type));
+      }
+
+      if (privacyClause) {
+        baseWhereConditions.push(privacyClause);
+      }
+
+      const whereClause = and(...baseWhereConditions);
+
+      const paginatedBookmarksSubquery = tx
+        .select()
+        .from(bookmark)
+        .where(whereClause)
+        .orderBy(orderBy)
+        .limit(per_page)
+        .offset(offset)
+        .as('paginated_bookmarks');
+
+      const [results, totalCount] = await Promise.all([
+        tx.select({
+            bookmark: bookmark,
+            movie: {
+              id: tmdbMovieView.id,
+              title: tmdbMovieView.title,
+              slug: tmdbMovieView.slug,
+              url: tmdbMovieView.url,
+              posterPath: tmdbMovieView.posterPath,
+              backdropPath: tmdbMovieView.backdropPath,
+              directors: tmdbMovieView.directors,
+              releaseDate: tmdbMovieView.releaseDate,
+              voteAverage: tmdbMovieView.voteAverage,
+              voteCount: tmdbMovieView.voteCount,
+              genres: tmdbMovieView.genres,
+              followerAvgRating: tmdbMovieView.followerAvgRating,
+            },
+            tvSeries: {
+              id: tmdbTvSeriesView.id,
+              name: tmdbTvSeriesView.name,
+              slug: tmdbTvSeriesView.slug,
+              url: tmdbTvSeriesView.url,
+              posterPath: tmdbTvSeriesView.posterPath,
+              backdropPath: tmdbTvSeriesView.backdropPath,
+              createdBy: tmdbTvSeriesView.createdBy,
+              firstAirDate: tmdbTvSeriesView.firstAirDate,
+              lastAirDate: tmdbTvSeriesView.lastAirDate,
+              voteAverage: tmdbTvSeriesView.voteAverage,
+              voteCount: tmdbTvSeriesView.voteCount,
+              genres: tmdbTvSeriesView.genres,
+              followerAvgRating: tmdbTvSeriesView.followerAvgRating,
+            },
+          })
+          .from(paginatedBookmarksSubquery)
+          .innerJoin(bookmark, eq(bookmark.id, paginatedBookmarksSubquery.id))
+          .leftJoin(tmdbMovieView, eq(bookmark.movieId, tmdbMovieView.id))
+          .leftJoin(tmdbTvSeriesView, eq(bookmark.tvSeriesId, tmdbTvSeriesView.id))
+          .orderBy(orderBy),
+        tx.$count(bookmark, whereClause)
+      ]);
+
+      const totalPages = Math.ceil(totalCount / per_page);
+
+      return {
+        data: results.map(({ bookmark: {
+          movieId,
+          tvSeriesId,
+          ...bookmark
+        }, movie, tvSeries }) => ({
+          ...bookmark,
+          mediaId: bookmark.type === 'movie' ? movieId : tvSeriesId,
+          media: bookmark.type === 'movie' ? movie : tvSeries,
+        })),
+        meta: {
+          total_results: totalCount,
+          total_pages: totalPages,
+          current_page: page,
+          per_page,
+        },
+      };
+    });
+  }
+
+  /* -------------------------------- Playlists ------------------------------- */
   async getPlaylists(targetUserId: string, query: GetPlaylistsQueryDto, currentUser: User | null): Promise<ListPlaylistsDto> {
     const { per_page, sort_order, sort_by, page } = query;
     const direction = sort_order === 'asc' ? asc : desc;
     const orderBy = (() => {
       switch (sort_by) {
-        case 'likes_count':
+        case PlaylistSortBy.RANDOM:
+          return sql`RANDOM()`;
+        case PlaylistSortBy.LIKES_COUNT:
           return direction(playlist.likesCount);
-        case 'updated_at':
+        case PlaylistSortBy.UPDATED_AT:
           return direction(playlist.updatedAt);
-        case 'created_at':
+        case PlaylistSortBy.CREATED_AT:
         default:
           return direction(playlist.createdAt);
       }
@@ -306,9 +476,11 @@ export class UsersService {
     
     const orderBy = (() => {
       switch (sort_by) {
-        case 'followers_count':
+        case UserSortBy.RANDOM:
+          return sql`RANDOM()`;
+        case UserSortBy.FOLLOWERS_COUNT:
           return direction(profile.followersCount);
-        case 'created_at':
+        case UserSortBy.CREATED_AT:
         default:
           return direction(follow.createdAt);
       }
@@ -399,9 +571,11 @@ export class UsersService {
     
     const orderBy = (() => {
       switch (sort_by) {
-        case 'followers_count':
+        case UserSortBy.RANDOM:
+          return sql`RANDOM()`;
+        case UserSortBy.FOLLOWERS_COUNT:
           return direction(profile.followersCount);
-        case 'created_at':
+        case UserSortBy.CREATED_AT:
         default:
           return direction(follow.createdAt);
       }

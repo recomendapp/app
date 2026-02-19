@@ -20,7 +20,7 @@ import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { moviePlaylistsOptions } from '@libs/query-client/src';
+import { moviePlaylistsOptions } from '@libs/query-client';
 
 type SortBy = "created_at" | "updated_at" | "likes_count";
 const DEFAULT_SORT_BY: SortBy = "updated_at";

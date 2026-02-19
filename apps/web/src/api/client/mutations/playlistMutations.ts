@@ -5,10 +5,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/context/auth-context';
 import { mediaKeys } from '../keys/mediaKeys';
 import { playlistKeys } from '../keys/playlistKeys';
-import { usePlaylistDetailsOptions, usePlaylistMovieItemsOptions, usePlaylistTvSeriesItemsOptions } from '../options/playlistOptions';
+import { usePlaylistMovieItemsOptions, usePlaylistTvSeriesItemsOptions } from '../options/playlistOptions';
 import { v4 } from 'uuid';
 import compressPicture from '@/lib/utils/compressPicture';
-import { userPlaylistsInfiniteOptions } from '@libs/query-client';
+import { playlistOptions, userPlaylistsInfiniteOptions } from '@libs/query-client';
 
 // export const usePlaylistInsertMutation = () => {
 // 	const { session } = useAuth();
@@ -420,7 +420,7 @@ export const usePlaylistMovieDeleteMutation = ({
 }) => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
-	const playlistDetailsOptions = usePlaylistDetailsOptions({ playlistId: playlistId });
+	const playlistDetailsOptions = playlistOptions({ playlistId: playlistId });
 	return useMutation({
 		mutationFn: async ({
 			itemId,
@@ -541,7 +541,7 @@ export const usePlaylistTvSeriesDeleteMutation = ({
 }) => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
-	const playlistDetailsOptions = usePlaylistDetailsOptions({ playlistId: playlistId });
+	const playlistDetailsOptions = playlistOptions({ playlistId: playlistId });
 	return useMutation({
 		mutationFn: async ({
 			itemId,
@@ -611,7 +611,7 @@ export const usePlaylistMovieMultiInsertMutation = ({
 }) => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
-	const playlistDetailsOptions = usePlaylistDetailsOptions({ playlistId: playlistId });
+	const playlistDetailsOptions = playlistOptions({ playlistId: playlistId });
 	return useMutation({
 		mutationFn: async ({
 			userId,
@@ -656,7 +656,7 @@ export const usePlaylistTvSeriesMultiInsertMutation = ({
 }) => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
-	const playlistDetailsOptions = usePlaylistDetailsOptions({ playlistId: playlistId });
+	const playlistDetailsOptions = playlistOptions({ playlistId: playlistId });
 	return useMutation({
 		mutationFn: async ({
 			userId,

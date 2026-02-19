@@ -12,6 +12,7 @@ export enum ReviewMovieSortBy {
 	UPDATED_AT = 'updated_at',
 	LIKES_COUNT = 'likes_count',
 	RATING = 'rating',
+	RANDOM = 'random',
 }
 
 @ApiSchema({ name: 'ReviewMovie' })

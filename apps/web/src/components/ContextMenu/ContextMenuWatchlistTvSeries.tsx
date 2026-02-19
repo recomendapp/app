@@ -4,15 +4,15 @@ import { useModal } from "@/context/modal-context";
 import { Fragment, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { UserWatchlistTvSeries } from "@recomendapp/types";
 import { ModalUserWatchlistTvSeriesComment } from "../Modals/watchlist/ModalUserWatchlistTvSeriesComment";
+import { Bookmark } from "@packages/api-js";
 
 export const ContextMenuWatchlistTvSeries = ({
 	children,
 	watchlistItem,
 }: {
 	children: React.ReactNode,
-	watchlistItem?: UserWatchlistTvSeries | null,
+	watchlistItem?: Bookmark | null,
 }) => {
 	const { openModal } = useModal();
 	const t = useTranslations();

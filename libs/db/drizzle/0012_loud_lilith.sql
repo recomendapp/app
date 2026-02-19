@@ -1,0 +1,3 @@
+DROP INDEX "unique_active_reco";--> statement-breakpoint
+CREATE UNIQUE INDEX "unique_active_reco_movie" ON "reco" USING btree ("user_id","sender_id","movie_id") WHERE "reco"."status" = 'active'::reco_status AND "reco"."type" = 'movie'::reco_type;--> statement-breakpoint
+CREATE UNIQUE INDEX "unique_active_reco_tv_series" ON "reco" USING btree ("user_id","sender_id","tv_series_id") WHERE "reco"."status" = 'active'::reco_status AND "reco"."type" = 'tv_series'::reco_type;

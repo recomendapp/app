@@ -7,14 +7,14 @@ const AuthLayout = async ({
 	params,
 }: {
 	children: React.ReactNode;
-	params: Promise<{ lang: SupportedLocale }>;
+	params: Promise<{ lang: string }>;
 }) => {
 	const { lang } = await params;
 	const { data: session } = await getMe({
-		locale: lang,
+		locale: lang as SupportedLocale,
 	});
 	if (session) {
-		redirect({ href: '/', locale: lang });
+		redirect({ href: '/', locale: lang as SupportedLocale });
 	}
 	return children;
 };

@@ -7,6 +7,7 @@ import { User } from '../../auth/auth.service';
 import { CurrentLocale } from '../../../common/decorators/current-locale.decorator';
 import { SupportedLocale } from '@libs/i18n';
 import { TvSeasonGetDTO } from './dto/tv-seasons.dto';
+import { TvEpisodeDto } from '../episodes/dto/tv-episodes.dto';
 
 @ApiTags('Tv Seasons')
 @Controller({
@@ -35,4 +36,23 @@ export class TvSeasonsController {
       locale,
     });
   }
+
+  @Get(':season_number/episodes')
+  @ApiOkResponse({
+    description: 'Get all episodes of the tv season',
+    type: [TvEpisodeDto],
+  })
+  async getEpisodes(
+    @Param('tv_series_id', ParseIntPipe) tvSeriesId: number,
+    @Param('season_number', ParseIntPipe) seasonNumber: number,
+    @CurrentOptionalUser() currentUser: User | null,
+    @CurrentLocale() locale: SupportedLocale,
+  ): Promise<TvEpisodeDto[]> {
+    return this.tvSeasonsService.getEpisodes({
+      tvSeriesId,
+      seasonNumber,
+      currentUser,
+      locale,
+    });
+  }  
 }

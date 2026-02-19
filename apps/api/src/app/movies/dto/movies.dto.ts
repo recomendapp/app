@@ -297,6 +297,7 @@ export class MovieCompactDto extends PickType(MovieDto, [
   'slug',
   'url',
   'posterPath',
+  'backdropPath',
   'directors',
   'releaseDate',
   'voteAverage',

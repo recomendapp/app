@@ -20,7 +20,7 @@ import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useMediaTvSeriesPlaylistsOptions } from '@/api/client/options/mediaOptions';
+import { tvSeriesPlaylistsOptions } from '@libs/query-client';
 
 type SortBy = "created_at" | "updated_at" | "likes_count";
 const DEFAULT_PER_PAGE = 20;
@@ -61,12 +61,11 @@ export function TvSeriesPlaylists({
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useInfiniteQuery(useMediaTvSeriesPlaylistsOptions({
+  } = useInfiniteQuery(tvSeriesPlaylistsOptions({
     tvSeriesId: tvSeriesId,
     filters: {
-      sortBy: sortBy,
-      sortOrder: sortOrder,
-      perPage: perPage,
+      sort_by: sortBy,
+      sort_order: sortOrder,
     }
   }));
 
@@ -108,7 +107,7 @@ export function TvSeriesPlaylists({
         </ButtonGroup>
       </div>
       {/* PLAYLISTS */}
-      {(isLoading || playlists === undefined || playlists?.pages[0]?.length) ? (
+      {(isLoading || playlists === undefined || playlists?.pages[0]?.data.length) ? (
         <div className="w-full grid gap-2 grid-cols-2 @xs/movie-playlists:grid-cols-3 @md/movie-playlists:grid-cols-4 @lg/movie-playlists:grid-cols-5 @2xl/movie-playlists:grid-cols-6 @4xl/movie-playlists:grid-cols-7 @5xl/movie-playlists:grid-cols-8 @7xl/movie-playlists:grid-cols-10">
           {isLoading || playlists === undefined ? (
             Array.from({ length: 40 }).map((_, i) => (
@@ -116,12 +115,12 @@ export function TvSeriesPlaylists({
             ))
           ) : (
             playlists?.pages.map((page, i) => (
-              page?.map((playlist, index) => (
+              page?.data.map((playlist, index) => (
                 <CardPlaylist
                 key={index}
                 playlist={playlist}
                 {...(i === playlists.pages.length - 1 &&
-                  index === page.length - 1
+                  index === page.data.length - 1
                     ? { ref: ref }
                     : {})}
                 />

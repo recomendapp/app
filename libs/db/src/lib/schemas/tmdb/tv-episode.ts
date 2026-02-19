@@ -1,10 +1,10 @@
 import {
   bigint,
+  date,
   index,
   integer,
   real,
   text,
-  timestamp,
   unique,
 } from 'drizzle-orm/pg-core';
 import { tmdbSchema } from './common';
@@ -19,7 +19,7 @@ export const tmdbTvEpisode = tmdbSchema.table(
     tvSeasonId: bigint('tv_season_id', { mode: 'number' })
       .notNull()
       .references(() => tmdbTvSeason.id, { onDelete: 'cascade' }),
-    airDate: timestamp('air_date', { withTimezone: true, mode: 'string' }),
+    airDate: date('air_date', { mode: 'string' }),
     episodeNumber: integer('episode_number').notNull(),
     episodeType: text('episode_type'),
     name: text(),

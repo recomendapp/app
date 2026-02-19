@@ -1,4 +1,4 @@
-import { ApiProperty, ApiSchema } from '@nestjs/swagger';
+import { ApiProperty, ApiSchema, PickType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import {
   IsInt,
@@ -7,7 +7,7 @@ import {
   IsNumber,
   ValidateNested,
 } from 'class-validator';
-import { TvSeriesCompactDto } from '../../dto/tv-series.dto';
+import { TvSeriesMinimalDto } from '../../dto/tv-series.dto';
 
 
 @ApiSchema({ name: 'TvSeason' })
@@ -109,11 +109,23 @@ export class TvSeasonDto {
   url: string | null;
 }
 
+@ApiSchema({ name: 'TvSeasonCompact' })
+export class TvSeasonCompactDto extends PickType(TvSeasonDto, [
+  'id',
+  'tvSeriesId',
+  'seasonNumber',
+  'posterPath',
+  'episodeCount',
+  'voteAverage',
+  'voteCount',
+  'url',
+] as const) {}
+
 @ApiSchema({ name: 'TvSeasonGet' })
 export class TvSeasonGetDTO extends TvSeasonDto {
-    @ApiProperty({ type: () => TvSeriesCompactDto, description: 'The TV series object' })
+    @ApiProperty({ type: () => TvSeriesMinimalDto, description: 'The TV series object' })
     @Expose()
     @ValidateNested({ each: true })
-    @Type(() => TvSeriesCompactDto)
-    tvSeries: TvSeriesCompactDto;
+    @Type(() => TvSeriesMinimalDto)
+    tvSeries: TvSeriesMinimalDto;
 }

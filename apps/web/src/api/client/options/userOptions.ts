@@ -420,36 +420,36 @@ export const useUserReviewMovieOptions = ({
 		enabled: !!reviewId,
 	});
 };
-export const useUserReviewMovieLikeOptions = ({
-	userId,
-	reviewId,
-} : {
-	userId?: string;
-	reviewId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: userKeys.reviewLike({
-			reviewId: reviewId,
-			type: 'movie',
-			userId: userId!,
-		}),
-		queryFn: async () => {
-			if (!userId) throw Error('Missing user id');
-			const { data, error } = await supabase
-				.from('user_review_movie_likes')
-				.select('*')
-				.match({
-					'user_id': userId,
-					'review_id': reviewId,
-				})
-				.maybeSingle();
-			if (error) throw error;
-			return data;
-		},
-		enabled: !!userId && !!reviewId,
-	});
-};
+// export const useUserReviewMovieLikeOptions = ({
+// 	userId,
+// 	reviewId,
+// } : {
+// 	userId?: string;
+// 	reviewId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return queryOptions({
+// 		queryKey: userKeys.reviewLike({
+// 			reviewId: reviewId,
+// 			type: 'movie',
+// 			userId: userId!,
+// 		}),
+// 		queryFn: async () => {
+// 			if (!userId) throw Error('Missing user id');
+// 			const { data, error } = await supabase
+// 				.from('user_review_movie_likes')
+// 				.select('*')
+// 				.match({
+// 					'user_id': userId,
+// 					'review_id': reviewId,
+// 				})
+// 				.maybeSingle();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		enabled: !!userId && !!reviewId,
+// 	});
+// };
 
 export const useUserReviewTvSeriesOptions = ({
 	reviewId,
@@ -478,36 +478,36 @@ export const useUserReviewTvSeriesOptions = ({
 		enabled: !!reviewId,
 	});
 };
-export const useUserReviewTvSeriesLikeOptions = ({
-	userId,
-	reviewId,
-} : {
-	userId?: string;
-	reviewId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: userKeys.reviewLike({
-			reviewId: reviewId,
-			type: 'tv_series',
-			userId: userId!,
-		}),
-		queryFn: async () => {
-			if (!userId) throw Error('Missing user id');
-			const { data, error } = await supabase
-				.from('user_review_tv_series_likes')
-				.select('*')
-				.match({
-					'user_id': userId,
-					'review_id': reviewId,
-				})
-				.maybeSingle();
-			if (error) throw error;
-			return data;
-		},
-		enabled: !!userId && !!reviewId,
-	});
-};
+// export const useUserReviewTvSeriesLikeOptions = ({
+// 	userId,
+// 	reviewId,
+// } : {
+// 	userId?: string;
+// 	reviewId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return queryOptions({
+// 		queryKey: userKeys.reviewLike({
+// 			reviewId: reviewId,
+// 			type: 'tv_series',
+// 			userId: userId!,
+// 		}),
+// 		queryFn: async () => {
+// 			if (!userId) throw Error('Missing user id');
+// 			const { data, error } = await supabase
+// 				.from('user_review_tv_series_likes')
+// 				.select('*')
+// 				.match({
+// 					'user_id': userId,
+// 					'review_id': reviewId,
+// 				})
+// 				.maybeSingle();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		enabled: !!userId && !!reviewId,
+// 	});
+// };
 /* -------------------------------------------------------------------------- */
 
 /* ---------------------------------- RECOS --------------------------------- */
@@ -731,162 +731,162 @@ export const useUserRecosTvSeriesSendOptions = ({
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------- WATCHLIST ------------------------------- */
-export const useUserWatchlistOptions = ({
-	userId,
-	filters,
-} : {
-	userId?: string;
-	filters: {
-		sortBy: 'created_at';
-		sortOrder: 'asc' | 'desc' | 'random';
-		limit: number;
-	}
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: userKeys.watchlist({
-			userId: userId!,
-			type: 'all',
-			filters,
-		}),
-		queryFn: async () => {
-			if (!userId) throw Error('Missing user id');
-			let request = filters.sortOrder === 'random'
-				? supabase.from('user_watchlists_random').select('*').match({ 'user_id': userId, 'status': 'active' })
-				: supabase.from('user_watchlists').select('*').match({ 'user_id': userId, 'status': 'active' });
+// export const useUserWatchlistOptions = ({
+// 	userId,
+// 	filters,
+// } : {
+// 	userId?: string;
+// 	filters: {
+// 		sortBy: 'created_at';
+// 		sortOrder: 'asc' | 'desc' | 'random';
+// 		limit: number;
+// 	}
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return queryOptions({
+// 		queryKey: userKeys.watchlist({
+// 			userId: userId!,
+// 			type: 'all',
+// 			filters,
+// 		}),
+// 		queryFn: async () => {
+// 			if (!userId) throw Error('Missing user id');
+// 			let request = filters.sortOrder === 'random'
+// 				? supabase.from('user_watchlists_random').select('*').match({ 'user_id': userId, 'status': 'active' })
+// 				: supabase.from('user_watchlists').select('*').match({ 'user_id': userId, 'status': 'active' });
 
-			if (filters) {
-				if (filters.sortOrder !== 'random') {
-					switch (filters.sortBy) {
-						default: request = request.order('created_at', { ascending: filters.sortOrder === 'asc' });
-					}
-				}
-				if (filters.limit) {
-					request = request.limit(filters.limit);
-				}
-			}
-			const { data, error } = await request;
-			if (error) throw error;
-			return data;
-		},
-		enabled: !!userId,
-	});
-};
-export const useUserWatchlistMoviesOptions = ({
-	userId,
-} : {
-	userId?: string;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: userKeys.watchlist({
-			userId: userId!,
-			type: 'movie',
-		}),
-		queryFn: async () => {
-			if (!userId) throw Error('Missing user id');
-			const { data, error } = await supabase
-				.from('user_watchlists_movie')
-				.select(`*, movie:media_movie(*)`)
-				.match({
-					'user_id': userId,
-					'status': 'active',
-				});
-			if (error) throw error;
-			return data;
-		},
-		enabled: !!userId,
-	});
-};
-export const useUserWatchlistTvSeriesOptions = ({
-	userId,
-} : {
-	userId?: string;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: userKeys.watchlist({
-			userId: userId!,
-			type: 'tv_series',
-		}),
-		queryFn: async () => {
-			if (!userId) throw Error('Missing user id');
-			const { data, error } = await supabase
-				.from('user_watchlists_tv_series')
-				.select(`*, tv_series:media_tv_series(*)`)
-				.match({
-					'user_id': userId,
-					'status': 'active',
-				});
-			if (error) throw error;
-			return data;
-		},
-		enabled: !!userId,
-	});
-};
+// 			if (filters) {
+// 				if (filters.sortOrder !== 'random') {
+// 					switch (filters.sortBy) {
+// 						default: request = request.order('created_at', { ascending: filters.sortOrder === 'asc' });
+// 					}
+// 				}
+// 				if (filters.limit) {
+// 					request = request.limit(filters.limit);
+// 				}
+// 			}
+// 			const { data, error } = await request;
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		enabled: !!userId,
+// 	});
+// };
+// export const useUserWatchlistMoviesOptions = ({
+// 	userId,
+// } : {
+// 	userId?: string;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return queryOptions({
+// 		queryKey: userKeys.watchlist({
+// 			userId: userId!,
+// 			type: 'movie',
+// 		}),
+// 		queryFn: async () => {
+// 			if (!userId) throw Error('Missing user id');
+// 			const { data, error } = await supabase
+// 				.from('user_watchlists_movie')
+// 				.select(`*, movie:media_movie(*)`)
+// 				.match({
+// 					'user_id': userId,
+// 					'status': 'active',
+// 				});
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		enabled: !!userId,
+// 	});
+// };
+// export const useUserWatchlistTvSeriesOptions = ({
+// 	userId,
+// } : {
+// 	userId?: string;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return queryOptions({
+// 		queryKey: userKeys.watchlist({
+// 			userId: userId!,
+// 			type: 'tv_series',
+// 		}),
+// 		queryFn: async () => {
+// 			if (!userId) throw Error('Missing user id');
+// 			const { data, error } = await supabase
+// 				.from('user_watchlists_tv_series')
+// 				.select(`*, tv_series:media_tv_series(*)`)
+// 				.match({
+// 					'user_id': userId,
+// 					'status': 'active',
+// 				});
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		enabled: !!userId,
+// 	});
+// };
 
-export const useUserWatchlistMovieItemOptions = ({
-	userId,
-	movieId,
-} : {
-	userId?: string;
-	movieId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: userKeys.watchlistItem({
-			id: movieId,
-			type: 'movie',
-			userId: userId!,
-		}),
-		queryFn: async () => {
-			if (!userId) throw Error('Missing user id');
-			const { data, error } = await supabase
-				.from('user_watchlists_movie')
-				.select(`*`)
-				.match({
-					'user_id': userId,
-					'movie_id': movieId,
-					'status': 'active',
-				})
-				.maybeSingle();
-			if (error) throw error;
-			return data;
-		},
-		enabled: !!userId && !!movieId,
-	});
-};
-export const useUserWatchlistTvSeriesItemOptions = ({
-	userId,
-	tvSeriesId,
-} : {
-	userId?: string;
-	tvSeriesId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: userKeys.watchlistItem({
-			id: tvSeriesId,
-			type: 'tv_series',
-			userId: userId!,
-		}),
-		queryFn: async () => {
-			if (!userId) throw Error('Missing user id');
-			const { data, error } = await supabase
-				.from('user_watchlists_tv_series')
-				.select(`*`)
-				.match({
-					'user_id': userId,
-					'tv_series_id': tvSeriesId,
-					'status': 'active',
-				})
-				.maybeSingle();
-			if (error) throw error;
-			return data;
-		},
-		enabled: !!userId && !!tvSeriesId,
-	});
-};
+// export const useUserWatchlistMovieItemOptions = ({
+// 	userId,
+// 	movieId,
+// } : {
+// 	userId?: string;
+// 	movieId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return queryOptions({
+// 		queryKey: userKeys.watchlistItem({
+// 			id: movieId,
+// 			type: 'movie',
+// 			userId: userId!,
+// 		}),
+// 		queryFn: async () => {
+// 			if (!userId) throw Error('Missing user id');
+// 			const { data, error } = await supabase
+// 				.from('user_watchlists_movie')
+// 				.select(`*`)
+// 				.match({
+// 					'user_id': userId,
+// 					'movie_id': movieId,
+// 					'status': 'active',
+// 				})
+// 				.maybeSingle();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		enabled: !!userId && !!movieId,
+// 	});
+// };
+// export const useUserWatchlistTvSeriesItemOptions = ({
+// 	userId,
+// 	tvSeriesId,
+// } : {
+// 	userId?: string;
+// 	tvSeriesId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return queryOptions({
+// 		queryKey: userKeys.watchlistItem({
+// 			id: tvSeriesId,
+// 			type: 'tv_series',
+// 			userId: userId!,
+// 		}),
+// 		queryFn: async () => {
+// 			if (!userId) throw Error('Missing user id');
+// 			const { data, error } = await supabase
+// 				.from('user_watchlists_tv_series')
+// 				.select(`*`)
+// 				.match({
+// 					'user_id': userId,
+// 					'tv_series_id': tvSeriesId,
+// 					'status': 'active',
+// 				})
+// 				.maybeSingle();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		enabled: !!userId && !!tvSeriesId,
+// 	});
+// };
 /* -------------------------------------------------------------------------- */
 
 /* ------------------------------- Playlists ------------------------------- */

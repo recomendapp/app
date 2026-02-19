@@ -17,7 +17,7 @@ import ButtonUserRecosMovieSend from "@/components/buttons/ButtonUserRecosMovieS
 import ButtonPlaylistMovieAdd from "@/components/buttons/ButtonPlaylistMovieAdd";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 import { useQuery } from "@tanstack/react-query";
-import { movieOptions } from "@libs/query-client/src";
+import { movieOptions } from "@libs/query-client";
 
 export const MovieWidget = () => {
 	const {

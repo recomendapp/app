@@ -7,10 +7,10 @@ import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from "lodash";
 import { CardMovie } from "../Card/CardMovie";
-import { MediaMovie, MediaTvSeries } from "@recomendapp/types";
 import { CardTvSeries } from "../Card/CardTvSeries";
-import { useUserWatchlistOptions } from "@/api/client/options/userOptions";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { userBookmarksOptions } from "@libs/query-client/src";
+import { MovieCompact, TvSeriesCompact } from "@packages/api-js";
 
 export const WidgetUserWatchlist = ({
   className,
@@ -18,31 +18,30 @@ export const WidgetUserWatchlist = ({
   const { user } = useAuth();
   const t = useTranslations();
 
-  const { data: watchlist } = useQuery(useUserWatchlistOptions({
+  const { data: watchlist } = useInfiniteQuery(userBookmarksOptions({
     userId: user?.id,
     filters: {
-      sortBy: 'created_at',
-      sortOrder: 'random',
-      limit: 6,
+      sort_by: 'random',
     }
   }));
+  const watchlistItems = watchlist?.pages.flatMap(page => page.data).slice(0, 6);
 
   if (!user) return null;
 
-  if (!watchlist || !watchlist.length) return (null);
+  if (!watchlist || !watchlist.pages[0].data.length) return (null);
 
   return (
   <div className={cn('@container/widget-user-watchlist space-y-2', className)}>
     <Button variant={'link'} className="p-0 w-fit font-semibold text-xl" asChild>
-			<Link href={'/collection/watchlist'}>
+			<Link href={'/collection/bookmarks'}>
         {upperFirst(t('common.messages.to_watch'))}
 			</Link>
 		</Button>
     <div className='grid grid-cols-2 @2xl/widget-user-watchlist:grid-cols-3 gap-4'>
-      {watchlist.map((item, index) => (
+      {watchlistItems?.map((item, index) => (
         item.type === 'movie'
-          ? <CardMovie key={index} movie={item.media as MediaMovie} />
-          : <CardTvSeries key={index} tvSeries={item.media as MediaTvSeries} />
+          ? <CardMovie key={`watchlist-${index}`} movie={item.media as MovieCompact} />
+          : <CardTvSeries key={`watchlist-${index}`} tvSeries={item.media as TvSeriesCompact} />
       ))}
     </div>
   </div>

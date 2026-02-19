@@ -39,7 +39,7 @@ const Collection = () => {
 		  </CollectionIcon>
 		),
 		label: upperFirst(t('messages.watchlist')),
-		href: '/collection/watchlist',
+		href: '/collection/bookmarks',
 	  },
 	],
 	[t]

@@ -1,10 +1,11 @@
 import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { and, eq, sql } from 'drizzle-orm';
-import { follow, logMovie, profile, tmdbMovieView } from '@libs/db/schemas';
+import { and, asc, desc, eq, exists, or, SQL, sql } from 'drizzle-orm';
+import { follow, logMovie, profile, reviewMovie, tmdbMovieView } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
-import { UserMovieDto } from './dto/user-movie.dto';
+import { ListUserMovieWithMovieDto, UserMovieWithUserMovieDto } from './dto/user-movie.dto';
 import { SupportedLocale } from '@libs/i18n';
+import { GetLogsMovieQueryDto, LogMovieSortBy } from '../../movies/log/dto/log-movie.dto';
 
 @Injectable()
 export class UsersMovieService {
@@ -22,7 +23,7 @@ export class UsersMovieService {
     movieId: number;
     currentUser: User | null;
     locale: SupportedLocale;
-  }): Promise<UserMovieDto | null> {
+  }): Promise<UserMovieWithUserMovieDto | null> {
     return await this.db.transaction(async (tx) => {
       if (currentUser?.id !== userId) {
         const targetProfile = await tx.query.profile.findFirst({
@@ -96,6 +97,7 @@ export class UsersMovieService {
         id: tmdbMovieView.id,
         title: tmdbMovieView.title,
         posterPath: tmdbMovieView.posterPath,
+        backdropPath: tmdbMovieView.backdropPath,
         slug: tmdbMovieView.slug,
         url: tmdbMovieView.url,
         directors: tmdbMovieView.directors,
@@ -128,6 +130,141 @@ export class UsersMovieService {
           isPremium: user.profile.isPremium,
         },
         movie: movie,
+      }
+    });
+  }
+
+  async list({
+    userId,
+    query,
+    currentUser,
+    locale,
+  }: {
+    userId: string;
+    query: GetLogsMovieQueryDto;
+    currentUser: User | null;
+    locale: SupportedLocale;
+  }): Promise<ListUserMovieWithMovieDto> {
+    return await this.db.transaction(async (tx) => {
+      await tx.execute(
+        sql`SELECT set_config('app.current_language', ${locale}, true)`
+      );
+      if (currentUser) {
+        await tx.execute(
+          sql`SELECT set_config('app.current_user_id', ${currentUser.id}, true)`
+        );
+      }
+
+      const { per_page, sort_order, sort_by, page } = query;
+      const offset = (page - 1) * per_page;
+      const direction = sort_order === 'asc' ? asc : desc;
+      const orderBy = (() => {
+        switch (sort_by) {
+          case LogMovieSortBy.RANDOM:
+            return sql`RANDOM()`;
+          case LogMovieSortBy.RATING:
+            return sort_order === 'asc' 
+              ? sql`${logMovie.rating} ASC NULLS LAST`
+              : sql`${logMovie.rating} DESC NULLS LAST`;
+          case LogMovieSortBy.FIRST_WATCHED_AT:
+            return direction(logMovie.firstWatchedAt);
+          case LogMovieSortBy.UPDATED_AT:
+          default:
+            return direction(logMovie.updatedAt);
+        }
+      })();
+
+      let privacyClause: SQL | undefined;
+
+      if (currentUser?.id === userId) {
+        privacyClause = undefined;
+      } else if (!currentUser) {
+        privacyClause = exists(
+          tx.select({ id: profile.id })
+            .from(profile)
+            .where(and(eq(profile.id, userId), eq(profile.isPrivate, false)))
+        );
+      } else {
+        privacyClause = or(
+          exists(
+            tx.select({ id: profile.id })
+              .from(profile)
+              .where(and(eq(profile.id, userId), eq(profile.isPrivate, false)))
+          ),
+          exists(
+            tx.select({ id: follow.followerId })
+              .from(follow)
+              .where(
+                and(
+                  eq(follow.followerId, currentUser.id),
+                  eq(follow.followingId, userId),
+                  eq(follow.status, 'accepted')
+                )
+              )
+          )
+        );
+      }
+
+      const baseWhereConditions: SQL[] = [
+        eq(logMovie.userId, userId),
+      ];
+
+      if (privacyClause) {
+        baseWhereConditions.push(privacyClause);
+      }
+
+      const whereClause = and(...baseWhereConditions);
+
+      const paginatedLogsSubquery = tx
+        .select()
+        .from(logMovie)
+        .where(whereClause)
+        .orderBy(orderBy)
+        .limit(per_page)
+        .offset(offset)
+        .as('paginated_logs');
+
+      const [results, totalCount] = await Promise.all([        
+        tx.select({
+            log: logMovie, 
+            isReviewed: sql<boolean>`${reviewMovie.id} IS NOT NULL`,
+            movie: {
+              id: tmdbMovieView.id,
+              title: tmdbMovieView.title,
+              slug: tmdbMovieView.slug,
+              url: tmdbMovieView.url,
+              posterPath: tmdbMovieView.posterPath,
+              backdropPath: tmdbMovieView.backdropPath,
+              directors: tmdbMovieView.directors,
+              releaseDate: tmdbMovieView.releaseDate,
+              voteAverage: tmdbMovieView.voteAverage,
+              voteCount: tmdbMovieView.voteCount,
+              genres: tmdbMovieView.genres,
+              followerAvgRating: tmdbMovieView.followerAvgRating,
+            },
+          })
+          .from(paginatedLogsSubquery)
+          .innerJoin(logMovie, eq(logMovie.id, paginatedLogsSubquery.id)) 
+          .innerJoin(tmdbMovieView, eq(logMovie.movieId, tmdbMovieView.id))
+          .leftJoin(reviewMovie, eq(logMovie.id, reviewMovie.id))
+          .orderBy(orderBy),
+        tx.$count(logMovie, whereClause)
+      ]);
+
+      const totalPages = Math.ceil(totalCount / per_page);
+
+      return {
+        data: results.map(({ log, movie, isReviewed }) => ({
+          ...log,
+          isReviewed,
+          movie,
+        })),
+        meta: {
+          total_results: totalCount,
+          total_pages: totalPages,
+          current_page: page,
+          per_page,
+        }
       }
     });
   }

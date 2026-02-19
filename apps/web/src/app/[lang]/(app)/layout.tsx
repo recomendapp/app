@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 
 interface AppLayoutProps {
   children: React.ReactNode;
-  params: Promise<{ lang: SupportedLocale }>;
+  params: Promise<{ lang: string }>;
 };
 
 export default async function RootLayout({
@@ -13,7 +13,7 @@ export default async function RootLayout({
   params,
 }: AppLayoutProps) {
   const { lang } = await params;
-  if (routing.locales.includes(lang) === false) {
+  if (routing.locales.includes(lang as SupportedLocale) === false) {
     notFound();
   }
   return (

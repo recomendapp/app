@@ -1,4 +1,4 @@
-import { moviesControllerGet, moviesControllerGetCasting, moviesControllerGetPlaylists, MoviesControllerGetPlaylistsData, moviesControllerGetReviews, MoviesControllerGetReviewsData, moviesLogControllerGet } from "@packages/api-js";
+import { moviesBookmarkControllerGet, moviesControllerGet, moviesControllerGetCasting, moviesControllerGetPlaylists, MoviesControllerGetPlaylistsData, moviesControllerGetReviews, MoviesControllerGetReviewsData, moviesLogControllerGet, moviesLogControllerGetFollowingAverageRating, moviesLogControllerGetFollowingLogs } from "@packages/api-js";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { movieKeys } from "./movieKeys";
 
@@ -143,6 +143,79 @@ export const movieLogOptions = ({
 		queryFn: async () => {
 			if (!movieId) throw new Error('Movie ID is required');
 			const { data, error } = await moviesLogControllerGet({
+				path: {
+					movie_id: movieId,
+				},
+			});
+			if (error) throw error;
+			if (data === undefined) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId && !!movieId,
+	});
+}
+
+export const movieFollowingLogsOptions = ({
+	userId,
+	movieId,
+} : {
+	userId?: string;
+	movieId?: number;
+}) => {
+	return queryOptions({
+		queryKey: movieKeys.followingLogs({ movieId: movieId! }),
+		queryFn: async () => {
+			if (!movieId) throw new Error('Movie ID is required');
+			const { data, error } = await moviesLogControllerGetFollowingLogs({
+				path: {
+					movie_id: movieId,
+				},
+			});
+			if (error) throw error;
+			if (data === undefined) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId && !!movieId,
+	});
+}
+
+export const movieFollowingAverageRatingOptions = ({
+	userId,
+	movieId,
+} : {
+	userId?: string;
+	movieId?: number;
+}) => {
+	return queryOptions({
+		queryKey: movieKeys.followingAverageRating({ movieId: movieId! }),
+		queryFn: async () => {
+			if (!movieId) throw new Error('Movie ID is required');
+			const { data, error } = await moviesLogControllerGetFollowingAverageRating({
+				path: {
+					movie_id: movieId,
+				},
+			});
+			if (error) throw error;
+			if (data === undefined) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId && !!movieId,
+	});
+}
+
+/* -------------------------------- Bookmarks ------------------------------- */
+export const movieBookmarkOptions = ({
+	userId,
+	movieId,
+} : {
+	userId?: string;
+	movieId?: number;
+}) => {
+	return queryOptions({
+		queryKey: movieKeys.bookmark({ movieId: movieId! }),
+		queryFn: async () => {
+			if (!movieId) throw new Error('Movie ID is required');
+			const { data, error } = await moviesBookmarkControllerGet({
 				path: {
 					movie_id: movieId,
 				},

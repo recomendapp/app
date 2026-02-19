@@ -7,6 +7,9 @@ import { CurrentOptionalUser, CurrentUser } from '../auth/decorators';
 import { User } from '../auth/auth.service';
 import { GetPlaylistsQueryDto, ListPlaylistsDto } from '../playlists/dto/playlists.dto';
 import { FollowDto } from './dto/user-follow.dto';
+import { GetBookmarksQueryDto, ListBookmarksDto } from '../bookmark/dto/bookmark.dto';
+import { CurrentLocale } from '../../common/decorators/current-locale.decorator';
+import { SupportedLocale } from '@libs/i18n';
 
 @ApiTags('Users')
 @Controller({
@@ -66,6 +69,29 @@ export class UsersController {
     return this.usersService.getProfile(decodeURIComponent(identifier), currentUser);
   }
 
+  /* -------------------------------- Bookmarks ------------------------------- */
+  @Get(':user_id/bookmarks')
+  @UseGuards(OptionalAuthGuard)
+  @ApiOkResponse({
+    description: 'List of bookmarks',
+    type: ListBookmarksDto,
+  })
+  async getBookmarks(
+    @Param('user_id', ParseUUIDPipe) targetUserId: string,
+    @Query() query: GetBookmarksQueryDto,
+    @CurrentOptionalUser() currentUser: User | null,
+    @CurrentLocale() locale: SupportedLocale,
+  ): Promise<ListBookmarksDto> {
+    return this.usersService.getBookmarks({
+      targetUserId,
+      query,
+      currentUser,
+      locale,
+    });
+  }
+
+
+  /* -------------------------------- Playlists ------------------------------- */
   @Get(':user_id/playlists')
   @UseGuards(OptionalAuthGuard)
   @ApiOkResponse({

@@ -1,9 +1,9 @@
 'use client'
 
 import { useQuery } from "@tanstack/react-query";
-import { usePlaylistDetailsOptions } from "@/api/client/options/playlistOptions";
 import { PlaylistGet as TPlaylist } from "@packages/api-js";
 import { PlaylistHeader } from "./PlaylistHeader";
+import { playlistOptions } from "@libs/query-client";
 
 export const Playlist = ({
 	playlist: playlistProps,
@@ -12,10 +12,12 @@ export const Playlist = ({
 }) => {
 	const {
 		data: playlist,
-	} = useQuery(usePlaylistDetailsOptions({
-		playlistId: playlistProps.id,
+	} = useQuery({
+		...playlistOptions({
+			playlistId: playlistProps.id,
+		}),
 		initialData: playlistProps,
-	}));
+	});
 	if (!playlist) return null;
 	return (
 		<div className="h-full">

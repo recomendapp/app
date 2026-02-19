@@ -1,10 +1,11 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
-import { and, eq, sql } from 'drizzle-orm';
+import { and, asc, eq, sql } from 'drizzle-orm';
 import { User } from '../../auth/auth.service';
 import { SupportedLocale } from '@libs/i18n';
 import { TvSeasonGetDTO } from './dto/tv-seasons.dto';
-import { tmdbTvSeasonView, tmdbTvSeriesView } from '@libs/db/schemas';
+import { tmdbTvEpisode, tmdbTvSeasonView, tmdbTvSeriesView } from '@libs/db/schemas';
+import { TvEpisodeDto } from '../episodes/dto/tv-episodes.dto';
 
 @Injectable()
 export class TvSeasonsService {
@@ -73,4 +74,61 @@ export class TvSeasonsService {
       return tvSeason;
     });
   }
+
+  async getEpisodes({
+    tvSeriesId,
+    seasonNumber,
+    currentUser,
+    locale,
+  }: {
+    tvSeriesId: number;
+    seasonNumber: number;
+    currentUser: User | null;
+    locale: SupportedLocale;
+  }): Promise<TvEpisodeDto[]> {
+    return await this.db.transaction(async (tx) => {
+      await tx.execute(
+        sql`SELECT set_config('app.current_language', ${locale}, true)`
+      );
+      if (currentUser) {
+        await tx.execute(
+          sql`SELECT set_config('app.current_user_id', ${currentUser.id}, true)`
+        );
+      }
+
+      const episodes = await tx
+        .select({
+          id: tmdbTvEpisode.id,
+          tvSeasonId: tmdbTvEpisode.tvSeasonId,
+          tvSeriesId: tmdbTvSeasonView.tvSeriesId,
+          seasonNumber: tmdbTvSeasonView.seasonNumber,
+          episodeNumber: tmdbTvEpisode.episodeNumber,
+          name: tmdbTvEpisode.name,
+          overview: tmdbTvEpisode.overview,
+          airDate: tmdbTvEpisode.airDate,
+          episodeType: tmdbTvEpisode.episodeType,
+          runtime: tmdbTvEpisode.runtime,
+          productionCode: tmdbTvEpisode.productionCode,
+          stillPath: tmdbTvEpisode.stillPath,
+          voteAverage: tmdbTvEpisode.voteAverage,
+          voteCount: tmdbTvEpisode.voteCount,
+          seasonUrl: tmdbTvSeasonView.url,
+        })
+        .from(tmdbTvEpisode)
+        .innerJoin(tmdbTvSeasonView, eq(tmdbTvSeasonView.id, tmdbTvEpisode.tvSeasonId))
+        .where(
+          and(
+            eq(tmdbTvSeasonView.tvSeriesId, tvSeriesId),
+            eq(tmdbTvSeasonView.seasonNumber, seasonNumber)
+          )
+        )
+        .orderBy(asc(tmdbTvEpisode.episodeNumber));
+      
+      return episodes.map(({ seasonUrl, ...episode }) => ({
+        ...episode,
+        url: seasonUrl + '/episode/' + episode.episodeNumber,
+      }));
+    });
+  }
+
 }

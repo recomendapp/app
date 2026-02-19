@@ -10,8 +10,8 @@ import { Button } from '@/components/ui/button';
 import { Link } from '@/lib/i18n/navigation';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { useQuery } from '@tanstack/react-query';
-import { useMediaTvSeasonEpisodesOptions } from '@/api/client/options/mediaOptions';
 import { TvSeasonGet } from '@packages/api-js';
+import { tvSeasonEpisodesOptions } from '@libs/query-client';
 
 export const TvSeasonHeader = ({
 	season,
@@ -22,13 +22,13 @@ export const TvSeasonHeader = ({
 	const title = upperFirst(t('common.messages.tv_season_value', { number: season.seasonNumber }));
 	const {
 		data: episodes,
-	} = useQuery(useMediaTvSeasonEpisodesOptions({
+	} = useQuery(tvSeasonEpisodesOptions({
 		tvSeriesId: season.tvSeriesId,
 		seasonNumber: season.seasonNumber,
 	}));
 	const randomBg = useRandomImage(episodes?.map(episode => ({
-		src: episode.still_path ?? '',
-		alt: upperFirst(t('common.messages.tv_episode_value', { number: episode.episode_number })),
+		src: episode.stillPath ?? '',
+		alt: upperFirst(t('common.messages.tv_episode_value', { number: episode.episodeNumber })),
 	})) ?? []);
 	return (
 	<HeaderBox className='@xl/header-box:h-fit' background={randomBg ? { src: getTmdbImage({ path: randomBg.src, size: 'w1280' }), alt: randomBg.alt ?? '', unoptimized: true } : undefined}>

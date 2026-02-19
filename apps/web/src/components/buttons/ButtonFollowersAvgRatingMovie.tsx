@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { ModalUserActivityMovieFollowersRating } from "../Modals/activities/ModalUserActivityMovieFollowersRating";
 import { useQuery } from "@tanstack/react-query";
-import { useMediaMovieFollowersAvgRatingOptions } from "@/api/client/options/mediaOptions";
+import { movieFollowingAverageRatingOptions } from "@libs/query-client/src";
 
 interface ButtonFollowersAvgRatingMovieProps
 	extends React.ComponentProps<typeof Button> {
@@ -25,7 +25,7 @@ const ButtonFollowersAvgRatingMovie = forwardRef<
 	const {
 		data,
 		isLoading
-	} = useQuery(useMediaMovieFollowersAvgRatingOptions({
+	} = useQuery(movieFollowingAverageRatingOptions({
 		movieId: movieId,
 	}))
 
@@ -38,7 +38,7 @@ const ButtonFollowersAvgRatingMovie = forwardRef<
 		}
 	}, [stopPropagation, onClick, openModal, movieId]);
 
-	if (!data?.follower_avg_rating || isLoading) return null;
+	if (!data?.averageRating || isLoading) return null;
 
 	return (
 	<TooltipBox tooltip={upperFirst(t('common.messages.followers_ratings'))}>
@@ -49,7 +49,7 @@ const ButtonFollowersAvgRatingMovie = forwardRef<
 		onClick={handleClick}
 		{...props}
 		>
-			<p className="font-bold text-lg">{data.follower_avg_rating}</p>
+			<p className="font-bold text-lg">{data.averageRating}</p>
 		</Button>
 	</TooltipBox>
 	);

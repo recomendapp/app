@@ -17,7 +17,7 @@ import { useTranslations } from "next-intl";
 import { CardUser } from "@/components/Card/CardUser";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import { useQuery } from "@tanstack/react-query";
-import { useMediaMovieFollowersAvgRatingsOptions } from "@/api/client/options/mediaOptions";
+import { movieFollowingLogsOptions } from "@libs/query-client/src";
 
 const chartConfig = {
 	count: {
@@ -40,7 +40,7 @@ export const ModalUserActivityMovieFollowersRating = ({
 		data: followersRating,
 		isLoading,
 		isError,
-	} = useQuery(useMediaMovieFollowersAvgRatingsOptions({
+	} = useQuery(movieFollowingLogsOptions({
 		movieId: movieId,
 	}));
 
@@ -86,7 +86,7 @@ export const ModalUserActivityMovieFollowersRating = ({
 											return (
 												<>
 													{ratings.length ? ratings.map((item) => (
-														item.user ? <CardUser key={item.user_id} user={item.user} variant="inline" /> : null
+														item.user ? <CardUser key={item.userId} user={item.user} variant="inline" /> : null
 													)) : <span className="text-muted-foreground">{upperFirst(t('common.messages.no_rating'))}</span>}
 												</>
 											)
@@ -102,7 +102,7 @@ export const ModalUserActivityMovieFollowersRating = ({
 						<ScrollArea className="h-[10vh]">
 							<div className="grid grid-cols-2 gap-2">
 								{followersRating.map((item) => (
-									<Card key={item.user_id} className="flex items-center justify-between gap-2 p-2">
+									<Card key={item.id} className="flex items-center justify-between gap-2 p-2">
 										{item.user ? <CardUser user={item.user} variant="inline" /> : null}
 										<IconMediaRating
 										rating={item.rating}

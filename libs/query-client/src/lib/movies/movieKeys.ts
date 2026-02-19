@@ -40,4 +40,22 @@ export const movieKeys = {
 	}: {
 		movieId: number;
 	}) => [...movieKeys.details({ movieId }), 'log'] as const,
+
+	bookmark: ({
+		movieId,
+	}: {
+		movieId: number;
+	}) => [...movieKeys.details({ movieId }), 'bookmark'] as const,
+
+	followingLogs: ({
+		movieId,
+	}: {
+		movieId: number;
+	}) => [...movieKeys.details({ movieId }), 'following-logs'] as const,
+
+	followingAverageRating: ({
+		movieId,
+	}: {
+		movieId: number;
+	}) => [...movieKeys.details({ movieId }), 'following-average-rating'] as const,
 };

@@ -12,8 +12,7 @@ import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { ContextMenuWatchlistMovie } from "../ContextMenu/ContextMenuWatchlistMovie";
 import { useQuery } from "@tanstack/react-query";
-import { useUserWatchlistMovieItemOptions } from "@/api/client/options/userOptions";
-import { useUserWatchlistMovieDeleteMutation, useUserWatchlistMovieInsertMutation } from "@/api/client/mutations/userMutations";
+import { movieBookmarkOptions, useMovieBookmarkDeleteMutation, useMovieBookmarkSetMutation } from "@libs/query-client/src";
 
 interface ButtonUserWatchlistMovieProps
 	extends React.ComponentProps<typeof Button> {
@@ -25,7 +24,7 @@ const ButtonUserWatchlistMovie = React.forwardRef<
 	React.ComponentRef<typeof Button>,
 	ButtonUserWatchlistMovieProps
 >(({ movieId, stopPropagation = true, className, ...props }, ref) => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const t = useTranslations();
 	const pathname = usePathname();
 
@@ -33,48 +32,44 @@ const ButtonUserWatchlistMovie = React.forwardRef<
 		data: watchlist,
 		isLoading,
 		isError,
-	} = useQuery(useUserWatchlistMovieItemOptions({
+	} = useQuery(movieBookmarkOptions({
 		movieId: movieId,
-		userId: session?.user.id,
+		userId: user?.id,
 	}));
 
-	const { mutateAsync: insertWatchlist, isPending: isInsertPending } = useUserWatchlistMovieInsertMutation();
-	const { mutateAsync: deleteWatchlist, isPending: isDeletePending } = useUserWatchlistMovieDeleteMutation();
+	const { mutateAsync: addBookmark, isPending: isAddPending } = useMovieBookmarkSetMutation();
+	const { mutateAsync: deleteBookmark, isPending: isDeletePending } = useMovieBookmarkDeleteMutation();
 
 	const handleWatchlist = React.useCallback(async (e: React.MouseEvent) => {
 		stopPropagation && e.stopPropagation();
 		if (watchlist) return;
-		if (!session || !movieId) {
-			toast.error(upperFirst(t('common.messages.an_error_occurred')));
-			return;
-		}
-		await insertWatchlist({
-		  	userId: session.user.id,
-			movieId: movieId,
+		await addBookmark({
+		  	path: {
+				movie_id: movieId,
+			},
 		}, {
 		  onError: () => {
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 		  }
 		});
-	}, [insertWatchlist, movieId, session, stopPropagation, t, watchlist]);
+	}, [addBookmark, movieId, stopPropagation, t, watchlist]);
 
 	const handleUnwatchlist = React.useCallback(async (e: React.MouseEvent) => {
 		stopPropagation && e.stopPropagation();
 		if (!watchlist) return;
-		if (!watchlist.id) {
-			toast.error(upperFirst(t('common.messages.an_error_occurred')));
-			return;
-		}
-		await deleteWatchlist({
-		  watchlistId: watchlist.id,
+		await deleteBookmark({
+		  path: {
+			movie_id: movieId,
+		  },
+		  body: {}
 		}, {
 		  onError: () => {
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 		  }
 		});
-	}, [deleteWatchlist, stopPropagation, t, watchlist]);
+	}, [deleteBookmark, movieId, stopPropagation, t, watchlist]);
 
-	if (session == null) {
+	if (user == null) {
 		return (
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button
@@ -99,7 +94,7 @@ const ButtonUserWatchlistMovie = React.forwardRef<
 				<Button
 					ref={ref}
 					onClick={watchlist ? handleUnwatchlist : handleWatchlist}
-					disabled={isLoading || isError || watchlist === undefined || isInsertPending || isDeletePending}
+					disabled={isLoading || isError || watchlist === undefined || isAddPending || isDeletePending}
 					size="icon"
 					variant={'outline'}
 					className={cn(`rounded-full`, className)}

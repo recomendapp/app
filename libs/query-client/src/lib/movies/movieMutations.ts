@@ -1,7 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { movieLogOptions } from './movieOptions';
-import { moviesLogControllerDeleteMutation, moviesLogControllerSetMutation, moviesReviewControllerDeleteMutation, moviesReviewControllerUpsertMutation } from '@packages/api-js';
-import { userMovieLogOptions } from '../users';
+import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
+import { movieBookmarkOptions, movieLogOptions } from './movieOptions';
+import { ListBookmarks, moviesBookmarkControllerDeleteMutation, moviesBookmarkControllerSetMutation, moviesLogControllerDeleteMutation, moviesLogControllerSetMutation, moviesReviewControllerDeleteMutation, moviesReviewControllerUpsertMutation } from '@packages/api-js';
+import { userBookmarksOptions, userMovieLogOptions } from '../users';
 import { movieKeys } from './movieKeys';
 
 /* ---------------------------------- Logs ---------------------------------- */
@@ -29,7 +29,24 @@ export const useMovieLogSetMutation = () => {
                 });
 			}
 
-			// TODO: remove from bookmark
+			// Bookmarks
+			queryClient.setQueryData(movieBookmarkOptions({
+				userId: data.userId,
+				movieId: data.movieId,
+			}).queryKey, null);
+			queryClient.setQueriesData(
+                { queryKey: userBookmarksOptions({ userId: data.userId }).queryKey },
+                (oldData: InfiniteData<ListBookmarks> | undefined) => {
+                    if (!oldData || !oldData.pages) return oldData;
+                    return {
+                        ...oldData,
+                        pages: oldData.pages.map((page) => ({
+                            ...page,
+                            data: page.data.filter((item) => !(item.mediaId === data.movieId && item.type === 'movie' && item.status === 'active')),
+                        }))
+                    };
+                }
+            );
 
 			// TODO: invalidate feed
 		}
@@ -95,8 +112,6 @@ export const useMovieReviewUpsertMutation = () => {
                 });
 			}
 
-			// TODO: update review query
-
 			queryClient.invalidateQueries({
 				queryKey: movieKeys.reviews({
 					movieId: data.movieId,
@@ -133,13 +148,58 @@ export const useMovieReviewDeleteMutation = () => {
 				}
 			});
 
-			// TODO: set null review query
-
 			queryClient.invalidateQueries({
 				queryKey: movieKeys.reviews({
 					movieId: data.movieId,
 				})
 			});
+		}
+	});
+}
+
+/* -------------------------------- Bookmarks ------------------------------- */
+export const useMovieBookmarkSetMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		...moviesBookmarkControllerSetMutation(),
+		onSuccess: (data) => {
+			queryClient.setQueryData(movieBookmarkOptions({
+				userId: data.userId,
+				movieId: data.mediaId,
+			}).queryKey, data);
+
+			queryClient.invalidateQueries({
+				queryKey: userBookmarksOptions({
+					userId: data.userId,
+				}).queryKey,
+			});
+		}
+	});
+}
+
+export const useMovieBookmarkDeleteMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		...moviesBookmarkControllerDeleteMutation(),
+		onSuccess: (data) => {
+			queryClient.setQueryData(movieBookmarkOptions({
+				userId: data.userId,
+				movieId: data.mediaId,
+			}).queryKey, null);
+
+			queryClient.setQueriesData(
+                { queryKey: userBookmarksOptions({ userId: data.userId }).queryKey },
+                (oldData: InfiniteData<ListBookmarks> | undefined) => {
+                    if (!oldData || !oldData.pages) return oldData;
+                    return {
+                        ...oldData,
+                        pages: oldData.pages.map((page) => ({
+                            ...page,
+                            data: page.data.filter((item) => !(item.mediaId === data.mediaId && item.type === 'movie' && item.status === 'active')),
+                        }))
+                    };
+                }
+            );
 		}
 	});
 }

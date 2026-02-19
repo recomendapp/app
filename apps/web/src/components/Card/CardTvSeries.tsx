@@ -17,12 +17,12 @@ import ButtonUserActivityTvSeriesWatch from "../buttons/ButtonUserActivityTvSeri
 import ButtonUserWatchlistTvSeries from "../buttons/ButtonUserWatchlistTvSeries";
 import { ContextMenuTvSeries } from "../ContextMenu/ContextMenuTvSeries";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
-import { PersonCompact, TvSeries } from "@packages/api-js";
+import { PersonCompact, TvSeries, TvSeriesCompact } from "@packages/api-js";
 
 interface CardTvSeriesProps
 	extends React.ComponentProps<typeof Card> {
 		variant?: "default" | "poster" | "row";
-		tvSeries: TvSeries;
+		tvSeries: TvSeries | TvSeriesCompact;
 		activity?: UserActivityTvSeries;
 		profileActivity?: UserActivityTvSeries;
 		linked?: boolean;

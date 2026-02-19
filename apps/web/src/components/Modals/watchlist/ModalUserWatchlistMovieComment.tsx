@@ -5,14 +5,14 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useModal } from "@/context/modal-context";
-import { UserWatchlistMovie } from "@recomendapp/types";
 import { Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { useUserWatchlistMovieUpdateMutation } from "@/api/client/mutations/userMutations";
+import { Bookmark } from "@packages/api-js";
+import { useMovieBookmarkSetMutation } from "@libs/query-client";
 
 interface ModalUserWatchlistMovieCommentProps extends ModalType {
-	watchlistItem: UserWatchlistMovie;
+	watchlistItem: Bookmark;
 }
 
 const ModalUserWatchlistMovieComment = ({
@@ -22,7 +22,7 @@ const ModalUserWatchlistMovieComment = ({
 	const { closeModal } = useModal();
 	const t = useTranslations();
 	const [comment, setComment] = useState<string>(watchlistItem?.comment ?? '');
-	const { mutateAsync: updateWatchlistMovie, isPending } = useUserWatchlistMovieUpdateMutation();
+	const { mutateAsync: updateWatchlistMovie, isPending } = useMovieBookmarkSetMutation();
 
 	useEffect(() => {
 		setComment(watchlistItem?.comment ?? '');
@@ -38,8 +38,12 @@ const ModalUserWatchlistMovieComment = ({
 			return;
 		}
 		await updateWatchlistMovie({
-			watchlistId: watchlistItem?.id,
-			comment: comment,
+			path: {
+				movie_id: watchlistItem.mediaId,
+			},
+			body: {
+				comment: comment,
+			}
 		}, {
 			onSuccess: () => {
 				toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));

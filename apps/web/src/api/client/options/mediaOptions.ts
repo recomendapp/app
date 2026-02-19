@@ -142,60 +142,60 @@ import { mediaKeys } from "../keys/mediaKeys";
 
 /* -------------------------------- TV SERIES ------------------------------- */
 
-export const useMediaTvSeriesSeasonsOptions = ({
-	tvSeriesId,
-} : {
-	tvSeriesId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: mediaKeys.tvSeriesSeasons({
-			tvSeriesId,
-		}),
-		queryFn: async () => {
-			const { data, error } = await supabase
-				.from('media_tv_series_seasons')
-				.select('*')
-				.eq('serie_id', tvSeriesId)
-				.order('season_number', { ascending: true });
-			if (error) throw error;
-			data.sort((a, b) => {
-				if (a.season_number === 0) return 1;
-				if (b.season_number === 0) return -1;
-				return a.season_number - b.season_number;
-			});
-			return data;
-		},
-		staleTime: 1000 * 60 * 60 * 24 // 24 hours
-	})
-}
+// export const useMediaTvSeriesSeasonsOptions = ({
+// 	tvSeriesId,
+// } : {
+// 	tvSeriesId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return queryOptions({
+// 		queryKey: mediaKeys.tvSeriesSeasons({
+// 			tvSeriesId,
+// 		}),
+// 		queryFn: async () => {
+// 			const { data, error } = await supabase
+// 				.from('media_tv_series_seasons')
+// 				.select('*')
+// 				.eq('serie_id', tvSeriesId)
+// 				.order('season_number', { ascending: true });
+// 			if (error) throw error;
+// 			data.sort((a, b) => {
+// 				if (a.season_number === 0) return 1;
+// 				if (b.season_number === 0) return -1;
+// 				return a.season_number - b.season_number;
+// 			});
+// 			return data;
+// 		},
+// 		staleTime: 1000 * 60 * 60 * 24 // 24 hours
+// 	})
+// }
 
-export const useMediaTvSeasonEpisodesOptions = ({
-	tvSeriesId,
-	seasonNumber,
-} : {
-	tvSeriesId: number;
-	seasonNumber: number;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: mediaKeys.tvSeasonEpisodes({
-			tvSeriesId,
-			seasonNumber,
-		}),
-		queryFn: async () => {
-			const { data, error } = await supabase
-				.from('media_tv_series_episodes')
-				.select('*')
-				.eq('serie_id', tvSeriesId)
-				.eq('season_number', seasonNumber)
-				.order('episode_number', { ascending: true });
-			if (error) throw error;
-			return data;
-		},
-		staleTime: 1000 * 60 * 60 * 24 // 24 hours
-	})
-}
+// export const useMediaTvSeasonEpisodesOptions = ({
+// 	tvSeriesId,
+// 	seasonNumber,
+// } : {
+// 	tvSeriesId: number;
+// 	seasonNumber: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return queryOptions({
+// 		queryKey: mediaKeys.tvSeasonEpisodes({
+// 			tvSeriesId,
+// 			seasonNumber,
+// 		}),
+// 		queryFn: async () => {
+// 			const { data, error } = await supabase
+// 				.from('media_tv_series_episodes')
+// 				.select('*')
+// 				.eq('serie_id', tvSeriesId)
+// 				.eq('season_number', seasonNumber)
+// 				.order('episode_number', { ascending: true });
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		staleTime: 1000 * 60 * 60 * 24 // 24 hours
+// 	})
+// }
 
 // export const useMediaTvSeriesCastingOptions = ({
 // 	tvSeriesId,
@@ -278,60 +278,60 @@ export const useMediaTvSeriesReviewsOptions = ({
 	})
 }
 
-export const useMediaTvSeriesPlaylistsOptions = ({
-	tvSeriesId,
-	filters,
-} : {
-	tvSeriesId: number;
-	filters: {
-		perPage: number;
-		sortBy: 'created_at' | 'updated_at' | 'likes_count';
-		sortOrder: 'asc' | 'desc';
-	};
-}) => {
-	const supabase = useSupabaseClient();
-	return infiniteQueryOptions({
-		queryKey: mediaKeys.tvSeriesPlaylists({
-			tvSeriesId: tvSeriesId,
-			filters: filters,
-		}),
-		queryFn: async ({ pageParam = 1 }) => {
-			let from = (pageParam - 1) * filters.perPage;
-	  		let to = from + filters.perPage - 1;
-			let request = supabase
-				.from('playlists')
-				.select('*, user:profile(*), playlist_items_tv_series!inner(*)')
-				.match({
-					'type': 'tv_series',
-					'playlist_items_tv_series.tv_series_id': tvSeriesId,
-				})
-				.range(from, to);
+// export const useMediaTvSeriesPlaylistsOptions = ({
+// 	tvSeriesId,
+// 	filters,
+// } : {
+// 	tvSeriesId: number;
+// 	filters: {
+// 		perPage: number;
+// 		sortBy: 'created_at' | 'updated_at' | 'likes_count';
+// 		sortOrder: 'asc' | 'desc';
+// 	};
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return infiniteQueryOptions({
+// 		queryKey: mediaKeys.tvSeriesPlaylists({
+// 			tvSeriesId: tvSeriesId,
+// 			filters: filters,
+// 		}),
+// 		queryFn: async ({ pageParam = 1 }) => {
+// 			let from = (pageParam - 1) * filters.perPage;
+// 	  		let to = from + filters.perPage - 1;
+// 			let request = supabase
+// 				.from('playlists')
+// 				.select('*, user:profile(*), playlist_items_tv_series!inner(*)')
+// 				.match({
+// 					'type': 'tv_series',
+// 					'playlist_items_tv_series.tv_series_id': tvSeriesId,
+// 				})
+// 				.range(from, to);
 
-			if (filters.sortBy && filters.sortOrder) {
-				switch (filters.sortBy) {
-					case 'updated_at':
-						request = request.order('updated_at', { ascending: filters.sortOrder === 'asc' });
-						break;
-					case 'likes_count':
-						request = request.order('likes_count', { ascending: filters.sortOrder === 'asc' });
-						break;
-					default:
-						request = request.order('created_at', { ascending: filters.sortOrder === 'asc' });
-						break;
-				}
-			}
-			const { data, error } = await request;
-			if (error) throw error;
-			return data;
-		},
-		initialPageParam: 1,
-		getNextPageParam: (lastPage, pages) => {
-			return lastPage?.length == filters.perPage ? pages.length + 1 : undefined;
-		},
-		enabled: !!tvSeriesId,
-		staleTime: 1000 * 60 * 60 // 1 hour
-	})
-}
+// 			if (filters.sortBy && filters.sortOrder) {
+// 				switch (filters.sortBy) {
+// 					case 'updated_at':
+// 						request = request.order('updated_at', { ascending: filters.sortOrder === 'asc' });
+// 						break;
+// 					case 'likes_count':
+// 						request = request.order('likes_count', { ascending: filters.sortOrder === 'asc' });
+// 						break;
+// 					default:
+// 						request = request.order('created_at', { ascending: filters.sortOrder === 'asc' });
+// 						break;
+// 				}
+// 			}
+// 			const { data, error } = await request;
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		initialPageParam: 1,
+// 		getNextPageParam: (lastPage, pages) => {
+// 			return lastPage?.length == filters.perPage ? pages.length + 1 : undefined;
+// 		},
+// 		enabled: !!tvSeriesId,
+// 		staleTime: 1000 * 60 * 60 // 1 hour
+// 	})
+// }
 
 /* --------------------------------- PERSONS -------------------------------- */
 export const useMediaPersonFilmsOptions = ({
@@ -476,30 +476,30 @@ export const useMediaPersonTvSeriesOptions = ({
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------- FOLLOWERS AVG RATING -------------------------- */
-export const useMediaMovieFollowersAvgRatingsOptions = ({
-	movieId,
-} : {
-	movieId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: mediaKeys.followersAvgRatings({
-			id: movieId,
-			type: 'movie',
-		}),
-		queryFn: async () => {
-			const { data, error } = await supabase
-				.from('user_activities_movie_follower')
-				.select('*, user:profile(*)')
-				.eq('movie_id', movieId)
-				.not('rating', 'is', null)
-				.order('created_at', { ascending: false });
-			if (error) throw error;
-			return data;
-		},
-		staleTime: 1000 * 60 * 60 // 1 hour
-	});
-};
+// export const useMediaMovieFollowersAvgRatingsOptions = ({
+// 	movieId,
+// } : {
+// 	movieId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return queryOptions({
+// 		queryKey: mediaKeys.followersAvgRatings({
+// 			id: movieId,
+// 			type: 'movie',
+// 		}),
+// 		queryFn: async () => {
+// 			const { data, error } = await supabase
+// 				.from('user_activities_movie_follower')
+// 				.select('*, user:profile(*)')
+// 				.eq('movie_id', movieId)
+// 				.not('rating', 'is', null)
+// 				.order('created_at', { ascending: false });
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		staleTime: 1000 * 60 * 60 // 1 hour
+// 	});
+// };
 export const useMediaTvSeriesFollowersRatingOptions = ({
 	tvSeriesId,
 } : {
@@ -525,29 +525,29 @@ export const useMediaTvSeriesFollowersRatingOptions = ({
 	});
 };
 
-export const useMediaMovieFollowersAvgRatingOptions = ({
-	movieId,
-} : {
-	movieId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: mediaKeys.followersAvgRating({
-			type: 'movie',
-			id: movieId,
-		}),
-		queryFn: async () => {
-			const { data, error } = await supabase
-				.from('user_activities_movie_follower_average_rating')
-				.select('*')
-				.eq('movie_id', movieId)
-				.maybeSingle();
-			if (error) throw error;
-			return data;
-		},
-		staleTime: 1000 * 60 * 60 // 1 hour
-	})
-}
+// export const useMediaMovieFollowersAvgRatingOptions = ({
+// 	movieId,
+// } : {
+// 	movieId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return queryOptions({
+// 		queryKey: mediaKeys.followersAvgRating({
+// 			type: 'movie',
+// 			id: movieId,
+// 		}),
+// 		queryFn: async () => {
+// 			const { data, error } = await supabase
+// 				.from('user_activities_movie_follower_average_rating')
+// 				.select('*')
+// 				.eq('movie_id', movieId)
+// 				.maybeSingle();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		staleTime: 1000 * 60 * 60 // 1 hour
+// 	})
+// }
 
 export const useMediaTvSeriesFollowersAvgRatingOptions = ({
 	tvSeriesId,

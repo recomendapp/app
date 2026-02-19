@@ -1,4 +1,4 @@
-type ReviewType = 'movie' | 'tv_series';
+type ReviewType = 'movie' | 'tv-series';
 
 export const reviewKeys = {
 	base: ['review'] as const,

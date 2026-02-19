@@ -8,6 +8,7 @@ import { SortOrder } from "../../../common/dto/sort.dto";
 export enum UserSortBy {
   CREATED_AT = 'created_at',
   FOLLOWERS_COUNT = 'followers_count',
+  RANDOM = 'random',
 }
 
 @ApiSchema({ name: 'User' })

@@ -97,8 +97,8 @@ export const SidebarLeftRoutes = () => {
 			bgFrom: '#39BAED',
 			bgTo: '#32509e',
 			label: upperFirst(t('messages.watchlist')),
-			active: pathname.startsWith('/collection/watchlist'),
-			href: '/collection/watchlist',
+			active: pathname.startsWith('/collection/bookmarks'),
+			href: '/collection/bookmarks',
 		},
 	], [pathname, t]);
 

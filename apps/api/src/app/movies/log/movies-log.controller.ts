@@ -1,10 +1,11 @@
-import { Controller, Post, Param, Body, UseGuards, Get, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Post, Param, Body, UseGuards, Get, Delete, ParseIntPipe, Query } from '@nestjs/common';
 import { MoviesLogService } from './movies-log.service';
 import { LogMovieRequestDto, LogMovieDto } from './dto/log-movie.dto';
 import { ApiExtraModels, ApiOkResponse, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { AuthGuard } from '../../auth/guards';
 import { CurrentUser } from '../../auth/decorators';
 import { User } from '../../auth/auth.service';
+import { FollowingAverageRatingDto, FollowingLogDto, GetFollowingLogsQueryDto } from './dto/following-log-movie.dto';
 
 @ApiTags('Movies')
 @Controller({
@@ -61,5 +62,33 @@ export class MoviesLogController {
     @CurrentUser() user: User,
   ): Promise<LogMovieDto> {
     return this.logService.delete(user, movieId);
+  }
+
+  // Following
+  @Get('following')
+  @UseGuards(AuthGuard)
+  @ApiOkResponse({
+    description: 'Get all logs for this movie from users the authenticated user follows',
+    type: [FollowingLogDto],
+  })
+  async getFollowingLogs(
+    @Param('movie_id', ParseIntPipe) movieId: number,
+    @Query() query: GetFollowingLogsQueryDto,
+    @CurrentUser() user: User,
+  ): Promise<FollowingLogDto[]> {
+    return this.logService.getFollowingLogs(user, movieId, query);
+  }
+
+  @Get('following/average-rating')
+  @UseGuards(AuthGuard)
+  @ApiOkResponse({
+    description: 'Get the average rating for this movie from users the authenticated user follows',
+    type: FollowingAverageRatingDto,
+  })
+  async getFollowingAverageRating(
+    @Param('movie_id', ParseIntPipe) movieId: number,
+    @CurrentUser() user: User,
+  ): Promise<FollowingAverageRatingDto> {
+    return this.logService.getFollowingAverageRating(user, movieId);
   }
 }

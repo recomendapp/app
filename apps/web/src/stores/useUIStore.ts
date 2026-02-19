@@ -1,11 +1,14 @@
 
-import { UserActivityType, UserRecosType, UserWatchlistType } from '@recomendapp/types';
+import { Bookmark } from '@packages/api-js';
+import { UserRecosType } from '@recomendapp/types';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+export type BookmarkTab = 'all' | Bookmark['type'];
+
 interface UIStore {
-  watchlistTab: UserWatchlistType;
-  setWatchlistTab: (tab: UserWatchlistType) => void;
+  bookmarkTab: BookmarkTab;
+  setBookmarkTab: (tab: BookmarkTab) => void;
 
   myRecosTab: UserRecosType;
   setMyRecosTab: (tab: UserRecosType) => void;
@@ -17,8 +20,8 @@ interface UIStore {
 export const useUIStore = create<UIStore>()(
 	persist(
 		(set) => ({
-			watchlistTab: 'movie',
-			setWatchlistTab: (tab) => set({ watchlistTab: tab }),
+			bookmarkTab: 'all',
+			setBookmarkTab: (tab) => set({ bookmarkTab: tab }),
 
 			myRecosTab: 'movie',
 			setMyRecosTab: (tab) => set({ myRecosTab: tab }),

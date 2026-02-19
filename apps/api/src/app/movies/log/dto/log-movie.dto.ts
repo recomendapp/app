@@ -1,11 +1,12 @@
-import { ApiSchema, ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsDate, IsDateString, IsInt, IsNumber, IsOptional, Max, Min, ValidateNested } from 'class-validator';
+import { ApiSchema, ApiProperty, OmitType, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsBoolean, IsDate, IsDateString, IsEnum, IsInt, IsNumber, IsOptional, Max, Min, ValidateNested } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { WatchedDateDto } from './watched-date.dto';
 import { ReviewMovieDto } from '../../../reviews/movie/dto/reviews-movie.dto';
 import { IsNullable } from '../../../../common/decorators/is-nullable.decorator';
-
-/* -------------------------------- REQUESTS -------------------------------- */
+import { MovieCompactDto } from '../../dto/movies.dto';
+import { PaginationQueryDto } from '../../../../common/dto/pagination.dto';
+import { SortOrder } from '../../../../common/dto/sort.dto';
 
 @ApiSchema({ name: 'LogMovieRequest' })
 export class LogMovieRequestDto {
@@ -39,8 +40,6 @@ export class LogMovieRequestDto {
   @IsBoolean()
   isLiked?: boolean;
 }
-
-/* -------------------------------- RESPONSES ------------------------------- */
 
 @ApiSchema({ name: 'LogMovie' })
 export class LogMovieDto {
@@ -115,4 +114,45 @@ export class LogMovieDto {
   constructor(data: LogMovieDto) {
     Object.assign(this, data);
   }
+}
+
+@ApiSchema({ name: 'LogMovieWithMovie' })
+export class LogMovieWithMovieDto extends OmitType(LogMovieDto, ['review']) {
+  @ApiProperty({ example: false })
+  @Expose()
+  isReviewed: boolean;
+
+  @ApiProperty({ description: 'The movie details' })
+  @Type(() => MovieCompactDto)
+  movie: MovieCompactDto;
+}
+
+export enum LogMovieSortBy {
+  UPDATED_AT = 'updated_at',
+  RATING = 'rating',
+  FIRST_WATCHED_AT = 'first_watched_at',
+  RANDOM = 'random',
+}
+
+@ApiSchema({ name: 'GetLogsMovieQuery' })
+export class GetLogsMovieQueryDto extends PaginationQueryDto {
+    @ApiPropertyOptional({
+        description: 'Field to sort logs by',
+        default: LogMovieSortBy.UPDATED_AT,
+        example: LogMovieSortBy.UPDATED_AT,
+        enum: LogMovieSortBy,
+    })
+    @IsOptional()
+    @IsEnum(LogMovieSortBy)
+    sort_by: LogMovieSortBy = LogMovieSortBy.UPDATED_AT;
+
+    @ApiPropertyOptional({
+        description: 'Sort order',
+        default: SortOrder.DESC,
+        example: SortOrder.DESC,
+        enum: SortOrder,
+    })
+    @IsOptional()
+    @IsEnum(SortOrder)
+    sort_order: SortOrder = SortOrder.DESC;
 }

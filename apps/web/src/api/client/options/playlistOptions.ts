@@ -4,28 +4,28 @@ import { playlistKeys } from "../keys/playlistKeys";
 import { Database } from "@recomendapp/types";
 import { useApiClient } from "@/context/api-context";
 
-export const usePlaylistDetailsOptions = ({
-	playlistId,
-	initialData,
-} : {
-	playlistId: number;
-	initialData?: Database['public']['Tables']['playlists']['Row'] & { user: Database['public']['Views']['profile']['Row'] };
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: playlistKeys.details({ playlistId: playlistId }),
-		queryFn: async () => {
-			const { data, error } = await supabase
-				.from('playlists')
-				.select('*, user:profile(*)')
-				.eq('id', playlistId)
-				.maybeSingle();
-			if (error) throw error;
-			return data;
-		},
-		initialData: initialData,
-	});
-}
+// export const usePlaylistDetailsOptions = ({
+// 	playlistId,
+// 	initialData,
+// } : {
+// 	playlistId: number;
+// 	initialData?: Database['public']['Tables']['playlists']['Row'] & { user: Database['public']['Views']['profile']['Row'] };
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return queryOptions({
+// 		queryKey: playlistKeys.details({ playlistId: playlistId }),
+// 		queryFn: async () => {
+// 			const { data, error } = await supabase
+// 				.from('playlists')
+// 				.select('*, user:profile(*)')
+// 				.eq('id', playlistId)
+// 				.maybeSingle();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		initialData: initialData,
+// 	});
+// }
 
 // Items
 export const usePlaylistMovieItemsOptions = ({

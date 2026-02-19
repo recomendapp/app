@@ -58,9 +58,13 @@ export const reco = pgTable(
         (type = 'tv_series'::reco_type AND tv_series_id IS NOT NULL AND movie_id IS NULL)
       )`,
     ),
-    uniqueIndex('unique_active_reco')
-      .on(table.userId, table.senderId, table.type, table.movieId, table.tvSeriesId)
-      .where(sql`${table.status} = 'active'::reco_status`),
+    uniqueIndex('unique_active_reco_movie')
+      .on(table.userId, table.senderId, table.movieId)
+      .where(sql`${table.status} = 'active'::reco_status AND ${table.type} = 'movie'::reco_type`),
+
+    uniqueIndex('unique_active_reco_tv_series')
+      .on(table.userId, table.senderId, table.tvSeriesId)
+      .where(sql`${table.status} = 'active'::reco_status AND ${table.type} = 'tv_series'::reco_type`),
   ],
 );
 export const recoRelations = relations(reco, ({ one }) => ({

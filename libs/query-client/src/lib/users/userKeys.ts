@@ -1,4 +1,4 @@
-import { UsersControllerGetFollowersData, UsersControllerGetFollowingData, UsersControllerGetPlaylistsData } from "@packages/api-js";
+import { UsersControllerGetBookmarksData, UsersControllerGetFollowersData, UsersControllerGetFollowingData, UsersControllerGetPlaylistsData } from "@packages/api-js";
 
 export const userKeys = {
 	base: ['user'] as const,
@@ -52,6 +52,15 @@ export const userKeys = {
 		userId: string;
 		personId: number;
 	}) => [...userKeys.details({ userId }), 'person_follow', personId] as const,
+
+	/* -------------------------------- Bookmarks ------------------------------- */
+	bookmarks: ({
+		userId,
+		filters,
+	}: {
+		userId: string;
+		filters?: Omit<NonNullable<UsersControllerGetBookmarksData['query']>, 'page'>;
+	}) => filters ? [...userKeys.details({ userId }), 'bookmarks', filters] as const : [...userKeys.details({ userId }), 'bookmarks'] as const,
 
 	/* -------------------------------- Playlists ------------------------------- */
 	playlists: ({

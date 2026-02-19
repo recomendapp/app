@@ -22,8 +22,8 @@ import { createShareController } from "@/components/ShareController/ShareControl
 import { ShareControllerMovie } from "@/components/ShareController/ShareControllerMovie";
 import { ModalUserRecosMovieSend } from "@/components/Modals/recos/ModalUserRecosMovieSend";
 import { ModalUserWatchlistMovieComment } from "@/components/Modals/watchlist/ModalUserWatchlistMovieComment";
-import { useUserWatchlistMovieDeleteMutation } from "@/api/client/mutations/userMutations";
 import { useCallback } from "react";
+import { useMovieBookmarkDeleteMutation } from "@libs/query-client/src";
 
 interface DataTableRowActionsProps {
   table: Table<UserWatchlistMovie>;
@@ -40,12 +40,14 @@ export function DataTableRowActions({
 }: DataTableRowActionsProps) {
   const t = useTranslations();
   const { openModal, createConfirmModal } = useModal();
-  const { mutateAsync: deleteWatchlistMovie } = useUserWatchlistMovieDeleteMutation();
+  const { mutateAsync: deleteWatchlistMovie } = useMovieBookmarkDeleteMutation();
 
   const handleUnwatchlist = useCallback(async () => {
     if (!data) return;
     await deleteWatchlistMovie({
-      watchlistId: data.id,
+      path: {
+        movie_id: data.movie_id,
+      },
     }, {
       onSuccess: () => {
         toast.success(upperFirst(t('common.messages.deleted')));

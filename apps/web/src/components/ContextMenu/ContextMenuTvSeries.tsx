@@ -12,7 +12,7 @@ import { createShareController } from "../ShareController/ShareController";
 import { ShareControllerTvSeries } from "../ShareController/ShareControllerTvSeries";
 import { ModalUserRecosTvSeriesSend } from "../Modals/recos/ModalUserRecosTvSeriesSend";
 import { ModalPlaylistTvSeriesAdd } from "../Modals/playlists/ModalPlaylistTvSeriesAdd";
-import { TvSeries } from "@packages/api-js";
+import { TvSeries, TvSeriesCompact } from "@packages/api-js";
 
 interface Item {
 	icon: React.ElementType;
@@ -29,7 +29,7 @@ export const ContextMenuTvSeries = ({
 	additionalItemsBottom = [],
 }: {
 	children: React.ReactNode,
-	tvSeries: TvSeries,
+	tvSeries: TvSeries | TvSeriesCompact,
 	additionalItemsTop?: Item[],
 	additionalItemsBottom?: Item[],
 }) => {

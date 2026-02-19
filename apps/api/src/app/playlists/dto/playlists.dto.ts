@@ -12,6 +12,7 @@ export enum PlaylistSortBy {
   CREATED_AT = 'created_at',
   UPDATED_AT = 'updated_at',
   LIKES_COUNT = 'likes_count',
+  RANDOM = 'random',
 }
 
 @ApiSchema({ name: 'Playlist' })
@@ -107,8 +108,6 @@ export class PlaylistWithOwnerDTO extends PlaylistDto {
     @Type(() => UserSummaryDto)
     owner: UserSummaryDto;
 }
-
-
 
 @ApiSchema({ name: 'PlaylistGet' })
 export class PlaylistGetDTO extends PlaylistWithOwnerDTO {

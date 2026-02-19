@@ -1,4 +1,4 @@
-import { personsControllerGetFollowStatus, playlistsControllerGetLikeStatus, playlistsControllerGetSaveStatus, usersControllerGetFollowers, UsersControllerGetFollowersData, usersControllerGetFollowing, UsersControllerGetFollowingData, usersControllerGetFollowStatus, usersControllerGetMe, usersControllerGetPlaylists, UsersControllerGetPlaylistsData, usersMovieControllerGet } from "@packages/api-js";
+import { personsControllerGetFollowStatus, playlistsControllerGetLikeStatus, playlistsControllerGetSaveStatus, usersControllerGetBookmarks, UsersControllerGetBookmarksData, usersControllerGetFollowers, UsersControllerGetFollowersData, usersControllerGetFollowing, UsersControllerGetFollowingData, usersControllerGetFollowStatus, usersControllerGetMe, usersControllerGetPlaylists, UsersControllerGetPlaylistsData, usersMovieControllerGet } from "@packages/api-js";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { userKeys } from "./userKeys";
 
@@ -37,6 +37,42 @@ export const userMovieLogOptions = ({
 			return data;
 		},
 		enabled: !!userId && !!movieId,
+	});
+};
+
+/* -------------------------------- Bookmark -------------------------------- */
+export const userBookmarksOptions = ({
+	userId,
+	filters,
+}: {
+	userId?: string;
+	filters?: Omit<NonNullable<UsersControllerGetBookmarksData['query']>, 'page'>;
+}) => {
+	return infiniteQueryOptions({
+		queryKey: userKeys.bookmarks({ userId: userId!, filters }),
+		queryFn: async ({ pageParam = 1 }) => {
+			if (!userId) throw new Error('User ID is required');
+			const { data, error } = await usersControllerGetBookmarks({
+				path: {
+					user_id: userId,
+				},
+				query: {
+					page: pageParam,
+					...filters,
+				}
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		initialPageParam: 1,
+		getNextPageParam: (lastPage) => {
+			if (lastPage.meta.current_page < lastPage.meta.total_pages) {
+				return lastPage.meta.current_page + 1;
+			}
+			return undefined;
+		},
+		enabled: !!userId,
 	});
 };
 

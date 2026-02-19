@@ -846,381 +846,381 @@ export const useUserReviewTvSeriesDeleteMutation = ({
 	});
 };
 
-export const useUserReviewTvSeriesLikeInsertMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			userId,
-			reviewId,
-		} : {
-			userId: string;
-			reviewId: number;
-		}) => {
-			const { data, error } = await supabase
-				.from('user_review_tv_series_likes')
-				.insert({
-					user_id: userId,
-					review_id: reviewId,
-				})
-				.select('*')
-				.single()
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(userKeys.reviewLike({ reviewId: data.review_id, type: 'tv_series', userId: data.user_id }), data);
-		},
-	});
-};
-export const useUserReviewTvSeriesLikeDeleteMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			likeId,
-		} : {
-			likeId: number;
-		}) => {
-			const { data, error } = await supabase
-				.from('user_review_tv_series_likes')
-				.delete()
-				.eq('id', likeId)
-				.select()
-				.single();
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(userKeys.reviewLike({ reviewId: data.review_id, type: 'tv_series', userId: data.user_id }), null);
-		},
-	});
-};
+// export const useUserReviewTvSeriesLikeInsertMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			userId,
+// 			reviewId,
+// 		} : {
+// 			userId: string;
+// 			reviewId: number;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('user_review_tv_series_likes')
+// 				.insert({
+// 					user_id: userId,
+// 					review_id: reviewId,
+// 				})
+// 				.select('*')
+// 				.single()
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(userKeys.reviewLike({ reviewId: data.review_id, type: 'tv_series', userId: data.user_id }), data);
+// 		},
+// 	});
+// };
+// export const useUserReviewTvSeriesLikeDeleteMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			likeId,
+// 		} : {
+// 			likeId: number;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('user_review_tv_series_likes')
+// 				.delete()
+// 				.eq('id', likeId)
+// 				.select()
+// 				.single();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(userKeys.reviewLike({ reviewId: data.review_id, type: 'tv_series', userId: data.user_id }), null);
+// 		},
+// 	});
+// };
 /* -------------------------------------------------------------------------- */
 
 
 /* -------------------------------- WATCHLIST ------------------------------- */
-export const useUserWatchlistMovieInsertMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			userId,
-			movieId,
-		} : {
-			userId: string;
-			movieId: number;
-		}) => {
-			const { data, error } = await supabase
-				.from('user_watchlists_movie')
-				.insert({
-					user_id: userId,
-					movie_id: movieId,
-				})
-				.select()
-				.single()
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(userKeys.watchlistItem({
-				id: data.movie_id,
-				type: 'movie',
-				userId: data.user_id,
-			}), data);
+// export const useUserWatchlistMovieInsertMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			userId,
+// 			movieId,
+// 		} : {
+// 			userId: string;
+// 			movieId: number;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('user_watchlists_movie')
+// 				.insert({
+// 					user_id: userId,
+// 					movie_id: movieId,
+// 				})
+// 				.select()
+// 				.single()
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(userKeys.watchlistItem({
+// 				id: data.movie_id,
+// 				type: 'movie',
+// 				userId: data.user_id,
+// 			}), data);
 
-			queryClient.invalidateQueries({
-				queryKey: userKeys.watchlist({
-					userId: data.user_id,
-					type: 'movie',
-				})
-			});
-		}
-	});
-};
-export const useUserWatchlistMovieDeleteMutation = () => {
-	const { session } = useAuth();
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	const watchlistAllOptions = useUserWatchlistOptions({
-		userId: session?.user.id,
-		filters: {
-			sortBy: 'created_at',
-			sortOrder: 'random',
-			limit: 6,
-		}
-	});
-	const watchlistOptions = useUserWatchlistMoviesOptions({
-		userId: session?.user.id,
-	});
-	return useMutation({
-		mutationFn: async ({
-			watchlistId,
-		} : {
-			watchlistId: number;
-		}) => {
-			const { data, error } = await supabase
-				.from('user_watchlists_movie')
-				.delete()
-				.eq('id', watchlistId)
-				.select()
-				.single();
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(userKeys.watchlistItem({
-				id: data.movie_id,
-				type: 'movie',
-				userId: data.user_id,
-			}), null);
+// 			queryClient.invalidateQueries({
+// 				queryKey: userKeys.watchlist({
+// 					userId: data.user_id,
+// 					type: 'movie',
+// 				})
+// 			});
+// 		}
+// 	});
+// };
+// export const useUserWatchlistMovieDeleteMutation = () => {
+// 	const { session } = useAuth();
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	const watchlistAllOptions = useUserWatchlistOptions({
+// 		userId: session?.user.id,
+// 		filters: {
+// 			sortBy: 'created_at',
+// 			sortOrder: 'random',
+// 			limit: 6,
+// 		}
+// 	});
+// 	const watchlistOptions = useUserWatchlistMoviesOptions({
+// 		userId: session?.user.id,
+// 	});
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			watchlistId,
+// 		} : {
+// 			watchlistId: number;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('user_watchlists_movie')
+// 				.delete()
+// 				.eq('id', watchlistId)
+// 				.select()
+// 				.single();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(userKeys.watchlistItem({
+// 				id: data.movie_id,
+// 				type: 'movie',
+// 				userId: data.user_id,
+// 			}), null);
 
-			// Watchlist
-			queryClient.setQueryData(watchlistAllOptions.queryKey, (oldData) => {
-				if (!oldData) return oldData;
-				return oldData.filter(
-					(watchlist) => watchlist?.id !== data.id
-				);
-			});
-			queryClient.setQueryData(watchlistOptions.queryKey, (oldData) => {
-				if (!oldData) return oldData;
-				return oldData.filter(
-					(watchlist) => watchlist?.id !== data.id
-				);
-			});
-		}
-	});
-};
-export const useUserWatchlistMovieUpdateMutation = () => {
-	const { session } = useAuth();
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	const watchlistAllOptions = useUserWatchlistOptions({
-		userId: session?.user.id,
-		filters: {
-			sortBy: 'created_at',
-			sortOrder: 'random',
-			limit: 6,
-		}
-	});
-	const watchlistOptions = useUserWatchlistMoviesOptions({
-		userId: session?.user.id,
-	});
-	return useMutation({
-		mutationFn: async ({
-			watchlistId,
-			comment,
-		} : {
-			watchlistId: number;
-			comment: string;
-		}) => {
-			const { data, error } = await supabase
-				.from('user_watchlists_movie')
-				.update({
-					comment: comment,
-				})
-				.eq('id', watchlistId)
-				.select()
-				.single()
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(userKeys.watchlistItem({
-				id: data.movie_id,
-				type: 'movie',
-				userId: data.user_id,
-			}), data);
+// 			// Watchlist
+// 			queryClient.setQueryData(watchlistAllOptions.queryKey, (oldData) => {
+// 				if (!oldData) return oldData;
+// 				return oldData.filter(
+// 					(watchlist) => watchlist?.id !== data.id
+// 				);
+// 			});
+// 			queryClient.setQueryData(watchlistOptions.queryKey, (oldData) => {
+// 				if (!oldData) return oldData;
+// 				return oldData.filter(
+// 					(watchlist) => watchlist?.id !== data.id
+// 				);
+// 			});
+// 		}
+// 	});
+// };
+// export const useUserWatchlistMovieUpdateMutation = () => {
+// 	const { session } = useAuth();
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	const watchlistAllOptions = useUserWatchlistOptions({
+// 		userId: session?.user.id,
+// 		filters: {
+// 			sortBy: 'created_at',
+// 			sortOrder: 'random',
+// 			limit: 6,
+// 		}
+// 	});
+// 	const watchlistOptions = useUserWatchlistMoviesOptions({
+// 		userId: session?.user.id,
+// 	});
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			watchlistId,
+// 			comment,
+// 		} : {
+// 			watchlistId: number;
+// 			comment: string;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('user_watchlists_movie')
+// 				.update({
+// 					comment: comment,
+// 				})
+// 				.eq('id', watchlistId)
+// 				.select()
+// 				.single()
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(userKeys.watchlistItem({
+// 				id: data.movie_id,
+// 				type: 'movie',
+// 				userId: data.user_id,
+// 			}), data);
 
-			// Watchlist
-			queryClient.setQueryData(watchlistAllOptions.queryKey, (oldData) => {
-				if (!oldData) return oldData;
-				return oldData.map((item) => {
-					if (item.id === data.id) {
-						return {
-							...item,
-							...data,
-						};
-					}
-					return item;
-				});
-			});
-			queryClient.setQueryData(watchlistOptions.queryKey, (oldData) => {
-				if (!oldData) return oldData;
-				return oldData.map((item) => {
-					if (item.id === data.id) {
-						return {
-							...item,
-							...data,
-						};
-					}
-					return item;
-				});
-			});
-		}
-	});
-};
+// 			// Watchlist
+// 			queryClient.setQueryData(watchlistAllOptions.queryKey, (oldData) => {
+// 				if (!oldData) return oldData;
+// 				return oldData.map((item) => {
+// 					if (item.id === data.id) {
+// 						return {
+// 							...item,
+// 							...data,
+// 						};
+// 					}
+// 					return item;
+// 				});
+// 			});
+// 			queryClient.setQueryData(watchlistOptions.queryKey, (oldData) => {
+// 				if (!oldData) return oldData;
+// 				return oldData.map((item) => {
+// 					if (item.id === data.id) {
+// 						return {
+// 							...item,
+// 							...data,
+// 						};
+// 					}
+// 					return item;
+// 				});
+// 			});
+// 		}
+// 	});
+// };
 
-export const useUserWatchlistTvSeriesInsertMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			userId,
-			tvSeriesId,
-		} : {
-			userId: string;
-			tvSeriesId: number;
-		}) => {
-			const { data, error } = await supabase
-				.from('user_watchlists_tv_series')
-				.insert({
-					user_id: userId,
-					tv_series_id: tvSeriesId,
-				})
-				.select()
-				.single()
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(userKeys.watchlistItem({
-				id: data.tv_series_id,
-				type: 'tv_series',
-				userId: data.user_id,
-			}), data);
+// export const useUserWatchlistTvSeriesInsertMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			userId,
+// 			tvSeriesId,
+// 		} : {
+// 			userId: string;
+// 			tvSeriesId: number;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('user_watchlists_tv_series')
+// 				.insert({
+// 					user_id: userId,
+// 					tv_series_id: tvSeriesId,
+// 				})
+// 				.select()
+// 				.single()
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(userKeys.watchlistItem({
+// 				id: data.tv_series_id,
+// 				type: 'tv_series',
+// 				userId: data.user_id,
+// 			}), data);
 
-			queryClient.invalidateQueries({
-				queryKey: userKeys.watchlist({
-					userId: data.user_id,
-					type: 'tv_series',
-				})
-			});
-		}
-	});
-};
-export const useUserWatchlistTvSeriesDeleteMutation = () => {
-	const { session } = useAuth();
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	const watchlistAllOptions = useUserWatchlistOptions({
-		userId: session?.user.id,
-		filters: {
-			sortBy: 'created_at',
-			sortOrder: 'random',
-			limit: 6,
-		}
-	});
-	const watchlistOptions = useUserWatchlistTvSeriesOptions({
-		userId: session?.user.id,
-	});
-	return useMutation({
-		mutationFn: async ({
-			watchlistId,
-		} : {
-			watchlistId: number;
-		}) => {
-			const { data, error } = await supabase
-				.from('user_watchlists_tv_series')
-				.delete()
-				.eq('id', watchlistId)
-				.select()
-				.single();
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(userKeys.watchlistItem({
-				id: data.tv_series_id,
-				type: 'tv_series',
-				userId: data.user_id,
-			}), null);
+// 			queryClient.invalidateQueries({
+// 				queryKey: userKeys.watchlist({
+// 					userId: data.user_id,
+// 					type: 'tv_series',
+// 				})
+// 			});
+// 		}
+// 	});
+// };
+// export const useUserWatchlistTvSeriesDeleteMutation = () => {
+// 	const { session } = useAuth();
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	const watchlistAllOptions = useUserWatchlistOptions({
+// 		userId: session?.user.id,
+// 		filters: {
+// 			sortBy: 'created_at',
+// 			sortOrder: 'random',
+// 			limit: 6,
+// 		}
+// 	});
+// 	const watchlistOptions = useUserWatchlistTvSeriesOptions({
+// 		userId: session?.user.id,
+// 	});
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			watchlistId,
+// 		} : {
+// 			watchlistId: number;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('user_watchlists_tv_series')
+// 				.delete()
+// 				.eq('id', watchlistId)
+// 				.select()
+// 				.single();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(userKeys.watchlistItem({
+// 				id: data.tv_series_id,
+// 				type: 'tv_series',
+// 				userId: data.user_id,
+// 			}), null);
 
-			// Watchlist
-			queryClient.setQueryData(watchlistAllOptions.queryKey, (oldData) => {
-				if (!oldData) return oldData;
-				return oldData.filter(
-					(watchlist) => watchlist?.id !== data.id
-				);
-			});
-			queryClient.setQueryData(watchlistOptions.queryKey, (oldData) => {
-				if (!oldData) return oldData;
-				return oldData.filter(
-					(watchlist) => watchlist?.id !== data.id
-				);
-			});
-		}
-	});
-};
-export const useUserWatchlistTvSeriesUpdateMutation = () => {
-	const { session } = useAuth();
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	const watchlistAllOptions = useUserWatchlistOptions({
-		userId: session?.user.id,
-		filters: {
-			sortBy: 'created_at',
-			sortOrder: 'random',
-			limit: 6,
-		}
-	});
-	const watchlistOptions = useUserWatchlistTvSeriesOptions({
-		userId: session?.user.id,
-	});
-	return useMutation({
-		mutationFn: async ({
-			watchlistId,
-			comment,
-		} : {
-			watchlistId: number;
-			comment: string;
-		}) => {
-			const { data, error } = await supabase
-				.from('user_watchlists_tv_series')
-				.update({
-					comment: comment,
-				})
-				.eq('id', watchlistId)
-				.select()
-				.single()
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(userKeys.watchlistItem({
-				id: data.tv_series_id,
-				type: 'tv_series',
-				userId: data.user_id,
-			}), data);
+// 			// Watchlist
+// 			queryClient.setQueryData(watchlistAllOptions.queryKey, (oldData) => {
+// 				if (!oldData) return oldData;
+// 				return oldData.filter(
+// 					(watchlist) => watchlist?.id !== data.id
+// 				);
+// 			});
+// 			queryClient.setQueryData(watchlistOptions.queryKey, (oldData) => {
+// 				if (!oldData) return oldData;
+// 				return oldData.filter(
+// 					(watchlist) => watchlist?.id !== data.id
+// 				);
+// 			});
+// 		}
+// 	});
+// };
+// export const useUserWatchlistTvSeriesUpdateMutation = () => {
+// 	const { session } = useAuth();
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	const watchlistAllOptions = useUserWatchlistOptions({
+// 		userId: session?.user.id,
+// 		filters: {
+// 			sortBy: 'created_at',
+// 			sortOrder: 'random',
+// 			limit: 6,
+// 		}
+// 	});
+// 	const watchlistOptions = useUserWatchlistTvSeriesOptions({
+// 		userId: session?.user.id,
+// 	});
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			watchlistId,
+// 			comment,
+// 		} : {
+// 			watchlistId: number;
+// 			comment: string;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('user_watchlists_tv_series')
+// 				.update({
+// 					comment: comment,
+// 				})
+// 				.eq('id', watchlistId)
+// 				.select()
+// 				.single()
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(userKeys.watchlistItem({
+// 				id: data.tv_series_id,
+// 				type: 'tv_series',
+// 				userId: data.user_id,
+// 			}), data);
 
-			// Watchlist
-			queryClient.setQueryData(watchlistAllOptions.queryKey, (oldData) => {
-				if (!oldData) return oldData;
-				return oldData.map((item) => {
-					if (item.id === data.id) {
-						return {
-							...item,
-							...data,
-						};
-					}
-					return item;
-				});
-			});
-			queryClient.setQueryData(watchlistOptions.queryKey, (oldData) => {
-				if (!oldData) return oldData;
-				return oldData.map((item) => {
-					if (item.id === data.id) {
-						return {
-							...item,
-							...data,
-						};
-					}
-					return item;
-				});
-			});
-		}
-	});
-};
+// 			// Watchlist
+// 			queryClient.setQueryData(watchlistAllOptions.queryKey, (oldData) => {
+// 				if (!oldData) return oldData;
+// 				return oldData.map((item) => {
+// 					if (item.id === data.id) {
+// 						return {
+// 							...item,
+// 							...data,
+// 						};
+// 					}
+// 					return item;
+// 				});
+// 			});
+// 			queryClient.setQueryData(watchlistOptions.queryKey, (oldData) => {
+// 				if (!oldData) return oldData;
+// 				return oldData.map((item) => {
+// 					if (item.id === data.id) {
+// 						return {
+// 							...item,
+// 							...data,
+// 						};
+// 					}
+// 					return item;
+// 				});
+// 			});
+// 		}
+// 	});
+// };
 /* -------------------------------------------------------------------------- */
 
 /* ---------------------------------- RECOS --------------------------------- */

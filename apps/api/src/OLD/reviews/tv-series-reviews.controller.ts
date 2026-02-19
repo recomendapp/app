@@ -18,7 +18,7 @@ import { ReviewsService } from './reviews.service';
 import { AuthGuard } from '../../app/auth/guards';
 import { AuthenticatedRequest } from '../../app/auth/types/fastify';
 
-@ApiTags('TV Series')
+@ApiTags('Tv Series')
 @Controller({
   path: 'tv',
   version: '1',

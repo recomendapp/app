@@ -1,9 +1,10 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { LogMovieRequestDto, LogMovieDto } from './dto/log-movie.dto';
-import { and, eq, sql } from 'drizzle-orm';
-import { logMovie, logMovieWatchedDate } from '@libs/db/schemas';
+import { and, avg, desc, eq, isNotNull, sql } from 'drizzle-orm';
+import { bookmark, follow, logMovie, logMovieWatchedDate, profile, reviewMovie, user } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
+import { FollowingAverageRatingDto, FollowingLogDto, GetFollowingLogsQueryDto } from './dto/following-log-movie.dto';
 
 @Injectable()
 export class MoviesLogService {
@@ -79,6 +80,18 @@ export class MoviesLogService {
           watchedDate: watchedDate,
         });
       }
+
+      // Complete any active bookmarks for this movie
+      await tx.update(bookmark)
+        .set({ status: 'completed' })
+        .where(
+          and(
+            eq(bookmark.userId, user.id),
+            eq(bookmark.movieId, movieId),
+            eq(bookmark.type, 'movie'),
+            eq(bookmark.status, 'active')
+          )
+        );
     });
 
     const logEntry = await this.db.query.logMovie.findFirst({
@@ -145,5 +158,98 @@ export class MoviesLogService {
         } : null,
       };
     });
+  }
+
+  // Following
+  async getFollowingLogs(
+    currentUser: User,
+    movieId: number,
+    query: GetFollowingLogsQueryDto,
+  ): Promise<FollowingLogDto[]> {
+    const { has_rating } = query;
+
+    const whereClause = and(
+      eq(logMovie.movieId, movieId),
+      eq(follow.followerId, currentUser.id),
+      eq(follow.status, 'accepted'),
+      has_rating ? isNotNull(logMovie.rating) : undefined
+    );
+
+    const rows = await this.db
+      .select({
+        log: logMovie,
+        review: reviewMovie,
+        user: {
+          id: user.id,
+          name: user.name,
+          username: user.username,
+          avatar: user.image,
+          isPremium: profile.isPremium,
+        },
+        watchedDates: sql<Omit<typeof logMovieWatchedDate.$inferSelect, 'logMovieId'>[]>`
+          COALESCE(
+            json_agg(
+              json_build_object(
+                'id', ${logMovieWatchedDate.id},
+                'watchedDate', ${logMovieWatchedDate.watchedDate}
+              )
+            ) FILTER (WHERE ${logMovieWatchedDate.id} IS NOT NULL),
+            '[]'::json
+          )
+        `,
+      })
+      .from(logMovie)
+      .innerJoin(follow, eq(follow.followingId, logMovie.userId))
+      .innerJoin(user, eq(user.id, logMovie.userId))
+      .innerJoin(profile, eq(profile.id, user.id))
+      .leftJoin(reviewMovie, eq(reviewMovie.id, logMovie.id))
+      .leftJoin(logMovieWatchedDate, eq(logMovieWatchedDate.logMovieId, logMovie.id))
+      .where(whereClause)
+      .groupBy(
+        logMovie.id,
+        user.id,
+        profile.id,
+        reviewMovie.id
+      )
+      .orderBy(desc(logMovie.createdAt));
+    return rows.map(row => ({
+      ...row.log,
+      user: row.user,
+      watchedDates: row.watchedDates.map(d => ({
+        id: d.id,
+        watchedDate: new Date(d.watchedDate),
+      })),
+      review: row.review ? {
+        ...row.review,
+        userId: row.log.userId,
+        movieId: row.log.movieId,
+      } : null,
+    }));
+  }
+
+  async getFollowingAverageRating(
+    currentUser: User, 
+    movieId: number
+  ): Promise<FollowingAverageRatingDto> {
+    const [result] = await this.db
+      .select({
+        average: avg(logMovie.rating), 
+      })
+      .from(logMovie)
+      .innerJoin(follow, eq(follow.followingId, logMovie.userId))
+      .where(
+        and(
+          eq(logMovie.movieId, movieId),
+          eq(follow.followerId, currentUser.id),
+          eq(follow.status, 'accepted'),
+          isNotNull(logMovie.rating)
+        )
+      );
+
+    const averageValue = result?.average ? Number(result.average) : null;
+
+    return {
+      averageRating: averageValue !== null ? Math.round(averageValue * 10) / 10 : null,
+    };
   }
 }
