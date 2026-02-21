@@ -83,13 +83,13 @@ export class BookmarkRequestDto extends PartialType(PickType(BookmarkDto, ['comm
 export class BaseListBookmarksQueryDto {
     @ApiPropertyOptional({
       enum: bookmarkStatusEnum.enumValues,
-      default: bookmarkStatusEnum.enumValues[0],
+      default: 'active',
     })
     @IsOptional()
     @IsIn(bookmarkStatusEnum.enumValues, {
       message: `Status must be one of: ${bookmarkStatusEnum.enumValues.join(', ')}`
     })
-    status?: typeof bookmarkStatusEnum.enumValues[number];
+    status: typeof bookmarkStatusEnum.enumValues[number] = 'active';
 
     @ApiPropertyOptional({
       description: 'Filter bookmarks by type',

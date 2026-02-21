@@ -22,10 +22,7 @@ export async function generateMetadata(
   const { lang, person_id } = await props.params;
   const t = await getTranslations({ locale: lang });
   const { id } = getIdFromSlug(person_id);
-  const { data: person, error } = await getPerson(lang, id);
-  if (error || !person) {
-    return { title: upperFirst(t('common.messages.person_not_found')) };
-  }
+  const person = await getPerson(lang, id);
   return {
     title: t('pages.person.metadata.title', { name: person.name!, department: person.knownForDepartment! }),
     description: person.biography ? truncate(person.biography, { length: siteConfig.seo.description.limit }) : undefined,
@@ -52,17 +49,13 @@ export default async function Person(
     }>;
   }
 ) {
-  const { lang, person_id } = await props.params;
+  const { person_id } = await props.params;
   const { id } = getIdFromSlug(person_id);
-  const { data: person, error } = await getPerson(lang, id);
-  if (error || !person) {
-    return notFound();
-  }
   return (
     <div className='flex flex-col items-center'>
       <div className='max-w-7xl w-full'>
-        <WidgetPersonFilms person={person} />
-        <WidgetPersonTvSeries person={person} />
+        <WidgetPersonFilms personId={id} personSlug={person_id} />
+        <WidgetPersonTvSeries personId={id} personSlug={person_id} />
       </div>
     </div>
   );

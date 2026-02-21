@@ -11,14 +11,15 @@ import { useMediaPersonTvSeriesOptions } from '@/api/client/options/mediaOptions
 import { DEFAULT_PER_PAGE, DEFAULT_SORT_BY, DEFAULT_SORT_ORDER } from '../tv-series/_components/constants';
 import { Skeleton } from '@/components/ui/skeleton';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
-import { Person } from '@packages/api-js';
 
 interface WidgetPersonTvSeriesProps extends React.HTMLAttributes<HTMLDivElement> {
-  person: Person;
+  personId: number;
+  personSlug: string;
 }
 
 export const WidgetPersonTvSeries = ({
-  person,
+  personId,
+  personSlug,
 } : WidgetPersonTvSeriesProps) => {
   const t = useTranslations();
 
@@ -26,7 +27,7 @@ export const WidgetPersonTvSeries = ({
     data,
     isLoading 
   } = useQuery(useMediaPersonTvSeriesOptions({
-    personId: person.id,
+    personId: personId,
     filters: {
       page: 1,
       perPage: DEFAULT_PER_PAGE,
@@ -39,7 +40,7 @@ export const WidgetPersonTvSeries = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <Link href={`/person/${person.slug || person.id}/tv-series`} className={cn(buttonVariants({ variant: 'link' }), 'font-semibold text-xl p-0 w-fit')}>
+      <Link href={`/person/${personSlug}/tv-series`} className={cn(buttonVariants({ variant: 'link' }), 'font-semibold text-xl p-0 w-fit')}>
       {upperFirst(t('common.messages.tv_series', { count: 2 }))}
       </Link>
       <ScrollArea className="rounded-md">

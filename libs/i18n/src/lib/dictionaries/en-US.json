@@ -117,6 +117,7 @@
       "tv_episode_short": "S{seasonNumber}E{episodeNumber}",
       "tv_special_episode": "{count, plural, one {special} other {specials}}",
       "first_air_date": "first aired",
+      "last_air_date": "last aired",
       "see_film": "see film",
       "see_tv_series": "see serie",
       "watch_film_title": "watch {title}",

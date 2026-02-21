@@ -13,6 +13,12 @@ import {
 import { PersonCompactDto } from '../../persons/dto/persons.dto';
 import { GenreDto } from './genres.dto';
 
+export enum MovieSortBy {
+  RELEASE_DATE = 'release_date',
+  POPULARITY = 'popularity',
+  VOTE_AVERAGE = 'vote_average',
+}
+
 @ApiSchema({ name: 'Movie' })
 export class MovieDto {
   @ApiProperty({
@@ -302,6 +308,7 @@ export class MovieCompactDto extends PickType(MovieDto, [
   'releaseDate',
   'voteAverage',
   'voteCount',
+  'popularity',
   'genres',
   'followerAvgRating',
 ] as const) {}

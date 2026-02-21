@@ -119,6 +119,7 @@
       "tv_episode_short": "S{seasonNumber}E{episodeNumber}",
       "tv_special_episode": "{count, plural, one {épisode spécial} other {épisodes spéciaux}}",
       "first_air_date": "première diffusion",
+      "last_air_date": "dernière diffusion",
       "see_film": "voir le film",
       "see_tv_series": "voir la série",
       "watch_film_title": "voir {title}",

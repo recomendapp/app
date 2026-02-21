@@ -15,15 +15,15 @@ import {
 import { Label } from "@/components/ui/label";
 import { Icons } from "@/config/icons";
 import { DISPLAY, SORT_BY } from "./constants";
-import { Database } from "@recomendapp/types";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { useCallback, useMemo } from "react";
 import { TooltipBox } from "@/components/Box/TooltipBox";
+import { PersonMovieFacetDepartment } from "@packages/api-js/src";
 
 
 export const Filters = ({
 	knownForDepartment,
-	jobs,
+	departments,
 	sortBy,
 	sortOrder,
 	display,
@@ -31,7 +31,7 @@ export const Filters = ({
 	job,
 } : {
 	knownForDepartment: string | null;
-	jobs: Database['public']['Views']['media_person_jobs']['Row'][];
+	departments: PersonMovieFacetDepartment[];
 	sortBy: typeof SORT_BY[number];
 	sortOrder: 'asc' | 'desc';
 	display: typeof DISPLAY[number];
@@ -89,7 +89,7 @@ export const Filters = ({
 								<SelectValue placeholder="Select a department" />
 							</SelectTrigger>
 							<SelectContent>
-								{jobs.map((department, i) => {
+								{departments.map((department, i) => {
 									if (!department.department) return null;
 									return (
 										<SelectItem key={i} value={department.department}>
@@ -110,13 +110,13 @@ export const Filters = ({
 						onValueChange={(e) => {
 							handleChange({ job: e ?? null });
 						}}
-						disabled={!department || !jobs.some(d => d.department === department)}
+						disabled={!department || !departments.some(d => d.department === department)}
 						>
 							<SelectTrigger className="col-span-2">
 								<SelectValue placeholder="Select a job"/>
 							</SelectTrigger>
 							<SelectContent>
-								{jobs.filter(d => d.department === department).map((department, i) => (
+								{departments.filter(d => d.department === department).map((department, i) => (
 									department.jobs?.map((job, j) => (
 										<SelectItem key={j} value={job}>
 											{job}

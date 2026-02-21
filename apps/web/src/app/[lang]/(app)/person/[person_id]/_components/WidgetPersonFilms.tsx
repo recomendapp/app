@@ -11,14 +11,15 @@ import { useQuery } from '@tanstack/react-query';
 import { useMediaPersonFilmsOptions } from '@/api/client/options/mediaOptions';
 import { DEFAULT_PER_PAGE, DEFAULT_SORT_BY, DEFAULT_SORT_ORDER } from '../films/_components/constants';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Person } from '@packages/api-js';
 
 interface WidgetPersonFilmsProps extends React.HTMLAttributes<HTMLDivElement> {
-	person: Person;
+	personId: number;
+  personSlug: string;
 }
 
 export const WidgetPersonFilms = ({
-  person,
+  personId,
+  personSlug,
 } : WidgetPersonFilmsProps) => {
   const t = useTranslations();
 
@@ -26,7 +27,7 @@ export const WidgetPersonFilms = ({
     data,
     isLoading 
   } = useQuery(useMediaPersonFilmsOptions({
-    personId: person.id,
+    personId: personId,
     filters: {
       page: 1,
       perPage: DEFAULT_PER_PAGE,
@@ -39,7 +40,7 @@ export const WidgetPersonFilms = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <Link href={`/person/${person.slug || person.id}/films`} className={cn(buttonVariants({ variant: 'link' }), 'font-semibold text-xl p-0 w-fit')}>
+      <Link href={`/person/${personSlug}/films`} className={cn(buttonVariants({ variant: 'link' }), 'font-semibold text-xl p-0 w-fit')}>
       {upperFirst(t('common.messages.film', { count: 2 }))}
       </Link>
       <ScrollArea className="rounded-md">

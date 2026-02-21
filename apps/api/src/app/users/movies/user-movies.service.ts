@@ -107,6 +107,7 @@ export class UserMoviesService {
         releaseDate: tmdbMovieView.releaseDate,
         voteAverage: tmdbMovieView.voteAverage,
         voteCount: tmdbMovieView.voteCount,
+        popularity: tmdbMovieView.popularity,
         genres: tmdbMovieView.genres,
         followerAvgRating: tmdbMovieView.followerAvgRating,
       })
@@ -248,6 +249,7 @@ export class UserMoviesService {
               releaseDate: tmdbMovieView.releaseDate,
               voteAverage: tmdbMovieView.voteAverage,
               voteCount: tmdbMovieView.voteCount,
+              popularity: tmdbMovieView.popularity,
               genres: tmdbMovieView.genres,
               followerAvgRating: tmdbMovieView.followerAvgRating,
             },
@@ -373,6 +375,7 @@ export class UserMoviesService {
           releaseDate: tmdbMovieView.releaseDate,
           voteAverage: tmdbMovieView.voteAverage,
           voteCount: tmdbMovieView.voteCount,
+          popularity: tmdbMovieView.popularity,
           genres: tmdbMovieView.genres,
           followerAvgRating: tmdbMovieView.followerAvgRating,
         },

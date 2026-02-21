@@ -1,12 +1,13 @@
+import { PersonMovieFacetDepartment } from '@packages/api-js/src';
 import { z } from 'zod';
 
-export const SORT_BY = ["release_date", "vote_average"] as const;
+export const SORT_BY = ["release_date", "vote_average", "popularity"] as const;
 export const DISPLAY = ["grid", "row"] as const;
 export const SORT_ORDER = ["asc", "desc"] as const;
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_PER_PAGE = 40;
 export const DEFAULT_DISPLAY = "grid";
-export const DEFAULT_SORT_BY = "release_date";
+export const DEFAULT_SORT_BY =  "release_date";
 export const DEFAULT_SORT_ORDER = "desc";
 
 export const sortBySchema = z.enum(SORT_BY);
@@ -27,29 +28,21 @@ export const getValidatedDisplay = (display?: string | null): z.infer<typeof dis
 };
 export const departmentSchema = z.string().optional();
 export const getValidateDepartment = (
-  mediaJobs: { department: string }[],
+  departments: string[],
   department?: string | null
 ): string | undefined => {
   if (!department) return undefined;
-
-  const allowedDepartments = new Set(
-    mediaJobs.map(j => j.department)
-  );
-
-  return allowedDepartments.has(department) ? department : undefined;
+  return departments.includes(department) ? department : undefined;
 };
 export const jobSchema = z.string().optional();
 export const getValidateJob = (
-  mediaJobs: {
-    department: string;
-    jobs: string[] | null;
-  }[],
+  departments: PersonMovieFacetDepartment[],
   department?: string,
   job?: string | null
 ): string | undefined => {
   if (!department || !job) return undefined;
 
-  const departmentEntry = mediaJobs.find(
+  const departmentEntry = departments.find(
     d => d.department === department
   );
 

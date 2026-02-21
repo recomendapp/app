@@ -13,6 +13,12 @@ import {
 import { PersonCompactDto } from '../../persons/dto/persons.dto';
 import { GenreDto } from '../../movies/dto/genres.dto';
 
+export enum TvSeriesSortBy {
+  LAST_AIR_DATE = 'last_air_date',
+  POPULARITY = 'popularity',
+  VOTE_AVERAGE = 'vote_average',
+}
+
 @ApiSchema({ name: 'TvSeries' })
 export class TvSeriesDto {
   @ApiProperty({

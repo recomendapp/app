@@ -1,10 +1,10 @@
 'use server'
 
 import { getAnonApi } from "@/lib/api/server";
-import { createAnonClient } from "@/lib/supabase/anon";
 import { cache } from "@/lib/utils/cache";
 import { SupportedLocale } from "@libs/i18n";
-import { moviesControllerGet, personsControllerGet, tvSeasonsControllerGet, tvSeriesControllerGet } from "@packages/api-js";
+import { moviesControllerGet, personMoviesControllerFacets, personMoviesControllerList, PersonMoviesControllerListData, PersonTvSeriesControllerListData, personsControllerGet, tvSeasonsControllerGet, tvSeriesControllerGet, personTvSeriesControllerList, personTvSeriesControllerFacets } from "@packages/api-js";
+import { notFound } from "next/navigation";
 
 const MEDIA_REVALIDATE_TIME = 60 * 60 * 24; // 24 hours
 
@@ -62,97 +62,89 @@ export const getPerson = cache(
 		const client = await getAnonApi({
 			locale,
 		});
-		return await personsControllerGet({
+		const { data, error } = await personsControllerGet({
 			path: {
 				person_id: id
 			},
 			client,
 		});
+		if (error) notFound();
+		if (!data) notFound();
+		return data;
 	}, {
 		revalidate: MEDIA_REVALIDATE_TIME,
 	}
 )
 
-export const getPersonFilmsPagination = cache(
+export const getPersonFilms = cache(
 	async (
 		personId: number,
-		filters: {
-			page: number;
-			perPage: number;
-			department?: string;
-			job?: string;
-		}
+		filters: NonNullable<PersonMoviesControllerListData['query']>
 	) => {
-		const supabase = createAnonClient();
-		let request;
-		if (filters.department || filters.job) {
-			request = supabase
-				.from('tmdb_movie_credits')
-				.select(`person_id`, {
-					count: 'exact',
-					head: true,
-				})
-				.eq('person_id', personId);
-			if (filters.department) {
-				request = request.eq('department', filters.department);
-			}
-			if (filters.job) {
-				request = request.eq('job', filters.job);
-			}
-		} else {
-			request = supabase
-				.from('media_movie_aggregate_credits')
-				.select(`person_id`, {
-					count: 'exact',
-					head: true,
-				})
-				.eq('person_id', personId);
-		}
-		const { error, count } = await request;
+		const client = await getAnonApi();
+		const { data, error } = await personMoviesControllerList({
+			path: {
+				person_id: personId,
+			},
+			query: filters,
+			client,
+		});
 		if (error) throw error;
-		return {
-			totalResults: count ?? 0,
-			page: filters.page,
-			perPage: filters.perPage,
-			totalPages: count ? Math.ceil(count / filters.perPage) : 0,
-		};
+		if (data === undefined) throw new Error('No data');
+		return data;
+	}, {
+		revalidate: MEDIA_REVALIDATE_TIME,
+	}
+)
+export const getPersonFilmsFacets = cache(
+	async (personId: number) => {
+		const client = await getAnonApi();
+		const { data, error } =  await personMoviesControllerFacets({
+			path: {
+				person_id: personId,
+			},
+			client,
+		});
+		if (error) throw error;
+		if (!data) notFound();
+		return data;
 	}, {
 		revalidate: MEDIA_REVALIDATE_TIME,
 	}
 )
 
-export const getPersonTvSeriesPagination = cache(
+export const getPersonTvSeries = cache(
 	async (
 		personId: number,
-		filters: {
-			page: number;
-			perPage: number;
-			department?: string;
-			job?: string;
-		}
+		filters: NonNullable<PersonTvSeriesControllerListData['query']>
 	) => {
-		const supabase = createAnonClient();
-		let request = supabase
-			.from('tmdb_tv_series_credits')
-			.select(`person_id`, {
-				count: 'exact',
-				head: true,
-			})
-			.eq('person_id', personId);
-		if (filters.department) {
-			request = request.eq('department', filters.department);
-		}
-		if (filters.job) {
-			request = request.eq('job', filters.job);
-		}
-		const { error, count } = await request;
+		const client = await getAnonApi();
+		const { data, error } = await personTvSeriesControllerList({
+			path: {
+				person_id: personId,
+			},
+			query: filters,
+			client,
+		});
 		if (error) throw error;
-		return {
-			totalResults: count ?? 0,
-			page: filters.page,
-			perPage: filters.perPage,
-			totalPages: count ? Math.ceil(count / filters.perPage) : 0,
-		};
+		if (data === undefined) throw new Error('No data');
+		return data;
+	}, {
+		revalidate: MEDIA_REVALIDATE_TIME,
+	}
+)
+export const getPersonTvSeriesFacets = cache(
+	async (personId: number) => {
+		const client = await getAnonApi();
+		const { data, error } =  await personTvSeriesControllerFacets({
+			path: {
+				person_id: personId,
+			},
+			client,
+		});
+		if (error) throw error;
+		if (!data) notFound();
+		return data;
 	}, {
 		revalidate: MEDIA_REVALIDATE_TIME,
 	}
