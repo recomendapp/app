@@ -1,4 +1,4 @@
-import { personsControllerGetFollowStatus, playlistsControllerGetLikeStatus, playlistsControllerGetSaveStatus, usersControllerGetBookmarks, UsersControllerGetBookmarksData, usersControllerGetFollowers, UsersControllerGetFollowersData, usersControllerGetFollowing, UsersControllerGetFollowingData, usersControllerGetFollowStatus, usersControllerGetMe, usersControllerGetPlaylists, UsersControllerGetPlaylistsData, usersMovieControllerGet } from "@packages/api-js";
+import { personsControllerGetFollowStatus, playlistsControllerGetLikeStatus, playlistsControllerGetSaveStatus, usersControllerGetFollowStatus, usersControllerGetMe, userPlaylistsControllerList, UserPlaylistsControllerListData, userMoviesControllerGet, userMoviesControllerList, UserMoviesControllerListData, userMoviesControllerListInfinite, UserMoviesControllerListInfiniteData, UserPlaylistsControllerListInfiniteData, userPlaylistsControllerListInfinite, UserBookmarksControllerListInfiniteData, userBookmarksControllerListInfinite, UserBookmarksControllerListData, userBookmarksControllerList, UserFollowersControllerListData, userFollowersControllerList, UserFollowersControllerListInfiniteData, userFollowersControllerListInfinite, UserFollowingControllerListData, userFollowingControllerList, UserFollowingControllerListInfiniteData, userFollowingControllerListInfinite } from "@packages/api-js";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { userKeys } from "./userKeys";
 
@@ -26,7 +26,7 @@ export const userMovieLogOptions = ({
 		queryFn: async () => {
 			if (!userId) throw new Error ('User ID is required');
 			if (!movieId) throw new Error('Movie ID is required');
-			const { data, error } = await usersMovieControllerGet({
+			const { data, error } = await userMoviesControllerGet({
 				path: {
 					user_id: userId,
 					movie_id: movieId,
@@ -39,6 +39,62 @@ export const userMovieLogOptions = ({
 		enabled: !!userId && !!movieId,
 	});
 };
+export const userMovieLogsOptions = ({
+	userId,
+	filters,
+}: {
+	userId?: string;
+	filters?: NonNullable<UserMoviesControllerListData['query']>;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.movies({ userId: userId!, infinite: false, filters }),
+		queryFn: async () => {
+			if (!userId) throw new Error('User ID is required');
+			const { data, error } = await userMoviesControllerList({
+				path: {
+					user_id: userId,
+				},
+				query: filters
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId,
+	})
+};
+export const userMovieLogsInfiniteOptions = ({
+	userId,
+	filters,
+}: {
+	userId?: string;
+	filters?: Omit<NonNullable<UserMoviesControllerListInfiniteData['query']>, 'cursor'>;
+}) => {
+	return infiniteQueryOptions({
+		queryKey: userKeys.movies({ userId: userId!, infinite: true, filters }),
+		queryFn: async ({ pageParam }) => {
+			if (!userId) throw new Error('User ID is required');
+			const { data, error } = await userMoviesControllerListInfinite({
+				path: {
+					user_id: userId,
+				},
+				query: {
+					...filters,
+					cursor: pageParam,
+				}
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		initialPageParam: undefined as string | undefined,
+		getNextPageParam: (lastPage) => {
+			return lastPage.meta.next_cursor || undefined;
+		},
+		enabled: !!userId,
+	})
+};
+
 
 /* -------------------------------- Bookmark -------------------------------- */
 export const userBookmarksOptions = ({
@@ -46,34 +102,55 @@ export const userBookmarksOptions = ({
 	filters,
 }: {
 	userId?: string;
-	filters?: Omit<NonNullable<UsersControllerGetBookmarksData['query']>, 'page'>;
+	filters?: NonNullable<UserBookmarksControllerListData['query']>;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.bookmarks({ userId: userId!, infinite: false, filters }),
+		queryFn: async () => {
+			if (!userId) throw new Error('User ID is required');
+			const { data, error } = await userBookmarksControllerList({
+				path: {
+					user_id: userId,
+				},
+				query: filters
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId,
+	});
+};
+export const userBookmarksInfiniteOptions = ({
+	userId,
+	filters,
+}: {
+	userId?: string;
+	filters?: Omit<NonNullable<UserBookmarksControllerListInfiniteData['query']>, 'cursor'>;
 }) => {
 	return infiniteQueryOptions({
-		queryKey: userKeys.bookmarks({ userId: userId!, filters }),
-		queryFn: async ({ pageParam = 1 }) => {
+		queryKey: userKeys.bookmarks({ userId: userId!, infinite: true, filters }),
+		queryFn: async ({ pageParam }) => {
 			if (!userId) throw new Error('User ID is required');
-			const { data, error } = await usersControllerGetBookmarks({
+			const { data, error } = await userBookmarksControllerListInfinite({
 				path: {
 					user_id: userId,
 				},
 				query: {
-					page: pageParam,
 					...filters,
+					cursor: pageParam,
 				}
 			});
 			if (error) throw error;
 			if (!data) throw new Error('No data');
 			return data;
 		},
-		initialPageParam: 1,
+		initialPageParam: undefined as string | undefined,
 		getNextPageParam: (lastPage) => {
-			if (lastPage.meta.current_page < lastPage.meta.total_pages) {
-				return lastPage.meta.current_page + 1;
-			}
-			return undefined;
+			return lastPage.meta.next_cursor || undefined;
 		},
 		enabled: !!userId,
-	});
+	})
 };
 
 /* --------------------------------- Follows -------------------------------- */
@@ -82,34 +159,60 @@ export const userFollowersOptions = ({
 	filters,
 }: {
 	profileId?: string;
-	filters?: Omit<NonNullable<UsersControllerGetFollowersData['query']>, 'page' | 'per_page'>;
+	filters?: NonNullable<UserFollowersControllerListData['query']>;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.followers({
+			userId: profileId!,
+			infinite: false,
+			filters: filters,
+		}),
+		queryFn: async () => {
+			if (!profileId) throw new Error('Profile ID is required');
+			const { data, error } = await userFollowersControllerList({
+				path: {
+					user_id: profileId,
+				},
+				query: filters,
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		enabled: !!profileId,
+	})
+};
+export const userFollowersInfiniteOptions = ({
+	profileId,
+	filters,
+}: {
+	profileId?: string;
+	filters?: Omit<NonNullable<UserFollowersControllerListInfiniteData['query']>, 'cursor'>;
 }) => {
 	return infiniteQueryOptions({
 		queryKey: userKeys.followers({
 			userId: profileId!,
+			infinite: true,
 			filters: filters,
 		}),
-		queryFn: async ({ pageParam = 1 }) => {
+		queryFn: async ({ pageParam }) => {
 			if (!profileId) throw new Error('Profile ID is required');
-			const { data, error } = await usersControllerGetFollowers({
+			const { data, error } = await userFollowersControllerListInfinite({
 				path: {
 					user_id: profileId,
 				},
 				query: {
-					page: pageParam,
 					...filters,
+					cursor: pageParam,
 				}
 			});
 			if (error) throw error;
 			if (!data) throw new Error('No data');
 			return data;
 		},
-		initialPageParam: 1,
+		initialPageParam: undefined as string | undefined,
 		getNextPageParam: (lastPage) => {
-			if (lastPage.meta.current_page < lastPage.meta.total_pages) {
-				return lastPage.meta.current_page + 1;
-			}
-			return undefined;
+			return lastPage.meta.next_cursor || undefined;
 		},
 		enabled: !!profileId,
 	})
@@ -120,34 +223,60 @@ export const userFollowingOptions = ({
 	filters,
 }: {
 	profileId?: string;
-	filters?: Omit<NonNullable<UsersControllerGetFollowingData['query']>, 'page' | 'per_page'>;
+	filters?: NonNullable<UserFollowingControllerListData['query']>;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.following({
+			userId: profileId!,
+			infinite: false,
+			filters: filters,
+		}),
+		queryFn: async () => {
+			if (!profileId) throw new Error('Profile ID is required');
+			const { data, error } = await userFollowingControllerList({
+				path: {
+					user_id: profileId,
+				},
+				query: filters,
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		enabled: !!profileId,
+	})
+};
+export const userFollowingInfiniteOptions = ({
+	profileId,
+	filters,
+}: {
+	profileId?: string;
+	filters?: Omit<NonNullable<UserFollowingControllerListInfiniteData['query']>, 'cursor'>;
 }) => {
 	return infiniteQueryOptions({
 		queryKey: userKeys.following({
 			userId: profileId!,
+			infinite: true,
 			filters: filters,
 		}),
-		queryFn: async ({ pageParam = 1 }) => {
+		queryFn: async ({ pageParam }) => {
 			if (!profileId) throw new Error('Profile ID is required');
-			const { data, error } = await usersControllerGetFollowing({
+			const { data, error } = await userFollowingControllerListInfinite({
 				path: {
 					user_id: profileId,
 				},
 				query: {
-					page: pageParam,
 					...filters,
+					cursor: pageParam,
 				}
 			});
 			if (error) throw error;
 			if (!data) throw new Error('No data');
 			return data;
 		},
-		initialPageParam: 1,
+		initialPageParam: undefined as string | undefined,
 		getNextPageParam: (lastPage) => {
-			if (lastPage.meta.current_page < lastPage.meta.total_pages) {
-				return lastPage.meta.current_page + 1;
-			}
-			return undefined;
+			return lastPage.meta.next_cursor || undefined;
 		},
 		enabled: !!profileId,
 	})
@@ -205,26 +334,51 @@ export const userPersonFollowOptions = ({
 };
 
 /* -------------------------------- Playlists ------------------------------- */
+export const userPlaylistsOptions = ({
+	userId,
+	filters,
+} : {
+	userId?: string;
+	filters?: NonNullable<UserPlaylistsControllerListData['query']>;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.playlists({ userId: userId!, infinite: false, filters }),
+		queryFn: async () => {
+			if (!userId) throw new Error('User ID is required');
+			const { data, error } = await userPlaylistsControllerList({
+				path: {
+					user_id: userId,
+				},
+				query: filters,
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId,
+	})
+};
 export const userPlaylistsInfiniteOptions = ({
 	userId,
 	filters,
 }: {
 	userId?: string;
-	filters?: Omit<NonNullable<UsersControllerGetPlaylistsData['query']>, 'page' | 'per_page'>;
+	filters?: Omit<NonNullable<UserPlaylistsControllerListInfiniteData['query']>, 'cursor'>;
 }) => {
 	return infiniteQueryOptions({
 		queryKey: userKeys.playlists({
 			userId: userId!,
+			infinite: true,
 			filters: filters,
 		}),
-		queryFn: async ({ pageParam = 1 }) => {
+		queryFn: async ({ pageParam }) => {
 			if (!userId) throw new Error('User ID is required');
-			const { data, error } = await usersControllerGetPlaylists({
+			const { data, error } = await userPlaylistsControllerListInfinite({
 				path: {
 					user_id: userId,
 				},
 				query: {
-					page: pageParam,
+					cursor: pageParam,
 					...filters,
 				}
 			});
@@ -232,12 +386,9 @@ export const userPlaylistsInfiniteOptions = ({
 			if (!data) throw new Error('No data');
 			return data;
 		},
-		initialPageParam: 1,
+		initialPageParam: undefined as string | undefined,
 		getNextPageParam: (lastPage) => {
-			if (lastPage.meta.current_page < lastPage.meta.total_pages) {
-				return lastPage.meta.current_page + 1;
-			}
-			return undefined;
+			return lastPage.meta.next_cursor || undefined;
 		},
 		enabled: !!userId,
 	})

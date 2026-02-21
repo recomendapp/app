@@ -1,15 +1,17 @@
 import { Module } from '@nestjs/common';
-import { MoviesLogModule } from './log/movies-log.module';
+import { MovieLogsModule } from './log/movie-logs.module';
 import { MoviesController } from './movies.controller';
 import { MoviesService } from './movies.service';
-import { MoviesReviewModule } from './review/movies-review.module';
-import { MoviesBookmarkModule } from './bookmark/movies-bookmark.module';
+import { MovieReviewsModule } from './reviews/movie-reviews.module';
+import { MovieBookmarksModule } from './bookmarks/movie-bookmarks.module';
+import { MoviePlaylistsModule } from './playlists/movie-playlists.module';
 
 @Module({
   imports: [
-    MoviesLogModule,
-    MoviesReviewModule,
-    MoviesBookmarkModule,
+    MovieLogsModule,
+    MoviePlaylistsModule,
+    MovieReviewsModule,
+    MovieBookmarksModule,
   ],
   controllers: [MoviesController],
   providers: [MoviesService],

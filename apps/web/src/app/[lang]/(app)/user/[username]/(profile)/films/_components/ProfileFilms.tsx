@@ -17,17 +17,18 @@ import { useSearchParams } from 'next/navigation';
 import { z } from "zod";
 import { CardMovie } from '@/components/Card/CardMovie';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useUserActivitiesMovieInfiniteOptions } from '@/api/client/options/userOptions';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { Icons } from '@/config/icons';
 import { Spinner } from '@/components/ui/spinner';
 import { LayoutGridIcon, ListIcon } from 'lucide-react';
+import { userMovieLogsInfiniteOptions } from '@libs/query-client';
+import { UserSummary } from '@packages/api-js';
 
 const DISPLAY = ["grid", "row"] as const;
-type SortBy = "watched_date" | "rating";
+type SortBy = "rating" | "updated_at" | "first_watched_at" | "random";
 const DEFAULT_DISPLAY = "grid";
-const DEFAULT_SORT_BY = "watched_date";
+const DEFAULT_SORT_BY: SortBy = "first_watched_at";
 const DEFAULT_SORT_ORDER = "desc";
 
 // Display
@@ -37,7 +38,7 @@ const getValidatedDisplay = (display: string | null): z.infer<typeof displaySche
 };
 
 // SORT BY
-const sortBySchema = z.enum(["watched_date", "rating"]);
+const sortBySchema = z.enum(["rating", "updated_at", "first_watched_at", "random"]);
 const getValidatedSortBy = (order?: string | null): z.infer<typeof sortBySchema> => {
   return sortBySchema.safeParse(order).success ? order! as z.infer<typeof sortBySchema> : DEFAULT_SORT_BY;
 };
@@ -49,9 +50,9 @@ const getValidatedSortOrder = (order?: string | null): z.infer<typeof sortOrderS
 }
 
 export default function ProfileFilms({
-  userId
+  user
 } : {
-  userId: string,
+  user: UserSummary,
 }) {
   const t = useTranslations();
   const searchParams = useSearchParams();
@@ -66,16 +67,18 @@ export default function ProfileFilms({
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useInfiniteQuery(useUserActivitiesMovieInfiniteOptions({
-    userId: userId,
+  } = useInfiniteQuery(userMovieLogsInfiniteOptions({
+    userId: user.id,
     filters: {
-      sortBy: sortBy,
-      sortOrder: sortOrder,
+      sort_by: sortBy,
+      sort_order: sortOrder,
     }
   }))
 
   const sortOptions = useMemo((): { value: SortBy, label: string }[] => [
-    { value: "watched_date", label: upperFirst(t('common.messages.watched_date')) },
+    { value: "updated_at", label: upperFirst(t('common.messages.updated_at')) },
+    { value: "first_watched_at", label: upperFirst(t('common.messages.first_watched_at')) },
+    { value: "random", label: upperFirst(t('common.messages.random')) },
     { value: "rating", label: upperFirst(t('common.messages.rating')) },
   ], [t]);
 
@@ -123,7 +126,7 @@ export default function ProfileFilms({
         <div className="flex justify-center h-full">
           <Spinner />
         </div>
-      ) : !isLoading && activities?.pages[0]?.length ? (
+      ) : !isLoading && activities?.pages[0]?.data.length ? (
         <div
           className={` gap-2
               ${
@@ -134,13 +137,17 @@ export default function ProfileFilms({
           `}
         >
           {activities.pages.map((page, i) => (
-            page?.map((activity, index) => (
+            page?.data.map(({ movie, ...log }, index) => (
                 <CardMovie
-                ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
+                ref={(i === activities.pages?.length - 1) && (index === page?.data.length - 1) ? ref : undefined }
                 key={index}
                 variant={display === 'grid' ? 'poster' : 'row'}
-                movie={activity.movie}
-                profileActivity={activity}
+                movie={movie}
+                profile={{
+                  log: log,
+                  user: user,
+                }}
+                // profileActivity={activity}
                 className='w-full'
                 />
             ))

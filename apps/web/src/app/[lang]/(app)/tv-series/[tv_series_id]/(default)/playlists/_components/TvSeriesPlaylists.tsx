@@ -20,7 +20,7 @@ import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { tvSeriesPlaylistsOptions } from '@libs/query-client';
+import { tvSeriesPlaylistsInfiniteOptions } from '@libs/query-client';
 
 type SortBy = "created_at" | "updated_at" | "likes_count";
 const DEFAULT_PER_PAGE = 20;
@@ -61,7 +61,7 @@ export function TvSeriesPlaylists({
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useInfiniteQuery(tvSeriesPlaylistsOptions({
+  } = useInfiniteQuery(tvSeriesPlaylistsInfiniteOptions({
     tvSeriesId: tvSeriesId,
     filters: {
       sort_by: sortBy,

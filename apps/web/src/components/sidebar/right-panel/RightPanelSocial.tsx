@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { useUserFollowersRequestsOptions } from "@/api/client/options/userOptions";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useUserAcceptFollowerRequestMutation, useUserDeclineFollowerRequestMutation } from "@/api/client/mutations/userMutations";
-import { userFollowingOptions } from "@libs/query-client";
+import { userFollowingInfiniteOptions } from "@libs/query-client";
 
 export const RightPanelSocial = () => createRightPanel({
 	title: 'Social',
@@ -46,7 +46,7 @@ const RightPanelSocialFollows = () => {
 		data: followees,
 		isLoading,
 		isError,
-	} = useInfiniteQuery(userFollowingOptions({
+	} = useInfiniteQuery(userFollowingInfiniteOptions({
 		profileId: user?.id,
 	}));
 	const fuse = useMemo(() => {

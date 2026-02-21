@@ -1,15 +1,11 @@
-import { Controller, UseGuards, Get, Patch, Body, Param, Query, ParseUUIDPipe, Post, Delete } from '@nestjs/common';
+import { Controller, UseGuards, Get, Patch, Body, Param, ParseUUIDPipe, Post, Delete } from '@nestjs/common';
 import { ApiExtraModels, ApiOkResponse, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { UsersService } from './users.service';
-import { UserDto, UpdateUserDto, ListUsersDto, GetUsersQueryDto, ProfileDto } from './dto/users.dto';
+import { UserDto, UpdateUserDto, ProfileDto } from './dto/users.dto';
 import { AuthGuard, OptionalAuthGuard } from '../auth/guards';
 import { CurrentOptionalUser, CurrentUser } from '../auth/decorators';
 import { User } from '../auth/auth.service';
-import { GetPlaylistsQueryDto, ListPlaylistsDto } from '../playlists/dto/playlists.dto';
 import { FollowDto } from './dto/user-follow.dto';
-import { GetBookmarksQueryDto, ListBookmarksDto } from '../bookmark/dto/bookmark.dto';
-import { CurrentLocale } from '../../common/decorators/current-locale.decorator';
-import { SupportedLocale } from '@libs/i18n';
 
 @ApiTags('Users')
 @Controller({
@@ -69,72 +65,7 @@ export class UsersController {
     return this.usersService.getProfile(decodeURIComponent(identifier), currentUser);
   }
 
-  /* -------------------------------- Bookmarks ------------------------------- */
-  @Get(':user_id/bookmarks')
-  @UseGuards(OptionalAuthGuard)
-  @ApiOkResponse({
-    description: 'List of bookmarks',
-    type: ListBookmarksDto,
-  })
-  async getBookmarks(
-    @Param('user_id', ParseUUIDPipe) targetUserId: string,
-    @Query() query: GetBookmarksQueryDto,
-    @CurrentOptionalUser() currentUser: User | null,
-    @CurrentLocale() locale: SupportedLocale,
-  ): Promise<ListBookmarksDto> {
-    return this.usersService.getBookmarks({
-      targetUserId,
-      query,
-      currentUser,
-      locale,
-    });
-  }
-
-
-  /* -------------------------------- Playlists ------------------------------- */
-  @Get(':user_id/playlists')
-  @UseGuards(OptionalAuthGuard)
-  @ApiOkResponse({
-    description: 'List of playlists',
-    type: ListPlaylistsDto,
-  })
-  async getPlaylists(
-    @Param('user_id', ParseUUIDPipe) targetUserId: string,
-    @Query() query: GetPlaylistsQueryDto,
-    @CurrentOptionalUser() currentUser: User | null,
-  ): Promise<ListPlaylistsDto> {
-    return this.usersService.getPlaylists(targetUserId, query, currentUser);
-  }
-
   /* --------------------------------- Follows -------------------------------- */
-
-  @Get(':user_id/followers')
-  @UseGuards(OptionalAuthGuard)
-  @ApiOkResponse({
-    description: 'List of followers',
-    type: ListUsersDto,
-  })
-  async getFollowers(
-    @Param('user_id', ParseUUIDPipe) targetUserId: string,
-    @Query() query: GetUsersQueryDto,
-    @CurrentOptionalUser() currentUser: User | null,
-  ): Promise<ListUsersDto> {
-    return this.usersService.getFollowers(targetUserId, query, currentUser);
-  }
-
-  @Get(':user_id/following')
-  @UseGuards(OptionalAuthGuard)
-  @ApiOkResponse({
-    description: 'List of following',
-    type: ListUsersDto,
-  })
-  async getFollowing(
-    @Param('user_id', ParseUUIDPipe) targetUserId: string,
-    @Query() query: GetUsersQueryDto,
-    @CurrentOptionalUser() currentUser: User | null,
-  ): Promise<ListUsersDto> {
-    return this.usersService.getFollowing(targetUserId, query, currentUser);
-  }
 
   @Get(':user_id/follow')
   @UseGuards(AuthGuard)

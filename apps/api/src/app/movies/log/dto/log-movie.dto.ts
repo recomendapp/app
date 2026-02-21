@@ -1,4 +1,4 @@
-import { ApiSchema, ApiProperty, OmitType, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiSchema, ApiProperty, OmitType, ApiPropertyOptional, IntersectionType } from '@nestjs/swagger';
 import { IsBoolean, IsDate, IsDateString, IsEnum, IsInt, IsNumber, IsOptional, Max, Min, ValidateNested } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { WatchedDateDto } from './watched-date.dto';
@@ -7,6 +7,7 @@ import { IsNullable } from '../../../../common/decorators/is-nullable.decorator'
 import { MovieCompactDto } from '../../dto/movies.dto';
 import { PaginationQueryDto } from '../../../../common/dto/pagination.dto';
 import { SortOrder } from '../../../../common/dto/sort.dto';
+import { CursorPaginationQueryDto } from '../../../../common/dto/cursor-pagination.dto';
 
 @ApiSchema({ name: 'LogMovieRequest' })
 export class LogMovieRequestDto {
@@ -117,7 +118,7 @@ export class LogMovieDto {
 }
 
 @ApiSchema({ name: 'LogMovieWithMovie' })
-export class LogMovieWithMovieDto extends OmitType(LogMovieDto, ['review']) {
+export class LogMovieWithMovieDto extends OmitType(LogMovieDto, ['review', 'watchedDates']) {
   @ApiProperty({ example: false })
   @Expose()
   isReviewed: boolean;
@@ -134,8 +135,8 @@ export enum LogMovieSortBy {
   RANDOM = 'random',
 }
 
-@ApiSchema({ name: 'GetLogsMovieQuery' })
-export class GetLogsMovieQueryDto extends PaginationQueryDto {
+@ApiSchema({ name: 'BaseListLogsMovieQuery' })
+class BaseListLogsMovieQueryDto {
     @ApiPropertyOptional({
         description: 'Field to sort logs by',
         default: LogMovieSortBy.UPDATED_AT,
@@ -156,3 +157,15 @@ export class GetLogsMovieQueryDto extends PaginationQueryDto {
     @IsEnum(SortOrder)
     sort_order: SortOrder = SortOrder.DESC;
 }
+
+@ApiSchema({ name: 'ListLogsMovieQuery' })
+export class ListLogsMovieQueryDto extends IntersectionType(
+  BaseListLogsMovieQueryDto,
+  PaginationQueryDto
+) {}
+
+@ApiSchema({ name: 'ListInfiniteLogsMovieQuery' })
+export class ListInfiniteLogsMovieQueryDto extends IntersectionType(
+  BaseListLogsMovieQueryDto,
+  CursorPaginationQueryDto
+) {}

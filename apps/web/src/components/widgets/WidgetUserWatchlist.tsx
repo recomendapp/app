@@ -9,8 +9,10 @@ import { upperFirst } from "lodash";
 import { CardMovie } from "../Card/CardMovie";
 import { CardTvSeries } from "../Card/CardTvSeries";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { userBookmarksOptions } from "@libs/query-client/src";
+import { userBookmarksInfiniteOptions } from "@libs/query-client/src";
 import { MovieCompact, TvSeriesCompact } from "@packages/api-js";
+
+const ITEM_LIMIT = 6;
 
 export const WidgetUserWatchlist = ({
   className,
@@ -18,13 +20,13 @@ export const WidgetUserWatchlist = ({
   const { user } = useAuth();
   const t = useTranslations();
 
-  const { data: watchlist } = useInfiniteQuery(userBookmarksOptions({
+  const { data: watchlist } = useInfiniteQuery(userBookmarksInfiniteOptions({
     userId: user?.id,
     filters: {
       sort_by: 'random',
     }
   }));
-  const watchlistItems = watchlist?.pages.flatMap(page => page.data).slice(0, 6);
+  const watchlistItems = watchlist?.pages.flatMap(page => page.data).slice(0, ITEM_LIMIT);
 
   if (!user) return null;
 

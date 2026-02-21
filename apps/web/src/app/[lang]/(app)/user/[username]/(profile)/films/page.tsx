@@ -10,5 +10,5 @@ export default async function Films(
   const params = await props.params;
   const profile = await getProfile(params.username);
   if (!profile) return notFound();
-  return <ProfileFilms userId={profile.id} />;
+  return <ProfileFilms user={profile} />;
 }

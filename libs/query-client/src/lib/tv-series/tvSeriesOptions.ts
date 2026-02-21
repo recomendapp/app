@@ -1,4 +1,4 @@
-import { tvSeriesBookmarkControllerGet, tvSeriesControllerGet, tvSeriesControllerGetCasting, tvSeriesControllerGetPlaylists, TvSeriesControllerGetPlaylistsData, tvSeriesControllerGetSeasons } from "@packages/api-js";
+import { tvSeriesBookmarksControllerGet, tvSeriesControllerGet, tvSeriesControllerGetCasting, tvSeriesControllerGetSeasons, tvSeriesPlaylistsControllerList, TvSeriesPlaylistsControllerListData, tvSeriesPlaylistsControllerListInfinite, TvSeriesPlaylistsControllerListInfiniteData } from "@packages/api-js";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { tvSeriesKeys } from "./tvSeriesKeys";
 
@@ -82,34 +82,61 @@ export const tvSeriesPlaylistsOptions = ({
 	filters,
 } : {
 	tvSeriesId: number;
-	filters?: Omit<NonNullable<TvSeriesControllerGetPlaylistsData['query']>, 'page' | 'per_page'>;
+	filters?: NonNullable<TvSeriesPlaylistsControllerListData['query']>;
 }) => {
-	return infiniteQueryOptions({
+	return queryOptions({
 		queryKey: tvSeriesKeys.playlists({
 			tvSeriesId: tvSeriesId,
+			infinite: false,
 			filters: filters,
 		}),
-		queryFn: async ({ pageParam = 1 }) => {
+		queryFn: async () => {
 			if (!tvSeriesId) throw new Error('TV Series ID is required');
-			const { data, error } = await tvSeriesControllerGetPlaylists({
+			const { data, error } = await tvSeriesPlaylistsControllerList({
 				path: {
 					tv_series_id: tvSeriesId,
 				},
-				query: {
-					page: pageParam,
-					...filters,
-				}
+				query: filters,
 			});
 			if (error) throw error;
 			if (data === undefined) throw new Error('No data');
 			return data;
 		},
-		initialPageParam: 1,
+		enabled: !!tvSeriesId,
+		staleTime: 1000 * 60 * 60 // 1 hour
+	});
+}
+export const tvSeriesPlaylistsInfiniteOptions = ({
+	tvSeriesId,
+	filters,
+} : {
+	tvSeriesId: number;
+	filters?: Omit<NonNullable<TvSeriesPlaylistsControllerListInfiniteData['query']>, 'cursor'>;
+}) => {
+	return infiniteQueryOptions({
+		queryKey: tvSeriesKeys.playlists({
+			tvSeriesId: tvSeriesId,
+			infinite: true,
+			filters: filters,
+		}),
+		queryFn: async ({ pageParam }) => {
+			if (!tvSeriesId) throw new Error('TV Series ID is required');
+			const { data, error } = await tvSeriesPlaylistsControllerListInfinite({
+				path: {
+					tv_series_id: tvSeriesId,
+				},
+				query: {
+					...filters,
+					cursor: pageParam,
+				},
+			});
+			if (error) throw error;
+			if (data === undefined) throw new Error('No data');
+			return data;
+		},
+		initialPageParam: undefined as string | undefined,
 		getNextPageParam: (lastPage) => {
-			if (lastPage.meta.current_page < lastPage.meta.total_pages) {
-				return lastPage.meta.current_page + 1;
-			}
-			return undefined;
+			return lastPage.meta.next_cursor || undefined;
 		},
 		enabled: !!tvSeriesId,
 		staleTime: 1000 * 60 * 60 // 1 hour
@@ -128,7 +155,7 @@ export const tvSeriesBookmarkOptions = ({
 		queryKey: tvSeriesKeys.bookmark({ tvSeriesId: tvSeriesId! }),
 		queryFn: async () => {
 			if (!tvSeriesId) throw new Error('TV Series ID is required');
-			const { data, error } = await tvSeriesBookmarkControllerGet({
+			const { data, error } = await tvSeriesBookmarksControllerGet({
 				path: {
 					tv_series_id: tvSeriesId,
 				},

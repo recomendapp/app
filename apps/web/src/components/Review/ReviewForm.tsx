@@ -218,12 +218,12 @@ export default function ReviewForm({
 				{type === 'movie' ? (
 				<>
 					<CardMovie movie={movie} linked={false} />
-					<ButtonUserActivityMovieWatch movieId={movie.id} />
+					{!review && <ButtonUserActivityMovieWatch movieId={movie.id} />}
 				</>
 				) : type === 'tv_series' && (
 				<>
 					<CardTvSeries tvSeries={tvSeries} linked={false} />
-					<ButtonUserActivityTvSeriesRating tvSeriesId={tvSeries.id} />
+					{!review && <ButtonUserActivityTvSeriesRating tvSeriesId={tvSeries.id} />}
 				</>
 				)}
 

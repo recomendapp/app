@@ -23,7 +23,7 @@ import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { Movie } from '@packages/api-js';
-import { movieLogOptions, movieReviewsOptions } from '@libs/query-client';
+import { movieLogOptions, movieReviewsInfiniteOptions } from '@libs/query-client';
 
 type SortBy =  "updated_at" | "created_at" | "rating" | "likes_count";
 const DEFAULT_SORT_BY: SortBy = "updated_at";
@@ -56,7 +56,7 @@ export const MovieReviews = ({
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useInfiniteQuery(movieReviewsOptions({
+	} = useInfiniteQuery(movieReviewsInfiniteOptions({
 		movieId: movie.id,
 		filters: {
 			sort_by: sortBy,

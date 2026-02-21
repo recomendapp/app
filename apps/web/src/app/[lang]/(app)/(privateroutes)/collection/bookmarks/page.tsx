@@ -5,14 +5,14 @@ import { useAuth } from '@/context/auth-context';
 import { WatchlistHeader } from './_components/WatchlistHeader';
 import { ImageObject } from '@/hooks/use-random-image';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { userBookmarksOptions } from '@libs/query-client/src';
+import { userBookmarksInfiniteOptions } from '@libs/query-client';
 import { MovieCompact, TvSeriesCompact } from '@packages/api-js';
 
 export default function Watchlist() {
   const tab = useUIStore((state) => state.bookmarkTab);
   const { user } = useAuth();
 
-  const { data, isLoading } = useInfiniteQuery(userBookmarksOptions({
+  const { data, isLoading } = useInfiniteQuery(userBookmarksInfiniteOptions({
     userId: user?.id,
     ...(tab !== 'all' && {
       filters: {
@@ -20,7 +20,7 @@ export default function Watchlist() {
       }
     })
   }));
-  const totalCount = data?.pages[0].meta.total_results;
+  // const totalCount = data?.pages[0].meta.total_results;
 
   const backdrops = data?.pages.flatMap(page => page.data)
     .map(item => {
@@ -40,24 +40,12 @@ export default function Watchlist() {
     })
     .filter(item => item?.src !== null && item?.src !== undefined) as ImageObject[];
 
-  // const { data: watchlistMovies, isLoading: watchlistMoviesIsLoading } = useQuery(useUserWatchlistMoviesOptions({ userId: tab === 'movie' ? session?.user.id : undefined }));
-  // const { data: watchlistTvSeries, isLoading: watchlistTvSeriesIsLoading } = useQuery(useUserWatchlistTvSeriesOptions({ userId: tab === 'tv_series' ? session?.user.id : undefined }));
-
-  // const data = tab === 'movie' ? watchlistMovies : watchlistTvSeries;
-  // const isLoading = tab === 'movie'
-  //   ? (watchlistMovies === undefined || watchlistMoviesIsLoading)
-  //   : (watchlistTvSeries === undefined || watchlistTvSeriesIsLoading);
-  // const backdrops = (
-  //   tab === 'movie'
-  //   ? watchlistMovies?.map(item => ({ src: item.movie?.backdrop_url, alt: item.movie?.title }))
-  //   : watchlistTvSeries?.map(item => ({ src: item.tv_series?.backdrop_url, alt: item.tv_series?.name }))
-  // )?.filter(item => item.src !== null && item.src !== undefined) as ImageObject[];
-
   return (
     <div className="h-full">
       <WatchlistHeader
       tab={tab}
-      numberItems={totalCount}
+      numberItems={0}
+      // numberItems={totalCount}
       backdrops={backdrops || []}
       skeleton={isLoading}
       />

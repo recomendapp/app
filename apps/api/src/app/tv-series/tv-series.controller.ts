@@ -1,4 +1,4 @@
-import { Controller, Param, Get, ParseIntPipe, UseGuards, Query } from '@nestjs/common';
+import { Controller, Param, Get, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { TvSeriesService } from './tv-series.service';
 import { OptionalAuthGuard } from '../auth/guards';
@@ -9,7 +9,6 @@ import { SupportedLocale } from '@libs/i18n';
 import { TvSeriesDto } from './dto/tv-series.dto';
 import { TvSeriesCastingDto } from './dto/tv-series-credits.dto';
 import { TvSeasonCompactDto } from './seasons/dto/tv-seasons.dto';
-import { GetPlaylistsQueryDto, ListPlaylistsWithOwnerDto } from '../playlists/dto/playlists.dto';
 
 @ApiTags('Tv Series')
 @Controller({
@@ -67,23 +66,5 @@ export class TvSeriesController {
       tvSeriesId,
       locale,
     });
-  }
-
-  @Get(':tv_series_id/playlists')
-  @UseGuards(OptionalAuthGuard)
-  @ApiOkResponse({
-    description: 'Get playlists of the tv series',
-    type: ListPlaylistsWithOwnerDto,
-  })
-  async getPlaylists(
-    @Param('tv_series_id', ParseIntPipe) tvSeriesId: number,
-    @Query() query: GetPlaylistsQueryDto,
-    @CurrentOptionalUser() currentUser: User | null,
-  ): Promise<ListPlaylistsWithOwnerDto> {
-    return this.tvSeriesService.getPlaylists({
-      tvSeriesId,
-      query,
-      currentUser,
-    })
   }
 }

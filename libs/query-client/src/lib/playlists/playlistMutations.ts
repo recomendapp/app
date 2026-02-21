@@ -1,7 +1,10 @@
-import { ListPlaylists, playlistsControllerCreateMutation, playlistsControllerDeleteMutation, playlistsControllerUpdateMembersMutation, playlistsControllerUpdateMutation } from "@packages/api-js";
+import { ListInfinitePlaylists, ListInfinitePlaylistsWithOwner, ListPlaylists, ListPlaylistsWithOwner, playlistsControllerCreateMutation, playlistsControllerDeleteMutation, playlistsControllerUpdateMembersMutation, playlistsControllerUpdateMutation } from "@packages/api-js";
 import { InfiniteData, useMutation, useQueryClient } from "@tanstack/react-query";
-import { userPlaylistsInfiniteOptions } from "../users";
+import { userKeys, userPlaylistsInfiniteOptions, userPlaylistsOptions } from "../users";
 import { playlistMembersOptions, playlistOptions } from "./playlistOptions";
+import { removeFromInfiniteCache, removeFromPaginatedCache, updateFromInfiniteCache, updateFromPaginatedCache } from "../utils";
+import { moviePlaylistsInfiniteOptions, moviePlaylistsOptions } from "../movies";
+import { tvSeriesPlaylistsInfiniteOptions, tvSeriesPlaylistsOptions } from "../tv-series";
 
 export const usePlaylistInsertMutation = () => {
 	const queryClient = useQueryClient();
@@ -9,7 +12,7 @@ export const usePlaylistInsertMutation = () => {
 		...playlistsControllerCreateMutation(),
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({
-				queryKey: userPlaylistsInfiniteOptions({ userId: data.userId }).queryKey,
+				queryKey: userKeys.playlists({ userId: data.userId }),
 			})
 		}
 	});
@@ -27,19 +30,53 @@ export const usePlaylistUpdateMutation = () => {
 					...data,
 				}
 			});
+			// Update playlist in user playlists queries
+			queryClient.setQueriesData(
+				{ queryKey: userPlaylistsOptions({ userId: data.userId }).queryKey },
+				(old: InfiniteData<ListPlaylists> | undefined) => {
+					return updateFromPaginatedCache(old, data);
+				}
+			);
 			queryClient.setQueriesData(
 				{ queryKey: userPlaylistsInfiniteOptions({ userId: data.userId }).queryKey },
-				(old: InfiniteData<ListPlaylists> | undefined) => {
-					if (!old || !old.pages) return old;
-					return {
-						...old,
-						pages: old.pages.map((page) => ({
-							...page,
-							data: page.data.map((item) => item.id === data.id ? { ...item, ...data } : item),
-						}))
-					};
+				(old: InfiniteData<ListInfinitePlaylists> | undefined) => {
+					return updateFromInfiniteCache(old, data);
 				}
-			)
+			);
+
+			// Update playlist in movies queries
+			queryClient.setQueriesData(
+				{
+					predicate: ({ queryKey }) => {
+						const refKey = moviePlaylistsOptions({ movieId: -1 }).queryKey;
+						return (
+							queryKey[0] === refKey[0] &&
+							typeof queryKey[1] === typeof refKey[1] &&
+							queryKey[2] === refKey[2] &&
+							queryKey[3] === refKey[3]
+						);
+					}
+				},
+				(old: InfiniteData<ListPlaylistsWithOwner> | undefined) => {
+					return updateFromPaginatedCache(old, data);
+				}
+			);
+			queryClient.setQueriesData(
+				{
+					predicate: ({ queryKey }) => {
+						const refKey = moviePlaylistsInfiniteOptions({ movieId: -1 }).queryKey;
+						return (
+							queryKey[0] === refKey[0] &&
+							typeof queryKey[1] === typeof refKey[1] &&
+							queryKey[2] === refKey[2] &&
+							queryKey[3] === refKey[3]
+						);
+					}
+				},
+				(old: InfiniteData<ListInfinitePlaylistsWithOwner> | undefined) => {
+					return updateFromInfiniteCache(old, data);
+				}
+			);
 		}
 	});
 };
@@ -50,19 +87,84 @@ export const usePlaylistDeleteMutation = () => {
 		...playlistsControllerDeleteMutation(),
 		onSuccess: (data) => {
 			queryClient.setQueryData(playlistOptions({ playlistId: data.id }).queryKey, undefined);
+			
+			removeFromPaginatedCache(
+				queryClient,
+				userPlaylistsOptions({ userId: data.userId }).queryKey,
+				data.id
+			);
 			queryClient.setQueriesData(
 				{ queryKey: userPlaylistsInfiniteOptions({ userId: data.userId }).queryKey },
-				(old: InfiniteData<ListPlaylists> | undefined) => {
-					if (!old || !old.pages) return old;
-					return {
-						...old,
-						pages: old.pages.map((page) => ({
-							...page,
-							data: page.data.filter((item) => item.id !== data.id),
-						}))
-					};
+				(old: InfiniteData<ListInfinitePlaylists> | undefined) => {
+					return removeFromInfiniteCache(old, data.id);
 				}
-			)
+			);
+
+			// Movies
+			removeFromPaginatedCache(
+				queryClient,
+				{
+					predicate: ({ queryKey }) => {
+						const refKey = moviePlaylistsOptions({ movieId: -1 }).queryKey;
+						return (
+							queryKey[0] === refKey[0] &&
+							typeof queryKey[1] === typeof refKey[1] &&
+							queryKey[2] === refKey[2] &&
+							queryKey[3] === refKey[3]
+						);
+					}
+				},
+				data.id
+			);
+			queryClient.setQueriesData(
+				{
+					predicate: ({ queryKey }) => {
+						const refKey = moviePlaylistsInfiniteOptions({ movieId: -1 }).queryKey;
+						return (
+							queryKey[0] === refKey[0] &&
+							typeof queryKey[1] === typeof refKey[1] &&
+							queryKey[2] === refKey[2] &&
+							queryKey[3] === refKey[3]
+						);
+					}
+				},
+				(old: InfiniteData<ListInfinitePlaylistsWithOwner> | undefined) => {
+					return removeFromInfiniteCache(old, data.id);
+				}
+			);
+
+			// Tv Series
+			removeFromPaginatedCache(
+				queryClient,
+				{
+					predicate: ({ queryKey }) => {
+						const refKey = tvSeriesPlaylistsOptions({ tvSeriesId: -1 }).queryKey;
+						return (
+							queryKey[0] === refKey[0] &&
+							typeof queryKey[1] === typeof refKey[1] &&
+							queryKey[2] === refKey[2] &&
+							queryKey[3] === refKey[3]
+						);
+					}
+				},
+				data.id
+			 );
+			queryClient.setQueriesData(
+				{
+					predicate: ({ queryKey }) => {
+						const refKey = tvSeriesPlaylistsInfiniteOptions({ tvSeriesId: -1 }).queryKey;
+						return (
+							queryKey[0] === refKey[0] &&
+							typeof queryKey[1] === typeof refKey[1] &&
+							queryKey[2] === refKey[2] &&
+							queryKey[3] === refKey[3]
+						);
+					}
+				},
+				(old: InfiniteData<ListInfinitePlaylistsWithOwner> | undefined) => {
+					return removeFromInfiniteCache(old, data.id);
+				}
+			);
 		}
 	});
 };

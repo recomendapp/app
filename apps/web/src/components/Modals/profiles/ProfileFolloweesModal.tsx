@@ -13,7 +13,7 @@ import { Link } from "@/lib/i18n/navigation";
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { userFollowingOptions } from '@libs/query-client';
+import { userFollowingInfiniteOptions } from '@libs/query-client';
 
 export function ProfileFolloweesModal({
 	userId,
@@ -30,7 +30,7 @@ export function ProfileFolloweesModal({
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useInfiniteQuery(userFollowingOptions({
+	} = useInfiniteQuery(userFollowingInfiniteOptions({
 		profileId: userId,
 	}));
 

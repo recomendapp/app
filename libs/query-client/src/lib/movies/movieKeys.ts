@@ -1,4 +1,4 @@
-import { MoviesControllerGetPlaylistsData, MoviesControllerGetReviewsData } from "@packages/api-js";
+import { MoviePlaylistsControllerListData, MoviePlaylistsControllerListInfiniteData, MovieReviewsControllerListData, MovieReviewsControllerListInfiniteData } from "@packages/api-js";
 
 export const movieKeys = {
 	base: ['movie'] as const,
@@ -19,20 +19,34 @@ export const movieKeys = {
 	/* --------------------------------- Reviews -------------------------------- */
 	reviews: ({
 		movieId,
+		infinite,
 		filters,
-	} : {
+	}: {
 		movieId: number;
-		filters?: Omit<NonNullable<MoviesControllerGetReviewsData['query']>, 'page' | 'per_page'>;
-	}) => filters ? [...movieKeys.details({ movieId }), 'reviews', filters] as const : [...movieKeys.details({ movieId }), 'reviews'] as const,
+	} & (
+		| { infinite?: never; filters?: never }
+		| { infinite: false; filters?: NonNullable<MovieReviewsControllerListData['query']> }
+		| { infinite: true; filters?: Omit<NonNullable<MovieReviewsControllerListInfiniteData['query']>, 'cursor'> }
+	)) => {
+		const optionsKey = [...(infinite !== undefined ? [infinite] : []), ...(filters ? [filters] : [])];
+		return [...movieKeys.details({ movieId }), 'reviews', ...optionsKey] as const;
+	},
 
 	/* -------------------------------- Playlists ------------------------------- */
 	playlists: ({
 		movieId,
+		infinite,
 		filters,
-	} : {
+	}: {
 		movieId: number;
-		filters?: Omit<NonNullable<MoviesControllerGetPlaylistsData['query']>, 'page' | 'per_page'>;
-	}) => filters ? [...movieKeys.details({ movieId }), 'playlists', filters] as const : [...movieKeys.details({ movieId }), 'playlists'] as const,
+	} & (
+		| { infinite?: never; filters?: never }
+		| { infinite: false; filters?: NonNullable<MoviePlaylistsControllerListData['query']> }
+		| { infinite: true; filters?: Omit<NonNullable<MoviePlaylistsControllerListInfiniteData['query']>, 'cursor'> }
+	)) => {
+		const optionsKey = [...(infinite !== undefined ? [infinite] : []), ...(filters ? [filters] : [])];
+		return [...movieKeys.details({ movieId }), 'playlists', ...optionsKey] as const;
+	},
 
 	/* ---------------------------------- Logs ---------------------------------- */
 	log: ({

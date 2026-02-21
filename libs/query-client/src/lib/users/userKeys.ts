@@ -1,4 +1,4 @@
-import { UsersControllerGetBookmarksData, UsersControllerGetFollowersData, UsersControllerGetFollowingData, UsersControllerGetPlaylistsData } from "@packages/api-js";
+import { UserFollowersControllerListData, UserMoviesControllerListData, UserPlaylistsControllerListData, UserMoviesControllerListInfiniteData, UserPlaylistsControllerListInfiniteData, UserBookmarksControllerListData, UserFollowersControllerListInfiniteData, UserBookmarksControllerListInfiniteData, UserFollowingControllerListData, UserFollowingControllerListInfiniteData } from "@packages/api-js";
 
 export const userKeys = {
 	base: ['user'] as const,
@@ -22,21 +22,51 @@ export const userKeys = {
 		userId: string;
 	}) => [...userKeys.details({ userId }), 'log', type, id] as const,
 
+	/* --------------------------------- Movies --------------------------------- */
+	movies: ({
+		userId,
+		infinite,
+		filters,
+	}: {
+		userId: string;
+	} & (
+		| { infinite?: never; filters?: never }
+		| { infinite: false; filters?: NonNullable<UserMoviesControllerListData['query']> }
+		| { infinite: true; filters?: Omit<NonNullable<UserMoviesControllerListInfiniteData['query']>, 'cursor'> }
+	)) => {
+		const optionsKey = [...(infinite !== undefined ? [infinite] : []), ...(filters ? [filters] : [])];
+		return [...userKeys.details({ userId }), 'movies', ...optionsKey] as const;
+	},
+
 	/* --------------------------------- Follows -------------------------------- */
 	followers: ({
 		userId,
+		infinite,
 		filters,
 	}: {
 		userId: string;
-		filters?: Omit<NonNullable<UsersControllerGetFollowersData['query']>, 'page' | 'per_page'>;
-	}) => filters ? [...userKeys.details({ userId }), 'followers', filters] as const : [...userKeys.details({ userId }), 'followers'] as const,
+	} & (
+		| { infinite?: never; filters?: never }
+		| { infinite: false; filters?: NonNullable<UserFollowersControllerListData['query']> }
+		| { infinite: true; filters?: Omit<NonNullable<UserFollowersControllerListInfiniteData['query']>, 'cursor'> }
+	)) => {
+		const optionsKey = [...(infinite !== undefined ? [infinite] : []), ...(filters ? [filters] : [])];
+		return [...userKeys.details({ userId }), 'followers', ...optionsKey] as const;
+	},
 	following: ({
 		userId,
+		infinite,
 		filters,
 	}: {
 		userId: string;
-		filters?: Omit<NonNullable<UsersControllerGetFollowingData['query']>, 'page' | 'per_page'>;
-	}) => filters ? [...userKeys.details({ userId }), 'following', filters] as const : [...userKeys.details({ userId }), 'following'] as const,
+	} & (
+		| { infinite?: never; filters?: never }
+		| { infinite: false; filters?: NonNullable<UserFollowingControllerListData['query']> }
+		| { infinite: true; filters?: Omit<NonNullable<UserFollowingControllerListInfiniteData['query']>, 'cursor'> }
+	)) => {
+		const optionsKey = [...(infinite !== undefined ? [infinite] : []), ...(filters ? [filters] : [])];
+		return [...userKeys.details({ userId }), 'following', ...optionsKey] as const;
+	},
 	follow: ({
 		userId,
 		profileId,
@@ -56,20 +86,34 @@ export const userKeys = {
 	/* -------------------------------- Bookmarks ------------------------------- */
 	bookmarks: ({
 		userId,
+		infinite,
 		filters,
 	}: {
 		userId: string;
-		filters?: Omit<NonNullable<UsersControllerGetBookmarksData['query']>, 'page'>;
-	}) => filters ? [...userKeys.details({ userId }), 'bookmarks', filters] as const : [...userKeys.details({ userId }), 'bookmarks'] as const,
+	} & (
+		| { infinite?: never; filters?: never }
+		| { infinite: false; filters?: NonNullable<UserBookmarksControllerListData['query']> }
+		| { infinite: true; filters?: Omit<NonNullable<UserBookmarksControllerListInfiniteData['query']>, 'cursor'> }
+	)) => {
+		const optionsKey = [...(infinite !== undefined ? [infinite] : []), ...(filters ? [filters] : [])];
+		return [...userKeys.details({ userId }), 'bookmarks', ...optionsKey] as const;
+	},
 
 	/* -------------------------------- Playlists ------------------------------- */
 	playlists: ({
 		userId,
+		infinite,
 		filters,
 	}: {
 		userId: string;
-		filters?: Omit<NonNullable<UsersControllerGetPlaylistsData['query']>, 'page' | 'per_page'>;
-	}) => filters ? [...userKeys.details({ userId }), 'playlists', filters] as const : [...userKeys.details({ userId }), 'playlists'] as const,
+	} & (
+		| { infinite?: never; filters?: never }
+		| { infinite: false; filters?: NonNullable<UserPlaylistsControllerListData['query']> }
+		| { infinite: true; filters?: Omit<NonNullable<UserPlaylistsControllerListInfiniteData['query']>, 'cursor'> }
+	)) => {
+		const optionsKey = [...(infinite !== undefined ? [infinite] : []), ...(filters ? [filters] : [])];
+		return [...userKeys.details({ userId }), 'playlists', ...optionsKey] as const;
+	},
 
 	playlistLike: ({
 		userId,

@@ -1,4 +1,4 @@
-import { moviesBookmarkControllerGet, moviesControllerGet, moviesControllerGetCasting, moviesControllerGetPlaylists, MoviesControllerGetPlaylistsData, moviesControllerGetReviews, MoviesControllerGetReviewsData, moviesLogControllerGet, moviesLogControllerGetFollowingAverageRating, moviesLogControllerGetFollowingLogs } from "@packages/api-js";
+import { movieBookmarksControllerGet, moviesControllerGet, moviesControllerGetCasting, movieReviewsControllerList, MovieReviewsControllerListData, movieLogsControllerGet, movieLogsControllerGetFollowingAverageRating, MovieReviewsControllerListInfiniteData, movieReviewsControllerListInfinite, movieLogsControllerGetFollowingLogs, MoviePlaylistsControllerListData, moviePlaylistsControllerList, MoviePlaylistsControllerListInfiniteData, moviePlaylistsControllerListInfinite } from "@packages/api-js";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { movieKeys } from "./movieKeys";
 
@@ -56,34 +56,61 @@ export const movieReviewsOptions = ({
 	filters,
 } : {
 	movieId: number;
-	filters?: Omit<NonNullable<MoviesControllerGetReviewsData['query']>, 'page' | 'per_page'>;
+	filters?: NonNullable<MovieReviewsControllerListData['query']>;
 }) => {
-	return infiniteQueryOptions({
+	return queryOptions({
 		queryKey: movieKeys.reviews({
 			movieId: movieId,
+			infinite: false,
 			filters: filters,
 		}),
-		queryFn: async ({ pageParam = 1 }) => {
+		queryFn: async () => {
 			if (!movieId) throw new Error('Movie ID is required');
-			const { data, error } = await moviesControllerGetReviews({
+			const { data, error } = await movieReviewsControllerList({
 				path: {
 					movie_id: movieId,
 				},
-				query: {
-					page: pageParam,
-					...filters,
-				}
+				query: filters,
 			});
 			if (error) throw error;
 			if (data === undefined) throw new Error('No data');
 			return data;
 		},
-		initialPageParam: 1,
+		enabled: !!movieId,
+		staleTime: 1000 * 60 * 60 // 1 hour
+	});
+}
+export const movieReviewsInfiniteOptions = ({
+	movieId,
+	filters,
+} : {
+	movieId: number;
+	filters?: Omit<NonNullable<MovieReviewsControllerListInfiniteData['query']>, 'cursor'>;
+}) => {
+	return infiniteQueryOptions({
+		queryKey: movieKeys.reviews({
+			movieId: movieId,
+			infinite: true,
+			filters: filters,
+		}),
+		queryFn: async ({ pageParam }) => {
+			if (!movieId) throw new Error('Movie ID is required');
+			const { data, error } = await movieReviewsControllerListInfinite({
+				path: {
+					movie_id: movieId,
+				},
+				query: {
+					...filters,
+					cursor: pageParam,
+				},
+			});
+			if (error) throw error;
+			if (data === undefined) throw new Error('No data');
+			return data;
+		},
+		initialPageParam: undefined as string | undefined,
 		getNextPageParam: (lastPage) => {
-			if (lastPage.meta.current_page < lastPage.meta.total_pages) {
-				return lastPage.meta.current_page + 1;
-			}
-			return undefined;
+			return lastPage.meta.next_cursor || undefined;
 		},
 		enabled: !!movieId,
 		staleTime: 1000 * 60 * 60 // 1 hour
@@ -96,34 +123,61 @@ export const moviePlaylistsOptions = ({
 	filters,
 } : {
 	movieId: number;
-	filters?: Omit<NonNullable<MoviesControllerGetPlaylistsData['query']>, 'page' | 'per_page'>;
+	filters?: NonNullable<MoviePlaylistsControllerListData['query']>;
 }) => {
-	return infiniteQueryOptions({
+	return queryOptions({
 		queryKey: movieKeys.playlists({
 			movieId: movieId,
+			infinite: false,
 			filters: filters,
 		}),
-		queryFn: async ({ pageParam = 1 }) => {
+		queryFn: async () => {
 			if (!movieId) throw new Error('Movie ID is required');
-			const { data, error } = await moviesControllerGetPlaylists({
+			const { data, error } = await moviePlaylistsControllerList({
 				path: {
 					movie_id: movieId,
 				},
-				query: {
-					page: pageParam,
-					...filters,
-				}
+				query: filters,
 			});
 			if (error) throw error;
 			if (data === undefined) throw new Error('No data');
 			return data;
 		},
-		initialPageParam: 1,
+		enabled: !!movieId,
+		staleTime: 1000 * 60 * 60 // 1 hour
+	});
+}
+export const moviePlaylistsInfiniteOptions = ({
+	movieId,
+	filters,
+} : {
+	movieId: number;
+	filters?: Omit<NonNullable<MoviePlaylistsControllerListInfiniteData['query']>, 'cursor'>;
+}) => {
+	return infiniteQueryOptions({
+		queryKey: movieKeys.playlists({
+			movieId: movieId,
+			infinite: true,
+			filters: filters,
+		}),
+		queryFn: async ({ pageParam }) => {
+			if (!movieId) throw new Error('Movie ID is required');
+			const { data, error } = await moviePlaylistsControllerListInfinite({
+				path: {
+					movie_id: movieId,
+				},
+				query: {
+					...filters,
+					cursor: pageParam,
+				},
+			});
+			if (error) throw error;
+			if (data === undefined) throw new Error('No data');
+			return data;
+		},
+		initialPageParam: undefined as string | undefined,
 		getNextPageParam: (lastPage) => {
-			if (lastPage.meta.current_page < lastPage.meta.total_pages) {
-				return lastPage.meta.current_page + 1;
-			}
-			return undefined;
+			return lastPage.meta.next_cursor || undefined;
 		},
 		enabled: !!movieId,
 		staleTime: 1000 * 60 * 60 // 1 hour
@@ -142,7 +196,7 @@ export const movieLogOptions = ({
 		queryKey: movieKeys.log({ movieId: movieId! }),
 		queryFn: async () => {
 			if (!movieId) throw new Error('Movie ID is required');
-			const { data, error } = await moviesLogControllerGet({
+			const { data, error } = await movieLogsControllerGet({
 				path: {
 					movie_id: movieId,
 				},
@@ -166,7 +220,7 @@ export const movieFollowingLogsOptions = ({
 		queryKey: movieKeys.followingLogs({ movieId: movieId! }),
 		queryFn: async () => {
 			if (!movieId) throw new Error('Movie ID is required');
-			const { data, error } = await moviesLogControllerGetFollowingLogs({
+			const { data, error } = await movieLogsControllerGetFollowingLogs({
 				path: {
 					movie_id: movieId,
 				},
@@ -190,7 +244,7 @@ export const movieFollowingAverageRatingOptions = ({
 		queryKey: movieKeys.followingAverageRating({ movieId: movieId! }),
 		queryFn: async () => {
 			if (!movieId) throw new Error('Movie ID is required');
-			const { data, error } = await moviesLogControllerGetFollowingAverageRating({
+			const { data, error } = await movieLogsControllerGetFollowingAverageRating({
 				path: {
 					movie_id: movieId,
 				},
@@ -215,7 +269,7 @@ export const movieBookmarkOptions = ({
 		queryKey: movieKeys.bookmark({ movieId: movieId! }),
 		queryFn: async () => {
 			if (!movieId) throw new Error('Movie ID is required');
-			const { data, error } = await moviesBookmarkControllerGet({
+			const { data, error } = await movieBookmarksControllerGet({
 				path: {
 					movie_id: movieId,
 				},

@@ -4,8 +4,8 @@ import { Transform, Type } from 'class-transformer';
 import { LogMovieDto } from './log-movie.dto';
 import { UserSummaryDto } from '../../../users/dto/users.dto';
 
-@ApiSchema({ name: 'GetFollowingLogsQuery' })
-export class GetFollowingLogsQueryDto {
+@ApiSchema({ name: 'FollowingLogsQuery' })
+export class FollowingLogsQueryDto {
   @ApiPropertyOptional({
     description: 'Filter logs to only include those with a rating (useful for charts)',
     example: true,

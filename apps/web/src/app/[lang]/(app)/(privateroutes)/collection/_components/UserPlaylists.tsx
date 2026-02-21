@@ -51,7 +51,6 @@ export function UserPlaylists({
             ref={(i === playlists.pages?.length - 1) && (index === page?.data.length - 1) ? ref : undefined }
             key={playlist?.id}
             playlist={playlist}
-            owner={user ? { username: user.username } : undefined}
             showItemCount={true}
             />
           ))

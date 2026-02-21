@@ -2,7 +2,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils";
 import { Card } from "../ui/card";
-import { UserActivityMovie } from "@recomendapp/types";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Link, useRouter } from "@/lib/i18n/navigation";
 import { TooltipBox } from "../Box/TooltipBox";
@@ -17,14 +16,17 @@ import ButtonUserActivityMovieWatch from "../buttons/ButtonUserActivityMovieWatc
 import ButtonUserWatchlistMovie from "../buttons/ButtonUserWatchlistMovie";
 import { ContextMenuMovie } from "../ContextMenu/ContextMenuMovie";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
-import { Movie, MovieCompact, PersonCompact } from "@packages/api-js";
+import { LogMovie, LogMovieWithMovie, Movie, MovieCompact, PersonCompact, UserSummary } from "@packages/api-js";
 
 interface CardMovieProps
 	extends React.ComponentProps<typeof Card> {
 		variant?: "default" | "poster" | "row";
 		movie: Movie | MovieCompact;
-		activity?: UserActivityMovie;
-		profileActivity?: UserActivityMovie;
+		activity?: LogMovie;
+		profile?: {
+			log: Omit<LogMovieWithMovie, "movie">;
+			user: UserSummary;
+		}
 		linked?: boolean;
 		posterClassName?: string;
 		disableActions?: boolean;
@@ -35,9 +37,8 @@ interface CardMovieProps
 const CardMovieDefault = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardMovieProps, "variant">
->(({ className, movie, activity, profileActivity, children, linked, showRating, posterClassName, ...props }, ref) => {
+>(({ className, movie, activity, profile, children, linked, showRating, posterClassName, ...props }, ref) => {
 	return (
-	// <WithLink href={movie.url ?? undefined}>
 		<Card
 			ref={ref}
 			className={cn(
@@ -64,7 +65,6 @@ const CardMovieDefault = React.forwardRef<
 				{children}
 			</div>
 		</Card>
-	// </WithLink>
 	);
 });
 CardMovieDefault.displayName = "CardMovieDefault";
@@ -72,7 +72,7 @@ CardMovieDefault.displayName = "CardMovieDefault";
 const CardMoviePoster = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardMovieProps, "variant">
->(({ className, movie, activity, profileActivity, linked, disableActions, showRating, children, ...props }, ref) => {
+>(({ className, movie, activity, profile, linked, disableActions, showRating, children, ...props }, ref) => {
 	const { device } = useUI();
 	const [isHovered, setIsHovered] = React.useState(false);
 	return (
@@ -98,9 +98,9 @@ const CardMoviePoster = React.forwardRef<
 				unoptimized
 				/>
 				{(movie.voteAverage
-				|| profileActivity?.rating
-				|| profileActivity?.is_liked
-				|| profileActivity?.review
+				|| profile?.log?.rating
+				|| profile?.log?.isLiked
+				|| profile?.log?.isReviewed
 				) ? (
 					<div className='absolute top-1 right-1 flex flex-col gap-1'>
 						{movie.voteAverage ?
@@ -108,12 +108,12 @@ const CardMoviePoster = React.forwardRef<
 						disableTooltip
 						rating={movie.voteAverage}
 						/> : null}
-						{(profileActivity?.is_liked
-						|| profileActivity?.rating
-						|| profileActivity?.review) ? (
+						{(profile?.log?.isLiked
+						|| profile?.log?.rating
+						|| profile?.log?.isReviewed) ? (
 						<IconMediaRating
 						disableTooltip
-						rating={profileActivity.rating}
+						rating={profile?.log?.rating}
 						variant="profile"
 						/>) : null}
 					</div>
@@ -137,7 +137,7 @@ CardMoviePoster.displayName = "CardMoviePoster";
 const CardMovieRow = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardMovieProps, "variant">
->(({ className, posterClassName, movie, activity, profileActivity, hideMediaType, linked, showRating, children, ...props }, ref) => {
+>(({ className, posterClassName, movie, activity, profile, hideMediaType, linked, showRating, children, ...props }, ref) => {
 	return (
 		<Card
 			ref={ref}
@@ -168,21 +168,21 @@ const CardMovieRow = React.forwardRef<
 						>
 							{movie.title}
 						</WithLink>
-						{profileActivity?.rating && (
+						{profile?.log.rating && (
 							<WithLink
-							href={linked ? `/@${profileActivity?.user?.username}/film/${movie.slug ?? movie.id}` : undefined}
+							href={linked ? `/@${profile?.user?.username}/film/${movie.slug ?? movie.id}` : undefined}
 							className="pointer-events-auto"
 							onClick={linked ? (e) => e.stopPropagation() : undefined}
 							>
 								<IconMediaRating
-								rating={profileActivity.rating}
+								rating={profile?.log.rating}
 								className="inline-flex"
 								/>
 							</WithLink>
 						)}
-						{profileActivity?.is_liked && (
+						{profile?.log.isLiked && (
 							<Link
-							href={`/@${profileActivity?.user?.username}/film/${movie.slug ?? movie.id}`}
+							href={`/@${profile?.user?.username}/film/${movie.slug ?? movie.id}`}
 							className="pointer-events-auto"
 							onClick={linked ? (e) => e.stopPropagation() : undefined}
 							>
@@ -192,9 +192,9 @@ const CardMovieRow = React.forwardRef<
 								/>
 							</Link>
 						)}
-						{profileActivity?.review && (
+						{profile?.log.isReviewed && (
 							<Link
-							href={`${movie.url}/review/${profileActivity.review.id}`}
+							href={`/@${profile?.user?.username}/film/${movie.slug ?? movie.id}`}
 							className="pointer-events-auto"
 							onClick={linked ? (e) => e.stopPropagation() : undefined}
 							>

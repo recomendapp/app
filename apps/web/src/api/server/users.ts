@@ -2,7 +2,7 @@
 
 import { getApi } from "@/lib/api/server";
 import { SupportedLocale } from "@libs/i18n/src";
-import { usersControllerGetProfile, usersMovieControllerGet } from "@packages/api-js";
+import { userMoviesControllerGet, usersControllerGetProfile } from "@packages/api-js";
 import { cache } from "react";
 
 export const getProfile = cache(async (username: string) => {
@@ -29,7 +29,7 @@ export const getUserMovie = cache(async ({
 	const client = await getApi({
 		locale,
 	});
-	const { data, error } = await usersMovieControllerGet({
+	const { data, error } = await userMoviesControllerGet({
 		path: {
 			user_id: userId,
 			movie_id: movieId,

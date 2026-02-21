@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional, ApiSchema, PickType } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional, ApiSchema, IntersectionType, PickType } from "@nestjs/swagger";
 import { IsNullable } from "../../../../common/decorators/is-nullable.decorator";
 import { REVIEW_RULES } from "../../../../config/validation-rules";
 import { Expose, Type } from "class-transformer";
@@ -6,6 +6,7 @@ import { IsBoolean, IsEnum, IsInt, IsNumber, IsOptional, IsString, Length, Match
 import { PaginatedResponseDto, PaginationQueryDto } from "../../../../common/dto/pagination.dto";
 import { SortOrder } from "../../../../common/dto/sort.dto";
 import { UserSummaryDto } from "../../../users/dto/users.dto";
+import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from "../../../../common/dto/cursor-pagination.dto";
 
 export enum ReviewMovieSortBy {
 	CREATED_AT = 'created_at',
@@ -112,20 +113,32 @@ export class ReviewMovieInputDto extends PickType(ReviewMovieDto, [
 	'isSpoiler',
 ] as const) {}
 
-@ApiSchema({ name: 'ListReviewMovie' })
-export class ListReviewMovieDto extends PaginatedResponseDto<ReviewMovieWithAuthorDto> {
+@ApiSchema({ name: 'ListReviewsMovie' })
+export class ListReviewsMovieDto extends PaginatedResponseDto<ReviewMovieWithAuthorDto> {
 	@ApiProperty({ type: () => [ReviewMovieWithAuthorDto] })
 	@Type(() => ReviewMovieWithAuthorDto)
 	data: ReviewMovieWithAuthorDto[];
 
-	constructor(partial: Partial<ListReviewMovieDto>) {
+	constructor(partial: Partial<ListReviewsMovieDto>) {
 		super(partial);
 		Object.assign(this, partial);
 	}
 }
 
-@ApiSchema({ name: 'GetReviewsMovieQuery' })
-export class GetReviewsMovieQueryDto extends PaginationQueryDto {
+@ApiSchema({ name: 'ListInfiniteReviewsMovie'})
+export class ListInfiniteReviewsMovieDto extends CursorPaginatedResponseDto<ReviewMovieWithAuthorDto> {
+  @ApiProperty({ type: () => [ReviewMovieWithAuthorDto] })
+  @Type(() => ReviewMovieWithAuthorDto)
+  data: ReviewMovieWithAuthorDto[];
+
+  constructor(partial: Partial<ListInfiniteReviewsMovieDto>) {
+	super(partial);
+	Object.assign(this, partial);
+  }
+}
+
+@ApiSchema({ name: 'BaseListReviewsMovieQuery' })
+class BaseListReviewsMovieQueryDto {
 	@ApiPropertyOptional({
 		description: 'Field to sort reviews by',
 		default: ReviewMovieSortBy.CREATED_AT,
@@ -146,3 +159,15 @@ export class GetReviewsMovieQueryDto extends PaginationQueryDto {
 	@IsEnum(SortOrder)
 	sort_order: SortOrder = SortOrder.DESC;
 }
+
+@ApiSchema({ name: 'ListReviewsMovieQuery' })
+export class ListReviewsMovieQueryDto extends IntersectionType(
+  BaseListReviewsMovieQueryDto,
+  PaginationQueryDto
+) {}
+
+@ApiSchema({ name: 'ListInfiniteReviewsMovieQuery' })
+export class ListInfiniteReviewsMovieQueryDto extends IntersectionType(
+  BaseListReviewsMovieQueryDto,
+  CursorPaginationQueryDto
+) {}

@@ -1,13 +1,14 @@
-import { ListBookmarks, tvSeriesBookmarkControllerDeleteMutation, tvSeriesBookmarkControllerSetMutation } from "@packages/api-js";
+import { ListInfiniteBookmarks, tvSeriesBookmarksControllerDeleteMutation, tvSeriesBookmarksControllerSetMutation } from "@packages/api-js";
 import { InfiniteData, useMutation, useQueryClient } from "@tanstack/react-query";
 import { tvSeriesBookmarkOptions } from "./tvSeriesOptions";
-import { userBookmarksOptions } from "../users";
+import { userBookmarksInfiniteOptions, userBookmarksOptions, userKeys } from "../users";
+import { removeFromInfiniteCache, removeFromPaginatedCache } from "../utils";
 
 /* -------------------------------- Bookmarks ------------------------------- */
 export const useTvSeriesBookmarkSetMutation = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		...tvSeriesBookmarkControllerSetMutation(),
+		...tvSeriesBookmarksControllerSetMutation(),
 		onSuccess: (data) => {
 			queryClient.setQueryData(tvSeriesBookmarkOptions({
 				userId: data.userId,
@@ -15,9 +16,9 @@ export const useTvSeriesBookmarkSetMutation = () => {
 			}).queryKey, data);
 
 			queryClient.invalidateQueries({
-				queryKey: userBookmarksOptions({
+				queryKey: userKeys.bookmarks({
 					userId: data.userId,
-				}).queryKey,
+				}),
 			});
 		}
 	});
@@ -26,24 +27,22 @@ export const useTvSeriesBookmarkSetMutation = () => {
 export const useTvSeriesBookmarkDeleteMutation = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		...tvSeriesBookmarkControllerDeleteMutation(),
+		...tvSeriesBookmarksControllerDeleteMutation(),
 		onSuccess: (data) => {
 			queryClient.setQueryData(tvSeriesBookmarkOptions({
 				userId: data.userId,
 				tvSeriesId: data.mediaId,
 			}).queryKey, null);
 
+			removeFromPaginatedCache(
+				queryClient,
+				userBookmarksOptions({ userId: data.userId }).queryKey,
+				data.id
+			);
 			queryClient.setQueriesData(
-				{ queryKey: userBookmarksOptions({ userId: data.userId }).queryKey },
-				(oldData: InfiniteData<ListBookmarks> | undefined) => {
-					if (!oldData || !oldData.pages) return oldData;
-					return {
-						...oldData,
-						pages: oldData.pages.map((page) => ({
-							...page,
-							data: page.data.filter((item) => !(item.mediaId === data.mediaId && item.type === 'tv_series' && item.status === 'active')),
-						}))
-					};
+				{ queryKey: userBookmarksInfiniteOptions({ userId: data.userId }).queryKey },
+				(oldData: InfiniteData<ListInfiniteBookmarks> | undefined) => {
+					return removeFromInfiniteCache(oldData, data.id);
 				}
 			);
 		}
