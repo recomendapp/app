@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { useModal } from "@/context/modal-context";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { ModalUserRecoSend } from "../Modals/recos/ModalUserRecoSend";
+import { ModalRecoSend } from "../Modals/recos/ModalRecoSend";
 
 interface ButtonUserRecoSendProps
 	extends React.ComponentProps<typeof Button> {
@@ -30,7 +30,7 @@ const ButtonUserRecoSend = React.forwardRef<
 
 	const handleClick = React.useCallback((e: React.MouseEvent) => {
 		stopPropagation && e.stopPropagation();
-		openModal(ModalUserRecoSend, {
+		openModal(ModalRecoSend, {
 			mediaId,
 			mediaType,
 			mediaTitle,

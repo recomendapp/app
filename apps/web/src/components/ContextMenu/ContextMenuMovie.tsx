@@ -12,7 +12,7 @@ import { createShareController } from "../ShareController/ShareController";
 import { ShareControllerMovie } from "../ShareController/ShareControllerMovie";
 import { ModalPlaylistMovieAdd } from "../Modals/playlists/ModalPlaylistMovieAdd";
 import { Movie, MovieCompact } from "@packages/api-js";
-import { ModalUserRecoSend } from "../Modals/recos/ModalUserRecoSend";
+import { ModalRecoSend } from "../Modals/recos/ModalRecoSend";
 
 interface Item {
 	icon: React.ElementType;
@@ -53,7 +53,7 @@ export const ContextMenuMovie = ({
 				},
 				{
 					icon: Icons.send,
-					onClick: () => openModal(ModalUserRecoSend, { mediaId: movie.id, mediaTitle: movie.title!, mediaType: 'movie' }),
+					onClick: () => openModal(ModalRecoSend, { mediaId: movie.id, mediaTitle: movie.title!, mediaType: 'movie' }),
 					label: upperFirst(t('common.messages.send_to_friend')),
 				}
 			] : []),

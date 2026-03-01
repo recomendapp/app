@@ -33,7 +33,7 @@ interface ModalUserRecoSendProps extends ModalType {
 	mediaTitle?: string | null;
 }
 
-export const ModalUserRecoSend = ({
+export const ModalRecoSend = ({
 	mediaId,
 	mediaType,
 	mediaTitle,

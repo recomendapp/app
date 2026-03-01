@@ -24,7 +24,7 @@ import { useCallback, useMemo } from "react";
 import { useUserBookmarkDeleteByMediaMutation } from "@libs/query-client";
 import { BookmarkWithMedia } from "./types";
 import { getMediaDetails } from "@/utils/get-media-details";
-import { ModalUserRecoSend } from "@/components/Modals/recos/ModalUserRecoSend";
+import { ModalRecoSend } from "@/components/Modals/recos/ModalRecoSend";
 
 interface DataTableRowActionsProps {
   table: Table<BookmarkWithMedia>;
@@ -91,7 +91,7 @@ export function DataTableRowActions({
 
         <DropdownMenuContent align="end" className="w-40">
           <DropdownMenuItem
-          onClick={() => openModal(ModalUserRecoSend, { mediaId: data.mediaId!, mediaTitle: data.media?.title!, mediaType: data.type })}
+          onClick={() => openModal(ModalRecoSend, { mediaId: data.mediaId!, mediaTitle: data.media?.title!, mediaType: data.type })}
           >
             <Icons.send className='w-4' />
             {upperFirst(t('common.messages.send_to_friend'))}

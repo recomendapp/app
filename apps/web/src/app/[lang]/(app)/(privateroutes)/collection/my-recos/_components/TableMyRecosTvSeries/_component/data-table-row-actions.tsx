@@ -24,7 +24,7 @@ import { ModalRecoSenders } from "@/components/Modals/recos/ModalRecoSenders";
 import { ShareControllerTvSeries } from "@/components/ShareController/ShareControllerTvSeries";
 import { useUserRecosTvSeriesCompleteMutation, useUserRecosTvSeriesDeleteMutation } from "@/api/client/mutations/userMutations";
 import { useCallback } from "react";
-import { ModalUserRecoSend } from "@/components/Modals/recos/ModalUserRecoSend";
+import { ModalRecoSend } from "@/components/Modals/recos/ModalRecoSend";
 
 interface DataTableRowActionsProps {
   table: Table<UserRecosTvSeriesAggregated>;
@@ -109,7 +109,7 @@ export function DataTableRowActions({
             {upperFirst(t('common.messages.complete'))}
           </DropdownMenuItem>
           <DropdownMenuItem
-          onClick={() => openModal(ModalUserRecoSend, { mediaId: data.tv_series_id!, mediaType: 'tv_series', mediaTitle: data.tv_series?.name! })}
+          onClick={() => openModal(ModalRecoSend, { mediaId: data.tv_series_id!, mediaType: 'tv_series', mediaTitle: data.tv_series?.name! })}
           >
             <Icons.send className='w-4' />
             {upperFirst(t('common.messages.send_to_friend'))}

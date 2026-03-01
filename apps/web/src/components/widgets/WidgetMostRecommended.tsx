@@ -31,7 +31,7 @@ import { ContextMenuMovie } from "../ContextMenu/ContextMenuMovie";
 import { ContextMenuTvSeries } from "../ContextMenu/ContextMenuTvSeries";
 import { useQuery } from "@tanstack/react-query";
 import { useWidgetMostRecommendedOptions } from "@/api/client/options/widgetOptions";
-import { ModalUserRecoSend } from "../Modals/recos/ModalUserRecoSend";
+import { ModalRecoSend } from "../Modals/recos/ModalRecoSend";
 
 
 interface WidgetMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -115,7 +115,7 @@ const Item = ({
 	}, [item]);
 	const handleReco = useCallback(() => {
 		if (item.media) {
-			openModal(ModalUserRecoSend, {
+			openModal(ModalRecoSend, {
 				mediaId: item.media_id!,
 				mediaTitle: details?.title ?? '',
 				mediaType: item.type,

@@ -7,10 +7,12 @@ import { TvSeriesCompactDto } from '../../tv-series/dto/tv-series.dto';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../common/dto/pagination.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../common/dto/cursor-pagination.dto';
+import { UserSummaryDto } from '../../users/dto/users.dto';
 
 export enum RecoSortBy {
-  CREATED_AT = 'created_at',
-  UPDATED_AT = 'updated_at',
+  FIRST_SEND_AT = 'first_send_at',
+  LAST_SEND_AT = 'last_send_at',
+  SENDER_COUNT = 'sender_count',
   RANDOM = 'random',
 }
 
@@ -85,9 +87,43 @@ export class RecoDto {
   }
 }
 
+@ApiSchema({ name: 'RecoSender' })
+export class RecoSenderDto {
+  @ApiProperty({ example: '123456' })
+  @Expose()
+  @IsInt()
+  recoId: number;
+
+  @ApiProperty({ type: () => UserSummaryDto })
+  @Expose()
+  @Type(() => UserSummaryDto)
+  user: UserSummaryDto;
+
+  @ApiProperty({ example: 'Check this out!', nullable: true })
+  @Expose()
+  comment: string | null;
+
+  @ApiProperty({ example: '2024-01-30T12:00:00Z' })
+  @Expose()
+  createdAt: string;
+}
+
+@ApiSchema({ name: 'RecoGrouped' })
+export class RecoGroupedDto extends PickType(RecoDto, ['mediaId', 'type'] as const) {
+
+  @ApiProperty({ type: () => [RecoSenderDto] })
+  @Expose()
+  @Type(() => RecoSenderDto)
+  senders: RecoSenderDto[];
+  
+  @ApiProperty({ example: '2024-01-30T12:00:00Z' })
+  @Expose()
+  latestCreatedAt: string;
+}
+
 /* ---------------------------------- Types --------------------------------- */
 @ApiSchema({ name: 'RecoWithMovie' })
-export class RecoWithMovieDto extends RecoDto {
+export class RecoWithMovieDto extends RecoGroupedDto {
   @ApiProperty({ enum: ['movie'] as const })
   @Expose()
   type: 'movie';
@@ -100,7 +136,7 @@ export class RecoWithMovieDto extends RecoDto {
 }
 
 @ApiSchema({ name: 'RecoWithTvSeries' })
-export class RecoWithTvSeriesDto extends RecoDto {
+export class RecoWithTvSeriesDto extends RecoGroupedDto {
   @ApiProperty({ enum: ['tv_series'] as const })
   @Expose()
   type: 'tv_series';
@@ -156,13 +192,13 @@ export class BaseListRecosQueryDto {
 
     @ApiPropertyOptional({
         description: 'Field to sort recos by',
-        default: RecoSortBy.CREATED_AT,
-        example: RecoSortBy.CREATED_AT,
+        default: RecoSortBy.FIRST_SEND_AT,
+        example: RecoSortBy.FIRST_SEND_AT,
         enum: RecoSortBy,
     })
     @IsOptional()
     @IsEnum(RecoSortBy)
-    sort_by: RecoSortBy = RecoSortBy.CREATED_AT;
+    sort_by: RecoSortBy = RecoSortBy.FIRST_SEND_AT;
 
     @ApiPropertyOptional({
         description: 'Sort order',
@@ -263,3 +299,4 @@ export class ListInfiniteRecosDto extends CursorPaginatedResponseDto<RecoWithMed
     Object.assign(this, partial);
   }
 }
+

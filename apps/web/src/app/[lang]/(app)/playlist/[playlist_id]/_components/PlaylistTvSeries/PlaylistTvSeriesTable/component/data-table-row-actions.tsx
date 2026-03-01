@@ -26,7 +26,7 @@ import ModalPlaylistTvSeriesComment from "@/components/Modals/playlists/ModalPla
 import { ShareControllerTvSeries } from "@/components/ShareController/ShareControllerTvSeries";
 import { useQuery } from "@tanstack/react-query";
 import { usePlaylistIsAllowedToEditOptions } from "@/api/client/options/playlistOptions";
-import { ModalUserRecoSend } from "@/components/Modals/recos/ModalUserRecoSend";
+import { ModalRecoSend } from "@/components/Modals/recos/ModalRecoSend";
 
 interface DataTableRowActionsProps {
   table: Table<PlaylistItemTvSeries>;
@@ -93,7 +93,7 @@ export function DataTableRowActions({
             {upperFirst(t('common.messages.add_to_playlist'))}
           </DropdownMenuItem>
           <DropdownMenuItem
-          onClick={() => openModal(ModalUserRecoSend, { mediaId: data.tv_series_id!, mediaType: 'tv_series', mediaTitle: data.tv_series?.name! })}
+          onClick={() => openModal(ModalRecoSend, { mediaId: data.tv_series_id!, mediaType: 'tv_series', mediaTitle: data.tv_series?.name! })}
           >
             <Icons.send className='w-4' />
             {upperFirst(t('common.messages.send_to_friend'))}

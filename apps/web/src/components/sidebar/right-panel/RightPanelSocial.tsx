@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserAvatar } from "@/components/User/UserAvatar";
 import { Icons } from "@/config/icons";
 import { useAuth } from "@/context/auth-context";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { createRightPanel } from "./RightPanelUtils";
 import Fuse from "fuse.js";
@@ -14,6 +14,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { userFollowingInfiniteOptions, userFollowRequestsInfiniteOptions, useUserAcceptFollowMutation, useUserDeclineFollowMutation } from "@libs/query-client";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
+import { useInView } from "react-intersection-observer";
 
 export const RightPanelSocial = () => createRightPanel({
 	title: 'Social',
@@ -41,11 +42,15 @@ const RightPanelSocialContent = () => {
 
 const RightPanelSocialFollows = () => {
 	const { user } = useAuth();
+	const t = useTranslations();
+	const { ref, inView } = useInView();
 	const [search, setSearch] = useState('');
 	const {
 		data: followees,
 		isLoading,
-		isError,
+		isFetching,
+		fetchNextPage,
+		hasNextPage,
 	} = useInfiniteQuery(userFollowingInfiniteOptions({
 		profileId: user?.id,
 	}));
@@ -66,6 +71,10 @@ const RightPanelSocialFollows = () => {
 		return fuse.search(search).map(({ item }) => item);
 	}, [followees, search, fuse]);
 
+	useEffect(() => {
+		if (inView && hasNextPage) fetchNextPage();
+	}, [inView, hasNextPage, fetchNextPage]);
+
 	if (isLoading) {
 		return <Icons.loader className='w-8 h-8 mx-auto' />
 	}
@@ -73,14 +82,24 @@ const RightPanelSocialFollows = () => {
 	return (
 		<>
 			<Input placeholder="Rechercher" value={search} onChange={(e) => setSearch(e.target.value)} />
-			{results?.length ?
-				results.map((user, i) => (
+			{results?.length ? (
+			<>
+				{results.map((user, i) => (
 					<CardUser key={i} user={user} className="h-14"/>
-				))
+				))}
+				{isFetching ? (
+					<div className="flex items-center justify-center">
+						<Icons.loader />
+					</div>
+				) : (
+					<div ref={ref} />
+				)}
+			</>
+			)
 			: search ? (
 				<div></div>
 			) : (
-				<div className='text-center text-muted-foreground'>Aucun suivi</div>
+				<div className='text-center text-muted-foreground'>{upperFirst(t('common.messages.no_results'))}</div>
 			)}
 		</>
 	)
@@ -89,10 +108,13 @@ const RightPanelSocialFollows = () => {
 const RightPanelSocialRequests = () => {
 	const { user } = useAuth();
 	const t = useTranslations();
+	const { ref, inView } = useInView();
 	const {
 		data: requests,
 		isLoading,
 		isError,
+		fetchNextPage,
+		hasNextPage,
 	} = useInfiniteQuery(userFollowRequestsInfiniteOptions({
 		userId: user?.id,
 	}));
@@ -131,6 +153,10 @@ const RightPanelSocialRequests = () => {
 		});
 	}, [declineRequest]);
 
+	useEffect(() => {
+		if (inView && hasNextPage) fetchNextPage();
+	}, [inView, hasNextPage, fetchNextPage]);
+
 	return (
 		<>
 			{flattenedRequests.length ? (
@@ -153,6 +179,13 @@ const RightPanelSocialRequests = () => {
 							</div>
 						</Card>
 					))}
+					{isFetching ? (
+						<div className="flex items-center justify-center">
+							<Icons.loader />
+						</div>
+					) : (
+						<div ref={ref} />
+					)}
 				</>
 			) : (isLoading || requests === undefined) ? (
 				<Icons.loader className='w-8 h-8 mx-auto' />

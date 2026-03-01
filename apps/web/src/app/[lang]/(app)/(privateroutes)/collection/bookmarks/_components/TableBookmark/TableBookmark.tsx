@@ -5,8 +5,6 @@ import * as React from 'react';
 import {
 	ColumnFiltersState,
 	RowData,
-	SortingState,
-	VisibilityState,
 	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
@@ -28,8 +26,6 @@ import { upperFirst } from 'lodash';
 import { cn } from '@/lib/utils';
 import { TableToolbar } from '@/components/tables/TableToolbar';import { BookmarksHeader } from '../BookmarksHeader';
 import { BookmarkWithMedia } from './_component/types';
-import { useInView } from 'react-intersection-observer';
-import { Icons } from '@/config/icons';
 import { useBookmarkStore } from '@/stores/useBookmarkStore';
 import { BookmarkWithMovie, BookmarkWithTvSeries } from '@packages/api-js';
 

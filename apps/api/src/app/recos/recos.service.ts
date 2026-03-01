@@ -1,9 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { aliasedTable, and, eq, inArray, isNull, sql } from 'drizzle-orm';
 import { User } from '../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
 import { RecoDto, RecoSendDto, RecoSendResponseDto, RecoType } from './dto/recos.dto';
-import { follow, logMovie, logTvSeries, reco } from '@libs/db/schemas';
+import { follow, logMovie, logTvSeries, reco, recoTypeEnum } from '@libs/db/schemas';
 import { DbTransaction } from '@libs/db';
 import { NotifyClient } from '@shared/notify';
 
@@ -21,7 +21,7 @@ export class RecosService {
     dto
   }: {
     user: User;
-    type: RecoType;
+    type: typeof recoTypeEnum.enumValues[number];
     mediaId: number;
     dto: RecoSendDto;
   }): Promise<RecoSendResponseDto> {
@@ -116,6 +116,89 @@ export class RecosService {
     };
   }
 
+  async deleteByMedia({
+    user,
+    type,
+    mediaId,
+  }: {
+    user: User;
+    type: RecoType;
+    mediaId: number;
+  }): Promise<RecoDto[]> {
+    const mediaCondition = type === RecoType.MOVIE 
+      ? eq(reco.movieId, mediaId) 
+      : eq(reco.tvSeriesId, mediaId);
+
+    const updatedRecos = await this.db
+      .update(reco)
+      .set({ status: 'deleted' })
+      .where(
+        and(
+          eq(reco.type, type),
+          mediaCondition,
+          eq(reco.userId, user.id),
+          eq(reco.status, 'active')
+        )
+      )
+      .returning();
+
+    return updatedRecos.map(({ movieId, tvSeriesId, ...rest }) => ({
+      ...rest,
+      mediaId: movieId ?? tvSeriesId,
+    }));
+  }
+
+  async deleteById({
+    id,
+    user,
+  }: {
+    id: number;
+    user: User;
+  }): Promise<RecoDto> {
+    const [existingReco] = await this.db
+      .select()
+      .from(reco)
+      .where(eq(reco.id, id))
+      .limit(1);
+
+    if (!existingReco) {
+      throw new NotFoundException(`Reco with ID ${id} not found.`);
+    }
+
+    const isSender = existingReco.senderId === user.id;
+    const isReceiver = existingReco.userId === user.id;
+
+    if (!isSender && !isReceiver) {
+      throw new ForbiddenException('You do not have permission to delete this reco.');
+    }
+
+    let resultReco: typeof reco.$inferSelect;
+
+    if (isSender) {
+      const [deletedReco] = await this.db
+        .delete(reco)
+        .where(eq(reco.id, id))
+        .returning();
+        
+      resultReco = deletedReco;
+    } else {
+      const [updatedReco] = await this.db
+        .update(reco)
+        .set({ status: 'deleted' })
+        .where(eq(reco.id, id))
+        .returning();
+        
+      resultReco = updatedReco;
+    }
+
+    const { movieId, tvSeriesId, ...rest } = resultReco;
+    
+    return {
+      ...rest,
+      mediaId: movieId ?? tvSeriesId,
+    };
+  }
+
   async complete({
     userId,
     type,
@@ -123,7 +206,7 @@ export class RecosService {
     tx,
   }: {
     userId: string;
-    type: RecoType;
+    type: typeof recoTypeEnum.enumValues[number];
     mediaId: number;
     tx?: DbTransaction;
   }): Promise<RecoDto[]> {

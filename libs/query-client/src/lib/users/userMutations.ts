@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { bookmarksControllerDeleteByMediaMutation, bookmarksControllerSetByMediaMutation, FollowRequest, ListInfiniteBookmarks, ListInfiniteFollowRequests, ListInfiniteRecoTargets, ListInfiniteUsers, ListPaginatedBookmarks, ListPaginatedFollowRequests, ListPaginatedRecoTargets, ListPaginatedUsers, personsControllerFollowMutation, personsControllerUnfollowMutation, playlistsControllerLikeMutation, playlistsControllerSaveMutation, playlistsControllerUnlikeMutation, playlistsControllerUnsaveMutation, recosControllerSendMutation, RecoTarget, userFollowControllerAcceptMutation, userFollowControllerDeclineMutation, userFollowControllerDeleteMutation, userFollowControllerSetMutation, userPushTokensControllerSetMutation, usersControllerUpdateMeMutation, UserSummary } from '@packages/api-js';
+import { bookmarksControllerDeleteByMediaMutation, bookmarksControllerSetByMediaMutation, FollowRequest, ListInfiniteBookmarks, ListInfiniteFollowRequests, ListInfiniteRecoTargets, ListInfiniteUsers, ListPaginatedBookmarks, ListPaginatedFollowRequests, ListPaginatedRecoTargets, ListPaginatedUsers, personsControllerFollowMutation, personsControllerUnfollowMutation, playlistsControllerLikeMutation, playlistsControllerSaveMutation, playlistsControllerUnlikeMutation, playlistsControllerUnsaveMutation, recosControllerDeleteByIdMutation, recosControllerDeleteByMediaMutation, recosControllerSendMutation, RecoTarget, userFollowControllerAcceptMutation, userFollowControllerDeclineMutation, userFollowControllerDeleteMutation, userFollowControllerSetMutation, userPushTokensControllerSetMutation, usersControllerUpdateMeMutation, UserSummary } from '@packages/api-js';
 import { userBookmarkByMediaOptions, userFollowersInfiniteOptions, userFollowersPaginatedOptions, userFollowingInfiniteOptions, userFollowingPaginatedOptions, userFollowOptions, userFollowRequestsInfiniteOptions, userFollowRequestsPaginatedOptions, userMeOptions, userPersonFollowOptions, userPlaylistLikeOptions, userPlaylistSavedOptions, userRecoSendAllOptions, userRecoSendInfiniteOptions, userRecoSendPaginatedOptions } from './userOptions';
 import { removeListItemFromAllCaches, updateListItemInAllCaches } from '../utils';
 import { userKeys } from './userKeys';
@@ -41,6 +41,23 @@ export const useUserRecoSendMutation = () => {
 				{ alreadySent: true },
 				(item) => data.sent.includes(item.id)
 			);
+		}
+	});
+}
+
+export const useUserRecoDeleteByMediaMutation = () => {
+	return useMutation({
+		...recosControllerDeleteByMediaMutation(),
+		onSuccess: (data) => {
+			// TODO: Remove reco from caches
+		}
+	});
+}
+export const useUserRecoDeleteByIdMutation = () => {
+	return useMutation({
+		...recosControllerDeleteByIdMutation(),
+		onSuccess: (data) => {
+			// TODO: Remove reco from caches
 		}
 	});
 }
@@ -250,7 +267,6 @@ export const useUserDeclineFollowMutation = () => {
 	return useMutation({
 		...userFollowControllerDeclineMutation(),
 		onSuccess: (data) => {
-			// TODO: invalidate follow requests
 			removeListItemFromAllCaches<
 				FollowRequest,
 				ListPaginatedFollowRequests,

@@ -12,7 +12,7 @@ import { createShareController } from "../ShareController/ShareController";
 import { ShareControllerTvSeries } from "../ShareController/ShareControllerTvSeries";
 import { ModalPlaylistTvSeriesAdd } from "../Modals/playlists/ModalPlaylistTvSeriesAdd";
 import { TvSeries, TvSeriesCompact } from "@packages/api-js";
-import { ModalUserRecoSend } from "../Modals/recos/ModalUserRecoSend";
+import { ModalRecoSend } from "../Modals/recos/ModalRecoSend";
 
 interface Item {
 	icon: React.ElementType;
@@ -53,7 +53,7 @@ export const ContextMenuTvSeries = ({
 				},
 				{
 					icon: Icons.send,
-					onClick: () => openModal(ModalUserRecoSend, { mediaId: tvSeries.id, mediaType: 'tv_series', mediaTitle: tvSeries.name }),
+					onClick: () => openModal(ModalRecoSend, { mediaId: tvSeries.id, mediaType: 'tv_series', mediaTitle: tvSeries.name }),
 					label: upperFirst(t('common.messages.send_to_friend')),
 				}
 			] : []),

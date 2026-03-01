@@ -410,7 +410,8 @@
       "grid": "{count, plural, one {grid} other {grids}}",
       "order_asc": "ascending order",
       "order_desc": "descending order",
-      "menu": "menu"
+      "menu": "menu",
+      "at_least_one_watched_date_required": "at least one watched date is required"
     },
     "form": {
       "email": {

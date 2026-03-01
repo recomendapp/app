@@ -24,7 +24,7 @@ import { useAuth } from "@/context/auth-context";
 import { ModalRecoSenders } from "@/components/Modals/recos/ModalRecoSenders";
 import { useUserRecosMovieCompleteMutation, useUserRecosMovieDeleteMutation } from "@/api/client/mutations/userMutations";
 import { useCallback } from "react";
-import { ModalUserRecoSend } from "@/components/Modals/recos/ModalUserRecoSend";
+import { ModalRecoSend } from "@/components/Modals/recos/ModalRecoSend";
 
 interface DataTableRowActionsProps {
   table: Table<UserRecosMovieAggregated>;
@@ -109,7 +109,7 @@ export function DataTableRowActions({
             {upperFirst(t('common.messages.complete'))}
           </DropdownMenuItem>
           <DropdownMenuItem
-          onClick={() => openModal(ModalUserRecoSend, { mediaId: data.movie_id!, mediaTitle: data.movie?.title!, mediaType: 'movie' })}
+          onClick={() => openModal(ModalRecoSend, { mediaId: data.movie_id!, mediaTitle: data.movie?.title!, mediaType: 'movie' })}
           >
             <Icons.send className='w-4' />
             {upperFirst(t('common.messages.send_to_friend'))}

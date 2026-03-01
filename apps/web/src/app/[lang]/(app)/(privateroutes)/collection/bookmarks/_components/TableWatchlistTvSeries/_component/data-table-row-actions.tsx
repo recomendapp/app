@@ -23,7 +23,7 @@ import { ModalUserWatchlistTvSeriesComment } from "@/components/Modals/watchlist
 import { ShareControllerTvSeries } from "@/components/ShareController/ShareControllerTvSeries";
 import { useCallback } from "react";
 import { useUserBookmarkDeleteByMediaMutation } from "@libs/query-client";
-import { ModalUserRecoSend } from "@/components/Modals/recos/ModalUserRecoSend";
+import { ModalRecoSend } from "@/components/Modals/recos/ModalRecoSend";
 
 interface DataTableRowActionsProps {
   table: Table<UserWatchlistTvSeries>;
@@ -74,7 +74,7 @@ export function DataTableRowActions({
 
         <DropdownMenuContent align="end" className="w-40">
           <DropdownMenuItem
-          onClick={() => openModal(ModalUserRecoSend, { mediaId: data.tv_series_id!, mediaType: 'tv_series', mediaTitle: data.tv_series?.name! })}
+          onClick={() => openModal(ModalRecoSend, { mediaId: data.tv_series_id!, mediaType: 'tv_series', mediaTitle: data.tv_series?.name! })}
           >
             <Icons.send className='w-4' />
             {upperFirst(t('common.messages.send_to_friend'))}

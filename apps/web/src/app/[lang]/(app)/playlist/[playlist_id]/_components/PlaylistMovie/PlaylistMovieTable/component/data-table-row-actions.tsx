@@ -26,7 +26,7 @@ import { usePlaylistMovieDeleteMutation } from "@/api/client/mutations/playlistM
 import ModaPlaylistMovieComment from "@/components/Modals/playlists/ModalPlaylistMovieComment";
 import { useQuery } from "@tanstack/react-query";
 import { usePlaylistIsAllowedToEditOptions } from "@/api/client/options/playlistOptions";
-import { ModalUserRecoSend } from "@/components/Modals/recos/ModalUserRecoSend";
+import { ModalRecoSend } from "@/components/Modals/recos/ModalRecoSend";
 
 interface DataTableRowActionsProps {
   table: Table<PlaylistItemMovie>;
@@ -93,7 +93,7 @@ export function DataTableRowActions({
             {upperFirst(t('common.messages.add_to_playlist'))}
           </DropdownMenuItem>
           <DropdownMenuItem
-          onClick={() => openModal(ModalUserRecoSend, { mediaId: data.movie_id, mediaTitle: data.movie?.title!, mediaType: 'movie' })}
+          onClick={() => openModal(ModalRecoSend, { mediaId: data.movie_id, mediaTitle: data.movie?.title!, mediaType: 'movie' })}
           >
             <Icons.send className='w-4' />
             {upperFirst(t('common.messages.send_to_friend'))}
