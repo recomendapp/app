@@ -3,7 +3,7 @@ import { and, asc, desc, eq, exists, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { follow, playlist, playlistMember } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
-import { ListPlaylistsQueryDto, ListPlaylistsDto, PlaylistSortBy, ListInfinitePlaylistsQueryDto, ListInfinitePlaylistsDto } from '../../playlists/dto/playlists.dto';
+import { ListPaginatedPlaylistsQueryDto, ListPaginatedPlaylistsDto, PlaylistSortBy, ListInfinitePlaylistsQueryDto, ListInfinitePlaylistsDto } from '../../playlists/dto/playlists.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 
@@ -78,15 +78,15 @@ export class UserPlaylistsService {
 
     return { whereClause, orderBy };
   }
-  async list({
+  async listPaginated({
     targetUserId,
     query,
     currentUser,
   }: {
     targetUserId: string,
-    query: ListPlaylistsQueryDto,
+    query: ListPaginatedPlaylistsQueryDto,
     currentUser: User | null
-  }): Promise<ListPlaylistsDto> {
+  }): Promise<ListPaginatedPlaylistsDto> {
     const { per_page, sort_order, sort_by, page } = query;
     const offset = (page - 1) * per_page;
 
@@ -156,7 +156,7 @@ export class UserPlaylistsService {
         }
 
         case PlaylistSortBy.UPDATED_AT: {
-          const updatedDate = new Date(cursorData.value as string);
+          const updatedDate = String(cursorData.value);
           cursorWhereClause = or(
             operator(playlist.updatedAt, updatedDate),
             and(
@@ -172,7 +172,7 @@ export class UserPlaylistsService {
 
         case PlaylistSortBy.CREATED_AT:
         default: {
-          const createdDate = new Date(cursorData.value as string);
+          const createdDate = String(cursorData.value);
           cursorWhereClause = or(
             operator(playlist.createdAt, createdDate),
             and(
@@ -212,11 +212,11 @@ export class UserPlaylistsService {
           cursorValue = lastItem.likesCount ?? 0;
           break;
         case PlaylistSortBy.UPDATED_AT:
-          cursorValue = lastItem.updatedAt.toISOString();
+          cursorValue = lastItem.updatedAt;
           break;
         case PlaylistSortBy.CREATED_AT:
         default:
-          cursorValue = lastItem.createdAt.toISOString();
+          cursorValue = lastItem.createdAt;
           break;
       }
 

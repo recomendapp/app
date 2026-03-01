@@ -20,11 +20,11 @@ import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import { useModal } from '@/context/modal-context';
 import { createShareController } from "@/components/ShareController/ShareController";
 import { useAuth } from "@/context/auth-context";
-import { ModalRecosSenders } from "@/components/Modals/recos/ModalRecosSenders";
+import { ModalRecoSenders } from "@/components/Modals/recos/ModalRecoSenders";
 import { ShareControllerTvSeries } from "@/components/ShareController/ShareControllerTvSeries";
-import { ModalUserRecosTvSeriesSend } from "@/components/Modals/recos/ModalUserRecosTvSeriesSend";
 import { useUserRecosTvSeriesCompleteMutation, useUserRecosTvSeriesDeleteMutation } from "@/api/client/mutations/userMutations";
 import { useCallback } from "react";
+import { ModalUserRecoSend } from "@/components/Modals/recos/ModalUserRecoSend";
 
 interface DataTableRowActionsProps {
   table: Table<UserRecosTvSeriesAggregated>;
@@ -109,7 +109,7 @@ export function DataTableRowActions({
             {upperFirst(t('common.messages.complete'))}
           </DropdownMenuItem>
           <DropdownMenuItem
-          onClick={() => openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: data.tv_series_id!, tvSeriesTitle: data.tv_series?.name! })}
+          onClick={() => openModal(ModalUserRecoSend, { mediaId: data.tv_series_id!, mediaType: 'tv_series', mediaTitle: data.tv_series?.name! })}
           >
             <Icons.send className='w-4' />
             {upperFirst(t('common.messages.send_to_friend'))}
@@ -123,7 +123,7 @@ export function DataTableRowActions({
           </DropdownMenuItem>
           {data?.senders?.length! > 0 && (
             <DropdownMenuItem
-              onClick={() => openModal(ModalRecosSenders, { comments: row.original?.senders })}
+              onClick={() => openModal(ModalRecoSenders, { comments: row.original?.senders })}
             >
               <Icons.comment className='w-4' />
               {upperFirst(t('common.messages.view_recommendation', { count: data?.senders?.length }))}

@@ -12,7 +12,7 @@ import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { ContextMenuWatchlistMovie } from "../ContextMenu/ContextMenuWatchlistMovie";
 import { useQuery } from "@tanstack/react-query";
-import { movieBookmarkOptions, useMovieBookmarkDeleteMutation, useMovieBookmarkSetMutation } from "@libs/query-client/src";
+import { userBookmarkByMediaOptions, useUserBookmarkDeleteByMediaMutation, useUserBookmarkSetByMediaMutation } from "@libs/query-client";
 
 interface ButtonUserWatchlistMovieProps
 	extends React.ComponentProps<typeof Button> {
@@ -32,21 +32,24 @@ const ButtonUserWatchlistMovie = React.forwardRef<
 		data: watchlist,
 		isLoading,
 		isError,
-	} = useQuery(movieBookmarkOptions({
-		movieId: movieId,
+	} = useQuery(userBookmarkByMediaOptions({
+		mediaId: movieId,
+		type: 'movie',
 		userId: user?.id,
 	}));
 
-	const { mutateAsync: addBookmark, isPending: isAddPending } = useMovieBookmarkSetMutation();
-	const { mutateAsync: deleteBookmark, isPending: isDeletePending } = useMovieBookmarkDeleteMutation();
+	const { mutateAsync: addBookmark, isPending: isAddPending } = useUserBookmarkSetByMediaMutation();
+	const { mutateAsync: deleteBookmark, isPending: isDeletePending } = useUserBookmarkDeleteByMediaMutation();
 
 	const handleWatchlist = React.useCallback(async (e: React.MouseEvent) => {
 		stopPropagation && e.stopPropagation();
 		if (watchlist) return;
 		await addBookmark({
 		  	path: {
-				movie_id: movieId,
+				media_id: movieId,
+				type: 'movie',
 			},
+			body: {}
 		}, {
 		  onError: () => {
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
@@ -59,9 +62,9 @@ const ButtonUserWatchlistMovie = React.forwardRef<
 		if (!watchlist) return;
 		await deleteBookmark({
 		  path: {
-			movie_id: movieId,
+			media_id: watchlist.mediaId,
+			type: watchlist.type,
 		  },
-		  body: {}
 		}, {
 		  onError: () => {
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));

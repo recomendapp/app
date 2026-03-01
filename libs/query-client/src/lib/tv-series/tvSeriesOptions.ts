@@ -1,4 +1,4 @@
-import { tvSeriesBookmarksControllerGet, tvSeriesControllerGet, tvSeriesControllerGetCasting, tvSeriesControllerGetSeasons, tvSeriesPlaylistsControllerList, TvSeriesPlaylistsControllerListData, tvSeriesPlaylistsControllerListInfinite, TvSeriesPlaylistsControllerListInfiniteData } from "@packages/api-js";
+import { tvSeriesControllerGet, tvSeriesControllerGetCasting, tvSeriesControllerGetSeasons, tvSeriesPlaylistsControllerListInfinite, TvSeriesPlaylistsControllerListInfiniteData, tvSeriesPlaylistsControllerListPaginated, TvSeriesPlaylistsControllerListPaginatedData } from "@packages/api-js";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { tvSeriesKeys } from "./tvSeriesKeys";
 
@@ -77,22 +77,22 @@ export const tvSeriesCastingOptions = ({
 } 
 
 /* -------------------------------- Playlists ------------------------------- */
-export const tvSeriesPlaylistsOptions = ({
+export const tvSeriesPlaylistsPaginatedOptions = ({
 	tvSeriesId,
 	filters,
 } : {
 	tvSeriesId: number;
-	filters?: NonNullable<TvSeriesPlaylistsControllerListData['query']>;
+	filters?: NonNullable<TvSeriesPlaylistsControllerListPaginatedData['query']>;
 }) => {
 	return queryOptions({
 		queryKey: tvSeriesKeys.playlists({
 			tvSeriesId: tvSeriesId,
-			infinite: false,
+			mode: 'paginated',
 			filters: filters,
 		}),
 		queryFn: async () => {
 			if (!tvSeriesId) throw new Error('TV Series ID is required');
-			const { data, error } = await tvSeriesPlaylistsControllerList({
+			const { data, error } = await tvSeriesPlaylistsControllerListPaginated({
 				path: {
 					tv_series_id: tvSeriesId,
 				},
@@ -116,7 +116,7 @@ export const tvSeriesPlaylistsInfiniteOptions = ({
 	return infiniteQueryOptions({
 		queryKey: tvSeriesKeys.playlists({
 			tvSeriesId: tvSeriesId,
-			infinite: true,
+			mode: 'infinite',
 			filters: filters,
 		}),
 		queryFn: async ({ pageParam }) => {
@@ -140,30 +140,5 @@ export const tvSeriesPlaylistsInfiniteOptions = ({
 		},
 		enabled: !!tvSeriesId,
 		staleTime: 1000 * 60 * 60 // 1 hour
-	});
-}
-
-/* -------------------------------- Bookmarks ------------------------------- */
-export const tvSeriesBookmarkOptions = ({
-	userId,
-	tvSeriesId,
-} : {
-	userId?: string;
-	tvSeriesId?: number;
-}) => {
-	return queryOptions({
-		queryKey: tvSeriesKeys.bookmark({ tvSeriesId: tvSeriesId! }),
-		queryFn: async () => {
-			if (!tvSeriesId) throw new Error('TV Series ID is required');
-			const { data, error } = await tvSeriesBookmarksControllerGet({
-				path: {
-					tv_series_id: tvSeriesId,
-				},
-			});
-			if (error) throw error;
-			if (data === undefined) throw new Error('No data');
-			return data;
-		},
-		enabled: !!userId && !!tvSeriesId,
 	});
 }

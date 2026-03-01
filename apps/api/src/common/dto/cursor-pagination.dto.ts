@@ -39,6 +39,13 @@ export class CursorPaginationMetaDto {
   })
   @Expose()
   next_cursor: string | null;
+
+  @ApiPropertyOptional({
+	description: 'Total number of results (only provided on the first page)',
+	example: 123,
+  })
+  @Expose()
+  total_results?: number;
 }
 
 @ApiSchema({ name: 'CursorPaginatedResponse' })

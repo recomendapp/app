@@ -3,9 +3,9 @@ import { and, asc, desc, eq, exists, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { follow, logMovie, profile, reviewMovie, tmdbMovieView } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
-import { ListInfiniteUserMovieWithMovieDto, ListUserMovieWithMovieDto, UserMovieWithUserMovieDto } from './dto/user-movie.dto';
+import { ListInfiniteUserMoviesWithMovieDto, ListPaginatedUserMoviesWithMovieDto, UserMovieWithUserMovieDto } from './dto/user-movie.dto';
 import { SupportedLocale } from '@libs/i18n';
-import { ListInfiniteLogsMovieQueryDto, ListLogsMovieQueryDto, LogMovieSortBy } from '../../movies/log/dto/log-movie.dto';
+import { ListInfiniteLogsMovieQueryDto, ListPaginatedLogsMovieQueryDto, LogMovieSortBy } from '../../movies/logs/dto/log-movie.dto';
 import { DbTransaction } from '@libs/db';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
@@ -69,12 +69,6 @@ export class UserMoviesService {
           eq(logMovie.movieId, movieId),
         ),
         with: {
-          watchedDates: {
-            columns: {
-              id: true,
-              watchedDate: true,
-            },
-          },
           review: true,
           user: {
             columns: {
@@ -202,17 +196,17 @@ export class UserMoviesService {
       orderBy 
     };
   }
-  async list({
+  async listPaginated({
     userId,
     query,
     currentUser,
     locale,
   }: {
     userId: string;
-    query: ListLogsMovieQueryDto;
+    query: ListPaginatedLogsMovieQueryDto;
     currentUser: User | null;
     locale: SupportedLocale;
-  }): Promise<ListUserMovieWithMovieDto> {
+  }): Promise<ListPaginatedUserMoviesWithMovieDto> {
     return await this.db.transaction(async (tx) => {
       const { per_page, page, sort_by, sort_order } = query;
       const offset = (page - 1) * per_page;
@@ -287,7 +281,7 @@ export class UserMoviesService {
     query: ListInfiniteLogsMovieQueryDto;
     currentUser: User | null;
     locale: SupportedLocale;
-  }): Promise<ListInfiniteUserMovieWithMovieDto> {
+  }): Promise<ListInfiniteUserMoviesWithMovieDto> {
     return await this.db.transaction(async (tx) => {
       const { per_page, sort_order, sort_by, cursor } = query;
 
@@ -319,7 +313,7 @@ export class UserMoviesService {
             break;
 
           case LogMovieSortBy.FIRST_WATCHED_AT: {
-            const firstWatchedDate = new Date(cursorData.value);
+            const firstWatchedDate = String(cursorData.value);
             cursorWhereClause = or(
               operator(logMovie.firstWatchedAt, firstWatchedDate),
               and(
@@ -335,7 +329,7 @@ export class UserMoviesService {
 
           case LogMovieSortBy.UPDATED_AT:
           default: {
-            const updatedDate = new Date(cursorData.value);
+            const updatedDate = String(cursorData.value);
             cursorWhereClause = or(
               operator(logMovie.updatedAt, updatedDate),
               and(
@@ -400,11 +394,11 @@ export class UserMoviesService {
             cursorValue = lastItem.rating ?? 0;
             break;
           case LogMovieSortBy.FIRST_WATCHED_AT:
-            cursorValue = lastItem.firstWatchedAt?.toISOString() ?? new Date(0).toISOString();
+            cursorValue = lastItem.firstWatchedAt ?? new Date(0).toISOString();
             break;
           case LogMovieSortBy.UPDATED_AT:
           default:
-            cursorValue = lastItem.updatedAt.toISOString();
+            cursorValue = lastItem.updatedAt;
             break;
         }
 

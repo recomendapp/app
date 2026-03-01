@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional, ApiSchema, IntersectionType, PartialType, PickType } from "@nestjs/swagger";
 import { USER_RULES } from '../../../config/validation-rules';
 import { Expose, Transform, Type } from "class-transformer";
-import { IsEnum, IsLocale, IsOptional, IsString, IsUrl, Length, Matches } from "class-validator";
+import { IsDateString, IsEnum, IsLocale, IsOptional, IsString, IsUrl, Length, Matches } from "class-validator";
 import { PaginatedResponseDto, PaginationQueryDto } from "../../../common/dto/pagination.dto";
 import { SortOrder } from "../../../common/dto/sort.dto";
 import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from "../../../common/dto/cursor-pagination.dto";
@@ -51,8 +51,8 @@ export class UserDto {
 		nullable: true,
 	})
 	@Expose()
-	@Type(() => Date)
-	usernameUpdatedAt?: Date | null;
+	@IsDateString()
+	usernameUpdatedAt?: string | null;
 
 	@ApiProperty({ example: 'loup@recomend.com' })
 	@Expose()
@@ -102,13 +102,13 @@ export class UserDto {
 	// Dates
 	@ApiProperty()
 	@Expose()
-	@Type(() => Date)
-	createdAt: Date;
+	@IsDateString()
+	createdAt: string;
 
 	@ApiProperty()
 	@Expose()
-	@Type(() => Date)
-	updatedAt: Date;
+	@IsDateString()
+	updatedAt: string;
 
 	// Counts
 	@ApiProperty({ description: 'The number of followers the user has' })
@@ -140,7 +140,7 @@ export class ProfileDto extends PickType(UserDto, ['id', 'name', 'username', 'av
 export class UpdateUserDto extends PartialType(PickType(UserDto, ['name', 'username', 'bio', 'isPrivate', 'language'] as const)) {}
 
 @ApiSchema({ name: 'BaseListUsersQuery' })
-class BaseListUsersQueryDto {
+export class BaseListUsersQueryDto {
 	@ApiPropertyOptional({
 		description: 'Field to sort followers by',
 		default: UserSortBy.CREATED_AT,
@@ -162,8 +162,8 @@ class BaseListUsersQueryDto {
 	sort_order: SortOrder = SortOrder.DESC;
 }
 
-@ApiSchema({ name: 'ListUsersQuery' })
-export class ListUsersQueryDto extends IntersectionType(
+@ApiSchema({ name: 'ListPaginatedUsersQuery' })
+export class ListPaginatedUsersQueryDto extends IntersectionType(
   BaseListUsersQueryDto,
   PaginationQueryDto
 ) {}
@@ -174,13 +174,13 @@ export class ListInfiniteUsersQueryDto extends IntersectionType(
   CursorPaginationQueryDto
 ) {}
 
-@ApiSchema({ name: 'ListUsers' })
-export class ListUsersDto extends PaginatedResponseDto<UserSummaryDto> {
+@ApiSchema({ name: 'ListPaginatedUsers' })
+export class ListPaginatedUsersDto extends PaginatedResponseDto<UserSummaryDto> {
 	@ApiProperty({ type: () => [UserSummaryDto] })
 	@Type(() => UserSummaryDto)
 	data: UserSummaryDto[];
 
-	constructor(partial: Partial<ListUsersDto>) {
+	constructor(partial: Partial<ListPaginatedUsersDto>) {
 		super(partial);
 		Object.assign(this, partial);
 	}

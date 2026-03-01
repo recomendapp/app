@@ -96,7 +96,7 @@ export const SidebarLeftRoutes = () => {
 			icon: <BookmarkIcon fill="#fff" className="w-2/5 h-2/5" />,
 			bgFrom: '#39BAED',
 			bgTo: '#32509e',
-			label: upperFirst(t('messages.watchlist')),
+			label: upperFirst(t('messages.for_later')),
 			active: pathname.startsWith('/collection/bookmarks'),
 			href: '/collection/bookmarks',
 		},

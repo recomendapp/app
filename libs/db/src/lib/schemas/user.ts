@@ -9,9 +9,10 @@ import {
   primaryKey,
   uuid,
   index,
+  unique,
 } from 'drizzle-orm/pg-core';
 import { relations, sql } from 'drizzle-orm';
-import { user } from './auth';
+import { session, user } from './auth';
 import { tmdbPerson } from './tmdb';
 
 // Profile
@@ -23,7 +24,6 @@ export const profile = pgTable(
       .references(() => user.id, { onDelete: 'cascade' }),
     bio: text('bio'),
     backgroundImage: text('background_image'),
-    language: text('language').default('fr-FR').notNull(),
     // States
     isPremium: boolean('is_premium').default(false).notNull(),
     isPrivate: boolean('is_private').default(false).notNull(),
@@ -61,7 +61,7 @@ export const follow = pgTable('follow', {
     .notNull()
     .references(() => user.id, { onDelete: 'cascade' }),
   status: followStatusEnum('status').default('accepted').notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
   primaryKey({ columns: [table.followerId, table.followingId] }),
   check('check_follow_not_self', sql`${table.followerId} <> ${table.followingId}`)
@@ -84,7 +84,7 @@ export const followPerson = pgTable('follow_person', {
   personId: bigint('person_id', { mode: 'number' })
     .notNull()
     .references(() => tmdbPerson.id, { onDelete: 'cascade' }),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
   primaryKey({ columns: [table.userId, table.personId] }),
   index('idx_follow_person_user_id').on(table.userId),
@@ -132,6 +132,36 @@ export const subscription = pgTable(
     index('idx_subscription_product_id').on(table.productId),
     index('idx_subscription_status').on(table.status),
     index('idx_subscription_user_id').on(table.userId),
+  ],
+);
+
+// Notifications
+export const pushProviderEnum = pgEnum('push_provider_enum', ['fcm', 'apns']);
+export const deviceTypeEnum = pgEnum('device_type_enum', ['web', 'ios', 'android']);
+export const pushToken = pgTable(
+  'push_token',
+  {
+    id: uuid().defaultRandom().primaryKey(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    sessionId: text('session_id')
+      .notNull()
+      .references(() => session.id, { onDelete: 'cascade' }),
+    provider: pushProviderEnum('provider').notNull(),
+    token: text('token').notNull(),
+    deviceType: deviceTypeEnum('device_type').notNull().default('web'),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' })
+      .$onUpdate(() => sql`now()`)
+      .notNull(),
+  },
+  (table) => [
+    index('idx_push_token_user_id').on(table.userId),
+    index('idx_push_token_session_id').on(table.sessionId),
+    unique('unique_session_provider').on(table.sessionId, table.provider),
   ],
 );
 

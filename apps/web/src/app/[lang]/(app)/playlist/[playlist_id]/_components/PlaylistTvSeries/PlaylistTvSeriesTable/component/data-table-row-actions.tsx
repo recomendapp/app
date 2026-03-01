@@ -21,12 +21,12 @@ import { useModal } from '@/context/modal-context';
 import { createShareController } from "@/components/ShareController/ShareController";
 import { useAuth } from "@/context/auth-context";
 import { ModalPlaylistTvSeriesAdd } from "@/components/Modals/playlists/ModalPlaylistTvSeriesAdd";
-import { ModalUserRecosTvSeriesSend } from "@/components/Modals/recos/ModalUserRecosTvSeriesSend";
 import { usePlaylistTvSeriesDeleteMutation } from "@/api/client/mutations/playlistMutations";
 import ModalPlaylistTvSeriesComment from "@/components/Modals/playlists/ModalPlaylistTvSeriesComment";
 import { ShareControllerTvSeries } from "@/components/ShareController/ShareControllerTvSeries";
 import { useQuery } from "@tanstack/react-query";
 import { usePlaylistIsAllowedToEditOptions } from "@/api/client/options/playlistOptions";
+import { ModalUserRecoSend } from "@/components/Modals/recos/ModalUserRecoSend";
 
 interface DataTableRowActionsProps {
   table: Table<PlaylistItemTvSeries>;
@@ -93,7 +93,7 @@ export function DataTableRowActions({
             {upperFirst(t('common.messages.add_to_playlist'))}
           </DropdownMenuItem>
           <DropdownMenuItem
-          onClick={() => openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: data.tv_series_id, tvSeriesTitle: data.tv_series?.name! })}
+          onClick={() => openModal(ModalUserRecoSend, { mediaId: data.tv_series_id!, mediaType: 'tv_series', mediaTitle: data.tv_series?.name! })}
           >
             <Icons.send className='w-4' />
             {upperFirst(t('common.messages.send_to_friend'))}

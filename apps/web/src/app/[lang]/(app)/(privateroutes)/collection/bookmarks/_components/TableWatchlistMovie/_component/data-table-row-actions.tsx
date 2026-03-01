@@ -20,10 +20,10 @@ import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import { useModal } from '@/context/modal-context';
 import { createShareController } from "@/components/ShareController/ShareController";
 import { ShareControllerMovie } from "@/components/ShareController/ShareControllerMovie";
-import { ModalUserRecosMovieSend } from "@/components/Modals/recos/ModalUserRecosMovieSend";
 import { ModalUserWatchlistMovieComment } from "@/components/Modals/watchlist/ModalUserWatchlistMovieComment";
 import { useCallback } from "react";
-import { useMovieBookmarkDeleteMutation } from "@libs/query-client/src";
+import { useUserBookmarkDeleteByMediaMutation } from "@libs/query-client";
+import { ModalUserRecoSend } from "@/components/Modals/recos/ModalUserRecoSend";
 
 interface DataTableRowActionsProps {
   table: Table<UserWatchlistMovie>;
@@ -40,13 +40,14 @@ export function DataTableRowActions({
 }: DataTableRowActionsProps) {
   const t = useTranslations();
   const { openModal, createConfirmModal } = useModal();
-  const { mutateAsync: deleteWatchlistMovie } = useMovieBookmarkDeleteMutation();
+  const { mutateAsync: deleteWatchlistMovie } = useUserBookmarkDeleteByMediaMutation();
 
   const handleUnwatchlist = useCallback(async () => {
     if (!data) return;
     await deleteWatchlistMovie({
       path: {
-        movie_id: data.movie_id,
+        media_id: data.id,
+        type: data.type,
       },
     }, {
       onSuccess: () => {
@@ -73,7 +74,7 @@ export function DataTableRowActions({
 
         <DropdownMenuContent align="end" className="w-40">
           <DropdownMenuItem
-          onClick={() => openModal(ModalUserRecosMovieSend, { movieId: data.movie_id!, movieTitle: data.movie?.title! })}
+          onClick={() => openModal(ModalUserRecoSend, { mediaId: data.movie_id!, mediaTitle: data.movie?.title!, mediaType: 'movie' })}
           >
             <Icons.send className='w-4' />
             {upperFirst(t('common.messages.send_to_friend'))}

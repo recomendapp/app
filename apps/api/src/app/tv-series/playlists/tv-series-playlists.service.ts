@@ -6,7 +6,7 @@ import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
-import { ListInfinitePlaylistsQueryDto, ListInfinitePlaylistsWithOwnerDto, ListPlaylistsQueryDto, ListPlaylistsWithOwnerDto, PlaylistSortBy } from '../../playlists/dto/playlists.dto';
+import { ListInfinitePlaylistsQueryDto, ListInfinitePlaylistsWithOwnerDto, ListPaginatedPlaylistsQueryDto, ListPaginatedPlaylistsWithOwnerDto, PlaylistSortBy } from '../../playlists/dto/playlists.dto';
 
 @Injectable()
 export class TvSeriesPlaylistsService {
@@ -84,15 +84,15 @@ export class TvSeriesPlaylistsService {
 
     return { whereClause, orderBy };
   }
-  async list({
+  async listPaginated({
     tvSeriesId,
     query,
     currentUser,
   }: {
     tvSeriesId: number;
-    query: ListPlaylistsQueryDto,
+    query: ListPaginatedPlaylistsQueryDto,
     currentUser: User | null;
-  }): Promise<ListPlaylistsWithOwnerDto> {
+  }): Promise<ListPaginatedPlaylistsWithOwnerDto> {
     return await this.db.transaction(async (tx) => {
       const { per_page, page, sort_by, sort_order } = query;
       const offset = (page - 1) * per_page;
@@ -187,7 +187,7 @@ export class TvSeriesPlaylistsService {
           }
 
           case PlaylistSortBy.UPDATED_AT: {
-            const updatedDate = new Date(cursorData.value as string);
+            const updatedDate = String(cursorData.value);
             cursorWhereClause = or(
               operator(playlist.updatedAt, updatedDate),
               and(
@@ -203,7 +203,7 @@ export class TvSeriesPlaylistsService {
 
           case PlaylistSortBy.CREATED_AT:
           default: {
-            const createdDate = new Date(cursorData.value as string);
+            const createdDate = String(cursorData.value);
             cursorWhereClause = or(
               operator(playlist.createdAt, createdDate),
               and(
@@ -255,11 +255,11 @@ export class TvSeriesPlaylistsService {
             cursorValue = lastItem.likesCount ?? 0;
             break;
           case PlaylistSortBy.UPDATED_AT:
-            cursorValue = lastItem.updatedAt.toISOString();
+            cursorValue = lastItem.updatedAt;
             break;
           case PlaylistSortBy.CREATED_AT:
           default:
-            cursorValue = lastItem.createdAt.toISOString();
+            cursorValue = lastItem.createdAt;
             break;
         }
 

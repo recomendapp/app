@@ -36,11 +36,11 @@ import ButtonUserActivityMovieRating from '@/components/buttons/ButtonUserActivi
 import ButtonUserActivityMovieWatch from '@/components/buttons/ButtonUserActivityMovieWatch';
 import ButtonUserActivityMovieWatchedDate from '@/components/buttons/ButtonUserActivityMovieWatchedDate';
 import { ContextMenuMovie } from '@/components/ContextMenu/ContextMenuMovie';
-import ButtonUserRecosMovieSend from '@/components/buttons/ButtonUserRecosMovieSend';
 import ButtonPlaylistMovieAdd from '@/components/buttons/ButtonPlaylistMovieAdd';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import ButtonFollowersAvgRatingMovie from '@/components/buttons/ButtonFollowersAvgRatingMovie';
 import { Genre, Movie, MovieTrailer } from '@packages/api-js';
+import ButtonUserRecoSend from '@/components/buttons/ButtonUserRecoSend';
 
 export const MovieHeader = ({
   movie,
@@ -129,7 +129,7 @@ export const MovieHeader = ({
           </div>
           <div className="flex gap-2 items-center">
             <ButtonPlaylistMovieAdd movieId={movie.id} movieTitle={movie.title} />
-            <ButtonUserRecosMovieSend movieId={movie.id} movieTitle={movie.title} />
+            <ButtonUserRecoSend mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
           </div>
         </div>
       </div>

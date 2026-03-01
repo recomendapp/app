@@ -1,7 +1,7 @@
 import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { PersonMoviesService } from './person-movies.service';
-import { ListInfinitePersonMoviesDto, ListInfinitePersonMoviesQueryDto, ListPersonMovieQueryDto, ListPersonMoviesDto, PersonMovieFacetsDto } from './dto/person-movie.dto';
+import { ListInfinitePersonMoviesDto, ListInfinitePersonMoviesQueryDto, ListPaginatedPersonMovieQueryDto, ListPaginatedPersonMoviesDto, PersonMovieFacetsDto } from './dto/person-movie.dto';
 import { CurrentLocale } from '../../../common/decorators/current-locale.decorator';
 import { SupportedLocale } from '@libs/i18n';
 
@@ -13,17 +13,17 @@ import { SupportedLocale } from '@libs/i18n';
 export class PersonMoviesController {
   constructor(private readonly movieService: PersonMoviesService) {}
 
-  @Get('movies')
+  @Get('movies/paginated')
   @ApiOkResponse({
     description: 'Get the list of movies for the person',
-    type: ListPersonMoviesDto,
+    type: ListPaginatedPersonMoviesDto,
   })
-  async list(
+  async listPaginated(
     @Param('person_id', ParseIntPipe) personId: number,
-    @Query() query: ListPersonMovieQueryDto,
+    @Query() query: ListPaginatedPersonMovieQueryDto,
     @CurrentLocale() locale: SupportedLocale,
-  ): Promise<ListPersonMoviesDto> {
-    return this.movieService.list({ personId, query, locale });
+  ): Promise<ListPaginatedPersonMoviesDto> {
+    return this.movieService.listPaginated({ personId, query, locale });
   }
 
   @Get('movies/infinite')

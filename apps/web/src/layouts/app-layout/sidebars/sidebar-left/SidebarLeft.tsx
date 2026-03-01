@@ -37,12 +37,17 @@ export const SidebarLeft = ({ ...props }: React.ComponentProps<typeof Sidebar>) 
 							<Link
 							href={"https://oneummah.org.uk/appeals/gaza-emergency-appeal/"}
 							target="_blank"
+							className="relative w-full h-full"
 							>
 								<ImageWithFallback
 								src="/assets/free-palestine-min.webp"
 								alt="Free Palestine"
-								width={80}
-								height={80}
+								fill
+								sizes={`
+									(max-width: 640px) 40px,
+									80px
+								`}
+								className="object-contain"
 								/>
 							</Link>
 						</SidebarMenuButton>

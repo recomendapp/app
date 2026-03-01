@@ -1,10 +1,9 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
-import { and, eq, sql, SQL } from 'drizzle-orm';
+import { eq, sql, SQL } from 'drizzle-orm';
 import { profile, user, follow } from '@libs/db/schemas';
 import { UserDto, UpdateUserDto, ProfileDto } from './dto/users.dto';
 import { User } from '../auth/auth.service';
-import { FollowDto } from './dto/user-follow.dto';
 import { plainToInstance } from 'class-transformer';
 import { isUUID } from 'class-validator';
 import { USER_RULES } from '../../config/validation-rules';
@@ -39,7 +38,7 @@ export class UsersService {
       username: fullUser.username,
       usernameUpdatedAt: fullUser.usernameUpdatedAt,
       bio: fullUser.profile.bio,
-      language: fullUser.profile.language,
+      language: fullUser.language,
       avatar: fullUser.image,
       backgroundImage: fullUser.profile.backgroundImage,
       isPremium: fullUser.profile.isPremium,
@@ -62,6 +61,10 @@ export class UsersService {
       shouldSyncSearch = true;
     }
 
+    if (dto.language !== undefined) {
+      userUpdates.language = dto.language;
+    }
+
     if (dto.username !== undefined && dto.username !== loggedUser.username) {
       if (loggedUser.usernameUpdatedAt) {
         const now = new Date();
@@ -72,14 +75,13 @@ export class UsersService {
         }
       }
       userUpdates.username = dto.username;
-      userUpdates.usernameUpdatedAt = new Date();
+      userUpdates.usernameUpdatedAt = new Date().toISOString();
       shouldSyncSearch = true;
     }
 
     const profileUpdates: Partial<typeof profile.$inferSelect> = {};
     if (dto.bio !== undefined) profileUpdates.bio = dto.bio;
     if (dto.isPrivate !== undefined) profileUpdates.isPrivate = dto.isPrivate;
-    if (dto.language !== undefined) profileUpdates.language = dto.language;
 
     if (avatar) {
       // TODO: upload avatar
@@ -158,7 +160,7 @@ export class UsersService {
         createdAt: user.createdAt,
         bio: profile.bio,
         backgroundImage: profile.backgroundImage,
-        language: profile.language,
+        language: user.language,
         isPremium: profile.isPremium,
         isPrivate: profile.isPrivate,
         followersCount: profile.followersCount,
@@ -178,106 +180,4 @@ export class UsersService {
       excludeExtraneousValues: true,
     });
   }
-
-  /* --------------------------------- Follows -------------------------------- */
-
-  async getFollowStatus(currentUserId: string, targetUserId: string): Promise<FollowDto | null> {
-    if (currentUserId === targetUserId) {
-      throw new BadRequestException('You cannot follow yourself');
-    }
-    const followRecord = await this.db.query.follow.findFirst({
-      where: and(
-        eq(follow.followerId, currentUserId),
-        eq(follow.followingId, targetUserId)
-      )
-    });
-
-    if (!followRecord) {
-      return null;
-    }
-
-    return plainToInstance(FollowDto, followRecord, {
-      excludeExtraneousValues: true,
-    });
-  }
-
-  async followUser(currentUserId: string, targetUserId: string): Promise<FollowDto> {
-    if (currentUserId === targetUserId) {
-      throw new BadRequestException('You cannot follow yourself');
-    }
-
-    return this.db.transaction(async (tx) => {
-      const [newFollow] = await tx
-        .insert(follow)
-        .select(
-          tx
-            .select({
-              followerId: sql`${currentUserId}::uuid`.as('follower_id'),
-              followingId: profile.id,
-              status: sql`
-                CASE 
-                  WHEN ${profile.isPrivate} THEN 'pending' 
-                  ELSE 'accepted' 
-                END::follow_status_enum
-              `.as('status'),
-              createdAt: sql`now()`.as('created_at'), 
-            })
-            .from(profile)
-            .where(eq(profile.id, targetUserId))
-        )
-        .onConflictDoNothing()
-        .returning();
-      if (newFollow) {
-        if (newFollow.status === 'accepted') {
-          // TODO:
-          // - Update followers_count and following_count in profile table
-          // - Send notification to the followed user
-        }
-        return plainToInstance(FollowDto, newFollow, {
-          excludeExtraneousValues: true,
-        });
-      } else {
-        const existingFollow = await tx.query.follow.findFirst({
-          where: and(
-            eq(follow.followerId, currentUserId),
-            eq(follow.followingId, targetUserId)
-          )
-        });
-        if (!existingFollow) {
-          throw new NotFoundException('User to follow not found');
-        }
-        return plainToInstance(FollowDto, existingFollow, {
-          excludeExtraneousValues: true,
-        });
-      }
-    });
-  }
-
-  async unfollowUser(currentUserId: string, targetUserId: string): Promise<FollowDto> {
-    if (currentUserId === targetUserId) {
-      throw new BadRequestException('You cannot unfollow yourself');
-    }
-  
-    const [deletedFollow] = await this.db
-      .delete(follow)
-      .where(
-        and(
-          eq(follow.followerId, currentUserId),
-          eq(follow.followingId, targetUserId)
-        )
-      )
-      .returning();
-
-    if (!deletedFollow) {
-      throw new NotFoundException('Follow relationship not found');
-    }
-
-    // TODO:
-    // - Update followers_count and following_count in profile table
-
-    return plainToInstance(FollowDto, deletedFollow, {
-      excludeExtraneousValues: true,
-    });
-  }
-  /* -------------------------------------------------------------------------- */
 }

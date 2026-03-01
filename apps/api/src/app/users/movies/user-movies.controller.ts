@@ -4,10 +4,10 @@ import { OptionalAuthGuard } from '../../auth/guards';
 import { CurrentOptionalUser } from '../../auth/decorators';
 import { User } from '../../auth/auth.service';
 import { UserMoviesService } from './user-movies.service';
-import { ListInfiniteUserMovieWithMovieDto, ListUserMovieWithMovieDto, UserMovieWithUserMovieDto } from './dto/user-movie.dto';
+import { ListInfiniteUserMoviesWithMovieDto, ListPaginatedUserMoviesWithMovieDto, UserMovieWithUserMovieDto } from './dto/user-movie.dto';
 import { CurrentLocale } from '../../../common/decorators/current-locale.decorator';
 import { SupportedLocale } from '@libs/i18n';
-import { ListInfiniteLogsMovieQueryDto, ListLogsMovieQueryDto } from '../../movies/log/dto/log-movie.dto';
+import { ListInfiniteLogsMovieQueryDto, ListPaginatedLogsMovieQueryDto } from '../../movies/logs/dto/log-movie.dto';
 
 @ApiTags('Users')
 @Controller({
@@ -43,19 +43,19 @@ export class UserMoviesController {
     });
   }
 
-  @Get('movies')
+  @Get('movies/paginated')
   @UseGuards(OptionalAuthGuard)
   @ApiOkResponse({
     description: 'Get the list of movie logs for the user',
-    type: ListUserMovieWithMovieDto,
+    type: ListPaginatedUserMoviesWithMovieDto,
   })
-  async list(
+  async listPaginated(
     @Param('user_id', ParseUUIDPipe) userId: string,
-    @Query() query: ListLogsMovieQueryDto,
+    @Query() query: ListPaginatedLogsMovieQueryDto,
     @CurrentOptionalUser() currentUser: User | null,
     @CurrentLocale() locale: SupportedLocale,
-  ): Promise<ListUserMovieWithMovieDto> {
-    return this.movieService.list({
+  ): Promise<ListPaginatedUserMoviesWithMovieDto> {
+    return this.movieService.listPaginated({
       userId,
       query,
       currentUser,
@@ -67,14 +67,14 @@ export class UserMoviesController {
   @UseGuards(OptionalAuthGuard)
   @ApiOkResponse({
     description: 'Get the list of movie logs for the user with cursor pagination',
-    type: ListInfiniteUserMovieWithMovieDto,
+    type: ListInfiniteUserMoviesWithMovieDto,
   })
   async listInfinite(
     @Param('user_id', ParseUUIDPipe) userId: string,
     @Query() query: ListInfiniteLogsMovieQueryDto,
     @CurrentOptionalUser() currentUser: User | null,
     @CurrentLocale() locale: SupportedLocale,
-  ): Promise<ListInfiniteUserMovieWithMovieDto> {
+  ): Promise<ListInfiniteUserMoviesWithMovieDto> {
     return this.movieService.listInfinite({
       userId,
       query,

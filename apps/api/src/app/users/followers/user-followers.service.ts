@@ -5,7 +5,7 @@ import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
-import { ListInfiniteUsersDto, ListInfiniteUsersQueryDto, ListUsersDto, ListUsersQueryDto, UserSortBy } from '../dto/users.dto';
+import { ListInfiniteUsersDto, ListInfiniteUsersQueryDto, ListPaginatedUsersDto, ListPaginatedUsersQueryDto, UserSortBy } from '../dto/users.dto';
 
 @Injectable()
 export class UserFollowersService {
@@ -71,15 +71,15 @@ export class UserFollowersService {
 
     return { whereClause, orderBy };
   }
-  async list({
+  async listPaginated({
     targetUserId,
     query,
     currentUser,
   }: {
     targetUserId: string,
-    query: ListUsersQueryDto,
+    query: ListPaginatedUsersQueryDto,
     currentUser: User | null
-  }): Promise<ListUsersDto> {
+  }): Promise<ListPaginatedUsersDto> {
     const { per_page, sort_order, sort_by, page } = query;
     const offset = (page - 1) * per_page;
 
@@ -172,7 +172,7 @@ export class UserFollowersService {
 
         case UserSortBy.CREATED_AT:
         default: {
-          const createdDate = new Date(cursorData.value);
+          const createdDate = String(cursorData.value);
           cursorWhereClause = or(
             operator(follow.createdAt, createdDate),
             and(
@@ -227,7 +227,7 @@ export class UserFollowersService {
           break;
         case UserSortBy.CREATED_AT:
         default:
-          cursorValue = lastItem.follow.createdAt.toISOString();
+          cursorValue = lastItem.follow.createdAt;
           break;
       }
 

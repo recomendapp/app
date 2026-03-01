@@ -1,10 +1,12 @@
+'use no memo';
+
 import {
   CaretSortIcon,
 } from '@radix-ui/react-icons';
 import { Column } from '@tanstack/react-table';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, ChevronUp, LucideIcon, Triangle } from 'lucide-react';
+import { ChevronDown, ChevronUp, LucideIcon } from 'lucide-react';
 
 interface TableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {

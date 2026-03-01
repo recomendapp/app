@@ -3,7 +3,7 @@
 import { getAnonApi } from "@/lib/api/server";
 import { cache } from "@/lib/utils/cache";
 import { SupportedLocale } from "@libs/i18n";
-import { moviesControllerGet, personMoviesControllerFacets, personMoviesControllerList, PersonMoviesControllerListData, PersonTvSeriesControllerListData, personsControllerGet, tvSeasonsControllerGet, tvSeriesControllerGet, personTvSeriesControllerList, personTvSeriesControllerFacets } from "@packages/api-js";
+import { moviesControllerGet, personMoviesControllerFacets, personsControllerGet, tvSeasonsControllerGet, tvSeriesControllerGet, personTvSeriesControllerFacets, PersonMoviesControllerListPaginatedData, personMoviesControllerListPaginated, PersonTvSeriesControllerListPaginatedData, personTvSeriesControllerListPaginated } from "@packages/api-js";
 import { notFound } from "next/navigation";
 
 const MEDIA_REVALIDATE_TIME = 60 * 60 * 24; // 24 hours
@@ -79,10 +79,10 @@ export const getPerson = cache(
 export const getPersonFilms = cache(
 	async (
 		personId: number,
-		filters: NonNullable<PersonMoviesControllerListData['query']>
+		filters: NonNullable<PersonMoviesControllerListPaginatedData['query']>
 	) => {
 		const client = await getAnonApi();
-		const { data, error } = await personMoviesControllerList({
+		const { data, error } = await personMoviesControllerListPaginated({
 			path: {
 				person_id: personId,
 			},
@@ -116,10 +116,10 @@ export const getPersonFilmsFacets = cache(
 export const getPersonTvSeries = cache(
 	async (
 		personId: number,
-		filters: NonNullable<PersonTvSeriesControllerListData['query']>
+		filters: NonNullable<PersonTvSeriesControllerListPaginatedData['query']>
 	) => {
 		const client = await getAnonApi();
-		const { data, error } = await personTvSeriesControllerList({
+		const { data, error } = await personTvSeriesControllerListPaginated({
 			path: {
 				person_id: personId,
 			},

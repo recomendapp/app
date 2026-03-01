@@ -1,5 +1,5 @@
 import { ApiSchema, ApiProperty, PartialType, PickType, getSchemaPath, ApiPropertyOptional, ApiExtraModels, IntersectionType } from '@nestjs/swagger';
-import { IsDate, IsEnum, IsIn, IsInt, IsOptional, IsString, MaxLength, ValidateNested } from 'class-validator';
+import { IsDateString, IsEnum, IsIn, IsInt, IsOptional, IsString, MaxLength, ValidateNested } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { bookmarkStatusEnum, bookmarkTypeEnum } from '@libs/db/schemas';
 import { MovieCompactDto } from '../../movies/dto/movies.dto';
@@ -12,6 +12,11 @@ export enum BookmarkSortBy {
   CREATED_AT = 'created_at',
   UPDATED_AT = 'updated_at',
   RANDOM = 'random',
+}
+
+export enum BookmarkType {
+  MOVIE = 'movie',
+  TV_SERIES = 'tv_series',
 }
 
 @ApiSchema({ name: 'Bookmark' })
@@ -63,21 +68,51 @@ export class BookmarkDto {
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
-  @IsDate()
-  createdAt: Date;
+  @IsDateString()
+  createdAt: string;
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
-  @IsDate()
-  updatedAt: Date;
+  @IsDateString()
+  updatedAt: string;
 
   constructor(data: BookmarkDto) {
     Object.assign(this, data);
   }
 }
 
-@ApiSchema({ name: 'BookmarkDtoRequest' })
-export class BookmarkRequestDto extends PartialType(PickType(BookmarkDto, ['comment'] as const)) {}
+/* ---------------------------------- Types --------------------------------- */
+@ApiSchema({ name: 'BookmarkWithMovie' })
+export class BookmarkWithMovieDto extends BookmarkDto {
+  @ApiProperty({ enum: ['movie'] as const })
+  @Expose()
+  type: 'movie';
+
+  @ApiProperty({ type: () => MovieCompactDto })
+  @Expose()
+  @ValidateNested()
+  @Type(() => MovieCompactDto)
+  media: MovieCompactDto;
+}
+
+@ApiSchema({ name: 'BookmarkWithTvSeries' })
+export class BookmarkWithTvSeriesDto extends BookmarkDto {
+  @ApiProperty({ enum: ['tv_series'] as const })
+  @Expose()
+  type: 'tv_series';
+
+  @ApiProperty({ type: () => TvSeriesCompactDto })
+  @Expose()
+  @ValidateNested()
+  @Type(() => TvSeriesCompactDto)
+  media: TvSeriesCompactDto;
+}
+
+export type BookmarkWithMediaUnion = BookmarkWithMovieDto | BookmarkWithTvSeriesDto;
+/* -------------------------------------------------------------------------- */
+
+@ApiSchema({ name: 'BookmarkInput' })
+export class BookmarkInputDto extends PartialType(PickType(BookmarkDto, ['comment'] as const)) {}
 
 @ApiSchema({ name: 'BaseListBookmarksQuery' })
 export class BaseListBookmarksQueryDto {
@@ -103,27 +138,30 @@ export class BaseListBookmarksQueryDto {
 
     @ApiPropertyOptional({
         description: 'Field to sort bookmarks by',
-        default: BookmarkSortBy.UPDATED_AT,
-        example: BookmarkSortBy.UPDATED_AT,
+        default: BookmarkSortBy.CREATED_AT,
+        example: BookmarkSortBy.CREATED_AT,
         enum: BookmarkSortBy,
     })
     @IsOptional()
     @IsEnum(BookmarkSortBy)
-    sort_by: BookmarkSortBy = BookmarkSortBy.UPDATED_AT;
+    sort_by: BookmarkSortBy = BookmarkSortBy.CREATED_AT;
 
     @ApiPropertyOptional({
         description: 'Sort order',
-        default: SortOrder.DESC,
-        example: SortOrder.DESC,
+        default: SortOrder.ASC,
+        example: SortOrder.ASC,
         enum: SortOrder,
     })
     @IsOptional()
     @IsEnum(SortOrder)
-    sort_order: SortOrder = SortOrder.DESC;
+    sort_order: SortOrder = SortOrder.ASC;
 }
 
-@ApiSchema({ name: 'ListBookmarksQuery' })
-export class ListBookmarksQueryDto extends IntersectionType(
+@ApiSchema({ name: 'ListAllBookmarksQuery' })
+export class ListAllBookmarksQueryDto extends BaseListBookmarksQueryDto {}
+
+@ApiSchema({ name: 'ListPaginatedBookmarksQuery' })
+export class ListPaginatedBookmarksQueryDto extends IntersectionType(
   BaseListBookmarksQueryDto,
   PaginationQueryDto
 ) {}
@@ -134,46 +172,73 @@ export class ListInfiniteBookmarksQueryDto extends IntersectionType(
   CursorPaginationQueryDto
 ) {}
 
-@ApiExtraModels(MovieCompactDto, TvSeriesCompactDto)
-@ApiSchema({ name: 'BookmarkWithMedia' })
-export class BookmarkWithMediaDto extends BookmarkDto {
-    @ApiProperty({
-        description: 'The media object associated with the bookmark',
-        oneOf: [
-            { $ref: getSchemaPath(MovieCompactDto) },
-            { $ref: getSchemaPath(TvSeriesCompactDto) },
-        ]
+@ApiExtraModels(BookmarkWithMovieDto, BookmarkWithTvSeriesDto)
+@ApiSchema({ name: 'ListPaginatedBookmarks' })
+export class ListPaginatedBookmarksDto extends PaginatedResponseDto<BookmarkWithMediaUnion> {
+  @ApiProperty({
+    type: 'array',
+    items: {
+      oneOf: [
+        { $ref: getSchemaPath(BookmarkWithMovieDto) },
+        { $ref: getSchemaPath(BookmarkWithTvSeriesDto) },
+      ],
+      discriminator: {
+        propertyName: 'type',
+        mapping: {
+          movie: getSchemaPath(BookmarkWithMovieDto),
+          tv_series: getSchemaPath(BookmarkWithTvSeriesDto),
+        },
+      },
+    },
   })
-  @Expose()
-  @ValidateNested()
-  @Type((options) => {
-    if (options?.object?.type === 'movie') {
-      return MovieCompactDto;
-    } else if (options?.object?.type === 'tv_series') {
-      return TvSeriesCompactDto;
-    }
-    return Object;
+  @Type(() => BookmarkDto, {
+    keepDiscriminatorProperty: true,
+    discriminator: {
+      property: 'type',
+      subTypes: [
+        { value: BookmarkWithMovieDto, name: 'movie' },
+        { value: BookmarkWithTvSeriesDto, name: 'tv_series' },
+      ],
+    },
   })
-  media: MovieCompactDto | TvSeriesCompactDto;
-}
+  data: BookmarkWithMediaUnion[];
 
-@ApiSchema({ name: 'ListBookmarks' })
-export class ListBookmarksDto extends PaginatedResponseDto<BookmarkWithMediaDto> {
-  @ApiProperty({ type: () => [BookmarkWithMediaDto] })
-  @Type(() => BookmarkWithMediaDto)
-  data: BookmarkWithMediaDto[];
-
-  constructor(partial: Partial<ListBookmarksDto>) {
+  constructor(partial: Partial<ListPaginatedBookmarksDto>) {
     super(partial);
     Object.assign(this, partial);
   }
 }
 
+@ApiExtraModels(BookmarkWithMovieDto, BookmarkWithTvSeriesDto)
 @ApiSchema({ name: 'ListInfiniteBookmarks'})
-export class ListInfiniteBookmarksDto extends CursorPaginatedResponseDto<BookmarkWithMediaDto> {
-  @ApiProperty({ type: () => [BookmarkWithMediaDto] })
-  @Type(() => BookmarkWithMediaDto)
-  data: BookmarkWithMediaDto[];
+export class ListInfiniteBookmarksDto extends CursorPaginatedResponseDto<BookmarkWithMediaUnion> {
+  @ApiProperty({
+    type: 'array',
+    items: {
+      oneOf: [
+        { $ref: getSchemaPath(BookmarkWithMovieDto) },
+        { $ref: getSchemaPath(BookmarkWithTvSeriesDto) },
+      ],
+      discriminator: {
+        propertyName: 'type',
+        mapping: {
+          movie: getSchemaPath(BookmarkWithMovieDto),
+          tv_series: getSchemaPath(BookmarkWithTvSeriesDto),
+        },
+      },
+    },
+  })
+  @Type(() => BookmarkDto, {
+    keepDiscriminatorProperty: true,
+    discriminator: {
+      property: 'type',
+      subTypes: [
+        { value: BookmarkWithMovieDto, name: 'movie' },
+        { value: BookmarkWithTvSeriesDto, name: 'tv_series' },
+      ],
+    },
+  })
+  data: BookmarkWithMediaUnion[];
 
   constructor(partial: Partial<ListInfiniteBookmarksDto>) {
     super(partial);

@@ -4,7 +4,7 @@ import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, OptionalAuthGuard } from '../../auth/guards';
 import { CurrentOptionalUser, CurrentUser } from '../../auth/decorators';
 import { User } from '../../auth/auth.service';
-import { ListInfiniteReviewsMovieDto, ListInfiniteReviewsMovieQueryDto, ListReviewsMovieDto, ListReviewsMovieQueryDto, ReviewMovieDto, ReviewMovieInputDto } from '../../reviews/movie/dto/reviews-movie.dto';
+import { ListInfiniteReviewsMovieDto, ListInfiniteReviewsMovieQueryDto, ListPaginatedReviewsMovieDto, ListPaginatedReviewsMovieQueryDto, ReviewMovieDto, ReviewMovieInputDto } from '../../reviews/movie/dto/reviews-movie.dto';
 
 @ApiTags('Movies')
 @Controller({
@@ -51,18 +51,18 @@ export class MovieReviewsController {
   }
 
   /* ---------------------------------- List ---------------------------------- */
-  @Get('reviews')
+  @Get('reviews/paginated')
   @UseGuards(OptionalAuthGuard)
   @ApiOkResponse({
     description: 'Get the list of movie reviews for the user',
-    type: ListReviewsMovieDto,
+    type: ListPaginatedReviewsMovieDto,
   })
-  async list(
+  async listPaginated(
     @Param('movie_id', ParseIntPipe) movieId: number,
-    @Query() query: ListReviewsMovieQueryDto,
+    @Query() query: ListPaginatedReviewsMovieQueryDto,
     @CurrentOptionalUser() currentUser: User | null,
-  ): Promise<ListReviewsMovieDto> {
-    return this.reviewService.list({
+  ): Promise<ListPaginatedReviewsMovieDto> {
+    return this.reviewService.listPaginated({
       movieId,
       query,
       currentUser,

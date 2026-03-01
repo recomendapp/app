@@ -4,7 +4,7 @@ import { OptionalAuthGuard } from '../../auth/guards';
 import { CurrentOptionalUser } from '../../auth/decorators';
 import { User } from '../../auth/auth.service';
 import { UserPlaylistsService } from './user-playlists.service';
-import { ListPlaylistsQueryDto, ListPlaylistsDto, ListInfinitePlaylistsQueryDto, ListInfinitePlaylistsDto } from '../../playlists/dto/playlists.dto';
+import { ListPaginatedPlaylistsQueryDto, ListPaginatedPlaylistsDto, ListInfinitePlaylistsQueryDto, ListInfinitePlaylistsDto } from '../../playlists/dto/playlists.dto';
 
 @ApiTags('Users')
 @Controller({
@@ -14,18 +14,18 @@ import { ListPlaylistsQueryDto, ListPlaylistsDto, ListInfinitePlaylistsQueryDto,
 export class UserPlaylistsController {
   constructor(private readonly playlistService: UserPlaylistsService) {}
 
-  @Get()
+  @Get('paginated')
   @UseGuards(OptionalAuthGuard)
   @ApiOkResponse({
     description: 'List of playlists',
-    type: ListPlaylistsDto,
+    type: ListPaginatedPlaylistsDto,
   })
-  async list(
+  async listPaginated(
     @Param('user_id', ParseUUIDPipe) targetUserId: string,
-    @Query() query: ListPlaylistsQueryDto,
+    @Query() query: ListPaginatedPlaylistsQueryDto,
     @CurrentOptionalUser() currentUser: User | null,
-  ): Promise<ListPlaylistsDto> {
-    return this.playlistService.list({
+  ): Promise<ListPaginatedPlaylistsDto> {
+    return this.playlistService.listPaginated({
       targetUserId,
       query,
       currentUser,

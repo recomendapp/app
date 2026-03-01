@@ -24,8 +24,6 @@ import { useTranslations } from "next-intl";
 import { BadgeMedia } from "../Badge/BadgeMedia";
 import Image from "next/image";
 import { upperFirst } from "lodash";
-import { ModalUserRecosMovieSend } from "../Modals/recos/ModalUserRecosMovieSend";
-import { ModalUserRecosTvSeriesSend } from "../Modals/recos/ModalUserRecosTvSeriesSend";
 import { getMediaDetails } from "@/utils/get-media-details";
 import { Database } from "@recomendapp/types";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
@@ -33,6 +31,7 @@ import { ContextMenuMovie } from "../ContextMenu/ContextMenuMovie";
 import { ContextMenuTvSeries } from "../ContextMenu/ContextMenuTvSeries";
 import { useQuery } from "@tanstack/react-query";
 import { useWidgetMostRecommendedOptions } from "@/api/client/options/widgetOptions";
+import { ModalUserRecoSend } from "../Modals/recos/ModalUserRecoSend";
 
 
 interface WidgetMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -101,7 +100,7 @@ const Item = ({
 	index,
 	...props
 }: ItemProps) => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const { openModal } = useModal();
 	const t = useTranslations('common');
 	const details = useMemo(() => {
@@ -116,14 +115,11 @@ const Item = ({
 	}, [item]);
 	const handleReco = useCallback(() => {
 		if (item.media) {
-			switch (item.type) {
-				case 'movie':
-					openModal(ModalUserRecosMovieSend, { movieId: item.media_id!, movieTitle: details?.title! })
-					break;
-				case 'tv_series':
-					openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: item.media_id!, tvSeriesTitle: details?.title! })
-					break;
-			}
+			openModal(ModalUserRecoSend, {
+				mediaId: item.media_id!,
+				mediaTitle: details?.title ?? '',
+				mediaType: item.type,
+			})
 		}
 	}, [item, details, openModal]);
 
@@ -182,8 +178,8 @@ const Item = ({
 						)}
 					</CardContent>
 					<CardFooter className="flex items-center gap-2">
-						{session && (
-							<TooltipBox tooltip={session ? 'Envoyer à un(e) ami(e)' : undefined}>
+						{user && (
+							<TooltipBox tooltip={user ? 'Envoyer à un(e) ami(e)' : undefined}>
 								<Button size={"icon"} variant={'outline'} className="bg-red-500" onClick={handleReco}>
 									<SendIcon className="w-4 h-4 fill-foreground" />
 								</Button>

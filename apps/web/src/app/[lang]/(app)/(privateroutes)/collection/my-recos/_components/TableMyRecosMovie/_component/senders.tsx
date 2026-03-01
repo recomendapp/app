@@ -1,4 +1,4 @@
-import { ModalRecosSenders } from "@/components/Modals/recos/ModalRecosSenders";
+import { ModalRecoSenders } from "@/components/Modals/recos/ModalRecoSenders";
 import { UserAvatar } from "@/components/User/UserAvatar";
 import { useModal } from "@/context/modal-context";
 import { UserRecosMovieAggregated } from "@recomendapp/types";
@@ -16,7 +16,7 @@ export default function Senders({
 
 	return (
 		<div
-		onClick={() => openModal(ModalRecosSenders, { comments: row.original?.senders })}
+		onClick={() => openModal(ModalRecoSenders, { comments: row.original?.senders })}
 		className="flex w-fit items-center -space-x-2  cursor-pointer "
 		>
 			<div className="flex justify-end flex-row-reverse -space-x-4 space-x-reverse">

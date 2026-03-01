@@ -3,7 +3,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { PersonTvSeriesService } from './person-tv-series.service';
 import { CurrentLocale } from '../../../common/decorators/current-locale.decorator';
 import { SupportedLocale } from '@libs/i18n';
-import { ListInfinitePersonTvSeriesDto, ListInfinitePersonTvSeriesQueryDto, ListPersonTvSeriesQueryDto, ListPersonTvSeriesDto, PersonTvSeriesFacetsDto } from './dto/person-tv-series.dto';
+import { ListInfinitePersonTvSeriesDto, ListInfinitePersonTvSeriesQueryDto, ListPaginatedPersonTvSeriesQueryDto, ListPaginatedPersonTvSeriesDto, PersonTvSeriesFacetsDto } from './dto/person-tv-series.dto';
 
 @ApiTags('Persons')
 @Controller({
@@ -13,17 +13,17 @@ import { ListInfinitePersonTvSeriesDto, ListInfinitePersonTvSeriesQueryDto, List
 export class PersonTvSeriesController {
   constructor(private readonly tvSeriesService: PersonTvSeriesService) {}
 
-  @Get('tv-series')
+  @Get('tv-series/paginated')
   @ApiOkResponse({
     description: 'Get the list of tv-series for the person',
-    type: ListPersonTvSeriesDto,
+    type: ListPaginatedPersonTvSeriesDto,
   })
-  async list(
+  async listPaginated(
     @Param('person_id', ParseIntPipe) personId: number,
-    @Query() query: ListPersonTvSeriesQueryDto,
+    @Query() query: ListPaginatedPersonTvSeriesQueryDto,
     @CurrentLocale() locale: SupportedLocale,
-  ): Promise<ListPersonTvSeriesDto> {
-    return this.tvSeriesService.list({ personId, query, locale });
+  ): Promise<ListPaginatedPersonTvSeriesDto> {
+    return this.tvSeriesService.listPaginated({ personId, query, locale });
   }
 
   @Get('tv-series/infinite')

@@ -1,0 +1,10 @@
+{
+  "received": {
+    "subject": "New reco from {senderName} !",
+    "body": "{senderName} just reco'd {mediaTitle}"
+  },
+  "completed": {
+    "subject": "Your reco has been completed !",
+    "body": "{receiverName} watched {mediaTitle} that you reco'd"
+  }
+}

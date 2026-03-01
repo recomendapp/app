@@ -1,11 +1,15 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
-import { Logger } from '@nestjs/common';
+import { Inject, Logger } from '@nestjs/common';
 import { NOTIFY_QUEUE, NotifyJob } from '@shared/notify';
 import { NotifyService } from './notify.service';
 import { I18nService } from 'nestjs-i18n';
 import { render } from '@react-email/render';
 import { VerificationEmail } from '../templates/auth/verification-email';
 import { DeleteAccount } from '../templates/auth/delete-account';
+import { DRIZZLE_SERVICE, DrizzleService } from '../common/modules/drizzle.module';
+import { eq, inArray, sql } from 'drizzle-orm';
+import { pushToken, tmdbMovieView, tmdbTvSeriesView, user } from '@libs/db/schemas';
+import { defaultSupportedLocale } from '@libs/i18n';
 
 @Processor(NOTIFY_QUEUE)
 export class NotifyProcessor extends WorkerHost {
@@ -14,6 +18,7 @@ export class NotifyProcessor extends WorkerHost {
   constructor(
     private readonly notifyService: NotifyService,
     private readonly i18n: I18nService,
+    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
   ) {
     super();
   }
@@ -55,6 +60,253 @@ export class NotifyProcessor extends WorkerHost {
           );
           break;
         }
+        case 'follow:new': {
+          const { actorId, targetUserId } = job.data;
+
+          const actor = await this.db.query.user.findFirst({
+            where: eq(user.id, actorId),
+            columns: { username: true, name: true },
+          });
+          if (!actor) break;
+
+          const actorName = actor.name ?? actor.username;
+
+          const groupedByLang = await this.getDevicesGroupedByLang([targetUserId]);
+
+          await Promise.all(
+            Object.entries(groupedByLang).map(async ([lang, devices]) => {
+              const title = this.i18n.t('follow.new.subject', { lang });
+              const body = this.i18n.t('follow.new.body', { 
+                lang, 
+                args: { actorName } 
+              });
+
+              await this.notifyService.sendPushNotifications(devices, {
+                title,
+                body,
+                data: { url: `/@${actor.username}`, type: 'follow_new' },
+              });
+            })
+          );
+
+          break;
+        }
+        case 'follow:request': {
+          const { actorId, targetUserId } = job.data;
+
+          const actor = await this.db.query.user.findFirst({
+            where: eq(user.id, actorId),
+            columns: { username: true, name: true },
+          });
+          if (!actor) break;
+
+          const actorName = actor.name ?? actor.username;
+
+          const groupedByLang = await this.getDevicesGroupedByLang([targetUserId]);
+
+          await Promise.all(
+            Object.entries(groupedByLang).map(async ([lang, devices]) => {
+              const title = this.i18n.t('follow.request.subject', { lang });
+              const body = this.i18n.t('follow.request.body', { 
+                lang, 
+                args: { actorName } 
+              });
+
+              await this.notifyService.sendPushNotifications(devices, {
+                title,
+                body,
+                data: { url: `/`, type: 'follow_request' },
+              });
+            })
+          );
+          break;
+        }
+        case 'follow:accepted': {
+          const { actorId, targetUserId } = job.data;
+
+          const actor = await this.db.query.user.findFirst({
+            where: eq(user.id, actorId),
+            columns: { username: true, name: true },
+          });
+          if (!actor) break;
+
+          const actorName = actor.name ?? actor.username;
+
+          const groupedByLang = await this.getDevicesGroupedByLang([targetUserId]);
+
+          await Promise.all(
+            Object.entries(groupedByLang).map(async ([lang, devices]) => {
+              const title = this.i18n.t('follow.accepted.subject', { lang });
+              const body = this.i18n.t('follow.accepted.body', { 
+                lang, 
+                args: { actorName } 
+              });
+
+              await this.notifyService.sendPushNotifications(devices, {
+                title,
+                body,
+                data: { url: `/@${actor.username}`, type: 'follow_accepted' },
+              });
+            })
+          );
+          break;
+        }
+        case 'reco:completed': {
+          const { userId, senderIds, mediaId, type } = job.data;
+          if (!senderIds.length) break;
+
+          const watcher = await this.db.query.user.findFirst({
+            where: eq(user.id, userId),
+            columns: { username: true, name: true },
+          });
+
+          const watcherName = watcher.name ?? watcher.username;
+
+          const sendersData = await this.db
+            .select({
+              userId: pushToken.userId,
+              token: pushToken.token,
+              provider: pushToken.provider,
+              deviceType: pushToken.deviceType,
+              language: user.language,
+            })
+            .from(pushToken)
+            .innerJoin(user, eq(user.id, pushToken.userId))
+            .where(inArray(pushToken.userId, senderIds));
+          
+          if (!sendersData.length) break;
+
+          const groupedByLang = sendersData.reduce((acc, current) => {
+            const lang = current.language || defaultSupportedLocale;
+            if (!acc[lang]) acc[lang] = [];
+            acc[lang].push(current);
+            return acc;
+          }, {} as Record<string, typeof sendersData>);
+
+          await Promise.all(
+            Object.entries(groupedByLang).map(async ([lang, devices]) => {
+              const mediaData = await this.db.transaction(async (tx) => {
+                await tx.execute(sql`SELECT set_config('app.current_language', ${lang}, true)`);
+                
+                if (type === 'movie') {
+                  const result = await tx.select({ title: tmdbMovieView.title, url: tmdbMovieView.url })
+                    .from(tmdbMovieView)
+                    .where(eq(tmdbMovieView.id, mediaId))
+                    .limit(1);
+                  return result[0];
+                } else {
+                  const result = await tx.select({ title: tmdbTvSeriesView.name, url: tmdbTvSeriesView.url })
+                    .from(tmdbTvSeriesView)
+                    .where(eq(tmdbTvSeriesView.id, mediaId))
+                    .limit(1);
+                  return result[0];
+                }
+              });
+
+              if (!mediaData) return;
+
+              const title = this.i18n.t('reco.completed.subject', { 
+                lang, 
+                args: { watcherName } 
+              });
+              
+              const body = this.i18n.t('reco.completed.body', { 
+                lang, 
+                args: { watcherName, mediaTitle: mediaData.title } 
+              });
+
+              await this.notifyService.sendPushNotifications(devices, {
+                title,
+                body,
+                data: {
+                  url: watcher?.username ? `/@${watcher.username}` : mediaData.url,
+                  type: 'reco_completed',
+                },
+              });
+            })
+          );
+
+          break;
+        }
+        case 'reco:received': {
+          const { senderId, receiverIds, mediaId, type, comment } = job.data;
+          if (!receiverIds.length) break;
+
+          const sender = await this.db.query.user.findFirst({
+            where: eq(user.id, senderId),
+            columns: { username: true, name: true },
+          });
+
+          const senderName = sender?.name ?? sender?.username;
+
+          const receiversData = await this.db
+            .select({
+              userId: pushToken.userId,
+              token: pushToken.token,
+              provider: pushToken.provider,
+              deviceType: pushToken.deviceType,
+              language: user.language,
+            })
+            .from(pushToken)
+            .innerJoin(user, eq(user.id, pushToken.userId))
+            .where(inArray(pushToken.userId, receiverIds));
+          
+          if (!receiversData.length) break;
+
+          const groupedByLang = receiversData.reduce((acc, current) => {
+            const lang = current.language || defaultSupportedLocale;
+            if (!acc[lang]) acc[lang] = [];
+            acc[lang].push(current);
+            return acc;
+          }, {} as Record<string, typeof receiversData>);
+
+          await Promise.all(
+            Object.entries(groupedByLang).map(async ([lang, devices]) => {
+              const mediaTitle = await this.db.transaction(async (tx) => {
+                await tx.execute(sql`SELECT set_config('app.current_language', ${lang}, true)`);
+                
+                if (type === 'movie') {
+                  const result = await tx.select({ title: tmdbMovieView.title, url: tmdbMovieView.url })
+                    .from(tmdbMovieView)
+                    .where(eq(tmdbMovieView.id, mediaId))
+                    .limit(1);
+                  return result[0];
+                } else {
+                  const result = await tx.select({ title: tmdbTvSeriesView.name, url: tmdbTvSeriesView.url })
+                    .from(tmdbTvSeriesView)
+                    .where(eq(tmdbTvSeriesView.id, mediaId))
+                    .limit(1);
+                  return result[0];
+                }
+              });
+
+              if (!mediaTitle) return;
+
+              const title = this.i18n.t('reco.received.subject', { 
+                lang, 
+                args: { senderName } 
+              });
+              
+              const body = comment 
+                ? comment 
+                : this.i18n.t('reco.received.body', { 
+                    lang, 
+                    args: { senderName, mediaTitle: mediaTitle.title } 
+                  });
+
+              await this.notifyService.sendPushNotifications(devices, {
+                title,
+                body,
+                data: {
+                  url: mediaTitle.url,
+                  type: 'reco_received',
+                },
+              });
+            })
+          );
+
+          break;
+        }
         default:
           this.logger.warn(`Unhandled job`);
       }
@@ -62,5 +314,28 @@ export class NotifyProcessor extends WorkerHost {
       this.logger.error(`Failed to process job ${job.name}: ${error}`);
       throw error;
     }
+  }
+
+  private async getDevicesGroupedByLang(userIds: string[]) {
+    if (!userIds.length) return {};
+
+    const receiversData = await this.db
+      .select({
+        userId: pushToken.userId,
+        token: pushToken.token,
+        provider: pushToken.provider,
+        deviceType: pushToken.deviceType,
+        language: user.language,
+      })
+      .from(pushToken)
+      .innerJoin(user, eq(user.id, pushToken.userId))
+      .where(inArray(pushToken.userId, userIds));
+
+    return receiversData.reduce((acc, current) => {
+      const lang = current.language || defaultSupportedLocale;
+      if (!acc[lang]) acc[lang] = [];
+      acc[lang].push(current);
+      return acc;
+    }, {} as Record<string, typeof receiversData>);
   }
 }

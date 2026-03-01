@@ -1,28 +1,29 @@
-import { MediaMovie, MediaPerson, MediaTvSeries, MediaTvSeriesEpisode, MediaTvSeriesSeason, MediaType } from "@recomendapp/types";
+import { Movie, MovieCompact, Person, PersonCompact, TvEpisode, TvSeasonCompact, TvSeries, TvSeriesCompact } from "@packages/api-js";
 
+type MediaType = 'movie' | 'tv_series';
 
 interface MediaBaseProps {
 	type: MediaType;
 };
 type MediaMovieDetailsProps = {
 	type: 'movie',
-	media: MediaMovie
+	media: MovieCompact | Movie;
 };
 type MediaTvSeriesDetailsProps = {
 	type: 'tv_series',
-	media: MediaTvSeries
+	media: TvSeriesCompact | TvSeries;
 };
 type MediaTvSeriesSeasonDetailsProps = {
 	type: 'tv_season',
-	media: MediaTvSeriesSeason
+	media: TvSeasonCompact;
 };
 type MediaTvSeriesEpisodeDetailsProps = {
 	type: 'tv_episode',
-	media: MediaTvSeriesEpisode
+	media: TvEpisode;
 };
 type MediaPersonDetailsProps = {
 	type: 'person',
-	media: MediaPerson
+	media: PersonCompact | Person;
 };
 export type MediaDetailsProps = MediaBaseProps & (
 	MediaMovieDetailsProps
@@ -42,20 +43,6 @@ const getMediaDetails = ({
 				return media.title;
 			case 'tv_series':
 				return media.name;
-			case 'person':
-				return media.name;
-			default:
-				return null;
-		}
-	};
-	const getImageUrl = () => {
-		switch (type) {
-			case 'movie':
-				return media.poster_url;
-			case 'tv_series':
-				return media.poster_url;
-			case 'person':
-				return media.profile_url;
 			default:
 				return null;
 		}
@@ -63,11 +50,9 @@ const getMediaDetails = ({
 	const getImagePath = () => {
 		switch (type) {
 			case 'movie':
-				return media.poster_path;
+				return media.posterPath;
 			case 'tv_series':
-				return media.poster_path;
-			case 'person':
-				return media.profile_path;
+				return media.posterPath;
 			default:
 				return null;
 		}
@@ -75,39 +60,32 @@ const getMediaDetails = ({
 	const getDate = () => {
 		switch (type) {
 			case 'movie':
-				return media.release_date;
+				return media.releaseDate;
 			case 'tv_series':
-				return media.first_air_date;
-			case 'person':
-				return media.birthday;
+				return media.firstAirDate;
 			default:
 				return null;
 		}
 	};
-	const getDescription = () => {
+	const getCredits = () => {
 		switch (type) {
 			case 'movie':
-				return media.overview;
+				return media.directors;
 			case 'tv_series':
-				return media.overview;
-			case 'person':
-				return media.biography;
+				return media.createdBy;
 			default:
-				return null;
+				return [];
 		}
 	};
 	return {
 		title: getTitle(),
-		imageUrl: getImageUrl(),
 		imagePath: getImagePath(),
 		date: getDate(),
-		description: getDescription(),
+		credits: getCredits(),
 		posterClassName: type === 'movie'
 			? 'aspect-2/3 rounded-md'
 			: type === 'tv_series'
 			? 'aspect-2/3 rounded-md'
-			: type === 'person'
-			? 'aspect-square rounded-full'
 			: 'aspect-2/3 rounded-md',
 	}
 
@@ -119,8 +97,6 @@ const getMediaUrlPrefix = (type: MediaType) => {
 			return '/film';
 		case 'tv_series':
 			return '/tv-series';
-		case 'person':
-			return '/person';
 		default:
 			return '';
 	}

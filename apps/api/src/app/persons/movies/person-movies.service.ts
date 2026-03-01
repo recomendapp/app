@@ -6,7 +6,7 @@ import { MovieSortBy } from '../../movies/dto/movies.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { and, asc, desc, eq, gt, isNotNull, lt, or, SQL, sql } from 'drizzle-orm';
 import { tmdbMovieCredit, tmdbMovieView } from '@libs/db/schemas';
-import { ListInfinitePersonMoviesDto, ListInfinitePersonMoviesQueryDto, ListPersonMovieQueryDto, ListPersonMoviesDto, PersonMovieFacetsDto } from './dto/person-movie.dto';
+import { ListInfinitePersonMoviesDto, ListInfinitePersonMoviesQueryDto, ListPaginatedPersonMovieQueryDto, ListPaginatedPersonMoviesDto, PersonMovieFacetsDto } from './dto/person-movie.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 
 @Injectable()
@@ -44,15 +44,15 @@ export class PersonMoviesService {
         return [direction(tmdbMovieView.releaseDate), direction(tmdbMovieView.id)];
     }
   }
-  async list({
+  async listPaginated({
     personId,
     query,
     locale,
   }: {
     personId: number;
-    query: ListPersonMovieQueryDto;
+    query: ListPaginatedPersonMovieQueryDto;
     locale: SupportedLocale;
-  }): Promise<ListPersonMoviesDto> {
+  }): Promise<ListPaginatedPersonMoviesDto> {
     return await this.db.transaction(async (tx) => {
       await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
 

@@ -10,6 +10,8 @@ import { DrizzleModule } from '../common/modules/drizzle.module';
 import { PersonsModule } from './persons/persons.module';
 import { TvSeriesModule } from './tv-series/tv-series.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { BookmarksModule } from './bookmarks/bookmarks.module';
+import { RecosModule } from './recos/recos.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { ReviewsModule } from './reviews/reviews.module';
     AuthModule,
     HealthModule,
     UsersModule,
+    BookmarksModule,
+    RecosModule,
     PlaylistsModule,
     MoviesModule,
     TvSeriesModule,

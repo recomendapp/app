@@ -1,10 +1,10 @@
 import { Controller, Param, UseGuards, Get, ParseUUIDPipe, Query } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { OptionalAuthGuard } from '../../auth/guards';
 import { CurrentOptionalUser } from '../../auth/decorators';
 import { User } from '../../auth/auth.service';
 import { UserBookmarksService } from './user-bookmarks.service';
-import { ListBookmarksDto, ListBookmarksQueryDto, ListInfiniteBookmarksDto, ListInfiniteBookmarksQueryDto } from '../../bookmarks/dto/bookmarks.dto';
+import { ListPaginatedBookmarksDto, ListPaginatedBookmarksQueryDto, ListInfiniteBookmarksDto, ListInfiniteBookmarksQueryDto, ListAllBookmarksQueryDto, BookmarkWithMediaUnion, BookmarkWithMovieDto, BookmarkWithTvSeriesDto } from '../../bookmarks/dto/bookmarks.dto';
 import { CurrentLocale } from '../../../common/decorators/current-locale.decorator';
 import { SupportedLocale } from '@libs/i18n';
 
@@ -19,16 +19,51 @@ export class UserBookmarksController {
   @Get()
   @UseGuards(OptionalAuthGuard)
   @ApiOkResponse({
-    description: 'List of bookmarks',
-    type: ListBookmarksDto,
+    description: 'Get all bookmarks for the user as a raw array',
+    schema: {
+      type: 'array',
+      items: {
+        oneOf: [
+          { $ref: getSchemaPath(BookmarkWithMovieDto) },
+          { $ref: getSchemaPath(BookmarkWithTvSeriesDto) },
+        ],
+        discriminator: {
+          propertyName: 'type',
+          mapping: {
+            movie: getSchemaPath(BookmarkWithMovieDto),
+            tv_series: getSchemaPath(BookmarkWithTvSeriesDto),
+          },
+        },
+      },
+    },
   })
-  async list(
+  async listAll(
     @Param('user_id', ParseUUIDPipe) targetUserId: string,
-    @Query() query: ListBookmarksQueryDto,
+    @Query() query: ListAllBookmarksQueryDto,
     @CurrentOptionalUser() currentUser: User | null,
     @CurrentLocale() locale: SupportedLocale,
-  ): Promise<ListBookmarksDto> {
-    return this.usersService.list({
+  ): Promise<BookmarkWithMediaUnion[]> {
+    return this.usersService.listAll({
+      targetUserId,
+      query,
+      currentUser,
+      locale,
+    });
+  }
+
+  @Get('paginated')
+  @UseGuards(OptionalAuthGuard)
+  @ApiOkResponse({
+    description: 'List of bookmarks',
+    type: ListPaginatedBookmarksDto,
+  })
+  async listPaginated(
+    @Param('user_id', ParseUUIDPipe) targetUserId: string,
+    @Query() query: ListPaginatedBookmarksQueryDto,
+    @CurrentOptionalUser() currentUser: User | null,
+    @CurrentLocale() locale: SupportedLocale,
+  ): Promise<ListPaginatedBookmarksDto> {
+    return this.usersService.listPaginated({
       targetUserId,
       query,
       currentUser,

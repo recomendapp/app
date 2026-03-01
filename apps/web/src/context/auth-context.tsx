@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useState, use, useCallback } from 'react';
+import { createContext, use, useCallback, useEffect } from 'react';
 import { CustomerInfo } from '@revenuecat/purchases-js';
 import { useRevenueCat } from '@/lib/revenuecat/useRevenueCat';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -9,9 +9,9 @@ import { SocialProvider } from 'better-auth/types';
 import { authClient } from '@/lib/auth/client';
 import toast from 'react-hot-toast';
 import { upperFirst } from 'lodash';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from '@/lib/i18n/navigation';
-import { userMeOptions } from '@libs/query-client';
+import { userMeOptions, useUserMeUpdateMutation } from '@libs/query-client';
 import { User } from '@packages/api-js/src';
 
 export interface UserState {
@@ -40,7 +40,6 @@ export interface UserState {
   }) => Promise<void>;
   loginOAuth2: (provider: SocialProvider, redirectTo?: string | null) => Promise<void>;
   loginWithMagicLink: (email: string, redirectTo?: string | null) => Promise<void>;
-  setPushToken: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const AuthContext = createContext<UserState | undefined>(undefined);
@@ -53,13 +52,13 @@ interface AuthProviderProps {
 export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps) => {
   const t = useTranslations();
   const router = useRouter();
+  const locale = useLocale();
   const queryClient = useQueryClient();
+  
   const { data: user } = useQuery({
     ...userMeOptions(),
     initialData: initialUser || undefined,
   });
-
-  const [pushToken, setPushToken] = useState<string | null>(null);
   const { customerInfo: initCustomerInfo } = useRevenueCat(user);
   const {
     data: customerInfo,
@@ -67,6 +66,8 @@ export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps)
     enabled: !!initCustomerInfo,
     initialData: initCustomerInfo,
 	}));
+
+  const { mutate: updateUser } = useUserMeUpdateMutation();
 
   const login = useCallback(async (credentials: { 
     password: string, 
@@ -112,10 +113,6 @@ export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps)
 
   const logout = useCallback(async () => {
     if (!user) return;
-    // TODO: re-enable notification tokens management
-    if (pushToken) {
-    //     await supabase.from('user_notification_tokens').delete().match({ token: pushToken, provider: 'fcm' });
-    }
     const { error } = await authClient.signOut();
     if (error) {
       switch (error.code) {
@@ -128,7 +125,7 @@ export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps)
     }
     queryClient.setQueryData(userMeOptions().queryKey, undefined);
     router.refresh();
-  }, [user, pushToken, t, router, queryClient]);
+  }, [user, t, router, queryClient]);
 
   const signup = useCallback(async ({
     email,
@@ -148,10 +145,14 @@ export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps)
       name: name,
       username: username,
       password: password,
+      language: locale,
       callbackURL: `${location.origin}/auth/callback${redirectTo ? `?redirect=${redirectTo}` : ''}`
     });
     if (error) {
       switch (error.code) {
+        case 'USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL':
+          toast.error(t('common.form.email.error.unavailable'));
+          break;
         default:
           toast.error(upperFirst(t('common.messages.an_error_occurred')));
           break;
@@ -159,7 +160,7 @@ export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps)
       throw error;
     }
     toast.success(t('pages.auth.signup.form.success', { email }));
-  }, [t]);
+  }, [t, locale]);
 
   const loginOAuth2 = useCallback(async (provider: SocialProvider, redirectTo?: string | null) => {
     const { error } = await authClient.signIn.social({
@@ -194,6 +195,12 @@ export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps)
     toast.success(t('common.form.code_sent', { email }));
   }, [t]);
 
+  useEffect(() => {
+    if (user && locale && user.language !== locale) {
+      updateUser({ body: { language: locale } });
+    }
+  }, [user, locale, updateUser]);
+
   return (
     <AuthContext.Provider
       value={{
@@ -204,7 +211,6 @@ export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps)
         signup,
         loginOAuth2,
         loginWithMagicLink,
-        setPushToken,
       }}
     >
       {children}

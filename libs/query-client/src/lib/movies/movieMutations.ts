@@ -1,9 +1,10 @@
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
-import { movieBookmarkOptions, movieLogOptions, movieReviewsInfiniteOptions, movieReviewsOptions } from './movieOptions';
-import { ListBookmarks, ListInfiniteBookmarks, ListInfiniteReviewsMovie, ListInfiniteUserMovieWithMovie, ListReviewsMovie, ListUserMovieWithMovie, movieBookmarksControllerDeleteMutation, movieBookmarksControllerSetMutation, movieLogsControllerDeleteMutation, movieLogsControllerSetMutation, movieReviewsControllerDeleteMutation, movieReviewsControllerUpsertMutation } from '@packages/api-js';
-import { userBookmarksInfiniteOptions, userBookmarksOptions, userKeys, userMovieLogOptions, userMovieLogsInfiniteOptions, userMovieLogsOptions } from '../users';
+import { movieLogOptions, movieReviewsInfiniteOptions, movieReviewsPaginatedOptions } from './movieOptions';
+import { ListInfiniteBookmarks, ListInfiniteReviewsMovie, ListInfiniteUserMoviesWithMovie, ListInfiniteWatchedDates, ListPaginatedBookmarks, ListPaginatedUserMoviesWithMovie, LogMovieWithMovie, movieLogsControllerDeleteMutation, movieLogsControllerSetMutation, movieReviewsControllerDeleteMutation, movieReviewsControllerUpsertMutation, movieWatchedDatesControllerDeleteMutation, movieWatchedDatesControllerSetMutation, movieWatchedDatesControllerUpdateMutation } from '@packages/api-js';
+import { userBookmarkByMediaOptions, userKeys, userMovieLogOptions, userMovieLogsInfiniteOptions, userMovieLogsPaginatedOptions, userMovieWatchedDatesInfiniteOptions, userMovieWatchedDatesPaginatedOptions } from '../users';
 import { movieKeys } from './movieKeys';
-import { removeFromInfiniteCache, removeFromPaginatedCache, updateFromInfiniteCache, updateFromPaginatedCache } from '../utils';
+import { removeListItemFromAllCaches, updateFromInfiniteCache, updateListItemInAllCaches } from '../utils';
+import { BookmarkWithMedia } from '../users/types';
 
 /* ---------------------------------- Logs ---------------------------------- */
 export const useMovieLogSetMutation = () => {
@@ -31,21 +32,35 @@ export const useMovieLogSetMutation = () => {
 			}
 
 			// Bookmarks
-			queryClient.setQueryData(movieBookmarkOptions({
+			queryClient.setQueryData(userBookmarkByMediaOptions({
 				userId: data.userId,
-				movieId: data.movieId,
+				mediaId: data.movieId,
+				type: 'movie',
 			}).queryKey, null);
-			removeFromPaginatedCache(
+			removeListItemFromAllCaches<
+				BookmarkWithMedia,
+				ListPaginatedBookmarks,
+				ListInfiniteBookmarks
+			>(
 				queryClient,
-				userBookmarksOptions({ userId: data.userId }).queryKey,
-				data.id
+				{
+					all: userKeys.bookmarks({ userId: data.userId, mode: 'all' }),
+					paginated: userKeys.bookmarks({ userId: data.userId, mode: 'paginated' }),
+					infinite: userKeys.bookmarks({ userId: data.userId, mode: 'infinite' }),
+				},
+				data.id 
 			);
-			queryClient.setQueriesData(
-				{ queryKey: userBookmarksInfiniteOptions({ userId: data.userId }).queryKey },
-				(oldData: InfiniteData<ListInfiniteBookmarks> | undefined) => {
-					return removeFromInfiniteCache(oldData, data.id);
-				}
-			);
+			// removeFromPaginatedCache(
+			// 	queryClient,
+			// 	userBookmarksOptions({ userId: data.userId }).queryKey,
+			// 	data.id
+			// );
+			// queryClient.setQueriesData(
+			// 	{ queryKey: userBookmarksInfiniteOptions({ userId: data.userId }).queryKey },
+			// 	(oldData: InfiniteData<ListInfiniteBookmarks> | undefined) => {
+			// 		return removeFromInfiniteCache(oldData, data.id);
+			// 	}
+			// );
 
 			// User Movies
 			const isNewLog = data.createdAt === data.updatedAt;
@@ -55,18 +70,26 @@ export const useMovieLogSetMutation = () => {
 						userId: data.userId,
 					}),
 				});
+
+				// Watched dates
+				queryClient.invalidateQueries({
+					queryKey: userMovieWatchedDatesPaginatedOptions({ userId: data.userId, movieId: data.movieId }).queryKey,
+				});
+				queryClient.invalidateQueries({
+					queryKey: userMovieWatchedDatesInfiniteOptions({ userId: data.userId, movieId: data.movieId }).queryKey,
+				});
 			} else {
-				queryClient.setQueriesData(
-					{ queryKey: userMovieLogsOptions({ userId: data.userId }).queryKey },
-					(old: InfiniteData<ListUserMovieWithMovie> | undefined) => {
-						return updateFromPaginatedCache(old, data);
-					}
-				);
-				queryClient.setQueriesData(
-					{ queryKey: userMovieLogsInfiniteOptions({ userId: data.userId }).queryKey },
-					(old: InfiniteData<ListInfiniteUserMovieWithMovie> | undefined) => {
-						return updateFromInfiniteCache(old, data);
-					}
+				updateListItemInAllCaches<
+					LogMovieWithMovie,
+					ListPaginatedUserMoviesWithMovie,
+					ListInfiniteUserMoviesWithMovie
+				>(
+					queryClient,
+					{
+						paginated: userMovieLogsPaginatedOptions({ userId: data.userId }).queryKey,
+						infinite: userMovieLogsInfiniteOptions({ userId: data.userId }).queryKey,
+					},
+					data
 				);
 			}
 
@@ -94,30 +117,126 @@ export const useMovieLogDeleteMutation = () => {
 
 			if (data.review) {
 				const reviewId = data.review.id;
-				removeFromPaginatedCache(
+				removeListItemFromAllCaches(
 					queryClient,
-					movieReviewsOptions({ movieId: data.movieId }).queryKey,
+					{
+						paginated: movieReviewsPaginatedOptions({ movieId: data.movieId }).queryKey,
+						infinite: movieReviewsInfiniteOptions({ movieId: data.movieId }).queryKey,
+					},
 					reviewId
-				);
-				queryClient.setQueriesData(
-					{ queryKey: movieReviewsInfiniteOptions({ movieId: data.movieId }).queryKey },
-					(old: InfiniteData<ListInfiniteReviewsMovie> | undefined) => {
-						return removeFromInfiniteCache(old, reviewId);
-					}
 				);
 			}
 
+			// Watched dates
+			queryClient.removeQueries({
+				queryKey: userMovieWatchedDatesPaginatedOptions({ userId: data.userId, movieId: data.movieId }).queryKey,
+			});
+			queryClient.removeQueries({
+				queryKey: userMovieWatchedDatesInfiniteOptions({ userId: data.userId, movieId: data.movieId }).queryKey,
+			});
+
 			// User Movies
-			removeFromPaginatedCache(
+			removeListItemFromAllCaches(
 				queryClient,
-				userMovieLogsOptions({ userId: data.userId }).queryKey,
+				{
+					paginated: userMovieLogsPaginatedOptions({ userId: data.userId }).queryKey,
+					infinite: userMovieLogsInfiniteOptions({ userId: data.userId }).queryKey,
+				},
 				data.id
 			);
-			queryClient.setQueriesData(
-				{ queryKey: userMovieLogsInfiniteOptions({ userId: data.userId }).queryKey },
-				(old: InfiniteData<ListInfiniteUserMovieWithMovie> | undefined) => {
-					return removeFromInfiniteCache(old, data.id);
+		}
+	});
+}
+
+// Watched dates
+export const useMovieWatchedDateSetMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		...movieWatchedDatesControllerSetMutation(),
+		onSuccess: (data) => {
+			queryClient.setQueryData(movieLogOptions({
+				userId: data.log.userId,
+				movieId: data.log.movieId,
+			}).queryKey, (old) => {
+				if (!old) return undefined;
+				return {
+					...old,
+					watchCount: data.log.watchCount,
+					firstWatchedAt: data.log.firstWatchedAt,
+					lastWatchedAt: data.log.lastWatchedAt,
 				}
+			});
+
+			queryClient.invalidateQueries({
+				queryKey: userKeys.watchedDates({
+					userId: data.log.userId,
+					type: 'movie',
+					id: data.log.movieId,
+				}),
+			});
+		}
+	});
+}
+
+export const useMovieWatchedDateUpdateMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		...movieWatchedDatesControllerUpdateMutation(),
+		onSuccess: (data) => {
+			queryClient.setQueryData(movieLogOptions({
+				userId: data.log.userId,
+				movieId: data.log.movieId,
+			}).queryKey, (old) => {
+				if (!old) return undefined;
+				return {
+					...old,
+					watchCount: data.log.watchCount,
+					firstWatchedAt: data.log.firstWatchedAt,
+					lastWatchedAt: data.log.lastWatchedAt,
+				}
+			});
+
+			// queryClient.setQueriesData(
+			// 	{ queryKey: userMovieWatchedDatesOptions({ userId: data.log.userId, movieId: data.log.movieId }).queryKey },
+			// 	(old: InfiniteData<ListWatchedDates> | undefined) => {
+			// 		return updateFromPaginatedCache(old, data.watchedDate);
+			// 	}
+			// );
+			queryClient.setQueriesData(
+				{ queryKey: userMovieWatchedDatesInfiniteOptions({ userId: data.log.userId, movieId: data.log.movieId }).queryKey },
+				(old: InfiniteData<ListInfiniteWatchedDates> | undefined) => {
+					return updateFromInfiniteCache(old, data.watchedDate);
+				}
+			);
+		}
+	});
+}
+
+export const useMovieWatchedDateDeleteMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		...movieWatchedDatesControllerDeleteMutation(),
+		onSuccess: (data) => {
+			queryClient.setQueryData(movieLogOptions({
+				userId: data.log.userId,
+				movieId: data.log.movieId,
+			}).queryKey, (old) => {
+				if (!old) return undefined;
+				return {
+					...old,
+					watchCount: data.log.watchCount,
+					firstWatchedAt: data.log.firstWatchedAt,
+					lastWatchedAt: data.log.lastWatchedAt,
+				}
+			});
+
+			removeListItemFromAllCaches(
+				queryClient,
+				{
+					paginated: userMovieWatchedDatesPaginatedOptions({ userId: data.log.userId, movieId: data.log.movieId }).queryKey,
+					infinite: userMovieWatchedDatesInfiniteOptions({ userId: data.log.userId, movieId: data.log.movieId }).queryKey,
+				},
+				data.watchedDate.id
 			);
 		}
 	});
@@ -162,12 +281,12 @@ export const useMovieReviewUpsertMutation = () => {
 					})
 				});
 			} else {
-				queryClient.setQueriesData(
-					{ queryKey: movieReviewsOptions({ movieId: data.movieId }).queryKey },
-					(old: InfiniteData<ListReviewsMovie> | undefined) => {
-						return updateFromPaginatedCache(old, data);
-					}
-				);
+				// queryClient.setQueriesData(
+				// 	{ queryKey: movieReviewsOptions({ movieId: data.movieId }).queryKey },
+				// 	(old: InfiniteData<ListReviewsMovie> | undefined) => {
+				// 		return updateFromPaginatedCache(old, data);
+				// 	}
+				// );
 				queryClient.setQueriesData(
 					{ queryKey: movieReviewsInfiniteOptions({ movieId: data.movieId }).queryKey },
 					(old: InfiniteData<ListInfiniteReviewsMovie> | undefined) => {
@@ -206,62 +325,59 @@ export const useMovieReviewDeleteMutation = () => {
 				}
 			});
 
-			removeFromPaginatedCache(
+			removeListItemFromAllCaches(
 				queryClient,
-				movieReviewsOptions({ movieId: data.movieId }).queryKey,
+				{
+					paginated: movieReviewsPaginatedOptions({ movieId: data.movieId }).queryKey,
+					infinite: movieReviewsInfiniteOptions({ movieId: data.movieId }).queryKey,
+				},
 				data.id
-			);
-			queryClient.setQueriesData(
-				{ queryKey: movieReviewsInfiniteOptions({ movieId: data.movieId }).queryKey },
-				(old: InfiniteData<ListInfiniteReviewsMovie> | undefined) => {
-					return removeFromInfiniteCache(old, data.id);
-				}
 			);
 		}
 	});
 }
 
 /* -------------------------------- Bookmarks ------------------------------- */
-export const useMovieBookmarkSetMutation = () => {
-	const queryClient = useQueryClient();
-	return useMutation({
-		...movieBookmarksControllerSetMutation(),
-		onSuccess: (data) => {
-			queryClient.setQueryData(movieBookmarkOptions({
-				userId: data.userId,
-				movieId: data.mediaId,
-			}).queryKey, data);
+// export const useMovieBookmarkSetMutation = () => {
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		...movieBookmarksControllerSetMutation(),
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(movieBookmarkOptions({
+// 				userId: data.userId,
+// 				movieId: data.mediaId,
+// 			}).queryKey, data);
 
-			queryClient.invalidateQueries({
-				queryKey: userKeys.movies({
-					userId: data.userId,
-				}),
-			});
-		}
-	});
-}
+// 			queryClient.invalidateQueries({
+// 				queryKey: userKeys.movies({
+// 					userId: data.userId,
+// 				}),
+// 			});
+// 		}
+// 	});
+// }
 
-export const useMovieBookmarkDeleteMutation = () => {
-	const queryClient = useQueryClient();
-	return useMutation({
-		...movieBookmarksControllerDeleteMutation(),
-		onSuccess: (data) => {
-			queryClient.setQueryData(movieBookmarkOptions({
-				userId: data.userId,
-				movieId: data.mediaId,
-			}).queryKey, null);
+// export const useMovieBookmarkDeleteMutation = () => {
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		...movieBookmarksControllerDeleteMutation(),
+// 		onSuccess: (data) => {
+// 			queryClient.setQueryData(movieBookmarkOptions({
+// 				userId: data.userId,
+// 				movieId: data.mediaId,
+// 			}).queryKey, null);
 
-			removeFromPaginatedCache(
-				queryClient,
-				userBookmarksOptions({ userId: data.userId }).queryKey,
-				data.id
-			);
-			queryClient.setQueriesData(
-				{ queryKey: userBookmarksInfiniteOptions({ userId: data.userId }).queryKey },
-				(oldData: InfiniteData<ListInfiniteBookmarks> | undefined) => {
-					return removeFromInfiniteCache(oldData, data.id);
-				}
-			);
-		}
-	});
-}
+// 			removeFromPaginatedCache(
+// 				queryClient,
+// 				userBookmarksOptions({ userId: data.userId }).queryKey,
+// 				data.id
+// 			);
+// 			queryClient.setQueriesData(
+// 				{ queryKey: userBookmarksInfiniteOptions({ userId: data.userId }).queryKey },
+// 				(oldData: InfiniteData<ListInfiniteBookmarks> | undefined) => {
+// 					return removeFromInfiniteCache(oldData, data.id);
+// 				}
+// 			);
+// 		}
+// 	});
+// }

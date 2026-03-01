@@ -25,7 +25,6 @@ import MediaPoster from '@/components/Media/MediaPoster';
 import { HeaderBox } from '@/components/Box/HeaderBox';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { Database } from '@recomendapp/types';
 import { upperFirst } from 'lodash';
 import { useLocale, useTranslations } from 'next-intl';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
@@ -35,11 +34,11 @@ import ButtonUserActivityTvSeriesRating from '@/components/buttons/ButtonUserAct
 import ButtonUserActivityTvSeriesWatch from '@/components/buttons/ButtonUserActivityTvSeriesWatch';
 import ButtonUserActivityTvSeriesWatchedDate from '@/components/buttons/ButtonUserActivityTvSeriesWatchedDate';
 import { ContextMenuTvSeries } from '@/components/ContextMenu/ContextMenuTvSeries';
-import ButtonUserRecosTvSeriesSend from '@/components/buttons/ButtonUserRecosTvSeriesSend';
 import ButtonPlaylistTvSeriesAdd from '@/components/buttons/ButtonPlaylistTvSeriesAdd';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import ButtonFollowersAvgRatingTvSeries from '@/components/buttons/ButtonFollowersAvgRatingTvSeries';
 import { TvSeries, TvSeriesTrailer } from '@packages/api-js';
+import ButtonUserRecoSend from '@/components/buttons/ButtonUserRecoSend';
 
 export const TvSeriesHeader = ({
   tvSeries,
@@ -130,7 +129,7 @@ export const TvSeriesHeader = ({
           </div>
           <div className="flex gap-2 items-center">
             <ButtonPlaylistTvSeriesAdd tvSeriesId={tvSeries.id} tvSeriesTitle={tvSeries.name} />
-            <ButtonUserRecosTvSeriesSend tvSeriesId={tvSeries.id} tvSeriesTitle={tvSeries.name} />
+            <ButtonUserRecoSend mediaId={tvSeries.id} mediaType="tv_series" mediaTitle={tvSeries.name} />
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import { and, asc, desc, eq, exists, gt, lt, or, sql, SQL } from 'drizzle-orm';
 import { follow, logMovie, profile, reviewMovie, user } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
-import { ListInfiniteReviewsMovieDto, ListInfiniteReviewsMovieQueryDto, ListReviewsMovieDto, ListReviewsMovieQueryDto, ReviewMovieDto, ReviewMovieInputDto, ReviewMovieSortBy } from '../../reviews/movie/dto/reviews-movie.dto';
+import { ListInfiniteReviewsMovieDto, ListInfiniteReviewsMovieQueryDto, ListPaginatedReviewsMovieDto, ListPaginatedReviewsMovieQueryDto, ReviewMovieDto, ReviewMovieInputDto, ReviewMovieSortBy } from '../../reviews/movie/dto/reviews-movie.dto';
 import DOMPurify from 'isomorphic-dompurify';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
@@ -159,15 +159,15 @@ export class MovieReviewsService {
 
     return { whereClause, orderBy };
   }
-  async list({
+  async listPaginated({
     movieId,
     query,
     currentUser,
   }: {
     movieId: number;
-    query: ListReviewsMovieQueryDto;
+    query: ListPaginatedReviewsMovieQueryDto;
     currentUser: User | null;
-  }): Promise<ListReviewsMovieDto> {
+  }): Promise<ListPaginatedReviewsMovieDto> {
     return await this.db.transaction(async (tx) => {
       const { per_page, page, sort_by, sort_order } = query;
       const offset = (page - 1) * per_page;
@@ -275,7 +275,7 @@ export class MovieReviewsService {
           }
 
           case ReviewMovieSortBy.UPDATED_AT: {
-            const updatedDate = new Date(cursorData.value as string);
+            const updatedDate = String(cursorData.value);
             cursorWhereClause = or(
               operator(reviewMovie.updatedAt, updatedDate),
               and(
@@ -291,7 +291,7 @@ export class MovieReviewsService {
 
           case ReviewMovieSortBy.CREATED_AT:
           default: {
-            const createdDate = new Date(cursorData.value as string);
+            const createdDate = String(cursorData.value);
             cursorWhereClause = or(
               operator(reviewMovie.createdAt, createdDate),
               and(
@@ -346,11 +346,11 @@ export class MovieReviewsService {
             cursorValue = lastItem.log.rating ?? 0;
             break;
           case ReviewMovieSortBy.UPDATED_AT:
-            cursorValue = lastItem.review.updatedAt.toISOString();
+            cursorValue = lastItem.review.updatedAt;
             break;
           case ReviewMovieSortBy.CREATED_AT:
           default:
-            cursorValue = lastItem.review.createdAt.toISOString();
+            cursorValue = lastItem.review.createdAt;
             break;
         }
 

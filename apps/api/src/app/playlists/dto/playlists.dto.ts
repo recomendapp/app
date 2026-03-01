@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional, ApiSchema, IntersectionType, PartialType, PickType } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
-import { IsEnum, IsIn, IsOptional, IsString, IsUrl, Length, Matches, ValidateNested } from "class-validator";
+import { IsDateString, IsEnum, IsIn, IsOptional, IsString, IsUrl, Length, Matches, ValidateNested } from "class-validator";
 import { PLAYLIST_RULES } from "../../../config/validation-rules";
 import { playlistMemberRoleEnum, playlistVisibilityEnum } from "@libs/db/schemas";
 import { PaginatedResponseDto, PaginationQueryDto } from "../../../common/dto/pagination.dto";
@@ -79,13 +79,13 @@ export class PlaylistDto {
 	// Dates
 	@ApiProperty()
     @Expose()
-    @Type(() => Date)
-    createdAt: Date;
+    @IsDateString()
+    createdAt: string;
 
     @ApiProperty()
     @Expose()
-    @Type(() => Date)
-    updatedAt: Date;
+    @IsDateString()
+    updatedAt: string;
 
 	// Counts
 	@ApiProperty({ example: 42, description: 'Number of items in the playlist' })
@@ -147,8 +147,8 @@ class BaseListPlaylistsQueryDto {
     sort_order: SortOrder = SortOrder.DESC;
 }
 
-@ApiSchema({ name: 'ListPlaylistsQuery' })
-export class ListPlaylistsQueryDto extends IntersectionType(
+@ApiSchema({ name: 'ListPaginatedPlaylistsQuery' })
+export class ListPaginatedPlaylistsQueryDto extends IntersectionType(
   BaseListPlaylistsQueryDto,
   PaginationQueryDto
 ) {}
@@ -165,13 +165,13 @@ export class PlaylistCreateDto extends PickType(PlaylistDto, ['title', 'descript
 @ApiSchema({ name: 'PlaylistUpdate' })
 export class PlaylistUpdateDto extends PartialType(PlaylistCreateDto) {}
 
-@ApiSchema({ name: 'ListPlaylists' })
-export class ListPlaylistsDto extends PaginatedResponseDto<PlaylistDto> {
+@ApiSchema({ name: 'ListPaginatedPlaylists' })
+export class ListPaginatedPlaylistsDto extends PaginatedResponseDto<PlaylistDto> {
 	@ApiProperty({ type: () => [PlaylistDto] })
 	@Type(() => PlaylistDto)
 	data: PlaylistDto[];
 
-	constructor(partial: Partial<ListPlaylistsDto>) {
+	constructor(partial: Partial<ListPaginatedPlaylistsDto>) {
 		super(partial);
 		Object.assign(this, partial);
 	}
@@ -189,13 +189,13 @@ export class ListInfinitePlaylistsDto extends CursorPaginatedResponseDto<Playlis
   }
 }
 
-@ApiSchema({ name: 'ListPlaylistsWithOwner' })
-export class ListPlaylistsWithOwnerDto extends PaginatedResponseDto<PlaylistWithOwnerDTO> {
+@ApiSchema({ name: 'ListPaginatedPlaylistsWithOwner' })
+export class ListPaginatedPlaylistsWithOwnerDto extends PaginatedResponseDto<PlaylistWithOwnerDTO> {
 	@ApiProperty({ type: () => [PlaylistWithOwnerDTO] })
 	@Type(() => PlaylistWithOwnerDTO)
 	data: PlaylistWithOwnerDTO[];
 
-	constructor(partial: Partial<ListPlaylistsWithOwnerDto>) {
+	constructor(partial: Partial<ListPaginatedPlaylistsWithOwnerDto>) {
 		super(partial);
 		Object.assign(this, partial);
 	}

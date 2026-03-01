@@ -5,67 +5,67 @@ import { useAuth } from "@/context/auth-context";
 import { UserRecosAggregated, UserRecosMovieAggregated, UserRecosTvSeriesAggregated } from "@recomendapp/types";
 
 /* --------------------------------- FOLLOWS -------------------------------- */
-export const useUserFollowersRequestsOptions = ({
-	userId,
-} : {
-	userId?: string;
-}) => {
-	const PER_PAGE = 20;
-	const supabase = useSupabaseClient();
-	return infiniteQueryOptions({
-		queryKey: userKeys.followersRequests({
-			userId: userId!,
-		}),
-		queryFn: async ({ pageParam = 1 }) => {
-			if (!userId) throw Error('Missing user id');
-			const from = (pageParam - 1) * PER_PAGE;
-			const to = from + PER_PAGE - 1;
-			const { data, error } = await supabase
-				.from('user_follower')
-				.select('id, user:profile!user_follower_user_id_fkey!inner(*)')
-				.eq('followee_id', userId)
-				.eq('is_pending', true)
-				.range(from, to);
-			if (error) throw error;
-			return data;
-		},
-		initialPageParam: 1,
-		getNextPageParam: (lastPage, pages) => {
-			return lastPage?.length == PER_PAGE ? pages.length + 1 : undefined;
-		},
-		enabled: !!userId,
-	});
-};
+// export const useUserFollowersRequestsOptions = ({
+// 	userId,
+// } : {
+// 	userId?: string;
+// }) => {
+// 	const PER_PAGE = 20;
+// 	const supabase = useSupabaseClient();
+// 	return infiniteQueryOptions({
+// 		queryKey: userKeys.followersRequests({
+// 			userId: userId!,
+// 		}),
+// 		queryFn: async ({ pageParam = 1 }) => {
+// 			if (!userId) throw Error('Missing user id');
+// 			const from = (pageParam - 1) * PER_PAGE;
+// 			const to = from + PER_PAGE - 1;
+// 			const { data, error } = await supabase
+// 				.from('user_follower')
+// 				.select('id, user:profile!user_follower_user_id_fkey!inner(*)')
+// 				.eq('followee_id', userId)
+// 				.eq('is_pending', true)
+// 				.range(from, to);
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		initialPageParam: 1,
+// 		getNextPageParam: (lastPage, pages) => {
+// 			return lastPage?.length == PER_PAGE ? pages.length + 1 : undefined;
+// 		},
+// 		enabled: !!userId,
+// 	});
+// };
 
-export const useUserFollowPersonOptions = ({
-	userId,
-	personId,
-} : {
-	userId?: string;
-	personId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: userKeys.followPerson({
-			userId: userId!,
-			personId: personId,
-		}),
-		queryFn: async () => {
-			if (!userId) throw Error('Missing user id');
-			const { data, error } = await supabase
-				.from('user_person_follower')
-				.select('*')
-				.match({
-					user_id: userId,
-					person_id: personId,
-				})
-				.maybeSingle();
-			if (error) throw error;
-			return data;
-		},
-		enabled: !!userId && !!personId,
-	});
-};
+// export const useUserFollowPersonOptions = ({
+// 	userId,
+// 	personId,
+// } : {
+// 	userId?: string;
+// 	personId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return queryOptions({
+// 		queryKey: userKeys.followPerson({
+// 			userId: userId!,
+// 			personId: personId,
+// 		}),
+// 		queryFn: async () => {
+// 			if (!userId) throw Error('Missing user id');
+// 			const { data, error } = await supabase
+// 				.from('user_person_follower')
+// 				.select('*')
+// 				.match({
+// 					user_id: userId,
+// 					person_id: personId,
+// 				})
+// 				.maybeSingle();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		enabled: !!userId && !!personId,
+// 	});
+// };
 /* -------------------------------------------------------------------------- */
 
 /* ---------------------------------- FEED ---------------------------------- */
@@ -622,59 +622,59 @@ export const useUserRecosTvSeriesOptions = ({
 	});
 };
 
-export const useUserRecosMovieSendOptions = ({
-	userId,
-	movieId,
-} : {
-	userId?: string;
-	movieId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: userKeys.recosSend({
-			id: movieId,
-			type: 'movie',
-		}),
-		queryFn: async () => {
-			if (!userId) throw Error('Missing user id');
-			const { data, error } = await supabase
-				.from('user_friend')
-				.select(`
-					id,
-					friend:profile!user_friend_friend_id_fkey!inner(
-						*,
-						user_activities_movie(count),
-						user_recos_movie!user_recos_movie_user_id_fkey(count)
-					)
-				`)
-				.match({
-					'user_id': userId,
-					'friend.user_activities_movie.movie_id': movieId,
-					'friend.user_recos_movie.movie_id': movieId,
-					'friend.user_recos_movie.sender_id': userId,
-					'friend.user_recos_movie.status': 'active',
-				})
-				// .overrideTypes<(UserFriend & {
-				// 	friend: {
-				// 		user_activities_movie: {
-				// 			count: number;
-				// 		}[];
-				// 		user_recos_movie: {
-				// 			count: number;
-				// 		}[];
-				// 	};
-				// })[]>();
-			if (error) throw error;
-			const output = data?.map((userFriend) => ({
-				friend: userFriend.friend,
-				as_watched: userFriend.friend.user_activities_movie[0]?.count > 0,
-				already_sent: userFriend.friend.user_recos_movie[0]?.count > 0,
-			}));
-			return output;
-		},
-		enabled: !!userId,
-	});
-};
+// export const useUserRecosMovieSendOptions = ({
+// 	userId,
+// 	movieId,
+// } : {
+// 	userId?: string;
+// 	movieId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return queryOptions({
+// 		queryKey: userKeys.recosSend({
+// 			id: movieId,
+// 			type: 'movie',
+// 		}),
+// 		queryFn: async () => {
+// 			if (!userId) throw Error('Missing user id');
+// 			const { data, error } = await supabase
+// 				.from('user_friend')
+// 				.select(`
+// 					id,
+// 					friend:profile!user_friend_friend_id_fkey!inner(
+// 						*,
+// 						user_activities_movie(count),
+// 						user_recos_movie!user_recos_movie_user_id_fkey(count)
+// 					)
+// 				`)
+// 				.match({
+// 					'user_id': userId,
+// 					'friend.user_activities_movie.movie_id': movieId,
+// 					'friend.user_recos_movie.movie_id': movieId,
+// 					'friend.user_recos_movie.sender_id': userId,
+// 					'friend.user_recos_movie.status': 'active',
+// 				})
+// 				// .overrideTypes<(UserFriend & {
+// 				// 	friend: {
+// 				// 		user_activities_movie: {
+// 				// 			count: number;
+// 				// 		}[];
+// 				// 		user_recos_movie: {
+// 				// 			count: number;
+// 				// 		}[];
+// 				// 	};
+// 				// })[]>();
+// 			if (error) throw error;
+// 			const output = data?.map((userFriend) => ({
+// 				friend: userFriend.friend,
+// 				as_watched: userFriend.friend.user_activities_movie[0]?.count > 0,
+// 				already_sent: userFriend.friend.user_recos_movie[0]?.count > 0,
+// 			}));
+// 			return output;
+// 		},
+// 		enabled: !!userId,
+// 	});
+// };
 export const useUserRecosTvSeriesSendOptions = ({
 	userId,
 	tvSeriesId,

@@ -22,11 +22,11 @@ import { createShareController } from "@/components/ShareController/ShareControl
 import { useAuth } from "@/context/auth-context";
 import { ShareControllerMovie } from "@/components/ShareController/ShareControllerMovie";
 import { ModalPlaylistMovieAdd } from "@/components/Modals/playlists/ModalPlaylistMovieAdd";
-import { ModalUserRecosMovieSend } from "@/components/Modals/recos/ModalUserRecosMovieSend";
 import { usePlaylistMovieDeleteMutation } from "@/api/client/mutations/playlistMutations";
 import ModaPlaylistMovieComment from "@/components/Modals/playlists/ModalPlaylistMovieComment";
 import { useQuery } from "@tanstack/react-query";
 import { usePlaylistIsAllowedToEditOptions } from "@/api/client/options/playlistOptions";
+import { ModalUserRecoSend } from "@/components/Modals/recos/ModalUserRecoSend";
 
 interface DataTableRowActionsProps {
   table: Table<PlaylistItemMovie>;
@@ -93,7 +93,7 @@ export function DataTableRowActions({
             {upperFirst(t('common.messages.add_to_playlist'))}
           </DropdownMenuItem>
           <DropdownMenuItem
-          onClick={() => openModal(ModalUserRecosMovieSend, { movieId: data.movie_id, movieTitle: data.movie?.title! })}
+          onClick={() => openModal(ModalUserRecoSend, { mediaId: data.movie_id, mediaTitle: data.movie?.title!, mediaType: 'movie' })}
           >
             <Icons.send className='w-4' />
             {upperFirst(t('common.messages.send_to_friend'))}

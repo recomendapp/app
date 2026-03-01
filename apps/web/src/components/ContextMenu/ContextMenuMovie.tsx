@@ -10,9 +10,9 @@ import { upperFirst } from "lodash";
 import { useAuth } from "@/context/auth-context";
 import { createShareController } from "../ShareController/ShareController";
 import { ShareControllerMovie } from "../ShareController/ShareControllerMovie";
-import { ModalUserRecosMovieSend } from "../Modals/recos/ModalUserRecosMovieSend";
 import { ModalPlaylistMovieAdd } from "../Modals/playlists/ModalPlaylistMovieAdd";
 import { Movie, MovieCompact } from "@packages/api-js";
+import { ModalUserRecoSend } from "../Modals/recos/ModalUserRecoSend";
 
 interface Item {
 	icon: React.ElementType;
@@ -53,7 +53,7 @@ export const ContextMenuMovie = ({
 				},
 				{
 					icon: Icons.send,
-					onClick: () => openModal(ModalUserRecosMovieSend, { movieId: movie.id, movieTitle: movie.title! }),
+					onClick: () => openModal(ModalUserRecoSend, { mediaId: movie.id, mediaTitle: movie.title!, mediaType: 'movie' }),
 					label: upperFirst(t('common.messages.send_to_friend')),
 				}
 			] : []),

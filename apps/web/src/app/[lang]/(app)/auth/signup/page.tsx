@@ -32,6 +32,7 @@ import { useUsernameAvailability } from '@/hooks/use-username-availability';
 import { InputPassword } from '@/components/ui/input-password';
 import { Turnstile } from "next-turnstile";
 import { upperFirst } from 'lodash';
+import { authClient } from '@/lib/auth/client';
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 15;
@@ -174,20 +175,18 @@ export default function Signup() {
 	const resendOtp = useCallback(async () => {
 		try {
 			setIsLoading(true);
-			// await loginWithOtp(form.getValues('email'), redirectTo);
-			toast.success(common('form.code_sent'));
-		} catch (error) {
-			if (error instanceof AuthError) {
-				switch (error.status) {
-					case 429:
-						toast.error(common('form.error.too_many_attempts'));
-						break;
+			const { error } = await authClient.sendVerificationEmail({
+				email: form.getValues('email'),
+			});
+			if (error) {
+				switch (error.code) {
 					default:
-						toast.error(error.message);
+						toast.error(upperFirst(common('messages.an_error_occurred')));
+						break;
 				}
-			} else {
-				toast.error(upperFirst(common('messages.an_error_occurred')));
-			}
+				throw error;
+			};
+			toast.success(common('form.code_sent'));
 		} finally {
 			setIsLoading(false);
 		}

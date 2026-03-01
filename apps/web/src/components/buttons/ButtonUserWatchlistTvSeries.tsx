@@ -12,7 +12,7 @@ import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { ContextMenuWatchlistTvSeries } from "../ContextMenu/ContextMenuWatchlistTvSeries";
 import { useQuery } from "@tanstack/react-query";
-import { tvSeriesBookmarkOptions, useTvSeriesBookmarkDeleteMutation, useTvSeriesBookmarkSetMutation } from "@libs/query-client";
+import { userBookmarkByMediaOptions, useUserBookmarkDeleteByMediaMutation, useUserBookmarkSetByMediaMutation } from "@libs/query-client";
 
 interface ButtonUserWatchlistTvSeriesProps
 	extends React.ComponentProps<typeof Button> {
@@ -32,19 +32,21 @@ const ButtonUserWatchlistTvSeries = React.forwardRef<
 		data: watchlist,
 		isLoading,
 		isError,
-	} = useQuery(tvSeriesBookmarkOptions({
-		tvSeriesId: tvSeriesId,
+	} = useQuery(userBookmarkByMediaOptions({
+		mediaId: tvSeriesId,
+		type: 'tv_series',
 		userId: user?.id,
 	}));
-	const { mutateAsync: addBookmark, isPending: isAddPending } = useTvSeriesBookmarkSetMutation();
-	const { mutateAsync: deleteBookmark, isPending: isDeletePending } = useTvSeriesBookmarkDeleteMutation();
+	const { mutateAsync: addBookmark, isPending: isAddPending } = useUserBookmarkSetByMediaMutation();
+	const { mutateAsync: deleteBookmark, isPending: isDeletePending } = useUserBookmarkDeleteByMediaMutation();
 
 	const handleWatchlist = React.useCallback(async (e: React.MouseEvent) => {
 		stopPropagation && e.stopPropagation();
 		if (watchlist) return;
 		await addBookmark({
 			path: {
-				tv_series_id: tvSeriesId,
+				media_id: tvSeriesId,
+				type: 'tv_series',
 			},
 			body: {}
 		}, {
@@ -59,7 +61,8 @@ const ButtonUserWatchlistTvSeries = React.forwardRef<
 		if (!watchlist) return;
 		await deleteBookmark({
 			path: {
-				tv_series_id: tvSeriesId,
+				media_id: watchlist.mediaId,
+				type: watchlist.type,
 			}
 		}, {
 		  onError: () => {

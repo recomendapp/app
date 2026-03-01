@@ -26,10 +26,10 @@ export const bookmark = pgTable(
     userId: uuid('user_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
-    createdAt: timestamp('created_at', { withTimezone: true })
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
       .defaultNow()
       .notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true })
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' })
       .$onUpdate(() => sql`now()`)
       .notNull(),
     status: bookmarkStatusEnum().default('active').notNull(),

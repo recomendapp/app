@@ -5,7 +5,7 @@ import { UserDto, UpdateUserDto, ProfileDto } from './dto/users.dto';
 import { AuthGuard, OptionalAuthGuard } from '../auth/guards';
 import { CurrentOptionalUser, CurrentUser } from '../auth/decorators';
 import { User } from '../auth/auth.service';
-import { FollowDto } from './dto/user-follow.dto';
+import { FollowDto } from './follow/dto/user-follow.dto';
 
 @ApiTags('Users')
 @Controller({
@@ -64,52 +64,4 @@ export class UsersController {
   ): Promise<ProfileDto> {
     return this.usersService.getProfile(decodeURIComponent(identifier), currentUser);
   }
-
-  /* --------------------------------- Follows -------------------------------- */
-
-  @Get(':user_id/follow')
-  @UseGuards(AuthGuard)
-  @ApiExtraModels(FollowDto)
-  @ApiOkResponse({
-    description: 'Get follow relationship with the target user',
-    schema: {
-      nullable: true,
-      allOf: [
-        { $ref: getSchemaPath(FollowDto) }
-      ]
-    }
-  })
-  async getFollowStatus(
-    @Param('user_id', ParseUUIDPipe) targetUserId: string,
-    @CurrentUser() currentUser: User,
-  ): Promise<FollowDto | null> {
-    return this.usersService.getFollowStatus(currentUser.id, targetUserId);
-  }
-
-  @Post(':user_id/follow')
-  @UseGuards(AuthGuard)
-  @ApiOkResponse({
-    description: 'Follow a user',
-    type: FollowDto,
-  })
-  async followUser(
-    @Param('user_id', ParseUUIDPipe) targetUserId: string,
-    @CurrentUser() currentUser: User,
-  ): Promise<FollowDto> {
-    return this.usersService.followUser(currentUser.id, targetUserId);
-  }
-
-  @Delete(':user_id/follow')
-  @UseGuards(AuthGuard)
-  @ApiOkResponse({
-    description: 'Unfollow a user',
-    type: FollowDto,
-  })
-  async unfollowUser(
-    @Param('user_id', ParseUUIDPipe) targetUserId: string,
-    @CurrentUser() currentUser: User,
-  ): Promise<FollowDto> {
-    return this.usersService.unfollowUser(currentUser.id, targetUserId);
-  }
-  /* -------------------------------------------------------------------------- */
 }

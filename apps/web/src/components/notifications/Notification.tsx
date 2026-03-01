@@ -13,7 +13,6 @@ import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { NotificationPayload } from '@recomendapp/types';
-import { useUserAcceptFollowerRequestMutation, useUserDeclineFollowerRequestMutation } from '@/api/client/mutations/userMutations';
 
 interface NotificationProps extends React.HTMLAttributes<HTMLDivElement | HTMLAnchorElement> {
 	notification: NotificationType;
@@ -21,8 +20,8 @@ interface NotificationProps extends React.HTMLAttributes<HTMLDivElement | HTMLAn
 
 const NotificationContent = ({ notification }: { notification: NotificationType }) => {
 	const t = useTranslations('common');
-	const { mutateAsync: acceptRequest } = useUserAcceptFollowerRequestMutation();
-	const { mutateAsync: declineRequest } = useUserDeclineFollowerRequestMutation();
+	// const { mutateAsync: acceptRequest } = useUserAcceptFollowerRequestMutation();
+	// const { mutateAsync: declineRequest } = useUserDeclineFollowerRequestMutation();
 
 	const handleAction = useCallback(async ({
 		action,
@@ -35,33 +34,33 @@ const NotificationContent = ({ notification }: { notification: NotificationType 
 		switch (data.type) {
 			case 'follower_request':
 				if (action === 'primary') {
-					await acceptRequest({
-						requestId: data.id
-					}, {
-						onSuccess: () => {
-							toast.success(upperFirst(t('messages.request_accepted', { count: 1 })));
-							notification.completePrimary();
-						}, onError: () => {
-							toast.error(upperFirst(t('messages.an_error_occurred')))
-						}
-					});
+					// await acceptRequest({
+					// 	requestId: data.id
+					// }, {
+					// 	onSuccess: () => {
+					// 		toast.success(upperFirst(t('messages.request_accepted', { count: 1 })));
+					// 		notification.completePrimary();
+					// 	}, onError: () => {
+					// 		toast.error(upperFirst(t('messages.an_error_occurred')))
+					// 	}
+					// });
 				} else {
-					await declineRequest({
-						requestId: data.id
-					}, {
-						onSuccess: () => {
-							toast.success(upperFirst(t('messages.request_declined', { count: 1 })));
-							notification.completeSecondary();
-						}, onError: () => {
-							toast.error(upperFirst(t('messages.an_error_occurred')));
-						}
-					});
+					// await declineRequest({
+					// 	requestId: data.id
+					// }, {
+					// 	onSuccess: () => {
+					// 		toast.success(upperFirst(t('messages.request_declined', { count: 1 })));
+					// 		notification.completeSecondary();
+					// 	}, onError: () => {
+					// 		toast.error(upperFirst(t('messages.an_error_occurred')));
+					// 	}
+					// });
 				}
 				break;
 			default:
 				break;
 		}
-	}, [acceptRequest, declineRequest, notification, t]);
+	}, [/*acceptRequest, declineRequest,*/ notification, t]);
 	return (
 		<div className='flex gap-2'>
 			<div className='h-10 relative shrink-0 rounded-md overflow-hidden aspect-square'>

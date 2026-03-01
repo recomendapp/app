@@ -25,13 +25,13 @@ const CardUserDefault = React.forwardRef<
 			href={linked ? `/@${user.username}` : undefined}
 			as={Card}
 			className={cn(
-				"flex items-center rounded-xl h-20 bg-muted hover:bg-muted-hover p-1",
+				"flex items-center rounded-xl h-20 bg-muted hover:bg-muted-hover p-1 gap-2",
 				className
 			)}
 			{...props}
 		>
 			<UserAvatar username={user.username ?? ''} avatarUrl={user.avatar} className="h-full w-auto aspect-square" />
-			<div className='px-2 py-1 space-y-1'>
+			<div>
 				<p className='line-clamp-2 wrap-break-word'>{user.name}</p>
 				<p className="text-muted-foreground">@{user.username}</p>
 				{children}

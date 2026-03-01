@@ -1,4 +1,4 @@
-import { MoviePlaylistsControllerListData, MoviePlaylistsControllerListInfiniteData, MovieReviewsControllerListData, MovieReviewsControllerListInfiniteData } from "@packages/api-js";
+import { MoviePlaylistsControllerListInfiniteData, MoviePlaylistsControllerListPaginatedData, MovieReviewsControllerListInfiniteData, MovieReviewsControllerListPaginatedData } from "@packages/api-js";
 
 export const movieKeys = {
 	base: ['movie'] as const,
@@ -19,32 +19,32 @@ export const movieKeys = {
 	/* --------------------------------- Reviews -------------------------------- */
 	reviews: ({
 		movieId,
-		infinite,
+		mode,
 		filters,
 	}: {
 		movieId: number;
 	} & (
-		| { infinite?: never; filters?: never }
-		| { infinite: false; filters?: NonNullable<MovieReviewsControllerListData['query']> }
-		| { infinite: true; filters?: Omit<NonNullable<MovieReviewsControllerListInfiniteData['query']>, 'cursor'> }
+		| { mode?: never; filters?: never }
+		| { mode: 'paginated'; filters?: NonNullable<MovieReviewsControllerListPaginatedData['query']> }
+		| { mode: 'infinite'; filters?: Omit<NonNullable<MovieReviewsControllerListInfiniteData['query']>, 'cursor'> }
 	)) => {
-		const optionsKey = [...(infinite !== undefined ? [infinite] : []), ...(filters ? [filters] : [])];
+		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
 		return [...movieKeys.details({ movieId }), 'reviews', ...optionsKey] as const;
 	},
 
 	/* -------------------------------- Playlists ------------------------------- */
 	playlists: ({
 		movieId,
-		infinite,
+		mode,
 		filters,
 	}: {
 		movieId: number;
 	} & (
-		| { infinite?: never; filters?: never }
-		| { infinite: false; filters?: NonNullable<MoviePlaylistsControllerListData['query']> }
-		| { infinite: true; filters?: Omit<NonNullable<MoviePlaylistsControllerListInfiniteData['query']>, 'cursor'> }
+		| { mode?: never; filters?: never }
+		| { mode: 'paginated'; filters?: NonNullable<MoviePlaylistsControllerListPaginatedData['query']> }
+		| { mode: 'infinite'; filters?: Omit<NonNullable<MoviePlaylistsControllerListInfiniteData['query']>, 'cursor'> }
 	)) => {
-		const optionsKey = [...(infinite !== undefined ? [infinite] : []), ...(filters ? [filters] : [])];
+		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
 		return [...movieKeys.details({ movieId }), 'playlists', ...optionsKey] as const;
 	},
 
@@ -54,12 +54,6 @@ export const movieKeys = {
 	}: {
 		movieId: number;
 	}) => [...movieKeys.details({ movieId }), 'log'] as const,
-
-	bookmark: ({
-		movieId,
-	}: {
-		movieId: number;
-	}) => [...movieKeys.details({ movieId }), 'bookmark'] as const,
 
 	followingLogs: ({
 		movieId,

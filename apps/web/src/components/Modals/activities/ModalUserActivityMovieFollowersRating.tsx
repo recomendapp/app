@@ -17,7 +17,7 @@ import { useTranslations } from "next-intl";
 import { CardUser } from "@/components/Card/CardUser";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import { useQuery } from "@tanstack/react-query";
-import { movieFollowingLogsOptions } from "@libs/query-client/src";
+import { movieFollowingLogsOptions } from "@libs/query-client";
 
 const chartConfig = {
 	count: {

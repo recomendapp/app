@@ -3,7 +3,7 @@ import { and, asc, desc, eq, exists, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { bookmark, follow, profile, tmdbMovieView, tmdbTvSeriesView } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
-import { BaseListBookmarksQueryDto, BookmarkSortBy, ListBookmarksDto, ListBookmarksQueryDto, ListInfiniteBookmarksDto, ListInfiniteBookmarksQueryDto } from '../../bookmarks/dto/bookmarks.dto';
+import { BaseListBookmarksQueryDto, BookmarkSortBy, BookmarkWithMediaUnion, ListAllBookmarksQueryDto, ListInfiniteBookmarksDto, ListInfiniteBookmarksQueryDto, ListPaginatedBookmarksDto, ListPaginatedBookmarksQueryDto } from '../../bookmarks/dto/bookmarks.dto';
 import { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
@@ -84,17 +84,101 @@ export class UserBookmarksService {
       orderBy 
     };
   }
-  async list({
+  async listAll({
     targetUserId,
     query,
     currentUser,
     locale,
   }: {
     targetUserId: string;
-    query: ListBookmarksQueryDto;
+    query: ListAllBookmarksQueryDto;
     currentUser: User | null;
     locale: SupportedLocale;
-  }): Promise<ListBookmarksDto> {
+  }): Promise<BookmarkWithMediaUnion[]> {
+    return await this.db.transaction(async (tx) => {
+      const { sort_by, sort_order, status, type } = query;
+
+      const { whereClause, orderBy } = await this.getListBaseQuery(
+        tx,
+        targetUserId,
+        locale,
+        currentUser,
+        sort_by,
+        sort_order,
+        status,
+        type
+      );
+
+      const results = await tx.select({
+          bookmark: bookmark,
+          movie: {
+            id: tmdbMovieView.id,
+            title: tmdbMovieView.title,
+            slug: tmdbMovieView.slug,
+            url: tmdbMovieView.url,
+            posterPath: tmdbMovieView.posterPath,
+            backdropPath: tmdbMovieView.backdropPath,
+            directors: tmdbMovieView.directors,
+            releaseDate: tmdbMovieView.releaseDate,
+            voteAverage: tmdbMovieView.voteAverage,
+            voteCount: tmdbMovieView.voteCount,
+            popularity: tmdbMovieView.popularity,
+            genres: tmdbMovieView.genres,
+            followerAvgRating: tmdbMovieView.followerAvgRating,
+          },
+          tvSeries: {
+            id: tmdbTvSeriesView.id,
+            name: tmdbTvSeriesView.name,
+            slug: tmdbTvSeriesView.slug,
+            url: tmdbTvSeriesView.url,
+            posterPath: tmdbTvSeriesView.posterPath,
+            backdropPath: tmdbTvSeriesView.backdropPath,
+            createdBy: tmdbTvSeriesView.createdBy,
+            firstAirDate: tmdbTvSeriesView.firstAirDate,
+            lastAirDate: tmdbTvSeriesView.lastAirDate,
+            voteAverage: tmdbTvSeriesView.voteAverage,
+            voteCount: tmdbTvSeriesView.voteCount,
+            popularity: tmdbTvSeriesView.popularity,
+            genres: tmdbTvSeriesView.genres,
+            followerAvgRating: tmdbTvSeriesView.followerAvgRating,
+          },
+        })
+        .from(bookmark)
+        .where(whereClause)
+        .leftJoin(tmdbMovieView, eq(bookmark.movieId, tmdbMovieView.id))
+        .leftJoin(tmdbTvSeriesView, eq(bookmark.tvSeriesId, tmdbTvSeriesView.id))
+        .orderBy(...orderBy);
+
+      return results.map((row): BookmarkWithMediaUnion => {
+        const { movieId, tvSeriesId, ...baseBookmark } = row.bookmark;
+        if (baseBookmark.type === 'movie') {
+          return {
+            ...baseBookmark,
+            type: 'movie',
+            mediaId: movieId,
+            media: row.movie,
+          };
+        }
+        return {
+          ...baseBookmark,
+          type: 'tv_series',
+          mediaId: tvSeriesId,
+          media: row.tvSeries,
+        };
+      });
+    });
+  }
+  async listPaginated({
+    targetUserId,
+    query,
+    currentUser,
+    locale,
+  }: {
+    targetUserId: string;
+    query: ListPaginatedBookmarksQueryDto;
+    currentUser: User | null;
+    locale: SupportedLocale;
+  }): Promise<ListPaginatedBookmarksDto> {
     return await this.db.transaction(async (tx) => {
       const { per_page, page, sort_by, sort_order, status, type } = query;
       const offset = (page - 1) * per_page;
@@ -162,15 +246,23 @@ export class UserBookmarksService {
       ]);
 
       return {
-        data: results.map(({ bookmark: {
-          movieId,
-          tvSeriesId,
-          ...bookmark
-        }, movie, tvSeries }) => ({
-          ...bookmark,
-          mediaId: bookmark.type === 'movie' ? movieId : tvSeriesId,
-          media: bookmark.type === 'movie' ? movie : tvSeries,
-        })),
+        data: results.map((row): ListInfiniteBookmarksDto['data'][number] => {
+          const { movieId, tvSeriesId, ...baseBookmark } = row.bookmark;
+          if (baseBookmark.type === 'movie') {
+            return {
+              ...baseBookmark,
+              type: 'movie',
+              mediaId: movieId,
+              media: row.movie,
+            }
+          }
+          return {
+            ...baseBookmark,
+            type: 'tv_series',
+            mediaId: tvSeriesId,
+            media: row.tvSeries,
+          }
+        }),
         meta: {
           total_results: totalCount,
           total_pages: Math.ceil(totalCount / per_page),
@@ -214,7 +306,7 @@ export class UserBookmarksService {
 
         switch (sort_by) {
           case BookmarkSortBy.UPDATED_AT: {
-            const updatedDate = new Date(cursorData.value as string);
+            const updatedDate = String(cursorData.value);
             cursorWhereClause = or(
               operator(bookmark.updatedAt, updatedDate),
               and(
@@ -230,7 +322,7 @@ export class UserBookmarksService {
 
           case BookmarkSortBy.CREATED_AT:
           default: {
-            const createdDate = new Date(cursorData.value as string);
+            const createdDate = String(cursorData.value);
             cursorWhereClause = or(
               operator(bookmark.createdAt, createdDate),
               and(
@@ -256,7 +348,8 @@ export class UserBookmarksService {
         .limit(fetchLimit)
         .as('paginated_bookmarks');
 
-      const results = await tx.select({
+      const [results, totalCount] = await Promise.all([
+        tx.select({
           bookmark: bookmark,
           movie: {
             id: tmdbMovieView.id,
@@ -289,12 +382,14 @@ export class UserBookmarksService {
             genres: tmdbTvSeriesView.genres,
             followerAvgRating: tmdbTvSeriesView.followerAvgRating,
           },
-        })
-        .from(paginatedBookmarksSubquery)
-        .innerJoin(bookmark, eq(bookmark.id, paginatedBookmarksSubquery.id))
-        .leftJoin(tmdbMovieView, eq(bookmark.movieId, tmdbMovieView.id))
-        .leftJoin(tmdbTvSeriesView, eq(bookmark.tvSeriesId, tmdbTvSeriesView.id))
-        .orderBy(...orderBy);
+          })
+          .from(paginatedBookmarksSubquery)
+          .innerJoin(bookmark, eq(bookmark.id, paginatedBookmarksSubquery.id))
+          .leftJoin(tmdbMovieView, eq(bookmark.movieId, tmdbMovieView.id))
+          .leftJoin(tmdbTvSeriesView, eq(bookmark.tvSeriesId, tmdbTvSeriesView.id))
+          .orderBy(...orderBy),
+        !cursorData ? tx.$count(bookmark, baseWhereClause) : undefined,
+      ]);
 
       const hasNextPage = results.length > per_page;
       const paginatedResults = hasNextPage ? results.slice(0, per_page) : results;
@@ -307,11 +402,11 @@ export class UserBookmarksService {
 
         switch (sort_by) {
           case BookmarkSortBy.UPDATED_AT:
-            cursorValue = lastItem.updatedAt.toISOString();
+            cursorValue = lastItem.updatedAt;
             break;
           case BookmarkSortBy.CREATED_AT:
           default:
-            cursorValue = lastItem.createdAt.toISOString();
+            cursorValue = lastItem.createdAt;
             break;
         }
 
@@ -324,18 +419,27 @@ export class UserBookmarksService {
       }
 
       return {
-        data: paginatedResults.map(({ bookmark: {
-          movieId,
-          tvSeriesId,
-          ...bookmark
-        }, movie, tvSeries }) => ({
-          ...bookmark,
-          mediaId: bookmark.type === 'movie' ? movieId : tvSeriesId,
-          media: bookmark.type === 'movie' ? movie : tvSeries,
-        })),
+        data: paginatedResults.map((row): ListInfiniteBookmarksDto['data'][number] => {
+          const { movieId, tvSeriesId, ...baseBookmark } = row.bookmark;
+          if (baseBookmark.type === 'movie') {
+            return {
+              ...baseBookmark,
+              type: 'movie',
+              mediaId: movieId,
+              media: row.movie,
+            }
+          }
+          return {
+            ...baseBookmark,
+            type: 'tv_series',
+            mediaId: tvSeriesId,
+            media: row.tvSeries,
+          }
+        }),
         meta: {
           next_cursor: nextCursor,
           per_page,
+          total_results: totalCount,
         }
       };
     });

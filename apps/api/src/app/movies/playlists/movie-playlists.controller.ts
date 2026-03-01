@@ -4,7 +4,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { OptionalAuthGuard } from '../../auth/guards';
 import { CurrentOptionalUser } from '../../auth/decorators';
 import { User } from '../../auth/auth.service';
-import { ListInfinitePlaylistsQueryDto, ListInfinitePlaylistsWithOwnerDto, ListPlaylistsQueryDto, ListPlaylistsWithOwnerDto } from '../../playlists/dto/playlists.dto';
+import { ListInfinitePlaylistsQueryDto, ListInfinitePlaylistsWithOwnerDto, ListPaginatedPlaylistsQueryDto, ListPaginatedPlaylistsWithOwnerDto } from '../../playlists/dto/playlists.dto';
 
 @ApiTags('Movies')
 @Controller({
@@ -14,18 +14,18 @@ import { ListInfinitePlaylistsQueryDto, ListInfinitePlaylistsWithOwnerDto, ListP
 export class MoviePlaylistsController {
   constructor(private readonly playlistService: MoviePlaylistsService) {}
 
-  @Get('playlists')
+  @Get('playlists/paginated')
   @UseGuards(OptionalAuthGuard)
   @ApiOkResponse({
     description: 'Get the list of playlists of the movie',
-    type: ListPlaylistsWithOwnerDto,
+    type: ListPaginatedPlaylistsWithOwnerDto,
   })
-  async list(
+  async listPaginated(
     @Param('movie_id', ParseIntPipe) movieId: number,
-    @Query() query: ListPlaylistsQueryDto,
+    @Query() query: ListPaginatedPlaylistsQueryDto,
     @CurrentOptionalUser() currentUser: User | null,
-  ): Promise<ListPlaylistsWithOwnerDto> {
-    return this.playlistService.list({
+  ): Promise<ListPaginatedPlaylistsWithOwnerDto> {
+    return this.playlistService.listPaginated({
       movieId,
       query,
       currentUser,

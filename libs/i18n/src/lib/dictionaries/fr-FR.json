@@ -16,6 +16,7 @@
       "view_profile": "voir le profil",
       "library": "bibliothèque",
       "watchlist": "watchlist",
+      "for_later": "pour plus tard",
       "heart_pick": "{count, plural, one {coup} other {coups}} de coeurs",
       "add_to_heart_picks": "ajouter aux coups de coeur",
       "remove_from_heart_picks": "retirer des coups de coeur",
@@ -108,6 +109,7 @@
       "add_review": "ajouter une critique",
       "tv_series": "{count, plural, one {série} other {séries}}",
       "film": "{count, plural, one {film} other {films}}",
+      "movie": "{count, plural, one {film} other {films}}",
       "media": "{count, plural, one {média} other {médias}}",
       "tv_season": "{count, plural, one {saison} other {saisons}}",
       "tv_season_count": "{count, plural, one {# saison} other {# saisons}}",
@@ -145,6 +147,8 @@
       "last_appearance_date": "dernière apparition",
       "vote_average": "note moyenne",
       "added": "ajouté{gender, select, female {e} other {}}{count, plural, one {} other {s}}",
+      "added_date": "date d'ajout",
+      "added_at": "ajouté{gender, select, female {e} other {}}{count, plural, one {} other {s}} le",
       "add": "ajouter",
       "playlist_name": "nom de la playlist",
       "updated_at": "mis à jour",
@@ -162,7 +166,7 @@
       "start_typing_to_search_users": "commencez à taper pour rechercher des utilisateurs",
       "search_playlist": "rechercher une playlist",
       "start_typing_to_search_playlists": "commencez à taper pour rechercher des playlists",
-      "watched_date": "date de visionnage",
+      "watched_date": "{count, plural, one {date} other {dates}} de visionnage",
       "rating": "note",
       "create_a_playlist": "créer une playlist",
       "by_name": "par {name}",
@@ -406,7 +410,8 @@
       "grid": "{count, plural, one {grille} other {grilles}}",
       "order_asc": "ordre croissant",
       "order_desc": "ordre décroissant",
-      "menu": "menu"
+      "menu": "menu",
+      "at_least_one_watched_date_required": "au moins une date de visionnage est requise"
     },
     "form": {
       "email": {

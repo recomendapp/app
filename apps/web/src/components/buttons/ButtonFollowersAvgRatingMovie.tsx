@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { ModalUserActivityMovieFollowersRating } from "../Modals/activities/ModalUserActivityMovieFollowersRating";
 import { useQuery } from "@tanstack/react-query";
-import { movieFollowingAverageRatingOptions } from "@libs/query-client/src";
+import { movieFollowingAverageRatingOptions } from "@libs/query-client";
 
 interface ButtonFollowersAvgRatingMovieProps
 	extends React.ComponentProps<typeof Button> {

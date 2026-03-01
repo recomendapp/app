@@ -7,6 +7,9 @@ import { UserPlaylistsModule } from './playlists/user-playlists.module';
 import { UserBookmarksModule } from './bookmarks/user-bookmarks.module';
 import { UserFollowersModule } from './followers/user-followers.module';
 import { UserFollowingModule } from './following/user-following.module';
+import { UserPushTokensModule } from './push-tokens/user-push-tokens.module';
+import { UserFollowModule } from './follow/user-follow.module';
+import { UserFollowRequestsModule } from './follow-requests/user-follow-requests.module';
 
 @Module({
   imports: [
@@ -16,6 +19,9 @@ import { UserFollowingModule } from './following/user-following.module';
     UserBookmarksModule,
     UserFollowersModule,
     UserFollowingModule,
+    UserPushTokensModule,
+    UserFollowModule,
+    UserFollowRequestsModule,
   ],
   controllers: [UsersController],
   providers: [UsersService],

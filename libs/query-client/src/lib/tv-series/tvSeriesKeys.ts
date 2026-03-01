@@ -1,4 +1,4 @@
-import { TvSeriesPlaylistsControllerListData, TvSeriesPlaylistsControllerListInfiniteData } from "@packages/api-js";
+import { TvSeriesPlaylistsControllerListInfiniteData, TvSeriesPlaylistsControllerListPaginatedData } from "@packages/api-js";
 
 export const tvSeriesKeys = {
 	base: ['tv-series'] as const,
@@ -35,16 +35,16 @@ export const tvSeriesKeys = {
 	/* -------------------------------- Playlists ------------------------------- */
 	playlists: ({
 		tvSeriesId,
-		infinite,
+		mode,
 		filters,
 	}: {
 		tvSeriesId: number;
 	} & (
-		| { infinite?: never; filters?: never }
-		| { infinite: false; filters?: NonNullable<TvSeriesPlaylistsControllerListData['query']> }
-		| { infinite: true; filters?: Omit<NonNullable<TvSeriesPlaylistsControllerListInfiniteData['query']>, 'cursor'> }
+		| { mode?: never; filters?: never }
+		| { mode: 'paginated'; filters?: NonNullable<TvSeriesPlaylistsControllerListPaginatedData['query']> }
+		| { mode: 'infinite'; filters?: Omit<NonNullable<TvSeriesPlaylistsControllerListInfiniteData['query']>, 'cursor'> }
 	)) => {
-		const optionsKey = [...(infinite !== undefined ? [infinite] : []), ...(filters ? [filters] : [])];
+		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
 		return [...tvSeriesKeys.details({ tvSeriesId }), 'playlists', ...optionsKey] as const;
 	},
 	/* ---------------------------------- Logs ---------------------------------- */
@@ -53,11 +53,4 @@ export const tvSeriesKeys = {
 	}: {
 		tvSeriesId: number;
 	}) => [...tvSeriesKeys.details({ tvSeriesId }), 'log'] as const,
-
-	/* -------------------------------- Bookmarks ------------------------------- */
-	bookmark: ({
-		tvSeriesId,
-	}: {
-		tvSeriesId: number;
-	}) => [...tvSeriesKeys.details({ tvSeriesId }), 'bookmark'] as const,
 };

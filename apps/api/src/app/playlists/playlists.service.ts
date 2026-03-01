@@ -233,7 +233,7 @@ export class PlaylistsService {
     const updatedMembers = await this.db.transaction(async (tx) => {
       const [ownershipCheck] = await tx
         .update(playlist)
-        .set({ updatedAt: new Date() }) 
+        .set({ updatedAt: sql`now()` }) 
         .where(and(
           eq(playlist.id, playlistId),
           eq(playlist.userId, user.id)

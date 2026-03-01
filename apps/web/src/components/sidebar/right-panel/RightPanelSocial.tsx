@@ -10,10 +10,10 @@ import toast from "react-hot-toast";
 import { createRightPanel } from "./RightPanelUtils";
 import Fuse from "fuse.js";
 import { Input } from "@/components/ui/input";
-import { useUserFollowersRequestsOptions } from "@/api/client/options/userOptions";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useUserAcceptFollowerRequestMutation, useUserDeclineFollowerRequestMutation } from "@/api/client/mutations/userMutations";
-import { userFollowingInfiniteOptions } from "@libs/query-client";
+import { userFollowingInfiniteOptions, userFollowRequestsInfiniteOptions, useUserAcceptFollowMutation, useUserDeclineFollowMutation } from "@libs/query-client";
+import { upperFirst } from "lodash";
+import { useTranslations } from "next-intl";
 
 export const RightPanelSocial = () => createRightPanel({
 	title: 'Social',
@@ -75,7 +75,7 @@ const RightPanelSocialFollows = () => {
 			<Input placeholder="Rechercher" value={search} onChange={(e) => setSearch(e.target.value)} />
 			{results?.length ?
 				results.map((user, i) => (
-					<CardUser key={i} user={user} />
+					<CardUser key={i} user={user} className="h-14"/>
 				))
 			: search ? (
 				<div></div>
@@ -88,62 +88,68 @@ const RightPanelSocialFollows = () => {
 
 const RightPanelSocialRequests = () => {
 	const { user } = useAuth();
+	const t = useTranslations();
 	const {
 		data: requests,
 		isLoading,
 		isError,
-	} = useInfiniteQuery(useUserFollowersRequestsOptions({
+	} = useInfiniteQuery(userFollowRequestsInfiniteOptions({
 		userId: user?.id,
 	}));
+	const flattenedRequests = useMemo(() => requests?.pages.flatMap(page => page.data) || [], [requests]);
 
-	const { mutateAsync: acceptRequest } = useUserAcceptFollowerRequestMutation();
-	const { mutateAsync: declineRequest } = useUserDeclineFollowerRequestMutation();
+	const { mutateAsync: acceptRequest } = useUserAcceptFollowMutation();
+	const { mutateAsync: declineRequest } = useUserDeclineFollowMutation();
 
-	const handleAcceptRequest = useCallback(async(requestId: number) => {
+	const handleAcceptRequest = useCallback(async(targetUserId: string) => {
 		await acceptRequest({
-			requestId,
+			path: {
+				user_id: targetUserId,
+			},
 		}, {
 			onSuccess: () => {
-				toast.success('Demande acceptée');
+				toast.success(upperFirst(t('common.messages.request_accepted', { count: 1 })));
 			},
 			onError: () => {
-				toast.error("Une erreur s'est produite");
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}, [acceptRequest]);
+	}, [acceptRequest, t]);
 
-	const handleDeclineRequest = useCallback(async(requestId: number) => {
+	const handleDeclineRequest = useCallback(async(targetUserId: string) => {
 		await declineRequest({
-			requestId,
+			path: {
+				user_id: targetUserId,
+			},
 		}, {
 			onSuccess: () => {
-				toast.success('Demande refusée');
+				toast.success(upperFirst(t('common.messages.request_declined', { count: 1 })));
 			},
 			onError: () => {
-				toast.error("Une erreur s'est produite");
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
 	}, [declineRequest]);
 
 	return (
 		<>
-			{requests?.pages.length ? (
+			{flattenedRequests.length ? (
 				<>
-					{requests?.pages.flat().map(({ id, user }, i) => (
+					{flattenedRequests.map(({ createdAt, user }, i) => (
 						<Card
 						key={i}
 						className={"flex flex-col rounded-xl bg-muted hover:bg-muted-hover p-1"}
 						>
 							<div className="flex items-center p-1">
-								<UserAvatar username={user.username} avatarUrl={user.avatar_url} />
+								<UserAvatar username={user.username} avatarUrl={user.avatar} />
 								<div className='px-2 py-1 space-y-1'>
 									<p className='line-clamp-2 wrap-break-word'>{user.username}</p>
 									<p className="text-muted-foreground">@{user.username}</p>
 								</div>
 							</div>
 							<div className="grid grid-cols-2 gap-2">
-								<Button onClick={() => handleAcceptRequest(id)}>Accepter</Button>
-								<Button variant="outline" onClick={() => handleDeclineRequest(id)}>Refuser</Button>
+								<Button onClick={() => handleAcceptRequest(user.id)}>{upperFirst(t('common.messages.accept'))}</Button>
+								<Button variant="outline" onClick={() => handleDeclineRequest(user.id)}>{upperFirst(t('common.messages.decline'))}</Button>
 							</div>
 						</Card>
 					))}
@@ -151,9 +157,9 @@ const RightPanelSocialRequests = () => {
 			) : (isLoading || requests === undefined) ? (
 				<Icons.loader className='w-8 h-8 mx-auto' />
 			) : isError ? (
-				<div className='text-center text-muted-foreground'>Une erreur s&apos;est produite</div>
+				<div className='text-center text-muted-foreground'>{upperFirst(t('common.messages.an_error_occurred'))}</div>
 			) : (
-				<div className='text-center text-muted-foreground'>Aucune demande</div>
+				<div className='text-center text-muted-foreground'>{upperFirst(t('common.messages.no_results'))}</div>
 			)}
 		</>
 	);

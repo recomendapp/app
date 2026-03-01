@@ -20,10 +20,10 @@ export const reviewMovie = pgTable(
 	id: bigint({ mode: 'number' })
 		.primaryKey()
 		.references(() => logMovie.id, { onDelete: 'cascade' }),
-	createdAt: timestamp('created_at', { withTimezone: true })
+	createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
 		.defaultNow()
 		.notNull(),
-	updatedAt: timestamp('updated_at', { withTimezone: true })
+	updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' })
 		.$onUpdate(() => sql`now()`)
 		.notNull(),
 	title: text(),
@@ -73,7 +73,7 @@ export const reviewMovieLike = pgTable(
 		userId: uuid('user_id')
 			.notNull()
 			.references(() => user.id, { onDelete: 'cascade' }),
-		createdAt: timestamp('created_at', { withTimezone: true })
+		createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
 			.defaultNow()
 			.notNull(),
 		},
@@ -99,10 +99,10 @@ export const reviewTvSeries = pgTable(
 	id: bigint({ mode: 'number' })
 		.primaryKey()
 		.references(() => logTvSeries.id, { onDelete: 'cascade' }),
-	createdAt: timestamp('created_at', { withTimezone: true })
+	createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
 		.defaultNow()
 		.notNull(),
-	updatedAt: timestamp('updated_at', { withTimezone: true })
+	updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' })
 		.$onUpdate(() => sql`now()`)
 		.notNull(),
 	title: text(),
@@ -151,7 +151,7 @@ export const reviewTvSeriesLike = pgTable(
 		userId: uuid('user_id')
 			.notNull()
 			.references(() => user.id, { onDelete: 'cascade' }),
-		createdAt: timestamp('created_at', { withTimezone: true })
+		createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
 			.defaultNow()
 			.notNull(),
 		},

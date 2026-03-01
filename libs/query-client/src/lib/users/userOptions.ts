@@ -1,4 +1,4 @@
-import { personsControllerGetFollowStatus, playlistsControllerGetLikeStatus, playlistsControllerGetSaveStatus, usersControllerGetFollowStatus, usersControllerGetMe, userPlaylistsControllerList, UserPlaylistsControllerListData, userMoviesControllerGet, userMoviesControllerList, UserMoviesControllerListData, userMoviesControllerListInfinite, UserMoviesControllerListInfiniteData, UserPlaylistsControllerListInfiniteData, userPlaylistsControllerListInfinite, UserBookmarksControllerListInfiniteData, userBookmarksControllerListInfinite, UserBookmarksControllerListData, userBookmarksControllerList, UserFollowersControllerListData, userFollowersControllerList, UserFollowersControllerListInfiniteData, userFollowersControllerListInfinite, UserFollowingControllerListData, userFollowingControllerList, UserFollowingControllerListInfiniteData, userFollowingControllerListInfinite } from "@packages/api-js";
+import { personsControllerGetFollowStatus, playlistsControllerGetLikeStatus, playlistsControllerGetSaveStatus, usersControllerGetMe, userMoviesControllerGet, userMoviesControllerListInfinite, UserMoviesControllerListInfiniteData, UserPlaylistsControllerListInfiniteData, userPlaylistsControllerListInfinite, UserBookmarksControllerListInfiniteData, userBookmarksControllerListInfinite, UserFollowersControllerListInfiniteData, userFollowersControllerListInfinite, UserFollowingControllerListInfiniteData, userFollowingControllerListInfinite, movieWatchedDatesControllerListInfinite, MovieWatchedDatesControllerListInfiniteData, Bookmark, bookmarksControllerGetByMedia, UserBookmarksControllerListAllData, userBookmarksControllerListAll, userBookmarksControllerListPaginated, UserBookmarksControllerListPaginatedData, UserPlaylistsControllerListPaginatedData, userPlaylistsControllerListPaginated, UserFollowersControllerListPaginatedData, UserFollowingControllerListPaginatedData, MovieWatchedDatesControllerListPaginatedData, UserMoviesControllerListPaginatedData, userMoviesControllerListPaginated, movieWatchedDatesControllerListPaginated, userFollowersControllerListPaginated, userFollowingControllerListPaginated, RecoTargetsControllerListPaginatedData, recoTargetsControllerListPaginated, recoTargetsControllerListInfinite, RecoTargetsControllerListInfiniteData, recoTargetsControllerListAll, RecoTargetsControllerListAllData, userFollowControllerGet, UserFollowRequestsControllerListPaginatedData, userFollowRequestsControllerListPaginated, UserFollowRequestsControllerListInfiniteData, userFollowRequestsControllerListInfinite } from "@packages/api-js";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { userKeys } from "./userKeys";
 
@@ -39,18 +39,18 @@ export const userMovieLogOptions = ({
 		enabled: !!userId && !!movieId,
 	});
 };
-export const userMovieLogsOptions = ({
+export const userMovieLogsPaginatedOptions = ({
 	userId,
 	filters,
 }: {
 	userId?: string;
-	filters?: NonNullable<UserMoviesControllerListData['query']>;
+	filters?: NonNullable<UserMoviesControllerListPaginatedData['query']>;
 }) => {
 	return queryOptions({
-		queryKey: userKeys.movies({ userId: userId!, infinite: false, filters }),
+		queryKey: userKeys.movies({ userId: userId!, mode: 'paginated', filters }),
 		queryFn: async () => {
 			if (!userId) throw new Error('User ID is required');
-			const { data, error } = await userMoviesControllerList({
+			const { data, error } = await userMoviesControllerListPaginated({
 				path: {
 					user_id: userId,
 				},
@@ -71,7 +71,7 @@ export const userMovieLogsInfiniteOptions = ({
 	filters?: Omit<NonNullable<UserMoviesControllerListInfiniteData['query']>, 'cursor'>;
 }) => {
 	return infiniteQueryOptions({
-		queryKey: userKeys.movies({ userId: userId!, infinite: true, filters }),
+		queryKey: userKeys.movies({ userId: userId!, mode: 'infinite', filters }),
 		queryFn: async ({ pageParam }) => {
 			if (!userId) throw new Error('User ID is required');
 			const { data, error } = await userMoviesControllerListInfinite({
@@ -94,21 +94,223 @@ export const userMovieLogsInfiniteOptions = ({
 		enabled: !!userId,
 	})
 };
+// Watched dates
+export const userMovieWatchedDatesPaginatedOptions = ({
+	userId,
+	movieId,
+	filters,
+}: {
+	userId?: string;
+	movieId?: number;
+	filters?: NonNullable<MovieWatchedDatesControllerListPaginatedData['query']>;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.watchedDates({ userId: userId!, type: 'movie', id: movieId!, mode: 'paginated', filters }),
+		queryFn: async () => {
+			if (!userId) throw new Error('User ID is required');
+			if (!movieId) throw new Error('Movie ID is required');
+			const { data, error } = await movieWatchedDatesControllerListPaginated({
+				path: {
+					movie_id: movieId,
+				},
+				query: filters,
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId && !!movieId,
+	});
+};
+export const userMovieWatchedDatesInfiniteOptions = ({
+	userId,
+	movieId,
+	filters,
+}: {
+	userId?: string;
+	movieId?: number;
+	filters?: Omit<NonNullable<MovieWatchedDatesControllerListInfiniteData['query']>, 'cursor'>;
+}) => {
+	return infiniteQueryOptions({
+		queryKey: userKeys.watchedDates({ userId: userId!, type: 'movie', id: movieId!, mode: 'infinite', filters }),
+		queryFn: async ({ pageParam }) => {
+			if (!userId) throw new Error('User ID is required');
+			if (!movieId) throw new Error('Movie ID is required');
+			const { data, error } = await movieWatchedDatesControllerListInfinite({
+				path: {
+					movie_id: movieId,
+				},
+				query: {
+					...filters,
+					cursor: pageParam,
+				}
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		initialPageParam: undefined as string | undefined,
+		getNextPageParam: (lastPage) => {
+			return lastPage.meta.next_cursor || undefined;
+		},
+		enabled: !!userId && !!movieId,
+	})
+};
 
+/* ---------------------------------- Recos --------------------------------- */
+export const userRecoSendAllOptions = ({
+	userId,
+	mediaId,
+	mediaType,
+	filters,
+}: {
+	userId?: string;
+	mediaId?: number;
+	mediaType?: 'movie' | 'tv_series';
+	filters?: NonNullable<RecoTargetsControllerListAllData['query']>;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.recoTargets({
+			userId: userId!,
+			mediaId: mediaId!,
+			type: mediaType!,
+			mode: 'all',
+			filters,
+		}),
+		queryFn: async () => {
+			if (!mediaId) throw new Error('Media ID is required');
+			if (!mediaType) throw new Error('Media type is required');
+			const { data, error } = await recoTargetsControllerListAll({
+				path: {
+					media_id: mediaId,
+					type: mediaType,
+				},
+				query: filters,
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId && !!mediaId && !!mediaType,
+	});
+};
+export const userRecoSendPaginatedOptions = ({
+	userId,
+	mediaId,
+	mediaType,
+	filters,
+}: {
+	userId?: string;
+	mediaId?: number;
+	mediaType?: 'movie' | 'tv_series';
+	filters?: NonNullable<RecoTargetsControllerListPaginatedData['query']>;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.recoTargets({
+			userId: userId!,
+			mediaId: mediaId!,
+			type: mediaType!,
+			mode: 'paginated',
+			filters,
+		}),
+		queryFn: async () => {
+			if (!mediaId) throw new Error('Media ID is required');
+			if (!mediaType) throw new Error('Media type is required');
+			const { data, error } = await recoTargetsControllerListPaginated({
+				path: {
+					media_id: mediaId,
+					type: mediaType,
+				},
+				query: filters
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId && !!mediaId && !!mediaType,
+	});
+};
+export const userRecoSendInfiniteOptions = ({
+	userId,
+	mediaId,
+	mediaType,
+	filters,
+}: {
+	userId?: string;
+	mediaId?: number;
+	mediaType?: 'movie' | 'tv_series';
+	filters?: Omit<NonNullable<RecoTargetsControllerListInfiniteData['query']>, 'cursor'>;
+}) => {
+	return infiniteQueryOptions({
+		queryKey: userKeys.recoTargets({
+			userId: userId!,
+			mediaId: mediaId!,
+			type: mediaType!,
+			mode: 'infinite',
+			filters,
+		}),
+		queryFn: async ({ pageParam }) => {
+			if (!mediaId) throw new Error('Media ID is required');
+			if (!mediaType) throw new Error('Media type is required');
+			const { data, error } = await recoTargetsControllerListInfinite({
+				path: {
+					media_id: mediaId,
+					type: mediaType,
+				},
+				query: {
+					...filters,
+					cursor: pageParam,
+				}
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		initialPageParam: undefined as string | undefined,
+		getNextPageParam: (lastPage) => {
+			return lastPage.meta.next_cursor || undefined;
+		},
+		enabled: !!userId && !!mediaId && !!mediaType,
+	})
+};
 
 /* -------------------------------- Bookmark -------------------------------- */
-export const userBookmarksOptions = ({
+export const userBookmarksAllOptions = ({
 	userId,
 	filters,
 }: {
 	userId?: string;
-	filters?: NonNullable<UserBookmarksControllerListData['query']>;
+	filters?: NonNullable<UserBookmarksControllerListAllData['query']>;
 }) => {
 	return queryOptions({
-		queryKey: userKeys.bookmarks({ userId: userId!, infinite: false, filters }),
+		queryKey: userKeys.bookmarks({ userId: userId!, mode: 'all', filters }),
 		queryFn: async () => {
 			if (!userId) throw new Error('User ID is required');
-			const { data, error } = await userBookmarksControllerList({
+			const { data, error } = await userBookmarksControllerListAll({
+				path: {
+					user_id: userId,
+				},
+				query: filters
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId,
+	});
+};
+export const userBookmarksPaginatedOptions = ({
+	userId,
+	filters,
+}: {
+	userId?: string;
+	filters?: NonNullable<UserBookmarksControllerListPaginatedData['query']>;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.bookmarks({ userId: userId!, mode: 'paginated', filters }),
+		queryFn: async () => {
+			if (!userId) throw new Error('User ID is required');
+			const { data, error } = await userBookmarksControllerListPaginated({
 				path: {
 					user_id: userId,
 				},
@@ -129,7 +331,7 @@ export const userBookmarksInfiniteOptions = ({
 	filters?: Omit<NonNullable<UserBookmarksControllerListInfiniteData['query']>, 'cursor'>;
 }) => {
 	return infiniteQueryOptions({
-		queryKey: userKeys.bookmarks({ userId: userId!, infinite: true, filters }),
+		queryKey: userKeys.bookmarks({ userId: userId!, mode: 'infinite', filters }),
 		queryFn: async ({ pageParam }) => {
 			if (!userId) throw new Error('User ID is required');
 			const { data, error } = await userBookmarksControllerListInfinite({
@@ -153,23 +355,53 @@ export const userBookmarksInfiniteOptions = ({
 	})
 };
 
+export const userBookmarkByMediaOptions = ({
+	userId,
+	mediaId,
+	type
+} : {
+	userId?: string
+	mediaId?: Bookmark['mediaId'];
+	type?: Bookmark['type'];
+}) => {
+	return queryOptions({
+		queryKey: userKeys.bookmark({ userId: userId!, mediaId: mediaId!, type: type! }),
+		queryFn: async () => {
+			if (!userId) throw new Error('User ID is required');
+			if (!mediaId) throw new Error('Media ID is required');
+			if (!type) throw new Error('Bookmark type is required');
+			
+			const { data, error } = await bookmarksControllerGetByMedia({
+				path: {
+					type: type,
+					media_id: mediaId,
+				}
+			});
+			if (error) throw error;
+			if (data === undefined) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId && !!mediaId && !!type,
+	});
+};
+
 /* --------------------------------- Follows -------------------------------- */
-export const userFollowersOptions = ({
+export const userFollowersPaginatedOptions = ({
 	profileId,
 	filters,
 }: {
 	profileId?: string;
-	filters?: NonNullable<UserFollowersControllerListData['query']>;
+	filters?: NonNullable<UserFollowersControllerListPaginatedData['query']>;
 }) => {
 	return queryOptions({
 		queryKey: userKeys.followers({
 			userId: profileId!,
-			infinite: false,
+			mode: 'paginated',
 			filters: filters,
 		}),
 		queryFn: async () => {
 			if (!profileId) throw new Error('Profile ID is required');
-			const { data, error } = await userFollowersControllerList({
+			const { data, error } = await userFollowersControllerListPaginated({
 				path: {
 					user_id: profileId,
 				},
@@ -192,7 +424,7 @@ export const userFollowersInfiniteOptions = ({
 	return infiniteQueryOptions({
 		queryKey: userKeys.followers({
 			userId: profileId!,
-			infinite: true,
+			mode: 'infinite',
 			filters: filters,
 		}),
 		queryFn: async ({ pageParam }) => {
@@ -218,22 +450,22 @@ export const userFollowersInfiniteOptions = ({
 	})
 };
 
-export const userFollowingOptions = ({
+export const userFollowingPaginatedOptions = ({
 	profileId,
 	filters,
 }: {
 	profileId?: string;
-	filters?: NonNullable<UserFollowingControllerListData['query']>;
+	filters?: NonNullable<UserFollowingControllerListPaginatedData['query']>;
 }) => {
 	return queryOptions({
 		queryKey: userKeys.following({
 			userId: profileId!,
-			infinite: false,
+			mode: 'paginated',
 			filters: filters,
 		}),
 		queryFn: async () => {
 			if (!profileId) throw new Error('Profile ID is required');
-			const { data, error } = await userFollowingControllerList({
+			const { data, error } = await userFollowingControllerListPaginated({
 				path: {
 					user_id: profileId,
 				},
@@ -256,7 +488,7 @@ export const userFollowingInfiniteOptions = ({
 	return infiniteQueryOptions({
 		queryKey: userKeys.following({
 			userId: profileId!,
-			infinite: true,
+			mode: 'infinite',
 			filters: filters,
 		}),
 		queryFn: async ({ pageParam }) => {
@@ -293,7 +525,7 @@ export const userFollowOptions = ({
 		queryKey: userKeys.follow({ userId: userId!, profileId: profileId! }),
 		queryFn: async () => {
 			if (!profileId) throw new Error('Profile ID is required');
-			const { data, error } = await usersControllerGetFollowStatus({
+			const { data, error } = await userFollowControllerGet({
 				path: {
 					user_id: profileId,
 				}
@@ -304,6 +536,64 @@ export const userFollowOptions = ({
 		},
 		enabled: !!userId && !!profileId && userId !== profileId,
 	});
+};
+
+export const userFollowRequestsPaginatedOptions = ({
+	userId,
+	filters,
+}: {
+	userId?: string;
+	filters?: NonNullable<UserFollowRequestsControllerListPaginatedData['query']>;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.followRequests({
+			userId: userId!,
+			mode: 'paginated',
+			filters,
+		}),
+		queryFn: async () => {
+			if (!userId) throw new Error('User ID is required');
+			const { data, error } = await userFollowRequestsControllerListPaginated({
+				query: filters,
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId,
+	})
+};
+export const userFollowRequestsInfiniteOptions = ({
+	userId,
+	filters,
+}: {
+	userId?: string;
+	filters?: Omit<NonNullable<UserFollowRequestsControllerListInfiniteData['query']>, 'cursor'>;
+}) => {
+	return infiniteQueryOptions({
+		queryKey: userKeys.followRequests({
+			userId: userId!,
+			mode: 'infinite',
+			filters,
+		}),
+		queryFn: async ({ pageParam }) => {
+			if (!userId) throw new Error('User ID is required');
+			const { data, error } = await userFollowRequestsControllerListInfinite({
+				query: {
+					...filters,
+					cursor: pageParam,
+				}
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		initialPageParam: undefined as string | undefined,
+		getNextPageParam: (lastPage) => {
+			return lastPage.meta.next_cursor || undefined;
+		},
+		enabled: !!userId,
+	})
 };
 
 export const userPersonFollowOptions = ({
@@ -334,18 +624,18 @@ export const userPersonFollowOptions = ({
 };
 
 /* -------------------------------- Playlists ------------------------------- */
-export const userPlaylistsOptions = ({
+export const userPlaylistsPaginatedOptions = ({
 	userId,
 	filters,
 } : {
 	userId?: string;
-	filters?: NonNullable<UserPlaylistsControllerListData['query']>;
+	filters?: NonNullable<UserPlaylistsControllerListPaginatedData['query']>;
 }) => {
 	return queryOptions({
-		queryKey: userKeys.playlists({ userId: userId!, infinite: false, filters }),
+		queryKey: userKeys.playlists({ userId: userId!, mode: 'paginated', filters }),
 		queryFn: async () => {
 			if (!userId) throw new Error('User ID is required');
-			const { data, error } = await userPlaylistsControllerList({
+			const { data, error } = await userPlaylistsControllerListPaginated({
 				path: {
 					user_id: userId,
 				},
@@ -368,7 +658,7 @@ export const userPlaylistsInfiniteOptions = ({
 	return infiniteQueryOptions({
 		queryKey: userKeys.playlists({
 			userId: userId!,
-			infinite: true,
+			mode: 'infinite',
 			filters: filters,
 		}),
 		queryFn: async ({ pageParam }) => {

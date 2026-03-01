@@ -1,6 +1,7 @@
 import { useAuth } from "@/context/auth-context";
 import { useSupabaseClient } from "@/context/supabase-context";
 import { fetchToken } from "@/lib/firebase/firebase.config";
+import { useUserPushTokenUpdateMutation } from "@libs/query-client";
 import { useEffect, useRef, useState } from "react";
 
 const LOCAL_STORAGE_KEY = 'notification-prompt-permission';
@@ -16,12 +17,14 @@ export interface NotificationPermissionProps {
 
 
 const useNotificationPermission = () => {
-	const { session, setPushToken } = useAuth();
+	const { user } = useAuth();
 	const supabase = useSupabaseClient();
 	const [permission, setPermission] = useState<NotificationPermission>('default');
 	const [token, setToken] = useState<string | null>(null);
 	const retryLoadToken = useRef(0);
 	const isLoading = useRef(false);
+
+	const { mutate: updatePushToken } = useUserPushTokenUpdateMutation();
 
 	const loadToken = async () => {
 		if (isLoading.current) return;
@@ -39,7 +42,6 @@ const useNotificationPermission = () => {
 			return await loadToken();
 		}
 		setToken(token);
-		setPushToken(token);
 		isLoading.current;
 	}
 
@@ -48,7 +50,7 @@ const useNotificationPermission = () => {
 			console.warn('This browser does not support notifications');
 			return;
 		}
-		if (session) {
+		if (user) {
 			const newPermission = await Notification.requestPermission();
 			if (newPermission !== 'granted') throw new Error('Permission denied');
 			setPermission(newPermission);
@@ -73,14 +75,11 @@ const useNotificationPermission = () => {
 		handler();
 		const storedPermission = localStorage.getItem(LOCAL_STORAGE_KEY);
 
-		if (session && !storedPermission) {
+		if (user && !storedPermission) {
 			const timeoutId = setTimeout(() => {
 				Notification.requestPermission().then((newPermission) => {
 					setPermission(newPermission);
 					localStorage.setItem(LOCAL_STORAGE_KEY, newPermission);
-					// if (newPermission === 'granted' || newPermission === 'denied') {
-					// 	localStorage.setItem(LOCAL_STORAGE_KEY, newPermission);
-					// }
 				});
 			}
 			, DELAY);
@@ -91,35 +90,29 @@ const useNotificationPermission = () => {
 
 			return () => clearTimeout(timeoutId);
 		}
-	}, [session]);
+	}, [user]);
 
 	// FCM token
 	useEffect(() => {
-		if (session && permission === 'granted') {
+		if (user && permission === 'granted') {
 			loadToken();
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [session, permission]);
+	}, [user, permission]);
 
 	// Store token
 	useEffect(() => {
-		if (!token || !session) return;
+		if (!token || !user) return;
 
-		const saveToken = async () => {
-			await supabase.from('user_notification_tokens').upsert({
-				user_id: session.user.id,
-				token: token,
-				device_type: 'web',
-				provider: 'fcm',
-				updated_at: new Date().toISOString(),
-			}, {
-				onConflict: "provider, token"
+		// if (process.env.NODE_ENV !== 'development') {
+			updatePushToken({
+				body: {
+					provider: 'fcm',
+					token,
+					deviceType: 'web',
+				}
 			});
-		};
-		if (process.env.NODE_ENV !== 'development') {
-			saveToken();
-		}
-	}, [token, session,  supabase]);
+		// }
+	}, [token,  supabase]);
 
 
 	return {

@@ -1,8 +1,9 @@
-import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ListInfiniteUsers, personsControllerFollowMutation, personsControllerUnfollowMutation, playlistsControllerLikeMutation, playlistsControllerSaveMutation, playlistsControllerUnlikeMutation, playlistsControllerUnsaveMutation, usersControllerFollowUserMutation, usersControllerUnfollowUserMutation, usersControllerUpdateMeMutation } from '@packages/api-js';
-import { userFollowersInfiniteOptions, userFollowersOptions, userFollowingInfiniteOptions, userFollowingOptions, userFollowOptions, userMeOptions, userPersonFollowOptions, userPlaylistLikeOptions, userPlaylistSavedOptions } from './userOptions';
-import { removeFromInfiniteCache, removeFromPaginatedCache } from '../utils';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { bookmarksControllerDeleteByMediaMutation, bookmarksControllerSetByMediaMutation, FollowRequest, ListInfiniteBookmarks, ListInfiniteFollowRequests, ListInfiniteRecoTargets, ListInfiniteUsers, ListPaginatedBookmarks, ListPaginatedFollowRequests, ListPaginatedRecoTargets, ListPaginatedUsers, personsControllerFollowMutation, personsControllerUnfollowMutation, playlistsControllerLikeMutation, playlistsControllerSaveMutation, playlistsControllerUnlikeMutation, playlistsControllerUnsaveMutation, recosControllerSendMutation, RecoTarget, userFollowControllerAcceptMutation, userFollowControllerDeclineMutation, userFollowControllerDeleteMutation, userFollowControllerSetMutation, userPushTokensControllerSetMutation, usersControllerUpdateMeMutation, UserSummary } from '@packages/api-js';
+import { userBookmarkByMediaOptions, userFollowersInfiniteOptions, userFollowersPaginatedOptions, userFollowingInfiniteOptions, userFollowingPaginatedOptions, userFollowOptions, userFollowRequestsInfiniteOptions, userFollowRequestsPaginatedOptions, userMeOptions, userPersonFollowOptions, userPlaylistLikeOptions, userPlaylistSavedOptions, userRecoSendAllOptions, userRecoSendInfiniteOptions, userRecoSendPaginatedOptions } from './userOptions';
+import { removeListItemFromAllCaches, updateListItemInAllCaches } from '../utils';
 import { userKeys } from './userKeys';
+import { BookmarkWithMedia } from './types';
 
 export const useUserMeUpdateMutation = () => {
 	const queryClient = useQueryClient();
@@ -14,11 +15,107 @@ export const useUserMeUpdateMutation = () => {
 	});
 };
 
+export const useUserPushTokenUpdateMutation = () => {
+	return useMutation({
+		...userPushTokensControllerSetMutation(),		
+	});
+}
+
+/* ---------------------------------- Recos --------------------------------- */
+export const useUserRecoSendMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		...recosControllerSendMutation(),
+		onSuccess: (data) => {
+			updateListItemInAllCaches<
+				RecoTarget,
+				ListPaginatedRecoTargets,
+				ListInfiniteRecoTargets
+			>(
+				queryClient,
+				{
+					all: userRecoSendAllOptions({ userId: data.senderId, mediaId: data.mediaId, mediaType: data.type }).queryKey,
+					paginated: userRecoSendPaginatedOptions({ userId: data.senderId, mediaId: data.mediaId, mediaType: data.type }).queryKey,
+					infinite: userRecoSendInfiniteOptions({ userId: data.senderId, mediaId: data.mediaId, mediaType: data.type }).queryKey,
+				},
+				{ alreadySent: true },
+				(item) => data.sent.includes(item.id)
+			);
+		}
+	});
+}
+
+/* -------------------------------- Bookmarks ------------------------------- */
+export const useUserBookmarkSetByMediaMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		...bookmarksControllerSetByMediaMutation(),
+		onSuccess: (data) => {
+			queryClient.setQueryData(userBookmarkByMediaOptions({
+				userId: data.userId,
+				mediaId: data.mediaId,
+				type: data.type,
+			}).queryKey, data);
+
+			const isInsert = data.createdAt === data.updatedAt;
+			if (isInsert) {
+				queryClient.invalidateQueries({
+					queryKey: userKeys.bookmarks({
+						userId: data.userId,
+					}),
+				});
+			} else {
+				updateListItemInAllCaches<
+                    BookmarkWithMedia,
+                    ListPaginatedBookmarks,
+                    ListInfiniteBookmarks
+                >(
+                    queryClient,
+                    {
+                        all: userKeys.bookmarks({ userId: data.userId, mode: 'all' }),
+                        paginated: userKeys.bookmarks({ userId: data.userId, mode: 'paginated' }),
+                        infinite: userKeys.bookmarks({ userId: data.userId, mode: 'infinite' }),
+                    },
+                    data
+                );
+			}
+		}
+	});
+}
+
+export const useUserBookmarkDeleteByMediaMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		...bookmarksControllerDeleteByMediaMutation(),
+		onSuccess: (data) => {
+			queryClient.setQueryData(userBookmarkByMediaOptions({
+				userId: data.userId,
+				mediaId: data.mediaId,
+				type: data.type,
+			}).queryKey, null);
+
+			removeListItemFromAllCaches<
+                BookmarkWithMedia,
+                ListPaginatedBookmarks,
+                ListInfiniteBookmarks
+            >(
+                queryClient,
+                {
+                    all: userKeys.bookmarks({ userId: data.userId, mode: 'all' }),
+                    paginated: userKeys.bookmarks({ userId: data.userId, mode: 'paginated' }),
+                    infinite: userKeys.bookmarks({ userId: data.userId, mode: 'infinite' }),
+                },
+                data.id 
+            );
+		}
+	});
+}
+
 /* --------------------------------- Follows -------------------------------- */
 export const useUserFollowMutation = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		...usersControllerFollowUserMutation(),
+		...userFollowControllerSetMutation(),
 		onSuccess: (data) => {
 			queryClient.setQueryData(userFollowOptions({
 				userId: data.followerId,
@@ -45,40 +142,40 @@ export const useUserFollowMutation = () => {
 export const useUserUnfollowMutation = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		...usersControllerUnfollowUserMutation(),
+		...userFollowControllerDeleteMutation(),
 		onSuccess: (data) => {
 			queryClient.setQueryData(userFollowOptions({
 				userId: data.followerId,
 				profileId: data.followingId,
 			}).queryKey, null);
 
-			removeFromPaginatedCache(
-				queryClient,
-				userFollowersOptions({
-					profileId: data.followingId,
-				}).queryKey,
-				(item) => item.id === data.followerId
-			)
-			queryClient.setQueriesData(
-				{ queryKey: userFollowersInfiniteOptions({ profileId: data.followingId }).queryKey },
-				(oldData: InfiniteData<ListInfiniteUsers> | undefined) => {
-					return removeFromInfiniteCache(oldData, (item) => item.id === data.followerId);
-				}
-			)
 
-			removeFromPaginatedCache(
-				queryClient,
-				userFollowingOptions({
-					profileId: data.followerId,
-				}).queryKey,
-				(item) => item.id === data.followingId
-			)
-			queryClient.setQueriesData(
-				{ queryKey: userFollowingInfiniteOptions({ profileId: data.followerId }).queryKey },
-				(oldData: InfiniteData<ListInfiniteUsers> | undefined) => {
-					return removeFromInfiniteCache(oldData, (item) => item.id === data.followingId);
-				}
-			)
+			if (data.status === 'accepted') {
+				removeListItemFromAllCaches<
+					UserSummary,
+					ListPaginatedUsers,
+					ListInfiniteUsers
+				>(
+					queryClient,
+					{
+						paginated: userFollowingPaginatedOptions({ profileId: data.followerId }).queryKey,
+						infinite: userFollowingInfiniteOptions({ profileId: data.followerId }).queryKey,
+					},
+					(item) => item.id === data.followingId
+				);
+				removeListItemFromAllCaches<
+					UserSummary,
+					ListPaginatedUsers,
+					ListInfiniteUsers
+				>(
+					queryClient,
+					{
+						paginated: userFollowersPaginatedOptions({ profileId: data.followingId }).queryKey,
+						infinite: userFollowersInfiniteOptions({ profileId: data.followingId }).queryKey,
+					},
+					(item) => item.id === data.followerId
+				);
+			}
 
 			// TODO: Invalidate feed queries
 		}
@@ -111,6 +208,61 @@ export const useUserPersonUnfollowMutation = () => {
 			}).queryKey, null);
 
 			// TODO: Invalidate followed persons queries
+		}
+	});
+}
+
+export const useUserAcceptFollowMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		...userFollowControllerAcceptMutation(),
+		onSuccess: (data) => {
+			removeListItemFromAllCaches<
+				FollowRequest,
+				ListPaginatedFollowRequests,
+				ListInfiniteFollowRequests
+			>(
+				queryClient,
+				{
+					paginated: userFollowRequestsPaginatedOptions({ userId: data.followingId }).queryKey,
+					infinite: userFollowRequestsInfiniteOptions({ userId: data.followingId }).queryKey,
+				},
+				(item) => item.user.id === data.followerId
+			);
+
+			queryClient.invalidateQueries({
+				queryKey: userKeys.followers({
+					userId: data.followingId,
+				}),
+			});
+
+			queryClient.invalidateQueries({
+				queryKey: userKeys.following({
+					userId: data.followerId,
+				}),
+			});
+		}
+	});
+}
+
+export const useUserDeclineFollowMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		...userFollowControllerDeclineMutation(),
+		onSuccess: (data) => {
+			// TODO: invalidate follow requests
+			removeListItemFromAllCaches<
+				FollowRequest,
+				ListPaginatedFollowRequests,
+				ListInfiniteFollowRequests
+			>(
+				queryClient,
+				{
+					paginated: userFollowRequestsPaginatedOptions({ userId: data.followingId }).queryKey,
+					infinite: userFollowRequestsInfiniteOptions({ userId: data.followingId }).queryKey,
+				},
+				(item) => item.user.id === data.followerId
+			);
 		}
 	});
 }

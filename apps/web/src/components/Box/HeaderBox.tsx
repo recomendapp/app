@@ -37,6 +37,7 @@ export const HeaderBox: React.FC<BoxProps> = ({
           onError={() => setImageError(true)}
           onLoad={() => setImageLoaded(true)}
           unoptimized={background.unoptimized}
+          loading='eager'
         />
       )}
       <div

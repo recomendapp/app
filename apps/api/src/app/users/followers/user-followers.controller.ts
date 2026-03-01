@@ -4,7 +4,7 @@ import { OptionalAuthGuard } from '../../auth/guards';
 import { CurrentOptionalUser } from '../../auth/decorators';
 import { User } from '../../auth/auth.service';
 import { UserFollowersService } from './user-followers.service';
-import { ListInfiniteUsersDto, ListInfiniteUsersQueryDto, ListUsersDto, ListUsersQueryDto } from '../dto/users.dto';
+import { ListInfiniteUsersDto, ListInfiniteUsersQueryDto, ListPaginatedUsersDto, ListPaginatedUsersQueryDto } from '../dto/users.dto';
 
 @ApiTags('Users')
 @Controller({
@@ -14,18 +14,18 @@ import { ListInfiniteUsersDto, ListInfiniteUsersQueryDto, ListUsersDto, ListUser
 export class UserFollowersController {
   constructor(private readonly followerService: UserFollowersService) {}
 
-  @Get()
+  @Get('paginated')
   @UseGuards(OptionalAuthGuard)
   @ApiOkResponse({
     description: 'List of followers',
-    type: ListUsersDto,
+    type: ListPaginatedUsersDto,
   })
-  async list(
+  async listPaginated(
     @Param('user_id', ParseUUIDPipe) targetUserId: string,
-    @Query() query: ListUsersQueryDto,
+    @Query() query: ListPaginatedUsersQueryDto,
     @CurrentOptionalUser() currentUser: User | null,
-  ): Promise<ListUsersDto> {
-    return this.followerService.list({
+  ): Promise<ListPaginatedUsersDto> {
+    return this.followerService.listPaginated({
       targetUserId,
       query,
       currentUser,

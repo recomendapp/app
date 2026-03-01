@@ -7,14 +7,23 @@ import {
   pgEnum,
   pgTable,
   real,
+  text,
   timestamp,
   unique,
   uuid,
 } from 'drizzle-orm/pg-core';
-import { tmdbMovie, tmdbMovieView, tmdbTvSeries } from './tmdb';
+import { tmdbMovie, tmdbTvSeries } from './tmdb';
 import { user } from './auth';
 import { relations, sql } from 'drizzle-orm';
 import { reviewMovie, reviewTvSeries } from './review';
+
+export const watchFormatEnum = pgEnum('watch_format_enum', [
+  'theater',
+  'physical',
+  'digital',
+  'streaming',
+  'other',
+]);
 
 /* -------------------------------------------------------------------------- */
 /*                                    MOVIE                                   */
@@ -30,23 +39,23 @@ export const logMovie = pgTable(
     userId: uuid('user_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
-    createdAt: timestamp('created_at', { withTimezone: true })
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
       .defaultNow()
       .notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true })
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' })
       .$onUpdate(() => sql`now()`)
       .notNull(),
     isLiked: boolean('is_liked').default(false).notNull(),
-    likedAt: timestamp('liked_at', { withTimezone: true }),
+    likedAt: timestamp('liked_at', { withTimezone: true, mode: 'string' }),
     rating: real(),
-    ratedAt: timestamp('rated_at', { withTimezone: true }),
+    ratedAt: timestamp('rated_at', { withTimezone: true, mode: 'string' }),
 
     watchCount: integer('watch_count').default(1).notNull(),
 
-    firstWatchedAt: timestamp('first_watched_at', { withTimezone: true })
+    firstWatchedAt: timestamp('first_watched_at', { withTimezone: true, mode: 'string' })
       .defaultNow()
       .notNull(),
-    lastWatchedAt: timestamp('last_watched_at', { withTimezone: true })
+    lastWatchedAt: timestamp('last_watched_at', { withTimezone: true, mode: 'string' })
       .defaultNow()
       .notNull(),
   },
@@ -89,13 +98,16 @@ export const logMovieWatchedDate = pgTable(
     logMovieId: bigint('log_movie_id', { mode: 'number' })
       .notNull()
       .references(() => logMovie.id, { onDelete: 'cascade' }),
-    watchedDate: timestamp('watched_date', { withTimezone: true })
+    watchedDate: timestamp('watched_date', { withTimezone: true, mode: 'string' })
       .defaultNow()
       .notNull(),
+    format: watchFormatEnum('format').default('theater').notNull(),
+    comment: text(),
   },
   (table) => [
     index('idx_log_movie_watched_date_log_movie_id').on(table.logMovieId),
     index('idx_log_movie_watched_date_watched_date').on(table.watchedDate),
+    check('check_log_movie_watched_date_comment', sql`length(comment) <= 180`),
   ],
 );
 export const logMovieWatchedDateRelations = relations(logMovieWatchedDate, ({ one }) => ({
@@ -128,22 +140,22 @@ export const logTvSeries = pgTable(
     userId: uuid('user_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
-    createdAt: timestamp('created_at', { withTimezone: true })
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
       .defaultNow()
       .notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true })
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' })
       .$onUpdate(() => sql`now()`)
       .notNull(),
     isLiked: boolean('is_liked').default(false).notNull(),
-    likedAt: timestamp('liked_at', { withTimezone: true }),
+    likedAt: timestamp('liked_at', { withTimezone: true, mode: 'string' }),
     rating: real(),
-    ratedAt: timestamp('rated_at', { withTimezone: true }),
+    ratedAt: timestamp('rated_at', { withTimezone: true, mode: 'string' }),
 
     status: logTvStatusEnum('status').default('watching').notNull(),
 
     watchCount: integer('watch_count').default(0).notNull(),
 
-    lastWatchedAt: timestamp('last_watched_at', { withTimezone: true }),
+    lastWatchedAt: timestamp('last_watched_at', { withTimezone: true, mode: 'string' }),
     lastSeasonSeen: integer('last_season_seen'),
     lastEpisodeSeen: integer('last_episode_seen'),
   },

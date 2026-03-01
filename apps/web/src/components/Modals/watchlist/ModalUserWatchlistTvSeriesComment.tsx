@@ -9,7 +9,7 @@ import { Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle, ModalType } fro
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { Bookmark } from "@packages/api-js";
-import { useTvSeriesBookmarkSetMutation } from "@libs/query-client/src";
+import { useUserBookmarkSetByMediaMutation } from "@libs/query-client";
 
 interface ModalUserWatchlistTvSeriesCommentProps extends ModalType {
 	watchlistItem: Bookmark;
@@ -22,7 +22,7 @@ const ModalUserWatchlistTvSeriesComment = ({
 	const { closeModal } = useModal();
 	const t = useTranslations();
 	const [comment, setComment] = useState<string>(watchlistItem?.comment ?? '');
-	const { mutateAsync: updateWatchlistTvSeries, isPending } = useTvSeriesBookmarkSetMutation();
+	const { mutateAsync: updateWatchlistTvSeries, isPending } = useUserBookmarkSetByMediaMutation();
 
 	useEffect(() => {
 		setComment(watchlistItem?.comment ?? '');
@@ -39,7 +39,8 @@ const ModalUserWatchlistTvSeriesComment = ({
 		}
 		await updateWatchlistTvSeries({
 			path: {
-				tv_series_id: watchlistItem.mediaId,
+				media_id: watchlistItem.mediaId,
+				type: watchlistItem.type,
 			},
 			body: {
 				comment: comment,

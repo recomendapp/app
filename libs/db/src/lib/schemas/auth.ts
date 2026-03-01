@@ -1,4 +1,4 @@
-import { relations } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import {
   pgTable,
   text,
@@ -9,6 +9,7 @@ import {
   uuid,
 } from 'drizzle-orm/pg-core';
 import { profile } from './user';
+import { supportedLanguages } from './i18n';
 
 export const authSchema = pgSchema('auth');
 
@@ -18,25 +19,32 @@ export const user = authSchema.table('user', {
   email: text('email').notNull().unique(),
   emailVerified: boolean('email_verified').default(false).notNull(),
   image: text('image'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at')
+  createdAt: timestamp('created_at', { mode: 'string' }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { mode: 'string' })
     .defaultNow()
-    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .$onUpdate(() => sql`now()`)
     .notNull(),
   username: text('username').unique().notNull(),
   displayUsername: text('display_username'),
-  usernameUpdatedAt: timestamp('username_updated_at'),
+  usernameUpdatedAt: timestamp('username_updated_at', { withTimezone: true, mode: 'string' }),
+  language: text('language')
+    .default('en-US')
+    .notNull()
+    .references(() => supportedLanguages.language, { 
+      onUpdate: 'cascade', 
+      onDelete: 'restrict',
+    }),
 });
 
 export const session = authSchema.table(
   'session',
   {
     id: text('id').primaryKey(),
-    expiresAt: timestamp('expires_at').notNull(),
+    expiresAt: timestamp('expires_at', { mode: 'string' }).notNull(),
     token: text('token').notNull().unique(),
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at')
-      .$onUpdate(() => /* @__PURE__ */ new Date())
+    createdAt: timestamp('created_at', { mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'string' })
+      .$onUpdate(() => sql`now()`)
       .notNull(),
     ipAddress: text('ip_address'),
     userAgent: text('user_agent'),
@@ -60,12 +68,12 @@ export const account = authSchema.table(
     refreshToken: text('refresh_token'),
     idToken: text('id_token'),
     accessTokenExpiresAt: timestamp('access_token_expires_at'),
-    refreshTokenExpiresAt: timestamp('refresh_token_expires_at'),
+    refreshTokenExpiresAt: timestamp('refresh_token_expires_at', { mode: 'string' }),
     scope: text('scope'),
     password: text('password'),
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at')
-      .$onUpdate(() => /* @__PURE__ */ new Date())
+    createdAt: timestamp('created_at', { mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'string' })
+      .$onUpdate(() => sql`now()`)
       .notNull(),
   },
   (table) => [index('account_userId_idx').on(table.userId)],
@@ -77,11 +85,11 @@ export const verification = authSchema.table(
     id: text('id').primaryKey(),
     identifier: text('identifier').notNull(),
     value: text('value').notNull(),
-    expiresAt: timestamp('expires_at').notNull(),
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at')
+    expiresAt: timestamp('expires_at', { mode: 'string' }).notNull(),
+    createdAt: timestamp('created_at', { mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'string' })
       .defaultNow()
-      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .$onUpdate(() => sql`now()`)
       .notNull(),
   },
   (table) => [index('verification_identifier_idx').on(table.identifier)],
@@ -94,6 +102,10 @@ export const userRelations = relations(user, ({ many, one }) => ({
     fields: [user.id],
     references: [profile.id],
   }),
+  language: one(supportedLanguages, {
+    fields: [user.language],
+    references: [supportedLanguages.language],
+  })
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({

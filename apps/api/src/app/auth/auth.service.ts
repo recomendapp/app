@@ -10,6 +10,8 @@ import { v7 as uuidv7 } from 'uuid';
 import { USER_RULES } from '../../config/validation-rules';
 import bcrypt from "bcrypt"; 
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
+import { defaultSupportedLocale, SupportedLocale } from '@libs/i18n';
+import { additionalFields, auth } from '@libs/db';
 
 export const AUTH_SERVICE = 'AUTH_SERVICE';
 
@@ -105,11 +107,12 @@ const createBetterAuth = ({
 		emailVerification: {
 			autoSignInAfterVerification: true,
 			sendVerificationEmail: async ({ user, token, url }) => {
+				const u = user as typeof auth.$Infer.Session.user;
 				await notify.emit('auth:verification-email', {
 					email: user.email,
 					token,
 					url,
-					lang: 'en',
+					lang: 'el-GR',
 				});
 			},
 		},
@@ -117,22 +120,16 @@ const createBetterAuth = ({
 			deleteUser: {
 				enabled: true,
 				sendDeleteAccountVerification: async ({ user, token, url }) => {
+					const u = user as typeof auth.$Infer.Session.user;
 					await notify.emit('auth:delete-account-email', {
 						email: user.email,
 						token,
 						url,
-						lang: 'en',
+						lang: (u.language as SupportedLocale) || defaultSupportedLocale,
 					});
 				},
 			},
-			additionalFields: {
-				usernameUpdatedAt: {
-					type: 'date',
-					required: false,
-					defaultValue: null,
-					input: false,
-				},
-			},
+			additionalFields: additionalFields,
 		},
 		socialProviders: {
 			github: {

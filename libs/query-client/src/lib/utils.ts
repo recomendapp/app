@@ -6,43 +6,77 @@ export interface PaginatedResponse<T> {
   meta: PaginationMeta;
 }
 
-/**
- * Utility function to update an item in a paginated query cache.
- * @param oldData The existing paginated query data.
- * @param updatedItem The item with updated data to be merged into the cache.
- * @returns Updated paginated query data with the item updated.
- */
+export const updateFromFlatCache = <
+  TItem,
+  TUpdated extends Partial<TItem>
+>(
+  queryClient: QueryClient,
+  filters: QueryKey | QueryFilters,
+  updatedItem: TUpdated,
+  matcher?: string | number | ((item: TItem) => boolean)
+): void => {
+  const queryFilters: QueryFilters = Array.isArray(filters) 
+    ? { queryKey: filters } 
+    : (filters as QueryFilters);
+
+  queryClient.setQueriesData(queryFilters, (oldData: TItem[] | undefined) => {
+    if (!oldData) return oldData;
+    return oldData.map((item) => {
+      const isMatch = typeof matcher === 'function' 
+        ? matcher(item) 
+        : matcher !== undefined 
+          ? (item as any).id === matcher
+        : ('id' in updatedItem && (item as any).id === (updatedItem as any).id);
+
+      return isMatch ? { ...item, ...updatedItem } : item;
+    });
+  });
+};
+
+export const removeFromFlatCache = <TItem>(
+  queryClient: QueryClient,
+  filters: QueryKey | QueryFilters,
+  matcher: string | number | ((item: TItem) => boolean)
+): void => {
+  const queryFilters: QueryFilters = Array.isArray(filters) 
+    ? { queryKey: filters } 
+    : (filters as QueryFilters);
+
+  queryClient.setQueriesData(queryFilters, (oldData: TItem[] | undefined) => {
+    if (!oldData) return oldData;
+    return oldData.filter((item) =>
+      typeof matcher === 'function' ? !matcher(item) : (item as any).id !== matcher
+    );
+  });
+};
+
 export const updateFromPaginatedCache = <
-  TItem extends { id: string | number },
-  TUpdated extends { id: TItem['id'] },
+  TItem,
+  TUpdated extends Partial<TItem>,
   TPage extends PaginatedResponse<TItem>
 >(
-  oldData: InfiniteData<TPage> | undefined,
-  updatedItem: TUpdated
-): InfiniteData<TPage> | undefined => {
-  if (!oldData || !oldData.pages.length) return oldData;
-
-  const newPages = oldData.pages.map((page) => ({
-    ...page,
-    data: page.data.map((item) =>
-      item.id === updatedItem.id ? { ...item, ...updatedItem } : item
-    ),
-  }));
+  oldData: TPage | undefined,
+  updatedItem: TUpdated,
+  matcher?: string | number | ((item: TItem) => boolean)
+): TPage | undefined => {
+  if (!oldData) return oldData;
 
   return {
     ...oldData,
-    pages: newPages,
+    data: oldData.data.map((item) => {
+      const isMatch = typeof matcher === 'function' 
+        ? matcher(item) 
+        : matcher !== undefined 
+          ? (item as any).id === matcher
+        : ('id' in updatedItem && (item as any).id === (updatedItem as any).id);
+
+      return isMatch ? { ...item, ...updatedItem } : item;
+    }),
   };
 };
 
-/**
- * Utility function to remove an item from standard paginated queries cache and shift items across pages.
- * @param queryClient The React Query client instance.
- * @param queryKeyFilter The base query key to match all pages (e.g., ['movies', movieId]).
- * @param itemIdToDelete The ID of the item to remove.
- */
 export const removeFromPaginatedCache = <
-  TItem extends { id: string | number },
+  TItem,
   TPage extends PaginatedResponse<TItem>
 >(
   queryClient: QueryClient,
@@ -78,7 +112,7 @@ export const removeFromPaginatedCache = <
     const filteredItems = allItems.filter((item) => {
       const isMatch = typeof matcher === 'function' 
         ? matcher(item) 
-        : item.id === matcher;
+        : (item as any).id === matcher;
 
       if (isMatch) {
         itemFound = true;
@@ -123,15 +157,9 @@ export interface InfinitePaginatedResponse<T> {
   meta: CursorPaginationMeta;
 }
 
-/**
- * Utility function to update an item in a cursor-based paginated query cache.
- * @param oldData The existing cursor-paginated query data.
- * @param updatedItem The item with updated data to be merged into the cache.
- * @returns Updated cursor-paginated query data with the item updated.
- */
 export const updateFromInfiniteCache = <
-  TItem extends { id: string | number },
-  TUpdated extends { id: TItem['id'] },
+  TItem,
+  TUpdated extends Partial<TItem>,
   TPage extends InfinitePaginatedResponse<TItem>
 >(
   oldData: InfiniteData<TPage> | undefined,
@@ -141,29 +169,24 @@ export const updateFromInfiniteCache = <
   if (!oldData) return oldData;
 
   return {
-	...oldData,
-	pages: oldData.pages.map((page) => ({
-		...page,
-		data: page.data.map((item) => {
+  ...oldData,
+  pages: oldData.pages.map((page) => ({
+    ...page,
+    data: page.data.map((item) => {
       const isMatch = typeof matcher === 'function' 
         ? matcher(item) 
-        : matcher === undefined 
-          ? item.id === updatedItem.id
-        : item.id === matcher;
+        : matcher !== undefined 
+          ? (item as any).id === matcher
+        : ('id' in updatedItem && (item as any).id === (updatedItem as any).id);
+
       return isMatch ? { ...item, ...updatedItem } : item;
-		}),
-	})),
+    }),
+  })),
   };
 };
 
-/**
- * Utility function to remove an item from a cursor-based paginated query cache.
- * @param oldData The existing cursor-paginated query data.
- * @param matcher The ID of the item to remove from the cache, or a function that returns true for items to be removed.
- * @returns Updated cursor-paginated query data with the item removed.
- */
 export const removeFromInfiniteCache = <
-  TItem extends { id: string | number },
+  TItem,
   TPage extends InfinitePaginatedResponse<TItem>
 >(
   oldData: InfiniteData<TPage> | undefined,
@@ -173,14 +196,91 @@ export const removeFromInfiniteCache = <
 
   return {
     ...oldData,
-    pages: oldData.pages.map((page) => ({
-      ...page,
-      data: page.data.filter((item) => {
+    pages: oldData.pages.map((page, index) => {
+      const newData = page.data.filter((item) => {
         const isMatch = typeof matcher === 'function' 
           ? matcher(item) 
-          : item.id === matcher;
+          : (item as any).id === matcher;
         return !isMatch;
-      }),
-    })),
+      });
+
+      let newMeta = page.meta;
+      if (index === 0 && typeof newMeta.total_results === 'number') {
+        newMeta = {
+          ...newMeta,
+          total_results: Math.max(0, newMeta.total_results - 1),
+        };
+      }
+
+      return {
+        ...page,
+        data: newData,
+        meta: newMeta,
+      };
+    }),
   };
+};
+
+export const updateListItemInAllCaches = <
+  TItem,
+  TPaginated extends PaginatedResponse<TItem>,
+  TInfinite extends InfinitePaginatedResponse<TItem>
+>(
+  queryClient: QueryClient,
+  keys: {
+    all?: QueryKey;
+    paginated?: QueryKey;
+    infinite?: QueryKey;
+  },
+  updatedItem: Partial<TItem>,
+  matcher?: string | number | ((item: TItem) => boolean)
+) => {
+  if (keys.all) {
+    updateFromFlatCache(queryClient, keys.all, updatedItem, matcher);
+  }
+
+  if (keys.paginated) {
+    queryClient.setQueriesData(
+      { queryKey: keys.paginated },
+      (oldData: TPaginated | undefined) =>
+        updateFromPaginatedCache(oldData, updatedItem, matcher)
+    );
+  }
+
+  if (keys.infinite) {
+    queryClient.setQueriesData(
+      { queryKey: keys.infinite },
+      (oldData: InfiniteData<TInfinite> | undefined) =>
+        updateFromInfiniteCache(oldData, updatedItem, matcher)
+    );
+  }
+};
+
+export const removeListItemFromAllCaches = <
+  TItem,
+  TPaginated extends PaginatedResponse<TItem>,
+  TInfinite extends InfinitePaginatedResponse<TItem>
+>(
+  queryClient: QueryClient,
+  keys: {
+    all?: QueryKey;
+    paginated?: QueryKey;
+    infinite?: QueryKey;
+  },
+  matcher: string | number | ((item: TItem) => boolean)
+) => {
+  if (keys.all) {
+    removeFromFlatCache<TItem>(queryClient, keys.all, matcher);
+  }
+  if (keys.paginated) {
+    removeFromPaginatedCache<TItem, TPaginated>(queryClient, keys.paginated, matcher);
+  }
+
+  if (keys.infinite) {
+    queryClient.setQueriesData(
+      { queryKey: keys.infinite },
+      (oldData: InfiniteData<TInfinite> | undefined) =>
+        removeFromInfiniteCache<TItem, TInfinite>(oldData, matcher)
+    );
+  }
 };

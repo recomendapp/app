@@ -16,6 +16,9 @@ const badgeVariants = cva(
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
         'accent-yellow': "border-transparent bg-accent-yellow text-accent-yellow-foreground hover:bg-accent-yellow/80",
+        // Media
+        'movie': "border-transparent bg-media-movie text-media-movie-foreground hover:bg-media-movie/80",
+        'tv_series': "border-transparent bg-media-tv-series text-media-tv-series-foreground hover:bg-media-tv-series/80",
       },
     },
     defaultVariants: {

@@ -35,13 +35,13 @@ export class PersonMovieDto {
   credits: PersonMovieCreditDto[];
 }
 
-@ApiSchema({ name: 'ListPersonMovies'})
-export class ListPersonMoviesDto extends PaginatedResponseDto<PersonMovieDto> {
+@ApiSchema({ name: 'ListPaginatedPersonMovies'})
+export class ListPaginatedPersonMoviesDto extends PaginatedResponseDto<PersonMovieDto> {
   @ApiProperty({ type: () => [PersonMovieDto] })
   @Type(() => PersonMovieDto)
   data: PersonMovieDto[];
 
-  constructor(partial: Partial<ListPersonMoviesDto>) {
+  constructor(partial: Partial<ListPaginatedPersonMoviesDto>) {
     super(partial);
     Object.assign(this, partial);
   }
@@ -98,8 +98,8 @@ class BaseListPersonMoviesQueryDto {
   sort_order: SortOrder = SortOrder.DESC;
 }
 
-@ApiSchema({ name: 'ListPersonMovieQuery' })
-export class ListPersonMovieQueryDto extends IntersectionType(
+@ApiSchema({ name: 'ListPaginatedPersonMovieQuery' })
+export class ListPaginatedPersonMovieQueryDto extends IntersectionType(
   BaseListPersonMoviesQueryDto,
   PaginationQueryDto
 ) {}

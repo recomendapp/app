@@ -10,12 +10,12 @@ export const playlist = pgTable(
 	'playlist',
 	{
 		id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
-		createdAt: timestamp('created_at', { withTimezone: true })
+		createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
 			.defaultNow()
 			.notNull(),
-		updatedAt: timestamp('updated_at', { withTimezone: true })
+		updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' })
 			.defaultNow()
-			.$onUpdate(() => /* @__PURE__ */ new Date())
+			.$onUpdate(() => sql`now()`)
 			.notNull(),
 		userId: uuid('user_id')
 			.notNull()
@@ -79,12 +79,12 @@ export const playlistItem = pgTable(
 	userId: uuid('user_id')
 		.notNull()
 		.references(() => user.id, { onDelete: 'cascade' }),
-    createdAt: timestamp('created_at', { withTimezone: true })
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
       .defaultNow()
       .notNull(),
-	updatedAt: timestamp('updated_at', { withTimezone: true })
+	updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' })
 		.defaultNow()
-		.$onUpdate(() => /* @__PURE__ */ new Date())
+		.$onUpdate(() => sql`now()`)
 		.notNull(),
 	comment: text(),
 	rank: integer().notNull(),
@@ -141,7 +141,7 @@ export const playlistMember = pgTable(
 		.references(() => playlist.id, { onDelete: 'cascade' }),
 	userId: uuid('user_id').notNull()
 		.references(() => user.id, { onDelete: 'cascade' }),
-    createdAt: timestamp('created_at', { withTimezone: true })
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
       .defaultNow()
       .notNull(),
     role: playlistMemberRoleEnum('role').default('viewer').notNull(),
@@ -168,7 +168,7 @@ export const playlistLike = pgTable(
   'playlist_like',
   {
     id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
-    createdAt: timestamp('created_at', { withTimezone: true })
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
       .defaultNow()
       .notNull(),
     playlistId: bigint('playlist_id', { mode: 'number' })
@@ -200,7 +200,7 @@ export const playlistSaved = pgTable(
   'playlist_saved',
   {
     id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
-    createdAt: timestamp('created_at', { withTimezone: true })
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
       .defaultNow()
       .notNull(),
     playlistId: bigint('playlist_id', { mode: 'number' })

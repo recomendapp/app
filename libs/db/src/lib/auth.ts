@@ -2,6 +2,22 @@ import { betterAuth } from 'better-auth';
 import { magicLink, openAPI, username } from 'better-auth/plugins';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { db } from './client';
+import { defaultSupportedLocale } from '@libs/i18n';
+
+export const additionalFields = {
+  usernameUpdatedAt: {
+    type: 'date',
+    required: false,
+    defaultValue: null,
+    input: false,
+  },
+  language: {
+    type:  'string',
+    defaultValue: defaultSupportedLocale,
+    required: true,
+    input: true,
+  },
+} as const;
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -24,14 +40,7 @@ export const auth = betterAuth({
     autoSignInAfterVerification: true,
   },
   user: {
-    additionalFields: {
-      usernameUpdatedAt: {
-        type: 'date',
-        required: false,
-        defaultValue: null,
-        input: false,
-      },
-    },
+    additionalFields: additionalFields,
   },
   experimental: {
     joins: true,

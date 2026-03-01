@@ -235,73 +235,73 @@ import { mediaKeys } from "../keys/mediaKeys";
 // 	});
 // };
 
-export const useUserAcceptFollowerRequestMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			requestId,
-		} : {
-			requestId: number;
-		}) => {
-			const { data, error } = await supabase
-				.from('user_follower')
-				.update({
-					is_pending: false,
-				})
-				.eq('id', requestId)
-				.select()
-				.single();
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.invalidateQueries({
-				queryKey: userKeys.followersRequests({
-					userId: data.followee_id
-				})
-			})
-			queryClient.invalidateQueries({
-				queryKey: userKeys.followees({
-					userId: data.user_id,
-				})
-			})
-			queryClient.invalidateQueries({
-				queryKey: userKeys.followers({
-					userId: data.followee_id,
-				})
-			});
-		},
-	});
-};
+// export const useUserAcceptFollowerRequestMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			requestId,
+// 		} : {
+// 			requestId: number;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('user_follower')
+// 				.update({
+// 					is_pending: false,
+// 				})
+// 				.eq('id', requestId)
+// 				.select()
+// 				.single();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.invalidateQueries({
+// 				queryKey: userKeys.followersRequests({
+// 					userId: data.followee_id
+// 				})
+// 			})
+// 			queryClient.invalidateQueries({
+// 				queryKey: userKeys.followees({
+// 					userId: data.user_id,
+// 				})
+// 			})
+// 			queryClient.invalidateQueries({
+// 				queryKey: userKeys.followers({
+// 					userId: data.followee_id,
+// 				})
+// 			});
+// 		},
+// 	});
+// };
 
-export const useUserDeclineFollowerRequestMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			requestId,
-		} : {
-			requestId: number;
-		}) => {
-			const { data, error } = await supabase
-				.from('user_follower')
-				.delete()
-				.eq('id', requestId)
-				.select()
-				.single();
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.invalidateQueries({
-				queryKey: userKeys.followersRequests({
-					userId: data.followee_id
-				})
-			})
-		},
-	});
-};
+// export const useUserDeclineFollowerRequestMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			requestId,
+// 		} : {
+// 			requestId: number;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('user_follower')
+// 				.delete()
+// 				.eq('id', requestId)
+// 				.select()
+// 				.single();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.invalidateQueries({
+// 				queryKey: userKeys.followersRequests({
+// 					userId: data.followee_id
+// 				})
+// 			})
+// 		},
+// 	});
+// };
 /* -------------------------------------------------------------------------- */
 
 /* ------------------------------- ACTIVITIES ------------------------------- */
@@ -1224,42 +1224,42 @@ export const useUserReviewTvSeriesDeleteMutation = ({
 /* -------------------------------------------------------------------------- */
 
 /* ---------------------------------- RECOS --------------------------------- */
-export const useUserRecosMovieInsertMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			senderId,
-			movieId,
-			receivers,
-			comment,
-		} : {
-			senderId: string;
-			movieId: number;
-			receivers: Database['public']['Views']['profile']['Row'][];
-			comment: string;
-		}) => {
-			if (receivers.length === 0) throw Error('Missing receivers');
-			const { error } = await supabase
-				.rpc('user_recos_movie_insert', {
-					p_movie_id: movieId,
-					receiver_user_ids: receivers.map((user) => String(user?.id)),
-					sender_user_id: senderId,
-					comment: comment,
-				})
-			if (error) throw error;
-			return {
-				senderId,
-				movieId,
-			}
-		},
-		onSuccess: ({ movieId }) => {
-			queryClient.invalidateQueries({
-				queryKey: userKeys.recosSend({ id: movieId, type: 'movie' }),
-			});
-		}
-	});
-};
+// export const useUserRecosMovieInsertMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			senderId,
+// 			movieId,
+// 			receivers,
+// 			comment,
+// 		} : {
+// 			senderId: string;
+// 			movieId: number;
+// 			receivers: Database['public']['Views']['profile']['Row'][];
+// 			comment: string;
+// 		}) => {
+// 			if (receivers.length === 0) throw Error('Missing receivers');
+// 			const { error } = await supabase
+// 				.rpc('user_recos_movie_insert', {
+// 					p_movie_id: movieId,
+// 					receiver_user_ids: receivers.map((user) => String(user?.id)),
+// 					sender_user_id: senderId,
+// 					comment: comment,
+// 				})
+// 			if (error) throw error;
+// 			return {
+// 				senderId,
+// 				movieId,
+// 			}
+// 		},
+// 		onSuccess: ({ movieId }) => {
+// 			queryClient.invalidateQueries({
+// 				queryKey: userKeys.recosSend({ id: movieId, type: 'movie' }),
+// 			});
+// 		}
+// 	});
+// };
 export const useUserRecosMovieDeleteMutation = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();

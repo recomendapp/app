@@ -59,7 +59,7 @@ export const UIProvider = ({
   cookieRightPanelOpen?: boolean
   device: Device;
 }) => {
-  const { session } = useAuth();
+  const { user } = useAuth();
   const isMobile = useIsMobile();
   // LAYOUT
   const [ uiLayout, setUiLayout ] = useState(defaultLayout);
@@ -88,10 +88,10 @@ export const UIProvider = ({
 
   // *========== START RIGHTPANEL ==========*
   const [ rightPanelOpen, setRightPanelOpen ] = useState(
-    session ? cookieRightPanelOpen : false
+    user ? cookieRightPanelOpen : false
   );
   const [ rightPanelOpenMobile, setRightPanelOpenMobile ] = useState(false);
-  const [ rightPanel, setRightPanel ] = useState<RightPanel<any> | null>(session ? RightPanelSocial : null);
+  const [ rightPanel, setRightPanel ] = useState<RightPanel<any> | null>(user ? RightPanelSocial : null);
   const rightPanelCollapsedSize = 0;
   const rightPanelMinSize = 20;
   const rightPanelMaxSize = 30;
@@ -118,7 +118,7 @@ export const UIProvider = ({
   }, [isMobile, rightPanelOpen, rightPanelOpenChange, rightPanelOpenMobile]);
 
   const toggleRightPanelContent = <P,>(content: RightPanel) => {
-    if (content.onlyAuth && !session) return;
+    if (content.onlyAuth && !user) return;
     const isSameContent = rightPanel?.title === content.title && rightPanel?.component === content.component && JSON.stringify(rightPanel?.props) === JSON.stringify(content.props);
     if (isSameContent) {
       toggleRightPanel();

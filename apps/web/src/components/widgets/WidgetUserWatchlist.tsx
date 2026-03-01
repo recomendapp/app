@@ -9,7 +9,7 @@ import { upperFirst } from "lodash";
 import { CardMovie } from "../Card/CardMovie";
 import { CardTvSeries } from "../Card/CardTvSeries";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { userBookmarksInfiniteOptions } from "@libs/query-client/src";
+import { userBookmarksInfiniteOptions } from "@libs/query-client";
 import { MovieCompact, TvSeriesCompact } from "@packages/api-js";
 
 const ITEM_LIMIT = 6;

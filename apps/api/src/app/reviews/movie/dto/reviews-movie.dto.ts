@@ -2,7 +2,7 @@ import { ApiProperty, ApiPropertyOptional, ApiSchema, IntersectionType, PickType
 import { IsNullable } from "../../../../common/decorators/is-nullable.decorator";
 import { REVIEW_RULES } from "../../../../config/validation-rules";
 import { Expose, Type } from "class-transformer";
-import { IsBoolean, IsEnum, IsInt, IsNumber, IsOptional, IsString, Length, Matches, ValidateNested } from "class-validator";
+import { IsBoolean, IsDateString, IsEnum, IsInt, IsNumber, IsOptional, IsString, Length, Matches, ValidateNested } from "class-validator";
 import { PaginatedResponseDto, PaginationQueryDto } from "../../../../common/dto/pagination.dto";
 import { SortOrder } from "../../../../common/dto/sort.dto";
 import { UserSummaryDto } from "../../../users/dto/users.dto";
@@ -66,13 +66,13 @@ export class ReviewMovieDto {
 	// Dates
 	@ApiProperty()
 	@Expose()
-	@Type(() => Date)
-	createdAt: Date;
+	@IsDateString()
+	createdAt: string;
 
 	@ApiProperty()
 	@Expose()
-	@Type(() => Date)
-	updatedAt: Date;
+	@IsDateString()
+	updatedAt: string;
 
 	// Counts
 	@ApiProperty({ description: 'The number of likes' })
@@ -113,13 +113,13 @@ export class ReviewMovieInputDto extends PickType(ReviewMovieDto, [
 	'isSpoiler',
 ] as const) {}
 
-@ApiSchema({ name: 'ListReviewsMovie' })
-export class ListReviewsMovieDto extends PaginatedResponseDto<ReviewMovieWithAuthorDto> {
+@ApiSchema({ name: 'ListPaginatedReviewsMovie' })
+export class ListPaginatedReviewsMovieDto extends PaginatedResponseDto<ReviewMovieWithAuthorDto> {
 	@ApiProperty({ type: () => [ReviewMovieWithAuthorDto] })
 	@Type(() => ReviewMovieWithAuthorDto)
 	data: ReviewMovieWithAuthorDto[];
 
-	constructor(partial: Partial<ListReviewsMovieDto>) {
+	constructor(partial: Partial<ListPaginatedReviewsMovieDto>) {
 		super(partial);
 		Object.assign(this, partial);
 	}
@@ -160,8 +160,8 @@ class BaseListReviewsMovieQueryDto {
 	sort_order: SortOrder = SortOrder.DESC;
 }
 
-@ApiSchema({ name: 'ListReviewsMovieQuery' })
-export class ListReviewsMovieQueryDto extends IntersectionType(
+@ApiSchema({ name: 'ListPaginatedReviewsMovieQuery' })
+export class ListPaginatedReviewsMovieQueryDto extends IntersectionType(
   BaseListReviewsMovieQueryDto,
   PaginationQueryDto
 ) {}

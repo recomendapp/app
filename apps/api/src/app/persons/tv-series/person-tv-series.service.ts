@@ -7,7 +7,7 @@ import { and, asc, desc, eq, gt, isNotNull, lt, or, SQL, sql } from 'drizzle-orm
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { tmdbTvSeriesCredit, tmdbTvSeriesView } from '@libs/db/schemas';
 import { TvSeriesSortBy } from '../../tv-series/dto/tv-series.dto';
-import { ListInfinitePersonTvSeriesDto, ListInfinitePersonTvSeriesQueryDto, ListPersonTvSeriesDto, ListPersonTvSeriesQueryDto, PersonTvSeriesFacetsDto } from './dto/person-tv-series.dto';
+import { ListInfinitePersonTvSeriesDto, ListInfinitePersonTvSeriesQueryDto, ListPaginatedPersonTvSeriesDto, ListPaginatedPersonTvSeriesQueryDto, PersonTvSeriesFacetsDto } from './dto/person-tv-series.dto';
 
 @Injectable()
 export class PersonTvSeriesService {
@@ -44,15 +44,15 @@ export class PersonTvSeriesService {
         return [direction(tmdbTvSeriesView.lastAirDate), direction(tmdbTvSeriesView.id)];
     }
   }
-  async list({
+  async listPaginated({
     personId,
     query,
     locale,
   }: {
     personId: number;
-    query: ListPersonTvSeriesQueryDto;
+    query: ListPaginatedPersonTvSeriesQueryDto;
     locale: SupportedLocale;
-  }): Promise<ListPersonTvSeriesDto> {
+  }): Promise<ListPaginatedPersonTvSeriesDto> {
     return await this.db.transaction(async (tx) => {
       await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
 

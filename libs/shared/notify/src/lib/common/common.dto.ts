@@ -1,5 +1,6 @@
 import z from "zod";
+import { defaultSupportedLocale, supportedLocales } from "@libs/i18n";
 
 export const LangSchema = z.object({
-	lang: z.enum(['en']).default("en"),
+	lang: z.enum(supportedLocales).default(defaultSupportedLocale),
 });

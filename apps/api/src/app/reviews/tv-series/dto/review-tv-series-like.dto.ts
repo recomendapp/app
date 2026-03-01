@@ -1,5 +1,6 @@
 import { ApiProperty, ApiSchema } from "@nestjs/swagger";
-import { Expose, Type } from "class-transformer";
+import { Expose } from "class-transformer";
+import { IsDateString } from "class-validator";
 
 @ApiSchema({ name: 'ReviewTvSeriesLike' })
 export class ReviewTvSeriesLikeDto {
@@ -14,6 +15,6 @@ export class ReviewTvSeriesLikeDto {
 	// Dates
 	@ApiProperty()
 	@Expose()
-	@Type(() => Date)
-	createdAt: Date;
+	@IsDateString()
+	createdAt: string;
 }

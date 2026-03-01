@@ -10,9 +10,9 @@ import { upperFirst } from "lodash";
 import { useAuth } from "@/context/auth-context";
 import { createShareController } from "../ShareController/ShareController";
 import { ShareControllerTvSeries } from "../ShareController/ShareControllerTvSeries";
-import { ModalUserRecosTvSeriesSend } from "../Modals/recos/ModalUserRecosTvSeriesSend";
 import { ModalPlaylistTvSeriesAdd } from "../Modals/playlists/ModalPlaylistTvSeriesAdd";
 import { TvSeries, TvSeriesCompact } from "@packages/api-js";
+import { ModalUserRecoSend } from "../Modals/recos/ModalUserRecoSend";
 
 interface Item {
 	icon: React.ElementType;
@@ -53,7 +53,7 @@ export const ContextMenuTvSeries = ({
 				},
 				{
 					icon: Icons.send,
-					onClick: () => openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: tvSeries.id, tvSeriesTitle: tvSeries.name! }),
+					onClick: () => openModal(ModalUserRecoSend, { mediaId: tvSeries.id, mediaType: 'tv_series', mediaTitle: tvSeries.name }),
 					label: upperFirst(t('common.messages.send_to_friend')),
 				}
 			] : []),

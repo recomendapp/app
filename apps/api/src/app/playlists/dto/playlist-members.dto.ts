@@ -1,6 +1,6 @@
 import { ApiProperty, ApiSchema, PickType } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
-import { IsIn, IsString, ValidateNested } from "class-validator";
+import { IsDateString, IsIn, IsString, ValidateNested } from "class-validator";
 import { playlistMemberRoleEnum } from "@libs/db/schemas";
 import { UserSummaryDto } from "../../users/dto/users.dto";
 
@@ -33,8 +33,8 @@ export class PlaylistMemberDto {
 	// Dates
 	@ApiProperty()
     @Expose()
-    @Type(() => Date)
-    createdAt: Date;
+    @IsDateString()
+    createdAt: string;
 }
 
 class PlaylistMemberFullDto extends PlaylistMemberDto {

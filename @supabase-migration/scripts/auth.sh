@@ -55,7 +55,8 @@ SELECT
     au.updated_at,                              -- updatedAt
     LOWER(pu.username),                         -- username (FORCE EN MINUSCULE)
     pu.username,                                -- displayUsername
-    pu.username_updated_at                      -- usernameUpdatedAt
+    pu.username_updated_at,                     -- usernameUpdatedAt
+    COALESCE(pu.language, 'en-US')              -- language <-- AJOUT ICI (fallback si NULL)
 FROM auth.users au
 JOIN public.user pu ON au.id = pu.id
 "
@@ -64,8 +65,7 @@ migrate_query_to_table \
     "Supabase Users" \
     "$SQL_USERS" \
     "auth.user" \
-    "id, name, email, email_verified, image, created_at, updated_at, username, display_username, username_updated_at"
-
+    "id, name, email, email_verified, image, created_at, updated_at, username, display_username, username_updated_at, language"
 
 # ==============================================================================
 # 2. MIGRATION DES PROFILS (Table public.profile)
@@ -76,7 +76,6 @@ SELECT
     id,                 -- id (FK user)
     bio,                -- bio
     background_url,     -- backgroundImage
-    language,           -- language
     premium,            -- isPremium
     private,            -- isPrivate
     followers_count,    -- followersCount
@@ -88,7 +87,7 @@ migrate_query_to_table \
     "Public Profiles" \
     "$SQL_PROFILE" \
     "public.profile" \
-    "id, bio, background_image, language, is_premium, is_private, followers_count, following_count"
+    "id, bio, background_image, is_premium, is_private, followers_count, following_count"
 
 
 # ==============================================================================

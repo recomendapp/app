@@ -1,4 +1,4 @@
-import { UserFollowersControllerListData, UserMoviesControllerListData, UserPlaylistsControllerListData, UserMoviesControllerListInfiniteData, UserPlaylistsControllerListInfiniteData, UserBookmarksControllerListData, UserFollowersControllerListInfiniteData, UserBookmarksControllerListInfiniteData, UserFollowingControllerListData, UserFollowingControllerListInfiniteData } from "@packages/api-js";
+import { UserFollowersControllerListPaginatedData, UserMoviesControllerListInfiniteData, UserPlaylistsControllerListInfiniteData, UserFollowersControllerListInfiniteData, UserBookmarksControllerListInfiniteData, UserFollowingControllerListPaginatedData, UserFollowingControllerListInfiniteData, MovieWatchedDatesControllerListInfiniteData, Bookmark, UserBookmarksControllerListAllData, UserBookmarksControllerListPaginatedData, UserPlaylistsControllerListPaginatedData, UserMoviesControllerListPaginatedData, MovieWatchedDatesControllerListPaginatedData, RecoTargetsControllerListPaginatedData, RecoTargetsControllerListInfiniteData, RecoTargetsControllerListAllData, UserFollowRequestsControllerListPaginatedData, UserFollowRequestsControllerListInfiniteData } from "@packages/api-js";
 
 export const userKeys = {
 	base: ['user'] as const,
@@ -21,50 +21,68 @@ export const userKeys = {
 		type: 'movie' | 'tv_series';
 		userId: string;
 	}) => [...userKeys.details({ userId }), 'log', type, id] as const,
+	watchedDates: ({
+		id,
+		type,
+		userId,
+		mode,
+		filters,
+	}: {
+		id: number;
+		type: 'movie' | 'tv_series';
+		userId: string;
+	} & (
+		| { mode?: never; filters?: never }
+		| { mode: 'paginated'; filters?: NonNullable<MovieWatchedDatesControllerListPaginatedData['query']> }
+		| { mode: 'infinite'; filters?: Omit<NonNullable<MovieWatchedDatesControllerListInfiniteData['query']>, 'cursor'> }
+	)) => {
+		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
+		return [...userKeys.details({ userId }), 'watchedDates', type, id, ...optionsKey] as const;
+	},
 
 	/* --------------------------------- Movies --------------------------------- */
 	movies: ({
 		userId,
-		infinite,
+		mode,
 		filters,
 	}: {
 		userId: string;
 	} & (
-		| { infinite?: never; filters?: never }
-		| { infinite: false; filters?: NonNullable<UserMoviesControllerListData['query']> }
-		| { infinite: true; filters?: Omit<NonNullable<UserMoviesControllerListInfiniteData['query']>, 'cursor'> }
+		| { mode?: never; filters?: never }
+		| { mode: 'paginated'; filters?: NonNullable<UserMoviesControllerListPaginatedData['query']> }
+		| { mode: 'infinite'; filters?: Omit<NonNullable<UserMoviesControllerListInfiniteData['query']>, 'cursor'> }
 	)) => {
-		const optionsKey = [...(infinite !== undefined ? [infinite] : []), ...(filters ? [filters] : [])];
+		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
 		return [...userKeys.details({ userId }), 'movies', ...optionsKey] as const;
 	},
 
 	/* --------------------------------- Follows -------------------------------- */
 	followers: ({
 		userId,
-		infinite,
+		mode,
 		filters,
 	}: {
 		userId: string;
 	} & (
-		| { infinite?: never; filters?: never }
-		| { infinite: false; filters?: NonNullable<UserFollowersControllerListData['query']> }
-		| { infinite: true; filters?: Omit<NonNullable<UserFollowersControllerListInfiniteData['query']>, 'cursor'> }
+		| { mode?: never; filters?: never }
+		| { mode: 'paginated'; filters?: NonNullable<UserFollowersControllerListPaginatedData['query']> }
+		| { mode: 'infinite'; filters?: Omit<NonNullable<UserFollowersControllerListInfiniteData['query']>, 'cursor'> }
 	)) => {
-		const optionsKey = [...(infinite !== undefined ? [infinite] : []), ...(filters ? [filters] : [])];
+		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
 		return [...userKeys.details({ userId }), 'followers', ...optionsKey] as const;
 	},
 	following: ({
 		userId,
-		infinite,
+		mode,
 		filters,
 	}: {
 		userId: string;
 	} & (
-		| { infinite?: never; filters?: never }
-		| { infinite: false; filters?: NonNullable<UserFollowingControllerListData['query']> }
-		| { infinite: true; filters?: Omit<NonNullable<UserFollowingControllerListInfiniteData['query']>, 'cursor'> }
+		| { mode?: never; filters?: never }
+		| { mode: 'paginated'; filters?: NonNullable<UserFollowingControllerListPaginatedData['query']> }
+		| { mode: 'infinite'; filters?: Omit<NonNullable<UserFollowingControllerListInfiniteData['query']>, 'cursor'> }
 	)) => {
-		const optionsKey = [...(infinite !== undefined ? [infinite] : []), ...(filters ? [filters] : [])];
+		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
 		return [...userKeys.details({ userId }), 'following', ...optionsKey] as const;
 	},
 	follow: ({
@@ -75,6 +93,21 @@ export const userKeys = {
 		profileId: string;
 	}) => [...userKeys.details({ userId }), 'follow', profileId] as const,
 
+	followRequests: ({
+		userId,
+		mode,
+		filters,
+	}: {
+		userId: string;
+	} & (
+		| { mode?: never; filters?: never }
+		| { mode: 'paginated'; filters?: NonNullable<UserFollowRequestsControllerListPaginatedData['query']> }
+		| { mode: 'infinite'; filters?: Omit<NonNullable<UserFollowRequestsControllerListInfiniteData['query']>, 'cursor'> }
+	)) => {
+		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
+		return [...userKeys.details({ userId }), 'follow_requests', ...optionsKey] as const;
+	},
+
 	personFollow: ({
 		userId,
 		personId,
@@ -83,35 +116,76 @@ export const userKeys = {
 		personId: number;
 	}) => [...userKeys.details({ userId }), 'person_follow', personId] as const,
 
-	/* -------------------------------- Bookmarks ------------------------------- */
-	bookmarks: ({
+	/* ---------------------------------- Recos --------------------------------- */
+	recoTargets: ({
 		userId,
-		infinite,
+		mediaId,
+		type,
+		mode,
 		filters,
 	}: {
 		userId: string;
+		mediaId: number;
+		type: 'movie' | 'tv_series';
 	} & (
-		| { infinite?: never; filters?: never }
-		| { infinite: false; filters?: NonNullable<UserBookmarksControllerListData['query']> }
-		| { infinite: true; filters?: Omit<NonNullable<UserBookmarksControllerListInfiniteData['query']>, 'cursor'> }
+		| { mode?: never, filters?: never }
+		| { mode: 'all'; filters?: NonNullable<RecoTargetsControllerListAllData['query']> }
+		| { mode: 'paginated'; filters?: NonNullable<RecoTargetsControllerListPaginatedData['query']> }
+		| { mode: 'infinite'; filters?: Omit<NonNullable<RecoTargetsControllerListInfiniteData['query']>, 'cursor'> }
 	)) => {
-		const optionsKey = [...(infinite !== undefined ? [infinite] : []), ...(filters ? [filters] : [])];
-		return [...userKeys.details({ userId }), 'bookmarks', ...optionsKey] as const;
+		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
+		return [...userKeys.details({ userId }), 'reco_targets', type, mediaId, ...optionsKey] as const;
+	},
+
+	/* -------------------------------- Bookmarks ------------------------------- */
+	bookmarks: ({
+        userId,
+        mode,
+        filters,
+    }: {
+        userId: string;
+    } & (
+        | { mode?: never; filters?: never }
+        | { mode: 'all'; filters?: NonNullable<UserBookmarksControllerListAllData['query']> }
+        | { mode: 'paginated'; filters?: NonNullable<UserBookmarksControllerListPaginatedData['query']> }
+        | { mode: 'infinite'; filters?: Omit<NonNullable<UserBookmarksControllerListInfiniteData['query']>, 'cursor'> }
+    )) => {
+        const optionsKey = [
+            ...(mode !== undefined ? [mode] : []), 
+            ...(filters ? [filters] : [])
+        ];
+        
+        return [...userKeys.details({ userId }), 'bookmarks', ...optionsKey] as const;
+    },
+
+	bookmark: ({
+		userId,
+		mediaId,
+		type,
+		id,
+	}: {
+		userId: string;
+	} & (
+		| { mediaId?: never; type?: never, id: Bookmark['id'] }
+		| { mediaId: Bookmark['mediaId']; type: Bookmark['type']; id?: never }
+	)) => {
+		const optionsKey = mediaId && type ? [type, mediaId] : [id];
+		return [...userKeys.details({ userId }), 'bookmark', ...optionsKey] as const;
 	},
 
 	/* -------------------------------- Playlists ------------------------------- */
 	playlists: ({
 		userId,
-		infinite,
+		mode,
 		filters,
 	}: {
 		userId: string;
 	} & (
-		| { infinite?: never; filters?: never }
-		| { infinite: false; filters?: NonNullable<UserPlaylistsControllerListData['query']> }
-		| { infinite: true; filters?: Omit<NonNullable<UserPlaylistsControllerListInfiniteData['query']>, 'cursor'> }
+		| { mode?: never; filters?: never }
+		| { mode: 'paginated'; filters?: NonNullable<UserPlaylistsControllerListPaginatedData['query']> }
+		| { mode: 'infinite'; filters?: Omit<NonNullable<UserPlaylistsControllerListInfiniteData['query']>, 'cursor'> }
 	)) => {
-		const optionsKey = [...(infinite !== undefined ? [infinite] : []), ...(filters ? [filters] : [])];
+		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
 		return [...userKeys.details({ userId }), 'playlists', ...optionsKey] as const;
 	},
 

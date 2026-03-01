@@ -20,10 +20,10 @@ import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import { useModal } from '@/context/modal-context';
 import { createShareController } from "@/components/ShareController/ShareController";
 import { ModalUserWatchlistTvSeriesComment } from "@/components/Modals/watchlist/ModalUserWatchlistTvSeriesComment";
-import { ModalUserRecosTvSeriesSend } from "@/components/Modals/recos/ModalUserRecosTvSeriesSend";
 import { ShareControllerTvSeries } from "@/components/ShareController/ShareControllerTvSeries";
 import { useCallback } from "react";
-import { useTvSeriesBookmarkDeleteMutation } from "@libs/query-client/src";
+import { useUserBookmarkDeleteByMediaMutation } from "@libs/query-client";
+import { ModalUserRecoSend } from "@/components/Modals/recos/ModalUserRecoSend";
 
 interface DataTableRowActionsProps {
   table: Table<UserWatchlistTvSeries>;
@@ -40,13 +40,14 @@ export function DataTableRowActions({
 }: DataTableRowActionsProps) {
   const t = useTranslations();
   const { openModal, createConfirmModal } = useModal();
-  const { mutateAsync: deleteWatchlistTvSeries } = useTvSeriesBookmarkDeleteMutation();
+  const { mutateAsync: deleteWatchlistTvSeries } = useUserBookmarkDeleteByMediaMutation();
 
   const handleUnwatchlist = useCallback(async () => {
     if (!data) return;
     await deleteWatchlistTvSeries({
       path: {
-        tv_series_id: data.tv_series_id,
+        media_id: data.tv_series_id,
+        type: 'tv_series',
       },
     }, {
       onSuccess: () => {
@@ -73,7 +74,7 @@ export function DataTableRowActions({
 
         <DropdownMenuContent align="end" className="w-40">
           <DropdownMenuItem
-          onClick={() => openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: data.tv_series_id!, tvSeriesTitle: data.tv_series?.name! })}
+          onClick={() => openModal(ModalUserRecoSend, { mediaId: data.tv_series_id!, mediaType: 'tv_series', mediaTitle: data.tv_series?.name! })}
           >
             <Icons.send className='w-4' />
             {upperFirst(t('common.messages.send_to_friend'))}

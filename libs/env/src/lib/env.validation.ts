@@ -42,9 +42,22 @@ export const apiSchema = commonSchema.extend({
 export const notifySchema = commonSchema.extend({
   PORT: z.coerce.number().default(9001),
   HOST: z.string().default('0.0.0.0'),
+  DATABASE_URL: z.string(),
 
   RESEND_API_KEY: z.string().startsWith('re_'),
   RESEND_FROM_EMAIL: z.string().default('Recomend <hello@recomend.app>'),
+
+  FIREBASE_PROJECT_ID: z.string(),
+  FIREBASE_CLIENT_EMAIL: z.string(),
+  FIREBASE_PRIVATE_KEY_B64: z.string().transform((str) => {
+    return Buffer.from(str, 'base64').toString('utf-8');
+  }),
+
+  APNS_KEY_B64: z.string().transform((str) => {
+    return Buffer.from(str, 'base64').toString('utf-8');
+  }),
+  APNS_KEY_ID: z.string(),
+  APNS_TEAM_ID: z.string(),
 });
 
 export const workerSchema = commonSchema.extend({

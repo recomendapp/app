@@ -35,13 +35,13 @@ export class PersonTvSeriesDto {
   credits: PersonTvSeriesCreditDto[];
 }
 
-@ApiSchema({ name: 'ListPersonTvSeries'})
-export class ListPersonTvSeriesDto extends PaginatedResponseDto<PersonTvSeriesDto> {
+@ApiSchema({ name: 'ListPaginatedPersonTvSeries'})
+export class ListPaginatedPersonTvSeriesDto extends PaginatedResponseDto<PersonTvSeriesDto> {
   @ApiProperty({ type: () => [PersonTvSeriesDto] })
   @Type(() => PersonTvSeriesDto)
   data: PersonTvSeriesDto[];
 
-  constructor(partial: Partial<ListPersonTvSeriesDto>) {
+  constructor(partial: Partial<ListPaginatedPersonTvSeriesDto>) {
     super(partial);
     Object.assign(this, partial);
   }
@@ -98,8 +98,8 @@ class BaseListPersonTvSeriesQueryDto {
   sort_order: SortOrder = SortOrder.DESC;
 }
 
-@ApiSchema({ name: 'ListPersonTvSeriesQuery' })
-export class ListPersonTvSeriesQueryDto extends IntersectionType(
+@ApiSchema({ name: 'ListPaginatedPersonTvSeriesQuery' })
+export class ListPaginatedPersonTvSeriesQueryDto extends IntersectionType(
   BaseListPersonTvSeriesQueryDto,
   PaginationQueryDto
 ) {}
