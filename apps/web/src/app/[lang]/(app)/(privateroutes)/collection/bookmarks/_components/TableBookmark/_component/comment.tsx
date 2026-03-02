@@ -5,9 +5,7 @@ import { BookmarkWithMedia } from './types';
 import { ModalBookmarkComment } from '@/components/Modals/bookmarks/ModalBookmarkComment';
 
 export function Comment({ data }: { data: BookmarkWithMedia }) {
-
   const { openModal } = useModal();
-
   return (
     <p
       onClick={() => openModal(ModalBookmarkComment, { data })}

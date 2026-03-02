@@ -9,8 +9,9 @@ import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { TableViewOptions } from './TableViewOptions';
 import { TableSortOptions } from './TableSortOptions';
+import { cn } from '@/lib/utils';
 
-interface TableToolbarProps<TData> {
+interface TableToolbarProps<TData> extends React.HTMLAttributes<HTMLDivElement> {
   table: Table<TData>;
   searchPlaceholder?: string;
 }
@@ -18,12 +19,13 @@ interface TableToolbarProps<TData> {
 export function TableToolbar<TData>({
   table,
   searchPlaceholder,
+  className,
 }: TableToolbarProps<TData>) {
   const t = useTranslations();
   const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
-	<div className="flex items-center justify-between gap-4">
+	<div className={cn("flex items-center justify-between gap-4", className)}>
 	  <div className="flex flex-1 items-center gap-2">
 		<Input
 		  placeholder={searchPlaceholder ?? upperFirst(t('common.messages.search'))}

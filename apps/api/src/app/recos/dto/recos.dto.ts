@@ -88,24 +88,11 @@ export class RecoDto {
 }
 
 @ApiSchema({ name: 'RecoSender' })
-export class RecoSenderDto {
-  @ApiProperty({ example: '123456' })
-  @Expose()
-  @IsInt()
-  recoId: number;
-
+export class RecoSenderDto extends PickType(RecoDto, ['id', 'comment', 'createdAt'] as const) {
   @ApiProperty({ type: () => UserSummaryDto })
   @Expose()
   @Type(() => UserSummaryDto)
   user: UserSummaryDto;
-
-  @ApiProperty({ example: 'Check this out!', nullable: true })
-  @Expose()
-  comment: string | null;
-
-  @ApiProperty({ example: '2024-01-30T12:00:00Z' })
-  @Expose()
-  createdAt: string;
 }
 
 @ApiSchema({ name: 'RecoGrouped' })

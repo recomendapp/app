@@ -1,12 +1,9 @@
 
-import { Bookmark } from '@packages/api-js';
 import { OnChangeFn, SortingState, TableState, Updater, VisibilityState } from '@tanstack/react-table';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export type BookmarkTab = 'all' | Bookmark['type'];
-
-interface BookmarkStore {
+interface MyRecosStore {
 	state?: Partial<TableState>;
 	onSortingChange: OnChangeFn<SortingState>;
 	onColumnVisibilityChange: OnChangeFn<VisibilityState>;
@@ -29,7 +26,7 @@ function resolveUpdater<T>(
     : updater
 }
 
-export const useBookmarkStore = create<BookmarkStore>()(
+export const useMyRecosStore = create<MyRecosStore>()(
 	persist(
 		(set) => ({
 			state: initialState,
@@ -62,7 +59,7 @@ export const useBookmarkStore = create<BookmarkStore>()(
 			})),	
 		}),
 		{
-			name: 'bookmark-storage',
+			name: 'my-recos-storage',
 			version: 1,
 		}
 	)

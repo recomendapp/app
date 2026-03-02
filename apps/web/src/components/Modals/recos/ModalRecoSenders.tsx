@@ -1,19 +1,19 @@
 'use client'
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { UserRecosAggregated } from "@recomendapp/types";
 import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useModal } from "@/context/modal-context";
 import { CardUser } from "@/components/Card/CardUser";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
+import { RecoSender } from "@packages/api-js";
 
 interface ModalRecosSendersProps extends ModalType {
-	comments: UserRecosAggregated['senders'];
+	senders: RecoSender[];
 }
 
 export const ModalRecoSenders = ({
-	comments,
+	senders,
 	...props
   } : ModalRecosSendersProps) => {
 	const t = useTranslations();
@@ -24,16 +24,16 @@ export const ModalRecoSenders = ({
 			onOpenChange={(open) => !open && closeModal(props.id)}
 		>
 			<ModalHeader>
-				<ModalTitle>{upperFirst(t('common.messages.reco', { count: comments.length }))}</ModalTitle>
+				<ModalTitle>{upperFirst(t('common.messages.reco', { count: senders.length }))}</ModalTitle>
 			</ModalHeader>
 			<ModalBody>
 				<ScrollArea className="h-[40vh]">
 					<div className="space-y-2">
-						{comments?.map((item: any) => (
+						{senders?.map((item) => (
 							<div
-								key={item.user.id}
-								className="bg-muted rounded-xl p-2 space-y-2"
-								>
+							key={item.user.id}
+							className="bg-muted rounded-xl p-2 space-y-2"
+							>
 								<CardUser user={item.user} variant="inline" />
 								{item.comment && (
 									<div className="pl-8">

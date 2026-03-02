@@ -39,10 +39,7 @@ const Bookmarks = () => {
 		backdrops={backdrops}
 		/>
 		{data && (
-			<TableBookmark
-			data={data}
-			className='px-4'
-			/>
+			<TableBookmark data={data} className='py-2' />
 		)}
 	</>
 	)

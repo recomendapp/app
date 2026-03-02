@@ -3,13 +3,13 @@ import { ColumnDef } from '@tanstack/react-table';
 import { DataTableRowActions } from './data-table-row-actions';
 import { useFormatter, useNow, useTranslations } from 'next-intl';
 import { Item } from './item';
-import { upperFirst } from 'lodash';
+import { capitalize, upperFirst } from 'lodash';
 import { TableColumnHeader } from '@/components/tables/TableColumnHeader';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
-import { BookmarkWithMedia } from './types';
-import { Comment } from './comment';
+import { RecoWithMedia } from './types';
+import Senders from './senders';
 
-export const Columns = (): ColumnDef<BookmarkWithMedia>[] => {
+export const Columns = (): ColumnDef<RecoWithMedia>[] => {
   const t = useTranslations();
   const formatter = useFormatter();
   const now = useNow();
@@ -36,7 +36,7 @@ export const Columns = (): ColumnDef<BookmarkWithMedia>[] => {
     },
     {
       id: 'created_at',
-      accessorFn: (row) => row.createdAt,
+      accessorFn: (row) => row.latestCreatedAt,
       meta: {
         displayName: upperFirst(t('common.messages.added_at', { gender: 'male', count: 1 })),
       },
@@ -44,22 +44,25 @@ export const Columns = (): ColumnDef<BookmarkWithMedia>[] => {
         <TableColumnHeader column={column} title={upperFirst(t('common.messages.added_at', { gender: 'male', count: 1 }))} />
       ),
       cell: ({ row }) => (
-        <DateOnlyYearTooltip date={row.original?.createdAt} className='text-muted-foreground'>
-          {formatter.relativeTime(new Date(row.original?.createdAt), { now })}
+        <DateOnlyYearTooltip date={row.original.latestCreatedAt} className='text-muted-foreground'>
+          {formatter.relativeTime(new Date(row.original.latestCreatedAt), { now })}
         </DateOnlyYearTooltip>
       ),
     },
     {
-      id: 'comment',
-      accessorKey: 'comment',
+      id: 'by',
+      accessorFn: (row) => row.senders.length,
       meta: {
-        displayName: upperFirst(t('common.messages.comment', { count: 1 })),
+        displayName: upperFirst(t('common.messages.added_by')),
       },
       header: ({ column }) => (
-        <TableColumnHeader column={column} title={upperFirst(t('common.messages.comment', { count: 1 }))} />
+        <TableColumnHeader
+        column={column}
+        title={capitalize(t('common.messages.added_by'))}
+        className="justify-end hidden lg:block"
+        />
       ),
-      cell: ({ row }) => <Comment data={row.original} />,
-      enableSorting: false,
+      cell: ({ row }) => <Senders row={row} />,
     },
     {
       id: 'actions',

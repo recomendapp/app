@@ -25,18 +25,13 @@ import { useUserBookmarkDeleteByMediaMutation } from "@libs/query-client";
 import { BookmarkWithMedia } from "./types";
 import { getMediaDetails } from "@/utils/get-media-details";
 import { ModalRecoSend } from "@/components/Modals/recos/ModalRecoSend";
+import { ShareControllerTvSeries } from "@/components/ShareController/ShareControllerTvSeries";
 
 interface DataTableRowActionsProps {
-  table: Table<BookmarkWithMedia>;
-  row: Row<BookmarkWithMedia>;
-  column: Column<BookmarkWithMedia, unknown>;
   data: BookmarkWithMedia;
 }
 
 export function DataTableRowActions({
-  row,
-  table,
-  column,
   data,
 }: DataTableRowActionsProps) {
   const t = useTranslations();
@@ -91,7 +86,11 @@ export function DataTableRowActions({
 
         <DropdownMenuContent align="end" className="w-40">
           <DropdownMenuItem
-          onClick={() => openModal(ModalRecoSend, { mediaId: data.mediaId!, mediaTitle: data.media?.title!, mediaType: data.type })}
+          onClick={() => openModal(ModalRecoSend, {
+            mediaId: data.mediaId,
+            mediaTitle: data.type === 'movie' ? data.media.title : data.media.name,
+            mediaType: data.type
+          })}
           >
             <Icons.send className='w-4' />
             {upperFirst(t('common.messages.send_to_friend'))}
@@ -115,7 +114,9 @@ export function DataTableRowActions({
               title: details?.title || '',
               type: data.type,
               path: data.media.url || '',
-              shareController: createShareController(ShareControllerMovie, { movie: data?.movie! }),
+              shareController: data.type === 'movie'
+                              ? createShareController(ShareControllerMovie, { movie: data.media })
+                              : createShareController(ShareControllerTvSeries, { tvSeries: data.media }),
             })}
           >
             <Icons.share className='w-4' />

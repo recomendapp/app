@@ -1,16 +1,13 @@
 'use client';
+'use no memo';
+
 import * as React from 'react';
 import {
 	ColumnFiltersState,
 	RowData,
-	SortingState,
-	VisibilityState,
 	flexRender,
 	getCoreRowModel,
-	getFacetedRowModel,
-	getFacetedUniqueValues,
 	getFilteredRowModel,
-	getPaginationRowModel,
 	getSortedRowModel,
 	useReactTable,
 } from '@tanstack/react-table';
@@ -24,11 +21,13 @@ import {
 } from '@/components/ui/table';
 import { Columns } from './_component/columns';
 import { useMediaQuery } from 'react-responsive';
-import { UserWatchlistMovie } from '@recomendapp/types';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { cn } from '@/lib/utils';
 import { TableToolbar } from '@/components/tables/TableToolbar';
+import { RecoWithMedia } from './_component/types';
+import { useMyRecosStore } from '@/stores/useMyRecosStore';
+import { RecoWithMovie, RecoWithTvSeries } from '@packages/api-js';
 
 declare module '@tanstack/react-table' {
 	interface ColumnMeta<TData extends RowData, TValue> {
@@ -36,48 +35,45 @@ declare module '@tanstack/react-table' {
 	}
 }
 
-interface DataTableProps extends React.HTMLAttributes<HTMLDivElement> {
-	data: UserWatchlistMovie[];
+interface TableMyRecosProps extends React.HTMLAttributes<HTMLDivElement> {
+	data: (
+		| ({ type: 'movie' } & RecoWithMovie)
+		| ({ type: 'tv_series' } & RecoWithTvSeries)
+	)[];
 }
 
-export function TableWatchlistMovie({ data,className, ...props }: DataTableProps) {
+export function TableMyRecos({
+	data,
+	className,
+}: TableMyRecosProps) {
 	const t = useTranslations();
-	const [rowSelection, setRowSelection] = React.useState({});
-	const [columnVisibility, setColumnVisibility] =
-		React.useState<VisibilityState>({});
-	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-		[]
-	);
-	const [sorting, setSorting] = React.useState<SortingState>([]);
+	const { state, onSortingChange, onColumnVisibilityChange } = useMyRecosStore((state) => state);
 
-	const table = useReactTable<UserWatchlistMovie>({
-		data,
+	const [rowSelection, setRowSelection] = React.useState({});
+	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+
+	const table = useReactTable<RecoWithMedia>({
+		data: data,
 		columns: Columns(),
-		initialState: {
-			pagination: {
-				pageSize: 5000,
-			},
-		},
 		state: {
-			sorting,
-			columnVisibility,
 			rowSelection,
+			columnVisibility: state?.columnVisibility,
 			columnFilters,
+			sorting: state?.sorting,
 		},
 		enableRowSelection: true,
+		enableSortingRemoval: false,
 		onRowSelectionChange: setRowSelection,
-		onSortingChange: setSorting,
+		onSortingChange: onSortingChange,
 		onColumnFiltersChange: setColumnFilters,
-		onColumnVisibilityChange: setColumnVisibility,
+		onColumnVisibilityChange: onColumnVisibilityChange,
 		getCoreRowModel: getCoreRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
 		getSortedRowModel: getSortedRowModel(),
-		getFacetedRowModel: getFacetedRowModel(),
-		getFacetedUniqueValues: getFacetedUniqueValues(),
 	});
 
 	const isMobile = useMediaQuery({ maxWidth: 1024 });
+
 	React.useEffect(() => {
 		if (isMobile) {
 			table
@@ -89,22 +85,12 @@ export function TableWatchlistMovie({ data,className, ...props }: DataTableProps
 				.forEach((column) => {
 					column.toggleVisibility(false);
 				});
-		} else {
-			table
-				.getAllColumns()
-				.filter(
-					(column) =>
-						typeof column.accessorFn !== 'undefined' && column.getCanHide()
-				)
-				.forEach((column) => {
-					column.toggleVisibility(true);
-				});
 		}
 	}, [isMobile, table]);
 
 	return (
-		<div className={cn("flex flex-col gap-2", className)} {...props}>
-			<TableToolbar table={table} searchPlaceholder={upperFirst(t('common.messages.search_film'))} />
+		<div className={cn("flex flex-col gap-2", className)}>
+			<TableToolbar table={table} searchPlaceholder={upperFirst(t('common.messages.search_film'))} className='px-4' />
 			<div className="rounded-md">
 				<Table>
 					<TableHeader>
@@ -147,7 +133,7 @@ export function TableWatchlistMovie({ data,className, ...props }: DataTableProps
 							<TableRow>
 								<TableCell
 									colSpan={table.getAllColumns().length}
-									className="h-24 text-center"
+									className="h-24 text-center text-muted-foreground"
 								>
 								{upperFirst(t('common.messages.no_results'))}
 								</TableCell>

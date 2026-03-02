@@ -10,6 +10,7 @@ import { UserFollowingModule } from './following/user-following.module';
 import { UserPushTokensModule } from './push-tokens/user-push-tokens.module';
 import { UserFollowModule } from './follow/user-follow.module';
 import { UserFollowRequestsModule } from './follow-requests/user-follow-requests.module';
+import { UserRecosModule } from './recos/user-recos.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UserFollowRequestsModule } from './follow-requests/user-follow-requests
     UserPushTokensModule,
     UserFollowModule,
     UserFollowRequestsModule,
+    UserRecosModule,
   ],
   controllers: [UsersController],
   providers: [UsersService],

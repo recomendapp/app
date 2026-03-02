@@ -24,9 +24,9 @@ import { useMediaQuery } from 'react-responsive';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { cn } from '@/lib/utils';
-import { TableToolbar } from '@/components/tables/TableToolbar';import { BookmarksHeader } from '../BookmarksHeader';
+import { TableToolbar } from '@/components/tables/TableToolbar';
 import { BookmarkWithMedia } from './_component/types';
-import { useBookmarkStore } from '@/stores/useBookmarkStore';
+import { useBookmarksStore } from '@/stores/useBookmarksStore';
 import { BookmarkWithMovie, BookmarkWithTvSeries } from '@packages/api-js';
 
 declare module '@tanstack/react-table' {
@@ -47,7 +47,7 @@ export function TableBookmark({
 	className,
 }: TableBookmarkProps) {
 	const t = useTranslations();
-	const { state, onSortingChange, onColumnVisibilityChange } = useBookmarkStore((state) => state);
+	const { state, onSortingChange, onColumnVisibilityChange } = useBookmarksStore((state) => state);
 
 	const [rowSelection, setRowSelection] = React.useState({});
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -90,7 +90,7 @@ export function TableBookmark({
 
 	return (
 		<div className={cn("flex flex-col gap-2", className)}>
-			<TableToolbar table={table} searchPlaceholder={upperFirst(t('common.messages.search_film'))} />
+			<TableToolbar table={table} searchPlaceholder={upperFirst(t('common.messages.search_film'))} className='px-4' />
 			<div className="rounded-md">
 				<Table>
 					<TableHeader>
@@ -132,8 +132,8 @@ export function TableBookmark({
 						) : (
 							<TableRow>
 								<TableCell
-									colSpan={table.getAllColumns().length}
-									className="h-24 text-center"
+								colSpan={table.getAllColumns().length}
+								className="h-24 text-center text-muted-foreground"
 								>
 								{upperFirst(t('common.messages.no_results'))}
 								</TableCell>

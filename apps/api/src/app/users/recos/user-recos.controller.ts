@@ -86,8 +86,8 @@ export class UserRecosController {
     return this.usersService.listInfinite({
       targetUserId,
       query,
-      currentUser,
       locale,
+      currentUser
     });
   }
 }
