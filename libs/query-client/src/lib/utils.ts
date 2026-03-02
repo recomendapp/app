@@ -284,3 +284,59 @@ export const removeListItemFromAllCaches = <
     );
   }
 };
+
+export const updateOrRemoveListItemInAllCaches = <
+  TItem,
+  TPaginated extends PaginatedResponse<TItem>,
+  TInfinite extends InfinitePaginatedResponse<TItem>
+>(
+  queryClient: QueryClient,
+  keys: {
+    all?: QueryKey;
+    paginated?: QueryKey;
+    infinite?: QueryKey;
+  },
+  matcher: (item: TItem) => boolean,
+  modifier: (item: TItem) => Partial<TItem> | null
+) => {
+  let currentItem: TItem | undefined;
+
+  if (keys.all && !currentItem) {
+    const queries = queryClient.getQueriesData<TItem[]>({ queryKey: keys.all });
+    for (const [, data] of queries) {
+      if (data) currentItem = data.find(matcher);
+      if (currentItem) break;
+    }
+  }
+
+  if (keys.infinite && !currentItem) {
+    const queries = queryClient.getQueriesData<InfiniteData<TInfinite>>({ queryKey: keys.infinite });
+    for (const [, data] of queries) {
+      if (data?.pages) {
+        for (const page of data.pages) {
+          currentItem = page.data?.find(matcher);
+          if (currentItem) break;
+        }
+      }
+      if (currentItem) break;
+    }
+  }
+
+  if (keys.paginated && !currentItem) {
+    const queries = queryClient.getQueriesData<TPaginated>({ queryKey: keys.paginated });
+    for (const [, data] of queries) {
+      if (data?.data) currentItem = data.data.find(matcher);
+      if (currentItem) break;
+    }
+  }
+
+  if (!currentItem) return; 
+
+  const updatedItemOrNull = modifier(currentItem);
+
+  if (updatedItemOrNull === null) {
+    removeListItemFromAllCaches<TItem, TPaginated, TInfinite>(queryClient, keys, matcher);
+  } else {
+    updateListItemInAllCaches<TItem, TPaginated, TInfinite>(queryClient, keys, updatedItemOrNull, matcher);
+  }
+};

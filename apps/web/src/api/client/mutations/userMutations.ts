@@ -1260,240 +1260,240 @@ export const useUserReviewTvSeriesDeleteMutation = ({
 // 		}
 // 	});
 // };
-export const useUserRecosMovieDeleteMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			movieId,
-			userId,
-		} : {
-			movieId: number;
-			userId: string;
-		}) => {
-			const { error } = await supabase
-				.from('user_recos_movie')
-				.update({
-					status: 'deleted',
-				})
-				.match({
-					movie_id: movieId,
-					user_id: userId,
-					status: 'active',
-				})
-			if (error) throw error;
-			return {
-				movieId,
-				userId,
-			};
-		},
-		onSuccess: (data) => {
-			/* -------------- Delete the item in all the my recos queries -------------- */
-			const recosQueries = queryClient.getQueriesData<UserRecosMovieAggregated[]>({
-				predicate: (query) => {
-					const key = query.queryKey
-					return Array.isArray(key) && userKeys.recos({ userId: data.userId, type: 'movie' }).every((v, i) => v === key[i]);
-				}
-			});
-			recosQueries.forEach(([key, oldData]) => {
-				if (!oldData) return;
-				queryClient.setQueryData(key, (currentData: UserRecosMovieAggregated[] | undefined) => {
-					if (!currentData) return currentData;
-					return currentData.filter(
-						(reco) => reco.movie_id !== data.movieId
-					);
-				});
-			});
-			/* -------------------------------------------------------------------------- */
-		}
-	});
-};
-export const useUserRecosMovieCompleteMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			movieId,
-			userId,
-		} : {
-			movieId: number;
-			userId: string;
-		}) => {
-			const { error } = await supabase
-				.from('user_recos_movie')
-				.update({
-					status: 'completed',
-				})
-				.match({
-					movie_id: movieId,
-					user_id: userId,
-					status: 'active',
-				})
-				.single();
-			if (error) throw error;
-			return {
-				movieId,
-				userId,
-			}
-		},
-		onSuccess: (data) => {
-			/* -------------- Delete the item in all the my recos queries -------------- */
-			const recosQueries = queryClient.getQueriesData<UserRecosMovieAggregated[]>({
-				predicate: (query) => {
-					const key = query.queryKey
-					return Array.isArray(key) && userKeys.recos({ userId: data.userId, type: 'movie' }).every((v, i) => v === key[i]);
-				}
-			});
+// export const useUserRecosMovieDeleteMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			movieId,
+// 			userId,
+// 		} : {
+// 			movieId: number;
+// 			userId: string;
+// 		}) => {
+// 			const { error } = await supabase
+// 				.from('user_recos_movie')
+// 				.update({
+// 					status: 'deleted',
+// 				})
+// 				.match({
+// 					movie_id: movieId,
+// 					user_id: userId,
+// 					status: 'active',
+// 				})
+// 			if (error) throw error;
+// 			return {
+// 				movieId,
+// 				userId,
+// 			};
+// 		},
+// 		onSuccess: (data) => {
+// 			/* -------------- Delete the item in all the my recos queries -------------- */
+// 			const recosQueries = queryClient.getQueriesData<UserRecosMovieAggregated[]>({
+// 				predicate: (query) => {
+// 					const key = query.queryKey
+// 					return Array.isArray(key) && userKeys.recos({ userId: data.userId, type: 'movie' }).every((v, i) => v === key[i]);
+// 				}
+// 			});
+// 			recosQueries.forEach(([key, oldData]) => {
+// 				if (!oldData) return;
+// 				queryClient.setQueryData(key, (currentData: UserRecosMovieAggregated[] | undefined) => {
+// 					if (!currentData) return currentData;
+// 					return currentData.filter(
+// 						(reco) => reco.movie_id !== data.movieId
+// 					);
+// 				});
+// 			});
+// 			/* -------------------------------------------------------------------------- */
+// 		}
+// 	});
+// };
+// export const useUserRecosMovieCompleteMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			movieId,
+// 			userId,
+// 		} : {
+// 			movieId: number;
+// 			userId: string;
+// 		}) => {
+// 			const { error } = await supabase
+// 				.from('user_recos_movie')
+// 				.update({
+// 					status: 'completed',
+// 				})
+// 				.match({
+// 					movie_id: movieId,
+// 					user_id: userId,
+// 					status: 'active',
+// 				})
+// 				.single();
+// 			if (error) throw error;
+// 			return {
+// 				movieId,
+// 				userId,
+// 			}
+// 		},
+// 		onSuccess: (data) => {
+// 			/* -------------- Delete the item in all the my recos queries -------------- */
+// 			const recosQueries = queryClient.getQueriesData<UserRecosMovieAggregated[]>({
+// 				predicate: (query) => {
+// 					const key = query.queryKey
+// 					return Array.isArray(key) && userKeys.recos({ userId: data.userId, type: 'movie' }).every((v, i) => v === key[i]);
+// 				}
+// 			});
 
-			recosQueries.forEach(([key, oldData]) => {
-				if (!oldData) return;
-				queryClient.setQueryData(key, (currentData: UserRecosMovieAggregated[] | undefined) => {
-					if (!currentData) return currentData;
-					return currentData.filter(
-						(reco) => reco.movie_id !== data.movieId
-					);
-				});
-			});
-			/* -------------------------------------------------------------------------- */
-		}
-	});
-};
+// 			recosQueries.forEach(([key, oldData]) => {
+// 				if (!oldData) return;
+// 				queryClient.setQueryData(key, (currentData: UserRecosMovieAggregated[] | undefined) => {
+// 					if (!currentData) return currentData;
+// 					return currentData.filter(
+// 						(reco) => reco.movie_id !== data.movieId
+// 					);
+// 				});
+// 			});
+// 			/* -------------------------------------------------------------------------- */
+// 		}
+// 	});
+// };
 
-export const useUserRecosTvSeriesInsertMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			senderId,
-			tvSeriesId,
-			receivers,
-			comment,
-		} : {
-			senderId: string;
-			tvSeriesId: number;
-			receivers: Database['public']['Views']['profile']['Row'][];
-			comment: string;
-		}) => {
-			if (receivers.length === 0) throw Error('Missing receivers');
-			const { error } = await supabase
-				.rpc('user_recos_tv_series_insert', {
-					p_tv_series_id: tvSeriesId,
-					receiver_user_ids: receivers.map((user) => String(user?.id)),
-					sender_user_id: senderId,
-					comment: comment,
-				})
-			if (error) throw error;
-			return {
-				senderId,
-				tvSeriesId,
-			}
-		},
-		onSuccess: ({ tvSeriesId }) => {
-			queryClient.invalidateQueries({
-				queryKey: userKeys.recosSend({ id: tvSeriesId, type: 'tv_series' }),
-			});
-		}
-	});
-};
-export const useUserRecosTvSeriesDeleteMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			tvSeriesId,
-			userId,
-		} : {
-			tvSeriesId: number;
-			userId: string;
-		}) => {
-			const { error } = await supabase
-				.from('user_recos_tv_series')
-				.update({
-					status: 'deleted',
-				})
-				.match({
-					tv_series_id: tvSeriesId,
-					user_id: userId,
-					status: 'active',
-				})
-			if (error) throw error;
-			return {
-				tvSeriesId,
-				userId,
-			};
-		},
-		onSuccess: (data) => {
-			/* -------------- Delete the item in all the my recos queries -------------- */
-			const recosQueries = queryClient.getQueriesData<UserRecosTvSeriesAggregated[]>({
-				predicate: (query) => {
-					const key = query.queryKey
-					return Array.isArray(key) && userKeys.recos({ userId: data.userId, type: 'tv_series' }).every((v, i) => v === key[i]);
-				}
-			});
+// export const useUserRecosTvSeriesInsertMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			senderId,
+// 			tvSeriesId,
+// 			receivers,
+// 			comment,
+// 		} : {
+// 			senderId: string;
+// 			tvSeriesId: number;
+// 			receivers: Database['public']['Views']['profile']['Row'][];
+// 			comment: string;
+// 		}) => {
+// 			if (receivers.length === 0) throw Error('Missing receivers');
+// 			const { error } = await supabase
+// 				.rpc('user_recos_tv_series_insert', {
+// 					p_tv_series_id: tvSeriesId,
+// 					receiver_user_ids: receivers.map((user) => String(user?.id)),
+// 					sender_user_id: senderId,
+// 					comment: comment,
+// 				})
+// 			if (error) throw error;
+// 			return {
+// 				senderId,
+// 				tvSeriesId,
+// 			}
+// 		},
+// 		onSuccess: ({ tvSeriesId }) => {
+// 			queryClient.invalidateQueries({
+// 				queryKey: userKeys.recosSend({ id: tvSeriesId, type: 'tv_series' }),
+// 			});
+// 		}
+// 	});
+// };
+// export const useUserRecosTvSeriesDeleteMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			tvSeriesId,
+// 			userId,
+// 		} : {
+// 			tvSeriesId: number;
+// 			userId: string;
+// 		}) => {
+// 			const { error } = await supabase
+// 				.from('user_recos_tv_series')
+// 				.update({
+// 					status: 'deleted',
+// 				})
+// 				.match({
+// 					tv_series_id: tvSeriesId,
+// 					user_id: userId,
+// 					status: 'active',
+// 				})
+// 			if (error) throw error;
+// 			return {
+// 				tvSeriesId,
+// 				userId,
+// 			};
+// 		},
+// 		onSuccess: (data) => {
+// 			/* -------------- Delete the item in all the my recos queries -------------- */
+// 			const recosQueries = queryClient.getQueriesData<UserRecosTvSeriesAggregated[]>({
+// 				predicate: (query) => {
+// 					const key = query.queryKey
+// 					return Array.isArray(key) && userKeys.recos({ userId: data.userId, type: 'tv_series' }).every((v, i) => v === key[i]);
+// 				}
+// 			});
 
-			recosQueries.forEach(([key, oldData]) => {
-				if (!oldData) return;
-				queryClient.setQueryData(key, (currentData: UserRecosTvSeriesAggregated[] | undefined) => {
-					if (!currentData) return currentData;
-					return currentData.filter(
-						(reco) => reco.tv_series_id !== data.tvSeriesId
-					);
-				});
-			});
-			/* -------------------------------------------------------------------------- */
-		}
-	});
-};
-export const useUserRecosTvSeriesCompleteMutation = () => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			tvSeriesId,
-			userId,
-		} : {
-			tvSeriesId: number;
-			userId: string;
-		}) => {
-			const { error } = await supabase
-				.from('user_recos_tv_series')
-				.update({
-					status: 'completed',
-				})
-				.match({
-					tv_series_id: tvSeriesId,
-					user_id: userId,
-					status: 'active',
-				})
-				.single();
-			if (error) throw error;
-			return {
-				tvSeriesId,
-				userId,
-			}
-		},
-		onSuccess: (data) => {
-			/* -------------- Delete the item in all the my recos queries -------------- */
-			const recosQueries = queryClient.getQueriesData<UserRecosTvSeriesAggregated[]>({
-				predicate: (query) => {
-					const key = query.queryKey
-					return Array.isArray(key) && userKeys.recos({ userId: data.userId, type: 'tv_series' }).every((v, i) => v === key[i]);
-				}
-			});
+// 			recosQueries.forEach(([key, oldData]) => {
+// 				if (!oldData) return;
+// 				queryClient.setQueryData(key, (currentData: UserRecosTvSeriesAggregated[] | undefined) => {
+// 					if (!currentData) return currentData;
+// 					return currentData.filter(
+// 						(reco) => reco.tv_series_id !== data.tvSeriesId
+// 					);
+// 				});
+// 			});
+// 			/* -------------------------------------------------------------------------- */
+// 		}
+// 	});
+// };
+// export const useUserRecosTvSeriesCompleteMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			tvSeriesId,
+// 			userId,
+// 		} : {
+// 			tvSeriesId: number;
+// 			userId: string;
+// 		}) => {
+// 			const { error } = await supabase
+// 				.from('user_recos_tv_series')
+// 				.update({
+// 					status: 'completed',
+// 				})
+// 				.match({
+// 					tv_series_id: tvSeriesId,
+// 					user_id: userId,
+// 					status: 'active',
+// 				})
+// 				.single();
+// 			if (error) throw error;
+// 			return {
+// 				tvSeriesId,
+// 				userId,
+// 			}
+// 		},
+// 		onSuccess: (data) => {
+// 			/* -------------- Delete the item in all the my recos queries -------------- */
+// 			const recosQueries = queryClient.getQueriesData<UserRecosTvSeriesAggregated[]>({
+// 				predicate: (query) => {
+// 					const key = query.queryKey
+// 					return Array.isArray(key) && userKeys.recos({ userId: data.userId, type: 'tv_series' }).every((v, i) => v === key[i]);
+// 				}
+// 			});
 
-			recosQueries.forEach(([key, oldData]) => {
-				if (!oldData) return;
-				queryClient.setQueryData(key, (currentData: UserRecosTvSeriesAggregated[] | undefined) => {
-					if (!currentData) return currentData;
-					return currentData.filter(
-						(reco) => reco.tv_series_id !== data.tvSeriesId
-					);
-				});
-			});
-			/* -------------------------------------------------------------------------- */
-		}
-	});
-};
+// 			recosQueries.forEach(([key, oldData]) => {
+// 				if (!oldData) return;
+// 				queryClient.setQueryData(key, (currentData: UserRecosTvSeriesAggregated[] | undefined) => {
+// 					if (!currentData) return currentData;
+// 					return currentData.filter(
+// 						(reco) => reco.tv_series_id !== data.tvSeriesId
+// 					);
+// 				});
+// 			});
+// 			/* -------------------------------------------------------------------------- */
+// 		}
+// 	});
+// };
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------- PLAYLISTS ------------------------------- */

@@ -14,36 +14,41 @@ import { MovieCompact, TvSeriesCompact } from "@packages/api-js";
 
 const ITEM_LIMIT = 6;
 
-export const WidgetUserWatchlist = ({
+interface WidgetBookmarksProps extends React.HTMLAttributes<HTMLDivElement> {
+  limit?: number;
+}
+
+export const WidgetBookmarks = ({
+  limit = ITEM_LIMIT,
   className,
-} : React.HTMLAttributes<HTMLDivElement>) => {
+} : WidgetBookmarksProps) => {
   const { user } = useAuth();
   const t = useTranslations();
 
-  const { data: watchlist } = useInfiniteQuery(userBookmarksInfiniteOptions({
+  const { data: bookmarks } = useInfiniteQuery(userBookmarksInfiniteOptions({
     userId: user?.id,
     filters: {
       sort_by: 'random',
     }
   }));
-  const watchlistItems = watchlist?.pages.flatMap(page => page.data).slice(0, ITEM_LIMIT);
+  const flattendBookmarks = bookmarks?.pages.flatMap(page => page.data).slice(0, limit);
 
   if (!user) return null;
 
-  if (!watchlist || !watchlist.pages[0].data.length) return (null);
+  if (!flattendBookmarks || !flattendBookmarks.length) return (null);
 
   return (
-  <div className={cn('@container/widget-user-watchlist space-y-2', className)}>
+  <div className={cn('@container/widget-user-bookmarks space-y-2', className)}>
     <Button variant={'link'} className="p-0 w-fit font-semibold text-xl" asChild>
 			<Link href={'/collection/bookmarks'}>
         {upperFirst(t('common.messages.to_watch'))}
 			</Link>
 		</Button>
-    <div className='grid grid-cols-2 @2xl/widget-user-watchlist:grid-cols-3 gap-4'>
-      {watchlistItems?.map((item, index) => (
+    <div className='grid grid-cols-2 @2xl/widget-user-bookmarks:grid-cols-3 gap-4'>
+      {flattendBookmarks?.map((item, index) => (
         item.type === 'movie'
-          ? <CardMovie key={`watchlist-${index}`} movie={item.media as MovieCompact} />
-          : <CardTvSeries key={`watchlist-${index}`} tvSeries={item.media as TvSeriesCompact} />
+          ? <CardMovie key={`bookmarks-${index}`} movie={item.media as MovieCompact} />
+          : <CardTvSeries key={`bookmarks-${index}`} tvSeries={item.media as TvSeriesCompact} />
       ))}
     </div>
   </div>

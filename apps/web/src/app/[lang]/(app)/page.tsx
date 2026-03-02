@@ -13,9 +13,9 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/lib/i18n/navigation";
 import { upperFirst } from "lodash";
 import { WidgetMostRecommended } from "@/components/widgets/WidgetMostRecommended";
-import { WidgetUserRecos } from "@/components/widgets/WidgetUserRecos";
-import { WidgetUserWatchlist } from "@/components/widgets/WidgetUserWatchlist";
+import { WidgetBookmarks } from "@/components/widgets/WidgetBookmarks";
 import { useMemo } from "react";
+import { WidgetRecos } from "@/components/widgets/WidgetRecos";
 
 export default function Home() {
 	const { user } = useAuth();
@@ -51,8 +51,8 @@ export default function Home() {
 			{user ? (
 				// Only logged users
 				<>
-				<WidgetUserRecos />
-				<WidgetUserWatchlist />
+				<WidgetRecos />
+				<WidgetBookmarks />
 				<WidgetUserFriendsPlaylists />
 				<WidgetUserFeed />
 				<WidgetUserDiscovery className="h-[600px]" />

@@ -27,7 +27,7 @@ export class UserRecosService {
     }
 
     return tx.select({
-        mediaId: sql<number>`COALESCE(${reco.movieId}, ${reco.tvSeriesId})`.as('media_id'),
+        mediaId: sql<number>`COALESCE(${reco.movieId}, ${reco.tvSeriesId})::int`.as('media_id'),
         type: reco.type,
         firstSendAt: sql<string>`MIN(${reco.createdAt})`.as('first_send_at'),
         lastSendAt: sql<string>`MAX(${reco.createdAt})`.as('last_send_at'),

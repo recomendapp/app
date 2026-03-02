@@ -1,7 +1,7 @@
 'use client'
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from "../Modal";
+import { Modal, ModalBody, ModalDescription, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useModal } from "@/context/modal-context";
 import { CardUser } from "@/components/Card/CardUser";
 import { useTranslations } from "next-intl";
@@ -25,6 +25,7 @@ export const ModalRecoSenders = ({
 		>
 			<ModalHeader>
 				<ModalTitle>{upperFirst(t('common.messages.reco', { count: senders.length }))}</ModalTitle>
+				<ModalDescription className="sr-only" />
 			</ModalHeader>
 			<ModalBody>
 				<ScrollArea className="h-[40vh]">

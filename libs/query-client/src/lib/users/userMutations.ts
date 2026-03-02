@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { bookmarksControllerDeleteByMediaMutation, bookmarksControllerSetByMediaMutation, FollowRequest, ListInfiniteBookmarks, ListInfiniteFollowRequests, ListInfiniteRecoTargets, ListInfiniteUsers, ListPaginatedBookmarks, ListPaginatedFollowRequests, ListPaginatedRecoTargets, ListPaginatedUsers, personsControllerFollowMutation, personsControllerUnfollowMutation, playlistsControllerLikeMutation, playlistsControllerSaveMutation, playlistsControllerUnlikeMutation, playlistsControllerUnsaveMutation, recosControllerDeleteByIdMutation, recosControllerDeleteByMediaMutation, recosControllerSendMutation, RecoTarget, userFollowControllerAcceptMutation, userFollowControllerDeclineMutation, userFollowControllerDeleteMutation, userFollowControllerSetMutation, userPushTokensControllerSetMutation, usersControllerUpdateMeMutation, UserSummary } from '@packages/api-js';
-import { userBookmarkByMediaOptions, userFollowersInfiniteOptions, userFollowersPaginatedOptions, userFollowingInfiniteOptions, userFollowingPaginatedOptions, userFollowOptions, userFollowRequestsInfiniteOptions, userFollowRequestsPaginatedOptions, userMeOptions, userPersonFollowOptions, userPlaylistLikeOptions, userPlaylistSavedOptions, userRecoSendAllOptions, userRecoSendInfiniteOptions, userRecoSendPaginatedOptions } from './userOptions';
-import { removeListItemFromAllCaches, updateListItemInAllCaches } from '../utils';
+import { bookmarksControllerDeleteByMediaMutation, bookmarksControllerSetByMediaMutation, FollowRequest, ListInfiniteBookmarks, ListInfiniteFollowRequests, ListInfiniteRecos, ListInfiniteRecoTargets, ListInfiniteUsers, ListPaginatedBookmarks, ListPaginatedFollowRequests, ListPaginatedRecos, ListPaginatedRecoTargets, ListPaginatedUsers, personsControllerFollowMutation, personsControllerUnfollowMutation, playlistsControllerLikeMutation, playlistsControllerSaveMutation, playlistsControllerUnlikeMutation, playlistsControllerUnsaveMutation, recosControllerDeleteByIdMutation, recosControllerDeleteByMediaMutation, recosControllerSendMutation, RecoTarget, userFollowControllerAcceptMutation, userFollowControllerDeclineMutation, userFollowControllerDeleteMutation, userFollowControllerSetMutation, userPushTokensControllerSetMutation, usersControllerUpdateMeMutation, UserSummary } from '@packages/api-js';
+import { userBookmarkByMediaOptions, userFollowersInfiniteOptions, userFollowersPaginatedOptions, userFollowingInfiniteOptions, userFollowingPaginatedOptions, userFollowOptions, userFollowRequestsInfiniteOptions, userFollowRequestsPaginatedOptions, userMeOptions, userPersonFollowOptions, userPlaylistLikeOptions, userPlaylistSavedOptions, userRecosAllOptions, userRecoSendAllOptions, userRecoSendInfiniteOptions, userRecoSendPaginatedOptions, userRecosInfiniteOptions, userRecosPaginatedOptions } from './userOptions';
+import { removeListItemFromAllCaches, updateListItemInAllCaches, updateOrRemoveListItemInAllCaches } from '../utils';
 import { userKeys } from './userKeys';
-import { BookmarkWithMedia } from './types';
+import { BookmarkWithMedia, RecoWithMedia } from './types';
 
 export const useUserMeUpdateMutation = () => {
 	const queryClient = useQueryClient();
@@ -46,18 +46,59 @@ export const useUserRecoSendMutation = () => {
 }
 
 export const useUserRecoDeleteByMediaMutation = () => {
+	const queryClient = useQueryClient();
 	return useMutation({
 		...recosControllerDeleteByMediaMutation(),
 		onSuccess: (data) => {
-			// TODO: Remove reco from caches
+			const firstItem = data[0];
+			if (firstItem) {
+				removeListItemFromAllCaches<
+					RecoWithMedia,
+					ListPaginatedRecos,
+					ListInfiniteRecos
+				>(queryClient, {
+					all: userRecosAllOptions({ userId: firstItem.userId }).queryKey,
+					paginated: userRecosPaginatedOptions({ userId: firstItem.userId }).queryKey,
+					infinite: userRecosInfiniteOptions({ userId: firstItem.userId }).queryKey,
+				}, (item) => item.mediaId === firstItem.mediaId && item.type === firstItem.type);
+			}
 		}
 	});
 }
 export const useUserRecoDeleteByIdMutation = () => {
+	const queryClient = useQueryClient();
 	return useMutation({
 		...recosControllerDeleteByIdMutation(),
 		onSuccess: (data) => {
-			// TODO: Remove reco from caches
+			updateOrRemoveListItemInAllCaches<
+                RecoWithMedia, 
+                ListPaginatedRecos, 
+                ListInfiniteRecos
+            >(
+                queryClient,
+                {
+                    all: userKeys.recos({ userId: data.userId, mode: 'all' }),
+                    paginated: userKeys.recos({ userId: data.userId, mode: 'paginated' }),
+                    infinite: userKeys.recos({ userId: data.userId, mode: 'infinite' }),
+                },
+                (item) => item.mediaId === data.mediaId && item.type === data.type,
+                (item) => {
+                    const remainingSenders = item.senders.filter(s => s.id !== data.id);
+
+                    if (remainingSenders.length === 0) {
+                        return null; 
+                    }
+                    
+                    const newLatestCreatedAt = remainingSenders.reduce(
+                        (latest, current) => current.createdAt > latest.createdAt ? current : latest
+                    ).createdAt;
+
+                    return { 
+                        senders: remainingSenders, 
+                        latestCreatedAt: newLatestCreatedAt 
+                    };
+                }
+            );
 		}
 	});
 }

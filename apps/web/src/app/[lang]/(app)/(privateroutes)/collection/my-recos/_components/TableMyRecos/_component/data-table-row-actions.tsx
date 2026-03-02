@@ -19,12 +19,12 @@ import { useModal } from '@/context/modal-context';
 import { createShareController } from "@/components/ShareController/ShareController";
 import { ShareControllerMovie } from "@/components/ShareController/ShareControllerMovie";
 import { useCallback, useMemo } from "react";
-import { useUserBookmarkDeleteByMediaMutation } from "@libs/query-client";
 import { RecoWithMedia } from "./types";
 import { getMediaDetails } from "@/utils/get-media-details";
 import { ModalRecoSend } from "@/components/Modals/recos/ModalRecoSend";
 import { ModalRecoSenders } from "@/components/Modals/recos/ModalRecoSenders";
 import { ShareControllerTvSeries } from "@/components/ShareController/ShareControllerTvSeries";
+import { useUserRecoDeleteByMediaMutation } from "@libs/query-client";
 
 interface DataTableRowActionsProps {
   data: RecoWithMedia;
@@ -35,7 +35,7 @@ export function DataTableRowActions({
 }: DataTableRowActionsProps) {
   const t = useTranslations();
   const { openModal, createConfirmModal } = useModal();
-  const { mutateAsync: deleteWatchlistMovie } = useUserBookmarkDeleteByMediaMutation();
+  const { mutateAsync: deleteReco } = useUserRecoDeleteByMediaMutation();
   const details = useMemo(() => {
     switch (data.type) {
       case 'movie':
@@ -53,9 +53,9 @@ export function DataTableRowActions({
     }
   }, [data]);
 
-  const handleUnwatchlist = useCallback(async () => {
+  const handleDeleteReco = useCallback(async () => {
     if (!data) return;
-    await deleteWatchlistMovie({
+    await deleteReco({
       path: {
         media_id: data.mediaId,
         type: data.type,
@@ -68,7 +68,7 @@ export function DataTableRowActions({
         toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
-  }, [data, deleteWatchlistMovie, t]);
+  }, [data, deleteReco, t]);
 
   return (
     <div className="flex items-center justify-end">
@@ -124,12 +124,12 @@ export function DataTableRowActions({
           <DropdownMenuItem
             variant="destructive"
             onClick={async () => createConfirmModal({
-              title: upperFirst(t('pages.collection.watchlist.modal.delete_confirm.title')),
-              description: t.rich('pages.collection.watchlist.modal.delete_confirm.description', {
+              title: upperFirst(t('pages.collection.my_recos.modal.delete_confirm.title')),
+              description: t.rich('pages.collection.my_recos.modal.delete_confirm.description', {
                 title: details?.title || '',
                 important: (chunk) => <b>{chunk}</b>,
               }),
-              onConfirm: handleUnwatchlist,
+              onConfirm: handleDeleteReco,
             })}
           >
             <Icons.delete className='w-4' />
