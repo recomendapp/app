@@ -55,6 +55,12 @@ export const tmdbTvSeasonCredit = tmdbSchema.table(
     index('idx_tmdb_tv_season_credit_tv_season_id').on(table.tvSeasonId),
   ],
 );
+export const tmdbTvSeasonCreditRelations = relations(tmdbTvSeasonCredit, ({ one }) => ({
+  tvSeason: one(tmdbTvSeason, {
+    fields: [tmdbTvSeasonCredit.tvSeasonId],
+    references: [tmdbTvSeason.id],
+  }),
+}));
 
 export const tmdbTvSeasonTranslation = tmdbSchema.table(
   'tv_season_translation',

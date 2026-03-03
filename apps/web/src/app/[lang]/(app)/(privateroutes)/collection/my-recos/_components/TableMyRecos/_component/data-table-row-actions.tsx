@@ -96,16 +96,19 @@ export function DataTableRowActions({
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href={data?.media?.url ?? ''}>
+            <Link href={data.media.url ?? ''}>
               <Icons.eye className='w-4' />
-              {upperFirst(t('common.messages.go_to_film'))}
+              {data.type === 'movie'
+                ? upperFirst(t('common.messages.go_to_movie'))
+                : upperFirst(t('common.messages.go_to_tv_series'))
+              }
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
           onClick={() => openModal(ModalRecoSenders, { senders: data.senders })}
           >
             <Icons.comment className='w-4' />
-            {upperFirst(t('common.messages.view_recommendation', { count: data?.senders?.length }))}
+            {upperFirst(t('common.messages.view_recommendation', { count: data.senders?.length }))}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem

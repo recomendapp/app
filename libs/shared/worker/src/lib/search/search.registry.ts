@@ -1,4 +1,12 @@
-export interface SearchRegistry {
-	'search:sync-user': { userId: string };
-	'search:sync-playlist': { playlistId: string };
-}
+import { PrefixRegistry } from "../utils";
+import { SyncPlaylistDto, SyncUserDto } from "./search.dto";
+
+export const SEARCH_QUEUE = 'search_queue';
+export const SEARCH_PATH = 'search';
+
+type BaseSearchRegistry = {
+    'sync-user': SyncUserDto;
+    'sync-playlist': SyncPlaylistDto;
+};
+
+export type SearchRegistry = PrefixRegistry<typeof SEARCH_PATH, BaseSearchRegistry>;

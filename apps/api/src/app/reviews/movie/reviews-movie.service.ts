@@ -5,11 +5,13 @@ import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle
 import { ReviewMovieLikeDto } from './dto/review-movie-like.dto';
 import { follow, logMovie, profile, reviewMovie, reviewMovieLike } from '@libs/db/schemas';
 import { plainToInstance } from 'class-transformer';
+import { WorkerClient } from '@shared/worker';
 
 @Injectable()
 export class ReviewsMovieService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
+    private readonly workerClient: WorkerClient,
   ) {}
 
   async getLike({
@@ -78,7 +80,10 @@ export class ReviewsMovieService {
       return plainToInstance(ReviewMovieLikeDto, existingLike, { excludeExtraneousValues: true });
     }
 
-    // TODO: update likes count in reviewMovie table (si tu as un compteur dénormalisé)
+    await this.workerClient.emit('counters:update-review-movie-likes', {
+      reviewId,
+      action: 'increment',
+    });
 
     return plainToInstance(ReviewMovieLikeDto, like, { excludeExtraneousValues: true });
   }
@@ -102,7 +107,10 @@ export class ReviewsMovieService {
       throw new NotFoundException('Like not found');
     }
 
-    // TODO: update likes count
+    await this.workerClient.emit('counters:update-review-movie-likes', {
+      reviewId,
+      action: 'decrement',
+    });
 
     return plainToInstance(ReviewMovieLikeDto, deleted, { excludeExtraneousValues: true });
   }

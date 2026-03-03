@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { bookmarksControllerDeleteByMediaMutation, bookmarksControllerSetByMediaMutation, FollowRequest, ListInfiniteBookmarks, ListInfiniteFollowRequests, ListInfiniteRecos, ListInfiniteRecoTargets, ListInfiniteUsers, ListPaginatedBookmarks, ListPaginatedFollowRequests, ListPaginatedRecos, ListPaginatedRecoTargets, ListPaginatedUsers, personsControllerFollowMutation, personsControllerUnfollowMutation, playlistsControllerLikeMutation, playlistsControllerSaveMutation, playlistsControllerUnlikeMutation, playlistsControllerUnsaveMutation, recosControllerDeleteByIdMutation, recosControllerDeleteByMediaMutation, recosControllerSendMutation, RecoTarget, userFollowControllerAcceptMutation, userFollowControllerDeclineMutation, userFollowControllerDeleteMutation, userFollowControllerSetMutation, userPushTokensControllerSetMutation, usersControllerUpdateMeMutation, UserSummary } from '@packages/api-js';
+import { bookmarksControllerDeleteByMediaMutation, bookmarksControllerSetByMediaMutation, FollowRequest, ListInfiniteBookmarks, ListInfiniteFollowRequests, ListInfiniteRecos, ListInfiniteRecoTargets, ListInfiniteUsers, ListPaginatedBookmarks, ListPaginatedFollowRequests, ListPaginatedRecos, ListPaginatedRecoTargets, ListPaginatedUsers, personsControllerFollowMutation, personsControllerUnfollowMutation, playlistLikesControllerDeleteMutation, playlistLikesControllerSetMutation, playlistSavesControllerDeleteMutation, playlistSavesControllerSetMutation, recosControllerDeleteByIdMutation, recosControllerDeleteByMediaMutation, recosControllerSendMutation, RecoTarget, userFollowControllerAcceptMutation, userFollowControllerDeclineMutation, userFollowControllerDeleteMutation, userFollowControllerSetMutation, userPushTokensControllerSetMutation, usersControllerUpdateMeMutation, UserSummary } from '@packages/api-js';
 import { userBookmarkByMediaOptions, userFollowersInfiniteOptions, userFollowersPaginatedOptions, userFollowingInfiniteOptions, userFollowingPaginatedOptions, userFollowOptions, userFollowRequestsInfiniteOptions, userFollowRequestsPaginatedOptions, userMeOptions, userPersonFollowOptions, userPlaylistLikeOptions, userPlaylistSavedOptions, userRecosAllOptions, userRecoSendAllOptions, userRecoSendInfiniteOptions, userRecoSendPaginatedOptions, userRecosInfiniteOptions, userRecosPaginatedOptions } from './userOptions';
 import { removeListItemFromAllCaches, updateListItemInAllCaches, updateOrRemoveListItemInAllCaches } from '../utils';
 import { userKeys } from './userKeys';
@@ -334,7 +334,7 @@ export const useUserPlaylistLikeMutation = ({
 }) => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		...playlistsControllerLikeMutation(),
+		...playlistLikesControllerSetMutation(),
 		onMutate: async ({ path: { playlist_id } }) => {
 			const options = userPlaylistLikeOptions({ userId, playlistId: playlist_id });
 			await queryClient.cancelQueries({ queryKey: options.queryKey });
@@ -364,7 +364,7 @@ export const useUserPlaylistUnlikeMutation = ({
 }) => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		...playlistsControllerUnlikeMutation(),
+		...playlistLikesControllerDeleteMutation(),
 		onMutate: async ({ path: { playlist_id } }) => {
 			const options = userPlaylistLikeOptions({ userId, playlistId: playlist_id });
 			await queryClient.cancelQueries({ queryKey: options.queryKey });
@@ -396,7 +396,7 @@ export const useUserPlaylistSaveMutation = ({
 }) => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		...playlistsControllerSaveMutation(),
+		...playlistSavesControllerSetMutation(),
 		onMutate: async ({ path: { playlist_id } }) => {
 			const options = userPlaylistSavedOptions({ userId, playlistId: playlist_id });
 			await queryClient.cancelQueries({ queryKey: options.queryKey });
@@ -428,7 +428,7 @@ export const useUserPlaylistUnsaveMutation = ({
 }) => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		...playlistsControllerUnsaveMutation(),
+		...playlistSavesControllerDeleteMutation(),
 		onMutate: async ({ path: { playlist_id } }) => {
 			const options = userPlaylistSavedOptions({ userId, playlistId: playlist_id });
 			await queryClient.cancelQueries({ queryKey: options.queryKey });

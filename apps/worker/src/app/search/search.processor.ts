@@ -1,6 +1,6 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
-import { SEARCH_QUEUE, WorkerJob } from '@shared/worker';
+import { SEARCH_QUEUE, SearchJob } from '@shared/worker';
 import { SearchService } from './search.service';
 
 @Processor(SEARCH_QUEUE)
@@ -11,7 +11,7 @@ export class SearchProcessor extends WorkerHost {
     super();
   }
 
-  async process(job: WorkerJob): Promise<void> {
+  async process(job: SearchJob): Promise<void> {
     this.logger.log(`Processing job ${job.name} (ID: ${job.id})`);
 
     try {

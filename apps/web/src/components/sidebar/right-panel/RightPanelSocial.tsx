@@ -113,6 +113,7 @@ const RightPanelSocialRequests = () => {
 		data: requests,
 		isLoading,
 		isError,
+		isFetching,
 		fetchNextPage,
 		hasNextPage,
 	} = useInfiniteQuery(userFollowRequestsInfiniteOptions({

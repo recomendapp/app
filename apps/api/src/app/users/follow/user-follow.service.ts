@@ -75,9 +75,11 @@ export class UserFollowService {
         .returning();
       if (newFollow) {
         if (newFollow.status === 'accepted') {
-          // TODO:
-          // - Update followers_count and following_count in profile table
-          // - Send notification to the followed user
+          await this.workerClient.emit('counters:update-follow', {
+            followerId: currentUserId,
+            followingId: targetUserId,
+            action: 'increment',
+          });
 
           await this.notify.emit('follow:new', {
             actorId: currentUserId,
@@ -134,8 +136,13 @@ export class UserFollowService {
       throw new NotFoundException('Follow relationship not found');
     }
 
-    // TODO:
-    // - Update followers_count and following_count in profile table
+    if (deletedFollow.status === 'accepted') {
+      await this.workerClient.emit('counters:update-follow', {
+        followerId: currentUserId,
+        followingId: targetUserId,
+        action: 'decrement'
+      });
+    }
 
     return plainToInstance(FollowDto, deletedFollow, {
       excludeExtraneousValues: true,
@@ -165,8 +172,11 @@ export class UserFollowService {
       )
       .returning();
     
-    // TODO:
-    // - Update followers_count and following_count in profile table
+    await this.workerClient.emit('counters:update-follow', {
+      followerId: targetUserId,
+      followingId: currentUserId,
+      action: 'increment'
+    });
 
     await this.notify.emit('follow:accepted', {
       actorId: currentUserId,

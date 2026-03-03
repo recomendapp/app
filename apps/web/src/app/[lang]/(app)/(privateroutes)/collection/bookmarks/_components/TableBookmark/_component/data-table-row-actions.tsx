@@ -1,7 +1,6 @@
 'use client';
 
 import { Link } from "@/lib/i18n/navigation";
-import { Column, Row, Table } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -97,16 +96,19 @@ export function DataTableRowActions({
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href={data?.media?.url ?? ''}>
+            <Link href={data.media.url ?? ''}>
               <Icons.eye className='w-4' />
-              {upperFirst(t('common.messages.go_to_film'))}
+              {data.type === 'movie'
+                ? upperFirst(t('common.messages.go_to_movie'))
+                : upperFirst(t('common.messages.go_to_tv_series'))
+              }
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
           onClick={() => openModal(ModalUserWatchlistMovieComment, { watchlistItem: data })}
           >
             <Icons.comment className='w-4' />
-            {data?.comment ? upperFirst(t('common.messages.view_comment', { count: 1 })) : upperFirst(t('common.messages.add_comment', { count: 1 }))}
+            {data.comment ? upperFirst(t('common.messages.view_comment', { count: 1 })) : upperFirst(t('common.messages.add_comment', { count: 1 }))}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
@@ -115,8 +117,8 @@ export function DataTableRowActions({
               type: data.type,
               path: data.media.url || '',
               shareController: data.type === 'movie'
-                              ? createShareController(ShareControllerMovie, { movie: data.media })
-                              : createShareController(ShareControllerTvSeries, { tvSeries: data.media }),
+                ? createShareController(ShareControllerMovie, { movie: data.media })
+                : createShareController(ShareControllerTvSeries, { tvSeries: data.media }),
             })}
           >
             <Icons.share className='w-4' />
