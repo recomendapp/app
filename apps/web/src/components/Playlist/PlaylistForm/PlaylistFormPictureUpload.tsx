@@ -4,6 +4,7 @@ import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Loader2 } from 'lucide-react';
 import { Dispatch } from 'react';
+import { Playlist } from '@packages/api-js';
 
 const PlaylistFormPictureUpload = ({
   playlist,
@@ -11,7 +12,7 @@ const PlaylistFormPictureUpload = ({
   newPoster,
   setNewPoster,
 }: {
-  playlist: any;
+  playlist?: Playlist;
   loading: boolean;
   newPoster: File | undefined;
   setNewPoster: Dispatch<any>;
@@ -31,7 +32,7 @@ const PlaylistFormPictureUpload = ({
             src={
               newPoster
                 ? URL.createObjectURL(newPoster)
-                : playlist?.poster_url ?? ''
+                : playlist?.poster ?? ''
             }
             alt={playlist?.title ?? ''}
             fill

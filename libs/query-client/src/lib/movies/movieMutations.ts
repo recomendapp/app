@@ -1,6 +1,6 @@
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 import { movieLogOptions, movieReviewsInfiniteOptions, movieReviewsPaginatedOptions } from './movieOptions';
-import { ListInfiniteBookmarks, ListInfiniteReviewsMovie, ListInfiniteUserMoviesWithMovie, ListInfiniteWatchedDates, ListPaginatedBookmarks, ListPaginatedUserMoviesWithMovie, LogMovieWithMovie, movieLogsControllerDeleteMutation, movieLogsControllerSetMutation, movieReviewsControllerDeleteMutation, movieReviewsControllerUpsertMutation, movieWatchedDatesControllerDeleteMutation, movieWatchedDatesControllerSetMutation, movieWatchedDatesControllerUpdateMutation } from '@packages/api-js';
+import { ListInfiniteBookmarks, ListInfiniteReviewsMovie, ListInfiniteUserMoviesWithMovie, ListInfiniteWatchedDates, ListPaginatedBookmarks, ListPaginatedUserMoviesWithMovie, ListPaginatedWatchedDates, LogMovieWithMovie, movieLogsControllerDeleteMutation, movieLogsControllerSetMutation, movieReviewsControllerDeleteMutation, movieReviewsControllerUpsertMutation, movieWatchedDatesControllerDeleteMutation, movieWatchedDatesControllerSetMutation, movieWatchedDatesControllerUpdateMutation, WatchedDate } from '@packages/api-js';
 import { userBookmarkByMediaOptions, userKeys, userMovieLogOptions, userMovieLogsInfiniteOptions, userMovieLogsPaginatedOptions, userMovieWatchedDatesInfiniteOptions, userMovieWatchedDatesPaginatedOptions } from '../users';
 import { movieKeys } from './movieKeys';
 import { removeListItemFromAllCaches, updateFromInfiniteCache, updateListItemInAllCaches } from '../utils';
@@ -50,17 +50,6 @@ export const useMovieLogSetMutation = () => {
 				},
 				data.id 
 			);
-			// removeFromPaginatedCache(
-			// 	queryClient,
-			// 	userBookmarksOptions({ userId: data.userId }).queryKey,
-			// 	data.id
-			// );
-			// queryClient.setQueriesData(
-			// 	{ queryKey: userBookmarksInfiniteOptions({ userId: data.userId }).queryKey },
-			// 	(oldData: InfiniteData<ListInfiniteBookmarks> | undefined) => {
-			// 		return removeFromInfiniteCache(oldData, data.id);
-			// 	}
-			// );
 
 			// User Movies
 			const isNewLog = data.createdAt === data.updatedAt;
@@ -196,17 +185,17 @@ export const useMovieWatchedDateUpdateMutation = () => {
 				}
 			});
 
-			// queryClient.setQueriesData(
-			// 	{ queryKey: userMovieWatchedDatesOptions({ userId: data.log.userId, movieId: data.log.movieId }).queryKey },
-			// 	(old: InfiniteData<ListWatchedDates> | undefined) => {
-			// 		return updateFromPaginatedCache(old, data.watchedDate);
-			// 	}
-			// );
-			queryClient.setQueriesData(
-				{ queryKey: userMovieWatchedDatesInfiniteOptions({ userId: data.log.userId, movieId: data.log.movieId }).queryKey },
-				(old: InfiniteData<ListInfiniteWatchedDates> | undefined) => {
-					return updateFromInfiniteCache(old, data.watchedDate);
-				}
+			removeListItemFromAllCaches<
+				WatchedDate,
+				ListPaginatedWatchedDates,
+				ListInfiniteWatchedDates
+			>(
+				queryClient,
+				{
+					paginated: userMovieWatchedDatesPaginatedOptions({ userId: data.log.userId, movieId: data.log.movieId }).queryKey,
+					infinite: userMovieWatchedDatesInfiniteOptions({ userId: data.log.userId, movieId: data.log.movieId }).queryKey,
+				},
+				data.watchedDate.id
 			);
 		}
 	});
@@ -336,48 +325,3 @@ export const useMovieReviewDeleteMutation = () => {
 		}
 	});
 }
-
-/* -------------------------------- Bookmarks ------------------------------- */
-// export const useMovieBookmarkSetMutation = () => {
-// 	const queryClient = useQueryClient();
-// 	return useMutation({
-// 		...movieBookmarksControllerSetMutation(),
-// 		onSuccess: (data) => {
-// 			queryClient.setQueryData(movieBookmarkOptions({
-// 				userId: data.userId,
-// 				movieId: data.mediaId,
-// 			}).queryKey, data);
-
-// 			queryClient.invalidateQueries({
-// 				queryKey: userKeys.movies({
-// 					userId: data.userId,
-// 				}),
-// 			});
-// 		}
-// 	});
-// }
-
-// export const useMovieBookmarkDeleteMutation = () => {
-// 	const queryClient = useQueryClient();
-// 	return useMutation({
-// 		...movieBookmarksControllerDeleteMutation(),
-// 		onSuccess: (data) => {
-// 			queryClient.setQueryData(movieBookmarkOptions({
-// 				userId: data.userId,
-// 				movieId: data.mediaId,
-// 			}).queryKey, null);
-
-// 			removeFromPaginatedCache(
-// 				queryClient,
-// 				userBookmarksOptions({ userId: data.userId }).queryKey,
-// 				data.id
-// 			);
-// 			queryClient.setQueriesData(
-// 				{ queryKey: userBookmarksInfiniteOptions({ userId: data.userId }).queryKey },
-// 				(oldData: InfiniteData<ListInfiniteBookmarks> | undefined) => {
-// 					return removeFromInfiniteCache(oldData, data.id);
-// 				}
-// 			);
-// 		}
-// 	});
-// }

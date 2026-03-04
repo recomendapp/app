@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { User } from '../auth/auth.service';
 import { PlaylistCreateDto, PlaylistDto, PlaylistGetDTO, PlaylistUpdateDto } from './dto/playlists.dto';
@@ -6,11 +6,16 @@ import { follow, playlist, playlistMember } from '@libs/db/schemas';
 import { and, eq, exists, notInArray, or, sql, SQL } from 'drizzle-orm';
 import { PlaylistMemberListDto, PlaylistMemberUpdateDto } from './dto/playlist-members.dto';
 import { plainToInstance } from 'class-transformer';
+import { StorageService } from '../../common/modules/storage/storage.service';
+import { StorageFolders } from '../../common/modules/storage/storage.constants';
 
 @Injectable()
 export class PlaylistsService {
+  private readonly logger = new Logger(PlaylistsService.name);
+
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
+    private readonly storageService: StorageService,
   ) {}
 
   async get({
@@ -157,6 +162,13 @@ export class PlaylistsService {
     if (!deletedPlaylist) {
       throw new NotFoundException();
     }
+
+    if (deletedPlaylist.poster) {
+      this.storageService.deleteFile(deletedPlaylist.poster, StorageFolders.PLAYLIST_POSTERS).catch(err => 
+        this.logger.error(`Failed to delete poster: ${deletedPlaylist.poster}`, err)
+      );
+    }
+
     return plainToInstance(PlaylistDto, deletedPlaylist);
   }
 

@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional, ApiSchema, IntersectionType, PartialType, PickType } from "@nestjs/swagger";
-import { Expose, Type } from "class-transformer";
+import { Expose, Transform, Type } from "class-transformer";
 import { IsDateString, IsEnum, IsIn, IsOptional, IsString, IsUrl, Length, Matches, ValidateNested } from "class-validator";
 import { PLAYLIST_RULES } from "../../../config/validation-rules";
 import { playlistMemberRoleEnum, playlistVisibilityEnum } from "@libs/db/schemas";
@@ -8,6 +8,8 @@ import { UserSummaryDto } from "../../users/dto/users.dto";
 import { IsNullable } from "../../../common/decorators/is-nullable.decorator";
 import { SortOrder } from "../../../common/dto/sort.dto";
 import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from "../../../common/dto/cursor-pagination.dto";
+import { getMediaUrl } from "../../../common/modules/storage/storage.utils";
+import { StorageFolders } from "../../../common/modules/storage/storage.constants";
 
 export enum PlaylistSortBy {
   CREATED_AT = 'created_at',
@@ -73,6 +75,7 @@ export class PlaylistDto {
         nullable: true 
     })
     @Expose()
+    @Transform(({ value }) => getMediaUrl(value, StorageFolders.PLAYLIST_POSTERS))
     @IsUrl()
     poster: string | null;
 

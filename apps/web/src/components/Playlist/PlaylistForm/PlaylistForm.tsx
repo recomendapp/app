@@ -15,7 +15,6 @@ import {
 import { DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
 import toast from 'react-hot-toast';
 import { Textarea } from '@/components/ui/textarea';
 import { useCallback, useState } from 'react';
@@ -37,8 +36,9 @@ import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { usePlaylistDeleteMutation, usePlaylistInsertMutation, usePlaylistUpdateMutation } from '@libs/query-client';
-import { Playlist, PlaylistCreate } from '@packages/api-js';
+import { usePlaylistDeleteMutation, usePlaylistInsertMutation, usePlaylistPoserDeleteMutation, usePlaylistPoserUpdateMutation, usePlaylistUpdateMutation } from '@libs/query-client';
+import { Playlist } from '@packages/api-js';
+import compressPicture from '@/lib/utils/compressPicture';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   success: () => void;
@@ -61,6 +61,8 @@ export function PlaylistForm({
   const { mutateAsync: insertPlaylistMutation, isPending: insertPending } = usePlaylistInsertMutation();
   const { mutateAsync: updatePlaylistMutation, isPending: updatePending } = usePlaylistUpdateMutation();
   const { mutateAsync: deletePlaylistMutation, isPending: deletePending } = usePlaylistDeleteMutation();
+  const { mutateAsync: uploadPoster } = usePlaylistPoserUpdateMutation();
+  const { mutateAsync: deletePoster } = usePlaylistPoserDeleteMutation();
 
   // Form
   const visibilityOptions: { value: Playlist['visibility'], label: string }[] = [
@@ -110,7 +112,18 @@ export function PlaylistForm({
         visibility: data.visibility,
       }
     }, {
-      onSuccess: async () => {
+      onSuccess: async (data) => {
+        const compressedFile = newPoster ? await compressPicture(newPoster, 400, 400) : null;
+        if (compressedFile) {
+          await uploadPoster({
+            path: {
+              playlist_id: data.id,
+            },
+            body: {
+              file: compressedFile,
+            }
+          });
+        }
         toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
         success();
       },
@@ -122,6 +135,25 @@ export function PlaylistForm({
 
   const handleUpdate = useCallback(async (data: PlaylistFormValues) => {
     if (!user || !playlist) return;
+    if (!newPoster && user.id === playlist.userId && playlist.title === data.title && playlist.description === data.description && playlist.visibility === data.visibility) return;
+
+    if (newPoster) {
+      const compressedFile = await compressPicture(newPoster, 400, 400);
+      await uploadPoster({
+        path: {
+          playlist_id: playlist.id,
+        },
+        body: {
+          file: compressedFile,
+        }
+      }, {
+        onError: () => {
+          toast.error(upperFirst(t('common.messages.an_error_occurred')));
+        }
+      });
+      setNewPoster(undefined);
+    }
+
     await updatePlaylistMutation({
       path: {
         playlist_id: playlist.id,

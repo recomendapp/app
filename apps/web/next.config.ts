@@ -22,11 +22,11 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   // https://github.com/vercel/next.js/issues/79313#issuecomment-2892288965
   htmlLimitedBots: /Googlebot|Bingbot|DuckDuckBot|YandexBot|Slurp|facebookexternalhit|Twitterbot|LinkedInBot|Slackbot/i,
-
   images: {
+    unoptimized: process.env.NODE_ENV === 'development',
     remotePatterns: [
       { protocol: 'https', hostname: 'supabase.recomend.app' },
-      { protocol: 'https', hostname: 'api.recomend.app' },
+      { protocol: 'https', hostname: 'medias.recomend.app' },
       { protocol: 'https', hostname: 'image.tmdb.org' },
       { protocol: 'https', hostname: 'images.justwatch.com' },
       { protocol: 'https', hostname: 's.ltrbxd.com' },
