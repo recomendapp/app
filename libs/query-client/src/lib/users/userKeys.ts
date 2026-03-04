@@ -5,11 +5,16 @@ export const userKeys = {
 
 	me: () => [...userKeys.base, 'me'] as const,
 
-	details: ({
-		userId,
-	} : {
-		userId: string;
-	}) => [...userKeys.base, userId] as const,
+	details: (
+		params: { userId: string, username?: never } | { userId?: never, username: string }
+	) => {
+		const identifierKey = 'userId' in params ? params.userId : `@${params.username}`;
+		return [...userKeys.base, identifierKey] as const;
+	},
+	
+	profile: (
+		params: { userId: string, username?: never } | { userId?: never, username: string }
+	) => [...userKeys.details(params), 'profile'] as const,
 
 	/* ---------------------------------- Logs ---------------------------------- */
 	log: ({

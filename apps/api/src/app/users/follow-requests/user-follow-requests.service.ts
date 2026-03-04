@@ -1,10 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
-import { FollowRequestSortBy, ListInfiniteFollowRequestsQueryDto, ListPaginatedFollowRequestsQueryDto } from './dto/user-follow-requests.dto';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import { FollowRequestSortBy, ListInfiniteFollowRequestsDto, ListInfiniteFollowRequestsQueryDto, ListPaginatedFollowRequestsDto, ListPaginatedFollowRequestsQueryDto } from './dto/user-follow-requests.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { and, asc, desc, eq, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { follow, profile, user } from '@libs/db/schemas';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UserFollowRequestsService {
@@ -43,7 +44,7 @@ export class UserFollowRequestsService {
   }: {
     currentUserId: string,
     query: ListPaginatedFollowRequestsQueryDto
-  }) {
+  }): Promise<ListPaginatedFollowRequestsDto> {
     const { per_page, sort_order, sort_by, page } = query;
     const offset = (page - 1) * per_page;
 
@@ -70,7 +71,7 @@ export class UserFollowRequestsService {
       this.db.$count(follow, whereClause),
     ]);
 
-    return {
+    return plainToInstance(ListPaginatedFollowRequestsDto, {
       data: requests.map((row) => ({
         createdAt: row.follow.createdAt,
         user: {
@@ -87,7 +88,7 @@ export class UserFollowRequestsService {
         current_page: page,
         per_page,
       },
-    };
+    });
   }
 
   async listInfinite({
@@ -96,7 +97,7 @@ export class UserFollowRequestsService {
   }: {
     currentUserId: string,
     query: ListInfiniteFollowRequestsQueryDto
-  }) {
+  }): Promise<ListInfiniteFollowRequestsDto> {
     const { per_page, sort_order, sort_by, cursor } = query;
 
     const cursorData = cursor ? decodeCursor<BaseCursor<string | number, string>>(cursor) : null;
@@ -188,7 +189,7 @@ export class UserFollowRequestsService {
       }
     }
 
-    return {
+    return plainToInstance(ListInfiniteFollowRequestsDto, {
       data: paginatedResults.map((row) => ({
         createdAt: row.follow.createdAt,
         user: {
@@ -204,6 +205,6 @@ export class UserFollowRequestsService {
         per_page,
         total_results: totalCount,
       },
-    };
+    });
   }
 }

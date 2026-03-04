@@ -14,6 +14,15 @@ export const typesenseSchema = z.object({
   TYPESENSE_API_KEY: z.string(),
 });
 
+export const s3Schema = z.object({
+  S3_ENDPOINT: z.url(),
+  S3_REGION: z.string().default('eu-west-1'),
+  S3_ACCESS_KEY_ID: z.string(),
+  S3_SECRET_ACCESS_KEY: z.string(),
+  S3_BUCKET: z.string().default('medias'),
+  S3_PUBLIC_ENDPOINT: z.url().optional(), 
+});
+
 export const extensionSchema = redisSchema.extend(typesenseSchema.shape);
 
 export const commonSchema = extensionSchema.extend({
@@ -25,7 +34,7 @@ export const commonSchema = extensionSchema.extend({
 });
 /* -------------------------------------------------------------------------- */
 
-export const apiSchema = commonSchema.extend({
+export const apiSchema = commonSchema.extend(s3Schema.shape).extend({
   PORT: z.coerce.number().default(9000),
   HOST: z.string().default('0.0.0.0'),
   API_URL: z.url().default('http://localhost:9000'),

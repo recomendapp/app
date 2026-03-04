@@ -2,7 +2,6 @@ import Compressor from 'compressorjs';
 
 export default function compressPicture(
   file: File,
-  filePath: string,
   width: number,
   height: number
 ): Promise<File> {
@@ -15,7 +14,7 @@ export default function compressPicture(
       width: width,
       height: height,
       success: (compressedImage) => {
-        const image = new File([compressedImage], filePath, {
+        const image = new File([compressedImage], file.name, {
           type: compressedImage.type,
         });
         resolve(image);

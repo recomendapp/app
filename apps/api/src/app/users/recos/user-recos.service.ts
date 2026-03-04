@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, asc, desc, eq, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { profile, reco, recoStatusEnum, recoTypeEnum, tmdbMovieView, tmdbTvSeriesView, user } from '@libs/db/schemas';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';

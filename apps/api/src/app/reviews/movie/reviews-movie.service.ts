@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { and, eq, sql } from 'drizzle-orm';
 import { User } from '../../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { ReviewMovieLikeDto } from './dto/review-movie-like.dto';
 import { follow, logMovie, profile, reviewMovie, reviewMovieLike } from '@libs/db/schemas';
 import { plainToInstance } from 'class-transformer';

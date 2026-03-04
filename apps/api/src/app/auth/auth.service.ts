@@ -9,7 +9,7 @@ import { profile } from '@libs/db/schemas';
 import { v7 as uuidv7 } from 'uuid';
 import { USER_RULES } from '../../config/validation-rules';
 import bcrypt from "bcrypt"; 
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { defaultSupportedLocale, SupportedLocale } from '@libs/i18n';
 import { additionalFields, auth } from '@libs/db';
 

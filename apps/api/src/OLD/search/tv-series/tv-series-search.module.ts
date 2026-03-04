@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TvSeriesSearchController } from './tv-series-search.controller';
 import { TvSeriesSearchService } from './tv-series-search.service';
 import { SupabaseModule } from '../../common/supabase/supabase.module';
-import { TypesenseModule } from '../../../common/modules/typesense.module';
+import { TypesenseModule } from '../../../common/modules/typesense/typesense.module';
 
 
 @Module({

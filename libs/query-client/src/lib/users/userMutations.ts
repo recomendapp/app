@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { bookmarksControllerDeleteByMediaMutation, bookmarksControllerSetByMediaMutation, FollowRequest, ListInfiniteBookmarks, ListInfiniteFollowRequests, ListInfiniteRecos, ListInfiniteRecoTargets, ListInfiniteUsers, ListPaginatedBookmarks, ListPaginatedFollowRequests, ListPaginatedRecos, ListPaginatedRecoTargets, ListPaginatedUsers, personsControllerFollowMutation, personsControllerUnfollowMutation, playlistLikesControllerDeleteMutation, playlistLikesControllerSetMutation, playlistSavesControllerDeleteMutation, playlistSavesControllerSetMutation, recosControllerDeleteByIdMutation, recosControllerDeleteByMediaMutation, recosControllerSendMutation, RecoTarget, userFollowControllerAcceptMutation, userFollowControllerDeclineMutation, userFollowControllerDeleteMutation, userFollowControllerSetMutation, userPushTokensControllerSetMutation, usersControllerUpdateMeMutation, UserSummary } from '@packages/api-js';
-import { userBookmarkByMediaOptions, userFollowersInfiniteOptions, userFollowersPaginatedOptions, userFollowingInfiniteOptions, userFollowingPaginatedOptions, userFollowOptions, userFollowRequestsInfiniteOptions, userFollowRequestsPaginatedOptions, userMeOptions, userPersonFollowOptions, userPlaylistLikeOptions, userPlaylistSavedOptions, userRecosAllOptions, userRecoSendAllOptions, userRecoSendInfiniteOptions, userRecoSendPaginatedOptions, userRecosInfiniteOptions, userRecosPaginatedOptions } from './userOptions';
+import { bookmarksControllerDeleteByMediaMutation, bookmarksControllerSetByMediaMutation, FollowRequest, ListInfiniteBookmarks, ListInfiniteFollowRequests, ListInfiniteRecos, ListInfiniteRecoTargets, ListInfiniteUsers, ListPaginatedBookmarks, ListPaginatedFollowRequests, ListPaginatedRecos, ListPaginatedRecoTargets, ListPaginatedUsers, personsControllerFollowMutation, personsControllerUnfollowMutation, playlistLikesControllerDeleteMutation, playlistLikesControllerSetMutation, playlistSavesControllerDeleteMutation, playlistSavesControllerSetMutation, recosControllerDeleteByIdMutation, recosControllerDeleteByMediaMutation, recosControllerSendMutation, RecoTarget, userFollowControllerAcceptMutation, userFollowControllerDeclineMutation, userFollowControllerDeleteMutation, userFollowControllerSetMutation, userPushTokensControllerSetMutation, meControllerUpdateMutation, UserSummary, meAvatarControllerSetMutation, meAvatarControllerDeleteMutation } from '@packages/api-js';
+import { userBookmarkByMediaOptions, userByIdOptions, userByUsernameOptions, userFollowersInfiniteOptions, userFollowersPaginatedOptions, userFollowingInfiniteOptions, userFollowingPaginatedOptions, userFollowOptions, userFollowRequestsInfiniteOptions, userFollowRequestsPaginatedOptions, userMeOptions, userPersonFollowOptions, userPlaylistLikeOptions, userPlaylistSavedOptions, userRecosAllOptions, userRecoSendAllOptions, userRecoSendInfiniteOptions, userRecoSendPaginatedOptions, userRecosInfiniteOptions, userRecosPaginatedOptions } from './userOptions';
 import { removeListItemFromAllCaches, updateListItemInAllCaches, updateOrRemoveListItemInAllCaches } from '../utils';
 import { userKeys } from './userKeys';
 import { BookmarkWithMedia, RecoWithMedia } from './types';
@@ -8,9 +8,89 @@ import { BookmarkWithMedia, RecoWithMedia } from './types';
 export const useUserMeUpdateMutation = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		...usersControllerUpdateMeMutation(),
+		...meControllerUpdateMutation(),
 		onSuccess: (data) => {
 			queryClient.setQueryData(userMeOptions().queryKey, data);
+			queryClient.setQueryData(userByIdOptions({ userId: data.id }).queryKey, (oldData) => {
+				if (!oldData) return oldData;
+				return {
+					...oldData,
+					name: data.name,
+					username: data.username,
+					bio: data.bio,
+					isPrivate: data.isPrivate,
+				};
+			});
+			queryClient.setQueryData(userByUsernameOptions({ username: data.username }).queryKey, (oldData) => {
+				if (!oldData) return oldData;
+				return {
+					...oldData,
+					name: data.name,
+					username: data.username,
+					bio: data.bio,
+					isPrivate: data.isPrivate,
+				};
+			});
+		}
+	});
+};
+
+export const useUserMeAvatarUpdateMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		...meAvatarControllerSetMutation(),
+		onSuccess: (data) => {
+			queryClient.setQueryData(userMeOptions().queryKey, data);
+			queryClient.setQueryData(userByIdOptions({ userId: data.id }).queryKey, (oldData) => {
+				if (!oldData) return oldData;
+				return {
+					...oldData,
+					name: data.name,
+					username: data.username,
+					bio: data.bio,
+					isPrivate: data.isPrivate,
+				};
+			});
+			queryClient.setQueryData(userByUsernameOptions({ username: data.username }).queryKey, (oldData) => {
+				if (!oldData) return oldData;
+				return {
+					...oldData,
+					name: data.name,
+					username: data.username,
+					bio: data.bio,
+					isPrivate: data.isPrivate,
+				};
+			});
+		}
+	});
+};
+
+export const useUserMeAvatarDeleteMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		...meAvatarControllerDeleteMutation(),
+		onSuccess: (data) => {
+			queryClient.setQueryData(userMeOptions().queryKey, data);
+			queryClient.setQueryData(userByIdOptions({ userId: data.id }).queryKey, (oldData) => {
+				if (!oldData) return oldData;
+				return {
+					...oldData,
+					name: data.name,
+					username: data.username,
+					bio: data.bio,
+					isPrivate: data.isPrivate,
+				};
+			});
+			queryClient.setQueryData(userByUsernameOptions({ username: data.username }).queryKey, (oldData) => {
+				if (!oldData) return oldData;
+				return {
+					...oldData,
+					name: data.name,
+					username: data.username,
+					bio: data.bio,
+					isPrivate: data.isPrivate,
+				};
+			});
 		}
 	});
 };

@@ -1,5 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { and, eq, sql } from 'drizzle-orm';
 import { followPerson, tmdbPersonView } from '@libs/db/schemas';
 import { plainToInstance } from 'class-transformer';
@@ -43,7 +43,7 @@ export class PersonsService {
         throw new NotFoundException(`Person with id ${personId} not found`);
       }
 
-      return person;
+      return plainToInstance(PersonDto, person);
     });
   }
 

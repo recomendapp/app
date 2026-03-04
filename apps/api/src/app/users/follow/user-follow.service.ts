@@ -1,5 +1,5 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { and, eq, sql } from 'drizzle-orm';
 import { profile, follow } from '@libs/db/schemas';
 import { plainToInstance } from 'class-transformer';

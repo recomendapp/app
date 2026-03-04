@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { PlaylistsSearchController } from './playlists-search.controller';
 import { PlaylistsSearchService } from './playlists-search.service';
 import { SupabaseModule } from '../../common/supabase/supabase.module';
-import { TypesenseModule } from '../../../common/modules/typesense.module';
+import { TypesenseModule } from '../../../common/modules/typesense/typesense.module';
 
 
 @Module({

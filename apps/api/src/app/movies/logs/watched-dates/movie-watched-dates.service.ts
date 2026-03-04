@@ -1,12 +1,13 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { and, asc, desc, eq, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { logMovie, logMovieWatchedDate } from '@libs/db/schemas';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/drizzle/drizzle.module';
 import { ListInfiniteWatchedDatesDto, ListInfiniteWatchedDatesQueryDto, ListPaginatedWatchedDatesDto, ListPaginatedWatchedDatesQueryDto, WatchedDateCreateDto, WatchedDateResponseDto, WatchedDateSortBy, WatchedDateUpdateDto } from './dto/watched-dates.dto';
 import { User } from '../../../auth/auth.service';
 import { DbTransaction } from '@libs/db';
 import { SortOrder } from '../../../../common/dto/sort.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../../utils/cursor';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class MovieWatchedDatesService {
@@ -70,14 +71,14 @@ export class MovieWatchedDatesService {
 
       const syncResult = await this.syncLogDates(tx, logEntry.id);
 
-      return {
+      return plainToInstance(WatchedDateResponseDto, {
         watchedDate: newDate,
         log: {
           ...syncResult,
           userId: logEntry.userId,
           movieId: logEntry.movieId,
         },
-      };
+      });
     });
   }
 
@@ -112,14 +113,14 @@ export class MovieWatchedDatesService {
 
       const syncResult = await this.syncLogDates(tx, logEntry.id);
 
-      return {
+      return plainToInstance(WatchedDateResponseDto, {
         watchedDate: updatedDate,
         log: {
           ...syncResult,
           userId: logEntry.userId,
           movieId: logEntry.movieId,
         },
-      };
+      });
     });
   }
 
@@ -155,14 +156,14 @@ export class MovieWatchedDatesService {
 
       const syncResult = await this.syncLogDates(tx, logEntry.id);
 
-      return {
+      return plainToInstance(WatchedDateResponseDto, {
         watchedDate: deletedDate,
         log: {
           ...syncResult,
           userId: logEntry.userId,
           movieId: logEntry.movieId,
         },
-      };
+      });
     });
   }
 

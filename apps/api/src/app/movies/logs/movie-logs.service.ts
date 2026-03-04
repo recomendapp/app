@@ -3,10 +3,11 @@ import { LogMovieRequestDto, LogMovieDto } from './dto/log-movie.dto';
 import { and, avg, desc, eq, isNotNull, sql } from 'drizzle-orm';
 import { bookmark, follow, logMovie, logMovieWatchedDate, profile, reviewMovie, user } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { FollowingAverageRatingDto, FollowingLogDto, FollowingLogsQueryDto } from './dto/following-log-movie.dto';
 import { RecosService } from '../../recos/recos.service';
 import { RecoType } from '../../recos/dto/recos.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class MovieLogsService {
@@ -27,14 +28,14 @@ export class MovieLogsService {
     })
 
     if (!logEntry) return null;
-    return {
+    return plainToInstance(LogMovieDto, {
       ...logEntry,
       review: logEntry.review ? {
         ...logEntry.review,
         userId: logEntry.userId,
         movieId: logEntry.movieId,
       } : null,
-    }
+    });
   }
 
   async set(user: User, movieId: number, dto: LogMovieRequestDto): Promise<LogMovieDto> {    
@@ -107,14 +108,14 @@ export class MovieLogsService {
       }
     });
 
-    return {
+    return plainToInstance(LogMovieDto, {
       ...logEntry,
       review: logEntry.review ? {
         ...logEntry.review,
         userId: logEntry.userId,
         movieId: logEntry.movieId,
       } : null,
-    };
+    });
   }
 
   async delete(user: User, movieId: number): Promise<LogMovieDto> {
@@ -140,14 +141,14 @@ export class MovieLogsService {
         )
       );
 
-      return {
+      return plainToInstance(LogMovieDto, {
         ...logEntry,
         review: logEntry.review ? {
           ...logEntry.review,
           userId: logEntry.userId,
           movieId: logEntry.movieId,
         } : null,
-      };
+      });
     });
   }
 
@@ -190,7 +191,7 @@ export class MovieLogsService {
         reviewMovie.id
       )
       .orderBy(desc(logMovie.createdAt));
-    return rows.map(row => ({
+    return plainToInstance(FollowingLogDto, rows.map(row => ({
       ...row.log,
       user: row.user,
       review: row.review ? {
@@ -198,7 +199,7 @@ export class MovieLogsService {
         userId: row.log.userId,
         movieId: row.log.movieId,
       } : null,
-    }));
+    })));
   }
 
   async getFollowingAverageRating(
@@ -222,8 +223,8 @@ export class MovieLogsService {
 
     const averageValue = result?.average ? Number(result.average) : null;
 
-    return {
+    return plainToInstance(FollowingAverageRatingDto, {
       averageRating: averageValue !== null ? Math.round(averageValue * 10) / 10 : null,
-    };
+    });
   }
 }

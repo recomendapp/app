@@ -5,6 +5,8 @@ import { IsDateString, IsEnum, IsLocale, IsOptional, IsString, IsUrl, Length, Ma
 import { PaginatedResponseDto, PaginationQueryDto } from "../../../common/dto/pagination.dto";
 import { SortOrder } from "../../../common/dto/sort.dto";
 import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from "../../../common/dto/cursor-pagination.dto";
+import { getMediaUrl } from "../../../common/modules/storage/storage.utils";
+import { StorageFolders } from "../../../common/modules/storage/storage.constants";
 
 export enum UserSortBy {
   CREATED_AT = 'created_at',
@@ -78,11 +80,13 @@ export class UserDto {
 
 	@ApiProperty({ example: "https://example.com/avatar.jpg", description: 'The URL of the user avatar', nullable: true })
 	@Expose()
+	@Transform(({ value }) => getMediaUrl(value, StorageFolders.AVATARS))
 	@IsUrl()
 	avatar: string | null;
 
 	@ApiProperty({ example: "https://example.com/background.jpg", description: 'The URL of the user background image', nullable: true })
 	@Expose()
+	@Transform(({ value }) => getMediaUrl(value, StorageFolders.USER_BACKGROUNDS))
 	@IsUrl()
 	backgroundImage: string | null;
 

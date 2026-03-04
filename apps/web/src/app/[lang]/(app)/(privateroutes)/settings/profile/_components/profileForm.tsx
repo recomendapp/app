@@ -23,13 +23,16 @@ import { useCallback, useEffect, useState } from 'react';
 import Loader from '@/components/Loader';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import { useUserMeUpdateMutation } from '@libs/query-client';
+import { useUserMeAvatarDeleteMutation, useUserMeAvatarUpdateMutation, useUserMeUpdateMutation } from '@libs/query-client';
+import compressPicture from '@/lib/utils/compressPicture';
 
 export function ProfileForm() {
   const t = useTranslations();
   const { user } = useAuth();
 
   const { mutateAsync: updateProfile, isPending: isUpdating } = useUserMeUpdateMutation();
+  const { mutateAsync: updateAvatar } = useUserMeAvatarUpdateMutation();
+  const { mutateAsync: deleteAvatar } = useUserMeAvatarDeleteMutation();
 
   const [newAvatar, setNewAvatar] = useState<File>();
 
@@ -67,11 +70,25 @@ export function ProfileForm() {
   const handleSubmit = useCallback(async (data: ProfileFormValues) => {
     if (!user) return;
     if (!newAvatar && user.name === data.name && user.bio === data.bio) return;
+
+    if (newAvatar) {
+      const compressedFile = await compressPicture(newAvatar, 400, 400);
+      await updateAvatar({
+        body: {
+            file: compressedFile,
+        }
+      }, {
+        onError: () => {
+          toast.error(upperFirst(t('common.messages.an_error_occurred')));
+        }
+      });
+      setNewAvatar(undefined);
+    }
+
     await updateProfile({
       body: {
         name: data.name?.trim(),
         bio: data.bio?.trim() || null,
-        // avatar: newAvatar,
       }
     }, {
       onSuccess: () => {
@@ -84,9 +101,7 @@ export function ProfileForm() {
   }, [newAvatar, t, updateProfile, user]);
 
   const handleDeleteAvatar = useCallback(async () => {
-    await updateProfile({
-      avatar: null,
-    }, {
+    await deleteAvatar({}, {
       onSuccess: () => {
         toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
       },

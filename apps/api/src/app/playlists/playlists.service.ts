@@ -1,10 +1,11 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { User } from '../auth/auth.service';
 import { PlaylistCreateDto, PlaylistDto, PlaylistGetDTO, PlaylistUpdateDto } from './dto/playlists.dto';
 import { follow, playlist, playlistMember } from '@libs/db/schemas';
 import { and, eq, exists, notInArray, or, sql, SQL } from 'drizzle-orm';
 import { PlaylistMemberListDto, PlaylistMemberUpdateDto } from './dto/playlist-members.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class PlaylistsService {
@@ -88,7 +89,7 @@ export class PlaylistsService {
 
     const { user, members, ...playlistData } = result;
 
-    return {
+    return plainToInstance(PlaylistGetDTO, {
       ...playlistData,
       role: currentUser?.id === playlistData.userId
         ? 'owner'
@@ -102,7 +103,7 @@ export class PlaylistsService {
         avatar: user.image,
         isPremium: user.profile.isPremium,
       }
-    };
+    });
   }
 
   async create(currentUser: User, createPlaylistDto: PlaylistCreateDto): Promise<PlaylistDto> {
@@ -110,7 +111,7 @@ export class PlaylistsService {
       userId: currentUser.id,
       ...createPlaylistDto,
     }).returning();
-    return insertedPlaylist;
+    return plainToInstance(PlaylistDto, insertedPlaylist);
   }
 
   async update({
@@ -134,7 +135,7 @@ export class PlaylistsService {
     if (!updatedPlaylist) {
       throw new NotFoundException();
     }
-    return updatedPlaylist;
+    return plainToInstance(PlaylistDto, updatedPlaylist);
   }
 
   async delete({
@@ -156,7 +157,7 @@ export class PlaylistsService {
     if (!deletedPlaylist) {
       throw new NotFoundException();
     }
-    return deletedPlaylist;
+    return plainToInstance(PlaylistDto, deletedPlaylist);
   }
 
   // Members
@@ -197,7 +198,7 @@ export class PlaylistsService {
       }
     });
   
-    return {
+    return plainToInstance(PlaylistMemberListDto, {
       members: members.map(({ user, ...member }) => ({
         ...member,
         user: {
@@ -208,7 +209,7 @@ export class PlaylistsService {
           isPremium: user.profile?.isPremium ?? false,
         }
       }))
-    };
+    });
   }
 
   async updateMembers({
@@ -271,7 +272,7 @@ export class PlaylistsService {
       });
     });
 
-    return {
+    return plainToInstance(PlaylistMemberListDto, {
       members: updatedMembers.map(({ user, ...member }) => ({
         ...member,
         user: {
@@ -282,6 +283,6 @@ export class PlaylistsService {
           isPremium: user.profile?.isPremium ?? false,
         }
       })),
-    };
+    });
   }
 }

@@ -2,10 +2,11 @@ import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nest
 import { and, asc, desc, eq, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { follow, profile, user } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { ListInfiniteUsersDto, ListInfiniteUsersQueryDto, ListPaginatedUsersDto, ListPaginatedUsersQueryDto, UserSortBy } from '../dto/users.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UserFollowingService {
@@ -114,7 +115,7 @@ export class UserFollowingService {
       this.db.$count(follow, whereClause),
     ]);
 
-    return {
+    return plainToInstance(ListPaginatedUsersDto, {
       data: followers.map((row) => ({
         id: row.user.id,
         name: row.user.name,
@@ -128,7 +129,7 @@ export class UserFollowingService {
         current_page: page,
         per_page,
       },
-    };
+    });
   }
   async listInfinite({
     targetUserId,
@@ -239,7 +240,7 @@ export class UserFollowingService {
       }
     }
 
-    return {
+    return plainToInstance(ListInfiniteUsersDto, {
       data: paginatedResults.map((row) => ({
         id: row.user.id,
         name: row.user.name,
@@ -251,6 +252,6 @@ export class UserFollowingService {
         next_cursor: nextCursor,
         per_page,
       },
-    };
+    });
   }
 }

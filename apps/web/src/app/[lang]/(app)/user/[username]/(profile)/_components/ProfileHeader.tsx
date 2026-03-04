@@ -1,3 +1,4 @@
+'use client';
 import { UserAvatar } from '@/components/User/UserAvatar';
 import { Button } from '@/components/ui/button';
 import { Settings } from 'lucide-react';
@@ -11,14 +12,24 @@ import { Session } from '@supabase/supabase-js';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProfileFollowButton } from './ProfileFollowButton';
 import { Profile } from '@packages/api-js';
+import { useQuery } from '@tanstack/react-query';
+import { userByIdOptions } from '@libs/query-client/src';
 
 export const ProfileHeader = ({
-  profile,
+  profile: profileServer,
   session,
 }: {
   profile?: Profile | null;
   session: Session | null;
 }) => {
+  const {
+    data: profile,
+  } = useQuery({
+    ...userByIdOptions({
+      userId: profileServer?.id,
+    }),
+    initialData: profileServer || undefined,
+  });
   return (
     <HeaderBox className='h-fit!' background={profile?.backgroundImage ? { src: profile.backgroundImage, alt: profile.username ?? ''} : undefined}>
       <div className='max-w-7xl w-full flex flex-col @lg/header-box:items-start @lg/header-box:flex-row gap-4'>

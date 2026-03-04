@@ -1,11 +1,12 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { and, asc, eq, sql } from 'drizzle-orm';
 import { User } from '../../auth/auth.service';
 import { SupportedLocale } from '@libs/i18n';
 import { TvSeasonGetDTO } from './dto/tv-seasons.dto';
 import { tmdbTvEpisode, tmdbTvSeasonView, tmdbTvSeriesView } from '@libs/db/schemas';
 import { TvEpisodeDto } from '../episodes/dto/tv-episodes.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class TvSeasonsService {
@@ -71,7 +72,7 @@ export class TvSeasonsService {
         throw new NotFoundException(`TV Season with tvSeriesId ${tvSeriesId} and seasonNumber ${seasonNumber} not found`);
       }
 
-      return tvSeason;
+      return plainToInstance(TvSeasonGetDTO, tvSeason);
     });
   }
 
@@ -124,10 +125,10 @@ export class TvSeasonsService {
         )
         .orderBy(asc(tmdbTvEpisode.episodeNumber));
       
-      return episodes.map(({ seasonUrl, ...episode }) => ({
+      return plainToInstance(TvEpisodeDto, episodes.map(({ seasonUrl, ...episode }) => ({
         ...episode,
         url: seasonUrl + '/episode/' + episode.episodeNumber,
-      }));
+      })));
     });
   }
 

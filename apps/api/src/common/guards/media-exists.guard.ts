@@ -7,7 +7,7 @@ import {
   Inject 
 } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
-import { DRIZZLE_SERVICE, DrizzleService } from '../modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../modules/drizzle/drizzle.module';
 import { tmdbMovie, tmdbTvSeries } from '@libs/db/schemas';
 import { MediaType } from '../enums/medias.enum';
 

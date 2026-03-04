@@ -12,6 +12,7 @@ import {
 import { env } from './env';
 import { setupVersionedDocs } from './utils/docs';
 import { API_VERSIONS } from './constants/api';
+import fastifyMultipart from '@fastify/multipart';
 
 async function bootstrap() {
   const adapter = new FastifyAdapter();
@@ -40,6 +41,14 @@ async function bootstrap() {
       },
     }),
   );
+
+  // Plugins
+  await app.register(fastifyMultipart as any, {
+    limits: {
+      fileSize: 5 * 1024 * 1024, // 5MB
+      files: 1,
+    }
+  })
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 

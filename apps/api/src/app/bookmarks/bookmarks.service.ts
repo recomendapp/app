@@ -1,10 +1,11 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { and, eq, sql } from 'drizzle-orm';
 import { User } from '../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { BookmarkDto, BookmarkInputDto } from './dto/bookmarks.dto';
 import { bookmark } from '@libs/db/schemas';
 import { BookmarkTarget } from './bookmarks.type';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class BookmarksService {
@@ -38,7 +39,7 @@ export class BookmarksService {
       where: this.getWhereConditions(user.id, target),
     })
     if (!bookmarkEntry) return null;
-    return new BookmarkDto({
+    return plainToInstance(BookmarkDto, {
       id: bookmarkEntry.id,
       userId: bookmarkEntry.userId,
       type: bookmarkEntry.type,
@@ -102,7 +103,7 @@ export class BookmarksService {
       result = upserted;
     }
 
-    return new BookmarkDto({
+    return plainToInstance(BookmarkDto, {
       id: result.id,
       userId: result.userId,
       type: result.type,
@@ -130,7 +131,7 @@ export class BookmarksService {
         throw new NotFoundException('Bookmark entry not found');
       }
 
-      return new BookmarkDto({
+      return plainToInstance(BookmarkDto, {
         id: deletedBookmark.id,
         userId: deletedBookmark.userId,
         type: deletedBookmark.type,

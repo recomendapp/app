@@ -1,11 +1,12 @@
 import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { aliasedTable, and, eq, inArray, isNull, sql } from 'drizzle-orm';
 import { User } from '../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { RecoDto, RecoSendDto, RecoSendResponseDto, RecoType } from './dto/recos.dto';
 import { follow, logMovie, logTvSeries, reco, recoTypeEnum } from '@libs/db/schemas';
 import { DbTransaction } from '@libs/db';
 import { NotifyClient } from '@shared/notify';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class RecosService {
@@ -106,14 +107,14 @@ export class RecosService {
     
     const item = returnedRecos[0];
     
-    return {
+    return plainToInstance(RecoSendResponseDto, {
       mediaId: item.type === 'movie' ? item.movieId : item.tvSeriesId,
       type: item.type,
       senderId: item.senderId,
       comment: item.comment,
       requested: dto.userIds.length,
       sent: returnedRecos.map(r => r.userId),
-    };
+    });
   }
 
   async deleteByMedia({
@@ -142,10 +143,10 @@ export class RecosService {
       )
       .returning();
 
-    return updatedRecos.map(({ movieId, tvSeriesId, ...rest }) => ({
+    return plainToInstance(RecoDto, updatedRecos.map(({ movieId, tvSeriesId, ...rest }) => ({
       ...rest,
       mediaId: movieId ?? tvSeriesId,
-    }));
+    })));
   }
 
   async deleteById({
@@ -193,10 +194,10 @@ export class RecosService {
 
     const { movieId, tvSeriesId, ...rest } = resultReco;
     
-    return {
+    return plainToInstance(RecoDto, {
       ...rest,
       mediaId: movieId ?? tvSeriesId,
-    };
+    });
   }
 
   async complete({
@@ -236,9 +237,9 @@ export class RecosService {
       });
     }
 
-    return completedRecos.map(({ movieId, tvSeriesId, ...rest }) => ({
+    return plainToInstance(RecoDto, completedRecos.map(({ movieId, tvSeriesId, ...rest }) => ({
       ...rest,
       mediaId: movieId ?? tvSeriesId,
-    }));
+    })));
   }
 }

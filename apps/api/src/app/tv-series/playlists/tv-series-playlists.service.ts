@@ -2,11 +2,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { and, asc, desc, eq, exists, gt, lt, or, sql, SQL } from 'drizzle-orm';
 import { follow, playlist, playlistItem, playlistMember, profile, user } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { ListInfinitePlaylistsQueryDto, ListInfinitePlaylistsWithOwnerDto, ListPaginatedPlaylistsQueryDto, ListPaginatedPlaylistsWithOwnerDto, PlaylistSortBy } from '../../playlists/dto/playlists.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class TvSeriesPlaylistsService {
@@ -133,7 +134,7 @@ export class TvSeriesPlaylistsService {
       const totalCount = Number(totalCountResult[0]?.count || 0);
       const totalPages = Math.ceil(totalCount / per_page);
 
-      return {
+      return plainToInstance(ListPaginatedPlaylistsWithOwnerDto, {
         data: rows.map((row) => ({
           ...row.playlist,
           owner: row.owner,
@@ -144,7 +145,7 @@ export class TvSeriesPlaylistsService {
           current_page: page,
           per_page,
         },
-      };
+      });
     });
   }
   async listInfinite({
@@ -271,7 +272,7 @@ export class TvSeriesPlaylistsService {
         }
       }
 
-      return {
+      return plainToInstance(ListInfinitePlaylistsWithOwnerDto, {
         data: paginatedResults.map((row) => ({
           ...row.playlist,
           owner: row.owner,
@@ -280,7 +281,7 @@ export class TvSeriesPlaylistsService {
           next_cursor: nextCursor,
           per_page,
         },
-      };
+      });
     });
   }
 }

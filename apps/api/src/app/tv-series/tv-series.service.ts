@@ -1,5 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { tmdbPersonView, tmdbTvSeasonView, tmdbTvSeriesCredit, tmdbTvSeriesRole, tmdbTvSeriesView } from '@libs/db/schemas';
 import { and, asc, eq, sql } from 'drizzle-orm';
 import { User } from '../auth/auth.service';
@@ -7,6 +7,7 @@ import { SupportedLocale } from '@libs/i18n';
 import { TvSeriesDto } from './dto/tv-series.dto';
 import { TvSeriesCastingDto } from './dto/tv-series-credits.dto';
 import { TvSeasonCompactDto } from './seasons/dto/tv-seasons.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class TvSeriesService {
@@ -43,7 +44,7 @@ export class TvSeriesService {
         throw new NotFoundException(`TV Series with id ${tvSeriesId} not found`);
       }
 
-      return tvSeries;
+      return plainToInstance(TvSeriesDto, tvSeries);
     });
   }
 
@@ -74,7 +75,7 @@ export class TvSeriesService {
         .where(eq(tmdbTvSeasonView.tvSeriesId, tvSeriesId))
         .orderBy(asc(tmdbTvSeasonView.seasonNumber));
       
-      return seasons;
+      return plainToInstance(TvSeasonCompactDto, seasons);
     });
   }
     
@@ -133,7 +134,7 @@ export class TvSeriesService {
         .innerJoin(tmdbPersonView, eq(tmdbPersonView.id, aggregatedCastingSq.personId))
         .orderBy(asc(aggregatedCastingSq.order));
       
-      return castingData;
+      return plainToInstance(TvSeriesCastingDto, castingData);
     });
   }
 }

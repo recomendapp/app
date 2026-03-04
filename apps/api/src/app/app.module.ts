@@ -6,12 +6,13 @@ import { AuthModule } from './auth/auth.module';
 import { MoviesModule } from './movies/movies.module';
 import { UsersModule } from './users/users.module';
 import { PlaylistsModule } from './playlists/playlists.module';
-import { DrizzleModule } from '../common/modules/drizzle.module';
+import { DrizzleModule } from '../common/modules/drizzle/drizzle.module';
 import { PersonsModule } from './persons/persons.module';
 import { TvSeriesModule } from './tv-series/tv-series.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { BookmarksModule } from './bookmarks/bookmarks.module';
 import { RecosModule } from './recos/recos.module';
+import { MeModule } from './me/me.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { RecosModule } from './recos/recos.module';
     DrizzleModule,
     AuthModule,
     HealthModule,
+    MeModule,
     UsersModule,
     BookmarksModule,
     RecosModule,

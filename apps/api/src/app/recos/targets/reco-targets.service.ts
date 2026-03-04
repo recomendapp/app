@@ -1,12 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { aliasedTable, and, asc, desc, eq, gt, ilike, lt, max, or, SQL, sql } from 'drizzle-orm';
 import { User } from '../../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { follow, logMovie, logTvSeries, profile, reco, user } from '@libs/db/schemas';
-import { ListAllRecoTargetsQueryDto, ListInfiniteRecoTargetsQueryDto, ListPaginatedRecoTargetsQueryDto, RecoTargetSortBy } from './dto/reco-targets.dto';
+import { ListAllRecoTargetsQueryDto, ListInfiniteRecoTargetsDto, ListInfiniteRecoTargetsQueryDto, ListPaginatedRecoTargetsDto, ListPaginatedRecoTargetsQueryDto, RecoTargetDto, RecoTargetSortBy } from './dto/reco-targets.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { RecoType } from '../dto/recos.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class RecoTargetsService {
@@ -121,7 +122,7 @@ export class RecoTargetsService {
     type: RecoType;
     mediaId: number;
     query: ListAllRecoTargetsQueryDto;
-  }) {
+  }): Promise<RecoTargetDto[]> {
     const { sort_order, sort_by, search } = query;
 
     const { joinedQb, whereClause, orderBy } = this.getListBaseQuery(
@@ -132,17 +133,15 @@ export class RecoTargetsService {
       .where(whereClause)
       .orderBy(...orderBy);
 
-    return {
-      data: results.map((row) => ({
-        id: row.user.id,
-        name: row.user.name,
-        username: row.user.username,
-        avatar: row.user.avatar,
-        isPremium: row.profile.isPremium,
-        alreadySeen: row.alreadySeen,
-        alreadySent: row.alreadySent,
-      })),
-    };
+    return plainToInstance(RecoTargetDto, results.map((row) => ({
+      id: row.user.id,
+      name: row.user.name,
+      username: row.user.username,
+      avatar: row.user.avatar,
+      isPremium: row.profile.isPremium,
+      alreadySeen: row.alreadySeen,
+      alreadySent: row.alreadySent,
+    })));
   }
 
   async listPaginated({
@@ -155,7 +154,7 @@ export class RecoTargetsService {
     type: RecoType;
     mediaId: number;
     query: ListPaginatedRecoTargetsQueryDto;
-  }) {
+  }): Promise<ListPaginatedRecoTargetsDto> {
     const { per_page, sort_order, sort_by, page, search } = query;
     const offset = (page - 1) * per_page;
 
@@ -185,7 +184,7 @@ export class RecoTargetsService {
       countQuery,
     ]);
 
-    return {
+    return plainToInstance(ListPaginatedRecoTargetsDto, {
       data: followers.map((row) => ({
         id: row.user.id,
         name: row.user.name,
@@ -201,7 +200,7 @@ export class RecoTargetsService {
         current_page: page,
         per_page,
       },
-    };
+    });
   }
 
   async listInfinite({
@@ -214,7 +213,7 @@ export class RecoTargetsService {
     type: RecoType;
     mediaId: number;
     query: ListInfiniteRecoTargetsQueryDto;
-  }) {
+  }): Promise<ListInfiniteRecoTargetsDto> {
     const { per_page, sort_order, sort_by, cursor, search } = query;
 
     const cursorData = cursor ? decodeCursor<BaseCursor<string | number, string>>(cursor) : null;
@@ -298,7 +297,7 @@ export class RecoTargetsService {
       }
     }
 
-    return {
+    return plainToInstance(ListInfiniteRecoTargetsDto, {
       data: paginatedResults.map((row) => ({
         id: row.user.id,
         name: row.user.name,
@@ -313,6 +312,6 @@ export class RecoTargetsService {
         per_page,
         total_results: totalCount,
       },
-    };
+    });
   }
 }

@@ -1,0 +1,16 @@
+import { Module } from '@nestjs/common';
+import { MeController } from './me.controller';
+import { MeService } from './me.service';
+import { SharedWorkerModule } from '@shared/worker';
+import { MeAvatarModule } from './avatar/me-avatar.module';
+
+@Module({
+  imports: [
+    SharedWorkerModule,
+    MeAvatarModule,
+  ],
+  controllers: [MeController],
+  providers: [MeService],
+  exports: [MeService],
+})
+export class MeModule {}

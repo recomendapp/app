@@ -99,7 +99,7 @@ export function DataTableRowActions({
             <Link href={data.media.url ?? ''}>
               <Icons.eye className='w-4' />
               {data.type === 'movie'
-                ? upperFirst(t('common.messages.go_to_movie'))
+                ? upperFirst(t('common.messages.go_to_film'))
                 : upperFirst(t('common.messages.go_to_tv_series'))
               }
             </Link>

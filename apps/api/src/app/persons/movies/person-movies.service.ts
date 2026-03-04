@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { DbTransaction } from '@libs/db';
 import { SupportedLocale } from '@libs/i18n';
 import { MovieSortBy } from '../../movies/dto/movies.dto';
@@ -8,6 +8,7 @@ import { and, asc, desc, eq, gt, isNotNull, lt, or, SQL, sql } from 'drizzle-orm
 import { tmdbMovieCredit, tmdbMovieView } from '@libs/db/schemas';
 import { ListInfinitePersonMoviesDto, ListInfinitePersonMoviesQueryDto, ListPaginatedPersonMovieQueryDto, ListPaginatedPersonMoviesDto, PersonMovieFacetsDto } from './dto/person-movie.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class PersonMoviesService {
@@ -106,7 +107,7 @@ export class PersonMoviesService {
 
       const totalCount = Number(totalCountResult[0]?.count || 0);
 
-      return {
+      return plainToInstance(ListPaginatedPersonMoviesDto, {
         data: results.map((row) => ({
           movie: row.movie,
           credits: row.credits || [],
@@ -117,7 +118,7 @@ export class PersonMoviesService {
           current_page: page,
           per_page,
         }
-      }
+      });
     });
   }
   async listInfinite({
@@ -250,7 +251,7 @@ export class PersonMoviesService {
         }
       }
 
-      return {
+      return plainToInstance(ListInfinitePersonMoviesDto, {
         data: paginatedResults.map((row) => ({
           movie: row.movie,
           credits: row.credits || [],
@@ -259,7 +260,7 @@ export class PersonMoviesService {
           next_cursor: nextCursor,
           per_page,
         }
-      }
+      });
     });
   }
   // Facets
@@ -292,6 +293,6 @@ export class PersonMoviesService {
       }))
       .sort((a, b) => a.department.localeCompare(b.department));
 
-    return { departments };
+    return plainToInstance(PersonMovieFacetsDto, { departments });
   }
 }

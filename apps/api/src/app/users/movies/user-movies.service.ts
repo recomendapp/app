@@ -2,13 +2,14 @@ import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nest
 import { and, asc, desc, eq, exists, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { follow, logMovie, profile, reviewMovie, tmdbMovieView } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { ListInfiniteUserMoviesWithMovieDto, ListPaginatedUserMoviesWithMovieDto, UserMovieWithUserMovieDto } from './dto/user-movie.dto';
 import { SupportedLocale } from '@libs/i18n';
 import { ListInfiniteLogsMovieQueryDto, ListPaginatedLogsMovieQueryDto, LogMovieSortBy } from '../../movies/logs/dto/log-movie.dto';
 import { DbTransaction } from '@libs/db';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UserMoviesService {
@@ -113,7 +114,7 @@ export class UserMoviesService {
 
       const { user, review, ...logData } = logEntry;
 
-      return {
+      return plainToInstance(UserMovieWithUserMovieDto, {
         ...logData,
         review: review ? {
           ...review,
@@ -128,7 +129,7 @@ export class UserMoviesService {
           isPremium: user.profile.isPremium,
         },
         movie: movie,
-      }
+      });
     });
   }
 
@@ -256,7 +257,7 @@ export class UserMoviesService {
         tx.$count(logMovie, whereClause)
       ]);
 
-      return {
+      return plainToInstance(ListPaginatedUserMoviesWithMovieDto, {
         data: results.map(({ log, movie, isReviewed }) => ({
           ...log,
           isReviewed,
@@ -268,7 +269,7 @@ export class UserMoviesService {
           current_page: page,
           per_page,
         }
-      }
+      });
     });
   }
   async listInfinite({
@@ -409,7 +410,7 @@ export class UserMoviesService {
           });
         }
       }
-      return {
+      return plainToInstance(ListInfiniteUserMoviesWithMovieDto, {
         data: paginatedResults.map(({ log, movie, isReviewed }) => ({
           ...log,
           isReviewed,
@@ -419,7 +420,7 @@ export class UserMoviesService {
           next_cursor: nextCursor,
           per_page,
         }
-      }
+      });
     });
   }
 }

@@ -2,12 +2,12 @@
 
 import { getApi } from "@/lib/api/server";
 import { SupportedLocale } from "@libs/i18n/src";
-import { userMoviesControllerGet, usersControllerGetProfile } from "@packages/api-js";
+import { userMoviesControllerGet, usersControllerGet } from "@packages/api-js";
 import { cache } from "react";
 
 export const getProfile = cache(async (username: string) => {
 	const client = await getApi();
-	const { data: user, error } = await usersControllerGetProfile({
+	const { data: user, error } = await usersControllerGet({
 		path: {
 			identifier: `@${username}`,
 		},

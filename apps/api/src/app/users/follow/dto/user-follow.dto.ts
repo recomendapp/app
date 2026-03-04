@@ -1,6 +1,6 @@
 import { ApiProperty, ApiSchema } from "@nestjs/swagger";
-import { Expose, Type } from "class-transformer";
-import { IsIn, IsString } from "class-validator";
+import { Expose } from "class-transformer";
+import { IsDateString, IsIn, IsString } from "class-validator";
 import { followStatusEnum } from "@libs/db/schemas";
 
 @ApiSchema({ name: 'Follow' })
@@ -28,7 +28,7 @@ export class FollowDto {
 	// Dates
 	@ApiProperty()
     @Expose()
-    @Type(() => Date)
-    createdAt: Date;
+	@IsDateString()
+	createdAt: string;
 }
 

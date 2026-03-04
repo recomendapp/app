@@ -2,9 +2,9 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getInitiales } from '@/lib/utils';
-import { User } from '@recomendapp/types';
+import { User } from '@packages/api-js';
 import { Loader2 } from 'lucide-react';
-import { Dispatch } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 
 export default function PictureUpload({
   user,
@@ -15,7 +15,7 @@ export default function PictureUpload({
   user: User;
   isUploading: boolean;
   newAvatar: File | undefined;
-  setNewAvatar: Dispatch<any>;
+  setNewAvatar: Dispatch<SetStateAction<File | undefined>>;
 }) {
   return (
     <label className="flex w-[150px] h-[150px] rounded-full overflow-hidden relative cursor-pointer">
@@ -29,12 +29,12 @@ export default function PictureUpload({
         )}
         <AvatarImage
           src={
-            newAvatar ? URL.createObjectURL(newAvatar) : user?.avatar_url ?? ''
+            newAvatar ? URL.createObjectURL(newAvatar) : user?.avatar ?? ''
           }
           alt={user?.username}
         />
         <AvatarFallback className="text-[75px]">
-          {getInitiales(user?.full_name)}
+          {getInitiales(user.username)}
         </AvatarFallback>
       </Avatar>
       <input

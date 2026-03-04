@@ -2,12 +2,13 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { and, asc, desc, eq, exists, gt, lt, or, sql, SQL } from 'drizzle-orm';
 import { follow, logMovie, profile, reviewMovie, user } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { ListInfiniteReviewsMovieDto, ListInfiniteReviewsMovieQueryDto, ListPaginatedReviewsMovieDto, ListPaginatedReviewsMovieQueryDto, ReviewMovieDto, ReviewMovieInputDto, ReviewMovieSortBy } from '../../reviews/movie/dto/reviews-movie.dto';
 import DOMPurify from 'isomorphic-dompurify';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class MovieReviewsService {
@@ -59,11 +60,11 @@ export class MovieReviewsService {
       })
       .returning();
 
-    return {
+    return plainToInstance(ReviewMovieDto, {
       ...upsertedReview,
       userId: user.id,
       movieId: movieId,
-    };
+    });
   }
 
   async delete({
@@ -95,11 +96,11 @@ export class MovieReviewsService {
       throw new NotFoundException('Review not found');
     }
 
-    return {
+    return plainToInstance(ReviewMovieDto, {
       ...deletedReview,
       userId: user.id,
       movieId: movieId,
-    };
+    });
   }
 
   /* ---------------------------------- List ---------------------------------- */
@@ -205,7 +206,7 @@ export class MovieReviewsService {
 
       const totalCount = Number(totalCountResult[0]?.count || 0);
 
-      return {
+      return plainToInstance(ListPaginatedReviewsMovieDto, {
         data: reviewsData.map((row) => ({
           ...row.review,
           userId: row.log.userId,
@@ -225,7 +226,7 @@ export class MovieReviewsService {
           current_page: page,
           per_page,
         },
-      };
+      });
     });
   };
   async listInfinite({
@@ -362,7 +363,7 @@ export class MovieReviewsService {
         }
       }
 
-      return {
+      return plainToInstance(ListInfiniteReviewsMovieDto, {
         data: paginatedResults.map((row) => ({
           ...row.review,
           userId: row.log.userId,
@@ -380,7 +381,7 @@ export class MovieReviewsService {
           next_cursor: nextCursor,
           per_page,
         },
-      };
+      });
     });
   }
 }

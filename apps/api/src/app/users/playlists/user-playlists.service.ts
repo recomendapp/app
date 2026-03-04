@@ -2,10 +2,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import { and, asc, desc, eq, exists, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { follow, playlist, playlistMember } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { ListPaginatedPlaylistsQueryDto, ListPaginatedPlaylistsDto, PlaylistSortBy, ListInfinitePlaylistsQueryDto, ListInfinitePlaylistsDto } from '../../playlists/dto/playlists.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UserPlaylistsService {
@@ -108,7 +109,7 @@ export class UserPlaylistsService {
       this.db.$count(playlist, whereClause),
     ]);
 
-    return {
+    return plainToInstance(ListPaginatedPlaylistsDto, {
       data: playlists,
       meta: {
         total_results: totalCount,
@@ -116,7 +117,7 @@ export class UserPlaylistsService {
         current_page: page,
         per_page,
       },
-    };
+    });
   }
   async listInfinite({
     targetUserId,
@@ -228,12 +229,12 @@ export class UserPlaylistsService {
       }
     }
 
-    return {
+    return plainToInstance(ListInfinitePlaylistsDto, {
       data: paginatedResults,
       meta: {
         next_cursor: nextCursor,
         per_page,
       },
-    };
+    });
   }
 }

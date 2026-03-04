@@ -5,7 +5,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { AuthenticatedRequest } from '../../auth/types/fastify';
 import { playlist } from '@libs/db/schemas';
 import { eq } from 'drizzle-orm';

@@ -1,11 +1,12 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { MovieDto } from './dto/movies.dto';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { tmdbMovieCredit, tmdbMovieRole, tmdbMovieView, tmdbPersonView, user } from '@libs/db/schemas';
 import { and, asc, eq, sql } from 'drizzle-orm';
 import { User } from '../auth/auth.service';
 import { SupportedLocale } from '@libs/i18n';
 import { MovieCastingDto } from './dto/movie-credits.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class MoviesService {
@@ -42,7 +43,7 @@ export class MoviesService {
         throw new NotFoundException(`Movie with id ${movieId} not found`);
       }
 
-      return movie;
+      return plainToInstance(MovieDto, movie);
     });
   }
 
@@ -101,7 +102,7 @@ export class MoviesService {
         .innerJoin(tmdbPersonView, eq(tmdbPersonView.id, aggregatedCastingSq.personId))
         .orderBy(asc(aggregatedCastingSq.order));
       
-      return castingData;
+      return plainToInstance(MovieCastingDto, castingData);
     });
   }
 }

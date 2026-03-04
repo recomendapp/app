@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { Session } from '../../auth/auth.service';
 import { PushTokenDto, PushTokenSetDto } from './push-tokens.dto';
 import { pushToken } from '@libs/db/schemas';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UserPushTokensService {
@@ -37,6 +38,8 @@ export class UserPushTokensService {
       throw new Error('Failed to upsert push token');
     }
 
-    return upsertedToken;
+    return plainToInstance(PushTokenDto, upsertedToken, {
+      excludeExtraneousValues: true,
+    });
   }
 }

@@ -42,3 +42,46 @@ services:
     command: >
       --data-dir /data
       --enable-cors
+
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: ${S3_ACCESS_KEY_ID:-admin}
+      MINIO_ROOT_PASSWORD: ${S3_SECRET_ACCESS_KEY:-password123}
+    ports:
+      - "${S3_PORT:-9900}:9000"
+      - "${S3_CONSOLE_PORT:-9901}:9001"
+    volumes:
+      - ./tmp/minio-data:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  minio-setup:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      MINIO_ROOT_USER: ${S3_ACCESS_KEY_ID:-admin}
+      MINIO_ROOT_PASSWORD: ${S3_SECRET_ACCESS_KEY:-password123}
+      S3_BUCKET: ${S3_BUCKET:-avatars}
+    entrypoint: >
+      /bin/sh -c "
+      echo Waiting for MinIO...;
+      mc alias set myminio http://minio:9000 $${MINIO_ROOT_USER} $${MINIO_ROOT_PASSWORD};
+      
+      if ! mc ls myminio/$${S3_BUCKET} > /dev/null 2>&1; then
+        echo Creating bucket $${S3_BUCKET}...;
+        mc mb myminio/$${S3_BUCKET};
+        
+        mc anonymous set download myminio/$${S3_BUCKET};
+        echo Bucket $${S3_BUCKET} created and set to public read.;
+      else
+        echo Bucket $${S3_BUCKET} already exists.;
+      fi
+      "

@@ -12,7 +12,7 @@ import { Person } from '../../common/dto/person.dto';
 import { Playlist } from '../../common/dto/playlist.dto';
 import { Profile } from '../../common/dto/profile.dto';
 import { TypesenseSearchResult } from '../../types/typesense';
-import { TYPESENSE_CLIENT } from '../../../common/modules/typesense.module';
+import { TYPESENSE_CLIENT } from '../../../common/modules/typesense/typesense.module';
 
 type TypesenseHitDocument = {
   id: string;

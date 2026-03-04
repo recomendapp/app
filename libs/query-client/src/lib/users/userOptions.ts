@@ -1,4 +1,4 @@
-import { personsControllerGetFollowStatus, usersControllerGetMe, userMoviesControllerGet, userMoviesControllerListInfinite, UserMoviesControllerListInfiniteData, UserPlaylistsControllerListInfiniteData, userPlaylistsControllerListInfinite, UserBookmarksControllerListInfiniteData, userBookmarksControllerListInfinite, UserFollowersControllerListInfiniteData, userFollowersControllerListInfinite, UserFollowingControllerListInfiniteData, userFollowingControllerListInfinite, movieWatchedDatesControllerListInfinite, MovieWatchedDatesControllerListInfiniteData, Bookmark, bookmarksControllerGetByMedia, UserBookmarksControllerListAllData, userBookmarksControllerListAll, userBookmarksControllerListPaginated, UserBookmarksControllerListPaginatedData, UserPlaylistsControllerListPaginatedData, userPlaylistsControllerListPaginated, UserFollowersControllerListPaginatedData, UserFollowingControllerListPaginatedData, MovieWatchedDatesControllerListPaginatedData, UserMoviesControllerListPaginatedData, userMoviesControllerListPaginated, movieWatchedDatesControllerListPaginated, userFollowersControllerListPaginated, userFollowingControllerListPaginated, RecoTargetsControllerListPaginatedData, recoTargetsControllerListPaginated, recoTargetsControllerListInfinite, RecoTargetsControllerListInfiniteData, recoTargetsControllerListAll, RecoTargetsControllerListAllData, userFollowControllerGet, UserFollowRequestsControllerListPaginatedData, userFollowRequestsControllerListPaginated, UserFollowRequestsControllerListInfiniteData, userFollowRequestsControllerListInfinite, UserRecosControllerListAllData, userRecosControllerListAll, UserRecosControllerListPaginatedData, userRecosControllerListPaginated, UserRecosControllerListInfiniteData, userRecosControllerListInfinite, playlistLikesControllerGet, playlistSavesControllerGet } from "@packages/api-js";
+import { personsControllerGetFollowStatus, meControllerGet, userMoviesControllerGet, userMoviesControllerListInfinite, UserMoviesControllerListInfiniteData, UserPlaylistsControllerListInfiniteData, userPlaylistsControllerListInfinite, UserBookmarksControllerListInfiniteData, userBookmarksControllerListInfinite, UserFollowersControllerListInfiniteData, userFollowersControllerListInfinite, UserFollowingControllerListInfiniteData, userFollowingControllerListInfinite, movieWatchedDatesControllerListInfinite, MovieWatchedDatesControllerListInfiniteData, Bookmark, bookmarksControllerGetByMedia, UserBookmarksControllerListAllData, userBookmarksControllerListAll, userBookmarksControllerListPaginated, UserBookmarksControllerListPaginatedData, UserPlaylistsControllerListPaginatedData, userPlaylistsControllerListPaginated, UserFollowersControllerListPaginatedData, UserFollowingControllerListPaginatedData, MovieWatchedDatesControllerListPaginatedData, UserMoviesControllerListPaginatedData, userMoviesControllerListPaginated, movieWatchedDatesControllerListPaginated, userFollowersControllerListPaginated, userFollowingControllerListPaginated, RecoTargetsControllerListPaginatedData, recoTargetsControllerListPaginated, recoTargetsControllerListInfinite, RecoTargetsControllerListInfiniteData, recoTargetsControllerListAll, RecoTargetsControllerListAllData, userFollowControllerGet, UserFollowRequestsControllerListPaginatedData, userFollowRequestsControllerListPaginated, UserFollowRequestsControllerListInfiniteData, userFollowRequestsControllerListInfinite, UserRecosControllerListAllData, userRecosControllerListAll, UserRecosControllerListPaginatedData, userRecosControllerListPaginated, UserRecosControllerListInfiniteData, userRecosControllerListInfinite, playlistLikesControllerGet, playlistSavesControllerGet, usersControllerGet } from "@packages/api-js";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { userKeys } from "./userKeys";
 
@@ -6,12 +6,56 @@ export const userMeOptions = () => {
 	return queryOptions({
 		queryKey: userKeys.me(),
 		queryFn: async () => {
-			const { data, error } = await usersControllerGetMe();
+			const { data, error } = await meControllerGet();
 			if (error) throw error;
 			return data;
 		},
 	});
 };
+
+export const userByIdOptions = ({
+	userId,
+}: {
+	userId?: string;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.profile({ userId: userId! }),
+		queryFn: async () => {
+			if (!userId) throw new Error('User ID is required');
+			const { data, error } = await usersControllerGet({
+				path: {
+					identifier: userId,
+				},
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId,
+	});
+};
+export const userByUsernameOptions = ({
+	username,
+}: {
+	username?: string;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.profile({ username: username! }),
+		queryFn: async () => {
+			if (!username) throw new Error('Username is required');
+			const { data, error } = await usersControllerGet({
+				path: {
+					identifier: `@${username}`,
+				},
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		enabled: !!username,
+	});
+};
+
 
 /* ---------------------------------- Logs ---------------------------------- */
 export const userMovieLogOptions = ({

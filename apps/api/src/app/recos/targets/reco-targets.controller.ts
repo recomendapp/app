@@ -3,7 +3,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '../../auth/decorators';
 import { User } from '../../auth/auth.service';
 import { RecoTargetsService } from './reco-targets.service';
-import { ListAllRecoTargetsQueryDto, ListInfiniteRecoTargetsDto, ListInfiniteRecoTargetsQueryDto, ListPaginatedRecoTargetsDto, ListPaginatedRecoTargetsQueryDto } from './dto/reco-targets.dto';
+import { ListAllRecoTargetsQueryDto, ListInfiniteRecoTargetsDto, ListInfiniteRecoTargetsQueryDto, ListPaginatedRecoTargetsDto, ListPaginatedRecoTargetsQueryDto, RecoTargetDto } from './dto/reco-targets.dto';
 import { AuthGuard } from '../../auth/guards';
 import { MediaExistsGuard } from '../../../common/guards/media-exists.guard';
 import { RecoType } from '../dto/recos.dto';
@@ -18,7 +18,7 @@ export class RecoTargetsController {
 
   @Get()
   @UseGuards(AuthGuard, MediaExistsGuard)
-  @ApiOkResponse({ type: ListInfiniteRecoTargetsDto })
+  @ApiOkResponse({ type: RecoTargetDto, isArray: true })
   async listAll(
     @Param('type', new ParseEnumPipe(RecoType)) type: RecoType,
     @Param('media_id', ParseIntPipe) mediaId: number,

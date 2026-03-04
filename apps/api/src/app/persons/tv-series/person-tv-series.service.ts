@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { DbTransaction } from '@libs/db';
 import { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
@@ -8,6 +8,7 @@ import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { tmdbTvSeriesCredit, tmdbTvSeriesView } from '@libs/db/schemas';
 import { TvSeriesSortBy } from '../../tv-series/dto/tv-series.dto';
 import { ListInfinitePersonTvSeriesDto, ListInfinitePersonTvSeriesQueryDto, ListPaginatedPersonTvSeriesDto, ListPaginatedPersonTvSeriesQueryDto, PersonTvSeriesFacetsDto } from './dto/person-tv-series.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class PersonTvSeriesService {
@@ -107,7 +108,7 @@ export class PersonTvSeriesService {
 
       const totalCount = Number(totalCountResult[0]?.count || 0);
 
-      return {
+      return plainToInstance(ListPaginatedPersonTvSeriesDto, {
         data: results.map((row) => ({
           tvSeries: row.tvSeries,
           credits: row.credits || [],
@@ -118,7 +119,7 @@ export class PersonTvSeriesService {
           current_page: page,
           per_page,
         }
-      }
+      });
     });
   }
   async listInfinite({
@@ -251,7 +252,7 @@ export class PersonTvSeriesService {
         }
       }
 
-      return {
+      return plainToInstance(ListInfinitePersonTvSeriesDto, {
         data: paginatedResults.map((row) => ({
           tvSeries: row.tvSeries,
           credits: row.credits || [],
@@ -260,7 +261,7 @@ export class PersonTvSeriesService {
           next_cursor: nextCursor,
           per_page,
         }
-      }
+      });
     });
   }
   // Facets
@@ -293,6 +294,6 @@ export class PersonTvSeriesService {
       }))
       .sort((a, b) => a.department.localeCompare(b.department));
 
-    return { departments };
+    return plainToInstance(PersonTvSeriesFacetsDto, { departments });
   }
 }

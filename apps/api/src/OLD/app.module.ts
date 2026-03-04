@@ -5,7 +5,7 @@ import { HealthModule } from './health/health.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { EnvModule } from '@libs/env';
 import { AuthModule } from '../app/auth/auth.module';
-import { DrizzleModule } from '../common/modules/drizzle.module';
+import { DrizzleModule } from '../common/modules/drizzle/drizzle.module';
 
 @Module({
   imports: [
