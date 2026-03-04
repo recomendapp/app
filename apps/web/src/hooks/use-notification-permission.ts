@@ -1,5 +1,4 @@
 import { useAuth } from "@/context/auth-context";
-import { useSupabaseClient } from "@/context/supabase-context";
 import { fetchToken } from "@/lib/firebase/firebase.config";
 import { useUserPushTokenUpdateMutation } from "@libs/query-client";
 import { useEffect, useRef, useState } from "react";
@@ -18,7 +17,6 @@ export interface NotificationPermissionProps {
 
 const useNotificationPermission = () => {
 	const { user } = useAuth();
-	const supabase = useSupabaseClient();
 	const [permission, setPermission] = useState<NotificationPermission>('default');
 	const [token, setToken] = useState<string | null>(null);
 	const retryLoadToken = useRef(0);
@@ -103,7 +101,7 @@ const useNotificationPermission = () => {
 	useEffect(() => {
 		if (!token || !user) return;
 
-		// if (process.env.NODE_ENV !== 'development') {
+		if (process.env.NODE_ENV !== 'development') {
 			updatePushToken({
 				body: {
 					provider: 'fcm',
@@ -111,8 +109,8 @@ const useNotificationPermission = () => {
 					deviceType: 'web',
 				}
 			});
-		// }
-	}, [token,  supabase]);
+		}
+	}, [token]);
 
 
 	return {

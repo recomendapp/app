@@ -25,6 +25,7 @@ import { useUsernameAvailability } from '@/hooks/use-username-availability';
 import useDebounce from '@/hooks/use-debounce';
 import { upperFirst } from 'lodash';
 import { useUserMeUpdateMutation } from '@libs/query-client';
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 15;
@@ -78,7 +79,11 @@ export function AccountForm() {
     defaultValues,
     mode: 'onChange',
   });
-  const usernameAvailability = useUsernameAvailability();
+  const {
+		isAvailable: usernameAvailable,
+		isLoading: usernameAvailabilityLoading,
+		check,
+	} = useUsernameAvailability();;
   const usernameToCheck = useDebounce(form.watch('username'), 500);
 
   const handleSubmit = useCallback(async (data: AccountFormValues) => {
@@ -108,19 +113,17 @@ export function AccountForm() {
 
   useEffect(() => {
 		if (!form.formState.errors.username?.message && usernameToCheck && usernameToCheck !== user?.username) {
-			usernameAvailability.check(usernameToCheck);
+			check(usernameToCheck);
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [usernameToCheck]);
 
 	useEffect(() => {
-		if (usernameAvailability.isAvailable === false) {
+		if (usernameAvailable === false) {
 			form.setError('username', {
 				message: t('common.form.username.schema.unavailable'),
 			});
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [usernameAvailability.isAvailable, t]);
+	}, [usernameAvailable, t]);
 
   if (!user) return <Loader />;
 
@@ -137,17 +140,26 @@ export function AccountForm() {
                 <p className="">{field?.value?.length ?? 0} / 15</p>
               </FormLabel>
               <FormControl>
-                <Input
-                  disabled={
-                    (date.getTime() - dateLastUsernameUpdate.getTime()) /
-                      (1000 * 60 * 60 * 24) <
-                    30
-                      ? true
-                      : false
-                  }
-                  placeholder={t('pages.settings.account.username.placeholder')}
-                  {...field}
-                />
+                <InputGroup>
+                  <InputGroupInput
+                    disabled={
+                      (date.getTime() - dateLastUsernameUpdate.getTime()) /
+                        (1000 * 60 * 60 * 24) <
+                      30
+                        ? true
+                        : false
+                    }
+                    placeholder={t('pages.settings.account.username.placeholder')}
+                    {...field}
+                  />
+                  <InputGroupAddon align={"inline-end"}>
+                    {usernameAvailabilityLoading ? (
+                      <Icons.loader />
+                    ) : usernameAvailable === true ? (
+                      <Icons.check className='text-green-500' />
+                    ) : null}
+                  </InputGroupAddon>
+                </InputGroup>
               </FormControl>
               <FormDescription className="text-justify">{t('pages.settings.account.username.description')}</FormDescription>
               <FormMessage />

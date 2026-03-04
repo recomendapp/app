@@ -15,7 +15,7 @@ import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
 import { SupportedLocale } from '@libs/i18n';
 import { ApiProvider } from './api-context';
-import { checkMaintenance } from '@/api/server/utils';
+import { getStatus } from '@/api/server/system';
 import { getMe } from '@/lib/auth/server';
 
 export const Providers = async ({
@@ -27,14 +27,14 @@ export const Providers = async ({
 }) => {
   const [
     { data: user },
-    isMaintenanceMode,
+    status,
     cookiesStore,
     device,
   ] = await Promise.all([
     getMe({
       locale,
     }),
-    checkMaintenance(),
+    getStatus(),
     cookies(),
     getServerDevice(),
   ]);
@@ -44,6 +44,8 @@ export const Providers = async ({
   const rightPanelOpen = cookiesStore.get("ui-right-panel:open");
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
 
+
+  console.log('System status:', status);
   return (
     <NextIntlClientProvider locale={locale}>
       <SupabaseProvider>
@@ -77,7 +79,7 @@ export const Providers = async ({
                               },
                             }}
                           />
-                          {isMaintenanceMode ? <MaintenancePage /> : children}
+                          {status?.isMaintenance ? <MaintenancePage /> : children}
                         </ModalProvider>
                       </TooltipProvider>
                     </UIProvider>

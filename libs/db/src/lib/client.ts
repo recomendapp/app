@@ -12,6 +12,8 @@ export const db = drizzle(pool, {
   schema,
 });
 
+export type DbClient = typeof db;
+
 export type DbTransaction = PgTransaction<
   NodePgQueryResultHKT,
   typeof schema,

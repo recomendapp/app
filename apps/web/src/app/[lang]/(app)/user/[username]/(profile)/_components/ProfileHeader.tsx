@@ -8,20 +8,19 @@ import { ProfileFollowersButton } from './ProfileFollowersButton';
 import { ProfileFolloweesButton } from './ProfileFolloweesButton';
 import { Icons } from '@/config/icons';
 import { ButtonGroup } from '@/components/ui/button-group';
-import { Session } from '@supabase/supabase-js';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProfileFollowButton } from './ProfileFollowButton';
 import { Profile } from '@packages/api-js';
 import { useQuery } from '@tanstack/react-query';
 import { userByIdOptions } from '@libs/query-client/src';
+import { useAuth } from '@/context/auth-context';
 
 export const ProfileHeader = ({
   profile: profileServer,
-  session,
 }: {
   profile?: Profile | null;
-  session: Session | null;
 }) => {
+  const { user } = useAuth();
   const {
     data: profile,
   } = useQuery({
@@ -47,7 +46,7 @@ export const ProfileHeader = ({
                 <ProfileFollowersButton userId={profile?.id} disabled={!profile?.isVisible ? true : false} />
                 <ProfileFolloweesButton userId={profile?.id} disabled={!profile?.isVisible ? true : false} />
               </ButtonGroup>
-              {session?.user.id == profile?.id && (
+              {user?.id == profile?.id && (
                 <ButtonGroup>
                   <Button variant={'outline'} asChild>
                     <Link href={'/settings/profile'}>
@@ -57,7 +56,7 @@ export const ProfileHeader = ({
                 </ButtonGroup>
               )}
             </ButtonGroup>
-            {profile && session?.user.id !== profile?.id && <ProfileFollowButton profileId={profile?.id} className="@lg/header-box:hidden" />}
+            {profile && user?.id !== profile?.id && <ProfileFollowButton profileId={profile?.id} className="@lg/header-box:hidden" />}
           </div>
         </div>
         <div className="flex flex-col gap-2 w-full">
@@ -83,7 +82,7 @@ export const ProfileHeader = ({
                 <ProfileFollowersButton userId={profile?.id} className="hidden sm:block" disabled={!profile?.isVisible ? true : false} />
                 <ProfileFolloweesButton userId={profile?.id} className="hidden sm:block" disabled={!profile?.isVisible ? true : false} />
               </ButtonGroup>
-              {session?.user.id == profile?.id && (
+              {user?.id == profile?.id && (
                 <ButtonGroup>
                   <Button variant={'outline'} asChild>
                     <Link href={'/settings/profile'}>

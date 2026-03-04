@@ -25,7 +25,6 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: process.env.NODE_ENV === 'development',
     remotePatterns: [
-      { protocol: 'https', hostname: 'supabase.recomend.app' },
       { protocol: 'https', hostname: 'medias.recomend.app' },
       { protocol: 'https', hostname: 'image.tmdb.org' },
       { protocol: 'https', hostname: 'images.justwatch.com' },

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { HealthModule } from './health/health.module';
+import { SystemModule } from './system/system.module';
 import { apiSchema, EnvModule } from '@libs/env';
 import { AuthModule } from './auth/auth.module';
 import { MoviesModule } from './movies/movies.module';
@@ -13,6 +13,8 @@ import { ReviewsModule } from './reviews/reviews.module';
 import { BookmarksModule } from './bookmarks/bookmarks.module';
 import { RecosModule } from './recos/recos.module';
 import { MeModule } from './me/me.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -20,7 +22,7 @@ import { MeModule } from './me/me.module';
     EnvModule.forRoot(apiSchema),
     DrizzleModule,
     AuthModule,
-    HealthModule,
+    SystemModule,
     MeModule,
     UsersModule,
     BookmarksModule,
@@ -31,7 +33,7 @@ import { MeModule } from './me/me.module';
     PersonsModule,
     ReviewsModule,
   ],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

@@ -1,9 +1,9 @@
 import { supportedLocales, defaultSupportedLocale } from '@libs/i18n';
 import { countries, languages, supportedLanguages, defaultCountries } from '../schemas/i18n';
-import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'; 
 import { notInArray, sql } from 'drizzle-orm';
+import { DbClient } from '../client';
 
-export const seedI18n = async (db: PostgresJsDatabase<any>) => {
+export const seedI18n = async (db: DbClient) => {
   console.log('🌍 i18n synchronization in progress...');
 
   const uniqueLangs = new Set<string>();

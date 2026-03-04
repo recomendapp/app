@@ -16,7 +16,6 @@ import { useRandomImage } from '@/hooks/use-random-image';
 import { Link, useRouter } from "@/lib/i18n/navigation";
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { useSupabaseClient } from '@/context/supabase-context';
 import { useLocale, useTranslations } from 'next-intl';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
@@ -24,7 +23,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import toast from 'react-hot-toast';
-import { AuthError } from '@supabase/supabase-js';
 import { useAuth } from '@/context/auth-context';
 import { Input } from '@/components/ui/input';
 import useDebounce from '@/hooks/use-debounce';
@@ -33,6 +31,7 @@ import { InputPassword } from '@/components/ui/input-password';
 import { Turnstile } from "next-turnstile";
 import { upperFirst } from 'lodash';
 import { authClient } from '@/lib/auth/client';
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 15;
@@ -41,11 +40,9 @@ const FULL_NAME_MAX_LENGTH = 30;
 const PASSWORD_MIN_LENGTH = 8;
 
 export default function Signup() {
-	const supabase = useSupabaseClient();
 	const { signup } = useAuth();
 	const t = useTranslations('pages.auth.signup');
 	const common = useTranslations('common');
-
 	const locale = useLocale();
 	const router = useRouter();
 	const searchParams = useSearchParams();
@@ -133,24 +130,26 @@ export default function Signup() {
 	// OTP
 	const numberOfDigits = 6;
 	const [showOtp, setShowOtp] = useState<boolean>(false);
-	const usernameAvailability = useUsernameAvailability();
+	const {
+		isAvailable: usernameAvailable,
+		isLoading: usernameAvailabilityLoading,
+		check,
+	} = useUsernameAvailability();
 	const usernameToCheck = useDebounce(form.watch('username'), 500);
 
 	useEffect(() => {
 		if (!form.formState.errors.username?.message && usernameToCheck) {
-			usernameAvailability.check(usernameToCheck);
+			check(usernameToCheck);
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [usernameToCheck]);
 
 	useEffect(() => {
-		if (usernameAvailability.isAvailable === false) {
+		if (usernameAvailable === false) {
 			form.setError('username', {
 				message: common('form.username.schema.unavailable'),
 			});
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [usernameAvailability.isAvailable, common]);
+	}, [usernameAvailable, common]);
 	
 	const handleSubmit = useCallback(async (submitData: SignupFormValues) => {
 		try {
@@ -192,34 +191,29 @@ export default function Signup() {
 		}
 	}, [redirectTo, form, common]);
 
-	const handleVerifyOtp = useCallback(async (otp: string) => {
-		try {
-		  setIsLoading(true);
-		  const { error } = await supabase.auth.verifyOtp({
-			email: form.getValues('email'),
-			token: otp,
-			type: 'email',
-		  });
-		  if (error) throw error;
-		  toast.success(common('form.email.verified'));
-		  router.push(redirectTo || '/');
-		  router.refresh();
-		} catch (error) {
-		  if (error instanceof AuthError) {
-			switch (error.status) {
-			  case 403:
-				toast.error(common('form.error.invalid_code'));
-				break
-			  default:
-				toast.error(error.message);
-			}
-		  } else {
-			toast.error(upperFirst(common('messages.an_error_occurred')));
-		  }
-		} finally {
-		  setIsLoading(false);
-		}
-	}, [supabase, router, redirectTo, form, common]);
+	// const handleVerifyOtp = useCallback(async (otp: string) => {
+	// 	try {
+	// 	  setIsLoading(true);
+	// 	  if (error) throw error;
+	// 	  toast.success(common('form.email.verified'));
+	// 	  router.push(redirectTo || '/');
+	// 	  router.refresh();
+	// 	} catch (error) {
+	// 	  if (error instanceof AuthError) {
+	// 		switch (error.status) {
+	// 		  case 403:
+	// 			toast.error(common('form.error.invalid_code'));
+	// 			break
+	// 		  default:
+	// 			toast.error(error.message);
+	// 		}
+	// 	  } else {
+	// 		toast.error(upperFirst(common('messages.an_error_occurred')));
+	// 	  }
+	// 	} finally {
+	// 	  setIsLoading(false);
+	// 	}
+	// }, [router, redirectTo, form, common]);
 	
 	return (
 	<div
@@ -271,20 +265,23 @@ export default function Signup() {
 							<span className='text-xs text-destructive'>{(field?.value && field?.value?.length > USERNAME_MAX_LENGTH) ? `${field.value.length} / ${USERNAME_MAX_LENGTH}` : ''}</span>
 							</FormLabel>
 								<FormControl>
-									<div className='relative'>
-										<Input
+									<InputGroup>
+										<InputGroupInput
 										autoComplete="username"
 										disabled={isLoading}
 										placeholder={common('form.username.placeholder')}
-										className={usernameAvailability.isLoading ? 'pr-8' : ''}
 										{...field}
 										/>
-										{usernameAvailability.isLoading ?
-										<div className="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full flex justify-center items-center h-6 w-6">
-											<Icons.loader className='w-4' />
-										</div>
-										: null}
-									</div>
+										<InputGroupAddon align={"inline-end"}>
+											{usernameAvailabilityLoading ? (
+												<Icons.loader />
+											) : usernameAvailable === true ? (
+												<Icons.check className='text-green-500' />
+											) : usernameAvailable === false ? (
+												<Icons.X className='text-destructive' />
+											) : null}
+										</InputGroupAddon>
+									</InputGroup>
 								</FormControl>
 							<FormDescription></FormDescription>
 							<FormMessage />
@@ -414,13 +411,13 @@ export default function Signup() {
 				<CardDescription>{t('confirm_form.description', { email: form.getValues('email') })}</CardDescription>
 			</CardHeader>
 			<CardContent className='grid gap-2 justify-items-center'>
-				<InputOTP disabled={isLoading} maxLength={numberOfDigits} onChange={(e) => e.length === numberOfDigits && handleVerifyOtp(e)}>
+				{/* <InputOTP disabled={isLoading} maxLength={numberOfDigits} onChange={(e) => e.length === numberOfDigits && handleVerifyOtp(e)}>
 					<InputOTPGroup>
 						{Array.from({ length: numberOfDigits }).map((_, index) => (
 						<InputOTPSlot key={index} index={index}/>
 						))}
 					</InputOTPGroup>
-				</InputOTP>
+				</InputOTP> */}
 			</CardContent>
 			<CardFooter>
 				<p className="px-8 text-center text-sm text-muted-foreground">
