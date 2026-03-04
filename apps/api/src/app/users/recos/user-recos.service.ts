@@ -9,6 +9,7 @@ import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { ListAllRecosQueryDto, ListInfiniteRecosQueryDto, ListPaginatedRecosQueryDto, RecoSortBy, RecoType, RecoWithMediaUnion } from '../../recos/dto/recos.dto';
 import { UserSummaryDto } from '../dto/users.dto';
 import { User } from '../../auth/auth.service';
+import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
 
 @Injectable()
 export class UserRecosService {
@@ -94,37 +95,8 @@ export class UserRecosService {
             senderCount: groupedRecosSq.senderCount,
             firstSendAt: groupedRecosSq.firstSendAt,
           },
-          movie: {
-            id: tmdbMovieView.id,
-            title: tmdbMovieView.title,
-            slug: tmdbMovieView.slug,
-            url: tmdbMovieView.url,
-            posterPath: tmdbMovieView.posterPath,
-            backdropPath: tmdbMovieView.backdropPath,
-            directors: tmdbMovieView.directors,
-            releaseDate: tmdbMovieView.releaseDate,
-            voteAverage: tmdbMovieView.voteAverage,
-            voteCount: tmdbMovieView.voteCount,
-            popularity: tmdbMovieView.popularity,
-            genres: tmdbMovieView.genres,
-            followerAvgRating: tmdbMovieView.followerAvgRating,
-          },
-          tvSeries: {
-            id: tmdbTvSeriesView.id,
-            name: tmdbTvSeriesView.name,
-            slug: tmdbTvSeriesView.slug,
-            url: tmdbTvSeriesView.url,
-            posterPath: tmdbTvSeriesView.posterPath,
-            backdropPath: tmdbTvSeriesView.backdropPath,
-            createdBy: tmdbTvSeriesView.createdBy,
-            firstAirDate: tmdbTvSeriesView.firstAirDate,
-            lastAirDate: tmdbTvSeriesView.lastAirDate,
-            voteAverage: tmdbTvSeriesView.voteAverage,
-            voteCount: tmdbTvSeriesView.voteCount,
-            popularity: tmdbTvSeriesView.popularity,
-            genres: tmdbTvSeriesView.genres,
-            followerAvgRating: tmdbTvSeriesView.followerAvgRating,
-          },
+          movie: MOVIE_COMPACT_SELECT,
+          tvSeries: TV_SERIES_COMPACT_SELECT,
         })
         .from(groupedRecosSq)
         .leftJoin(tmdbMovieView, and(eq(groupedRecosSq.type, 'movie'), eq(groupedRecosSq.mediaId, tmdbMovieView.id)))
@@ -186,37 +158,8 @@ export class UserRecosService {
               senders: groupedRecosSq.senders,
               lastSendAt: groupedRecosSq.lastSendAt,
             },
-            movie: {
-              id: tmdbMovieView.id,
-              title: tmdbMovieView.title,
-              slug: tmdbMovieView.slug,
-              url: tmdbMovieView.url,
-              posterPath: tmdbMovieView.posterPath,
-              backdropPath: tmdbMovieView.backdropPath,
-              directors: tmdbMovieView.directors,
-              releaseDate: tmdbMovieView.releaseDate,
-              voteAverage: tmdbMovieView.voteAverage,
-              voteCount: tmdbMovieView.voteCount,
-              popularity: tmdbMovieView.popularity,
-              genres: tmdbMovieView.genres,
-              followerAvgRating: tmdbMovieView.followerAvgRating,
-            },
-            tvSeries: {
-              id: tmdbTvSeriesView.id,
-              name: tmdbTvSeriesView.name,
-              slug: tmdbTvSeriesView.slug,
-              url: tmdbTvSeriesView.url,
-              posterPath: tmdbTvSeriesView.posterPath,
-              backdropPath: tmdbTvSeriesView.backdropPath,
-              createdBy: tmdbTvSeriesView.createdBy,
-              firstAirDate: tmdbTvSeriesView.firstAirDate,
-              lastAirDate: tmdbTvSeriesView.lastAirDate,
-              voteAverage: tmdbTvSeriesView.voteAverage,
-              voteCount: tmdbTvSeriesView.voteCount,
-              popularity: tmdbTvSeriesView.popularity,
-              genres: tmdbTvSeriesView.genres,
-              followerAvgRating: tmdbTvSeriesView.followerAvgRating,
-            },
+            movie: MOVIE_COMPACT_SELECT,
+            tvSeries: TV_SERIES_COMPACT_SELECT,
           })
           .from(groupedRecosSq)
           .leftJoin(tmdbMovieView, and(eq(groupedRecosSq.type, 'movie'), eq(groupedRecosSq.mediaId, tmdbMovieView.id)))
@@ -349,37 +292,8 @@ export class UserRecosService {
               senderCount: groupedRecosSq.senderCount,
               firstSendAt: groupedRecosSq.firstSendAt,
             },
-            movie: {
-              id: tmdbMovieView.id,
-              title: tmdbMovieView.title,
-              slug: tmdbMovieView.slug,
-              url: tmdbMovieView.url,
-              posterPath: tmdbMovieView.posterPath,
-              backdropPath: tmdbMovieView.backdropPath,
-              directors: tmdbMovieView.directors,
-              releaseDate: tmdbMovieView.releaseDate,
-              voteAverage: tmdbMovieView.voteAverage,
-              voteCount: tmdbMovieView.voteCount,
-              popularity: tmdbMovieView.popularity,
-              genres: tmdbMovieView.genres,
-              followerAvgRating: tmdbMovieView.followerAvgRating,
-            },
-            tvSeries: {
-              id: tmdbTvSeriesView.id,
-              name: tmdbTvSeriesView.name,
-              slug: tmdbTvSeriesView.slug,
-              url: tmdbTvSeriesView.url,
-              posterPath: tmdbTvSeriesView.posterPath,
-              backdropPath: tmdbTvSeriesView.backdropPath,
-              createdBy: tmdbTvSeriesView.createdBy,
-              firstAirDate: tmdbTvSeriesView.firstAirDate,
-              lastAirDate: tmdbTvSeriesView.lastAirDate,
-              voteAverage: tmdbTvSeriesView.voteAverage,
-              voteCount: tmdbTvSeriesView.voteCount,
-              popularity: tmdbTvSeriesView.popularity,
-              genres: tmdbTvSeriesView.genres,
-              followerAvgRating: tmdbTvSeriesView.followerAvgRating,
-            },
+            movie: MOVIE_COMPACT_SELECT,
+            tvSeries: TV_SERIES_COMPACT_SELECT,
           })
           .from(groupedRecosSq)
           .leftJoin(tmdbMovieView, and(eq(groupedRecosSq.type, 'movie'), eq(groupedRecosSq.mediaId, tmdbMovieView.id)))

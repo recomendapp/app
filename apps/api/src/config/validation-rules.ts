@@ -29,6 +29,12 @@ export const PLAYLIST_RULES = {
   }
 }
 
+export const PLAYLIST_ITEM_RULES = {
+  COMMENT: {
+    MAX: 180,
+  }
+}
+
 export const REVIEW_RULES = {
   TITLE: {
     MIN: 1,

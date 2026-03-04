@@ -9,6 +9,7 @@ import { tmdbTvSeriesCredit, tmdbTvSeriesView } from '@libs/db/schemas';
 import { TvSeriesSortBy } from '../../tv-series/dto/tv-series.dto';
 import { ListInfinitePersonTvSeriesDto, ListInfinitePersonTvSeriesQueryDto, ListPaginatedPersonTvSeriesDto, ListPaginatedPersonTvSeriesQueryDto, PersonTvSeriesFacetsDto } from './dto/person-tv-series.dto';
 import { plainToInstance } from 'class-transformer';
+import { TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
 
 @Injectable()
 export class PersonTvSeriesService {
@@ -74,22 +75,7 @@ export class PersonTvSeriesService {
 
       const [results, totalCountResult] = await Promise.all([        
         tx.select({
-            tvSeries: {
-              id: tmdbTvSeriesView.id,
-              name: tmdbTvSeriesView.name,
-              slug: tmdbTvSeriesView.slug,
-              url: tmdbTvSeriesView.url,
-              posterPath: tmdbTvSeriesView.posterPath,
-              backdropPath: tmdbTvSeriesView.backdropPath,
-              createdBy: tmdbTvSeriesView.createdBy,
-              firstAirDate: tmdbTvSeriesView.firstAirDate,
-              lastAirDate: tmdbTvSeriesView.lastAirDate,
-              voteAverage: tmdbTvSeriesView.voteAverage,
-              voteCount: tmdbTvSeriesView.voteCount,
-              popularity: tmdbTvSeriesView.popularity,
-              genres: tmdbTvSeriesView.genres,
-              followerAvgRating: tmdbTvSeriesView.followerAvgRating,
-            },
+            tvSeries: TV_SERIES_COMPACT_SELECT,
             credits: sql<Pick<typeof tmdbTvSeriesCredit.$inferSelect, 'department' | 'job'>[]>`(
               SELECT json_agg(json_build_object('department', mc.department, 'job', mc.job))
               FROM ${tmdbTvSeriesCredit} mc
@@ -196,22 +182,7 @@ export class PersonTvSeriesService {
         .as('paginated_tv_series');
       
       const results = await tx.select({
-          tvSeries: {
-            id: tmdbTvSeriesView.id,
-            name: tmdbTvSeriesView.name,
-            slug: tmdbTvSeriesView.slug,
-            url: tmdbTvSeriesView.url,
-            posterPath: tmdbTvSeriesView.posterPath,
-            backdropPath: tmdbTvSeriesView.backdropPath,
-            createdBy: tmdbTvSeriesView.createdBy,
-            firstAirDate: tmdbTvSeriesView.firstAirDate,
-            lastAirDate: tmdbTvSeriesView.lastAirDate,
-            voteAverage: tmdbTvSeriesView.voteAverage,
-            voteCount: tmdbTvSeriesView.voteCount,
-            popularity: tmdbTvSeriesView.popularity,
-            genres: tmdbTvSeriesView.genres,
-            followerAvgRating: tmdbTvSeriesView.followerAvgRating,
-          },
+          tvSeries: TV_SERIES_COMPACT_SELECT,
           credits: sql<Pick<typeof tmdbTvSeriesCredit.$inferSelect, 'department' | 'job'>[]>`(
             SELECT json_agg(json_build_object('department', mc.department, 'job', mc.job))
             FROM ${tmdbTvSeriesCredit} mc

@@ -2,12 +2,13 @@ import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { User } from '../auth/auth.service';
 import { PlaylistCreateDto, PlaylistDto, PlaylistGetDTO, PlaylistUpdateDto } from './dto/playlists.dto';
-import { follow, playlist, playlistMember } from '@libs/db/schemas';
-import { and, eq, exists, notInArray, or, sql, SQL } from 'drizzle-orm';
+import { playlist, playlistMember } from '@libs/db/schemas';
+import { and, eq, notInArray, or, sql } from 'drizzle-orm';
 import { PlaylistMemberListDto, PlaylistMemberUpdateDto } from './dto/playlist-members.dto';
 import { plainToInstance } from 'class-transformer';
 import { StorageService } from '../../common/modules/storage/storage.service';
 import { StorageFolders } from '../../common/modules/storage/storage.constants';
+import { canViewPlaylist } from './playlists.permission';
 
 @Injectable()
 export class PlaylistsService {
@@ -25,42 +26,7 @@ export class PlaylistsService {
     playlistId: number;
     user: User | null;
   }): Promise<PlaylistGetDTO> {
-    const isMemberQuery = currentUser 
-      ? this.db
-          .select()
-          .from(playlistMember)
-          .where(and(
-            eq(playlistMember.playlistId, playlist.id),
-            eq(playlistMember.userId, currentUser.id)
-          ))
-      : null;
-
-    const isFollowerQuery = currentUser
-      ? this.db
-          .select()
-          .from(follow)
-          .where(and(
-            eq(follow.followerId, currentUser.id),
-            eq(follow.followingId, playlist.userId),
-            eq(follow.status, 'accepted')
-          ))
-      : null;
-
-    let accessCondition: SQL;
-
-    if (!currentUser) {
-      accessCondition = eq(playlist.visibility, 'public');
-    } else {
-      accessCondition = or(
-        eq(playlist.visibility, 'public'),
-        eq(playlist.userId, currentUser.id),
-        exists(isMemberQuery),
-        and(
-          eq(playlist.visibility, 'followers'),
-          exists(isFollowerQuery)
-        )
-      );
-    }
+    const accessCondition = canViewPlaylist(this.db, currentUser);
 
     const result = await this.db.query.playlist.findFirst({
       where: and(

@@ -9,6 +9,7 @@ import { tmdbMovieCredit, tmdbMovieView } from '@libs/db/schemas';
 import { ListInfinitePersonMoviesDto, ListInfinitePersonMoviesQueryDto, ListPaginatedPersonMovieQueryDto, ListPaginatedPersonMoviesDto, PersonMovieFacetsDto } from './dto/person-movie.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { plainToInstance } from 'class-transformer';
+import { MOVIE_COMPACT_SELECT } from '@libs/db/selectors';
 
 @Injectable()
 export class PersonMoviesService {
@@ -74,21 +75,7 @@ export class PersonMoviesService {
 
       const [results, totalCountResult] = await Promise.all([        
         tx.select({
-            movie: {
-              id: tmdbMovieView.id,
-              title: tmdbMovieView.title,
-              slug: tmdbMovieView.slug,
-              url: tmdbMovieView.url,
-              posterPath: tmdbMovieView.posterPath,
-              backdropPath: tmdbMovieView.backdropPath,
-              directors: tmdbMovieView.directors,
-              releaseDate: tmdbMovieView.releaseDate,
-              voteAverage: tmdbMovieView.voteAverage,
-              voteCount: tmdbMovieView.voteCount,
-              popularity: tmdbMovieView.popularity,
-              genres: tmdbMovieView.genres,
-              followerAvgRating: tmdbMovieView.followerAvgRating,
-            },
+            movie: MOVIE_COMPACT_SELECT,
             credits: sql<Pick<typeof tmdbMovieCredit.$inferSelect, 'department' | 'job'>[]>`(
               SELECT json_agg(json_build_object('department', mc.department, 'job', mc.job))
               FROM ${tmdbMovieCredit} mc
@@ -196,21 +183,7 @@ export class PersonMoviesService {
         .as('paginated_movies');
       
       const results = await tx.select({
-          movie: {
-            id: tmdbMovieView.id,
-            title: tmdbMovieView.title,
-            slug: tmdbMovieView.slug,
-            url: tmdbMovieView.url,
-            posterPath: tmdbMovieView.posterPath,
-            backdropPath: tmdbMovieView.backdropPath,
-            directors: tmdbMovieView.directors,
-            releaseDate: tmdbMovieView.releaseDate,
-            voteAverage: tmdbMovieView.voteAverage,
-            voteCount: tmdbMovieView.voteCount,
-            popularity: tmdbMovieView.popularity,
-            genres: tmdbMovieView.genres,
-            followerAvgRating: tmdbMovieView.followerAvgRating,
-          },
+          movie: MOVIE_COMPACT_SELECT,
           credits: sql<Pick<typeof tmdbMovieCredit.$inferSelect, 'department' | 'job'>[]>`(
             SELECT json_agg(json_build_object('department', mc.department, 'job', mc.job))
             FROM ${tmdbMovieCredit} mc

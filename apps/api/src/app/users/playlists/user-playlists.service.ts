@@ -1,12 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { and, asc, desc, eq, exists, gt, lt, or, SQL, sql } from 'drizzle-orm';
-import { follow, playlist, playlistMember } from '@libs/db/schemas';
+import { and, asc, desc, eq, gt, lt, or, SQL, sql } from 'drizzle-orm';
+import { playlist } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { ListPaginatedPlaylistsQueryDto, ListPaginatedPlaylistsDto, PlaylistSortBy, ListInfinitePlaylistsQueryDto, ListInfinitePlaylistsDto } from '../../playlists/dto/playlists.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { plainToInstance } from 'class-transformer';
+import { canViewPlaylist } from '../../playlists/playlists.permission';
 
 @Injectable()
 export class UserPlaylistsService {
@@ -35,45 +36,15 @@ export class UserPlaylistsService {
       }
     })();
 
-    let whereClause: SQL | undefined;
+    let whereClause: SQL;
 
     if (currentUser?.id === targetUserId) { 
       whereClause = eq(playlist.userId, targetUserId);
-    } else if (!currentUser) { 
+    } 
+    else { 
       whereClause = and(
         eq(playlist.userId, targetUserId),
-        eq(playlist.visibility, 'public'),
-      );
-    } else { 
-      const isFollowingSubquery = this.db
-        .select({ is_following: sql<boolean>`true` })
-        .from(follow)
-        .where(
-          and(
-            eq(follow.followerId, currentUser.id),
-            eq(follow.followingId, targetUserId),
-            eq(follow.status, 'accepted')
-          )
-        )
-        .limit(1);
-
-      whereClause = and(
-        eq(playlist.userId, targetUserId),
-        or(
-          eq(playlist.visibility, 'public'),
-          and(
-            eq(playlist.visibility, 'followers'),
-            exists(isFollowingSubquery)
-          ),
-          exists(
-            this.db.select({ id: playlistMember.id }).from(playlistMember).where(
-              and(
-                eq(playlistMember.playlistId, playlist.id),
-                eq(playlistMember.userId, currentUser.id)
-              )
-            )
-          )
-        )
+        canViewPlaylist(this.db, currentUser)
       );
     }
 

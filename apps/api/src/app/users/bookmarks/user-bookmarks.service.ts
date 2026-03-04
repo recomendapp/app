@@ -8,6 +8,7 @@ import { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
 
 @Injectable()
 export class UserBookmarksService {
@@ -111,37 +112,8 @@ export class UserBookmarksService {
 
       const results = await tx.select({
           bookmark: bookmark,
-          movie: {
-            id: tmdbMovieView.id,
-            title: tmdbMovieView.title,
-            slug: tmdbMovieView.slug,
-            url: tmdbMovieView.url,
-            posterPath: tmdbMovieView.posterPath,
-            backdropPath: tmdbMovieView.backdropPath,
-            directors: tmdbMovieView.directors,
-            releaseDate: tmdbMovieView.releaseDate,
-            voteAverage: tmdbMovieView.voteAverage,
-            voteCount: tmdbMovieView.voteCount,
-            popularity: tmdbMovieView.popularity,
-            genres: tmdbMovieView.genres,
-            followerAvgRating: tmdbMovieView.followerAvgRating,
-          },
-          tvSeries: {
-            id: tmdbTvSeriesView.id,
-            name: tmdbTvSeriesView.name,
-            slug: tmdbTvSeriesView.slug,
-            url: tmdbTvSeriesView.url,
-            posterPath: tmdbTvSeriesView.posterPath,
-            backdropPath: tmdbTvSeriesView.backdropPath,
-            createdBy: tmdbTvSeriesView.createdBy,
-            firstAirDate: tmdbTvSeriesView.firstAirDate,
-            lastAirDate: tmdbTvSeriesView.lastAirDate,
-            voteAverage: tmdbTvSeriesView.voteAverage,
-            voteCount: tmdbTvSeriesView.voteCount,
-            popularity: tmdbTvSeriesView.popularity,
-            genres: tmdbTvSeriesView.genres,
-            followerAvgRating: tmdbTvSeriesView.followerAvgRating,
-          },
+          movie: MOVIE_COMPACT_SELECT,
+          tvSeries: TV_SERIES_COMPACT_SELECT,
         })
         .from(bookmark)
         .where(whereClause)
@@ -205,37 +177,8 @@ export class UserBookmarksService {
       const [results, totalCount] = await Promise.all([
         tx.select({
             bookmark: bookmark,
-            movie: {
-              id: tmdbMovieView.id,
-              title: tmdbMovieView.title,
-              slug: tmdbMovieView.slug,
-              url: tmdbMovieView.url,
-              posterPath: tmdbMovieView.posterPath,
-              backdropPath: tmdbMovieView.backdropPath,
-              directors: tmdbMovieView.directors,
-              releaseDate: tmdbMovieView.releaseDate,
-              voteAverage: tmdbMovieView.voteAverage,
-              voteCount: tmdbMovieView.voteCount,
-              popularity: tmdbMovieView.popularity,
-              genres: tmdbMovieView.genres,
-              followerAvgRating: tmdbMovieView.followerAvgRating,
-            },
-            tvSeries: {
-              id: tmdbTvSeriesView.id,
-              name: tmdbTvSeriesView.name,
-              slug: tmdbTvSeriesView.slug,
-              url: tmdbTvSeriesView.url,
-              posterPath: tmdbTvSeriesView.posterPath,
-              backdropPath: tmdbTvSeriesView.backdropPath,
-              createdBy: tmdbTvSeriesView.createdBy,
-              firstAirDate: tmdbTvSeriesView.firstAirDate,
-              lastAirDate: tmdbTvSeriesView.lastAirDate,
-              voteAverage: tmdbTvSeriesView.voteAverage,
-              voteCount: tmdbTvSeriesView.voteCount,
-              popularity: tmdbTvSeriesView.popularity,
-              genres: tmdbTvSeriesView.genres,
-              followerAvgRating: tmdbTvSeriesView.followerAvgRating,
-            },
+            movie: MOVIE_COMPACT_SELECT,
+            tvSeries: TV_SERIES_COMPACT_SELECT,
           })
           .from(paginatedBookmarksSubquery)
           .innerJoin(bookmark, eq(bookmark.id, paginatedBookmarksSubquery.id))
@@ -351,37 +294,8 @@ export class UserBookmarksService {
       const [results, totalCount] = await Promise.all([
         tx.select({
           bookmark: bookmark,
-          movie: {
-            id: tmdbMovieView.id,
-            title: tmdbMovieView.title,
-            slug: tmdbMovieView.slug,
-            url: tmdbMovieView.url,
-            posterPath: tmdbMovieView.posterPath,
-            backdropPath: tmdbMovieView.backdropPath,
-            directors: tmdbMovieView.directors,
-            releaseDate: tmdbMovieView.releaseDate,
-            voteAverage: tmdbMovieView.voteAverage,
-            voteCount: tmdbMovieView.voteCount,
-            popularity: tmdbMovieView.popularity,
-            genres: tmdbMovieView.genres,
-            followerAvgRating: tmdbMovieView.followerAvgRating,
-          },
-          tvSeries: {
-            id: tmdbTvSeriesView.id,
-            name: tmdbTvSeriesView.name,
-            slug: tmdbTvSeriesView.slug,
-            url: tmdbTvSeriesView.url,
-            posterPath: tmdbTvSeriesView.posterPath,
-            backdropPath: tmdbTvSeriesView.backdropPath,
-            createdBy: tmdbTvSeriesView.createdBy,
-            firstAirDate: tmdbTvSeriesView.firstAirDate,
-            lastAirDate: tmdbTvSeriesView.lastAirDate,
-            voteAverage: tmdbTvSeriesView.voteAverage,
-            voteCount: tmdbTvSeriesView.voteCount,
-            popularity: tmdbTvSeriesView.popularity,
-            genres: tmdbTvSeriesView.genres,
-            followerAvgRating: tmdbTvSeriesView.followerAvgRating,
-          },
+          movie: MOVIE_COMPACT_SELECT,
+          tvSeries: TV_SERIES_COMPACT_SELECT,
           })
           .from(paginatedBookmarksSubquery)
           .innerJoin(bookmark, eq(bookmark.id, paginatedBookmarksSubquery.id))
