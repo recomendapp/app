@@ -36,7 +36,7 @@ export function UserPlaylists({
 
   useEffect(() => {
     if (inView && hasNextPage) fetchNextPage();
-  }, [inView, hasNextPage, playlists, fetchNextPage]);
+  }, [inView, hasNextPage, fetchNextPage]);
 
   if (loading) return <Loader />;
 

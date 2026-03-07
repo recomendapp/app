@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { bookmarksControllerDeleteByMediaMutation, bookmarksControllerSetByMediaMutation, FollowRequest, ListInfiniteBookmarks, ListInfiniteFollowRequests, ListInfiniteRecos, ListInfiniteRecoTargets, ListInfiniteUsers, ListPaginatedBookmarks, ListPaginatedFollowRequests, ListPaginatedRecos, ListPaginatedRecoTargets, ListPaginatedUsers, personsControllerFollowMutation, personsControllerUnfollowMutation, playlistLikesControllerDeleteMutation, playlistLikesControllerSetMutation, playlistSavesControllerDeleteMutation, playlistSavesControllerSetMutation, recosControllerDeleteByIdMutation, recosControllerDeleteByMediaMutation, recosControllerSendMutation, RecoTarget, userFollowControllerAcceptMutation, userFollowControllerDeclineMutation, userFollowControllerDeleteMutation, userFollowControllerSetMutation, userPushTokensControllerSetMutation, meControllerUpdateMutation, UserSummary, meAvatarControllerSetMutation, meAvatarControllerDeleteMutation } from '@packages/api-js';
-import { userBookmarkByMediaOptions, userByIdOptions, userByUsernameOptions, userFollowersInfiniteOptions, userFollowersPaginatedOptions, userFollowingInfiniteOptions, userFollowingPaginatedOptions, userFollowOptions, userFollowRequestsInfiniteOptions, userFollowRequestsPaginatedOptions, userMeOptions, userPersonFollowOptions, userPlaylistLikeOptions, userPlaylistSavedOptions, userRecosAllOptions, userRecoSendAllOptions, userRecoSendInfiniteOptions, userRecoSendPaginatedOptions, userRecosInfiniteOptions, userRecosPaginatedOptions } from './userOptions';
+import { bookmarksControllerDeleteByMediaMutation, bookmarksControllerSetByMediaMutation, FollowRequest, ListInfiniteBookmarks, ListInfiniteFollowRequests, ListInfiniteRecos, ListInfiniteRecoTargets, ListInfiniteUsers, ListPaginatedBookmarks, ListPaginatedFollowRequests, ListPaginatedRecos, ListPaginatedRecoTargets, ListPaginatedUsers, personsControllerFollowMutation, personsControllerUnfollowMutation, playlistLikesControllerDeleteMutation, playlistLikesControllerSetMutation, playlistSavesControllerDeleteMutation, playlistSavesControllerSetMutation, recosControllerDeleteByIdMutation, recosControllerDeleteByMediaMutation, recosControllerSendMutation, RecoTarget, userFollowControllerAcceptMutation, userFollowControllerDeclineMutation, userFollowControllerDeleteMutation, userFollowControllerSetMutation, userPushTokensControllerSetMutation, meControllerUpdateMutation, UserSummary, meAvatarControllerSetMutation, meAvatarControllerDeleteMutation, Playlist, ListPaginatedPlaylists, ListInfinitePlaylists } from '@packages/api-js';
+import { userBookmarkByMediaOptions, userByIdOptions, userByUsernameOptions, userFollowersInfiniteOptions, userFollowersPaginatedOptions, userFollowingInfiniteOptions, userFollowingPaginatedOptions, userFollowOptions, userFollowRequestsInfiniteOptions, userFollowRequestsPaginatedOptions, userMeOptions, userPersonFollowOptions, userPlaylistLikeOptions, userPlaylistSavedOptions, userPlaylistsSavedInfiniteOptions, userPlaylistsSavedPaginatedOptions, userRecosAllOptions, userRecoSendAllOptions, userRecoSendInfiniteOptions, userRecoSendPaginatedOptions, userRecosInfiniteOptions, userRecosPaginatedOptions } from './userOptions';
 import { removeListItemFromAllCaches, updateListItemInAllCaches, updateOrRemoveListItemInAllCaches } from '../utils';
 import { userKeys } from './userKeys';
 import { BookmarkWithMedia, RecoWithMedia } from './types';
@@ -497,7 +497,7 @@ export const useUserPlaylistSaveMutation = ({
 				playlistId: data.playlistId,
 			}).queryKey, true);
 
-			// TODO: Invalidate saved playlists queries
+			queryClient.invalidateQueries({ queryKey: userKeys.playlistsSaved({ userId: data.userId })});
 		}
 	});
 }
@@ -529,7 +529,18 @@ export const useUserPlaylistUnsaveMutation = ({
 				playlistId: data.playlistId,
 			}).queryKey, false);
 
-			// TODO: Invalidate saved playlists queries
+			removeListItemFromAllCaches<
+				Playlist,
+				ListPaginatedPlaylists,
+				ListInfinitePlaylists
+			>(
+				queryClient,
+				{
+					paginated: userPlaylistsSavedPaginatedOptions({ userId: data.userId }).queryKey,
+					infinite: userPlaylistsSavedInfiniteOptions({ userId: data.userId }).queryKey,
+				},
+				(item) => item.id === data.playlistId
+			);
 		}
 	});
 }

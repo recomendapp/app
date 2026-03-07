@@ -675,59 +675,59 @@ export const useUserReviewTvSeriesOptions = ({
 // 		enabled: !!userId,
 // 	});
 // };
-export const useUserRecosTvSeriesSendOptions = ({
-	userId,
-	tvSeriesId,
-} : {
-	userId?: string;
-	tvSeriesId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: userKeys.recosSend({
-			id: tvSeriesId,
-			type: 'tv_series',
-		}),
-		queryFn: async () => {
-			if (!userId) throw Error('Missing user id');
-			const { data, error } = await supabase
-				.from('user_friend')
-				.select(`
-					id,
-					friend:profile!user_friend_friend_id_fkey!inner(
-						*,
-						user_activities_tv_series(count),
-						user_recos_tv_series!user_recos_tv_series_user_id_fkey(count)
-					)
-				`)
-				.match({
-					'user_id': userId,
-					'friend.user_activities_tv_series.tv_series_id': tvSeriesId,
-					'friend.user_recos_tv_series.tv_series_id': tvSeriesId,
-					'friend.user_recos_tv_series.sender_id': userId,
-					'friend.user_recos_tv_series.status': 'active',
-				})
-				// .overrideTypes<(UserFriend & {
-				// 	friend: {
-				// 		user_activities_tv_series: {
-				// 			count: number;
-				// 		}[];
-				// 		user_recos_tv_series: {
-				// 			count: number;
-				// 		}[];
-				// 	};
-				// })[]>();
-			if (error) throw error;
-			const output = data?.map((userFriend) => ({
-				friend: userFriend.friend,
-				as_watched: userFriend.friend.user_activities_tv_series[0]?.count > 0,
-				already_sent: userFriend.friend.user_recos_tv_series[0]?.count > 0,
-			}));
-			return output;
-		},
-		enabled: !!userId,
-	});
-};
+// export const useUserRecosTvSeriesSendOptions = ({
+// 	userId,
+// 	tvSeriesId,
+// } : {
+// 	userId?: string;
+// 	tvSeriesId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return queryOptions({
+// 		queryKey: userKeys.recosSend({
+// 			id: tvSeriesId,
+// 			type: 'tv_series',
+// 		}),
+// 		queryFn: async () => {
+// 			if (!userId) throw Error('Missing user id');
+// 			const { data, error } = await supabase
+// 				.from('user_friend')
+// 				.select(`
+// 					id,
+// 					friend:profile!user_friend_friend_id_fkey!inner(
+// 						*,
+// 						user_activities_tv_series(count),
+// 						user_recos_tv_series!user_recos_tv_series_user_id_fkey(count)
+// 					)
+// 				`)
+// 				.match({
+// 					'user_id': userId,
+// 					'friend.user_activities_tv_series.tv_series_id': tvSeriesId,
+// 					'friend.user_recos_tv_series.tv_series_id': tvSeriesId,
+// 					'friend.user_recos_tv_series.sender_id': userId,
+// 					'friend.user_recos_tv_series.status': 'active',
+// 				})
+// 				// .overrideTypes<(UserFriend & {
+// 				// 	friend: {
+// 				// 		user_activities_tv_series: {
+// 				// 			count: number;
+// 				// 		}[];
+// 				// 		user_recos_tv_series: {
+// 				// 			count: number;
+// 				// 		}[];
+// 				// 	};
+// 				// })[]>();
+// 			if (error) throw error;
+// 			const output = data?.map((userFriend) => ({
+// 				friend: userFriend.friend,
+// 				as_watched: userFriend.friend.user_activities_tv_series[0]?.count > 0,
+// 				already_sent: userFriend.friend.user_recos_tv_series[0]?.count > 0,
+// 			}));
+// 			return output;
+// 		},
+// 		enabled: !!userId,
+// 	});
+// };
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------- WATCHLIST ------------------------------- */
@@ -940,39 +940,39 @@ export const useUserRecosTvSeriesSendOptions = ({
 // 	})
 // };
 
-export const useUserPlaylistsSavedOptions = ({
-	userId,
-} : {
-	userId?: string;
-}) => {
-	const PER_PAGE = 20;
-	const supabase = useSupabaseClient();
-	return infiniteQueryOptions({
-		queryKey: userKeys.playlistsSaved({
-			userId: userId!,
-		}),
-		queryFn: async ({ pageParam = 1 }) => {
-			if (!userId) throw Error('Missing user id');
-			const from = (pageParam - 1) * PER_PAGE;
-	  		const to = from + PER_PAGE - 1;
-			let request = supabase
-				.from('playlists_saved')
-				.select(`*, playlist:playlists(*, user:profile(*))`)
-				.eq('user_id', userId)
-				.range(from, to)
-				.order('created_at', { ascending: false });
+// export const useUserPlaylistsSavedOptions = ({
+// 	userId,
+// } : {
+// 	userId?: string;
+// }) => {
+// 	const PER_PAGE = 20;
+// 	const supabase = useSupabaseClient();
+// 	return infiniteQueryOptions({
+// 		queryKey: userKeys.playlistsSaved({
+// 			userId: userId!,
+// 		}),
+// 		queryFn: async ({ pageParam = 1 }) => {
+// 			if (!userId) throw Error('Missing user id');
+// 			const from = (pageParam - 1) * PER_PAGE;
+// 	  		const to = from + PER_PAGE - 1;
+// 			let request = supabase
+// 				.from('playlists_saved')
+// 				.select(`*, playlist:playlists(*, user:profile(*))`)
+// 				.eq('user_id', userId)
+// 				.range(from, to)
+// 				.order('created_at', { ascending: false });
 
-			const { data, error } = await request;
-			if (error) throw error;
-			return data;
-		},
-		initialPageParam: 1,
-		getNextPageParam: (lastPage, pages) => {
-			return lastPage?.length == PER_PAGE ? pages.length + 1 : undefined;
-		},
-		enabled: !!userId,
-	});
-};
+// 			const { data, error } = await request;
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		initialPageParam: 1,
+// 		getNextPageParam: (lastPage, pages) => {
+// 			return lastPage?.length == PER_PAGE ? pages.length + 1 : undefined;
+// 		},
+// 		enabled: !!userId,
+// 	});
+// };
 
 // export const useUserPlaylistSavedOptions = ({
 // 	userId,

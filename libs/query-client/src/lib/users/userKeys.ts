@@ -1,9 +1,21 @@
-import { UserFollowersControllerListPaginatedData, UserMoviesControllerListInfiniteData, UserPlaylistsControllerListInfiniteData, UserFollowersControllerListInfiniteData, UserBookmarksControllerListInfiniteData, UserFollowingControllerListPaginatedData, UserFollowingControllerListInfiniteData, MovieWatchedDatesControllerListInfiniteData, Bookmark, UserBookmarksControllerListAllData, UserBookmarksControllerListPaginatedData, UserPlaylistsControllerListPaginatedData, UserMoviesControllerListPaginatedData, MovieWatchedDatesControllerListPaginatedData, RecoTargetsControllerListPaginatedData, RecoTargetsControllerListInfiniteData, RecoTargetsControllerListAllData, UserFollowRequestsControllerListPaginatedData, UserFollowRequestsControllerListInfiniteData, UserRecosControllerListAllData, UserRecosControllerListInfiniteData, UserRecosControllerListPaginatedData } from "@packages/api-js";
+import { UserFollowersControllerListPaginatedData, UserMoviesControllerListInfiniteData, UserPlaylistsControllerListInfiniteData, UserFollowersControllerListInfiniteData, UserBookmarksControllerListInfiniteData, UserFollowingControllerListPaginatedData, UserFollowingControllerListInfiniteData, MovieWatchedDatesControllerListInfiniteData, Bookmark, UserBookmarksControllerListAllData, UserBookmarksControllerListPaginatedData, UserPlaylistsControllerListPaginatedData, UserMoviesControllerListPaginatedData, MovieWatchedDatesControllerListPaginatedData, RecoTargetsControllerListPaginatedData, RecoTargetsControllerListInfiniteData, RecoTargetsControllerListAllData, UserFollowRequestsControllerListPaginatedData, UserFollowRequestsControllerListInfiniteData, UserRecosControllerListAllData, UserRecosControllerListInfiniteData, UserRecosControllerListPaginatedData, UserPlaylistsSavedControllerListPaginatedData, UserPlaylistsSavedControllerListInfiniteData, UsersControllerListPaginatedData, UsersControllerListInfiniteData } from "@packages/api-js";
 
 export const userKeys = {
 	base: ['user'] as const,
 
 	me: () => [...userKeys.base, 'me'] as const,
+
+	list: ({
+		mode,
+		filters,
+	}: (
+		| { mode?: never; filters?: never }
+		| { mode: 'paginated'; filters?: NonNullable<UsersControllerListPaginatedData['query']> }
+		| { mode: 'infinite'; filters?: Omit<NonNullable<UsersControllerListInfiniteData['query']>, 'cursor'> }
+	)) => {
+		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
+		return ['users', ...optionsKey] as const;
+	},
 
 	details: (
 		params: { userId: string, username?: never } | { userId?: never, username: string }
@@ -217,6 +229,21 @@ export const userKeys = {
 		playlistId: number;
 	}) => [...userKeys.details({ userId }), 'playlist_like', playlistId] as const,
 
+
+	playlistsSaved: ({
+		userId,
+		mode,
+		filters,
+	}: {
+		userId: string;
+	} & (
+		| { mode?: never; filters?: never }
+		| { mode: 'paginated'; filters?: NonNullable<UserPlaylistsSavedControllerListPaginatedData['query']> }
+		| { mode: 'infinite'; filters?: Omit<NonNullable<UserPlaylistsSavedControllerListInfiniteData['query']>, 'cursor'> }
+	)) => {
+		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
+		return [...userKeys.details({ userId }), 'playlists_saved', ...optionsKey] as const;
+	},
 	playlistSaved: ({
 		userId,
 		playlistId,

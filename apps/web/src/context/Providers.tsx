@@ -44,8 +44,6 @@ export const Providers = async ({
   const rightPanelOpen = cookiesStore.get("ui-right-panel:open");
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
 
-
-  console.log('System status:', status);
   return (
     <NextIntlClientProvider locale={locale}>
       <SupabaseProvider>

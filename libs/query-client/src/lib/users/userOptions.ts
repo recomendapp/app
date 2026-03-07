@@ -1,6 +1,48 @@
-import { personsControllerGetFollowStatus, meControllerGet, userMoviesControllerGet, userMoviesControllerListInfinite, UserMoviesControllerListInfiniteData, UserPlaylistsControllerListInfiniteData, userPlaylistsControllerListInfinite, UserBookmarksControllerListInfiniteData, userBookmarksControllerListInfinite, UserFollowersControllerListInfiniteData, userFollowersControllerListInfinite, UserFollowingControllerListInfiniteData, userFollowingControllerListInfinite, movieWatchedDatesControllerListInfinite, MovieWatchedDatesControllerListInfiniteData, Bookmark, bookmarksControllerGetByMedia, UserBookmarksControllerListAllData, userBookmarksControllerListAll, userBookmarksControllerListPaginated, UserBookmarksControllerListPaginatedData, UserPlaylistsControllerListPaginatedData, userPlaylistsControllerListPaginated, UserFollowersControllerListPaginatedData, UserFollowingControllerListPaginatedData, MovieWatchedDatesControllerListPaginatedData, UserMoviesControllerListPaginatedData, userMoviesControllerListPaginated, movieWatchedDatesControllerListPaginated, userFollowersControllerListPaginated, userFollowingControllerListPaginated, RecoTargetsControllerListPaginatedData, recoTargetsControllerListPaginated, recoTargetsControllerListInfinite, RecoTargetsControllerListInfiniteData, recoTargetsControllerListAll, RecoTargetsControllerListAllData, userFollowControllerGet, UserFollowRequestsControllerListPaginatedData, userFollowRequestsControllerListPaginated, UserFollowRequestsControllerListInfiniteData, userFollowRequestsControllerListInfinite, UserRecosControllerListAllData, userRecosControllerListAll, UserRecosControllerListPaginatedData, userRecosControllerListPaginated, UserRecosControllerListInfiniteData, userRecosControllerListInfinite, playlistLikesControllerGet, playlistSavesControllerGet, usersControllerGet } from "@packages/api-js";
+import { personsControllerGetFollowStatus, meControllerGet, userMoviesControllerGet, userMoviesControllerListInfinite, UserMoviesControllerListInfiniteData, UserPlaylistsControllerListInfiniteData, userPlaylistsControllerListInfinite, UserBookmarksControllerListInfiniteData, userBookmarksControllerListInfinite, UserFollowersControllerListInfiniteData, userFollowersControllerListInfinite, UserFollowingControllerListInfiniteData, userFollowingControllerListInfinite, movieWatchedDatesControllerListInfinite, MovieWatchedDatesControllerListInfiniteData, Bookmark, bookmarksControllerGetByMedia, UserBookmarksControllerListAllData, userBookmarksControllerListAll, userBookmarksControllerListPaginated, UserBookmarksControllerListPaginatedData, UserPlaylistsControllerListPaginatedData, userPlaylistsControllerListPaginated, UserFollowersControllerListPaginatedData, UserFollowingControllerListPaginatedData, MovieWatchedDatesControllerListPaginatedData, UserMoviesControllerListPaginatedData, userMoviesControllerListPaginated, movieWatchedDatesControllerListPaginated, userFollowersControllerListPaginated, userFollowingControllerListPaginated, RecoTargetsControllerListPaginatedData, recoTargetsControllerListPaginated, recoTargetsControllerListInfinite, RecoTargetsControllerListInfiniteData, recoTargetsControllerListAll, RecoTargetsControllerListAllData, userFollowControllerGet, UserFollowRequestsControllerListPaginatedData, userFollowRequestsControllerListPaginated, UserFollowRequestsControllerListInfiniteData, userFollowRequestsControllerListInfinite, UserRecosControllerListAllData, userRecosControllerListAll, UserRecosControllerListPaginatedData, userRecosControllerListPaginated, UserRecosControllerListInfiniteData, userRecosControllerListInfinite, playlistLikesControllerGet, playlistSavesControllerGet, usersControllerGet, UserPlaylistsSavedControllerListInfiniteData, userPlaylistsSavedControllerListInfinite, userPlaylistsSavedControllerListPaginated, UserPlaylistsSavedControllerListPaginatedData, UsersControllerListPaginatedData, usersControllerListPaginated, UsersControllerListInfiniteData, usersControllerListInfinite } from "@packages/api-js";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { userKeys } from "./userKeys";
+
+export const usersPaginatedOptions = ({
+	filters,
+} : {
+	filters?: NonNullable<UsersControllerListPaginatedData['query']>;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.list({ mode: 'paginated', filters }),
+		queryFn: async () => {
+			const { data, error } = await usersControllerListPaginated({
+				query: filters,
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+	});
+};
+export const usersInfiniteOptions = ({
+	filters,
+} : {
+	filters?: Omit<NonNullable<UsersControllerListInfiniteData['query']>, 'cursor'>;
+}) => {
+	return infiniteQueryOptions({
+		queryKey: userKeys.list({ mode: 'infinite', filters }),
+		queryFn: async ({ pageParam }) => {
+			const { data, error } = await usersControllerListInfinite({
+				query: {
+					...filters,
+					cursor: pageParam,
+				},
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		initialPageParam: undefined as string | undefined,
+		getNextPageParam: (lastPage) => {
+			return lastPage.meta.next_cursor || undefined;
+		},
+	});
+};
 
 export const userMeOptions = () => {
 	return queryOptions({
@@ -55,7 +97,6 @@ export const userByUsernameOptions = ({
 		enabled: !!username,
 	});
 };
-
 
 /* ---------------------------------- Logs ---------------------------------- */
 export const userMovieLogOptions = ({
@@ -832,6 +873,70 @@ export const userPlaylistLikeOptions = ({
 		},
 		enabled: !!userId && !!playlistId,
 	});
+};
+
+export const userPlaylistsSavedPaginatedOptions = ({
+	userId,
+	filters,
+} : {
+	userId?: string;
+	filters?: NonNullable<UserPlaylistsSavedControllerListPaginatedData['query']>;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.playlistsSaved({
+			userId: userId!,
+			mode: 'paginated',
+			filters,
+		}),
+		queryFn: async () => {
+			if (!userId) throw new Error('User ID is required');
+			const { data, error } = await userPlaylistsSavedControllerListPaginated({
+				path: {
+					user_id: userId,
+				},
+				query: filters,
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId,
+	})
+};
+export const userPlaylistsSavedInfiniteOptions = ({
+	userId,
+	filters,
+} : {
+	userId?: string;
+	filters?: Omit<NonNullable<UserPlaylistsSavedControllerListInfiniteData['query']>, 'cursor'>;
+}) => {
+	return infiniteQueryOptions({
+		queryKey: userKeys.playlistsSaved({
+			userId: userId!,
+			mode: 'infinite',
+			filters,
+		}),
+		queryFn: async ({ pageParam }) => {
+			if (!userId) throw new Error('User ID is required');
+			const { data, error } = await userPlaylistsSavedControllerListInfinite({
+				path: {
+					user_id: userId,
+				},
+				query: {
+					cursor: pageParam,
+					...filters,
+				}
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		initialPageParam: undefined as string | undefined,
+		getNextPageParam: (lastPage) => {
+			return lastPage.meta.next_cursor || undefined;
+		},
+		enabled: !!userId,
+	})
 };
 
 export const userPlaylistSavedOptions = ({
