@@ -1,4 +1,4 @@
-import { UserFollowersControllerListPaginatedData, UserMoviesControllerListInfiniteData, UserPlaylistsControllerListInfiniteData, UserFollowersControllerListInfiniteData, UserBookmarksControllerListInfiniteData, UserFollowingControllerListPaginatedData, UserFollowingControllerListInfiniteData, MovieWatchedDatesControllerListInfiniteData, Bookmark, UserBookmarksControllerListAllData, UserBookmarksControllerListPaginatedData, UserPlaylistsControllerListPaginatedData, UserMoviesControllerListPaginatedData, MovieWatchedDatesControllerListPaginatedData, RecoTargetsControllerListPaginatedData, RecoTargetsControllerListInfiniteData, RecoTargetsControllerListAllData, UserFollowRequestsControllerListPaginatedData, UserFollowRequestsControllerListInfiniteData, UserRecosControllerListAllData, UserRecosControllerListInfiniteData, UserRecosControllerListPaginatedData, UserPlaylistsSavedControllerListPaginatedData, UserPlaylistsSavedControllerListInfiniteData, UsersControllerListPaginatedData, UsersControllerListInfiniteData } from "@packages/api-js";
+import { UserFollowersControllerListPaginatedData, UserMoviesControllerListInfiniteData, UserPlaylistsControllerListInfiniteData, UserFollowersControllerListInfiniteData, UserBookmarksControllerListInfiniteData, UserFollowingControllerListPaginatedData, UserFollowingControllerListInfiniteData, MovieWatchedDatesControllerListInfiniteData, Bookmark, UserBookmarksControllerListAllData, UserBookmarksControllerListPaginatedData, UserPlaylistsControllerListPaginatedData, UserMoviesControllerListPaginatedData, MovieWatchedDatesControllerListPaginatedData, RecoTargetsControllerListPaginatedData, RecoTargetsControllerListInfiniteData, RecoTargetsControllerListAllData, UserFollowRequestsControllerListPaginatedData, UserFollowRequestsControllerListInfiniteData, UserRecosControllerListAllData, UserRecosControllerListInfiniteData, UserRecosControllerListPaginatedData, UserPlaylistsSavedControllerListPaginatedData, UserPlaylistsSavedControllerListInfiniteData, UsersControllerListPaginatedData, UsersControllerListInfiniteData, MePlaylistsFollowingControllerListPaginatedData, MePlaylistsFollowingControllerListInfiniteData } from "@packages/api-js";
 
 export const userKeys = {
 	base: ['user'] as const,
@@ -219,6 +219,21 @@ export const userKeys = {
 	)) => {
 		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
 		return [...userKeys.details({ userId }), 'playlists', ...optionsKey] as const;
+	},
+
+	playlistsFollowing: ({
+		userId,
+		mode,
+		filters,
+	}: {
+		userId: string;
+	} & (
+		| { mode?: never; filters?: never }
+		| { mode: 'paginated'; filters?: NonNullable<MePlaylistsFollowingControllerListPaginatedData['query']> }
+		| { mode: 'infinite'; filters?: Omit<NonNullable<MePlaylistsFollowingControllerListInfiniteData['query']>, 'cursor'> }
+	)) => {
+		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
+		return [...userKeys.details({ userId }), 'playlists_following', ...optionsKey] as const;
 	},
 
 	playlistLike: ({

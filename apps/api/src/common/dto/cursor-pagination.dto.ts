@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional, ApiSchema } from '@nestjs/swagger';
-import { Expose, Type } from 'class-transformer';
-import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
+import { Expose, Transform, Type } from 'class-transformer';
+import { IsBoolean, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 
 @ApiSchema({ name: 'CursorPaginationQuery' })
 export class CursorPaginationQueryDto {
@@ -25,6 +25,16 @@ export class CursorPaginationQueryDto {
   @Min(1)
   @Max(100)
   per_page?: number = 10;
+
+  @ApiPropertyOptional({
+    description: 'Whether to include the total count of results (only on the first page)',
+    example: false,
+    default: false,
+  })
+  @IsOptional()
+  @Transform(({ value }) => value === 'true' || value === true)
+  @IsBoolean()
+  include_total_count?: boolean = false;
 }
 
 @ApiSchema({ name: 'CursorPaginationMeta' })

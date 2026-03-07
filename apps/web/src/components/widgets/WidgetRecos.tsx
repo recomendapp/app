@@ -55,10 +55,10 @@ export const WidgetRecos = ({
         <Wrapper key={index} {...(item.type === 'movie' ? { type: 'movie', media: item.media } : { type: 'tv_series', media: item.media })}>
           <AvatarGroup>
             {item.senders?.slice(0, sendersShow).reverse().map((item, i) => (
-            <div key={i} className='relative'>
-              {item.user?.username ? <UserAvatar avatarUrl={item.user.avatar} username={item.user.username} /> : null}
-              {item?.comment ? <TextIcon size={15} className='absolute -top-1 -right-1 rounded-full bg-background text-accent-yellow p-1'/> : null}
-            </div>
+              <div key={i} className='relative'>
+                <UserAvatar avatarUrl={item.user.avatar} username={item.user.username} className="w-5 h-5" />
+                {item?.comment ? <TextIcon size={15} className='absolute -top-1 -right-1 rounded-full bg-background text-accent-yellow p-1'/> : null}
+              </div>
             ))}
             {item.senders.length > sendersShow && (
               <AvatarGroupCount>+{item.senders.length - sendersShow}</AvatarGroupCount>

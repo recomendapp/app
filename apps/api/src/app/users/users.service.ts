@@ -146,7 +146,7 @@ export class UsersService {
 
   /* ---------------------------------- Infinite --------------------------------- */
   async listInfinite(query: ListInfiniteUsersQueryDto): Promise<ListInfiniteUsersDto> {
-    const { per_page, sort_order, sort_by, cursor } = query;
+    const { per_page, sort_order, sort_by, cursor, include_total_count } = query;
 
     const cursorData = cursor ? decodeCursor<BaseCursor<string | number, string>>(cursor) : null;
 
@@ -205,7 +205,7 @@ export class UsersService {
         .where(cursorWhereClause)
         .orderBy(...orderBy)
         .limit(fetchLimit),
-      !cursorData 
+      (!cursorData && include_total_count)
         ? this.db.$count(user)
         : Promise.resolve(undefined)
     ]);

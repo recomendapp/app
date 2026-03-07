@@ -1,0 +1,1 @@
+CREATE MATERIALIZED VIEW "public"."recos_trending" AS (select COALESCE("movie_id", "tv_series_id") as "media_id", "type", cast(count(*) as int) as "recommendation_count" from "reco" where "reco"."created_at" > (now() - '30 days'::interval) group by COALESCE("reco"."movie_id", "reco"."tv_series_id"), "reco"."type");

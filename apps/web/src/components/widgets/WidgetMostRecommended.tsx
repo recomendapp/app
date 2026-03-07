@@ -25,31 +25,24 @@ import { BadgeMedia } from "../Badge/BadgeMedia";
 import Image from "next/image";
 import { upperFirst } from "lodash";
 import { getMediaDetails } from "@/utils/get-media-details";
-import { Database } from "@recomendapp/types";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 import { ContextMenuMovie } from "../ContextMenu/ContextMenuMovie";
 import { ContextMenuTvSeries } from "../ContextMenu/ContextMenuTvSeries";
-import { useQuery } from "@tanstack/react-query";
-import { useWidgetMostRecommendedOptions } from "@/api/client/options/widgetOptions";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { ModalRecoSend } from "../Modals/recos/ModalRecoSend";
-
-
-interface WidgetMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {}
+import { widgetRecosTrendingInfiniteOptions } from "@libs/query-client";
+import { RecoTrendingWithMovie, RecoTrendingWithTvSeries } from "@packages/api-js";
 
 export const WidgetMostRecommended = ({
 	className,
-} : WidgetMostRecommendedProps) => {
+} : React.HTMLAttributes<HTMLDivElement>) => {
 	const {
 		data,
 		isLoading,
 		isError
-	} = useQuery(useWidgetMostRecommendedOptions({
-		filters: {
-			limit: 10,
-			sortBy: 'recommendation_count',
-			sortOrder: 'desc',
-		}
-	}));
+	} = useInfiniteQuery(widgetRecosTrendingInfiniteOptions());
+	const flattenRecos = data?.pages.flatMap(page => page.data) || [];
+
 	const [isPlaying, setIsPlaying] = useState(true);
 	const autoplay = useRef(
 		Autoplay({
@@ -61,7 +54,7 @@ export const WidgetMostRecommended = ({
 		return <Skeleton className={cn("w-full h-80", className)} />
 	}
 	
-	if (!data.length || isError) return null;
+	if (!flattenRecos.length || isError) return null;
 	return (
 	<Carousel
 	opts={{
@@ -73,7 +66,7 @@ export const WidgetMostRecommended = ({
 	onMouseLeave={() => isPlaying && autoplay.current.play()}
 	>
 		<CarouselContent>
-			{data.map((item, index) => <Item key={`${item.type}:${item.media_id}`} item={item} index={index} />)}
+			{flattenRecos.map((item, index) => <Item key={`${item.type}:${item.mediaId}`} item={item} index={index} />)}
 		</CarouselContent>
 		<div className="absolute bottom-6 right-2 flex gap-2">
 			<CarouselPlayPause
@@ -91,7 +84,15 @@ export const WidgetMostRecommended = ({
 
 type ItemProps =
   {
-    item: Database['public']['Views']['widget_most_recommended']['Row'];
+    item: (
+		| {
+			type: "movie";
+		} & RecoTrendingWithMovie
+	) | (
+		{
+			type: "tv_series";
+		} & RecoTrendingWithTvSeries
+	);
 	index: number;
   } & React.ComponentProps<typeof CarouselItem>;
 
@@ -116,7 +117,7 @@ const Item = ({
 	const handleReco = useCallback(() => {
 		if (item.media) {
 			openModal(ModalRecoSend, {
-				mediaId: item.media_id!,
+				mediaId: item.mediaId,
 				mediaTitle: details?.title ?? '',
 				mediaType: item.type,
 			})
@@ -128,9 +129,9 @@ const Item = ({
 		<CarouselItem className="" {...props}>
 			<ItemContextMenu item={item}>
 				<Card className="overflow-hidden relative bg-black/40 flex flex-col h-full justify-between gap-2">
-					{item.media?.backdrop_url && (
+					{item.media.backdropPath && (
 						<Image
-						src={getTmdbImage({ path: item.media?.backdrop_path, size: 'w1280' })}
+						src={getTmdbImage({ path: item.media.backdropPath, size: 'w1280' })}
 						alt={details.title ?? ''}
 						fill
 						className="object-cover -z-10"
@@ -154,28 +155,23 @@ const Item = ({
 							</sup>}
 						</Link>
 						{item.media.genres ? <div>
-							{item.media?.genres?.map((genre, index: number) => (
-							<span key={genre.id}>
-								<Button
-								variant="link"
-								className="w-fit p-0 h-full font-normal"
-								asChild
-								>
-								<Link href={`/genre/${genre.id}`}>
-									{genre.name}
-								</Link>
-								</Button>
-								{index !== item.media.genres?.length! - 1 && (
-								<span>, </span>
-								)}
-							</span>
+							{item.media.genres.map((genre, index) => (
+								<span key={genre.id}>
+									<Button
+									variant="link"
+									className="w-fit p-0 h-full font-normal"
+									asChild
+									>
+									<Link href={`/genre/${genre.id}`}>
+										{genre.name}
+									</Link>
+									</Button>
+									{index !== item.media.genres!.length - 1 && (
+									<span>, </span>
+									)}
+								</span>
 							))}
 						</div> : null}
-						{details.description && (
-							<div className="max-w-xl line-clamp-2 pt-2">
-								{details.description}
-							</div>
-						)}
 					</CardContent>
 					<CardFooter className="flex items-center gap-2">
 						{user && (
@@ -185,7 +181,7 @@ const Item = ({
 								</Button>
 							</TooltipBox>
 						)}
-						{item.recommendation_count} reco{Number(item.recommendation_count) > 1 ? 's' : ''}
+						{item.recommendationCount} reco{Number(item.recommendationCount) > 1 ? 's' : ''}
 					</CardFooter>
 				</Card>
 			</ItemContextMenu>
@@ -197,7 +193,15 @@ const ItemContextMenu = ({
 	item,
 	children
 }: {
-	item: Database['public']['Views']['widget_most_recommended']['Row'];
+	item: (
+		| {
+			type: "movie";
+		} & RecoTrendingWithMovie
+	) | (
+		{
+			type: "tv_series";
+		} & RecoTrendingWithTvSeries
+	);
 	children: React.ReactNode;
 }) => {
 	switch (item.type) {

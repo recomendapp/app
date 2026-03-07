@@ -1003,57 +1003,57 @@ export const useUserReviewTvSeriesOptions = ({
 // 	});
 // };
 
-export const useUserPlaylistsFriendOptions = ({
-	filters,
-} : {
-	filters: {
-		sortBy: 'updated_at' | 'created_at' | 'likes_count';
-		sortOrder: 'asc' | 'desc';
-	}
-}) => {
-	const perPage = 20;
-	const { user } = useAuth();
-	const supabase = useSupabaseClient();
-	return infiniteQueryOptions({
-		queryKey: userKeys.playlistsFriends({
-			userId: user?.id!,
-			filters: filters,
-		}),
-		queryFn: async ({ pageParam = 1 }) => {
-			if (!user?.id) return null;
+// export const useUserPlaylistsFriendOptions = ({
+// 	filters,
+// } : {
+// 	filters: {
+// 		sortBy: 'updated_at' | 'created_at' | 'likes_count';
+// 		sortOrder: 'asc' | 'desc';
+// 	}
+// }) => {
+// 	const perPage = 20;
+// 	const { user } = useAuth();
+// 	const supabase = useSupabaseClient();
+// 	return infiniteQueryOptions({
+// 		queryKey: userKeys.playlistsFriends({
+// 			userId: user?.id!,
+// 			filters: filters,
+// 		}),
+// 		queryFn: async ({ pageParam = 1 }) => {
+// 			if (!user?.id) return null;
 			
-			let from = (pageParam - 1) * perPage;
-			let to = from + perPage - 1;
-			let request = supabase
-				.from('playlists_friends')
-				.select('*, user:profile(*)')
-				.range(from, to);
+// 			let from = (pageParam - 1) * perPage;
+// 			let to = from + perPage - 1;
+// 			let request = supabase
+// 				.from('playlists_friends')
+// 				.select('*, user:profile(*)')
+// 				.range(from, to);
 			
-			if (filters) {
-				if (filters.sortBy && filters.sortOrder) {
-					switch (filters.sortBy) {
-						case 'updated_at':
-							request = request.order('updated_at', { ascending: filters.sortOrder === 'asc' });
-							break;
-						case 'created_at':
-							request = request.order('created_at', { ascending: filters.sortOrder === 'asc' });
-							break;
-						case 'likes_count':
-							request = request.order('likes_count', { ascending: filters.sortOrder === 'asc' });
-							break;
-					}
-				}
-			}
+// 			if (filters) {
+// 				if (filters.sortBy && filters.sortOrder) {
+// 					switch (filters.sortBy) {
+// 						case 'updated_at':
+// 							request = request.order('updated_at', { ascending: filters.sortOrder === 'asc' });
+// 							break;
+// 						case 'created_at':
+// 							request = request.order('created_at', { ascending: filters.sortOrder === 'asc' });
+// 							break;
+// 						case 'likes_count':
+// 							request = request.order('likes_count', { ascending: filters.sortOrder === 'asc' });
+// 							break;
+// 					}
+// 				}
+// 			}
 
-			const { data, error } = await request;
-			if (error) throw error;
-			return data;
-		},
-		initialPageParam: 1,
-		getNextPageParam: (lastPage, pages) => {
-			return lastPage?.length == perPage ? pages.length + 1 : undefined;
-		},
-		enabled: !!user?.id,
-	})
-}
+// 			const { data, error } = await request;
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		initialPageParam: 1,
+// 		getNextPageParam: (lastPage, pages) => {
+// 			return lastPage?.length == perPage ? pages.length + 1 : undefined;
+// 		},
+// 		enabled: !!user?.id,
+// 	})
+// }
 /* -------------------------------------------------------------------------- */

@@ -4,6 +4,7 @@ import {
   check,
   index,
   pgEnum,
+  pgMaterializedView,
   pgTable,
   text,
   timestamp,
@@ -85,3 +86,15 @@ export const recoRelations = relations(reco, ({ one }) => ({
     references: [tmdbTvSeries.id],
   }),
 }));
+
+export const recosTrending = pgMaterializedView('recos_trending').as((qb) => {
+  return qb
+    .select({
+      mediaId: sql<number>`COALESCE(${reco.movieId}, ${reco.tvSeriesId})`.as('media_id'),
+      type: reco.type,
+      recommendationCount: sql<number>`cast(count(*) as int)`.as('recommendation_count'),
+    })
+    .from(reco)
+    .where(sql`${reco.createdAt} > (now() - '30 days'::interval)`)
+    .groupBy(sql`COALESCE(${reco.movieId}, ${reco.tvSeriesId})`, reco.type);
+});

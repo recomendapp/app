@@ -36,6 +36,7 @@
     "@nestjs/microservices": "^11.1.12",
     "@nestjs/platform-express": "^11.0.0",
     "@nestjs/platform-fastify": "^11.1.15",
+    "@nestjs/schedule": "^6.1.1",
     "@nestjs/swagger": "^11.2.5",
     "@normy/react-query": "^0.18.0",
     "@novu/react": "^3.5.0",

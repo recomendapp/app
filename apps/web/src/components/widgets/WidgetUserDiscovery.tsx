@@ -49,7 +49,9 @@ export const WidgetUserDiscovery = ({
 		<div className="flex items-center justify-between">
 			<Button variant={'link'} className="p-0 w-fit font-semibold text-xl">
 				{upperFirst(t('common.messages.discover_users'))}
-				<span className="text-muted-foreground">- {totalCount}</span>
+				{totalCount !== undefined && (
+					<span className="text-muted-foreground">- {totalCount}</span>
+				)}
 			</Button>
 			<ButtonGroup>
 				<TooltipBox tooltip={upperFirst(sortOrder === 'asc' ? t('common.messages.order_asc') : t('common.messages.order_desc'))}>
