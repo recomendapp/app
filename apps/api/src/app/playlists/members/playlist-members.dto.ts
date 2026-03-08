@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional, ApiSchema, IntersectionType, PickType } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
-import { IsDateString, IsEnum, IsIn, IsOptional, IsString, ValidateNested } from "class-validator";
+import { IsArray, IsDateString, IsEnum, IsIn, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator";
 import { playlistMemberRoleEnum } from "@libs/db/schemas";
 import { UserSummaryDto } from "../../users/dto/users.dto";
 import { SortOrder } from "../../../common/dto/sort.dto";
@@ -52,21 +52,31 @@ export class PlaylistMemberWithUserDto extends PlaylistMemberDto {
     user: UserSummaryDto;
 }
 
-@ApiSchema({ name: 'PlaylistMemberInput' })
-export class PlaylistMemberInputDto extends PickType(PlaylistMemberDto, [
-    'userId',
-    'role'
-] as const) {}
+@ApiSchema({ name: 'PlaylistMemberAdd' })
+export class PlaylistMemberAddDto {
+    @ApiProperty({
+        description: 'The list of user IDs to add as members to the playlist. They will be added as "viewer" by default.',
+        type: [String],
+        example: ['user-uuid-123', 'user-uuid-456']
+    })
+    @IsArray()
+    @IsUUID('all', { each: true })
+    userIds: string[];
+}
 
 @ApiSchema({ name: 'PlaylistMemberUpdate' })
-export class PlaylistMemberUpdateDto {
+export class PlaylistMemberUpdateDto extends PickType(PlaylistMemberDto, ['role'] as const) {}
+
+@ApiSchema({ name: 'PlaylistMemberDelete' })
+export class PlaylistMemberDeleteDto {
     @ApiProperty({
-        description: 'The list of members to update, add or remove. To remove a member, exclude them.',
-        type: [PlaylistMemberInputDto],
+        description: 'The list of user IDs to remove from the playlist.',
+        type: [String],
+        example: ['user-uuid-123', 'user-uuid-456']
     })
-    @ValidateNested({ each: true })
-    @Type(() => PlaylistMemberInputDto)
-    members: PlaylistMemberInputDto[];
+    @IsArray()
+    @IsUUID('all', { each: true })
+    userIds: string[];
 }
 
 export class BaseListPlaylistMembersQueryDto {

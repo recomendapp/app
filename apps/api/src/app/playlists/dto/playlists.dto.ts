@@ -104,8 +104,8 @@ export class PlaylistDto {
 	likesCount: number;
 
     @ApiProperty({ 
-        description: 'The role of the current user for this playlist (owner, editor, viewer, or null)', 
-        enum: [...playlistMemberRoleEnum.enumValues, 'owner'], 
+        description: 'The role of the current user for this playlist', 
+        enum: [...playlistMemberRoleEnum.enumValues, 'owner', null], 
         example: 'owner',
         nullable: true 
     })

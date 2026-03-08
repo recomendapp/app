@@ -57,10 +57,16 @@ export function PlaylistForm({
 
   // Mutations
   const { mutateAsync: insertPlaylistMutation, isPending: insertPending } = usePlaylistInsertMutation();
-  const { mutateAsync: updatePlaylistMutation, isPending: updatePending } = usePlaylistUpdateMutation();
+  const { mutateAsync: updatePlaylistMutation, isPending: updatePending } = usePlaylistUpdateMutation({
+    userId: user?.id,
+  });
   const { mutateAsync: deletePlaylistMutation, isPending: deletePending } = usePlaylistDeleteMutation();
-  const { mutateAsync: uploadPoster } = usePlaylistPoserUpdateMutation();
-  const { mutateAsync: deletePoster } = usePlaylistPoserDeleteMutation();
+  const { mutateAsync: uploadPoster } = usePlaylistPoserUpdateMutation({
+    userId: user?.id,
+  });
+  const { mutateAsync: deletePoster } = usePlaylistPoserDeleteMutation({
+    userId: user?.id,
+  });
 
   // Permissions
   const canEditVisibility = !playlist || playlist.role === 'owner';

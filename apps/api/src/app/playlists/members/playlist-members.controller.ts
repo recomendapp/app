@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Put, Query, UseGuards } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, ParseUUIDPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { PlaylistMembersService } from './playlist-members.service';
 import { AuthGuard } from '../../auth/guards';
 import { PlaylistRolesGuard } from '../guards/playlist-roles.guard';
@@ -10,19 +10,22 @@ import {
   ListInfinitePlaylistMembersQueryDto, 
   ListPaginatedPlaylistMembersDto, 
   ListPaginatedPlaylistMembersQueryDto, 
+  PlaylistMemberAddDto, 
+  PlaylistMemberDeleteDto, 
+  PlaylistMemberDto, 
   PlaylistMemberUpdateDto, 
   PlaylistMemberWithUserDto 
 } from './playlist-members.dto';
 
 @ApiTags('Playlists')
 @Controller({
-  path: 'playlist/:playlist_id/members',
+  path: 'playlist/:playlist_id',
   version: '1',
 })
 export class PlaylistMembersController {
   constructor(private readonly playlistMembersService: PlaylistMembersService) {}
 
-  @Get()
+  @Get('members')
   @UseGuards(AuthGuard, PlaylistRolesGuard)
   @RequirePlaylistRoles()
   @ApiOkResponse({
@@ -40,7 +43,7 @@ export class PlaylistMembersController {
     });
   }
 
-  @Get('paginated')
+  @Get('members/paginated')
   @UseGuards(AuthGuard, PlaylistRolesGuard)
   @RequirePlaylistRoles()
   @ApiOkResponse({
@@ -57,7 +60,7 @@ export class PlaylistMembersController {
     });
   }
 
-  @Get('infinite')
+  @Get('members/infinite')
   @UseGuards(AuthGuard, PlaylistRolesGuard)
   @RequirePlaylistRoles()
   @ApiOkResponse({
@@ -74,21 +77,58 @@ export class PlaylistMembersController {
     });
   }
 
-  @Put()
+  @Post('members')
+  @UseGuards(AuthGuard, PlaylistRolesGuard)
+  @RequirePlaylistRoles('owner', 'admin')
+  @ApiCreatedResponse({
+    description: 'Add new members to the playlist. They will be added as "viewer" by default.',
+    type: PlaylistMemberDto,
+    isArray: true,
+  })
+  add(
+    @Param('playlist_id', ParseIntPipe) playlistId: number,
+    @Body() dto: PlaylistMemberAddDto,
+  ) {
+    return this.playlistMembersService.add({
+      playlistId,
+      dto,
+    });
+  }
+
+  @Patch('member/:user_id')
   @UseGuards(AuthGuard, PlaylistRolesGuard)
   @RequirePlaylistRoles('owner', 'admin')
   @ApiOkResponse({
-    description: 'Update the list of members in the playlist. Replaces the current member list.',
-    type: PlaylistMemberWithUserDto,
+    description: 'Update the role of a specific member in the playlist.',
+    type: PlaylistMemberDto,
+  })
+  update(
+    @Param('playlist_id', ParseIntPipe) playlistId: number,
+    @Param('user_id', ParseUUIDPipe) targetUserId: string,
+    @Body() dto: PlaylistMemberUpdateDto,
+  ) {
+    return this.playlistMembersService.update({
+      playlistId,
+      targetUserId,
+      dto,
+    });
+  }
+
+  @Delete('members')
+  @UseGuards(AuthGuard, PlaylistRolesGuard)
+  @RequirePlaylistRoles('owner', 'admin')
+  @ApiOkResponse({
+    description: 'Remove members from the playlist.',
+    type: PlaylistMemberDto,
     isArray: true,
   })
-  updateAll(
+  delete(
     @Param('playlist_id', ParseIntPipe) playlistId: number,
-    @Body() updateMembersDto: PlaylistMemberUpdateDto,
+    @Body() removeMembersDto: PlaylistMemberDeleteDto,
   ) {
-    return this.playlistMembersService.updateAll({
+    return this.playlistMembersService.delete({
       playlistId,
-      updateMembersDto,
+      userIds: removeMembersDto.userIds,
     });
   }
 }

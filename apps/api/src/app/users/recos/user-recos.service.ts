@@ -6,10 +6,11 @@ import { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
-import { ListAllRecosQueryDto, ListInfiniteRecosQueryDto, ListPaginatedRecosQueryDto, RecoSortBy, RecoType, RecoWithMediaUnion } from '../../recos/dto/recos.dto';
+import { ListAllRecosQueryDto, ListInfiniteRecosDto, ListInfiniteRecosQueryDto, ListPaginatedRecosDto, ListPaginatedRecosQueryDto, RecoSortBy, RecoType, RecoWithMediaUnion, RecoWithMovieDto, RecoWithTvSeriesDto } from '../../recos/dto/recos.dto';
 import { UserSummaryDto } from '../dto/users.dto';
 import { User } from '../../auth/auth.service';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UserRecosService {
@@ -111,11 +112,19 @@ export class UserRecosService {
           latestCreatedAt: row.grouped.lastSendAt,
         };
 
-        if (base.type === RecoType.MOVIE && row.movie) {
-          return { ...base, type: RecoType.MOVIE, media: row.movie };
+        if (base.type === RecoType.MOVIE) {
+          return plainToInstance(RecoWithMovieDto, {
+            ...base,
+            type: RecoType.MOVIE,
+            media: row.movie,
+          })
         } 
         else {
-          return { ...base, type: RecoType.TV_SERIES, media: row.tvSeries };
+          return plainToInstance(RecoWithTvSeriesDto, {
+            ...base,
+            type: RecoType.TV_SERIES,
+            media: row.tvSeries,
+          })
         }
       });
     });
@@ -130,7 +139,7 @@ export class UserRecosService {
     query: ListPaginatedRecosQueryDto;
     locale: SupportedLocale;
     currentUser: User | null;
-  }) {
+  }): Promise<ListPaginatedRecosDto> {
     const { per_page, page, sort_order, sort_by, status, type } = query;
     const offset = (page - 1) * per_page;
 
@@ -194,7 +203,7 @@ export class UserRecosService {
         }
       });
 
-      return {
+      return plainToInstance(ListPaginatedRecosDto, {
         data: mappedData,
         meta: {
           total_results: Number(totalCount),
@@ -202,7 +211,7 @@ export class UserRecosService {
           current_page: page,
           per_page,
         },
-      };
+      });
     });
   }
   async listInfinite({
@@ -215,7 +224,7 @@ export class UserRecosService {
     query: ListInfiniteRecosQueryDto;
     locale: SupportedLocale;
     currentUser: User | null;
-  }) {
+  }): Promise<ListInfiniteRecosDto> {
     const { per_page, sort_order, sort_by, cursor, status, type } = query;
     const cursorData = cursor ? decodeCursor<BaseCursor<string | number, number>>(cursor) : null;
 
@@ -360,14 +369,14 @@ export class UserRecosService {
         }
       });
 
-      return {
+      return plainToInstance(ListInfiniteRecosDto, {
         data: mappedData,
         meta: {
           next_cursor: nextCursor,
           per_page,
           total_results: totalCountResult ? Number(totalCountResult[0].count) : undefined,
         },
-      };
+      });
     });
   }
 }

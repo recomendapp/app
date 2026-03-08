@@ -17,8 +17,8 @@ import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/components/ui/input-group';
-import { playlistMembersAllOptions } from '@libs/query-client';
-import { PlaylistMemberWithUser, UserSummary } from '@packages/api-js';
+import { playlistMembersAllOptions, usePlaylistMembersDeleteMutation, usePlaylistMemberUpdateMutation } from '@libs/query-client';
+import { PlaylistMemberUpdate, PlaylistMemberWithUser, UserSummary } from '@packages/api-js';
 import { CardUser } from '@/components/Card/CardUser';
 import Fuse from 'fuse.js';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -34,8 +34,18 @@ export const PlaylistMembersView = ({
   playlistId: number,
   setView: (view: 'manage' | 'add') => void
 }) => {
+  const { user } = useAuth();
   const t = useTranslations();
   const { playlistMembersRoleValues } = usePlaylistMembers();
+
+  // Mutations
+  const { mutateAsync: updateMember } = usePlaylistMemberUpdateMutation({
+    userId: user?.id,
+  });
+  const { mutateAsync: deleteMember } = usePlaylistMembersDeleteMutation({
+    userId: user?.id,
+  });
+
   const [searchQuery, setSearchQuery] = useState('');
   const fuse = useMemo(() => {
 		return new Fuse(members || [], {
@@ -49,6 +59,28 @@ export const PlaylistMembersView = ({
     }
     return fuse.search(searchQuery).map(result => result.item);
   }, [searchQuery, members, fuse]);
+
+  // Handlers
+  const handleUpdateMember = useCallback(async (userId: string, dto: PlaylistMemberUpdate) => {
+    await updateMember({
+      path: {
+        playlist_id: playlistId,
+        user_id: userId,
+      },
+      body: dto,
+    });
+  }, [updateMember, playlistId]);
+  const handleDeleteMember = useCallback(async (userId: string) => {
+    await deleteMember({
+      path: {
+        playlist_id: playlistId,
+      },
+      body: {
+        userIds: [userId],
+      }
+    });
+  }, [deleteMember, playlistId]);
+
   return (
     <>
       <ModalHeader>
@@ -76,14 +108,6 @@ export const PlaylistMembersView = ({
                     <div
                     key={user.id}
                     className="w-full flex items-center justify-between text-left px-1"
-                    // onClick={() => {
-                    //   if (selectedUsers.some((selectedUser) => selectedUser?.id === friend?.id)) {
-                    //     return setSelectedUsers((prev) => prev.filter(
-                    //       (selectedUser) => selectedUser?.id !== friend?.id
-                    //     ))
-                    //   }
-                    //   return setSelectedUsers((prev) => [...prev, friend]);
-                    // }}
                     >
                       <div className="flex items-center">
                         <UserAvatar avatarUrl={user.avatar} username={user.username} />
@@ -97,23 +121,22 @@ export const PlaylistMembersView = ({
                         </div>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
-                        <Select value={item.role} onValueChange={(e) => console.log('e',e)}>
+                        <Select value={item.role} onValueChange={(v) => handleUpdateMember(item.userId, { role: v as PlaylistMemberUpdate['role'] })}>
                           <SelectTrigger className="w-full max-w-48">
                             <SelectValue placeholder="Select a fruit" />
                           </SelectTrigger>
                           <SelectContent>
-                            {playlistMembersRoleValues.map(({ value, label, disabled }) => (
-                              <SelectItem key={value} value={value} disabled={disabled}>
+                            {playlistMembersRoleValues.map(({ value, label }) => (
+                              <SelectItem key={value} value={value}>
                                 {label}
                               </SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
-                        <Button variant="outline" size="icon-sm">
+                        <Button variant="outline" size="icon-sm" onClick={() => handleDeleteMember(item.userId)}>
                           <Icons.X />
                           <span className="sr-only">{upperFirst(t('common.messages.delete'))}</span>
                         </Button>
-                        {/* <Check size={20} className={`text-primary ${!selectedUsers.some((selectedUser) => selectedUser?.id === friend?.id) ? 'opacity-0' : ''}`} /> */}
                       </div>
                     </div>
                   ))

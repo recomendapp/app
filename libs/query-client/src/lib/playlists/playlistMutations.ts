@@ -1,11 +1,12 @@
-import { ListInfinitePlaylistsWithOwner, playlistPosterControllerDeleteMutation, playlistPosterControllerSetMutation, playlistsControllerCreateMutation, playlistsControllerDeleteMutation, playlistMembersControllerUpdateAllMutation, playlistsControllerUpdateMutation } from "@packages/api-js";
+import { ListInfinitePlaylistMembers, ListInfinitePlaylistsWithOwner, ListPaginatedPlaylistMembers, playlistMembersControllerAddMutation, playlistMembersControllerDeleteMutation, playlistMembersControllerUpdateMutation, PlaylistMemberWithUser, playlistPosterControllerDeleteMutation, playlistPosterControllerSetMutation, playlistsControllerCreateMutation, playlistsControllerDeleteMutation, playlistsControllerUpdateMutation } from "@packages/api-js";
 import { InfiniteData, useMutation, useQueryClient } from "@tanstack/react-query";
 import { userKeys, userPlaylistsInfiniteOptions, userPlaylistsPaginatedOptions } from "../users";
-import { playlistMembersAllOptions, playlistOptions } from "./playlistOptions";
-import { removeFromInfiniteCache, removeFromPaginatedCache, removeListItemFromAllCaches } from "../utils";
+import { playlistMembersAllOptions, playlistMembersInfiniteOptions, playlistMembersPaginatedOptions, playlistOptions } from "./playlistOptions";
+import { removeFromInfiniteCache, removeFromPaginatedCache, removeListItemFromAllCaches, updateListItemInAllCaches } from "../utils";
 import { moviePlaylistsInfiniteOptions, moviePlaylistsPaginatedOptions } from "../movies";
 import { tvSeriesPlaylistsInfiniteOptions, tvSeriesPlaylistsPaginatedOptions } from "../tv-series";
 import { usePlaylistCacheUpdate } from "./playlistHooks";
+import { playlistKeys } from "./playlistKeys";
 
 export const usePlaylistInsertMutation = () => {
 	const queryClient = useQueryClient();
@@ -19,8 +20,14 @@ export const usePlaylistInsertMutation = () => {
 	});
 };
 
-export const usePlaylistUpdateMutation = () => {
-	const updatePlaylistCache = usePlaylistCacheUpdate();
+export const usePlaylistUpdateMutation = ({
+	userId,
+}: {
+	userId?: string;
+}) => {
+	const updatePlaylistCache = usePlaylistCacheUpdate({
+		userId,
+	});
 	return useMutation({
 		...playlistsControllerUpdateMutation(),
 		onSuccess: (data) => {
@@ -115,8 +122,14 @@ export const usePlaylistDeleteMutation = () => {
 };
 
 // Poster
-export const usePlaylistPoserUpdateMutation = () => {
-	const updatePlaylistCache = usePlaylistCacheUpdate();
+export const usePlaylistPoserUpdateMutation = ({
+	userId,
+}: {
+	userId?: string;
+}) => {
+	const updatePlaylistCache = usePlaylistCacheUpdate({
+		userId,
+	});
 	return useMutation({
 		...playlistPosterControllerSetMutation(),
 		onSuccess: (data) => {
@@ -125,8 +138,14 @@ export const usePlaylistPoserUpdateMutation = () => {
 	});
 };
 
-export const usePlaylistPoserDeleteMutation = () => {
-	const updatePlaylistCache = usePlaylistCacheUpdate();
+export const usePlaylistPoserDeleteMutation = ({
+	userId,
+}: {
+	userId?: string;
+}) => {
+	const updatePlaylistCache = usePlaylistCacheUpdate({
+		userId,
+	});
 	return useMutation({
 		...playlistPosterControllerDeleteMutation(),
 		onSuccess: (data) => {
@@ -135,17 +154,89 @@ export const usePlaylistPoserDeleteMutation = () => {
 	});
 };
 
-// Members
-export const usePlaylistMembersUpdateMutation = ({
-	playlistId,
-}: {
-	playlistId?: number;
-}) => {
+/* --------------------------------- Members -------------------------------- */
+export const usePlaylistMembersAddMutation = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		...playlistMembersControllerUpdateAllMutation(),
+		...playlistMembersControllerAddMutation(),
 		onSuccess: (data) => {
-			queryClient.setQueryData(playlistMembersAllOptions({ playlistId: playlistId }).queryKey, data);
+			if (data.length === 0) return;
+			const playlistId = data[0]?.playlistId;
+			queryClient.invalidateQueries({
+				queryKey: playlistKeys.members({ playlistId: playlistId }),
+			});
+		}
+	});
+};
+export const usePlaylistMembersDeleteMutation = ({
+	userId,
+}: {
+	userId?: string;
+}) => {
+	const queryClient = useQueryClient();
+	const updatePlaylistCache = usePlaylistCacheUpdate({
+		userId,
+	});
+	return useMutation({
+		...playlistMembersControllerDeleteMutation(),
+		onSuccess: (data) => {
+			if (data.length === 0) return;
+			const playlistId = data[0]?.playlistId;
+			removeListItemFromAllCaches<
+				PlaylistMemberWithUser,
+				ListPaginatedPlaylistMembers,
+				ListInfinitePlaylistMembers
+			>(
+				queryClient,
+				{
+					all: playlistMembersAllOptions({ playlistId: playlistId }).queryKey,
+					paginated: playlistMembersPaginatedOptions({ playlistId: playlistId }).queryKey,
+					infinite: playlistMembersInfiniteOptions({ playlistId: playlistId }).queryKey,
+				},
+				(item) => data.some(deleted => deleted.userId === item.userId)
+			);
+
+			if (userId && data.some(deleted => deleted.userId === userId)) {
+				updatePlaylistCache({
+					role: null,
+				})
+			}
+		}
+	});
+};
+export const usePlaylistMemberUpdateMutation = ({
+	userId,
+}: {
+	userId?: string;
+}) => {
+	const queryClient = useQueryClient();
+	const updatePlaylistCache = usePlaylistCacheUpdate({
+		userId,
+	});
+	return useMutation({
+		...playlistMembersControllerUpdateMutation(),
+		onSuccess: (data) => {
+			const playlistId = data.playlistId;
+			
+			updateListItemInAllCaches<
+				PlaylistMemberWithUser,
+				ListPaginatedPlaylistMembers,
+				ListInfinitePlaylistMembers
+			>(
+				queryClient,
+				{
+					all: playlistMembersAllOptions({ playlistId: playlistId }).queryKey,
+					paginated: playlistMembersPaginatedOptions({ playlistId: playlistId }).queryKey,
+					infinite: playlistMembersInfiniteOptions({ playlistId: playlistId }).queryKey,
+				},
+				data,
+			);
+
+			if (userId && data.userId === userId) {
+				updatePlaylistCache({
+					role: data.role,
+				})
+			}
 		}
 	});
 };

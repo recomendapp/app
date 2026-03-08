@@ -1,7 +1,7 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable, Logger } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { playlist, playlistMember, profile, user } from '@libs/db/schemas';
-import { and, asc, desc, eq, gt, ilike, lt, notInArray, or, SQL, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, ilike, inArray, lt, or, SQL, sql } from 'drizzle-orm';
 import { plainToInstance } from 'class-transformer';
 import { 
   ListAllPlaylistMembersQueryDto, 
@@ -9,6 +9,8 @@ import {
   ListInfinitePlaylistMembersQueryDto, 
   ListPaginatedPlaylistMembersDto, 
   ListPaginatedPlaylistMembersQueryDto, 
+  PlaylistMemberAddDto, 
+  PlaylistMemberDto, 
   PlaylistMemberSortBy, 
   PlaylistMemberUpdateDto, 
   PlaylistMemberWithUserDto 
@@ -186,61 +188,87 @@ export class PlaylistMembersService {
     }, { excludeExtraneousValues: true });
   }
 
-  /* -------------------------------- Mutations ------------------------------- */
-
-  async updateAll({
+  async add({
     playlistId,
-    updateMembersDto,
+    dto,
   }: {
     playlistId: number;
-    updateMembersDto: PlaylistMemberUpdateDto;
-  }): Promise<PlaylistMemberWithUserDto[]> {
-    const membersToUpsert = updateMembersDto.members.map((member) => ({
-      playlistId, 
-      userId: member.userId,
-      role: member.role,
-    }));
-    const userIdsToKeep = membersToUpsert.map((m) => m.userId);
+    dto: PlaylistMemberAddDto;
+  }): Promise<PlaylistMemberDto[]> {
+    if (dto.userIds.length === 0) return [];
 
-    const updatedMembers = await this.db.transaction(async (tx) => {
-      await tx
-        .update(playlist)
-        .set({ updatedAt: sql`now()` }) 
-        .where(eq(playlist.id, playlistId));
+    return await this.db.transaction(async (tx) => {
+      const valuesToInsert = dto.userIds.map(userId => ({
+        playlistId,
+        userId,
+        role: 'viewer' as const
+      }));
 
-      if (userIdsToKeep.length > 0) {
-        await tx.delete(playlistMember)
-          .where(and(
-              eq(playlistMember.playlistId, playlistId),
-              notInArray(playlistMember.userId, userIdsToKeep)
-            ));
-      } else {
-        await tx.delete(playlistMember).where(eq(playlistMember.playlistId, playlistId));
-      }
+      const insertedMembers = await tx.insert(playlistMember)
+        .values(valuesToInsert)
+        .onConflictDoNothing()
+        .returning();
 
-      if (membersToUpsert.length > 0) {
-        await tx.insert(playlistMember)
-          .values(membersToUpsert)
-          .onConflictDoUpdate({
-            target: [playlistMember.playlistId, playlistMember.userId],
-            set: { role: sql`excluded.role` },
-          });
-      }
-
-      return tx
-        .select({
-          member: playlistMember,
-          user: USER_COMPACT_SELECT,
-        })
-        .from(playlistMember)
-        .innerJoin(user, eq(user.id, playlistMember.userId))
-        .innerJoin(profile, eq(profile.id, user.id))
-        .where(eq(playlistMember.playlistId, playlistId));
+      return plainToInstance(PlaylistMemberDto, insertedMembers);
     });
+  }
 
-    return plainToInstance(PlaylistMemberWithUserDto, updatedMembers.map((row) => ({
-      ...row.member,
-      user: row.user,
-    })));
+  async update({
+    playlistId,
+    targetUserId,
+    dto,
+  }: {
+    playlistId: number;
+    targetUserId: string;
+    dto: PlaylistMemberUpdateDto;
+  }): Promise<PlaylistMemberDto> {
+    if (dto.role !== 'viewer') {
+      const ownerProfile = await this.db
+        .select({ isPremium: profile.isPremium })
+        .from(playlist)
+        .innerJoin(profile, eq(profile.id, playlist.userId))
+        .where(eq(playlist.id, playlistId))
+        .limit(1)
+        .then(res => res[0]);
+
+      if (!ownerProfile || !ownerProfile.isPremium) {
+        throw new ForbiddenException('The playlist owner must be Premium to assign another role than viewer');
+      }
+    }
+
+    return await this.db.transaction(async (tx) => {
+      const [updatedMember] = await tx.update(playlistMember)
+        .set({ role: dto.role })
+        .where(and(
+          eq(playlistMember.playlistId, playlistId),
+          eq(playlistMember.userId, targetUserId)
+        ))
+        .returning();
+
+      if (!updatedMember) {
+         throw new ForbiddenException('Member not found in this playlist');
+      }
+
+      return plainToInstance(PlaylistMemberDto, updatedMember);
+    });
+  }
+
+  async delete({
+    playlistId,
+    userIds,
+  }: {
+    playlistId: number;
+    userIds: string[];
+  }): Promise<PlaylistMemberDto[]> {
+    if (userIds.length === 0) return [];
+
+    const deletedMembers = await this.db.delete(playlistMember)
+      .where(and(
+        eq(playlistMember.playlistId, playlistId),
+        inArray(playlistMember.userId, userIds) 
+      ))
+      .returning();
+
+    return plainToInstance(PlaylistMemberDto, deletedMembers);
   }
 }

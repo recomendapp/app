@@ -1,4 +1,3 @@
-import { useAuth } from '@/context/auth-context';
 import { PlaylistMemberWithUser } from '@packages/api-js/src';
 import { useTranslations } from 'next-intl';
 import { useCallback, useMemo } from 'react';
@@ -11,7 +10,6 @@ const PLAYLIST_MEMBERS_ROLE: PlaylistMemberWithUser['role'][] = [
 
 export const usePlaylistMembers = () => {
   const t = useTranslations();
-  const { user } = useAuth();
 
   const getPlaylistMembersRoleLabel = useCallback(
     (role: PlaylistMemberWithUser['role']): string => {
@@ -32,7 +30,6 @@ export const usePlaylistMembers = () => {
     return PLAYLIST_MEMBERS_ROLE.map((role) => ({
       value: role,
       label: getPlaylistMembersRoleLabel(role),
-	  disabled: !user?.isPremium && role != 'viewer',
     }));
   }, [getPlaylistMembersRoleLabel]);
 

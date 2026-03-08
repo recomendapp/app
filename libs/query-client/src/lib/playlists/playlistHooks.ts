@@ -1,14 +1,18 @@
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { Playlist, ListPaginatedPlaylists, ListInfinitePlaylists, ListPaginatedPlaylistsWithOwner, ListInfinitePlaylistsWithOwner } from "@packages/api-js";
 import { playlistOptions } from "./playlistOptions";
-import { userPlaylistsPaginatedOptions, userPlaylistsInfiniteOptions } from "../users";
+import { userPlaylistsPaginatedOptions, userPlaylistsInfiniteOptions, userPlaylistsFollowingPaginatedOptions, userPlaylistsFollowingInfiniteOptions } from "../users";
 import { moviePlaylistsPaginatedOptions, moviePlaylistsInfiniteOptions } from "../movies";
 import { tvSeriesPlaylistsPaginatedOptions, tvSeriesPlaylistsInfiniteOptions } from "../tv-series";
 import { updateListItemInAllCaches, updateFromPaginatedCache, updateFromInfiniteCache } from "../utils";
 
-export const usePlaylistCacheUpdate = () => {
+export const usePlaylistCacheUpdate = ({
+    userId,
+}: {
+    userId?: string;
+} = {}) => {
     const queryClient = useQueryClient();
-    return (updatedPlaylist: Playlist) => {
+    return (updatedPlaylist: Partial<Playlist>) => {
         queryClient.setQueryData(playlistOptions({ playlistId: updatedPlaylist.id }).queryKey, (old) => {
             if (!old) return undefined;
             return {
@@ -29,6 +33,21 @@ export const usePlaylistCacheUpdate = () => {
             },
             updatedPlaylist
         );
+
+        if (userId && userId !== updatedPlaylist.userId) {
+            updateListItemInAllCaches<
+                Playlist,
+                ListPaginatedPlaylistsWithOwner,
+                ListInfinitePlaylistsWithOwner
+            >(
+                queryClient,
+                {
+                    paginated: userPlaylistsFollowingPaginatedOptions({ userId: userId }).queryKey,
+                    infinite: userPlaylistsFollowingInfiniteOptions({ userId: userId }).queryKey,
+                },
+                updatedPlaylist
+            );
+        };
 
 		// Movies
         queryClient.setQueriesData(
