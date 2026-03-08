@@ -3,7 +3,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Switch } from "@/components/ui/switch"
 import { UserAvatar } from "@/components/User/UserAvatar"
 import { useAuth } from "@/context/auth-context"
-import { usePlaylistGuestUpdateMutation } from "@/api/client/mutations/playlistMutations"
+// import { usePlaylistGuestUpdateMutation } from "@/api/client/mutations/playlistMutations"
 import { PlaylistGuest } from "@recomendapp/types"
 import { CaretSortIcon } from "@radix-ui/react-icons"
 import { ColumnDef } from "@tanstack/react-table"
@@ -89,30 +89,30 @@ const EditSwitch = ({
 }) => {
 	const t = useTranslations()
 	const { customerInfo } = useAuth()
-	const { mutateAsync: updatePlaylistGuest } = usePlaylistGuestUpdateMutation({
-		playlistId: playlistId
-	})
+	// const { mutateAsync: updatePlaylistGuest } = usePlaylistGuestUpdateMutation({
+	// 	playlistId: playlistId
+	// })
 	const [edit, setEdit] = useState(editSate);
 
-	const handleEdit = useCallback(async (value: boolean) => {
-		if (!playlistId || !id) return null;
-		await updatePlaylistGuest({
-			guestId: id,
-			edit: value,
-		}, {
-			onSuccess: () => {
-				setEdit(value)
-			},
-			onError: () => {
-				setEdit(!value)
-				toast.error(upperFirst(t('common.messages.an_error_occurred')));
-			}
-		})
-	}, [id, playlistId, t, updatePlaylistGuest]);
+	// const handleEdit = useCallback(async (value: boolean) => {
+	// 	if (!playlistId || !id) return null;
+	// 	await updatePlaylistGuest({
+	// 		guestId: id,
+	// 		edit: value,
+	// 	}, {
+	// 		onSuccess: () => {
+	// 			setEdit(value)
+	// 		},
+	// 		onError: () => {
+	// 			setEdit(!value)
+	// 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
+	// 		}
+	// 	})
+	// }, [id, playlistId, t, updatePlaylistGuest]);
 	return (
 	<Switch
 		checked={edit}
-		onCheckedChange={handleEdit}
+		// onCheckedChange={handleEdit}
 		disabled={!customerInfo?.entitlements.active['premium'] && !edit}
 	/>
 	)

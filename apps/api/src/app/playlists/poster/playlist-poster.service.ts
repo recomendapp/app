@@ -5,13 +5,12 @@ import { StorageFolders } from '../../../common/modules/storage/storage.constant
 import { MultipartFile } from '@fastify/multipart';
 import { eq } from 'drizzle-orm';
 import { playlist } from '@libs/db/schemas';
-import { User } from '../../auth/auth.service';
 import { plainToInstance } from 'class-transformer';
 import { PlaylistDto } from '../dto/playlists.dto';
 
 @Injectable()
-export class PLaylistPosterService {
-  private readonly logger = new Logger(PLaylistPosterService.name);
+export class PlaylistPosterService {
+  private readonly logger = new Logger(PlaylistPosterService.name);
 
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
@@ -21,23 +20,18 @@ export class PLaylistPosterService {
   async set({
     playlistId,
     file,
-    currentUser,
   }: {
     playlistId: number,
     file: MultipartFile,
-    currentUser: User,
   }): Promise<PlaylistDto> {
 
     const existingPlaylist = await this.db.query.playlist.findFirst({
       where: eq(playlist.id, playlistId),
-      columns: { userId: true, poster: true },
+      columns: { poster: true },
     });
 
     if (!existingPlaylist) {
       throw new NotFoundException('Playlist not found');
-    }
-    if (existingPlaylist.userId !== currentUser.id) {
-      throw new BadRequestException('You do not have permission to change the poster of this playlist');
     }
 
     const { filename: newAvatarFilename } = await this.storageService.uploadFile(
@@ -61,21 +55,16 @@ export class PLaylistPosterService {
 
   async delete({
     playlistId,
-    currentUser,
   }: {
     playlistId: number,
-    currentUser: User,
   }): Promise<PlaylistDto> {
     const existingPlaylist = await this.db.query.playlist.findFirst({
       where: eq(playlist.id, playlistId),
-      columns: { userId: true, poster: true },
+      columns: { poster: true },
     });
 
     if (!existingPlaylist) {
       throw new NotFoundException('Playlist not found');
-    }
-    if (existingPlaylist.userId !== currentUser.id) {
-      throw new BadRequestException('You do not have permission to change the poster of this playlist');
     }
     if (!existingPlaylist.poster) {
       throw new BadRequestException('This playlist does not have a poster to delete');

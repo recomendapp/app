@@ -1,14 +1,14 @@
-import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { User } from '../auth/auth.service';
-import { PlaylistCreateDto, PlaylistDto, PlaylistGetDTO, PlaylistUpdateDto } from './dto/playlists.dto';
+import { PlaylistCreateDto, PlaylistDto, PlaylistUpdateDto, PlaylistWithOwnerDTO } from './dto/playlists.dto';
 import { playlist, playlistMember } from '@libs/db/schemas';
-import { and, eq, notInArray, or, sql } from 'drizzle-orm';
-import { PlaylistMemberListDto, PlaylistMemberUpdateDto } from './dto/playlist-members.dto';
+import { and, eq } from 'drizzle-orm';
 import { plainToInstance } from 'class-transformer';
 import { StorageService } from '../../common/modules/storage/storage.service';
 import { StorageFolders } from '../../common/modules/storage/storage.constants';
 import { canViewPlaylist } from './playlists.permission';
+import { PlaylistRole } from './types/playlist-role.type';
 
 @Injectable()
 export class PlaylistsService {
@@ -25,7 +25,7 @@ export class PlaylistsService {
   }: {
     playlistId: number;
     user: User | null;
-  }): Promise<PlaylistGetDTO> {
+  }): Promise<PlaylistWithOwnerDTO> {
     const accessCondition = canViewPlaylist(this.db, currentUser);
 
     const result = await this.db.query.playlist.findFirst({
@@ -60,7 +60,7 @@ export class PlaylistsService {
 
     const { user, members, ...playlistData } = result;
 
-    return plainToInstance(PlaylistGetDTO, {
+    return plainToInstance(PlaylistWithOwnerDTO, {
       ...playlistData,
       role: currentUser?.id === playlistData.userId
         ? 'owner'
@@ -86,23 +86,22 @@ export class PlaylistsService {
   }
 
   async update({
-    user,
+    role,
     playlistId,
     updatePlaylistDto,
   }: {
-    user: User;
+    role: PlaylistRole;
     playlistId: number;
     updatePlaylistDto: PlaylistUpdateDto;
   }): Promise<PlaylistDto> {
+    if (role != 'owner' && updatePlaylistDto.visibility !== undefined) {
+      throw new ForbiddenException('Only the owner can change the playlist visibility.');
+    }
     const [updatedPlaylist] = await this.db.update(playlist)
       .set(updatePlaylistDto)
-      .where(
-        and(
-          eq(playlist.id, playlistId),
-          eq(playlist.userId, user.id),
-        )
-      )
+      .where(eq(playlist.id, playlistId))
       .returning();
+  
     if (!updatedPlaylist) {
       throw new NotFoundException();
     }
@@ -110,19 +109,12 @@ export class PlaylistsService {
   }
 
   async delete({
-    user,
     playlistId,
   }: {
-    user: User;
     playlistId: number;
   }): Promise<PlaylistDto> {
     const [deletedPlaylist] = await this.db.delete(playlist)
-      .where(
-        and(
-          eq(playlist.id, playlistId),
-          eq(playlist.userId, user.id),
-        )
-      )
+      .where(eq(playlist.id, playlistId))
       .returning();
 
     if (!deletedPlaylist) {
@@ -136,131 +128,5 @@ export class PlaylistsService {
     }
 
     return plainToInstance(PlaylistDto, deletedPlaylist);
-  }
-
-  // Members
-  async getMembers({
-    user,
-    playlistId,
-  }: {
-    user: User;
-    playlistId: number;
-  }): Promise<PlaylistMemberListDto> {
-    const [accessCheck] = await this.db
-      .select({ id: playlist.id })
-      .from(playlist)
-      .leftJoin(playlistMember, and(
-        eq(playlistMember.playlistId, playlist.id),
-        eq(playlistMember.userId, user.id)
-      ))
-      .where(and(
-        eq(playlist.id, playlistId),
-        or(
-          eq(playlist.userId, user.id),
-          eq(playlistMember.role, 'editor')
-        )
-      ))
-      .limit(1);
-
-    if (!accessCheck) {
-      throw new NotFoundException('Playlist not found or access denied');
-    }
-
-    const members = await this.db.query.playlistMember.findMany({
-      where: eq(playlistMember.playlistId, playlistId),
-      with: {
-        user: {
-          columns: { id: true, name: true, username: true, image: true },
-          with: { profile: { columns: { isPremium: true } } }
-        }
-      }
-    });
-  
-    return plainToInstance(PlaylistMemberListDto, {
-      members: members.map(({ user, ...member }) => ({
-        ...member,
-        user: {
-          id: user.id,
-          name: user.name,
-          username: user.username,
-          avatar: user.image,
-          isPremium: user.profile?.isPremium ?? false,
-        }
-      }))
-    });
-  }
-
-  async updateMembers({
-    user,
-    playlistId,
-    updateMembersDto,
-  }: {
-    user: User;
-    playlistId: number;
-    updateMembersDto: PlaylistMemberUpdateDto;
-  }): Promise<PlaylistMemberListDto> {
-    const membersToUpsert = updateMembersDto.members.map((member) => ({
-      playlistId, 
-      userId: member.userId,
-      role: member.role,
-    }));
-    const userIdsToKeep = membersToUpsert.map((m) => m.userId);
-
-    const updatedMembers = await this.db.transaction(async (tx) => {
-      const [ownershipCheck] = await tx
-        .update(playlist)
-        .set({ updatedAt: sql`now()` }) 
-        .where(and(
-          eq(playlist.id, playlistId),
-          eq(playlist.userId, user.id)
-        ))
-        .returning({ id: playlist.id });
-
-      if (!ownershipCheck) {
-        throw new NotFoundException('Playlist not found or access denied');
-      }
-
-      if (userIdsToKeep.length > 0) {
-        await tx.delete(playlistMember)
-          .where(and(
-              eq(playlistMember.playlistId, playlistId),
-              notInArray(playlistMember.userId, userIdsToKeep)
-            ));
-      } else {
-        await tx.delete(playlistMember).where(eq(playlistMember.playlistId, playlistId));
-      }
-
-      if (membersToUpsert.length > 0) {
-        await tx.insert(playlistMember)
-          .values(membersToUpsert)
-          .onConflictDoUpdate({
-            target: [playlistMember.playlistId, playlistMember.userId],
-            set: { role: sql`excluded.role` },
-          });
-      }
-
-      return tx.query.playlistMember.findMany({
-        where: eq(playlistMember.playlistId, playlistId),
-        with: {
-          user: {
-            columns: { id: true, name: true, username: true, image: true },
-            with: { profile: { columns: { isPremium: true } } }
-          }
-        }
-      });
-    });
-
-    return plainToInstance(PlaylistMemberListDto, {
-      members: updatedMembers.map(({ user, ...member }) => ({
-        ...member,
-        user: {
-          id: user.id,
-          name: user.name,
-          username: user.username,
-          avatar: user.image,
-          isPremium: user.profile?.isPremium ?? false,
-        }
-      })),
-    });
   }
 }

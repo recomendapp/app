@@ -8,6 +8,7 @@ import { FollowingAverageRatingDto, FollowingLogDto, FollowingLogsQueryDto } fro
 import { RecosService } from '../../recos/recos.service';
 import { RecoType } from '../../recos/dto/recos.dto';
 import { plainToInstance } from 'class-transformer';
+import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 
 @Injectable()
 export class MovieLogsService {
@@ -171,13 +172,7 @@ export class MovieLogsService {
       .select({
         log: logMovie,
         review: reviewMovie,
-        user: {
-          id: user.id,
-          name: user.name,
-          username: user.username,
-          avatar: user.image,
-          isPremium: profile.isPremium,
-        },
+        user: USER_COMPACT_SELECT,
       })
       .from(logMovie)
       .innerJoin(follow, eq(follow.followingId, logMovie.userId))

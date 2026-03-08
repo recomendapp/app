@@ -42,13 +42,11 @@ import compressPicture from '@/lib/utils/compressPicture';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   success: () => void;
-  filmId?: string;
   playlist?: Playlist;
 }
 
 export function PlaylistForm({
   success,
-  filmId,
   playlist,
 }: PlaylistFormProps) {
   const { user } = useAuth();
@@ -64,6 +62,10 @@ export function PlaylistForm({
   const { mutateAsync: uploadPoster } = usePlaylistPoserUpdateMutation();
   const { mutateAsync: deletePoster } = usePlaylistPoserDeleteMutation();
 
+  // Permissions
+  const canEditVisibility = !playlist || playlist.role === 'owner';
+  const canDeletePlaylist = playlist && playlist.role === 'owner';
+  
   // Form
   const visibilityOptions: { value: Playlist['visibility'], label: string }[] = [
     { value: 'public', label: upperFirst(t('common.messages.public')) },
@@ -101,6 +103,7 @@ export function PlaylistForm({
     defaultValues,
     mode: 'onChange',
   });
+  
 
   // Handlers
   const handleInsert = useCallback(async (data: PlaylistFormValues) => {
@@ -154,15 +157,19 @@ export function PlaylistForm({
       setNewPoster(undefined);
     }
 
+    const payload: Partial<PlaylistFormValues> = {
+      title: data.title.replace(/\s+/g, ' ').trim(),
+      description: data.description?.trim() || undefined,
+    };
+    if (canEditVisibility) {
+      payload.visibility = data.visibility;
+    }
+
     await updatePlaylistMutation({
       path: {
         playlist_id: playlist.id,
       },
-      body: {
-        title: data.title.replace(/\s+/g, ' ').trim(),
-        description: data.description?.trim() || null,
-        visibility: data.visibility,
-      },
+      body: payload,
     }, {
       onSuccess: async () => {
         toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
@@ -172,7 +179,7 @@ export function PlaylistForm({
         toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
-  }, [newPoster, updatePlaylistMutation, playlist, user, success, t]);
+  }, [newPoster, updatePlaylistMutation, playlist, user, success, t, canEditVisibility]);
 
   const handleDeletePlaylist = useCallback(async () => {
     if (!playlist) return;
@@ -245,7 +252,7 @@ export function PlaylistForm({
                 </FormItem>
               )}
             />
-            <FormField
+            {canEditVisibility && <FormField
               control={form.control}
               name="visibility"
               render={({ field }) => (
@@ -266,11 +273,11 @@ export function PlaylistForm({
                   </FormItem>
                 </TooltipBox>
               )}
-            />
+            />}
           </div>
         </div>
         <DialogFooter>
-          {playlist && (
+          {canDeletePlaylist && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button

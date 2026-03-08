@@ -1,0 +1,1 @@
+ALTER TYPE "public"."playlist_member_role_enum" ADD VALUE 'admin';

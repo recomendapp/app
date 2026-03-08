@@ -9,6 +9,7 @@ import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { plainToInstance } from 'class-transformer';
+import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 
 @Injectable()
 export class MovieReviewsService {
@@ -181,13 +182,7 @@ export class MovieReviewsService {
         tx.select({
             review: reviewMovie,
             log: logMovie,
-            user: {
-              id: user.id,
-              name: user.name,
-              username: user.username,
-              avatar: user.image,
-              isPremium: profile.isPremium,
-            }
+            user: USER_COMPACT_SELECT,
           })
           .from(reviewMovie)
           .innerJoin(logMovie, eq(logMovie.id, reviewMovie.id))
@@ -314,13 +309,7 @@ export class MovieReviewsService {
       const results = await tx.select({
           review: reviewMovie,
           log: logMovie,
-          user: {
-            id: user.id,
-            name: user.name,
-            username: user.username,
-            avatar: user.image,
-            isPremium: profile.isPremium,
-          }
+          user: USER_COMPACT_SELECT,
         })
         .from(reviewMovie)
         .innerJoin(logMovie, eq(logMovie.id, reviewMovie.id))

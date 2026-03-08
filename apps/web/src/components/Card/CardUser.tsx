@@ -107,7 +107,7 @@ const CardUserUsername = React.forwardRef<
 		>
 			{user.username}
 			{user.isPremium && (
-				<Icons.premium className='fill-blue-400 inline w-3'/>
+				<>{' '}<Icons.premium className='fill-blue-400 inline w-3'/></>
 			)}
 		</WithLink>
 	);

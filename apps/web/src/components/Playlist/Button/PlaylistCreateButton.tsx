@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useModal } from '@/context/modal-context';
-import { PlaylistModal } from '@/components/Modals/playlists/PlaylistModal';
+import { ModalPlaylist } from '@/components/Modals/playlists/ModalPlaylist';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
@@ -31,7 +31,7 @@ export function PlaylistCreateButton({
           variant={'outline'}
           size={'icon'}
           className={cn(className)}
-          onClick={() => openModal(PlaylistModal, { filmId })}
+          onClick={() => openModal(ModalPlaylist, { filmId })}
         >
           {icon ? <Plus /> : upperFirst(t('common.messages.create_a_playlist'))}
           {icon && <span className="sr-only">

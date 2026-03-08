@@ -4,7 +4,7 @@ import { OptionalAuthGuard } from '../../../auth/guards';
 import { CurrentOptionalUser } from '../../../auth/decorators';
 import { User } from '../../../auth/auth.service';
 import { UserPlaylistsSavedService } from './user-playlists-saved.service';
-import { ListPaginatedPlaylistsDto, ListInfinitePlaylistsDto } from '../../../playlists/dto/playlists.dto';
+import { ListPaginatedPlaylistsWithOwnerDto, ListInfinitePlaylistsWithOwnerDto } from '../../../playlists/dto/playlists.dto';
 import { ListInfinitePlaylistsSavedQueryDto, ListPaginatedPlaylistsSavedQueryDto } from '../../../playlists/saves/dto/playlist-saved.dto';
 
 @ApiTags('Users')
@@ -19,13 +19,13 @@ export class UserPlaylistsSavedController {
   @UseGuards(OptionalAuthGuard)
   @ApiOkResponse({
     description: 'List of playlists saved by the user',
-    type: ListPaginatedPlaylistsDto,
+    type: ListPaginatedPlaylistsWithOwnerDto,
   })
   async listPaginated(
     @Param('user_id', ParseUUIDPipe) targetUserId: string,
     @Query() query: ListPaginatedPlaylistsSavedQueryDto,
     @CurrentOptionalUser() currentUser: User | null,
-  ): Promise<ListPaginatedPlaylistsDto> {
+  ): Promise<ListPaginatedPlaylistsWithOwnerDto> {
     return this.playlistService.listPaginated({
       targetUserId,
       query,
@@ -37,13 +37,13 @@ export class UserPlaylistsSavedController {
   @UseGuards(OptionalAuthGuard)
   @ApiOkResponse({
     description: 'Get the list of playlists saved by the user with cursor pagination',
-    type: ListInfinitePlaylistsDto,
+    type: ListInfinitePlaylistsWithOwnerDto,
   })
   async listInfinite(
     @Param('user_id', ParseUUIDPipe) targetUserId: string,
     @Query() query: ListInfinitePlaylistsSavedQueryDto,
     @CurrentOptionalUser() currentUser: User | null,
-  ): Promise<ListInfinitePlaylistsDto> {
+  ): Promise<ListInfinitePlaylistsWithOwnerDto> {
     return this.playlistService.listInfinite({
       targetUserId,
       query,

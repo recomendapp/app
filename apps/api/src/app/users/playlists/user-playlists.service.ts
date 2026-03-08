@@ -1,13 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { and, asc, desc, eq, gt, lt, or, SQL, sql } from 'drizzle-orm';
-import { playlist } from '@libs/db/schemas';
+import { and, eq } from 'drizzle-orm';
+import { follow, playlist } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import { ListPaginatedPlaylistsQueryDto, ListPaginatedPlaylistsDto, PlaylistSortBy, ListInfinitePlaylistsQueryDto, ListInfinitePlaylistsDto } from '../../playlists/dto/playlists.dto';
-import { SortOrder } from '../../../common/dto/sort.dto';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { ListPaginatedPlaylistsQueryDto, ListPaginatedPlaylistsDto, ListInfinitePlaylistsQueryDto, ListInfinitePlaylistsDto } from '../../playlists/dto/playlists.dto';
+import { encodeCursor } from '../../../utils/cursor';
 import { plainToInstance } from 'class-transformer';
-import { canViewPlaylist } from '../../playlists/playlists.permission';
+import { PlaylistQueryBuilder } from '../../playlists/playlists.query-builder';
 
 @Injectable()
 export class UserPlaylistsService {
@@ -15,41 +14,20 @@ export class UserPlaylistsService {
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
   ) {}
 
-  private getListBaseQuery(
-    targetUserId: string,
-    currentUser: User | null,
-    sortBy: PlaylistSortBy,
-    sortOrder: SortOrder,
-  ) {
-    const direction = sortOrder === SortOrder.ASC ? asc : desc;
-    const orderBy = (() => {
-      switch (sortBy) {
-        case PlaylistSortBy.RANDOM:
-          return [sql`RANDOM()`];
-        case PlaylistSortBy.LIKES_COUNT:
-          return [direction(playlist.likesCount), direction(playlist.id)];
-        case PlaylistSortBy.UPDATED_AT:
-          return [direction(playlist.updatedAt), direction(playlist.id)];
-        case PlaylistSortBy.CREATED_AT:
-        default:
-          return [direction(playlist.createdAt), direction(playlist.id)];
-      }
-    })();
-
-    let whereClause: SQL;
-
-    if (currentUser?.id === targetUserId) { 
-      whereClause = eq(playlist.userId, targetUserId);
-    } 
-    else { 
-      whereClause = and(
-        eq(playlist.userId, targetUserId),
-        canViewPlaylist(this.db, currentUser)
-      );
-    }
-
-    return { whereClause, orderBy };
+  private async getIsFollowing(targetUserId: string, currentUser: User | null): Promise<boolean> {
+    if (!currentUser || currentUser.id === targetUserId) return false;
+    
+    const followRecord = await this.db.query.follow.findFirst({
+      where: and(
+        eq(follow.followerId, currentUser.id),
+        eq(follow.followingId, targetUserId),
+        eq(follow.status, 'accepted')
+      ),
+      columns: { followerId: true }
+    });
+    return !!followRecord;
   }
+
   async listPaginated({
     targetUserId,
     query,
@@ -62,16 +40,23 @@ export class UserPlaylistsService {
     const { per_page, sort_order, sort_by, page } = query;
     const offset = (page - 1) * per_page;
 
-    const { whereClause, orderBy } = this.getListBaseQuery(
+    const isFollowing = await this.getIsFollowing(targetUserId, currentUser);
+    
+    const visibilityCondition = PlaylistQueryBuilder.getVisibilityCondition(this.db, currentUser, {
       targetUserId,
-      currentUser,
-      sort_by,
-      sort_order
-    );
+      isFollowingTarget: isFollowing
+    });
+    const orderBy = PlaylistQueryBuilder.getOrderBy(sort_by, sort_order);
+    const roleSelection = PlaylistQueryBuilder.getRoleSelection(currentUser);
 
-    const [playlists, totalCount] = await Promise.all([
+    const whereClause = and(eq(playlist.userId, targetUserId), visibilityCondition);
+
+    const [results, totalCount] = await Promise.all([
       this.db
-        .select()
+        .select({
+          playlist: playlist,
+          role: roleSelection,
+        })
         .from(playlist)
         .where(whereClause)
         .orderBy(...orderBy)
@@ -81,7 +66,10 @@ export class UserPlaylistsService {
     ]);
 
     return plainToInstance(ListPaginatedPlaylistsDto, {
-      data: playlists,
+      data: results.map(row => ({
+        ...row.playlist,
+        role: row.role,
+      })),
       meta: {
         total_results: totalCount,
         total_pages: Math.ceil(totalCount / per_page),
@@ -90,6 +78,7 @@ export class UserPlaylistsService {
       },
     });
   }
+
   async listInfinite({
     targetUserId,
     query,
@@ -101,62 +90,17 @@ export class UserPlaylistsService {
   }): Promise<ListInfinitePlaylistsDto> {
     const { per_page, sort_order, sort_by, cursor } = query;
 
-    const cursorData = cursor ? decodeCursor<BaseCursor<string | number, number>>(cursor) : null;
+    const isFollowing = await this.getIsFollowing(targetUserId, currentUser);
 
-    const { whereClause: baseWhereClause, orderBy } = this.getListBaseQuery(
+    const visibilityCondition = PlaylistQueryBuilder.getVisibilityCondition(this.db, currentUser, {
       targetUserId,
-      currentUser,
-      sort_by,
-      sort_order
-    );
+      isFollowingTarget: isFollowing
+    });
+    const orderBy = PlaylistQueryBuilder.getOrderBy(sort_by, sort_order);
+    const roleSelection = PlaylistQueryBuilder.getRoleSelection(currentUser);
+    const cursorWhereClause = PlaylistQueryBuilder.getCursorWhereClause(sort_by, sort_order, cursor);
 
-    let cursorWhereClause: SQL | undefined;
-
-    if (cursorData) {
-      const operator = sort_order === SortOrder.ASC ? gt : lt;
-
-      switch (sort_by) {
-        case PlaylistSortBy.LIKES_COUNT: {
-          cursorWhereClause = or(
-            operator(playlist.likesCount, Number(cursorData.value)),
-            and(
-              eq(playlist.likesCount, Number(cursorData.value)),
-              operator(playlist.id, cursorData.id)
-            )
-          );
-          break;
-        }
-
-        case PlaylistSortBy.UPDATED_AT: {
-          const updatedDate = String(cursorData.value);
-          cursorWhereClause = or(
-            operator(playlist.updatedAt, updatedDate),
-            and(
-              eq(playlist.updatedAt, updatedDate),
-              operator(playlist.id, cursorData.id)
-            )
-          );
-          break;
-        }
-
-        case PlaylistSortBy.RANDOM:
-          break;
-
-        case PlaylistSortBy.CREATED_AT:
-        default: {
-          const createdDate = String(cursorData.value);
-          cursorWhereClause = or(
-            operator(playlist.createdAt, createdDate),
-            and(
-              eq(playlist.createdAt, createdDate),
-              operator(playlist.id, cursorData.id)
-            )
-          );
-          break;
-        }
-      }
-    }
-
+    const baseWhereClause = and(eq(playlist.userId, targetUserId), visibilityCondition);
     const finalWhereClause = cursorWhereClause 
       ? and(baseWhereClause, cursorWhereClause) 
       : baseWhereClause;
@@ -164,7 +108,10 @@ export class UserPlaylistsService {
     const fetchLimit = per_page + 1;
 
     const results = await this.db
-      .select()
+      .select({
+        playlist: playlist,
+        role: roleSelection,
+      })
       .from(playlist)
       .where(finalWhereClause)
       .orderBy(...orderBy)
@@ -176,24 +123,11 @@ export class UserPlaylistsService {
     let nextCursor: string | null = null;
 
     if (hasNextPage) {
-      const lastItem = paginatedResults[paginatedResults.length - 1];
-      let cursorValue: string | number | null = null;
-
-      switch (sort_by) {
-        case PlaylistSortBy.LIKES_COUNT:
-          cursorValue = lastItem.likesCount ?? 0;
-          break;
-        case PlaylistSortBy.UPDATED_AT:
-          cursorValue = lastItem.updatedAt;
-          break;
-        case PlaylistSortBy.CREATED_AT:
-        default:
-          cursorValue = lastItem.createdAt;
-          break;
-      }
-
+      const lastItem = paginatedResults[paginatedResults.length - 1].playlist;
+      const cursorValue = PlaylistQueryBuilder.getNextCursorValue(lastItem, sort_by);
+      
       if (cursorValue !== null) {
-        nextCursor = encodeCursor<BaseCursor<string | number, number>>({
+        nextCursor = encodeCursor({
           value: cursorValue,
           id: lastItem.id,
         });
@@ -201,7 +135,10 @@ export class UserPlaylistsService {
     }
 
     return plainToInstance(ListInfinitePlaylistsDto, {
-      data: paginatedResults,
+      data: paginatedResults.map(row => ({
+        ...row.playlist,
+        role: row.role,
+      })),
       meta: {
         next_cursor: nextCursor,
         per_page,

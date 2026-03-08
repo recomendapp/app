@@ -12,22 +12,23 @@ import {
   } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Icons } from "@/config/icons"
-import { usePlaylistGuestsDeleteMutation } from "@/api/client/mutations/playlistMutations"
+// import { usePlaylistGuestsDeleteMutation } from "@/api/client/mutations/playlistMutations"
 import toast from "react-hot-toast"
 import { useModal } from "@/context/modal-context"
 import { upperFirst } from "lodash"
 import { useTranslations } from "next-intl"
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { PlaylistMemberWithUserDto } from "@packages/api-js"
 
-export const PlaylistGuestTable = ({
-	guests,
+export const PlaylistMembersTable = ({
+	members,
 	playlistId,
 	setView
 }: {
-	guests: PlaylistGuest[],
+	members: PlaylistMemberWithUserDto[],
 	playlistId: number,
-	setView: (view: 'guests' | 'add') => void
+	setView: (view: 'manage' | 'add') => void
 }) => {
 	const t = useTranslations();
 	const { createConfirmModal } = useModal()
@@ -35,11 +36,11 @@ export const PlaylistGuestTable = ({
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 	const [rowSelection, setRowSelection] = useState({})
-	const { mutateAsync: deletePlaylistGuests, isPending } = usePlaylistGuestsDeleteMutation({
-		playlistId: playlistId
-	})
+	// const { mutateAsync: deletePlaylistGuests, isPending } = usePlaylistGuestsDeleteMutation({
+	// 	playlistId: playlistId
+	// })
 	const table = useReactTable({
-		data: guests,
+		data: members,
 		columns: Columns(),
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
@@ -56,23 +57,23 @@ export const PlaylistGuestTable = ({
 		},
 	})
 
-	const handleDelete = useCallback(async () => {
-		const selectedRows = table.getFilteredSelectedRowModel().rows
-		const ids = selectedRows.map((row) => row.original?.id as number)
-		if (!ids.length) toast.error(upperFirst(t('common.messages.no_selected_users')))
-		await deletePlaylistGuests({
-			ids: ids,
-			playlistId: playlistId
-		}, {
-			onSuccess: () => {
-				toast.success(upperFirst(t('common.messages.deleted', { count: selectedRows.length })))
-				setRowSelection({})
-			},
-			onError: () => {
-				toast.error(upperFirst(t('common.messages.an_error_occurred')))
-			}
-		})
-	}, [deletePlaylistGuests, playlistId, setRowSelection, table, t])
+	// const handleDelete = useCallback(async () => {
+	// 	const selectedRows = table.getFilteredSelectedRowModel().rows
+	// 	const ids = selectedRows.map((row) => row.original?.id as number)
+	// 	if (!ids.length) toast.error(upperFirst(t('common.messages.no_selected_users')))
+	// 	await deletePlaylistGuests({
+	// 		ids: ids,
+	// 		playlistId: playlistId
+	// 	}, {
+	// 		onSuccess: () => {
+	// 			toast.success(upperFirst(t('common.messages.deleted', { count: selectedRows.length })))
+	// 			setRowSelection({})
+	// 		},
+	// 		onError: () => {
+	// 			toast.error(upperFirst(t('common.messages.an_error_occurred')))
+	// 		}
+	// 	})
+	// }, [deletePlaylistGuests, playlistId, setRowSelection, table, t])
 
 
 	return (
@@ -169,11 +170,11 @@ export const PlaylistGuestTable = ({
 				<Button
 					variant="outline"
 					className="h-8"
-					onClick={() => createConfirmModal({
-						title: upperFirst(t('common.messages.are_u_sure')),
-						onConfirm: handleDelete
-					})}
-					disabled={isPending}
+					// onClick={() => createConfirmModal({
+					// 	title: upperFirst(t('common.messages.are_u_sure')),
+					// 	onConfirm: handleDelete
+					// })}
+					// disabled={isPending}
 				>
 					<Icons.delete className="h-4 w-4" />
 					<span className="sr-only">{upperFirst(t('common.messages.delete'))}</span>

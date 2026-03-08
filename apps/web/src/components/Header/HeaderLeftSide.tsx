@@ -12,7 +12,7 @@ import {
   ButtonGroup,
 } from "@/components/ui/button-group"
 import { useModal } from '@/context/modal-context';
-import { PlaylistModal } from '../Modals/playlists/PlaylistModal';
+import { ModalPlaylist } from '../Modals/playlists/ModalPlaylist';
 
 export default function HeaderLeftSide({
   className,
@@ -47,7 +47,7 @@ const ButtonPlaylistCreate = () => {
   const t = useTranslations();
   const { openModal } = useModal();
   return (
-    <Button variant="outline" size="icon" aria-label={upperFirst(t('common.messages.create_a_playlist'))} onClick={() => openModal(PlaylistModal, {})}>
+    <Button variant="outline" size="icon" aria-label={upperFirst(t('common.messages.create_a_playlist'))} onClick={() => openModal(ModalPlaylist, {})}>
       <Icons.add />
       <span className="sr-only">{upperFirst(t('common.messages.create_a_playlist'))}</span>
     </Button>

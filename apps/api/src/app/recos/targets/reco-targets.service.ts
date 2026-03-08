@@ -8,6 +8,7 @@ import { SortOrder } from '../../../common/dto/sort.dto';
 import { RecoType } from '../dto/recos.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { plainToInstance } from 'class-transformer';
+import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 
 @Injectable()
 export class RecoTargetsService {
@@ -60,13 +61,7 @@ export class RecoTargetsService {
       .select({
         follow: follow,
         user: {
-          id: user.id,
-          name: user.name,
-          username: user.username,
-          avatar: user.image,
-        },
-        profile: {
-          isPremium: profile.isPremium,
+          ...USER_COMPACT_SELECT,
           followersCount: profile.followersCount,
         },
         alreadySeen: (isMovie 
@@ -86,7 +81,6 @@ export class RecoTargetsService {
         )
       )
       .leftJoin(latestRecoQuery, eq(latestRecoQuery.targetUserId, follow.followingId));
-
     const joinedQb = isMovie
       ? baseQb
           .leftJoin(logMovie, and(
@@ -138,7 +132,7 @@ export class RecoTargetsService {
       name: row.user.name,
       username: row.user.username,
       avatar: row.user.avatar,
-      isPremium: row.profile.isPremium,
+      isPremium: row.user.isPremium,
       alreadySeen: row.alreadySeen,
       alreadySent: row.alreadySent,
     })));
@@ -190,7 +184,7 @@ export class RecoTargetsService {
         name: row.user.name,
         username: row.user.username,
         avatar: row.user.avatar,
-        isPremium: row.profile.isPremium,
+        isPremium: row.user.isPremium,
         alreadySeen: row.alreadySeen,
         alreadySent: row.alreadySent,
       })),
@@ -303,7 +297,7 @@ export class RecoTargetsService {
         name: row.user.name,
         username: row.user.username,
         avatar: row.user.avatar,
-        isPremium: row.profile.isPremium,
+        isPremium: row.user.isPremium,
         alreadySeen: row.alreadySeen,
         alreadySent: row.alreadySent,
       })),

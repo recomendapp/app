@@ -102,19 +102,7 @@ export class PlaylistDto {
 	@ApiProperty({ example: 250, description: 'Number of likes the playlist has received' })
 	@Expose()
 	likesCount: number;
-}
 
-@ApiSchema({ name: 'PlaylistWithOwner' })
-export class PlaylistWithOwnerDTO extends PlaylistDto {
-    @ApiProperty({ type: () => UserSummaryDto, description: 'The user object' })
-    @Expose()
-    @ValidateNested()
-    @Type(() => UserSummaryDto)
-    owner: UserSummaryDto;
-}
-
-@ApiSchema({ name: 'PlaylistGet' })
-export class PlaylistGetDTO extends PlaylistWithOwnerDTO {
     @ApiProperty({ 
         description: 'The role of the current user for this playlist (owner, editor, viewer, or null)', 
         enum: [...playlistMemberRoleEnum.enumValues, 'owner'], 
@@ -125,6 +113,15 @@ export class PlaylistGetDTO extends PlaylistWithOwnerDTO {
     @IsString()
     @IsNullable()
     role: typeof playlistMemberRoleEnum.enumValues[number] | 'owner' | null;
+}
+
+@ApiSchema({ name: 'PlaylistWithOwner' })
+export class PlaylistWithOwnerDTO extends PlaylistDto {
+    @ApiProperty({ type: () => UserSummaryDto, description: 'The user object' })
+    @Expose()
+    @ValidateNested()
+    @Type(() => UserSummaryDto)
+    owner: UserSummaryDto;
 }
 
 @ApiSchema({ name: 'BaseListPlaylistsQuery' })

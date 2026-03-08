@@ -131,7 +131,7 @@ export const playlistItemRelations = relations(playlistItem, ({ one }) => ({
 }));
 
 // Member
-export const playlistMemberRoleEnum = pgEnum('playlist_member_role_enum', ['viewer', 'editor']);
+export const playlistMemberRoleEnum = pgEnum('playlist_member_role_enum', ['viewer', 'editor', 'admin']);
 export const playlistMember = pgTable(
   'playlist_member',
   {

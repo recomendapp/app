@@ -162,6 +162,13 @@
       "when": 1772909864427,
       "tag": "0022_add_indexes_to_person_feed",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1772980990217,
+      "tag": "0023_jazzy_wraith",
+      "breakpoints": true
     }
   ]
 }

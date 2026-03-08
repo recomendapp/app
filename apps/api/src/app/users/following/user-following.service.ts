@@ -7,6 +7,7 @@ import { SortOrder } from '../../../common/dto/sort.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { ListInfiniteUsersDto, ListInfiniteUsersQueryDto, ListPaginatedUsersDto, ListPaginatedUsersQueryDto, UserSortBy } from '../dto/users.dto';
 import { plainToInstance } from 'class-transformer';
+import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 
 @Injectable()
 export class UserFollowingService {
@@ -93,17 +94,9 @@ export class UserFollowingService {
 
     const [followers, totalCount] = await Promise.all([
       this.db
-        .select({
+         .select({
           follow: follow,
-          user: {
-            id: user.id,
-            name: user.name,
-            username: user.username,
-            avatar: user.image,
-          },
-          profile: {
-            isPremium: profile.isPremium,
-          }
+          user: USER_COMPACT_SELECT,
         })
         .from(follow)
         .innerJoin(user, eq(user.id, follow.followingId))
@@ -116,13 +109,7 @@ export class UserFollowingService {
     ]);
 
     return plainToInstance(ListPaginatedUsersDto, {
-      data: followers.map((row) => ({
-        id: row.user.id,
-        name: row.user.name,
-        username: row.user.username,
-        avatar: row.user.avatar,
-        isPremium: row.profile.isPremium,
-      })),
+      data: followers.map((row) => row.user),
       meta: {
         total_results: totalCount,
         total_pages: Math.ceil(totalCount / per_page),
@@ -196,15 +183,9 @@ export class UserFollowingService {
       .select({
         follow: follow,
         user: {
-          id: user.id,
-          name: user.name,
-          username: user.username,
-          avatar: user.image,
-        },
-        profile: {
-          isPremium: profile.isPremium,
+          ...USER_COMPACT_SELECT,
           followersCount: profile.followersCount,
-        }
+        },
       })
       .from(follow)
       .innerJoin(user, eq(user.id, follow.followingId))
@@ -224,7 +205,7 @@ export class UserFollowingService {
 
       switch (sort_by) {
         case UserSortBy.FOLLOWERS_COUNT:
-          cursorValue = lastItem.profile.followersCount ?? 0;
+          cursorValue = lastItem.user.followersCount ?? 0;
           break;
         case UserSortBy.CREATED_AT:
         default:
@@ -246,7 +227,7 @@ export class UserFollowingService {
         name: row.user.name,
         username: row.user.username,
         avatar: row.user.avatar,
-        isPremium: row.profile.isPremium,
+        isPremium: row.user.isPremium,
       })),
       meta: {
         next_cursor: nextCursor,

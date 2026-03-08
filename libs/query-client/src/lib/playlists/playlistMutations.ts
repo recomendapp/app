@@ -1,7 +1,7 @@
-import { ListInfinitePlaylistsWithOwner, pLaylistPosterControllerDeleteMutation, pLaylistPosterControllerSetMutation, playlistsControllerCreateMutation, playlistsControllerDeleteMutation, playlistsControllerUpdateMembersMutation, playlistsControllerUpdateMutation } from "@packages/api-js";
+import { ListInfinitePlaylistsWithOwner, playlistPosterControllerDeleteMutation, playlistPosterControllerSetMutation, playlistsControllerCreateMutation, playlistsControllerDeleteMutation, playlistMembersControllerUpdateAllMutation, playlistsControllerUpdateMutation } from "@packages/api-js";
 import { InfiniteData, useMutation, useQueryClient } from "@tanstack/react-query";
 import { userKeys, userPlaylistsInfiniteOptions, userPlaylistsPaginatedOptions } from "../users";
-import { playlistMembersOptions, playlistOptions } from "./playlistOptions";
+import { playlistMembersAllOptions, playlistOptions } from "./playlistOptions";
 import { removeFromInfiniteCache, removeFromPaginatedCache, removeListItemFromAllCaches } from "../utils";
 import { moviePlaylistsInfiniteOptions, moviePlaylistsPaginatedOptions } from "../movies";
 import { tvSeriesPlaylistsInfiniteOptions, tvSeriesPlaylistsPaginatedOptions } from "../tv-series";
@@ -118,7 +118,7 @@ export const usePlaylistDeleteMutation = () => {
 export const usePlaylistPoserUpdateMutation = () => {
 	const updatePlaylistCache = usePlaylistCacheUpdate();
 	return useMutation({
-		...pLaylistPosterControllerSetMutation(),
+		...playlistPosterControllerSetMutation(),
 		onSuccess: (data) => {
 			updatePlaylistCache(data);
 		}
@@ -128,7 +128,7 @@ export const usePlaylistPoserUpdateMutation = () => {
 export const usePlaylistPoserDeleteMutation = () => {
 	const updatePlaylistCache = usePlaylistCacheUpdate();
 	return useMutation({
-		...pLaylistPosterControllerDeleteMutation(),
+		...playlistPosterControllerDeleteMutation(),
 		onSuccess: (data) => {
 			updatePlaylistCache(data);
 		}
@@ -143,9 +143,9 @@ export const usePlaylistMembersUpdateMutation = ({
 }) => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		...playlistsControllerUpdateMembersMutation(),
+		...playlistMembersControllerUpdateAllMutation(),
 		onSuccess: (data) => {
-			queryClient.setQueryData(playlistMembersOptions({ playlistId: playlistId }).queryKey, data);
+			queryClient.setQueryData(playlistMembersAllOptions({ playlistId: playlistId }).queryKey, data);
 		}
 	});
 };

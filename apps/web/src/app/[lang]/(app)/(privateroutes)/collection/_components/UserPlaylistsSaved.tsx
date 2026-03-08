@@ -42,10 +42,11 @@ export function UserPlaylistsSaved({
   if (grid) {
     return (
       <Fragment>
-        {flattenPlaylists?.map((playlist, index) => (
+        {flattenPlaylists?.map(({ owner, ...playlist }, index) => (
           <CardPlaylist
           key={playlist.id}
           playlist={playlist}
+          owner={owner}
           ref={(index === flattenPlaylists.length - 1) ? ref : null}
           />
         ))}
@@ -54,10 +55,11 @@ export function UserPlaylistsSaved({
   }
   return (
     <Fragment>
-      {flattenPlaylists?.map((playlist, index) => (
+      {flattenPlaylists?.map(({ owner, ...playlist }, index) => (
         <CardPlaylist
         key={playlist.id}
         playlist={playlist}
+        owner={owner}
         ref={(index === flattenPlaylists.length - 1) ? ref : null}
         />
       ))}

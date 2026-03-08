@@ -1,14 +1,14 @@
 'use client'
 
 import { useQuery } from "@tanstack/react-query";
-import { PlaylistGet as TPlaylist } from "@packages/api-js";
+import { PlaylistWithOwner } from "@packages/api-js";
 import { PlaylistHeader } from "./PlaylistHeader";
 import { playlistOptions } from "@libs/query-client";
 
 export const Playlist = ({
 	playlist: playlistProps,
 } : {
-	playlist: TPlaylist;
+	playlist: PlaylistWithOwner;
 }) => {
 	const {
 		data: playlist,

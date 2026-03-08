@@ -6,22 +6,20 @@ import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from '../Modal';
 import { Button } from '@/components/ui/button';
 import { UserCogIcon } from 'lucide-react';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { ModalPlaylistGuest } from './ModalPlaylistGuest/ModalPlaylistGuest';
+import { ModalPlaylistMembers } from './ModalPlaylistMembers/ModalPlaylistMembers';
 import { PlaylistForm } from '@/components/Playlist/PlaylistForm/PlaylistForm';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import { Playlist } from '@packages/api-js/src';
+import { Playlist } from '@packages/api-js';
 
-interface PlaylistModalProps extends ModalType {
+interface ModalPlaylistProps extends ModalType {
   playlist?: Playlist;
-  filmId?: string;
 }
 
-export function PlaylistModal({
-  filmId,
+export function ModalPlaylist({
   playlist,
   ...props
-} : PlaylistModalProps) {
+} : ModalPlaylistProps) {
   const t = useTranslations();
   const { user } = useAuth();
   const { openModal, closeModal } = useModal();
@@ -38,7 +36,7 @@ export function PlaylistModal({
               <Button
               variant={'outline'}
               size={'icon'}
-              onClick={() => openModal(ModalPlaylistGuest, { playlistId: playlist.id })}
+              onClick={() => openModal(ModalPlaylistMembers, { playlistId: playlist.id })}
               >
                 <UserCogIcon size={20}/>
               </Button>
@@ -49,7 +47,6 @@ export function PlaylistModal({
       <ModalBody>
         <PlaylistForm
         success={() => closeModal(props.id)}
-        filmId={filmId}
         playlist={playlist}
         />
       </ModalBody>

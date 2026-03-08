@@ -13,7 +13,7 @@ import { useInView } from "react-intersection-observer";
 import { useUI } from "@/context/ui-context";
 import { ContextMenuPlaylist } from "@/components/ContextMenu/ContextMenuPlaylist";
 import { useModal } from "@/context/modal-context";
-import { PlaylistModal } from "@/components/Modals/playlists/PlaylistModal";
+import { ModalPlaylist } from "@/components/Modals/playlists/ModalPlaylist";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { userPlaylistsInfiniteOptions } from "@libs/query-client";
 
@@ -195,7 +195,7 @@ export const SidebarLeftRoutes = () => {
 							</span>
 						</Link>
 					</SidebarMenuButton>
-					<SidebarMenuAction onClick={() => openModal(PlaylistModal, {})}>
+					<SidebarMenuAction onClick={() => openModal(ModalPlaylist, {})}>
 						<Icons.add />
 						<span className="sr-only">{upperFirst(t('messages.create_a_playlist'))}</span>
 					</SidebarMenuAction>

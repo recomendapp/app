@@ -14,6 +14,7 @@ import { SortOrder } from '../../../../common/dto/sort.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../../utils/cursor';
 import { plainToInstance } from 'class-transformer';
 import { canViewPlaylist } from '../../../playlists/playlists.permission';
+import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 
 @Injectable()
 export class MePlaylistsFollowingService {
@@ -75,13 +76,7 @@ export class MePlaylistsFollowingService {
       this.db
         .select({
           playlist: playlist,
-          owner: {
-            id: user.id,
-            name: user.name,
-            username: user.username,
-            avatar: user.image,
-            isPremium: profile.isPremium,
-          }
+          owner: USER_COMPACT_SELECT,
         })
         .from(playlist)
         .innerJoin(user, eq(playlist.userId, user.id))
@@ -156,13 +151,7 @@ export class MePlaylistsFollowingService {
       this.db
         .select({
           playlist: playlist,
-          owner: {
-            id: user.id,
-            name: user.name,
-            username: user.username,
-            avatar: user.image,
-            isPremium: profile.isPremium,
-          }
+          owner: USER_COMPACT_SELECT,
         })
         .from(playlist)
         .innerJoin(user, eq(playlist.userId, user.id))

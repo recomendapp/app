@@ -1,7 +1,7 @@
 import { HeaderBox } from "@/components/Box/HeaderBox";
 import { CardUser } from "@/components/Card/CardUser";
 import { ContextMenuPlaylist } from "@/components/ContextMenu/ContextMenuPlaylist";
-import { PlaylistModal } from "@/components/Modals/playlists/PlaylistModal";
+import { ModalPlaylist } from "@/components/Modals/playlists/ModalPlaylist";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { useAuth } from "@/context/auth-context";
@@ -9,13 +9,13 @@ import { useModal } from "@/context/modal-context";
 import { useRandomImage } from "@/hooks/use-random-image";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 import { ConvertHoursMinutes } from "@/lib/utils";
-import { PlaylistGet } from "@packages/api-js";
+import { PlaylistWithOwner } from "@packages/api-js";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 
 interface PlaylistHeaderProps
   extends React.HTMLAttributes<HTMLDivElement> {
-    playlist: PlaylistGet;
+    playlist: PlaylistWithOwner;
     numberItems: number;
     totalRuntime?: number;
     backdrops?: string[];
@@ -38,7 +38,7 @@ export function PlaylistHeader({
   
   const openPlaylistModal = () => {
     if (playlist.userId !== user?.id) return;
-    openModal(PlaylistModal, {
+    openModal(ModalPlaylist, {
       playlist,
     })
   }
@@ -91,10 +91,10 @@ export function PlaylistHeader({
               {playlist.description}
             </p>
             {/* ITEMS & TOTAL RUNTIME */}
-            <div className="flex gap-1 font-light">
+            <div className="flex items-center gap-1 font-light">
               {playlist.owner ? <CardUser user={playlist.owner} variant='inline' /> : null}
               <span className=" before:content-['_•_']" >
-                {`${numberItems} ${t('common.messages.film', { count: numberItems })}`}
+                {`${numberItems} ${t('common.messages.item', { count: numberItems })}`}
               </span>
               {totalRuntime && <span className=" before:content-['_•_']" >
                 {ConvertHoursMinutes(totalRuntime)}

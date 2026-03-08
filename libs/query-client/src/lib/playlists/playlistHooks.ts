@@ -1,5 +1,5 @@
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
-import { Playlist, ListPaginatedPlaylists, ListInfinitePlaylists, ListPaginatedPlaylistsWithOwner, ListInfinitePlaylistsWithOwner, PlaylistGet } from "@packages/api-js";
+import { Playlist, ListPaginatedPlaylists, ListInfinitePlaylists, ListPaginatedPlaylistsWithOwner, ListInfinitePlaylistsWithOwner } from "@packages/api-js";
 import { playlistOptions } from "./playlistOptions";
 import { userPlaylistsPaginatedOptions, userPlaylistsInfiniteOptions } from "../users";
 import { moviePlaylistsPaginatedOptions, moviePlaylistsInfiniteOptions } from "../movies";
@@ -8,7 +8,7 @@ import { updateListItemInAllCaches, updateFromPaginatedCache, updateFromInfinite
 
 export const usePlaylistCacheUpdate = () => {
     const queryClient = useQueryClient();
-    return (updatedPlaylist: PlaylistGet | Playlist) => {
+    return (updatedPlaylist: Playlist) => {
         queryClient.setQueryData(playlistOptions({ playlistId: updatedPlaylist.id }).queryKey, (old) => {
             if (!old) return undefined;
             return {

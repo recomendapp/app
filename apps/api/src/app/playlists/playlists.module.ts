@@ -3,8 +3,9 @@ import { PlaylistsController } from './playlists.controller';
 import { PlaylistsService } from './playlists.service';
 import { PlaylistLikesModule } from './likes/playlist-likes.module';
 import { PlaylistSavesModule } from './saves/playlist-saves.module';
-import { PLaylistPosterModule } from './poster/playlist-poster.module';
+import { PlaylistPosterModule } from './poster/playlist-poster.module';
 import { StorageModule } from '../../common/modules/storage/storage.module';
+import { PlaylistMembersModule } from './members/playlist-members.module';
 
 
 @Module({
@@ -12,7 +13,8 @@ import { StorageModule } from '../../common/modules/storage/storage.module';
     StorageModule,
     PlaylistLikesModule,
     PlaylistSavesModule,
-    PLaylistPosterModule,
+    PlaylistPosterModule,
+    PlaylistMembersModule,
   ],
   controllers: [PlaylistsController],
   providers: [PlaylistsService],

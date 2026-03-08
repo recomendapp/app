@@ -1,7 +1,7 @@
 import { HeaderBox } from "@/components/Box/HeaderBox";
 import { CardUser } from "@/components/Card/CardUser";
 import { ContextMenuPlaylist } from "@/components/ContextMenu/ContextMenuPlaylist";
-import { PlaylistModal } from "@/components/Modals/playlists/PlaylistModal";
+import { ModalPlaylist } from "@/components/Modals/playlists/ModalPlaylist";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { useAuth } from "@/context/auth-context";
@@ -35,7 +35,7 @@ export function PlaylistTvSeriesHeader({
 
   const openPlaylistModal = () => {
     if (playlist?.user_id !== session?.user.id) return;
-    openModal(PlaylistModal, {
+    openModal(ModalPlaylist, {
       playlist,
     })
   }
