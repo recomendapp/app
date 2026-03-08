@@ -117,38 +117,38 @@ export const useUserMyFeedInfiniteOptions = ({
 		},
 	})
 };
-export const useUserMyFeedCastCrewOptions = ({
-	enabled,
-} : {
-	enabled?: boolean;
-}) => {
-	const PER_PAGE = 20;
-	const supabase = useSupabaseClient();
-	return infiniteQueryOptions({
-		queryKey: userKeys.myFeedCastCrew(),
-		queryFn: async ({ pageParam = 1 }) => {
-			let from = (pageParam - 1) * PER_PAGE;
-	  		let to = from - 1 + PER_PAGE;
-			const { data, error } = await supabase
-				.from('user_feed_cast_crew')
-				.select(`
-					*,
-					movie:media_movie!inner(*),
-					person:media_person(name,profile_url,url)
-				`)
-				.not('movie.release_date', 'is', null)
-				.order('movie(release_date)', { ascending: false })
-				.range(from, to);
-			if (error) throw error;
-			return data;
-		},
-		initialPageParam: 1,
-		getNextPageParam: (lastPage, pages) => {
-			return lastPage?.length == PER_PAGE ? pages.length + 1 : undefined;
-		},
-		enabled: enabled,
-	});
-};
+// export const useUserMyFeedCastCrewOptions = ({
+// 	enabled,
+// } : {
+// 	enabled?: boolean;
+// }) => {
+// 	const PER_PAGE = 20;
+// 	const supabase = useSupabaseClient();
+// 	return infiniteQueryOptions({
+// 		queryKey: userKeys.myFeedCastCrew(),
+// 		queryFn: async ({ pageParam = 1 }) => {
+// 			let from = (pageParam - 1) * PER_PAGE;
+// 	  		let to = from - 1 + PER_PAGE;
+// 			const { data, error } = await supabase
+// 				.from('user_feed_cast_crew')
+// 				.select(`
+// 					*,
+// 					movie:media_movie!inner(*),
+// 					person:media_person(name,profile_url,url)
+// 				`)
+// 				.not('movie.release_date', 'is', null)
+// 				.order('movie(release_date)', { ascending: false })
+// 				.range(from, to);
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		initialPageParam: 1,
+// 		getNextPageParam: (lastPage, pages) => {
+// 			return lastPage?.length == PER_PAGE ? pages.length + 1 : undefined;
+// 		},
+// 		enabled: enabled,
+// 	});
+// };
 export const useUserFeedInfiniteOptions = ({
 	userId,
 	filters,

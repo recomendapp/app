@@ -15,6 +15,7 @@ import { RecosModule } from './recos/recos.module';
 import { MeModule } from './me/me.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { FeedModule } from './feed/feed.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { AppService } from './app.service';
     TvSeriesModule,
     PersonsModule,
     ReviewsModule,
+    FeedModule,
   ],
   controllers: [AppController],
   providers: [AppService],

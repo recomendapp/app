@@ -60,7 +60,7 @@ export const siteConfig = {
       '/auth',
     ],
     premiumRoutes: [
-      '/feed/cast-crew',
+      '/feed/persons',
     ]
   }
 } as const;

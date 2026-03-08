@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { bookmarksControllerDeleteByMediaMutation, bookmarksControllerSetByMediaMutation, FollowRequest, ListInfiniteBookmarks, ListInfiniteFollowRequests, ListInfiniteRecos, ListInfiniteRecoTargets, ListInfiniteUsers, ListPaginatedBookmarks, ListPaginatedFollowRequests, ListPaginatedRecos, ListPaginatedRecoTargets, ListPaginatedUsers, personsControllerFollowMutation, personsControllerUnfollowMutation, playlistLikesControllerDeleteMutation, playlistLikesControllerSetMutation, playlistSavesControllerDeleteMutation, playlistSavesControllerSetMutation, recosControllerDeleteByIdMutation, recosControllerDeleteByMediaMutation, recosControllerSendMutation, RecoTarget, userFollowControllerAcceptMutation, userFollowControllerDeclineMutation, userFollowControllerDeleteMutation, userFollowControllerSetMutation, userPushTokensControllerSetMutation, meControllerUpdateMutation, UserSummary, meAvatarControllerSetMutation, meAvatarControllerDeleteMutation, Playlist, ListPaginatedPlaylists, ListInfinitePlaylists } from '@packages/api-js';
-import { userBookmarkByMediaOptions, userByIdOptions, userByUsernameOptions, userFollowersInfiniteOptions, userFollowersPaginatedOptions, userFollowingInfiniteOptions, userFollowingPaginatedOptions, userFollowOptions, userFollowRequestsInfiniteOptions, userFollowRequestsPaginatedOptions, userMeOptions, userPersonFollowOptions, userPlaylistLikeOptions, userPlaylistSavedOptions, userPlaylistsSavedInfiniteOptions, userPlaylistsSavedPaginatedOptions, userRecosAllOptions, userRecoSendAllOptions, userRecoSendInfiniteOptions, userRecoSendPaginatedOptions, userRecosInfiniteOptions, userRecosPaginatedOptions } from './userOptions';
+import { bookmarksControllerDeleteByMediaMutation, bookmarksControllerSetByMediaMutation, FollowRequest, ListInfiniteBookmarks, ListInfiniteFollowRequests, ListInfiniteRecos, ListInfiniteRecoTargets, ListInfiniteUsers, ListPaginatedBookmarks, ListPaginatedFollowRequests, ListPaginatedRecos, ListPaginatedRecoTargets, ListPaginatedUsers, personsControllerFollowMutation, personsControllerUnfollowMutation, playlistLikesControllerDeleteMutation, playlistLikesControllerSetMutation, playlistSavesControllerDeleteMutation, playlistSavesControllerSetMutation, recosControllerDeleteByIdMutation, recosControllerDeleteByMediaMutation, recosControllerSendMutation, RecoTarget, userFollowControllerAcceptMutation, userFollowControllerDeclineMutation, userFollowControllerDeleteMutation, userFollowControllerSetMutation, userPushTokensControllerSetMutation, meControllerUpdateMutation, UserSummary, meAvatarControllerSetMutation, meAvatarControllerDeleteMutation, Playlist, ListPaginatedPlaylists, ListInfinitePlaylists, ListPaginatedPersonFeed, ListInfinitePersonFeed, PersonFeedWithMovie, PersonFeedWithTvSeries } from '@packages/api-js';
+import { userBookmarkByMediaOptions, userByIdOptions, userByUsernameOptions, userFeedPersonsInfiniteOptions, userFeedPersonsPaginatedOptions, userFollowersInfiniteOptions, userFollowersPaginatedOptions, userFollowingInfiniteOptions, userFollowingPaginatedOptions, userFollowOptions, userFollowRequestsInfiniteOptions, userFollowRequestsPaginatedOptions, userMeOptions, userPersonFollowOptions, userPlaylistLikeOptions, userPlaylistSavedOptions, userPlaylistsSavedInfiniteOptions, userPlaylistsSavedPaginatedOptions, userRecosAllOptions, userRecoSendAllOptions, userRecoSendInfiniteOptions, userRecoSendPaginatedOptions, userRecosInfiniteOptions, userRecosPaginatedOptions } from './userOptions';
 import { removeListItemFromAllCaches, updateListItemInAllCaches, updateOrRemoveListItemInAllCaches } from '../utils';
 import { userKeys } from './userKeys';
 import { BookmarkWithMedia, RecoWithMedia } from './types';
@@ -330,7 +330,11 @@ export const useUserPersonFollowMutation = () => {
 				personId: data.personId,
 			}).queryKey, data);
 
-			// TODO: Invalidate followed persons queries
+			queryClient.invalidateQueries({
+				queryKey: userKeys.feedPersons({
+					userId: data.userId,
+				})
+			});
 		}
 	});
 }
@@ -345,7 +349,24 @@ export const useUserPersonUnfollowMutation = () => {
 				personId: data.personId,
 			}).queryKey, null);
 
-			// TODO: Invalidate followed persons queries
+			removeListItemFromAllCaches<
+				(({
+						type: "movie";
+					} & PersonFeedWithMovie)
+				| ({
+						type: "tv_series";
+					} & PersonFeedWithTvSeries)
+				),
+				ListPaginatedPersonFeed,
+				ListInfinitePersonFeed
+			>(
+				queryClient,
+				{
+					paginated: userFeedPersonsPaginatedOptions({ userId: data.userId }).queryKey,
+					infinite: userFeedPersonsInfiniteOptions({ userId: data.userId }).queryKey,
+				},
+				(item) => item.person.id === data.personId
+			);
 		}
 	});
 }

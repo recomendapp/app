@@ -148,6 +148,20 @@
       "when": 1772906263328,
       "tag": "0020_add_indexes_to_recos_trending",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1772908582443,
+      "tag": "0021_flaky_tag",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1772909864427,
+      "tag": "0022_add_indexes_to_person_feed",
+      "breakpoints": true
     }
   ]
 }

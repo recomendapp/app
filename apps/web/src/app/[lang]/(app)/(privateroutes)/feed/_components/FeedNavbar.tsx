@@ -9,7 +9,7 @@ import { usePathname } from '@/lib/i18n/navigation';
 import { useMemo } from "react";
 
 export const FeedNavbar = () => {
-	const { customerInfo } = useAuth();
+	const { user } = useAuth();
 	const common = useTranslations('common');
 	const pathname = usePathname();
 	const routes = useMemo(() => [
@@ -21,11 +21,11 @@ export const FeedNavbar = () => {
 		},
 		{
 			label: title(common('messages.cast_and_crew')),
-			active: pathname === '/feed/cast-crew',
-			href: customerInfo?.entitlements.active['premium'] ? `/feed/cast-crew` : '/upgrade',
-			disabled: !customerInfo?.entitlements.active['premium'],
+			active: pathname === '/feed/persons',
+			href: user?.isPremium ? `/feed/persons` : '/upgrade',
+			disabled: !user?.isPremium,
 		},
-	], [pathname, common, customerInfo]);
+	], [pathname, common, user]);
 
 	return (
 		<div className="inline-flex h-10 items-center justify-center bg-muted p-1 text-muted-foreground w-full max-w-xl rounded-md mb-4">

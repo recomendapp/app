@@ -596,8 +596,8 @@
         "rated_liked": "<name></name> liked and rated",
         "reviewed": "<name></name> reviewed"
       },
-      "cast_and_crew": {
-        "new_activity": "<linkPerson>{name}</linkPerson> is <important>{roles}</important> in <linkFilm>{film}</linkFilm>",
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> is <important>{roles}</important> in <linkMedia>{titleMedia}</linkMedia>",
         "label": "<linkPerson>{name}</linkPerson> is <important>{roles}</important>"
       }
     },
