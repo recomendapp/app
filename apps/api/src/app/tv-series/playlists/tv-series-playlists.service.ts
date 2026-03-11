@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { and, eq, sql } from 'drizzle-orm';
+import { and, eq, exists, sql } from 'drizzle-orm';
 import { playlist, playlistItem, profile, user } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
@@ -28,9 +28,20 @@ export class TvSeriesPlaylistsService {
   ) {
     const visibilityCondition = PlaylistQueryBuilder.getVisibilityCondition(tx, currentUser);
 
+    const containsTvSeriesCondition = exists(
+      tx.select({ id: playlistItem.id })
+        .from(playlistItem)
+        .where(
+          and(
+            eq(playlistItem.playlistId, playlist.id),
+            eq(playlistItem.tvSeriesId, tvSeriesId),
+            eq(playlistItem.type, 'tv_series')
+          )
+        )
+    );
+
     return and(
-      eq(playlistItem.tvSeriesId, tvSeriesId),
-      eq(playlistItem.type, 'tv_series'),
+      containsTvSeriesCondition,
       visibilityCondition
     );
   }
@@ -59,7 +70,6 @@ export class TvSeriesPlaylistsService {
             owner: USER_COMPACT_SELECT,
           })
           .from(playlist)
-          .innerJoin(playlistItem, eq(playlistItem.playlistId, playlist.id))
           .innerJoin(user, eq(user.id, playlist.userId))
           .innerJoin(profile, eq(profile.id, user.id))
           .where(baseWhereClause)
@@ -68,7 +78,6 @@ export class TvSeriesPlaylistsService {
           .offset(offset),
         tx.select({ count: sql<number>`count(*)` })
           .from(playlist)
-          .innerJoin(playlistItem, eq(playlistItem.playlistId, playlist.id))
           .where(baseWhereClause)
       ]);
     
@@ -120,7 +129,6 @@ export class TvSeriesPlaylistsService {
           owner: USER_COMPACT_SELECT,
         })
         .from(playlist)
-        .innerJoin(playlistItem, eq(playlistItem.playlistId, playlist.id))
         .innerJoin(user, eq(user.id, playlist.userId))
         .innerJoin(profile, eq(profile.id, user.id))
         .where(finalWhereClause)

@@ -114,7 +114,7 @@ SELECT
     created_at,
     created_at,     -- updatedAt (défaut)
     comment,
-    rank,
+    LPAD(rank::text, 10, '0'),
     'movie',        -- type
     movie_id,
     NULL            -- tv_series_id
@@ -137,7 +137,7 @@ SELECT
     created_at,
     created_at,     -- updatedAt
     comment,
-    rank,
+    LPAD(rank::text, 10, '0'),
     'tv_series',    -- type
     NULL,           -- movie_id
     tv_series_id

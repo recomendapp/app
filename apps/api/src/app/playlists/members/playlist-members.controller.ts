@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, ParseUUIDPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiForbiddenResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { PlaylistMembersService } from './playlist-members.service';
 import { AuthGuard } from '../../auth/guards';
 import { PlaylistRolesGuard } from '../guards/playlist-roles.guard';
@@ -16,6 +16,7 @@ import {
   PlaylistMemberUpdateDto, 
   PlaylistMemberWithUserDto 
 } from './playlist-members.dto';
+import { ApiErrorDto } from '../../../common/dto/api-error.dto';
 
 @ApiTags('Playlists')
 @Controller({
@@ -101,6 +102,10 @@ export class PlaylistMembersController {
   @ApiOkResponse({
     description: 'Update the role of a specific member in the playlist.',
     type: PlaylistMemberDto,
+  })
+  @ApiForbiddenResponse({ 
+    description: 'User is not allowed to assign this role (e.g., requires Premium).',
+    type: ApiErrorDto, 
   })
   update(
     @Param('playlist_id', ParseIntPipe) playlistId: number,

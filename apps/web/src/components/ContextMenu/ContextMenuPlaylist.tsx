@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useAuth } from "@/context/auth-context";
 import { ModalPlaylist } from "../Modals/playlists/ModalPlaylist";
-import { ModalPlaylistMembers } from "../Modals/playlists/ModalPlaylistMembers/ModalPlaylistMembers";
+import { ModalPlaylistMembers } from "../Modals/playlists/ModalPlaylistMembers";
 import toast from "react-hot-toast";
 import { usePathname, useRouter } from "@/lib/i18n/navigation";
 import { Playlist, User } from "@packages/api-js";
@@ -57,7 +57,7 @@ export const ContextMenuPlaylist = ({
 				{
 					icon: Icons.users,
 					onClick: () => openModal(ModalPlaylistMembers, {
-						playlistId: playlist.id,
+						playlist: playlist,
 					}),
 					label: upperFirst(t('common.messages.manage_members', { count: 2 })),
 				},

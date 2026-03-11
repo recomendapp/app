@@ -47,7 +47,7 @@ export const ModalRecoSend = ({
 	const debouncedSearch = useDebounce(searchQuery);
 	const { ref, inView } = useInView(); 
 	const {
-		data: data,
+		data,
 		fetchNextPage,
 		hasNextPage,
 		isFetching,

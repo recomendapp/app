@@ -10,7 +10,7 @@ import { upperFirst } from "lodash";
 import { useAuth } from "@/context/auth-context";
 import { createShareController } from "../ShareController/ShareController";
 import { ShareControllerTvSeries } from "../ShareController/ShareControllerTvSeries";
-import { ModalPlaylistTvSeriesAdd } from "../Modals/playlists/ModalPlaylistTvSeriesAdd";
+import { ModalPlaylistAdd } from "../Modals/playlists/ModalPlaylistAdd";
 import { TvSeries, TvSeriesCompact } from "@packages/api-js";
 import { ModalRecoSend } from "../Modals/recos/ModalRecoSend";
 
@@ -48,7 +48,7 @@ export const ContextMenuTvSeries = ({
 			...(user ? [
 				{
 					icon: Icons.addPlaylist,
-					onClick: () => openModal(ModalPlaylistTvSeriesAdd, { tvSeriesId: tvSeries.id, tvSeriesTitle: tvSeries.name! }),
+					onClick: () => openModal(ModalPlaylistAdd, { mediaId: tvSeries.id, type: 'tv_series', mediaTitle: tvSeries.name }),
 					label: upperFirst(t('common.messages.add_to_playlist')),
 				},
 				{

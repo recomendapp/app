@@ -1,16 +1,17 @@
 import { ApiSchema, ApiProperty, PartialType, PickType, getSchemaPath, ApiPropertyOptional, ApiExtraModels, IntersectionType } from '@nestjs/swagger';
-import { IsDateString, IsEnum, IsIn, IsInt, IsOptional, IsString, MaxLength, Min, ValidateNested } from 'class-validator';
+import { ArrayMinSize, IsArray, IsDateString, IsEnum, IsIn, IsInt, IsOptional, IsString, MaxLength, Min, ValidateNested } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { playlistItemTypeEnum } from '@libs/db/schemas';
-import { MovieCompactDto } from '../../../movies/dto/movies.dto';
-import { TvSeriesCompactDto } from '../../../tv-series/dto/tv-series.dto';
-import { PaginatedResponseDto, PaginationQueryDto } from '../../../../common/dto/pagination.dto';
-import { SortOrder } from '../../../../common/dto/sort.dto';
-import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../../common/dto/cursor-pagination.dto';
-import { PLAYLIST_ITEM_RULES } from '../../../../config/validation-rules';
+import { MovieCompactDto } from '../../movies/dto/movies.dto';
+import { TvSeriesCompactDto } from '../../tv-series/dto/tv-series.dto';
+import { PaginatedResponseDto, PaginationQueryDto } from '../../../common/dto/pagination.dto';
+import { SortOrder } from '../../../common/dto/sort.dto';
+import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../common/dto/cursor-pagination.dto';
+import { PLAYLIST_ITEM_RULES } from '../../../config/validation-rules';
 
 export enum PlaylistItemSortBy {
   RANK = 'rank',
+  CREATED_AT = 'created_at',
 }
 
 export enum PlaylistItemType {
@@ -45,11 +46,10 @@ export class PlaylistItemDto {
   @MaxLength(PLAYLIST_ITEM_RULES.COMMENT.MAX)
   comment: string | null;
 
-  @ApiProperty({ example: 1 })
+  @ApiProperty({ example: '0|i0000r:' }) 
   @Expose()
-  @IsInt()
-  @Min(1)
-  rank: number;
+  @IsString()
+  rank: string;
 
   @ApiProperty({ example: 123456 })
   @Expose()
@@ -236,4 +236,18 @@ export class ListInfinitePlaylistItemsDto extends CursorPaginatedResponseDto<Pla
 	super(partial);
 	Object.assign(this, partial);
   }
+}
+
+// Delete
+@ApiSchema({ name: 'PlaylistItemsDelete' })
+export class PlaylistItemsDeleteDto {
+  @ApiProperty({
+    description: 'Array of playlist item IDs to remove',
+    example: [1, 42, 108],
+    type: [Number],
+  })
+  @IsArray()
+  @ArrayMinSize(1)
+  @IsInt({ each: true })
+  itemIds: number[];
 }

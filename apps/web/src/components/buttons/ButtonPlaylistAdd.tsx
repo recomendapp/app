@@ -9,19 +9,21 @@ import { cn } from "@/lib/utils";
 import { useModal } from "@/context/modal-context";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { ModalPlaylistTvSeriesAdd } from "../Modals/playlists/ModalPlaylistTvSeriesAdd";
+import { PlaylistsAddTargetsControllerListAllData } from "@packages/api-js/src";
+import { ModalPlaylistAdd } from "../Modals/playlists/ModalPlaylistAdd";
 
-interface ButtonPlaylistTvSeriesAddProps
+interface ButtonPlaylistAddProps
 	extends React.ComponentProps<typeof Button> {
-		tvSeriesId: number;
-		tvSeriesTitle?: string | null;
+		mediaId: PlaylistsAddTargetsControllerListAllData['path']['media_id'];
+		mediaType: PlaylistsAddTargetsControllerListAllData['path']['type'];
+		mediaTitle?: string | null;
 		stopPropagation?: boolean;
 	}
 
-const ButtonPlaylistTvSeriesAdd = React.forwardRef<
+const ButtonPlaylistAdd = React.forwardRef<
 	React.ComponentRef<typeof Button>,
-	ButtonPlaylistTvSeriesAddProps
->(({ tvSeriesId, stopPropagation = true, tvSeriesTitle, className, ...props }, ref) => {
+	ButtonPlaylistAddProps
+>(({ mediaId, mediaType, mediaTitle, stopPropagation = true, className, ...props }, ref) => {
 	const { user } = useAuth();
 	const t = useTranslations();
 	const pathname = usePathname();
@@ -29,8 +31,8 @@ const ButtonPlaylistTvSeriesAdd = React.forwardRef<
 
 	const handleClick = React.useCallback((e: React.MouseEvent) => {
 		stopPropagation && e.stopPropagation();
-		openModal(ModalPlaylistTvSeriesAdd, { tvSeriesId, tvSeriesTitle: tvSeriesTitle! })
-	}, [stopPropagation, openModal, tvSeriesId, tvSeriesTitle]);
+		openModal(ModalPlaylistAdd, { mediaId, type: mediaType, mediaTitle: mediaTitle })
+	}, [stopPropagation, openModal, mediaId, mediaType, mediaTitle]);
 
 	if (user === null) {
 		return (
@@ -67,6 +69,6 @@ const ButtonPlaylistTvSeriesAdd = React.forwardRef<
 	</TooltipBox>
 	);
 });
-ButtonPlaylistTvSeriesAdd.displayName = 'ButtonPlaylistTvSeriesAdd';
+ButtonPlaylistAdd.displayName = 'ButtonPlaylistAdd';
 
-export default ButtonPlaylistTvSeriesAdd;
+export default ButtonPlaylistAdd;

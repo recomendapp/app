@@ -2,9 +2,8 @@
 
 import { useAuth } from '@/context/auth-context';
 import { useModal } from '@/context/modal-context';
-import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../../Modal';
+import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../Modal';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { PlaylistMembersTable } from './components/table/table';
 import { Button } from '@/components/ui/button';
 import { ArrowLeftIcon, Check } from 'lucide-react';
 import { UserAvatar } from '@/components/User/UserAvatar';
@@ -17,158 +16,13 @@ import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/components/ui/input-group';
-import { playlistMembersAllOptions, usePlaylistMembersDeleteMutation, usePlaylistMemberUpdateMutation } from '@libs/query-client';
-import { PlaylistMemberUpdate, PlaylistMemberWithUser, UserSummary } from '@packages/api-js';
+import { playlistMembersAllOptions, usePlaylistMembersAddMutation, usePlaylistMembersDeleteMutation, usePlaylistMemberUpdateMutation } from '@libs/query-client';
+import { Playlist, PlaylistMemberAdd, PlaylistMemberUpdate, PlaylistMemberWithUser, UserSummary } from '@packages/api-js';
 import { CardUser } from '@/components/Card/CardUser';
 import Fuse from 'fuse.js';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { usePlaylistMembers } from '@/hooks/use-playlist-members';
-
-export const PlaylistMembersView = ({
-  members,
-  playlistId,
-  setView
-} : {
-  members: PlaylistMemberWithUser[],
-  playlistId: number,
-  setView: (view: 'manage' | 'add') => void
-}) => {
-  const { user } = useAuth();
-  const t = useTranslations();
-  const { playlistMembersRoleValues } = usePlaylistMembers();
-
-  // Mutations
-  const { mutateAsync: updateMember } = usePlaylistMemberUpdateMutation({
-    userId: user?.id,
-  });
-  const { mutateAsync: deleteMember } = usePlaylistMembersDeleteMutation({
-    userId: user?.id,
-  });
-
-  const [searchQuery, setSearchQuery] = useState('');
-  const fuse = useMemo(() => {
-		return new Fuse(members || [], {
-			keys: ['user.username', 'user.name'],
-			threshold: 0.5,
-		});
-	}, [members]);
-  const results = useMemo(() => {
-    if (!searchQuery || searchQuery.trim() === '') {
-      return members;
-    }
-    return fuse.search(searchQuery).map(result => result.item);
-  }, [searchQuery, members, fuse]);
-
-  // Handlers
-  const handleUpdateMember = useCallback(async (userId: string, dto: PlaylistMemberUpdate) => {
-    await updateMember({
-      path: {
-        playlist_id: playlistId,
-        user_id: userId,
-      },
-      body: dto,
-    });
-  }, [updateMember, playlistId]);
-  const handleDeleteMember = useCallback(async (userId: string) => {
-    await deleteMember({
-      path: {
-        playlist_id: playlistId,
-      },
-      body: {
-        userIds: [userId],
-      }
-    });
-  }, [deleteMember, playlistId]);
-
-  return (
-    <>
-      <ModalHeader>
-        <ModalTitle>
-          {upperFirst(t('common.messages.manage_members'))}
-        </ModalTitle>
-        <ModalDescription>
-          {upperFirst(t('common.messages.manage_playlist_access_rights'))}
-        </ModalDescription>
-      </ModalHeader>
-      <ModalBody>
-        <InputGroup>
-          <InputGroupAddon align="block-start" className='border-b py-1!'>
-            <Icons.search className="text-muted-foreground" />
-            <InputGroupInput placeholder={upperFirst(t('common.messages.search_user', { count: 1 }))} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-            <InputGroupButton variant={'outline'} onClick={() => setView('add')}>
-              {upperFirst(t('common.messages.add_member', { count: 2 }))}
-            </InputGroupButton>
-          </InputGroupAddon>
-          <InputGroupAddon align="block-end">
-            <ScrollArea className="h-[30vh] w-full">
-              <div className="space-y-2">
-                {results.length ? (
-                  results?.map(({ user, ...item }, index) => (
-                    <div
-                    key={user.id}
-                    className="w-full flex items-center justify-between text-left px-1"
-                    >
-                      <div className="flex items-center">
-                        <UserAvatar avatarUrl={user.avatar} username={user.username} />
-                        <div className="ml-2 ">
-                          <p className="text-sm font-medium leading-none line-clamp-1">
-                            {user.name}
-                          </p>
-                          <p className="text-sm line-clamp-1">
-                            @{user.username}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2 shrink-0">
-                        <Select value={item.role} onValueChange={(v) => handleUpdateMember(item.userId, { role: v as PlaylistMemberUpdate['role'] })}>
-                          <SelectTrigger className="w-full max-w-48">
-                            <SelectValue placeholder="Select a fruit" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {playlistMembersRoleValues.map(({ value, label }) => (
-                              <SelectItem key={value} value={value}>
-                                {label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <Button variant="outline" size="icon-sm" onClick={() => handleDeleteMember(item.userId)}>
-                          <Icons.X />
-                          <span className="sr-only">{upperFirst(t('common.messages.delete'))}</span>
-                        </Button>
-                      </div>
-                    </div>
-                  ))
-                ) : searchQuery ? (
-                  <div className="p-4 text-center text-muted-foreground">
-                    {upperFirst(t('common.messages.no_user_found'))}
-                  </div>
-                ) : (
-                  <div className="p-4 text-center text-muted-foreground">
-                    {upperFirst(t('common.messages.no_member', { count: 1 }))}
-                  </div>
-                )}
-                {/* {isFetching ? (
-                  <div className="flex items-center justify-center p-4">
-                    <Icons.loader />
-                  </div>
-                ) : (
-                  <div ref={ref} />
-                )} */}
-              </div>
-            </ScrollArea>
-          </InputGroupAddon>
-        </InputGroup>
-      </ModalBody>
-      {/* <ModalBody>
-        {members ? (
-          <PlaylistMembersTable playlistId={playlistId} members={members} setView={setView} />
-        ) : null}
-      </ModalBody> */}
-    </>
-  )
-}
 
 // export const PlaylistMembersAddView = ({
 //   playlistId,
@@ -345,36 +199,106 @@ export const PlaylistMembersView = ({
 //   )
 // }
 
-interface ModalPlaylistMembersProps extends ModalType {
-  playlistId: number;
+interface ModalPlaylistMembersAddProps extends ModalType {
+  playlist: Playlist;
 }
 
-export function ModalPlaylistMembers({
-  playlistId,
+export function ModalPlaylistMembersAdd({
+  playlist,
   ...props
-} : ModalPlaylistMembersProps) {
-  const t = useTranslations();
+} : ModalPlaylistMembersAddProps) {
   const { user } = useAuth();
-  const { data: members, isError } = useQuery(playlistMembersAllOptions({ playlistId }));
   const { closeModal } = useModal();
-  const [view, setView] = useState<'manage' | 'add'>('manage');
+  const t = useTranslations();
 
-  if (!user) return null;
+  // Mutations
+  const { mutateAsync: addMembers } = usePlaylistMembersAddMutation();
+
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Handlers
+  const handleAddMembers = useCallback(async (dto: PlaylistMemberAdd) => {
+    await addMembers({
+      path: {
+        playlist_id: playlist.id,
+      },
+      body: dto,
+    });
+  }, [addMembers, playlist.id]);
+
   return (
     <Modal
     open={props.open}
     onOpenChange={(open) => !open && closeModal(props.id)}
     >
-      {members ? (
-        view === 'manage' ? (
-          <PlaylistMembersView playlistId={playlistId} members={members} setView={setView} />
-        ) : (
-          <></>
-          // <PlaylistMembersAddView playlistId={playlistId} members={members} setView={setView} />
-        )
-      ) : isError ? (
-        <p>{upperFirst(t('common.messages.an_error_occurred'))}</p>
-      ) : null}
+      <ModalHeader>
+        <ModalTitle>
+          {upperFirst(t('common.messages.add_member', { count: 2 }))}
+        </ModalTitle>
+        <ModalDescription>
+          {upperFirst(t('common.messages.add_guests_to_your_playlist'))}
+        </ModalDescription>
+      </ModalHeader>
+      <ModalBody>
+        <InputGroup>
+          <InputGroupAddon align="block-start" className='border-b py-1!'>
+            <Icons.search className="text-muted-foreground" />
+            <InputGroupInput placeholder={upperFirst(t('common.messages.search_user', { count: 1 }))} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+          </InputGroupAddon>
+          <InputGroupAddon align="block-end">
+            <ScrollArea className="h-[30vh] w-full">
+              <div className="space-y-2">
+                {/* {results.length ? (
+                  results?.map(({ user, ...item }, index) => (
+                    <div
+                    key={user.id}
+                    className="w-full flex items-center justify-between text-left px-1"
+                    >
+                      <div className="flex items-center">
+                        <UserAvatar avatarUrl={user.avatar} username={user.username} />
+                        <div className="ml-2 ">
+                          <p className="text-sm font-medium leading-none line-clamp-1">
+                            {user.name}
+                          </p>
+                          <p className="text-sm line-clamp-1">
+                            @{user.username}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <Select value={item.role} onValueChange={(v) => handleUpdateMember(item.userId, { role: v as PlaylistMemberUpdate['role'] })}>
+                          <SelectTrigger className="w-full max-w-48">
+                            <SelectValue placeholder="Select a fruit" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {playlistMembersRoleValues.map(({ value, label }) => (
+                              <SelectItem key={value} value={value}>
+                                {label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <Button variant="outline" size="icon-sm" onClick={() => handleDeleteMember(item.userId)}>
+                          <Icons.X />
+                          <span className="sr-only">{upperFirst(t('common.messages.delete'))}</span>
+                        </Button>
+                      </div>
+                    </div>
+                  ))
+                ) : searchQuery ? (
+                  <div className="p-4 text-center text-muted-foreground">
+                    {upperFirst(t('common.messages.no_user_found'))}
+                  </div>
+                ) : (
+                  <div className="p-4 text-center text-muted-foreground">
+                    {upperFirst(t('common.messages.no_member', { count: 1 }))}
+                  </div>
+                )} */}
+              </div>
+            </ScrollArea>
+          </InputGroupAddon>
+        </InputGroup>
+      </ModalBody>
     </Modal>
   )
 }

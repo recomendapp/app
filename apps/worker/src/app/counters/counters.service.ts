@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
-import { UpdateFollowCountsDto, UpdatePlaylistLikesDto, UpdatePlaylistSavesDto, UpdateReviewMovieLikesDto, UpdateReviewTvSeriesLikesDto } from '@shared/worker';
+import { UpdateFollowCountsDto, UpdatePlaylistItemsDto, UpdatePlaylistLikesDto, UpdatePlaylistSavesDto, UpdateReviewMovieLikesDto, UpdateReviewTvSeriesLikesDto } from '@shared/worker';
 import { playlist, profile, reviewMovie, reviewTvSeries } from '@libs/db/schemas';
 import { eq, sql } from 'drizzle-orm';
 
@@ -13,15 +13,15 @@ export class CountersService {
 	) {}
 
 	async updateFollowCounts(data: UpdateFollowCountsDto) {
-		const { followerId, followingId, action } = data;
+		const { followerId, followingId, action, amount } = data;
 
 		const followingUpdateSql = action === 'increment'
-            ? sql`${profile.followingCount} + 1`
-            : sql`GREATEST(${profile.followingCount} - 1, 0)`;
+            ? sql`${profile.followingCount} + ${amount}`
+            : sql`GREATEST(${profile.followingCount} - ${amount}, 0)`;
 
         const followersUpdateSql = action === 'increment'
-            ? sql`${profile.followersCount} + 1`
-            : sql`GREATEST(${profile.followersCount} - 1, 0)`;
+            ? sql`${profile.followersCount} + ${amount}`
+            : sql`GREATEST(${profile.followersCount} - ${amount}, 0)`;
 
 		await this.db.transaction(async (tx) => {
 			await tx.update(profile)
@@ -35,11 +35,11 @@ export class CountersService {
 	}
 
 	async updateReviewMovieLikes(data: UpdateReviewMovieLikesDto) {
-		const { reviewId, action } = data;
+		const { reviewId, action, amount } = data;
 
 		const likesUpdateSql = action === 'increment'
-			? sql`${reviewMovie.likesCount} + 1`
-			: sql`GREATEST(${reviewMovie.likesCount} - 1, 0)`;
+			? sql`${reviewMovie.likesCount} + ${amount}`
+			: sql`GREATEST(${reviewMovie.likesCount} - ${amount}, 0)`;
 
 		await this.db.update(reviewMovie)
 			.set({ likesCount: likesUpdateSql })
@@ -47,23 +47,35 @@ export class CountersService {
 	}
 
 	async updateReviewTvSeriesLikes(data: UpdateReviewTvSeriesLikesDto) {
-		const { reviewId, action } = data;
+		const { reviewId, action, amount } = data;
 
 		const likesUpdateSql = action === 'increment'
-			? sql`${reviewTvSeries.likesCount} + 1`
-			: sql`GREATEST(${reviewTvSeries.likesCount} - 1, 0)`;
+			? sql`${reviewTvSeries.likesCount} + ${amount}`
+			: sql`GREATEST(${reviewTvSeries.likesCount} - ${amount}, 0)`;
 
 		await this.db.update(reviewTvSeries)
 			.set({ likesCount: likesUpdateSql })
 			.where(eq(reviewTvSeries.id, reviewId));
 	}
 
+	async updatePlaylistItems(data: UpdatePlaylistItemsDto) {
+		const { playlistId, action, amount } = data;
+
+		const itemsUpdateSql = action === 'increment'
+			? sql`${playlist.itemsCount} + ${amount}`
+			: sql`GREATEST(${playlist.itemsCount} - ${amount}, 0)`;
+
+		await this.db.update(playlist)
+			.set({ itemsCount: itemsUpdateSql })
+			.where(eq(playlist.id, playlistId));
+	}
+
 	async updatePlaylistLikes(data: UpdatePlaylistLikesDto) {
-		const { playlistId, action } = data;
+		const { playlistId, action, amount } = data;
 
 		const likesUpdateSql = action === 'increment'
-			? sql`${playlist.likesCount} + 1`
-			: sql`GREATEST(${playlist.likesCount} - 1, 0)`;
+			? sql`${playlist.likesCount} + ${amount}`
+			: sql`GREATEST(${playlist.likesCount} - ${amount}, 0)`;
 
 		await this.db.update(playlist)
 			.set({ likesCount: likesUpdateSql })
@@ -71,11 +83,11 @@ export class CountersService {
 	}
 
 	async updatePlaylistSaves(data: UpdatePlaylistSavesDto) {
-		const { playlistId, action } = data;
+		const { playlistId, action, amount } = data;
 
 		const savedUpdateSql = action === 'increment'
-			? sql`${playlist.savedCount} + 1`
-			: sql`GREATEST(${playlist.savedCount} - 1, 0)`;
+			? sql`${playlist.savedCount} + ${amount}`
+			: sql`GREATEST(${playlist.savedCount} - ${amount}, 0)`;
 
 		await this.db.update(playlist)
 			.set({ savedCount: savedUpdateSql })

@@ -13,7 +13,7 @@ import ButtonUserActivityMovieLike from "@/components/buttons/ButtonUserActivity
 import ButtonUserActivityMovieRating from "@/components/buttons/ButtonUserActivityMovieRating";
 import ButtonUserActivityMovieWatch from "@/components/buttons/ButtonUserActivityMovieWatch";
 import ButtonUserActivityMovieWatchedDate from "@/components/buttons/ButtonUserActivityMovieWatchedDate";
-import ButtonPlaylistMovieAdd from "@/components/buttons/ButtonPlaylistMovieAdd";
+import ButtonPlaylistAdd from "@/components/buttons/ButtonPlaylistAdd";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 import { useQuery } from "@tanstack/react-query";
 import { movieOptions } from "@libs/query-client";
@@ -158,7 +158,7 @@ export const MovieWidget = () => {
 						<ButtonUserActivityMovieWatchedDate movieId={movie.id} />
 						</div>
 						<div className="flex gap-2 items-center">
-						<ButtonPlaylistMovieAdd movieId={movie.id} movieTitle={movie.title} />
+						<ButtonPlaylistAdd movieId={movie.id} movieTitle={movie.title} />
 						<ButtonUserRecoSend mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
 						</div>
 					</div>

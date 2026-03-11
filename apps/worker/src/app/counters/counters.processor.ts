@@ -27,6 +27,10 @@ export class CountersProcessor extends WorkerHost {
         case 'counters:update-review-tv-series-likes':
           await this.countersService.updateReviewTvSeriesLikes(job.data);
           break;
+
+        case 'counters:update-playlist-items':
+          await this.countersService.updatePlaylistItems(job.data);
+          break;
         
         case 'counters:update-playlist-likes':
           await this.countersService.updatePlaylistLikes(job.data);

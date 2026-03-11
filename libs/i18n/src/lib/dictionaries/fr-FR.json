@@ -417,7 +417,8 @@
       "viewer": "{count, plural, one {Spectateur} other {Spectateurs}}",
       "editor": "{count, plural, one {Éditeur} other {Éditeurs}}",
       "admin": "{count, plural, one {Administrateur} other {Administrateurs}}",
-      "owner": "{count, plural, one {Propriétaire} other {Propriétaires}}"
+      "owner": "{count, plural, one {Propriétaire} other {Propriétaires}}",
+      "you_dont_have_permission_to_do_this_action": "Vous n'avez pas la permission d'effectuer cette action"
     },
     "form": {
       "email": {

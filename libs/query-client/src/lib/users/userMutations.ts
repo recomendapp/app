@@ -444,7 +444,7 @@ export const useUserPlaylistLikeMutation = ({
 			return { previous };
 		},
 		onError: (_err, _variables, context) => {
-			if (context?.previous) {
+			if (context && context.previous !== undefined) {
 				const { path: { playlist_id } } = _variables;
 				const options = userPlaylistLikeOptions({ userId, playlistId: playlist_id });
 				queryClient.setQueryData(options.queryKey, context.previous);
@@ -474,7 +474,7 @@ export const useUserPlaylistUnlikeMutation = ({
 			return { previous };
 		},
 		onError: (_err, _variables, context) => {
-			if (context?.previous) {
+			if (context && context.previous !== undefined) {
 				const { path: { playlist_id } } = _variables;
 				const options = userPlaylistLikeOptions({ userId, playlistId: playlist_id });
 				queryClient.setQueryData(options.queryKey, context.previous);
@@ -506,11 +506,11 @@ export const useUserPlaylistSaveMutation = ({
 			return { previous };
 		},
 		onError: (_err, _variables, context) => {
-			if (context?.previous) {
-				const { path: { playlist_id } } = _variables;
-				const options = userPlaylistSavedOptions({ userId, playlistId: playlist_id });
-				queryClient.setQueryData(options.queryKey, context.previous);
-			}
+			if (context && context.previous !== undefined) {
+                const { path: { playlist_id } } = _variables;
+                const options = userPlaylistSavedOptions({ userId, playlistId: playlist_id });
+                queryClient.setQueryData(options.queryKey, context.previous);
+            }
 		},
 		onSuccess: (data) => {
 			queryClient.setQueryData(userPlaylistSavedOptions({
@@ -538,11 +538,11 @@ export const useUserPlaylistUnsaveMutation = ({
 			return { previous };
 		},
 		onError: (_err, _variables, context) => {
-			if (context?.previous) {
-				const { path: { playlist_id } } = _variables;
-				const options = userPlaylistSavedOptions({ userId, playlistId: playlist_id });
-				queryClient.setQueryData(options.queryKey, context.previous);
-			}
+			if (context && context.previous !== undefined) {
+                const { path: { playlist_id } } = _variables;
+                const options = userPlaylistSavedOptions({ userId, playlistId: playlist_id });
+                queryClient.setQueryData(options.queryKey, context.previous);
+            }
 		},
 		onSuccess: (data) => {
 			queryClient.setQueryData(userPlaylistSavedOptions({

@@ -169,6 +169,13 @@
       "when": 1772980990217,
       "tag": "0023_jazzy_wraith",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1773096167361,
+      "tag": "0024_complete_black_panther",
+      "breakpoints": true
     }
   ]
 }

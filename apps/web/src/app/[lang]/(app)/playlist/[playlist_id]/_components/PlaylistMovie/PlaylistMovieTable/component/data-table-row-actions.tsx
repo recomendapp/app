@@ -21,7 +21,7 @@ import { useModal } from '@/context/modal-context';
 import { createShareController } from "@/components/ShareController/ShareController";
 import { useAuth } from "@/context/auth-context";
 import { ShareControllerMovie } from "@/components/ShareController/ShareControllerMovie";
-import { ModalPlaylistMovieAdd } from "@/components/Modals/playlists/ModalPlaylistMovieAdd";
+import { ModalPlaylistAdd } from "@/components/Modals/playlists/ModalPlaylistAdd";
 import { usePlaylistMovieDeleteMutation } from "@/api/client/mutations/playlistMutations";
 import ModaPlaylistMovieComment from "@/components/Modals/playlists/ModalPlaylistMovieComment";
 import { useQuery } from "@tanstack/react-query";
@@ -87,7 +87,7 @@ export function DataTableRowActions({
 
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem
-            onClick={() => openModal(ModalPlaylistMovieAdd, { movieId: data.movie_id, movieTitle: data.movie?.title! })}
+            onClick={() => openModal(ModalPlaylistAdd, { movieId: data.movie_id, type: 'movie' })}
           >
             <Icons.addPlaylist className='w-4' />
             {upperFirst(t('common.messages.add_to_playlist'))}

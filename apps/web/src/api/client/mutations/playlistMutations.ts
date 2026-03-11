@@ -357,62 +357,62 @@ export const usePlaylistItemsTvSeriesRealtimeMutation = ({
 
 /* ---------------------------------- ITEMS --------------------------------- */
 // Movie
-export const usePlaylistMovieInsertMutation = ({
-	movieId
-} : {
-	movieId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			playlists,
-			movieId,
-			userId,
-			comment,
-		} : {
-			playlists: Playlist[];
-			movieId: number;
-			userId: string;
-			comment?: string;
-		}) => {
-			if (!userId) throw Error('User id is missing');
-			if (playlists.length === 0) throw Error('You must select at least one playlist');
-			const { data, error } = await supabase
-				.from('playlist_items_movie')
-				.insert(
-					playlists.map((playlist) => ({
-						playlist_id: playlist.id,
-						movie_id: movieId,
-						user_id: userId,
-						comment: comment,
-						rank: 0,
-					}))
-				);
-			if (error) throw error;
-			const updatedPlaylists = playlists.map((playlist) => ({
-				...playlist,
-				items_count: (playlist?.items_count ?? 0) + 1,
-			}));
-			return updatedPlaylists; // Normalized cache
-		},
-		onSuccess: (data) => {
-			// queryClient.invalidateQueries({
-			// 	queryKey: playlistKeys.detail(data.playlist_id),
-			// });
+// export const usePlaylistMovieInsertMutation = ({
+// 	movieId
+// } : {
+// 	movieId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			playlists,
+// 			movieId,
+// 			userId,
+// 			comment,
+// 		} : {
+// 			playlists: Playlist[];
+// 			movieId: number;
+// 			userId: string;
+// 			comment?: string;
+// 		}) => {
+// 			if (!userId) throw Error('User id is missing');
+// 			if (playlists.length === 0) throw Error('You must select at least one playlist');
+// 			const { data, error } = await supabase
+// 				.from('playlist_items_movie')
+// 				.insert(
+// 					playlists.map((playlist) => ({
+// 						playlist_id: playlist.id,
+// 						movie_id: movieId,
+// 						user_id: userId,
+// 						comment: comment,
+// 						rank: 0,
+// 					}))
+// 				);
+// 			if (error) throw error;
+// 			const updatedPlaylists = playlists.map((playlist) => ({
+// 				...playlist,
+// 				items_count: (playlist?.items_count ?? 0) + 1,
+// 			}));
+// 			return updatedPlaylists; // Normalized cache
+// 		},
+// 		onSuccess: (data) => {
+// 			// queryClient.invalidateQueries({
+// 			// 	queryKey: playlistKeys.detail(data.playlist_id),
+// 			// });
 
-			queryClient.invalidateQueries({
-				queryKey: mediaKeys.moviePlaylists({
-					movieId: movieId,
-				}),
-			});
+// 			queryClient.invalidateQueries({
+// 				queryKey: mediaKeys.moviePlaylists({
+// 					movieId: movieId,
+// 				}),
+// 			});
 
-			queryClient.invalidateQueries({
-				queryKey: playlistKeys.addTo({ itemId: movieId, type: 'movie' }),
-			})
-		}
-	});
-};
+// 			queryClient.invalidateQueries({
+// 				queryKey: playlistKeys.addTo({ itemId: movieId, type: 'movie' }),
+// 			})
+// 		}
+// 	});
+// };
 export const usePlaylistMovieDeleteMutation = ({
 	playlistId
 } : {
@@ -482,58 +482,58 @@ export const usePlaylistMovieUpdateMutation = () => {
 	});
 };
 // TV Series
-export const usePlaylistTvSeriesInsertMutation = ({
-	tvSeriesId
-} : {
-	tvSeriesId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			playlists,
-			tvSeriesId,
-			userId,
-			comment,
-		} : {
-			playlists: Playlist[];
-			tvSeriesId: number;
-			userId: string;
-			comment?: string;
-		}) => {
-			if (!userId) throw Error('User id is missing');
-			if (playlists.length === 0) throw Error('You must select at least one playlist');
-			const { data, error } = await supabase
-				.from('playlist_items_tv_series')
-				.insert(
-					playlists.map((playlist) => ({
-						playlist_id: playlist.id,
-						tv_series_id: tvSeriesId,
-						user_id: userId,
-						comment: comment,
-						rank: 0,
-					}))
-				);
-			if (error) throw error;
-			const updatedPlaylists = playlists.map((playlist) => ({
-				...playlist,
-				items_count: (playlist?.items_count ?? 0) + 1,
-			}));
-			return updatedPlaylists; // Normalized cache
-		},
-		onSuccess: (data) => {
-			queryClient.invalidateQueries({
-				queryKey: mediaKeys.tvSeriesPlaylists({
-					tvSeriesId: tvSeriesId,
-				}),
-			});
+// export const usePlaylistTvSeriesInsertMutation = ({
+// 	tvSeriesId
+// } : {
+// 	tvSeriesId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			playlists,
+// 			tvSeriesId,
+// 			userId,
+// 			comment,
+// 		} : {
+// 			playlists: Playlist[];
+// 			tvSeriesId: number;
+// 			userId: string;
+// 			comment?: string;
+// 		}) => {
+// 			if (!userId) throw Error('User id is missing');
+// 			if (playlists.length === 0) throw Error('You must select at least one playlist');
+// 			const { data, error } = await supabase
+// 				.from('playlist_items_tv_series')
+// 				.insert(
+// 					playlists.map((playlist) => ({
+// 						playlist_id: playlist.id,
+// 						tv_series_id: tvSeriesId,
+// 						user_id: userId,
+// 						comment: comment,
+// 						rank: 0,
+// 					}))
+// 				);
+// 			if (error) throw error;
+// 			const updatedPlaylists = playlists.map((playlist) => ({
+// 				...playlist,
+// 				items_count: (playlist?.items_count ?? 0) + 1,
+// 			}));
+// 			return updatedPlaylists; // Normalized cache
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.invalidateQueries({
+// 				queryKey: mediaKeys.tvSeriesPlaylists({
+// 					tvSeriesId: tvSeriesId,
+// 				}),
+// 			});
 
-			queryClient.invalidateQueries({
-				queryKey: playlistKeys.addTo({ itemId: tvSeriesId, type: 'tv_series' }),
-			})
-		}
-	});
-};
+// 			queryClient.invalidateQueries({
+// 				queryKey: playlistKeys.addTo({ itemId: tvSeriesId, type: 'tv_series' }),
+// 			})
+// 		}
+// 	});
+// };
 export const usePlaylistTvSeriesDeleteMutation = ({
 	playlistId
 } : {

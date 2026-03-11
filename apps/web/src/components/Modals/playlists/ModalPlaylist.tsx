@@ -6,7 +6,7 @@ import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from '../Modal';
 import { Button } from '@/components/ui/button';
 import { UserCogIcon } from 'lucide-react';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { ModalPlaylistMembers } from './ModalPlaylistMembers/ModalPlaylistMembers';
+import { ModalPlaylistMembers } from './ModalPlaylistMembers';
 import { PlaylistForm } from '@/components/Playlist/PlaylistForm/PlaylistForm';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
@@ -36,7 +36,7 @@ export function ModalPlaylist({
               <Button
               variant={'outline'}
               size={'icon'}
-              onClick={() => openModal(ModalPlaylistMembers, { playlistId: playlist.id })}
+              onClick={() => openModal(ModalPlaylistMembers, { playlist: playlist })}
               >
                 <UserCogIcon size={20}/>
               </Button>

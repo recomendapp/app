@@ -1,7 +1,7 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { User } from '../../auth/auth.service';
-import { playlistSaved } from '@libs/db/schemas';
+import { playlistSaved, playlist } from '@libs/db/schemas'; 
 import { and, eq } from 'drizzle-orm';
 import { plainToInstance } from 'class-transformer';
 import { WorkerClient } from '@shared/worker';
@@ -14,31 +14,33 @@ export class PlaylistSavesService {
     private readonly workerClient: WorkerClient,
   ) {}
 
-  async get({
-    user,
-    playlistId,
-  }: {
-    user: User;
-    playlistId: number;
-  }): Promise<boolean> {
-    const save = await this.db.query.playlistSaved
-      .findFirst({
-        where: and(
-          eq(playlistSaved.playlistId, playlistId),
-          eq(playlistSaved.userId, user.id)
-        )
-      });
+  async get({ user, playlistId }: { user: User; playlistId: number }): Promise<boolean> {
+    const save = await this.db.query.playlistSaved.findFirst({
+      where: and(
+        eq(playlistSaved.playlistId, playlistId),
+        eq(playlistSaved.userId, user.id)
+      )
+    });
     
     return !!save;
   }
 
-  async set({
-    user,
-    playlistId,
-  }: {
-    user: User;
-    playlistId: number;
-  }): Promise<PlaylistSavedDto> {
+  async set({ user, playlistId }: { user: User; playlistId: number }): Promise<PlaylistSavedDto> {
+    const existingPlaylist = await this.db.query.playlist.findFirst({
+      where: eq(playlist.id, playlistId),
+      columns: {
+        userId: true,
+      },
+    });
+
+    if (!existingPlaylist) {
+      throw new NotFoundException();
+    }
+
+    if (existingPlaylist.userId === user.id) {
+      throw new BadRequestException('You cannot save your own playlist.');
+    }
+
     const [save] = await this.db
       .insert(playlistSaved)
       .values({
@@ -49,15 +51,14 @@ export class PlaylistSavesService {
       .returning();
     
     if (!save) {
-      const existingSave = await this.db.query.playlistSaved
-        .findFirst({
-          where: and(
-            eq(playlistSaved.playlistId, playlistId),
-            eq(playlistSaved.userId, user.id)
-          )
-        });
+      const existingSave = await this.db.query.playlistSaved.findFirst({
+        where: and(
+          eq(playlistSaved.playlistId, playlistId),
+          eq(playlistSaved.userId, user.id)
+        )
+      });
       if (!existingSave) {
-        throw new NotFoundException('Playlist not found');
+        throw new NotFoundException();
       }
       return plainToInstance(PlaylistSavedDto, existingSave, { excludeExtraneousValues: true });
     }
@@ -70,13 +71,7 @@ export class PlaylistSavesService {
     return plainToInstance(PlaylistSavedDto, save, { excludeExtraneousValues: true });
   }
 
-  async delete({
-    user,
-    playlistId,
-  }: {
-    user: User;
-    playlistId: number;
-  }): Promise<PlaylistSavedDto | null> {
+  async delete({ user, playlistId }: { user: User; playlistId: number }): Promise<PlaylistSavedDto | null> {
     const [deleted] = await this.db
       .delete(playlistSaved)
       .where(and(

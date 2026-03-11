@@ -20,13 +20,13 @@ import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import { useModal } from '@/context/modal-context';
 import { createShareController } from "@/components/ShareController/ShareController";
 import { useAuth } from "@/context/auth-context";
-import { ModalPlaylistTvSeriesAdd } from "@/components/Modals/playlists/ModalPlaylistTvSeriesAdd";
 import { usePlaylistTvSeriesDeleteMutation } from "@/api/client/mutations/playlistMutations";
 import ModalPlaylistTvSeriesComment from "@/components/Modals/playlists/ModalPlaylistTvSeriesComment";
 import { ShareControllerTvSeries } from "@/components/ShareController/ShareControllerTvSeries";
 import { useQuery } from "@tanstack/react-query";
 import { usePlaylistIsAllowedToEditOptions } from "@/api/client/options/playlistOptions";
 import { ModalRecoSend } from "@/components/Modals/recos/ModalRecoSend";
+import { ModalPlaylistAdd } from "@/components/Modals/playlists/ModalPlaylistAdd";
 
 interface DataTableRowActionsProps {
   table: Table<PlaylistItemTvSeries>;
@@ -87,7 +87,7 @@ export function DataTableRowActions({
 
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem
-            onClick={() => openModal(ModalPlaylistTvSeriesAdd, { tvSeriesId: data.tv_series_id, tvSeriesTitle: data.tv_series?.name! })}
+            onClick={() => openModal(ModalPlaylistAdd, { tvSeriesId: data.tv_series_id, tvSeriesTitle: data.tv_series?.name! })}
           >
             <Icons.addPlaylist className='w-4' />
             {upperFirst(t('common.messages.add_to_playlist'))}

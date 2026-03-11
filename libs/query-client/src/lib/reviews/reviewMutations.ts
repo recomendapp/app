@@ -18,7 +18,7 @@ export const useReviewMovieLikeMutation = ({
 			return { previous };
 		},
 		onError: (_err, _variables, context) => {
-			if (context?.previous) {
+			if (context && context.previous !== undefined) {
 				const { path: { review_id } } = _variables;
 				const options = reviewMovieLikeOptions({ userId, reviewId: review_id });
 				queryClient.setQueryData(options.queryKey, context.previous);
@@ -49,7 +49,7 @@ export const useReviewMovieUnlikeMutation = ({
 			return { previous };
 		},
 		onError: (_err, _variables, context) => {
-			if (context?.previous) {
+			if (context && context.previous !== undefined) {
 				const { path: { review_id } } = _variables;
 				const options = reviewMovieLikeOptions({ userId, reviewId: review_id });
 				queryClient.setQueryData(options.queryKey, context.previous);
@@ -80,7 +80,7 @@ export const useReviewTvSeriesLikeMutation = ({
 			return { previous };
 		},
 		onError: (_err, _variables, context) => {
-			if (context?.previous) {
+			if (context && context.previous !== undefined) {
 				const { path: { review_id } } = _variables;
 				const options = reviewTvSeriesLikeOptions({ userId, reviewId: review_id });
 				queryClient.setQueryData(options.queryKey, context.previous);
@@ -111,7 +111,7 @@ export const useReviewTvSeriesUnlikeMutation = ({
 			return { previous };
 		},
 		onError: (_err, _variables, context) => {
-			if (context?.previous) {
+			if (context && context.previous !== undefined) {
 				const { path: { review_id } } = _variables;
 				const options = reviewTvSeriesLikeOptions({ userId, reviewId: review_id });
 				queryClient.setQueryData(options.queryKey, context.previous);

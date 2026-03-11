@@ -10,7 +10,7 @@ import { upperFirst } from "lodash";
 import { useAuth } from "@/context/auth-context";
 import { createShareController } from "../ShareController/ShareController";
 import { ShareControllerMovie } from "../ShareController/ShareControllerMovie";
-import { ModalPlaylistMovieAdd } from "../Modals/playlists/ModalPlaylistMovieAdd";
+import { ModalPlaylistAdd } from "../Modals/playlists/ModalPlaylistAdd";
 import { Movie, MovieCompact } from "@packages/api-js";
 import { ModalRecoSend } from "../Modals/recos/ModalRecoSend";
 
@@ -48,12 +48,12 @@ export const ContextMenuMovie = ({
 			...(user ? [
 				{
 					icon: Icons.addPlaylist,
-					onClick: () => openModal(ModalPlaylistMovieAdd, { movieId: movie.id, movieTitle: movie.title! }),
+					onClick: () => openModal(ModalPlaylistAdd, { mediaId: movie.id, type: 'movie', mediaTitle: movie.title }),
 					label: upperFirst(t('common.messages.add_to_playlist')),
 				},
 				{
 					icon: Icons.send,
-					onClick: () => openModal(ModalRecoSend, { mediaId: movie.id, mediaTitle: movie.title!, mediaType: 'movie' }),
+					onClick: () => openModal(ModalRecoSend, { mediaId: movie.id, mediaTitle: movie.title, mediaType: 'movie' }),
 					label: upperFirst(t('common.messages.send_to_friend')),
 				}
 			] : []),

@@ -1,6 +1,6 @@
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query"
 import { playlistKeys } from "./playlistKeys"
-import { playlistMembersControllerListAll, PlaylistMembersControllerListAllData, playlistMembersControllerListInfinite, PlaylistMembersControllerListInfiniteData, playlistMembersControllerListPaginated, PlaylistMembersControllerListPaginatedData, playlistsControllerGet } from "@packages/api-js";
+import { playlistItemsControllerListAll, PlaylistItemsControllerListAllData, playlistItemsControllerListInfinite, PlaylistItemsControllerListInfiniteData, playlistItemsControllerListPaginated, PlaylistItemsControllerListPaginatedData, playlistMembersControllerListAll, PlaylistMembersControllerListAllData, playlistMembersControllerListInfinite, PlaylistMembersControllerListInfiniteData, playlistMembersControllerListPaginated, PlaylistMembersControllerListPaginatedData, playlistsControllerGet } from "@packages/api-js";
 
 export const playlistOptions = ({
 	playlistId,
@@ -26,6 +26,100 @@ export const playlistOptions = ({
 	});
 };
 
+// Items
+export const playlistItemsAllOptions = ({
+	playlistId,
+	filters,
+} : {
+	playlistId?: number;
+	filters?: NonNullable<PlaylistItemsControllerListAllData['query']>;
+}) => {
+	return queryOptions({
+		queryKey: playlistKeys.items({
+			playlistId: playlistId!,
+			mode: 'all',
+			filters,
+		}),
+		queryFn: async () => {
+			if (!playlistId) throw new Error('Playlist ID is required');
+			const { data, error } = await playlistItemsControllerListAll({
+				path: {
+					playlist_id: playlistId,
+				},
+				query: filters,
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		enabled: !!playlistId,
+	});
+};
+export const playlistItemsPaginatedOptions = ({
+	playlistId,
+	filters,
+} : {
+	playlistId?: number;
+	filters?: NonNullable<PlaylistItemsControllerListPaginatedData['query']>;
+}) => {
+	return queryOptions({
+		queryKey: playlistKeys.items({
+			playlistId: playlistId!,
+			mode: 'paginated',
+			filters,
+		}),
+		queryFn: async () => {
+			if (!playlistId) throw new Error('Playlist ID is required');
+			const { data, error } = await playlistItemsControllerListPaginated({
+				path: {
+					playlist_id: playlistId,
+				},
+				query: filters,
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		enabled: !!playlistId,
+	});
+};
+export const playlistItemsInfiniteOptions = ({
+	playlistId,
+	filters,
+} : {
+	playlistId?: number;
+	filters?: Omit<NonNullable<PlaylistItemsControllerListInfiniteData['query']>, 'cursor'>;
+}) => {
+	return infiniteQueryOptions({
+		queryKey: playlistKeys.items({
+			playlistId: playlistId!,
+			mode: 'infinite',
+			filters,
+		}),
+		queryFn: async ({ pageParam }) => {
+			if (!playlistId) throw new Error('Playlist ID is required');
+			const { data, error } = await playlistItemsControllerListInfinite({
+				path: {
+					playlist_id: playlistId,
+				},
+				query: {
+					...filters,
+					cursor: pageParam,
+				},
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		initialPageParam: undefined as string | undefined,
+		getNextPageParam: (lastPage) => {
+			return lastPage.meta.next_cursor || undefined;
+		},
+		enabled: !!playlistId,
+	});
+};
+
+// Members
 export const playlistMembersAllOptions = ({
 	playlistId,
 	filters,

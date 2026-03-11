@@ -1,4 +1,4 @@
-import { bigint, check, index, integer, pgEnum, pgTable, text, timestamp, unique, uuid } from "drizzle-orm/pg-core";
+import { bigint, check, index, integer, pgEnum, pgTable, text, timestamp, unique, uuid, varchar } from "drizzle-orm/pg-core";
 import { user } from "./auth";
 import { relations, sql } from "drizzle-orm";
 import { tmdbMovie, tmdbTvSeries } from "./tmdb";
@@ -87,7 +87,7 @@ export const playlistItem = pgTable(
 		.$onUpdate(() => sql`now()`)
 		.notNull(),
 	comment: text(),
-	rank: integer().notNull(),
+	rank: varchar('rank', { length: 255 }).notNull(),
 	// Type & References
 	type: playlistItemTypeEnum('type').notNull(),
 	movieId: bigint('movie_id', { mode: 'number' })
@@ -100,7 +100,6 @@ export const playlistItem = pgTable(
     index('idx_playlist_item_user_id').on(table.userId),
     index('idx_playlist_item_rank').on(table.rank),
 	check('check_playlist_item_comment', sql`length(comment) <= 180`),
-    check('check_playlist_item_rank', sql`rank >= 1`),
 	check(
 	  'check_playlist_item_type_references',
 	  sql`(

@@ -1,18 +1,18 @@
 import { CursorPaginationMeta, PaginationMeta } from '@packages/api-js';
 import { InfiniteData, QueryClient, QueryFilters, QueryKey } from '@tanstack/react-query';
 
-export interface PaginatedResponse<T> {
-  data: T[];
-  meta: PaginationMeta;
-}
+export type ItemUpdater<TItem> = Partial<TItem> | ((item: TItem) => Partial<TItem>);
 
+export const resolveUpdater = <TItem>(item: TItem, updater: ItemUpdater<TItem>): Partial<TItem> =>
+  typeof updater === 'function' ? updater(item) : updater;
+
+/* -------------------------------- Flat -------------------------------- */
 export const updateFromFlatCache = <
-  TItem,
-  TUpdated extends Partial<TItem>
+  TItem
 >(
   queryClient: QueryClient,
   filters: QueryKey | QueryFilters,
-  updatedItem: TUpdated,
+  updater: ItemUpdater<TItem>,
   matcher?: string | number | ((item: TItem) => boolean)
 ): void => {
   const queryFilters: QueryFilters = Array.isArray(filters) 
@@ -26,9 +26,9 @@ export const updateFromFlatCache = <
         ? matcher(item) 
         : matcher !== undefined 
           ? (item as any).id === matcher
-        : ('id' in updatedItem && (item as any).id === (updatedItem as any).id);
+          : ('id' in (typeof updater === 'function' ? {} : updater) && (item as any).id === (updater as any).id);
 
-      return isMatch ? { ...item, ...updatedItem } : item;
+      return isMatch ? { ...item, ...resolveUpdater(item, updater) } : item;  // <-- resolveUpdater ici aussi
     });
   });
 };
@@ -50,13 +50,18 @@ export const removeFromFlatCache = <TItem>(
   });
 };
 
-export const updateFromPaginatedCache = <
+/* -------------------------------- Paginated ------------------------------- */
+export interface PaginatedResponse<T> {
+  data: T[];
+  meta: PaginationMeta;
+}
+
+export const updateFromPaginatedCache =<
   TItem,
-  TUpdated extends Partial<TItem>,
   TPage extends PaginatedResponse<TItem>
 >(
   oldData: TPage | undefined,
-  updatedItem: TUpdated,
+  updater: ItemUpdater<TItem>,
   matcher?: string | number | ((item: TItem) => boolean)
 ): TPage | undefined => {
   if (!oldData) return oldData;
@@ -64,13 +69,13 @@ export const updateFromPaginatedCache = <
   return {
     ...oldData,
     data: oldData.data.map((item) => {
-      const isMatch = typeof matcher === 'function' 
-        ? matcher(item) 
-        : matcher !== undefined 
+      const isMatch = typeof matcher === 'function'
+        ? matcher(item)
+        : matcher !== undefined
           ? (item as any).id === matcher
-        : ('id' in updatedItem && (item as any).id === (updatedItem as any).id);
+          : ('id' in (typeof updater === 'function' ? {} : updater) && (item as any).id === (updater as any).id);
 
-      return isMatch ? { ...item, ...updatedItem } : item;
+      return isMatch ? { ...item, ...resolveUpdater(item, updater) } : item;
     }),
   };
 };
@@ -152,6 +157,8 @@ export const removeFromPaginatedCache = <
   });
 };
 
+
+/* -------------------------------- Infinite -------------------------------- */
 export interface InfinitePaginatedResponse<T> {
   data: T[];
   meta: CursorPaginationMeta;
@@ -159,29 +166,28 @@ export interface InfinitePaginatedResponse<T> {
 
 export const updateFromInfiniteCache = <
   TItem,
-  TUpdated extends Partial<TItem>,
   TPage extends InfinitePaginatedResponse<TItem>
 >(
   oldData: InfiniteData<TPage> | undefined,
-  updatedItem: TUpdated,
+  updater: ItemUpdater<TItem>,
   matcher?: string | number | ((item: TItem) => boolean)
 ): InfiniteData<TPage> | undefined => {
   if (!oldData) return oldData;
 
   return {
-  ...oldData,
-  pages: oldData.pages.map((page) => ({
-    ...page,
-    data: page.data.map((item) => {
-      const isMatch = typeof matcher === 'function' 
-        ? matcher(item) 
-        : matcher !== undefined 
-          ? (item as any).id === matcher
-        : ('id' in updatedItem && (item as any).id === (updatedItem as any).id);
+    ...oldData,
+    pages: oldData.pages.map((page) => ({
+      ...page,
+      data: page.data.map((item) => {
+        const isMatch = typeof matcher === 'function'
+          ? matcher(item)
+          : matcher !== undefined
+            ? (item as any).id === matcher
+            : ('id' in (typeof updater === 'function' ? {} : updater) && (item as any).id === (updater as any).id);
 
-      return isMatch ? { ...item, ...updatedItem } : item;
-    }),
-  })),
+        return isMatch ? { ...item, ...resolveUpdater(item, updater) } : item;
+      }),
+    })),
   };
 };
 
@@ -220,38 +226,43 @@ export const removeFromInfiniteCache = <
     }),
   };
 };
-
 export const updateListItemInAllCaches = <
   TItem,
   TPaginated extends PaginatedResponse<TItem>,
   TInfinite extends InfinitePaginatedResponse<TItem>
 >(
   queryClient: QueryClient,
-  keys: {
-    all?: QueryKey;
-    paginated?: QueryKey;
-    infinite?: QueryKey;
+  filters: { 
+    all?: QueryKey | QueryFilters; 
+    paginated?: QueryKey | QueryFilters; 
+    infinite?: QueryKey | QueryFilters 
   },
-  updatedItem: Partial<TItem>,
+  updater: ItemUpdater<TItem>,
   matcher?: string | number | ((item: TItem) => boolean)
 ) => {
-  if (keys.all) {
-    updateFromFlatCache(queryClient, keys.all, updatedItem, matcher);
+  if (filters.all) {
+    updateFromFlatCache(queryClient, filters.all, updater, matcher);
   }
 
-  if (keys.paginated) {
+  if (filters.paginated) {
+    const queryFilters = Array.isArray(filters.paginated) 
+      ? { queryKey: filters.paginated } 
+      : (filters.paginated as QueryFilters);
+
     queryClient.setQueriesData(
-      { queryKey: keys.paginated },
-      (oldData: TPaginated | undefined) =>
-        updateFromPaginatedCache(oldData, updatedItem, matcher)
+      queryFilters,
+      (oldData: TPaginated | undefined) => updateFromPaginatedCache(oldData, updater, matcher)
     );
   }
 
-  if (keys.infinite) {
+  if (filters.infinite) {
+    const queryFilters = Array.isArray(filters.infinite) 
+      ? { queryKey: filters.infinite } 
+      : (filters.infinite as QueryFilters);
+
     queryClient.setQueriesData(
-      { queryKey: keys.infinite },
-      (oldData: InfiniteData<TInfinite> | undefined) =>
-        updateFromInfiniteCache(oldData, updatedItem, matcher)
+      queryFilters,
+      (oldData: InfiniteData<TInfinite> | undefined) => updateFromInfiniteCache(oldData, updater, matcher)
     );
   }
 };
@@ -262,23 +273,28 @@ export const removeListItemFromAllCaches = <
   TInfinite extends InfinitePaginatedResponse<TItem>
 >(
   queryClient: QueryClient,
-  keys: {
-    all?: QueryKey;
-    paginated?: QueryKey;
-    infinite?: QueryKey;
+  filters: {
+    all?: QueryKey | QueryFilters;
+    paginated?: QueryKey | QueryFilters;
+    infinite?: QueryKey | QueryFilters;
   },
   matcher: string | number | ((item: TItem) => boolean)
 ) => {
-  if (keys.all) {
-    removeFromFlatCache<TItem>(queryClient, keys.all, matcher);
+  if (filters.all) {
+    removeFromFlatCache<TItem>(queryClient, filters.all, matcher);
   }
-  if (keys.paginated) {
-    removeFromPaginatedCache<TItem, TPaginated>(queryClient, keys.paginated, matcher);
+  
+  if (filters.paginated) {
+    removeFromPaginatedCache<TItem, TPaginated>(queryClient, filters.paginated, matcher);
   }
 
-  if (keys.infinite) {
+  if (filters.infinite) {
+    const queryFilters = Array.isArray(filters.infinite) 
+      ? { queryKey: filters.infinite } 
+      : (filters.infinite as QueryFilters);
+
     queryClient.setQueriesData(
-      { queryKey: keys.infinite },
+      queryFilters,
       (oldData: InfiniteData<TInfinite> | undefined) =>
         removeFromInfiniteCache<TItem, TInfinite>(oldData, matcher)
     );
@@ -291,26 +307,28 @@ export const updateOrRemoveListItemInAllCaches = <
   TInfinite extends InfinitePaginatedResponse<TItem>
 >(
   queryClient: QueryClient,
-  keys: {
-    all?: QueryKey;
-    paginated?: QueryKey;
-    infinite?: QueryKey;
+  filters: {
+    all?: QueryKey | QueryFilters;
+    paginated?: QueryKey | QueryFilters;
+    infinite?: QueryKey | QueryFilters;
   },
   matcher: (item: TItem) => boolean,
   modifier: (item: TItem) => Partial<TItem> | null
 ) => {
   let currentItem: TItem | undefined;
 
-  if (keys.all && !currentItem) {
-    const queries = queryClient.getQueriesData<TItem[]>({ queryKey: keys.all });
+  if (filters.all && !currentItem) {
+    const queryFilters = Array.isArray(filters.all) ? { queryKey: filters.all } : (filters.all as QueryFilters);
+    const queries = queryClient.getQueriesData<TItem[]>(queryFilters);
     for (const [, data] of queries) {
       if (data) currentItem = data.find(matcher);
       if (currentItem) break;
     }
   }
 
-  if (keys.infinite && !currentItem) {
-    const queries = queryClient.getQueriesData<InfiniteData<TInfinite>>({ queryKey: keys.infinite });
+  if (filters.infinite && !currentItem) {
+    const queryFilters = Array.isArray(filters.infinite) ? { queryKey: filters.infinite } : (filters.infinite as QueryFilters);
+    const queries = queryClient.getQueriesData<InfiniteData<TInfinite>>(queryFilters);
     for (const [, data] of queries) {
       if (data?.pages) {
         for (const page of data.pages) {
@@ -322,8 +340,9 @@ export const updateOrRemoveListItemInAllCaches = <
     }
   }
 
-  if (keys.paginated && !currentItem) {
-    const queries = queryClient.getQueriesData<TPaginated>({ queryKey: keys.paginated });
+  if (filters.paginated && !currentItem) {
+    const queryFilters = Array.isArray(filters.paginated) ? { queryKey: filters.paginated } : (filters.paginated as QueryFilters);
+    const queries = queryClient.getQueriesData<TPaginated>(queryFilters);
     for (const [, data] of queries) {
       if (data?.data) currentItem = data.data.find(matcher);
       if (currentItem) break;
@@ -335,8 +354,8 @@ export const updateOrRemoveListItemInAllCaches = <
   const updatedItemOrNull = modifier(currentItem);
 
   if (updatedItemOrNull === null) {
-    removeListItemFromAllCaches<TItem, TPaginated, TInfinite>(queryClient, keys, matcher);
+    removeListItemFromAllCaches<TItem, TPaginated, TInfinite>(queryClient, filters, matcher);
   } else {
-    updateListItemInAllCaches<TItem, TPaginated, TInfinite>(queryClient, keys, updatedItemOrNull, matcher);
+    updateListItemInAllCaches<TItem, TPaginated, TInfinite>(queryClient, filters, updatedItemOrNull, matcher);
   }
 };

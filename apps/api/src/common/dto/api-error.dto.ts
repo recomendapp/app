@@ -1,5 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiSchema } from '@nestjs/swagger';
 
+@ApiSchema({ name: 'ApiError' })
 export class ApiErrorDto {
   @ApiProperty({ example: 404 })
   statusCode: number;

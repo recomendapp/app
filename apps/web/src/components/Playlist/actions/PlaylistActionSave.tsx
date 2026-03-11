@@ -43,7 +43,6 @@ const PlaylistActionSave = React.forwardRef<
 
 	const handleSave = React.useCallback(async (e: React.MouseEvent) => {
 		stopPropagation && e.stopPropagation();
-		console.log('save', saved)
 		if (saved) return;
 		await save({
 			path: {
@@ -57,7 +56,6 @@ const PlaylistActionSave = React.forwardRef<
 	}, [playlistId, save, stopPropagation, t, saved]);
 	const handleUnsave = React.useCallback(async (e: React.MouseEvent) => {
 		stopPropagation && e.stopPropagation();
-		console.log('unsave', saved)
 		if (!saved) return;
 		await unsave({
 			path: {

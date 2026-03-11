@@ -34,7 +34,7 @@ import ButtonUserActivityTvSeriesRating from '@/components/buttons/ButtonUserAct
 import ButtonUserActivityTvSeriesWatch from '@/components/buttons/ButtonUserActivityTvSeriesWatch';
 import ButtonUserActivityTvSeriesWatchedDate from '@/components/buttons/ButtonUserActivityTvSeriesWatchedDate';
 import { ContextMenuTvSeries } from '@/components/ContextMenu/ContextMenuTvSeries';
-import ButtonPlaylistTvSeriesAdd from '@/components/buttons/ButtonPlaylistTvSeriesAdd';
+import ButtonPlaylistAdd from '@/components/buttons/ButtonPlaylistAdd';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import ButtonFollowersAvgRatingTvSeries from '@/components/buttons/ButtonFollowersAvgRatingTvSeries';
 import { TvSeries, TvSeriesTrailer } from '@packages/api-js';
@@ -128,7 +128,7 @@ export const TvSeriesHeader = ({
             <ButtonUserActivityTvSeriesWatchedDate tvSeriesId={tvSeries.id} />
           </div>
           <div className="flex gap-2 items-center">
-            <ButtonPlaylistTvSeriesAdd tvSeriesId={tvSeries.id} tvSeriesTitle={tvSeries.name} />
+            <ButtonPlaylistAdd mediaId={tvSeries.id} mediaType="tv_series" mediaTitle={tvSeries.name} />
             <ButtonUserRecoSend mediaId={tvSeries.id} mediaType="tv_series" mediaTitle={tvSeries.name} />
           </div>
         </div>
@@ -177,7 +177,7 @@ export const SerieTrailerButton = ({
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  {videos?.map((video: any) => (
+                  {videos?.map((video) => (
                     <SelectItem key={video.key} value={video.key}>
                       {video.name}
                     </SelectItem>

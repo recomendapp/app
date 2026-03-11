@@ -1,4 +1,4 @@
-import { personsControllerGetFollowStatus, meControllerGet, userMoviesControllerGet, userMoviesControllerListInfinite, UserMoviesControllerListInfiniteData, UserPlaylistsControllerListInfiniteData, userPlaylistsControllerListInfinite, UserBookmarksControllerListInfiniteData, userBookmarksControllerListInfinite, UserFollowersControllerListInfiniteData, userFollowersControllerListInfinite, UserFollowingControllerListInfiniteData, userFollowingControllerListInfinite, movieWatchedDatesControllerListInfinite, MovieWatchedDatesControllerListInfiniteData, Bookmark, bookmarksControllerGetByMedia, UserBookmarksControllerListAllData, userBookmarksControllerListAll, userBookmarksControllerListPaginated, UserBookmarksControllerListPaginatedData, UserPlaylistsControllerListPaginatedData, userPlaylistsControllerListPaginated, UserFollowersControllerListPaginatedData, UserFollowingControllerListPaginatedData, MovieWatchedDatesControllerListPaginatedData, UserMoviesControllerListPaginatedData, userMoviesControllerListPaginated, movieWatchedDatesControllerListPaginated, userFollowersControllerListPaginated, userFollowingControllerListPaginated, RecoTargetsControllerListPaginatedData, recoTargetsControllerListPaginated, recoTargetsControllerListInfinite, RecoTargetsControllerListInfiniteData, recoTargetsControllerListAll, RecoTargetsControllerListAllData, userFollowControllerGet, UserFollowRequestsControllerListPaginatedData, userFollowRequestsControllerListPaginated, UserFollowRequestsControllerListInfiniteData, userFollowRequestsControllerListInfinite, UserRecosControllerListAllData, userRecosControllerListAll, UserRecosControllerListPaginatedData, userRecosControllerListPaginated, UserRecosControllerListInfiniteData, userRecosControllerListInfinite, playlistLikesControllerGet, playlistSavesControllerGet, usersControllerGet, UserPlaylistsSavedControllerListInfiniteData, userPlaylistsSavedControllerListInfinite, userPlaylistsSavedControllerListPaginated, UserPlaylistsSavedControllerListPaginatedData, UsersControllerListPaginatedData, usersControllerListPaginated, UsersControllerListInfiniteData, usersControllerListInfinite, MePlaylistsFollowingControllerListPaginatedData, mePlaylistsFollowingControllerListPaginated, MePlaylistsFollowingControllerListInfiniteData, mePlaylistsFollowingControllerListInfinite, FeedPersonsControllerListInfiniteData, feedPersonsControllerListInfinite, FeedPersonsControllerListPaginatedData, feedPersonsControllerListPaginated } from "@packages/api-js";
+import { personsControllerGetFollowStatus, meControllerGet, userMoviesControllerGet, userMoviesControllerListInfinite, UserMoviesControllerListInfiniteData, UserPlaylistsControllerListInfiniteData, userPlaylistsControllerListInfinite, UserBookmarksControllerListInfiniteData, userBookmarksControllerListInfinite, UserFollowersControllerListInfiniteData, userFollowersControllerListInfinite, UserFollowingControllerListInfiniteData, userFollowingControllerListInfinite, movieWatchedDatesControllerListInfinite, MovieWatchedDatesControllerListInfiniteData, Bookmark, bookmarksControllerGetByMedia, UserBookmarksControllerListAllData, userBookmarksControllerListAll, userBookmarksControllerListPaginated, UserBookmarksControllerListPaginatedData, UserPlaylistsControllerListPaginatedData, userPlaylistsControllerListPaginated, UserFollowersControllerListPaginatedData, UserFollowingControllerListPaginatedData, MovieWatchedDatesControllerListPaginatedData, UserMoviesControllerListPaginatedData, userMoviesControllerListPaginated, movieWatchedDatesControllerListPaginated, userFollowersControllerListPaginated, userFollowingControllerListPaginated, RecoTargetsControllerListPaginatedData, recoTargetsControllerListPaginated, recoTargetsControllerListInfinite, RecoTargetsControllerListInfiniteData, recoTargetsControllerListAll, RecoTargetsControllerListAllData, userFollowControllerGet, UserFollowRequestsControllerListPaginatedData, userFollowRequestsControllerListPaginated, UserFollowRequestsControllerListInfiniteData, userFollowRequestsControllerListInfinite, UserRecosControllerListAllData, userRecosControllerListAll, UserRecosControllerListPaginatedData, userRecosControllerListPaginated, UserRecosControllerListInfiniteData, userRecosControllerListInfinite, playlistLikesControllerGet, playlistSavesControllerGet, usersControllerGet, UserPlaylistsSavedControllerListInfiniteData, userPlaylistsSavedControllerListInfinite, userPlaylistsSavedControllerListPaginated, UserPlaylistsSavedControllerListPaginatedData, UsersControllerListPaginatedData, usersControllerListPaginated, UsersControllerListInfiniteData, usersControllerListInfinite, MePlaylistsFollowingControllerListPaginatedData, mePlaylistsFollowingControllerListPaginated, MePlaylistsFollowingControllerListInfiniteData, mePlaylistsFollowingControllerListInfinite, FeedPersonsControllerListInfiniteData, feedPersonsControllerListInfinite, FeedPersonsControllerListPaginatedData, feedPersonsControllerListPaginated, PlaylistsAddTargetsControllerListAllData, playlistsAddTargetsControllerListAll, PlaylistsAddTargetsControllerListPaginatedData, playlistsAddTargetsControllerListPaginated, PlaylistsAddTargetsControllerListInfiniteData, playlistsAddTargetsControllerListInfinite } from "@packages/api-js";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { userKeys } from "./userKeys";
 
@@ -1021,6 +1021,123 @@ export const userPlaylistsFollowingInfiniteOptions = ({
 			return lastPage.meta.next_cursor || undefined;
 		},
 		enabled: !!userId,
+	})
+};
+
+// Add
+export const userPlaylistsAddTargetsAllOptions = ({
+	userId,
+	type,
+	mediaId,
+	filters,
+} : {
+	userId?: string;
+	type?: PlaylistsAddTargetsControllerListAllData['path']['type'];
+	mediaId?: PlaylistsAddTargetsControllerListAllData['path']['media_id'];
+	filters?: NonNullable<PlaylistsAddTargetsControllerListAllData['query']>;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.playlistsAddTargets({
+			userId: userId!,
+			type: type!,
+			mediaId: mediaId!,
+			mode: 'all',
+			filters,
+		}),
+		queryFn: async () => {
+			if (!type) throw new Error('Media type is required');
+			if (!mediaId) throw new Error('Media ID is required');
+			const { data, error } = await playlistsAddTargetsControllerListAll({
+				path: {
+					type,
+					media_id: mediaId,
+				},
+				query: filters,
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId && !!type && !!mediaId,
+	});
+};
+export const userPlaylistsAddTargetsPaginatedOptions = ({
+	userId,
+	type,
+	mediaId,
+	filters,
+} : {
+	userId?: string;
+	type?: PlaylistsAddTargetsControllerListPaginatedData['path']['type'];
+	mediaId?: PlaylistsAddTargetsControllerListPaginatedData['path']['media_id'];
+	filters?: NonNullable<PlaylistsAddTargetsControllerListPaginatedData['query']>;
+}) => {
+	return queryOptions({
+		queryKey: userKeys.playlistsAddTargets({
+			userId: userId!,
+			type: type!,
+			mediaId: mediaId!,
+			mode: 'paginated',
+			filters,
+		}),
+		queryFn: async () => {
+			if (!type) throw new Error('Media type is required');
+			if (!mediaId) throw new Error('Media ID is required');
+			const { data, error } = await playlistsAddTargetsControllerListPaginated({
+				path: {
+					type,
+					media_id: mediaId,
+				},
+				query: filters,
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId && !!type && !!mediaId,
+	});
+};
+export const userPlaylistsAddTargetsInfiniteOptions = ({
+	userId,
+	type,
+	mediaId,
+	filters,
+} : {
+	userId?: string;
+	type?: PlaylistsAddTargetsControllerListInfiniteData['path']['type'];
+	mediaId?: PlaylistsAddTargetsControllerListInfiniteData['path']['media_id'];
+	filters?: Omit<NonNullable<PlaylistsAddTargetsControllerListInfiniteData['query']>, 'cursor'>;
+}) => {
+	return infiniteQueryOptions({
+		queryKey: userKeys.playlistsAddTargets({
+			userId: userId!,
+			type: type!,
+			mediaId: mediaId!,
+			mode: 'infinite',
+			filters,
+		}),
+		queryFn: async ({ pageParam }) => {
+			if (!type) throw new Error('Media type is required');
+			if (!mediaId) throw new Error('Media ID is required');
+			const { data, error } = await playlistsAddTargetsControllerListInfinite({
+				path: {
+					type,
+					media_id: mediaId,
+				},
+				query: {
+					...filters,
+					cursor: pageParam,
+				},
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		initialPageParam: undefined as string | undefined,
+		getNextPageParam: (lastPage) => {
+			return lastPage.meta.next_cursor || undefined;
+		},
+		enabled: !!userId && !!type && !!mediaId,
 	})
 };
 

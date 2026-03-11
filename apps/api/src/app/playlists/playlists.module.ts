@@ -6,6 +6,8 @@ import { PlaylistSavesModule } from './saves/playlist-saves.module';
 import { PlaylistPosterModule } from './poster/playlist-poster.module';
 import { StorageModule } from '../../common/modules/storage/storage.module';
 import { PlaylistMembersModule } from './members/playlist-members.module';
+import { PlaylistsAddModule } from './add/playlists-add.module';
+import { PlaylistItemsModule } from './items/playlist-items.module';
 
 
 @Module({
@@ -15,6 +17,8 @@ import { PlaylistMembersModule } from './members/playlist-members.module';
     PlaylistSavesModule,
     PlaylistPosterModule,
     PlaylistMembersModule,
+    PlaylistsAddModule,
+    PlaylistItemsModule,
   ],
   controllers: [PlaylistsController],
   providers: [PlaylistsService],

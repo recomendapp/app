@@ -1,6 +1,6 @@
-import { ListInfinitePlaylistMembers, ListInfinitePlaylistsWithOwner, ListPaginatedPlaylistMembers, playlistMembersControllerAddMutation, playlistMembersControllerDeleteMutation, playlistMembersControllerUpdateMutation, PlaylistMemberWithUser, playlistPosterControllerDeleteMutation, playlistPosterControllerSetMutation, playlistsControllerCreateMutation, playlistsControllerDeleteMutation, playlistsControllerUpdateMutation } from "@packages/api-js";
+import { ListInfinitePlaylistMembers, ListInfinitePlaylistsAddTargets, ListInfinitePlaylistsWithOwner, ListPaginatedPlaylistMembers, ListPaginatedPlaylistsAddTargets, playlistMembersControllerAddMutation, playlistMembersControllerDeleteMutation, playlistMembersControllerUpdateMutation, PlaylistMemberWithUser, playlistPosterControllerDeleteMutation, playlistPosterControllerSetMutation, playlistsAddControllerAddMutation, PlaylistsAddTarget, playlistsControllerCreateMutation, playlistsControllerDeleteMutation, playlistsControllerUpdateMutation } from "@packages/api-js";
 import { InfiniteData, useMutation, useQueryClient } from "@tanstack/react-query";
-import { userKeys, userPlaylistsInfiniteOptions, userPlaylistsPaginatedOptions } from "../users";
+import { userKeys, userPlaylistsAddTargetsAllOptions, userPlaylistsAddTargetsInfiniteOptions, userPlaylistsAddTargetsPaginatedOptions, userPlaylistsInfiniteOptions, userPlaylistsPaginatedOptions } from "../users";
 import { playlistMembersAllOptions, playlistMembersInfiniteOptions, playlistMembersPaginatedOptions, playlistOptions } from "./playlistOptions";
 import { removeFromInfiniteCache, removeFromPaginatedCache, removeListItemFromAllCaches, updateListItemInAllCaches } from "../utils";
 import { moviePlaylistsInfiniteOptions, moviePlaylistsPaginatedOptions } from "../movies";
@@ -31,7 +31,11 @@ export const usePlaylistUpdateMutation = ({
 	return useMutation({
 		...playlistsControllerUpdateMutation(),
 		onSuccess: (data) => {
-			updatePlaylistCache(data);
+			updatePlaylistCache(
+				data.id,
+				data,
+				data.userId
+			);
 		}
 	});
 };
@@ -121,7 +125,7 @@ export const usePlaylistDeleteMutation = () => {
 	});
 };
 
-// Poster
+/* --------------------------------- Poster --------------------------------- */
 export const usePlaylistPoserUpdateMutation = ({
 	userId,
 }: {
@@ -133,7 +137,11 @@ export const usePlaylistPoserUpdateMutation = ({
 	return useMutation({
 		...playlistPosterControllerSetMutation(),
 		onSuccess: (data) => {
-			updatePlaylistCache(data);
+			updatePlaylistCache(
+				data.id,
+				data,
+				data.userId
+			);
 		}
 	});
 };
@@ -149,7 +157,54 @@ export const usePlaylistPoserDeleteMutation = ({
 	return useMutation({
 		...playlistPosterControllerDeleteMutation(),
 		onSuccess: (data) => {
-			updatePlaylistCache(data);
+			updatePlaylistCache(
+				data.id,
+				data,
+				data.userId
+			);
+		}
+	});
+};
+
+/* ---------------------------------- Items --------------------------------- */
+export const usePlaylistItemsAddMutation = ({
+	userId,
+}: {
+	userId?: string;
+}) => {
+	const queryClient = useQueryClient();
+	const updatePlaylistCache = usePlaylistCacheUpdate({
+		userId,
+	});
+	return useMutation({
+		...playlistsAddControllerAddMutation(),
+		onSuccess: (data) => {
+			if (!data || data.length === 0) return;
+			const mediaId = data[0].mediaId;
+			const mediaType = data[0].type;
+
+			updateListItemInAllCaches<
+				PlaylistsAddTarget,
+				ListPaginatedPlaylistsAddTargets,
+				ListInfinitePlaylistsAddTargets
+			>(
+				queryClient,
+				{
+					all: userPlaylistsAddTargetsAllOptions({ userId, mediaId, type: mediaType }).queryKey,
+					paginated: userPlaylistsAddTargetsPaginatedOptions({ userId, mediaId, type: mediaType }).queryKey,
+					infinite: userPlaylistsAddTargetsInfiniteOptions({ userId, mediaId, type: mediaType }).queryKey,
+				},
+				{ alreadyAdded: true },
+				(item) => data.some(added => added.playlistId === item.id)
+			);
+
+			data.forEach(item => {
+				updatePlaylistCache(
+					item.playlistId,
+					(prev) => ({ itemsCount: (prev?.itemsCount || 0) + 1 }),
+					item.userId
+				);
+			});
 		}
 	});
 };
@@ -182,6 +237,7 @@ export const usePlaylistMembersDeleteMutation = ({
 		onSuccess: (data) => {
 			if (data.length === 0) return;
 			const playlistId = data[0]?.playlistId;
+			const ownerId = data[0]?.userId;
 			removeListItemFromAllCaches<
 				PlaylistMemberWithUser,
 				ListPaginatedPlaylistMembers,
@@ -197,9 +253,11 @@ export const usePlaylistMembersDeleteMutation = ({
 			);
 
 			if (userId && data.some(deleted => deleted.userId === userId)) {
-				updatePlaylistCache({
-					role: null,
-				})
+				updatePlaylistCache(
+					playlistId,
+					{ role: null },
+					ownerId
+				);
 			}
 		}
 	});
@@ -233,9 +291,11 @@ export const usePlaylistMemberUpdateMutation = ({
 			);
 
 			if (userId && data.userId === userId) {
-				updatePlaylistCache({
-					role: data.role,
-				})
+				updatePlaylistCache(
+					playlistId,
+					{ role: data.role },
+					data.userId
+				);
 			}
 		}
 	});
