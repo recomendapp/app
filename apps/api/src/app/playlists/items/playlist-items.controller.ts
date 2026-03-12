@@ -1,4 +1,4 @@
-import { Controller, Param, UseGuards, Get, ParseIntPipe, Query, Delete, Body } from '@nestjs/common';
+import { Controller, Param, UseGuards, Get, ParseIntPipe, Query, Delete, Body, Patch } from '@nestjs/common';
 import { ApiOkResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { AuthGuard, OptionalAuthGuard } from '../../auth/guards';
 import { PlaylistItemsService } from './playlist-items.service';
@@ -12,6 +12,7 @@ import {
   ListPaginatedPlaylistItemsQueryDto, 
   PlaylistItemDto, 
   PlaylistItemsDeleteDto, 
+  PlaylistItemUpdateDto, 
   PlaylistItemWithMediaUnion, 
   PlaylistItemWithMovieDto, 
   PlaylistItemWithTvSeriesDto 
@@ -22,13 +23,13 @@ import { RequirePlaylistRoles } from '../decorators/playlist-roles.decorator';
 
 @ApiTags('Playlists')
 @Controller({
-  path: 'playlist/:playlist_id/items',
+  path: 'playlist/:playlist_id',
   version: '1',
 })
 export class PlaylistItemsController {
   constructor(private readonly playlistItemsService: PlaylistItemsService) {}
 
-  @Get()
+  @Get('items')
   @UseGuards(OptionalAuthGuard, PlaylistVisibilityGuard)
   @ApiOkResponse({
     description: 'Get all items in the playlist as a raw array',
@@ -61,7 +62,7 @@ export class PlaylistItemsController {
     });
   }
 
-  @Get('paginated')
+  @Get('items/paginated')
   @UseGuards(OptionalAuthGuard, PlaylistVisibilityGuard)
   @ApiOkResponse({
     description: 'Get a paginated list of items in the playlist.',
@@ -79,7 +80,7 @@ export class PlaylistItemsController {
     });
   }
 
-  @Get('infinite')
+  @Get('items/infinite')
   @UseGuards(OptionalAuthGuard, PlaylistVisibilityGuard)
   @ApiOkResponse({
     description: 'Get an infinite scrolling list of items in the playlist with cursor pagination.',
@@ -94,6 +95,25 @@ export class PlaylistItemsController {
       playlistId,
       query,
       locale,
+    });
+  }
+
+  @Patch('item/:item_id')
+  @UseGuards(AuthGuard, PlaylistRolesGuard)
+  @RequirePlaylistRoles('owner', 'admin', 'editor')
+  @ApiOkResponse({
+    description: 'Update an item (comment and/or position) in the playlist.',
+    type: PlaylistItemDto,
+  })
+  async update(
+    @Param('playlist_id', ParseIntPipe) playlistId: number,
+    @Param('item_id', ParseIntPipe) itemId: number,
+    @Body() dto: PlaylistItemUpdateDto,
+  ) {
+    return this.playlistItemsService.update({
+      playlistId,
+      itemId,
+      dto,
     });
   }
 

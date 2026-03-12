@@ -17,7 +17,7 @@ export const playlistKeys = {
 		playlistId: number;
 	} & (
 		| { mode?: never; filters?: never }
-		| { mode: 'all'; filters?: NonNullable<PlaylistItemsControllerListAllData['query']> }
+		| { mode: 'all'; filters?: never }
 		| { mode: 'paginated'; filters?: NonNullable<PlaylistItemsControllerListPaginatedData['query']> }
 		| { mode: 'infinite'; filters?: Omit<NonNullable<PlaylistItemsControllerListInfiniteData['query']>, 'cursor'> }
 	)) => {

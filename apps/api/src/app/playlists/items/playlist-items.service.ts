@@ -1,7 +1,7 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { playlist, playlistItem, tmdbMovieView, tmdbTvSeriesView } from '@libs/db/schemas';
-import { and, asc, desc, eq, gt, inArray, lt, or, sql, SQL } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, inArray, lt, ne, or, sql, SQL } from 'drizzle-orm';
 import { 
   PlaylistItemWithMediaUnion, 
   ListAllPlaylistItemsQueryDto, 
@@ -11,7 +11,8 @@ import {
   ListInfinitePlaylistItemsDto, 
   PlaylistItemSortBy,
   PlaylistItemDto,
-  PlaylistItemsDeleteDto
+  PlaylistItemsDeleteDto,
+  PlaylistItemUpdateDto
 } from './playlist-items.dto'; 
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
@@ -20,6 +21,7 @@ import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
 import { plainToInstance } from 'class-transformer';
 import { WorkerClient } from '@shared/worker';
+import { LexoRank } from 'lexorank';
 
 @Injectable()
 export class PlaylistItemsService {
@@ -252,6 +254,94 @@ export class PlaylistItemsService {
           per_page,
         }
       });
+    });
+  }
+
+  async update({
+    playlistId,
+    itemId,
+    dto,
+  }: {
+    playlistId: number;
+    itemId: number;
+    dto: PlaylistItemUpdateDto;
+  }): Promise<PlaylistItemDto> {
+    
+    return await this.db.transaction(async (tx) => {
+      let newRankString: string | undefined;
+
+      if (dto.position !== undefined) {
+        
+        if (dto.position <= 1) {
+          const [firstItem] = await tx.select({ rank: playlistItem.rank })
+            .from(playlistItem)
+            .where(and(eq(playlistItem.playlistId, playlistId), ne(playlistItem.id, itemId)))
+            .orderBy(asc(playlistItem.rank))
+            .limit(1);
+
+          if (firstItem) {
+            newRankString = LexoRank.parse(firstItem.rank).genPrev().toString();
+          } else {
+            newRankString = LexoRank.middle().toString();
+          }
+
+        } else {
+          const offset = dto.position - 2;
+
+          const neighbors = await tx.select({ rank: playlistItem.rank })
+            .from(playlistItem)
+            .where(and(eq(playlistItem.playlistId, playlistId), ne(playlistItem.id, itemId)))
+            .orderBy(asc(playlistItem.rank))
+            .offset(offset)
+            .limit(2);
+
+          if (neighbors.length === 2) {
+            const prev = LexoRank.parse(neighbors[0].rank);
+            const next = LexoRank.parse(neighbors[1].rank);
+            newRankString = prev.between(next).toString();
+          } 
+          else if (neighbors.length === 1) {
+            newRankString = LexoRank.parse(neighbors[0].rank).genNext().toString();
+          } 
+          else {
+            const [lastItem] = await tx.select({ rank: playlistItem.rank })
+              .from(playlistItem)
+              .where(and(eq(playlistItem.playlistId, playlistId), ne(playlistItem.id, itemId)))
+              .orderBy(desc(playlistItem.rank))
+              .limit(1);
+            
+            newRankString = lastItem ? LexoRank.parse(lastItem.rank).genNext().toString() : LexoRank.middle().toString();
+          }
+        }
+      }
+
+      const updateData: Partial<typeof playlistItem.$inferInsert> = {};
+      
+      if (dto.comment !== undefined) updateData.comment = dto.comment;
+      if (newRankString !== undefined) updateData.rank = newRankString;
+
+      if (Object.keys(updateData).length === 0) {
+        const [existing] = await tx.select().from(playlistItem).where(and(eq(playlistItem.id, itemId), eq(playlistItem.playlistId, playlistId)));
+        if (!existing) throw new NotFoundException('Playlist item not found.');
+        const { movieId, tvSeriesId, ...existingItem } = existing;
+        return plainToInstance(PlaylistItemDto, { ...existingItem, mediaId: existingItem.type === 'movie' ? movieId : tvSeriesId });
+      }
+
+      const [updated] = await tx.update(playlistItem)
+        .set(updateData)
+        .where(and(eq(playlistItem.id, itemId), eq(playlistItem.playlistId, playlistId)))
+        .returning();
+
+      if (!updated) {
+        throw new NotFoundException('Playlist item not found.');
+      }
+
+      await tx.update(playlist)
+        .set({ updatedAt: sql`now()` })
+        .where(eq(playlist.id, playlistId));
+
+      const { movieId, tvSeriesId, ...updatedItem } = updated;
+      return plainToInstance(PlaylistItemDto, { ...updatedItem, mediaId: updatedItem.type === 'movie' ? movieId : tvSeriesId });
     });
   }
 

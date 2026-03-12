@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import toast from 'react-hot-toast';
-import { PlaylistItemWithMediaMovie } from '@recomendapp/types';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { Icons } from '@/config/icons';
@@ -21,18 +20,15 @@ import { useModal } from '@/context/modal-context';
 import { createShareController } from "@/components/ShareController/ShareController";
 import { useAuth } from "@/context/auth-context";
 import { ShareControllerMovie } from "@/components/ShareController/ShareControllerMovie";
-import { ModalPlaylistMovieAdd } from "@/components/Modals/playlists/ModalPlaylistMovieAdd";
-import { usePlaylistMovieDeleteMutation } from "@/api/client/mutations/playlistMutations";
-import ModaPlaylistMovieComment from "@/components/Modals/playlists/ModalPlaylistMovieComment";
-import { useQuery } from "@tanstack/react-query";
-import { usePlaylistIsAllowedToEditOptions } from "@/api/client/options/playlistOptions";
 import { ModalRecoSend } from "@/components/Modals/recos/ModalRecoSend";
 import { usePlaylist } from "@/hooks/use-playlist";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { getMediaDetails } from "@/utils/get-media-details";
 import { ShareControllerTvSeries } from "@/components/ShareController/ShareControllerTvSeries";
 import { PlaylistItemWithMedia } from "@packages/api-js";
 import ModalPlaylistComment from "@/components/Modals/playlists/ModalPlaylistComment";
+import { usePlaylistItemsDeleteMutation } from "@libs/query-client";
+import { ModalPlaylistAdd } from "@/components/Modals/playlists/ModalPlaylistAdd";
 
 interface DataTableRowActionsProps {
   table: Table<PlaylistItemWithMedia>;
@@ -47,6 +43,7 @@ export function DataTableRowActions({
   column,
   data,
 }: DataTableRowActionsProps) {
+  const { user } = useAuth();
   const t = useTranslations();
   const { canEdit } = usePlaylist({
     playlistId: data.playlistId,
@@ -54,27 +51,9 @@ export function DataTableRowActions({
   const { openModal, createConfirmModal } = useModal();
 
   // Mutations
-  // const deletePlaylistItemWithMedia = usePlaylistMovieDeleteMutation({
-  //   playlistId: row.original.playlist_id
-  // });
-
-  // Handlers
-  // const handleDeleteItem = async () => {
-  //   if (!session || !data.movie_id) {
-  //     toast.error(upperFirst(t('common.messages.an_error_occurred')));
-  //     return;
-  //   }
-  //   await deletePlaylistItemWithMedia.mutateAsync({
-  //     itemId: data.id,
-  //   }, {
-  //     onSuccess: () => {
-  //       toast.success(upperFirst(t('common.messages.deleted')));
-  //     },
-  //     onError: () => {
-  //       toast.error(upperFirst(t('common.messages.an_error_occurred')));
-  //     }
-  //   });
-  // };
+  const { mutateAsync: deleteItem } = usePlaylistItemsDeleteMutation({
+    userId: user?.id,
+  });
 
   const details = useMemo(() => {
     switch (data.type) {
@@ -93,6 +72,25 @@ export function DataTableRowActions({
     }
   }, [data]);
 
+  // Handlers
+  const handleDeleteItem = useCallback(async () => {
+    await deleteItem({
+      path: {
+        playlist_id: data.playlistId,
+      },
+      body: {
+        itemIds: [data.id],
+      }
+    }, {
+      onSuccess: () => {
+        toast.success(upperFirst(t('common.messages.deleted')));
+      },
+      onError: () => {
+        toast.error(upperFirst(t('common.messages.an_error_occurred')));
+      }
+    });
+  }, [deleteItem, data, t]);
+
   return (
     <div className="flex items-center justify-end">
       <DropdownMenu>
@@ -106,15 +104,15 @@ export function DataTableRowActions({
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent align="end" className="w-[160px]">
-          {/* <DropdownMenuItem
-            onClick={() => openModal(ModalPlaylistMovieAdd, { movieId: data.mediaId, movieTitle: data.movie?.title! })}
+        <DropdownMenuContent align="end" className="w-40">
+          <DropdownMenuItem
+            onClick={() => openModal(ModalPlaylistAdd, { mediaId: data.mediaId, type: data.type, mediaTitle: details?.title })}
           >
             <Icons.addPlaylist className='w-4' />
             {upperFirst(t('common.messages.add_to_playlist'))}
-          </DropdownMenuItem> */}
+          </DropdownMenuItem>
           <DropdownMenuItem
-          onClick={() => openModal(ModalRecoSend, { mediaId: data.mediaId, mediaTitle: details?.title, mediaType: 'movie' })}
+          onClick={() => openModal(ModalRecoSend, { mediaId: data.mediaId, mediaTitle: details?.title, mediaType: data.type })}
           >
             <Icons.send className='w-4' />
             {upperFirst(t('common.messages.send_to_friend'))}
@@ -150,13 +148,14 @@ export function DataTableRowActions({
           </DropdownMenuItem>
           {canEdit && (
             <DropdownMenuItem
+              variant="destructive"
               onClick={() => createConfirmModal({
                 title: upperFirst(t('common.messages.are_u_sure')),
                 description: t.rich('pages.playlist.modal.delete_item_confirm.description', {
                   title: details?.title || '',
                   important: (chunk) => <b>{chunk}</b>,
                 }),
-                // onConfirm: handleDeleteItem,
+                onConfirm: handleDeleteItem,
               })}
             >
               <Icons.delete className='w-4' />

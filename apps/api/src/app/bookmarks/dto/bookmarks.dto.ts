@@ -30,7 +30,7 @@ export class BookmarkDto {
   @Expose()
   userId: string;
 
-  @ApiProperty({ example: 'Must watch this weekend', nullable: true })
+  @ApiProperty({ example: 'Must watch this weekend', nullable: true, maxLength: 180 })
   @Expose()
   @IsOptional()
   @IsString()

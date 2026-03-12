@@ -1,8 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
-import { UpdateFollowCountsDto, UpdatePlaylistItemsDto, UpdatePlaylistLikesDto, UpdatePlaylistSavesDto, UpdateReviewMovieLikesDto, UpdateReviewTvSeriesLikesDto } from '@shared/worker';
 import { playlist, profile, reviewMovie, reviewTvSeries } from '@libs/db/schemas';
 import { eq, sql } from 'drizzle-orm';
+import { CountersRegistry } from '@shared/worker';
 
 @Injectable()
 export class CountersService {
@@ -12,7 +12,7 @@ export class CountersService {
 		@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
 	) {}
 
-	async updateFollowCounts(data: UpdateFollowCountsDto) {
+	async updateFollowCounts(data: CountersRegistry['counters:update-follow']) {
 		const { followerId, followingId, action, amount } = data;
 
 		const followingUpdateSql = action === 'increment'
@@ -34,7 +34,7 @@ export class CountersService {
 		});
 	}
 
-	async updateReviewMovieLikes(data: UpdateReviewMovieLikesDto) {
+	async updateReviewMovieLikes(data: CountersRegistry['counters:update-review-movie-likes']) {
 		const { reviewId, action, amount } = data;
 
 		const likesUpdateSql = action === 'increment'
@@ -46,7 +46,7 @@ export class CountersService {
 			.where(eq(reviewMovie.id, reviewId));
 	}
 
-	async updateReviewTvSeriesLikes(data: UpdateReviewTvSeriesLikesDto) {
+	async updateReviewTvSeriesLikes(data: CountersRegistry['counters:update-review-tv-series-likes']) {
 		const { reviewId, action, amount } = data;
 
 		const likesUpdateSql = action === 'increment'
@@ -58,7 +58,7 @@ export class CountersService {
 			.where(eq(reviewTvSeries.id, reviewId));
 	}
 
-	async updatePlaylistItems(data: UpdatePlaylistItemsDto) {
+	async updatePlaylistItems(data: CountersRegistry['counters:update-playlist-items']) {
 		const { playlistId, action, amount } = data;
 
 		const itemsUpdateSql = action === 'increment'
@@ -70,7 +70,7 @@ export class CountersService {
 			.where(eq(playlist.id, playlistId));
 	}
 
-	async updatePlaylistLikes(data: UpdatePlaylistLikesDto) {
+	async updatePlaylistLikes(data: CountersRegistry['counters:update-playlist-likes']) {
 		const { playlistId, action, amount } = data;
 
 		const likesUpdateSql = action === 'increment'
@@ -82,7 +82,7 @@ export class CountersService {
 			.where(eq(playlist.id, playlistId));
 	}
 
-	async updatePlaylistSaves(data: UpdatePlaylistSavesDto) {
+	async updatePlaylistSaves(data: CountersRegistry['counters:update-playlist-saves']) {
 		const { playlistId, action, amount } = data;
 
 		const savedUpdateSql = action === 'increment'

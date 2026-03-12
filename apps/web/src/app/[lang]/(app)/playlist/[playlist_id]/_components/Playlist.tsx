@@ -45,11 +45,6 @@ export const Playlist = ({
 			{items && (
 				<PlaylistTable playlist={playlist} items={items} />
 			)}
-			{/* {playlist.type === 'movie' ? (
-				<PlaylistMovie playlist={playlist} />
-			) : playlist.type === 'tv_series' ? (
-				<PlaylistTvSeries playlist={playlist} />
-			) : null} */}
 		</div>
 	)
 };

@@ -1,12 +1,22 @@
-import { PrefixRegistry } from "../utils";
-import { SyncPlaylistDto, SyncUserDto } from "./search.dto";
+import { z } from 'zod';
+import { PrefixRegistry, createPrefixedRegistry } from "../utils";
+import {
+    SyncUserSchema,
+    SyncPlaylistSchema,
+} from "./search.dto";
 
 export const SEARCH_QUEUE = 'search_queue';
 export const SEARCH_PATH = 'search';
 
+const BaseSearchSchemas = {
+    'sync-user': SyncUserSchema,
+    'sync-playlist': SyncPlaylistSchema,
+} as const;
+
+export const SearchSchemas = createPrefixedRegistry(SEARCH_PATH, BaseSearchSchemas);
+
 type BaseSearchRegistry = {
-    'sync-user': SyncUserDto;
-    'sync-playlist': SyncPlaylistDto;
+  [K in keyof typeof BaseSearchSchemas]: z.input<typeof BaseSearchSchemas[K]>;
 };
 
 export type SearchRegistry = PrefixRegistry<typeof SEARCH_PATH, BaseSearchRegistry>;

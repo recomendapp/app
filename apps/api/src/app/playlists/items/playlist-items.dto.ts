@@ -238,6 +238,22 @@ export class ListInfinitePlaylistItemsDto extends CursorPaginatedResponseDto<Pla
   }
 }
 
+// Update
+@ApiSchema({ name: 'PlaylistItemUpdate' })
+export class PlaylistItemUpdateDto {
+  @ApiPropertyOptional({ description: 'Update the comment of the item', nullable: true, maxLength: 180 })
+  @IsOptional()
+  @IsString()
+  @MaxLength(180)
+  comment: string | null;
+
+  @ApiPropertyOptional({ description: 'The new absolute position in the playlist (starts at 1)' })
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  position?: number;
+}
+
 // Delete
 @ApiSchema({ name: 'PlaylistItemsDelete' })
 export class PlaylistItemsDeleteDto {

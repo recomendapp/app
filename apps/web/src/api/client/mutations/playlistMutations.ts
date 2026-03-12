@@ -413,74 +413,74 @@ export const usePlaylistItemsTvSeriesRealtimeMutation = ({
 // 		}
 // 	});
 // };
-export const usePlaylistMovieDeleteMutation = ({
-	playlistId
-} : {
-	playlistId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	const playlistDetailsOptions = playlistOptions({ playlistId: playlistId });
-	return useMutation({
-		mutationFn: async ({
-			itemId,
-		} : {
-			itemId: number;
-		}) => {
-			const { data, error } = await supabase
-				.from('playlist_items_movie')
-				.delete()
-				.eq('id', itemId)
-				.select('*')
-				.single();
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.invalidateQueries({
-				queryKey: playlistKeys.addTo({ itemId: data.id, type: 'movie' }),
-			});
-			queryClient.invalidateQueries({
-				queryKey: mediaKeys.moviePlaylists({
-					movieId: data.movie_id,
-				}),
-			});
-			queryClient.setQueryData(playlistDetailsOptions.queryKey, (oldData) => {
-				if (!oldData) return oldData;
-				return {
-					...oldData,
-					items_count: oldData.items_count - 1,
-				}
-			});
-		},
-	});
-};
-export const usePlaylistMovieUpdateMutation = () => {
-	const supabase = useSupabaseClient();
-	return useMutation({
-		mutationFn: async ({
-			itemId,
-			rank,
-			comment,
-		} : {
-			itemId: number;
-			rank?: number;
-			comment?: string;
-		}) => {
-			const { data, error } = await supabase
-				.from('playlist_items_movie')
-				.update({
-					rank,
-					comment,
-				})
-				.eq('id', itemId)
-				.select('*')
-				.single();
-			if (error) throw error;
-			return data;
-		},
-	});
-};
+// export const usePlaylistMovieDeleteMutation = ({
+// 	playlistId
+// } : {
+// 	playlistId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	const playlistDetailsOptions = playlistOptions({ playlistId: playlistId });
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			itemId,
+// 		} : {
+// 			itemId: number;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('playlist_items_movie')
+// 				.delete()
+// 				.eq('id', itemId)
+// 				.select('*')
+// 				.single();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.invalidateQueries({
+// 				queryKey: playlistKeys.addTo({ itemId: data.id, type: 'movie' }),
+// 			});
+// 			queryClient.invalidateQueries({
+// 				queryKey: mediaKeys.moviePlaylists({
+// 					movieId: data.movie_id,
+// 				}),
+// 			});
+// 			queryClient.setQueryData(playlistDetailsOptions.queryKey, (oldData) => {
+// 				if (!oldData) return oldData;
+// 				return {
+// 					...oldData,
+// 					items_count: oldData.items_count - 1,
+// 				}
+// 			});
+// 		},
+// 	});
+// };
+// export const usePlaylistMovieUpdateMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			itemId,
+// 			rank,
+// 			comment,
+// 		} : {
+// 			itemId: number;
+// 			rank?: number;
+// 			comment?: string;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('playlist_items_movie')
+// 				.update({
+// 					rank,
+// 					comment,
+// 				})
+// 				.eq('id', itemId)
+// 				.select('*')
+// 				.single();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 	});
+// };
 // TV Series
 // export const usePlaylistTvSeriesInsertMutation = ({
 // 	tvSeriesId
@@ -534,74 +534,74 @@ export const usePlaylistMovieUpdateMutation = () => {
 // 		}
 // 	});
 // };
-export const usePlaylistTvSeriesDeleteMutation = ({
-	playlistId
-} : {
-	playlistId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	const playlistDetailsOptions = playlistOptions({ playlistId: playlistId });
-	return useMutation({
-		mutationFn: async ({
-			itemId,
-		} : {
-			itemId: number;
-		}) => {
-			const { data, error } = await supabase
-				.from('playlist_items_tv_series')
-				.delete()
-				.eq('id', itemId)
-				.select('*')
-				.single();
-			if (error) throw error;
-			return data;
-		},
-		onSuccess: (data) => {
-			queryClient.invalidateQueries({
-				queryKey: playlistKeys.addTo({ itemId: data.id, type: 'tv_series' }),
-			});
-			queryClient.invalidateQueries({
-				queryKey: mediaKeys.tvSeriesPlaylists({
-					tvSeriesId: data.tv_series_id,
-				}),
-			});
-			queryClient.setQueryData(playlistDetailsOptions.queryKey, (oldData) => {
-				if (!oldData) return oldData;
-				return {
-					...oldData,
-					items_count: oldData.items_count - 1,
-				}
-			});
-		},
-	});
-};
-export const usePlaylistTvSeriesUpdateMutation = () => {
-	const supabase = useSupabaseClient();
-	return useMutation({
-		mutationFn: async ({
-			itemId,
-			rank,
-			comment,
-		} : {
-			itemId: number;
-			rank?: number;
-			comment?: string;
-		}) => {
-			const { data, error } = await supabase
-				.from('playlist_items_tv_series')
-				.update({
-					rank,
-					comment,
-				})
-				.eq('id', itemId)
-				.select('*')
-				.single();
-			if (error) throw error;
-			return data;
-		},
-	});
-};
+// export const usePlaylistTvSeriesDeleteMutation = ({
+// 	playlistId
+// } : {
+// 	playlistId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	const playlistDetailsOptions = playlistOptions({ playlistId: playlistId });
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			itemId,
+// 		} : {
+// 			itemId: number;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('playlist_items_tv_series')
+// 				.delete()
+// 				.eq('id', itemId)
+// 				.select('*')
+// 				.single();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		onSuccess: (data) => {
+// 			queryClient.invalidateQueries({
+// 				queryKey: playlistKeys.addTo({ itemId: data.id, type: 'tv_series' }),
+// 			});
+// 			queryClient.invalidateQueries({
+// 				queryKey: mediaKeys.tvSeriesPlaylists({
+// 					tvSeriesId: data.tv_series_id,
+// 				}),
+// 			});
+// 			queryClient.setQueryData(playlistDetailsOptions.queryKey, (oldData) => {
+// 				if (!oldData) return oldData;
+// 				return {
+// 					...oldData,
+// 					items_count: oldData.items_count - 1,
+// 				}
+// 			});
+// 		},
+// 	});
+// };
+// export const usePlaylistTvSeriesUpdateMutation = () => {
+// 	const supabase = useSupabaseClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			itemId,
+// 			rank,
+// 			comment,
+// 		} : {
+// 			itemId: number;
+// 			rank?: number;
+// 			comment?: string;
+// 		}) => {
+// 			const { data, error } = await supabase
+// 				.from('playlist_items_tv_series')
+// 				.update({
+// 					rank,
+// 					comment,
+// 				})
+// 				.eq('id', itemId)
+// 				.select('*')
+// 				.single();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 	});
+// };
 
 /* -------------------------------------------------------------------------- */
 export const usePlaylistMovieMultiInsertMutation = ({

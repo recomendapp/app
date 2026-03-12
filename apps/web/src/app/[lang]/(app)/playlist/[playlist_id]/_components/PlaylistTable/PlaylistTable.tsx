@@ -46,12 +46,10 @@ import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { DataTableToolbar } from './component/data-table-toolbar';
-import { usePlaylistMovieUpdateMutation } from '@/api/client/mutations/playlistMutations';
 import { useAuth } from '@/context/auth-context';
-import { useQuery } from '@tanstack/react-query';
-import { usePlaylistIsAllowedToEditOptions } from '@/api/client/options/playlistOptions';
 import { PlaylistItemWithMedia, PlaylistWithOwner } from '@packages/api-js';
 import { usePlaylist } from '@/hooks/use-playlist';
+import { usePlaylistItemUpdateMutation } from '@libs/query-client/src';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -75,7 +73,7 @@ export default function PlaylistTable({
     playlistId: playlist.id,
   })
   // Mutations
-  const updatePlaylistItem = usePlaylistMovieUpdateMutation();
+  const { mutateAsync: updateItem } = usePlaylistItemUpdateMutation();
 
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -154,40 +152,35 @@ export default function PlaylistTable({
     })
   );
 
-  function handleDragStart(event: DragStartEvent) {
+  const handleDragStart = React.useCallback((event: DragStartEvent) => {
     setActiveId(event.active.id);
-  }
+  }, []);
 
-  async function handleDragEnd(event: DragEndEvent) {
-    // const { active, over } = event;
-    // if (!active || !over) return;
-    // if (active.id !== over?.id) {
-    //   try {
-    //     setPlaylistItems((data) => {
-    //       const oldIndex = items.indexOf(active.id);
-    //       const newIndex = items.indexOf(over.id);
-    //       return arrayMove(data, oldIndex, newIndex);
-    //     });
-    //     await updatePlaylistItem.mutateAsync({
-    //       itemId: Number(active.id),
-    //       rank: over?.data.current?.sortable.index + 1
-    //     })
-    //   } catch (error) {
-    //     setPlaylistItems((data) => {
-    //       const oldIndex = items.indexOf(active.id);
-    //       const newIndex = items.indexOf(over.id);
-    //       return arrayMove(data, newIndex, oldIndex);
-    //     });
-    //     toast.error(upperFirst(common('messages.an_error_occurred')));
-    //   }
-    // }
-
-    // setActiveId(null);
-  }
-
-  function handleDragCancel() {
+  const handleDragEnd = React.useCallback(async (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!active || !over) return;
+    if (active.id !== over?.id) {
+      const newIndex = items.indexOf(over.id);
+      await updateItem({
+        path: {
+          playlist_id: playlist.id,
+          item_id: Number(active.id),
+        },
+        body: {
+          position: newIndex + 1,
+        },
+      }, {
+        onError: () => {
+          toast.error(upperFirst(common('messages.an_error_occurred')));
+        }
+      });
+    }
     setActiveId(null);
-  }
+  }, [updateItem, playlist.id, items, common]);
+
+  const handleDragCancel = React.useCallback(() => {
+    setActiveId(null);
+  }, []);
 
   const rowData = table?.getRowModel().rows;
 

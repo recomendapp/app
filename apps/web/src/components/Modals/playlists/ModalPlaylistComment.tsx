@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,9 +8,9 @@ import { useModal } from "@/context/modal-context";
 import { Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { usePlaylistMovieUpdateMutation } from "@/api/client/mutations/playlistMutations";
 import { PlaylistItemWithMedia } from "@packages/api-js";
 import { usePlaylist } from "@/hooks/use-playlist";
+import { usePlaylistItemUpdateMutation } from "@libs/query-client/src";
 
 interface ModalPlaylistComment extends ModalType {
 	data: PlaylistItemWithMedia;
@@ -27,7 +27,7 @@ const ModalPlaylistComment = ({
 	})
 
 	// Mutations
-	const updatePlaylistItem = usePlaylistMovieUpdateMutation();
+	const { mutateAsync: updateItem, isPending } = usePlaylistItemUpdateMutation();
 
 	// States
 	const [comment, setComment] = useState(data?.comment ?? '');
@@ -35,24 +35,29 @@ const ModalPlaylistComment = ({
 		setComment(data?.comment ?? '');
 	}, [data?.comment]);
 
-	async function onSubmit() {  
-	//   if (comment == playlistItem?.comment) {
-	// 	closeModal(props.id);
-	// 	return;
-	//   }
-	//   await updatePlaylistItem.mutateAsync({
-	// 	itemId: playlistItem.id,
-	// 	comment: comment,
-	//   }, {
-	// 	onSuccess: () => {
-	// 		toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
-	// 		closeModal(props.id);
-	// 	},
-	// 	onError: () => {
-	// 		toast.error(upperFirst(t('common.messages.an_error_occurred')));
-	// 	}
-	//   })
-	}
+	const onSubmit = useCallback(async () => {  
+	  if (comment == data.comment) {
+		closeModal(props.id);
+		return;
+	  }
+	  await updateItem({
+		path: {
+			playlist_id: data.playlistId,
+			item_id: data.id,
+		},
+		body: {
+			comment: comment,
+		}
+	  }, {
+		onSuccess: () => {
+			toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
+			closeModal(props.id);
+		},
+		onError: () => {
+			toast.error(upperFirst(t('common.messages.an_error_occurred')));
+		}
+	  })
+	}, [comment, updateItem, data, t, closeModal, props.id])
   
 	return (
 		<Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
@@ -67,7 +72,7 @@ const ModalPlaylistComment = ({
 					setComment(e.target.value.replace(/\s+/g, ' ').trimStart())
 				}
 				maxLength={180}
-				disabled={updatePlaylistItem.isPending}
+				disabled={isPending}
 				className="col-span-3 resize-none h-48"
 				placeholder={upperFirst(t('common.messages.add_comment', { count: 1 }))}
 				readOnly={!canEdit}

@@ -1,10 +1,15 @@
 import { Job } from 'bullmq';
-import { SearchRegistry } from './search/search.registry';
-import { CountersRegistry } from './counters/counters.registry';
+import { SearchRegistry, SearchSchemas } from './search/search.registry';
+import { CountersRegistry, CountersSchemas } from './counters/counters.registry';
 
 export type WorkerRegistry = SearchRegistry & CountersRegistry;
 
 export type WorkerJobName = keyof WorkerRegistry;
+
+export const WorkerSchemas = {
+  ...SearchSchemas,
+  ...CountersSchemas,
+} as const;
 
 type DistributiveJob<K extends WorkerJobName> = K extends any
   ? Job<WorkerRegistry[K], any, K>

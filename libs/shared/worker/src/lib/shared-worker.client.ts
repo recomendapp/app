@@ -1,9 +1,10 @@
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable, Logger } from '@nestjs/common';
 import { Queue, JobsOptions } from 'bullmq';
-import { WorkerJobName, WorkerRegistry } from './shared-worker.definitions';
+import { WorkerJobName, WorkerRegistry, WorkerSchemas } from './shared-worker.definitions';
 import { SEARCH_PATH, SEARCH_QUEUE } from './search/search.registry';
 import { COUNTERS_PATH, COUNTERS_QUEUE } from './counters/counters.registry';
+import z from 'zod';
 
 @Injectable()
 export class WorkerClient {
@@ -33,6 +34,21 @@ export class WorkerClient {
             removeOnFail: false,
         };
 
+        let payloadToSend = data;
+        
+        const schema = (WorkerSchemas as Record<string, z.ZodType>)[jobName as string];
+
+        if (schema) {
+            try {
+                payloadToSend = schema.parse(data) as WorkerRegistry[K];
+            } catch (error) {
+                this.logger.error(`Validation failed for job ${jobName}`, error);
+                throw error;
+            }
+        } else {
+            this.logger.warn(`No validation schema found for job: ${jobName}`);
+        }
+
         let targetQueue: Queue;
 
         const jobPrefix = jobName.split(':')[0];
@@ -52,6 +68,6 @@ export class WorkerClient {
             }
         }
 
-        await targetQueue.add(jobName, data, { ...defaultOptions, ...options });
+        await targetQueue.add(jobName, payloadToSend, { ...defaultOptions, ...options });
     }
 }

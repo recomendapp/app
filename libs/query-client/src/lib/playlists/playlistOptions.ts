@@ -29,16 +29,13 @@ export const playlistOptions = ({
 // Items
 export const playlistItemsAllOptions = ({
 	playlistId,
-	filters,
 } : {
 	playlistId?: number;
-	filters?: NonNullable<PlaylistItemsControllerListAllData['query']>;
 }) => {
 	return queryOptions({
 		queryKey: playlistKeys.items({
 			playlistId: playlistId!,
 			mode: 'all',
-			filters,
 		}),
 		queryFn: async () => {
 			if (!playlistId) throw new Error('Playlist ID is required');
@@ -46,7 +43,6 @@ export const playlistItemsAllOptions = ({
 				path: {
 					playlist_id: playlistId,
 				},
-				query: filters,
 			});
 			if (error) throw error;
 			if (!data) throw new Error('No data');
