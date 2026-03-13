@@ -1,13 +1,19 @@
 import { CanActivate, ExecutionContext, Inject, Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { WsException } from '@nestjs/websockets';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import { playlist, playlistMember, profile } from '@libs/db/schemas'; // 🔥 Ajout de "profile"
+import { playlist, playlistMember, profile } from '@libs/db/schemas';
 import { and, eq, sql } from 'drizzle-orm';
-import { AuthenticatedRequest } from '../../auth/types/fastify';
+import { AuthenticatedRequest, AuthenticatedSocket } from '../../auth/types/fastify'; // 🔥 Import de tes types de base unifiés
 import { PLAYLIST_ROLES_KEY } from '../decorators/playlist-roles.decorator';
 import { PlaylistRole } from '../types/playlist-role.type';
+import { User } from '../../auth/auth.service';
 
 export interface PlaylistAuthenticatedRequest extends AuthenticatedRequest {
+  playlistRole?: PlaylistRole;
+}
+
+export interface PlaylistAuthenticatedSocket extends AuthenticatedSocket {
   playlistRole?: PlaylistRole;
 }
 
@@ -24,10 +30,27 @@ export class PlaylistRolesGuard implements CanActivate {
       context.getClass(),
     ]);
 
-    const request = context.switchToHttp().getRequest<PlaylistAuthenticatedRequest & { params: { playlist_id: string } }>();
-    const user = request.user;
-    const playlistId = parseInt(request.params.playlist_id, 10);
+    const isWs = context.getType() === 'ws';
+    let user: User | null = null;
+    let playlistIdStr: string | number | undefined;
+    
+    let requestOrClient: (PlaylistAuthenticatedRequest & { params: { playlist_id: string } }) | PlaylistAuthenticatedSocket;
 
+    if (isWs) {
+      const wsContext = context.switchToWs();
+      requestOrClient = wsContext.getClient<PlaylistAuthenticatedSocket>();
+      const data = wsContext.getData<{ playlistId?: string | number }>();
+      
+      user = requestOrClient.user;
+      playlistIdStr = data?.playlistId;
+    } else {
+      requestOrClient = context.switchToHttp().getRequest<PlaylistAuthenticatedRequest & { params: { playlist_id: string } }>();
+      
+      user = requestOrClient.user;
+      playlistIdStr = requestOrClient.params.playlist_id;
+    }
+
+    const playlistId = parseInt(String(playlistIdStr), 10);
     if (!user || isNaN(playlistId)) return false;
 
     const [access] = await this.db
@@ -45,17 +68,19 @@ export class PlaylistRolesGuard implements CanActivate {
       .where(eq(playlist.id, playlistId))
       .limit(1);
 
-    if (!access) throw new NotFoundException('Playlist not found');
+    if (!access) {
+      if (isWs) throw new WsException('Playlist not found');
+      throw new NotFoundException('Playlist not found');
+    }
 
     let currentRole: PlaylistRole | null = null;
-    
     if (access.isOwner) {
       currentRole = 'owner';
     } else if (access.role) {
       currentRole = access.isOwnerPremium ? access.role : 'viewer';
     }
 
-    request.playlistRole = currentRole;
+    requestOrClient.playlistRole = currentRole;
 
     if (requiredRoles === undefined) {
       return true;
@@ -63,13 +88,17 @@ export class PlaylistRolesGuard implements CanActivate {
 
     if (requiredRoles.length === 0) {
       if (!currentRole) {
-        throw new ForbiddenException('You must be a member of this playlist to perform this action.');
+        const msg = 'You must be a member of this playlist to perform this action.';
+        if (isWs) throw new WsException(msg);
+        throw new ForbiddenException(msg);
       }
       return true;
     }
 
     if (!currentRole || !requiredRoles.includes(currentRole)) {
-      throw new ForbiddenException(`Access denied. Required roles: ${requiredRoles.join(', ')}`);
+      const msg = `Access denied. Required roles: ${requiredRoles.join(', ')}`;
+      if (isWs) throw new WsException(msg);
+      throw new ForbiddenException(msg);
     }
 
     return true;

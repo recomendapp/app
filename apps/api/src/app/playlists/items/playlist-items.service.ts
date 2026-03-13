@@ -22,12 +22,14 @@ import { DbTransaction } from '@libs/db';
 import { plainToInstance } from 'class-transformer';
 import { WorkerClient } from '@shared/worker';
 import { LexoRank } from 'lexorank';
+import { PlaylistsGateway } from '../playlists.gateway';
 
 @Injectable()
 export class PlaylistItemsService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
     private readonly workerClient: WorkerClient,
+    private readonly playlistsGateway: PlaylistsGateway,
   ) {}
 
   private async getListBaseQuery(
@@ -257,6 +259,39 @@ export class PlaylistItemsService {
     });
   }
 
+  async get({
+    playlistId,
+    itemId,
+    locale,
+  }: {
+    playlistId: number;
+    itemId: number;
+    locale: SupportedLocale;
+  }): Promise<PlaylistItemWithMediaUnion> {
+    return await this.db.transaction(async (tx) => {
+      await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
+
+      const [row] = await tx.select({
+          item: playlistItem,
+          movie: MOVIE_COMPACT_SELECT,
+          tvSeries: TV_SERIES_COMPACT_SELECT,
+        })
+        .from(playlistItem)
+        .where(and(eq(playlistItem.id, itemId), eq(playlistItem.playlistId, playlistId)))
+        .leftJoin(tmdbMovieView, eq(playlistItem.movieId, tmdbMovieView.id))
+        .leftJoin(tmdbTvSeriesView, eq(playlistItem.tvSeriesId, tmdbTvSeriesView.id))
+        .limit(1);
+
+      if (!row) throw new NotFoundException('Playlist item not found');
+
+      const { movieId, tvSeriesId, ...baseItem } = row.item;
+      if (baseItem.type === 'movie') {
+        return { ...baseItem, type: 'movie', mediaId: movieId, media: row.movie };
+      }
+      return { ...baseItem, type: 'tv_series', mediaId: tvSeriesId, media: row.tvSeries };
+    });
+  }
+
   async update({
     playlistId,
     itemId,
@@ -267,7 +302,7 @@ export class PlaylistItemsService {
     dto: PlaylistItemUpdateDto;
   }): Promise<PlaylistItemDto> {
     
-    return await this.db.transaction(async (tx) => {
+    const result = await this.db.transaction(async (tx) => {
       let newRankString: string | undefined;
 
       if (dto.position !== undefined) {
@@ -343,6 +378,14 @@ export class PlaylistItemsService {
       const { movieId, tvSeriesId, ...updatedItem } = updated;
       return plainToInstance(PlaylistItemDto, { ...updatedItem, mediaId: updatedItem.type === 'movie' ? movieId : tvSeriesId });
     });
+
+    this.playlistsGateway.broadcastItemUpdated(playlistId, {
+      id: result.id,
+      rank: result.rank,
+      comment: result.comment,
+    });
+
+    return result;
   }
 
   async delete({
@@ -370,6 +413,7 @@ export class PlaylistItemsService {
         action: 'decrement',
         amount: deletedItems.length,
       });
+      this.playlistsGateway.broadcastItemDeleted(playlistId, deletedItems.map(item => item.id));
     }
 
     return plainToInstance(PlaylistItemDto, deletedItems.map(({ movieId, tvSeriesId, ...item }) => ({

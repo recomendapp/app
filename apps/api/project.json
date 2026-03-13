@@ -8,7 +8,7 @@
     "generate-openapi": {
       "executor": "nx:run-commands",
       "cache": true,
-      "outputs": ["{projectRoot}/.openapi"],
+      "outputs": ["{projectRoot}/.openapi/*"],
       "inputs": [
         "default",
         "{projectRoot}/src/**/*",

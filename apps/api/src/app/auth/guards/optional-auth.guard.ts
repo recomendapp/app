@@ -1,6 +1,7 @@
 import { CanActivate, ExecutionContext, Inject, Injectable } from '@nestjs/common';
 import { fromNodeHeaders } from 'better-auth/node';
-import { OptionalAuthenticatedRequest } from '../types/fastify';
+import { IncomingHttpHeaders } from 'node:http';
+import { OptionalAuthenticatedRequest, OptionalAuthenticatedSocket } from '../types/fastify';
 import { AUTH_SERVICE, AuthService } from '../auth.service';
 
 @Injectable()
@@ -10,18 +11,27 @@ export class OptionalAuthGuard implements CanActivate {
   ) {}
   
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context
-      .switchToHttp()
-      .getRequest<OptionalAuthenticatedRequest>();
+    const isWs = context.getType() === 'ws';
+    
+    let requestOrClient: OptionalAuthenticatedRequest | OptionalAuthenticatedSocket;
+    let rawHeaders: IncomingHttpHeaders;
 
-    const headers = fromNodeHeaders(request.headers);
+    if (isWs) {
+      requestOrClient = context.switchToWs().getClient<OptionalAuthenticatedSocket>();
+      rawHeaders = requestOrClient.handshake.headers;
+    } else {
+      requestOrClient = context.switchToHttp().getRequest<OptionalAuthenticatedRequest>();
+      rawHeaders = requestOrClient.headers;
+    }
+
+    const headers = fromNodeHeaders(rawHeaders);
 
     const session = await this.auth.api.getSession({
       headers,
     });
 
-    request.session = session?.session || null;
-    request.user = session?.user || null;
+    requestOrClient.session = session?.session || null;
+    requestOrClient.user = session?.user || null;
 
     return true;
   }

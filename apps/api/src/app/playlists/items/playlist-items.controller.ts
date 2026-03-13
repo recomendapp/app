@@ -98,6 +98,29 @@ export class PlaylistItemsController {
     });
   }
 
+  @Get('item/:item_id')
+  @UseGuards(OptionalAuthGuard, PlaylistVisibilityGuard)
+  @ApiOkResponse({
+    description: 'Get a single item in the playlist fully populated.',
+    schema: {
+      oneOf: [
+        { $ref: getSchemaPath(PlaylistItemWithMovieDto) },
+        { $ref: getSchemaPath(PlaylistItemWithTvSeriesDto) },
+      ],
+    },
+  })
+  async get(
+    @Param('playlist_id', ParseIntPipe) playlistId: number,
+    @Param('item_id', ParseIntPipe) itemId: number,
+    @CurrentLocale() locale: SupportedLocale,
+  ): Promise<PlaylistItemWithMediaUnion> {
+    return this.playlistItemsService.get({
+      playlistId,
+      itemId,
+      locale,
+    });
+  }
+
   @Patch('item/:item_id')
   @UseGuards(AuthGuard, PlaylistRolesGuard)
   @RequirePlaylistRoles('owner', 'admin', 'editor')

@@ -1,9 +1,11 @@
 import { CanActivate, ExecutionContext, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { WsException } from '@nestjs/websockets';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { playlist } from '@libs/db/schemas';
 import { and, eq } from 'drizzle-orm';
-import { AuthenticatedRequest } from '../../auth/types/fastify';
+import { OptionalAuthenticatedRequest, OptionalAuthenticatedSocket } from '../../auth/types/fastify';
 import { PlaylistQueryBuilder } from '../playlists.query-builder';
+import { User } from '../../auth/auth.service';
 
 @Injectable()
 export class PlaylistVisibilityGuard implements CanActivate {
@@ -12,10 +14,27 @@ export class PlaylistVisibilityGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest<AuthenticatedRequest & { params: { playlist_id: string } }>();
-    const user = request.user || null;
-    const playlistId = parseInt(request.params.playlist_id, 10);
+    const isWs = context.getType() === 'ws';
+    
+    let user: User | null = null;
+    let playlistIdStr: string | number | undefined;
 
+    if (isWs) {
+      const wsContext = context.switchToWs();
+      const client = wsContext.getClient<OptionalAuthenticatedSocket>();
+      const data = wsContext.getData<{ playlistId?: string | number }>();
+      
+      user = client.user || null;
+      playlistIdStr = data?.playlistId;
+    } else {
+      const request = context.switchToHttp().getRequest<OptionalAuthenticatedRequest & { params: { playlist_id: string } }>();
+      
+      user = request.user || null;
+      playlistIdStr = request.params.playlist_id;
+    }
+
+    const playlistId = parseInt(String(playlistIdStr), 10);
+    
     if (isNaN(playlistId)) return false;
 
     const visibilityCondition = PlaylistQueryBuilder.getVisibilityCondition(this.db, user);
@@ -29,6 +48,7 @@ export class PlaylistVisibilityGuard implements CanActivate {
     });
 
     if (!playlistRecord) {
+      if (isWs) throw new WsException('Playlist not found');
       throw new NotFoundException('Playlist not found');
     }
 

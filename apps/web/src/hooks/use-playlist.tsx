@@ -1,9 +1,7 @@
 import { playlistOptions } from "@libs/query-client";
-import { Playlist } from "@packages/api-js";
+import { ROLES_CAN_EDIT } from "@packages/api-js";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-
-const ROLES_CAN_EDIT: Playlist['role'][] = ['editor', 'admin', 'owner'] as const;
 
 export const usePlaylist = ({
 	playlistId,

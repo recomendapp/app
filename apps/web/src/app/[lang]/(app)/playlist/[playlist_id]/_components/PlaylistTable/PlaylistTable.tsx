@@ -68,7 +68,6 @@ export default function PlaylistTable({
   items: itemsProp,
 }: DataTableProps) {
   const common = useTranslations('common');
-  const { session } = useAuth();
   const { canEdit } = usePlaylist({
     playlistId: playlist.id,
   })

@@ -7,7 +7,8 @@ import { WorkerClient } from '@shared/worker';
 import { LexoRank } from 'lexorank';
 import { PlaylistsAddQueryDto } from './playlists-add.dto';
 import { plainToInstance } from 'class-transformer';
-import { PlaylistItemDto } from '../items/playlist-items.dto'; // 🔥 Assure-toi du bon chemin d'import
+import { PlaylistItemDto } from '../items/playlist-items.dto';
+import { PlaylistsGateway } from '../playlists.gateway';
 
 @Injectable()
 export class PlaylistsAddService {
@@ -16,6 +17,7 @@ export class PlaylistsAddService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
     private readonly workerClient: WorkerClient,
+    private readonly playlistsGateway: PlaylistsGateway,
   ) {}
 
   async add({
@@ -103,6 +105,14 @@ export class PlaylistsAddService {
         playlistId: item.playlistId,
         action: 'increment',
       });
+      this.playlistsGateway.broadcastItemAdded(item.playlistId, [{
+        id: item.id,
+        playlistId: item.playlistId,
+        mediaId: item.type === 'movie' ? item.movieId : item.tvSeriesId,
+        type: item.type,
+        rank: item.rank,
+        comment: item.comment,
+      }]);
     }
 
     return plainToInstance(PlaylistItemDto, insertedItems.map(({ movieId, tvSeriesId, ...item }) => ({

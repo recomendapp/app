@@ -25,7 +25,8 @@
       "@libs/query-client": ["libs/query-client/src/index.ts"],
       "@packages/api-js": ["packages/api-js/src/index.ts"],
       "@shared/notify": ["libs/shared/notify/src/index.ts"],
-      "@shared/worker": ["libs/shared/worker/src/index.ts"]
+      "@shared/worker": ["libs/shared/worker/src/index.ts"],
+      "@libs/realtime": ["libs/realtime/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

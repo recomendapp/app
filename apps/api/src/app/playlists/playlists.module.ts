@@ -8,6 +8,7 @@ import { StorageModule } from '../../common/modules/storage/storage.module';
 import { PlaylistMembersModule } from './members/playlist-members.module';
 import { PlaylistsAddModule } from './add/playlists-add.module';
 import { PlaylistItemsModule } from './items/playlist-items.module';
+import { PlaylistsGateway } from './playlists.gateway';
 
 
 @Module({
@@ -21,7 +22,13 @@ import { PlaylistItemsModule } from './items/playlist-items.module';
     PlaylistItemsModule,
   ],
   controllers: [PlaylistsController],
-  providers: [PlaylistsService],
-  exports: [PlaylistsService],
+  providers: [
+    PlaylistsService,
+    PlaylistsGateway,
+  ],
+  exports: [
+    PlaylistsService,
+    PlaylistsGateway,
+  ],
 })
 export class PlaylistsModule {}

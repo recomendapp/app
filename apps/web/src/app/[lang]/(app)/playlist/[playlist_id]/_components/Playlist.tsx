@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { PlaylistWithOwner } from "@packages/api-js";
 import { PlaylistHeader } from "./PlaylistHeader";
-import { playlistItemsAllOptions, playlistOptions } from "@libs/query-client";
+import { playlistItemsAllOptions, playlistOptions, usePlaylistRealtime } from "@libs/query-client";
 import { useMemo } from "react";
 import PlaylistTable from "./PlaylistTable/PlaylistTable";
 
@@ -22,8 +22,6 @@ export const Playlist = ({
 	});
 	const {
 		data: items,
-		isLoading,
-		refetch,
 	} = useQuery(playlistItemsAllOptions({
 		playlistId: playlist.id
 	}));
@@ -33,6 +31,11 @@ export const Playlist = ({
 		if (item.type === 'tv_series') return item.media.backdropPath;
 		return null;
 	}).filter((src): src is string => !!src) || [], [items]);
+
+	usePlaylistRealtime({
+		playlistId: playlist.id,
+		role: playlist.role,
+	});
 	
 	if (!playlist) return null;
 	return (
