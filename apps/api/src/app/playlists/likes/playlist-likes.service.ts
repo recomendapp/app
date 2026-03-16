@@ -61,10 +61,17 @@ export class PlaylistLikesService {
       return plainToInstance(PlaylistLikeDto, existingLike, { excludeExtraneousValues: true });
     }
 
-    await this.workerClient.emit('counters:update-playlist-likes', {
-      playlistId,
-      action: 'increment',
-    });
+    await Promise.all([
+      this.workerClient.emit('counters:update-playlist-likes', {
+        playlistId,
+        action: 'increment',
+      }),
+      this.workerClient.emit('feed:insert-activity', {
+        userId: user.id,
+        activityType: 'playlist_like',
+        activityId: like.id,
+      }),
+    ]);
 
     return plainToInstance(PlaylistLikeDto, like, { excludeExtraneousValues: true });
   }
@@ -88,10 +95,16 @@ export class PlaylistLikesService {
       return null;
     }
 
-    await this.workerClient.emit('counters:update-playlist-likes', {
-      playlistId,
-      action: 'decrement',
-    });
+    await Promise.all([
+      this.workerClient.emit('counters:update-playlist-likes', {
+        playlistId,
+        action: 'decrement',
+      }),
+      this.workerClient.emit('feed:delete-activity', {
+        activityType: 'playlist_like',
+        activityId: deleted.id,
+      }),
+    ]);
 
     return plainToInstance(PlaylistLikeDto, deleted, { excludeExtraneousValues: true });
   }

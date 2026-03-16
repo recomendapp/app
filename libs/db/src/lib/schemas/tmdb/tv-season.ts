@@ -18,6 +18,7 @@ export const tmdbTvSeason = tmdbSchema.table(
       .notNull()
       .references(() => tmdbTvSeries.id, { onDelete: 'cascade' }),
     seasonNumber: integer('season_number').notNull(),
+    episodeCount: integer('episode_count').default(0).notNull(),
     voteAverage: real('vote_average').notNull(),
     voteCount: integer('vote_count').notNull(),
     posterPath: text('poster_path'),
@@ -134,11 +135,7 @@ export const tmdbTvSeasonView = tmdbSchema.view('tv_season_view', {
     s.poster_path,
     s.vote_average,
     s.vote_count,
-    (
-      SELECT count(*)::integer
-      FROM tmdb.tv_episode e
-      WHERE e.tv_season_id = s.id
-    ) AS episode_count,
+    s.episode_count,
     ('/tv-series/'::text || s.tv_series_id || '/season/' || s.season_number) AS url
   FROM tmdb.tv_season s,
   LATERAL i18n.language() language(requested_language, fallback_language, default_language)`

@@ -123,4 +123,17 @@ echo "   📺 Migrate TV Episodes"
 migrate_table "tmdb_tv_series_episodes" "tmdb.tv_episode" "id, season_id, air_date, episode_number, episode_type, name, overview, production_code, runtime, still_path, vote_average, vote_count" "id, tv_season_id, air_date, episode_number, episode_type, name, overview, production_code, runtime, still_path, vote_average, vote_count"
 migrate_table "tmdb_tv_series_episodes_credits" "tmdb.tv_episode_credit" "credit_id, episode_id" "credit_id, tv_episode_id"
 
+echo "   🧮 Calcul du nombre d'épisodes par saison (episode_count)..."
+psql "$TARGET_DB" -c "
+UPDATE tmdb.tv_season
+SET episode_count = subquery.cnt
+FROM (
+    SELECT tv_season_id, COUNT(*)::integer AS cnt
+    FROM tmdb.tv_episode
+    GROUP BY tv_season_id
+) AS subquery
+WHERE tmdb.tv_season.id = subquery.tv_season_id;
+"
+echo "   ✅ Calcul de l'episode_count terminé."
+
 echo "   🎉 Migration TMDB terminée avec succès !"

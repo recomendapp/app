@@ -9,3 +9,4 @@ export * from './user';
 export * from './tmdb';
 export * from './system';
 export * from './ui';
+export * from './feed';

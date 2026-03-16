@@ -4,9 +4,9 @@ import {
   check,
   index,
   pgTable,
-  primaryKey,
   text,
   timestamp,
+  unique,
   uuid,
 } from 'drizzle-orm/pg-core';
 import { user } from './auth';
@@ -67,6 +67,7 @@ export const reviewMovieRelations = relations(reviewMovie, ({ one }) => ({
 export const reviewMovieLike = pgTable(
 	'review_movie_like',
 	{
+		id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
 		reviewId: bigint('review_id', { mode: 'number' })
 			.notNull()
 			.references(() => reviewMovie.id, { onDelete: 'cascade' }),
@@ -78,7 +79,7 @@ export const reviewMovieLike = pgTable(
 			.notNull(),
 		},
 	(table) => [
-		primaryKey({ columns: [table.reviewId, table.userId] }),
+		unique('unique_review_movie_like').on(table.reviewId, table.userId),
 		index('idx_review_movie_like_user_id').on(table.userId),
 	],
 );
@@ -145,6 +146,7 @@ export const reviewTvSeriesRelations = relations(reviewTvSeries, ({ one }) => ({
 export const reviewTvSeriesLike = pgTable(
 	'review_tv_series_like',
 	{
+		id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
 		reviewId: bigint('review_id', { mode: 'number' })
 			.notNull()
 			.references(() => reviewTvSeries.id, { onDelete: 'cascade' }),
@@ -156,7 +158,7 @@ export const reviewTvSeriesLike = pgTable(
 			.notNull(),
 		},
 	(table) => [
-		primaryKey({ columns: [table.reviewId, table.userId] }),
+		unique('unique_review_tv_series_like').on(table.reviewId, table.userId),
 		index('idx_review_tv_series_like_user_id').on(table.userId),
 	],
 );

@@ -80,10 +80,17 @@ export class ReviewsMovieService {
       return plainToInstance(ReviewMovieLikeDto, existingLike, { excludeExtraneousValues: true });
     }
 
-    await this.workerClient.emit('counters:update-review-movie-likes', {
-      reviewId,
-      action: 'increment',
-    });
+    await Promise.all([
+      this.workerClient.emit('counters:update-review-movie-likes', {
+        reviewId,
+        action: 'increment',
+      }),
+      this.workerClient.emit('feed:insert-activity', {
+        userId: user.id,
+        activityType: 'review_movie_like',
+        activityId: like.id,
+      }),
+    ]);
 
     return plainToInstance(ReviewMovieLikeDto, like, { excludeExtraneousValues: true });
   }
@@ -107,10 +114,16 @@ export class ReviewsMovieService {
       throw new NotFoundException('Like not found');
     }
 
-    await this.workerClient.emit('counters:update-review-movie-likes', {
-      reviewId,
-      action: 'decrement',
-    });
+    await Promise.all([
+      this.workerClient.emit('counters:update-review-movie-likes', {
+        reviewId,
+        action: 'decrement',
+      }),
+      this.workerClient.emit('feed:delete-activity', {
+        activityType: 'review_movie_like',
+        activityId: deleted.id,
+      }),
+    ]);
 
     return plainToInstance(ReviewMovieLikeDto, deleted, { excludeExtraneousValues: true });
   }

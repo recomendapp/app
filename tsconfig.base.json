@@ -19,8 +19,7 @@
     "paths": {
       "@libs/env": ["libs/env/src/index.ts"],
       "@libs/db": ["libs/db/src/index.ts"],
-      "@libs/db/schemas": ["libs/db/src/lib/schemas/index.ts"],
-      "@libs/db/selectors": ["libs/db/src/lib/selectors/index.ts"],
+      "@libs/db/*": ["libs/db/src/lib/*"],
       "@libs/i18n": ["libs/i18n/src/index.ts"],
       "@libs/query-client": ["libs/query-client/src/index.ts"],
       "@packages/api-js": ["packages/api-js/src/index.ts"],

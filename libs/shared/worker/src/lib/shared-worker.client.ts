@@ -4,6 +4,7 @@ import { Queue, JobsOptions } from 'bullmq';
 import { WorkerJobName, WorkerRegistry, WorkerSchemas } from './shared-worker.definitions';
 import { SEARCH_PATH, SEARCH_QUEUE } from './search/search.registry';
 import { COUNTERS_PATH, COUNTERS_QUEUE } from './counters/counters.registry';
+import { FEED_PATH, FEED_QUEUE } from './feed/feed.registry';
 import z from 'zod';
 
 @Injectable()
@@ -12,6 +13,7 @@ export class WorkerClient {
     constructor(
         @InjectQueue(SEARCH_QUEUE) private readonly searchQueue: Queue,
         @InjectQueue(COUNTERS_QUEUE) private readonly countersQueue: Queue,
+        @InjectQueue(FEED_QUEUE) private readonly feedQueue: Queue,
     ) {}
 
     /**
@@ -60,6 +62,10 @@ export class WorkerClient {
             }
             case COUNTERS_PATH: {
                 targetQueue = this.countersQueue;
+                break;
+            }
+            case FEED_PATH: {
+                targetQueue = this.feedQueue;
                 break;
             }
             default: {
