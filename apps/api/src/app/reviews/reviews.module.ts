@@ -4,8 +4,8 @@ import { ReviewsTvSeriesModule } from './tv-series/reviews-tv-series.module';
 
 @Module({
   imports: [
-	ReviewsMovieModule,
-  ReviewsTvSeriesModule,
+    ReviewsMovieModule,
+    ReviewsTvSeriesModule,
   ],
 })
 export class ReviewsModule {}

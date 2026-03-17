@@ -3,59 +3,59 @@ import { ApiExtraModels, ApiOkResponse, ApiTags, getSchemaPath } from '@nestjs/s
 import { OptionalAuthGuard } from '../../auth/guards';
 import { CurrentOptionalUser } from '../../auth/decorators';
 import { User } from '../../auth/auth.service';
-import { UserMoviesService } from './user-movies.service';
-import { ListInfiniteUserMoviesWithMovieDto, ListPaginatedUserMoviesWithMovieDto, UserMovieWithUserMovieDto } from './user-movies.dto';
+import { UserTvSeriesService } from './user-tv-series.service';
 import { CurrentLocale } from '../../../common/decorators/current-locale.decorator';
 import { SupportedLocale } from '@libs/i18n';
-import { ListInfiniteLogsMovieQueryDto, ListPaginatedLogsMovieQueryDto } from '../../movies/logs/dto/log-movie.dto';
+import { ListInfiniteUserTvSeriesWithTvSeriesDto, ListPaginatedUserTvSeriesWithTvSeriesDto, UserTvSeriesWithUserTvSeriesDto } from './user-tv-series.dto';
+import { ListInfiniteLogsTvSeriesQueryDto, ListPaginatedLogsTvSeriesQueryDto } from '../../tv-series/logs/tv-series-logs.dto';
 
 @ApiTags('Users')
 @Controller({
   path: 'user/:user_id',
   version: '1',
 })
-export class UserMoviesController {
-  constructor(private readonly movieService: UserMoviesService) {}
+export class UserTvSeriesController {
+  constructor(private readonly tvSeriesService: UserTvSeriesService) {}
 
-  @Get('movie/:movie_id')
+  @Get('tv-series/:tv_series_id')
   @UseGuards(OptionalAuthGuard)
-  @ApiExtraModels(UserMovieWithUserMovieDto)
+  @ApiExtraModels(UserTvSeriesWithUserTvSeriesDto)
   @ApiOkResponse({
-    description: 'Get the movie log for the user',
+    description: 'Get the tv series log for the user',
     schema: {
       nullable: true,
       allOf: [
-        { $ref: getSchemaPath(UserMovieWithUserMovieDto) }
+        { $ref: getSchemaPath(UserTvSeriesWithUserTvSeriesDto) }
       ]
     }
   })
   async get(
     @Param('user_id', ParseUUIDPipe) userId: string,
-    @Param('movie_id', ParseIntPipe) movieId: number,
+    @Param('tv_series_id', ParseIntPipe) tvSeriesId: number,
     @CurrentOptionalUser() currentUser: User | null,
     @CurrentLocale() locale: SupportedLocale,
-  ): Promise<UserMovieWithUserMovieDto | null> {
-    return this.movieService.get({
+  ): Promise<UserTvSeriesWithUserTvSeriesDto | null> {
+    return this.tvSeriesService.get({
       userId,
-      movieId,
+      tvSeriesId,
       currentUser,
       locale,
     });
   }
 
-  @Get('movies/paginated')
+  @Get('tv-series/paginated')
   @UseGuards(OptionalAuthGuard)
   @ApiOkResponse({
-    description: 'Get the list of movie logs for the user',
-    type: ListPaginatedUserMoviesWithMovieDto,
+    description: 'Get the list of tv series logs for the user',
+    type: ListPaginatedUserTvSeriesWithTvSeriesDto,
   })
   async listPaginated(
     @Param('user_id', ParseUUIDPipe) userId: string,
-    @Query() query: ListPaginatedLogsMovieQueryDto,
+    @Query() query: ListPaginatedLogsTvSeriesQueryDto,
     @CurrentOptionalUser() currentUser: User | null,
     @CurrentLocale() locale: SupportedLocale,
-  ): Promise<ListPaginatedUserMoviesWithMovieDto> {
-    return this.movieService.listPaginated({
+  ): Promise<ListPaginatedUserTvSeriesWithTvSeriesDto> {
+    return this.tvSeriesService.listPaginated({
       userId,
       query,
       currentUser,
@@ -63,19 +63,19 @@ export class UserMoviesController {
     });
   }
 
-  @Get('movies/infinite')
+  @Get('tv-series/infinite')
   @UseGuards(OptionalAuthGuard)
   @ApiOkResponse({
-    description: 'Get the list of movie logs for the user with cursor pagination',
-    type: ListInfiniteUserMoviesWithMovieDto,
+    description: 'Get the list of tv series logs for the user with cursor pagination',
+    type: ListInfiniteUserTvSeriesWithTvSeriesDto,
   })
   async listInfinite(
     @Param('user_id', ParseUUIDPipe) userId: string,
-    @Query() query: ListInfiniteLogsMovieQueryDto,
+    @Query() query: ListInfiniteLogsTvSeriesQueryDto,
     @CurrentOptionalUser() currentUser: User | null,
     @CurrentLocale() locale: SupportedLocale,
-  ): Promise<ListInfiniteUserMoviesWithMovieDto> {
-    return this.movieService.listInfinite({
+  ): Promise<ListInfiniteUserTvSeriesWithTvSeriesDto> {
+    return this.tvSeriesService.listInfinite({
       userId,
       query,
       currentUser,

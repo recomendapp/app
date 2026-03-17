@@ -7,7 +7,7 @@ import {
   IsNumber,
   ValidateNested,
 } from 'class-validator';
-import { TvSeriesMinimalDto } from '../../dto/tv-series.dto';
+import { TvSeriesMinimalDto } from '../dto/tv-series.dto';
 
 
 @ApiSchema({ name: 'TvSeason' })

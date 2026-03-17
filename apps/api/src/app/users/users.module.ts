@@ -10,10 +10,12 @@ import { UserPushTokensModule } from './push-tokens/user-push-tokens.module';
 import { UserFollowModule } from './follow/user-follow.module';
 import { UserFollowRequestsModule } from './follow-requests/user-follow-requests.module';
 import { UserRecosModule } from './recos/user-recos.module';
+import { UserTvSeriesModule } from './tv-series/user-tv-series.module';
 
 @Module({
   imports: [
     UserMoviesModule,
+    UserTvSeriesModule,
     UserPlaylistsModule,
     UserBookmarksModule,
     UserFollowersModule,

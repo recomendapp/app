@@ -1,17 +1,17 @@
 import { Controller, Param, Get, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { TvSeasonsService } from './tv-seasons.service';
+import { TvSeasonsService } from '../seasons/tv-seasons.service';
 import { OptionalAuthGuard } from '../../auth/guards';
 import { CurrentOptionalUser } from '../../auth/decorators';
 import { User } from '../../auth/auth.service';
 import { CurrentLocale } from '../../../common/decorators/current-locale.decorator';
 import { SupportedLocale } from '@libs/i18n';
-import { TvSeasonGetDTO } from './dto/tv-seasons.dto';
-import { TvEpisodeDto } from '../episodes/dto/tv-episodes.dto';
+import { TvSeasonGetDTO } from '../seasons/tv-seasons.dto';
+import { TvEpisodeDto } from './episodes/tv-episodes.dto';
 
 @ApiTags('Tv Seasons')
 @Controller({
-  path: 'tv-series/:tv_series_id/seasons',
+  path: 'tv-series/:tv_series_id/season',
   version: '1',
 })
 export class TvSeasonsController {

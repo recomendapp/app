@@ -1,11 +1,11 @@
 import { ApiSchema, ApiProperty } from '@nestjs/swagger';
 import { ValidateNested } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
-import { UserSummaryDto } from '../../dto/users.dto';
-import { MovieCompactDto } from '../../../movies/dto/movies.dto';
-import { LogMovieDto, LogMovieWithMovieDto } from '../../../movies/logs/dto/log-movie.dto';
-import { PaginatedResponseDto } from '../../../../common/dto/pagination.dto';
-import { CursorPaginatedResponseDto } from '../../../../common/dto/cursor-pagination.dto';
+import { UserSummaryDto } from '../dto/users.dto';
+import { MovieCompactDto } from '../../movies/dto/movies.dto';
+import { LogMovieDto, LogMovieWithMovieDto } from '../../movies/logs/dto/log-movie.dto';
+import { PaginatedResponseDto } from '../../../common/dto/pagination.dto';
+import { CursorPaginatedResponseDto } from '../../../common/dto/cursor-pagination.dto';
 
 @ApiSchema({ name: 'UserMovieWithUserMovie' })
 export class UserMovieWithUserMovieDto extends LogMovieDto {

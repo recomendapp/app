@@ -155,8 +155,6 @@ export class MovieLogsService {
       );
 
       return logEntry;
-
-      
     });
 
     await this.workerClient.emit('feed:delete-activity', {

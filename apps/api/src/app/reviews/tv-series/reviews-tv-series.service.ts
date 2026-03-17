@@ -4,8 +4,8 @@ import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { follow, logTvSeries, profile, reviewTvSeries, reviewTvSeriesLike } from '@libs/db/schemas';
 import { plainToInstance } from 'class-transformer';
-import { ReviewTvSeriesLikeDto } from './dto/review-tv-series-like.dto';
 import { WorkerClient } from '@shared/worker';
+import { ReviewTvSeriesLikeDto } from './dto/review-tv-series-like.dto';
 
 @Injectable()
 export class ReviewsTvSeriesService {

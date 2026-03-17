@@ -8,7 +8,7 @@ import { CurrentLocale } from '../../common/decorators/current-locale.decorator'
 import { SupportedLocale } from '@libs/i18n';
 import { TvSeriesDto } from './dto/tv-series.dto';
 import { TvSeriesCastingDto } from './dto/tv-series-credits.dto';
-import { TvSeasonCompactDto } from './seasons/dto/tv-seasons.dto';
+import { TvSeasonCompactDto } from './seasons/tv-seasons.dto';
 
 @ApiTags('Tv Series')
 @Controller({

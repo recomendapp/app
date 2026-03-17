@@ -3,8 +3,8 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../../auth/guards';
 import { CurrentUser } from '../../auth/decorators';
 import { User } from '../../auth/auth.service';
-import { ReviewTvSeriesLikeDto } from './dto/review-tv-series-like.dto';
 import { ReviewsTvSeriesService } from './reviews-tv-series.service';
+import { ReviewTvSeriesLikeDto } from './dto/review-tv-series-like.dto';
 
 @ApiTags('Reviews')
 @Controller({

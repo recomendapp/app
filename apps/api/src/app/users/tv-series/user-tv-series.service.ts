@@ -1,34 +1,34 @@
 import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { and, asc, desc, eq, exists, gt, lt, or, SQL, sql } from 'drizzle-orm';
-import { follow, logMovie, profile, reviewMovie, tmdbMovieView } from '@libs/db/schemas';
+import { follow, logTvSeries, profile, reviewTvSeries, tmdbTvSeriesView } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import { ListInfiniteUserMoviesWithMovieDto, ListPaginatedUserMoviesWithMovieDto, UserMovieWithUserMovieDto } from './user-movies.dto';
 import { SupportedLocale } from '@libs/i18n';
-import { ListInfiniteLogsMovieQueryDto, ListPaginatedLogsMovieQueryDto, LogMovieSortBy } from '../../movies/logs/dto/log-movie.dto';
 import { DbTransaction } from '@libs/db';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { plainToInstance } from 'class-transformer';
-import { MOVIE_COMPACT_SELECT } from '@libs/db/selectors';
+import { ListInfiniteUserTvSeriesWithTvSeriesDto, ListPaginatedUserTvSeriesWithTvSeriesDto, UserTvSeriesWithUserTvSeriesDto } from './user-tv-series.dto';
+import { TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
+import { ListInfiniteLogsTvSeriesQueryDto, ListPaginatedLogsTvSeriesQueryDto, LogTvSeriesSortBy } from '../../tv-series/logs/tv-series-logs.dto';
 
 @Injectable()
-export class UserMoviesService {
+export class UserTvSeriesService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
   ) {}
 
   async get({
     userId,
-    movieId,
+    tvSeriesId,
     currentUser,
     locale,
   }: {
     userId: string;
-    movieId: number;
+    tvSeriesId: number;
     currentUser: User | null;
     locale: SupportedLocale;
-  }): Promise<UserMovieWithUserMovieDto | null> {
+  }): Promise<UserTvSeriesWithUserTvSeriesDto | null> {
     return await this.db.transaction(async (tx) => {
       if (currentUser?.id !== userId) {
         const targetProfile = await tx.query.profile.findFirst({
@@ -65,10 +65,10 @@ export class UserMoviesService {
           sql`SELECT set_config('app.current_user_id', ${currentUser.id}, true)`
         );
       }
-      const logEntry = await tx.query.logMovie.findFirst({
+      const logEntry = await tx.query.logTvSeries.findFirst({
         where: and(
-          eq(logMovie.userId, userId),
-          eq(logMovie.movieId, movieId),
+          eq(logTvSeries.userId, userId),
+          eq(logTvSeries.tvSeriesId, tvSeriesId),
         ),
         with: {
           review: true,
@@ -92,21 +92,21 @@ export class UserMoviesService {
 
       if (!logEntry) return null;
 
-      const [movie] = await tx.select(MOVIE_COMPACT_SELECT)
-      .from(tmdbMovieView)
-      .where(eq(tmdbMovieView.id, movieId))
+      const [tvSeries] = await tx.select(TV_SERIES_COMPACT_SELECT)
+      .from(tmdbTvSeriesView)
+      .where(eq(tmdbTvSeriesView.id, tvSeriesId))
       .limit(1);
       
-      if (!movie) throw new NotFoundException('Movie not found');
+      if (!tvSeries) throw new NotFoundException('TV series not found');
 
       const { user, review, ...logData } = logEntry;
 
-      return plainToInstance(UserMovieWithUserMovieDto, {
+      return plainToInstance(UserTvSeriesWithUserTvSeriesDto, {
         ...logData,
         review: review ? {
           ...review,
           userId: logData.userId,
-          movieId: logData.movieId,
+          tvSeriesId: logData.tvSeriesId,
         } : null,
         user: {
           id: user.id,
@@ -115,7 +115,7 @@ export class UserMoviesService {
           avatar: user.image,
           isPremium: user.profile.isPremium,
         },
-        movie: movie,
+        tvSeries: tvSeries,
       });
     });
   }
@@ -126,7 +126,7 @@ export class UserMoviesService {
     userId: string,
     locale: SupportedLocale,
     currentUser: User | null,
-    sortBy: LogMovieSortBy,
+    sortBy: LogTvSeriesSortBy,
     sortOrder: SortOrder,
   ) {
     await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
@@ -136,17 +136,15 @@ export class UserMoviesService {
     const direction = sortOrder === 'asc' ? asc : desc;
     const orderBy = (() => {
       switch (sortBy) {
-        case LogMovieSortBy.RANDOM:
+        case LogTvSeriesSortBy.RANDOM:
           return [sql`RANDOM()`];
-        case LogMovieSortBy.RATING:
+        case LogTvSeriesSortBy.RATING:
           return sortOrder === 'asc' 
-            ? [sql`${logMovie.rating} ASC NULLS LAST`, direction(logMovie.id)]
-            : [sql`${logMovie.rating} DESC NULLS LAST`, direction(logMovie.id)];
-        case LogMovieSortBy.FIRST_WATCHED_AT:
-          return [direction(logMovie.firstWatchedAt), direction(logMovie.id)];
-        case LogMovieSortBy.UPDATED_AT:
+            ? [sql`${logTvSeries.rating} ASC NULLS LAST`, direction(logTvSeries.id)]
+            : [sql`${logTvSeries.rating} DESC NULLS LAST`, direction(logTvSeries.id)];
+        case LogTvSeriesSortBy.UPDATED_AT:
         default:
-          return [direction(logMovie.updatedAt), direction(logMovie.id)];
+          return [direction(logTvSeries.updatedAt), direction(logTvSeries.id)];
       }
     })();
 
@@ -176,7 +174,7 @@ export class UserMoviesService {
       }
     }
 
-    const baseWhereConditions: SQL[] = [eq(logMovie.userId, userId)];
+    const baseWhereConditions: SQL[] = [eq(logTvSeries.userId, userId)];
     if (privacyClause) baseWhereConditions.push(privacyClause);
 
     return { 
@@ -191,10 +189,10 @@ export class UserMoviesService {
     locale,
   }: {
     userId: string;
-    query: ListPaginatedLogsMovieQueryDto;
+    query: ListPaginatedLogsTvSeriesQueryDto;
     currentUser: User | null;
     locale: SupportedLocale;
-  }): Promise<ListPaginatedUserMoviesWithMovieDto> {
+  }): Promise<ListPaginatedUserTvSeriesWithTvSeriesDto> {
     return await this.db.transaction(async (tx) => {
       const { per_page, page, sort_by, sort_order } = query;
       const offset = (page - 1) * per_page;
@@ -209,7 +207,7 @@ export class UserMoviesService {
 
       const paginatedLogsSubquery = tx
         .select()
-        .from(logMovie)
+        .from(logTvSeries)
         .where(whereClause)
         .orderBy(...orderBy)
         .limit(per_page)
@@ -218,23 +216,23 @@ export class UserMoviesService {
 
       const [results, totalCount] = await Promise.all([        
         tx.select({
-            log: logMovie, 
-            isReviewed: sql<boolean>`${reviewMovie.id} IS NOT NULL`,
-            movie: MOVIE_COMPACT_SELECT,
+            log: logTvSeries, 
+            isReviewed: sql<boolean>`${reviewTvSeries.id} IS NOT NULL`,
+            tvSeries: TV_SERIES_COMPACT_SELECT,
           })
           .from(paginatedLogsSubquery)
-          .innerJoin(logMovie, eq(logMovie.id, paginatedLogsSubquery.id)) 
-          .innerJoin(tmdbMovieView, eq(logMovie.movieId, tmdbMovieView.id))
-          .leftJoin(reviewMovie, eq(logMovie.id, reviewMovie.id))
+          .innerJoin(logTvSeries, eq(logTvSeries.id, paginatedLogsSubquery.id)) 
+          .innerJoin(tmdbTvSeriesView, eq(logTvSeries.tvSeriesId, tmdbTvSeriesView.id))
+          .leftJoin(reviewTvSeries, eq(logTvSeries.id, reviewTvSeries.id))
           .orderBy(...orderBy),
-        tx.$count(logMovie, whereClause)
+        tx.$count(logTvSeries, whereClause)
       ]);
 
-      return plainToInstance(ListPaginatedUserMoviesWithMovieDto, {
-        data: results.map(({ log, movie, isReviewed }) => ({
+      return plainToInstance(ListPaginatedUserTvSeriesWithTvSeriesDto, {
+        data: results.map(({ log, tvSeries, isReviewed }) => ({
           ...log,
           isReviewed,
-          movie,
+          tvSeries,
         })),
         meta: {
           total_results: totalCount,
@@ -252,10 +250,10 @@ export class UserMoviesService {
     locale,
   }: {
     userId: string;
-    query: ListInfiniteLogsMovieQueryDto;
+    query: ListInfiniteLogsTvSeriesQueryDto;
     currentUser: User | null;
     locale: SupportedLocale;
-  }): Promise<ListInfiniteUserMoviesWithMovieDto> {
+  }): Promise<ListInfiniteUserTvSeriesWithTvSeriesDto> {
     return await this.db.transaction(async (tx) => {
       const { per_page, sort_order, sort_by, cursor } = query;
 
@@ -276,39 +274,27 @@ export class UserMoviesService {
         const operator = sort_order === SortOrder.ASC ? gt : lt;
 
         switch (sort_by) {
-          case LogMovieSortBy.RATING:
+          case LogTvSeriesSortBy.RATING:
             cursorWhereClause = or(
-              operator(logMovie.rating, Number(cursorData.value)),
+              operator(logTvSeries.rating, Number(cursorData.value)),
               and(
-                eq(logMovie.rating, Number(cursorData.value)),
-                operator(logMovie.id, cursorData.id)
+                eq(logTvSeries.rating, Number(cursorData.value)),
+                operator(logTvSeries.id, cursorData.id)
               )
             );
             break;
 
-          case LogMovieSortBy.FIRST_WATCHED_AT: {
-            const firstWatchedDate = String(cursorData.value);
-            cursorWhereClause = or(
-              operator(logMovie.firstWatchedAt, firstWatchedDate),
-              and(
-                eq(logMovie.firstWatchedAt, firstWatchedDate),
-                operator(logMovie.id, cursorData.id)
-              )
-            );
-            break;
-          }
-
-          case LogMovieSortBy.RANDOM:
+          case LogTvSeriesSortBy.RANDOM:
             break;
 
-          case LogMovieSortBy.UPDATED_AT:
+          case LogTvSeriesSortBy.UPDATED_AT:
           default: {
             const updatedDate = String(cursorData.value);
             cursorWhereClause = or(
-              operator(logMovie.updatedAt, updatedDate),
+              operator(logTvSeries.updatedAt, updatedDate),
               and(
-                eq(logMovie.updatedAt, updatedDate),
-                operator(logMovie.id, cursorData.id)
+                eq(logTvSeries.updatedAt, updatedDate),
+                operator(logTvSeries.id, cursorData.id)
               )
             );
             break;
@@ -323,21 +309,21 @@ export class UserMoviesService {
       const fetchLimit = per_page + 1;
 
       const paginatedLogsSubquery = tx.select()
-        .from(logMovie)
+        .from(logTvSeries)
         .where(finalWhereClause)
         .orderBy(...orderBy)
         .limit(fetchLimit)
         .as('paginated_logs');
       
       const results = await tx.select({
-        log: logMovie, 
-        isReviewed: sql<boolean>`${reviewMovie.id} IS NOT NULL`,
-        movie: MOVIE_COMPACT_SELECT,
+        log: logTvSeries, 
+        isReviewed: sql<boolean>`${reviewTvSeries.id} IS NOT NULL`,
+        tvSeries: TV_SERIES_COMPACT_SELECT,
       })
       .from(paginatedLogsSubquery)
-      .innerJoin(logMovie, eq(logMovie.id, paginatedLogsSubquery.id)) 
-      .innerJoin(tmdbMovieView, eq(logMovie.movieId, tmdbMovieView.id))
-      .leftJoin(reviewMovie, eq(logMovie.id, reviewMovie.id))
+      .innerJoin(logTvSeries, eq(logTvSeries.id, paginatedLogsSubquery.id)) 
+      .innerJoin(tmdbTvSeriesView, eq(logTvSeries.tvSeriesId, tmdbTvSeriesView.id))
+      .leftJoin(reviewTvSeries, eq(logTvSeries.id, reviewTvSeries.id))
       .orderBy(...orderBy);
       
       const hasNextPage = results.length > per_page;
@@ -350,13 +336,10 @@ export class UserMoviesService {
         let cursorValue: string | number | null = null;
 
         switch (sort_by) {
-          case LogMovieSortBy.RATING:
+          case LogTvSeriesSortBy.RATING:
             cursorValue = lastItem.rating ?? 0;
             break;
-          case LogMovieSortBy.FIRST_WATCHED_AT:
-            cursorValue = lastItem.firstWatchedAt ?? new Date(0).toISOString();
-            break;
-          case LogMovieSortBy.UPDATED_AT:
+          case LogTvSeriesSortBy.UPDATED_AT:
           default:
             cursorValue = lastItem.updatedAt;
             break;
@@ -369,11 +352,11 @@ export class UserMoviesService {
           });
         }
       }
-      return plainToInstance(ListInfiniteUserMoviesWithMovieDto, {
-        data: paginatedResults.map(({ log, movie, isReviewed }) => ({
+      return plainToInstance(ListInfiniteUserTvSeriesWithTvSeriesDto, {
+        data: paginatedResults.map(({ log, tvSeries, isReviewed }) => ({
           ...log,
           isReviewed,
-          movie,
+          tvSeries,
         })),
         meta: {
           next_cursor: nextCursor,

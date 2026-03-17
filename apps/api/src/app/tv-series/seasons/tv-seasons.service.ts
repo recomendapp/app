@@ -3,9 +3,9 @@ import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle
 import { and, asc, eq, sql } from 'drizzle-orm';
 import { User } from '../../auth/auth.service';
 import { SupportedLocale } from '@libs/i18n';
-import { TvSeasonGetDTO } from './dto/tv-seasons.dto';
+import { TvSeasonGetDTO } from './tv-seasons.dto';
 import { tmdbTvEpisode, tmdbTvSeasonView, tmdbTvSeriesView } from '@libs/db/schemas';
-import { TvEpisodeDto } from '../episodes/dto/tv-episodes.dto';
+import { TvEpisodeDto } from './episodes/tv-episodes.dto';
 import { plainToInstance } from 'class-transformer';
 
 @Injectable()

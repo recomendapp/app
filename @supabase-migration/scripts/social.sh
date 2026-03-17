@@ -41,168 +41,170 @@ migrate_query_to_table() {
 
 echo "🎬 Démarrage de la migration SOCIAL (Follows, Recos)..."
 
-# # ==============================================================================
-# # 1. FOLLOWS (Utilisateurs)
-# # ==============================================================================
-# # Mapping :
-# # user_id (Source) -> follower_id (Celui qui suit)
-# # followee_id (Source) -> following_id (Celui qui est suivi)
-# # is_pending (Bool) -> status (Enum: 'pending', 'accepted')
+# ==============================================================================
+# 1. FOLLOWS (Utilisateurs)
+# ==============================================================================
+# Mapping :
+# user_id (Source) -> follower_id (Celui qui suit)
+# followee_id (Source) -> following_id (Celui qui est suivi)
+# is_pending (Bool) -> status (Enum: 'pending', 'accepted')
 
-# SQL_FOLLOW="
-# SELECT 
-#     user_id,
-#     followee_id,
-#     CASE 
-#         WHEN is_pending = true THEN 'pending' 
-#         ELSE 'accepted' 
-#     END,
-#     created_at
-# FROM public.user_follower
-# "
+SQL_FOLLOW="
+SELECT 
+    user_id,
+    followee_id,
+    CASE 
+        WHEN is_pending = true THEN 'pending' 
+        ELSE 'accepted' 
+    END,
+    created_at
+FROM public.user_follower
+"
 
-# migrate_query_to_table \
-#     "User Follows" \
-#     "$SQL_FOLLOW" \
-#     "follow" \
-#     "follower_id, following_id, status, created_at" \
-#     "false"
-
-
-# # ==============================================================================
-# # 2. FOLLOWS (Personnes / Stars)
-# # ==============================================================================
-# # Mapping direct, juste changement de snake_case vers camelCase (géré par les colonnes cibles)
-
-# SQL_FOLLOW_PERSON="
-# SELECT 
-#     user_id,
-#     person_id,
-#     created_at
-# FROM public.user_person_follower
-# "
-
-# migrate_query_to_table \
-#     "Person Follows" \
-#     "$SQL_FOLLOW_PERSON" \
-#     "follow_person" \
-#     "user_id, person_id, created_at" \
-#     "false"
+migrate_query_to_table \
+    "User Follows" \
+    "$SQL_FOLLOW" \
+    "follow" \
+    "follower_id, following_id, status, created_at" \
+    "false"
 
 
-# # ==============================================================================
-# # 3. RECOMMANDATIONS (Fusion Movie + TV)
-# # ==============================================================================
-# # La table cible 'reco' fusionne les films et les séries.
-# # On ignore l'ID source pour laisser la cible générer de nouveaux IDs (car risque de conflit d'ID entre les 2 tables sources).
+# ==============================================================================
+# 2. FOLLOWS (Personnes / Stars)
+# ==============================================================================
+# Mapping direct, juste changement de snake_case vers camelCase (géré par les colonnes cibles)
 
-# # --- Partie A : Movies ---
-# # type = 'movie'
-# # movie_id = valeur
-# # tv_series_id = NULL
+SQL_FOLLOW_PERSON="
+SELECT 
+    user_id,
+    person_id,
+    created_at
+FROM public.user_person_follower
+"
 
-# SQL_RECO_MOVIE="
-# SELECT 
-#     user_id,
-#     sender_id,
-#     created_at,
-#     created_at,        -- updatedAt (on met created_at par défaut)
-#     status,            -- on suppose que l'enum source matche 'active', 'completed', 'delete'
-#     comment,
-#     'movie',           -- type
-#     movie_id,          -- movie_id
-#     NULL               -- tv_series_id
-# FROM public.user_recos_movie
-# "
-
-# migrate_query_to_table \
-#     "Recos (Movies)" \
-#     "$SQL_RECO_MOVIE" \
-#     "reco" \
-#     "user_id, sender_id, created_at, updated_at, status, comment, type, movie_id, tv_series_id" \
-#     "false" # Premier passage = Truncate
+migrate_query_to_table \
+    "Person Follows" \
+    "$SQL_FOLLOW_PERSON" \
+    "follow_person" \
+    "user_id, person_id, created_at" \
+    "false"
 
 
-# # --- Partie B : TV Series ---
-# # type = 'tv_series'
-# # movie_id = NULL
-# # tv_series_id = valeur
+# ==============================================================================
+# 3. RECOMMANDATIONS (Fusion Movie + TV)
+# ==============================================================================
+# La table cible 'reco' fusionne les films et les séries.
+# On ignore l'ID source pour laisser la cible générer de nouveaux IDs (car risque de conflit d'ID entre les 2 tables sources).
 
-# SQL_RECO_TV="
-# SELECT 
-#     user_id,
-#     sender_id,
-#     created_at,
-#     created_at,        -- updatedAt
-#     status,
-#     comment,
-#     'tv_series',       -- type
-#     NULL,              -- movie_id
-#     tv_series_id       -- tv_series_id
-# FROM public.user_recos_tv_series
-# "
+# --- Partie A : Movies ---
+# type = 'movie'
+# movie_id = valeur
+# tv_series_id = NULL
 
-# migrate_query_to_table \
-#     "Recos (TV Series)" \
-#     "$SQL_RECO_TV" \
-#     "reco" \
-#     "user_id, sender_id, created_at, updated_at, status, comment, type, movie_id, tv_series_id" \
-#     "true" # Second passage = Append (Pas de Truncate)
+SQL_RECO_MOVIE="
+SELECT DISTINCT ON (user_id, sender_id, movie_id)
+    user_id,
+    sender_id,
+    created_at,
+    created_at,        -- updatedAt (on met created_at par défaut)
+    status,            -- on suppose que l'enum source matche 'active', 'completed', 'delete'
+    comment,
+    'movie',           -- type
+    movie_id,          -- movie_id
+    NULL               -- tv_series_id
+FROM public.user_recos_movie
+ORDER BY user_id, sender_id, movie_id, created_at DESC
+"
 
-# # ==============================================================================
-# # 4. BOOKMARKS (Fusion Watchlist Movie + TV)
-# # ==============================================================================
-
-# # --- Partie A : Movies ---
-# # type = 'movie'
-# # movie_id = valeur
-# # tv_series_id = NULL
-
-# SQL_BOOKMARK_MOVIE="
-# SELECT 
-#     user_id,
-#     created_at,
-#     created_at,        -- updatedAt (on initialise avec created_at)
-#     status,            -- on suppose que les status source (watchlist_status) matchent cible (active/completed)
-#     comment,
-#     'movie',           -- type
-#     movie_id,
-#     NULL               -- tv_series_id
-# FROM public.user_watchlists_movie
-# "
-
-# migrate_query_to_table \
-#     "Bookmarks (Movies)" \
-#     "$SQL_BOOKMARK_MOVIE" \
-#     "bookmark" \
-#     "user_id, created_at, updated_at, status, comment, type, movie_id, tv_series_id" \
-#     "false" # Premier passage = Truncate
+migrate_query_to_table \
+    "Recos (Movies)" \
+    "$SQL_RECO_MOVIE" \
+    "reco" \
+    "user_id, sender_id, created_at, updated_at, status, comment, type, movie_id, tv_series_id" \
+    "false" # Premier passage = Truncate
 
 
-# # --- Partie B : TV Series ---
-# # type = 'tv_series'
-# # movie_id = NULL
-# # tv_series_id = valeur
+# --- Partie B : TV Series ---
+# type = 'tv_series'
+# movie_id = NULL
+# tv_series_id = valeur
 
-# SQL_BOOKMARK_TV="
-# SELECT 
-#     user_id,
-#     created_at,
-#     created_at,        -- updatedAt
-#     status,
-#     comment,
-#     'tv_series',       -- type
-#     NULL,              -- movie_id
-#     tv_series_id
-# FROM public.user_watchlists_tv_series
-# "
+SQL_RECO_TV="
+SELECT DISTINCT ON (user_id, sender_id, tv_series_id)
+    user_id,
+    sender_id,
+    created_at,
+    created_at,        -- updatedAt
+    status,
+    comment,
+    'tv_series',       -- type
+    NULL,              -- movie_id
+    tv_series_id       -- tv_series_id
+FROM public.user_recos_tv_series
+ORDER BY user_id, sender_id, tv_series_id, created_at DESC
+"
 
-# migrate_query_to_table \
-#     "Bookmarks (TV Series)" \
-#     "$SQL_BOOKMARK_TV" \
-#     "bookmark" \
-#     "user_id, created_at, updated_at, status, comment, type, movie_id, tv_series_id" \
-#     "true" # Second passage = Append (Pas de Truncate)
+migrate_query_to_table \
+    "Recos (TV Series)" \
+    "$SQL_RECO_TV" \
+    "reco" \
+    "user_id, sender_id, created_at, updated_at, status, comment, type, movie_id, tv_series_id" \
+    "true" # Second passage = Append (Pas de Truncate)
+
+# ==============================================================================
+# 4. BOOKMARKS (Fusion Watchlist Movie + TV)
+# ==============================================================================
+
+# --- Partie A : Movies ---
+# type = 'movie'
+# movie_id = valeur
+# tv_series_id = NULL
+
+SQL_BOOKMARK_MOVIE="
+SELECT 
+    user_id,
+    created_at,
+    created_at,        -- updatedAt (on initialise avec created_at)
+    status,            -- on suppose que les status source (watchlist_status) matchent cible (active/completed)
+    comment,
+    'movie',           -- type
+    movie_id,
+    NULL               -- tv_series_id
+FROM public.user_watchlists_movie
+"
+
+migrate_query_to_table \
+    "Bookmarks (Movies)" \
+    "$SQL_BOOKMARK_MOVIE" \
+    "bookmark" \
+    "user_id, created_at, updated_at, status, comment, type, movie_id, tv_series_id" \
+    "false" # Premier passage = Truncate
+
+
+# --- Partie B : TV Series ---
+# type = 'tv_series'
+# movie_id = NULL
+# tv_series_id = valeur
+
+SQL_BOOKMARK_TV="
+SELECT 
+    user_id,
+    created_at,
+    created_at,        -- updatedAt
+    status,
+    comment,
+    'tv_series',       -- type
+    NULL,              -- movie_id
+    tv_series_id
+FROM public.user_watchlists_tv_series
+"
+
+migrate_query_to_table \
+    "Bookmarks (TV Series)" \
+    "$SQL_BOOKMARK_TV" \
+    "bookmark" \
+    "user_id, created_at, updated_at, status, comment, type, movie_id, tv_series_id" \
+    "true" # Second passage = Append (Pas de Truncate)
 
 # ==============================================================================
 # 5. LOGS MOVIES (Activités Films)
@@ -255,7 +257,28 @@ echo "   ✅ Terminé (Historique généré)."
 # 7. LOGS TV SERIES (Activités Séries)
 # ==============================================================================
 
-SQL_LOG_TV="
+echo "---------------------------------------------------"
+echo "🚀 Migration & Expansion : TV Series Logs (Mode 'Completed')"
+
+# A. Création d'une table temporaire pour recevoir l'ancien format
+psql "$TARGET_DB" -c "
+DROP TABLE IF EXISTS tmp_log_tv_series;
+CREATE UNLOGGED TABLE tmp_log_tv_series (
+    tv_series_id bigint,
+    user_id uuid,
+    created_at timestamptz,
+    updated_at timestamptz,
+    is_liked boolean,
+    liked_at timestamptz,
+    rating real,
+    rated_at timestamptz,
+    watch_count int,
+    last_watched_at timestamptz
+);
+" > /dev/null
+
+# B. Streaming des données depuis l'ancienne base
+SQL_LOG_TV_SOURCE="
 SELECT 
     tv_series_id,
     user_id,
@@ -265,18 +288,60 @@ SELECT
     liked_at,
     rating::real,
     rated_at,
-    'watching',
     1,
     watched_date
 FROM public.user_activities_tv_series
 "
 
-migrate_query_to_table \
-    "Log TV Series" \
-    "$SQL_LOG_TV" \
-    "log_tv_series" \
-    "tv_series_id, user_id, created_at, updated_at, is_liked, liked_at, rating, rated_at, status, watch_count, last_watched_at" \
-    "false"
+echo "   🌊 Streaming des séries vues vers table temporaire..."
+psql "$SOURCE_DB" -c "COPY ($SQL_LOG_TV_SOURCE) TO STDOUT WITH (FORMAT BINARY)" | \
+psql "$TARGET_DB" -c "COPY tmp_log_tv_series FROM STDIN WITH (FORMAT BINARY)"
+
+# C. Insertion en cascade (Séries -> Saisons -> Épisodes)
+echo "   🔨 Insertion de log_tv_series (Calcul des épisodes vus)..."
+psql "$TARGET_DB" -c "
+TRUNCATE TABLE log_tv_series CASCADE;
+
+INSERT INTO log_tv_series (
+    tv_series_id, user_id, created_at, updated_at, is_liked, liked_at, 
+    rating, rated_at, status, watch_count, last_watched_at, episodes_watched_count
+)
+SELECT 
+    t.tv_series_id, t.user_id, t.created_at, t.updated_at, t.is_liked, t.liked_at, 
+    t.rating, t.rated_at, 'completed'::log_tv_status, t.watch_count, t.last_watched_at,
+    COALESCE(tmdb.number_of_episodes, 0)
+FROM tmp_log_tv_series t
+LEFT JOIN tmdb.tv_series tmdb ON tmdb.id = t.tv_series_id;
+"
+
+echo "   🔨 Expansion : Insertion de log_tv_season..."
+psql "$TARGET_DB" -c "
+INSERT INTO log_tv_season (
+    log_tv_series_id, tv_season_id, season_number, status, episodes_watched_count, created_at, updated_at
+)
+SELECT 
+    lts.id, ts.id, ts.season_number, 'completed'::log_tv_status, ts.episode_count, lts.created_at, lts.updated_at
+FROM log_tv_series lts
+JOIN tmdb.tv_season ts ON ts.tv_series_id = lts.tv_series_id
+WHERE ts.season_number > 0; -- On ignore les épisodes spéciaux (saison 0)
+"
+
+echo "   🔨 Expansion : Insertion de log_tv_episode..."
+psql "$TARGET_DB" -c "
+INSERT INTO log_tv_episode (
+    log_tv_series_id, log_tv_season_id, tv_episode_id, season_number, episode_number, 
+    watched_at, created_at, updated_at
+)
+SELECT 
+    lts.id, lsea.id, te.id, lsea.season_number, te.episode_number, 
+    lts.last_watched_at, lts.created_at, lts.updated_at
+FROM log_tv_season lsea
+JOIN log_tv_series lts ON lts.id = lsea.log_tv_series_id
+JOIN tmdb.tv_episode te ON te.tv_season_id = lsea.tv_season_id;
+
+DROP TABLE tmp_log_tv_series;
+"
+echo "   ✅ Terminé (Saisons et Épisodes générés avec succès)."
 
 # ==============================================================================
 # 8. REVIEWS MOVIES (Via Table Intermédiaire)
