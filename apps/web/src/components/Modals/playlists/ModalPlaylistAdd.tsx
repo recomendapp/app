@@ -3,19 +3,14 @@
 import { useAuth } from '@/context/auth-context';
 import { Button } from '@/components/ui/button';
 import { useModal } from '@/context/modal-context';
-import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
-import { Input } from '@/components/ui/input';
+import { useCallback, useEffect, useState } from 'react';
 import { Check } from 'lucide-react';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../Modal';
 import { Icons } from '@/config/icons';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
-import { Label } from '@/components/ui/label';
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { TooltipBox } from '@/components/Box/TooltipBox';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { usePlaylistItemsAddMutation, userPlaylistsAddTargetsInfiniteOptions } from '@libs/query-client';
@@ -30,6 +25,7 @@ import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGr
 import { cn } from '@/lib/utils';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import toast from 'react-hot-toast';
+import { ModalPlaylist } from './ModalPlaylist';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -47,8 +43,7 @@ export function ModalPlaylistAdd({
 } : ModalPlaylistAddProps) {
 	const { user } = useAuth();
 	const t = useTranslations();
-	const queryClient = useQueryClient();
-	const { closeModal } = useModal();
+	const { openModal, closeModal } = useModal();
 	const [selectedPlaylists, setSelectedPlaylists] = useState<Playlist[]>([]);
 	const [searchQuery, setSearchQuery] = useState('');
 	const debouncedSearch = useDebounce(searchQuery);
@@ -68,27 +63,12 @@ export function ModalPlaylistAdd({
 			}
 		})
 	}));
-	const totalPlaylists = data?.pages[0].meta.total_results;
 	const playlists = data?.pages.flatMap((page) => page.data) ?? [];
-	// const [source, setSource] = useState<'personal' | 'shared'>('personal');
-	// const [createPlaylist, setCreatePlaylist] = useState<boolean>(false);
-	// const [createPlaylistName, setCreatePlaylistName] = useState<string>('');
-	// const addToSourceOptions = usePlaylistMovieAddToOptions({
-	// 	movieId: movieId,
-	// 	userId: user?.id,
-	// 	source: source,
-	// });
-	// const {
-	// 	data: playlists,
-	// 	isLoading,
-	// } = useQuery(addToSourceOptions);
 
 	// Mutations
 	const { mutateAsync: add, isPending } = usePlaylistItemsAddMutation({
 		userId: user?.id,
 	});
-	// const { mutateAsync: insertPlaylist } = usePlaylistInsertMutation()
-
 	// Form
 	const playlistAddFormSchema = z.object({
 		comment: z.string().max(COMMENT_MAX_LENGTH, { message: t('common.form.length.char_max', { count: COMMENT_MAX_LENGTH }) }).optional(),
@@ -106,57 +86,6 @@ export function ModalPlaylistAdd({
 	});
 	const commentLength = watch('comment')?.length || 0;
 
-	// const handleSubmit = useCallback(async () => {
-	// 	if (!user) return;
-	// 	await add({
-	// 		path: {
-	// 			media_id: mediaId,
-	// 			type: type,
-	// 		},
-	// 		body: {
-	// 			playlistIds: selectedPlaylists.map((playlist) => playlist.id),
-
-	// 		}
-	// 		// playlists: selectedPlaylists,
-	// 		// movieId: movieId,
-	// 		// userId: user.id,
-	// 		// comment: comment,
-	// 	}, {
-	// 		onSuccess: () => {
-	// 			toast.success(upperFirst(t('common.messages.added', { gender: 'male', count: selectedPlaylists.length })));
-	// 			closeModal(props.id);
-	// 		},
-	// 		onError: () => {
-	// 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
-	// 		}
-	// 	});
-	// }, [addMovieToPlaylist, comment, closeModal, props.id, selectedPlaylists, user, t, movieId]);
-
-
-	// const handleCreatePlaylist = useCallback(async () => {
-	// 	if (!createPlaylistName || !createPlaylistName.length) return
-	// 	await insertPlaylist({
-	// 		body: {
-	// 			title: createPlaylistName,
-	// 			description: null,
-	// 			visibility: 'public',
-	// 		}
-	// 	}, {
-	// 		onSuccess: (playlist) => {
-	// 			queryClient.setQueryData(addToSourceOptions.queryKey, (oldData) => {
-	// 				if (!oldData) return oldData;
-	// 				return [...oldData, { playlist, already_added: false }];
-	// 			});
-	// 			setSelectedPlaylists((prev) => [...prev, playlist]);
-	// 			setCreatePlaylist(false);
-	// 			setCreatePlaylistName('');
-	// 		},
-	// 		onError: (error) => {
-	// 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
-	// 		}
-	// 	});
-	// }, [createPlaylistName, insertPlaylist, queryClient, addToSourceOptions.queryKey, t]);
-
 	const onSubmit = useCallback(async (data: PlaylistAddFormValues) => {
 		await add({
 			path: {
@@ -167,10 +96,6 @@ export function ModalPlaylistAdd({
 				playlistIds: selectedPlaylists.map((playlist) => playlist.id),
 				comment: data.comment || null,
 			}
-			// playlists: selectedPlaylists,
-			// movieId: movieId,
-			// userId: user.id,
-			// comment: comment,
 		}, {
 			onSuccess: () => {
 				toast.success(upperFirst(t('common.messages.added', { gender: 'male', count: selectedPlaylists.length })));
@@ -205,9 +130,15 @@ export function ModalPlaylistAdd({
 					<InputGroupAddon align="block-start" className='border-b py-1!'>
 						<Icons.search className="text-muted-foreground" />
 						<InputGroupInput placeholder={upperFirst(t('common.messages.search_playlist', { count: 1 }))} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-						{totalPlaylists !== undefined && (
-							<InputGroupAddon align="inline-end">{totalPlaylists}</InputGroupAddon>
-						)}
+						<InputGroupButton
+						variant={'outline'}
+						onClick={() => openModal(ModalPlaylist, {
+							onSave: (newPlaylist) => setSelectedPlaylists((prev) => [...prev, newPlaylist]),
+						})}
+						>
+							<Icons.add />
+							{upperFirst(t('common.messages.create_a_playlist', { count: 2 }))}
+						</InputGroupButton>
 					</InputGroupAddon>
 					<InputGroupAddon align="block-end">
 						<ScrollArea className="h-[30vh] w-full">
@@ -244,7 +175,7 @@ export function ModalPlaylistAdd({
 													{playlist.title}
 												</p>
 												<p className="text-sm text-muted-foreground line-clamp-1">
-													{playlist.itemsCount}
+													@{playlist.owner.username}
 												</p>
 											</div>
 										</div>
@@ -254,7 +185,6 @@ export function ModalPlaylistAdd({
 													{upperFirst(t('common.messages.already_added', { count: 1, gender: 'male' }))}
 												</Badge>
 											)}
-	
 											<Check size={20} className={`text-primary ${!selectedPlaylists.some((selectedPlaylist) => selectedPlaylist.id === playlist.id) ? 'opacity-0' : ''}`} />
 										</div>
 									</Button>

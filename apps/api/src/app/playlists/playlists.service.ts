@@ -1,14 +1,15 @@
 import { ForbiddenException, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { User } from '../auth/auth.service';
-import { PlaylistCreateDto, PlaylistDto, PlaylistUpdateDto, PlaylistWithOwnerDTO } from './dto/playlists.dto';
-import { playlist, playlistMember } from '@libs/db/schemas';
+import { PlaylistCreateDto, PlaylistDto, PlaylistUpdateDto, PlaylistWithOwnerDto } from './dto/playlists.dto';
+import { playlist } from '@libs/db/schemas';
 import { and, eq } from 'drizzle-orm';
 import { plainToInstance } from 'class-transformer';
 import { StorageService } from '../../common/modules/storage/storage.service';
 import { StorageFolders } from '../../common/modules/storage/storage.constants';
 import { canViewPlaylist } from './playlists.permission';
 import { PlaylistRole } from './types/playlist-role.type';
+import { PlaylistQueryBuilder } from './playlists.query-builder';
 
 @Injectable()
 export class PlaylistsService {
@@ -25,7 +26,7 @@ export class PlaylistsService {
   }: {
     playlistId: number;
     user: User | null;
-  }): Promise<PlaylistWithOwnerDTO> {
+  }): Promise<PlaylistWithOwnerDto> {
     const accessCondition = canViewPlaylist(this.db, currentUser);
 
     const result = await this.db.query.playlist.findFirst({
@@ -33,6 +34,9 @@ export class PlaylistsService {
         eq(playlist.id, playlistId),
         accessCondition
       ),
+      extras: {
+        role: PlaylistQueryBuilder.getRoleSelection(currentUser).as('role'), 
+      },
       with: {
         user: {
           columns: {
@@ -44,13 +48,7 @@ export class PlaylistsService {
           with: {
             profile: { columns: { isPremium: true } }
           } 
-        },
-        ...(currentUser ? {
-          members: {
-            where: eq(playlistMember.userId, currentUser.id),
-            columns: { role: true }, 
-          }
-        } : {})
+        }
       }
     });
 
@@ -58,15 +56,11 @@ export class PlaylistsService {
       throw new NotFoundException('Playlist not found');
     }
 
-    const { user, members, ...playlistData } = result;
+    const { user, role, ...playlistData } = result;
 
-    return plainToInstance(PlaylistWithOwnerDTO, {
+    return plainToInstance(PlaylistWithOwnerDto, {
       ...playlistData,
-      role: currentUser?.id === playlistData.userId
-        ? 'owner'
-        : members && members.length > 0
-          ? members[0].role
-          : null,
+      role: role,
       owner: {
         id: user.id,
         name: user.name,
@@ -74,7 +68,7 @@ export class PlaylistsService {
         avatar: user.image,
         isPremium: user.profile.isPremium,
       }
-    });
+    }, { excludeExtraneousValues: true });
   }
 
   async create(currentUser: User, createPlaylistDto: PlaylistCreateDto): Promise<PlaylistDto> {

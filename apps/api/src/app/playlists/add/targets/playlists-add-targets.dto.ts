@@ -4,10 +4,16 @@ import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { SortOrder } from '../../../../common/dto/sort.dto';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../../common/dto/pagination.dto';
 import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../../common/dto/cursor-pagination.dto';
-import { PlaylistDto, PlaylistSortBy } from '../../dto/playlists.dto';
+import { PlaylistSortBy, PlaylistWithOwnerDto } from '../../dto/playlists.dto';
+
+export enum PlaylistTargetFilter {
+  ALL = 'all',
+  MINE = 'mine',
+  SAVED = 'saved',
+}
 
 @ApiSchema({ name: 'PlaylistsAddTarget' })
-export class PlaylistsAddTargetDto extends PlaylistDto {
+export class PlaylistsAddTargetDto extends PlaylistWithOwnerDto {
   @ApiProperty({ description: 'True if the media is already in this playlist' })
   @Expose()
   alreadyAdded: boolean;
@@ -38,6 +44,16 @@ export class BaseListPlaylistsAddTargetsQueryDto {
   @IsOptional()
   @IsString()
   search?: string;
+
+  @ApiPropertyOptional({
+    description: 'Filter playlists to show only owned (mine) or saved playlists',
+    default: PlaylistTargetFilter.ALL,
+    example: PlaylistTargetFilter.ALL,
+    enum: PlaylistTargetFilter,
+  })
+  @IsOptional()
+  @IsEnum(PlaylistTargetFilter)
+  filter: PlaylistTargetFilter = PlaylistTargetFilter.ALL;
 }
 
 @ApiSchema({ name: 'ListAllPlaylistsAddTargetsQuery' })

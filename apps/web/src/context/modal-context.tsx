@@ -14,8 +14,7 @@ interface Modal<T = any> {
 }
 
 interface ModalContextProps {
-  // modals: Modal[];
-  openModal: <T>(component: React.ComponentType<T>, props: Omit<T, 'id' | 'open' | 'onOpenChange'>) => void;
+  openModal: <T>(component: React.ComponentType<T>, props?: Omit<T, 'id' | 'open' | 'onOpenChange'>) => void;
   createModal: (props: Omit<ModalTemplateProps, 'id' | 'open' | 'onOpenChange'>) => void;
   createConfirmModal: (props: Omit<ConfirmModalTemplateProps, 'id' | 'open' | 'onOpenChange'>) => void;
   closeModal: (id: string) => void;
@@ -33,7 +32,7 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
    * @param modal - The modal to open
    * @returns void
    */
-  const openModal = useCallback(<T,>(component: React.ComponentType<T>, props: Omit<T, 'id' | 'open' | 'onOpenChange'>) => {
+  const openModal = useCallback(<T,>(component: React.ComponentType<T>, props?: Omit<T, 'id' | 'open' | 'onOpenChange'>) => {
     setModals((prevModals) => {
         const newModalId = Math.random().toString(36).substring(7);
         const newModal = {
@@ -110,7 +109,6 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <ModalContext.Provider value={{
-      // modals,
       openModal,
       createModal,
       createConfirmModal,

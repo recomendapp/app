@@ -14,10 +14,12 @@ import { Playlist } from '@packages/api-js';
 
 interface ModalPlaylistProps extends ModalType {
   playlist?: Playlist;
+  onSave?: (data: Playlist) => void;
 }
 
 export function ModalPlaylist({
   playlist,
+  onSave,
   ...props
 } : ModalPlaylistProps) {
   const t = useTranslations();
@@ -46,7 +48,10 @@ export function ModalPlaylist({
       </ModalHeader>
       <ModalBody>
         <PlaylistForm
-        success={() => closeModal(props.id)}
+        onSave={(data) => {
+          onSave?.(data);
+          closeModal(props.id);
+        }}
         playlist={playlist}
         />
       </ModalBody>

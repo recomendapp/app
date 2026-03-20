@@ -41,12 +41,12 @@ import { Playlist } from '@packages/api-js';
 import compressPicture from '@/lib/utils/compressPicture';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
-  success: () => void;
+  onSave?: (data: Playlist) => void;
   playlist?: Playlist;
 }
 
 export function PlaylistForm({
-  success,
+  onSave,
   playlist,
 }: PlaylistFormProps) {
   const { user } = useAuth();
@@ -134,13 +134,13 @@ export function PlaylistForm({
           });
         }
         toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
-        success();
+        onSave?.(data);
       },
       onError: () => {
         toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
-  }, [newPoster, insertPlaylistMutation, user, success, t]);
+  }, [newPoster, insertPlaylistMutation, user, onSave, t]);
 
   const handleUpdate = useCallback(async (data: PlaylistFormValues) => {
     if (!user || !playlist) return;
@@ -177,15 +177,15 @@ export function PlaylistForm({
       },
       body: payload,
     }, {
-      onSuccess: async () => {
+      onSuccess: async (data) => {
         toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
-        success();
+        onSave?.(data);
       },
       onError: () => {
         toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
-  }, [newPoster, updatePlaylistMutation, playlist, user, success, t, canEditVisibility]);
+  }, [newPoster, updatePlaylistMutation, playlist, user, onSave, t, canEditVisibility]);
 
   const handleDeletePlaylist = useCallback(async () => {
     if (!playlist) return;
@@ -194,16 +194,16 @@ export function PlaylistForm({
           playlist_id: playlist.id,
       },
     }, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         if (pathname.startsWith(`/playlist/${playlist.id}`)) router.push('/');
         toast.success(upperFirst(t('common.messages.deleted')));
-        success();
+        onSave?.(data);
       },
       onError: () => {
         toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
-  }, [deletePlaylistMutation, playlist, router, pathname, user, success, t]);
+  }, [deletePlaylistMutation, playlist, router, pathname, user, onSave, t]);
 
   return (
     <Form {...form}>

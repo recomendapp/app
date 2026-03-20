@@ -116,7 +116,7 @@ export class PlaylistDto {
 }
 
 @ApiSchema({ name: 'PlaylistWithOwner' })
-export class PlaylistWithOwnerDTO extends PlaylistDto {
+export class PlaylistWithOwnerDto extends PlaylistDto {
     @ApiProperty({ type: () => UserSummaryDto, description: 'The user object' })
     @Expose()
     @ValidateNested()
@@ -190,10 +190,10 @@ export class ListInfinitePlaylistsDto extends CursorPaginatedResponseDto<Playlis
 }
 
 @ApiSchema({ name: 'ListPaginatedPlaylistsWithOwner' })
-export class ListPaginatedPlaylistsWithOwnerDto extends PaginatedResponseDto<PlaylistWithOwnerDTO> {
-	@ApiProperty({ type: () => [PlaylistWithOwnerDTO] })
-	@Type(() => PlaylistWithOwnerDTO)
-	data: PlaylistWithOwnerDTO[];
+export class ListPaginatedPlaylistsWithOwnerDto extends PaginatedResponseDto<PlaylistWithOwnerDto> {
+	@ApiProperty({ type: () => [PlaylistWithOwnerDto] })
+	@Type(() => PlaylistWithOwnerDto)
+	data: PlaylistWithOwnerDto[];
 
 	constructor(partial: Partial<ListPaginatedPlaylistsWithOwnerDto>) {
 		super(partial);
@@ -202,10 +202,10 @@ export class ListPaginatedPlaylistsWithOwnerDto extends PaginatedResponseDto<Pla
 }
 
 @ApiSchema({ name: 'ListInfinitePlaylistsWithOwner'})
-export class ListInfinitePlaylistsWithOwnerDto extends CursorPaginatedResponseDto<PlaylistWithOwnerDTO> {
-  @ApiProperty({ type: () => [PlaylistWithOwnerDTO] })
-  @Type(() => PlaylistWithOwnerDTO)
-  data: PlaylistWithOwnerDTO[];
+export class ListInfinitePlaylistsWithOwnerDto extends CursorPaginatedResponseDto<PlaylistWithOwnerDto> {
+  @ApiProperty({ type: () => [PlaylistWithOwnerDto] })
+  @Type(() => PlaylistWithOwnerDto)
+  data: PlaylistWithOwnerDto[];
 
   constructor(partial: Partial<ListInfinitePlaylistsWithOwnerDto>) {
     super(partial);
