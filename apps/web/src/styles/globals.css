@@ -36,6 +36,8 @@
   --color-accent-pink-foreground: var(--accent-pink-foreground);
   --color-accent-blue: var(--accent-blue);
   --color-accent-blue-foreground: var(--accent-blue-foreground);
+  --color-accent-orange: var(--accent-orange);
+  --color-accent-orange-foreground: var(--accent-orange-foreground);
   /* MEDIAS */
   --color-media-movie: var(--media-movie);
   --color-media-movie-foreground: var(--media-movie-foreground);
@@ -89,6 +91,8 @@
   --accent-pink-foreground: oklch(0.205 0 0);
   --accent-blue: oklch(64.955% 0.174 259.421);
   --accent-blue-foreground: oklch(0.985 0 0);
+  --accent-orange: oklch(0.932 0.1391 99.46);
+  --accent-orange-foreground: oklch(0.205 0 0);
   /* MEDIAS */
   --media-movie: oklch(42.473% 0.1743 29.223);
   --media-movie-foreground: oklch(0.985 0 0);
@@ -146,6 +150,8 @@
   --accent-pink-foreground: oklch(0.205 0 0);
   --accent-blue: oklch(64.955% 0.174 259.421);
   --accent-blue-foreground: oklch(0.985 0 0);
+  --accent-orange: oklch(93.956% 0.06966 87.4);
+  --accent-orange-foreground: oklch(0.205 0 0);
   /* MEDIAS */
   --media-movie: oklch(76.696% 0.14545 302.923);
   --media-movie-foreground: oklch(0% 0 0);

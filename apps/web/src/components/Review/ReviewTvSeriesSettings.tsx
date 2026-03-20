@@ -8,15 +8,14 @@ DropdownMenuTrigger,
 import { useAuth } from '@/context/auth-context';
 import { LucideIcon, MoreVertical } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { MediaTvSeries, UserReviewTvSeries } from '@recomendapp/types';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { Icons } from '@/config/icons';
 import { useModal } from '@/context/modal-context';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
 import { useCallback, useMemo } from 'react';
-import { useUserReviewTvSeriesDeleteMutation } from '@/api/client/mutations/userMutations';
-import { UserSummary } from '@packages/api-js';
+import { ReviewTvSeries, TvSeriesCompact, UserSummary } from '@packages/api-js';
+import { useTvSeriesReviewDeleteMutation } from '@libs/query-client';
 
 type OptionItem = {
 	variant?: 'destructive';
@@ -32,30 +31,25 @@ export function ReviewTvSeriesSettings({
 	author,
 } : {
 	tvSeriesId: number;
-	tvSeries: MediaTvSeries;
-	review: UserReviewTvSeries;
+	tvSeries: TvSeriesCompact;
+	review: ReviewTvSeries;
 	author: UserSummary;
 }) {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const t = useTranslations();
 	const { createConfirmModal } = useModal();
 	const pathname = usePathname();
 	const router = useRouter();
-	const { mutateAsync: deleteReview } = useUserReviewTvSeriesDeleteMutation({
-		userId: session?.user.id,
-		tvSeriesId,
-	});
+	const { mutateAsync: deleteReview } = useTvSeriesReviewDeleteMutation();
 
 	const handleDeleteReview = useCallback(async () => {
 		await deleteReview({
-			id: review.id,
+			path: {
+				tv_series_id: tvSeriesId,
+			}
 		}, {
 			onSuccess: () => {
 				toast.success(upperFirst(t('common.messages.deleted')));
-				const regex = new RegExp(`^\/tv-series\/[^/]+\/review\/${review.id}$`);
-				if (pathname.match(regex)) {
-					router.replace(`/tv-series/${tvSeries.slug || tvSeriesId}`);
-				}
 			},
 			onError: () => {
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
@@ -64,12 +58,12 @@ export function ReviewTvSeriesSettings({
 	}, [deleteReview, review.id, t, pathname, router, tvSeries, tvSeriesId]);
 
 	const options = useMemo<OptionItem[]>(() => [
-		...(session?.user.id && session?.user.id == author?.id ? [
+		...(user?.id && user?.id == author?.id ? [
 			{
 				label: upperFirst(t('common.messages.edit')),
 				icon: Icons.edit,
 				onSelect: () => {
-					router.push(`/tv-series/${tvSeries.slug || tvSeriesId}/review/${review.id}/edit`);
+					router.push(`/tv-series/${tvSeries.slug || tvSeriesId}/review`);
 				},
 			},
 			{
@@ -83,10 +77,10 @@ export function ReviewTvSeriesSettings({
 				variant: 'destructive' as const,
 			}
 		] : []),
-	], [session, t, createConfirmModal, handleDeleteReview, author, tvSeries.slug, tvSeriesId, review.id, router]);
+	], [user, t, createConfirmModal, handleDeleteReview, author, tvSeries.slug, tvSeriesId, review.id, router]);
 
 
-	if (session?.user.id != author?.id) return null;
+	if (user?.id != author?.id) return null;
 
 	return (
 	<DropdownMenu>

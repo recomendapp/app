@@ -1,8 +1,7 @@
 import { ApiSchema, ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsIn, IsInt, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
+import { IsDateString, IsEnum, IsInt, IsNumber, IsOptional, Max, Min } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
-import { LogTvSeriesDto } from '../../logs/tv-series-logs.dto';
-import { logTvStatusEnum } from '@libs/db/schemas';
+import { LogTvSeriesDto, LogTvStatus } from '../../logs/tv-series-logs.dto';
 
 @ApiSchema({ name: 'LogTvSeasonRequest' })
 export class LogTvSeasonRequestDto {
@@ -15,16 +14,16 @@ export class LogTvSeasonRequestDto {
   rating?: number | null;
   
   @ApiProperty({
-	description: 'The status of the series',
-	enum: logTvStatusEnum.enumValues,
-	example: logTvStatusEnum.enumValues[0],
+    required: false,
+    description: 'The status of the series',
+    enum: LogTvStatus,
+    example: LogTvStatus.WATCHING,
   })
   @IsOptional()
-  @IsString()
-  @IsIn(logTvStatusEnum.enumValues, {
-	message: `Status must be one of: ${logTvStatusEnum.enumValues.join(', ')}`
+  @IsEnum(LogTvStatus, {
+    message: `Status must be one of: ${Object.values(LogTvStatus).join(', ')}`
   })
-  status?: typeof logTvStatusEnum.enumValues[number];
+  status?: LogTvStatus;
 }
 
 @ApiSchema({ name: 'LogTvSeason' })
@@ -50,15 +49,15 @@ export class LogTvSeasonDto {
   seasonNumber: number;
   
   @ApiProperty({
-	description: 'The status of the series',
-	enum: logTvStatusEnum.enumValues,
-	example: logTvStatusEnum.enumValues[0],
+    description: 'The status of the series',
+    enum: LogTvStatus,
+    example: LogTvStatus.WATCHING,
   })
-  @IsString()
-  @IsIn(logTvStatusEnum.enumValues, {
-	message: `Status must be one of: ${logTvStatusEnum.enumValues.join(', ')}`
+  @Expose()
+  @IsEnum(LogTvStatus, {
+    message: `Status must be one of: ${Object.values(LogTvStatus).join(', ')}`
   })
-  status: typeof logTvStatusEnum.enumValues[number];
+  status: LogTvStatus;
 
   @ApiProperty()
   @Expose()
@@ -94,11 +93,13 @@ export class LogTvSeasonDto {
 
 @ApiSchema({ name: 'LogTvSeasonUpdateResponse' })
 export class LogTvSeasonUpdateResponseDto {
-  @ApiProperty({ type: () => LogTvSeasonDto, nullable: true })
+  @ApiProperty({ type: () => LogTvSeasonDto })
+  @Expose()
   @Type(() => LogTvSeasonDto)
-  season: LogTvSeasonDto | null;
+  season: LogTvSeasonDto;
 
   @ApiProperty({ type: () => LogTvSeriesDto })
+  @Expose()
   @Type(() => LogTvSeriesDto)
   series: LogTvSeriesDto;
 }

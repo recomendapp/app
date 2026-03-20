@@ -11,7 +11,7 @@ import { CardMovie } from "../Card/CardMovie";
 import { CardTvSeries } from "../Card/CardTvSeries";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
-import { userRecosInfiniteOptions } from "@libs/query-client/src";
+import { userRecosInfiniteOptions } from "@libs/query-client";
 import { MovieCompact, TvSeriesCompact } from "@packages/api-js/src";
 import { AvatarGroup, AvatarGroupCount } from "../ui/avatar";
 import { TextIcon } from "lucide-react";

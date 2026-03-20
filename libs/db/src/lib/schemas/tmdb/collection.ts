@@ -1,4 +1,4 @@
-import { bigint, index, integer, real, text } from 'drizzle-orm/pg-core';
+import { bigint, index, integer, real, text, unique } from 'drizzle-orm/pg-core';
 import { imageType, tmdbSchema } from './common';
 
 export const tmdbCollection = tmdbSchema.table('collection', {
@@ -23,6 +23,7 @@ export const tmdbCollectionImage = tmdbSchema.table(
     iso6391: text('iso_639_1'),
   },
   (table) => [
+    unique('unique_collection_image').on(table.collectionId, table.filePath, table.type),
     index('idx_tmdb_collection_image_collection_id').on(table.collectionId),
     index('idx_tmdb_collection_image_iso_language').on(table.iso6391),
     index('idx_tmdb_collection_image_type').on(table.type),
@@ -46,6 +47,11 @@ export const tmdbCollectionTranslation = tmdbSchema.table(
   (table) => [
     index('idx_tmdb_collection_translation_collection_id').on(
       table.collection_id,
+    ),
+    unique('unique_collection_translation').on(
+      table.collection_id,
+      table.iso6391,
+      table.iso31661,
     ),
     index('idx_tmdb_collection_translation_collection_language').on(
       table.collection_id,

@@ -16,18 +16,19 @@ import { upperFirst } from 'lodash';
 import { useSearchParams } from 'next/navigation';
 import { z } from "zod";
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useUserActivitiesTvSeriesInfiniteOptions } from '@/api/client/options/userOptions';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { Icons } from '@/config/icons';
 import { Spinner } from '@/components/ui/spinner';
 import { LayoutGridIcon, ListIcon } from 'lucide-react';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
+import { userTvSeriesLogsInfiniteOptions } from '@libs/query-client';
+import { UserSummary } from '@packages/api-js';
 
 const DISPLAY = ["grid", "row"] as const;
-type SortBy = "watched_date" | "rating";
+type SortBy = "rating" | "updated_at" | "random";
 const DEFAULT_DISPLAY = "grid";
-const DEFAULT_SORT_BY = "watched_date";
+const DEFAULT_SORT_BY = "updated_at";
 const DEFAULT_SORT_ORDER = "desc";
 
 // Display
@@ -37,7 +38,7 @@ const getValidatedDisplay = (display: string | null): z.infer<typeof displaySche
 };
 
 // SORT BY
-const sortBySchema = z.enum(["watched_date", "rating"]);
+const sortBySchema = z.enum(["updated_at", "rating", "random"]);
 const getValidatedSortBy = (order?: string | null): z.infer<typeof sortBySchema> => {
   return sortBySchema.safeParse(order).success ? order! as z.infer<typeof sortBySchema> : DEFAULT_SORT_BY;
 };
@@ -49,9 +50,9 @@ const getValidatedSortOrder = (order?: string | null): z.infer<typeof sortOrderS
 }
 
 export default function ProfileTvSeries({
-  userId
+  user
 } : {
-  userId: string,
+  user: UserSummary,
 }) {
   const t = useTranslations();
   const searchParams = useSearchParams();
@@ -66,17 +67,18 @@ export default function ProfileTvSeries({
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useInfiniteQuery(useUserActivitiesTvSeriesInfiniteOptions({
-    userId: userId,
+  } = useInfiniteQuery(userTvSeriesLogsInfiniteOptions({
+    userId: user.id,
     filters: {
-      sortBy: sortBy,
-      sortOrder: sortOrder,
+      sort_by: sortBy,
+      sort_order: sortOrder,
     }
   }))
 
   const sortOptions = useMemo((): { value: SortBy, label: string }[] => [
-    { value: "watched_date", label: upperFirst(t('common.messages.watched_date')) },
+    { value: "updated_at", label: upperFirst(t('common.messages.updated_at')) },
     { value: "rating", label: upperFirst(t('common.messages.rating')) },
+    { value: "random", label: upperFirst(t('common.messages.random')) },
   ], [t]);
 
   const handleChange = useCallback(({ name, value }: { name: string, value: string }) => {
@@ -124,7 +126,7 @@ export default function ProfileTvSeries({
         <div className="flex justify-center h-full">
           <Spinner />
         </div>
-      ) : !isLoading && activities?.pages[0]?.length ? (
+      ) : !isLoading && activities?.pages[0]?.data.length ? (
         <div
           className={` gap-2
               ${
@@ -135,13 +137,16 @@ export default function ProfileTvSeries({
           `}
         >
           {activities.pages.map((page, i) => (
-            page?.map((activity, index) => (
+            page?.data?.map(({ tvSeries, ...log }, index) => (
                 <CardTvSeries
-                ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
+                ref={(i === activities.pages?.length - 1) && (index === page?.data?.length - 1) ? ref : undefined }
                 key={index}
                 variant={display === 'grid' ? 'poster' : 'row'}
-                tvSeries={activity.tv_series}
-                profileActivity={activity}
+                tvSeries={tvSeries}
+                profile={{
+                  log: log,
+                  user: user,
+                }}
                 className='w-full'
                 />
             ))

@@ -4,7 +4,7 @@ import { useAuth } from '@/context/auth-context';
 import { MyRecosHeader } from './_components/MyRecosHeader';
 import { ImageObject } from '@/hooks/use-random-image';
 import { useQuery } from '@tanstack/react-query';
-import { userRecosAllOptions } from '@libs/query-client/src';
+import { userRecosAllOptions } from '@libs/query-client';
 import { useMemo } from 'react';
 import { TableMyRecos } from './_components/TableMyRecos/TableMyRecos';
 

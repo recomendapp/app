@@ -13,18 +13,21 @@ import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import { useUI } from "@/context/ui-context";
 import { DateOnlyYearTooltip } from "../utils/Date";
 import { WithLink } from "../utils/WithLink";
-import ButtonUserActivityTvSeriesWatch from "../buttons/ButtonUserActivityTvSeriesWatch";
+import ButtonLogTvSeriesWatch from "../buttons/ButtonLogTvSeriesWatch";
 import ButtonUserWatchlistTvSeries from "../buttons/ButtonUserWatchlistTvSeries";
 import { ContextMenuTvSeries } from "../ContextMenu/ContextMenuTvSeries";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
-import { PersonCompact, TvSeries, TvSeriesCompact } from "@packages/api-js";
+import { LogTvSeriesWithTvSeries, PersonCompact, TvSeries, TvSeriesCompact, UserSummary } from "@packages/api-js";
 
 interface CardTvSeriesProps
 	extends React.ComponentProps<typeof Card> {
 		variant?: "default" | "poster" | "row";
 		tvSeries: TvSeries | TvSeriesCompact;
 		activity?: UserActivityTvSeries;
-		profileActivity?: UserActivityTvSeries;
+		profile?: {
+			log: Omit<LogTvSeriesWithTvSeries, "tvSeries">;
+			user: UserSummary;
+		}
 		linked?: boolean;
 		posterClassName?: string;
 		disableActions?: boolean;
@@ -35,7 +38,7 @@ interface CardTvSeriesProps
 const CardTvSeriesDefault = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardTvSeriesProps, "variant">
->(({ className, tvSeries, activity, profileActivity, children, linked, showRating, posterClassName, ...props }, ref) => {
+>(({ className, tvSeries, activity, profile, children, linked, showRating, posterClassName, ...props }, ref) => {
 	return (
 	<WithLink href={tvSeries.url ?? undefined}>
 		<Card
@@ -71,7 +74,7 @@ CardTvSeriesDefault.displayName = "CardTvSeriesDefault";
 const CardTvSeriesPoster = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardTvSeriesProps, "variant">
->(({ className, tvSeries, activity, profileActivity, linked, disableActions, showRating, children, ...props }, ref) => {
+>(({ className, tvSeries, activity, profile, linked, disableActions, showRating, children, ...props }, ref) => {
 	const { device } = useUI();
 	const [isHovered, setIsHovered] = React.useState(false);
 	return (
@@ -97,9 +100,9 @@ const CardTvSeriesPoster = React.forwardRef<
 				unoptimized
 				/>
 				{(tvSeries.voteAverage
-				|| profileActivity?.rating
-				|| profileActivity?.is_liked
-				|| profileActivity?.review
+				|| profile?.log?.rating
+				|| profile?.log?.isLiked
+				|| profile?.log?.isReviewed
 				) ? (
 					<div className='absolute top-1 right-1 flex flex-col gap-1'>
 						{tvSeries.voteAverage ?
@@ -107,12 +110,12 @@ const CardTvSeriesPoster = React.forwardRef<
 						disableTooltip
 						rating={tvSeries.voteAverage}
 						/> : null}
-						{(profileActivity?.is_liked
-						|| profileActivity?.rating
-						|| profileActivity?.review) ? (
+						{(profile?.log?.isLiked
+						|| profile?.log?.rating
+						|| profile?.log?.isReviewed) ? (
 						<IconMediaRating
 						disableTooltip
-						rating={profileActivity.rating}
+						rating={profile?.log?.rating}
 						variant="profile"
 						/>) : null}
 					</div>
@@ -121,7 +124,7 @@ const CardTvSeriesPoster = React.forwardRef<
 					<div className="hidden absolute bottom-2 group-hover:flex w-full justify-center pointer-events-none">
 					{isHovered ? (
 						<div className="space-x-2 w-fit pointer-events-auto">
-							<ButtonUserActivityTvSeriesWatch tvSeriesId={tvSeries.id} className="bg-background!" />
+							<ButtonLogTvSeriesWatch tvSeries={tvSeries} />
 							<ButtonUserWatchlistTvSeries tvSeriesId={tvSeries.id} className="bg-background!" />
 						</div>
 					) : null}
@@ -136,8 +139,7 @@ CardTvSeriesPoster.displayName = "CardTvSeriesPoster";
 const CardTvSeriesRow = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardTvSeriesProps, "variant">
->(({ className, posterClassName, tvSeries, activity, profileActivity, hideMediaType, linked, showRating, children, ...props }, ref) => {
-	// const mediaUrlPrefix = getMediaUrlPrefix(tvSeries.media_type!);
+>(({ className, posterClassName, tvSeries, activity, profile, hideMediaType, linked, showRating, children, ...props }, ref) => {
 	return (
 		<Card
 			ref={ref}
@@ -168,21 +170,21 @@ const CardTvSeriesRow = React.forwardRef<
 						>
 							{tvSeries.name}
 						</WithLink>
-						{profileActivity?.rating && (
+						{profile?.log?.rating && (
 							<WithLink
-							href={linked ? `/@${profileActivity?.user?.username}/tv-series/${tvSeries.slug ?? tvSeries.id}` : undefined}
+							href={linked ? `/@${profile?.user?.username}/tv-series/${tvSeries.slug ?? tvSeries.id}` : undefined}
 							className="pointer-events-auto"
 							onClick={linked ? (e) => e.stopPropagation() : undefined}
 							>
 								<IconMediaRating
-								rating={profileActivity.rating}
+								rating={profile?.log?.rating}
 								className="inline-flex"
 								/>
 							</WithLink>
 						)}
-						{profileActivity?.is_liked && (
+						{profile?.log?.isLiked && (
 							<Link
-							href={`/@${profileActivity?.user?.username}/tv-series/${tvSeries.slug ?? tvSeries.id}`}
+							href={`/@${profile?.user?.username}/tv-series/${tvSeries.slug ?? tvSeries.id}`}
 							className="pointer-events-auto"
 							onClick={linked ? (e) => e.stopPropagation() : undefined}
 							>
@@ -192,9 +194,9 @@ const CardTvSeriesRow = React.forwardRef<
 								/>
 							</Link>
 						)}
-						{profileActivity?.review && (
+						{profile?.log?.isReviewed && (
 							<Link
-							href={`${tvSeries.url}/review/${profileActivity.review.id}`}
+							href={`/@${profile?.user?.username}/tv-series/${tvSeries.slug ?? tvSeries.id}`}
 							className="pointer-events-auto"
 							onClick={linked ? (e) => e.stopPropagation() : undefined}
 							>

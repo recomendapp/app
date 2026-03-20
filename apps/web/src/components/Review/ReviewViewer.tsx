@@ -2,7 +2,6 @@
 
 import { EditorContent } from '@tiptap/react';
 import { buttonVariants } from '@/components/ui/button';
-import { MediaTvSeries, UserReviewTvSeries } from '@recomendapp/types';
 import { cn } from '@/lib/utils';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { CardUser } from '@/components/Card/CardUser';
@@ -13,7 +12,7 @@ import { ReviewMovieSettings } from './ReviewMovieSettings';
 import { ReviewTvSeriesSettings } from './ReviewTvSeriesSettings';
 import ButtonUserReviewMovieLike from '../buttons/ButtonUserReviewMovieLike';
 import ButtonUserReviewTvSeriesLike from '../buttons/ButtonUserReviewTvSeriesLike';
-import { MovieCompact, ReviewMovie as TReviewMovie, UserSummary } from '@packages/api-js';
+import { MovieCompact, ReviewMovie as TReviewMovie, ReviewTvSeries as TReviewTvSeries, TvSeriesCompact, UserSummary } from '@packages/api-js';
 import { upperFirst } from 'lodash';
 
 interface ReviewViewerBase extends React.HTMLAttributes<HTMLDivElement> {
@@ -30,8 +29,8 @@ type ReviewMovie = {
 
 type ReviewTvSeries = {
 	type: 'tv_series';
-	review: UserReviewTvSeries;
-	tvSeries: MediaTvSeries;
+	review: TReviewTvSeries;
+	tvSeries: TvSeriesCompact;
 	movie?: never;
 }
 
@@ -72,7 +71,7 @@ export default function ReviewViewer({
 						</>
 						) : type === 'tv_series' && (
 						<>
-						<ReviewTvSeriesSettings tvSeriesId={tvSeries.id} review={review} tvSeries={tvSeries} author={author} />
+						<ReviewTvSeriesSettings tvSeriesId={tvSeries.id} tvSeries={tvSeries} review={review} author={author} />
 						</>
 						)}
 					</ButtonGroup>
@@ -91,7 +90,7 @@ export default function ReviewViewer({
 				{type === 'movie' ? (
 					<ButtonUserReviewMovieLike reviewId={review?.id} reviewLikesCount={review.likesCount} />
 				) : type === 'tv_series' && (
-					<ButtonUserReviewTvSeriesLike reviewId={review?.id} reviewLikesCount={review.likes_count} />
+					<ButtonUserReviewTvSeriesLike reviewId={review?.id} reviewLikesCount={review.likesCount} />
 				)}
 			</CardFooter>
 	 	</Card>

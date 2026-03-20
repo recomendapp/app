@@ -2,7 +2,7 @@
 
 import { getApi } from "@/lib/api/server";
 import { SupportedLocale } from "@libs/i18n/src";
-import { userMoviesControllerGet, usersControllerGet } from "@packages/api-js";
+import { userMoviesControllerGet, usersControllerGet, userTvSeriesControllerGet } from "@packages/api-js";
 import { cache } from "react";
 
 export const getProfile = cache(async (username: string) => {
@@ -39,4 +39,28 @@ export const getUserMovie = cache(async ({
 	if (error) throw error;
 	if (data === undefined) throw new Error('No data');
 	return data;
-})
+});
+
+export const getUserTvSeries = cache(async ({
+	userId,
+	tvSeriesId,
+	locale,
+}: {
+	userId: string,
+	tvSeriesId: number;
+	locale: SupportedLocale,
+}) => {
+	const client = await getApi({
+		locale,
+	});
+	const { data, error } = await userTvSeriesControllerGet({
+		path: {
+			user_id: userId,
+			tv_series_id: tvSeriesId,
+		},
+		client,
+	});
+	if (error) throw error;
+	if (data === undefined) throw new Error('No data');
+	return data;
+});

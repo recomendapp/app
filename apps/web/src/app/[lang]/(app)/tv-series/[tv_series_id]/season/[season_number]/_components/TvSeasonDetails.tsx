@@ -1,5 +1,6 @@
 'use client'
 
+import ButtonLogTvEpisodeWatch from '@/components/buttons/ButtonLogTvEpisodeWatch';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -68,6 +69,9 @@ export const TvSeasonDetails = ({
               </h3>
               <p className="line-clamp-2 wrap-break-word">{episode.overview ?? upperFirst(t('common.messages.no_overview'))}</p>
               <h4 className='text-sm text-muted-foreground'>{`${upperFirst(t('common.messages.first_air_date'))} : ${episode.airDate ? format.dateTime(new Date(episode.airDate), { year: 'numeric', month: 'long', day: 'numeric' }) : upperFirst(t('common.messages.unknown'))}`}</h4>
+            </div>
+            <div>
+              <ButtonLogTvEpisodeWatch tvSeriesId={season.tvSeriesId} seasonNumber={season.seasonNumber} episodeNumber={episode.episodeNumber} />
             </div>
           </Card>
         ))}

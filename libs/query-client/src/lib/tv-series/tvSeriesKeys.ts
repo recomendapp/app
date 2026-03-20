@@ -1,4 +1,4 @@
-import { TvSeriesPlaylistsControllerListInfiniteData, TvSeriesPlaylistsControllerListPaginatedData } from "@packages/api-js";
+import { TvSeriesPlaylistsControllerListInfiniteData, TvSeriesPlaylistsControllerListPaginatedData, TvSeriesReviewsControllerListInfiniteData, TvSeriesReviewsControllerListPaginatedData } from "@packages/api-js";
 
 export const tvSeriesKeys = {
 	base: ['tv-series'] as const,
@@ -24,13 +24,20 @@ export const tvSeriesKeys = {
 	}) => [...tvSeriesKeys.details({ tvSeriesId }), 'casting'] as const,
 
 	/* --------------------------------- Reviews -------------------------------- */
-	// reviews: ({
-	// 	tvSeriesId,
-	// 	filters,
-	// } : {
-	// 	tvSeriesId: number;
-	// 	filters?: Omit<NonNullable<TvSeriesControllerGetReviewsData['query']>, 'page' | 'per_page'>;
-	// }) => filters ? [...tvSeriesKeys.details({ tvSeriesId }), 'reviews', filters] as const : [...tvSeriesKeys.details({ tvSeriesId }), 'reviews'] as const,
+	reviews: ({
+		tvSeriesId,
+		mode,
+		filters,
+	}: {
+		tvSeriesId: number;
+	} & (
+		| { mode?: never; filters?: never }
+		| { mode: 'paginated'; filters?: NonNullable<TvSeriesReviewsControllerListPaginatedData['query']> }
+		| { mode: 'infinite'; filters?: Omit<NonNullable<TvSeriesReviewsControllerListInfiniteData['query']>, 'cursor'> }
+	)) => {
+		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
+		return [...tvSeriesKeys.details({ tvSeriesId }), 'reviews', ...optionsKey] as const;
+	},
 
 	/* -------------------------------- Playlists ------------------------------- */
 	playlists: ({

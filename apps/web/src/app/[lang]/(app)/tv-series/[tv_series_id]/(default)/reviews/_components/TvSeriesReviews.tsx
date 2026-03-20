@@ -22,16 +22,14 @@ import { CardReviewTvSeries } from '@/components/Card/CardReviewTvSeries';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { useMediaTvSeriesReviewsOptions } from '@/api/client/options/mediaOptions';
-import { useUserActivityTvSeriesOptions } from '@/api/client/options/userOptions';
 import { TvSeries } from '@packages/api-js';
+import { tvSeriesLogOptions, tvSeriesReviewsInfiniteOptions } from '@libs/query-client';
 
-type SortBy = "updated_at" | "created_at";
-const DEFAULT_PER_PAGE = 20;
+type SortBy = "updated_at" | "created_at" | "likes_count" | "rating" | "random";
 const DEFAULT_SORT_BY: SortBy = "updated_at";
 const DEFAULT_SORT_ORDER = "desc";
 
-const sortBySchema = z.enum(["updated_at", "created_at"]);
+const sortBySchema = z.enum(["updated_at", "created_at", "likes_count", "rating", "random"]);
 const getValidatedSortBy = (order?: string | null): z.infer<typeof sortBySchema> => {
   return sortBySchema.safeParse(order).success ? order! as z.infer<typeof sortBySchema> : DEFAULT_SORT_BY;
 };
@@ -39,10 +37,6 @@ const orderSchema = z.enum(["asc", "desc"]);
 const getValidatedSortOrder = (order?: string | null): z.infer<typeof orderSchema> => {
   return orderSchema.safeParse(order).success ? order! as z.infer<typeof orderSchema> : DEFAULT_SORT_ORDER;
 };
-const perPageSchema = z.number().int().positive();
-const getValidatePerPage = (perPage?: number | null): number => {
-  return perPageSchema.safeParse(perPage).success ? perPage! : DEFAULT_PER_PAGE;
-}
 
 export const TvSeriesReviews = ({
 	tvSeries,
@@ -53,7 +47,6 @@ export const TvSeriesReviews = ({
 	const searchParams = useSearchParams();
 	const sortBy = getValidatedSortBy(searchParams.get('sort_by'));
 	const sortOrder = getValidatedSortOrder(searchParams.get('sort_order'));
-	const perPage = getValidatePerPage(Number(searchParams.get('per_page')));
 	const router = useRouter();
 	const { ref, inView } = useInView();
 	// Requests
@@ -63,18 +56,20 @@ export const TvSeriesReviews = ({
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useInfiniteQuery(useMediaTvSeriesReviewsOptions({
+	} = useInfiniteQuery(tvSeriesReviewsInfiniteOptions({
 		tvSeriesId: tvSeries.id,
 		filters: {
-			sortBy: sortBy,
-			sortOrder: sortOrder,
-			perPage: perPage,
+			sort_by: sortBy,
+			sort_order: sortOrder,
 		},
 	}));
 
 	const sortOptions = useMemo((): { value: SortBy, label: string }[] => [
 		{ value: "updated_at", label: upperFirst(t('common.messages.date_updated')) },
 		{ value: "created_at", label: upperFirst(t('common.messages.date_created')) },
+		{ value: "likes_count", label: upperFirst(t('common.messages.likes_count')) },
+		{ value: "rating", label: upperFirst(t('common.messages.rating')) },
+		{ value: "random", label: upperFirst(t('common.messages.random')) },
 		], [t]);
 
 	const handleChange = useCallback(({ name, value }: { name: string, value: string }) => {
@@ -121,18 +116,18 @@ export const TvSeriesReviews = ({
 					<Skeleton key={i} className="h-24 w-full mb-2 rounded-md" style={{ animationDelay: `${i * 0.12}s`}}/>
 				))}
 			</div>
-		) : reviews?.pages[0]?.length ? (
+		) : reviews?.pages[0]?.data.length ? (
 			reviews?.pages.map((page, i) => (
-				page?.map((review, index) => {
+				page?.data.map(({ rating, author, ...review }, index) => {
 				if (!review) return null;
 				return (
 					<CardReviewTvSeries
-					ref={(i === reviews.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
+					ref={(i === reviews.pages?.length - 1) && (index === page?.data.length - 1) ? ref : undefined }
 					key={review.id ?? index}
 					review={review}
-					activity={review.user_activities_tv_series}
-					author={review.user_activities_tv_series.profile}
-					url={`/tv-series/${tvSeries.slug || tvSeries.id}/review/${review?.id}`}
+					author={author}
+					rating={rating}
+					url={`/@${author.username}/tv-series/${tvSeries.slug || tvSeries.id}`}
 					/>
 				)
 				})
@@ -156,7 +151,7 @@ const MyReviewButton = ({
 	const {
 	  data: activity,
 	  isLoading,  
-	} = useQuery(useUserActivityTvSeriesOptions({
+	} = useQuery(tvSeriesLogOptions({
 		tvSeriesId: tvSeries.id,
 		userId: user?.id,
 	}));
@@ -170,7 +165,7 @@ const MyReviewButton = ({
 		variant={'outline'}
 		asChild
 		>
-			<Link href={activity?.review ? `/tv-series/${tvSeries.slug || tvSeries.id}/review/${activity.review.id}` : `/tv-series/${tvSeries.slug || tvSeries.id}/review/create`}>
+			<Link href={activity?.review ? `/@${user.username}/tv-series/${tvSeries.slug || tvSeries.id}` : `/tv-series/${tvSeries.slug || tvSeries.id}/review`}>
 				{activity?.review ? <Icons.eye /> : <Icons.edit />}
 				{upperFirst(activity?.review ? t('common.messages.my_review', { count: 1 }) : t('common.messages.write_review'))}	
 			</Link>

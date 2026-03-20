@@ -153,6 +153,7 @@ export const tmdbMovieImage = tmdbSchema.table(
     index('idx_tmdb_movie_image_iso_639_1').on(table.iso6391),
     index('idx_tmdb_movie_image_type').on(table.type),
     index('idx_tmdb_movie_image_vote_average').on(table.voteAverage),
+    unique('unique_movie_image').on(table.movieId, table.filePath, table.type),
   ],
 );
 
@@ -255,6 +256,7 @@ export const tmdbMovieReleaseDate = tmdbSchema.table(
     index('idx_tmdb_movie_release_date_movie_id').on(table.movieId),
     index('idx_tmdb_movie_release_date_release_date').on(table.releaseDate),
     index('idx_tmdb_movie_release_date_release_type').on(table.releaseType),
+    unique('unique_movie_release_date').on(table.movieId, table.iso31661, table.iso6391, table.releaseType),
   ],
 );
 

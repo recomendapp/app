@@ -44,6 +44,7 @@ export const tmdbPersonAlsoKnownAs = tmdbSchema.table(
   (table) => [
     index('idx_tmdb_person_also_known_as_name').on(table.name),
     index('idx_tmdb_person_also_known_as_person_id').on(table.personId),
+    unique('unique_person_also_known_as').on(table.personId, table.name),
   ],
 );
 
@@ -80,6 +81,7 @@ export const tmdbPersonImage = tmdbSchema.table(
   (table) => [
     index('idx_tmdb_person_image_person_id').on(table.personId),
     index('idx_tmdb_person_image_vote_average').on(table.voteAverage),
+    unique('unique_person_image').on(table.personId, table.filePath),
   ],
 );
 

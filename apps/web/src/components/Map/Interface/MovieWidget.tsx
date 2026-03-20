@@ -9,10 +9,10 @@ import { RuntimeTooltip } from "@/components/utils/RuntimeTooltip";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import ButtonUserWatchlistMovie from "@/components/buttons/ButtonUserWatchlistMovie";
-import ButtonUserActivityMovieLike from "@/components/buttons/ButtonUserActivityMovieLike";
-import ButtonUserActivityMovieRating from "@/components/buttons/ButtonUserActivityMovieRating";
-import ButtonUserActivityMovieWatch from "@/components/buttons/ButtonUserActivityMovieWatch";
-import ButtonUserActivityMovieWatchedDate from "@/components/buttons/ButtonUserActivityMovieWatchedDate";
+import ButtonLogMovieLike from "@/components/buttons/ButtonLogMovieLike";
+import ButtonLogMovieRating from "@/components/buttons/ButtonLogMovieRating";
+import ButtonLogMovieWatch from "@/components/buttons/ButtonLogMovieWatch";
+import ButtonLogMovieWatchedDate from "@/components/buttons/ButtonLogMovieWatchedDate";
 import ButtonPlaylistAdd from "@/components/buttons/ButtonPlaylistAdd";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 import { useQuery } from "@tanstack/react-query";
@@ -151,11 +151,11 @@ export const MovieWidget = () => {
 					</div>
 					<div className="flex justify-between gap-2 px-4 pb-4">
 						<div className="flex gap-2 overflow-x-auto items-center">
-						<ButtonUserActivityMovieRating movieId={movie.id} />
-						<ButtonUserActivityMovieLike movieId={movie.id} />
-						<ButtonUserActivityMovieWatch movieId={movie.id} />
+						<ButtonLogMovieRating movieId={movie.id} />
+						<ButtonLogMovieLike movieId={movie.id} />
+						<ButtonLogMovieWatch movieId={movie.id} />
 						<ButtonUserWatchlistMovie movieId={movie.id} />
-						<ButtonUserActivityMovieWatchedDate movieId={movie.id} />
+						<ButtonLogMovieWatchedDate movieId={movie.id} />
 						</div>
 						<div className="flex gap-2 items-center">
 						<ButtonPlaylistAdd movieId={movie.id} movieTitle={movie.title} />

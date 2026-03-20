@@ -9,15 +9,15 @@ import { movieLogOptions } from "@libs/query-client";
 import { useModal } from "@/context/modal-context";
 import { ModalLogMovieWatchedDates } from "../Modals/activities/ModalLogMovieWatchedDates";
 
-interface ButtonUserActivityMovieWatchedDateProps
+interface ButtonLogMovieWatchedDateProps
 	extends React.ComponentProps<typeof Button> {
 		movieId: number;
     	stopPropagation?: boolean;
 	}
 
-const ButtonUserActivityMovieWatchedDate = React.forwardRef<
+const ButtonLogMovieWatchedDate = React.forwardRef<
 	React.ComponentRef<typeof Button>,
-	ButtonUserActivityMovieWatchedDateProps
+	ButtonLogMovieWatchedDateProps
 >(({ movieId, stopPropagation = true, className, ...props }, ref) => {
 	const { user } = useAuth();
   const { openModal } = useModal();
@@ -47,6 +47,6 @@ const ButtonUserActivityMovieWatchedDate = React.forwardRef<
     </TooltipBox>
   );
 });
-ButtonUserActivityMovieWatchedDate.displayName = 'ButtonUserActivityMovieWatchedDate';
+ButtonLogMovieWatchedDate.displayName = 'ButtonLogMovieWatchedDate';
 
-export default ButtonUserActivityMovieWatchedDate;
+export default ButtonLogMovieWatchedDate;

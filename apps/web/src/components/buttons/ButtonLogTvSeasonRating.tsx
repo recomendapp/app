@@ -2,9 +2,7 @@ import * as React from "react"
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/auth-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
-import { Link } from "@/lib/i18n/navigation";
 import { Icons } from "@/config/icons";
-import { usePathname } from '@/lib/i18n/navigation';
 import { cn } from "@/lib/utils";
 import { AlertCircleIcon } from "lucide-react";
 import toast from "react-hot-toast";
@@ -20,39 +18,41 @@ import {
 	DialogTrigger,
   } from '@/components/ui/dialog';
 import { useQuery } from "@tanstack/react-query";
-import { movieLogOptions, useMovieLogSetMutation } from "@libs/query-client";
+import { tvSeasonLogOptions, useTvSeasonLogSetMutation } from "@libs/query-client";
+import { TvSeasonCompact } from "@packages/api-js";
 
-interface ButtonUserActivityMovieRatingProps
+interface ButtonLogTvSeasonRatingProps
 	extends React.ComponentProps<typeof Button> {
-		movieId: number;
+		tvSeason: TvSeasonCompact;
 		stopPropagation?: boolean;
 	}
 
-const ButtonUserActivityMovieRating = React.forwardRef<
+const ButtonLogTvSeasonRating = React.forwardRef<
 	React.ComponentRef<typeof Button>,
-	ButtonUserActivityMovieRatingProps
->(({ movieId, stopPropagation = true, className, ...props }, ref) => {
+	ButtonLogTvSeasonRatingProps
+>(({ tvSeason, stopPropagation = true, className, ...props }, ref) => {
 	const { user } = useAuth();
 	const t = useTranslations();
-	const pathname = usePathname();
 	const [ratingValue, setRatingValue] = React.useState(5);
 
 	const {
 		data: activity,
 		isLoading,
 		isError,
-	} = useQuery(movieLogOptions({
+	} = useQuery(tvSeasonLogOptions({
 		userId: user?.id,
-		movieId: movieId,
+		tvSeriesId: tvSeason.tvSeriesId,
+		seasonNumber: tvSeason.seasonNumber,
 	}));
 
-	const { mutateAsync: handleLog, isPending } = useMovieLogSetMutation();	
+	const { mutateAsync: handleLog, isPending } = useTvSeasonLogSetMutation();	
 
 	const handleRate = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();
 		await handleLog({
 			path: {
-				movie_id: movieId,
+				tv_series_id: tvSeason.tvSeriesId,
+				season_number: tvSeason.seasonNumber,
 			},
 			body: {
 				rating: ratingValue,
@@ -62,12 +62,13 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}, [movieId, ratingValue, stopPropagation, t]);
+	}, [tvSeason, ratingValue, stopPropagation, t]);
 	const handleUnrate = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();
 		await handleLog({
 			path: {
-				movie_id: movieId,
+				tv_series_id: tvSeason.tvSeriesId,
+				season_number: tvSeason.seasonNumber,
 			},
 			body: {
 				rating: null,
@@ -77,30 +78,13 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}, [movieId, stopPropagation, t]);
+	}, [tvSeason, stopPropagation, t]);
 
 	React.useEffect(() => {
 		activity?.rating && setRatingValue(activity?.rating);
 	  }, [activity]);
 
-	if (user == null) {
-		return (
-		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
-			<Button
-			ref={ref}
-			size={'icon'}
-			variant={'outline'}
-			className={cn('rounded-full', className)}
-			asChild
-			{...props}
-			>
-			<Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
-				<Icons.star />
-			</Link>
-			</Button>
-		</TooltipBox>
-		)
-	}
+	if (!user) return null;
 
 	return (
 		<Dialog>
@@ -160,7 +144,7 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 		</Dialog>
 	  );
 });
-ButtonUserActivityMovieRating.displayName = 'ButtonUserActivityMovieRating';
+ButtonLogTvSeasonRating.displayName = 'ButtonLogTvSeasonRating';
 
 const MovieRating = ({
 	rating,
@@ -223,4 +207,4 @@ const MovieRating = ({
 };
   
 
-export default ButtonUserActivityMovieRating;
+export default ButtonLogTvSeasonRating;

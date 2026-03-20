@@ -49,7 +49,7 @@ import { DataTableToolbar } from './component/data-table-toolbar';
 import { useAuth } from '@/context/auth-context';
 import { PlaylistItemWithMedia, PlaylistWithOwner } from '@packages/api-js';
 import { usePlaylist } from '@/hooks/use-playlist';
-import { usePlaylistItemUpdateMutation } from '@libs/query-client/src';
+import { usePlaylistItemUpdateMutation } from '@libs/query-client';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {

@@ -1,12 +1,17 @@
 import { ApiSchema, ApiProperty, OmitType, ApiPropertyOptional, IntersectionType } from '@nestjs/swagger';
-import { IsBoolean, IsDateString, IsEnum, IsIn, IsInt, IsNumber, IsOptional, IsString, Max, Min, ValidateNested } from 'class-validator';
+import { IsBoolean, IsDateString, IsEnum, IsInt, IsNumber, IsOptional, IsString, Max, Min, ValidateNested } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { ReviewTvSeriesDto } from '../../reviews/tv-series/dto/review-tv-series.dto';
-import { logTvStatusEnum } from '@libs/db/schemas';
 import { TvSeriesCompactDto } from '../dto/tv-series.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { PaginationQueryDto } from '../../../common/dto/pagination.dto';
 import { CursorPaginationQueryDto } from '../../../common/dto/cursor-pagination.dto';
+
+export enum LogTvStatus {
+  WATCHING = 'watching',
+  COMPLETED = 'completed',
+  DROPPED = 'dropped',
+}
 
 @ApiSchema({ name: 'LogTvSeriesRequest' })
 export class LogTvSeriesRequestDto {
@@ -24,16 +29,16 @@ export class LogTvSeriesRequestDto {
   isLiked?: boolean;
 
   @ApiProperty({
-	description: 'The status of the series',
-	enum: logTvStatusEnum.enumValues,
-	example: logTvStatusEnum.enumValues[0],
+    required: false,
+    description: 'The status of the series',
+    enum: LogTvStatus,
+    example: LogTvStatus.WATCHING,
   })
   @IsOptional()
-  @IsString()
-  @IsIn(logTvStatusEnum.enumValues, {
-	message: `Status must be one of: ${logTvStatusEnum.enumValues.join(', ')}`
+  @IsEnum(LogTvStatus, {
+    message: `Status must be one of: ${Object.values(LogTvStatus).join(', ')}`
   })
-  status?: typeof logTvStatusEnum.enumValues[number];
+  status?: LogTvStatus;
 }
 
 @ApiSchema({ name: 'LogTvSeries' })
@@ -53,14 +58,14 @@ export class LogTvSeriesDto {
   userId: string;
 
   @ApiProperty({
-	enum: logTvStatusEnum.enumValues,
-	example: logTvStatusEnum.enumValues[0]
+    enum: LogTvStatus,
+    example: LogTvStatus.WATCHING
   })
   @Expose()
-  @IsIn(logTvStatusEnum.enumValues, {
-	message: `Status must be one of: ${logTvStatusEnum.enumValues.join(', ')}`
+  @IsEnum(LogTvStatus, {
+	  message: `Status must be one of: ${Object.values(LogTvStatus).join(', ')}`
   })
-  status: typeof logTvStatusEnum.enumValues[number];
+  status: LogTvStatus;
   
   @ApiProperty()
   @Expose()
@@ -123,11 +128,14 @@ export class LogTvSeriesDto {
   @IsDateString()
   updatedAt: string;
 
-  @ApiProperty({ type: () => ReviewTvSeriesDto, nullable: true })
+  @ApiProperty({
+    type: () => ReviewTvSeriesDto,
+    nullable: true,
+  })
   @Expose()
-  @Type(() => ReviewTvSeriesDto)
   @ValidateNested()
-  review?: ReviewTvSeriesDto | null;
+  @Type(() => ReviewTvSeriesDto)
+  review: ReviewTvSeriesDto | null;
 
   constructor(data: Partial<LogTvSeriesDto>) {
     Object.assign(this, data);

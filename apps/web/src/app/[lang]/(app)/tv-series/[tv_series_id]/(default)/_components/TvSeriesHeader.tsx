@@ -29,10 +29,9 @@ import { upperFirst } from 'lodash';
 import { useLocale, useTranslations } from 'next-intl';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 import ButtonUserWatchlistTvSeries from '@/components/buttons/ButtonUserWatchlistTvSeries';
-import ButtonUserActivityTvSeriesLike from '@/components/buttons/ButtonUserActivityTvSeriesLike';
-import ButtonUserActivityTvSeriesRating from '@/components/buttons/ButtonUserActivityTvSeriesRating';
-import ButtonUserActivityTvSeriesWatch from '@/components/buttons/ButtonUserActivityTvSeriesWatch';
-import ButtonUserActivityTvSeriesWatchedDate from '@/components/buttons/ButtonUserActivityTvSeriesWatchedDate';
+import ButtonLogTvSeriesLike from '@/components/buttons/ButtonLogTvSeriesLike';
+import ButtonLogTvSeriesRating from '@/components/buttons/ButtonLogTvSeriesRating';
+import ButtonLogTvSeriesWatch from '@/components/buttons/ButtonLogTvSeriesWatch';
 import { ContextMenuTvSeries } from '@/components/ContextMenu/ContextMenuTvSeries';
 import ButtonPlaylistAdd from '@/components/buttons/ButtonPlaylistAdd';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
@@ -121,11 +120,10 @@ export const TvSeriesHeader = ({
       <div className='flex flex-col items-center'>
         <div className="max-w-7xl w-full flex justify-between gap-2 px-4 pb-4">
           <div className="flex gap-2 overflow-x-auto items-center">
-            <ButtonUserActivityTvSeriesRating tvSeriesId={tvSeries.id} />
-            <ButtonUserActivityTvSeriesLike tvSeriesId={tvSeries.id} />
-            <ButtonUserActivityTvSeriesWatch tvSeriesId={tvSeries.id} />
+            <ButtonLogTvSeriesRating tvSeries={tvSeries} />
+            <ButtonLogTvSeriesLike tvSeries={tvSeries} />
+            <ButtonLogTvSeriesWatch tvSeries={tvSeries} />
             <ButtonUserWatchlistTvSeries tvSeriesId={tvSeries.id} />
-            <ButtonUserActivityTvSeriesWatchedDate tvSeriesId={tvSeries.id} />
           </div>
           <div className="flex gap-2 items-center">
             <ButtonPlaylistAdd mediaId={tvSeries.id} mediaType="tv_series" mediaTitle={tvSeries.name} />

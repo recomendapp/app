@@ -37,12 +37,10 @@ import { Input } from '../ui/input';
 import { ScrollArea, ScrollBar } from '../ui/scroll-area';
 import { CardMovie } from '../Card/CardMovie';
 import { CardTvSeries } from '../Card/CardTvSeries';
-import ButtonUserActivityMovieRating from '../buttons/ButtonUserActivityMovieRating';
-import ButtonUserActivityTvSeriesRating from '../buttons/ButtonUserActivityTvSeriesRating';
 import { Spinner } from '../ui/spinner';
-import { Movie, TvSeries, ReviewMovie as TReviewMovie } from '@packages/api-js';
-import { UserReview } from '@recomendapp/types';
-import ButtonUserActivityMovieWatch from '../buttons/ButtonUserActivityMovieWatch';
+import { Movie, TvSeries, ReviewMovie as TReviewMovie, ReviewTvSeries as TReviewTvSeries } from '@packages/api-js';
+import ButtonLogMovieWatch from '../buttons/ButtonLogMovieWatch';
+import ButtonLogTvSeriesWatch from '../buttons/ButtonLogTvSeriesWatch';
 
 const MAX_TITLE_LENGTH = 50;
 const MAX_BODY_LENGTH = 5000;
@@ -71,7 +69,7 @@ type ReviewMovie = {
 
 type ReviewTvSeries = {
 	type: 'tv_series';
-	review?: UserReview | null;
+	review?: TReviewTvSeries | null;
 	tvSeries: TvSeries;
 	movie?: never;
 }
@@ -218,12 +216,12 @@ export default function ReviewForm({
 				{type === 'movie' ? (
 				<>
 					<CardMovie movie={movie} linked={false} />
-					{!review && <ButtonUserActivityMovieWatch movieId={movie.id} />}
+					{!review && <ButtonLogMovieWatch movieId={movie.id} />}
 				</>
 				) : type === 'tv_series' && (
 				<>
 					<CardTvSeries tvSeries={tvSeries} linked={false} />
-					{!review && <ButtonUserActivityTvSeriesRating tvSeriesId={tvSeries.id} />}
+					{!review && <ButtonLogTvSeriesWatch tvSeries={tvSeries} />}
 				</>
 				)}
 

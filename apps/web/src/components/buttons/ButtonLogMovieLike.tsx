@@ -13,15 +13,15 @@ import { upperFirst } from "lodash";
 import { useQuery } from "@tanstack/react-query";
 import { movieLogOptions, useMovieLogSetMutation } from "@libs/query-client";
 
-interface ButtonUserActivityMovieLikeProps
+interface ButtonLogMovieLikeProps
 	extends React.ComponentProps<typeof Button> {
 		movieId: number;
 		stopPropagation?: boolean;
 	}
 
-const ButtonUserActivityMovieLike = React.forwardRef<
+const ButtonLogMovieLike = React.forwardRef<
 	React.ComponentRef<typeof Button>,
-	ButtonUserActivityMovieLikeProps
+	ButtonLogMovieLikeProps
 >(({ movieId, stopPropagation = true, className, ...props }, ref) => {
 	const { user } = useAuth();
 	const t = useTranslations();
@@ -101,6 +101,6 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 		</TooltipBox>
 	);
 });
-ButtonUserActivityMovieLike.displayName = 'ButtonUserActivityMovieLike';
+ButtonLogMovieLike.displayName = 'ButtonLogMovieLike';
 
-export default ButtonUserActivityMovieLike;
+export default ButtonLogMovieLike;

@@ -10,7 +10,7 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import { ButtonGroup } from "../ui/button-group"
 import { TooltipBox } from "../Box/TooltipBox"
 import { Icons } from "@/config/icons"
-import { usersInfiniteOptions } from "@libs/query-client/src"
+import { usersInfiniteOptions } from "@libs/query-client"
 import { useInView } from "react-intersection-observer"
 
 export const WidgetUserDiscovery = ({

@@ -147,7 +147,6 @@ export default function ProfileFilms({
                   log: log,
                   user: user,
                 }}
-                // profileActivity={activity}
                 className='w-full'
                 />
             ))

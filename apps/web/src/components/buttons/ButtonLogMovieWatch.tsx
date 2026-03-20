@@ -11,21 +11,20 @@ import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useModal } from "@/context/modal-context";
-import { useUserActivityTvSeriesOptions } from "@/api/client/options/userOptions";
 import { useQuery } from "@tanstack/react-query";
-import { useUserActivityTvSeriesDeleteMutation, useUserActivityTvSeriesInsertMutation } from "@/api/client/mutations/userMutations";
+import { movieLogOptions, useMovieLogDeleteMutation, useMovieLogSetMutation } from "@libs/query-client";
 
-interface ButtonUserActivityTvSeriesWatchProps
+interface ButtonLogMovieWatchProps
 	extends React.ComponentProps<typeof Button> {
-		tvSeriesId: number;
-		stopPropagation?: boolean;
+		movieId: number;
+    stopPropagation?: boolean;
 	}
 
-const ButtonUserActivityTvSeriesWatch = React.forwardRef<
+const ButtonLogMovieWatch = React.forwardRef<
 	React.ComponentRef<typeof Button>,
-	ButtonUserActivityTvSeriesWatchProps
->(({ tvSeriesId, stopPropagation = true, className, ...props }, ref) => {
-	const { session } = useAuth();
+	ButtonLogMovieWatchProps
+>(({ movieId, stopPropagation = true, className, ...props }, ref) => {
+	const { user } = useAuth();
   	const { createConfirmModal } = useModal();
 	const t = useTranslations();
 	const pathname = usePathname();
@@ -33,45 +32,47 @@ const ButtonUserActivityTvSeriesWatch = React.forwardRef<
 		data: activity,
 		isLoading,
 		isError,
-	} = useQuery(useUserActivityTvSeriesOptions({
-		userId: session?.user.id,
-		tvSeriesId: tvSeriesId,
+	} = useQuery(movieLogOptions({
+		userId: user?.id,
+		movieId: movieId,
 	}));
-	const { mutateAsync: insertActivity, isPending: isInsertPending } = useUserActivityTvSeriesInsertMutation();
-	const { mutateAsync: deleteActivity, isPending: isDeletePending } = useUserActivityTvSeriesDeleteMutation();
+	const { mutateAsync: handleLog, isPending: isLogPending } = useMovieLogSetMutation();
+	const { mutateAsync: handleUnlog, isPending: isUnlogPending } = useMovieLogDeleteMutation();
 
 	const handleInsertActivity = React.useCallback(async (e?: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e?.stopPropagation();
-		if (activity || !session?.user.id) return;
-		await insertActivity({
-		userId: session?.user.id,
-		tvSeriesId: tvSeriesId,
-		}), {
-		onError: () => {
-			toast.error(upperFirst(t('common.messages.an_error_occurred')));
-		}
-		};
-	}, [activity, insertActivity, session, stopPropagation, t, tvSeriesId]);
+		await handleLog({
+			path: {
+				movie_id: movieId,
+			},
+			body: {}
+		}, {
+			onError: () => {
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
+			}
+		});
+	}, [handleLog, movieId, stopPropagation, t]);
 
 	const handleDeleteActivity = React.useCallback(async (e?: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e?.stopPropagation();
-		if (!activity) return;
 		createConfirmModal({
 			title: upperFirst(t('common.messages.remove_from_watched')),
 			description: t('components.media.actions.watch.remove_from_watched.description'),
 			onConfirm: async () => {
-				await deleteActivity({
-					activityId: activity.id,
-				}), {
-					onError: () => {
-					toast.error(upperFirst(t('common.messages.an_error_occurred')));
+				await handleUnlog({
+					path: {
+						movie_id: movieId,
 					}
-				};
+				}, {
+					onError: () => {
+						toast.error(upperFirst(t('common.messages.an_error_occurred')));
+					}
+				});
 			}
 		});
-	}, [activity, deleteActivity, stopPropagation, t, createConfirmModal]);
+	}, [handleUnlog, movieId, stopPropagation, t, createConfirmModal]);
 
-	if (session === null) {
+	if (user === null) {
 		return (
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button
@@ -95,7 +96,7 @@ const ButtonUserActivityTvSeriesWatch = React.forwardRef<
 			<Button
 			ref={ref}
 			onClick={activity ? handleDeleteActivity : handleInsertActivity}
-			disabled={isLoading || isError || activity === undefined || isInsertPending || isDeletePending}
+			disabled={isLoading || isError || activity === undefined || isLogPending || isUnlogPending}
 			size="icon"
 			variant={'outline'}
 			className={cn(
@@ -116,6 +117,6 @@ const ButtonUserActivityTvSeriesWatch = React.forwardRef<
 		</TooltipBox>
 	);
 });
-ButtonUserActivityTvSeriesWatch.displayName = 'ButtonUserActivityTvSeriesWatch';
+ButtonLogMovieWatch.displayName = 'ButtonLogMovieWatch';
 
-export default ButtonUserActivityTvSeriesWatch;
+export default ButtonLogMovieWatch;

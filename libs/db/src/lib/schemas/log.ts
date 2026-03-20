@@ -125,7 +125,6 @@ export const logMovieWatchedDateRelations = relations(logMovieWatchedDate, ({ on
 
 export const logTvStatusEnum = pgEnum('log_tv_status', [
   'watching',
-  'completed',
   'dropped',
 ]);
 

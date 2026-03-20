@@ -16,6 +16,15 @@ export const usePlaylistInsertMutation = () => {
 			queryClient.invalidateQueries({
 				queryKey: userKeys.playlists({ userId: data.userId }),
 			})
+
+			const userPlaylistTargetKey = userPlaylistsAddTargetsAllOptions({ userId: data.userId, mediaId: -1, type: 'movie' }).queryKey;
+			queryClient.invalidateQueries({
+				predicate: ({ queryKey }) => (
+					queryKey[0] === userPlaylistTargetKey[0] &&
+					queryKey[1] === userPlaylistTargetKey[1] &&
+					queryKey[2] === userPlaylistTargetKey[2]
+				)
+			});
 		}
 	});
 };
@@ -120,6 +129,21 @@ export const usePlaylistDeleteMutation = () => {
 				(old: InfiniteData<ListInfinitePlaylistsWithOwner> | undefined) => {
 					return removeFromInfiniteCache(old, data.id);
 				}
+			);
+
+			// User Playlists Add Targets
+			removeListItemFromAllCaches<
+				PlaylistsAddTarget,
+				ListPaginatedPlaylistsAddTargets,
+				ListInfinitePlaylistsAddTargets
+			>(
+				queryClient,
+				{
+					all: { predicate: ({ queryKey }) => queryKey.includes('playlists_add_targets') && queryKey.includes('all') },
+					paginated: { predicate: ({ queryKey }) => queryKey.includes('playlists_add_targets') && queryKey.includes('paginated') },
+					infinite: { predicate: ({ queryKey }) => queryKey.includes('playlists_add_targets') && queryKey.includes('infinite') },
+				},
+				data.id
 			);
 		}
 	});

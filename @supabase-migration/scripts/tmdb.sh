@@ -136,4 +136,73 @@ WHERE tmdb.tv_season.id = subquery.tv_season_id;
 "
 echo "   ✅ Calcul de l'episode_count terminé."
 
+echo "   📊 Migrate Sync Logs"
+migrate_table "sync_logs" "tmdb.sync_logs" "id, created_at, updated_at, REPLACE(type::text, 'tmdb_', ''), status::text, date" "id, created_at, updated_at, type, status, date"
+
+# ---------------------------------------------------------------------------- #
+#                          RÉINITIALISATION DES SÉQUENCES                      #
+# ---------------------------------------------------------------------------- #
+echo "   🔢 Mise à jour des séquences (AUTO INCREMENT)..."
+
+reset_sequence() {
+    local SCHEMA_TABLE=$1
+    local COLUMN=${2:-id} # Utilise 'id' par défaut, sinon la colonne spécifiée
+    
+    # Exécute la mise à jour de la séquence en ignorant silencieusement les tables qui n'en ont pas
+    psql "$TARGET_DB" -c "
+        DO \$\$ 
+        DECLARE 
+            seq_name text;
+        BEGIN 
+            seq_name := pg_get_serial_sequence('$SCHEMA_TABLE', '$COLUMN');
+            IF seq_name IS NOT NULL THEN 
+                EXECUTE 'SELECT setval(''' || seq_name || ''', COALESCE((SELECT MAX(' || quote_ident('$COLUMN') || ') FROM $SCHEMA_TABLE), 1), true)';
+            END IF;
+        END \$\$;
+    " > /dev/null 2>&1
+    
+    echo "      🔄 Séquence vérifiée/mise à jour pour $SCHEMA_TABLE"
+}
+
+# On liste ici toutes les tables Drizzle qui ont un id en generatedByDefaultAsIdentity()
+reset_sequence "tmdb.collection_translation"
+reset_sequence "tmdb.collection_image"
+reset_sequence "tmdb.company_alternative_name"
+reset_sequence "tmdb.company_image"
+reset_sequence "tmdb.network_alternative_name"
+reset_sequence "tmdb.network_image"
+reset_sequence "tmdb.person_also_known_as"
+reset_sequence "tmdb.person_external_id"
+reset_sequence "tmdb.person_image"
+reset_sequence "tmdb.person_translation"
+reset_sequence "tmdb.movie_external_id"
+reset_sequence "tmdb.movie_genre"
+reset_sequence "tmdb.movie_image"
+reset_sequence "tmdb.movie_keyword"
+reset_sequence "tmdb.movie_origin_country"
+reset_sequence "tmdb.movie_production_company"
+reset_sequence "tmdb.movie_production_country"
+reset_sequence "tmdb.movie_release_date"
+reset_sequence "tmdb.movie_spoken_language"
+reset_sequence "tmdb.movie_translation"
+reset_sequence "tmdb.tv_series_alternative_title"
+reset_sequence "tmdb.tv_series_content_rating"
+reset_sequence "tmdb.tv_series_external_id"
+reset_sequence "tmdb.tv_series_genre"
+reset_sequence "tmdb.tv_series_image"
+reset_sequence "tmdb.tv_series_keyword"
+reset_sequence "tmdb.tv_series_language"
+reset_sequence "tmdb.tv_series_network"
+reset_sequence "tmdb.tv_series_origin_country"
+reset_sequence "tmdb.tv_series_production_company"
+reset_sequence "tmdb.tv_series_production_country"
+reset_sequence "tmdb.tv_series_spoken_language"
+reset_sequence "tmdb.tv_series_translation"
+reset_sequence "tmdb.tv_season_credit"
+reset_sequence "tmdb.tv_season_translation"
+reset_sequence "tmdb.tv_episode_credit"
+reset_sequence "tmdb.sync_logs"
+
+echo "   ✅ Toutes les séquences ont été mises à jour."
+
 echo "   🎉 Migration TMDB terminée avec succès !"

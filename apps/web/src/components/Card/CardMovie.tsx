@@ -12,7 +12,7 @@ import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import { useUI } from "@/context/ui-context";
 import { DateOnlyYearTooltip } from "../utils/Date";
 import { WithLink } from "../utils/WithLink";
-import ButtonUserActivityMovieWatch from "../buttons/ButtonUserActivityMovieWatch";
+import ButtonLogMovieWatch from "../buttons/ButtonLogMovieWatch";
 import ButtonUserWatchlistMovie from "../buttons/ButtonUserWatchlistMovie";
 import { ContextMenuMovie } from "../ContextMenu/ContextMenuMovie";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
@@ -122,7 +122,7 @@ const CardMoviePoster = React.forwardRef<
 					<div className="hidden absolute bottom-2 group-hover:flex w-full justify-center pointer-events-none">
 					{isHovered ? (
 						<div className="space-x-2 pointer-events-auto">
-							<ButtonUserActivityMovieWatch movieId={movie.id} />
+							<ButtonLogMovieWatch movieId={movie.id} />
 							<ButtonUserWatchlistMovie movieId={movie.id} />
 						</div>
 					) : null}

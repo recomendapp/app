@@ -1,2 +1,3 @@
 export * from './tvSeasonKeys';
-export * from './tvSeriesOptions';
+export * from './tvSeasonOptions';
+export * from './tvSeasonMutations';

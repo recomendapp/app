@@ -1,4 +1,4 @@
-import { UserFollowersControllerListPaginatedData, UserMoviesControllerListInfiniteData, UserPlaylistsControllerListInfiniteData, UserFollowersControllerListInfiniteData, UserBookmarksControllerListInfiniteData, UserFollowingControllerListPaginatedData, UserFollowingControllerListInfiniteData, MovieWatchedDatesControllerListInfiniteData, Bookmark, UserBookmarksControllerListAllData, UserBookmarksControllerListPaginatedData, UserPlaylistsControllerListPaginatedData, UserMoviesControllerListPaginatedData, MovieWatchedDatesControllerListPaginatedData, RecoTargetsControllerListPaginatedData, RecoTargetsControllerListInfiniteData, RecoTargetsControllerListAllData, UserFollowRequestsControllerListPaginatedData, UserFollowRequestsControllerListInfiniteData, UserRecosControllerListAllData, UserRecosControllerListInfiniteData, UserRecosControllerListPaginatedData, UserPlaylistsSavedControllerListPaginatedData, UserPlaylistsSavedControllerListInfiniteData, UsersControllerListPaginatedData, UsersControllerListInfiniteData, MePlaylistsFollowingControllerListPaginatedData, MePlaylistsFollowingControllerListInfiniteData, FeedPersonsControllerListPaginatedData, FeedPersonsControllerListInfiniteData, PlaylistsAddTargetsControllerListAllData, PlaylistsAddTargetsControllerListPaginatedData, PlaylistsAddTargetsControllerListInfiniteData } from "@packages/api-js";
+import { UserFollowersControllerListPaginatedData, UserMoviesControllerListInfiniteData, UserPlaylistsControllerListInfiniteData, UserFollowersControllerListInfiniteData, UserBookmarksControllerListInfiniteData, UserFollowingControllerListPaginatedData, UserFollowingControllerListInfiniteData, MovieWatchedDatesControllerListInfiniteData, Bookmark, UserBookmarksControllerListAllData, UserBookmarksControllerListPaginatedData, UserPlaylistsControllerListPaginatedData, UserMoviesControllerListPaginatedData, MovieWatchedDatesControllerListPaginatedData, RecoTargetsControllerListPaginatedData, RecoTargetsControllerListInfiniteData, RecoTargetsControllerListAllData, UserFollowRequestsControllerListPaginatedData, UserFollowRequestsControllerListInfiniteData, UserRecosControllerListAllData, UserRecosControllerListInfiniteData, UserRecosControllerListPaginatedData, UserPlaylistsSavedControllerListPaginatedData, UserPlaylistsSavedControllerListInfiniteData, UsersControllerListPaginatedData, UsersControllerListInfiniteData, MePlaylistsFollowingControllerListPaginatedData, MePlaylistsFollowingControllerListInfiniteData, FeedPersonsControllerListPaginatedData, FeedPersonsControllerListInfiniteData, PlaylistsAddTargetsControllerListAllData, PlaylistsAddTargetsControllerListPaginatedData, PlaylistsAddTargetsControllerListInfiniteData, UserTvSeriesControllerListPaginatedData, UserTvSeriesControllerListInfiniteData } from "@packages/api-js";
 
 export const userKeys = {
 	base: ['user'] as const,
@@ -35,7 +35,7 @@ export const userKeys = {
 		userId,
 	}: {
 		id: number;
-		type: 'movie' | 'tv_series';
+		type: 'movie' | 'tv_series' | 'tv_season' | 'tv_episode';
 		userId: string;
 	}) => [...userKeys.details({ userId }), 'log', type, id] as const,
 	watchedDates: ({
@@ -46,7 +46,7 @@ export const userKeys = {
 		filters,
 	}: {
 		id: number;
-		type: 'movie' | 'tv_series';
+		type: 'movie';
 		userId: string;
 	} & (
 		| { mode?: never; filters?: never }
@@ -71,6 +71,22 @@ export const userKeys = {
 	)) => {
 		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
 		return [...userKeys.details({ userId }), 'movies', ...optionsKey] as const;
+	},
+
+	/* -------------------------------- TV Series -------------------------------- */
+	tvSeries: ({
+		userId,
+		mode,
+		filters,
+	}: {
+		userId: string;
+	} & (
+		| { mode?: never; filters?: never }
+		| { mode: 'paginated'; filters?: NonNullable<UserTvSeriesControllerListPaginatedData['query']> }
+		| { mode: 'infinite'; filters?: Omit<NonNullable<UserTvSeriesControllerListInfiniteData['query']>, 'cursor'> }
+	)) => {
+		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
+		return [...userKeys.details({ userId }), 'tv_series', ...optionsKey] as const;
 	},
 
 	/* --------------------------------- Follows -------------------------------- */

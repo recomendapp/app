@@ -10,5 +10,5 @@ export default async function TvSeries(
   const params = await props.params;
   const profile = await getProfile(params.username);
   if (!profile) return notFound();
-  return <ProfileTvSeries userId={profile.id} />;
+  return <ProfileTvSeries user={profile} />;
 }

@@ -1,10 +1,12 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { logTvSeries, logTvSeason, tmdbTvSeries, tmdbTvSeason, bookmark } from '@libs/db/schemas';
+import { logTvSeries, logTvSeason, tmdbTvSeries, tmdbTvSeason, bookmark, reviewTvSeries } from '@libs/db/schemas';
 import { eq, and, sql } from 'drizzle-orm';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/drizzle/drizzle.module';
 import { DbTransaction } from '@libs/db';
 import { RecosService } from '../../../recos/recos.service';
 import { RecoType } from '../../../recos/dto/recos.dto';
+import { LogTvSeriesDto, LogTvStatus } from '../tv-series-logs.dto';
+import { LogTvSeasonDto } from '../../seasons/logs/tv-season-logs.dto';
 
 @Injectable()
 export class TvLogsSyncService {
@@ -13,66 +15,104 @@ export class TvLogsSyncService {
 		private readonly recosService: RecosService,
 	) {}
 
-	async syncTree(tx: DbTransaction, userId: string, tvSeriesId: number, seasonNumber?: number) {
-		const [seriesLog] = await tx.select().from(logTvSeries).where(and(eq(logTvSeries.userId, userId), eq(logTvSeries.tvSeriesId, tvSeriesId)));
-		
-		if (!seriesLog) return { series: null, season: null };
-
+	async syncTree(tx: DbTransaction, userId: string, tvSeriesId: number, seasonNumber?: number): Promise<{ series: LogTvSeriesDto | null; season: LogTvSeasonDto | null }> {
 		await tx.execute(sql`
-		UPDATE log_tv_season s
-		SET 
-			episodes_watched_count = COALESCE(e.count, 0),
-			status = CASE 
-					WHEN COALESCE(e.count, 0) >= tmdb.episode_count THEN 'completed'::log_tv_status 
-					ELSE 'watching'::log_tv_status 
-					END,
-			updated_at = now()
-		FROM tmdb.tv_season tmdb
-		LEFT JOIN (
-			SELECT log_tv_season_id, COUNT(*) as count
-			FROM log_tv_episode
-			WHERE log_tv_series_id = ${seriesLog.id}
-			GROUP BY log_tv_season_id
-		) e ON e.log_tv_season_id = s.id
-		WHERE s.log_tv_series_id = ${seriesLog.id} AND s.tv_season_id = tmdb.id
-		`);
-
-		const [tmdbSeries] = await tx.select({ totalEpisodes: tmdbTvSeries.numberOfEpisodes }).from(tmdbTvSeries).where(eq(tmdbTvSeries.id, tvSeriesId));
-		
-		const [seriesStats] = await tx.select({
-				totalWatched: sql<number>`COALESCE(SUM(${logTvSeason.episodesWatchedCount}), 0)::integer`
+            WITH series_log AS (
+                SELECT id
+                FROM log_tv_series
+                WHERE user_id      = ${userId}
+                  AND tv_series_id = ${tvSeriesId}
+            ),
+            season_counts AS (
+                SELECT log_tv_season_id, COUNT(*)::integer AS count
+                FROM log_tv_episode
+                WHERE log_tv_series_id = (SELECT id FROM series_log)
+                GROUP BY log_tv_season_id
+            ),
+            _update_seasons AS (
+                UPDATE log_tv_season s
+                SET
+                    episodes_watched_count = COALESCE(sc.count, 0),
+                    updated_at             = now()
+                FROM log_tv_season lts
+                LEFT JOIN season_counts sc ON sc.log_tv_season_id = lts.id
+                WHERE lts.log_tv_series_id = (SELECT id FROM series_log)
+                  AND s.id                 = lts.id
+                RETURNING s.season_number, s.episodes_watched_count
+            )
+            UPDATE log_tv_series
+            SET
+                episodes_watched_count = (
+                    SELECT COALESCE(SUM(episodes_watched_count), 0)::integer
+                    FROM _update_seasons
+                    WHERE season_number > 0
+                ),
+                updated_at = now()
+            WHERE id = (SELECT id FROM series_log)
+        `);
+ 
+		const [row] = await tx
+			.select({
+				series:              logTvSeries,
+				seriesTotalEpisodes: tmdbTvSeries.numberOfEpisodes,
+				season:              logTvSeason,
+				seasonTotalEpisodes: tmdbTvSeason.episodeCount,
+				review:              reviewTvSeries,
 			})
-			.from(logTvSeason)
+			.from(logTvSeries)
+			.innerJoin(
+				tmdbTvSeries,
+				eq(tmdbTvSeries.id, logTvSeries.tvSeriesId),
+			)
+			.leftJoin(
+                reviewTvSeries,
+                eq(reviewTvSeries.id, logTvSeries.id)
+            )
+			.leftJoin(
+				logTvSeason,
+				and(
+					eq(logTvSeason.logTvSeriesId, logTvSeries.id),
+					seasonNumber !== undefined
+						? eq(logTvSeason.seasonNumber, seasonNumber)
+						: sql`FALSE`,
+				),
+			)
+			.leftJoin(
+				tmdbTvSeason,
+				eq(tmdbTvSeason.id, logTvSeason.tvSeasonId),
+			)
 			.where(
 				and(
-					eq(logTvSeason.logTvSeriesId, seriesLog.id),
-					sql`${logTvSeason.seasonNumber} > 0`
-				)
-			);
-
-		const newWatchedCount = seriesStats?.totalWatched || 0;
-		
-		const newStatus = seriesLog.status === 'dropped' ? 'dropped' : (newWatchedCount >= tmdbSeries.totalEpisodes ? 'completed' : 'watching');
-
-		await tx.update(logTvSeries)
-			.set({
-				episodesWatchedCount: newWatchedCount,
-				status: newStatus,
-			})
-			.where(eq(logTvSeries.id, seriesLog.id));
-
-		const [updatedSeries] = await tx.select().from(logTvSeries).where(eq(logTvSeries.id, seriesLog.id));
-		
-		let updatedSeason: typeof logTvSeason.$inferSelect | null = null;
-		if (seasonNumber !== undefined) {
-			const [season] = await tx.select().from(logTvSeason)
-				.where(and(eq(logTvSeason.logTvSeriesId, seriesLog.id), eq(logTvSeason.seasonNumber, seasonNumber)));
-			updatedSeason = season || null;
-		}
+					eq(logTvSeries.userId,     userId),
+					eq(logTvSeries.tvSeriesId, tvSeriesId),
+				),
+			)
+			.limit(1);
+ 
+		if (!row) return { series: null, season: null };
 
 		return {
-			series: updatedSeries,
-			season: updatedSeason,
+			series: {
+				...row.series,
+				status: (
+					row.series.status !== 'dropped'
+					&& row.seriesTotalEpisodes > 0
+					&& row.series.episodesWatchedCount >= row.seriesTotalEpisodes
+				) ? LogTvStatus.COMPLETED : row.series.status as LogTvStatus,
+				review: row.review ? {
+                    ...row.review,
+                    userId: row.series.userId,
+                    tvSeriesId: row.series.tvSeriesId,
+                } : null,
+			},
+			season: row.season ? {
+				...row.season,
+				status: (
+					row.season.status !== 'dropped'
+					&& row.seasonTotalEpisodes > 0
+					&& row.season.episodesWatchedCount >= row.seasonTotalEpisodes
+				) ? LogTvStatus.COMPLETED : row.season.status as LogTvStatus,
+			} : null,
 		};
 	}
 

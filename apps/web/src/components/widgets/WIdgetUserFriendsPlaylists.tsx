@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { userPlaylistsFollowingInfiniteOptions } from "@libs/query-client/src";
+import { userPlaylistsFollowingInfiniteOptions } from "@libs/query-client";
 import { useAuth } from "@/context/auth-context";
 
 export const WidgetUserFriendsPlaylists = ({

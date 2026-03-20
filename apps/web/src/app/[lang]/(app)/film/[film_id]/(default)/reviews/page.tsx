@@ -9,7 +9,6 @@ import { MovieReviews } from './_components/MovieReviews';
 import { SupportedLocale } from '@libs/i18n';
 import { getMovie } from '@/api/server/medias';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
-import { Database } from '@recomendapp/types';
 
 export async function generateMetadata(
   props: {

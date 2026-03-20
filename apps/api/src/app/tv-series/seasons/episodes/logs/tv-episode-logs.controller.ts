@@ -1,10 +1,10 @@
 import { Controller, Post, Param, Body, UseGuards, Get, Delete, ParseIntPipe } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiExtraModels, ApiOkResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { TvEpisodeLogsService } from './tv-episode-logs.service';
 import { AuthGuard } from '../../../../auth/guards';
 import { CurrentUser } from '../../../../auth/decorators';
 import { User } from '../../../../auth/auth.service';
-import { LogTvEpisodeRequestDto } from './tv-episode-logs.dto';
+import { LogTvEpisodeDto, LogTvEpisodeRequestDto, LogTvEpisodeUpdateResponseDto } from './tv-episode-logs.dto';
 
 @ApiTags('Tv Episodes')
 @Controller({
@@ -16,12 +16,22 @@ export class TvEpisodeLogsController {
 
   @Get()
   @UseGuards(AuthGuard)
+  @ApiExtraModels(LogTvEpisodeDto)
+  @ApiOkResponse({
+      description: 'Get the tv episode log for the authenticated user',
+      schema: {
+        nullable: true,
+        allOf: [
+          { $ref: getSchemaPath(LogTvEpisodeDto) }
+        ]
+      }
+    })
   async get(
     @Param('tv_series_id', ParseIntPipe) tvSeriesId: number,
     @Param('season_number', ParseIntPipe) seasonNumber: number,
     @Param('episode_number', ParseIntPipe) episodeNumber: number,
     @CurrentUser() currentUser: User,
-  ) {
+  ): Promise<LogTvEpisodeDto | null> {
     return this.episodeLogsService.get({
       currentUser,
       tvSeriesId,
@@ -32,13 +42,17 @@ export class TvEpisodeLogsController {
 
   @Post()
   @UseGuards(AuthGuard)
+  @ApiOkResponse({
+    description: 'Tv episode log created or updated successfully',
+    type: LogTvEpisodeUpdateResponseDto,
+  })
   async set(
     @Param('tv_series_id', ParseIntPipe) tvSeriesId: number,
     @Param('season_number', ParseIntPipe) seasonNumber: number,
     @Param('episode_number', ParseIntPipe) episodeNumber: number,
     @Body() dto: LogTvEpisodeRequestDto,
     @CurrentUser() currentUser: User,
-  ) {
+  ): Promise<LogTvEpisodeUpdateResponseDto> {
     return this.episodeLogsService.set({
       currentUser,
       tvSeriesId,
@@ -50,12 +64,16 @@ export class TvEpisodeLogsController {
 
   @Delete()
   @UseGuards(AuthGuard)
+  @ApiOkResponse({
+    description: 'Tv episode log deleted successfully',
+    type: LogTvEpisodeUpdateResponseDto,
+  })
   async delete(
     @Param('tv_series_id', ParseIntPipe) tvSeriesId: number,
     @Param('season_number', ParseIntPipe) seasonNumber: number,
     @Param('episode_number', ParseIntPipe) episodeNumber: number,
     @CurrentUser() currentUser: User,
-  ) {
+  ): Promise<LogTvEpisodeUpdateResponseDto> {
     return this.episodeLogsService.delete({
       currentUser,
       tvSeriesId,

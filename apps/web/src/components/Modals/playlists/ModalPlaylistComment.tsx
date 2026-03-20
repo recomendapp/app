@@ -10,7 +10,7 @@ import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { PlaylistItemWithMedia } from "@packages/api-js";
 import { usePlaylist } from "@/hooks/use-playlist";
-import { usePlaylistItemUpdateMutation } from "@libs/query-client/src";
+import { usePlaylistItemUpdateMutation } from "@libs/query-client";
 
 interface ModalPlaylistComment extends ModalType {
 	data: PlaylistItemWithMedia;

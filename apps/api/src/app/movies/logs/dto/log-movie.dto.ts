@@ -94,14 +94,13 @@ export class LogMovieDto {
 
   @ApiProperty({
     type: () => ReviewMovieDto,
-    description: 'The user object',
     nullable: true,
   })
   @Expose()
   @IsNullable()
   @ValidateNested({ each: true })
   @Type(() => ReviewMovieDto)
-  review: ReviewMovieDto;
+  review: ReviewMovieDto | null;
 
   constructor(data: LogMovieDto) {
     Object.assign(this, data);

@@ -7,7 +7,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Movie } from '@packages/api-js';
-import { movieLogOptions, useMovieReviewUpsertMutation, userMovieLogOptions } from '@libs/query-client';
+import { useMovieReviewUpsertMutation, userMovieLogOptions } from '@libs/query-client';
 
 export const MovieReview = ({
 	movie,

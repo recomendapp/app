@@ -3,7 +3,7 @@ import { and, eq, sql } from 'drizzle-orm';
 import { logTvSeries, tmdbTvSeries } from '@libs/db/schemas';
 import { plainToInstance } from 'class-transformer';
 import { WorkerClient } from '@shared/worker';
-import { LogTvSeriesDto, LogTvSeriesRequestDto } from './tv-series-logs.dto';
+import { LogTvSeriesDto, LogTvSeriesRequestDto, LogTvStatus } from './tv-series-logs.dto';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { TvLogsSyncService } from './sync/tv-logs-sync.service';
 import { User } from '../../auth/auth.service';
@@ -24,20 +24,27 @@ export class TvSeriesLogsService {
     tvSeriesId: number;
   }): Promise<LogTvSeriesDto | null> {
     const logEntry = await this.db.query.logTvSeries.findFirst({
-      where: and(
-        eq(logTvSeries.userId, currentUser.id),
-        eq(logTvSeries.tvSeriesId, tvSeriesId),
-      ),
-      with: {
-        review: true
-      }
+      where: and(eq(logTvSeries.userId, currentUser.id), eq(logTvSeries.tvSeriesId, tvSeriesId)),
+      with: { 
+        review: true,
+        tvSeries: {
+          columns: {
+            id: true,
+            numberOfEpisodes: true,
+          }
+        }
+      } 
     });
 
     if (!logEntry) return null;
 
-
     return plainToInstance(LogTvSeriesDto, {
       ...logEntry,
+      status: (
+        logEntry.status !== 'dropped'
+        && logEntry.tvSeries.numberOfEpisodes > 0
+        && logEntry.episodesWatchedCount >= logEntry.tvSeries.numberOfEpisodes
+      ) ? LogTvStatus.COMPLETED : logEntry.status as LogTvStatus,
       review: logEntry.review ? {
         ...logEntry.review,
         userId: logEntry.userId,
@@ -68,7 +75,7 @@ export class TvSeriesLogsService {
         ratedAt: dto.rating != null ? sql`now()` : null,
         isLiked: dto.isLiked || false,
         likedAt: dto.isLiked ? sql`now()` : null,
-        status: dto.status || 'watching',
+        status: dto.status === 'completed' ? 'watching' : (dto.status || 'watching'),
       })
       .onConflictDoUpdate({
         target: [logTvSeries.tvSeriesId, logTvSeries.userId],
@@ -77,8 +84,7 @@ export class TvSeriesLogsService {
           ratedAt: dto.rating !== undefined ? (dto.rating != null ? sql`now()` : null) : sql`${logTvSeries.ratedAt}`,
           isLiked: dto.isLiked !== undefined ? dto.isLiked : sql`${logTvSeries.isLiked}`,
           likedAt: dto.isLiked !== undefined ? (dto.isLiked ? sql`now()` : null) : sql`${logTvSeries.likedAt}`,
-          status: dto.status !== undefined ? dto.status : sql`${logTvSeries.status}`,
-          updatedAt: sql`now()`
+          status: dto.status === 'completed' ? 'watching' : (dto.status || sql`${logTvSeries.status}`),
         }
       }).returning();
 
@@ -87,16 +93,20 @@ export class TvSeriesLogsService {
 
       if (dto.status === 'completed') {
         await tx.execute(sql`
-          INSERT INTO log_tv_season (log_tv_series_id, tv_season_id, season_number, status)
-          SELECT ${seriesLog.id}, id, season_number, 'completed'
+          INSERT INTO log_tv_season (
+            log_tv_series_id, tv_season_id, season_number, status, created_at, updated_at
+          )
+          SELECT ${seriesLog.id}, id, season_number, 'watching', now(), now()
           FROM tmdb.tv_season
           WHERE tv_series_id = ${tvSeriesId} AND season_number > 0
           ON CONFLICT DO NOTHING
         `);
 
         await tx.execute(sql`
-          INSERT INTO log_tv_episode (log_tv_series_id, log_tv_season_id, tv_episode_id, season_number, episode_number, watched_at)
-          SELECT ${seriesLog.id}, s.id, e.id, e.season_number, e.episode_number, now()
+          INSERT INTO log_tv_episode (
+            log_tv_series_id, log_tv_season_id, tv_episode_id, season_number, episode_number, watched_at, created_at, updated_at
+          )
+          SELECT ${seriesLog.id}, s.id, e.id, s.season_number, e.episode_number, now(), now(), now()
           FROM tmdb.tv_episode e
           JOIN log_tv_season s ON s.tv_season_id = e.tv_season_id AND s.log_tv_series_id = ${seriesLog.id}
           WHERE e.tv_season_id IN (SELECT id FROM tmdb.tv_season WHERE tv_series_id = ${tvSeriesId} AND season_number > 0)
@@ -119,19 +129,22 @@ export class TvSeriesLogsService {
 
     const completeLog = await this.db.query.logTvSeries.findFirst({
       where: eq(logTvSeries.id, finalLogId),
-      with: { review: true }
+      with: { review: true, tvSeries: { columns: { id: true, numberOfEpisodes: true } } }
     });
 
-    const seriesDto = plainToInstance(LogTvSeriesDto, {
+    return plainToInstance(LogTvSeriesDto, {
       ...completeLog,
+      status: (
+        completeLog.status !== 'dropped'
+        && completeLog.tvSeries.numberOfEpisodes > 0
+        && completeLog.episodesWatchedCount >= completeLog.tvSeries.numberOfEpisodes
+      ) ? LogTvStatus.COMPLETED : completeLog.status as LogTvStatus,
       review: completeLog.review ? {
         ...completeLog.review,
         userId: completeLog.userId,
         tvSeriesId: completeLog.tvSeriesId,
       } : null,
     }, { excludeExtraneousValues: true });
-
-    return seriesDto;
   }
 
   async delete({
@@ -149,6 +162,12 @@ export class TvSeriesLogsService {
         ),
         with: {
           review: true,
+          tvSeries: {
+            columns: {
+              id: true,
+              numberOfEpisodes: true,
+            }
+          }
         }
       });
 
@@ -173,11 +192,16 @@ export class TvSeriesLogsService {
 
     return plainToInstance(LogTvSeriesDto, {
       ...deletedLog,
+      status: (
+        deletedLog.status !== 'dropped'
+        && deletedLog.tvSeries.numberOfEpisodes > 0
+        && deletedLog.episodesWatchedCount >= deletedLog.tvSeries.numberOfEpisodes
+      ) ? LogTvStatus.COMPLETED : deletedLog.status as LogTvStatus,
       review: deletedLog.review ? {
         ...deletedLog.review,
         userId: deletedLog.userId,
         tvSeriesId: deletedLog.tvSeriesId,
       } : null,
-    });
+    }, { excludeExtraneousValues: true })
   }
 }

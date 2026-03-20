@@ -12,18 +12,20 @@ import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useModal } from "@/context/modal-context";
 import { useQuery } from "@tanstack/react-query";
-import { movieLogOptions, useMovieLogDeleteMutation, useMovieLogSetMutation } from "@libs/query-client";
+import { tvEpisodeLogOptions, useTvEpisodeLogDeleteMutation, useTvEpisodeLogSetMutation } from "@libs/query-client";
 
-interface ButtonUserActivityMovieWatchProps
+interface ButtonLogTvEpisodeWatchProps
 	extends React.ComponentProps<typeof Button> {
-		movieId: number;
-    stopPropagation?: boolean;
+		tvSeriesId: number;
+		seasonNumber: number;
+		episodeNumber: number;
+    	stopPropagation?: boolean;
 	}
 
-const ButtonUserActivityMovieWatch = React.forwardRef<
+const ButtonLogTvEpisodeWatch = React.forwardRef<
 	React.ComponentRef<typeof Button>,
-	ButtonUserActivityMovieWatchProps
->(({ movieId, stopPropagation = true, className, ...props }, ref) => {
+	ButtonLogTvEpisodeWatchProps
+>(({ tvSeriesId, seasonNumber, episodeNumber, stopPropagation = true, className, ...props }, ref) => {
 	const { user } = useAuth();
   	const { createConfirmModal } = useModal();
 	const t = useTranslations();
@@ -32,18 +34,22 @@ const ButtonUserActivityMovieWatch = React.forwardRef<
 		data: activity,
 		isLoading,
 		isError,
-	} = useQuery(movieLogOptions({
+	} = useQuery(tvEpisodeLogOptions({
 		userId: user?.id,
-		movieId: movieId,
+		tvSeriesId: tvSeriesId,
+		seasonNumber: seasonNumber,
+		episodeNumber: episodeNumber,
 	}));
-	const { mutateAsync: handleLog, isPending: isLogPending } = useMovieLogSetMutation();
-	const { mutateAsync: handleUnlog, isPending: isUnlogPending } = useMovieLogDeleteMutation();
+	const { mutateAsync: handleLog, isPending: isLogPending } = useTvEpisodeLogSetMutation();
+	const { mutateAsync: handleUnlog, isPending: isUnlogPending } = useTvEpisodeLogDeleteMutation();
 
 	const handleInsertActivity = React.useCallback(async (e?: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e?.stopPropagation();
 		await handleLog({
 			path: {
-				movie_id: movieId,
+				tv_series_id: tvSeriesId,
+				season_number: seasonNumber,
+				episode_number: episodeNumber,
 			},
 			body: {}
 		}, {
@@ -51,26 +57,22 @@ const ButtonUserActivityMovieWatch = React.forwardRef<
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}, [handleLog, movieId, stopPropagation, t]);
+	}, [handleLog, tvSeriesId, seasonNumber, episodeNumber, stopPropagation, t]);
 
 	const handleDeleteActivity = React.useCallback(async (e?: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e?.stopPropagation();
-		createConfirmModal({
-			title: upperFirst(t('common.messages.remove_from_watched')),
-			description: t('components.media.actions.watch.remove_from_watched.description'),
-			onConfirm: async () => {
-				await handleUnlog({
-					path: {
-						movie_id: movieId,
-					}
-				}, {
-					onError: () => {
-						toast.error(upperFirst(t('common.messages.an_error_occurred')));
-					}
-				});
+		await handleUnlog({
+			path: {
+				tv_series_id: tvSeriesId,
+				season_number: seasonNumber,
+				episode_number: episodeNumber,
+			}
+		}, {
+			onError: () => {
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}, [handleUnlog, movieId, stopPropagation, t, createConfirmModal]);
+	}, [handleUnlog, tvSeriesId, seasonNumber, episodeNumber, stopPropagation, t, createConfirmModal]);
 
 	if (user === null) {
 		return (
@@ -117,6 +119,6 @@ const ButtonUserActivityMovieWatch = React.forwardRef<
 		</TooltipBox>
 	);
 });
-ButtonUserActivityMovieWatch.displayName = 'ButtonUserActivityMovieWatch';
+ButtonLogTvEpisodeWatch.displayName = 'ButtonLogTvEpisodeWatch';
 
-export default ButtonUserActivityMovieWatch;
+export default ButtonLogTvEpisodeWatch;

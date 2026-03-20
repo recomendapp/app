@@ -3,7 +3,7 @@
 import ReviewViewer from "@/components/Review/ReviewViewer";
 import { CardMovie } from "@/components/Card/CardMovie";
 import { useQuery } from "@tanstack/react-query";
-import { UserMovie } from "@packages/api-js";
+import { UserMovieWithUserMovie } from "@packages/api-js";
 import { userMovieLogOptions } from "@libs/query-client";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { CardUser } from "@/components/Card/CardUser";
@@ -13,7 +13,7 @@ import { useEffect } from "react";
 export const UserMovieLog = ({
 	log: logProp,
 }: {
-	log: UserMovie;
+	log: UserMovieWithUserMovie;
 }) => {
 	const router = useRouter();
 	const {

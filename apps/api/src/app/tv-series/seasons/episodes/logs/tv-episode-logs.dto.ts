@@ -89,14 +89,17 @@ export class LogTvEpisodeDto {
 @ApiSchema({ name: 'LogTvEpisodeUpdateResponse' })
 export class LogTvEpisodeUpdateResponseDto {
   @ApiProperty({ type: () => LogTvEpisodeDto })
+  @Expose()
   @Type(() => LogTvEpisodeDto)
   episode: LogTvEpisodeDto;
 
   @ApiProperty({ type: () => LogTvSeasonDto })
+  @Expose()
   @Type(() => LogTvSeasonDto)
   season: LogTvSeasonDto;
 
   @ApiProperty({ type: () => LogTvSeriesDto })
+  @Expose()
   @Type(() => LogTvSeriesDto)
   series: LogTvSeriesDto;
 }

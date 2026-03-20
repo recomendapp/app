@@ -1,0 +1,2 @@
+ALTER TABLE "tmdb"."collection_image" ADD CONSTRAINT "unique_collection_image" UNIQUE("collection_id","file_path","type");--> statement-breakpoint
+ALTER TABLE "tmdb"."collection_translation" ADD CONSTRAINT "unique_collection_translation" UNIQUE("collection_id","iso_639_1","iso_3166_1");

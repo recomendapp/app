@@ -418,7 +418,10 @@
       "editor": "{count, plural, one {Editor} other {Editors}}",
       "admin": "{count, plural, one {Administrator} other {Administrators}}",
       "owner": "{count, plural, one {Owner} other {Owners}}",
-      "you_dont_have_permission_to_do_this_action": "You don't have permission to do this action"
+      "you_dont_have_permission_to_do_this_action": "You don't have permission to do this action",
+      "in_progress": "in progress",
+      "give_up": "give up",
+      "random": "random"
     },
     "form": {
       "email": {
@@ -1169,6 +1172,17 @@
         "watch": {
           "remove_from_watched": {
             "description": "Are you sure you want to remove this work from your watched list? If you have a rating or a review, they will also be deleted."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "Are you sure you want to complete season {seasonNumber} ? All episodes in the season will be marked as watched."
+            }
           }
         }
       }

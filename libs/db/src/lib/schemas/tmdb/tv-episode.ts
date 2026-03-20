@@ -33,7 +33,6 @@ export const tmdbTvEpisode = tmdbSchema.table(
     voteCount: integer('vote_count').default(0).notNull(),
   },
   (table) => [
-    unique('unique_tv_episodes').on(table.tvSeasonId, table.episodeNumber),
     index('idx_tmdb_tv_episode_episode_number').on(table.episodeNumber),
     index('idx_tmdb_tv_episode_tv_season_id').on(table.tvSeasonId),
   ],
@@ -51,7 +50,6 @@ export const tmdbTvEpisodeCredit = tmdbSchema.table(
       .references(() => tmdbTvEpisode.id, { onDelete: 'cascade' }),
   },
   (table) => [
-    unique('unique_tv_episode_credit').on(table.creditId, table.tvEpisodeId),
     index('idx_tmdb_tv_episode_credit_credit_id').on(table.creditId),
     index('idx_tmdb_tv_episode_credit_tv_episode_id').on(table.tvEpisodeId),
   ],

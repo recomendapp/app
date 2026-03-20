@@ -19,21 +19,21 @@ import {
 	DialogTitle,
 	DialogTrigger,
   } from '@/components/ui/dialog';
-import { useUserActivityTvSeriesOptions } from "@/api/client/options/userOptions";
 import { useQuery } from "@tanstack/react-query";
-import { useUserActivityTvSeriesInsertMutation, useUserActivityTvSeriesUpdateMutation } from "@/api/client/mutations/userMutations";
+import { tvSeriesLogOptions, useTvSeriesLogSetMutation } from "@libs/query-client";
+import { TvSeriesCompact } from "@packages/api-js";
 
-interface ButtonUserActivityTvSeriesRatingProps
+interface ButtonLogTvSeriesRatingProps
 	extends React.ComponentProps<typeof Button> {
-		tvSeriesId: number;
+		tvSeries: TvSeriesCompact;
 		stopPropagation?: boolean;
 	}
 
-const ButtonUserActivityTvSeriesRating = React.forwardRef<
+const ButtonLogTvSeriesRating = React.forwardRef<
 	React.ComponentRef<typeof Button>,
-	ButtonUserActivityTvSeriesRatingProps
->(({ tvSeriesId, stopPropagation = true, className, ...props }, ref) => {
-	const { session } = useAuth();
+	ButtonLogTvSeriesRatingProps
+>(({ tvSeries, stopPropagation = true, className, ...props }, ref) => {
+	const { user } = useAuth();
 	const t = useTranslations();
 	const pathname = usePathname();
 	const [ratingValue, setRatingValue] = React.useState(5);
@@ -42,60 +42,50 @@ const ButtonUserActivityTvSeriesRating = React.forwardRef<
 		data: activity,
 		isLoading,
 		isError,
-	} = useQuery(useUserActivityTvSeriesOptions({
-		userId: session?.user.id,
-		tvSeriesId: tvSeriesId,
+	} = useQuery(tvSeriesLogOptions({
+		userId: user?.id,
+		tvSeriesId: tvSeries.id,
 	}));
 
-	const { mutateAsync: insertActivity, isPending: isInsertPending } = useUserActivityTvSeriesInsertMutation();
-	const { mutateAsync: updateActivity, isPending: isUpdatePending } = useUserActivityTvSeriesUpdateMutation();
-
+	const { mutateAsync: handleLog, isPending } = useTvSeriesLogSetMutation();
 
 	const handleRate = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();
-		if (!session?.user.id) return;
-		if (activity) {
-			await updateActivity({
-				activityId: activity.id,
+		await handleLog({
+			path: {
+				tv_series_id: tvSeries.id,
+			},
+			body: {
 				rating: ratingValue,
-			}, {
-				onError: () => {
-					toast.error(upperFirst(t('common.messages.an_error_occurred')));
-				}
-			});
-		} else {
-			await insertActivity({
-				userId: session?.user.id,
-				tvSeriesId: tvSeriesId,
-				rating: ratingValue,
-			}, {
-				onError: () => {
-					toast.error(upperFirst(t('common.messages.an_error_occurred')));
-				}
-			});
-		}
-	}, [activity, insertActivity, tvSeriesId, ratingValue, session, stopPropagation, t, updateActivity]);
-
-	const handleUnrate = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
-		stopPropagation && e.stopPropagation();
-		if (activity?.review) {
-			return toast.error(t('components.media.actions.rating.remove_rating.has_review'));
-		}
-		await updateActivity({
-		  activityId: activity!.id!,
-		  rating: null,
+			}
 		}, {
 			onError: () => {
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}, [activity, updateActivity, stopPropagation, t]);
+	}, [tvSeries.id, ratingValue, stopPropagation, t]);
+
+	const handleUnrate = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
+		stopPropagation && e.stopPropagation();
+		await handleLog({
+			path: {
+				tv_series_id: tvSeries.id,
+			},
+			body: {
+				rating: null,
+			}
+		}, {
+			onError: () => {
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
+			}
+		});
+	}, [tvSeries.id, stopPropagation, t]);
 
 	React.useEffect(() => {
 		activity?.rating && setRatingValue(activity?.rating);
 	  }, [activity]);
 
-	if (session == null) {
+	if (user == null) {
 		return (
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button
@@ -120,7 +110,7 @@ const ButtonUserActivityTvSeriesRating = React.forwardRef<
 			<DialogTrigger asChild>
 				<Button
 				ref={ref}
-				disabled={isLoading || isError || activity === undefined || isInsertPending || isUpdatePending}
+				disabled={isLoading || isError || activity === undefined || isPending}
 				variant={'outline'}
 				size={activity?.rating ? 'default' : 'icon'}
 				className={cn(
@@ -172,7 +162,7 @@ const ButtonUserActivityTvSeriesRating = React.forwardRef<
 		</Dialog>
 	  );
 });
-ButtonUserActivityTvSeriesRating.displayName = 'ButtonUserActivityTvSeriesRating';
+ButtonLogTvSeriesRating.displayName = 'ButtonLogTvSeriesRating';
 
 const MovieRating = ({
 	rating,
@@ -235,4 +225,4 @@ const MovieRating = ({
 };
   
 
-export default ButtonUserActivityTvSeriesRating;
+export default ButtonLogTvSeriesRating;

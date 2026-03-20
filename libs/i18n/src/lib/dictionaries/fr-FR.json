@@ -418,7 +418,10 @@
       "editor": "{count, plural, one {Éditeur} other {Éditeurs}}",
       "admin": "{count, plural, one {Administrateur} other {Administrateurs}}",
       "owner": "{count, plural, one {Propriétaire} other {Propriétaires}}",
-      "you_dont_have_permission_to_do_this_action": "Vous n'avez pas la permission d'effectuer cette action"
+      "you_dont_have_permission_to_do_this_action": "Vous n'avez pas la permission d'effectuer cette action",
+      "in_progress": "en cours",
+      "give_up": "abandonner",
+      "random": "aléatoire"
     },
     "form": {
       "email": {
@@ -1169,6 +1172,24 @@
         "watch": {
           "remove_from_watched": {
             "description": "Êtes-vous sûr de vouloir retirer cette oeuvre de votre liste de vues ? Si vous avez une note ou une critique, elles seront également supprimées."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "Êtes-vous sur de compléter la série ? Toutes les épisodes de toutes les saisons seront marqués comme vus."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "Êtes-vous sur de compléter la saison {seasonNumber} ? Toutes les épisodes de la saison seront marqués comme vus."
+            }
           }
         }
       }

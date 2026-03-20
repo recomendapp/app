@@ -218,6 +218,41 @@
       "when": 1773687314124,
       "tag": "0030_motionless_kingpin",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1773753425121,
+      "tag": "0031_famous_spencer_smythe",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1773756024841,
+      "tag": "0032_blue_rawhide_kid",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1773775465219,
+      "tag": "0033_first_otto_octavius",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1773784456011,
+      "tag": "0034_reflective_barracuda",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "7",
+      "when": 1773868743397,
+      "tag": "0035_tense_doomsday",
+      "breakpoints": true
     }
   ]
 }
