@@ -3,7 +3,7 @@
 import { useAuth } from '@/context/auth-context';
 import { Button } from '@/components/ui/button';
 import { useModal } from '@/context/modal-context';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Check } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '@/components/Modals/Modal';
@@ -11,8 +11,8 @@ import { Icons } from '@/config/icons';
 import { UserAvatar } from '@/components/User/UserAvatar';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { userRecoSendInfiniteOptions, useUserRecoSendMutation } from '@libs/query-client';
+import { useQuery } from '@tanstack/react-query';
+import { userRecoSendAllOptions, useUserRecoSendMutation } from '@libs/query-client';
 import { UserSummary } from '@packages/api-js';
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText, InputGroupTextarea } from '@/components/ui/input-group';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
@@ -21,9 +21,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 import { FormField } from '@/components/ui/form';
 import { cn } from '@/lib/utils';
-import useDebounce from '@/hooks/use-debounce';
-import { useInView } from 'react-intersection-observer';
 import toast from 'react-hot-toast';
+import Fuse from 'fuse.js';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -43,26 +42,30 @@ export const ModalRecoSend = ({
 	const { user } = useAuth();
 	const { closeModal } = useModal();
 	const [selectedUsers, setSelectedUsers] = useState<UserSummary[]>([]);
-	const [searchQuery, setSearchQuery] = useState('');
-	const debouncedSearch = useDebounce(searchQuery);
-	const { ref, inView } = useInView(); 
 	const {
-		data,
-		fetchNextPage,
-		hasNextPage,
+		data: friends,
 		isFetching,
-	} = useInfiniteQuery(userRecoSendInfiniteOptions({
+	} = useQuery(userRecoSendAllOptions({
 		userId: user?.id,
 		mediaId: mediaId,
 		mediaType: mediaType,
-		...(debouncedSearch.length > 0 && {
-			filters: {
-				search: debouncedSearch,
-			}
-		})
 	}));
-	const totalFriends = data?.pages[0].meta.total_results;
-	const friends = data?.pages.flatMap((page) => page.data) ?? [];
+	// Search
+	const [searchQuery, setSearchQuery] = useState('');
+	const fuse = useMemo(() => {
+		return new Fuse(friends || [], {
+			keys: ['username', 'name'],
+			threshold: 0.5,
+		});
+	}, [friends]);
+	const results = useMemo(() => {
+		if (!searchQuery || searchQuery.trim() === '') {
+		return friends || [];
+		}
+		return fuse.search(searchQuery).map(result => result.item);
+	}, [searchQuery, friends, fuse]);
+
+	// Mutations
 	const { mutateAsync: send, isPending } = useUserRecoSendMutation();
 
 	// Form
@@ -104,10 +107,6 @@ export const ModalRecoSend = ({
 		});
 	}, [mediaId, mediaType, selectedUsers, send, t, closeModal, props.id]);
 
-	useEffect(() => {
-		if (inView && hasNextPage) fetchNextPage();
-	}, [inView, hasNextPage, fetchNextPage]);
-
 	return (
 		<Modal
 		open={props.open}
@@ -127,19 +126,15 @@ export const ModalRecoSend = ({
 					<InputGroupAddon align="block-start" className='border-b py-1!'>
 						<Icons.search className="text-muted-foreground" />
 						<InputGroupInput placeholder={upperFirst(t('common.messages.search_user', { count: 1 }))} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-						{totalFriends !== undefined && (
-							<InputGroupAddon align="inline-end">{totalFriends}</InputGroupAddon>
-						)}
 					</InputGroupAddon>
 					<InputGroupAddon align="block-end">
 						<ScrollArea className="h-[30vh] w-full">
 							<div className="space-y-2">
-								{friends?.map(({ alreadySeen, alreadySent, ...friend }, index) => (
+								{results?.map(({ alreadySeen, alreadySent, ...friend }) => (
 									<Button
 									key={friend.id}
 									variant={'ghost'}
 									disabled={alreadySeen}
-									ref={index === friends.length - 1 ? ref : undefined}
 									className="w-full flex items-center justify-between text-left px-1"
 									onClick={() => {
 										if (selectedUsers.some((selectedUser) => selectedUser?.id === friend?.id)) {
@@ -176,12 +171,10 @@ export const ModalRecoSend = ({
 										</div>
 									</Button>
 								))}
-								{isFetching ? (
+								{isFetching && (
 									<div className="flex items-center justify-center p-4">
 										<Icons.loader />
 									</div>
-								) : (
-									<div ref={ref} />
 								)}
 							</div>
 						</ScrollArea>

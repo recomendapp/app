@@ -3,13 +3,13 @@
 import { useSearchParams } from "next/navigation";
 import { getValidatedQuery } from "../../_components/SearchResults";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useSearchPersonsOptions } from "@/api/client/options/searchOptions";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { CardPerson } from "@/components/Card/CardPerson";
+import { searchPersonsInfiniteOptions } from "@libs/query-client";
 
 export const SearchCrewCast = () => {
 	const t = useTranslations();
@@ -33,11 +33,12 @@ const SearchResults = ({
 	const {
 		data,
 		isLoading,
-		isError,
 		fetchNextPage,
 		hasNextPage,
-	} = useInfiniteQuery(useSearchPersonsOptions({
-		query: search,
+	} = useInfiniteQuery(searchPersonsInfiniteOptions({
+		filters: {
+			q: search,
+		}
 	}));
 
 	useEffect(() => {
@@ -51,7 +52,7 @@ const SearchResults = ({
 				Array.from({ length: 16 }).map((_, index) => (
 					<Skeleton key={index} className="h-20 w-full rounded-md" style={{ animationDelay: `${index * 0.12}s`}} />
 				))
-			) : data?.pages[0]?.pagination.total_results ? (
+			) : data?.pages[0]?.data.length ? (
 				data?.pages.map((page, i) => (
 					page?.data.map((person, index) => (
 						<CardPerson

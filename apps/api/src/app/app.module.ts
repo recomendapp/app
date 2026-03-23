@@ -16,6 +16,7 @@ import { MeModule } from './me/me.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { FeedModule } from './feed/feed.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { FeedModule } from './feed/feed.module';
     PersonsModule,
     ReviewsModule,
     FeedModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],

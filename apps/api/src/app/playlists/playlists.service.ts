@@ -10,6 +10,7 @@ import { StorageFolders } from '../../common/modules/storage/storage.constants';
 import { canViewPlaylist } from './playlists.permission';
 import { PlaylistRole } from './types/playlist-role.type';
 import { PlaylistQueryBuilder } from './playlists.query-builder';
+import { WorkerClient } from '@shared/worker';
 
 @Injectable()
 export class PlaylistsService {
@@ -18,6 +19,7 @@ export class PlaylistsService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
     private readonly storageService: StorageService,
+    private readonly workerClient: WorkerClient,
   ) {}
 
   async get({
@@ -76,6 +78,16 @@ export class PlaylistsService {
       userId: currentUser.id,
       ...createPlaylistDto,
     }).returning();
+
+    if (!insertedPlaylist) {
+      throw new NotFoundException('Failed to create playlist');
+    }
+
+    this.workerClient.emit('search:sync-playlist', {
+      playlistId: insertedPlaylist.id,
+      action: 'upsert'
+    }).catch(err => this.logger.error(`Failed to emit search sync for playlist ${insertedPlaylist.id}`, err));
+  
     return plainToInstance(PlaylistDto, insertedPlaylist);
   }
 
@@ -97,8 +109,14 @@ export class PlaylistsService {
       .returning();
   
     if (!updatedPlaylist) {
-      throw new NotFoundException();
+      throw new NotFoundException('Playlist not found');
     }
+
+    this.workerClient.emit('search:sync-playlist', {
+      playlistId: updatedPlaylist.id,
+      action: 'upsert'
+    }).catch(err => this.logger.error(`Failed to emit search sync for playlist ${updatedPlaylist.id}`, err));
+
     return plainToInstance(PlaylistDto, updatedPlaylist);
   }
 
@@ -112,7 +130,7 @@ export class PlaylistsService {
       .returning();
 
     if (!deletedPlaylist) {
-      throw new NotFoundException();
+      throw new NotFoundException('Playlist not found');
     }
 
     if (deletedPlaylist.poster) {
@@ -120,6 +138,11 @@ export class PlaylistsService {
         this.logger.error(`Failed to delete poster: ${deletedPlaylist.poster}`, err)
       );
     }
+
+    this.workerClient.emit('search:sync-playlist', {
+      playlistId: deletedPlaylist.id,
+      action: 'delete'
+    }).catch(err => this.logger.error(`Failed to emit search sync for playlist ${deletedPlaylist.id}`, err));
 
     return plainToInstance(PlaylistDto, deletedPlaylist);
   }

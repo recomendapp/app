@@ -94,7 +94,7 @@ export class MeService {
     });
 
     if (shouldSyncSearch) {
-      await this.workerClient.emit('search:sync-user', { userId: loggedUser.id });
+      await this.workerClient.emit('search:sync-user', { userId: loggedUser.id, action: 'upsert' });
     }
 
     return this.get(loggedUser);

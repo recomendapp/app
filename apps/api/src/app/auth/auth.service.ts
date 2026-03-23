@@ -65,12 +65,17 @@ const createBetterAuth = ({
 							id: user.id,
 						});
 
-						await worker.emit('search:sync-user', { userId: user.id})
+						await worker.emit('search:sync-user', { userId: user.id, action: 'upsert' });
 					},
 				},
 				update: {
 					after: async (user) => {
-						await worker.emit('search:sync-user', { userId: user.id });
+						await worker.emit('search:sync-user', { userId: user.id, action: 'upsert' });
+					},
+				},
+				delete: {
+					after: async (user) => {
+						await worker.emit('search:sync-user', { userId: user.id, action: 'delete' });
 					},
 				}
 			}

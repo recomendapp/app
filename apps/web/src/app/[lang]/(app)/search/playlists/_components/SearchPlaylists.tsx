@@ -9,7 +9,7 @@ import { useSearchParams } from 'next/navigation';
 import { getValidatedQuery } from '../../_components/SearchResults';
 import { upperFirst } from 'lodash';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useSearchPlaylistsOptions } from '@/api/client/options/searchOptions';
+import { searchPlaylistsInfiniteOptions } from '@libs/query-client';
 
 export const SearchPlaylists = () => {
   const t = useTranslations();
@@ -35,8 +35,10 @@ export const SearchResults = ({
     isLoading,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery(useSearchPlaylistsOptions({
-    query: search,
+  } = useInfiniteQuery(searchPlaylistsInfiniteOptions({
+    filters: {
+      q: search,
+    }
   }));
 
   useEffect(() => {
@@ -45,7 +47,7 @@ export const SearchResults = ({
     }
   }, [inView, hasNextPage, playlists, fetchNextPage]);
 
-  if (!isLoading && playlists?.pages[0]?.pagination.total_results === 0) {
+  if (!isLoading && playlists?.pages[0]?.data.length === 0) {
     return (
       <p className='text-muted-foreground w-full'>
         {t.rich('common.messages.no_results_for', {

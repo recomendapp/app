@@ -18,6 +18,7 @@ import {
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
+import { WorkerClient } from '@shared/worker';
 
 @Injectable()
 export class PlaylistMembersService {
@@ -25,6 +26,7 @@ export class PlaylistMembersService {
 
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
+    private readonly workerClient: WorkerClient,
   ) {}
 
   private getListBaseQuery(
@@ -197,7 +199,7 @@ export class PlaylistMembersService {
   }): Promise<PlaylistMemberDto[]> {
     if (dto.userIds.length === 0) return [];
 
-    return await this.db.transaction(async (tx) => {
+    const result = await this.db.transaction(async (tx) => {
       const valuesToInsert = dto.userIds.map(userId => ({
         playlistId,
         userId,
@@ -211,6 +213,15 @@ export class PlaylistMembersService {
 
       return plainToInstance(PlaylistMemberDto, insertedMembers);
     });
+
+    if (result.length > 0) {
+      this.workerClient.emit('search:sync-playlist', {
+        playlistId: playlistId,
+        action: 'upsert'
+      }).catch(err => this.logger.error(`Failed to emit search sync after adding members to playlist ${playlistId}`, err));
+    }
+
+    return result;
   }
 
   async update({
@@ -268,6 +279,13 @@ export class PlaylistMembersService {
         inArray(playlistMember.userId, userIds) 
       ))
       .returning();
+
+    if (deletedMembers.length > 0) {
+      this.workerClient.emit('search:sync-playlist', {
+        playlistId: playlistId,
+        action: 'upsert'
+      }).catch(err => this.logger.error(`Failed to emit search sync after deleting members from playlist ${playlistId}`, err));
+    }
 
     return plainToInstance(PlaylistMemberDto, deletedMembers);
   }

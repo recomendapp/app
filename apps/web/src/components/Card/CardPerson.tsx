@@ -3,22 +3,19 @@
 import * as React from "react"
 import { cn } from "@/lib/utils";
 import { Card } from "../ui/card";
-import { MediaPerson } from "@recomendapp/types";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { useRouter } from "@/lib/i18n/navigation";
-import { Button } from "../ui/button";
-import { BadgeMedia } from "../Badge/BadgeMedia";
 import { WithLink } from "../utils/WithLink";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import { PersonCompact } from "@packages/api-js";
 
 interface CardPersonProps
 	extends React.ComponentProps<typeof Card> {
 		variant?: "default" | "poster" | "row";
-		person: MediaPerson;
+		person: PersonCompact;
 		linked?: boolean;
 		posterClassName?: string;
 		disableActions?: boolean;
-		hideMediaType?: boolean;
 	}
 
 const CardPersonDefault = React.forwardRef<
@@ -39,7 +36,7 @@ const CardPersonDefault = React.forwardRef<
 			className={cn('relative h-full shrink-0 overflow-hidden aspect-square rounded-full', posterClassName)}
 			>
 				<ImageWithFallback
-					src={getTmdbImage({ path: person.profile_path, size: 'w342' })}
+					src={getTmdbImage({ path: person.profilePath, size: 'w342' })}
 					alt={person.name ?? ''}
 					fill
 					className="object-cover"
@@ -60,7 +57,7 @@ CardPersonDefault.displayName = "CardPersonDefault";
 const CardPersonRow = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardPersonProps, "variant">
->(({ className, posterClassName, person, hideMediaType, linked, children, ...props }, ref) => {
+>(({ className, posterClassName, person, linked, children, ...props }, ref) => {
 	return (
 		<Card
 			ref={ref}
@@ -73,7 +70,7 @@ const CardPersonRow = React.forwardRef<
 		>
 			<div className={cn("relative w-24 aspect-2/3 rounded-md overflow-hidden", posterClassName)}>
 				<ImageWithFallback
-				src={getTmdbImage({ path: person.profile_path, size: 'w342' })}
+				src={getTmdbImage({ path: person.profilePath, size: 'w342' })}
 				alt={person.name ?? ''}
 				fill
 				className="object-cover"
@@ -92,12 +89,11 @@ const CardPersonRow = React.forwardRef<
 							{person.name}
 						</WithLink>
 					</div>
-					{person.known_for_department && (
+					{/* {person.known_for_department && (
 						<div className="text-xs text-muted-foreground">
 							{person.known_for_department}
 						</div>
-					)}
-					{!hideMediaType && <BadgeMedia type={'person'} />}
+					)} */}
 				</div>
 			</div>
 		</Card>
@@ -108,7 +104,7 @@ CardPersonRow.displayName = "CardPersonRow";
 const CardPerson = React.forwardRef<
 	HTMLDivElement,
 	CardPersonProps
->(({ className, hideMediaType = true, onClick, linked = true, variant = "default", ...props }, ref) => {
+>(({ className, onClick, linked = true, variant = "default", ...props }, ref) => {
 	const router = useRouter();
 	const customOnClick = (e: React.MouseEvent<HTMLDivElement>) => {
 		if (linked && props.person.url) {
@@ -121,7 +117,7 @@ const CardPerson = React.forwardRef<
 		{variant === "default" ? (
 			<CardPersonDefault ref={ref} className={cn(linked ? 'cursor-pointer' : '', className)} linked={linked} onClick={customOnClick} {...props} />
 		) : variant == "row" ? (
-			<CardPersonRow ref={ref} className={cn(linked ? 'cursor-pointer' : '', className)} linked={linked} onClick={customOnClick} hideMediaType={hideMediaType} {...props} />
+			<CardPersonRow ref={ref} className={cn(linked ? 'cursor-pointer' : '', className)} linked={linked} onClick={customOnClick} {...props} />
 		) : null}
 	</>
 	);
@@ -133,43 +129,4 @@ export {
 	CardPerson,
 	CardPersonDefault,
 	CardPersonRow,
-}
-  
-
-const Credits = ({
-	credits,
-	linked,
-	className,
-} : {
-	credits: MediaPerson[];
-	linked?: boolean;
-	className?: string;
-}) => {
-	if (!credits || credits.length === 0) return null;
-	return (
-	  <p className={cn('line-clamp-1', className)}>
-		{credits?.map((credit, index) => (
-		  <span key={index}>
-			<Button
-			  variant={'link'}
-			  className={`
-				w-fit p-0 h-full italic text-muted-foreground transition
-				${linked ? 'hover:text-accent-yellow' : 'hover:text-muted-foreground hover:no-underline'}
-			`}
-			  asChild
-			>
-			  <WithLink
-			  href={linked ? (credit.url ?? '') : undefined}
-			  onClick={linked ? (e) => e.stopPropagation() : undefined}
-			  >
-				{credit.name}
-			  </WithLink>
-			</Button>
-			{index !== credits.length - 1 && (
-			  <span className='text-muted-foreground'>, </span>
-			)}
-		  </span>
-		))}
-	  </p>
-	)
 }

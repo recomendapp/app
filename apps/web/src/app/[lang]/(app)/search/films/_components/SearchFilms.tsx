@@ -3,14 +3,13 @@
 import { useSearchParams } from "next/navigation";
 import { getValidatedQuery } from "../../_components/SearchResults";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useSearchMoviesOptions } from "@/api/client/options/searchOptions";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import { CardMovie } from "@/components/Card/CardMovie";
-import { MediaMovie } from "@recomendapp/types";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
+import { searchMoviesInfiniteOptions } from "@libs/query-client";
 
 export const SearchFilms = () => {
 	const t = useTranslations();
@@ -37,8 +36,10 @@ const SearchResults = ({
 		isError,
 		fetchNextPage,
 		hasNextPage,
-	} = useInfiniteQuery(useSearchMoviesOptions({
-		query: search,
+	} = useInfiniteQuery(searchMoviesInfiniteOptions({
+		filters: {
+			q: search,
+		}
 	}));
 
 	useEffect(() => {
@@ -52,14 +53,14 @@ const SearchResults = ({
 				Array.from({ length: 16 }).map((_, index) => (
 					<Skeleton key={index} className="h-20 w-full rounded-md" style={{ animationDelay: `${index * 0.12}s`}} />
 				))
-			) : data?.pages[0]?.pagination.total_results ? (
+			) : data?.pages[0]?.data.length ? (
 				data?.pages.map((page, i) => (
 					page?.data.map((movie, index) => (
 						<CardMovie
 						key={i}
 						ref={(i === data.pages.length - 1) && (index === page.data.length - 1) ? ref : undefined}
 						variant='row'
-						movie={movie as MediaMovie}
+						movie={movie}
 						className='border-none bg-transparent shadow-none'
 						posterClassName='w-[50px]'
 						/>

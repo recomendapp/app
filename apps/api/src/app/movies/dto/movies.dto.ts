@@ -12,6 +12,8 @@ import {
 } from 'class-validator';
 import { PersonCompactDto } from '../../persons/dto/persons.dto';
 import { GenreDto } from './genres.dto';
+import { PaginatedResponseDto } from '../../../common/dto/pagination.dto';
+import { CursorPaginatedResponseDto } from '../../../common/dto/cursor-pagination.dto';
 
 export enum MovieSortBy {
   RELEASE_DATE = 'release_date',
@@ -312,3 +314,27 @@ export class MovieCompactDto extends PickType(MovieDto, [
   'genres',
   'followerAvgRating',
 ] as const) {}
+
+@ApiSchema({ name: 'ListPaginatedMovies' })
+export class ListPaginatedMoviesDto extends PaginatedResponseDto<MovieCompactDto> {
+  @ApiProperty({ type: () => [MovieCompactDto] })
+  @Type(() => MovieCompactDto)
+  data: MovieCompactDto[];
+
+  constructor(partial: Partial<ListPaginatedMoviesDto>) {
+    super(partial);
+    Object.assign(this, partial);
+  }
+}
+
+@ApiSchema({ name: 'ListInfiniteMovies' })
+export class ListInfiniteMoviesDto extends CursorPaginatedResponseDto<MovieCompactDto> {
+  @ApiProperty({ type: () => [MovieCompactDto] })
+  @Type(() => MovieCompactDto)
+  data: MovieCompactDto[];
+
+  constructor(partial: Partial<ListInfiniteMoviesDto>) {
+    super(partial);
+    Object.assign(this, partial);
+  }
+}

@@ -12,6 +12,8 @@ import {
 } from 'class-validator';
 import { PersonCompactDto } from '../../persons/dto/persons.dto';
 import { GenreDto } from '../../movies/dto/genres.dto';
+import { PaginatedResponseDto } from '../../../common/dto/pagination.dto';
+import { CursorPaginatedResponseDto } from '../../../common/dto/cursor-pagination.dto';
 
 export enum TvSeriesSortBy {
   LAST_AIR_DATE = 'last_air_date',
@@ -270,6 +272,7 @@ export class TvSeriesCompactDto extends PickType(TvSeriesDto, [
   'lastAirDate',
   'voteAverage',
   'voteCount',
+  'popularity',
   'genres',
   'followerAvgRating',
 ] as const) {}
@@ -281,6 +284,30 @@ export class TvSeriesMinimalDto extends PickType(TvSeriesDto, [
   'slug',
   'url',
 ] as const) {}
+
+@ApiSchema({ name: 'ListPaginatedTvSeries' })
+export class ListPaginatedTvSeriesDto extends PaginatedResponseDto<TvSeriesCompactDto> {
+  @ApiProperty({ type: () => [TvSeriesCompactDto] })
+  @Type(() => TvSeriesCompactDto)
+  data: TvSeriesCompactDto[];
+
+  constructor(partial: Partial<ListPaginatedTvSeriesDto>) {
+    super(partial);
+    Object.assign(this, partial);
+  }
+}
+
+@ApiSchema({ name: 'ListInfiniteTvSeries' })
+export class ListInfiniteTvSeriesDto extends CursorPaginatedResponseDto<TvSeriesCompactDto> {
+  @ApiProperty({ type: () => [TvSeriesCompactDto] })
+  @Type(() => TvSeriesCompactDto)
+  data: TvSeriesCompactDto[];
+
+  constructor(partial: Partial<ListInfiniteTvSeriesDto>) {
+    super(partial);
+    Object.assign(this, partial);
+  }
+}
 
 @ApiSchema({ name: 'TvSeriesTrailer' })
 export class TvSeriesTrailerDto {
@@ -334,3 +361,4 @@ export class TvSeriesTrailerDto {
   @IsString()
   iso31661: string | null;
 }
+

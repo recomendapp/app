@@ -3,20 +3,18 @@
 import { useAuth } from '@/context/auth-context';
 import { Button } from '@/components/ui/button';
 import { useModal } from '@/context/modal-context';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Check } from 'lucide-react';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Badge } from '@/components/ui/badge';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../Modal';
 import { Icons } from '@/config/icons';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import { usePlaylistItemsAddMutation, userPlaylistsAddTargetsInfiniteOptions } from '@libs/query-client';
+import { usePlaylistItemsAddMutation, userPlaylistsAddTargetsAllOptions } from '@libs/query-client';
 import { Playlist, PlaylistsAddTargetsControllerListAllData } from '@packages/api-js';
-import useDebounce from '@/hooks/use-debounce';
-import { useInView } from 'react-intersection-observer';
 import z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -26,6 +24,7 @@ import { cn } from '@/lib/utils';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import toast from 'react-hot-toast';
 import { ModalPlaylist } from './ModalPlaylist';
+import Fuse from 'fuse.js';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -45,25 +44,29 @@ export function ModalPlaylistAdd({
 	const t = useTranslations();
 	const { openModal, closeModal } = useModal();
 	const [selectedPlaylists, setSelectedPlaylists] = useState<Playlist[]>([]);
-	const [searchQuery, setSearchQuery] = useState('');
-	const debouncedSearch = useDebounce(searchQuery);
-	const { ref, inView } = useInView(); 
 	const {
-		data,
-		fetchNextPage,
-		hasNextPage,
+		data: playlists,
 		isFetching,
-	} = useInfiniteQuery(userPlaylistsAddTargetsInfiniteOptions({
+	} = useQuery(userPlaylistsAddTargetsAllOptions({
 		userId: user?.id,
 		mediaId: mediaId,
 		type: type,
-		...(debouncedSearch.length > 0 && {
-			filters: {
-				search: debouncedSearch,
-			}
-		})
 	}));
-	const playlists = data?.pages.flatMap((page) => page.data) ?? [];
+	
+	// Search
+	const [searchQuery, setSearchQuery] = useState('');
+	const fuse = useMemo(() => {
+		return new Fuse(playlists || [], {
+			keys: ['title', 'owner.username', 'owner.name'],
+			threshold: 0.5,
+		});
+	}, [playlists]);
+	const results = useMemo(() => {
+		if (!searchQuery || searchQuery.trim() === '') {
+		return playlists || [];
+		}
+		return fuse.search(searchQuery).map(result => result.item);
+	}, [searchQuery, playlists, fuse]);
 
 	// Mutations
 	const { mutateAsync: add, isPending } = usePlaylistItemsAddMutation({
@@ -107,10 +110,6 @@ export function ModalPlaylistAdd({
 		});
 	}, [mediaId, type, selectedPlaylists, add, t, closeModal, props.id]);
 
-	useEffect(() => {
-		if (inView && hasNextPage) fetchNextPage();
-	}, [inView, hasNextPage, fetchNextPage]);
-
 	return (
 		<Modal
 		open={props.open}
@@ -143,11 +142,10 @@ export function ModalPlaylistAdd({
 					<InputGroupAddon align="block-end">
 						<ScrollArea className="h-[30vh] w-full">
 							<div className="space-y-2">
-								{playlists?.map(({ alreadyAdded, ...playlist }, index) => (
+								{results?.map(({ alreadyAdded, ...playlist }) => (
 									<Button
 									key={playlist.id}
 									variant={'ghost'}
-									ref={index === playlists.length - 1 ? ref : undefined}
 									className="w-full flex items-center justify-between text-left px-1"
 									onClick={() => {
 										if (selectedPlaylists.some((selectedPlaylist) => selectedPlaylist.id === playlist.id)) {
@@ -189,12 +187,10 @@ export function ModalPlaylistAdd({
 										</div>
 									</Button>
 								))}
-								{isFetching ? (
+								{isFetching && (
 									<div className="flex items-center justify-center p-4">
 										<Icons.loader />
 									</div>
-								) : (
-									<div ref={ref} />
 								)}
 							</div>
 						</ScrollArea>

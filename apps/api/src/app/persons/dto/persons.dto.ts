@@ -1,5 +1,7 @@
 import { ApiProperty, ApiSchema, PickType } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { CursorPaginatedResponseDto } from '../../../common/dto/cursor-pagination.dto';
+import { PaginatedResponseDto } from '../../../common/dto/pagination.dto';
+import { Expose, Type } from 'class-transformer';
 import { IsInt, IsString, IsUrl, IsNumber } from 'class-validator';
 
 @ApiSchema({ name: 'Person' })
@@ -156,3 +158,27 @@ export class PersonCompactDto extends PickType(PersonDto, [
   'slug',
   'url',
 ] as const) {}
+
+@ApiSchema({ name: 'ListPaginatedPersons' })
+export class ListPaginatedPersonsDto extends PaginatedResponseDto<PersonCompactDto> {
+  @ApiProperty({ type: () => [PersonCompactDto] })
+  @Type(() => PersonCompactDto)
+  data: PersonCompactDto[];
+
+  constructor(partial: Partial<ListPaginatedPersonsDto>) {
+    super(partial);
+    Object.assign(this, partial);
+  }
+}
+
+@ApiSchema({ name: 'ListInfinitePersons' })
+export class ListInfinitePersonsDto extends CursorPaginatedResponseDto<PersonCompactDto> {
+  @ApiProperty({ type: () => [PersonCompactDto] })
+  @Type(() => PersonCompactDto)
+  data: PersonCompactDto[];
+
+  constructor(partial: Partial<ListInfinitePersonsDto>) {
+    super(partial);
+    Object.assign(this, partial);
+  }
+}

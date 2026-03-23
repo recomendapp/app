@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { Client } from 'typesense';
 import { EnvService, ENV_SERVICE } from '@libs/env';
 
 export const TYPESENSE_CLIENT = Symbol('typesense-client');
 
+@Global()
 @Module({
   providers: [
     {

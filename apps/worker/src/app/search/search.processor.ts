@@ -17,11 +17,11 @@ export class SearchProcessor extends WorkerHost {
     try {
       switch (job.name) {
         case 'search:sync-user':
-          await this.searchService.syncUser(job.data.userId);
+          await this.searchService.syncUser(job.data);
           break;
 
         case 'search:sync-playlist':
-          await this.searchService.syncPlaylist(job.data.playlistId);
+          await this.searchService.syncPlaylist(job.data);
           break;
 
         default:

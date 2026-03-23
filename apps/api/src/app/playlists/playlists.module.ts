@@ -9,11 +9,13 @@ import { PlaylistMembersModule } from './members/playlist-members.module';
 import { PlaylistsAddModule } from './add/playlists-add.module';
 import { PlaylistItemsModule } from './items/playlist-items.module';
 import { PlaylistsGateway } from './playlists.gateway';
+import { SharedWorkerModule } from '@shared/worker';
 
 
 @Module({
   imports: [
     StorageModule,
+    SharedWorkerModule,
     PlaylistLikesModule,
     PlaylistSavesModule,
     PlaylistPosterModule,

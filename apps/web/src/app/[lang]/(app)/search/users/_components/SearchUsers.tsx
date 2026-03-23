@@ -8,8 +8,8 @@ import { useSearchParams } from 'next/navigation';
 import { getValidatedQuery } from '../../_components/SearchResults';
 import { upperFirst } from 'lodash';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useSearchUsersOptions } from '@/api/client/options/searchOptions';
 import { CardUser } from '@/components/Card/CardUser';
+import { searchUsersInfiniteOptions } from '@libs/query-client';
 
 export const SearchUsers = () => {
   const t = useTranslations();
@@ -35,8 +35,10 @@ export const SearchResults = ({
     isLoading,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery(useSearchUsersOptions({
-    query: search,
+  } = useInfiniteQuery(searchUsersInfiniteOptions({
+    filters: {
+      q: search,
+    }
   }));
 
   useEffect(() => {
@@ -45,7 +47,7 @@ export const SearchResults = ({
     }
   }, [inView, hasNextPage, users, fetchNextPage]);
 
-  if (!isLoading && users?.pages[0]?.pagination.total_results === 0) {
+  if (!isLoading && users?.pages[0]?.data.length === 0) {
     return (
       <p className='text-muted-foreground w-full'>
         {t.rich('common.messages.no_results_for', {
