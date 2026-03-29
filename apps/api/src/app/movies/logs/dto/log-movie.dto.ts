@@ -107,14 +107,23 @@ export class LogMovieDto {
   }
 }
 
-@ApiSchema({ name: 'LogMovieWithMovie' })
-export class LogMovieWithMovieDto extends OmitType(LogMovieDto, ['review']) {
+@ApiSchema({ name: 'LogMovieWithMovieNoReview' })
+export class LogMovieWithMovieNoReviewDto extends OmitType(LogMovieDto, ['review']) {
   @ApiProperty({ example: false })
   @Expose()
   isReviewed: boolean;
 
   @ApiProperty({ description: 'The movie details' })
   @Type(() => MovieCompactDto)
+  @Expose()
+  movie: MovieCompactDto;
+}
+
+@ApiSchema({ name: 'LogMovieWithMovie' })
+export class LogMovieWithMovieDto extends LogMovieDto {
+  @ApiProperty({ description: 'The movie details' })
+  @Type(() => MovieCompactDto)
+  @Expose()
   movie: MovieCompactDto;
 }
 

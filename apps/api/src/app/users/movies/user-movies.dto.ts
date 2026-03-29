@@ -3,7 +3,7 @@ import { ValidateNested } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { UserSummaryDto } from '../dto/users.dto';
 import { MovieCompactDto } from '../../movies/dto/movies.dto';
-import { LogMovieDto, LogMovieWithMovieDto } from '../../movies/logs/dto/log-movie.dto';
+import { LogMovieDto, LogMovieWithMovieNoReviewDto } from '../../movies/logs/dto/log-movie.dto';
 import { PaginatedResponseDto } from '../../../common/dto/pagination.dto';
 import { CursorPaginatedResponseDto } from '../../../common/dto/cursor-pagination.dto';
 
@@ -24,10 +24,10 @@ export class UserMovieWithUserMovieDto extends LogMovieDto {
 
 
 @ApiSchema({ name: 'ListPaginatedUserMoviesWithMovie'})
-export class ListPaginatedUserMoviesWithMovieDto extends PaginatedResponseDto<LogMovieWithMovieDto> {
-  @ApiProperty({ type: () => [LogMovieWithMovieDto] })
-  @Type(() => LogMovieWithMovieDto)
-  data: LogMovieWithMovieDto[];
+export class ListPaginatedUserMoviesWithMovieDto extends PaginatedResponseDto<LogMovieWithMovieNoReviewDto> {
+  @ApiProperty({ type: () => [LogMovieWithMovieNoReviewDto] })
+  @Type(() => LogMovieWithMovieNoReviewDto)
+  data: LogMovieWithMovieNoReviewDto[];
 
   constructor(partial: Partial<ListPaginatedUserMoviesWithMovieDto>) {
     super(partial);
@@ -36,10 +36,10 @@ export class ListPaginatedUserMoviesWithMovieDto extends PaginatedResponseDto<Lo
 }
 
 @ApiSchema({ name: 'ListInfiniteUserMoviesWithMovie'})
-export class ListInfiniteUserMoviesWithMovieDto extends CursorPaginatedResponseDto<LogMovieWithMovieDto> {
-  @ApiProperty({ type: () => [LogMovieWithMovieDto] })
-  @Type(() => LogMovieWithMovieDto)
-  data: LogMovieWithMovieDto[];
+export class ListInfiniteUserMoviesWithMovieDto extends CursorPaginatedResponseDto<LogMovieWithMovieNoReviewDto> {
+  @ApiProperty({ type: () => [LogMovieWithMovieNoReviewDto] })
+  @Type(() => LogMovieWithMovieNoReviewDto)
+  data: LogMovieWithMovieNoReviewDto[];
 
   constructor(partial: Partial<ListInfiniteUserMoviesWithMovieDto>) {
     super(partial);

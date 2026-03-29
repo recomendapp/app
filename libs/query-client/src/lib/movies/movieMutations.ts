@@ -1,7 +1,7 @@
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 import { movieLogOptions, movieReviewsInfiniteOptions, movieReviewsPaginatedOptions } from './movieOptions';
-import { ListInfiniteBookmarks, ListInfiniteReviewsMovie, ListInfiniteUserMoviesWithMovie, ListInfiniteWatchedDates, ListPaginatedBookmarks, ListPaginatedUserMoviesWithMovie, ListPaginatedWatchedDates, LogMovieWithMovie, movieLogsControllerDeleteMutation, movieLogsControllerSetMutation, movieReviewsControllerDeleteMutation, movieReviewsControllerUpsertMutation, movieWatchedDatesControllerDeleteMutation, movieWatchedDatesControllerSetMutation, movieWatchedDatesControllerUpdateMutation, WatchedDate } from '@packages/api-js';
-import { userBookmarkByMediaOptions, userKeys, userMovieLogOptions, userMovieLogsInfiniteOptions, userMovieLogsPaginatedOptions, userMovieWatchedDatesInfiniteOptions, userMovieWatchedDatesPaginatedOptions } from '../users';
+import { FeedItem, ListInfiniteBookmarks, ListInfiniteFeed, ListInfiniteReviewsMovie, ListInfiniteUserMoviesWithMovie, ListInfiniteWatchedDates, ListPaginatedBookmarks, ListPaginatedFeed, ListPaginatedUserMoviesWithMovie, ListPaginatedWatchedDates, LogMovieWithMovieNoReview, movieLogsControllerDeleteMutation, movieLogsControllerSetMutation, movieReviewsControllerDeleteMutation, movieReviewsControllerUpsertMutation, movieWatchedDatesControllerDeleteMutation, movieWatchedDatesControllerSetMutation, movieWatchedDatesControllerUpdateMutation, WatchedDate } from '@packages/api-js';
+import { userBookmarkByMediaOptions, userFeedInfiniteOptions, userFeedPaginatedOptions, userKeys, userMovieLogOptions, userMovieLogsInfiniteOptions, userMovieLogsPaginatedOptions, userMovieWatchedDatesInfiniteOptions, userMovieWatchedDatesPaginatedOptions } from '../users';
 import { movieKeys } from './movieKeys';
 import { removeListItemFromAllCaches, updateFromInfiniteCache, updateListItemInAllCaches } from '../utils';
 import { BookmarkWithMedia } from '../users/types';
@@ -67,9 +67,15 @@ export const useMovieLogSetMutation = () => {
 				queryClient.invalidateQueries({
 					queryKey: userMovieWatchedDatesInfiniteOptions({ userId: data.userId, movieId: data.movieId }).queryKey,
 				});
+
+				queryClient.invalidateQueries({
+					queryKey: userKeys.feed({
+						userId: data.userId,
+					}),
+				});
 			} else {
 				updateListItemInAllCaches<
-					LogMovieWithMovie,
+					LogMovieWithMovieNoReview,
 					ListPaginatedUserMoviesWithMovie,
 					ListInfiniteUserMoviesWithMovie
 				>(
@@ -80,9 +86,30 @@ export const useMovieLogSetMutation = () => {
 					},
 					data
 				);
-			}
 
-			// TODO: invalidate feed
+				updateListItemInAllCaches<
+					FeedItem,
+					ListPaginatedFeed,
+					ListInfiniteFeed
+				>(
+					queryClient,
+					{
+						paginated: userFeedPaginatedOptions({ userId: data.userId }).queryKey,
+						infinite: userFeedInfiniteOptions({ userId: data.userId }).queryKey,
+					},
+					(old) => {
+						if (old.activityType !== 'log_movie') return old;
+						return {
+							...old,
+							content: {
+								...old.content,
+								...data,
+							}
+						}
+					},
+					(item) => item.activityType === 'log_movie' && item.content.id === data.id
+				);
+			}
 		}
 	});
 }
@@ -101,8 +128,6 @@ export const useMovieLogDeleteMutation = () => {
 				userId: data.userId,
 				movieId: data.movieId,
 			}).queryKey, null);
-
-			// TODO: invalidate feed
 
 			if (data.review) {
 				const reviewId = data.review.id;
@@ -132,6 +157,16 @@ export const useMovieLogDeleteMutation = () => {
 					infinite: userMovieLogsInfiniteOptions({ userId: data.userId }).queryKey,
 				},
 				data.id
+			);
+
+			// Feed
+			removeListItemFromAllCaches(
+				queryClient,
+				{
+					paginated: userFeedPaginatedOptions({ userId: data.userId }).queryKey,
+					infinite: userFeedInfiniteOptions({ userId: data.userId }).queryKey,
+				},
+				(old: FeedItem) => old.activityType === 'log_movie' && old.content.id === data.id
 			);
 		}
 	});

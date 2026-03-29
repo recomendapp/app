@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { Playlist, ListPaginatedPlaylists, ListInfinitePlaylists, ListPaginatedPlaylistsWithOwner, ListInfinitePlaylistsWithOwner, PlaylistsAddTarget, ListPaginatedPlaylistsAddTargets, ListInfinitePlaylistsAddTargets } from "@packages/api-js";
+import { Playlist, ListPaginatedPlaylists, ListInfinitePlaylists, ListPaginatedPlaylistsWithOwner, ListInfinitePlaylistsWithOwner, PlaylistsAddTarget, ListPaginatedPlaylistsAddTargets, ListInfinitePlaylistsAddTargets, FeedItem, ListPaginatedFeed, ListInfiniteFeed } from "@packages/api-js";
 import { playlistOptions } from "./playlistOptions";
-import { userPlaylistsPaginatedOptions, userPlaylistsInfiniteOptions, userPlaylistsFollowingPaginatedOptions, userPlaylistsFollowingInfiniteOptions } from "../users";
+import { userPlaylistsPaginatedOptions, userPlaylistsInfiniteOptions, userPlaylistsFollowingPaginatedOptions, userPlaylistsFollowingInfiniteOptions, userFeedPaginatedOptions, userFeedInfiniteOptions } from "../users";
 import { moviePlaylistsPaginatedOptions, moviePlaylistsInfiniteOptions } from "../movies";
 import { tvSeriesPlaylistsPaginatedOptions, tvSeriesPlaylistsInfiniteOptions } from "../tv-series";
 import { updateListItemInAllCaches, ItemUpdater, resolveUpdater } from "../utils";
@@ -144,5 +144,30 @@ export const usePlaylistCacheUpdate = ({
             updater,
             playlistId
         );
+
+        // Feed
+        updateListItemInAllCaches<
+            FeedItem,
+            ListPaginatedFeed,
+            ListInfiniteFeed
+        >(
+            queryClient,
+            {
+                paginated: userFeedPaginatedOptions({ userId: targetUserId }).queryKey,
+                infinite: userFeedInfiniteOptions({ userId: targetUserId }).queryKey,
+            },
+            (old) => {
+                if (old.activityType !== 'playlist_like') return old;
+                // how use updater here
+                return {
+                    ...old,
+                    content: {
+                        ...old.content,
+                        ...resolveUpdater(old.content as Playlist, updater),
+                    }
+                }
+            },
+            (item) => item.activityType === 'playlist_like' && item.content.id === playlistId
+        )
     };
 };

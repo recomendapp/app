@@ -1,6 +1,6 @@
-import { ListInfinitePlaylistItems, ListInfinitePlaylistMembers, ListInfinitePlaylistsAddTargets, ListInfinitePlaylistsWithOwner, ListPaginatedPlaylistItems, ListPaginatedPlaylistMembers, ListPaginatedPlaylistsAddTargets, playlistItemsControllerDeleteMutation, playlistItemsControllerUpdateMutation, PlaylistItemWithMedia, playlistMembersControllerAddMutation, playlistMembersControllerDeleteMutation, playlistMembersControllerUpdateMutation, PlaylistMemberWithUser, playlistPosterControllerDeleteMutation, playlistPosterControllerSetMutation, playlistsAddControllerAddMutation, PlaylistsAddTarget, playlistsControllerCreateMutation, playlistsControllerDeleteMutation, playlistsControllerUpdateMutation } from "@packages/api-js";
+import { FeedItem, ListInfiniteFeed, ListInfinitePlaylistItems, ListInfinitePlaylistMembers, ListInfinitePlaylistsAddTargets, ListInfinitePlaylistsWithOwner, ListPaginatedFeed, ListPaginatedPlaylistItems, ListPaginatedPlaylistMembers, ListPaginatedPlaylistsAddTargets, playlistItemsControllerDeleteMutation, playlistItemsControllerUpdateMutation, PlaylistItemWithMedia, playlistMembersControllerAddMutation, playlistMembersControllerDeleteMutation, playlistMembersControllerUpdateMutation, PlaylistMemberWithUser, playlistPosterControllerDeleteMutation, playlistPosterControllerSetMutation, playlistsAddControllerAddMutation, PlaylistsAddTarget, playlistsControllerCreateMutation, playlistsControllerDeleteMutation, playlistsControllerUpdateMutation } from "@packages/api-js";
 import { InfiniteData, useMutation, useQueryClient } from "@tanstack/react-query";
-import { userKeys, userPlaylistsAddTargetsAllOptions, userPlaylistsAddTargetsInfiniteOptions, userPlaylistsAddTargetsPaginatedOptions, userPlaylistsInfiniteOptions, userPlaylistsPaginatedOptions } from "../users";
+import { userFeedInfiniteOptions, userFeedPaginatedOptions, userKeys, userPlaylistsAddTargetsAllOptions, userPlaylistsAddTargetsInfiniteOptions, userPlaylistsAddTargetsPaginatedOptions, userPlaylistsInfiniteOptions, userPlaylistsPaginatedOptions } from "../users";
 import { playlistItemsAllOptions, playlistItemsInfiniteOptions, playlistItemsPaginatedOptions, playlistMembersAllOptions, playlistMembersInfiniteOptions, playlistMembersPaginatedOptions, playlistOptions } from "./playlistOptions";
 import { removeFromInfiniteCache, removeFromPaginatedCache, removeListItemFromAllCaches, updateListItemInAllCaches } from "../utils";
 import { moviePlaylistsInfiniteOptions, moviePlaylistsPaginatedOptions } from "../movies";
@@ -145,6 +145,20 @@ export const usePlaylistDeleteMutation = () => {
 				},
 				data.id
 			);
+
+			// Feed
+			removeListItemFromAllCaches<
+				FeedItem,
+				ListPaginatedFeed,
+				ListInfiniteFeed
+			>(
+				queryClient,
+				{
+					paginated: userFeedPaginatedOptions({ userId: data.userId }).queryKey,
+					infinite: userFeedInfiniteOptions({ userId: data.userId }).queryKey,
+				},
+				(item) => item.activityType === 'playlist_like' && item.content.id === data.id
+			)
 		}
 	});
 };

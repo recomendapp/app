@@ -5,8 +5,11 @@ import {
     ListInfiniteBookmarks,
     ListPaginatedUserTvSeriesWithTvSeries,
     ListInfiniteUserTvSeriesWithTvSeries,
-	LogTvSeriesWithTvSeries,
+	LogTvSeriesWithTvSeriesNoReview,
 	LogTvSeries,
+    FeedItem,
+    ListPaginatedFeed,
+    ListInfiniteFeed,
 } from "@packages/api-js";
 import { tvSeriesLogOptions, tvSeriesReviewsInfiniteOptions, tvSeriesReviewsPaginatedOptions } from "./tvSeriesOptions";
 import { 
@@ -14,7 +17,9 @@ import {
     userTvSeriesLogOptions, 
     userTvSeriesLogsPaginatedOptions, 
     userTvSeriesLogsInfiniteOptions, 
-    userBookmarkByMediaOptions
+    userBookmarkByMediaOptions,
+    userFeedPaginatedOptions,
+    userFeedInfiniteOptions
 } from "../users";
 import { removeListItemFromAllCaches, updateListItemInAllCaches } from "../utils";
 import { BookmarkWithMedia } from "../users/types";
@@ -72,9 +77,12 @@ export const useTvSeriesLogCacheUpdate = ({
             queryClient.invalidateQueries({
                 queryKey: userKeys.tvSeries({ userId }),
             });
+            queryClient.invalidateQueries({
+                queryKey: userKeys.feed({ userId }),
+            });
         } else {
             updateListItemInAllCaches<
-                LogTvSeriesWithTvSeries,
+                LogTvSeriesWithTvSeriesNoReview,
                 ListPaginatedUserTvSeriesWithTvSeries,
                 ListInfiniteUserTvSeriesWithTvSeries
             >(
@@ -84,6 +92,29 @@ export const useTvSeriesLogCacheUpdate = ({
                     infinite: userTvSeriesLogsInfiniteOptions({ userId }).queryKey,
                 },
                 data
+            );
+
+            updateListItemInAllCaches<
+                FeedItem,
+                ListPaginatedFeed,
+                ListInfiniteFeed
+            >(
+                queryClient,
+                {
+                    paginated: userFeedPaginatedOptions({ userId: userId }).queryKey,
+                    infinite: userFeedInfiniteOptions({ userId: userId }).queryKey,
+                },
+                (old) => {
+                    if (old.activityType !== 'log_tv_series') return old;
+                    return {
+                        ...old,
+                        content: {
+                            ...old.content,
+                            ...data,
+                        }
+                    }
+                },
+                (item) => item.activityType === 'log_tv_series' && item.content.id === data.id
             );
         }
     }, [currentUserId, queryClient]);
@@ -115,6 +146,16 @@ export const useTvSeriesLogCacheUpdate = ({
                 infinite: userTvSeriesLogsInfiniteOptions({ userId }).queryKey,
             },
             data.id
+        );
+
+        // Feed
+        removeListItemFromAllCaches(
+            queryClient,
+            {
+                paginated: userFeedPaginatedOptions({ userId: data.userId }).queryKey,
+                infinite: userFeedInfiniteOptions({ userId: data.userId }).queryKey,
+            },
+            (old: FeedItem) => old.activityType === 'log_tv_series' && old.content.id === data.id
         );
     }, [currentUserId, queryClient]);
 

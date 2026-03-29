@@ -14,6 +14,7 @@ import { TableSortOptions } from '@/components/tables/TableSortOptions';
 import { ModalPlaylistMovieQuickAdd } from '@/components/Modals/playlists/ModalPlaylistMovieQuickAdd';
 import { usePlaylist } from '@/hooks/use-playlist';
 import { Playlist } from '@packages/api-js';
+import PlaylistActionLike from '@/components/Playlist/actions/PlaylistActionLike';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -62,7 +63,10 @@ export function DataTableToolbar<TData>({
       <div className="w-full lg:w-fit flex items-center justify-between gap-2">
         <div className='flex items-center gap-2'>
           {playlist && user?.id !== playlist.userId ? (
+          <>
+            <PlaylistActionLike playlistId={playlist.id} />
             <PlaylistActionSave playlistId={playlist.id} />
+          </>
           ) : null}
           <Button
           size={'icon'}

@@ -5,31 +5,36 @@ import { useInView } from "react-intersection-observer";
 import Loader from "@/components/Loader";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
-import { CardFeedActivityMovie } from "@/components/Card/feed/CardFeedActivityMovie";
-import { CardFeedActivityTvSeries } from "@/components/Card/feed/CardFeedActivityTvSeries";
+import { CardFeedLogMovie } from "@/components/Card/feed/CardFeedLogMovie";
+import { CardFeedLogTvSeries } from "@/components/Card/feed/CardFeedLogTvSeries";
 import { CardFeedPlaylistLike } from "@/components/Card/feed/CardFeedPlaylistLike";
 import { CardFeedReviewMovieLike } from "@/components/Card/feed/CardFeedReviewMovieLike";
 import { CardFeedReviewTvSeriesLike } from "@/components/Card/feed/CardFeedReviewTvSeriesLike";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useUserMyFeedInfiniteOptions } from "@/api/client/options/userOptions";
+import { userFeedInfiniteOptions } from "@libs/query-client";
+import { useAuth } from "@/context/auth-context";
+import { Icons } from "@/config/icons";
 
 export default function Feed() {
   const t = useTranslations();
+  const { user } = useAuth();
 
   const { ref, inView } = useInView();
 
   const {
     data: feed,
     isLoading,
+    isFetching,
     fetchNextPage,
-    isFetchingNextPage,
     hasNextPage,
-  } = useInfiniteQuery(useUserMyFeedInfiniteOptions());
+  } = useInfiniteQuery(userFeedInfiniteOptions({
+    userId: user?.id
+  }));
 
   useEffect(() => {
     if (inView && hasNextPage)
       fetchNextPage();
-   }, [inView, hasNextPage, feed, fetchNextPage]);
+   }, [inView, hasNextPage, fetchNextPage]);
 
   return (
     <div className="w-full max-w-2xl">
@@ -37,26 +42,30 @@ export default function Feed() {
         <div className="flex items-center h-full">
           <Loader />
         </div>
-      ) : !isLoading && feed?.pages[0]?.length ? (
+      ) : !isLoading && feed?.pages[0]?.data ? (
         <div className="flex flex-col gap-4">
           {feed.pages.map((page, i) => (
-            page?.map((activity, index) => {
-              const scrollRef = (i === feed.pages.length - 1) && (index === page.length - 1) ? ref : undefined;
-              return (
-                activity.activity_type === 'activity_movie' ? (
-                  <CardFeedActivityMovie ref={scrollRef} key={index} author={activity.author} activity={activity.content} />
-                ) : activity.activity_type === 'activity_tv_series' ? (
-                  <CardFeedActivityTvSeries ref={scrollRef} key={index} author={activity.author} activity={activity.content} />
-                ) : activity.activity_type === 'playlist_like' ? (
-                  <CardFeedPlaylistLike ref={scrollRef} key={index} author={activity.author} playlistLike={activity.content} />
-                ) : activity.activity_type === 'review_movie_like' ? (
-                  <CardFeedReviewMovieLike ref={scrollRef} key={index} author={activity.author} reviewLike={activity.content} />
-                ) : activity.activity_type === 'review_tv_series_like' ? (
-                  <CardFeedReviewTvSeriesLike ref={scrollRef} key={index} author={activity.author} reviewLike={activity.content} />
-                ) : null
-              )
-            })
+            page?.data.map((item, index) => (
+              item.activityType === 'log_movie' ? (
+                <CardFeedLogMovie key={index} data={item} />
+              ) : item.activityType === 'log_tv_series' ? (
+                <CardFeedLogTvSeries key={index} data={item} />
+              ) : item.activityType === 'playlist_like' ? (
+                <CardFeedPlaylistLike key={index} data={item} />
+              ) : item.activityType === 'review_movie_like' ? (
+                <CardFeedReviewMovieLike key={index} data={item} />
+              ) : item.activityType === 'review_tv_series_like' ? (
+                <CardFeedReviewTvSeriesLike key={index} data={item} />
+              ) : null
+            ))
           ))}
+          {isFetching ? (
+            <div className="flex items-center justify-center p-4">
+              <Icons.loader />
+            </div>
+          ): (
+            <div ref={ref} />
+          )}
         </div>
       ) : (
         <div className="text-center text-muted-foreground">

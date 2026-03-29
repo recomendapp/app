@@ -7,6 +7,7 @@ import { PaginatedResponseDto, PaginationQueryDto } from "../../../../common/dto
 import { SortOrder } from "../../../../common/dto/sort.dto";
 import { UserSummaryDto } from "../../../users/dto/users.dto";
 import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from "../../../../common/dto/cursor-pagination.dto";
+import { MovieCompactDto } from "../../../movies/dto/movies.dto";
 
 export enum ReviewMovieSortBy {
 	CREATED_AT = 'created_at',
@@ -104,6 +105,15 @@ export class ReviewMovieWithAuthorDto extends ReviewMovieDto {
 	@ValidateNested()
 	@Type(() => UserSummaryDto)
 	author: UserSummaryDto;
+}
+
+@ApiSchema({ name: 'ReviewMovieWithAuthorMovie' })
+export class ReviewMovieWithAuthorMovieDto extends ReviewMovieWithAuthorDto {
+	@ApiProperty({ type: () => MovieCompactDto, description: 'The movie being reviewed' })
+	@Expose()
+	@ValidateNested()
+	@Type(() => MovieCompactDto)
+	movie: MovieCompactDto;
 }
 
 @ApiSchema({ name: 'ReviewMovieInput' })

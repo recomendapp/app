@@ -1,5 +1,5 @@
 import { ApiSchema, ApiProperty, OmitType, ApiPropertyOptional, IntersectionType } from '@nestjs/swagger';
-import { IsBoolean, IsDateString, IsEnum, IsInt, IsNumber, IsOptional, IsString, Max, Min, ValidateNested } from 'class-validator';
+import { IsBoolean, IsDateString, IsEnum, IsInt, IsNumber, IsOptional, Max, Min, ValidateNested } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { ReviewTvSeriesDto } from '../../reviews/tv-series/dto/review-tv-series.dto';
 import { TvSeriesCompactDto } from '../dto/tv-series.dto';
@@ -142,14 +142,23 @@ export class LogTvSeriesDto {
   }
 }
 
-@ApiSchema({ name: 'LogTvSeriesWithTvSeries' })
-export class LogTvSeriesWithTvSeriesDto extends OmitType(LogTvSeriesDto, ['review']) {
+@ApiSchema({ name: 'LogTvSeriesWithTvSeriesNoReview' })
+export class LogTvSeriesWithTvSeriesNoReviewDto extends OmitType(LogTvSeriesDto, ['review']) {
   @ApiProperty({ example: false })
   @Expose()
   isReviewed: boolean;
 
   @ApiProperty({ description: 'The tv series details' })
   @Type(() => TvSeriesCompactDto)
+  @Expose()
+  tvSeries: TvSeriesCompactDto;
+}
+
+@ApiSchema({ name: 'LogTvSeriesWithTvSeries' })
+export class LogTvSeriesWithTvSeriesDto extends LogTvSeriesDto {
+  @ApiProperty({ description: 'The tv series details' })
+  @Type(() => TvSeriesCompactDto)
+  @Expose()
   tvSeries: TvSeriesCompactDto;
 }
 

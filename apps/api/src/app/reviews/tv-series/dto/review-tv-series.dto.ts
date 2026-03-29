@@ -7,6 +7,7 @@ import { PaginatedResponseDto, PaginationQueryDto } from "../../../../common/dto
 import { SortOrder } from "../../../../common/dto/sort.dto";
 import { UserSummaryDto } from "../../../users/dto/users.dto";
 import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from "../../../../common/dto/cursor-pagination.dto";
+import { TvSeriesCompactDto } from "../../../tv-series/dto/tv-series.dto";
 
 export enum ReviewTvSeriesSortBy {
 	CREATED_AT = 'created_at',
@@ -104,6 +105,15 @@ export class ReviewTvSeriesWithAuthorDto extends ReviewTvSeriesDto {
 	@ValidateNested()
 	@Type(() => UserSummaryDto)
 	author: UserSummaryDto;
+}
+
+@ApiSchema({ name: 'ReviewTvSeriesWithAuthorTvSeries' })
+export class ReviewTvSeriesWithAuthorTvSeriesDto extends ReviewTvSeriesWithAuthorDto {
+	@ApiProperty({ type: () => TvSeriesCompactDto, description: 'The tv series being reviewed' })
+	@Expose()
+	@ValidateNested()
+	@Type(() => TvSeriesCompactDto)
+	tvSeries: TvSeriesCompactDto;
 }
 
 @ApiSchema({ name: 'ReviewTvSeriesInput' })

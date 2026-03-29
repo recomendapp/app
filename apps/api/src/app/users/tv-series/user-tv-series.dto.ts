@@ -5,7 +5,7 @@ import { UserSummaryDto } from '../dto/users.dto';
 import { PaginatedResponseDto } from '../../../common/dto/pagination.dto';
 import { CursorPaginatedResponseDto } from '../../../common/dto/cursor-pagination.dto';
 import { TvSeriesCompactDto } from '../../tv-series/dto/tv-series.dto';
-import { LogTvSeriesDto, LogTvSeriesWithTvSeriesDto } from '../../tv-series/logs/tv-series-logs.dto';
+import { LogTvSeriesDto, LogTvSeriesWithTvSeriesNoReviewDto } from '../../tv-series/logs/tv-series-logs.dto';
 
 @ApiSchema({ name: 'UserTvSeriesWithUserTvSeries' })
 export class UserTvSeriesWithUserTvSeriesDto extends LogTvSeriesDto {
@@ -24,10 +24,10 @@ export class UserTvSeriesWithUserTvSeriesDto extends LogTvSeriesDto {
 
 
 @ApiSchema({ name: 'ListPaginatedUserTvSeriesWithTvSeries'})
-export class ListPaginatedUserTvSeriesWithTvSeriesDto extends PaginatedResponseDto<LogTvSeriesWithTvSeriesDto> {
-  @ApiProperty({ type: () => [LogTvSeriesWithTvSeriesDto] })
-  @Type(() => LogTvSeriesWithTvSeriesDto)
-  data: LogTvSeriesWithTvSeriesDto[];
+export class ListPaginatedUserTvSeriesWithTvSeriesDto extends PaginatedResponseDto<LogTvSeriesWithTvSeriesNoReviewDto> {
+  @ApiProperty({ type: () => [LogTvSeriesWithTvSeriesNoReviewDto] })
+  @Type(() => LogTvSeriesWithTvSeriesNoReviewDto)
+  data: LogTvSeriesWithTvSeriesNoReviewDto[];
 
   constructor(partial: Partial<ListPaginatedUserTvSeriesWithTvSeriesDto>) {
     super(partial);
@@ -36,10 +36,10 @@ export class ListPaginatedUserTvSeriesWithTvSeriesDto extends PaginatedResponseD
 }
 
 @ApiSchema({ name: 'ListInfiniteUserTvSeriesWithTvSeries'})
-export class ListInfiniteUserTvSeriesWithTvSeriesDto extends CursorPaginatedResponseDto<LogTvSeriesWithTvSeriesDto> {
-  @ApiProperty({ type: () => [LogTvSeriesWithTvSeriesDto] })
-  @Type(() => LogTvSeriesWithTvSeriesDto)
-  data: LogTvSeriesWithTvSeriesDto[];
+export class ListInfiniteUserTvSeriesWithTvSeriesDto extends CursorPaginatedResponseDto<LogTvSeriesWithTvSeriesNoReviewDto> {
+  @ApiProperty({ type: () => [LogTvSeriesWithTvSeriesNoReviewDto] })
+  @Type(() => LogTvSeriesWithTvSeriesNoReviewDto)
+  data: LogTvSeriesWithTvSeriesNoReviewDto[];
 
   constructor(partial: Partial<ListInfiniteUserTvSeriesWithTvSeriesDto>) {
     super(partial);
