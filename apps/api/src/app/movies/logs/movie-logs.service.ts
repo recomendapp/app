@@ -1,10 +1,10 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { LogMovieRequestDto, LogMovieDto } from './dto/log-movie.dto';
+import { LogMovieRequestDto, LogMovieDto } from './log-movie.dto';
 import { and, avg, desc, eq, isNotNull, sql } from 'drizzle-orm';
 import { bookmark, follow, logMovie, logMovieWatchedDate, profile, reviewMovie, user } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import { FollowingAverageRatingDto, FollowingLogDto, FollowingLogsQueryDto } from './dto/following-log-movie.dto';
+import { MovieFollowingAverageRatingDto, MovieFollowingLogDto, MovieFollowingLogsQueryDto } from './movie-following-logs.dto';
 import { RecosService } from '../../recos/recos.service';
 import { RecoType } from '../../recos/dto/recos.dto';
 import { plainToInstance } from 'class-transformer';
@@ -173,12 +173,16 @@ export class MovieLogsService {
   }
 
   // Following
-  async getFollowingLogs(
+  async getFollowingLogs({
+    currentUser,
+    movieId,
+    dto,
+  }: {
     currentUser: User,
     movieId: number,
-    query: FollowingLogsQueryDto,
-  ): Promise<FollowingLogDto[]> {
-    const { has_rating } = query;
+    dto: MovieFollowingLogsQueryDto,
+  }): Promise<MovieFollowingLogDto[]> {
+    const { has_rating } = dto;
 
     const whereClause = and(
       eq(logMovie.movieId, movieId),
@@ -205,7 +209,7 @@ export class MovieLogsService {
         reviewMovie.id
       )
       .orderBy(desc(logMovie.createdAt));
-    return plainToInstance(FollowingLogDto, rows.map(row => ({
+    return plainToInstance(MovieFollowingLogDto, rows.map(row => ({
       ...row.log,
       user: row.user,
       review: row.review ? {
@@ -216,10 +220,13 @@ export class MovieLogsService {
     })));
   }
 
-  async getFollowingAverageRating(
+  async getFollowingAverageRating({
+    currentUser, 
+    movieId,
+  }: {
     currentUser: User, 
     movieId: number
-  ): Promise<FollowingAverageRatingDto> {
+  }): Promise<MovieFollowingAverageRatingDto> {
     const [result] = await this.db
       .select({
         average: avg(logMovie.rating), 
@@ -237,7 +244,7 @@ export class MovieLogsService {
 
     const averageValue = result?.average ? Number(result.average) : null;
 
-    return plainToInstance(FollowingAverageRatingDto, {
+    return plainToInstance(MovieFollowingAverageRatingDto, {
       averageRating: averageValue !== null ? Math.round(averageValue * 10) / 10 : null,
     });
   }

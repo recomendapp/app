@@ -1,12 +1,14 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { and, eq, sql } from 'drizzle-orm';
-import { logTvSeries, tmdbTvSeries } from '@libs/db/schemas';
+import { and, avg, desc, eq, isNotNull, sql } from 'drizzle-orm';
+import { follow, logTvSeries, profile, reviewTvSeries, tmdbTvSeries, user } from '@libs/db/schemas';
 import { plainToInstance } from 'class-transformer';
 import { WorkerClient } from '@shared/worker';
 import { LogTvSeriesDto, LogTvSeriesRequestDto, LogTvStatus } from './tv-series-logs.dto';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { TvLogsSyncService } from './sync/tv-logs-sync.service';
 import { User } from '../../auth/auth.service';
+import { TvSeriesFollowingAverageRatingDto, TvSeriesFollowingLogDto, TvSeriesFollowingLogsQueryDto } from './tv-series-following-logs.dto';
+import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 
 @Injectable()
 export class TvSeriesLogsService {
@@ -203,5 +205,84 @@ export class TvSeriesLogsService {
         tvSeriesId: deletedLog.tvSeriesId,
       } : null,
     }, { excludeExtraneousValues: true })
+  }
+
+  // Following
+  async getFollowingLogs({
+    currentUser,
+    tvSeriesId,
+    dto,
+  }: {
+    currentUser: User,
+    tvSeriesId: number,
+    dto: TvSeriesFollowingLogsQueryDto,
+  }): Promise<TvSeriesFollowingLogDto[]> {
+    const { has_rating } = dto;
+
+    const whereClause = and(
+      eq(logTvSeries.tvSeriesId, tvSeriesId),
+      eq(follow.followerId, currentUser.id),
+      eq(follow.status, 'accepted'),
+      has_rating ? isNotNull(logTvSeries.rating) : undefined
+    );
+
+    const rows = await this.db
+      .select({
+        log: logTvSeries,
+        review: reviewTvSeries,
+        user: USER_COMPACT_SELECT,
+      })
+      .from(logTvSeries)
+      .innerJoin(follow, eq(follow.followingId, logTvSeries.userId))
+      .innerJoin(user, eq(user.id, logTvSeries.userId))
+      .innerJoin(profile, eq(profile.id, user.id))
+      .leftJoin(reviewTvSeries, eq(reviewTvSeries.id, logTvSeries.id))
+      .where(whereClause)
+      .groupBy(
+        logTvSeries.id,
+        user.id,
+        profile.id,
+        reviewTvSeries.id
+      )
+      .orderBy(desc(logTvSeries.createdAt));
+
+    return plainToInstance(TvSeriesFollowingLogDto, rows.map(row => ({
+      ...row.log,
+      user: row.user,
+      review: row.review ? {
+        ...row.review,
+        userId: row.log.userId,
+        tvSeriesId: row.log.tvSeriesId,
+      } : null,
+    })));
+  }
+
+  async getFollowingAverageRating({
+    currentUser, 
+    tvSeriesId,
+  }: {
+    currentUser: User,
+    tvSeriesId: number,
+  }): Promise<TvSeriesFollowingAverageRatingDto> {
+    const [result] = await this.db
+      .select({
+        average: avg(logTvSeries.rating),
+      })
+      .from(logTvSeries)
+      .innerJoin(follow, eq(follow.followingId, logTvSeries.userId))
+      .where(
+        and(
+          eq(logTvSeries.tvSeriesId, tvSeriesId),
+          eq(follow.followerId, currentUser.id),
+          eq(follow.status, 'accepted'),
+          isNotNull(logTvSeries.rating)
+        )
+      );
+
+    const averageValue = result?.average ? Number(result.average) : null;
+
+    return plainToInstance(TvSeriesFollowingAverageRatingDto, {
+      averageRating: averageValue !== null ? Math.round(averageValue * 10) / 10 : null,
+    });
   }
 }

@@ -185,6 +185,24 @@ migrate_query_to_table \
     "created_at, playlist_id, user_id" \
     "false"
 
+# ==============================================================================
+# 6. PLAYLIST FEATURED
+# ==============================================================================
+
+SQL_FEATURED="
+SELECT 
+    id,
+    created_at
+FROM public.playlists_featured
+"
+
+migrate_query_to_table \
+    "Playlist Featured" \
+    "$SQL_FEATURED" \
+    "playlist_featured" \
+    "playlist_id, created_at" \
+    "false"
+
 
 # ==============================================================================
 # FIN : RESET DES SÉQUENCES

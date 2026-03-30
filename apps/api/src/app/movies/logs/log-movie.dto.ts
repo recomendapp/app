@@ -1,12 +1,12 @@
 import { ApiSchema, ApiProperty, OmitType, ApiPropertyOptional, IntersectionType } from '@nestjs/swagger';
 import { IsBoolean, IsDateString, IsEnum, IsInt, IsNumber, IsOptional, Max, Min, ValidateNested } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
-import { ReviewMovieDto } from '../../../reviews/movie/dto/reviews-movie.dto';
-import { IsNullable } from '../../../../common/decorators/is-nullable.decorator';
-import { MovieCompactDto } from '../../dto/movies.dto';
-import { PaginationQueryDto } from '../../../../common/dto/pagination.dto';
-import { SortOrder } from '../../../../common/dto/sort.dto';
-import { CursorPaginationQueryDto } from '../../../../common/dto/cursor-pagination.dto';
+import { ReviewMovieDto } from '../../reviews/movie/dto/reviews-movie.dto';
+import { IsNullable } from '../../../common/decorators/is-nullable.decorator';
+import { MovieCompactDto } from '../dto/movies.dto';
+import { PaginationQueryDto } from '../../../common/dto/pagination.dto';
+import { SortOrder } from '../../../common/dto/sort.dto';
+import { CursorPaginationQueryDto } from '../../../common/dto/cursor-pagination.dto';
 
 @ApiSchema({ name: 'LogMovieRequest' })
 export class LogMovieRequestDto {

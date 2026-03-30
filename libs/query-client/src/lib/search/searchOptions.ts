@@ -5,14 +5,14 @@ import { searchControllerSearch, SearchControllerSearchData, searchMoviesControl
 export const searchGlobalOptions = ({
 	filters,
 }: {
-	filters: NonNullable<SearchControllerSearchData['query']>
-}) => {
+	filters?: NonNullable<SearchControllerSearchData['query']>
+} = {}) => {
 	return queryOptions({
 		queryKey: searchKeys.global({
 			filters,
 		}),
 		queryFn: async () => {
-			if (!filters.q || !filters.q.length) throw new Error("Query is required");
+			if (!filters?.q || !filters.q.length) throw new Error("Query is required");
 			const { data, error } = await searchControllerSearch({
 				query: filters,
 			});
@@ -235,15 +235,15 @@ export const searchUsersInfiniteOptions = ({
 export const searchPlaylistsPaginatedOptions = ({
 	filters,
 }: {
-	filters: NonNullable<SearchPlaylistsControllerListPaginatedData['query']>
-}) => {
+	filters?: NonNullable<SearchPlaylistsControllerListPaginatedData['query']>
+} = {}) => {
 	return queryOptions({
 		queryKey: searchKeys.playlists({
 			mode: 'paginated',
-			filters,
+			filters: filters!,
 		}),
 		queryFn: async () => {
-			if (!filters.q || !filters.q.length) throw new Error("Query is required");
+			if (!filters?.q || !filters.q.length) throw new Error("Query is required");
 			const { data, error } = await searchPlaylistsControllerListPaginated({
 				query: filters,
 			});
@@ -257,15 +257,15 @@ export const searchPlaylistsPaginatedOptions = ({
 export const searchPlaylistsInfiniteOptions = ({
 	filters,
 }: {
-	filters: Omit<NonNullable<SearchPlaylistsControllerListInfiniteData['query']>, 'cursor'>
-}) => {
+	filters?: Omit<NonNullable<SearchPlaylistsControllerListInfiniteData['query']>, 'cursor'>
+} = {}) => {
 	return infiniteQueryOptions({
 		queryKey: searchKeys.playlists({
 			mode: 'infinite',
-			filters,
+			filters: filters!,
 		}),
 		queryFn: async ({ pageParam }) => {
-			if (!filters.q || !filters.q.length) throw new Error("Query is required");
+			if (!filters?.q || !filters.q.length) throw new Error("Query is required");
 			const { data, error } = await searchPlaylistsControllerListInfinite({
 				query: {
 					...filters,

@@ -6,8 +6,9 @@ import { useModal } from "@/context/modal-context";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useQuery } from "@tanstack/react-query";
-import { useMediaTvSeriesFollowersAvgRatingOptions } from "@/api/client/options/mediaOptions";
 import { ModalUserActivityTvSeriesFollowersRating } from "../Modals/activities/ModalUserActivityTvSeriesFollowersRating";
+import { tvSeriesFollowingAverageRatingOptions } from "@libs/query-client";
+import { useAuth } from "@/context/auth-context";
 
 interface ButtonFollowersAvgRatingTvSeriesProps
 	extends React.ComponentProps<typeof Button> {
@@ -19,15 +20,17 @@ const ButtonFollowersAvgRatingTvSeries = forwardRef<
 	React.ComponentRef<typeof Button>,
 	ButtonFollowersAvgRatingTvSeriesProps
 >(({ tvSeriesId, stopPropagation = true, onClick, className, ...props }, ref) => {
+	const { user } = useAuth();
 	const t = useTranslations();
 	const { openModal } = useModal();
 
 	const {
 		data,
 		isLoading
-	} = useQuery(useMediaTvSeriesFollowersAvgRatingOptions({
+	} = useQuery(tvSeriesFollowingAverageRatingOptions({
+		userId: user?.id,
 		tvSeriesId: tvSeriesId,
-	}))
+	}));
 
 	const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		stopPropagation && e.stopPropagation();
@@ -38,7 +41,7 @@ const ButtonFollowersAvgRatingTvSeries = forwardRef<
 		}
 	}, [stopPropagation, onClick, openModal, tvSeriesId]);
 
-	if (!data?.follower_avg_rating || isLoading) return null;
+	if (!data?.averageRating || isLoading) return null;
 
 	return (
 	<TooltipBox tooltip={upperFirst(t('common.messages.followers_ratings'))}>
@@ -49,7 +52,7 @@ const ButtonFollowersAvgRatingTvSeries = forwardRef<
 		onClick={handleClick}
 		{...props}
 		>
-			<p className="font-bold text-lg">{data.follower_avg_rating}</p>
+			<p className="font-bold text-lg">{data.averageRating}</p>
 		</Button>
 	</TooltipBox>
 	);

@@ -166,194 +166,194 @@ import { playlistOptions, userPlaylistsInfiniteOptions } from '@libs/query-clien
 // };
 
 // Realtime
-export const usePlaylistItemsMovieRealtimeMutation = ({
-	playlistId
-} : {
-	playlistId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	const options = usePlaylistMovieItemsOptions({ playlistId });
-	return useMutation({
-		mutationFn: async ({
-			event,
-			payload,
-		} : {
-			event: string;
-			payload: {
-				old: PlaylistItemMovie;
-				new: PlaylistItemMovie;
-			}
-		}) => {
-			const newPlaylistItems = [...queryClient.getQueryData(options.queryKey) || []];
-			if (!newPlaylistItems.length) throw new Error('playlist items is undefined');
-			switch (event) {
-				case 'INSERT':
-					if (payload.new.playlist_id !== playlistId) throw new Error('Invalid playlist id');
-					const { error: insertError, data: insertData } = await supabase
-						.from('playlist_items_movie')
-						.select(`*, movie:media_movie(*)`)
-						.eq('id', payload.new.id)
-						.single();
-					if (insertError) throw insertError;
-					newPlaylistItems.forEach(item => {
-						if (item.rank >= payload.new.rank) {
-							item.rank++;
-						}
-					});
-					newPlaylistItems.push({
-						...payload.new,
-						movie: insertData.movie
-					});
-					break;
-				case 'UPDATE':
-					if (!payload.new.playlist_id) throw new Error('Invalid playlist id');
-					const itemIndex = newPlaylistItems.findIndex((item) => item.id === payload.new.id);
-					if (itemIndex === -1) throw new Error('Missing item');
+// export const usePlaylistItemsMovieRealtimeMutation = ({
+// 	playlistId
+// } : {
+// 	playlistId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	const options = usePlaylistMovieItemsOptions({ playlistId });
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			event,
+// 			payload,
+// 		} : {
+// 			event: string;
+// 			payload: {
+// 				old: PlaylistItemMovie;
+// 				new: PlaylistItemMovie;
+// 			}
+// 		}) => {
+// 			const newPlaylistItems = [...queryClient.getQueryData(options.queryKey) || []];
+// 			if (!newPlaylistItems.length) throw new Error('playlist items is undefined');
+// 			switch (event) {
+// 				case 'INSERT':
+// 					if (payload.new.playlist_id !== playlistId) throw new Error('Invalid playlist id');
+// 					const { error: insertError, data: insertData } = await supabase
+// 						.from('playlist_items_movie')
+// 						.select(`*, movie:media_movie(*)`)
+// 						.eq('id', payload.new.id)
+// 						.single();
+// 					if (insertError) throw insertError;
+// 					newPlaylistItems.forEach(item => {
+// 						if (item.rank >= payload.new.rank) {
+// 							item.rank++;
+// 						}
+// 					});
+// 					newPlaylistItems.push({
+// 						...payload.new,
+// 						movie: insertData.movie
+// 					});
+// 					break;
+// 				case 'UPDATE':
+// 					if (!payload.new.playlist_id) throw new Error('Invalid playlist id');
+// 					const itemIndex = newPlaylistItems.findIndex((item) => item.id === payload.new.id);
+// 					if (itemIndex === -1) throw new Error('Missing item');
 
-					if (payload.old.rank !== payload.new.rank) {
-						if (payload.old.rank < payload.new.rank) {
-							newPlaylistItems.forEach(item => {
-							if (item.rank > payload.old.rank && item.rank <= payload.new.rank) {
-								item.rank--;
-							}
-							});
-						}
-						if (payload.old.rank > payload.new.rank) {
-							newPlaylistItems.forEach(item => {
-							if (item.rank < payload.old.rank && item.rank >= payload.new.rank) {
-								item.rank++;
-							}
-							});
-						}
-					}
-					newPlaylistItems[itemIndex] = {
-						...newPlaylistItems[itemIndex],
-						...payload.new
-					};
-					break;
-				case 'DELETE':
-					if (!payload.old.playlist_id) throw new Error('Invalid playlist id');
-					const deleteIndex = newPlaylistItems.findIndex((item) => item.id === payload.old.id);
-					if (deleteIndex === -1) throw new Error('Missing item');
-					newPlaylistItems.splice(deleteIndex, 1);
+// 					if (payload.old.rank !== payload.new.rank) {
+// 						if (payload.old.rank < payload.new.rank) {
+// 							newPlaylistItems.forEach(item => {
+// 							if (item.rank > payload.old.rank && item.rank <= payload.new.rank) {
+// 								item.rank--;
+// 							}
+// 							});
+// 						}
+// 						if (payload.old.rank > payload.new.rank) {
+// 							newPlaylistItems.forEach(item => {
+// 							if (item.rank < payload.old.rank && item.rank >= payload.new.rank) {
+// 								item.rank++;
+// 							}
+// 							});
+// 						}
+// 					}
+// 					newPlaylistItems[itemIndex] = {
+// 						...newPlaylistItems[itemIndex],
+// 						...payload.new
+// 					};
+// 					break;
+// 				case 'DELETE':
+// 					if (!payload.old.playlist_id) throw new Error('Invalid playlist id');
+// 					const deleteIndex = newPlaylistItems.findIndex((item) => item.id === payload.old.id);
+// 					if (deleteIndex === -1) throw new Error('Missing item');
+// 					newPlaylistItems.splice(deleteIndex, 1);
 
-					newPlaylistItems.forEach(item => {
-						if (item.rank > payload.old.rank) {
-							item.rank--;
-						}
-					});
-					break;
-				default:
-					break;
-			};
-			newPlaylistItems.sort((a, b) => a.rank - b.rank);
-			return newPlaylistItems;
-		},
-		onSuccess: (newPlaylistItems) => {
-			newPlaylistItems && queryClient.setQueryData(options.queryKey, newPlaylistItems);
-		},
-		onError: (error) => {
-			queryClient.invalidateQueries({
-				queryKey: options.queryKey,
-			});
-		}
-	});
-};
-export const usePlaylistItemsTvSeriesRealtimeMutation = ({
-	playlistId
-} : {
-	playlistId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
-	const options = usePlaylistTvSeriesItemsOptions({ playlistId });
-	return useMutation({
-		mutationFn: async ({
-			event,
-			payload,
-		} : {
-			event: string;
-			payload: {
-				old: PlaylistItemTvSeries;
-				new: PlaylistItemTvSeries;
-			}
-		}) => {
-			const newPlaylistItems = [...queryClient.getQueryData(options.queryKey) || []];
-			if (!newPlaylistItems.length) throw new Error('playlist items is undefined');
-			switch (event) {
-				case 'INSERT':
-					if (payload.new.playlist_id !== playlistId) throw new Error('Invalid playlist id');
-					const { error: insertError, data: insertData } = await supabase
-						.from('playlist_items_tv_series')
-						.select(`*, tv_series:media_tv_series(*)`)
-						.eq('id', payload.new.id)
-						.single();
-					if (insertError) throw insertError;
-					newPlaylistItems.forEach(item => {
-						if (item.rank >= payload.new.rank) {
-							item.rank++;
-						}
-					});
-					newPlaylistItems.push({
-						...payload.new,
-						tv_series: insertData.tv_series
-					});
-					break;
-				case 'UPDATE':
-					if (!payload.new.playlist_id) throw new Error('Invalid playlist id');
-					const itemIndex = newPlaylistItems.findIndex((item) => item.id === payload.new.id);
-					if (itemIndex === -1) throw new Error('Missing item');
+// 					newPlaylistItems.forEach(item => {
+// 						if (item.rank > payload.old.rank) {
+// 							item.rank--;
+// 						}
+// 					});
+// 					break;
+// 				default:
+// 					break;
+// 			};
+// 			newPlaylistItems.sort((a, b) => a.rank - b.rank);
+// 			return newPlaylistItems;
+// 		},
+// 		onSuccess: (newPlaylistItems) => {
+// 			newPlaylistItems && queryClient.setQueryData(options.queryKey, newPlaylistItems);
+// 		},
+// 		onError: (error) => {
+// 			queryClient.invalidateQueries({
+// 				queryKey: options.queryKey,
+// 			});
+// 		}
+// 	});
+// };
+// export const usePlaylistItemsTvSeriesRealtimeMutation = ({
+// 	playlistId
+// } : {
+// 	playlistId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	const queryClient = useQueryClient();
+// 	const options = usePlaylistTvSeriesItemsOptions({ playlistId });
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			event,
+// 			payload,
+// 		} : {
+// 			event: string;
+// 			payload: {
+// 				old: PlaylistItemTvSeries;
+// 				new: PlaylistItemTvSeries;
+// 			}
+// 		}) => {
+// 			const newPlaylistItems = [...queryClient.getQueryData(options.queryKey) || []];
+// 			if (!newPlaylistItems.length) throw new Error('playlist items is undefined');
+// 			switch (event) {
+// 				case 'INSERT':
+// 					if (payload.new.playlist_id !== playlistId) throw new Error('Invalid playlist id');
+// 					const { error: insertError, data: insertData } = await supabase
+// 						.from('playlist_items_tv_series')
+// 						.select(`*, tv_series:media_tv_series(*)`)
+// 						.eq('id', payload.new.id)
+// 						.single();
+// 					if (insertError) throw insertError;
+// 					newPlaylistItems.forEach(item => {
+// 						if (item.rank >= payload.new.rank) {
+// 							item.rank++;
+// 						}
+// 					});
+// 					newPlaylistItems.push({
+// 						...payload.new,
+// 						tv_series: insertData.tv_series
+// 					});
+// 					break;
+// 				case 'UPDATE':
+// 					if (!payload.new.playlist_id) throw new Error('Invalid playlist id');
+// 					const itemIndex = newPlaylistItems.findIndex((item) => item.id === payload.new.id);
+// 					if (itemIndex === -1) throw new Error('Missing item');
 
-					if (payload.old.rank !== payload.new.rank) {
-						if (payload.old.rank < payload.new.rank) {
-							newPlaylistItems.forEach(item => {
-							if (item.rank > payload.old.rank && item.rank <= payload.new.rank) {
-								item.rank--;
-							}
-							});
-						}
-						if (payload.old.rank > payload.new.rank) {
-							newPlaylistItems.forEach(item => {
-							if (item.rank < payload.old.rank && item.rank >= payload.new.rank) {
-								item.rank++;
-							}
-							});
-						}
-					}
-					newPlaylistItems[itemIndex] = {
-						...newPlaylistItems[itemIndex],
-						...payload.new
-					};
-					break;
-				case 'DELETE':
-					if (!payload.old.playlist_id) throw new Error('Invalid playlist id');
-					const deleteIndex = newPlaylistItems.findIndex((item) => item.id === payload.old.id);
-					if (deleteIndex === -1) throw new Error('Missing item');
-					newPlaylistItems.splice(deleteIndex, 1);
+// 					if (payload.old.rank !== payload.new.rank) {
+// 						if (payload.old.rank < payload.new.rank) {
+// 							newPlaylistItems.forEach(item => {
+// 							if (item.rank > payload.old.rank && item.rank <= payload.new.rank) {
+// 								item.rank--;
+// 							}
+// 							});
+// 						}
+// 						if (payload.old.rank > payload.new.rank) {
+// 							newPlaylistItems.forEach(item => {
+// 							if (item.rank < payload.old.rank && item.rank >= payload.new.rank) {
+// 								item.rank++;
+// 							}
+// 							});
+// 						}
+// 					}
+// 					newPlaylistItems[itemIndex] = {
+// 						...newPlaylistItems[itemIndex],
+// 						...payload.new
+// 					};
+// 					break;
+// 				case 'DELETE':
+// 					if (!payload.old.playlist_id) throw new Error('Invalid playlist id');
+// 					const deleteIndex = newPlaylistItems.findIndex((item) => item.id === payload.old.id);
+// 					if (deleteIndex === -1) throw new Error('Missing item');
+// 					newPlaylistItems.splice(deleteIndex, 1);
 
-					newPlaylistItems.forEach(item => {
-						if (item.rank > payload.old.rank) {
-							item.rank--;
-						}
-					});
-					break;
-				default:
-					break;
-			};
-			newPlaylistItems.sort((a, b) => a.rank - b.rank);
-			return newPlaylistItems;
-		},
-		onSuccess: (newPlaylistItems) => {
-			newPlaylistItems && queryClient.setQueryData(options.queryKey, newPlaylistItems);
-		},
-		onError: (error) => {
-			queryClient.invalidateQueries({
-				queryKey: options.queryKey,
-			});
-		}
-	});
-};
+// 					newPlaylistItems.forEach(item => {
+// 						if (item.rank > payload.old.rank) {
+// 							item.rank--;
+// 						}
+// 					});
+// 					break;
+// 				default:
+// 					break;
+// 			};
+// 			newPlaylistItems.sort((a, b) => a.rank - b.rank);
+// 			return newPlaylistItems;
+// 		},
+// 		onSuccess: (newPlaylistItems) => {
+// 			newPlaylistItems && queryClient.setQueryData(options.queryKey, newPlaylistItems);
+// 		},
+// 		onError: (error) => {
+// 			queryClient.invalidateQueries({
+// 				queryKey: options.queryKey,
+// 			});
+// 		}
+// 	});
+// };
 
 /* ---------------------------------- ITEMS --------------------------------- */
 // Movie

@@ -8,6 +8,7 @@ import { upperFirst } from "lodash";
 import { ModalUserActivityMovieFollowersRating } from "../Modals/activities/ModalUserActivityMovieFollowersRating";
 import { useQuery } from "@tanstack/react-query";
 import { movieFollowingAverageRatingOptions } from "@libs/query-client";
+import { useAuth } from "@/context/auth-context";
 
 interface ButtonFollowersAvgRatingMovieProps
 	extends React.ComponentProps<typeof Button> {
@@ -19,6 +20,7 @@ const ButtonFollowersAvgRatingMovie = forwardRef<
 	React.ComponentRef<typeof Button>,
 	ButtonFollowersAvgRatingMovieProps
 >(({ movieId, stopPropagation = true, onClick, className, ...props }, ref) => {
+	const { user } = useAuth();
 	const t = useTranslations();
 	const { openModal } = useModal();
 
@@ -26,8 +28,9 @@ const ButtonFollowersAvgRatingMovie = forwardRef<
 		data,
 		isLoading
 	} = useQuery(movieFollowingAverageRatingOptions({
+		userId: user?.id,
 		movieId: movieId,
-	}))
+	}));
 
 	const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		stopPropagation && e.stopPropagation();

@@ -1,8 +1,8 @@
 'use client'
 
-import { usePlaylistsFeaturedOptions } from '@/api/client/options/playlistOptions';
 import { CardPlaylist } from '@/components/Card/CardPlaylist';
 import { Skeleton } from '@/components/ui/skeleton';
+import { playlistFeaturedInfiniteOptions } from '@libs/query-client/src';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
@@ -14,13 +14,7 @@ export const FeaturedPlaylists = () => {
     isLoading,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery(usePlaylistsFeaturedOptions({
-    filters: {
-      perPage: 40,
-      sortBy: 'created_at',
-      sortOrder: 'desc',
-    }
-  }));
+  } = useInfiniteQuery(playlistFeaturedInfiniteOptions());
 
   useEffect(() => {
     if (inView && hasNextPage)
@@ -34,14 +28,15 @@ export const FeaturedPlaylists = () => {
           <Skeleton key={index} className="w-full aspect-square rounded-md" />
         ))
       ) : data?.pages?.map((page, i) => (
-        page?.map((playlist, index) => (
+        page?.data.map(({ owner, ...playlist }, index) => (
           <CardPlaylist
           key={i}
-          ref={(i === data.pages.length - 1) && (index === page.length - 1) ? ref : undefined}
           playlist={playlist}
+          owner={owner}
           />
         )
       )))}
+      <div ref={ref} />
     </div>
   );
 }

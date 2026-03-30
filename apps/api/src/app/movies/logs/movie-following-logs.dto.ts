@@ -2,10 +2,10 @@ import { ApiSchema, ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsBoolean, IsOptional } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { LogMovieDto } from './log-movie.dto';
-import { UserSummaryDto } from '../../../users/dto/users.dto';
+import { UserSummaryDto } from '../../users/dto/users.dto';
 
-@ApiSchema({ name: 'FollowingLogsQuery' })
-export class FollowingLogsQueryDto {
+@ApiSchema({ name: 'MovieFollowingLogsQuery' })
+export class MovieFollowingLogsQueryDto {
   @ApiPropertyOptional({
     description: 'Filter logs to only include those with a rating (useful for charts)',
     example: true,
@@ -16,15 +16,15 @@ export class FollowingLogsQueryDto {
   has_rating?: boolean;
 }
 
-@ApiSchema({ name: 'FollowingLog' })
-export class FollowingLogDto extends LogMovieDto {
+@ApiSchema({ name: 'MovieFollowingLog' })
+export class MovieFollowingLogDto extends LogMovieDto {
   @ApiProperty({ type: () => UserSummaryDto })
   @Type(() => UserSummaryDto)
   user: UserSummaryDto;
 }
 
-@ApiSchema({ name: 'FollowingAverageRating' })
-export class FollowingAverageRatingDto {
+@ApiSchema({ name: 'MovieFollowingAverageRating' })
+export class MovieFollowingAverageRatingDto {
   @ApiProperty({
     description: 'The average rating given by the users the authenticated user follows',
     example: 7.5,

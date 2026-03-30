@@ -60,4 +60,16 @@ export const tvSeriesKeys = {
 	}: {
 		tvSeriesId: number;
 	}) => [...tvSeriesKeys.details({ tvSeriesId }), 'log'] as const,
+
+	followingLogs: ({
+		tvSeriesId,
+	}: {
+		tvSeriesId: number;
+	}) => [...tvSeriesKeys.details({ tvSeriesId }), 'following-logs'] as const,
+
+	followingAverageRating: ({
+		tvSeriesId,
+	}: {
+		tvSeriesId: number;
+	}) => [...tvSeriesKeys.details({ tvSeriesId }), 'following-average-rating'] as const,
 };

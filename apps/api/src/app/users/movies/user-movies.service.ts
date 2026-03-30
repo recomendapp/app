@@ -5,7 +5,7 @@ import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { ListInfiniteUserMoviesWithMovieDto, ListPaginatedUserMoviesWithMovieDto, UserMovieWithUserMovieDto } from './user-movies.dto';
 import { SupportedLocale } from '@libs/i18n';
-import { ListInfiniteLogsMovieQueryDto, ListPaginatedLogsMovieQueryDto, LogMovieSortBy } from '../../movies/logs/dto/log-movie.dto';
+import { ListInfiniteLogsMovieQueryDto, ListPaginatedLogsMovieQueryDto, LogMovieSortBy } from '../../movies/logs/log-movie.dto';
 import { DbTransaction } from '@libs/db';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';

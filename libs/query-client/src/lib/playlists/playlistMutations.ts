@@ -1,12 +1,13 @@
-import { FeedItem, ListInfiniteFeed, ListInfinitePlaylistItems, ListInfinitePlaylistMembers, ListInfinitePlaylistsAddTargets, ListInfinitePlaylistsWithOwner, ListPaginatedFeed, ListPaginatedPlaylistItems, ListPaginatedPlaylistMembers, ListPaginatedPlaylistsAddTargets, playlistItemsControllerDeleteMutation, playlistItemsControllerUpdateMutation, PlaylistItemWithMedia, playlistMembersControllerAddMutation, playlistMembersControllerDeleteMutation, playlistMembersControllerUpdateMutation, PlaylistMemberWithUser, playlistPosterControllerDeleteMutation, playlistPosterControllerSetMutation, playlistsAddControllerAddMutation, PlaylistsAddTarget, playlistsControllerCreateMutation, playlistsControllerDeleteMutation, playlistsControllerUpdateMutation } from "@packages/api-js";
+import { FeedItem, ListInfiniteFeed, ListInfinitePlaylistItems, ListInfinitePlaylistMembers, ListInfinitePlaylists, ListInfinitePlaylistsAddTargets, ListInfinitePlaylistsWithOwner, ListPaginatedFeed, ListPaginatedPlaylistItems, ListPaginatedPlaylistMembers, ListPaginatedPlaylists, ListPaginatedPlaylistsAddTargets, Playlist, playlistItemsControllerDeleteMutation, playlistItemsControllerUpdateMutation, PlaylistItemWithMedia, playlistMembersControllerAddMutation, playlistMembersControllerDeleteMutation, playlistMembersControllerUpdateMutation, PlaylistMemberWithUser, playlistPosterControllerDeleteMutation, playlistPosterControllerSetMutation, playlistsAddControllerAddMutation, PlaylistsAddTarget, playlistsControllerCreateMutation, playlistsControllerDeleteMutation, playlistsControllerUpdateMutation, SearchResponse } from "@packages/api-js";
 import { InfiniteData, useMutation, useQueryClient } from "@tanstack/react-query";
 import { userFeedInfiniteOptions, userFeedPaginatedOptions, userKeys, userPlaylistsAddTargetsAllOptions, userPlaylistsAddTargetsInfiniteOptions, userPlaylistsAddTargetsPaginatedOptions, userPlaylistsInfiniteOptions, userPlaylistsPaginatedOptions } from "../users";
-import { playlistItemsAllOptions, playlistItemsInfiniteOptions, playlistItemsPaginatedOptions, playlistMembersAllOptions, playlistMembersInfiniteOptions, playlistMembersPaginatedOptions, playlistOptions } from "./playlistOptions";
+import { playlistFeaturedInfiniteOptions, playlistFeaturedPaginatedOptions, playlistItemsAllOptions, playlistItemsInfiniteOptions, playlistItemsPaginatedOptions, playlistMembersAllOptions, playlistMembersInfiniteOptions, playlistMembersPaginatedOptions, playlistOptions } from "./playlistOptions";
 import { removeFromInfiniteCache, removeFromPaginatedCache, removeListItemFromAllCaches, updateListItemInAllCaches } from "../utils";
 import { moviePlaylistsInfiniteOptions, moviePlaylistsPaginatedOptions } from "../movies";
 import { tvSeriesPlaylistsInfiniteOptions, tvSeriesPlaylistsPaginatedOptions } from "../tv-series";
 import { usePlaylistCacheUpdate } from "./playlistHooks";
 import { playlistKeys } from "./playlistKeys";
+import { searchGlobalOptions, searchPlaylistsInfiniteOptions, searchPlaylistsPaginatedOptions } from "../search";
 
 export const usePlaylistInsertMutation = () => {
 	const queryClient = useQueryClient();
@@ -158,7 +159,46 @@ export const usePlaylistDeleteMutation = () => {
 					infinite: userFeedInfiniteOptions({ userId: data.userId }).queryKey,
 				},
 				(item) => item.activityType === 'playlist_like' && item.content.id === data.id
-			)
+			);
+
+			// Featured
+			removeListItemFromAllCaches(
+				queryClient,
+				{
+					paginated: playlistFeaturedPaginatedOptions().queryKey,
+					infinite: playlistFeaturedInfiniteOptions().queryKey,
+				},
+				data.id
+			);
+
+			// Search
+			removeListItemFromAllCaches<
+				Playlist,
+				ListPaginatedPlaylists,
+				ListInfinitePlaylists
+			>(
+				queryClient,
+				{
+					paginated: searchPlaylistsPaginatedOptions().queryKey,
+					infinite: searchPlaylistsInfiniteOptions().queryKey,
+				},
+				data.id
+			);
+			queryClient.setQueriesData(
+				{
+					predicate: (query) => {
+						const refKey = searchGlobalOptions().queryKey;
+						return query.queryKey[0] === refKey[0] && query.queryKey[1] === refKey[1];
+					}
+				},
+				(old: SearchResponse) => {
+					if (!old) return old;
+					return {
+						...old,
+						playlists: old.playlists.filter(playlist => playlist.id !== data.id),
+					};
+				}
+			);
 		}
 	});
 };

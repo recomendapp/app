@@ -6,7 +6,7 @@ export const searchKeys = {
 	global: ({
 		filters,
 	} : {
-		filters: NonNullable<SearchControllerSearchData['query']>
+		filters?: NonNullable<SearchControllerSearchData['query']>
 	}) => {
 		const sub = [...(filters ? [filters] : [])] 
 		return [searchKeys.base, 'global', ...sub]
@@ -60,6 +60,7 @@ export const searchKeys = {
 		mode,
 		filters,
 	} : (
+		| { mode?: never; filters?: never }
 		| { mode: 'paginated'; filters: NonNullable<SearchPlaylistsControllerListPaginatedData['query']> }
 		| { mode: 'infinite'; filters: Omit<NonNullable<SearchPlaylistsControllerListInfiniteData['query']>, 'cursor'> }
 	)) => {

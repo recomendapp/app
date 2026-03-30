@@ -225,3 +225,28 @@ export const playlistSavedRelations = relations(playlistSaved, ({ one }) => ({
 		references: [playlist.id],
 	}),
 }));
+
+// Featured
+export const playlistFeatured = pgTable(
+	'playlist_featured',
+	{
+		id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
+		playlistId: bigint('playlist_id', { mode: 'number' })
+		.notNull()
+		.references(() => playlist.id, { onDelete: 'cascade' }),
+		createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
+		.defaultNow()
+		.notNull(),
+	},
+	(table) => [
+		unique('unique_playlist_featured_playlist_id').on(table.playlistId),
+		index('idx_playlist_featured_created_at').on(table.createdAt),
+	]
+);
+
+export const playlistFeaturedRelations = relations(playlistFeatured, ({ one }) => ({
+	playlist: one(playlist, {
+		fields: [playlistFeatured.playlistId],
+		references: [playlist.id],
+	}),
+}));

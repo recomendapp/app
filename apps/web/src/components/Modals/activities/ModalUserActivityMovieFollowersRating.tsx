@@ -18,6 +18,7 @@ import { CardUser } from "@/components/Card/CardUser";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import { useQuery } from "@tanstack/react-query";
 import { movieFollowingLogsOptions } from "@libs/query-client";
+import { useAuth } from "@/context/auth-context";
 
 const chartConfig = {
 	count: {
@@ -34,6 +35,7 @@ export const ModalUserActivityMovieFollowersRating = ({
 	movieId,
 	...props
   } : ModalUserActivityMovieFollowersRatingProps) => {
+	const { user } = useAuth();
 	const t = useTranslations();
 	const { closeModal } = useModal();
 	const {
@@ -41,6 +43,7 @@ export const ModalUserActivityMovieFollowersRating = ({
 		isLoading,
 		isError,
 	} = useQuery(movieFollowingLogsOptions({
+		userId: user?.id,
 		movieId: movieId,
 	}));
 

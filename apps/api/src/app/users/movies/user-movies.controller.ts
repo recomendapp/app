@@ -7,7 +7,7 @@ import { UserMoviesService } from './user-movies.service';
 import { ListInfiniteUserMoviesWithMovieDto, ListPaginatedUserMoviesWithMovieDto, UserMovieWithUserMovieDto } from './user-movies.dto';
 import { CurrentLocale } from '../../../common/decorators/current-locale.decorator';
 import { SupportedLocale } from '@libs/i18n';
-import { ListInfiniteLogsMovieQueryDto, ListPaginatedLogsMovieQueryDto } from '../../movies/logs/dto/log-movie.dto';
+import { ListInfiniteLogsMovieQueryDto, ListPaginatedLogsMovieQueryDto } from '../../movies/logs/log-movie.dto';
 
 @ApiTags('Users')
 @Controller({

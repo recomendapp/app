@@ -1,11 +1,11 @@
 import { Controller, Post, Param, Body, UseGuards, Get, Delete, ParseIntPipe, Query } from '@nestjs/common';
 import { MovieLogsService } from './movie-logs.service';
-import { LogMovieRequestDto, LogMovieDto } from './dto/log-movie.dto';
+import { LogMovieRequestDto, LogMovieDto } from './log-movie.dto';
 import { ApiExtraModels, ApiOkResponse, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { AuthGuard } from '../../auth/guards';
 import { CurrentUser } from '../../auth/decorators';
 import { User } from '../../auth/auth.service';
-import { FollowingAverageRatingDto, FollowingLogDto, FollowingLogsQueryDto } from './dto/following-log-movie.dto';
+import { MovieFollowingAverageRatingDto, MovieFollowingLogDto, MovieFollowingLogsQueryDto } from './movie-following-logs.dto';
 
 @ApiTags('Movies')
 @Controller({
@@ -69,26 +69,33 @@ export class MovieLogsController {
   @UseGuards(AuthGuard)
   @ApiOkResponse({
     description: 'Get all logs for this movie from users the authenticated user follows',
-    type: [FollowingLogDto],
+    type: [MovieFollowingLogDto],
   })
   async getFollowingLogs(
     @Param('movie_id', ParseIntPipe) movieId: number,
-    @Query() query: FollowingLogsQueryDto,
-    @CurrentUser() user: User,
-  ): Promise<FollowingLogDto[]> {
-    return this.logService.getFollowingLogs(user, movieId, query);
+    @Query() dto: MovieFollowingLogsQueryDto,
+    @CurrentUser() currentUser: User,
+  ): Promise<MovieFollowingLogDto[]> {
+    return this.logService.getFollowingLogs({
+      currentUser,
+      movieId,
+      dto,
+    });
   }
 
   @Get('following/average-rating')
   @UseGuards(AuthGuard)
   @ApiOkResponse({
     description: 'Get the average rating for this movie from users the authenticated user follows',
-    type: FollowingAverageRatingDto,
+    type: MovieFollowingAverageRatingDto,
   })
   async getFollowingAverageRating(
     @Param('movie_id', ParseIntPipe) movieId: number,
-    @CurrentUser() user: User,
-  ): Promise<FollowingAverageRatingDto> {
-    return this.logService.getFollowingAverageRating(user, movieId);
+    @CurrentUser() currentUser: User,
+  ): Promise<MovieFollowingAverageRatingDto> {
+    return this.logService.getFollowingAverageRating({
+      currentUser,
+      movieId,
+    });
   }
 }

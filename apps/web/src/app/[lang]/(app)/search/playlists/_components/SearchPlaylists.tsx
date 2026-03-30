@@ -65,11 +65,12 @@ export const SearchResults = ({
           <Skeleton key={index} className="w-full aspect-square rounded-md" style={{ animationDelay: `${index * 0.12}s`}} />
         ))
       ) : playlists?.pages?.map((page, i) => (
-          page.data.map((playlist, index) => (
+          page.data.map(({ owner, ...playlist }, index) => (
             <CardPlaylist
             key={i}
             ref={(i === playlists.pages.length - 1) && (index === page.data.length - 1) ? ref : undefined}
             playlist={playlist}
+            owner={owner}
             />
           )
         ))

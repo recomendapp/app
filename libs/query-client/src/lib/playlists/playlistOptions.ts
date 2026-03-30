@@ -1,6 +1,6 @@
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query"
 import { playlistKeys } from "./playlistKeys"
-import { playlistItemsControllerListAll, PlaylistItemsControllerListAllData, playlistItemsControllerListInfinite, PlaylistItemsControllerListInfiniteData, playlistItemsControllerListPaginated, PlaylistItemsControllerListPaginatedData, playlistMembersControllerListAll, PlaylistMembersControllerListAllData, playlistMembersControllerListInfinite, PlaylistMembersControllerListInfiniteData, playlistMembersControllerListPaginated, PlaylistMembersControllerListPaginatedData, playlistsControllerGet } from "@packages/api-js";
+import { playlistFeaturedControllerListInfinite, PlaylistFeaturedControllerListInfiniteData, playlistFeaturedControllerListPaginated, PlaylistFeaturedControllerListPaginatedData, playlistItemsControllerListAll, PlaylistItemsControllerListAllData, playlistItemsControllerListInfinite, PlaylistItemsControllerListInfiniteData, playlistItemsControllerListPaginated, PlaylistItemsControllerListPaginatedData, playlistMembersControllerListAll, PlaylistMembersControllerListAllData, playlistMembersControllerListInfinite, PlaylistMembersControllerListInfiniteData, playlistMembersControllerListPaginated, PlaylistMembersControllerListPaginatedData, playlistsControllerGet } from "@packages/api-js";
 
 export const playlistOptions = ({
 	playlistId,
@@ -205,5 +205,55 @@ export const playlistMembersInfiniteOptions = ({
 			return lastPage.meta.next_cursor || undefined;
 		},
 		enabled: !!playlistId,
+	});
+};
+
+// Featured
+export const playlistFeaturedPaginatedOptions = ({
+	filters,
+} : {
+	filters?: NonNullable<PlaylistFeaturedControllerListPaginatedData['query']>;
+} = {}) => {
+	return queryOptions({
+		queryKey: playlistKeys.featured({
+			mode: 'paginated',
+			filters,
+		}),
+		queryFn: async () => {
+			const { data, error } = await playlistFeaturedControllerListPaginated({
+				query: filters,
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+	});
+};
+
+export const playlistFeaturedInfiniteOptions = ({
+	filters,
+} : {
+	filters?: Omit<NonNullable<PlaylistFeaturedControllerListInfiniteData['query']>, 'cursor'>;
+} = {}) => {
+	return infiniteQueryOptions({
+		queryKey: playlistKeys.featured({
+			mode: 'infinite',
+			filters,
+		}),
+		queryFn: async ({ pageParam }) => {
+			const { data, error } = await playlistFeaturedControllerListInfinite({
+				query: {
+					...filters,
+					cursor: pageParam,
+				},
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		initialPageParam: undefined as string | undefined,
+		getNextPageParam: (lastPage) => {
+			return lastPage.meta.next_cursor || undefined;
+		},
 	});
 };

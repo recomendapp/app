@@ -17,7 +17,8 @@ import { useTranslations } from "next-intl";
 import { CardUser } from "@/components/Card/CardUser";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import { useQuery } from "@tanstack/react-query";
-import { useMediaTvSeriesFollowersRatingOptions } from "@/api/client/options/mediaOptions";
+import { tvSeriesFollowingLogsOptions } from "@libs/query-client/src";
+import { useAuth } from "@/context/auth-context";
 
 const chartConfig = {
 	count: {
@@ -34,13 +35,15 @@ export const ModalUserActivityTvSeriesFollowersRating = ({
 	tvSeriesId,
 	...props
   } : ModalUserActivityTvSeriesFollowersRatingProps) => {
+	const { user } = useAuth();
 	const t = useTranslations();
 	const { closeModal } = useModal();
 	const {
 		data: followersRating,
 		isLoading,
 		isError,
-	} = useQuery(useMediaTvSeriesFollowersRatingOptions({
+	} = useQuery(tvSeriesFollowingLogsOptions({
+		userId: user?.id,
 		tvSeriesId: tvSeriesId,
 	}));
 
@@ -86,7 +89,7 @@ export const ModalUserActivityTvSeriesFollowersRating = ({
 											return (
 												<>
 													{ratings.length ? ratings.map((item) => (
-														item.user ? <CardUser key={item.user_id} user={item.user} variant="inline" /> : null
+														item.user ? <CardUser key={item.userId} user={item.user} variant="inline" /> : null
 													)) : <span className="text-muted-foreground">{upperFirst(t('common.messages.no_rating'))}</span>}
 												</>
 											)
@@ -102,7 +105,7 @@ export const ModalUserActivityTvSeriesFollowersRating = ({
 						<ScrollArea className="h-[10vh]">
 							<div className="grid grid-cols-2 gap-2">
 								{followersRating.map((item) => (
-									<Card key={item.user_id} className="flex items-center justify-between gap-2 p-2">
+									<Card key={item.id} className="flex items-center justify-between gap-2 p-2">
 										{item.user ? <CardUser user={item.user} variant="inline" /> : null}
 										<IconMediaRating
 										rating={item.rating}

@@ -4,7 +4,7 @@ import { IsNullable } from '../../../../../common/decorators/is-nullable.decorat
 import { WATCHED_DATE_RULES } from '../../../../../config/validation-rules';
 import { Expose, Type } from 'class-transformer';
 import { IsDateString, IsEnum, IsIn, IsInt, IsOptional, IsString, Length, Matches, ValidateNested } from 'class-validator';
-import { LogMovieDto } from '../../dto/log-movie.dto';
+import { LogMovieDto } from '../../log-movie.dto';
 import { SortOrder } from '../../../../../common/dto/sort.dto';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../../../common/dto/pagination.dto';
 import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../../../common/dto/cursor-pagination.dto';

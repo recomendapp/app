@@ -1,4 +1,4 @@
-import { PlaylistItemsControllerListAllData, PlaylistItemsControllerListInfiniteData, PlaylistItemsControllerListPaginatedData, PlaylistMembersControllerListAllData, PlaylistMembersControllerListInfiniteData, PlaylistMembersControllerListPaginatedData } from "@packages/api-js";
+import { PlaylistFeaturedControllerListInfiniteData, PlaylistFeaturedControllerListPaginatedData, PlaylistItemsControllerListAllData, PlaylistItemsControllerListInfiniteData, PlaylistItemsControllerListPaginatedData, PlaylistMembersControllerListAllData, PlaylistMembersControllerListInfiniteData, PlaylistMembersControllerListPaginatedData } from "@packages/api-js";
 
 export const playlistKeys = {
 	base: ['playlist'] as const,
@@ -39,5 +39,17 @@ export const playlistKeys = {
 	)) => {
 		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
 		return [...playlistKeys.details({ playlistId }), 'members', ...optionsKey] as const;
+	},
+
+	featured: ({
+		mode,
+		filters,
+	}: (
+		| { mode?: never; filters?: never }
+		| { mode: 'paginated'; filters?: NonNullable<PlaylistFeaturedControllerListPaginatedData['query']> }
+		| { mode: 'infinite'; filters?: Omit<NonNullable<PlaylistFeaturedControllerListInfiniteData['query']>, 'cursor'> }
+	)) => {
+		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
+		return [...playlistKeys.base, 'featured', ...optionsKey] as const;
 	},
 }

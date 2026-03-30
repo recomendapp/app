@@ -10,6 +10,7 @@ import { PlaylistsAddModule } from './add/playlists-add.module';
 import { PlaylistItemsModule } from './items/playlist-items.module';
 import { PlaylistsGateway } from './playlists.gateway';
 import { SharedWorkerModule } from '@shared/worker';
+import { PlaylistFeaturedModule } from './featured/playlist-featured.module';
 
 
 @Module({
@@ -22,6 +23,7 @@ import { SharedWorkerModule } from '@shared/worker';
     PlaylistMembersModule,
     PlaylistsAddModule,
     PlaylistItemsModule,
+    PlaylistFeaturedModule,
   ],
   controllers: [PlaylistsController],
   providers: [

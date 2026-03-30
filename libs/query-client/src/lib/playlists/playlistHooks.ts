@@ -1,10 +1,11 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { Playlist, ListPaginatedPlaylists, ListInfinitePlaylists, ListPaginatedPlaylistsWithOwner, ListInfinitePlaylistsWithOwner, PlaylistsAddTarget, ListPaginatedPlaylistsAddTargets, ListInfinitePlaylistsAddTargets, FeedItem, ListPaginatedFeed, ListInfiniteFeed } from "@packages/api-js";
-import { playlistOptions } from "./playlistOptions";
+import { Playlist, ListPaginatedPlaylists, ListInfinitePlaylists, ListPaginatedPlaylistsWithOwner, ListInfinitePlaylistsWithOwner, PlaylistsAddTarget, ListPaginatedPlaylistsAddTargets, ListInfinitePlaylistsAddTargets, FeedItem, ListPaginatedFeed, ListInfiniteFeed, SearchResponse } from "@packages/api-js";
+import { playlistFeaturedInfiniteOptions, playlistFeaturedPaginatedOptions, playlistOptions } from "./playlistOptions";
 import { userPlaylistsPaginatedOptions, userPlaylistsInfiniteOptions, userPlaylistsFollowingPaginatedOptions, userPlaylistsFollowingInfiniteOptions, userFeedPaginatedOptions, userFeedInfiniteOptions } from "../users";
 import { moviePlaylistsPaginatedOptions, moviePlaylistsInfiniteOptions } from "../movies";
 import { tvSeriesPlaylistsPaginatedOptions, tvSeriesPlaylistsInfiniteOptions } from "../tv-series";
 import { updateListItemInAllCaches, ItemUpdater, resolveUpdater } from "../utils";
+import { searchGlobalOptions, searchPlaylistsInfiniteOptions, searchPlaylistsPaginatedOptions } from "../search";
 
 export const usePlaylistCacheUpdate = ({
     userId,
@@ -168,6 +169,59 @@ export const usePlaylistCacheUpdate = ({
                 }
             },
             (item) => item.activityType === 'playlist_like' && item.content.id === playlistId
-        )
+        );
+
+        // Featured
+        updateListItemInAllCaches<
+            Playlist,
+            ListPaginatedPlaylists,
+            ListInfinitePlaylists
+        >(
+            queryClient,
+            {
+                paginated: playlistFeaturedPaginatedOptions().queryKey,
+                infinite: playlistFeaturedInfiniteOptions().queryKey,
+            },
+            updater,
+            playlistId
+        );
+
+        // Search
+        updateListItemInAllCaches<
+            Playlist,
+            ListPaginatedPlaylists,
+            ListInfinitePlaylists
+        >(
+            queryClient,
+            {
+                paginated: searchPlaylistsPaginatedOptions().queryKey,
+                infinite: searchPlaylistsInfiniteOptions().queryKey,
+            },
+            updater,
+            playlistId
+        );
+        queryClient.setQueriesData(
+            {
+                predicate: (query) => {
+                    const refKey = searchGlobalOptions().queryKey;
+                    return query.queryKey[0] === refKey[0] && query.queryKey[1] === refKey[1];
+                }
+            },
+            (old: SearchResponse) => {
+                if (!old) return old;
+                const updatedPlaylists = old.playlists?.map((item) => {
+                    if (item.id !== playlistId) return item;
+                    return {
+                        ...item,
+                        ...resolveUpdater(item, updater),
+                    }
+                });
+                if (!updatedPlaylists) return old;
+                return {
+                    ...old,
+                    playlists: updatedPlaylists,
+                };
+            }
+        );
     };
 };

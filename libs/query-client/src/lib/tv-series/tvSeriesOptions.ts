@@ -1,4 +1,4 @@
-import { tvSeriesControllerGet, tvSeriesControllerGetCasting, tvSeriesControllerGetSeasons, tvSeriesLogsControllerGet, tvSeriesPlaylistsControllerListInfinite, TvSeriesPlaylistsControllerListInfiniteData, tvSeriesPlaylistsControllerListPaginated, TvSeriesPlaylistsControllerListPaginatedData, tvSeriesReviewsControllerListInfinite, TvSeriesReviewsControllerListInfiniteData, tvSeriesReviewsControllerListPaginated, TvSeriesReviewsControllerListPaginatedData } from "@packages/api-js";
+import { tvSeriesControllerGet, tvSeriesControllerGetCasting, tvSeriesControllerGetSeasons, tvSeriesLogsControllerGet, tvSeriesLogsControllerGetFollowingAverageRating, tvSeriesLogsControllerGetFollowingLogs, tvSeriesPlaylistsControllerListInfinite, TvSeriesPlaylistsControllerListInfiniteData, tvSeriesPlaylistsControllerListPaginated, TvSeriesPlaylistsControllerListPaginatedData, tvSeriesReviewsControllerListInfinite, TvSeriesReviewsControllerListInfiniteData, tvSeriesReviewsControllerListPaginated, TvSeriesReviewsControllerListPaginatedData } from "@packages/api-js";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { tvSeriesKeys } from "./tvSeriesKeys";
 
@@ -233,5 +233,53 @@ export const tvSeriesLogOptions = ({
 			return data;
 		},
 		enabled: !!tvSeriesId && !!userId,
+	});
+}
+
+export const tvSeriesFollowingLogsOptions = ({
+	userId,
+	tvSeriesId,
+} : {
+	userId?: string;
+	tvSeriesId?: number;
+}) => {
+	return queryOptions({
+		queryKey: tvSeriesKeys.followingLogs({ tvSeriesId: tvSeriesId! }),
+		queryFn: async () => {
+			if (!tvSeriesId) throw new Error('TV Series ID is required');
+			const { data, error } = await tvSeriesLogsControllerGetFollowingLogs({
+				path: {
+					tv_series_id: tvSeriesId,
+				},
+			});
+			if (error) throw error;
+			if (data === undefined) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId && !!tvSeriesId,
+	});
+}
+
+export const tvSeriesFollowingAverageRatingOptions = ({
+	userId,
+	tvSeriesId,
+} : {
+	userId?: string;
+	tvSeriesId?: number;
+}) => {
+	return queryOptions({
+		queryKey: tvSeriesKeys.followingAverageRating({ tvSeriesId: tvSeriesId! }),
+		queryFn: async () => {
+			if (!tvSeriesId) throw new Error('TV Series ID is required');
+			const { data, error } = await tvSeriesLogsControllerGetFollowingAverageRating({
+				path: {
+					tv_series_id: tvSeriesId,
+				},
+			});
+			if (error) throw error;
+			if (data === undefined) throw new Error('No data');
+			return data;
+		},
+		enabled: !!userId && !!tvSeriesId,
 	});
 }

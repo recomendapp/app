@@ -13,7 +13,7 @@ import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../comm
 import { feedTypeEnum } from '@libs/db/schemas';
 import { UserSummaryDto } from '../users/dto/users.dto';
 import { PlaylistDto } from '../playlists/dto/playlists.dto';
-import { LogMovieWithMovieDto } from '../movies/logs/dto/log-movie.dto';
+import { LogMovieWithMovieDto } from '../movies/logs/log-movie.dto';
 import { LogTvSeriesWithTvSeriesDto } from '../tv-series/logs/tv-series-logs.dto';
 import { IsOptional, IsString } from 'class-validator';
 import { ReviewMovieWithAuthorMovieDto } from '../reviews/movie/dto/reviews-movie.dto';

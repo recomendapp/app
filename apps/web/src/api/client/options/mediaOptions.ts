@@ -223,60 +223,60 @@ import { mediaKeys } from "../keys/mediaKeys";
 // 	})
 // }
 
-export const useMediaTvSeriesReviewsOptions = ({
-	tvSeriesId,
-	filters,
-} : {
-	tvSeriesId: number;
-	filters: {
-		perPage: number;
-		sortBy: 'updated_at' | 'created_at';
-		sortOrder: 'asc' | 'desc';
-	};
-}) => {
-	const supabase = useSupabaseClient();
-	return infiniteQueryOptions({
-		queryKey: mediaKeys.tvSeriesReviews({
-			tvSeriesId: tvSeriesId,
-			filters: filters,
-		}),
-		queryFn: async ({ pageParam = 1 }) => {
-			let from = (pageParam - 1) * filters.perPage;
-	  		let to = from + filters.perPage - 1;
-			let request = supabase
-				.from('user_reviews_tv_series')
-				.select(`
-					*,
-					user_activities_tv_series!inner(*, profile(*))
-				`)
-				.eq('user_activities_tv_series.tv_series_id', tvSeriesId)
-				.range(from, to)
+// export const useMediaTvSeriesReviewsOptions = ({
+// 	tvSeriesId,
+// 	filters,
+// } : {
+// 	tvSeriesId: number;
+// 	filters: {
+// 		perPage: number;
+// 		sortBy: 'updated_at' | 'created_at';
+// 		sortOrder: 'asc' | 'desc';
+// 	};
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return infiniteQueryOptions({
+// 		queryKey: mediaKeys.tvSeriesReviews({
+// 			tvSeriesId: tvSeriesId,
+// 			filters: filters,
+// 		}),
+// 		queryFn: async ({ pageParam = 1 }) => {
+// 			let from = (pageParam - 1) * filters.perPage;
+// 	  		let to = from + filters.perPage - 1;
+// 			let request = supabase
+// 				.from('user_reviews_tv_series')
+// 				.select(`
+// 					*,
+// 					user_activities_tv_series!inner(*, profile(*))
+// 				`)
+// 				.eq('user_activities_tv_series.tv_series_id', tvSeriesId)
+// 				.range(from, to)
 
-			if (filters.sortBy && filters.sortOrder) {
-				switch (filters.sortBy) {
-					case 'updated_at':
-						request = request.order('updated_at', { ascending: filters.sortOrder === 'asc' });
-						break;
-					case 'created_at':
-						request = request.order('created_at', { ascending: filters.sortOrder === 'asc' });
-						break;
-					default:
-						break;
-				}
-			}
+// 			if (filters.sortBy && filters.sortOrder) {
+// 				switch (filters.sortBy) {
+// 					case 'updated_at':
+// 						request = request.order('updated_at', { ascending: filters.sortOrder === 'asc' });
+// 						break;
+// 					case 'created_at':
+// 						request = request.order('created_at', { ascending: filters.sortOrder === 'asc' });
+// 						break;
+// 					default:
+// 						break;
+// 				}
+// 			}
 
-			const { data, error } = await request;
-			if (error) throw error;
-			return data;
-		},
-		initialPageParam: 1,
-		getNextPageParam: (lastPage, pages) => {
-			return lastPage?.length == filters.perPage ? pages.length + 1 : undefined;
-		},
-		enabled: !!tvSeriesId,
-		staleTime: 1000 * 60 * 60 // 1 hour
-	})
-}
+// 			const { data, error } = await request;
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		initialPageParam: 1,
+// 		getNextPageParam: (lastPage, pages) => {
+// 			return lastPage?.length == filters.perPage ? pages.length + 1 : undefined;
+// 		},
+// 		enabled: !!tvSeriesId,
+// 		staleTime: 1000 * 60 * 60 // 1 hour
+// 	})
+// }
 
 // export const useMediaTvSeriesPlaylistsOptions = ({
 // 	tvSeriesId,
@@ -500,30 +500,30 @@ export const useMediaPersonTvSeriesOptions = ({
 // 		staleTime: 1000 * 60 * 60 // 1 hour
 // 	});
 // };
-export const useMediaTvSeriesFollowersRatingOptions = ({
-	tvSeriesId,
-} : {
-	tvSeriesId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: mediaKeys.followersAvgRatings({
-			id: tvSeriesId,
-			type: 'tv_series',
-		}),
-		queryFn: async () => {
-			const { data, error } = await supabase
-				.from('user_activities_tv_series_follower')
-				.select('*, user:profile(*)')
-				.eq('tv_series_id', tvSeriesId)
-				.not('rating', 'is', null)
-				.order('created_at', { ascending: false });
-			if (error) throw error;
-			return data;
-		},
-		staleTime: 1000 * 60 * 60 // 1 hour
-	});
-};
+// export const useMediaTvSeriesFollowersRatingOptions = ({
+// 	tvSeriesId,
+// } : {
+// 	tvSeriesId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return queryOptions({
+// 		queryKey: mediaKeys.followersAvgRatings({
+// 			id: tvSeriesId,
+// 			type: 'tv_series',
+// 		}),
+// 		queryFn: async () => {
+// 			const { data, error } = await supabase
+// 				.from('user_activities_tv_series_follower')
+// 				.select('*, user:profile(*)')
+// 				.eq('tv_series_id', tvSeriesId)
+// 				.not('rating', 'is', null)
+// 				.order('created_at', { ascending: false });
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		staleTime: 1000 * 60 * 60 // 1 hour
+// 	});
+// };
 
 // export const useMediaMovieFollowersAvgRatingOptions = ({
 // 	movieId,
@@ -549,27 +549,27 @@ export const useMediaTvSeriesFollowersRatingOptions = ({
 // 	})
 // }
 
-export const useMediaTvSeriesFollowersAvgRatingOptions = ({
-	tvSeriesId,
-} : {
-	tvSeriesId: number;
-}) => {
-	const supabase = useSupabaseClient();
-	return queryOptions({
-		queryKey: mediaKeys.followersAvgRating({
-			type: 'tv_series',
-			id: tvSeriesId,
-		}),
-		queryFn: async () => {
-			const { data, error } = await supabase
-				.from('user_activities_tv_series_follower_average_rating')
-				.select('*')
-				.eq('tv_series_id', tvSeriesId)
-				.maybeSingle();
-			if (error) throw error;
-			return data;
-		},
-		staleTime: 1000 * 60 * 60 // 1 hour
-	})
-}
+// export const useMediaTvSeriesFollowersAvgRatingOptions = ({
+// 	tvSeriesId,
+// } : {
+// 	tvSeriesId: number;
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return queryOptions({
+// 		queryKey: mediaKeys.followersAvgRating({
+// 			type: 'tv_series',
+// 			id: tvSeriesId,
+// 		}),
+// 		queryFn: async () => {
+// 			const { data, error } = await supabase
+// 				.from('user_activities_tv_series_follower_average_rating')
+// 				.select('*')
+// 				.eq('tv_series_id', tvSeriesId)
+// 				.maybeSingle();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		staleTime: 1000 * 60 * 60 // 1 hour
+// 	})
+// }
 /* -------------------------------------------------------------------------- */
