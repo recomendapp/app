@@ -9,14 +9,12 @@ import { RecosService } from '../../recos/recos.service';
 import { RecoType } from '../../recos/dto/recos.dto';
 import { plainToInstance } from 'class-transformer';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
-import { WorkerClient } from '@shared/worker';
 
 @Injectable()
 export class MovieLogsService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
     private readonly recosService: RecosService,
-    private readonly workerClient: WorkerClient,
   ) {}
 
   async get(user: User, movieId: number): Promise<LogMovieDto | null> {
@@ -113,14 +111,6 @@ export class MovieLogsService {
       }
     });
 
-    if (isInserted) {
-      await this.workerClient.emit('feed:insert-activity', {
-        userId: user.id,
-        activityType: 'log_movie',
-        activityId: logEntry.id,
-      });
-    }
-
     return plainToInstance(LogMovieDto, {
       ...logEntry,
       review: logEntry.review ? {
@@ -155,11 +145,6 @@ export class MovieLogsService {
       );
 
       return logEntry;
-    });
-
-    await this.workerClient.emit('feed:delete-activity', {
-      activityType: 'log_movie',
-      activityId: deletedLog.id,
     });
 
     return plainToInstance(LogMovieDto, {

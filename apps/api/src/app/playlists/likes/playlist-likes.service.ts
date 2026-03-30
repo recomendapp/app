@@ -66,11 +66,6 @@ export class PlaylistLikesService {
         playlistId,
         action: 'increment',
       }),
-      this.workerClient.emit('feed:insert-activity', {
-        userId: user.id,
-        activityType: 'playlist_like',
-        activityId: like.id,
-      }),
     ]);
 
     return plainToInstance(PlaylistLikeDto, like, { excludeExtraneousValues: true });
@@ -99,10 +94,6 @@ export class PlaylistLikesService {
       this.workerClient.emit('counters:update-playlist-likes', {
         playlistId,
         action: 'decrement',
-      }),
-      this.workerClient.emit('feed:delete-activity', {
-        activityType: 'playlist_like',
-        activityId: deleted.id,
       }),
     ]);
 

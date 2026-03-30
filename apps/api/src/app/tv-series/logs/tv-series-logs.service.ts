@@ -2,7 +2,6 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { and, avg, desc, eq, isNotNull, sql } from 'drizzle-orm';
 import { follow, logTvSeries, profile, reviewTvSeries, tmdbTvSeries, user } from '@libs/db/schemas';
 import { plainToInstance } from 'class-transformer';
-import { WorkerClient } from '@shared/worker';
 import { LogTvSeriesDto, LogTvSeriesRequestDto, LogTvStatus } from './tv-series-logs.dto';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { TvLogsSyncService } from './sync/tv-logs-sync.service';
@@ -14,7 +13,6 @@ import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 export class TvSeriesLogsService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-    private readonly workerClient: WorkerClient,
     private readonly syncService: TvLogsSyncService,
   ) {}
 
@@ -121,14 +119,6 @@ export class TvSeriesLogsService {
       return series;
     });
 
-    if (isInserted) {
-      await this.workerClient.emit('feed:insert-activity', {
-        userId: currentUser.id,
-        activityType: 'log_tv_series',
-        activityId: finalLogId,
-      });
-    }
-
     const completeLog = await this.db.query.logTvSeries.findFirst({
       where: eq(logTvSeries.id, finalLogId),
       with: { review: true, tvSeries: { columns: { id: true, numberOfEpisodes: true } } }
@@ -185,11 +175,6 @@ export class TvSeriesLogsService {
       );
 
       return logEntry;
-    });
-
-    await this.workerClient.emit('feed:delete-activity', {
-      activityType: 'log_tv_series',
-      activityId: deletedLog.id,
     });
 
     return plainToInstance(LogTvSeriesDto, {

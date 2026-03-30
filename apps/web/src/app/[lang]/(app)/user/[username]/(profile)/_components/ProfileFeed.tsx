@@ -40,7 +40,7 @@ export const ProfileFeed = ({
   useEffect(() => {
     if (inView && hasNextPage)
       fetchNextPage();
-    }, [inView, hasNextPage, feed, fetchNextPage]);
+    }, [inView, hasNextPage, fetchNextPage]);
 
   return (
   <div className='w-full flex flex-col items-center'>

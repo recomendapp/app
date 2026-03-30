@@ -6,7 +6,6 @@ import { DrizzleModule } from '../common/modules/drizzle.module';
 import { SearchModule } from './search/search.module';
 import { EnvModule, workerSchema } from '@libs/env';
 import { CountersModule } from './counters/counters.module';
-import { FeedModule } from './feed/feed.module';
 
 @Module({
   imports: [
@@ -22,7 +21,6 @@ import { FeedModule } from './feed/feed.module';
     SharedWorkerModule,
     SearchModule,
     CountersModule,
-    FeedModule,
   ],
 })
 export class WorkerModule {}

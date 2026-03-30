@@ -7,4 +7,3 @@ export * from './lib/shared-worker.client';
 
 export * from './lib/search';
 export * from './lib/counters';
-export * from './lib/feed';
