@@ -9,7 +9,6 @@ import { notFound } from 'next/navigation';
 import { SupportedLocale } from '@libs/i18n';
 import { getTvSeries } from '@/api/server/medias';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
-import { Database } from '@recomendapp/types';
 
 export async function generateMetadata(
   props: {

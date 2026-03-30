@@ -1,4 +1,3 @@
-import { notFound } from 'next/navigation';
 import { PersonHeader } from './_components/PersonHeader';
 import PersonNavbar from './_components/PersonNavbar';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
@@ -10,16 +9,16 @@ export default async function PersonLayout(
   props: {
     children: React.ReactNode;
     params: Promise<{
-      lang: SupportedLocale;
+      lang: string;
       person_id: string;
     }>;
   }
 ) {
   const { lang, person_id } = await props.params;
   const { id } = getIdFromSlug(person_id);
-  const person = await getPerson(lang, id);
+  const person = await getPerson(lang as SupportedLocale, id);
   if (person.slug !== person_id) {
-    redirect({ href: `/person/${person.slug}`, locale: lang });
+    redirect({ href: `/person/${person.slug}`, locale: lang as SupportedLocale });
   }
   return (
     <>

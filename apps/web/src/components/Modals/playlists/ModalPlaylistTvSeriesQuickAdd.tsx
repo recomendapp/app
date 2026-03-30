@@ -8,7 +8,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { MediaTvSeries, Playlist } from '@recomendapp/types';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../Modal';
 import { Icons } from '@/config/icons';
 import { Label } from '@/components/ui/label';
@@ -17,12 +16,11 @@ import { useTranslations } from 'next-intl';
 import { InputSearch } from '@/components/ui/input-search';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useInView } from 'react-intersection-observer';
-import { usePlaylistTvSeriesMultiInsertMutation } from '@/api/client/mutations/playlistMutations';
 import { upperFirst } from 'lodash';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useSearchTvSeriesOptions } from '@/api/client/options/searchOptions';
+import { Playlist, TvSeriesCompact } from '@packages/api-js';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -34,54 +32,50 @@ export function ModalPlaylistTvSeriesQuickAdd({
 	playlist,
 	...props
 } : ModalPlaylistTvSeriesQuickAddProps) {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const t = useTranslations();
 	const { closeModal } = useModal();
-	const [selectedTvSeries, setSelectedTvSeries] = useState<MediaTvSeries[]>([]);
+	const [selectedTvSeries, setSelectedTvSeries] = useState<TvSeriesCompact[]>([]);
 	const [comment, setComment] = useState<string>('');
 	const [search, setSearch] = useState<string>('');
 	const searchQuery = useDebounce(search);
 	const { ref, inView } = useInView();
 
-	const {
-		data: tvSeries,
-		isLoading,
-		isError,
-		fetchNextPage,
-		isFetchingNextPage,
-		hasNextPage,
-	} = useInfiniteQuery(useSearchTvSeriesOptions({
-		query: searchQuery,
-	}));
+	// const {
+	// 	data: tvSeries,
+	// 	isLoading,
+	// 	isError,
+	// 	fetchNextPage,
+	// 	isFetchingNextPage,
+	// 	hasNextPage,
+	// } = useInfiniteQuery(useSearchTvSeriesOptions({
+	// 	query: searchQuery,
+	// }));
 
-	const { mutateAsync: insertTvSeriesMultiple, isPending } = usePlaylistTvSeriesMultiInsertMutation({
-		playlistId: playlist.id,
-	});
-
-	useEffect(() => {
-		if (inView && hasNextPage) {
-		  fetchNextPage();
-		}
-	}, [inView, hasNextPage, fetchNextPage]);
+	// useEffect(() => {
+	// 	if (inView && hasNextPage) {
+	// 	  fetchNextPage();
+	// 	}
+	// }, [inView, hasNextPage, fetchNextPage]);
 
 	const handleSubmit = useCallback(async () =>{
-		if (!session?.user.id) return;
-		const ids = selectedTvSeries.map((tvSeries) => tvSeries.id);
-		if (ids.length === 0) return;
-		await insertTvSeriesMultiple({
-			userId: session.user.id,
-			tvSeriesIds: ids,
-			comment: comment,
-		}, {
-			onSuccess: () => {
-				toast.success(upperFirst(t('common.messages.added', { gender: 'male', count: selectedTvSeries.length })));
-				closeModal(props.id);
-			},
-			onError: () => {
-				toast.error(upperFirst(t('common.messages.an_error_occurred')));
-			}
-		});
-	}, [session, selectedTvSeries, comment, insertTvSeriesMultiple, t, closeModal, props.id]);
+		if (!user?.id) return;
+		// const ids = selectedTvSeries.map((tvSeries) => tvSeries.id);
+		// if (ids.length === 0) return;
+		// await insertTvSeriesMultiple({
+		// 	userId: session.user.id,
+		// 	tvSeriesIds: ids,
+		// 	comment: comment,
+		// }, {
+		// 	onSuccess: () => {
+		// 		toast.success(upperFirst(t('common.messages.added', { gender: 'male', count: selectedTvSeries.length })));
+		// 		closeModal(props.id);
+		// 	},
+		// 	onError: () => {
+		// 		toast.error(upperFirst(t('common.messages.an_error_occurred')));
+		// 	}
+		// });
+	}, [user, selectedTvSeries, comment, t, closeModal, props.id]);
 
 	return (
 		<Modal
@@ -106,7 +100,7 @@ export function ModalPlaylistTvSeriesQuickAdd({
 				/>
 				<ScrollArea className={`h-[40vh]`}>
 					<div className='p-2 flex flex-col gap-1'>
-					{(tvSeries?.pages && tvSeries.pages[0].data.length > 0) ? (
+					{/* {(tvSeries?.pages && tvSeries.pages[0].data.length > 0) ? (
 						tvSeries.pages.map((page, i) => (
 							page.data.map((tvSeriesItem, index) => (
 								<CardTvSeries
@@ -149,7 +143,7 @@ export function ModalPlaylistTvSeriesQuickAdd({
 						{upperFirst(t('common.messages.search_tv_series', { count: 1 }))}
 						</p>
 					) : null}
-					 {(isLoading || isFetchingNextPage) ? <Icons.loader className='w-full'/> : null}
+					 {(isLoading || isFetchingNextPage) ? <Icons.loader className='w-full'/> : null} */}
 					</div>
 				</ScrollArea>
 			</ModalBody>
@@ -175,7 +169,7 @@ export function ModalPlaylistTvSeriesQuickAdd({
 						>
 							<AspectRatio ratio={1 / 1}>
 								<ImageWithFallback
-								src={getTmdbImage({ path: tvSeriesItem?.poster_path, size: 'w342' })}
+								src={getTmdbImage({ path: tvSeriesItem?.posterPath, size: 'w342' })}
 								alt={tvSeriesItem.name ?? ''}
 								fill
 								className="rounded-md object-cover"
@@ -191,13 +185,13 @@ export function ModalPlaylistTvSeriesQuickAdd({
 						{upperFirst(t('common.messages.select_a_tv_series_to_add_to_playlist'))}
 					</p>
 				)}
-				<Button
+				{/* <Button
 				disabled={!selectedTvSeries.length || isPending}
 				onClick={handleSubmit}
 				>
 				{isPending && <Icons.loader className="mr-2" />}
 				{upperFirst(t('common.messages.add'))}
-				</Button>
+				</Button> */}
 			</ModalFooter>
 		</Modal>
 	)

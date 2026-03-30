@@ -6,27 +6,23 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import toast from 'react-hot-toast';
 import * as z from 'zod';
-import { AuthError } from '@supabase/supabase-js';
-import { useAuth } from '@/context/auth-context';
-import { useState } from 'react';
-import { useSupabaseClient } from '@/context/supabase-context';
+import { useCallback, useState } from 'react';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { ArrowLeftIcon } from 'lucide-react';
 import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/lib/i18n/navigation';
 import { upperFirst } from 'lodash';
+import { authClient } from '@/lib/auth/client';
 
 export function LoginOtpForm({
   className,
   redirectTo,
   ...props
 } : React.HTMLAttributes<HTMLDivElement> & { redirectTo: string | null }) {
-  const supabase = useSupabaseClient();
   const t = useTranslations('pages.auth.login');
   const common = useTranslations('common');
   const router = useRouter();
-  const { loginWithMagicLink } = useAuth();
   const [email, setEmail] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   // OTP
@@ -34,67 +30,56 @@ export function LoginOtpForm({
   const [showOtp, setShowOtp] = useState<boolean>(false);
 
   const emailSchema = z
-  .string()
-  .email({
-    message: common('form.email.error.invalid'),
-  });
+    .email({
+      message: common('form.email.error.invalid'),
+    });
 
-  const handleSubmit = async (event?: React.SyntheticEvent) => {
+  const handleSubmit = useCallback(async (event?: React.SyntheticEvent) => {
     event?.preventDefault();
     try {
       setIsLoading(true);
       emailSchema.parse(email);
-      await loginWithMagicLink(email, redirectTo);
-      setShowOtp(true);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        error.errors.map((currError) => {
-          toast.error(currError.message);
-        });
-      } else if (error instanceof AuthError) {
+      const { error } = await authClient.emailOtp.sendVerificationOtp({
+        email,
+        type: 'sign-in',
+      });
+      if (error) {
         switch (error.status) {
-          case 500:
-            toast.error(t('otp.form.no_user_found'));
-            break;
           default:
-            toast.error(error.message);
+            toast.error(upperFirst(common('messages.an_error_occurred')));
         }
-      } else {
-        toast.error(upperFirst(common('messages.an_error_occurred')));
+        return;
       }
+      setShowOtp(true);
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [email, emailSchema, common, t]);
 
-  const handleVerifyOtp = async (otp: string) => {
+  const handleVerifyOtp = useCallback(async (otp: string) => {
     try {
       setIsLoading(true);
-      const { error } = await supabase.auth.verifyOtp({
-        email: email,
-        token: otp,
-        type: 'email',
+      const { error } = await authClient.signIn.emailOtp({
+        email,
+        otp,
       });
-      if (error) throw error;
-      toast.success(t('otp.form.success'));
-      router.push(redirectTo || '/');
-      router.refresh();
-    } catch (error) {
-      if (error instanceof AuthError) {
-        switch (error.status) {
-          case 400:
+      if (error) {
+        switch (error.code) {
+          case 'INVALID_OTP':
             toast.error(common('form.error.invalid_code'));
             break;
           default:
-            toast.error(error.message);
+            toast.error(upperFirst(common('messages.an_error_occurred')));
         }
-      } else {
-        toast.error(upperFirst(common('messages.an_error_occurred')));
+        return;
       }
+      toast.success(t('otp.form.success'));
+      router.push(redirectTo || '/');
+      router.refresh();
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [email, common, t, router, redirectTo]);
 
   if (showOtp) return (
     <>

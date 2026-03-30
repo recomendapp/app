@@ -173,9 +173,6 @@ importers:
       '@react-email/render':
         specifier: ^2.0.4
         version: 2.0.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      '@recomendapp/types':
-        specifier: ^1.0.37
-        version: 1.0.37
       '@revenuecat/purchases-js':
         specifier: ^1.20.1
         version: 1.24.4
@@ -5088,9 +5085,6 @@ packages:
     engines: {node: '>=20.0.0'}
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-
-  '@recomendapp/types@1.0.37':
-    resolution: {integrity: sha512-f2f/zejENyHJB+rG4bvw92bmERfulQYZu/yN6SiJmSKut3GVne/cDt+DlbPJkQVY4IFr3DLsN+n5ENeOZnoQeA==, tarball: https://npm.pkg.github.com/download/@recomendapp/types/1.0.37/184483241edc6c17bbba45957e25072ee0b900e1}
 
   '@remirror/core-constants@3.0.0':
     resolution: {integrity: sha512-42aWfPrimMfDKDi4YegyS7x+/0tlzaqwPQCULLanv3DMIlu96KTJR0fM5isWX2UViOqlGnX6YFgqWepcX+XMNg==}
@@ -14840,9 +14834,6 @@ packages:
     peerDependencies:
       zod: ^3.25.0 || ^4.0.0
 
-  zod@3.25.76:
-    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
-
   zod@4.3.6:
     resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
 
@@ -20401,10 +20392,6 @@ snapshots:
   '@react-email/text@0.1.6(react@19.2.4)':
     dependencies:
       react: 19.2.4
-
-  '@recomendapp/types@1.0.37':
-    dependencies:
-      zod: 3.25.76
 
   '@remirror/core-constants@3.0.0': {}
 
@@ -31869,8 +31856,6 @@ snapshots:
   zod-validation-error@4.0.2(zod@4.3.6):
     dependencies:
       zod: 4.3.6
-
-  zod@3.25.76: {}
 
   zod@4.3.6: {}
 

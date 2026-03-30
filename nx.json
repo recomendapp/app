@@ -53,7 +53,7 @@
             "-f",
             "{projectRoot}/Dockerfile",
             "--tag",
-            "api-{projectName}:latest"
+            "{projectName}:latest"
           ]
         }
       }

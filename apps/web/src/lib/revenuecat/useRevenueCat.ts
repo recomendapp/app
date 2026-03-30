@@ -5,13 +5,13 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import { authKeys } from "@/api/client/keys/authKeys";
 import { REVENUECAT_API_KEY } from "../env";
-import { UserMe } from "@packages/api-js/src";
+import { User } from "@packages/api-js";
 
-export const useRevenueCat = (user: UserMe | null | undefined) => {
+export const useRevenueCat = (user: User | null | undefined) => {
   const queryClient = useQueryClient();
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo | undefined>(undefined);
   
-  const init = useCallback(async (user: UserMe) => {
+  const init = useCallback(async (user: User) => {
     if (process.env.NODE_ENV === 'development') {
       Purchases.setLogLevel(LogLevel.Verbose);
     }

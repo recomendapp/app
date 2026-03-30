@@ -10,7 +10,6 @@ import { toISO8601Duration } from '@/lib/utils';
 import { SupportedLocale } from '@libs/i18n';
 import { getMovie } from '@/api/server/medias';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
-import { Database } from '@recomendapp/types';
 import { JustWatchWidget } from '@/components/JustWatch/JustWatchWidgetScript';
 import { MovieCasting } from './_components/MovieCasting';
 

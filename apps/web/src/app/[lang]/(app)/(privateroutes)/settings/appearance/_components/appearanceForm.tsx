@@ -51,11 +51,10 @@ export function AppearanceForm() {
 
   const appearanceFormSchema = z.object({
     theme: z.enum(['light', 'dark'], {
-      required_error: 'Please select a theme.',
+      error: 'Please select a theme.',
     }),
-    language: z.enum([...supportedLocales], {
-      invalid_type_error: 'Select a language',
-      required_error: 'Please select a language.',
+    language: z.enum(supportedLocales, {
+      error: 'Please select a language.',
     }),
   });
 
@@ -73,7 +72,6 @@ export function AppearanceForm() {
 
   useEffect(() => {
     form.reset(defaultValues);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultValues]);
 
   const handleSubmit = useCallback(async (data: AppearanceFormValues) => {

@@ -71,8 +71,8 @@ export default async function UserMovie(
   const { id: tvSeriesId } = getIdFromSlug(tv_series_id);
   const t = await getTranslations({ locale: lang });
   const profile = await getProfile(username);
-  if (!profile) return {
-      title: upperFirst(t('common.messages.user_not_found')),
+  if (!profile) {
+    return notFound();
   };
   const log = await getUserTvSeries({
     userId: profile.id,

@@ -421,7 +421,12 @@
       "you_dont_have_permission_to_do_this_action": "You don't have permission to do this action",
       "in_progress": "in progress",
       "give_up": "give up",
-      "random": "random"
+      "random": "random",
+      "reset_password": "Reset password",
+      "password_reset": "Password reset",
+      "return_to_login": "Return to login",
+      "invalid_code": "Invalid code",
+      "no_token_found": "No token found"
     },
     "form": {
       "email": {
@@ -674,6 +679,12 @@
         "confirm_form": {
           "label": "Confirm code",
           "description": "A verification code has been sent to the address {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "Reset Password",
+          "description": "Choose a new password for your account."
         }
       },
       "error": {

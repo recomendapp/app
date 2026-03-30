@@ -4,7 +4,7 @@ import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { cn } from "@/lib/utils";
 import { Link } from "@/lib/i18n/navigation";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
-import { BookmarkWithMedia } from "./types";
+import { RecoWithMedia } from "./types";
 import { getMediaDetails } from "@/utils/get-media-details";
 import { useFormatter, useTranslations } from "next-intl";
 import { PersonCompact } from "@packages/api-js";
@@ -13,7 +13,7 @@ import { forwardRef, useMemo } from "react";
 
 interface ItemProps
 	extends React.ComponentProps<'div'> {
-		data: BookmarkWithMedia;
+		data: RecoWithMedia;
 	}
 
 export const Item = forwardRef<

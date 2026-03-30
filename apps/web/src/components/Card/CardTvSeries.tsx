@@ -2,7 +2,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils";
 import { Card } from "../ui/card";
-import { UserActivityTvSeries } from "@recomendapp/types";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Link, useRouter } from "@/lib/i18n/navigation";
 import { TooltipBox } from "../Box/TooltipBox";
@@ -17,15 +16,15 @@ import ButtonLogTvSeriesWatch from "../buttons/ButtonLogTvSeriesWatch";
 import ButtonUserWatchlistTvSeries from "../buttons/ButtonUserWatchlistTvSeries";
 import { ContextMenuTvSeries } from "../ContextMenu/ContextMenuTvSeries";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
-import { LogTvSeriesWithTvSeries, PersonCompact, TvSeries, TvSeriesCompact, UserSummary } from "@packages/api-js";
+import { LogTvSeries, LogTvSeriesWithTvSeriesNoReview, PersonCompact, TvSeries, TvSeriesCompact, UserSummary } from "@packages/api-js";
 
 interface CardTvSeriesProps
 	extends React.ComponentProps<typeof Card> {
 		variant?: "default" | "poster" | "row";
 		tvSeries: TvSeries | TvSeriesCompact;
-		activity?: UserActivityTvSeries;
+		activity?: LogTvSeries;
 		profile?: {
-			log: Omit<LogTvSeriesWithTvSeries, "tvSeries">;
+			log: Omit<LogTvSeriesWithTvSeriesNoReview, "tvSeries">;
 			user: UserSummary;
 		}
 		linked?: boolean;

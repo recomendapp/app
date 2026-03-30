@@ -1,17 +1,19 @@
 import { Provider } from '@nestjs/common';
 import { APIError, betterAuth } from 'better-auth';
-import { createAuthMiddleware, magicLink, openAPI, username } from 'better-auth/plugins';
+import { createAuthMiddleware, emailOTP, magicLink, openAPI, username } from 'better-auth/plugins';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { ENV_SERVICE, EnvService } from '@libs/env'; // Ton token
 import { NotifyClient } from '@shared/notify';
 import { WorkerClient } from '@shared/worker';
-import { profile } from '@libs/db/schemas';
+import { profile, user } from '@libs/db/schemas';
 import { v7 as uuidv7 } from 'uuid';
 import { USER_RULES } from '../../config/validation-rules';
 import bcrypt from "bcrypt"; 
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { defaultSupportedLocale, SupportedLocale } from '@libs/i18n';
 import { additionalFields, auth } from '@libs/db';
+import { generateUniqueUsername } from '../../utils/generate-username';
+import { eq } from 'drizzle-orm';
 
 export const AUTH_SERVICE = 'AUTH_SERVICE';
 
@@ -56,10 +58,69 @@ const createBetterAuth = ({
 				},
 				disableSignUp: true,
 			}),
+			emailOTP({
+				async sendVerificationOTP({ email, otp, type }) { 
+					const userDb = await db.query.user.findFirst({
+						where: (eq(user.email, email)),
+						columns: {
+							language: true,
+						}
+					});
+					switch (type) {
+						case 'sign-in':
+							await notify.emit('auth:sign-in-otp-email', {
+								email,
+								otp,
+								type,
+								lang: (userDb?.language as SupportedLocale) || defaultSupportedLocale,
+							});
+							break;
+						case 'email-verification':
+							await notify.emit('auth:verification-otp-email', {
+								email,
+								otp,
+								type,
+								lang: (userDb?.language as SupportedLocale) || defaultSupportedLocale,
+							});
+							break;
+						case 'forget-password':
+							await notify.emit('auth:password-reset-otp-email', {
+								email,
+								otp,
+								type,
+								lang: (userDb?.language as SupportedLocale) || defaultSupportedLocale,
+							});
+							break;
+					}
+				}, 
+			})
 		],
 		databaseHooks: {
 			user: {
 				create: {
+					before: async (userData) => {
+                        let finalUsername = userData.username as string | undefined;
+                        let finalName = userData.name;
+
+                        if (!finalUsername) {
+                            finalUsername = await generateUniqueUsername({
+								email: userData.email,
+								db,
+							});
+                        }
+
+                        if (!finalName) {
+                            finalName = finalUsername;
+                        }
+
+                        return {
+                            data: {
+                                ...userData,
+                                username: finalUsername,
+                                name: finalName,
+                            }
+                        };
+                    },
 					after: async (user) => {
 						await db.insert(profile).values({
 							id: user.id,
@@ -107,7 +168,16 @@ const createBetterAuth = ({
 				verify: async ({ hash, password }) => { 
 					return await bcrypt.compare(password, hash); 
 				} 
-			} 
+			},
+			sendResetPassword: async ({ user, url, token }) => {
+				const u = user as typeof auth.$Infer.Session.user;
+				await notify.emit('auth:reset-password', {
+					email: user.email,
+					url,
+					token,
+					lang: (u.language as SupportedLocale) || defaultSupportedLocale,
+				});
+			},
 		},
 		emailVerification: {
 			autoSignInAfterVerification: true,
@@ -117,7 +187,7 @@ const createBetterAuth = ({
 					email: user.email,
 					token,
 					url,
-					lang: 'el-GR',
+					lang: (u.language as SupportedLocale) || defaultSupportedLocale,
 				});
 			},
 		},

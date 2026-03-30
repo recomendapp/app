@@ -5,7 +5,6 @@ import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { Input } from "@/components/ui/input";
 import { siteConfig } from "@/config/site";
 import { FacebookIcon, FacebookShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, TwitterShareButton, WhatsappIcon, WhatsappShareButton, XIcon } from "react-share";
-import { MediaType } from "@recomendapp/types";
 import { ButtonCopy } from "@/components/utils/ButtonCopy";
 import { useLocale, useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
@@ -19,7 +18,7 @@ import { Separator } from "@/components/ui/separator";
 
 interface ModalShareProps<T> extends ModalType {
 	title?: string | null;
-	type?: 'playlist' | MediaType | null;
+	type?: 'playlist' | 'movie' | 'tv_series' | 'person' | null;
 	path: string;
 	shareController?: ShareController<any>;
 }

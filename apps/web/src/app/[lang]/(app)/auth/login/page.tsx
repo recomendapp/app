@@ -3,7 +3,6 @@
 import { LoginPasswordForm } from './_components/LoginPasswordForm';
 import { Icons } from '@/config/icons';
 import { Images } from '@/config/images';
-import { siteConfig } from '@/config/site';
 import { Link } from "@/lib/i18n/navigation";
 import { useSearchParams } from 'next/navigation';
 import {
@@ -13,14 +12,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Provider } from '@supabase/supabase-js';
 import { useAuth } from '@/context/auth-context';
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useRandomImage } from '@/hooks/use-random-image';
 import { RectangleEllipsisIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
+import { SocialProvider } from 'better-auth';
 
 export default function Login() {
   const { loginOAuth2 } = useAuth();
@@ -31,14 +30,29 @@ export default function Login() {
   const redirectTo = searchParams.get('redirect');
   const bgImage = useRandomImage(Images.auth.login.background);
 
-  async function handleLoginOAuth2(provider: Provider) {
+  const oAuth2Providers = useMemo((): { value: SocialProvider; label: string; icon: any, enabled: boolean }[] => [
+    {
+      value: 'github',
+      label: 'Github',
+      icon: Icons.gitHub,
+      enabled: true,
+    },
+    {
+      value: 'google',
+      label: 'Google',
+      icon: Icons.google,
+      enabled: false,
+    },
+  ], []);
+
+  const handleLoginOAuth2 = useCallback(async (provider: SocialProvider) => {
     try {
       setIsLoading(true);
       await loginOAuth2(provider, redirectTo);
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [loginOAuth2, redirectTo]);
 
   return (
     <div
@@ -87,16 +101,16 @@ export default function Login() {
                 OTP
               </Link>
             </Button>
-            {siteConfig.oauth2.map((provider, i) => (
+            {oAuth2Providers.map((provider, i) => (
               <Button
-                key={provider.name}
+                key={provider.value}
                 variant={'outline'}
-                onClick={() => handleLoginOAuth2(provider.name.toLowerCase() as Provider)}
+                onClick={() => handleLoginOAuth2(provider.value)}
                 disabled={!provider.enabled || isLoading}
-                className={siteConfig.oauth2.length % 2 !== 0 && i === siteConfig.oauth2.length - 1 ? 'col-span-2' : ''}
+                className={oAuth2Providers.length % 2 !== 0 && i === oAuth2Providers.length - 1 ? 'col-span-2' : ''}
               >
                 <provider.icon className="mr-2 h-4 w-4" />
-                {provider.name}
+                {provider.label}
               </Button>
             ))}
           </div>

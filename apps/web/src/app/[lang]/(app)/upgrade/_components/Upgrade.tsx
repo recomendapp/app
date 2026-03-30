@@ -45,9 +45,9 @@ const GetStarted = ({
 	offering?: Offering | null;
 	onPurchase?: () => void | Promise<void>;
 }) => {
-	const { session, customerInfo } = useAuth();
+	const { user, customerInfo } = useAuth();
 	const t = useTranslations();
-	if (!session) {
+	if (!user) {
 		return (
 			<Button className='w-full' asChild>
 				<Link href={`/auth/login?redirect=${encodeURIComponent('/upgrade')}`}>
@@ -84,7 +84,7 @@ const GetStarted = ({
 };
 
 export const Upgrade = () => {
-	const { session, customerInfo } = useAuth();
+	const { user, customerInfo } = useAuth();
 	const {
 		isLoading: isOfferingLoading,
 		offering,
@@ -192,7 +192,7 @@ export const Upgrade = () => {
 						),
 						premium: formatPrice(
 							{
-								unit_amount: billingInterval === 'annual' ? offering?.annual?.webBillingProduct.price.amountMicros! / 10_000 : offering?.monthly?.webBillingProduct.price.amountMicros! / 10_000,
+								unit_amount: billingInterval === 'annual' ? (offering?.annual?.webBillingProduct.price.amountMicros || 0) / 10_000 : (offering?.monthly?.webBillingProduct.price.amountMicros || 0) / 10_000,
 								currency: offering?.monthly?.webBillingProduct.price.currency,
 							},
 							locale
@@ -205,7 +205,7 @@ export const Upgrade = () => {
 	], [t, billingInterval, offering, locale]);
 
 	const handlePurchase = useCallback(async (plan: Package) => {
-		if (!session) {
+		if (!user) {
 			toast.error(upperFirst(t('common.messages.not_logged_in')));
 		  	return router.push(`/auth/login?redirect=${encodeURIComponent(pathname)}`);
 		}
@@ -213,7 +213,7 @@ export const Upgrade = () => {
 		  	return router.push('/settings/subscription');
 		}
 		await purchasePackage(plan);
-	}, [purchasePackage, session, customerInfo, router, pathname, t]);
+	}, [purchasePackage, user, customerInfo, router, pathname, t]);
 
 	const handleSelectPlan = useCallback(() => {
 		if (!offering) return;
@@ -236,7 +236,7 @@ export const Upgrade = () => {
 				{!isOfferingLoading ? (
 					offering && (
 					<h2>
-					{upperFirst(t('pages.upgrade.header.subtitle', { price: `${formatPrice({ unit_amount: offering?.monthly?.webBillingProduct.price.amountMicros! / 10_000, currency: offering?.monthly?.webBillingProduct.price.currency }, locale)}` }))}
+					{upperFirst(t('pages.upgrade.header.subtitle', { price: `${formatPrice({ unit_amount: (offering?.monthly?.webBillingProduct.price.amountMicros || 0) / 10_000, currency: offering?.monthly?.webBillingProduct.price.currency }, locale)}` }))}
 					</h2>
 					)
 				) : <Skeleton className="h-6 w-3/4" />}
@@ -280,7 +280,7 @@ export const Upgrade = () => {
 												className="text-muted-foreground"
 											/>
 											</svg>
-											<Badge className="mt-3 uppercase shrink-0">{(t('common.messages.save_up_to_percent', { percent: calculateSave({ unit_amount: offering?.annual?.webBillingProduct.price.amountMicros!, interval: 'yearly' }, { unit_amount: offering?.monthly?.webBillingProduct.price.amountMicros!, interval: 'monthly' }) }))}</Badge>
+											<Badge className="mt-3 uppercase shrink-0">{(t('common.messages.save_up_to_percent', { percent: calculateSave({ unit_amount: offering?.annual?.webBillingProduct.price.amountMicros || 0, interval: 'yearly' }, { unit_amount: (offering?.monthly?.webBillingProduct.price.amountMicros || 0), interval: 'monthly' }) }))}</Badge>
 										</span>
 									</span>
 								)}

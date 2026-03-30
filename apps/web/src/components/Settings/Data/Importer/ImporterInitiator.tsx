@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/input";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { ImporterSource } from "./Importer";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, SearchIcon, XIcon } from "lucide-react";
@@ -26,8 +26,8 @@ import {
 
 import LetterboxdParser from "./services/LetterboxdParser";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { MovieCompact } from "@packages/api-js";
 // import ImporterResults from "./services/ImporterResults";
-import { MediaMovie } from "@recomendapp/types";
 
 export type ImportResults = {
 	watchlist: {
@@ -38,7 +38,7 @@ export type ImportResults = {
 				year: string;
 				date: string;
 			},
-			movie: MediaMovie;
+			movie: MovieCompact;
 		}[];
 		failed: any[];
 	};
@@ -49,7 +49,7 @@ export type ImportResults = {
 				title: string;
 				year: string;
 			},
-			movie: MediaMovie;
+			movie: MovieCompact;
 			rating: number | null;
 			liked: boolean;
 		}[];

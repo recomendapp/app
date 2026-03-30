@@ -13,7 +13,7 @@ import {
 import { Icons } from '@/config/icons';
 import { Images } from '@/config/images';
 import { useRandomImage } from '@/hooks/use-random-image';
-import { Link, useRouter } from "@/lib/i18n/navigation";
+import { Link } from "@/lib/i18n/navigation";
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
@@ -21,7 +21,6 @@ import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import toast from 'react-hot-toast';
 import { useAuth } from '@/context/auth-context';
 import { Input } from '@/components/ui/input';
@@ -44,7 +43,6 @@ export default function Signup() {
 	const t = useTranslations('pages.auth.signup');
 	const common = useTranslations('common');
 	const locale = useLocale();
-	const router = useRouter();
 	const searchParams = useSearchParams();
 	const redirectTo = searchParams.get('redirect');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -191,30 +189,6 @@ export default function Signup() {
 		}
 	}, [redirectTo, form, common]);
 
-	// const handleVerifyOtp = useCallback(async (otp: string) => {
-	// 	try {
-	// 	  setIsLoading(true);
-	// 	  if (error) throw error;
-	// 	  toast.success(common('form.email.verified'));
-	// 	  router.push(redirectTo || '/');
-	// 	  router.refresh();
-	// 	} catch (error) {
-	// 	  if (error instanceof AuthError) {
-	// 		switch (error.status) {
-	// 		  case 403:
-	// 			toast.error(common('form.error.invalid_code'));
-	// 			break
-	// 		  default:
-	// 			toast.error(error.message);
-	// 		}
-	// 	  } else {
-	// 		toast.error(upperFirst(common('messages.an_error_occurred')));
-	// 	  }
-	// 	} finally {
-	// 	  setIsLoading(false);
-	// 	}
-	// }, [router, redirectTo, form, common]);
-	
 	return (
 	<div
 		className="h-full w-full flex flex-col items-center justify-center"

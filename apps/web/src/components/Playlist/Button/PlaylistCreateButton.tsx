@@ -13,11 +13,9 @@ import { upperFirst } from 'lodash';
 export function PlaylistCreateButton({
   className,
   icon = true,
-  filmId,
 }: {
   className?: string;
   icon?: boolean;
-  filmId?: string;
 }) {
   const { user } = useAuth();
   const t = useTranslations();
@@ -31,7 +29,7 @@ export function PlaylistCreateButton({
           variant={'outline'}
           size={'icon'}
           className={cn(className)}
-          onClick={() => openModal(ModalPlaylist, { filmId })}
+          onClick={() => openModal(ModalPlaylist)}
         >
           {icon ? <Plus /> : upperFirst(t('common.messages.create_a_playlist'))}
           {icon && <span className="sr-only">

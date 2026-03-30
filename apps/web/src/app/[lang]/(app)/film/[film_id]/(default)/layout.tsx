@@ -9,7 +9,7 @@ export default async function Layout(
   props: {
       children: React.ReactNode;
       params: Promise<{
-        lang: SupportedLocale;
+        lang: string;
         film_id: string;
       }>;
   }
@@ -21,7 +21,7 @@ export default async function Layout(
   } = props;
   const { id: movieId } = getIdFromSlug(params.film_id);
 
-  const { data: movie, error } = await getMovie(params.lang, movieId);
+  const { data: movie, error } = await getMovie(params.lang as SupportedLocale, movieId);
   if (error || !movie) {
     return notFound();
   }

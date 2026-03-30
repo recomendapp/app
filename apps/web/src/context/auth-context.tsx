@@ -116,7 +116,6 @@ export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps)
     const { error } = await authClient.signOut();
     if (error) {
       switch (error.code) {
-        // TODO: handle specific error codes
         default:
           toast.error(upperFirst(t('common.messages.an_error_occurred')));
           break;
@@ -169,7 +168,6 @@ export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps)
     });
     if (error) {
       switch (error.code) {
-        // TODO: handle specific error codes
         default:
           toast.error(upperFirst(t('common.messages.an_error_occurred')));
           break;
@@ -185,7 +183,6 @@ export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps)
     });
     if (error) {
       switch (error.code) {
-        // TODO: handle specific error codes
         default:
           toast.error(upperFirst(t('common.messages.an_error_occurred')));
           break;

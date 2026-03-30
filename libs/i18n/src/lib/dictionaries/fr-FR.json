@@ -421,7 +421,12 @@
       "you_dont_have_permission_to_do_this_action": "Vous n'avez pas la permission d'effectuer cette action",
       "in_progress": "en cours",
       "give_up": "abandonner",
-      "random": "aléatoire"
+      "random": "aléatoire",
+      "reset_password": "Réinitialiser le mot de passe",
+      "password_reset": "Mot de passe réinitialisé",
+      "return_to_login": "Retour à la connexion",
+      "invalid_code": "Code invalide",
+      "no_token_found": "Aucun token trouvé"
     },
     "form": {
       "email": {
@@ -674,6 +679,12 @@
         "confirm_form": {
           "label": "Confirmer le code",
           "description": "Un code de vérification a été envoyé à l'adresse {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "Réinitialisation du mot de passe",
+          "description": "Choisissez un nouveau mot de passe pour votre compte."
         }
       },
       "error": {

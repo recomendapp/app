@@ -60,6 +60,64 @@ export class NotifyProcessor extends WorkerHost {
           );
           break;
         }
+        case 'auth:reset-password': {
+          const { email, url, lang } = job.data;
+          await this.notifyService.sendEmail(
+            email,
+            this.i18n.t('auth.reset_password.subject', { lang }),
+            await render(VerificationEmail({
+              url,
+              dictionary: {
+                title: this.i18n.t('auth.reset_password.title', { lang }),
+                text: this.i18n.t('auth.reset_password.text', { lang }),
+                button: this.i18n.t('auth.reset_password.button', { lang }),
+              },
+            }))
+          );
+          break;
+        }
+        case 'auth:sign-in-otp-email':
+        case 'auth:verification-otp-email':
+        case 'auth:password-reset-otp-email': {
+          const { email, otp, type, lang } = job.data;
+
+          let subjectKey: string;
+          let titleKey: string;
+          let textKey: string;
+
+          switch (type) {
+            case 'sign-in':
+              subjectKey = 'auth.sign_in_otp_email.subject';
+              titleKey = 'auth.sign_in_otp_email.title';
+              textKey = 'auth.sign_in_otp_email.text';
+              break;
+            case 'email-verification':
+              subjectKey = 'auth.verification_otp_email.subject';
+              titleKey = 'auth.verification_otp_email.title';
+              textKey = 'auth.verification_otp_email.text';
+              break;
+            case 'forget-password':
+              subjectKey = 'auth.password_reset_otp_email.subject';
+              titleKey = 'auth.password_reset_otp_email.title';
+              textKey = 'auth.password_reset_otp_email.text';
+              break;
+            default:
+              throw new Error('Invalid OTP email type');
+          }
+
+          await this.notifyService.sendEmail(
+            email,
+            this.i18n.t(subjectKey, { lang }),
+            await render(VerificationEmail({
+              dictionary: {
+                title: this.i18n.t(titleKey, { lang }),
+                text: this.i18n.t(textKey, { lang, args: { otp } }),
+                button: this.i18n.t('auth.otp_email.button', { lang }),
+              },
+            }))
+          );
+          break;
+        }
         case 'follow:new': {
           const { actorId, targetUserId } = job.data;
 

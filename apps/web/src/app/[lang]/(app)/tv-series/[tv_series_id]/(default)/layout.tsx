@@ -9,7 +9,7 @@ export default async function Layout(
   props: {
       children: React.ReactNode;
       params: Promise<{
-        lang: SupportedLocale;
+        lang: string;
         tv_series_id: string;
       }>;
   }
@@ -21,7 +21,7 @@ export default async function Layout(
   } = props;
 
   const { id: tvSeriesId } = getIdFromSlug(tv_series_id);
-  const { data: tvSeries, error } = await getTvSeries(lang, tvSeriesId);
+  const { data: tvSeries, error } = await getTvSeries(lang as SupportedLocale, tvSeriesId);
   if (error || !tvSeries) {
     return notFound();
   }

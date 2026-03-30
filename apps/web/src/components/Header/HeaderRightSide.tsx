@@ -4,23 +4,19 @@ import { UserNav } from '../User/UserNav';
 import { Button } from '../ui/button';
 import { Link } from "@/lib/i18n/navigation";
 import { SocialButton } from './components/SocialButton';
-import { NotificationsButton } from '../notifications/NotificationsButton';
 import { useAuth } from '@/context/auth-context';
 import { useTranslations } from 'next-intl';
-import { useNotifications } from '@/context/notifications-context';
 import { upperFirst } from 'lodash';
 import { ButtonGroup } from '../ui/button-group';
 
 export default function HeaderRightSide() {
   const { user } = useAuth();
-  const { state } = useNotifications();
   const t = useTranslations();
   return (
     <ButtonGroup>
       {user ? (
         <>
           <ButtonGroup>
-            {state === 'success' && <NotificationsButton />}
             <SocialButton />
             <UserNav />
           </ButtonGroup>

@@ -12,18 +12,18 @@ export const webReset = () => {
 };
 
 export const useOffering = () => {
-	const { session, customerInfo } = useAuth();
+	const { user, customerInfo } = useAuth();
 	const isConfigured = useMemo(() => customerInfo !== undefined, [customerInfo]);
 	const [offering, setOffering] = useState<Offering | null | undefined>(undefined);
 	const [isLoading, setIsLoading] = useState(true);
 
 	const purchasePackage = useCallback(async (pkg: Package) => {
 		try {
-			if (!session) {
+			if (!user) {
 				throw new Error("User not logged in");
 			}
 			const { customerInfo } = await Purchases.getSharedInstance().purchase({
-				customerEmail: session.user.email || undefined,
+				customerEmail: user.email || undefined,
 				rcPackage: pkg,
 			});
 			return customerInfo;
@@ -35,7 +35,7 @@ export const useOffering = () => {
 		} finally {
 			webReset();
 		}
-	}, [session]);
+	}, [user]);
 
 	const fetchOffering = useCallback(async () => {
 		try {

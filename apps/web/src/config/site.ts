@@ -20,18 +20,6 @@ export const siteConfig = {
       url: 'https://instagram.com/recomendhd',
     }
   },
-  oauth2: [
-    {
-      name: 'Github',
-      icon: Icons.gitHub,
-      enabled: true,
-    },
-    {
-      name: 'Google',
-      icon: Icons.google,
-      enabled: false,
-    },
-  ],
   features: [
     { icon: Icons.check, key: 'tracking', iconClass: '' },
     { icon: Icons.send, key: 'recos', iconClass: '' },

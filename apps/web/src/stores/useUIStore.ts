@@ -1,6 +1,5 @@
 
 import { Bookmark } from '@packages/api-js';
-import { UserRecosType } from '@recomendapp/types';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -10,8 +9,8 @@ interface UIStore {
   bookmarkTab: BookmarkTab;
   setBookmarkTab: (tab: BookmarkTab) => void;
 
-  myRecosTab: UserRecosType;
-  setMyRecosTab: (tab: UserRecosType) => void;
+  myRecosTab: 'movie' | 'tv_series';
+  setMyRecosTab: (tab: 'movie' | 'tv_series') => void;
 
   searchFilter: string;
   setSearchFilter: (filter: string) => void;

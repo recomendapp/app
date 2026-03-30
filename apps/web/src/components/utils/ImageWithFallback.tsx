@@ -4,11 +4,10 @@ import Image from 'next/image';
 import { ComponentProps, useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ImageIcon, ListVideo, UserIcon } from 'lucide-react';
-import { MediaType } from '@recomendapp/types';
 
 interface ImageWithFallbackProps extends Omit<ComponentProps<typeof Image>, 'src'> {
   src?: string | null;
-  type?: 'default' | 'playlist' | 'service' | 'watch-provider' | MediaType | null;
+  type?: 'default' | 'playlist' | 'service' | 'watch-provider' | 'movie' | 'tv_series' | 'tv_season' | 'tv_episode' | 'person' | null;
   blurDataURL?: string;
 }
 

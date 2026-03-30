@@ -16,10 +16,8 @@ import { Icons } from '@/config/icons';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 
-interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-export function Navbar({ className }: NavbarProps) {
-  const { session } = useAuth();
+export function Navbar({ className }: React.HTMLAttributes<HTMLDivElement>) {
+  const { user } = useAuth();
   const t = useTranslations('common');
   const pathname = usePathname();
   const routes = useMemo(
@@ -43,26 +41,26 @@ export function Navbar({ className }: NavbarProps) {
         href: '/explore',
       },
       {
-        icon: session ? Zap : Icons.shop,
-        label: session ? upperFirst(t('messages.feed')) : upperFirst(t('messages.shop')),
-        active: session ? pathname.startsWith('/feed') : false,
-        href: session ? '/feed' : 'https://shop.recomend.app',
-        target: session ? undefined : '_blank',
+        icon: user ? Zap : Icons.shop,
+        label: user ? upperFirst(t('messages.feed')) : upperFirst(t('messages.shop')),
+        active: user ? pathname.startsWith('/feed') : false,
+        href: user ? '/feed' : 'https://shop.recomend.app',
+        target: user ? undefined : '_blank',
       },
       {
-        icon: session ? Library : Icons.user,
-        label: session ? upperFirst(t('messages.library')) : upperFirst(t('messages.login')),
+        icon: user ? Library : Icons.user,
+        label: user ? upperFirst(t('messages.library')) : upperFirst(t('messages.login')),
         active:
-        session ?
+        user ?
             pathname.startsWith('/collection') ||
             pathname.startsWith('/auth') ||
             pathname.startsWith('/resetPassword') ||
             pathname.startsWith('/verifyEmail')
             : pathname.startsWith('/auth'),
-        href: session ? '/collection' : '/auth/login',
+        href: user ? '/collection' : '/auth/login',
       },
     ],
-    [pathname, session, t]
+    [pathname, user, t]
   );
 
   return (

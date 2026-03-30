@@ -1,7 +1,7 @@
 import MediaPoster from "@/components/Media/MediaPoster";
 import ActivityIcon from "@/components/Review/ActivityIcon";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
-import { MediaPerson } from "@recomendapp/types";
+import { PersonCompact } from "@packages/api-js";
 import { HeartIcon } from "lucide-react";
 
 export default function MovieCard({
@@ -17,7 +17,7 @@ export default function MovieCard({
 	title: string | null | undefined;
 	poster_url: string | null | undefined;
 	release_date: string | null | undefined;
-	directors: any | null | undefined;
+	directors: PersonCompact[] | null | undefined;
 	rating?: number | null;
 	liked?: boolean | null;
 }) {
@@ -40,7 +40,7 @@ export default function MovieCard({
   
 		  {/* DATE / GENRES / RUNTIME */}
 		  <div className="line-clamp-1">
-			{directors?.map(({ person } : { person: MediaPerson }, index: number) => (
+			{directors?.map((person, index: number) => (
 			  <>
 				{index > 0 && <span className='text-muted-foreground'>, </span>}
 				<span key={person?.id} className="italic text-muted-foreground">

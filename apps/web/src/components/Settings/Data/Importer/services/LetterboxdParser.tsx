@@ -1,12 +1,11 @@
 import Loader from "@/components/Loader";
 import JSZip from "jszip";
-import { set } from "lodash";
 import { useEffect, useState } from "react";
 import { usePapaParse } from 'react-papaparse';
-import { handleGetWatchlist } from "../hook/handleGetWatchlist";
+// import { handleGetWatchlist } from "../hook/handleGetWatchlist";
 import { useAuth } from "@/context/auth-context";
 import { ImportResults } from "../ImporterInitiator";
-import { handleGetWatched } from "../hook/handleGetWatched";
+// import { handleGetWatched } from "../hook/handleGetWatched";
 
 const LetterboxdParser = ({
 	file,
@@ -42,7 +41,6 @@ const LetterboxdParser = ({
 		else if (parsingStep === 2) user_movie();
 		else if (parsingStep === 3) watchlist();
 		else if (parsingStep === 4) setStep(3);
-	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [parsingStep]);
 
 	const parseCSV: (content: string) => Promise<any[]> = (content) => {
@@ -176,10 +174,10 @@ const LetterboxdParser = ({
 		});
 		// delete duplicates
 		movieMap.filter((movie, index) => movieMap.findIndex(m => m.movie.title === movie.movie.title && m.movie.year === movie.movie.year) === index);
-		const watchedResults = await handleGetWatched(movieMap, user?.id);
+		// const watchedResults = await handleGetWatched(movieMap, user?.id);
 		setImportResults({
 			...importResults,
-			user_movies: watchedResults,
+			// user_movies: watchedResults,
 		});
 		setParsingStep(3);
 	}
@@ -215,10 +213,10 @@ const LetterboxdParser = ({
 				// delete duplicates
 				movies.filter((movie, index) => movies.findIndex(m => m.title === movie.title && m.year === movie.year) === index);
 				// search in database for each movie and if user has watched it
-				const watchlistResults = await handleGetWatchlist(movies, user?.id);
+				// const watchlistResults = await handleGetWatchlist(movies, user?.id);
 				setImportResults({
 					...importResults,
-					watchlist: watchlistResults,
+					// watchlist: watchlistResults,
 				});
 				setParsingStep(4);
 			},
