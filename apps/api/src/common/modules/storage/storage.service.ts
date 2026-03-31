@@ -5,7 +5,7 @@ import { extname } from 'path';
 import { EnvService, ENV_SERVICE } from '@libs/env';
 import { AllowedMimeTypes, StorageFolder } from './storage.constants';
 import { MultipartFile } from '@fastify/multipart';
-import { z } from 'zod'; // <-- Import de Zod
+import { z } from 'zod';
 
 @Injectable()
 export class StorageService {
