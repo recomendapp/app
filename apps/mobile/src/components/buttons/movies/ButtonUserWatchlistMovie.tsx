@@ -1,18 +1,18 @@
-import { useAuth } from "@/providers/AuthProvider";
-import { Icons } from "@/constants/Icons";
-import { useUserWatchlistMovieDeleteMutation, useUserWatchlistMovieInsertMutation } from "@/api/users/userMutations";
-import { useTheme } from "@/providers/ThemeProvider";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { useUserWatchlistMovieDeleteMutation, useUserWatchlistMovieInsertMutation } from "apps/mobile/src/api/users/userMutations";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { MediaMovie } from "@recomendapp/types";
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
 import { usePathname, useRouter } from "expo-router";
-import { Button } from "@/components/ui/Button";
-import useBottomSheetStore from "@/stores/useBottomSheetStore";
-import { BottomSheetWatchlistMovieComment } from "@/components/bottom-sheets/sheets/BottomSheetWatchlistMovieComment";
-import { useToast } from "@/components/Toast";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
+import { BottomSheetWatchlistMovieComment } from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetWatchlistMovieComment";
+import { useToast } from "apps/mobile/src/components/Toast";
 import { forwardRef, useCallback } from "react";
-import tw from "@/lib/tw";
-import { useUserWatchlistMovieItemQuery } from "@/api/users/userQueries";
+import tw from "apps/mobile/src/lib/tw";
+import { useUserWatchlistMovieItemQuery } from "apps/mobile/src/api/users/userQueries";
 
 interface ButtonUserWatchlistMovieProps
 	extends React.ComponentProps<typeof Button> {

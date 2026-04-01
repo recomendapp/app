@@ -1,15 +1,15 @@
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
 import { LegendList } from "@legendapp/list";
 import { upperFirst } from "lodash";
 import { Href, Link } from "expo-router";
-import { useTheme } from "@/providers/ThemeProvider";
-import { Icons } from "@/constants/Icons";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { useTranslations } from "use-intl";
-import { Text } from "@/components/ui/text";
+import { Text } from "apps/mobile/src/components/ui/text";
 import { MediaMovie, UserReviewMovie } from "@recomendapp/types";
-import { CardReviewMovie } from "@/components/cards/reviews/CardReviewMovie";
-import { useMediaMovieReviewsQuery } from "@/api/medias/mediaQueries";
+import { CardReviewMovie } from "apps/mobile/src/components/cards/reviews/CardReviewMovie";
+import { useMediaMovieReviewsQuery } from "apps/mobile/src/api/medias/mediaQueries";
 
 interface MovieWidgetReviewsProps extends React.ComponentPropsWithoutRef<typeof View> {
 	movie: MediaMovie;

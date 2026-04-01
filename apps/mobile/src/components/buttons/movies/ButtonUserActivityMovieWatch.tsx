@@ -1,17 +1,17 @@
 import { Alert } from "react-native";
-import { useAuth } from "@/providers/AuthProvider";
-import { Icons } from "@/constants/Icons";
-import { useUserActivityMovieDeleteMutation, useUserActivityMovieInsertMutation } from "@/api/users/userMutations";
-import { useTheme } from "@/providers/ThemeProvider";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { useUserActivityMovieDeleteMutation, useUserActivityMovieInsertMutation } from "apps/mobile/src/api/users/userMutations";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { MediaMovie } from "@recomendapp/types";
 import { upperFirst } from "lodash";
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { useTranslations } from "use-intl";
 import { usePathname, useRouter } from "expo-router";
-import { Button } from "@/components/ui/Button";
-import { useToast } from "@/components/Toast";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { useToast } from "apps/mobile/src/components/Toast";
 import { forwardRef, useCallback } from "react";
-import { useUserActivityMovieQuery } from "@/api/users/userQueries";
+import { useUserActivityMovieQuery } from "apps/mobile/src/api/users/userQueries";
 
 interface ButtonUserActivityMovieWatchProps
 	extends React.ComponentProps<typeof Button> {

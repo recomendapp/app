@@ -1,14 +1,14 @@
-import { View } from "@/components/ui/view";
-import tw from "@/lib/tw";
-import { useTheme } from "@/providers/ThemeProvider";
+import { View } from "apps/mobile/src/components/ui/view";
+import tw from "apps/mobile/src/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { createMaterialTopTabNavigator, MaterialTopTabNavigationEventMap, MaterialTopTabNavigationOptions } from "@react-navigation/material-top-tabs";
 import { ParamListBase, TabNavigationState } from "@react-navigation/native";
 import { Stack, useLocalSearchParams, withLayoutContext } from "expo-router";
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
 import { HeaderTitle } from "@react-navigation/elements";
-import { Icons } from "@/constants/Icons";
-import { useUserProfileQuery } from "@/api/users/userQueries";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { useUserProfileQuery } from "apps/mobile/src/api/users/userQueries";
 
 const Tab = createMaterialTopTabNavigator();
 

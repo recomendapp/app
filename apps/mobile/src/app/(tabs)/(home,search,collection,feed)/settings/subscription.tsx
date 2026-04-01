@@ -1,6 +1,6 @@
 
-import { useTheme } from "@/providers/ThemeProvider";
-import { GAP, PADDING_VERTICAL } from "@/theme/globals";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { GAP, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import RevenueCatUI from "react-native-purchases-ui";
 import { Stack, useRouter } from "expo-router";
 import { useCallback } from "react";

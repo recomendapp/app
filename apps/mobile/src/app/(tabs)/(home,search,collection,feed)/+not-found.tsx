@@ -1,8 +1,8 @@
-import { Button } from '@/components/ui/Button';
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
-import tw from '@/lib/tw';
-import { useTheme } from '@/providers/ThemeProvider';
+import { Button } from 'apps/mobile/src/components/ui/Button';
+import { Text } from 'apps/mobile/src/components/ui/text';
+import { View } from 'apps/mobile/src/components/ui/view';
+import tw from 'apps/mobile/src/lib/tw';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import { Stack, useRouter } from 'expo-router';
 
 const NotFoundScreen = () => {

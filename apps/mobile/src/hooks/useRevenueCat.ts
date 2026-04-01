@@ -1,5 +1,5 @@
-import { authKeys } from "@/api/auth/authKeys";
-import { REVENUECAT_API_KEY } from "@/lib/revenue-cat";
+import { authKeys } from "apps/mobile/src/api/auth/authKeys";
+import { REVENUECAT_API_KEY } from "apps/mobile/src/lib/revenue-cat";
 import { Session } from "@supabase/supabase-js";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";

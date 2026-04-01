@@ -1,30 +1,30 @@
-import ButtonUserFollow from "@/components/buttons/ButtonUserFollow";
-import { Button } from "@/components/ui/Button";
-import { Text } from "@/components/ui/text";
-import UserAvatar from "@/components/user/UserAvatar";
-import { Icons } from "@/constants/Icons";
-import tw from "@/lib/tw";
-import { useAuth } from "@/providers/AuthProvider";
-import { useTheme } from "@/providers/ThemeProvider";
+import ButtonUserFollow from "apps/mobile/src/components/buttons/ButtonUserFollow";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { Text } from "apps/mobile/src/components/ui/text";
+import UserAvatar from "apps/mobile/src/components/user/UserAvatar";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import tw from "apps/mobile/src/lib/tw";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { Profile } from "@recomendapp/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { ExternalPathString, Link, Stack, useLocalSearchParams, useRouter } from "expo-router"
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
 import { HeaderTitle, useHeaderHeight } from "@react-navigation/elements";
-import { View } from "@/components/ui/view";
-import ProfileWidgetPlaylists from "@/components/screens/user/ProfileWidgetPlaylists";
-import { Skeleton } from "@/components/ui/Skeleton";
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
-import ProfileWidgetActivitiesMovie from "@/components/screens/user/ProfileWidgetActivitiesMovie";
-import ProfileWidgetActivitiesTvSeries from "@/components/screens/user/ProfileWidgetActivitiesTvSeries";
+import { View } from "apps/mobile/src/components/ui/view";
+import ProfileWidgetPlaylists from "apps/mobile/src/components/screens/user/ProfileWidgetPlaylists";
+import { Skeleton } from "apps/mobile/src/components/ui/Skeleton";
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
+import ProfileWidgetActivitiesMovie from "apps/mobile/src/components/screens/user/ProfileWidgetActivitiesMovie";
+import ProfileWidgetActivitiesTvSeries from "apps/mobile/src/components/screens/user/ProfileWidgetActivitiesTvSeries";
 import { ActivityIndicator, Pressable, RefreshControl } from "react-native";
-import useBottomSheetStore from "@/stores/useBottomSheetStore";
-import BottomSheetUser from "@/components/bottom-sheets/sheets/BottomSheetUser";
+import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
+import BottomSheetUser from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetUser";
 import { useCallback, useMemo } from "react";
 import Animated from "react-native-reanimated";
-import { authKeys } from "@/api/auth/authKeys";
-import { useUserActivitiesMovieQuery, useUserActivitiesTvSeriesQuery, useUserPlaylistsQuery, useUserProfileQuery } from "@/api/users/userQueries";
+import { authKeys } from "apps/mobile/src/api/auth/authKeys";
+import { useUserActivitiesMovieQuery, useUserActivitiesTvSeriesQuery, useUserPlaylistsQuery, useUserProfileQuery } from "apps/mobile/src/api/users/userQueries";
 
 const ProfileHeader = ({
 	profile,

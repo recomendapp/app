@@ -1,6 +1,6 @@
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { mediasKeys } from "./mediaKeys";
-import { SupabaseClient } from "@/lib/supabase/client";
+import { SupabaseClient } from "apps/mobile/src/lib/supabase/client";
 
 /* --------------------------------- DETAILS -------------------------------- */
 export const mediaMovieDetailsOptions = ({

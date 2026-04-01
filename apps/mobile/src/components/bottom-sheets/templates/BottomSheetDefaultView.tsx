@@ -1,5 +1,5 @@
 import React from 'react';
-import TrueSheet from '@/components/ui/TrueSheet';
+import TrueSheet from 'apps/mobile/src/components/ui/TrueSheet';
 import { BottomSheetProps } from '../BottomSheetManager';
 
 interface BottomSheetDefaultViewProps extends BottomSheetProps {

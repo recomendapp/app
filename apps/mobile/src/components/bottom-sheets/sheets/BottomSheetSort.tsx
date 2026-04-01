@@ -1,14 +1,14 @@
 import { forwardRef, useCallback, useMemo } from "react";
 import { FlashList } from "@shopify/flash-list";
-import { Text } from "@/components/ui/text";
-import { Button } from "@/components/ui/Button";
-import TrueSheet from "@/components/ui/TrueSheet";
-import { useTheme } from "@/providers/ThemeProvider";
-import useBottomSheetStore from "@/stores/useBottomSheetStore";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import TrueSheet from "apps/mobile/src/components/ui/TrueSheet";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import { BottomSheetProps } from "../BottomSheetManager";
-import tw from "@/lib/tw";
-import { Icons } from "@/constants/Icons";
-import { View } from "@/components/ui/view";
+import tw from "apps/mobile/src/lib/tw";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { View } from "apps/mobile/src/components/ui/view";
 
 export interface SortOption<T = string> {
 	label: string;

@@ -1,4 +1,4 @@
-import { useTheme } from "@/providers/ThemeProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { forwardRef } from "react";
 import { EnrichedTextInput as EnrichedTextInputBase, EnrichedTextInputInstance, EnrichedTextInputProps } from "react-native-enriched";
 

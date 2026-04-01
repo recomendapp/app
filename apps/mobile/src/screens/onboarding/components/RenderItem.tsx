@@ -7,9 +7,9 @@ import Animated, {
   useAnimatedStyle,
 } from 'react-native-reanimated';
 import {OnboardingData} from '../data';
-import tw from '@/lib/tw';
+import tw from 'apps/mobile/src/lib/tw';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BORDER_RADIUS_LG, GAP_LG, PADDING_HORIZONTAL } from '@/theme/globals';
+import { BORDER_RADIUS_LG, GAP_LG, PADDING_HORIZONTAL } from 'apps/mobile/src/theme/globals';
 import { Image } from 'expo-image';
 
 type Props = {

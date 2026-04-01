@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import CollectionIcon from "./CollectionIcon";
-import { Icons } from "@/constants/Icons";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { capitalize } from "lodash";
 import { LinkProps } from "expo-router";
-import { useTheme } from "@/providers/ThemeProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useTranslations } from "use-intl";
 
 interface CollectionStaticRoute {

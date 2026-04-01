@@ -3,15 +3,15 @@ import { Profile, UserActivityMovie, UserReviewMovie, FixedOmit } from "@recomen
 import Animated from "react-native-reanimated";
 import { Pressable, View } from "react-native";
 import { Href, useRouter } from "expo-router";
-import tw from "@/lib/tw";
-import { useTheme } from "@/providers/ThemeProvider";
-import { IconMediaRating } from "@/components/medias/IconMediaRating";
+import tw from "apps/mobile/src/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { IconMediaRating } from "apps/mobile/src/components/medias/IconMediaRating";
 import { CardUser } from "../CardUser";
-import { Text } from "@/components/ui/text";
-import { Skeleton } from "@/components/ui/Skeleton";
-import ButtonUserReviewMovieLike from "@/components/buttons/ButtonUserReviewMovieLike";
-import { BottomSheetReviewMovie } from "@/components/bottom-sheets/sheets/BottomSheetReviewMovie";
-import useBottomSheetStore from "@/stores/useBottomSheetStore";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { Skeleton } from "apps/mobile/src/components/ui/Skeleton";
+import ButtonUserReviewMovieLike from "apps/mobile/src/components/buttons/ButtonUserReviewMovieLike";
+import { BottomSheetReviewMovie } from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetReviewMovie";
+import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import { convert } from "html-to-text";
 
 interface CardReviewMovieBaseProps

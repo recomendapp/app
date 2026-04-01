@@ -8,9 +8,9 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
-import tw from '@/lib/tw';
-import { useTheme } from '@/providers/ThemeProvider';
-import { BORDER_RADIUS } from '@/theme/globals';
+import tw from 'apps/mobile/src/lib/tw';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import { BORDER_RADIUS } from 'apps/mobile/src/theme/globals';
 import * as Haptics from 'expo-haptics';
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);

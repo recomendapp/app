@@ -1,4 +1,4 @@
-import { useTheme } from '@/providers/ThemeProvider';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import * as React from 'react';
 import { SwitchProps, Switch as SwitchRN } from 'react-native';
 

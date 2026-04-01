@@ -2,10 +2,10 @@ import { forwardRef, useRef } from "react";
 import { BottomSheetProps } from "../../BottomSheetManager";
 import { Profile, User } from "@recomendapp/types";
 import { TrueSheet } from "@lodev09/react-native-true-sheet";
-import { ShareViewRef } from "@/components/share/type";
+import { ShareViewRef } from "apps/mobile/src/components/share/type";
 import BottomSheetShareLayout from "./BottomSheetShareLayout"; // Importer le layout
-import { ShareUser } from "@/components/share/ShareUser";
-import { useAuth } from "@/providers/AuthProvider";
+import { ShareUser } from "apps/mobile/src/components/share/ShareUser";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 
 interface BottomSheetShareUserProps extends BottomSheetProps {
     user: User | Profile;

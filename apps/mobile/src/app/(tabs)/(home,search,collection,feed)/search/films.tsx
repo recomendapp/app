@@ -1,13 +1,13 @@
-import { CardMovie } from "@/components/cards/CardMovie";
-import { Text } from "@/components/ui/text";
-import TrueSheet from "@/components/ui/TrueSheet";
+import { CardMovie } from "apps/mobile/src/components/cards/CardMovie";
+import { Text } from "apps/mobile/src/components/ui/text";
+import TrueSheet from "apps/mobile/src/components/ui/TrueSheet";
 import { TrueSheet as RNTrueSheet } from "@lodev09/react-native-true-sheet";
-import { View } from "@/components/ui/view";
-import { Icons } from "@/constants/Icons";
-import tw from "@/lib/tw";
-import { useTheme } from "@/providers/ThemeProvider";
-import useSearchStore from "@/stores/useSearchStore";
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
+import { View } from "apps/mobile/src/components/ui/view";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import tw from "apps/mobile/src/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import useSearchStore from "apps/mobile/src/stores/useSearchStore";
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { LegendList, LegendListRef } from "@legendapp/list";
 import { useScrollToTop } from "@react-navigation/native";
 import { upperFirst } from "lodash";
@@ -16,9 +16,9 @@ import { ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslations } from "use-intl";
 import { MediaMovie } from "@recomendapp/types";
-import ErrorMessage from "@/components/ErrorMessage";
+import ErrorMessage from "apps/mobile/src/components/ErrorMessage";
 import { useKeyboardState } from "react-native-keyboard-controller";
-import { useSearchMoviesQuery } from "@/api/search/searchQueries";
+import { useSearchMoviesQuery } from "apps/mobile/src/api/search/searchQueries";
 
 const FiltersSheet = forwardRef<RNTrueSheet>((_, ref) => {
 	const insets = useSafeAreaInsets();

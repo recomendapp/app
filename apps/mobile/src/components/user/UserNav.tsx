@@ -1,10 +1,10 @@
-import { useAuth } from "@/providers/AuthProvider";
-import { Skeleton } from "@/components/ui/Skeleton";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import { Skeleton } from "apps/mobile/src/components/ui/Skeleton";
 import { GestureResponderEvent, Pressable, PressableProps } from "react-native";
 import { useRouter } from "expo-router";
 import UserAvatar from "./UserAvatar";
 import { forwardRef, useCallback } from "react";
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 
 export const UserNav = forwardRef<
 	React.ComponentRef<typeof Pressable>,

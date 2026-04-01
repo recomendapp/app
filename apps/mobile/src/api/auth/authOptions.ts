@@ -1,7 +1,7 @@
 import { queryOptions } from '@tanstack/react-query'
 import Purchases, { CustomerInfo } from 'react-native-purchases';
 import { authKeys } from './authKeys';
-import { SupabaseClient } from '@/lib/supabase/client';
+import { SupabaseClient } from 'apps/mobile/src/lib/supabase/client';
 
 export const authUserOptions = ({
 	supabase,

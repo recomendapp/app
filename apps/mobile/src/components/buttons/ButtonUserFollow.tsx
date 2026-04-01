@@ -1,16 +1,16 @@
-import { Button } from '@/components/ui/Button';
-import { Skeleton } from '@/components/ui/Skeleton';
-import { useAuth } from '@/providers/AuthProvider';
+import { Button } from 'apps/mobile/src/components/ui/Button';
+import { Skeleton } from 'apps/mobile/src/components/ui/Skeleton';
+import { useAuth } from 'apps/mobile/src/providers/AuthProvider';
 import upperFirst from 'lodash/upperFirst';
 import { Alert, ViewStyle } from 'react-native';
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { useTranslations } from "use-intl";
-import { CORNERS } from "@/theme/globals";
+import { CORNERS } from "apps/mobile/src/theme/globals";
 import { useToast } from "../Toast";
-import { useTheme } from "@/providers/ThemeProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { forwardRef } from 'react';
-import { useUserFollowProfileQuery } from '@/api/users/userQueries';
-import { useUserFollowProfileInsertMutation, useUserFollowProfileDeleteMutation } from '@/api/users/userMutations';
+import { useUserFollowProfileQuery } from 'apps/mobile/src/api/users/userQueries';
+import { useUserFollowProfileInsertMutation, useUserFollowProfileDeleteMutation } from 'apps/mobile/src/api/users/userMutations';
 
 type ButtonUserFollowSkeletonProps = {
   skeleton: true;

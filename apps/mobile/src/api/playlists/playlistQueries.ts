@@ -1,7 +1,7 @@
-import { useSupabaseClient } from "@/providers/SupabaseProvider";
+import { useSupabaseClient } from "apps/mobile/src/providers/SupabaseProvider";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { useApiClient } from "@/providers/ApiProvider";
-import { useAuth } from "@/providers/AuthProvider";
+import { useApiClient } from "apps/mobile/src/providers/ApiProvider";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { playlistDetailsOptions, playlistGuestsAddOptions, playlistGuestsOptions, playlistIsAllowedToEditOptions, playlistItemsMovieOptions, playlistItemsTvSeriesOptions, playlistMovieAddToOptions, playlistsFeaturedOptions, playlistTvSeriesAddToOptions } from "./playlistOptions";
 
 /* --------------------------------- DETAILS -------------------------------- */

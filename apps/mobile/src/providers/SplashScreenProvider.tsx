@@ -1,8 +1,8 @@
 import { createContext, use, useEffect, useMemo, useState } from "react";
-import { isAndroid, isIOS } from '@/platform/detection';
+import { isAndroid, isIOS } from 'apps/mobile/src/platform/detection';
 import * as SystemUI from 'expo-system-ui'
 import * as ScreenOrientation from 'expo-screen-orientation'
-import { logger } from '@/logger'
+import { logger } from 'apps/mobile/src/logger'
 import * as SplashScreen from 'expo-splash-screen';
 
 SplashScreen.preventAutoHideAsync()

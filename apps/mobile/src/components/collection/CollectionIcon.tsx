@@ -1,4 +1,4 @@
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { LinearGradient } from "expo-linear-gradient";
 import { ElementRef, forwardRef } from "react";
 import { View } from "react-native";

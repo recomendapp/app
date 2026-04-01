@@ -1,5 +1,5 @@
-import { useTheme } from "@/providers/ThemeProvider";
-import { PADDING_VERTICAL } from "@/theme/globals";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { forwardRef } from "react";
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller';
 import Animated, { interpolate, useAnimatedStyle } from "react-native-reanimated";

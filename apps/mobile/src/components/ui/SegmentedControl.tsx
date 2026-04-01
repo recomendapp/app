@@ -1,4 +1,4 @@
-import { useTheme } from '@/providers/ThemeProvider';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import RNSegmentedControl, { FontStyle } from '@react-native-segmented-control/segmented-control';
 import { forwardRef } from 'react';
 import { Platform } from 'react-native';

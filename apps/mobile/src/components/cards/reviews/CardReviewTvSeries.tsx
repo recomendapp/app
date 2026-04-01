@@ -3,15 +3,15 @@ import { Profile, UserActivityTvSeries, UserReviewTvSeries, FixedOmit } from "@r
 import Animated from "react-native-reanimated";
 import { Pressable, View } from "react-native";
 import { useRouter, Href } from "expo-router";
-import tw from "@/lib/tw";
-import { useTheme } from "@/providers/ThemeProvider";
-import { IconMediaRating } from "@/components/medias/IconMediaRating";
+import tw from "apps/mobile/src/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { IconMediaRating } from "apps/mobile/src/components/medias/IconMediaRating";
 import { CardUser } from "../CardUser";
-import { Text } from "@/components/ui/text";
-import { Skeleton } from "@/components/ui/Skeleton";
-import ButtonUserReviewTvSeriesLike from "@/components/buttons/ButtonUserReviewTvSeriesLike";
-import useBottomSheetStore from "@/stores/useBottomSheetStore";
-import { BottomSheetReviewTvSeries } from "@/components/bottom-sheets/sheets/BottomSheetReviewTvSeries";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { Skeleton } from "apps/mobile/src/components/ui/Skeleton";
+import ButtonUserReviewTvSeriesLike from "apps/mobile/src/components/buttons/ButtonUserReviewTvSeriesLike";
+import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
+import { BottomSheetReviewTvSeries } from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetReviewTvSeries";
 import { convert } from "html-to-text";
 
 interface CardReviewTvSeriesBaseProps

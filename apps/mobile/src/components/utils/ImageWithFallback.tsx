@@ -3,11 +3,11 @@ import { ComponentProps, useEffect, useState } from 'react';
 import { MediaType } from '@recomendapp/types';
 import { Text, View } from 'react-native';
 import { ImageIcon, ListVideoIcon } from 'lucide-react-native';
-import { Icons } from '@/constants/Icons';
+import { Icons } from 'apps/mobile/src/constants/Icons';
 import { Image, ImageProps, ImageSource } from 'expo-image';
 import Animated from 'react-native-reanimated';
-import tw from '@/lib/tw';
-import { useTheme } from '@/providers/ThemeProvider';
+import tw from 'apps/mobile/src/lib/tw';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 
 export type ImageType = 'default' | 'playlist' | 'service' | 'watch-provider' | 'user' | MediaType | null;
 

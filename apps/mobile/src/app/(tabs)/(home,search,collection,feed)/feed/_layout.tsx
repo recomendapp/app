@@ -4,8 +4,8 @@ import { withLayoutContext } from "expo-router";
 import { upperFirst } from "lodash";
 import { View } from "react-native";
 import { useTranslations } from "use-intl";
-import { SegmentedControl } from "@/components/ui/SegmentedControl";
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
+import { SegmentedControl } from "apps/mobile/src/components/ui/SegmentedControl";
+import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 
 const Tab = createMaterialTopTabNavigator();
 

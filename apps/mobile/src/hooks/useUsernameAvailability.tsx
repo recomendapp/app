@@ -1,5 +1,5 @@
 
-import { useSupabaseClient } from "@/providers/SupabaseProvider";
+import { useSupabaseClient } from "apps/mobile/src/providers/SupabaseProvider";
 import { useState } from "react";
 
 const useUsernameAvailability = () => {

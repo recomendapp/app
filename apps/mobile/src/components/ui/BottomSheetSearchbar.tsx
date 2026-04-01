@@ -1,9 +1,9 @@
-import { Icon } from '@/components/ui/icon';
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
-import tw from '@/lib/tw';
-import { useTheme } from '@/providers/ThemeProvider';
-import { CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
+import { Icon } from 'apps/mobile/src/components/ui/icon';
+import { Text } from 'apps/mobile/src/components/ui/text';
+import { View } from 'apps/mobile/src/components/ui/view';
+import tw from 'apps/mobile/src/lib/tw';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import { CORNERS, FONT_SIZE, HEIGHT } from 'apps/mobile/src/theme/globals';
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 import { Search, X } from 'lucide-react-native';
 import { useRef, useState } from 'react';

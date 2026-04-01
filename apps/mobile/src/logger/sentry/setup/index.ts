@@ -1,5 +1,5 @@
 import {init} from '@sentry/react-native'
-import * as env from '@/env'
+import * as env from 'apps/mobile/src/env'
 
 init({
   enabled: !env.IS_DEV && !!env.SENTRY_DSN,

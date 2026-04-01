@@ -1,4 +1,4 @@
-import { SupportedLocale, supportedLocales } from '@/translations/locales';
+import { SupportedLocale, supportedLocales } from '@libs/i18n';
 import getUnicodeFlagIcon from 'country-flag-icons/unicode'
 import { capitalize } from "lodash";
 

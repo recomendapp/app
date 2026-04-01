@@ -1,22 +1,22 @@
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
 import React from "react";
 import { UserRecosMovieAggregated } from "@recomendapp/types";
-import CollectionScreen, { CollectionAction, SortByOption } from "@/components/collection/CollectionScreen";
-import { Icons } from "@/constants/Icons";
+import CollectionScreen, { CollectionAction, SortByOption } from "apps/mobile/src/components/collection/CollectionScreen";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { Alert } from "react-native";
-import richTextToPlainString from "@/utils/richTextToPlainString";
-import { useUserRecosMovieCompleteMutation, useUserRecosMovieDeleteMutation } from "@/api/users/userMutations";
-import useBottomSheetStore from "@/stores/useBottomSheetStore";
-import BottomSheetMovie from "@/components/bottom-sheets/sheets/BottomSheetMovie";
-import { useUIStore } from "@/stores/useUIStore";
-import BottomSheetMyRecosSenders from "@/components/bottom-sheets/sheets/BottomSheetMyRecosSenders";
-import { useToast } from "@/components/Toast";
-import { useTheme } from "@/providers/ThemeProvider";
-import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import richTextToPlainString from "apps/mobile/src/utils/richTextToPlainString";
+import { useUserRecosMovieCompleteMutation, useUserRecosMovieDeleteMutation } from "apps/mobile/src/api/users/userMutations";
+import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
+import BottomSheetMovie from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetMovie";
+import { useUIStore } from "apps/mobile/src/stores/useUIStore";
+import BottomSheetMyRecosSenders from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetMyRecosSenders";
+import { useToast } from "apps/mobile/src/components/Toast";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
 import { SharedValue } from "react-native-reanimated";
-import { useUserRecosMovieQuery } from "@/api/users/userQueries";
+import { useUserRecosMovieQuery } from "apps/mobile/src/api/users/userQueries";
 
 interface CollectionMyRecosMovieProps {
 	scrollY?: SharedValue<number>;

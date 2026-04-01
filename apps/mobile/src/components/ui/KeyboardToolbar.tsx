@@ -1,4 +1,4 @@
-import { useTheme } from "@/providers/ThemeProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useMemo } from "react";
 import { DefaultKeyboardToolbarTheme, KeyboardToolbar as RNKeyboardToolbar } from "react-native-keyboard-controller";
 import { KeyboardToolbarTheme } from "react-native-keyboard-controller/lib/typescript/components/KeyboardToolbar/types";

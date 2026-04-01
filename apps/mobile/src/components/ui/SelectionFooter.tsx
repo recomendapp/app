@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, FlatListProps, ListRenderItem, ViewStyle } from 'react-native';
 import Animated, { SharedValue, useAnimatedStyle, useSharedValue, withTiming, useDerivedValue } from 'react-native-reanimated';
-import { useTheme } from '@/providers/ThemeProvider';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import { View } from './view';
-import tw from '@/lib/tw';
-import { PADDING, PADDING_VERTICAL } from '@/theme/globals';
+import tw from 'apps/mobile/src/lib/tw';
+import { PADDING, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { isLiquidGlassAvailable } from 'expo-glass-effect';

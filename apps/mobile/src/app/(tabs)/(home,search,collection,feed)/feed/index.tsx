@@ -1,21 +1,21 @@
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { upperFirst } from "lodash";
 import { LegendList, LegendListRef } from "@legendapp/list";
-import { View } from "@/components/ui/view";
-import { Text } from "@/components/ui/text";
+import { View } from "apps/mobile/src/components/ui/view";
+import { Text } from "apps/mobile/src/components/ui/text";
 import { useTranslations } from "use-intl";
-import { useTheme } from "@/providers/ThemeProvider";
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
-import { CardFeedActivityMovie } from "@/components/cards/feed/CardFeedActivityMovie";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
+import { CardFeedActivityMovie } from "apps/mobile/src/components/cards/feed/CardFeedActivityMovie";
 import { UserFeedItem } from "@recomendapp/types";
-import { CardFeedActivityTvSeries } from "@/components/cards/feed/CardFeedActivityTvSeries";
-import { CardFeedPlaylistLike } from "@/components/cards/feed/CardFeedPlaylistLike";
-import { CardFeedReviewMovieLike } from "@/components/cards/feed/CardFeedReviewMovieLike";
-import { CardFeedReviewTvSeriesLike } from "@/components/cards/feed/CardFeedReviewTvSeriesLike";
+import { CardFeedActivityTvSeries } from "apps/mobile/src/components/cards/feed/CardFeedActivityTvSeries";
+import { CardFeedPlaylistLike } from "apps/mobile/src/components/cards/feed/CardFeedPlaylistLike";
+import { CardFeedReviewMovieLike } from "apps/mobile/src/components/cards/feed/CardFeedReviewMovieLike";
+import { CardFeedReviewTvSeriesLike } from "apps/mobile/src/components/cards/feed/CardFeedReviewTvSeriesLike";
 import { useScrollToTop } from "@react-navigation/native";
 import { useCallback, useMemo, useRef } from "react";
-import { Icons } from "@/constants/Icons";
-import { useUserMyFeedQuery } from "@/api/users/userQueries";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { useUserMyFeedQuery } from "apps/mobile/src/api/users/userQueries";
 
 const FeedScreen = () => {
 	const t = useTranslations();

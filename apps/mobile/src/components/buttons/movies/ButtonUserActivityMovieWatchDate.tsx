@@ -1,17 +1,17 @@
-import { useAuth } from "@/providers/AuthProvider";
-import { Icons } from "@/constants/Icons";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { MediaMovie } from "@recomendapp/types";
-import { Button } from "@/components/ui/Button";
-import { useUserActivityMovieUpdateMutation } from "@/api/users/userMutations";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { useUserActivityMovieUpdateMutation } from "apps/mobile/src/api/users/userMutations";
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
-import { useToast } from "@/components/Toast";
+import { useToast } from "apps/mobile/src/components/Toast";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { useTheme } from "@/providers/ThemeProvider";
-import tw from "@/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import tw from "apps/mobile/src/lib/tw";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { forwardRef, useState } from "react";
-import { useUserActivityMovieQuery } from "@/api/users/userQueries";
+import { useUserActivityMovieQuery } from "apps/mobile/src/api/users/userQueries";
 
 interface ButtonUserActivityMovieWatchDateProps
 	extends React.ComponentProps<typeof Button> {

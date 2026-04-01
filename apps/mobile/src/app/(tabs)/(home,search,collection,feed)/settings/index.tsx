@@ -1,12 +1,12 @@
-import { useToast } from "@/components/Toast";
-import { Button } from "@/components/ui/Button";
-import { Text } from "@/components/ui/text";
-import { View } from "@/components/ui/view";
-import { Icons } from "@/constants/Icons";
-import tw from "@/lib/tw";
-import { useAuth } from "@/providers/AuthProvider";
-import { useTheme } from "@/providers/ThemeProvider";
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
+import { useToast } from "apps/mobile/src/components/Toast";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { View } from "apps/mobile/src/components/ui/view";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import tw from "apps/mobile/src/lib/tw";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { LegendList } from "@legendapp/list";
 import { AuthError } from "expo-auth-session";
 import { Href, useRouter } from "expo-router";
@@ -16,8 +16,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Alert, Pressable } from "react-native";
 import { useTranslations } from "use-intl";
 import * as Application from 'expo-application';
-import app from "@/constants/app";
-import { Badge } from "@/components/ui/Badge";
+import app from "apps/mobile/src/constants/app";
+import { Badge } from "apps/mobile/src/components/ui/Badge";
 
 type BaseRoute = {
 	label: string;

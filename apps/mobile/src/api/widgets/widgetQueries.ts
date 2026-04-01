@@ -1,4 +1,4 @@
-import { useSupabaseClient } from "@/providers/SupabaseProvider";
+import { useSupabaseClient } from "apps/mobile/src/providers/SupabaseProvider";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { widgetMostPopularOptions, widgetMostRecommendedOptions, widgetUsersOptions } from "./widgetOptions";
 

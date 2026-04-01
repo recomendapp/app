@@ -1,11 +1,11 @@
 import React from "react"
 import { Pressable } from "react-native";
-import { Icons } from "@/constants/Icons";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { MediaMovie } from "@recomendapp/types";
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { usePathname, useRouter } from "expo-router";
-import { Button } from "@/components/ui/Button";
-import tw from "@/lib/tw";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import tw from "apps/mobile/src/lib/tw";
 
 interface ButtonUserRecoMovieSendProps
 	extends React.ComponentProps<typeof Button> {

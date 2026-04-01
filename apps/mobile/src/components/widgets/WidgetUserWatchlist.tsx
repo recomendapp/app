@@ -1,18 +1,18 @@
-import { useAuth } from "@/providers/AuthProvider";
-import tw from "@/lib/tw";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import tw from "apps/mobile/src/lib/tw";
 import { Link } from "expo-router";
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
-import { useTheme } from "@/providers/ThemeProvider";
-import { Icons } from "@/constants/Icons";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { useTranslations } from "use-intl";
 import { upperFirst } from "lodash";
 import { CardMovie } from "../cards/CardMovie";
 import { MediaMovie, MediaTvSeries, UserWatchlist } from "@recomendapp/types";
 import { CardTvSeries } from "../cards/CardTvSeries";
-import { GAP } from "@/theme/globals";
+import { GAP } from "apps/mobile/src/theme/globals";
 import { GridView } from "../ui/GridView";
 import { Text } from "../ui/text";
-import { useUserWatchlistQuery } from "@/api/users/userQueries";
+import { useUserWatchlistQuery } from "apps/mobile/src/api/users/userQueries";
 
 interface WidgetUserWatchlistProps extends React.ComponentPropsWithoutRef<typeof View> {
   labelStyle?: StyleProp<TextStyle>;

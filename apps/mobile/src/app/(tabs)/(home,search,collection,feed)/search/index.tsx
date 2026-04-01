@@ -1,31 +1,31 @@
 
-import { CardMovie } from "@/components/cards/CardMovie";
-import { CardPerson } from "@/components/cards/CardPerson";
-import { CardPlaylist } from "@/components/cards/CardPlaylist";
-import { CardTvSeries } from "@/components/cards/CardTvSeries";
-import { CardUser } from "@/components/cards/CardUser";
-import FeaturedPlaylists from "@/components/screens/search/FeaturedPlaylists";
-import { MultiRowHorizontalList } from "@/components/ui/MultiRowHorizontalList";
-import { Text } from "@/components/ui/text";
-import { View } from "@/components/ui/view";
-import { Icons } from "@/constants/Icons";
-import tw from "@/lib/tw";
-import { useTheme } from "@/providers/ThemeProvider";
-import useSearchStore from "@/stores/useSearchStore";
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
+import { CardMovie } from "apps/mobile/src/components/cards/CardMovie";
+import { CardPerson } from "apps/mobile/src/components/cards/CardPerson";
+import { CardPlaylist } from "apps/mobile/src/components/cards/CardPlaylist";
+import { CardTvSeries } from "apps/mobile/src/components/cards/CardTvSeries";
+import { CardUser } from "apps/mobile/src/components/cards/CardUser";
+import FeaturedPlaylists from "apps/mobile/src/components/screens/search/FeaturedPlaylists";
+import { MultiRowHorizontalList } from "apps/mobile/src/components/ui/MultiRowHorizontalList";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { View } from "apps/mobile/src/components/ui/view";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import tw from "apps/mobile/src/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import useSearchStore from "apps/mobile/src/stores/useSearchStore";
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { useScrollToTop } from "@react-navigation/native";
 import { MediaMovie, MediaPerson, MediaTvSeries, Playlist, Profile } from "@recomendapp/types";
 import { Link } from "expo-router";
 import { clamp, upperFirst } from "lodash";
 import { useRef } from "react";
 import { useWindowDimensions, ScrollView, RefreshControl } from "react-native";
-import { KeyboardAwareScrollView } from '@/components/ui/KeyboardAwareScrollView';
+import { KeyboardAwareScrollView } from 'apps/mobile/src/components/ui/KeyboardAwareScrollView';
 import { useTranslations } from "use-intl";
 import { BestResultItem } from "@recomendapp/api-js";
-import ErrorMessage from "@/components/ErrorMessage";
+import ErrorMessage from "apps/mobile/src/components/ErrorMessage";
 import { KeyboardAwareScrollViewRef, useKeyboardState } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useSearchMultiQuery } from "@/api/search/searchQueries";
+import { useSearchMultiQuery } from "apps/mobile/src/api/search/searchQueries";
 
 const SearchScreen = () => {
 	const search = useSearchStore(state => state.search);

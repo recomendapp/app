@@ -1,9 +1,9 @@
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
-import { Icons } from '@/constants/Icons';
-import tw from '@/lib/tw';
-import { useTheme } from '@/providers/ThemeProvider';
-import { GAP, GAP_LG, GAP_XL, GAP_XS, PADDING_VERTICAL } from '@/theme/globals';
+import { Text } from 'apps/mobile/src/components/ui/text';
+import { View } from 'apps/mobile/src/components/ui/view';
+import { Icons } from 'apps/mobile/src/constants/Icons';
+import tw from 'apps/mobile/src/lib/tw';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import { GAP, GAP_LG, GAP_XL, GAP_XS, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
 import { ExternalPathString, Link } from 'expo-router';
 import { useMemo } from 'react';
 import { ScrollView } from 'react-native';

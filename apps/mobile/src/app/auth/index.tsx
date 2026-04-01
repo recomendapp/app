@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui/Button";
-import { View } from "@/components/ui/view";
-import { Icons } from "@/constants/Icons";
-import tw from "@/lib/tw";
-import { useTheme } from "@/providers/ThemeProvider";
-import { GAP, GAP_XL, PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { View } from "apps/mobile/src/components/ui/view";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import tw from "apps/mobile/src/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { GAP, GAP_XL, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { Href, Link, Stack, useRouter } from "expo-router";
 import { upperFirst } from "lodash";
 import { ScrollView, useWindowDimensions } from "react-native";
@@ -11,15 +11,15 @@ import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { useTranslations } from "use-intl";
 import { LinearGradient } from 'expo-linear-gradient';
 import Color from "color";
-import { Text } from "@/components/ui/text";
-import { getMediaDetails } from "@/components/utils/getMediaDetails";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { getMediaDetails } from "apps/mobile/src/components/utils/getMediaDetails";
 import { Database } from "@recomendapp/types";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useCallback, useMemo, useState } from "react";
-import { LoopCarousel } from "@/components/ui/LoopCarousel";
+import { LoopCarousel } from "apps/mobile/src/components/ui/LoopCarousel";
 import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useUIBackgroundsQuery } from "@/api/ui/uiQueries";
+import { useUIBackgroundsQuery } from "apps/mobile/src/api/ui/uiQueries";
 
 const AuthHeader = ({
   onBackgroundChange,

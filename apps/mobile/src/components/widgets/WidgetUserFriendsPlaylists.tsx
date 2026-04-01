@@ -1,12 +1,12 @@
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
 import { CardPlaylist } from "../cards/CardPlaylist";
 import { LegendList } from "@legendapp/list";
 import { useTranslations } from "use-intl";
 import { upperFirst } from "lodash";
 import { Text } from "../ui/text";
-import { GAP } from "@/theme/globals";
-import { useUserPlaylistsFriendQuery } from "@/api/users/userQueries";
+import { GAP } from "apps/mobile/src/theme/globals";
+import { useUserPlaylistsFriendQuery } from "apps/mobile/src/api/users/userQueries";
 
 interface WidgetUserFriendsPlaylistsProps extends React.ComponentPropsWithoutRef<typeof View> {
   labelStyle?: StyleProp<TextStyle>;

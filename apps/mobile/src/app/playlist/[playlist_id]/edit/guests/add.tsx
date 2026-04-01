@@ -1,13 +1,13 @@
-import { CardUser } from "@/components/cards/CardUser";
-import { Button } from "@/components/ui/Button";
-import { SearchBar } from "@/components/ui/searchbar";
-import { SelectionFooter } from "@/components/ui/SelectionFooter";
-import { Text } from "@/components/ui/text";
-import { View } from "@/components/ui/view";
-import { Icons } from "@/constants/Icons";
-import { usePlaylistGuestsUpsertMutation } from "@/api/playlists/playlistMutations";
-import tw from "@/lib/tw";
-import { GAP, PADDING, PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
+import { CardUser } from "apps/mobile/src/components/cards/CardUser";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { SearchBar } from "apps/mobile/src/components/ui/searchbar";
+import { SelectionFooter } from "apps/mobile/src/components/ui/SelectionFooter";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { View } from "apps/mobile/src/components/ui/view";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { usePlaylistGuestsUpsertMutation } from "apps/mobile/src/api/playlists/playlistMutations";
+import tw from "apps/mobile/src/lib/tw";
+import { GAP, PADDING, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { Profile } from "@recomendapp/types";
 import { AnimatedLegendList } from "@legendapp/list/reanimated";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
@@ -17,10 +17,10 @@ import { Alert } from "react-native";
 import { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { useTranslations } from "use-intl";
 import { PostgrestError } from "@supabase/supabase-js";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useToast } from "@/components/Toast";
-import { useTheme } from "@/providers/ThemeProvider";
-import { usePlaylistGuestsAddQuery } from "@/api/playlists/playlistQueries";
+import { Checkbox } from "apps/mobile/src/components/ui/checkbox";
+import { useToast } from "apps/mobile/src/components/Toast";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { usePlaylistGuestsAddQuery } from "apps/mobile/src/api/playlists/playlistQueries";
 
 const ModalPlaylistEditGuestsAdd = () => {
 	const { playlist_id } = useLocalSearchParams<{ playlist_id: string }>();

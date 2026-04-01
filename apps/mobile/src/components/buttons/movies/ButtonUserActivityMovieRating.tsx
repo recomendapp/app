@@ -1,20 +1,20 @@
-import { useAuth } from "@/providers/AuthProvider";
-import { Icons } from "@/constants/Icons";
-import useBottomSheetStore from "@/stores/useBottomSheetStore";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import { MediaMovie } from "@recomendapp/types";
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { usePathname, useRouter } from "expo-router";
-import { Button } from "@/components/ui/Button";
-import BottomSheetRating from "@/components/bottom-sheets/sheets/BottomSheetRating";
-import { useUserActivityMovieInsertMutation, useUserActivityMovieUpdateMutation } from "@/api/users/userMutations";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import BottomSheetRating from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetRating";
+import { useUserActivityMovieInsertMutation, useUserActivityMovieUpdateMutation } from "apps/mobile/src/api/users/userMutations";
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
-import { useToast } from "@/components/Toast";
+import { useToast } from "apps/mobile/src/components/Toast";
 import { forwardRef, useCallback } from "react";
-import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
-import { useTheme } from "@/providers/ThemeProvider";
-import { Text } from "@/components/ui/text";
-import { useUserActivityMovieQuery } from "@/api/users/userQueries";
+import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { useUserActivityMovieQuery } from "apps/mobile/src/api/users/userQueries";
 
 interface ButtonUserActivityMovieRatingProps
 	extends Omit<React.ComponentProps<typeof Button>, 'size'> {

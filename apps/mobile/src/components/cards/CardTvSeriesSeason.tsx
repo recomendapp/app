@@ -3,14 +3,14 @@ import { MediaTvSeriesSeason } from "@recomendapp/types";
 import Animated from "react-native-reanimated";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Href, useRouter } from "expo-router";
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { Pressable, View } from "react-native";
-import { useTheme } from "@/providers/ThemeProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { upperFirst } from "lodash";
 import { IconMediaRating } from "../medias/IconMediaRating";
 import { useTranslations } from "use-intl";
 import { Text } from "../ui/text";
-import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
 
 interface CardTvSeriesSeasonProps
 	extends React.ComponentPropsWithRef<typeof Animated.View> {

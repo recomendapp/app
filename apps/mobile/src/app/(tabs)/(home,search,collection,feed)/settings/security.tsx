@@ -1,23 +1,23 @@
-import { useSupabaseClient } from "@/providers/SupabaseProvider";
+import { useSupabaseClient } from "apps/mobile/src/providers/SupabaseProvider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import * as z from 'zod';
-import tw from "@/lib/tw";
-import { Label } from "@/components/ui/Label";
-import { Button } from "@/components/ui/Button";
-import { useTheme } from "@/providers/ThemeProvider";
+import tw from "apps/mobile/src/lib/tw";
+import { Label } from "apps/mobile/src/components/ui/Label";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useCallback, useMemo, useState } from "react";
 import { AuthError } from "@supabase/supabase-js";
 import { useTranslations } from "use-intl";
 import { upperFirst } from "lodash";
-import { Input } from "@/components/ui/Input";
+import { Input } from "apps/mobile/src/components/ui/Input";
 import { Stack } from "expo-router";
-import { Text } from "@/components/ui/text";
-import { View } from "@/components/ui/view";
-import { KeyboardAwareScrollView } from '@/components/ui/KeyboardAwareScrollView';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
-import { KeyboardToolbar } from "@/components/ui/KeyboardToolbar";
-import { useToast } from "@/components/Toast";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { View } from "apps/mobile/src/components/ui/view";
+import { KeyboardAwareScrollView } from 'apps/mobile/src/components/ui/KeyboardAwareScrollView';
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
+import { KeyboardToolbar } from "apps/mobile/src/components/ui/KeyboardToolbar";
+import { useToast } from "apps/mobile/src/components/Toast";
 
 const SettingsSecurityScreen = () => {
 	const supabase = useSupabaseClient();

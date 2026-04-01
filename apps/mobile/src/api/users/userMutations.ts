@@ -1,14 +1,14 @@
 import { userReviewMovieLikeOptions, userReviewTvSeriesLikeOptions, userHeartPicksMovieOptions, userHeartPicksTvSeriesOptions, userWatchlistOptions, userWatchlistMoviesOptions, userWatchlistTvSeriesOptions, userPlaylistLikeOptions, userPlaylistSavedOptions, userProfileOptions } from "./userOptions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Database, UserRecosMovieAggregated, UserRecosTvSeriesAggregated } from "@recomendapp/types";
-import { useAuth } from "@/providers/AuthProvider";
-import { useSupabaseClient } from "@/providers/SupabaseProvider";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import { useSupabaseClient } from "apps/mobile/src/providers/SupabaseProvider";
 import { ImagePickerAsset } from "expo-image-picker";
 import { randomUUID } from "expo-crypto";
 import { decode } from "base64-arraybuffer";
 import { ImageManipulator, SaveFormat } from "expo-image-manipulator";
 import { userKeys } from "./userKeys";
-import { useApiClient } from "@/providers/ApiProvider";
+import { useApiClient } from "apps/mobile/src/providers/ApiProvider";
 import { mediasKeys } from "../medias/mediaKeys";
 import { authUserOptions } from "../auth/authOptions";
 

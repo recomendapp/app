@@ -2,7 +2,7 @@ import { createClient as createClientSupabase } from "@supabase/supabase-js";
 import * as SecureStore from "expo-secure-store";
 import { getRandomValues } from "expo-crypto";
 import { Database } from "@recomendapp/types";
-import * as env from "@/env";
+import * as env from "apps/mobile/src/env";
 import { createMMKV, MMKV } from "react-native-mmkv";
 
 async function getOrCreateEncryptionKey(): Promise<string> {

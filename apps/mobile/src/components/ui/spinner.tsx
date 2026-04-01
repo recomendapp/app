@@ -1,6 +1,6 @@
-import { Text } from '@/components/ui/text';
-import { useTheme } from '@/providers/ThemeProvider';
-import { BORDER_RADIUS, CORNERS, FONT_SIZE } from '@/theme/globals';
+import { Text } from 'apps/mobile/src/components/ui/text';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import { BORDER_RADIUS, CORNERS, FONT_SIZE } from 'apps/mobile/src/theme/globals';
 import { Loader2 } from 'lucide-react-native';
 import React, { useEffect, useRef } from 'react';
 import {

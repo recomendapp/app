@@ -1,20 +1,20 @@
-import { getIdFromSlug } from "@/utils/getIdFromSlug";
+import { getIdFromSlug } from "apps/mobile/src/utils/getIdFromSlug";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useTranslations } from "use-intl";
 import { upperFirst } from "lodash";
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { Text, useWindowDimensions, View } from "react-native";
-import tw from "@/lib/tw";
-import { useTheme } from "@/providers/ThemeProvider";
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
+import tw from "apps/mobile/src/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { LegendList } from "@legendapp/list";
 import { useCallback, useMemo, useState } from "react";
-import { Button } from "@/components/ui/Button";
-import { Icons } from "@/constants/Icons";
-import { CardPlaylist } from "@/components/cards/CardPlaylist";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { CardPlaylist } from "apps/mobile/src/components/cards/CardPlaylist";
 import { Playlist } from "@recomendapp/types";
-import { useMediaTvSeriesDetailsQuery, useMediaTvSeriesPlaylistsQuery } from "@/api/medias/mediaQueries";
+import { useMediaTvSeriesDetailsQuery, useMediaTvSeriesPlaylistsQuery } from "apps/mobile/src/api/medias/mediaQueries";
 
 interface sortBy {
 	label: string;

@@ -5,6 +5,7 @@ import { TvSeasonsModule } from './seasons/tv-seasons.module';
 import { TvSeriesPlaylistsModule } from './playlists/tv-series-playlists.module';
 import { TvSeriesLogsModule } from './logs/tv-series-logs.module';
 import { TvSeriesReviewsModule } from './reviews/tv-series-reviews.module';
+import { TvSeriesImagesModule } from './images/tv-series-images.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { TvSeriesReviewsModule } from './reviews/tv-series-reviews.module';
     TvSeriesLogsModule,
     TvSeriesPlaylistsModule,
     TvSeriesReviewsModule,
+    TvSeriesImagesModule,
   ],
   controllers: [TvSeriesController],
   providers: [TvSeriesService],

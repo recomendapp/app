@@ -1,10 +1,10 @@
-import { authKeys } from "@/api/auth/authKeys";
-import { authCustomerInfoOptions } from "@/api/auth/authOptions";
-import { Button } from "@/components/ui/Button";
-import { Icons } from "@/constants/Icons";
-import tw from "@/lib/tw";
-import { useAuth } from "@/providers/AuthProvider";
-import { useTheme } from "@/providers/ThemeProvider";
+import { authKeys } from "apps/mobile/src/api/auth/authKeys";
+import { authCustomerInfoOptions } from "apps/mobile/src/api/auth/authOptions";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import tw from "apps/mobile/src/lib/tw";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useQueryClient } from "@tanstack/react-query";
 import { Redirect, Stack, useRouter } from "expo-router";
 import { upperFirst } from "lodash";

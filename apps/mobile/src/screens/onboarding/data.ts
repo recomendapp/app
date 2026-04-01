@@ -1,5 +1,5 @@
-import { Assets } from '@/constants/Assets';
-import { useTheme } from '@/providers/ThemeProvider';
+import { Assets } from 'apps/mobile/src/constants/Assets';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 

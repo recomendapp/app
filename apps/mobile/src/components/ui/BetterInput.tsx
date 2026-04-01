@@ -1,8 +1,8 @@
 import * as React from "react"
 import { Pressable, StyleProp, TextInput, TextStyle, View, ViewStyle } from "react-native"
-import { useTheme } from "@/providers/ThemeProvider"
-import tw from "@/lib/tw"
-import { Icons } from "@/constants/Icons"
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider"
+import tw from "apps/mobile/src/lib/tw"
+import { Icons } from "apps/mobile/src/constants/Icons"
 
 export interface InputProps extends React.ComponentProps<typeof TextInput> {
 	variant?: 'default' | 'outline';

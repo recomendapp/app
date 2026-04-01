@@ -1,8 +1,8 @@
-import { useAuth } from "@/providers/AuthProvider"
+import { useAuth } from "apps/mobile/src/providers/AuthProvider"
 import {
 useUserReviewMovieLikeInsertMutation,
 useUserReviewMovieLikeDeleteMutation,
-} from "@/api/users/userMutations"
+} from "apps/mobile/src/api/users/userMutations"
 import * as Haptics from 'expo-haptics'
 import { useCallback, useMemo } from "react"
 import { useUserReviewMovieLikeQuery } from "../userQueries"

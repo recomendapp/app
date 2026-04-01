@@ -1,19 +1,19 @@
 import React, { useCallback, useMemo } from 'react';
-import tw from '@/lib/tw';
+import tw from 'apps/mobile/src/lib/tw';
 import { upperFirst } from 'lodash';
-import useBottomSheetStore from '@/stores/useBottomSheetStore';
-import { Button } from '@/components/ui/Button';
-import TrueSheet from '@/components/ui/TrueSheet';
+import useBottomSheetStore from 'apps/mobile/src/stores/useBottomSheetStore';
+import { Button } from 'apps/mobile/src/components/ui/Button';
+import TrueSheet from 'apps/mobile/src/components/ui/TrueSheet';
 import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
-import { BORDER_RADIUS, GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '@/theme/globals';
-import { Input } from '@/components/ui/Input';
-import { Text } from '@/components/ui/text';
+import { BORDER_RADIUS, GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
+import { Input } from 'apps/mobile/src/components/ui/Input';
+import { Text } from 'apps/mobile/src/components/ui/text';
 import { z } from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { View } from '@/components/ui/view';
-import { useTheme } from '@/providers/ThemeProvider';
+import { View } from 'apps/mobile/src/components/ui/view';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import { Pressable } from 'react-native';
 
 interface BottomSheetCommentProps extends BottomSheetProps {

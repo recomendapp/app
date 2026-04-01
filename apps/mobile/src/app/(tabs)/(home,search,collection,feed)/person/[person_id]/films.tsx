@@ -1,4 +1,4 @@
-import { getIdFromSlug } from "@/utils/getIdFromSlug";
+import { getIdFromSlug } from "apps/mobile/src/utils/getIdFromSlug";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { upperFirst } from "lodash";
 import { useCallback, useMemo, useState } from "react";
@@ -6,15 +6,15 @@ import { useWindowDimensions, View } from "react-native"
 import { useTranslations } from "use-intl";
 import { HeaderTitle } from "@react-navigation/elements";
 import { LegendList } from "@legendapp/list";
-import { CardMovie } from "@/components/cards/CardMovie";
-import tw from "@/lib/tw";
-import { Button } from "@/components/ui/Button";
-import { Icons } from "@/constants/Icons";
+import { CardMovie } from "apps/mobile/src/components/cards/CardMovie";
+import tw from "apps/mobile/src/lib/tw";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { useActionSheet } from "@expo/react-native-action-sheet";
-import { useTheme } from "@/providers/ThemeProvider";
-import { Text } from "@/components/ui/text";
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
-import { useMediaPersonDetailsQuery, useMediaPersonFilmsQuery } from "@/api/medias/mediaQueries";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
+import { useMediaPersonDetailsQuery, useMediaPersonFilmsQuery } from "apps/mobile/src/api/medias/mediaQueries";
 
 interface sortBy {
 	label: string;

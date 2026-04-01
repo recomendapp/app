@@ -10,20 +10,20 @@ import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
 } from 'react-native-reanimated';
-import { AnimatedImageWithFallback } from '@/components/ui/AnimatedImageWithFallback';
+import { AnimatedImageWithFallback } from 'apps/mobile/src/components/ui/AnimatedImageWithFallback';
 import { upperFirst } from 'lodash';
 import { MediaPerson } from '@recomendapp/types';
-import useColorConverter from '@/hooks/useColorConverter';
-import { Skeleton } from '@/components/ui/Skeleton';
+import useColorConverter from 'apps/mobile/src/hooks/useColorConverter';
+import { Skeleton } from 'apps/mobile/src/components/ui/Skeleton';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useTheme } from '@/providers/ThemeProvider';
-import tw from '@/lib/tw';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import tw from 'apps/mobile/src/lib/tw';
 import { useTranslations } from 'use-intl';
-import { Text } from '@/components/ui/text';
-import { BORDER_RADIUS, PADDING_HORIZONTAL, PADDING_VERTICAL } from '@/theme/globals';
+import { Text } from 'apps/mobile/src/components/ui/text';
+import { BORDER_RADIUS, PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
 import { useHeaderHeight } from '@react-navigation/elements';
-import { View } from '@/components/ui/view';
-import { useImagePalette } from '@/hooks/useImagePalette';
+import { View } from 'apps/mobile/src/components/ui/view';
+import { useImagePalette } from 'apps/mobile/src/hooks/useImagePalette';
 
 interface PersonHeaderProps {
 	person?: MediaPerson | null;

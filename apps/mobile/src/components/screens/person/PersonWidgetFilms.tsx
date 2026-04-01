@@ -1,17 +1,17 @@
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { useWindowDimensions, View } from "react-native";
 import { clamp, upperFirst } from "lodash";
 import { Href, Link } from "expo-router";
-import { useTheme } from "@/providers/ThemeProvider";
-import { Icons } from "@/constants/Icons";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { useTranslations } from "use-intl";
-import { Text } from "@/components/ui/text";
-import { CardMovie } from "@/components/cards/CardMovie";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { CardMovie } from "apps/mobile/src/components/cards/CardMovie";
 import { Database } from "@recomendapp/types";
-import { MultiRowHorizontalList } from "@/components/ui/MultiRowHorizontalList";
-import { GAP, PADDING_HORIZONTAL } from "@/theme/globals";
+import { MultiRowHorizontalList } from "apps/mobile/src/components/ui/MultiRowHorizontalList";
+import { GAP, PADDING_HORIZONTAL } from "apps/mobile/src/theme/globals";
 import { useMemo } from "react";
-import { useMediaPersonFilmsQuery } from "@/api/medias/mediaQueries";
+import { useMediaPersonFilmsQuery } from "apps/mobile/src/api/medias/mediaQueries";
 
 interface PersonWidgetFilmsProps extends React.ComponentPropsWithoutRef<typeof View> {
 	personId: number;

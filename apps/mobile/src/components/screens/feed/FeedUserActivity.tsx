@@ -1,12 +1,12 @@
-import { IconMediaRating } from "@/components/medias/IconMediaRating";
-import { Icons } from "@/constants/Icons";
-import { useTheme } from "@/providers/ThemeProvider";
-import tw from "@/lib/tw";
+import { IconMediaRating } from "apps/mobile/src/components/medias/IconMediaRating";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import tw from "apps/mobile/src/lib/tw";
 import { Profile, UserActivityMovie, UserActivityTvSeries } from "@recomendapp/types";
 import { forwardRef } from "react";
 import { View } from "react-native";
 import { useTranslations } from "use-intl";
-import { Text } from "@/components/ui/text";
+import { Text } from "apps/mobile/src/components/ui/text";
 
 interface FeedUserActivityProps
   extends React.ComponentProps<typeof View> {

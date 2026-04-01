@@ -1,17 +1,19 @@
 // Sentry
-import '@/logger/sentry/setup';
-import { Sentry } from '@/logger/sentry/lib'
+import 'apps/mobile/src/logger/sentry/setup';
+import { Sentry } from 'apps/mobile/src/logger/sentry/lib'
+// API
+import 'apps/mobile/src/lib/api/init';
 
 import { useRef, useState } from 'react';
-import { setAndroidNavigationBar } from '@/lib/android-navigation-bar';
-import { Providers } from '@/providers/Providers';
-import StatusBar from '@/components/StatusBar';
-import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
+import { setAndroidNavigationBar } from 'apps/mobile/src/lib/android-navigation-bar';
+import { Providers } from 'apps/mobile/src/providers/Providers';
+import StatusBar from 'apps/mobile/src/components/StatusBar';
+import { useIsomorphicLayoutEffect } from 'apps/mobile/src/hooks/useIsomorphicLayoutEffect';
 import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-reanimated';
 import { Stack } from 'expo-router';
 import { enableFreeze, enableScreens } from 'react-native-screens';
-import { useTheme } from '@/providers/ThemeProvider';
-import { useAuth } from '@/providers/AuthProvider';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import { useAuth } from 'apps/mobile/src/providers/AuthProvider';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 import { Platform } from 'react-native';

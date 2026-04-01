@@ -1,4 +1,4 @@
-import { useSupabaseClient } from "@/providers/SupabaseProvider";
+import { useSupabaseClient } from "apps/mobile/src/providers/SupabaseProvider";
 import { useNovu } from "@novu/react-native";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { notificationsOptions } from "./notificationOptions";

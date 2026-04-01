@@ -1,20 +1,20 @@
-import { useTheme } from "@/providers/ThemeProvider";
-import tw from "@/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import tw from "apps/mobile/src/lib/tw";
 import { MediaTvSeries, Profile, UserReviewTvSeriesLike, FixedOmit } from "@recomendapp/types";
 import * as React from "react"
 import Animated from "react-native-reanimated";
-import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
+import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
 import { Pressable, View } from "react-native";
 import { Href, useRouter } from "expo-router";
-import { Text } from "@/components/ui/text";
+import { Text } from "apps/mobile/src/components/ui/text";
 import { useTranslations } from "use-intl";
-import { Skeleton } from "@/components/ui/Skeleton";
-import useBottomSheetStore from "@/stores/useBottomSheetStore";
+import { Skeleton } from "apps/mobile/src/components/ui/Skeleton";
+import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import { CardUser } from "../CardUser";
 import { CardReviewTvSeries } from "../reviews/CardReviewTvSeries";
-import BottomSheetTvSeries from "@/components/bottom-sheets/sheets/BottomSheetTvSeries";
-import { GAP } from "@/theme/globals";
-import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import BottomSheetTvSeries from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetTvSeries";
+import { GAP } from "apps/mobile/src/theme/globals";
+import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
 
 interface CardFeedReviewTvSeriesLikeBaseProps
 	extends React.ComponentProps<typeof Animated.View> {

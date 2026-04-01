@@ -1,7 +1,7 @@
-import { Text } from "@/components/ui/text";
-import { View } from "@/components/ui/view";
-import tw from "@/lib/tw";
-import { useTheme } from "@/providers/ThemeProvider";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { View } from "apps/mobile/src/components/ui/view";
+import tw from "apps/mobile/src/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { MediaTvSeries } from "@recomendapp/types";
 import { upperFirst } from "lodash";
 import { forwardRef, Fragment, ReactNode, useMemo } from "react";

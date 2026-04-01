@@ -1,27 +1,27 @@
 import { upperFirst } from "lodash";
 import { SharedValue, useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated";
 import { useTranslations } from "use-intl";
-import { useTheme } from "@/providers/ThemeProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import React, { useCallback } from "react";
 import Fuse, { FuseOptionKey } from "fuse.js";
 import { AnimatedLegendList } from "@legendapp/list/reanimated";
-import CollectionHeader from "@/components/collection/CollectionHeader";
-import { SearchBar } from "@/components/ui/searchbar";
-import tw from "@/lib/tw";
-import { Icons } from "@/constants/Icons";
-import { View } from "@/components/ui/view";
-import { Text } from "@/components/ui/text";
-import { ButtonProps } from "@/components/ui/Button";
+import CollectionHeader from "apps/mobile/src/components/collection/CollectionHeader";
+import { SearchBar } from "apps/mobile/src/components/ui/searchbar";
+import tw from "apps/mobile/src/lib/tw";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { View } from "apps/mobile/src/components/ui/view";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { ButtonProps } from "apps/mobile/src/components/ui/Button";
 import { UseQueryResult } from "@tanstack/react-query";
 import { CollectionItem } from "./CollectionItem";
-import { ImageType } from "@/components/utils/ImageWithFallback";
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
+import { ImageType } from "apps/mobile/src/components/utils/ImageWithFallback";
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { MediaType, ViewType } from "@recomendapp/types";
 import { LegendListRenderItemProps } from "@legendapp/list";
 import { useWindowDimensions } from "react-native";
 import CollectionToolbar, { CollectionToolbarItem } from "./CollectionToolbar";
 import BottomSheetSort from "../bottom-sheets/sheets/BottomSheetSort";
-import useBottomSheetStore from "@/stores/useBottomSheetStore";
+import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 
 const MemoizedSearchBar = React.memo(SearchBar);
 

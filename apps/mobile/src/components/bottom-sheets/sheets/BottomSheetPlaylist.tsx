@@ -1,30 +1,30 @@
-import tw from '@/lib/tw';
-import { Icons } from '@/constants/Icons';
+import tw from 'apps/mobile/src/lib/tw';
+import { Icons } from 'apps/mobile/src/constants/Icons';
 import { Playlist } from '@recomendapp/types';
 import { usePathname, useRouter } from 'expo-router';
 import { LucideIcon } from 'lucide-react-native';
-import { useTheme } from '@/providers/ThemeProvider';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import { upperFirst } from 'lodash';
-import useBottomSheetStore from '@/stores/useBottomSheetStore';
+import useBottomSheetStore from 'apps/mobile/src/stores/useBottomSheetStore';
 import { Alert } from 'react-native';
-import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
-import { useAuth } from '@/providers/AuthProvider';
-import { usePlaylistDeleteMutation } from '@/api/playlists/playlistMutations';
-import TrueSheet from '@/components/ui/TrueSheet';
+import { ImageWithFallback } from 'apps/mobile/src/components/utils/ImageWithFallback';
+import { useAuth } from 'apps/mobile/src/providers/AuthProvider';
+import { usePlaylistDeleteMutation } from 'apps/mobile/src/api/playlists/playlistMutations';
+import TrueSheet from 'apps/mobile/src/components/ui/TrueSheet';
 import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
-import { Button } from '@/components/ui/Button';
-import { Text } from '@/components/ui/text';
-import richTextToPlainString from '@/utils/richTextToPlainString';
-import { useToast } from '@/components/Toast';
+import { Button } from 'apps/mobile/src/components/ui/Button';
+import { Text } from 'apps/mobile/src/components/ui/text';
+import richTextToPlainString from 'apps/mobile/src/utils/richTextToPlainString';
+import { useToast } from 'apps/mobile/src/components/Toast';
 import BottomSheetSharePlaylist from './share/BottomSheetSharePlaylist';
-import { GAP } from '@/theme/globals';
-import { View } from '@/components/ui/view';
-import ButtonActionPlaylistLike from '@/components/buttons/ButtonActionPlaylistLike';
-import ButtonActionPlaylistSaved from '@/components/buttons/ButtonActionPlaylistSaved';
+import { GAP } from 'apps/mobile/src/theme/globals';
+import { View } from 'apps/mobile/src/components/ui/view';
+import ButtonActionPlaylistLike from 'apps/mobile/src/components/buttons/ButtonActionPlaylistLike';
+import ButtonActionPlaylistSaved from 'apps/mobile/src/components/buttons/ButtonActionPlaylistSaved';
 import { forwardRef, useMemo } from 'react';
 import { FlashList } from '@shopify/flash-list';
-import { useUserPlaylistSaved } from '@/api/users/hooks/useUserPlaylistSaved';
+import { useUserPlaylistSaved } from 'apps/mobile/src/api/users/hooks/useUserPlaylistSaved';
 
 interface BottomSheetPlaylistProps extends BottomSheetProps {
 	playlist: Playlist,

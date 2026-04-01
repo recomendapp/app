@@ -13,14 +13,14 @@ import Animated, {
 	withTiming,
 } from 'react-native-reanimated'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
-import { Icons } from '@/constants/Icons'
-import { useTheme } from '@/providers/ThemeProvider'
+import { Icons } from 'apps/mobile/src/constants/Icons'
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider'
 import { scheduleOnRN } from 'react-native-worklets'
 import { LucideProps } from 'lucide-react-native'
 import { clamp } from 'lodash'
 import Svg from 'react-native-svg'
-import tw from '@/lib/tw'
-import { useSplashScreen } from '@/providers/SplashScreenProvider'
+import tw from 'apps/mobile/src/lib/tw'
+import { useSplashScreen } from 'apps/mobile/src/providers/SplashScreenProvider'
 
 export const Logo = React.forwardRef<Svg, LucideProps>((props: LucideProps, ref) => {
 	const { colors } = useTheme();

@@ -1,4 +1,4 @@
-import { useTheme } from "@/providers/ThemeProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { Stack } from "expo-router";
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";

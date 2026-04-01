@@ -1,19 +1,19 @@
-import { useAuth } from "@/providers/AuthProvider";
-import { Icons } from "@/constants/Icons";
-import { useUserActivityTvSeriesInsertMutation, useUserActivityTvSeriesUpdateMutation } from "@/api/users/userMutations";
-import { useTheme } from "@/providers/ThemeProvider";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { useUserActivityTvSeriesInsertMutation, useUserActivityTvSeriesUpdateMutation } from "apps/mobile/src/api/users/userMutations";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { MediaTvSeries } from "@recomendapp/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { upperFirst } from "lodash";
 import { useSharedValue } from "react-native-reanimated";
 import { useTranslations } from "use-intl";
 import { usePathname, useRouter } from "expo-router";
-import { Button } from "@/components/ui/Button";
-import { useToast } from "@/components/Toast";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { useToast } from "apps/mobile/src/components/Toast";
 import { forwardRef, useCallback } from "react";
-import tw from "@/lib/tw";
-import { useUserActivityTvSeriesQuery } from "@/api/users/userQueries";
-import { userKeys } from "@/api/users/userKeys";
+import tw from "apps/mobile/src/lib/tw";
+import { useUserActivityTvSeriesQuery } from "apps/mobile/src/api/users/userQueries";
+import { userKeys } from "apps/mobile/src/api/users/userKeys";
 
 interface ButtonUserActivityTvSeriesLikeProps
 	extends React.ComponentProps<typeof Button> {

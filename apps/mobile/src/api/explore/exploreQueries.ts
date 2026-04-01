@@ -1,4 +1,4 @@
-import { useSupabaseClient } from '@/providers/SupabaseProvider';
+import { useSupabaseClient } from 'apps/mobile/src/providers/SupabaseProvider';
 import { useQuery } from '@tanstack/react-query'
 import { useLocale } from 'use-intl';
 import { exploreTileMetaOptions, exploreTileOptions } from './exploreOptions';

@@ -1,20 +1,20 @@
-import { useAuth } from "@/providers/AuthProvider";
-import tw from "@/lib/tw";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import tw from "apps/mobile/src/lib/tw";
 import { Link } from "expo-router";
 import { StyleProp, TextStyle, ViewStyle } from "react-native";
-import { View } from "@/components/ui/view";
-import UserAvatar from "@/components/user/UserAvatar";
-import { useTheme } from "@/providers/ThemeProvider";
-import { Icons } from "@/constants/Icons";
+import { View } from "apps/mobile/src/components/ui/view";
+import UserAvatar from "apps/mobile/src/components/user/UserAvatar";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { useTranslations } from "use-intl";
 import { upperFirst } from "lodash";
 import { MediaMovie, MediaTvSeries, UserRecosAggregated } from "@recomendapp/types";
 import { CardMovie } from "../cards/CardMovie";
 import { CardTvSeries } from "../cards/CardTvSeries";
-import { GAP } from "@/theme/globals";
+import { GAP } from "apps/mobile/src/theme/globals";
 import { GridView } from "../ui/GridView";
 import { Text } from "../ui/text";
-import { useUserRecosQuery } from "@/api/users/userQueries";
+import { useUserRecosQuery } from "apps/mobile/src/api/users/userQueries";
 
 interface WidgetUserRecosProps extends React.ComponentPropsWithoutRef<typeof View> {
   labelStyle?: StyleProp<TextStyle>;

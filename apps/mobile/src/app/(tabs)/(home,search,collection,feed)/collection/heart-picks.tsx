@@ -1,13 +1,13 @@
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
 import Animated, { FadeIn, FadeOut, useSharedValue } from "react-native-reanimated";
-import tw from "@/lib/tw";
-import { useUIStore } from "@/stores/useUIStore";
-import { CollectionHeartPicksMovie } from "@/components/screens/collection/heart-picks/CollectionHeartPicksMovie";
-import { CollectionHeartPicksTvSeries } from "@/components/screens/collection/heart-picks/CollectionHeartPicksTvSeries";
-import AnimatedStackScreen from "@/components/ui/AnimatedStackScreen";
-import { Button } from "@/components/ui/Button";
-import { Icons } from "@/constants/Icons";
+import tw from "apps/mobile/src/lib/tw";
+import { useUIStore } from "apps/mobile/src/stores/useUIStore";
+import { CollectionHeartPicksMovie } from "apps/mobile/src/components/screens/collection/heart-picks/CollectionHeartPicksMovie";
+import { CollectionHeartPicksTvSeries } from "apps/mobile/src/components/screens/collection/heart-picks/CollectionHeartPicksTvSeries";
+import AnimatedStackScreen from "apps/mobile/src/components/ui/AnimatedStackScreen";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { Icons } from "apps/mobile/src/constants/Icons";
 
 const HeartPicksScreen = () => {
 	const t = useTranslations();

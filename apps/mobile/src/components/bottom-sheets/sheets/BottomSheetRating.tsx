@@ -1,19 +1,19 @@
-import { Button } from '@/components/ui/Button';
-import { useTheme } from '@/providers/ThemeProvider';
-import tw from '@/lib/tw';
+import { Button } from 'apps/mobile/src/components/ui/Button';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import tw from 'apps/mobile/src/lib/tw';
 import { upperFirst } from 'lodash';
 import React from 'react';
 import { Dimensions, FlatList, Pressable, TouchableOpacity, View } from 'react-native';
 import Animated, { clamp, interpolate, runOnJS, SharedValue, useAnimatedProps, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
-import { Icons } from '@/constants/Icons';
-import { ImageType, ImageWithFallback } from '@/components/utils/ImageWithFallback';
-import useBottomSheetStore from '@/stores/useBottomSheetStore';
-import TrueSheet from '@/components/ui/TrueSheet';
+import { Icons } from 'apps/mobile/src/constants/Icons';
+import { ImageType, ImageWithFallback } from 'apps/mobile/src/components/utils/ImageWithFallback';
+import useBottomSheetStore from 'apps/mobile/src/stores/useBottomSheetStore';
+import TrueSheet from 'apps/mobile/src/components/ui/TrueSheet';
 import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '@/theme/globals';
-import { Text } from '@/components/ui/text';
+import { PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
+import { Text } from 'apps/mobile/src/components/ui/text';
 
 const { width } = Dimensions.get('screen');
 const ITEM_WIDTH = width * 0.2;

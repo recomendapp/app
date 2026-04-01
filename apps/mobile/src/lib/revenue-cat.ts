@@ -1,6 +1,6 @@
 import { Platform } from "react-native";
 import Purchases, { LOG_LEVEL } from "react-native-purchases";
-import * as env from '@/env';
+import * as env from 'apps/mobile/src/env';
 
 export const REVENUECAT_API_KEY = Platform.select({
 	ios: env.REVENUECAT_IOS_API_KEY,

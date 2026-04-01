@@ -1,15 +1,15 @@
-import { CardPlaylist } from "@/components/cards/CardPlaylist";
-import { Text } from "@/components/ui/text";
-import { Icons } from "@/constants/Icons";
-import tw from "@/lib/tw";
-import { useTheme } from "@/providers/ThemeProvider";
+import { CardPlaylist } from "apps/mobile/src/components/cards/CardPlaylist";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import tw from "apps/mobile/src/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { Profile } from "@recomendapp/types";
 import { LegendList } from "@legendapp/list";
 import { Link } from "expo-router";
 import { upperFirst } from "lodash";
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
 import { useTranslations } from "use-intl";
-import { useUserPlaylistsQuery } from "@/api/users/userQueries";
+import { useUserPlaylistsQuery } from "apps/mobile/src/api/users/userQueries";
 
 interface ProfileWidgetPlaylistsProps extends React.ComponentPropsWithoutRef<typeof View> {
 	profile: Profile;

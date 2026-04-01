@@ -1,8 +1,8 @@
 
-import { Button } from "@/components/ui/Button";
-import { Icons } from "@/constants/Icons";
-import tw from "@/lib/tw";
-import { useTheme } from "@/providers/ThemeProvider";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import tw from "apps/mobile/src/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { LegendList } from "@legendapp/list";
 import { useLocalSearchParams } from "expo-router";
@@ -10,11 +10,11 @@ import { upperFirst } from "lodash";
 import { useCallback, useMemo, useState } from "react";
 import { Text, useWindowDimensions, View } from "react-native";
 import { useTranslations } from "use-intl";
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
-import { CardMovie } from "@/components/cards/CardMovie";
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
+import { CardMovie } from "apps/mobile/src/components/cards/CardMovie";
 import { FadeInDown } from "react-native-reanimated";
 import { UserActivityMovie } from "@recomendapp/types";
-import { useUserActivitiesMovieQuery, useUserProfileQuery } from "@/api/users/userQueries";
+import { useUserActivitiesMovieQuery, useUserProfileQuery } from "apps/mobile/src/api/users/userQueries";
 
 interface sortBy {
 	label: string;

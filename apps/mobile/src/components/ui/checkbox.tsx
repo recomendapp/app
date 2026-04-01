@@ -1,7 +1,7 @@
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
-import { useTheme } from '@/providers/ThemeProvider';
-import { HEIGHT } from '@/theme/globals';
+import { Text } from 'apps/mobile/src/components/ui/text';
+import { View } from 'apps/mobile/src/components/ui/view';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import { HEIGHT } from 'apps/mobile/src/theme/globals';
 import { Check } from 'lucide-react-native';
 import React from 'react';
 import { TextStyle, TouchableOpacity } from 'react-native';

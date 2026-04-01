@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui/Button";
-import { SearchBar } from "@/components/ui/searchbar";
-import { View } from "@/components/ui/view"
-import tw from "@/lib/tw";
-import useSearchStore, { SearchType } from "@/stores/useSearchStore";
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { SearchBar } from "apps/mobile/src/components/ui/searchbar";
+import { View } from "apps/mobile/src/components/ui/view"
+import tw from "apps/mobile/src/lib/tw";
+import useSearchStore, { SearchType } from "apps/mobile/src/stores/useSearchStore";
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { Href, Stack, usePathname, useRouter } from "expo-router"
 import { upperFirst } from "lodash"
 import { useEffect, useMemo, useCallback, useState } from "react";

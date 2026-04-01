@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "apps/mobile/src/lib/supabase/client";
 import { Database } from "@recomendapp/types";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, use, useMemo } from "react";

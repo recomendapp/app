@@ -1,8 +1,8 @@
-import { Icon } from '@/components/ui/icon';
-import { Icons } from '@/constants/Icons';
-import tw from '@/lib/tw';
-import { useTheme } from '@/providers/ThemeProvider';
-import { BORDER_RADIUS, FONT_SIZE, HEIGHT } from '@/theme/globals';
+import { Icon } from 'apps/mobile/src/components/ui/icon';
+import { Icons } from 'apps/mobile/src/constants/Icons';
+import tw from 'apps/mobile/src/lib/tw';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import { BORDER_RADIUS, FONT_SIZE, HEIGHT } from 'apps/mobile/src/theme/globals';
 import { upperFirst } from 'lodash';
 import { LucideProps } from 'lucide-react-native';
 import React, { forwardRef, ReactElement, useState } from 'react';

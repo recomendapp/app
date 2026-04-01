@@ -1,5 +1,5 @@
-import { isAndroid } from '@/platform/detection';
-import { useTheme } from '@/providers/ThemeProvider';
+import { isAndroid } from 'apps/mobile/src/platform/detection';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import { TrueSheet as RNTrueSheet, TrueSheetProps as RNTrueSheetProps } from '@lodev09/react-native-true-sheet';
 import { forwardRef } from 'react';
 import { Platform } from 'react-native';

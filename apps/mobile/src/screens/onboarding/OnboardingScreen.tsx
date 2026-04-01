@@ -10,7 +10,7 @@ import CustomButton from './components/CustomButton';
 import RenderItem from './components/RenderItem';
 import useOnboardingData, { OnboardingData } from './data';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { PADDING_VERTICAL } from '@/theme/globals';
+import { PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
 import { useRouter } from 'expo-router';
 
 const OnboardingScreen = () => {

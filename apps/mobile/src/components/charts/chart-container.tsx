@@ -1,6 +1,6 @@
-import { useTheme } from '@/providers/ThemeProvider';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import { View, ViewStyle } from 'react-native';
-import tw from '@/lib/tw';
+import tw from 'apps/mobile/src/lib/tw';
 import { Text } from '../ui/text';
 
 type Props = {

@@ -1,6 +1,6 @@
 import { Redirect, RelativePathString, useLocalSearchParams } from "expo-router";
 import NotFoundScreen from "./+not-found";
-import { SupportedLocale, supportedLocales } from "@/translations/locales";
+import { SupportedLocale, supportedLocales } from "@libs/i18n";
 
 const handleLocalePrefix = (segments: string[]): string[] => {
     let firstNonLocaleIndex = 0;

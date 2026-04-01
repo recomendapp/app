@@ -4,9 +4,10 @@ import { HEADER_LANGUAGE_KEY } from '@libs/i18n/src';
 import { client } from '@packages/api-js';
 import { useLocale } from 'next-intl';
 import { useEffect } from 'react';
+import { API_ENDPOINT } from '../env';
 
 client.setConfig({
-  baseUrl: process.env.NEXT_PUBLIC_API_HOST || 'https://api.woodn.fr',
+  baseUrl: API_ENDPOINT || 'https://api.recomend.app/v1',
   credentials: 'include',
 });
 

@@ -1,16 +1,16 @@
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
 import { LegendList } from "@legendapp/list";
 import { upperFirst } from "lodash";
 import { Href, Link } from "expo-router";
-import { useTheme } from "@/providers/ThemeProvider";
-import { Icons } from "@/constants/Icons";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { useTranslations } from "use-intl";
-import { Text } from "@/components/ui/text";
+import { Text } from "apps/mobile/src/components/ui/text";
 import { MediaTvSeries, UserReviewTvSeries } from "@recomendapp/types";
-import { CardReviewTvSeries } from "@/components/cards/reviews/CardReviewTvSeries";
+import { CardReviewTvSeries } from "apps/mobile/src/components/cards/reviews/CardReviewTvSeries";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useMediaTvSeriesReviewsQuery } from "@/api/medias/mediaQueries";
+import { useMediaTvSeriesReviewsQuery } from "apps/mobile/src/api/medias/mediaQueries";
 
 interface TvSeriesWidgetReviewsProps extends React.ComponentPropsWithoutRef<typeof View> {
 	tvSeries: MediaTvSeries;

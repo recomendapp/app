@@ -1,13 +1,13 @@
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
 import { LegendList } from "@legendapp/list";
 import { upperFirst } from "lodash";
-import { useTheme } from "@/providers/ThemeProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { Database } from "@recomendapp/types";
-import { CardTvSeriesSeason } from "@/components/cards/CardTvSeriesSeason";
+import { CardTvSeriesSeason } from "apps/mobile/src/components/cards/CardTvSeriesSeason";
 import { useTranslations } from "use-intl";
-import { Text } from "@/components/ui/text";
-import { useMediaTvSeriesSeasonsQuery } from "@/api/medias/mediaQueries";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { useMediaTvSeriesSeasonsQuery } from "apps/mobile/src/api/medias/mediaQueries";
 
 interface TvSeriesWidgetSeasonsProps extends React.ComponentPropsWithoutRef<typeof View> {
 	tvSeries: Database['public']['Views']['media_tv_series']['Row'];

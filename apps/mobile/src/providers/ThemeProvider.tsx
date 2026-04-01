@@ -1,14 +1,14 @@
-import Colors, { TColors } from "@/constants/Colors";
+import Colors, { TColors } from "apps/mobile/src/constants/Colors";
 import { DarkTheme, ThemeProvider as NativeThemeProvider } from "@react-navigation/native";
 import { createContext, use, useCallback, useEffect, useMemo, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import { useBottomTabOverflow } from "@/hooks/useBottomTabOverflow";
+import { useBottomTabOverflow } from "apps/mobile/src/hooks/useBottomTabOverflow";
 import { setBackgroundColorAsync } from "expo-system-ui";
 import { Appearance, Platform } from "react-native";
 import { isLiquidGlassAvailable as utilsIsLiquidGlassAvailable } from "expo-glass-effect";
 import { setButtonStyleAsync } from "expo-navigation-bar";
-import { getModeFromColor } from "@/utils/getModeFromColor";
+import { getModeFromColor } from "apps/mobile/src/utils/getModeFromColor";
 
 type ThemeMode = "light" | "dark";
 

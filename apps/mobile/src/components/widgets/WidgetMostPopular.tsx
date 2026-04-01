@@ -1,13 +1,13 @@
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
 import { LegendList } from "@legendapp/list";
 import { useTranslations } from "use-intl";
 import { upperFirst } from "lodash";
 import { CardMovie } from "../cards/CardMovie";
 import { CardTvSeries } from "../cards/CardTvSeries";
-import { GAP, WIDTH_CARD_XS } from "@/theme/globals";
+import { GAP, WIDTH_CARD_XS } from "apps/mobile/src/theme/globals";
 import { Text } from "../ui/text";
-import { useWidgetMostPopularQuery } from "@/api/widgets/widgetQueries";
+import { useWidgetMostPopularQuery } from "apps/mobile/src/api/widgets/widgetQueries";
 
 interface WidgetMostPopularProps extends React.ComponentPropsWithoutRef<typeof View> {
   labelStyle?: StyleProp<TextStyle>;

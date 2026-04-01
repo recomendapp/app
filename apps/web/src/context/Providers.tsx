@@ -13,9 +13,9 @@ import { ModalProvider } from './modal-context';
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
 import { SupportedLocale } from '@libs/i18n';
-import { ApiProvider } from './api-context';
 import { getStatus } from '@/api/server/system';
 import { getMe } from '@/lib/auth/server';
+import { ApiProvider } from '@/lib/api/client';
 
 export const Providers = async ({
   children,

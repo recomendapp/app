@@ -1,5 +1,5 @@
-import { TColors } from "@/constants/Colors";
-import { useTheme } from "@/providers/ThemeProvider";
+import { TColors } from "apps/mobile/src/constants/Colors";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useMemo } from "react";
 import { StyleSheet } from "react-native";
 

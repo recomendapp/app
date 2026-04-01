@@ -3,25 +3,25 @@ import { Provider, Session } from "@supabase/supabase-js";
 import { createContext, use, useCallback, useEffect, useState } from "react";
 import { useSupabaseClient } from "./SupabaseProvider";
 import { Alert, AppState, Platform } from "react-native";
-import { supabase } from "@/lib/supabase/client";
+import { supabase } from "apps/mobile/src/lib/supabase/client";
 import { useSplashScreen } from "./SplashScreenProvider";
 import { useLocaleContext } from "./LocaleProvider";
 import * as AuthSession from 'expo-auth-session';
 import * as WebBrowser from 'expo-web-browser';
 import * as QueryParams from "expo-auth-session/build/QueryParams";
 import { makeRedirectUri } from "expo-auth-session";
-import { defaultSupportedLocale, SupportedLocale, supportedLocales } from "@/translations/locales";
-import { useRevenueCat } from "@/hooks/useRevenueCat";
+import { useRevenueCat } from "apps/mobile/src/hooks/useRevenueCat";
 import { CustomerInfo } from "react-native-purchases";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { randomUUID } from "expo-crypto";
 import * as AppleAuthentication from 'expo-apple-authentication';
-import * as env from '@/env';
+import * as env from 'apps/mobile/src/env';
 import { useQueryClient } from "@tanstack/react-query";
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
-import { authKeys } from "@/api/auth/authKeys";
-import { useAuthCustomerInfoQuery, useAuthUserQuery } from "@/api/auth/authQueries";
+import { authKeys } from "apps/mobile/src/api/auth/authKeys";
+import { useAuthCustomerInfoQuery, useAuthUserQuery } from "apps/mobile/src/api/auth/authQueries";
+import { defaultSupportedLocale, SupportedLocale, supportedLocales } from "@libs/i18n";
 
 // Tells Supabase Auth to continuously refresh the session automatically
 // if the app is in the foreground. When this is added, you will continue

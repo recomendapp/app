@@ -1,18 +1,18 @@
-import { CardUser } from "@/components/cards/CardUser";
-import { Button } from "@/components/ui/Button";
-import { Text } from "@/components/ui/text";
-import { View } from "@/components/ui/view";
-import { Icons } from "@/constants/Icons";
-import { useUserAcceptFollowerRequestMutation, useUserDeclineFollowerRequestMutation } from "@/api/users/userMutations";
-import tw from "@/lib/tw";
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
+import { CardUser } from "apps/mobile/src/components/cards/CardUser";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { View } from "apps/mobile/src/components/ui/view";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { useUserAcceptFollowerRequestMutation, useUserDeclineFollowerRequestMutation } from "apps/mobile/src/api/users/userMutations";
+import tw from "apps/mobile/src/lib/tw";
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { LegendList } from "@legendapp/list";
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
-import { useToast } from "@/components/Toast";
+import { useToast } from "apps/mobile/src/components/Toast";
 import { useCallback, useMemo } from "react";
-import { useUserFollowersRequestsQuery } from "@/api/users/userQueries";
-import { useTheme } from "@/providers/ThemeProvider";
+import { useUserFollowersRequestsQuery } from "apps/mobile/src/api/users/userQueries";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 
 const FollowRequestsScreen = () => {
 	const t = useTranslations();

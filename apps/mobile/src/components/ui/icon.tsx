@@ -1,4 +1,4 @@
-import { useTheme } from '@/providers/ThemeProvider';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import { LucideProps } from 'lucide-react-native';
 import React from 'react';
 

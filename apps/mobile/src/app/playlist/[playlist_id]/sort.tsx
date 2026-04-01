@@ -1,13 +1,13 @@
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
-import tw from "@/lib/tw";
-import { View } from "@/components/ui/view";
-import { Icons } from "@/constants/Icons";
-import { PlaylistSortMovie } from "@/components/screens/playlist/sort/PlaylistSortMovie";
-import { PlaylistSortTvSeries } from "@/components/screens/playlist/sort/PlaylistSortTvSeries";
+import tw from "apps/mobile/src/lib/tw";
+import { View } from "apps/mobile/src/components/ui/view";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { PlaylistSortMovie } from "apps/mobile/src/components/screens/playlist/sort/PlaylistSortMovie";
+import { PlaylistSortTvSeries } from "apps/mobile/src/components/screens/playlist/sort/PlaylistSortTvSeries";
 import { useCallback } from "react";
-import { usePlaylistDetailsQuery } from "@/api/playlists/playlistQueries";
+import { usePlaylistDetailsQuery } from "apps/mobile/src/api/playlists/playlistQueries";
 
 const PlaylistSortScreen = () => {
 	const t = useTranslations();

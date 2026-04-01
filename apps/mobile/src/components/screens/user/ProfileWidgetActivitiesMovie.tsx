@@ -1,15 +1,15 @@
-import { CardMovie } from "@/components/cards/CardMovie";
-import { Text } from "@/components/ui/text";
-import { Icons } from "@/constants/Icons";
-import tw from "@/lib/tw";
-import { useTheme } from "@/providers/ThemeProvider";
+import { CardMovie } from "apps/mobile/src/components/cards/CardMovie";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import tw from "apps/mobile/src/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { Profile } from "@recomendapp/types";
 import { LegendList } from "@legendapp/list";
 import { Link } from "expo-router";
 import { upperFirst } from "lodash";
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
 import { useTranslations } from "use-intl";
-import { useUserActivitiesMovieQuery } from "@/api/users/userQueries";
+import { useUserActivitiesMovieQuery } from "apps/mobile/src/api/users/userQueries";
 
 interface ProfileWidgetActivitiesMovieProps extends React.ComponentPropsWithoutRef<typeof View> {
 	profile: Profile;

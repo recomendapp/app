@@ -1,18 +1,18 @@
 import React, { useMemo } from 'react';
-import tw from '@/lib/tw';
+import tw from 'apps/mobile/src/lib/tw';
 import { FlatList, View } from 'react-native';
-import TrueSheet from '@/components/ui/TrueSheet';
+import TrueSheet from 'apps/mobile/src/components/ui/TrueSheet';
 import { BottomSheetProps } from '../BottomSheetManager';
-import { CardUser } from '@/components/cards/CardUser';
-import { BarChart } from '@/components/charts/bar-chart';
-import { IconMediaRating } from '@/components/medias/IconMediaRating';
+import { CardUser } from 'apps/mobile/src/components/cards/CardUser';
+import { BarChart } from 'apps/mobile/src/components/charts/bar-chart';
+import { IconMediaRating } from 'apps/mobile/src/components/medias/IconMediaRating';
 import { upperFirst } from 'lodash';
-import { Icons } from '@/constants/Icons';
+import { Icons } from 'apps/mobile/src/constants/Icons';
 import { useTranslations } from 'use-intl';
 import { interpolateRgb } from 'd3-interpolate'; 
-import { Text } from '@/components/ui/text';
+import { Text } from 'apps/mobile/src/components/ui/text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useMediaTvSeriesFollowersAverageRatingsQuery } from '@/api/medias/mediaQueries';
+import { useMediaTvSeriesFollowersAverageRatingsQuery } from 'apps/mobile/src/api/medias/mediaQueries';
 
 interface BottomSheetUserActivityTvSeriesFollowersRatingProps extends BottomSheetProps {
   tvSeriesId: number;

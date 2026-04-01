@@ -1,9 +1,9 @@
-import { Icon } from '@/components/ui/icon';
-import { ButtonSpinner, SpinnerVariant } from '@/components/ui/spinner';
-import { Text } from '@/components/ui/text';
-import tw from '@/lib/tw';
-import { useTheme } from '@/providers/ThemeProvider';
-import {  HEIGHT } from '@/theme/globals';
+import { Icon } from 'apps/mobile/src/components/ui/icon';
+import { ButtonSpinner, SpinnerVariant } from 'apps/mobile/src/components/ui/spinner';
+import { Text } from 'apps/mobile/src/components/ui/text';
+import tw from 'apps/mobile/src/lib/tw';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import {  HEIGHT } from 'apps/mobile/src/theme/globals';
 import * as Haptics from 'expo-haptics';
 import { LucideProps } from 'lucide-react-native';
 import { forwardRef } from 'react';

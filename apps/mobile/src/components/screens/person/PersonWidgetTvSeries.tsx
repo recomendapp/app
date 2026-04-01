@@ -1,17 +1,17 @@
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { useWindowDimensions, View } from "react-native";
 import { clamp, upperFirst } from "lodash";
 import { Href, Link } from "expo-router";
-import { useTheme } from "@/providers/ThemeProvider";
-import { Icons } from "@/constants/Icons";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { useTranslations } from "use-intl";
-import { Text } from "@/components/ui/text";
+import { Text } from "apps/mobile/src/components/ui/text";
 import { Database } from "@recomendapp/types";
-import { MultiRowHorizontalList } from "@/components/ui/MultiRowHorizontalList";
-import { GAP, PADDING_HORIZONTAL } from "@/theme/globals";
-import { CardTvSeries } from "@/components/cards/CardTvSeries";
+import { MultiRowHorizontalList } from "apps/mobile/src/components/ui/MultiRowHorizontalList";
+import { GAP, PADDING_HORIZONTAL } from "apps/mobile/src/theme/globals";
+import { CardTvSeries } from "apps/mobile/src/components/cards/CardTvSeries";
 import { useMemo } from "react";
-import { useMediaPersonTvSeriesQuery } from "@/api/medias/mediaQueries";
+import { useMediaPersonTvSeriesQuery } from "apps/mobile/src/api/medias/mediaQueries";
 
 interface PersonWidgetTvSeriesProps extends React.ComponentPropsWithoutRef<typeof View> {
 	personId: number;

@@ -1,21 +1,21 @@
-import tw from '@/lib/tw';
+import tw from 'apps/mobile/src/lib/tw';
 import { UserWatchlistMovie } from '@recomendapp/types';
 import { upperFirst } from 'lodash';
-import useBottomSheetStore from '@/stores/useBottomSheetStore';
-import { useUserWatchlistMovieUpdateMutation } from '@/api/users/userMutations';
-import { Button } from '@/components/ui/Button';
-import TrueSheet from '@/components/ui/TrueSheet';
+import useBottomSheetStore from 'apps/mobile/src/stores/useBottomSheetStore';
+import { useUserWatchlistMovieUpdateMutation } from 'apps/mobile/src/api/users/userMutations';
+import { Button } from 'apps/mobile/src/components/ui/Button';
+import TrueSheet from 'apps/mobile/src/components/ui/TrueSheet';
 import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '@/theme/globals';
-import { Input } from '@/components/ui/Input';
-import { Text } from '@/components/ui/text';
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
+import { Input } from 'apps/mobile/src/components/ui/Input';
+import { Text } from 'apps/mobile/src/components/ui/text';
 import { z } from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { View } from '@/components/ui/view';
-import { useTheme } from '@/providers/ThemeProvider';
-import { useToast } from '@/components/Toast';
+import { View } from 'apps/mobile/src/components/ui/view';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import { useToast } from 'apps/mobile/src/components/Toast';
 import { forwardRef } from 'react';
 
 interface BottomSheetWatchlistMovieCommentProps extends BottomSheetProps {

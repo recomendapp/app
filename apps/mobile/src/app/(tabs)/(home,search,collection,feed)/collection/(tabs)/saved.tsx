@@ -1,16 +1,16 @@
-import { CardPlaylist } from "@/components/cards/CardPlaylist";
-import { useAuth } from "@/providers/AuthProvider";
-import tw from "@/lib/tw";
+import { CardPlaylist } from "apps/mobile/src/components/cards/CardPlaylist";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import tw from "apps/mobile/src/lib/tw";
 import { Text, useWindowDimensions, View } from "react-native";
 import { LegendList } from "@legendapp/list";
-import { Icons } from "@/constants/Icons";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { upperFirst } from "lodash";
-import { useTheme } from "@/providers/ThemeProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useTranslations } from "use-intl";
 import { Playlist } from "@recomendapp/types";
 import { useCallback, useMemo } from "react";
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
-import { useUserPlaylistsSavedQuery } from "@/api/users/userQueries";
+import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
+import { useUserPlaylistsSavedQuery } from "apps/mobile/src/api/users/userQueries";
 
 const CollectionSavedScreen = () => {
 	const { user } = useAuth();

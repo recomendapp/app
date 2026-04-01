@@ -2,10 +2,10 @@ import { forwardRef, useRef } from "react";
 import { BottomSheetProps } from "../../BottomSheetManager";
 import { MediaMovie } from "@recomendapp/types";
 import { TrueSheet } from "@lodev09/react-native-true-sheet";
-import { ShareViewRef } from "@/components/share/type";
+import { ShareViewRef } from "apps/mobile/src/components/share/type";
 import BottomSheetShareLayout from "./BottomSheetShareLayout"; // Importer le layout
-import { ShareMovie } from "@/components/share/ShareMovie";
-import { useAuth } from "@/providers/AuthProvider";
+import { ShareMovie } from "apps/mobile/src/components/share/ShareMovie";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 
 interface BottomSheetShareMovieProps extends BottomSheetProps {
     movie: MediaMovie;

@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { View } from "./view";
 import { StyleProp, ViewStyle } from "react-native";
-import { GAP } from "@/theme/globals";
+import { GAP } from "apps/mobile/src/theme/globals";
 
 export interface GridViewProps<T> extends React.ComponentProps<typeof View> {
 	data: T[];

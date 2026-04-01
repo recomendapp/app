@@ -1,4 +1,4 @@
-import { SupportedLocale } from "@/translations/locales"
+import { SupportedLocale } from "@libs/i18n";
 
 const loader = {
   af: async () => {

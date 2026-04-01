@@ -1,10 +1,10 @@
-import { Icons } from "@/constants/Icons";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { forwardRef, memo, useCallback, useMemo } from "react";
 import { Button } from "../ui/Button";
 import { FlashList } from "@shopify/flash-list";
 import { LucideIcon } from "lucide-react-native";
 import { FlatList, FlatListProps, useWindowDimensions } from "react-native";
-import { GAP, PADDING_HORIZONTAL } from "@/theme/globals";
+import { GAP, PADDING_HORIZONTAL } from "apps/mobile/src/theme/globals";
 import { ViewType } from "@recomendapp/types";
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";

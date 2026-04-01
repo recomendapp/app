@@ -1,8 +1,8 @@
-import { CardPlaylist } from "@/components/cards/CardPlaylist";
-import { Button } from "@/components/ui/Button";
-import { Icons } from "@/constants/Icons";
-import tw from "@/lib/tw";
-import { useTheme } from "@/providers/ThemeProvider";
+import { CardPlaylist } from "apps/mobile/src/components/cards/CardPlaylist";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import tw from "apps/mobile/src/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { LegendList } from "@legendapp/list";
 import { Stack, useLocalSearchParams } from "expo-router";
@@ -11,8 +11,8 @@ import { useCallback, useMemo, useState } from "react";
 import { Text, useWindowDimensions, View } from "react-native";
 import { useTranslations } from "use-intl";
 import { HeaderTitle } from "@react-navigation/elements";
-import { PADDING_VERTICAL } from "@/theme/globals";
-import { useUserPlaylistsQuery, useUserProfileQuery } from "@/api/users/userQueries";
+import { PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
+import { useUserPlaylistsQuery, useUserProfileQuery } from "apps/mobile/src/api/users/userQueries";
 
 interface sortBy {
 	label: string;

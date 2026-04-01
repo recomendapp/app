@@ -7,22 +7,22 @@ import {
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
-import { View } from '@/components/ui/view';
-import { Text } from '@/components/ui/text';
-import { BottomSheetSearchbar } from '@/components/ui/BottomSheetSearchbar';
-import { GAP, PADDING_HORIZONTAL } from '@/theme/globals';
+import { View } from 'apps/mobile/src/components/ui/view';
+import { Text } from 'apps/mobile/src/components/ui/text';
+import { BottomSheetSearchbar } from 'apps/mobile/src/components/ui/BottomSheetSearchbar';
+import { GAP, PADDING_HORIZONTAL } from 'apps/mobile/src/theme/globals';
 import { ExploreTile } from '@recomendapp/types';
-import tw from '@/lib/tw';
+import tw from 'apps/mobile/src/lib/tw';
 import Fuse from 'fuse.js';
-import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
-import { Button } from '@/components/ui/Button';
-import { useTheme } from '@/providers/ThemeProvider';
+import { ImageWithFallback } from 'apps/mobile/src/components/utils/ImageWithFallback';
+import { Button } from 'apps/mobile/src/components/ui/Button';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import { LegendList } from '@legendapp/list';
-import { useExploreStore } from '@/stores/useExploreStore';
-import { Icons } from '@/constants/Icons';
+import { useExploreStore } from 'apps/mobile/src/stores/useExploreStore';
+import { Icons } from 'apps/mobile/src/constants/Icons';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
-import { useExploreTileQuery } from '@/api/explore/exploreQueries';
+import { useExploreTileQuery } from 'apps/mobile/src/api/explore/exploreQueries';
 
 interface SearchBottomSheetProps {
   index: SharedValue<number>;

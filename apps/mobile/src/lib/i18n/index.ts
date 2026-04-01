@@ -1,10 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Localization from "expo-localization";
 import deepmerge from "deepmerge";
-import { defaultSupportedLocale, SupportedLocale } from "@/translations/locales";
-import { getFallbackLocale } from "@/translations/utils/getFallbackLocale";
 import { loadPolyfills } from "./polyfills";
-import { getDictionary } from "@/translations/utils/getDictionary";
+import { defaultSupportedLocale, getDictionary, getFallbackLocale, SupportedLocale } from "@libs/i18n";
 
 export const getLocale = async (): Promise<string> => {
   let saved = await AsyncStorage.getItem("language");

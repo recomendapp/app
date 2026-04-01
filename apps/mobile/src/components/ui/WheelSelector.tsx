@@ -8,11 +8,11 @@ import Animated, {
   useAnimatedStyle, 
   useSharedValue 
 } from 'react-native-reanimated';
-import tw from '@/lib/tw';
+import tw from 'apps/mobile/src/lib/tw';
 import * as Haptics from 'expo-haptics';
-import { GAP } from '@/theme/globals';
+import { GAP } from 'apps/mobile/src/theme/globals';
 import { LayoutChangeEvent, FlatList, StyleProp, ViewStyle, Pressable } from 'react-native';
-import useDebounce from '@/hooks/useDebounce';
+import useDebounce from 'apps/mobile/src/hooks/useDebounce';
 import { scheduleOnRN } from 'react-native-worklets';
 import { View } from './view';
 

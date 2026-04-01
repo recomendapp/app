@@ -1,12 +1,12 @@
 import { forwardRef } from "react";
 import { View } from "./ui/view";
 import { useTranslations } from "use-intl";
-import { useTheme } from "@/providers/ThemeProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { Text, TextProps } from "./ui/text";
-import { Icons } from "@/constants/Icons";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { upperFirst } from "lodash";
-import { PADDING_VERTICAL } from "@/theme/globals";
-import tw from "@/lib/tw";
+import { PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
+import tw from "apps/mobile/src/lib/tw";
 
 interface ErrorMessageProps extends React.ComponentProps<typeof View> {
 	message?: string | React.ReactNode;

@@ -1,5 +1,5 @@
-import { useTheme } from "@/providers/ThemeProvider";
-import tw from "@/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import tw from "apps/mobile/src/lib/tw";
 import * as React from "react";
 import Animated from "react-native-reanimated";
 import { Skeleton } from "../ui/Skeleton";

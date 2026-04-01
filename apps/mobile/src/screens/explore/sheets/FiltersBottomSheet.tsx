@@ -5,23 +5,23 @@ import {
 } from '@gorhom/bottom-sheet';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { SharedValue } from 'react-native-reanimated';
-import { Text } from '@/components/ui/text';
-import { useTheme } from '@/providers/ThemeProvider';
-import { useExploreStore } from '@/stores/useExploreStore';
-import { View } from '@/components/ui/view';
-import tw from '@/lib/tw';
-import { BORDER_RADIUS_FULL, GAP, GAP_XS, PADDING_HORIZONTAL, PADDING_VERTICAL } from '@/theme/globals';
-import { Button } from '@/components/ui/Button';
-import { Icons } from '@/constants/Icons';
+import { Text } from 'apps/mobile/src/components/ui/text';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import { useExploreStore } from 'apps/mobile/src/stores/useExploreStore';
+import { View } from 'apps/mobile/src/components/ui/view';
+import tw from 'apps/mobile/src/lib/tw';
+import { BORDER_RADIUS_FULL, GAP, GAP_XS, PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
+import { Button } from 'apps/mobile/src/components/ui/Button';
+import { Icons } from 'apps/mobile/src/constants/Icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
-import SliderRange, { SliderRangeRef } from '@/components/ui/SliderRange';
-import { Skeleton } from '@/components/ui/Skeleton';
+import SliderRange, { SliderRangeRef } from 'apps/mobile/src/components/ui/SliderRange';
+import { Skeleton } from 'apps/mobile/src/components/ui/Skeleton';
 import { MediaMovie } from '@recomendapp/types';
-import { useAuth } from '@/providers/AuthProvider';
-import Switch from '@/components/ui/Switch';
-import { useExploreTileQuery } from '@/api/explore/exploreQueries';
+import { useAuth } from 'apps/mobile/src/providers/AuthProvider';
+import Switch from 'apps/mobile/src/components/ui/Switch';
+import { useExploreTileQuery } from 'apps/mobile/src/api/explore/exploreQueries';
 
 interface FiltersBottomSheetProps {
   index: SharedValue<number>;

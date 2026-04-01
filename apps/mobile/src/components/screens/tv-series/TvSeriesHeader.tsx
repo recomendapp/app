@@ -13,28 +13,28 @@ import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
 } from 'react-native-reanimated';
-import { AnimatedImageWithFallback } from '@/components/ui/AnimatedImageWithFallback';
+import { AnimatedImageWithFallback } from 'apps/mobile/src/components/ui/AnimatedImageWithFallback';
 import { upperFirst } from 'lodash';
 import { MediaPerson, MediaTvSeries } from '@recomendapp/types';
-import useColorConverter from '@/hooks/useColorConverter';
-import { Skeleton } from '@/components/ui/Skeleton';
+import useColorConverter from 'apps/mobile/src/hooks/useColorConverter';
+import { Skeleton } from 'apps/mobile/src/components/ui/Skeleton';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { useTheme } from '@/providers/ThemeProvider';
-import tw from '@/lib/tw';
-import { IconMediaRating } from '@/components/medias/IconMediaRating';
-import useBottomSheetStore from '@/stores/useBottomSheetStore';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import tw from 'apps/mobile/src/lib/tw';
+import { IconMediaRating } from 'apps/mobile/src/components/medias/IconMediaRating';
+import useBottomSheetStore from 'apps/mobile/src/stores/useBottomSheetStore';
 import { useLocale, useTranslations } from 'use-intl';
-import { Text, TextProps } from '@/components/ui/text';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '@/theme/globals';
-import BottomSheetUserActivityTvSeriesFollowersRating from '@/components/bottom-sheets/sheets/BottomSheetUserActivityTvSeriesFollowersRating';
+import { Text, TextProps } from 'apps/mobile/src/components/ui/text';
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
+import BottomSheetUserActivityTvSeriesFollowersRating from 'apps/mobile/src/components/bottom-sheets/sheets/BottomSheetUserActivityTvSeriesFollowersRating';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { TvSeriesHeaderInfo } from './TvSeriesHeaderInfo';
-import { useImagePalette } from '@/hooks/useImagePalette';
-import AnimatedImage from '@/components/ui/AnimatedImage';
-import BottomSheetPerson from '@/components/bottom-sheets/sheets/BottomSheetPerson';
-import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
-import { useMediaTvSeriesFollowersAverageRatingQuery } from '@/api/medias/mediaQueries';
+import { useImagePalette } from 'apps/mobile/src/hooks/useImagePalette';
+import AnimatedImage from 'apps/mobile/src/components/ui/AnimatedImage';
+import BottomSheetPerson from 'apps/mobile/src/components/bottom-sheets/sheets/BottomSheetPerson';
+import { getTmdbImage } from 'apps/mobile/src/lib/tmdb/getTmdbImage';
+import { useMediaTvSeriesFollowersAverageRatingQuery } from 'apps/mobile/src/api/medias/mediaQueries';
 
 interface TvSeriesHeaderProps {
 	tvSeries?: MediaTvSeries | null;

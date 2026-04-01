@@ -1,10 +1,10 @@
-import { useTheme } from "@/providers/ThemeProvider";
-import { Icons } from "@/constants/Icons";
-import { Button } from "@/components/ui/Button";
-import { Text } from "@/components/ui/text";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { Text } from "apps/mobile/src/components/ui/text";
 import { forwardRef, useEffect, useState } from "react";
-import tw from "@/lib/tw";
-import { useUserReviewMovieLike } from "@/api/users/hooks/useUserReviewMovieLike";
+import tw from "apps/mobile/src/lib/tw";
+import { useUserReviewMovieLike } from "apps/mobile/src/api/users/hooks/useUserReviewMovieLike";
 
 interface ButtonUserReviewMovieLikeProps
 	extends React.ComponentProps<typeof Button> {

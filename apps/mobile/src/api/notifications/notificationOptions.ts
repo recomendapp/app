@@ -2,7 +2,7 @@ import { Notification, useNovu } from "@novu/react-native";
 import { infiniteQueryOptions } from "@tanstack/react-query";
 import { notificationKeys } from "./notificationKeys";
 import { Database, NotificationPayload } from "@recomendapp/types";
-import { SupabaseClient } from "@/lib/supabase/client";
+import { SupabaseClient } from "apps/mobile/src/lib/supabase/client";
 
 export type NotificationWithContent = {
 	notifications: (Notification & {

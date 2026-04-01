@@ -1,26 +1,26 @@
 import React, { useCallback } from 'react';
-import tw from '@/lib/tw';
-import { Icons } from '@/constants/Icons';
+import tw from 'apps/mobile/src/lib/tw';
+import { Icons } from 'apps/mobile/src/constants/Icons';
 import { MediaMovie, UserActivityMovie } from '@recomendapp/types';
 import { LinkProps, usePathname, useRouter } from 'expo-router';
 import { LucideIcon } from 'lucide-react-native';
-import { useTheme } from '@/providers/ThemeProvider';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import { upperFirst } from 'lodash';
-import useBottomSheetStore from '@/stores/useBottomSheetStore';
+import useBottomSheetStore from 'apps/mobile/src/stores/useBottomSheetStore';
 import { View } from 'react-native';
-import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
+import { ImageWithFallback } from 'apps/mobile/src/components/utils/ImageWithFallback';
 import { TrueSheet as RNTrueSheet } from '@lodev09/react-native-true-sheet';
-import TrueSheet from '@/components/ui/TrueSheet';
+import TrueSheet from 'apps/mobile/src/components/ui/TrueSheet';
 import BottomSheetDefaultView from '../templates/BottomSheetDefaultView';
 import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
-import { Button } from '@/components/ui/Button';
-import { Text } from '@/components/ui/text';
-import { useAuth } from '@/providers/AuthProvider';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '@/theme/globals';
+import { Button } from 'apps/mobile/src/components/ui/Button';
+import { Text } from 'apps/mobile/src/components/ui/text';
+import { useAuth } from 'apps/mobile/src/providers/AuthProvider';
+import { PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
 import BottomSheetShareMovie from './share/BottomSheetShareMovie';
 import { FlashList } from '@shopify/flash-list';
-import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
+import { getTmdbImage } from 'apps/mobile/src/lib/tmdb/getTmdbImage';
 
 interface BottomSheetMovieProps extends BottomSheetProps {
   movie?: MediaMovie,

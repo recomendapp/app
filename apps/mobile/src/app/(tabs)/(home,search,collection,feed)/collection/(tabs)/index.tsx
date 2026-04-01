@@ -1,15 +1,15 @@
-import { CardPlaylist } from "@/components/cards/CardPlaylist";
-import useCollectionStaticRoutes from "@/components/collection/useCollectionStaticRoutes";
-import { useAuth } from "@/providers/AuthProvider";
-import tw from "@/lib/tw";
+import { CardPlaylist } from "apps/mobile/src/components/cards/CardPlaylist";
+import useCollectionStaticRoutes from "apps/mobile/src/components/collection/useCollectionStaticRoutes";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import tw from "apps/mobile/src/lib/tw";
 import { Link } from "expo-router";
 import { useWindowDimensions, View } from "react-native";
 import { LegendList } from "@legendapp/list";
-import { useTheme } from "@/providers/ThemeProvider";
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
-import { Text } from "@/components/ui/text";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
+import { Text } from "apps/mobile/src/components/ui/text";
 import { useCallback, useMemo } from "react";
-import { useUserPlaylistsQuery } from "@/api/users/userQueries";
+import { useUserPlaylistsQuery } from "apps/mobile/src/api/users/userQueries";
 
 const CollectionScreen = () => {
 	const { user } = useAuth();

@@ -1,4 +1,4 @@
-import { mergeRefs } from '@/utils/merge-refs'
+import { mergeRefs } from 'apps/mobile/src/utils/merge-refs'
 import {type ForwardedRef, useEffect, useMemo, useRef} from 'react'
 import {type ScrollView} from 'react-native'
 import {Platform} from 'react-native'

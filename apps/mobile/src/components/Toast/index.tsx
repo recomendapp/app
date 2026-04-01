@@ -1,5 +1,5 @@
 import {toast, Toaster as SNToaster} from 'sonner-native'
-import { useTheme } from '@/providers/ThemeProvider'
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider'
 import { createContext, use, useCallback } from 'react'
 import { ExternalToast, ToastAction } from './types'
 import { Button } from '../ui/Button'

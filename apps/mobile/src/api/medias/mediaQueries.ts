@@ -1,4 +1,4 @@
-import { useSupabaseClient } from "@/providers/SupabaseProvider";
+import { useSupabaseClient } from "apps/mobile/src/providers/SupabaseProvider";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { mediaMovieCreditsOptions, mediaMovieDetailsOptions, mediaMoviePlaylistsOptions, mediaMovieReviewsOptions, mediaPersonDetailsOptions, mediaPersonFilmsOptions, mediaTvSeriesCreditsOptions, mediaTvSeriesDetailsOptions, mediaTvSeriesPlaylistsOptions, mediaTvSeriesReviewsOptions, mediaTvSeriesSeasonDetailsOptions, mediaPersonTvSeriesOptions, mediaMovieFollowersAverageRatingOptions, mediaTvSeriesFollowersAverageRatingOptions, mediaMoviePostersOptions, mediaTvSeriesPostersOptions, mediaMovieBackdropsOptions, mediaTvSeriesBackdropsOptions, mediaGenresOptions, mediaTvSeriesSeasonsOptions, mediaMovieCastOptions, mediaTvSeriesCastOptions, mediaMovieFollowersAverageRatingsOptions, mediaTvSeriesFollowersAverageRatingsOptions } from "./mediaOptions";
 

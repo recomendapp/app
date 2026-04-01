@@ -1,13 +1,13 @@
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { useWindowDimensions, View } from "react-native";
 import { clamp, upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
-import { Text } from "@/components/ui/text";
-import { MultiRowHorizontalList } from "@/components/ui/MultiRowHorizontalList";
-import { GAP, PADDING_HORIZONTAL } from "@/theme/globals";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { MultiRowHorizontalList } from "apps/mobile/src/components/ui/MultiRowHorizontalList";
+import { GAP, PADDING_HORIZONTAL } from "apps/mobile/src/theme/globals";
 import { useMemo } from "react";
-import { useMediaTvSeriesCastQuery } from "@/api/medias/mediaQueries";
-import { CardPerson } from "@/components/cards/CardPerson";
+import { useMediaTvSeriesCastQuery } from "apps/mobile/src/api/medias/mediaQueries";
+import { CardPerson } from "apps/mobile/src/components/cards/CardPerson";
 
 interface TvSeriesWidgetCastProps extends React.ComponentPropsWithoutRef<typeof View> {
 	tvSeriesId: number;

@@ -3,9 +3,9 @@ import { forwardRef, useCallback, useMemo } from "react";
 import { StyleSheet, StyleProp, ViewStyle } from "react-native";
 import Animated, { SharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated";
 import { Button } from "./Button";
-import { Icons } from "@/constants/Icons";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { HeaderTitle, HeaderTitleProps } from '@react-navigation/elements';
-import { useTheme } from "@/providers/ThemeProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { LinearGradient } from "expo-linear-gradient";
 import Color from "color";
 

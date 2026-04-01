@@ -1,13 +1,13 @@
 import { forwardRef, useCallback, useMemo, useState } from 'react';
-import { KeyboardToolbar } from '@/components/ui/KeyboardToolbar';
+import { KeyboardToolbar } from 'apps/mobile/src/components/ui/KeyboardToolbar';
 import { KeyboardToolbarProps } from 'react-native-keyboard-controller';
 import { EnrichedTextInputInstance, OnChangeSelectionEvent, OnChangeStateEvent, OnLinkDetected } from 'react-native-enriched';
 import { LucideIcon } from 'lucide-react-native';
-import { Icons } from '@/constants/Icons';
-import { useTheme } from '@/providers/ThemeProvider';
+import { Icons } from 'apps/mobile/src/constants/Icons';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import { FlashList } from '@shopify/flash-list';
-import tw from '@/lib/tw';
-import { BORDER_RADIUS_FULL, GAP, GAP_XS } from '@/theme/globals';
+import tw from 'apps/mobile/src/lib/tw';
+import { BORDER_RADIUS_FULL, GAP, GAP_XS } from 'apps/mobile/src/theme/globals';
 import { View } from 'react-native';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';

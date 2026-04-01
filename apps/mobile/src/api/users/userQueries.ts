@@ -1,7 +1,7 @@
-import { useSupabaseClient } from "@/providers/SupabaseProvider";
+import { useSupabaseClient } from "apps/mobile/src/providers/SupabaseProvider";
 import { userActivitiesMovieOptions, userActivitiesOptions, userActivitiesTvSeriesOptions, userActivityMovieOptions, userActivityTvSeriesOptions, userDeleteRequestOptions, userFolloweesOptions, userFollowersOptions, userFollowersRequestsOptions, userFollowPersonOptions, userFollowProfileOptions, userHeartPicksMovieOptions, userHeartPicksTvSeriesOptions, userMyFeedCastCrewOptions, userMyFeedOptions, userPlaylistLikeOptions, userPlaylistSavedOptions, userPlaylistsFriendOptions, userPlaylistsSavedOptions, userProfileOptions, userRecosMovieOptions, userRecosMovieSendOptions, userRecosOptions, userRecosTvSeriesOptions, userRecosTvSeriesSendOptions, userReviewMovieLikeOptions, userReviewMovieOptions, userReviewTvSeriesLikeOptions, userReviewTvSeriesOptions, userWatchlistMovieItemOptions, userWatchlistMoviesOptions, userWatchlistOptions, userWatchlistTvSeriesItemOptions, userWatchlistTvSeriesOptions, userPlaylistsOptions } from "./userOptions";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 
 /* --------------------------------- PROFILE -------------------------------- */
 export const useUserProfileQuery = ({

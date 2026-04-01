@@ -3,17 +3,17 @@ import { MediaTvSeries, UserActivityTvSeries, FixedOmit } from "@recomendapp/typ
 import Animated from "react-native-reanimated";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Href, useRouter } from "expo-router";
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { Pressable, View } from "react-native";
-import { useTheme } from "@/providers/ThemeProvider";
-import useBottomSheetStore from "@/stores/useBottomSheetStore";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import { IconMediaRating } from "../medias/IconMediaRating";
 import { Skeleton } from "../ui/Skeleton";
 import BottomSheetTvSeries from "../bottom-sheets/sheets/BottomSheetTvSeries";
 import { Text } from "../ui/text";
 import ButtonUserActivityTvSeriesRating from "../buttons/tv-series/ButtonUserActivityTvSeriesRating";
-import { GAP } from "@/theme/globals";
-import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import { GAP } from "apps/mobile/src/theme/globals";
+import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
 
 interface CardTvSeriesBaseProps
 	extends React.ComponentPropsWithRef<typeof Animated.View> {

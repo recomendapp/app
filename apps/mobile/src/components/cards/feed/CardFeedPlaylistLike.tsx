@@ -1,18 +1,18 @@
 import * as React from "react"
-import { useTheme } from "@/providers/ThemeProvider";
-import tw from "@/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import tw from "apps/mobile/src/lib/tw";
 import { PlaylistLike, Profile, FixedOmit } from "@recomendapp/types";
 import Animated from "react-native-reanimated";
-import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
+import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
 import { Pressable, View } from "react-native";
 import { useRouter } from "expo-router";
-import { Text } from "@/components/ui/text";
+import { Text } from "apps/mobile/src/components/ui/text";
 import { useTranslations } from "use-intl";
-import { Skeleton } from "@/components/ui/Skeleton";
-import useBottomSheetStore from "@/stores/useBottomSheetStore";
-import BottomSheetPlaylist from "@/components/bottom-sheets/sheets/BottomSheetPlaylist";
+import { Skeleton } from "apps/mobile/src/components/ui/Skeleton";
+import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
+import BottomSheetPlaylist from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetPlaylist";
 import { CardUser } from "../CardUser";
-import { GAP } from "@/theme/globals";
+import { GAP } from "apps/mobile/src/theme/globals";
 
 interface CardFeedPlaylistLikeBaseProps
 	extends React.ComponentProps<typeof Animated.View> {

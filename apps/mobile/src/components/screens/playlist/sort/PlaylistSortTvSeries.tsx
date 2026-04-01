@@ -1,12 +1,12 @@
-import { Button } from "@/components/ui/Button";
-import { Text } from "@/components/ui/text";
-import { View } from "@/components/ui/view";
-import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
-import { Icons } from "@/constants/Icons";
-import { usePlaylistTvSeriesUpdateMutation } from "@/api/playlists/playlistMutations";
-import tw from "@/lib/tw";
-import { useAuth } from "@/providers/AuthProvider";
-import { useTheme } from "@/providers/ThemeProvider";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { View } from "apps/mobile/src/components/ui/view";
+import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { usePlaylistTvSeriesUpdateMutation } from "apps/mobile/src/api/playlists/playlistMutations";
+import tw from "apps/mobile/src/lib/tw";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { PlaylistItemTvSeries } from "@recomendapp/types";
 import { PostgrestError } from "@supabase/supabase-js";
 import { Redirect, useLocalSearchParams } from "expo-router";
@@ -14,12 +14,12 @@ import { upperFirst } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 import DraggableFlatList, { DragEndParams, RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist";
 import { useTranslations } from "use-intl";
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
+import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useToast } from "@/components/Toast";
-import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import { useToast } from "apps/mobile/src/components/Toast";
+import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
 import { useHeaderHeight } from "@react-navigation/elements";
-import { usePlaylistIsAllowedToEditQuery, usePlaylistItemsTvSeriesQuery } from "@/api/playlists/playlistQueries";
+import { usePlaylistIsAllowedToEditQuery, usePlaylistItemsTvSeriesQuery } from "apps/mobile/src/api/playlists/playlistQueries";
 
 export const PlaylistSortTvSeries = () => {
 	const { session } = useAuth();

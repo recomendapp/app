@@ -1,15 +1,15 @@
 import { Tabs, useRouter, useSegments } from 'expo-router';
 import { Icon, Label, NativeTabs } from 'expo-router/unstable-native-tabs';
-import { Icons } from "@/constants/Icons";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { Platform } from 'react-native';
-import { useAuth } from '@/providers/AuthProvider';
-import { useTheme } from '@/providers/ThemeProvider';
-import { HapticTab } from '@/components/HapticTab';
-import TabBarBackground from '@/components/TabBar/TabBarBackground';
+import { useAuth } from 'apps/mobile/src/providers/AuthProvider';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import { HapticTab } from 'apps/mobile/src/components/HapticTab';
+import TabBarBackground from 'apps/mobile/src/components/TabBar/TabBarBackground';
 import { useTranslations } from 'use-intl';
 import { upperFirst } from 'lodash';
 import { useEffect } from 'react';
-import { useUIStore } from '@/stores/useUIStore';
+import { useUIStore } from 'apps/mobile/src/stores/useUIStore';
 
 const TabsLayout = () => {
 	const { session } = useAuth();

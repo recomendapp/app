@@ -1,17 +1,17 @@
-import ReviewForm from "@/components/screens/review/ReviewForm";
-import { Icons } from "@/constants/Icons";
-import { useAuth } from "@/providers/AuthProvider";
-import { getIdFromSlug } from "@/utils/getIdFromSlug";
-import tw from "@/lib/tw";
+import ReviewForm from "apps/mobile/src/components/screens/review/ReviewForm";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import { getIdFromSlug } from "apps/mobile/src/utils/getIdFromSlug";
+import tw from "apps/mobile/src/lib/tw";
 import { Redirect, useLocalSearchParams, useRouter } from "expo-router";
 import { View } from "react-native"
-import { useUserReviewTvSeriesUpsertMutation } from "@/api/users/userMutations";
+import { useUserReviewTvSeriesUpsertMutation } from "apps/mobile/src/api/users/userMutations";
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
-import { useToast } from "@/components/Toast";
+import { useToast } from "apps/mobile/src/components/Toast";
 import { useCallback } from "react";
-import { useMediaTvSeriesDetailsQuery } from "@/api/medias/mediaQueries";
-import { useUserActivityTvSeriesQuery } from "@/api/users/userQueries";
+import { useMediaTvSeriesDetailsQuery } from "apps/mobile/src/api/medias/mediaQueries";
+import { useUserActivityTvSeriesQuery } from "apps/mobile/src/api/users/userQueries";
 
 const ReviewTvSeriesCreateScreen = () => {
 	const { user } = useAuth();

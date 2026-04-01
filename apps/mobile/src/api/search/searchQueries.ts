@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useLocale } from "use-intl";
-import { useApiClient } from "@/providers/ApiProvider";
+import { useApiClient } from "apps/mobile/src/providers/ApiProvider";
 import { searchMoviesOptions, searchMultiOptions, searchPersonsOptions, searchPlaylistsOptions, searchTvSeriesOptions, searchUsersOptions } from "./searchOptions";
 
 export const useSearchMultiQuery = ({

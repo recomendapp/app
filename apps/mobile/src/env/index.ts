@@ -1,8 +1,8 @@
 import { nativeBuildVersion } from 'expo-application'
 
-import { BUNDLE_IDENTIFIER, IS_TESTFLIGHT, RELEASE_VERSION } from '@/env/common'
+import { BUNDLE_IDENTIFIER, IS_TESTFLIGHT, RELEASE_VERSION } from 'apps/mobile/src/env/common'
 
-export * from '@/env/common'
+export * from 'apps/mobile/src/env/common'
 
 /**
  * The semver version of the app, specified in our `package.json`.file. On

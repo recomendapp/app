@@ -1,22 +1,22 @@
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
 import React from "react";
 import { UserWatchlistTvSeries } from "@recomendapp/types";
-import CollectionScreen, { CollectionAction, SortByOption } from "@/components/collection/CollectionScreen";
-import { Icons } from "@/constants/Icons";
+import CollectionScreen, { CollectionAction, SortByOption } from "apps/mobile/src/components/collection/CollectionScreen";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { Alert } from "react-native";
-import richTextToPlainString from "@/utils/richTextToPlainString";
-import { useUserWatchlistTvSeriesDeleteMutation } from "@/api/users/userMutations";
-import useBottomSheetStore from "@/stores/useBottomSheetStore";
-import { useUIStore } from "@/stores/useUIStore";
-import { BottomSheetWatchlistTvSeriesComment } from "@/components/bottom-sheets/sheets/BottomSheetWatchlistTvSeriesComment";
-import BottomSheetTvSeries from "@/components/bottom-sheets/sheets/BottomSheetTvSeries";
-import { useToast } from "@/components/Toast";
-import { useTheme } from "@/providers/ThemeProvider";
-import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import richTextToPlainString from "apps/mobile/src/utils/richTextToPlainString";
+import { useUserWatchlistTvSeriesDeleteMutation } from "apps/mobile/src/api/users/userMutations";
+import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
+import { useUIStore } from "apps/mobile/src/stores/useUIStore";
+import { BottomSheetWatchlistTvSeriesComment } from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetWatchlistTvSeriesComment";
+import BottomSheetTvSeries from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetTvSeries";
+import { useToast } from "apps/mobile/src/components/Toast";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
 import { SharedValue } from "react-native-reanimated";
-import { useUserWatchlistTvSeriesQuery } from "@/api/users/userQueries";
+import { useUserWatchlistTvSeriesQuery } from "apps/mobile/src/api/users/userQueries";
 
 interface CollectionWatchlistTvSeriesProps {
 	scrollY?: SharedValue<number>;

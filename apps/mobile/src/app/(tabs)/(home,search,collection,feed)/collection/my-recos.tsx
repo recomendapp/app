@@ -1,13 +1,13 @@
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
 import Animated, { FadeIn, FadeOut, useSharedValue } from "react-native-reanimated";
-import tw from "@/lib/tw";
-import { useUIStore } from "@/stores/useUIStore";
-import { CollectionMyRecosMovie } from "@/components/screens/collection/my-recos/CollectionMyRecosMovie";
-import { CollectionMyRecosTvSeries } from "@/components/screens/collection/my-recos/CollectionMyRecosTvSeries";
-import AnimatedStackScreen from "@/components/ui/AnimatedStackScreen";
-import { Button } from "@/components/ui/Button";
-import { Icons } from "@/constants/Icons";
+import tw from "apps/mobile/src/lib/tw";
+import { useUIStore } from "apps/mobile/src/stores/useUIStore";
+import { CollectionMyRecosMovie } from "apps/mobile/src/components/screens/collection/my-recos/CollectionMyRecosMovie";
+import { CollectionMyRecosTvSeries } from "apps/mobile/src/components/screens/collection/my-recos/CollectionMyRecosTvSeries";
+import AnimatedStackScreen from "apps/mobile/src/components/ui/AnimatedStackScreen";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { Icons } from "apps/mobile/src/constants/Icons";
 
 const MyRecosScreen = () => {
     const t = useTranslations();

@@ -2,28 +2,28 @@ import { useLocalSearchParams } from "expo-router"
 import { upperFirst } from "lodash";
 import { LayoutChangeEvent, View } from "react-native";
 import { Database, MediaTvSeriesEpisode } from "@recomendapp/types";
-import tw from "@/lib/tw";
-import { useTheme } from "@/providers/ThemeProvider";
+import tw from "apps/mobile/src/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import Animated, { Extrapolation, interpolate, SharedValue, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
-import { getIdFromSlug } from "@/utils/getIdFromSlug";
+import { getIdFromSlug } from "apps/mobile/src/utils/getIdFromSlug";
 import { LinearGradient } from 'expo-linear-gradient';
-import { Skeleton } from "@/components/ui/Skeleton";
-import { AnimatedImageWithFallback } from "@/components/ui/AnimatedImageWithFallback";
+import { Skeleton } from "apps/mobile/src/components/ui/Skeleton";
+import { AnimatedImageWithFallback } from "apps/mobile/src/components/ui/AnimatedImageWithFallback";
 import { Image } from 'expo-image';
-import useColorConverter from "@/hooks/useColorConverter";
-import { useRandomImage } from "@/hooks/useRandomImage";
+import useColorConverter from "apps/mobile/src/hooks/useColorConverter";
+import { useRandomImage } from "apps/mobile/src/hooks/useRandomImage";
 import { AnimatedLegendList } from "@legendapp/list/reanimated";
-import { Icons } from "@/constants/Icons";
-import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
-import { IconMediaRating } from "@/components/medias/IconMediaRating";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
+import { IconMediaRating } from "apps/mobile/src/components/medias/IconMediaRating";
 import { useFormatter, useTranslations } from "use-intl";
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
-import AnimatedStackScreen from "@/components/ui/AnimatedStackScreen";
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
+import AnimatedStackScreen from "apps/mobile/src/components/ui/AnimatedStackScreen";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useCallback } from "react";
-import { Text } from "@/components/ui/text";
-import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
-import { useMediaTvSeriesSeasonDetailsQuery } from "@/api/medias/mediaQueries";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
+import { useMediaTvSeriesSeasonDetailsQuery } from "apps/mobile/src/api/medias/mediaQueries";
 
 interface MediaHeaderProps {
 	season?: Database['public']['Views']['media_tv_series_seasons']['Row']

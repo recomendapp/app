@@ -1,10 +1,10 @@
 import { forwardRef } from "react";
 import { View } from "../ui/view";
 import { Text } from "../ui/text";
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { useRouter } from "expo-router";
 import { Button } from "../ui/Button";
-import { Icons } from "@/constants/Icons";
+import { Icons } from "apps/mobile/src/constants/Icons";
 
 interface HeaderProps extends React.ComponentProps<typeof View> {
 	right?: string | React.ReactNode;

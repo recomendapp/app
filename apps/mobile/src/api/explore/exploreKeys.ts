@@ -1,4 +1,4 @@
-import { withPersistKey } from "@/api";
+import { withPersistKey } from "apps/mobile/src/api";
 
 export const exploreKeys = {
 	base: ['explore'] as const,

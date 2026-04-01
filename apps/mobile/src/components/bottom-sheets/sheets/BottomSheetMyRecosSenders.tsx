@@ -1,17 +1,17 @@
 import React, { useCallback } from 'react';
-import tw from '@/lib/tw';
+import tw from 'apps/mobile/src/lib/tw';
 import { UserRecosAggregated } from '@recomendapp/types';
-import { useTheme } from '@/providers/ThemeProvider';
-import { Text } from '@/components/ui/text';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import { Text } from 'apps/mobile/src/components/ui/text';
 import { upperFirst } from 'lodash';
 import { View } from 'react-native';
-import { CardUser } from '@/components/cards/CardUser';
+import { CardUser } from 'apps/mobile/src/components/cards/CardUser';
 import { FlashList } from '@shopify/flash-list';
-import TrueSheet from '@/components/ui/TrueSheet';
+import TrueSheet from 'apps/mobile/src/components/ui/TrueSheet';
 import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '@/theme/globals';
+import { PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
 
 interface BottomSheetMyRecosSendersProps extends BottomSheetProps {
   comments: UserRecosAggregated['senders'];

@@ -6,7 +6,7 @@ import { CurrentOptionalUser, CurrentUser } from '../../auth/decorators';
 import { User } from '../../auth/auth.service';
 import { ListInfiniteReviewsTvSeriesDto, ListInfiniteReviewsTvSeriesQueryDto, ListPaginatedReviewsTvSeriesDto, ListPaginatedReviewsTvSeriesQueryDto, ReviewTvSeriesDto, ReviewTvSeriesInputDto } from '../../reviews/tv-series/dto/review-tv-series.dto';
 
-@ApiTags('TV Series')
+@ApiTags('Tv Series')
 @Controller({
   path: 'tv-series/:tv_series_id',
   version: '1',

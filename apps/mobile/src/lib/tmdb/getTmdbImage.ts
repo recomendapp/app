@@ -1,4 +1,4 @@
-import { TMDB_IMAGE_BASE_URL } from "@/env";
+import { TMDB_IMAGE_BASE_URL } from "apps/mobile/src/env";
 
 type TmdbImageProps = {
 	path?: string | null;

@@ -3,7 +3,7 @@ import { AuthProvider } from "./AuthProvider";
 import { ReactQueryProvider } from "./ReactQueryProvider";
 import { SupabaseProvider } from "./SupabaseProvider";
 import { ThemeProvider } from "./ThemeProvider";
-import { BottomSheetManager } from "@/components/bottom-sheets/BottomSheetManager";
+import { BottomSheetManager } from "apps/mobile/src/components/bottom-sheets/BottomSheetManager";
 import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context";
 import { SplashScreenProvider } from "./SplashScreenProvider";
 import { LocaleProvider } from "./LocaleProvider";
@@ -11,10 +11,10 @@ import { NotificationsProvider } from "./NotificationsProvider";
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PropsWithChildren } from "react";
-import { ToastProvider } from "@/components/Toast";
+import { ToastProvider } from "apps/mobile/src/components/Toast";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { ApiProvider } from "./ApiProvider";
-import { useUIBackgroundsQuery } from "@/api/ui/uiQueries";
+import { useUIBackgroundsQuery } from "apps/mobile/src/api/ui/uiQueries";
 
 type ProvidersProps = {
 	children: React.ReactNode;

@@ -1,6 +1,6 @@
-import { useAuth } from '@/providers/AuthProvider';
-import { useNotifications } from '@/providers/NotificationsProvider';
-import { ThemeUpdater, useTheme } from '@/providers/ThemeProvider';
+import { useAuth } from 'apps/mobile/src/providers/AuthProvider';
+import { useNotifications } from 'apps/mobile/src/providers/NotificationsProvider';
+import { ThemeUpdater, useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import { Stack } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useMemo } from 'react';

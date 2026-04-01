@@ -1,10 +1,10 @@
 import { forwardRef } from "react";
-import { useAuth } from "@/providers/AuthProvider";
-import { useTheme } from "@/providers/ThemeProvider";
-import { Icons } from "@/constants/Icons";
-import { Button } from "@/components/ui/Button";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { Button } from "apps/mobile/src/components/ui/Button";
 import { Playlist } from "@recomendapp/types";
-import { useUserPlaylistLike } from "@/api/users/hooks/useUserPlaylistLike";
+import { useUserPlaylistLike } from "apps/mobile/src/api/users/hooks/useUserPlaylistLike";
 
 interface ButtonActionPlaylistLikeProps
 	extends React.ComponentProps<typeof Button> {

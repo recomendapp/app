@@ -1,15 +1,15 @@
-import { View } from "@/components/ui/view";
-import { Icons } from "@/constants/Icons";
-import tw from "@/lib/tw";
-import { useAuth } from "@/providers/AuthProvider";
+import { View } from "apps/mobile/src/components/ui/view";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import tw from "apps/mobile/src/lib/tw";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { AuthError } from "expo-auth-session";
 import { useLinkingURL } from "expo-linking";
 import { useEffect, useState } from "react";
 import { Redirect } from "expo-router";
 import { useTranslations } from "use-intl";
 import { upperFirst } from "lodash";
-import { useToast } from "@/components/Toast";
-import { logger } from "@/logger";
+import { useToast } from "apps/mobile/src/components/Toast";
+import { logger } from "apps/mobile/src/logger";
 
 const AuthCallbackScreen = () => {
 	const url = useLinkingURL();

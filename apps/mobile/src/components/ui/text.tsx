@@ -1,5 +1,5 @@
-import { useTheme } from '@/providers/ThemeProvider';
-import { FONT_SIZE } from '@/theme/globals';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import { FONT_SIZE } from 'apps/mobile/src/theme/globals';
 import React, { forwardRef, useMemo } from 'react'; // Importer useMemo
 import {
   Text as RNText,

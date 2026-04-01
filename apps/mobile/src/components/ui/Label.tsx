@@ -1,4 +1,4 @@
-import tw from '@/lib/tw';
+import tw from 'apps/mobile/src/lib/tw';
 import * as React from 'react';
 import { Text, TextProps } from './text';
 

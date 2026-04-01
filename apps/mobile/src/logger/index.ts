@@ -1,16 +1,16 @@
 import { nanoid } from 'nanoid/non-secure'
-import { add } from '@/logger/logDump'
-import { type MetricEvents } from '@/logger/metrics'
-import { consoleTransport } from '@/logger/transports/console'
-import { sentryTransport } from '@/logger/transports/sentry'
+import { add } from 'apps/mobile/src/logger/logDump'
+import { type MetricEvents } from 'apps/mobile/src/logger/metrics'
+import { consoleTransport } from 'apps/mobile/src/logger/transports/console'
+import { sentryTransport } from 'apps/mobile/src/logger/transports/sentry'
 import {
   LogContext,
   LogLevel,
   type Metadata,
   type Transport,
-} from '@/logger/types'
-import { enabledLogLevels } from '@/logger/util'
-import * as env from '@/env'
+} from 'apps/mobile/src/logger/types'
+import { enabledLogLevels } from 'apps/mobile/src/logger/util'
+import * as env from 'apps/mobile/src/env'
 
 const TRANSPORTS: Transport[] = (function configureTransports() {
   switch (env.ENV) {

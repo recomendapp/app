@@ -1,20 +1,20 @@
-import { useTheme } from "@/providers/ThemeProvider";
-import useColorConverter from "@/hooks/useColorConverter";
-import tw from "@/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import useColorConverter from "apps/mobile/src/hooks/useColorConverter";
+import tw from "apps/mobile/src/lib/tw";
 import React, { forwardRef, memo, useMemo } from "react";
 import { Dimensions, Text } from "react-native";
 import Animated, { Extrapolation, interpolate, SharedValue, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
-import useRandomBackdrop from "@/hooks/useRandomBackdrop";
+import useRandomBackdrop from "apps/mobile/src/hooks/useRandomBackdrop";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useHeaderHeight } from '@react-navigation/elements';
-import { Skeleton } from "@/components/ui/Skeleton";
-import { View } from "@/components/ui/view";
-import { AnimatedImageWithFallback } from "@/components/ui/AnimatedImageWithFallback";
-import { ImageType } from "@/components/utils/ImageWithFallback";
+import { Skeleton } from "apps/mobile/src/components/ui/Skeleton";
+import { View } from "apps/mobile/src/components/ui/view";
+import { AnimatedImageWithFallback } from "apps/mobile/src/components/ui/AnimatedImageWithFallback";
+import { ImageType } from "apps/mobile/src/components/utils/ImageWithFallback";
 import { MediaType } from "@recomendapp/types";
 import { useTranslations } from "use-intl";
-import { PADDING_HORIZONTAL } from "@/theme/globals";
+import { PADDING_HORIZONTAL } from "apps/mobile/src/theme/globals";
 
 interface CollectionHeaderBaseProps
 	extends React.ComponentPropsWithoutRef<typeof Animated.View> {

@@ -1,21 +1,21 @@
-import { useTheme } from "@/providers/ThemeProvider";
-import tw from "@/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import tw from "apps/mobile/src/lib/tw";
 import { MediaPerson, MediaTvSeries, FixedOmit } from "@recomendapp/types";
 import * as React from "react"
 import Animated from "react-native-reanimated";
-import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
+import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
 import { Pressable, View } from "react-native";
 import { Href, Link, useRouter } from "expo-router";
-import { Text } from "@/components/ui/text";
+import { Text } from "apps/mobile/src/components/ui/text";
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
-import UserAvatar from "@/components/user/UserAvatar";
-import { Skeleton } from "@/components/ui/Skeleton";
-import useBottomSheetStore from "@/stores/useBottomSheetStore";
-import BottomSheetTvSeries from "@/components/bottom-sheets/sheets/BottomSheetTvSeries";
-import { BadgeMedia } from "@/components/badges/BadgeMedia";
-import { GAP } from "@/theme/globals";
-import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import UserAvatar from "apps/mobile/src/components/user/UserAvatar";
+import { Skeleton } from "apps/mobile/src/components/ui/Skeleton";
+import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
+import BottomSheetTvSeries from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetTvSeries";
+import { BadgeMedia } from "apps/mobile/src/components/badges/BadgeMedia";
+import { GAP } from "apps/mobile/src/theme/globals";
+import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
 
 interface CardFeedCastCrewTvSeriesBaseProps
 	extends React.ComponentProps<typeof Animated.View> {

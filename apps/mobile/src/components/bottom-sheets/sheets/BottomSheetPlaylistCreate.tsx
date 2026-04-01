@@ -1,22 +1,22 @@
-import tw from '@/lib/tw';
+import tw from 'apps/mobile/src/lib/tw';
 import { upperFirst } from 'lodash';
-import { Button } from '@/components/ui/Button';
-import useBottomSheetStore from '@/stores/useBottomSheetStore';
-import { usePlaylistInsertMutation } from '@/api/playlists/playlistMutations';
+import { Button } from 'apps/mobile/src/components/ui/Button';
+import useBottomSheetStore from 'apps/mobile/src/stores/useBottomSheetStore';
+import { usePlaylistInsertMutation } from 'apps/mobile/src/api/playlists/playlistMutations';
 import { Playlist, PlaylistType } from '@recomendapp/types';
 import * as z from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { View } from 'react-native';
 import { BottomSheetProps } from '../BottomSheetManager';
-import TrueSheet from '@/components/ui/TrueSheet';
+import TrueSheet from 'apps/mobile/src/components/ui/TrueSheet';
 import { useTranslations } from 'use-intl';
-import { useToast } from '@/components/Toast';
-import { Input } from "@/components/ui/Input";
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '@/theme/globals';
-import { Label } from '@/components/ui/Label';
+import { useToast } from 'apps/mobile/src/components/Toast';
+import { Input } from "apps/mobile/src/components/ui/Input";
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
+import { Label } from 'apps/mobile/src/components/ui/Label';
 import { forwardRef, useCallback } from 'react';
-import { Text } from '@/components/ui/text';
+import { Text } from 'apps/mobile/src/components/ui/text';
 import { FlashList } from '@shopify/flash-list';
 
 interface BottomSheetPlaylistCreateProps extends BottomSheetProps {

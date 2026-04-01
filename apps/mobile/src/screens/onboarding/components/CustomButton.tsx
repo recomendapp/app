@@ -16,11 +16,11 @@ import Animated, {
 } from 'react-native-reanimated';
 import {OnboardingData} from '../data';
 import { useNavigation, useRouter } from 'expo-router';
-import { useUIStore } from '@/stores/useUIStore';
-import { useAuth } from '@/providers/AuthProvider';
+import { useUIStore } from 'apps/mobile/src/stores/useUIStore';
+import { useAuth } from 'apps/mobile/src/providers/AuthProvider';
 import { useTranslations } from 'use-intl';
 import { upperFirst } from 'lodash';
-import tw from '@/lib/tw';
+import tw from 'apps/mobile/src/lib/tw';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 const AnimatedChevron = Animated.createAnimatedComponent(Ionicons);

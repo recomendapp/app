@@ -8,10 +8,10 @@ import { useRouter } from "expo-router";
 import { NotificationPayload } from "@recomendapp/types";
 import { NovuProvider } from "@novu/react-native";
 import { useQueryClient } from "@tanstack/react-query";
-import { useToast } from "@/components/Toast";
-import * as env from '@/env';
-import { notificationKeys } from "@/api/notifications/notificationKeys";
-import { useNovuSubscriberHashQuery } from "@/api/novu/novuQueries";
+import { useToast } from "apps/mobile/src/components/Toast";
+import * as env from 'apps/mobile/src/env';
+import { notificationKeys } from "apps/mobile/src/api/notifications/notificationKeys";
+import { useNovuSubscriberHashQuery } from "apps/mobile/src/api/novu/novuQueries";
 
 type NotificationsContextType = {
   isMounted: boolean;

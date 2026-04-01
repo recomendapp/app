@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { useTheme } from "@/providers/ThemeProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import GBottomSheet, {
   BottomSheetProps,
 } from "@gorhom/bottom-sheet";

@@ -3,14 +3,14 @@ import { MediaPerson, FixedOmit } from "@recomendapp/types";
 import Animated from "react-native-reanimated";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Href, useRouter } from "expo-router";
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { Pressable, View } from "react-native";
-import { useTheme } from "@/providers/ThemeProvider";
-import useBottomSheetStore from "@/stores/useBottomSheetStore";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import { Skeleton } from "../ui/Skeleton";
 import { Text } from "../ui/text";
 import BottomSheetPerson from "../bottom-sheets/sheets/BottomSheetPerson";
-import { GAP } from "@/theme/globals";
+import { GAP } from "apps/mobile/src/theme/globals";
 import UserAvatar, { UserAvatarProps } from "../user/UserAvatar";
 
 interface CardPersonBaseProps

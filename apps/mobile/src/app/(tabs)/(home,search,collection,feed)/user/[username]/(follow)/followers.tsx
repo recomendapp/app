@@ -1,7 +1,7 @@
-import { useUserFollowersQuery, useUserProfileQuery } from "@/api/users/userQueries";
-import { CardUser } from "@/components/cards/CardUser";
-import { useTheme } from "@/providers/ThemeProvider";
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
+import { useUserFollowersQuery, useUserProfileQuery } from "apps/mobile/src/api/users/userQueries";
+import { CardUser } from "apps/mobile/src/components/cards/CardUser";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { LegendList } from "@legendapp/list";
 import { useLocalSearchParams } from "expo-router";
 import { useCallback, useMemo } from "react";

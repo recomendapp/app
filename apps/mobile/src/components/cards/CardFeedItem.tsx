@@ -1,11 +1,11 @@
-import { useTheme } from "@/providers/ThemeProvider";
-import tw from "@/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import tw from "apps/mobile/src/lib/tw";
 import { MediaMovie, MediaTvSeries, UserActivityType, FixedOmit } from "@recomendapp/types";
 import * as React from "react"
 import Animated from "react-native-reanimated";
-import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
+import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
 import { Pressable, View } from "react-native";
-import { Text } from "@/components/ui/text";
+import { Text } from "apps/mobile/src/components/ui/text";
 import { Skeleton } from "../ui/Skeleton";
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";

@@ -4,12 +4,12 @@ import { Pressable, View, StyleProp, ViewStyle } from "react-native";
 import Animated from "react-native-reanimated";
 import { Profile, User, FixedOmit } from "@recomendapp/types";
 import UserAvatar from "../user/UserAvatar";
-import tw from "@/lib/tw";
-import { useTheme } from "@/providers/ThemeProvider";
-import { Icons } from "@/constants/Icons";
+import tw from "apps/mobile/src/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { Skeleton } from "../ui/Skeleton";
 import { Text } from "../ui/text";
-import useBottomSheetStore from "@/stores/useBottomSheetStore";
+import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import BottomSheetUser from "../bottom-sheets/sheets/BottomSheetUser";
 
 interface CardUserBaseProps

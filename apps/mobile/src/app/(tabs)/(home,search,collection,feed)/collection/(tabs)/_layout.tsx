@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/Button";
-import { UserNav } from "@/components/user/UserNav";
-import tw from "@/lib/tw";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { UserNav } from "apps/mobile/src/components/user/UserNav";
+import tw from "apps/mobile/src/lib/tw";
 import { createMaterialTopTabNavigator, MaterialTopTabNavigationEventMap, MaterialTopTabNavigationOptions, type MaterialTopTabBarProps } from '@react-navigation/material-top-tabs';
 import { NavigationRoute, ParamListBase, TabNavigationState } from "@react-navigation/native";
 import { Stack, useRouter, withLayoutContext } from "expo-router";
@@ -10,13 +10,13 @@ import { View, FlatList, Pressable } from "react-native";
 import Animated from "react-native-reanimated";
 import { useTranslations } from "use-intl";
 import { HeaderTitle } from "@react-navigation/elements";
-import { useTheme } from "@/providers/ThemeProvider";
-import { GAP, PADDING_HORIZONTAL } from "@/theme/globals";
-import UserAvatar from "@/components/user/UserAvatar";
-import { useAuth } from "@/providers/AuthProvider";
-import useBottomSheetStore from "@/stores/useBottomSheetStore";
-import BottomSheetPlaylistCreate from "@/components/bottom-sheets/sheets/BottomSheetPlaylistCreate";
-import { Icons } from "@/constants/Icons";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { GAP, PADDING_HORIZONTAL } from "apps/mobile/src/theme/globals";
+import UserAvatar from "apps/mobile/src/components/user/UserAvatar";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
+import BottomSheetPlaylistCreate from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetPlaylistCreate";
+import { Icons } from "apps/mobile/src/constants/Icons";
 
 const Tab = createMaterialTopTabNavigator();
 

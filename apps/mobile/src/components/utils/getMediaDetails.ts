@@ -1,4 +1,4 @@
-import { BORDER_RADIUS } from "@/theme/globals";
+import { BORDER_RADIUS } from "apps/mobile/src/theme/globals";
 import { MediaMovie, MediaPerson, MediaTvSeries, MediaTvSeriesEpisode, MediaTvSeriesSeason, MediaType, Playlist, User } from "@recomendapp/types";
 import { Href } from "expo-router";
 import { StyleProp, ViewStyle } from "react-native";

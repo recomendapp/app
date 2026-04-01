@@ -1,6 +1,6 @@
 import { Skeleton } from '../ui/Skeleton';
 import Avatar from '../ui/Avatar';
-import { CORNERS } from '@/theme/globals';
+import { CORNERS } from 'apps/mobile/src/theme/globals';
 import { forwardRef } from 'react';
 import { ViewProps } from 'react-native';
 import { ImageSource } from 'expo-image';

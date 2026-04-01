@@ -1,6 +1,6 @@
-import { usePlaylistDetailsQuery } from "@/api/playlists/playlistQueries";
-import { useAuth } from "@/providers/AuthProvider";
-import { useTheme } from "@/providers/ThemeProvider";
+import { usePlaylistDetailsQuery } from "apps/mobile/src/api/playlists/playlistQueries";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { Redirect, Stack, useLocalSearchParams, useRouter } from "expo-router";
 
 const ModalPlaylistEditLayout = () => {

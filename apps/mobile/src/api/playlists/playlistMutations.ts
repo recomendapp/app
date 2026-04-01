@@ -1,7 +1,7 @@
-import { useSupabaseClient } from "@/providers/SupabaseProvider";
+import { useSupabaseClient } from "apps/mobile/src/providers/SupabaseProvider";
 import { InfiniteData, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Database, Playlist, PlaylistItemMovie, PlaylistItemTvSeries } from "@recomendapp/types";
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { clamp } from "lodash";
 import { playlistDetailsOptions, playlistGuestsOptions, playlistItemsMovieOptions, playlistItemsTvSeriesOptions, playlistMovieAddToOptions, playlistTvSeriesAddToOptions } from "./playlistOptions";
 import { playlistKeys } from "./playlistKeys";

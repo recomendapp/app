@@ -1,12 +1,12 @@
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
 import { CardUser } from "../cards/CardUser";
 import { LegendList } from "@legendapp/list";
 import { useTranslations } from "use-intl";
 import { upperFirst } from "lodash";
 import { Text } from "../ui/text";
-import { GAP } from "@/theme/globals";
-import { useWidgetUsersQuery } from "@/api/widgets/widgetQueries";
+import { GAP } from "apps/mobile/src/theme/globals";
+import { useWidgetUsersQuery } from "apps/mobile/src/api/widgets/widgetQueries";
 
 interface WidgetUserDiscoveryProps extends React.ComponentPropsWithoutRef<typeof View> {
   labelStyle?: StyleProp<TextStyle>;

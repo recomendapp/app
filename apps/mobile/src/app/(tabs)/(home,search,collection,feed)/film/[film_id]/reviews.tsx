@@ -1,21 +1,21 @@
 import { ActivityIndicator, Text, View } from "react-native";
-import { getIdFromSlug } from "@/utils/getIdFromSlug";
+import { getIdFromSlug } from "apps/mobile/src/utils/getIdFromSlug";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
-import tw from "@/lib/tw";
-import { useTheme } from "@/providers/ThemeProvider";
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
+import tw from "apps/mobile/src/lib/tw";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { LegendList } from "@legendapp/list";
 import { useCallback, useMemo, useState } from "react";
-import { CardReviewMovie } from "@/components/cards/reviews/CardReviewMovie";
-import { Button } from "@/components/ui/Button";
-import { Icons } from "@/constants/Icons";
+import { CardReviewMovie } from "apps/mobile/src/components/cards/reviews/CardReviewMovie";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { UserReviewMovie } from "@recomendapp/types";
-import { useAuth } from "@/providers/AuthProvider";
-import { useMediaMovieDetailsQuery, useMediaMovieReviewsQuery } from "@/api/medias/mediaQueries";
-import { useUserActivityMovieQuery } from "@/api/users/userQueries";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import { useMediaMovieDetailsQuery, useMediaMovieReviewsQuery } from "apps/mobile/src/api/medias/mediaQueries";
+import { useUserActivityMovieQuery } from "apps/mobile/src/api/users/userQueries";
 
 interface sortBy {
 	label: string;

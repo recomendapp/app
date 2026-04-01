@@ -1,11 +1,11 @@
 import React from "react"
 import { Pressable } from "react-native";
-import { Icons } from "@/constants/Icons";
-import { useAuth } from "@/providers/AuthProvider";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { usePathname, useRouter } from "expo-router";
-import { Button } from "@/components/ui/Button";
+import { Button } from "apps/mobile/src/components/ui/Button";
 import { MediaTvSeries } from "@recomendapp/types";
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 
 interface ButtonPlaylistTvSeriesAddProps
 	extends React.ComponentProps<typeof Button> {

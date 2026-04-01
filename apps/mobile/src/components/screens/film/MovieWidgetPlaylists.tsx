@@ -1,15 +1,15 @@
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
 import { LegendList } from "@legendapp/list";
-import { CardPlaylist } from "@/components/cards/CardPlaylist";
+import { CardPlaylist } from "apps/mobile/src/components/cards/CardPlaylist";
 import { upperFirst } from "lodash";
 import { Href, Link } from "expo-router";
-import { useTheme } from "@/providers/ThemeProvider";
-import { Icons } from "@/constants/Icons";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { useTranslations } from "use-intl";
-import { Text } from "@/components/ui/text";
+import { Text } from "apps/mobile/src/components/ui/text";
 import { Playlist } from "@recomendapp/types";
-import { useMediaMoviePlaylistsQuery } from "@/api/medias/mediaQueries";
+import { useMediaMoviePlaylistsQuery } from "apps/mobile/src/api/medias/mediaQueries";
 
 interface MovieWidgetPlaylistsProps extends React.ComponentPropsWithoutRef<typeof View> {
 	movieId: number;

@@ -99,7 +99,6 @@ export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps)
       });
       if (error) {
         switch (error.code) {
-          // TODO: handle specific error codes
           default:
             toast.error(upperFirst(t('common.messages.an_error_occurred')));
             break;
@@ -122,7 +121,7 @@ export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps)
       }
       throw error;
     }
-    queryClient.setQueryData(userMeOptions().queryKey, undefined);
+    queryClient.setQueryData(userMeOptions().queryKey, null);
     router.refresh();
   }, [user, t, router, queryClient]);
 

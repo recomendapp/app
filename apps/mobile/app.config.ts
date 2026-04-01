@@ -59,6 +59,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 		supportsTablet: true,
 		googleServicesFile: getGoogleServiceInfoFile(),
 		bundleIdentifier: getUniqueIdentifier(),
+		appleTeamId: 'G87KW7348W',
 		associatedDomains: [
 			`applinks:${getWebDomain()}`
 		],
@@ -211,7 +212,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 				"organization": process.env.SENTRY_ORG,
 			}
 		],
-		"@maplibre/maplibre-react-native",
+		// "@maplibre/maplibre-react-native",
 		[
 			"expo-media-library",
 			{

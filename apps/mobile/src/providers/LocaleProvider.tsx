@@ -10,10 +10,10 @@ import '@formatjs/intl-durationformat/polyfill';
 
 import { IntlProvider } from "use-intl";
 import { createContext, use, useCallback, useEffect, useState } from "react";
-import { getLocale, initI18n, setLocale as setLocaleHook } from "@/lib/i18n"; // à toi d’implémenter
+import { getLocale, initI18n, setLocale as setLocaleHook } from "apps/mobile/src/lib/i18n";
 import { useSplashScreen } from "./SplashScreenProvider";
 import { getCalendars } from 'expo-localization';
-import { defaultSupportedLocale, SupportedLocale, supportedLocales } from '@/translations/locales';
+import { defaultSupportedLocale, SupportedLocale, supportedLocales } from '@libs/i18n';
 
 type LocaleContextType = {
   locale: SupportedLocale;

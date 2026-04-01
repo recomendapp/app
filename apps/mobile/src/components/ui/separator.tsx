@@ -1,5 +1,5 @@
-import { View } from '@/components/ui/view';
-import { useTheme } from '@/providers/ThemeProvider';
+import { View } from 'apps/mobile/src/components/ui/view';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import React from 'react';
 import { ViewStyle } from 'react-native';
 

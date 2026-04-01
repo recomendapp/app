@@ -8,9 +8,9 @@ import Animated, {
   AnimatedStyle,
   SharedValue,
 } from 'react-native-reanimated';
-import { useTheme } from '@/providers/ThemeProvider';
-import tw from '@/lib/tw';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '@/theme/globals';
+import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import tw from 'apps/mobile/src/lib/tw';
+import { PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { scheduleOnRN } from 'react-native-worklets';
 

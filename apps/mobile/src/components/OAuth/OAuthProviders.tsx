@@ -2,16 +2,16 @@ import { LegendList, LegendListProps } from "@legendapp/list";
 import { Provider as AuthProvider } from "@supabase/supabase-js";
 import { Button } from "../ui/Button";
 import { Text } from "../ui/text";
-import { GAP } from "@/theme/globals";
+import { GAP } from "apps/mobile/src/theme/globals";
 import { useCallback, useMemo } from "react";
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
-import { useTheme } from "@/providers/ThemeProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useToast } from "../Toast";
-import { Icons } from "@/constants/Icons";
-import { BrandIcon, BrandIconProps } from "@/lib/icons";
-import { logger } from "@/logger";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { BrandIcon, BrandIconProps } from "apps/mobile/src/lib/icons";
+import { logger } from "apps/mobile/src/logger";
 
 type Provider = {
 	name: AuthProvider;

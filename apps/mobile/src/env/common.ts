@@ -1,4 +1,4 @@
-import packageJson from '@/../package.json'
+import packageJson from 'apps/mobile/src/../package.json'
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 
@@ -76,6 +76,17 @@ export const LOG_LEVEL = (process.env.EXPO_PUBLIC_LOG_LEVEL || 'info') as
 export const LOG_DEBUG: string = process.env.EXPO_PUBLIC_LOG_DEBUG || ''
 
 export const DOMAIN_NAME: string = process.env.EXPO_PUBLIC_WEB_APP!
+
+/**
+ * API
+ */
+export const API_URL: string = process.env.EXPO_PUBLIC_API_URL!
+export const API_ENDPOINT = `${API_URL}/v1`;
+
+const schemeFromConfig = Constants.expoConfig?.scheme;
+export const SCHEME: string = Array.isArray(schemeFromConfig)
+  ? schemeFromConfig[0]
+  : schemeFromConfig || 'woodn';
 
 /**
  * Supabase

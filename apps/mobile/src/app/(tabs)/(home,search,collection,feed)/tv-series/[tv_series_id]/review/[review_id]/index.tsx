@@ -1,22 +1,22 @@
-import { Button } from "@/components/ui/Button";
-import { Icons } from "@/constants/Icons";
-import { useAuth } from "@/providers/AuthProvider";
-import { useTheme } from "@/providers/ThemeProvider";
-import tw from "@/lib/tw";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import tw from "apps/mobile/src/lib/tw";
 import { Redirect, Stack, useLocalSearchParams } from "expo-router";
 import { upperFirst } from "lodash";
 import { RefreshControl, ScrollView, View } from "react-native"
 import { useTranslations } from "use-intl";
-import { Text } from "@/components/ui/text";
-import { CardUser } from "@/components/cards/CardUser";
-import { CardTvSeries } from "@/components/cards/CardTvSeries";
-import ButtonUserReviewTvSeriesLike from "@/components/buttons/ButtonUserReviewTvSeriesLike";
-import { BottomSheetReviewTvSeries } from "@/components/bottom-sheets/sheets/BottomSheetReviewTvSeries";
-import useBottomSheetStore from "@/stores/useBottomSheetStore";
-import { EnrichedTextInput } from "@/components/RichText/EnrichedTextInput";
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
-import { useUserReviewTvSeriesLike } from "@/api/users/hooks/useUserReviewTvSeriesLike";
-import { useUserReviewTvSeriesQuery } from "@/api/users/userQueries";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { CardUser } from "apps/mobile/src/components/cards/CardUser";
+import { CardTvSeries } from "apps/mobile/src/components/cards/CardTvSeries";
+import ButtonUserReviewTvSeriesLike from "apps/mobile/src/components/buttons/ButtonUserReviewTvSeriesLike";
+import { BottomSheetReviewTvSeries } from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetReviewTvSeries";
+import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
+import { EnrichedTextInput } from "apps/mobile/src/components/RichText/EnrichedTextInput";
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
+import { useUserReviewTvSeriesLike } from "apps/mobile/src/api/users/hooks/useUserReviewTvSeriesLike";
+import { useUserReviewTvSeriesQuery } from "apps/mobile/src/api/users/userQueries";
 import { NativeStackHeaderItem } from "@react-navigation/native-stack";
 
 const ReviewTvSeriesScreen = () => {

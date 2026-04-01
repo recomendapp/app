@@ -1,19 +1,19 @@
-import tw from "@/lib/tw";
+import tw from "apps/mobile/src/lib/tw";
 import { MediaMovie, Profile, FixedOmit } from "@recomendapp/types";
 import * as React from "react"
 import Animated from "react-native-reanimated";
-import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
+import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
 import { View } from "react-native";
 import { Href, useRouter } from "expo-router";
-import { Text } from "@/components/ui/text";
+import { Text } from "apps/mobile/src/components/ui/text";
 import { useTranslations } from "use-intl";
-import { Skeleton } from "@/components/ui/Skeleton";
+import { Skeleton } from "apps/mobile/src/components/ui/Skeleton";
 import { CardUser } from "../CardUser";
-import { useTheme } from "@/providers/ThemeProvider";
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { scheduleOnRN } from "react-native-worklets";
-import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
 
 interface CardNotificationRecoSentMovieBaseProps
 	extends React.ComponentProps<typeof Animated.View> {

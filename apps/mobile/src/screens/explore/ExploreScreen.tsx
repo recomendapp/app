@@ -1,30 +1,30 @@
-import { Camera, CameraRef, MapView, MapViewRef, MarkerView, OnPressEvent, ShapeSource, SymbolLayer } from "@maplibre/maplibre-react-native";
-import styleJSON from "@/assets/map/style.json";
-import { Text } from "@/components/ui/text";
-import { View } from "@/components/ui/view";
+// import { Camera, CameraRef, MapView, MapViewRef, MarkerView, OnPressEvent, ShapeSource, SymbolLayer } from "@maplibre/maplibre-react-native";
+import styleJSON from "apps/mobile/src/assets/map/style.json";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { View } from "apps/mobile/src/components/ui/view";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { BORDER_RADIUS, BORDER_RADIUS_FULL, GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
+import { BORDER_RADIUS, BORDER_RADIUS_FULL, GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { Stack, useRouter } from "expo-router";
-import { useTheme } from "@/providers/ThemeProvider";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { ExploreTile } from "@recomendapp/types";
+// import { ExploreTile } from "@recomendapp/types";
 import Color from "color";
-import { Button } from "@/components/ui/Button";
-import { Icons } from "@/constants/Icons";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 import { useWindowDimensions } from "react-native";
 import { SearchBottomSheet } from "./sheets/SearchBottomSheet";
 import { LocationDetailsBottomSheet, LocationDetailsBottomSheetMethods } from "./sheets/LocationDetailsBottomSheet";
-import { withModalProvider } from "@/components/utils/withModalProvider";
+import { withModalProvider } from "apps/mobile/src/components/utils/withModalProvider";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { FiltersBottomSheet } from "./sheets/FiltersBottomSheet";
-import { useExploreStore } from "@/stores/useExploreStore";
+import { useExploreStore } from "apps/mobile/src/stores/useExploreStore";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useMediaGenresQuery } from "@/api/medias/mediaQueries";
+import { useMediaGenresQuery } from "apps/mobile/src/api/medias/mediaQueries";
 import { TrueSheet } from "@lodev09/react-native-true-sheet";
-import { Input } from "@/components/ui/Input";
-import { useExploreTileMetaQuery, useExploreTileQuery } from "@/api/explore/exploreQueries";
-import { useUIStore } from "@/stores/useUIStore";
+import { Input } from "apps/mobile/src/components/ui/Input";
+import { useExploreTileMetaQuery, useExploreTileQuery } from "apps/mobile/src/api/explore/exploreQueries";
+import { useUIStore } from "apps/mobile/src/stores/useUIStore";
 
 const MOVE_DELAY = 500;
 
@@ -38,8 +38,8 @@ const ExploreScreen = () => {
 	const { height: screenHeight } = useWindowDimensions();
 	
 	// REFs
-	const mapRef = useRef<MapViewRef>(null);
-	const cameraRef = useRef<CameraRef>(null);
+	// const mapRef = useRef<MapViewRef>(null);
+	// const cameraRef = useRef<CameraRef>(null);
 	const searchRef = useRef<TrueSheet>(null);
 	const locationDetailsRef = useRef<LocationDetailsBottomSheetMethods>(null);
 	
@@ -54,7 +54,7 @@ const ExploreScreen = () => {
 	
 	// States
 	const { map, setMapCamera } = useUIStore((state) => state);
-	const [selectedMovie, setSelectedMovie] = useState<ExploreTile['features'][number] | null>(null);
+	// const [selectedMovie, setSelectedMovie] = useState<ExploreTile['features'][number] | null>(null);
 	const [showRecenter, setShowRecenter] = useState(false);
 	
 	const baseZoom = 8;
@@ -70,34 +70,34 @@ const ExploreScreen = () => {
 	const { data: tileMeta } = useExploreTileMetaQuery({ exploreId: 1 });
 
 	// Handlers
-	const handleSaveCameraPosition = useCallback(async () => {
-		if (!mapRef.current) return;
-		try {
-			const center = await mapRef.current.getCenter();
-			const zoom = await mapRef.current.getZoom();
+	// const handleSaveCameraPosition = useCallback(async () => {
+	// 	if (!mapRef.current) return;
+	// 	try {
+	// 		const center = await mapRef.current.getCenter();
+	// 		const zoom = await mapRef.current.getZoom();
 
-			const lng = center[0];
-			const lat = center[1];
+	// 		const lng = center[0];
+	// 		const lat = center[1];
 
-			setMapCamera([lng, lat], zoom);
-		} catch (error) {
-			console.error('Error getting camera position:', error);
-		}
-	}, [setMapCamera]);
+	// 		setMapCamera([lng, lat], zoom);
+	// 	} catch (error) {
+	// 		console.error('Error getting camera position:', error);
+	// 	}
+	// }, [setMapCamera]);
 
-	const handleOnLocationPress = useCallback((e: OnPressEvent) => {
-		const location = e.features.at(0) as ExploreTile['features'][number];
-		if (!location) return;
-		setSelectedMovie(location);
-	}, []);
+	// const handleOnLocationPress = useCallback((e: OnPressEvent) => {
+	// 	const location = e.features.at(0) as ExploreTile['features'][number];
+	// 	if (!location) return;
+	// 	setSelectedMovie(location);
+	// }, []);
 
-	const handleOnSearchItemPress = useCallback((item: ExploreTile['features'][number]) => {
-		setSelectedMovie(item);
-	}, []);
+	// const handleOnSearchItemPress = useCallback((item: ExploreTile['features'][number]) => {
+	// 	setSelectedMovie(item);
+	// }, []);
  
-	const handleOnLocationClose = useCallback(() => {
-		setSelectedMovie(null);
-	}, []);
+	// const handleOnLocationClose = useCallback(() => {
+	// 	setSelectedMovie(null);
+	// }, []);
 
 	// Styles
 	const animatedOptionsStyle = useAnimatedStyle(() => {
@@ -119,13 +119,13 @@ const ExploreScreen = () => {
 	});
 
 	// useEffects
-	useEffect(() => {
-		if (selectedMovie) {
-			cameraRef.current?.flyTo(selectedMovie.geometry.coordinates, MOVE_DELAY);
-			locationDetailsRef.current?.present(selectedMovie.properties);
-		}
-		setShowRecenter(false);
-	}, [selectedMovie]);
+	// useEffect(() => {
+	// 	if (selectedMovie) {
+	// 		cameraRef.current?.flyTo(selectedMovie.geometry.coordinates, MOVE_DELAY);
+	// 		locationDetailsRef.current?.present(selectedMovie.properties);
+	// 	}
+	// 	setShowRecenter(false);
+	// }, [selectedMovie]);
 
 	useEffect(() => {
 		if (tile && tileMeta && tile.updated_at !== tileMeta.updated_at) {
@@ -156,7 +156,7 @@ const ExploreScreen = () => {
 			),
 		}}
 		/> */}
-		<MapView
+		{/* <MapView
 		ref={mapRef}
 		style={{ flex: 1 }}
 		mapStyle={styleJSON}
@@ -301,20 +301,7 @@ const ExploreScreen = () => {
 					/>
 				</ShapeSource>
 			)}
-			{/* <MarkerView
-			coordinate={[selectedMovie?.geometry.coordinates[0] || userPosition.longitude, selectedMovie?.geometry.coordinates[1] || userPosition.latitude]}
-			anchor={{ x: 0.5, y: 1 }}
-			style={{ opacity: selectedMovie ? 1 : 0 }}
-			pointerEvents="none"
-			>
-				<View style={{ alignItems: 'center', justifyContent: 'center' }}>
-					<View style={{ backgroundColor: colors.muted, padding: PADDING_VERTICAL, borderRadius: BORDER_RADIUS, opacity: 0.9 }}>
-						<Text>{selectedMovie?.properties.movie.title}</Text>
-					</View>
-					<Icons.MapPin color={'rgba(136, 0, 0, 1)'} fill={'rgba(255, 0, 0, 1)'} size={32} />
-				</View>
-			</MarkerView> */}
-		</MapView>
+		</MapView> */}
 
 		{/* <TrueSheet
 		ref={searchRef}

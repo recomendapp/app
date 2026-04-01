@@ -1,30 +1,30 @@
-import { useAuth } from "@/providers/AuthProvider";
-import tw from "@/lib/tw";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import tw from "apps/mobile/src/lib/tw";
 import { useEffect, useMemo, useState } from "react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "apps/mobile/src/components/ui/Button";
 import { useTranslations } from "use-intl";
 import { upperFirst } from "lodash";
-import { Icons } from "@/constants/Icons";
+import { Icons } from "apps/mobile/src/constants/Icons";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { Text } from "@/components/ui/text";
-import { View } from "@/components/ui/view";
-import Switch from "@/components/ui/Switch";
+import { Text } from "apps/mobile/src/components/ui/text";
+import { View } from "apps/mobile/src/components/ui/view";
+import Switch from "apps/mobile/src/components/ui/Switch";
 import { Alert } from "react-native";
-import { usePlaylistGuestsDeleteMutation, usePlaylistGuestsUpsertMutation } from "@/api/playlists/playlistMutations";
+import { usePlaylistGuestsDeleteMutation, usePlaylistGuestsUpsertMutation } from "apps/mobile/src/api/playlists/playlistMutations";
 import { Profile } from "@recomendapp/types";
 import Fuse from "fuse.js";
-import { SearchBar } from "@/components/ui/searchbar";
+import { SearchBar } from "apps/mobile/src/components/ui/searchbar";
 import { LegendList } from "@legendapp/list";
-import { CardUser } from "@/components/cards/CardUser";
+import { CardUser } from "apps/mobile/src/components/cards/CardUser";
 import { PostgrestError } from "@supabase/supabase-js";
-import app from "@/constants/app";
+import app from "apps/mobile/src/constants/app";
 import Swipeable, { SwipeableMethods } from 'react-native-gesture-handler/ReanimatedSwipeable';
 import Animated, { interpolate, SharedValue, useAnimatedStyle } from "react-native-reanimated";
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "@/theme/globals";
-import { useToast } from "@/components/Toast";
-import { useTheme } from "@/providers/ThemeProvider";
+import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
+import { useToast } from "apps/mobile/src/components/Toast";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { usePlaylistDetailsQuery, usePlaylistGuestsQuery } from "@/api/playlists/playlistQueries";
+import { usePlaylistDetailsQuery, usePlaylistGuestsQuery } from "apps/mobile/src/api/playlists/playlistQueries";
 
 const RightActions = ({
 	drag,
