@@ -308,7 +308,7 @@ INSERT INTO log_tv_series (
 )
 SELECT 
     t.tv_series_id, t.user_id, t.created_at, t.updated_at, t.is_liked, t.liked_at, 
-    t.rating, t.rated_at, 'completed'::log_tv_status, t.watch_count, t.last_watched_at,
+    t.rating, t.rated_at, 'watching'::log_tv_status, t.watch_count, t.last_watched_at,
     COALESCE(tmdb.number_of_episodes, 0)
 FROM tmp_log_tv_series t
 LEFT JOIN tmdb.tv_series tmdb ON tmdb.id = t.tv_series_id;
@@ -320,7 +320,7 @@ INSERT INTO log_tv_season (
     log_tv_series_id, tv_season_id, season_number, status, episodes_watched_count, created_at, updated_at
 )
 SELECT 
-    lts.id, ts.id, ts.season_number, 'completed'::log_tv_status, ts.episode_count, lts.created_at, lts.updated_at
+    lts.id, ts.id, ts.season_number, 'watching'::log_tv_status, ts.episode_count, lts.created_at, lts.updated_at
 FROM log_tv_series lts
 JOIN tmdb.tv_season ts ON ts.tv_series_id = lts.tv_series_id
 WHERE ts.season_number > 0; -- On ignore les épisodes spéciaux (saison 0)

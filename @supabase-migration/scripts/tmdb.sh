@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e # Arrête le script dès qu'une erreur survient
+set -o pipefail
 
 # 1. Charger les variables d'environnement (depuis .env)
 if [ -f .env ]; then
@@ -88,7 +89,7 @@ migrate_table "tmdb_movie_keywords" "tmdb.movie_keyword" "movie_id, keyword_id" 
 migrate_table "tmdb_movie_origin_country" "tmdb.movie_origin_country" "movie_id, iso_3166_1" "movie_id, iso_3166_1"
 migrate_table "tmdb_movie_production_companies" "tmdb.movie_production_company" "movie_id, company_id" "movie_id, company_id"
 migrate_table "tmdb_movie_production_countries" "tmdb.movie_production_country" "movie_id, iso_3166_1" "movie_id, iso_3166_1"
-migrate_table "tmdb_movie_release_dates" "tmdb.movie_release_date" "movie_id, iso_3166_1, release_date, certification, iso_639_1, note, release_type, descriptors" "movie_id, iso_3166_1, release_date, certification, iso_639_1, note, release_type, descriptors"
+migrate_table "tmdb_movie_release_dates" "tmdb.movie_release_date" "movie_id, iso_3166_1, release_date::date, certification, iso_639_1, note, release_type, descriptors" "movie_id, iso_3166_1, release_date, certification, iso_639_1, note, release_type, descriptors"
 migrate_table "tmdb_movie_roles" "tmdb.movie_role" "credit_id, character, \"order\"" "credit_id, character, \"order\""
 migrate_table "tmdb_movie_spoken_languages" "tmdb.movie_spoken_language" "movie_id, iso_639_1" "movie_id, iso_639_1"
 migrate_table "tmdb_movie_translations" "tmdb.movie_translation" "movie_id, overview, tagline, title, homepage, runtime, iso_639_1, iso_3166_1" "movie_id, overview, tagline, title, homepage, runtime, iso_639_1, iso_3166_1"
@@ -120,7 +121,7 @@ migrate_table "tmdb_tv_series_seasons_translations" "tmdb.tv_season_translation"
 
 
 echo "   📺 Migrate TV Episodes"
-migrate_table "tmdb_tv_series_episodes" "tmdb.tv_episode" "id, season_id, air_date, episode_number, episode_type, name, overview, production_code, runtime, still_path, vote_average, vote_count" "id, tv_season_id, air_date, episode_number, episode_type, name, overview, production_code, runtime, still_path, vote_average, vote_count"
+migrate_table "tmdb_tv_series_episodes" "tmdb.tv_episode" "id, season_id, air_date::date, episode_number, episode_type, name, overview, production_code, runtime, still_path, vote_average, vote_count" "id, tv_season_id, air_date, episode_number, episode_type, name, overview, production_code, runtime, still_path, vote_average, vote_count"
 migrate_table "tmdb_tv_series_episodes_credits" "tmdb.tv_episode_credit" "credit_id, episode_id" "credit_id, tv_episode_id"
 
 echo "   🧮 Calcul du nombre d'épisodes par saison (episode_count)..."
