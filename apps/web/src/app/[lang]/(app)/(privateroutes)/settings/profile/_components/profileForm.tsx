@@ -23,16 +23,16 @@ import { useCallback, useEffect, useState } from 'react';
 import Loader from '@/components/Loader';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import { useUserMeAvatarDeleteMutation, useUserMeAvatarUpdateMutation, useUserMeUpdateMutation } from '@libs/query-client';
+import { useMeAvatarDeleteMutation, useMeAvatarUpdateMutation, useMeUpdateMutation } from '@libs/query-client';
 import compressPicture from '@/lib/utils/compressPicture';
 
 export function ProfileForm() {
   const t = useTranslations();
   const { user } = useAuth();
 
-  const { mutateAsync: updateProfile, isPending: isUpdating } = useUserMeUpdateMutation();
-  const { mutateAsync: updateAvatar } = useUserMeAvatarUpdateMutation();
-  const { mutateAsync: deleteAvatar } = useUserMeAvatarDeleteMutation();
+  const { mutateAsync: updateProfile, isPending: isUpdating } = useMeUpdateMutation();
+  const { mutateAsync: updateAvatar } = useMeAvatarUpdateMutation();
+  const { mutateAsync: deleteAvatar } = useMeAvatarDeleteMutation();
 
   const [newAvatar, setNewAvatar] = useState<File>();
 

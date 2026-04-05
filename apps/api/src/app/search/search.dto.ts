@@ -25,41 +25,56 @@ export class SearchQueryDto {
 
 export class BestResultMovie {
   @ApiProperty({ enum: ['movie'] })
+  @Expose()
   type: 'movie';
 
   @ApiProperty({ type: () => MovieCompactDto })
+  @Expose()
+  @Type(() => MovieCompactDto)
   data: MovieCompactDto;
 }
 
 export class BestResultTvSeries {
   @ApiProperty({ enum: ['tv_series'] })
+  @Expose()
   type: 'tv_series';
 
   @ApiProperty({ type: () => TvSeriesCompactDto })
+  @Expose()
+  @Type(() => TvSeriesCompactDto)
   data: TvSeriesCompactDto;
 }
 
 export class BestResultPerson {
   @ApiProperty({ enum: ['person'] })
+  @Expose()
   type: 'person';
 
   @ApiProperty({ type: () => PersonCompactDto })
+  @Expose()
+  @Type(() => PersonCompactDto)
   data: PersonCompactDto;
 }
 
 export class BestResultUser {
   @ApiProperty({ enum: ['user'] })
+  @Expose()
   type: 'user';
 
   @ApiProperty({ type: () => UserSummaryDto })
+  @Expose()
+  @Type(() => UserSummaryDto)
   data: UserSummaryDto;
 }
 
 export class BestResultPlaylist {
   @ApiProperty({ enum: ['playlist'] })
+  @Expose()
   type: 'playlist';
 
   @ApiProperty({ type: () => PlaylistWithOwnerDto })
+  @Expose()
+  @Type(() => PlaylistWithOwnerDto)
   data: PlaylistWithOwnerDto;
 }
 
@@ -94,6 +109,19 @@ export class SearchResponseDto {
     },
   })
   @Expose()
+  @Type(() => Object, {
+    keepDiscriminatorProperty: true,
+    discriminator: {
+      property: 'type',
+      subTypes: [
+        { value: BestResultMovie, name: 'movie' },
+        { value: BestResultTvSeries, name: 'tv_series' },
+        { value: BestResultPerson, name: 'person' },
+        { value: BestResultUser, name: 'user' },
+        { value: BestResultPlaylist, name: 'playlist' },
+      ],
+    },
+  })
   best_result: BestResultUnion | null;
 
   @ApiProperty({ type: () => [MovieCompactDto] })

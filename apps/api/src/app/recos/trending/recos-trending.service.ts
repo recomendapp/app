@@ -2,10 +2,10 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { recosTrending, tmdbMovieView, tmdbTvSeriesView } from '@libs/db/schemas';
-import { ListInfiniteRecosTrendingDto, ListInfiniteRecosTrendingQueryDto, ListPaginatedRecosTrendingDto, ListPaginatedRecosTrendingQueryDto, RecoTrendingSortBy } from './dto/recos-trending.dto';
+import { ListInfiniteRecosTrendingDto, ListInfiniteRecosTrendingQueryDto, ListPaginatedRecosTrendingDto, ListPaginatedRecosTrendingQueryDto, RecoTrendingSortBy } from './recos-trending.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { and, asc, desc, eq, gt, lt, or, sql, SQL } from 'drizzle-orm';
-import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
+import { MOVIE_SUMMARY_SELECT, TV_SERIES_SUMMARY_SELECT } from '@libs/db/selectors';
 import { plainToInstance } from 'class-transformer';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { SupportedLocale } from '@libs/i18n';
@@ -66,8 +66,8 @@ export class RecosTrendingService {
               type: recosTrending.type,
               recommendationCount: recosTrending.recommendationCount,
             },
-            movie: MOVIE_COMPACT_SELECT,
-            tvSeries: TV_SERIES_COMPACT_SELECT,
+            movie: MOVIE_SUMMARY_SELECT,
+            tvSeries: TV_SERIES_SUMMARY_SELECT,
           })
           .from(recosTrending)
           .leftJoin(tmdbMovieView, and(eq(recosTrending.mediaId, tmdbMovieView.id), eq(recosTrending.type, 'movie')))
@@ -133,8 +133,8 @@ export class RecosTrendingService {
               type: recosTrending.type,
               recommendationCount: recosTrending.recommendationCount,
             },
-            movie: MOVIE_COMPACT_SELECT,
-            tvSeries: TV_SERIES_COMPACT_SELECT,
+            movie: MOVIE_SUMMARY_SELECT,
+            tvSeries: TV_SERIES_SUMMARY_SELECT,
           })
           .from(recosTrending)
           .leftJoin(tmdbMovieView, and(eq(recosTrending.mediaId, tmdbMovieView.id), eq(recosTrending.type, 'movie')))

@@ -15,3 +15,20 @@ export const MOVIE_COMPACT_SELECT = {
   genres: tmdbMovieView.genres,
   followerAvgRating: tmdbMovieView.followerAvgRating,
 };
+
+export const MOVIE_SUMMARY_SELECT = {
+  id: tmdbMovieView.id,
+  title: tmdbMovieView.title,
+  slug: tmdbMovieView.slug,
+  url: tmdbMovieView.url,
+  overview: tmdbMovieView.overview,
+  posterPath: tmdbMovieView.posterPath,
+  backdropPath: tmdbMovieView.backdropPath,
+  directors: tmdbMovieView.directors,
+  releaseDate: tmdbMovieView.releaseDate,
+  voteAverage: tmdbMovieView.voteAverage,
+  voteCount: tmdbMovieView.voteCount,
+  popularity: tmdbMovieView.popularity,
+  genres: tmdbMovieView.genres,
+  followerAvgRating: tmdbMovieView.followerAvgRating,
+};

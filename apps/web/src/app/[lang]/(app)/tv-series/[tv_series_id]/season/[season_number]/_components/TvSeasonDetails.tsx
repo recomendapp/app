@@ -5,12 +5,15 @@ import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
+import { Icons } from '@/config/icons';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
-import { tvSeasonEpisodesOptions } from '@libs/query-client';
+import { tvSeasonEpisodesInfiniteOptions } from '@libs/query-client';
 import { TvSeasonGet } from '@packages/api-js';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { upperFirst } from 'lodash';
 import { useFormatter, useTranslations } from 'next-intl';
+import { useEffect, useMemo } from 'react';
+import { useInView } from 'react-intersection-observer';
 
 export const TvSeasonDetails = ({
   season,
@@ -19,13 +22,22 @@ export const TvSeasonDetails = ({
 }) => {
   const t = useTranslations();
   const format = useFormatter();
+  const { ref, inView } = useInView();
   const {
     data,
     isLoading,
-  } = useQuery(tvSeasonEpisodesOptions({
+    isFetching,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(tvSeasonEpisodesInfiniteOptions({
     tvSeriesId: season.tvSeriesId,
     seasonNumber: season.seasonNumber,
   }));
+  const flatEpisodes = useMemo(() => data?.pages.flatMap(page => page.data) ?? [], [data]);
+
+  useEffect(() => {
+    if (inView && hasNextPage) fetchNextPage();
+  }, [inView, hasNextPage, fetchNextPage]);
 
   return (
 	<div className="@container/tv_season-details flex flex-col gap-4 max-w-7xl w-full">
@@ -38,7 +50,7 @@ export const TvSeasonDetails = ({
           Array.from({ length: season.episodeCount || 5 }).map((_, i) => (
             <Skeleton key={i} className="h-24 w-full rounded-md" style={{ animationDelay: `${i * 0.12}s` }} />
           ))
-        ) : data?.map((episode, i) => (
+        ) : flatEpisodes?.map((episode, i) => (
           <Card key={i} className="@container/episode-card flex flex-row items-center gap-2 p-2 hover:bg-muted-hover hover:cursor-pointer">
             <div className="shrink-0 relative w-32 @sm/episode-card:w-40 @md/episode-card:w-48 aspect-video rounded-md overflow-hidden">
               <ImageWithFallback
@@ -75,6 +87,13 @@ export const TvSeasonDetails = ({
             </div>
           </Card>
         ))}
+        {isFetching ? (
+						<div className="flex items-center justify-center p-4">
+							<Icons.loader />
+						</div>
+					): (
+						<div ref={ref} />
+					)}
       </div>
 		</div>
   </div>

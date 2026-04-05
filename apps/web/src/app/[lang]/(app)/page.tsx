@@ -31,7 +31,7 @@ export default function Home() {
 	}, [now]);
 
 	return (
-		<div className="p-4 gap-4 gap-x-8 grid grid-cols-1 @4xl/main:grid-cols-2">
+		<div className="p-4 flex flex-col gap-4">
 			<div className="flex justify-between items-center w-full">
 				<h2 className="text-xl md:text-4xl break-all line-clamp-2">
 					{user ? upperFirst(t('common.messages.greeting_with_name', { timeOfDay: getTimeOfDay, name: user.name })) : upperFirst(t('common.messages.welcome_to_app', { app: siteConfig.name }))}
@@ -39,25 +39,27 @@ export default function Home() {
 				{device === "mobile" ? <HeaderRightSide /> : null}
 			</div>
 			<WidgetMostRecommended className='col-span-full' />
-			{!user ? (
-				// Only non-logged users
-				<>
-				<Button className="col-span-full m-auto max-w-lg" asChild>
-					<Link href="/auth/login">{upperFirst(t('common.messages.get_started_its_free'))}</Link>
-				</Button>
-				<WidgetRecomendShowcase className='col-span-full'/>
-				</>
-			) : null}
-			{user ? (
-				// Only logged users
-				<>
-				<WidgetRecos />
-				<WidgetBookmarks />
-				<WidgetUserFriendsPlaylists />
-				<WidgetUserFeed />
-				<WidgetUserDiscovery className="h-[600px]" />
-				</>
-			) : null}
+			<div className="gap-4 gap-x-8 grid grid-cols-1 @4xl/main:grid-cols-2">
+				{!user ? (
+					// Only non-logged users
+					<>
+					<Button className="col-span-full m-auto max-w-lg" asChild>
+						<Link href="/auth/login">{upperFirst(t('common.messages.get_started_its_free'))}</Link>
+					</Button>
+					<WidgetRecomendShowcase className='col-span-full'/>
+					</>
+				) : null}
+				{user ? (
+					// Only logged users
+					<>
+					<WidgetRecos />
+					<WidgetBookmarks />
+					<WidgetUserFriendsPlaylists />
+					<WidgetUserFeed />
+					<WidgetUserDiscovery className="h-[600px]" />
+					</>
+				) : null}
+			</div>
 		</div>
 	);
 }

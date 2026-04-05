@@ -6,7 +6,7 @@ import {
   reviewTvSeriesLike, tmdbMovieView, tmdbTvSeriesView, user 
 } from '@libs/db/schemas';
 import { plainToInstance } from 'class-transformer';
-import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT, USER_COMPACT_SELECT } from '@libs/db/selectors';
+import { MOVIE_SUMMARY_SELECT, TV_SERIES_SUMMARY_SELECT, USER_COMPACT_SELECT } from '@libs/db/selectors';
 import { 
   FeedLogMovieContentDto,
   FeedLogTvSeriesContentDto,
@@ -39,8 +39,8 @@ export class FeedService {
   }): SQL<FeedItemUnion['content'] | null> {
     const activityTypeText = sql<string>`${feed.activityType}::text`;
 
-    const movieFeedJsonb = buildJsonbObject({ ...MOVIE_COMPACT_SELECT, overview: tmdbMovieView.overview });
-    const tvSeriesFeedJsonb = buildJsonbObject({ ...TV_SERIES_COMPACT_SELECT, overview: tmdbTvSeriesView.overview });
+    const movieFeedJsonb = buildJsonbObject({ ...MOVIE_SUMMARY_SELECT, overview: tmdbMovieView.overview });
+    const tvSeriesFeedJsonb = buildJsonbObject({ ...TV_SERIES_SUMMARY_SELECT, overview: tmdbTvSeriesView.overview });
     const userCompactJsonb = buildJsonbObject(USER_COMPACT_SELECT);
 
     return caseWhen(

@@ -9,12 +9,13 @@ import { useRandomImage } from '@/hooks/use-random-image';
 import { Button } from '@/components/ui/button';
 import { Link } from '@/lib/i18n/navigation';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { TvSeasonGet } from '@packages/api-js';
-import { tvSeasonEpisodesOptions } from '@libs/query-client';
+import { tvSeasonEpisodesInfiniteOptions } from '@libs/query-client';
 import ButtonLogTvSeasonWatch from '@/components/buttons/ButtonLogTvSeasonWatch';
 import { useAuth } from '@/context/auth-context';
 import ButtonLogTvSeasonRating from '@/components/buttons/ButtonLogTvSeasonRating';
+import { useMemo } from 'react';
 
 export const TvSeasonHeader = ({
 	season,
@@ -26,11 +27,12 @@ export const TvSeasonHeader = ({
 	const title = upperFirst(t('common.messages.tv_season_value', { number: season.seasonNumber }));
 	const {
 		data: episodes,
-	} = useQuery(tvSeasonEpisodesOptions({
+	} = useInfiniteQuery(tvSeasonEpisodesInfiniteOptions({
 		tvSeriesId: season.tvSeriesId,
 		seasonNumber: season.seasonNumber,
 	}));
-	const randomBg = useRandomImage(episodes?.map(episode => ({
+	const flatEpisodes = useMemo(() => episodes?.pages.flatMap(page => page.data) ?? [], [episodes]);
+	const randomBg = useRandomImage(flatEpisodes?.map(episode => ({
 		src: episode.stillPath ?? '',
 		alt: upperFirst(t('common.messages.tv_episode_value', { number: episode.episodeNumber })),
 	})) ?? []);

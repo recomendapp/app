@@ -106,10 +106,16 @@ export class SearchService {
       ]);
     });
 
-    const [hydratedUsers, hydratedPlaylists] = await Promise.all([
+    const [hydratedUsers, rawHydratedPlaylists] = await Promise.all([
       this.searchUsersService.hydrateUsers(userIds),
       this.searchPlaylistsService.hydratePlaylists(playlistIds, currentUser),
     ]);
+
+    const hydratedPlaylists = rawHydratedPlaylists.map(({ playlist, owner, role }) => ({
+      ...playlist,
+      owner,
+      role,
+    }));
 
     const candidates = [
       { type: 'movie', hit: moviesRes.hits?.[0] as TypesenseHit, data: hydratedMovies[0] },
@@ -145,18 +151,13 @@ export class SearchService {
         }
       }
     }
-
     return plainToInstance(SearchResponseDto, {
       best_result: bestResult,
       movies: hydratedMovies,
       tv_series: hydratedTvSeries,
       persons: hydratedPersons,
       users: hydratedUsers,
-      playlists: hydratedPlaylists.map(({ playlist, owner, role }) => ({
-        ...playlist,
-        owner,
-        role,
-      })),
+      playlists: hydratedPlaylists,
     }, { excludeExtraneousValues: true });
   }
 }

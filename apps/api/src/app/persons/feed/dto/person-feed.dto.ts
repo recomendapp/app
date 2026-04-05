@@ -1,8 +1,8 @@
 import { ApiSchema, ApiProperty, ApiPropertyOptional, ApiExtraModels, IntersectionType, getSchemaPath } from '@nestjs/swagger';
 import { IsDateString, IsEnum, IsInt, IsOptional, ValidateNested, IsString, IsArray } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
-import { MovieCompactDto } from '../../../movies/dto/movies.dto'; // Ajuste les imports
-import { TvSeriesCompactDto } from '../../../tv-series/dto/tv-series.dto';
+import { MovieSummaryDto } from '../../../movies/dto/movies.dto'; // Ajuste les imports
+import { TvSeriesSummaryDto } from '../../../tv-series/dto/tv-series.dto';
 import { PersonCompactDto } from '../../../persons/dto/persons.dto';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../../common/dto/pagination.dto';
 import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../../common/dto/cursor-pagination.dto';
@@ -53,11 +53,11 @@ export class PersonFeedWithMovieDto extends PersonFeedDto {
   @Expose()
   type: 'movie';
 
-  @ApiProperty({ type: () => MovieCompactDto })
+  @ApiProperty({ type: () => MovieSummaryDto })
   @Expose()
   @ValidateNested()
-  @Type(() => MovieCompactDto)
-  media: MovieCompactDto;
+  @Type(() => MovieSummaryDto)
+  media: MovieSummaryDto;
 }
 
 @ApiSchema({ name: 'PersonFeedWithTvSeries' })
@@ -66,11 +66,11 @@ export class PersonFeedWithTvSeriesDto extends PersonFeedDto {
   @Expose()
   type: 'tv_series';
 
-  @ApiProperty({ type: () => TvSeriesCompactDto })
+  @ApiProperty({ type: () => TvSeriesSummaryDto })
   @Expose()
   @ValidateNested()
-  @Type(() => TvSeriesCompactDto)
-  media: TvSeriesCompactDto;
+  @Type(() => TvSeriesSummaryDto)
+  media: TvSeriesSummaryDto;
 }
 
 export type PersonFeedUnion = PersonFeedWithMovieDto | PersonFeedWithTvSeriesDto;

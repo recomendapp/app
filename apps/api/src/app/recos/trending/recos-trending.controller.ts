@@ -1,7 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { RecosTrendingService } from './recos-trending.service';
-import { ListInfiniteRecosTrendingDto, ListInfiniteRecosTrendingQueryDto, ListPaginatedRecosTrendingDto, ListPaginatedRecosTrendingQueryDto } from './dto/recos-trending.dto';
+import { ListInfiniteRecosTrendingDto, ListInfiniteRecosTrendingQueryDto, ListPaginatedRecosTrendingDto, ListPaginatedRecosTrendingQueryDto } from './recos-trending.dto';
 import { CurrentLocale } from '../../../common/decorators/current-locale.decorator';
 import { SupportedLocale } from '@libs/i18n';
 

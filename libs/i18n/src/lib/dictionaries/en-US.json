@@ -164,6 +164,7 @@
       "start_typing_to_search_users": "start typing to search users",
       "search_playlist": "search a playlist",
       "start_typing_to_search_playlists": "start typing to search playlists",
+      "search_film_or_tv_series": "search a film or a TV series",
       "watched_date": "watched {count, plural, one {date} other {dates}}",
       "mark_as_watched": "mark as watched",
       "remove_from_watched": "remove from watched",
@@ -426,7 +427,8 @@
       "password_reset": "Password reset",
       "return_to_login": "Return to login",
       "invalid_code": "Invalid code",
-      "no_token_found": "No token found"
+      "no_token_found": "No token found",
+      "first_watched_at": "first watched at"
     },
     "form": {
       "email": {

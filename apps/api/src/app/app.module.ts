@@ -17,6 +17,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { FeedModule } from './feed/feed.module';
 import { SearchModule } from './search/search.module';
+import { UiModule } from './ui/ui.module';
+import { MediasModule } from './medias/medias.module';
 
 @Module({
   imports: [
@@ -32,10 +34,12 @@ import { SearchModule } from './search/search.module';
     PlaylistsModule,
     MoviesModule,
     TvSeriesModule,
+    MediasModule,
     PersonsModule,
     ReviewsModule,
     FeedModule,
     SearchModule,
+    UiModule,
   ],
   controllers: [AppController],
   providers: [AppService],

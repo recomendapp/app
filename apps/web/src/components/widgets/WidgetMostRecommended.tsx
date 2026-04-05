@@ -172,6 +172,11 @@ const Item = ({
 								</span>
 							))}
 						</div> : null}
+						{item.media.overview?.length && (
+							<div className="max-w-xl line-clamp-2 pt-2">
+								{item.media.overview}
+							</div>
+						)}
 					</CardContent>
 					<CardFooter className="flex items-center gap-2">
 						{user && (

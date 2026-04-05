@@ -82,7 +82,7 @@ const SearchBestResult = ({
 				: data?.type === 'person'
 					? <CardPerson variant="row" person={data.data} className="max-w-[600px] h-80" posterClassName="h-full w-auto" />
 				: data?.type === 'playlist'
-					? <CardPlaylist playlist={data.data} className="max-w-[200px]" />
+					? <CardPlaylist playlist={data.data} owner={data.data.owner} className="max-w-[200px]" />
 				: data?.type === 'user'
 					? <CardUser user={data.data} className="max-w-[600px] h-40" />
 				: null

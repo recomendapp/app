@@ -14,7 +14,7 @@ import { UpdateUserDto, UserDto } from '../users/dto/users.dto';
 export class MeController {
   constructor(private readonly meService: MeService) {}
 
-  @Get('me')
+  @Get()
   @UseGuards(OptionalAuthGuard)
   @ApiExtraModels(UserDto)
   @ApiOkResponse({
@@ -33,7 +33,7 @@ export class MeController {
     return this.meService.get(user);
   }
 
-  @Patch('me')
+  @Patch()
   @UseGuards(AuthGuard)
   @ApiResponse({
     status: 200,

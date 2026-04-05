@@ -11,7 +11,7 @@ import toast from 'react-hot-toast';
 import { upperFirst } from 'lodash';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from '@/lib/i18n/navigation';
-import { userMeOptions, useUserMeUpdateMutation } from '@libs/query-client';
+import { meOptions, useMeUpdateMutation } from '@libs/query-client';
 import { User } from '@packages/api-js/src';
 
 export interface UserState {
@@ -56,7 +56,7 @@ export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps)
   const queryClient = useQueryClient();
   
   const { data: user } = useQuery({
-    ...userMeOptions(),
+    ...meOptions(),
     initialData: initialUser || undefined,
   });
   const { customerInfo: initCustomerInfo } = useRevenueCat(user);
@@ -67,7 +67,7 @@ export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps)
     initialData: initCustomerInfo,
 	}));
 
-  const { mutate: updateUser } = useUserMeUpdateMutation();
+  const { mutate: updateUser } = useMeUpdateMutation();
 
   const login = useCallback(async (credentials: { 
     password: string, 
@@ -106,7 +106,7 @@ export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps)
         throw error;
       };
     }
-    await queryClient.invalidateQueries({ queryKey: userMeOptions().queryKey });
+    await queryClient.invalidateQueries({ queryKey: meOptions().queryKey });
     router.push(credentials.redirectTo || '/');
   }, [t, router, queryClient]);
 
@@ -121,7 +121,7 @@ export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps)
       }
       throw error;
     }
-    queryClient.setQueryData(userMeOptions().queryKey, null);
+    queryClient.setQueryData(meOptions().queryKey, null);
     router.refresh();
   }, [user, t, router, queryClient]);
 

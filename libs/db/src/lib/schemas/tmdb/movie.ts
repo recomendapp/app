@@ -347,7 +347,7 @@ export const tmdbMovieView = tmdbSchema.view('movie_view', {
   title: text(),
   posterPath: text('poster_path'),
   backdropPath: text('backdrop_path'),
-  directors: jsonb().$type<Pick<typeof tmdbPersonView.$inferSelect, 'id' | 'name' | 'profilePath' | 'slug' | 'url'>[]>(),
+  directors: jsonb().$type<Pick<typeof tmdbPersonView.$inferSelect, 'id' | 'name' | 'gender' | 'profilePath' | 'slug' | 'url'>[]>(),
   genres: jsonb().$type<(typeof tmdbGenre.$inferSelect & { name: string })[]>(),
   trailers: jsonb().$type<Pick<typeof tmdbMovieVideo.$inferSelect, 'id' | 'name' | 'key' | 'site' | 'size' | 'type' | 'official' | 'publishedAt' | 'iso6391' | 'iso31661'>[]>(),
   releaseDate: date('release_date', { mode: 'string' }),
@@ -501,6 +501,7 @@ export const tmdbMovieView = tmdbSchema.view('movie_view', {
           jsonb_build_object(
             'id', p.id,
             'name', p.name,
+            'gender', p.gender,
             'profilePath', p.profile_path,
             'slug', p.slug,
             'url', p.url

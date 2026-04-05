@@ -39,7 +39,6 @@ export const MovieReview = ({
 			}
 		}, {
 			onSuccess: () => {
-				console.log('okoko')
 				router.push(`/@${user?.username}/film/${movie.slug || movie.id}`);
 			},
 			onError: (error) => {

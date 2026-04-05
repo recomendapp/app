@@ -1,6 +1,6 @@
 import { useAuth } from "@/context/auth-context";
 import { fetchToken } from "@/lib/firebase/firebase.config";
-import { useUserPushTokenUpdateMutation } from "@libs/query-client";
+import { usePushTokenUpdateMutation } from "@libs/query-client";
 import { useEffect, useRef, useState } from "react";
 
 const LOCAL_STORAGE_KEY = 'notification-prompt-permission';
@@ -22,7 +22,7 @@ const useNotificationPermission = () => {
 	const retryLoadToken = useRef(0);
 	const isLoading = useRef(false);
 
-	const { mutate: updatePushToken } = useUserPushTokenUpdateMutation();
+	const { mutate: updatePushToken } = usePushTokenUpdateMutation();
 
 	const loadToken = async () => {
 		if (isLoading.current) return;

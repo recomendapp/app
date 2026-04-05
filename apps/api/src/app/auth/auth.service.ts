@@ -1,6 +1,7 @@
 import { Provider } from '@nestjs/common';
 import { APIError, betterAuth } from 'better-auth';
 import { createAuthMiddleware, emailOTP, magicLink, openAPI, username } from 'better-auth/plugins';
+import { expo } from '@better-auth/expo';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { ENV_SERVICE, EnvService } from '@libs/env'; // Ton token
 import { NotifyClient } from '@shared/notify';
@@ -35,6 +36,7 @@ const createBetterAuth = ({
 		trustedOrigins: [
 			"http://localhost:3000",
 			env.WEB_APP_URL,
+			env.MOBILE_APP_SCHEME,
 		],
 		baseURL: env.API_URL,
 		basePath: '/auth',
@@ -93,7 +95,8 @@ const createBetterAuth = ({
 							break;
 					}
 				}, 
-			})
+			}),
+			expo(),
 		],
 		databaseHooks: {
 			user: {

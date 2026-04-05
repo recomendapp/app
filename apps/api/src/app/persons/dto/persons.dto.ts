@@ -154,6 +154,7 @@ export class PersonDto {
 export class PersonCompactDto extends PickType(PersonDto, [
   'id',
   'name',
+  'gender',
   'profilePath',
   'slug',
   'url',

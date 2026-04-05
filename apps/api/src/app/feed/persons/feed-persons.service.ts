@@ -7,7 +7,7 @@ import { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { plainToInstance } from 'class-transformer';
-import { MOVIE_COMPACT_SELECT, PERSON_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
+import { MOVIE_SUMMARY_SELECT, PERSON_COMPACT_SELECT, TV_SERIES_SUMMARY_SELECT } from '@libs/db/selectors';
 import { 
   ListPaginatedPersonFeedQueryDto, 
   ListInfinitePersonFeedQueryDto, 
@@ -102,8 +102,8 @@ export class FeedPersonsService {
               jobs: paginatedFeedSubquery.jobs,
             },
             person: PERSON_COMPACT_SELECT,
-            movie: MOVIE_COMPACT_SELECT,
-            tvSeries: TV_SERIES_COMPACT_SELECT,
+            movie: MOVIE_SUMMARY_SELECT,
+            tvSeries: TV_SERIES_SUMMARY_SELECT,
           })
           .from(paginatedFeedSubquery)
           .innerJoin(tmdbPersonView, eq(tmdbPersonView.id, paginatedFeedSubquery.personId))
@@ -206,8 +206,8 @@ export class FeedPersonsService {
               jobs: infiniteFeedSubquery.jobs,
             },
             person: PERSON_COMPACT_SELECT,
-            movie: MOVIE_COMPACT_SELECT,
-            tvSeries: TV_SERIES_COMPACT_SELECT,
+            movie: MOVIE_SUMMARY_SELECT,
+            tvSeries: TV_SERIES_SUMMARY_SELECT,
           })
           .from(infiniteFeedSubquery)
           .innerJoin(tmdbPersonView, eq(tmdbPersonView.id, infiniteFeedSubquery.personId))

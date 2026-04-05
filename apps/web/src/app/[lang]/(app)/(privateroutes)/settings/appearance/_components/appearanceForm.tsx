@@ -36,7 +36,7 @@ import { ChevronsUpDown } from 'lucide-react';
 import { upperFirst } from 'lodash';
 import { supportedLocales } from '@libs/i18n';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
-import { useUserMeUpdateMutation } from '@libs/query-client';
+import { useMeUpdateMutation } from '@libs/query-client';
 
 export function AppearanceForm() {
   const t = useTranslations();
@@ -47,7 +47,7 @@ export function AppearanceForm() {
   const { user } = useAuth();
   const locales = useLocalizedLanguageName([...supportedLocales]);
 
-  const { mutateAsync: updateProfile, isPending } = useUserMeUpdateMutation();
+  const { mutateAsync: updateProfile, isPending } = useMeUpdateMutation();
 
   const appearanceFormSchema = z.object({
     theme: z.enum(['light', 'dark'], {

@@ -10,3 +10,4 @@ export * from './tmdb';
 export * from './system';
 export * from './ui';
 export * from './feed';
+export * from './media';

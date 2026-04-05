@@ -267,6 +267,34 @@
       "when": 1774881252303,
       "tag": "0037_add_feed_triggers",
       "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "7",
+      "when": 1775246406640,
+      "tag": "0038_breezy_hellfire_club",
+      "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1775308126012,
+      "tag": "0039_gorgeous_husk",
+      "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1775310162301,
+      "tag": "0040_green_tempest",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1775317650476,
+      "tag": "0041_uneven_gunslinger",
+      "breakpoints": true
     }
   ]
 }

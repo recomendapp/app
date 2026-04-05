@@ -166,6 +166,7 @@
       "start_typing_to_search_users": "commencez à taper pour rechercher des utilisateurs",
       "search_playlist": "rechercher une playlist",
       "start_typing_to_search_playlists": "commencez à taper pour rechercher des playlists",
+      "search_film_or_tv_series": "rechercher un film ou une série",
       "watched_date": "{count, plural, one {date} other {dates}} de visionnage",
       "rating": "note",
       "create_a_playlist": "créer une playlist",
@@ -426,7 +427,8 @@
       "password_reset": "Mot de passe réinitialisé",
       "return_to_login": "Retour à la connexion",
       "invalid_code": "Code invalide",
-      "no_token_found": "Aucun token trouvé"
+      "no_token_found": "Aucun token trouvé",
+      "first_watched_at": "première date de visionnage"
     },
     "form": {
       "email": {

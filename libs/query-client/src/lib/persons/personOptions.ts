@@ -1,6 +1,28 @@
-import { PersonMoviesControllerListPaginatedData, personMoviesControllerListPaginated, PersonMoviesControllerListInfiniteData, personMoviesControllerListInfinite, PersonTvSeriesControllerListPaginatedData, personTvSeriesControllerListPaginated, PersonTvSeriesControllerListInfiniteData, personTvSeriesControllerListInfinite } from "@packages/api-js";
+import { PersonMoviesControllerListPaginatedData, personMoviesControllerListPaginated, PersonMoviesControllerListInfiniteData, personMoviesControllerListInfinite, PersonTvSeriesControllerListPaginatedData, personTvSeriesControllerListPaginated, PersonTvSeriesControllerListInfiniteData, personTvSeriesControllerListInfinite, personsControllerGet } from "@packages/api-js";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { personKeys } from "./personKeys";
+
+export const personOptions = ({
+	personId,
+} : {
+	personId?: number;
+}) => {
+	return queryOptions({
+		queryKey: personKeys.details({ personId: personId! }),
+		queryFn: async () => {
+			if (!personId) throw new Error('Person ID is required');
+			const { data, error } = await personsControllerGet({
+				path: {
+					person_id: personId,
+				},
+			});
+			if (error) throw error;
+			if (!data) throw new Error('No data');
+			return data;
+		},
+		enabled: !!personId,
+	});
+};
 
 export const personMoviesPaginatedOptions = ({
 	personId,

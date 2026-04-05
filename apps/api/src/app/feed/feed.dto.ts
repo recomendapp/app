@@ -18,8 +18,8 @@ import { LogTvSeriesWithTvSeriesDto } from '../tv-series/logs/tv-series-logs.dto
 import { IsOptional, IsString } from 'class-validator';
 import { ReviewMovieWithAuthorMovieDto } from '../reviews/movie/dto/reviews-movie.dto';
 import { ReviewTvSeriesWithAuthorTvSeriesDto } from '../reviews/tv-series/dto/review-tv-series.dto';
-import { MovieCompactDto } from '../movies/dto/movies.dto';
-import { TvSeriesCompactDto } from '../tv-series/dto/tv-series.dto';
+import { MovieSummaryDto } from '../movies/dto/movies.dto';
+import { TvSeriesSummaryDto } from '../tv-series/dto/tv-series.dto';
 
 class BaseFeedItemDto {
   @ApiProperty({ example: 42 })
@@ -44,54 +44,36 @@ class BaseFeedItemDto {
   activityType: typeof feedTypeEnum.enumValues[number];
 }
 
-@ApiSchema({ name: 'FeedMovie' })
-export class FeedMovieDto extends MovieCompactDto {
-  @ApiProperty({ description: 'The movie overview', nullable: true })
-  @Expose()
-  @IsString()
-  @IsOptional()
-  overview: string | null;
-}
-
-@ApiSchema({ name: 'FeedTvSeries' })
-export class FeedTvSeriesDto extends TvSeriesCompactDto {
-  @ApiProperty({ description: 'The tv series overview', nullable: true })
-  @Expose()
-  @IsString()
-  @IsOptional()
-  overview: string | null;
-}
-
 @ApiSchema({ name: 'FeedLogMovieContent' })
 export class FeedLogMovieContentDto extends OmitType(LogMovieWithMovieDto, ['movie']) {
-  @ApiProperty({ type: () => FeedMovieDto })
+  @ApiProperty({ type: () => MovieSummaryDto })
   @Expose()
-  @Type(() => FeedMovieDto)
-  movie: FeedMovieDto;
+  @Type(() => MovieSummaryDto)
+  movie: MovieSummaryDto;
 }
 
 @ApiSchema({ name: 'FeedLogTvSeriesContent' })
 export class FeedLogTvSeriesContentDto extends OmitType(LogTvSeriesWithTvSeriesDto, ['tvSeries']) {
-  @ApiProperty({ type: () => FeedTvSeriesDto })
+  @ApiProperty({ type: () => TvSeriesSummaryDto })
   @Expose()
-  @Type(() => FeedTvSeriesDto)
-  tvSeries: FeedTvSeriesDto;
+  @Type(() => TvSeriesSummaryDto)
+  tvSeries: TvSeriesSummaryDto;
 }
 
 @ApiSchema({ name: 'FeedReviewMovieLikeContent' })
 export class FeedReviewMovieLikeContentDto extends OmitType(ReviewMovieWithAuthorMovieDto, ['movie']) {
-  @ApiProperty({ type: () => FeedMovieDto })
+  @ApiProperty({ type: () => MovieSummaryDto })
   @Expose()
-  @Type(() => FeedMovieDto)
-  movie: FeedMovieDto;
+  @Type(() => MovieSummaryDto)
+  movie: MovieSummaryDto;
 }
 
 @ApiSchema({ name: 'FeedReviewTvSeriesLikeContent' })
 export class FeedReviewTvSeriesLikeContentDto extends OmitType(ReviewTvSeriesWithAuthorTvSeriesDto, ['tvSeries']) {
-  @ApiProperty({ type: () => FeedTvSeriesDto })
+  @ApiProperty({ type: () => TvSeriesSummaryDto })
   @Expose()
-  @Type(() => FeedTvSeriesDto)
-  tvSeries: FeedTvSeriesDto;
+  @Type(() => TvSeriesSummaryDto)
+  tvSeries: TvSeriesSummaryDto;
 }
 
 @ApiSchema({ name: 'FeedItemLogMovie' })

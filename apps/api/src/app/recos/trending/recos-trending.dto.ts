@@ -2,11 +2,11 @@ import { ApiProperty, ApiPropertyOptional, ApiSchema, IntersectionType, ApiExtra
 import { Expose, Type } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, ValidateNested } from 'class-validator';
 import { recoTypeEnum } from '@libs/db/schemas';
-import { MovieCompactDto } from '../../../movies/dto/movies.dto'; // <-- Ajuste les imports
-import { TvSeriesCompactDto } from '../../../tv-series/dto/tv-series.dto';
-import { PaginatedResponseDto, PaginationQueryDto } from '../../../../common/dto/pagination.dto';
-import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../../common/dto/cursor-pagination.dto';
-import { SortOrder } from '../../../../common/dto/sort.dto';
+import { MovieSummaryDto } from '../../movies/dto/movies.dto'; // <-- Ajuste les imports
+import { TvSeriesSummaryDto } from '../../tv-series/dto/tv-series.dto';
+import { PaginatedResponseDto, PaginationQueryDto } from '../../../common/dto/pagination.dto';
+import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../common/dto/cursor-pagination.dto';
+import { SortOrder } from '../../../common/dto/sort.dto';
 
 export enum RecoTrendingSortBy {
   RECOMMENDATION_COUNT = 'recommendation_count',
@@ -43,11 +43,11 @@ export class RecoTrendingWithMovieDto extends RecoTrendingDto {
   @Expose()
   type: 'movie';
 
-  @ApiProperty({ type: () => MovieCompactDto })
+  @ApiProperty({ type: () => MovieSummaryDto })
   @Expose()
   @ValidateNested()
-  @Type(() => MovieCompactDto)
-  media: MovieCompactDto;
+  @Type(() => MovieSummaryDto)
+  media: MovieSummaryDto;
 }
 
 @ApiSchema({ name: 'RecoTrendingWithTvSeries' })
@@ -56,11 +56,11 @@ export class RecoTrendingWithTvSeriesDto extends RecoTrendingDto {
   @Expose()
   type: 'tv_series';
 
-  @ApiProperty({ type: () => TvSeriesCompactDto })
+  @ApiProperty({ type: () => TvSeriesSummaryDto })
   @Expose()
   @ValidateNested()
-  @Type(() => TvSeriesCompactDto)
-  media: TvSeriesCompactDto;
+  @Type(() => TvSeriesSummaryDto)
+  media: TvSeriesSummaryDto;
 }
 
 export type RecoTrendingWithMediaUnion = RecoTrendingWithMovieDto | RecoTrendingWithTvSeriesDto;

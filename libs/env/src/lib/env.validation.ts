@@ -39,6 +39,7 @@ export const apiSchema = commonSchema.extend(s3Schema.shape).extend({
   HOST: z.string().default('0.0.0.0'),
   API_URL: z.url().default('http://localhost:9000'),
   DATABASE_URL: z.string(),
+  MOBILE_APP_SCHEME: z.string().default('recomend://'),
 
   // Auth
   AUTH_SECRET: z.string(),

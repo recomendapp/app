@@ -277,6 +277,25 @@ export class TvSeriesCompactDto extends PickType(TvSeriesDto, [
   'followerAvgRating',
 ] as const) {}
 
+@ApiSchema({ name: 'TvSeriesSummary' })
+export class TvSeriesSummaryDto extends PickType(TvSeriesDto, [
+  'id',
+  'name',
+  'slug',
+  'url',
+  'overview',
+  'posterPath',
+  'backdropPath',
+  'createdBy',
+  'firstAirDate',
+  'lastAirDate',
+  'voteAverage',
+  'voteCount',
+  'popularity',
+  'genres',
+  'followerAvgRating',
+] as const) {}
+
 @ApiSchema({ name: 'TvSeriesMinimal' })
 export class TvSeriesMinimalDto extends PickType(TvSeriesDto, [
   'id',

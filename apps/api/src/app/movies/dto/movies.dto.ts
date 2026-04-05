@@ -315,6 +315,24 @@ export class MovieCompactDto extends PickType(MovieDto, [
   'followerAvgRating',
 ] as const) {}
 
+@ApiSchema({ name: 'MovieSummary' })
+export class MovieSummaryDto extends PickType(MovieDto, [
+  'id',
+  'title',
+  'slug',
+  'url',
+  'overview',
+  'posterPath',
+  'backdropPath',
+  'directors',
+  'releaseDate',
+  'voteAverage',
+  'voteCount',
+  'popularity',
+  'genres',
+  'followerAvgRating',
+] as const) {}
+
 @ApiSchema({ name: 'ListPaginatedMovies' })
 export class ListPaginatedMoviesDto extends PaginatedResponseDto<MovieCompactDto> {
   @ApiProperty({ type: () => [MovieCompactDto] })

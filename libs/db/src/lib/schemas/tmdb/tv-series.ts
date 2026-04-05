@@ -364,7 +364,7 @@ export const tmdbTvSeriesView = tmdbSchema.view('tv_series_view', {
   name: text(),
   posterPath: text('poster_path'),
   backdropPath: text('backdrop_path'),
-  createdBy: jsonb('created_by').$type<Pick<typeof tmdbPersonView.$inferSelect, 'id' | 'name' | 'profilePath' | 'slug' | 'url'>[]>(),
+  createdBy: jsonb('created_by').$type<Pick<typeof tmdbPersonView.$inferSelect, 'id' | 'name' | 'gender' | 'profilePath' | 'slug' | 'url'>[]>(),
   genres: jsonb().$type<(typeof tmdbGenre.$inferSelect & { name: string })[]>(),
   trailers: jsonb().$type<Pick<typeof tmdbTvSeriesVideo.$inferSelect, 'id' | 'name' | 'key' | 'site' | 'size' | 'type' | 'official' | 'publishedAt' | 'iso6391' | 'iso31661'>[]>(),
   firstAirDate: date('first_air_date', { mode: 'string' }),
@@ -483,6 +483,7 @@ export const tmdbTvSeriesView = tmdbSchema.view('tv_series_view', {
           jsonb_build_object(
             'id', p.id,
             'name', p.name,
+            'gender', p.gender,
             'profilePath', p.profile_path,
             'slug', p.slug,
             'url', p.url

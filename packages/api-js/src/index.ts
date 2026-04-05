@@ -6,3 +6,6 @@ export * from './playlists';
 export * from './realtime';
 export * from './search';
 export * from './feed';
+export * from './recos';
+export * from './bookmarks';
+export * from './utils';

@@ -24,7 +24,7 @@ import { useTranslations } from 'next-intl';
 import { useUsernameAvailability } from '@/hooks/use-username-availability';
 import useDebounce from '@/hooks/use-debounce';
 import { upperFirst } from 'lodash';
-import { useUserMeUpdateMutation } from '@libs/query-client';
+import { useMeUpdateMutation } from '@libs/query-client';
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 
 const USERNAME_MIN_LENGTH = 3;
@@ -33,7 +33,7 @@ const USERNAME_MAX_LENGTH = 15;
 export function AccountForm() {
   const t = useTranslations();
   const { user } = useAuth();
-  const { mutateAsync: updateProfile, isPending } = useUserMeUpdateMutation();
+  const { mutateAsync: updateProfile, isPending } = useMeUpdateMutation();
 
   const date = new Date();
   const dateLastUsernameUpdate = user?.usernameUpdatedAt

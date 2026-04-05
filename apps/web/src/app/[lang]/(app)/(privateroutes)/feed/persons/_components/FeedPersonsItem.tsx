@@ -8,24 +8,14 @@ import { UserAvatar } from "@/components/User/UserAvatar";
 import { ContextMenuMovie } from "@/components/ContextMenu/ContextMenuMovie";
 import { getMediaDetails } from "@/utils/get-media-details";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
-import { PersonFeedWithMovie, PersonFeedWithTvSeries } from "@packages/api-js";
+import { FeedPersonItem } from "@packages/api-js";
 import { ContextMenuTvSeries } from "@/components/ContextMenu/ContextMenuTvSeries";
 import { forwardRef, useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 
-type Item = (
-	| {
-		type: "movie";
-	} & PersonFeedWithMovie
-) | (
-	{
-		type: "tv_series";
-	} & PersonFeedWithTvSeries
-);
-
 interface FeedPersonsItemProps
 	extends React.ComponentProps<typeof Card> {
-		item: Item;
+		item: FeedPersonItem;
 	}
 
 const FeedPersonsItemDefault = forwardRef<
@@ -122,7 +112,7 @@ export {
 	FeedPersonsItemDefault
 }
 
-const ContextMenu = ({ item, children }: { item: Item, children: React.ReactNode }) => {
+const ContextMenu = ({ item, children }: { item: FeedPersonItem, children: React.ReactNode }) => {
 	if (item.type === 'movie') {
 		return (
 			<ContextMenuMovie movie={item.media}>
