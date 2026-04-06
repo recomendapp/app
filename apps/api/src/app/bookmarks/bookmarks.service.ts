@@ -14,7 +14,7 @@ export class BookmarksService {
   ) {}
 
   private getWhereConditions(userId: string, target: BookmarkTarget) {
-    const conditions = [eq(bookmark.userId, userId)];
+    const conditions = [eq(bookmark.userId, userId), eq(bookmark.status, 'active')];
 
     if (target.id) {
       conditions.push(eq(bookmark.id, target.id));
