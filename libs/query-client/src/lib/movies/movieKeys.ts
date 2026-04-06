@@ -1,4 +1,4 @@
-import { MoviePlaylistsControllerListInfiniteData, MoviePlaylistsControllerListPaginatedData, MovieReviewsControllerListInfiniteData, MovieReviewsControllerListPaginatedData } from "@packages/api-js";
+import { MovieImagesControllerListInfiniteData, MovieImagesControllerListPaginatedData, MoviePlaylistsControllerListInfiniteData, MoviePlaylistsControllerListPaginatedData, MovieReviewsControllerListInfiniteData, MovieReviewsControllerListPaginatedData } from "@packages/api-js";
 
 export const movieKeys = {
 	base: ['movie'] as const,
@@ -66,4 +66,20 @@ export const movieKeys = {
 	}: {
 		movieId: number;
 	}) => [...movieKeys.details({ movieId }), 'following-average-rating'] as const,
+
+	/* --------------------------------- Images --------------------------------- */
+	images: ({
+		movieId,
+		mode,
+		filters,
+	}: {
+		movieId: number;
+	} & (
+		| { mode?: never; filters?: never }
+		| { mode: 'paginated'; filters?: NonNullable<MovieImagesControllerListPaginatedData['query']> }
+		| { mode: 'infinite'; filters?: Omit<NonNullable<MovieImagesControllerListInfiniteData['query']>, 'cursor'> }
+	)) => {
+		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
+		return [...movieKeys.details({ movieId }), 'images', ...optionsKey] as const;
+	},
 };

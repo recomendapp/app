@@ -1,4 +1,4 @@
-import { moviesControllerGet, moviesControllerGetCasting, movieLogsControllerGet, movieLogsControllerGetFollowingAverageRating, MovieReviewsControllerListInfiniteData, movieReviewsControllerListInfinite, movieLogsControllerGetFollowingLogs, MoviePlaylistsControllerListInfiniteData, moviePlaylistsControllerListInfinite, MovieReviewsControllerListPaginatedData, movieReviewsControllerListPaginated, MoviePlaylistsControllerListPaginatedData, moviePlaylistsControllerListPaginated } from "@packages/api-js";
+import { moviesControllerGet, moviesControllerGetCasting, movieLogsControllerGet, movieLogsControllerGetFollowingAverageRating, MovieReviewsControllerListInfiniteData, movieReviewsControllerListInfinite, movieLogsControllerGetFollowingLogs, MoviePlaylistsControllerListInfiniteData, moviePlaylistsControllerListInfinite, MovieReviewsControllerListPaginatedData, movieReviewsControllerListPaginated, MoviePlaylistsControllerListPaginatedData, moviePlaylistsControllerListPaginated, MovieImagesControllerListPaginatedData, movieImagesControllerListPaginated, MovieImagesControllerListInfiniteData, movieImagesControllerListInfinite } from "@packages/api-js";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { movieKeys } from "./movieKeys";
 
@@ -255,5 +255,73 @@ export const movieFollowingAverageRatingOptions = ({
 			return data;
 		},
 		enabled: !!userId && !!movieId,
+	});
+}
+
+/* --------------------------------- Images --------------------------------- */
+export const movieImagesPaginatedOptions = ({
+	movieId,
+	filters,
+} : {
+	movieId?: number;
+	filters?: NonNullable<MovieImagesControllerListPaginatedData['query']>;
+}) => {
+	return queryOptions({
+		queryKey: movieKeys.images({
+			movieId: movieId!,
+			mode: 'paginated',
+			filters: filters,
+		}),
+		queryFn: async () => {
+			if (!movieId) throw new Error('Movie ID is required');
+			const { data, error } = await movieImagesControllerListPaginated({
+				path: {
+					movie_id: movieId,
+				},
+				query: filters,
+			});
+			if (error) throw error;
+			if (data === undefined) throw new Error('No data');
+			return data;
+		},
+		enabled: !!movieId,
+		staleTime: 1000 * 60 * 60 // 1 hour
+	});
+}
+
+export const movieImagesInfiniteOptions = ({
+	movieId,
+	filters,
+} : {
+	movieId?: number;
+	filters?: Omit<NonNullable<MovieImagesControllerListInfiniteData['query']>, 'cursor'>;
+}) => {
+	return infiniteQueryOptions({
+		queryKey: movieKeys.images({
+			movieId: movieId!,
+			mode: 'infinite',
+			filters: filters,
+		}),
+		queryFn: async ({ pageParam }) => {
+			if (!movieId) throw new Error('Movie ID is required');
+			const { data, error } = await movieImagesControllerListInfinite({
+				path: {
+					movie_id: movieId,
+				},
+				query: {
+					...filters,
+					cursor: pageParam,
+				},
+			});
+			if (error) throw error;
+			if (data === undefined) throw new Error('No data');
+			return data;
+		},
+		initialPageParam: undefined as string | undefined,
+		getNextPageParam: (lastPage) => {
+			return lastPage.meta.next_cursor || undefined;
+		},
+		enabled: !!movieId,
+		staleTime: 1000 * 60 * 60 // 1 hour
 	});
 }

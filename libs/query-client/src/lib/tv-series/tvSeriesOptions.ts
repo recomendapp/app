@@ -1,4 +1,4 @@
-import { tvSeriesControllerGet, tvSeriesControllerGetCasting, tvSeriesControllerGetSeasons, tvSeriesLogsControllerGet, tvSeriesLogsControllerGetFollowingAverageRating, tvSeriesLogsControllerGetFollowingLogs, tvSeriesPlaylistsControllerListInfinite, TvSeriesPlaylistsControllerListInfiniteData, tvSeriesPlaylistsControllerListPaginated, TvSeriesPlaylistsControllerListPaginatedData, tvSeriesReviewsControllerListInfinite, TvSeriesReviewsControllerListInfiniteData, tvSeriesReviewsControllerListPaginated, TvSeriesReviewsControllerListPaginatedData } from "@packages/api-js";
+import { tvSeriesControllerGet, tvSeriesControllerGetCasting, tvSeriesControllerGetSeasons, tvSeriesImagesControllerListInfinite, TvSeriesImagesControllerListInfiniteData, tvSeriesImagesControllerListPaginated, TvSeriesImagesControllerListPaginatedData, tvSeriesLogsControllerGet, tvSeriesLogsControllerGetFollowingAverageRating, tvSeriesLogsControllerGetFollowingLogs, tvSeriesPlaylistsControllerListInfinite, TvSeriesPlaylistsControllerListInfiniteData, tvSeriesPlaylistsControllerListPaginated, TvSeriesPlaylistsControllerListPaginatedData, tvSeriesReviewsControllerListInfinite, TvSeriesReviewsControllerListInfiniteData, tvSeriesReviewsControllerListPaginated, TvSeriesReviewsControllerListPaginatedData } from "@packages/api-js";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { tvSeriesKeys } from "./tvSeriesKeys";
 
@@ -281,5 +281,73 @@ export const tvSeriesFollowingAverageRatingOptions = ({
 			return data;
 		},
 		enabled: !!userId && !!tvSeriesId,
+	});
+}
+
+/* --------------------------------- Images --------------------------------- */
+export const tvSeriesImagesPaginatedOptions = ({
+	tvSeriesId,
+	filters,
+} : {
+	tvSeriesId?: number;
+	filters?: NonNullable<TvSeriesImagesControllerListPaginatedData['query']>;
+}) => {
+	return queryOptions({
+		queryKey: tvSeriesKeys.images({
+			tvSeriesId: tvSeriesId!,
+			mode: 'paginated',
+			filters: filters,
+		}),
+		queryFn: async () => {
+			if (!tvSeriesId) throw new Error('TV Series ID is required');
+			const { data, error } = await tvSeriesImagesControllerListPaginated({
+				path: {
+					tv_series_id: tvSeriesId,
+				},
+				query: filters,
+			});
+			if (error) throw error;
+			if (data === undefined) throw new Error('No data');
+			return data;
+		},
+		enabled: !!tvSeriesId,
+		staleTime: 1000 * 60 * 60 // 1 hour
+	});
+}
+
+export const tvSeriesImagesInfiniteOptions = ({
+	tvSeriesId,
+	filters,
+} : {
+	tvSeriesId?: number;
+	filters?: Omit<NonNullable<TvSeriesImagesControllerListInfiniteData['query']>, 'cursor'>;
+}) => {
+	return infiniteQueryOptions({
+		queryKey: tvSeriesKeys.images({
+			tvSeriesId: tvSeriesId!,
+			mode: 'infinite',
+			filters: filters,
+		}),
+		queryFn: async ({ pageParam }) => {
+			if (!tvSeriesId) throw new Error('TV Series ID is required');
+			const { data, error } = await tvSeriesImagesControllerListInfinite({
+				path: {
+					tv_series_id: tvSeriesId,
+				},
+				query: {
+					...filters,
+					cursor: pageParam,
+				},
+			});
+			if (error) throw error;
+			if (data === undefined) throw new Error('No data');
+			return data;
+		},
+		initialPageParam: undefined as string | undefined,
+		getNextPageParam: (lastPage) => {
+			return lastPage.meta.next_cursor || undefined;
+		},
+		enabled: !!tvSeriesId,
+		staleTime: 1000 * 60 * 60 // 1 hour
 	});
 }
