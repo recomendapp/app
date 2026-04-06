@@ -1,15 +1,15 @@
+import { TvSeries } from "@packages/api-js";
 import { Text } from "apps/mobile/src/components/ui/text";
 import { View } from "apps/mobile/src/components/ui/view";
 import tw from "apps/mobile/src/lib/tw";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
-import { MediaTvSeries } from "@recomendapp/types";
 import { upperFirst } from "lodash";
 import { forwardRef, Fragment, ReactNode, useMemo } from "react";
 import { ViewProps } from "react-native";
 import { useTranslations } from "use-intl";
 
 type TvSeriesHeaderInfoProps = Omit<ViewProps, 'children'> & {
-  tvSeries: MediaTvSeries;
+  tvSeries: TvSeries;
 };
 
 export const TvSeriesHeaderInfo = forwardRef<
@@ -22,20 +22,20 @@ export const TvSeriesHeaderInfo = forwardRef<
   const items = useMemo((): (string | ReactNode)[] => {
     const result: (string | ReactNode)[] = [];
     // Date
-    if (tvSeries.first_air_date) {
-      result.push(new Date(tvSeries.first_air_date).getFullYear());
+    if (tvSeries.firstAirDate) {
+      result.push(new Date(tvSeries.firstAirDate).getFullYear());
     }
     // Genres
     if (tvSeries.genres?.length) {
       result.push(tvSeries.genres.at(0)!.name);
     }
 
-    if (tvSeries.number_of_seasons) {
-      result.push(upperFirst(t("common.messages.tv_season_count", { count: tvSeries.number_of_seasons })));
+    if (tvSeries.numberOfSeasons) {
+      result.push(upperFirst(t("common.messages.tv_season_count", { count: tvSeries.numberOfSeasons })));
     }
 
-    if (tvSeries.number_of_episodes) {
-      result.push(upperFirst(t("common.messages.tv_episode_count", { count: tvSeries.number_of_episodes })));
+    if (tvSeries.numberOfEpisodes) {
+      result.push(upperFirst(t("common.messages.tv_episode_count", { count: tvSeries.numberOfEpisodes })));
     }
     return result;
   }, [tvSeries, t]);

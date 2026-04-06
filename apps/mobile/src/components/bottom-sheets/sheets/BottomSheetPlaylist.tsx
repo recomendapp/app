@@ -1,6 +1,5 @@
 import tw from 'apps/mobile/src/lib/tw';
 import { Icons } from 'apps/mobile/src/constants/Icons';
-import { Playlist } from '@recomendapp/types';
 import { usePathname, useRouter } from 'expo-router';
 import { LucideIcon } from 'lucide-react-native';
 import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
@@ -9,7 +8,6 @@ import useBottomSheetStore from 'apps/mobile/src/stores/useBottomSheetStore';
 import { Alert } from 'react-native';
 import { ImageWithFallback } from 'apps/mobile/src/components/utils/ImageWithFallback';
 import { useAuth } from 'apps/mobile/src/providers/AuthProvider';
-import { usePlaylistDeleteMutation } from 'apps/mobile/src/api/playlists/playlistMutations';
 import TrueSheet from 'apps/mobile/src/components/ui/TrueSheet';
 import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
@@ -24,10 +22,12 @@ import ButtonActionPlaylistLike from 'apps/mobile/src/components/buttons/ButtonA
 import ButtonActionPlaylistSaved from 'apps/mobile/src/components/buttons/ButtonActionPlaylistSaved';
 import { forwardRef, useMemo } from 'react';
 import { FlashList } from '@shopify/flash-list';
-import { useUserPlaylistSaved } from 'apps/mobile/src/api/users/hooks/useUserPlaylistSaved';
+import { Playlist, UserSummary } from '@packages/api-js';
+import { usePlaylistDeleteMutation, useUserPlaylistSaved } from '@libs/query-client';
 
 interface BottomSheetPlaylistProps extends BottomSheetProps {
 	playlist: Playlist,
+	owner?: UserSummary;
 	additionalItemsTop?: Item[];
 };
 
@@ -44,16 +44,19 @@ interface Item {
 const BottomSheetPlaylist = forwardRef<
 	React.ComponentRef<typeof TrueSheet>,
 	BottomSheetPlaylistProps
->(({ id, playlist, additionalItemsTop = [], ...props }, ref) => {
-	const { session } = useAuth();
+>(({ id, playlist, owner, additionalItemsTop = [], ...props }, ref) => {
+	const { user } = useAuth();
 	const toast = useToast();
 	const { closeSheet, openSheet } = useBottomSheetStore((state) => state);
 	const { colors, mode, isLiquidGlassAvailable } = useTheme();
 	const router = useRouter();
 	const pathname = usePathname();
 	const t = useTranslations();
-	const { isSaved, toggle } = useUserPlaylistSaved({ playlistId: playlist.id });
-	const { mutateAsync: playlistDeleteMutation} = usePlaylistDeleteMutation();
+	const { isSaved, toggle } = useUserPlaylistSaved({
+		userId: user?.id,
+		playlistId: playlist.id
+	});
+	const { mutateAsync: deletePlaylist} = usePlaylistDeleteMutation();
 
 	const items = useMemo<Item[]>(() => [
 		...additionalItemsTop,
@@ -64,7 +67,7 @@ const BottomSheetPlaylist = forwardRef<
 			}),
 			label: upperFirst(t('common.messages.share')),
 		},
-		...(session?.user.id && playlist.user?.id !== session.user.id ? [
+		...(user?.id && playlist.userId !== user.id ? [
 			{
 				icon: isSaved
 					? Icons.Check
@@ -80,24 +83,28 @@ const BottomSheetPlaylist = forwardRef<
 			label: upperFirst(t('common.messages.go_to_playlist')),
 			disabled: pathname.startsWith(`/playlist/${playlist.id}`),
 		},
-		...(playlist.user ? [
+		...(owner ? [
 			{
 				icon: Icons.User,
-				onPress: () => router.push(`/user/${playlist.user?.username}`),
+				onPress: () => router.push({ pathname: '/user/[username]', params: { username: owner.username } }),
 				label: upperFirst(t('common.messages.go_to_user')),
 			}
 		] : []),
-		...(session?.user.id === playlist.user_id ? [
+		...(user?.id === playlist.userId ? [
 			{
 				icon: Icons.Users,
-				onPress: () => router.push(`/playlist/${playlist.id}/edit/guests`),
+				onPress: () => router.push({ pathname: '/playlist/[playlist_id]/edit/guests', params: { playlist_id: playlist.id }}),
 				label: upperFirst(t('common.messages.manage_guests', { gender: 'male', count: 2 })),
 			},
+		] : []),
+		...((playlist.role === 'owner' || playlist.role === 'admin') ? [
 			{
 				icon: Icons.settings,
-				onPress: () => router.push(`/playlist/${playlist.id}/edit`),
+				onPress: () => router.push({ pathname: '/playlist/[playlist_id]/edit', params: { playlist_id: playlist.id }}),
 				label: upperFirst(t('common.messages.edit_playlist')),
 			},
+		] : []),
+		...(user?.id === playlist.userId ? [
 			{
 				icon: Icons.Delete,
 				destructive: true,
@@ -113,21 +120,22 @@ const BottomSheetPlaylist = forwardRef<
 							{
 								text: upperFirst(t('common.messages.delete')),
 								onPress: async () => {
-									await playlistDeleteMutation(
-										{ playlistId: playlist.id },
-										{
-											onSuccess: () => {
-												toast.success(upperFirst(t('common.messages.deleted')));
-												if (pathname.startsWith(`/playlist/${playlist.id}`)) {
-													router.replace('/collection');
-												}
-												closeSheet(id);
-											},
-											onError: () => {
-												toast.error(upperFirst(t('common.messages.error')), { description: upperFirst(t('common.messages.an_error_occurred')) });
-											},
+									await deletePlaylist({
+										path: {
+											playlist_id: playlist.id,
 										}
-									);
+									}, {
+										onSuccess: () => {
+											toast.success(upperFirst(t('common.messages.deleted')));
+											if (pathname.startsWith(`/playlist/${playlist.id}`)) {
+												router.replace('/collection');
+											}
+											closeSheet(id);
+										},
+										onError: () => {
+											toast.error(upperFirst(t('common.messages.error')), { description: upperFirst(t('common.messages.an_error_occurred')) });
+										},
+									});
 								},
 								style: 'destructive',
 							}
@@ -149,10 +157,10 @@ const BottomSheetPlaylist = forwardRef<
 		playlist,
 		router,
 		pathname,
-		session?.user.id,
+		user?.id,
 		t,
 		toast,
-		playlistDeleteMutation,
+		deletePlaylist,
 		isSaved,
 		toggle,
 	]);
@@ -181,8 +189,8 @@ const BottomSheetPlaylist = forwardRef<
 				>
 					<View style={[tw`flex-row items-center`, { gap: GAP }]}>
 						<ImageWithFallback
-						alt={playlist.title ?? ''}
-						source={{ uri: playlist.poster_url ?? '' }}
+						alt={playlist.title}
+						source={{ uri: playlist.poster ?? '' }}
 						style={[
 							{ aspectRatio: 1 / 1 },
 							tw.style('rounded-md w-12'),
@@ -191,8 +199,8 @@ const BottomSheetPlaylist = forwardRef<
 						/>
 						<View>
 							<Text numberOfLines={2}>{playlist.title}</Text>
-							{playlist.user && <Text textColor='muted' numberOfLines={1}>
-								{t('common.messages.by_name', { name: playlist.user?.username! })}
+							{owner && <Text textColor='muted' numberOfLines={1}>
+								{t('common.messages.by_name', { name: owner.username })}
 							</Text>}
 						</View>
 					</View>
@@ -219,7 +227,6 @@ const BottomSheetPlaylist = forwardRef<
 					(item.closeSheet === undefined || item.closeSheet === true) && closeSheet(id);
 					item.onPress();
 				}}
-				
 				>
 					{item.label}
 				</Button>

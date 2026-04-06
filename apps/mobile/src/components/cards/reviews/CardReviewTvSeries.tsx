@@ -1,5 +1,4 @@
 import * as React from "react"
-import { Profile, UserActivityTvSeries, UserReviewTvSeries, FixedOmit } from "@recomendapp/types";
 import Animated from "react-native-reanimated";
 import { Pressable, View } from "react-native";
 import { useRouter, Href } from "expo-router";
@@ -13,6 +12,8 @@ import ButtonUserReviewTvSeriesLike from "apps/mobile/src/components/buttons/But
 import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import { BottomSheetReviewTvSeries } from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetReviewTvSeries";
 import { convert } from "html-to-text";
+import { ReviewTvSeries, UserSummary } from "@packages/api-js";
+import { FixedOmit } from "apps/mobile/src/utils/fixed-omit";
 
 interface CardReviewTvSeriesBaseProps
 	extends React.ComponentPropsWithRef<typeof Animated.View> {
@@ -25,16 +26,16 @@ interface CardReviewTvSeriesBaseProps
 type CardReviewTvSeriesSkeletonProps = {
   skeleton: true;
   review?: never;
-  activity?: never;
   author?: never;
+  rating?: never;
   url?: never;
 };
 
 type CardReviewTvSeriesDataProps = {
   skeleton?: false;
-  review: UserReviewTvSeries;
-  activity: UserActivityTvSeries;
-  author: Profile;
+  review: ReviewTvSeries;
+  author: UserSummary;
+  rating?: number | null;
   url: Href;
 };
 
@@ -44,7 +45,7 @@ export type CardReviewTvSeriesProps = CardReviewTvSeriesBaseProps &
 const CardReviewTvSeriesDefault = React.forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	FixedOmit<CardReviewTvSeriesProps, "variant" | "linked" | "onPress" | "onLongPress" | "url">
->(({ review, skeleton, activity, author, children, style, ...props }, ref) => {
+>(({ review, rating, skeleton, author, children, style, ...props }, ref) => {
 	const { colors } = useTheme();
 	return (
 		<Animated.View
@@ -56,9 +57,11 @@ const CardReviewTvSeriesDefault = React.forwardRef<
 			]}
 			{...props}
 		>
-			<View style={tw.style("items-center gap-1 shrink")}>
-				<IconMediaRating rating={activity?.rating} skeleton={skeleton} />
-			</View>
+			{rating !== undefined && (
+				<View style={tw.style("items-center gap-1 shrink")}>
+					<IconMediaRating rating={rating} skeleton={skeleton} />
+				</View>
+			)}
 			<View style={tw.style("w-full flex-col gap-1 shrink")}>
 				{!skeleton ? <CardUser variant="inline" user={author} /> : <CardUser variant="inline" skeleton={skeleton} />}
 				{review?.title && (
@@ -79,7 +82,7 @@ const CardReviewTvSeriesDefault = React.forwardRef<
 				) : <Skeleton style={tw.style("h-12 w-full")} />}
 				{!skeleton && (
 					<View style={tw.style("flex-row items-center justify-end m-1")}>
-						<ButtonUserReviewTvSeriesLike reviewId={review?.id} reviewLikesCount={review.likes_count} />
+						<ButtonUserReviewTvSeriesLike reviewId={review?.id} reviewLikesCount={review.likesCount} />
 					</View>
 				)}
 			</View>
@@ -113,6 +116,7 @@ const CardReviewTvSeries = React.forwardRef<
 		onLongPress={() => {
 			openSheet(BottomSheetReviewTvSeries, {
 				review: props.review,
+				author: props.author,
 			});
 			onLongPress?.();
 		}}

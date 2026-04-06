@@ -22,7 +22,6 @@ const ITEM_TOTAL_SIZE = ITEM_WIDTH + ITEM_SPACING;
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
-
 interface RatingItemProps
 	extends React.ComponentProps<typeof Animated.View> {
 		index: number;

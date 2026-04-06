@@ -28,7 +28,8 @@ import { logger } from 'apps/mobile/src/logger';
 import { LoopCarousel } from 'apps/mobile/src/components/ui/LoopCarousel';
 import { Image } from 'expo-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useUIBackgroundsQuery } from 'apps/mobile/src/api/ui/uiQueries';
+import { useQuery } from '@tanstack/react-query';
+import { uiBackgroundsOptions } from '../../api/ui/uiOptions';
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 15;
@@ -48,7 +49,7 @@ const SignupScreen = () => {
 
 	const {
 		data: backgrounds,
-	} = useUIBackgroundsQuery();
+	} = useQuery(uiBackgroundsOptions());
 
 	/* ------------------------------- FORM SCHEMA ------------------------------ */
 	const signupSchema = z.object({

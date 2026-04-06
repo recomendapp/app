@@ -8,13 +8,14 @@ import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { useTranslations } from "use-intl";
 import { upperFirst } from "lodash";
-import { MediaMovie, MediaTvSeries, UserRecosAggregated } from "@recomendapp/types";
 import { CardMovie } from "../cards/CardMovie";
 import { CardTvSeries } from "../cards/CardTvSeries";
 import { GAP } from "apps/mobile/src/theme/globals";
 import { GridView } from "../ui/GridView";
 import { Text } from "../ui/text";
-import { useUserRecosQuery } from "apps/mobile/src/api/users/userQueries";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { userRecosInfiniteOptions } from "@libs/query-client";
+import { RecoWithMedia } from "@packages/api-js";
 
 interface WidgetUserRecosProps extends React.ComponentPropsWithoutRef<typeof View> {
   labelStyle?: StyleProp<TextStyle>;
@@ -25,22 +26,22 @@ const SendersAvatars = ({
   senders, 
   sendersShow = 3 
 }: { 
-  senders: UserRecosAggregated['senders']; 
+  senders: RecoWithMedia['senders']; 
   sendersShow?: number; 
 }) => {
   const { colors } = useTheme();
 
-  const visibleSenders = senders?.slice(0, sendersShow) || [];
+  const visibleSenders = senders.slice(0, sendersShow) || [];
 
-  const remainingCount = (senders?.length || 0) - sendersShow;
+  const remainingCount = senders.length - sendersShow;
 
   return (
     <View style={tw`flex-row -gap-2 overflow-hidden`}>
       {visibleSenders.map(({ user: sender }) => (
         <UserAvatar
           key={sender.id}
-          full_name={sender?.full_name ?? ''}
-          avatar_url={sender?.avatar_url ?? ''}
+          full_name={sender.name}
+          avatar_url={sender.avatar}
           style={tw`w-4 h-4`}
         />
       ))}
@@ -60,13 +61,13 @@ const RecoItem = ({
   item, 
   sendersShow 
 }: { 
-  item: UserRecosAggregated; 
+  item: RecoWithMedia; 
   sendersShow: number; 
 }) => {
 
   if (item.type === 'movie') {
     return (
-      <CardMovie variant='list' hideReleaseDate hideDirectors movie={item.media as MediaMovie}>
+      <CardMovie variant='list' hideReleaseDate hideDirectors movie={item.media}>
         <SendersAvatars senders={item.senders} sendersShow={sendersShow} />
       </CardMovie>
     );
@@ -74,7 +75,7 @@ const RecoItem = ({
 
   if (item.type === 'tv_series') {
     return (
-      <CardTvSeries variant='list' hideReleaseDate hideCreator tvSeries={item.media as MediaTvSeries}>
+      <CardTvSeries variant='list' hideReleaseDate hideCreator tvSeries={item.media}>
         <SendersAvatars senders={item.senders} sendersShow={sendersShow} />
       </CardTvSeries>
     );
@@ -104,24 +105,25 @@ const WidgetHeader = ({
 };
 WidgetHeader.displayName = 'WidgetHeader';
 
+const MAX_RECOS = 6;
+
 export const WidgetUserRecos = ({
   style,
   labelStyle,
   containerStyle
 }: WidgetUserRecosProps) => {
-  const { session } = useAuth();
-  const { data: recos } = useUserRecosQuery({
-    userId: session?.user.id,
+  const { user } = useAuth();
+  const { data: recos } = useInfiniteQuery(userRecosInfiniteOptions({
+    userId: user?.id,
     filters: {
-      sortBy: 'created_at',
-      sortOrder: 'random',
-      limit: 6,
+      sort_by: 'random',
     }
-  });
+  }));
+  const flattendRecos = (recos?.pages.flatMap(page => page.data) || []).slice(0, MAX_RECOS);
 
   const sendersShow = 3;
 
-  if (!recos?.length) {
+  if (!flattendRecos.length) {
     return null;
   }
 
@@ -130,7 +132,7 @@ export const WidgetUserRecos = ({
       <WidgetHeader labelStyle={labelStyle} />
       <View style={containerStyle}>
         <GridView
-        data={recos}
+        data={flattendRecos}
         renderItem={(item) => (
           <RecoItem item={item} sendersShow={sendersShow} />
         )}

@@ -1,5 +1,3 @@
-import * as React from "react"
-import { MediaPerson, FixedOmit } from "@recomendapp/types";
 import Animated from "react-native-reanimated";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Href, useRouter } from "expo-router";
@@ -12,6 +10,10 @@ import { Text } from "../ui/text";
 import BottomSheetPerson from "../bottom-sheets/sheets/BottomSheetPerson";
 import { GAP } from "apps/mobile/src/theme/globals";
 import UserAvatar, { UserAvatarProps } from "../user/UserAvatar";
+import { PersonCompact } from "@packages/api-js";
+import { FixedOmit } from "../../utils/fixed-omit";
+import { getTmdbImage } from "../../lib/tmdb/getTmdbImage";
+import { forwardRef } from "react";
 
 interface CardPersonBaseProps
 	extends React.ComponentPropsWithRef<typeof Animated.View> {
@@ -29,7 +31,7 @@ type CardPersonSkeletonProps = {
 
 type CardPersonDataProps = {
 	skeleton?: false;
-	person: MediaPerson;
+	person: PersonCompact;
 };
 
 type VariantBaseProps = Omit<CardPersonBaseProps, "variant"> &
@@ -44,7 +46,6 @@ type VariantMap = {
 	};
 	list: VariantBaseProps & {
 		variant: "list";
-		hideKnownForDepartment?: boolean;
 	};
 	vertical: VariantBaseProps & {
 		variant: "vertical"
@@ -57,7 +58,7 @@ type VariantMap = {
 
 export type CardPersonProps = VariantMap[keyof VariantMap];
 
-const CardPersonDefault = React.forwardRef<
+const CardPersonDefault = forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	FixedOmit<CardPersonProps, "variant" | "linked" | "onPress" | "onLongPress">
 >(({ style, person, skeleton, children, ...props }, ref) => {
@@ -74,7 +75,7 @@ const CardPersonDefault = React.forwardRef<
 		>
 			<View style={tw`flex-1 flex-row items-center gap-2`}>
 				{!skeleton ? <ImageWithFallback
-					source={{uri: person.profile_url ?? ''}}
+					source={{ uri: getTmdbImage({ path: person.profilePath, size: 'w342' })}}
 					alt={person.name ?? ''}
 					type={'person'}
 					style={{
@@ -92,7 +93,7 @@ const CardPersonDefault = React.forwardRef<
 });
 CardPersonDefault.displayName = "CardPersonDefault";
 
-const CardPersonPoster = React.forwardRef<
+const CardPersonPoster = forwardRef<
 React.ComponentRef<typeof Animated.View>,
 	FixedOmit<CardPersonProps, "variant" | "linked" | "onPress" | "onLongPress">
 >(({ style, person, skeleton, children, ...props }, ref) => {
@@ -107,7 +108,7 @@ React.ComponentRef<typeof Animated.View>,
 			{...props}
 		>
 			{!skeleton ? <ImageWithFallback
-				source={{uri: person.profile_url ?? ''}}
+				source={{uri: getTmdbImage({ path: person.profilePath, size: 'w342' })}}
 				alt={person.name ?? ''}
 				type={'person'}
 			/> : <Skeleton style={tw.style('w-full h-full')} />}
@@ -116,13 +117,13 @@ React.ComponentRef<typeof Animated.View>,
 });
 CardPersonPoster.displayName = "CardPersonPoster";
 
-const CardPersonInline = React.forwardRef<
+const CardPersonInline = forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	FixedOmit<VariantMap['inline'], "variant" | "linked" | "onPress" | "onLongPress">
 >(({ person, avatarStyle, children, skeleton, style, ...props }, ref) => {
 	return (
 		<Animated.View ref={ref} style={[tw.style('flex-row items-center gap-1'), style]}>
-			{!skeleton ? <UserAvatar full_name={person.name!} avatar_url={person.profile_url} style={avatarStyle} /> : <UserAvatar skeleton />}
+			{!skeleton ? <UserAvatar full_name={person.name!} avatar_url={getTmdbImage({ path: person.profilePath, size: 'w342' })} style={avatarStyle} /> : <UserAvatar skeleton />}
 			{!skeleton ? <Text>{person.name}</Text> : <Skeleton style={tw.style('w-12 h-4')} />}
 		</Animated.View>
 	);
@@ -130,10 +131,10 @@ const CardPersonInline = React.forwardRef<
 CardPersonInline.displayName = "CardPersonInline";
 
 
-const CardPersonList = React.forwardRef<
+const CardPersonList = forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	FixedOmit<VariantMap['list'], "variant" | "linked" | "onPress" | "onLongPress">
->(({ style, person, skeleton, children, hideKnownForDepartment, ...props }, ref) => {
+>(({ style, person, skeleton, children, ...props }, ref) => {
 	return (
 		<Animated.View
 		ref={ref}
@@ -146,7 +147,7 @@ const CardPersonList = React.forwardRef<
 		>
 			<View style={tw`flex-1 flex-row items-center gap-2`}>
 				{!skeleton ? <ImageWithFallback
-					source={{uri: person.profile_url ?? ''}}
+					source={{uri: getTmdbImage({ path: person.profilePath, size: 'w342' })}}
 					alt={person.name ?? ''}
 					type={'person'}
 					style={[
@@ -161,21 +162,12 @@ const CardPersonList = React.forwardRef<
 					{children}
 				</View>
 			</View>
-			{!hideKnownForDepartment && (
-				<View style={[tw`flex-row items-center`, { gap: GAP }]}>
-					{skeleton ? <Skeleton style={tw`h-5 w-12`} /> : person.known_for_department && (
-						<Text style={tw`text-sm`} textColor='muted' numberOfLines={1}>
-							{person.known_for_department}
-						</Text>
-					)}
-				</View>
-			)}
 		</Animated.View>
 	);
 });
 CardPersonList.displayName = "CardPersonList";
 
-const CardPersonVertical = React.forwardRef<
+const CardPersonVertical = forwardRef<
 React.ComponentRef<typeof Animated.View>,
 	FixedOmit<CardPersonProps, "variant" | "linked" | "onPress" | "onLongPress">
 >(({ style, person, skeleton, children, ...props }, ref) => {
@@ -188,17 +180,16 @@ React.ComponentRef<typeof Animated.View>,
 		]}
 		{...props}
 		>
-			{!skeleton ? <Skeleton style={{ aspectRatio: 2 / 3, width: '100%' }} />
-			: <Skeleton style={{ aspectRatio: 2 / 3, width: '100%' }} />}
-			{/* {!skeleton ? <ImageWithFallback
-				source={{uri: person.profile_url ?? ''}}
+			{!skeleton ? <ImageWithFallback
+				source={{uri: getTmdbImage({ path: person.profilePath, size: 'w342' })}}
 				alt={person.name ?? ''}
 				type={'person'}
 				style={{
 					aspectRatio: 2 / 3,
 					width: '100%',
 				}}
-			/> : <Skeleton style={{ aspectRatio: 2 / 3, width: 'auto' }} />} */}
+			/>
+			: <Skeleton style={{ aspectRatio: 2 / 3, width: '100%' }} />}
 			<View style={tw`px-2 py-1 gap-1`}>
 				{!skeleton ? <Text numberOfLines={2} style={tw`text-center`}>{person.name}</Text> : <Skeleton style={tw.style('w-full h-5')} />}
 				{children}
@@ -208,7 +199,7 @@ React.ComponentRef<typeof Animated.View>,
 });
 CardPersonVertical.displayName = "CardPersonVertical";
 
-const CardPerson = React.forwardRef<
+const CardPerson = forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	CardPersonProps
 >(({ variant = "default", linked = true, onPress, onLongPress, ...props }, ref) => {

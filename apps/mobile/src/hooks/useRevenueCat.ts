@@ -1,11 +1,11 @@
 import { authKeys } from "apps/mobile/src/api/auth/authKeys";
 import { REVENUECAT_API_KEY } from "apps/mobile/src/lib/revenue-cat";
-import { Session } from "@supabase/supabase-js";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import Purchases, { CustomerInfo, LOG_LEVEL } from "react-native-purchases";
+import { User } from "@packages/api-js";
 
-export const useRevenueCat = (session: Session | null | undefined) => {
+export const useRevenueCat = (user: User | null | undefined) => {
   const queryClient = useQueryClient();
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo | undefined>(undefined);
 	const [isInitialized, setIsInitialized] = useState(false);
@@ -23,23 +23,23 @@ export const useRevenueCat = (session: Session | null | undefined) => {
     });
     setIsInitialized(true);
   }, []);
-	const login = useCallback(async (session: Session) => {
-		const { customerInfo } = await Purchases.logIn(session.user.id);
-    if (session.user.email) {
+	const login = useCallback(async (user: User) => {
+		const { customerInfo } = await Purchases.logIn(user.id);
+    if (user.email) {
       await Purchases.setAttributes({
-        $email: session.user.email,
+        $email: user.email,
       })
     }
 		setCustomerInfo(customerInfo);
 	}, []);
 
   useEffect(() => {
-    if (!isInitialized && session?.user.id) {
-      init(session?.user.id).catch(console.error);
+    if (!isInitialized && user?.id) {
+      init(user?.id).catch(console.error);
       return;
     }
-    if (session) {
-      login(session);
+    if (user) {
+      login(user);
       queryClient.invalidateQueries({
         queryKey: authKeys.customerInfo(),
       });
@@ -47,7 +47,7 @@ export const useRevenueCat = (session: Session | null | undefined) => {
       queryClient.setQueryData(authKeys.customerInfo(), null);
       setCustomerInfo(undefined);
     }
-  }, [session, isInitialized, init, login, queryClient]);
+  }, [user, isInitialized, init, login, queryClient]);
 
   return { customerInfo, isInitialized, login };
 };

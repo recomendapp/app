@@ -13,8 +13,9 @@ import { useCallback, useState, useMemo } from "react";
 import { Button } from "apps/mobile/src/components/ui/Button";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { CardPlaylist } from "apps/mobile/src/components/cards/CardPlaylist";
-import { Playlist } from "@recomendapp/types";
-import { useMediaMovieDetailsQuery, useMediaMoviePlaylistsQuery } from "apps/mobile/src/api/medias/mediaQueries";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { movieOptions, moviePlaylistsInfiniteOptions } from "@libs/query-client";
+import { PlaylistWithOwner } from "@packages/api-js";
 
 interface sortBy {
 	label: string;
@@ -25,7 +26,7 @@ const FilmPlaylists = () => {
 	const t = useTranslations();
 	const router = useRouter();
 	const { width: SCREEN_WIDTH } = useWindowDimensions();
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const { film_id } = useLocalSearchParams<{ film_id: string }>();
 	const { id: movieId } = getIdFromSlug(film_id);
 	const { colors, bottomOffset, tabBarHeight } = useTheme();
@@ -39,7 +40,7 @@ const FilmPlaylists = () => {
 	const [sortBy, setSortBy] = useState<sortBy>(sortByOptions[0]);
 	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 	// Requests
-	const { data: movie } = useMediaMovieDetailsQuery({ movieId: movieId });
+	const { data: movie } = useQuery(movieOptions({ movieId: movieId }));
 	const {
 		data,
 		isLoading,
@@ -47,15 +48,15 @@ const FilmPlaylists = () => {
 		hasNextPage,
 		isRefetching,
 		refetch,
-	} = useMediaMoviePlaylistsQuery({
+	} = useInfiniteQuery(moviePlaylistsInfiniteOptions({
 		movieId: movieId,
 		filters: {
-			sortBy: sortBy.value,
-			sortOrder,
+			sort_by: sortBy.value,
+			sort_order: sortOrder,
 		}
-	});
+	}));
 	const loading = data === undefined || isLoading;
-	const playlists = useMemo(() => data?.pages.flat() || [], [data]);
+	const playlists = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
 	// Handlers
 	const handleSortBy = useCallback(() => {
 		const sortByOptionsWithCancel = [
@@ -77,11 +78,15 @@ const FilmPlaylists = () => {
 		setSortOrder((prev) => prev === 'asc' ? 'desc' : 'asc');
 	}, []);
 
+	const renderItem = useCallback(({ item: { owner, ...playlist } } : { item: PlaylistWithOwner }) => (
+		<CardPlaylist playlist={playlist} owner={owner} />
+	), []);
+
 	return (
 	<>
 		<Stack.Screen
 		options={{
-			headerRight: session ? () => (
+			headerRight: user ? () => (
 				<Button
 				variant="outline"
 				size="icon"
@@ -89,25 +94,27 @@ const FilmPlaylists = () => {
 				style={tw`rounded-full`}
 				onPress={() => {
 					router.push({
-						pathname: '/playlist/add/movie/[movie_id]',
+						pathname: '/playlist/add/[type]/[id]',
 						params: {
-							movie_id: movieId,
-							movie_title: movie?.title,
+							type: 'movie',
+							id: movieId,
+							title: movie?.title,
 						},
 					})
 				}}
 				/>
 			) : undefined,
-			unstable_headerRightItems: session ? (props) => [
+			unstable_headerRightItems: user ? (props) => [
 				{
 					type: "button",
 					label: upperFirst(t('common.messages.add_to_playlist')),
 					onPress: () => {
 						router.push({
-							pathname: '/playlist/add/movie/[movie_id]',
+							pathname: '/playlist/add/[type]/[id]',
 							params: {
-								movie_id: movieId,
-								movie_title: movie?.title,
+								type: 'movie',
+								id: movieId,
+								title: movie?.title,
 							},
 						})
 					},
@@ -121,9 +128,7 @@ const FilmPlaylists = () => {
 		/>
 		<LegendList
 		data={playlists}
-		renderItem={useCallback(({ item } : { item: Playlist }) => (
-			<CardPlaylist playlist={item} />
-		), [])}
+		renderItem={renderItem}
 		ListHeaderComponent={
 			<View style={tw.style('flex flex-row justify-end items-center gap-2 py-2')}>
 				<Button
@@ -162,7 +167,7 @@ const FilmPlaylists = () => {
 		}}
 		maintainVisibleContentPosition={false}
 		scrollIndicatorInsets={{ bottom: tabBarHeight }}
-		keyExtractor={useCallback((item: Playlist) => item.id.toString(), [])}
+		keyExtractor={(item) => item.id.toString()}
 		refreshing={isRefetching}
 		onRefresh={refetch}
 		/>

@@ -4,7 +4,8 @@ import { Button } from "apps/mobile/src/components/ui/Button";
 import { Text } from "apps/mobile/src/components/ui/text";
 import { forwardRef, useEffect, useState } from "react";
 import tw from "apps/mobile/src/lib/tw";
-import { useUserReviewMovieLike } from "apps/mobile/src/api/users/hooks/useUserReviewMovieLike";
+import { useUserReviewMovieLike } from "@libs/query-client";
+import { useAuth } from "../../providers/AuthProvider";
 
 interface ButtonUserReviewMovieLikeProps
 	extends React.ComponentProps<typeof Button> {
@@ -17,8 +18,10 @@ const ButtonUserReviewMovieLike = forwardRef<
 	ButtonUserReviewMovieLikeProps
 >(({ reviewId, reviewLikesCount, variant = "outline", size, icon = Icons.like, style, onPress, ...props }, ref) => {
 	const { colors } = useTheme();
+	const { user } = useAuth();
 	const { isLiked, toggle } = useUserReviewMovieLike({
 		reviewId,
+		userId: user?.id,
 	});
 	const [likeCount, setLikeCount] = useState<number | undefined>(reviewLikesCount);
 

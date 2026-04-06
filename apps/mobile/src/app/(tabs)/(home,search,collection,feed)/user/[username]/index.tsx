@@ -6,8 +6,7 @@ import { Icons } from "apps/mobile/src/constants/Icons";
 import tw from "apps/mobile/src/lib/tw";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
-import { Profile } from "@recomendapp/types";
-import { useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ExternalPathString, Link, Stack, useLocalSearchParams, useRouter } from "expo-router"
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
@@ -16,23 +15,23 @@ import { View } from "apps/mobile/src/components/ui/view";
 import ProfileWidgetPlaylists from "apps/mobile/src/components/screens/user/ProfileWidgetPlaylists";
 import { Skeleton } from "apps/mobile/src/components/ui/Skeleton";
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
-import ProfileWidgetActivitiesMovie from "apps/mobile/src/components/screens/user/ProfileWidgetActivitiesMovie";
-import ProfileWidgetActivitiesTvSeries from "apps/mobile/src/components/screens/user/ProfileWidgetActivitiesTvSeries";
+import ProfileWidgetActivitiesMovie from "apps/mobile/src/components/screens/user/ProfileWidgetLogMovie";
+import ProfileWidgetActivitiesTvSeries from "apps/mobile/src/components/screens/user/ProfileWidgetLogTvSeries";
 import { ActivityIndicator, Pressable, RefreshControl } from "react-native";
 import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import BottomSheetUser from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetUser";
 import { useCallback, useMemo } from "react";
 import Animated from "react-native-reanimated";
-import { authKeys } from "apps/mobile/src/api/auth/authKeys";
-import { useUserActivitiesMovieQuery, useUserActivitiesTvSeriesQuery, useUserPlaylistsQuery, useUserProfileQuery } from "apps/mobile/src/api/users/userQueries";
+import { Profile } from "@packages/api-js";
+import { meKeys, userByUsernameOptions, userMovieLogsInfiniteOptions, userPlaylistsInfiniteOptions, userTvSeriesLogsInfiniteOptions } from "@libs/query-client";
 
 const ProfileHeader = ({
 	profile,
 	skeleton,
-} : {
-	profile?: Profile | null;
-	skeleton: boolean;
-}) => {
+} : (
+	| ({ skeleton: true; profile?: never })
+	| ({ skeleton?: false; profile: Profile })
+)) => {
 	const router = useRouter();
 	const { user } = useAuth();
 	const { colors } = useTheme();
@@ -56,11 +55,19 @@ const ProfileHeader = ({
 		]}
 		>
 			<View style={tw`flex-row gap-4 shrink-0 items-start justify-between`}>
-				{!skeleton ? <UserAvatar style={tw`w-24 h-24`} full_name={profile?.full_name!} avatar_url={profile?.avatar_url} /> : <UserAvatar skeleton style={tw`w-24 h-24`} />}
+				<UserAvatar
+				{...(!skeleton ? {
+					avatar_url: profile.avatar,
+					full_name: profile.name,
+				} : {
+					skeleton: true,
+				})}
+				style={tw`w-24 h-24 rounded-full`}
+				/>
 				<View style={tw`flex-1 gap-2`}>
 					<View style={tw`flex-row items-center justify-between gap-4`}>
 						{!skeleton ? <Text style={tw`font-semibold`} numberOfLines={3}>
-							{profile?.full_name}
+							{profile.name}
 						</Text> : <Skeleton style={tw`w-12 h-5`} />}
 						<View style={tw`flex-row items-center gap-4`}>
 							{routesFollow.map((item, index) => (
@@ -74,20 +81,22 @@ const ProfileHeader = ({
 					</View>
 					<View>
 						{profile?.bio && <Text style={tw`text-sm`} numberOfLines={3}>{profile.bio}</Text>}
-						{profile?.website && (
+						{/* {profile?.website && (
 							<Link href={profile.website as ExternalPathString} target="_blank" asChild>
 								<Pressable style={tw.style('flex-row gap-2 items-center')}>
 									<Icons.link color={colors.accentPink} width={15}/>
 									<Text numberOfLines={1} style={[{ color: colors.accentPink}, tw`m-w-1/2`]}>{profile.website.replace(/(^\w+:|^)\/\//, '')}</Text>
 								</Pressable>
 							</Link>
-						)}
+						)} */}
 					</View>
 				</View>
 			</View>
 			{/* ACTION BUTTON */}
 			{profile?.id && profile.id !== user?.id && (
-				!skeleton ? <ButtonUserFollow profileId={profile.id} /> : <ButtonUserFollow skeleton />
+				<ButtonUserFollow
+				{...(!skeleton ? { profileId: profile.id } : { skeleton: true })}
+				/>
 			)}
 		</View>
 	)
@@ -110,7 +119,7 @@ const ProfilePrivateAccountCard = () => {
 const ProfileScreen = () => {
 	const t = useTranslations();
 	const { username } = useLocalSearchParams<{ username: string }>();
-	const { session, user } = useAuth();
+	const { user } = useAuth();
 	const { colors, bottomOffset, tabBarHeight, isLiquidGlassAvailable } = useTheme();
 	const navigationHeaderHeight = useHeaderHeight();
 	const router = useRouter();
@@ -122,24 +131,24 @@ const ProfileScreen = () => {
 		isLoading,
 		isRefetching,
 		refetch,
-	} = useUserProfileQuery({
+	} = useQuery(userByUsernameOptions({
 		username: username,
-	});
+	}));
 	const loading = isLoading || profile === undefined;
 
 	// Hooks
-	const { data: widgetActivitiesMovie, isLoading: widgetActivitiesMovieLoading } = useUserActivitiesMovieQuery({ userId: profile?.id, filters: { sortBy: 'watched_date', sortOrder: 'desc' } });
-	const { data: widgetActivitiesTvSeries, isLoading: widgetActivitiesTvSeriesLoading } = useUserActivitiesTvSeriesQuery({ userId: profile?.id, filters: { sortBy: 'watched_date', sortOrder: 'desc' } });
-	const { data: widgetPlaylists, isLoading: widgetPlaylistsLoading } = useUserPlaylistsQuery({ userId: profile?.id, filters: { sortBy: 'updated_at', sortOrder: 'desc' } });
+	const { data: widgetActivitiesMovie, isLoading: widgetActivitiesMovieLoading } = useInfiniteQuery(userMovieLogsInfiniteOptions({ userId: profile?.id, filters: { sort_by: 'updated_at', sort_order: 'desc' } }));
+	const { data: widgetActivitiesTvSeries, isLoading: widgetActivitiesTvSeriesLoading } = useInfiniteQuery(userTvSeriesLogsInfiniteOptions({ userId: profile?.id, filters: { sort_by: 'updated_at', sort_order: 'desc' } }));
+	const { data: widgetPlaylists, isLoading: widgetPlaylistsLoading } = useInfiniteQuery(userPlaylistsInfiniteOptions({ userId: profile?.id, filters: { sort_by: 'updated_at', sort_order: 'desc' } }));
 	const areWidgetsLoading = widgetActivitiesMovieLoading || widgetActivitiesTvSeriesLoading || widgetPlaylistsLoading;
 	const hasActivity = !areWidgetsLoading && (widgetActivitiesMovie?.pages.flat().length || widgetActivitiesTvSeries?.pages.flat().length || widgetPlaylists?.pages.flat().length);
 
 	const refresh = useCallback(() => {
 		refetch();
-		profile?.id === session?.user.id && queryClient.invalidateQueries({
-			queryKey: authKeys.user()
+		profile?.id === user?.id && queryClient.invalidateQueries({
+			queryKey: meKeys.details(),
 		});
-	}, [refetch, profile?.id, session?.user.id, queryClient]);
+	}, [refetch, profile?.id, user?.id, queryClient]);
 
 	return (
 	<>
@@ -155,14 +164,14 @@ const ProfileScreen = () => {
 						<HeaderTitle {...props}>
 						{profile ? `@${profile.username}` : ''}
 						</HeaderTitle>
-						{profile?.premium && <Icons.premium color={colors.accentBlue} size={14} />}
+						{profile?.isPremium && <Icons.premium color={colors.accentBlue} size={14} />}
 				</View>
 			),
 			headerTitleAlign: 'center',
 			headerRight: () => (
 			<>
 				{(
-					profile?.id === session?.user.id
+					profile?.id === user?.id
 					|| user?.username === username
 				) && (
 					<Button
@@ -183,7 +192,7 @@ const ProfileScreen = () => {
 			</>
 			),
 			unstable_headerRightItems: (props) => [
-				...(profile?.id === session?.user.id ? [
+				...(profile?.id === user?.id ? [
 					{
 						type: "button",
 						label: upperFirst(t('common.messages.setting', { count: 2 })),
@@ -193,15 +202,15 @@ const ProfileScreen = () => {
 							name: "gearshape",
 							type: "sfSymbol",
 						},
-						visible: profile?.id === session?.user.id,
+						visible: profile?.id === user?.id,
 					}
 				] as const : []),
 				{
 					type: "button",
 					label: upperFirst(t('common.messages.menu')),
-					onPress: () => openSheet(BottomSheetUser, {
-						user: profile!
-					}),
+					onPress: () => profile ? openSheet(BottomSheetUser, {
+						user: profile
+					}) : null,
 					tintColor: props.tintColor,
 					icon: {
 						name: "ellipsis",
@@ -222,10 +231,10 @@ const ProfileScreen = () => {
 			bottom: tabBarHeight,
 		}}
 		>
-			<ProfileHeader profile={profile} skeleton={loading} />
+			<ProfileHeader {...(loading ? { skeleton: true } : { profile: profile })} />
 			{
 				loading ? null
-				: !profile?.visible ? <ProfilePrivateAccountCard />
+				: !profile?.isVisible ? <ProfilePrivateAccountCard />
 				: areWidgetsLoading ? <ActivityIndicator />
 				: !hasActivity ? (
 					<View style={tw`items-center justify-center p-8 gap-2`}>

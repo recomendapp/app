@@ -56,6 +56,7 @@ export const Icons = {
 	AlertCircle: AlertCircleIcon,
 	Reco: SendIcon,
 	Watchlist: BookmarkIcon,
+	Bookmark: BookmarkIcon,
 	Likes: HeartIcon,
 	Movie: ClapperboardIcon,
 	Tv: TvIcon,

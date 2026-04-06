@@ -1,5 +1,4 @@
 import * as React from "react"
-import { MediaTvSeriesSeason } from "@recomendapp/types";
 import Animated from "react-native-reanimated";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Href, useRouter } from "expo-router";
@@ -11,11 +10,12 @@ import { IconMediaRating } from "../medias/IconMediaRating";
 import { useTranslations } from "use-intl";
 import { Text } from "../ui/text";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
+import { TvSeasonCompact } from "@packages/api-js";
 
 interface CardTvSeriesSeasonProps
 	extends React.ComponentPropsWithRef<typeof Animated.View> {
 		variant?: "default" | "poster" | "row";
-		season: MediaTvSeriesSeason
+		season: TvSeasonCompact
 		linked?: boolean;
 		disableActions?: boolean;
 		showRating?: boolean;
@@ -44,8 +44,8 @@ const CardTvSeriesSeasonDefault = React.forwardRef<
 		{...props}
 		>
 			<ImageWithFallback
-				source={{uri: getTmdbImage({ path: season?.poster_path, size: 'w342' }) ?? ''}}
-				alt={season.name ?? ''}
+				source={{uri: getTmdbImage({ path: season.posterPath, size: 'w342' }) ?? ''}}
+				alt={season.id.toString() ?? ''}
 				type={'tv_season'}
 				style={[
 					{ aspectRatio: 2 / 3 },
@@ -54,7 +54,7 @@ const CardTvSeriesSeasonDefault = React.forwardRef<
 			>
 				{showRating && (
 					<IconMediaRating
-					rating={season.vote_average}
+					rating={season.voteAverage}
 					variant="general"
 					style={tw`absolute top-1 right-1`}
 					/>
@@ -62,8 +62,8 @@ const CardTvSeriesSeasonDefault = React.forwardRef<
 			</ImageWithFallback>
 			
 			<View style={tw`shrink px-2 py-1 gap-1`}>
-				<Text numberOfLines={1} style={tw`text-center`}>{upperFirst(t('common.messages.tv_season_value', { number: season.season_number! }))}</Text>
-				<Text numberOfLines={1} style={[tw`text-center`, { color: colors.mutedForeground }]}>{upperFirst(t('common.messages.tv_episode_count', { count: season.episode_count! }))}</Text>
+				<Text numberOfLines={1} style={tw`text-center`}>{upperFirst(t('common.messages.tv_season_value', { number: season.seasonNumber }))}</Text>
+				<Text numberOfLines={1} style={[tw`text-center`, { color: colors.mutedForeground }]}>{upperFirst(t('common.messages.tv_episode_count', { count: season.episodeCount }))}</Text>
 				{children}
 			</View>
 		</Animated.View>
@@ -76,13 +76,19 @@ const CardTvSeriesSeason = React.forwardRef<
 	CardTvSeriesSeasonProps
 >(({ hideMediaType = true, showRating = true, linked = true, variant = "default", ...props }, ref) => {
 	const router = useRouter();
-	const onPress = () => {
-		if (linked && props.season.url) {
-			router.push(props.season.url as Href);
+	const onPress = React.useCallback(() => {
+		if (linked) {
+			router.push({
+				pathname: '/tv-series/[tv_series_id]/season/[season_number]',
+				params: {
+					tv_series_id: props.season.tvSeriesId.toString(),
+					season_number: props.season.seasonNumber.toString(),
+				},
+			});
 		}
-	};
-	const onLongPress = () => {
-	};
+	}, [linked, props.season.tvSeriesId, props.season.seasonNumber, router]);
+	const onLongPress = React.useCallback(() => {
+	}, []);
 	return (
 	<Pressable
 	onPress={onPress}

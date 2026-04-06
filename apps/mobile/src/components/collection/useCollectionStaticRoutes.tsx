@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import CollectionIcon from "./CollectionIcon";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { capitalize } from "lodash";
-import { LinkProps } from "expo-router";
+import { Href } from "expo-router";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useTranslations } from "use-intl";
 
@@ -10,7 +10,7 @@ interface CollectionStaticRoute {
 	type: 'static';
 	icon: React.ReactNode;
 	label: string;
-	href: LinkProps['href'];
+	href: Href;
 }
 
 const useCollectionStaticRoutes = () => {
@@ -25,27 +25,17 @@ const useCollectionStaticRoutes = () => {
 				</CollectionIcon>
 			),
 			label: capitalize(t('common.messages.my_recos')),
-			href: '/collection/my-recos',
+			href: { pathname: '/collection/my-recos'},
 		},
 		{
 			type: 'static',
 			icon: (
 				<CollectionIcon from="#39BAED" to="#32509e">
-					<Icons.Watchlist color={colors.white} fill={colors.white}  className="w-2/5 h-2/5" />
+					<Icons.Bookmark color={colors.white} fill={colors.white}  className="w-2/5 h-2/5" />
 				</CollectionIcon>
 			),
-			label: capitalize(t('common.messages.watchlist')),
-			href: '/collection/watchlist',
-		},
-		{
-			type: 'static',
-			icon: (
-				<CollectionIcon from="#e6619b" to="#e84749">
-					<Icons.like color={colors.white} fill={colors.white}  className="w-2/5 h-2/5" />
-				</CollectionIcon>
-			),
-			label: capitalize(t('common.messages.heart_pick', { count: 2 })),
-			href: '/collection/heart-picks',
+			label: capitalize(t('common.messages.for_later')),
+			href: { pathname: '/collection/bookmarks' },
 		},
 	], [t, colors]);
 	return routes;

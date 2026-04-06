@@ -1,7 +1,6 @@
 import { Href, Link, useLocalSearchParams } from "expo-router"
 import { lowerCase, upperFirst } from "lodash";
 import { Pressable, useWindowDimensions, View, ViewProps } from "react-native";
-import { Database } from "@recomendapp/types";
 import tw from "apps/mobile/src/lib/tw";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
@@ -20,35 +19,37 @@ import TvSeriesWidgetReviews from "apps/mobile/src/components/screens/tv-series/
 import { Button } from "apps/mobile/src/components/ui/Button";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { FloatingBar } from "apps/mobile/src/components/ui/FloatingBar";
-import ButtonUserActivityTvSeriesRating from "apps/mobile/src/components/buttons/tv-series/ButtonUserActivityTvSeriesRating";
-import ButtonUserActivityTvSeriesLike from "apps/mobile/src/components/buttons/tv-series/ButtonUserActivityTvSeriesLike";
-import ButtonUserActivityTvSeriesWatch from "apps/mobile/src/components/buttons/tv-series/ButtonUserActivityTvSeriesWatch";
-import { ButtonUserWatchlistTvSeries } from "apps/mobile/src/components/buttons/tv-series/ButtonUserWatchlistTvSeries";
-import { ButtonPlaylistTvSeriesAdd } from "apps/mobile/src/components/buttons/ButtonPlaylistTvSeriesAdd";
-import ButtonUserRecoTvSeriesSend from "apps/mobile/src/components/buttons/tv-series/ButtonUserRecoTvSeriesSend";
+import ButtonUserLogTvSeriesRating from "apps/mobile/src/components/buttons/tv-series/ButtonUserLogTvSeriesRating";
+import ButtonUserLogTvSeriesLike from "apps/mobile/src/components/buttons/tv-series/ButtonUserLogTvSeriesLike";
+import ButtonUserLogTvSeriesWatch from "apps/mobile/src/components/buttons/tv-series/ButtonUserLogTvSeriesWatch";
+import { ButtonPlaylistAdd } from "apps/mobile/src/components/buttons/ButtonPlaylistAdd";
+import ButtonUserRecoSend from "apps/mobile/src/components/buttons/ButtonUserRecoSend";
 import AnimatedContentContainer from "apps/mobile/src/components/ui/AnimatedContentContainer";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import YoutubePlayer from "react-native-youtube-iframe";
 import { LegendList } from "@legendapp/list";
 import { Vimeo } from "react-native-vimeo-iframe";
-import { useMediaTvSeriesCastQuery, useMediaTvSeriesDetailsQuery } from "apps/mobile/src/api/medias/mediaQueries";
 import TvSeriesWidgetCast from "apps/mobile/src/components/screens/tv-series/TvSeriesWidgetCast";
+import { useQuery } from "@tanstack/react-query";
+import { tvSeriesCastingOptions, tvSeriesOptions } from "@libs/query-client";
+import { TvSeries, TvSeriesTrailer } from "@packages/api-js";
+import { ButtonUserBookmark } from "apps/mobile/src/components/buttons/ButtonUserBookmark";
 
 const TvSeriesScreen = () => {
 	const { tv_series_id } = useLocalSearchParams<{ tv_series_id: string }>();
 	const { id: seriesId } = getIdFromSlug(tv_series_id);
 	const { bottomOffset, tabBarHeight } = useTheme();
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const t = useTranslations();
 	const openSheet = useBottomSheetStore((state) => state.openSheet);
 	const {
 		data: series,
 		isLoading,
-	} = useMediaTvSeriesDetailsQuery({
+	} = useQuery(tvSeriesOptions({
 		tvSeriesId: seriesId,
-	});
+	}));
 	// Prefetch 
-	const { data: cast } = useMediaTvSeriesCastQuery({ tvSeriesId: seriesId });
+	useQuery(tvSeriesCastingOptions({ tvSeriesId: seriesId }));
 
 	const loading = series === undefined || isLoading;
 	
@@ -140,17 +141,17 @@ const TvSeriesScreen = () => {
 				</View>
 			)}
 		</AnimatedContentContainer>
-		{series && session && (
+		{series && user && (
 			<FloatingBar bottomOffset={bottomOffset + PADDING_VERTICAL} height={floatingBarHeight} containerStyle={{ paddingHorizontal: 0 }} style={tw`flex-row items-center justify-between`}>
 				<View style={tw`flex-row items-center gap-2`}>
-					<ButtonUserActivityTvSeriesRating tvSeries={series} />
-					<ButtonUserActivityTvSeriesLike tvSeries={series} />
-					<ButtonUserActivityTvSeriesWatch tvSeries={series} />
-					<ButtonUserWatchlistTvSeries tvSeries={series} />
+					<ButtonUserLogTvSeriesRating tvSeries={series} />
+					<ButtonUserLogTvSeriesLike tvSeries={series} />
+					<ButtonUserLogTvSeriesWatch tvSeries={series} />
+					<ButtonUserBookmark mediaId={series.id} mediaType="tv_series" mediaTitle={series.name} />
 				</View>
 				<View style={tw`flex-row items-center gap-2`}>
-					<ButtonPlaylistTvSeriesAdd tvSeries={series} />
-					<ButtonUserRecoTvSeriesSend tvSeries={series} />
+					<ButtonPlaylistAdd mediaId={series.id} mediaType="tv_series" mediaTitle={series.name} />
+					<ButtonUserRecoSend mediaId={series.id} mediaType="tv_series" mediaTitle={series.name} />
 				</View>
 			</FloatingBar>
 		)}
@@ -158,8 +159,7 @@ const TvSeriesScreen = () => {
 	)
 };
 
-
-const TvSeriesSynopsis = ({ tvSeries, style, containerStyle, numberOfLines = 5, ...props } : Omit<TextProps, 'children'> & { tvSeries: Database['public']['Views']['media_tv_series_full']['Row'], containerStyle: ViewProps['style'] }) => {
+const TvSeriesSynopsis = ({ tvSeries, style, containerStyle, numberOfLines = 5, ...props } : Omit<TextProps, 'children'> & { tvSeries: TvSeries, containerStyle: ViewProps['style'] }) => {
 	const t = useTranslations();
 	const { colors } = useTheme();
 	const [showFullSynopsis, setShowFullSynopsis] = useState<boolean>(false);
@@ -184,65 +184,25 @@ const TvSeriesSynopsis = ({ tvSeries, style, containerStyle, numberOfLines = 5, 
 	)
 };
 
-const TvSeriesOriginalTitle = ({ tvSeries, style, numberOfLines = 1, ...props } : Omit<TextProps, 'children'> & { tvSeries: Database['public']['Views']['media_tv_series_full']['Row'] }) => {
+const TvSeriesOriginalTitle = ({ tvSeries, style, numberOfLines = 1, ...props } : Omit<TextProps, 'children'> & { tvSeries: TvSeries }) => {
 	const t = useTranslations();
 	const { colors } = useTheme();
 
-	if (!tvSeries.original_name || lowerCase(tvSeries.original_name) === lowerCase(tvSeries.name!)) return null;
+	if (!tvSeries.originalName || lowerCase(tvSeries.originalName) === lowerCase(tvSeries.name!)) return null;
 	return (
 		<Text style={[tw`text-sm`, { color: colors.mutedForeground }, style]} numberOfLines={numberOfLines} {...props}>
 			<Text style={tw`text-sm font-medium`}>
 				{`${upperFirst(t('common.messages.original_title'))} : `}
 			</Text>
-			{tvSeries.original_name}
+			{tvSeries.originalName}
 		</Text>
 	)
 };
 
-
-// const TvSeriesCast = ({
-// 	tvSeries,
-// } : {
-// 	tvSeries: Database['public']['Views']['media_tv_series_full']['Row']
-// }) => {
-// 	const t = useTranslations();
-// 	const { width: screenWidth } = useWindowDimensions();
-// 	const width = useMemo(() => clamp((screenWidth * 0.8) - ((PADDING_HORIZONTAL * 2) + GAP * 2), 400), [screenWidth]);
-// 	const renderItem = useCallback((item: MediaTvSeriesCasting) => (
-// 		<CardPerson variant='list' hideKnownForDepartment person={item.person!} style={tw`h-12`} />
-// 	), []);
-
-// 	const keyExtractor = useCallback((item: MediaTvSeriesCasting) => item.person_id!.toString(), []);
-// 	if (!tvSeries.cast?.length) return null;
-
-// 	return (
-// 		<View> 
-// 			<Text style={[tw`text-sm font-medium`, { marginHorizontal: PADDING_HORIZONTAL }]}>
-// 				{`${upperFirst(t('common.messages.starring'))} :`}
-// 			</Text>
-// 			<MultiRowHorizontalList<MediaTvSeriesCasting>
-// 			data={tvSeries.cast}
-// 			renderItem={renderItem}
-// 			keyExtractor={keyExtractor}
-// 			contentContainerStyle={{
-// 				paddingHorizontal: PADDING_HORIZONTAL,
-// 				gap: GAP,
-// 			}}
-// 			columnStyle={{
-// 				width: width,
-// 				gap: GAP,
-// 			}}
-// 			snapToInterval={width + GAP}
-// 			decelerationRate={"fast"}
-// 			/>
-// 		</View>
-// 	)
-// };
-
 const TvSeriesTrailers = ({
 	tvSeries,
 } : {
-	tvSeries: Database['public']['Views']['media_tv_series_full']['Row']
+	tvSeries: TvSeries
 }) => {
 	const { colors } = useTheme();
 	const t = useTranslations();
@@ -251,17 +211,17 @@ const TvSeriesTrailers = ({
 	const playerWidth = width - PADDING_HORIZONTAL * 2;
 	const playerHeight = playerWidth * 9 / 16;
 	// States
-	const [selectedTrailer, setSelectedTrailer] = useState<Database['public']['Tables']['tmdb_tv_series_videos']['Row'] | null>(tvSeries.trailers?.at(0) || null);
+	const [selectedTrailer, setSelectedTrailer] = useState<TvSeriesTrailer | null>(tvSeries.trailers?.at(0) || null);
 	const normalizedSite = useMemo(() => selectedTrailer?.site.toLowerCase(), [selectedTrailer]);
 	// Render
-	const renderItem = useCallback(({ item }: { item: Database['public']['Tables']['tmdb_tv_series_videos']['Row'] }) => {
-		const label = item.iso_639_1 === tvSeries.original_language ? 'VO' : (item.iso_639_1?.toUpperCase() || 'N/A');
+	const renderItem = useCallback(({ item }: { item: TvSeriesTrailer }) => {
+		const label = item.iso6391 === tvSeries.originalLanguage ? 'VO' : (item.iso6391?.toUpperCase() || 'N/A');
 		return (
 			<Button variant={item.id === selectedTrailer?.id ? 'accent-yellow' : 'outline'} onPress={() => setSelectedTrailer(item)} style={{ borderRadius: BORDER_RADIUS_FULL }}>
 				{label}
 			</Button>
 		)
-	}, [selectedTrailer, tvSeries.original_language]);
+	}, [selectedTrailer, tvSeries.originalLanguage]);
 	if (!tvSeries.trailers?.length || !selectedTrailer) return null;
 	return (
 		<View style={{ gap: GAP }}> 

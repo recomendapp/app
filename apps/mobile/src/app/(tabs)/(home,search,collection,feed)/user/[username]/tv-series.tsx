@@ -13,42 +13,45 @@ import { useTranslations } from "use-intl";
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { CardTvSeries } from "apps/mobile/src/components/cards/CardTvSeries";
 import { HeaderTitle } from "@react-navigation/elements";
-import { useUserActivitiesTvSeriesQuery, useUserProfileQuery } from "apps/mobile/src/api/users/userQueries";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { userByUsernameOptions, userTvSeriesLogsInfiniteOptions } from "@libs/query-client";
 
 interface sortBy {
 	label: string;
-	value: 'watched_date' | 'rating';
+	value: "rating" | "updated_at" | "random";
 }
 
 const UserCollectionTvSeries = () => {
 	const t = useTranslations();
 	const { width: SCREEN_WIDTH } = useWindowDimensions();
 	const { username } = useLocalSearchParams<{ username: string }>();
-	const { data: userProfile } = useUserProfileQuery({ username: username });
+	const { data: profile } = useQuery(userByUsernameOptions({ username: username }));
 	const { colors, bottomOffset, tabBarHeight } = useTheme();
 	const { showActionSheetWithOptions } = useActionSheet();
 	// States
 	const sortByOptions = useMemo((): sortBy[] => [
-		{ label: upperFirst(t('common.messages.watched_date')), value: 'watched_date' },
+		{ label: upperFirst(t('common.messages.updated_at')), value: 'updated_at' },
 		{ label: upperFirst(t('common.messages.rating')), value: 'rating' },
+		{ label: upperFirst(t('common.messages.random')), value: 'random' },
 	], [t]);
 	const [sortBy, setSortBy] = useState<sortBy>(sortByOptions[0]);
 	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 	const {
-		data: tvSeries,
+		data,
 		isLoading,
 		fetchNextPage,
 		hasNextPage,
 		isRefetching,
 		refetch,
-	} = useUserActivitiesTvSeriesQuery({
-		userId: userProfile?.id || undefined,
+	} = useInfiniteQuery(userTvSeriesLogsInfiniteOptions({
+		userId: profile?.id,
 		filters: {
-			sortBy: sortBy.value,
-			sortOrder,
+			sort_by: sortBy.value,
+			sort_order: sortOrder,
 		}
-	});
-	const loading = tvSeries === undefined || isLoading;
+	}));
+	const tvSeries = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
+	const loading = data === undefined || isLoading;
 	// Handlers
 	const handleSortBy = useCallback(() => {
 		const sortByOptionsWithCancel = [
@@ -70,18 +73,20 @@ const UserCollectionTvSeries = () => {
 	<>
 		<Stack.Screen
 		options={{
-			title: userProfile ? `@${userProfile.username}` : '',
+			title: profile ? `@${profile.username}` : '',
 			headerTitle: (props) => <HeaderTitle {...props}>{upperFirst(t('common.messages.tv_series', { count: 2 }))}</HeaderTitle>
 		}}
 		/>
 		<LegendList
-		data={tvSeries?.pages.flat() || []}
-		renderItem={({ item }) => (
+		data={tvSeries}
+		renderItem={({ item: { tvSeries, ...log } }) => (
 			<CardTvSeries
-			key={item.id}
 			variant="poster"
-			tvSeries={item.tv_series!}
-			profileActivity={item}
+			tvSeries={tvSeries}
+			profile={{
+				log: log,
+				user: profile!,
+			}}
 			style={tw`w-full`}
 			/>
 		)}

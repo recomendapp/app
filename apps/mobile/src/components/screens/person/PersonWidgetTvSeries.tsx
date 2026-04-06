@@ -6,12 +6,13 @@ import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { useTranslations } from "use-intl";
 import { Text } from "apps/mobile/src/components/ui/text";
-import { Database } from "@recomendapp/types";
 import { MultiRowHorizontalList } from "apps/mobile/src/components/ui/MultiRowHorizontalList";
 import { GAP, PADDING_HORIZONTAL } from "apps/mobile/src/theme/globals";
 import { CardTvSeries } from "apps/mobile/src/components/cards/CardTvSeries";
 import { useMemo } from "react";
-import { useMediaPersonTvSeriesQuery } from "apps/mobile/src/api/medias/mediaQueries";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { personTvSeriesInfiniteOptions } from "@libs/query-client";
+import { PersonTvSeries } from "@packages/api-js";
 
 interface PersonWidgetTvSeriesProps extends React.ComponentPropsWithoutRef<typeof View> {
 	personId: number;
@@ -28,18 +29,15 @@ const PersonWidgetTvSeries = ({
 	const { width: screenWidth } = useWindowDimensions();
 	const width = useMemo(() => clamp(screenWidth - ((PADDING_HORIZONTAL * 2) + GAP * 2), 400), [screenWidth]);
 	const {
-		data: tvSeries,
+		data,
 		isLoading,
 		fetchNextPage,
 		hasNextPage,
-	} = useMediaPersonTvSeriesQuery({
+	} = useInfiniteQuery(personTvSeriesInfiniteOptions({
 		personId,
-		filters: {
-			sortBy: 'last_appearance_date',
-			sortOrder: 'desc',
-		}
-	});
-	const loading = tvSeries === undefined || isLoading;
+	}));
+	const tvSeries = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
+	const loading = data === undefined || isLoading;
 	return (
 	<View style={[tw`gap-1`, style]}>
 		<Link href={url} style={{ paddingHorizontal: PADDING_HORIZONTAL }}>
@@ -50,22 +48,25 @@ const PersonWidgetTvSeries = ({
 				<Icons.ChevronRight color={colors.mutedForeground} />
 			</View>
 		</Link>
-		<MultiRowHorizontalList<{ media_tv_series: Database['public']['Views']['media_tv_series']['Row'] }>
+		<MultiRowHorizontalList<PersonTvSeries>
 		key={loading ? 'loading' : 'tv_series'}
-		data={loading ? new Array(3).fill(null) : tvSeries?.pages.flat()}
+		data={loading ? new Array(3).fill(null) : tvSeries}
 		renderItem={(item) => (
-			!loading ? (
-				<CardTvSeries variant="list" tvSeries={item.media_tv_series} />
-			) : (
-				<CardTvSeries variant="list" skeleton />
-			)
+			<CardTvSeries
+			variant="list"
+			{...(!loading ? {
+				tvSeries: item.tvSeries,
+			} : {
+				skeleton: true,
+			})}
+			/>
 		)}
 		ListEmptyComponent={
 			<Text style={[tw``, { color: colors.mutedForeground }]}>
 				{upperFirst(t('common.messages.no_tv_series'))}
 			</Text>
 		}
-		keyExtractor={(item, index) => loading ? index.toString() : item.media_tv_series.id.toString()}
+		keyExtractor={(item, index) => loading ? index.toString() : item.tvSeries.id.toString()}
 		contentContainerStyle={{
 			paddingHorizontal: PADDING_HORIZONTAL,
 			gap: GAP,

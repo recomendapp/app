@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import tw from 'apps/mobile/src/lib/tw';
 import { Icons } from 'apps/mobile/src/constants/Icons';
-import { MediaMovie, UserActivityMovie } from '@recomendapp/types';
 import { LinkProps, usePathname, useRouter } from 'expo-router';
 import { LucideIcon } from 'lucide-react-native';
 import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
@@ -21,10 +20,11 @@ import { PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/glob
 import BottomSheetShareMovie from './share/BottomSheetShareMovie';
 import { FlashList } from '@shopify/flash-list';
 import { getTmdbImage } from 'apps/mobile/src/lib/tmdb/getTmdbImage';
+import { MovieCompact, UserMovieWithUserMovie } from '@packages/api-js';
 
 interface BottomSheetMovieProps extends BottomSheetProps {
-  movie?: MediaMovie,
-  activity?: UserActivityMovie,
+  movie: MovieCompact,
+  log?: UserMovieWithUserMovie,
   additionalItemsTop?: Item[];
   additionalItemsBottom?: Item[];
 };
@@ -41,11 +41,11 @@ type Item = {
 const BottomSheetMovie = React.forwardRef<
   React.ComponentRef<typeof TrueSheet>,
   BottomSheetMovieProps
->(({ id, movie, activity, additionalItemsTop = [], additionalItemsBottom = [], ...props }, ref) => {
+>(({ id, movie, log, additionalItemsTop = [], additionalItemsBottom = [], ...props }, ref) => {
   const openSheet = useBottomSheetStore((state) => state.openSheet);
   const closeSheet = useBottomSheetStore((state) => state.closeSheet);
   const { colors, mode, isLiquidGlassAvailable } = useTheme();
-  const { session } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const t = useTranslations();
   const pathname = usePathname();
@@ -62,20 +62,20 @@ const BottomSheetMovie = React.forwardRef<
       }),
       label: upperFirst(t('common.messages.share')),
     },
-    ...((activity) ? [
+    ...((log) ? [
       {
         icon: Icons.Feed,
-        onPress: () => router.push(`/user/${activity.user?.username}`),
+        onPress: () => router.push({ pathname: '/user/[username]/film/[film_id]', params: { username: log.user.username, film_id: movie.id } }),
         label: upperFirst(t('common.messages.go_to_activity')),
       },
     ] : []),
     {
       icon: Icons.Movie,
-      onPress: () => router.push(movie?.url as LinkProps['href']),
+      onPress: () => router.push({ pathname: '/film/[film_id]', params: { film_id: movie.id }}),
       label: upperFirst(t('common.messages.go_to_film')),
-      disabled: movie?.url ? pathname.startsWith(movie.url) : false
+      disabled: movie.url ? pathname.startsWith(movie.url) : false
     },
-    ...((movie?.directors && movie.directors.length > 0) ? [
+    ...((movie.directors && movie.directors.length > 0) ? [
       movie.directors.length > 1 ? {
         icon: Icons.Users,
         onPress: () => BottomSheetMainCreditsRef.current?.present(),
@@ -83,36 +83,37 @@ const BottomSheetMovie = React.forwardRef<
         closeOnPress: false,
       } : {
         icon: Icons.User,
-        onPress: () => router.push(movie.directors?.[0].url as LinkProps['href']),
+        onPress: () => router.push({ pathname: '/person/[person_id]', params: { person_id: movie.directors![0].id } }),
         label: upperFirst(t('common.messages.go_to_director', { gender: movie.directors![0].gender === 1 ? 'female' : 'male', count: 1 }))
       },
     ] : []),
-    ...(session ? [
+    ...(user ? [
       {
         icon: Icons.AddPlaylist,
-        onPress: () => movie?.id && router.push({
-          pathname: '/playlist/add/movie/[movie_id]',
+        onPress: () => movie.id && router.push({
+          pathname: '/playlist/add/[type]/[id]',
           params: {
-            movie_id: movie?.id,
-            movie_title: movie?.title,
+            type: 'movie',
+            id: movie.id,
+            title: movie.title,
           }
         }),
         label: upperFirst(t('common.messages.add_to_playlist')),
       },
       {
         icon: Icons.Reco,
-        onPress: () => movie?.id && router.push({
-          pathname: '/reco/send/movie/[movie_id]',
+        onPress: () => movie.id && router.push({
+          pathname: '/reco/send/[type]/[id]',
           params: {
-            movie_id: movie?.id,
-            movie_title: movie?.title,
+            type: 'movie',
+            id: movie.id,
           }
         }),
         label: upperFirst(t('common.messages.send_to_friend')),
       }
     ] : []),
     ...additionalItemsBottom,
-  ]), [movie, additionalItemsTop, additionalItemsBottom, openSheet, router, t, pathname, activity, session]);
+  ]), [movie, additionalItemsTop, additionalItemsBottom, openSheet, router, t, pathname, log, user]);
 
   const renderItem = useCallback(({ item }: { item: Item }) => {
     if (typeof item === 'string') {
@@ -125,8 +126,8 @@ const BottomSheetMovie = React.forwardRef<
         >
           <View style={tw`flex-row items-center gap-2 `}>
             <ImageWithFallback
-            alt={movie?.title ?? ''}
-            source={{ uri: getTmdbImage({ path: movie?.poster_path, size: 'w342' }) ?? '' }}
+            alt={movie.title ?? ''}
+            source={{ uri: getTmdbImage({ path: movie.posterPath, size: 'w342' }) ?? '' }}
             style={[
               { aspectRatio: 2 / 3, height: 'fit-content' },
               tw.style('rounded-md w-12'),
@@ -134,8 +135,8 @@ const BottomSheetMovie = React.forwardRef<
             type={'movie'}
             />
             <View style={tw`shrink`}>
-              <Text numberOfLines={2} style={tw`shrink`}>{movie?.title}</Text>
-              {movie?.directors && movie?.directors.length > 0 && (
+              <Text numberOfLines={2} style={tw`shrink`}>{movie.title}</Text>
+              {movie.directors && movie.directors.length > 0 && (
                 <Text numberOfLines={1} style={[{ color: colors.mutedForeground }, tw`shrink`]}>
                 {movie.directors?.map((director) => director.name).join(', ')}
                 </Text>
@@ -180,7 +181,7 @@ const BottomSheetMovie = React.forwardRef<
       indicatorStyle={mode === 'dark' ? 'white' : 'black'}
       nestedScrollEnabled
       />
-      {movie?.directors && (
+      {movie.directors && (
         <BottomSheetDefaultView
         ref={BottomSheetMainCreditsRef}
         id={`${id}-credits`}

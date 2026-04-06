@@ -1,6 +1,5 @@
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import tw from "apps/mobile/src/lib/tw";
-import { MediaMovie, Profile, UserReviewMovieLike, FixedOmit } from "@recomendapp/types";
 import * as React from "react"
 import Animated from "react-native-reanimated";
 import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
@@ -15,6 +14,8 @@ import BottomSheetMovie from "apps/mobile/src/components/bottom-sheets/sheets/Bo
 import { CardUser } from "../CardUser";
 import { GAP } from "apps/mobile/src/theme/globals";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
+import { FeedItemReviewMovieLike } from "@packages/api-js";
+import { FixedOmit } from "apps/mobile/src/utils/fixed-omit";
 
 interface CardFeedReviewMovieLikeBaseProps
 	extends React.ComponentProps<typeof Animated.View> {
@@ -25,17 +26,13 @@ interface CardFeedReviewMovieLikeBaseProps
 
 type CardFeedReviewMovieLikeSkeletonProps = {
 	skeleton: true;
-	author?: never;
-	reviewLike?: never;
-	movie?: never;
+	data?: never;
 	footer?: never;
 };
 
 type CardFeedReviewMovieLikeDataProps = {
 	skeleton?: false;
-	author: Profile;
-	reviewLike: UserReviewMovieLike;
-	movie: MediaMovie;
+	data: FeedItemReviewMovieLike;
 	footer?: React.ReactNode;
 };
 
@@ -45,7 +42,7 @@ export type CardFeedReviewMovieLikeProps = CardFeedReviewMovieLikeBaseProps &
 const CardFeedReviewMovieLikeDefault = React.forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	FixedOmit<CardFeedReviewMovieLikeProps, "variant" | "onPress" | "onLongPress">
->(({ style, children, author, reviewLike, movie, footer, skeleton, ...props }, ref) => {
+>(({ style, children, data, footer, skeleton, ...props }, ref) => {
 	const { colors } = useTheme();
 	const t = useTranslations();
 	return (
@@ -60,8 +57,8 @@ const CardFeedReviewMovieLikeDefault = React.forwardRef<
 		>
 			{!skeleton ? (
 				<ImageWithFallback
-				source={{ uri: getTmdbImage({ path: movie?.poster_path, size: 'w342' }) ?? '' }}
-				alt={movie.title ?? ''}
+				source={{ uri: getTmdbImage({ path: data.content.movie.posterPath, size: 'w342' }) ?? '' }}
+				alt={data.content.movie.title ?? ''}
 				type={'movie'}
 				style={tw`w-20 h-full`}
 				/>
@@ -70,11 +67,11 @@ const CardFeedReviewMovieLikeDefault = React.forwardRef<
 			)}
 			<View style={tw`flex-1 gap-2 p-2`}>
 				{!skeleton ? <View style={tw`flex-row items-center gap-1`}>
-					<CardUser user={author} variant="icon" />
+					<CardUser user={data.author} variant="icon" />
 					<Text style={[{ color: colors.mutedForeground }, tw`text-sm`]} numberOfLines={2}>
 						{t.rich('common.messages.user_liked_review', {
 							name: () => (
-								<Text style={tw`font-semibold`}>{author.full_name}</Text>
+								<Text style={tw`font-semibold`}>{data.author.name}</Text>
 							)
 						})}
 					</Text>
@@ -82,16 +79,22 @@ const CardFeedReviewMovieLikeDefault = React.forwardRef<
 				<View style={tw`gap-2`}>
 					{!skeleton ? (
 						<Text numberOfLines={2} style={tw`font-bold`}>
-						{movie.title}
+						{data.content.movie.title}
 						</Text>
  					) : <Skeleton style={tw`w-full h-5`} />}
 					{footer || (
 						!skeleton ? (
 							<CardReviewMovie
-							author={reviewLike.review?.activity?.user!}
-							activity={reviewLike.review?.activity!}
-							review={reviewLike.review!}
-							url={`${movie.url}/review/${reviewLike.review_id}` as Href}
+							author={data.content.author}
+							review={data.content}
+							rating={data.content.rating}
+							url={{
+								pathname: '/user/[username]/film/[film_id]',
+								params: {
+									username: data.content.author.username,
+									film_id: data.content.movieId,
+								}
+							}}
 							/>
 						) : <Skeleton style={tw`w-full h-12`} />
 					)}
@@ -109,17 +112,20 @@ const CardFeedReviewMovieLike = React.forwardRef<
 	const router = useRouter();
 	const openSheet = useBottomSheetStore((state) => state.openSheet);
 	const handleOnPress = React.useCallback(() => {
-		if (!props.movie) return;
-		router.push(props.movie.url as Href);
+		if (!props.data?.content.movie) return;
+		router.push({
+			pathname: '/film/[film_id]',
+			params: { film_id: props.data.content.movie.id }
+		});
 		onPress?.();
-	}, [onPress, props.movie, router]);
+	}, [onPress, props.data?.content.movie, router]);
 	const handleOnLongPress = React.useCallback(() => {
-		if (!props.movie) return;
+		if (!props.data?.content.movie) return;
 		openSheet(BottomSheetMovie, {
-			movie: props.movie
+			movie: props.data.content.movie
 		})
 		onLongPress?.();
-	}, [onLongPress, openSheet, props.movie]);
+	}, [onLongPress, openSheet, props.data?.content.movie]);
 	const content = (
 		variant === "default" ? (
 			<CardFeedReviewMovieLikeDefault ref={ref} {...props} />

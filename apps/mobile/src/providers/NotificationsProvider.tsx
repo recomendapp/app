@@ -1,17 +1,14 @@
-import { createContext, use, useEffect, useRef, useState } from "react";
+import { createContext, use, useCallback, useEffect, useRef, useState } from "react";
 import * as Notifications from "expo-notifications";
 import { useAuth } from "./AuthProvider";
 import { useSupabaseClient } from "./SupabaseProvider";
 import { Platform } from "react-native";
 import * as Device from 'expo-device';
 import { useRouter } from "expo-router";
-import { NotificationPayload } from "@recomendapp/types";
-import { NovuProvider } from "@novu/react-native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "apps/mobile/src/components/Toast";
-import * as env from 'apps/mobile/src/env';
 import { notificationKeys } from "apps/mobile/src/api/notifications/notificationKeys";
-import { useNovuSubscriberHashQuery } from "apps/mobile/src/api/novu/novuQueries";
+import { usePushTokenUpdateMutation } from "@libs/query-client";
 
 type NotificationsContextType = {
   isMounted: boolean;
@@ -34,17 +31,18 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
   const supabase = useSupabaseClient();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { session, pushToken, setPushToken } = useAuth();
+  const { user, pushToken, setPushToken } = useAuth();
   const [isMounted, setIsMounted] = useState(false);
   const [permissionStatus, setPermissionStatus] = useState<Notifications.PermissionStatus | null>(null);
   const [notifications, setNotifications] = useState<Notifications.Notification[] | null>(null);
   const [error, setError] = useState<Error | null>(null);
-  const { data: subscriberHash } = useNovuSubscriberHashQuery({ subscriberId: session?.user.id });
 
   const notificationsListener = useRef<Notifications.EventSubscription | null>(null);
   const responseListener = useRef<Notifications.EventSubscription | null>(null);
 
-  const handleRegisterForPushNotificationsAsync = async () => {
+  const { mutate: updatePushToken } = usePushTokenUpdateMutation(); 
+
+  const handleRegisterForPushNotificationsAsync = useCallback(async () => {
     if (Platform.OS === 'android') {
       await Notifications.setNotificationChannelAsync('default', {
         name: 'default',
@@ -76,27 +74,9 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
     } else {
       throw new Error('Must use physical device for push notifications');
     }
-  };
-  const handleSaveToken = async (token: string) => {
-    try {
-      if (!session) return;
-      const provider = (Platform.OS === 'ios' || Platform.OS === 'macos') ? 'apns' : 'fcm';
-      const { error } = await supabase
-        .from("user_notification_tokens")
-        .upsert({
-          user_id: session.user.id,
-          token: token,
-          device_type: Platform.OS,
-          provider: provider,
-          updated_at: new Date().toISOString(),
-        }, { onConflict: "provider, token" });
-      if (error) throw error;
-    } catch (err) {
-      console.error("Error saving push token:", err);
-    }
-  };
+  }, []);
   
-  const handleRedirect = (data: NotificationPayload) => {
+  const handleRedirect = useCallback((data: NotificationPayload) => {
     switch (data.type) {
       case 'reco_sent_movie':
         router.push({
@@ -119,8 +99,8 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
       default:
         break;
     }
-  };
-  const handleResponse = (response: Notifications.NotificationResponse) => {
+  }, [router]);
+  const handleResponse = useCallback((response: Notifications.NotificationResponse) => {
     // iOS APNs : data in response.notification.request.trigger.payload.data
     // Android FCM : data in response.notification.request.content.data
     const data = (
@@ -130,9 +110,9 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
     if (data) {
       handleRedirect(data);
     }
-  };
+  }, [handleRedirect]);
 
-  const handleToast = (notification: Notifications.Notification) => {
+  const handleToast = useCallback((notification: Notifications.Notification) => {
     const data = (
       notification.request.content.data ||
       (notification.request.trigger as any).payload.data
@@ -141,16 +121,22 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
       description: notification.request.content.body ?? undefined,
       onPress: (data && data.type) ? () => handleRedirect(data) : undefined,
     });
-  };
+  }, [toast, handleRedirect]);
 
   useEffect(() => {
-    if (!session) return;
+    if (!user) return;
 
     // Register token
     handleRegisterForPushNotificationsAsync().then(
-      async (token) => {
+      (token) => {
         setPushToken(token);
-        await handleSaveToken(token);
+        updatePushToken({
+          body: {
+            provider: (Platform.OS === 'ios' || Platform.OS === 'macos') ? 'apns' : 'fcm',
+            token,
+            deviceType: Platform.OS === 'ios' ? 'ios' : 'android',
+          },
+        });
       },
       (err) => {
         console.error("Error getting push token:", err);
@@ -188,15 +174,9 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
       notificationsListener.current?.remove();
       responseListener.current?.remove();
     };
-  }, [session]);
+  }, [user, updatePushToken, queryClient, toast, router]);
 
-  useEffect(() => {
-    if (session && subscriberHash && !isMounted) {
-      setIsMounted(true);
-    }
-  }, [session, subscriberHash, isMounted]);
-
-  const defaultProvider = (
+  return (
     <NotificationsContext.Provider
     value={{
       isMounted,
@@ -209,17 +189,4 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
       {children}
     </NotificationsContext.Provider>
   );
-
-  if (!session || !subscriberHash) return defaultProvider;
-
-  return (
-    <NovuProvider
-    applicationIdentifier={env.NOVU_APPLICATION_IDENTIFIER}
-    subscriberId={session.user.id}
-    subscriberHash={subscriberHash}
-    // useCache={true}
-    >
-      {defaultProvider}
-    </NovuProvider>
-  )
 };

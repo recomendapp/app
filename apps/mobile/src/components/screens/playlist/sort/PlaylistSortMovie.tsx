@@ -22,7 +22,7 @@ import { useHeaderHeight } from "@react-navigation/elements";
 import { usePlaylistIsAllowedToEditQuery, usePlaylistItemsMovieQuery } from "apps/mobile/src/api/playlists/playlistQueries";
 
 export const PlaylistSortMovie = () => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const toast = useToast();
 	const insets = useSafeAreaInsets();
 	const { colors } = useTheme();
@@ -35,7 +35,7 @@ export const PlaylistSortMovie = () => {
 	});
 	const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery({
 		playlistId: playlistId,
-		userId: session?.user.id,
+		userId: user?.id,
 	});
 	const { mutateAsync: updatePlaylistItem } = usePlaylistMovieUpdateMutation();
 

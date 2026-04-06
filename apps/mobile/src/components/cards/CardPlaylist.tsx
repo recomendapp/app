@@ -1,5 +1,4 @@
 import { ImageWithFallback } from '../utils/ImageWithFallback';
-import { Playlist, FixedOmit } from '@recomendapp/types';
 import React from 'react';
 import Animated from 'react-native-reanimated';
 import { Pressable, View } from 'react-native';
@@ -11,6 +10,8 @@ import BottomSheetPlaylist from '../bottom-sheets/sheets/BottomSheetPlaylist';
 import { useTranslations } from 'use-intl';
 import { Skeleton } from '../ui/Skeleton';
 import { Text } from '../ui/text';
+import { Playlist, UserSummary } from '@packages/api-js';
+import { FixedOmit } from '../../utils/fixed-omit';
 
 interface CardPlaylistBaseProps
 	extends React.ComponentPropsWithRef<typeof Animated.View> {
@@ -18,18 +19,19 @@ interface CardPlaylistBaseProps
 		linked?: boolean;
 		onPress?: () => void;
 		onLongPress?: () => void;
-		showPlaylistAuthor?: boolean;
 		showItemsCount?: boolean;
 	}
 
 type CardPlaylistSkeletonProps = {
 	skeleton: true;
 	playlist?: never;
+	owner?: never;
 };
 
 type CardPlaylistDataProps = {
 	skeleton?: false;
 	playlist: Playlist;
+	owner?: UserSummary;
 };
 
 export type CardPlaylistProps = CardPlaylistBaseProps &
@@ -38,20 +40,9 @@ export type CardPlaylistProps = CardPlaylistBaseProps &
 const CardPlaylistDefault = React.forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	FixedOmit<CardPlaylistProps, "variant" | "linked" | "onPress" | "onLongPress">
->(({ style, playlist, skeleton, showPlaylistAuthor = true, showItemsCount = false, children, ...props }, ref) => {
+>(({ style, playlist, owner, skeleton, showItemsCount = false, children, ...props }, ref) => {
 	const t = useTranslations();
 	const { colors } = useTheme();
-	const renderItemsCount = () => {
-		if (!playlist) return null;
-		switch (playlist.type) {
-			case 'movie':
-				return t('common.messages.film_count', { count: playlist.items_count ?? 0 });
-			case 'tv_series':
-				return t('common.messages.tv_series_count', { count: playlist.items_count ?? 0 });
-			default:
-				return t('common.messages.item_count', { count: playlist.items_count ?? 0 });
-		}
-	}
 	return (
 		<Animated.View
 			ref={ref}
@@ -62,17 +53,17 @@ const CardPlaylistDefault = React.forwardRef<
 			{...props}
 		>
 			{!skeleton ? <ImageWithFallback
-				source={{uri: playlist?.poster_url ?? ''}}
-				alt={playlist?.title ?? ''}
+				source={{uri: playlist.poster ?? ''}}
+				alt={playlist.title}
 				type="playlist"
 				style={tw`aspect-square w-auto h-auto`}
 			/> : <Skeleton style={tw`aspect-square w-auto h-auto`} />}
 			<View style={skeleton ? tw`gap-1` : undefined}>
-				{!skeleton ? <Text numberOfLines={2} style={tw`font-medium`}>{playlist?.title}</Text> : <Skeleton style={tw`w-24 h-5`} />}
-				{showPlaylistAuthor && (
+				{!skeleton ? <Text numberOfLines={2} style={tw`font-medium`}>{playlist.title}</Text> : <Skeleton style={tw`w-24 h-5`} />}
+				{owner && (
 					!skeleton ? (
 						<Text style={{ color: colors.mutedForeground }} numberOfLines={1} className="text-sm italic">
-							{t('common.messages.by_name', { name: playlist?.user?.username! })}
+							{t('common.messages.by_name', { name: owner.username })}
 						</Text>
 					) : (
 						<Skeleton style={tw`w-24 h-5`} />
@@ -81,7 +72,7 @@ const CardPlaylistDefault = React.forwardRef<
 				{showItemsCount && (
 					!skeleton ? (
 						<Text style={{ color: colors.mutedForeground }} numberOfLines={1} className="text-sm italic">
-							{renderItemsCount()}
+							{t('common.messages.item_count', { count: playlist.itemsCount })}
 						</Text>
 					) : (
 						<Skeleton style={tw`w-10 h-5`} />
@@ -96,20 +87,9 @@ CardPlaylistDefault.displayName = "CardPlaylistDefault";
 const CardPlaylistList = React.forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	FixedOmit<CardPlaylistProps, "variant" | "linked" | "onPress" | "onLongPress">
->(({ style, playlist, skeleton, showPlaylistAuthor = true, showItemsCount, children, ...props }, ref) => {
+>(({ style, playlist, owner, skeleton, showItemsCount, children, ...props }, ref) => {
 	const { colors } = useTheme();
 	const t = useTranslations();
-	const renderItemsCount = () => {
-		if (!playlist) return null;
-		switch (playlist.type) {
-			case 'movie':
-				return t('common.messages.film_count', { count: playlist.items_count ?? 0 });
-			case 'tv_series':
-				return t('common.messages.tv_series_count', { count: playlist.items_count ?? 0 });
-			default:
-				return t('common.messages.item_count', { count: playlist.items_count ?? 0 });
-		}
-	}
 	return (
 		<Animated.View
 		ref={ref}
@@ -121,24 +101,26 @@ const CardPlaylistList = React.forwardRef<
 		>
 			<View style={tw`flex-1 flex-row items-center gap-2`}>
 				{!skeleton ? <ImageWithFallback
-					source={{uri: playlist?.poster_url ?? ''}}
-					alt={playlist?.title ?? ''}
+					source={{uri: playlist.poster ?? ''}}
+					alt={playlist.title}
 					type="playlist"
 					style={tw`aspect-square w-auto`}
 				/> : <Skeleton style={tw`aspect-square w-auto h-auto`} />}
 				<View style={skeleton ? tw`gap-1` : undefined}>
-					{!skeleton ? <Text numberOfLines={2} style={tw`font-medium`}>{playlist?.title}</Text> : <Skeleton style={tw`w-24 h-5`} />}
-					{showPlaylistAuthor && (
-						skeleton ? <Skeleton style={tw`w-24 h-5`} /> : playlist.user && (
+					{!skeleton ? <Text numberOfLines={2} style={tw`font-medium`}>{playlist.title}</Text> : <Skeleton style={tw`w-24 h-5`} />}
+					{owner && (
+						!skeleton ? (
 							<Text style={{ color: colors.mutedForeground }} numberOfLines={1} className="text-sm italic">
-								{t('common.messages.by_name', { name: playlist?.user?.username! })}
+								{t('common.messages.by_name', { name: owner.username })}
 							</Text>
+						) : (
+							<Skeleton style={tw`w-24 h-5`} />
 						)
 					)}
 					{showItemsCount && (
 						!skeleton ? (
 							<Text style={{ color: colors.mutedForeground }} numberOfLines={1} className="text-sm italic">
-								{renderItemsCount()}
+								{t('common.messages.item_count', { count: playlist.itemsCount })}
 							</Text>
 						) : (
 							<Skeleton style={tw`w-10 h-5`} />
@@ -157,7 +139,7 @@ const CardPlaylist = React.forwardRef<
 >(({ variant = "default", linked = true, onPress, onLongPress, ...props }, ref) => {
 	const router = useRouter();
 	const openSheet = useBottomSheetStore((state) => state.openSheet);
-	
+
 	const content = (
 		variant === "default" ? (
 			<CardPlaylistDefault ref={ref} {...props} />
@@ -171,12 +153,16 @@ const CardPlaylist = React.forwardRef<
 	return (
 		<Pressable
 		onPress={() => {
-			if (linked) router.push(`/playlist/${props.playlist.id}`);
+			if (linked) router.push({
+				pathname: '/playlist/[playlist_id]',
+				params: { playlist_id: props.playlist.id }
+			})
 			onPress?.();
 		}}
 		onLongPress={() => {
 			openSheet(BottomSheetPlaylist, {
 				playlist: props.playlist,
+				owner: props.owner,
 			});
 			onLongPress?.();
 		}}

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { MediaMovie, UserActivityMovie, FixedOmit } from "@recomendapp/types";
+// import { UserActivityMovie, FixedOmit } from "@recomendapp/types";
 import Animated from "react-native-reanimated";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Href, useRouter } from "expo-router";
@@ -11,15 +11,20 @@ import { IconMediaRating } from "../medias/IconMediaRating";
 import { Skeleton } from "../ui/Skeleton";
 import BottomSheetMovie from "../bottom-sheets/sheets/BottomSheetMovie";
 import { Text } from "../ui/text";
-import ButtonUserActivityMovieRating from "../buttons/movies/ButtonUserActivityMovieRating";
+import ButtonUserLogMovieRating from "../buttons/movies/ButtonUserLogMovieRating";
 import { GAP } from "apps/mobile/src/theme/globals";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
+import { LogMovie, LogMovieWithMovieNoReview, MovieCompact, UserSummary } from "@packages/api-js";
+import { FixedOmit } from "../../utils/fixed-omit";
 
 interface CardMovieBaseProps
 	extends React.ComponentPropsWithRef<typeof Animated.View> {
 		variant?: "default" | "poster" | "list";
-		activity?: UserActivityMovie;
-		profileActivity?: UserActivityMovie;
+		activity?: LogMovie;
+		profile?: {
+			log: Omit<LogMovieWithMovieNoReview, "movie">;
+			user: UserSummary;
+		}
 		linked?: boolean;
 		children?: React.ReactNode;
 		// Stats
@@ -37,7 +42,7 @@ type CardMovieSkeletonProps = {
 
 type CardMovieDataProps = {
 	skeleton?: false;
-	movie: MediaMovie;
+	movie: MovieCompact;
 };
 
 type VariantBaseProps = Omit<CardMovieBaseProps, "variant"> &
@@ -62,7 +67,7 @@ export type CardMovieProps = VariantMap[keyof VariantMap];
 const CardMovieDefault = React.forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	FixedOmit<CardMovieProps, "variant" | "linked" | "onPress" | "onLongPress">
->(({ style, movie, skeleton, activity, showActionRating, profileActivity, children, showRating, ...props }, ref) => {
+>(({ style, movie, skeleton, activity, profile, showActionRating, children, showRating, ...props }, ref) => {
 	const { colors } = useTheme();
 	return (
 		<Animated.View
@@ -76,7 +81,7 @@ const CardMovieDefault = React.forwardRef<
 		>
 			<View style={tw`flex-1 flex-row items-center gap-2`}>
 				{!skeleton ? <ImageWithFallback
-					source={{uri: getTmdbImage({ path: movie.poster_path, size: 'w342' })}}
+					source={{uri: getTmdbImage({ path: movie.posterPath, size: 'w342' })}}
 					alt={movie.title ?? ''}
 					type={'movie'}
 					style={{
@@ -92,7 +97,7 @@ const CardMovieDefault = React.forwardRef<
 			{!skeleton && (
 				(showActionRating || showRating) && (
 					<View style={tw`flex-row items-center gap-2`}>
-						{showActionRating && <ButtonUserActivityMovieRating movie={movie} />}
+						{showActionRating && <ButtonUserLogMovieRating movie={movie} />}
 						{showRating && <IconMediaRating rating={activity?.rating} />}
 					</View>
 				)
@@ -105,7 +110,7 @@ CardMovieDefault.displayName = "CardMovieDefault";
 const CardMoviePoster = React.forwardRef<
 React.ComponentRef<typeof Animated.View>,
 	FixedOmit<CardMovieProps, "variant" | "linked" | "onPress" | "onLongPress">
->(({ style, movie, skeleton, activity, profileActivity, showRating, children, ...props }, ref) => {
+>(({ style, movie, skeleton, activity, profile, showRating, children, ...props }, ref) => {
 	return (
 		<Animated.View
 			ref={ref}
@@ -117,25 +122,25 @@ React.ComponentRef<typeof Animated.View>,
 			{...props}
 		>
 			{!skeleton ? <ImageWithFallback
-				source={{uri: getTmdbImage({ path: movie.poster_path, size: 'w342' })}}
+				source={{uri: getTmdbImage({ path: movie.posterPath, size: 'w342' })}}
 				alt={movie.title ?? ''}
 				type={'movie'}
 			/> : <Skeleton style={tw.style('w-full h-full')} />}
-			{!skeleton && (movie.vote_average
-			|| profileActivity?.rating
-			|| profileActivity?.is_liked
-			|| profileActivity?.review
+			{!skeleton && (movie.voteAverage
+			|| profile?.log?.rating
+			|| profile?.log?.isLiked
+			|| profile?.log?.isReviewed
 			) ? (
 				<View style={tw`absolute top-1 right-1 flex-col gap-1`}>
-					{movie.vote_average ?
+					{movie.voteAverage ?
 					<IconMediaRating
-					rating={movie.vote_average}
+					rating={movie.voteAverage}
 					/> : null}
-					{(profileActivity?.is_liked
-					|| profileActivity?.rating
-					|| profileActivity?.review) ? (
+					{(profile?.log?.isLiked
+					|| profile?.log?.rating
+					|| profile?.log?.isReviewed) ? (
 					<IconMediaRating
-					rating={profileActivity.rating}
+					rating={profile?.log?.rating}
 					variant="profile"
 					/>) : null}
 				</View>
@@ -148,7 +153,7 @@ CardMoviePoster.displayName = "CardMoviePoster";
 const CardMovieList = React.forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	FixedOmit<VariantMap["list"], "variant" | "linked" | "onPress" | "onLongPress">
->(({ style, movie, skeleton, activity, showActionRating, profileActivity, children, showRating, hideReleaseDate, hideDirectors, ...props }, ref) => {
+>(({ style, movie, skeleton, activity, profile, showActionRating, children, showRating, hideReleaseDate, hideDirectors, ...props }, ref) => {
 	return (
 		<Animated.View
 		ref={ref}
@@ -161,7 +166,7 @@ const CardMovieList = React.forwardRef<
 		>
 			<View style={tw`flex-1 flex-row items-center gap-2`}>
 				{!skeleton ? <ImageWithFallback
-					source={{uri: getTmdbImage({ path: movie.poster_path, size: 'w342' })}}
+					source={{uri: getTmdbImage({ path: movie.posterPath, size: 'w342' })}}
 					alt={movie.title ?? ''}
 					type={'movie'}
 					style={[
@@ -185,9 +190,9 @@ const CardMovieList = React.forwardRef<
 			</View>
 			{!hideReleaseDate && (
 				<View style={[tw`flex-row items-center`, { gap: GAP }]}>
-					{skeleton ? <Skeleton style={tw`h-5 w-12`} /> : movie.release_date && (
+					{skeleton ? <Skeleton style={tw`h-5 w-12`} /> : movie.releaseDate && (
 						<Text style={tw`text-sm`} textColor='muted' numberOfLines={1}>
-							{new Date(movie.release_date).getFullYear()}
+							{new Date(movie.releaseDate).getFullYear()}
 						</Text>
 					)}
 				</View>

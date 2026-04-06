@@ -13,8 +13,9 @@ import { useCallback, useMemo, useState } from "react";
 import { Button } from "apps/mobile/src/components/ui/Button";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { CardPlaylist } from "apps/mobile/src/components/cards/CardPlaylist";
-import { Playlist } from "@recomendapp/types";
-import { useMediaTvSeriesDetailsQuery, useMediaTvSeriesPlaylistsQuery } from "apps/mobile/src/api/medias/mediaQueries";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { tvSeriesOptions, tvSeriesPlaylistsInfiniteOptions } from "@libs/query-client";
+import { PlaylistWithOwner } from "@packages/api-js";
 
 interface sortBy {
 	label: string;
@@ -25,7 +26,7 @@ const TvSeriesPlaylists = () => {
 	const t = useTranslations();
 	const router = useRouter();
 	const { width: SCREEN_WIDTH } = useWindowDimensions();
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const { tv_series_id } = useLocalSearchParams<{ tv_series_id: string }>();
 	const { id: seriesId } = getIdFromSlug(tv_series_id);
 	const { colors, bottomOffset, tabBarHeight } = useTheme();
@@ -39,7 +40,7 @@ const TvSeriesPlaylists = () => {
 	const [sortBy, setSortBy] = useState<sortBy>(sortByOptions[0]);
 	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 	// Requests
-	const { data: tvSeries } = useMediaTvSeriesDetailsQuery({ tvSeriesId: seriesId });
+	const { data: tvSeries } = useQuery(tvSeriesOptions({ tvSeriesId: seriesId }));
 	const {
 		data,
 		isLoading,
@@ -47,15 +48,15 @@ const TvSeriesPlaylists = () => {
 		hasNextPage,
 		isRefetching,
 		refetch,
-	} = useMediaTvSeriesPlaylistsQuery({
+	} = useInfiniteQuery(tvSeriesPlaylistsInfiniteOptions({
 		tvSeriesId: seriesId,
 		filters: {
-			sortBy: sortBy.value,
-			sortOrder,
+			sort_by: sortBy.value,
+			sort_order: sortOrder,
 		}
-	});
+	}));
 	const loading = data === undefined || isLoading;
-	const playlists = useMemo(() => data?.pages.flat() || [], [data]);
+	const playlists = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
 	// Handlers
 	const handleSortBy = useCallback(() => {
 		const sortByOptionsWithCancel = [
@@ -77,12 +78,15 @@ const TvSeriesPlaylists = () => {
 		setSortOrder((prev) => prev === 'asc' ? 'desc' : 'asc');
 	}, []);
 
+	const renderItem = useCallback(({ item: { owner, ...playlist } } : { item: PlaylistWithOwner }) => (
+		<CardPlaylist playlist={playlist} owner={owner} />
+	), []);
 
 	return (
 	<>
 		<Stack.Screen
 		options={{
-			headerRight: session ? () => (
+			headerRight: user ? () => (
 				<Button
 				variant="outline"
 				size="icon"
@@ -90,25 +94,27 @@ const TvSeriesPlaylists = () => {
 				style={tw`rounded-full`}
 				onPress={() => {
 					router.push({
-						pathname: '/playlist/add/tv-series/[tv_series_id]',
+						pathname: '/playlist/add/[type]/[id]',
 						params: {
-							tv_series_id: seriesId,
-							tv_series_name: tvSeries?.name,
+							type: 'tv-series',
+							id: seriesId,
+							title: tvSeries?.name,
 						},
 					})
 				}}
 				/>
 			) : undefined,
-			unstable_headerRightItems: session ? (props) => [
+			unstable_headerRightItems: user ? (props) => [
 				{
 					type: "button",
 					label: upperFirst(t('common.messages.add_to_playlist')),
 					onPress: () => {
 						router.push({
-							pathname: '/playlist/add/tv-series/[tv_series_id]',
+							pathname: '/playlist/add/[type]/[id]',
 							params: {
-								tv_series_id: seriesId,
-								tv_series_name: tvSeries?.name,
+								type: 'tv-series',
+								id: seriesId,
+								title: tvSeries?.name,
 							},
 						})
 					},
@@ -122,9 +128,7 @@ const TvSeriesPlaylists = () => {
 		/>
 		<LegendList
 		data={playlists}
-		renderItem={useCallback(({ item } : { item: Playlist }) => (
-			<CardPlaylist playlist={item} />
-		), [])}
+		renderItem={renderItem}
 		ListHeaderComponent={
 			<View style={tw.style('flex flex-row justify-end items-center gap-2 py-2')}>
 				<Button
@@ -163,7 +167,7 @@ const TvSeriesPlaylists = () => {
 		}}
 		maintainVisibleContentPosition={false}
 		scrollIndicatorInsets={{ bottom: tabBarHeight }}
-		keyExtractor={useCallback((item: Playlist) => item.id.toString(), [])}
+		keyExtractor={(item) => item.id.toString()}
 		columnWrapperStyle={tw`gap-2`}
 		refreshing={isRefetching}
 		onRefresh={refetch}

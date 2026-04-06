@@ -13,7 +13,7 @@ import { CustomerInfo } from "react-native-purchases";
 import RevenueCatUI from "react-native-purchases-ui";
 import Animated, { FadeInDown, FadeOut, ZoomIn } from "react-native-reanimated"; // Imports d'animation
 import { useTranslations } from "use-intl";
-import * as Haptics from "expo-haptics"; // Pour la vibration
+import * as Haptics from "expo-haptics";
 
 const PremiumSuccess = ({ onClose } : { onClose: () => void }) => {
 	const { colors } = useTheme();
@@ -62,7 +62,7 @@ const PremiumSuccess = ({ onClose } : { onClose: () => void }) => {
 };
 
 const UpgradeScreen = () => {
-    const { session } = useAuth();
+    const { user } = useAuth();
     const router = useRouter();
     const queryClient = useQueryClient();
     const t = useTranslations();
@@ -80,14 +80,14 @@ const UpgradeScreen = () => {
 
     const onSuccess = useCallback(async ({ customerInfo } : { customerInfo: CustomerInfo }) => {
         queryClient.setQueryData(authCustomerInfoOptions().queryKey, customerInfo);
-        session?.user.id && await queryClient.invalidateQueries({
+        user?.id && await queryClient.invalidateQueries({
             queryKey: authKeys.user(),
         });
         
         setIsSuccess(true);
-    }, [queryClient, session?.user.id]);
+    }, [queryClient, user?.id]);
 
-    if (!session) return <Redirect href={'/auth/login'} />
+    if (!user) return <Redirect href={'/auth/login'} />
     
     return (
     <>

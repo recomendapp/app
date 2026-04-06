@@ -1,7 +1,6 @@
 import { forwardRef, useMemo } from 'react';
 import tw from 'apps/mobile/src/lib/tw';
 import { Icons } from 'apps/mobile/src/constants/Icons';
-import { UserReviewMovie } from '@recomendapp/types';
 import { usePathname, useRouter } from 'expo-router';
 import { LucideIcon } from 'lucide-react-native';
 import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
@@ -14,12 +13,14 @@ import { Button } from 'apps/mobile/src/components/ui/Button';
 import { useAuth } from 'apps/mobile/src/providers/AuthProvider';
 import { PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
 import { Alert } from 'react-native';
-import { useUserReviewMovieDeleteMutation } from 'apps/mobile/src/api/users/userMutations';
 import { useToast } from 'apps/mobile/src/components/Toast';
 import { FlashList } from '@shopify/flash-list';
+import { ReviewMovie, UserSummary } from '@packages/api-js';
+import { useMovieReviewDeleteMutation } from '@libs/query-client';
 
 interface BottomSheetReviewMovieProps extends BottomSheetProps {
-  review: UserReviewMovie,
+  review: ReviewMovie,
+  author: UserSummary;
   additionalItemsTop?: Item[];
   additionalItemsBottom?: Item[];
 };
@@ -36,29 +37,40 @@ interface Item {
 export const BottomSheetReviewMovie = forwardRef<
   React.ComponentRef<typeof TrueSheet>,
   BottomSheetReviewMovieProps
->(({ id, review, additionalItemsTop = [], additionalItemsBottom = [], ...props }, ref) => {
+>(({ id, review, author, additionalItemsTop = [], additionalItemsBottom = [], ...props }, ref) => {
   const closeSheet = useBottomSheetStore((state) => state.closeSheet);
   const toast = useToast();
   const { colors, mode } = useTheme();
-  const { session } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const t = useTranslations();
   const pathname = usePathname();
   // Mutations
-  const { mutateAsync: reviewDeleteMutation } = useUserReviewMovieDeleteMutation();
+  const { mutateAsync: deleteReview } = useMovieReviewDeleteMutation();
   // States
   const items = useMemo<Item[]>(() => [
     ...additionalItemsTop,
     {
       icon: Icons.Movie,
-      onPress: () => router.push(`/film/${review.activity?.movie?.slug || review.activity?.movie_id}/review/${review.id}`),
+      onPress: () => router.push({
+        pathname: '/user/[username]/film/[film_id]',
+        params: {
+          username: author.username,
+          film_id: review.movieId,
+        }
+      }),
       label: upperFirst(t('common.messages.go_to_review')),
-      disabled: review.activity?.movie?.url ? pathname.startsWith(review.activity?.movie?.url) : false
+      disabled: pathname.startsWith(`/user/${author.username}/film/${review.movieId}`),
     },
-    ...(session?.user.id === review.activity?.user_id ? [
+    ...(user?.id === author.id ? [
       {
         icon: Icons.Edit,
-        onPress: () => router.push(`/film/${review.activity?.movie?.slug || review.activity?.movie_id}/review/${review.id}/edit`),
+        onPress: () => router.push({
+          pathname: '/film/[film_id]/review',
+          params: {
+            film_id: review.movieId,
+          }
+        }),
         label: upperFirst(t('common.messages.edit_review')),
       },
       {
@@ -75,25 +87,31 @@ export const BottomSheetReviewMovie = forwardRef<
               {
                 text: upperFirst(t('common.messages.delete')),
                 onPress: async () => {
-                  await reviewDeleteMutation(
-                    { id: review.id, movieId: review.activity?.movie_id! },
-                    {
-                      onSuccess: () => {
-                        toast.success(upperFirst(t('common.messages.deleted')));
-                        if (pathname.startsWith(`/film/${review.activity?.movie?.slug || review.activity?.movie_id}/review/${review.id}`)) {
-                          if (router.canGoBack()) {
-                            router.back()
-                          } else {
-                            router.replace(`/film/${review.activity?.movie?.slug || review.activity?.movie_id}`);
-                          }
-                        }
-                        closeSheet(id);
-                      },
-                      onError: () => {
-                        toast.error(upperFirst(t('common.messages.error')), { description: upperFirst(t('common.messages.an_error_occurred')) });
-                      },
+                  await deleteReview({
+                    path: {
+                      movie_id: review.movieId,
                     }
-                  );
+                  }, {
+                    onSuccess: () => {
+                      toast.success(upperFirst(t('common.messages.deleted')));
+                      if (pathname.startsWith(`/user/${author.username}/film/${review.movieId}`)) {
+                        if (router.canGoBack()) {
+                          router.back()
+                        } else {
+                          router.replace({
+                            pathname: '/film/[film_id]',
+                            params: {
+                              film_id: review.movieId,
+                            }
+                          });
+                        }
+                      }
+                      closeSheet(id);
+                    },
+                    onError: () => {
+                      toast.error(upperFirst(t('common.messages.error')), { description: upperFirst(t('common.messages.an_error_occurred')) });
+                    },
+                  });
                 },
                 style: 'destructive',
               }
@@ -116,10 +134,10 @@ export const BottomSheetReviewMovie = forwardRef<
     pathname,
     review,
     router,
-    session?.user.id,
+    user?.id,
     t,
     toast,
-    reviewDeleteMutation,
+    deleteReview,
   ]);
 
   return (

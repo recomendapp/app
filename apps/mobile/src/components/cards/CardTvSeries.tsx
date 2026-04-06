@@ -1,5 +1,4 @@
 import * as React from "react"
-import { MediaTvSeries, UserActivityTvSeries, FixedOmit } from "@recomendapp/types";
 import Animated from "react-native-reanimated";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Href, useRouter } from "expo-router";
@@ -11,15 +10,20 @@ import { IconMediaRating } from "../medias/IconMediaRating";
 import { Skeleton } from "../ui/Skeleton";
 import BottomSheetTvSeries from "../bottom-sheets/sheets/BottomSheetTvSeries";
 import { Text } from "../ui/text";
-import ButtonUserActivityTvSeriesRating from "../buttons/tv-series/ButtonUserActivityTvSeriesRating";
+import ButtonUserLogTvSeriesRating from "../buttons/tv-series/ButtonUserLogTvSeriesRating";
 import { GAP } from "apps/mobile/src/theme/globals";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
+import { LogTvSeries, LogTvSeriesWithTvSeriesNoReview, TvSeriesCompact, UserSummary } from "@packages/api-js";
+import { FixedOmit } from "../../utils/fixed-omit";
 
 interface CardTvSeriesBaseProps
 	extends React.ComponentPropsWithRef<typeof Animated.View> {
 		variant?: "default" | "poster" | "list";
-		activity?: UserActivityTvSeries;
-		profileActivity?: UserActivityTvSeries;
+		activity?: LogTvSeries;
+		profile?: {
+			log: Omit<LogTvSeriesWithTvSeriesNoReview, "tvSeries">;
+			user: UserSummary;
+		}
 		linked?: boolean;
 		children?: React.ReactNode;
 		// Stats
@@ -37,7 +41,7 @@ type CardTvSeriesSkeletonProps = {
 
 type CardTvSeriesDataProps = {
 	skeleton?: false;
-	tvSeries: MediaTvSeries;
+	tvSeries: TvSeriesCompact;
 };
 
 type VariantBaseProps = Omit<CardTvSeriesBaseProps, "variant"> &
@@ -62,7 +66,7 @@ export type CardTvSeriesProps = VariantMap[keyof VariantMap];
 const CardTvSeriesDefault = React.forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	FixedOmit<CardTvSeriesProps, "variant" | "linked" | "onPress" | "onLongPress">
->(({ style, tvSeries, skeleton, activity, showActionRating, profileActivity, children, showRating, ...props }, ref) => {
+>(({ style, tvSeries, skeleton, activity, profile, showActionRating, children, showRating, ...props }, ref) => {
 	const { colors } = useTheme();
 	return (
 		<Animated.View
@@ -76,7 +80,7 @@ const CardTvSeriesDefault = React.forwardRef<
 		>
 			<View style={tw`flex-1 flex-row items-center gap-2`}>
 				{!skeleton ? <ImageWithFallback
-					source={{uri: getTmdbImage({ path: tvSeries?.poster_path, size: 'w342' }) ?? ''}}
+					source={{uri: getTmdbImage({ path: tvSeries.posterPath, size: 'w342' }) ?? ''}}
 					alt={tvSeries.name ?? ''}
 					type={'tv_series'}
 					style={{
@@ -92,7 +96,7 @@ const CardTvSeriesDefault = React.forwardRef<
 			{!skeleton && (
 				(showActionRating || showRating) && (
 					<View style={tw`flex-row items-center gap-2`}>
-						{showActionRating && <ButtonUserActivityTvSeriesRating tvSeries={tvSeries} />}
+						{showActionRating && <ButtonUserLogTvSeriesRating tvSeries={tvSeries} />}
 						{showRating && <IconMediaRating rating={activity?.rating} />}
 					</View>
 				)
@@ -105,7 +109,7 @@ CardTvSeriesDefault.displayName = "CardTvSeriesDefault";
 const CardTvSeriesPoster = React.forwardRef<
 React.ComponentRef<typeof Animated.View>,
 	FixedOmit<CardTvSeriesProps, "variant" | "linked" | "onPress" | "onLongPress">
->(({ style, tvSeries, skeleton, activity, profileActivity, showRating, children, ...props }, ref) => {
+>(({ style, tvSeries, skeleton, activity, profile, showRating, children, ...props }, ref) => {
 	return (
 		<Animated.View
 			ref={ref}
@@ -117,25 +121,25 @@ React.ComponentRef<typeof Animated.View>,
 			{...props}
 		>
 			{!skeleton ? <ImageWithFallback
-				source={{uri: getTmdbImage({ path: tvSeries?.poster_path, size: 'w342' }) ?? ''}}
+				source={{uri: getTmdbImage({ path: tvSeries.posterPath, size: 'w342' }) ?? ''}}
 				alt={tvSeries.name ?? ''}
 				type={'tv_series'}
 			/> : <Skeleton style={tw.style('w-full h-full')} />}
-			{!skeleton && (tvSeries.vote_average
-			|| profileActivity?.rating
-			|| profileActivity?.is_liked
-			|| profileActivity?.review
+			{!skeleton && (tvSeries.voteAverage
+			|| profile?.log?.rating
+			|| profile?.log?.isLiked
+			|| profile?.log?.isReviewed
 			) ? (
 				<View style={tw`absolute top-1 right-1 flex-col gap-1`}>
-					{tvSeries.vote_average ?
+					{tvSeries.voteAverage ?
 					<IconMediaRating
-					rating={tvSeries.vote_average}
+					rating={tvSeries.voteAverage}
 					/> : null}
-					{(profileActivity?.is_liked
-					|| profileActivity?.rating
-					|| profileActivity?.review) ? (
+					{(profile?.log?.isLiked
+					|| profile?.log?.rating
+					|| profile?.log?.isReviewed) ? (
 					<IconMediaRating
-					rating={profileActivity.rating}
+					rating={profile?.log?.rating}
 					variant="profile"
 					/>) : null}
 				</View>
@@ -148,7 +152,7 @@ CardTvSeriesPoster.displayName = "CardTvSeriesPoster";
 const CardTvSeriesList = React.forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	FixedOmit<VariantMap["list"], "variant" | "linked" | "onPress" | "onLongPress">
->(({ style, tvSeries, skeleton, activity, showActionRating, profileActivity, children, showRating, hideReleaseDate, hideCreator, ...props }, ref) => {
+>(({ style, tvSeries, skeleton, activity, profile, showActionRating, children, showRating, hideReleaseDate, hideCreator, ...props }, ref) => {
 	return (
 		<Animated.View
 		ref={ref}
@@ -160,7 +164,7 @@ const CardTvSeriesList = React.forwardRef<
 		>
 			<View style={tw`flex-1 flex-row items-center gap-2`}>
 				{!skeleton ? <ImageWithFallback
-					source={{uri: getTmdbImage({ path: tvSeries?.poster_path, size: 'w342' }) ?? ''}}
+					source={{uri: getTmdbImage({ path: tvSeries.posterPath, size: 'w342' }) ?? ''}}
 					alt={tvSeries.name ?? ''}
 					type={'tv_series'}
 					style={[
@@ -173,9 +177,9 @@ const CardTvSeriesList = React.forwardRef<
 				<View style={tw`shrink px-2 py-1 gap-1`}>
 					{!skeleton ? <Text numberOfLines={2}>{tvSeries.name}</Text> : <Skeleton style={tw.style('w-full h-5')} />}
 					{!hideCreator && (
-						skeleton ? <Skeleton style={tw`w-20 h-5`} /> : tvSeries.created_by?.length && (
+						skeleton ? <Skeleton style={tw`w-20 h-5`} /> : tvSeries.createdBy?.length && (
 							<Text style={tw`text-sm`} textColor='muted' numberOfLines={1}>
-								{tvSeries.created_by.map((creator) => creator.name).join(', ')}
+								{tvSeries.createdBy.map((creator) => creator.name).join(', ')}
 							</Text>
 						)
 					)}
@@ -184,9 +188,9 @@ const CardTvSeriesList = React.forwardRef<
 			</View>
 			{!hideReleaseDate && (
 				<View style={[tw`flex-row items-center`, { gap: GAP }]}>
-					{skeleton ? <Skeleton style={tw`h-5 w-12`} /> : tvSeries.first_air_date && (
+					{skeleton ? <Skeleton style={tw`h-5 w-12`} /> : tvSeries.firstAirDate && (
 						<Text style={tw`text-sm`} textColor='muted' numberOfLines={1}>
-							{new Date(tvSeries.first_air_date).getFullYear()}
+							{new Date(tvSeries.firstAirDate).getFullYear()}
 						</Text>
 					)}
 				</View>

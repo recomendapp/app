@@ -11,14 +11,14 @@ import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme
 import { LegendList, LegendListRef } from "@legendapp/list";
 import { useScrollToTop } from "@react-navigation/native";
 import { upperFirst } from "lodash";
-import { useRef, forwardRef } from "react";
+import { useRef, forwardRef, useMemo } from "react";
 import { ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslations } from "use-intl";
-import { MediaMovie } from "@recomendapp/types";
 import ErrorMessage from "apps/mobile/src/components/ErrorMessage";
 import { useKeyboardState } from "react-native-keyboard-controller";
-import { useSearchMoviesQuery } from "apps/mobile/src/api/search/searchQueries";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { searchMoviesInfiniteOptions } from "@libs/query-client";
 
 const FiltersSheet = forwardRef<RNTrueSheet>((_, ref) => {
 	const insets = useSafeAreaInsets();
@@ -78,9 +78,12 @@ const SearchFilmsScreen = () => {
 		fetchNextPage,
 		refetch,
 		isRefetching,
-	} = useSearchMoviesQuery({
-		query: search,
-	});
+	} = useInfiniteQuery(searchMoviesInfiniteOptions({
+		filters: {
+			q: search,
+		}
+	}));
+	const movies = useMemo(() => data?.pages.flatMap(page => page.data) ?? [], [data]);
 	
 	// REFs
 	const scrollRef = useRef<LegendListRef>(null);
@@ -109,7 +112,7 @@ const SearchFilmsScreen = () => {
 			<LegendList
 			key={search}
 			ref={scrollRef}
-			data={data?.pages.flatMap(page => page.data) as MediaMovie[] || []}
+			data={movies}
 			renderItem={({ item }) => <CardMovie variant="list" movie={item} /> }
 			contentContainerStyle={{
 				paddingLeft: insets.left + PADDING_HORIZONTAL,

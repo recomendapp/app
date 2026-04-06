@@ -5,7 +5,6 @@ import Carousel, { ICarouselInstance, Pagination } from "react-native-reanimated
 import Animated, { SharedValue, useAnimatedStyle, useSharedValue, interpolate } from "react-native-reanimated";
 import tw from "apps/mobile/src/lib/tw";
 import { Image } from "expo-image";
-import { Database, MediaMovie, MediaTvSeries } from "@recomendapp/types";
 import { getMediaDetails } from "../utils/getMediaDetails";
 import { clamp, upperFirst } from "lodash";
 import { LinearGradient } from "expo-linear-gradient";
@@ -21,7 +20,9 @@ import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import BottomSheetMovie from "../bottom-sheets/sheets/BottomSheetMovie";
 import BottomSheetTvSeries from "../bottom-sheets/sheets/BottomSheetTvSeries";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
-import { useWidgetMostRecommendedQuery } from "apps/mobile/src/api/widgets/widgetQueries";
+import { RecoTrendingWithMovie, RecoTrendingWithTvSeries } from "@packages/api-js";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { widgetRecosTrendingInfiniteOptions } from "@libs/query-client";
 
 interface WidgetMostRecommendedProps extends ViewProps {
 	scrollY?: SharedValue<number>;
@@ -41,7 +42,9 @@ const WidgetMostRecommended = ({
 		data,
 		isLoading,
 		isError
-	} = useWidgetMostRecommendedQuery();
+	} = useInfiniteQuery(widgetRecosTrendingInfiniteOptions());
+	const flattenRecos = data?.pages.flatMap(page => page.data) || [];
+
 	const ref = useRef<ICarouselInstance>(null);
 	const progress = useSharedValue<number>(0);
 	
@@ -56,7 +59,7 @@ const WidgetMostRecommended = ({
 	if (data === undefined || isLoading) {
 		return <Skeleton style={[{ height: height }, tw`w-full`, style]} />
 	}
-	if (!data.length || isError) return <View style={[{ height: navigationHeaderHeight }, tw`w-full`, style]} />;
+	if (!flattenRecos.length || isError) return <View style={[{ height: navigationHeaderHeight }, tw`w-full`, style]} />;
 	return (
 		<View
 		style={[
@@ -69,7 +72,7 @@ const WidgetMostRecommended = ({
 			ref={ref}
 			width={screenWidth}
 			height={height}
-			data={data}
+			data={flattenRecos}
 			onProgressChange={progress}
 			renderItem={({ item, index }) => (
 				<WidgetMostRecommendedItem item={item} position={index + 1} style={[style]} scrollY={scrollY} baseHeight={height} carouselProgress={progress} />
@@ -80,7 +83,7 @@ const WidgetMostRecommended = ({
 			/>
 			<Pagination.Basic
 			progress={progress}
-			data={data}
+			data={flattenRecos}
 			dotStyle={{ backgroundColor: colors.muted, borderRadius: BORDER_RADIUS_FULL }}
 			activeDotStyle={{ backgroundColor: colors.accentYellow, borderRadius: BORDER_RADIUS_FULL }}
 			containerStyle={{ gap: 5, marginTop: 10 }}
@@ -98,7 +101,15 @@ const WidgetMostRecommendedItem = ({
 	baseHeight,
 	carouselProgress,
 } : {
-	item: Database['public']['Views']['widget_most_recommended']['Row'];
+	item: (
+		| {
+			type: "movie";
+		} & RecoTrendingWithMovie
+	) | (
+		{
+			type: "tv_series";
+		} & RecoTrendingWithTvSeries
+	);
 	position: number;
 	style?: StyleProp<ViewStyle>;
 	scrollY?: SharedValue<number>;
@@ -111,8 +122,8 @@ const WidgetMostRecommendedItem = ({
 	const t = useTranslations();
 	const navigationHeaderHeight = useHeaderHeight();
 	const details = (
-		item.type === 'movie' ? getMediaDetails({ type: 'movie', media: item.media as MediaMovie }) :
-		item.type === 'tv_series' ? getMediaDetails({ type: 'tv_series', media: item.media as MediaTvSeries }) :
+		item.type === 'movie' ? getMediaDetails({ type: 'movie', media: item.media }) :
+		item.type === 'tv_series' ? getMediaDetails({ type: 'tv_series', media: item.media }) :
 		null
 	)
 	const handleOnPress = () => {
@@ -177,7 +188,7 @@ const WidgetMostRecommendedItem = ({
 					bgAnim,
 				]}
 				>
-					{(item.media.backdrop_path) && <Image style={StyleSheet.absoluteFill} source={{ uri: getTmdbImage({ path: item.media.backdrop_path, size: 'w1280' }) ?? '' }} />}
+					{(item.media.backdropPath) && <Image style={StyleSheet.absoluteFill} source={{ uri: getTmdbImage({ path: item.media.backdropPath, size: 'w1280' }) ?? '' }} />}
 					<LinearGradient
 					colors={[
 						'transparent',
@@ -205,7 +216,11 @@ const WidgetMostRecommendedItem = ({
 					</View>
 					<View style={[{ gap: GAP }]}>
 						<Text onPress={handleOnPress} onLongPress={handleOnLongPress} style={tw`text-xl font-bold`}>{details?.title}</Text>
-						{details?.description && <Text style={tw`text-base`} numberOfLines={2}>{details.description}</Text>}
+						{item.media.overview?.length && (
+							<Text style={tw`text-base`} numberOfLines={2}>
+								{item.media.overview}
+							</Text>
+						)}
 					</View>
 				</View>
 			</View>

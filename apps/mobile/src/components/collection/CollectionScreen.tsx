@@ -16,12 +16,12 @@ import { UseQueryResult } from "@tanstack/react-query";
 import { CollectionItem } from "./CollectionItem";
 import { ImageType } from "apps/mobile/src/components/utils/ImageWithFallback";
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
-import { MediaType, ViewType } from "@recomendapp/types";
 import { LegendListRenderItemProps } from "@legendapp/list";
 import { useWindowDimensions } from "react-native";
 import CollectionToolbar, { CollectionToolbarItem } from "./CollectionToolbar";
 import BottomSheetSort from "../bottom-sheets/sheets/BottomSheetSort";
 import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
+import { ViewType } from "@packages/api-js";
 
 const MemoizedSearchBar = React.memo(SearchBar);
 
@@ -68,7 +68,6 @@ interface CollectionScreenConfig<T> extends Omit<React.ComponentProps<typeof Ani
     onItemAction?: (item: T) => void;
     defaultView?: ViewType;
     onViewChange?: (view: ViewType) => void;
-    type?: MediaType;
 	fuseKeys?: FuseOptionKey<T>[];
 	fuseThreshold?: number;
 }
@@ -104,7 +103,6 @@ const CollectionScreen = <T extends {}>({
     onViewChange,
     maintainVisibleContentPosition = false,
     numColumns = 4,
-    type,
 	fuseKeys,
 	fuseThreshold = 0.5,
 	...props
@@ -187,7 +185,6 @@ const CollectionScreen = <T extends {}>({
             getItemUrl={getItemUrl}
             onItemAction={onItemAction}
             view={view}
-            type={type}
             index={index}
             />
         )
@@ -201,7 +198,6 @@ const CollectionScreen = <T extends {}>({
         getItemUrl,
         onItemAction,
         view,
-        type,
     ]);
 
     React.useEffect(() => {
@@ -235,7 +231,6 @@ const CollectionScreen = <T extends {}>({
                     scrollY={scrollY}
                     headerHeight={headerHeight}
                     backdrops={backdrops}
-                    type={type}
                 />}
                 {!loading && (
                     <View style={tw`gap-2`}>

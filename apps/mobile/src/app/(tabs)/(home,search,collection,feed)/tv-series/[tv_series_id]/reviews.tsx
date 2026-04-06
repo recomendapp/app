@@ -12,20 +12,20 @@ import { useCallback, useMemo, useState } from "react";
 import { Button } from "apps/mobile/src/components/ui/Button";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { CardReviewTvSeries } from "apps/mobile/src/components/cards/reviews/CardReviewTvSeries";
-import { UserReviewTvSeries } from "@recomendapp/types";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
-import { useMediaTvSeriesDetailsQuery, useMediaTvSeriesReviewsQuery } from "apps/mobile/src/api/medias/mediaQueries";
-import { useUserActivityTvSeriesQuery } from "apps/mobile/src/api/users/userQueries";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { tvSeriesLogOptions, tvSeriesOptions, tvSeriesReviewsInfiniteOptions } from "@libs/query-client";
+import { ReviewTvSeriesWithAuthor } from "@packages/api-js";
 
 interface sortBy {
 	label: string;
-	value: 'updated_at' | 'created_at' | 'likes_count';
+	value: 'updated_at' | 'created_at' | 'likes_count' | 'rating' | 'random';
 }
 
 const TvSeriesReviews = () => {
 	const t = useTranslations();
 	const router = useRouter();
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const { tv_series_id } = useLocalSearchParams<{ tv_series_id: string }>();
 	const { id: tvSeriesId } = getIdFromSlug(tv_series_id);
 	const { colors, bottomOffset, tabBarHeight } = useTheme();
@@ -35,17 +35,19 @@ const TvSeriesReviews = () => {
 		{ label: upperFirst(t('common.messages.date_updated')), value: 'updated_at' },
 		{ label: upperFirst(t('common.messages.date_created')), value: 'created_at' },
 		{ label: upperFirst(t('common.messages.number_of_likes')), value: 'likes_count' },
+		{ label: upperFirst(t('common.messages.rating')), value: 'rating' },
+		{ label: upperFirst(t('common.messages.random')), value: 'random' },
 	], [t]);
 	const [sortBy, setSortBy] = useState<sortBy>(sortByOptions[0]);
 	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 	// Requests
-	const { data: tvSeries } = useMediaTvSeriesDetailsQuery({ tvSeriesId: tvSeriesId });
+	const { data: tvSeries } = useQuery(tvSeriesOptions({ tvSeriesId: tvSeriesId }));
 	const {
 		data: activity,
-	} = useUserActivityTvSeriesQuery({
-		userId: session?.user.id,
+	} = useQuery(tvSeriesLogOptions({
+		userId: user?.id,
 		tvSeriesId: tvSeriesId,
-	});
+	}));
 	const {
 		data,
 		isLoading,
@@ -53,15 +55,15 @@ const TvSeriesReviews = () => {
 		hasNextPage,
 		isRefetching,
 		refetch,
-	} = useMediaTvSeriesReviewsQuery({
+	} = useInfiniteQuery(tvSeriesReviewsInfiniteOptions({
 		tvSeriesId: tvSeriesId,
 		filters: {
-			sortBy: sortBy.value,
-			sortOrder,
+			sort_by: sortBy.value,
+			sort_order: sortOrder,
 		}
-	});
+	}));
 	const loading = data === undefined || isLoading;
-	const reviews = useMemo(() => data?.pages.flat() || [], [data]);
+	const reviews = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
 	// Handlers
 	const handleSortBy = useCallback(() => {
 		const sortByOptionsWithCancel = [
@@ -82,6 +84,15 @@ const TvSeriesReviews = () => {
 		setSortOrder((prev) => prev === 'asc' ? 'desc' : 'asc');
 	}, []);
 
+	const renderItem = useCallback(({ item: { author, rating, ...review } } : { item: ReviewTvSeriesWithAuthor }) => (
+		<CardReviewTvSeries
+		review={review}
+		author={author}
+		rating={rating}
+		url={{ pathname: `/user/[username]/tv-series/[tv_series_id]`, params: { username: author.username, tv_series_id: review.tvSeriesId } }}
+		/>
+	), [tvSeries, tvSeriesId]);
+
 	return (
 	<>
 		<Stack.Screen
@@ -97,7 +108,7 @@ const TvSeriesReviews = () => {
 				}}
 				/>
 			) : undefined,
-			unstable_headerRightItems: session ? (props) => [
+			unstable_headerRightItems: user ? (props) => [
 				...(activity !== undefined ? [
 					{
 						type: "button",
@@ -123,21 +134,14 @@ const TvSeriesReviews = () => {
 		/>
 		<LegendList
 		data={reviews}
-		renderItem={useCallback(({ item } : { item: UserReviewTvSeries }) => (
-			<CardReviewTvSeries
-			review={item}
-			activity={item.activity!}
-			author={item.activity!.user!}
-			url={`/tv-series/${tvSeries?.slug || tvSeries?.id}/review/${item.id}`}
-			/>
-		), [])}
+		renderItem={renderItem}
 		ListHeaderComponent={
 			<View style={tw.style('flex flex-row justify-end items-center gap-2 py-2')}>
 				<Button
 				icon={sortOrder === 'desc' ? Icons.ArrowDown : Icons.ArrowUp}
 				variant="muted"
 				size='icon'
-				onPress={() => setSortOrder((prev) => prev === 'asc' ? 'desc' : 'asc')}
+				onPress={handleSortOrderToggle}
 				/>
 				<Button icon={Icons.ChevronDown} variant="muted" onPress={handleSortBy}>{sortBy.label}</Button>
 			</View>
@@ -161,7 +165,7 @@ const TvSeriesReviews = () => {
 		}}
 		maintainVisibleContentPosition={false}
 		scrollIndicatorInsets={{ bottom: tabBarHeight }}
-		keyExtractor={useCallback((item: UserReviewTvSeries) => item.id.toString(), [])}
+		keyExtractor={(item) => item.id.toString()}
 		refreshing={isRefetching}
 		onRefresh={refetch}
 		/>

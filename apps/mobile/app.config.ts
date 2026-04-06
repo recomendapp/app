@@ -39,6 +39,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
 	name: getAppName(),
 	slug: 'recomend',
+	platforms: ['ios', 'android'],
 	version: '1.0.0',
 	runtimeVersion: {
 		policy: 'appVersion',
@@ -51,7 +52,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 	icon: './src/assets/images/app/icons/icon.png',
 	scheme: 'recomend',
 	userInterfaceStyle: 'automatic',
-	newArchEnabled: true,
 	assetBundlePatterns: [
 		'**/*'
 	],
@@ -83,7 +83,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 			monochromeImage: './src/assets/images/app/icons/adaptive-icon-monochrome.png',
 			backgroundColor: '#0b0909',
 		},
-		edgeToEdgeEnabled: true,
 		package: getUniqueIdentifier(),
 		intentFilters: [
 			{

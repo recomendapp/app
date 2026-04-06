@@ -7,12 +7,13 @@ import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { useTranslations } from "use-intl";
 import { Text } from "apps/mobile/src/components/ui/text";
-import { MediaMovie, UserReviewMovie } from "@recomendapp/types";
 import { CardReviewMovie } from "apps/mobile/src/components/cards/reviews/CardReviewMovie";
-import { useMediaMovieReviewsQuery } from "apps/mobile/src/api/medias/mediaQueries";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { movieReviewsInfiniteOptions } from "@libs/query-client";
+import { Movie, ReviewMovieWithAuthor } from "@packages/api-js";
 
 interface MovieWidgetReviewsProps extends React.ComponentPropsWithoutRef<typeof View> {
-	movie: MediaMovie;
+	movie: Movie;
 	url: Href;
 	labelStyle?: StyleProp<TextStyle>;
 	containerStyle?: StyleProp<ViewStyle>;
@@ -33,13 +34,10 @@ const MovieWidgetReviews = ({
 		isLoading,
 		fetchNextPage,
 		hasNextPage,
-	} = useMediaMovieReviewsQuery({
+	} = useInfiniteQuery(movieReviewsInfiniteOptions({
 		movieId: movie.id,
-		filters: {
-			sortBy: 'updated_at',
-			sortOrder: 'desc',
-		}
-	});
+	}));
+	const flattenedReviews = reviews?.pages.flatMap(page => page.data) || [];
 	const loading = reviews === undefined || isLoading;
 
 	return (
@@ -52,20 +50,19 @@ const MovieWidgetReviews = ({
 				<Icons.ChevronRight color={colors.mutedForeground} />
 			</View>
 		</Link>
-		<LegendList<UserReviewMovie>
+		<LegendList<ReviewMovieWithAuthor>
 		key={loading ? 'loading' : 'reviews'}
-		data={loading ? new Array(3).fill(null) : reviews?.pages.flat()}
-		renderItem={({ item }) => (
-			!loading ? (
-				<CardReviewMovie
-				review={item}
-				activity={item.activity!}
-				author={item.activity?.user!} style={tw`w-86`}
-				url={`/film/${movie?.slug || movie?.id}/review/${item.id}`}
-				/>
-			) : (
-				<CardReviewMovie skeleton style={tw`w-86`} />
-			)
+		data={loading ? new Array(3).fill(null) : flattenedReviews}
+		renderItem={({ item: { rating, author, ...review } }) => (
+			<CardReviewMovie
+			{...(!loading ? {
+				review: review,
+				author: author,
+				rating: rating,
+				url: { pathname: '/user/[username]/film/[film_id]', params: { username: author.username, film_id: review.movieId } }
+			} : { skeleton: true })}
+			style={tw`w-86`}
+			/>
 		)}
 		ListEmptyComponent={
 			<Text style={[tw``, { color: colors.mutedForeground }]}>

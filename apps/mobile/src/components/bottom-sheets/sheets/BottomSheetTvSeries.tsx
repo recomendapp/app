@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import tw from 'apps/mobile/src/lib/tw';
 import { Icons } from 'apps/mobile/src/constants/Icons';
-import { MediaTvSeries, UserActivityTvSeries } from '@recomendapp/types';
 import { LinkProps, usePathname, useRouter } from 'expo-router';
 import { LucideIcon } from 'lucide-react-native';
 import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
@@ -21,10 +20,11 @@ import { PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/glob
 import BottomSheetShareTvSeries from './share/BottomSheetShareTvSeries';
 import { FlashList } from '@shopify/flash-list';
 import { getTmdbImage } from 'apps/mobile/src/lib/tmdb/getTmdbImage';
+import { TvSeriesCompact, UserTvSeriesWithUserTvSeries } from '@packages/api-js';
 
 interface BottomSheetTvSeriesProps extends BottomSheetProps {
-  tvSeries?: MediaTvSeries,
-  activity?: UserActivityTvSeries,
+  tvSeries: TvSeriesCompact,
+  log?: UserTvSeriesWithUserTvSeries,
   additionalItemsTop?: Item[];
   additionalItemsBottom?: Item[];
 };
@@ -41,11 +41,11 @@ type Item = {
 const BottomSheetTvSeries = React.forwardRef<
   React.ComponentRef<typeof TrueSheet>,
   BottomSheetTvSeriesProps
->(({ id, tvSeries, activity, additionalItemsTop = [], additionalItemsBottom = [], ...props }, ref) => {
+>(({ id, tvSeries, log, additionalItemsTop = [], additionalItemsBottom = [], ...props }, ref) => {
   const openSheet = useBottomSheetStore((state) => state.openSheet);
   const closeSheet = useBottomSheetStore((state) => state.closeSheet);
   const { colors, mode, isLiquidGlassAvailable } = useTheme();
-  const { session } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const t = useTranslations();
   const pathname = usePathname();
@@ -62,57 +62,58 @@ const BottomSheetTvSeries = React.forwardRef<
       }),
       label: upperFirst(t('common.messages.share')),
     },
-    ...((activity) ? [
+    ...((log) ? [
       {
         icon: Icons.Feed,
-        onPress: () => router.push(`/user/${activity.user?.username}`),
+        onPress: () => router.push({ pathname: '/user/[username]/tv-series/[tv_series_id]', params: { username: log.user.username, tv_series_id: tvSeries.id } }),
         label: upperFirst(t('common.messages.go_to_activity')),
       },
     ] : []),
     {
       icon: Icons.Movie,
-      onPress: () => router.push(tvSeries?.url as LinkProps['href']),
+      onPress: () => router.push({ pathname: '/tv-series/[tv_series_id]', params: { tv_series_id: tvSeries.id }}),
       label: upperFirst(t('common.messages.go_to_tv_series')),
-      disabled: tvSeries?.url ? pathname.startsWith(tvSeries.url) : false
+      disabled: tvSeries.url ? pathname.startsWith(tvSeries.url) : false
     },
-    ...((tvSeries?.created_by && tvSeries.created_by.length > 0) ? [
-      tvSeries.created_by.length > 1 ? {
+    ...((tvSeries.createdBy && tvSeries.createdBy.length > 0) ? [
+      tvSeries.createdBy.length > 1 ? {
         icon: Icons.Users,
         onPress: () => BottomSheetMainCreditsRef.current?.present(),
-        label: upperFirst(t('common.messages.show_creator', { gender: 'male', count: tvSeries.created_by.length })),
+        label: upperFirst(t('common.messages.show_creator', { gender: 'male', count: tvSeries.createdBy.length })),
         closeOnPress: false,
       } : {
         icon: Icons.User,
-        onPress: () => router.push(tvSeries.created_by?.[0].url as LinkProps['href']),
-        label: upperFirst(t('common.messages.go_to_creator', { gender: tvSeries.created_by![0].gender === 1 ? 'female' : 'male', count: 1 }))
+        onPress: () => router.push({ pathname: '/person/[person_id]', params: { person_id: tvSeries.createdBy![0].id } }),
+        label: upperFirst(t('common.messages.go_to_creator', { gender: tvSeries.createdBy![0].gender === 1 ? 'female' : 'male', count: 1 }))
       },
     ] : []),
-    ...(session ? [
+    ...(user ? [
       {
         icon: Icons.AddPlaylist,
-        onPress: () => tvSeries?.id && router.push({
-          pathname: '/playlist/add/tv-series/[tv_series_id]',
+        onPress: () => tvSeries.id && router.push({
+          pathname: '/playlist/add/[type]/[id]',
           params: {
-            tv_series_id: tvSeries?.id,
-            tv_series_name: tvSeries?.name,
+            type: 'tv_series',
+            id: tvSeries.id,
+            title: tvSeries.name,
           }
         }),
         label: upperFirst(t('common.messages.add_to_playlist')),
       },
       {
         icon: Icons.Reco,
-        onPress: () => tvSeries?.id && router.push({
-          pathname: '/reco/send/tv-series/[tv_series_id]',
+        onPress: () => tvSeries.id && router.push({
+          pathname: '/reco/send/[type]/[id]',
           params: {
-            tv_series_id: tvSeries?.id,
-            tv_series_name: tvSeries?.name,
+            type: 'tv_series',
+            id: tvSeries.id,
           }
         }),
         label: upperFirst(t('common.messages.send_to_friend')),
       }
     ] : []),
     ...additionalItemsBottom,
-  ]), [tvSeries, additionalItemsTop, additionalItemsBottom, openSheet, router, t, pathname, activity, session]);
+  ]), [tvSeries, additionalItemsTop, additionalItemsBottom, openSheet, router, t, pathname, log, user]);
 
   const renderItem = useCallback(({ item }: { item: Item }) => {
     if (typeof item === 'string') {
@@ -125,8 +126,8 @@ const BottomSheetTvSeries = React.forwardRef<
         >
           <View style={tw`flex-row items-center gap-2 `}>
             <ImageWithFallback
-            alt={tvSeries?.name ?? ''}
-            source={{ uri: getTmdbImage({ path: tvSeries?.poster_path, size: 'w342' }) ?? '' }}
+            alt={tvSeries.name ?? ''}
+            source={{ uri: getTmdbImage({ path: tvSeries.posterPath, size: 'w342' }) ?? '' }}
             style={[
               { aspectRatio: 2 / 3, height: 'fit-content' },
               tw.style('rounded-md w-12'),
@@ -134,10 +135,10 @@ const BottomSheetTvSeries = React.forwardRef<
             type={'tv_series'}
             />
             <View style={tw`shrink`}>
-              <Text numberOfLines={2} style={tw`shrink`}>{tvSeries?.name}</Text>
-              {tvSeries?.created_by && tvSeries?.created_by.length > 0 && (
+              <Text numberOfLines={2} style={tw`shrink`}>{tvSeries.name}</Text>
+              {tvSeries.createdBy && tvSeries.createdBy.length > 0 && (
                 <Text numberOfLines={1} style={[{ color: colors.mutedForeground }, tw`shrink`]}>
-                {tvSeries.created_by?.map((creator) => creator.name).join(', ')}
+                {tvSeries.createdBy?.map((creator) => creator.name).join(', ')}
                 </Text>
               )}
             </View>
@@ -181,14 +182,14 @@ const BottomSheetTvSeries = React.forwardRef<
       indicatorStyle={mode === 'dark' ? 'white' : 'black'}
       nestedScrollEnabled
       />
-      {tvSeries?.created_by && (
+      {tvSeries.createdBy && (
         <BottomSheetDefaultView
         ref={BottomSheetMainCreditsRef}
         id={`${id}-credits`}
         scrollable
         >
           <FlashList
-          data={tvSeries?.created_by || []}
+          data={tvSeries.createdBy}
           bounces={false}
           renderItem={({ item }) => (
             <Button

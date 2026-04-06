@@ -1,7 +1,6 @@
 import React from 'react';
 import tw from 'apps/mobile/src/lib/tw';
 import { Icons } from 'apps/mobile/src/constants/Icons';
-import { Profile, User } from '@recomendapp/types';
 import { usePathname, useRouter } from 'expo-router';
 import { LucideIcon } from 'lucide-react-native';
 import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
@@ -16,9 +15,10 @@ import { Text } from 'apps/mobile/src/components/ui/text';
 import UserAvatar from 'apps/mobile/src/components/user/UserAvatar';
 import BottomSheetShareUser from './share/BottomSheetShareUser';
 import { FlashList } from '@shopify/flash-list';
+import { UserSummary } from '@packages/api-js';
 
 interface BottomSheetUserProps extends BottomSheetProps {
-  user: User | Profile,
+  user: UserSummary,
   additionalItemsTop?: Item[];
   additionalItemsBottom?: Item[];
 };
@@ -54,7 +54,12 @@ const BottomSheetUser = React.forwardRef<
     },
     {
       icon: Icons.User,
-      onPress: () => router.push(`/user/${user.username}`),
+      onPress: () => router.push({
+        pathname: '/user/[username]',
+        params: {
+          username: user.username,
+        }
+      }),
       label: upperFirst(t('common.messages.go_to_user')),
       disabled: pathname.startsWith(`/user/${user.username}`)
     },
@@ -85,12 +90,12 @@ const BottomSheetUser = React.forwardRef<
           >
             <View style={tw`flex-row items-center gap-2 `}>
               <UserAvatar
-              full_name={user.full_name!}
-              avatar_url={user.avatar_url}
+              full_name={user.name}
+              avatar_url={user.avatar}
               style={tw`w-12 h-12`}
               />
               <View style={tw`shrink`}>
-                <Text numberOfLines={2} style={tw`shrink`}>{user?.full_name}</Text>
+                <Text numberOfLines={2} style={tw`shrink`}>{user.name}</Text>
                 <Text numberOfLines={1} style={[{ color: colors.mutedForeground }, tw`shrink`]}>
                   @{user.username}
                 </Text>

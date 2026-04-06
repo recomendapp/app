@@ -11,17 +11,11 @@ interface MapState {
 
 
 interface UIStore {
-  heartPicks: { tab: UserActivityType; view: ViewType };
-  setHeartPicksTab: (tab: UserActivityType) => void;
-  setHeartPicksView: (view: ViewType) => void;
+  watchlist: { view: ViewType };
+  setWatchlist: (props: Partial<{ view: ViewType }>) => void;
 
-  watchlist: { tab: UserWatchlistType; view: ViewType };
-  setWatchlistTab: (tab: UserWatchlistType) => void;
-  setWatchlistView: (view: ViewType) => void;
-
-  myRecos: { tab: UserRecosType; view: ViewType };
-  setMyRecosTab: (tab: UserRecosType) => void;
-  setMyRecosView: (view: ViewType) => void;
+  myRecos: { view: ViewType };
+  setMyRecos: (props: Partial<{ view: ViewType }>) => void;
 
   playlistView: ViewType;
   setPlaylistView: (view: ViewType) => void;
@@ -43,38 +37,19 @@ interface UIStore {
 export const useUIStore = create<UIStore>()(
 	persist(
 		(set) => ({
-			// Heart Picks
-			heartPicks: {
-				tab: 'movie',
-				view: 'grid',
-			},
-			setHeartPicksTab: (tab) => set(state => ({
-				heartPicks: { ...state.heartPicks, tab },
-			})),
-			setHeartPicksView: (view) => set(state => ({
-				heartPicks: { ...state.heartPicks, view },
-			})),
 			// Watchlist
 			watchlist: {
-				tab: 'movie',
 				view: 'grid',
 			},
-			setWatchlistTab: (tab) => set(state => ({
-				watchlist: { ...state.watchlist, tab },
-			})),
-			setWatchlistView: (view) => set(state => ({
-				watchlist: { ...state.watchlist, view },
+			setWatchlist: (props) => set(state => ({
+				watchlist: { ...state.watchlist, ...props },
 			})),
 			// My Recos
 			myRecos: {
-				tab: 'movie',
 				view: 'grid',
 			},
-			setMyRecosTab: (tab) => set(state => ({
-				myRecos: { ...state.myRecos, tab },
-			})),
-			setMyRecosView: (view) => set(state => ({
-				myRecos: { ...state.myRecos, view },
+			setMyRecos: (props) => set(state => ({
+				myRecos: { ...state.myRecos, ...props },
 			})),
 			// Playlist
 			playlistView: 'list',

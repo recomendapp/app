@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { LegendList, LegendListProps } from '@legendapp/list';
+import { LegendList, LegendListProps } from '@legendapp/list/react-native';
 
 interface MultiRowHorizontalListProps<T> extends Omit<LegendListProps<T[]>, 'data' | 'renderItem' | 'keyExtractor' | 'children'> {
   data: T[];

@@ -1,15 +1,15 @@
+import { Movie } from "@packages/api-js";
 import { Text } from "apps/mobile/src/components/ui/text";
 import { View } from "apps/mobile/src/components/ui/view";
 import tw from "apps/mobile/src/lib/tw";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
-import { MediaMovie } from "@recomendapp/types";
 import { upperFirst } from "lodash";
 import { forwardRef, Fragment, ReactNode, useMemo } from "react";
 import { ViewProps } from "react-native";
 import { useTranslations } from "use-intl";
 
 interface MovieHeaderInfoProps extends Omit<ViewProps, 'children'> {
-  movie: MediaMovie;
+  movie: Movie;
 };
 
 export const MovieHeaderInfo = forwardRef<
@@ -22,8 +22,8 @@ export const MovieHeaderInfo = forwardRef<
   const items = useMemo((): (string | ReactNode)[] => {
     const result: (string | ReactNode)[] = [];
     // Date
-    if (movie.release_date) {
-      result.push(new Date(movie.release_date).getFullYear());
+    if (movie.releaseDate) {
+      result.push(new Date(movie.releaseDate).getFullYear());
     }
     // Runtime
     if (movie.runtime) {

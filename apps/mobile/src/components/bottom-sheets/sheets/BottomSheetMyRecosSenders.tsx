@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import tw from 'apps/mobile/src/lib/tw';
-import { UserRecosAggregated } from '@recomendapp/types';
 import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import { Text } from 'apps/mobile/src/components/ui/text';
 import { upperFirst } from 'lodash';
@@ -12,9 +11,10 @@ import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
+import { RecoSender } from '@packages/api-js';
 
 interface BottomSheetMyRecosSendersProps extends BottomSheetProps {
-  comments: UserRecosAggregated['senders'];
+  comments: RecoSender[];
 };
 
 const BottomSheetMyRecosSenders = React.forwardRef<
@@ -24,7 +24,7 @@ const BottomSheetMyRecosSenders = React.forwardRef<
 	const insets = useSafeAreaInsets();
 	const { colors, mode } = useTheme();
 	const t = useTranslations();
-	const renderItem = useCallback(({ item }: { item: UserRecosAggregated['senders'][number] }) => {
+	const renderItem = useCallback(({ item }: { item: RecoSender }) => {
 		return (
 			<View key={item.user.id} style={[{ backgroundColor: colors.background }, tw`rounded-xl p-2 gap-2`]}>
 				<View style={tw`flex-row items-center justify-between gap-2`}>
@@ -38,7 +38,6 @@ const BottomSheetMyRecosSenders = React.forwardRef<
 			</View>
 		);
 	}, [colors.muted, colors.background]);
-	const keyExtractor = useCallback((item: UserRecosAggregated['senders'][number]) => item.user.id!, []);
 	return (
     <TrueSheet
     ref={ref}
@@ -61,7 +60,7 @@ const BottomSheetMyRecosSenders = React.forwardRef<
 		<FlashList
 		data={comments}
 		renderItem={renderItem}
-		keyExtractor={keyExtractor}
+		keyExtractor={(item) => item.id.toString()}
 		contentContainerStyle={{
 			paddingHorizontal: PADDING_HORIZONTAL,
 			paddingBottom: insets.bottom + PADDING_VERTICAL,

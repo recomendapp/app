@@ -13,42 +13,46 @@ import { useTranslations } from "use-intl";
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { CardMovie } from "apps/mobile/src/components/cards/CardMovie";
 import { HeaderTitle } from "@react-navigation/elements";
-import { useUserActivitiesMovieQuery, useUserProfileQuery } from "apps/mobile/src/api/users/userQueries";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { userByUsernameOptions, userMovieLogsInfiniteOptions } from "@libs/query-client";
 
 interface sortBy {
 	label: string;
-	value: 'watched_date' | 'rating';
+	value: "rating" | "updated_at" | "first_watched_at" | "random";
 }
 
 const UserCollectionMovieScreen = () => {
 	const t = useTranslations();
 	const { width: SCREEN_WIDTH } = useWindowDimensions();
 	const { username } = useLocalSearchParams<{ username: string }>();
-	const { data: userProfile } = useUserProfileQuery({ username: username });
+	const { data: profile } = useQuery(userByUsernameOptions({ username: username }));
 	const { colors, bottomOffset, tabBarHeight } = useTheme();
 	const { showActionSheetWithOptions } = useActionSheet();
 	// States
 	const sortByOptions = useMemo((): sortBy[] => ([
-		{ label: upperFirst(t('common.messages.watched_date')), value: 'watched_date' },
+		{ label: upperFirst(t('common.messages.updated_at')), value: 'updated_at' },
+		{ label: upperFirst(t('common.messages.first_watched_at')), value: 'first_watched_at' },
 		{ label: upperFirst(t('common.messages.rating')), value: 'rating' },
+		{ label: upperFirst(t('common.messages.random')), value: 'random' },
 	]), [t]);
 	const [sortBy, setSortBy] = useState<sortBy>(sortByOptions[0]);
 	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 	const {
-		data: movies,
+		data,
 		isLoading,
 		fetchNextPage,
 		hasNextPage,
 		isRefetching,
 		refetch,
-	} = useUserActivitiesMovieQuery({
-		userId: userProfile?.id || undefined,
+	} = useInfiniteQuery(userMovieLogsInfiniteOptions({
+		userId: profile?.id,
 		filters: {
-			sortBy: sortBy.value,
-			sortOrder,
+			sort_by: sortBy.value,
+			sort_order: sortOrder,
 		}
-	});
-	const loading = movies === undefined || isLoading;
+	}));
+	const movies = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
+	const loading = data === undefined || isLoading;
 	// Handlers
 	const handleSortBy = useCallback(() => {
 		const sortByOptionsWithCancel = [
@@ -70,17 +74,20 @@ const UserCollectionMovieScreen = () => {
 	<>
 		<Stack.Screen
 		options={{
-			title: userProfile ? `@${userProfile.username}` : '',
+			title: profile ? `@${profile.username}` : '',
 			headerTitle: (props) => <HeaderTitle {...props}>{upperFirst(t('common.messages.film', { count: 2 }))}</HeaderTitle>
 		}}
 		/>
 		<LegendList
-		data={movies?.pages.flat() || []}
-		renderItem={({ item }) => (
+		data={movies}
+		renderItem={({ item: { movie, ...log } }) => (
 			<CardMovie
 			variant="poster"
-			movie={item.movie}
-			profileActivity={item}
+			movie={movie}
+			profile={{
+				log: log,
+				user: profile!,
+			}}
 			style={tw`w-full`}
 			/>
 		)}

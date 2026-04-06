@@ -5,7 +5,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useWindowDimensions, View } from "react-native"
 import { useTranslations } from "use-intl";
 import { HeaderTitle } from "@react-navigation/elements";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { CardMovie } from "apps/mobile/src/components/cards/CardMovie";
 import tw from "apps/mobile/src/lib/tw";
 import { Button } from "apps/mobile/src/components/ui/Button";
@@ -14,11 +14,13 @@ import { useActionSheet } from "@expo/react-native-action-sheet";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { Text } from "apps/mobile/src/components/ui/text";
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
-import { useMediaPersonDetailsQuery, useMediaPersonFilmsQuery } from "apps/mobile/src/api/medias/mediaQueries";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { personMoviesInfiniteOptions, personOptions } from "@libs/query-client";
+import { PersonMovie } from "@packages/api-js";
 
 interface sortBy {
 	label: string;
-	value: 'release_date' | 'vote_average';
+	value: 'release_date' | 'vote_average' | 'popularity';
 }
 
 const PersonFilmsScreen = () => {
@@ -32,11 +34,14 @@ const PersonFilmsScreen = () => {
 	const sortByOptions = useMemo((): sortBy[] => [
 		{ label: upperFirst(t('common.messages.release_date')), value: 'release_date' },
 		{ label: upperFirst(t('common.messages.vote_average')), value: 'vote_average' },
+		{ label: upperFirst(t('common.messages.popularity')), value: 'popularity' },
 	], [t]);
 	const [sortBy, setSortBy] = useState<sortBy>(sortByOptions[0]);
 	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 	// Queries
-	const { data: person } = useMediaPersonDetailsQuery({ personId });
+	const { data: person } = useQuery(personOptions({
+		personId,
+	}));
 	const {
 		data,
 		isLoading,
@@ -44,15 +49,15 @@ const PersonFilmsScreen = () => {
 		hasNextPage,
 		isRefetching,
 		refetch,
-	} = useMediaPersonFilmsQuery({
+	} = useInfiniteQuery(personMoviesInfiniteOptions({
 		personId: personId,
 		filters: {
-			sortBy: sortBy.value,
-			sortOrder,
+			sort_by: sortBy.value,
+			sort_order: sortOrder,
 		}
-	});
+	}));
+	const movies = useMemo(() => data?.pages.flatMap(page => page.data), [data]);
 	const loading = useMemo(() => data === undefined || isLoading, [data, isLoading]);
-	const movies = useMemo(() => data?.pages.flat() || [], [data]);
 	// Handlers
 	const handleSortBy = useCallback(() => {
 		const sortByOptionsWithCancel = [
@@ -69,6 +74,15 @@ const PersonFilmsScreen = () => {
 			setSortBy(sortByOptionsWithCancel[selectedIndex] as sortBy);
 		});
 	}, [sortByOptions, showActionSheetWithOptions, sortBy.value, t]);
+
+	const renderItem = useCallback(({ item: { movie } } : { item: PersonMovie }) => (
+		<CardMovie
+		variant="poster"
+		movie={movie}
+		style={tw`w-full`}
+		/>
+	), []);
+
 	return (
 	<>
 		<Stack.Screen
@@ -79,13 +93,7 @@ const PersonFilmsScreen = () => {
 		/>
 		<LegendList
 		data={movies}
-		renderItem={useCallback(({ item } : { item: typeof movies[number] }) => (
-			<CardMovie
-			variant="poster"
-			movie={item.media_movie}
-			style={tw`w-full`}
-			/>
-		), [])}
+		renderItem={renderItem}
 		ListHeaderComponent={
 			<View style={tw`flex flex-row justify-end items-center gap-2 py-2`}>
 				<Button
@@ -115,7 +123,7 @@ const PersonFilmsScreen = () => {
 			SCREEN_WIDTH < 600 ? 4 :
 			SCREEN_WIDTH < 768 ? 5 : 6
 		}
-		onEndReached={useCallback(() => hasNextPage && fetchNextPage(), [hasNextPage, fetchNextPage])}
+		onEndReached={() => hasNextPage && fetchNextPage()}
 		onEndReachedThreshold={0.5}
 		contentContainerStyle={{
 			gap: GAP,
@@ -123,7 +131,7 @@ const PersonFilmsScreen = () => {
 			paddingBottom: bottomOffset + PADDING_VERTICAL,
 		}}
 		scrollIndicatorInsets={{ bottom: tabBarHeight }}
-		keyExtractor={useCallback((item: typeof movies[number]) => item.media_movie.id.toString(), [])}
+		keyExtractor={(item) => item.movie.id.toString()}
 		refreshing={isRefetching}
 		onRefresh={refetch}
 		/>

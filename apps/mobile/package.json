@@ -129,7 +129,9 @@
     "expo-screen-orientation": "*",
     "zustand": "*",
     "better-auth": "*",
-    "@better-auth/expo": "*"
+    "@better-auth/expo": "*",
+    "@better-auth/core": "*",
+    "expo-network": "*"
   },
   "devDependencies": {}
 }

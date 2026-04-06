@@ -7,6 +7,7 @@ import {
   PersistQueryClientProviderProps,
 } from '@tanstack/react-query-persist-client';
 import { persistKey } from 'apps/mobile/src/api';
+import { meKeys } from '@libs/query-client';
 // import { useReactQueryDevTools } from "@dev-plugins/react-query";
 
 const queryStorage = createMMKV({
@@ -40,7 +41,7 @@ const createMMKVPersister = (key: string) => ({
 });
 
 const PERSISTED_QUERY_KEYS = [
-  'auth',
+  meKeys.base,
   'novu',
   'ui',
   persistKey,

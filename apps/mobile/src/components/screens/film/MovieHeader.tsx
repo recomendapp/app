@@ -15,7 +15,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { AnimatedImageWithFallback } from 'apps/mobile/src/components/ui/AnimatedImageWithFallback';
 import { upperFirst } from 'lodash';
-import { MediaMovie, MediaPerson } from '@recomendapp/types';
 import useColorConverter from 'apps/mobile/src/hooks/useColorConverter';
 import { Skeleton } from 'apps/mobile/src/components/ui/Skeleton';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -27,17 +26,18 @@ import useBottomSheetStore from 'apps/mobile/src/stores/useBottomSheetStore';
 import { useLocale, useTranslations } from 'use-intl';
 import { Text, TextProps } from 'apps/mobile/src/components/ui/text';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
-import BottomSheetUserActivityMovieFollowersRating from 'apps/mobile/src/components/bottom-sheets/sheets/BottomSheetUserActivityMovieFollowersRating';
+import BottomSheetMovieFollowersRating from 'apps/mobile/src/components/bottom-sheets/sheets/BottomSheetMovieFollowersRating';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { MovieHeaderInfo } from './MovieHeaderInfo';
 import { useImagePalette } from 'apps/mobile/src/hooks/useImagePalette';
 import AnimatedImage from 'apps/mobile/src/components/ui/AnimatedImage';
 import BottomSheetPerson from 'apps/mobile/src/components/bottom-sheets/sheets/BottomSheetPerson';
 import { getTmdbImage } from 'apps/mobile/src/lib/tmdb/getTmdbImage';
-import { useMediaMovieFollowersAverageRatingQuery } from 'apps/mobile/src/api/medias/mediaQueries';
+// import { useMediaMovieFollowersAverageRatingQuery } from 'apps/mobile/src/api/medias/mediaQueries';
+import { Movie, PersonCompact } from '@packages/api-js';
 
 interface MovieHeaderProps {
-	movie?: MediaMovie | null;
+	movie?: Movie | null;
 	loading: boolean;
 	scrollY: SharedValue<number>;
 	triggerHeight: SharedValue<number>;
@@ -54,12 +54,7 @@ const MovieHeader: React.FC<MovieHeaderProps> = ({
 	const { colors } = useTheme();
 	const navigationHeaderHeight = useHeaderHeight();
 	const bgColor = hslToRgb(colors.background);
-	const {
-		data: followersAvgRating,
-	} = useMediaMovieFollowersAverageRatingQuery({
-		movieId: movie?.id,
-	});
-	const { palette } = useImagePalette(getTmdbImage({ path: movie?.poster_path, size: 'w92' }) || undefined);
+	const { palette } = useImagePalette(getTmdbImage({ path: movie?.posterPath, size: 'w92' }) || undefined);
 	// SharedValue
 	const posterHeight = useSharedValue(0);
 	const headerHeight = useSharedValue(0);
@@ -130,8 +125,8 @@ const MovieHeader: React.FC<MovieHeaderProps> = ({
 		]}
 		>
 			{movie && (
-				movie.backdrop_path ? (
-					<AnimatedImage transition={500} style={tw`absolute inset-0`} source={{ uri: getTmdbImage({ path: movie.backdrop_path, size: 'w1280' }) ?? '' }} />
+				movie.backdropPath ? (
+					<AnimatedImage transition={500} style={tw`absolute inset-0`} source={{ uri: getTmdbImage({ path: movie.backdropPath, size: 'w1280' }) ?? '' }} />
 				) : (palette && palette.length > 1 ) && (
 					<Animated.View entering={FadeIn} style={[tw`absolute inset-0`, { backgroundColor: palette.at(0) }]} />
 				)
@@ -164,7 +159,7 @@ const MovieHeader: React.FC<MovieHeaderProps> = ({
 					}}
 					transition={250}
 					alt={movie?.title ?? ''}
-					source={{ uri: getTmdbImage({ path: movie?.poster_path, size: 'w780' }) ?? '' }}
+					source={{ uri: getTmdbImage({ path: movie?.posterPath, size: 'w780' }) ?? '' }}
 					style={[
 						{ aspectRatio: 2 / 3 },
 						tw`rounded-md w-48 h-auto`,
@@ -173,16 +168,16 @@ const MovieHeader: React.FC<MovieHeaderProps> = ({
 					type={'movie'}
 					>
 						<View style={tw`absolute gap-2 top-2 right-2`}>
-							{movie?.vote_average ? (
+							{movie?.voteAverage ? (
 								<IconMediaRating
-								rating={movie.vote_average}
+								rating={movie.voteAverage}
 								variant="general"
 								/>
 							) : null}
-							{followersAvgRating && (
-								<Pressable onPress={() => openSheet(BottomSheetUserActivityMovieFollowersRating, { movieId: movie?.id! })}>
+							{movie?.followerAvgRating && (
+								<Pressable onPress={() => openSheet(BottomSheetMovieFollowersRating, { movieId: movie.id })}>
 									<IconMediaRating
-									rating={followersAvgRating.follower_avg_rating}
+									rating={movie.followerAvgRating}
 									variant="follower"
 									/>
 								</Pressable>
@@ -223,7 +218,7 @@ const MovieHeader: React.FC<MovieHeaderProps> = ({
 	);
 };
 
-const Directors = ({ directors, ...props }: Omit<TextProps, 'children'> & { directors: MediaPerson[] }) => {
+const Directors = ({ directors, ...props }: Omit<TextProps, 'children'> & { directors: PersonCompact[] }) => {
 	const router = useRouter();
 	const locale = useLocale();
 	const openSheet = useBottomSheetStore((state) => state.openSheet);
@@ -234,10 +229,10 @@ const Directors = ({ directors, ...props }: Omit<TextProps, 'children'> & { dire
 	const names = directors.map(d => d.name!);
 	const formatted = listFormatter.formatToParts(names);
 
-	const onPress = useCallback((person: MediaPerson) => {
+	const onPress = useCallback((person: PersonCompact) => {
 		router.push({ pathname: '/person/[person_id]', params: { person_id: person.slug || person.id }})
 	}, [router]);
-	const onLongPress = useCallback((person: MediaPerson) => {
+	const onLongPress = useCallback((person: PersonCompact) => {
 		openSheet(BottomSheetPerson, {
 			person: person,
 		});

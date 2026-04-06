@@ -2,8 +2,6 @@ import tw from 'apps/mobile/src/lib/tw';
 import { upperFirst } from 'lodash';
 import { Button } from 'apps/mobile/src/components/ui/Button';
 import useBottomSheetStore from 'apps/mobile/src/stores/useBottomSheetStore';
-import { usePlaylistInsertMutation } from 'apps/mobile/src/api/playlists/playlistMutations';
-import { Playlist, PlaylistType } from '@recomendapp/types';
 import * as z from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,12 +15,12 @@ import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme
 import { Label } from 'apps/mobile/src/components/ui/Label';
 import { forwardRef, useCallback } from 'react';
 import { Text } from 'apps/mobile/src/components/ui/text';
-import { FlashList } from '@shopify/flash-list';
+import { Playlist } from '@packages/api-js';
+import { usePlaylistInsertMutation } from '@libs/query-client';
 
 interface BottomSheetPlaylistCreateProps extends BottomSheetProps {
 	onCreate?: (playlist: Playlist) => void;
 	placeholder?: string | null;
-	playlistType?: PlaylistType;
 }
 
 const TITLE_MIN_LENGTH = 1;
@@ -31,40 +29,32 @@ const TITLE_MAX_LENGTH = 100;
 const BottomSheetPlaylistCreate = forwardRef<
 	React.ComponentRef<typeof TrueSheet>,
 	BottomSheetPlaylistCreateProps
->(({ id, onCreate,  placeholder, playlistType, ...props }, ref) => {
+>(({ id, onCreate,  placeholder, ...props }, ref) => {
 	const toast = useToast();
 	const closeSheet = useBottomSheetStore((state) => state.closeSheet);
 	const t = useTranslations();
-	const { mutateAsync: createPlaylistMutation, isPending: isPlaylistCreating } = usePlaylistInsertMutation();
-
-	const typeOptions: { key: PlaylistType; label: string }[] = [
-		{ key: 'movie', label: upperFirst(t('common.messages.film', { count: 2 })) },
-		{ key: 'tv_series', label: upperFirst(t('common.messages.tv_series', { count: 2 })) },
-	];
+	const { mutateAsync: createPlaylist, isPending } = usePlaylistInsertMutation();
 
 	/* ---------------------------------- FORM ---------------------------------- */
 	const playlistSchema = z.object({
 		title: z.string()
 			.min(TITLE_MIN_LENGTH, { message: upperFirst(t('common.form.length.char_min', { count: TITLE_MIN_LENGTH }))})
 			.max(TITLE_MAX_LENGTH, { message: upperFirst(t('common.form.length.char_max', { count: TITLE_MIN_LENGTH }))}),
-		type: z.enum(['movie', 'tv_series']),
 	});
 	type PlaylistFormValues = z.infer<typeof playlistSchema>;
-	const defaultValues: Partial<PlaylistFormValues> = {
-		title: '',
-		type: playlistType || 'movie',
-	};
 	const form = useForm<PlaylistFormValues>({
 		resolver: zodResolver(playlistSchema),
-		defaultValues: defaultValues,
 		mode: 'onChange',
 	});
 	/* -------------------------------------------------------------------------- */
 
 	const onSubmit = useCallback(async (values: PlaylistFormValues) => {
-		await createPlaylistMutation({
-			title: values.title,
-			type: values.type,
+		await createPlaylist({
+			body: {
+				title: values.title.replace(/\s+/g, ' ').trim(),
+				description: null,
+				visibility: 'public',
+			}
 		}, {
 			onSuccess: (playlist) => {
 				toast.success(upperFirst(t('common.messages.added', { gender: 'female', count: 1 })));
@@ -76,7 +66,7 @@ const BottomSheetPlaylistCreate = forwardRef<
 				toast.error(upperFirst(t('common.messages.error')), { description: upperFirst(t('common.messages.an_error_occurred')) });
 			}
 		});
-	}, [createPlaylistMutation, toast, t, onCreate, closeSheet, id, form]);
+	}, [createPlaylist, toast, t, onCreate, closeSheet, id, form]);
 
 	return (
 		<TrueSheet
@@ -102,48 +92,23 @@ const BottomSheetPlaylistCreate = forwardRef<
 					onBlur={onBlur}
 					placeholder={placeholder ?? upperFirst(t('pages.playlist.form.title.placeholder'))}
 					autoCorrect={false}
-					disabled={isPlaylistCreating}
+					disabled={isPending}
 					error={form.formState.errors.title?.message}
 					/>
 				</View>
-			)}
-			/>
-			<Controller
-			name='type'
-			control={form.control}
-			render={({ field: { onChange, value } }) => (
-			<View style={[tw`w-full`, { gap: GAP }]}>
-				<Label>{upperFirst(t('common.messages.select_a_type'))}</Label>
-				<FlashList
-				data={typeOptions}
-				extraData={value}
-				horizontal
-				style={tw`w-full`}
-				ItemSeparatorComponent={() => <View style={{ width: GAP }} />}
-				renderItem={({ item } : { item: { key: string; label: string } }) => (
-					<Button
-					variant={value === item.key ? 'accent-yellow' : 'outline'}
-					onPress={() => onChange(item.key)}
-					disabled={playlistType && item.key !== playlistType}
-					>
-						{item.label}
-					</Button>
-				)}
-				/>
-			</View>
 			)}
 			/>
 			<Button
 			variant='outline'
 			onPress={() => {
 				if (form.getValues('title').length === 0 && placeholder && placeholder.length > 0) {
-					onSubmit({ title: placeholder, type: form.getValues('type') });
+					onSubmit({ title: placeholder });
 				} else {
 					form.handleSubmit(onSubmit)();
 				}
 			}}
 			containerStyle={tw`w-full`}
-			disabled={isPlaylistCreating}
+			disabled={isPending}
 			>
 				{upperFirst(t('common.messages.create'))}
 			</Button>

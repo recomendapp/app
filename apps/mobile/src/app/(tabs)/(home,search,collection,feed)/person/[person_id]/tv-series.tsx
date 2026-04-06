@@ -5,7 +5,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useWindowDimensions, View } from "react-native"
 import { useTranslations } from "use-intl";
 import { HeaderTitle } from "@react-navigation/elements";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import tw from "apps/mobile/src/lib/tw";
 import { Button } from "apps/mobile/src/components/ui/Button";
 import { Icons } from "apps/mobile/src/constants/Icons";
@@ -14,11 +14,13 @@ import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { Text } from "apps/mobile/src/components/ui/text";
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { CardTvSeries } from "apps/mobile/src/components/cards/CardTvSeries";
-import { useMediaPersonDetailsQuery, useMediaPersonTvSeriesQuery } from "apps/mobile/src/api/medias/mediaQueries";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { personOptions, personTvSeriesInfiniteOptions } from "@libs/query-client";
+import { PersonTvSeries } from "@packages/api-js";
 
 interface sortBy {
 	label: string;
-	value: 'last_appearance_date' | 'first_air_date' | 'vote_average';
+	value: "last_air_date" | "popularity" | "vote_average";
 }
 
 const PersonTvSeriesScreen = () => {
@@ -30,14 +32,16 @@ const PersonTvSeriesScreen = () => {
 	const { showActionSheetWithOptions } = useActionSheet();
 	// States
 	const sortByOptions = useMemo((): sortBy[] => [
-		{ label: upperFirst(t('common.messages.last_appearance_date')), value: 'last_appearance_date' },
-		{ label: upperFirst(t('common.messages.release_date')), value: 'first_air_date' },
+		{ label: upperFirst(t('common.messages.last_air_date')), value: 'last_air_date' },
+		{ label: upperFirst(t('common.messages.popularity')), value: 'popularity' },
 		{ label: upperFirst(t('common.messages.vote_average')), value: 'vote_average' },
 	], [t]);
 	const [sortBy, setSortBy] = useState<sortBy>(sortByOptions[0]);
 	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 	// Queries
-	const { data: person } = useMediaPersonDetailsQuery({ personId });
+	const { data: person } = useQuery(personOptions({
+		personId,
+	}));
 	const {
 		data,
 		isLoading,
@@ -45,15 +49,15 @@ const PersonTvSeriesScreen = () => {
 		hasNextPage,
 		isRefetching,
 		refetch,
-	} = useMediaPersonTvSeriesQuery({
+	} = useInfiniteQuery(personTvSeriesInfiniteOptions({
 		personId: personId,
 		filters: {
-			sortBy: sortBy.value,
-			sortOrder,
+			sort_by: sortBy.value,
+			sort_order: sortOrder,
 		}
-	});
+	}));
+	const tvSeries = useMemo(() => data?.pages.flatMap(page => page.data), [data]);
 	const loading = useMemo(() => data === undefined || isLoading, [data, isLoading]);
-	const tvSeries = useMemo(() => data?.pages.flat() || [], [data]);
 	// Handlers
 	const handleSortBy = useCallback(() => {
 		const sortByOptionsWithCancel = [
@@ -70,6 +74,15 @@ const PersonTvSeriesScreen = () => {
 			setSortBy(sortByOptionsWithCancel[selectedIndex] as sortBy);
 		});
 	}, [sortByOptions, showActionSheetWithOptions, sortBy.value, t]);
+
+	const renderItem = useCallback(({ item: { tvSeries } } : { item: PersonTvSeries }) => (
+		<CardTvSeries
+		variant="poster"
+		tvSeries={tvSeries}
+		style={tw`w-full`}
+		/>
+	), []);
+
 	return (
 	<>
 		<Stack.Screen
@@ -80,13 +93,7 @@ const PersonTvSeriesScreen = () => {
 		/>
 		<LegendList
 		data={tvSeries}
-		renderItem={useCallback(({ item } : { item: typeof tvSeries[number] }) => (
-			<CardTvSeries
-			variant="poster"
-			tvSeries={item.media_tv_series}
-			style={tw`w-full`}
-			/>
-		), [])}
+		renderItem={renderItem}
 		ListHeaderComponent={
 			<View style={tw`flex flex-row justify-end items-center gap-2 py-2`}>
 				<Button
@@ -116,7 +123,7 @@ const PersonTvSeriesScreen = () => {
 			SCREEN_WIDTH < 600 ? 4 :
 			SCREEN_WIDTH < 768 ? 5 : 6
 		}
-		onEndReached={useCallback(() => hasNextPage && fetchNextPage(), [hasNextPage, fetchNextPage])}
+		onEndReached={() => hasNextPage && fetchNextPage()}
 		onEndReachedThreshold={0.5}
 		contentContainerStyle={{
 			gap: GAP,
@@ -124,7 +131,7 @@ const PersonTvSeriesScreen = () => {
 			paddingHorizontal: PADDING_HORIZONTAL,
 		}}
 		scrollIndicatorInsets={{ bottom: tabBarHeight }}
-		keyExtractor={useCallback((item: typeof tvSeries[number]) => item.media_tv_series.id.toString(), [])}
+		keyExtractor={(item) => item.tvSeries.id.toString()}
 		refreshing={isRefetching}
 		onRefresh={refetch}
 		/>

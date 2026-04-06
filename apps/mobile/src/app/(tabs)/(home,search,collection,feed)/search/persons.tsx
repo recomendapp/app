@@ -1,4 +1,3 @@
-import { useSearchPersonsQuery } from "apps/mobile/src/api/search/searchQueries";
 import { CardPerson } from "apps/mobile/src/components/cards/CardPerson";
 import ErrorMessage from "apps/mobile/src/components/ErrorMessage";
 import { Text } from "apps/mobile/src/components/ui/text";
@@ -10,12 +9,13 @@ import useSearchStore from "apps/mobile/src/stores/useSearchStore";
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { LegendList, LegendListRef } from "@legendapp/list";
 import { useScrollToTop } from "@react-navigation/native";
-import { MediaPerson } from "@recomendapp/types";
 import { upperFirst } from "lodash";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useKeyboardState } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslations } from "use-intl";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { searchPersonsInfiniteOptions } from "@libs/query-client";
 
 const SearchPersonsScreen = () => {
 	const insets = useSafeAreaInsets();
@@ -36,9 +36,12 @@ const SearchPersonsScreen = () => {
 		fetchNextPage,
 		refetch,
 		isRefetching,
-	} = useSearchPersonsQuery({
-		query: search,
-	});
+	} = useInfiniteQuery(searchPersonsInfiniteOptions({
+		filters: {
+			q: search
+		}
+	}));
+	const persons = useMemo(() => data?.pages.flatMap(page => page.data) ?? [], [data]);
 	
 	// REFs
 	const scrollRef = useRef<LegendListRef>(null);
@@ -49,7 +52,7 @@ const SearchPersonsScreen = () => {
 		<LegendList
 			key={search}
 			ref={scrollRef}
-			data={data?.pages.flatMap(page => page.data) as MediaPerson[] || []}
+			data={persons}
 			renderItem={({ item }) => <CardPerson variant="list" person={item} /> }
 			contentContainerStyle={{
 				paddingLeft: insets.left + PADDING_HORIZONTAL,

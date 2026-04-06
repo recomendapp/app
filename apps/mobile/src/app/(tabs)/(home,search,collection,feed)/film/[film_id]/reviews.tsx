@@ -12,20 +12,20 @@ import { useCallback, useMemo, useState } from "react";
 import { CardReviewMovie } from "apps/mobile/src/components/cards/reviews/CardReviewMovie";
 import { Button } from "apps/mobile/src/components/ui/Button";
 import { Icons } from "apps/mobile/src/constants/Icons";
-import { UserReviewMovie } from "@recomendapp/types";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
-import { useMediaMovieDetailsQuery, useMediaMovieReviewsQuery } from "apps/mobile/src/api/medias/mediaQueries";
-import { useUserActivityMovieQuery } from "apps/mobile/src/api/users/userQueries";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { movieLogOptions, movieOptions, movieReviewsInfiniteOptions } from "@libs/query-client";
+import { ReviewMovieWithAuthor } from "@packages/api-js";
 
 interface sortBy {
 	label: string;
-	value: 'updated_at' | 'created_at' | 'likes_count';
+	value: 'updated_at' | 'created_at' | 'likes_count' | 'rating' | 'random';
 }
 
 const FilmReviews = () => {
 	const t = useTranslations();
 	const router = useRouter();
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const { film_id } = useLocalSearchParams<{ film_id: string }>();
 	const { id: movieId } = getIdFromSlug(film_id);
 	const { colors, bottomOffset, tabBarHeight } = useTheme();
@@ -35,17 +35,19 @@ const FilmReviews = () => {
 		{ label: upperFirst(t('common.messages.date_updated')), value: 'updated_at' },
 		{ label: upperFirst(t('common.messages.date_created')), value: 'created_at' },
 		{ label: upperFirst(t('common.messages.number_of_likes')), value: 'likes_count' },
+		{ label: upperFirst(t('common.messages.rating')), value: 'rating' },
+		{ label: upperFirst(t('common.messages.random')), value: 'random' },
 	], [t]);
 	const [sortBy, setSortBy] = useState<sortBy>(sortByOptions[0]);
 	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 	// Requests
-	const { data: movie } = useMediaMovieDetailsQuery({ movieId: movieId });
+	const { data: movie } = useQuery(movieOptions({ movieId: movieId }));
 	const {
 		data: activity,
-	} = useUserActivityMovieQuery({
-		userId: session?.user.id,
+	} = useQuery(movieLogOptions({
+		userId: user?.id,
 		movieId: movieId,
-	});
+	}));
 	const {
 		data,
 		isLoading,
@@ -53,15 +55,15 @@ const FilmReviews = () => {
 		hasNextPage,
 		isRefetching,
 		refetch,
-	} = useMediaMovieReviewsQuery({
+	} = useInfiniteQuery(movieReviewsInfiniteOptions({
 		movieId: movieId,
 		filters: {
-			sortBy: sortBy.value,
-			sortOrder,
+			sort_by: sortBy.value,
+			sort_order: sortOrder,
 		}
-	});
+	}));
 	const loading = data === undefined || isLoading;
-	const reviews = useMemo(() => data?.pages.flat() || [], [data]);
+	const reviews = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
 	// Handlers
 	const handleSortBy = useCallback(() => {
 		const sortByOptionsWithCancel = [
@@ -81,6 +83,16 @@ const FilmReviews = () => {
 	const handleSortOrderToggle = useCallback(() => {
 		setSortOrder((prev) => prev === 'asc' ? 'desc' : 'asc');
 	}, []);
+
+	const renderItem = useCallback(({ item: { author, rating, ...review } } : { item: ReviewMovieWithAuthor }) => (
+		<CardReviewMovie
+		review={review}
+		author={author}
+		rating={rating}
+		url={{ pathname: `/user/[username]/film/[film_id]`, params: { username: author.username, film_id: review.movieId } }}
+		/>
+	), [movie, movieId]);
+
 	return (
 	<>
 		<Stack.Screen
@@ -96,7 +108,7 @@ const FilmReviews = () => {
 				}}
 				/>
 			) : undefined,
-			unstable_headerRightItems: session ? (props) => [
+			unstable_headerRightItems: user ? (props) => [
 				...(activity !== undefined ? [
 					{
 						type: "button",
@@ -122,14 +134,7 @@ const FilmReviews = () => {
 		/>
 		<LegendList
 		data={reviews}
-		renderItem={useCallback(({ item } : { item: UserReviewMovie }) => (
-			<CardReviewMovie
-			review={item}
-			activity={item.activity!}
-			author={item.activity!.user!}
-			url={`/film/${movie?.slug || movie?.id}/review/${item.id}`}
-			/>
-		), [])}
+		renderItem={renderItem}
 		ListHeaderComponent={
 			<View style={tw.style('flex flex-row justify-end items-center gap-2 py-2')}>
 				<Button
@@ -160,7 +165,7 @@ const FilmReviews = () => {
 		}}
 		maintainVisibleContentPosition={false}
 		scrollIndicatorInsets={{ bottom: tabBarHeight }}
-		keyExtractor={useCallback((item: UserReviewMovie) => item.id.toString(), [])}
+		keyExtractor={(item) => item.id.toString()}
 		refreshing={isRefetching}
 		onRefresh={refetch}
 		/>

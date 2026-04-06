@@ -55,7 +55,7 @@ const FeedLayout = () => {
 	tabBar={(props) => <TabBar {...props} />}
 	>
 		<MaterialTopTabs.Screen name="index" options={{ title: upperFirst(t('common.messages.community')) }} />
-		<MaterialTopTabs.Screen name="cast-crew" options={{ title: upperFirst(t('common.messages.cast_and_crew')) }} />
+		<MaterialTopTabs.Screen name="persons" options={{ title: upperFirst(t('common.messages.cast_and_crew')) }} />
 	</MaterialTopTabs>
 	)
 };

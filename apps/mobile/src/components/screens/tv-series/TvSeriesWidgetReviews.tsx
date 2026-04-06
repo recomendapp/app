@@ -7,13 +7,13 @@ import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { useTranslations } from "use-intl";
 import { Text } from "apps/mobile/src/components/ui/text";
-import { MediaTvSeries, UserReviewTvSeries } from "@recomendapp/types";
 import { CardReviewTvSeries } from "apps/mobile/src/components/cards/reviews/CardReviewTvSeries";
+import { ReviewTvSeriesWithAuthor, TvSeries } from "@packages/api-js";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useMediaTvSeriesReviewsQuery } from "apps/mobile/src/api/medias/mediaQueries";
+import { tvSeriesReviewsInfiniteOptions } from "@libs/query-client";
 
 interface TvSeriesWidgetReviewsProps extends React.ComponentPropsWithoutRef<typeof View> {
-	tvSeries: MediaTvSeries;
+	tvSeries: TvSeries;
 	url: Href;
 	labelStyle?: StyleProp<TextStyle>;
 	containerStyle?: StyleProp<ViewStyle>;
@@ -34,13 +34,10 @@ const TvSeriesWidgetReviews = ({
 		isLoading,
 		fetchNextPage,
 		hasNextPage,
-	} = useMediaTvSeriesReviewsQuery({
+	} = useInfiniteQuery(tvSeriesReviewsInfiniteOptions({
 		tvSeriesId: tvSeries.id,
-		filters: {
-			sortBy: 'updated_at',
-			sortOrder: 'desc',
-		}
-	});
+	}));
+	const flattenedReviews = reviews?.pages.flatMap(page => page.data) || [];
 	const loading = reviews === undefined || isLoading;
 
 	return (
@@ -53,20 +50,19 @@ const TvSeriesWidgetReviews = ({
 				<Icons.ChevronRight color={colors.mutedForeground} />
 			</View>
 		</Link>
-		<LegendList<UserReviewTvSeries>
+		<LegendList<ReviewTvSeriesWithAuthor>
 		key={loading ? 'loading' : 'reviews'}
-		data={loading ? new Array(3).fill(null) : reviews?.pages.flat()}
-		renderItem={({ item }) => (
-			!loading ? (
-				<CardReviewTvSeries
-				review={item}
-				activity={item.activity!}
-				author={item.activity?.user!} style={tw`w-86`}
-				url={`/tv-series/${tvSeries?.slug || tvSeries?.id}/review/${item.id}`}
-				/>
-			) : (
-				<CardReviewTvSeries skeleton style={tw`w-86`} />
-			)
+		data={loading ? new Array(3).fill(null) : flattenedReviews}
+		renderItem={({ item: { rating, author, ...review } }) => (
+			<CardReviewTvSeries
+			{...(!loading ? {
+				review: review,
+				author: author,
+				rating: rating,
+				url: { pathname: '/user/[username]/tv-series/[tv_series_id]', params: { username: author.username, tv_series_id: review.tvSeriesId } }
+			} : { skeleton: true })}
+			style={tw`w-86`}
+			/>
 		)}
 		ListEmptyComponent={
 			<Text style={[tw``, { color: colors.mutedForeground }]}>

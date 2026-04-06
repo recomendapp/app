@@ -15,7 +15,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { AnimatedImageWithFallback } from 'apps/mobile/src/components/ui/AnimatedImageWithFallback';
 import { upperFirst } from 'lodash';
-import { MediaPerson, MediaTvSeries } from '@recomendapp/types';
 import useColorConverter from 'apps/mobile/src/hooks/useColorConverter';
 import { Skeleton } from 'apps/mobile/src/components/ui/Skeleton';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -27,17 +26,17 @@ import useBottomSheetStore from 'apps/mobile/src/stores/useBottomSheetStore';
 import { useLocale, useTranslations } from 'use-intl';
 import { Text, TextProps } from 'apps/mobile/src/components/ui/text';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
-import BottomSheetUserActivityTvSeriesFollowersRating from 'apps/mobile/src/components/bottom-sheets/sheets/BottomSheetUserActivityTvSeriesFollowersRating';
+import BottomSheetTvSeriesFollowersRating from 'apps/mobile/src/components/bottom-sheets/sheets/BottomSheetTvSeriesFollowersRating';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { TvSeriesHeaderInfo } from './TvSeriesHeaderInfo';
 import { useImagePalette } from 'apps/mobile/src/hooks/useImagePalette';
 import AnimatedImage from 'apps/mobile/src/components/ui/AnimatedImage';
 import BottomSheetPerson from 'apps/mobile/src/components/bottom-sheets/sheets/BottomSheetPerson';
 import { getTmdbImage } from 'apps/mobile/src/lib/tmdb/getTmdbImage';
-import { useMediaTvSeriesFollowersAverageRatingQuery } from 'apps/mobile/src/api/medias/mediaQueries';
+import { PersonCompact, TvSeries } from '@packages/api-js';
 
 interface TvSeriesHeaderProps {
-	tvSeries?: MediaTvSeries | null;
+	tvSeries?: TvSeries | null;
 	loading: boolean;
 	scrollY: SharedValue<number>;
 	triggerHeight: SharedValue<number>;
@@ -54,12 +53,7 @@ const TvSeriesHeader: React.FC<TvSeriesHeaderProps> = ({
 	const { colors } = useTheme();
 	const navigationHeaderHeight = useHeaderHeight();
 	const bgColor = hslToRgb(colors.background);
-	const {
-		data: followersAvgRating,
-	} = useMediaTvSeriesFollowersAverageRatingQuery({
-		tvSeriesId: tvSeries?.id,
-	});
-	const { palette } = useImagePalette(getTmdbImage({ path: tvSeries?.poster_path, size: 'w92' }) || undefined);
+	const { palette } = useImagePalette(getTmdbImage({ path: tvSeries?.posterPath, size: 'w92' }) || undefined);
 	// SharedValue
 	const posterHeight = useSharedValue(0);
 	const headerHeight = useSharedValue(0);
@@ -130,8 +124,8 @@ const TvSeriesHeader: React.FC<TvSeriesHeaderProps> = ({
 		]}
 		>
 			{tvSeries && (
-				tvSeries.backdrop_path ? (
-					<AnimatedImage transition={500} style={tw`absolute inset-0`} source={{ uri: getTmdbImage({ path: tvSeries.backdrop_path, size: 'w1280' }) ?? '' }} />
+				tvSeries.backdropPath ? (
+					<AnimatedImage transition={500} style={tw`absolute inset-0`} source={{ uri: getTmdbImage({ path: tvSeries.backdropPath, size: 'w1280' }) ?? '' }} />
 				) : (palette && palette.length > 1 ) && (
 					<Animated.View entering={FadeIn} style={[tw`absolute inset-0`, { backgroundColor: palette.at(0) }]} />
 				)
@@ -164,7 +158,7 @@ const TvSeriesHeader: React.FC<TvSeriesHeaderProps> = ({
 					}}
 					transition={250}
 					alt={tvSeries?.name ?? ''}
-					source={{ uri: getTmdbImage({ path: tvSeries?.poster_path, size: 'w780' }) ?? '' }}
+					source={{ uri: getTmdbImage({ path: tvSeries?.posterPath, size: 'w780' }) ?? '' }}
 					style={[
 						{ aspectRatio: 2 / 3 },
 						tw.style('rounded-md w-48 h-auto'),
@@ -173,16 +167,16 @@ const TvSeriesHeader: React.FC<TvSeriesHeaderProps> = ({
 					type={'tv_series'}
 					>
 						<View style={tw`absolute gap-2 top-2 right-2`}>
-							{tvSeries?.vote_average ? (
+							{tvSeries?.voteAverage ? (
 								<IconMediaRating
-								rating={tvSeries.vote_average}
+								rating={tvSeries.voteAverage}
 								variant="general"
 								/>
 							) : null}
-							{followersAvgRating && (
-								<Pressable onPress={() => openSheet(BottomSheetUserActivityTvSeriesFollowersRating, { tvSeriesId: tvSeries?.id! })}>
+							{tvSeries?.followerAvgRating && (
+								<Pressable onPress={() => openSheet(BottomSheetTvSeriesFollowersRating, { tvSeriesId: tvSeries.id })}>
 									<IconMediaRating
-									rating={followersAvgRating.follower_avg_rating}
+									rating={tvSeries.followerAvgRating}
 									variant="follower"
 									/>
 								</Pressable>
@@ -211,8 +205,8 @@ const TvSeriesHeader: React.FC<TvSeriesHeaderProps> = ({
 							{tvSeries?.name || upperFirst(t('common.messages.tv_series_not_found'))}
 						</Text>
 					) : <Skeleton style={tw.style('w-64 h-12')} />}
-					{tvSeries?.created_by ? (
-						<Directors style={tw`text-center`} directors={tvSeries.created_by} />
+					{tvSeries?.createdBy ? (
+						<Directors style={tw`text-center`} directors={tvSeries.createdBy} />
 					) : null}
 				</View>
 				{tvSeries ? <TvSeriesHeaderInfo tvSeries={tvSeries} /> : loading ? <Skeleton style={tw.style('w-32 h-8')} /> : null}
@@ -222,7 +216,7 @@ const TvSeriesHeader: React.FC<TvSeriesHeaderProps> = ({
 	);
 };
 
-const Directors = ({ directors, ...props }: Omit<TextProps, 'children'> & { directors: MediaPerson[] }) => {
+const Directors = ({ directors, ...props }: Omit<TextProps, 'children'> & { directors: PersonCompact[] }) => {
 	const router = useRouter();
 	const locale = useLocale();
 	const openSheet = useBottomSheetStore((state) => state.openSheet);
@@ -233,10 +227,10 @@ const Directors = ({ directors, ...props }: Omit<TextProps, 'children'> & { dire
 	const names = directors.map(d => d.name!);
 	const formatted = listFormatter.formatToParts(names);
 
-	const onPress = useCallback((person: MediaPerson) => {
+	const onPress = useCallback((person: PersonCompact) => {
 		router.push({ pathname: '/person/[person_id]', params: { person_id: person.slug || person.id }})
 	}, [router]);
-	const onLongPress = useCallback((person: MediaPerson) => {
+	const onLongPress = useCallback((person: PersonCompact) => {
 		openSheet(BottomSheetPerson, {
 			person: person,
 		});

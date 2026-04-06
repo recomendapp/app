@@ -25,7 +25,8 @@ import { logger } from 'apps/mobile/src/logger';
 import { LoopCarousel } from 'apps/mobile/src/components/ui/LoopCarousel';
 import { Image } from 'expo-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useUIBackgroundsQuery } from 'apps/mobile/src/api/ui/uiQueries';
+import { useQuery } from '@tanstack/react-query';
+import { uiBackgroundsOptions } from '../../api/ui/uiOptions';
 
 const ForgotPasswordScreen = () => {
 	const supabase = useSupabaseClient();
@@ -45,7 +46,7 @@ const ForgotPasswordScreen = () => {
 
 	const {
 		data: backgrounds,
-	} = useUIBackgroundsQuery();
+	} = useQuery(uiBackgroundsOptions());
 
 	/* ------------------------------- FORM SCHEMA ------------------------------ */
 	const forgotPasswordSchema = z.object({

@@ -7,10 +7,11 @@ import { Icons } from "apps/mobile/src/constants/Icons";
 import { upperFirst } from "lodash";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useTranslations } from "use-intl";
-import { Playlist } from "@recomendapp/types";
 import { useCallback, useMemo } from "react";
 import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
-import { useUserPlaylistsSavedQuery } from "apps/mobile/src/api/users/userQueries";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { userPlaylistsSavedInfiniteOptions } from "@libs/query-client";
+import { PlaylistWithOwner } from "@packages/api-js";
 
 const CollectionSavedScreen = () => {
 	const { user } = useAuth();
@@ -23,19 +24,17 @@ const CollectionSavedScreen = () => {
 		fetchNextPage,
 		refetch,
 		hasNextPage,
-	} = useUserPlaylistsSavedQuery({
+	} = useInfiniteQuery(userPlaylistsSavedInfiniteOptions({
 		userId: user?.id,
-	});
+	}));
 	const loading = isLoading || data === undefined;
-	const playlists = useMemo(() => data?.pages.flat() ?? [], [data]);
+	const playlists = useMemo(() => data?.pages.flatMap(page => page.data) ?? [], [data]);
 
-	const renderItem = useCallback(({ item }: { item: { playlist: Playlist} }) => (
+	const renderItem = useCallback(({ item: { owner, ...playlist } }: { item: PlaylistWithOwner }) => (
 		<View style={tw`p-1`}>
-			<CardPlaylist playlist={item.playlist} style={tw`w-full`} />
+			<CardPlaylist playlist={playlist} owner={owner} style={tw`w-full`} />
 		</View>
 	), []);
-	const keyExtractor = useCallback((item: { playlist: Playlist }) => item.playlist.id.toString(), []);
-	const onEndReached = useCallback(() => hasNextPage && fetchNextPage(), [hasNextPage, fetchNextPage]);
 	return (
 		<LegendList
 		data={playlists}
@@ -62,8 +61,8 @@ const CollectionSavedScreen = () => {
 		}}
 		maintainVisibleContentPosition={false}
 		scrollIndicatorInsets={{ bottom: tabBarHeight }}
-		keyExtractor={keyExtractor}
-		onEndReached={onEndReached}
+		keyExtractor={(item) => item.id.toString()}
+		onEndReached={hasNextPage ? () => fetchNextPage() : undefined}
 		onEndReachedThreshold={0.3}
 		nestedScrollEnabled
 		/>

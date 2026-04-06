@@ -1,5 +1,4 @@
 import * as React from "react"
-import { Profile, UserActivityMovie, UserReviewMovie, FixedOmit } from "@recomendapp/types";
 import Animated from "react-native-reanimated";
 import { Pressable, View } from "react-native";
 import { Href, useRouter } from "expo-router";
@@ -13,6 +12,8 @@ import ButtonUserReviewMovieLike from "apps/mobile/src/components/buttons/Button
 import { BottomSheetReviewMovie } from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetReviewMovie";
 import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import { convert } from "html-to-text";
+import { ReviewMovie, UserSummary } from "@packages/api-js";
+import { FixedOmit } from "apps/mobile/src/utils/fixed-omit";
 
 interface CardReviewMovieBaseProps
 	extends React.ComponentPropsWithRef<typeof Animated.View> {
@@ -25,16 +26,16 @@ interface CardReviewMovieBaseProps
 type CardReviewMovieSkeletonProps = {
   skeleton: true;
   review?: never;
-  activity?: never;
   author?: never;
+  rating?: never;
   url?: never;
 };
 
 type CardReviewMovieDataProps = {
   skeleton?: false;
-  review: UserReviewMovie;
-  activity: UserActivityMovie;
-  author: Profile;
+  review: ReviewMovie;
+  author: UserSummary;
+  rating?: number | null;
   url: Href;
 };
 
@@ -44,7 +45,7 @@ export type CardReviewMovieProps = CardReviewMovieBaseProps &
 const CardReviewMovieDefault = React.forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	FixedOmit<CardReviewMovieProps, "variant" | "linked" | "onPress" | "onLongPress" | "url">
->(({ review, skeleton, activity, author, children, style, ...props }, ref) => {
+>(({ review, rating, skeleton, author, children, style, ...props }, ref) => {
 	const { colors } = useTheme();
 	return (
 		<Animated.View
@@ -56,9 +57,11 @@ const CardReviewMovieDefault = React.forwardRef<
 			]}
 			{...props}
 		>
-			<View style={tw.style("items-center gap-1 shrink")}>
-				<IconMediaRating rating={activity?.rating} skeleton={skeleton} />
-			</View>
+			{rating !== undefined && (
+				<View style={tw.style("items-center gap-1 shrink")}>
+					<IconMediaRating rating={rating} skeleton={skeleton} />
+				</View>
+			)}
 			<View style={tw.style("w-full flex-col gap-1 shrink")}>
 				{!skeleton ? <CardUser variant="inline" user={author} /> : <CardUser variant="inline" skeleton={skeleton} />}
 				{review?.title && (
@@ -79,7 +82,7 @@ const CardReviewMovieDefault = React.forwardRef<
 				) : <Skeleton style={tw.style("h-12 w-full")} />}
 				{!skeleton && (
 					<View style={tw.style("flex-row items-center justify-end m-1")}>
-						<ButtonUserReviewMovieLike reviewId={review?.id} reviewLikesCount={review.likes_count} />
+						<ButtonUserReviewMovieLike reviewId={review?.id} reviewLikesCount={review.likesCount} />
 					</View>
 				)}
 			</View>
@@ -113,6 +116,7 @@ const CardReviewMovie = React.forwardRef<
 		onLongPress={() => {
 			openSheet(BottomSheetReviewMovie, {
 				review: props.review,
+				author: props.author,
 			});
 			onLongPress?.();
 		}}

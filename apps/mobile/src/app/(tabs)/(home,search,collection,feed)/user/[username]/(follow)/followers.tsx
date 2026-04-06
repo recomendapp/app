@@ -1,4 +1,3 @@
-import { useUserFollowersQuery, useUserProfileQuery } from "apps/mobile/src/api/users/userQueries";
 import { CardUser } from "apps/mobile/src/components/cards/CardUser";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
@@ -6,10 +5,13 @@ import { LegendList } from "@legendapp/list";
 import { useLocalSearchParams } from "expo-router";
 import { useCallback, useMemo } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { userByUsernameOptions, userFollowersInfiniteOptions } from "@libs/query-client";
+import { UserSummary } from "@packages/api-js";
 
 const ProfileFollowersScreen = () => {
 	const { username } = useLocalSearchParams<{ username: string }>();
-	const { data: profile } = useUserProfileQuery({ username: username });
+	const { data: profile } = useQuery(userByUsernameOptions({ username: username }));
 	const insets = useSafeAreaInsets();
 	const { bottomOffset, tabBarHeight } = useTheme();
 	const {
@@ -17,19 +19,12 @@ const ProfileFollowersScreen = () => {
 		hasNextPage,
 		fetchNextPage,
 		refetch,
-	} = useUserFollowersQuery({
-		userId: profile?.id || undefined,
-	});
-	const followers = useMemo(() => data?.pages.flat() || [], [data]);
-	// useCallback
-	const keyExtractor = useCallback((item: typeof followers[number]) => item.follower.id!.toString(), []);
-	const onEndReached = useCallback(() => {
-		if (hasNextPage) {
-			fetchNextPage();
-		}
-	}, [hasNextPage, fetchNextPage]);
-	const renderItem = useCallback(({ item }: { item: typeof followers[number], index: number }) => (
-		<CardUser variant="list" user={item.follower} />
+	} = useInfiniteQuery(userFollowersInfiniteOptions({
+		profileId: profile?.id,
+	}));
+	const followers = useMemo(() => data?.pages.flatMap(page => page.data) ?? [], [data]);
+	const renderItem = useCallback(({ item }: { item: UserSummary }) => (
+		<CardUser variant="list" user={item} />
 	), []);
 	return (
 		<LegendList
@@ -43,8 +38,8 @@ const ProfileFollowersScreen = () => {
 		scrollIndicatorInsets={{
 			bottom: tabBarHeight,
 		}}
-		keyExtractor={keyExtractor}
-		onEndReached={onEndReached}
+		keyExtractor={(item) => item.id}
+		onEndReached={hasNextPage ? () => fetchNextPage() : undefined}
 		onRefresh={refetch}
 		/>
 	);

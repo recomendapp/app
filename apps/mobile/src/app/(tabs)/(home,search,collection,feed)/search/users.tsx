@@ -1,4 +1,3 @@
-import { useSearchUsersQuery } from "apps/mobile/src/api/search/searchQueries";
 import { CardUser } from "apps/mobile/src/components/cards/CardUser";
 import ErrorMessage from "apps/mobile/src/components/ErrorMessage";
 import { Text } from "apps/mobile/src/components/ui/text";
@@ -11,10 +10,12 @@ import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme
 import { LegendList, LegendListRef } from "@legendapp/list";
 import { useScrollToTop } from "@react-navigation/native";
 import { upperFirst } from "lodash";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useKeyboardState } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslations } from "use-intl";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { searchUsersInfiniteOptions } from "@libs/query-client";
 
 const SearchUsersScreen = () => {
 	const insets = useSafeAreaInsets();
@@ -35,9 +36,12 @@ const SearchUsersScreen = () => {
 		fetchNextPage,
 		refetch,
 		isRefetching,
-	} = useSearchUsersQuery({
-		query: search,
-	});
+	} = useInfiniteQuery(searchUsersInfiniteOptions({
+		filters: {
+			q: search
+		}
+	}));
+	const users = useMemo(() => data?.pages.flatMap(page => page.data) ?? [], [data]);
 	
 	// REFs
 	const scrollRef = useRef<LegendListRef>(null);
@@ -48,7 +52,7 @@ const SearchUsersScreen = () => {
 		<LegendList
 		key={search}
 		ref={scrollRef}
-		data={data?.pages.flatMap(page => page.data) || []}
+		data={users}
 		renderItem={({ item }) => <CardUser variant="list" user={item} /> }
 		contentContainerStyle={{
 			paddingLeft: insets.left + PADDING_HORIZONTAL,

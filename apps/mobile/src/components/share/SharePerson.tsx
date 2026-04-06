@@ -1,6 +1,5 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { View } from "apps/mobile/src/components/ui/view";
-import { MediaPerson } from "@recomendapp/types";
 import tw from "apps/mobile/src/lib/tw";
 import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
 import ViewShot from "react-native-view-shot";
@@ -20,9 +19,11 @@ import { clamp } from "lodash";
 import { useImagePalette } from "apps/mobile/src/hooks/useImagePalette";
 import Color from "color";
 import { ShapeVerticalRoundedBackground } from "apps/mobile/src/lib/icons";
+import { PersonCompact } from "@packages/api-js";
+import { getTmdbImage } from "../../lib/tmdb/getTmdbImage";
 
 interface SharePersonProps extends React.ComponentProps<typeof ViewShot> {
-	person: MediaPerson;
+	person: PersonCompact;
 	variant?: 'default';
 	isPremium?: boolean;
 };
@@ -94,7 +95,7 @@ const EditOptionsSelector = ({
 };
 
 /* -------------------------------- VARIANTS -------------------------------- */
-const SharePersonDefault = ({ person, poster, scale = 1 } : { person: MediaPerson, poster: string | undefined, scale?: number }) => {
+const SharePersonDefault = ({ person, poster, scale = 1 } : { person: PersonCompact, poster: string | undefined, scale?: number }) => {
 	const { colors } = useTheme();
 	return (
 		<View
@@ -119,7 +120,7 @@ const SharePersonDefault = ({ person, poster, scale = 1 } : { person: MediaPerso
 			/>
 			<View>
 			<Text style={[tw`font-bold`, { fontSize: 16 * scale }]}>{person.name}</Text>
-			{person.known_for_department && <Text textColor="muted" style={{ fontSize: 12 * scale }}>{person.known_for_department}</Text>}
+			{/* {person.known_for_department && <Text textColor="muted" style={{ fontSize: 12 * scale }}>{person.known_for_department}</Text>} */}
 			</View>
 			<Icons.app.logo color={colors.accentYellow} height={10 * scale}/>
 		</View>
@@ -184,7 +185,7 @@ export const SharePerson = forwardRef<
 	const { height: screenHeight } = useWindowDimensions();
 	const { colors } = useTheme();
 	// States
-	const [poster, setPoster] = useState(person.profile_url || undefined);
+	const [poster, setPoster] = useState(getTmdbImage({ path: person.profilePath, size: 'w780' }) || undefined);
 	const { palette } = useImagePalette(poster);
 	const [bgColor, setBgColor] = useState<{index: number, color: string } | null>(palette ? { index: 0, color: palette[0] } : null);
 	const [bgType, setBgType] = useState<'color' | 'image'>('color');

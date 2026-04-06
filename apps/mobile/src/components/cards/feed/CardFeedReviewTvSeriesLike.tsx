@@ -1,6 +1,5 @@
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import tw from "apps/mobile/src/lib/tw";
-import { MediaTvSeries, Profile, UserReviewTvSeriesLike, FixedOmit } from "@recomendapp/types";
 import * as React from "react"
 import Animated from "react-native-reanimated";
 import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
@@ -15,6 +14,8 @@ import { CardReviewTvSeries } from "../reviews/CardReviewTvSeries";
 import BottomSheetTvSeries from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetTvSeries";
 import { GAP } from "apps/mobile/src/theme/globals";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
+import { FeedItemReviewTvSeriesLike } from "@packages/api-js";
+import { FixedOmit } from "apps/mobile/src/utils/fixed-omit";
 
 interface CardFeedReviewTvSeriesLikeBaseProps
 	extends React.ComponentProps<typeof Animated.View> {
@@ -25,17 +26,13 @@ interface CardFeedReviewTvSeriesLikeBaseProps
 
 type CardFeedReviewTvSeriesLikeSkeletonProps = {
 	skeleton: true;
-	author?: never;
-	reviewLike?: never;
-	tvSeries?: never;
+	data?: never;
 	footer?: never;
 };
 
 type CardFeedReviewTvSeriesLikeDataProps = {
 	skeleton?: false;
-	author: Profile;
-	reviewLike: UserReviewTvSeriesLike;
-	tvSeries: MediaTvSeries;
+	data: FeedItemReviewTvSeriesLike;
 	footer?: React.ReactNode;
 };
 
@@ -45,7 +42,7 @@ export type CardFeedReviewTvSeriesLikeProps = CardFeedReviewTvSeriesLikeBaseProp
 const CardFeedReviewTvSeriesLikeDefault = React.forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	FixedOmit<CardFeedReviewTvSeriesLikeProps, "variant" | "onPress" | "onLongPress">
->(({ style, children, author, reviewLike, tvSeries, footer, skeleton, ...props }, ref) => {
+>(({ style, children, data, footer, skeleton, ...props }, ref) => {
 	const { colors } = useTheme();
 	const t = useTranslations();
 	return (
@@ -60,8 +57,8 @@ const CardFeedReviewTvSeriesLikeDefault = React.forwardRef<
 		>
 			{!skeleton ? (
 				<ImageWithFallback
-				source={{ uri: getTmdbImage({ path: tvSeries?.poster_path, size: 'w342' }) ?? '' }}
-				alt={tvSeries.name ?? ''}
+				source={{ uri: getTmdbImage({ path: data.content.tvSeries.posterPath, size: 'w342' }) ?? '' }}
+				alt={data.content.tvSeries.name ?? ''}
 				type={'tv_series'}
 				style={tw`w-20 h-full`}
 				/>
@@ -70,11 +67,11 @@ const CardFeedReviewTvSeriesLikeDefault = React.forwardRef<
 			)}
 			<View style={tw`flex-1 gap-2 p-2`}>
 				{!skeleton ? <View style={tw`flex-row items-center gap-1`}>
-					<CardUser user={author} variant="icon" />
+					<CardUser user={data.author} variant="icon" />
 					<Text style={[{ color: colors.mutedForeground }, tw`text-sm`]} numberOfLines={2}>
 						{t.rich('common.messages.user_liked_review', {
 							name: () => (
-								<Text style={tw`font-semibold`}>{author.full_name}</Text>
+								<Text style={tw`font-semibold`}>{data.author.name}</Text>
 							)
 						})}
 					</Text>
@@ -82,16 +79,22 @@ const CardFeedReviewTvSeriesLikeDefault = React.forwardRef<
 				<View style={tw`gap-2`}>
 					{!skeleton ? (
 						<Text numberOfLines={2} style={tw`font-bold`}>
-						{tvSeries.name}
+						{data.content.tvSeries.name}
 						</Text>
  					) : <Skeleton style={tw`w-full h-5`} />}
 					{footer || (
 						!skeleton ? (
 							<CardReviewTvSeries
-							author={reviewLike.review?.activity?.user!}
-							activity={reviewLike.review?.activity!}
-							review={reviewLike.review!}
-							url={`${tvSeries.url}/review/${reviewLike.review_id}` as Href}
+							author={data.content.author}
+							review={data.content}
+							rating={data.content.rating}
+							url={{
+								pathname: '/user/[username]/tv-series/[tv_series_id]',
+								params: {
+									username: data.content.author.username,
+									tv_series_id: data.content.tvSeries.id,
+								}
+							}}
 							/>
 						) : <Skeleton style={tw`w-full h-12`} />
 					)}
@@ -109,17 +112,20 @@ const CardFeedReviewTvSeriesLike = React.forwardRef<
 	const router = useRouter();
 	const openSheet = useBottomSheetStore((state) => state.openSheet);
 	const handleOnPress = React.useCallback(() => {
-		if (!props.tvSeries) return;
-		router.push(props.tvSeries.url as Href);
+		if (!props.data?.content.tvSeries) return;
+		router.push({
+			pathname: '/tv-series/[tv_series_id]',
+			params: { tv_series_id: props.data.content.tvSeries.id }
+		});
 		onPress?.();
-	}, [onPress, props.tvSeries, router]);
+	}, [onPress, props.data?.content.tvSeries, router]);
 	const handleOnLongPress = React.useCallback(() => {
-		if (!props.tvSeries) return;
+		if (!props.data?.content.tvSeries) return;
 		openSheet(BottomSheetTvSeries, {
-			tvSeries: props.tvSeries
+			tvSeries: props.data.content.tvSeries
 		})
 		onLongPress?.();
-	}, [onLongPress, openSheet, props.tvSeries]);
+	}, [onLongPress, openSheet, props.data?.content.tvSeries]);
 	const content = (
 		variant === "default" ? (
 			<CardFeedReviewTvSeriesLikeDefault ref={ref} {...props} />

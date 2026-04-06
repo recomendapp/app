@@ -7,7 +7,10 @@ import { CardMovie } from "../cards/CardMovie";
 import { CardTvSeries } from "../cards/CardTvSeries";
 import { GAP, WIDTH_CARD_XS } from "apps/mobile/src/theme/globals";
 import { Text } from "../ui/text";
-import { useWidgetMostPopularQuery } from "apps/mobile/src/api/widgets/widgetQueries";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { widgetMediasMostPopularInfiniteOptions } from "@libs/query-client";
+import { useCallback, useMemo } from "react";
+import { ListInfiniteMediasMostPopular } from "@packages/api-js";
 
 interface WidgetMostPopularProps extends React.ComponentPropsWithoutRef<typeof View> {
   labelStyle?: StyleProp<TextStyle>;
@@ -26,8 +29,18 @@ export const WidgetMostPopular = ({
     data,
     hasNextPage,
     fetchNextPage,
-  } = useWidgetMostPopularQuery();
-  const medias = data?.pages.flat() || [];
+  } = useInfiniteQuery(widgetMediasMostPopularInfiniteOptions());
+  const medias = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
+
+  const renderItem = useCallback(({ item }: { item: ListInfiniteMediasMostPopular['data'][number] }) => {
+    if (item.type === 'movie') {
+      return <CardMovie variant="poster" movie={item.media} style={{ width: WIDTH_CARD_XS }} />
+    }
+    if (item.type === 'tv_series') {
+      return <CardTvSeries variant="poster" tvSeries={item.media} style={{ width: WIDTH_CARD_XS }} />
+    }
+    return null;
+  }, []);
 
   if (!medias.length) {
     return null;
@@ -40,16 +53,10 @@ export const WidgetMostPopular = ({
       </Text>
       <LegendList
         data={medias}
-        renderItem={({ item }) => (
-          item.type === 'movie'
-            ? <CardMovie variant="poster" movie={item.media} style={{ width: WIDTH_CARD_XS }} />
-          : item.type === 'tv_series'
-            ? <CardTvSeries variant="poster" tvSeries={item.media} style={{ width: WIDTH_CARD_XS }} />
-          : null
-        )}
+        renderItem={renderItem}
         snapToInterval={WIDTH_CARD_XS + GAP}
         decelerationRate="fast"
-        keyExtractor={(item) =>  `${item.type}-${item.media_id}`}
+        keyExtractor={(item) =>  `${item.type}-${item.mediaId}`}
         onEndReached={() => hasNextPage && fetchNextPage()}
         horizontal
         showsHorizontalScrollIndicator={false}

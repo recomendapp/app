@@ -33,7 +33,7 @@ type Props = {
 };
 
 const CustomButton = ({data, flatListRef, flatListIndex, x}: Props) => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const t = useTranslations();
 	const setHasOnboarded = useUIStore(state => state.setHasOnboarded);
 	const {width: SCREEN_WIDTH} = useWindowDimensions();
@@ -112,7 +112,7 @@ const CustomButton = ({data, flatListRef, flatListIndex, x}: Props) => {
 					router.replace({ pathname: '/(tabs)/(home)' });
 				}
 
-				if (!session && (!prevRoute || !prevRoute.name.includes('auth'))) {
+				if (!user && (!prevRoute || !prevRoute.name.includes('auth'))) {
 					router.push({ pathname: '/auth' });
 				}
 			}

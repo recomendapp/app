@@ -1,6 +1,5 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { View } from "apps/mobile/src/components/ui/view";
-import { MediaTvSeries, MediaTvSeriesBackdrop, MediaTvSeriesPoster } from "@recomendapp/types";
 import tw from "apps/mobile/src/lib/tw";
 import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
 import ViewShot from "react-native-view-shot";
@@ -23,10 +22,12 @@ import { useImagePalette } from "apps/mobile/src/hooks/useImagePalette";
 import Color from "color";
 import { ShapeVerticalRoundedBackground, ShapeVerticalRoundedForeground } from "apps/mobile/src/lib/icons";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
-import { useMediaTvSeriesBackdropsQuery, useMediaTvSeriesPostersQuery } from "apps/mobile/src/api/medias/mediaQueries";
+import { TvSeriesCompact, TvSeriesImage } from "@packages/api-js";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { tvSeriesImagesInfiniteOptions } from "@libs/query-client";
 
 interface ShareTvSeriesProps extends React.ComponentProps<typeof ViewShot> {
-	tvSeries: MediaTvSeries;
+	tvSeries: TvSeriesCompact;
 	variant?: 'default';
 	isPremium?: boolean;
 };
@@ -99,9 +100,9 @@ const EditOptionsSelector = ({
 
 
 /* -------------------------------- VARIANTS -------------------------------- */
-const ShareTvSeriesDefault = ({ tvSeries, poster, scale = 1 } : { tvSeries: MediaTvSeries, poster: string | undefined, scale?: number }) => {
+const ShareTvSeriesDefault = ({ tvSeries, posterUrl, scale = 1 } : { tvSeries: TvSeriesCompact, posterUrl: string | undefined, scale?: number }) => {
 	const { colors } = useTheme();
-	const creatorsText = useMemo(() => tvSeries.created_by?.map(c => c.name!).join(', '), [tvSeries.created_by]);
+	const creatorsText = useMemo(() => tvSeries.createdBy?.map(c => c.name!).join(', '), [tvSeries.createdBy]);
 	return (
 		<View
 		style={{
@@ -112,7 +113,7 @@ const ShareTvSeriesDefault = ({ tvSeries, poster, scale = 1 } : { tvSeries: Medi
 		}}
 		>
 			<ImageWithFallback
-			source={{uri: poster ?? '' }}
+			source={{uri: posterUrl ?? '' }}
 			alt={tvSeries.name ?? ''}
 			type={'tv_series'}
 			style={[
@@ -139,33 +140,36 @@ const PosterSelector = ({
 	poster,
 	setPoster,
 } : {
-	tvSeries: MediaTvSeries;
-	poster: string | undefined;
-	setPoster: (poster: string) => void;
+	tvSeries: TvSeriesCompact;
+	poster: TvSeriesImage | undefined;
+	setPoster: (poster: TvSeriesImage) => void;
 }) => {
 	const {
 		data,
 		hasNextPage,
 		fetchNextPage,
-	} = useMediaTvSeriesPostersQuery({
-		tvSeriesId: poster ? tvSeries.id : undefined,
-	});
-	const posters = useMemo(() => data?.pages.flat() || [], [data]);
+	} = useInfiniteQuery(tvSeriesImagesInfiniteOptions({
+		tvSeriesId: tvSeries.id,
+		filters: {
+			type: 'poster',
+		}
+	}));
+	const posters = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
 	const initialIndex = useMemo(() => {
-		const isFind = posters.findIndex(p => p.poster_url === poster);
+		const isFind = posters.findIndex(p => p.id === poster?.id);
 		return isFind === -1 ? 0 : isFind;
 	}, [posters]);
-	const renderItem = useCallback((item: MediaTvSeriesPoster, isActive: boolean) => (
+	const renderItem = useCallback((item: TvSeriesImage) => (
 		<ImageWithFallback
-		source={{ uri: getTmdbImage({ path: item.file_path, size: 'w342' }) ?? '' }}
+		source={{ uri: getTmdbImage({ path: item.filePath, size: 'w342' }) ?? '' }}
 		alt={tvSeries.name ?? ''}
 		type={"tv_series"}
 		style={[{ aspectRatio: 2 / 3, width: ITEM_WIDTH }]}
 		/>
 	), [tvSeries.name]);
-	const keyExtractor = useCallback((item: MediaTvSeriesPoster) => item.id!.toString(), []);
-	const onSelectionChange = useCallback((item: MediaTvSeriesPoster) => {
-		setPoster(item.poster_url!);
+	const keyExtractor = useCallback((item: TvSeriesImage) => item.id!.toString(), []);
+	const onSelectionChange = useCallback((item: TvSeriesImage) => {
+		setPoster(item);
 	}, [setPoster]);
 	const onEndReached = useCallback(() => {
 		if (hasNextPage) {
@@ -242,30 +246,33 @@ const BackdropImageSelector = ({
 	tvSeriesTitle,
 }: {
 	tvSeriesId: number;
-	selectedBackdrop?: string;
-	setBackdrop: (backdrop: string) => void;
+	selectedBackdrop?: TvSeriesImage;
+	setBackdrop: (backdrop: TvSeriesImage) => void;
 	tvSeriesTitle: string;
 }) => {
 	const {
 		data,
 		hasNextPage,
 		fetchNextPage,
-	} = useMediaTvSeriesBackdropsQuery({
+	} = useInfiniteQuery(tvSeriesImagesInfiniteOptions({
 		tvSeriesId: tvSeriesId,
-	});
-	const backdrops = useMemo(() => data?.pages.flat() || [], [data]);
+		filters: {
+			type: 'backdrop',
+		}
+	}));
+	const backdrops = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
 	
-	const renderBackdropItem = useCallback((item: MediaTvSeriesBackdrop, isActive: boolean) => (
+	const renderBackdropItem = useCallback((item: TvSeriesImage, isActive: boolean) => (
 		<ImageWithFallback
-			source={{ uri: getTmdbImage({ path: item.file_path, size: 'w154' }) ?? '' }}
+			source={{ uri: getTmdbImage({ path: item.filePath, size: 'w154' }) ?? '' }}
 			alt={tvSeriesTitle}
 			type="tv_series"
 			style={{ aspectRatio: 2 / 3, width: ITEM_WIDTH }}
 		/>
 	), [tvSeriesTitle]);
 
-	const handleBackdropSelection = useCallback((item: MediaTvSeriesBackdrop) => {
-		setBackdrop(item.backdrop_url!);
+	const handleBackdropSelection = useCallback((item: TvSeriesImage) => {
+		setBackdrop(item);
 	}, [setBackdrop]);
 	
 	const handleEndReached = useCallback(() => {
@@ -273,11 +280,11 @@ const BackdropImageSelector = ({
 	}, [hasNextPage, fetchNextPage]);
 	
 	const initialIndex = useMemo(() => {
-		const isFind = backdrops.findIndex(p => p.backdrop_url === selectedBackdrop);
+		const isFind = backdrops.findIndex(p => p.id === selectedBackdrop?.id);
 		return isFind === -1 ? 0 : isFind;
 	}, [backdrops, selectedBackdrop]);
 
-	const keyExtractor = useCallback((item: MediaTvSeriesBackdrop) => item.id!.toString(), []);
+	const keyExtractor = useCallback((item: TvSeriesImage) => item.id.toString(), []);
 	
 	return (
 		<WheelSelector
@@ -308,16 +315,18 @@ export const ShareTvSeries = forwardRef<
 	const { height: screenHeight } = useWindowDimensions();
 	const { colors } = useTheme();
 	// States
-	const [poster, setPoster] = useState(tvSeries.poster_url || undefined);
-	const [backdrop, setBackdrop] = useState(tvSeries.backdrop_url || undefined);
-	const { palette } = useImagePalette(poster);
+	const [poster, setPoster] = useState<TvSeriesImage | undefined>(undefined);
+	const posterUrl = useMemo(() => poster ? getTmdbImage({ path: poster.filePath, size: 'w342' }) : tvSeries.posterPath ? getTmdbImage({ path: tvSeries.posterPath, size: 'w342' }) : undefined, [poster, tvSeries.posterPath]);
+	const [backdrop, setBackdrop] = useState<TvSeriesImage | undefined>(undefined);
+	const backdropUrl = useMemo(() => backdrop ? getTmdbImage({ path: backdrop.filePath, size: 'w780' }) : tvSeries.backdropPath ? getTmdbImage({ path: tvSeries.backdropPath, size: 'w780' }) : undefined, [backdrop, tvSeries.backdropPath]);
+	const { palette } = useImagePalette(posterUrl);
 	const [bgColor, setBgColor] = useState<{index: number, color: string } | null>(palette ? { index: 0, color: palette[0] } : null);
 	const [bgType, setBgType] = useState<'color' | 'image'>(isPremium && backdrop ? 'image' : 'color');
 	const [editing, setEditing] = useState(false);
 	const editOptions = useMemo((): EditOption[] => {
 		const options: EditOption[] = [];
-		const hasPoster = !!poster;
-		const hasBackground = !!poster || !!backdrop;
+		const hasPoster = !!posterUrl;
+		const hasBackground = !!backdropUrl;
 		if (hasPoster) {
 			options.push({ value: 'poster', icon: ShapeVerticalRoundedForeground });
 		}
@@ -325,7 +334,7 @@ export const ShareTvSeries = forwardRef<
 			options.push({ value: 'background', icon: ShapeVerticalRoundedBackground });
 		}
 		return options;
-	}, [poster, backdrop]);
+	}, [posterUrl, backdropUrl]);
 	const [activeEditingOption, setActiveEditingOption] = useState(editOptions[0].value);
 
 	useImperativeHandle(ref, () => ({
@@ -333,8 +342,8 @@ export const ShareTvSeries = forwardRef<
 			if (!viewShotRef.current) throw new Error('ViewShot ref is not available');	
 			const uri = await viewShotRef.current.capture?.();
 
-			const backgroundImage = (bgType === 'image' && backdrop)
-				? await cropImageRatio(backdrop, options?.background?.ratio ?? 9 / 16)
+			const backgroundImage = (bgType === 'image' && backdropUrl)
+				? await cropImageRatio(backdropUrl, options?.background?.ratio ?? 9 / 16)
 				: undefined;
 
 			return {
@@ -349,8 +358,8 @@ export const ShareTvSeries = forwardRef<
 	}));
 
 	const renderSticker = useCallback((scale: number) => (
-		<ShareTvSeriesDefault tvSeries={tvSeries} poster={poster} scale={scale} />
-	), [tvSeries, poster]);
+		<ShareTvSeriesDefault tvSeries={tvSeries} posterUrl={posterUrl} scale={scale} />
+	), [tvSeries, posterUrl]);
 
 	const handleEnableEditing = useCallback(() => {
 		if (isPremium) {
@@ -457,8 +466,8 @@ export const ShareTvSeries = forwardRef<
 						tw`relative items-center justify-center overflow-hidden`
 					]}
 				>
-					{bgType === 'image' && backdrop ? (
-						<Image source={backdrop} style={tw`absolute inset-0`} />
+					{bgType === 'image' && backdropUrl ? (
+						<Image source={{ uri: backdropUrl }} style={tw`absolute inset-0`} />
 					) : bgType === 'color' && bgColor && (
 						<View style={[tw`absolute inset-0`, { backgroundColor: bgColor.color }]} />
 					)}

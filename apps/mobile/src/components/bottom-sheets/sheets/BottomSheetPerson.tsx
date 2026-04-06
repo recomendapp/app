@@ -1,7 +1,6 @@
 import React from 'react';
 import tw from 'apps/mobile/src/lib/tw';
 import { Icons } from 'apps/mobile/src/constants/Icons';
-import { MediaPerson } from '@recomendapp/types';
 import { LinkProps, usePathname, useRouter } from 'expo-router';
 import { LucideIcon } from 'lucide-react-native';
 import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
@@ -17,9 +16,11 @@ import { Text } from 'apps/mobile/src/components/ui/text';
 import BottomSheetSharePerson from './share/BottomSheetSharePerson';
 import { FlashList } from '@shopify/flash-list';
 import { PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
+import { PersonCompact } from '@packages/api-js';
+import { getTmdbImage } from 'apps/mobile/src/lib/tmdb/getTmdbImage';
 
 interface BottomSheetPersonProps extends BottomSheetProps {
-  person?: MediaPerson,
+  person: PersonCompact,
   additionalItemsTop?: Item[];
   additionalItemsBottom?: Item[];
 };
@@ -55,9 +56,9 @@ const BottomSheetPerson = React.forwardRef<
     },
     {
       icon: Icons.User,
-      onPress: () => router.push(person?.url as LinkProps['href']),
+      onPress: () => router.push(person.url as LinkProps['href']),
       label: upperFirst(t('common.messages.go_to_person')),
-      disabled: person?.url ? pathname.startsWith(person.url) : false
+      disabled: person.url ? pathname.startsWith(person.url) : false
     },
     ...additionalItemsBottom,
   ]), [person, additionalItemsTop, additionalItemsBottom, openSheet, router, t, pathname]);
@@ -87,8 +88,8 @@ const BottomSheetPerson = React.forwardRef<
           >
             <View style={tw`flex-row items-center gap-2 `}>
               <ImageWithFallback
-              alt={person?.name ?? ''}
-              source={{ uri: person?.profile_url ?? '' }}
+              alt={person.name ?? ''}
+              source={{ uri: getTmdbImage({ path: person.profilePath, size: 'w92' }) ?? '' }}
               style={[
                 { aspectRatio: 2 / 3, height: 'fit-content' },
                 tw.style('rounded-md w-12'),
@@ -96,12 +97,12 @@ const BottomSheetPerson = React.forwardRef<
               type={'person'}
               />
               <View style={tw`shrink`}>
-                <Text numberOfLines={2} style={tw`shrink`}>{person?.name}</Text>
-                {person?.known_for_department && (
+                <Text numberOfLines={2} style={tw`shrink`}>{person.name}</Text>
+                {/* {person.known_for_department && (
                   <Text numberOfLines={1} style={[{ color: colors.mutedForeground }, tw`shrink`]}>
                     {person.known_for_department}
                   </Text>
-                )}
+                )} */}
               </View>
             </View>
           </View>

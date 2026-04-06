@@ -2,9 +2,14 @@ import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { Button } from "apps/mobile/src/components/ui/Button";
 import { Text } from "apps/mobile/src/components/ui/text";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useCallback, useEffect, useState } from "react";
 import tw from "apps/mobile/src/lib/tw";
-import { useUserReviewTvSeriesLike } from "apps/mobile/src/api/users/hooks/useUserReviewTvSeriesLike";
+import { useAuth } from "../../providers/AuthProvider";
+import { useToast } from "../Toast";
+import { useTranslations } from "use-intl";
+import { useQuery } from "@tanstack/react-query";
+import { reviewTvSeriesLikeOptions, useReviewTvSeriesLikeMutation, useReviewTvSeriesUnlikeMutation, useUserReviewTvSeriesLike } from "@libs/query-client";
+import { upperFirst } from "lodash";
 
 interface ButtonUserReviewTvSeriesLikeProps
 	extends React.ComponentProps<typeof Button> {
@@ -17,8 +22,12 @@ const ButtonUserReviewTvSeriesLike = forwardRef<
 	ButtonUserReviewTvSeriesLikeProps
 >(({ reviewId, reviewLikesCount, variant = "outline", size, icon = Icons.like, style, onPress, ...props }, ref) => {
 	const { colors } = useTheme();
+	const { user } = useAuth();
+	const toast = useToast();
+	const t = useTranslations();
 	const { isLiked, toggle } = useUserReviewTvSeriesLike({
 		reviewId,
+		userId: user?.id,
 	});
 	const [likeCount, setLikeCount] = useState<number | undefined>(reviewLikesCount);
 

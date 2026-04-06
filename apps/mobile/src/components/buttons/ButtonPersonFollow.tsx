@@ -29,14 +29,14 @@ const ButtonPersonFollow = forwardRef<
 >(({ personId, onPress, skeleton, style, ...props }, ref) => {
   const toast = useToast();
   const t = useTranslations();
-  const { session } = useAuth();
+  const { user } = useAuth();
   const { mode } = useTheme();
 
   const {
     data: isFollow,
     isLoading,
   } = useUserFollowPersonQuery({
-    userId: session?.user.id,
+    userId: user?.id,
     personId: personId,
   });
   const loading = skeleton || !personId || isLoading || isFollow === undefined;
@@ -45,9 +45,9 @@ const ButtonPersonFollow = forwardRef<
   const { mutateAsync: deleteFollowerMutation } = useUserFollowPersonDeleteMutation();
 
   const followPerson = async () => {
-    if (!session || !personId) return;
+    if (!user || !personId) return;
     await insertFollow({
-      userId: session.user.id,
+      userId: user.id,
       personId: personId,
     }, {
       onError: (error) => {
@@ -57,7 +57,7 @@ const ButtonPersonFollow = forwardRef<
   }
 
   const unfollowPerson = async () => {
-    if (!session || !personId) return;
+    if (!user || !personId) return;
     Alert.alert(
       upperFirst(t('common.messages.are_u_sure')),
       undefined,
@@ -70,7 +70,7 @@ const ButtonPersonFollow = forwardRef<
           text: upperFirst(t('common.messages.unfollow')),
           onPress: async () => {
             await deleteFollowerMutation({
-              userId: session.user.id,
+              userId: user.id,
               personId: personId,
             }, {
               onError: (error) => {
@@ -92,7 +92,7 @@ const ButtonPersonFollow = forwardRef<
     );
   }
 
-  if (!session || loading) return null;
+  if (!user || loading) return null;
 
   return (
     <Button

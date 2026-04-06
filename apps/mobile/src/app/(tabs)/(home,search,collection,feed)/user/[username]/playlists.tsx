@@ -12,7 +12,8 @@ import { Text, useWindowDimensions, View } from "react-native";
 import { useTranslations } from "use-intl";
 import { HeaderTitle } from "@react-navigation/elements";
 import { PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
-import { useUserPlaylistsQuery, useUserProfileQuery } from "apps/mobile/src/api/users/userQueries";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { userByUsernameOptions, userPlaylistsInfiniteOptions } from "@libs/query-client";
 
 interface sortBy {
 	label: string;
@@ -23,7 +24,7 @@ const UserPlaylistsScreen = () => {
 	const t = useTranslations();
 	const { width: SCREEN_WIDTH } = useWindowDimensions();
 	const { username } = useLocalSearchParams<{ username: string }>();
-	const { data, } = useUserProfileQuery({ username: username });
+	const { data: profile } = useQuery(userByUsernameOptions({ username: username }));
 	const { colors, bottomOffset, tabBarHeight } = useTheme();
 	const { showActionSheetWithOptions } = useActionSheet();
 	// States
@@ -35,20 +36,21 @@ const UserPlaylistsScreen = () => {
 	const [sortBy, setSortBy] = useState<sortBy>(sortByOptions[0]);
 	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 	const {
-		data: playlists,
+		data,
 		isLoading,
 		fetchNextPage,
 		hasNextPage,
 		isRefetching,
 		refetch,
-	} = useUserPlaylistsQuery({
-		userId: data?.id,
+	} = useInfiniteQuery(userPlaylistsInfiniteOptions({
+		userId: profile?.id,
 		filters: {
-			sortBy: sortBy.value,
-			sortOrder,
+			sort_by: sortBy.value,
+			sort_order: sortOrder,
 		}
-	});
-	const loading = playlists === undefined || isLoading;
+	}));
+	const playlists = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
+	const loading = data === undefined || isLoading;
 	// Handlers
 	const handleSortBy = useCallback(() => {
 		const sortByOptionsWithCancel = [
@@ -70,18 +72,16 @@ const UserPlaylistsScreen = () => {
 	<>
 		<Stack.Screen
 		options={{
-			title: data ? `@${data.username}` : '',
+			title: profile ? `@${profile.username}` : '',
 			headerTitle: (props) => <HeaderTitle {...props}>{upperFirst(t('common.messages.playlist', { count: 2 }))}</HeaderTitle>
 		}}
 		/>
 		<LegendList
-		data={playlists?.pages.flat() || []}
-		renderItem={({ item, index }) => (
+		data={playlists}
+		renderItem={({ item }) => (
 			<CardPlaylist
-			key={item.id}
 			playlist={item}
 			showItemsCount
-			showPlaylistAuthor={false}
 			/>
 		)}
 		ListHeaderComponent={

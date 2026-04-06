@@ -1,4 +1,5 @@
-import { useMediaPersonDetailsQuery } from "apps/mobile/src/api/medias/mediaQueries";
+import { personOptions } from "@libs/query-client";
+import { useQuery } from "@tanstack/react-query";
 import BottomSheetPerson from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetPerson";
 import ButtonPersonFollow from "apps/mobile/src/components/buttons/ButtonPersonFollow";
 import { PersonHeader } from "apps/mobile/src/components/screens/person/PersonHeader";
@@ -25,15 +26,15 @@ const PersonScreen = () => {
 	const { person_id } = useLocalSearchParams<{ person_id: string }>();
 	const { id: personId } = getIdFromSlug(person_id);
 	const { bottomOffset, tabBarHeight } = useTheme();
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const openSheet = useBottomSheetStore((state) => state.openSheet);
 	// Queries
 	const {
 		data: person,
 		isLoading,
-	} = useMediaPersonDetailsQuery({
+	} = useQuery(personOptions({
 		personId: personId,
-	});
+	}));
 	const loading = useMemo(() => person === undefined || isLoading, [person, isLoading]);
 	// SharedValue
 	const headerHeight = useSharedValue(0);
@@ -62,7 +63,7 @@ const PersonScreen = () => {
 			headerTransparent: true,
 			headerRight: () => (
 				<View style={tw`flex-row items-center gap-1`}>
-					{session && <ButtonPersonFollow personId={personId} />}
+					{user && <ButtonPersonFollow personId={personId} />}
 					<Button
 					variant="ghost"
 					size="icon"

@@ -1,7 +1,6 @@
 import * as React from "react"
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import tw from "apps/mobile/src/lib/tw";
-import { PlaylistLike, Profile, FixedOmit } from "@recomendapp/types";
 import Animated from "react-native-reanimated";
 import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
 import { Pressable, View } from "react-native";
@@ -13,6 +12,8 @@ import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import BottomSheetPlaylist from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetPlaylist";
 import { CardUser } from "../CardUser";
 import { GAP } from "apps/mobile/src/theme/globals";
+import { FeedItemPlaylistLike } from "@packages/api-js";
+import { FixedOmit } from "apps/mobile/src/utils/fixed-omit";
 
 interface CardFeedPlaylistLikeBaseProps
 	extends React.ComponentProps<typeof Animated.View> {
@@ -23,15 +24,13 @@ interface CardFeedPlaylistLikeBaseProps
 
 type CardFeedPlaylistLikeSkeletonProps = {
 	skeleton: true;
-	author?: never;
-	playlistLike?: never;
+	data?: never;
 	footer?: never;
 };
 
 type CardFeedPlaylistLikeDataProps = {
 	skeleton?: false;
-	author: Profile;
-	playlistLike: PlaylistLike;
+	data: FeedItemPlaylistLike;
 	footer?: React.ReactNode;
 };
 
@@ -41,7 +40,7 @@ export type CardFeedPlaylistLikeProps = CardFeedPlaylistLikeBaseProps &
 const CardFeedPlaylistLikeDefault = React.forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	FixedOmit<CardFeedPlaylistLikeProps, "variant" | "onPress" | "onLongPress">
->(({ style, children, author, playlistLike, footer, skeleton, ...props }, ref) => {
+>(({ style, children, data, footer, skeleton, ...props }, ref) => {
 	const { colors } = useTheme();
 	const t = useTranslations();
 	return (
@@ -56,8 +55,8 @@ const CardFeedPlaylistLikeDefault = React.forwardRef<
 		>
 			{!skeleton ? (
 				<ImageWithFallback
-				source={{ uri: playlistLike.playlist?.poster_url ?? '' }}
-				alt={playlistLike.playlist?.title ?? ''}
+				source={{ uri: data.content.poster ?? '' }}
+				alt={data.content.title ?? ''}
 				type={'playlist'}
 				style={tw`w-20 min-h-20 h-full`}
 				/>
@@ -66,11 +65,11 @@ const CardFeedPlaylistLikeDefault = React.forwardRef<
 			)}
 			<View style={tw`flex-1 gap-2 p-2`}>
 				{!skeleton ? <View style={tw`flex-row gap-1`}>
-					<CardUser user={author} variant="icon" />
+					<CardUser user={data.author} variant="icon" />
 					<Text style={[{ color: colors.mutedForeground }, tw`text-sm`]} numberOfLines={2}>
 						{t.rich('common.messages.user_liked_playlist', {
 							name: () => (
-								<Text style={tw`font-semibold`}>{author.full_name}</Text>
+								<Text style={tw`font-semibold`}>{data.author.name}</Text>
 							)
 						})}
 					</Text>
@@ -78,17 +77,17 @@ const CardFeedPlaylistLikeDefault = React.forwardRef<
 				<View style={tw`gap-2`}>
 					{!skeleton ? (
 						<Text numberOfLines={2} style={tw`font-bold`}>
-						{playlistLike.playlist?.title}
+						{data.content.title}
 						</Text>
  					) : <Skeleton style={tw`w-full h-5`} />}
 					{footer || (
 						!skeleton ? (
-							playlistLike.playlist?.description && (
+							data.content.description && (
 								<Text
 								numberOfLines={2}
 								style={tw`text-xs text-justify`}
 								>
-									{playlistLike.playlist?.description}
+									{data.content.description}
 								</Text>
 							)
 						) : <Skeleton style={tw`w-full h-12`} />
@@ -107,20 +106,20 @@ const CardFeedPlaylistLike = React.forwardRef<
 	const router = useRouter();
 	const openSheet = useBottomSheetStore((state) => state.openSheet);
 	const handleOnPress = React.useCallback(() => {
-		if (!props.playlistLike) return;
+		if (!props.data) return;
 		router.push({
 			pathname: '/playlist/[playlist_id]',
-			params: { playlist_id: props.playlistLike.playlist_id }
+			params: { playlist_id: props.data.content.id }
 		});
 		onPress?.();
-	}, [onPress, props.playlistLike, router]);
+	}, [onPress, props.data, router]);
 	const handleOnLongPress = React.useCallback(() => {
-		if (!props.playlistLike) return;
+		if (!props.data) return;
 		openSheet(BottomSheetPlaylist, {
-			playlist: props.playlistLike.playlist!
+			playlist: props.data.content!
 		})
 		onLongPress?.();
-	}, [onLongPress, openSheet, props.playlistLike]);
+	}, [onLongPress, openSheet, props.data]);
 	const content = (
 		variant === "default" ? (
 			<CardFeedPlaylistLikeDefault ref={ref} {...props} />

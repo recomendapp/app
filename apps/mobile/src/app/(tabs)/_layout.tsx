@@ -1,5 +1,4 @@
 import { Tabs, useRouter, useSegments } from 'expo-router';
-import { Icon, Label, NativeTabs } from 'expo-router/unstable-native-tabs';
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { Platform } from 'react-native';
 import { useAuth } from 'apps/mobile/src/providers/AuthProvider';
@@ -12,8 +11,8 @@ import { useEffect } from 'react';
 import { useUIStore } from 'apps/mobile/src/stores/useUIStore';
 
 const TabsLayout = () => {
-	const { session } = useAuth();
-	const { colors, isLiquidGlassAvailable } = useTheme();
+	const { user } = useAuth();
+	const { colors } = useTheme();
 	const t = useTranslations();
 	const router = useRouter();
 	const hasOnboarded = useUIStore(state => state.hasOnboarded);
@@ -24,48 +23,6 @@ const TabsLayout = () => {
 			router.replace({ pathname: '/onboarding' });
 		}
 	}, [hasOnboarded, router, segment]);
-
-	// return (
-	// 	<NativeTabs
-	// 	iconColor={isLiquidGlassAvailable ? colors.accentYellow : colors.mutedForeground}
-	// 	tintColor={colors.accentYellow}
-	// 	backgroundColor={Platform.select({
-	// 		android: colors.muted,
-	// 		default: undefined
-	// 	})}
-	// 	indicatorColor={'transparent'}
-	// 	disableTransparentOnScrollEdge
-	//   	>
-	// 		<NativeTabs.Trigger name='(home)'>
-	// 			<Label>{upperFirst(t('common.messages.home'))}</Label>
-	// 			<Icon sf={{ default: 'house', selected: 'house.fill' }} drawable='home' />
-	// 		</NativeTabs.Trigger>
-	// 		<NativeTabs.Trigger name='(search)'>
-	// 			<Label>{upperFirst(t('common.messages.search'))}</Label>
-	// 			<Icon sf={'magnifyingglass'} drawable='search' />
-	// 		</NativeTabs.Trigger>
-
-	// 		{/* LOGIN ONLY */}
-	// 		<Tabs.Protected guard={!!session}>
-	// 			<NativeTabs.Trigger name='(feed)'>
-	// 				<Label>{upperFirst(t('common.messages.feed'))}</Label>
-	// 				<Icon sf={'text.justify'} drawable='feed' />
-	// 			</NativeTabs.Trigger>
-	// 			<NativeTabs.Trigger name='(collection)'>
-	// 				<Label>{upperFirst(t('common.messages.library'))}</Label>
-	// 				<Icon sf={'books.vertical.fill'} drawable='library' />
-	// 			</NativeTabs.Trigger>
-	// 		</Tabs.Protected>
-
-	// 		{/* ANON ONLY */}
-	// 		<Tabs.Protected guard={!session}>
-	// 			<NativeTabs.Trigger name='auth'>
-	// 				<Label>{upperFirst(t('common.messages.login'))}</Label>
-	// 				<Icon sf={'person.crop.circle'} />
-	// 			</NativeTabs.Trigger>
-	// 		</Tabs.Protected>
-	// 	</NativeTabs>
-	// );
 
 	return (
 	<Tabs
@@ -105,7 +62,7 @@ const TabsLayout = () => {
 		/>
 
 		{/* LOGIN ONLY */}
-		<Tabs.Protected guard={!!session}>
+		<Tabs.Protected guard={!!user}>
 			<Tabs.Screen
 				name="(feed)"
 				options={{
@@ -123,7 +80,7 @@ const TabsLayout = () => {
 		</Tabs.Protected>
 
 		{/* ANON ONLY */}
-		<Tabs.Protected guard={!session}>
+		<Tabs.Protected guard={!user}>
 			<Tabs.Screen
 			name='auth'
 			options={{

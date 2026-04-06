@@ -19,7 +19,8 @@ import { useCallback, useMemo, useState } from "react";
 import { LoopCarousel } from "apps/mobile/src/components/ui/LoopCarousel";
 import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useUIBackgroundsQuery } from "apps/mobile/src/api/ui/uiQueries";
+import { useQuery } from "@tanstack/react-query";
+import { uiBackgroundsOptions } from "../../api/ui/uiOptions";
 
 const AuthHeader = ({
   onBackgroundChange,
@@ -32,7 +33,7 @@ const AuthHeader = ({
   const bgColor = useMemo(() => Color(colors.background).rgb().object(), [colors.background]);
   const {
     data,
-  } = useUIBackgroundsQuery();
+  } = useQuery(uiBackgroundsOptions());
   return (
     <View style={[tw`items-center justify-end`, { paddingHorizontal: PADDING_HORIZONTAL, paddingVertical: PADDING_VERTICAL, paddingTop: headerHeight, height: SCREEN_HEIGHT * 0.5 }]}>
       <Animated.View style={tw`absolute inset-0`}>

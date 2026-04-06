@@ -25,7 +25,7 @@ import { supportedLocales } from '@libs/i18n';
 
 const SettingsAppearanceScreen = () => {
 	const { locale, setLocale } = useLocaleContext();
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const toast = useToast();
 	const queryClient = useQueryClient();
 	const { colors, bottomOffset, tabBarHeight } = useTheme();
@@ -52,7 +52,7 @@ const SettingsAppearanceScreen = () => {
 	const handleSubmit = useCallback(async (data: ProfileFormValues) => {
 		try {
 			setIsLoading(true);
-			if (session) {
+			if (user) {
 				await updateUser({
 					language: data.locale,
 				});
@@ -71,7 +71,7 @@ const SettingsAppearanceScreen = () => {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [setLocale, session, updateUser, t, toast, queryClient, formReset]);
+	}, [setLocale, user, updateUser, t, toast, queryClient, formReset]);
 
 	// useEffects
 	useEffect(() => {

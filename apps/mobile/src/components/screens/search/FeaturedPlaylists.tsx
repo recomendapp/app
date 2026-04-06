@@ -5,13 +5,14 @@ import { StyleProp, useWindowDimensions, View, ViewStyle } from "react-native";
 import { LegendList, LegendListRef } from "@legendapp/list";
 import { useCallback, useMemo, useRef } from "react";
 import { useScrollToTop } from "@react-navigation/native";
-import { Playlist } from "@recomendapp/types";
 import { GAP, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { Text } from "apps/mobile/src/components/ui/text";
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
-import { usePlaylistsFeaturedQuery } from "apps/mobile/src/api/playlists/playlistQueries";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { playlistFeaturedInfiniteOptions } from "@libs/query-client";
+import { PlaylistWithOwner } from "@packages/api-js";
 
 interface FeaturedPlaylistsProps {
 	contentContainerStyle?: StyleProp<ViewStyle>;
@@ -29,30 +30,15 @@ const FeaturedPlaylists = ({
 		fetchNextPage,
 		hasNextPage,
 		refetch,
-	} = usePlaylistsFeaturedQuery({
-		filters: {
-			sortBy: 'updated_at',
-			sortOrder: 'desc',
-		}
-	});
-	const playlists = useMemo(() => data?.pages.flat() || [], [data]);
+	} = useInfiniteQuery(playlistFeaturedInfiniteOptions());
+	const playlists = useMemo(() => data?.pages.flatMap(page => page.data) ?? [], [data]);
 	// REFs
 	const scrollRef = useRef<LegendListRef>(null);
 
 	// Callbacks
-	const renderItem = useCallback(({ item }: { item: { playlist: Playlist } }) => (
-		<CardPlaylist playlist={item.playlist} />
+	const renderItem = useCallback(({ item: { owner, ...playlist } }: { item: PlaylistWithOwner }) => (
+		<CardPlaylist playlist={playlist} owner={owner} />
 	), []);
-	const keyExtractor = useCallback((item: { playlist: Playlist }) => 
-		item.playlist.id.toString(), 
-		[]
-	);
-	const onEndReached = useCallback(() => {
-		if (hasNextPage) {
-			fetchNextPage();
-		}
-	}, [hasNextPage, fetchNextPage]);
-	const itemSeparator = useCallback(() => <View style={tw`h-2`} />, []);
 
 	useScrollToTop(scrollRef);
 
@@ -67,7 +53,7 @@ const FeaturedPlaylists = ({
 			SCREEN_WIDTH < 600 ? 4 :
 			SCREEN_WIDTH < 768 ? 5 : 6
 		}
-		onEndReached={onEndReached}
+		onEndReached={hasNextPage ? () => fetchNextPage() : undefined}
 		onEndReachedThreshold={0.3}
 		contentContainerStyle={[
 			{
@@ -89,8 +75,8 @@ const FeaturedPlaylists = ({
 				</View>
 			)
 		}
-		keyExtractor={keyExtractor}
-		ItemSeparatorComponent={itemSeparator}
+		keyExtractor={(item) => item.id.toString()}
+		ItemSeparatorComponent={() => <View style={tw`h-2`} />}
 		onRefresh={refetch}
 		keyboardShouldPersistTaps='always'
 		/>

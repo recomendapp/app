@@ -1,6 +1,5 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { View } from "apps/mobile/src/components/ui/view";
-import { Playlist, Profile, User } from "@recomendapp/types";
 import tw from "apps/mobile/src/lib/tw";
 import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
 import ViewShot from "react-native-view-shot";
@@ -21,9 +20,11 @@ import { useImagePalette } from "apps/mobile/src/hooks/useImagePalette";
 import Color from "color";
 import { useTranslations } from "use-intl";
 import { ShapeVerticalRoundedBackground } from "apps/mobile/src/lib/icons";
+import { Playlist, UserSummary } from "@packages/api-js";
 
 interface SharePlaylistProps extends React.ComponentProps<typeof ViewShot> {
 	playlist: Playlist;
+	owner?: UserSummary;
 	variant?: 'default';
 	isPremium?: boolean;
 };
@@ -95,7 +96,7 @@ const EditOptionsSelector = ({
 };
 
 /* -------------------------------- VARIANTS -------------------------------- */
-const SharePlaylistDefault = ({ playlist, poster, scale = 1 } : { playlist: Playlist, poster: string | undefined, scale?: number }) => {
+const SharePlaylistDefault = ({ playlist, owner, poster, scale = 1 } : { playlist: Playlist, owner?: UserSummary, poster: string | undefined, scale?: number }) => {
 	const t = useTranslations();
 	const { colors } = useTheme();
 	return (
@@ -127,7 +128,9 @@ const SharePlaylistDefault = ({ playlist, poster, scale = 1 } : { playlist: Play
 						<Text style={{ fontSize: 12 * scale }}>{playlist.user.full_name}</Text>
 					</View>
 				)} */}
-				{playlist.user && <Text textColor="muted" style={{ fontSize: 12 * scale }}>{t('common.messages.by_name', { name: `@${playlist.user?.username}` })}</Text>}
+				{owner && (
+					<Text textColor="muted" style={{ fontSize: 12 * scale }}>{t('common.messages.by_name', { name: `@${owner.username}` })}</Text>
+				)}
 			</View>
 			<Icons.app.logo color={colors.accentYellow} height={10 * scale}/>
 		</View>
@@ -187,12 +190,12 @@ const ColorSelector = ({
 export const SharePlaylist = forwardRef<
 	ShareViewRef,
 	SharePlaylistProps
->(({ playlist, variant = 'default', isPremium, ...props }, ref) => {
+>(({ playlist, owner, variant = 'default', isPremium, ...props }, ref) => {
 	const viewShotRef = useRef<ViewShot>(null);
 	const { height: screenHeight } = useWindowDimensions();
 	const { colors } = useTheme();
 	// States
-	const [poster, setPoster] = useState(playlist.poster_url || undefined);
+	const [poster, setPoster] = useState(playlist.poster || undefined);
 	const { palette } = useImagePalette(poster);
 	const [bgColor, setBgColor] = useState<{index: number, color: string } | null>(palette ? { index: 0, color: palette[0] } : null);
 	const [bgType, setBgType] = useState<'color' | 'image'>('color');
@@ -218,7 +221,7 @@ export const SharePlaylist = forwardRef<
 	}));
 
 	const renderSticker = useCallback((scale: number) => (
-		<SharePlaylistDefault playlist={playlist} poster={poster} scale={scale} />
+		<SharePlaylistDefault playlist={playlist} owner={owner} poster={poster} scale={scale} />
 	), [playlist, poster]);
 
 	const handleEnableEditing = useCallback(() => {

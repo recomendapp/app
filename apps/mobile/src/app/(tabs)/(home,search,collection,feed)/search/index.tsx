@@ -1,4 +1,3 @@
-
 import { CardMovie } from "apps/mobile/src/components/cards/CardMovie";
 import { CardPerson } from "apps/mobile/src/components/cards/CardPerson";
 import { CardPlaylist } from "apps/mobile/src/components/cards/CardPlaylist";
@@ -14,18 +13,18 @@ import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import useSearchStore from "apps/mobile/src/stores/useSearchStore";
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { useScrollToTop } from "@react-navigation/native";
-import { MediaMovie, MediaPerson, MediaTvSeries, Playlist, Profile } from "@recomendapp/types";
 import { Link } from "expo-router";
 import { clamp, upperFirst } from "lodash";
 import { useRef } from "react";
 import { useWindowDimensions, ScrollView, RefreshControl } from "react-native";
 import { KeyboardAwareScrollView } from 'apps/mobile/src/components/ui/KeyboardAwareScrollView';
 import { useTranslations } from "use-intl";
-import { BestResultItem } from "@recomendapp/api-js";
 import ErrorMessage from "apps/mobile/src/components/ErrorMessage";
 import { KeyboardAwareScrollViewRef, useKeyboardState } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useSearchMultiQuery } from "apps/mobile/src/api/search/searchQueries";
+import { useQuery } from "@tanstack/react-query";
+import { searchGlobalOptions } from "@libs/query-client";
+import { MovieCompact, PersonCompact, PlaylistWithOwner, SearchBestResultItem, TvSeriesCompact, UserSummary } from "@packages/api-js";
 
 const SearchScreen = () => {
 	const search = useSearchStore(state => state.search);
@@ -50,16 +49,17 @@ export const SearchResults = ({ search, ...props } : SearchResultsProps) => {
 		height: keyboardHeight,
 	} = useKeyboardState((state) => state);
 
-
 	const {
 		data,
 		isLoading,
 		isError,
 		refetch,
 		isRefetching,
-	} = useSearchMultiQuery({
-		query: search,
-	});
+	} = useQuery(searchGlobalOptions({
+		filters: {
+			q: search
+		}
+	}));
 	
 	const loading = data === undefined || isLoading;
 	const scrollRef = useRef<KeyboardAwareScrollViewRef>(null);
@@ -91,27 +91,27 @@ export const SearchResults = ({ search, ...props } : SearchResultsProps) => {
 			<Icons.Loader />
 		) : (
 			<>
-			{data.bestResult && (
-				<SearchBestResult best={data.bestResult} />
+			{data.best_result && (
+				<SearchBestResult best={data.best_result} />
 			)}
-			{data.movies.data.length > 0 && (
-				<SearchResultsMovies movies={data.movies.data as MediaMovie[]} search={search} />
+			{data.movies.length > 0 && (
+				<SearchResultsMovies movies={data.movies} search={search} />
 			)}
-			{data.tv_series.data.length > 0 && (
-				<SearchResultsTvSeries tvSeries={data.tv_series.data as MediaTvSeries[]} search={search} />
+			{data.tv_series.length > 0 && (
+				<SearchResultsTvSeries tvSeries={data.tv_series} search={search} />
 			)}
-			{data.persons.data.length > 0 && (
-				<SearchResultsPersons persons={data.persons.data as MediaPerson[]} search={search} />
+			{data.persons.length > 0 && (
+				<SearchResultsPersons persons={data.persons} search={search} />
 			)}
-			{data.playlists.data.length > 0 && (
-				<SearchResultsPlaylists playlists={data.playlists.data as Playlist[]} search={search} />
+			{data.playlists.length > 0 && (
+				<SearchResultsPlaylists playlists={data.playlists} search={search} />
 			)}
-			{data.users.data.length > 0 && (
-				<SearchResultsUsers users={data.users.data} search={search} />
+			{data.users.length > 0 && (
+				<SearchResultsUsers users={data.users} search={search} />
 			)}
-			{(data.movies.data.length === 0 && data.tv_series.data.length === 0 &&
-			data.persons.data.length === 0 && data.playlists.data.length === 0 &&
-			data.users.data.length === 0) && (
+			{(data.movies.length === 0 && data.tv_series.length === 0 &&
+			data.persons.length === 0 && data.playlists.length === 0 &&
+			data.users.length === 0) && (
 				isLoading ? <Icons.Loader />
 				: search ? (
 					<View style={tw`flex-1 items-center justify-center`}>
@@ -129,7 +129,7 @@ export const SearchResults = ({ search, ...props } : SearchResultsProps) => {
 const SearchBestResult = ({
 	best,
 } : {
-	best: BestResultItem;
+	best: SearchBestResultItem | null;
 }) => {
 	const t = useTranslations();
 	return (
@@ -139,15 +139,15 @@ const SearchBestResult = ({
 			</Text>
 			{
 				best?.type === 'movie'
-					? <CardMovie variant="list" movie={best.data as MediaMovie} />
+					? <CardMovie variant="list" movie={best.data} />
 				: best?.type === 'tv_series'
-					? <CardTvSeries variant="list" tvSeries={best.data as MediaTvSeries} />
+					? <CardTvSeries variant="list" tvSeries={best.data} />
 				: best?.type === 'person'
-					? <CardPerson variant="list" person={best.data as MediaPerson} />
+					? <CardPerson variant="list" person={best.data} />
 				: best?.type === 'playlist'
-					? <CardPlaylist variant="list" playlist={best.data as Playlist} />
+					? <CardPlaylist variant="list" playlist={best.data} owner={best.data.owner} />
 				: best?.type === 'user'
-					? <CardUser variant="list" user={best.data as Profile} />
+					? <CardUser variant="list" user={best.data} />
 				: null
 			}
 		</View>
@@ -210,12 +210,12 @@ const SearchResultsMovies = ({
 	movies,
 	search,
 } : {
-	movies: MediaMovie[];
+	movies: MovieCompact[];
 	search: string;
 }) => {
 	const t = useTranslations();
 	return (
-		<SearchResultSection<MediaMovie>
+		<SearchResultSection<MovieCompact>
 			title={upperFirst(t('common.messages.film', { count: 2 }))}
 			data={movies}
 			search={search}
@@ -230,12 +230,12 @@ const SearchResultsTvSeries = ({
 	tvSeries,
 	search,
 } : {
-	tvSeries: MediaTvSeries[];
+	tvSeries: TvSeriesCompact[];
 	search: string;
 }) => {
 	const t = useTranslations();
 	return (
-		<SearchResultSection<MediaTvSeries>
+		<SearchResultSection<TvSeriesCompact>
 			title={upperFirst(t('common.messages.tv_series', { count: 2 }))}
 			data={tvSeries}
 			search={search}
@@ -250,12 +250,12 @@ const SearchResultsPersons = ({
 	persons,
 	search,
 } : {
-	persons: MediaPerson[];
+	persons: PersonCompact[];
 	search: string;
 }) => {
 	const t = useTranslations();
 	return (
-		<SearchResultSection<MediaPerson>
+		<SearchResultSection<PersonCompact>
 			title={upperFirst(t('common.messages.person', { count: 2 }))}
 			data={persons}
 			search={search}
@@ -270,17 +270,17 @@ const SearchResultsPlaylists = ({
 	playlists,
 	search,
 } : {
-	playlists: Playlist[];
+	playlists: PlaylistWithOwner[];
 	search: string;
 }) => {
 	const t = useTranslations();
 	return (
-		<SearchResultSection<Playlist>
+		<SearchResultSection
 			title={upperFirst(t('common.messages.playlist', { count: 2 }))}
 			data={playlists}
 			search={search}
 			pathname="/search/playlists"
-			renderItem={(item) => <CardPlaylist playlist={item} variant="list" /> }
+			renderItem={({ owner, ...playlist }) => <CardPlaylist playlist={playlist} owner={owner} variant="list" /> }
 			keyExtractor={(item) => item.id.toString()}
 		/>
 	);
@@ -290,12 +290,12 @@ const SearchResultsUsers = ({
 	users,
 	search,
 } : {
-	users: Profile[];
+	users: UserSummary[];
 	search: string;
 }) => {
 	const t = useTranslations();
 	return (
-		<SearchResultSection<Profile>
+		<SearchResultSection<UserSummary>
 			title={upperFirst(t('common.messages.user', { count: 2 }))}
 			data={users}
 			search={search}

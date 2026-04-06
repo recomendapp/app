@@ -14,7 +14,8 @@ import { PropsWithChildren } from "react";
 import { ToastProvider } from "apps/mobile/src/components/Toast";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { ApiProvider } from "./ApiProvider";
-import { useUIBackgroundsQuery } from "apps/mobile/src/api/ui/uiQueries";
+import { useQuery } from "@tanstack/react-query";
+import { uiBackgroundsOptions } from "../api/ui/uiOptions";
 
 type ProvidersProps = {
 	children: React.ReactNode;
@@ -58,13 +59,8 @@ const Providers = ({ children } : ProvidersProps) => {
 };
 
 const ProvidersInner = ({ children } : PropsWithChildren) => {
-	useUIBackgroundsQuery(); // Preload UI backgrounds
+	useQuery(uiBackgroundsOptions()); // Preload UI backgrounds
 	return children;
-	// return (
-	// 	<Splash>
-	// 		{children}
-	// 	</Splash>
-	// );
 };
 
 export { Providers };

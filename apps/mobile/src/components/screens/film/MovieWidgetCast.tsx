@@ -6,8 +6,9 @@ import { Text } from "apps/mobile/src/components/ui/text";
 import { MultiRowHorizontalList } from "apps/mobile/src/components/ui/MultiRowHorizontalList";
 import { GAP, PADDING_HORIZONTAL } from "apps/mobile/src/theme/globals";
 import { useMemo } from "react";
-import { useMediaMovieCastQuery } from "apps/mobile/src/api/medias/mediaQueries";
 import { CardPerson } from "apps/mobile/src/components/cards/CardPerson";
+import { useQuery } from "@tanstack/react-query";
+import { movieCastingOptions } from "@libs/query-client";
 
 interface MovieWidgetCastProps extends React.ComponentPropsWithoutRef<typeof View> {
 	movieId: number;
@@ -23,9 +24,9 @@ const MovieWidgetCast = ({
 
 	const {
 		data,
-	} = useMediaMovieCastQuery({
+	} = useQuery(movieCastingOptions({
 		movieId,
-	});
+	}));
 
 	if (!data?.length) return null;
 
@@ -37,9 +38,9 @@ const MovieWidgetCast = ({
 			<MultiRowHorizontalList
 			data={data}
 			renderItem={(item) => (
-				<CardPerson variant='list' hideKnownForDepartment person={item.media_person!} style={tw`h-12`} />
+				<CardPerson variant='list' person={item.person} style={tw`h-12`} />
 			)}
-			keyExtractor={(item) => item.person_id!.toString()}
+			keyExtractor={(item) => item.personId.toString()}
 			contentContainerStyle={{
 				paddingHorizontal: PADDING_HORIZONTAL,
 				gap: GAP,

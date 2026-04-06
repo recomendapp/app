@@ -33,7 +33,7 @@ configureReanimatedLogger({
 
 const RootLayoutNav = () => {
   const t = useTranslations();
-  const { session } = useAuth();
+  const { user } = useAuth();
   const { defaultScreenOptions, isLiquidGlassAvailable } = useTheme();
   return (
   <Stack
@@ -42,7 +42,7 @@ const RootLayoutNav = () => {
   >
     <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
     {/* PLAYLISTS */}
-    <Stack.Protected guard={!!session}>
+    <Stack.Protected guard={!!user}>
       <Stack.Screen
       name="playlist/[playlist_id]/sort"
       options={{
@@ -62,24 +62,7 @@ const RootLayoutNav = () => {
       }}
       />
       <Stack.Screen
-      name="playlist/add/movie/[movie_id]"
-      options={{
-        presentation: Platform.OS === "ios"
-          ? isLiquidGlassAvailable && osName !== "iPadOS"
-            ? "formSheet"
-            : "modal"
-          : "modal",
-        sheetGrabberVisible: true,
-        sheetAllowedDetents: [0.8],
-        sheetInitialDetentIndex: 0,
-        ...(isLiquidGlassAvailable ? {
-          contentStyle: { backgroundColor: 'transparent' },
-          headerStyle: { backgroundColor: 'transparent' },
-        } : {}),
-      }}
-      />
-      <Stack.Screen
-      name="playlist/add/tv-series/[tv_series_id]"
+      name="playlist/add/[type]/[id]"
       options={{
         presentation: Platform.OS === "ios"
           ? isLiquidGlassAvailable && osName !== "iPadOS"
@@ -98,26 +81,9 @@ const RootLayoutNav = () => {
       <Stack.Screen name='playlist/[playlist_id]/edit' options={{ headerShown: false, presentation: 'modal' }} />
     </Stack.Protected>
     {/* RECOS */}
-    <Stack.Protected guard={!!session}>
+    <Stack.Protected guard={!!user}>
       <Stack.Screen
-      name="reco/send/movie/[movie_id]"
-      options={{
-        presentation: Platform.OS === "ios"
-          ? isLiquidGlassAvailable && osName !== "iPadOS"
-            ? "formSheet"
-            : "modal"
-          : "modal",
-        sheetGrabberVisible: true,
-        sheetAllowedDetents: [0.8],
-        sheetInitialDetentIndex: 0,
-        ...(isLiquidGlassAvailable ? {
-          contentStyle: { backgroundColor: 'transparent' },
-          headerStyle: { backgroundColor: 'transparent' },
-        } : {}),
-      }}
-      />
-      <Stack.Screen
-      name="reco/send/tv-series/[tv_series_id]"
+      name="reco/send/[type]/[id]"
       options={{
         presentation: Platform.OS === "ios"
           ? isLiquidGlassAvailable && osName !== "iPadOS"
@@ -135,7 +101,7 @@ const RootLayoutNav = () => {
       />
     </Stack.Protected>
     {/* AUTH */}
-    <Stack.Protected guard={!session}>
+    <Stack.Protected guard={!user}>
       <Stack.Screen
       name='auth'
       options={{

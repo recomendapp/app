@@ -20,7 +20,7 @@ import { useUserReviewTvSeriesQuery } from "apps/mobile/src/api/users/userQuerie
 import { NativeStackHeaderItem } from "@react-navigation/native-stack";
 
 const ReviewTvSeriesScreen = () => {
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const { bottomOffset, colors, tabBarHeight } = useTheme();
 	const openSheet = useBottomSheetStore((state) => state.openSheet);
 	const t = useTranslations();
@@ -48,7 +48,7 @@ const ReviewTvSeriesScreen = () => {
 		options={{
 			headerRight: () => (
 			<>
-				{review && session && <ButtonUserReviewTvSeriesLike variant="ghost" reviewId={review?.id} />}
+				{review && user && <ButtonUserReviewTvSeriesLike variant="ghost" reviewId={review?.id} />}
 				<Button
 				variant="ghost"
 				size="icon"
@@ -64,7 +64,7 @@ const ReviewTvSeriesScreen = () => {
 			</>
 			),
 			unstable_headerRightItems: (props) => [
-				...(session ? [
+				...(user ? [
 					{
 						type: "button",
 						label: upperFirst(t('common.messages.like')),

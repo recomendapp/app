@@ -12,7 +12,6 @@ import { Skeleton } from "apps/mobile/src/components/ui/Skeleton";
 import { View } from "apps/mobile/src/components/ui/view";
 import { AnimatedImageWithFallback } from "apps/mobile/src/components/ui/AnimatedImageWithFallback";
 import { ImageType } from "apps/mobile/src/components/utils/ImageWithFallback";
-import { MediaType } from "@recomendapp/types";
 import { useTranslations } from "use-intl";
 import { PADDING_HORIZONTAL } from "apps/mobile/src/theme/globals";
 
@@ -22,7 +21,6 @@ interface CollectionHeaderBaseProps
 		scrollY: SharedValue<number>;
 		poster?: string;
 		posterType?: ImageType;
-		type?: MediaType;
 	}
 
 type CollectionHeaderLoadingProps = {
@@ -50,7 +48,7 @@ type CollectionHeaderProps = CollectionHeaderBaseProps & (CollectionHeaderLoaded
 const CollectionHeader = forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	CollectionHeaderProps
->(({ loading, headerHeight, scrollY, title, hideTitle, poster, posterType, bottomText, numberOfItems, hideNumberOfItems, backdrops, type, ...props }, ref) => {
+>(({ loading, headerHeight, scrollY, title, hideTitle, poster, posterType, bottomText, numberOfItems, hideNumberOfItems, backdrops, ...props }, ref) => {
 	const { colors } = useTheme();
 	const { hslToRgb } = useColorConverter();
 	const t = useTranslations();
@@ -97,18 +95,6 @@ const CollectionHeader = forwardRef<
 			],
 		};
 	});
-
-	const itemsCount = useMemo(() => {
-		if (numberOfItems === undefined) return null;
-		switch (type) {
-			case 'movie':
-				return t('common.messages.film_count', { count: numberOfItems });
-			case 'tv_series':
-				return t('common.messages.tv_series_count', { count: numberOfItems });
-			default:
-				return t('common.messages.item_count', { count: numberOfItems });
-		}
-	}, [numberOfItems, t, type]);
 	
 	return (
 		<Animated.View
@@ -183,7 +169,7 @@ const CollectionHeader = forwardRef<
 					)}
 					{!hideNumberOfItems && (
 						!loading ? <Text numberOfLines={1} style={[{ color: colors.mutedForeground }]}>
-							{itemsCount}
+							{t('common.messages.item_count', { count: numberOfItems })}
 						</Text> : <Skeleton style={tw`h-4 w-10`} />
 					)}
 				</View>

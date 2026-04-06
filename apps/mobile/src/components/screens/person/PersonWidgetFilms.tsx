@@ -7,11 +7,12 @@ import { Icons } from "apps/mobile/src/constants/Icons";
 import { useTranslations } from "use-intl";
 import { Text } from "apps/mobile/src/components/ui/text";
 import { CardMovie } from "apps/mobile/src/components/cards/CardMovie";
-import { Database } from "@recomendapp/types";
 import { MultiRowHorizontalList } from "apps/mobile/src/components/ui/MultiRowHorizontalList";
 import { GAP, PADDING_HORIZONTAL } from "apps/mobile/src/theme/globals";
 import { useMemo } from "react";
-import { useMediaPersonFilmsQuery } from "apps/mobile/src/api/medias/mediaQueries";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { personMoviesInfiniteOptions } from "@libs/query-client";
+import { PersonMovie } from "@packages/api-js";
 
 interface PersonWidgetFilmsProps extends React.ComponentPropsWithoutRef<typeof View> {
 	personId: number;
@@ -28,18 +29,15 @@ const PersonWidgetFilms = ({
 	const { width: screenWidth } = useWindowDimensions();
 	const width = useMemo(() => clamp(screenWidth - ((PADDING_HORIZONTAL * 2) + GAP * 2), 400), [screenWidth]);
 	const {
-		data: movies,
+		data,
 		isLoading,
 		fetchNextPage,
 		hasNextPage,
-	} = useMediaPersonFilmsQuery({
+	} = useInfiniteQuery(personMoviesInfiniteOptions({
 		personId,
-		filters: {
-			sortBy: 'release_date',
-			sortOrder: 'desc',
-		}
-	});
-	const loading = movies === undefined || isLoading;
+	}));
+	const movies = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
+	const loading = data === undefined || isLoading;
 	return (
 	<View style={[tw`gap-1`, style]}>
 		<Link href={url} style={{ paddingHorizontal: PADDING_HORIZONTAL }}>
@@ -50,22 +48,25 @@ const PersonWidgetFilms = ({
 				<Icons.ChevronRight color={colors.mutedForeground} />
 			</View>
 		</Link>
-		<MultiRowHorizontalList<{ media_movie: Database['public']['Views']['media_movie']['Row'] }>
+		<MultiRowHorizontalList<PersonMovie>
 		key={loading ? 'loading' : 'movie'}
-		data={loading ? new Array(3).fill(null) : movies?.pages.flat()}
+		data={loading ? new Array(3).fill(null) : movies}
 		renderItem={(item) => (
-			!loading ? (
-				<CardMovie variant="list" movie={item.media_movie} />
-			) : (
-				<CardMovie variant="list" skeleton />
-			)
+			<CardMovie
+			variant="list"
+			{...(!loading ? {
+				movie: item.movie,
+			} : {
+				skeleton: true,
+			})}
+			/>
 		)}
 		ListEmptyComponent={
 			<Text style={[tw``, { color: colors.mutedForeground }]}>
 				{upperFirst(t('common.messages.no_films'))}
 			</Text>
 		}
-		keyExtractor={(item, index) => loading ? index.toString() : item.media_movie.id.toString()}
+		keyExtractor={(item, index) => loading ? index.toString() : item.movie.id.toString()}
 		contentContainerStyle={{
 			paddingHorizontal: PADDING_HORIZONTAL,
 			gap: GAP,

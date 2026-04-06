@@ -8,8 +8,9 @@ import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { useTranslations } from "use-intl";
 import { Text } from "apps/mobile/src/components/ui/text";
-import { Playlist } from "@recomendapp/types";
-import { useMediaMoviePlaylistsQuery } from "apps/mobile/src/api/medias/mediaQueries";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { moviePlaylistsInfiniteOptions } from "@libs/query-client";
+import { PlaylistWithOwner } from "@packages/api-js";
 
 interface MovieWidgetPlaylistsProps extends React.ComponentPropsWithoutRef<typeof View> {
 	movieId: number;
@@ -33,13 +34,10 @@ const MovieWidgetPlaylists = ({
 		isLoading,
 		fetchNextPage,
 		hasNextPage,
-	} = useMediaMoviePlaylistsQuery({
+	} = useInfiniteQuery(moviePlaylistsInfiniteOptions({
 		movieId,
-		filters: {
-			sortBy: 'updated_at',
-			sortOrder: 'desc',
-		}
-	});
+	}));
+	const flattenedPlaylists = playlists?.pages.flatMap(page => page.data) || [];
 	const loading = playlists === undefined || isLoading;
 
 	return (
@@ -52,15 +50,11 @@ const MovieWidgetPlaylists = ({
 				<Icons.ChevronRight color={colors.mutedForeground} />
 			</View>
 		</Link>
-		<LegendList<Playlist>
+		<LegendList<PlaylistWithOwner>
 		key={loading ? 'loading' : 'playlists'}
-		data={loading ? new Array(3).fill(null) : playlists?.pages.flat()}
+		data={loading ? new Array(3).fill(null) : flattenedPlaylists}
 		renderItem={({ item }) => (
-			!loading ? (
-				<CardPlaylist playlist={item} style={tw`w-36`} />
-			) : (
-				<CardPlaylist skeleton style={tw`w-36`} />
-			)
+			<CardPlaylist {...(!loading ? { playlist: item, owner: item.owner } : { skeleton: true })} style={tw`w-36`} />
 		)}
 		ListEmptyComponent={
 			<Text style={[tw``, { color: colors.mutedForeground }]}>

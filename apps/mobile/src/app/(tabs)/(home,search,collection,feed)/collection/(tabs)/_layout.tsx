@@ -140,8 +140,16 @@ const CollectionLayout = () => {
 				{
 					type: "custom",
 					element: (
-						<Pressable onPress={() => router.push(`/user/${user?.username}`)} disabled={!user}>
-							{user ? <UserAvatar full_name={user.full_name} avatar_url={user.avatar_url} style={{ width: 36, height: 36 }} /> : <UserAvatar skeleton style={{ width: 36, height: 36 }} />}
+						<Pressable onPress={user ? () => router.push({ pathname: '/user/[username]', params: { username: user.username } }) : undefined} disabled={!user}>
+							<UserAvatar
+							{...(user ? {
+								full_name: user.name,
+								avatar_url: user.avatar,
+							} : {
+								skeleton: true,
+							})}
+							style={{ width: 36, height: 36 }}
+							/>
 						</Pressable>
 					)
 				}

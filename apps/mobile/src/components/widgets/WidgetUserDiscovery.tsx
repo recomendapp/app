@@ -6,7 +6,8 @@ import { useTranslations } from "use-intl";
 import { upperFirst } from "lodash";
 import { Text } from "../ui/text";
 import { GAP } from "apps/mobile/src/theme/globals";
-import { useWidgetUsersQuery } from "apps/mobile/src/api/widgets/widgetQueries";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { usersInfiniteOptions } from "@libs/query-client";
 
 interface WidgetUserDiscoveryProps extends React.ComponentPropsWithoutRef<typeof View> {
   labelStyle?: StyleProp<TextStyle>;
@@ -23,16 +24,11 @@ export const WidgetUserDiscovery = ({
     data: users,
     fetchNextPage,
     hasNextPage,
-  } = useWidgetUsersQuery({
-    filters: {
-      sortBy: 'created_at',
-      sortOrder: 'desc',
-    }
-  });
+  } = useInfiniteQuery(usersInfiniteOptions());
 
-  const userData = users?.pages.flat() || [];
+  const flattenUsers = users?.pages.flatMap(page => page.data) || [];
 
-  if (!userData.length) {
+  if (!flattenUsers.length) {
     return null;
   }
 
@@ -42,7 +38,7 @@ export const WidgetUserDiscovery = ({
         {upperFirst(t('common.messages.discover_users'))}
       </Text>
       <LegendList
-        data={userData}
+        data={flattenUsers}
         renderItem={({ item }) => (
           <View style={tw`max-h-24`}>
             <CardUser user={item} style={tw`h-full w-48`} />

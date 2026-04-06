@@ -1,4 +1,3 @@
-import { useSearchTvSeriesQuery } from "apps/mobile/src/api/search/searchQueries";
 import { CardTvSeries } from "apps/mobile/src/components/cards/CardTvSeries";
 import ErrorMessage from "apps/mobile/src/components/ErrorMessage";
 import { Text } from "apps/mobile/src/components/ui/text";
@@ -12,14 +11,15 @@ import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme
 import { LegendList, LegendListRef } from "@legendapp/list";
 import { TrueSheet as RNTrueSheet } from "@lodev09/react-native-true-sheet";
 import { useScrollToTop } from "@react-navigation/native";
-import { MediaTvSeries } from "@recomendapp/types";
 // import { useNavigation } from "expo-router";
 import { upperFirst } from "lodash";
-import { useRef, forwardRef } from "react";
+import { useRef, forwardRef, useMemo } from "react";
 import { ScrollView } from "react-native";
 import { useKeyboardState } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslations } from "use-intl";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { searchTvSeriesInfiniteOptions } from "@libs/query-client";
 
 // const FiltersButton = ({ onPress }: { onPress: () => void }) => {
 // 	return (
@@ -91,9 +91,12 @@ const SearchTvSeriesScreen = () => {
 		fetchNextPage,
 		refetch,
 		isRefetching,
-	} = useSearchTvSeriesQuery({
-		query: search,
-	});
+	} = useInfiniteQuery(searchTvSeriesInfiniteOptions({
+		filters: {
+			q: search
+		}
+	}));
+	const tvSeries = useMemo(() => data?.pages.flatMap(page => page.data) ?? [], [data]);
 	
 	// REFs
 	const scrollRef = useRef<LegendListRef>(null);
@@ -122,7 +125,7 @@ const SearchTvSeriesScreen = () => {
 			<LegendList
 				key={search}
 				ref={scrollRef}
-				data={data?.pages.flatMap(page => page.data) as MediaTvSeries[] || []}
+				data={tvSeries}
 				renderItem={({ item }) => <CardTvSeries variant="list" tvSeries={item} /> }
 				contentContainerStyle={{
 					paddingLeft: insets.left + PADDING_HORIZONTAL,

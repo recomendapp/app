@@ -1,4 +1,3 @@
-import { useSearchPlaylistsQuery } from "apps/mobile/src/api/search/searchQueries";
 import { CardPlaylist } from "apps/mobile/src/components/cards/CardPlaylist";
 import ErrorMessage from "apps/mobile/src/components/ErrorMessage";
 import { Text } from "apps/mobile/src/components/ui/text";
@@ -10,12 +9,13 @@ import useSearchStore from "apps/mobile/src/stores/useSearchStore";
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { LegendList, LegendListRef } from "@legendapp/list";
 import { useScrollToTop } from "@react-navigation/native";
-import { Playlist } from "@recomendapp/types";
 import { upperFirst } from "lodash";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useKeyboardState } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslations } from "use-intl";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { searchPlaylistsInfiniteOptions } from "@libs/query-client";
 
 const SearchPlaylistsScreen = () => {
 	const insets = useSafeAreaInsets();
@@ -36,10 +36,13 @@ const SearchPlaylistsScreen = () => {
 		fetchNextPage,
 		refetch,
 		isRefetching,
-	} = useSearchPlaylistsQuery({
-		query: search,
-	});
-	
+	} = useInfiniteQuery(searchPlaylistsInfiniteOptions({
+		filters: {
+			q: search
+		}
+	}));
+	const playlists = useMemo(() => data?.pages.flatMap(page => page.data) ?? [], [data]);
+
 	// REFs
 	const scrollRef = useRef<LegendListRef>(null);
 
@@ -49,8 +52,8 @@ const SearchPlaylistsScreen = () => {
 		<LegendList
 			key={search}
 			ref={scrollRef}
-			data={data?.pages.flatMap(page => page.data) as Playlist[] || []}
-			renderItem={({ item }) => <CardPlaylist variant="list" playlist={item} /> }
+			data={playlists}
+			renderItem={({ item: { owner, ...playlist } }) => <CardPlaylist variant="list" playlist={playlist} owner={owner} /> }
 			contentContainerStyle={{
 				paddingLeft: insets.left + PADDING_HORIZONTAL,
 				paddingRight: insets.right + PADDING_HORIZONTAL,

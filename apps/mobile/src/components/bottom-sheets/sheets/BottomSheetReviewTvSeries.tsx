@@ -1,7 +1,6 @@
 import { forwardRef, useMemo } from 'react';
 import tw from 'apps/mobile/src/lib/tw';
 import { Icons } from 'apps/mobile/src/constants/Icons';
-import { UserReviewTvSeries } from '@recomendapp/types';
 import { usePathname, useRouter } from 'expo-router';
 import { LucideIcon } from 'lucide-react-native';
 import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
@@ -14,12 +13,14 @@ import { Button } from 'apps/mobile/src/components/ui/Button';
 import { useAuth } from 'apps/mobile/src/providers/AuthProvider';
 import { PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
 import { Alert } from 'react-native';
-import { useUserReviewTvSeriesDeleteMutation } from 'apps/mobile/src/api/users/userMutations';
 import { useToast } from 'apps/mobile/src/components/Toast';
 import { FlashList } from '@shopify/flash-list';
+import { ReviewTvSeries, UserSummary } from '@packages/api-js';
+import { useTvSeriesReviewDeleteMutation } from '@libs/query-client';
 
 interface BottomSheetReviewTvSeriesProps extends BottomSheetProps {
-  review: UserReviewTvSeries,
+  review: ReviewTvSeries,
+  author: UserSummary;
   additionalItemsTop?: Item[];
   additionalItemsBottom?: Item[];
 };
@@ -36,29 +37,40 @@ interface Item {
 export const BottomSheetReviewTvSeries = forwardRef<
   React.ComponentRef<typeof TrueSheet>,
   BottomSheetReviewTvSeriesProps
->(({ id, review, additionalItemsTop = [], additionalItemsBottom = [], ...props }, ref) => {
+>(({ id, review, author, additionalItemsTop = [], additionalItemsBottom = [], ...props }, ref) => {
   const toast = useToast();
   const closeSheet = useBottomSheetStore((state) => state.closeSheet);
   const { colors, mode } = useTheme();
-  const { session } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const t = useTranslations();
   const pathname = usePathname();
   // Mutations
-  const { mutateAsync: reviewDeleteMutation } = useUserReviewTvSeriesDeleteMutation();
+  const { mutateAsync: deleteReview } = useTvSeriesReviewDeleteMutation();
   // States
   const items = useMemo<Item[]>(() => [
     ...additionalItemsTop,
     {
       icon: Icons.Movie,
-      onPress: () => router.push(`/tv-series/${review.activity?.tv_series?.slug || review.activity?.tv_series_id}/review/${review.id}`),
+      onPress: () => router.push({
+        pathname: '/user/[username]/tv-series/[tv_series_id]',
+        params: {
+          username: author.username,
+          tv_series_id: review.tvSeriesId,
+        }
+      }),
       label: upperFirst(t('common.messages.go_to_review')),
-      disabled: review.activity?.tv_series?.url ? pathname.startsWith(review.activity?.tv_series?.url) : false
+      disabled: pathname.startsWith(`/user/${author.username}/tv-series/${review.tvSeriesId}`),
     },
-    ...(session?.user.id === review.activity?.user_id ? [
+    ...(user?.id === author.id ? [
       {
         icon: Icons.Edit,
-        onPress: () => router.push(`/tv-series/${review.activity?.tv_series?.slug || review.activity?.tv_series_id}/review/${review.id}/edit`),
+        onPress: () => router.push({
+          pathname: '/tv-series/[tv_series_id]/review',
+          params: {
+            tv_series_id: review.tvSeriesId,
+          }
+        }),
         label: upperFirst(t('common.messages.edit_review')),
       },
       {
@@ -75,25 +87,31 @@ export const BottomSheetReviewTvSeries = forwardRef<
               {
                 text: upperFirst(t('common.messages.delete')),
                 onPress: async () => {
-                  await reviewDeleteMutation(
-                    { id: review.id, tvSeriesId: review.activity?.tv_series_id! },
-                    {
-                      onSuccess: () => {
-                        toast.success(upperFirst(t('common.messages.deleted')));
-                        if (pathname.startsWith(`/tv-series/${review.activity?.tv_series?.slug || review.activity?.tv_series_id}/review/${review.id}`)) {
-                          if (router.canGoBack()) {
-                            router.back()
-                          } else {
-                            router.replace(`/tv-series/${review.activity?.tv_series?.slug || review.activity?.tv_series_id}`);
-                          }
-                        }
-                        closeSheet(id);
-                      },
-                      onError: () => {
-                        toast.error(upperFirst(t('common.messages.error')), { description: upperFirst(t('common.messages.an_error_occurred')) });
-                      },
+                  await deleteReview({
+                    path: {
+                      tv_series_id: review.tvSeriesId,
                     }
-                  );
+                  }, {
+                    onSuccess: () => {
+                      toast.success(upperFirst(t('common.messages.deleted')));
+                      if (pathname.startsWith(`/user/${author.username}/tv-series/${review.tvSeriesId}`)) {
+                        if (router.canGoBack()) {
+                          router.back()
+                        } else {
+                          router.replace({
+                            pathname: '/tv-series/[tv_series_id]',
+                            params: {
+                              tv_series_id: review.tvSeriesId,
+                            }
+                          });
+                        }
+                      }
+                      closeSheet(id);
+                    },
+                    onError: () => {
+                      toast.error(upperFirst(t('common.messages.error')), { description: upperFirst(t('common.messages.an_error_occurred')) });
+                    },
+                  });
                 },
                 style: 'destructive',
               }
@@ -115,15 +133,11 @@ export const BottomSheetReviewTvSeries = forwardRef<
     mode,
     router,
     pathname,
-    review.activity?.tv_series?.slug,
-    review.activity?.tv_series_id,
-    review.activity?.tv_series?.url,
-    review.id,
-    review.activity?.user_id,
-    session?.user.id,
+    review,
+    user?.id,
     t,
     toast,
-    reviewDeleteMutation,
+    deleteReview,
   ]);
   return (
     <TrueSheet

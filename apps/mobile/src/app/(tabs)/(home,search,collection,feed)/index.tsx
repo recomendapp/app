@@ -5,7 +5,7 @@ import tw from 'apps/mobile/src/lib/tw';
 import { Button } from 'apps/mobile/src/components/ui/Button';
 import { upperFirst } from 'lodash';
 import { WidgetUserRecos } from 'apps/mobile/src/components/widgets/WidgetUserRecos';
-import { WidgetUserWatchlist } from 'apps/mobile/src/components/widgets/WidgetUserWatchlist';
+import { WidgetUserBookmarks } from 'apps/mobile/src/components/widgets/WidgetUserBookmarks';
 import { WidgetUserFriendsPlaylists } from 'apps/mobile/src/components/widgets/WidgetUserFriendsPlaylists';
 import { WidgetUserDiscovery } from 'apps/mobile/src/components/widgets/WidgetUserDiscovery';
 import { useNow, useTranslations } from 'use-intl';
@@ -28,11 +28,10 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import { useQueryClient } from '@tanstack/react-query';
 import { NativeStackHeaderItem } from '@react-navigation/native-stack';
 import UserAvatar from 'apps/mobile/src/components/user/UserAvatar';
-import { widgetKeys } from 'apps/mobile/src/api/widgets/widgetKeys';
 import { userKeys } from 'apps/mobile/src/api/users/userKeys';
 
 const HeaderLeft = () => {
-  const { session, user } = useAuth();
+  const { user } = useAuth();
   const t = useTranslations();
   const now = useNow();
 
@@ -43,12 +42,12 @@ const HeaderLeft = () => {
     hour < 18 ? 'afternoon' :
     'evening';
 
-  if (session) {
+  if (user) {
     return user ? (
       <Text style={tw`text-lg font-semibold`}>
         {upperFirst(t('common.messages.greeting_with_name', { 
           timeOfDay: timeOfDay, 
-          name: user.full_name 
+          name: user.name 
         }))}
       </Text>
     ) : (
@@ -64,7 +63,7 @@ const HeaderLeft = () => {
 };
 
 const HeaderRight = () => {
-  const { session } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
 
   const handleNotificationsPress = () => {
@@ -83,7 +82,7 @@ const HeaderRight = () => {
         size='icon'
         onPress={() => router.push('/explore')}
       />
-      {session ? (
+      {user ? (
         <>
           <Button
             variant='ghost'
@@ -109,7 +108,7 @@ const AuthenticatedWidgets = () => {
   return (
     <>
       <WidgetUserRecos labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} />
-      <WidgetUserWatchlist labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} />
+      <WidgetUserBookmarks labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} />
       <WidgetUserFriendsPlaylists labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} />
       <WidgetUserDiscovery labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} />
     </>
@@ -125,7 +124,7 @@ const HomeScreen = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { bottomOffset, tabBarHeight } = useTheme();
-  const { session, user } = useAuth();
+  const { user } = useAuth();
   const navigationHeaderHeight = useHeaderHeight();
   // States
   const [isRefetching, setIsRefetching] = useState(false);
@@ -145,13 +144,13 @@ const HomeScreen = () => {
   const refetch = async () => {
     setIsRefetching(true);
     try {
-      queryClient.invalidateQueries({ queryKey: widgetKeys.mostRecommended() }); // WidgetMostRecommended
-      queryClient.invalidateQueries({ queryKey: widgetKeys.mostPopular() }); // WidgetMostPopular
-      if (session?.user.id) {
-        queryClient.invalidateQueries({ queryKey: userKeys.recos({ userId: session.user.id, type: 'all' })}); // WidgetUserRecos
-        queryClient.invalidateQueries({ queryKey: userKeys.watchlist({ userId: session.user.id, type: 'all' })}); // WidgetUserWatchlist
-        queryClient.invalidateQueries({ queryKey: userKeys.playlistsFriends({ userId: session.user.id })}); // WidgetUserFriendsPlaylists
-        queryClient.invalidateQueries({ queryKey: widgetKeys.users({ filters: { sortBy: 'created_at', sortOrder: 'desc' }})}); // WidgetUserDiscovery
+      // queryClient.invalidateQueries({ queryKey: widgetKeys.recosTrending() }); // WidgetMostRecommended
+      // queryClient.invalidateQueries({ queryKey: widgetKeys.mostPopular() }); // WidgetMostPopular
+      if (user?.id) {
+        queryClient.invalidateQueries({ queryKey: userKeys.recos({ userId: user.id, type: 'all' })}); // WidgetUserRecos
+        queryClient.invalidateQueries({ queryKey: userKeys.watchlist({ userId: user.id, type: 'all' })}); // WidgetUserBookmarks
+        queryClient.invalidateQueries({ queryKey: userKeys.playlistsFriends({ userId: user.id })}); // WidgetUserFriendsPlaylists
+        // queryClient.invalidateQueries({ queryKey: widgetKeys.users({ filters: { sortBy: 'created_at', sortOrder: 'desc' }})}); // WidgetUserDiscovery
       }
     } finally {
       setIsRefetching(false);
@@ -180,7 +179,7 @@ const HomeScreen = () => {
                 type: 'sfSymbol',
               },
             },
-            ...(session ? [
+            ...(user ? [
               {
                 type: "button",
                 label: upperFirst(t('common.messages.notification', { count: 2 })),
@@ -194,7 +193,7 @@ const HomeScreen = () => {
                 type: "custom",
                 element: (
                   <Pressable onPress={() => router.push(`/user/${user?.username}`)} disabled={!user}>
-                    {user ? <UserAvatar full_name={user.full_name} avatar_url={user.avatar_url} style={{ width: 36, height: 36 }} /> : <UserAvatar skeleton style={{ width: 36, height: 36 }} />}
+                    {user ? <UserAvatar full_name={user.name} avatar_url={user.avatar} style={{ width: 36, height: 36 }} /> : <UserAvatar skeleton style={{ width: 36, height: 36 }} />}
                   </Pressable>
                 ),
               },
@@ -255,7 +254,7 @@ const HomeScreen = () => {
         }}
         />
         <WidgetMostPopular labelStyle={{paddingHorizontal: PADDING_HORIZONTAL }} containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} />
-        {session ? (
+        {user ? (
           <AuthenticatedWidgets />
         ) : (
           <UnauthenticatedContent />

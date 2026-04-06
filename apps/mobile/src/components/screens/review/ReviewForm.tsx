@@ -1,6 +1,5 @@
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import tw from "apps/mobile/src/lib/tw";
-import { MediaMovie, MediaTvSeries, UserActivityMovie, UserActivityTvSeries, UserReviewMovie, UserReviewTvSeries } from "@recomendapp/types";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { upperFirst } from "lodash";
 import Animated, { Extrapolation, interpolate, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
@@ -20,26 +19,26 @@ import { EnrichedTextInput } from "apps/mobile/src/components/RichText/EnrichedT
 import { useReanimatedKeyboardAnimation } from "react-native-keyboard-controller";
 import { usePreventRemove } from "@react-navigation/native";
 import { Alert } from "react-native";
+import { Movie, TvSeries, ReviewMovie as TReviewMovie, ReviewTvSeries as TReviewTvSeries } from '@packages/api-js';
 
 const MAX_TITLE_LENGTH = 50;
 
 interface ReviewFormBaseProps {
+	isWatched: boolean;
 	onSave?: (review: { title: string; body: string }) => void | Promise<void>;
 };
 
 type ReviewFormMovieProps = {
 	type: 'movie';
-	activity?: UserActivityMovie | null;
-	movie: MediaMovie;
-	review?: UserReviewMovie;
+	review?: TReviewMovie | null;
+	movie: Movie;
 	tvSeries?: never;
 };
 
 type ReviewFormTvSeriesProps = {
 	type: 'tv_series';
-	activity?: UserActivityTvSeries | null;
-	tvSeries: MediaTvSeries;
-	review?: UserReviewTvSeries;
+	review?: TReviewTvSeries | null;
+	tvSeries: TvSeries;
 	movie?: never;
 }
 
@@ -47,11 +46,11 @@ type ReviewFormProps = ReviewFormBaseProps &
 	(ReviewFormMovieProps | ReviewFormTvSeriesProps);
 
 const ReviewForm = ({
-	type,
-	activity,
-	tvSeries,
-	movie,
+	isWatched,
 	review,
+	type,
+	movie,
+	tvSeries,
 	onSave,
 } : ReviewFormProps) => {
 	const toast = useToast();
@@ -79,22 +78,22 @@ const ReviewForm = ({
 	const handleSave = useCallback(async () => {
 		setIsSaving(true);
 		try {
-			if (!activity?.rating) {
+			if (!isWatched) {
 				setIsSaving(false);
-				return toast.error(upperFirst(t('common.messages.a_rating_is_required_to_add_a_review')));
+				return toast.error(upperFirst(t('common.messages.must_watch_to_review')));
 			}
 			if (!body) {
 				setIsSaving(false);
 				return toast.error(upperFirst(t('common.messages.review_cannot_be_empty')));
 			}
 			await onSave?.({
-				title: title,
+				title: title.trim(),
 				body: body,
 			});
 		} catch {
 			setIsSaving(false);
 		}
-	}, [activity?.rating, onSave, title, t, toast, body]);
+	}, [isWatched, onSave, title, t, toast, body]);
 
 	const scrollViewStyle = useAnimatedStyle(() => {
 		const closedPadding = bottomOffset + PADDING_VERTICAL;

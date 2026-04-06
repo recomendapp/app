@@ -33,7 +33,7 @@ export const FiltersBottomSheet = forwardRef<
   FiltersBottomSheetProps
 >(({ index, position }, ref) => {
   // Hooks
-  const { session } = useAuth();
+  const { user } = useAuth();
   const t = useTranslations();
   const { filters, setFilters, activeFiltersCount } = useExploreStore((state) => state);
   const insets = useSafeAreaInsets();
@@ -292,7 +292,7 @@ export const FiltersBottomSheet = forwardRef<
           ) : <Skeleton color={colors.background} style={[tw`h-40 w-full`]} />}
         </View>
         {/* USER */}
-        {session && (
+        {user && (
           <View style={[tw`flex-row items-center justify-between`, { gap: GAP }]}>
             <Text>{upperFirst(t('common.messages.hide_watched'))}</Text>
             <Switch key={`hide-watched-${filters.user.hideWatched}`} value={filters.user.hideWatched} onValueChange={(value) => setFilters({ user: { hideWatched: value }})} />

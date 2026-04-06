@@ -1,7 +1,6 @@
 import { Href, Link, useLocalSearchParams } from "expo-router"
 import { lowerCase, upperFirst } from "lodash";
 import { Pressable, useWindowDimensions, ViewProps } from "react-native";
-import { Database } from "@recomendapp/types";
 import tw from "apps/mobile/src/lib/tw";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
@@ -20,25 +19,27 @@ import { View } from "apps/mobile/src/components/ui/view";
 import { Button } from "apps/mobile/src/components/ui/Button";
 import { FloatingBar } from "apps/mobile/src/components/ui/FloatingBar";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
-import ButtonUserActivityMovieRating from "apps/mobile/src/components/buttons/movies/ButtonUserActivityMovieRating";
-import ButtonUserActivityMovieLike from "apps/mobile/src/components/buttons/movies/ButtonUserActivityMovieLike";
-import ButtonUserActivityMovieWatch from "apps/mobile/src/components/buttons/movies/ButtonUserActivityMovieWatch";
-import { ButtonUserWatchlistMovie } from "apps/mobile/src/components/buttons/movies/ButtonUserWatchlistMovie";
-import ButtonUserActivityMovieWatchDate from "apps/mobile/src/components/buttons/movies/ButtonUserActivityMovieWatchDate";
-import { ButtonPlaylistMovieAdd } from "apps/mobile/src/components/buttons/ButtonPlaylistMovieAdd";
-import ButtonUserRecoMovieSend from "apps/mobile/src/components/buttons/movies/ButtonUserRecoMovieSend";
+import ButtonUserLogMovieRating from "apps/mobile/src/components/buttons/movies/ButtonUserLogMovieRating";
+import ButtonUserLogMovieLike from "apps/mobile/src/components/buttons/movies/ButtonUserLogMovieLike";
+import ButtonUserLogMovieWatch from "apps/mobile/src/components/buttons/movies/ButtonUserLogMovieWatch";
+import ButtonUserLogMovieWatchDate from "apps/mobile/src/components/buttons/movies/ButtonUserLogMovieWatchDate";
+import { ButtonPlaylistAdd } from "apps/mobile/src/components/buttons/ButtonPlaylistAdd";
+import ButtonUserRecoSend from "apps/mobile/src/components/buttons/ButtonUserRecoSend";
 import AnimatedContentContainer from "apps/mobile/src/components/ui/AnimatedContentContainer";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import YoutubePlayer from "react-native-youtube-iframe";
 import { Vimeo } from 'react-native-vimeo-iframe'
 import { LegendList } from "@legendapp/list";
-import { useMediaMovieCastQuery, useMediaMovieDetailsQuery, useMediaTvSeriesSeasonsQuery } from "apps/mobile/src/api/medias/mediaQueries";
 import MovieWidgetCast from "apps/mobile/src/components/screens/film/MovieWidgetCast";
+import { useQuery } from "@tanstack/react-query";
+import { movieCastingOptions, movieOptions } from "@libs/query-client";
+import { Movie, MovieTrailer } from "@packages/api-js";
+import { ButtonUserBookmark } from "apps/mobile/src/components/buttons/ButtonUserBookmark";
 
 const FilmScreen = () => {
 	const { film_id } = useLocalSearchParams<{ film_id: string }>();
 	const { id: movieId } = getIdFromSlug(film_id);
-	const { session } = useAuth();
+	const { user } = useAuth();
 	const { bottomOffset, tabBarHeight } = useTheme();
 	const t = useTranslations();
 	const openSheet = useBottomSheetStore((state) => state.openSheet);
@@ -46,13 +47,12 @@ const FilmScreen = () => {
 	const {
 		data: movie,
 		isLoading,
-	} = useMediaMovieDetailsQuery({
+	} = useQuery(movieOptions({
 		movieId: movieId,
-	});
+	}));
 
 	// Prefetch related data
-	useMediaMovieCastQuery({ movieId: movieId });
-	useMediaTvSeriesSeasonsQuery({ tvSeriesId: movieId });
+	useQuery(movieCastingOptions({ movieId: movieId }));
 
 	const loading = movie === undefined || isLoading;
 
@@ -142,18 +142,18 @@ const FilmScreen = () => {
 				</View>
 			)}
 		</AnimatedContentContainer>
-		{movie && session && (
+		{movie && user && (
 			<FloatingBar bottomOffset={bottomOffset + PADDING_VERTICAL} height={floatingBarHeight} containerStyle={{ paddingHorizontal: 0 }} style={tw`flex-row items-center justify-between`}>
 				<View style={tw`flex-row items-center gap-2`}>
-					<ButtonUserActivityMovieRating movie={movie} />
-					<ButtonUserActivityMovieLike movie={movie} />
-					<ButtonUserActivityMovieWatch movie={movie} />
-					<ButtonUserWatchlistMovie movie={movie} />
-					<ButtonUserActivityMovieWatchDate movie={movie} />
+					<ButtonUserLogMovieRating movie={movie} />
+					<ButtonUserLogMovieLike movie={movie} />
+					<ButtonUserLogMovieWatch movie={movie} />
+					<ButtonUserBookmark mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
+					<ButtonUserLogMovieWatchDate movie={movie} />
 				</View>
 				<View style={tw`flex-row items-center gap-2`}>
-					<ButtonPlaylistMovieAdd movie={movie} />
-					<ButtonUserRecoMovieSend movie={movie} />
+					<ButtonPlaylistAdd mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
+					<ButtonUserRecoSend mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
 				</View>
 			</FloatingBar>
 		)}
@@ -161,7 +161,7 @@ const FilmScreen = () => {
 	)
 };
 
-const FilmSynopsis = ({ movie, style, containerStyle, numberOfLines = 5, ...props } : Omit<TextProps, 'children'> & { movie: Database['public']['Views']['media_movie_full']['Row'], containerStyle: ViewProps['style'] }) => {
+const FilmSynopsis = ({ movie, style, containerStyle, numberOfLines = 5, ...props } : Omit<TextProps, 'children'> & { movie: Movie, containerStyle: ViewProps['style'] }) => {
 	const t = useTranslations();
 	const { colors } = useTheme();
 	const [showFullSynopsis, setShowFullSynopsis] = useState<boolean>(false);
@@ -186,18 +186,18 @@ const FilmSynopsis = ({ movie, style, containerStyle, numberOfLines = 5, ...prop
 	)
 };
 
-const FilmOriginalTitle = ({ movie, style, numberOfLines = 1, ...props } : Omit<TextProps, 'children'> & { movie: Database['public']['Views']['media_movie_full']['Row'] }) => {
+const FilmOriginalTitle = ({ movie, style, numberOfLines = 1, ...props } : Omit<TextProps, 'children'> & { movie: Movie }) => {
 	const t = useTranslations();
 	const { colors } = useTheme();
 
-	if (!movie.original_title || lowerCase(movie.original_title) === lowerCase(movie.title!)) return null;
+	if (!movie.originalTitle || lowerCase(movie.originalTitle) === lowerCase(movie.title!)) return null;
 
 	return (
 		<Text style={[tw`text-sm`, { color: colors.mutedForeground }, style]} numberOfLines={numberOfLines} {...props}>
 			<Text style={tw`text-sm font-medium`}>
 				{`${upperFirst(t('common.messages.original_title'))} : `}
 			</Text>
-			{movie.original_title}
+			{movie.originalTitle}
 		</Text>
 	)
 };
@@ -205,7 +205,7 @@ const FilmOriginalTitle = ({ movie, style, numberOfLines = 1, ...props } : Omit<
 const FilmTrailers = ({
 	movie,
 } : {
-	movie: Database['public']['Views']['media_movie_full']['Row'];
+	movie: Movie;
 }) => {
 	const { colors } = useTheme();
 	const t = useTranslations();
@@ -214,17 +214,17 @@ const FilmTrailers = ({
 	const playerWidth = width - PADDING_HORIZONTAL * 2;
 	const playerHeight = playerWidth * 9 / 16;
 	// States
-	const [selectedTrailer, setSelectedTrailer] = useState<Database['public']['Tables']['tmdb_movie_videos']['Row'] | null>(movie.trailers?.at(0) || null);
+	const [selectedTrailer, setSelectedTrailer] = useState<MovieTrailer | null>(movie.trailers?.at(0) || null);
 	const normalizedSite = useMemo(() => selectedTrailer?.site.toLowerCase(), [selectedTrailer]);
 	// Render
-	const renderItem = useCallback(({ item }: { item: Database['public']['Tables']['tmdb_movie_videos']['Row'] }) => {
-		const label = item.iso_639_1 === movie.original_language ? 'VO' : (item.iso_639_1?.toUpperCase() || 'N/A');
+	const renderItem = useCallback(({ item }: { item: MovieTrailer }) => {
+		const label = item.iso6391 === movie.originalLanguage ? 'VO' : (item.iso6391?.toUpperCase() || 'N/A');
 		return (
 			<Button variant={item.id === selectedTrailer?.id ? 'accent-yellow' : 'outline'} onPress={() => setSelectedTrailer(item)} style={{ borderRadius: BORDER_RADIUS_FULL }}>
 				{label}
 			</Button>
 		)
-	}, [selectedTrailer, movie.original_language]);
+	}, [selectedTrailer, movie.originalLanguage]);
 	if (!movie.trailers?.length || !selectedTrailer) return null;
 	return (
 		<View style={{ gap: GAP }}> 
@@ -257,7 +257,7 @@ const FilmTrailers = ({
 				}
 			</View>
 			<LegendList
-			data={movie.trailers || []}
+			data={movie.trailers}
 			extraData={selectedTrailer}
 			renderItem={renderItem}
 			horizontal

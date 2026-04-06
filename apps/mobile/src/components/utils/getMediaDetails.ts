@@ -1,40 +1,32 @@
 import { BORDER_RADIUS } from "apps/mobile/src/theme/globals";
-import { MediaMovie, MediaPerson, MediaTvSeries, MediaTvSeriesEpisode, MediaTvSeriesSeason, MediaType, Playlist, User } from "@recomendapp/types";
 import { Href } from "expo-router";
+import { Movie, MovieCompact, Person, PersonCompact, TvEpisode, TvSeasonCompact, TvSeries, TvSeriesCompact } from "@packages/api-js";
 import { StyleProp, ViewStyle } from "react-native";
 
+type MediaType = 'movie' | 'tv_series' | 'tv_season' | 'tv_episode' | 'person';
+
 interface MediaBaseProps {
-	type: MediaType | 'playlist' | 'user';
+	type: MediaType;
 };
 type MediaMovieDetailsProps = {
 	type: 'movie',
-	media: MediaMovie
+	media: MovieCompact | Movie;
 };
 type MediaTvSeriesDetailsProps = {
 	type: 'tv_series',
-	media: MediaTvSeries
+	media: TvSeriesCompact | TvSeries;
 };
 type MediaTvSeriesSeasonDetailsProps = {
 	type: 'tv_season',
-	media: MediaTvSeriesSeason
+	media: TvSeasonCompact;
 };
 type MediaTvSeriesEpisodeDetailsProps = {
 	type: 'tv_episode',
-	media: MediaTvSeriesEpisode
+	media: TvEpisode;
 };
 type MediaPersonDetailsProps = {
 	type: 'person',
-	media: MediaPerson
-};
-
-type MediaPlaylistDetailsProps = {
-	type: 'playlist',
-	media: Playlist
-};
-
-type MediaUserDetailsProps = {
-	type: 'user',
-	media: User
+	media: PersonCompact | Person;
 };
 
 export type MediaDetailsProps = MediaBaseProps & (
@@ -43,8 +35,6 @@ export type MediaDetailsProps = MediaBaseProps & (
 	| MediaTvSeriesSeasonDetailsProps
 	| MediaTvSeriesEpisodeDetailsProps
 	| MediaPersonDetailsProps
-	| MediaPlaylistDetailsProps
-	| MediaUserDetailsProps
 );
 
 const getMediaDetails = ({
@@ -59,38 +49,16 @@ const getMediaDetails = ({
 				return media.name;
 			case 'person':
 				return media.name;
-			case 'playlist':
-				return media.title;
-			case 'user':
-				return media.full_name;
 			default:
 				return null;
 		}
 	};
-	const getSubtitle = () => {
+	const getImagePath = () => {
 		switch (type) {
 			case 'movie':
-				return media.directors?.map(director => director.name).join(', ');
+				return media.posterPath;
 			case 'tv_series':
-				return media.created_by?.map(creator => creator.name).join(', ');
-			case 'person':
-				return media.known_for_department;
-			default:
-				return null;
-		}
-	};
-	const getImage = () => {
-		switch (type) {
-			case 'movie':
-				return media.poster_url;
-			case 'tv_series':
-				return media.poster_url;
-			case 'person':
-				return media.profile_url;
-			case 'playlist':
-				return media.poster_url;
-			case 'user':
-				return media.avatar_url;
+				return media.posterPath;
 			default:
 				return null;
 		}
@@ -98,27 +66,21 @@ const getMediaDetails = ({
 	const getDate = () => {
 		switch (type) {
 			case 'movie':
-				return media.release_date;
+				return media.releaseDate;
 			case 'tv_series':
-				return media.first_air_date;
+				return media.firstAirDate;
 			default:
 				return null;
 		}
 	};
-	const getDescription = () => {
+	const getCredits = () => {
 		switch (type) {
 			case 'movie':
-				return media.overview;
+				return media.directors;
 			case 'tv_series':
-				return media.overview;
-			case 'person':
-				return media.biography;
-			case 'playlist':
-				return media.description;
-			case 'user':
-				return media.bio;
+				return media.createdBy;
 			default:
-				return null;
+				return [];
 		}
 	};
 	const getImageStyle = (): StyleProp<ViewStyle> => {
@@ -127,10 +89,6 @@ const getMediaDetails = ({
 			case 'tv_series':
 			case 'person':
 				return { aspectRatio: 2 / 3, borderRadius: BORDER_RADIUS };
-			case 'playlist':
-				return { aspectRatio: 1 / 1, borderRadius: BORDER_RADIUS };
-			case 'user':
-				return { aspectRatio: 1 / 1, borderRadius: BORDER_RADIUS };
 			default:
 				return {};
 		}
@@ -143,20 +101,19 @@ const getMediaDetails = ({
 				return `/tv-series/${media.slug ?? media.id}`;
 			case 'person':
 				return `/person/${media.slug ?? media.id}`;
-			case 'playlist':
-				return `/playlist/${media.id}`;
-			case 'user':
-				return `/user/${media.username}`;
+			case 'tv_season':
+				return `/tv-series/${media.tvSeriesId}/season/${media.seasonNumber}`;
+			case 'tv_episode':
+				return `/tv-series/${media.tvSeriesId}/season/${media.seasonNumber}/episode/${media.episodeNumber}`;
 			default:
 				return '/';
 		}
 	};
 	return {
 		title: getTitle(),
-		subtitle: getSubtitle(),
-		imageUrl: getImage(),
+		imagePath: getImagePath(),
 		date: getDate(),
-		description: getDescription(),
+		credits: getCredits(),
 		style: getImageStyle(),
 		url: getUrl(),
 		posterClassName: type === 'movie'

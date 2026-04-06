@@ -3,13 +3,15 @@ import { Text } from "apps/mobile/src/components/ui/text";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import tw from "apps/mobile/src/lib/tw";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
-import { Profile } from "@recomendapp/types";
 import { LegendList } from "@legendapp/list";
 import { Link } from "expo-router";
 import { upperFirst } from "lodash";
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
 import { useTranslations } from "use-intl";
-import { useUserPlaylistsQuery } from "apps/mobile/src/api/users/userQueries";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { userPlaylistsInfiniteOptions } from "@libs/query-client";
+import { useMemo } from "react";
+import { Profile } from "@packages/api-js";
 
 interface ProfileWidgetPlaylistsProps extends React.ComponentPropsWithoutRef<typeof View> {
 	profile: Profile;
@@ -26,19 +28,20 @@ const ProfileWidgetPlaylists = ({
 	const t = useTranslations();
 	const { colors } = useTheme();
 	const {
-	  data: playlists,
+	  data,
 	  fetchNextPage,
 	  isFetching,
 	  hasNextPage,
-	} = useUserPlaylistsQuery({
+	} = useInfiniteQuery(userPlaylistsInfiniteOptions({
 	  userId: profile?.id ?? undefined,
 	  filters: {
-		sortBy: 'updated_at',
-		sortOrder: 'desc',
+		sort_by: 'updated_at',
+		sort_order: 'desc',
 	  }
-	});
+	}));
+	const playlists = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
 
-	if (!playlists?.pages.flat().length) return null;
+	if (!playlists.length) return null;
   
 	return (
 	  <View style={[tw`gap-2`, style]}>
@@ -51,19 +54,17 @@ const ProfileWidgetPlaylists = ({
 			</View>
 		</Link>
 		<LegendList
-		data={playlists?.pages.flat() || []}
-		renderItem={({ item, index }) => (
+		data={playlists}
+		renderItem={({ item }) => (
 			<CardPlaylist
-			key={item.id}
 			playlist={item}
 			style={tw`w-32`}
 			showItemsCount
-			showPlaylistAuthor={false}
 			/>
 		)}
 		snapToInterval={136}
 		decelerationRate="fast"
-		keyExtractor={(_, index) => index.toString()}
+		keyExtractor={(item) => item.id.toString()}
 		refreshing={isFetching}
 		onEndReached={() => hasNextPage && fetchNextPage()}
 		onEndReachedThreshold={0.25}

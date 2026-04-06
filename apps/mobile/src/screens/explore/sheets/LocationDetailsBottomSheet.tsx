@@ -9,7 +9,6 @@ import {
 import { useHeaderHeight } from '@react-navigation/elements';
 import { SharedValue } from 'react-native-reanimated';
 import { Text } from 'apps/mobile/src/components/ui/text';
-import { ExploreTile, MediaPerson } from '@recomendapp/types';
 import { Button } from 'apps/mobile/src/components/ui/Button';
 import { View } from 'apps/mobile/src/components/ui/view';
 import tw from 'apps/mobile/src/lib/tw';
@@ -23,14 +22,14 @@ import { Link } from 'expo-router';
 import { Skeleton } from 'apps/mobile/src/components/ui/Skeleton';
 import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import { upperFirst } from 'lodash';
-import ButtonUserActivityMovieRating from 'apps/mobile/src/components/buttons/movies/ButtonUserActivityMovieRating';
-import ButtonUserActivityMovieLike from 'apps/mobile/src/components/buttons/movies/ButtonUserActivityMovieLike';
-import ButtonUserActivityMovieWatch from 'apps/mobile/src/components/buttons/movies/ButtonUserActivityMovieWatch';
-import { ButtonUserWatchlistMovie } from 'apps/mobile/src/components/buttons/movies/ButtonUserWatchlistMovie';
-import { ButtonPlaylistMovieAdd } from 'apps/mobile/src/components/buttons/ButtonPlaylistMovieAdd';
-import ButtonUserRecoMovieSend from 'apps/mobile/src/components/buttons/movies/ButtonUserRecoMovieSend';
+import ButtonUserLogMovieRating from 'apps/mobile/src/components/buttons/movies/ButtonUserLogMovieRating';
+import ButtonUserLogMovieLike from 'apps/mobile/src/components/buttons/movies/ButtonUserLogMovieLike';
+import ButtonUserLogMovieWatch from 'apps/mobile/src/components/buttons/movies/ButtonUserLogMovieWatch';
 import { useAuth } from 'apps/mobile/src/providers/AuthProvider';
 import { useMediaMovieDetailsQuery } from 'apps/mobile/src/api/medias/mediaQueries';
+import { ButtonUserBookmark } from 'apps/mobile/src/components/buttons/ButtonUserBookmark';
+import { ButtonPlaylistAdd } from 'apps/mobile/src/components/buttons/ButtonPlaylistAdd';
+import ButtonUserRecoSend from 'apps/mobile/src/components/buttons/ButtonUserRecoSend';
 
 interface LocationDetailsBottomSheetProps {
   index: SharedValue<number>;
@@ -49,7 +48,7 @@ export const LocationDetailsBottomSheet = forwardRef<
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const t = useTranslations();
-  const { session } = useAuth();
+  const { user } = useAuth();
   // REFs
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
@@ -129,17 +128,17 @@ export const LocationDetailsBottomSheet = forwardRef<
           )}
         </View>
       </View>
-      {session && movie && (
+      {user && movie && (
         <View style={[tw`flex-row items-center justify-between`, { gap: GAP_LG, paddingVertical: PADDING_VERTICAL }]}>
           <View style={[tw`flex-row items-center`, { gap: GAP_LG }]}>
-            <ButtonUserActivityMovieRating movie={movie} />
-            <ButtonUserActivityMovieLike movie={movie} />
-            <ButtonUserActivityMovieWatch movie={movie} />
-            <ButtonUserWatchlistMovie movie={movie} />
+            <ButtonUserLogMovieRating movie={movie} />
+            <ButtonUserLogMovieLike movie={movie} />
+            <ButtonUserLogMovieWatch movie={movie} />
+            <ButtonUserBookmark mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
           </View>
           <View style={[tw`flex-row items-center`, { gap: GAP_LG }]}>
-            <ButtonPlaylistMovieAdd movie={movie} />
-            <ButtonUserRecoMovieSend movie={movie} />
+            <ButtonPlaylistAdd mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
+            <ButtonUserRecoSend mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
           </View>
         </View>
       )}

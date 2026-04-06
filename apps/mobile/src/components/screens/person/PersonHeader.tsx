@@ -12,7 +12,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { AnimatedImageWithFallback } from 'apps/mobile/src/components/ui/AnimatedImageWithFallback';
 import { upperFirst } from 'lodash';
-import { MediaPerson } from '@recomendapp/types';
 import useColorConverter from 'apps/mobile/src/hooks/useColorConverter';
 import { Skeleton } from 'apps/mobile/src/components/ui/Skeleton';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -24,9 +23,11 @@ import { BORDER_RADIUS, PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile
 import { useHeaderHeight } from '@react-navigation/elements';
 import { View } from 'apps/mobile/src/components/ui/view';
 import { useImagePalette } from 'apps/mobile/src/hooks/useImagePalette';
+import { Person } from '@packages/api-js';
+import { getTmdbImage } from 'apps/mobile/src/lib/tmdb/getTmdbImage';
 
 interface PersonHeaderProps {
-	person?: MediaPerson | null;
+	person?: Person | null;
 	loading: boolean;
 	scrollY: SharedValue<number>;
 	triggerHeight: SharedValue<number>;
@@ -42,7 +43,7 @@ export const PersonHeader: React.FC<PersonHeaderProps> = ({
 	const { colors } = useTheme();
 	const navigationHeaderHeight = useHeaderHeight();
 	const bgColor = hslToRgb(colors.background);
-	const { palette } = useImagePalette(person?.profile_url || undefined);
+	const { palette } = useImagePalette(getTmdbImage({ path: person?.profilePath, size: 'w92' }) || undefined);
 	// SharedValue
 	const posterHeight = useSharedValue(0);
 	const headerHeight = useSharedValue(0);
@@ -137,7 +138,7 @@ export const PersonHeader: React.FC<PersonHeaderProps> = ({
 					}}
 					transition={250}
 					alt={person?.name ?? ''}
-					source={{ uri: person?.profile_url ?? '' }}
+					source={{ uri: getTmdbImage({ path: person?.profilePath, size: 'w342' }) ?? '' }}
 					style={[
 						{ aspectRatio: 1 / 1, borderRadius: BORDER_RADIUS },
 						tw`w-48 h-auto`,
@@ -158,10 +159,10 @@ export const PersonHeader: React.FC<PersonHeaderProps> = ({
 					<Text style={{ color: colors.accentYellow }}>
 						{upperFirst(t('common.messages.person', { count: 1 }))}
 					</Text>
-					{person.known_for_department ? (
+					{person.knownForDepartment ? (
 						<>
 						{" | "}
-						<Text>{person.known_for_department}</Text>
+						<Text>{person.knownForDepartment}</Text>
 						</>
 					) : null}
 				</Text> : loading ? <Skeleton style={tw`w-32 h-8`} /> : null}

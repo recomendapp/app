@@ -1,6 +1,5 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { View } from "apps/mobile/src/components/ui/view";
-import { MediaMovie, MediaMovieBackdrop, MediaMoviePoster } from "@recomendapp/types";
 import tw from "apps/mobile/src/lib/tw";
 import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
 import ViewShot from "react-native-view-shot";
@@ -23,9 +22,11 @@ import { useImagePalette } from "apps/mobile/src/hooks/useImagePalette";
 import Color from "color";
 import { ShapeVerticalRoundedBackground, ShapeVerticalRoundedForeground } from "apps/mobile/src/lib/icons";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
-import { useMediaMovieBackdropsQuery, useMediaMoviePostersQuery } from "apps/mobile/src/api/medias/mediaQueries";
+import { MovieCompact, MovieImage } from "@packages/api-js";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { movieImagesInfiniteOptions } from "@libs/query-client";
 interface ShareMovieProps extends React.ComponentProps<typeof ViewShot> {
-	movie: MediaMovie;
+	movie: MovieCompact;
 	variant?: 'default';
 	isPremium?: boolean;
 };
@@ -98,7 +99,7 @@ const EditOptionsSelector = ({
 
 
 /* -------------------------------- VARIANTS -------------------------------- */
-const ShareMovieDefault = ({ movie, poster, scale = 1 } : { movie: MediaMovie, poster: string | undefined, scale?: number }) => {
+const ShareMovieDefault = ({ movie, posterUrl, scale = 1 } : { movie: MovieCompact, posterUrl: string | undefined, scale?: number }) => {
 	const { colors } = useTheme();
 	const directorsText = useMemo(() => movie.directors?.map(d => d.name!).join(', '), [movie.directors]);
 	return (
@@ -111,7 +112,7 @@ const ShareMovieDefault = ({ movie, poster, scale = 1 } : { movie: MediaMovie, p
 		}}
 		>
 			<ImageWithFallback
-			source={{uri: poster ?? '' }}
+			source={{uri: posterUrl ?? '' }}
 			alt={movie.title ?? ''}
 			type={'movie'}
 			style={[
@@ -138,33 +139,36 @@ const PosterSelector = ({
 	poster,
 	setPoster,
 } : {
-	movie: MediaMovie;
-	poster: string | undefined;
-	setPoster: (poster: string) => void;
+	movie: MovieCompact;
+	poster: MovieImage | undefined;
+	setPoster: (poster: MovieImage) => void;
 }) => {
 	const {
 		data,
 		hasNextPage,
 		fetchNextPage,
-	} = useMediaMoviePostersQuery({
-		movieId: poster ? movie.id : undefined,
-	});
-	const posters = useMemo(() => data?.pages.flat() || [], [data]);
+	} = useInfiniteQuery(movieImagesInfiniteOptions({
+		movieId: movie.id,
+		filters: {
+			type: 'poster',
+		}
+	}));
+	const posters = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
 	const initialIndex = useMemo(() => {
-		const isFind = posters.findIndex(p => p.poster_url === poster);
+		const isFind = posters.findIndex(p => p.id === poster?.id);
 		return isFind === -1 ? 0 : isFind;
 	}, [posters, poster]);
-	const renderItem = useCallback((item: MediaMoviePoster, isActive: boolean) => (
+	const renderItem = useCallback((item: MovieImage) => (
 		<ImageWithFallback
-		source={{ uri: getTmdbImage({ path: item.file_path, size: 'w154' }) ?? '' }}
+		source={{ uri: getTmdbImage({ path: item.filePath, size: 'w154' }) ?? '' }}
 		alt={movie.title ?? ''}
 		type={"movie"}
 		style={[{ aspectRatio: 2 / 3, width: ITEM_WIDTH }]}
 		/>
 	), [movie.title]);
-	const keyExtractor = useCallback((item: MediaMoviePoster) => item.id!.toString(), []);
-	const onSelectionChange = useCallback((item: MediaMoviePoster) => {
-		setPoster(item.poster_url!);
+	const keyExtractor = useCallback((item: MovieImage) => item.id.toString(), []);
+	const onSelectionChange = useCallback((item: MovieImage) => {
+		setPoster(item);
 	}, [setPoster]);
 	const onEndReached = useCallback(() => {
 		if (hasNextPage) {
@@ -241,30 +245,33 @@ const BackdropImageSelector = ({
 	movieTitle,
 }: {
 	movieId: number;
-	selectedBackdrop?: string;
-	setBackdrop: (backdrop: string) => void;
+	selectedBackdrop?: MovieImage;
+	setBackdrop: (backdrop: MovieImage) => void;
 	movieTitle: string;
 }) => {
 	const {
 		data,
 		hasNextPage,
 		fetchNextPage,
-	} = useMediaMovieBackdropsQuery({
+	} = useInfiniteQuery(movieImagesInfiniteOptions({
 		movieId: movieId,
-	});
-	const backdrops = useMemo(() => data?.pages.flat() || [], [data]);
+		filters: {
+			type: 'backdrop',
+		}
+	}));
+	const backdrops = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
 	
-	const renderBackdropItem = useCallback((item: MediaMovieBackdrop, isActive: boolean) => (
+	const renderBackdropItem = useCallback((item: MovieImage) => (
 		<ImageWithFallback
-			source={{ uri: getTmdbImage({ path: item.file_path, size: 'w154' }) ?? '' }}
+			source={{ uri: getTmdbImage({ path: item.filePath, size: 'w154' }) ?? '' }}
 			alt={movieTitle}
 			type="movie"
 			style={{ aspectRatio: 2 / 3, width: ITEM_WIDTH }}
 		/>
 	), [movieTitle]);
 
-	const handleBackdropSelection = useCallback((item: MediaMovieBackdrop) => {
-		setBackdrop(item.backdrop_url!);
+	const handleBackdropSelection = useCallback((item: MovieImage) => {
+		setBackdrop(item);
 	}, [setBackdrop]);
 	
 	const handleEndReached = useCallback(() => {
@@ -272,11 +279,11 @@ const BackdropImageSelector = ({
 	}, [hasNextPage, fetchNextPage]);
 	
 	const initialIndex = useMemo(() => {
-		const isFind = backdrops.findIndex(p => p.backdrop_url === selectedBackdrop);
+		const isFind = backdrops.findIndex(p => p.id === selectedBackdrop?.id);
 		return isFind === -1 ? 0 : isFind;
 	}, [backdrops, selectedBackdrop]);
 
-	const keyExtractor = useCallback((item: MediaMovieBackdrop) => item.id!.toString(), []);
+	const keyExtractor = useCallback((item: MovieImage) => item.id.toString(), []);
 	
 	return (
 		<WheelSelector
@@ -307,16 +314,18 @@ export const ShareMovie = forwardRef<
 	const { height: screenHeight } = useWindowDimensions();
 	const { colors } = useTheme();
 	// States
-	const [poster, setPoster] = useState(movie.poster_url || undefined);
-	const [backdrop, setBackdrop] = useState(movie.backdrop_url || undefined);
-	const { palette } = useImagePalette(poster);
+	const [poster, setPoster] = useState<MovieImage | undefined>(undefined);
+	const posterUrl = useMemo(() => poster ? getTmdbImage({ path: poster.filePath, size: 'w342' }) : movie.posterPath ? getTmdbImage({ path: movie.posterPath, size: 'w342' }) : undefined, [poster, movie.posterPath]);
+	const [backdrop, setBackdrop] = useState<MovieImage | undefined>(undefined);
+	const backdropUrl = useMemo(() => backdrop ? getTmdbImage({ path: backdrop.filePath, size: 'w780' }) : movie.backdropPath ? getTmdbImage({ path: movie.backdropPath, size: 'w780' }) : undefined, [backdrop, movie.backdropPath]);
+	const { palette } = useImagePalette(posterUrl);
 	const [bgColor, setBgColor] = useState<{index: number, color: string } | null>(palette ? { index: 0, color: palette[0] } : null);
 	const [bgType, setBgType] = useState<'color' | 'image'>(isPremium && backdrop ? 'image' : 'color');
 	const [editing, setEditing] = useState(false);
 	const editOptions = useMemo((): EditOption[] => {
 		const options: EditOption[] = [];
-		const hasPoster = !!poster;
-		const hasBackground = !!poster || !!backdrop;
+		const hasPoster = !!posterUrl;
+		const hasBackground = !!backdropUrl;
 		if (hasPoster) {
 			options.push({ value: 'poster', icon: ShapeVerticalRoundedForeground });
 		}
@@ -324,16 +333,16 @@ export const ShareMovie = forwardRef<
 			options.push({ value: 'background', icon: ShapeVerticalRoundedBackground });
 		}
 		return options;
-	}, [poster, backdrop]);
-	const [activeEditingOption, setActiveEditingOption] = useState(editOptions[0].value);
+	}, [posterUrl, backdropUrl]);
+	const [activeEditingOption, setActiveEditingOption] = useState(editOptions[0]?.value);
 
 	useImperativeHandle(ref, () => ({
       	capture: async (options): Promise<CaptureResult> => {
 			if (!viewShotRef.current) throw new Error('ViewShot ref is not available');	
 			const uri = await viewShotRef.current.capture?.();
 
-			const backgroundImage = (bgType === 'image' && backdrop)
-				? await cropImageRatio(backdrop, options?.background?.ratio ?? 9 / 16)
+			const backgroundImage = (bgType === 'image' && backdropUrl)
+				? await cropImageRatio(backdropUrl, options?.background?.ratio ?? 9 / 16)
 				: undefined;
 
 			return {
@@ -348,8 +357,8 @@ export const ShareMovie = forwardRef<
 	}));
 
 	const renderSticker = useCallback((scale: number) => (
-		<ShareMovieDefault movie={movie} poster={poster} scale={scale} />
-	), [movie, poster]);
+		<ShareMovieDefault movie={movie} posterUrl={posterUrl} scale={scale} />
+	), [movie, posterUrl]);
 
 	const handleEnableEditing = useCallback(() => {
 		if (isPremium) {
@@ -456,8 +465,8 @@ export const ShareMovie = forwardRef<
 						tw`relative items-center justify-center overflow-hidden`
 					]}
 				>
-					{bgType === 'image' && backdrop ? (
-						<Image source={backdrop} style={tw`absolute inset-0`} />
+					{bgType === 'image' && backdropUrl ? (
+						<Image source={{ uri: backdropUrl }} style={tw`absolute inset-0`} />
 					) : bgType === 'color' && bgColor && (
 						<View style={[tw`absolute inset-0`, { backgroundColor: bgColor.color }]} />
 					)}

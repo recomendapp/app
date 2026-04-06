@@ -1,6 +1,5 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { View } from "apps/mobile/src/components/ui/view";
-import { Profile, User } from "@recomendapp/types";
 import tw from "apps/mobile/src/lib/tw";
 import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
 import ViewShot from "react-native-view-shot";
@@ -20,9 +19,10 @@ import { clamp } from "lodash";
 import { useImagePalette } from "apps/mobile/src/hooks/useImagePalette";
 import Color from "color";
 import { ShapeVerticalRoundedBackground } from "apps/mobile/src/lib/icons";
+import { UserSummary } from "@packages/api-js";
 
 interface ShareUserProps extends React.ComponentProps<typeof ViewShot> {
-	user: User | Profile;
+	user: UserSummary;
 	variant?: 'default';
 	isPremium?: boolean;
 };
@@ -94,7 +94,7 @@ const EditOptionsSelector = ({
 };
 
 /* -------------------------------- VARIANTS -------------------------------- */
-const ShareUserDefault = ({ user, poster, scale = 1 } : { user: User | Profile, poster: string | undefined, scale?: number }) => {
+const ShareUserDefault = ({ user, poster, scale = 1 } : { user: UserSummary, poster: string | undefined, scale?: number }) => {
 	const { colors } = useTheme();
 	return (
 		<View
@@ -107,7 +107,7 @@ const ShareUserDefault = ({ user, poster, scale = 1 } : { user: User | Profile, 
 		>
 			<ImageWithFallback
 			source={{uri: poster ?? '' }}
-			alt={user.full_name ?? ''}
+			alt={user.name ?? ''}
 			type={'user'}
 			style={[
 				{
@@ -119,8 +119,8 @@ const ShareUserDefault = ({ user, poster, scale = 1 } : { user: User | Profile, 
 			/>
 			<View>
 			<Text style={[tw`font-bold`, { fontSize: 16 * scale }]}>
-				{user.full_name}
-				{user?.premium && (
+				{user.name}
+				{user.isPremium && (
 					<>{' '}<Icons.premium color={colors.accentBlue} size={10 * scale} /></>
 				)}
 			</Text>
@@ -189,7 +189,7 @@ export const ShareUser = forwardRef<
 	const { height: screenHeight } = useWindowDimensions();
 	const { colors } = useTheme();
 	// States
-	const [poster, setPoster] = useState(user.avatar_url || undefined);
+	const [poster, setPoster] = useState(user.avatar || undefined);
 	const { palette } = useImagePalette(poster);
 	const [bgColor, setBgColor] = useState<{index: number, color: string } | null>(palette ? { index: 0, color: palette[0] } : null);
 	const [bgType, setBgType] = useState<'color' | 'image'>('color');

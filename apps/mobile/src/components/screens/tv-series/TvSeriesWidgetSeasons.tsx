@@ -3,14 +3,15 @@ import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
 import { LegendList } from "@legendapp/list";
 import { upperFirst } from "lodash";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
-import { Database } from "@recomendapp/types";
 import { CardTvSeriesSeason } from "apps/mobile/src/components/cards/CardTvSeriesSeason";
 import { useTranslations } from "use-intl";
 import { Text } from "apps/mobile/src/components/ui/text";
-import { useMediaTvSeriesSeasonsQuery } from "apps/mobile/src/api/medias/mediaQueries";
+import { TvSeries } from "@packages/api-js";
+import { useQuery } from "@tanstack/react-query";
+import { tvSeriesSeasonsOptions } from "@libs/query-client";
 
 interface TvSeriesWidgetSeasonsProps extends React.ComponentPropsWithoutRef<typeof View> {
-	tvSeries: Database['public']['Views']['media_tv_series']['Row'];
+	tvSeries: TvSeries;
 	labelStyle?: StyleProp<TextStyle>;
 	containerStyle?: StyleProp<ViewStyle>;
 }
@@ -26,9 +27,9 @@ const TvSeriesWidgetSeasons = ({
 
 	const {
 		data
-	} = useMediaTvSeriesSeasonsQuery({
+	} = useQuery(tvSeriesSeasonsOptions({
 		tvSeriesId: tvSeries.id,
-	});
+	}));
 
 	if (!data?.length) return null;
 

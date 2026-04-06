@@ -17,9 +17,7 @@ import { useActionSheet } from "@expo/react-native-action-sheet";
 import { Separator } from "apps/mobile/src/components/ui/separator";
 import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
 import { Skeleton } from "apps/mobile/src/components/ui/Skeleton";
-import Switch from "apps/mobile/src/components/ui/Switch";
 import { Alert, Pressable } from "react-native";
-import { usePlaylistUpdateMutation } from "apps/mobile/src/api/playlists/playlistMutations";
 import { KeyboardAwareScrollView } from 'apps/mobile/src/components/ui/KeyboardAwareScrollView';
 import { useHeaderHeight } from "@react-navigation/elements";
 import { LucideIcon } from "lucide-react-native";
@@ -28,7 +26,9 @@ import { KeyboardToolbar } from "apps/mobile/src/components/ui/KeyboardToolbar";
 import { useToast } from "apps/mobile/src/components/Toast";
 import { PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { usePlaylistDetailsQuery } from "apps/mobile/src/api/playlists/playlistQueries";
+import { useQuery } from "@tanstack/react-query";
+import { playlistOptions, usePlaylistUpdateMutation } from "@libs/query-client";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 
 const TITLE_MIN_LENGTH = 1;
 const TITLE_MAX_LENGTH = 100;
@@ -41,18 +41,20 @@ const ModalPlaylistEdit = () => {
 	const insets = useSafeAreaInsets();
 	const { colors, mode } = useTheme();
 	const router = useRouter();
+	const { user } = useAuth();
 	const { showActionSheetWithOptions } = useActionSheet();
 	const t = useTranslations();
 	const headerHeight = useHeaderHeight();
 	const {
 		data: playlist,
-	} = usePlaylistDetailsQuery({
+	} = useQuery(playlistOptions({
 		playlistId: playlistId,
+	}));
+	const { mutateAsync: updatePlaylist, isPending } = usePlaylistUpdateMutation({
+		userId: user?.id,
 	});
-	const { mutateAsync: updatePlaylistMutation} = usePlaylistUpdateMutation();
 
 	// States
-	const [ isLoading, setIsLoading ] = useState(false);
 	const [ newPoster, setNewPoster ] = useState<ImagePickerAsset | null | undefined>(undefined);
 
 	// Form
@@ -67,13 +69,11 @@ const ModalPlaylistEdit = () => {
 			})
 			.optional()
 			.nullable(),
-		private: z.boolean(),
 	});
 	type PlaylistFormValues = z.infer<typeof playlistFormSchema>;
 	const defaultValues = useMemo((): Partial<PlaylistFormValues> => ({
 		title: playlist?.title ?? '',
 		description: playlist?.description ?? null,
-		private: playlist?.private ?? false,
 	}), [playlist]);
 	const { watch: formWatch, reset: formReset, ...form} = useForm<PlaylistFormValues>({
 		resolver: zodResolver(playlistFormSchema),
@@ -99,8 +99,8 @@ const ModalPlaylistEdit = () => {
 	const posterOptions = useMemo((): { label: string, value: "library" | "camera" | "delete", disable?: boolean }[] => ([
 		{ label: upperFirst(t('common.messages.choose_from_the_library')), value: "library" },
 		{ label: upperFirst(t('common.messages.take_a_photo')), value: "camera" },
-		{ label: upperFirst(t('common.messages.delete_current_image')), value: "delete", disable: !playlist?.poster_url && !newPoster },
-	]), [playlist?.poster_url, newPoster, t]);
+		{ label: upperFirst(t('common.messages.delete_current_image')), value: "delete", disable: !playlist?.poster && !newPoster },
+	]), [playlist?.poster, newPoster, t]);
 	// Handlers
 	const handlePosterOptions = useCallback(() => {
 		const options = [
@@ -147,7 +147,7 @@ const ModalPlaylistEdit = () => {
 					}
 					break;
 				case 'delete':
-					setNewPoster(playlist?.poster_url ? null : undefined);
+					setNewPoster(playlist?.poster ? null : undefined);
 					break;
 				default:
 					break;
@@ -156,30 +156,25 @@ const ModalPlaylistEdit = () => {
 	}, [playlist, showActionSheetWithOptions, toast, t, posterOptions]);
 
 	const handleSubmit = useCallback(async (values: PlaylistFormValues) => {
-		try {
-			if (!playlist) return;
-			setIsLoading(true);
-			await updatePlaylistMutation({
-				id: playlist.id,
+		if (!playlist) return;
+		await updatePlaylist({
+			path: {
+				playlist_id: playlist.id,
+			},
+			body: {
 				title: values.title.trim(),
 				description: values.description?.trim() || null,
-				private: values.private,
-				poster: newPoster,
-			});
-			toast.success(upperFirst(t('common.messages.saved', { count: 1, gender: 'male' })));
-			router.dismiss();
-		} catch (error) {
-			let errorMessage: string = upperFirst(t('common.messages.an_error_occurred'));
-			if (error instanceof Error) {
-				errorMessage = error.message;
-			} else if (typeof error === 'string') {
-				errorMessage = error;
 			}
-			toast.error(upperFirst(t('common.messages.error')), { description: errorMessage });
-		} finally {
-			setIsLoading(false);
-		}
-	}, [playlist, newPoster, updatePlaylistMutation, toast, router, t]);
+		}, {
+			onSuccess: () => {
+				toast.success(upperFirst(t('common.messages.saved', { count: 1, gender: 'male' })));
+				router.dismiss();
+			},
+			onError: () => {
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
+			}
+		});
+	}, [playlist, updatePlaylist, toast, router, t]);
 
 	const handleCancel = useCallback(() => {
 		if (canSave) {
@@ -208,7 +203,6 @@ const ModalPlaylistEdit = () => {
 			formReset({
 				title: playlist.title,
 				description: playlist.description,
-				private: playlist.private,
 			});
 		}
 	}, [playlist, formReset]);
@@ -219,7 +213,6 @@ const ModalPlaylistEdit = () => {
 			const isFormChanged =
 				value.title !== defaultValues.title ||
 				(value.description?.trim() || null) !== defaultValues.description ||
-				(value.private !== defaultValues.private) ||
 				newPoster !== undefined;
 			setHasFormChanged(isFormChanged);
 		});
@@ -235,7 +228,7 @@ const ModalPlaylistEdit = () => {
 					<Button
 					variant="ghost"
 					size="fit"
-					disabled={isLoading}
+					disabled={isPending}
 					onPress={handleCancel}
 					>
 						{upperFirst(t('common.messages.cancel'))}
@@ -245,9 +238,9 @@ const ModalPlaylistEdit = () => {
 					<Button
 					variant="ghost"
 					size="fit"
-					loading={isLoading}
+					loading={isPending}
 					onPress={form.handleSubmit(handleSubmit)}
-					disabled={!canSave || isLoading}
+					disabled={!canSave || isPending}
 					>
 						{upperFirst(t('common.messages.save'))}
 					</Button>
@@ -258,7 +251,7 @@ const ModalPlaylistEdit = () => {
 						label: upperFirst(t('common.messages.cancel')),
 						onPress: handleCancel,
 						tintColor: props.tintColor,
-						disabled: isLoading,
+						disabled: isPending,
 						icon: {
 							name: "xmark",
 							type: "sfSymbol",
@@ -271,7 +264,7 @@ const ModalPlaylistEdit = () => {
 						label: upperFirst(t('common.messages.save')),
 						onPress: form.handleSubmit(handleSubmit),
 						tintColor: props.tintColor,
-						disabled: !canSave || isLoading,
+						disabled: !canSave || isPending,
 						icon: {
 							name: "checkmark",
 							type: "sfSymbol",
@@ -292,14 +285,14 @@ const ModalPlaylistEdit = () => {
 			<Pressable onPress={handlePosterOptions} style={tw`relative items-center justify-center gap-2`}>
 				{playlist ? (
 					<ImageWithFallback
-					source={{uri: newPoster !== undefined ? newPoster?.uri : playlist.poster_url ?? ''}}
+					source={{uri: newPoster !== undefined ? newPoster?.uri : playlist.poster ?? ''}}
 					alt={playlist?.title ?? ''}
 					type="playlist"
 					style={tw`relative aspect-square rounded-md overflow-hidden w-1/3 h-auto`}
 					/>
 				) : <Skeleton style={tw`aspect-square w-1/3`} color={colors.background} />}
 				<Text>
-					{playlist?.poster_url ? upperFirst(t('common.messages.edit_image')) : upperFirst(t('common.messages.add_image'))}
+					{playlist?.poster ? upperFirst(t('common.messages.edit_image')) : upperFirst(t('common.messages.add_image'))}
 				</Text>
 			</Pressable>
 			<Separator />
@@ -317,7 +310,7 @@ const ModalPlaylistEdit = () => {
 					nativeID="title"
 					autoCapitalize="sentences"
 					returnKeyType="done"
-					disabled={isLoading}
+					disabled={isPending}
 					leftSectionStyle={tw`w-auto`}
 					error={form.formState.errors.title?.message}
 					/>
@@ -338,13 +331,13 @@ const ModalPlaylistEdit = () => {
 					nativeID="description"
 					autoCapitalize="sentences"
 					type="textarea"
-					disabled={isLoading}
+					disabled={isPending}
 					error={form.formState.errors.description?.message}
 					/>
 				</View>
 			)}
 			/>
-			<Controller
+			{/* <Controller
 			name='private'
 			control={form.control}
 			render={({ field: { onChange, value} }) => (
@@ -353,11 +346,11 @@ const ModalPlaylistEdit = () => {
 					<Switch
 					value={value}
 					onValueChange={onChange}
-					disabled={isLoading}
+					disabled={isPending}
 					/>
 				</View>
 			)}
-			/>
+			/> */}
 			{routes.length > 0 && (
 				<>
 					<Separator />
