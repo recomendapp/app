@@ -12,7 +12,7 @@ import { CardTvSeries } from "apps/mobile/src/components/cards/CardTvSeries";
 import { useMemo } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { personTvSeriesInfiniteOptions } from "@libs/query-client";
-import { PersonTvSeries } from "@packages/api-js";
+import { PersonTvSeries } from "@libs/api-js";
 
 interface PersonWidgetTvSeriesProps extends React.ComponentPropsWithoutRef<typeof View> {
 	personId: number;

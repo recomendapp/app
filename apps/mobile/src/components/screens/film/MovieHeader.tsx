@@ -33,8 +33,7 @@ import { useImagePalette } from 'apps/mobile/src/hooks/useImagePalette';
 import AnimatedImage from 'apps/mobile/src/components/ui/AnimatedImage';
 import BottomSheetPerson from 'apps/mobile/src/components/bottom-sheets/sheets/BottomSheetPerson';
 import { getTmdbImage } from 'apps/mobile/src/lib/tmdb/getTmdbImage';
-// import { useMediaMovieFollowersAverageRatingQuery } from 'apps/mobile/src/api/medias/mediaQueries';
-import { Movie, PersonCompact } from '@packages/api-js';
+import { Movie, PersonCompact } from '@libs/api-js';
 
 interface MovieHeaderProps {
 	movie?: Movie | null;

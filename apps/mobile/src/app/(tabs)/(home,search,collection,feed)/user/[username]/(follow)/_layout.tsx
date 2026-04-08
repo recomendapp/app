@@ -8,7 +8,8 @@ import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
 import { HeaderTitle } from "@react-navigation/elements";
 import { Icons } from "apps/mobile/src/constants/Icons";
-import { useUserProfileQuery } from "apps/mobile/src/api/users/userQueries";
+import { useQuery } from "@tanstack/react-query";
+import { userByUsernameOptions } from "@libs/query-client";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -21,7 +22,7 @@ const MaterialTopTabs = withLayoutContext<
 
 const ProfileFollowLayout = () => {
 	const { username } = useLocalSearchParams<{ username: string }>();
-	const { data: profile } = useUserProfileQuery({ username: username });
+	const { data: profile } = useQuery(userByUsernameOptions({ username: username }));
 	const { colors } = useTheme();
 	const t = useTranslations();
 	return (
@@ -34,7 +35,7 @@ const ProfileFollowLayout = () => {
 						<HeaderTitle {...props}>
 						{profile ? `@${profile.username}` : ''}
 						</HeaderTitle>
-						{profile?.premium && <Icons.premium color={colors.accentBlue} size={14} />}
+						{profile?.isPremium && <Icons.premium color={colors.accentBlue} size={14} />}
 				</View>
 			),
 			headerBackButtonDisplayMode: 'minimal',
@@ -55,8 +56,8 @@ const ProfileFollowLayout = () => {
 			}
 		}}
 		>
-			<MaterialTopTabs.Screen name="followers" initialParams={{ username }} options={{ title: upperFirst(t('common.messages.follower_count', { count: profile?.followers_count || 0 })) }} />
-			<MaterialTopTabs.Screen name="followees" initialParams={{ username }} options={{ title: upperFirst(t('common.messages.followee_count', { count: profile?.following_count || 0 })) }} />
+			<MaterialTopTabs.Screen name="followers" initialParams={{ username }} options={{ title: upperFirst(t('common.messages.follower_count', { count: profile?.followersCount || 0 })) }} />
+			<MaterialTopTabs.Screen name="followees" initialParams={{ username }} options={{ title: upperFirst(t('common.messages.followee_count', { count: profile?.followingCount || 0 })) }} />
 		</MaterialTopTabs>
 	</>
 	);

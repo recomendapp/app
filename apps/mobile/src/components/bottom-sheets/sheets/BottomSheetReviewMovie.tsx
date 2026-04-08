@@ -15,7 +15,7 @@ import { PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
 import { Alert } from 'react-native';
 import { useToast } from 'apps/mobile/src/components/Toast';
 import { FlashList } from '@shopify/flash-list';
-import { ReviewMovie, UserSummary } from '@packages/api-js';
+import { ReviewMovie, UserSummary } from '@libs/api-js';
 import { useMovieReviewDeleteMutation } from '@libs/query-client';
 
 interface BottomSheetReviewMovieProps extends BottomSheetProps {

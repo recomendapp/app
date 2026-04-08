@@ -1,13 +1,13 @@
 import { CardUser } from "apps/mobile/src/components/cards/CardUser";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useCallback, useMemo } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { userByUsernameOptions, userFollowersInfiniteOptions } from "@libs/query-client";
-import { UserSummary } from "@packages/api-js";
+import { UserSummary } from "@libs/api-js";
 
 const ProfileFollowersScreen = () => {
 	const { username } = useLocalSearchParams<{ username: string }>();

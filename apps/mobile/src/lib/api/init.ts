@@ -1,5 +1,5 @@
 import { API_ENDPOINT, API_URL } from 'apps/mobile/src/env';
-import { client, realtime } from '@packages/api-js';
+import { client, realtime } from '@libs/api-js';
 import { authClient } from '../auth/client';
 
 client.setConfig({

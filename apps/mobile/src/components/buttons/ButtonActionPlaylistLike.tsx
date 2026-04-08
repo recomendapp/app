@@ -3,7 +3,7 @@ import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { Button } from "apps/mobile/src/components/ui/Button";
-import { Playlist } from "@packages/api-js";
+import { Playlist } from "@libs/api-js";
 import { useUserPlaylistLike } from "@libs/query-client";
 
 interface ButtonActionPlaylistLikeProps

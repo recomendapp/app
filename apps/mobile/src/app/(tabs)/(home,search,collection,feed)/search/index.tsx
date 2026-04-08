@@ -24,7 +24,7 @@ import { KeyboardAwareScrollViewRef, useKeyboardState } from "react-native-keybo
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useQuery } from "@tanstack/react-query";
 import { searchGlobalOptions } from "@libs/query-client";
-import { MovieCompact, PersonCompact, PlaylistWithOwner, SearchBestResultItem, TvSeriesCompact, UserSummary } from "@packages/api-js";
+import { MovieCompact, PersonCompact, PlaylistWithOwner, SearchBestResultItem, TvSeriesCompact, UserSummary } from "@libs/api-js";
 
 const SearchScreen = () => {
 	const search = useSearchStore(state => state.search);

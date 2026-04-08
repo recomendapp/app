@@ -2,7 +2,7 @@ import { CardPlaylist } from "apps/mobile/src/components/cards/CardPlaylist";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import tw from "apps/mobile/src/lib/tw";
 import { Text, useWindowDimensions, View } from "react-native";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { upperFirst } from "lodash";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
@@ -11,7 +11,7 @@ import { useCallback, useMemo } from "react";
 import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { userPlaylistsSavedInfiniteOptions } from "@libs/query-client";
-import { PlaylistWithOwner } from "@packages/api-js";
+import { PlaylistWithOwner } from "@libs/api-js";
 
 const CollectionSavedScreen = () => {
 	const { user } = useAuth();

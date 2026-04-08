@@ -5,7 +5,7 @@ import { Icons } from "apps/mobile/src/constants/Icons";
 import tw from "apps/mobile/src/lib/tw";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { GAP, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { Stack, useRouter } from "expo-router";
 import { useCallback, useMemo } from "react";
 import { useNotificationArchiveMutation, useNotificationReadMutation, useNotificationUnarchiveMutation, useNotificationUnreadMutation } from "apps/mobile/src/api/notifications/notificationMutations";

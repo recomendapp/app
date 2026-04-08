@@ -20,7 +20,7 @@ import { useImagePalette } from "apps/mobile/src/hooks/useImagePalette";
 import Color from "color";
 import { useTranslations } from "use-intl";
 import { ShapeVerticalRoundedBackground } from "apps/mobile/src/lib/icons";
-import { Playlist, UserSummary } from "@packages/api-js";
+import { Playlist, UserSummary } from "@libs/api-js";
 
 interface SharePlaylistProps extends React.ComponentProps<typeof ViewShot> {
 	playlist: Playlist;

@@ -4,14 +4,14 @@ import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import tw from "apps/mobile/src/lib/tw";
 import { Link } from "expo-router";
 import { useWindowDimensions, View } from "react-native";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { Text } from "apps/mobile/src/components/ui/text";
 import { useCallback, useMemo } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { userPlaylistsInfiniteOptions } from "@libs/query-client";
-import { Playlist } from "@packages/api-js";
+import { Playlist } from "@libs/api-js";
 
 const CollectionScreen = () => {
 	const { user } = useAuth();

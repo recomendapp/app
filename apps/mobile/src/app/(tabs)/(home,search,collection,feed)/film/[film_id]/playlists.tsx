@@ -8,14 +8,14 @@ import tw from "apps/mobile/src/lib/tw";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { useActionSheet } from "@expo/react-native-action-sheet";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { useCallback, useState, useMemo } from "react";
 import { Button } from "apps/mobile/src/components/ui/Button";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { CardPlaylist } from "apps/mobile/src/components/cards/CardPlaylist";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { movieOptions, moviePlaylistsInfiniteOptions } from "@libs/query-client";
-import { PlaylistWithOwner } from "@packages/api-js";
+import { PlaylistWithOwner } from "@libs/api-js";
 
 interface sortBy {
 	label: string;

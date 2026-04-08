@@ -1,6 +1,6 @@
 import tw from "apps/mobile/src/lib/tw";
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { upperFirst } from "lodash";
 import { Href, Link } from "expo-router";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
@@ -8,7 +8,7 @@ import { Icons } from "apps/mobile/src/constants/Icons";
 import { useTranslations } from "use-intl";
 import { Text } from "apps/mobile/src/components/ui/text";
 import { CardReviewTvSeries } from "apps/mobile/src/components/cards/reviews/CardReviewTvSeries";
-import { ReviewTvSeriesWithAuthor, TvSeries } from "@packages/api-js";
+import { ReviewTvSeriesWithAuthor, TvSeries } from "@libs/api-js";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { tvSeriesReviewsInfiniteOptions } from "@libs/query-client";
 

@@ -5,7 +5,7 @@ import { ShareViewRef } from "apps/mobile/src/components/share/type";
 import BottomSheetShareLayout from "./BottomSheetShareLayout"; // Importer le layout
 import { ShareMovie } from "apps/mobile/src/components/share/ShareMovie";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
-import { MovieCompact } from "@packages/api-js";
+import { MovieCompact } from "@libs/api-js";
 
 interface BottomSheetShareMovieProps extends BottomSheetProps {
     movie: MovieCompact;

@@ -3,20 +3,23 @@ import { Button } from "apps/mobile/src/components/ui/Button";
 import { Text } from "apps/mobile/src/components/ui/text";
 import { View } from "apps/mobile/src/components/ui/view";
 import { Icons } from "apps/mobile/src/constants/Icons";
-import { useUserAcceptFollowerRequestMutation, useUserDeclineFollowerRequestMutation } from "apps/mobile/src/api/users/userMutations";
 import tw from "apps/mobile/src/lib/tw";
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
 import { useToast } from "apps/mobile/src/components/Toast";
 import { useCallback, useMemo } from "react";
-import { useUserFollowersRequestsQuery } from "apps/mobile/src/api/users/userQueries";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { userFollowRequestsInfiniteOptions, useUserAcceptFollowMutation, useUserDeclineFollowMutation } from "@libs/query-client";
+import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import { FollowRequest } from "@libs/api-js";
 
 const FollowRequestsScreen = () => {
 	const t = useTranslations();
 	const toast = useToast();
+	const { user } = useAuth();
 	const { bottomOffset, tabBarHeight } = useTheme();
 	const {
 		data,
@@ -25,18 +28,22 @@ const FollowRequestsScreen = () => {
 		refetch,
 		hasNextPage,
 		fetchNextPage,
-	} = useUserFollowersRequestsQuery();
-	const requests = useMemo(() => data?.pages.flat() || [], [data]);
+	} = useInfiniteQuery(userFollowRequestsInfiniteOptions({
+		userId: user?.id
+	}));
+	const requests = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
 	const loading = requests === undefined || isLoading;
 
 	// Mutations
-	const { mutateAsync: acceptRequest} = useUserAcceptFollowerRequestMutation();
-	const { mutateAsync: declineRequest} = useUserDeclineFollowerRequestMutation();
+	const { mutateAsync: acceptRequest } = useUserAcceptFollowMutation();
+	const { mutateAsync: declineRequest } = useUserDeclineFollowMutation();
 
 	// Handlers
-	const handleAcceptRequest = useCallback(async (requestId: number) => {
+	const handleAcceptRequest = useCallback(async (userId: string) => {
 		await acceptRequest({
-			requestId
+			path: {
+				user_id: userId,
+			}
 		}, {
 			onSuccess: () => {
 				toast.success(upperFirst(t('common.messages.request_accepted', { count: 1 })));
@@ -46,9 +53,11 @@ const FollowRequestsScreen = () => {
 			}
 		});
 	}, [acceptRequest, toast, t]);
-	const handleDeclineRequest = useCallback(async (requestId: number) => {
+	const handleDeclineRequest = useCallback(async (userId: string) => {
 		await declineRequest({
-			requestId
+			path: {
+				user_id: userId,
+			}
 		}, {
 			onSuccess: () => {
 				toast.success(upperFirst(t('common.messages.request_declined', { count: 1 })));
@@ -59,23 +68,25 @@ const FollowRequestsScreen = () => {
 		});
 	}, [declineRequest, toast, t]);
 
+	const renderItem = useCallback(({ item }: { item: FollowRequest }) => (
+		<CardUser user={item.user} style={tw`bg-transparent border-0 p-0 h-auto`}>
+			<View style={tw`flex-row items-center justify-between gap-2`}>
+				<Button icon={Icons.Check} size="fit" variant="accent-blue" onPress={() => handleAcceptRequest(item.user.id)} style={tw`py-1 px-2`}>
+					{upperFirst(t('common.messages.accept'))}
+				</Button>
+				<Button icon={Icons.X} size="fit" variant="outline" onPress={() => handleDeclineRequest(item.user.id)} style={tw`py-1 px-2`}>
+					{upperFirst(t('common.messages.decline'))}
+				</Button>
+			</View>
+		</CardUser>
+	), [handleAcceptRequest, handleDeclineRequest, t]);
+
 	return (
 	<>
 		<LegendList
 		data={requests || []}
-		renderItem={({ item }) => (
-			<CardUser user={item.user} style={tw`bg-transparent border-0 p-0 h-auto`}>
-				<View style={tw`flex-row items-center justify-between gap-2`}>
-					<Button icon={Icons.Check} size="fit" variant="accent-blue" onPress={() => handleAcceptRequest(item.id)} style={tw`py-1 px-2`}>
-						{upperFirst(t('common.messages.accept'))}
-					</Button>
-					<Button icon={Icons.X} size="fit" variant="outline" onPress={() => handleDeclineRequest(item.id)} style={tw`py-1 px-2`}>
-						{upperFirst(t('common.messages.decline'))}
-					</Button>
-				</View>
-			</CardUser>
-		)}
-		keyExtractor={(item) => item.id.toString()}
+		renderItem={renderItem}
+		keyExtractor={(item) => item.user.id}
 		refreshing={isRefetching}
 		onRefresh={refetch}
 		onEndReached={() => hasNextPage && fetchNextPage()}

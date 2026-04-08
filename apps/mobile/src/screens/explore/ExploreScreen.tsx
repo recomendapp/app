@@ -20,7 +20,6 @@ import { useHeaderHeight } from "@react-navigation/elements";
 import { FiltersBottomSheet } from "./sheets/FiltersBottomSheet";
 import { useExploreStore } from "apps/mobile/src/stores/useExploreStore";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useMediaGenresQuery } from "apps/mobile/src/api/medias/mediaQueries";
 import { TrueSheet } from "@lodev09/react-native-true-sheet";
 import { Input } from "apps/mobile/src/components/ui/Input";
 import { useExploreTileMetaQuery, useExploreTileQuery } from "apps/mobile/src/api/explore/exploreQueries";
@@ -59,9 +58,9 @@ const ExploreScreen = () => {
 	
 	const baseZoom = 8;
 
-	const {
-		data: genres,
-	} = useMediaGenresQuery();
+	// const {
+	// 	data: genres,
+	// } = useMediaGenresQuery();
 
 	const {
 		data: tile,

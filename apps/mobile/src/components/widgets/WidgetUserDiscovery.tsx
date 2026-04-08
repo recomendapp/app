@@ -1,7 +1,7 @@
 import tw from "apps/mobile/src/lib/tw";
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
 import { CardUser } from "../cards/CardUser";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { useTranslations } from "use-intl";
 import { upperFirst } from "lodash";
 import { Text } from "../ui/text";

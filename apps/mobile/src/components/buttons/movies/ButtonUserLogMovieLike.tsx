@@ -10,7 +10,7 @@ import { Button } from "apps/mobile/src/components/ui/Button";
 import { useToast } from "apps/mobile/src/components/Toast";
 import { forwardRef, useCallback } from "react";
 import tw from "apps/mobile/src/lib/tw";
-import { MovieCompact } from "@packages/api-js";
+import { MovieCompact } from "@libs/api-js";
 import { movieLogOptions, useMovieLogSetMutation } from "@libs/query-client";
 
 interface ButtonUserLogMovieLikeProps

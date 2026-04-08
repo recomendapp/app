@@ -13,7 +13,7 @@ import { GridView } from "../ui/GridView";
 import { Text } from "../ui/text";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { userBookmarksInfiniteOptions } from "@libs/query-client";
-import { BookmarkWithMedia } from "@packages/api-js";
+import { BookmarkWithMedia } from "@libs/api-js";
 
 interface WidgetUserBookmarksProps extends React.ComponentPropsWithoutRef<typeof View> {
   labelStyle?: StyleProp<TextStyle>;

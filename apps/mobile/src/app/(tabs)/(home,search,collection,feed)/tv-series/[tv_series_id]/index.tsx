@@ -27,12 +27,12 @@ import ButtonUserRecoSend from "apps/mobile/src/components/buttons/ButtonUserRec
 import AnimatedContentContainer from "apps/mobile/src/components/ui/AnimatedContentContainer";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import YoutubePlayer from "react-native-youtube-iframe";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { Vimeo } from "react-native-vimeo-iframe";
 import TvSeriesWidgetCast from "apps/mobile/src/components/screens/tv-series/TvSeriesWidgetCast";
 import { useQuery } from "@tanstack/react-query";
 import { tvSeriesCastingOptions, tvSeriesOptions } from "@libs/query-client";
-import { TvSeries, TvSeriesTrailer } from "@packages/api-js";
+import { TvSeries, TvSeriesTrailer } from "@libs/api-js";
 import { ButtonUserBookmark } from "apps/mobile/src/components/buttons/ButtonUserBookmark";
 
 const TvSeriesScreen = () => {

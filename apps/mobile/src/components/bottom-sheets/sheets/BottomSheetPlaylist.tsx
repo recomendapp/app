@@ -22,7 +22,7 @@ import ButtonActionPlaylistLike from 'apps/mobile/src/components/buttons/ButtonA
 import ButtonActionPlaylistSaved from 'apps/mobile/src/components/buttons/ButtonActionPlaylistSaved';
 import { forwardRef, useMemo } from 'react';
 import { FlashList } from '@shopify/flash-list';
-import { Playlist, UserSummary } from '@packages/api-js';
+import { Playlist, UserSummary } from '@libs/api-js';
 import { usePlaylistDeleteMutation, useUserPlaylistSaved } from '@libs/query-client';
 
 interface BottomSheetPlaylistProps extends BottomSheetProps {
@@ -93,8 +93,8 @@ const BottomSheetPlaylist = forwardRef<
 		...(user?.id === playlist.userId ? [
 			{
 				icon: Icons.Users,
-				onPress: () => router.push({ pathname: '/playlist/[playlist_id]/edit/guests', params: { playlist_id: playlist.id }}),
-				label: upperFirst(t('common.messages.manage_guests', { gender: 'male', count: 2 })),
+				onPress: () => router.push({ pathname: '/playlist/[playlist_id]/edit/members', params: { playlist_id: playlist.id }}),
+				label: upperFirst(t('common.messages.manage_members', { gender: 'male', count: 2 })),
 			},
 		] : []),
 		...((playlist.role === 'owner' || playlist.role === 'admin') ? [

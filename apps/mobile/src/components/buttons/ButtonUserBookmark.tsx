@@ -10,7 +10,7 @@ import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import { useToast } from "apps/mobile/src/components/Toast";
 import { forwardRef, useCallback } from "react";
 import tw from "apps/mobile/src/lib/tw";
-import { Bookmark } from "@packages/api-js";
+import { Bookmark } from "@libs/api-js";
 import { useQuery } from "@tanstack/react-query";
 import { userBookmarkByMediaOptions, useUserBookmarkDeleteByMediaMutation, useUserBookmarkSetByMediaMutation } from "@libs/query-client";
 import { BottomSheetBookmarkComment } from "../bottom-sheets/sheets/BottomSheetBookmarkComment";

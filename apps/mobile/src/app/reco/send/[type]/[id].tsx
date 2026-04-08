@@ -26,7 +26,7 @@ import { Checkbox } from "apps/mobile/src/components/ui/checkbox";
 import { useToast } from "apps/mobile/src/components/Toast";
 import { useQuery } from "@tanstack/react-query";
 import { userRecoSendAllOptions, useUserRecoSendMutation } from "@libs/query-client";
-import { UserSummary } from "@packages/api-js";
+import { UserSummary } from "@libs/api-js";
 
 const COMMENT_MAX_LENGTH = 180;
 

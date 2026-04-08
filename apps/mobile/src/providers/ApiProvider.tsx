@@ -1,5 +1,5 @@
 import { useLocale } from "use-intl";
-import { client } from "@packages/api-js";
+import { client } from "@libs/api-js";
 import { useEffect } from "react";
 import { HEADER_LANGUAGE_KEY } from "@libs/i18n";
 

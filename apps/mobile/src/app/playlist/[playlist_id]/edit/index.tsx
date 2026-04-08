@@ -91,7 +91,10 @@ const ModalPlaylistEdit = () => {
 		{
 			label: upperFirst(t('common.messages.manage_guests', { count: 2 })),
 			icon: Icons.Users,
-			route: `/playlist/${playlistId}/edit/guests`,
+			route: {
+				pathname: '/playlist/[playlist_id]/edit/members',
+				params: { playlist_id: playlistId },
+			},
 		}
 	];
 

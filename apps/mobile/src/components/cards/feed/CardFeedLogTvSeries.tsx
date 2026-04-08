@@ -16,7 +16,7 @@ import { CardUser } from "../CardUser";
 import { CardReviewTvSeries } from "../reviews/CardReviewTvSeries";
 import { GAP } from "apps/mobile/src/theme/globals";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
-import { FeedItemLogTvSeries } from "@packages/api-js";
+import { FeedItemLogTvSeries } from "@libs/api-js";
 import { FixedOmit } from "apps/mobile/src/utils/fixed-omit";
 
 interface CardFeedLogTvSeriesBaseProps

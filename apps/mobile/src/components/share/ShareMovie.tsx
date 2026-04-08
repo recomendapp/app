@@ -22,7 +22,7 @@ import { useImagePalette } from "apps/mobile/src/hooks/useImagePalette";
 import Color from "color";
 import { ShapeVerticalRoundedBackground, ShapeVerticalRoundedForeground } from "apps/mobile/src/lib/icons";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
-import { MovieCompact, MovieImage } from "@packages/api-js";
+import { MovieCompact, MovieImage } from "@libs/api-js";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { movieImagesInfiniteOptions } from "@libs/query-client";
 interface ShareMovieProps extends React.ComponentProps<typeof ViewShot> {

@@ -11,7 +11,7 @@ import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
-import { RecoSender } from '@packages/api-js';
+import { RecoSender } from '@libs/api-js';
 
 interface BottomSheetMyRecosSendersProps extends BottomSheetProps {
   comments: RecoSender[];

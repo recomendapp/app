@@ -1,4 +1,3 @@
-import { Provider } from "@supabase/supabase-js";
 import { createContext, use, useCallback, useEffect, useState } from "react";
 import { Alert, Platform } from "react-native";
 import { useSplashScreen } from "./SplashScreenProvider";
@@ -15,17 +14,18 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { upperFirst } from "lodash";
 import { useLocale, useTranslations } from "use-intl";
 import { useAuthCustomerInfoQuery } from "apps/mobile/src/api/auth/authQueries";
-import { User } from "@packages/api-js";
+import { User } from "@libs/api-js";
 import { meOptions } from '@libs/query-client';
 import { authClient } from "../lib/auth/client";
 import { useToast } from "../components/Toast";
+import { SocialProvider } from 'better-auth/types';
 import { defaultSupportedLocale, SupportedLocale, supportedLocales } from "@libs/i18n";
 
 type AuthContextProps = {
 	user: User | null | undefined;
 	customerInfo: CustomerInfo | undefined;
 	login: (credentials: { email: string; password: string }) => Promise<void>;
-	loginWithOAuth: (provider: Provider, redirectTo?: string | null) => Promise<void>;
+	loginWithOAuth: (provider: SocialProvider, redirectTo?: string | null) => Promise<void>;
 	logout: () => Promise<void>;
 	forceLogout: () => Promise<void>;
 	safeLogout: (withConfirm?: boolean) => Promise<void>;
@@ -54,7 +54,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 	const queryClient = useQueryClient();
 	const { setLocale } = useLocaleContext();
 	const locale = useLocale();
-	// const supabase = useSupabaseClient();
 	const redirectUri = AuthSession.makeRedirectUri();
 	const [pushToken, setPushToken] = useState<string | null>(null);
 	const { data: user } = useQuery(meOptions());
@@ -107,7 +106,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 		await queryClient.invalidateQueries({ queryKey: meOptions().queryKey });
 	}, [t, queryClient]);
 
-	const loginWithOAuth = useCallback(async (provider: Provider, redirectTo?: string | null) => {
+	const loginWithOAuth = useCallback(async (provider: SocialProvider, redirectTo?: string | null) => {
 		switch (provider) {
 			case "google":
 				GoogleSignin.configure({

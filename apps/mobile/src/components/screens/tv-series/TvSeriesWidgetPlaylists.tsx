@@ -1,6 +1,6 @@
 import tw from "apps/mobile/src/lib/tw";
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { CardPlaylist } from "apps/mobile/src/components/cards/CardPlaylist";
 import { upperFirst } from "lodash";
 import { Href, Link } from "expo-router";
@@ -10,7 +10,7 @@ import { useTranslations } from "use-intl";
 import { Text } from "apps/mobile/src/components/ui/text";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { tvSeriesPlaylistsInfiniteOptions } from "@libs/query-client";
-import { PlaylistWithOwner } from "@packages/api-js";
+import { PlaylistWithOwner } from "@libs/api-js";
 
 interface TvSeriesWidgetPlaylistsProps extends React.ComponentPropsWithoutRef<typeof View> {
 	tvSeriesId: number;

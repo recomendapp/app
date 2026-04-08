@@ -1,6 +1,6 @@
 import { BORDER_RADIUS } from "apps/mobile/src/theme/globals";
 import { Href } from "expo-router";
-import { Movie, MovieCompact, Person, PersonCompact, TvEpisode, TvSeasonCompact, TvSeries, TvSeriesCompact } from "@packages/api-js";
+import { Movie, MovieCompact, Person, PersonCompact, TvEpisode, TvSeasonCompact, TvSeries, TvSeriesCompact } from "@libs/api-js";
 import { StyleProp, ViewStyle } from "react-native";
 
 type MediaType = 'movie' | 'tv_series' | 'tv_season' | 'tv_episode' | 'person';

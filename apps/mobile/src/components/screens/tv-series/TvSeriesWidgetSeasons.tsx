@@ -1,12 +1,12 @@
 import tw from "apps/mobile/src/lib/tw";
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { upperFirst } from "lodash";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { CardTvSeriesSeason } from "apps/mobile/src/components/cards/CardTvSeriesSeason";
 import { useTranslations } from "use-intl";
 import { Text } from "apps/mobile/src/components/ui/text";
-import { TvSeries } from "@packages/api-js";
+import { TvSeries } from "@libs/api-js";
 import { useQuery } from "@tanstack/react-query";
 import { tvSeriesSeasonsOptions } from "@libs/query-client";
 

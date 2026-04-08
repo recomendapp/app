@@ -2,7 +2,7 @@ import { queryOptions } from "@tanstack/react-query"
 import { File, Directory, Paths } from 'expo-file-system';
 import { logger } from "apps/mobile/src/logger";
 import { uiKeys } from "./uiKeys";
-import { uiBackgroundsControllerListAll } from "@packages/api-js";
+import { uiBackgroundsControllerListAll } from "@libs/api-js";
 import { getTmdbImage } from "../../lib/tmdb/getTmdbImage";
 
 const UI_DIRECTORY = new Directory(Paths.cache, 'ui');

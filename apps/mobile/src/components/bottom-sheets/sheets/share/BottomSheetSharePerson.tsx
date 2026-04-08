@@ -5,7 +5,7 @@ import { ShareViewRef } from "apps/mobile/src/components/share/type";
 import BottomSheetShareLayout from "./BottomSheetShareLayout"; // Importer le layout
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { SharePerson } from "apps/mobile/src/components/share/SharePerson";
-import { PersonCompact } from "@packages/api-js";
+import { PersonCompact } from "@libs/api-js";
 
 interface BottomSheetSharePersonProps extends BottomSheetProps {
     person: PersonCompact;

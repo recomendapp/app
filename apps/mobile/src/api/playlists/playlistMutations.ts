@@ -5,7 +5,7 @@ import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { clamp } from "lodash";
 import { playlistDetailsOptions, playlistGuestsOptions, playlistItemsMovieOptions, playlistItemsTvSeriesOptions, playlistMovieAddToOptions, playlistTvSeriesAddToOptions } from "./playlistOptions";
 import { playlistKeys } from "./playlistKeys";
-import { mediasKeys } from "../medias/mediaKeys";
+// import { mediasKeys } from "../medias/mediaKeys";
 import { randomUUID } from "expo-crypto";
 import { ImageManipulator, SaveFormat } from "expo-image-manipulator";
 import { ImagePickerAsset } from "expo-image-picker";
@@ -481,12 +481,12 @@ export const usePlaylistMovieInsertMutation = ({
 			return playlists;
 		},
 		onSuccess: (data) => {
-			queryClient.invalidateQueries({
-				queryKey: mediasKeys.playlists({
-					id: movieId,
-					type: 'movie',
-				}),
-			});
+			// queryClient.invalidateQueries({
+			// 	queryKey: mediasKeys.playlists({
+			// 		id: movieId,
+			// 		type: 'movie',
+			// 	}),
+			// });
 
 			// Update add to queries
 			queryClient.setQueryData(playlistMovieAddToOptions({
@@ -625,12 +625,12 @@ export const usePlaylistMovieDeleteMutation = () => {
 			});
 
 			// Invalidate media playlists
-			queryClient.invalidateQueries({
-				queryKey: mediasKeys.playlists({
-					id: data.movie_id,
-					type: 'movie',
-				}),
-			});
+			// queryClient.invalidateQueries({
+			// 	queryKey: mediasKeys.playlists({
+			// 		id: data.movie_id,
+			// 		type: 'movie',
+			// 	}),
+			// });
 
 			// Update playlist
 			queryClient.setQueryData(playlistDetailsOptions({ supabase, playlistId: data.playlist_id }).queryKey, (oldData) => {
@@ -739,12 +739,12 @@ export const usePlaylistTvSeriesInsertMutation = ({
 			return playlists;
 		},
 		onSuccess: (data) => {
-			queryClient.invalidateQueries({
-				queryKey: mediasKeys.playlists({
-					id: tvSeriesId,
-					type: 'tv_series',
-				}),
-			});
+			// queryClient.invalidateQueries({
+			// 	queryKey: mediasKeys.playlists({
+			// 		id: tvSeriesId,
+			// 		type: 'tv_series',
+			// 	}),
+			// });
 
 			// Update add to queries
 			queryClient.setQueryData(playlistTvSeriesAddToOptions({
@@ -884,12 +884,12 @@ export const usePlaylistTvSeriesDeleteMutation = () => {
 			});
 
 			// Invalidate media playlists
-			queryClient.invalidateQueries({
-				queryKey: mediasKeys.playlists({
-					id: data.tv_series_id,
-					type: 'tv_series',
-				}),
-			});
+			// queryClient.invalidateQueries({
+			// 	queryKey: mediasKeys.playlists({
+			// 		id: data.tv_series_id,
+			// 		type: 'tv_series',
+			// 	}),
+			// });
 
 			// Update playlist
 			queryClient.setQueryData(playlistDetailsOptions({ supabase, playlistId: data.playlist_id }).queryKey, (oldData) => {

@@ -12,7 +12,7 @@ import ButtonUserReviewTvSeriesLike from "apps/mobile/src/components/buttons/But
 import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import { BottomSheetReviewTvSeries } from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetReviewTvSeries";
 import { convert } from "html-to-text";
-import { ReviewTvSeries, UserSummary } from "@packages/api-js";
+import { ReviewTvSeries, UserSummary } from "@libs/api-js";
 import { FixedOmit } from "apps/mobile/src/utils/fixed-omit";
 
 interface CardReviewTvSeriesBaseProps

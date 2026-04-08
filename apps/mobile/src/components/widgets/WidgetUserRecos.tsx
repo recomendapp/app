@@ -15,7 +15,7 @@ import { GridView } from "../ui/GridView";
 import { Text } from "../ui/text";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { userRecosInfiniteOptions } from "@libs/query-client";
-import { RecoWithMedia } from "@packages/api-js";
+import { RecoWithMedia } from "@libs/api-js";
 
 interface WidgetUserRecosProps extends React.ComponentPropsWithoutRef<typeof View> {
   labelStyle?: StyleProp<TextStyle>;

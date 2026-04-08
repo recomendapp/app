@@ -3,7 +3,7 @@ import { REVENUECAT_API_KEY } from "apps/mobile/src/lib/revenue-cat";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import Purchases, { CustomerInfo, LOG_LEVEL } from "react-native-purchases";
-import { User } from "@packages/api-js";
+import { User } from "@libs/api-js";
 
 export const useRevenueCat = (user: User | null | undefined) => {
   const queryClient = useQueryClient();

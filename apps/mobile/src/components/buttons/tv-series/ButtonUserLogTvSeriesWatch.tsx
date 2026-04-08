@@ -9,7 +9,7 @@ import { usePathname, useRouter } from "expo-router";
 import { Button } from "apps/mobile/src/components/ui/Button";
 import { useToast } from "apps/mobile/src/components/Toast";
 import { forwardRef, useCallback } from "react";
-import { TvSeriesCompact } from "@packages/api-js";
+import { TvSeriesCompact } from "@libs/api-js";
 import { useQuery } from "@tanstack/react-query";
 import { tvSeriesLogOptions, useTvSeriesLogDeleteMutation, useTvSeriesLogSetMutation } from "@libs/query-client";
 

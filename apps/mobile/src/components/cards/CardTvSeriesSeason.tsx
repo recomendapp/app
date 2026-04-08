@@ -10,7 +10,7 @@ import { IconMediaRating } from "../medias/IconMediaRating";
 import { useTranslations } from "use-intl";
 import { Text } from "../ui/text";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
-import { TvSeasonCompact } from "@packages/api-js";
+import { TvSeasonCompact } from "@libs/api-js";
 
 interface CardTvSeriesSeasonProps
 	extends React.ComponentPropsWithRef<typeof Animated.View> {

@@ -10,7 +10,7 @@ import { Skeleton } from "../ui/Skeleton";
 import { Text } from "../ui/text";
 import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import BottomSheetUser from "../bottom-sheets/sheets/BottomSheetUser";
-import { UserSummary } from "@packages/api-js";
+import { UserSummary } from "@libs/api-js";
 import { FixedOmit } from "../../utils/fixed-omit";
 
 interface CardUserBaseProps

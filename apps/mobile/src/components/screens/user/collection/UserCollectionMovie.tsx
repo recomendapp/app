@@ -4,7 +4,7 @@ import { Icons } from "apps/mobile/src/constants/Icons";
 import tw from "apps/mobile/src/lib/tw";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useActionSheet } from "@expo/react-native-action-sheet";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { useLocalSearchParams } from "expo-router";
 import { upperFirst } from "lodash";
 import { useCallback, useMemo, useState } from "react";
@@ -13,25 +13,28 @@ import { useTranslations } from "use-intl";
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { CardMovie } from "apps/mobile/src/components/cards/CardMovie";
 import { FadeInDown } from "react-native-reanimated";
-import { UserActivityMovie } from "@recomendapp/types";
-import { useUserActivitiesMovieQuery, useUserProfileQuery } from "apps/mobile/src/api/users/userQueries";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { userByUsernameOptions, userMovieLogsInfiniteOptions } from "@libs/query-client";
+import { LogMovieWithMovieNoReview } from "@libs/api-js";
 
 interface sortBy {
 	label: string;
-	value: 'watched_date' | 'rating';
+	value: 'rating' | 'updated_at' | 'first_watched_at' | 'random';
 }
 
 const UserCollectionMovie = () => {
 	const t = useTranslations();
 	const { width: SCREEN_WIDTH } = useWindowDimensions();
 	const { username } = useLocalSearchParams<{ username: string }>();
-	const { data: profile } = useUserProfileQuery({ username: username });
+	const { data: profile } = useQuery(userByUsernameOptions({ username: username }));
 	const { colors, bottomOffset } = useTheme();
 	const { showActionSheetWithOptions } = useActionSheet();
 	// States
 	const sortByOptions = useMemo((): sortBy[] => [
-		{ label: upperFirst(t('common.messages.watched_date')), value: 'watched_date' },
+		{ label: upperFirst(t('common.messages.updated_at')), value: 'updated_at' },
+		{ label: upperFirst(t('common.messages.first_watched_at')), value: 'first_watched_at' },
 		{ label: upperFirst(t('common.messages.rating')), value: 'rating' },
+		{ label: upperFirst(t('common.messages.random')), value: 'random' },
 	], [t]);
 	const [sortBy, setSortBy] = useState<sortBy>(sortByOptions[0]);
 	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -42,15 +45,15 @@ const UserCollectionMovie = () => {
 		hasNextPage,
 		isRefetching,
 		refetch,
-	} = useUserActivitiesMovieQuery({
+	} = useInfiniteQuery(userMovieLogsInfiniteOptions({
 		userId: profile?.id || undefined,
 		filters: {
-			sortBy: sortBy.value,
-			sortOrder,
+			sort_by: sortBy.value,
+			sort_order: sortOrder,
 		}
-	});
+	}));
 	const loading = data === undefined || isLoading;
-	const medias = useMemo(() => data?.pages.flat() || [], [data]);
+	const movies = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
 	// Handlers
 	const handleSortBy = useCallback(() => {
 		const sortByOptionsWithCancel = [
@@ -71,19 +74,23 @@ const UserCollectionMovie = () => {
 		setSortOrder((prev) => prev === 'asc' ? 'desc' : 'asc');
 	}, []);
 
-	return (
-	<LegendList
-	data={medias}
-	renderItem={useCallback(({ item } : { item: UserActivityMovie })  => (
+	const renderItem = useCallback(({ item } : { item: LogMovieWithMovieNoReview })  => (
 		<CardMovie
-		key={item.id}
 		variant="poster"
 		movie={item.movie!}
-		profileActivity={item}
+		profile={{
+			user: profile!,
+			log: item,
+		}}
 		style={tw`w-full`}
 		entering={FadeInDown}
 		/>
-	), [])}
+	), []);
+
+	return (
+	<LegendList
+	data={movies}
+	renderItem={renderItem}
 	ListHeaderComponent={
 		<View style={tw`flex flex-row justify-end items-center gap-2 py-2`}>
 			<Button
@@ -120,7 +127,7 @@ const UserCollectionMovie = () => {
 		paddingBottom: bottomOffset + PADDING_VERTICAL,
 		paddingHorizontal: PADDING_HORIZONTAL,
 	}}
-	keyExtractor={useCallback((item: UserActivityMovie) => item.id.toString(), [])}
+	keyExtractor={useCallback((item: LogMovieWithMovieNoReview) => item.id.toString(), [])}
 	refreshing={isRefetching}
 	onRefresh={refetch}
 	/>

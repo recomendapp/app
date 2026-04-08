@@ -28,7 +28,7 @@ import { Checkbox } from "apps/mobile/src/components/ui/checkbox";
 import { useToast } from "apps/mobile/src/components/Toast";
 import { useSupabaseClient } from "apps/mobile/src/providers/SupabaseProvider";
 import { usePlaylistItemsAddMutation, userPlaylistsAddTargetsAllOptions } from "@libs/query-client";
-import { Playlist, PlaylistWithOwner } from "@packages/api-js";
+import { Playlist, PlaylistWithOwner } from "@libs/api-js";
 
 const COMMENT_MAX_LENGTH = 180;
 

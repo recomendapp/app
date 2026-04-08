@@ -10,7 +10,7 @@ import { Text } from "../ui/text";
 import BottomSheetPerson from "../bottom-sheets/sheets/BottomSheetPerson";
 import { GAP } from "apps/mobile/src/theme/globals";
 import UserAvatar, { UserAvatarProps } from "../user/UserAvatar";
-import { PersonCompact } from "@packages/api-js";
+import { PersonCompact } from "@libs/api-js";
 import { FixedOmit } from "../../utils/fixed-omit";
 import { getTmdbImage } from "../../lib/tmdb/getTmdbImage";
 import { forwardRef } from "react";

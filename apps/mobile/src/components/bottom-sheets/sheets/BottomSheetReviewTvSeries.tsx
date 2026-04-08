@@ -15,7 +15,7 @@ import { PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
 import { Alert } from 'react-native';
 import { useToast } from 'apps/mobile/src/components/Toast';
 import { FlashList } from '@shopify/flash-list';
-import { ReviewTvSeries, UserSummary } from '@packages/api-js';
+import { ReviewTvSeries, UserSummary } from '@libs/api-js';
 import { useTvSeriesReviewDeleteMutation } from '@libs/query-client';
 
 interface BottomSheetReviewTvSeriesProps extends BottomSheetProps {

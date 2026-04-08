@@ -12,7 +12,7 @@ import { forwardRef, useCallback } from "react";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
 import { Text } from "apps/mobile/src/components/ui/text";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
-import { TvSeriesCompact } from "@packages/api-js";
+import { TvSeriesCompact } from "@libs/api-js";
 import { useQuery } from "@tanstack/react-query";
 import { tvSeriesLogOptions, useTvSeriesLogSetMutation } from "@libs/query-client";
 

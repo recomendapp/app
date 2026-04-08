@@ -4,7 +4,7 @@ import { Icons } from "apps/mobile/src/constants/Icons";
 import tw from "apps/mobile/src/lib/tw";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useActionSheet } from "@expo/react-native-action-sheet";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { upperFirst } from "lodash";
 import { useCallback, useMemo, useState } from "react";

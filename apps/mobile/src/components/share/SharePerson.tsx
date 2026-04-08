@@ -19,7 +19,7 @@ import { clamp } from "lodash";
 import { useImagePalette } from "apps/mobile/src/hooks/useImagePalette";
 import Color from "color";
 import { ShapeVerticalRoundedBackground } from "apps/mobile/src/lib/icons";
-import { PersonCompact } from "@packages/api-js";
+import { PersonCompact } from "@libs/api-js";
 import { getTmdbImage } from "../../lib/tmdb/getTmdbImage";
 
 interface SharePersonProps extends React.ComponentProps<typeof ViewShot> {

@@ -8,7 +8,7 @@ import tw from "apps/mobile/src/lib/tw";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import useSearchStore from "apps/mobile/src/stores/useSearchStore";
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
-import { LegendList, LegendListRef } from "@legendapp/list";
+import { LegendList, LegendListRef } from "@legendapp/list/react-native";
 import { TrueSheet as RNTrueSheet } from "@lodev09/react-native-true-sheet";
 import { useScrollToTop } from "@react-navigation/native";
 // import { useNavigation } from "expo-router";

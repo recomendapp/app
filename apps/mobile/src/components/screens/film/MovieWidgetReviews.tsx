@@ -1,6 +1,6 @@
 import tw from "apps/mobile/src/lib/tw";
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { upperFirst } from "lodash";
 import { Href, Link } from "expo-router";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
@@ -10,7 +10,7 @@ import { Text } from "apps/mobile/src/components/ui/text";
 import { CardReviewMovie } from "apps/mobile/src/components/cards/reviews/CardReviewMovie";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { movieReviewsInfiniteOptions } from "@libs/query-client";
-import { Movie, ReviewMovieWithAuthor } from "@packages/api-js";
+import { Movie, ReviewMovieWithAuthor } from "@libs/api-js";
 
 interface MovieWidgetReviewsProps extends React.ComponentPropsWithoutRef<typeof View> {
 	movie: Movie;

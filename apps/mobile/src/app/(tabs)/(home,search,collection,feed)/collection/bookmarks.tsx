@@ -10,7 +10,7 @@ import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import { useQuery } from "@tanstack/react-query";
 import { userBookmarksAllOptions, useUserBookmarkDeleteByMediaMutation } from "@libs/query-client";
-import { BookmarkWithMedia } from "@packages/api-js";
+import { BookmarkWithMedia } from "@libs/api-js";
 import { useCallback, useMemo } from "react";
 import { Alert } from "react-native";
 import richTextToPlainString from "apps/mobile/src/utils/richTextToPlainString";

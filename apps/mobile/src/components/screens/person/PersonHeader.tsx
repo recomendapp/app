@@ -23,7 +23,7 @@ import { BORDER_RADIUS, PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile
 import { useHeaderHeight } from '@react-navigation/elements';
 import { View } from 'apps/mobile/src/components/ui/view';
 import { useImagePalette } from 'apps/mobile/src/hooks/useImagePalette';
-import { Person } from '@packages/api-js';
+import { Person } from '@libs/api-js';
 import { getTmdbImage } from 'apps/mobile/src/lib/tmdb/getTmdbImage';
 
 interface PersonHeaderProps {

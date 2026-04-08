@@ -10,7 +10,7 @@ import BottomSheetPlaylist from '../bottom-sheets/sheets/BottomSheetPlaylist';
 import { useTranslations } from 'use-intl';
 import { Skeleton } from '../ui/Skeleton';
 import { Text } from '../ui/text';
-import { Playlist, UserSummary } from '@packages/api-js';
+import { Playlist, UserSummary } from '@libs/api-js';
 import { FixedOmit } from '../../utils/fixed-omit';
 
 interface CardPlaylistBaseProps

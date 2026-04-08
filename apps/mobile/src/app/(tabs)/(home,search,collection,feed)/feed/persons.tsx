@@ -10,7 +10,7 @@ import tw from "apps/mobile/src/lib/tw";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { BORDER_RADIUS, GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import Color from "color";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
@@ -20,7 +20,7 @@ import { useCallback, useMemo } from "react";
 import { useTranslations } from "use-intl";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { userFeedPersonsInfiniteOptions } from "@libs/query-client";
-import { FeedPersonItem } from "@packages/api-js";
+import { FeedPersonItem } from "@libs/api-js";
 import { uiBackgroundsOptions } from "apps/mobile/src/api/ui/uiOptions";
 
 const CastCrewFeedScreen = () => {

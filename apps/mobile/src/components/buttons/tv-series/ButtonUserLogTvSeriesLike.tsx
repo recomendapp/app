@@ -10,7 +10,7 @@ import { Button } from "apps/mobile/src/components/ui/Button";
 import { useToast } from "apps/mobile/src/components/Toast";
 import { forwardRef, useCallback } from "react";
 import tw from "apps/mobile/src/lib/tw";
-import { TvSeriesCompact } from "@packages/api-js";
+import { TvSeriesCompact } from "@libs/api-js";
 import { tvSeriesLogOptions, useTvSeriesLogSetMutation } from "@libs/query-client";
 
 interface ButtonUserLogTvSeriesLikeProps

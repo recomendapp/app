@@ -12,7 +12,7 @@ import { GAP, PADDING_HORIZONTAL } from "apps/mobile/src/theme/globals";
 import { useMemo } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { personMoviesInfiniteOptions } from "@libs/query-client";
-import { PersonMovie } from "@packages/api-js";
+import { PersonMovie } from "@libs/api-js";
 
 interface PersonWidgetFilmsProps extends React.ComponentPropsWithoutRef<typeof View> {
 	personId: number;

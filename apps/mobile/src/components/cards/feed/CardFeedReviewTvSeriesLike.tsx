@@ -14,7 +14,7 @@ import { CardReviewTvSeries } from "../reviews/CardReviewTvSeries";
 import BottomSheetTvSeries from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetTvSeries";
 import { GAP } from "apps/mobile/src/theme/globals";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
-import { FeedItemReviewTvSeriesLike } from "@packages/api-js";
+import { FeedItemReviewTvSeriesLike } from "@libs/api-js";
 import { FixedOmit } from "apps/mobile/src/utils/fixed-omit";
 
 interface CardFeedReviewTvSeriesLikeBaseProps

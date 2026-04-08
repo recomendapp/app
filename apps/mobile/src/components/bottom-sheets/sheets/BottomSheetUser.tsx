@@ -15,7 +15,7 @@ import { Text } from 'apps/mobile/src/components/ui/text';
 import UserAvatar from 'apps/mobile/src/components/user/UserAvatar';
 import BottomSheetShareUser from './share/BottomSheetShareUser';
 import { FlashList } from '@shopify/flash-list';
-import { UserSummary } from '@packages/api-js';
+import { UserSummary } from '@libs/api-js';
 
 interface BottomSheetUserProps extends BottomSheetProps {
   user: UserSummary,

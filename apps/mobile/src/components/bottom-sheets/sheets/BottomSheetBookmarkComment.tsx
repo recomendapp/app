@@ -15,7 +15,7 @@ import { View } from 'apps/mobile/src/components/ui/view';
 import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import { useToast } from 'apps/mobile/src/components/Toast';
 import { forwardRef, useCallback } from 'react';
-import { Bookmark } from '@packages/api-js';
+import { Bookmark } from '@libs/api-js';
 import { useUserBookmarkSetByMediaMutation } from '@libs/query-client';
 
 interface BottomSheetBookmarkCommentProps extends BottomSheetProps {

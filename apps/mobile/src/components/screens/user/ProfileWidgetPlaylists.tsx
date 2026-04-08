@@ -3,7 +3,7 @@ import { Text } from "apps/mobile/src/components/ui/text";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import tw from "apps/mobile/src/lib/tw";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { Link } from "expo-router";
 import { upperFirst } from "lodash";
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
@@ -11,7 +11,7 @@ import { useTranslations } from "use-intl";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { userPlaylistsInfiniteOptions } from "@libs/query-client";
 import { useMemo } from "react";
-import { Profile } from "@packages/api-js";
+import { Profile } from "@libs/api-js";
 
 interface ProfileWidgetPlaylistsProps extends React.ComponentPropsWithoutRef<typeof View> {
 	profile: Profile;

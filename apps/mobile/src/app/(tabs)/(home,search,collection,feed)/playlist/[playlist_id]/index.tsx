@@ -18,7 +18,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useUIStore } from "apps/mobile/src/stores/useUIStore";
 import { useToast } from "apps/mobile/src/components/Toast";
 import { useCallback, useMemo } from "react";
-import { canEditPlaylistItem, PlaylistItemWithMedia } from "@packages/api-js";
+import { canEditPlaylistItem, PlaylistItemWithMedia } from "@libs/api-js";
 import { Alert } from "react-native";
 import richTextToPlainString from "apps/mobile/src/utils/richTextToPlainString";
 import { BottomSheetComment } from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetComment";

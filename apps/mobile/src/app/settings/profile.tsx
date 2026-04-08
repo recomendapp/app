@@ -1,6 +1,5 @@
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
-import { useUserUpdateMutation } from "apps/mobile/src/api/users/userMutations";
 import tw from "apps/mobile/src/lib/tw";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -24,6 +23,7 @@ import { KeyboardToolbar } from "apps/mobile/src/components/ui/KeyboardToolbar";
 import { useToast } from "apps/mobile/src/components/Toast";
 import { Pressable } from "react-native";
 import { KeyboardAwareScrollView } from "apps/mobile/src/components/ui/KeyboardAwareScrollView";
+import { useMeUpdateMutation } from "@libs/query-client";
 
 const FULL_NAME_MIN_LENGTH = 1;
 const FULL_NAME_MAX_LENGTH = 30;
@@ -35,7 +35,7 @@ const SettingsProfileScreen = () => {
 	const { bottomOffset, tabBarHeight } = useTheme();
 	const t = useTranslations();
 	const { showActionSheetWithOptions } = useActionSheet();
-	const { mutateAsync: updateProfileMutation } = useUserUpdateMutation();
+	const { mutateAsync: updateProfile } = useMeUpdateMutation();
 	const [ isLoading, setIsLoading ] = useState(false);
 	const [ newAvatar, setNewAvatar ] = useState<ImagePickerAsset | null | undefined>(undefined);
 	// Form
@@ -59,18 +59,18 @@ const SettingsProfileScreen = () => {
 		  })
 		  .optional()
 		  .nullable(),
-		website: z
-		  .url({
-			  message: t('pages.settings.profile.url.form.invalid'),
-		  })
-		  .optional()
-		  .nullable(),
+		// website: z
+		//   .url({
+		// 	  message: t('pages.settings.profile.url.form.invalid'),
+		//   })
+		//   .optional()
+		//   .nullable(),
 	});
 	type ProfileFormValues = z.infer<typeof profileFormSchema>;
 	const defaultValues: Partial<ProfileFormValues> = {
-		full_name: user?.full_name ?? '',
+		full_name: user?.name ?? '',
 		bio: user?.bio,
-		website: user?.website,
+		// website: user?.website,
 	};
 	const { watch: formWatch, reset: formReset, ...form} = useForm<ProfileFormValues>({
 		resolver: zodResolver(profileFormSchema),
@@ -85,8 +85,8 @@ const SettingsProfileScreen = () => {
 	const avatarOptions = useMemo(() => [
 		{ label: upperFirst(t('common.messages.choose_from_the_library')), value: "library" },
 		{ label: upperFirst(t('common.messages.take_a_photo')), value: "camera" },
-		{ label: upperFirst(t('common.messages.delete_current_image')), value: "delete", disable: !user?.avatar_url && !newAvatar },
-	], [t, user?.avatar_url, newAvatar]);
+		{ label: upperFirst(t('common.messages.delete_current_image')), value: "delete", disable: !user?.avatar && !newAvatar },
+	], [t, user?.avatar, newAvatar]);
 
 	const handleAvatarOptions = useCallback(() => {
 		const options = [
@@ -133,23 +133,25 @@ const SettingsProfileScreen = () => {
 					}
 					break;
 				case 'delete':
-					setNewAvatar(user?.avatar_url ? null : undefined);
+					setNewAvatar(user?.avatar ? null : undefined);
 					break;
 				default:
 					break;
 			};
 		});
-	}, [showActionSheetWithOptions, toast, t, user?.avatar_url, avatarOptions]);
+	}, [showActionSheetWithOptions, toast, t, user?.avatar, avatarOptions]);
 
 	const handleSubmit = useCallback(async (values: ProfileFormValues) => {
 		try {
 			if (!user) return;
 			setIsLoading(true);
-			await updateProfileMutation({
-				full_name: values.full_name,
-				bio: values.bio?.trim() || null,
-				website: values.website?.trim() || null,
-				avatar: newAvatar,
+			await updateProfile({
+				body: {
+					name: values.full_name,
+					bio: values.bio?.trim() || null,
+					// website: values.website?.trim() || null,
+					// avatar: newAvatar,
+				}
 			});
 			setNewAvatar(undefined);
 			setHasFormChanged(false);
@@ -166,15 +168,15 @@ const SettingsProfileScreen = () => {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [user, newAvatar, updateProfileMutation, toast, t]);
+	}, [user, newAvatar, updateProfile, toast, t]);
 
 	// useEffects
 	useEffect(() => {
 		if (user) {
 			formReset({
-				full_name: user.full_name,
+				full_name: user.name,
 				bio: user.bio,
-				website: user.website,
+				// website: user.website,
 			});
 		}
 	}, [user, formReset]);
@@ -183,12 +185,12 @@ const SettingsProfileScreen = () => {
 		const subscription = formWatch((value) => {
 			const isFormChanged =
 				value.full_name !== defaultValues.full_name ||
-				(value.bio?.trim() || null) !== defaultValues.bio ||
-				(value.website?.trim() || null) !== defaultValues.website;
+				(value.bio?.trim() || null) !== defaultValues.bio;
+				// (value.website?.trim() || null) !== defaultValues.website;
 			setHasFormChanged(isFormChanged);
 		});
 		return () => subscription.unsubscribe();
-	}, [formWatch, defaultValues.full_name, defaultValues.bio, defaultValues.website]);
+	}, [formWatch, defaultValues]);
 
 	return (
 	<>
@@ -237,12 +239,12 @@ const SettingsProfileScreen = () => {
 			<Pressable onPress={handleAvatarOptions} style={tw`items-center justify-center gap-2`}>
 				{user ? (
 					<UserAvatar
-					avatar_url={newAvatar !== undefined ? newAvatar?.uri : user?.avatar_url}
-					full_name={user?.full_name} style={tw`w-24 h-24`}
+					avatar_url={newAvatar !== undefined ? newAvatar?.uri : user?.avatar}
+					full_name={user?.name} style={tw`w-24 h-24`}
 					/>
 				) : <UserAvatar skeleton style={tw`w-24 h-24`} />}
 				<Text>
-					{user?.avatar_url ? upperFirst(t('common.messages.edit_image')) : upperFirst(t('common.messages.add_image'))}
+					{user?.avatar ? upperFirst(t('common.messages.edit_image')) : upperFirst(t('common.messages.add_image'))}
 				</Text>
 			</Pressable>
 			<Separator />
@@ -294,7 +296,7 @@ const SettingsProfileScreen = () => {
 				</View>
 			)}
 			/>
-			<Controller
+			{/* <Controller
 			name='website'
 			control={form.control}
 			render={({ field: { onChange, onBlur, value} }) => (
@@ -319,7 +321,7 @@ const SettingsProfileScreen = () => {
 					</Text>
 				</View>
 			)}
-			/>
+			/> */}
 		</KeyboardAwareScrollView>
 		<KeyboardToolbar />
 	</>

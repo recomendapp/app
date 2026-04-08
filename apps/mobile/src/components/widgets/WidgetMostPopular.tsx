@@ -1,6 +1,6 @@
 import tw from "apps/mobile/src/lib/tw";
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { useTranslations } from "use-intl";
 import { upperFirst } from "lodash";
 import { CardMovie } from "../cards/CardMovie";
@@ -10,7 +10,7 @@ import { Text } from "../ui/text";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { widgetMediasMostPopularInfiniteOptions } from "@libs/query-client";
 import { useCallback, useMemo } from "react";
-import { ListInfiniteMediasMostPopular } from "@packages/api-js";
+import { ListInfiniteMediasMostPopular } from "@libs/api-js";
 
 interface WidgetMostPopularProps extends React.ComponentPropsWithoutRef<typeof View> {
   labelStyle?: StyleProp<TextStyle>;

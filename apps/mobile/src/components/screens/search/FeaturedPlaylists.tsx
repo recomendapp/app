@@ -2,7 +2,7 @@ import { CardPlaylist } from "apps/mobile/src/components/cards/CardPlaylist";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import tw from "apps/mobile/src/lib/tw";
 import { StyleProp, useWindowDimensions, View, ViewStyle } from "react-native";
-import { LegendList, LegendListRef } from "@legendapp/list";
+import { LegendList, LegendListRef } from "@legendapp/list/react-native";
 import { useCallback, useMemo, useRef } from "react";
 import { useScrollToTop } from "@react-navigation/native";
 import { GAP, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
@@ -12,7 +12,7 @@ import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { playlistFeaturedInfiniteOptions } from "@libs/query-client";
-import { PlaylistWithOwner } from "@packages/api-js";
+import { PlaylistWithOwner } from "@libs/api-js";
 
 interface FeaturedPlaylistsProps {
 	contentContainerStyle?: StyleProp<ViewStyle>;

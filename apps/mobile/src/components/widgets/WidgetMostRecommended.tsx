@@ -20,7 +20,7 @@ import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import BottomSheetMovie from "../bottom-sheets/sheets/BottomSheetMovie";
 import BottomSheetTvSeries from "../bottom-sheets/sheets/BottomSheetTvSeries";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
-import { RecoTrendingWithMovie, RecoTrendingWithTvSeries } from "@packages/api-js";
+import { RecoTrendingWithMovie, RecoTrendingWithTvSeries } from "@libs/api-js";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { widgetRecosTrendingInfiniteOptions } from "@libs/query-client";
 

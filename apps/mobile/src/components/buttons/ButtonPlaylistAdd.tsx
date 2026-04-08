@@ -5,7 +5,7 @@ import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { usePathname, useRouter } from "expo-router";
 import { Button } from "apps/mobile/src/components/ui/Button";
 import tw from "apps/mobile/src/lib/tw";
-import { PlaylistItem } from "@packages/api-js";
+import { PlaylistItem } from "@libs/api-js";
 
 interface ButtonPlaylistAddProps
 	extends React.ComponentProps<typeof Button> {

@@ -7,7 +7,7 @@ import tw from "apps/mobile/src/lib/tw";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { AuthError } from "expo-auth-session";
 import { Href, useRouter } from "expo-router";
 import { upperFirst } from "lodash";
@@ -38,7 +38,7 @@ type Route = BaseRoute & (
 );
 
 const SettingsScreen = () => {
-	const { session, customerInfo, logout, forceLogout } = useAuth();
+	const { user, customerInfo, logout, forceLogout } = useAuth();
 	const { colors, bottomOffset, tabBarHeight, mode } = useTheme();
 	const toast = useToast();
 	const router = useRouter();
@@ -88,8 +88,8 @@ const SettingsScreen = () => {
 			{ label: upperFirst(t('common.messages.about')), route: '/about', icon: Icons.info },
 			{ label: upperFirst(t('common.messages.logout')), onPress: handleLogoutButtonPress, icon: Icons.logout, authOnly: true, color: colors.destructive },
 		];
-		return routes.filter(route => !route.authOnly || (route.authOnly && session));
-	}, [t, session, handleLogoutButtonPress, colors.destructive, customerInfo, router]);
+		return routes.filter(route => !route.authOnly || (route.authOnly && user));
+	}, [t, user, handleLogoutButtonPress, colors.destructive, customerInfo, router]);
 
 	const renderItem = useCallback(({ item, index }: { item: Route; index: number }) => (
 		<Button

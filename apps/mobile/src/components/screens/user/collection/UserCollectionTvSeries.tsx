@@ -4,7 +4,7 @@ import { Icons } from "apps/mobile/src/constants/Icons";
 import tw from "apps/mobile/src/lib/tw";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useActionSheet } from "@expo/react-native-action-sheet";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { useLocalSearchParams } from "expo-router";
 import { upperFirst } from "lodash";
 import { useCallback, useMemo, useState } from "react";
@@ -13,25 +13,27 @@ import { useTranslations } from "use-intl";
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { CardTvSeries } from "apps/mobile/src/components/cards/CardTvSeries";
 import { FadeInDown } from "react-native-reanimated";
-import { UserActivityTvSeries } from "@recomendapp/types";
-import { useUserActivitiesTvSeriesQuery, useUserProfileQuery } from "apps/mobile/src/api/users/userQueries";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { userByUsernameOptions, userTvSeriesLogsInfiniteOptions } from "@libs/query-client";
+import { LogTvSeriesWithTvSeriesNoReview } from "@libs/api-js";
 
 interface sortBy {
 	label: string;
-	value: 'watched_date' | 'rating';
+	value: 'rating' | 'updated_at' | 'random';
 }
 
 const UserCollectionTvSeries = () => {
 	const t = useTranslations();
 	const { width: SCREEN_WIDTH } = useWindowDimensions();
 	const { username } = useLocalSearchParams<{ username: string }>();
-	const { data: profile } = useUserProfileQuery({ username: username });
+	const { data: profile } = useQuery(userByUsernameOptions({ username: username }));
 	const { colors, bottomOffset } = useTheme();
 	const { showActionSheetWithOptions } = useActionSheet();
 	// States
 	const sortByOptions = useMemo((): sortBy[] => [
-		{ label: upperFirst(t('common.messages.watched_date')), value: 'watched_date' },
+		{ label: upperFirst(t('common.messages.updated_at')), value: 'updated_at' },
 		{ label: upperFirst(t('common.messages.rating')), value: 'rating' },
+		{ label: upperFirst(t('common.messages.random')), value: 'random' },
 	], [t]);
 	const [sortBy, setSortBy] = useState<sortBy>(sortByOptions[0]);
 	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -42,15 +44,15 @@ const UserCollectionTvSeries = () => {
 		hasNextPage,
 		isRefetching,
 		refetch,
-	} = useUserActivitiesTvSeriesQuery({
+	} = useInfiniteQuery(userTvSeriesLogsInfiniteOptions({
 		userId: profile?.id || undefined,
 		filters: {
-			sortBy: sortBy.value,
-			sortOrder,
+			sort_by: sortBy.value,
+			sort_order: sortOrder,
 		}
-	});
+	}));
 	const loading = data === undefined || isLoading;
-	const medias = useMemo(() => data?.pages.flat() || [], [data]);
+	const tvSeries = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
 	// Handlers
 	const handleSortBy = useCallback(() => {
 		const sortByOptionsWithCancel = [
@@ -71,20 +73,24 @@ const UserCollectionTvSeries = () => {
 		setSortOrder((prev) => prev === 'asc' ? 'desc' : 'asc');
 	}, []);
 
+	const renderItem = useCallback(({ item } : { item: LogTvSeriesWithTvSeriesNoReview })  => (
+		<CardTvSeries
+		variant="poster"
+		tvSeries={item.tvSeries}
+		profile={{
+			user: profile!,
+			log: item,
+		}}
+		style={tw`w-full`}
+		entering={FadeInDown}
+		/>
+	), [profile]);
+
 	return (
 	<>
 		<LegendList
-		data={medias}
-		renderItem={useCallback(({ item } : { item: UserActivityTvSeries }) => (
-			<CardTvSeries
-			key={item.id}
-			variant="poster"
-			tvSeries={item.tv_series!}
-			profileActivity={item}
-			style={tw`w-full`}
-			entering={FadeInDown}
-			/>
-		), [])}
+		data={tvSeries}
+		renderItem={renderItem}
 		ListHeaderComponent={
 			<View style={tw.style('flex flex-row justify-end items-center gap-2 py-2')}>
 				<Button
@@ -121,7 +127,7 @@ const UserCollectionTvSeries = () => {
 			paddingBottom: bottomOffset + PADDING_VERTICAL,
 			paddingHorizontal: PADDING_HORIZONTAL,
 		}}
-		keyExtractor={useCallback((item: UserActivityTvSeries) => item.id.toString(), [])}
+		keyExtractor={useCallback((item: LogTvSeriesWithTvSeriesNoReview) => item.id.toString(), [])}
 		refreshing={isRefetching}
 		onRefresh={refetch}
 		/>

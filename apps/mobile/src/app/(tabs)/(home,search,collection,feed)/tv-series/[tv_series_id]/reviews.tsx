@@ -7,7 +7,7 @@ import tw from "apps/mobile/src/lib/tw";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { useActionSheet } from "@expo/react-native-action-sheet";
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import { useCallback, useMemo, useState } from "react";
 import { Button } from "apps/mobile/src/components/ui/Button";
 import { Icons } from "apps/mobile/src/constants/Icons";
@@ -15,7 +15,7 @@ import { CardReviewTvSeries } from "apps/mobile/src/components/cards/reviews/Car
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { tvSeriesLogOptions, tvSeriesOptions, tvSeriesReviewsInfiniteOptions } from "@libs/query-client";
-import { ReviewTvSeriesWithAuthor } from "@packages/api-js";
+import { ReviewTvSeriesWithAuthor } from "@libs/api-js";
 
 interface sortBy {
 	label: string;

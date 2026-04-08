@@ -19,7 +19,7 @@ import { EnrichedTextInput } from "apps/mobile/src/components/RichText/EnrichedT
 import { useReanimatedKeyboardAnimation } from "react-native-keyboard-controller";
 import { usePreventRemove } from "@react-navigation/native";
 import { Alert } from "react-native";
-import { Movie, TvSeries, ReviewMovie as TReviewMovie, ReviewTvSeries as TReviewTvSeries } from '@packages/api-js';
+import { Movie, TvSeries, ReviewMovie as TReviewMovie, ReviewTvSeries as TReviewTvSeries } from '@libs/api-js';
 
 const MAX_TITLE_LENGTH = 50;
 

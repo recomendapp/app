@@ -1,5 +1,5 @@
 import { playlistOptions } from "@libs/query-client";
-import { canEditPlaylist } from "@packages/api-js";
+import { canEditPlaylist } from "@libs/api-js";
 import { useQuery } from "@tanstack/react-query";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { Redirect, Stack, useLocalSearchParams, useRouter } from "expo-router";

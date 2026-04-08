@@ -15,7 +15,7 @@ import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme
 import { Label } from 'apps/mobile/src/components/ui/Label';
 import { forwardRef, useCallback } from 'react';
 import { Text } from 'apps/mobile/src/components/ui/text';
-import { Playlist } from '@packages/api-js';
+import { Playlist } from '@libs/api-js';
 import { usePlaylistInsertMutation } from '@libs/query-client';
 
 interface BottomSheetPlaylistCreateProps extends BottomSheetProps {

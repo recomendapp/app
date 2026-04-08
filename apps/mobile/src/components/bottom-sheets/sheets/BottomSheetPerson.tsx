@@ -16,7 +16,7 @@ import { Text } from 'apps/mobile/src/components/ui/text';
 import BottomSheetSharePerson from './share/BottomSheetSharePerson';
 import { FlashList } from '@shopify/flash-list';
 import { PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
-import { PersonCompact } from '@packages/api-js';
+import { PersonCompact } from '@libs/api-js';
 import { getTmdbImage } from 'apps/mobile/src/lib/tmdb/getTmdbImage';
 
 interface BottomSheetPersonProps extends BottomSheetProps {

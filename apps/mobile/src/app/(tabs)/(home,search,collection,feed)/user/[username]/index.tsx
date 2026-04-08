@@ -22,7 +22,7 @@ import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import BottomSheetUser from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetUser";
 import { useCallback, useMemo } from "react";
 import Animated from "react-native-reanimated";
-import { Profile } from "@packages/api-js";
+import { Profile } from "@libs/api-js";
 import { meKeys, userByUsernameOptions, userMovieLogsInfiniteOptions, userPlaylistsInfiniteOptions, userTvSeriesLogsInfiniteOptions } from "@libs/query-client";
 
 const ProfileHeader = ({

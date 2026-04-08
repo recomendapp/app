@@ -8,9 +8,9 @@ import { useTranslations } from "use-intl";
 import { CORNERS } from "apps/mobile/src/theme/globals";
 import { useToast } from "../Toast";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
-import { forwardRef } from 'react';
-import { useUserFollowProfileQuery } from 'apps/mobile/src/api/users/userQueries';
-import { useUserFollowProfileInsertMutation, useUserFollowProfileDeleteMutation } from 'apps/mobile/src/api/users/userMutations';
+import { forwardRef, useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { userFollowOptions, useUserFollowMutation, useUserUnfollowMutation } from '@libs/query-client';
 
 type ButtonUserFollowSkeletonProps = {
   skeleton: true;
@@ -37,29 +37,30 @@ const ButtonUserFollow = forwardRef<
   const {
     data: isFollow,
     isLoading,
-  } = useUserFollowProfileQuery({
+  } = useQuery(userFollowOptions({
     userId: user?.id,
     profileId: profileId,
-  });
+  }));
   const loading = skeleton || !profileId || isLoading || isFollow === undefined;
 
-  const { mutateAsync: insertFollow } = useUserFollowProfileInsertMutation();
-  const { mutateAsync: deleteFollowerMutation } = useUserFollowProfileDeleteMutation();
+  const { mutateAsync: insertFollow } = useUserFollowMutation();
+  const { mutateAsync: deleteFollow } = useUserUnfollowMutation();
 
-  const followUser = async () => {
-    if (!user || !profileId) return;
+  const followUser = useCallback(async () => {
+    if (!profileId) return;
     await insertFollow({
-      userId: user?.id,
-      followeeId: profileId,
+      path: {
+        user_id: profileId,
+      }
     }, {
-      onError: (error) => {
-        toast.error(upperFirst(t('common.messages.error')), { description: upperFirst(t('common.messages.an_error_occurred')) });
+      onError: () => {
+        toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
-  }
+  }, [insertFollow, profileId, toast, t]);
 
-  const unfollowUser = async () => {
-    if (!user || !profileId) return;
+  const unfollowUser = useCallback(async () => {
+    if (!profileId) return;
     Alert.alert(
       upperFirst(t('common.messages.are_u_sure')),
       undefined,
@@ -69,14 +70,15 @@ const ButtonUserFollow = forwardRef<
           style: 'cancel',
         },
         {
-          text: isFollow?.is_pending ? upperFirst(t('common.messages.cancel_request')) : upperFirst(t('common.messages.unfollow')),
+          text: isFollow?.status === 'pending' ? upperFirst(t('common.messages.cancel_request')) : upperFirst(t('common.messages.unfollow')),
           onPress: async () => {
-            await deleteFollowerMutation({
-              userId: user?.id,
-              followeeId: profileId,
+            await deleteFollow({
+              path: {
+                user_id: profileId,
+              }
             }, {
-              onError: (error) => {
-                toast.error(upperFirst(t('common.messages.error')), { description: upperFirst(t('common.messages.an_error_occurred')) });
+              onError: () => {
+                toast.error(upperFirst(t('common.messages.an_error_occurred')));
               }
             });
           },
@@ -86,7 +88,7 @@ const ButtonUserFollow = forwardRef<
         userInterfaceStyle: mode,
       }
     );
-  }
+  }, [deleteFollow, toast, t, mode]);
 
   if (!user || user.id === profileId) return null;
 
@@ -115,7 +117,7 @@ const ButtonUserFollow = forwardRef<
     {...props}
     >
       {isFollow ? (
-        isFollow.is_pending ? upperFirst(t('common.messages.request_sent')) : upperFirst(t('common.messages.followed'))
+        isFollow.status === 'pending' ? upperFirst(t('common.messages.request_sent')) : upperFirst(t('common.messages.followed'))
       ) : upperFirst(t('common.messages.follow'))}
     </Button>
   );

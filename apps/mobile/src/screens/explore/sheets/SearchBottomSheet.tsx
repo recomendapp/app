@@ -17,7 +17,7 @@ import Fuse from 'fuse.js';
 import { ImageWithFallback } from 'apps/mobile/src/components/utils/ImageWithFallback';
 import { Button } from 'apps/mobile/src/components/ui/Button';
 import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
-import { LegendList } from '@legendapp/list';
+import { LegendList } from '@legendapp/list/react-native';
 import { useExploreStore } from 'apps/mobile/src/stores/useExploreStore';
 import { Icons } from 'apps/mobile/src/constants/Icons';
 import { upperFirst } from 'lodash';

@@ -15,7 +15,7 @@ import BottomSheetTvSeries from "apps/mobile/src/components/bottom-sheets/sheets
 import { BadgeMedia } from "apps/mobile/src/components/badges/BadgeMedia";
 import { GAP } from "apps/mobile/src/theme/globals";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
-import { PersonFeedWithTvSeries } from "@packages/api-js";
+import { PersonFeedWithTvSeries } from "@libs/api-js";
 import { FixedOmit } from "apps/mobile/src/utils/fixed-omit";
 
 interface CardFeedPersonTvSeriesBaseProps

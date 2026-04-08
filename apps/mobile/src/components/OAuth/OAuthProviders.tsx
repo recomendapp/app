@@ -1,5 +1,4 @@
-import { LegendList, LegendListProps } from "@legendapp/list";
-import { Provider as AuthProvider } from "@supabase/supabase-js";
+import { LegendList, LegendListProps } from "@legendapp/list/react-native";
 import { Button } from "../ui/Button";
 import { Text } from "../ui/text";
 import { GAP } from "apps/mobile/src/theme/globals";

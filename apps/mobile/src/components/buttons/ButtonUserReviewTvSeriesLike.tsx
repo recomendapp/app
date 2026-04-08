@@ -2,14 +2,12 @@ import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { Button } from "apps/mobile/src/components/ui/Button";
 import { Text } from "apps/mobile/src/components/ui/text";
-import { forwardRef, useCallback, useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import tw from "apps/mobile/src/lib/tw";
 import { useAuth } from "../../providers/AuthProvider";
 import { useToast } from "../Toast";
 import { useTranslations } from "use-intl";
-import { useQuery } from "@tanstack/react-query";
-import { reviewTvSeriesLikeOptions, useReviewTvSeriesLikeMutation, useReviewTvSeriesUnlikeMutation, useUserReviewTvSeriesLike } from "@libs/query-client";
-import { upperFirst } from "lodash";
+import { useUserReviewTvSeriesLike } from "@libs/query-client";
 
 interface ButtonUserReviewTvSeriesLikeProps
 	extends React.ComponentProps<typeof Button> {

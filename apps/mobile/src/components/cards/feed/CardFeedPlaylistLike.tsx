@@ -12,7 +12,7 @@ import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import BottomSheetPlaylist from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetPlaylist";
 import { CardUser } from "../CardUser";
 import { GAP } from "apps/mobile/src/theme/globals";
-import { FeedItemPlaylistLike } from "@packages/api-js";
+import { FeedItemPlaylistLike } from "@libs/api-js";
 import { FixedOmit } from "apps/mobile/src/utils/fixed-omit";
 
 interface CardFeedPlaylistLikeBaseProps

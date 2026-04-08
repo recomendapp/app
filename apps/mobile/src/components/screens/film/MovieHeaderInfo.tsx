@@ -1,4 +1,4 @@
-import { Movie } from "@packages/api-js";
+import { Movie } from "@libs/api-js";
 import { Text } from "apps/mobile/src/components/ui/text";
 import { View } from "apps/mobile/src/components/ui/view";
 import tw from "apps/mobile/src/lib/tw";

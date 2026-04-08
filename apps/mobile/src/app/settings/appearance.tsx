@@ -13,7 +13,6 @@ import { View } from "apps/mobile/src/components/ui/view";
 import { useLocaleContext } from "apps/mobile/src/providers/LocaleProvider";
 import { Picker } from '@react-native-picker/picker';
 import useLocalizedLanguageName from "apps/mobile/src/hooks/useLocalizedLanguageName";
-import { useUserUpdateMutation } from "apps/mobile/src/api/users/userMutations";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { KeyboardAwareScrollView } from 'apps/mobile/src/components/ui/KeyboardAwareScrollView';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
@@ -22,6 +21,7 @@ import { useToast } from "apps/mobile/src/components/Toast";
 import { Platform } from "react-native";
 import { useQueryClient } from "@tanstack/react-query";
 import { supportedLocales } from '@libs/i18n';
+import { useMeUpdateMutation } from "@libs/query-client";
 
 const SettingsAppearanceScreen = () => {
 	const { locale, setLocale } = useLocaleContext();
@@ -32,7 +32,7 @@ const SettingsAppearanceScreen = () => {
 	const t = useTranslations();
 	const [ isLoading, setIsLoading ] = useState(false);
 	const locales = useLocalizedLanguageName(locale);
-	const { mutateAsync: updateUser } = useUserUpdateMutation()
+	const { mutateAsync: updateUser } = useMeUpdateMutation()
 
 	// Form
 	const profileFormSchema = z.object({
@@ -54,7 +54,9 @@ const SettingsAppearanceScreen = () => {
 			setIsLoading(true);
 			if (user) {
 				await updateUser({
-					language: data.locale,
+					body: {
+						language: data.locale,
+					}
 				});
 			}
 			setLocale(data.locale);

@@ -16,12 +16,12 @@ import { UseQueryResult } from "@tanstack/react-query";
 import { CollectionItem } from "./CollectionItem";
 import { ImageType } from "apps/mobile/src/components/utils/ImageWithFallback";
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
-import { LegendListRenderItemProps } from "@legendapp/list";
+import { LegendListRenderItemProps } from "@legendapp/list/react-native";
 import { useWindowDimensions } from "react-native";
 import CollectionToolbar, { CollectionToolbarItem } from "./CollectionToolbar";
 import BottomSheetSort from "../bottom-sheets/sheets/BottomSheetSort";
 import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
-import { ViewType } from "@packages/api-js";
+import { ViewType } from "@libs/api-js";
 
 const MemoizedSearchBar = React.memo(SearchBar);
 

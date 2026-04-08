@@ -5,7 +5,7 @@ import { ShareViewRef } from "apps/mobile/src/components/share/type";
 import BottomSheetShareLayout from "./BottomSheetShareLayout"; // Importer le layout
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { SharePlaylist } from "apps/mobile/src/components/share/SharePlaylist";
-import { Playlist, UserSummary } from "@packages/api-js";
+import { Playlist, UserSummary } from "@libs/api-js";
 
 interface BottomSheetSharePlaylistProps extends BottomSheetProps {
     playlist: Playlist;

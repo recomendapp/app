@@ -58,24 +58,12 @@ const AppLayout = ({ segment } : { segment: string }) => {
         <Stack.Screen name="tv-series/[tv_series_id]/review/create" options={{ headerTitle: upperFirst(t('common.messages.new_review')) }} />
         <Stack.Screen name="tv-series/[tv_series_id]/review/[review_id]/edit" options={{ headerTitle: upperFirst(t('common.messages.edit_review')) }} />
       </Stack.Protected>
-      <Stack.Screen name="settings/index" options={{ headerTitle: upperFirst(t('pages.settings.label')) }} />
-      <Stack.Screen name="settings/appearance" options={{ headerTitle: upperFirst(t('pages.settings.appearance.label')) }} />
-      <Stack.Protected guard={!!user}>
-        <Stack.Screen name="settings/profile" options={{ headerTitle: upperFirst(t('pages.settings.profile.label')) }} />
-        <Stack.Screen name="settings/account" options={{ headerTitle: upperFirst(t('pages.settings.account.label')) }} />
-        <Stack.Screen name="settings/subscription" options={{ headerTitle: upperFirst(t('pages.settings.subscription.label')) }} />
-        <Stack.Screen name="settings/security" options={{ headerTitle: upperFirst(t('pages.settings.security.label')) }} />
-        <Stack.Screen name="settings/notifications" options={{ headerTitle: upperFirst(t('pages.settings.notifications.label')) }} />
-      </Stack.Protected>
 
       {/* NOTIFICATIONS */}
       <Stack.Protected guard={!!isMounted}>
         <Stack.Screen name="notifications" options={{ headerTitle: upperFirst(t('common.messages.notification', { count: 2 })) }} />
 			  <Stack.Screen name="follow-requests" options={{ headerTitle: upperFirst(t('common.messages.follow_requests')) }} />
       </Stack.Protected>
-      
-      {/* ABOUT */}
-      <Stack.Screen name="about/index" options={{ headerTitle: upperFirst(t('common.messages.about')) }} />
     </Stack>
   </>
   );

@@ -80,6 +80,8 @@ const RootLayoutNav = () => {
       />
       <Stack.Screen name='playlist/[playlist_id]/edit' options={{ headerShown: false, presentation: 'modal' }} />
     </Stack.Protected>
+    {/* MOVIES */}
+    <Stack.Screen name="film/[film_id]/watched-dates" options={{ title: upperFirst(t('common.messages.watched_dates')), presentation: 'modal' }} />
     {/* RECOS */}
     <Stack.Protected guard={!!user}>
       <Stack.Screen
@@ -113,6 +115,18 @@ const RootLayoutNav = () => {
         })
       }} />
     </Stack.Protected>
+    {/* SETTINGS */}
+    <Stack.Screen name="settings/index" options={{ headerTitle: upperFirst(t('pages.settings.label')) }} />
+    <Stack.Screen name="settings/appearance" options={{ headerTitle: upperFirst(t('pages.settings.appearance.label')) }} />
+    <Stack.Protected guard={!!user}>
+      <Stack.Screen name="settings/profile" options={{ headerTitle: upperFirst(t('pages.settings.profile.label')) }} />
+      <Stack.Screen name="settings/account" options={{ headerTitle: upperFirst(t('pages.settings.account.label')) }} />
+      <Stack.Screen name="settings/subscription" options={{ headerTitle: upperFirst(t('pages.settings.subscription.label')) }} />
+      <Stack.Screen name="settings/security" options={{ headerTitle: upperFirst(t('pages.settings.security.label')) }} />
+      <Stack.Screen name="settings/notifications" options={{ headerTitle: upperFirst(t('pages.settings.notifications.label')) }} />
+    </Stack.Protected>
+    {/* ABOUT */}
+    <Stack.Screen name="about/index" options={{ headerTitle: upperFirst(t('common.messages.about')) }} />
 
     <Stack.Screen name="explore" options={{ title: upperFirst(t('common.messages.explore')), headerTitle: () => <></>, headerTransparent: true, headerStyle: { backgroundColor: 'transparent' } }} />
     <Stack.Screen name="upgrade" options={{ presentation: 'fullScreenModal' }} />

@@ -16,7 +16,7 @@ import { Text } from "apps/mobile/src/components/ui/text";
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { personMoviesInfiniteOptions, personOptions } from "@libs/query-client";
-import { PersonMovie } from "@packages/api-js";
+import { PersonMovie } from "@libs/api-js";
 
 interface sortBy {
 	label: string;

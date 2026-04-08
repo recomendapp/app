@@ -22,7 +22,7 @@ import { useImagePalette } from "apps/mobile/src/hooks/useImagePalette";
 import Color from "color";
 import { ShapeVerticalRoundedBackground, ShapeVerticalRoundedForeground } from "apps/mobile/src/lib/icons";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
-import { TvSeriesCompact, TvSeriesImage } from "@packages/api-js";
+import { TvSeriesCompact, TvSeriesImage } from "@libs/api-js";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { tvSeriesImagesInfiniteOptions } from "@libs/query-client";
 

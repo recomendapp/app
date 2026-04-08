@@ -5,7 +5,7 @@ import tw from "apps/mobile/src/lib/tw";
 import { forwardRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { movieLogOptions } from "@libs/query-client";
-import { MovieCompact } from "@packages/api-js";
+import { MovieCompact } from "@libs/api-js";
 import { useRouter } from "expo-router";
 
 interface ButtonUserLogMovieWatchDateProps

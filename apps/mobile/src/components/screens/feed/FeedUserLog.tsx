@@ -6,7 +6,7 @@ import { forwardRef } from "react";
 import { View } from "react-native";
 import { useTranslations } from "use-intl";
 import { Text } from "apps/mobile/src/components/ui/text";
-import { LogMovie, LogTvSeries, UserSummary } from "@packages/api-js";
+import { LogMovie, LogTvSeries, UserSummary } from "@libs/api-js";
 
 interface FeedUserLogProps
   extends React.ComponentProps<typeof View> {

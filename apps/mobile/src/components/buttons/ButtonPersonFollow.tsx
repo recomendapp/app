@@ -6,9 +6,9 @@ import tw from "apps/mobile/src/lib/tw";
 import { useTranslations } from "use-intl";
 import { useToast } from "../Toast";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
-import { forwardRef } from 'react';
-import { useUserFollowPersonQuery } from 'apps/mobile/src/api/users/userQueries';
-import { useUserFollowPersonDeleteMutation, useUserFollowPersonInsertMutation } from 'apps/mobile/src/api/users/userMutations';
+import { forwardRef, useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { userPersonFollowOptions, useUserPersonFollowMutation, useUserPersonUnfollowMutation } from '@libs/query-client';
 
 type ButtonPersonFollowSkeletonProps = {
   skeleton: true;
@@ -35,29 +35,30 @@ const ButtonPersonFollow = forwardRef<
   const {
     data: isFollow,
     isLoading,
-  } = useUserFollowPersonQuery({
+  } = useQuery(userPersonFollowOptions({
     userId: user?.id,
     personId: personId,
-  });
+  }));
   const loading = skeleton || !personId || isLoading || isFollow === undefined;
 
-  const { mutateAsync: insertFollow } = useUserFollowPersonInsertMutation();
-  const { mutateAsync: deleteFollowerMutation } = useUserFollowPersonDeleteMutation();
+  const { mutateAsync: insertFollow } = useUserPersonFollowMutation();
+  const { mutateAsync: deleteFollower } = useUserPersonUnfollowMutation();
 
-  const followPerson = async () => {
-    if (!user || !personId) return;
+  const followPerson = useCallback(async () => {
+    if (!personId) return;
     await insertFollow({
-      userId: user.id,
-      personId: personId,
+      path: {
+        person_id: personId,
+      }
     }, {
-      onError: (error) => {
-        toast.error(upperFirst(t('common.messages.error')), { description: upperFirst(t('common.messages.an_error_occurred')) });
+      onError: () => {
+        toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
-  }
+  }, [insertFollow, personId, toast, t]);
 
-  const unfollowPerson = async () => {
-    if (!user || !personId) return;
+  const unfollowPerson = useCallback(async () => {
+    if (!personId) return;
     Alert.alert(
       upperFirst(t('common.messages.are_u_sure')),
       undefined,
@@ -69,18 +70,13 @@ const ButtonPersonFollow = forwardRef<
         {
           text: upperFirst(t('common.messages.unfollow')),
           onPress: async () => {
-            await deleteFollowerMutation({
-              userId: user.id,
-              personId: personId,
+            await deleteFollower({
+              path: {
+                person_id: personId,
+              }
             }, {
               onError: (error) => {
-                // Burnt.toast({
-                //   title: upperFirst(t('common.messages.error')),
-                //   message: upperFirst(t('common.messages.an_error_occurred')),
-                //   preset: 'error',
-                //   haptic: 'error',
-                // });
-                toast.error(upperFirst(t('common.messages.error')), { description: upperFirst(t('common.messages.an_error_occurred')) });
+                toast.error(upperFirst(t('common.messages.an_error_occurred')));
               }
             });
           },
@@ -90,7 +86,7 @@ const ButtonPersonFollow = forwardRef<
         userInterfaceStyle: mode,
       }
     );
-  }
+  }, [deleteFollower, personId, toast, t, mode]);
 
   if (!user || loading) return null;
 

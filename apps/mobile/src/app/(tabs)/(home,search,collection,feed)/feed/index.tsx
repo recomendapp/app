@@ -16,7 +16,7 @@ import { Icons } from "apps/mobile/src/constants/Icons";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { userFeedInfiniteOptions } from "@libs/query-client";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
-import { FeedItem } from "@packages/api-js";
+import { FeedItem } from "@libs/api-js";
 import { CardFeedLogTvSeries } from "apps/mobile/src/components/cards/feed/CardFeedLogTvSeries";
 
 const FeedScreen = () => {

@@ -13,7 +13,7 @@ import { userRecosAllOptions, useUserRecoDeleteByMediaMutation } from "@libs/que
 import { useCallback, useMemo } from "react";
 import { Alert } from "react-native";
 import richTextToPlainString from "apps/mobile/src/utils/richTextToPlainString";
-import { RecoWithMedia } from "@packages/api-js";
+import { RecoWithMedia } from "@libs/api-js";
 import CollectionScreen, { CollectionAction, SortByOption } from "apps/mobile/src/components/collection/CollectionScreen";
 import BottomSheetMyRecosSenders from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetMyRecosSenders";
 import BottomSheetMovie from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetMovie";

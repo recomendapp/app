@@ -13,7 +13,7 @@ import { Text } from "../ui/text";
 import ButtonUserLogTvSeriesRating from "../buttons/tv-series/ButtonUserLogTvSeriesRating";
 import { GAP } from "apps/mobile/src/theme/globals";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
-import { LogTvSeries, LogTvSeriesWithTvSeriesNoReview, TvSeriesCompact, UserSummary } from "@packages/api-js";
+import { LogTvSeries, LogTvSeriesWithTvSeriesNoReview, TvSeriesCompact, UserSummary } from "@libs/api-js";
 import { FixedOmit } from "../../utils/fixed-omit";
 
 interface CardTvSeriesBaseProps

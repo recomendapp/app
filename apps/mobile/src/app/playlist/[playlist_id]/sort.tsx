@@ -11,7 +11,7 @@ import { useToast } from "apps/mobile/src/components/Toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import useHeaderHeight from "apps/mobile/src/hooks/useHeaderHeight";
-import { canEditPlaylistItem, PlaylistItemWithMedia } from "@packages/api-js";
+import { canEditPlaylistItem, PlaylistItemWithMedia } from "@libs/api-js";
 import DraggableFlatList, { DragEndParams, RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist";
 import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
 import { getMediaDetails } from "apps/mobile/src/components/utils/getMediaDetails";

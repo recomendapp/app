@@ -14,7 +14,7 @@ import { Text } from "../ui/text";
 import ButtonUserLogMovieRating from "../buttons/movies/ButtonUserLogMovieRating";
 import { GAP } from "apps/mobile/src/theme/globals";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
-import { LogMovie, LogMovieWithMovieNoReview, MovieCompact, UserSummary } from "@packages/api-js";
+import { LogMovie, LogMovieWithMovieNoReview, MovieCompact, UserSummary } from "@libs/api-js";
 import { FixedOmit } from "../../utils/fixed-omit";
 
 interface CardMovieBaseProps

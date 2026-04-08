@@ -12,7 +12,7 @@ import ButtonUserReviewMovieLike from "apps/mobile/src/components/buttons/Button
 import { BottomSheetReviewMovie } from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetReviewMovie";
 import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import { convert } from "html-to-text";
-import { ReviewMovie, UserSummary } from "@packages/api-js";
+import { ReviewMovie, UserSummary } from "@libs/api-js";
 import { FixedOmit } from "apps/mobile/src/utils/fixed-omit";
 
 interface CardReviewMovieBaseProps

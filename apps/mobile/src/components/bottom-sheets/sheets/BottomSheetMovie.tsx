@@ -20,7 +20,7 @@ import { PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/glob
 import BottomSheetShareMovie from './share/BottomSheetShareMovie';
 import { FlashList } from '@shopify/flash-list';
 import { getTmdbImage } from 'apps/mobile/src/lib/tmdb/getTmdbImage';
-import { MovieCompact, UserMovieWithUserMovie } from '@packages/api-js';
+import { MovieCompact, UserMovieWithUserMovie } from '@libs/api-js';
 
 interface BottomSheetMovieProps extends BottomSheetProps {
   movie: MovieCompact,

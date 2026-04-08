@@ -24,7 +24,7 @@ import { Text } from "apps/mobile/src/components/ui/text";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { tvSeasonEpisodesInfiniteOptions, tvSeasonOptions } from "@libs/query-client";
-import { TvEpisode, TvSeasonGet } from "@packages/api-js";
+import { TvEpisode, TvSeasonGet } from "@libs/api-js";
 
 interface MediaHeaderProps {
 	season?: TvSeasonGet;

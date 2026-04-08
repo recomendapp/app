@@ -29,11 +29,11 @@ import AnimatedContentContainer from "apps/mobile/src/components/ui/AnimatedCont
 import { Icons } from "apps/mobile/src/constants/Icons";
 import YoutubePlayer from "react-native-youtube-iframe";
 import { Vimeo } from 'react-native-vimeo-iframe'
-import { LegendList } from "@legendapp/list";
+import { LegendList } from "@legendapp/list/react-native";
 import MovieWidgetCast from "apps/mobile/src/components/screens/film/MovieWidgetCast";
 import { useQuery } from "@tanstack/react-query";
 import { movieCastingOptions, movieOptions } from "@libs/query-client";
-import { Movie, MovieTrailer } from "@packages/api-js";
+import { Movie, MovieTrailer } from "@libs/api-js";
 import { ButtonUserBookmark } from "apps/mobile/src/components/buttons/ButtonUserBookmark";
 
 const FilmScreen = () => {

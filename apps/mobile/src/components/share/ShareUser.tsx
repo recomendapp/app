@@ -19,7 +19,7 @@ import { clamp } from "lodash";
 import { useImagePalette } from "apps/mobile/src/hooks/useImagePalette";
 import Color from "color";
 import { ShapeVerticalRoundedBackground } from "apps/mobile/src/lib/icons";
-import { UserSummary } from "@packages/api-js";
+import { UserSummary } from "@libs/api-js";
 
 interface ShareUserProps extends React.ComponentProps<typeof ViewShot> {
 	user: UserSummary;

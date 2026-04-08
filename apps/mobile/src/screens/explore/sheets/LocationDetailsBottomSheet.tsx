@@ -26,10 +26,13 @@ import ButtonUserLogMovieRating from 'apps/mobile/src/components/buttons/movies/
 import ButtonUserLogMovieLike from 'apps/mobile/src/components/buttons/movies/ButtonUserLogMovieLike';
 import ButtonUserLogMovieWatch from 'apps/mobile/src/components/buttons/movies/ButtonUserLogMovieWatch';
 import { useAuth } from 'apps/mobile/src/providers/AuthProvider';
-import { useMediaMovieDetailsQuery } from 'apps/mobile/src/api/medias/mediaQueries';
 import { ButtonUserBookmark } from 'apps/mobile/src/components/buttons/ButtonUserBookmark';
 import { ButtonPlaylistAdd } from 'apps/mobile/src/components/buttons/ButtonPlaylistAdd';
 import ButtonUserRecoSend from 'apps/mobile/src/components/buttons/ButtonUserRecoSend';
+import { useQuery } from '@tanstack/react-query';
+import { movieOptions } from '@libs/query-client';
+import { getTmdbImage } from 'apps/mobile/src/lib/tmdb/getTmdbImage';
+import { PersonCompact } from '@libs/api-js';
 
 interface LocationDetailsBottomSheetProps {
   index: SharedValue<number>;
@@ -58,7 +61,7 @@ export const LocationDetailsBottomSheet = forwardRef<
   // Queries
   const {
     data: movie,
-  } = useMediaMovieDetailsQuery({ movieId: selectedLocation?.movie.id })
+  } = useQuery(movieOptions({ movieId: selectedLocation?.movie.id }));
 
   //#region hooks
   const headerHeight = useHeaderHeight();
@@ -111,7 +114,7 @@ export const LocationDetailsBottomSheet = forwardRef<
         {movie ?  (
           <ImageWithFallback
           alt={movie.title || 'Movie Poster'}
-          source={{ uri: movie.poster_url || '' }}
+          source={{ uri: getTmdbImage({ path: movie.posterPath, size: 'w92' }) }}
           style={[
             {aspectRatio: 2 / 3},
             tw`w-20 h-auto rounded-md`
@@ -156,7 +159,7 @@ export const LocationDetailsBottomSheet = forwardRef<
 });
 LocationDetailsBottomSheet.displayName = 'LocationDetailsBottomSheet';
 
-const Directors = ({ directors }: { directors: MediaPerson[] }) => {
+const Directors = ({ directors }: { directors: PersonCompact[] }) => {
   const locale = useLocale();
   const listFormatter = new Intl.ListFormat(locale, {
     style: 'long',

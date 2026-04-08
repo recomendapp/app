@@ -14,7 +14,7 @@ import BottomSheetMovie from "apps/mobile/src/components/bottom-sheets/sheets/Bo
 import { CardUser } from "../CardUser";
 import { GAP } from "apps/mobile/src/theme/globals";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
-import { FeedItemReviewMovieLike } from "@packages/api-js";
+import { FeedItemReviewMovieLike } from "@libs/api-js";
 import { FixedOmit } from "apps/mobile/src/utils/fixed-omit";
 
 interface CardFeedReviewMovieLikeBaseProps

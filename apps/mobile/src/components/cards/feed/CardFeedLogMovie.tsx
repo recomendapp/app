@@ -16,7 +16,7 @@ import { CardUser } from "../CardUser";
 import { CardReviewMovie } from "../reviews/CardReviewMovie";
 import { GAP } from "apps/mobile/src/theme/globals";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
-import { FeedItemLogMovie } from "@packages/api-js";
+import { FeedItemLogMovie } from "@libs/api-js";
 import { FixedOmit } from "apps/mobile/src/utils/fixed-omit";
 
 interface CardFeedLogMovieBaseProps

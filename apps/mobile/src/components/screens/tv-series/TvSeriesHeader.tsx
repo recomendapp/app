@@ -33,7 +33,7 @@ import { useImagePalette } from 'apps/mobile/src/hooks/useImagePalette';
 import AnimatedImage from 'apps/mobile/src/components/ui/AnimatedImage';
 import BottomSheetPerson from 'apps/mobile/src/components/bottom-sheets/sheets/BottomSheetPerson';
 import { getTmdbImage } from 'apps/mobile/src/lib/tmdb/getTmdbImage';
-import { PersonCompact, TvSeries } from '@packages/api-js';
+import { PersonCompact, TvSeries } from '@libs/api-js';
 
 interface TvSeriesHeaderProps {
 	tvSeries?: TvSeries | null;

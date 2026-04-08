@@ -16,7 +16,7 @@ import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme
 import { CardTvSeries } from "apps/mobile/src/components/cards/CardTvSeries";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { personOptions, personTvSeriesInfiniteOptions } from "@libs/query-client";
-import { PersonTvSeries } from "@packages/api-js";
+import { PersonTvSeries } from "@libs/api-js";
 
 interface sortBy {
 	label: string;
