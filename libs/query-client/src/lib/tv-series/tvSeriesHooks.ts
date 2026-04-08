@@ -10,7 +10,7 @@ import {
     FeedItem,
     ListPaginatedFeed,
     ListInfiniteFeed,
-} from "@packages/api-js";
+} from "@libs/api-js";
 import { tvSeriesLogOptions, tvSeriesReviewsInfiniteOptions, tvSeriesReviewsPaginatedOptions } from "./tvSeriesOptions";
 import { 
     userKeys, 

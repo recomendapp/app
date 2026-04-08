@@ -1,4 +1,4 @@
-import { PersonMoviesControllerListPaginatedData, personMoviesControllerListPaginated, PersonMoviesControllerListInfiniteData, personMoviesControllerListInfinite, PersonTvSeriesControllerListPaginatedData, personTvSeriesControllerListPaginated, PersonTvSeriesControllerListInfiniteData, personTvSeriesControllerListInfinite, personsControllerGet } from "@packages/api-js";
+import { PersonMoviesControllerListPaginatedData, personMoviesControllerListPaginated, PersonMoviesControllerListInfiniteData, personMoviesControllerListInfinite, PersonTvSeriesControllerListPaginatedData, personTvSeriesControllerListPaginated, PersonTvSeriesControllerListInfiniteData, personTvSeriesControllerListInfinite, personsControllerGet } from "@libs/api-js";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { personKeys } from "./personKeys";
 

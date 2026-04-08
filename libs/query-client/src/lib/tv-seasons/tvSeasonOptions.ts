@@ -1,4 +1,4 @@
-import { tvEpisodesControllerListAll, TvEpisodesControllerListAllData, tvEpisodesControllerListInfinite, TvEpisodesControllerListInfiniteData, tvEpisodesControllerListPaginated, TvEpisodesControllerListPaginatedData, tvSeasonLogsControllerGet, tvSeasonsControllerGet } from "@packages/api-js";
+import { tvEpisodesControllerListAll, TvEpisodesControllerListAllData, tvEpisodesControllerListInfinite, TvEpisodesControllerListInfiniteData, tvEpisodesControllerListPaginated, TvEpisodesControllerListPaginatedData, tvSeasonLogsControllerGet, tvSeasonsControllerGet } from "@libs/api-js";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { tvSeasonKeys } from "./tvSeasonKeys";
 

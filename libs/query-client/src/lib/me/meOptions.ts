@@ -1,6 +1,6 @@
 import { queryOptions } from "@tanstack/react-query"
 import { meKeys } from "./meKeys";
-import { meControllerGet } from "@packages/api-js";
+import { meControllerGet } from "@libs/api-js";
 
 export const meOptions = () => {
 	return queryOptions({

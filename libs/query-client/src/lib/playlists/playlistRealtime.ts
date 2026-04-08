@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { ListInfinitePlaylistItems, ListPaginatedPlaylistItems, Playlist, playlistItemsControllerGet, PlaylistItemWithMedia, realtime, ROLES_CAN_EDIT } from '@packages/api-js';
+import { ListInfinitePlaylistItems, ListPaginatedPlaylistItems, Playlist, playlistItemsControllerGet, PlaylistItemWithMedia, realtime, ROLES_CAN_EDIT } from '@libs/api-js';
 import { playlistItemsAllOptions, playlistItemsInfiniteOptions, playlistItemsPaginatedOptions } from './playlistOptions';
 import { removeListItemFromAllCaches, updateListItemInAllCaches } from '../utils';
 

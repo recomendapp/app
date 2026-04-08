@@ -428,7 +428,9 @@
       "return_to_login": "Return to login",
       "invalid_code": "Invalid code",
       "no_token_found": "No token found",
-      "first_watched_at": "first watched at"
+      "first_watched_at": "first watched at",
+      "watched_dates": "watched dates",
+      "no_watched_dates": "no watched dates"
     },
     "form": {
       "email": {

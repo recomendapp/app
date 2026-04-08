@@ -1,4 +1,4 @@
-import { reviewsMovieControllerLikeMutation, reviewsMovieControllerUnlikeMutation, reviewsTvSeriesControllerLikeMutation, reviewsTvSeriesControllerUnlikeMutation } from "@packages/api-js";
+import { reviewsMovieControllerLikeMutation, reviewsMovieControllerUnlikeMutation, reviewsTvSeriesControllerLikeMutation, reviewsTvSeriesControllerUnlikeMutation } from "@libs/api-js";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { reviewMovieLikeOptions, reviewTvSeriesLikeOptions } from "./reviewOptions";
 

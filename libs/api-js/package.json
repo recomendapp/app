@@ -1,5 +1,5 @@
 {
-  "name": "@packages/api-js",
+  "name": "@libs/api-js",
   "version": "0.0.1",
   "type": "module",
   "main": "./src/index.ts",

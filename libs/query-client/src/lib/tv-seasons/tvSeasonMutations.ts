@@ -1,4 +1,4 @@
-import { tvSeasonLogsControllerDeleteMutation, tvSeasonLogsControllerSetMutation } from "@packages/api-js";
+import { tvSeasonLogsControllerDeleteMutation, tvSeasonLogsControllerSetMutation } from "@libs/api-js";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { tvSeasonLogOptions } from "./tvSeasonOptions";
 import { tvEpisodeLogOptions } from "../tv-episodes";

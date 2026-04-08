@@ -428,7 +428,9 @@
       "return_to_login": "Retour à la connexion",
       "invalid_code": "Code invalide",
       "no_token_found": "Aucun token trouvé",
-      "first_watched_at": "première date de visionnage"
+      "first_watched_at": "première date de visionnage",
+      "watched_dates": "dates de visionnage",
+      "no_watched_dates": "aucune date de visionnage"
     },
     "form": {
       "email": {

@@ -1,4 +1,4 @@
-import { PersonMoviesControllerListInfiniteData, PersonMoviesControllerListPaginatedData, PersonTvSeriesControllerListInfiniteData, PersonTvSeriesControllerListPaginatedData } from "@packages/api-js";
+import { PersonMoviesControllerListInfiniteData, PersonMoviesControllerListPaginatedData, PersonTvSeriesControllerListInfiniteData, PersonTvSeriesControllerListPaginatedData } from "@libs/api-js";
 
 export const personKeys = {
 	base: 'person' as const,

@@ -1,4 +1,4 @@
-import { MovieImagesControllerListInfiniteData, MovieImagesControllerListPaginatedData, MoviePlaylistsControllerListInfiniteData, MoviePlaylistsControllerListPaginatedData, MovieReviewsControllerListInfiniteData, MovieReviewsControllerListPaginatedData } from "@packages/api-js";
+import { MovieImagesControllerListInfiniteData, MovieImagesControllerListPaginatedData, MoviePlaylistsControllerListInfiniteData, MoviePlaylistsControllerListPaginatedData, MovieReviewsControllerListInfiniteData, MovieReviewsControllerListPaginatedData } from "@libs/api-js";
 
 export const movieKeys = {
 	base: ['movie'] as const,

@@ -1,6 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { reviewKeys } from "./reviewKeys";
-import { reviewsMovieControllerGetLikeStatus, reviewsTvSeriesControllerGetLikeStatus } from "@packages/api-js";
+import { reviewsMovieControllerGetLikeStatus, reviewsTvSeriesControllerGetLikeStatus } from "@libs/api-js";
 
 export const reviewMovieLikeOptions = ({
 	userId,

@@ -1,4 +1,4 @@
-import { ListInfiniteReviewsTvSeries, tvSeriesLogsControllerDeleteMutation, tvSeriesLogsControllerSetMutation, tvSeriesReviewsControllerDeleteMutation, tvSeriesReviewsControllerUpsertMutation } from "@packages/api-js";
+import { ListInfiniteReviewsTvSeries, tvSeriesLogsControllerDeleteMutation, tvSeriesLogsControllerSetMutation, tvSeriesReviewsControllerDeleteMutation, tvSeriesReviewsControllerUpsertMutation } from "@libs/api-js";
 import { InfiniteData, useMutation, useQueryClient } from "@tanstack/react-query";
 import { tvSeriesLogOptions, tvSeriesReviewsInfiniteOptions, tvSeriesReviewsPaginatedOptions } from "./tvSeriesOptions";
 import { tvSeasonLogOptions } from "../tv-seasons";

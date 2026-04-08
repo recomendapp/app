@@ -1,4 +1,4 @@
-import { meAvatarControllerDeleteMutation, meAvatarControllerSetMutation, meControllerUpdateMutation, userPushTokensControllerSetMutation } from '@packages/api-js';
+import { meAvatarControllerDeleteMutation, meAvatarControllerSetMutation, meControllerUpdateMutation, userPushTokensControllerSetMutation } from '@libs/api-js';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { meOptions } from './meOptions';
 import { userByIdOptions, userByUsernameOptions } from '../users';

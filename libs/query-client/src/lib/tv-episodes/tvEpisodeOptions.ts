@@ -1,4 +1,4 @@
-import { tvEpisodeLogsControllerGet } from "@packages/api-js";
+import { tvEpisodeLogsControllerGet } from "@libs/api-js";
 import { queryOptions } from "@tanstack/react-query";
 import { tvEpisodeKeys } from "./tvEpisodeKeys";
 

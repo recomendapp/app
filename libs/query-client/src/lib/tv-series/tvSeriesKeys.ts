@@ -1,4 +1,4 @@
-import { TvSeriesImagesControllerListInfiniteData, TvSeriesImagesControllerListPaginatedData, TvSeriesPlaylistsControllerListInfiniteData, TvSeriesPlaylistsControllerListPaginatedData, TvSeriesReviewsControllerListInfiniteData, TvSeriesReviewsControllerListPaginatedData } from "@packages/api-js";
+import { TvSeriesImagesControllerListInfiniteData, TvSeriesImagesControllerListPaginatedData, TvSeriesPlaylistsControllerListInfiniteData, TvSeriesPlaylistsControllerListPaginatedData, TvSeriesReviewsControllerListInfiniteData, TvSeriesReviewsControllerListPaginatedData } from "@libs/api-js";
 
 export const tvSeriesKeys = {
 	base: ['tv-series'] as const,

@@ -1,6 +1,6 @@
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { widgetKeys } from "./widgetKeys";
-import { mediasMostPopularControllerListInfinite, MediasMostPopularControllerListInfiniteData, mediasMostPopularControllerListPaginated, MediasMostPopularControllerListPaginatedData, recosTrendingControllerListInfinite, RecosTrendingControllerListInfiniteData, recosTrendingControllerListPaginated, RecosTrendingControllerListPaginatedData } from "@packages/api-js";
+import { mediasMostPopularControllerListInfinite, MediasMostPopularControllerListInfiniteData, mediasMostPopularControllerListPaginated, MediasMostPopularControllerListPaginatedData, recosTrendingControllerListInfinite, RecosTrendingControllerListInfiniteData, recosTrendingControllerListPaginated, RecosTrendingControllerListPaginatedData } from "@libs/api-js";
 
 export const widgetRecosTrendingPaginatedOptions = ({
 	filters,

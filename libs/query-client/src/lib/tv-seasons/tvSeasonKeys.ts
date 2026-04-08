@@ -1,4 +1,4 @@
-import { TvEpisodesControllerListAllData, TvEpisodesControllerListInfiniteData, TvEpisodesControllerListPaginatedData } from "@packages/api-js";
+import { TvEpisodesControllerListAllData, TvEpisodesControllerListInfiniteData, TvEpisodesControllerListPaginatedData } from "@libs/api-js";
 
 export const tvSeasonKeys = {
 	base: ['tv-seasons'] as const,

@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { Playlist, ListPaginatedPlaylists, ListInfinitePlaylists, ListPaginatedPlaylistsWithOwner, ListInfinitePlaylistsWithOwner, PlaylistsAddTarget, ListPaginatedPlaylistsAddTargets, ListInfinitePlaylistsAddTargets, FeedItem, ListPaginatedFeed, ListInfiniteFeed, SearchResponse } from "@packages/api-js";
+import { Playlist, ListPaginatedPlaylists, ListInfinitePlaylists, ListPaginatedPlaylistsWithOwner, ListInfinitePlaylistsWithOwner, PlaylistsAddTarget, ListPaginatedPlaylistsAddTargets, ListInfinitePlaylistsAddTargets, FeedItem, ListPaginatedFeed, ListInfiniteFeed, SearchResponse } from "@libs/api-js";
 import { playlistFeaturedInfiniteOptions, playlistFeaturedPaginatedOptions, playlistOptions } from "./playlistOptions";
 import { userPlaylistsPaginatedOptions, userPlaylistsInfiniteOptions, userPlaylistsFollowingPaginatedOptions, userPlaylistsFollowingInfiniteOptions, userFeedPaginatedOptions, userFeedInfiniteOptions } from "../users";
 import { moviePlaylistsPaginatedOptions, moviePlaylistsInfiniteOptions } from "../movies";

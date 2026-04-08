@@ -1,4 +1,4 @@
-import { CursorPaginationMeta, PaginationMeta } from '@packages/api-js';
+import { CursorPaginationMeta, PaginationMeta } from '@libs/api-js';
 import { InfiniteData, QueryClient, QueryFilters, QueryKey } from '@tanstack/react-query';
 
 export type ItemUpdater<TItem> = Partial<TItem> | ((item: TItem) => Partial<TItem>);

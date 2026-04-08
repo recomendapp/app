@@ -1,4 +1,4 @@
-import { MediasMostPopularControllerListInfiniteData, MediasMostPopularControllerListPaginatedData, RecosTrendingControllerListInfiniteData, RecosTrendingControllerListPaginatedData } from "@packages/api-js";
+import { MediasMostPopularControllerListInfiniteData, MediasMostPopularControllerListPaginatedData, RecosTrendingControllerListInfiniteData, RecosTrendingControllerListPaginatedData } from "@libs/api-js";
 
 export const widgetKeys = {
 	base: ['widget'] as const,
