@@ -1,4 +1,4 @@
-import { ApiSchema, ApiProperty, PartialType, PickType, getSchemaPath, ApiPropertyOptional, ApiExtraModels, IntersectionType, OmitType } from '@nestjs/swagger';
+import { ApiSchema, ApiProperty, PartialType, PickType, getSchemaPath, ApiPropertyOptional, ApiExtraModels, IntersectionType } from '@nestjs/swagger';
 import { IsDateString, IsEnum, IsIn, IsInt, IsOptional, IsString, IsUUID, MaxLength, ValidateNested } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { recoStatusEnum, recoTypeEnum } from '@libs/db/schemas';

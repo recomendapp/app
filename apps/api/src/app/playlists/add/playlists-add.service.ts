@@ -3,7 +3,6 @@ import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle
 import { playlist, playlistItem, playlistMember, profile } from '@libs/db/schemas';
 import { and, eq, inArray, or, sql } from 'drizzle-orm';
 import { User } from '../../auth/auth.service';
-import { WorkerClient } from '@shared/worker';
 import { LexoRank } from 'lexorank';
 import { PlaylistsAddQueryDto } from './playlists-add.dto';
 import { plainToInstance } from 'class-transformer';
@@ -16,7 +15,6 @@ export class PlaylistsAddService {
 
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-    private readonly workerClient: WorkerClient,
     private readonly playlistsGateway: PlaylistsGateway,
   ) {}
 
@@ -101,10 +99,6 @@ export class PlaylistsAddService {
     });
 
     for (const item of insertedItems) {
-      await this.workerClient.emit('counters:update-playlist-items', {
-        playlistId: item.playlistId,
-        action: 'increment',
-      });
       this.playlistsGateway.broadcastItemAdded(item.playlistId, [{
         id: item.id,
         playlistId: item.playlistId,

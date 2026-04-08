@@ -4,14 +4,12 @@ import { User } from '../../auth/auth.service';
 import { playlistSaved, playlist } from '@libs/db/schemas'; 
 import { and, eq } from 'drizzle-orm';
 import { plainToInstance } from 'class-transformer';
-import { WorkerClient } from '@shared/worker';
 import { PlaylistSavedDto } from './dto/playlist-saved.dto';
 
 @Injectable()
 export class PlaylistSavesService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-    private readonly workerClient: WorkerClient,
   ) {}
 
   async get({ user, playlistId }: { user: User; playlistId: number }): Promise<boolean> {
@@ -63,11 +61,6 @@ export class PlaylistSavesService {
       return plainToInstance(PlaylistSavedDto, existingSave, { excludeExtraneousValues: true });
     }
 
-    await this.workerClient.emit('counters:update-playlist-saves', {
-      playlistId,
-      action: 'increment',
-    });
-
     return plainToInstance(PlaylistSavedDto, save, { excludeExtraneousValues: true });
   }
 
@@ -83,11 +76,6 @@ export class PlaylistSavesService {
     if (!deleted) {
       return null;
     }
-
-    await this.workerClient.emit('counters:update-playlist-saves', {
-      playlistId,
-      action: 'decrement',
-    });
 
     return plainToInstance(PlaylistSavedDto, deleted, { excludeExtraneousValues: true });
   }

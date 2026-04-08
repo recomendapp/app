@@ -124,6 +124,10 @@ export class TvSeriesLogsService {
       with: { review: true, tvSeries: { columns: { id: true, numberOfEpisodes: true } } }
     });
 
+    if (!completeLog) {
+      throw new NotFoundException('Log entry not found after update');
+    }
+
     return plainToInstance(LogTvSeriesDto, {
       ...completeLog,
       status: (

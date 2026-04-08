@@ -23,7 +23,7 @@ export const s3Schema = z.object({
   S3_PUBLIC_ENDPOINT: z.url().optional(), 
 });
 
-export const extensionSchema = redisSchema.extend(typesenseSchema.shape);
+export const extensionSchema = redisSchema;
 
 export const commonSchema = extensionSchema.extend({
   NODE_ENV: z
@@ -34,7 +34,10 @@ export const commonSchema = extensionSchema.extend({
 });
 /* -------------------------------------------------------------------------- */
 
-export const apiSchema = commonSchema.extend(s3Schema.shape).extend({
+export const apiSchema = commonSchema
+.extend(s3Schema.shape)
+.extend(typesenseSchema.shape)
+.extend({
   PORT: z.coerce.number().default(9000),
   HOST: z.string().default('0.0.0.0'),
   API_URL: z.url().default('http://localhost:9000'),
@@ -70,7 +73,9 @@ export const notifySchema = commonSchema.extend({
   APNS_TEAM_ID: z.string(),
 });
 
-export const workerSchema = commonSchema.extend({
+export const workerSchema = commonSchema
+.extend(typesenseSchema.shape)
+.extend({
   PORT: z.coerce.number().default(9002),
   HOST: z.string().default('0.0.0.0'),
   DATABASE_URL: z.string(),

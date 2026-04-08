@@ -20,7 +20,6 @@ import { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
 import { plainToInstance } from 'class-transformer';
-import { WorkerClient } from '@shared/worker';
 import { LexoRank } from 'lexorank';
 import { PlaylistsGateway } from '../playlists.gateway';
 
@@ -28,7 +27,6 @@ import { PlaylistsGateway } from '../playlists.gateway';
 export class PlaylistItemsService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-    private readonly workerClient: WorkerClient,
     private readonly playlistsGateway: PlaylistsGateway,
   ) {}
 
@@ -408,11 +406,6 @@ export class PlaylistItemsService {
       .returning();
     
     if (deletedItems.length > 0) {
-      await this.workerClient.emit('counters:update-playlist-items', {
-        playlistId,
-        action: 'decrement',
-        amount: deletedItems.length,
-      });
       this.playlistsGateway.broadcastItemDeleted(playlistId, deletedItems.map(item => item.id));
     }
 

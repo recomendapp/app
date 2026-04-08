@@ -1,4 +1,4 @@
-import { Controller, Param, Get, ParseIntPipe, UseGuards, Query } from '@nestjs/common';
+import { Controller, Param, Get, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { MovieDto } from './dto/movies.dto';
 import { MoviesService } from './movies.service';

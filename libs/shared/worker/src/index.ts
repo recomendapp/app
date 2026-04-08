@@ -6,4 +6,3 @@ export * from './lib/shared-worker.definitions';
 export * from './lib/shared-worker.client';
 
 export * from './lib/search';
-export * from './lib/counters';

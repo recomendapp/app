@@ -3,7 +3,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Queue, JobsOptions } from 'bullmq';
 import { WorkerJobName, WorkerRegistry, WorkerSchemas } from './shared-worker.definitions';
 import { SEARCH_PATH, SEARCH_QUEUE } from './search/search.registry';
-import { COUNTERS_PATH, COUNTERS_QUEUE } from './counters/counters.registry';
 import z from 'zod';
 
 @Injectable()
@@ -11,7 +10,6 @@ export class WorkerClient {
     private readonly logger = new Logger(WorkerClient.name);
     constructor(
         @InjectQueue(SEARCH_QUEUE) private readonly searchQueue: Queue,
-        @InjectQueue(COUNTERS_QUEUE) private readonly countersQueue: Queue,
     ) {}
 
     /**
@@ -56,10 +54,6 @@ export class WorkerClient {
         switch (jobPrefix) {
             case SEARCH_PATH: {
                 targetQueue = this.searchQueue;
-                break;
-            }
-            case COUNTERS_PATH: {
-                targetQueue = this.countersQueue;
                 break;
             }
             default: {

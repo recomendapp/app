@@ -11,7 +11,6 @@ import { NotifyClient } from '@shared/notify';
 export class UserFollowService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-    private readonly workerClient: WorkerClient,
     private readonly notify: NotifyClient, 
   ) {}
 
@@ -75,12 +74,6 @@ export class UserFollowService {
         .returning();
       if (newFollow) {
         if (newFollow.status === 'accepted') {
-          await this.workerClient.emit('counters:update-follow', {
-            followerId: currentUserId,
-            followingId: targetUserId,
-            action: 'increment',
-          });
-
           await this.notify.emit('follow:new', {
             actorId: currentUserId,
             targetUserId: targetUserId,
@@ -136,14 +129,6 @@ export class UserFollowService {
       throw new NotFoundException('Follow relationship not found');
     }
 
-    if (deletedFollow.status === 'accepted') {
-      await this.workerClient.emit('counters:update-follow', {
-        followerId: currentUserId,
-        followingId: targetUserId,
-        action: 'decrement'
-      });
-    }
-
     return plainToInstance(FollowDto, deletedFollow, {
       excludeExtraneousValues: true,
     });
@@ -171,12 +156,6 @@ export class UserFollowService {
         )
       )
       .returning();
-    
-    await this.workerClient.emit('counters:update-follow', {
-      followerId: targetUserId,
-      followingId: currentUserId,
-      action: 'increment'
-    });
 
     await this.notify.emit('follow:accepted', {
       actorId: currentUserId,

@@ -40,7 +40,7 @@ export class MovieLogsService {
   }
 
   async set(user: User, movieId: number, dto: LogMovieRequestDto): Promise<LogMovieDto> {    
-    const isInserted = await this.db.transaction(async (tx) => {
+    await this.db.transaction(async (tx) => {
       const [logEntry] = await tx
         .insert(logMovie)
         .values({
@@ -110,6 +110,10 @@ export class MovieLogsService {
         review: true,
       }
     });
+
+    if (!logEntry) {
+      throw new NotFoundException('Log entry not found after upsert');
+    }
 
     return plainToInstance(LogMovieDto, {
       ...logEntry,

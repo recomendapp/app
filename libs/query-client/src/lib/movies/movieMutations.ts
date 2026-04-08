@@ -220,7 +220,7 @@ export const useMovieWatchedDateUpdateMutation = () => {
 				}
 			});
 
-			removeListItemFromAllCaches<
+			updateListItemInAllCaches<
 				WatchedDate,
 				ListPaginatedWatchedDates,
 				ListInfiniteWatchedDates
@@ -230,6 +230,7 @@ export const useMovieWatchedDateUpdateMutation = () => {
 					paginated: userMovieWatchedDatesPaginatedOptions({ userId: data.log.userId, movieId: data.log.movieId }).queryKey,
 					infinite: userMovieWatchedDatesInfiniteOptions({ userId: data.log.userId, movieId: data.log.movieId }).queryKey,
 				},
+				data.watchedDate,
 				data.watchedDate.id
 			);
 		}

@@ -4,14 +4,12 @@ import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { follow, logTvSeries, profile, reviewTvSeries, reviewTvSeriesLike } from '@libs/db/schemas';
 import { plainToInstance } from 'class-transformer';
-import { WorkerClient } from '@shared/worker';
 import { ReviewTvSeriesLikeDto } from './dto/review-tv-series-like.dto';
 
 @Injectable()
 export class ReviewsTvSeriesService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-    private readonly workerClient: WorkerClient,
   ) {}
 
   async getLike({
@@ -80,11 +78,6 @@ export class ReviewsTvSeriesService {
       return plainToInstance(ReviewTvSeriesLikeDto, existingLike, { excludeExtraneousValues: true });
     }
 
-    await this.workerClient.emit('counters:update-review-tv-series-likes', {
-      reviewId,
-      action: 'increment',
-    });
-
     return plainToInstance(ReviewTvSeriesLikeDto, like, { excludeExtraneousValues: true });
   }
 
@@ -106,11 +99,6 @@ export class ReviewsTvSeriesService {
     if (!deleted) {
       throw new NotFoundException('Like not found');
     }
-
-    await this.workerClient.emit('counters:update-review-tv-series-likes', {
-      reviewId,
-      action: 'decrement',
-    });
     
     return plainToInstance(ReviewTvSeriesLikeDto, deleted, { excludeExtraneousValues: true });
   }

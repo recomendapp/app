@@ -5,13 +5,11 @@ import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle
 import { ReviewMovieLikeDto } from './dto/review-movie-like.dto';
 import { follow, logMovie, profile, reviewMovie, reviewMovieLike } from '@libs/db/schemas';
 import { plainToInstance } from 'class-transformer';
-import { WorkerClient } from '@shared/worker';
 
 @Injectable()
 export class ReviewsMovieService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-    private readonly workerClient: WorkerClient,
   ) {}
 
   async getLike({
@@ -80,13 +78,6 @@ export class ReviewsMovieService {
       return plainToInstance(ReviewMovieLikeDto, existingLike, { excludeExtraneousValues: true });
     }
 
-    await Promise.all([
-      this.workerClient.emit('counters:update-review-movie-likes', {
-        reviewId,
-        action: 'increment',
-      }),
-    ]);
-
     return plainToInstance(ReviewMovieLikeDto, like, { excludeExtraneousValues: true });
   }
 
@@ -108,13 +99,6 @@ export class ReviewsMovieService {
     if (!deleted) {
       throw new NotFoundException('Like not found');
     }
-
-    await Promise.all([
-      this.workerClient.emit('counters:update-review-movie-likes', {
-        reviewId,
-        action: 'decrement',
-      }),
-    ]);
 
     return plainToInstance(ReviewMovieLikeDto, deleted, { excludeExtraneousValues: true });
   }

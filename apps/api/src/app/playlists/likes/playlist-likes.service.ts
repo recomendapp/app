@@ -5,13 +5,11 @@ import { playlistLike } from '@libs/db/schemas';
 import { and, eq } from 'drizzle-orm';
 import { plainToInstance } from 'class-transformer';
 import { PlaylistLikeDto } from './dto/playlist-likes.dto';
-import { WorkerClient } from '@shared/worker';
 
 @Injectable()
 export class PlaylistLikesService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-    private readonly workerClient: WorkerClient,
   ) {}
 
   async get({
@@ -61,13 +59,6 @@ export class PlaylistLikesService {
       return plainToInstance(PlaylistLikeDto, existingLike, { excludeExtraneousValues: true });
     }
 
-    await Promise.all([
-      this.workerClient.emit('counters:update-playlist-likes', {
-        playlistId,
-        action: 'increment',
-      }),
-    ]);
-
     return plainToInstance(PlaylistLikeDto, like, { excludeExtraneousValues: true });
   }
 
@@ -89,13 +80,6 @@ export class PlaylistLikesService {
     if (!deleted) {
       return null;
     }
-
-    await Promise.all([
-      this.workerClient.emit('counters:update-playlist-likes', {
-        playlistId,
-        action: 'decrement',
-      }),
-    ]);
 
     return plainToInstance(PlaylistLikeDto, deleted, { excludeExtraneousValues: true });
   }
