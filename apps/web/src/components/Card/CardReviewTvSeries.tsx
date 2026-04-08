@@ -9,7 +9,7 @@ import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import ButtonUserReviewTvSeriesLike from "../buttons/ButtonUserReviewTvSeriesLike";
 import { generateJSON } from "@tiptap/html";
 import { EDITOR_EXTENSIONS } from "../tiptap/TiptapExtensions";
-import { ReviewTvSeries, UserSummary } from "@packages/api-js/src";
+import { ReviewTvSeries, UserSummary } from "@libs/api-js";
 
 interface CardReviewTvSeriesProps
 	extends React.ComponentProps<typeof Card> {

@@ -18,7 +18,7 @@ import { DISPLAY, SORT_BY } from "./constants";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { useCallback, useMemo } from "react";
 import { TooltipBox } from "@/components/Box/TooltipBox";
-import { PersonTvSeriesFacetDepartment } from "@packages/api-js/src";
+import { PersonTvSeriesFacetDepartment } from "@libs/api-js";
 
 
 export const Filters = ({

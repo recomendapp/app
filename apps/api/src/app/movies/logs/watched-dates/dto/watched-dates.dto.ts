@@ -3,7 +3,7 @@ import { ApiSchema, ApiProperty, PickType, PartialType, IntersectionType, ApiPro
 import { IsNullable } from '../../../../../common/decorators/is-nullable.decorator';
 import { WATCHED_DATE_RULES } from '../../../../../config/validation-rules';
 import { Expose, Type } from 'class-transformer';
-import { IsDateString, IsEnum, IsIn, IsInt, IsOptional, IsString, Length, Matches, ValidateNested } from 'class-validator';
+import { IsDate, IsEnum, IsIn, IsInt, IsOptional, IsString, Length, Matches, ValidateNested } from 'class-validator';
 import { LogMovieDto } from '../../log-movie.dto';
 import { SortOrder } from '../../../../../common/dto/sort.dto';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../../../common/dto/pagination.dto';
@@ -18,13 +18,13 @@ export class WatchedDateDto {
   @ApiProperty({ example: 123, description: 'The unique ID of this history entry' })
   @Expose()
   @IsInt()
-  id: number;
+  id!: number;
 
   @Expose()
   @ApiProperty({ example: '2023-10-27T10:00:00.000Z' })
-  @Type(() => String)
-  @IsDateString()
-  watchedDate: string;
+  @Type(() => Date)
+  @IsDate()
+  watchedDate!: Date;
 
   @ApiProperty({
     description: 'The format in which the movie was watched',
@@ -35,7 +35,7 @@ export class WatchedDateDto {
   @IsIn(watchFormatEnum.enumValues, {
     message: `Format must be one of: ${watchFormatEnum.enumValues.join(', ')}`
   })
-  format: typeof watchFormatEnum.enumValues[number];
+  format!: typeof watchFormatEnum.enumValues[number];
 
   @ApiProperty({
     example: 'Watched with friends at home',
@@ -51,7 +51,7 @@ export class WatchedDateDto {
   @Matches(WATCHED_DATE_RULES.COMMENT.REGEX, {
     message: 'Comment cannot be empty or contain excessive line breaks'
   })
-  comment: string | null;
+  comment!: string | null;
 
   constructor(partial: Partial<WatchedDateDto>) {
     Object.assign(this, partial);
@@ -86,13 +86,13 @@ export class WatchedDateResponseDto {
   @Expose()
   @ValidateNested()
   @Type(() => WatchedDateDto)
-  watchedDate: WatchedDateDto;
+  watchedDate!: WatchedDateDto;
 
   @ApiProperty({ type: () => WatchedDateLogSyncDto })
   @Expose()
   @ValidateNested()
   @Type(() => WatchedDateLogSyncDto)
-  log: WatchedDateLogSyncDto;
+  log!: WatchedDateLogSyncDto;
 }
 
 @ApiSchema({ name: 'BaseListWatchedDatesQuery' })
@@ -134,7 +134,7 @@ export class ListInfiniteWatchedDatesQueryDto extends IntersectionType(
 export class ListPaginatedWatchedDatesDto extends PaginatedResponseDto<WatchedDateDto> {
   @ApiProperty({ type: () => [WatchedDateDto] })
   @Type(() => WatchedDateDto)
-  data: WatchedDateDto[];
+  data!: WatchedDateDto[];
 
   constructor(partial: Partial<ListPaginatedWatchedDatesDto>) {
     super(partial);
@@ -146,7 +146,7 @@ export class ListPaginatedWatchedDatesDto extends PaginatedResponseDto<WatchedDa
 export class ListInfiniteWatchedDatesDto extends CursorPaginatedResponseDto<WatchedDateDto> {
   @ApiProperty({ type: () => [WatchedDateDto] })
   @Type(() => WatchedDateDto)
-  data: WatchedDateDto[];
+  data!: WatchedDateDto[];
 
   constructor(partial: Partial<ListInfiniteWatchedDatesDto>) {
     super(partial);

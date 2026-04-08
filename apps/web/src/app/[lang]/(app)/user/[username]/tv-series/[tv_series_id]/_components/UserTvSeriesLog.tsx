@@ -7,7 +7,7 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { CardUser } from "@/components/Card/CardUser";
 import { useRouter } from "@/lib/i18n/navigation";
 import { useEffect } from "react";
-import { UserTvSeriesWithUserTvSeries } from "@packages/api-js";
+import { UserTvSeriesWithUserTvSeries } from "@libs/api-js";
 import { CardTvSeries } from "@/components/Card/CardTvSeries";
 
 export const UserTvSeriesLog = ({

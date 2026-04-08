@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { CardUser } from "@/components/Card/CardUser";
 import { upperFirst } from "lodash";
 import { forwardRef } from "react";
-import { FeedItemPlaylistLike } from "@packages/api-js";
+import { FeedItemPlaylistLike } from "@libs/api-js";
 
 interface CardFeedPlaylistLikeProps extends React.HTMLAttributes<HTMLDivElement> {
 	data: FeedItemPlaylistLike;

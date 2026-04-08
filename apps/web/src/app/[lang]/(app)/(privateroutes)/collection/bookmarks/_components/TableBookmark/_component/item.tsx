@@ -7,7 +7,7 @@ import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 import { BookmarkWithMedia } from "./types";
 import { getMediaDetails } from "@/utils/get-media-details";
 import { useFormatter, useTranslations } from "next-intl";
-import { PersonCompact } from "@packages/api-js";
+import { PersonCompact } from "@libs/api-js";
 import { Badge } from "@/components/ui/badge";
 import { forwardRef, useMemo } from "react";
 

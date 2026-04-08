@@ -7,7 +7,7 @@ import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { Link } from "@/lib/i18n/navigation";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 import { movieCastingOptions } from "@libs/query-client";
-import { Movie } from "@packages/api-js";
+import { Movie } from "@libs/api-js";
 import { useQuery } from "@tanstack/react-query";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";

@@ -10,7 +10,7 @@ import { Icons } from '@/config/icons';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProfileFollowButton } from './ProfileFollowButton';
-import { Profile } from '@packages/api-js';
+import { Profile } from '@libs/api-js';
 import { useQuery } from '@tanstack/react-query';
 import { userByIdOptions } from '@libs/query-client';
 import { useAuth } from '@/context/auth-context';

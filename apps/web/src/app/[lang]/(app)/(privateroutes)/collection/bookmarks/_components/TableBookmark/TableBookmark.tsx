@@ -27,7 +27,7 @@ import { cn } from '@/lib/utils';
 import { TableToolbar } from '@/components/tables/TableToolbar';
 import { BookmarkWithMedia } from './_component/types';
 import { useBookmarksStore } from '@/stores/useBookmarksStore';
-import { BookmarkWithMovie, BookmarkWithTvSeries } from '@packages/api-js';
+import { BookmarkWithMovie, BookmarkWithTvSeries } from '@libs/api-js';
 
 declare module '@tanstack/react-table' {
 	interface ColumnMeta<TData extends RowData, TValue> {

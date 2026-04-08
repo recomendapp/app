@@ -3,7 +3,7 @@
 import { getAnonApi } from "@/lib/api/server";
 import { cache } from "@/lib/utils/cache";
 import { SupportedLocale } from "@libs/i18n";
-import { moviesControllerGet, personMoviesControllerFacets, personsControllerGet, tvSeasonsControllerGet, tvSeriesControllerGet, personTvSeriesControllerFacets, PersonMoviesControllerListPaginatedData, personMoviesControllerListPaginated, PersonTvSeriesControllerListPaginatedData, personTvSeriesControllerListPaginated } from "@packages/api-js";
+import { moviesControllerGet, personMoviesControllerFacets, personsControllerGet, tvSeasonsControllerGet, tvSeriesControllerGet, personTvSeriesControllerFacets, PersonMoviesControllerListPaginatedData, personMoviesControllerListPaginated, PersonTvSeriesControllerListPaginatedData, personTvSeriesControllerListPaginated } from "@libs/api-js";
 import { notFound } from "next/navigation";
 
 const MEDIA_REVALIDATE_TIME = 60 * 60 * 24; // 24 hours

@@ -10,7 +10,7 @@ import { ModalPlaylistMembers } from './ModalPlaylistMembers';
 import { PlaylistForm } from '@/components/Playlist/PlaylistForm/PlaylistForm';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import { Playlist } from '@packages/api-js';
+import { Playlist } from '@libs/api-js';
 
 interface ModalPlaylistProps extends ModalType {
   playlist?: Playlist;

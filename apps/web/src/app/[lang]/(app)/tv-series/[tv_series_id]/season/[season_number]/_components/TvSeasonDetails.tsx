@@ -8,7 +8,7 @@ import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { Icons } from '@/config/icons';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { tvSeasonEpisodesInfiniteOptions } from '@libs/query-client';
-import { TvSeasonGet } from '@packages/api-js';
+import { TvSeasonGet } from '@libs/api-js';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { upperFirst } from 'lodash';
 import { useFormatter, useTranslations } from 'next-intl';

@@ -15,7 +15,7 @@ import { useModal } from '@/context/modal-context';
 import { useRouter } from '@/lib/i18n/navigation';
 import { useCallback, useMemo } from 'react';
 import { useMovieReviewDeleteMutation } from '@libs/query-client';
-import { MovieCompact, ReviewMovie, UserSummary } from '@packages/api-js';
+import { MovieCompact, ReviewMovie, UserSummary } from '@libs/api-js';
 
 type OptionItem = {
 	variant?: 'destructive';

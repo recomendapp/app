@@ -8,7 +8,7 @@ import { UserAvatar } from "@/components/User/UserAvatar";
 import { ContextMenuMovie } from "@/components/ContextMenu/ContextMenuMovie";
 import { getMediaDetails } from "@/utils/get-media-details";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
-import { FeedPersonItem } from "@packages/api-js";
+import { FeedPersonItem } from "@libs/api-js";
 import { ContextMenuTvSeries } from "@/components/ContextMenu/ContextMenuTvSeries";
 import { forwardRef, useMemo } from "react";
 import { Badge } from "@/components/ui/badge";

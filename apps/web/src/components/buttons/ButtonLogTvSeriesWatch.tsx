@@ -19,7 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { tvSeriesLogOptions, useTvSeriesLogDeleteMutation, useTvSeriesLogSetMutation } from "@libs/query-client";
-import { LogTvSeries, TvSeriesCompact } from "@packages/api-js";
+import { LogTvSeries, TvSeriesCompact } from "@libs/api-js";
 
 interface ButtonLogTvSeriesWatchProps
 	extends React.ComponentProps<typeof Button> {

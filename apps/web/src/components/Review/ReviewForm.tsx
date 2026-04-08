@@ -38,7 +38,7 @@ import { ScrollArea, ScrollBar } from '../ui/scroll-area';
 import { CardMovie } from '../Card/CardMovie';
 import { CardTvSeries } from '../Card/CardTvSeries';
 import { Spinner } from '../ui/spinner';
-import { Movie, TvSeries, ReviewMovie as TReviewMovie, ReviewTvSeries as TReviewTvSeries } from '@packages/api-js';
+import { Movie, TvSeries, ReviewMovie as TReviewMovie, ReviewTvSeries as TReviewTvSeries } from '@libs/api-js';
 import ButtonLogMovieWatch from '../buttons/ButtonLogMovieWatch';
 import ButtonLogTvSeriesWatch from '../buttons/ButtonLogTvSeriesWatch';
 

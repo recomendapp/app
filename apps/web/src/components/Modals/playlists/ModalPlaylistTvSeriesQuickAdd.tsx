@@ -20,7 +20,7 @@ import { upperFirst } from 'lodash';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { Playlist, TvSeriesCompact } from '@packages/api-js';
+import { Playlist, TvSeriesCompact } from '@libs/api-js';
 
 const COMMENT_MAX_LENGTH = 180;
 

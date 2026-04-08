@@ -266,7 +266,7 @@ export class MovieWatchedDatesService {
       switch (sort_by) {
         case WatchedDateSortBy.WATCHED_DATE:
         default: {
-          const watchedDate = cursorData.value as string;
+          const watchedDate = new Date(cursorData.value);
           cursorWhereClause = or(
             operator(logMovieWatchedDate.watchedDate, watchedDate),
             and(
@@ -310,7 +310,7 @@ export class MovieWatchedDatesService {
       switch (sort_by) {
         case WatchedDateSortBy.WATCHED_DATE:
         default:
-          cursorValue = lastItem.watchedDate;
+          cursorValue = lastItem.watchedDate.toISOString();
           break;
       }
 

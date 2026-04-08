@@ -3,7 +3,7 @@
 import ReviewViewer from "@/components/Review/ReviewViewer";
 import { CardMovie } from "@/components/Card/CardMovie";
 import { useQuery } from "@tanstack/react-query";
-import { UserMovieWithUserMovie } from "@packages/api-js";
+import { UserMovieWithUserMovie } from "@libs/api-js";
 import { userMovieLogOptions } from "@libs/query-client";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { CardUser } from "@/components/Card/CardUser";

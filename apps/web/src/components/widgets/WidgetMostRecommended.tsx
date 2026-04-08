@@ -31,7 +31,7 @@ import { ContextMenuTvSeries } from "../ContextMenu/ContextMenuTvSeries";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { ModalRecoSend } from "../Modals/recos/ModalRecoSend";
 import { widgetRecosTrendingInfiniteOptions } from "@libs/query-client";
-import { RecoTrendingWithMovie, RecoTrendingWithTvSeries } from "@packages/api-js";
+import { RecoTrendingWithMovie, RecoTrendingWithTvSeries } from "@libs/api-js";
 
 export const WidgetMostRecommended = ({
 	className,

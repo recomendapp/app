@@ -1,4 +1,4 @@
-import { PlaylistMemberWithUser } from '@packages/api-js/src';
+import { PlaylistMemberWithUser } from '@libs/api-js';
 import { useTranslations } from 'next-intl';
 import { useCallback, useMemo } from 'react';
 

@@ -1,13 +1,13 @@
 'use client'
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from "../Modal";
+import { Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useModal } from "@/context/modal-context";
 import { Card } from "@/components/ui/card";
 import { upperFirst } from "lodash";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useMovieWatchedDateDeleteMutation, useMovieWatchedDateUpdateMutation, userMovieWatchedDatesInfiniteOptions } from "@libs/query-client";
+import { useMovieWatchedDateDeleteMutation, useMovieWatchedDateSetMutation, useMovieWatchedDateUpdateMutation, userMovieWatchedDatesInfiniteOptions } from "@libs/query-client";
 import { useAuth } from "@/context/auth-context";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { useCallback } from "react";
 import { enUS, fr } from "date-fns/locale";
 import { Icons } from "@/config/icons";
-import { WatchedDate } from "@packages/api-js";
+import { WatchedDate } from "@libs/api-js";
 import toast from "react-hot-toast";
 
 interface ModalLogMovieWatchedDatesProps extends ModalType {
@@ -38,8 +38,24 @@ export const ModalLogMovieWatchedDates = ({
 		movieId: movieId,
 	}));
 
+	const { mutateAsync: setWatchedDate, isPending: isSetPending } = useMovieWatchedDateSetMutation();
 	const { mutateAsync: updateWatchedDate, isPending: isUpdatePending } = useMovieWatchedDateUpdateMutation();
 	const { mutateAsync: deleteWatchedDate, isPending: isDeletePending } = useMovieWatchedDateDeleteMutation();
+
+	const handleInsertDate = useCallback(async (date: Date) => {
+		await setWatchedDate({
+			path: {
+				movie_id: movieId,
+			},
+			body: {
+				watchedDate: date.toISOString(),
+			}
+		}, {
+			onError: () => {
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
+			}
+		})
+	}, [setWatchedDate, movieId]);
 
 	const handleUpdateDate = useCallback(async (date: WatchedDate) => {
 		await updateWatchedDate({
@@ -126,6 +142,12 @@ export const ModalLogMovieWatchedDates = ({
 					</div>
 				</ScrollArea>
 			</ModalBody>
+			<ModalFooter>
+				<Button variant='outline' onClick={() => handleInsertDate(new Date())} disabled={isSetPending}>
+					<Icons.add />
+					{upperFirst(t('common.messages.add'))}
+				</Button>
+			</ModalFooter>
 		</Modal>
 	);
 };

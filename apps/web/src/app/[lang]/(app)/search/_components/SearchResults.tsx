@@ -16,7 +16,7 @@ import { CardPlaylist } from "@/components/Card/CardPlaylist";
 import { CardPerson } from "@/components/Card/CardPerson";
 import { CardUser } from "@/components/Card/CardUser";
 import { searchGlobalOptions } from "@libs/query-client";
-import { MovieCompact, PersonCompact, PlaylistWithOwner, SearchBestResultItem, TvSeriesCompact, UserSummary } from "@packages/api-js";
+import { MovieCompact, PersonCompact, PlaylistWithOwner, SearchBestResultItem, TvSeriesCompact, UserSummary } from "@libs/api-js";
 
 const querySchema = z.string().min(1);
 export const getValidatedQuery = (query?: string | null): string | null => {

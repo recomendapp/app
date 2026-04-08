@@ -14,7 +14,7 @@ export class PaginationQueryDto {
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  page?: number = 1;
+  page = 1;
 
   @ApiPropertyOptional({
     description: 'Number of results per page',
@@ -28,38 +28,38 @@ export class PaginationQueryDto {
   @IsInt()
   @Min(1)
   @Max(100)
-  per_page?: number = 10;
+  per_page = 10;
 }
 
 @ApiSchema({ name: 'PaginationMeta' })
 export class PaginationMetaDto {
   @ApiProperty()
   @Expose()
-  total_results: number;
+  total_results!: number;
 
   @ApiProperty()
   @Expose()
-  total_pages: number;
+  total_pages!: number;
 
   @ApiProperty()
   @Expose()
-  current_page: number;
+  current_page!: number;
 
   @ApiProperty()
   @Expose()
-  per_page: number;
+  per_page!: number;
 }
 
 @ApiSchema({ name: 'PaginatedResponse' })
 export class PaginatedResponseDto<T> {
   @ApiProperty({ isArray: true })
   @Expose()
-  data: T[];
+  data!: T[];
 
   @ApiProperty({ type: PaginationMetaDto })
   @Expose()
   @Type(() => PaginationMetaDto)
-  meta: PaginationMetaDto;
+  meta!: PaginationMetaDto;
 
   constructor(partial: Partial<PaginatedResponseDto<T>>) {
     Object.assign(this, partial);

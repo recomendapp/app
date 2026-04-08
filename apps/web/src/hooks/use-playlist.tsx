@@ -1,5 +1,5 @@
 import { playlistOptions } from "@libs/query-client";
-import { ROLES_CAN_EDIT } from "@packages/api-js";
+import { ROLES_CAN_EDIT } from "@libs/api-js";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 

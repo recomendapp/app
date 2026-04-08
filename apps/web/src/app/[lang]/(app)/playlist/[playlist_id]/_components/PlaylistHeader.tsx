@@ -9,7 +9,7 @@ import { useModal } from "@/context/modal-context";
 import { useRandomImage } from "@/hooks/use-random-image";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 import { ConvertHoursMinutes } from "@/lib/utils";
-import { PlaylistWithOwner } from "@packages/api-js";
+import { PlaylistWithOwner } from "@libs/api-js";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 

@@ -15,7 +15,7 @@ import { upperFirst } from 'lodash';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 import { playlistMembersAllOptions, searchUsersInfiniteOptions, usePlaylistMembersAddMutation } from '@libs/query-client';
-import { Playlist, UserSummary } from '@packages/api-js';
+import { Playlist, UserSummary } from '@libs/api-js';
 import { Badge } from '@/components/ui/badge';
 import useDebounce from '@/hooks/use-debounce';
 

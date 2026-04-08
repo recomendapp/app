@@ -8,7 +8,7 @@ import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Icons } from "@/config/icons";
 import toast from "react-hot-toast";
 import { domToBlob } from "modern-screenshot";
-import { TvSeries, TvSeriesCompact } from "@packages/api-js/src";
+import { TvSeries, TvSeriesCompact } from "@libs/api-js";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
 interface ShareControllerTvSeriesProps extends ShareControllerProps {

@@ -6,7 +6,7 @@ import { useModal } from "@/context/modal-context";
 import { CardUser } from "@/components/Card/CardUser";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { RecoSender } from "@packages/api-js";
+import { RecoSender } from "@libs/api-js";
 
 interface ModalRecosSendersProps extends ModalType {
 	senders: RecoSender[];

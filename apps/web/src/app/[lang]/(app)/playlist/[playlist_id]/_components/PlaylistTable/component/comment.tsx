@@ -4,7 +4,7 @@ import { TooltipBox } from '@/components/Box/TooltipBox';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { usePlaylist } from '@/hooks/use-playlist';
-import { PlaylistItemWithMedia } from '@packages/api-js';
+import { PlaylistItemWithMedia } from '@libs/api-js';
 import ModalPlaylistComment from '@/components/Modals/playlists/ModalPlaylistComment';
 
 export function DataComment({ data }: { data: PlaylistItemWithMedia }) {

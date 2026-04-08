@@ -4,7 +4,7 @@ import { Card } from "../ui/card";
 import { UserAvatar } from "../User/UserAvatar";
 import { WithLink } from "../utils/WithLink";
 import { Icons } from "@/config/icons";
-import { UserSummary } from "@packages/api-js";
+import { UserSummary } from "@libs/api-js";
 
 interface CardUserProps
 	extends React.ComponentProps<typeof Card> {

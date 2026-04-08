@@ -1,7 +1,7 @@
 import MediaPoster from "@/components/Media/MediaPoster";
 import ActivityIcon from "@/components/Review/ActivityIcon";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
-import { PersonCompact } from "@packages/api-js";
+import { PersonCompact } from "@libs/api-js";
 import { HeartIcon } from "lucide-react";
 
 export default function MovieCard({

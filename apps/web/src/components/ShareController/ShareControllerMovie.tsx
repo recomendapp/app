@@ -8,7 +8,7 @@ import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Icons } from "@/config/icons";
 import toast from "react-hot-toast";
 import { domToBlob } from "modern-screenshot";
-import { Movie, MovieCompact } from "@packages/api-js";
+import { Movie, MovieCompact } from "@libs/api-js";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
 interface ShareControllerMovieProps extends ShareControllerProps {

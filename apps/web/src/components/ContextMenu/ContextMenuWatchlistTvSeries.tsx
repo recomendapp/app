@@ -5,7 +5,7 @@ import { Fragment, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { ModalUserWatchlistTvSeriesComment } from "../Modals/watchlist/ModalUserWatchlistTvSeriesComment";
-import { Bookmark } from "@packages/api-js";
+import { Bookmark } from "@libs/api-js";
 
 export const ContextMenuWatchlistTvSeries = ({
 	children,

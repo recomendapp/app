@@ -22,7 +22,7 @@ import { CardReviewTvSeries } from '@/components/Card/CardReviewTvSeries';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { TvSeries } from '@packages/api-js';
+import { TvSeries } from '@libs/api-js';
 import { tvSeriesLogOptions, tvSeriesReviewsInfiniteOptions } from '@libs/query-client';
 
 type SortBy = "updated_at" | "created_at" | "likes_count" | "rating" | "random";

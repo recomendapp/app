@@ -24,7 +24,7 @@ export class CursorPaginationQueryDto {
   @IsInt()
   @Min(1)
   @Max(100)
-  per_page?: number = 10;
+  per_page = 10;
 
   @ApiPropertyOptional({
     description: 'Whether to include the total count of results (only on the first page)',
@@ -41,14 +41,14 @@ export class CursorPaginationQueryDto {
 export class CursorPaginationMetaDto {
   @ApiProperty()
   @Expose()
-  per_page: number;
+  per_page!: number;
 
   @ApiPropertyOptional({ 
     description: 'The cursor to send for the next fetch. Null if end of list.',
     nullable: true 
   })
   @Expose()
-  next_cursor: string | null;
+  next_cursor!: string | null;
 
   @ApiPropertyOptional({
 	description: 'Total number of results (only provided on the first page)',
@@ -62,12 +62,12 @@ export class CursorPaginationMetaDto {
 export class CursorPaginatedResponseDto<T> {
   @ApiProperty({ isArray: true })
   @Expose()
-  data: T[];
+  data!: T[];
 
   @ApiProperty({ type: CursorPaginationMetaDto })
   @Expose()
   @Type(() => CursorPaginationMetaDto)
-  meta: CursorPaginationMetaDto;
+  meta!: CursorPaginationMetaDto;
 
   constructor(partial: Partial<CursorPaginatedResponseDto<T>>) {
     Object.assign(this, partial);

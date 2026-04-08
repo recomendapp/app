@@ -4,7 +4,7 @@ import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Loader2 } from 'lucide-react';
 import { Dispatch } from 'react';
-import { Playlist } from '@packages/api-js';
+import { Playlist } from '@libs/api-js';
 
 const PlaylistFormPictureUpload = ({
   playlist,

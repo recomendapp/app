@@ -1,7 +1,7 @@
 'use client';
 
 import { HEADER_LANGUAGE_KEY } from '@libs/i18n/src';
-import { client, realtime } from '@packages/api-js';
+import { client, realtime } from '@libs/api-js';
 import { useLocale } from 'next-intl';
 import { useEffect } from 'react';
 import { API_ENDPOINT, API_URL } from '../env';

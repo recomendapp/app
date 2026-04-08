@@ -8,7 +8,7 @@ import { CardUser } from "@/components/Card/CardUser";
 import { forwardRef } from "react";
 import { CardReviewTvSeries } from "@/components/Card/CardReviewTvSeries";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
-import { FeedItemReviewTvSeriesLike } from "@packages/api-js";
+import { FeedItemReviewTvSeriesLike } from "@libs/api-js";
 
 interface CardFeedReviewTvSeriesLikeProps extends React.HTMLAttributes<HTMLDivElement> {
 	data: FeedItemReviewTvSeriesLike;

@@ -8,7 +8,7 @@ import { useModal } from "@/context/modal-context";
 import { Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { Bookmark } from "@packages/api-js";
+import { Bookmark } from "@libs/api-js";
 import { useUserBookmarkSetByMediaMutation } from "@libs/query-client";
 
 interface ModalUserWatchlistTvSeriesCommentProps extends ModalType {

@@ -1,4 +1,4 @@
-import { client } from '@packages/api-js';
+import { client } from '@libs/api-js';
 import { getLocale } from 'next-intl/server';
 import { headers } from 'next/headers';
 import { HEADER_LANGUAGE_KEY } from '@libs/i18n';

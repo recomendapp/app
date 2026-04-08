@@ -37,7 +37,7 @@ import { upperFirst } from 'lodash';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { usePlaylistDeleteMutation, usePlaylistInsertMutation, usePlaylistPoserDeleteMutation, usePlaylistPoserUpdateMutation, usePlaylistUpdateMutation } from '@libs/query-client';
-import { Playlist } from '@packages/api-js';
+import { Playlist } from '@libs/api-js';
 import compressPicture from '@/lib/utils/compressPicture';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {

@@ -1,4 +1,4 @@
-import { PersonMovieFacetDepartment } from '@packages/api-js/src';
+import { PersonMovieFacetDepartment } from '@libs/api-js';
 import { z } from 'zod';
 
 export const SORT_BY = ["release_date", "vote_average", "popularity"] as const;

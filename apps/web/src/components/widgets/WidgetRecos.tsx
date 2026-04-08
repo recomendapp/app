@@ -12,7 +12,7 @@ import { CardTvSeries } from "../Card/CardTvSeries";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 import { userRecosInfiniteOptions } from "@libs/query-client";
-import { MovieCompact, TvSeriesCompact } from "@packages/api-js/src";
+import { MovieCompact, TvSeriesCompact } from "@libs/api-js";
 import { AvatarGroup, AvatarGroupCount } from "../ui/avatar";
 import { TextIcon } from "lucide-react";
 

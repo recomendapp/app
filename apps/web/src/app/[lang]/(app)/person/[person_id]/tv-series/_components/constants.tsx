@@ -1,4 +1,4 @@
-import { PersonTvSeriesFacetDepartment } from '@packages/api-js/src';
+import { PersonTvSeriesFacetDepartment } from '@libs/api-js';
 import { z } from 'zod';
 
 export const SORT_BY = ["last_air_date", "vote_average", "popularity"] as const;

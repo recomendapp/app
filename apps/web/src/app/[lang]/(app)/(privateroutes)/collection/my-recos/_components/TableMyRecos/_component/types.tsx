@@ -1,3 +1,3 @@
-import { RecoWithMovie, RecoWithTvSeries } from "@packages/api-js";
+import { RecoWithMovie, RecoWithTvSeries } from "@libs/api-js";
 
 export type RecoWithMedia = RecoWithMovie | RecoWithTvSeries;

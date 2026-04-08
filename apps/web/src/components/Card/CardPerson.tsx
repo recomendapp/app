@@ -7,7 +7,7 @@ import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { useRouter } from "@/lib/i18n/navigation";
 import { WithLink } from "../utils/WithLink";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
-import { PersonCompact } from "@packages/api-js";
+import { PersonCompact } from "@libs/api-js";
 
 interface CardPersonProps
 	extends React.ComponentProps<typeof Card> {

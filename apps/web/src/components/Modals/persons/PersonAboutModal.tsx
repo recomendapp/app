@@ -7,7 +7,7 @@ import { TooltipBox } from "@/components/Box/TooltipBox";
 import { useFormatter, useTranslations } from "next-intl";
 import { TbGrave } from "react-icons/tb";
 import { upperFirst } from "lodash";
-import { Person } from "@packages/api-js";
+import { Person } from "@libs/api-js";
 
 interface PersonAboutModalProps extends ModalType {
 	person?: Person;

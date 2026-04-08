@@ -9,7 +9,7 @@ import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import ButtonUserReviewMovieLike from "../buttons/ButtonUserReviewMovieLike";
 import { generateJSON } from "@tiptap/html";
 import { EDITOR_EXTENSIONS } from "../tiptap/TiptapExtensions";
-import { ReviewMovie, UserSummary } from "@packages/api-js";
+import { ReviewMovie, UserSummary } from "@libs/api-js";
 
 interface CardReviewMovieProps
 	extends React.ComponentProps<typeof Card> {

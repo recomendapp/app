@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from '@/lib/i18n/navigation';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { TvSeasonGet } from '@packages/api-js';
+import { TvSeasonGet } from '@libs/api-js';
 import { tvSeasonEpisodesInfiniteOptions } from '@libs/query-client';
 import ButtonLogTvSeasonWatch from '@/components/buttons/ButtonLogTvSeasonWatch';
 import { useAuth } from '@/context/auth-context';

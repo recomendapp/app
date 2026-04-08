@@ -20,7 +20,7 @@ import { upperFirst } from 'lodash';
 import { CardMovie } from '@/components/Card/CardMovie';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { MovieCompact, Playlist } from '@packages/api-js';
+import { MovieCompact, Playlist } from '@libs/api-js';
 
 const COMMENT_MAX_LENGTH = 180;
 

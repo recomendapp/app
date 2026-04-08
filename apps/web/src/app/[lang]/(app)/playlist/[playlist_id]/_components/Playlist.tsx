@@ -1,7 +1,7 @@
 'use client'
 
 import { useQuery } from "@tanstack/react-query";
-import { PlaylistWithOwner } from "@packages/api-js";
+import { PlaylistWithOwner } from "@libs/api-js";
 import { PlaylistHeader } from "./PlaylistHeader";
 import { playlistItemsAllOptions, playlistOptions, usePlaylistRealtime } from "@libs/query-client";
 import { useMemo } from "react";

@@ -6,7 +6,7 @@ import ReviewForm from '@/components/Review/ReviewForm';
 import { Spinner } from '@/components/ui/spinner';
 import { useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { TvSeries } from '@packages/api-js';
+import { TvSeries } from '@libs/api-js';
 import { userTvSeriesLogOptions, useTvSeriesReviewUpsertMutation } from '@libs/query-client';
 
 export const TvSeriesReview = ({

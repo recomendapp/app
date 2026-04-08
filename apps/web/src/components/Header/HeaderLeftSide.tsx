@@ -2,7 +2,6 @@
 
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
 import SearchBar from '@/components/Search/SearchBar';
-import { cn } from '@/lib/utils';
 import { SidebarTrigger } from '../ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { upperFirst } from 'lodash';

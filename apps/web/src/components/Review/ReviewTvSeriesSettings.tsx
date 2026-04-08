@@ -14,7 +14,7 @@ import { Icons } from '@/config/icons';
 import { useModal } from '@/context/modal-context';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
 import { useCallback, useMemo } from 'react';
-import { ReviewTvSeries, TvSeriesCompact, UserSummary } from '@packages/api-js';
+import { ReviewTvSeries, TvSeriesCompact, UserSummary } from '@libs/api-js';
 import { useTvSeriesReviewDeleteMutation } from '@libs/query-client';
 
 type OptionItem = {

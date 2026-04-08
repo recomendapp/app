@@ -26,7 +26,7 @@ import {
 
 import LetterboxdParser from "./services/LetterboxdParser";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { MovieCompact } from "@packages/api-js";
+import { MovieCompact } from "@libs/api-js";
 // import ImporterResults from "./services/ImporterResults";
 
 export type ImportResults = {

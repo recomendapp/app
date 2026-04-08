@@ -1,5 +1,5 @@
 
-import { Bookmark } from '@packages/api-js';
+import { Bookmark } from '@libs/api-js';
 import { OnChangeFn, SortingState, TableState, Updater, VisibilityState } from '@tanstack/react-table';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';

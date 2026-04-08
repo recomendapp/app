@@ -23,7 +23,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { LayoutGridIcon, ListIcon } from 'lucide-react';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
 import { userTvSeriesLogsInfiniteOptions } from '@libs/query-client';
-import { UserSummary } from '@packages/api-js';
+import { UserSummary } from '@libs/api-js';
 
 const DISPLAY = ["grid", "row"] as const;
 type SortBy = "rating" | "updated_at" | "random";

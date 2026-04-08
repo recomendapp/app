@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { tvSeasonLogOptions, useTvSeasonLogDeleteMutation, useTvSeasonLogSetMutation } from "@libs/query-client";
-import { LogTvSeason, TvSeasonCompact } from "@packages/api-js/src";
+import { LogTvSeason, TvSeasonCompact } from "@libs/api-js";
 
 interface ButtonLogTvSeasonWatchProps
 	extends React.ComponentProps<typeof Button> {

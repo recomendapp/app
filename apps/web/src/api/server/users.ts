@@ -2,7 +2,7 @@
 
 import { getApi } from "@/lib/api/server";
 import { SupportedLocale } from "@libs/i18n/src";
-import { userMoviesControllerGet, usersControllerGet, userTvSeriesControllerGet } from "@packages/api-js";
+import { userMoviesControllerGet, usersControllerGet, userTvSeriesControllerGet } from "@libs/api-js";
 import { cache } from "react";
 
 export const getProfile = cache(async (username: string) => {

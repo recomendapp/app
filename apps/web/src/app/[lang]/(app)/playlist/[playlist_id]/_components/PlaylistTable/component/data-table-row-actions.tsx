@@ -25,7 +25,7 @@ import { usePlaylist } from "@/hooks/use-playlist";
 import { useCallback, useMemo } from "react";
 import { getMediaDetails } from "@/utils/get-media-details";
 import { ShareControllerTvSeries } from "@/components/ShareController/ShareControllerTvSeries";
-import { PlaylistItemWithMedia } from "@packages/api-js";
+import { PlaylistItemWithMedia } from "@libs/api-js";
 import ModalPlaylistComment from "@/components/Modals/playlists/ModalPlaylistComment";
 import { usePlaylistItemsDeleteMutation } from "@libs/query-client";
 import { ModalPlaylistAdd } from "@/components/Modals/playlists/ModalPlaylistAdd";

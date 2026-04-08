@@ -12,7 +12,7 @@ import { upperFirst } from 'lodash';
 import { useQuery } from '@tanstack/react-query';
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/components/ui/input-group';
 import { playlistMembersAllOptions, usePlaylistMembersDeleteMutation, usePlaylistMemberUpdateMutation } from '@libs/query-client';
-import { ApiError, Playlist, PlaylistMemberUpdate } from '@packages/api-js';
+import { ApiError, Playlist, PlaylistMemberUpdate } from '@libs/api-js';
 import Fuse from 'fuse.js';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { usePlaylistMembers } from '@/hooks/use-playlist-members';

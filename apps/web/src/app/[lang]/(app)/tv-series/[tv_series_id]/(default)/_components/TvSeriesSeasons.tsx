@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 import { cn } from '@/lib/utils';
-import { TvSeries } from "@packages/api-js";
+import { TvSeries } from "@libs/api-js";
 import { tvSeriesSeasonsOptions } from "@libs/query-client";
 
 export const TvSeriesSeasons = ({

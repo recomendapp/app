@@ -7,7 +7,7 @@ import { Link } from "@/lib/i18n/navigation";
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { ContextMenuPlaylist } from '../ContextMenu/ContextMenuPlaylist';
-import { Playlist, User } from '@packages/api-js';
+import { Playlist, User } from '@libs/api-js';
 
 interface CardPlaylistProps
 	extends React.HTMLAttributes<HTMLDivElement> {

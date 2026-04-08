@@ -11,7 +11,7 @@ import { ModalPlaylist } from "../Modals/playlists/ModalPlaylist";
 import { ModalPlaylistMembers } from "../Modals/playlists/ModalPlaylistMembers";
 import toast from "react-hot-toast";
 import { usePathname, useRouter } from "@/lib/i18n/navigation";
-import { Playlist, User } from "@packages/api-js";
+import { Playlist, User } from "@libs/api-js";
 import { usePlaylistDeleteMutation } from "@libs/query-client";
 
 interface Item {

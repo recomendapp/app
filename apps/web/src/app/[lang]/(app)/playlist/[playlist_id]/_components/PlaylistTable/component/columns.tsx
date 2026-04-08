@@ -6,7 +6,7 @@ import { Item } from './item';
 import { upperFirst } from 'lodash';
 import { TableColumnHeader } from '@/components/tables/TableColumnHeader';
 import { DataComment } from './comment';
-import { PlaylistItemWithMedia } from '@packages/api-js';
+import { PlaylistItemWithMedia } from '@libs/api-js';
 
 export const Columns = (): ColumnDef<PlaylistItemWithMedia>[] => {
   const t = useTranslations();

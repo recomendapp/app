@@ -16,7 +16,7 @@ import ButtonLogTvSeriesWatch from "../buttons/ButtonLogTvSeriesWatch";
 import ButtonUserWatchlistTvSeries from "../buttons/ButtonUserWatchlistTvSeries";
 import { ContextMenuTvSeries } from "../ContextMenu/ContextMenuTvSeries";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
-import { LogTvSeries, LogTvSeriesWithTvSeriesNoReview, PersonCompact, TvSeries, TvSeriesCompact, UserSummary } from "@packages/api-js";
+import { LogTvSeries, LogTvSeriesWithTvSeriesNoReview, PersonCompact, TvSeries, TvSeriesCompact, UserSummary } from "@libs/api-js";
 
 interface CardTvSeriesProps
 	extends React.ComponentProps<typeof Card> {

@@ -6,7 +6,7 @@ import { Link } from "@/lib/i18n/navigation";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 import { useFormatter } from "next-intl";
 import { getMediaDetails } from "@/utils/get-media-details";
-import { PersonCompact, PlaylistItemWithMedia } from "@packages/api-js";
+import { PersonCompact, PlaylistItemWithMedia } from "@libs/api-js";
 import { forwardRef, useMemo } from "react";
 import { BadgeMedia } from "@/components/Badge/BadgeMedia";
 

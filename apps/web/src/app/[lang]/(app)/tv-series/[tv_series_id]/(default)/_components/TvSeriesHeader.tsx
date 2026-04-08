@@ -36,7 +36,7 @@ import { ContextMenuTvSeries } from '@/components/ContextMenu/ContextMenuTvSerie
 import ButtonPlaylistAdd from '@/components/buttons/ButtonPlaylistAdd';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import ButtonFollowersAvgRatingTvSeries from '@/components/buttons/ButtonFollowersAvgRatingTvSeries';
-import { TvSeries, TvSeriesTrailer } from '@packages/api-js';
+import { TvSeries, TvSeriesTrailer } from '@libs/api-js';
 import ButtonUserRecoSend from '@/components/buttons/ButtonUserRecoSend';
 
 export const TvSeriesHeader = ({

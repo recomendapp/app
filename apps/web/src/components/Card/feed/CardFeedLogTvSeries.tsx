@@ -10,7 +10,7 @@ import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import { Icons } from "@/config/icons";
 import { forwardRef } from "react";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
-import { FeedItemLogTvSeries } from "@packages/api-js";
+import { FeedItemLogTvSeries } from "@libs/api-js";
 import { CardReviewTvSeries } from "../CardReviewTvSeries";
 import { upperFirst } from "lodash";
 

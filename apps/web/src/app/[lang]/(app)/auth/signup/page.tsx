@@ -126,8 +126,7 @@ export default function Signup() {
 		mode: 'onChange',
 	});
 	// OTP
-	const numberOfDigits = 6;
-	const [showOtp, setShowOtp] = useState<boolean>(false);
+	const [showEmailConfirm, setShowEmailConfirm] = useState<boolean>(false);
 	const {
 		isAvailable: usernameAvailable,
 		isLoading: usernameAvailabilityLoading,
@@ -163,13 +162,13 @@ export default function Signup() {
 				password: submitData.password,
 				redirectTo,
 			})
-			setShowOtp(true);
+			setShowEmailConfirm(true);
 		} finally {
 			setIsLoading(false);
 		}
 	}, [signup, common, turnstileStatus, redirectTo]);
 
-	const resendOtp = useCallback(async () => {
+	const resendEmailConfirmation = useCallback(async () => {
 		try {
 			setIsLoading(true);
 			const { error } = await authClient.sendVerificationEmail({
@@ -199,7 +198,7 @@ export default function Signup() {
 			backgroundRepeat: 'no-repeat',
 		}}
     >
-	{!showOtp ? (
+	{!showEmailConfirm ? (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(handleSubmit)}>
 				<Card className="w-full max-w-[400px]">
@@ -384,19 +383,10 @@ export default function Signup() {
 				</CardTitle>
 				<CardDescription>{t('confirm_form.description', { email: form.getValues('email') })}</CardDescription>
 			</CardHeader>
-			<CardContent className='grid gap-2 justify-items-center'>
-				{/* <InputOTP disabled={isLoading} maxLength={numberOfDigits} onChange={(e) => e.length === numberOfDigits && handleVerifyOtp(e)}>
-					<InputOTPGroup>
-						{Array.from({ length: numberOfDigits }).map((_, index) => (
-						<InputOTPSlot key={index} index={index}/>
-						))}
-					</InputOTPGroup>
-				</InputOTP> */}
-			</CardContent>
 			<CardFooter>
 				<p className="px-8 text-center text-sm text-muted-foreground">
 					{common('form.error.not_received_code')}{' '}
-					<Button variant='link' className='text-accent-yellow p-0' disabled={isLoading} onClick={resendOtp}>
+					<Button variant='link' className='text-accent-yellow p-0' disabled={isLoading} onClick={resendEmailConfirmation}>
 					{common('form.resend_code')}
 					</Button>
 				</p>

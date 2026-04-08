@@ -1,4 +1,4 @@
-import { Movie, MovieCompact, Person, PersonCompact, TvEpisode, TvSeasonCompact, TvSeries, TvSeriesCompact } from "@packages/api-js";
+import { Movie, MovieCompact, Person, PersonCompact, TvEpisode, TvSeasonCompact, TvSeries, TvSeriesCompact } from "@libs/api-js";
 
 type MediaType = 'movie' | 'tv_series';
 

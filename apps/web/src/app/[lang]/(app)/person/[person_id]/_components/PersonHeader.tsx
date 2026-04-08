@@ -7,7 +7,7 @@ import { PersonAbout } from './PersonAbout';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useRandomImage } from '@/hooks/use-random-image';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
-import { Person } from '@packages/api-js';
+import { Person } from '@libs/api-js';
 import { personMoviesInfiniteOptions, personTvSeriesInfiniteOptions } from '@libs/query-client/src';
 
 export const PersonHeader = ({

@@ -16,7 +16,7 @@ import ButtonLogMovieWatch from "../buttons/ButtonLogMovieWatch";
 import ButtonUserWatchlistMovie from "../buttons/ButtonUserWatchlistMovie";
 import { ContextMenuMovie } from "../ContextMenu/ContextMenuMovie";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
-import { LogMovie, LogMovieWithMovieNoReview, Movie, MovieCompact, PersonCompact, UserSummary } from "@packages/api-js";
+import { LogMovie, LogMovieWithMovieNoReview, Movie, MovieCompact, PersonCompact, UserSummary } from "@libs/api-js";
 
 interface CardMovieProps
 	extends React.ComponentProps<typeof Card> {

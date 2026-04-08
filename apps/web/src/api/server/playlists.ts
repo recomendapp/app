@@ -1,7 +1,7 @@
 'use server'
 
 import { getApi } from "@/lib/api/server";
-import { playlistsControllerGet } from "@packages/api-js/src";
+import { playlistsControllerGet } from "@libs/api-js";
 import { cache } from "react";
 
 export const getPlaylist = cache(async (id: number) => {

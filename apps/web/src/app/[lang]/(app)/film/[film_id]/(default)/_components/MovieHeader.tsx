@@ -39,7 +39,7 @@ import { ContextMenuMovie } from '@/components/ContextMenu/ContextMenuMovie';
 import ButtonPlaylistAdd from '@/components/buttons/ButtonPlaylistAdd';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import ButtonFollowersAvgRatingMovie from '@/components/buttons/ButtonFollowersAvgRatingMovie';
-import { Genre, Movie, MovieTrailer } from '@packages/api-js';
+import { Genre, Movie, MovieTrailer } from '@libs/api-js';
 import ButtonUserRecoSend from '@/components/buttons/ButtonUserRecoSend';
 
 export const MovieHeader = ({

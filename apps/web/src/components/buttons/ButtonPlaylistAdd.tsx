@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { useModal } from "@/context/modal-context";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { PlaylistsAddTargetsControllerListAllData } from "@packages/api-js/src";
+import { PlaylistsAddTargetsControllerListAllData } from "@libs/api-js";
 import { ModalPlaylistAdd } from "../Modals/playlists/ModalPlaylistAdd";
 
 interface ButtonPlaylistAddProps

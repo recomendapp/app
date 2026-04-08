@@ -27,7 +27,7 @@ import { cn } from '@/lib/utils';
 import { TableToolbar } from '@/components/tables/TableToolbar';
 import { RecoWithMedia } from './_component/types';
 import { useMyRecosStore } from '@/stores/useMyRecosStore';
-import { RecoWithMovie, RecoWithTvSeries } from '@packages/api-js';
+import { RecoWithMovie, RecoWithTvSeries } from '@libs/api-js';
 
 declare module '@tanstack/react-table' {
 	interface ColumnMeta<TData extends RowData, TValue> {

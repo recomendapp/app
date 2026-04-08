@@ -19,7 +19,7 @@ import {
   } from '@/components/ui/dialog';
 import { useQuery } from "@tanstack/react-query";
 import { tvSeasonLogOptions, useTvSeasonLogSetMutation } from "@libs/query-client";
-import { TvSeasonCompact } from "@packages/api-js";
+import { TvSeasonCompact } from "@libs/api-js";
 
 interface ButtonLogTvSeasonRatingProps
 	extends React.ComponentProps<typeof Button> {

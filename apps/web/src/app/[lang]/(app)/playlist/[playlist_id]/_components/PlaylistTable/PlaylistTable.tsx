@@ -47,7 +47,7 @@ import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { DataTableToolbar } from './component/data-table-toolbar';
 import { useAuth } from '@/context/auth-context';
-import { PlaylistItemWithMedia, PlaylistWithOwner } from '@packages/api-js';
+import { PlaylistItemWithMedia, PlaylistWithOwner } from '@libs/api-js';
 import { usePlaylist } from '@/hooks/use-playlist';
 import { usePlaylistItemUpdateMutation } from '@libs/query-client';
 

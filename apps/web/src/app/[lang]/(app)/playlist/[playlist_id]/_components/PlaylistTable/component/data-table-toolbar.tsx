@@ -13,7 +13,7 @@ import { TableViewOptions } from '@/components/tables/TableViewOptions';
 import { TableSortOptions } from '@/components/tables/TableSortOptions';
 import { ModalPlaylistMovieQuickAdd } from '@/components/Modals/playlists/ModalPlaylistMovieQuickAdd';
 import { usePlaylist } from '@/hooks/use-playlist';
-import { Playlist } from '@packages/api-js';
+import { Playlist } from '@libs/api-js';
 import PlaylistActionLike from '@/components/Playlist/actions/PlaylistActionLike';
 
 interface DataTableToolbarProps<TData> {

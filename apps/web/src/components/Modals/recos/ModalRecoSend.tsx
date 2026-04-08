@@ -13,7 +13,7 @@ import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
 import { userRecoSendAllOptions, useUserRecoSendMutation } from '@libs/query-client';
-import { UserSummary } from '@packages/api-js';
+import { UserSummary } from '@libs/api-js';
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText, InputGroupTextarea } from '@/components/ui/input-group';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useForm } from 'react-hook-form';

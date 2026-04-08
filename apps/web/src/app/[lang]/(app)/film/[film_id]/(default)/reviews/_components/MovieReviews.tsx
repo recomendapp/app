@@ -22,7 +22,7 @@ import { CardReviewMovie } from '@/components/Card/CardReviewMovie';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { Movie } from '@packages/api-js';
+import { Movie } from '@libs/api-js';
 import { movieLogOptions, movieReviewsInfiniteOptions } from '@libs/query-client';
 
 type SortBy =  "updated_at" | "created_at" | "rating" | "likes_count";

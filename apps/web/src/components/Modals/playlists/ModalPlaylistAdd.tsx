@@ -14,7 +14,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { usePlaylistItemsAddMutation, userPlaylistsAddTargetsAllOptions } from '@libs/query-client';
-import { Playlist, PlaylistsAddTargetsControllerListAllData } from '@packages/api-js';
+import { Playlist, PlaylistsAddTargetsControllerListAllData } from '@libs/api-js';
 import z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';

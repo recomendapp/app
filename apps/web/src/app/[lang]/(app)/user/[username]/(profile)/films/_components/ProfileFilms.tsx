@@ -23,7 +23,7 @@ import { Icons } from '@/config/icons';
 import { Spinner } from '@/components/ui/spinner';
 import { LayoutGridIcon, ListIcon } from 'lucide-react';
 import { userMovieLogsInfiniteOptions } from '@libs/query-client';
-import { UserSummary } from '@packages/api-js';
+import { UserSummary } from '@libs/api-js';
 
 const DISPLAY = ["grid", "row"] as const;
 type SortBy = "rating" | "updated_at" | "first_watched_at" | "random";

@@ -1,5 +1,5 @@
 
-import { Bookmark } from '@packages/api-js';
+import { Bookmark } from '@libs/api-js';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 

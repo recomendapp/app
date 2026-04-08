@@ -12,7 +12,7 @@ import { upperFirst } from 'lodash';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from '@/lib/i18n/navigation';
 import { meOptions, useMeUpdateMutation } from '@libs/query-client';
-import { User } from '@packages/api-js/src';
+import { User } from '@libs/api-js';
 
 export interface UserState {
   user: User | null | undefined;

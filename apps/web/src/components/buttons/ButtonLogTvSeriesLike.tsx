@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useQuery } from "@tanstack/react-query";
-import { TvSeriesCompact } from "@packages/api-js";
+import { TvSeriesCompact } from "@libs/api-js";
 import { tvSeriesLogOptions, useTvSeriesLogSetMutation } from "@libs/query-client";
 
 interface ButtonLogTvSeriesLikeProps

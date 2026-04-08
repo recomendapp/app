@@ -2,7 +2,7 @@
 
 import { getAnonApi } from "@/lib/api/server";
 import { cache } from "@/lib/utils/cache";
-import { systemControllerGetStatus } from "@packages/api-js/src";
+import { systemControllerGetStatus } from "@libs/api-js";
 
 export const getStatus = cache(
 	async () => {

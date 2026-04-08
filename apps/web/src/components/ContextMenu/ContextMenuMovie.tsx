@@ -11,7 +11,7 @@ import { useAuth } from "@/context/auth-context";
 import { createShareController } from "../ShareController/ShareController";
 import { ShareControllerMovie } from "../ShareController/ShareControllerMovie";
 import { ModalPlaylistAdd } from "../Modals/playlists/ModalPlaylistAdd";
-import { Movie, MovieCompact } from "@packages/api-js";
+import { Movie, MovieCompact } from "@libs/api-js";
 import { ModalRecoSend } from "../Modals/recos/ModalRecoSend";
 
 interface Item {

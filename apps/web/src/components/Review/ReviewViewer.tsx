@@ -12,7 +12,7 @@ import { ReviewMovieSettings } from './ReviewMovieSettings';
 import { ReviewTvSeriesSettings } from './ReviewTvSeriesSettings';
 import ButtonUserReviewMovieLike from '../buttons/ButtonUserReviewMovieLike';
 import ButtonUserReviewTvSeriesLike from '../buttons/ButtonUserReviewTvSeriesLike';
-import { MovieCompact, ReviewMovie as TReviewMovie, ReviewTvSeries as TReviewTvSeries, TvSeriesCompact, UserSummary } from '@packages/api-js';
+import { MovieCompact, ReviewMovie as TReviewMovie, ReviewTvSeries as TReviewTvSeries, TvSeriesCompact, UserSummary } from '@libs/api-js';
 import { upperFirst } from 'lodash';
 
 interface ReviewViewerBase extends React.HTMLAttributes<HTMLDivElement> {
