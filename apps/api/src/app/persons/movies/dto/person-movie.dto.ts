@@ -10,11 +10,11 @@ import { SortOrder } from '../../../../common/dto/sort.dto';
 export class PersonMovieCreditDto {
   @ApiProperty({ example: 'Acting' })
   @Expose()
-  department: string;
+  department!: string;
 
   @ApiProperty({ example: 'Lead' })
   @Expose()
-  job: string;
+  job!: string;
 }
 
 @ApiSchema({ name: 'PersonMovie' })
@@ -23,7 +23,7 @@ export class PersonMovieDto {
   @Expose()
   @ValidateNested()
   @Type(() => MovieCompactDto)
-  movie: MovieCompactDto;
+  movie!: MovieCompactDto;
   
   @ApiProperty({
     type: [PersonMovieCreditDto],
@@ -32,14 +32,14 @@ export class PersonMovieDto {
   @Expose()
   @ValidateNested({ each: true })
   @Type(() => PersonMovieCreditDto)
-  credits: PersonMovieCreditDto[];
+  credits!: PersonMovieCreditDto[];
 }
 
 @ApiSchema({ name: 'ListPaginatedPersonMovies'})
 export class ListPaginatedPersonMoviesDto extends PaginatedResponseDto<PersonMovieDto> {
   @ApiProperty({ type: () => [PersonMovieDto] })
   @Type(() => PersonMovieDto)
-  data: PersonMovieDto[];
+  data!: PersonMovieDto[];
 
   constructor(partial: Partial<ListPaginatedPersonMoviesDto>) {
     super(partial);
@@ -51,7 +51,7 @@ export class ListPaginatedPersonMoviesDto extends PaginatedResponseDto<PersonMov
 export class ListInfinitePersonMoviesDto extends CursorPaginatedResponseDto<PersonMovieDto> {
   @ApiProperty({ type: () => [PersonMovieDto] })
   @Type(() => PersonMovieDto)
-  data: PersonMovieDto[];
+  data!: PersonMovieDto[];
 
   constructor(partial: Partial<ListInfinitePersonMoviesDto>) {
     super(partial);
@@ -114,11 +114,11 @@ export class ListInfinitePersonMoviesQueryDto extends IntersectionType(
 export class PersonMovieFacetDepartmentDto {
   @ApiProperty({ example: 'Directing', description: 'Name of the department' })
   @Expose()
-  department: string;
+  department!: string;
 
   @ApiProperty({ example: ['Director', 'Producer'], description: 'Available jobs in this department for this person' })
   @Expose()
-  jobs: string[];
+  jobs!: string[];
 }
 
 @ApiSchema({ name: 'PersonMovieFacets' })
@@ -130,5 +130,5 @@ export class PersonMovieFacetsDto {
   @Expose()
   @ValidateNested({ each: true })
   @Type(() => PersonMovieFacetDepartmentDto)
-  departments: PersonMovieFacetDepartmentDto[];
+  departments!: PersonMovieFacetDepartmentDto[];
 }

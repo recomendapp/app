@@ -60,7 +60,7 @@ export class MovieImagesService {
       const baseWhereClause = this.getListBaseQuery(movieId, type);
 
       const [rows, [{ count: totalCount }]] = await Promise.all([
-        tx.select()
+        tx.select(({ movie_image: tmdbMovieImage }))
           .from(tmdbMovieImage)
           .innerJoin(sql`LATERAL i18n.language() language(requested_language, fallback_language, default_language)`, sql`true`)
           .where(baseWhereClause)
@@ -113,7 +113,7 @@ export class MovieImagesService {
 
       const fetchLimit = per_page + 1;
 
-      const results = await tx.select()
+      const results = await tx.select(({ movie_image: tmdbMovieImage }))
         .from(tmdbMovieImage)
         .innerJoin(sql`LATERAL i18n.language() language(requested_language, fallback_language, default_language)`, sql`true`)
         .where(finalWhereClause)
@@ -133,7 +133,7 @@ export class MovieImagesService {
       }
 
       return plainToInstance(ListInfiniteMovieImagesDto, {
-        data: paginatedResults.map(row => row.movie_image), // 🔥 Mapping propre
+        data: paginatedResults.map(row => row.movie_image),
         meta: {
           next_cursor: nextCursor,
           per_page,

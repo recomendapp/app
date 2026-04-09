@@ -22,16 +22,16 @@ export class ReviewTvSeriesDto {
 	@ApiProperty({ example: 42 })
 	@Expose()
 	@IsInt()
-	id: number;
+	id!: number;
 
 	@ApiProperty({ example: 550 })
 	@Expose()
 	@IsInt()
-	tvSeriesId: number;
+	tvSeriesId!: number;
 
 	@ApiProperty({ example: 'user-uuid-123' })
 	@Expose()
-	userId: string;
+	userId!: string;
 
 	@ApiProperty({ 
         description: 'The title of the review', 
@@ -47,7 +47,7 @@ export class ReviewTvSeriesDto {
 	@Matches(REVIEW_RULES.TITLE.REGEX, {
 		message: 'Invalid title format'
 	})
-    title: string | null;
+    title!: string | null;
 
 	@ApiProperty({ 
         description: 'The content of the review wrapped in <html> tags', 
@@ -57,39 +57,39 @@ export class ReviewTvSeriesDto {
     @Expose()
     @IsString()
     @Length(REVIEW_RULES.BODY.MIN, REVIEW_RULES.BODY.MAX)
-    body: string;
+    body!: string;
 
 	@ApiProperty({ description: 'Whether the review contain spoils' })
 	@Expose()
 	@IsBoolean()
-	isSpoiler: boolean;
+	isSpoiler!: boolean;
 
 	// Dates
 	@ApiProperty()
 	@Expose()
 	@IsDateString()
-	createdAt: string;
+	createdAt!: string;
 
 	@ApiProperty()
 	@Expose()
 	@IsDateString()
-	updatedAt: string;
+	updatedAt!: string;
 
 	// Counts
 	@ApiProperty({ description: 'The number of likes' })
 	@Expose()
 	@IsInt()
-	likesCount: number;
+	likesCount!: number;
 	
 	@ApiProperty({ description: 'The number of views' })
 	@Expose()
 	@IsInt()
-	viewsCount: number;
+	viewsCount!: number;
 
 	@ApiProperty({ description: 'The number of comments' })
 	@Expose()
 	@IsInt()
-	commentsCount: number;
+	commentsCount!: number;
 }
 
 @ApiSchema({ name: 'ReviewTvSeriesWithAuthor' })
@@ -98,13 +98,13 @@ export class ReviewTvSeriesWithAuthorDto extends ReviewTvSeriesDto {
 	@Expose()
 	@IsNumber()
 	@IsNullable()
-	rating: number | null;
+	rating!: number | null;
 
 	@ApiProperty({ type: () => UserSummaryDto, description: 'The author of the review' })
 	@Expose()
 	@ValidateNested()
 	@Type(() => UserSummaryDto)
-	author: UserSummaryDto;
+	author!: UserSummaryDto;
 }
 
 @ApiSchema({ name: 'ReviewTvSeriesWithAuthorTvSeries' })
@@ -113,7 +113,7 @@ export class ReviewTvSeriesWithAuthorTvSeriesDto extends ReviewTvSeriesWithAutho
 	@Expose()
 	@ValidateNested()
 	@Type(() => TvSeriesCompactDto)
-	tvSeries: TvSeriesCompactDto;
+	tvSeries!: TvSeriesCompactDto;
 }
 
 @ApiSchema({ name: 'ReviewTvSeriesInput' })
@@ -127,7 +127,7 @@ export class ReviewTvSeriesInputDto extends PickType(ReviewTvSeriesDto, [
 export class ListPaginatedReviewsTvSeriesDto extends PaginatedResponseDto<ReviewTvSeriesWithAuthorDto> {
 	@ApiProperty({ type: () => [ReviewTvSeriesWithAuthorDto] })
 	@Type(() => ReviewTvSeriesWithAuthorDto)
-	data: ReviewTvSeriesWithAuthorDto[];
+	data!: ReviewTvSeriesWithAuthorDto[];
 
 	constructor(partial: Partial<ListPaginatedReviewsTvSeriesDto>) {
 		super(partial);
@@ -139,7 +139,7 @@ export class ListPaginatedReviewsTvSeriesDto extends PaginatedResponseDto<Review
 export class ListInfiniteReviewsTvSeriesDto extends CursorPaginatedResponseDto<ReviewTvSeriesWithAuthorDto> {
   @ApiProperty({ type: () => [ReviewTvSeriesWithAuthorDto] })
   @Type(() => ReviewTvSeriesWithAuthorDto)
-  data: ReviewTvSeriesWithAuthorDto[];
+  data!: ReviewTvSeriesWithAuthorDto[];
 
   constructor(partial: Partial<ListInfiniteReviewsTvSeriesDto>) {
 	super(partial);

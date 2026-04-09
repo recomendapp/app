@@ -46,51 +46,51 @@ export class LogMovieDto {
   @ApiProperty({ example: 42 })
   @Expose()
   @IsInt()
-  id: number;
+  id!: number;
 
   @ApiProperty({ example: 550 })
   @Expose()
   @IsInt()
-  movieId: number;
+  movieId!: number;
 
   @ApiProperty({ example: 'user-uuid-123' })
   @Expose()
-  userId: string;
+  userId!: string;
 
   @ApiProperty({ example: 8.5, nullable: true })
   @Expose()
   @IsNumber()
-  rating: number | null;
+  rating!: number | null;
 
   @ApiProperty({ example: true })
   @Expose()
   @IsBoolean()
-  isLiked: boolean;
+  isLiked!: boolean;
 
   @ApiProperty({ example: 1, description: 'Total number of times watched' })
   @Expose()
   @IsInt()
-  watchCount: number;
+  watchCount!: number;
 
   @ApiProperty({ example: '2024-01-15T14:30:00Z' })
   @Expose()
   @IsDateString()
-  firstWatchedAt: string;
+  firstWatchedAt!: string;
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
   @IsDateString()
-  lastWatchedAt: string;
+  lastWatchedAt!: string;
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
   @IsDateString()
-  createdAt: string;
+  createdAt!: string;
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
   @IsDateString()
-  updatedAt: string;
+  updatedAt!: string;
 
   @ApiProperty({
     type: () => ReviewMovieDto,
@@ -100,7 +100,7 @@ export class LogMovieDto {
   @IsNullable()
   @ValidateNested({ each: true })
   @Type(() => ReviewMovieDto)
-  review: ReviewMovieDto | null;
+  review!: ReviewMovieDto | null;
 
   constructor(data: LogMovieDto) {
     Object.assign(this, data);
@@ -111,12 +111,12 @@ export class LogMovieDto {
 export class LogMovieWithMovieNoReviewDto extends OmitType(LogMovieDto, ['review']) {
   @ApiProperty({ example: false })
   @Expose()
-  isReviewed: boolean;
+  isReviewed!: boolean;
 
   @ApiProperty({ description: 'The movie details' })
   @Type(() => MovieCompactDto)
   @Expose()
-  movie: MovieCompactDto;
+  movie!: MovieCompactDto;
 }
 
 @ApiSchema({ name: 'LogMovieWithMovie' })
@@ -124,7 +124,7 @@ export class LogMovieWithMovieDto extends LogMovieDto {
   @ApiProperty({ description: 'The movie details' })
   @Type(() => MovieCompactDto)
   @Expose()
-  movie: MovieCompactDto;
+  movie!: MovieCompactDto;
 }
 
 export enum LogMovieSortBy {

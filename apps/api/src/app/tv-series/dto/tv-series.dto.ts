@@ -29,7 +29,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsInt()
-  id: number;
+  id!: number;
 
   @ApiProperty({
     description: 'The name of the TV series',
@@ -39,7 +39,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsString()
-  name: string | null;
+  name!: string | null;
 
   @ApiProperty({
     description: 'Poster path of the TV series',
@@ -49,7 +49,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsString()
-  posterPath: string | null;
+  posterPath!: string | null;
 
   @ApiProperty({
     description: 'Backdrop path of the TV series',
@@ -59,7 +59,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsString()
-  backdropPath: string | null;
+  backdropPath!: string | null;
 
   @ApiProperty({
     type: () => PersonCompactDto,
@@ -71,7 +71,7 @@ export class TvSeriesDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => PersonCompactDto)
-  createdBy: PersonCompactDto[] | null;
+  createdBy!: PersonCompactDto[] | null;
 
   @ApiProperty({
     type: () => GenreDto,
@@ -83,7 +83,7 @@ export class TvSeriesDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => GenreDto)
-  genres: GenreDto[] | null;
+  genres!: GenreDto[] | null;
 
   @ApiProperty({
     type: () => TvSeriesTrailerDto,
@@ -95,7 +95,7 @@ export class TvSeriesDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => TvSeriesTrailerDto)
-  trailers: TvSeriesTrailerDto[] | null;
+  trailers!: TvSeriesTrailerDto[] | null;
 
   @ApiProperty({
     description: 'First air date of the TV series',
@@ -105,7 +105,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsDateString()
-  firstAirDate: string | null;
+  firstAirDate!: string | null;
 
   @ApiProperty({
     description: 'Last air date of the TV series',
@@ -115,7 +115,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsDateString()
-  lastAirDate: string | null;
+  lastAirDate!: string | null;
 
   @ApiProperty({
     description: 'Overview of the TV series',
@@ -126,7 +126,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsString()
-  overview: string | null;
+  overview!: string | null;
 
   @ApiProperty({
     description: 'Total number of episodes',
@@ -136,7 +136,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsInt()
-  numberOfEpisodes: number | null;
+  numberOfEpisodes!: number | null;
 
   @ApiProperty({
     description: 'Total number of seasons',
@@ -146,7 +146,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsInt()
-  numberOfSeasons: number | null;
+  numberOfSeasons!: number | null;
 
   @ApiProperty({
     description: 'Indicates if the TV series is still in production',
@@ -156,7 +156,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsBoolean()
-  inProduction: boolean | null;
+  inProduction!: boolean | null;
 
   @ApiProperty({
     description: 'Original language of the TV series',
@@ -166,7 +166,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsString()
-  originalLanguage: string | null;
+  originalLanguage!: string | null;
 
   @ApiProperty({
     description: 'Original name of the TV series',
@@ -176,7 +176,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsString()
-  originalName: string | null;
+  originalName!: string | null;
 
   @ApiProperty({
     description: 'Status of the TV series',
@@ -186,7 +186,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsString()
-  status: string | null;
+  status!: string | null;
 
   @ApiProperty({
     description: 'Type of the TV series (e.g., Scripted, Miniseries)',
@@ -196,7 +196,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsString()
-  type: string | null;
+  type!: string | null;
 
   @ApiProperty({
     description: 'Popularity score of the TV series',
@@ -206,7 +206,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsNumber()
-  popularity: number;
+  popularity!: number;
 
   @ApiProperty({
     description: 'Vote average of the TV series',
@@ -216,7 +216,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsNumber()
-  voteAverage: number;
+  voteAverage!: number;
 
   @ApiProperty({
     description: 'Vote count of the TV series',
@@ -226,7 +226,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsInt()
-  voteCount: number;
+  voteCount!: number;
 
   @ApiProperty({
     description: 'Slug of the TV series',
@@ -236,7 +236,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsString()
-  slug: string | null;
+  slug!: string | null;
 
   @ApiProperty({
     description: 'URL to the TV series page',
@@ -246,7 +246,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsUrl()
-  url: string | null;
+  url!: string | null;
 
   @ApiProperty({
     description: 'Followers average rating of the TV series',
@@ -256,7 +256,7 @@ export class TvSeriesDto {
   })
   @Expose()
   @IsNumber()
-  followerAvgRating: number | null;
+  followerAvgRating!: number | null;
 }
 
 @ApiSchema({ name: 'TvSeriesCompact' })
@@ -308,7 +308,7 @@ export class TvSeriesMinimalDto extends PickType(TvSeriesDto, [
 export class ListPaginatedTvSeriesDto extends PaginatedResponseDto<TvSeriesCompactDto> {
   @ApiProperty({ type: () => [TvSeriesCompactDto] })
   @Type(() => TvSeriesCompactDto)
-  data: TvSeriesCompactDto[];
+  data!: TvSeriesCompactDto[];
 
   constructor(partial: Partial<ListPaginatedTvSeriesDto>) {
     super(partial);
@@ -320,7 +320,7 @@ export class ListPaginatedTvSeriesDto extends PaginatedResponseDto<TvSeriesCompa
 export class ListInfiniteTvSeriesDto extends CursorPaginatedResponseDto<TvSeriesCompactDto> {
   @ApiProperty({ type: () => [TvSeriesCompactDto] })
   @Type(() => TvSeriesCompactDto)
-  data: TvSeriesCompactDto[];
+  data!: TvSeriesCompactDto[];
 
   constructor(partial: Partial<ListInfiniteTvSeriesDto>) {
     super(partial);
@@ -333,51 +333,51 @@ export class TvSeriesTrailerDto {
   @ApiProperty({ example: '5c9294240e0a267cd516835f' })
   @Expose()
   @IsString()
-  id: string;
+  id!: string;
 
   @ApiProperty({ example: 'Official Trailer' })
   @Expose()
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiProperty({ example: 'zSWdZVtXT7E', description: 'YouTube video key' })
   @Expose()
   @IsString()
-  key: string;
+  key!: string;
 
   @ApiProperty({ example: 'YouTube' })
   @Expose()
   @IsString()
-  site: string;
+  site!: string;
 
   @ApiProperty({ example: 1080, description: 'Resolution (e.g., 1080, 720)' })
   @Expose()
   @IsInt()
-  size: number;
+  size!: number;
 
   @ApiProperty({ example: 'Trailer' })
   @Expose()
   @IsString()
-  type: string;
+  type!: string;
 
   @ApiProperty({ example: true })
   @Expose()
   @IsBoolean()
-  official: boolean;
+  official!: boolean;
 
   @ApiProperty({ example: '2014-10-01T17:55:04Z' })
   @Expose()
   @IsDateString()
-  publishedAt: string;
+  publishedAt!: string;
 
   @ApiProperty({ example: 'en', nullable: true })
   @Expose()
   @IsString()
-  iso6391: string | null;
+  iso6391!: string | null;
 
   @ApiProperty({ example: 'US', nullable: true })
   @Expose()
   @IsString()
-  iso31661: string | null;
+  iso31661!: string | null;
 }
 

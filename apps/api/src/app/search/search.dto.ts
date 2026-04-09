@@ -12,7 +12,7 @@ import { PlaylistWithOwnerDto } from '../playlists/dto/playlists.dto';
 export class SearchQueryDto {
   @ApiProperty({ description: 'Search query string', example: 'nolan' })
   @IsString()
-  q: string;
+  q!: string;
 
   @ApiPropertyOptional({ description: 'Results per category', example: 5, default: 5 })
   @IsOptional()
@@ -26,56 +26,56 @@ export class SearchQueryDto {
 export class BestResultMovie {
   @ApiProperty({ enum: ['movie'] })
   @Expose()
-  type: 'movie';
+  type!: 'movie';
 
   @ApiProperty({ type: () => MovieCompactDto })
   @Expose()
   @Type(() => MovieCompactDto)
-  data: MovieCompactDto;
+  data!: MovieCompactDto;
 }
 
 export class BestResultTvSeries {
   @ApiProperty({ enum: ['tv_series'] })
   @Expose()
-  type: 'tv_series';
+  type!: 'tv_series';
 
   @ApiProperty({ type: () => TvSeriesCompactDto })
   @Expose()
   @Type(() => TvSeriesCompactDto)
-  data: TvSeriesCompactDto;
+  data!: TvSeriesCompactDto;
 }
 
 export class BestResultPerson {
   @ApiProperty({ enum: ['person'] })
   @Expose()
-  type: 'person';
+  type!: 'person';
 
   @ApiProperty({ type: () => PersonCompactDto })
   @Expose()
   @Type(() => PersonCompactDto)
-  data: PersonCompactDto;
+  data!: PersonCompactDto;
 }
 
 export class BestResultUser {
   @ApiProperty({ enum: ['user'] })
   @Expose()
-  type: 'user';
+  type!: 'user';
 
   @ApiProperty({ type: () => UserSummaryDto })
   @Expose()
   @Type(() => UserSummaryDto)
-  data: UserSummaryDto;
+  data!: UserSummaryDto;
 }
 
 export class BestResultPlaylist {
   @ApiProperty({ enum: ['playlist'] })
   @Expose()
-  type: 'playlist';
+  type!: 'playlist';
 
   @ApiProperty({ type: () => PlaylistWithOwnerDto })
   @Expose()
   @Type(() => PlaylistWithOwnerDto)
-  data: PlaylistWithOwnerDto;
+  data!: PlaylistWithOwnerDto;
 }
 
 export type BestResultUnion =
@@ -122,30 +122,30 @@ export class SearchResponseDto {
       ],
     },
   })
-  best_result: BestResultUnion | null;
+  best_result!: BestResultUnion | null;
 
   @ApiProperty({ type: () => [MovieCompactDto] })
   @Expose()
   @Type(() => MovieCompactDto)
-  movies: MovieCompactDto[];
+  movies!: MovieCompactDto[];
 
   @ApiProperty({ type: () => [TvSeriesCompactDto] })
   @Expose()
   @Type(() => TvSeriesCompactDto)
-  tv_series: TvSeriesCompactDto[];
+  tv_series!: TvSeriesCompactDto[];
 
   @ApiProperty({ type: () => [PersonCompactDto] })
   @Expose()
   @Type(() => PersonCompactDto)
-  persons: PersonCompactDto[];
+  persons!: PersonCompactDto[];
 
   @ApiProperty({ type: () => [UserSummaryDto] })
   @Expose()
   @Type(() => UserSummaryDto)
-  users: UserSummaryDto[];
+  users!: UserSummaryDto[];
 
   @ApiProperty({ type: () => [PlaylistWithOwnerDto] })
   @Expose()
   @Type(() => PlaylistWithOwnerDto)
-  playlists: PlaylistWithOwnerDto[];
+  playlists!: PlaylistWithOwnerDto[];
 }

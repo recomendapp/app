@@ -19,7 +19,7 @@ export class FollowRequestDto extends PickType(FollowDto, ['createdAt'] as const
 	@Expose()
 	@ValidateNested()
 	@Type(() => UserSummaryDto)
-	user: UserSummaryDto;
+	user!: UserSummaryDto;
 }
 
 export class BaseListFollowRequestsQueryDto {
@@ -60,7 +60,7 @@ export class ListInfiniteFollowRequestsQueryDto extends IntersectionType(
 export class ListPaginatedFollowRequestsDto extends PaginatedResponseDto<FollowRequestDto> {
 	@ApiProperty({ type: () => [FollowRequestDto] })
 	@Type(() => FollowRequestDto)
-	data: FollowRequestDto[];
+	data!: FollowRequestDto[];
 
 	constructor(partial: Partial<ListPaginatedFollowRequestsDto>) {
 		super(partial);
@@ -72,7 +72,7 @@ export class ListPaginatedFollowRequestsDto extends PaginatedResponseDto<FollowR
 export class ListInfiniteFollowRequestsDto extends CursorPaginatedResponseDto<FollowRequestDto> {
   @ApiProperty({ type: () => [FollowRequestDto] })
   @Type(() => FollowRequestDto)
-  data: FollowRequestDto[];
+  data!: FollowRequestDto[];
 
   constructor(partial: Partial<ListInfiniteFollowRequestsDto>) {
 	super(partial);

@@ -15,41 +15,41 @@ export class TvSeriesImageDto {
   @ApiProperty({ example: 12345 })
   @Expose()
   @IsInt()
-  id: number;
+  id!: number;
 
   @ApiProperty({ example: '/path/to/image.jpg' })
   @Expose()
   @IsString()
-  filePath: string;
+  filePath!: string;
 
   @ApiProperty({ enum: TvSeriesImageType, example: TvSeriesImageType.POSTER })
   @Expose()
   @IsEnum(TvSeriesImageType)
-  type: string;
+  type!: string;
 
   @ApiProperty({ example: 1.778 })
   @Expose()
-  aspectRatio: number;
+  aspectRatio!: number;
 
   @ApiProperty({ example: 1080 })
   @Expose()
-  height: number;
+  height!: number;
 
   @ApiProperty({ example: 1920 })
   @Expose()
-  width: number;
+  width!: number;
 
   @ApiProperty({ example: 8.5 })
   @Expose()
-  voteAverage: number;
+  voteAverage!: number;
 
   @ApiProperty({ example: 120 })
   @Expose()
-  voteCount: number;
+  voteCount!: number;
 
   @ApiProperty({ example: 'en', nullable: true })
   @Expose()
-  iso6391: string | null;
+  iso6391!: string | null;
 }
 
 export class BaseTvSeriesImagesQueryDto {
@@ -75,7 +75,7 @@ export class ListInfiniteTvSeriesImagesQueryDto extends IntersectionType(
 export class ListPaginatedTvSeriesImagesDto extends PaginatedResponseDto<TvSeriesImageDto> {
   @ApiProperty({ type: () => [TvSeriesImageDto] })
   @Type(() => TvSeriesImageDto)
-  data: TvSeriesImageDto[];
+  data!: TvSeriesImageDto[];
 
   constructor(partial: Partial<ListPaginatedTvSeriesImagesDto>) {
     super(partial);
@@ -87,7 +87,7 @@ export class ListPaginatedTvSeriesImagesDto extends PaginatedResponseDto<TvSerie
 export class ListInfiniteTvSeriesImagesDto extends CursorPaginatedResponseDto<TvSeriesImageDto> {
   @ApiProperty({ type: () => [TvSeriesImageDto] })
   @Type(() => TvSeriesImageDto)
-  data: TvSeriesImageDto[];
+  data!: TvSeriesImageDto[];
 
   constructor(partial: Partial<ListInfiniteTvSeriesImagesDto>) {
     super(partial);

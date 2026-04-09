@@ -6,7 +6,7 @@ import { IsInt } from "class-validator";
 export class PersonFollowDto {
 	@ApiProperty({ example: "ciud123", description: 'The unique ID of the user who is following' })
 	@Expose()
-	userId: string;
+	userId!: string;
 
 	@ApiProperty({
 		description: "The person's unique identifier",
@@ -16,12 +16,12 @@ export class PersonFollowDto {
 	})
 	@Expose()
 	@IsInt()
-	personId: number;
+	personId!: number;
 
 	// Dates
 	@ApiProperty()
     @Expose()
     @Type(() => Date)
-    createdAt: Date;
+    createdAt!: Date;
 }
 

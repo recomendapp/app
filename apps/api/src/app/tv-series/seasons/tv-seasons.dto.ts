@@ -9,7 +9,6 @@ import {
 } from 'class-validator';
 import { TvSeriesMinimalDto } from '../dto/tv-series.dto';
 
-
 @ApiSchema({ name: 'TvSeason' })
 export class TvSeasonDto {
   @ApiProperty({
@@ -18,7 +17,7 @@ export class TvSeasonDto {
   })
   @Expose()
   @IsInt()
-  id: number;
+  id!: number;
 
   @ApiProperty({
     description: 'The TV series ID this season belongs to',
@@ -26,7 +25,7 @@ export class TvSeasonDto {
   })
   @Expose()
   @IsInt()
-  tvSeriesId: number;
+  tvSeriesId!: number;
 
   @ApiProperty({
     description: 'The season number',
@@ -34,7 +33,7 @@ export class TvSeasonDto {
   })
   @Expose()
   @IsInt()
-  seasonNumber: number;
+  seasonNumber!: number;
 
   @ApiProperty({
     description: 'The name of the TV series',
@@ -44,7 +43,7 @@ export class TvSeasonDto {
   })
   @Expose()
   @IsString()
-  name: string | null;
+  name!: string | null;
 
   @ApiProperty({
     description: 'Overview of the TV season',
@@ -55,7 +54,7 @@ export class TvSeasonDto {
   })
   @Expose()
   @IsString()
-  overview: string | null;
+  overview!: string | null;
 
 
   @ApiProperty({
@@ -66,7 +65,7 @@ export class TvSeasonDto {
   })
   @Expose()
   @IsString()
-  posterPath: string | null;
+  posterPath!: string | null;
 
   @ApiProperty({
     description: 'The number of episodes in the TV season',
@@ -76,7 +75,7 @@ export class TvSeasonDto {
   })
   @Expose()
   @IsInt()
-  episodeCount: number;
+  episodeCount!: number;
 
   @ApiProperty({
     description: 'Vote average of the TV season',
@@ -86,7 +85,7 @@ export class TvSeasonDto {
   })
   @Expose()
   @IsNumber()
-  voteAverage: number;
+  voteAverage!: number;
 
   @ApiProperty({
     description: 'Vote count of the TV season',
@@ -96,7 +95,7 @@ export class TvSeasonDto {
   })
   @Expose()
   @IsInt()
-  voteCount: number;
+  voteCount!: number;
 
   @ApiProperty({
     description: 'URL to the TV season page',
@@ -106,7 +105,7 @@ export class TvSeasonDto {
   })
   @Expose()
   @IsUrl()
-  url: string | null;
+  url!: string | null;
 }
 
 @ApiSchema({ name: 'TvSeasonCompact' })
@@ -127,5 +126,5 @@ export class TvSeasonGetDTO extends TvSeasonDto {
     @Expose()
     @ValidateNested({ each: true })
     @Type(() => TvSeriesMinimalDto)
-    tvSeries: TvSeriesMinimalDto;
+    tvSeries!: TvSeriesMinimalDto;
 }

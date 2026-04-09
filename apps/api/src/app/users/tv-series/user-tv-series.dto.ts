@@ -13,13 +13,13 @@ export class UserTvSeriesWithUserTvSeriesDto extends LogTvSeriesDto {
   @Expose()
   @ValidateNested()
   @Type(() => UserSummaryDto)
-  user: UserSummaryDto;
+  user!: UserSummaryDto;
 
   @ApiProperty({ type: () => TvSeriesCompactDto, description: 'The tv series object' })
   @Expose()
   @ValidateNested()
   @Type(() => TvSeriesCompactDto)
-  tvSeries: TvSeriesCompactDto;
+  tvSeries!: TvSeriesCompactDto;
 }
 
 
@@ -27,7 +27,7 @@ export class UserTvSeriesWithUserTvSeriesDto extends LogTvSeriesDto {
 export class ListPaginatedUserTvSeriesWithTvSeriesDto extends PaginatedResponseDto<LogTvSeriesWithTvSeriesNoReviewDto> {
   @ApiProperty({ type: () => [LogTvSeriesWithTvSeriesNoReviewDto] })
   @Type(() => LogTvSeriesWithTvSeriesNoReviewDto)
-  data: LogTvSeriesWithTvSeriesNoReviewDto[];
+  data!: LogTvSeriesWithTvSeriesNoReviewDto[];
 
   constructor(partial: Partial<ListPaginatedUserTvSeriesWithTvSeriesDto>) {
     super(partial);
@@ -39,7 +39,7 @@ export class ListPaginatedUserTvSeriesWithTvSeriesDto extends PaginatedResponseD
 export class ListInfiniteUserTvSeriesWithTvSeriesDto extends CursorPaginatedResponseDto<LogTvSeriesWithTvSeriesNoReviewDto> {
   @ApiProperty({ type: () => [LogTvSeriesWithTvSeriesNoReviewDto] })
   @Type(() => LogTvSeriesWithTvSeriesNoReviewDto)
-  data: LogTvSeriesWithTvSeriesNoReviewDto[];
+  data!: LogTvSeriesWithTvSeriesNoReviewDto[];
 
   constructor(partial: Partial<ListInfiniteUserTvSeriesWithTvSeriesDto>) {
     super(partial);

@@ -14,11 +14,11 @@ export enum RecoTargetSortBy {
 export class RecoTargetDto extends UserSummaryDto {
   @ApiProperty({ description: 'True if the user has already seen this media' })
   @Expose()
-  alreadySeen: boolean;
+  alreadySeen!: boolean;
 
   @ApiProperty({ description: 'True if you have already sent an active reco to this user for this media' })
   @Expose()
-  alreadySent: boolean;
+  alreadySent!: boolean;
 }
 
 export class BaseListRecoTargetsQueryDto {
@@ -67,7 +67,7 @@ export class ListInfiniteRecoTargetsQueryDto extends IntersectionType(
 export class ListPaginatedRecoTargetsDto extends PaginatedResponseDto<RecoTargetDto> {
   @ApiProperty({ type: () => [RecoTargetDto] })
   @Type(() => RecoTargetDto)
-  data: RecoTargetDto[];
+  data!: RecoTargetDto[];
 
   constructor(partial: Partial<ListPaginatedRecoTargetsDto>) {
     super(partial);
@@ -79,7 +79,7 @@ export class ListPaginatedRecoTargetsDto extends PaginatedResponseDto<RecoTarget
 export class ListInfiniteRecoTargetsDto extends CursorPaginatedResponseDto<RecoTargetDto> {
   @ApiProperty({ type: () => [RecoTargetDto] })
   @Type(() => RecoTargetDto)
-  data: RecoTargetDto[];
+  data!: RecoTargetDto[];
 
   constructor(partial: Partial<ListInfiniteRecoTargetsDto>) {
     super(partial);

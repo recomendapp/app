@@ -231,7 +231,7 @@ export class MovieWatchedDatesService {
 
     const totalCount = Number(totalCountResult[0]?.count || 0);
 
-    return {
+    return plainToInstance(ListPaginatedWatchedDatesDto, {
       data: dates,
       meta: {
         total_results: totalCount,
@@ -239,7 +239,7 @@ export class MovieWatchedDatesService {
         current_page: page,
         per_page,
       },
-    };
+    });
   }
 
   async listInfinite(
@@ -266,7 +266,7 @@ export class MovieWatchedDatesService {
       switch (sort_by) {
         case WatchedDateSortBy.WATCHED_DATE:
         default: {
-          const watchedDate = new Date(cursorData.value);
+          const watchedDate = cursorData.value as string;
           cursorWhereClause = or(
             operator(logMovieWatchedDate.watchedDate, watchedDate),
             and(
@@ -310,7 +310,7 @@ export class MovieWatchedDatesService {
       switch (sort_by) {
         case WatchedDateSortBy.WATCHED_DATE:
         default:
-          cursorValue = lastItem.watchedDate.toISOString();
+          cursorValue = lastItem.watchedDate;
           break;
       }
 
@@ -322,12 +322,12 @@ export class MovieWatchedDatesService {
       }
     }
 
-    return {
+    return plainToInstance(ListInfiniteWatchedDatesDto, {
       data: paginatedResults,
       meta: {
         next_cursor: nextCursor,
         per_page,
       },
-    };
+    });
   }
 }

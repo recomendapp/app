@@ -20,7 +20,7 @@ export class MovieFollowingLogsQueryDto {
 export class MovieFollowingLogDto extends LogMovieDto {
   @ApiProperty({ type: () => UserSummaryDto })
   @Type(() => UserSummaryDto)
-  user: UserSummaryDto;
+  user!: UserSummaryDto;
 }
 
 @ApiSchema({ name: 'MovieFollowingAverageRating' })
@@ -31,5 +31,5 @@ export class MovieFollowingAverageRatingDto {
     type: Number,
     nullable: true,
   })
-  averageRating: number | null;
+  averageRating!: number | null;
 }

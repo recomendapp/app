@@ -22,11 +22,11 @@ export enum PlaylistSortBy {
 export class PlaylistDto {
 	@ApiProperty({ example: "123456", description: 'The unique ID of the Playlist' })
 	@Expose()
-	id: number;
+	id!: number;
 
 	@ApiProperty({ example: "user-uuid-123", description: 'The ID of the owner' })
     @Expose()
-    userId: string;
+    userId!: string;
 
 	@ApiProperty({
 		example: "Where cats shine",
@@ -40,7 +40,7 @@ export class PlaylistDto {
 	@Matches(PLAYLIST_RULES.TITLE.REGEX, {
 		message: 'Invalid title format'
 	})
-	title: string;
+	title!: string;
 
 	@ApiProperty({
         example: "A collection of chill songs.",
@@ -55,7 +55,7 @@ export class PlaylistDto {
     @Matches(PLAYLIST_RULES.DESCRIPTION.REGEX, {
         message: 'Description cannot be empty or contain excessive line breaks'
     })
-    description: string | null;
+    description!: string | null;
 
 	@ApiProperty({
         description: 'Who can see this playlist',
@@ -67,7 +67,7 @@ export class PlaylistDto {
     @IsIn(playlistVisibilityEnum.enumValues, {
         message: `Visibility must be one of: ${playlistVisibilityEnum.enumValues.join(', ')}`
     })
-    visibility: typeof playlistVisibilityEnum.enumValues[number];
+    visibility!: typeof playlistVisibilityEnum.enumValues[number];
 
 	@ApiProperty({ 
         example: "https://example.com/poster.jpg", 
@@ -77,31 +77,31 @@ export class PlaylistDto {
     @Expose()
     @Transform(({ value }) => getMediaUrl(value, StorageFolders.PLAYLIST_POSTERS))
     @IsUrl()
-    poster: string | null;
+    poster!: string | null;
 
 	// Dates
 	@ApiProperty()
     @Expose()
     @IsDateString()
-    createdAt: string;
+    createdAt!: string;
 
     @ApiProperty()
     @Expose()
     @IsDateString()
-    updatedAt: string;
+    updatedAt!: string;
 
 	// Counts
 	@ApiProperty({ example: 42, description: 'Number of items in the playlist' })
 	@Expose()
-	itemsCount: number;
+	itemsCount!: number;
 
 	@ApiProperty({ example: 100, description: 'Number of times the playlist has been saved' })
 	@Expose()
-	savedCount: number;
+	savedCount!: number;
 	
 	@ApiProperty({ example: 250, description: 'Number of likes the playlist has received' })
 	@Expose()
-	likesCount: number;
+	likesCount!: number;
 
     @ApiProperty({ 
         description: 'The role of the current user for this playlist', 
@@ -112,7 +112,7 @@ export class PlaylistDto {
     @Expose()
     @IsString()
     @IsNullable()
-    role: typeof playlistMemberRoleEnum.enumValues[number] | 'owner' | null;
+    role!: typeof playlistMemberRoleEnum.enumValues[number] | 'owner' | null;
 }
 
 @ApiSchema({ name: 'PlaylistWithOwner' })
@@ -121,7 +121,7 @@ export class PlaylistWithOwnerDto extends PlaylistDto {
     @Expose()
     @ValidateNested()
     @Type(() => UserSummaryDto)
-    owner: UserSummaryDto;
+    owner!: UserSummaryDto;
 }
 
 @ApiSchema({ name: 'BaseListPlaylistsQuery' })
@@ -169,7 +169,7 @@ export class PlaylistUpdateDto extends PartialType(PlaylistCreateDto) {}
 export class ListPaginatedPlaylistsDto extends PaginatedResponseDto<PlaylistDto> {
 	@ApiProperty({ type: () => [PlaylistDto] })
 	@Type(() => PlaylistDto)
-	data: PlaylistDto[];
+	data!: PlaylistDto[];
 
 	constructor(partial: Partial<ListPaginatedPlaylistsDto>) {
 		super(partial);
@@ -181,7 +181,7 @@ export class ListPaginatedPlaylistsDto extends PaginatedResponseDto<PlaylistDto>
 export class ListInfinitePlaylistsDto extends CursorPaginatedResponseDto<PlaylistDto> {
   @ApiProperty({ type: () => [PlaylistDto] })
   @Type(() => PlaylistDto)
-  data: PlaylistDto[];
+  data!: PlaylistDto[];
 
   constructor(partial: Partial<ListInfinitePlaylistsDto>) {
     super(partial);
@@ -193,7 +193,7 @@ export class ListInfinitePlaylistsDto extends CursorPaginatedResponseDto<Playlis
 export class ListPaginatedPlaylistsWithOwnerDto extends PaginatedResponseDto<PlaylistWithOwnerDto> {
 	@ApiProperty({ type: () => [PlaylistWithOwnerDto] })
 	@Type(() => PlaylistWithOwnerDto)
-	data: PlaylistWithOwnerDto[];
+	data!: PlaylistWithOwnerDto[];
 
 	constructor(partial: Partial<ListPaginatedPlaylistsWithOwnerDto>) {
 		super(partial);
@@ -205,7 +205,7 @@ export class ListPaginatedPlaylistsWithOwnerDto extends PaginatedResponseDto<Pla
 export class ListInfinitePlaylistsWithOwnerDto extends CursorPaginatedResponseDto<PlaylistWithOwnerDto> {
   @ApiProperty({ type: () => [PlaylistWithOwnerDto] })
   @Type(() => PlaylistWithOwnerDto)
-  data: PlaylistWithOwnerDto[];
+  data!: PlaylistWithOwnerDto[];
 
   constructor(partial: Partial<ListInfinitePlaylistsWithOwnerDto>) {
     super(partial);

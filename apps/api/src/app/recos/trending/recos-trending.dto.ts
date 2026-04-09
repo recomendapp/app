@@ -17,7 +17,7 @@ export class RecoTrendingDto {
   @ApiProperty({ example: 123456 })
   @Expose()
   @IsInt()
-  mediaId: number;
+  mediaId!: number;
 
   @ApiProperty({
     description: 'The type of the media',
@@ -25,12 +25,12 @@ export class RecoTrendingDto {
     example: 'movie',
   })
   @Expose()
-  type: typeof recoTypeEnum.enumValues[number];
+  type!: typeof recoTypeEnum.enumValues[number];
 
   @ApiProperty({ example: 42, description: 'Number of times this media was recommended' })
   @Expose()
   @IsInt()
-  recommendationCount: number;
+  recommendationCount!: number;
 
   constructor(data: RecoTrendingDto) {
     Object.assign(this, data);
@@ -41,26 +41,26 @@ export class RecoTrendingDto {
 export class RecoTrendingWithMovieDto extends RecoTrendingDto {
   @ApiProperty({ enum: ['movie'] as const })
   @Expose()
-  type: 'movie';
+  type!: 'movie';
 
   @ApiProperty({ type: () => MovieSummaryDto })
   @Expose()
   @ValidateNested()
   @Type(() => MovieSummaryDto)
-  media: MovieSummaryDto;
+  media!: MovieSummaryDto;
 }
 
 @ApiSchema({ name: 'RecoTrendingWithTvSeries' })
 export class RecoTrendingWithTvSeriesDto extends RecoTrendingDto {
   @ApiProperty({ enum: ['tv_series'] as const })
   @Expose()
-  type: 'tv_series';
+  type!: 'tv_series';
 
   @ApiProperty({ type: () => TvSeriesSummaryDto })
   @Expose()
   @ValidateNested()
   @Type(() => TvSeriesSummaryDto)
-  media: TvSeriesSummaryDto;
+  media!: TvSeriesSummaryDto;
 }
 
 export type RecoTrendingWithMediaUnion = RecoTrendingWithMovieDto | RecoTrendingWithTvSeriesDto;
@@ -131,7 +131,7 @@ export class ListPaginatedRecosTrendingDto extends PaginatedResponseDto<RecoTren
       ],
     },
   })
-  data: RecoTrendingWithMediaUnion[];
+  data!: RecoTrendingWithMediaUnion[];
 
   constructor(partial: Partial<ListPaginatedRecosTrendingDto>) {
     super(partial);
@@ -168,7 +168,7 @@ export class ListInfiniteRecosTrendingDto extends CursorPaginatedResponseDto<Rec
       ],
     },
   })
-  data: RecoTrendingWithMediaUnion[];
+  data!: RecoTrendingWithMediaUnion[];
 
   constructor(partial: Partial<ListInfiniteRecosTrendingDto>) {
     super(partial);

@@ -256,7 +256,7 @@ export class PersonMoviesService {
       if (!departmentsMap.has(credit.department)) {
         departmentsMap.set(credit.department, new Set());
       }
-      departmentsMap.get(credit.department).add(credit.job);
+      departmentsMap.get(credit.department)?.add(credit.job);
     }
 
     const departments = Array.from(departmentsMap.entries())

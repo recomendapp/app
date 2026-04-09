@@ -12,5 +12,5 @@ export class PlaylistsAddQueryDto extends PickType(PlaylistItemDto, ['comment'] 
   @IsArray()
   @ArrayMinSize(1)
   @IsInt({ each: true })
-  playlistIds: number[];
+  playlistIds!: number[];
 }

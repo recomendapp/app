@@ -11,7 +11,7 @@ export class BaseSearchPlaylistsQueryDto {
     nullable: false,
   })
   @IsString()
-  q: string;
+  q!: string;
 }
 
 @ApiSchema({ name: 'ListPaginatedSearchPlaylistsQuery' })

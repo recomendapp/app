@@ -17,29 +17,29 @@ export class PersonFeedDto {
   @ApiProperty({ description: 'The type of the media', example: 'movie' })
   @Expose()
   @IsString()
-  type: 'movie' | 'tv_series';
+  type!: 'movie' | 'tv_series';
 
   @ApiProperty({ example: 123456 })
   @Expose()
   @IsInt()
-  mediaId: number;
+  mediaId!: number;
 
   @ApiProperty({ example: '2024-01-30' })
   @Expose()
   @IsDateString()
-  date: string;
+  date!: string;
 
   @ApiProperty({ example: ['Director', 'Writer'] })
   @Expose()
   @IsArray()
   @IsString({ each: true })
-  jobs: string[];
+  jobs!: string[];
 
   @ApiProperty({ type: () => PersonCompactDto })
   @Expose()
   @ValidateNested()
   @Type(() => PersonCompactDto)
-  person: PersonCompactDto;
+  person!: PersonCompactDto;
 
   constructor(data: PersonFeedDto) {
     Object.assign(this, data);
@@ -51,26 +51,26 @@ export class PersonFeedDto {
 export class PersonFeedWithMovieDto extends PersonFeedDto {
   @ApiProperty({ enum: ['movie'] as const })
   @Expose()
-  type: 'movie';
+  type!: 'movie';
 
   @ApiProperty({ type: () => MovieSummaryDto })
   @Expose()
   @ValidateNested()
   @Type(() => MovieSummaryDto)
-  media: MovieSummaryDto;
+  media!: MovieSummaryDto;
 }
 
 @ApiSchema({ name: 'PersonFeedWithTvSeries' })
 export class PersonFeedWithTvSeriesDto extends PersonFeedDto {
   @ApiProperty({ enum: ['tv_series'] as const })
   @Expose()
-  type: 'tv_series';
+  type!: 'tv_series';
 
   @ApiProperty({ type: () => TvSeriesSummaryDto })
   @Expose()
   @ValidateNested()
   @Type(() => TvSeriesSummaryDto)
-  media: TvSeriesSummaryDto;
+  media!: TvSeriesSummaryDto;
 }
 
 export type PersonFeedUnion = PersonFeedWithMovieDto | PersonFeedWithTvSeriesDto;
@@ -157,7 +157,7 @@ export class ListPaginatedPersonFeedDto extends PaginatedResponseDto<PersonFeedU
       ],
     },
   })
-  data: PersonFeedUnion[];
+  data!: PersonFeedUnion[];
 
   constructor(partial: Partial<ListPaginatedPersonFeedDto>) {
     super(partial);
@@ -194,7 +194,7 @@ export class ListInfinitePersonFeedDto extends CursorPaginatedResponseDto<Person
       ],
     },
   })
-  data: PersonFeedUnion[];
+  data!: PersonFeedUnion[];
 
   constructor(partial: Partial<ListInfinitePersonFeedDto>) {
     super(partial);

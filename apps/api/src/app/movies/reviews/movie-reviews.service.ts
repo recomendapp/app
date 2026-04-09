@@ -130,7 +130,7 @@ export class MovieReviewsService {
       }
     })();
 
-    let isVisibleLogic: SQL;
+    let isVisibleLogic: SQL | undefined;
 
     if (!currentUser) {
       isVisibleLogic = eq(profile.isPrivate, false);

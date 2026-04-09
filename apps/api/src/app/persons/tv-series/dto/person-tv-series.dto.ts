@@ -10,11 +10,11 @@ import { TvSeriesCompactDto, TvSeriesSortBy } from '../../../tv-series/dto/tv-se
 export class PersonTvSeriesCreditDto {
   @ApiProperty({ example: 'Acting' })
   @Expose()
-  department: string;
+  department!: string;
 
   @ApiProperty({ example: 'Lead' })
   @Expose()
-  job: string;
+  job!: string;
 }
 
 @ApiSchema({ name: 'PersonTvSeries' })
@@ -23,7 +23,7 @@ export class PersonTvSeriesDto {
   @Expose()
   @ValidateNested()
   @Type(() => TvSeriesCompactDto)
-  tvSeries: TvSeriesCompactDto;
+  tvSeries!: TvSeriesCompactDto;
   
   @ApiProperty({
     type: [PersonTvSeriesCreditDto],
@@ -32,14 +32,14 @@ export class PersonTvSeriesDto {
   @Expose()
   @ValidateNested({ each: true })
   @Type(() => PersonTvSeriesCreditDto)
-  credits: PersonTvSeriesCreditDto[];
+  credits!: PersonTvSeriesCreditDto[];
 }
 
 @ApiSchema({ name: 'ListPaginatedPersonTvSeries'})
 export class ListPaginatedPersonTvSeriesDto extends PaginatedResponseDto<PersonTvSeriesDto> {
   @ApiProperty({ type: () => [PersonTvSeriesDto] })
   @Type(() => PersonTvSeriesDto)
-  data: PersonTvSeriesDto[];
+  data!: PersonTvSeriesDto[];
 
   constructor(partial: Partial<ListPaginatedPersonTvSeriesDto>) {
     super(partial);
@@ -51,7 +51,7 @@ export class ListPaginatedPersonTvSeriesDto extends PaginatedResponseDto<PersonT
 export class ListInfinitePersonTvSeriesDto extends CursorPaginatedResponseDto<PersonTvSeriesDto> {
   @ApiProperty({ type: () => [PersonTvSeriesDto] })
   @Type(() => PersonTvSeriesDto)
-  data: PersonTvSeriesDto[];
+  data!: PersonTvSeriesDto[];
 
   constructor(partial: Partial<ListInfinitePersonTvSeriesDto>) {
     super(partial);
@@ -114,11 +114,11 @@ export class ListInfinitePersonTvSeriesQueryDto extends IntersectionType(
 export class PersonTvSeriesFacetDepartmentDto {
   @ApiProperty({ example: 'Directing', description: 'Name of the department' })
   @Expose()
-  department: string;
+  department!: string;
 
   @ApiProperty({ example: ['Director', 'Producer'], description: 'Available jobs in this department for this person' })
   @Expose()
-  jobs: string[];
+  jobs!: string[];
 }
 
 @ApiSchema({ name: 'PersonTvSeriesFacets' })
@@ -130,5 +130,5 @@ export class PersonTvSeriesFacetsDto {
   @Expose()
   @ValidateNested({ each: true })
   @Type(() => PersonTvSeriesFacetDepartmentDto)
-  departments: PersonTvSeriesFacetDepartmentDto[];
+  departments!: PersonTvSeriesFacetDepartmentDto[];
 }

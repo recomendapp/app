@@ -8,17 +8,17 @@ export class PushTokenDto {
 	@ApiProperty({ example: 'token-abc123' })
 	@Expose()
 	@IsUUID()
-	id: string;
+	id!: string;
 
 	@ApiProperty({ example: 'user-uuid-123' })
 	@Expose()
 	@IsUUID()
-	userId: string;
+	userId!: string;
 
 	@ApiProperty({ example: 'session-uuid-456' })
 	@Expose()
 	@IsString()
-	sessionId: string;
+	sessionId!: string;
 
 	@ApiProperty({
 		enum: pushProviderEnum.enumValues,
@@ -29,13 +29,13 @@ export class PushTokenDto {
 	@IsIn(pushProviderEnum.enumValues, {
 		message: `Provider must be one of: ${pushProviderEnum.enumValues.join(', ')}`
 	})
-	provider: typeof pushProviderEnum.enumValues[number];
+	provider!: typeof pushProviderEnum.enumValues[number];
 
 	@ApiProperty({ description: "The push token string provided by the client" })
 	@Expose()
 	@IsString()
 	@IsNotEmpty()
-	token: string;
+	token!: string;
 
 	@ApiProperty({
 		enum: deviceTypeEnum.enumValues,
@@ -46,17 +46,17 @@ export class PushTokenDto {
 	@IsIn(deviceTypeEnum.enumValues, {
 		message: `Device type must be one of: ${deviceTypeEnum.enumValues.join(', ')}`
 	})
-	deviceType: typeof deviceTypeEnum.enumValues[number];
+	deviceType!: typeof deviceTypeEnum.enumValues[number];
 
 	@ApiProperty()
 	@Expose()
 	@IsDateString()
-	createdAt: string;
+	createdAt!: string;
 
 	@ApiProperty()
 	@Expose()
 	@IsDateString()
-	updatedAt: string;
+	updatedAt!: string;
 }
 
 @ApiSchema({ name: 'PushTokenSet' })

@@ -20,7 +20,7 @@ export class TvSeriesFollowingLogsQueryDto {
 export class TvSeriesFollowingLogDto extends LogTvSeriesDto {
   @ApiProperty({ type: () => UserSummaryDto })
   @Type(() => UserSummaryDto)
-  user: UserSummaryDto;
+  user!: UserSummaryDto;
 }
 
 @ApiSchema({ name: 'TvSeriesFollowingAverageRating' })
@@ -31,5 +31,5 @@ export class TvSeriesFollowingAverageRatingDto {
 	type: Number,
 	nullable: true,
   })
-  averageRating: number | null;
+  averageRating!: number | null;
 }

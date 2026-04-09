@@ -26,22 +26,22 @@ export class RecoDto {
   @ApiProperty({ example: 42 })
   @Expose()
   @IsInt()
-  id: number;
+  id!: number;
 
   @ApiProperty({ example: 'user-uuid-123' })
   @Expose()
-  userId: string;
+  userId!: string;
 
   @ApiProperty({ example: 'sender-uuid-456' })
   @Expose()
-  senderId: string;
+  senderId!: string;
 
   @ApiProperty({ example: 'You gona like it', nullable: true })
   @Expose()
   @IsOptional()
   @IsString()
   @MaxLength(180)
-  comment: string | null;
+  comment!: string | null;
 
   @ApiProperty({
       description: 'The status of the reco',
@@ -53,12 +53,12 @@ export class RecoDto {
   @IsIn(recoStatusEnum.enumValues, {
       message: `Status must be one of: ${recoStatusEnum.enumValues.join(', ')}`
   })
-  status: typeof recoStatusEnum.enumValues[number];
+  status!: typeof recoStatusEnum.enumValues[number];
 
   @ApiProperty({ example: 123456 })
   @Expose()
   @IsInt()
-  mediaId: number;
+  mediaId!: number;
 
   @ApiProperty({
       description: 'The type of the reco',
@@ -70,17 +70,17 @@ export class RecoDto {
   @IsIn(recoTypeEnum.enumValues, {
       message: `Type must be one of: ${recoTypeEnum.enumValues.join(', ')}`
   })
-  type: typeof recoTypeEnum.enumValues[number];
+  type!: typeof recoTypeEnum.enumValues[number];
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
   @IsDateString()
-  createdAt: string;
+  createdAt!: string;
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
   @IsDateString()
-  updatedAt: string;
+  updatedAt!: string;
 
   constructor(data: RecoDto) {
     Object.assign(this, data);
@@ -92,7 +92,7 @@ export class RecoSenderDto extends PickType(RecoDto, ['id', 'comment', 'createdA
   @ApiProperty({ type: () => UserSummaryDto })
   @Expose()
   @Type(() => UserSummaryDto)
-  user: UserSummaryDto;
+  user!: UserSummaryDto;
 }
 
 @ApiSchema({ name: 'RecoGrouped' })
@@ -101,11 +101,11 @@ export class RecoGroupedDto extends PickType(RecoDto, ['mediaId', 'type'] as con
   @ApiProperty({ type: () => [RecoSenderDto] })
   @Expose()
   @Type(() => RecoSenderDto)
-  senders: RecoSenderDto[];
+  senders!: RecoSenderDto[];
   
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
-  latestCreatedAt: string;
+  latestCreatedAt!: string;
 }
 
 /* ---------------------------------- Types --------------------------------- */
@@ -113,26 +113,26 @@ export class RecoGroupedDto extends PickType(RecoDto, ['mediaId', 'type'] as con
 export class RecoWithMovieDto extends RecoGroupedDto {
   @ApiProperty({ enum: ['movie'] as const })
   @Expose()
-  type: 'movie';
+  type!: 'movie';
 
   @ApiProperty({ type: () => MovieCompactDto })
   @Expose()
   @ValidateNested()
   @Type(() => MovieCompactDto)
-  media: MovieCompactDto;
+  media!: MovieCompactDto;
 }
 
 @ApiSchema({ name: 'RecoWithTvSeries' })
 export class RecoWithTvSeriesDto extends RecoGroupedDto {
   @ApiProperty({ enum: ['tv_series'] as const })
   @Expose()
-  type: 'tv_series';
+  type!: 'tv_series';
 
   @ApiProperty({ type: () => TvSeriesCompactDto })
   @Expose()
   @ValidateNested()
   @Type(() => TvSeriesCompactDto)
-  media: TvSeriesCompactDto;
+  media!: TvSeriesCompactDto;
 }
 
 export type RecoWithMediaUnion = RecoWithMovieDto | RecoWithTvSeriesDto;
@@ -143,16 +143,16 @@ export class RecoSendDto extends PartialType(PickType(RecoDto, ['comment'] as co
   @ApiProperty({ example: ['user-uuid-123', 'user-uuid-456'] })
   @Expose()
   @IsUUID('all', { each: true })
-  userIds: string[];
+  userIds!: string[];
 }
 
 @ApiSchema({ name: 'RecoSendResponse' })
 export class RecoSendResponseDto extends PickType(RecoDto, ['mediaId', 'type', 'senderId', 'comment'] as const) {
     @ApiProperty({ example: 2, description: 'Number of recos requested to be sent (including those that failed)' })
-    requested: number;
+    requested!: number;
 
     @ApiProperty({ example: ['user-uuid-123', 'user-uuid-456'], description: 'List of user IDs the reco was sent to' })
-    sent: string[];
+    sent!: string[];
 }
 
 @ApiSchema({ name: 'BaseListRecosQuery' })
@@ -242,7 +242,7 @@ export class ListPaginatedRecosDto extends PaginatedResponseDto<RecoWithMediaUni
       ],
     },
   })
-  data: RecoWithMediaUnion[];
+  data!: RecoWithMediaUnion[];
 
   constructor(partial: Partial<ListPaginatedRecosDto>) {
     super(partial);
@@ -279,7 +279,7 @@ export class ListInfiniteRecosDto extends CursorPaginatedResponseDto<RecoWithMed
       ],
     },
   })
-  data: RecoWithMediaUnion[];
+  data!: RecoWithMediaUnion[];
 
   constructor(partial: Partial<ListInfiniteRecosDto>) {
     super(partial);

@@ -15,41 +15,41 @@ export class MovieImageDto {
   @ApiProperty({ example: 12345 })
   @Expose()
   @IsInt()
-  id: number;
+  id!: number;
 
   @ApiProperty({ example: '/path/to/image.jpg' })
   @Expose()
   @IsString()
-  filePath: string;
+  filePath!: string;
 
   @ApiProperty({ enum: MovieImageType, example: MovieImageType.POSTER })
   @Expose()
   @IsEnum(MovieImageType)
-  type: string;
+  type!: string;
 
   @ApiProperty({ example: 1.778 })
   @Expose()
-  aspectRatio: number;
+  aspectRatio!: number;
 
   @ApiProperty({ example: 1080 })
   @Expose()
-  height: number;
+  height!: number;
 
   @ApiProperty({ example: 1920 })
   @Expose()
-  width: number;
+  width!: number;
 
   @ApiProperty({ example: 8.5 })
   @Expose()
-  voteAverage: number;
+  voteAverage!: number;
 
   @ApiProperty({ example: 120 })
   @Expose()
-  voteCount: number;
+  voteCount!: number;
 
   @ApiProperty({ example: 'en', nullable: true })
   @Expose()
-  iso6391: string | null;
+  iso6391!: string | null;
 }
 
 export class BaseMovieImagesQueryDto {
@@ -75,7 +75,7 @@ export class ListInfiniteMovieImagesQueryDto extends IntersectionType(
 export class ListPaginatedMovieImagesDto extends PaginatedResponseDto<MovieImageDto> {
   @ApiProperty({ type: () => [MovieImageDto] })
   @Type(() => MovieImageDto)
-  data: MovieImageDto[];
+  data!: MovieImageDto[];
 
   constructor(partial: Partial<ListPaginatedMovieImagesDto>) {
     super(partial);
@@ -87,7 +87,7 @@ export class ListPaginatedMovieImagesDto extends PaginatedResponseDto<MovieImage
 export class ListInfiniteMovieImagesDto extends CursorPaginatedResponseDto<MovieImageDto> {
   @ApiProperty({ type: () => [MovieImageDto] })
   @Type(() => MovieImageDto)
-  data: MovieImageDto[];
+  data!: MovieImageDto[];
 
   constructor(partial: Partial<ListInfiniteMovieImagesDto>) {
     super(partial);

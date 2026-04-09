@@ -6,15 +6,15 @@ import { IsDateString } from "class-validator";
 export class ReviewMovieLikeDto {
 	@ApiProperty({ example: "52", description: 'The ID of the review' })
 	@Expose()
-	reviewId: number;
+	reviewId!: number;
 	
 	@ApiProperty({ example: "user-uuid-123", description: 'The ID of the user who liked the review' })
 	@Expose()
-	userId: string;
+	userId!: string;
 
 	// Dates
 	@ApiProperty()
 	@Expose()
 	@IsDateString()
-	createdAt: string;
+	createdAt!: string;
 }

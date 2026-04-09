@@ -46,16 +46,16 @@ export class LogTvSeriesDto {
   @ApiProperty()
   @Expose()
   @IsInt()
-  id: number;
+  id!: number;
 
   @ApiProperty()
   @Expose()
   @IsInt()
-  tvSeriesId: number;
+  tvSeriesId!: number;
 
   @ApiProperty()
   @Expose()
-  userId: string;
+  userId!: string;
 
   @ApiProperty({
     enum: LogTvStatus,
@@ -65,68 +65,68 @@ export class LogTvSeriesDto {
   @IsEnum(LogTvStatus, {
 	  message: `Status must be one of: ${Object.values(LogTvStatus).join(', ')}`
   })
-  status: LogTvStatus;
+  status!: LogTvStatus;
   
   @ApiProperty()
   @Expose()
   @IsInt()
-  episodesWatchedCount: number;
+  episodesWatchedCount!: number;
 
   @ApiProperty()
   @Expose()
   @IsInt()
-  watchCount: number;
+  watchCount!: number;
   
   @ApiProperty()
   @Expose()
   @IsBoolean()
-  isLiked: boolean;
+  isLiked!: boolean;
 
   @ApiProperty({ nullable: true })
   @Expose()
   @IsOptional()
   @IsDateString()
-  likedAt: string | null;
+  likedAt!: string | null;
 
   @ApiProperty({ nullable: true })
   @Expose()
   @IsOptional()
   @IsNumber()
-  rating: number | null;
+  rating!: number | null;
 
   @ApiProperty({ nullable: true })
   @Expose()
   @IsOptional()
   @IsDateString()
-  ratedAt: string | null;
+  ratedAt!: string | null;
   
   @ApiProperty({ nullable: true })
   @Expose()
   @IsOptional()
   @IsInt()
-  lastSeasonSeen: number | null;
+  lastSeasonSeen!: number | null;
 
   @ApiProperty({ nullable: true })
   @Expose()
   @IsOptional()
   @IsInt()
-  lastEpisodeSeen: number | null;
+  lastEpisodeSeen!: number | null;
 
   @ApiProperty({ nullable: true })
   @Expose()
   @IsOptional()
   @IsDateString()
-  lastWatchedAt: string | null;
+  lastWatchedAt!: string | null;
 
   @ApiProperty()
   @Expose()
   @IsDateString()
-  createdAt: string;
+  createdAt!: string;
 
   @ApiProperty()
   @Expose()
   @IsDateString()
-  updatedAt: string;
+  updatedAt!: string;
 
   @ApiProperty({
     type: () => ReviewTvSeriesDto,
@@ -135,7 +135,7 @@ export class LogTvSeriesDto {
   @Expose()
   @ValidateNested()
   @Type(() => ReviewTvSeriesDto)
-  review: ReviewTvSeriesDto | null;
+  review!: ReviewTvSeriesDto | null;
 
   constructor(data: Partial<LogTvSeriesDto>) {
     Object.assign(this, data);
@@ -146,12 +146,12 @@ export class LogTvSeriesDto {
 export class LogTvSeriesWithTvSeriesNoReviewDto extends OmitType(LogTvSeriesDto, ['review']) {
   @ApiProperty({ example: false })
   @Expose()
-  isReviewed: boolean;
+  isReviewed!: boolean;
 
   @ApiProperty({ description: 'The tv series details' })
   @Type(() => TvSeriesCompactDto)
   @Expose()
-  tvSeries: TvSeriesCompactDto;
+  tvSeries!: TvSeriesCompactDto;
 }
 
 @ApiSchema({ name: 'LogTvSeriesWithTvSeries' })
@@ -159,7 +159,7 @@ export class LogTvSeriesWithTvSeriesDto extends LogTvSeriesDto {
   @ApiProperty({ description: 'The tv series details' })
   @Type(() => TvSeriesCompactDto)
   @Expose()
-  tvSeries: TvSeriesCompactDto;
+  tvSeries!: TvSeriesCompactDto;
 }
 
 export enum LogTvSeriesSortBy {

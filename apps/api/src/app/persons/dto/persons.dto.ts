@@ -14,7 +14,7 @@ export class PersonDto {
   })
   @Expose()
   @IsInt()
-  id: number;
+  id!: number;
 
   @ApiProperty({
 	description: "The person's name",
@@ -24,7 +24,7 @@ export class PersonDto {
   })
   @Expose()
   @IsString()
-  name: string | null;
+  name!: string | null;
 
   @ApiProperty({
 	description: "The person's profile image path",
@@ -34,7 +34,7 @@ export class PersonDto {
   })
   @Expose()
   @IsString()
-  profilePath: string | null;
+  profilePath!: string | null;
 
   @ApiProperty({
 	description: "The person's birthday",
@@ -44,7 +44,7 @@ export class PersonDto {
   })
   @Expose()
   @IsString()
-  birthday: string | null;
+  birthday!: string | null;
 
   @ApiProperty({
 	description: "The person's deathday",
@@ -54,7 +54,7 @@ export class PersonDto {
   })
   @Expose()
   @IsString()
-  deathday: string | null;
+  deathday!: string | null;
 
   @ApiProperty({
 	description: "The person's homepage URL",
@@ -64,7 +64,7 @@ export class PersonDto {
   })
   @Expose()
   @IsUrl()
-  homepage: string | null;
+  homepage!: string | null;
 
   @ApiProperty({
 	description: "The person's imdb identifier",
@@ -74,7 +74,7 @@ export class PersonDto {
   })
   @Expose()
   @IsString()
-  imdbId: string | null;
+  imdbId!: string | null;
 
   @ApiProperty({
 	description: "The person's kown for department",
@@ -84,7 +84,7 @@ export class PersonDto {
   })
   @Expose()
   @IsString()
-  knownForDepartment: string | null;
+  knownForDepartment!: string | null;
 
   @ApiProperty({
 	description: "The person's place of birth",
@@ -94,7 +94,7 @@ export class PersonDto {
   })
   @Expose()
   @IsString()
-  placeOfBirth: string | null;
+  placeOfBirth!: string | null;
 
   @ApiProperty({
 	description:
@@ -106,7 +106,7 @@ export class PersonDto {
   })
   @Expose()
   @IsNumber()
-  gender: number | null;
+  gender!: number | null;
 
   @ApiProperty({
 	description: "The person's biography",
@@ -117,7 +117,7 @@ export class PersonDto {
   })
   @Expose()
   @IsString()
-  biography: string | null;
+  biography!: string | null;
 
   @ApiProperty({
 	description: "The person's popularity score",
@@ -127,7 +127,7 @@ export class PersonDto {
   })
   @Expose()
   @IsNumber()
-  popularity: number | null;
+  popularity!: number | null;
 
   @ApiProperty({
 	description: "The person's slug",
@@ -137,7 +137,7 @@ export class PersonDto {
   })
   @Expose()
   @IsString()
-  slug: string | null;
+  slug!: string | null;
 
   @ApiProperty({
 	description: "The person's URL",
@@ -147,7 +147,7 @@ export class PersonDto {
   })
   @Expose()
   @IsUrl()
-  url: string | null;
+  url!: string | null;
 }
 
 @ApiSchema({ name: 'PersonCompact' })
@@ -164,7 +164,7 @@ export class PersonCompactDto extends PickType(PersonDto, [
 export class ListPaginatedPersonsDto extends PaginatedResponseDto<PersonCompactDto> {
   @ApiProperty({ type: () => [PersonCompactDto] })
   @Type(() => PersonCompactDto)
-  data: PersonCompactDto[];
+  data!: PersonCompactDto[];
 
   constructor(partial: Partial<ListPaginatedPersonsDto>) {
     super(partial);
@@ -176,7 +176,7 @@ export class ListPaginatedPersonsDto extends PaginatedResponseDto<PersonCompactD
 export class ListInfinitePersonsDto extends CursorPaginatedResponseDto<PersonCompactDto> {
   @ApiProperty({ type: () => [PersonCompactDto] })
   @Type(() => PersonCompactDto)
-  data: PersonCompactDto[];
+  data!: PersonCompactDto[];
 
   constructor(partial: Partial<ListInfinitePersonsDto>) {
     super(partial);

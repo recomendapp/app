@@ -15,12 +15,12 @@ export class UiBackgroundDto {
   @ApiProperty({ example: 'uuid-1234-5678' })
   @Expose()
   @IsString()
-  id: string;
+  id!: string;
 
   @ApiProperty({ example: '/path/to/image.jpg' })
   @Expose()
   @IsString()
-  filePath: string;
+  filePath!: string;
 
   @ApiProperty({
       description: 'The type of the media',
@@ -30,11 +30,11 @@ export class UiBackgroundDto {
   @Expose()
   @IsString()
   @IsIn(uiBackgroundTypeEnum.enumValues)
-  type: typeof uiBackgroundTypeEnum.enumValues[number];
+  type!: typeof uiBackgroundTypeEnum.enumValues[number];
 
   @ApiProperty({ example: 123456 })
   @Expose()
-  mediaId: number;
+  mediaId!: number;
 
   constructor(data: UiBackgroundDto) {
     Object.assign(this, data);
@@ -46,26 +46,26 @@ export class UiBackgroundDto {
 export class UiBackgroundWithMovieDto extends UiBackgroundDto {
   @ApiProperty({ enum: ['movie'] as const })
   @Expose()
-  type: 'movie';
+  type!: 'movie';
 
   @ApiProperty({ type: () => MovieCompactDto })
   @Expose()
   @ValidateNested()
   @Type(() => MovieCompactDto)
-  media: MovieCompactDto;
+  media!: MovieCompactDto;
 }
 
 @ApiSchema({ name: 'UiBackgroundWithTvSeries' })
 export class UiBackgroundWithTvSeriesDto extends UiBackgroundDto {
   @ApiProperty({ enum: ['tv_series'] as const })
   @Expose()
-  type: 'tv_series';
+  type!: 'tv_series';
 
   @ApiProperty({ type: () => TvSeriesCompactDto })
   @Expose()
   @ValidateNested()
   @Type(() => TvSeriesCompactDto)
-  media: TvSeriesCompactDto;
+  media!: TvSeriesCompactDto;
 }
 
 export type UiBackgroundWithMediaUnion = UiBackgroundWithMovieDto | UiBackgroundWithTvSeriesDto;

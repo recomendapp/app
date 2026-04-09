@@ -15,15 +15,15 @@ export enum PlaylistMemberSortBy {
 export class PlaylistMemberDto {
     @ApiProperty({ example: 123456, description: 'The unique ID of the member' })
     @Expose()
-    id: number;
+    id!: number;
 
     @ApiProperty({ example: 52, description: 'The ID of the playlist' })
     @Expose()
-    playlistId: number;
+    playlistId!: number;
     
     @ApiProperty({ example: "user-uuid-123", description: 'The ID of the member' })
     @Expose()
-    userId: string;
+    userId!: string;
 
     @ApiProperty({
         description: 'The role of the member in the playlist',
@@ -35,12 +35,12 @@ export class PlaylistMemberDto {
     @IsIn(playlistMemberRoleEnum.enumValues, {
         message: `Role must be one of: ${playlistMemberRoleEnum.enumValues.join(', ')}`
     })
-    role: typeof playlistMemberRoleEnum.enumValues[number];
+    role!: typeof playlistMemberRoleEnum.enumValues[number];
 
     @ApiProperty()
     @Expose()
     @IsDateString()
-    createdAt: string;
+    createdAt!: string;
 }
 
 @ApiSchema({ name: 'PlaylistMemberWithUser' })
@@ -49,7 +49,7 @@ export class PlaylistMemberWithUserDto extends PlaylistMemberDto {
     @Expose()
     @ValidateNested()
     @Type(() => UserSummaryDto)
-    user: UserSummaryDto;
+    user!: UserSummaryDto;
 }
 
 @ApiSchema({ name: 'PlaylistMemberAdd' })
@@ -61,7 +61,7 @@ export class PlaylistMemberAddDto {
     })
     @IsArray()
     @IsUUID('all', { each: true })
-    userIds: string[];
+    userIds!: string[];
 }
 
 @ApiSchema({ name: 'PlaylistMemberUpdate' })
@@ -76,7 +76,7 @@ export class PlaylistMemberDeleteDto {
     })
     @IsArray()
     @IsUUID('all', { each: true })
-    userIds: string[];
+    userIds!: string[];
 }
 
 export class BaseListPlaylistMembersQueryDto {
@@ -123,7 +123,7 @@ export class ListInfinitePlaylistMembersQueryDto extends IntersectionType(
 export class ListPaginatedPlaylistMembersDto extends PaginatedResponseDto<PlaylistMemberWithUserDto> {
   @ApiProperty({ type: () => [PlaylistMemberWithUserDto] })
   @Type(() => PlaylistMemberWithUserDto)
-  data: PlaylistMemberWithUserDto[];
+  data!: PlaylistMemberWithUserDto[];
 
   constructor(partial: Partial<ListPaginatedPlaylistMembersDto>) {
     super(partial);
@@ -135,7 +135,7 @@ export class ListPaginatedPlaylistMembersDto extends PaginatedResponseDto<Playli
 export class ListInfinitePlaylistMembersDto extends CursorPaginatedResponseDto<PlaylistMemberWithUserDto> {
   @ApiProperty({ type: () => [PlaylistMemberWithUserDto] })
   @Type(() => PlaylistMemberWithUserDto)
-  data: PlaylistMemberWithUserDto[];
+  data!: PlaylistMemberWithUserDto[];
 
   constructor(partial: Partial<ListInfinitePlaylistMembersDto>) {
     super(partial);

@@ -16,7 +16,7 @@ export enum PlaylistTargetFilter {
 export class PlaylistsAddTargetDto extends PlaylistWithOwnerDto {
   @ApiProperty({ description: 'True if the media is already in this playlist' })
   @Expose()
-  alreadyAdded: boolean;
+  alreadyAdded!: boolean;
 }
 
 export class BaseListPlaylistsAddTargetsQueryDto {
@@ -75,7 +75,7 @@ export class ListInfinitePlaylistsAddTargetsQueryDto extends IntersectionType(
 export class ListPaginatedPlaylistsAddTargetsDto extends PaginatedResponseDto<PlaylistsAddTargetDto> {
   @ApiProperty({ type: () => [PlaylistsAddTargetDto] })
   @Type(() => PlaylistsAddTargetDto)
-  data: PlaylistsAddTargetDto[];
+  data!: PlaylistsAddTargetDto[];
 
   constructor(partial: Partial<ListPaginatedPlaylistsAddTargetsDto>) {
     super(partial);
@@ -87,7 +87,7 @@ export class ListPaginatedPlaylistsAddTargetsDto extends PaginatedResponseDto<Pl
 export class ListInfinitePlaylistsAddTargetsDto extends CursorPaginatedResponseDto<PlaylistsAddTargetDto> {
   @ApiProperty({ type: () => [PlaylistsAddTargetDto] })
   @Type(() => PlaylistsAddTargetDto)
-  data: PlaylistsAddTargetDto[];
+  data!: PlaylistsAddTargetDto[];
 
   constructor(partial: Partial<ListInfinitePlaylistsAddTargetsDto>) {
     super(partial);

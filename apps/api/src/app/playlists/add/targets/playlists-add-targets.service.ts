@@ -68,7 +68,7 @@ export class PlaylistsAddTargetsService {
       .from(playlistSaved)
       .where(eq(playlistSaved.userId, currentUser.id));
 
-    let filterClause: SQL;
+    let filterClause: SQL | undefined;
     if (filter === PlaylistTargetFilter.MINE) {
       filterClause = eq(playlist.userId, currentUser.id);
     } else if (filter === PlaylistTargetFilter.SAVED) {

@@ -3,7 +3,7 @@ import { ApiSchema, ApiProperty, PickType, PartialType, IntersectionType, ApiPro
 import { IsNullable } from '../../../../../common/decorators/is-nullable.decorator';
 import { WATCHED_DATE_RULES } from '../../../../../config/validation-rules';
 import { Expose, Type } from 'class-transformer';
-import { IsDate, IsEnum, IsIn, IsInt, IsOptional, IsString, Length, Matches, ValidateNested } from 'class-validator';
+import { IsDateString, IsEnum, IsIn, IsInt, IsOptional, IsString, Length, Matches, ValidateNested } from 'class-validator';
 import { LogMovieDto } from '../../log-movie.dto';
 import { SortOrder } from '../../../../../common/dto/sort.dto';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../../../common/dto/pagination.dto';
@@ -20,11 +20,10 @@ export class WatchedDateDto {
   @IsInt()
   id!: number;
 
-  @Expose()
   @ApiProperty({ example: '2023-10-27T10:00:00.000Z' })
-  @Type(() => Date)
-  @IsDate()
-  watchedDate!: Date;
+  @Expose()
+  @IsDateString()
+  watchedDate!: string;
 
   @ApiProperty({
     description: 'The format in which the movie was watched',

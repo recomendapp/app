@@ -11,7 +11,7 @@ export class BaseSearchUsersQueryDto {
     nullable: false,
   })
   @IsString()
-  q: string;
+  q!: string;
 }
 
 @ApiSchema({ name: 'ListPaginatedSearchUsersQuery' })

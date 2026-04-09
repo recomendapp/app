@@ -8,12 +8,12 @@ export class TvSeriesRoleDto {
   @ApiProperty()
   @Expose()
   @IsString()
-  character: string;
+  character!: string;
 
   @ApiProperty()
   @Expose()
   @IsInt()
-  order: number;
+  order!: number;
 }
 
 @ApiSchema({ name: 'TvSeriesCasting' })
@@ -21,27 +21,27 @@ export class TvSeriesCastingDto {
   @ApiProperty()
   @Expose()
   @IsInt()
-  tvSeriesId: number;
+  tvSeriesId!: number;
 
   @ApiProperty()
   @Expose()
   @IsInt()
-  personId: number;
+  personId!: number;
 
   @ApiProperty({ description: 'The primary ordering index for this actor' })
   @Expose()
   @IsInt()
-  order: number;
+  order!: number;
 
   @ApiProperty({ type: () => PersonCompactDto })
   @Expose()
   @ValidateNested()
   @Type(() => PersonCompactDto)
-  person: PersonCompactDto;
+  person!: PersonCompactDto;
 
   @ApiProperty({ type: () => [TvSeriesRoleDto] })
   @Expose()
   @ValidateNested({ each: true })
   @Type(() => TvSeriesRoleDto)
-  roles: TvSeriesRoleDto[];
+  roles!: TvSeriesRoleDto[];
 }

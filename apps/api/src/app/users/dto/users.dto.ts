@@ -18,7 +18,7 @@ export enum UserSortBy {
 export class UserDto {
 	@ApiProperty({ example: "ciud123", description: 'The unique ID of the user' })
 	@Expose()
-	id: string;
+	id!: string;
 
 	@ApiProperty({
 		example: "Loooooup",
@@ -32,7 +32,7 @@ export class UserDto {
 	@Matches(USER_RULES.NAME.REGEX, {
 		message: 'Invalid name format'
 	})
-	name: string;
+	name!: string;
 
 	@ApiProperty({
 		example: "loup",
@@ -47,7 +47,7 @@ export class UserDto {
 	@Matches(USER_RULES.USERNAME.REGEX, {
 		message: "Invalid username format (3-15 characters, letters, numbers, dots, no consecutive dots)"
 	})
-	username: string;
+	username!: string;
 
 	@ApiProperty({
 		nullable: true,
@@ -58,11 +58,11 @@ export class UserDto {
 
 	@ApiProperty({ example: 'loup@recomend.com' })
 	@Expose()
-	email: string;
+	email!: string;
 
 	@ApiProperty()
 	@Expose()
-	emailVerified: boolean;
+	emailVerified!: boolean;
 
 	@ApiProperty({
 		example: "Just a movie lover.",
@@ -76,52 +76,52 @@ export class UserDto {
 	@Matches(USER_RULES.BIO.REGEX, {
 		message: "The bio cannot be empty or contain too many line breaks"
 	})
-	bio: string | null;
+	bio!: string | null;
 
 	@ApiProperty({ example: "https://example.com/avatar.jpg", description: 'The URL of the user avatar', nullable: true })
 	@Expose()
 	@Transform(({ value }) => getMediaUrl(value, StorageFolders.AVATARS))
 	@IsUrl()
-	avatar: string | null;
+	avatar!: string | null;
 
 	@ApiProperty({ example: "https://example.com/background.jpg", description: 'The URL of the user background image', nullable: true })
 	@Expose()
 	@Transform(({ value }) => getMediaUrl(value, StorageFolders.USER_BACKGROUNDS))
 	@IsUrl()
-	backgroundImage: string | null;
+	backgroundImage!: string | null;
 
 	@ApiProperty({ example: 'fr-FR' })
 	@Expose()
 	@IsLocale()
-	language: string;
+	language!: string;
 
 	@ApiProperty({ description: 'Whether the user has a premium account' })
 	@Expose()
-	isPremium: boolean;
+	isPremium!: boolean;
 
 	@ApiProperty({ description: 'Whether the user profile is private' })
 	@Expose()
-	isPrivate: boolean;
+	isPrivate!: boolean;
 
 	// Dates
 	@ApiProperty()
 	@Expose()
 	@IsDateString()
-	createdAt: string;
+	createdAt!: string;
 
 	@ApiProperty()
 	@Expose()
 	@IsDateString()
-	updatedAt: string;
+	updatedAt!: string;
 
 	// Counts
 	@ApiProperty({ description: 'The number of followers the user has' })
 	@Expose()
-	followersCount: number;
+	followersCount!: number;
 	
 	@ApiProperty({ description: 'The number of users this user is following' })
 	@Expose()
-	followingCount: number;
+	followingCount!: number;
 }
 
 @ApiSchema({ name: 'UserSummary' })
@@ -137,7 +137,7 @@ export class UserSummaryDto extends PickType(UserDto, [
 export class ProfileDto extends PickType(UserDto, ['id', 'name', 'username', 'avatar', 'bio', 'backgroundImage', 'isPrivate', 'isPremium', 'createdAt', 'followersCount', 'followingCount'] as const) {
 	@ApiProperty({ description: 'Whether the user profile is visilble by current user (if target user is private)' })
 	@Expose()
-	isVisible: boolean;
+	isVisible!: boolean;
 }
 
 @ApiSchema({ name: 'UpdateUser' })
@@ -182,7 +182,7 @@ export class ListInfiniteUsersQueryDto extends IntersectionType(
 export class ListPaginatedUsersDto extends PaginatedResponseDto<UserSummaryDto> {
 	@ApiProperty({ type: () => [UserSummaryDto] })
 	@Type(() => UserSummaryDto)
-	data: UserSummaryDto[];
+	data!: UserSummaryDto[];
 
 	constructor(partial: Partial<ListPaginatedUsersDto>) {
 		super(partial);
@@ -194,7 +194,7 @@ export class ListPaginatedUsersDto extends PaginatedResponseDto<UserSummaryDto> 
 export class ListInfiniteUsersDto extends CursorPaginatedResponseDto<UserSummaryDto> {
   @ApiProperty({ type: () => [UserSummaryDto] })
   @Type(() => UserSummaryDto)
-  data: UserSummaryDto[];
+  data!: UserSummaryDto[];
 
   constructor(partial: Partial<ListInfiniteUsersDto>) {
 	super(partial);

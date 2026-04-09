@@ -31,22 +31,22 @@ export class LogTvSeasonDto {
   @ApiProperty()
   @Expose()
   @IsInt()
-  id: number;
+  id!: number;
 
   @ApiProperty()
   @Expose()
   @IsInt()
-  logTvSeriesId: number;
+  logTvSeriesId!: number;
 
   @ApiProperty()
   @Expose()
   @IsInt()
-  tvSeasonId: number;
+  tvSeasonId!: number;
 
   @ApiProperty()
   @Expose()
   @IsInt()
-  seasonNumber: number;
+  seasonNumber!: number;
   
   @ApiProperty({
     description: 'The status of the series',
@@ -57,34 +57,34 @@ export class LogTvSeasonDto {
   @IsEnum(LogTvStatus, {
     message: `Status must be one of: ${Object.values(LogTvStatus).join(', ')}`
   })
-  status: LogTvStatus;
+  status!: LogTvStatus;
 
   @ApiProperty()
   @Expose()
   @IsInt()
-  episodesWatchedCount: number;
+  episodesWatchedCount!: number;
   
   @ApiProperty({ nullable: true })
   @Expose()
   @IsOptional()
   @IsNumber()
-  rating: number | null;
+  rating!: number | null;
 
   @ApiProperty({ nullable: true })
   @Expose()
   @IsOptional()
   @IsDateString()
-  ratedAt: string | null;
+  ratedAt!: string | null;
 
   @ApiProperty()
   @Expose()
   @IsDateString()
-  createdAt: string;
+  createdAt!: string;
 
   @ApiProperty()
   @Expose()
   @IsDateString()
-  updatedAt: string;
+  updatedAt!: string;
 
   constructor(data: Partial<LogTvSeasonDto>) {
     Object.assign(this, data);
@@ -96,10 +96,10 @@ export class LogTvSeasonUpdateResponseDto {
   @ApiProperty({ type: () => LogTvSeasonDto })
   @Expose()
   @Type(() => LogTvSeasonDto)
-  season: LogTvSeasonDto;
+  season!: LogTvSeasonDto;
 
   @ApiProperty({ type: () => LogTvSeriesDto })
   @Expose()
   @Type(() => LogTvSeriesDto)
-  series: LogTvSeriesDto;
+  series!: LogTvSeriesDto;
 }

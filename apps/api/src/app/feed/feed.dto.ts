@@ -24,24 +24,24 @@ import { TvSeriesSummaryDto } from '../tv-series/dto/tv-series.dto';
 class BaseFeedItemDto {
   @ApiProperty({ example: 42 })
   @Expose()
-  id: number;
+  id!: number;
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
-  createdAt: string;
+  createdAt!: string;
 
   @ApiProperty({ type: () => UserSummaryDto })
   @Expose()
   @Type(() => UserSummaryDto)
-  author: UserSummaryDto;
+  author!: UserSummaryDto;
 
   @ApiProperty({ description: 'The id of the activity' })
   @Expose()
-  activityId: number;
+  activityId!: number;
 
   @ApiProperty({ enum: feedTypeEnum.enumValues })
   @Expose()
-  activityType: typeof feedTypeEnum.enumValues[number];
+  activityType!: typeof feedTypeEnum.enumValues[number];
 }
 
 @ApiSchema({ name: 'FeedLogMovieContent' })
@@ -49,7 +49,7 @@ export class FeedLogMovieContentDto extends OmitType(LogMovieWithMovieDto, ['mov
   @ApiProperty({ type: () => MovieSummaryDto })
   @Expose()
   @Type(() => MovieSummaryDto)
-  movie: MovieSummaryDto;
+  movie!: MovieSummaryDto;
 }
 
 @ApiSchema({ name: 'FeedLogTvSeriesContent' })
@@ -57,7 +57,7 @@ export class FeedLogTvSeriesContentDto extends OmitType(LogTvSeriesWithTvSeriesD
   @ApiProperty({ type: () => TvSeriesSummaryDto })
   @Expose()
   @Type(() => TvSeriesSummaryDto)
-  tvSeries: TvSeriesSummaryDto;
+  tvSeries!: TvSeriesSummaryDto;
 }
 
 @ApiSchema({ name: 'FeedReviewMovieLikeContent' })
@@ -65,7 +65,7 @@ export class FeedReviewMovieLikeContentDto extends OmitType(ReviewMovieWithAutho
   @ApiProperty({ type: () => MovieSummaryDto })
   @Expose()
   @Type(() => MovieSummaryDto)
-  movie: MovieSummaryDto;
+  movie!: MovieSummaryDto;
 }
 
 @ApiSchema({ name: 'FeedReviewTvSeriesLikeContent' })
@@ -73,67 +73,67 @@ export class FeedReviewTvSeriesLikeContentDto extends OmitType(ReviewTvSeriesWit
   @ApiProperty({ type: () => TvSeriesSummaryDto })
   @Expose()
   @Type(() => TvSeriesSummaryDto)
-  tvSeries: TvSeriesSummaryDto;
+  tvSeries!: TvSeriesSummaryDto;
 }
 
 @ApiSchema({ name: 'FeedItemLogMovie' })
 export class FeedItemLogMovieDto extends BaseFeedItemDto {
   @ApiProperty({ enum: ['log_movie'] as const })
   @Expose()
-  activityType: 'log_movie';
+  activityType!: 'log_movie';
 
   @ApiProperty({ type: () => FeedLogMovieContentDto })
   @Expose()
   @Type(() => FeedLogMovieContentDto)
-  content: FeedLogMovieContentDto;
+  content!: FeedLogMovieContentDto;
 }
 
 @ApiSchema({ name: 'FeedItemLogTvSeries' })
 export class FeedItemLogTvSeriesDto extends BaseFeedItemDto {
   @ApiProperty({ enum: ['log_tv_series'] as const })
   @Expose()
-  activityType: 'log_tv_series';
+  activityType!: 'log_tv_series';
 
   @ApiProperty({ type: () => FeedLogTvSeriesContentDto })
   @Expose()
   @Type(() => FeedLogTvSeriesContentDto)
-  content: FeedLogTvSeriesContentDto;
+  content!: FeedLogTvSeriesContentDto;
 }
 
 @ApiSchema({ name: 'FeedItemPlaylistLike' })
 export class FeedItemPlaylistLikeDto extends BaseFeedItemDto {
   @ApiProperty({ enum: ['playlist_like'] as const })
   @Expose()
-  activityType: 'playlist_like';
+  activityType!: 'playlist_like';
 
   @ApiProperty({ type: () => PlaylistDto })
   @Expose()
   @Type(() => PlaylistDto)
-  content: PlaylistDto;
+  content!: PlaylistDto;
 }
 
 @ApiSchema({ name: 'FeedItemReviewMovieLike' })
 export class FeedItemReviewMovieLikeDto extends BaseFeedItemDto {
   @ApiProperty({ enum: ['review_movie_like'] as const })
   @Expose()
-  activityType: 'review_movie_like';
+  activityType!: 'review_movie_like';
 
   @ApiProperty({ type: () => FeedReviewMovieLikeContentDto })
   @Expose()
   @Type(() => FeedReviewMovieLikeContentDto)
-  content: FeedReviewMovieLikeContentDto;
+  content!: FeedReviewMovieLikeContentDto;
 }
 
 @ApiSchema({ name: 'FeedItemReviewTvSeriesLike' })
 export class FeedItemReviewTvSeriesLikeDto extends BaseFeedItemDto {
   @ApiProperty({ enum: ['review_tv_series_like'] as const })
   @Expose()
-  activityType: 'review_tv_series_like';
+  activityType!: 'review_tv_series_like';
 
   @ApiProperty({ type: () => FeedReviewTvSeriesLikeContentDto })
   @Expose()
   @Type(() => FeedReviewTvSeriesLikeContentDto)
-  content: FeedReviewTvSeriesLikeContentDto;
+  content!: FeedReviewTvSeriesLikeContentDto;
 }
 
 export type FeedItemUnion = 
@@ -215,7 +215,7 @@ export class ListPaginatedFeedDto extends PaginatedResponseDto<FeedItemUnion> {
       ],
     },
   })
-  data: FeedItemUnion[];
+  data!: FeedItemUnion[];
 
   constructor(partial: Partial<ListPaginatedFeedDto>) {
     super(partial);
@@ -267,7 +267,7 @@ export class ListInfiniteFeedDto extends CursorPaginatedResponseDto<FeedItemUnio
       ],
     },
   })
-  data: FeedItemUnion[];
+  data!: FeedItemUnion[];
 
   constructor(partial: Partial<ListInfiniteFeedDto>) {
     super(partial);

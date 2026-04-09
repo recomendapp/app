@@ -12,7 +12,7 @@ export class BaseSearchTvSeriesQueryDto {
     nullable: false,
   })
   @IsString()
-  q: string;
+  q!: string;
 
   @ApiPropertyOptional({
     description: 'Comma-separated list of genre IDs to filter by',

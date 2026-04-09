@@ -24,16 +24,16 @@ export class PlaylistItemDto {
   @ApiProperty({ example: 42 })
   @Expose()
   @IsInt()
-  id: number;
+  id!: number;
 
   @ApiProperty({ example: 123456 })
   @Expose()
   @IsInt()
-  playlistId: number;
+  playlistId!: number;
 
   @ApiProperty({ example: 'user-uuid-123' })
   @Expose()
-  userId: string;
+  userId!: string;
 
   @ApiProperty({
 	example: 'Must watch this weekend',
@@ -44,17 +44,17 @@ export class PlaylistItemDto {
   @IsOptional()
   @IsString()
   @MaxLength(PLAYLIST_ITEM_RULES.COMMENT.MAX)
-  comment: string | null;
+  comment!: string | null;
 
   @ApiProperty({ example: '0|i0000r:' }) 
   @Expose()
   @IsString()
-  rank: string;
+  rank!: string;
 
   @ApiProperty({ example: 123456 })
   @Expose()
   @IsInt()
-  mediaId: number;
+  mediaId!: number;
 
   @ApiProperty({
 	  description: 'The type of the playlist item',
@@ -66,17 +66,17 @@ export class PlaylistItemDto {
   @IsIn(playlistItemTypeEnum.enumValues, {
 	  message: `Type must be one of: ${playlistItemTypeEnum.enumValues.join(', ')}`
   })
-  type: typeof playlistItemTypeEnum.enumValues[number];
+  type!: typeof playlistItemTypeEnum.enumValues[number];
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
   @IsDateString()
-  createdAt: string;
+  createdAt!: string;
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
   @IsDateString()
-  updatedAt: string;
+  updatedAt!: string;
 
   constructor(data: PlaylistItemDto) {
 	Object.assign(this, data);
@@ -88,26 +88,26 @@ export class PlaylistItemDto {
 export class PlaylistItemWithMovieDto extends PlaylistItemDto {
   @ApiProperty({ enum: ['movie'] as const })
   @Expose()
-  type: 'movie';
+  type!: 'movie';
 
   @ApiProperty({ type: () => MovieCompactDto })
   @Expose()
   @ValidateNested()
   @Type(() => MovieCompactDto)
-  media: MovieCompactDto;
+  media!: MovieCompactDto;
 }
 
 @ApiSchema({ name: 'PlaylistItemWithTvSeries' })
 export class PlaylistItemWithTvSeriesDto extends PlaylistItemDto {
   @ApiProperty({ enum: ['tv_series'] as const })
   @Expose()
-  type: 'tv_series';
+  type!: 'tv_series';
 
   @ApiProperty({ type: () => TvSeriesCompactDto })
   @Expose()
   @ValidateNested()
   @Type(() => TvSeriesCompactDto)
-  media: TvSeriesCompactDto;
+  media!: TvSeriesCompactDto;
 }
 
 export type PlaylistItemWithMediaUnion = PlaylistItemWithMovieDto | PlaylistItemWithTvSeriesDto;
@@ -193,7 +193,7 @@ export class ListPaginatedPlaylistItemsDto extends PaginatedResponseDto<Playlist
 	  ],
 	},
   })
-  data: PlaylistItemWithMediaUnion[];
+  data!: PlaylistItemWithMediaUnion[];
 
   constructor(partial: Partial<ListPaginatedPlaylistItemsDto>) {
 	super(partial);
@@ -230,7 +230,7 @@ export class ListInfinitePlaylistItemsDto extends CursorPaginatedResponseDto<Pla
 	  ],
 	},
   })
-  data: PlaylistItemWithMediaUnion[];
+  data!: PlaylistItemWithMediaUnion[];
 
   constructor(partial: Partial<ListInfinitePlaylistItemsDto>) {
 	super(partial);
@@ -245,7 +245,7 @@ export class PlaylistItemUpdateDto {
   @IsOptional()
   @IsString()
   @MaxLength(180)
-  comment: string | null;
+  comment!: string | null;
 
   @ApiPropertyOptional({ description: 'The new absolute position in the playlist (starts at 1)' })
   @IsOptional()
@@ -265,5 +265,5 @@ export class PlaylistItemsDeleteDto {
   @IsArray()
   @ArrayMinSize(1)
   @IsInt({ each: true })
-  itemIds: number[];
+  itemIds!: number[];
 }

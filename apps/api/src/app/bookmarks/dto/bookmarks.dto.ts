@@ -24,18 +24,18 @@ export class BookmarkDto {
   @ApiProperty({ example: 42 })
   @Expose()
   @IsInt()
-  id: number;
+  id!: number;
 
   @ApiProperty({ example: 'user-uuid-123' })
   @Expose()
-  userId: string;
+  userId!: string;
 
   @ApiProperty({ example: 'Must watch this weekend', nullable: true, maxLength: 180 })
   @Expose()
   @IsOptional()
   @IsString()
   @MaxLength(180)
-  comment: string | null;
+  comment!: string | null;
 
   @ApiProperty({
       description: 'The status of the bookmark',
@@ -47,12 +47,12 @@ export class BookmarkDto {
   @IsIn(bookmarkStatusEnum.enumValues, {
       message: `Status must be one of: ${bookmarkStatusEnum.enumValues.join(', ')}`
   })
-  status: typeof bookmarkStatusEnum.enumValues[number];
+  status!: typeof bookmarkStatusEnum.enumValues[number];
 
   @ApiProperty({ example: 123456 })
   @Expose()
   @IsInt()
-  mediaId: number;
+  mediaId!: number;
 
   @ApiProperty({
       description: 'The type of the bookmark',
@@ -64,17 +64,17 @@ export class BookmarkDto {
   @IsIn(bookmarkTypeEnum.enumValues, {
       message: `Type must be one of: ${bookmarkTypeEnum.enumValues.join(', ')}`
   })
-  type: typeof bookmarkTypeEnum.enumValues[number];
+  type!: typeof bookmarkTypeEnum.enumValues[number];
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
   @IsDateString()
-  createdAt: string;
+  createdAt!: string;
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
   @IsDateString()
-  updatedAt: string;
+  updatedAt!: string;
 
   constructor(data: BookmarkDto) {
     Object.assign(this, data);
@@ -86,26 +86,26 @@ export class BookmarkDto {
 export class BookmarkWithMovieDto extends BookmarkDto {
   @ApiProperty({ enum: ['movie'] as const })
   @Expose()
-  type: 'movie';
+  type!: 'movie';
 
   @ApiProperty({ type: () => MovieCompactDto })
   @Expose()
   @ValidateNested()
   @Type(() => MovieCompactDto)
-  media: MovieCompactDto;
+  media!: MovieCompactDto;
 }
 
 @ApiSchema({ name: 'BookmarkWithTvSeries' })
 export class BookmarkWithTvSeriesDto extends BookmarkDto {
   @ApiProperty({ enum: ['tv_series'] as const })
   @Expose()
-  type: 'tv_series';
+  type!: 'tv_series';
 
   @ApiProperty({ type: () => TvSeriesCompactDto })
   @Expose()
   @ValidateNested()
   @Type(() => TvSeriesCompactDto)
-  media: TvSeriesCompactDto;
+  media!: TvSeriesCompactDto;
 }
 
 export type BookmarkWithMediaUnion = BookmarkWithMovieDto | BookmarkWithTvSeriesDto;
@@ -201,7 +201,7 @@ export class ListPaginatedBookmarksDto extends PaginatedResponseDto<BookmarkWith
       ],
     },
   })
-  data: BookmarkWithMediaUnion[];
+  data!: BookmarkWithMediaUnion[];
 
   constructor(partial: Partial<ListPaginatedBookmarksDto>) {
     super(partial);
@@ -238,7 +238,7 @@ export class ListInfiniteBookmarksDto extends CursorPaginatedResponseDto<Bookmar
       ],
     },
   })
-  data: BookmarkWithMediaUnion[];
+  data!: BookmarkWithMediaUnion[];
 
   constructor(partial: Partial<ListInfiniteBookmarksDto>) {
     super(partial);

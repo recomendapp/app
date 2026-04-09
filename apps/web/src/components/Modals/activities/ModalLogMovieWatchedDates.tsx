@@ -80,7 +80,7 @@ export const ModalLogMovieWatchedDates = ({
 				watched_date_id: dateId,
 			},
 		}, {
-			onError: (error: any) => {
+			onError: (error) => {
 				if ('statusCode' in error) {
 					switch (error.statusCode) {
 						case 400:

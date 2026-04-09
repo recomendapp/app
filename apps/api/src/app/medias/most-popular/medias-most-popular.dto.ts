@@ -16,7 +16,7 @@ export class MediaMostPopularDto {
   @ApiProperty({ example: 123456 })
   @Expose()
   @IsInt()
-  mediaId: number;
+  mediaId!: number;
 
   @ApiProperty({
     description: 'The type of the media',
@@ -24,12 +24,12 @@ export class MediaMostPopularDto {
     example: 'movie',
   })
   @Expose()
-  type: 'movie' | 'tv_series';
+  type!: 'movie' | 'tv_series';
 
   @ApiProperty({ example: 85.5, description: 'TMDB popularity score' })
   @Expose()
   @IsNumber()
-  popularity: number;
+  popularity!: number;
 
   constructor(data: MediaMostPopularDto) {
     Object.assign(this, data);
@@ -40,26 +40,26 @@ export class MediaMostPopularDto {
 export class MediaMostPopularWithMovieDto extends MediaMostPopularDto {
   @ApiProperty({ enum: ['movie'] as const })
   @Expose()
-  type: 'movie';
+  type!: 'movie';
 
   @ApiProperty({ type: () => MovieCompactDto })
   @Expose()
   @ValidateNested()
   @Type(() => MovieCompactDto)
-  media: MovieCompactDto;
+  media!: MovieCompactDto;
 }
 
 @ApiSchema({ name: 'MediaMostPopularWithTvSeries' })
 export class MediaMostPopularWithTvSeriesDto extends MediaMostPopularDto {
   @ApiProperty({ enum: ['tv_series'] as const })
   @Expose()
-  type: 'tv_series';
+  type!: 'tv_series';
 
   @ApiProperty({ type: () => TvSeriesCompactDto })
   @Expose()
   @ValidateNested()
   @Type(() => TvSeriesCompactDto)
-  media: TvSeriesCompactDto;
+  media!: TvSeriesCompactDto;
 }
 
 export type MediaMostPopularWithMediaUnion = MediaMostPopularWithMovieDto | MediaMostPopularWithTvSeriesDto;
@@ -130,7 +130,7 @@ export class ListPaginatedMediasMostPopularDto extends PaginatedResponseDto<Medi
       ],
     },
   })
-  data: MediaMostPopularWithMediaUnion[];
+  data!: MediaMostPopularWithMediaUnion[];
 
   constructor(partial: Partial<ListPaginatedMediasMostPopularDto>) {
     super(partial);
@@ -167,7 +167,7 @@ export class ListInfiniteMediasMostPopularDto extends CursorPaginatedResponseDto
       ],
     },
   })
-  data: MediaMostPopularWithMediaUnion[];
+  data!: MediaMostPopularWithMediaUnion[];
 
   constructor(partial: Partial<ListInfiniteMediasMostPopularDto>) {
     super(partial);

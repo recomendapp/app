@@ -7,11 +7,11 @@ import { followStatusEnum } from "@libs/db/schemas";
 export class FollowDto {
 	@ApiProperty({ example: "ciud123", description: 'The unique ID of the follower' })
 	@Expose()
-	followerId: string;
+	followerId!: string;
 
 	@ApiProperty({ example: "ciud456", description: 'The unique ID of the following' })
 	@Expose()
-	followingId: string;
+	followingId!: string;
 
 	@ApiProperty({
 		description: 'The status of the follow relationship',
@@ -23,12 +23,12 @@ export class FollowDto {
 	@IsIn(followStatusEnum.enumValues, {
 		message: `Status must be one of: ${followStatusEnum.enumValues.join(', ')}`
 	})
-	status: typeof followStatusEnum.enumValues[number];
+	status!: typeof followStatusEnum.enumValues[number];
 
 	// Dates
 	@ApiProperty()
     @Expose()
 	@IsDateString()
-	createdAt: string;
+	createdAt!: string;
 }
 

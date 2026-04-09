@@ -29,7 +29,7 @@ export class MovieDto {
   })
   @Expose()
   @IsInt()
-  id: number;
+  id!: number;
 
   @ApiProperty({
     description: 'The title of the movie',
@@ -39,7 +39,7 @@ export class MovieDto {
   })
   @Expose()
   @IsString()
-  title: string | null;
+  title!: string | null;
 
   @ApiProperty({
     description: 'Poster path of the movie',
@@ -49,7 +49,7 @@ export class MovieDto {
   })
   @Expose()
   @IsString()
-  posterPath: string | null;
+  posterPath!: string | null;
 
   @ApiProperty({
     description: 'Backdrop path of the movie',
@@ -59,7 +59,7 @@ export class MovieDto {
   })
   @Expose()
   @IsString()
-  backdropPath: string | null;
+  backdropPath!: string | null;
 
   @ApiProperty({
     type: () => PersonCompactDto,
@@ -70,7 +70,7 @@ export class MovieDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => PersonCompactDto)
-  directors: PersonCompactDto[];
+  directors!: PersonCompactDto[];
 
   @ApiProperty({
     type: () => GenreDto,
@@ -81,7 +81,7 @@ export class MovieDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => GenreDto)
-  genres: GenreDto[];
+  genres!: GenreDto[];
 
   @ApiProperty({
     type: () => MovieTrailerDto,
@@ -92,7 +92,7 @@ export class MovieDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => MovieTrailerDto)
-  trailers: MovieTrailerDto[];
+  trailers!: MovieTrailerDto[];
 
   @ApiProperty({
     description: 'Release date of the movie',
@@ -102,7 +102,7 @@ export class MovieDto {
   })
   @Expose()
   @IsDateString()
-  releaseDate: string | null;
+  releaseDate!: string | null;
 
   @ApiProperty({
     description: 'Overview of the movie',
@@ -113,7 +113,7 @@ export class MovieDto {
   })
   @Expose()
   @IsString()
-  overview: string | null;
+  overview!: string | null;
 
   @ApiProperty({
     description: 'Budget of the movie in USD',
@@ -123,7 +123,7 @@ export class MovieDto {
   })
   @Expose()
   @IsInt()
-  budget: number | null;
+  budget!: number | null;
 
   @ApiProperty({
     description: 'Homepage URL of the movie',
@@ -133,7 +133,7 @@ export class MovieDto {
   })
   @Expose()
   @IsUrl()
-  homepage: string | null;
+  homepage!: string | null;
 
   @ApiProperty({
     description: 'Revenue of the movie in USD',
@@ -143,7 +143,7 @@ export class MovieDto {
   })
   @Expose()
   @IsInt()
-  revenue: number | null;
+  revenue!: number | null;
 
   @ApiProperty({
     description: 'Runtime of the movie in minutes',
@@ -153,7 +153,7 @@ export class MovieDto {
   })
   @Expose()
   @IsInt()
-  runtime: number | null;
+  runtime!: number | null;
 
   @ApiProperty({
     description: 'Original language of the movie',
@@ -163,7 +163,7 @@ export class MovieDto {
   })
   @Expose()
   @IsString()
-  originalLanguage: string | null;
+  originalLanguage!: string | null;
 
   @ApiProperty({
     description: 'Original title of the movie',
@@ -173,7 +173,7 @@ export class MovieDto {
   })
   @Expose()
   @IsString()
-  originalTitle: string | null;
+  originalTitle!: string | null;
 
   @ApiProperty({
     description: 'Status of the movie',
@@ -183,7 +183,7 @@ export class MovieDto {
   })
   @Expose()
   @IsString()
-  status: string | null;
+  status!: string | null;
 
   @ApiProperty({
     description: 'Popularity score of the movie',
@@ -193,7 +193,7 @@ export class MovieDto {
   })
   @Expose()
   @IsNumber()
-  popularity: number;
+  popularity!: number;
 
   @ApiProperty({
     description: 'Vote average of the movie',
@@ -203,7 +203,7 @@ export class MovieDto {
   })
   @Expose()
   @IsNumber()
-  voteAverage: number;
+  voteAverage!: number;
 
   @ApiProperty({
     description: 'Vote count of the movie',
@@ -213,7 +213,7 @@ export class MovieDto {
   })
   @Expose()
   @IsInt()
-  voteCount: number;
+  voteCount!: number;
 
   @ApiProperty({
     description: 'Slug of the movie',
@@ -223,7 +223,7 @@ export class MovieDto {
   })
   @Expose()
   @IsString()
-  slug: string | null;
+  slug!: string | null;
 
   @ApiProperty({
     description: 'URL to the movie page',
@@ -233,7 +233,7 @@ export class MovieDto {
   })
   @Expose()
   @IsUrl()
-  url: string | null;
+  url!: string | null;
 
   @ApiProperty({
     description: 'Followers average rating of the movie',
@@ -243,59 +243,59 @@ export class MovieDto {
   })
   @Expose()
   @IsNumber()
-  followerAvgRating: number | null;
+  followerAvgRating!: number | null;
 }
 @ApiSchema({ name: 'MovieTrailer' })
 export class MovieTrailerDto {
   @ApiProperty({ example: '5c9294240e0a267cd516835f' })
   @Expose()
   @IsString()
-  id: string;
+  id!: string;
 
   @ApiProperty({ example: 'Official Trailer' })
   @Expose()
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiProperty({ example: 'zSWdZVtXT7E', description: 'YouTube video key' })
   @Expose()
   @IsString()
-  key: string;
+  key!: string;
 
   @ApiProperty({ example: 'YouTube' })
   @Expose()
   @IsString()
-  site: string;
+  site!: string;
 
   @ApiProperty({ example: 1080, description: 'Resolution (e.g., 1080, 720)' })
   @Expose()
   @IsInt()
-  size: number;
+  size!: number;
 
   @ApiProperty({ example: 'Trailer' })
   @Expose()
   @IsString()
-  type: string;
+  type!: string;
 
   @ApiProperty({ example: true })
   @Expose()
   @IsBoolean()
-  official: boolean;
+  official!: boolean;
 
   @ApiProperty({ example: '2014-10-01T17:55:04Z' })
   @Expose()
   @IsDateString()
-  publishedAt: string;
+  publishedAt!: string;
 
   @ApiProperty({ example: 'en', nullable: true })
   @Expose()
   @IsString()
-  iso6391: string | null;
+  iso6391!: string | null;
 
   @ApiProperty({ example: 'US', nullable: true })
   @Expose()
   @IsString()
-  iso31661: string | null;
+  iso31661!: string | null;
 }
 
 @ApiSchema({ name: 'MovieCompact' })
@@ -337,7 +337,7 @@ export class MovieSummaryDto extends PickType(MovieDto, [
 export class ListPaginatedMoviesDto extends PaginatedResponseDto<MovieCompactDto> {
   @ApiProperty({ type: () => [MovieCompactDto] })
   @Type(() => MovieCompactDto)
-  data: MovieCompactDto[];
+  data!: MovieCompactDto[];
 
   constructor(partial: Partial<ListPaginatedMoviesDto>) {
     super(partial);
@@ -349,7 +349,7 @@ export class ListPaginatedMoviesDto extends PaginatedResponseDto<MovieCompactDto
 export class ListInfiniteMoviesDto extends CursorPaginatedResponseDto<MovieCompactDto> {
   @ApiProperty({ type: () => [MovieCompactDto] })
   @Type(() => MovieCompactDto)
-  data: MovieCompactDto[];
+  data!: MovieCompactDto[];
 
   constructor(partial: Partial<ListInfiniteMoviesDto>) {
     super(partial);

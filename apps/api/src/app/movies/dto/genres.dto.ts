@@ -10,7 +10,7 @@ export class GenreDto {
   })
   @Expose()
   @IsInt()
-  id: number;
+  id!: number;
 
   @ApiProperty({
 	description: 'The name of the genre',
@@ -18,5 +18,5 @@ export class GenreDto {
   })
   @Expose()
   @IsString()
-  name: string;
+  name!: string;
 }

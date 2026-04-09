@@ -22,16 +22,16 @@ export class ReviewMovieDto {
 	@ApiProperty({ example: 42 })
 	@Expose()
 	@IsInt()
-	id: number;
+	id!: number;
 
 	@ApiProperty({ example: 550 })
 	@Expose()
 	@IsInt()
-	movieId: number;
+	movieId!: number;
 
 	@ApiProperty({ example: 'user-uuid-123' })
 	@Expose()
-	userId: string;
+	userId!: string;
 
 	@ApiProperty({ 
         description: 'The title of the review', 
@@ -47,7 +47,7 @@ export class ReviewMovieDto {
 	@Matches(REVIEW_RULES.TITLE.REGEX, {
 		message: 'Invalid title format'
 	})
-    title: string | null;
+    title!: string | null;
 
 	@ApiProperty({ 
         description: 'The content of the review wrapped in <html> tags', 
@@ -57,39 +57,39 @@ export class ReviewMovieDto {
     @Expose()
     @IsString()
     @Length(REVIEW_RULES.BODY.MIN, REVIEW_RULES.BODY.MAX)
-    body: string;
+    body!: string;
 
 	@ApiProperty({ description: 'Whether the review contain spoils' })
 	@Expose()
 	@IsBoolean()
-	isSpoiler: boolean;
+	isSpoiler!: boolean;
 
 	// Dates
 	@ApiProperty()
 	@Expose()
 	@IsDateString()
-	createdAt: string;
+	createdAt!: string;
 
 	@ApiProperty()
 	@Expose()
 	@IsDateString()
-	updatedAt: string;
+	updatedAt!: string;
 
 	// Counts
 	@ApiProperty({ description: 'The number of likes' })
 	@Expose()
 	@IsInt()
-	likesCount: number;
+	likesCount!: number;
 	
 	@ApiProperty({ description: 'The number of views' })
 	@Expose()
 	@IsInt()
-	viewsCount: number;
+	viewsCount!: number;
 
 	@ApiProperty({ description: 'The number of comments' })
 	@Expose()
 	@IsInt()
-	commentsCount: number;
+	commentsCount!: number;
 }
 
 @ApiSchema({ name: 'ReviewMovieWithAuthor' })
@@ -98,13 +98,13 @@ export class ReviewMovieWithAuthorDto extends ReviewMovieDto {
 	@Expose()
 	@IsNumber()
 	@IsNullable()
-	rating: number | null;
+	rating!: number | null;
 
 	@ApiProperty({ type: () => UserSummaryDto, description: 'The author of the review' })
 	@Expose()
 	@ValidateNested()
 	@Type(() => UserSummaryDto)
-	author: UserSummaryDto;
+	author!: UserSummaryDto;
 }
 
 @ApiSchema({ name: 'ReviewMovieWithAuthorMovie' })
@@ -113,7 +113,7 @@ export class ReviewMovieWithAuthorMovieDto extends ReviewMovieWithAuthorDto {
 	@Expose()
 	@ValidateNested()
 	@Type(() => MovieCompactDto)
-	movie: MovieCompactDto;
+	movie!: MovieCompactDto;
 }
 
 @ApiSchema({ name: 'ReviewMovieInput' })
@@ -127,7 +127,7 @@ export class ReviewMovieInputDto extends PickType(ReviewMovieDto, [
 export class ListPaginatedReviewsMovieDto extends PaginatedResponseDto<ReviewMovieWithAuthorDto> {
 	@ApiProperty({ type: () => [ReviewMovieWithAuthorDto] })
 	@Type(() => ReviewMovieWithAuthorDto)
-	data: ReviewMovieWithAuthorDto[];
+	data!: ReviewMovieWithAuthorDto[];
 
 	constructor(partial: Partial<ListPaginatedReviewsMovieDto>) {
 		super(partial);
@@ -139,7 +139,7 @@ export class ListPaginatedReviewsMovieDto extends PaginatedResponseDto<ReviewMov
 export class ListInfiniteReviewsMovieDto extends CursorPaginatedResponseDto<ReviewMovieWithAuthorDto> {
   @ApiProperty({ type: () => [ReviewMovieWithAuthorDto] })
   @Type(() => ReviewMovieWithAuthorDto)
-  data: ReviewMovieWithAuthorDto[];
+  data!: ReviewMovieWithAuthorDto[];
 
   constructor(partial: Partial<ListInfiniteReviewsMovieDto>) {
 	super(partial);

@@ -8,12 +8,12 @@ export class MovieRoleDto {
   @ApiProperty()
   @Expose()
   @IsString()
-  character: string;
+  character!: string;
 
   @ApiProperty()
   @Expose()
   @IsInt()
-  order: number;
+  order!: number;
 }
 
 @ApiSchema({ name: 'MovieCasting' })
@@ -21,27 +21,27 @@ export class MovieCastingDto {
   @ApiProperty()
   @Expose()
   @IsInt()
-  movieId: number;
+  movieId!: number;
 
   @ApiProperty()
   @Expose()
   @IsInt()
-  personId: number;
+  personId!: number;
 
   @ApiProperty({ description: 'The primary ordering index for this actor' })
   @Expose()
   @IsInt()
-  order: number;
+  order!: number;
 
   @ApiProperty({ type: () => PersonCompactDto })
   @Expose()
   @ValidateNested()
   @Type(() => PersonCompactDto)
-  person: PersonCompactDto;
+  person!: PersonCompactDto;
 
   @ApiProperty({ type: () => [MovieRoleDto] })
   @Expose()
   @ValidateNested({ each: true })
   @Type(() => MovieRoleDto)
-  roles: MovieRoleDto[];
+  roles!: MovieRoleDto[];
 }

@@ -27,59 +27,59 @@ export class LogTvEpisodeDto {
   @ApiProperty({ example: 42 })
   @Expose()
   @IsInt()
-  id: number;
+  id!: number;
 
   @ApiProperty({ example: 12345, description: 'The internal ID of the global series log' })
   @Expose()
   @IsInt()
-  logTvSeriesId: number;
+  logTvSeriesId!: number;
 
   @ApiProperty({ example: 6789, description: 'The internal ID of the season log' })
   @Expose()
   @IsInt()
-  logTvSeasonId: number;
+  logTvSeasonId!: number;
 
   @ApiProperty({ example: 550, description: 'The TMDB Episode ID' })
   @Expose()
   @IsInt()
-  tvEpisodeId: number;
+  tvEpisodeId!: number;
 
   @ApiProperty({ example: 1 })
   @Expose()
   @IsInt()
-  seasonNumber: number;
+  seasonNumber!: number;
 
   @ApiProperty({ example: 3 })
   @Expose()
   @IsInt()
-  episodeNumber: number;
+  episodeNumber!: number;
 
   @ApiProperty({ example: 8.5, nullable: true })
   @Expose()
   @IsOptional()
   @IsNumber()
-  rating: number | null;
+  rating!: number | null;
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z', nullable: true })
   @Expose()
   @IsOptional()
   @IsDateString()
-  ratedAt: string | null;
+  ratedAt!: string | null;
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z', description: 'When the user watched it' })
   @Expose()
   @IsDateString()
-  watchedAt: string;
+  watchedAt!: string;
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
   @IsDateString()
-  createdAt: string;
+  createdAt!: string;
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
   @IsDateString()
-  updatedAt: string;
+  updatedAt!: string;
 
   constructor(data: LogTvEpisodeDto) {
     Object.assign(this, data);
@@ -91,15 +91,15 @@ export class LogTvEpisodeUpdateResponseDto {
   @ApiProperty({ type: () => LogTvEpisodeDto })
   @Expose()
   @Type(() => LogTvEpisodeDto)
-  episode: LogTvEpisodeDto;
+  episode!: LogTvEpisodeDto;
 
   @ApiProperty({ type: () => LogTvSeasonDto })
   @Expose()
   @Type(() => LogTvSeasonDto)
-  season: LogTvSeasonDto;
+  season!: LogTvSeasonDto;
 
   @ApiProperty({ type: () => LogTvSeriesDto })
   @Expose()
   @Type(() => LogTvSeriesDto)
-  series: LogTvSeriesDto;
+  series!: LogTvSeriesDto;
 }

@@ -60,7 +60,7 @@ export class TvSeriesImagesService {
       const baseWhereClause = this.getListBaseQuery(tvSeriesId, type);
 
       const [rows, [{ count: totalCount }]] = await Promise.all([
-        tx.select()
+        tx.select(({ tv_series_image: tmdbTvSeriesImage }))
           .from(tmdbTvSeriesImage)
           .innerJoin(sql`LATERAL i18n.language() language(requested_language, fallback_language, default_language)`, sql`true`)
           .where(baseWhereClause)
@@ -113,7 +113,7 @@ export class TvSeriesImagesService {
 
       const fetchLimit = per_page + 1;
 
-      const results = await tx.select()
+      const results = await tx.select(({ tv_series_image: tmdbTvSeriesImage }))
         .from(tmdbTvSeriesImage)
         .innerJoin(sql`LATERAL i18n.language() language(requested_language, fallback_language, default_language)`, sql`true`)
         .where(finalWhereClause)

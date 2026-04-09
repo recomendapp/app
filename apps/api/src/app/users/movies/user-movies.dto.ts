@@ -13,13 +13,13 @@ export class UserMovieWithUserMovieDto extends LogMovieDto {
   @Expose()
   @ValidateNested()
   @Type(() => UserSummaryDto)
-  user: UserSummaryDto;
+  user!: UserSummaryDto;
 
   @ApiProperty({ type: () => MovieCompactDto, description: 'The movie object' })
   @Expose()
   @ValidateNested()
   @Type(() => MovieCompactDto)
-  movie: MovieCompactDto;
+  movie!: MovieCompactDto;
 }
 
 
@@ -27,7 +27,7 @@ export class UserMovieWithUserMovieDto extends LogMovieDto {
 export class ListPaginatedUserMoviesWithMovieDto extends PaginatedResponseDto<LogMovieWithMovieNoReviewDto> {
   @ApiProperty({ type: () => [LogMovieWithMovieNoReviewDto] })
   @Type(() => LogMovieWithMovieNoReviewDto)
-  data: LogMovieWithMovieNoReviewDto[];
+  data!: LogMovieWithMovieNoReviewDto[];
 
   constructor(partial: Partial<ListPaginatedUserMoviesWithMovieDto>) {
     super(partial);
@@ -39,7 +39,7 @@ export class ListPaginatedUserMoviesWithMovieDto extends PaginatedResponseDto<Lo
 export class ListInfiniteUserMoviesWithMovieDto extends CursorPaginatedResponseDto<LogMovieWithMovieNoReviewDto> {
   @ApiProperty({ type: () => [LogMovieWithMovieNoReviewDto] })
   @Type(() => LogMovieWithMovieNoReviewDto)
-  data: LogMovieWithMovieNoReviewDto[];
+  data!: LogMovieWithMovieNoReviewDto[];
 
   constructor(partial: Partial<ListInfiniteUserMoviesWithMovieDto>) {
     super(partial);
