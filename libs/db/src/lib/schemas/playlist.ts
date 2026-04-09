@@ -1,4 +1,4 @@
-import { bigint, check, index, integer, pgEnum, pgTable, text, timestamp, unique, uuid, varchar } from "drizzle-orm/pg-core";
+import { bigint, check, index, pgEnum, pgTable, text, timestamp, unique, uuid, varchar } from "drizzle-orm/pg-core";
 import { user } from "./auth";
 import { relations, sql } from "drizzle-orm";
 import { tmdbMovie, tmdbTvSeries } from "./tmdb";

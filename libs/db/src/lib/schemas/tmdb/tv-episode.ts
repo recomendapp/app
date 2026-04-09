@@ -5,7 +5,6 @@ import {
   integer,
   real,
   text,
-  unique,
 } from 'drizzle-orm/pg-core';
 import { tmdbSchema } from './common';
 import { tmdbTvSeriesCredit } from './tv-series';
