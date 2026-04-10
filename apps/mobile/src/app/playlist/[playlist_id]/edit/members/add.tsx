@@ -5,22 +5,21 @@ import { SelectionFooter } from "apps/mobile/src/components/ui/SelectionFooter";
 import { Text } from "apps/mobile/src/components/ui/text";
 import { View } from "apps/mobile/src/components/ui/view";
 import { Icons } from "apps/mobile/src/constants/Icons";
-import { usePlaylistGuestsUpsertMutation } from "apps/mobile/src/api/playlists/playlistMutations";
 import tw from "apps/mobile/src/lib/tw";
 import { GAP, PADDING, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
-import { Profile } from "@recomendapp/types";
 import { AnimatedLegendList } from "@legendapp/list/reanimated";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { upperFirst } from "lodash";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Alert } from "react-native";
 import { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { useTranslations } from "use-intl";
-import { PostgrestError } from "@supabase/supabase-js";
 import { Checkbox } from "apps/mobile/src/components/ui/checkbox";
 import { useToast } from "apps/mobile/src/components/Toast";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
-import { usePlaylistGuestsAddQuery } from "apps/mobile/src/api/playlists/playlistQueries";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { playlistMembersAllOptions, searchUsersInfiniteOptions, usePlaylistMembersAddMutation } from "@libs/query-client";
+import { UserSummary } from "@libs/api-js";
 
 const ModalPlaylistEditGuestsAdd = () => {
 	const { playlist_id } = useLocalSearchParams<{ playlist_id: string }>();
@@ -29,12 +28,20 @@ const ModalPlaylistEditGuestsAdd = () => {
 	const toast = useToast();
 	const router = useRouter();
 	const { mode } = useTheme();
+	// Queries
+	const { data: members } = useQuery(playlistMembersAllOptions({
+		playlistId: playlistId,
+	}));
+	// Mutations
+	const { mutateAsync: addMembers, isPending } = usePlaylistMembersAddMutation();
+
+
 	// SharedValues
 	const footerHeight = useSharedValue(0);
 
 	// States
 	const [ search, setSearch ] = useState('');
-	const [ selectedUsers, setSelectedUsers ] = useState<Profile[]>([]);
+	const [ selectedUsers, setSelectedUsers ] = useState<UserSummary[]>([]);
 	const canSave: boolean = selectedUsers.length > 0;
 	const {
 		data,
@@ -43,23 +50,18 @@ const ModalPlaylistEditGuestsAdd = () => {
 		fetchNextPage,
 		hasNextPage,
 		refetch,
-	} = usePlaylistGuestsAddQuery({
-		playlistId: playlistId,
-		query: search,
-	});
-	const users = (
-		data?.pages.flatMap((page) => page.data.map((user) => ({
-			user,
-			isSelected: selectedUsers.some((u) => u.id === user.id),
-		}))) || []
-	);
-	// Mutations
-	const { mutateAsync: upsertGuestsMutation, isPending: isUpsertingGuests } = usePlaylistGuestsUpsertMutation({
-		playlistId: playlistId,
-	});
+	} = useInfiniteQuery(searchUsersInfiniteOptions({
+		filters: {
+			q: search,
+		}
+	}));
+	const users = useMemo(() => data?.pages.flatMap((page) => page.data.map((user) => ({
+		user,
+		isSelected: selectedUsers.some((u) => u.id === user.id),
+	}))) || [], [data, selectedUsers]);
 
 	// Handlers
-	const handleToggleUser = useCallback((user: Profile) => {
+	const handleToggleUser = useCallback((user: UserSummary) => {
 		setSelectedUsers((prev) => {
 			const isSelected = prev.some((u) => u.id === user.id);
 			if (isSelected) {
@@ -69,27 +71,23 @@ const ModalPlaylistEditGuestsAdd = () => {
 		});
 	}, []);
 	const handleSubmit = useCallback(async () => {
-		try {
-			if (selectedUsers.length === 0) return;
-			await upsertGuestsMutation({
-				guests: selectedUsers.map((guest) => ({
-					user_id: guest.id!,
-				})),
-			}, { onError: (error) => { throw error } })
-			toast.success(upperFirst(t('common.messages.saved', { count: 1, gender: 'male' })));
-			router.dismiss();
-		} catch (error) {
-			let errorMessage: string = upperFirst(t('common.messages.an_error_occurred'));
-			if (error instanceof Error) {
-				errorMessage = error.message;
-			} else if (error instanceof PostgrestError) {
-				errorMessage = error.message;
-			} else if (typeof error === 'string') {
-				errorMessage = error;
+		await addMembers({
+			path: {
+				playlist_id: playlistId,
+			},
+			body: {
+				userIds: selectedUsers.map((user) => user.id),
+			},
+			}, {
+			onSuccess: () => {
+				toast.success(upperFirst(t('common.messages.added', { gender: 'male', count: selectedUsers.length })));
+				router.dismiss();
+			},
+			onError: () => {
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
-			toast.error(upperFirst(t('common.messages.error')), { description: errorMessage });
-		}
-	}, [selectedUsers, upsertGuestsMutation, toast, router, t]);
+		});
+	}, [selectedUsers, addMembers, toast, router, t]);
 	const handleCancel = useCallback(() => {
 		if (canSave) {
 			Alert.alert(
@@ -128,7 +126,7 @@ const ModalPlaylistEditGuestsAdd = () => {
 					<Button
 					variant="ghost"
 					size="fit"
-					disabled={isUpsertingGuests}
+					disabled={isPending}
 					onPress={handleCancel}
 					>
 						{upperFirst(t('common.messages.cancel'))}
@@ -138,9 +136,9 @@ const ModalPlaylistEditGuestsAdd = () => {
 					<Button
 					variant="ghost"
 					size="fit"
-					loading={isUpsertingGuests}
+					loading={isPending}
 					onPress={handleSubmit}
-					disabled={!canSave || isUpsertingGuests}
+					disabled={!canSave || isPending}
 					>
 						{upperFirst(t('common.messages.save'))}
 					</Button>
@@ -151,7 +149,7 @@ const ModalPlaylistEditGuestsAdd = () => {
 						label: upperFirst(t('common.messages.cancel')),
 						onPress: handleCancel,
 						tintColor: props.tintColor,
-						disabled: isUpsertingGuests,
+						disabled: isPending,
 						icon: {
 							name: "xmark",
 							type: "sfSymbol",
@@ -164,7 +162,7 @@ const ModalPlaylistEditGuestsAdd = () => {
 						label: upperFirst(t('common.messages.save')),
 						onPress: handleSubmit,
 						tintColor: props.tintColor,
-						disabled: !canSave || isUpsertingGuests,
+						disabled: !canSave || isPending,
 						icon: {
 							name: "checkmark",
 							type: "sfSymbol",

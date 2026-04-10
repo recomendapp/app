@@ -90,21 +90,19 @@ const BottomSheetPlaylist = forwardRef<
 				label: upperFirst(t('common.messages.go_to_user')),
 			}
 		] : []),
-		...(user?.id === playlist.userId ? [
+		...((playlist.role === 'owner' || playlist.role === 'admin') ? [
 			{
 				icon: Icons.Users,
 				onPress: () => router.push({ pathname: '/playlist/[playlist_id]/edit/members', params: { playlist_id: playlist.id }}),
 				label: upperFirst(t('common.messages.manage_members', { gender: 'male', count: 2 })),
 			},
-		] : []),
-		...((playlist.role === 'owner' || playlist.role === 'admin') ? [
 			{
 				icon: Icons.settings,
 				onPress: () => router.push({ pathname: '/playlist/[playlist_id]/edit', params: { playlist_id: playlist.id }}),
 				label: upperFirst(t('common.messages.edit_playlist')),
 			},
 		] : []),
-		...(user?.id === playlist.userId ? [
+		...(playlist.role === 'owner' ? [
 			{
 				icon: Icons.Delete,
 				destructive: true,

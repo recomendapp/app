@@ -66,6 +66,13 @@ const ProfileWidgetLogMovie = ({
 				log: log,
 				user: profile,
 			}}
+			href={{
+				pathname: '/user/[username]/film/[film_id]',
+				params: {
+					username: profile.username,
+					film_id: movie.id,
+				}
+			}}
 			style={tw`w-32`}
 			/>
 		)}

@@ -87,6 +87,13 @@ const UserCollectionTvSeries = () => {
 				log: log,
 				user: profile!,
 			}}
+			href={{
+				pathname: '/user/[username]/tv-series/[tv_series_id]',
+				params: {
+					username: profile?.username!,
+					tv_series_id: tvSeries.id,
+				}
+			}}
 			style={tw`w-full`}
 			/>
 		)}

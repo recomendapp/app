@@ -5,7 +5,7 @@ import { Button } from "apps/mobile/src/components/ui/Button";
 import { useTranslations } from "use-intl";
 import { upperFirst } from "lodash";
 import { Icons } from "apps/mobile/src/constants/Icons";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { Text } from "apps/mobile/src/components/ui/text";
 import { View } from "apps/mobile/src/components/ui/view";
 import Fuse from "fuse.js";
@@ -224,7 +224,7 @@ const ModalPlaylistEditMembers = () => {
 	<>
 		<Stack.Screen
 			options={{
-				headerTitle: upperFirst(t('common.messages.manage_guests', { gender: 'male', count: 2 })),
+				headerTitle: upperFirst(t('common.messages.manage_members', { count: 2 })),
 				headerLeft: () => (
 					<Button
 					variant="muted"
@@ -260,13 +260,14 @@ const ModalPlaylistEditMembers = () => {
 			style={
 				hasResults ? tw`flex-row items-center justify-between gap-2` : undefined
 			}>
-				<Button
-				variant="muted"
-				icon={Icons.Add}
-				onPress={() => router.push(`/playlist/${playlistId}/edit/guests/add`)}
-				>
-					{upperFirst(t('common.messages.add_guest', { count: 2 }))}
-				</Button>
+				<Link href={{ pathname: '/playlist/[playlist_id]/edit/members/add', params: { playlist_id: playlistId }}} asChild>
+					<Button
+					variant="muted"
+					icon={Icons.Add}
+					>
+						{upperFirst(t('common.messages.add_member', { count: 2 }))}
+					</Button>
+				</Link>
 				{hasResults && <Text textColor="muted" style={tw`text-right`}>{upperFirst(t('common.messages.can_edit'))}</Text>}
 			</View>
 		</View>

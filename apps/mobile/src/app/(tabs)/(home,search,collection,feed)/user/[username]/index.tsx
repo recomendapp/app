@@ -15,8 +15,8 @@ import { View } from "apps/mobile/src/components/ui/view";
 import ProfileWidgetPlaylists from "apps/mobile/src/components/screens/user/ProfileWidgetPlaylists";
 import { Skeleton } from "apps/mobile/src/components/ui/Skeleton";
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
-import ProfileWidgetActivitiesMovie from "apps/mobile/src/components/screens/user/ProfileWidgetLogMovie";
-import ProfileWidgetActivitiesTvSeries from "apps/mobile/src/components/screens/user/ProfileWidgetLogTvSeries";
+import ProfileWidgetLogMovie from "apps/mobile/src/components/screens/user/ProfileWidgetLogMovie";
+import ProfileWidgetLogTvSeries from "apps/mobile/src/components/screens/user/ProfileWidgetLogTvSeries";
 import { ActivityIndicator, Pressable, RefreshControl } from "react-native";
 import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import BottomSheetUser from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetUser";
@@ -244,8 +244,8 @@ const ProfileScreen = () => {
 					</View>
 				) : (
 					<>
-					<ProfileWidgetActivitiesMovie profile={profile} labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} />
-					<ProfileWidgetActivitiesTvSeries profile={profile} labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} />
+					<ProfileWidgetLogMovie profile={profile} labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} />
+					<ProfileWidgetLogTvSeries profile={profile} labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} />
 					<ProfileWidgetPlaylists profile={profile} labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }} />
 					</>
 				)

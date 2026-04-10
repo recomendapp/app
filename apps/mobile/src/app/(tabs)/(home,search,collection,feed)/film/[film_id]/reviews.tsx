@@ -93,6 +93,25 @@ const FilmReviews = () => {
 		/>
 	), [movie, movieId]);
 
+	const handleViewOrCreateReview = useCallback(() => {
+		if (activity?.review) {
+			router.push({
+				pathname: '/user/[username]/film/[film_id]',
+				params: {
+					username: user?.username!,
+					film_id: movieId,
+				}
+			})
+		} else {
+			router.push({
+				pathname: '/film/[film_id]/review',
+				params: {
+					film_id: movieId,
+				}
+			})
+		}
+	}, [activity?.review, router, movieId, user?.username]);
+
 	return (
 	<>
 		<Stack.Screen
@@ -103,9 +122,7 @@ const FilmReviews = () => {
 				size="icon"
 				style={tw`rounded-full`}
 				icon={activity?.review ? Icons.Eye : Icons.Edit}
-				onPress={() => {
-					router.push(`/film/${movie?.slug || movieId}/review/${activity?.review ? activity.review.id : `create`}`);
-				}}
+				onPress={handleViewOrCreateReview}
 				/>
 			) : undefined,
 			unstable_headerRightItems: user ? (props) => [
@@ -113,9 +130,7 @@ const FilmReviews = () => {
 					{
 						type: "button",
 						label: activity?.review ? upperFirst(t('common.messages.my_review', { count: 1 })) : upperFirst(t('common.messages.add_review')),
-						onPress: () => {
-							router.push(`/film/${movie?.slug || movieId}/review/${activity?.review ? activity.review.id : `create`}`);
-						},
+						onPress: handleViewOrCreateReview,
 						icon: {
 							name: activity?.review ? "eye" : "pencil",
 							type: "sfSymbol",

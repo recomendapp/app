@@ -90,7 +90,7 @@ export function TableBookmark({
 
 	return (
 		<div className={cn("flex flex-col gap-2", className)}>
-			<TableToolbar table={table} searchPlaceholder={upperFirst(t('common.messages.search_film'))} className='px-4' />
+			<TableToolbar table={table} searchPlaceholder={upperFirst(t('common.messages.search_film_or_tv_series', { count: 1 }))} className='px-4' />
 			<div className="rounded-md">
 				<Table>
 					<TableHeader>

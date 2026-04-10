@@ -3,7 +3,7 @@ import { Icons } from "apps/mobile/src/constants/Icons";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { getIdFromSlug } from "apps/mobile/src/utils/getIdFromSlug";
 import tw from "apps/mobile/src/lib/tw";
-import { Redirect, useLocalSearchParams, useRouter } from "expo-router";
+import { Redirect, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { View } from "react-native"
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
@@ -78,13 +78,22 @@ const MovieReviewScreen = () => {
 		);
 	};
 	return (
-	<ReviewForm
-	review={log?.review}
-	isWatched={!!log}
-	type="movie"
-	movie={movie}
-	onSave={handleSave}
-	/>
+	<>
+		<Stack.Screen
+		options={{
+			title: log?.review
+				? upperFirst(t('common.messages.edit_review'))
+				: upperFirst(t('common.messages.add_review'))
+		}}
+		/>
+		<ReviewForm
+		review={log?.review}
+		isWatched={!!log}
+		type="movie"
+		movie={movie}
+		onSave={handleSave}
+		/>
+	</>
 	)
 };
 

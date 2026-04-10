@@ -24,7 +24,7 @@ interface CardTvSeriesBaseProps
 			log: Omit<LogTvSeriesWithTvSeriesNoReview, "tvSeries">;
 			user: UserSummary;
 		}
-		linked?: boolean;
+		href?: Href | null;
 		children?: React.ReactNode;
 		// Stats
 		showRating?: boolean;
@@ -203,9 +203,10 @@ CardTvSeriesList.displayName = "CardTvSeriesList";
 const CardTvSeries = React.forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	CardTvSeriesProps
->(({ variant = "default", linked = true, onPress, onLongPress, ...props }, ref) => {
+>(({ variant = "default", href: hrefProps, onPress, onLongPress, ...props }, ref) => {
 	const router = useRouter();
 	const openSheet = useBottomSheetStore((state) => state.openSheet);
+	const href: Href | null | undefined = hrefProps || (props.tvSeries ? { pathname: '/tv-series/[tv_series_id]', params: { tv_series_id: props.tvSeries.id }} : undefined);
 
 	const content = (
 		variant === "default" ? (
@@ -222,12 +223,17 @@ const CardTvSeries = React.forwardRef<
 	return (
 	<Pressable
 	onPress={() => {
-		if (linked) router.push(props.tvSeries.url as Href);
+		if (href) router.push(href);
 		onPress?.();
 	}}
 	onLongPress={() => {
 		openSheet(BottomSheetTvSeries, {
 			tvSeries: props.tvSeries,
+			log: props.profile ? {
+				...props.profile.log,
+				tvSeries: props.tvSeries,
+				user: props.profile.user,
+			} : undefined,
 		});
 		onLongPress?.();
 	}}

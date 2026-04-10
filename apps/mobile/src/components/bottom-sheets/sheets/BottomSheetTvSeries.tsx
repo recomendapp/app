@@ -20,11 +20,11 @@ import { PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/glob
 import BottomSheetShareTvSeries from './share/BottomSheetShareTvSeries';
 import { FlashList } from '@shopify/flash-list';
 import { getTmdbImage } from 'apps/mobile/src/lib/tmdb/getTmdbImage';
-import { TvSeriesCompact, UserTvSeriesWithUserTvSeries } from '@libs/api-js';
+import { LogTvSeriesWithTvSeriesNoReview, TvSeriesCompact, UserSummary } from '@libs/api-js';
 
 interface BottomSheetTvSeriesProps extends BottomSheetProps {
   tvSeries: TvSeriesCompact,
-  log?: UserTvSeriesWithUserTvSeries,
+  log?: LogTvSeriesWithTvSeriesNoReview & { user: UserSummary },
   additionalItemsTop?: Item[];
   additionalItemsBottom?: Item[];
 };

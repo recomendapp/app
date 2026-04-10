@@ -1,5 +1,5 @@
 export const uiKeys = {
-	base: ['ui'] as const,
+	base: 'ui' as const,
 
-	backgrounds: () => [...uiKeys.base, 'backgrounds'] as const,
+	backgrounds: () => [uiKeys.base, 'backgrounds'] as const,
 };

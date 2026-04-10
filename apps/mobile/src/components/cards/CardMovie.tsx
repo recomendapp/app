@@ -25,7 +25,7 @@ interface CardMovieBaseProps
 			log: Omit<LogMovieWithMovieNoReview, "movie">;
 			user: UserSummary;
 		}
-		linked?: boolean;
+		href?: Href | null;
 		children?: React.ReactNode;
 		// Stats
 		showRating?: boolean;
@@ -205,9 +205,10 @@ CardMovieList.displayName = "CardMovieList";
 const CardMovie = React.forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	CardMovieProps
->(({ variant = "default", linked = true, onPress, onLongPress, ...props }, ref) => {
+>(({ variant = "default", href: hrefProps, onPress, onLongPress, ...props }, ref) => {
 	const router = useRouter();
 	const openSheet = useBottomSheetStore((state) => state.openSheet);
+	const href: Href | null | undefined = hrefProps || (props.movie ? { pathname: '/film/[film_id]', params: { film_id: props.movie.id }} : undefined);
 
 	const content = (
 		variant === "default" ? (
@@ -224,12 +225,17 @@ const CardMovie = React.forwardRef<
 	return (
 	<Pressable
 	onPress={() => {
-		if (linked) router.push(props.movie.url as Href);
+		if (href) router.push(href);
 		onPress?.();
 	}}
 	onLongPress={() => {
 		openSheet(BottomSheetMovie, {
 			movie: props.movie,
+			log: props.profile ? {
+				...props.profile.log,
+				movie: props.movie,
+				user: props.profile.user,
+			} : undefined,
 		});
 		onLongPress?.();
 	}}
