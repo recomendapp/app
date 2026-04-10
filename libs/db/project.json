@@ -62,6 +62,39 @@
         "main": "libs/db/src/index.ts",
         "assets": ["libs/db/*.md"]
       }
+    },
+    "build-migrator": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/db-migrator",
+        "main": "libs/db/scripts/run-setup.ts",
+        "tsConfig": "libs/db/tsconfig.lib.json",
+        "platform": "node",
+        "bundle": true,
+        "format": ["cjs"],
+        "generatePackageJson": true,
+        "thirdParty": false, 
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "libs/db/drizzle",
+            "output": "./drizzle"
+          }
+        ]
+      }
+    },
+    "docker-build": {
+      "dependsOn": ["build-migrator"],
+      "options": {
+        "args": [
+          "-f",
+          "libs/db/Dockerfile",
+          "--tag",
+          "db-migrator:latest"
+        ],
+        "cwd": "."
+      }
     }
   }
 }

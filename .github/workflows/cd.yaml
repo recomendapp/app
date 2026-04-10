@@ -139,19 +139,21 @@ jobs:
           
           echo "Updates to apply: $SERVICES_JSON -> $VERSION"
           
-          # Updates the deployment files for each affected service
           for service in $(echo $SERVICES_JSON | jq -r '.[]'); do
+            IMAGE_REF="ghcr.io/${OWNER}/${service}"
             
-            # ⚠️ Adjust this path according to the exact structure of your infra repo!
-            # Example: apps/api/deployment.yaml, apps/web/deployment.yaml, etc.
-            DEPLOYMENT_PATH="apps/$service/deployment.yaml"
+            # Find ALL yaml files in the repo that reference this image, regardless of filename or location
+            FILES=$(grep -rl "${IMAGE_REF}" --include="*.yaml" .)
             
-            if [ -f "$DEPLOYMENT_PATH" ]; then
-              echo "✅ Updating $service -> $VERSION"
-              sed -i "s|image: ghcr.io/${OWNER}/${service}:.*|image: ghcr.io/${OWNER}/${service}:${VERSION}|" "$DEPLOYMENT_PATH"
-            else
-              echo "⚠️ File not found: $DEPLOYMENT_PATH (Skipping update for $service)"
+            if [ -z "$FILES" ]; then
+              echo "⚠️  No manifest found referencing ${IMAGE_REF} — skipping"
+              continue
             fi
+            
+            for FILE in $FILES; do
+              echo "✅ Updating ${IMAGE_REF} -> ${VERSION} in ${FILE}"
+              sed -i "s|image: ${IMAGE_REF}:.*|image: ${IMAGE_REF}:${VERSION}|g" "$FILE"
+            done
           done
 
       - name: Commit and Push Changes
