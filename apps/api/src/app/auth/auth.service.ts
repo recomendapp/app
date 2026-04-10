@@ -54,12 +54,11 @@ const createBetterAuth = ({
 				usernameNormalization: USER_RULES.USERNAME.normalization,
 			}),
 			openAPI(),
-			magicLink({
-				sendMagicLink: async ({ email, token, url }, ctx) => {
-					// TODO: Add mailer service to send email
-				},
-				disableSignUp: true,
-			}),
+			// magicLink({
+			// 	sendMagicLink: async ({ email, token, url }, ctx) => {
+			// 	},
+			// 	disableSignUp: true,
+			// }),
 			emailOTP({
 				async sendVerificationOTP({ email, otp, type }) { 
 					const userDb = await db.query.user.findFirst({

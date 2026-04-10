@@ -9,12 +9,13 @@ export class PaginationQueryDto {
     example: 1,
     default: 1,
     minimum: 1,
+    type: Number,
   })
   @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  page: number = 1;
+  page = 1;
 
   @ApiPropertyOptional({
     description: 'Number of results per page',
@@ -22,13 +23,14 @@ export class PaginationQueryDto {
     default: 10,
     minimum: 1,
     maximum: 100,
+    type: Number,
   })
   @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(1)
   @Max(100)
-  per_page: number = 10;
+  per_page = 10;
 }
 
 @ApiSchema({ name: 'PaginationMeta' })

@@ -18,13 +18,14 @@ export class CursorPaginationQueryDto {
     default: 10,
     minimum: 1,
     maximum: 100,
+    type: Number,
   })
   @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(1)
   @Max(100)
-  per_page: number = 10;
+  per_page = 10;
 
   @ApiPropertyOptional({
     description: 'Whether to include the total count of results (only on the first page)',
