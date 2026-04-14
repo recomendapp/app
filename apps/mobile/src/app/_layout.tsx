@@ -64,6 +64,7 @@ const RootLayoutNav = () => {
       <Stack.Screen
       name="playlist/add/[type]/[id]"
       options={{
+        title: upperFirst(t('common.messages.add_to_playlist')),
         presentation: Platform.OS === "ios"
           ? isLiquidGlassAvailable && osName !== "iPadOS"
             ? "formSheet"
@@ -72,6 +73,7 @@ const RootLayoutNav = () => {
         sheetGrabberVisible: true,
         sheetAllowedDetents: [0.8],
         sheetInitialDetentIndex: 0,
+        headerTransparent: false,
         ...(isLiquidGlassAvailable ? {
           contentStyle: { backgroundColor: 'transparent' },
           headerStyle: { backgroundColor: 'transparent' },
@@ -87,6 +89,7 @@ const RootLayoutNav = () => {
       <Stack.Screen
       name="reco/send/[type]/[id]"
       options={{
+        title: upperFirst(t('common.messages.send_to_friend')),
         presentation: Platform.OS === "ios"
           ? isLiquidGlassAvailable && osName !== "iPadOS"
             ? "formSheet"
@@ -95,6 +98,7 @@ const RootLayoutNav = () => {
         sheetGrabberVisible: true,
         sheetAllowedDetents: [0.8],
         sheetInitialDetentIndex: 0,
+        headerTransparent: false,
         ...(isLiquidGlassAvailable ? {
           contentStyle: { backgroundColor: 'transparent' },
           headerStyle: { backgroundColor: 'transparent' },

@@ -10,7 +10,7 @@ export const userKeys = {
 		| { mode?: never; filters?: never }
 		| { mode: 'paginated'; filters?: NonNullable<UsersControllerListPaginatedData['query']> }
 		| { mode: 'infinite'; filters?: Omit<NonNullable<UsersControllerListInfiniteData['query']>, 'cursor'> }
-	)) => {
+	) = {}) => {
 		const optionsKey = [...(mode !== undefined ? [mode] : []), ...(filters ? [filters] : [])];
 		return ['users', ...optionsKey] as const;
 	},

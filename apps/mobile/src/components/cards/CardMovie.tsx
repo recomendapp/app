@@ -16,6 +16,7 @@ import { GAP } from "apps/mobile/src/theme/globals";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
 import { LogMovie, LogMovieWithMovieNoReview, MovieCompact, UserSummary } from "@libs/api-js";
 import { FixedOmit } from "../../utils/fixed-omit";
+import ButtonUserLogMovieWatch from "../buttons/movies/ButtonUserLogMovieWatch";
 
 interface CardMovieBaseProps
 	extends React.ComponentPropsWithRef<typeof Animated.View> {
@@ -30,7 +31,7 @@ interface CardMovieBaseProps
 		// Stats
 		showRating?: boolean;
 		// Actions
-		showActionRating?: boolean;
+		showActionWatch?: boolean;
 		onPress?: () => void;
 		onLongPress?: () => void;
 	}
@@ -67,7 +68,7 @@ export type CardMovieProps = VariantMap[keyof VariantMap];
 const CardMovieDefault = React.forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	FixedOmit<CardMovieProps, "variant" | "linked" | "onPress" | "onLongPress">
->(({ style, movie, skeleton, activity, profile, showActionRating, children, showRating, ...props }, ref) => {
+>(({ style, movie, skeleton, activity, profile, showActionWatch, children, showRating, ...props }, ref) => {
 	const { colors } = useTheme();
 	return (
 		<Animated.View
@@ -95,9 +96,9 @@ const CardMovieDefault = React.forwardRef<
 				</View>
 			</View>
 			{!skeleton && (
-				(showActionRating || showRating) && (
+				(showActionWatch || showRating) && (
 					<View style={tw`flex-row items-center gap-2`}>
-						{showActionRating && <ButtonUserLogMovieRating movie={movie} />}
+						{showActionWatch && <ButtonUserLogMovieWatch movie={movie} />}
 						{showRating && <IconMediaRating rating={activity?.rating} />}
 					</View>
 				)
@@ -153,7 +154,7 @@ CardMoviePoster.displayName = "CardMoviePoster";
 const CardMovieList = React.forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	FixedOmit<VariantMap["list"], "variant" | "linked" | "onPress" | "onLongPress">
->(({ style, movie, skeleton, activity, profile, showActionRating, children, showRating, hideReleaseDate, hideDirectors, ...props }, ref) => {
+>(({ style, movie, skeleton, activity, profile, showActionWatch, children, showRating, hideReleaseDate, hideDirectors, ...props }, ref) => {
 	return (
 		<Animated.View
 		ref={ref}

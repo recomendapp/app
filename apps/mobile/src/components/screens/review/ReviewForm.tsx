@@ -204,9 +204,9 @@ const ReviewForm = ({
 				multiline
 				/>
 				{type === 'movie' ? (
-					<CardMovie movie={movie} linked={false} showActionRating />
+					<CardMovie movie={movie} href={null} showActionWatch />
 				) : type === 'tv_series' && (
-					<CardTvSeries tvSeries={tvSeries} linked={false} showActionRating />
+					<CardTvSeries tvSeries={tvSeries} href={null} showActionWatch />
 				)}
 			</View>
 			<EnrichedTextInput

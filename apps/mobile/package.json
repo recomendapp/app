@@ -1,9 +1,10 @@
 {
   "name": "mobile",
   "version": "0.0.1",
+  "main": "index.js",
   "private": true,
   "scripts": {
-    "eas-build-post-install": "cd ../../ && node tools/scripts/eas-build-post-install.mjs . apps/mobile",
+    "eas-build-pre-install": "if [ \"$EAS_BUILD_PLATFORM\" = \"android\" ]; then echo $GOOGLE_SERVICES_ANDROID_BASE64 | base64 --decode > ./google-services.json; elif [ \"$EAS_BUILD_PLATFORM\" = \"ios\" ]; then echo $GOOGLE_SERVICES_IOS_BASE64 | base64 --decode > ./GoogleService-Info.plist; fi",
     "android": "expo run:android",
     "ios": "expo run:ios"
   },
@@ -24,7 +25,7 @@
     "react-native-web": "*",
     "@nx/eslint-plugin": "*",
     "eslint-config-expo": "*",
-    "eslint-plugin-react-compiler": "*",
+    "eslint-plugin-react-compiler": "^19.1.0-rc.2",
     "expo-router": "*",
     "@nx/devkit": "*",
     "@nx/eslint": "*",
@@ -131,7 +132,8 @@
     "better-auth": "*",
     "@better-auth/expo": "*",
     "@better-auth/core": "*",
-    "expo-network": "*"
+    "expo-network": "*",
+    "@react-native-community/datetimepicker": "*"
   },
   "devDependencies": {}
 }

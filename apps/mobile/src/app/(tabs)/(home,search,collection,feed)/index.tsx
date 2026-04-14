@@ -28,7 +28,7 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import { useQueryClient } from '@tanstack/react-query';
 import { NativeStackHeaderItem } from '@react-navigation/native-stack';
 import UserAvatar from 'apps/mobile/src/components/user/UserAvatar';
-import { userKeys } from 'apps/mobile/src/api/users/userKeys';
+import { userKeys, widgetKeys } from '@libs/query-client';
 
 const HeaderLeft = () => {
   const { user } = useAuth();
@@ -144,13 +144,13 @@ const HomeScreen = () => {
   const refetch = async () => {
     setIsRefetching(true);
     try {
-      // queryClient.invalidateQueries({ queryKey: widgetKeys.recosTrending() }); // WidgetMostRecommended
-      // queryClient.invalidateQueries({ queryKey: widgetKeys.mostPopular() }); // WidgetMostPopular
+      queryClient.invalidateQueries({ queryKey: widgetKeys.recosTrending() }); // WidgetMostRecommended
+      queryClient.invalidateQueries({ queryKey: widgetKeys.mediasMostPopular() }); // WidgetMostPopular
       if (user?.id) {
-        queryClient.invalidateQueries({ queryKey: userKeys.recos({ userId: user.id, type: 'all' })}); // WidgetUserRecos
-        queryClient.invalidateQueries({ queryKey: userKeys.watchlist({ userId: user.id, type: 'all' })}); // WidgetUserBookmarks
-        queryClient.invalidateQueries({ queryKey: userKeys.playlistsFriends({ userId: user.id })}); // WidgetUserFriendsPlaylists
-        // queryClient.invalidateQueries({ queryKey: widgetKeys.users({ filters: { sortBy: 'created_at', sortOrder: 'desc' }})}); // WidgetUserDiscovery
+        queryClient.invalidateQueries({ queryKey: userKeys.recos({ userId: user.id })}); // WidgetUserRecos
+        queryClient.invalidateQueries({ queryKey: userKeys.bookmarks({ userId: user.id })}); // WidgetUserBookmarks
+        queryClient.invalidateQueries({ queryKey: userKeys.playlistsFollowing({ userId: user.id })}); // WidgetUserFriendsPlaylists
+        queryClient.invalidateQueries({ queryKey: userKeys.list()}); // WidgetUserDiscovery
       }
     } finally {
       setIsRefetching(false);

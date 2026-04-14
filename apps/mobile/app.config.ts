@@ -118,17 +118,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 			'expo-build-properties',
 			{
 				ios: {
-					deploymentTarget: '15.4',
-					useFrameworks: 'static',
-					forceStaticLinking: [
-						'RNFBApp',
-						// 'RNFBAppCheck'
-					],
-				},
-				android: {
-					"compileSdkVersion": 35,
-					"targetSdkVersion": 35,
-					"buildToolsVersion": "35.0.0"
+					deploymentTarget: '16.0',
 				},
 			},
 		],
@@ -147,12 +137,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 				]
 			}
 	  	],
-		[
-			"expo-web-browser",
-			{
-			"experimentalLauncherActivity": true
-			}
-		],
+		"expo-web-browser",
 		[
 		  'expo-splash-screen',
 		  {

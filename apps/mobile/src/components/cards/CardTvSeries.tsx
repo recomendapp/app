@@ -10,11 +10,11 @@ import { IconMediaRating } from "../medias/IconMediaRating";
 import { Skeleton } from "../ui/Skeleton";
 import BottomSheetTvSeries from "../bottom-sheets/sheets/BottomSheetTvSeries";
 import { Text } from "../ui/text";
-import ButtonUserLogTvSeriesRating from "../buttons/tv-series/ButtonUserLogTvSeriesRating";
 import { GAP } from "apps/mobile/src/theme/globals";
 import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
 import { LogTvSeries, LogTvSeriesWithTvSeriesNoReview, TvSeriesCompact, UserSummary } from "@libs/api-js";
 import { FixedOmit } from "../../utils/fixed-omit";
+import ButtonUserLogTvSeriesWatch from "../buttons/tv-series/ButtonUserLogTvSeriesWatch";
 
 interface CardTvSeriesBaseProps
 	extends React.ComponentPropsWithRef<typeof Animated.View> {
@@ -29,7 +29,7 @@ interface CardTvSeriesBaseProps
 		// Stats
 		showRating?: boolean;
 		// Actions
-		showActionRating?: boolean;
+		showActionWatch?: boolean;
 		onPress?: () => void;
 		onLongPress?: () => void;
 	}
@@ -66,7 +66,7 @@ export type CardTvSeriesProps = VariantMap[keyof VariantMap];
 const CardTvSeriesDefault = React.forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	FixedOmit<CardTvSeriesProps, "variant" | "linked" | "onPress" | "onLongPress">
->(({ style, tvSeries, skeleton, activity, profile, showActionRating, children, showRating, ...props }, ref) => {
+>(({ style, tvSeries, skeleton, activity, profile, showActionWatch, children, showRating, ...props }, ref) => {
 	const { colors } = useTheme();
 	return (
 		<Animated.View
@@ -94,9 +94,9 @@ const CardTvSeriesDefault = React.forwardRef<
 				</View>
 			</View>
 			{!skeleton && (
-				(showActionRating || showRating) && (
+				(showActionWatch || showRating) && (
 					<View style={tw`flex-row items-center gap-2`}>
-						{showActionRating && <ButtonUserLogTvSeriesRating tvSeries={tvSeries} />}
+						{showActionWatch && <ButtonUserLogTvSeriesWatch tvSeries={tvSeries} />}
 						{showRating && <IconMediaRating rating={activity?.rating} />}
 					</View>
 				)
@@ -152,7 +152,7 @@ CardTvSeriesPoster.displayName = "CardTvSeriesPoster";
 const CardTvSeriesList = React.forwardRef<
 	React.ComponentRef<typeof Animated.View>,
 	FixedOmit<VariantMap["list"], "variant" | "linked" | "onPress" | "onLongPress">
->(({ style, tvSeries, skeleton, activity, profile, showActionRating, children, showRating, hideReleaseDate, hideCreator, ...props }, ref) => {
+>(({ style, tvSeries, skeleton, activity, profile, showActionWatch, children, showRating, hideReleaseDate, hideCreator, ...props }, ref) => {
 	return (
 		<Animated.View
 		ref={ref}

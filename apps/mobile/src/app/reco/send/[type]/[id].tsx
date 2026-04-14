@@ -7,15 +7,13 @@ import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { upperFirst } from "lodash";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Alert, Pressable } from "react-native";
+import { Alert, Pressable, TextInput, useWindowDimensions } from "react-native";
 import { useTranslations } from "use-intl";
 import { z } from "zod";
 import { SelectionFooter } from "apps/mobile/src/components/ui/SelectionFooter";
 import tw from "apps/mobile/src/lib/tw";
-import { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
-import { SearchBar } from "apps/mobile/src/components/ui/searchbar";
-import { PADDING, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
-import { AnimatedLegendList } from "@legendapp/list/reanimated";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import { IOS_TOOLBAR_HEIGHT, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import Fuse from "fuse.js";
 import { Icons } from "apps/mobile/src/constants/Icons";
@@ -26,7 +24,9 @@ import { Checkbox } from "apps/mobile/src/components/ui/checkbox";
 import { useToast } from "apps/mobile/src/components/Toast";
 import { useQuery } from "@tanstack/react-query";
 import { userRecoSendAllOptions, useUserRecoSendMutation } from "@libs/query-client";
-import { UserSummary } from "@libs/api-js";
+import { RecoTarget, UserSummary } from "@libs/api-js";
+import { FlashList } from "@shopify/flash-list";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -34,11 +34,15 @@ const RecoSend = () => {
 	const t = useTranslations();
 	const router = useRouter();
 	const toast = useToast();
-	const { mode } = useTheme();
+	const { colors, mode, isLiquidGlassAvailable } = useTheme();
+	const insets = useSafeAreaInsets();
 	const { user } = useAuth();
+	const { width: SCREEN_WIDTH } = useWindowDimensions();
 	const { type, id } = useLocalSearchParams();
 	const mediaId = Number(id);
 	const mediaType = type === 'movie' ? 'movie' : 'tv_series';
+
+	const [toolbarView, setToolbarView] = useState<'main' | 'comment' | 'targets'>('main');
 
 	// Form
 	const sendRecoFormSchema = z.object({
@@ -68,7 +72,7 @@ const RecoSend = () => {
 	const [search, setSearch] = useState('');
 	const [results, setResults] = useState<typeof friends>([]);
 	const [selected, setSelected] = useState<UserSummary[]>([]);
-	const resultsRender = results?.map((item) => ({ item: item, isSelected: selected.some((selectedItem) => selectedItem.id === item.id) }));
+	const resultsRender = useMemo(() => results?.map((item) => ({ item: item, isSelected: selected.some((selectedItem) => selectedItem.id === item.id) })) || [], [results, selected]);
 	const canSave = useMemo(() => {
 		return selected.length > 0;
 	}, [selected]);
@@ -155,15 +159,43 @@ const RecoSend = () => {
 	// AnimatedStyles
 	const animatedFooterStyle = useAnimatedStyle(() => {
 		return {
-			marginBottom: withTiming(footerHeight.value, { duration: 200 }),
+			height: Math.max(footerHeight.value, insets.bottom),
 		};
 	});
+
+	// Render
+	const renderItem = useCallback(({ item: { item: { alreadySeen, alreadySent, ...friend }, isSelected } }: { item: { item: RecoTarget, isSelected: boolean } }) => (
+		<Pressable disabled={alreadySeen} onPress={() => handleToggleUser(friend)} style={tw`flex-row items-center justify-between`}>
+			<CardUser user={friend} linked={false} style={tw`border-0 p-0 h-auto bg-transparent`} />
+			<View style={tw`flex-row items-center gap-2`}>
+				{alreadySent && (
+				<Badge variant="accent-yellow">
+					{upperFirst(t('common.messages.already_sent'))}
+				</Badge>
+				)}
+				{alreadySeen && (
+				<Badge variant="destructive">
+					{upperFirst(t('common.messages.already_watched'))}
+				</Badge>
+				)}
+				<Checkbox
+				checked={isSelected}
+				onCheckedChange={() => handleToggleUser(friend)}
+				/>
+			</View>
+		</Pressable>
+	), [handleToggleUser, t]);
 
 	return (
 	<>
 		<Stack.Screen
 			options={{
-				headerTitle: upperFirst(t('common.messages.send_to_friend')),
+				headerSearchBarOptions: {
+					autoCapitalize: 'none',
+					placeholder: upperFirst(t('common.messages.search_user', { count: 1 })),
+					onChangeText: (e) => setSearch(e.nativeEvent.text),
+					hideNavigationBar: false,
+				},
 				headerRight: () => (
 					<Button
 					variant="outline"
@@ -199,38 +231,80 @@ const RecoSend = () => {
 				],
 			}}
 		/>
-		<View style={[{ paddingHorizontal: PADDING, paddingVertical: PADDING_VERTICAL }]}>
-			<SearchBar
-			autoCorrect={false}
-			autoComplete="off"
-			autoCapitalize="none"
-			onSearch={setSearch}
-			placeholder={upperFirst(t('common.messages.search_user', { count: 1 }))}
-			/>
-		</View>
-		<AnimatedLegendList
-		data={resultsRender}
-		renderItem={({ item: { item: { alreadySeen, alreadySent, ...friend }, isSelected } }) => (
-			<Pressable disabled={alreadySeen} onPress={() => handleToggleUser(friend)} style={[{ marginHorizontal: PADDING_HORIZONTAL }, tw`flex-row items-center justify-between`]}>
-				<CardUser user={friend} linked={false} style={tw`border-0 p-0 h-auto bg-transparent`} />
-				<View style={tw`flex-row items-center gap-2`}>
-					{alreadySent && (
-					<Badge variant="accent-yellow">
-						{upperFirst(t('common.messages.already_sent'))}
-					</Badge>
-					)}
-					{alreadySeen && (
-					<Badge variant="destructive">
-						{upperFirst(t('common.messages.already_watched'))}
-					</Badge>
-					)}
-					<Checkbox
-					checked={isSelected}
-					onCheckedChange={() => handleToggleUser(friend)}
-					/>
-				</View>
-			</Pressable>
+		{isLiquidGlassAvailable && (
+				<Stack.Toolbar>
+				{toolbarView === 'comment' ? (
+				<>
+					<Stack.Toolbar.View>
+						<View style={[tw`justify-center h-20`, { width: SCREEN_WIDTH - 80, paddingHorizontal: PADDING_HORIZONTAL, paddingVertical: PADDING_VERTICAL }]}>
+							<Controller
+								name="comment"
+								control={form.control}
+								render={({ field: { onChange, onBlur, value } }) => (
+									<TextInput
+										placeholder={upperFirst(t('common.messages.add_comment', { count: 1 }))}
+										autoCapitalize="sentences"
+										value={value || ''}
+										onChangeText={onChange}
+										onBlur={onBlur}
+										multiline
+										style={{
+											color: colors.foreground,
+										}}
+										placeholderTextColor={colors.mutedForeground}
+										autoFocus
+									/>
+								)}
+							/>
+						</View>
+					</Stack.Toolbar.View>
+					<Stack.Toolbar.Button icon={'xmark'} onPress={() => setToolbarView('main')} />
+				</>
+				) : toolbarView === 'targets' ? (
+				<>
+					<Stack.Toolbar.View>
+						<View style={[tw`justify-center h-20`, { width: SCREEN_WIDTH - 80 }]}>
+							<FlashList
+								horizontal
+								data={selected}
+								keyExtractor={(item) => item.id!.toString()}
+								showsHorizontalScrollIndicator={false}
+								contentContainerStyle={[
+									tw`items-center`, 
+									{ paddingHorizontal: PADDING_HORIZONTAL, gap: 8 }
+								]}
+								renderItem={({ item }) => (
+									<CardUser 
+										user={item} 
+										variant="icon" 
+										linked={false} 
+										onPress={() => handleToggleUser(item)} 
+										width={50} 
+										height={50} 
+									/>
+								)}
+								ListEmptyComponent={
+									<Text textColor="muted" style={tw`text-sm`}>
+										{upperFirst(t('common.messages.select_users_to_send_reco'))}
+									</Text>
+								}
+							/>
+						</View>
+					</Stack.Toolbar.View>
+					<Stack.Toolbar.Button icon={'xmark'} onPress={() => setToolbarView('main')} />
+				</>
+				) : (
+				<>
+					<Stack.Toolbar.SearchBarSlot />
+					<Stack.Toolbar.Button icon={'text.aligncenter'} onPress={() => setToolbarView('comment')} />
+					<Stack.Toolbar.Button icon={'person'} onPress={() => setToolbarView('targets')} />
+				</>
+				)}
+			</Stack.Toolbar>
 		)}
+		<FlashList
+		data={resultsRender}
+		renderItem={renderItem}
 		ListEmptyComponent={
 			isSendingReco ? <Icons.Loader />
 			: (
@@ -241,41 +315,51 @@ const RecoSend = () => {
 				</View>
 			)
 		}
-		keyExtractor={({ item }) => item.id.toString()}
+		keyExtractor={({ item }) => item.id}
 		refreshing={isRefetching}
 		onRefresh={refetch}
+		maintainVisibleContentPosition={{
+			disabled: true,
+		}}
 		onEndReachedThreshold={0.5}
 		contentContainerStyle={[
 			tw`gap-2`,
-			{ paddingBottom: PADDING_VERTICAL },
+			{
+				paddingBottom: isLiquidGlassAvailable ? insets.bottom + PADDING_VERTICAL + IOS_TOOLBAR_HEIGHT : 0,
+				paddingHorizontal: PADDING_HORIZONTAL,
+			},
 		]}
-		style={animatedFooterStyle}
 		keyboardShouldPersistTaps='handled'
 		/>
-		<SelectionFooter
-		data={selected}
-		visibleHeight={footerHeight}
-		renderItem={({ item }) => (
-			<CardUser user={item} variant="icon" linked={false} onPress={() => handleToggleUser(item)} width={50} height={50} />
-		)}
-		keyExtractor={(item) => item.id!.toString()}
-		>
-			<Controller
-			name="comment"
-			control={form.control}
-			render={({ field: { onChange, onBlur, value } }) => (
-				<Input
-				placeholder={upperFirst(t('common.messages.add_comment', { count: 1 }))}
-				autoCapitalize="sentences"
-				value={value || ''}
-				onChangeText={onChange}
-				onBlur={onBlur}
-				disabled={isSendingReco}
-				error={form.formState.errors.comment?.message}
-				/>
+		{!isLiquidGlassAvailable && (
+		<>
+			<Animated.View style={animatedFooterStyle} />
+			<SelectionFooter
+			data={selected}
+			visibleHeight={footerHeight}
+			renderItem={({ item }) => (
+				<CardUser user={item} variant="icon" linked={false} onPress={() => handleToggleUser(item)} width={50} height={50} />
 			)}
-			/>
-		</SelectionFooter>
+			keyExtractor={(item) => item.id.toString()}
+			>
+				<Controller
+				name="comment"
+				control={form.control}
+				render={({ field: { onChange, onBlur, value } }) => (
+					<Input
+					placeholder={upperFirst(t('common.messages.add_comment', { count: 1 }))}
+					autoCapitalize="sentences"
+					value={value || ''}
+					onChangeText={onChange}
+					onBlur={onBlur}
+					disabled={isSendingReco}
+					error={form.formState.errors.comment?.message}
+					/>
+				)}
+				/>
+			</SelectionFooter>
+		</>
+		)}
 	</>
 	)
 };

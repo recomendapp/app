@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "tslib": "^2.3.0",
-    "@libs/api-js": "0.0.1",
+    "@libs/api-js": "workspace:*",
     "@tanstack/react-query": "^5.90.20",
     "react": "^19.2.0"
   }

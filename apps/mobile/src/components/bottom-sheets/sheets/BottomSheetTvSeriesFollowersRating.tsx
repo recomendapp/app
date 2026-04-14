@@ -23,7 +23,7 @@ interface BottomSheetTvSeriesFollowersRatingProps extends BottomSheetProps {
 const BottomSheetTvSeriesFollowersRating = React.forwardRef<
 	React.ComponentRef<typeof TrueSheet>,
 	BottomSheetTvSeriesFollowersRatingProps
->(({ id, tvSeriesId, detents = [0.5, 1], ...props }, ref) => {
+>(({ id, tvSeriesId, detents = [0.8], ...props }, ref) => {
   const insets = useSafeAreaInsets();
   const t = useTranslations();
   const { user } = useAuth();

@@ -19,3 +19,7 @@ export const ICON_ACTION_SIZE = 24;
 export const SOCIAL_CARD_WIDTH = 540;
 
 export const WIDTH_CARD_XS = 96;
+
+// IOS
+// Toolbar
+export const IOS_TOOLBAR_HEIGHT = 49;

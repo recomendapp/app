@@ -9,16 +9,14 @@ import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { upperFirst } from "lodash";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Alert, Pressable } from "react-native";
+import { Alert, Pressable, TextInput, useWindowDimensions } from "react-native";
 import { useTranslations } from "use-intl";
 import { z } from "zod";
 import { SelectionFooter } from "apps/mobile/src/components/ui/SelectionFooter";
 import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
 import tw from "apps/mobile/src/lib/tw";
-import Animated, { FadeInRight, FadeOutRight, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
-import { SearchBar } from "apps/mobile/src/components/ui/searchbar";
-import { PADDING, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
-import { AnimatedLegendList } from "@legendapp/list/reanimated";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import { GAP, IOS_TOOLBAR_HEIGHT, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import Fuse from "fuse.js";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { Badge } from "apps/mobile/src/components/ui/Badge";
@@ -26,24 +24,29 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Input } from "apps/mobile/src/components/ui/Input";
 import { Checkbox } from "apps/mobile/src/components/ui/checkbox";
 import { useToast } from "apps/mobile/src/components/Toast";
-import { useSupabaseClient } from "apps/mobile/src/providers/SupabaseProvider";
 import { usePlaylistItemsAddMutation, userPlaylistsAddTargetsAllOptions } from "@libs/query-client";
-import { Playlist, PlaylistWithOwner } from "@libs/api-js";
+import { Playlist, PlaylistsAddTarget, PlaylistWithOwner } from "@libs/api-js";
+import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { FlashList } from "@shopify/flash-list";
 
 const COMMENT_MAX_LENGTH = 180;
 
 const PlaylistAddTo = () => {
 	const t = useTranslations();
 	const router = useRouter();
-	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const { colors, isLiquidGlassAvailable } = useTheme();
+	const insets = useSafeAreaInsets();
+	const { width: SCREEN_WIDTH } = useWindowDimensions();
 	const toast = useToast();
 	const { user } = useAuth();
-	// const { movie_id, movie_title } = useLocalSearchParams();
 	const { type, id, title } = useLocalSearchParams();
 	const mediaId = Number(id);
 	const mediaType = type === 'movie' ? 'movie' : 'tv_series';
 	const mediaTitle = title ? String(title) : undefined;
+
+	const [toolbarView, setToolbarView] = useState<'main' | 'comment' | 'targets'>('main');
 
 	// Form
 	const addToPlaylistFormSchema = z.object({
@@ -78,7 +81,7 @@ const PlaylistAddTo = () => {
 	const [search, setSearch] = useState('');
 	const [results, setResults] = useState<typeof playlists>([]);
 	const [selected, setSelected] = useState<PlaylistWithOwner[]>([]);
-	const resultsRender = results?.map((item) => ({ item: item, isSelected: selected.some((selectedItem) => selectedItem.id === item.id) })) || [];
+	const resultsRender = useMemo(() => results?.map((item) => ({ item: item, isSelected: selected.some((selectedItem) => selectedItem.id === item.id) })) || [], [results, selected]);
 	const canSave = useMemo(() => selected.length > 0, [selected]);
 
 	// Queries
@@ -94,7 +97,7 @@ const PlaylistAddTo = () => {
 	// Search
 	const fuse = useMemo(() => {
 		return new Fuse(playlists || [], {
-			keys: ['playlist.title'],
+			keys: ['title'],
 			threshold: 0.5,
 		});
 	}, [playlists]);
@@ -173,6 +176,29 @@ const PlaylistAddTo = () => {
 		};
 	});
 
+	// Render
+	const renderItem = useCallback(({ item: { item: { alreadyAdded, ...playlist }, isSelected } }: { item: { item: PlaylistsAddTarget, isSelected: boolean } }) => (
+		<Pressable disabled={alreadyAdded} onPress={() => handleTogglePlaylist(playlist)} style={tw`flex-row items-center justify-between gap-2`}>
+			<View style={tw`shrink flex-row items-center gap-2`}>
+				<ImageWithFallback
+				source={{ uri: playlist.poster ?? '' }}
+				alt={playlist.title}
+				style={tw`rounded-md w-14 h-14`}
+				type="playlist"
+				/>
+				<Text style={tw`shrink`} numberOfLines={1}>{playlist.title}</Text>
+			</View>
+			<View style={tw`flex-row items-center gap-2 shrink-0`}>
+				{alreadyAdded && (
+				<Badge variant="destructive">
+					{upperFirst(t('common.messages.already_added', { count: 1, gender: 'male' }))}
+				</Badge>
+				)}
+				<Checkbox checked={isSelected} onCheckedChange={() => handleTogglePlaylist(playlist)} />
+			</View>
+		</Pressable>
+	), [handleTogglePlaylist, t]);
+
 	// useEffects
 	useEffect(() => {
 		return () => {
@@ -184,7 +210,12 @@ const PlaylistAddTo = () => {
 	<>
 		<Stack.Screen
 			options={{
-				headerTitle: upperFirst(t('common.messages.add_to_playlist')),
+				headerSearchBarOptions: {
+					autoCapitalize: 'none',
+					placeholder: upperFirst(t('common.messages.search_playlist', { count: 1 })),
+					onChangeText: (e) => setSearch(e.nativeEvent.text),
+					hideNavigationBar: false,
+				},
 				headerRight: () => (
 					<Button
 					variant="outline"
@@ -220,50 +251,84 @@ const PlaylistAddTo = () => {
 				],
 			}}
 		/>
-		<View style={[tw`gap-2`, { paddingHorizontal: PADDING, paddingVertical: PADDING_VERTICAL }]}>
-			<View style={tw`flex-row items-center justify-between gap-2`}>
-				<SearchBar
-				autoCorrect={false}
-				autoComplete="off"
-				autoCapitalize="none"
-				onSearch={setSearch}
-				placeholder={upperFirst(t('common.messages.search_playlist', { count: 1 }))}
-				containerStyle={tw`flex-1`}
-				/>
-				<Animated.View 
-				entering={FadeInRight.duration(200)} 
-				exiting={FadeOutRight.duration(200)}
-				>
-					<Button 
-					icon={Icons.Add} 
-					onPress={() => BottomSheetPlaylistCreateRef.current?.present()} 
-					/>
-				</Animated.View>
-			</View>
-		</View>
-		<AnimatedLegendList
-		data={resultsRender}
-		renderItem={({ item: { item: { alreadyAdded, ...playlist }, isSelected } }) => (
-			<Pressable disabled={alreadyAdded} onPress={() => handleTogglePlaylist(playlist)} style={[tw`flex-row items-center justify-between gap-2`, { paddingHorizontal: PADDING_HORIZONTAL }]}>
-				<View style={tw`shrink flex-row items-center gap-2`}>
-					<ImageWithFallback
-					source={{ uri: playlist.poster ?? '' }}
-					alt={playlist.title}
-					style={tw`rounded-md w-14 h-14`}
-					type="playlist"
-					/>
-					<Text style={tw`shrink`} numberOfLines={1}>{playlist.title}</Text>
-				</View>
-				<View style={tw`flex-row items-center gap-2 shrink-0`}>
-					{alreadyAdded && (
-					<Badge variant="destructive">
-						{upperFirst(t('common.messages.already_added', { count: 1, gender: 'male' }))}
-					</Badge>
-					)}
-					<Checkbox checked={isSelected} onCheckedChange={() => handleTogglePlaylist(playlist)} />
-				</View>
-			</Pressable>
+		{isLiquidGlassAvailable && (
+				<Stack.Toolbar>
+				{toolbarView === 'comment' ? (
+				<>
+					<Stack.Toolbar.View>
+						<View style={[tw`justify-center h-20`, { width: SCREEN_WIDTH - 80, paddingHorizontal: PADDING_HORIZONTAL, paddingVertical: PADDING_VERTICAL }]}>
+							<Controller
+								name="comment"
+								control={form.control}
+								render={({ field: { onChange, onBlur, value } }) => (
+									<TextInput
+										placeholder={upperFirst(t('common.messages.add_comment', { count: 1 }))}
+										autoCapitalize="sentences"
+										value={value || ''}
+										onChangeText={onChange}
+										onBlur={onBlur}
+										multiline
+										style={{
+											color: colors.foreground,
+										}}
+										placeholderTextColor={colors.mutedForeground}
+										autoFocus
+									/>
+								)}
+							/>
+						</View>
+					</Stack.Toolbar.View>
+					<Stack.Toolbar.Button icon={'xmark'} onPress={() => setToolbarView('main')} />
+				</>
+				) : toolbarView === 'targets' ? (
+				<>
+					<Stack.Toolbar.View>
+						<View style={[tw`justify-center h-20`, { width: SCREEN_WIDTH - 80 }]}>
+							<FlashList
+								horizontal
+								data={selected}
+								keyExtractor={(item) => item.id.toString()}
+								showsHorizontalScrollIndicator={false}
+								contentContainerStyle={[
+									tw`items-center`, 
+									{ paddingHorizontal: PADDING_HORIZONTAL, gap: 8 }
+								]}
+								ItemSeparatorComponent={() => <View style={{ width: GAP }} />}
+								renderItem={({ item }) => (
+									<Pressable
+									onPress={() => handleTogglePlaylist(item)}
+									>
+										<ImageWithFallback
+										source={{ uri: item.poster ?? '' }}
+										alt={item.title}
+										style={tw`rounded-md w-10 h-10`}
+										type="playlist"
+										/>
+									</Pressable>
+								)}
+								ListEmptyComponent={
+									<Text textColor="muted" style={tw`text-sm`}>
+										{upperFirst(t('common.messages.select_playlists_to_add_the_item'))}
+									</Text>
+								}
+							/>
+						</View>
+					</Stack.Toolbar.View>
+					<Stack.Toolbar.Button icon={'xmark'} onPress={() => setToolbarView('main')} />
+				</>
+				) : (
+				<>
+					<Stack.Toolbar.SearchBarSlot />
+					<Stack.Toolbar.Button icon={'text.aligncenter'} onPress={() => setToolbarView('comment')} />
+					<Stack.Toolbar.Button icon={'list.bullet'} onPress={() => setToolbarView('targets')} />
+					<Stack.Toolbar.Button icon={'text.badge.plus'} onPress={() => BottomSheetPlaylistCreateRef.current?.present()} />
+				</>
+				)}
+			</Stack.Toolbar>
 		)}
+		<FlashList
+		data={resultsRender}
+		renderItem={renderItem}
 		ListEmptyComponent={
 			isAddingToPlaylist ? <Icons.Loader />
 			: (
@@ -277,51 +342,58 @@ const PlaylistAddTo = () => {
 		keyExtractor={({ item }) => item.id.toString()}
 		refreshing={isRefetching}
 		onRefresh={refetch}
+		maintainVisibleContentPosition={{
+			disabled: true,
+		}}
+		ItemSeparatorComponent={() => <View style={{ height: GAP }} />}
 		onEndReachedThreshold={0.5}
 		contentContainerStyle={[
-			tw`gap-2`,
-			{ paddingBottom: PADDING_VERTICAL },
+			{
+				paddingBottom: isLiquidGlassAvailable ? insets.bottom + PADDING_VERTICAL + IOS_TOOLBAR_HEIGHT : 0,
+				paddingHorizontal: PADDING_HORIZONTAL,
+			},
 		]}
-		style={animatedFooterStyle}
 		keyboardShouldPersistTaps='handled'
 		/>
-		<SelectionFooter
-		data={selected}
-		visibleHeight={footerHeight}
-		renderItem={({ item }) => (
-			<Pressable
-			key={item.id}
-			onPress={() => setSelected((prev) => prev.filter(
-			(selectedPlaylist) => selectedPlaylist?.id !== item.id
-			))}
-			>
-				<ImageWithFallback
-				source={{ uri: item.poster ?? '' }}
-				alt={item.title}
-				style={tw`rounded-md w-10 h-10`}
-				type="playlist"
-				/>
-			</Pressable>
-		)}
-		keyExtractor={(item) => item.id.toString()}
-		>
-			<Controller
-			name="comment"
-			control={form.control}
-			render={({ field: { onChange, onBlur, value } }) => (
-				<Input
-				placeholder={upperFirst(t('common.messages.add_comment', { count: 1 }))}
-				autoCapitalize="sentences"
-				value={value || ''}
-				onChangeText={onChange}
-				onBlur={onBlur}
-				disabled={isAddingToPlaylist}
-				error={form.formState.errors.comment?.message}
-				/>
+		{!isLiquidGlassAvailable && (
+		<>
+			<Animated.View style={animatedFooterStyle} />
+			<SelectionFooter
+			data={selected}
+			visibleHeight={footerHeight}
+			renderItem={({ item }) => (
+				<Pressable
+				key={item.id}
+				onPress={() => handleTogglePlaylist(item)}
+				>
+					<ImageWithFallback
+					source={{ uri: item.poster ?? '' }}
+					alt={item.title}
+					style={tw`rounded-md w-10 h-10`}
+					type="playlist"
+					/>
+				</Pressable>
 			)}
-			/>
-		</SelectionFooter>
-
+			keyExtractor={(item) => item.id.toString()}
+			>
+				<Controller
+				name="comment"
+				control={form.control}
+				render={({ field: { onChange, onBlur, value } }) => (
+					<Input
+					placeholder={upperFirst(t('common.messages.add_comment', { count: 1 }))}
+					autoCapitalize="sentences"
+					value={value || ''}
+					onChangeText={onChange}
+					onBlur={onBlur}
+					disabled={isAddingToPlaylist}
+					error={form.formState.errors.comment?.message}
+					/>
+				)}
+				/>
+			</SelectionFooter>
+		</>
+		)}
 		<BottomSheetPlaylistCreate
 		ref={BottomSheetPlaylistCreateRef}
 		id={`${mediaType}-${mediaId}-create-playlist`}

@@ -8,7 +8,7 @@
   "dependencies": {
     "tslib": "^2.3.0",
     "zod": "^4.3.6",
-    "@libs/i18n": "0.0.1",
+    "@libs/i18n": "workspace:*",
     "@nestjs/bullmq": "^11.0.4",
     "@nestjs/common": "^11.0.0",
     "bullmq": "^5.67.2"

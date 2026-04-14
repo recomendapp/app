@@ -1,9 +1,9 @@
 import { Provider } from '@nestjs/common';
 import { APIError, betterAuth } from 'better-auth';
-import { createAuthMiddleware, emailOTP, magicLink, openAPI, username } from 'better-auth/plugins';
+import { emailOTP, openAPI, username } from 'better-auth/plugins';
 import { expo } from '@better-auth/expo';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { ENV_SERVICE, EnvService } from '@libs/env'; // Ton token
+import { ENV_SERVICE, EnvService } from '@libs/env';
 import { NotifyClient } from '@shared/notify';
 import { WorkerClient } from '@shared/worker';
 import { profile, user } from '@libs/db/schemas';
@@ -15,6 +15,7 @@ import { defaultSupportedLocale, SupportedLocale } from '@libs/i18n';
 import { additionalFields, auth } from '@libs/db';
 import { generateUniqueUsername } from '../../utils/generate-username';
 import { eq } from 'drizzle-orm';
+import { createAuthMiddleware } from 'better-auth/api';
 
 export const AUTH_SERVICE = 'AUTH_SERVICE';
 

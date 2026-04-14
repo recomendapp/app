@@ -1,6 +1,5 @@
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { Icons } from "apps/mobile/src/constants/Icons";
-import { useUserWatchlistMovieDeleteMutation, useUserWatchlistMovieInsertMutation } from "apps/mobile/src/api/users/userMutations";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";

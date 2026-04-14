@@ -23,7 +23,7 @@ interface BottomSheetMovieFollowersRatingProps extends BottomSheetProps {
 const BottomSheetMovieFollowersRating = React.forwardRef<
 	React.ComponentRef<typeof TrueSheet>,
 	BottomSheetMovieFollowersRatingProps
->(({ id, movieId, detents = [0.5, 1], ...props }, ref) => {
+>(({ id, movieId, detents = [0.8], ...props }, ref) => {
   const insets = useSafeAreaInsets();
   const t = useTranslations();
   const { user } = useAuth();
