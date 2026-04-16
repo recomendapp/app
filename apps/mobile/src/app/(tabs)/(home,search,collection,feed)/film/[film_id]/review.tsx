@@ -4,13 +4,13 @@ import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { getIdFromSlug } from "apps/mobile/src/utils/getIdFromSlug";
 import tw from "apps/mobile/src/lib/tw";
 import { Redirect, Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { View } from "react-native"
+import { Alert, View } from "react-native"
 import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
 import { useToast } from "apps/mobile/src/components/Toast";
 import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { movieOptions, useMovieReviewUpsertMutation, userMovieLogOptions } from "@libs/query-client";
+import { movieOptions, useMovieReviewDeleteMutation, useMovieReviewUpsertMutation, userMovieLogOptions } from "@libs/query-client";
 
 const MovieReviewScreen = () => {
 	const { user } = useAuth();
@@ -36,34 +36,81 @@ const MovieReviewScreen = () => {
 	const loading = movieLoading || movie === undefined || isLoading || log === undefined;
 	// Mutations
 	const { mutateAsync: upsertReview } = useMovieReviewUpsertMutation();
+	const { mutateAsync: deleteReview } = useMovieReviewDeleteMutation();
 
 	// Handlers
 	const handleSave = useCallback(async (data: { title: string; body: string }) => {
 		if (!movie) return;
+		const isEditing = !!log?.review;
 		await upsertReview({
 			path: {
 				movie_id: movie.id,
 			},
 			body: {
-				title: data.title,
+				title: data.title.trim() || null,
 				body: data.body,
 				isSpoiler: false,
 			}
 		}, {
-			onSuccess: (review) => {
-				router.replace({
-					pathname: '/user/[username]/film/[film_id]',
-					params: {
-						username: user?.username!,
-						film_id: movie.id,
-					}
-				});
+			onSuccess: () => {
+				if (isEditing && router.canGoBack()) {
+                    router.back();
+                } else {
+                    router.replace({
+                        pathname: '/user/[username]/film/[film_id]',
+                        params: {
+                            username: user?.username!,
+                            film_id: movie.id,
+                        }
+                    });
+                }
 			},
-			onError: (error) => {
+			onError: () => {
 				toast.error(upperFirst(t('common.messages.error')), { description: upperFirst(t('common.messages.an_error_occurred')) });
 			}
 		});
 	}, [upsertReview, router, movie, toast, t, user?.username]);
+	const handleDelete = useCallback(async () => {
+		if (!log?.review) return;
+		Alert.alert(
+			upperFirst(t('common.messages.are_u_sure')),
+			undefined,
+			[
+				{
+					text: upperFirst(t('common.messages.cancel')),
+					style: 'cancel',
+				},
+				{
+					text: upperFirst(t('common.messages.delete')),
+					onPress: async () => {
+						await deleteReview({
+							path: {
+								movie_id: log.movieId,
+							}
+						}, {
+							onSuccess: () => {
+								toast.success(upperFirst(t('common.messages.deleted')));
+								if (router.canGoBack()) {
+									router.back();
+								} else {
+									router.replace({
+										pathname: '/film/[film_id]',
+										params: {
+											film_id: log.movieId,
+										}
+									});
+								}
+							},
+							onError: () => {
+								toast.error(upperFirst(t('common.messages.error')), { description: upperFirst(t('common.messages.an_error_occurred')) });
+							}
+						});
+					},
+					style: 'destructive',
+				}
+			]
+		)
+	}, [deleteReview, router, log, toast, t]);
 
 	if (movie === null) {
 		return (
@@ -92,6 +139,7 @@ const MovieReviewScreen = () => {
 		type="movie"
 		movie={movie}
 		onSave={handleSave}
+		onDelete={handleDelete}
 		/>
 	</>
 	)

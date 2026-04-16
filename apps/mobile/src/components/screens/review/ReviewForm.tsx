@@ -20,12 +20,15 @@ import { useReanimatedKeyboardAnimation } from "react-native-keyboard-controller
 import { usePreventRemove } from "@react-navigation/native";
 import { Alert } from "react-native";
 import { Movie, TvSeries, ReviewMovie as TReviewMovie, ReviewTvSeries as TReviewTvSeries } from '@libs/api-js';
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { NativeStackHeaderItem } from "@react-navigation/native-stack";
 
 const MAX_TITLE_LENGTH = 50;
 
 interface ReviewFormBaseProps {
 	isWatched: boolean;
 	onSave?: (review: { title: string; body: string }) => void | Promise<void>;
+	onDelete?: () => void | Promise<void>;
 };
 
 type ReviewFormMovieProps = {
@@ -52,6 +55,7 @@ const ReviewForm = ({
 	movie,
 	tvSeries,
 	onSave,
+	onDelete,
 } : ReviewFormProps) => {
 	const toast = useToast();
 	const insets = useSafeAreaInsets();
@@ -65,6 +69,8 @@ const ReviewForm = ({
 	const toolbarHeight = useSharedValue(0);
 	const { height: keyboardHeight, progress } = useReanimatedKeyboardAnimation();
 	const [isSaving, setIsSaving] = useState(false);
+	const [isDeleting, setIsDeleting] = useState(false);
+
 	const hasChanges = useMemo(() => {
 		const bodyChanged = review ? (body !== null && body !== review.body) : (body !== null && body !== undefined && body.length > 0);
 		return title !== (review?.title || '') || bodyChanged;
@@ -94,6 +100,14 @@ const ReviewForm = ({
 			setIsSaving(false);
 		}
 	}, [isWatched, onSave, title, t, toast, body]);
+    const handleDelete = useCallback(async () => {
+        setIsDeleting(true);
+        try {
+            await onDelete?.();
+        } catch {
+            setIsDeleting(false); 
+        }
+    }, [onDelete]);
 
 	const scrollViewStyle = useAnimatedStyle(() => {
 		const closedPadding = bottomOffset + PADDING_VERTICAL;
@@ -112,7 +126,7 @@ const ReviewForm = ({
 		};
 	});
 
-	usePreventRemove((hasChanges && !isSaving), ({ data }) => {
+	usePreventRemove((hasChanges && !isSaving && !isDeleting), ({ data }) => {
 		Alert.alert(
 			upperFirst(t('common.messages.are_u_sure')),
 			upperFirst(t('common.messages.do_you_really_want_to_cancel_change', { count: 2 })),
@@ -147,16 +161,40 @@ const ReviewForm = ({
 		<Stack.Screen
 		options={{
 			headerRight: () => (
-				<Button
-				variant="ghost"
-				size="fit"
-				onPress={handleSave}
-				textStyle={{ color: colors.accentYellow }}
-				>
-					{review ? upperFirst(t('common.messages.save')) : upperFirst(t('common.messages.publish'))}
-				</Button>
+				<View style={tw`flex-row items-center gap-2`}>
+					{review && onDelete && (
+						<Button
+						variant="ghost"
+						size="icon"
+						iconProps={{
+							color: colors.destructive,
+						}}
+						onPress={handleDelete}
+						icon={Icons.Delete}
+						/>
+					)}
+					<Button
+					variant="ghost"
+					size="icon"
+					onPress={handleSave}
+					textStyle={{ color: colors.accentYellow }}
+					icon={Icons.Check}
+					/>
+				</View>
 			),
 			unstable_headerRightItems: (props) => [
+				...(review && onDelete ? [
+					{
+						type: "button",
+						label: review ? upperFirst(t('common.messages.save')) : upperFirst(t('common.messages.publish')),
+						onPress: handleDelete,
+						icon: {
+							name: "trash",
+							type: "sfSymbol",
+						},
+						tintColor: colors.destructive,
+					},
+				] satisfies NativeStackHeaderItem[] : []),
 				{
 					type: "button",
 					label: review ? upperFirst(t('common.messages.save')) : upperFirst(t('common.messages.publish')),

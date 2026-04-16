@@ -29,6 +29,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useQuery } from "@tanstack/react-query";
 import { playlistOptions, usePlaylistUpdateMutation } from "@libs/query-client";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
+import { ImageManipulator, SaveFormat } from "expo-image-manipulator";
 
 const TITLE_MIN_LENGTH = 1;
 const TITLE_MAX_LENGTH = 100;
@@ -45,11 +46,13 @@ const ModalPlaylistEdit = () => {
 	const { showActionSheetWithOptions } = useActionSheet();
 	const t = useTranslations();
 	const headerHeight = useHeaderHeight();
+	// Queries
 	const {
 		data: playlist,
 	} = useQuery(playlistOptions({
 		playlistId: playlistId,
 	}));
+	// Mutations
 	const { mutateAsync: updatePlaylist, isPending } = usePlaylistUpdateMutation({
 		userId: user?.id,
 	});
@@ -160,6 +163,25 @@ const ModalPlaylistEdit = () => {
 
 	const handleSubmit = useCallback(async (values: PlaylistFormValues) => {
 		if (!playlist) return;
+
+		let poster: File | null | undefined = newPoster ? undefined : newPoster;
+        if (newPoster && newPoster.uri) {
+            const processedImage = await ImageManipulator.manipulate(newPoster.uri)
+				.resize({ width: 1024, height: 1024 })
+				.renderAsync();
+			const processedImageCompressed = await processedImage.saveAsync({
+				compress: 0.8,
+				format: SaveFormat.JPEG,
+			});
+
+            const filePayload = {
+                uri: processedImageCompressed.uri,
+                name: `poster_${playlist.id}.jpg`,
+                type: 'image/jpeg',
+            } as unknown as File;
+
+			poster = filePayload;
+        }
 		await updatePlaylist({
 			path: {
 				playlist_id: playlist.id,
@@ -167,6 +189,7 @@ const ModalPlaylistEdit = () => {
 			body: {
 				title: values.title.trim(),
 				description: values.description?.trim() || null,
+				poster,
 			}
 		}, {
 			onSuccess: () => {
@@ -177,7 +200,7 @@ const ModalPlaylistEdit = () => {
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}, [playlist, updatePlaylist, toast, router, t]);
+	}, [playlist, updatePlaylist, toast, router, t, newPoster]);
 
 	const handleCancel = useCallback(() => {
 		if (canSave) {

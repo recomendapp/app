@@ -1,4 +1,4 @@
-import { meAvatarControllerDeleteMutation, meAvatarControllerSetMutation, meControllerUpdateMutation, userPushTokensControllerSetMutation } from '@libs/api-js';
+import { meAvatarControllerDelete, meAvatarControllerSet, meControllerUpdate, MeControllerUpdateData, Options, userPushTokensControllerSetMutation } from '@libs/api-js';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { meOptions } from './meOptions';
 import { userByIdOptions, userByUsernameOptions } from '../users';
@@ -6,67 +6,28 @@ import { userByIdOptions, userByUsernameOptions } from '../users';
 export const useMeUpdateMutation = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		...meControllerUpdateMutation(),
-		onSuccess: (data) => {
-			queryClient.setQueryData(meOptions().queryKey, data);
-			queryClient.setQueryData(userByIdOptions({ userId: data.id }).queryKey, (oldData) => {
-				if (!oldData) return oldData;
-				return {
-					...oldData,
-					name: data.name,
-					username: data.username,
-					bio: data.bio,
-					isPrivate: data.isPrivate,
-				};
+		mutationFn: async ({ body: { avatar, ...body }, ...variables }: Options<MeControllerUpdateData> & { body: { avatar?: File | null }}) => {
+			if (avatar === null) {
+				const { data, error } = await meAvatarControllerDelete();
+				if (error) throw error;
+				if (data === undefined) throw new Error('No data');
+			} else if (avatar) {
+				const formData = new FormData();
+				formData.append('file', avatar);
+				const { data, error } = await meAvatarControllerSet({
+					body: formData as unknown as { file: File },
+					bodySerializer: (formData) => formData,
+				});
+				if (error) throw error;
+				if (data === undefined) throw new Error('No data');
+			}
+			const { data } = await meControllerUpdate({
+				...variables,
+				body,
 			});
-			queryClient.setQueryData(userByUsernameOptions({ username: data.username }).queryKey, (oldData) => {
-				if (!oldData) return oldData;
-				return {
-					...oldData,
-					name: data.name,
-					username: data.username,
-					bio: data.bio,
-					isPrivate: data.isPrivate,
-				};
-			});
-		}
-	});
-};
-
-export const useMeAvatarUpdateMutation = () => {
-	const queryClient = useQueryClient();
-	return useMutation({
-		...meAvatarControllerSetMutation(),
-		onSuccess: (data) => {
-			queryClient.setQueryData(meOptions().queryKey, data);
-			queryClient.setQueryData(userByIdOptions({ userId: data.id }).queryKey, (oldData) => {
-				if (!oldData) return oldData;
-				return {
-					...oldData,
-					name: data.name,
-					username: data.username,
-					bio: data.bio,
-					isPrivate: data.isPrivate,
-				};
-			});
-			queryClient.setQueryData(userByUsernameOptions({ username: data.username }).queryKey, (oldData) => {
-				if (!oldData) return oldData;
-				return {
-					...oldData,
-					name: data.name,
-					username: data.username,
-					bio: data.bio,
-					isPrivate: data.isPrivate,
-				};
-			});
-		}
-	});
-};
-
-export const useMeAvatarDeleteMutation = () => {
-	const queryClient = useQueryClient();
-	return useMutation({
-		...meAvatarControllerDeleteMutation(),
+			if (data === undefined) throw new Error('No data');
+			return data;
+		},
 		onSuccess: (data) => {
 			queryClient.setQueryData(meOptions().queryKey, data);
 			queryClient.setQueryData(userByIdOptions({ userId: data.id }).queryKey, (oldData) => {

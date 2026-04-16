@@ -23,7 +23,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Loader from '@/components/Loader';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import { useMeAvatarDeleteMutation, useMeAvatarUpdateMutation, useMeUpdateMutation } from '@libs/query-client';
+import { useMeUpdateMutation } from '@libs/query-client';
 import compressPicture from '@/lib/utils/compressPicture';
 
 export function ProfileForm() {
@@ -31,8 +31,6 @@ export function ProfileForm() {
   const { user } = useAuth();
 
   const { mutateAsync: updateProfile, isPending: isUpdating } = useMeUpdateMutation();
-  const { mutateAsync: updateAvatar } = useMeAvatarUpdateMutation();
-  const { mutateAsync: deleteAvatar } = useMeAvatarDeleteMutation();
 
   const [newAvatar, setNewAvatar] = useState<File>();
 
@@ -70,29 +68,17 @@ export function ProfileForm() {
   const handleSubmit = useCallback(async (data: ProfileFormValues) => {
     if (!user) return;
     if (!newAvatar && user.name === data.name && user.bio === data.bio) return;
-
-    if (newAvatar) {
-      const compressedFile = await compressPicture(newAvatar, 400, 400);
-      await updateAvatar({
-        body: {
-            file: compressedFile,
-        }
-      }, {
-        onError: () => {
-          toast.error(upperFirst(t('common.messages.an_error_occurred')));
-        }
-      });
-      setNewAvatar(undefined);
-    }
-
+    const avatar: File | null | undefined = newAvatar ? await compressPicture(newAvatar, 400, 400) : undefined;
     await updateProfile({
       body: {
         name: data.name?.trim(),
         bio: data.bio?.trim() || null,
+        avatar,
       }
     }, {
       onSuccess: () => {
         toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
+        setNewAvatar(undefined);
       },
       onError: () => {
         toast.error(upperFirst(t('common.messages.an_error_occurred')));
@@ -101,7 +87,11 @@ export function ProfileForm() {
   }, [newAvatar, t, updateProfile, user]);
 
   const handleDeleteAvatar = useCallback(async () => {
-    await deleteAvatar({}, {
+    await updateProfile({
+      body: {
+        avatar: null,
+      }
+    }, {
       onSuccess: () => {
         toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
       },

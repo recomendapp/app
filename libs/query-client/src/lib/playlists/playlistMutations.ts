@@ -1,4 +1,4 @@
-import { FeedItem, ListInfiniteFeed, ListInfinitePlaylistItems, ListInfinitePlaylistMembers, ListInfinitePlaylists, ListInfinitePlaylistsAddTargets, ListInfinitePlaylistsWithOwner, ListPaginatedFeed, ListPaginatedPlaylistItems, ListPaginatedPlaylistMembers, ListPaginatedPlaylists, ListPaginatedPlaylistsAddTargets, Playlist, playlistItemsControllerDeleteMutation, playlistItemsControllerUpdateMutation, PlaylistItemWithMedia, playlistMembersControllerAddMutation, playlistMembersControllerDeleteMutation, playlistMembersControllerUpdateMutation, PlaylistMemberWithUser, playlistPosterControllerDeleteMutation, playlistPosterControllerSetMutation, playlistsAddControllerAddMutation, PlaylistsAddTarget, playlistsControllerCreateMutation, playlistsControllerDeleteMutation, playlistsControllerUpdateMutation, SearchResponse } from "@libs/api-js";
+import { FeedItem, ListInfiniteFeed, ListInfinitePlaylistItems, ListInfinitePlaylistMembers, ListInfinitePlaylists, ListInfinitePlaylistsAddTargets, ListInfinitePlaylistsWithOwner, ListPaginatedFeed, ListPaginatedPlaylistItems, ListPaginatedPlaylistMembers, ListPaginatedPlaylists, ListPaginatedPlaylistsAddTargets, Options, Playlist, playlistItemsControllerDeleteMutation, playlistItemsControllerUpdateMutation, PlaylistItemWithMedia, playlistMembersControllerAddMutation, playlistMembersControllerDeleteMutation, playlistMembersControllerUpdateMutation, PlaylistMemberWithUser, playlistPosterControllerDelete, playlistPosterControllerDeleteMutation, playlistPosterControllerSet, playlistPosterControllerSetMutation, playlistsAddControllerAddMutation, PlaylistsAddTarget, playlistsControllerCreate, PlaylistsControllerCreateData, playlistsControllerDeleteMutation, playlistsControllerUpdate, PlaylistsControllerUpdateData, SearchResponse } from "@libs/api-js";
 import { InfiniteData, useMutation, useQueryClient } from "@tanstack/react-query";
 import { userFeedInfiniteOptions, userFeedPaginatedOptions, userKeys, userPlaylistsAddTargetsAllOptions, userPlaylistsAddTargetsInfiniteOptions, userPlaylistsAddTargetsPaginatedOptions, userPlaylistsInfiniteOptions, userPlaylistsPaginatedOptions } from "../users";
 import { playlistFeaturedInfiniteOptions, playlistFeaturedPaginatedOptions, playlistItemsAllOptions, playlistItemsInfiniteOptions, playlistItemsPaginatedOptions, playlistMembersAllOptions, playlistMembersInfiniteOptions, playlistMembersPaginatedOptions, playlistOptions } from "./playlistOptions";
@@ -12,7 +12,30 @@ import { searchGlobalOptions, searchPlaylistsInfiniteOptions, searchPlaylistsPag
 export const usePlaylistInsertMutation = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		...playlistsControllerCreateMutation(),
+		mutationFn: async ({ body: { poster, ...body }, ...variables }: Options<PlaylistsControllerCreateData> & { body: { poster?: File }}) => {
+			let returnData: Playlist | undefined;
+			const { data } = await playlistsControllerCreate({
+				...variables,
+				body,
+			});
+			if (data === undefined) throw new Error('No data');
+			returnData = data;
+			if (poster) {
+				const formData = new FormData();
+				formData.append('file', poster);
+				const { data: posterData, error } = await playlistPosterControllerSet({
+					path: {
+						playlist_id: returnData.id,
+					},
+					body: formData as unknown as { file: File },
+					bodySerializer: (formData) => formData,
+				});
+				if (error) throw error;
+				if (posterData === undefined) throw new Error('No data');
+				returnData = posterData;
+			}
+			return returnData;
+		},	
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({
 				queryKey: userKeys.playlists({ userId: data.userId }),
@@ -39,7 +62,31 @@ export const usePlaylistUpdateMutation = ({
 		userId,
 	});
 	return useMutation({
-		...playlistsControllerUpdateMutation(),
+		mutationFn: async ({ body: { poster, ...body }, ...variables }: Options<PlaylistsControllerUpdateData> & { body: { poster?: File | null }}) => {
+			if (poster === null) {
+				const { data, error } = await playlistPosterControllerDelete({
+					path: variables.path,
+				});
+				if (error) throw error;
+				if (data === undefined) throw new Error('No data');
+			} else if (poster) {
+				const formData = new FormData();
+				formData.append('file', poster);
+				const { data, error } = await playlistPosterControllerSet({
+					path: variables.path,
+					body: formData as unknown as { file: File },
+					bodySerializer: (formData) => formData,
+				});
+				if (error) throw error;
+				if (data === undefined) throw new Error('No data');
+			}
+			const { data } = await playlistsControllerUpdate({
+				...variables,
+				body,
+			});
+			if (data === undefined) throw new Error('No data');
+			return data;
+		},
 		onSuccess: (data) => {
 			updatePlaylistCache(
 				data.id,
@@ -198,47 +245,6 @@ export const usePlaylistDeleteMutation = () => {
 						playlists: old.playlists.filter(playlist => playlist.id !== data.id),
 					};
 				}
-			);
-		}
-	});
-};
-
-/* --------------------------------- Poster --------------------------------- */
-export const usePlaylistPoserUpdateMutation = ({
-	userId,
-}: {
-	userId?: string;
-}) => {
-	const updatePlaylistCache = usePlaylistCacheUpdate({
-		userId,
-	});
-	return useMutation({
-		...playlistPosterControllerSetMutation(),
-		onSuccess: (data) => {
-			updatePlaylistCache(
-				data.id,
-				data,
-				data.userId
-			);
-		}
-	});
-};
-
-export const usePlaylistPoserDeleteMutation = ({
-	userId,
-}: {
-	userId?: string;
-}) => {
-	const updatePlaylistCache = usePlaylistCacheUpdate({
-		userId,
-	});
-	return useMutation({
-		...playlistPosterControllerDeleteMutation(),
-		onSuccess: (data) => {
-			updatePlaylistCache(
-				data.id,
-				data,
-				data.userId
 			);
 		}
 	});

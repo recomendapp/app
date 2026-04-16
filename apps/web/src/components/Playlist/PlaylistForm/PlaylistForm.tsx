@@ -36,7 +36,7 @@ import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { usePlaylistDeleteMutation, usePlaylistInsertMutation, usePlaylistPoserDeleteMutation, usePlaylistPoserUpdateMutation, usePlaylistUpdateMutation } from '@libs/query-client';
+import { usePlaylistDeleteMutation, usePlaylistInsertMutation, usePlaylistUpdateMutation } from '@libs/query-client';
 import { Playlist } from '@libs/api-js';
 import compressPicture from '@/lib/utils/compressPicture';
 
@@ -61,12 +61,6 @@ export function PlaylistForm({
     userId: user?.id,
   });
   const { mutateAsync: deletePlaylistMutation, isPending: deletePending } = usePlaylistDeleteMutation();
-  const { mutateAsync: uploadPoster } = usePlaylistPoserUpdateMutation({
-    userId: user?.id,
-  });
-  const { mutateAsync: deletePoster } = usePlaylistPoserDeleteMutation({
-    userId: user?.id,
-  });
 
   // Permissions
   const canEditVisibility = !playlist || playlist.role === 'owner';
@@ -114,25 +108,16 @@ export function PlaylistForm({
   // Handlers
   const handleInsert = useCallback(async (data: PlaylistFormValues) => {
     if (!user) return;
+    const compressedFile = newPoster ? await compressPicture(newPoster, 400, 400) : undefined;
     await insertPlaylistMutation({
       body: {
         title: data.title.replace(/\s+/g, ' ').trim(),
         description: data.description?.trim() || null,
         visibility: data.visibility,
+        poster: compressedFile
       }
     }, {
       onSuccess: async (data) => {
-        const compressedFile = newPoster ? await compressPicture(newPoster, 400, 400) : null;
-        if (compressedFile) {
-          await uploadPoster({
-            path: {
-              playlist_id: data.id,
-            },
-            body: {
-              file: compressedFile,
-            }
-          });
-        }
         toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
         onSave?.(data);
       },
@@ -146,22 +131,7 @@ export function PlaylistForm({
     if (!user || !playlist) return;
     if (!newPoster && user.id === playlist.userId && playlist.title === data.title && playlist.description === data.description && playlist.visibility === data.visibility) return;
 
-    if (newPoster) {
-      const compressedFile = await compressPicture(newPoster, 400, 400);
-      await uploadPoster({
-        path: {
-          playlist_id: playlist.id,
-        },
-        body: {
-          file: compressedFile,
-        }
-      }, {
-        onError: () => {
-          toast.error(upperFirst(t('common.messages.an_error_occurred')));
-        }
-      });
-      setNewPoster(undefined);
-    }
+    const poster: File | null | undefined = newPoster ? await compressPicture(newPoster, 400, 400) : undefined;
 
     const payload: Partial<PlaylistFormValues> = {
       title: data.title.replace(/\s+/g, ' ').trim(),
@@ -175,7 +145,10 @@ export function PlaylistForm({
       path: {
         playlist_id: playlist.id,
       },
-      body: payload,
+      body: {
+        ...payload,
+        poster: poster,
+      },
     }, {
       onSuccess: async (data) => {
         toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));

@@ -29,6 +29,7 @@ import { Playlist, PlaylistsAddTarget, PlaylistWithOwner } from "@libs/api-js";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { FlashList } from "@shopify/flash-list";
+import { theme } from "apps/mobile/src/theme";
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -256,7 +257,7 @@ const PlaylistAddTo = () => {
 				{toolbarView === 'comment' ? (
 				<>
 					<Stack.Toolbar.View>
-						<View style={[tw`justify-center h-20`, { width: SCREEN_WIDTH - 80, paddingHorizontal: PADDING_HORIZONTAL, paddingVertical: PADDING_VERTICAL }]}>
+						<View style={[tw`justify-center h-10`, { width: SCREEN_WIDTH - 80, paddingHorizontal: PADDING_HORIZONTAL }]}>
 							<Controller
 								name="comment"
 								control={form.control}
@@ -291,9 +292,9 @@ const PlaylistAddTo = () => {
 								showsHorizontalScrollIndicator={false}
 								contentContainerStyle={[
 									tw`items-center`, 
-									{ paddingHorizontal: PADDING_HORIZONTAL, gap: 8 }
+									{ paddingHorizontal: PADDING_HORIZONTAL, gap: theme.space12 }
 								]}
-								ItemSeparatorComponent={() => <View style={{ width: GAP }} />}
+								ItemSeparatorComponent={() => <View style={{ width: theme.space12 }} />}
 								renderItem={({ item }) => (
 									<Pressable
 									onPress={() => handleTogglePlaylist(item)}

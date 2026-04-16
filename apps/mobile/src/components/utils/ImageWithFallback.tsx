@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { ComponentProps, useEffect, useState } from 'react';
-import { MediaType } from '@recomendapp/types';
 import { Text, View } from 'react-native';
 import { ImageIcon, ListVideoIcon } from 'lucide-react-native';
 import { Icons } from 'apps/mobile/src/constants/Icons';
@@ -9,7 +8,7 @@ import Animated from 'react-native-reanimated';
 import tw from 'apps/mobile/src/lib/tw';
 import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 
-export type ImageType = 'default' | 'playlist' | 'service' | 'watch-provider' | 'user' | MediaType | null;
+export type ImageType = 'default' | 'movie' | 'tv_series' | 'person' | 'playlist' | 'service' | 'watch-provider' | 'user' | null;
 
 interface ImageWithFallbackProps extends ComponentProps<typeof Animated.View> {
   source: ImageSource;

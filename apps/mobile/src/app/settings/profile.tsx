@@ -24,6 +24,7 @@ import { useToast } from "apps/mobile/src/components/Toast";
 import { Pressable } from "react-native";
 import { KeyboardAwareScrollView } from "apps/mobile/src/components/ui/KeyboardAwareScrollView";
 import { useMeUpdateMutation } from "@libs/query-client";
+import { ImageManipulator, SaveFormat } from "expo-image-manipulator";
 
 const FULL_NAME_MIN_LENGTH = 1;
 const FULL_NAME_MAX_LENGTH = 30;
@@ -35,8 +36,7 @@ const SettingsProfileScreen = () => {
 	const { bottomOffset, tabBarHeight } = useTheme();
 	const t = useTranslations();
 	const { showActionSheetWithOptions } = useActionSheet();
-	const { mutateAsync: updateProfile } = useMeUpdateMutation();
-	const [ isLoading, setIsLoading ] = useState(false);
+	const { mutateAsync: updateProfile, isPending } = useMeUpdateMutation();
 	const [ newAvatar, setNewAvatar ] = useState<ImagePickerAsset | null | undefined>(undefined);
 	// Form
 	const profileFormSchema = z.object({
@@ -142,32 +142,39 @@ const SettingsProfileScreen = () => {
 	}, [showActionSheetWithOptions, toast, t, user?.avatar, avatarOptions]);
 
 	const handleSubmit = useCallback(async (values: ProfileFormValues) => {
-		try {
-			if (!user) return;
-			setIsLoading(true);
-			await updateProfile({
-				body: {
-					name: values.full_name,
-					bio: values.bio?.trim() || null,
-					// website: values.website?.trim() || null,
-					// avatar: newAvatar,
-				}
+		let avatar: File | null | undefined = newAvatar ? undefined : newAvatar;
+        if (newAvatar && newAvatar.uri) {
+            const processedImage = await ImageManipulator.manipulate(newAvatar.uri)
+				.resize({ width: 1024, height: 1024 })
+				.renderAsync();
+			const processedImageCompressed = await processedImage.saveAsync({
+				compress: 0.8,
+				format: SaveFormat.JPEG,
 			});
-			setNewAvatar(undefined);
-			setHasFormChanged(false);
-			toast.success(upperFirst(t('common.messages.saved', { count: 1, gender: 'male' })));
-		} catch (error) {
-			console.error(error);
-			let errorMessage: string = upperFirst(t('common.messages.an_error_occurred'));
-			if (error instanceof Error) {
-				errorMessage = error.message;
-			} else if (typeof error === 'string') {
-				errorMessage = error;
-			}
-			toast.error(upperFirst(t('common.messages.error')), { description: errorMessage });
-		} finally {
-			setIsLoading(false);
-		}
+
+            const filePayload = {
+                uri: processedImageCompressed.uri,
+                name: `avatar_${user?.id}_${Date.now()}.jpg`,
+                type: 'image/jpeg',
+            } as unknown as File;
+
+			avatar = filePayload;
+        }
+		await updateProfile({
+			body: {
+				name: values.full_name?.trim(),
+				bio: values.bio?.trim() || null,
+				avatar,
+			},
+		}, {
+			onSuccess: () => {
+				toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
+				setNewAvatar(undefined);
+			},
+			onError: () => {
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
+			},
+		});
 	}, [user, newAvatar, updateProfile, toast, t]);
 
 	// useEffects
@@ -201,9 +208,9 @@ const SettingsProfileScreen = () => {
 					<Button
 					variant="ghost"
 					size="fit"
-					loading={isLoading}
+					loading={isPending}
 					onPress={form.handleSubmit(handleSubmit)}
-					disabled={!canSave || isLoading}
+					disabled={!canSave || isPending}
 					>
 						{upperFirst(t('common.messages.save'))}
 					</Button>
@@ -214,7 +221,7 @@ const SettingsProfileScreen = () => {
 					label: upperFirst(t('common.messages.save')),
 					onPress: form.handleSubmit(handleSubmit),
 					tintColor: props.tintColor,
-					disabled: !canSave || isLoading,
+					disabled: !canSave || isPending,
 					icon: {
 						name: "checkmark",
 						type: "sfSymbol",
@@ -263,7 +270,7 @@ const SettingsProfileScreen = () => {
 					nativeID="full_name"
 					autoComplete="name"
 					autoCapitalize="words"
-					disabled={isLoading}
+					disabled={isPending}
 					leftSectionStyle={tw`w-auto`}
 					error={form.formState.errors.full_name?.message}
 					/>
@@ -287,7 +294,7 @@ const SettingsProfileScreen = () => {
 					nativeID="bio"
 					autoCapitalize="sentences"
 					type="textarea"
-					disabled={isLoading}
+					disabled={isPending}
 					error={form.formState.errors.bio?.message}
 					/>
 					<Text textColor='muted' style={tw`text-xs text-justify`}>
@@ -313,7 +320,7 @@ const SettingsProfileScreen = () => {
 					keyboardType="url"
 					autoCorrect={false}
 					leftSectionStyle={tw`w-auto`}
-					disabled={isLoading}
+					disabled={isPending}
 					error={form.formState.errors.website?.message}
 					/>
 					<Text textColor='muted' style={tw`text-xs text-justify`}>

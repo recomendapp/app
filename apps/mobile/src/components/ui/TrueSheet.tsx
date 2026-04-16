@@ -20,12 +20,7 @@ const TrueSheet = forwardRef<
   <RNTrueSheet
   ref={ref}
   detents={detents || (props.scrollable && isAndroid) ? [0.33, 1] : ['auto']}
-  backgroundColor={
-    backgroundColor
-    ?? isLiquidGlassAvailable
-        ? "transparent"
-        : colors.muted
-  }
+  backgroundColor={backgroundColor || (!isLiquidGlassAvailable ? colors.background : undefined)}
   style={[
     { paddingBottom: Platform.OS === 'android' ? insets.bottom : 0 },
     style,

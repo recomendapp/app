@@ -1,12 +1,9 @@
-import { Text } from "apps/mobile/src/components/ui/text";
-import { View } from "apps/mobile/src/components/ui/view";
+import { ProfileFilm } from "apps/mobile/src/components/screens/user/film/ProfileFilm";
+import { useLocalSearchParams } from "expo-router";
 
-const UserMovieScreen = () => {
-	return (
-		<View>
-			<Text>COOL</Text>
-		</View>
-	);
+const ProfileFilmScreen = () => {
+	const { username, film_id } = useLocalSearchParams<{ username: string, film_id: string }>();
+	return <ProfileFilm username={username} movieId={parseInt(film_id)} />;
 };
 
-export default UserMovieScreen;
+export default ProfileFilmScreen;

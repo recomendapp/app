@@ -1,12 +1,9 @@
-import { Text } from "apps/mobile/src/components/ui/text";
-import { View } from "apps/mobile/src/components/ui/view";
+import { ProfileTvSeries } from "apps/mobile/src/components/screens/user/tv-series/ProfileTvSeries";
+import { useLocalSearchParams } from "expo-router";
 
-const UserTvSeriesScreen = () => {
-	return (
-		<View>
-			<Text>COOL</Text>
-		</View>
-	);
+const ProfileTvSeriesScreen = () => {
+	const { username, tv_series_id } = useLocalSearchParams<{ username: string, tv_series_id: string }>();
+	return <ProfileTvSeries username={username} tvSeriesId={parseInt(tv_series_id)} />;
 };
 
-export default UserTvSeriesScreen;
+export default ProfileTvSeriesScreen;
