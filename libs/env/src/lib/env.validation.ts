@@ -82,6 +82,10 @@ export const workerSchema = commonSchema
 });
 
 export function validateEnv<T extends z.ZodType>(schema: T): z.infer<T> {
+  if (process.env['SKIP_ENV_VALIDATION'] === 'true') {
+    return process.env as z.infer<T>;
+  }
+
   const parsed = schema.safeParse(process.env);
 
   if (!parsed.success) {
