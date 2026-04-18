@@ -66,20 +66,20 @@ jobs:
           echo "AUTH_GITHUB_CLIENT_ID=${{ secrets.INFISICAL_AUTH_GITHUB_CLIENT_ID }}" >> apps/api/.env
           echo "AUTH_GITHUB_CLIENT_SECRET=${{ secrets.INFISICAL_AUTH_GITHUB_CLIENT_SECRET }}" >> apps/api/.env
           # Web-app
-          echo "NEXT_PUBLIC_SITE_URL=${{ secrets.INFISICAL_WEB_APP_URL }}" >> apps/web-app/.env
-          echo "NEXT_PUBLIC_API_URL=${{ secrets.INFISICAL_API_URL }}" >> apps/web-app/.env
+          echo "NEXT_PUBLIC_SITE_URL=${{ secrets.INFISICAL_WEB_APP_URL }}" >> apps/web/.env
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.INFISICAL_API_URL }}" >> apps/web/.env
           echo "NEXT_PUBLIC_REVENUECAT_API_KEY=${{ secrets.INFISICAL_REVENUECAT_API_KEY }}" >> apps
-          echo "NEXT_PUBLIC_FIREBASE_API_KEY=${{ secrets.INFISICAL_FIREBASE_API_KEY }}" >> apps/web-app/.env
-          echo "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ secrets.INFISICAL_FIREBASE_AUTH_DOMAIN }}" >> apps/web-app/.env
-          echo "NEXT_PUBLIC_FIREBASE_PROJECT_ID=${{ secrets.INFISICAL_FIREBASE_PROJECT_ID }}" >> apps/web-app/.env
-          echo "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${{ secrets.INFISICAL_FIREBASE_STORAGE_BUCKET }}" >> apps/web-app/.env
-          echo "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.INFISICAL_FIREBASE_MESSAGING_SENDER_ID }}" >> apps/web-app/.env
-          echo "NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.INFISICAL_FIREBASE_APP_ID }}" >> apps/web-app/.env
-          echo "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=${{ secrets.INFISICAL_FIREBASE_MEASUREMENT_ID }}" >> apps/web-app/.env
-          echo "NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY=${{ secrets.INFISICAL_FIREBASE_FCM_VAPID_KEY }}" >> apps/web-app/.env
-          echo "NEXT_PUBLIC_TMDB_IMAGE_BASE_URL=${{ secrets.INFISICAL_TMDB_IMAGE_BASE_URL }}" >> apps/web-app/.env
-          echo "NEXT_PUBLIC_JUSTWATCH_API_KEY=${{ secrets.INFISICAL_JUSTWATCH_API_KEY }}" >> apps/web-app/.env
-          echo "NEXT_PUBLIC_TURNSTILE_SITE_KEY=${{ secrets.INFISICAL_CLOUDFLARE_TURNSTILE_SITE_KEY }}" >> apps/web-app/.env
+          echo "NEXT_PUBLIC_FIREBASE_API_KEY=${{ secrets.INFISICAL_FIREBASE_API_KEY }}" >> apps/web/.env
+          echo "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ secrets.INFISICAL_FIREBASE_AUTH_DOMAIN }}" >> apps/web/.env
+          echo "NEXT_PUBLIC_FIREBASE_PROJECT_ID=${{ secrets.INFISICAL_FIREBASE_PROJECT_ID }}" >> apps/web/.env
+          echo "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${{ secrets.INFISICAL_FIREBASE_STORAGE_BUCKET }}" >> apps/web/.env
+          echo "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.INFISICAL_FIREBASE_MESSAGING_SENDER_ID }}" >> apps/web/.env
+          echo "NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.INFISICAL_FIREBASE_APP_ID }}" >> apps/web/.env
+          echo "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=${{ secrets.INFISICAL_FIREBASE_MEASUREMENT_ID }}" >> apps/web/.env
+          echo "NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY=${{ secrets.INFISICAL_FIREBASE_FCM_VAPID_KEY }}" >> apps/web/.env
+          echo "NEXT_PUBLIC_TMDB_IMAGE_BASE_URL=${{ secrets.INFISICAL_TMDB_IMAGE_BASE_URL }}" >> apps/web/.env
+          echo "NEXT_PUBLIC_JUSTWATCH_API_KEY=${{ secrets.INFISICAL_JUSTWATCH_API_KEY }}" >> apps/web/.env
+          echo "NEXT_PUBLIC_TURNSTILE_SITE_KEY=${{ secrets.INFISICAL_CLOUDFLARE_TURNSTILE_SITE_KEY }}" >> apps/web/.env
 
       - name: Build Docker Images (Nx Affected)
         env:
