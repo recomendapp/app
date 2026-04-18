@@ -76,7 +76,7 @@ jobs:
           NEXT_PUBLIC_TMDB_IMAGE_BASE_URL: ${{ secrets.INFISICAL_TMDB_IMAGE_BASE_URL }}
           NEXT_PUBLIC_JUSTWATCH_API_KEY: ${{ secrets.INFISICAL_JUSTWATCH_API_KEY }}
           NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ secrets.INFISICAL_CLOUDFLARE_TURNSTILE_SITE_KEY }}
-        run: npx nx affected -t docker-build --parallel=3
+        run: npx nx run-many -t docker-build --parallel=3
 
       - name: Retag and Push to GHCR
         id: affected
@@ -108,9 +108,9 @@ jobs:
               docker tag "${LOCAL_IMAGE}" "${REMOTE_IMAGE}:${VERSION}"
               docker tag "${LOCAL_IMAGE}" "${REMOTE_IMAGE}:latest"
               
-              # echo "⬆️ [${PROJECT}] Pushing..."
-              # docker push "${REMOTE_IMAGE}:${VERSION}"
-              # docker push "${REMOTE_IMAGE}:latest"
+              echo "⬆️ [${PROJECT}] Pushing..."
+              docker push "${REMOTE_IMAGE}:${VERSION}"
+              docker push "${REMOTE_IMAGE}:latest"
               
               echo "✅ [${PROJECT}] Done."
             ) &
@@ -136,7 +136,7 @@ jobs:
   update-infra:
     name: 🏗️ Update Infra Manifests
     needs: build-and-push
-    if: needs.build-and-push.outputs.affected_projects != '[]' && needs.build-and-push.outputs.affected_projects != '' && false # Disable for now
+    if: needs.build-and-push.outputs.affected_projects != '[]' && needs.build-and-push.outputs.affected_projects != ''
     runs-on: ubuntu-latest
     permissions:
       contents: write
