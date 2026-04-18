@@ -68,7 +68,7 @@ jobs:
           # Web-app
           echo "NEXT_PUBLIC_SITE_URL=${{ secrets.INFISICAL_WEB_APP_URL }}" >> apps/web/.env
           echo "NEXT_PUBLIC_API_URL=${{ secrets.INFISICAL_API_URL }}" >> apps/web/.env
-          echo "NEXT_PUBLIC_REVENUECAT_API_KEY=${{ secrets.INFISICAL_REVENUECAT_API_KEY }}" >> apps
+          echo "NEXT_PUBLIC_REVENUECAT_API_KEY=${{ secrets.INFISICAL_REVENUECAT_API_KEY }}" >> apps/web/.env
           echo "NEXT_PUBLIC_FIREBASE_API_KEY=${{ secrets.INFISICAL_FIREBASE_API_KEY }}" >> apps/web/.env
           echo "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ secrets.INFISICAL_FIREBASE_AUTH_DOMAIN }}" >> apps/web/.env
           echo "NEXT_PUBLIC_FIREBASE_PROJECT_ID=${{ secrets.INFISICAL_FIREBASE_PROJECT_ID }}" >> apps/web/.env
