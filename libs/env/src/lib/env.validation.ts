@@ -40,7 +40,7 @@ export const apiSchema = commonSchema
 .extend({
   PORT: z.coerce.number().default(9000),
   HOST: z.string().default('0.0.0.0'),
-  API_URL: z.url().default('http://localhost:9000'),
+  API_URL: z.url().default('https://api.recomend.app'),
   DATABASE_URL: z.string(),
   MOBILE_APP_SCHEME: z.string().default('recomend://'),
 

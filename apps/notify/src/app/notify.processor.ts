@@ -217,6 +217,7 @@ export class NotifyProcessor extends WorkerHost {
             where: eq(user.id, userId),
             columns: { username: true, name: true },
           });
+          if (!watcher) throw new Error('Watcher not found');
 
           const watcherName = watcher.name ?? watcher.username;
 
@@ -277,7 +278,7 @@ export class NotifyProcessor extends WorkerHost {
                 title,
                 body,
                 data: {
-                  url: watcher?.username ? `/@${watcher.username}` : mediaData.url,
+                  url: watcher?.username ? `/@${watcher.username}` : mediaData.url || '/',
                   type: 'reco_completed',
                 },
               });
@@ -356,7 +357,7 @@ export class NotifyProcessor extends WorkerHost {
                 title,
                 body,
                 data: {
-                  url: mediaTitle.url,
+                  url: mediaTitle.url || '/',
                   type: 'reco_received',
                 },
               });

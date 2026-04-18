@@ -2,7 +2,7 @@ import { useAuth } from 'apps/mobile/src/providers/AuthProvider';
 import { useCallback, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button } from 'apps/mobile/src/components/ui/Button';
-import { Link, useRouter } from 'expo-router';
+import { Link, Stack, useRouter } from 'expo-router';
 import tw from 'apps/mobile/src/lib/tw';
 import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import { GroupedInput, GroupedInputItem } from 'apps/mobile/src/components/ui/Input';
@@ -17,13 +17,16 @@ import { KeyboardToolbar } from 'apps/mobile/src/components/ui/KeyboardToolbar';
 import { OAuthProviders } from 'apps/mobile/src/components/OAuth/OAuthProviders';
 import { useToast } from 'apps/mobile/src/components/Toast';
 import { KeyboardAwareScrollView } from 'apps/mobile/src/components/ui/KeyboardAwareScrollView';
-import { AuthError } from '@supabase/supabase-js';
 import { logger } from 'apps/mobile/src/logger';
 import { LoopCarousel } from 'apps/mobile/src/components/ui/LoopCarousel';
 import { Image } from 'expo-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery } from '@tanstack/react-query';
 import { uiBackgroundsOptions } from 'apps/mobile/src/api/ui/uiOptions';
+import { z } from 'zod';
+import { useModalHeaderOptions } from 'apps/mobile/src/hooks/useModalHeaderOptions';
+
+const EmailSchema = z.email();
 
 const LoginScreen = () => {
 	const { login } = useAuth();
@@ -32,7 +35,8 @@ const LoginScreen = () => {
 	const router = useRouter();
 	const toast = useToast();
 	const t = useTranslations();
-	const [ email, setEmail ] = useState('');
+	const modalHeaderOptions = useModalHeaderOptions();
+	const [ identifier, setIdentifier ] = useState('');
 	const [ password, setPassword ] = useState('');
 	const [ isLoading, setIsLoading ] = useState(false);
 
@@ -43,30 +47,26 @@ const LoginScreen = () => {
 	const handleSubmit = useCallback(async () => {
 		try {
 			setIsLoading(true);
-			await login({ email: email, password: password });
+			const isEmail = EmailSchema.safeParse(identifier).success;
+			await login({
+				password: password,
+				...(isEmail ? { email: identifier } : { username: identifier }),
+			});
 			logger.metric('account:loggedIn', {
 				logContext: 'LoginForm',
 				withPassword: true,
 			})
 		} catch (error) {
-			if (error instanceof AuthError) {
-				if (error.code === 'invalid_credentials') {
-					logger.metric('account:loginFailed', {
-						logContext: 'LoginForm',
-						reason: error.code,
-					})
-					return toast.error(t('pages.auth.login.form.wrong_credentials'));
-				}
-			}
 			logger.error('login error', { error });
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 		} finally {
 			setIsLoading(false);
 		}
-	}, [email, password, login, t, toast]);
+	}, [identifier, password, login, t, toast]);
 
 	return (
 	<>
+		<Stack.Screen options={modalHeaderOptions} />
 		{backgrounds && (
           <LoopCarousel
           items={backgrounds}
@@ -106,18 +106,18 @@ const LoginScreen = () => {
 						<GroupedInputItem
 						icon={Icons.Mail}
 						nativeID="email"
-						placeholder={upperFirst(t('common.form.email.label'))}
+						placeholder={t('pages.auth.login.form.identifier.placeholder')}
 						autoComplete='email'
 						autoCapitalize='none'
-						value={email}
-						onChangeText={setEmail}
+						value={identifier}
+						onChangeText={setIdentifier}
 						disabled={isLoading}
 						keyboardType='email-address'
 						/>
 						<GroupedInputItem
 						label={null}
 						nativeID="password"
-						placeholder="Password"
+						placeholder={t('pages.auth.login.form.password.placeholder')}
 						autoComplete='password'
 						autoCapitalize='none'
 						value={password}

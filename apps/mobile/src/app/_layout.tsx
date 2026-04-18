@@ -121,7 +121,7 @@ const RootLayoutNav = () => {
     {/* AUTH */}
     <Stack.Protected guard={!user}>
       <Stack.Screen
-      name='auth'
+      name='auth/(main)'
       options={{
         headerShown: false,
         presentation: Platform.select({
@@ -129,7 +129,20 @@ const RootLayoutNav = () => {
           android: 'formSheet',
           default: 'modal',
         })
-      }} />
+      }}
+      />
+      <Stack.Screen
+        name="auth/(password)"
+        options={{
+          title: t('messages.forgot_password'),
+          headerShown: false,
+          presentation: Platform.select({
+            ios: 'modal',
+            android: 'formSheet',
+            default: 'modal',
+          }),
+        }}
+      />
     </Stack.Protected>
     {/* SETTINGS */}
     <Stack.Screen name="settings/index" options={{ headerTitle: upperFirst(t('pages.settings.label')) }} />

@@ -5,18 +5,16 @@ import { useTranslations } from "use-intl";
 
 const AuthLayout = () => {
   const t = useTranslations();
-  const { colors } = useTheme();
+  const { defaultScreenOptions } = useTheme();
   return (
     <Stack
     initialRouteName="index"
     screenOptions={{
-      animation: 'ios_from_right',
-      headerTintColor: colors.foreground,
+      ...defaultScreenOptions,
       headerTransparent: true,
       headerStyle: {
         backgroundColor: 'transparent',
       },
-      headerBackButtonDisplayMode: 'minimal',
     }}
     >
       <Stack.Screen name="index" options={{ title: upperFirst(t('common.messages.welcome')) }} />

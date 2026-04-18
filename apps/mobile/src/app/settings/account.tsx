@@ -87,8 +87,10 @@ const SettingsAccountScreen = () => {
 		defaultValues,
 		mode: 'onChange',
 	});
-	const usernameAvailability = useUsernameAvailability();
 	const usernameToCheck = useDebounce(form.watch('username'), 500);
+	const { data: isUsernameAvailable, isLoading: isUsernameChecking } = useUsernameAvailability(
+		!form.formState.errors.username?.message && usernameToCheck && usernameToCheck !== user?.username ? usernameToCheck : undefined
+	);
 
 	// Handlers
 	// const handleVerifyEmail = useCallback(async (email: string, token: string) => {
@@ -204,17 +206,12 @@ const SettingsAccountScreen = () => {
 
 	// useEffects
 	useEffect(() => {
-		if (!form.formState.errors.username?.message && usernameToCheck && usernameToCheck !== user?.username) {
-			usernameAvailability.check(usernameToCheck);
-		}
-	}, [usernameToCheck]);
-	useEffect(() => {
-		if (usernameAvailability.isAvailable === false) {
+		if (isUsernameAvailable === false) {
 			formSetError('username', {
 				message: t('common.form.username.schema.unavailable'),
 			});
 		}
-	}, [usernameAvailability.isAvailable, t, formSetError]);
+	}, [isUsernameAvailable, t, formSetError]);
 	useEffect(() => {
 		if (user) {
 			fromReset({
@@ -297,10 +294,10 @@ const SettingsAccountScreen = () => {
 					onChangeText={onChange}
 					leftSectionStyle={tw`w-auto`}
 					rightComponent={(!form.formState.errors.username && value !== defaultValues.username) ? (
-						usernameAvailability.isLoading ? <ActivityIndicator />
+						isUsernameChecking ? <ActivityIndicator />
 						: (
-							<View style={[{ backgroundColor: usernameAvailability.isAvailable ? colors.success : colors.destructive }, tw`rounded-full h-6 w-6 items-center justify-center`]}>
-								{usernameAvailability.isAvailable ? (
+							<View style={[{ backgroundColor: isUsernameAvailable ? colors.success : colors.destructive }, tw`rounded-full h-6 w-6 items-center justify-center`]}>
+								{isUsernameAvailable ? (
 									<Icons.Check size={17} color={colors.successForeground} />
 								) : <Icons.Cancel size={17} color={colors.destructiveForeground} />}
 							</View>

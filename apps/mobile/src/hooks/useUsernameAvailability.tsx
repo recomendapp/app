@@ -1,32 +1,19 @@
+import { authClient } from "../lib/auth/client";
+import { useQuery } from "@tanstack/react-query";
 
-import { useSupabaseClient } from "apps/mobile/src/providers/SupabaseProvider";
-import { useState } from "react";
-
-const useUsernameAvailability = () => {
-	const supabase = useSupabaseClient();
-	const [isAvailable, setIsAvailable] = useState<boolean | undefined>(undefined);
-	const [isLoading, setIsLoading] = useState<boolean>(false);
-
-	const reset = () => {
-		setIsAvailable(undefined);
-		setIsLoading(false);
-	}
-
-	const check = async (username: string) => {
-		try {
-			setIsAvailable(undefined);
-			setIsLoading(true);
-			const { data, error } = await supabase.from('profile').select('username').eq('username', username).maybeSingle();
+const useUsernameAvailability = (username?: string) => {
+	return useQuery({
+		queryKey: ['username-availability', username],
+		queryFn: async () => {
+			if (!username) return undefined;
+			const { data, error } = await authClient.isUsernameAvailable({
+				username,
+			});
 			if (error) throw error;
-			setIsAvailable(data === null);
-		} catch (error) {
-			console.error(error);
-		} finally {
-			setIsLoading(false);
-		}
-	};
-
-	return { isAvailable, reset, isLoading, check };	
+			return data.available;
+		},
+		enabled: !!username && username.length > 0,
+	});	
 };
 
 export { useUsernameAvailability }

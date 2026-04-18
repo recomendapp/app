@@ -2,8 +2,6 @@ import { createContext, use, useCallback, useEffect, useState } from "react";
 import { Alert, Platform } from "react-native";
 import { useSplashScreen } from "./SplashScreenProvider";
 import { useLocaleContext } from "./LocaleProvider";
-import * as AuthSession from 'expo-auth-session';
-import { makeRedirectUri } from "expo-auth-session";
 import { useRevenueCat } from "apps/mobile/src/hooks/useRevenueCat";
 import { CustomerInfo } from "react-native-purchases";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
@@ -12,7 +10,7 @@ import * as AppleAuthentication from 'expo-apple-authentication';
 import * as env from 'apps/mobile/src/env';
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { upperFirst } from "lodash";
-import { useLocale, useTranslations } from "use-intl";
+import { useTranslations } from "use-intl";
 import { useAuthCustomerInfoQuery } from "apps/mobile/src/api/auth/authQueries";
 import { User } from "@libs/api-js";
 import { meOptions } from '@libs/query-client';
@@ -24,19 +22,11 @@ import { defaultSupportedLocale, SupportedLocale, supportedLocales } from "@libs
 type AuthContextProps = {
 	user: User | null | undefined;
 	customerInfo: CustomerInfo | undefined;
-	login: (credentials: { email: string; password: string }) => Promise<void>;
+	login: (credentials: { password: string } & ({ email: string } | { username: string })) => Promise<void>;
 	loginWithOAuth: (provider: SocialProvider, redirectTo?: string | null) => Promise<void>;
 	logout: () => Promise<void>;
 	forceLogout: () => Promise<void>;
 	safeLogout: (withConfirm?: boolean) => Promise<void>;
-	signup: (credentials: {
-		email: string;
-		name: string;
-		username: string;
-		password: string;
-		language: string;
-		redirectTo?: string;
-	}) => Promise<void>;
 	pushToken: string | null;
 	setPushToken: (token: string | null) => void;
 };
@@ -53,8 +43,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 	const toast = useToast();
 	const queryClient = useQueryClient();
 	const { setLocale } = useLocaleContext();
-	const locale = useLocale();
-	const redirectUri = AuthSession.makeRedirectUri();
 	const [pushToken, setPushToken] = useState<string | null>(null);
 	const { data: user } = useQuery(meOptions());
 	const { customerInfo: initCustomerInfo } = useRevenueCat(user);
@@ -103,7 +91,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 				throw error;
 			};
 		}
-		await queryClient.invalidateQueries({ queryKey: meOptions().queryKey });
+		await queryClient.resetQueries();
 	}, [t, queryClient]);
 
 	const loginWithOAuth = useCallback(async (provider: SocialProvider, redirectTo?: string | null) => {
@@ -234,66 +222,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 		}
 	}, [logout, forceLogout, t]);
 
-	const signup = useCallback(async (
-		credentials: {
-			email: string;
-			name: string;
-			username: string;
-			password: string;
-			redirectTo?: string;
-		}
-	) => {
-		const { error } = await authClient.signUp.email({
-			email: credentials.email,
-			name: credentials.name,
-			username: credentials.username,
-			password: credentials.password,
-			language: locale,
-			callbackURL: credentials.redirectTo ? makeRedirectUri({
-				path: credentials.redirectTo,
-			}) : undefined,
-		})
-		if (error) throw error;
-	}, [locale, authClient]);
-
-// 	const resetPasswordForEmail = useCallback(async (email: string) => {
-// 		const { error } = await supabase.auth.resetPasswordForEmail(email, {
-// 			redirectTo: makeRedirectUri({
-// 				path: "/auth/reset-password",
-// 			})
-// 		});
-// 		if (error) throw error;
-// 	}, [supabase]);
-
-// 	const updateEmail = useCallback(async (email: string) => {
-// 		const { error } = await supabase.auth.updateUser({
-// 			email: email,
-// 		});
-// 		if (error) throw error;
-// 	}, [supabase]);
-
-// 	const verifyEmailChange = useCallback(async (email: string, token: string) => {
-// 		const { error } = await supabase.auth.verifyOtp({
-// 			type: 'email_change',
-// 			token: token,
-// 			email: email,
-// 		});
-// 		if (error) throw error;
-// 		const { error: refreshError } = await supabase.auth.refreshSession(session ? { refresh_token: session.refresh_token } : undefined);
-// 		if (refreshError) throw refreshError;
-// 	}, [supabase, session]);
-
-// 	const cancelPendingEmailChange = useCallback(async () => {
-// 		const { error } = await supabase.rpc('utils_cancel_email_change');
-// 		if (error) throw error;
-// 	}, [supabase]);
-
-// 	useEffect(() => {
-//     if (user && locale && user.language !== locale) {
-//       updateUser({ body: { language: locale } });
-//     }
-//   }, [user, locale, updateUser]);
-
 	const syncLanguage = useCallback(async (data: User) => {
 		if (data?.language) {
 			if (supportedLocales.includes(data.language as SupportedLocale)) {
@@ -325,7 +253,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 			logout,
 			forceLogout,
 			safeLogout,
-			signup,
 			pushToken,
 			setPushToken,
 		}}

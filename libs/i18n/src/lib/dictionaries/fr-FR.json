@@ -289,7 +289,7 @@
       "try_again": "réessayer",
       "error": "erreur",
       "not_logged_in": "vous n'êtes pas connecté",
-      "an_error_occurred": "une erreur s'est produite",
+      "an_error_occurred": "Une erreur s'est produite",
       "playlist_not_found": "playlist introuvable",
       "user_not_found": "utilisateur introuvable",
       "film_not_found": "film introuvable",
@@ -433,7 +433,18 @@
       "no_watched_dates": "aucune date de visionnage",
       "select_role": "sélectionner un rôle",
       "you_must_be_premium_to_change_member_role": "Vous devez être premium pour changer le rôle d'un membre",
-      "already_member": "déjà membre"
+      "already_member": "déjà membre",
+      "email_already_used": "Cet email est déjà utilisé",
+      "email_confirmed": "Email confirmé",
+      "confirmation_email_sent": "Email de confirmation envoyé",
+      "continue": "Continuer",
+      "finish": "Terminer",
+      "forgot_password": "Mot de passe oublié",
+      "new_password": "Nouveau mot de passe",
+      "confirm_password": "Confirmer le mot de passe",
+      "password_reseted": "Mot de passe réinitialisé",
+      "reset_your_password": "Réinitialiser votre mot de passe",
+      "invalid_token": "Token invalide"
     },
     "form": {
       "email": {
@@ -492,6 +503,7 @@
         "turnstile": "Erreur de vérification, veuillez réessayer"
       },
       "resend_code": "Renvoyer le code",
+      "resend_email": "Renvoyer l'email",
       "code_verified": "Code vérifié",
       "code_sent": "Code envoyé"
     }
@@ -633,11 +645,15 @@
         "or_continue_with": "Ou continuer avec",
         "no_account_yet": "Pas encore de compte ?",
         "form": {
+          "identifier": {
+            "label": "Email ou nom d'utilisateur",
+            "placeholder": "Entrez votre email ou nom d'utilisateur"
+          },
           "password": {
             "label": "Mot de passe",
             "placeholder": "Entrez votre mot de passe"
           },
-          "submit": "Se connecter avec un email",
+          "submit": "Se connecter",
           "forgot_password": "Mot de passe oublié ?",
           "wrong_credentials": "L'email ou le mot de passe est incorrect"
         },
@@ -664,7 +680,7 @@
         },
         "confirm_form": {
           "label": "Confirmer l'email",
-          "description": "Un code de vérification a été envoyé à l'adresse {email}"
+          "description": "Un lien de vérification a été envoyé à l'adresse {email}"
         },
         "return_to_login": "Oups, finalement j'ai déjà un compte."
       },

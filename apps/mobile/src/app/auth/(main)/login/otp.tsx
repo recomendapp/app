@@ -1,8 +1,7 @@
-import { useAuth } from 'apps/mobile/src/providers/AuthProvider';
 import { useCallback, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button } from 'apps/mobile/src/components/ui/Button';
-import { Link, useNavigation } from 'expo-router';
+import { Link, Stack, useNavigation } from 'expo-router';
 import tw from 'apps/mobile/src/lib/tw';
 import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
 import { GroupedInput, GroupedInputItem } from 'apps/mobile/src/components/ui/Input';
@@ -12,9 +11,7 @@ import { useTranslations } from 'use-intl';
 import * as z from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AuthError } from '@supabase/supabase-js';
 import { Text } from 'apps/mobile/src/components/ui/text';
-import { useSupabaseClient } from 'apps/mobile/src/providers/SupabaseProvider';
 import { InputOTP } from 'apps/mobile/src/components/ui/input-otp';
 import { KeyboardAwareScrollView } from 'apps/mobile/src/components/ui/KeyboardAwareScrollView';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
@@ -25,18 +22,20 @@ import { logger } from 'apps/mobile/src/logger';
 import { LoopCarousel } from 'apps/mobile/src/components/ui/LoopCarousel';
 import { Image } from 'expo-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { uiBackgroundsOptions } from 'apps/mobile/src/api/ui/uiOptions';
+import { authClient } from 'apps/mobile/src/lib/auth/client';
+import { useModalHeaderOptions } from 'apps/mobile/src/hooks/useModalHeaderOptions';
 
 const LoginOtpScreen = () => {
-	const supabase = useSupabaseClient();
-	const { loginWithOtp } = useAuth();
 	const { colors } = useTheme();
+	const queryClient = useQueryClient();
 	const insets = useSafeAreaInsets();
 	const toast = useToast();
 	const t = useTranslations();
 	const [ isLoading, setIsLoading ] = useState(false);
 	const navigation = useNavigation();
+	const modalHeaderOptions = useModalHeaderOptions();
 	const routes = navigation.getState()?.routes;
 	const prevRoute = routes? routes[routes.length - 2] : null;
 	// OTP
@@ -69,65 +68,66 @@ const LoginOtpScreen = () => {
 	const handleSubmit = useCallback(async (data: ForgotPasswordFormValues) => {
 		try {
 			setIsLoading(true);
-			await loginWithOtp(data.email);
+			const { error } = await authClient.emailOtp.sendVerificationOtp({
+				email: data.email,
+				type: 'sign-in',
+			});
+			if (error) {
+				switch (error.code) {
+					default:
+						toast.error(upperFirst(t('common.messages.an_error_occurred')));
+						logger.error('login with otp error', { error });
+						break;
+				}
+				throw error;
+			};
 			toast.success(upperFirst(t('common.form.code_sent')));
 			setShowOtp(true);
-		} catch (error) {
-			if (error instanceof AuthError) {
-				if (error.code === 'unexpected_failure') {
-					logger.metric('account:loginFailed', {
-						logContext: 'LoginOtpScreen',
-						reason: error.code,
-					});
-					return toast.error(t('pages.auth.login.otp.form.no_user_found'));
-				}
-				if (error.code === 'over_email_send_rate_limit') {
-					logger.metric('account:loginFailed', {
-						logContext: 'LoginOtpScreen',
-						reason: error.code,
-					});
-					return toast.error(t('common.form.error.too_many_attempts'));
-				}
-			}
-			toast.error(upperFirst(t('common.messages.an_error_occurred')));
-			logger.error('login with otp error', { error });
 		} finally {
 			setIsLoading(false);
 		}
-	}, [loginWithOtp, t, toast]);
+	}, [t, toast, logger]);
 	const handleVerifyOtp = useCallback(async (otp: string) => {
 		try {
 			setIsLoading(true);
-			const { error } = await supabase.auth.verifyOtp({
+			const { data, error } = await authClient.emailOtp.checkVerificationOtp({
 				email: formGetValues('email'),
-				token: otp,
-				type: 'email',
+				type: 'sign-in',
+				otp,
 			});
-			if (error) throw error;
+			if (error) {
+				switch (error.code) {
+					case 'INVALID_OTP':
+						toast.error(t('common.form.error.invalid_code'));
+						logger.metric('account:loginFailed', {
+							logContext: 'LoginOtpScreen',
+							reason: error.code,
+						});
+						break;
+					default:
+						toast.error(upperFirst(t('common.messages.an_error_occurred')));
+						logger.error('otp verification error', { error });
+						break;
+				}
+				throw error;
+			}
 			logger.metric('account:loggedIn', {
 				logContext: 'LoginOtpScreen',
 				withPassword: false,
 			});
+			console.log('OTP login successful', data);
+			const { data: sessionData, error: sessionError } = await authClient.getSession();
+			console.log('Session data after OTP login', sessionData, sessionError);
 			toast.success(upperFirst(t('common.form.code_verified')));
-		} catch (error) {
-			if (error instanceof AuthError) {
-				if (error.code === 'otp_expired') {
-					logger.metric('account:loginFailed', {
-						logContext: 'LoginOtpScreen',
-						reason: error.code,
-					});
-					return toast.error(t('common.form.error.invalid_code'));
-				}
-			}
-			toast.error(upperFirst(t('common.messages.an_error_occurred')));
-			logger.error('otp verification error', { error });
+			await queryClient.resetQueries();
 		} finally {
 			setIsLoading(false);
 			setOtp('');
 		}
-	}, [supabase, formGetValues, t, toast]);
+	}, [t, toast, logger, formGetValues]);
 	return (
 	<>
+		<Stack.Screen options={modalHeaderOptions} />
 		{backgrounds && (
 			<LoopCarousel
 			items={backgrounds}

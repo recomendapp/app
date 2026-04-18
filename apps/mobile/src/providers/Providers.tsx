@@ -1,7 +1,6 @@
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import { AuthProvider } from "./AuthProvider";
 import { ReactQueryProvider } from "./ReactQueryProvider";
-import { SupabaseProvider } from "./SupabaseProvider";
 import { ThemeProvider } from "./ThemeProvider";
 import { BottomSheetManager } from "apps/mobile/src/components/bottom-sheets/BottomSheetManager";
 import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context";
@@ -31,22 +30,20 @@ const Providers = ({ children } : ProvidersProps) => {
 						<ThemeProvider>
 							<ToastProvider>
 								<ActionSheetProvider>
-									<SupabaseProvider>
-										<ReactQueryProvider>
-											<AuthProvider>
-												<ApiProvider>
-													<BottomSheetModalProvider>
-														<NotificationsProvider>
-															<ProvidersInner>
-																{children}
-															</ProvidersInner>
-															<BottomSheetManager />
-														</NotificationsProvider>
-													</BottomSheetModalProvider>
-												</ApiProvider>
-											</AuthProvider>
-										</ReactQueryProvider>
-									</SupabaseProvider>
+									<ReactQueryProvider>
+										<AuthProvider>
+											<ApiProvider>
+												<BottomSheetModalProvider>
+													<NotificationsProvider>
+														<ProvidersInner>
+															{children}
+														</ProvidersInner>
+														<BottomSheetManager />
+													</NotificationsProvider>
+												</BottomSheetModalProvider>
+											</ApiProvider>
+										</AuthProvider>
+									</ReactQueryProvider>
 								</ActionSheetProvider>
 							</ToastProvider>
 						</ThemeProvider>

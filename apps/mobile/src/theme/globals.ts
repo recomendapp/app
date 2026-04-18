@@ -7,7 +7,7 @@ export const GAP_XS = GAP / 2;
 export const GAP_LG = GAP * 2;
 export const GAP_XL = GAP * 4;
 
-export const HEIGHT = 36;
+export const HEIGHT = 48;
 export const FONT_SIZE = 16;
 export const BORDER_RADIUS = 8;
 export const BORDER_RADIUS_XS = BORDER_RADIUS / 2;

@@ -1,4 +1,3 @@
-import { useSupabaseClient } from "apps/mobile/src/providers/SupabaseProvider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import * as z from 'zod';
@@ -7,7 +6,6 @@ import { Label } from "apps/mobile/src/components/ui/Label";
 import { Button } from "apps/mobile/src/components/ui/Button";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useCallback, useMemo, useState } from "react";
-import { AuthError } from "@supabase/supabase-js";
 import { useTranslations } from "use-intl";
 import { upperFirst } from "lodash";
 import { Input } from "apps/mobile/src/components/ui/Input";
@@ -18,31 +16,38 @@ import { KeyboardAwareScrollView } from 'apps/mobile/src/components/ui/KeyboardA
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { KeyboardToolbar } from "apps/mobile/src/components/ui/KeyboardToolbar";
 import { useToast } from "apps/mobile/src/components/Toast";
+import { authClient } from "../../lib/auth/client";
 
 const SettingsSecurityScreen = () => {
-	const supabase = useSupabaseClient();
 	const toast = useToast();
 	const { bottomOffset, tabBarHeight } = useTheme();
 	const t = useTranslations();
 	const [ isLoading, setIsLoading ] = useState(false);
 	const profileFormSchema = useMemo(() => z.object({
+		currentPassword: z
+			.string({
+				message: t('pages.settings.security.current_password.form.invalid'),
+			})
+			.min(1, {
+				message: t('pages.settings.security.current_password.form.required'),
+			}),
 		newpassword: z
-		.string()
-		.min(8, {
-			message: t('pages.settings.security.new_password.form.min_length'),
-		})
-		.regex(/[A-Z]/, {
-			message: t('pages.settings.security.new_password.form.uppercase'),
-		})
-		.regex(/[a-z]/, {
-			message: t('pages.settings.security.new_password.form.lowercase'),
-		})
-		.regex(/[0-9]/, {
-			message: t('pages.settings.security.new_password.form.number'),
-		})
-		.regex(/[\W_]/, {
-			message: t('pages.settings.security.new_password.form.special'),
-		}),
+			.string()
+			.min(8, {
+				message: t('pages.settings.security.new_password.form.min_length'),
+			})
+			.regex(/[A-Z]/, {
+				message: t('pages.settings.security.new_password.form.uppercase'),
+			})
+			.regex(/[a-z]/, {
+				message: t('pages.settings.security.new_password.form.lowercase'),
+			})
+			.regex(/[0-9]/, {
+				message: t('pages.settings.security.new_password.form.number'),
+			})
+			.regex(/[\W_]/, {
+				message: t('pages.settings.security.new_password.form.special'),
+			}),
 		confirmnewpassword: z.string(),
 	}).refine((data) => data.newpassword === data.confirmnewpassword, {
 		message: t('pages.settings.security.confirm_password.form.match'),
@@ -66,23 +71,30 @@ const SettingsSecurityScreen = () => {
 	const handleSubmit = useCallback(async (data: ProfileFormValues) => {
 		try {
 			setIsLoading(true);
-			const { error } = await supabase.auth.updateUser({
-				password: data.newpassword,
+			const { error } = await authClient.changePassword({
+				currentPassword: data.currentPassword,
+				newPassword: data.newpassword,
+				revokeOtherSessions: true,
 			});
-			if (error) throw error;
-			await supabase.auth.signOut({ scope: "others" });
+			if (error) {
+				switch (error.code) {
+				case 'INVALID_PASSWORD':
+					form.setError('currentPassword', {
+						message: t('pages.settings.security.current_password.form.invalid'),
+					});
+					break;
+				default:
+					toast.error(upperFirst(t('common.messages.an_error_occurred')));
+					break;
+				}
+				throw error;
+			};
 			toast.success(upperFirst(t('common.messages.saved', { count: 1, gender: 'male' })));
 			formReset();
-		} catch (error) {
-			let errorMessage: string = upperFirst(t('common.messages.an_error_occurred'));
-			if (error instanceof AuthError) {
-				errorMessage = error.message;
-			}
-			toast.error(upperFirst(t('common.messages.error')), { description: errorMessage });
 		} finally {
 			setIsLoading(false);
 		}
-	}, [supabase, t, formReset, toast]);
+	}, [t, toast, form, formReset]);
 
 	return (
 		<>
@@ -129,11 +141,34 @@ const SettingsSecurityScreen = () => {
 			>
 				<Text textColor='muted' style={tw`text-sm text-justify`}>{t(`pages.settings.security.description`)}</Text>
 				<Controller
+				name="currentPassword"
+				control={form.control}
+				render={({ field: { onChange, onBlur, value } }) => (
+				<View style={tw`gap-2`}>
+					<Label>{upperFirst(t('pages.settings.security.current_password.label'))}</Label>
+					<Input
+					label={null}
+					placeholder={t('pages.settings.security.current_password.placeholder')}
+					value={value ?? ''}
+					onChangeText={onChange}
+					onBlur={onBlur}
+					nativeID="currentPassword"
+					autoComplete="new-password"
+					autoCapitalize="none"
+					disabled={isLoading}
+					leftSectionStyle={tw`w-auto`}
+					error={form.formState.errors.currentPassword?.message}
+					type="password"
+					/>
+				</View>
+				)}
+				/>
+				<Controller
 				name="newpassword"
 				control={form.control}
 				render={({ field: { onChange, onBlur, value } }) => (
 				<View style={tw`gap-2`}>
-					<Label>{upperFirst(t('common.form.password.label'))}</Label>
+					<Label>{upperFirst(t('pages.settings.security.new_password.label'))}</Label>
 					<Input
 					label={null}
 					placeholder={t('pages.settings.security.new_password.placeholder')}

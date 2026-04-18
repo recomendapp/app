@@ -1,53 +1,38 @@
-# 🖼️ Recomend API
+# 🎬 Recomend
 
-<div align="center">
-  <img src="./assets/recomend_icon.svg" alt="Recomend logo" width="100" />
-  <h2 align="center">Recomend API</h2>
-</div>
+<p align="center">
+  <img src="./assets/recomend_logo.svg" alt="Recomend logo" width="" />
+</p>
 
-The main **NestJS (with Fastify)**-based API service for the Recomend application. It handles search functionalities for movies, TV series, persons, users, and playlists, alongside user authentication and other backend operations. Developed by [@lxup](https://github.com/lxup).
+Monorepo of the **Recomend** app, dev by [@lxup](https://github.com/lxup).
+
+## ✅ TODO
+
+- [ ] Update english translations
 
 ## 🚀 Tech Stack
 
-- ⚡️ [NestJS](https://nestjs.com/) – A progressive Node.js framework for building efficient, reliable and scalable server-side applications.
-- 🚀 [Fastify](https://fastify.dev/) – Fast and low overhead web framework, for Node.js.
-- 🖌️ [Typesense](https://typesense.org/) – Lightning-fast, open source search engine.
-- 🛡️ [Supabase](https://supabase.com/) – Open source Firebase alternative for authentication, database, and storage.
+- ⚡️ [Next.js](https://nextjs.org/) – React Framework
+- 💳 [RevenueCat](https://www.revenuecat.com/) – Subscriptions
+- 🔔 [Novu](https://novu.co/) – In-app Notifications
+- 📲 [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging) – Push Notifications
+- ☁️ [Cloudflare R2](https://www.cloudflare.com/products/r2/) – Media Storage
+- ⚙️ [Prefect](https://www.prefect.io/) – DB Sync Scripts (with TMDB)
+- 🎞️ [TMDB](https://www.themoviedb.org/) – Movie & TV Metadata Provider
+
+<p align="left">
+  <img src="./assets/recomend-stack.svg" alt="Recomend logo" width="" />
+</p>
+
+## 📸 Preview
+
+![Homepage](./assets/screenshot-home.png)
 
 ## 📦 Installation
 
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/recomendapp/api.git
-   cd api
-   ```
-
-2. **Install dependencies:**
-
-   ```bash
-   pnpm install
-   ```
-
-3. **Set up environment variables:**
-
-   ```bash
-   cp .env.template .env
-   ```
-
-   _Add your environment variables to the `.env` file._
-
-4. **Run the development server:**
-   ```bash
-   pnpm run dev
-   ```
-
-## 📚 API Documentation
-
-Explore the API routes and their documentation using the Swagger interface:
-
-- **Swagger UI Endpoint**: /api-docs
-- **OpenAPI JSON Schema Endpoint**: /api-docs-json
-- **Description**: Access the interactive Swagger UI to view and test all available API endpoints, including parameters and response formats. The raw OpenAPI JSON schema is also available.
-
-Visit http://localhost:9000/api-docs after starting the service to explore the API documentation.
+```bash
+pnpm install
+cp .env.template .env.local
+# Add your environment variables to .env.local
+pnpm start
+```

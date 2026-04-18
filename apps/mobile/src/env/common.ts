@@ -89,12 +89,6 @@ export const SCHEME: string = Array.isArray(schemeFromConfig)
   : schemeFromConfig || 'woodn';
 
 /**
- * Supabase
- */
-export const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL!
-export const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY!
-
-/**
  * Sentry DSN for telemetry
  */
 export const SENTRY_DSN = process.env.EXPO_PUBLIC_SENTRY_DSN

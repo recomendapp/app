@@ -9,16 +9,16 @@ export const authClient = createAuthClient({
   baseURL: API_URL,
   basePath: '/auth',
   plugins: [
+    usernameClient(),
+    magicLinkClient(),
+    inferAdditionalFields<typeof auth>(),
+    emailOTPClient(),
     expoClient({
       scheme: SCHEME,
       storagePrefix: SCHEME,
       // cookiePrefix: AUTH_COOKIE_PREFIX || SCHEME,
       storage: SecureStore,
     }),
-    usernameClient(),
-    magicLinkClient(),
-    inferAdditionalFields<typeof auth>(),
-    emailOTPClient()
   ],
 });
 

@@ -22,7 +22,7 @@ export const useModalHeaderOptions = ({
     const t = useTranslations();
     const { mode } = useTheme();
 
-    const shouldShowCross = forceCross || navigation.getState()?.routes?.length === 1;
+    const shouldShowCross = forceCross || navigation.getState()?.index === 0;
 
     const handleExit = useCallback(() => {
         if (confirmExit) {
@@ -45,9 +45,8 @@ export const useModalHeaderOptions = ({
         }
     }, [confirmExit, router, t, mode]);
 
-    return useMemo((): Partial<NativeStackNavigationOptions> => ({
-        headerLeft: (props) => {
-            if (props.canGoBack && !forceCross) return undefined;
+    return useMemo((): Partial<NativeStackNavigationOptions> => shouldShowCross ? ({
+        headerLeft: () => {
             return (
                 <Button
                     variant="muted"
@@ -58,18 +57,20 @@ export const useModalHeaderOptions = ({
                 />
             );
         },
-        unstable_headerLeftItems: shouldShowCross ? (props) => [
-            {
-                type: "button",
-                label: upperFirst(t('common.messages.cancel')),
-                onPress: handleExit,
-                tintColor: props.tintColor,
-                disabled: isPending,
-                icon: {
-                    name: "xmark",
-                    type: "sfSymbol",
+        unstable_headerLeftItems: (props) => {
+            return [
+                {
+                    type: "button",
+                    label: upperFirst(t('common.messages.cancel')),
+                    onPress: handleExit,
+                    tintColor: props.tintColor,
+                    disabled: isPending,
+                    icon: {
+                        name: "xmark",
+                        type: "sfSymbol",
+                    },
                 },
-            },
-        ] : undefined,
-    }), [handleExit, isPending, forceCross, t, shouldShowCross]);
+            ]
+        },
+    }) : {}, [handleExit, isPending, forceCross, t, shouldShowCross]);
 };

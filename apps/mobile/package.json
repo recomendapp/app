@@ -70,7 +70,6 @@
     "@hookform/resolvers": "*",
     "react-hook-form": "*",
     "zod": "*",
-    "@supabase/supabase-js": "*",
     "@react-native-picker/picker": "*",
     "expo-auth-session": "*",
     "lucide-react-native": "*",

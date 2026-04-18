@@ -13,19 +13,20 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Color from "color";
 import { Text } from "apps/mobile/src/components/ui/text";
 import { getMediaDetails } from "apps/mobile/src/components/utils/getMediaDetails";
-import { Database } from "@recomendapp/types";
 import { useHeaderHeight } from "@react-navigation/elements";
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { LoopCarousel } from "apps/mobile/src/components/ui/LoopCarousel";
 import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useQuery } from "@tanstack/react-query";
-import { uiBackgroundsOptions } from "../../api/ui/uiOptions";
+import { uiBackgroundsOptions } from "../../../api/ui/uiOptions";
+import { useModalHeaderOptions } from "../../../hooks/useModalHeaderOptions";
+import { UiBackground } from "@libs/api-js";
 
 const AuthHeader = ({
   onBackgroundChange,
 }: {
-  onBackgroundChange: (background: Database['public']['Functions']['get_ui_backgrounds']['Returns'][number] | null) => void;
+  onBackgroundChange: (background: UiBackground | null) => void;
 }) => {
   const { colors } = useTheme();
   const headerHeight = useHeaderHeight();
@@ -65,15 +66,14 @@ const AuthHeader = ({
   )
 };
 
-
 const AuthScreen = () => {
   const t = useTranslations();
-  const { colors, isLiquidGlassAvailable } = useTheme();
-  const router = useRouter();
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
-  const [activeBackground, setActiveBackground] = useState<Database['public']['Functions']['get_ui_backgrounds']['Returns'][number] | null>(null);
+  const [activeBackground, setActiveBackground] = useState<UiBackground | null>(null);
+  const modalHeaderOptions = useModalHeaderOptions();
   const activeDetails = useMemo(() => {
-    switch (activeBackground?.media_type) {
+    switch (activeBackground?.type) {
       case 'movie':
         return activeBackground ? getMediaDetails({ type: 'movie', media: activeBackground.media }) : undefined;
       case 'tv_series':
@@ -84,38 +84,17 @@ const AuthScreen = () => {
   }, [activeBackground]);
 
   const routes = useMemo((): { name: string; href: Href }[] => [
-    { name: upperFirst(t('common.messages.login')), href: '/auth/login' },
-    { name: upperFirst(t('common.messages.signup')), href: '/auth/signup' },
-    { name: upperFirst(t('common.messages.show_me_around')), href: '/onboarding' },
+    { name: upperFirst(t('common.messages.login')), href: { pathname: '/auth/login'} },
+    { name: upperFirst(t('common.messages.signup')), href: { pathname: '/auth/signup'} },
+    { name: upperFirst(t('common.messages.show_me_around')), href: { pathname: '/onboarding'} },
   ], [t]);
-
-  const handleClose = useCallback(() => {
-    if (router.canGoBack()) {
-      router.back();
-    } else {
-      router.replace('/');
-    }
-  }, [router]);
   
 	return (
   <>
     <Stack.Screen
     options={{
+      ...modalHeaderOptions,
       headerTitle: () => <></>,
-      headerLeft: () => (
-        <Button variant="muted" icon={Icons.X} size="icon" style={tw`rounded-full`} onPress={handleClose} />
-      ),
-      unstable_headerLeftItems: isLiquidGlassAvailable ? (props) => [
-        {
-          type: "button",
-          label: upperFirst(t('common.messages.close')),
-          onPress: handleClose,
-          icon: {
-            name: "xmark",
-            type: "sfSymbol",
-          },
-        },
-      ] : undefined,
     }}
     />
     <ScrollView

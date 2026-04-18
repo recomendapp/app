@@ -14,6 +14,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from '@/lib/i18n/navigation';
 import { upperFirst } from 'lodash';
 import { authClient } from '@/lib/auth/client';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function LoginOtpForm({
   className,
@@ -22,6 +23,7 @@ export function LoginOtpForm({
 } : React.HTMLAttributes<HTMLDivElement> & { redirectTo: string | null }) {
   const t = useTranslations('pages.auth.login');
   const common = useTranslations('common');
+  const queryClient = useQueryClient();
   const router = useRouter();
   const [email, setEmail] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -75,7 +77,7 @@ export function LoginOtpForm({
       }
       toast.success(t('otp.form.success'));
       router.push(redirectTo || '/');
-      router.refresh();
+      await queryClient.resetQueries();
     } finally {
       setIsLoading(false);
     }

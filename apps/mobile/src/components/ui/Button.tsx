@@ -33,6 +33,8 @@ export type ButtonVariant =
 
 export type ButtonSize = 'default' | 'sm' | 'lg' | 'icon' | 'fit';
 
+export type ButtonIconPosition = 'left' | 'right';
+
 export interface ButtonProps extends PressableProps {
   label?: string;
   children?: React.ReactNode;
@@ -40,6 +42,7 @@ export interface ButtonProps extends PressableProps {
   haptic?: boolean;
   icon?: React.ComponentType<LucideProps>;
   iconProps?: LucideProps;
+  iconPosition?: ButtonIconPosition;
   variant?: ButtonVariant;
   size?: ButtonSize;
   disabled?: boolean;
@@ -56,6 +59,7 @@ export const Button = forwardRef<View, ButtonProps>(
       children,
       icon,
       iconProps,
+      iconPosition = 'left',
       onPress,
       variant = 'default',
       size = 'default',
@@ -364,7 +368,7 @@ export const Button = forwardRef<View, ButtonProps>(
       >
         <Animated.View style={[animatedStyle, buttonStyle, styleWithoutFlex]}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, opacity: loading ? 0.5 : 1 }}>
-            {icon && (
+            {icon && iconPosition === 'left' && (
               <Icon name={icon} color={contentColor} size={iconSize} {...iconProps} />
             )}
             {typeof children === 'string' ? (
@@ -372,7 +376,9 @@ export const Button = forwardRef<View, ButtonProps>(
             ) : (
               children
             )}
-
+            {icon && iconPosition === 'right' && (
+              <Icon name={icon} color={contentColor} size={iconSize} {...iconProps} />
+            )}
           </View>
           {loading && (
             <View
@@ -398,11 +404,16 @@ export const Button = forwardRef<View, ButtonProps>(
         {...props}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, opacity: loading ? 0.5 : 1 }}>
-          {icon && <Icon name={icon} color={contentColor} size={iconSize} {...iconProps} />}
+          {icon && iconPosition === 'left' && (
+            <Icon name={icon} color={contentColor} size={iconSize} {...iconProps} />
+          )}
           {typeof children === 'string' ? (
             <Text style={[finalTextStyle, textStyle]}>{children}</Text>
           ) : (
             children
+          )}
+          {icon && iconPosition === 'right' && (
+            <Icon name={icon} color={contentColor} size={iconSize} {...iconProps} />
           )}
         </View>
         {loading && (

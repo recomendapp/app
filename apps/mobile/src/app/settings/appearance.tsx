@@ -5,7 +5,6 @@ import { Label } from "apps/mobile/src/components/ui/Label";
 import { Button } from "apps/mobile/src/components/ui/Button";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useCallback, useEffect, useState } from "react";
-import { AuthError } from "@supabase/supabase-js";
 import { useTranslations } from "use-intl";
 import { upperFirst } from "lodash";
 import { Stack } from "expo-router";
@@ -62,16 +61,9 @@ const SettingsAppearanceScreen = () => {
 			setLocale(data.locale);
 			toast.success(upperFirst(t('common.messages.saved', { count: 1, gender: 'male' })));
 			formReset();
-			queryClient.clear();
-			queryClient.invalidateQueries();
-		} catch (error) {
-			let errorMessage: string = upperFirst(t('common.messages.an_error_occurred'));
-			if (error instanceof AuthError) {
-				errorMessage = error.message;
-			}
-			toast.error(upperFirst(t('common.messages.error')), { description: errorMessage });
-		} finally {
-			setIsLoading(false);
+			await queryClient.resetQueries();
+		} catch {
+			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 		}
 	}, [setLocale, user, updateUser, t, toast, queryClient, formReset]);
 

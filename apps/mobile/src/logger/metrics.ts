@@ -1,4 +1,4 @@
-import { Provider } from "@supabase/supabase-js"
+import { SocialProvider } from 'better-auth/types';
 
 export type MetricEvents = {
   // App events
@@ -21,7 +21,7 @@ export type MetricEvents = {
   },
   'account:loggedInWithOAuth': {
     logContext: 'LoginForm' | 'SignupForm',
-    provider: Provider
+    provider: SocialProvider
   },
   'account:forgotPasswordFailed': {
     logContext: 'ForgotPasswordScreen' | 'ForgotPasswordOtpScreen',
