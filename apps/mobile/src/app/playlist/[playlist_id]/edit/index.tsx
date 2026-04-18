@@ -30,6 +30,7 @@ import { useQuery } from "@tanstack/react-query";
 import { playlistOptions, usePlaylistUpdateMutation } from "@libs/query-client";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { ImageManipulator, SaveFormat } from "expo-image-manipulator";
+import { useModalHeaderOptions } from "apps/mobile/src/hooks/useModalHeaderOptions";
 
 const TITLE_MIN_LENGTH = 1;
 const TITLE_MAX_LENGTH = 100;
@@ -88,6 +89,11 @@ const ModalPlaylistEdit = () => {
 	const canSave = useMemo(() => {
 		return hasFormChanged || newPoster !== undefined;
 	}, [hasFormChanged, newPoster]);
+
+	const modalHeaderOptions = useModalHeaderOptions({
+		isPending,
+		confirmExit: !!canSave,
+	});
 
 	// Routes
 	const routes: { label: string, icon: LucideIcon, route: Href }[] = [
@@ -202,27 +208,6 @@ const ModalPlaylistEdit = () => {
 		});
 	}, [playlist, updatePlaylist, toast, router, t, newPoster]);
 
-	const handleCancel = useCallback(() => {
-		if (canSave) {
-			Alert.alert(
-				upperFirst(t('common.messages.are_u_sure')),
-				upperFirst(t('common.messages.do_you_really_want_to_cancel_change', { count: 2 })),
-				[
-					{
-						text: upperFirst(t('common.messages.continue_editing')),
-					},
-					{
-						text: upperFirst(t('common.messages.ignore')),
-						onPress: () => router.dismiss(),
-						style: 'destructive',
-					},
-				], { userInterfaceStyle: mode }
-			);
-		} else {
-			router.dismiss();
-		}
-	}, [canSave, router, t, mode]);
-
 	// useEffects
 	useEffect(() => {
 		if (playlist) {
@@ -249,17 +234,8 @@ const ModalPlaylistEdit = () => {
 	<>
 		<Stack.Screen
 			options={{
+				...modalHeaderOptions,
 				headerTitle: upperFirst(t('common.messages.edit_playlist')),
-				headerLeft: () => (
-					<Button
-					variant="ghost"
-					size="fit"
-					disabled={isPending}
-					onPress={handleCancel}
-					>
-						{upperFirst(t('common.messages.cancel'))}
-					</Button>
-				),
 				headerRight: () => (
 					<Button
 					variant="ghost"
@@ -271,19 +247,6 @@ const ModalPlaylistEdit = () => {
 						{upperFirst(t('common.messages.save'))}
 					</Button>
 				),
-				unstable_headerLeftItems: (props) => [
-					{
-						type: "button",
-						label: upperFirst(t('common.messages.cancel')),
-						onPress: handleCancel,
-						tintColor: props.tintColor,
-						disabled: isPending,
-						icon: {
-							name: "xmark",
-							type: "sfSymbol",
-						},
-					},
-				],
 				unstable_headerRightItems: (props) => [
 					{
 						type: "button",

@@ -1,26 +1,29 @@
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import tw from "apps/mobile/src/lib/tw";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "apps/mobile/src/components/ui/Button";
 import { useTranslations } from "use-intl";
 import { upperFirst } from "lodash";
 import { Icons } from "apps/mobile/src/constants/Icons";
-import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { Text } from "apps/mobile/src/components/ui/text";
 import { View } from "apps/mobile/src/components/ui/view";
 import Fuse from "fuse.js";
-import { SearchBar } from "apps/mobile/src/components/ui/searchbar";
-import { LegendList } from "@legendapp/list/react-native";
 import { CardUser } from "apps/mobile/src/components/cards/CardUser";
 import app from "apps/mobile/src/constants/app";
 import Swipeable, { SwipeableMethods } from 'react-native-gesture-handler/ReanimatedSwipeable';
 import Animated, { interpolate, SharedValue, useAnimatedStyle } from "react-native-reanimated";
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
+import { PADDING_HORIZONTAL } from "apps/mobile/src/theme/globals";
 import { useToast } from "apps/mobile/src/components/Toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { PlaylistMemberWithUser, UserSummary } from "@libs/api-js";
 import { useQuery } from "@tanstack/react-query";
 import { playlistMembersAllOptions, playlistOptions, usePlaylistMembersDeleteMutation, usePlaylistMemberUpdateMutation } from "@libs/query-client";
+import { useModalHeaderOptions } from "apps/mobile/src/hooks/useModalHeaderOptions";
+import { usePlaylistMembers } from "apps/mobile/src/hooks/usePlaylistMembers";
+import { useActionSheet } from "@expo/react-native-action-sheet";
+import { KeyboardAvoidingLegendList } from "@legendapp/list/keyboard-test";
+import { LegendListRef } from "@legendapp/list/react-native";
 
 const RightActions = ({
 	drag,
@@ -75,9 +78,13 @@ const ModalPlaylistEditMembers = () => {
     const playlistId = Number(playlist_id);
 	const router = useRouter();
 	const toast = useToast();
-	const { customerInfo } = useAuth();
 	const t = useTranslations();
 	const insets = useSafeAreaInsets();
+	const { showActionSheetWithOptions } = useActionSheet();
+	const { playlistMembersRoleValues } = usePlaylistMembers();
+	// Refs
+	const listRef = useRef<LegendListRef>(null);
+	// Queries
 	const {
 		data: playlist,
 	} = useQuery(playlistOptions({
@@ -92,7 +99,7 @@ const ModalPlaylistEditMembers = () => {
 		playlistId: playlist?.id,
 	}));
 	const loading = members === undefined || isLoading;
-	
+
 	// Mutations
 	const { mutateAsync: updateMember, isPending: isUpdatingMember } = usePlaylistMemberUpdateMutation({
 		userId: user?.id,
@@ -101,13 +108,16 @@ const ModalPlaylistEditMembers = () => {
 		userId: user?.id,
 	});
 	const isPending = useMemo(() => isUpdatingMember || isDeletingMember, [isUpdatingMember, isDeletingMember]);
+	const modalHeaderOptions = useModalHeaderOptions({
+		isPending,
+	});
 
 	// Search
 	const [search, setSearch] = useState('');
 	const [results, setResults] = useState<PlaylistMemberWithUser[]>([]);
 	const fuse = useMemo(() => {
 		return new Fuse(members || [], {
-			keys: ['user.username', 'user.full_name'],
+			keys: ['user.username', 'user.name'],
 			threshold: 0.5,
 		});
 	}, [members]);
@@ -118,56 +128,10 @@ const ModalPlaylistEditMembers = () => {
 			setResults(members || []);
 		}
 	}, [search, members, fuse]);
-	const hasResults = results && results.length > 0;
 	/* -------------------------------------------------------------------------- */
 
 
 	// Handlers
-	const handleToggleEdit = (userId: string) => {
-		if (!customerInfo?.entitlements.active['premium']) {
-			router.push({ pathname: '/upgrade', params: { feature: app.features.playlist_collaborators } });
-			return;
-		}
-	};
-	// const handleSubmit = async () => {
-	// 	try {
-	// 		if (!playlist) return;
-	// 		setIsLoading(true);
-	// 		const guestsToUpsert = guests?.filter((guest) => {
-	// 			const original = guestsRequest?.find(g => g.user?.id === guest.user.id);
-	// 			if (!original) return true;
-	// 			return original.edit !== guest.edit;
-	// 		});
-	// 		const guestsToDelete = guestsRequest?.filter((guest) => !guests?.some((g) => g.user.id === guest.user?.id));
-	// 		if (guestsToUpsert?.length) {
-	// 			await upsertGuestsMutation({
-	// 				guests: guestsToUpsert.map((guest) => ({
-	// 					user_id: guest.user.id!,
-	// 					edit: guest.edit
-	// 				})),
-	// 			}, { onError: (error) => { throw error } })
-	// 		}
-	// 		if (guestsToDelete?.length) {
-	// 			await deleteGuestsMutation({
-	// 				userIds: guestsToDelete.map((guest) => guest.user_id),
-	// 			}, { onError: (error) => { throw error } })
-	// 		}
-	// 		toast.success(upperFirst(t('common.messages.saved', { count: 1, gender: 'male' })));
-	// 		router.dismiss();
-	// 	} catch (error) {
-	// 		let errorMessage: string = upperFirst(t('common.messages.an_error_occurred'));
-	// 		if (error instanceof Error) {
-	// 			errorMessage = error.message;
-	// 		} else if (error instanceof PostgrestError) {
-	// 			errorMessage = error.message;
-	// 		} else if (typeof error === 'string') {
-	// 			errorMessage = error;
-	// 		}
-	// 		toast.error(upperFirst(t('common.messages.error')), { description: errorMessage });
-	// 	} finally {
-	// 		setIsLoading(false);
-	// 	}
-	// };
 	const handleDeleteMember = useCallback(async (userId: string) => {
 		await deleteMember({
 			path: {
@@ -183,14 +147,56 @@ const ModalPlaylistEditMembers = () => {
 		});
 	}, [deleteMember, playlistId, toast]);
 
-	const handleGoBack = useCallback(() => {
-		if (router.canGoBack()) {
-			router.back();
-		} else {
-			router.replace('/')
-		}
-	}, [router]);
+	const handleSelectRole = useCallback((member: PlaylistMemberWithUser) => {
+        const roleOptionsWithCancel = [
+            ...playlistMembersRoleValues,
+            { label: upperFirst(t('common.messages.cancel')), value: 'cancel' },
+        ];
+        const cancelIndex = roleOptionsWithCancel.length - 1;
+        
+        showActionSheetWithOptions({
+            title: upperFirst(t('common.messages.select_role')),
+            options: roleOptionsWithCancel.map((option) => option.label),
+            cancelButtonIndex: cancelIndex,
+        }, async (selectedIndex) => {
+            if (selectedIndex === undefined || selectedIndex === cancelIndex) return;
 
+            const selectedRole = playlistMembersRoleValues[selectedIndex].value;
+
+            if (selectedRole !== 'viewer' && !user?.isPremium) {
+                router.push({ 
+                    pathname: '/upgrade', 
+                    params: { feature: app.features.playlist_collaborators } 
+                });
+                return;
+            }
+
+            await updateMember({
+                path: {
+                    playlist_id: playlistId,
+                    user_id: member.userId,
+                },
+                body: {
+                    role: selectedRole,
+                }
+            }, {
+                onError: () => {
+                    toast.error(upperFirst(t('common.messages.an_error_occurred')));
+                }
+            });
+        });
+    }, [
+        playlistMembersRoleValues, 
+        showActionSheetWithOptions, 
+        t, 
+        user?.isPremium, 
+        router, 
+        updateMember, 
+        playlistId, 
+        toast
+    ]);
+
+	// Render
 	const renderItem = useCallback(({ item }: { item: PlaylistMemberWithUser }) => {
 		return (
 			<Swipeable
@@ -211,87 +217,76 @@ const ModalPlaylistEditMembers = () => {
 				<View style={tw`flex-row items-center justify-between gap-2 w-full`}>
 					<CardUser user={item.user} linked={false} style={tw`border-0 p-0 h-auto bg-transparent`} />
 					<View style={tw`flex-row items-center gap-2`}>
-						<Text textColor="muted" style={tw`text-sm`}>
-							edit
-						</Text>
+						<Button variant="outline" onPress={() => handleSelectRole(item)}>
+							{playlistMembersRoleValues.find((r) => r.value === item.role)?.label}
+						</Button>
 					</View>
 				</View>
 			</Swipeable>
 		);
 	}, [handleDeleteMember]);
-	
+
 	return (
 	<>
 		<Stack.Screen
 			options={{
-				headerTitle: upperFirst(t('common.messages.manage_members', { count: 2 })),
-				headerLeft: () => (
+				...modalHeaderOptions,
+				title: upperFirst(t('common.messages.manage_members', { count: 2 })),
+				headerSearchBarOptions: {
+					autoCapitalize: 'none',
+					placeholder: upperFirst(t('common.messages.search_user', { count: 1 })),
+					onChangeText: (e) => {
+						setSearch(e.nativeEvent.text);
+						listRef.current?.scrollToOffset({ offset: 0, animated: false });
+					},
+					hideNavigationBar: false,
+					allowToolbarIntegration: false,
+					hideWhenScrolling: false,
+				},
+				headerRight: () => (
 					<Button
-					variant="muted"
+					variant="outline"
+					icon={Icons.Add}
 					size="icon"
-					disabled={isPending}
-					onPress={handleGoBack}
+					onPress={() => router.push({ pathname: '/playlist/[playlist_id]/edit/members/add', params: { playlist_id: playlistId }})}
+					style={tw`rounded-full`}
 					/>
 				),
-				unstable_headerLeftItems: (props) => [
+				unstable_headerRightItems: (props) => [
 					{
 						type: "button",
-						label: upperFirst(t('common.messages.cancel')),
-						onPress: handleGoBack,
-						tintColor: props.tintColor,
-						disabled: isPending,
+						label: upperFirst(t('common.messages.add_member', { count: 2 })),
+						onPress:  () => router.push({ pathname: '/playlist/[playlist_id]/edit/members/add', params: { playlist_id: playlistId }}),
 						icon: {
-							name: "xmark",
+							name: "person.badge.plus",
 							type: "sfSymbol",
 						},
 					},
 				],
 			}}
 		/>
-		<View style={[tw`gap-2`, { paddingHorizontal: PADDING_HORIZONTAL, paddingVertical: PADDING_VERTICAL }]}>
-			<SearchBar
-			onSearch={setSearch}
-			autoCorrect={false}
-			autoComplete="off"
-			autoCapitalize="none"
-			placeholder={upperFirst(t('common.messages.search_user', { count: 1 }))}
-			/>
-			<View
-			style={
-				hasResults ? tw`flex-row items-center justify-between gap-2` : undefined
-			}>
-				<Link href={{ pathname: '/playlist/[playlist_id]/edit/members/add', params: { playlist_id: playlistId }}} asChild>
-					<Button
-					variant="muted"
-					icon={Icons.Add}
-					>
-						{upperFirst(t('common.messages.add_member', { count: 2 }))}
-					</Button>
-				</Link>
-				{hasResults && <Text textColor="muted" style={tw`text-right`}>{upperFirst(t('common.messages.can_edit'))}</Text>}
-			</View>
-		</View>
-		<LegendList
-		data={results || []}
+		<KeyboardAvoidingLegendList
+		ref={listRef}
+		data={results}
 		renderItem={renderItem}
 		ListEmptyComponent={
 			loading ? <Icons.Loader />
 			: (
-				<View style={tw`flex-1 items-center justify-center p-4`}>
+				<View style={tw`flex-1 items-center p-4`}>
 					<Text textColor="muted" style={tw`text-center`}>
 						{upperFirst(t('common.messages.no_results'))}
 					</Text>
 				</View>
 			) 
 		}
-		keyExtractor={(item) => item.user.id!.toString()}
-		nestedScrollEnabled
+		keyExtractor={(item) => item.id.toString()}
 		refreshing={isRefetching}
 		onRefresh={refetch}
 		contentContainerStyle={[
-			tw`gap-2`,
-			{ paddingBottom: insets.bottom + PADDING_VERTICAL }
+			tw`gap-2 flex-grow`,
+			{ paddingBottom: insets.bottom }
 		]}
+		keyboardShouldPersistTaps="handled"
 		/>
 	</>
 	)

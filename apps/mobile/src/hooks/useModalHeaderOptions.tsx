@@ -1,0 +1,75 @@
+import { useNavigation, useRouter } from "expo-router";
+import { useTranslations } from "use-intl";
+import { upperFirst } from "lodash";
+import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
+import { Button } from "apps/mobile/src/components/ui/Button";
+import { Icons } from "apps/mobile/src/constants/Icons";
+import { useCallback, useMemo } from "react";
+import { Alert } from "react-native";
+import { useTheme } from "../providers/ThemeProvider";
+
+export const useModalHeaderOptions = ({
+    isPending = false,
+    forceCross = false,
+    confirmExit = false,
+}: {
+    isPending?: boolean;
+    forceCross?: boolean;
+    confirmExit?: boolean | { confirmTitle?: string; confirmMessage?: string; continueEditingLabel?: string; ignoreLabel?: string };
+} = {}): Partial<NativeStackNavigationOptions> => {
+    const navigation = useNavigation();
+    const router = useRouter();
+    const t = useTranslations();
+    const { mode } = useTheme();
+
+    const shouldShowCross = forceCross || navigation.getState()?.routes?.length === 1;
+
+    const handleExit = useCallback(() => {
+        if (confirmExit) {
+            Alert.alert(
+               typeof confirmExit === 'object' && confirmExit.confirmTitle ? confirmExit.confirmTitle : upperFirst(t('common.messages.are_u_sure')),
+                typeof confirmExit === 'object' && confirmExit.confirmMessage ? confirmExit.confirmMessage : upperFirst(t('common.messages.do_you_really_want_to_cancel_change', { count: 2 })),
+                [
+                    {
+                        text: typeof confirmExit === 'object' && confirmExit.continueEditingLabel ? confirmExit.continueEditingLabel : upperFirst(t('common.messages.continue_editing')),
+                    },
+                    {
+                        text: typeof confirmExit === 'object' && confirmExit.ignoreLabel ? confirmExit.ignoreLabel : upperFirst(t('common.messages.ignore')),
+                        onPress: () => router.dismiss(),
+                        style: 'destructive',
+                    },
+                ], { userInterfaceStyle: mode }
+            );
+        } else {
+            router.dismiss();
+        }
+    }, [confirmExit, router, t, mode]);
+
+    return useMemo((): Partial<NativeStackNavigationOptions> => ({
+        headerLeft: (props) => {
+            if (props.canGoBack && !forceCross) return undefined;
+            return (
+                <Button
+                    variant="muted"
+                    size="icon"
+                    icon={Icons.X} 
+                    disabled={isPending}
+                    onPress={handleExit}
+                />
+            );
+        },
+        unstable_headerLeftItems: shouldShowCross ? (props) => [
+            {
+                type: "button",
+                label: upperFirst(t('common.messages.cancel')),
+                onPress: handleExit,
+                tintColor: props.tintColor,
+                disabled: isPending,
+                icon: {
+                    name: "xmark",
+                    type: "sfSymbol",
+                },
+            },
+        ] : undefined,
+    }), [handleExit, isPending, forceCross, t, shouldShowCross]);
+};

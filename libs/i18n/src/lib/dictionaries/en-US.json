@@ -430,7 +430,10 @@
       "no_token_found": "No token found",
       "first_watched_at": "first watched at",
       "watched_dates": "watched dates",
-      "no_watched_dates": "no watched dates"
+      "no_watched_dates": "no watched dates",
+      "select_role": "select a role",
+      "you_must_be_premium_to_change_member_role": "You must be a premium member to change member role",
+      "already_member": "already member"
     },
     "form": {
       "email": {

@@ -68,11 +68,9 @@ const SearchPlaylistsScreen = () => {
 				isError ? <ErrorMessage />
 				: isLoading ? <Icons.Loader />
 				: (
-					<View style={tw`flex-1 items-center justify-center`}>
-						<Text textColor='muted'>
-							{search.length ? upperFirst(t('common.messages.no_results')) : upperFirst(t('common.messages.start_typing_to_search_playlists'))}
-						</Text>
-					</View>
+					<Text textColor='muted' style={tw`text-center`}>
+						{search.length ? upperFirst(t('common.messages.no_results')) : upperFirst(t('common.messages.start_typing_to_search_playlists'))}
+					</Text>
 				)
 			}
 			keyboardShouldPersistTaps="handled"

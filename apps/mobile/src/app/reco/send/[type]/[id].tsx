@@ -28,6 +28,7 @@ import { RecoTarget, UserSummary } from "@libs/api-js";
 import { FlashList } from "@shopify/flash-list";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { theme } from "apps/mobile/src/theme";
+import { useModalHeaderOptions } from "apps/mobile/src/hooks/useModalHeaderOptions";
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -77,6 +78,12 @@ const RecoSend = () => {
 	const canSave = useMemo(() => {
 		return selected.length > 0;
 	}, [selected]);
+
+	const modalHeaderOptions = useModalHeaderOptions({
+		isPending: isSendingReco,
+		forceCross: true,
+		confirmExit: !!canSave,
+	});
 
 	// Queries
 	const {
@@ -136,26 +143,6 @@ const RecoSend = () => {
 			}
 		});
 	}, [user, selected, mediaId, mediaType, sendReco, toast, router, t]);
-	const handleCancel = useCallback(() => {
-		if (canSave) {
-			Alert.alert(
-				upperFirst(t('common.messages.are_u_sure')),
-				upperFirst(t('common.messages.do_you_really_want_to_cancel_change', { count: 2 })),
-				[
-					{
-						text: upperFirst(t('common.messages.continue_editing')),
-					},
-					{
-						text: upperFirst(t('common.messages.ignore')),
-						onPress: () => router.dismiss(),
-						style: 'destructive',
-					},
-				], { userInterfaceStyle: mode }
-			);
-		} else {
-			router.back();
-		}
-	}, [canSave, router, t, mode]);
 
 	// AnimatedStyles
 	const animatedFooterStyle = useAnimatedStyle(() => {
@@ -191,6 +178,7 @@ const RecoSend = () => {
 	<>
 		<Stack.Screen
 			options={{
+				...modalHeaderOptions,
 				headerSearchBarOptions: {
 					autoCapitalize: 'none',
 					placeholder: upperFirst(t('common.messages.search_user', { count: 1 })),
@@ -207,17 +195,6 @@ const RecoSend = () => {
 					style={tw`rounded-full`}
 					/>
 				),
-				unstable_headerLeftItems: (props) => [
-					{
-						type: "button",
-						label: upperFirst(t('common.messages.close')),
-						onPress: handleCancel,
-						icon: {
-							name: "xmark",
-							type: "sfSymbol",
-						},
-					},
-				],
 				unstable_headerRightItems: (props) => [
 					{
 						type: "button",
@@ -323,7 +300,6 @@ const RecoSend = () => {
 		maintainVisibleContentPosition={{
 			disabled: true,
 		}}
-		onEndReachedThreshold={0.5}
 		contentContainerStyle={[
 			tw`gap-2`,
 			{

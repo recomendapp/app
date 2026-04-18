@@ -430,7 +430,10 @@
       "no_token_found": "Aucun token trouvé",
       "first_watched_at": "première date de visionnage",
       "watched_dates": "dates de visionnage",
-      "no_watched_dates": "aucune date de visionnage"
+      "no_watched_dates": "aucune date de visionnage",
+      "select_role": "sélectionner un rôle",
+      "you_must_be_premium_to_change_member_role": "Vous devez être premium pour changer le rôle d'un membre",
+      "already_member": "déjà membre"
     },
     "form": {
       "email": {

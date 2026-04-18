@@ -158,7 +158,7 @@ export const MovieWidget = () => {
 						<ButtonLogMovieWatchedDate movieId={movie.id} />
 						</div>
 						<div className="flex gap-2 items-center">
-						<ButtonPlaylistAdd mediaId={movie.id} mediaType="movies" mediaTitle={movie.title} />
+						<ButtonPlaylistAdd mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
 						<ButtonUserRecoSend mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
 						</div>
 					</div>

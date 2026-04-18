@@ -7,7 +7,7 @@ import { useMemo } from "react";
 
 const ModalPlaylistEditLayout = () => {
 	const router = useRouter();
-	const { colors, defaultScreenOptions } = useTheme();
+	const { defaultScreenOptions } = useTheme();
 	const params = useLocalSearchParams<{ playlist_id: string }>();
 	const playlistId = Number(params.playlist_id);
 
@@ -29,9 +29,7 @@ const ModalPlaylistEditLayout = () => {
 		<Stack 
 		screenOptions={{
 			...defaultScreenOptions,
-			headerStyle: {
-				backgroundColor: colors.muted,
-			},
+			headerTransparent: false,
 		}}
 		/>
 	)

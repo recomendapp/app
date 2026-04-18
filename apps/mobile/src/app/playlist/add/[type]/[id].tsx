@@ -9,7 +9,7 @@ import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { upperFirst } from "lodash";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Alert, Pressable, TextInput, useWindowDimensions } from "react-native";
+import { Pressable, TextInput, useWindowDimensions } from "react-native";
 import { useTranslations } from "use-intl";
 import { z } from "zod";
 import { SelectionFooter } from "apps/mobile/src/components/ui/SelectionFooter";
@@ -30,6 +30,7 @@ import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { FlashList } from "@shopify/flash-list";
 import { theme } from "apps/mobile/src/theme";
+import { useModalHeaderOptions } from "apps/mobile/src/hooks/useModalHeaderOptions";
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -85,6 +86,12 @@ const PlaylistAddTo = () => {
 	const resultsRender = useMemo(() => results?.map((item) => ({ item: item, isSelected: selected.some((selectedItem) => selectedItem.id === item.id) })) || [], [results, selected]);
 	const canSave = useMemo(() => selected.length > 0, [selected]);
 
+	const modalHeaderOptions = useModalHeaderOptions({
+		isPending: isAddingToPlaylist,
+		forceCross: true,
+		confirmExit: !!canSave,
+	});
+
 	// Queries
 	const {
 		data: playlists,
@@ -98,7 +105,7 @@ const PlaylistAddTo = () => {
 	// Search
 	const fuse = useMemo(() => {
 		return new Fuse(playlists || [], {
-			keys: ['title'],
+			keys: ['title', 'owner.username', 'owner.name'],
 			threshold: 0.5,
 		});
 	}, [playlists]);
@@ -135,31 +142,11 @@ const PlaylistAddTo = () => {
 				toast.success(upperFirst(t('common.messages.saved', { count: 1, gender: 'male' })));
 				router.dismiss();
 			},
-			onError: (error) => {
+			onError: () => {
 				toast.error(upperFirst(t('common.messages.error')), { description: upperFirst(t('common.messages.an_error_occurred')) });
 			}
 		});
 	}, [addToPlaylistMutation, mediaId, mediaType, selected, toast, router, t]);
-	const handleCancel = useCallback(() => {
-		if (canSave) {
-			Alert.alert(
-				upperFirst(t('common.messages.are_u_sure')),
-				upperFirst(t('common.messages.do_you_really_want_to_cancel_change', { count: 2 })),
-				[
-					{
-						text: upperFirst(t('common.messages.continue_editing')),
-					},
-					{
-						text: upperFirst(t('common.messages.ignore')),
-						onPress: () => router.dismiss(),
-						style: 'destructive',
-					},
-				]
-			);
-		} else {
-			router.back();
-		}
-	}, [canSave, router, t]);
 	const onCreatePlaylist = useCallback((playlist: Playlist) => {
 		if (!user) return;
 		BottomSheetPlaylistCreateRef.current?.dismiss();
@@ -187,7 +174,19 @@ const PlaylistAddTo = () => {
 				style={tw`rounded-md w-14 h-14`}
 				type="playlist"
 				/>
-				<Text style={tw`shrink`} numberOfLines={1}>{playlist.title}</Text>
+				<View>
+					<Text style={tw`shrink`} numberOfLines={1}>{playlist.title}</Text>
+					{playlist.role !== 'owner' && (
+						<View style={tw`flex-row items-center gap-1`}>
+							<Text textColor="muted" style={tw`text-xs`}>
+								@{playlist.owner.username}
+							</Text>
+							{playlist.owner.isPremium && (
+								<Icons.premium color={colors.accentBlue} size={12} />
+							)}
+						</View>
+					)}
+				</View>
 			</View>
 			<View style={tw`flex-row items-center gap-2 shrink-0`}>
 				{alreadyAdded && (
@@ -211,6 +210,7 @@ const PlaylistAddTo = () => {
 	<>
 		<Stack.Screen
 			options={{
+				...modalHeaderOptions,
 				headerSearchBarOptions: {
 					autoCapitalize: 'none',
 					placeholder: upperFirst(t('common.messages.search_playlist', { count: 1 })),
@@ -227,17 +227,6 @@ const PlaylistAddTo = () => {
 					style={tw`rounded-full`}
 					/>
 				),
-				unstable_headerLeftItems: (props) => [
-					{
-						type: "button",
-						label: upperFirst(t('common.messages.close')),
-						onPress: handleCancel,
-						icon: {
-							name: "xmark",
-							type: "sfSymbol",
-						},
-					},
-				],
 				unstable_headerRightItems: (props) => [
 					{
 						type: "button",
@@ -347,7 +336,6 @@ const PlaylistAddTo = () => {
 			disabled: true,
 		}}
 		ItemSeparatorComponent={() => <View style={{ height: GAP }} />}
-		onEndReachedThreshold={0.5}
 		contentContainerStyle={[
 			{
 				paddingBottom: isLiquidGlassAvailable ? insets.bottom + PADDING_VERTICAL + IOS_TOOLBAR_HEIGHT : 0,

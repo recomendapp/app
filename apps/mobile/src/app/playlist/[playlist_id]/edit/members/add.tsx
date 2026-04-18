@@ -1,25 +1,29 @@
 import { CardUser } from "apps/mobile/src/components/cards/CardUser";
 import { Button } from "apps/mobile/src/components/ui/Button";
-import { SearchBar } from "apps/mobile/src/components/ui/searchbar";
 import { SelectionFooter } from "apps/mobile/src/components/ui/SelectionFooter";
 import { Text } from "apps/mobile/src/components/ui/text";
 import { View } from "apps/mobile/src/components/ui/view";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import tw from "apps/mobile/src/lib/tw";
-import { GAP, PADDING, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
-import { AnimatedLegendList } from "@legendapp/list/reanimated";
+import { PADDING_HORIZONTAL } from "apps/mobile/src/theme/globals";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { upperFirst } from "lodash";
-import { useCallback, useMemo, useState } from "react";
-import { Alert } from "react-native";
-import { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Pressable } from "react-native";
+import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 import { useTranslations } from "use-intl";
 import { Checkbox } from "apps/mobile/src/components/ui/checkbox";
 import { useToast } from "apps/mobile/src/components/Toast";
-import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { playlistMembersAllOptions, searchUsersInfiniteOptions, usePlaylistMembersAddMutation } from "@libs/query-client";
 import { UserSummary } from "@libs/api-js";
+import { useModalHeaderOptions } from "apps/mobile/src/hooks/useModalHeaderOptions";
+import useDebounce from "apps/mobile/src/hooks/useDebounce";
+import { FlashList } from "@shopify/flash-list";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useReanimatedKeyboardAnimation } from "react-native-keyboard-controller";
+import { Badge } from "apps/mobile/src/components/ui/Badge";
+import { SearchBarCommands } from "react-native-screens";
 
 const ModalPlaylistEditGuestsAdd = () => {
 	const { playlist_id } = useLocalSearchParams<{ playlist_id: string }>();
@@ -27,7 +31,11 @@ const ModalPlaylistEditGuestsAdd = () => {
 	const t = useTranslations();
 	const toast = useToast();
 	const router = useRouter();
-	const { mode } = useTheme();
+	const insets = useSafeAreaInsets();
+
+	// Refs
+	const searchBarRef = useRef<SearchBarCommands>(null); 
+
 	// Queries
 	const { data: members } = useQuery(playlistMembersAllOptions({
 		playlistId: playlistId,
@@ -35,14 +43,19 @@ const ModalPlaylistEditGuestsAdd = () => {
 	// Mutations
 	const { mutateAsync: addMembers, isPending } = usePlaylistMembersAddMutation();
 
-
 	// SharedValues
 	const footerHeight = useSharedValue(0);
+	const { height: keyboardHeight } = useReanimatedKeyboardAnimation();
 
 	// States
 	const [ search, setSearch ] = useState('');
+	const debouncedSearch = useDebounce(search);
 	const [ selectedUsers, setSelectedUsers ] = useState<UserSummary[]>([]);
-	const canSave: boolean = selectedUsers.length > 0;
+	const canSave: boolean = useMemo(() => selectedUsers.length > 0, [selectedUsers]);
+	const modalHeaderOptions = useModalHeaderOptions({
+		isPending,
+		confirmExit: !!canSave,
+	});
 	const {
 		data,
 		isLoading,
@@ -52,12 +65,13 @@ const ModalPlaylistEditGuestsAdd = () => {
 		refetch,
 	} = useInfiniteQuery(searchUsersInfiniteOptions({
 		filters: {
-			q: search,
+			q: debouncedSearch,
 		}
 	}));
 	const users = useMemo(() => data?.pages.flatMap((page) => page.data.map((user) => ({
 		user,
 		isSelected: selectedUsers.some((u) => u.id === user.id),
+		alreadyMember: members?.some((m) => m.user.id === user.id) || false,
 	}))) || [], [data, selectedUsers]);
 
 	// Handlers
@@ -88,50 +102,60 @@ const ModalPlaylistEditGuestsAdd = () => {
 			}
 		});
 	}, [selectedUsers, addMembers, toast, router, t]);
-	const handleCancel = useCallback(() => {
-		if (canSave) {
-			Alert.alert(
-				upperFirst(t('common.messages.are_u_sure')),
-				upperFirst(t('common.messages.do_you_really_want_to_cancel_change', { count: 2 })),
-				[
-					{
-						text: upperFirst(t('common.messages.continue_editing')),
-					},
-					{
-						text: upperFirst(t('common.messages.ignore')),
-						onPress: () => router.dismiss(),
-						style: 'destructive',
-					},
-				], { userInterfaceStyle: mode }
-			);
-		} else {
-			router.dismiss();
-		}
-	}, [canSave, router, t, mode]);
-
 
 	// AnimatedStyles
 	const animatedFooterStyle = useAnimatedStyle(() => {
+		const kHeight = Math.abs(keyboardHeight.value);
 		return {
-			marginBottom: withTiming(footerHeight.value, { duration: 200 }),
+			height: Math.max((footerHeight.value + kHeight), insets.bottom),
 		};
 	});
+
+	// Render
+	const renderItem = useCallback(({ item: { user, isSelected, alreadyMember } }: { item: { user: UserSummary, isSelected: boolean, alreadyMember: boolean } }) => (
+		<Pressable disabled={alreadyMember} onPress={() => handleToggleUser(user)} style={tw`flex-row items-center justify-between`}>
+			<CardUser user={user} linked={false} style={tw`border-0 p-0 h-auto bg-transparent`} />
+			<View style={tw`flex-row items-center gap-2`}>
+				{alreadyMember && (
+					<Badge variant="destructive">
+						{upperFirst(t('common.messages.already_member'))}
+					</Badge>
+				)}
+				<Checkbox
+				checked={isSelected}
+				onCheckedChange={() => handleToggleUser(user)}
+				/>
+			</View>
+		</Pressable>
+	), [handleToggleUser]);
+
+	useEffect(() => {
+        const timer = setTimeout(() => {
+            if (searchBarRef.current) {
+				console.log('Focusing search bar');
+                searchBarRef.current.focus();
+            }
+        }, 600);
+
+        return () => clearTimeout(timer);
+    }, []);
 
 	return (
 	<>
 		<Stack.Screen
 			options={{
+				...modalHeaderOptions,
+				headerSearchBarOptions: {
+					ref: searchBarRef,
+					autoCapitalize: 'none',
+					placeholder: upperFirst(t('common.messages.search_user', { count: 1 })),
+					onChangeText: (e) => setSearch(e.nativeEvent.text),
+					hideNavigationBar: false,
+					allowToolbarIntegration: false,
+					hideWhenScrolling: false,
+					autoFocus: true,
+				},
 				headerTitle: upperFirst(t('common.messages.add_guest', { count: 2 })),
-				headerLeft: () => (
-					<Button
-					variant="ghost"
-					size="fit"
-					disabled={isPending}
-					onPress={handleCancel}
-					>
-						{upperFirst(t('common.messages.cancel'))}
-					</Button>
-				),
 				headerRight: () => (
 					<Button
 					variant="ghost"
@@ -143,19 +167,6 @@ const ModalPlaylistEditGuestsAdd = () => {
 						{upperFirst(t('common.messages.save'))}
 					</Button>
 				),
-				unstable_headerLeftItems: (props) => [
-					{
-						type: "button",
-						label: upperFirst(t('common.messages.cancel')),
-						onPress: handleCancel,
-						tintColor: props.tintColor,
-						disabled: isPending,
-						icon: {
-							name: "xmark",
-							type: "sfSymbol",
-						},
-					},
-				],
 				unstable_headerRightItems: (props) => [
 					{
 						type: "button",
@@ -171,59 +182,49 @@ const ModalPlaylistEditGuestsAdd = () => {
 				],
 			}}
 		/>
-		<View style={[tw`gap-2`, { paddingHorizontal: PADDING, paddingVertical: PADDING_VERTICAL }]}>
-			<SearchBar
-			autoCorrect={false}
-			autoComplete="off"
-			autoCapitalize="none"
-			onSearch={setSearch}
-			placeholder={upperFirst(t('common.messages.search_user', { count: 1 }))}
-			/>
-		</View>
-		<AnimatedLegendList
+		<FlashList
 		data={users}
-		renderItem={({ item }) => (
-			<CardUser linked={false} onPress={() => handleToggleUser(item.user)} user={item.user} containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}>
-				<Checkbox
-				checked={item.isSelected}
-				onCheckedChange={() => handleToggleUser(item.user)}
-				/>
-			</CardUser>
-		)}
+		renderItem={renderItem}
 		ListEmptyComponent={
 			isLoading ? <Icons.Loader />
-			: search.length ? (
+			: debouncedSearch.length ? (
 				<View style={tw`p-4`}>
 					<Text textColor="muted" style={tw`text-center`}>
 						{upperFirst(t('common.messages.no_results'))}
 					</Text>
 				</View>
 			) : (
-				<View style={tw`items-center justify-center p-4`}>
+				<View style={tw`items-center p-4`}>
 					<Text textColor="muted" style={tw`text-center`}>
 						{upperFirst(t('common.messages.search_user', { count: 1 }))}
 					</Text>
 				</View>
 			)
 		}
-		keyExtractor={(item) => item.user.id!.toString()}
+		keyExtractor={(item) => item.user.id}
 		refreshing={isRefetching}
 		onRefresh={refetch}
 		onEndReached={() => hasNextPage && fetchNextPage()}
 		onEndReachedThreshold={0.5}
+		maintainVisibleContentPosition={{
+			disabled: true,
+		}}
 		contentContainerStyle={[
-			{ gap: GAP },
-			{ paddingBottom: PADDING_VERTICAL },
+			tw`gap-2 flex-grow`,
+			{
+				paddingHorizontal: PADDING_HORIZONTAL,
+			},
 		]}
-		style={animatedFooterStyle}
+		keyboardShouldPersistTaps='handled'
 		/>
+		<Animated.View style={animatedFooterStyle} />
 		<SelectionFooter
 		data={selectedUsers}
 		visibleHeight={footerHeight}
 		renderItem={({ item }) => (
-			<CardUser variant="icon" linked={false} onPress={() => handleToggleUser(item)} user={item} width={50} height={50}/>
+			<CardUser user={item} variant="icon" linked={false} onPress={() => handleToggleUser(item)} width={50} height={50} />
 		)}
-		keyExtractor={(user) => user.id!}
+		keyExtractor={(item) => item.id.toString()}
 		/>
 	</>
 	)

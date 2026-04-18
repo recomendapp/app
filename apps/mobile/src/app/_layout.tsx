@@ -44,6 +44,19 @@ const RootLayoutNav = () => {
     {/* PLAYLISTS */}
     <Stack.Protected guard={!!user}>
       <Stack.Screen
+      name='playlist/[playlist_id]/edit'
+      options={{
+        headerShown: false,
+        presentation: "modal",
+        headerTransparent: false,
+        ...(isLiquidGlassAvailable ? {
+          contentStyle: { backgroundColor: 'transparent' },
+          headerStyle: { backgroundColor: 'transparent' },
+        } : {}),
+        gestureEnabled: false,
+      }}
+      />
+      <Stack.Screen
       name="playlist/[playlist_id]/sort"
       options={{
         presentation: Platform.OS === "ios"
@@ -80,7 +93,6 @@ const RootLayoutNav = () => {
         } : {}),
       }}
       />
-      <Stack.Screen name='playlist/[playlist_id]/edit' options={{ headerShown: false, presentation: 'modal' }} />
     </Stack.Protected>
     {/* MOVIES */}
     <Stack.Screen name="film/[film_id]/watched-dates" options={{ title: upperFirst(t('common.messages.watched_dates')), presentation: 'modal' }} />

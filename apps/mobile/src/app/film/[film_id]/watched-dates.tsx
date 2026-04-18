@@ -8,6 +8,7 @@ import { Button } from "apps/mobile/src/components/ui/Button";
 import { Text } from "apps/mobile/src/components/ui/text"
 import { View } from "apps/mobile/src/components/ui/view"
 import { Icons } from "apps/mobile/src/constants/Icons";
+import { useModalHeaderOptions } from "apps/mobile/src/hooks/useModalHeaderOptions";
 import tw from "apps/mobile/src/lib/tw";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
@@ -42,6 +43,10 @@ const FilmWatchedDatesScreen = () => {
 	const { mutate: setWatchedDate } = useMovieWatchedDateSetMutation();
 	const { mutate: updateWatchedDate } = useMovieWatchedDateUpdateMutation();
 	const { mutateAsync: deleteWatchedDate } = useMovieWatchedDateDeleteMutation();
+
+	const modalHeaderOptions = useModalHeaderOptions({
+		forceCross: true,
+	});
 
 	// Handlers
 	const handleClose = useCallback(() => {
@@ -108,23 +113,10 @@ const FilmWatchedDatesScreen = () => {
 	<>
 		<Stack.Screen
 		options={{
-			headerLeft: () => (
-				<Button variant="muted" icon={Icons.X} size="icon" style={tw`rounded-full`} onPress={handleClose} />
-			),
+			...modalHeaderOptions,
 			headerRight: () => (
 				<Button variant="ghost" icon={Icons.Add} size="icon" style={tw`rounded-full`} onPress={() => handleSelectDate()} />
 			),
-			unstable_headerLeftItems: () => [
-				{
-					type: "button",
-					label: upperFirst(t('common.messages.close')),
-					onPress: handleClose,
-					icon: {
-						name: "xmark",
-						type: "sfSymbol",
-					},
-				},
-			],
 			unstable_headerRightItems: () => [
 				{
 					type: "button",
