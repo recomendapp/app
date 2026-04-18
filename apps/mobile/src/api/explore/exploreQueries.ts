@@ -1,4 +1,3 @@
-import { useSupabaseClient } from 'apps/mobile/src/providers/SupabaseProvider';
 import { useQuery } from '@tanstack/react-query'
 import { useLocale } from 'use-intl';
 import { exploreTileMetaOptions, exploreTileOptions } from './exploreOptions';
@@ -8,7 +7,7 @@ export const useExploreTileMetaQuery = ({
 } : {
 	exploreId: number;
 }) => {
-	const supabase = useSupabaseClient();
+	const supabase = {} as any;
 	const locale = useLocale();
 	return useQuery(exploreTileMetaOptions({
 		supabase,
@@ -22,7 +21,7 @@ export const useExploreTileQuery = ({
 } : {
 	exploreId: number;
 }) => {
-	const supabase = useSupabaseClient();
+	const supabase = {} as any;
 	const locale = useLocale();
 	return useQuery(exploreTileOptions({
 		supabase,

@@ -85,7 +85,7 @@ export const tvSeasonEpisodesPaginatedOptions = ({
 		}),
 		queryFn: async () => {
 			if (!tvSeriesId) throw new Error('TV Series ID is required');
-			if (!seasonNumber) throw new Error('Season Number is required');
+			if (seasonNumber === undefined) throw new Error('Season Number is required');
 			const { data, error } = await tvEpisodesControllerListPaginated({
 				path: {
 					tv_series_id: tvSeriesId,
@@ -97,7 +97,7 @@ export const tvSeasonEpisodesPaginatedOptions = ({
 			if (data === undefined) throw new Error('No data');
 			return data;
 		},
-		enabled: !!tvSeriesId && !!seasonNumber,
+		enabled: !!tvSeriesId && seasonNumber !== undefined,
 		staleTime: 1000 * 60 * 60 * 24 // 24 hours
 	})
 }
@@ -119,7 +119,7 @@ export const tvSeasonEpisodesInfiniteOptions = ({
 		}),
 		queryFn: async ({ pageParam }) => {
 			if (!tvSeriesId) throw new Error('TV Series ID is required');
-			if (!seasonNumber) throw new Error('Season Number is required');
+			if (seasonNumber === undefined) throw new Error('Season Number is required');
 			const { data, error } = await tvEpisodesControllerListInfinite({
 				path: {
 					tv_series_id: tvSeriesId,
@@ -138,7 +138,7 @@ export const tvSeasonEpisodesInfiniteOptions = ({
 		getNextPageParam: (lastPage) => {
 			return lastPage.meta.next_cursor || undefined;
 		},
-		enabled: !!tvSeriesId && !!seasonNumber,
+		enabled: !!tvSeriesId && seasonNumber !== undefined,
 		staleTime: 1000 * 60 * 60 * 24 // 24 hours
 	})
 }

@@ -1,14 +1,12 @@
 import { queryOptions } from '@tanstack/react-query'
-import { ExploreTile } from '@recomendapp/types';
 import { exploreKeys } from './exploreKeys';
-import { SupabaseClient } from 'apps/mobile/src/lib/supabase/client';
 
 export const exploreTileMetaOptions = ({
 	supabase,
 	locale,
 	exploreId,
 } : {
-	supabase: SupabaseClient;
+	supabase: any;
 	locale: string;
 	exploreId: number;
 }) => {
@@ -34,7 +32,7 @@ export const exploreTileOptions = ({
 	locale,
 	exploreId,
 } : {
-	supabase: SupabaseClient;
+	supabase: any;
 	locale: string;
 	exploreId: number;
 }) => {
@@ -49,7 +47,7 @@ export const exploreTileOptions = ({
 				method: 'GET',
 			});
 			if (error) throw error;
-			return data as ExploreTile;
+			return data;
 		},
 		staleTime: Infinity,
 		gcTime: Infinity,

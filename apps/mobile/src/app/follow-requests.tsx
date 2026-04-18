@@ -15,11 +15,16 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { userFollowRequestsInfiniteOptions, useUserAcceptFollowMutation, useUserDeclineFollowMutation } from "@libs/query-client";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { FollowRequest } from "@libs/api-js";
+import { useModalHeaderOptions } from "../hooks/useModalHeaderOptions";
+import { Stack } from "expo-router";
 
 const FollowRequestsScreen = () => {
 	const t = useTranslations();
 	const toast = useToast();
 	const { user } = useAuth();
+	const modalHeaderOptions = useModalHeaderOptions({
+		forceCross: true,
+	});
 	const { bottomOffset, tabBarHeight } = useTheme();
 	const {
 		data,
@@ -83,6 +88,7 @@ const FollowRequestsScreen = () => {
 
 	return (
 	<>
+		<Stack.Screen options={modalHeaderOptions} />
 		<LegendList
 		data={requests || []}
 		renderItem={renderItem}
@@ -106,6 +112,7 @@ const FollowRequestsScreen = () => {
 				paddingHorizontal: PADDING_HORIZONTAL,
 				paddingTop: PADDING_VERTICAL,
 				paddingBottom: bottomOffset + PADDING_VERTICAL,
+				flexGrow: 1,
 			}
 		]}
 		scrollIndicatorInsets={{ bottom: tabBarHeight }}

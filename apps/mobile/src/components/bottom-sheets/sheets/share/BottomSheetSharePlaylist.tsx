@@ -20,7 +20,7 @@ const BottomSheetSharePlaylist = forwardRef<
     owner,
     ...props
 }, ref) => {
-    const { customerInfo } = useAuth();
+    const { user } = useAuth();
     const shareViewRef = useRef<ShareViewRef>(null);
     return (
         <BottomSheetShareLayout
@@ -33,7 +33,7 @@ const BottomSheetSharePlaylist = forwardRef<
             ref={shareViewRef}
             playlist={playlist}
             owner={owner}
-            isPremium={!!customerInfo?.entitlements.active['premium']}
+            isPremium={!!user?.isPremium}
             />
         </BottomSheetShareLayout>
     );

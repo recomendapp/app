@@ -18,7 +18,7 @@ const BottomSheetShareMovie = forwardRef<
     movie,
     ...props
 }, ref) => {
-    const { customerInfo } = useAuth();
+    const { user } = useAuth();
     const shareViewRef = useRef<ShareViewRef>(null);
     return (
         <BottomSheetShareLayout
@@ -30,7 +30,7 @@ const BottomSheetShareMovie = forwardRef<
             <ShareMovie
 			ref={shareViewRef}
 			movie={movie}
-			isPremium={!!customerInfo?.entitlements.active['premium']}
+			isPremium={!!user?.isPremium}
 			/>
         </BottomSheetShareLayout>
     );

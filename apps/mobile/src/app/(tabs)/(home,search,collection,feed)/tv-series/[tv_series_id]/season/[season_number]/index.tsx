@@ -310,7 +310,10 @@ const TvSeriesSeasonScreen = () => {
 		}}
 		keyExtractor={(item) => item.id.toString()}
 		refreshing={isRefetching}
-		onRefresh={refetch}
+		onRefresh={() => {
+			refetch();
+			refetchEpisodes();
+		}}
 		onEndReached={() => hasNextPage && fetchNextPage()}
 		/>
 	</>

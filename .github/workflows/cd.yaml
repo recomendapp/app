@@ -3,7 +3,7 @@ name: 🚀 Build & Deploy (Production)
 on:
   push:
     branches:
-      - work-in-progress
+      - main
 
 jobs:
   # =================================================================================
@@ -91,9 +91,9 @@ jobs:
               docker tag "${LOCAL_IMAGE}" "${REMOTE_IMAGE}:${VERSION}"
               docker tag "${LOCAL_IMAGE}" "${REMOTE_IMAGE}:latest"
               
-              echo "⬆️ [${PROJECT}] Pushing..."
-              docker push "${REMOTE_IMAGE}:${VERSION}"
-              docker push "${REMOTE_IMAGE}:latest"
+              # echo "⬆️ [${PROJECT}] Pushing..."
+              # docker push "${REMOTE_IMAGE}:${VERSION}"
+              # docker push "${REMOTE_IMAGE}:latest"
               
               echo "✅ [${PROJECT}] Done."
             ) &
@@ -119,7 +119,7 @@ jobs:
   update-infra:
     name: 🏗️ Update Infra Manifests
     needs: build-and-push
-    if: needs.build-and-push.outputs.affected_projects != '[]' && needs.build-and-push.outputs.affected_projects != ''
+    if: needs.build-and-push.outputs.affected_projects != '[]' && needs.build-and-push.outputs.affected_projects != '' && false # Disable for now
     runs-on: ubuntu-latest
     permissions:
       contents: write

@@ -73,7 +73,10 @@ export class TvSeriesService {
         })
         .from(tmdbTvSeasonView)
         .where(eq(tmdbTvSeasonView.tvSeriesId, tvSeriesId))
-        .orderBy(asc(tmdbTvSeasonView.seasonNumber));
+        .orderBy(
+          asc(sql`CASE WHEN ${tmdbTvSeasonView.seasonNumber} = 0 THEN 1 ELSE 0 END`),
+          asc(tmdbTvSeasonView.seasonNumber)
+        );
       
       return plainToInstance(TvSeasonCompactDto, seasons);
     });

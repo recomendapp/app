@@ -12,47 +12,56 @@ import { Input } from "apps/mobile/src/components/ui/Input";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { useFormatter, useNow, useTranslations } from "use-intl";
 import { upperFirst } from "lodash";
-import { Stack } from "expo-router";
-import { ActivityIndicator, Alert, Text as RNText } from "react-native";
+import { Stack, useLocalSearchParams } from "expo-router";
+import { ActivityIndicator, Alert } from "react-native";
 import { View } from "apps/mobile/src/components/ui/view";
 import { Text } from "apps/mobile/src/components/ui/text";
 import { Label } from "apps/mobile/src/components/ui/Label";
 import Switch from "apps/mobile/src/components/ui/Switch";
-import { GridView } from "apps/mobile/src/components/ui/GridView";
-import richTextToPlainString from "apps/mobile/src/utils/richTextToPlainString";
-import { useActionSheet } from "@expo/react-native-action-sheet";
 import { Separator } from "apps/mobile/src/components/ui/separator";
 import { KeyboardAwareScrollView } from 'apps/mobile/src/components/ui/KeyboardAwareScrollView';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
 import { KeyboardToolbar } from "apps/mobile/src/components/ui/KeyboardToolbar";
 import { useToast } from "apps/mobile/src/components/Toast";
-import { useMeUpdateMutation } from "@libs/query-client";
+import { meOptions, useMeUpdateMutation } from "@libs/query-client";
+import { authClient } from "../../lib/auth/client";
+import { makeRedirectUri } from "expo-auth-session";
+import { useQueryClient } from "@tanstack/react-query";
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 15;
 
+const verifiedSchema = z.object({
+	verified: z
+		.enum(['true', 'false'])
+		.transform((val) => val === 'true')
+		.optional()
+		.catch(false),
+});
+
 const SettingsAccountScreen = () => {
-	const {
-		user,
-		// updateEmail,
-		// cancelPendingEmailChange,
-		// verifyEmailChange,
-	} = useAuth();
+	const { user } = useAuth();
 	const format = useFormatter();
 	const t = useTranslations();
 	const toast = useToast();
 	const { colors, bottomOffset, tabBarHeight } = useTheme();
 	const { mutateAsync: updateProfile } = useMeUpdateMutation();
-	const { showActionSheetWithOptions } = useActionSheet();
 	const [ hasUnsavedChanges, setHasUnsavedChanges ] = useState(false);
 	const [ isLoading, setIsLoading ] = useState(false);
+	const queryClient = useQueryClient();
+
+	const rawParams = useLocalSearchParams();
+	const { verified: isVerified } = useMemo(
+		() => verifiedSchema.parse(rawParams),
+		[rawParams],
+	);
 
 	const now = useNow();
 	const dateLastUsernameUpdate = useMemo(() => user?.usernameUpdatedAt ? new Date(user.usernameUpdatedAt) : new Date('01/01/1970'), [user?.usernameUpdatedAt]);
 	const usernameDisabled = (now.getTime() - dateLastUsernameUpdate.getTime()) / (1000 * 60 * 60 * 24) < 30 ? true : false;
 
 	// Form
-	const accountFormSchema = z.object({
+	const accountFormSchema = useMemo(() => z.object({
 		username: z
 			.string()
 			.min(USERNAME_MIN_LENGTH, {
@@ -75,13 +84,13 @@ const SettingsAccountScreen = () => {
 			}),
 		private: z.boolean(),
 		email: z.email({ error: t('common.form.email.error.invalid') })
-	});
+	}), [t]);
 	type AccountFormValues = z.infer<typeof accountFormSchema>;
-	const defaultValues: Partial<AccountFormValues> = {
+	const defaultValues = useMemo((): Partial<AccountFormValues> => ({
 		username: user?.username,
 		private: user?.isPrivate,
 		email: user?.email,
-	};
+	}), [user]);
 	const { reset: fromReset, setError: formSetError, ...form} = useForm<AccountFormValues>({
 		resolver: zodResolver(accountFormSchema),
 		defaultValues,
@@ -93,23 +102,6 @@ const SettingsAccountScreen = () => {
 	);
 
 	// Handlers
-	// const handleVerifyEmail = useCallback(async (email: string, token: string) => {
-	// 	try {
-	// 		setIsLoading(true);
-	// 		await verifyEmailChange(email, token);
-	// 		toast.success(upperFirst(t('common.messages.saved', { count: 1, gender: 'male' })));
-	// 	} catch (error) {
-	// 		let errorMessage: string = upperFirst(t('common.messages.an_error_occurred'));
-	// 		if (error instanceof Error) {
-	// 			errorMessage = error.message;
-	// 		} else if (typeof error === 'string') {
-	// 			errorMessage = error;
-	// 		}
-	// 		toast.error(upperFirst(t('common.messages.error')), { description: errorMessage });
-	// 	} finally {
-	// 		setIsLoading(false);
-	// 	}
-	// }, [verifyEmailChange, toast, t]);
 	const handleOnSubmit = useCallback(async (values: AccountFormValues) => {
 		try {
 			if (!user) return;
@@ -123,86 +115,36 @@ const SettingsAccountScreen = () => {
 						username: values.username,
 						isPrivate: values.private,
 					}
+				}, {
+					onError: (error) => {
+						toast.error(upperFirst(t('common.messages.an_error_occurred')), { description: error.message });
+						throw error;
+					}
 				});
 			}
 			if (values.email && values.email !== user.email) {
-				// await updateEmail(values.email);
-				// TODO: handle email change flow (verification, cancelation)
+				const { error } = await authClient.changeEmail({
+					newEmail: values.email,
+					callbackURL: makeRedirectUri({
+						path: '/settings/account',
+						queryParams: { verified: 'true' },
+					}),
+				});
+				if (error) {
+					switch (error.code) {
+						default:
+							toast.error(upperFirst(t('common.messages.an_error_occurred')), { description: error.message });
+							break;
+					}
+					throw error;
+				}
 			}
 			setHasUnsavedChanges(false);
 			toast.success(upperFirst(t('common.messages.saved', { count: 1, gender: 'male' })));
-		} catch (error) {
-			let errorMessage: string = upperFirst(t('common.messages.an_error_occurred'));
-			if (error instanceof Error) {
-				errorMessage = error.message;
-			} else if (typeof error === 'string') {
-				errorMessage = error;
-			}
-			toast.error(upperFirst(t('common.messages.error')), { description: errorMessage });
 		} finally {
 			setIsLoading(false);
 		}
-	}, [user, updateProfile, toast, t]);
-	// const handleCancelEmailChange = useCallback(async () => {
-	// 	try {
-	// 		setIsLoading(true);
-	// 		await cancelPendingEmailChange();
-	// 		toast.success(upperFirst(t('common.messages.request_canceled')));
-	// 	} catch (error) {
-	// 		let errorMessage: string = upperFirst(t('common.messages.an_error_occurred'));
-	// 		if (error instanceof Error) {
-	// 			errorMessage = error.message;
-	// 		} else if (typeof error === 'string') {
-	// 			errorMessage = error;
-	// 		}
-	// 		toast.error(upperFirst(t('common.messages.error')), { description: errorMessage });
-	// 	} finally {
-	// 		setIsLoading(false);
-	// 	}
-	// }, [cancelPendingEmailChange, toast, t]);
-	// const handleVerifyEmailButtonPress = useCallback(() => {
-	// 	const options = [
-	// 		...(session?.user.email ? [{label: session?.user.email, value: session?.user.email}] : []),
-	// 		...(session?.user.new_email ? [{label: session?.user.new_email, value: session?.user.new_email}] : []),
-	// 		{ label: upperFirst(t('common.messages.cancel')), value: 'cancel' }
-	// 	]
-	// 	if (options.length === 1) return;
-	// 	const cancelIndex = options.length - 1;
-	// 	showActionSheetWithOptions({
-	// 		options: options.map(option => option.label),
-	// 		disabledButtonIndices: [],
-	// 		cancelButtonIndex: cancelIndex,
-	// 	}, (selectedIndex) => {
-	// 		if (selectedIndex === undefined || selectedIndex === cancelIndex) return;
-	// 		const selectedOption = options[selectedIndex];
-	// 		if (selectedOption) {
-	// 			Alert.prompt(
-	// 				upperFirst(t('common.messages.verify_with_a_code')),
-	// 				richTextToPlainString(t.rich('pages.settings.account.email.confirm_email_code.description', {
-	// 					email: selectedOption.value || upperFirst(t('common.messages.unknown')),
-	// 					strong: (chunk) => `"${chunk}"`,
-	// 				})),
-	// 				[
-	// 					{
-	// 						text: upperFirst(t('common.messages.cancel')),
-	// 						style: 'cancel',
-	// 					},
-	// 					{
-	// 						text: upperFirst(t('common.messages.ok')),
-	// 						onPress: (text?: string) => {
-	// 							if (text) {
-	// 								handleVerifyEmail(selectedOption.value, text);
-	// 							}
-	// 						},
-	// 					},
-	// 				],
-	// 				'plain-text',
-	// 				undefined,
-	// 				'numeric',
-	// 			);
-	// 		}
-	// 	})
-	// }, [user, showActionSheetWithOptions, t, handleVerifyEmail]);
+	}, [updateProfile, toast, t, user]);
 
 	// useEffects
 	useEffect(() => {
@@ -212,6 +154,7 @@ const SettingsAccountScreen = () => {
 			});
 		}
 	}, [isUsernameAvailable, t, formSetError]);
+
 	useEffect(() => {
 		if (user) {
 			fromReset({
@@ -221,6 +164,15 @@ const SettingsAccountScreen = () => {
 			});
 		}
 	}, [user, fromReset]);
+
+	useEffect(() => {
+		if (isVerified) {
+			queryClient.invalidateQueries({
+				queryKey: meOptions().queryKey,
+			});
+			toast.success(upperFirst(t('pages.settings.account.email.change_success')));
+		}
+	}, [isVerified, queryClient, toast, t]);
 
 	useEffect(() => {
 		const subscription = form.watch((value) => {
@@ -336,7 +288,7 @@ const SettingsAccountScreen = () => {
 				</View>
 				)}
 				/>
-				{/* <Controller
+				<Controller
 				name='email'
 				control={form.control}
 				render={({ field: { onChange, onBlur, value } }) => (
@@ -352,9 +304,9 @@ const SettingsAccountScreen = () => {
 					onChangeText={onChange}
 					leftSectionStyle={tw`w-auto`}
 					error={form.formState.errors.email?.message}
-					disabled={!!session?.user.new_email || isLoading}
+					disabled={isLoading}
 					/>
-					{session?.user.new_email && (
+					{/* {session?.user.new_email && (
 					<>
 						<Text style={[{ color: colors.destructive }, tw`text-center text-xs`]}>
 							{t.rich('pages.settings.account.email.change_pending', {
@@ -386,114 +338,74 @@ const SettingsAccountScreen = () => {
 						gap={50}
 						/>
 					</>
-					)}
+					)} */}
 					<Text textColor='muted' style={tw`text-xs text-justify`}>
 						{t('pages.settings.account.email.description')}
 					</Text>
 				</View>
 				)}
-				/> */}
+				/>
 				<Separator style={tw`my-4`} />
-				{/* <DeleteAccountSection /> */}
+				<DeleteAccountSection />
 			</KeyboardAwareScrollView>
 			<KeyboardToolbar />
 		</>
 	)
 };
 
-// const DeleteAccountSection = () => {
-// 	const { user } = useAuth();
-// 	const { colors, mode } = useTheme();
-// 	const toast = useToast();
-// 	const format = useFormatter();
-// 	const t = useTranslations();
-// 	const {
-// 		data,
-// 		isLoading,
-// 	} = useUserDeleteRequestQuery({
-// 		userId: user?.id,
-// 	});
-// 	const loading = data === undefined || isLoading;
+const DeleteAccountSection = () => {
+	const { user } = useAuth();
+	const { colors, mode } = useTheme();
+	const toast = useToast();
+	const format = useFormatter();
+	const t = useTranslations();
+	// Handlers
+	const handleDeleteButtonPress = useCallback(() => {
+		Alert.alert(
+			upperFirst(t('common.messages.are_u_sure')),
+			upperFirst(t('pages.settings.account.delete_account.confirm.description')),
+			[
+				{
+					text: upperFirst(t('common.messages.cancel')),
+					style: 'cancel',
+				},
+				{
+					text: upperFirst(t('common.messages.delete')),
+					onPress: async () => {
+						const { data, error } = await authClient.deleteUser({
+							callbackURL: makeRedirectUri({
+								path: '/goodbye',
+							}),
+						});
+						if (error) {
+							switch (error.code) {
+								default:
+									toast.error(upperFirst(t('common.messages.an_error_occurred')), { description: error.message });
+									break;
+							}
+						}
+						if (data?.success) {
+							toast.success(upperFirst(t('common.messages.confirmation_email_sent')));
+						}
+					},
+					style: 'destructive',
+				},
+			],
+			{ cancelable: true, userInterfaceStyle: mode }
+		);
+	}, [t, mode, toast]);
 
-// 	const { mutateAsync: insertRequestMutation } = useUserDeleteRequestInsertMutation();
-// 	const { mutateAsync: deleteRequestMutation } = useUserDeleteRequestDeleteMutation();
-
-// 	// Handlers
-// 	const handleDeleteButtonPress = () => {
-// 		Alert.alert(
-// 			upperFirst(t('common.messages.are_u_sure')),
-// 			upperFirst(t('pages.settings.account.delete_account.description')),
-// 			[
-// 				{
-// 					text: upperFirst(t('common.messages.cancel')),
-// 					style: 'cancel',
-// 				},
-// 				{
-// 					text: upperFirst(t('common.messages.delete')),
-// 					onPress: handleInsertRequest,
-// 					style: 'destructive',
-// 				},
-// 			],
-// 			{ cancelable: true, userInterfaceStyle: mode }
-// 		);
-// 	};
-// 	const handleInsertRequest = async () => {
-// 		if (!user) return;
-// 		await insertRequestMutation({
-// 			userId: user.id,
-// 		}, {
-// 			onSuccess: () => {
-// 				toast.success(upperFirst(t('common.messages.request_made')));
-// 			},
-// 			onError: (error) => {
-// 				toast.error(upperFirst(t('common.messages.error')), { description: upperFirst(t('common.messages.an_error_occurred')) });
-// 			}
-// 		});
-// 	};
-// 	const handleDeleteRequest = async () => {
-// 		if (!user) return;
-// 		await deleteRequestMutation({
-// 			userId: user.id,
-// 		}, {
-// 			onSuccess: () => {
-// 				toast.success(upperFirst(t('common.messages.request_canceled')));
-// 			},
-// 			onError: (error) => {
-// 				toast.error(upperFirst(t('common.messages.error')), { description: upperFirst(t('common.messages.an_error_occurred')) });
-// 			}
-// 		});
-// 	};
-
-// 	if (loading) return null;
-
-// 	return (
-// 		<>
-// 			{!data ? (
-// 				<Button
-// 				variant="link"
-// 				textStyle={{ color: colors.destructive }}
-// 				onPress={handleDeleteButtonPress}
-// 				>
-// 					{upperFirst(t('pages.settings.account.delete_account.button'))}
-// 				</Button>
-// 			) : (
-// 			<>
-// 				<Text style={tw`text-center`}>
-// 					{t.rich('pages.settings.account.delete_account.deletion_requested', {
-// 						date: format.dateTime(new Date(data.delete_after)),
-// 						strong: (chunks) => <Text style={{ color: colors.accentYellow }}>{chunks}</Text>,
-// 					})}
-// 				</Text>
-// 				<Button
-// 				variant="outline"
-// 				textStyle={{ color: colors.accentYellow }}
-// 				onPress={handleDeleteRequest}>
-// 					{upperFirst(t('common.messages.cancel_request'))}
-// 				</Button>
-// 			</>
-// 			)}
-// 		</>
-// 	);
-// };
+	return (
+		<>
+			<Button
+			variant="link"
+			textStyle={{ color: colors.destructive }}
+			onPress={handleDeleteButtonPress}
+			>
+				{upperFirst(t('pages.settings.account.delete_account.button'))}
+			</Button>
+		</>
+	);
+};
 
 export default SettingsAccountScreen;

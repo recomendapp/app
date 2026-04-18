@@ -849,7 +849,8 @@
           "change_pending": "Un email de vérification a été envoyé le <strong>{date}</strong> à votre nouvelle adresse email <strong>{email}</strong>. Cliquez sur le lien ou entrez le code de vérification pour confirmer le changement.",
           "confirm_email_code": {
             "description": "Entrez le code de vérification envoyé à votre adresse email <strong>{email}</strong>."
-          }
+          },
+          "change_success": "Votre adresse email a été mise à jour avec succès"
         },
         "delete_account": {
           "button": "Supprimer mon compte",

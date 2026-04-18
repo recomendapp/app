@@ -246,7 +246,7 @@ export const Button = forwardRef<View, ButtonProps>(
       // triggerHapticFeedback();
 
       // Scale up with bouncy spring animation
-      scale.value = withSpring(1.05, {
+      scale.value = withSpring(0.95, {
         damping: 15,
         stiffness: 400,
         mass: 0.5,

@@ -9,7 +9,6 @@ import { useToast } from "apps/mobile/src/components/Toast";
 import { usePushTokenUpdateMutation } from "@libs/query-client";
 
 type NotificationsContextType = {
-  isMounted: boolean;
   permissionStatus: Notifications.PermissionStatus | null;
   pushToken: string | null;
   notifications: Notifications.Notification[] | null;
@@ -29,7 +28,6 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user, pushToken, setPushToken } = useAuth();
-  const [isMounted, setIsMounted] = useState(false);
   const [permissionStatus, setPermissionStatus] = useState<Notifications.PermissionStatus | null>(null);
   const [notifications, setNotifications] = useState<Notifications.Notification[] | null>(null);
   const [error, setError] = useState<Error | null>(null);
@@ -122,7 +120,6 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
   return (
     <NotificationsContext.Provider
     value={{
-      isMounted,
       permissionStatus,
       pushToken,
       notifications,

@@ -27,7 +27,7 @@ const CastCrewFeedScreen = () => {
 	const t = useTranslations();
 	const router = useRouter();
 	const { bottomOffset, tabBarHeight, colors } = useTheme();
-	const { user, customerInfo } = useAuth();
+	const { user } = useAuth();
 	const {
 		data: backgrounds,
 	} = useQuery(uiBackgroundsOptions());
@@ -41,7 +41,7 @@ const CastCrewFeedScreen = () => {
 		...userFeedPersonsInfiniteOptions({
 			userId: user?.id,
 		}),
-		enabled: !!customerInfo?.entitlements.active['premium'] && !!user,
+		enabled: !!user?.isPremium,
 	});
 	const loading = isLoading || data === undefined;
 	const feed = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
@@ -73,14 +73,14 @@ const CastCrewFeedScreen = () => {
 		}
 	}, [hasNextPage, fetchNextPage]);
 
-	if (user === undefined || customerInfo === undefined) {
+	if (user === undefined) {
 		return (
 			<View style={[tw`flex-1 items-center justify-center`, { paddingTop: PADDING_VERTICAL, paddingBottom: bottomOffset + PADDING_VERTICAL }]}>
 				<Icons.Loader />
 			</View>
 		)
 	}
-	if (!customerInfo?.entitlements.active['premium']) {
+	if (user?.isPremium === false) {
 		return (
 			<View style={[tw`flex-1 items-center justify-center`, { paddingTop: PADDING_VERTICAL, paddingBottom: bottomOffset + PADDING_VERTICAL }]}>
 				{backgrounds && (

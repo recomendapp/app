@@ -103,9 +103,12 @@ const TvSeriesReviews = () => {
 				size="icon"
 				style={tw`rounded-full`}
 				icon={activity?.review ? Icons.Eye : Icons.Edit}
-				onPress={() => {
-					router.push(`/tv-series/${tvSeries?.slug || tvSeriesId}/review/${activity?.review ? activity.review.id : `create`}`);
-				}}
+				onPress={() => router.push({
+					pathname: '/tv-series/[tv_series_id]/review',
+					params: {
+						tv_series_id: tvSeries?.slug || tvSeriesId,
+					}
+				})}
 				/>
 			) : undefined,
 			unstable_headerRightItems: user ? (props) => [
@@ -113,9 +116,13 @@ const TvSeriesReviews = () => {
 					{
 						type: "button",
 						label: activity?.review ? upperFirst(t('common.messages.my_review', { count: 1 })) : upperFirst(t('common.messages.add_review')),
-						onPress: () => {
-							router.push(`/tv-series/${tvSeries?.slug || tvSeriesId}/review/${activity?.review ? activity.review.id : `create`}`);
-						},
+						onPress: () => router.push({
+							pathname: '/tv-series/[tv_series_id]/review',
+							params: {
+								tv_series_id: tvSeries?.slug || tvSeriesId,
+							}
+						}),
+						tintColor: props.tintColor,
 						icon: {
 							name: activity?.review ? "eye" : "pencil",
 							type: "sfSymbol",

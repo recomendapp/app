@@ -1,7 +1,8 @@
+import useDebounce from "apps/mobile/src/hooks/useDebounce";
 import useSearchStore from "apps/mobile/src/stores/useSearchStore";
 import { Stack, usePathname, useRouter } from "expo-router"
 import { upperFirst } from "lodash"
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "use-intl";
 
 const SearchLayout = () => {
@@ -9,6 +10,8 @@ const SearchLayout = () => {
 	const pathname = usePathname();
 	const router = useRouter();
 	const { search, setSearch, setIsFocused, type, setType } = useSearchStore(state => state);
+	const [searchQuery, setSearchQuery] = useState('');
+	const debouncedSearch = useDebounce(searchQuery, 500);
 
 	const handleBlurOrCancel = useCallback(() => {
         setIsFocused(false);
@@ -38,6 +41,12 @@ const SearchLayout = () => {
 		}
 	}, [pathname]);
 
+	useEffect(() => {
+		if (debouncedSearch !== search) {
+			setSearch(debouncedSearch);
+		}
+	}, [debouncedSearch, search, setSearch]);
+
 	return (
 	<>
 		<Stack.Screen
@@ -52,7 +61,7 @@ const SearchLayout = () => {
 					: type === 'tv_series' ? upperFirst(t('common.messages.search_tv_series', { count: 1 }))
 					: type === 'persons' ? upperFirst(t('common.messages.search_person', { count: 1 }))
 					: upperFirst(t('pages.search.placeholder')),
-				onChangeText: (e) => setSearch(e.nativeEvent.text),
+				onChangeText: (e) => setSearchQuery(e.nativeEvent.text),
 				hideNavigationBar: true,
 				hideWhenScrolling: false,
 				allowToolbarIntegration: false,

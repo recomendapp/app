@@ -17,7 +17,7 @@ export const useRevenueCat = (user: User | null | undefined) => {
     if (!REVENUECAT_API_KEY) {
       throw new Error("RevenueCat API key missing");
     }
-    await Purchases.configure({
+    Purchases.configure({
       apiKey: REVENUECAT_API_KEY,
       appUserID: userId,
     });

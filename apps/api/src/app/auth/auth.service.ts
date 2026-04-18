@@ -195,6 +195,9 @@ const createBetterAuth = ({
 			},
 		},
 		user: {
+			changeEmail: {
+				enabled: true,
+			},
 			deleteUser: {
 				enabled: true,
 				sendDeleteAccountVerification: async ({ user, token, url }) => {

@@ -183,7 +183,9 @@ const HomeScreen = () => {
               {
                 type: "button",
                 label: upperFirst(t('common.messages.notification', { count: 2 })),
-                onPress: () => router.push('/notifications'),
+                onPress: () => router.push({
+                  pathname: '/notifications',
+                }),
                 icon: {
                   name: "bell",
                   type: "sfSymbol",

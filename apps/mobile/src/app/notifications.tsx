@@ -6,14 +6,19 @@ import tw from "apps/mobile/src/lib/tw";
 import { Stack, useRouter } from "expo-router";
 import { useTranslations } from "use-intl";
 import { upperFirst } from "lodash";
+import { useModalHeaderOptions } from "../hooks/useModalHeaderOptions";
 
 const NotificationsScreen = () => {
 	const router = useRouter();
 	const t = useTranslations();
+	const modalHeaderOptions = useModalHeaderOptions({
+		forceCross: true,
+	});
 	return (
 	<>
 		<Stack.Screen
 		options={{
+			...modalHeaderOptions,
 			headerRight: () => (
 				<View style={[tw`flex-row items-center`]}>
 					<Button

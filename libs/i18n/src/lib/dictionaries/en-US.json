@@ -849,7 +849,8 @@
           "change_pending": "A verification email has been sent to your new email address <strong>{email}</strong>. Click on the link or enter the verification code to confirm the change.",
           "confirm_email_code": {
             "description": "Enter the verification code sent to your email address <strong>{email}</strong> to confirm the change."
-          }
+          },
+          "change_success": "Your email address has been successfully changed"
         },
         "delete_account": {
           "button": "Delete my account",

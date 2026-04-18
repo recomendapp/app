@@ -59,6 +59,7 @@ const RootLayoutNav = () => {
       <Stack.Screen
       name="playlist/[playlist_id]/sort"
       options={{
+        title: upperFirst(t('common.messages.edit_order')),
         presentation: Platform.OS === "ios"
           ? isLiquidGlassAvailable && osName !== "iPadOS"
             ? "formSheet"
@@ -134,7 +135,7 @@ const RootLayoutNav = () => {
       <Stack.Screen
         name="auth/(password)"
         options={{
-          title: t('messages.forgot_password'),
+          title: t('common.messages.forgot_password'),
           headerShown: false,
           presentation: Platform.select({
             ios: 'modal',
@@ -142,6 +143,32 @@ const RootLayoutNav = () => {
             default: 'modal',
           }),
         }}
+      />
+    </Stack.Protected>
+    {/* NOTIFICATIONS */}
+    <Stack.Protected guard={!!user}>
+      <Stack.Screen
+      name="notifications"
+      options={{
+        title: upperFirst(t('common.messages.notification', { count: 2 })),
+        presentation: Platform.select({
+          android: 'formSheet',
+          default: 'modal',
+        }),
+      }}
+      />
+    </Stack.Protected>
+    {/* FOLLOW REQUESTS */}
+    <Stack.Protected guard={!!user}>
+      <Stack.Screen
+      name="follow-requests"
+      options={{
+        title: upperFirst(t('common.messages.follow_requests')),
+        presentation: Platform.select({
+          android: 'formSheet',
+          default: 'modal',
+        }),
+      }}
       />
     </Stack.Protected>
     {/* SETTINGS */}

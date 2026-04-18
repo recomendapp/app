@@ -18,7 +18,7 @@ const BottomSheetShareUser = forwardRef<
     user,
     ...props
 }, ref) => {
-    const { customerInfo } = useAuth();
+    const { user: session } = useAuth();
     const shareViewRef = useRef<ShareViewRef>(null);
     return (
         <BottomSheetShareLayout
@@ -30,7 +30,7 @@ const BottomSheetShareUser = forwardRef<
             <ShareUser
             ref={shareViewRef}
             user={user}
-            isPremium={!!customerInfo?.entitlements.active['premium']}
+            isPremium={!!session?.isPremium}
             />
         </BottomSheetShareLayout>
     );

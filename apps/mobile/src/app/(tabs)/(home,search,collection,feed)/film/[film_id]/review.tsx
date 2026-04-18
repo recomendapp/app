@@ -117,13 +117,6 @@ const MovieReviewScreen = () => {
 			<Redirect href={'..'} />
 		)
 	}
-	if (loading) {
-		return (
-			<View style={tw`flex-1 items-center justify-center`}>
-				<Icons.Loader />
-			</View>
-		);
-	};
 	return (
 	<>
 		<Stack.Screen
@@ -133,14 +126,20 @@ const MovieReviewScreen = () => {
 				: upperFirst(t('common.messages.add_review'))
 		}}
 		/>
-		<ReviewForm
-		review={log?.review}
-		isWatched={!!log}
-		type="movie"
-		movie={movie}
-		onSave={handleSave}
-		onDelete={handleDelete}
-		/>
+		{loading ? (
+			<View style={tw`flex-1 items-center justify-center`}>
+				<Icons.Loader />
+			</View>
+		) : (
+			<ReviewForm
+			review={log?.review}
+			isWatched={!!log}
+			type="movie"
+			movie={movie}
+			onSave={handleSave}
+			onDelete={handleDelete}
+			/>
+		)}
 	</>
 	)
 };

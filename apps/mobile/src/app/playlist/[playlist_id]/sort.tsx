@@ -149,7 +149,6 @@ const PlaylistSortScreen = () => {
 	<>
 		<Stack.Screen
 		options={{
-			headerTitle: upperFirst(t('common.messages.edit_order')),
 			unstable_headerLeftItems: (props) => [
 				{
 					type: "button",
