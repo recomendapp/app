@@ -67,6 +67,12 @@ jobs:
           API_URL=${{ secrets.INFISICAL_API_URL }}
           AUTH_GITHUB_CLIENT_ID=${{ secrets.INFISICAL_AUTH_GITHUB_CLIENT_ID }}
           AUTH_GITHUB_CLIENT_SECRET=${{ secrets.INFISICAL_AUTH_GITHUB_CLIENT_SECRET }}
+          DATABASE_URL=postgres://localhost:5432/placeholder
+          S3_ENDPOINT=https://s3.example.com
+          S3_ACCESS_KEY_ID=placeholder
+          S3_SECRET_ACCESS_KEY=placeholder
+          TYPESENSE_HOST=localhost
+          TYPESENSE_API_KEY=placeholder
           EOF
           # Web-app
           cat <<EOF > apps/web/.env
