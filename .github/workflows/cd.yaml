@@ -47,7 +47,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.PAT_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate Version Tag
         id: prep
@@ -114,24 +114,24 @@ jobs:
           OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
           PIDS=""
 
-          # Loop in parallel to push all images to the registry
           for PROJECT in $PROJECTS; do
-            (
-              echo "🚀 [${PROJECT}] Processing..."
-              
-              LOCAL_IMAGE="${PROJECT}:latest"
-              REMOTE_IMAGE="ghcr.io/${OWNER}/${PROJECT}"
-              
-              docker tag "${LOCAL_IMAGE}" "${REMOTE_IMAGE}:${VERSION}"
-              docker tag "${LOCAL_IMAGE}" "${REMOTE_IMAGE}:latest"
-              
-              echo "⬆️ [${PROJECT}] Pushing..."
-              docker push "${REMOTE_IMAGE}:${VERSION}"
-              docker push "${REMOTE_IMAGE}:latest"
-              
-              echo "✅ [${PROJECT}] Done."
-            ) &
-            PIDS="$PIDS $!"
+            set -e
+
+            echo "🚀 [${PROJECT}] Processing..."
+            
+            LOCAL_IMAGE="${PROJECT}:latest"
+            REMOTE_IMAGE="ghcr.io/${OWNER}/${PROJECT}"
+            
+            docker tag "${LOCAL_IMAGE}" "${REMOTE_IMAGE}:${VERSION}"
+            docker tag "${LOCAL_IMAGE}" "${REMOTE_IMAGE}:latest"
+            
+            echo "⬆️ [${PROJECT}] Pushing VERSION..."
+            docker push "${REMOTE_IMAGE}:${VERSION}"
+            
+            echo "⬆️ [${PROJECT}] Pushing LATEST..."
+            docker push "${REMOTE_IMAGE}:latest"
+            
+            echo "✅ [${PROJECT}] Done."
           done
 
           FAIL=0
