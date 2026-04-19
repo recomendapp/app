@@ -93,7 +93,7 @@ jobs:
           EOF
 
       - name: Build Docker Images (Nx Affected)
-        run: npx nx run-many -t docker-build --parallel=3
+        run: npx nx affected -t docker-build --parallel=3
 
       - name: Retag and Push to GHCR
         id: affected

@@ -86,14 +86,12 @@
     },
     "docker-build": {
       "dependsOn": ["build-migrator"],
+      "executor": "nx:run-commands",
       "options": {
-        "args": [
-          "-f",
-          "libs/db/Dockerfile",
-          "--tag",
-          "db-migrator:latest"
+        "commands": [
+          "docker build -f libs/db/Dockerfile --tag db:latest ."
         ],
-        "cwd": "."
+        "parallel": false
       }
     }
   }
