@@ -8,6 +8,7 @@ import { tvSeriesPlaylistsInfiniteOptions, tvSeriesPlaylistsPaginatedOptions } f
 import { usePlaylistCacheUpdate } from "./playlistHooks";
 import { playlistKeys } from "./playlistKeys";
 import { searchGlobalOptions, searchPlaylistsInfiniteOptions, searchPlaylistsPaginatedOptions } from "../search";
+import { meFeedInfiniteOptions, meFeedPaginatedOptions } from "../me";
 
 export const usePlaylistInsertMutation = () => {
 	const queryClient = useQueryClient();
@@ -195,6 +196,18 @@ export const usePlaylistDeleteMutation = () => {
 			);
 
 			// Feed
+			removeListItemFromAllCaches<
+				FeedItem,
+				ListPaginatedFeed,
+				ListInfiniteFeed
+			>(
+				queryClient,
+				{
+					paginated: meFeedPaginatedOptions({ userId: data.userId }).queryKey,
+					infinite: meFeedInfiniteOptions({ userId: data.userId }).queryKey,
+				},
+				(item) => item.activityType === 'playlist_like' && item.content.id === data.id
+			);
 			removeListItemFromAllCaches<
 				FeedItem,
 				ListPaginatedFeed,

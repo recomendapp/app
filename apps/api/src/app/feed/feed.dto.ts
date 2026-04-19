@@ -152,11 +152,6 @@ export class BaseListFeedQueryDto {
   @IsOptional()
   @IsString()
   activity_type?: typeof feedTypeEnum.enumValues[number];
-
-  @ApiPropertyOptional({ description: 'Filter feed for a specific user ID' })
-  @IsOptional()
-  @IsString()
-  targetUserId?: string;
 }
 
 @ApiSchema({ name: 'ListPaginatedFeedQuery' })

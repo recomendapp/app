@@ -10,7 +10,6 @@ import { CardFeedPlaylistLike } from '@/components/Card/feed/CardFeedPlaylistLik
 import { CardFeedReviewMovieLike } from '@/components/Card/feed/CardFeedReviewMovieLike';
 import { CardFeedReviewTvSeriesLike } from '@/components/Card/feed/CardFeedReviewTvSeriesLike';
 import { userFeedInfiniteOptions } from '@libs/query-client';
-import { useAuth } from '@/context/auth-context';
 import { Icons } from '@/config/icons';
 import { CardFeedLogMovie } from '@/components/Card/feed/CardFeedLogMovie';
 import { CardFeedLogTvSeries } from '@/components/Card/feed/CardFeedLogTvSeries';
@@ -21,7 +20,6 @@ export const ProfileFeed = ({
   profileId: string;
 }) => {
   const t = useTranslations();
-  const { user } = useAuth();
   const { ref, inView } = useInView();
 
   const {
@@ -31,10 +29,7 @@ export const ProfileFeed = ({
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(userFeedInfiniteOptions({
-    userId: user?.id,
-    filters: {
-      targetUserId: profileId,
-    }
+    userId: profileId,
   }));
 
   useEffect(() => {

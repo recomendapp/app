@@ -14,10 +14,10 @@ import { useScrollToTop } from "@react-navigation/native";
 import { useCallback, useMemo, useRef } from "react";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { userFeedInfiniteOptions } from "@libs/query-client";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { FeedItem } from "@libs/api-js";
 import { CardFeedLogTvSeries } from "apps/mobile/src/components/cards/feed/CardFeedLogTvSeries";
+import { meFeedInfiniteOptions } from "@libs/query-client";
 
 const FeedScreen = () => {
 	const t = useTranslations();
@@ -29,7 +29,7 @@ const FeedScreen = () => {
 		fetchNextPage,
 		hasNextPage,
 		refetch,
-	} = useInfiniteQuery(userFeedInfiniteOptions({
+	} = useInfiniteQuery(meFeedInfiniteOptions({
 		userId: user?.id
 	}));
 	const loading = isLoading || data === undefined;

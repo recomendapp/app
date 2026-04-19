@@ -11,6 +11,7 @@ import { UserFollowModule } from './follow/user-follow.module';
 import { UserFollowRequestsModule } from './follow-requests/user-follow-requests.module';
 import { UserRecosModule } from './recos/user-recos.module';
 import { UserTvSeriesModule } from './tv-series/user-tv-series.module';
+import { UserFeedModule } from './feed/user-feed.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { UserTvSeriesModule } from './tv-series/user-tv-series.module';
     UserFollowModule,
     UserFollowRequestsModule,
     UserRecosModule,
+    UserFeedModule,
   ],
   controllers: [UsersController],
   providers: [UsersService],

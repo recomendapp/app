@@ -11,9 +11,9 @@ import { CardFeedPlaylistLike } from "@/components/Card/feed/CardFeedPlaylistLik
 import { CardFeedReviewMovieLike } from "@/components/Card/feed/CardFeedReviewMovieLike";
 import { CardFeedReviewTvSeriesLike } from "@/components/Card/feed/CardFeedReviewTvSeriesLike";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { userFeedInfiniteOptions } from "@libs/query-client";
 import { useAuth } from "@/context/auth-context";
 import { Icons } from "@/config/icons";
+import { meFeedInfiniteOptions } from "@libs/query-client/src";
 
 export default function Feed() {
   const t = useTranslations();
@@ -27,7 +27,7 @@ export default function Feed() {
     isFetching,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery(userFeedInfiniteOptions({
+  } = useInfiniteQuery(meFeedInfiniteOptions({
     userId: user?.id
   }));
 

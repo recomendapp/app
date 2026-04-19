@@ -7,10 +7,10 @@ import { CardFeedPlaylistLike } from "../Card/feed/CardFeedPlaylistLike";
 import { CardFeedReviewMovieLike } from "../Card/feed/CardFeedReviewMovieLike";
 import { CardFeedReviewTvSeriesLike } from "../Card/feed/CardFeedReviewTvSeriesLike";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { userFeedInfiniteOptions } from "@libs/query-client/src";
 import { useAuth } from "@/context/auth-context";
 import { CardFeedLogMovie } from "../Card/feed/CardFeedLogMovie";
 import { CardFeedLogTvSeries } from "../Card/feed/CardFeedLogTvSeries";
+import { meFeedInfiniteOptions } from "@libs/query-client/src";
 
 const WIDGET_USER_FEED_LIMIT = 4;
 
@@ -21,8 +21,8 @@ export const WidgetUserFeed = ({
 	const { user } = useAuth();
 	const {
 		data: feed,
-	} = useInfiniteQuery(userFeedInfiniteOptions({
-		userId: user?.id,
+	} = useInfiniteQuery(meFeedInfiniteOptions({
+		userId: user?.id
 	}));
 
 	if (!feed || !feed.pages[0]?.data.length) return null;

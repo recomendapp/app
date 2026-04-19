@@ -5,6 +5,7 @@ import { userBookmarkByMediaOptions, userFeedInfiniteOptions, userFeedPaginatedO
 import { movieKeys } from './movieKeys';
 import { removeListItemFromAllCaches, updateFromInfiniteCache, updateListItemInAllCaches } from '../utils';
 import { BookmarkWithMedia } from '../users/types';
+import { meFeedInfiniteOptions, meFeedPaginatedOptions, meKeys } from '../me';
 
 /* ---------------------------------- Logs ---------------------------------- */
 export const useMovieLogSetMutation = () => {
@@ -68,6 +69,10 @@ export const useMovieLogSetMutation = () => {
 					queryKey: userMovieWatchedDatesInfiniteOptions({ userId: data.userId, movieId: data.movieId }).queryKey,
 				});
 
+				// Feed
+				queryClient.invalidateQueries({
+					queryKey: meKeys.feed(),
+				});
 				queryClient.invalidateQueries({
 					queryKey: userKeys.feed({
 						userId: data.userId,
@@ -87,6 +92,28 @@ export const useMovieLogSetMutation = () => {
 					data
 				);
 
+				updateListItemInAllCaches<
+					FeedItem,
+					ListPaginatedFeed,
+					ListInfiniteFeed
+				>(
+					queryClient,
+					{
+						paginated: meFeedPaginatedOptions({ userId: data.userId }).queryKey,
+						infinite: meFeedInfiniteOptions({ userId: data.userId }).queryKey,
+					},
+					(old) => {
+						if (old.activityType !== 'log_movie') return old;
+						return {
+							...old,
+							content: {
+								...old.content,
+								...data,
+							}
+						}
+					},
+					(item) => item.activityType === 'log_movie' && item.content.id === data.id
+				);
 				updateListItemInAllCaches<
 					FeedItem,
 					ListPaginatedFeed,

@@ -23,6 +23,7 @@ import {
 } from "../users";
 import { removeListItemFromAllCaches, updateListItemInAllCaches } from "../utils";
 import { BookmarkWithMedia } from "../users/types";
+import { meFeedInfiniteOptions, meFeedPaginatedOptions } from "../me";
 
 export const useTvSeriesLogCacheUpdate = ({
     currentUserId,
@@ -94,6 +95,28 @@ export const useTvSeriesLogCacheUpdate = ({
                 data
             );
 
+            updateListItemInAllCaches<
+                FeedItem,
+                ListPaginatedFeed,
+                ListInfiniteFeed
+            >(
+                queryClient,
+                {
+                    paginated: meFeedPaginatedOptions({ userId: userId }).queryKey,
+                    infinite: meFeedInfiniteOptions({ userId: userId }).queryKey,
+                },
+                (old) => {
+                    if (old.activityType !== 'log_tv_series') return old;
+                    return {
+                        ...old,
+                        content: {
+                            ...old.content,
+                            ...data,
+                        }
+                    }
+                },
+                (item) => item.activityType === 'log_tv_series' && item.content.id === data.id
+            );
             updateListItemInAllCaches<
                 FeedItem,
                 ListPaginatedFeed,

@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { and, desc, eq, inArray, or, sql, SQL } from 'drizzle-orm';
 import { 
   feed, follow, logMovie, logTvSeries, playlist, playlistLike, 
@@ -113,26 +113,39 @@ export class FeedService {
     .elseNull();
   }
 
-  private async getFeedBaseWhere(tx: DbTransaction, currentUser: User, query: ListPaginatedFeedQueryDto | ListInfiniteFeedQueryDto): Promise<SQL> {
+  private async getFeedBaseWhere(
+    tx: DbTransaction, 
+    currentUser: User | null, 
+    query: ListPaginatedFeedQueryDto | ListInfiniteFeedQueryDto,
+    targetUserId?: string
+  ): Promise<SQL> {
     const conditions: SQL[] = [];
 
     if (query.activity_type) {
       conditions.push(eq(feed.activityType, query.activity_type));
     }
 
-    if (query.targetUserId) {
-      if (query.targetUserId !== currentUser.id) {
-        const [targetProfile] = await tx.select({ isPrivate: profile.isPrivate }).from(profile).where(eq(profile.id, query.targetUserId)).limit(1);
+    if (targetUserId) {
+      if (targetUserId !== currentUser?.id) {
+        const [targetProfile] = await tx.select({ isPrivate: profile.isPrivate })
+          .from(profile)
+          .where(eq(profile.id, targetUserId))
+          .limit(1);
+
         if (!targetProfile) throw new NotFoundException('User not found');
 
         if (targetProfile.isPrivate) {
+          if (!currentUser) throw new NotFoundException('Profile is private');
+
           const [following] = await tx.select({ id: follow.followerId }).from(follow)
-            .where(and(eq(follow.followerId, currentUser.id), eq(follow.followingId, query.targetUserId), eq(follow.status, 'accepted'))).limit(1);
+            .where(and(eq(follow.followerId, currentUser.id), eq(follow.followingId, targetUserId), eq(follow.status, 'accepted'))).limit(1);
           if (!following) throw new NotFoundException('Profile is private');
         }
       }
-      conditions.push(eq(feed.userId, query.targetUserId));
+      conditions.push(eq(feed.userId, targetUserId));
     } else {
+      if (!currentUser) throw new UnauthorizedException('User must be logged in to view their feed');
+
       const followingIdsSubquery = tx.select({ followingId: follow.followingId })
         .from(follow)
         .where(and(eq(follow.followerId, currentUser.id), eq(follow.status, 'accepted')));
@@ -146,7 +159,7 @@ export class FeedService {
     return and(...conditions);
   }
 
-  async listPaginated({ query, currentUser, locale }: { query: ListPaginatedFeedQueryDto; currentUser: User; locale: SupportedLocale }): Promise<ListPaginatedFeedDto> {
+  async listPaginated({ query, currentUser, locale, targetUserId }: { query: ListPaginatedFeedQueryDto; currentUser: User | null; locale: SupportedLocale; targetUserId?: string }): Promise<ListPaginatedFeedDto> {
     return await this.db.transaction(async (tx) => {
       await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
       if (currentUser?.id) {
@@ -156,7 +169,7 @@ export class FeedService {
       const { per_page, page } = query;
       const offset = (page - 1) * per_page;
 
-      const baseWhere = await this.getFeedBaseWhere(tx, currentUser, query);
+      const baseWhere = await this.getFeedBaseWhere(tx, currentUser, query, targetUserId);
 
       const [feedRows, [{ count: totalCount }]] = await Promise.all([
         tx.select({ 
@@ -188,7 +201,7 @@ export class FeedService {
     });
   }
 
-  async listInfinite({ query, currentUser, locale }: { query: ListInfiniteFeedQueryDto; currentUser: User; locale: SupportedLocale }): Promise<ListInfiniteFeedDto> {
+  async listInfinite({ query, currentUser, locale, targetUserId }: { query: ListInfiniteFeedQueryDto; currentUser: User | null; locale: SupportedLocale; targetUserId?: string }): Promise<ListInfiniteFeedDto> {
     return await this.db.transaction(async (tx) => {
       await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
       if (currentUser?.id) {
@@ -198,7 +211,7 @@ export class FeedService {
       const { per_page, cursor } = query;
       const cursorData = cursor ? decodeCursor<BaseCursor<string, number>>(cursor) : null;
       
-      const baseWhere = await this.getFeedBaseWhere(tx, currentUser, query);
+      const baseWhere = await this.getFeedBaseWhere(tx, currentUser, query, targetUserId);
 
       let finalWhere = baseWhere;
       if (cursorData) {

@@ -4,6 +4,7 @@ import { userBookmarkByMediaOptions, userFeedInfiniteOptions, userFeedPaginatedO
 import { removeListItemFromAllCaches, updateListItemInAllCaches, updateOrRemoveListItemInAllCaches } from '../utils';
 import { userKeys } from './userKeys';
 import { BookmarkWithMedia, RecoWithMedia } from './types';
+import { meFeedInfiniteOptions, meFeedPaginatedOptions } from '../query-client';
 
 /* ---------------------------------- Recos --------------------------------- */
 export const useUserRecoSendMutation = () => {
@@ -392,6 +393,18 @@ export const useUserPlaylistUnlikeMutation = ({
 				playlistId: data.playlistId,
 			}).queryKey, false);
 
+			removeListItemFromAllCaches<
+				FeedItem,
+				ListPaginatedFeed,
+				ListInfiniteFeed
+			>(
+				queryClient,
+				{
+					paginated: meFeedPaginatedOptions({ userId: data.userId }).queryKey,
+					infinite: meFeedInfiniteOptions({ userId: data.userId }).queryKey,
+				},
+				(old: FeedItem) => old.activityType === 'playlist_like' && old.content.id === data.playlistId && old.author.id === data.userId
+			);
 			removeListItemFromAllCaches<
 				FeedItem,
 				ListPaginatedFeed,

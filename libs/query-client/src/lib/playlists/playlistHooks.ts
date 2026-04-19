@@ -6,6 +6,7 @@ import { moviePlaylistsPaginatedOptions, moviePlaylistsInfiniteOptions } from ".
 import { tvSeriesPlaylistsPaginatedOptions, tvSeriesPlaylistsInfiniteOptions } from "../tv-series";
 import { updateListItemInAllCaches, ItemUpdater, resolveUpdater } from "../utils";
 import { searchGlobalOptions, searchPlaylistsInfiniteOptions, searchPlaylistsPaginatedOptions } from "../search";
+import { meFeedInfiniteOptions, meFeedPaginatedOptions } from "../me";
 
 export const usePlaylistCacheUpdate = ({
     userId,
@@ -147,6 +148,28 @@ export const usePlaylistCacheUpdate = ({
         );
 
         // Feed
+        updateListItemInAllCaches<
+            FeedItem,
+            ListPaginatedFeed,
+            ListInfiniteFeed
+        >(
+            queryClient,
+            {
+                paginated: meFeedPaginatedOptions({ userId: targetUserId }).queryKey,
+                infinite: meFeedInfiniteOptions({ userId: targetUserId }).queryKey,
+            },
+            (old) => {
+                if (old.activityType !== 'playlist_like') return old;
+                return {
+                    ...old,
+                    content: {
+                        ...old.content,
+                        ...resolveUpdater(old.content as Playlist, updater),
+                    }
+                }
+            },
+            (item) => item.activityType === 'playlist_like' && item.content.id === playlistId
+        );
         updateListItemInAllCaches<
             FeedItem,
             ListPaginatedFeed,
