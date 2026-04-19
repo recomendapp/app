@@ -19,11 +19,20 @@ import { FeedModule } from './feed/feed.module';
 import { SearchModule } from './search/search.module';
 import { UiModule } from './ui/ui.module';
 import { MediasModule } from './medias/medias.module';
+import { BullModule } from '@nestjs/bullmq';
+import { env } from '../env';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     EnvModule.forRoot(apiSchema),
+    BullModule.forRoot({
+      connection: {
+        host: env.REDIS_HOST,
+        port: env.REDIS_PORT,
+        password: env.REDIS_PASSWORD,
+      },
+    }),
     DrizzleModule,
     AuthModule,
     SystemModule,
