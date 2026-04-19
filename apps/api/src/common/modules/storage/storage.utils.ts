@@ -8,7 +8,7 @@ export function getMediaUrl(filenameOrUrl: string | null | undefined, folder: St
   }
 
   const endpoint = process.env.S3_PUBLIC_ENDPOINT || process.env.S3_ENDPOINT;
-  const bucketName = process.env.S3_BUCKET_NAME || 'medias';
+  const bucketName = process.env.S3_BUCKET || 'medias';
 
   return `${endpoint}/${bucketName}/${folder}/${filenameOrUrl}`;
 }
