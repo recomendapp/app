@@ -58,7 +58,7 @@ const BottomSheetTvSeries = React.forwardRef<
     {
       icon: Icons.Share,
       onPress: () => openSheet(BottomSheetShareTvSeries, {
-        tvSeries: tvSeries!,
+        tvSeries: tvSeries,
       }),
       label: upperFirst(t('common.messages.share')),
     },

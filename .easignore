@@ -15,6 +15,12 @@ web-build
 
 node_modules
 
+/apps/*
+!/apps/mobile
+
+ios/
+android/
+
 *.apk
 *.aab
 *.ipa
@@ -33,10 +39,3 @@ google-services*.json
 GoogleService-Info*.plist
 
 .env*.local
-
-/apps/*
-!/apps/mobile
-!/apps/mobile/**
-
-/apps/mobile/ios
-/apps/mobile/android

@@ -50,7 +50,7 @@ const BottomSheetPerson = React.forwardRef<
     {
       icon: Icons.Share,
       onPress: () => openSheet(BottomSheetSharePerson, {
-        person: person!,
+        person: person,
       }),
       label: upperFirst(t('common.messages.share')),
     },

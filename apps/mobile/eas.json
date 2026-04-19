@@ -22,10 +22,13 @@
       "env": {
         "APP_VARIANT": "preview"
       },
-      "autoIncrement": false
+      "autoIncrement": true
     },
     "production": {
       "channel": "production",
+      "env": {
+        "APP_VARIANT": "production"
+      },
       "autoIncrement": true
     }
   },

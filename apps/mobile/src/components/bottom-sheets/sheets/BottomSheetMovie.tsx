@@ -58,7 +58,7 @@ const BottomSheetMovie = React.forwardRef<
     {
       icon: Icons.Share,
       onPress: () => openSheet(BottomSheetShareMovie, {
-        movie: movie!,
+        movie: movie,
       }),
       label: upperFirst(t('common.messages.share')),
     },
