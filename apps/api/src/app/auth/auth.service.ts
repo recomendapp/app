@@ -34,9 +34,6 @@ const createBetterAuth = ({
 		database: drizzleAdapter(db, {
 			provider: 'pg',
 		}),
-		cookie: {
-            domain: env.NODE_ENV === 'production' ? env.AUTH_COOKIE_DOMAIN : undefined,
-        },
 		trustedOrigins: [
 			"http://localhost:3000",
 			env.WEB_APP_URL,
@@ -46,6 +43,10 @@ const createBetterAuth = ({
 		basePath: '/auth',
 		secret: env.AUTH_SECRET,
 		advanced: {
+			crossSubDomainCookies: {
+				enabled: true,
+				domain: env.NODE_ENV === 'production' ? env.AUTH_COOKIE_DOMAIN : undefined,
+			},
 			useSecureCookies: env.NODE_ENV === 'production',
 			database: {
 				generateId: () => uuidv7(),
