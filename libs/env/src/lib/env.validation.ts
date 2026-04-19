@@ -45,6 +45,7 @@ export const apiSchema = commonSchema
   MOBILE_APP_SCHEME: z.string().default('recomend://'),
 
   // Auth
+  AUTH_COOKIE_DOMAIN: z.string().default('recomend.app'),
   AUTH_SECRET: z.string(),
 
   // OAuth
