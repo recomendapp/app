@@ -16,10 +16,11 @@ import { additionalFields, auth } from '@libs/db';
 import { generateUniqueUsername } from '../../utils/generate-username';
 import { eq } from 'drizzle-orm';
 import { createAuthMiddleware } from 'better-auth/api';
+import { generateAppleClientSecret } from './auth.utils';
 
 export const AUTH_SERVICE = 'AUTH_SERVICE';
 
-const createBetterAuth = ({
+const createBetterAuth = async ({
 	env,
 	db,
 	notify,
@@ -30,12 +31,19 @@ const createBetterAuth = ({
 	notify: NotifyClient;
 	worker: WorkerClient;
 }) => {
+	const appleClientSecret = await generateAppleClientSecret({
+		teamId: env.AUTH_APPLE_TEAM_ID,
+		clientId: env.AUTH_APPLE_CLIENT_ID,
+		keyId: env.AUTH_APPLE_KEY_ID,
+		privateKey: env.AUTH_APPLE_PRIVATE_KEY,
+	});
 	return betterAuth({
 		database: drizzleAdapter(db, {
 			provider: 'pg',
 		}),
 		trustedOrigins: [
 			"http://localhost:3000",
+			"https://appleid.apple.com",
 			env.WEB_APP_URL,
 			env.MOBILE_APP_SCHEME,
 		],
@@ -218,9 +226,22 @@ const createBetterAuth = ({
 			additionalFields: additionalFields,
 		},
 		socialProviders: {
+			google: {
+				clientId: env.AUTH_GOOGLE_CLIENT_ID,
+				clientSecret: env.AUTH_GOOGLE_CLIENT_SECRET,
+			},
 			github: {
 				clientId: env.AUTH_GITHUB_CLIENT_ID,
 				clientSecret: env.AUTH_GITHUB_CLIENT_SECRET,
+			},
+			facebook: {
+				clientId: env.AUTH_FACEBOOK_CLIENT_ID,
+				clientSecret: env.AUTH_FACEBOOK_CLIENT_SECRET,
+			},
+			apple: {
+				clientId: env.AUTH_APPLE_CLIENT_ID,
+				clientSecret: appleClientSecret,
+				appBundleIdentifier: env.AUTH_APPLE_BUNDLE_ID,
 			}
 		},
 		experimental: {
@@ -229,7 +250,7 @@ const createBetterAuth = ({
 	})
 };
 
-export type AuthService = ReturnType<typeof createBetterAuth>;
+export type AuthService = Awaited<ReturnType<typeof createBetterAuth>>;
 
 export type Session = AuthService['$Infer']['Session']['session'];
 export type User = AuthService['$Infer']['Session']['user'];
@@ -237,12 +258,12 @@ export type User = AuthService['$Infer']['Session']['user'];
 export const AuthProvider: Provider = {
 	provide: AUTH_SERVICE,
 	inject: [ENV_SERVICE, DRIZZLE_SERVICE, NotifyClient, WorkerClient],
-	useFactory: (
+	useFactory: async (
 		env: EnvService,
 		db: DrizzleService,
 		notify: NotifyClient,
 		worker: WorkerClient,
 	) => { 
-		return createBetterAuth({ env, db, notify, worker });
+		return await createBetterAuth({ env, db, notify, worker });
 	},
 };

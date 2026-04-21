@@ -189,7 +189,7 @@
     "html-to-text": "^9.0.5",
     "input-otp": "^1.4.2",
     "isomorphic-dompurify": "^2.35.0",
-    "jose": "^6.1.2",
+    "jose": "^6.2.2",
     "jszip": "^3.10.1",
     "lexorank": "^1.0.5",
     "lodash": "^4.17.21",

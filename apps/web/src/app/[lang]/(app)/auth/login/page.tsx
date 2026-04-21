@@ -32,16 +32,28 @@ export default function Login() {
 
   const oAuth2Providers = useMemo((): { value: SocialProvider; label: string; icon: any, enabled: boolean }[] => [
     {
+      value: 'google',
+      label: 'Google',
+      icon: Icons.google,
+      enabled: true,
+    },
+    {
+      value: 'facebook',
+      label: 'Facebook',
+      icon: Icons.facebook,
+      enabled: true,
+    },
+    {
+      value: 'apple',
+      label: 'Apple',
+      icon: Icons.apple,
+      enabled: true,
+    },
+    {
       value: 'github',
       label: 'Github',
       icon: Icons.gitHub,
       enabled: true,
-    },
-    {
-      value: 'google',
-      label: 'Google',
-      icon: Icons.google,
-      enabled: false,
     },
   ], []);
 

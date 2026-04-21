@@ -49,8 +49,17 @@ export const apiSchema = commonSchema
   AUTH_SECRET: z.string(),
 
   // OAuth
+  AUTH_GOOGLE_CLIENT_ID: z.string(),
+  AUTH_GOOGLE_CLIENT_SECRET: z.string(),
   AUTH_GITHUB_CLIENT_ID: z.string(),
   AUTH_GITHUB_CLIENT_SECRET: z.string(),
+  AUTH_FACEBOOK_CLIENT_ID: z.string(),
+  AUTH_FACEBOOK_CLIENT_SECRET: z.string(),
+  AUTH_APPLE_CLIENT_ID: z.string(),
+  AUTH_APPLE_TEAM_ID: z.string(),
+  AUTH_APPLE_KEY_ID: z.string(),
+  AUTH_APPLE_PRIVATE_KEY: z.string(),
+  AUTH_APPLE_BUNDLE_ID: z.string(),
 });
 
 export const notifySchema = commonSchema.extend({
