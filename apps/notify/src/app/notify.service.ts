@@ -4,6 +4,7 @@ import { env } from '../env';
 import { pushProviderEnum } from '@libs/db/schemas';
 import { FcmService } from './fcm/fcm.service';
 import { ApnsService } from './apns/apns.service';
+import { PushNotificationPayload } from '@shared/notify';
 
 @Injectable()
 export class NotifyService {
@@ -39,7 +40,7 @@ export class NotifyService {
 
   async sendPushNotifications(
     devices: { provider: typeof pushProviderEnum.enumValues[number]; token: string }[],
-    payload: { title: string; body: string; data?: Record<string, string> }
+    payload: { title: string; body: string; data: PushNotificationPayload }
   ) {
     const fcmTokens = devices.filter(d => d.provider === 'fcm').map(d => d.token);
     const apnsTokens = devices.filter(d => d.provider === 'apns').map(d => d.token);

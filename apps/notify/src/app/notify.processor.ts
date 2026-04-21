@@ -142,7 +142,12 @@ export class NotifyProcessor extends WorkerHost {
               await this.notifyService.sendPushNotifications(devices, {
                 title,
                 body,
-                data: { url: `/@${actor.username}`, type: 'follow_new' },
+                data: {
+                  type: job.name,
+                  url: `/@${actor.username}`,
+                  actorId: actorId,
+                  actorUsername: actor.username,
+                }
               });
             })
           );
@@ -173,7 +178,12 @@ export class NotifyProcessor extends WorkerHost {
               await this.notifyService.sendPushNotifications(devices, {
                 title,
                 body,
-                data: { url: `/`, type: 'follow_request' },
+                data: {
+                  type: job.name,
+                  url: `/@${actor.username}`,
+                  actorId: actorId,
+                  actorUsername: actor.username,
+                }
               });
             })
           );
@@ -203,7 +213,12 @@ export class NotifyProcessor extends WorkerHost {
               await this.notifyService.sendPushNotifications(devices, {
                 title,
                 body,
-                data: { url: `/@${actor.username}`, type: 'follow_accepted' },
+                data: {
+                  type: job.name,
+                  url: `/@${actor.username}`,
+                  actorId: actorId,
+                  actorUsername: actor.username,
+                }
               });
             })
           );
@@ -278,9 +293,11 @@ export class NotifyProcessor extends WorkerHost {
                 title,
                 body,
                 data: {
-                  url: watcher?.username ? `/@${watcher.username}` : mediaData.url || '/',
-                  type: 'reco_completed',
-                },
+                  type: job.name,
+                  url: mediaData.url || '/',
+                  mediaId: mediaId.toString(),
+                  mediaType: type,
+                }
               });
             })
           );
@@ -357,9 +374,11 @@ export class NotifyProcessor extends WorkerHost {
                 title,
                 body,
                 data: {
+                  type: job.name,
                   url: mediaTitle.url || '/',
-                  type: 'reco_received',
-                },
+                  mediaId: mediaId.toString(),
+                  mediaType: type,
+                }
               });
             })
           );

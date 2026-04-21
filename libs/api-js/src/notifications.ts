@@ -1,0 +1,1 @@
+export { PushNotificationPayload } from '@shared/notify';

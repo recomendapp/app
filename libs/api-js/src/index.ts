@@ -10,3 +10,4 @@ export * from './recos';
 export * from './bookmarks';
 export * from './utils';
 export * from './ui';
+export * from './notifications';

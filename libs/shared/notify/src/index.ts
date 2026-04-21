@@ -6,3 +6,5 @@ export * from './lib/shared-notify.constants';
 export * from './lib/shared-notify.definitions';
 // Client
 export * from './lib/shared-notify.client';
+// Payload
+export * from './lib/shared-notify.payload';

@@ -1,4 +1,4 @@
-import { meAvatarControllerDelete, meAvatarControllerSet, meControllerUpdate, MeControllerUpdateData, Options, userPushTokensControllerSetMutation } from '@libs/api-js';
+import { meAvatarControllerDelete, meAvatarControllerSet, meControllerUpdate, MeControllerUpdateData, mePushTokensControllerSetMutation, Options } from '@libs/api-js';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { meOptions } from './meOptions';
 import { userByIdOptions, userByUsernameOptions } from '../users';
@@ -56,6 +56,6 @@ export const useMeUpdateMutation = () => {
 
 export const usePushTokenUpdateMutation = () => {
 	return useMutation({
-		...userPushTokensControllerSetMutation(),		
+		...mePushTokensControllerSetMutation(),		
 	});
 };

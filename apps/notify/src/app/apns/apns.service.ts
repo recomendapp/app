@@ -26,6 +26,15 @@ export class ApnsService {
       
       if (result.failed.length > 0) {
         this.logger.warn(`Failed to send to ${result.failed.length} APNs tokens`);
+        result.failed.forEach(f => {
+            if (f.error) {
+                this.logger.error(`APNs error for token ${f.device}: ${f.error.message}`);
+            } else if (f.status) {
+              this.logger.error(`APNs failed for token ${f.device} with status ${f.status}`);
+            } else {
+              this.logger.error(`APNs failed for token ${f.device} with unknown error`);
+            }
+        });
         return result.failed.map(f => f.device);
       }
       

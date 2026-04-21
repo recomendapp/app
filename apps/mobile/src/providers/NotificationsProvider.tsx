@@ -7,6 +7,8 @@ import { useRouter } from "expo-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "apps/mobile/src/components/Toast";
 import { usePushTokenUpdateMutation } from "@libs/query-client";
+import { useTranslations } from "use-intl";
+import { PushNotificationPayload } from "@libs/api-js";
 
 type NotificationsContextType = {
   permissionStatus: Notifications.PermissionStatus | null;
@@ -25,6 +27,7 @@ export const useNotifications = () => {
 
 export const NotificationsProvider = ({ children }: { children: React.ReactNode }) => {
   const toast = useToast();
+  const t = useTranslations();
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user, pushToken, setPushToken } = useAuth();
@@ -71,6 +74,65 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
     }
   }, []);
 
+  const handleRedirect = useCallback((data: PushNotificationPayload) => {
+    switch (data.type) {
+      case 'reco:received':
+        if (data.mediaType === 'movie') {
+          router.push({
+            pathname: '/film/[film_id]',
+            params: { film_id: data.mediaId },
+          });
+        } if (data.mediaType === 'tv_series') {
+          router.push({
+            pathname: '/tv-series/[tv_series_id]',
+            params: { tv_series_id: data.mediaId },
+          });
+        }
+        break;
+      case 'follow:new':
+        router.push({
+          pathname: '/user/[username]',
+          params: { username: data.actorUsername },
+        });
+      case 'follow:request':
+        router.push({
+          pathname: '/follow-requests',
+        });
+        break;
+      case 'follow:accepted':
+        router.push({
+          pathname: '/user/[username]',
+          params: { username: data.actorUsername },
+        });
+        break;
+      default:
+        break;
+    }
+  }, [router]);
+
+  const handleResponse = useCallback((response: Notifications.NotificationResponse) => {
+    // iOS APNs : data in response.notification.request.trigger.payload.data
+    // Android FCM : data in response.notification.request.content.data
+    const data = (
+      response.notification.request.content.data ||
+      (response.notification.request.trigger as any).payload.data
+    ) as PushNotificationPayload | undefined;
+    if (data) {
+      handleRedirect(data);
+    }
+  }, [handleRedirect]);
+
+  const handleToast = useCallback((notification: Notifications.Notification) => {
+    const data = (
+      notification.request.content.data ||
+      (notification.request.trigger as any).payload.data
+    ) as PushNotificationPayload | undefined;
+    toast.info(notification.request.content.title || t('common.messages.new_notification', { count: 1 }), {
+      description: notification.request.content.body ?? undefined,
+      onPress: (data && data.type) ? () => handleRedirect(data) : undefined,
+    });
+  }, [toast, t, handleRedirect]);
+
   useEffect(() => {
     if (!user) return;
 
@@ -96,11 +158,13 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
     notificationsListener.current = Notifications.addNotificationReceivedListener((notification) => {
       console.log("🔔 Notification received:", notification);
       setNotifications((prev) => (prev ? [...prev, notification] : [notification]));
+      handleToast(notification);
     });
 
     // Listener when notification is clicked
     responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
       console.log("🔔 Notification response received:", JSON.stringify(response, null, 2));
+      handleResponse(response);
     });
 
     // Handle notification that opened the app
@@ -108,6 +172,7 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
       const initialResponse = Notifications.getLastNotificationResponse();
       if (initialResponse) {
         console.log("🔔 Initial notification response:", JSON.stringify(initialResponse, null, 2));
+        handleResponse(initialResponse);
       }
     })();
 
@@ -115,7 +180,14 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
       notificationsListener.current?.remove();
       responseListener.current?.remove();
     };
-  }, [user, updatePushToken, queryClient, toast, router]);
+  }, [
+    user,
+    handleRegisterForPushNotificationsAsync,
+    setPushToken,
+    updatePushToken,
+    handleToast,
+    handleResponse,
+  ]);
 
   return (
     <NotificationsContext.Provider

@@ -444,7 +444,8 @@
       "confirm_password": "Confirmer le mot de passe",
       "password_reseted": "Mot de passe réinitialisé",
       "reset_your_password": "Réinitialiser votre mot de passe",
-      "invalid_token": "Token invalide"
+      "invalid_token": "Token invalide",
+      "new_notification": "{count, plural, one {nouvelle notification} other {nouvelles notifications}}"
     },
     "form": {
       "email": {
