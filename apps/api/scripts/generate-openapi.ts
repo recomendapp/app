@@ -7,7 +7,7 @@ import * as path from 'path';
 
 async function generateOpenAPIs() {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, {
-    logger: false,
+    logger: ['error'],
   });
 
   const outputDir = 'apps/api/.openapi';
