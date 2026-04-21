@@ -1,22 +1,21 @@
 import { Button } from "apps/mobile/src/components/ui/Button";
 import { UserNav } from "apps/mobile/src/components/user/UserNav";
 import tw from "apps/mobile/src/lib/tw";
-import { createMaterialTopTabNavigator, MaterialTopTabNavigationEventMap, MaterialTopTabNavigationOptions, type MaterialTopTabBarProps } from '@react-navigation/material-top-tabs';
-import { NavigationRoute, ParamListBase, TabNavigationState } from "@react-navigation/native";
+import { createMaterialTopTabNavigator, MaterialTopTabNavigationEventMap, MaterialTopTabNavigationOptions } from '@react-navigation/material-top-tabs';
+import { ParamListBase, TabNavigationState } from "@react-navigation/native";
 import { Stack, useRouter, withLayoutContext } from "expo-router";
 import { upperFirst } from "lodash";
-import { useCallback, useEffect, useRef } from "react";
-import { View, FlatList, Pressable } from "react-native";
-import Animated from "react-native-reanimated";
+import { useCallback } from "react";
+import { View, Pressable } from "react-native";
 import { useTranslations } from "use-intl";
 import { HeaderTitle } from "@react-navigation/elements";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
-import { GAP, PADDING_HORIZONTAL } from "apps/mobile/src/theme/globals";
 import UserAvatar from "apps/mobile/src/components/user/UserAvatar";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
 import BottomSheetPlaylistCreate from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetPlaylistCreate";
 import { Icons } from "apps/mobile/src/constants/Icons";
+import { SegmentedControlTabBar } from "apps/mobile/src/components/ui/segmented-control-tabbar";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -26,76 +25,6 @@ const MaterialTopTabs = withLayoutContext<
 	TabNavigationState<ParamListBase>,
 	MaterialTopTabNavigationEventMap
 >(Tab.Navigator);
-
-const TabBar = ({ state, descriptors, navigation } : MaterialTopTabBarProps) => {
-	const flatListRef = useRef<FlatList>(null);
-
-	const onPressTab = useCallback((item: typeof state.routes[0], index: number, isFocused: boolean) => {
-		const event = navigation.emit({
-			type: 'tabPress',
-			target: item.key,
-			canPreventDefault: true,
-		});
-
-		if (!isFocused && !event.defaultPrevented) {
-			navigation.navigate(item.name);
-		}
-
-		flatListRef.current?.scrollToIndex({ index, animated: true });
-	}, [navigation, state]);
-
-	const renderItem = useCallback(({ item, index } : { item: NavigationRoute<ParamListBase, string>, index: number }) => {
-		const { options } = descriptors[item.key];
-		const label =
-		(options.tabBarLabel !== undefined && typeof options.tabBarLabel === 'string')
-			? options.tabBarLabel
-			: options.title !== undefined
-			? options.title
-			: item.name;
-		const isFocused = state.index === index;
-		const onPress = () => {
-			const event = navigation.emit({
-				type: 'tabPress',
-				target: item.key,
-				canPreventDefault: true,
-			});
-			if (!isFocused && !event.defaultPrevented) {
-				navigation.navigate(item.name);
-			}
-		};
-		return (
-			<Button
-			variant={isFocused ? 'default' : 'outline'}
-			style={{ borderRadius: 9999}}
-			onPress={onPress}
-			>
-				{upperFirst(label)}
-			</Button>
-		);
-	}, [descriptors, navigation, state]);
-
-	useEffect(() => {
-		onPressTab(state.routes[state.index], state.index, true);
-	}, [onPressTab, state.index, state.routes]);
-
-	return (
-		<View>
-			<Animated.FlatList
-			ref={flatListRef}
-			data={state.routes}
-			renderItem={renderItem}
-			keyExtractor={(item) => item.key}
-			contentContainerStyle={{
-				gap: GAP,
-				paddingHorizontal: PADDING_HORIZONTAL,
-				paddingBottom: GAP,
-			}}
-			horizontal
-			showsHorizontalScrollIndicator={false}
-			/>
-		</View>
-	)
-};
 
 const CollectionLayout = () => {
 	const t = useTranslations();
@@ -157,7 +86,7 @@ const CollectionLayout = () => {
 		}}
 		/>
 		<MaterialTopTabs
-		tabBar={(props) => <TabBar {...props} />}
+		tabBar={(props) => <SegmentedControlTabBar {...props} />}
 		>
 			<MaterialTopTabs.Screen name="index" options={{ title: "perso" }} />
 			<MaterialTopTabs.Screen name="saved" options={{ title: upperFirst(t('common.messages.saved', { gender: 'female', count: 2 })) }} />

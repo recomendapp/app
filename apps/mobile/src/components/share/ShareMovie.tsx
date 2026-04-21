@@ -320,12 +320,12 @@ export const ShareMovie = forwardRef<
 	const backdropUrl = useMemo(() => backdrop ? getTmdbImage({ path: backdrop.filePath, size: 'w780' }) : movie.backdropPath ? getTmdbImage({ path: movie.backdropPath, size: 'w780' }) : undefined, [backdrop, movie.backdropPath]);
 	const { palette } = useImagePalette(posterUrl);
 	const [bgColor, setBgColor] = useState<{index: number, color: string } | null>(palette ? { index: 0, color: palette[0] } : null);
-	const [bgType, setBgType] = useState<'color' | 'image'>(isPremium && backdrop ? 'image' : 'color');
+	const [bgType, setBgType] = useState<'color' | 'image'>(isPremium && backdropUrl ? 'image' : 'color');
 	const [editing, setEditing] = useState(false);
 	const editOptions = useMemo((): EditOption[] => {
 		const options: EditOption[] = [];
 		const hasPoster = !!posterUrl;
-		const hasBackground = !!backdropUrl;
+		const hasBackground = !!backdropUrl || (bgType === 'color' && bgColor);
 		if (hasPoster) {
 			options.push({ value: 'poster', icon: ShapeVerticalRoundedForeground });
 		}
@@ -333,7 +333,7 @@ export const ShareMovie = forwardRef<
 			options.push({ value: 'background', icon: ShapeVerticalRoundedBackground });
 		}
 		return options;
-	}, [posterUrl, backdropUrl]);
+	}, [posterUrl, backdropUrl, bgType, bgColor]);
 	const [activeEditingOption, setActiveEditingOption] = useState(editOptions[0]?.value);
 
 	useImperativeHandle(ref, () => ({
@@ -383,7 +383,7 @@ export const ShareMovie = forwardRef<
 		<View style={[tw`absolute top-2 right-2 flex-row items-center`, { gap: GAP }]}>
 			{editing && (
 				<Animated.View entering={FadeInRight} exiting={FadeOutRight} style={[tw`flex-row items-center`, { gap: GAP }]}>
-				{backdrop && activeEditingOption === 'background' && (
+				{backdropUrl && activeEditingOption === 'background' && (
 					<Button
 					variant="muted"
 					icon={bgType === 'image' && bgColor ? CircleIcon : Icons.Image}

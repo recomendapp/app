@@ -74,10 +74,12 @@ const CardFeedPersonMovieDefault = React.forwardRef<
 					) : <Skeleton style={tw`w-6 h-6 rounded-md`} />}
 					{!skeleton ? (
 						<Text textColor="muted">
-							{t.rich('pages.feed.cast_and_crew.label', {
+							{t.rich('pages.feed.persons.new_activity', {
 								name: data.person.name || t('common.messages.unknown'),
 								roles: data.jobs.length ? data.jobs.join(', ').toLowerCase() : t('common.messages.unknown'),
+								titleMedia: data.media.title || t('common.messages.unknown'),
 								linkPerson: (chunk) => <Link href={{ pathname: '/person/[person_id]', params: { person_id: data.person.id } }} style={{ color: colors.foreground }}>{chunk}</Link>,
+								linkMedia: (chunk) => <Link href={{ pathname: '/film/[film_id]', params: { film_id: data.media.id } }} style={{ color: colors.foreground }}>{chunk}</Link>,
 								important: (chunk) => <Text textColor="default">{chunk}</Text>
 							})}
 						</Text>
