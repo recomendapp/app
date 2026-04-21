@@ -1,7 +1,9 @@
 import { Job } from 'bullmq';
-import { NotifyAuthRegistry } from './auth/auth.registry';
-import { NotifyRecoRegistry } from './reco/reco.registry';
-import { NotifyFollowRegistry } from './follow/follow.registry';
+import {
+  NotifyAuthRegistry,
+  NotifyFollowRegistry,
+  NotifyRecoRegistry,
+} from '@libs/notify-types';
 
 export type NotifyRegistry =
   NotifyAuthRegistry

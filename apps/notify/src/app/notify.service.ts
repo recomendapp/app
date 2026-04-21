@@ -4,7 +4,7 @@ import { env } from '../env';
 import { pushProviderEnum } from '@libs/db/schemas';
 import { FcmService } from './fcm/fcm.service';
 import { ApnsService } from './apns/apns.service';
-import { PushNotificationPayload } from '@shared/notify';
+import { PushNotificationPayload } from '@libs/notify-types';
 
 @Injectable()
 export class NotifyService {

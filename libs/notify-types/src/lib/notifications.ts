@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { NotifyRecoRegistry } from './reco/reco.registry';
-import { NotifyFollowRegistry } from './follow/follow.registry';
+import { NotifyFollowRegistry } from './follow';
+import { NotifyRecoRegistry } from './reco';
 
 const MediaTypeSchema = z.enum(['movie', 'tv_series']);
 type MediaType = z.infer<typeof MediaTypeSchema>;

@@ -1,1 +1,1 @@
-export type { PushNotificationPayload } from '@shared/notify';
+export type { PushNotificationPayload } from '@libs/notify-types';
