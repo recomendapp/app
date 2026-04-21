@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-// import { apnsProvider } from './apns.provider';
-// import { ApnsService } from './apns.service';
+import { apnsProvider } from './apns.provider';
+import { ApnsService } from './apns.service';
 
 @Module({
-//   providers: [apnsProvider, ApnsService],
-//   exports: [ApnsService],
+  providers: [apnsProvider, ApnsService],
+  exports: [ApnsService],
 })
 export class ApnsModule {}

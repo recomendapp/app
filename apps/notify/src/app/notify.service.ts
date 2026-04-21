@@ -3,7 +3,7 @@ import { Resend } from 'resend';
 import { env } from '../env';
 import { pushProviderEnum } from '@libs/db/schemas';
 import { FcmService } from './fcm/fcm.service';
-// import { ApnsService } from './apns/apns.service';
+import { ApnsService } from './apns/apns.service';
 
 @Injectable()
 export class NotifyService {
@@ -12,7 +12,7 @@ export class NotifyService {
 
   constructor(
     private readonly fcmService: FcmService,
-    // private readonly apnsService: ApnsService,
+    private readonly apnsService: ApnsService,
   ) {
     this.resend = new Resend(env.RESEND_API_KEY);
   }
@@ -44,12 +44,12 @@ export class NotifyService {
     const fcmTokens = devices.filter(d => d.provider === 'fcm').map(d => d.token);
     const apnsTokens = devices.filter(d => d.provider === 'apns').map(d => d.token);
 
-    const [failedFcm, /*failedApns*/] = await Promise.all([
+    const [failedFcm, failedApns] = await Promise.all([
       this.fcmService.sendMulticast(fcmTokens, payload.title, payload.body, payload.data),
-      // this.apnsService.sendToDevices(apnsTokens, payload.title, payload.body, payload.data),
+      this.apnsService.sendToDevices(apnsTokens, payload.title, payload.body, payload.data),
     ]);
 
-    const allFailedTokens = [...failedFcm, /*...failedApns*/];
+    const allFailedTokens = [...failedFcm, ...failedApns];
 
     if (allFailedTokens.length > 0) {
       this.logger.debug(`Total dead tokens to clean up: ${allFailedTokens.length}`);

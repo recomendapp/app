@@ -81,6 +81,7 @@ export const notifySchema = commonSchema.extend({
   }),
   APNS_KEY_ID: z.string(),
   APNS_TEAM_ID: z.string(),
+  APNS_BUNDLE_ID: z.string(),
 });
 
 export const workerSchema = commonSchema

@@ -18,6 +18,7 @@ import { authClient } from "../lib/auth/client";
 import { useToast } from "../components/Toast";
 import { SocialProvider } from 'better-auth/types';
 import { defaultSupportedLocale, SupportedLocale, supportedLocales } from "@libs/i18n";
+import { makeRedirectUri } from "expo-auth-session";
 
 type AuthContextProps = {
 	user: User | null | undefined;
@@ -158,6 +159,9 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 			default:
 				const { data, error } = await authClient.signIn.social({
 					provider: provider,
+					callbackURL: makeRedirectUri({
+						path: '/',
+					}),
 				})
 				if (error) throw error
 				break;

@@ -59,6 +59,7 @@
     "@normy/react-query": "^0.18.0",
     "@novu/react": "^3.5.0",
     "@novu/react-native": "^3.11.1",
+    "@parse/node-apn": "^8.1.0",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-aspect-ratio": "^1.1.7",
