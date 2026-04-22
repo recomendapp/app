@@ -19,6 +19,7 @@ import { useToast } from "../components/Toast";
 import { SocialProvider } from 'better-auth/types';
 import { defaultSupportedLocale, SupportedLocale, supportedLocales } from "@libs/i18n";
 import { makeRedirectUri } from "expo-auth-session";
+import { logger } from "../logger";
 
 type AuthContextProps = {
 	user: User | null | undefined;
@@ -96,78 +97,107 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 	}, [t, queryClient]);
 
 	const loginWithOAuth = useCallback(async (provider: SocialProvider, redirectTo?: string | null) => {
-		switch (provider) {
-			case "google":
-				GoogleSignin.configure({
-					scopes: ["https://www.googleapis.com/auth/drive.readonly"],
-					iosClientId: env.GOOGLE_IOS_CLIENT_ID,
-					webClientId: env.GOOGLE_WEB_CLIENT_ID,
-				})
-				await GoogleSignin.hasPlayServices();
-				const userInfo = await GoogleSignin.signIn();
-				if (userInfo.type === 'cancelled') throw new Error('cancelled');
-				if (!userInfo.data?.idToken) {
-					throw new Error('No ID token received');
-				}
-				const { error: googleError } = await authClient.signIn.social({
-					provider: 'google',
-					idToken: {
-						token: userInfo.data.idToken,
+		try {
+			switch (provider) {
+				case "google":
+					GoogleSignin.configure({
+						scopes: ["https://www.googleapis.com/auth/drive.readonly"],
+						iosClientId: env.GOOGLE_IOS_CLIENT_ID,
+						webClientId: env.GOOGLE_WEB_CLIENT_ID,
+					})
+					await GoogleSignin.hasPlayServices();
+					const userInfo = await GoogleSignin.signIn();
+					if (userInfo.type === 'cancelled') return;
+					if (!userInfo.data?.idToken) {
+						toast.error(upperFirst(t('common.messages.an_error_occurred')));
+						throw new Error('No ID token received');
 					}
-				});
-				if (googleError) throw googleError;
-				break;
-			
-			case 'apple':
-				if (Platform.OS === 'ios') {
-					try {
-						const rawNone = randomUUID();
-						const credential = await AppleAuthentication.signInAsync({
-							requestedScopes: [
-								AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-								AppleAuthentication.AppleAuthenticationScope.EMAIL,
-							],
-							state: rawNone,
-						});
-						if (credential.state !== rawNone) {
-							throw new Error('State does not match');
+					const { error: googleError } = await authClient.signIn.social({
+						provider: 'google',
+						idToken: {
+							token: userInfo.data.idToken,
 						}
-						const { identityToken } = credential;
-						if (!identityToken) {
-							throw new Error('No identity token provided');
+					});
+					if (googleError) {
+						switch (googleError.code) {
+							default:
+								toast.error(upperFirst(t('common.messages.an_error_occurred')));
+								break;
 						}
-						const { error: appleError } = await authClient.signIn.social({
-							provider: 'apple',
-							idToken: {
-								token: identityToken,
+						throw googleError;
+					};
+					break;
+				
+				case 'apple':
+					if (Platform.OS === 'ios') {
+						try {
+							const rawNone = randomUUID();
+							const credential = await AppleAuthentication.signInAsync({
+								requestedScopes: [
+									AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+									AppleAuthentication.AppleAuthenticationScope.EMAIL,
+								],
+								state: rawNone,
+							});
+							if (credential.state !== rawNone) {
+								toast.error(upperFirst(t('common.messages.an_error_occurred')));
+								throw new Error('State does not match');
 							}
-						});
-						if (appleError) throw appleError;
-						break;
-					} catch (error) {
-						if (error instanceof Error) {
-							if (!(
-								('code' in error && error.code === 'ERR_REQUEST_CANCELED')
-							)) {
+							const { identityToken } = credential;
+							if (!identityToken) {
+								toast.error(upperFirst(t('common.messages.an_error_occurred')));
+								throw new Error('No identity token provided');
+							}
+							const { error: appleError } = await authClient.signIn.social({
+								provider: 'apple',
+								idToken: {
+									token: identityToken,
+								}
+							});
+							if (appleError) {
+								switch (appleError.code) {
+									default:
+										toast.error(upperFirst(t('common.messages.an_error_occurred')), { description: appleError.message });
+										break;
+								}
+								throw appleError;
+							}
+							break;
+						} catch (error) {
+							if (error instanceof Error) {
+								if (!(
+									('code' in error && error.code === 'ERR_REQUEST_CANCELED')
+								)) {
+									throw error;
+								}
+							} else {
 								throw error;
 							}
-						} else {
-							throw error;
 						}
 					}
-				}
-			default:
-				const { data, error } = await authClient.signIn.social({
-					provider: provider,
-					callbackURL: makeRedirectUri({
-						path: '/',
-					}),
-				})
-				if (error) throw error
-				break;
+				default:
+					const { error } = await authClient.signIn.social({
+						provider: provider,
+						callbackURL: makeRedirectUri({
+							path: '/',
+						}),
+					})
+					if (error) {
+						switch (error.code) {
+							default:
+								toast.error(upperFirst(t('common.messages.an_error_occurred')), { description: error.message });
+								break;
+						}
+						throw error;
+					}
+					break;
+			}
+			logger.metric('account:loggedInWithOAuth', { logContext: 'LoginForm', provider });
+			queryClient.invalidateQueries({ queryKey: meOptions().queryKey });
+		} catch (error) {
+			logger.error('oauth login error', { error, provider });
 		}
-		queryClient.invalidateQueries({ queryKey: meOptions().queryKey });
-	}, [authClient, queryClient, t]);
+	}, [authClient, queryClient, t, toast]);
 
 	const logout = useCallback(async () => {
 		if (pushToken) {

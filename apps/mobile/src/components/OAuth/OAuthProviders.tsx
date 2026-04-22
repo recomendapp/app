@@ -4,16 +4,14 @@ import { Text } from "../ui/text";
 import { GAP } from "apps/mobile/src/theme/globals";
 import { useCallback, useMemo } from "react";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
-import { upperFirst } from "lodash";
 import { useTranslations } from "use-intl";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
-import { useToast } from "../Toast";
 import { Icons } from "apps/mobile/src/constants/Icons";
 import { BrandIcon, BrandIconProps } from "apps/mobile/src/lib/icons";
-import { logger } from "apps/mobile/src/logger";
+import { SocialProvider } from 'better-auth/types';
 
 type Provider = {
-	name: AuthProvider;
+	name: SocialProvider;
 	label: string;
 	icon: { component: BrandIcon, variant?: BrandIconProps['variant'] };
 };
@@ -29,7 +27,6 @@ export const OAuthProviders = ({
 	contentContainerStyle,
 	...props 
 }: OAuthProvidersProps) => {
-	const toast = useToast();
 	const { loginWithOAuth } = useAuth();
 	const { colors, mode } = useTheme();
 	const t = useTranslations();
@@ -57,25 +54,12 @@ export const OAuthProviders = ({
 		},
 	]), [mode, data]);
 
-	const handleProviderPress = useCallback(async (provider: AuthProvider) => {
-		try {
-			await loginWithOAuth(provider);
-			logger.metric('account:loggedInWithOAuth', { logContext: 'LoginForm', provider });
-		} catch (error) {
-			if (error instanceof Error) {
-				if (error.message === 'cancelled') return;
-			}
-			toast.error(upperFirst(t('common.messages.error')), { description: upperFirst(t('common.messages.an_error_occurred')) });
-			logger.error('oauth login error', { error, provider });
-		}
-	}, [loginWithOAuth, t, toast]);
-
 	const renderItem = useCallback(({ item }: { item: Provider }) => (
-		<Button variant='muted' onPress={() => handleProviderPress(item.name)}>
+		<Button variant='muted' onPress={() => loginWithOAuth(item.name)}>
 			<item.icon.component width={18} height={18} variant={item.icon.variant} />
 			<Text style={{ color: colors.foreground }}>{item.label}</Text>
 		</Button>
-	), [handleProviderPress, colors.foreground]);
+	), [loginWithOAuth, colors.foreground]);
 
 	return (
 		<LegendList
