@@ -42,10 +42,12 @@ const createBetterAuth = async ({
 			provider: 'pg',
 		}),
 		trustedOrigins: [
-			"http://localhost:3000",
 			"https://appleid.apple.com",
 			env.WEB_APP_URL,
 			env.MOBILE_APP_SCHEME,
+			...(env.NODE_ENV === "development" ? [
+				"exp://**",
+			] : []),
 		],
 		baseURL: env.API_URL,
 		basePath: '/auth',

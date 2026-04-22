@@ -20,6 +20,9 @@ import { SocialProvider } from 'better-auth/types';
 import { defaultSupportedLocale, SupportedLocale, supportedLocales } from "@libs/i18n";
 import { makeRedirectUri } from "expo-auth-session";
 import { logger } from "../logger";
+import { maybeCompleteAuthSession, openAuthSessionAsync } from "expo-web-browser";
+
+maybeCompleteAuthSession();
 
 type AuthContextProps = {
 	user: User | null | undefined;
@@ -176,7 +179,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 						}
 					}
 				default:
-					const { error } = await authClient.signIn.social({
+					const { data, error } = await authClient.signIn.social({
 						provider: provider,
 						callbackURL: makeRedirectUri({
 							path: '/',
@@ -189,6 +192,17 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 								break;
 						}
 						throw error;
+					}
+					if (data?.url) {
+						const result = await openAuthSessionAsync(
+							data.url,
+							makeRedirectUri({
+								path: '/',
+							}),
+						)
+						if (result.type !== 'success') {
+							return;
+						}
 					}
 					break;
 			}
