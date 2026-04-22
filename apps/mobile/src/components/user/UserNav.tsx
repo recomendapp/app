@@ -11,7 +11,7 @@ export const UserNav = forwardRef<
 	PressableProps
 >(({ onPress, onLongPress, style, ...props}, ref) => {
 	const router = useRouter();
-	const { session, user } = useAuth();
+	const { user } = useAuth();
 	
 	const handlePress = useCallback((event: GestureResponderEvent) => {
 		if (!user?.username) return;
@@ -24,22 +24,22 @@ export const UserNav = forwardRef<
 		onLongPress?.(event);
 	}, [onLongPress, router]);
 
-	if (!session) return null;
+	if (user === null) return null;
 	
-	if (!user) {
+	if (user === undefined) {
 		return (
-		<Skeleton
-		style={[
-			tw`w-12 h-12 rounded-full`,
-			style as object,
-		]}
-		/>
+			<Skeleton
+			style={[
+				tw`w-12 h-12 rounded-full`,
+				style as object,
+			]}
+			/>
 		);
 	}
 	
 	return (
 		<Pressable ref={ref} onPress={handlePress} onLongPress={handleLongPress} style={style} {...props} >
-			<UserAvatar full_name={user.full_name} avatar_url={user.avatar_url} />
+			<UserAvatar full_name={user.name} avatar_url={user.avatar} />
 		</Pressable>
 	);
 });

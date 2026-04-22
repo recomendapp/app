@@ -19,10 +19,8 @@ import { useToast } from "../components/Toast";
 import { SocialProvider } from 'better-auth/types';
 import { defaultSupportedLocale, SupportedLocale, supportedLocales } from "@libs/i18n";
 import { makeRedirectUri } from "expo-auth-session";
+import { LoginManager, AccessToken, AuthenticationToken } from "react-native-fbsdk-next";
 import { logger } from "../logger";
-import { maybeCompleteAuthSession, openAuthSessionAsync } from "expo-web-browser";
-
-maybeCompleteAuthSession();
 
 type AuthContextProps = {
 	user: User | null | undefined;
@@ -178,8 +176,49 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 							}
 						}
 					}
+				case 'facebook':
+					const fbResult = await LoginManager.logInWithPermissions(
+						["public_profile", "email"],
+						"limited",
+					);
+
+					if (fbResult.isCancelled) {
+						return;
+					}
+
+					let fbToken: string | undefined = undefined;
+
+					if (Platform.OS === "ios") {
+						const authData = await AuthenticationToken.getAuthenticationTokenIOS();
+						fbToken = authData?.authenticationToken;
+					} else {
+						const accessData = await AccessToken.getCurrentAccessToken();
+						fbToken = accessData?.accessToken.toString();
+					}
+
+					if (!fbToken) {
+						toast.error(upperFirst(t('common.messages.an_error_occurred')));
+						throw new Error('No Facebook token received');
+					}
+
+					const { error: fbError } = await authClient.signIn.social({
+						provider: 'facebook',
+						idToken: {
+							token: fbToken,
+						}
+					});
+
+					if (fbError) {
+						switch (fbError.code) {
+							default:
+								toast.error(upperFirst(t('common.messages.an_error_occurred')), { description: fbError.message });
+								break;
+						}
+						throw fbError;
+					}
+					break;
 				default:
-					const { data, error } = await authClient.signIn.social({
+					const { error } = await authClient.signIn.social({
 						provider: provider,
 						callbackURL: makeRedirectUri({
 							path: '/',
@@ -193,17 +232,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 						}
 						throw error;
 					}
-					if (data?.url) {
-						const result = await openAuthSessionAsync(
-							data.url,
-							makeRedirectUri({
-								path: '/',
-							}),
-						)
-						if (result.type !== 'success') {
-							return;
-						}
-					}
+
 					break;
 			}
 			logger.metric('account:loggedInWithOAuth', { logContext: 'LoginForm', provider });

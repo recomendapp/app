@@ -90,7 +90,7 @@ const LoginOtpScreen = () => {
 	const handleVerifyOtp = useCallback(async (otp: string) => {
 		try {
 			setIsLoading(true);
-			const { data, error } = await authClient.emailOtp.checkVerificationOtp({
+			const { error } = await authClient.emailOtp.checkVerificationOtp({
 				email: formGetValues('email'),
 				type: 'sign-in',
 				otp,
@@ -115,9 +115,6 @@ const LoginOtpScreen = () => {
 				logContext: 'LoginOtpScreen',
 				withPassword: false,
 			});
-			console.log('OTP login successful', data);
-			const { data: sessionData, error: sessionError } = await authClient.getSession();
-			console.log('Session data after OTP login', sessionData, sessionError);
 			toast.success(upperFirst(t('common.form.code_verified')));
 			await queryClient.resetQueries();
 		} finally {

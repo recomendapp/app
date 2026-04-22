@@ -106,6 +106,7 @@
     "react-native": "*",
     "react-native-draggable-flatlist": "*",
     "react-native-enriched": "*",
+    "react-native-fbsdk-next": "*",
     "react-native-gesture-handler": "*",
     "react-native-image-colors": "*",
     "react-native-keyboard-controller": "*",

@@ -205,6 +205,19 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 				"isAccessMediaLocationEnabled": true,
 				"granularPermissions": ["audio", "photo"]
 			}
+		],
+		[
+			"react-native-fbsdk-next",
+			{
+				"appID": process.env.EXPO_PUBLIC_FACEBOOK_APP_ID,
+				"clientToken": process.env.EXPO_PUBLIC_FACEBOOK_CLIENT_TOKEN,
+				"displayName": getAppName(),
+				"scheme": process.env.EXPO_PUBLIC_FACEBOOK_APP_ID ? `fb${process.env.EXPO_PUBLIC_FACEBOOK_APP_ID}` : undefined,
+				"advertiserIDCollectionEnabled": false,
+				"autoLogAppEventsEnabled": false,
+				"isAutoInitEnabled": true,
+				"iosUserTrackingPermission": "Allow $(PRODUCT_NAME) to use Facebook login and share features.",
+			}
 		]
 	],
 	experiments: {
