@@ -21,6 +21,7 @@ import { UiModule } from './ui/ui.module';
 import { MediasModule } from './medias/medias.module';
 import { BullModule } from '@nestjs/bullmq';
 import { env } from '../env';
+import { WebhooksModule } from './webhooks/webhooks.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { env } from '../env';
     FeedModule,
     SearchModule,
     UiModule,
+    WebhooksModule,
   ],
   controllers: [AppController],
   providers: [AppService],

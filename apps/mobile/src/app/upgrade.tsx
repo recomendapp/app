@@ -1,4 +1,3 @@
-import { authKeys } from "apps/mobile/src/api/auth/authKeys";
 import { authCustomerInfoOptions } from "apps/mobile/src/api/auth/authOptions";
 import { Button } from "apps/mobile/src/components/ui/Button";
 import { Icons } from "apps/mobile/src/constants/Icons";
@@ -14,6 +13,7 @@ import RevenueCatUI from "react-native-purchases-ui";
 import Animated, { FadeInDown, FadeOut, ZoomIn } from "react-native-reanimated"; // Imports d'animation
 import { useTranslations } from "use-intl";
 import * as Haptics from "expo-haptics";
+import { meOptions } from "@libs/query-client";
 
 const PremiumSuccess = ({ onClose } : { onClose: () => void }) => {
 	const { colors } = useTheme();
@@ -81,9 +81,8 @@ const UpgradeScreen = () => {
     const onSuccess = useCallback(async ({ customerInfo } : { customerInfo: CustomerInfo }) => {
         queryClient.setQueryData(authCustomerInfoOptions().queryKey, customerInfo);
         user?.id && await queryClient.invalidateQueries({
-            queryKey: authKeys.user(),
+            queryKey: meOptions().queryKey,
         });
-        
         setIsSuccess(true);
     }, [queryClient, user?.id]);
 

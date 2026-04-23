@@ -60,6 +60,10 @@ export const apiSchema = commonSchema
   AUTH_APPLE_KEY_ID: z.string(),
   AUTH_APPLE_PRIVATE_KEY: z.string(),
   AUTH_APPLE_BUNDLE_ID: z.string(),
+
+  // RevenueCat
+  REVENUECAT_API_KEY: z.string(),
+  REVENUECAT_WEBHOOK_SECRET: z.string(),
 });
 
 export const notifySchema = commonSchema.extend({
