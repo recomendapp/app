@@ -146,7 +146,6 @@ export const ProfileTvSeriesHeader: React.FC<ProfileTvSeriesHeaderProps> = ({
 							variant="title"
 							numberOfLines={2}
 							style={{
-								...tw`text-center`,
 								...(!log?.tvSeries && !loading) && { color: colors.mutedForeground }
 							}}
 							>

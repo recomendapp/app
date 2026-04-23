@@ -219,22 +219,33 @@ export const useUserUnfollowMutation = () => {
 					(item) => item.id === data.followerId
 				);
 			}
-
-			// TODO: Invalidate feed queries
 		}
 	});
 }
 
-export const useUserPersonFollowMutation = () => {
+export const useUserPersonFollowMutation = ({
+	userId,
+}: {
+	userId?: string;
+}) => {
 	const queryClient = useQueryClient();
 	return useMutation({
 		...personsControllerFollowMutation(),
+		onMutate: async ({ path: { person_id } }) => {
+			const options = userPersonFollowOptions({ userId: userId, personId: person_id });
+			await queryClient.cancelQueries({ queryKey: options.queryKey });
+			const previous = queryClient.getQueryData(options.queryKey);
+			queryClient.setQueryData(options.queryKey, true);
+			return { previous };
+		},
+		onError: (_err, _variables, context) => {
+			if (context && context.previous !== undefined) {
+				const { path: { person_id } } = _variables;
+				const options = userPersonFollowOptions({ userId: userId, personId: person_id });
+				queryClient.setQueryData(options.queryKey, context.previous);
+			}
+		},
 		onSuccess: (data) => {
-			queryClient.setQueryData(userPersonFollowOptions({
-				userId: data.userId,
-				personId: data.personId,
-			}).queryKey, data);
-
 			queryClient.invalidateQueries({
 				queryKey: userKeys.feedPersons({
 					userId: data.userId,
@@ -244,16 +255,29 @@ export const useUserPersonFollowMutation = () => {
 	});
 }
 
-export const useUserPersonUnfollowMutation = () => {
+export const useUserPersonUnfollowMutation = ({
+	userId,
+}: {
+	userId?: string;
+}) => {
 	const queryClient = useQueryClient();
 	return useMutation({
 		...personsControllerUnfollowMutation(),
+		onMutate: async ({ path: { person_id } }) => {
+			const options = userPersonFollowOptions({ userId: userId, personId: person_id });
+			await queryClient.cancelQueries({ queryKey: options.queryKey });
+			const previous = queryClient.getQueryData(options.queryKey);
+			queryClient.setQueryData(options.queryKey, false);
+			return { previous };
+		},
+		onError: (_err, _variables, context) => {
+			if (context && context.previous !== undefined) {
+				const { path: { person_id } } = _variables;
+				const options = userPersonFollowOptions({ userId: userId, personId: person_id });
+				queryClient.setQueryData(options.queryKey, context.previous);
+			}
+		},
 		onSuccess: (data) => {
-			queryClient.setQueryData(userPersonFollowOptions({
-				userId: data.userId,
-				personId: data.personId,
-			}).queryKey, null);
-
 			removeListItemFromAllCaches<
 				(({
 						type: "movie";

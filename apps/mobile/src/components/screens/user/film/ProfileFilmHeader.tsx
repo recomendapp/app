@@ -146,7 +146,6 @@ export const ProfileFilmHeader: React.FC<ProfileFilmHeaderProps> = ({
 							variant="title"
 							numberOfLines={2}
 							style={{
-								...tw`text-center`,
 								...(!log?.movie && !loading) && { color: colors.mutedForeground }
 							}}
 							>

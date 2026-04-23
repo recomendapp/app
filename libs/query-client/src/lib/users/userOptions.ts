@@ -852,7 +852,7 @@ export const userPersonFollowOptions = ({
 			});
 			if (error) throw error;
 			if (data === undefined) throw new Error('No data');
-			return data;
+			return !!data;
 		},
 		enabled: !!userId && !!personId,
 	});

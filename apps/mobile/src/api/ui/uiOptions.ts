@@ -38,26 +38,24 @@ export const uiBackgroundsOptions = () => {
 			// Download missing files
             const cached = await Promise.all(
                 data.map(async (item) => {
-                const file = new File(UI_BACKGROUND_DIRECTORY, `${item.id}.jpg`);
-                
-                if (!file.exists) {
-                    try {
-                        const fullUrl = getTmdbImage({ path: item.filePath, size: 'original' }); 
-                        
-                        await File.downloadFileAsync(fullUrl, file);
-                        logger.log(`✅ Cached UI background ${item.id}`);
-                    } catch (e) {
-                        logger.error(`❌ Failed to cache ${item.filePath}: ${e}`);
+                    const file = new File(UI_BACKGROUND_DIRECTORY, `${item.id}.jpg`);
+                    
+                    if (!file.exists) {
+                        try {
+                            const fullUrl = getTmdbImage({ path: item.filePath, size: 'original' }); 
+                            
+                            await File.downloadFileAsync(fullUrl, file);
+                            logger.log(`✅ Cached UI background ${item.id}`);
+                        } catch (e) {
+                            logger.error(`❌ Failed to cache ${item.filePath}: ${e}`);
+                        }
                     }
-                }
 
-                return { ...item, localUri: file.uri };
+                    return { ...item, localUri: file.uri };
                 })
             );
 
             return cached;
         },
-        staleTime: 24 * 60 * 60 * 1000, // 24 hours
-        gcTime: 48 * 60 * 60 * 1000, // 48 hours
     });
 };

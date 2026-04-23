@@ -36,7 +36,7 @@ export function UserNav({
 } : {
   className?: string;
 }) {
-  const { user, customerInfo, logout } = useAuth();
+  const { user, logout } = useAuth();
   const t = useTranslations();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -69,7 +69,7 @@ export function UserNav({
       icon: Icons.premium,
       label: upperFirst(t('common.messages.upgrade_to_plan', { plan: 'Premium' })),
       href: '/upgrade',
-      visible: !customerInfo?.entitlements.active['premium'],
+      visible: !user?.isPremium,
       className: 'fill-accent-blue text-accent-blue!',
     },
     {
@@ -77,7 +77,7 @@ export function UserNav({
       label: upperFirst(t('common.messages.setting', { count: 0 })),
       href: '/settings/profile',
     },
-  ], [customerInfo, t]);
+  ], [user, t]);
 
   const handleLogout = useCallback(async () => {
     try {

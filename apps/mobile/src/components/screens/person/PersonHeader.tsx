@@ -25,6 +25,7 @@ import { View } from 'apps/mobile/src/components/ui/view';
 import { useImagePalette } from 'apps/mobile/src/hooks/useImagePalette';
 import { Person } from '@libs/api-js';
 import { getTmdbImage } from 'apps/mobile/src/lib/tmdb/getTmdbImage';
+import ButtonPersonFollow from '../../buttons/ButtonPersonFollow';
 
 interface PersonHeaderProps {
 	person?: Person | null;
@@ -178,6 +179,7 @@ export const PersonHeader: React.FC<PersonHeaderProps> = ({
 						{person?.name || upperFirst(t('common.messages.person_not_found'))}
 					</Text>
 				) : <Skeleton style={tw`w-64 h-12`} />}
+			{person && <ButtonPersonFollow personId={person.id} />}
 			</Animated.View>
 		</Animated.View>
 	</Animated.View>

@@ -1,10 +1,9 @@
 import { meAvatarControllerDelete, meAvatarControllerSet, meControllerUpdate, MeControllerUpdateData, mePushTokensControllerSetMutation, Options } from '@libs/api-js';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { meOptions } from './meOptions';
-import { userByIdOptions, userByUsernameOptions } from '../users';
+import { useMutation } from '@tanstack/react-query';
+import { useUserCacheUpdate } from '../users';
 
 export const useMeUpdateMutation = () => {
-	const queryClient = useQueryClient();
+	const updateUserCache = useUserCacheUpdate();
 	return useMutation({
 		mutationFn: async ({ body: { avatar, ...body }, ...variables }: Options<MeControllerUpdateData> & { body: { avatar?: File | null }}) => {
 			if (avatar === null) {
@@ -29,27 +28,7 @@ export const useMeUpdateMutation = () => {
 			return data;
 		},
 		onSuccess: (data) => {
-			queryClient.setQueryData(meOptions().queryKey, data);
-			queryClient.setQueryData(userByIdOptions({ userId: data.id }).queryKey, (oldData) => {
-				if (!oldData) return oldData;
-				return {
-					...oldData,
-					name: data.name,
-					username: data.username,
-					bio: data.bio,
-					isPrivate: data.isPrivate,
-				};
-			});
-			queryClient.setQueryData(userByUsernameOptions({ username: data.username }).queryKey, (oldData) => {
-				if (!oldData) return oldData;
-				return {
-					...oldData,
-					name: data.name,
-					username: data.username,
-					bio: data.bio,
-					isPrivate: data.isPrivate,
-				};
-			});
+			updateUserCache(data, data);
 		}
 	});
 };

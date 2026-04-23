@@ -31,8 +31,12 @@ export function PersonFollowButton({
     userId: user?.id,
     personId: personId,
   }));
-  const { mutateAsync: follow } = useUserPersonFollowMutation();
-  const { mutateAsync: unfollow } = useUserPersonUnfollowMutation();
+  const { mutateAsync: follow } = useUserPersonFollowMutation({
+    userId: user?.id,
+  });
+  const { mutateAsync: unfollow } = useUserPersonUnfollowMutation({
+    userId: user?.id,
+  });
 
   const followPerson = useCallback(async () => {
     await follow({

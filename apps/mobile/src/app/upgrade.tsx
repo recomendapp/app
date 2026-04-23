@@ -13,7 +13,7 @@ import RevenueCatUI from "react-native-purchases-ui";
 import Animated, { FadeInDown, FadeOut, ZoomIn } from "react-native-reanimated"; // Imports d'animation
 import { useTranslations } from "use-intl";
 import * as Haptics from "expo-haptics";
-import { meOptions } from "@libs/query-client";
+import { useUserCacheUpdate } from "@libs/query-client";
 
 const PremiumSuccess = ({ onClose } : { onClose: () => void }) => {
 	const { colors } = useTheme();
@@ -65,6 +65,7 @@ const UpgradeScreen = () => {
     const { user } = useAuth();
     const router = useRouter();
     const queryClient = useQueryClient();
+    const updateUserCache = useUserCacheUpdate();
     const t = useTranslations();
     const { defaultScreenOptions, isLiquidGlassAvailable } = useTheme();
     
@@ -80,11 +81,17 @@ const UpgradeScreen = () => {
 
     const onSuccess = useCallback(async ({ customerInfo } : { customerInfo: CustomerInfo }) => {
         queryClient.setQueryData(authCustomerInfoOptions().queryKey, customerInfo);
-        user?.id && await queryClient.invalidateQueries({
-            queryKey: meOptions().queryKey,
-        });
+        if (user && !!customerInfo.entitlements.active['premium']) {
+            updateUserCache(user, (old) => {
+                if (!old) return old;
+                return {
+                    ...old,
+                    isPremium: true,
+                };
+            });
+        }
         setIsSuccess(true);
-    }, [queryClient, user?.id]);
+    }, [queryClient, updateUserCache, user]);
 
     if (!user) return <Redirect href={'/auth/login'} />
     

@@ -19,6 +19,7 @@ import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { NativeStackHeaderItem } from "@react-navigation/native-stack";
 import ButtonUserReviewTvSeriesLike from "../../../buttons/ButtonUserReviewTvSeriesLike";
 import { BottomSheetLogTvSeries } from "../../../bottom-sheets/sheets/BottomSheetLogTvSeries";
+import FeedUserLog from "../../feed/FeedUserLog";
 
 export const ProfileTvSeries = ({
     username,
@@ -135,15 +136,24 @@ export const ProfileTvSeries = ({
             scrollY={scrollY}
             triggerHeight={headerHeight}
             />
-            {log?.review && (
-                <Animated.View entering={FadeIn} style={{ paddingHorizontal: PADDING_HORIZONTAL }}>
-                    <View style={tw`justify-center items-center`}>
-         				<Text variant="heading" style={[{ color: colors.accentYellow }, tw`text-center my-2`]}>
-         					{log.review.title || upperFirst(t('common.messages.review_by', { name: log.user.username })) }
-         				</Text>
-                    </View>
-                    <EnrichedTextInput key={log.review.body} defaultValue={log.review.body} editable={false} style={tw`flex-1`} scrollEnabled={false} />
-                </Animated.View>
+            {log && (
+                <View style={{ paddingHorizontal: PADDING_HORIZONTAL }}>
+                    {log.review ? (
+                        <>
+                            <View style={tw`justify-center items-center`}>
+                                 <Text variant="heading" style={[{ color: colors.accentYellow }, tw`text-center my-2`]}>
+                                     {log.review.title || upperFirst(t('common.messages.review_by', { name: log.user.username })) }
+                                 </Text>
+                            </View>
+                            <EnrichedTextInput key={log.review.body} defaultValue={log.review.body} editable={false} style={tw`flex-1`} scrollEnabled={false} />
+                        </>
+                    ) : (
+                        <FeedUserLog
+                        author={log?.user}
+                        log={log}
+                        />
+                    )}
+                </View>
             )}
         </AnimatedContentContainer>
     </>

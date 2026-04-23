@@ -41,8 +41,12 @@ const ButtonPersonFollow = forwardRef<
   }));
   const loading = skeleton || !personId || isLoading || isFollow === undefined;
 
-  const { mutateAsync: insertFollow } = useUserPersonFollowMutation();
-  const { mutateAsync: deleteFollower } = useUserPersonUnfollowMutation();
+  const { mutateAsync: insertFollow } = useUserPersonFollowMutation({
+    userId: user?.id,
+  });
+  const { mutateAsync: deleteFollower } = useUserPersonUnfollowMutation({
+    userId: user?.id,
+  });
 
   const followPerson = useCallback(async () => {
     if (!personId) return;

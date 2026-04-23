@@ -7,6 +7,7 @@ import { tvSeriesPlaylistsPaginatedOptions, tvSeriesPlaylistsInfiniteOptions } f
 import { updateListItemInAllCaches, ItemUpdater, resolveUpdater } from "../utils";
 import { searchGlobalOptions, searchPlaylistsInfiniteOptions, searchPlaylistsPaginatedOptions } from "../search";
 import { meFeedInfiniteOptions, meFeedPaginatedOptions } from "../me";
+import { useCallback } from "react";
 
 export const usePlaylistCacheUpdate = ({
     userId,
@@ -15,7 +16,7 @@ export const usePlaylistCacheUpdate = ({
 } = {}) => {
     const queryClient = useQueryClient();
     
-    return (playlistId: number, updater: ItemUpdater<Playlist>, playlistOwnerId?: string) => {
+    return useCallback((playlistId: number, updater: ItemUpdater<Playlist>, playlistOwnerId?: string) => {
         
         const targetUserId = playlistOwnerId || userId;
 
@@ -246,5 +247,5 @@ export const usePlaylistCacheUpdate = ({
                 };
             }
         );
-    };
+    }, [queryClient, userId]);
 };
