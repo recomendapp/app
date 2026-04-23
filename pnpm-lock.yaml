@@ -1407,6 +1407,9 @@ importers:
       '@hey-api/openapi-ts':
         specifier: 0.91.0
         version: 0.91.0(typescript@5.9.3)
+      '@libs/notify-types':
+        specifier: workspace:*
+        version: link:../notify-types
       '@libs/realtime':
         specifier: workspace:*
         version: link:../realtime
