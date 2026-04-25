@@ -3,7 +3,6 @@ import { File, Directory, Paths } from 'expo-file-system';
 import { logger } from "apps/mobile/src/logger";
 import { uiKeys } from "./uiKeys";
 import { uiBackgroundsControllerListAll } from "@libs/api-js";
-import { getTmdbImage } from "../../lib/tmdb/getTmdbImage";
 
 const UI_DIRECTORY = new Directory(Paths.cache, 'ui');
 const UI_BACKGROUND_DIRECTORY = new Directory(UI_DIRECTORY, 'backgrounds');
@@ -42,12 +41,10 @@ export const uiBackgroundsOptions = () => {
                     
                     if (!file.exists) {
                         try {
-                            const fullUrl = getTmdbImage({ path: item.filePath, size: 'original' }); 
-                            
-                            await File.downloadFileAsync(fullUrl, file);
+                            await File.downloadFileAsync(item.url, file);
                             logger.log(`✅ Cached UI background ${item.id}`);
                         } catch (e) {
-                            logger.error(`❌ Failed to cache ${item.filePath}: ${e}`);
+                            logger.error(`❌ Failed to cache ${item.url}: ${e}`);
                         }
                     }
 

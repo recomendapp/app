@@ -17,10 +17,10 @@ export class UiBackgroundDto {
   @IsString()
   id!: string;
 
-  @ApiProperty({ example: '/path/to/image.jpg' })
+  @ApiProperty({ example: 'https://image.tmdb.org/t/p/original/path/to/image.jpg' })
   @Expose()
   @IsString()
-  filePath!: string;
+  url!: string;
 
   @ApiProperty({
       description: 'The type of the media',

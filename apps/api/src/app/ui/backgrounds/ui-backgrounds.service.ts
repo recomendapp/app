@@ -4,8 +4,6 @@ import {
   uiBackground, 
   tmdbMovieView, 
   tmdbTvSeriesView, 
-  tmdbMovieImage, 
-  tmdbTvSeriesImage 
 } from '@libs/db/schemas';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { SupportedLocale } from '@libs/i18n';
@@ -15,6 +13,8 @@ import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UiBackgroundsService {
+  private readonly IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/original';
+
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
   ) {}
@@ -34,27 +34,23 @@ export class UiBackgroundsService {
 
       const results = await tx.select({
           bg: uiBackground,
-          movieImagePath: tmdbMovieImage.filePath,
-          tvSeriesImagePath: tmdbTvSeriesImage.filePath,
-          movieId: tmdbMovieImage.movieId,
-          tvSeriesId: tmdbTvSeriesImage.tvSeriesId,
           movie: MOVIE_COMPACT_SELECT,
           tvSeries: TV_SERIES_COMPACT_SELECT,
         })
         .from(uiBackground)
-        .leftJoin(tmdbMovieImage, eq(uiBackground.movieImageId, tmdbMovieImage.id))
-        .leftJoin(tmdbTvSeriesImage, eq(uiBackground.tvSeriesImageId, tmdbTvSeriesImage.id))
-        .leftJoin(tmdbMovieView, eq(tmdbMovieImage.movieId, tmdbMovieView.id))
-        .leftJoin(tmdbTvSeriesView, eq(tmdbTvSeriesImage.tvSeriesId, tmdbTvSeriesView.id))
+        .leftJoin(tmdbMovieView, eq(uiBackground.movieId, tmdbMovieView.id))
+        .leftJoin(tmdbTvSeriesView, eq(uiBackground.tvSeriesId, tmdbTvSeriesView.id))
         .where(whereClause);
 
       return results.map((row): UiBackgroundWithMediaUnion => {
+        const imageUrl = `${this.IMAGE_BASE_URL}${row.bg.filePath}`;
+
         if (row.bg.type === 'movie') {
           return plainToInstance(UiBackgroundWithMovieDto,{
             ...row.bg,
             type: 'movie',
-            filePath: row.movieImagePath,
-            mediaId: row.movieId,
+            url: imageUrl,
+            mediaId: row.bg.movieId,
             media: row.movie,
           }, { excludeExtraneousValues: true });
         }
@@ -62,8 +58,8 @@ export class UiBackgroundsService {
         return plainToInstance(UiBackgroundWithTvSeriesDto, {
           ...row.bg,
           type: 'tv_series',
-          filePath: row.tvSeriesImagePath,
-          mediaId: row.tvSeriesId,
+          url: imageUrl,
+          mediaId: row.bg.tvSeriesId,
           media: row.tvSeries,
         }, { excludeExtraneousValues: true });
       });
