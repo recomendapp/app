@@ -11,7 +11,7 @@ export const routing = defineRouting({
   // Used when no locale matches
   defaultLocale: defaultSupportedLocale,
   // Prefix for all locale-aware routes
-  localePrefix: 'as-needed',
+  localePrefix: 'never',
   localeCookie: {
     name: localeCookieName,
   }
@@ -19,21 +19,14 @@ export const routing = defineRouting({
 
 export const generateAlternates = (currentLocale: string, endpoint: string): AlternateURLs => {
   const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-  const localePrefix = currentLocale === routing.defaultLocale ? '' : `/${currentLocale}`;
   return {
-    canonical: `${siteConfig.url}${localePrefix}${normalizedEndpoint}`,
-    languages: {
-      'x-default': `${siteConfig.url}${normalizedEndpoint}`,
-    }
+    canonical: `${siteConfig.url}${normalizedEndpoint}`,
   };
 };
 
 export const sitemapLocales = (endpoint: string) => {
   const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-  return Object.fromEntries(
-    routing.locales.map((locale) => {
-      const prefix = locale === routing.defaultLocale ? '' : `/${locale}`;
-      return [locale, `${siteConfig.url}${prefix}${normalizedEndpoint}`];
-    })
-  );
+  return {
+    'x-default': `${siteConfig.url}${normalizedEndpoint}`,
+  }
 };

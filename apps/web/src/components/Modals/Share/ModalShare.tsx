@@ -6,9 +6,8 @@ import { Input } from "@/components/ui/input";
 import { siteConfig } from "@/config/site";
 import { FacebookIcon, FacebookShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, TwitterShareButton, WhatsappIcon, WhatsappShareButton, XIcon } from "react-share";
 import { ButtonCopy } from "@/components/utils/ButtonCopy";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { useUI } from "@/context/ui-context";
 import { useMemo, useState } from "react";
 import { Icons } from "@/config/icons";
 import { Button } from "@/components/ui/button";
@@ -25,12 +24,10 @@ interface ModalShareProps<T> extends ModalType {
 
 export const ModalShare = <T,>({ title, type, path, shareController, ...props }: ModalShareProps<T>) => {
 	const { closeModal } = useModal();
-	const locale = useLocale();
-	const { device } = useUI();
 	const common = useTranslations('common');
 	const url = useMemo(() => (
-		`${location.origin}/${locale}${path}`
-	), [path, locale]);
+		`${location.origin}${path}`
+	), [path]);
 	const sharedData: ShareData = useMemo(() => ({
 		title: title ?? '',
 		url,

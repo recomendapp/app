@@ -3,7 +3,7 @@
 import { HEADER_LANGUAGE_KEY } from '@libs/i18n/src';
 import { client, realtime } from '@libs/api-js';
 import { useLocale } from 'next-intl';
-import { useEffect } from 'react';
+import { useMemo } from 'react';
 import { API_ENDPOINT, API_URL } from '../env';
 
 client.setConfig({
@@ -18,7 +18,7 @@ realtime.setConfig({
 export const ApiProvider = ({ children }: { children?: React.ReactNode }) => {
   const locale = useLocale();
 
-  useEffect(() => {
+  useMemo(() => {
     client.setConfig({
       headers: {
         [HEADER_LANGUAGE_KEY]: locale,
