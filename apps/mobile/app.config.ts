@@ -196,7 +196,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 				"organization": process.env.SENTRY_ORG,
 			}
 		],
-		// "@maplibre/maplibre-react-native",
+		"@maplibre/maplibre-react-native",
 		[
 			"expo-media-library",
 			{
@@ -216,7 +216,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 				"advertiserIDCollectionEnabled": false,
 				"autoLogAppEventsEnabled": false,
 				"isAutoInitEnabled": true,
-				"iosUserTrackingPermission": "Allow $(PRODUCT_NAME) to use Facebook login and share features.",
+				"iosUserTrackingPermission": false
 			}
 		]
 	],

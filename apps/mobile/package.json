@@ -26,6 +26,7 @@
     "@hookform/resolvers": "*",
     "@legendapp/list": "*",
     "@lodev09/react-native-true-sheet": "*",
+    "@maplibre/maplibre-react-native": "*",
     "@novu/react-native": "*",
     "@nx/detox": "*",
     "@nx/devkit": "*",
