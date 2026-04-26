@@ -1,6 +1,6 @@
 import { RecomendLogo } from "apps/mobile/src/lib/icons/RecomendLogo";
 import { RecomendIcon } from "apps/mobile/src/lib/icons/RecomendIcon";
-import { AlertCircleIcon, ArchiveIcon, ArchiveRestoreIcon, ArrowDownIcon, ArrowDownToLineIcon, ArrowUpIcon, BellIcon, BoldIcon, BookmarkIcon, CalendarIcon, CheckIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon, CirclePlayIcon, ClapperboardIcon, CompassIcon, CreditCardIcon, EditIcon, EllipsisIcon, EllipsisVerticalIcon, EyeIcon, EyeOffIcon, HeartIcon, HomeIcon, ImageIcon, InfoIcon, ItalicIcon, LayoutGridIcon, LibraryIcon, LinkIcon, ListIcon, ListOrderedIcon, ListPlusIcon, ListVideoIcon, Loader2Icon, LockIcon, LogOutIcon, MailIcon, MapPinIcon, MenuIcon, NavigationIcon, PlusIcon, QuoteIcon, RectangleEllipsisIcon, RectangleHorizontalIcon, RectangleVerticalIcon, RotateCcwIcon, SearchIcon, SendIcon, Settings2Icon, SettingsIcon, ShieldIcon, StarIcon, StoreIcon, StrikethroughIcon, TextIcon, TrashIcon, TvIcon, UnderlineIcon, UserIcon, UserPlusIcon, UsersIcon, WallpaperIcon, XIcon, ZapIcon } from "lucide-react-native";
+import { AlertCircleIcon, ArchiveIcon, ArchiveRestoreIcon, ArrowDownIcon, ArrowDownToLineIcon, ArrowUpIcon, BellIcon, BoldIcon, BookmarkIcon, BugIcon, CalendarIcon, CheckIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon, CirclePlayIcon, ClapperboardIcon, CompassIcon, CreditCardIcon, EditIcon, EllipsisIcon, EllipsisVerticalIcon, EyeIcon, EyeOffIcon, HeartIcon, HomeIcon, ImageIcon, InfoIcon, ItalicIcon, LayoutGridIcon, LibraryIcon, LinkIcon, ListIcon, ListOrderedIcon, ListPlusIcon, ListVideoIcon, Loader2Icon, LockIcon, LogOutIcon, MailIcon, MapPinIcon, MenuIcon, NavigationIcon, PlusIcon, QuoteIcon, RectangleEllipsisIcon, RectangleHorizontalIcon, RectangleVerticalIcon, RotateCcwIcon, SearchIcon, SendIcon, Settings2Icon, SettingsIcon, ShieldIcon, StarIcon, StoreIcon, StrikethroughIcon, TextIcon, TrashIcon, TvIcon, UnderlineIcon, UserIcon, UserPlusIcon, UsersIcon, WallpaperIcon, XIcon, ZapIcon } from "lucide-react-native";
 import { Premium } from "apps/mobile/src/lib/icons/Premium";
 import { ActivityIndicator } from "react-native";
 import { Apple, Facebook, Github, Google, Instagram, Messenger, WhatsApp, X } from "apps/mobile/src/lib/icons";
@@ -96,4 +96,5 @@ export const Icons = {
 	Strikethrough: StrikethroughIcon,
 	Link: LinkIcon,
 	PlayCircle: CirclePlayIcon,
+	Bug: BugIcon,
 };

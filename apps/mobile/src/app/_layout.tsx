@@ -19,9 +19,7 @@ import { useTranslations } from 'use-intl';
 import { Platform } from 'react-native';
 import { osName } from 'expo-device';
 
-export {
-  ErrorBoundary,
-} from 'expo-router';
+export { ErrorBoundary } from 'apps/mobile/src/providers/ErrorBoundaryProvider';
 
 enableScreens(true);
 enableFreeze(true);

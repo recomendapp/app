@@ -4,43 +4,64 @@ import { Icons } from "apps/mobile/src/constants/Icons";
 import tw from "apps/mobile/src/lib/tw";
 import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Redirect, Stack, useRouter } from "expo-router";
 import { upperFirst } from "lodash";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { CustomerInfo } from "react-native-purchases";
 import RevenueCatUI from "react-native-purchases-ui";
-import Animated, { FadeInDown, FadeOut, ZoomIn } from "react-native-reanimated"; // Imports d'animation
+import Animated, { FadeIn, FadeInDown, FadeOut, ZoomIn } from "react-native-reanimated"; // Imports d'animation
 import { useTranslations } from "use-intl";
 import * as Haptics from "expo-haptics";
 import { useUserCacheUpdate } from "@libs/query-client";
+import { uiBackgroundsOptions } from "../api/ui/uiOptions";
+import useRandomBackdrop from "../hooks/useRandomBackdrop";
+import { Image } from "expo-image";
+import { View } from "../components/ui/view";
 
 const PremiumSuccess = ({ onClose } : { onClose: () => void }) => {
 	const { colors } = useTheme();
 	const t = useTranslations();
 
-    useEffect(() => {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    const {
+        data,
+    } = useQuery(uiBackgroundsOptions());
+    const backgrounds = useMemo(() => data?.map(bg => bg.localUri) || [], [data]);
+    const bg = useRandomBackdrop(backgrounds);
 
-        const timer = setTimeout(() => {
-            onClose();
-        }, 3000);
-        return () => clearTimeout(timer);
-    }, [onClose]);
+    useEffect(() => {
+        const intervalDuration = 200; 
+        const totalDuration = 1000;
+
+        const hapticInterval = setInterval(() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
+        }, intervalDuration);
+
+        const timeout = setTimeout(() => {
+            clearInterval(hapticInterval);
+        }, totalDuration);
+
+        return () => {
+            clearInterval(hapticInterval);
+            clearTimeout(timeout);
+        };
+    }, []);
 
     return (
         <Animated.View 
             style={tw`flex-1 justify-center items-center gap-4 bg-background px-6`}
             exiting={FadeOut.duration(300)}
         >
-            <Animated.View entering={ZoomIn.springify().damping(12)}>
-                <Icons.Star 
-				size={64} 
-				color={colors.accentYellow}
-				fill={colors.accentYellow}
-                />
-            </Animated.View>
-
+            {bg && (
+                <Animated.View entering={FadeIn.duration(2000)} style={tw`absolute inset-0`}>
+                    <Image
+                        
+                        source={{ uri: bg }}
+                        style={tw`absolute inset-0`}
+                    />
+                    <View style={tw`absolute inset-0 bg-black/50`} />
+                </Animated.View>
+            )}
             <Animated.Text 
                 entering={FadeInDown.duration(600).springify()}
                 style={[
@@ -48,15 +69,11 @@ const PremiumSuccess = ({ onClose } : { onClose: () => void }) => {
 					tw`text-3xl font-bold text-center mb-4`
 				]}
             >
-                {upperFirst(t('pages.upgrade.subscription.success.description'))}
+                {upperFirst(t('pages.upgrade.subscription.success.label'))}
             </Animated.Text>
-
-            <Animated.Text 
-                entering={FadeInDown.delay(300).duration(600).springify()}
-                style={tw`text-lg text-muted-foreground text-center leading-6`}
-            >
-                Thanks for supporting the project and unlocking full access.
-            </Animated.Text>
+            <Button onPress={onClose}>
+                {upperFirst(t('common.messages.lets_go'))}
+            </Button>
         </Animated.View>
     )
 };

@@ -178,7 +178,7 @@
       "share_title": "Partager <strong>{title}</strong>",
       "link": "lien",
       "copy_link": "copier le lien",
-      "copied": "{gender, select, female {{count, plural, one {copiée} other {copiées}}} other {{count, plural, one {copié} other {copiés}}}}",
+      "copied": "{gender, select, female {{count, plural, one {Copiée} other {Copiées}}} other {{count, plural, one {Copié} other {Copiés}}}}",
       "other": "{count, plural, one {autre} other {autres}}",
       "via": "via",
       "edit": "modifier",
@@ -286,7 +286,7 @@
       "add_to_one_or_more_playlists": "Ajouter <strong>{title}</strong> à une ou plusieurs de vos playlists",
       "my_playlist": "{count, plural, one {ma playlist} other {mes playlists}}",
       "what_is_title": "Qu'est-ce que <strong>{title}</strong> ?",
-      "try_again": "réessayer",
+      "try_again": "Réessayer",
       "error": "erreur",
       "not_logged_in": "vous n'êtes pas connecté",
       "an_error_occurred": "Une erreur s'est produite",
@@ -445,7 +445,8 @@
       "password_reseted": "Mot de passe réinitialisé",
       "reset_your_password": "Réinitialiser votre mot de passe",
       "invalid_token": "Token invalide",
-      "new_notification": "{count, plural, one {nouvelle notification} other {nouvelles notifications}}"
+      "new_notification": "{count, plural, one {nouvelle notification} other {nouvelles notifications}}",
+      "lets_go": "C'est parti !"
     },
     "form": {
       "email": {
@@ -989,6 +990,9 @@
               "description": "votre profil dans le générique de l'app"
             }
           }
+        },
+        "success": {
+          "label": "Merci pour votre soutien !"
         }
       }
     },

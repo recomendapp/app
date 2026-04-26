@@ -178,7 +178,7 @@
       "share_title": "Share <strong>{title}</strong>",
       "link": "link",
       "copy_link": "copy link",
-      "copied": "copied",
+      "copied": "Copied",
       "other": "{count, plural, one {other} other {others}}",
       "via": "via",
       "edit": "edit",
@@ -286,7 +286,7 @@
       "add_to_one_or_more_playlists": "Add <strong>{title}</strong> to one or more of your playlists",
       "my_playlist": "my {count, plural, one {playlist} other {playlists}}",
       "what_is_title": "What is <strong>{title}</strong>?",
-      "try_again": "try again",
+      "try_again": "Try again",
       "error": "error",
       "not_logged_in": "you are not logged in",
       "an_error_occurred": "An error occurred",
@@ -445,7 +445,8 @@
       "password_reseted": "Password reseted",
       "reset_your_password": "Reset your password",
       "invalid_token": "Invalid token",
-      "new_notification": "new notification{count, plural, one {} other {s}}"
+      "new_notification": "new notification{count, plural, one {} other {s}}",
+      "lets_go": "Let's go!"
     },
     "form": {
       "email": {
@@ -989,6 +990,9 @@
               "description": "your profile in the app credits"
             }
           }
+        },
+        "success": {
+          "label": "Thank you for your support!"
         }
       }
     },
