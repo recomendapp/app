@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { and, asc, desc, eq, gte, lte, SQL, sql } from 'drizzle-orm';
 import { followPerson, tmdbMovieView, tmdbPersonFeedView, tmdbPersonView, tmdbTvSeriesView } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
@@ -15,12 +15,26 @@ import {
   ListInfinitePersonFeedDto, 
   PersonFeedSortBy 
 } from '../../persons/feed/dto/person-feed.dto';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class FeedPersonsService {
+  private readonly logger = new Logger(FeedPersonsService.name);
+
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
   ) {}
+
+  @Cron(CronExpression.EVERY_DAY_AT_4PM)
+  async refreshTrendingView() {
+    this.logger.log('Starting refresh of tmdbPersonFeedView...');
+    try {
+      await this.db.refreshMaterializedView(tmdbPersonFeedView);
+      this.logger.log('Successfully refreshed tmdbPersonFeedView.');
+    } catch (error) {
+      this.logger.error('Failed to refresh tmdbPersonFeedView', error);
+    }
+  }
 
   private getListBaseQuery(
     userId: string,
