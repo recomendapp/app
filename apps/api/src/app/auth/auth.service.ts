@@ -117,28 +117,28 @@ const createBetterAuth = async ({
 			user: {
 				create: {
 					before: async (userData) => {
-                        let finalUsername = userData.username as string | undefined;
-                        let finalName = userData.name;
+						let finalUsername = typeof userData.username === 'string' ? userData.username.trim() : undefined;
+						let finalName = typeof userData.name === 'string' ? userData.name.trim() : undefined;
 
-                        if (!finalUsername) {
-                            finalUsername = await generateUniqueUsername({
+						if (!finalUsername) {
+							finalUsername = await generateUniqueUsername({
 								email: userData.email,
 								db,
 							});
-                        }
+						}
 
-                        if (!finalName) {
-                            finalName = finalUsername;
-                        }
+						if (!finalName) {
+							finalName = finalUsername;
+						}
 
-                        return {
-                            data: {
-                                ...userData,
-                                username: finalUsername,
-                                name: finalName,
-                            }
-                        };
-                    },
+						return {
+							data: {
+								...userData,
+								username: finalUsername,
+								name: finalName,
+							}
+						};
+					},
 					after: async (user) => {
 						await db.insert(profile).values({
 							id: user.id,

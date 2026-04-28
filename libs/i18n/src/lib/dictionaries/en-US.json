@@ -62,7 +62,7 @@
       "choose_subscription_recurrence": "Choose the recurrence of your subscription",
       "compare_plans": "compare plans",
       "save_up_to_percent": "save up to {percent}%",
-      "is_empty": "it's a bit empty here",
+      "is_empty": "It's a bit empty here",
       "add_to_playlist": "add to a playlist",
       "send_to_friend": "send to a friend",
       "custom_sort": "custom sort",
@@ -1226,6 +1226,14 @@
           }
         }
       }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "To see activity here, you or the users you follow must rate movies, series, ..."
+    },
+    "feed_person": {
+      "message": "To see activity here, you must follow people involved in movies or series."
     }
   },
   "notifications": {

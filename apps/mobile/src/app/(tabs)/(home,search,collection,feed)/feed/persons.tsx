@@ -22,6 +22,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { userFeedPersonsInfiniteOptions } from "@libs/query-client";
 import { FeedPersonItem } from "@libs/api-js";
 import { uiBackgroundsOptions } from "apps/mobile/src/api/ui/uiOptions";
+import Empty from "apps/mobile/src/components/ui/empty";
 
 const CastCrewFeedScreen = () => {
 	const t = useTranslations();
@@ -59,9 +60,9 @@ const CastCrewFeedScreen = () => {
 	const renderEmpty = useCallback(() => (
 		loading ? <Icons.Loader />
 		: (
-			<Text style={tw`text-center`} textColor='muted'>
-				{upperFirst(t('common.messages.no_results'))}
-			</Text>
+			<Empty description="blablabla">
+				<Text>{t('help_hints.feed_person.message')}</Text>
+			</Empty>
 		)
 	), [loading, t]);
 	const keyExtractor = useCallback((item: FeedPersonItem) => (
@@ -129,6 +130,7 @@ const CastCrewFeedScreen = () => {
 			paddingHorizontal: PADDING_HORIZONTAL,
 			paddingBottom: bottomOffset + PADDING_VERTICAL,
 			gap: GAP,
+			flexGrow: 1,
 		}}
 		scrollIndicatorInsets={{
 			bottom: tabBarHeight,

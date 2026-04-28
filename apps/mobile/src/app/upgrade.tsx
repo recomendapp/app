@@ -141,7 +141,7 @@ const UpgradeScreen = () => {
             {isSuccess ? (
                 <PremiumSuccess onClose={handleClose} />
             ) : (
-                <RevenueCatUI.Paywall 
+                <RevenueCatUI.Paywall
                     onPurchaseCompleted={onSuccess} 
                     onRestoreCompleted={onSuccess} 
                 />

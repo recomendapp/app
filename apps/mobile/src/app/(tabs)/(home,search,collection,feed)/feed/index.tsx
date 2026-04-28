@@ -18,6 +18,7 @@ import { useAuth } from "apps/mobile/src/providers/AuthProvider";
 import { FeedItem } from "@libs/api-js";
 import { CardFeedLogTvSeries } from "apps/mobile/src/components/cards/feed/CardFeedLogTvSeries";
 import { meFeedInfiniteOptions } from "@libs/query-client";
+import Empty from "apps/mobile/src/components/ui/empty";
 
 const FeedScreen = () => {
 	const t = useTranslations();
@@ -58,7 +59,9 @@ const FeedScreen = () => {
 	const renderEmpty = useCallback(() => (
 		loading ? <Icons.Loader />
 		: (
-			<Text style={tw`text-center`} textColor='muted'>{upperFirst(t('common.messages.no_activity'))}</Text>
+			<Empty description="blablabla">
+				<Text>{t('help_hints.feed.message')}</Text>
+			</Empty>
 		)
 	), [t, loading]);
 
@@ -72,6 +75,7 @@ const FeedScreen = () => {
 			paddingHorizontal: PADDING_HORIZONTAL,
 			paddingBottom: bottomOffset + PADDING_VERTICAL,
 			gap: GAP,
+			flexGrow: 1,
 		}}
 		scrollIndicatorInsets={{
 			bottom: tabBarHeight,

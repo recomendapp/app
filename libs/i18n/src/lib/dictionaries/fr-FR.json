@@ -64,7 +64,7 @@
       "choose_subscription_recurrence": "choisissez la récurrence de votre abonnement",
       "compare_plans": "comparer les plans",
       "save_up_to_percent": "économisez jusqu'à {percent}%",
-      "is_empty": "c'est un peu vide ici",
+      "is_empty": "C'est un peu vide ici",
       "add_to_playlist": "ajouter à une playlist",
       "send_to_friend": "envoyer à un(e) ami(e)",
       "custom_sort": "tri personnalisé",
@@ -1233,6 +1233,14 @@
           }
         }
       }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "Pour voir de l'activité ici, vous ou les utilisateurs que vous suivez doivent noter des films, des séries, ..."
+    },
+    "feed_person": {
+      "message": "Pour voir de l'activité ici, vous devez suivre des personnes impliquées dans des films ou séries."
     }
   },
   "notifications": {

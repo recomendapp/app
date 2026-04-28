@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import {
 	LayoutChangeEvent,
 	Pressable,
@@ -26,7 +26,6 @@ import useBottomSheetStore from 'apps/mobile/src/stores/useBottomSheetStore';
 import { useTranslations } from 'use-intl';
 import { Text } from 'apps/mobile/src/components/ui/text';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
-import BottomSheetMovieFollowersRating from 'apps/mobile/src/components/bottom-sheets/sheets/BottomSheetMovieFollowersRating';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useImagePalette } from 'apps/mobile/src/hooks/useImagePalette';
 import AnimatedImage from 'apps/mobile/src/components/ui/AnimatedImage';

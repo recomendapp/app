@@ -140,8 +140,14 @@ const ProfileScreen = () => {
 	const { data: widgetActivitiesMovie, isLoading: widgetActivitiesMovieLoading } = useInfiniteQuery(userMovieLogsInfiniteOptions({ userId: profile?.id, filters: { sort_by: 'updated_at', sort_order: 'desc' } }));
 	const { data: widgetActivitiesTvSeries, isLoading: widgetActivitiesTvSeriesLoading } = useInfiniteQuery(userTvSeriesLogsInfiniteOptions({ userId: profile?.id, filters: { sort_by: 'updated_at', sort_order: 'desc' } }));
 	const { data: widgetPlaylists, isLoading: widgetPlaylistsLoading } = useInfiniteQuery(userPlaylistsInfiniteOptions({ userId: profile?.id, filters: { sort_by: 'updated_at', sort_order: 'desc' } }));
-	const areWidgetsLoading = widgetActivitiesMovieLoading || widgetActivitiesTvSeriesLoading || widgetPlaylistsLoading;
-	const hasActivity = !areWidgetsLoading && (widgetActivitiesMovie?.pages.flat().length || widgetActivitiesTvSeries?.pages.flat().length || widgetPlaylists?.pages.flat().length);
+	const areWidgetsLoading = useMemo(() => widgetActivitiesMovieLoading || widgetActivitiesTvSeriesLoading || widgetPlaylistsLoading, [widgetActivitiesMovieLoading, widgetActivitiesTvSeriesLoading, widgetPlaylistsLoading]);
+	const hasActivity = useMemo(() => (
+		!areWidgetsLoading && (
+			widgetActivitiesMovie?.pages.flatMap(page => page.data).length
+			|| widgetActivitiesTvSeries?.pages.flatMap(page => page.data).length
+			|| widgetPlaylists?.pages.flatMap(page => page.data).length
+		)
+	), [areWidgetsLoading, widgetActivitiesMovie, widgetActivitiesTvSeries, widgetPlaylists]);
 
 	const refresh = useCallback(() => {
 		refetch();
