@@ -106,8 +106,8 @@ const UpgradeScreen = () => {
                     isPremium: true,
                 };
             });
+            setIsSuccess(true);
         }
-        setIsSuccess(true);
     }, [queryClient, updateUserCache, user]);
 
     if (!user) return <Redirect href={'/auth/login'} />

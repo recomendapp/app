@@ -22,11 +22,13 @@ import { MediasModule } from './medias/medias.module';
 import { BullModule } from '@nestjs/bullmq';
 import { env } from '../env';
 import { WebhooksModule } from './webhooks/webhooks.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     EnvModule.forRoot(apiSchema),
+    ScheduleModule.forRoot(),
     BullModule.forRoot({
       connection: {
         host: env.REDIS_HOST,
