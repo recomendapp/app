@@ -10,7 +10,8 @@
     "test": "nx run-many --target=test --all",
     "graph": "nx graph",
     "reset": "nx reset",
-    "clear": "rm -rf dist tmp"
+    "clear": "rm -rf dist tmp",
+    "prepare": "husky"
   },
   "private": true,
   "dependencies": {
@@ -276,6 +277,9 @@
     "@babel/core": "^7.28.0",
     "@babel/runtime": "~7.27.6",
     "@better-auth/cli": "^1.4.17",
+    "@changesets/cli": "^2.31.0",
+    "@commitlint/cli": "^20.5.3",
+    "@commitlint/config-conventional": "^20.5.3",
     "@eslint/js": "^9.8.0",
     "@expo/cli": "~54.0.16",
     "@hey-api/openapi-ts": "0.91.0",
@@ -337,12 +341,14 @@
     "eslint-plugin-react": "7.35.0",
     "eslint-plugin-react-compiler": "^19.1.0-rc.2",
     "eslint-plugin-react-hooks": "5.0.0",
+    "husky": "^9.1.7",
     "jest": "^30.0.2",
     "jest-environment-jsdom": "^30.0.2",
     "jest-environment-node": "^30.0.2",
     "jest-expo": "~55.0.11",
     "jest-util": "^30.0.2",
     "jsonc-eslint-parser": "^2.1.0",
+    "lint-staged": "^16.4.0",
     "metro-config": "~0.83.0",
     "metro-resolver": "~0.83.0",
     "nx": "22.4.1",
@@ -362,5 +368,14 @@
   },
   "nx": {
     "includedScripts": []
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yaml,yml,html,css,scss}": [
+      "prettier --write"
+    ]
   }
 }
