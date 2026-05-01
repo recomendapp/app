@@ -570,8 +570,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       nestjs-i18n:
-        specifier: ^10.8.2
-        version: 10.8.2(@nestjs/common@11.1.19(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/core@11.1.19)(class-validator@0.14.4)(rxjs@7.8.2)
+        specifier: ^10.6.5
+        version: 10.6.5(@nestjs/common@11.1.19(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/core@11.1.19)(class-validator@0.14.4)(rxjs@7.8.2)
       next:
         specifier: 16.0.10
         version: 16.0.10(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(@playwright/test@1.59.1)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(sass@1.99.0)
@@ -9300,6 +9300,9 @@ packages:
   abstract-logging@2.0.1:
     resolution: {integrity: sha512-2BjRTZxTPvheOvGbBslFSYOUkr+SjPtOnrLP33f+VIWLzezQpZcqVg7ja3L4dBXmzzgwT+a029jRx5PCi3JuiA==}
 
+  accept-language-parser@1.5.0:
+    resolution: {integrity: sha512-QhyTbMLYo0BBGg1aWbeMG4ekWtds/31BrEU+DONOg/7ax23vxpL03Pb7/zBmha2v7vdD3AyzZVWBVGEZxKOXWw==}
+
   accepts@1.3.8:
     resolution: {integrity: sha512-PYAthTa2m2VKxuvSD3DPC/Gy+U+sOA1LAuT8mkmRuvw+NACSaeXEQ+NHcVF7rONl6qcaxV3Uuemwawk+7+SJLw==}
     engines: {node: '>= 0.6'}
@@ -14685,10 +14688,6 @@ packages:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
 
-  messageformat@4.0.0:
-    resolution: {integrity: sha512-XKmJ/ffTWToWOlHJzt85ZChQgVGC0LHzNWuNK8zuYpNySsB0nIEmytOdSAOW9ETKtkajAUJf520m5gFHHnrTYg==}
-    engines: {node: ^20.19 || ^22.12 || >=24}
-
   methods@1.1.2:
     resolution: {integrity: sha512-iclAHeNqNm68zFtnZ0e+1L2yUIdvzNoauKU4WBA3VvH/vPFieF7qfRlwUZU+DA9P9bPXIS90ulxoUoCH23sV2w==}
     engines: {node: '>= 0.6'}
@@ -15188,10 +15187,9 @@ packages:
   nested-error-stacks@2.0.1:
     resolution: {integrity: sha512-SrQrok4CATudVzBS7coSz26QRSmlK9TzzoFbeKfcPBUFPjcQM9Rqvr/DlJkOrwI/0KcgvMub1n1g5Jt9EgRn4A==}
 
-  nestjs-i18n@10.8.2:
-    resolution: {integrity: sha512-uCyYa4/XDWRrC/aZL/XZznUbIIjg11kHjt3XVCH/bluvuNMFWEeoAYswXY8vSlsvwGKZm883+kXXTcKOHA+S1Q==}
+  nestjs-i18n@10.6.5:
+    resolution: {integrity: sha512-jqbZ+H7LMEfAVYqS1FM0YfZjzPDwZQq97NE4BBIfPpxzAhlfnPzaQDGpNkPE/5Ft+rawtNJOuuuaWMpDhSLwaA==}
     engines: {node: '>=22'}
-    hasBin: true
     peerDependencies:
       '@nestjs/common': '*'
       '@nestjs/core': '*'
@@ -30321,6 +30319,8 @@ snapshots:
 
   abstract-logging@2.0.1: {}
 
+  accept-language-parser@1.5.0: {}
+
   accepts@1.3.8:
     dependencies:
       mime-types: 2.1.35
@@ -37176,8 +37176,6 @@ snapshots:
 
   merge2@1.4.1: {}
 
-  messageformat@4.0.0: {}
-
   methods@1.1.2: {}
 
   metro-babel-transformer@0.83.3:
@@ -38053,16 +38051,17 @@ snapshots:
 
   nested-error-stacks@2.0.1: {}
 
-  nestjs-i18n@10.8.2(@nestjs/common@11.1.19(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/core@11.1.19)(class-validator@0.14.4)(rxjs@7.8.2):
+  nestjs-i18n@10.6.5(@nestjs/common@11.1.19(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/core@11.1.19)(class-validator@0.14.4)(rxjs@7.8.2):
     dependencies:
       '@nestjs/common': 11.1.19(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.1.14)(rxjs@7.8.2)
       '@nestjs/core': 11.1.19(@nestjs/common@11.1.19(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/microservices@11.1.19)(@nestjs/platform-express@11.1.19)(@nestjs/websockets@11.1.19)(reflect-metadata@0.1.14)(rxjs@7.8.2)
+      accept-language-parser: 1.5.0
       chokidar: 3.6.0
-      cookie: 1.1.1
-      messageformat: 4.0.0
+      cookie: 0.7.2
+      iterare: 1.2.1
+      js-yaml: 4.1.1
       rxjs: 7.8.2
       string-format: 2.0.0
-      yaml: 2.8.3
     optionalDependencies:
       class-validator: 0.14.4
 
