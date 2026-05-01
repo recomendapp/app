@@ -3,6 +3,7 @@ import { magicLink, openAPI, username } from 'better-auth/plugins';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { db } from './client';
 import { defaultSupportedLocale } from '@libs/i18n';
+import type {} from 'zod';
 
 export const additionalFields = {
   usernameUpdatedAt: {

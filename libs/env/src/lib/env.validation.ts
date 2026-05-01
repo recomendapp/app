@@ -50,6 +50,8 @@ export const apiSchema = commonSchema
 
   // OAuth
   AUTH_GOOGLE_CLIENT_ID: z.string(),
+  AUTH_GOOGLE_IOS_CLIENT_ID: z.string(),
+  AUTH_GOOGLE_ANDROID_CLIENT_ID: z.string(),
   AUTH_GOOGLE_CLIENT_SECRET: z.string(),
   AUTH_GITHUB_CLIENT_ID: z.string(),
   AUTH_GITHUB_CLIENT_SECRET: z.string(),

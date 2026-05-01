@@ -229,7 +229,11 @@ const createBetterAuth = async ({
 		},
 		socialProviders: {
 			google: {
-				clientId: env.AUTH_GOOGLE_CLIENT_ID,
+				clientId: [
+					env.AUTH_GOOGLE_CLIENT_ID,
+					env.AUTH_GOOGLE_IOS_CLIENT_ID,
+					env.AUTH_GOOGLE_ANDROID_CLIENT_ID,
+				],
 				clientSecret: env.AUTH_GOOGLE_CLIENT_SECRET,
 			},
 			github: {
