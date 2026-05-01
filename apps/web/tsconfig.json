@@ -25,7 +25,6 @@
     "paths": {
       "@/*": ["./src/*"],
       "@libs/*": ["../../libs/*"],
-      "@packages/*": ["../../packages/*"]
     }
   },
   "include": [

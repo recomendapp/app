@@ -3,7 +3,7 @@ import { expoClient } from '@better-auth/expo/client';
 import { emailOTPClient, inferAdditionalFields, magicLinkClient, usernameClient } from "better-auth/client/plugins";
 import { API_URL, SCHEME } from 'apps/mobile/src/env';
 import * as SecureStore from 'expo-secure-store';
-import { auth } from '@libs/db';
+import type { auth } from '@libs/db';
 
 export const authClient = createAuthClient({
   baseURL: API_URL,
