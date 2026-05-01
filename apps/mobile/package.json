@@ -9,8 +9,8 @@
     "ios": "expo run:ios"
   },
   "dependencies": {
-    "@better-auth/core": "*",
-    "@better-auth/expo": "*",
+    "@better-auth/core": "1.7.0-beta.2",
+    "@better-auth/expo": "1.7.0-beta.2",
     "@expo/metro-config": "*",
     "@expo/react-native-action-sheet": "*",
     "@expo/vector-icons": "*",
@@ -51,7 +51,7 @@
     "@tanstack/react-query-persist-client": "*",
     "@testing-library/react-native": "*",
     "base64-arraybuffer": "*",
-    "better-auth": "*",
+    "better-auth": "1.7.0-beta.2",
     "color": "*",
     "country-flag-icons": "*",
     "d3-interpolate": "*",
