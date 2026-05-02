@@ -446,7 +446,8 @@
       "reset_your_password": "Réinitialiser votre mot de passe",
       "invalid_token": "Token invalide",
       "new_notification": "{count, plural, one {nouvelle notification} other {nouvelles notifications}}",
-      "lets_go": "C'est parti !"
+      "lets_go": "C'est parti !",
+      "update_available": "Mise à jour disponible"
     },
     "form": {
       "email": {
@@ -1022,7 +1023,7 @@
           "placeholder": "Entrez une description de la playlist"
         },
         "error": {
-          "format":"La description ne peut pas contenir de lignes vides ou être composée uniquement d'espaces."
+          "format": "La description ne peut pas contenir de lignes vides ou être composée uniquement d'espaces."
         }
       }
     },

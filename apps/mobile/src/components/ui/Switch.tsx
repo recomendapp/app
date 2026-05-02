@@ -1,19 +1,19 @@
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import { useTheme } from '../../providers/ThemeProvider';
 import * as React from 'react';
 import { SwitchProps, Switch as SwitchRN } from 'react-native';
 
 const Switch = React.forwardRef<React.ComponentRef<typeof SwitchRN>, SwitchProps>(
-	({ style, ...props }, ref) => {
-		const { colors } = useTheme();
-		return (
-			<SwitchRN
-				ref={ref}
-				trackColor={{ true: colors.accentYellow, false: colors.muted }}
-				thumbColor={colors.background}
-				{...props}
-			/>
-		);
-	}
+  ({ style, ...props }, ref) => {
+    const { colors } = useTheme();
+    return (
+      <SwitchRN
+        ref={ref}
+        trackColor={{ true: colors.accentYellow, false: colors.muted }}
+        thumbColor={colors.background}
+        {...props}
+      />
+    );
+  },
 );
 Switch.displayName = 'Switch';
 

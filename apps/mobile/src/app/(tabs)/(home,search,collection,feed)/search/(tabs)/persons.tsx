@@ -1,83 +1,81 @@
-import { CardPerson } from "apps/mobile/src/components/cards/CardPerson";
-import ErrorMessage from "apps/mobile/src/components/ErrorMessage";
-import { Text } from "apps/mobile/src/components/ui/text";
-import { Icons } from "apps/mobile/src/constants/Icons";
-import tw from "apps/mobile/src/lib/tw";
-import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
-import useSearchStore from "apps/mobile/src/stores/useSearchStore";
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
-import { LegendList, LegendListRef } from "@legendapp/list/react-native";
-import { useScrollToTop } from "@react-navigation/native";
-import { upperFirst } from "lodash";
-import { useMemo, useRef } from "react";
-import { useKeyboardState } from "react-native-keyboard-controller";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useTranslations } from "use-intl";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { searchPersonsInfiniteOptions } from "@libs/query-client";
+import { CardPerson } from '../../../../../components/cards/CardPerson';
+import ErrorMessage from '../../../../../components/ErrorMessage';
+import { Text } from '../../../../../components/ui/text';
+import { Icons } from '../../../../../constants/Icons';
+import tw from '../../../../../lib/tw';
+import { useTheme } from '../../../../../providers/ThemeProvider';
+import useSearchStore from '../../../../../stores/useSearchStore';
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
+import { LegendList, LegendListRef } from '@legendapp/list/react-native';
+import { useScrollToTop } from '@react-navigation/native';
+import { upperFirst } from 'lodash';
+import { useMemo, useRef } from 'react';
+import { useKeyboardState } from 'react-native-keyboard-controller';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslations } from 'use-intl';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { searchPersonsInfiniteOptions } from '@libs/query-client';
 
 const SearchPersonsScreen = () => {
-	const insets = useSafeAreaInsets();
-	const { bottomOffset, tabBarHeight } = useTheme();
-	const {
-		isVisible: keyboardVisible,
-		height: keyboardHeight,
-	} = useKeyboardState((state) => state);
-	const t = useTranslations();
-	const search = useSearchStore(state => state.search);
-	
-	// Queries
-	const {
-		data,
-		isLoading,
-		isError,
-		hasNextPage,
-		fetchNextPage,
-		refetch,
-		isRefetching,
-	} = useInfiniteQuery(searchPersonsInfiniteOptions({
-		filters: {
-			q: search
-		}
-	}));
-	const persons = useMemo(() => data?.pages.flatMap(page => page.data) ?? [], [data]);
-	
-	// REFs
-	const scrollRef = useRef<LegendListRef>(null);
+  const insets = useSafeAreaInsets();
+  const { bottomOffset, tabBarHeight } = useTheme();
+  const { isVisible: keyboardVisible, height: keyboardHeight } = useKeyboardState((state) => state);
+  const t = useTranslations();
+  const search = useSearchStore((state) => state.search);
 
-	useScrollToTop(scrollRef);
+  // Queries
+  const { data, isLoading, isError, hasNextPage, fetchNextPage, refetch, isRefetching } =
+    useInfiniteQuery(
+      searchPersonsInfiniteOptions({
+        filters: {
+          q: search,
+        },
+      }),
+    );
+  const persons = useMemo(() => data?.pages.flatMap((page) => page.data) ?? [], [data]);
 
-	return (
-		<LegendList
-			key={search}
-			ref={scrollRef}
-			data={persons}
-			renderItem={({ item }) => <CardPerson variant="list" person={item} /> }
-			contentContainerStyle={{
-				paddingLeft: insets.left + PADDING_HORIZONTAL,
-				paddingRight: insets.right + PADDING_HORIZONTAL,
-				paddingBottom: keyboardVisible ? keyboardHeight + PADDING_VERTICAL : bottomOffset + PADDING_VERTICAL,
-				gap: GAP,
-			}}
-			scrollIndicatorInsets={{
-				bottom: keyboardVisible ? (keyboardHeight - insets.bottom) : tabBarHeight,
-			}}
-			keyExtractor={(item) => item.id.toString()}
-			ListEmptyComponent={
-				isError ? <ErrorMessage />
-				: isLoading ? <Icons.Loader />
-				: (
-					<Text textColor='muted' style={tw`text-center`}>
-						{search.length ? upperFirst(t('common.messages.no_results')) : upperFirst(t('common.messages.start_typing_to_search_persons'))}
-					</Text>
-				)
-			}
-			keyboardShouldPersistTaps="handled"
-			onRefresh={refetch}
-			refreshing={isRefetching}
-			onEndReached={() => hasNextPage && fetchNextPage()}
-		/>
-	);
+  // REFs
+  const scrollRef = useRef<LegendListRef>(null);
+
+  useScrollToTop(scrollRef);
+
+  return (
+    <LegendList
+      key={search}
+      ref={scrollRef}
+      data={persons}
+      renderItem={({ item }) => <CardPerson variant="list" person={item} />}
+      contentContainerStyle={{
+        paddingLeft: insets.left + PADDING_HORIZONTAL,
+        paddingRight: insets.right + PADDING_HORIZONTAL,
+        paddingBottom: keyboardVisible
+          ? keyboardHeight + PADDING_VERTICAL
+          : bottomOffset + PADDING_VERTICAL,
+        gap: GAP,
+      }}
+      scrollIndicatorInsets={{
+        bottom: keyboardVisible ? keyboardHeight - insets.bottom : tabBarHeight,
+      }}
+      keyExtractor={(item) => item.id.toString()}
+      ListEmptyComponent={
+        isError ? (
+          <ErrorMessage />
+        ) : isLoading ? (
+          <Icons.Loader />
+        ) : (
+          <Text textColor="muted" style={tw`text-center`}>
+            {search.length
+              ? upperFirst(t('common.messages.no_results'))
+              : upperFirst(t('common.messages.start_typing_to_search_persons'))}
+          </Text>
+        )
+      }
+      keyboardShouldPersistTaps="handled"
+      onRefresh={refetch}
+      refreshing={isRefetching}
+      onEndReached={() => hasNextPage && fetchNextPage()}
+    />
+  );
 };
 
 export default SearchPersonsScreen;

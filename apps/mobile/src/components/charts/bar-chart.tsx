@@ -1,4 +1,4 @@
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import { useTheme } from '../../providers/ThemeProvider';
 import { useEffect, useState } from 'react';
 import { LayoutChangeEvent, View, ViewStyle } from 'react-native';
 import Animated, {
@@ -46,7 +46,7 @@ const BarChartItem = ({
   colors,
   showLabels,
   animationProgress,
-} : {
+}: {
   item: ChartDataPoint;
   index: number;
   maxValue: number;
@@ -83,7 +83,7 @@ const BarChartItem = ({
           <SvgText
             x={x + barWidth / 2}
             y={height - 5}
-            textAnchor='middle'
+            textAnchor="middle"
             fontSize={12}
             fill={colors.mutedForeground}
           >
@@ -92,10 +92,10 @@ const BarChartItem = ({
           <SvgText
             x={x + barWidth / 2}
             y={y - 5}
-            textAnchor='middle'
+            textAnchor="middle"
             fontSize={11}
             fill={colors.mutedForeground}
-            fontWeight='600'
+            fontWeight="600"
           >
             {item.value}
           </SvgText>
@@ -108,13 +108,7 @@ const BarChartItem = ({
 export const BarChart = ({ data, config = {}, style }: Props) => {
   const [containerWidth, setContainerWidth] = useState(300);
 
-  const {
-    height = 200,
-    padding = 20,
-    showLabels = true,
-    animated = true,
-    duration = 800,
-  } = config;
+  const { height = 200, padding = 20, showLabels = true, animated = true, duration = 800 } = config;
 
   // Use measured width or fallback to config width or default
   const chartWidth = containerWidth || config.width || 300;
@@ -151,18 +145,18 @@ export const BarChart = ({ data, config = {}, style }: Props) => {
       <Svg width={chartWidth} height={height}>
         {data.map((item, index) => (
           <BarChartItem
-          key={`bar-item-${index}`}
-          item={item}
-          index={index}
-          maxValue={maxValue}
-          chartHeight={chartHeight}
-          barWidth={barWidth}
-          barSpacing={barSpacing}
-          padding={padding}
-          height={height}
-          colors={colors}
-          showLabels={showLabels}
-          animationProgress={animationProgress}
+            key={`bar-item-${index}`}
+            item={item}
+            index={index}
+            maxValue={maxValue}
+            chartHeight={chartHeight}
+            barWidth={barWidth}
+            barSpacing={barSpacing}
+            padding={padding}
+            height={height}
+            colors={colors}
+            showLabels={showLabels}
+            animationProgress={animationProgress}
           />
         ))}
       </Svg>

@@ -1,8 +1,8 @@
-import { Icon } from 'apps/mobile/src/components/ui/icon';
-import { Icons } from 'apps/mobile/src/constants/Icons';
-import tw from 'apps/mobile/src/lib/tw';
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
-import { BORDER_RADIUS, FONT_SIZE, HEIGHT } from 'apps/mobile/src/theme/globals';
+import { Icon } from './icon';
+import { Icons } from '../../constants/Icons';
+import tw from '../../lib/tw';
+import { useTheme } from '../../providers/ThemeProvider';
+import { BORDER_RADIUS, FONT_SIZE, HEIGHT } from '../../theme/globals';
 import { upperFirst } from 'lodash';
 import { LucideProps } from 'lucide-react-native';
 import React, { forwardRef, ReactElement, useState } from 'react';
@@ -61,7 +61,7 @@ export const Input = forwardRef<TextInput, InputProps>(
       placeholder,
       ...props
     },
-    ref
+    ref,
   ) => {
     const [showPassword, setShowPassword] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
@@ -77,22 +77,26 @@ export const Input = forwardRef<TextInput, InputProps>(
     const danger = colors.destructive;
 
     // Default value
-    const label = type === 'password' ?
-      labelProp === null ? undefined : (labelProp ?? upperFirst(t('common.form.password.label')))
-      : labelProp;
-    const icon = type === 'password' ?
-      (iconProp ?? Icons.Password)
-      : iconProp;
+    const label =
+      type === 'password'
+        ? labelProp === null
+          ? undefined
+          : (labelProp ?? upperFirst(t('common.form.password.label')))
+        : labelProp;
+    const icon = type === 'password' ? (iconProp ?? Icons.Password) : iconProp;
     const secureTextEntry = type === 'password' ? !showPassword : secureTextEntryProp;
-    const rightComponent = (type === 'password') ? (
-      <Pressable onPress={() => setShowPassword((prev) => !prev)}>
-        {showPassword ? (
-          <Icons.EyeOff size={20} color={colors.mutedForeground} />
-        ) : (
-          <Icons.Eye size={20} color={colors.mutedForeground} />
-        )}
-      </Pressable>
-    ) : rightComponentProp;
+    const rightComponent =
+      type === 'password' ? (
+        <Pressable onPress={() => setShowPassword((prev) => !prev)}>
+          {showPassword ? (
+            <Icons.EyeOff size={20} color={colors.mutedForeground} />
+          ) : (
+            <Icons.Eye size={20} color={colors.mutedForeground} />
+          )}
+        </Pressable>
+      ) : (
+        rightComponentProp
+      );
 
     // Calculate height based on type
     const getHeight = () => {
@@ -106,11 +110,11 @@ export const Input = forwardRef<TextInput, InputProps>(
     const getVariantStyle = (): ViewStyle => {
       const baseStyle: ViewStyle = {
         borderRadius: BORDER_RADIUS,
-        flexDirection: type ==='textarea' ? 'column' : 'row',
-        alignItems: type ==='textarea' ? 'stretch' : 'center',
+        flexDirection: type === 'textarea' ? 'column' : 'row',
+        alignItems: type === 'textarea' ? 'stretch' : 'center',
         minHeight: getHeight(),
         paddingHorizontal: 16,
-        paddingVertical: type ==='textarea' ? 12 : 0,
+        paddingVertical: type === 'textarea' ? 12 : 0,
       };
 
       switch (variant) {
@@ -135,10 +139,10 @@ export const Input = forwardRef<TextInput, InputProps>(
     const getInputStyle = (): TextStyle => ({
       flex: 1,
       fontSize: FONT_SIZE,
-      lineHeight: type ==='textarea' ? 20 : undefined,
+      lineHeight: type === 'textarea' ? 20 : undefined,
       color: disabled ? muted : error ? danger : textColor,
       paddingVertical: 0, // Remove default padding
-      textAlignVertical: type ==='textarea' ? 'top' : 'center',
+      textAlignVertical: type === 'textarea' ? 'top' : 'center',
     });
 
     const handleFocus = (e: FocusEvent) => {
@@ -157,9 +161,7 @@ export const Input = forwardRef<TextInput, InputProps>(
       if (!rightComponent) return null;
 
       // If it's a function, call it. Otherwise, render directly
-      return typeof rightComponent === 'function'
-        ? rightComponent()
-        : rightComponent;
+      return typeof rightComponent === 'function' ? rightComponent() : rightComponent;
     };
 
     const renderInputContent = () => (
@@ -174,7 +176,7 @@ export const Input = forwardRef<TextInput, InputProps>(
           }}
           disabled={disabled}
         >
-          {type ==='textarea' ? (
+          {type === 'textarea' ? (
             // Textarea Layout (Column)
             <>
               {/* Header section with icon, label, and right component */}
@@ -195,26 +197,20 @@ export const Input = forwardRef<TextInput, InputProps>(
                       alignItems: 'center',
                       gap: 8,
                     }}
-                    pointerEvents='none'
+                    pointerEvents="none"
                   >
-                    {icon && (
-                      <Icon
-                        name={icon}
-                        size={16}
-                        color={error ? danger : muted}
-                      />
-                    )}
+                    {icon && <Icon name={icon} size={16} color={error ? danger : muted} />}
                     {label && (
                       <Text
                         numberOfLines={1}
-                        ellipsizeMode='tail'
+                        ellipsizeMode="tail"
                         style={[
                           {
                             color: error ? danger : muted,
                           },
                           labelStyle,
                         ]}
-                        pointerEvents='none'
+                        pointerEvents="none"
                       >
                         {label}
                       </Text>
@@ -254,29 +250,27 @@ export const Input = forwardRef<TextInput, InputProps>(
               {/* Left section - Icon + Label (fixed width to simulate grid column) */}
               {icon || label ? (
                 <View
-                style={[
-                  {
-                    width: label ? 120 : 'auto',
-                  },
-                  tw`flex-row items-center gap-2`,
-                  leftSectionStyle,
-                ]}
-                pointerEvents='none'
+                  style={[
+                    {
+                      width: label ? 120 : 'auto',
+                    },
+                    tw`flex-row items-center gap-2`,
+                    leftSectionStyle,
+                  ]}
+                  pointerEvents="none"
                 >
-                  {icon && (
-                    <Icon name={icon} size={16} color={error ? danger : muted} />
-                  )}
+                  {icon && <Icon name={icon} size={16} color={error ? danger : muted} />}
                   {label && (
                     <Text
                       numberOfLines={1}
-                      ellipsizeMode='tail'
+                      ellipsizeMode="tail"
                       style={[
                         {
                           color: error ? danger : muted,
                         },
                         labelStyle,
                       ]}
-                      pointerEvents='none'
+                      pointerEvents="none"
                     >
                       {label}
                     </Text>
@@ -326,7 +320,7 @@ export const Input = forwardRef<TextInput, InputProps>(
     );
 
     return renderInputContent();
-  }
+  },
 );
 Input.displayName = 'Input';
 
@@ -355,22 +349,13 @@ export const GroupedInput = ({
   const errors = childrenArray
     .filter(
       (child): child is ReactElement<any> =>
-        React.isValidElement(child) && !!(child.props as any).error
+        React.isValidElement(child) && !!(child.props as any).error,
     )
     .map((child) => child.props.error);
 
   const renderGroupedContent = () => (
     <View style={containerStyle}>
-      {!!title && (
-        <Text
-          style={[
-            tw`ml-2 mb-2 font-semibold`,
-            titleStyle
-          ]}
-        >
-          {title}
-        </Text>
-      )}
+      {!!title && <Text style={[tw`ml-2 mb-2 font-semibold`, titleStyle]}>{title}</Text>}
 
       <View
         style={{
@@ -453,7 +438,7 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
       placeholder,
       ...props
     },
-    ref
+    ref,
   ) => {
     const t = useTranslations();
     const [showPassword, setShowPassword] = useState(false);
@@ -466,22 +451,26 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
     const danger = colors.destructive;
 
     // Default values
-    const label = type === 'password' ?
-      labelProp === null ? undefined : (labelProp ?? upperFirst(t('common.form.password.label')))
-      : labelProp;
-    const icon = type === 'password' ?
-      (iconProp ?? Icons.Password)
-      : iconProp;
+    const label =
+      type === 'password'
+        ? labelProp === null
+          ? undefined
+          : (labelProp ?? upperFirst(t('common.form.password.label')))
+        : labelProp;
+    const icon = type === 'password' ? (iconProp ?? Icons.Password) : iconProp;
     const secureTextEntry = type === 'password' ? !showPassword : secureTextEntryProp;
-    const rightComponent = (type === 'password') ? (
-      <Pressable onPress={() => setShowPassword((prev) => !prev)}>
-        {showPassword ? (
-          <Icons.EyeOff size={16} color={colors.mutedForeground} />
-        ) : (
-          <Icons.Eye size={16} color={colors.mutedForeground} />
-        )}
-      </Pressable>
-    ) : rightComponentProp;
+    const rightComponent =
+      type === 'password' ? (
+        <Pressable onPress={() => setShowPassword((prev) => !prev)}>
+          {showPassword ? (
+            <Icons.EyeOff size={16} color={colors.mutedForeground} />
+          ) : (
+            <Icons.Eye size={16} color={colors.mutedForeground} />
+          )}
+        </Pressable>
+      ) : (
+        rightComponentProp
+      );
 
     const handleFocus = (e: FocusEvent) => {
       setIsFocused(true);
@@ -496,158 +485,87 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
 
     const renderRightComponent = () => {
       if (!rightComponent) return null;
-      return typeof rightComponent === 'function'
-        ? rightComponent()
-        : rightComponent;
+      return typeof rightComponent === 'function' ? rightComponent() : rightComponent;
     };
 
     const renderItemContent = () => (
-    <View>
-      <Pressable
-        onPress={() => ref && 'current' in ref && ref.current?.focus()}
-        disabled={disabled}
-        style={{ opacity: disabled ? 0.6 : 1 }}
-      >
-        <View
-          style={{
-            flexDirection: type ==='textarea' ? 'column' : 'row',
-            alignItems: type ==='textarea' ? 'stretch' : 'center',
-            backgroundColor: 'transparent',
-          }}
+      <View>
+        <Pressable
+          onPress={() => ref && 'current' in ref && ref.current?.focus()}
+          disabled={disabled}
+          style={{ opacity: disabled ? 0.6 : 1 }}
         >
-          {type ==='textarea' ? (
-            // Textarea Layout (Column)
-            <>
-              {/* Header section with icon, label, and right component */}
-              {(icon || label || rightComponent) && (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginBottom: 8,
-                    gap: 8,
-                  }}
-                >
-                  {/* Icon & Label */}
+          <View
+            style={{
+              flexDirection: type === 'textarea' ? 'column' : 'row',
+              alignItems: type === 'textarea' ? 'stretch' : 'center',
+              backgroundColor: 'transparent',
+            }}
+          >
+            {type === 'textarea' ? (
+              // Textarea Layout (Column)
+              <>
+                {/* Header section with icon, label, and right component */}
+                {(icon || label || rightComponent) && (
                   <View
                     style={{
-                      flex: 1,
                       flexDirection: 'row',
                       alignItems: 'center',
+                      marginBottom: 8,
                       gap: 8,
                     }}
-                    pointerEvents='none'
                   >
-                    {icon && (
-                      <Icon
-                        name={icon}
-                        size={16}
-                        color={error ? danger : muted}
-                      />
-                    )}
-                    {label && (
-                      <Text
-                        numberOfLines={1}
-                        ellipsizeMode='tail'
-                        style={[
-                          {
-                            color: error ? danger : muted,
-                          },
-                          labelStyle,
-                        ]}
-                        pointerEvents='none'
-                      >
-                        {label}
-                      </Text>
-                    )}
+                    {/* Icon & Label */}
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: 8,
+                      }}
+                      pointerEvents="none"
+                    >
+                      {icon && <Icon name={icon} size={16} color={error ? danger : muted} />}
+                      {label && (
+                        <Text
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                          style={[
+                            {
+                              color: error ? danger : muted,
+                            },
+                            labelStyle,
+                          ]}
+                          pointerEvents="none"
+                        >
+                          {label}
+                        </Text>
+                      )}
+                    </View>
+
+                    {/* Right Component */}
+                    {renderRightComponent()}
                   </View>
-
-                  {/* Right Component */}
-                  {renderRightComponent()}
-                </View>
-              )}
-
-              {/* Textarea Input */}
-              <TextInput
-                ref={ref}
-                multiline
-                numberOfLines={rows}
-                style={[
-                  {
-                    fontSize: FONT_SIZE,
-                    lineHeight: 20,
-                    color: disabled ? muted : error ? danger : text,
-                    textAlignVertical: 'top',
-                    paddingVertical: 0,
-                    minHeight: rows * 20,
-                  },
-                  inputStyle,
-                ]}
-                placeholderTextColor={error ? danger + '99' : muted}
-                placeholder={placeholder || 'Type your message...'}
-                editable={!disabled}
-                selectionColor={primary}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                secureTextEntry={secureTextEntry}
-                {...props}
-              />
-            </>
-          ) : (
-            // Input Layout (Row)
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 8,
-              }}
-            >
-              {/* Icon & Label */}
-              <View
-                style={{
-                  width: label ? 120 : 'auto',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  gap: 8,
-                }}
-                pointerEvents='none'
-              >
-                {icon && (
-                  <Icon name={icon} size={16} color={error ? danger : muted} />
                 )}
-                {label && (
-                  <Text
-                    numberOfLines={1}
-                    ellipsizeMode='tail'
-                    style={[
-                      {
-                        color: error ? danger : muted,
-                      },
-                      labelStyle,
-                    ]}
-                    pointerEvents='none'
-                  >
-                    {label}
-                  </Text>
-                )}
-              </View>
 
-              {/* Input */}
-              <View style={{ flex: 1 }}>
+                {/* Textarea Input */}
                 <TextInput
                   ref={ref}
+                  multiline
+                  numberOfLines={rows}
                   style={[
                     {
-                      flex: 1,
                       fontSize: FONT_SIZE,
+                      lineHeight: 20,
                       color: disabled ? muted : error ? danger : text,
+                      textAlignVertical: 'top',
                       paddingVertical: 0,
+                      minHeight: rows * 20,
                     },
                     inputStyle,
                   ]}
-                  placeholder={placeholder}
                   placeholderTextColor={error ? danger + '99' : muted}
+                  placeholder={placeholder || 'Type your message...'}
                   editable={!disabled}
                   selectionColor={primary}
                   onFocus={handleFocus}
@@ -655,15 +573,76 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
                   secureTextEntry={secureTextEntry}
                   {...props}
                 />
-              </View>
+              </>
+            ) : (
+              // Input Layout (Row)
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 8,
+                }}
+              >
+                {/* Icon & Label */}
+                <View
+                  style={{
+                    width: label ? 120 : 'auto',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 8,
+                  }}
+                  pointerEvents="none"
+                >
+                  {icon && <Icon name={icon} size={16} color={error ? danger : muted} />}
+                  {label && (
+                    <Text
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                      style={[
+                        {
+                          color: error ? danger : muted,
+                        },
+                        labelStyle,
+                      ]}
+                      pointerEvents="none"
+                    >
+                      {label}
+                    </Text>
+                  )}
+                </View>
 
-              {/* Right Component */}
-              {renderRightComponent()}
-            </View>
-          )}
-        </View>
-      </Pressable>
-      {/* Error Message */}
+                {/* Input */}
+                <View style={{ flex: 1 }}>
+                  <TextInput
+                    ref={ref}
+                    style={[
+                      {
+                        flex: 1,
+                        fontSize: FONT_SIZE,
+                        color: disabled ? muted : error ? danger : text,
+                        paddingVertical: 0,
+                      },
+                      inputStyle,
+                    ]}
+                    placeholder={placeholder}
+                    placeholderTextColor={error ? danger + '99' : muted}
+                    editable={!disabled}
+                    selectionColor={primary}
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+                    secureTextEntry={secureTextEntry}
+                    {...props}
+                  />
+                </View>
+
+                {/* Right Component */}
+                {renderRightComponent()}
+              </View>
+            )}
+          </View>
+        </Pressable>
+        {/* Error Message */}
         {error && (
           <Text
             style={[
@@ -678,10 +657,10 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
             {error}
           </Text>
         )}
-    </View>
+      </View>
     );
 
     return renderItemContent();
-  }
+  },
 );
 GroupedInputItem.displayName = 'GroupedInputItem';

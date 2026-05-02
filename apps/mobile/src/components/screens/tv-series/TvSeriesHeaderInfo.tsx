@@ -1,12 +1,12 @@
-import { TvSeries } from "@libs/api-js";
-import { Text } from "apps/mobile/src/components/ui/text";
-import { View } from "apps/mobile/src/components/ui/view";
-import tw from "apps/mobile/src/lib/tw";
-import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
-import { upperFirst } from "lodash";
-import { forwardRef, Fragment, ReactNode, useMemo } from "react";
-import { ViewProps } from "react-native";
-import { useTranslations } from "use-intl";
+import { TvSeries } from '@libs/api-js';
+import { Text } from '../../ui/text';
+import { View } from '../../ui/view';
+import tw from '../../../lib/tw';
+import { useTheme } from '../../../providers/ThemeProvider';
+import { upperFirst } from 'lodash';
+import { forwardRef, Fragment, ReactNode, useMemo } from 'react';
+import { ViewProps } from 'react-native';
+import { useTranslations } from 'use-intl';
 
 type TvSeriesHeaderInfoProps = Omit<ViewProps, 'children'> & {
   tvSeries: TvSeries;
@@ -18,7 +18,7 @@ export const TvSeriesHeaderInfo = forwardRef<
 >(({ tvSeries, style, ...props }, ref) => {
   const t = useTranslations();
   const { colors } = useTheme();
-  
+
   const items = useMemo((): (string | ReactNode)[] => {
     const result: (string | ReactNode)[] = [];
     // Date
@@ -31,11 +31,15 @@ export const TvSeriesHeaderInfo = forwardRef<
     }
 
     if (tvSeries.numberOfSeasons) {
-      result.push(upperFirst(t("common.messages.tv_season_count", { count: tvSeries.numberOfSeasons })));
+      result.push(
+        upperFirst(t('common.messages.tv_season_count', { count: tvSeries.numberOfSeasons })),
+      );
     }
 
     if (tvSeries.numberOfEpisodes) {
-      result.push(upperFirst(t("common.messages.tv_episode_count", { count: tvSeries.numberOfEpisodes })));
+      result.push(
+        upperFirst(t('common.messages.tv_episode_count', { count: tvSeries.numberOfEpisodes })),
+      );
     }
     return result;
   }, [tvSeries, t]);
@@ -43,18 +47,16 @@ export const TvSeriesHeaderInfo = forwardRef<
   return (
     <View ref={ref} style={[tw`flex-row flex-wrap items-center justify-center`, style]} {...props}>
       <Text style={[tw`mr-1`, { color: colors.accentYellow }]}>
-        {upperFirst(t("common.messages.film", { count: 1 }))}
+        {upperFirst(t('common.messages.film', { count: 1 }))}
       </Text>
       {items.length > 0 && <Text style={{ color: colors.mutedForeground }}> • </Text>}
       {items.map((item, i) => (
         <Fragment key={i}>
           {i > 0 && <Text style={{ color: colors.mutedForeground }}> • </Text>}
-          <Text style={{ color: colors.mutedForeground }}>
-            {item}
-          </Text>
+          <Text style={{ color: colors.mutedForeground }}>{item}</Text>
         </Fragment>
       ))}
     </View>
   );
 });
-TvSeriesHeaderInfo.displayName = "TvSeriesHeaderInfo";
+TvSeriesHeaderInfo.displayName = 'TvSeriesHeaderInfo';

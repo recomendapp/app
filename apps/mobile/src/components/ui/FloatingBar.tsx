@@ -8,9 +8,9 @@ import Animated, {
   AnimatedStyle,
   SharedValue,
 } from 'react-native-reanimated';
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
-import tw from 'apps/mobile/src/lib/tw';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
+import { useTheme } from '../../providers/ThemeProvider';
+import tw from '../../lib/tw';
+import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { scheduleOnRN } from 'react-native-worklets';
 
@@ -47,7 +47,7 @@ export const FloatingBar = forwardRef<FloatingBarRef, FloatingBarProps>(
       height,
       onHeightChange,
     },
-    ref
+    ref,
   ) => {
     const insets = useSafeAreaInsets();
     const { colors } = useTheme();
@@ -60,13 +60,13 @@ export const FloatingBar = forwardRef<FloatingBarRef, FloatingBarProps>(
 
     const show = () => {
       isVisible.value = true;
-      
+
       scale.value = withSpring(1, {
         damping: 12,
         stiffness: 150,
         mass: 0.8,
       });
-      
+
       translateY.value = withSpring(0);
       opacity.value = withTiming(1, { duration: 200 });
     };
@@ -104,17 +104,13 @@ export const FloatingBar = forwardRef<FloatingBarRef, FloatingBarProps>(
     const animatedStyle = useAnimatedStyle(() => {
       return {
         opacity: opacity.value,
-        transform: [
-          { translateY: translateY.value },
-          { scale: scale.value },
-        ],
+        transform: [{ translateY: translateY.value }, { scale: scale.value }],
         pointerEvents: isVisible.value ? 'auto' : 'none',
       };
     });
 
-    const finalBottomOffset = bottomOffset !== undefined 
-      ? bottomOffset 
-      : insets.bottom + PADDING_VERTICAL;
+    const finalBottomOffset =
+      bottomOffset !== undefined ? bottomOffset : insets.bottom + PADDING_VERTICAL;
 
     return (
       <Animated.View
@@ -122,8 +118,8 @@ export const FloatingBar = forwardRef<FloatingBarRef, FloatingBarProps>(
           tw`absolute bottom-0 left-0 right-0 items-center`,
           {
             paddingBottom: finalBottomOffset,
-            paddingLeft: insets.left + (PADDING_HORIZONTAL / 2),
-            paddingRight: insets.right + (PADDING_HORIZONTAL / 2),
+            paddingLeft: insets.left + PADDING_HORIZONTAL / 2,
+            paddingRight: insets.right + PADDING_HORIZONTAL / 2,
           },
           containerStyle,
           animatedStyle,
@@ -154,7 +150,7 @@ export const FloatingBar = forwardRef<FloatingBarRef, FloatingBarProps>(
         </Animated.View>
       </Animated.View>
     );
-  }
+  },
 );
 
 FloatingBar.displayName = 'FloatingBar';

@@ -1,21 +1,14 @@
-import { withPersistKey } from "apps/mobile/src/api";
+import { withPersistKey } from '..';
 
 export const exploreKeys = {
-	base: ['explore'] as const,
+  base: ['explore'] as const,
 
-	tileMeta: ({
-		exploreId,
-		locale,
-	} : {
-		exploreId: number;
-		locale: string;
-	}) => [...exploreKeys.base, 'tile-metadata', { exploreId, locale }],
+  tileMeta: ({ exploreId, locale }: { exploreId: number; locale: string }) => [
+    ...exploreKeys.base,
+    'tile-metadata',
+    { exploreId, locale },
+  ],
 
-	tile: ({
-		exploreId,
-		locale,
-	} : {
-		exploreId: number;
-		locale: string;
-	}) => withPersistKey([...exploreKeys.base, 'tile', { exploreId, locale }]),
+  tile: ({ exploreId, locale }: { exploreId: number; locale: string }) =>
+    withPersistKey([...exploreKeys.base, 'tile', { exploreId, locale }]),
 };

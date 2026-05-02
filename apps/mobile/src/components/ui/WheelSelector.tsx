@@ -1,18 +1,26 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import Animated, { 
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import Animated, {
   AnimatedStyle,
-  clamp, 
-  interpolate, 
-  SharedValue, 
-  useAnimatedScrollHandler, 
-  useAnimatedStyle, 
-  useSharedValue 
+  clamp,
+  interpolate,
+  SharedValue,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
 } from 'react-native-reanimated';
-import tw from 'apps/mobile/src/lib/tw';
+import tw from '../../lib/tw';
 import * as Haptics from 'expo-haptics';
-import { GAP } from 'apps/mobile/src/theme/globals';
+import { GAP } from '../../theme/globals';
 import { LayoutChangeEvent, FlatList, StyleProp, ViewStyle, Pressable } from 'react-native';
-import useDebounce from 'apps/mobile/src/hooks/useDebounce';
+import useDebounce from '../../hooks/useDebounce';
 import { scheduleOnRN } from 'react-native-worklets';
 import { View } from './view';
 
@@ -40,38 +48,33 @@ const WheelSelectorItem = <T,>({
   isActive,
   ...props
 }: WheelSelectorItemProps<T>) => {
-
   const animatedStyle = useAnimatedStyle(() => {
     const inputRange = [index - 1, index, index + 1];
     // const opacityRange = [0.65, 1, 0.65];
-    
+
     // Calcul de l'effet wheel
-    let transformations: any[] = [];
-    
+    const transformations: any[] = [];
+
     if (wheelIntensity > 0) {
       // Calcul de la translation Y (effet de courbe)
       const translateYOffset = (itemWidth / 3) * wheelIntensity;
-      const translateY = interpolate(
-        scrollX.value,
-        inputRange,
-        [translateYOffset, 0, translateYOffset],
-      );
-      
+      const translateY = interpolate(scrollX.value, inputRange, [
+        translateYOffset,
+        0,
+        translateYOffset,
+      ]);
+
       // Calcul de la rotation basée sur l'angle
       const maxRotation = wheelAngle * wheelIntensity;
-      const rotateZ = interpolate(
-        scrollX.value,
-        inputRange,
-        [-maxRotation, 0, maxRotation],
-      );
-      
+      const rotateZ = interpolate(scrollX.value, inputRange, [-maxRotation, 0, maxRotation]);
+
       transformations.push({ translateY });
-      
+
       if (wheelAngle !== 0) {
         transformations.push({ rotateZ: `${rotateZ}deg` });
       }
     }
-    
+
     return {
       // opacity: interpolate(scrollX.value, inputRange, opacityRange),
       transform: transformations,
@@ -81,9 +84,7 @@ const WheelSelectorItem = <T,>({
   return (
     <Animated.View style={animatedStyle}>
       <Pressable onPress={onPress}>
-        <View style={[{ width: itemWidth }, tw`relative`]}>
-          {renderItem(item, isActive)}
-        </View>
+        <View style={[{ width: itemWidth }, tw`relative`]}>{renderItem(item, isActive)}</View>
       </Pressable>
     </Animated.View>
   );
@@ -95,7 +96,8 @@ export interface WheelSelectorRef {
   getCurrentIndex: () => number;
 }
 
-interface WheelSelectorProps<T> extends Omit<React.ComponentProps<typeof Animated.FlatList<T>>, 'data' | 'renderItem'> {
+interface WheelSelectorProps<T>
+  extends Omit<React.ComponentProps<typeof Animated.FlatList<T>>, 'data' | 'renderItem'> {
   data: readonly T[];
   renderItem: (item: T, isActive: boolean) => React.ReactNode;
   onSelectionChange?: (item: T, index: number) => void;
@@ -105,10 +107,11 @@ interface WheelSelectorProps<T> extends Omit<React.ComponentProps<typeof Animate
   itemSpacing?: number;
   wheelAngle?: number;
   wheelIntensity?: number;
-  containerStyle?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>
+  containerStyle?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
 }
 
-function WheelSelectorInner<T>({
+function WheelSelectorInner<T>(
+  {
     data,
     renderItem: renderItemProps,
     onSelectionChange,
@@ -127,22 +130,28 @@ function WheelSelectorInner<T>({
     containerStyle,
     decelerationRate = 'fast',
     initialScrollIndex,
-	...props
-  }: WheelSelectorProps<T>, ref: React.ForwardedRef<WheelSelectorRef>) {
-    const scrollRef = useRef<FlatList>(null);
-    const scrollX = useSharedValue(initialIndex);
-    const activeIndex = useSharedValue(initialIndex);
-    const [selectedItem, setSelectedItem] = useState<{ item: T; index: number } | null>(data[initialIndex] ? { item: data[initialIndex], index: initialIndex } : null);
-    const debouncedSelectedItem = useDebounce(selectedItem, 200);
-    const [containerWidth, setContainerWidth] = useState<number | undefined>(undefined);
+    ...props
+  }: WheelSelectorProps<T>,
+  ref: React.ForwardedRef<WheelSelectorRef>,
+) {
+  const scrollRef = useRef<FlatList>(null);
+  const scrollX = useSharedValue(initialIndex);
+  const activeIndex = useSharedValue(initialIndex);
+  const [selectedItem, setSelectedItem] = useState<{ item: T; index: number } | null>(
+    data[initialIndex] ? { item: data[initialIndex], index: initialIndex } : null,
+  );
+  const debouncedSelectedItem = useDebounce(selectedItem, 200);
+  const [containerWidth, setContainerWidth] = useState<number | undefined>(undefined);
 
-     const finalItemWidth = useMemo(() => {
-      return itemWidth || (containerWidth && containerWidth > 0 ? containerWidth * 0.2 : 80); // fallback width
-    }, [itemWidth, containerWidth]);
+  const finalItemWidth = useMemo(() => {
+    return itemWidth || (containerWidth && containerWidth > 0 ? containerWidth * 0.2 : 80); // fallback width
+  }, [itemWidth, containerWidth]);
 
-    const totalItemWidth = useMemo(() => finalItemWidth + itemSpacing, [finalItemWidth, itemSpacing]);
+  const totalItemWidth = useMemo(() => finalItemWidth + itemSpacing, [finalItemWidth, itemSpacing]);
 
-    useImperativeHandle(ref, () => ({
+  useImperativeHandle(
+    ref,
+    () => ({
       scrollToIndex: (index: number, animated = true) => {
         scrollRef.current?.scrollToIndex({
           index,
@@ -158,79 +167,74 @@ function WheelSelectorInner<T>({
       getCurrentIndex: () => {
         return Math.round(scrollX.value);
       },
-    }), [scrollX]);
+    }),
+    [scrollX],
+  );
 
-    const vibrate = useCallback(() => {
-      if (enableHaptics && process.env.EXPO_OS === 'ios') {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      }
-    }, [enableHaptics]);
-  
-    const onScroll = useAnimatedScrollHandler(e => {
-      'worklet';
-      scrollX.value = clamp(e.contentOffset.x / totalItemWidth, 0, data.length - 1);
-      const newActiveIndex = Math.round(scrollX.value);
-      
-      if (newActiveIndex !== activeIndex.value) {
-        activeIndex.value = newActiveIndex;
-        if (enableHaptics) {
-          scheduleOnRN(vibrate);
-        }
-        scheduleOnRN(setSelectedItem, { item: data[newActiveIndex], index: newActiveIndex });
-      }
-    });
+  const vibrate = useCallback(() => {
+    if (enableHaptics && process.env.EXPO_OS === 'ios') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
+  }, [enableHaptics]);
 
-    const handleLayout = useCallback((event: LayoutChangeEvent) => {
+  const onScroll = useAnimatedScrollHandler((e) => {
+    'worklet';
+    scrollX.value = clamp(e.contentOffset.x / totalItemWidth, 0, data.length - 1);
+    const newActiveIndex = Math.round(scrollX.value);
+
+    if (newActiveIndex !== activeIndex.value) {
+      activeIndex.value = newActiveIndex;
+      if (enableHaptics) {
+        scheduleOnRN(vibrate);
+      }
+      scheduleOnRN(setSelectedItem, { item: data[newActiveIndex], index: newActiveIndex });
+    }
+  });
+
+  const handleLayout = useCallback(
+    (event: LayoutChangeEvent) => {
       const { width } = event.nativeEvent.layout;
       if (width !== containerWidth) {
         setContainerWidth(width);
       }
-    }, [containerWidth]);
+    },
+    [containerWidth],
+  );
 
-    const renderItem = useCallback(
-      ({ item, index }: { item: T; index: number }) => {
-        return (
-            <WheelSelectorItem
-            index={index}
-            item={item}
-            scrollX={scrollX}
-            onPress={() => {
-              scrollRef.current?.scrollToIndex({
-                index: index,
-                animated: true,
-              });
-            }}
-            renderItem={renderItemProps}
-            itemWidth={finalItemWidth}
-            wheelAngle={wheelAngle}
-            wheelIntensity={wheelIntensity}
-            isActive={selectedItem?.index === index}
-            />
-        )
-      },
-      [
-        finalItemWidth,
-        scrollX,
-        renderItemProps,
-        wheelAngle,
-        wheelIntensity,
-        selectedItem,
-      ]
-    );
+  const renderItem = useCallback(
+    ({ item, index }: { item: T; index: number }) => {
+      return (
+        <WheelSelectorItem
+          index={index}
+          item={item}
+          scrollX={scrollX}
+          onPress={() => {
+            scrollRef.current?.scrollToIndex({
+              index: index,
+              animated: true,
+            });
+          }}
+          renderItem={renderItemProps}
+          itemWidth={finalItemWidth}
+          wheelAngle={wheelAngle}
+          wheelIntensity={wheelIntensity}
+          isActive={selectedItem?.index === index}
+        />
+      );
+    },
+    [finalItemWidth, scrollX, renderItemProps, wheelAngle, wheelIntensity, selectedItem],
+  );
 
-    useEffect(() => {
-      if (debouncedSelectedItem && onSelectionChange) {
-        onSelectionChange(debouncedSelectedItem.item, debouncedSelectedItem.index);
-      }
-    }, [debouncedSelectedItem, onSelectionChange]);
+  useEffect(() => {
+    if (debouncedSelectedItem && onSelectionChange) {
+      onSelectionChange(debouncedSelectedItem.item, debouncedSelectedItem.index);
+    }
+  }, [debouncedSelectedItem, onSelectionChange]);
 
-    return (
-      <Animated.View
-      style={[{ width: '100%' }, containerStyle]}
-      onLayout={handleLayout}
-      >
-        {containerWidth !== undefined && (
-          <Animated.FlatList
+  return (
+    <Animated.View style={[{ width: '100%' }, containerStyle]} onLayout={handleLayout}>
+      {containerWidth !== undefined && (
+        <Animated.FlatList
           ref={scrollRef}
           onScroll={onScroll}
           data={data}
@@ -244,13 +248,15 @@ function WheelSelectorInner<T>({
           })}
           horizontal={horizontal}
           showsHorizontalScrollIndicator={showsHorizontalScrollIndicator}
-          ItemSeparatorComponent={itemSpacing ? () => <View style={[{ width: itemSpacing }]} /> : null}
+          ItemSeparatorComponent={
+            itemSpacing ? () => <View style={[{ width: itemSpacing }]} /> : null
+          }
           style={[
             {
               flexGrow: 0,
-              height: finalItemWidth * (1 + wheelIntensity)
+              height: finalItemWidth * (1 + wheelIntensity),
             },
-            style
+            style,
           ]}
           contentContainerStyle={[
             {
@@ -258,19 +264,19 @@ function WheelSelectorInner<T>({
               paddingLeft: (containerWidth - finalItemWidth) / 2,
               paddingRight: (containerWidth - finalItemWidth) / 2,
             },
-            contentContainerStyle
+            contentContainerStyle,
           ]}
           snapToInterval={totalItemWidth}
           decelerationRate={decelerationRate}
           {...props}
-          />
-        )}
-      </Animated.View>
-    );
-  }
+        />
+      )}
+    </Animated.View>
+  );
+}
 
 const WheelSelector = forwardRef(WheelSelectorInner) as <T>(
-  props: WheelSelectorProps<T> & { ref?: React.Ref<WheelSelectorRef> }
+  props: WheelSelectorProps<T> & { ref?: React.Ref<WheelSelectorRef> },
 ) => React.ReactElement;
 
 export default WheelSelector;

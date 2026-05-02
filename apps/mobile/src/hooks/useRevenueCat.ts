@@ -1,21 +1,21 @@
-import { authKeys } from "apps/mobile/src/api/auth/authKeys";
-import { REVENUECAT_API_KEY } from "apps/mobile/src/lib/revenue-cat";
-import { useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect, useState } from "react";
-import Purchases, { CustomerInfo, LOG_LEVEL } from "react-native-purchases";
-import { User } from "@libs/api-js";
+import { authKeys } from '../api/auth/authKeys';
+import { REVENUECAT_API_KEY } from '../lib/revenue-cat';
+import { useQueryClient } from '@tanstack/react-query';
+import { useCallback, useEffect, useState } from 'react';
+import Purchases, { CustomerInfo, LOG_LEVEL } from 'react-native-purchases';
+import { User } from '@libs/api-js';
 
 export const useRevenueCat = (user: User | null | undefined) => {
   const queryClient = useQueryClient();
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo | undefined>(undefined);
-	const [isInitialized, setIsInitialized] = useState(false);
-  
+  const [isInitialized, setIsInitialized] = useState(false);
+
   const init = useCallback(async (userId: string) => {
     if (__DEV__) {
       Purchases.setLogLevel(LOG_LEVEL.VERBOSE);
     }
     if (!REVENUECAT_API_KEY) {
-      throw new Error("RevenueCat API key missing");
+      throw new Error('RevenueCat API key missing');
     }
     Purchases.configure({
       apiKey: REVENUECAT_API_KEY,
@@ -23,15 +23,15 @@ export const useRevenueCat = (user: User | null | undefined) => {
     });
     setIsInitialized(true);
   }, []);
-	const login = useCallback(async (user: User) => {
-		const { customerInfo } = await Purchases.logIn(user.id);
+  const login = useCallback(async (user: User) => {
+    const { customerInfo } = await Purchases.logIn(user.id);
     if (user.email) {
       await Purchases.setAttributes({
         $email: user.email,
-      })
+      });
     }
-		setCustomerInfo(customerInfo);
-	}, []);
+    setCustomerInfo(customerInfo);
+  }, []);
 
   useEffect(() => {
     if (!isInitialized && user?.id) {

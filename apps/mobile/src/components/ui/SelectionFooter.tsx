@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, FlatListProps, ListRenderItem, ViewStyle } from 'react-native';
-import Animated, { SharedValue, useAnimatedStyle, useSharedValue, withTiming, useDerivedValue } from 'react-native-reanimated';
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import Animated, {
+  SharedValue,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+  useDerivedValue,
+} from 'react-native-reanimated';
+import { useTheme } from '../../providers/ThemeProvider';
 import { View } from './view';
-import tw from 'apps/mobile/src/lib/tw';
-import { PADDING, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
+import tw from '../../lib/tw';
+import { PADDING, PADDING_VERTICAL } from '../../theme/globals';
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { isLiquidGlassAvailable } from 'expo-glass-effect';
@@ -26,9 +32,9 @@ interface SelectionFooterProps<T> extends InheritedFlatListProps<T> {
   ItemSeparatorComponent?: React.ComponentType<any> | null;
   keyboardAware?: boolean;
   bottomOffset?: number;
-};
+}
 
-export const SelectionFooter = <T extends any>({
+export const SelectionFooter = <T,>({
   data,
   visibleHeight: externalVisibleHeight,
   renderItem,
@@ -80,9 +86,7 @@ export const SelectionFooter = <T extends any>({
   });
 
   const animatedKeyboardStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateY: keyboardAware ? keyboardHeight.value : 0 },
-    ],
+    transform: [{ translateY: keyboardAware ? keyboardHeight.value : 0 }],
   }));
 
   useEffect(() => {
@@ -98,10 +102,7 @@ export const SelectionFooter = <T extends any>({
 
   return (
     <Animated.View
-      style={[
-        tw`relative absolute bottom-0 left-0 right-0`,
-        animatedKeyboardStyle,
-      ]}
+      style={[tw`relative absolute bottom-0 left-0 right-0`, animatedKeyboardStyle]}
       pointerEvents={isVisible ? 'auto' : 'none'}
     >
       <Animated.View
@@ -111,15 +112,19 @@ export const SelectionFooter = <T extends any>({
         }}
         style={[
           tw`border-t gap-2`,
-          { backgroundColor: isGlassAvailable ? 'transparent' : colors.background, borderColor: colors.border },
-          { paddingBottom: insets.bottom + PADDING_VERTICAL + bottomOffset, paddingTop: PADDING_VERTICAL },
+          {
+            backgroundColor: isGlassAvailable ? 'transparent' : colors.background,
+            borderColor: colors.border,
+          },
+          {
+            paddingBottom: insets.bottom + PADDING_VERTICAL + bottomOffset,
+            paddingTop: PADDING_VERTICAL,
+          },
           containerStyle,
           animatedVisibilityStyle,
         ]}
       >
-        {isGlassAvailable && (
-          <BlurView style={tw`absolute inset-0`} />
-        )}
+        {isGlassAvailable && <BlurView style={tw`absolute inset-0`} />}
 
         <FlatList<T>
           horizontal

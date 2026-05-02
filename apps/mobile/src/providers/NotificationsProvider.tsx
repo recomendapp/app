@@ -1,14 +1,14 @@
-import { createContext, use, useCallback, useEffect, useRef, useState } from "react";
-import * as Notifications from "expo-notifications";
-import { useAuth } from "./AuthProvider";
-import { Platform } from "react-native";
+import { createContext, use, useCallback, useEffect, useRef, useState } from 'react';
+import * as Notifications from 'expo-notifications';
+import { useAuth } from './AuthProvider';
+import { Platform } from 'react-native';
 import * as Device from 'expo-device';
-import { useRouter } from "expo-router";
-import { useQueryClient } from "@tanstack/react-query";
-import { useToast } from "apps/mobile/src/components/Toast";
-import { usePushTokenUpdateMutation } from "@libs/query-client";
-import { useTranslations } from "use-intl";
-import { PushNotificationPayload } from "@libs/api-js";
+import { useRouter } from 'expo-router';
+import { useQueryClient } from '@tanstack/react-query';
+import { useToast } from '../components/Toast';
+import { usePushTokenUpdateMutation } from '@libs/query-client';
+import { useTranslations } from 'use-intl';
+import { PushNotificationPayload } from '@libs/api-js';
 
 type NotificationsContextType = {
   permissionStatus: Notifications.PermissionStatus | null;
@@ -21,7 +21,7 @@ const NotificationsContext = createContext<NotificationsContextType | undefined>
 
 export const useNotifications = () => {
   const ctx = use(NotificationsContext);
-  if (!ctx) throw new Error("useNotifications must be used in NotificationsProvider");
+  if (!ctx) throw new Error('useNotifications must be used in NotificationsProvider');
   return ctx;
 };
 
@@ -31,14 +31,16 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user, pushToken, setPushToken } = useAuth();
-  const [permissionStatus, setPermissionStatus] = useState<Notifications.PermissionStatus | null>(null);
+  const [permissionStatus, setPermissionStatus] = useState<Notifications.PermissionStatus | null>(
+    null,
+  );
   const [notifications, setNotifications] = useState<Notifications.Notification[] | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
   const notificationsListener = useRef<Notifications.EventSubscription | null>(null);
   const responseListener = useRef<Notifications.EventSubscription | null>(null);
 
-  const { mutate: updatePushToken } = usePushTokenUpdateMutation(); 
+  const { mutate: updatePushToken } = usePushTokenUpdateMutation();
 
   const handleRegisterForPushNotificationsAsync = useCallback(async () => {
     if (Platform.OS === 'android') {
@@ -62,9 +64,7 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
         throw new Error('Permission not granted to get push token for push notification!');
       }
       try {
-        const pushTokenString = (
-          await Notifications.getDevicePushTokenAsync()
-        ).data;
+        const pushTokenString = (await Notifications.getDevicePushTokenAsync()).data;
         return pushTokenString;
       } catch (e) {
         throw new Error(`${e}`);
@@ -74,64 +74,76 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
     }
   }, []);
 
-  const handleRedirect = useCallback((data: PushNotificationPayload) => {
-    switch (data.type) {
-      case 'reco:received':
-        if (data.mediaType === 'movie') {
+  const handleRedirect = useCallback(
+    (data: PushNotificationPayload) => {
+      switch (data.type) {
+        case 'reco:received':
+          if (data.mediaType === 'movie') {
+            router.push({
+              pathname: '/film/[film_id]',
+              params: { film_id: data.mediaId },
+            });
+          }
+          if (data.mediaType === 'tv_series') {
+            router.push({
+              pathname: '/tv-series/[tv_series_id]',
+              params: { tv_series_id: data.mediaId },
+            });
+          }
+          break;
+        case 'follow:new':
           router.push({
-            pathname: '/film/[film_id]',
-            params: { film_id: data.mediaId },
+            pathname: '/user/[username]',
+            params: { username: data.actorUsername },
           });
-        } if (data.mediaType === 'tv_series') {
+          break;
+        case 'follow:request':
           router.push({
-            pathname: '/tv-series/[tv_series_id]',
-            params: { tv_series_id: data.mediaId },
+            pathname: '/follow-requests',
           });
-        }
-        break;
-      case 'follow:new':
-        router.push({
-          pathname: '/user/[username]',
-          params: { username: data.actorUsername },
-        });
-      case 'follow:request':
-        router.push({
-          pathname: '/follow-requests',
-        });
-        break;
-      case 'follow:accepted':
-        router.push({
-          pathname: '/user/[username]',
-          params: { username: data.actorUsername },
-        });
-        break;
-      default:
-        break;
-    }
-  }, [router]);
+          break;
+        case 'follow:accepted':
+          router.push({
+            pathname: '/user/[username]',
+            params: { username: data.actorUsername },
+          });
+          break;
+        default:
+          break;
+      }
+    },
+    [router],
+  );
 
-  const handleResponse = useCallback((response: Notifications.NotificationResponse) => {
-    // iOS APNs : data in response.notification.request.trigger.payload.data
-    // Android FCM : data in response.notification.request.content.data
-    const data = (
-      response.notification.request.content.data ||
-      (response.notification.request.trigger as any).payload.data
-    ) as PushNotificationPayload | undefined;
-    if (data) {
-      handleRedirect(data);
-    }
-  }, [handleRedirect]);
+  const handleResponse = useCallback(
+    (response: Notifications.NotificationResponse) => {
+      // iOS APNs : data in response.notification.request.trigger.payload.data
+      // Android FCM : data in response.notification.request.content.data
+      const data = (response.notification.request.content.data ||
+        (response.notification.request.trigger as any).payload.data) as
+        | PushNotificationPayload
+        | undefined;
+      if (data) {
+        handleRedirect(data);
+      }
+    },
+    [handleRedirect],
+  );
 
-  const handleToast = useCallback((notification: Notifications.Notification) => {
-    const data = (
-      notification.request.content.data ||
-      (notification.request.trigger as any).payload.data
-    ) as PushNotificationPayload | undefined;
-    toast.info(notification.request.content.title || t('common.messages.new_notification', { count: 1 }), {
-      description: notification.request.content.body ?? undefined,
-      onPress: (data && data.type) ? () => handleRedirect(data) : undefined,
-    });
-  }, [toast, t, handleRedirect]);
+  const handleToast = useCallback(
+    (notification: Notifications.Notification) => {
+      const data = (notification.request.content.data ||
+        (notification.request.trigger as any).payload.data) as PushNotificationPayload | undefined;
+      toast.info(
+        notification.request.content.title || t('common.messages.new_notification', { count: 1 }),
+        {
+          description: notification.request.content.body ?? undefined,
+          onPress: data && data.type ? () => handleRedirect(data) : undefined,
+        },
+      );
+    },
+    [toast, t, handleRedirect],
+  );
 
   useEffect(() => {
     if (!user) return;
@@ -142,28 +154,30 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
         setPushToken(token);
         updatePushToken({
           body: {
-            provider: (Platform.OS === 'ios' || Platform.OS === 'macos') ? 'apns' : 'fcm',
+            provider: Platform.OS === 'ios' || Platform.OS === 'macos' ? 'apns' : 'fcm',
             token,
             deviceType: Platform.OS === 'ios' ? 'ios' : 'android',
           },
         });
       },
       (err) => {
-        console.error("Error getting push token:", err);
+        console.error('Error getting push token:', err);
         setError(err);
-      }
+      },
     );
 
     // Listener when app is open
-    notificationsListener.current = Notifications.addNotificationReceivedListener((notification) => {
-      console.log("🔔 Notification received:", notification);
-      setNotifications((prev) => (prev ? [...prev, notification] : [notification]));
-      handleToast(notification);
-    });
+    notificationsListener.current = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        console.log('🔔 Notification received:', notification);
+        setNotifications((prev) => (prev ? [...prev, notification] : [notification]));
+        handleToast(notification);
+      },
+    );
 
     // Listener when notification is clicked
     responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
-      console.log("🔔 Notification response received:", JSON.stringify(response, null, 2));
+      console.log('🔔 Notification response received:', JSON.stringify(response, null, 2));
       handleResponse(response);
     });
 
@@ -171,7 +185,7 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
     (async () => {
       const initialResponse = Notifications.getLastNotificationResponse();
       if (initialResponse) {
-        console.log("🔔 Initial notification response:", JSON.stringify(initialResponse, null, 2));
+        console.log('🔔 Initial notification response:', JSON.stringify(initialResponse, null, 2));
         handleResponse(initialResponse);
       }
     })();
@@ -191,12 +205,12 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
 
   return (
     <NotificationsContext.Provider
-    value={{
-      permissionStatus,
-      pushToken,
-      notifications,
-      error
-    }}
+      value={{
+        permissionStatus,
+        pushToken,
+        notifications,
+        error,
+      }}
     >
       {children}
     </NotificationsContext.Provider>

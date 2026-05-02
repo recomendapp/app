@@ -1,13 +1,7 @@
-import { Text } from 'apps/mobile/src/components/ui/text';
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
-import { CORNERS, FONT_SIZE } from 'apps/mobile/src/theme/globals';
-import React, {
-  forwardRef,
-  useCallback,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react';
+import { Text } from './text';
+import { useTheme } from '../../providers/ThemeProvider';
+import { CORNERS, FONT_SIZE } from '../../theme/globals';
+import React, { forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
 import {
   Pressable,
   TextInput,
@@ -18,8 +12,7 @@ import {
   ViewStyle,
 } from 'react-native';
 
-export interface InputOTPProps
-  extends Omit<TextInputProps, 'style' | 'value' | 'onChangeText'> {
+export interface InputOTPProps extends Omit<TextInputProps, 'style' | 'value' | 'onChangeText'> {
   /** Number of OTP digits */
   length?: number;
   /** Current OTP value */
@@ -72,7 +65,7 @@ export const InputOTP = forwardRef<InputOTPRef, InputOTPProps>(
       onBlur,
       ...textInputProps
     },
-    ref
+    ref,
   ) => {
     const [isFocused, setIsFocused] = useState(false);
     const [activeIndex, setActiveIndex] = useState(0);
@@ -118,7 +111,7 @@ export const InputOTP = forwardRef<InputOTPRef, InputOTPProps>(
           onComplete?.(limitedText);
         }
       },
-      [length, onChangeText, onComplete]
+      [length, onChangeText, onComplete],
     );
 
     const handleKeyPress = useCallback(
@@ -131,7 +124,7 @@ export const InputOTP = forwardRef<InputOTPRef, InputOTPProps>(
           setActiveIndex(Math.max(0, newValue.length));
         }
       },
-      [normalizedValue, onChangeText]
+      [normalizedValue, onChangeText],
     );
 
     const handleFocus = useCallback(
@@ -140,7 +133,7 @@ export const InputOTP = forwardRef<InputOTPRef, InputOTPProps>(
         setActiveIndex(normalizedValue.length);
         onFocus?.(e);
       },
-      [normalizedValue.length, onFocus]
+      [normalizedValue.length, onFocus],
     );
 
     const handleBlur = useCallback(
@@ -148,7 +141,7 @@ export const InputOTP = forwardRef<InputOTPRef, InputOTPProps>(
         setIsFocused(false);
         onBlur?.(e);
       },
-      [onBlur]
+      [onBlur],
     );
 
     const handleSlotPress = useCallback(() => {
@@ -161,11 +154,7 @@ export const InputOTP = forwardRef<InputOTPRef, InputOTPProps>(
     const slots = Array.from({ length }, (_, index) => {
       const hasValue = index < normalizedValue.length;
       const isActive = isFocused && index === currentActiveIndex;
-      const displayValue = hasValue
-        ? masked
-          ? '•'
-          : normalizedValue[index]
-        : '';
+      const displayValue = hasValue ? (masked ? '•' : normalizedValue[index]) : '';
 
       return (
         <React.Fragment key={index}>
@@ -181,10 +170,10 @@ export const InputOTP = forwardRef<InputOTPRef, InputOTPProps>(
                 borderColor: error
                   ? danger
                   : isActive
-                  ? primary
-                  : hasValue
-                  ? borderColor
-                  : borderColor,
+                    ? primary
+                    : hasValue
+                      ? borderColor
+                      : borderColor,
                 backgroundColor: disabled ? muted + '20' : cardColor,
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -235,10 +224,10 @@ export const InputOTP = forwardRef<InputOTPRef, InputOTPProps>(
           onKeyPress={handleKeyPress}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          keyboardType='numeric'
+          keyboardType="numeric"
           maxLength={length}
           editable={!disabled}
-          selectionColor='transparent'
+          selectionColor="transparent"
           style={{
             position: 'absolute',
             left: -9999,
@@ -279,27 +268,22 @@ export const InputOTP = forwardRef<InputOTPRef, InputOTPProps>(
     );
 
     return renderContent();
-  }
+  },
 );
 
 InputOTP.displayName = 'InputOTP';
 
 // Optional: Export a preset with separator
-export const InputOTPWithSeparator = forwardRef<
-  InputOTPRef,
-  Omit<InputOTPProps, 'separator'>
->((props, ref) => {
-  const { colors } = useTheme();
-  return (
-    <InputOTP
-      ref={ref}
-      separator={
-        <Text style={{ fontSize: 18, color: colors.mutedForeground }}>
-        -
-      </Text>
-    }
-    {...props}
-  />
-  );
-});
+export const InputOTPWithSeparator = forwardRef<InputOTPRef, Omit<InputOTPProps, 'separator'>>(
+  (props, ref) => {
+    const { colors } = useTheme();
+    return (
+      <InputOTP
+        ref={ref}
+        separator={<Text style={{ fontSize: 18, color: colors.mutedForeground }}>-</Text>}
+        {...props}
+      />
+    );
+  },
+);
 InputOTPWithSeparator.displayName = 'InputOTPWithSeparator';

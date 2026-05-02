@@ -1,146 +1,152 @@
 // import { Camera, CameraRef, MapView, MapViewRef, MarkerView, OnPressEvent, ShapeSource, SymbolLayer } from "@maplibre/maplibre-react-native";
-import styleJSON from "apps/mobile/src/assets/map/style.json";
-import { Text } from "apps/mobile/src/components/ui/text";
-import { View } from "apps/mobile/src/components/ui/view";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { BORDER_RADIUS, BORDER_RADIUS_FULL, GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from "apps/mobile/src/theme/globals";
-import { Stack, useRouter } from "expo-router";
-import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import styleJSON from '../../assets/map/style.json';
+import { Text } from '../../components/ui/text';
+import { View } from '../../components/ui/view';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import {
+  BORDER_RADIUS,
+  BORDER_RADIUS_FULL,
+  GAP,
+  PADDING_HORIZONTAL,
+  PADDING_VERTICAL,
+} from '../../theme/globals';
+import { Stack, useRouter } from 'expo-router';
+import { useTheme } from '../../providers/ThemeProvider';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
 // import { ExploreTile } from "@recomendapp/types";
-import Color from "color";
-import { Button } from "apps/mobile/src/components/ui/Button";
-import { Icons } from "apps/mobile/src/constants/Icons";
-import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated";
-import { useWindowDimensions } from "react-native";
-import { SearchBottomSheet } from "./sheets/SearchBottomSheet";
-import { LocationDetailsBottomSheet, LocationDetailsBottomSheetMethods } from "./sheets/LocationDetailsBottomSheet";
-import { withModalProvider } from "apps/mobile/src/components/utils/withModalProvider";
-import { useHeaderHeight } from "@react-navigation/elements";
-import { FiltersBottomSheet } from "./sheets/FiltersBottomSheet";
-import { useExploreStore } from "apps/mobile/src/stores/useExploreStore";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { TrueSheet } from "@lodev09/react-native-true-sheet";
-import { Input } from "apps/mobile/src/components/ui/Input";
-import { useExploreTileMetaQuery, useExploreTileQuery } from "apps/mobile/src/api/explore/exploreQueries";
-import { useUIStore } from "apps/mobile/src/stores/useUIStore";
+import Color from 'color';
+import { Button } from '../../components/ui/Button';
+import { Icons } from '../../constants/Icons';
+import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import { useWindowDimensions } from 'react-native';
+import { SearchBottomSheet } from './sheets/SearchBottomSheet';
+import {
+  LocationDetailsBottomSheet,
+  LocationDetailsBottomSheetMethods,
+} from './sheets/LocationDetailsBottomSheet';
+import { withModalProvider } from '../../components/utils/withModalProvider';
+import { useHeaderHeight } from '@react-navigation/elements';
+import { FiltersBottomSheet } from './sheets/FiltersBottomSheet';
+import { useExploreStore } from '../../stores/useExploreStore';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { TrueSheet } from '@lodev09/react-native-true-sheet';
+import { Input } from '../../components/ui/Input';
+import { useExploreTileMetaQuery, useExploreTileQuery } from '../../api/explore/exploreQueries';
+import { useUIStore } from '../../stores/useUIStore';
 
 const MOVE_DELAY = 500;
 
 const ExploreScreen = () => {
-	const router = useRouter();
-	const filters = useExploreStore((state) => state.filters);
-	const { colors } = useTheme();
-	const insets = useSafeAreaInsets();
-	
-	const headerHeight = useHeaderHeight();
-	const { height: screenHeight } = useWindowDimensions();
-	
-	// REFs
-	// const mapRef = useRef<MapViewRef>(null);
-	// const cameraRef = useRef<CameraRef>(null);
-	const searchRef = useRef<TrueSheet>(null);
-	const locationDetailsRef = useRef<LocationDetailsBottomSheetMethods>(null);
-	
-	// SharedValues
-	const animatedPOIListIndex = useSharedValue(0);
-	const animatedPOIListPosition = useSharedValue(screenHeight);
-	const animatedPOIDetailsIndex = useSharedValue(0);
-	const animatedPOIDetailsPosition = useSharedValue(screenHeight);
-	const animatedFiltersIndex = useSharedValue(0);
-	const animatedFiltersPosition = useSharedValue(screenHeight);
-	const optionsHeight = useSharedValue(0);
-	
-	// States
-	const { map, setMapCamera } = useUIStore((state) => state);
-	// const [selectedMovie, setSelectedMovie] = useState<ExploreTile['features'][number] | null>(null);
-	const [showRecenter, setShowRecenter] = useState(false);
-	
-	const baseZoom = 8;
+  const router = useRouter();
+  const filters = useExploreStore((state) => state.filters);
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
 
-	// const {
-	// 	data: genres,
-	// } = useMediaGenresQuery();
+  const headerHeight = useHeaderHeight();
+  const { height: screenHeight } = useWindowDimensions();
 
-	const {
-		data: tile,
-		refetch: refetchTile
-	} = useExploreTileQuery({ exploreId: 1 });
-	const { data: tileMeta } = useExploreTileMetaQuery({ exploreId: 1 });
+  // REFs
+  // const mapRef = useRef<MapViewRef>(null);
+  // const cameraRef = useRef<CameraRef>(null);
+  const searchRef = useRef<TrueSheet>(null);
+  const locationDetailsRef = useRef<LocationDetailsBottomSheetMethods>(null);
 
-	// Handlers
-	// const handleSaveCameraPosition = useCallback(async () => {
-	// 	if (!mapRef.current) return;
-	// 	try {
-	// 		const center = await mapRef.current.getCenter();
-	// 		const zoom = await mapRef.current.getZoom();
+  // SharedValues
+  const animatedPOIListIndex = useSharedValue(0);
+  const animatedPOIListPosition = useSharedValue(screenHeight);
+  const animatedPOIDetailsIndex = useSharedValue(0);
+  const animatedPOIDetailsPosition = useSharedValue(screenHeight);
+  const animatedFiltersIndex = useSharedValue(0);
+  const animatedFiltersPosition = useSharedValue(screenHeight);
+  const optionsHeight = useSharedValue(0);
 
-	// 		const lng = center[0];
-	// 		const lat = center[1];
+  // States
+  const { map, setMapCamera } = useUIStore((state) => state);
+  // const [selectedMovie, setSelectedMovie] = useState<ExploreTile['features'][number] | null>(null);
+  const [showRecenter, setShowRecenter] = useState(false);
 
-	// 		setMapCamera([lng, lat], zoom);
-	// 	} catch (error) {
-	// 		console.error('Error getting camera position:', error);
-	// 	}
-	// }, [setMapCamera]);
+  const baseZoom = 8;
 
-	// const handleOnLocationPress = useCallback((e: OnPressEvent) => {
-	// 	const location = e.features.at(0) as ExploreTile['features'][number];
-	// 	if (!location) return;
-	// 	setSelectedMovie(location);
-	// }, []);
+  // const {
+  // 	data: genres,
+  // } = useMediaGenresQuery();
 
-	// const handleOnSearchItemPress = useCallback((item: ExploreTile['features'][number]) => {
-	// 	setSelectedMovie(item);
-	// }, []);
- 
-	// const handleOnLocationClose = useCallback(() => {
-	// 	setSelectedMovie(null);
-	// }, []);
+  const { data: tile, refetch: refetchTile } = useExploreTileQuery({ exploreId: 1 });
+  const { data: tileMeta } = useExploreTileMetaQuery({ exploreId: 1 });
 
-	// Styles
-	const animatedOptionsStyle = useAnimatedStyle(() => {
-		const activeSheetY = Math.min(
-			animatedPOIListPosition.get(),
-			animatedPOIDetailsPosition.get(),
-			animatedFiltersPosition.get()
-		);
-		const B = insets.bottom + PADDING_VERTICAL;				// bottom safe area + padding 
-		const H = optionsHeight.get();							// Options height
-		const top0 = screenHeight - (B + H);					// 
-		const bottomOffset = screenHeight - activeSheetY;		// hauteur visible de la sheet
+  // Handlers
+  // const handleSaveCameraPosition = useCallback(async () => {
+  // 	if (!mapRef.current) return;
+  // 	try {
+  // 		const center = await mapRef.current.getCenter();
+  // 		const zoom = await mapRef.current.getZoom();
 
-		const dDesired = bottomOffset - B + PADDING_VERTICAL;	// coller au-dessus de la sheet
-		const dMax = top0 - (headerHeight + PADDING_VERTICAL);	// ne pas dépasser le header
-		const d = Math.max(0, Math.min(dDesired, dMax));		// clamp
+  // 		const lng = center[0];
+  // 		const lat = center[1];
 
-		return { transform: [{ translateY: -d }] };
-	});
+  // 		setMapCamera([lng, lat], zoom);
+  // 	} catch (error) {
+  // 		console.error('Error getting camera position:', error);
+  // 	}
+  // }, [setMapCamera]);
 
-	// useEffects
-	// useEffect(() => {
-	// 	if (selectedMovie) {
-	// 		cameraRef.current?.flyTo(selectedMovie.geometry.coordinates, MOVE_DELAY);
-	// 		locationDetailsRef.current?.present(selectedMovie.properties);
-	// 	}
-	// 	setShowRecenter(false);
-	// }, [selectedMovie]);
+  // const handleOnLocationPress = useCallback((e: OnPressEvent) => {
+  // 	const location = e.features.at(0) as ExploreTile['features'][number];
+  // 	if (!location) return;
+  // 	setSelectedMovie(location);
+  // }, []);
 
-	useEffect(() => {
-		if (tile && tileMeta && tile.updated_at !== tileMeta.updated_at) {
-			refetchTile();
-		}
-	}, [tile, tileMeta, refetchTile]);
+  // const handleOnSearchItemPress = useCallback((item: ExploreTile['features'][number]) => {
+  // 	setSelectedMovie(item);
+  // }, []);
 
-	useLayoutEffect(() => {
-		return () => {
-			searchRef.current?.dismiss();
-		}
-	}, []);
+  // const handleOnLocationClose = useCallback(() => {
+  // 	setSelectedMovie(null);
+  // }, []);
 
-	return (
-	<>
-		{/* <Stack.Screen
+  // Styles
+  const animatedOptionsStyle = useAnimatedStyle(() => {
+    const activeSheetY = Math.min(
+      animatedPOIListPosition.get(),
+      animatedPOIDetailsPosition.get(),
+      animatedFiltersPosition.get(),
+    );
+    const B = insets.bottom + PADDING_VERTICAL; // bottom safe area + padding
+    const H = optionsHeight.get(); // Options height
+    const top0 = screenHeight - (B + H); //
+    const bottomOffset = screenHeight - activeSheetY; // hauteur visible de la sheet
+
+    const dDesired = bottomOffset - B + PADDING_VERTICAL; // coller au-dessus de la sheet
+    const dMax = top0 - (headerHeight + PADDING_VERTICAL); // ne pas dépasser le header
+    const d = Math.max(0, Math.min(dDesired, dMax)); // clamp
+
+    return { transform: [{ translateY: -d }] };
+  });
+
+  // useEffects
+  // useEffect(() => {
+  // 	if (selectedMovie) {
+  // 		cameraRef.current?.flyTo(selectedMovie.geometry.coordinates, MOVE_DELAY);
+  // 		locationDetailsRef.current?.present(selectedMovie.properties);
+  // 	}
+  // 	setShowRecenter(false);
+  // }, [selectedMovie]);
+
+  useEffect(() => {
+    if (tile && tileMeta && tile.updated_at !== tileMeta.updated_at) {
+      refetchTile();
+    }
+  }, [tile, tileMeta, refetchTile]);
+
+  useLayoutEffect(() => {
+    return () => {
+      searchRef.current?.dismiss();
+    };
+  }, []);
+
+  return (
+    <>
+      {/* <Stack.Screen
 		options={{
 			headerTitle: () => <></>,
 			headerShown: true,
@@ -155,7 +161,7 @@ const ExploreScreen = () => {
 			),
 		}}
 		/> */}
-		{/* <MapView
+      {/* <MapView
 		ref={mapRef}
 		style={{ flex: 1 }}
 		mapStyle={styleJSON}
@@ -302,7 +308,7 @@ const ExploreScreen = () => {
 			)}
 		</MapView> */}
 
-		{/* <TrueSheet
+      {/* <TrueSheet
 		ref={searchRef}
 		detents={['auto', 0.8]}
 		initialDetentIndex={0}
@@ -319,7 +325,7 @@ const ExploreScreen = () => {
 			</View>
 		</TrueSheet> */}
 
-		{/* <SearchBottomSheet
+      {/* <SearchBottomSheet
 		ref={searchRef}
 		index={animatedPOIListIndex}
 		position={animatedPOIListPosition}
@@ -332,26 +338,34 @@ const ExploreScreen = () => {
 		onClose={handleOnLocationClose}
       	/> */}
 
-		<Animated.View onLayout={(e) => optionsHeight.value = e.nativeEvent.layout.height} style={[{ position: 'absolute', bottom: insets.bottom + PADDING_VERTICAL, right: PADDING_HORIZONTAL, gap: GAP }, animatedOptionsStyle]}>
-			{showRecenter && (
-				<Button
-				icon={Icons.Navigation}
-				size="icon"
-				variant="muted"
-				onPress={() => {
-					if (selectedMovie) {
-						cameraRef.current?.moveTo(selectedMovie.geometry.coordinates, MOVE_DELAY);
-					}
-				}}
-				/>
-			)}
-			<FiltersBottomSheet
-			index={animatedFiltersIndex}
-			position={animatedFiltersPosition}
-			/>
-		</Animated.View>
-	</>
-	);
+      <Animated.View
+        onLayout={(e) => (optionsHeight.value = e.nativeEvent.layout.height)}
+        style={[
+          {
+            position: 'absolute',
+            bottom: insets.bottom + PADDING_VERTICAL,
+            right: PADDING_HORIZONTAL,
+            gap: GAP,
+          },
+          animatedOptionsStyle,
+        ]}
+      >
+        {showRecenter && (
+          <Button
+            icon={Icons.Navigation}
+            size="icon"
+            variant="muted"
+            onPress={() => {
+              if (selectedMovie) {
+                cameraRef.current?.moveTo(selectedMovie.geometry.coordinates, MOVE_DELAY);
+              }
+            }}
+          />
+        )}
+        <FiltersBottomSheet index={animatedFiltersIndex} position={animatedFiltersPosition} />
+      </Animated.View>
+    </>
+  );
 };
 
 export default withModalProvider(ExploreScreen);

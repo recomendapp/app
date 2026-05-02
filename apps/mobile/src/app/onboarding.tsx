@@ -1,7 +1,7 @@
-import OnboardingScreen from "apps/mobile/src/screens/onboarding/OnboardingScreen";
+import OnboardingScreen from '../screens/onboarding/OnboardingScreen';
 
 const Onboarding = () => {
-	return <OnboardingScreen />;
+  return <OnboardingScreen />;
 };
 
 export default Onboarding;

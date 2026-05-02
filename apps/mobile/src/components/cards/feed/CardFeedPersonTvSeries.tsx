@@ -1,156 +1,185 @@
-import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
-import tw from "apps/mobile/src/lib/tw";
-import * as React from "react"
-import Animated from "react-native-reanimated";
-import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
-import { Pressable, View } from "react-native";
-import { Link, useRouter } from "expo-router";
-import { Text } from "apps/mobile/src/components/ui/text";
-import { upperFirst } from "lodash";
-import { useTranslations } from "use-intl";
-import UserAvatar from "apps/mobile/src/components/user/UserAvatar";
-import { Skeleton } from "apps/mobile/src/components/ui/Skeleton";
-import useBottomSheetStore from "apps/mobile/src/stores/useBottomSheetStore";
-import BottomSheetTvSeries from "apps/mobile/src/components/bottom-sheets/sheets/BottomSheetTvSeries";
-import { BadgeMedia } from "apps/mobile/src/components/badges/BadgeMedia";
-import { GAP } from "apps/mobile/src/theme/globals";
-import { getTmdbImage } from "apps/mobile/src/lib/tmdb/getTmdbImage";
-import { PersonFeedWithTvSeries } from "@libs/api-js";
-import { FixedOmit } from "apps/mobile/src/utils/fixed-omit";
+import { useTheme } from '../../../providers/ThemeProvider';
+import tw from '../../../lib/tw';
+import * as React from 'react';
+import Animated from 'react-native-reanimated';
+import { ImageWithFallback } from '../../utils/ImageWithFallback';
+import { Pressable, View } from 'react-native';
+import { Link, useRouter } from 'expo-router';
+import { Text } from '../../ui/text';
+import { upperFirst } from 'lodash';
+import { useTranslations } from 'use-intl';
+import UserAvatar from '../../user/UserAvatar';
+import { Skeleton } from '../../ui/Skeleton';
+import useBottomSheetStore from '../../../stores/useBottomSheetStore';
+import BottomSheetTvSeries from '../../bottom-sheets/sheets/BottomSheetTvSeries';
+import { BadgeMedia } from '../../badges/BadgeMedia';
+import { GAP } from '../../../theme/globals';
+import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
+import { PersonFeedWithTvSeries } from '@libs/api-js';
+import { FixedOmit } from '../../../utils/fixed-omit';
 
-interface CardFeedPersonTvSeriesBaseProps
-	extends React.ComponentProps<typeof Animated.View> {
-		variant?: "default";
-		onPress?: () => void;
-		onLongPress?: () => void;
-	}
+interface CardFeedPersonTvSeriesBaseProps extends React.ComponentProps<typeof Animated.View> {
+  variant?: 'default';
+  onPress?: () => void;
+  onLongPress?: () => void;
+}
 
 type CardFeedPersonTvSeriesSkeletonProps = {
-	skeleton: true;
-	data?: never;
+  skeleton: true;
+  data?: never;
 };
 
 type CardFeedPersonTvSeriesDataProps = {
-	skeleton?: false;
-	data: PersonFeedWithTvSeries;
+  skeleton?: false;
+  data: PersonFeedWithTvSeries;
 };
 
 export type CardFeedPersonTvSeriesProps = CardFeedPersonTvSeriesBaseProps &
-	(CardFeedPersonTvSeriesSkeletonProps | CardFeedPersonTvSeriesDataProps);
+  (CardFeedPersonTvSeriesSkeletonProps | CardFeedPersonTvSeriesDataProps);
 
 const CardFeedPersonTvSeriesDefault = React.forwardRef<
-	React.ComponentRef<typeof Animated.View>,
-	FixedOmit<CardFeedPersonTvSeriesProps, "variant" | "onPress">
+  React.ComponentRef<typeof Animated.View>,
+  FixedOmit<CardFeedPersonTvSeriesProps, 'variant' | 'onPress'>
 >(({ style, children, data, onLongPress, skeleton, ...props }, ref) => {
-	const { colors } = useTheme();
-	const t = useTranslations();
-	const router = useRouter();
-	return (
-		<Animated.View
-			ref={ref}
-			style={[
-				{ gap: GAP * 2 },
-				tw`flex-row rounded-xl`,
-				style
-			]}
-			{...props}
-		>
-			{!skeleton ? (
-				<ImageWithFallback
-				source={{ uri: getTmdbImage({ path: data.media.posterPath, size: 'w342' }) ?? '' }}
-				alt={data.media.name ?? ''}
-				type={'tv_series'}
-				style={[tw`w-20 h-full`, { backgroundColor: colors.background }]}
-				/>
-			) : (
-				<Skeleton style={tw`w-20 h-full`} />
-			)}
-			<View style={tw`flex-1 gap-2 p-2`}>
-				<View style={tw`flex-row items-center gap-1`}>
-					{!skeleton ? (
-						<Pressable onPress={() => router.push({ pathname: '/person/[person_id]', params: { person_id: data.person.id } })}>
-							<UserAvatar avatar_url={getTmdbImage({ path: data.person.profilePath, size: 'w342' }) ?? ''} full_name={data.person.name ?? ''} style={tw`rounded-md`}/>
-						</Pressable>
-					) : <Skeleton style={tw`w-6 h-6 rounded-md`} />}
-					{!skeleton ? (
-						<Text textColor="muted">
-							{t.rich('pages.feed.persons.new_activity', {
-								name: data.person.name || t('common.messages.unknown'),
-								roles: data.jobs.length ? data.jobs.join(', ').toLowerCase() : t('common.messages.unknown'),
-								titleMedia: data.media.name || t('common.messages.unknown'),
-								linkPerson: (chunk) => <Link href={{ pathname: '/person/[person_id]', params: { person_id: data.person.id } }} style={{ color: colors.foreground }}>{chunk}</Link>,
-								linkMedia: (chunk) => <Link href={{ pathname: '/tv-series/[tv_series_id]', params: { tv_series_id: data.media.id } }} style={{ color: colors.foreground }}>{chunk}</Link>,
-								important: (chunk) => <Text textColor="default">{chunk}</Text>
-							})}
-						</Text>
-					) : <Skeleton style={tw`w-40 h-4`} />}
-				</View>
-				<View style={tw`gap-2`}>
-					{!skeleton ? (
-						<Text numberOfLines={2} style={tw`font-bold`}>
-						{data.media.name}
-						</Text>
- 					) : <Skeleton style={tw`w-full h-5`} />}
-					{!skeleton ? <BadgeMedia type={'tv_series'} /> : <Skeleton style={tw`w-20 h-5 rounded-full`} />}
-					{!skeleton ? (
-						<Text
-						textColor={!data.media.overview ? "muted" : undefined}
-						numberOfLines={2}
-						style={tw`text-xs text-justify`}
-						>
-							{data.media.overview || upperFirst(t('common.messages.no_description'))}
-						</Text>
-					) : <Skeleton style={tw`w-full h-12`} />}
-				</View>
-			</View>
-		</Animated.View>
-	);
+  const { colors } = useTheme();
+  const t = useTranslations();
+  const router = useRouter();
+  return (
+    <Animated.View ref={ref} style={[{ gap: GAP * 2 }, tw`flex-row rounded-xl`, style]} {...props}>
+      {!skeleton ? (
+        <ImageWithFallback
+          source={{ uri: getTmdbImage({ path: data.media.posterPath, size: 'w342' }) ?? '' }}
+          alt={data.media.name ?? ''}
+          type={'tv_series'}
+          style={[tw`w-20 h-full`, { backgroundColor: colors.background }]}
+        />
+      ) : (
+        <Skeleton style={tw`w-20 h-full`} />
+      )}
+      <View style={tw`flex-1 gap-2 p-2`}>
+        <View style={tw`flex-row items-center gap-1`}>
+          {!skeleton ? (
+            <Pressable
+              onPress={() =>
+                router.push({
+                  pathname: '/person/[person_id]',
+                  params: { person_id: data.person.id },
+                })
+              }
+            >
+              <UserAvatar
+                avatar_url={getTmdbImage({ path: data.person.profilePath, size: 'w342' }) ?? ''}
+                full_name={data.person.name ?? ''}
+                style={tw`rounded-md`}
+              />
+            </Pressable>
+          ) : (
+            <Skeleton style={tw`w-6 h-6 rounded-md`} />
+          )}
+          {!skeleton ? (
+            <Text textColor="muted">
+              {t.rich('pages.feed.persons.new_activity', {
+                name: data.person.name || t('common.messages.unknown'),
+                roles: data.jobs.length
+                  ? data.jobs.join(', ').toLowerCase()
+                  : t('common.messages.unknown'),
+                titleMedia: data.media.name || t('common.messages.unknown'),
+                linkPerson: (chunk) => (
+                  <Link
+                    href={{
+                      pathname: '/person/[person_id]',
+                      params: { person_id: data.person.id },
+                    }}
+                    style={{ color: colors.foreground }}
+                  >
+                    {chunk}
+                  </Link>
+                ),
+                linkMedia: (chunk) => (
+                  <Link
+                    href={{
+                      pathname: '/tv-series/[tv_series_id]',
+                      params: { tv_series_id: data.media.id },
+                    }}
+                    style={{ color: colors.foreground }}
+                  >
+                    {chunk}
+                  </Link>
+                ),
+                important: (chunk) => <Text textColor="default">{chunk}</Text>,
+              })}
+            </Text>
+          ) : (
+            <Skeleton style={tw`w-40 h-4`} />
+          )}
+        </View>
+        <View style={tw`gap-2`}>
+          {!skeleton ? (
+            <Text numberOfLines={2} style={tw`font-bold`}>
+              {data.media.name}
+            </Text>
+          ) : (
+            <Skeleton style={tw`w-full h-5`} />
+          )}
+          {!skeleton ? (
+            <BadgeMedia type={'tv_series'} />
+          ) : (
+            <Skeleton style={tw`w-20 h-5 rounded-full`} />
+          )}
+          {!skeleton ? (
+            <Text
+              textColor={!data.media.overview ? 'muted' : undefined}
+              numberOfLines={2}
+              style={tw`text-xs text-justify`}
+            >
+              {data.media.overview || upperFirst(t('common.messages.no_description'))}
+            </Text>
+          ) : (
+            <Skeleton style={tw`w-full h-12`} />
+          )}
+        </View>
+      </View>
+    </Animated.View>
+  );
 });
-CardFeedPersonTvSeriesDefault.displayName = "CardFeedPersonTvSeriesDefault";
+CardFeedPersonTvSeriesDefault.displayName = 'CardFeedPersonTvSeriesDefault';
 
 const CardFeedPersonTvSeries = React.forwardRef<
-	React.ComponentRef<typeof Animated.View>,
-	CardFeedPersonTvSeriesProps
->(({ variant = "default", onPress, onLongPress, ...props }, ref) => {
-	const router = useRouter();
-	const openSheet = useBottomSheetStore((state) => state.openSheet);
-	const handleOnPress = React.useCallback(() => {
-		if (!props.data?.media) return;
-		router.push({
-			pathname: '/tv-series/[tv_series_id]',
-			params: {
-				tv_series_id: props.data.media.id
-			}
-		});
-		onPress?.();
-	}, [onPress, props.data?.media, router]);
-	const handleOnLongPress = React.useCallback(() => {
-		if (!props.data?.media) return;
-		openSheet(BottomSheetTvSeries, {
-			tvSeries: props.data.media
-		})
-		onLongPress?.();
-	}, [onLongPress, openSheet, props.data?.media]);
-	const content = (
-		variant === "default" ? (
-			<CardFeedPersonTvSeriesDefault ref={ref} onLongPress={onLongPress} {...props} />
-		) : null
-	);
+  React.ComponentRef<typeof Animated.View>,
+  CardFeedPersonTvSeriesProps
+>(({ variant = 'default', onPress, onLongPress, ...props }, ref) => {
+  const router = useRouter();
+  const openSheet = useBottomSheetStore((state) => state.openSheet);
+  const handleOnPress = React.useCallback(() => {
+    if (!props.data?.media) return;
+    router.push({
+      pathname: '/tv-series/[tv_series_id]',
+      params: {
+        tv_series_id: props.data.media.id,
+      },
+    });
+    onPress?.();
+  }, [onPress, props.data?.media, router]);
+  const handleOnLongPress = React.useCallback(() => {
+    if (!props.data?.media) return;
+    openSheet(BottomSheetTvSeries, {
+      tvSeries: props.data.media,
+    });
+    onLongPress?.();
+  }, [onLongPress, openSheet, props.data?.media]);
+  const content =
+    variant === 'default' ? (
+      <CardFeedPersonTvSeriesDefault ref={ref} onLongPress={onLongPress} {...props} />
+    ) : null;
 
-	if (props.skeleton) return content;
+  if (props.skeleton) return content;
 
-	return (
-		<Pressable
-		onPress={handleOnPress}
-		onLongPress={handleOnLongPress}
-		>
-			{content}
-		</Pressable>
-	)
+  return (
+    <Pressable onPress={handleOnPress} onLongPress={handleOnLongPress}>
+      {content}
+    </Pressable>
+  );
 });
-CardFeedPersonTvSeries.displayName = "CardFeedPersonTvSeries";
+CardFeedPersonTvSeries.displayName = 'CardFeedPersonTvSeries';
 
-export {
-	CardFeedPersonTvSeries,
-	CardFeedPersonTvSeriesDefault,
-}
+export { CardFeedPersonTvSeries, CardFeedPersonTvSeriesDefault };

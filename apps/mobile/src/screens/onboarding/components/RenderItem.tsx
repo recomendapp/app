@@ -1,4 +1,4 @@
-import {StyleSheet, View, useWindowDimensions} from 'react-native';
+import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import React from 'react';
 import Animated, {
   Extrapolation,
@@ -6,10 +6,10 @@ import Animated, {
   interpolate,
   useAnimatedStyle,
 } from 'react-native-reanimated';
-import {OnboardingData} from '../data';
-import tw from 'apps/mobile/src/lib/tw';
+import { OnboardingData } from '../data';
+import tw from '../../../lib/tw';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BORDER_RADIUS_LG, GAP_LG, PADDING_HORIZONTAL } from 'apps/mobile/src/theme/globals';
+import { BORDER_RADIUS_LG, GAP_LG, PADDING_HORIZONTAL } from '../../../theme/globals';
 import { Image } from 'expo-image';
 
 type Props = {
@@ -18,35 +18,27 @@ type Props = {
   item: OnboardingData;
 };
 
-const RenderItem = ({index, x, item}: Props) => {
+const RenderItem = ({ index, x, item }: Props) => {
   const insets = useSafeAreaInsets();
-  const {width: SCREEN_WIDTH} = useWindowDimensions();
+  const { width: SCREEN_WIDTH } = useWindowDimensions();
 
   const circleAnimation = useAnimatedStyle(() => {
     const scale = interpolate(
       x.value,
-      [
-        (index - 1) * SCREEN_WIDTH,
-        index * SCREEN_WIDTH,
-        (index + 1) * SCREEN_WIDTH,
-      ],
+      [(index - 1) * SCREEN_WIDTH, index * SCREEN_WIDTH, (index + 1) * SCREEN_WIDTH],
       [1, 4, 4],
       Extrapolation.CLAMP,
     );
 
     return {
-      transform: [{scale: scale}],
+      transform: [{ scale: scale }],
     };
   });
 
   const textAnimationStyle = useAnimatedStyle(() => {
     const progress = interpolate(
       x.value,
-      [
-        (index - 1) * SCREEN_WIDTH,
-        index * SCREEN_WIDTH,
-        (index + 1) * SCREEN_WIDTH,
-      ],
+      [(index - 1) * SCREEN_WIDTH, index * SCREEN_WIDTH, (index + 1) * SCREEN_WIDTH],
       [0, 1, 0],
       Extrapolation.CLAMP,
     );
@@ -55,7 +47,7 @@ const RenderItem = ({index, x, item}: Props) => {
     };
   });
   return (
-    <View style={[styles.itemContainer, {width: SCREEN_WIDTH, paddingTop: insets.top }]}>
+    <View style={[styles.itemContainer, { width: SCREEN_WIDTH, paddingTop: insets.top }]}>
       <View style={tw`absolute inset-0 items-center justify-end`}>
         <Animated.View
           style={[
@@ -69,20 +61,26 @@ const RenderItem = ({index, x, item}: Props) => {
           ]}
         />
       </View>
-      <Animated.View style={[ tw`items-center justify-center w-full`, { gap: GAP_LG }]}>
+      <Animated.View style={[tw`items-center justify-center w-full`, { gap: GAP_LG }]}>
         <Image
-        transition={500}
-        source={item.image}
-        style={[
-          tw`w-full h-full max-w-lg`,
-          {
-            maxHeight: 700,
-            borderRadius: BORDER_RADIUS_LG,
-          }
-        ]}
-        contentFit={'contain'}
+          transition={500}
+          source={item.image}
+          style={[
+            tw`w-full h-full max-w-lg`,
+            {
+              maxHeight: 700,
+              borderRadius: BORDER_RADIUS_LG,
+            },
+          ]}
+          contentFit={'contain'}
         />
-        <Animated.Text style={[tw`text-center text-xl font-bold`, { color: item.textColor, marginHorizontal: PADDING_HORIZONTAL }, textAnimationStyle]}>
+        <Animated.Text
+          style={[
+            tw`text-center text-xl font-bold`,
+            { color: item.textColor, marginHorizontal: PADDING_HORIZONTAL },
+            textAnimationStyle,
+          ]}
+        >
           {item.text}
         </Animated.Text>
       </Animated.View>

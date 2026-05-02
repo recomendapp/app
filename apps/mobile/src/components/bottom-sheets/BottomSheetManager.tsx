@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { useNavigation } from 'expo-router';
-import useBottomSheetStore from 'apps/mobile/src/stores/useBottomSheetStore';
+import useBottomSheetStore from '../../stores/useBottomSheetStore';
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
 
-export interface BottomSheetProps extends Omit<React.ComponentPropsWithoutRef<typeof TrueSheet>, 'children'> {
+export interface BottomSheetProps
+  extends Omit<React.ComponentPropsWithoutRef<typeof TrueSheet>, 'children'> {
   id: string;
-};
+}
 
 export const BottomSheetManager = () => {
   const navigation = useNavigation();

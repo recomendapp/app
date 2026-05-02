@@ -1,24 +1,14 @@
-import { Icon } from 'apps/mobile/src/components/ui/icon';
-import { ButtonSpinner, SpinnerVariant } from 'apps/mobile/src/components/ui/spinner';
-import { Text } from 'apps/mobile/src/components/ui/text';
-import tw from 'apps/mobile/src/lib/tw';
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
-import {  HEIGHT } from 'apps/mobile/src/theme/globals';
+import { Icon } from './icon';
+import { ButtonSpinner, SpinnerVariant } from './spinner';
+import { Text } from './text';
+import tw from '../../lib/tw';
+import { useTheme } from '../../providers/ThemeProvider';
+import { HEIGHT } from '../../theme/globals';
 import * as Haptics from 'expo-haptics';
 import { LucideProps } from 'lucide-react-native';
 import { forwardRef } from 'react';
-import {
-  Pressable,
-  PressableProps,
-  TextStyle,
-  View,
-  ViewStyle,
-} from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
+import { Pressable, PressableProps, TextStyle, View, ViewStyle } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 export type ButtonVariant =
   | 'default'
@@ -73,7 +63,7 @@ export const Button = forwardRef<View, ButtonProps>(
       textStyle,
       ...props
     },
-    ref
+    ref,
   ) => {
     const { colors } = useTheme();
     const primaryColor = colors.primary;
@@ -329,11 +319,11 @@ export const Button = forwardRef<View, ButtonProps>(
             alignSelf: 'stretch',
           }
         : flexValue !== null
-        ? {
-            flex: flexValue,
-            maxHeight: size === 'sm' ? 44 : size === 'lg' ? 54 : HEIGHT,
-          }
-        : {};
+          ? {
+              flex: flexValue,
+              maxHeight: size === 'sm' ? 44 : size === 'lg' ? 54 : HEIGHT,
+            }
+          : {};
     };
 
     // Updated getStyleWithoutFlex function
@@ -367,7 +357,14 @@ export const Button = forwardRef<View, ButtonProps>(
         {...props}
       >
         <Animated.View style={[animatedStyle, buttonStyle, styleWithoutFlex]}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, opacity: loading ? 0.5 : 1 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 6,
+              opacity: loading ? 0.5 : 1,
+            }}
+          >
             {icon && iconPosition === 'left' && (
               <Icon name={icon} color={contentColor} size={iconSize} {...iconProps} />
             )}
@@ -381,16 +378,8 @@ export const Button = forwardRef<View, ButtonProps>(
             )}
           </View>
           {loading && (
-            <View
-              style={[
-                tw`absolute inset-0 items-center justify-center`,
-              ]}
-            >
-              <ButtonSpinner
-                size={size}
-                variant={loadingVariant}
-                color={contentColor}
-              />
+            <View style={[tw`absolute inset-0 items-center justify-center`]}>
+              <ButtonSpinner size={size} variant={loadingVariant} color={contentColor} />
             </View>
           )}
         </Animated.View>
@@ -403,7 +392,9 @@ export const Button = forwardRef<View, ButtonProps>(
         disabled={disabled || loading}
         {...props}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, opacity: loading ? 0.5 : 1 }}>
+        <View
+          style={{ flexDirection: 'row', alignItems: 'center', gap: 6, opacity: loading ? 0.5 : 1 }}
+        >
           {icon && iconPosition === 'left' && (
             <Icon name={icon} color={contentColor} size={iconSize} {...iconProps} />
           )}
@@ -417,21 +408,13 @@ export const Button = forwardRef<View, ButtonProps>(
           )}
         </View>
         {loading && (
-          <View
-            style={[
-              tw`absolute inset-0 items-center justify-center`,
-            ]}
-          >
-            <ButtonSpinner
-              size={size}
-              variant={loadingVariant}
-              color={contentColor}
-            />
+          <View style={[tw`absolute inset-0 items-center justify-center`]}>
+            <ButtonSpinner size={size} variant={loadingVariant} color={contentColor} />
           </View>
         )}
       </Pressable>
     );
-  }
+  },
 );
 
 // Add display name for better debugging

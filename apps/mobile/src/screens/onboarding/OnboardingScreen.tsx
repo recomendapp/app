@@ -1,4 +1,4 @@
-import {StyleSheet, View, FlatList, ViewToken, Platform} from 'react-native';
+import { StyleSheet, View, FlatList, ViewToken, Platform } from 'react-native';
 import React from 'react';
 import Animated, {
   useSharedValue,
@@ -10,7 +10,7 @@ import CustomButton from './components/CustomButton';
 import RenderItem from './components/RenderItem';
 import useOnboardingData, { OnboardingData } from './data';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
+import { PADDING_VERTICAL } from '../../theme/globals';
 import { useRouter } from 'expo-router';
 
 const OnboardingScreen = () => {
@@ -22,18 +22,14 @@ const OnboardingScreen = () => {
   const shouldInsetsAware = !(Platform.OS === 'ios' && router.canDismiss());
   const insets = useSafeAreaInsets();
 
-  const onViewableItemsChanged = ({
-    viewableItems,
-  }: {
-    viewableItems: ViewToken[];
-  }) => {
+  const onViewableItemsChanged = ({ viewableItems }: { viewableItems: ViewToken[] }) => {
     if (viewableItems.length > 0 && viewableItems[0].index !== null) {
       flatListIndex.value = viewableItems[0].index;
     }
   };
 
   const onScroll = useAnimatedScrollHandler({
-    onScroll: event => {
+    onScroll: (event) => {
       x.value = event.contentOffset.x;
     },
   });
@@ -44,10 +40,10 @@ const OnboardingScreen = () => {
         ref={flatListRef}
         onScroll={onScroll}
         data={data}
-        renderItem={({item, index}) => {
+        renderItem={({ item, index }) => {
           return <RenderItem item={item} index={index} x={x} />;
         }}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()}
         scrollEventThrottle={16}
         horizontal={true}
         bounces={false}
@@ -58,16 +54,14 @@ const OnboardingScreen = () => {
           minimumViewTime: 300,
           viewAreaCoveragePercentThreshold: 10,
         }}
-        style={{ paddingTop: shouldInsetsAware ? insets.top + PADDING_VERTICAL : PADDING_VERTICAL, paddingBottom: insets.bottom + PADDING_VERTICAL + 50 }}
+        style={{
+          paddingTop: shouldInsetsAware ? insets.top + PADDING_VERTICAL : PADDING_VERTICAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL + 50,
+        }}
       />
       <View style={styles.bottomContainer}>
         <Pagination data={data} x={x} />
-        <CustomButton
-          flatListRef={flatListRef}
-          flatListIndex={flatListIndex}
-          x={x}
-          data={data}
-        />
+        <CustomButton flatListRef={flatListRef} flatListIndex={flatListIndex} x={x} data={data} />
       </View>
     </View>
   );

@@ -1,16 +1,16 @@
-import tw from "apps/mobile/src/lib/tw";
-import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
-import { LegendList } from "@legendapp/list/react-native";
-import { useTranslations } from "use-intl";
-import { upperFirst } from "lodash";
-import { CardMovie } from "../cards/CardMovie";
-import { CardTvSeries } from "../cards/CardTvSeries";
-import { GAP, WIDTH_CARD_XS } from "apps/mobile/src/theme/globals";
-import { Text } from "../ui/text";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { widgetMediasMostPopularInfiniteOptions } from "@libs/query-client";
-import { useCallback, useMemo } from "react";
-import { ListInfiniteMediasMostPopular } from "@libs/api-js";
+import tw from '../../lib/tw';
+import { StyleProp, TextStyle, View, ViewStyle } from 'react-native';
+import { LegendList } from '@legendapp/list/react-native';
+import { useTranslations } from 'use-intl';
+import { upperFirst } from 'lodash';
+import { CardMovie } from '../cards/CardMovie';
+import { CardTvSeries } from '../cards/CardTvSeries';
+import { GAP, WIDTH_CARD_XS } from '../../theme/globals';
+import { Text } from '../ui/text';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { widgetMediasMostPopularInfiniteOptions } from '@libs/query-client';
+import { useCallback, useMemo } from 'react';
+import { ListInfiniteMediasMostPopular } from '@libs/api-js';
 
 interface WidgetMostPopularProps extends React.ComponentPropsWithoutRef<typeof View> {
   labelStyle?: StyleProp<TextStyle>;
@@ -25,22 +25,25 @@ export const WidgetMostPopular = ({
   const t = useTranslations();
 
   // Queries
-  const {
-    data,
-    hasNextPage,
-    fetchNextPage,
-  } = useInfiniteQuery(widgetMediasMostPopularInfiniteOptions());
-  const medias = useMemo(() => data?.pages.flatMap(page => page.data) || [], [data]);
+  const { data, hasNextPage, fetchNextPage } = useInfiniteQuery(
+    widgetMediasMostPopularInfiniteOptions(),
+  );
+  const medias = useMemo(() => data?.pages.flatMap((page) => page.data) || [], [data]);
 
-  const renderItem = useCallback(({ item }: { item: ListInfiniteMediasMostPopular['data'][number] }) => {
-    if (item.type === 'movie') {
-      return <CardMovie variant="poster" movie={item.media} style={{ width: WIDTH_CARD_XS }} />
-    }
-    if (item.type === 'tv_series') {
-      return <CardTvSeries variant="poster" tvSeries={item.media} style={{ width: WIDTH_CARD_XS }} />
-    }
-    return null;
-  }, []);
+  const renderItem = useCallback(
+    ({ item }: { item: ListInfiniteMediasMostPopular['data'][number] }) => {
+      if (item.type === 'movie') {
+        return <CardMovie variant="poster" movie={item.media} style={{ width: WIDTH_CARD_XS }} />;
+      }
+      if (item.type === 'tv_series') {
+        return (
+          <CardTvSeries variant="poster" tvSeries={item.media} style={{ width: WIDTH_CARD_XS }} />
+        );
+      }
+      return null;
+    },
+    [],
+  );
 
   if (!medias.length) {
     return null;
@@ -56,7 +59,7 @@ export const WidgetMostPopular = ({
         renderItem={renderItem}
         snapToInterval={WIDTH_CARD_XS + GAP}
         decelerationRate="fast"
-        keyExtractor={(item) =>  `${item.type}-${item.mediaId}`}
+        keyExtractor={(item) => `${item.type}-${item.mediaId}`}
         onEndReached={() => hasNextPage && fetchNextPage()}
         horizontal
         showsHorizontalScrollIndicator={false}

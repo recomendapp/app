@@ -1,6 +1,6 @@
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import { useTheme } from '../../providers/ThemeProvider';
 import { View, ViewStyle } from 'react-native';
-import tw from 'apps/mobile/src/lib/tw';
+import tw from '../../lib/tw';
 import { Text } from '../ui/text';
 
 type Props = {
@@ -10,12 +10,7 @@ type Props = {
   style?: ViewStyle;
 };
 
-export const ChartContainer = ({
-  title,
-  description,
-  children,
-  style,
-}: Props) => {
+export const ChartContainer = ({ title, description, children, style }: Props) => {
   const { colors } = useTheme();
 
   return (
@@ -30,15 +25,9 @@ export const ChartContainer = ({
         style,
       ]}
     >
-      {title && (
-        <Text style={[tw`text-lg font-semibold`, { marginBottom: 4 }]}>
-          {title}
-        </Text>
-      )}
+      {title && <Text style={[tw`text-lg font-semibold`, { marginBottom: 4 }]}>{title}</Text>}
       {description && (
-        <Text style={[{ color: colors.mutedForeground, marginBottom: 16 }]}>
-          {description}
-        </Text>
+        <Text style={[{ color: colors.mutedForeground, marginBottom: 16 }]}>{description}</Text>
       )}
       {children}
     </View>

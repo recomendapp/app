@@ -1,85 +1,81 @@
-import { mergeRefs } from 'apps/mobile/src/utils/merge-refs'
-import {type ForwardedRef, useEffect, useMemo, useRef} from 'react'
-import {type ScrollView} from 'react-native'
-import {Platform} from 'react-native'
-
+import { mergeRefs } from '../utils/merge-refs';
+import { type ForwardedRef, useEffect, useMemo, useRef } from 'react';
+import { type ScrollView } from 'react-native';
+import { Platform } from 'react-native';
 
 type Props<Scrollable extends ScrollView = ScrollView> = {
-  cursor?: string
-  outerRef?: ForwardedRef<Scrollable>
-}
+  cursor?: string;
+  outerRef?: ForwardedRef<Scrollable>;
+};
 
 export function useDraggableScroll<Scrollable extends ScrollView = ScrollView>({
   outerRef,
   cursor = 'grab',
 }: Props<Scrollable> = {}) {
-  const ref = useRef<Scrollable>(null)
+  const ref = useRef<Scrollable>(null);
 
   useEffect(() => {
     if (Platform.OS !== 'web' || !ref.current) {
-      return
+      return;
     }
-    const slider = ref.current as unknown as HTMLDivElement
-    let isDragging = false
-    let isMouseDown = false
-    let startX = 0
-    let scrollLeft = 0
+    const slider = ref.current as unknown as HTMLDivElement;
+    let isDragging = false;
+    let isMouseDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
 
     const mouseDown = (e: MouseEvent) => {
-      isMouseDown = true
-      startX = e.pageX - slider.offsetLeft
-      scrollLeft = slider.scrollLeft
+      isMouseDown = true;
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
 
-      slider.style.cursor = cursor
-    }
+      slider.style.cursor = cursor;
+    };
 
     const mouseUp = () => {
       if (isDragging) {
-        slider.addEventListener('click', e => e.stopPropagation(), {once: true})
+        slider.addEventListener('click', (e) => e.stopPropagation(), { once: true });
       }
 
-      isMouseDown = false
-      isDragging = false
-      slider.style.cursor = 'default'
-    }
+      isMouseDown = false;
+      isDragging = false;
+      slider.style.cursor = 'default';
+    };
 
     const mouseMove = (e: MouseEvent) => {
       if (!isMouseDown) {
-        return
+        return;
       }
 
       // Require n pixels momement before start of drag (3 in this case )
-      const x = e.pageX - slider.offsetLeft
+      const x = e.pageX - slider.offsetLeft;
       if (Math.abs(x - startX) < 3) {
-        return
+        return;
       }
 
-      isDragging = true
-      e.preventDefault()
-      const walk = x - startX
-      slider.scrollLeft = scrollLeft - walk
+      isDragging = true;
+      e.preventDefault();
+      const walk = x - startX;
+      slider.scrollLeft = scrollLeft - walk;
 
       if (slider.contains(document.activeElement))
-        (document.activeElement as HTMLElement)?.blur?.()
-    }
+        (document.activeElement as HTMLElement)?.blur?.();
+    };
 
-    slider.addEventListener('mousedown', mouseDown)
-    window.addEventListener('mouseup', mouseUp)
-    window.addEventListener('mousemove', mouseMove)
+    slider.addEventListener('mousedown', mouseDown);
+    window.addEventListener('mouseup', mouseUp);
+    window.addEventListener('mousemove', mouseMove);
 
     return () => {
-      slider.removeEventListener('mousedown', mouseDown)
-      window.removeEventListener('mouseup', mouseUp)
-      window.removeEventListener('mousemove', mouseMove)
-    }
-  }, [cursor])
+      slider.removeEventListener('mousedown', mouseDown);
+      window.removeEventListener('mouseup', mouseUp);
+      window.removeEventListener('mousemove', mouseMove);
+    };
+  }, [cursor]);
 
-  const refs = useMemo(
-    () => mergeRefs(outerRef ? [ref, outerRef] : [ref]),
-    [ref, outerRef],
-  )
+  const refs = useMemo(() => mergeRefs(outerRef ? [ref, outerRef] : [ref]), [ref, outerRef]);
 
   return {
     refs,
-  }
+  };
 }

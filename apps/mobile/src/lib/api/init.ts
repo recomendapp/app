@@ -1,4 +1,4 @@
-import { API_ENDPOINT, API_URL } from 'apps/mobile/src/env';
+import { API_ENDPOINT, API_URL } from '../../env';
 import { client, realtime } from '@libs/api-js';
 import { authClient } from '../auth/client';
 
@@ -20,5 +20,5 @@ realtime.setConfig({
   getAuthCookie: () => {
     const token = authClient.getCookie();
     return token;
-  }
+  },
 });

@@ -1,15 +1,9 @@
-import { Text } from 'apps/mobile/src/components/ui/text';
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
-import { BORDER_RADIUS, CORNERS, FONT_SIZE } from 'apps/mobile/src/theme/globals';
+import { Text } from './text';
+import { useTheme } from '../../providers/ThemeProvider';
+import { BORDER_RADIUS, CORNERS, FONT_SIZE } from '../../theme/globals';
 import { Loader2 } from 'lucide-react-native';
 import React, { useEffect, useRef } from 'react';
-import {
-  ActivityIndicator,
-  Animated,
-  StyleSheet,
-  View,
-  ViewStyle,
-} from 'react-native';
+import { ActivityIndicator, Animated, StyleSheet, View, ViewStyle } from 'react-native';
 
 // Types
 type SpinnerSize = 'default' | 'sm' | 'lg' | 'icon' | 'fit';
@@ -104,7 +98,7 @@ export function Spinner({
           toValue: 1,
           duration: animationDuration,
           useNativeDriver: true,
-        })
+        }),
       );
       rotateAnimation.start();
       return () => rotateAnimation.stop();
@@ -126,7 +120,7 @@ export function Spinner({
             duration: animationDuration / 2,
             useNativeDriver: true,
           }),
-        ])
+        ]),
       );
       pulseAnimation.start();
       return () => pulseAnimation.stop();
@@ -150,11 +144,11 @@ export function Spinner({
               duration: animationDuration / 3,
               useNativeDriver: true,
             }),
-          ])
+          ]),
         );
 
       const animations = dotsAnim.map((anim, index) =>
-        createDotAnimation(anim, index * (animationDuration / 6))
+        createDotAnimation(anim, index * (animationDuration / 6)),
       );
 
       animations.forEach((anim) => anim.start());
@@ -179,11 +173,11 @@ export function Spinner({
               duration: animationDuration / 4,
               useNativeDriver: true,
             }),
-          ])
+          ]),
         );
 
       const animations = barsAnim.map((anim, index) =>
-        createBarAnimation(anim, index * (animationDuration / 8))
+        createBarAnimation(anim, index * (animationDuration / 8)),
       );
 
       animations.forEach((anim) => anim.start());
@@ -199,13 +193,7 @@ export function Spinner({
   const renderSpinner = () => {
     switch (variant) {
       case 'default':
-        return (
-          <ActivityIndicator
-            size={config.size}
-            color={spinnerColor}
-            style={styles.spinner}
-          />
-        );
+        return <ActivityIndicator size={config.size} color={spinnerColor} style={styles.spinner} />;
 
       case 'cirlce':
         return (
@@ -363,14 +351,7 @@ export function InlineLoader({
   variant = 'default',
   color,
 }: Omit<SpinnerProps, 'label' | 'showLabel'>) {
-  return (
-    <Spinner
-      size={size}
-      variant={variant}
-      color={color}
-      style={styles.inlineLoader}
-    />
-  );
+  return <Spinner size={size} variant={variant} color={color} style={styles.inlineLoader} />;
 }
 
 // Button Spinner Component - optimized for button usage

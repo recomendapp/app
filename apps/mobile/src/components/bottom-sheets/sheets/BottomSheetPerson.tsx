@@ -1,35 +1,35 @@
 import React from 'react';
-import tw from 'apps/mobile/src/lib/tw';
-import { Icons } from 'apps/mobile/src/constants/Icons';
+import tw from '../../../lib/tw';
+import { Icons } from '../../../constants/Icons';
 import { LinkProps, usePathname, useRouter } from 'expo-router';
 import { LucideIcon } from 'lucide-react-native';
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import { useTheme } from '../../../providers/ThemeProvider';
 import { upperFirst } from 'lodash';
-import useBottomSheetStore from 'apps/mobile/src/stores/useBottomSheetStore';
+import useBottomSheetStore from '../../../stores/useBottomSheetStore';
 import { View } from 'react-native';
-import { ImageWithFallback } from 'apps/mobile/src/components/utils/ImageWithFallback';
-import TrueSheet from 'apps/mobile/src/components/ui/TrueSheet';
+import { ImageWithFallback } from '../../utils/ImageWithFallback';
+import TrueSheet from '../../ui/TrueSheet';
 import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
-import { Button } from 'apps/mobile/src/components/ui/Button';
-import { Text } from 'apps/mobile/src/components/ui/text';
+import { Button } from '../../ui/Button';
+import { Text } from '../../ui/text';
 import BottomSheetSharePerson from './share/BottomSheetSharePerson';
 import { FlashList } from '@shopify/flash-list';
-import { PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
+import { PADDING_VERTICAL } from '../../../theme/globals';
 import { PersonCompact } from '@libs/api-js';
-import { getTmdbImage } from 'apps/mobile/src/lib/tmdb/getTmdbImage';
+import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
 
 interface BottomSheetPersonProps extends BottomSheetProps {
-  person: PersonCompact,
+  person: PersonCompact;
   additionalItemsTop?: Item[];
   additionalItemsBottom?: Item[];
-};
+}
 
 interface Item {
-	icon: LucideIcon;
-	label: string;
-	onPress: () => void;
-	submenu?: Item[];
+  icon: LucideIcon;
+  label: string;
+  onPress: () => void;
+  submenu?: Item[];
   closeOnPress?: boolean;
   disabled?: boolean;
 }
@@ -45,87 +45,91 @@ const BottomSheetPerson = React.forwardRef<
   const t = useTranslations();
   const pathname = usePathname();
   // States
-  const items: Item[] = React.useMemo(() => ([
-    ...additionalItemsTop,
-    {
-      icon: Icons.Share,
-      onPress: () => openSheet(BottomSheetSharePerson, {
-        person: person,
-      }),
-      label: upperFirst(t('common.messages.share')),
-    },
-    {
-      icon: Icons.User,
-      onPress: () => router.push(person.url as LinkProps['href']),
-      label: upperFirst(t('common.messages.go_to_person')),
-      disabled: person.url ? pathname.startsWith(person.url) : false
-    },
-    ...additionalItemsBottom,
-  ]), [person, additionalItemsTop, additionalItemsBottom, openSheet, router, t, pathname]);
-  
+  const items: Item[] = React.useMemo(
+    () => [
+      ...additionalItemsTop,
+      {
+        icon: Icons.Share,
+        onPress: () =>
+          openSheet(BottomSheetSharePerson, {
+            person: person,
+          }),
+        label: upperFirst(t('common.messages.share')),
+      },
+      {
+        icon: Icons.User,
+        onPress: () => router.push(person.url as LinkProps['href']),
+        label: upperFirst(t('common.messages.go_to_person')),
+        disabled: person.url ? pathname.startsWith(person.url) : false,
+      },
+      ...additionalItemsBottom,
+    ],
+    [person, additionalItemsTop, additionalItemsBottom, openSheet, router, t, pathname],
+  );
+
   return (
-    <TrueSheet
-    ref={ref}
-    scrollable
-    {...props}
-    >
+    <TrueSheet ref={ref} scrollable {...props}>
       <FlashList
-      data={[
-        'header',
-        ...items,
-      ]}
-      contentContainerStyle={{ paddingTop: PADDING_VERTICAL }}
-      bounces={false}
-      keyExtractor={(_, i) => i.toString()}
-      stickyHeaderIndices={[0]}
-      renderItem={({ item }) => (
-        typeof item === 'string' ? (
-          <View
-          style={[
-            { backgroundColor: isLiquidGlassAvailable ? 'transparent' : colors.muted, borderColor: colors.mutedForeground },
-            tw`border-b p-4`,
-          ]}
-          >
-            <View style={tw`flex-row items-center gap-2 `}>
-              <ImageWithFallback
-              alt={person.name ?? ''}
-              source={{ uri: getTmdbImage({ path: person.profilePath, size: 'w92' }) ?? '' }}
+        data={['header', ...items]}
+        contentContainerStyle={{ paddingTop: PADDING_VERTICAL }}
+        bounces={false}
+        keyExtractor={(_, i) => i.toString()}
+        stickyHeaderIndices={[0]}
+        renderItem={({ item }) =>
+          typeof item === 'string' ? (
+            <View
               style={[
-                { aspectRatio: 2 / 3, height: 'fit-content' },
-                tw.style('rounded-md w-12'),
+                {
+                  backgroundColor: isLiquidGlassAvailable ? 'transparent' : colors.muted,
+                  borderColor: colors.mutedForeground,
+                },
+                tw`border-b p-4`,
               ]}
-              type={'person'}
-              />
-              <View style={tw`shrink`}>
-                <Text numberOfLines={2} style={tw`shrink`}>{person.name}</Text>
-                {/* {person.known_for_department && (
+            >
+              <View style={tw`flex-row items-center gap-2 `}>
+                <ImageWithFallback
+                  alt={person.name ?? ''}
+                  source={{ uri: getTmdbImage({ path: person.profilePath, size: 'w92' }) ?? '' }}
+                  style={[
+                    { aspectRatio: 2 / 3, height: 'fit-content' },
+                    tw.style('rounded-md w-12'),
+                  ]}
+                  type={'person'}
+                />
+                <View style={tw`shrink`}>
+                  <Text numberOfLines={2} style={tw`shrink`}>
+                    {person.name}
+                  </Text>
+                  {/* {person.known_for_department && (
                   <Text numberOfLines={1} style={[{ color: colors.mutedForeground }, tw`shrink`]}>
                     {person.known_for_department}
                   </Text>
                 )} */}
+                </View>
               </View>
             </View>
-          </View>
-        ) : (
-          <Button
-          variant='ghost'
-          icon={item.icon}
-          iconProps={{
-            color: colors.mutedForeground,
-          }}
-          disabled={item.disabled}
-          style={tw`justify-start h-auto py-4`}
-          onPress={() => {
-            (item.closeOnPress || item.closeOnPress === undefined) && closeSheet(id);
-            item.onPress();
-          }}
-          >
-            {item.label}
-          </Button>
-        )
-      )}
-      indicatorStyle={mode === 'dark' ? 'white' : 'black'}
-      nestedScrollEnabled
+          ) : (
+            <Button
+              variant="ghost"
+              icon={item.icon}
+              iconProps={{
+                color: colors.mutedForeground,
+              }}
+              disabled={item.disabled}
+              style={tw`justify-start h-auto py-4`}
+              onPress={() => {
+                if (item.closeOnPress || item.closeOnPress === undefined) {
+                  closeSheet(id);
+                }
+                item.onPress();
+              }}
+            >
+              {item.label}
+            </Button>
+          )
+        }
+        indicatorStyle={mode === 'dark' ? 'white' : 'black'}
+        nestedScrollEnabled
       />
     </TrueSheet>
   );

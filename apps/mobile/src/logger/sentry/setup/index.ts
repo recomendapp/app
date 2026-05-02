@@ -1,5 +1,5 @@
-import {init} from '@sentry/react-native'
-import * as env from 'apps/mobile/src/env'
+import { init } from '@sentry/react-native';
+import * as env from '../../../env';
 
 init({
   enabled: !env.IS_DEV && !!env.SENTRY_DSN,
@@ -24,4 +24,4 @@ init({
    */
   attachStacktrace: false,
   sampleRate: env.IS_INTERNAL ? 1.0 : 0.1,
-})
+});

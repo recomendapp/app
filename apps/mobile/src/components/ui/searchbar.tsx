@@ -1,9 +1,9 @@
-import { Icon } from 'apps/mobile/src/components/ui/icon';
-import { Text } from 'apps/mobile/src/components/ui/text';
-import { View } from 'apps/mobile/src/components/ui/view';
-import tw from 'apps/mobile/src/lib/tw';
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
-import { CORNERS, FONT_SIZE, HEIGHT } from 'apps/mobile/src/theme/globals';
+import { Icon } from './icon';
+import { Text } from './text';
+import { View } from './view';
+import tw from '../../lib/tw';
+import { useTheme } from '../../providers/ThemeProvider';
+import { CORNERS, FONT_SIZE, HEIGHT } from '../../theme/globals';
 import { Search, X } from 'lucide-react-native';
 import { useCallback, useRef, useState } from 'react';
 import {
@@ -57,21 +57,24 @@ export function SearchBar({
   const icon = colors.mutedForeground;
 
   // Handle text change with debouncing
-  const handleTextChange = useCallback((text: string) => {
-    setInternalValue(text);
-    onChangeText?.(text);
+  const handleTextChange = useCallback(
+    (text: string) => {
+      setInternalValue(text);
+      onChangeText?.(text);
 
-    if (onSearch && debounceMs > 0) {
-      if (debounceRef.current) {
-        clearTimeout(debounceRef.current);
-      }
-      (debounceRef.current as any) = setTimeout(() => {
+      if (onSearch && debounceMs > 0) {
+        if (debounceRef.current) {
+          clearTimeout(debounceRef.current);
+        }
+        (debounceRef.current as any) = setTimeout(() => {
+          onSearch(text);
+        }, debounceMs);
+      } else if (onSearch) {
         onSearch(text);
-      }, debounceMs);
-    } else if (onSearch) {
-      onSearch(text);
-    }
-  }, [onChangeText, onSearch, debounceMs]);
+      }
+    },
+    [onChangeText, onSearch, debounceMs],
+  );
 
   // Handle clear button press
   const handleClear = useCallback(() => {
@@ -93,7 +96,7 @@ export function SearchBar({
     borderWidth: 1,
     minHeight: HEIGHT,
     paddingHorizontal: 16,
-    ...tw`rounded-lg`
+    ...tw`rounded-lg`,
   };
 
   const baseInputStyle = {
@@ -126,13 +129,7 @@ export function SearchBar({
       />
 
       {/* Loading Indicator */}
-      {loading && (
-        <ActivityIndicator
-          size='small'
-          color={muted}
-          style={{ marginRight: 4 }}
-        />
-      )}
+      {loading && <ActivityIndicator size="small" color={muted} style={{ marginRight: 4 }} />}
 
       {/* Clear Button */}
       {showClear && !loading && (
@@ -179,9 +176,7 @@ export function SearchBarWithSuggestions({
 
   const filteredSuggestions = suggestions
     .filter((suggestion) =>
-      suggestion
-        .toLowerCase()
-        .includes((searchBarProps.value || '').toLowerCase())
+      suggestion.toLowerCase().includes((searchBarProps.value || '').toLowerCase()),
     )
     .slice(0, maxSuggestions);
 
@@ -233,8 +228,7 @@ export function SearchBarWithSuggestions({
               style={{
                 paddingHorizontal: 16,
                 paddingVertical: 12,
-                borderBottomWidth:
-                  index < filteredSuggestions.length - 1 ? 0.6 : 0,
+                borderBottomWidth: index < filteredSuggestions.length - 1 ? 0.6 : 0,
                 borderBottomColor: borderColor,
               }}
               activeOpacity={0.7}

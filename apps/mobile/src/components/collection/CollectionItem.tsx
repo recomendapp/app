@@ -1,36 +1,55 @@
-import Animated from "react-native-reanimated";
-import { useTheme } from "apps/mobile/src/providers/ThemeProvider";
-import tw from "apps/mobile/src/lib/tw";
-import { Icons } from "apps/mobile/src/constants/Icons";
-import { View } from "apps/mobile/src/components/ui/view";
-import { Text } from "apps/mobile/src/components/ui/text";
-import { LinkProps, useRouter } from "expo-router";
-import { ImageWithFallback } from "apps/mobile/src/components/utils/ImageWithFallback";
-import { Button } from "apps/mobile/src/components/ui/Button";
-import { CollectionAction } from "./CollectionScreen";
-import { forwardRef, useCallback } from "react";
-import { MediaType, ViewType } from "@recomendapp/types";
-import { Pressable } from "react-native";
+import Animated from 'react-native-reanimated';
+import { useTheme } from '../../providers/ThemeProvider';
+import tw from '../../lib/tw';
+import { Icons } from '../../constants/Icons';
+import { View } from '../ui/view';
+import { Text } from '../ui/text';
+import { LinkProps, useRouter } from 'expo-router';
+import { ImageWithFallback } from '../utils/ImageWithFallback';
+import { Button } from '../ui/Button';
+import { CollectionAction } from './CollectionScreen';
+import { forwardRef, useCallback } from 'react';
+import { MediaType, ViewType } from '@recomendapp/types';
+import { Pressable } from 'react-native';
 
 interface CollectionItemProps<T> extends React.ComponentProps<typeof Animated.View> {
-    item: T;
-    swipeActions?: CollectionAction<T>[];
-    bottomSheetActions?: CollectionAction<T>[];
-    getItemId: (item: T) => string | number;
-    getItemTitle: (item: T) => string;
-    getItemSubtitle?: (item: T) => string;
-    getItemImageUrl?: (item: T) => string;
-    getItemUrl?: (item: T) => string;
-    onItemAction?: (item: T) => void;
-    view?: ViewType;
-    type?: MediaType;
-    index: number;
+  item: T;
+  swipeActions?: CollectionAction<T>[];
+  bottomSheetActions?: CollectionAction<T>[];
+  getItemId: (item: T) => string | number;
+  getItemTitle: (item: T) => string;
+  getItemSubtitle?: (item: T) => string;
+  getItemImageUrl?: (item: T) => string;
+  getItemUrl?: (item: T) => string;
+  onItemAction?: (item: T) => void;
+  view?: ViewType;
+  type?: MediaType;
+  index: number;
 }
 
 const CollectionItem = forwardRef<
-    React.ComponentRef<typeof Animated.View>,
-    CollectionItemProps<any>
->(({ style, item, swipeActions, bottomSheetActions, getItemId, getItemTitle, getItemSubtitle, getItemImageUrl, getItemUrl, onItemAction, view = 'list', type, index, ...props }, ref) => {
+  React.ComponentRef<typeof Animated.View>,
+  CollectionItemProps<any>
+>(
+  (
+    {
+      style,
+      item,
+      swipeActions,
+      bottomSheetActions,
+      getItemId,
+      getItemTitle,
+      getItemSubtitle,
+      getItemImageUrl,
+      getItemUrl,
+      onItemAction,
+      view = 'list',
+      type,
+      index,
+      ...props
+    },
+    ref,
+  ) => {
     const router = useRouter();
     const { colors } = useTheme();
 
@@ -41,12 +60,12 @@ const CollectionItem = forwardRef<
 
     // Handlers
     const handlePress = useCallback(() => {
-        if (url) {
-            router.push(url as LinkProps['href']);
-        }
+      if (url) {
+        router.push(url as LinkProps['href']);
+      }
     }, [url, router]);
     const handleLongPress = useCallback(() => {
-        onItemAction?.(item);
+      onItemAction?.(item);
     }, [item, onItemAction]);
 
     // const RightActions = useCallback((prog: SharedValue<number>, drag: SharedValue<number>, item: any, swipeable: SwipeableMethods) => {
@@ -71,9 +90,9 @@ const CollectionItem = forwardRef<
     //                     ]}
     //                     size="icon"
     //                     onPress={() => {
-	// 						swipeable.close();
-	// 						handleActionWithConfirmation(action, item)
-	// 					}}
+    // 						swipeable.close();
+    // 						handleActionWithConfirmation(action, item)
+    // 					}}
     //                 />
     //             ))}
     //         </Animated.View>
@@ -81,61 +100,50 @@ const CollectionItem = forwardRef<
     // }, [swipeActions, handleActionWithConfirmation]);
 
     return (
-        <Animated.View
+      <Animated.View
         ref={ref}
         // entering={FadeInDown}
-        style={[
-            tw`flex-row items-center justify-between gap-2`,
-            style
-        ]}
+        style={[tw`flex-row items-center justify-between gap-2`, style]}
         {...props}
-        >
-        <Pressable
-        style={tw`flex-1`}
-        onPress={handlePress}
-        onLongPress={handleLongPress}
-        >
-            {view === "grid" ? (
+      >
+        <Pressable style={tw`flex-1`} onPress={handlePress} onLongPress={handleLongPress}>
+          {view === 'grid' ? (
             <Animated.View style={tw`relative flex items-center w-full aspect-2/3`}>
-                <ImageWithFallback alt={title} source={{ uri: image }} type={type} />
+              <ImageWithFallback alt={title} source={{ uri: image }} type={type} />
             </Animated.View>
-            ) : (
+          ) : (
             <View style={tw`flex-row items-center gap-2`}>
-                <ImageWithFallback
+              <ImageWithFallback
                 alt={title}
                 source={{ uri: image }}
                 type={type}
                 style={[{ aspectRatio: 2 / 3, height: 'fit-content' }, tw`rounded-md w-16`]}
-                />
-                <View style={tw`shrink`}>
-                    <Text numberOfLines={1}>{title}</Text>
-                    {subtitle && (
-                        <Text
-                        numberOfLines={1}
-                        style={{ color: colors.mutedForeground }}
-                        >
-                        {subtitle}
-                        </Text>
-                    )}
-                </View>
+              />
+              <View style={tw`shrink`}>
+                <Text numberOfLines={1}>{title}</Text>
+                {subtitle && (
+                  <Text numberOfLines={1} style={{ color: colors.mutedForeground }}>
+                    {subtitle}
+                  </Text>
+                )}
+              </View>
             </View>
-            )}
+          )}
         </Pressable>
 
-        {view === "list" && (
-            <Button
+        {view === 'list' && (
+          <Button
             variant="ghost"
             size="icon"
             icon={Icons.EllipsisHorizontal}
             iconProps={{ color: colors.mutedForeground }}
             onPress={() => onItemAction?.(item)}
-            />
+          />
         )}
-        </Animated.View>
-    )
-});
-CollectionItem.displayName = "CollectionItem";
+      </Animated.View>
+    );
+  },
+);
+CollectionItem.displayName = 'CollectionItem';
 
-export {
-	CollectionItem
-}
+export { CollectionItem };

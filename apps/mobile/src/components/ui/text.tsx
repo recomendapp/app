@@ -1,19 +1,9 @@
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
-import { FONT_SIZE } from 'apps/mobile/src/theme/globals';
+import { useTheme } from '../../providers/ThemeProvider';
+import { FONT_SIZE } from '../../theme/globals';
 import React, { forwardRef, useMemo } from 'react'; // Importer useMemo
-import {
-  Text as RNText,
-  TextProps as RNTextProps,
-  TextStyle,
-} from 'react-native';
+import { Text as RNText, TextProps as RNTextProps, TextStyle } from 'react-native';
 
-type TextVariant =
-  | 'body'
-  | 'title'
-  | 'subtitle'
-  | 'caption'
-  | 'heading'
-  | 'link';
+type TextVariant = 'body' | 'title' | 'subtitle' | 'caption' | 'heading' | 'link';
 
 export interface TextProps extends RNTextProps {
   variant?: TextVariant;
@@ -33,15 +23,12 @@ export interface TextProps extends RNTextProps {
  *
  */
 export const Text = forwardRef<RNText, TextProps>(
-  (
-    { variant = 'body', textColor, style, children, ...props },
-    ref
-  ) => {
+  ({ variant = 'body', textColor, style, children, ...props }, ref) => {
     const { colors } = useTheme();
 
     const textStyle = useMemo((): TextStyle => {
       const sharedStyles: TextStyle = {
-        flexShrink: 1
+        flexShrink: 1,
       };
       const variantStyles: TextStyle = (() => {
         switch (variant) {
@@ -59,7 +46,7 @@ export const Text = forwardRef<RNText, TextProps>(
             return { fontSize: FONT_SIZE, fontWeight: '400' };
         }
       })();
-      
+
       const colorStyle: { color?: string } = {};
 
       if (textColor && textColor !== 'default') {
@@ -85,7 +72,6 @@ export const Text = forwardRef<RNText, TextProps>(
         }
       }
       return { ...sharedStyles, ...variantStyles, ...colorStyle };
-
     }, [variant, textColor, colors]);
 
     return (
@@ -93,6 +79,6 @@ export const Text = forwardRef<RNText, TextProps>(
         {children}
       </RNText>
     );
-  }
+  },
 );
 Text.displayName = 'Text';

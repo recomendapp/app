@@ -2,13 +2,24 @@ import * as React from 'react';
 import { ComponentProps, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { ImageIcon, ListVideoIcon } from 'lucide-react-native';
-import { Icons } from 'apps/mobile/src/constants/Icons';
+import { Icons } from '../../constants/Icons';
 import { Image, ImageProps, ImageSource } from 'expo-image';
 import Animated from 'react-native-reanimated';
-import tw from 'apps/mobile/src/lib/tw';
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import tw from '../../lib/tw';
+import { useTheme } from '../../providers/ThemeProvider';
 
-export type ImageType = 'default' | 'movie' | 'tv_series' | 'tv_season' | 'tv_episode' | 'person' | 'playlist' | 'service' | 'watch-provider' | 'user' | null;
+export type ImageType =
+  | 'default'
+  | 'movie'
+  | 'tv_series'
+  | 'tv_season'
+  | 'tv_episode'
+  | 'person'
+  | 'playlist'
+  | 'service'
+  | 'watch-provider'
+  | 'user'
+  | null;
 
 interface ImageWithFallbackProps extends ComponentProps<typeof Animated.View> {
   source: ImageSource;
@@ -23,67 +34,62 @@ interface ImageWithFallbackProps extends ComponentProps<typeof Animated.View> {
 // const blurhash =
 //   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
-
-export const ImageWithFallback = React.forwardRef<
-  View,
-  ImageWithFallbackProps
->(({
-  source,
-  alt,
-  type = 'default',
-  contentFit = 'cover',
-  transition = 250,
-  cachePolicy = 'disk',
-  style,
-  children,
-  ...rest
-}, ref) => {
-  const { colors } = useTheme();
-  const [imgSrc, setImgSrc] = useState<ImageSource | undefined | null>((source.uri && source.uri.length! > 0) ? source : null);
-
-  useEffect(() => {
-    setImgSrc((source.uri && source.uri.length! > 0) ? source : null);
-  }, [source]);
-
-  return (
-    <Animated.View
-    ref={ref}
-    style={[
-      { backgroundColor: colors.muted },
-      tw.style('relative overflow-hidden items-center justify-center w-full h-full rounded-md'),
+export const ImageWithFallback = React.forwardRef<View, ImageWithFallbackProps>(
+  (
+    {
+      source,
+      alt,
+      type = 'default',
+      contentFit = 'cover',
+      transition = 250,
+      cachePolicy = 'disk',
       style,
-    ]}
-    {...rest}
-    >
-      {imgSrc ? (
-        <Image
-        source={imgSrc}
-        onError={() => {
-          setImgSrc(null);
-        }}
-        style={
-          tw`w-full h-full`
-        }
-        transition={transition}
-        contentFit={contentFit}
-        cachePolicy={cachePolicy}
-        />
-      ) : (
-        <Fallback type={type} alt={alt} />
-      )}
-      {children}
-    </Animated.View>
-  );
-});
+      children,
+      ...rest
+    },
+    ref,
+  ) => {
+    const { colors } = useTheme();
+    const [imgSrc, setImgSrc] = useState<ImageSource | undefined | null>(
+      source.uri && source.uri.length! > 0 ? source : null,
+    );
+
+    useEffect(() => {
+      setImgSrc(source.uri && source.uri.length! > 0 ? source : null);
+    }, [source]);
+
+    return (
+      <Animated.View
+        ref={ref}
+        style={[
+          { backgroundColor: colors.muted },
+          tw.style('relative overflow-hidden items-center justify-center w-full h-full rounded-md'),
+          style,
+        ]}
+        {...rest}
+      >
+        {imgSrc ? (
+          <Image
+            source={imgSrc}
+            onError={() => {
+              setImgSrc(null);
+            }}
+            style={tw`w-full h-full`}
+            transition={transition}
+            contentFit={contentFit}
+            cachePolicy={cachePolicy}
+          />
+        ) : (
+          <Fallback type={type} alt={alt} />
+        )}
+        {children}
+      </Animated.View>
+    );
+  },
+);
 ImageWithFallback.displayName = 'ImageWithFallback';
 
-const Fallback = ({
-  type,
-  alt,
-}: {
-  type?: string | null;
-  alt?: string;
-}) => {
+const Fallback = ({ type, alt }: { type?: string | null; alt?: string }) => {
   const { colors } = useTheme();
   switch (type) {
     case 'playlist':
@@ -91,11 +97,32 @@ const Fallback = ({
     case 'person':
       return <Icons.User color={colors.foreground} style={tw.style('w-2/5 h-2/5')} />;
     case 'movie':
-      return <Text numberOfLines={2} style={[{ color: colors.mutedForeground }, tw.style('text-center')]}>{alt}</Text>;
+      return (
+        <Text
+          numberOfLines={2}
+          style={[{ color: colors.mutedForeground }, tw.style('text-center')]}
+        >
+          {alt}
+        </Text>
+      );
     case 'tv_series':
-      return <Text numberOfLines={2} style={[{ color: colors.mutedForeground }, tw.style('text-center')]}>{alt}</Text>;
+      return (
+        <Text
+          numberOfLines={2}
+          style={[{ color: colors.mutedForeground }, tw.style('text-center')]}
+        >
+          {alt}
+        </Text>
+      );
     case 'service':
-      return <Text numberOfLines={2} style={[{ color: colors.mutedForeground }, tw.style('text-center')]}>{alt}</Text>;
+      return (
+        <Text
+          numberOfLines={2}
+          style={[{ color: colors.mutedForeground }, tw.style('text-center')]}
+        >
+          {alt}
+        </Text>
+      );
     default:
       return <ImageIcon color={colors.foreground} style={tw.style('w-2/5 h-2/5')} />;
   }

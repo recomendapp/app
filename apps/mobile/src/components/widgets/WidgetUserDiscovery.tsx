@@ -1,13 +1,13 @@
-import tw from "apps/mobile/src/lib/tw";
-import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
-import { CardUser } from "../cards/CardUser";
-import { LegendList } from "@legendapp/list/react-native";
-import { useTranslations } from "use-intl";
-import { upperFirst } from "lodash";
-import { Text } from "../ui/text";
-import { GAP } from "apps/mobile/src/theme/globals";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { usersInfiniteOptions } from "@libs/query-client";
+import tw from '../../lib/tw';
+import { StyleProp, TextStyle, View, ViewStyle } from 'react-native';
+import { CardUser } from '../cards/CardUser';
+import { LegendList } from '@legendapp/list/react-native';
+import { useTranslations } from 'use-intl';
+import { upperFirst } from 'lodash';
+import { Text } from '../ui/text';
+import { GAP } from '../../theme/globals';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { usersInfiniteOptions } from '@libs/query-client';
 
 interface WidgetUserDiscoveryProps extends React.ComponentPropsWithoutRef<typeof View> {
   labelStyle?: StyleProp<TextStyle>;
@@ -17,16 +17,12 @@ interface WidgetUserDiscoveryProps extends React.ComponentPropsWithoutRef<typeof
 export const WidgetUserDiscovery = ({
   style,
   labelStyle,
-  containerStyle
-} : WidgetUserDiscoveryProps) => {
+  containerStyle,
+}: WidgetUserDiscoveryProps) => {
   const t = useTranslations();
-  const {
-    data: users,
-    fetchNextPage,
-    hasNextPage,
-  } = useInfiniteQuery(usersInfiniteOptions());
+  const { data: users, fetchNextPage, hasNextPage } = useInfiniteQuery(usersInfiniteOptions());
 
-  const flattenUsers = users?.pages.flatMap(page => page.data) || [];
+  const flattenUsers = users?.pages.flatMap((page) => page.data) || [];
 
   if (!flattenUsers.length) {
     return null;

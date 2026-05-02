@@ -1,5 +1,5 @@
 import React from 'react';
-import TrueSheet from 'apps/mobile/src/components/ui/TrueSheet';
+import TrueSheet from '../../ui/TrueSheet';
 import { BottomSheetProps } from '../BottomSheetManager';
 
 interface BottomSheetDefaultViewProps extends BottomSheetProps {
@@ -7,8 +7,8 @@ interface BottomSheetDefaultViewProps extends BottomSheetProps {
 }
 
 const BottomSheetDefaultView = React.forwardRef<
-	React.ComponentRef<typeof TrueSheet>,
-	BottomSheetDefaultViewProps
+  React.ComponentRef<typeof TrueSheet>,
+  BottomSheetDefaultViewProps
 >(({ id, children, ...props }, ref) => {
   return (
     <TrueSheet ref={ref} {...props}>

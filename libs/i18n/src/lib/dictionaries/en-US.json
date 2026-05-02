@@ -446,7 +446,8 @@
       "reset_your_password": "Reset your password",
       "invalid_token": "Invalid token",
       "new_notification": "new notification{count, plural, one {} other {s}}",
-      "lets_go": "Let's go!"
+      "lets_go": "Let's go!",
+      "update_available": "Update available"
     },
     "form": {
       "email": {
@@ -500,7 +501,7 @@
       },
       "error": {
         "too_many_attempts": "Too many attempts, please try again later",
-        "not_received_code":"Didn't receive a code?",
+        "not_received_code": "Didn't receive a code?",
         "invalid_code": "Invalid code",
         "turnstile": "Turnstile verification failed"
       },
@@ -731,7 +732,7 @@
         },
         "last": "Recomend can be used alone or with others, in public or private, day or night, but never in front of a movie, please focus!"
       },
-     "team": {
+      "team": {
         "label": "The Team",
         "intro": "Recomend was created by two brothers passionate about cinema who love investing their time in overly ambitious projects that may never see the light of day.",
         "members": {
@@ -1022,7 +1023,7 @@
           "placeholder": "Enter a description of the playlist"
         },
         "error": {
-          "format":"The description cannot contain empty lines or consist solely of spaces."
+          "format": "The description cannot contain empty lines or consist solely of spaces."
         }
       }
     },

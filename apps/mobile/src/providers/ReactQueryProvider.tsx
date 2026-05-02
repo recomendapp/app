@@ -6,7 +6,7 @@ import {
   PersistQueryClientProvider,
   PersistQueryClientProviderProps,
 } from '@tanstack/react-query-persist-client';
-import { persistKey } from 'apps/mobile/src/api';
+import { persistKey } from '../api';
 import { meKeys, widgetKeys } from '@libs/query-client';
 import { uiKeys } from '../api/ui/uiKeys';
 // import { useReactQueryDevTools } from "@dev-plugins/react-query";
@@ -41,12 +41,7 @@ const createMMKVPersister = (key: string) => ({
   },
 });
 
-const PERSISTED_QUERY_KEYS = [
-  meKeys.base,
-  uiKeys.base,
-  widgetKeys,
-  persistKey,
-];
+const PERSISTED_QUERY_KEYS = [meKeys.base, uiKeys.base, widgetKeys, persistKey];
 
 const createQueryClient = () =>
   new QueryClient({
@@ -63,26 +58,21 @@ const createQueryClient = () =>
 const dehydrateOptions: PersistQueryClientProviderProps['persistOptions']['dehydrateOptions'] = {
   shouldDehydrateMutation: () => false,
   shouldDehydrateQuery: (query) => {
-    return PERSISTED_QUERY_KEYS.some(key => 
-      String(query.queryKey[0]).startsWith(key)
-    );
+    return PERSISTED_QUERY_KEYS.some((key) => String(query.queryKey[0]).startsWith(key));
   },
 };
 
-const setupNetworkListeners = () => {
-  setInterval(() => {
-    if (AppState.currentState === 'active') {
-    }
-  }, 30000);
-};
+// const setupNetworkListeners = () => {
+//   setInterval(() => {
+//     if (AppState.currentState === 'active') {
+//     }
+//   }, 30000);
+// };
 
-focusManager.setEventListener(onFocus => {
-  const subscription = AppState.addEventListener(
-    'change',
-    (status: AppStateStatus) => {
-      focusManager.setFocused(status === 'active');
-    },
-  );
+focusManager.setEventListener((onFocus) => {
+  const subscription = AppState.addEventListener('change', (status: AppStateStatus) => {
+    focusManager.setFocused(status === 'active');
+  });
 
   return () => subscription.remove();
 });
@@ -92,33 +82,21 @@ type ReactQueryProviderProps = {
   userId?: string;
 };
 
-export function ReactQueryProvider({ 
-  children, 
-  userId 
-}: ReactQueryProviderProps) {
+export function ReactQueryProvider({ children, userId }: ReactQueryProviderProps) {
   return (
-    <QueryProviderInner
-	key={userId}
-	userId={userId}
-    >
+    <QueryProviderInner key={userId} userId={userId}>
       {children}
     </QueryProviderInner>
   );
 }
 
-function QueryProviderInner({
-  children,
-  userId,
-}: {
-  children: React.ReactNode;
-  userId?: string;
-}) {
+function QueryProviderInner({ children, userId }: { children: React.ReactNode; userId?: string }) {
   const queryClient = useMemo(() => createQueryClient(), []);
-  
+
   const persistOptions = useMemo(() => {
     const cacheKey = `queryClient-${userId ?? 'anonymous'}`;
     const mmkvPersister = createMMKVPersister(cacheKey);
-    
+
     return {
       persister: mmkvPersister,
       dehydrateOptions,
@@ -128,15 +106,12 @@ function QueryProviderInner({
 
   // useReactQueryDevTools(queryClient);
 
-  useEffect(() => {
-    setupNetworkListeners();
-  }, []);
+  // useEffect(() => {
+  //   setupNetworkListeners();
+  // }, []);
 
   return (
-    <PersistQueryClientProvider
-    client={queryClient}
-    persistOptions={persistOptions}
-    >
+    <PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
       {children}
     </PersistQueryClientProvider>
   );

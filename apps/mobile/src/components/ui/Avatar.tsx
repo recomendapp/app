@@ -1,11 +1,11 @@
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
-import tw from 'apps/mobile/src/lib/tw';
+import { useTheme } from '../../providers/ThemeProvider';
+import tw from '../../lib/tw';
 import {
   Image as EImage,
   ImageProps as EImageProps,
   type ImageErrorEventData,
   type ImageLoadEventData,
-  type ImageSource
+  type ImageSource,
 } from 'expo-image';
 import Animated from 'react-native-reanimated';
 import { ViewProps } from 'react-native';
@@ -53,19 +53,16 @@ const Root = forwardRef<Animated.View, RootProps>(({ alt, style, children }, ref
 
   return (
     <RootContext.Provider value={{ alt, status, setStatus, containerSize }}>
-    <Animated.View
-	  ref={ref}
-	  style={[
-      tw.style('relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full'),
-      style,
-	  ]}
-    onLayout={(e) => {
-      setContainerSize({
-        width: e.nativeEvent.layout.width,
-        height: e.nativeEvent.layout.height,
-      });
-    }}
-	  >
+      <Animated.View
+        ref={ref}
+        style={[tw.style('relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full'), style]}
+        onLayout={(e) => {
+          setContainerSize({
+            width: e.nativeEvent.layout.width,
+            height: e.nativeEvent.layout.height,
+          });
+        }}
+      >
         {children}
       </Animated.View>
     </RootContext.Provider>
@@ -97,17 +94,23 @@ const Image = forwardRef<EImage, ImageProps>(
       };
     }, [source, setStatus]);
 
-    const onLoad = useCallback((e: ImageLoadEventData) => {
-      setStatus('loaded');
-      onLoadingStatusChange?.('loaded');
-      onLoadProp?.(e);
-    }, [onLoadProp, onLoadingStatusChange, setStatus]);
+    const onLoad = useCallback(
+      (e: ImageLoadEventData) => {
+        setStatus('loaded');
+        onLoadingStatusChange?.('loaded');
+        onLoadProp?.(e);
+      },
+      [onLoadProp, onLoadingStatusChange, setStatus],
+    );
 
-    const onError = useCallback((e: ImageErrorEventData) => {
-      setStatus('error');
-      onLoadingStatusChange?.('error');
-      onErrorProp?.(e);
-    }, [onErrorProp, onLoadingStatusChange, setStatus]);
+    const onError = useCallback(
+      (e: ImageErrorEventData) => {
+        setStatus('error');
+        onLoadingStatusChange?.('error');
+        onErrorProp?.(e);
+      },
+      [onErrorProp, onLoadingStatusChange, setStatus],
+    );
 
     if (status === 'error') {
       return null;
@@ -117,16 +120,13 @@ const Image = forwardRef<EImage, ImageProps>(
       <EImage
         ref={ref}
         source={source}
-        style={[
-          tw.style('aspect-square h-full w-full'),
-          style,
-        ]}
+        style={[tw.style('aspect-square h-full w-full'), style]}
         accessibilityLabel={alt}
         onLoad={onLoad}
         onError={onError}
       />
     );
-  }
+  },
 );
 
 Image.displayName = 'ImageAvatar';
@@ -145,17 +145,17 @@ const Fallback = forwardRef<Animated.View, FallbackProps>(({ style }, ref) => {
 
   return (
     <Animated.View
-    ref={ref}
-    style={[
-      { backgroundColor: colors.muted },
-      tw.style('flex h-full w-full items-center justify-center rounded-full'),
-      style,
-    ]}
-    accessibilityRole="image"
-    accessibilityLabel={alt}
+      ref={ref}
+      style={[
+        { backgroundColor: colors.muted },
+        tw.style('flex h-full w-full items-center justify-center rounded-full'),
+        style,
+      ]}
+      accessibilityRole="image"
+      accessibilityLabel={alt}
     >
       <Animated.Text
-      style={{ color: colors.foreground, fontSize: fontSize, fontWeight: 'semibold' }}
+        style={{ color: colors.foreground, fontSize: fontSize, fontWeight: 'semibold' }}
       >
         {initials}
       </Animated.Text>
@@ -165,14 +165,31 @@ const Fallback = forwardRef<Animated.View, FallbackProps>(({ style }, ref) => {
 
 Fallback.displayName = 'FallbackAvatar';
 
-const getInitials = (name: string, type: 'first-and-last' | 'all' | 'international' = 'first-and-last') => {
+const getInitials = (
+  name: string,
+  type: 'first-and-last' | 'all' | 'international' = 'first-and-last',
+) => {
   switch (type) {
-    case 'all': 
-      return name.match(/(\b\S)?/g)?.join("").toUpperCase();
+    case 'all':
+      return name
+        .match(/(\b\S)?/g)
+        ?.join('')
+        .toUpperCase();
     case 'international':
-      return name.match(/(^\S\S?|\s\S)?/g)?.map(v=>v.trim()).join("").match(/(^\S|\S$)?/g)?.join("").toLocaleUpperCase();
+      return name
+        .match(/(^\S\S?|\s\S)?/g)
+        ?.map((v) => v.trim())
+        .join('')
+        .match(/(^\S|\S$)?/g)
+        ?.join('')
+        .toLocaleUpperCase();
     default:
-      return name.match(/(^\S\S?|\b\S)?/g)?.join("").match(/(^\S|\S$)?/g)?.join("").toUpperCase();
+      return name
+        .match(/(^\S\S?|\b\S)?/g)
+        ?.join('')
+        .match(/(^\S|\S$)?/g)
+        ?.join('')
+        .toUpperCase();
   }
 };
 
@@ -185,7 +202,7 @@ function isValidSource(source?: ImageSource): boolean {
 }
 
 export default {
-	Root,
-	Image,
-	Fallback
+  Root,
+  Image,
+  Fallback,
 };

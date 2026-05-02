@@ -1,5 +1,5 @@
-import { View } from 'apps/mobile/src/components/ui/view';
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import { View } from './view';
+import { useTheme } from '../../providers/ThemeProvider';
 import React from 'react';
 import { ViewStyle } from 'react-native';
 
@@ -8,10 +8,7 @@ interface SeparatorProps {
   style?: ViewStyle;
 }
 
-export function Separator({
-  orientation = 'horizontal',
-  style,
-}: SeparatorProps) {
+export function Separator({ orientation = 'horizontal', style }: SeparatorProps) {
   const { colors } = useTheme();
 
   return (

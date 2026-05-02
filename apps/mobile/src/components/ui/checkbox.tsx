@@ -1,7 +1,7 @@
-import { Text } from 'apps/mobile/src/components/ui/text';
-import { View } from 'apps/mobile/src/components/ui/view';
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
-import { HEIGHT } from 'apps/mobile/src/theme/globals';
+import { Text } from './text';
+import { View } from './view';
+import { useTheme } from '../../providers/ThemeProvider';
+import { HEIGHT } from '../../theme/globals';
 import { Check } from 'lucide-react-native';
 import React from 'react';
 import { TextStyle, TouchableOpacity } from 'react-native';
@@ -77,22 +77,22 @@ export function Checkbox({
             size={HEIGHT / 3}
             color={primaryForegroundColor}
             strokeWidth={3}
-            strokeLinecap='round'
+            strokeLinecap="round"
           />
         )}
       </View>
       {label && (
         <Text
-          variant='caption'
+          variant="caption"
           numberOfLines={1}
-          ellipsizeMode='tail'
+          ellipsizeMode="tail"
           style={[
             {
               color: error ? danger : primary,
             },
             labelStyle,
           ]}
-          pointerEvents='none'
+          pointerEvents="none"
         >
           {label}
         </Text>

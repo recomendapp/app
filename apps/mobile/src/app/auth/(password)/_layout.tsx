@@ -1,5 +1,5 @@
-import { useModalHeaderOptions } from 'apps/mobile/src/hooks/useModalHeaderOptions';
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import { useModalHeaderOptions } from '../../../hooks/useModalHeaderOptions';
+import { useTheme } from '../../../providers/ThemeProvider';
 import { Stack } from 'expo-router';
 import { useTranslations } from 'use-intl';
 
@@ -9,14 +9,14 @@ const AuthPasswordLayout = () => {
   return (
     <>
       <Stack
-      initialRouteName="forgot-password"
-      screenOptions={{
-        ...defaultScreenOptions,
-        headerTransparent: true,
-        headerStyle: {
-          backgroundColor: 'transparent',
-        },
-      }}
+        initialRouteName="forgot-password"
+        screenOptions={{
+          ...defaultScreenOptions,
+          headerTransparent: true,
+          headerStyle: {
+            backgroundColor: 'transparent',
+          },
+        }}
       >
         <Stack.Screen
           name="forgot-password"

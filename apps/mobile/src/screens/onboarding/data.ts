@@ -1,5 +1,5 @@
-import { Assets } from 'apps/mobile/src/constants/Assets';
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
+import { Assets } from '../../constants/Assets';
+import { useTheme } from '../../providers/ThemeProvider';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 
@@ -11,7 +11,7 @@ export interface OnboardingData {
   backgroundColor: string;
 }
 
-const useOnboardingData = ((): OnboardingData[] => {
+const useOnboardingData = (): OnboardingData[] => {
   const t = useTranslations();
   const { colors } = useTheme();
   return [
@@ -51,6 +51,6 @@ const useOnboardingData = ((): OnboardingData[] => {
       backgroundColor: colors.background,
     },
   ];
-});
+};
 
 export default useOnboardingData;

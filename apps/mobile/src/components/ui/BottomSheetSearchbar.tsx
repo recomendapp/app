@@ -1,9 +1,9 @@
-import { Icon } from 'apps/mobile/src/components/ui/icon';
-import { Text } from 'apps/mobile/src/components/ui/text';
-import { View } from 'apps/mobile/src/components/ui/view';
-import tw from 'apps/mobile/src/lib/tw';
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
-import { CORNERS, FONT_SIZE, HEIGHT } from 'apps/mobile/src/theme/globals';
+import { Icon } from './icon';
+import { Text } from './text';
+import { View } from './view';
+import tw from '../../lib/tw';
+import { useTheme } from '../../providers/ThemeProvider';
+import { CORNERS, FONT_SIZE, HEIGHT } from '../../theme/globals';
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 import { Search, X } from 'lucide-react-native';
 import { useRef, useState } from 'react';
@@ -92,7 +92,7 @@ export function BottomSheetSearchbar({
     backgroundColor: cardColor,
     height: HEIGHT,
     paddingHorizontal: 16,
-    ...tw`rounded-lg`
+    ...tw`rounded-lg`,
   };
 
   const baseInputStyle = {
@@ -125,13 +125,7 @@ export function BottomSheetSearchbar({
       />
 
       {/* Loading Indicator */}
-      {loading && (
-        <ActivityIndicator
-          size='small'
-          color={muted}
-          style={{ marginRight: 4 }}
-        />
-      )}
+      {loading && <ActivityIndicator size="small" color={muted} style={{ marginRight: 4 }} />}
 
       {/* Clear Button */}
       {showClear && !loading && (
@@ -178,9 +172,7 @@ export function BottomSheetSearchbarWithSuggestions({
 
   const filteredSuggestions = suggestions
     .filter((suggestion) =>
-      suggestion
-        .toLowerCase()
-        .includes((searchBarProps.value || '').toLowerCase())
+      suggestion.toLowerCase().includes((searchBarProps.value || '').toLowerCase()),
     )
     .slice(0, maxSuggestions);
 
@@ -232,8 +224,7 @@ export function BottomSheetSearchbarWithSuggestions({
               style={{
                 paddingHorizontal: 16,
                 paddingVertical: 12,
-                borderBottomWidth:
-                  index < filteredSuggestions.length - 1 ? 0.6 : 0,
+                borderBottomWidth: index < filteredSuggestions.length - 1 ? 0.6 : 0,
                 borderBottomColor: borderColor,
               }}
               activeOpacity={0.7}

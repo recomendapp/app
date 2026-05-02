@@ -1,58 +1,47 @@
-import { nanoid } from 'nanoid/non-secure'
-import { add } from 'apps/mobile/src/logger/logDump'
-import { type MetricEvents } from 'apps/mobile/src/logger/metrics'
-import { consoleTransport } from 'apps/mobile/src/logger/transports/console'
-import { sentryTransport } from 'apps/mobile/src/logger/transports/sentry'
-import {
-  LogContext,
-  LogLevel,
-  type Metadata,
-  type Transport,
-} from 'apps/mobile/src/logger/types'
-import { enabledLogLevels } from 'apps/mobile/src/logger/util'
-import * as env from 'apps/mobile/src/env'
+import { nanoid } from 'nanoid/non-secure';
+import { add } from './logDump';
+import { type MetricEvents } from './metrics';
+import { consoleTransport } from './transports/console';
+import { sentryTransport } from './transports/sentry';
+import { LogContext, LogLevel, type Metadata, type Transport } from './types';
+import { enabledLogLevels } from './util';
+import * as env from '../env';
 
 const TRANSPORTS: Transport[] = (function configureTransports() {
   switch (env.ENV) {
     case 'production': {
-      return [
-        sentryTransport
-      ].filter(
-        Boolean,
-      ) as Transport[]
+      return [sentryTransport].filter(Boolean) as Transport[];
     }
     case 'test': {
-      return []
+      return [];
     }
     default: {
-      return [
-        consoleTransport
-      ]
+      return [consoleTransport];
     }
   }
-})()
+})();
 
 export class Logger {
-  static Level = LogLevel
-  static Context = LogContext
+  static Level = LogLevel;
+  static Context = LogContext;
 
-  level: LogLevel
-  context: LogContext | undefined = undefined
-  contextFilter: string = ''
+  level: LogLevel;
+  context: LogContext | undefined = undefined;
+  contextFilter = '';
 
-  protected debugContextRegexes: RegExp[] = []
-  protected transports: Transport[] = []
+  protected debugContextRegexes: RegExp[] = [];
+  protected transports: Transport[] = [];
 
   static create(context?: LogContext) {
     const logger = new Logger({
       level: env.LOG_LEVEL as LogLevel,
       context,
       contextFilter: env.LOG_LEVEL || '',
-    })
+    });
     for (const transport of TRANSPORTS) {
-      logger.addTransport(transport)
+      logger.addTransport(transport);
     }
-    return logger
+    return logger;
   }
 
   constructor({
@@ -60,41 +49,39 @@ export class Logger {
     context,
     contextFilter,
   }: {
-    level?: LogLevel
-    context?: LogContext
-    contextFilter?: string
+    level?: LogLevel;
+    context?: LogContext;
+    contextFilter?: string;
   } = {}) {
-    this.context = context
-    this.level = level || LogLevel.Info
-    this.contextFilter = contextFilter || ''
+    this.context = context;
+    this.level = level || LogLevel.Info;
+    this.contextFilter = contextFilter || '';
     if (this.contextFilter) {
-      this.level = LogLevel.Debug
+      this.level = LogLevel.Debug;
     }
-    this.debugContextRegexes = (this.contextFilter || '')
-      .split(',')
-      .map(filter => {
-        return new RegExp(filter.replace(/[^\w:*-]/, '').replace(/\*/g, '.*'))
-      })
+    this.debugContextRegexes = (this.contextFilter || '').split(',').map((filter) => {
+      return new RegExp(filter.replace(/[^\w:*-]/, '').replace(/\*/g, '.*'));
+    });
   }
 
   debug(message: string, metadata: Metadata = {}) {
-    this.transport({level: LogLevel.Debug, message, metadata})
+    this.transport({ level: LogLevel.Debug, message, metadata });
   }
 
   info(message: string, metadata: Metadata = {}) {
-    this.transport({level: LogLevel.Info, message, metadata})
+    this.transport({ level: LogLevel.Info, message, metadata });
   }
 
   log(message: string, metadata: Metadata = {}) {
-    this.transport({level: LogLevel.Log, message, metadata})
+    this.transport({ level: LogLevel.Log, message, metadata });
   }
 
   warn(message: string, metadata: Metadata = {}) {
-    this.transport({level: LogLevel.Warn, message, metadata})
+    this.transport({ level: LogLevel.Warn, message, metadata });
   }
 
   error(error: Error | string, metadata: Metadata = {}) {
-    this.transport({level: LogLevel.Error, message: error, metadata})
+    this.transport({ level: LogLevel.Error, message: error, metadata });
   }
 
   metric<E extends keyof MetricEvents>(
@@ -104,19 +91,19 @@ export class Logger {
       /**
        * Optionally also send to StatSig
        */
-      statsig?: boolean
-    } = {statsig: true},
+      statsig?: boolean;
+    } = { statsig: true },
   ) {
     for (const transport of this.transports) {
-      transport(LogLevel.Info, LogContext.Metric, event, metadata, Date.now())
+      transport(LogLevel.Info, LogContext.Metric, event, metadata, Date.now());
     }
   }
 
   addTransport(transport: Transport) {
-    this.transports.push(transport)
+    this.transports.push(transport);
     return () => {
-      this.transports.splice(this.transports.indexOf(transport), 1)
-    }
+      this.transports.splice(this.transports.indexOf(transport), 1);
+    };
   }
 
   protected transport({
@@ -124,20 +111,20 @@ export class Logger {
     message,
     metadata = {},
   }: {
-    level: LogLevel
-    message: string | Error
-    metadata: Metadata
+    level: LogLevel;
+    message: string | Error;
+    metadata: Metadata;
   }) {
     if (
       level === LogLevel.Debug &&
       !!this.contextFilter &&
       !!this.context &&
-      !this.debugContextRegexes.find(reg => reg.test(this.context!))
+      !this.debugContextRegexes.find((reg) => reg.test(this.context!))
     )
-      return
+      return;
 
-    const timestamp = Date.now()
-    const meta = metadata || {}
+    const timestamp = Date.now();
+    const meta = metadata || {};
 
     // send every log to syslog
     add({
@@ -147,12 +134,12 @@ export class Logger {
       context: this.context,
       message,
       metadata: meta,
-    })
+    });
 
-    if (!enabledLogLevels[this.level].includes(level)) return
+    if (!enabledLogLevels[this.level].includes(level)) return;
 
     for (const transport of this.transports) {
-      transport(level, this.context, message, meta, timestamp)
+      transport(level, this.context, message, meta, timestamp);
     }
   }
 }
@@ -168,4 +155,4 @@ export class Logger {
  *   `logger.warn(message[, metadata])`
  *   `logger.error(error[, metadata])`
  */
-export const logger = Logger.create(Logger.Context.Default)
+export const logger = Logger.create(Logger.Context.Default);

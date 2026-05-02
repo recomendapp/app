@@ -1,14 +1,14 @@
-import tw from "apps/mobile/src/lib/tw";
-import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
-import { CardPlaylist } from "../cards/CardPlaylist";
-import { LegendList } from "@legendapp/list/react-native";
-import { useTranslations } from "use-intl";
-import { upperFirst } from "lodash";
-import { Text } from "../ui/text";
-import { GAP } from "apps/mobile/src/theme/globals";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { userPlaylistsFollowingInfiniteOptions } from "@libs/query-client";
-import { useAuth } from "../../providers/AuthProvider";
+import tw from '../../lib/tw';
+import { StyleProp, TextStyle, View, ViewStyle } from 'react-native';
+import { CardPlaylist } from '../cards/CardPlaylist';
+import { LegendList } from '@legendapp/list/react-native';
+import { useTranslations } from 'use-intl';
+import { upperFirst } from 'lodash';
+import { Text } from '../ui/text';
+import { GAP } from '../../theme/globals';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { userPlaylistsFollowingInfiniteOptions } from '@libs/query-client';
+import { useAuth } from '../../providers/AuthProvider';
 
 interface WidgetUserFriendsPlaylistsProps extends React.ComponentPropsWithoutRef<typeof View> {
   labelStyle?: StyleProp<TextStyle>;
@@ -22,10 +22,16 @@ export const WidgetUserFriendsPlaylists = ({
 }: WidgetUserFriendsPlaylistsProps) => {
   const t = useTranslations();
   const { user } = useAuth();
-  const { data: playlists, hasNextPage, fetchNextPage } = useInfiniteQuery(userPlaylistsFollowingInfiniteOptions({
-    userId: user?.id
-  }));
-  const flattenPlaylists = playlists?.pages.flatMap(page => page.data) || [];
+  const {
+    data: playlists,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery(
+    userPlaylistsFollowingInfiniteOptions({
+      userId: user?.id,
+    }),
+  );
+  const flattenPlaylists = playlists?.pages.flatMap((page) => page.data) || [];
 
   if (!flattenPlaylists.length) {
     return null;

@@ -1,75 +1,82 @@
 import React, { useCallback } from 'react';
-import tw from 'apps/mobile/src/lib/tw';
-import { useTheme } from 'apps/mobile/src/providers/ThemeProvider';
-import { Text } from 'apps/mobile/src/components/ui/text';
+import tw from '../../../lib/tw';
+import { useTheme } from '../../../providers/ThemeProvider';
+import { Text } from '../../ui/text';
 import { upperFirst } from 'lodash';
 import { View } from 'react-native';
-import { CardUser } from 'apps/mobile/src/components/cards/CardUser';
+import { CardUser } from '../../cards/CardUser';
 import { FlashList } from '@shopify/flash-list';
-import TrueSheet from 'apps/mobile/src/components/ui/TrueSheet';
+import TrueSheet from '../../ui/TrueSheet';
 import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from 'apps/mobile/src/theme/globals';
+import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import { RecoSender } from '@libs/api-js';
 
 interface BottomSheetMyRecosSendersProps extends BottomSheetProps {
   comments: RecoSender[];
-};
+}
 
 const BottomSheetMyRecosSenders = React.forwardRef<
   React.ComponentRef<typeof TrueSheet>,
   BottomSheetMyRecosSendersProps
 >(({ id, comments, ...props }, ref) => {
-	const insets = useSafeAreaInsets();
-	const { colors, mode } = useTheme();
-	const t = useTranslations();
-	const renderItem = useCallback(({ item }: { item: RecoSender }) => {
-		return (
-			<View key={item.user.id} style={[{ backgroundColor: colors.background }, tw`rounded-xl p-2 gap-2`]}>
-				<View style={tw`flex-row items-center justify-between gap-2`}>
-					<CardUser user={item.user} variant='inline' />
-				</View>
-				{item.comment ? (
-					<View style={[{ backgroundColor: colors.muted }, tw`ml-6 p-2 rounded-md`]}>
-						<Text>{item.comment}</Text>
-					</View>
-				) : null}
-			</View>
-		);
-	}, [colors.muted, colors.background]);
-	return (
+  const insets = useSafeAreaInsets();
+  const { colors, mode } = useTheme();
+  const t = useTranslations();
+  const renderItem = useCallback(
+    ({ item }: { item: RecoSender }) => {
+      return (
+        <View
+          key={item.user.id}
+          style={[{ backgroundColor: colors.background }, tw`rounded-xl p-2 gap-2`]}
+        >
+          <View style={tw`flex-row items-center justify-between gap-2`}>
+            <CardUser user={item.user} variant="inline" />
+          </View>
+          {item.comment ? (
+            <View style={[{ backgroundColor: colors.muted }, tw`ml-6 p-2 rounded-md`]}>
+              <Text>{item.comment}</Text>
+            </View>
+          ) : null}
+        </View>
+      );
+    },
+    [colors.muted, colors.background],
+  );
+  return (
     <TrueSheet
-    ref={ref}
-	header={
-		<Text
-		style={[
-			tw`text-center text-xl font-bold`,
-			{
-				paddingTop: PADDING_VERTICAL * 2,
-				paddingHorizontal: PADDING_HORIZONTAL,
-				paddingBottom: PADDING_VERTICAL,
-			}
-		]}>
-			{upperFirst(t('common.messages.reco', { count: comments.length }))}
-		</Text>
-	}
-	scrollable
-    {...props}
+      ref={ref}
+      header={
+        <Text
+          style={[
+            tw`text-center text-xl font-bold`,
+            {
+              paddingTop: PADDING_VERTICAL * 2,
+              paddingHorizontal: PADDING_HORIZONTAL,
+              paddingBottom: PADDING_VERTICAL,
+            },
+          ]}
+        >
+          {upperFirst(t('common.messages.reco', { count: comments.length }))}
+        </Text>
+      }
+      scrollable
+      {...props}
     >
-		<FlashList
-		data={comments}
-		renderItem={renderItem}
-		keyExtractor={(item) => item.id.toString()}
-		contentContainerStyle={{
-			paddingHorizontal: PADDING_HORIZONTAL,
-			paddingBottom: insets.bottom + PADDING_VERTICAL,
-		}}
-		indicatorStyle={mode === 'dark' ? 'white' : 'black'}
-		ItemSeparatorComponent={() => <View style={tw`h-2`} />}
-		/>
+      <FlashList
+        data={comments}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={{
+          paddingHorizontal: PADDING_HORIZONTAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
+        }}
+        indicatorStyle={mode === 'dark' ? 'white' : 'black'}
+        ItemSeparatorComponent={() => <View style={tw`h-2`} />}
+      />
     </TrueSheet>
-	);
+  );
 });
 BottomSheetMyRecosSenders.displayName = 'BottomSheetMyRecosSenders';
 
