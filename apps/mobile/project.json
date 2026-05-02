@@ -25,7 +25,8 @@
     },
     "update": {
       "command": "eas update",
-      "options": { "cwd": "{projectRoot}" }
+      "options": { "cwd": "{projectRoot}" },
+      "dependsOn": ["^build"]
     }
   }
 }
