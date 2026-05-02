@@ -20,53 +20,51 @@ export const s3Schema = z.object({
   S3_ACCESS_KEY_ID: z.string(),
   S3_SECRET_ACCESS_KEY: z.string(),
   S3_BUCKET: z.string().default('medias'),
-  S3_PUBLIC_ENDPOINT: z.url().optional(), 
+  S3_PUBLIC_ENDPOINT: z.url().optional(),
 });
 
 export const extensionSchema = redisSchema;
 
 export const commonSchema = extensionSchema.extend({
-  NODE_ENV: z
-    .enum(['development', 'production', 'test'])
-    .default('development'),
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
   WEB_APP_URL: z.url().default('http://localhost:3000'),
 });
 /* -------------------------------------------------------------------------- */
 
 export const apiSchema = commonSchema
-.extend(s3Schema.shape)
-.extend(typesenseSchema.shape)
-.extend({
-  PORT: z.coerce.number().default(9000),
-  HOST: z.string().default('0.0.0.0'),
-  API_URL: z.url().default('https://api.recomend.app'),
-  DATABASE_URL: z.string(),
-  MOBILE_APP_SCHEME: z.string().default('recomend://'),
+  .extend(s3Schema.shape)
+  .extend(typesenseSchema.shape)
+  .extend({
+    PORT: z.coerce.number().default(9000),
+    HOST: z.string().default('0.0.0.0'),
+    API_URL: z.url().default('https://api.recomend.app'),
+    DATABASE_URL: z.string(),
+    MOBILE_APP_SCHEME: z.string().default('recomend://'),
 
-  // Auth
-  AUTH_COOKIE_DOMAIN: z.string().default('recomend.app'),
-  AUTH_SECRET: z.string(),
+    // Auth
+    AUTH_COOKIE_DOMAIN: z.string().default('recomend.app'),
+    AUTH_SECRET: z.string(),
 
-  // OAuth
-  AUTH_GOOGLE_CLIENT_ID: z.string(),
-  AUTH_GOOGLE_IOS_CLIENT_ID: z.string(),
-  AUTH_GOOGLE_ANDROID_CLIENT_ID: z.string(),
-  AUTH_GOOGLE_CLIENT_SECRET: z.string(),
-  AUTH_GITHUB_CLIENT_ID: z.string(),
-  AUTH_GITHUB_CLIENT_SECRET: z.string(),
-  AUTH_FACEBOOK_CLIENT_ID: z.string(),
-  AUTH_FACEBOOK_CLIENT_SECRET: z.string(),
-  AUTH_APPLE_CLIENT_ID: z.string(),
-  AUTH_APPLE_TEAM_ID: z.string(),
-  AUTH_APPLE_KEY_ID: z.string(),
-  AUTH_APPLE_PRIVATE_KEY: z.string(),
-  AUTH_APPLE_BUNDLE_ID: z.string(),
+    // OAuth
+    AUTH_GOOGLE_CLIENT_ID: z.string(),
+    AUTH_GOOGLE_IOS_CLIENT_ID: z.string(),
+    AUTH_GOOGLE_ANDROID_CLIENT_ID: z.string(),
+    AUTH_GOOGLE_CLIENT_SECRET: z.string(),
+    AUTH_GITHUB_CLIENT_ID: z.string(),
+    AUTH_GITHUB_CLIENT_SECRET: z.string(),
+    AUTH_FACEBOOK_CLIENT_ID: z.string(),
+    AUTH_FACEBOOK_CLIENT_SECRET: z.string(),
+    AUTH_APPLE_CLIENT_ID: z.string(),
+    AUTH_APPLE_TEAM_ID: z.string(),
+    AUTH_APPLE_KEY_ID: z.string(),
+    AUTH_APPLE_PRIVATE_KEY: z.string(),
+    AUTH_APPLE_BUNDLE_ID: z.string(),
 
-  // RevenueCat
-  REVENUECAT_API_KEY: z.string(),
-  REVENUECAT_WEBHOOK_SECRET: z.string(),
-});
+    // RevenueCat
+    REVENUECAT_API_KEY: z.string(),
+    REVENUECAT_WEBHOOK_SECRET: z.string(),
+  });
 
 export const notifySchema = commonSchema.extend({
   PORT: z.coerce.number().default(9001),
@@ -90,9 +88,7 @@ export const notifySchema = commonSchema.extend({
   APNS_BUNDLE_ID: z.string(),
 });
 
-export const workerSchema = commonSchema
-.extend(typesenseSchema.shape)
-.extend({
+export const workerSchema = commonSchema.extend(typesenseSchema.shape).extend({
   PORT: z.coerce.number().default(9002),
   HOST: z.string().default('0.0.0.0'),
   DATABASE_URL: z.string(),
@@ -102,6 +98,11 @@ export function validateEnv<T extends z.ZodType>(schema: T): z.infer<T> {
   const parsed = schema.safeParse(process.env);
 
   if (!parsed.success) {
+    if (process.env['SKIP_ENV_VALIDATION'] === 'true') {
+      console.warn('⚠️ SKIP_ENV_VALIDATION is true. Bypassing strict env validation.');
+      return process.env as z.infer<T>;
+    }
+
     console.error('❌ Invalid environment variables:', parsed.error.format());
     process.exit(1);
   }
