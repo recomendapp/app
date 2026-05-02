@@ -18,6 +18,7 @@ import { useTranslations } from 'use-intl';
 import * as Application from 'expo-application';
 import app from '../../constants/app';
 import { Badge } from '../../components/ui/Badge';
+import { client } from '@libs/api-js';
 
 type BaseRoute = {
   label: string;
@@ -176,7 +177,8 @@ const SettingsScreen = () => {
 
   const renderFooter = useCallback(
     () => (
-      <View
+      <Pressable
+        onPress={() => Alert.alert(`DEBUG`, `Api URL: ${client.getConfig().baseUrl}`)}
         style={[
           tw`items-center justify-center`,
           { paddingHorizontal: PADDING_HORIZONTAL, paddingVertical: PADDING_VERTICAL * 2 },
@@ -186,17 +188,13 @@ const SettingsScreen = () => {
           {app.name} •{' '}
           {upperFirst(t('common.messages.version_value', { value: appVersion || 'N/A' }))}
         </Text>
-      </View>
+      </Pressable>
     ),
     [appVersion, t],
   );
 
   useEffect(() => {
-    async function getAppVersion() {
-      const version = Application.nativeApplicationVersion;
-      setAppVersion(version);
-    }
-    getAppVersion();
+    setAppVersion(Application.nativeApplicationVersion);
   }, []);
 
   return (

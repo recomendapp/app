@@ -269,34 +269,9 @@ jobs:
           eas-version: latest
           token: ${{ secrets.INFISICAL_EXPO_TOKEN }}
 
-      - name: 📝 Prepare Environment Files
-        if: steps.check-mobile.outputs.IS_AFFECTED == 'true'
-        run: |
-          cat <<EOF > apps/mobile/.env
-          APP_VARIANT=production
-          EXPO_PUBLIC_API_URL="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_API_URL }}"
-          EXPO_PUBLIC_WEB_APP="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_WEB_APP }}"
-          EXPO_PUBLIC_FACEBOOK_APP_ID="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_FACEBOOK_APP_ID }}"
-          EXPO_PUBLIC_FACEBOOK_CLIENT_TOKEN="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_FACEBOOK_CLIENT_TOKEN }}"
-          EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID }}"
-          EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID }}"
-          EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY }}"
-          EXPO_PUBLIC_SENTRY_DSN="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_SENTRY_DSN }}"
-          SENTRY_AUTH_TOKEN="${{ secrets.INFISICAL_MOBILE_SENTRY_AUTH_TOKEN }}"
-          SENTRY_ORG="${{ secrets.INFISICAL_MOBILE_SENTRY_ORG }}"
-          SENTRY_PROJECT="${{ secrets.INFISICAL_MOBILE_SENTRY_PROJECT }}"
-          SENTRY_DISABLE_AUTO_UPLOAD="${{ secrets.INFISICAL_MOBILE_SENTRY_DISABLE_AUTO_UPLOAD }}"
-          TMDB_IMAGE_BASE_URL="${{ secrets.INFISICAL_MOBILE_TMDB_IMAGE_BASE_URL }}"
-          EOF
-
       - name: 🚀 Publish EAS Update
         if: steps.check-mobile.outputs.IS_AFFECTED == 'true'
         env:
           SKIP_ENV_VALIDATION: 'true'
         run: |
           pnpm nx update mobile --channel production --message "CI Update: ${{ github.event.head_commit.message }}" --environment production --non-interactive
-
-      - name: 🧹 Cleanup
-        if: always()
-        run: |
-          rm -f apps/mobile/.env
