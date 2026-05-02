@@ -63,10 +63,39 @@ jobs:
           TMDB_IMAGE_BASE_URL="${{ secrets.INFISICAL_MOBILE_TMDB_IMAGE_BASE_URL }}"
           EOF
 
+      - name: 📝 Prepare API Environment Files
+        run: |
+          # Api
+          cat <<EOF > apps/api/.env
+          NODE_ENV=production
+          AUTH_SECRET="${{ secrets.INFISICAL_AUTH_SECRET }}"
+          API_URL="${{ secrets.INFISICAL_API_URL }}"
+          AUTH_GOOGLE_CLIENT_ID="${{ secrets.INFISICAL_AUTH_GOOGLE_CLIENT_ID }}"
+          AUTH_GOOGLE_IOS_CLIENT_ID="${{ secrets.INFISICAL_AUTH_GOOGLE_IOS_CLIENT_ID }}"
+          AUTH_GOOGLE_ANDROID_CLIENT_ID="${{ secrets.INFISICAL_AUTH_GOOGLE_ANDROID_CLIENT_ID }}"
+          AUTH_GOOGLE_CLIENT_SECRET="${{ secrets.INFISICAL_AUTH_GOOGLE_CLIENT_SECRET }}"
+          AUTH_GITHUB_CLIENT_ID="${{ secrets.INFISICAL_AUTH_GITHUB_CLIENT_ID }}"
+          AUTH_GITHUB_CLIENT_SECRET="${{ secrets.INFISICAL_AUTH_GITHUB_CLIENT_SECRET }}"
+          AUTH_FACEBOOK_CLIENT_ID="${{ secrets.INFISICAL_AUTH_FACEBOOK_CLIENT_ID }}"
+          AUTH_FACEBOOK_CLIENT_SECRET="${{ secrets.INFISICAL_AUTH_FACEBOOK_CLIENT_SECRET }}"
+          AUTH_APPLE_CLIENT_ID="${{ secrets.INFISICAL_AUTH_APPLE_CLIENT_ID }}"
+          AUTH_APPLE_TEAM_ID="${{ secrets.INFISICAL_AUTH_APPLE_TEAM_ID }}"
+          AUTH_APPLE_KEY_ID="${{ secrets.INFISICAL_AUTH_APPLE_KEY_ID }}"
+          AUTH_APPLE_PRIVATE_KEY="${{ secrets.INFISICAL_AUTH_APPLE_PRIVATE_KEY }}"
+          AUTH_APPLE_BUNDLE_ID="${{ secrets.INFISICAL_AUTH_APPLE_BUNDLE_ID }}"
+          REVENUECAT_API_KEY="${{ secrets.INFISICAL_REVENUECAT_API_KEY }}"
+          REVENUECAT_WEBHOOK_SECRET="${{ secrets.INFISICAL_REVENUECAT_WEBHOOK_SECRET }}"
+          DATABASE_URL="postgres://localhost:5432/placeholder"
+          S3_ENDPOINT="https://s3.example.com"
+          S3_ACCESS_KEY_ID="placeholder"
+          S3_SECRET_ACCESS_KEY="placeholder"
+          TYPESENSE_HOST="localhost"
+          TYPESENSE_API_KEY="placeholder"
+          EOF
+
       - name: 🏗️ EAS Build (via Nx)
         env:
           GOOGLE_SERVICES_ANDROID_BASE64: ${{ secrets.INFISICAL_MOBILE_GOOGLE_SERVICES_ANDROID_BASE64 }}
-          SKIP_ENV_VALIDATION: 'true'
         run: pnpm nx build mobile --platform android --profile production --local --non-interactive --output build.aab
 
       - name: 💾 Upload Artifact
