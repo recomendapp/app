@@ -113,6 +113,9 @@ export function validateEnv<T extends z.ZodType>(schema: T): z.infer<T> {
           if (prop === 'NODE_ENV') {
             return 'development';
           }
+          if (prop.includes('PRIVATE_KEY')) {
+            return `-----BEGIN PRIVATE KEY-----\nMC4CAQAwBQYDK2VwBCIEINTbH4Bq6/73x5Xy/u4P3p0cK+B6XhD0Qz3/8/w4aT6K\n-----END PRIVATE KEY-----`;
+          }
           return 'dummy-value-for-build-only';
         },
       }) as z.infer<T>;
