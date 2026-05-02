@@ -53,7 +53,7 @@ export const SearchResults = ({ search, ...props }: SearchResultsProps) => {
   const t = useTranslations();
   const { isVisible: keyboardVisible, height: keyboardHeight } = useKeyboardState((state) => state);
 
-  const { data, isLoading, isError, refetch, isRefetching } = useQuery(
+  const { data, isLoading, isError, error, refetch, isRefetching } = useQuery(
     searchGlobalOptions({
       filters: {
         q: search,
@@ -81,7 +81,7 @@ export const SearchResults = ({ search, ...props }: SearchResultsProps) => {
       {...props}
     >
       {isError ? (
-        <ErrorMessage />
+        <ErrorMessage message={JSON.stringify(error)} />
       ) : loading ? (
         <Icons.Loader />
       ) : (
