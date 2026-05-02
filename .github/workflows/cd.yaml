@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write 
+      packages: write
     outputs:
       version: ${{ steps.prep.outputs.VERSION }}
       affected_projects: ${{ steps.affected.outputs.PROJECTS }}
@@ -29,7 +29,7 @@ jobs:
         uses: pnpm/action-setup@v2
         with:
           version: 9
-          
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -54,10 +54,10 @@ jobs:
         run: |
           SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
           VERSION="b${{ github.run_number }}-${SHORT_SHA}"
-          
+
           echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
           echo "🚀 Build Version: ${VERSION}"
-      
+
       - name: Prepare Environment Files
         run: |
           # Api
@@ -114,9 +114,9 @@ jobs:
           # Retrieve the list of projects affected by the commit
           AFFECTED=$(npx nx show projects --affected --with-target=docker-build --json)
           echo "Affected projects (JSON): $AFFECTED"
-          
+
           PROJECTS=$(echo $AFFECTED | jq -r '.[]')
-          
+
           if [ -z "$PROJECTS" ]; then
             echo "No docker projects affected."
             echo "PROJECTS=[]" >> $GITHUB_OUTPUT
@@ -156,7 +156,7 @@ jobs:
             echo "❌ One or more images failed to push."
             exit 1
           fi
-          
+
           echo "PROJECTS=$AFFECTED" >> $GITHUB_OUTPUT
 
   # =================================================================================
@@ -221,3 +221,80 @@ jobs:
             git commit -m "deploy: update images to version ${VERSION}"
             git push origin main
           fi
+
+  # =================================================================================
+  #  JOB 3: OTA Updates for Mobile App (EAS Update)
+  #  Only runs if the mobile app is affected by the push to main
+  # =================================================================================
+  update-mobile:
+    name: 📱 Deploy OTA Update
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Initialize Nx SHAs
+        uses: nrwl/nx-set-shas@v4
+
+      - name: Check if Mobile is Affected
+        id: check-mobile
+        run: |
+          AFFECTED=$(npx nx show projects --affected --json)
+          echo "Affected projects: $AFFECTED"
+          if echo "$AFFECTED" | grep -q '"mobile"'; then
+            echo "IS_AFFECTED=true" >> $GITHUB_OUTPUT
+          else
+            echo "IS_AFFECTED=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 🔨 Setup EAS
+        if: steps.check-mobile.outputs.IS_AFFECTED == 'true'
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.INFISICAL_EXPO_TOKEN }}
+
+      - name: 📝 Prepare Environment Files
+        if: steps.check-mobile.outputs.IS_AFFECTED == 'true'
+        run: |
+          cat <<EOF > apps/mobile/.env
+          APP_VARIANT=production
+          EXPO_PUBLIC_API_URL="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_API_URL }}"
+          EXPO_PUBLIC_WEB_APP="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_WEB_APP }}"
+          EXPO_PUBLIC_FACEBOOK_APP_ID="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_FACEBOOK_APP_ID }}"
+          EXPO_PUBLIC_FACEBOOK_CLIENT_TOKEN="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_FACEBOOK_CLIENT_TOKEN }}"
+          EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID }}"
+          EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID }}"
+          EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY }}"
+          EXPO_PUBLIC_SENTRY_DSN="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_SENTRY_DSN }}"
+          SENTRY_AUTH_TOKEN="${{ secrets.INFISICAL_MOBILE_SENTRY_AUTH_TOKEN }}"
+          SENTRY_ORG="${{ secrets.INFISICAL_MOBILE_SENTRY_ORG }}"
+          SENTRY_PROJECT="${{ secrets.INFISICAL_MOBILE_SENTRY_PROJECT }}"
+          SENTRY_DISABLE_AUTO_UPLOAD="${{ secrets.INFISICAL_MOBILE_SENTRY_DISABLE_AUTO_UPLOAD }}"
+          TMDB_IMAGE_BASE_URL="${{ secrets.INFISICAL_MOBILE_TMDB_IMAGE_BASE_URL }}"
+          EOF
+
+      - name: 🚀 Publish EAS Update
+        if: steps.check-mobile.outputs.IS_AFFECTED == 'true'
+        run: |
+          pnpm nx update mobile --channel production --message "CI Update: ${{ github.event.head_commit.message }}" --environment production --non-interactive
+
+      - name: 🧹 Cleanup
+        if: always()
+        run: rm -f apps/mobile/.env
