@@ -22,6 +22,10 @@
       "options": {
         "command": "APP_VARIANT=development nx run-android mobile"
       }
+    },
+    "update": {
+      "command": "eas update",
+      "options": { "cwd": "{projectRoot}" }
     }
   }
 }

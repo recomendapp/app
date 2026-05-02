@@ -90,7 +90,7 @@
     "expo-status-bar": "*",
     "expo-symbols": "*",
     "expo-system-ui": "*",
-    "expo-updates": "~55.0.20",
+    "expo-updates": "*",
     "expo-web-browser": "*",
     "fuse.js": "*",
     "html-to-text": "*",
