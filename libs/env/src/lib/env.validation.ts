@@ -100,7 +100,22 @@ export function validateEnv<T extends z.ZodType>(schema: T): z.infer<T> {
   if (!parsed.success) {
     if (process.env['SKIP_ENV_VALIDATION'] === 'true') {
       console.warn('⚠️ SKIP_ENV_VALIDATION is true. Bypassing strict env validation.');
-      return process.env as z.infer<T>;
+      return new Proxy(process.env, {
+        get(target, prop) {
+          if (typeof prop !== 'string') return undefined;
+          if (target[prop] !== undefined) return target[prop];
+          if (prop.includes('URL') || prop.includes('HOST') || prop.includes('ENDPOINT')) {
+            return 'http://dummy.localhost';
+          }
+          if (prop.includes('PORT')) {
+            return '9000';
+          }
+          if (prop === 'NODE_ENV') {
+            return 'development';
+          }
+          return 'dummy-value-for-build-only';
+        },
+      }) as z.infer<T>;
     }
 
     console.error('❌ Invalid environment variables:', parsed.error.format());
