@@ -5,6 +5,9 @@
   "projectType": "application",
   "tags": [],
   "targets": {
+    "build": {
+      "dependsOn": ["^build"]
+    },
     "dev": {
       "executor": "nx:run-commands",
       "options": {
