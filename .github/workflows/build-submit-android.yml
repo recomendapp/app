@@ -99,10 +99,9 @@ jobs:
           echo $GOOGLE_SERVICES_ANDROID_BASE64 | base64 --decode > apps/mobile/google-services.json
 
       - name: 🏗️ EAS Build (via Nx)
+        timeout-minutes: 60
         env:
           GOOGLE_SERVICES_ANDROID_BASE64: ${{ secrets.INFISICAL_MOBILE_GOOGLE_SERVICES_ANDROID_BASE64 }}
-          GRADLE_OPTS: '-Xmx4096m -XX:MaxMetaspaceSize=1024m'
-          ORG_GRADLE_PROJECT_disableLintVital: 'true'
         run: pnpm nx build mobile --platform android --profile production --local --non-interactive --output build.aab
 
       - name: 💾 Upload Artifact
