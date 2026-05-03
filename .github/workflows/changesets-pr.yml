@@ -39,5 +39,6 @@ jobs:
         with:
           version: pnpm exec changeset version
           publish: pnpm exec changeset tag
+          createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
