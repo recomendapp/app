@@ -1,3 +1,4 @@
+import { useHeaderSearchBar } from '../../../../hooks/useHeaderSearchBar';
 import useDebounce from '../../../../hooks/useDebounce';
 import useSearchStore from '../../../../stores/useSearchStore';
 import { Stack, usePathname, useRouter } from 'expo-router';
@@ -21,6 +22,28 @@ const SearchLayout = () => {
       router.replace('/search');
     }
   }, [search, type, router, setIsFocused, setType]);
+
+  const headerSearchBar = useHeaderSearchBar({
+    autoCapitalize: 'none',
+    placeholder:
+      type === 'users'
+        ? upperFirst(t('common.messages.search_user', { count: 1 }))
+        : type === 'playlists'
+          ? upperFirst(t('common.messages.search_playlist', { count: 1 }))
+          : type === 'movies'
+            ? upperFirst(t('common.messages.search_film', { count: 1 }))
+            : type === 'tv_series'
+              ? upperFirst(t('common.messages.search_tv_series', { count: 1 }))
+              : type === 'persons'
+                ? upperFirst(t('common.messages.search_person', { count: 1 }))
+                : upperFirst(t('pages.search.placeholder')),
+    onChangeText: (e) => setSearchQuery(e),
+    hideNavigationBar: true,
+    hideWhenScrolling: false,
+    allowToolbarIntegration: false,
+    onFocus: () => setIsFocused(true),
+    onBlur: handleBlurOrCancel,
+  });
 
   useEffect(() => {
     switch (pathname) {
@@ -53,27 +76,7 @@ const SearchLayout = () => {
         options={{
           headerTitle: upperFirst(t('common.messages.search')),
           headerTransparent: false,
-          headerSearchBarOptions: {
-            autoCapitalize: 'none',
-            placeholder:
-              type === 'users'
-                ? upperFirst(t('common.messages.search_user', { count: 1 }))
-                : type === 'playlists'
-                  ? upperFirst(t('common.messages.search_playlist', { count: 1 }))
-                  : type === 'movies'
-                    ? upperFirst(t('common.messages.search_film', { count: 1 }))
-                    : type === 'tv_series'
-                      ? upperFirst(t('common.messages.search_tv_series', { count: 1 }))
-                      : type === 'persons'
-                        ? upperFirst(t('common.messages.search_person', { count: 1 }))
-                        : upperFirst(t('pages.search.placeholder')),
-            onChangeText: (e) => setSearchQuery(e.nativeEvent.text),
-            hideNavigationBar: true,
-            hideWhenScrolling: false,
-            allowToolbarIntegration: false,
-            onFocus: () => setIsFocused(true),
-            onBlur: handleBlurOrCancel,
-          },
+          ...headerSearchBar,
         }}
       />
       <Stack initialRouteName="(tabs)" />

@@ -20,7 +20,6 @@ import tw from '../../../../lib/tw';
 import { Text } from '../../../ui/text';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
-import { EnrichedTextInput } from '../../../RichText/EnrichedTextInput';
 import { Button } from '../../../ui/Button';
 import { Icons } from '../../../../constants/Icons';
 import useBottomSheetStore from '../../../../stores/useBottomSheetStore';
@@ -29,6 +28,7 @@ import { useAuth } from '../../../../providers/AuthProvider';
 import { NativeStackHeaderItem } from '@react-navigation/native-stack';
 import { BottomSheetLogMovie } from '../../../bottom-sheets/sheets/BottomSheetLogMovie';
 import FeedUserLog from '../../feed/FeedUserLog';
+import { EnrichedMarkdownText } from '../../../RichText/EnrichedMarkdownText';
 
 export const ProfileFilm = ({ username, movieId }: { username: string; movieId: number }) => {
   const { user } = useAuth();
@@ -154,13 +154,7 @@ export const ProfileFilm = ({ username, movieId }: { username: string; movieId: 
                       upperFirst(t('common.messages.review_by', { name: log.user.username }))}
                   </Text>
                 </View>
-                <EnrichedTextInput
-                  key={log.review.body}
-                  defaultValue={log.review.body}
-                  editable={false}
-                  style={tw`flex-1`}
-                  scrollEnabled={false}
-                />
+                <EnrichedMarkdownText markdown={log.review.body} />
               </>
             ) : (
               <FeedUserLog author={log?.user} log={log} />

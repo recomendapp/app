@@ -3,6 +3,7 @@ import Paragraph from '@tiptap/extension-paragraph';
 import Text from '@tiptap/extension-text';
 import Link from '@tiptap/extension-link';
 import Bold from '@tiptap/extension-bold';
+import { Markdown } from '@tiptap/markdown';
 import Underline from '@tiptap/extension-underline';
 import Italic from '@tiptap/extension-italic';
 import Strike from '@tiptap/extension-strike';
@@ -17,6 +18,7 @@ export const EDITOR_EXTENSIONS = [
   Link.configure({
     openOnClick: false,
   }),
+  Markdown,
   Bold,
   Underline,
   Italic,

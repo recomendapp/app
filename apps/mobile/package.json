@@ -106,7 +106,7 @@
     "react-hook-form": "*",
     "react-native": "*",
     "react-native-draggable-flatlist": "*",
-    "react-native-enriched": "*",
+    "react-native-enriched-markdown": "*",
     "react-native-fbsdk-next": "*",
     "react-native-gesture-handler": "*",
     "react-native-image-colors": "*",

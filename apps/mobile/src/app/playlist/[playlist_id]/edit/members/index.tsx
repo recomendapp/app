@@ -275,7 +275,7 @@ const ModalPlaylistEditMembers = () => {
           },
           headerRight: () => (
             <Button
-              variant="outline"
+              variant="ghost"
               icon={Icons.Add}
               size="icon"
               onPress={() =>

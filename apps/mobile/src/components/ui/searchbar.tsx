@@ -31,6 +31,7 @@ export function SearchBar({
   loading = false,
   onSearch,
   onClear,
+  numberOfLines = 1,
   showClearButton = true,
   leftIcon,
   rightIcon,
@@ -125,6 +126,7 @@ export function SearchBar({
         returnKeyType={returnKeyType}
         autoCorrect={autoCorrect}
         selectionColor={selectionColor || colors.accentYellow}
+        numberOfLines={numberOfLines}
         {...props}
       />
 

@@ -28,6 +28,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller';
 import { Badge } from '../../../../../components/ui/Badge';
 import { SearchBarCommands } from 'react-native-screens';
+import { isIOS } from '../../../../../platform/detection';
+import { SearchBar } from '../../../../../components/ui/searchbar';
 
 const ModalPlaylistEditGuestsAdd = () => {
   const { playlist_id } = useLocalSearchParams<{ playlist_id: string }>();
@@ -150,7 +152,6 @@ const ModalPlaylistEditGuestsAdd = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchBarRef.current) {
-        console.log('Focusing search bar');
         searchBarRef.current.focus();
       }
     }, 600);
@@ -163,27 +164,28 @@ const ModalPlaylistEditGuestsAdd = () => {
       <Stack.Screen
         options={{
           ...modalHeaderOptions,
-          headerSearchBarOptions: {
-            ref: searchBarRef,
-            autoCapitalize: 'none',
-            placeholder: upperFirst(t('common.messages.search_user', { count: 1 })),
-            onChangeText: (e) => setSearch(e.nativeEvent.text),
-            hideNavigationBar: false,
-            allowToolbarIntegration: false,
-            hideWhenScrolling: false,
-            autoFocus: true,
-          },
+          headerSearchBarOptions: isIOS
+            ? {
+                ref: searchBarRef,
+                autoCapitalize: 'none',
+                placeholder: upperFirst(t('common.messages.search_user', { count: 1 })),
+                onChangeText: (e) => setSearch(e.nativeEvent.text),
+                hideNavigationBar: false,
+                allowToolbarIntegration: false,
+                hideWhenScrolling: false,
+                autoFocus: true,
+              }
+            : undefined,
           headerTitle: upperFirst(t('common.messages.add_guest', { count: 2 })),
           headerRight: () => (
             <Button
               variant="ghost"
-              size="fit"
+              size="icon"
+              icon={Icons.Check}
               loading={isPending}
               onPress={handleSubmit}
               disabled={!canSave || isPending}
-            >
-              {upperFirst(t('common.messages.save'))}
-            </Button>
+            />
           ),
           unstable_headerRightItems: (props) => [
             {
@@ -203,6 +205,16 @@ const ModalPlaylistEditGuestsAdd = () => {
       <FlashList
         data={users}
         renderItem={renderItem}
+        ListHeaderComponent={
+          !isIOS ? (
+            <SearchBar
+              autoCapitalize="none"
+              autoFocus
+              placeholder={upperFirst(t('common.messages.search_user', { count: 1 }))}
+              onChangeText={(e) => setSearch(e)}
+            />
+          ) : null
+        }
         ListEmptyComponent={
           isLoading ? (
             <Icons.Loader />

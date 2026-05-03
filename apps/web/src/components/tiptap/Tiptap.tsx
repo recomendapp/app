@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import './Tiptap.css';
 import { DependencyList } from 'react';
@@ -8,6 +8,7 @@ import { EDITOR_EXTENSIONS } from './TiptapExtensions';
 export const useEditor = (options?: UseEditorOptions | undefined, deps?: DependencyList) => {
   return useEditorBase(
     {
+      contentType: 'markdown',
       ...options,
       immediatelyRender: options?.immediatelyRender ?? false,
       editorProps: {
@@ -16,11 +17,8 @@ export const useEditor = (options?: UseEditorOptions | undefined, deps?: Depende
         },
         ...options?.editorProps,
       },
-      extensions: [
-        ...EDITOR_EXTENSIONS,
-        ...(options?.extensions || []),
-      ],
+      extensions: [...EDITOR_EXTENSIONS, ...(options?.extensions || [])],
     },
-    deps
+    deps,
   );
 };

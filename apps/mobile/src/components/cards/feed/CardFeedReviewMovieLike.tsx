@@ -89,7 +89,7 @@ const CardFeedReviewMovieLikeDefault = React.forwardRef<
                   pathname: '/user/[username]/film/[film_id]',
                   params: {
                     username: data.content.author.username,
-                    film_id: data.content.movieId,
+                    film_id: data.content.movie.id,
                   },
                 }}
               />

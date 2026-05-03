@@ -55,7 +55,7 @@ const CollectionLayout = () => {
           headerRight: () => (
             <View style={tw`flex-row items-center gap-1`}>
               <Button
-                variant="outline"
+                variant="ghost"
                 icon={Icons.Add}
                 size="icon"
                 onPress={handleCreatePlaylist}

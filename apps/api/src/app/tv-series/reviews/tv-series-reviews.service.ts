@@ -3,34 +3,36 @@ import { and, asc, desc, eq, exists, gt, lt, or, sql, SQL } from 'drizzle-orm';
 import { follow, logTvSeries, profile, reviewTvSeries, user } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import DOMPurify from 'isomorphic-dompurify';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { plainToInstance } from 'class-transformer';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
-import { ListInfiniteReviewsTvSeriesDto, ListInfiniteReviewsTvSeriesQueryDto, ListPaginatedReviewsTvSeriesDto, ListPaginatedReviewsTvSeriesQueryDto, ReviewTvSeriesDto, ReviewTvSeriesInputDto, ReviewTvSeriesSortBy } from '../../reviews/tv-series/dto/review-tv-series.dto';
+import {
+  ListInfiniteReviewsTvSeriesDto,
+  ListInfiniteReviewsTvSeriesQueryDto,
+  ListPaginatedReviewsTvSeriesDto,
+  ListPaginatedReviewsTvSeriesQueryDto,
+  ReviewTvSeriesDto,
+  ReviewTvSeriesInputDto,
+  ReviewTvSeriesSortBy,
+} from '../../reviews/tv-series/dto/review-tv-series.dto';
 
 @Injectable()
 export class TvSeriesReviewsService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
   async upsert({
     user,
     tvSeriesId,
     dto,
   }: {
-    user: User,
-    tvSeriesId: number,
-    dto: ReviewTvSeriesInputDto,
+    user: User;
+    tvSeriesId: number;
+    dto: ReviewTvSeriesInputDto;
   }): Promise<ReviewTvSeriesDto> {
     const logEntry = await this.db.query.logTvSeries.findFirst({
-      where: and(
-        eq(logTvSeries.userId, user.id),
-        eq(logTvSeries.tvSeriesId, tvSeriesId),
-      ),
+      where: and(eq(logTvSeries.userId, user.id), eq(logTvSeries.tvSeriesId, tvSeriesId)),
       columns: {
         id: true,
         rating: true,
@@ -41,21 +43,21 @@ export class TvSeriesReviewsService {
       throw new NotFoundException('Log entry not found');
     }
 
-    const sanitizedBody = DOMPurify.sanitize(dto.body);
-    const wrappedHtml = `<html>${sanitizedBody}</html>`;
+    const markdownBody = dto.body.trim();
 
-    const [upsertedReview] = await this.db.insert(reviewTvSeries)
+    const [upsertedReview] = await this.db
+      .insert(reviewTvSeries)
       .values({
         id: logEntry.id,
         title: dto.title ?? null,
-        body: wrappedHtml,
+        body: markdownBody,
         isSpoiler: dto.isSpoiler,
       })
       .onConflictDoUpdate({
         target: reviewTvSeries.id,
         set: {
           title: dto.title ?? null,
-          body: wrappedHtml,
+          body: markdownBody,
           isSpoiler: dto.isSpoiler,
         },
       })
@@ -72,14 +74,11 @@ export class TvSeriesReviewsService {
     user,
     tvSeriesId,
   }: {
-    user: User,
-    tvSeriesId: number,
+    user: User;
+    tvSeriesId: number;
   }): Promise<ReviewTvSeriesDto> {
     const logEntry = await this.db.query.logTvSeries.findFirst({
-      where: and(
-        eq(logTvSeries.userId, user.id),
-        eq(logTvSeries.tvSeriesId, tvSeriesId),
-      ),
+      where: and(eq(logTvSeries.userId, user.id), eq(logTvSeries.tvSeriesId, tvSeriesId)),
       columns: {
         id: true,
       },
@@ -89,7 +88,8 @@ export class TvSeriesReviewsService {
       throw new NotFoundException('Log entry not found');
     }
 
-    const [deletedReview] = await this.db.delete(reviewTvSeries)
+    const [deletedReview] = await this.db
+      .delete(reviewTvSeries)
       .where(eq(reviewTvSeries.id, logEntry.id))
       .returning();
 
@@ -113,7 +113,7 @@ export class TvSeriesReviewsService {
     sortOrder: SortOrder,
   ) {
     const direction = sortOrder === SortOrder.ASC ? asc : desc;
-    
+
     const orderBy = (() => {
       switch (sortBy) {
         case ReviewTvSeriesSortBy.RANDOM:
@@ -123,7 +123,7 @@ export class TvSeriesReviewsService {
         case ReviewTvSeriesSortBy.UPDATED_AT:
           return [direction(reviewTvSeries.updatedAt), direction(reviewTvSeries.id)];
         case ReviewTvSeriesSortBy.RATING:
-          return [direction(logTvSeries.rating), direction(reviewTvSeries.id)]; 
+          return [direction(logTvSeries.rating), direction(reviewTvSeries.id)];
         case ReviewTvSeriesSortBy.CREATED_AT:
         default:
           return [direction(reviewTvSeries.createdAt), direction(reviewTvSeries.id)];
@@ -141,23 +141,20 @@ export class TvSeriesReviewsService {
         .where(
           and(
             eq(follow.followerId, currentUser.id),
-            eq(follow.followingId, logTvSeries.userId), 
-            eq(follow.status, 'accepted')
-          )
+            eq(follow.followingId, logTvSeries.userId),
+            eq(follow.status, 'accepted'),
+          ),
         )
         .limit(1);
 
       isVisibleLogic = or(
         eq(profile.isPrivate, false),
         eq(logTvSeries.userId, currentUser.id),
-        exists(isFollowingSubquery)
+        exists(isFollowingSubquery),
       );
     }
 
-    const whereClause = and(
-      eq(logTvSeries.tvSeriesId, tvSeriesId),
-      isVisibleLogic
-    );
+    const whereClause = and(eq(logTvSeries.tvSeriesId, tvSeriesId), isVisibleLogic);
 
     return { whereClause, orderBy };
   }
@@ -175,11 +172,16 @@ export class TvSeriesReviewsService {
       const offset = (page - 1) * per_page;
 
       const { whereClause, orderBy } = this.getListBaseQuery(
-        tx, tvSeriesId, currentUser, sort_by, sort_order
+        tx,
+        tvSeriesId,
+        currentUser,
+        sort_by,
+        sort_order,
       );
 
       const [reviewsData, totalCountResult] = await Promise.all([
-        tx.select({
+        tx
+          .select({
             review: reviewTvSeries,
             log: logTvSeries,
             user: USER_COMPACT_SELECT,
@@ -192,11 +194,12 @@ export class TvSeriesReviewsService {
           .orderBy(...orderBy)
           .limit(per_page)
           .offset(offset),
-        tx.select({ count: sql<number>`count(*)` })
+        tx
+          .select({ count: sql<number>`count(*)` })
           .from(reviewTvSeries)
           .innerJoin(logTvSeries, eq(logTvSeries.id, reviewTvSeries.id))
           .innerJoin(profile, eq(profile.id, logTvSeries.userId))
-          .where(whereClause)
+          .where(whereClause),
       ]);
 
       const totalCount = Number(totalCountResult[0]?.count || 0);
@@ -213,7 +216,7 @@ export class TvSeriesReviewsService {
             username: row.user.username,
             avatar: row.user.avatar,
             isPremium: row.user.isPremium,
-          }
+          },
         })),
         meta: {
           total_results: totalCount,
@@ -223,7 +226,7 @@ export class TvSeriesReviewsService {
         },
       });
     });
-  };
+  }
   async listInfinite({
     tvSeriesId,
     query,
@@ -239,7 +242,11 @@ export class TvSeriesReviewsService {
       const cursorData = cursor ? decodeCursor<BaseCursor<string | number, number>>(cursor) : null;
 
       const { whereClause: baseWhereClause, orderBy } = this.getListBaseQuery(
-        tx, tvSeriesId, currentUser, sort_by, sort_order
+        tx,
+        tvSeriesId,
+        currentUser,
+        sort_by,
+        sort_order,
       );
 
       let cursorWhereClause: SQL | undefined;
@@ -253,8 +260,8 @@ export class TvSeriesReviewsService {
               operator(reviewTvSeries.likesCount, Number(cursorData.value)),
               and(
                 eq(reviewTvSeries.likesCount, Number(cursorData.value)),
-                operator(reviewTvSeries.id, cursorData.id)
-              )
+                operator(reviewTvSeries.id, cursorData.id),
+              ),
             );
             break;
           }
@@ -264,8 +271,8 @@ export class TvSeriesReviewsService {
               operator(logTvSeries.rating, Number(cursorData.value)),
               and(
                 eq(logTvSeries.rating, Number(cursorData.value)),
-                operator(reviewTvSeries.id, cursorData.id)
-              )
+                operator(reviewTvSeries.id, cursorData.id),
+              ),
             );
             break;
           }
@@ -276,8 +283,8 @@ export class TvSeriesReviewsService {
               operator(reviewTvSeries.updatedAt, updatedDate),
               and(
                 eq(reviewTvSeries.updatedAt, updatedDate),
-                operator(reviewTvSeries.id, cursorData.id)
-              )
+                operator(reviewTvSeries.id, cursorData.id),
+              ),
             );
             break;
           }
@@ -292,21 +299,22 @@ export class TvSeriesReviewsService {
               operator(reviewTvSeries.createdAt, createdDate),
               and(
                 eq(reviewTvSeries.createdAt, createdDate),
-                operator(reviewTvSeries.id, cursorData.id)
-              )
+                operator(reviewTvSeries.id, cursorData.id),
+              ),
             );
             break;
           }
         }
       }
 
-      const finalWhereClause = cursorWhereClause 
-        ? and(baseWhereClause, cursorWhereClause) 
+      const finalWhereClause = cursorWhereClause
+        ? and(baseWhereClause, cursorWhereClause)
         : baseWhereClause;
 
       const fetchLimit = per_page + 1;
 
-      const results = await tx.select({
+      const results = await tx
+        .select({
           review: reviewTvSeries,
           log: logTvSeries,
           user: USER_COMPACT_SELECT,
@@ -364,7 +372,7 @@ export class TvSeriesReviewsService {
             username: row.user.username,
             avatar: row.user.avatar,
             isPremium: row.user.isPremium,
-          }
+          },
         })),
         meta: {
           next_cursor: nextCursor,

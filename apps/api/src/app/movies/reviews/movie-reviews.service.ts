@@ -3,8 +3,15 @@ import { and, asc, desc, eq, exists, gt, lt, or, sql, SQL } from 'drizzle-orm';
 import { follow, logMovie, profile, reviewMovie, user } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import { ListInfiniteReviewsMovieDto, ListInfiniteReviewsMovieQueryDto, ListPaginatedReviewsMovieDto, ListPaginatedReviewsMovieQueryDto, ReviewMovieDto, ReviewMovieInputDto, ReviewMovieSortBy } from '../../reviews/movie/dto/reviews-movie.dto';
-import DOMPurify from 'isomorphic-dompurify';
+import {
+  ListInfiniteReviewsMovieDto,
+  ListInfiniteReviewsMovieQueryDto,
+  ListPaginatedReviewsMovieDto,
+  ListPaginatedReviewsMovieQueryDto,
+  ReviewMovieDto,
+  ReviewMovieInputDto,
+  ReviewMovieSortBy,
+} from '../../reviews/movie/dto/reviews-movie.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
@@ -13,24 +20,19 @@ import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 
 @Injectable()
 export class MovieReviewsService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
   async upsert({
     user,
     movieId,
     dto,
   }: {
-    user: User,
-    movieId: number,
-    dto: ReviewMovieInputDto,
+    user: User;
+    movieId: number;
+    dto: ReviewMovieInputDto;
   }): Promise<ReviewMovieDto> {
     const logEntry = await this.db.query.logMovie.findFirst({
-      where: and(
-        eq(logMovie.userId, user.id),
-        eq(logMovie.movieId, movieId),
-      ),
+      where: and(eq(logMovie.userId, user.id), eq(logMovie.movieId, movieId)),
       columns: {
         id: true,
         rating: true,
@@ -41,21 +43,21 @@ export class MovieReviewsService {
       throw new NotFoundException('Log entry not found');
     }
 
-    const sanitizedBody = DOMPurify.sanitize(dto.body);
-    const wrappedHtml = `<html>${sanitizedBody}</html>`;
+    const markdownBody = dto.body.trim();
 
-    const [upsertedReview] = await this.db.insert(reviewMovie)
+    const [upsertedReview] = await this.db
+      .insert(reviewMovie)
       .values({
         id: logEntry.id,
         title: dto.title ?? null,
-        body: wrappedHtml,
+        body: markdownBody,
         isSpoiler: dto.isSpoiler,
       })
       .onConflictDoUpdate({
         target: reviewMovie.id,
         set: {
           title: dto.title ?? null,
-          body: wrappedHtml,
+          body: markdownBody,
           isSpoiler: dto.isSpoiler,
         },
       })
@@ -68,18 +70,9 @@ export class MovieReviewsService {
     });
   }
 
-  async delete({
-    user,
-    movieId,
-  }: {
-    user: User,
-    movieId: number,
-  }): Promise<ReviewMovieDto> {
+  async delete({ user, movieId }: { user: User; movieId: number }): Promise<ReviewMovieDto> {
     const logEntry = await this.db.query.logMovie.findFirst({
-      where: and(
-        eq(logMovie.userId, user.id),
-        eq(logMovie.movieId, movieId),
-      ),
+      where: and(eq(logMovie.userId, user.id), eq(logMovie.movieId, movieId)),
       columns: {
         id: true,
       },
@@ -89,7 +82,8 @@ export class MovieReviewsService {
       throw new NotFoundException('Log entry not found');
     }
 
-    const [deletedReview] = await this.db.delete(reviewMovie)
+    const [deletedReview] = await this.db
+      .delete(reviewMovie)
       .where(eq(reviewMovie.id, logEntry.id))
       .returning();
 
@@ -113,7 +107,7 @@ export class MovieReviewsService {
     sortOrder: SortOrder,
   ) {
     const direction = sortOrder === SortOrder.ASC ? asc : desc;
-    
+
     const orderBy = (() => {
       switch (sortBy) {
         case ReviewMovieSortBy.RANDOM:
@@ -123,7 +117,7 @@ export class MovieReviewsService {
         case ReviewMovieSortBy.UPDATED_AT:
           return [direction(reviewMovie.updatedAt), direction(reviewMovie.id)];
         case ReviewMovieSortBy.RATING:
-          return [direction(logMovie.rating), direction(reviewMovie.id)]; 
+          return [direction(logMovie.rating), direction(reviewMovie.id)];
         case ReviewMovieSortBy.CREATED_AT:
         default:
           return [direction(reviewMovie.createdAt), direction(reviewMovie.id)];
@@ -141,23 +135,20 @@ export class MovieReviewsService {
         .where(
           and(
             eq(follow.followerId, currentUser.id),
-            eq(follow.followingId, logMovie.userId), 
-            eq(follow.status, 'accepted')
-          )
+            eq(follow.followingId, logMovie.userId),
+            eq(follow.status, 'accepted'),
+          ),
         )
         .limit(1);
 
       isVisibleLogic = or(
         eq(profile.isPrivate, false),
         eq(logMovie.userId, currentUser.id),
-        exists(isFollowingSubquery)
+        exists(isFollowingSubquery),
       );
     }
 
-    const whereClause = and(
-      eq(logMovie.movieId, movieId),
-      isVisibleLogic
-    );
+    const whereClause = and(eq(logMovie.movieId, movieId), isVisibleLogic);
 
     return { whereClause, orderBy };
   }
@@ -175,11 +166,16 @@ export class MovieReviewsService {
       const offset = (page - 1) * per_page;
 
       const { whereClause, orderBy } = this.getListBaseQuery(
-        tx, movieId, currentUser, sort_by, sort_order
+        tx,
+        movieId,
+        currentUser,
+        sort_by,
+        sort_order,
       );
 
       const [reviewsData, totalCountResult] = await Promise.all([
-        tx.select({
+        tx
+          .select({
             review: reviewMovie,
             log: logMovie,
             user: USER_COMPACT_SELECT,
@@ -192,11 +188,12 @@ export class MovieReviewsService {
           .orderBy(...orderBy)
           .limit(per_page)
           .offset(offset),
-        tx.select({ count: sql<number>`count(*)` })
+        tx
+          .select({ count: sql<number>`count(*)` })
           .from(reviewMovie)
           .innerJoin(logMovie, eq(logMovie.id, reviewMovie.id))
           .innerJoin(profile, eq(profile.id, logMovie.userId))
-          .where(whereClause)
+          .where(whereClause),
       ]);
 
       const totalCount = Number(totalCountResult[0]?.count || 0);
@@ -213,7 +210,7 @@ export class MovieReviewsService {
             username: row.user.username,
             avatar: row.user.avatar,
             isPremium: row.user.isPremium,
-          }
+          },
         })),
         meta: {
           total_results: totalCount,
@@ -223,7 +220,7 @@ export class MovieReviewsService {
         },
       });
     });
-  };
+  }
   async listInfinite({
     movieId,
     query,
@@ -239,7 +236,11 @@ export class MovieReviewsService {
       const cursorData = cursor ? decodeCursor<BaseCursor<string | number, number>>(cursor) : null;
 
       const { whereClause: baseWhereClause, orderBy } = this.getListBaseQuery(
-        tx, movieId, currentUser, sort_by, sort_order
+        tx,
+        movieId,
+        currentUser,
+        sort_by,
+        sort_order,
       );
 
       let cursorWhereClause: SQL | undefined;
@@ -253,8 +254,8 @@ export class MovieReviewsService {
               operator(reviewMovie.likesCount, Number(cursorData.value)),
               and(
                 eq(reviewMovie.likesCount, Number(cursorData.value)),
-                operator(reviewMovie.id, cursorData.id)
-              )
+                operator(reviewMovie.id, cursorData.id),
+              ),
             );
             break;
           }
@@ -264,8 +265,8 @@ export class MovieReviewsService {
               operator(logMovie.rating, Number(cursorData.value)),
               and(
                 eq(logMovie.rating, Number(cursorData.value)),
-                operator(reviewMovie.id, cursorData.id)
-              )
+                operator(reviewMovie.id, cursorData.id),
+              ),
             );
             break;
           }
@@ -274,10 +275,7 @@ export class MovieReviewsService {
             const updatedDate = String(cursorData.value);
             cursorWhereClause = or(
               operator(reviewMovie.updatedAt, updatedDate),
-              and(
-                eq(reviewMovie.updatedAt, updatedDate),
-                operator(reviewMovie.id, cursorData.id)
-              )
+              and(eq(reviewMovie.updatedAt, updatedDate), operator(reviewMovie.id, cursorData.id)),
             );
             break;
           }
@@ -290,23 +288,21 @@ export class MovieReviewsService {
             const createdDate = String(cursorData.value);
             cursorWhereClause = or(
               operator(reviewMovie.createdAt, createdDate),
-              and(
-                eq(reviewMovie.createdAt, createdDate),
-                operator(reviewMovie.id, cursorData.id)
-              )
+              and(eq(reviewMovie.createdAt, createdDate), operator(reviewMovie.id, cursorData.id)),
             );
             break;
           }
         }
       }
 
-      const finalWhereClause = cursorWhereClause 
-        ? and(baseWhereClause, cursorWhereClause) 
+      const finalWhereClause = cursorWhereClause
+        ? and(baseWhereClause, cursorWhereClause)
         : baseWhereClause;
 
       const fetchLimit = per_page + 1;
 
-      const results = await tx.select({
+      const results = await tx
+        .select({
           review: reviewMovie,
           log: logMovie,
           user: USER_COMPACT_SELECT,
@@ -364,7 +360,7 @@ export class MovieReviewsService {
             username: row.user.username,
             avatar: row.user.avatar,
             isPremium: row.user.isPremium,
-          }
+          },
         })),
         meta: {
           next_cursor: nextCursor,

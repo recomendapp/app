@@ -2,11 +2,11 @@ import { forwardRef, useCallback, useMemo, useState } from 'react';
 import { KeyboardToolbar } from '../ui/KeyboardToolbar';
 import { KeyboardToolbarProps } from 'react-native-keyboard-controller';
 import {
-  EnrichedTextInputInstance,
-  OnChangeSelectionEvent,
-  OnChangeStateEvent,
+  EnrichedMarkdownTextInputInstance,
+  EnrichedMarkdownTextInputProps,
   OnLinkDetected,
-} from 'react-native-enriched';
+  StyleState,
+} from 'react-native-enriched-markdown';
 import { LucideIcon } from 'lucide-react-native';
 import { Icons } from '../../constants/Icons';
 import { useTheme } from '../../providers/ThemeProvider';
@@ -28,9 +28,11 @@ type Item = {
 };
 
 interface ToolbarProps extends KeyboardToolbarProps {
-  editorRef: React.RefObject<EnrichedTextInputInstance | null>;
-  stylesState?: OnChangeStateEvent | null;
-  selectionState?: OnChangeSelectionEvent | null;
+  editorRef: React.RefObject<EnrichedMarkdownTextInputInstance | null>;
+  stylesState?: StyleState | null;
+  selectionState?:
+    | Parameters<NonNullable<EnrichedMarkdownTextInputProps['onChangeSelection']>>[0]
+    | null;
   linkState?: OnLinkDetected | null;
 }
 
@@ -47,36 +49,36 @@ export const Toolbar = forwardRef<React.ComponentRef<typeof KeyboardToolbar>, To
           title: 'Toggle bold',
           onPress: editorRef.current?.toggleBold,
           icon: Icons.Bold,
-          active: stylesState?.isBold === true,
+          active: stylesState?.bold.isActive === true,
         },
         {
           title: 'Toggle underline',
           onPress: editorRef.current?.toggleUnderline,
           icon: Icons.Underline,
-          active: stylesState?.isUnderline === true,
+          active: stylesState?.underline.isActive === true,
         },
         {
           title: 'Toggle italic',
           onPress: editorRef.current?.toggleItalic,
           icon: Icons.Italic,
-          active: stylesState?.isItalic === true,
+          active: stylesState?.italic.isActive === true,
         },
         {
           title: 'Toggle strikethrough',
-          onPress: editorRef.current?.toggleStrikeThrough,
+          onPress: editorRef.current?.toggleStrikethrough,
           icon: Icons.Strikethrough,
-          active: stylesState?.isStrikeThrough === true,
+          active: stylesState?.strikethrough.isActive === true,
         },
         {
           title: 'Insert link',
           onPress: () => {
-            if (stylesState?.isLink && linkState) {
+            if (stylesState?.link.isActive && linkState) {
               setLinkUrl(linkState.url);
             }
             setIsLinkMode((prev) => !prev);
           },
           icon: Icons.Link,
-          active: stylesState?.isLink === true,
+          active: stylesState?.link.isActive === true,
           disabled: selectionState ? selectionState.start === selectionState.end : true,
         },
       ],
@@ -89,18 +91,12 @@ export const Toolbar = forwardRef<React.ComponentRef<typeof KeyboardToolbar>, To
       setLinkUrl('');
     }, []);
     const handleInsertLink = useCallback(() => {
-      if (!selectionState) return;
       if (!editorRef.current) return;
       const cleanedLink = linkUrl.trim();
       if (cleanedLink.length === 0) return;
-      editorRef.current.setLink(
-        selectionState.start,
-        selectionState.end,
-        selectionState.text || cleanedLink,
-        cleanedLink,
-      );
+      editorRef.current.setLink(cleanedLink);
       handleCancel();
-    }, [linkUrl, selectionState, editorRef, handleCancel]);
+    }, [linkUrl, editorRef, handleCancel]);
 
     return (
       <KeyboardToolbar {...props}>

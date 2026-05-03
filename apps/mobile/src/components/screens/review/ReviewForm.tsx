@@ -19,13 +19,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Toolbar } from '../../RichText/Toolbar';
 import { Input } from '../../ui/Input';
 import { useToast } from '../../Toast';
-import {
-  EnrichedTextInputInstance,
-  OnChangeSelectionEvent,
-  OnChangeStateEvent,
-  OnLinkDetected,
-} from 'react-native-enriched';
-import { EnrichedTextInput } from '../../RichText/EnrichedTextInput';
+import { EnrichedMarkdownTextInput } from '../../RichText/EnrichedMarkdownTextInput';
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller';
 import { usePreventRemove } from '@react-navigation/native';
 import { Alert } from 'react-native';
@@ -37,6 +31,12 @@ import {
 } from '@libs/api-js';
 import { Icons } from '../../../constants/Icons';
 import { NativeStackHeaderItem } from '@react-navigation/native-stack';
+import {
+  EnrichedMarkdownTextInputInstance,
+  EnrichedMarkdownTextInputProps,
+  OnLinkDetected,
+  StyleState,
+} from 'react-native-enriched-markdown';
 
 const MAX_TITLE_LENGTH = 50;
 
@@ -92,9 +92,11 @@ const ReviewForm = ({
     return title !== (review?.title || '') || bodyChanged;
   }, [title, body, review]);
   // EDITOR
-  const ref = useRef<EnrichedTextInputInstance>(null);
-  const [stylesState, setStylesState] = useState<OnChangeStateEvent | null>();
-  const [selectionState, setSelectionState] = useState<OnChangeSelectionEvent | null>();
+  const ref = useRef<EnrichedMarkdownTextInputInstance>(null);
+  const [stylesState, setStylesState] = useState<StyleState | null>();
+  const [selectionState, setSelectionState] = useState<
+    Parameters<NonNullable<EnrichedMarkdownTextInputProps['onChangeSelection']>>[0] | null
+  >();
   const [linkState, setLinkState] = useState<OnLinkDetected | null>(null);
   // HANDLER
   const handleSave = useCallback(async () => {
@@ -269,12 +271,12 @@ const ReviewForm = ({
             type === 'tv_series' && <CardTvSeries tvSeries={tvSeries} href={null} showActionWatch />
           )}
         </View>
-        <EnrichedTextInput
+        <EnrichedMarkdownTextInput
           ref={ref}
           defaultValue={defaultBody}
-          onChangeState={(e) => setStylesState(e.nativeEvent)}
-          onChangeHtml={(html) => setBody(html.nativeEvent.value)}
-          onChangeSelection={(e) => setSelectionState(e.nativeEvent)}
+          onChangeMarkdown={(e) => setBody(e)}
+          onChangeState={(e) => setStylesState(e)}
+          onChangeSelection={(e) => setSelectionState(e)}
           onLinkDetected={(e) => setLinkState(e)}
           style={{ flex: 1, fontSize: 16 }}
           placeholder={upperFirst(t('common.messages.write_your_review_here'))}

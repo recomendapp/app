@@ -21,7 +21,6 @@ import tw from '../../../../lib/tw';
 import { Text } from '../../../ui/text';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
-import { EnrichedTextInput } from '../../../RichText/EnrichedTextInput';
 import { Button } from '../../../ui/Button';
 import { Icons } from '../../../../constants/Icons';
 import useBottomSheetStore from '../../../../stores/useBottomSheetStore';
@@ -30,6 +29,7 @@ import { NativeStackHeaderItem } from '@react-navigation/native-stack';
 import ButtonUserReviewTvSeriesLike from '../../../buttons/ButtonUserReviewTvSeriesLike';
 import { BottomSheetLogTvSeries } from '../../../bottom-sheets/sheets/BottomSheetLogTvSeries';
 import FeedUserLog from '../../feed/FeedUserLog';
+import { EnrichedMarkdownText } from '../../../RichText/EnrichedMarkdownText';
 
 export const ProfileTvSeries = ({
   username,
@@ -161,13 +161,7 @@ export const ProfileTvSeries = ({
                       upperFirst(t('common.messages.review_by', { name: log.user.username }))}
                   </Text>
                 </View>
-                <EnrichedTextInput
-                  key={log.review.body}
-                  defaultValue={log.review.body}
-                  editable={false}
-                  style={tw`flex-1`}
-                  scrollEnabled={false}
-                />
+                <EnrichedMarkdownText markdown={log.review.body} />
               </>
             ) : (
               <FeedUserLog author={log?.user} log={log} />

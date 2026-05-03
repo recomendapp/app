@@ -131,7 +131,7 @@ export const ProfileFilmHeader: React.FC<ProfileFilmHeaderProps> = ({
           textAnim,
         ]}
       >
-        <Animated.View style={{ gap: GAP }}>
+        <Animated.View style={{ gap: GAP, flexShrink: 1 }}>
           <CardUser variant="inline" {...(log ? { user: log.user } : { skeleton: true })} />
           {!loading ? (
             <Link
