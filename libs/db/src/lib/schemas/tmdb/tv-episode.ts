@@ -1,11 +1,4 @@
-import {
-  bigint,
-  date,
-  index,
-  integer,
-  real,
-  text,
-} from 'drizzle-orm/pg-core';
+import { bigint, date, index, integer, real, text, unique } from 'drizzle-orm/pg-core';
 import { tmdbSchema } from './common';
 import { tmdbTvSeriesCredit } from './tv-series';
 import { sql } from 'drizzle-orm';
@@ -32,6 +25,7 @@ export const tmdbTvEpisode = tmdbSchema.table(
     voteCount: integer('vote_count').default(0).notNull(),
   },
   (table) => [
+    unique('unique_tv_episode').on(table.tvSeasonId, table.episodeNumber),
     index('idx_tmdb_tv_episode_episode_number').on(table.episodeNumber),
     index('idx_tmdb_tv_episode_tv_season_id').on(table.tvSeasonId),
   ],
@@ -49,7 +43,7 @@ export const tmdbTvEpisodeCredit = tmdbSchema.table(
       .references(() => tmdbTvEpisode.id, { onDelete: 'cascade' }),
   },
   (table) => [
-    index('idx_tmdb_tv_episode_credit_credit_id').on(table.creditId),
+    unique('unique_tv_episode_credit').on(table.creditId, table.tvEpisodeId),
     index('idx_tmdb_tv_episode_credit_tv_episode_id').on(table.tvEpisodeId),
   ],
 );

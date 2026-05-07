@@ -99,6 +99,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     permissions: ['android.permission.RECORD_AUDIO'],
+    blockedPermissions: ['com.google.android.gms.permission.AD_ID'],
     googleServicesFile: process.env.GOOGLE_SERVICES_JSON || getGoogleServicesFilePath(),
   },
   web: {

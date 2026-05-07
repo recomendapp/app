@@ -1,0 +1,1 @@
+ALTER TABLE "tmdb"."tv_episode" ADD CONSTRAINT "unique_tv_episode" UNIQUE("tv_season_id","episode_number");
