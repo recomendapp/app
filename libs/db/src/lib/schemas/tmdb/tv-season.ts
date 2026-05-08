@@ -1,11 +1,4 @@
-import {
-  bigint,
-  index,
-  integer,
-  real,
-  text,
-  unique,
-} from 'drizzle-orm/pg-core';
+import { bigint, index, integer, real, text, unique } from 'drizzle-orm/pg-core';
 import { tmdbSchema } from './common';
 import { tmdbTvSeries, tmdbTvSeriesCredit } from './tv-series';
 import { relations, sql } from 'drizzle-orm';
@@ -16,7 +9,7 @@ export const tmdbTvSeason = tmdbSchema.table(
     id: bigint({ mode: 'number' }).primaryKey(),
     tvSeriesId: bigint('tv_series_id', { mode: 'number' })
       .notNull()
-      .references(() => tmdbTvSeries.id, { onDelete: 'cascade' }),
+      .references(() => tmdbTvSeries.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
     seasonNumber: integer('season_number').notNull(),
     episodeCount: integer('episode_count').default(0).notNull(),
     voteAverage: real('vote_average').notNull(),
@@ -44,10 +37,10 @@ export const tmdbTvSeasonCredit = tmdbSchema.table(
     id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
     creditId: text('credit_id')
       .notNull()
-      .references(() => tmdbTvSeriesCredit.id, { onDelete: 'cascade' }),
+      .references(() => tmdbTvSeriesCredit.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
     tvSeasonId: bigint('tv_season_id', { mode: 'number' })
       .notNull()
-      .references(() => tmdbTvSeason.id, { onDelete: 'cascade' }),
+      .references(() => tmdbTvSeason.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
     order: integer(),
   },
   (table) => [
@@ -69,18 +62,14 @@ export const tmdbTvSeasonTranslation = tmdbSchema.table(
     id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
     tvSeasonId: bigint('tv_season_id', { mode: 'number' })
       .notNull()
-      .references(() => tmdbTvSeason.id, { onDelete: 'cascade' }),
+      .references(() => tmdbTvSeason.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
     name: text(),
     overview: text(),
     iso6391: text('iso_639_1').notNull(),
     iso31661: text('iso_3166_1').notNull(),
   },
   (table) => [
-    unique('unique_tv_season_translation').on(
-      table.tvSeasonId,
-      table.iso6391,
-      table.iso31661,
-    ),
+    unique('unique_tv_season_translation').on(table.tvSeasonId, table.iso6391, table.iso31661),
     index('idx_tmdb_tv_season_translation_iso_3166_1').on(table.iso31661),
     index('idx_tmdb_tv_season_translation_iso_639_1').on(table.iso6391),
     index('idx_tmdb_tv_season_translation_tv_season_id').on(table.tvSeasonId),
@@ -88,19 +77,21 @@ export const tmdbTvSeasonTranslation = tmdbSchema.table(
 );
 
 /* ---------------------------------- Views --------------------------------- */
-export const tmdbTvSeasonView = tmdbSchema.view('tv_season_view', {
-  id: bigint({ mode: 'number' }),
-  tvSeriesId: bigint('tv_series_id', { mode: 'number' }),
-  seasonNumber: integer('season_number'),
-  name: text(),
-  overview: text(),
-  posterPath: text('poster_path'),
-  voteAverage: real('vote_average'),
-  voteCount: integer('vote_count'),
-  episodeCount: integer('episode_count'),
-  url: text(),
-}).as(
-  sql`SELECT 
+export const tmdbTvSeasonView = tmdbSchema
+  .view('tv_season_view', {
+    id: bigint({ mode: 'number' }),
+    tvSeriesId: bigint('tv_series_id', { mode: 'number' }),
+    seasonNumber: integer('season_number'),
+    name: text(),
+    overview: text(),
+    posterPath: text('poster_path'),
+    voteAverage: real('vote_average'),
+    voteCount: integer('vote_count'),
+    episodeCount: integer('episode_count'),
+    url: text(),
+  })
+  .as(
+    sql`SELECT 
     s.id,
     s.tv_series_id,
     s.season_number,
@@ -138,5 +129,5 @@ export const tmdbTvSeasonView = tmdbSchema.view('tv_season_view', {
     s.episode_count,
     ('/tv-series/'::text || s.tv_series_id || '/season/' || s.season_number) AS url
   FROM tmdb.tv_season s,
-  LATERAL i18n.language() language(requested_language, fallback_language, default_language)`
-);
+  LATERAL i18n.language() language(requested_language, fallback_language, default_language)`,
+  );

@@ -35,7 +35,7 @@ export const logMovie = pgTable(
     id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
     movieId: bigint('movie_id', { mode: 'number' })
       .notNull()
-      .references(() => tmdbMovie.id, { onDelete: 'cascade' }),
+      .references(() => tmdbMovie.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
     userId: uuid('user_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
@@ -88,7 +88,7 @@ export const logMovieRelations = relations(logMovie, ({ many, one }) => ({
   review: one(reviewMovie, {
     fields: [logMovie.id],
     references: [reviewMovie.id],
-  })
+  }),
 }));
 
 export const logMovieWatchedDate = pgTable(
@@ -123,10 +123,7 @@ export const logMovieWatchedDateRelations = relations(logMovieWatchedDate, ({ on
 /*                                  TV SERIES                                 */
 /* -------------------------------------------------------------------------- */
 
-export const logTvStatusEnum = pgEnum('log_tv_status', [
-  'watching',
-  'dropped',
-]);
+export const logTvStatusEnum = pgEnum('log_tv_status', ['watching', 'dropped']);
 
 export const logTvSeries = pgTable(
   'log_tv_series',
@@ -134,7 +131,7 @@ export const logTvSeries = pgTable(
     id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
     tvSeriesId: bigint('tv_series_id', { mode: 'number' })
       .notNull()
-      .references(() => tmdbTvSeries.id, { onDelete: 'cascade' }),
+      .references(() => tmdbTvSeries.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
     userId: uuid('user_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
@@ -167,7 +164,7 @@ export const logTvSeries = pgTable(
     unique('unique_log_tv_series').on(table.tvSeriesId, table.userId),
     check(
       'check_log_tv_series_rating',
-      sql`(${table.rating} >= 0.5) AND (${table.rating} <= 10) AND ((${table.rating} * 2) = FLOOR(${table.rating} * 2))`
+      sql`(${table.rating} >= 0.5) AND (${table.rating} <= 10) AND ((${table.rating} * 2) = FLOOR(${table.rating} * 2))`,
     ),
   ],
 );
@@ -198,10 +195,10 @@ export const logTvSeason = pgTable(
       .references(() => logTvSeries.id, { onDelete: 'cascade' }),
     tvSeasonId: bigint('tv_season_id', { mode: 'number' })
       .notNull()
-      .references(() => tmdbTvSeason.id, { onDelete: 'cascade' }),
-    
+      .references(() => tmdbTvSeason.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+
     seasonNumber: integer('season_number').notNull(),
-    
+
     status: logTvStatusEnum('status').default('watching').notNull(),
     episodesWatchedCount: integer('episodes_watched_count').default(0).notNull(),
 
@@ -223,9 +220,9 @@ export const logTvSeason = pgTable(
     unique('unique_log_tv_season').on(table.logTvSeriesId, table.tvSeasonId),
     check(
       'check_log_tv_season_rating',
-      sql`(${table.rating} >= 0.5) AND (${table.rating} <= 10) AND ((${table.rating} * 2) = FLOOR(${table.rating} * 2))`
+      sql`(${table.rating} >= 0.5) AND (${table.rating} <= 10) AND ((${table.rating} * 2) = FLOOR(${table.rating} * 2))`,
     ),
-  ]
+  ],
 );
 
 export const logTvSeasonRelations = relations(logTvSeason, ({ one, many }) => ({
@@ -252,8 +249,8 @@ export const logTvEpisode = pgTable(
       .references(() => logTvSeason.id, { onDelete: 'cascade' }),
     tvEpisodeId: bigint('tv_episode_id', { mode: 'number' })
       .notNull()
-      .references(() => tmdbTvEpisode.id, { onDelete: 'cascade' }),
-    
+      .references(() => tmdbTvEpisode.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+
     seasonNumber: integer('season_number').notNull(),
     episodeNumber: integer('episode_number').notNull(),
 
@@ -279,9 +276,9 @@ export const logTvEpisode = pgTable(
     unique('unique_log_tv_episode').on(table.logTvSeasonId, table.tvEpisodeId),
     check(
       'check_log_tv_episode_rating',
-      sql`(${table.rating} >= 0.5) AND (${table.rating} <= 10) AND ((${table.rating} * 2) = FLOOR(${table.rating} * 2))`
+      sql`(${table.rating} >= 0.5) AND (${table.rating} <= 10) AND ((${table.rating} * 2) = FLOOR(${table.rating} * 2))`,
     ),
-  ]
+  ],
 );
 
 export const logTvEpisodeRelations = relations(logTvEpisode, ({ one }) => ({

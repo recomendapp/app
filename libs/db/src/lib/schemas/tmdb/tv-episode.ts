@@ -10,7 +10,7 @@ export const tmdbTvEpisode = tmdbSchema.table(
     id: bigint({ mode: 'number' }).primaryKey(),
     tvSeasonId: bigint('tv_season_id', { mode: 'number' })
       .notNull()
-      .references(() => tmdbTvSeason.id, { onDelete: 'cascade' }),
+      .references(() => tmdbTvSeason.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
     airDate: date('air_date', { mode: 'string' }),
     episodeNumber: integer('episode_number').notNull(),
     episodeType: text('episode_type'),
@@ -37,10 +37,10 @@ export const tmdbTvEpisodeCredit = tmdbSchema.table(
     id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
     creditId: text('credit_id')
       .notNull()
-      .references(() => tmdbTvSeriesCredit.id, { onDelete: 'cascade' }),
+      .references(() => tmdbTvSeriesCredit.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
     tvEpisodeId: bigint('tv_episode_id', { mode: 'number' })
       .notNull()
-      .references(() => tmdbTvEpisode.id, { onDelete: 'cascade' }),
+      .references(() => tmdbTvEpisode.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
   },
   (table) => [
     unique('unique_tv_episode_credit').on(table.creditId, table.tvEpisodeId),
