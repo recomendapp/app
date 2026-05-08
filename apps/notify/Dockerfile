@@ -8,6 +8,7 @@ RUN corepack enable
 FROM base AS installer
 WORKDIR /app
 
+COPY pnpm-workspace.yaml ./
 COPY dist/apps/notify/package.json ./
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod

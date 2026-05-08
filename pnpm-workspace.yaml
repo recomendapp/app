@@ -2,5 +2,11 @@ packages:
   - apps/*
   - libs/*
 
-onlyBuiltDependencies:
-  - nx
+allowBuilds:
+  nx: true
+  '@nestjs/core': true
+  '@firebase/util': true
+  '@scarf/scarf': true
+  bcrypt: true
+  msgpackr-extract: true
+  protobufjs: true
