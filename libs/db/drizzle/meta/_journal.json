@@ -344,6 +344,13 @@
       "when": 1778261360043,
       "tag": "0048_mighty_sinister_six",
       "breakpoints": true
+    },
+    {
+      "idx": 49,
+      "version": "7",
+      "when": 1778420490380,
+      "tag": "0049_hard_mole_man",
+      "breakpoints": true
     }
   ]
 }

@@ -1,13 +1,4 @@
-import {
-  bigint,
-  boolean,
-  date,
-  index,
-  integer,
-  real,
-  text,
-  unique,
-} from 'drizzle-orm/pg-core';
+import { bigint, boolean, date, index, integer, real, text, unique } from 'drizzle-orm/pg-core';
 import { tmdbSchema } from './common';
 import { tmdbGender } from './gender';
 import { sql } from 'drizzle-orm';
@@ -26,10 +17,9 @@ export const tmdbPerson = tmdbSchema.table(
     name: text(),
     placeOfBirth: text('place_of_birth'),
     popularity: real(),
+    updatedAt: date('updated_at'),
   },
-  (table) => [
-    index('idx_tmdb_person_popularity').on(table.popularity),
-  ],
+  (table) => [index('idx_tmdb_person_popularity').on(table.popularity)],
 );
 
 export const tmdbPersonAlsoKnownAs = tmdbSchema.table(
@@ -97,39 +87,34 @@ export const tmdbPersonTranslation = tmdbSchema.table(
     iso31661: text('iso_3166_1').notNull(),
   },
   (table) => [
-    unique('unique_person_language_country').on(
-      table.personId,
-      table.iso6391,
-      table.iso31661,
-    ),
+    unique('unique_person_language_country').on(table.personId, table.iso6391, table.iso31661),
     index('idx_tmdb_person_translation_iso_3166_1').on(table.iso31661),
     index('idx_tmdb_person_translation_iso_639_1').on(table.iso6391),
-    index('idx_tmdb_person_translation_iso_639_1_iso_3166_1').on(
-      table.iso6391,
-      table.iso31661,
-    ),
+    index('idx_tmdb_person_translation_iso_639_1_iso_3166_1').on(table.iso6391, table.iso31661),
     index('idx_tmdb_person_translation_person_id').on(table.personId),
   ],
 );
 
 /* ---------------------------------- Views --------------------------------- */
-export const tmdbPersonView = tmdbSchema.view('person_view', {
-  id: bigint({ mode: 'number' }),
-  name: text(),
-  profilePath: text('profile_path'),
-  birthday: date(),
-  deathday: date(),
-  homepage: text(),
-  imdbId: text('imdb_id'),
-  knownForDepartment: text('known_for_department'),
-  placeOfBirth: text('place_of_birth'),
-  gender: bigint({ mode: 'number' }),
-  biography: text(),
-  popularity: real(),
-  slug: text(),
-  url: text(),
-}).as(
-  sql`SELECT 
+export const tmdbPersonView = tmdbSchema
+  .view('person_view', {
+    id: bigint({ mode: 'number' }),
+    name: text(),
+    profilePath: text('profile_path'),
+    birthday: date(),
+    deathday: date(),
+    homepage: text(),
+    imdbId: text('imdb_id'),
+    knownForDepartment: text('known_for_department'),
+    placeOfBirth: text('place_of_birth'),
+    gender: bigint({ mode: 'number' }),
+    biography: text(),
+    popularity: real(),
+    slug: text(),
+    url: text(),
+  })
+  .as(
+    sql`SELECT 
     person.id, 
     person.name, 
     person.profile_path, 
@@ -177,14 +162,14 @@ export const tmdbPersonView = tmdbSchema.view('person_view', {
       ) AS biography 
     FROM tmdb.person c, 
     LATERAL i18n.language() language(requested_language, fallback_language, default_language)
-  ) person`
-);
+  ) person`,
+  );
 
 export const tmdbPersonFeedView = tmdbSchema.materializedView('person_feed_view', {
   personId: bigint('person_id', { mode: 'number' }),
   mediaId: bigint('media_id', { mode: 'number' }),
   type: text('type').$type<'movie' | 'tv_series'>(),
-  date: date('date', { mode: 'string' }), 
+  date: date('date', { mode: 'string' }),
   jobs: text('jobs').array(),
 }).as(sql`
   SELECT

@@ -43,6 +43,7 @@ export const tmdbTvSeries = tmdbSchema.table(
     numberOfSeasons: integer('number_of_seasons'),
     firstAirDate: date('first_air_date'),
     lastAirDate: date('last_air_date'),
+    updatedAt: date('updated_at'),
   },
   (table) => [index('idx_tmdb_tv_series_popularity').on(table.popularity)],
 );
@@ -247,13 +248,8 @@ export const tmdbTvSeriesProductionCompany = tmdbSchema.table(
       .references(() => tmdbCompany.id, { onDelete: 'cascade' }),
   },
   (table) => [
-    unique('unique_tv_series_production_company').on(
-      table.tvSeriesId,
-      table.companyId,
-    ),
-    index('idx_tmdb_tv_series_production_company_company_id').on(
-      table.companyId,
-    ),
+    unique('unique_tv_series_production_company').on(table.tvSeriesId, table.companyId),
+    index('idx_tmdb_tv_series_production_company_company_id').on(table.companyId),
     index('idx_tmdb_tv_series_production_company_tv_series_id').on(table.tvSeriesId),
   ],
 );
@@ -268,13 +264,8 @@ export const tmdbTvSeriesProductionCountry = tmdbSchema.table(
     iso31661: text('iso_3166_1').notNull(),
   },
   (table) => [
-    unique('unique_tv_series_production_country').on(
-      table.tvSeriesId,
-      table.iso31661,
-    ),
-    index('idx_tmdb_tv_series_production_country_iso_3166_1').on(
-      table.iso31661,
-    ),
+    unique('unique_tv_series_production_country').on(table.tvSeriesId, table.iso31661),
+    index('idx_tmdb_tv_series_production_country_iso_3166_1').on(table.iso31661),
     index('idx_tmdb_tv_series_production_country_tv_series_id').on(table.tvSeriesId),
   ],
 );
@@ -319,11 +310,7 @@ export const tmdbTvSeriesTranslation = tmdbSchema.table(
     iso31661: text('iso_3166_1').notNull(),
   },
   (table) => [
-    unique('unique_tv_series_translation').on(
-      table.tvSeriesId,
-      table.iso6391,
-      table.iso31661,
-    ),
+    unique('unique_tv_series_translation').on(table.tvSeriesId, table.iso6391, table.iso31661),
     index('idx_tmdb_tv_series_translation_iso_3166_1').on(table.iso31661),
     index('idx_tmdb_tv_series_translation_iso_639_1').on(table.iso6391),
     index('idx_tmdb_tv_series_translation_tv_series_id').on(table.tvSeriesId),
@@ -359,32 +346,55 @@ export const tmdbTvSeriesVideo = tmdbSchema.table(
 );
 
 /* ---------------------------------- Views --------------------------------- */
-export const tmdbTvSeriesView = tmdbSchema.view('tv_series_view', {
-  id: bigint({ mode: 'number' }),
-  name: text(),
-  posterPath: text('poster_path'),
-  backdropPath: text('backdrop_path'),
-  createdBy: jsonb('created_by').$type<Pick<typeof tmdbPersonView.$inferSelect, 'id' | 'name' | 'gender' | 'profilePath' | 'slug' | 'url'>[]>(),
-  genres: jsonb().$type<(typeof tmdbGenre.$inferSelect & { name: string })[]>(),
-  trailers: jsonb().$type<Pick<typeof tmdbTvSeriesVideo.$inferSelect, 'id' | 'name' | 'key' | 'site' | 'size' | 'type' | 'official' | 'publishedAt' | 'iso6391' | 'iso31661'>[]>(),
-  firstAirDate: date('first_air_date', { mode: 'string' }),
-  lastAirDate: date('last_air_date', { mode: 'string' }),
-  overview: text(),
-  numberOfEpisodes: integer('number_of_episodes'),
-  numberOfSeasons: integer('number_of_seasons'),
-  inProduction: boolean('in_production'),
-  originalLanguage: text('original_language'),
-  originalName: text('original_name'),
-  status: text(),
-  type: text(),
-  popularity: real(),
-  voteAverage: real('vote_average'),
-  voteCount: real('vote_count'),
-  slug: text(),
-  url: text(),
-  followerAvgRating: real('follower_avg_rating'),
-}).as(
-  sql`SELECT 
+export const tmdbTvSeriesView = tmdbSchema
+  .view('tv_series_view', {
+    id: bigint({ mode: 'number' }),
+    name: text(),
+    posterPath: text('poster_path'),
+    backdropPath: text('backdrop_path'),
+    createdBy:
+      jsonb('created_by').$type<
+        Pick<
+          typeof tmdbPersonView.$inferSelect,
+          'id' | 'name' | 'gender' | 'profilePath' | 'slug' | 'url'
+        >[]
+      >(),
+    genres: jsonb().$type<(typeof tmdbGenre.$inferSelect & { name: string })[]>(),
+    trailers:
+      jsonb().$type<
+        Pick<
+          typeof tmdbTvSeriesVideo.$inferSelect,
+          | 'id'
+          | 'name'
+          | 'key'
+          | 'site'
+          | 'size'
+          | 'type'
+          | 'official'
+          | 'publishedAt'
+          | 'iso6391'
+          | 'iso31661'
+        >[]
+      >(),
+    firstAirDate: date('first_air_date', { mode: 'string' }),
+    lastAirDate: date('last_air_date', { mode: 'string' }),
+    overview: text(),
+    numberOfEpisodes: integer('number_of_episodes'),
+    numberOfSeasons: integer('number_of_seasons'),
+    inProduction: boolean('in_production'),
+    originalLanguage: text('original_language'),
+    originalName: text('original_name'),
+    status: text(),
+    type: text(),
+    popularity: real(),
+    voteAverage: real('vote_average'),
+    voteCount: real('vote_count'),
+    slug: text(),
+    url: text(),
+    followerAvgRating: real('follower_avg_rating'),
+  })
+  .as(
+    sql`SELECT 
     serie.id, 
     COALESCE(serie.name, serie.original_name) AS name, 
     serie.poster_path, 
@@ -541,5 +551,5 @@ export const tmdbTvSeriesView = tmdbSchema.view('tv_series_view', {
       ) AS trailers
     FROM tmdb.tv_series s, 
     LATERAL i18n.language() language(requested_language, fallback_language, default_language)
-  ) serie`
-);
+  ) serie`,
+  );
