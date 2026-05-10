@@ -1,6 +1,6 @@
-import { composePlugins, withNx } from "@nx/next";
-import type { NextConfig } from "next";
-import createNextIntlPlugin from "next-intl/plugin";
+import { composePlugins, withNx } from '@nx/next';
+import type { NextConfig } from 'next';
+import createNextIntlPlugin from 'next-intl/plugin';
 
 const withPWA = require('@ducanh2912/next-pwa').default({
   dest: 'public',
@@ -21,7 +21,8 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   output: 'standalone',
   // https://github.com/vercel/next.js/issues/79313#issuecomment-2892288965
-  htmlLimitedBots: /Googlebot|Bingbot|DuckDuckBot|YandexBot|Slurp|facebookexternalhit|Twitterbot|LinkedInBot|Slackbot/i,
+  htmlLimitedBots:
+    /Googlebot|Bingbot|DuckDuckBot|YandexBot|Slurp|facebookexternalhit|Twitterbot|LinkedInBot|Slackbot/i,
   images: {
     unoptimized: process.env.NODE_ENV === 'development',
     remotePatterns: [
@@ -64,14 +65,31 @@ const nextConfig: NextConfig = {
         source: '/:lang/@:username/:path*',
         destination: '/:lang/user/:username/:path*',
       },
+      // Sitemaps
+      {
+        source: '/sitemaps/movies/:path*',
+        destination: 'https://medias.recomend.app/sitemaps/movies/:path*',
+      },
+      {
+        source: '/sitemaps/tv-series/:path*',
+        destination: 'https://medias.recomend.app/sitemaps/tv-series/:path*',
+      },
+      {
+        source: '/sitemaps/persons/:path*',
+        destination: 'https://medias.recomend.app/sitemaps/persons/:path*',
+      },
+      {
+        source: '/sitemaps/users/:path*',
+        destination: 'https://medias.recomend.app/sitemaps/users/:path*',
+      },
+      {
+        source: '/sitemaps/playlists/:path*',
+        destination: 'https://medias.recomend.app/sitemaps/playlists/:path*',
+      },
     ];
   },
 };
 
-const plugins = [
-  withNx,
-  withPWA,
-  withNextIntl,
-];
+const plugins = [withNx, withPWA, withNextIntl];
 
 module.exports = composePlugins(...plugins)(nextConfig);
