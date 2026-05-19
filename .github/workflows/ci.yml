@@ -11,6 +11,7 @@ concurrency:
 jobs:
   main:
     name: 🧪 Lint, Test & Build
+    if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout Code
