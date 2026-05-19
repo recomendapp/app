@@ -2,9 +2,7 @@ name: Build and Submit iOS
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - 'mobile@*'
+  workflow_call:
 
 jobs:
   build-ios:

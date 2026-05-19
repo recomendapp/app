@@ -2,9 +2,7 @@ name: Build and Submit Android
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - 'mobile@*'
+  workflow_call:
 
 jobs:
   build-android:

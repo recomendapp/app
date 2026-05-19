@@ -1,0 +1,103 @@
+name: 📱 Mobile Router (OTA vs Native)
+
+on:
+  push:
+    tags:
+      - 'mobile-v*'
+
+jobs:
+  router:
+    name: 🧭 Determine Build Strategy
+    runs-on: ubuntu-latest
+    outputs:
+      strategy: ${{ steps.check.outputs.strategy }}
+    steps:
+      - name: Parse Version
+        id: check
+        run: |
+          VERSION=${GITHUB_REF_NAME#mobile-v}
+          PATCH=$(echo $VERSION | awk -F'.' '{print $3}')
+
+          if [ "$PATCH" == "0" ]; then
+            echo "Version X.Y.0 detected -> Native Builds"
+            echo "strategy=native" >> $GITHUB_OUTPUT
+          else
+            echo "Patch detected -> OTA Update"
+            echo "strategy=ota" >> $GITHUB_OUTPUT
+          fi
+
+  ota-update:
+    name: ⚡ Deploy OTA Update
+    needs: router
+    if: needs.router.outputs.strategy == 'ota'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.INFISICAL_EXPO_TOKEN }}
+
+      - name: 📝 Prepare Environment Files
+        run: |
+          cat <<EOF > apps/mobile/.env
+          APP_VARIANT=production
+          EXPO_PUBLIC_API_URL="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_API_URL }}"
+          EXPO_PUBLIC_WEB_APP="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_WEB_APP }}"
+          EXPO_PUBLIC_FACEBOOK_APP_ID="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_FACEBOOK_APP_ID }}"
+          EXPO_PUBLIC_FACEBOOK_CLIENT_TOKEN="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_FACEBOOK_CLIENT_TOKEN }}"
+          EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID }}"
+          EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID }}"
+          EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY }}"
+          EXPO_PUBLIC_SENTRY_DSN="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_SENTRY_DSN }}"
+          SENTRY_AUTH_TOKEN="${{ secrets.INFISICAL_MOBILE_SENTRY_AUTH_TOKEN }}"
+          SENTRY_ORG="${{ secrets.INFISICAL_MOBILE_SENTRY_ORG }}"
+          SENTRY_PROJECT="${{ secrets.INFISICAL_MOBILE_SENTRY_PROJECT }}"
+          SENTRY_DISABLE_AUTO_UPLOAD="${{ secrets.INFISICAL_MOBILE_SENTRY_DISABLE_AUTO_UPLOAD }}"
+          TMDB_IMAGE_BASE_URL="${{ secrets.INFISICAL_MOBILE_TMDB_IMAGE_BASE_URL }}"
+          EOF
+
+      - name: 📝 Prepare API Environment Files
+        run: |
+          cat <<EOF > apps/api/.env
+          NODE_ENV=production
+          AUTH_SECRET="${{ secrets.INFISICAL_AUTH_SECRET }}"
+          API_URL="${{ secrets.INFISICAL_API_URL }}"
+          EOF
+
+      - name: 🚀 Publish EAS Update
+        run: pnpm nx update mobile --channel production --message "Release ${{ github.ref_name }}" --environment production --non-interactive
+
+      - name: 🧹 Cleanup
+        if: always()
+        run: |
+          rm -f apps/mobile/.env
+          rm -f apps/api/.env
+
+  call-ios-build:
+    name: 🍏 Call iOS Build
+    needs: router
+    if: needs.router.outputs.strategy == 'native'
+    uses: ./.github/workflows/build-submit-ios.yml
+    secrets: inherit
+
+  call-android-build:
+    name: 🤖 Call Android Build
+    needs: router
+    if: needs.router.outputs.strategy == 'native'
+    uses: ./.github/workflows/build-submit-android.yml
+    secrets: inherit
