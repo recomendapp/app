@@ -1,14 +1,13 @@
-import { UserActivityType, UserRecosType, UserWatchlistType, ViewType } from '@recomendapp/types';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { zustandStorage } from './storage';
+import { ViewType } from '@libs/api-js';
 
 interface MapState {
   center: [number, number]; // [lng, lat]
   zoom: number;
   selectedMovieId: number | null;
 }
-
 
 interface UIStore {
   watchlist: { view: ViewType };
@@ -35,54 +34,55 @@ interface UIStore {
 }
 
 export const useUIStore = create<UIStore>()(
-	persist(
-		(set) => ({
-			// Watchlist
-			watchlist: {
-				view: 'grid',
-			},
-			setWatchlist: (props) => set(state => ({
-				watchlist: { ...state.watchlist, ...props },
-			})),
-			// My Recos
-			myRecos: {
-				view: 'grid',
-			},
-			setMyRecos: (props) => set(state => ({
-				myRecos: { ...state.myRecos, ...props },
-			})),
-			// Playlist
-			playlistView: 'list',
-			setPlaylistView: (view) => set({ playlistView: view }),
-			// Feed
-			feedView: 'community',
-			setFeedView: (view) => set({ feedView: view }),
-			// Notifications
-			notificationsView: 'all',
-			setNotificationsView: (view) => set({ notificationsView: view }),
-			// Onboarding
-			hasOnboarded: false,
-			setHasOnboarded: (hasOnboarded) => set({ hasOnboarded }),
+  persist(
+    (set) => ({
+      // Watchlist
+      watchlist: {
+        view: 'grid',
+      },
+      setWatchlist: (props) =>
+        set((state) => ({
+          watchlist: { ...state.watchlist, ...props },
+        })),
+      // My Recos
+      myRecos: {
+        view: 'grid',
+      },
+      setMyRecos: (props) =>
+        set((state) => ({
+          myRecos: { ...state.myRecos, ...props },
+        })),
+      // Playlist
+      playlistView: 'list',
+      setPlaylistView: (view) => set({ playlistView: view }),
+      // Feed
+      feedView: 'community',
+      setFeedView: (view) => set({ feedView: view }),
+      // Notifications
+      notificationsView: 'all',
+      setNotificationsView: (view) => set({ notificationsView: view }),
+      // Onboarding
+      hasOnboarded: false,
+      setHasOnboarded: (hasOnboarded) => set({ hasOnboarded }),
 
-			// Map
-			map: {
-				center: [2.5, 48.5],
-				zoom: 8,
-				selectedMovieId: null,
-			},
-			setMapCamera: (center, zoom) =>
-				set(state => ({
-					map: { ...state.map, center, zoom },
-				})),
-			setSelectedMovieId: (id) =>
-				set(state => ({
-					map: { ...state.map, selectedMovieId: id },
-				})),
-
-		}),
-		{
-			name: 'ui-storage',
-			storage: createJSONStorage(() => zustandStorage),
-		}
-	)
+      // Map
+      map: {
+        center: [2.5, 48.5],
+        zoom: 8,
+        selectedMovieId: null,
+      },
+      setMapCamera: (center, zoom) =>
+        set((state) => ({
+          map: { ...state.map, center, zoom },
+        })),
+      setSelectedMovieId: (id) =>
+        set((state) => ({
+          map: { ...state.map, selectedMovieId: id },
+        })),
+    }),
+    {
+      name: 'ui-storage',
+      storage: createJSONStorage(() => zustandStorage),
+    },
+  ),
 );

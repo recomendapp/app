@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -7,15 +7,12 @@ import { cn } from '@/lib/utils';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-
-import { Button } from "@/components/ui/button"
-import { ButtonGroup } from "@/components/ui/button-group"
-import { Input } from "@/components/ui/input"
+import { Button } from '@/components/ui/button';
+import { ButtonGroup } from '@/components/ui/button-group';
+import { Input } from '@/components/ui/input';
 import { Icons } from '@/config/icons';
 
-interface SearchBarProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-export default function SearchBar({ className }: SearchBarProps) {
+export default function SearchBar({ className }: React.HTMLAttributes<HTMLDivElement>) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -42,14 +39,14 @@ export default function SearchBar({ className }: SearchBarProps) {
   }, [debouncedSearchTerm]);
 
   return (
-    <ButtonGroup className='w-full lg:max-w-lg'>
+    <ButtonGroup className="w-full lg:max-w-lg">
       <Input
-      type="search"
-      placeholder={t('pages.search.placeholder')}
-      value={searchQuery}
-      onChange={(e) => setSearchQuery(e.target.value)}
-      className={cn("w-full", className)}
-      autoFocus={pathname.startsWith('/search')}
+        type="search"
+        placeholder={t('pages.search.placeholder')}
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className={cn('w-full', className)}
+        autoFocus={pathname.startsWith('/search')}
       />
       <Button variant="outline" aria-label="Search">
         <Icons.search />

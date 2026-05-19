@@ -101,7 +101,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       }
       await queryClient.resetQueries();
     },
-    [t, queryClient],
+    [t, queryClient, toast],
   );
 
   const loginWithOAuth = useCallback(
@@ -251,14 +251,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         logger.error('oauth login error', { error, provider });
       }
     },
-    [authClient, queryClient, t, toast],
+    [queryClient, t, toast],
   );
 
   const logout = useCallback(async () => {
-    if (pushToken) {
-      const provider = Platform.OS === 'ios' || Platform.OS === 'macos' ? 'apns' : 'fcm';
-      // TODO: handle token deletion on the server when the provider supports it (apns doesn't support it, but fcm does) to avoid sending notifications to invalid tokens
-    }
     const { error } = await authClient.signOut();
     if (error) {
       switch (error.code) {
@@ -269,7 +265,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       throw error;
     }
     queryClient.resetQueries();
-  }, [authClient, queryClient, toast, t, pushToken]);
+  }, [queryClient, toast, t]);
 
   const forceLogout = useCallback(async () => {
     await authClient.signOut();

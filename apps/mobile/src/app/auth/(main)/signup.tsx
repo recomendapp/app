@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button } from '../../../components/ui/Button';
-import { Link, useLocalSearchParams, useRouter } from 'expo-router';
+import { Link, useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { z } from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -27,7 +27,6 @@ import { useQuery } from '@tanstack/react-query';
 import { uiBackgroundsOptions } from '../../../api/ui/uiOptions';
 import { authClient } from '../../../lib/auth/client';
 import { makeRedirectUri } from 'expo-auth-session';
-import { Stack } from 'expo-router';
 import { useModalHeaderOptions } from '../../../hooks/useModalHeaderOptions';
 
 const USERNAME_MIN_LENGTH = 3;

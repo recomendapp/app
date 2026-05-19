@@ -1,6 +1,6 @@
 'use client';
 
-import { Link } from "@/lib/i18n/navigation";
+import { Link } from '@/lib/i18n/navigation';
 import { usePathname } from '@/lib/i18n/navigation';
 
 import { cn } from '@/lib/utils';
@@ -8,9 +8,7 @@ import { buttonVariants } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
-interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {}
-
-export function SettingsNav({ className, ...props }: SidebarNavProps) {
+export function SettingsNav({ className, ...props }: React.HTMLAttributes<HTMLElement>) {
   const t = useTranslations('pages.settings');
   const pathname = usePathname();
 
@@ -50,7 +48,7 @@ export function SettingsNav({ className, ...props }: SidebarNavProps) {
       <nav
         className={cn(
           'flex space-x-2 pb-2 lg:pb-0 lg:flex-col lg:space-x-0 lg:space-y-1',
-          className
+          className,
         )}
         {...props}
       >
@@ -63,7 +61,7 @@ export function SettingsNav({ className, ...props }: SidebarNavProps) {
               pathname === item.href
                 ? 'bg-muted hover:bg-muted'
                 : 'hover:bg-transparent hover:underline',
-              'justify-start'
+              'justify-start',
             )}
           >
             {item.title}

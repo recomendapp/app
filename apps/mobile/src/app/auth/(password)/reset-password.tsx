@@ -2,7 +2,7 @@ import { View } from '../../../components/ui/view';
 import { Icons } from '../../../constants/Icons';
 import tw from '../../../lib/tw';
 import { useCallback, useMemo, useState } from 'react';
-import { Redirect, useLocalSearchParams, useRouter } from 'expo-router';
+import { Redirect, useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { useTranslations } from 'use-intl';
 import { useToast } from '../../../components/Toast';
 import { logger } from '../../../logger';
@@ -21,7 +21,6 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useModalHeaderOptions } from '../../../hooks/useModalHeaderOptions';
-import { Stack } from 'expo-router';
 
 const PASSWORD_MIN_LENGTH = 8;
 
