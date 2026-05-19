@@ -1,8 +1,7 @@
 'use client';
+
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-
-// UI
 import { Button } from '@/components/ui/button';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
@@ -18,42 +17,43 @@ export default function SearchFilters() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get('q');
-  const [searchFilter, setSearchFilter] = useState<string | undefined>(
-    getInitialFilter()
-  );
+  const [searchFilter, setSearchFilter] = useState<string | undefined>(getInitialFilter());
 
-  const routes = useMemo<Route[]>(() => [
-    {
-      label: 'Tout',
-      filter: '',
-      active: !searchFilter
-    },
-    {
-      label: 'Films',
-      filter: 'films',
-      active: searchFilter === 'films'
-    },
-    {
-      label: 'Séries',
-      filter: 'tv-series',
-      active: searchFilter === 'tv-series'
-    },
-    {
-      label: 'Playlists',
-      filter: 'playlists',
-      active: searchFilter === 'playlists'
-    },
-    {
-      label: 'Utilisateurs',
-      filter: 'users',
-      active: searchFilter === 'users'
-    },
-    {
-      label: 'Crew & Cast',
-      filter: 'crew-cast',
-      active: searchFilter === 'crew-cast'
-    }
-  ], [searchFilter]);
+  const routes = useMemo<Route[]>(
+    () => [
+      {
+        label: 'Tout',
+        filter: '',
+        active: !searchFilter,
+      },
+      {
+        label: 'Films',
+        filter: 'films',
+        active: searchFilter === 'films',
+      },
+      {
+        label: 'Séries',
+        filter: 'tv-series',
+        active: searchFilter === 'tv-series',
+      },
+      {
+        label: 'Playlists',
+        filter: 'playlists',
+        active: searchFilter === 'playlists',
+      },
+      {
+        label: 'Utilisateurs',
+        filter: 'users',
+        active: searchFilter === 'users',
+      },
+      {
+        label: 'Crew & Cast',
+        filter: 'crew-cast',
+        active: searchFilter === 'crew-cast',
+      },
+    ],
+    [searchFilter],
+  );
 
   function selectSearchFilter(route: Route) {
     const segments = pathname.split('/');
@@ -64,9 +64,7 @@ export default function SearchFilters() {
       queryParams.set('q', searchQuery);
     }
     const queryString = queryParams.toString();
-    const url = queryString
-      ? `${updatedPathname}?${queryString}`
-      : updatedPathname;
+    const url = queryString ? `${updatedPathname}?${queryString}` : updatedPathname;
 
     router.push(url);
   }
@@ -84,7 +82,6 @@ export default function SearchFilters() {
 
   useEffect(() => {
     setSearchFilter(getInitialFilter());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   if (!searchQuery && !searchFilter) return null;

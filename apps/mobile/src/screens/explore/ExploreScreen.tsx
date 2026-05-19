@@ -19,14 +19,12 @@ import { Button } from '../../components/ui/Button';
 import { Icons } from '../../constants/Icons';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { useWindowDimensions } from 'react-native';
-import { SearchBottomSheet } from './sheets/SearchBottomSheet';
 import {
   LocationDetailsBottomSheet,
   LocationDetailsBottomSheetMethods,
 } from './sheets/LocationDetailsBottomSheet';
 import { withModalProvider } from '../../components/utils/withModalProvider';
 import { useHeaderHeight } from '@react-navigation/elements';
-import { FiltersBottomSheet } from './sheets/FiltersBottomSheet';
 import { useExploreStore } from '../../stores/useExploreStore';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
@@ -324,20 +322,6 @@ const ExploreScreen = () => {
 				<Text>Test Sheet Content</Text>
 			</View>
 		</TrueSheet> */}
-
-      {/* <SearchBottomSheet
-		ref={searchRef}
-		index={animatedPOIListIndex}
-		position={animatedPOIListPosition}
-		onItemPress={handleOnSearchItemPress}
-		/>
-		<LocationDetailsBottomSheet
-        ref={locationDetailsRef}
-        index={animatedPOIDetailsIndex}
-        position={animatedPOIDetailsPosition}
-		onClose={handleOnLocationClose}
-      	/> */}
-
       <Animated.View
         onLayout={(e) => (optionsHeight.value = e.nativeEvent.layout.height)}
         style={[
@@ -350,7 +334,7 @@ const ExploreScreen = () => {
           animatedOptionsStyle,
         ]}
       >
-        {showRecenter && (
+        {/* {showRecenter && (
           <Button
             icon={Icons.Navigation}
             size="icon"
@@ -361,8 +345,7 @@ const ExploreScreen = () => {
               }
             }}
           />
-        )}
-        <FiltersBottomSheet index={animatedFiltersIndex} position={animatedFiltersPosition} />
+        )} */}
       </Animated.View>
     </>
   );

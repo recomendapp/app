@@ -13,6 +13,7 @@ const config = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../coverage/apps/web',
   testEnvironment: 'jsdom',
+  forceExit: true, // TODO: remove this when the issue with Jest hanging after tests is resolved
 };
 
 module.exports = createJestConfig(config);

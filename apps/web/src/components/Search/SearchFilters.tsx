@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -11,9 +11,7 @@ export default function SearchFilters() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get('q');
-  const [searchFilter, setSearchFilter] = useState<string | undefined>(
-    getInitialFilter()
-  );
+  const [searchFilter, setSearchFilter] = useState<string | undefined>(getInitialFilter());
 
   function selectSearchFilter(filter: string) {
     const segments = pathname.split('/');
@@ -24,9 +22,7 @@ export default function SearchFilters() {
       queryParams.set('q', searchQuery);
     }
     const queryString = queryParams.toString();
-    const url = queryString
-      ? `${updatedPathname}?${queryString}`
-      : updatedPathname;
+    const url = queryString ? `${updatedPathname}?${queryString}` : updatedPathname;
 
     router.push(url);
   }
@@ -44,7 +40,6 @@ export default function SearchFilters() {
 
   useEffect(() => {
     setSearchFilter(getInitialFilter());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   if (!searchQuery) return null;

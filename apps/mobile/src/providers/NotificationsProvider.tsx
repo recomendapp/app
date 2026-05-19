@@ -4,7 +4,6 @@ import { useAuth } from './AuthProvider';
 import { Platform } from 'react-native';
 import * as Device from 'expo-device';
 import { useRouter } from 'expo-router';
-import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from '../components/Toast';
 import { usePushTokenUpdateMutation } from '@libs/query-client';
 import { useTranslations } from 'use-intl';
@@ -29,7 +28,6 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
   const toast = useToast();
   const t = useTranslations();
   const router = useRouter();
-  const queryClient = useQueryClient();
   const { user, pushToken, setPushToken } = useAuth();
   const [permissionStatus, setPermissionStatus] = useState<Notifications.PermissionStatus | null>(
     null,

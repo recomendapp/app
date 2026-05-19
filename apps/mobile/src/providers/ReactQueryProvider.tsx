@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
 import { createMMKV } from 'react-native-mmkv';
 import { focusManager, QueryClient } from '@tanstack/react-query';

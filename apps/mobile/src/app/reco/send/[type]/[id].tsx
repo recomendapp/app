@@ -7,12 +7,12 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Alert, Pressable, TextInput, useWindowDimensions } from 'react-native';
+import { Pressable, TextInput, useWindowDimensions } from 'react-native';
 import { useTranslations } from 'use-intl';
 import { z } from 'zod';
 import { SelectionFooter } from '../../../../components/ui/SelectionFooter';
 import tw from '../../../../lib/tw';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import {
   IOS_TOOLBAR_HEIGHT,
   PADDING_HORIZONTAL,
@@ -40,7 +40,7 @@ const RecoSend = () => {
   const t = useTranslations();
   const router = useRouter();
   const toast = useToast();
-  const { colors, mode, isLiquidGlassAvailable } = useTheme();
+  const { colors, isLiquidGlassAvailable } = useTheme();
   const insets = useSafeAreaInsets();
   const { user } = useAuth();
   const { width: SCREEN_WIDTH } = useWindowDimensions();

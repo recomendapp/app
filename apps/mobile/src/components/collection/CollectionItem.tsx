@@ -9,8 +9,8 @@ import { ImageWithFallback } from '../utils/ImageWithFallback';
 import { Button } from '../ui/Button';
 import { CollectionAction } from './CollectionScreen';
 import { forwardRef, useCallback } from 'react';
-import { MediaType, ViewType } from '@recomendapp/types';
 import { Pressable } from 'react-native';
+import { ViewType } from '@libs/api-js';
 
 interface CollectionItemProps<T> extends React.ComponentProps<typeof Animated.View> {
   item: T;
@@ -23,7 +23,7 @@ interface CollectionItemProps<T> extends React.ComponentProps<typeof Animated.Vi
   getItemUrl?: (item: T) => string;
   onItemAction?: (item: T) => void;
   view?: ViewType;
-  type?: MediaType;
+  type?: 'movie' | 'tv_series';
   index: number;
 }
 

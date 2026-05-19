@@ -142,6 +142,7 @@ const CollectionScreen = <T extends Record<string, any>>({
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
       'worklet';
+      // eslint-disable-next-line react-compiler/react-compiler
       scrollY.value = event.contentOffset.y;
     },
   });
