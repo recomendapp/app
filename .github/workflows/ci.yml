@@ -32,6 +32,33 @@ jobs:
       - name: ⚙️ Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: 📝 Prepare Mock Env for CI
+        run: |
+          cat <<EOF > apps/api/.env
+          S3_ENDPOINT=http://localhost
+          S3_ACCESS_KEY_ID=mock
+          S3_SECRET_ACCESS_KEY=mock
+          TYPESENSE_HOST=localhost
+          TYPESENSE_API_KEY=mock
+          DATABASE_URL=postgres://localhost:5432/mock
+          AUTH_SECRET=mock
+          AUTH_GOOGLE_CLIENT_ID=mock
+          AUTH_GOOGLE_IOS_CLIENT_ID=mock
+          AUTH_GOOGLE_ANDROID_CLIENT_ID=mock
+          AUTH_GOOGLE_CLIENT_SECRET=mock
+          AUTH_GITHUB_CLIENT_ID=mock
+          AUTH_GITHUB_CLIENT_SECRET=mock
+          AUTH_FACEBOOK_CLIENT_ID=mock
+          AUTH_FACEBOOK_CLIENT_SECRET=mock
+          AUTH_APPLE_CLIENT_ID=mock
+          AUTH_APPLE_TEAM_ID=mock
+          AUTH_APPLE_KEY_ID=mock
+          AUTH_APPLE_PRIVATE_KEY=mock
+          AUTH_APPLE_BUNDLE_ID=mock
+          REVENUECAT_API_KEY=mock
+          REVENUECAT_WEBHOOK_SECRET=mock
+          EOF
+
       - name: 🧠 Initialize Nx SHAs
         uses: nrwl/nx-set-shas@v4
 
