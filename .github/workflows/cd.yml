@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CD Pipeline
 
 on:
   push:
@@ -6,10 +6,6 @@ on:
       - main
 
 jobs:
-  # =================================================================================
-  #  JOB 1: Build & Push Docker Images
-  #  Uses Nx to build ONLY what has changed (Affected projects)
-  # =================================================================================
   build-and-push:
     name: 🐳 Build & Push Images
     runs-on: ubuntu-latest
@@ -159,10 +155,6 @@ jobs:
 
           echo "PROJECTS=$AFFECTED" >> $GITHUB_OUTPUT
 
-  # =================================================================================
-  #  JOB 2: GitOps - Update Infrastructure Repo
-  #  Only runs if images were successfully built and pushed in the previous step
-  # =================================================================================
   update-infra:
     name: 🏗️ Update Infra Manifests
     needs: build-and-push
