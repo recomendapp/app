@@ -42,6 +42,11 @@ type AuthProviderProps = {
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
+GoogleSignin.configure({
+  iosClientId: env.GOOGLE_IOS_CLIENT_ID,
+  webClientId: env.GOOGLE_WEB_CLIENT_ID,
+});
+
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const { auth } = useSplashScreen();
   const t = useTranslations();
@@ -104,11 +109,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       try {
         switch (provider) {
           case 'google': {
-            GoogleSignin.configure({
-              scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-              iosClientId: env.GOOGLE_IOS_CLIENT_ID,
-              webClientId: env.GOOGLE_WEB_CLIENT_ID,
-            });
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
             if (userInfo.type === 'cancelled') return;
