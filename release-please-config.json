@@ -6,7 +6,13 @@
   "packages": {
     "apps/mobile": {
       "component": "mobile",
-      "release-type": "node"
+      "release-type": "node",
+      "bootstrap-sha": "b20bfaabd01cdc442e6bd3b4eebfe07b02042000"
     }
-  }
+  },
+  "plugins": [
+    {
+      "type": "node-workspace"
+    }
+  ]
 }
