@@ -11,29 +11,37 @@ concurrency:
 jobs:
   main:
     name: 🧪 Lint, Test & Build
-    if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
     runs-on: ubuntu-latest
     steps:
+      - name: Skip for Release Please PRs
+        if: ${{ startsWith(github.head_ref, 'release-please--branches') }}
+        run: echo "Skipping CI for Release Please PRs."
+
       - name: ⬇️ Checkout Code
+        if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: 📦 Setup pnpm
+        if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
         uses: pnpm/action-setup@v2
         with:
           version: 9
 
       - name: 🔧 Setup Node.js
+        if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
 
       - name: ⚙️ Install Dependencies
+        if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
         run: pnpm install --frozen-lockfile
 
       - name: 📝 Prepare Mock Env for CI
+        if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
         run: |
           cat <<EOF > apps/api/.env
           S3_ENDPOINT=http://localhost
@@ -61,10 +69,13 @@ jobs:
           EOF
 
       - name: 🧠 Initialize Nx SHAs
+        if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
         uses: nrwl/nx-set-shas@v4
 
       - name: 🧹 Run Lint (Affected)
+        if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
         run: pnpm nx affected -t lint --parallel=3
 
       - name: 🧪 Run Tests (Affected)
+        if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
         run: pnpm nx affected -t test --parallel=3
