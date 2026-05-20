@@ -1,4 +1,3 @@
-import { upperFirst } from 'lodash';
 import { SharedValue, useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
 import { useTranslations } from 'use-intl';
 import { useTheme } from '../../providers/ThemeProvider';
@@ -10,7 +9,6 @@ import { SearchBar } from '../ui/searchbar';
 import tw from '../../lib/tw';
 import { Icons } from '../../constants/Icons';
 import { View } from '../ui/view';
-import { Text } from '../ui/text';
 import { ButtonProps } from '../ui/Button';
 import { UseQueryResult } from '@tanstack/react-query';
 import { CollectionItem } from './CollectionItem';
@@ -22,6 +20,8 @@ import CollectionToolbar, { CollectionToolbarItem } from './CollectionToolbar';
 import BottomSheetSort from '../bottom-sheets/sheets/BottomSheetSort';
 import useBottomSheetStore from '../../stores/useBottomSheetStore';
 import { ViewType } from '@libs/api-js';
+import { CardError } from '../cards/CardError';
+import { CardEmpty } from '../cards/CardEmpty';
 
 const MemoizedSearchBar = React.memo(SearchBar);
 
@@ -108,12 +108,11 @@ const CollectionScreen = <T extends Record<string, any>>({
   fuseThreshold = 0.5,
   ...props
 }: CollectionScreenConfig<T>) => {
-  const { colors, bottomOffset, tabBarHeight } = useTheme();
+  const { bottomOffset, tabBarHeight } = useTheme();
   const t = useTranslations();
   const openSheet = useBottomSheetStore((state) => state.openSheet);
   const { width: SCREEN_WIDTH } = useWindowDimensions();
-  const { data, isLoading, isRefetching, refetch } = queryData;
-  const loading = data === undefined || isLoading;
+  const { data, isLoading, isRefetching, refetch, isError } = queryData;
 
   // Shared Values
   const scrollYInternal = useSharedValue(0);
@@ -243,7 +242,7 @@ const CollectionScreen = <T extends Record<string, any>>({
                 backdrops={backdrops}
               />
             )}
-            {!loading && (
+            {!isLoading && (
               <View style={tw`gap-2`}>
                 <MemoizedSearchBar
                   value={search}
@@ -271,15 +270,18 @@ const CollectionScreen = <T extends Record<string, any>>({
         renderItem={renderItemProp || renderItem}
         keyExtractor={(item) => getItemId(item).toString()}
         ListEmptyComponent={
-          loading ? (
-            <Icons.Loader />
-          ) : (
-            <View style={tw`flex-1 items-center justify-center`}>
-              <Text style={{ color: colors.mutedForeground }}>
-                {emptyStateMessage || upperFirst(t('common.messages.no_results'))}
-              </Text>
-            </View>
-          )
+          <View style={tw`flex-1 items-center justify-center`}>
+            {isLoading ? (
+              <Icons.Loader />
+            ) : isError ? (
+              <CardError />
+            ) : (
+              <CardEmpty
+                icon={'🫙'}
+                label={emptyStateMessage || t('help_hints.playlists.items.empty')}
+              />
+            )}
+          </View>
         }
         refreshing={isRefetching}
         onRefresh={refetch}
@@ -287,6 +289,7 @@ const CollectionScreen = <T extends Record<string, any>>({
           paddingHorizontal: PADDING_HORIZONTAL,
           paddingBottom: bottomOffset + PADDING_VERTICAL,
           gap: GAP,
+          flexGrow: 1,
         }}
         scrollIndicatorInsets={{
           bottom: tabBarHeight,

@@ -27,9 +27,9 @@
       "remove_from_watchlist": "remove from watchlist",
       "no_results": "no results",
       "no_results_for": "No results for <strong>{query}</strong>",
-      "no_followees": "no followees",
-      "no_followers": "no followers",
-      "no_rating": "no rating",
+      "no_followees": "No followees",
+      "no_followers": "No followers",
+      "no_rating": "No rating",
       "must_watch_to_review": "you must watch this content to review it",
       "review_cannot_be_empty": "review cannot be empty",
       "no_activity": "no activity",
@@ -92,11 +92,11 @@
       "recent": "recent",
       "popular": "popular",
       "popularity": "popularity",
-      "no_reviews": "no reviews",
-      "no_playlists": "no playlists",
-      "no_playlists_found": "no playlists found",
-      "no_films": "no films",
-      "no_tv_series": "no TV series",
+      "no_reviews": "No reviews",
+      "no_playlists": "No playlists",
+      "no_playlists_found": "No playlists found",
+      "no_films": "No films",
+      "no_tv_series": "No TV series",
       "view_activity": "view activity",
       "comment_count": "{count, plural, one {# comment} other {# comments}}",
       "write_review": "write a review",
@@ -1235,6 +1235,33 @@
     },
     "feed_person": {
       "message": "To see activity here, you must follow people involved in movies or series."
+    },
+    "playlists": {
+      "items": {
+        "empty": "No movies or series in this playlist. Add some to fill it!"
+      },
+      "add_to": {
+        "empty": "You have no playlists. Create one to add movies or series and find them easily!"
+      },
+      "saved": {
+        "empty": "You have no saved playlists. Save a playlist to find it easily in your library!"
+      },
+      "members": {
+        "empty": "This playlist has no members. Add some to collaborate with others on the same playlist!",
+        "search": "Search for users to add to the playlist..."
+      }
+    },
+    "follow-requests": {
+      "empty": "You have no pending follow requests. When you do, they will appear here!"
+    },
+    "recos": {
+      "empty": "You have no recommendations. When you do, they will appear here!",
+      "send_to": {
+        "empty": "You have no one to send a recommendation to. You must be friends with someone to be able to send them a recommendation (mutual follow)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "You have no bookmarks yet. When you do, they will appear here!"
     }
   },
   "notifications": {

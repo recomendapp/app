@@ -1,4 +1,4 @@
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { getIdFromSlug } from '../../../../../utils/getIdFromSlug';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
@@ -20,6 +20,8 @@ import {
   tvSeriesReviewsInfiniteOptions,
 } from '@libs/query-client';
 import { ReviewTvSeriesWithAuthor } from '@libs/api-js';
+import { CardError } from 'apps/mobile/src/components/cards/CardError';
+import { CardEmpty } from 'apps/mobile/src/components/cards/CardEmpty';
 
 interface sortBy {
   label: string;
@@ -32,7 +34,7 @@ const TvSeriesReviews = () => {
   const { user } = useAuth();
   const { tv_series_id } = useLocalSearchParams<{ tv_series_id: string }>();
   const { id: tvSeriesId } = getIdFromSlug(tv_series_id);
-  const { colors, bottomOffset, tabBarHeight } = useTheme();
+  const { bottomOffset, tabBarHeight } = useTheme();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(
@@ -55,16 +57,16 @@ const TvSeriesReviews = () => {
       tvSeriesId: tvSeriesId,
     }),
   );
-  const { data, isLoading, fetchNextPage, hasNextPage, isRefetching, refetch } = useInfiniteQuery(
-    tvSeriesReviewsInfiniteOptions({
-      tvSeriesId: tvSeriesId,
-      filters: {
-        sort_by: sortBy.value,
-        sort_order: sortOrder,
-      },
-    }),
-  );
-  const loading = data === undefined || isLoading;
+  const { data, isLoading, fetchNextPage, hasNextPage, isRefetching, refetch, isError } =
+    useInfiniteQuery(
+      tvSeriesReviewsInfiniteOptions({
+        tvSeriesId: tvSeriesId,
+        filters: {
+          sort_by: sortBy.value,
+          sort_order: sortOrder,
+        },
+      }),
+    );
   const reviews = useMemo(() => data?.pages.flatMap((page) => page.data) || [], [data]);
   // Handlers
   const handleSortBy = useCallback(() => {
@@ -185,15 +187,15 @@ const TvSeriesReviews = () => {
           </View>
         }
         ListEmptyComponent={
-          loading ? (
-            <Icons.Loader />
-          ) : (
-            <View style={tw`flex-1 items-center justify-center p-4`}>
-              <Text style={[tw`text-center`, { color: colors.mutedForeground }]}>
-                {upperFirst(t('common.messages.no_results'))}
-              </Text>
-            </View>
-          )
+          <View style={tw`flex-1 items-center justify-center`}>
+            {isLoading ? (
+              <Icons.Loader />
+            ) : isError ? (
+              <CardError />
+            ) : (
+              <CardEmpty icon={'📝'} label={t('common.messages.no_reviews')} />
+            )}
+          </View>
         }
         onEndReached={useCallback(
           () => hasNextPage && fetchNextPage(),

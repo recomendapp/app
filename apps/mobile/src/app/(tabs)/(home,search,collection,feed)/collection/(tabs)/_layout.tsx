@@ -52,6 +52,17 @@ const CollectionLayout = () => {
               {upperFirst(t('common.messages.library'))}
             </HeaderTitle>
           ),
+          unstable_headerLeftItems: () => [
+            {
+              type: 'custom',
+              element: (
+                <HeaderTitle tintColor={colors.foreground}>
+                  {upperFirst(t('common.messages.library'))}
+                </HeaderTitle>
+              ),
+              hidesSharedBackground: true,
+            },
+          ],
           headerRight: () => (
             <View style={tw`flex-row items-center gap-1`}>
               <Button

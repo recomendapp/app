@@ -1,0 +1,40 @@
+import React from 'react';
+import { ScrollView, RefreshControl } from 'react-native';
+import tw from '../../lib/tw';
+import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
+import { useTheme } from '../../providers/ThemeProvider';
+
+interface RefreshableStateContainerProps extends React.ComponentProps<typeof ScrollView> {
+  children: React.ReactNode;
+  onRefresh?: () => void;
+  refreshing?: boolean;
+}
+
+export const RefreshableStateContainer = ({
+  children,
+  onRefresh,
+  refreshing = false,
+  contentContainerStyle,
+  ...props
+}: RefreshableStateContainerProps) => {
+  const { bottomOffset } = useTheme();
+  return (
+    <ScrollView
+      contentContainerStyle={[
+        tw`flex-grow items-center justify-center`,
+        {
+          paddingHorizontal: PADDING_HORIZONTAL,
+          paddingBottom: bottomOffset + PADDING_VERTICAL,
+        },
+        contentContainerStyle,
+      ]}
+      alwaysBounceVertical={true}
+      refreshControl={
+        onRefresh ? <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> : undefined
+      }
+      {...props}
+    >
+      {children}
+    </ScrollView>
+  );
+};

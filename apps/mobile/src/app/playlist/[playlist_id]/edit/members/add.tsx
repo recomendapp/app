@@ -30,6 +30,9 @@ import { Badge } from '../../../../../components/ui/Badge';
 import { SearchBarCommands } from 'react-native-screens';
 import { isIOS } from '../../../../../platform/detection';
 import { SearchBar } from '../../../../../components/ui/searchbar';
+import { RefreshableStateContainer } from 'apps/mobile/src/components/ui/RefreshableStateContainer';
+import { CardError } from 'apps/mobile/src/components/cards/CardError';
+import { CardEmpty } from 'apps/mobile/src/components/cards/CardEmpty';
 
 const ModalPlaylistEditGuestsAdd = () => {
   const { playlist_id } = useLocalSearchParams<{ playlist_id: string }>();
@@ -64,13 +67,14 @@ const ModalPlaylistEditGuestsAdd = () => {
     isPending,
     confirmExit: !!canSave,
   });
-  const { data, isLoading, isRefetching, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery(
-    searchUsersInfiniteOptions({
-      filters: {
-        q: debouncedSearch,
-      },
-    }),
-  );
+  const { data, isLoading, isRefetching, fetchNextPage, hasNextPage, refetch, isError } =
+    useInfiniteQuery(
+      searchUsersInfiniteOptions({
+        filters: {
+          q: debouncedSearch,
+        },
+      }),
+    );
   const users = useMemo(
     () =>
       data?.pages.flatMap((page) =>
@@ -202,52 +206,57 @@ const ModalPlaylistEditGuestsAdd = () => {
           ],
         }}
       />
-      <FlashList
-        data={users}
-        renderItem={renderItem}
-        ListHeaderComponent={
-          !isIOS ? (
-            <SearchBar
-              autoCapitalize="none"
-              autoFocus
-              placeholder={upperFirst(t('common.messages.search_user', { count: 1 }))}
-              onChangeText={(e) => setSearch(e)}
-            />
-          ) : null
-        }
-        ListEmptyComponent={
-          isLoading ? (
-            <Icons.Loader />
-          ) : debouncedSearch.length ? (
-            <View style={tw`p-4`}>
-              <Text textColor="muted" style={tw`text-center`}>
-                {upperFirst(t('common.messages.no_results'))}
-              </Text>
-            </View>
-          ) : (
-            <View style={tw`items-center p-4`}>
-              <Text textColor="muted" style={tw`text-center`}>
-                {upperFirst(t('common.messages.search_user', { count: 1 }))}
-              </Text>
-            </View>
-          )
-        }
-        keyExtractor={(item) => item.user.id}
-        refreshing={isRefetching}
-        onRefresh={refetch}
-        onEndReached={() => hasNextPage && fetchNextPage()}
-        onEndReachedThreshold={0.5}
-        maintainVisibleContentPosition={{
-          disabled: true,
-        }}
-        contentContainerStyle={[
-          tw`gap-2 flex-grow`,
-          {
-            paddingHorizontal: PADDING_HORIZONTAL,
-          },
-        ]}
-        keyboardShouldPersistTaps="handled"
-      />
+      {isLoading ? (
+        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
+          <Icons.Loader />
+        </RefreshableStateContainer>
+      ) : isError ? (
+        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
+          <CardError />
+        </RefreshableStateContainer>
+      ) : users.length === 0 && search.length > 0 ? (
+        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
+          <View style={tw`flex-1 items-center p-4`}>
+            <Text textColor="muted" style={tw`text-center`}>
+              {upperFirst(t('common.messages.no_results'))}
+            </Text>
+          </View>
+        </RefreshableStateContainer>
+      ) : users.length === 0 ? (
+        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
+          <CardEmpty icon={'🧑‍🤝‍🧑'} label={t('help_hints.playlists.members.search')} />
+        </RefreshableStateContainer>
+      ) : (
+        <FlashList
+          data={users}
+          renderItem={renderItem}
+          ListHeaderComponent={
+            !isIOS ? (
+              <SearchBar
+                autoCapitalize="none"
+                autoFocus
+                placeholder={upperFirst(t('common.messages.search_user', { count: 1 }))}
+                onChangeText={(e) => setSearch(e)}
+              />
+            ) : null
+          }
+          keyExtractor={(item) => item.user.id}
+          refreshing={isRefetching}
+          onRefresh={refetch}
+          onEndReached={() => hasNextPage && fetchNextPage()}
+          onEndReachedThreshold={0.5}
+          maintainVisibleContentPosition={{
+            disabled: true,
+          }}
+          contentContainerStyle={[
+            tw`gap-2 flex-grow`,
+            {
+              paddingHorizontal: PADDING_HORIZONTAL,
+            },
+          ]}
+          keyboardShouldPersistTaps="handled"
+        />
+      )}
       <Animated.View style={animatedFooterStyle} />
       <SelectionFooter
         data={selectedUsers}

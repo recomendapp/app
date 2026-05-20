@@ -3,7 +3,7 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useTranslations } from 'use-intl';
 import { upperFirst } from 'lodash';
 import { useAuth } from '../../../../../providers/AuthProvider';
-import { Text, useWindowDimensions, View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import tw from '../../../../../lib/tw';
 import { useTheme } from '../../../../../providers/ThemeProvider';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
@@ -16,6 +16,8 @@ import { CardPlaylist } from '../../../../../components/cards/CardPlaylist';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { movieOptions, moviePlaylistsInfiniteOptions } from '@libs/query-client';
 import { PlaylistWithOwner } from '@libs/api-js';
+import { CardError } from 'apps/mobile/src/components/cards/CardError';
+import { CardEmpty } from 'apps/mobile/src/components/cards/CardEmpty';
 
 interface sortBy {
   label: string;
@@ -29,7 +31,7 @@ const FilmPlaylists = () => {
   const { user } = useAuth();
   const { film_id } = useLocalSearchParams<{ film_id: string }>();
   const { id: movieId } = getIdFromSlug(film_id);
-  const { colors, bottomOffset, tabBarHeight } = useTheme();
+  const { bottomOffset, tabBarHeight } = useTheme();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(
@@ -44,15 +46,16 @@ const FilmPlaylists = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   // Requests
   const { data: movie } = useQuery(movieOptions({ movieId: movieId }));
-  const { data, isLoading, fetchNextPage, hasNextPage, isRefetching, refetch } = useInfiniteQuery(
-    moviePlaylistsInfiniteOptions({
-      movieId: movieId,
-      filters: {
-        sort_by: sortBy.value,
-        sort_order: sortOrder,
-      },
-    }),
-  );
+  const { data, isLoading, fetchNextPage, hasNextPage, isRefetching, refetch, isError } =
+    useInfiniteQuery(
+      moviePlaylistsInfiniteOptions({
+        movieId: movieId,
+        filters: {
+          sort_by: sortBy.value,
+          sort_order: sortOrder,
+        },
+      }),
+    );
   const loading = data === undefined || isLoading;
   const playlists = useMemo(() => data?.pages.flatMap((page) => page.data) || [], [data]);
   // Handlers
@@ -153,15 +156,15 @@ const FilmPlaylists = () => {
           </View>
         }
         ListEmptyComponent={
-          loading ? (
-            <Icons.Loader />
-          ) : (
-            <View style={tw`flex-1 items-center justify-center p-4`}>
-              <Text style={[tw`text-center`, { color: colors.mutedForeground }]}>
-                {upperFirst(t('common.messages.no_results'))}
-              </Text>
-            </View>
-          )
+          <View style={tw`flex-1 items-center justify-center`}>
+            {isLoading ? (
+              <Icons.Loader />
+            ) : isError ? (
+              <CardError />
+            ) : (
+              <CardEmpty icon={'📚'} label={t('common.messages.no_playlists')} />
+            )}
+          </View>
         }
         numColumns={
           SCREEN_WIDTH < 360
@@ -183,6 +186,7 @@ const FilmPlaylists = () => {
           paddingHorizontal: PADDING_HORIZONTAL,
           paddingBottom: bottomOffset + PADDING_VERTICAL,
           gap: GAP,
+          flexGrow: 1,
         }}
         maintainVisibleContentPosition={false}
         scrollIndicatorInsets={{ bottom: tabBarHeight }}

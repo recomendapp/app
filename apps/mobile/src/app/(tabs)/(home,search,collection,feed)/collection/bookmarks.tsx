@@ -217,6 +217,7 @@ const BookmarksScreen = () => {
             getFn: (item) => (item.type === 'movie' ? item.media.title : item.media.name) || '',
           },
         ]}
+        emptyStateMessage={t('help_hints.bookmarks.empty')}
         // Sort
         sortByOptions={sortByOptions}
         // Getters

@@ -36,6 +36,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FlashList } from '@shopify/flash-list';
 import { theme } from '../../../../theme';
 import { useModalHeaderOptions } from '../../../../hooks/useModalHeaderOptions';
+import { RefreshableStateContainer } from 'apps/mobile/src/components/ui/RefreshableStateContainer';
+import { CardError } from 'apps/mobile/src/components/cards/CardError';
+import { CardEmpty } from 'apps/mobile/src/components/cards/CardEmpty';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -113,6 +116,8 @@ const PlaylistAddTo = () => {
     data: playlists,
     isRefetching,
     refetch,
+    isLoading,
+    isError,
   } = useQuery(
     userPlaylistsAddTargetsAllOptions({
       userId: user?.id,
@@ -371,37 +376,40 @@ const PlaylistAddTo = () => {
           )}
         </Stack.Toolbar>
       )}
-      <FlashList
-        data={resultsRender}
-        renderItem={renderItem}
-        ListEmptyComponent={
-          isAddingToPlaylist ? (
-            <Icons.Loader />
-          ) : (
-            <View style={tw`p-4`}>
-              <Text textColor="muted" style={tw`text-center`}>
-                {upperFirst(t('common.messages.no_results'))}
-              </Text>
-            </View>
-          )
-        }
-        keyExtractor={({ item }) => item.id.toString()}
-        refreshing={isRefetching}
-        onRefresh={refetch}
-        maintainVisibleContentPosition={{
-          disabled: true,
-        }}
-        ItemSeparatorComponent={() => <View style={{ height: GAP }} />}
-        contentContainerStyle={[
-          {
-            paddingBottom: isLiquidGlassAvailable
-              ? insets.bottom + PADDING_VERTICAL + IOS_TOOLBAR_HEIGHT
-              : 0,
-            paddingHorizontal: PADDING_HORIZONTAL,
-          },
-        ]}
-        keyboardShouldPersistTaps="handled"
-      />
+      {isLoading ? (
+        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
+          <Icons.Loader />
+        </RefreshableStateContainer>
+      ) : isError ? (
+        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
+          <CardError />
+        </RefreshableStateContainer>
+      ) : resultsRender.length === 0 ? (
+        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
+          <CardEmpty icon={'▶️'} label={t('help_hints.playlists.add_to.empty')} />
+        </RefreshableStateContainer>
+      ) : (
+        <FlashList
+          data={resultsRender}
+          renderItem={renderItem}
+          keyExtractor={({ item }) => item.id.toString()}
+          refreshing={isRefetching}
+          onRefresh={refetch}
+          maintainVisibleContentPosition={{
+            disabled: true,
+          }}
+          ItemSeparatorComponent={() => <View style={{ height: GAP }} />}
+          contentContainerStyle={[
+            {
+              paddingBottom: isLiquidGlassAvailable
+                ? insets.bottom + PADDING_VERTICAL + IOS_TOOLBAR_HEIGHT
+                : 0,
+              paddingHorizontal: PADDING_HORIZONTAL,
+            },
+          ]}
+          keyboardShouldPersistTaps="handled"
+        />
+      )}
       {!isLiquidGlassAvailable && (
         <>
           <Animated.View style={animatedFooterStyle} />

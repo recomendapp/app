@@ -7,13 +7,15 @@ import { LegendList } from '@legendapp/list/react-native';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useCallback, useMemo, useState } from 'react';
-import { Text, useWindowDimensions, View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import { useTranslations } from 'use-intl';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { CardTvSeries } from '../../../../../components/cards/CardTvSeries';
 import { HeaderTitle } from '@react-navigation/elements';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { userByUsernameOptions, userTvSeriesLogsInfiniteOptions } from '@libs/query-client';
+import { CardError } from 'apps/mobile/src/components/cards/CardError';
+import { CardEmpty } from 'apps/mobile/src/components/cards/CardEmpty';
 
 interface sortBy {
   label: string;
@@ -38,17 +40,17 @@ const UserCollectionTvSeries = () => {
   );
   const [sortBy, setSortBy] = useState<sortBy>(sortByOptions[0]);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-  const { data, isLoading, fetchNextPage, hasNextPage, isRefetching, refetch } = useInfiniteQuery(
-    userTvSeriesLogsInfiniteOptions({
-      userId: profile?.id,
-      filters: {
-        sort_by: sortBy.value,
-        sort_order: sortOrder,
-      },
-    }),
-  );
+  const { data, isLoading, fetchNextPage, hasNextPage, isRefetching, refetch, isError } =
+    useInfiniteQuery(
+      userTvSeriesLogsInfiniteOptions({
+        userId: profile?.id,
+        filters: {
+          sort_by: sortBy.value,
+          sort_order: sortOrder,
+        },
+      }),
+    );
   const tvSeries = useMemo(() => data?.pages.flatMap((page) => page.data) || [], [data]);
-  const loading = data === undefined || isLoading;
   // Handlers
   const handleSortBy = useCallback(() => {
     const sortByOptionsWithCancel = [
@@ -121,15 +123,15 @@ const UserCollectionTvSeries = () => {
           </View>
         }
         ListEmptyComponent={
-          loading ? (
-            <Icons.Loader />
-          ) : (
-            <View style={tw`flex-1 items-center justify-center p-4`}>
-              <Text style={[tw`text-center`, { color: colors.mutedForeground }]}>
-                {upperFirst(t('common.messages.no_results'))}
-              </Text>
-            </View>
-          )
+          <View style={tw`flex-1 items-center justify-center`}>
+            {isLoading ? (
+              <Icons.Loader />
+            ) : isError ? (
+              <CardError />
+            ) : (
+              <CardEmpty icon={'📺'} label={t('common.messages.no_tv_series')} />
+            )}
+          </View>
         }
         numColumns={
           SCREEN_WIDTH < 360
