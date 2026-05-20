@@ -8,6 +8,7 @@ on:
 jobs:
   build-and-push:
     name: 🐳 Build & Push Images
+    if: "!startsWith(github.event.head_commit.message, 'chore(main): release')"
     runs-on: ubuntu-latest
     permissions:
       contents: read
