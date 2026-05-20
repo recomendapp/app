@@ -112,7 +112,7 @@ jobs:
           retention-days: 7
 
       - name: 🚀 EAS Submit (via Nx)
-        run: pnpm nx submit mobile --platform ios --path build.ipa --profile production --non-interactive
+        run: pnpm nx submit mobile --platform ios --path build.ipa --profile production --non-interactive --no-wait
 
       - name: 🧹 Cleanup
         if: always()
