@@ -16,8 +16,8 @@ import { CardPlaylist } from '../../../../../components/cards/CardPlaylist';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { tvSeriesOptions, tvSeriesPlaylistsInfiniteOptions } from '@libs/query-client';
 import { PlaylistWithOwner } from '@libs/api-js';
-import { CardError } from 'apps/mobile/src/components/cards/CardError';
-import { CardEmpty } from 'apps/mobile/src/components/cards/CardEmpty';
+import { CardError } from '../../../../../components/cards/CardError';
+import { CardEmpty } from '../../../../../components/cards/CardEmpty';
 
 interface sortBy {
   label: string;

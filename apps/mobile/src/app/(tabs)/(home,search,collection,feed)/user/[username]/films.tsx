@@ -14,8 +14,8 @@ import { CardMovie } from '../../../../../components/cards/CardMovie';
 import { HeaderTitle } from '@react-navigation/elements';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { userByUsernameOptions, userMovieLogsInfiniteOptions } from '@libs/query-client';
-import { CardError } from 'apps/mobile/src/components/cards/CardError';
-import { CardEmpty } from 'apps/mobile/src/components/cards/CardEmpty';
+import { CardError } from '../../../../../components/cards/CardError';
+import { CardEmpty } from '../../../../../components/cards/CardEmpty';
 
 interface sortBy {
   label: string;

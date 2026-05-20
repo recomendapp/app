@@ -33,9 +33,9 @@ import { FlashList } from '@shopify/flash-list';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { theme } from '../../../../theme';
 import { useModalHeaderOptions } from '../../../../hooks/useModalHeaderOptions';
-import { RefreshableStateContainer } from 'apps/mobile/src/components/ui/RefreshableStateContainer';
-import { CardError } from 'apps/mobile/src/components/cards/CardError';
-import { CardEmpty } from 'apps/mobile/src/components/cards/CardEmpty';
+import { RefreshableStateContainer } from '../../../../components/ui/RefreshableStateContainer';
+import { CardError } from '../../../../components/cards/CardError';
+import { CardEmpty } from '../../../../components/cards/CardEmpty';
 
 const COMMENT_MAX_LENGTH = 180;
 

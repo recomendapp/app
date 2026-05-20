@@ -1,10 +1,9 @@
 import { CardPlaylist } from '../../../../../components/cards/CardPlaylist';
 import { useAuth } from '../../../../../providers/AuthProvider';
 import tw from '../../../../../lib/tw';
-import { Text, useWindowDimensions, View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import { LegendList } from '@legendapp/list/react-native';
 import { Icons } from '../../../../../constants/Icons';
-import { upperFirst } from 'lodash';
 import { useTheme } from '../../../../../providers/ThemeProvider';
 import { useTranslations } from 'use-intl';
 import { useCallback, useMemo } from 'react';
@@ -13,8 +12,8 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { userPlaylistsSavedInfiniteOptions } from '@libs/query-client';
 import { PlaylistWithOwner } from '@libs/api-js';
 import { RefreshableStateContainer } from '../../../../../components/ui/RefreshableStateContainer';
-import { CardError } from 'apps/mobile/src/components/cards/CardError';
-import { CardEmpty } from 'apps/mobile/src/components/cards/CardEmpty';
+import { CardError } from '../../../../../components/cards/CardError';
+import { CardEmpty } from '../../../../../components/cards/CardEmpty';
 
 const CollectionSavedScreen = () => {
   const { user } = useAuth();

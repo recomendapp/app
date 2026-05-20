@@ -16,8 +16,8 @@ import { useAuth } from '../../../../../providers/AuthProvider';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { movieLogOptions, movieOptions, movieReviewsInfiniteOptions } from '@libs/query-client';
 import { ReviewMovieWithAuthor } from '@libs/api-js';
-import { CardError } from 'apps/mobile/src/components/cards/CardError';
-import { CardEmpty } from 'apps/mobile/src/components/cards/CardEmpty';
+import { CardError } from '../../../../../components/cards/CardError';
+import { CardEmpty } from '../../../../../components/cards/CardEmpty';
 
 interface sortBy {
   label: string;

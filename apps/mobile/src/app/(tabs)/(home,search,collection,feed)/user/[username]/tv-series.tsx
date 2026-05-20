@@ -14,8 +14,8 @@ import { CardTvSeries } from '../../../../../components/cards/CardTvSeries';
 import { HeaderTitle } from '@react-navigation/elements';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { userByUsernameOptions, userTvSeriesLogsInfiniteOptions } from '@libs/query-client';
-import { CardError } from 'apps/mobile/src/components/cards/CardError';
-import { CardEmpty } from 'apps/mobile/src/components/cards/CardEmpty';
+import { CardError } from '../../../../../components/cards/CardError';
+import { CardEmpty } from '../../../../../components/cards/CardEmpty';
 
 interface sortBy {
   label: string;
@@ -27,7 +27,7 @@ const UserCollectionTvSeries = () => {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const { username } = useLocalSearchParams<{ username: string }>();
   const { data: profile } = useQuery(userByUsernameOptions({ username: username }));
-  const { colors, bottomOffset, tabBarHeight } = useTheme();
+  const { bottomOffset, tabBarHeight } = useTheme();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(

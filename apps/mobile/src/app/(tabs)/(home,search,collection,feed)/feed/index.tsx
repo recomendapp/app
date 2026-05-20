@@ -19,7 +19,7 @@ import { CardFeedLogTvSeries } from '../../../../components/cards/feed/CardFeedL
 import { meFeedInfiniteOptions } from '@libs/query-client';
 import { RefreshableStateContainer } from '../../../../components/ui/RefreshableStateContainer';
 import { CardError } from '../../../../components/cards/CardError';
-import { CardEmpty } from 'apps/mobile/src/components/cards/CardEmpty';
+import { CardEmpty } from '../../../../components/cards/CardEmpty';
 
 const FeedScreen = () => {
   const t = useTranslations();

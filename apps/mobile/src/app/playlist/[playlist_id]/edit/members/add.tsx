@@ -30,9 +30,9 @@ import { Badge } from '../../../../../components/ui/Badge';
 import { SearchBarCommands } from 'react-native-screens';
 import { isIOS } from '../../../../../platform/detection';
 import { SearchBar } from '../../../../../components/ui/searchbar';
-import { RefreshableStateContainer } from 'apps/mobile/src/components/ui/RefreshableStateContainer';
-import { CardError } from 'apps/mobile/src/components/cards/CardError';
-import { CardEmpty } from 'apps/mobile/src/components/cards/CardEmpty';
+import { RefreshableStateContainer } from '../../../../../components/ui/RefreshableStateContainer';
+import { CardError } from '../../../../../components/cards/CardError';
+import { CardEmpty } from '../../../../../components/cards/CardEmpty';
 
 const ModalPlaylistEditGuestsAdd = () => {
   const { playlist_id } = useLocalSearchParams<{ playlist_id: string }>();

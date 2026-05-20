@@ -29,9 +29,9 @@ import { usePlaylistMembers } from '../../../../../hooks/usePlaylistMembers';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { KeyboardAvoidingLegendList } from '@legendapp/list/keyboard-test';
 import { LegendListRef } from '@legendapp/list/react-native';
-import { RefreshableStateContainer } from 'apps/mobile/src/components/ui/RefreshableStateContainer';
-import { CardError } from 'apps/mobile/src/components/cards/CardError';
-import { CardEmpty } from 'apps/mobile/src/components/cards/CardEmpty';
+import { RefreshableStateContainer } from '../../../../../components/ui/RefreshableStateContainer';
+import { CardError } from '../../../../../components/cards/CardError';
+import { CardEmpty } from '../../../../../components/cards/CardEmpty';
 
 const RightActions = ({
   drag,

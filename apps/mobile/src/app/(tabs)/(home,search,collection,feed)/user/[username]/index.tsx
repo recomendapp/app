@@ -30,7 +30,7 @@ import {
   userPlaylistsInfiniteOptions,
   userTvSeriesLogsInfiniteOptions,
 } from '@libs/query-client';
-import { CardEmpty } from 'apps/mobile/src/components/cards/CardEmpty';
+import { CardEmpty } from '../../../../../components/cards/CardEmpty';
 
 const ProfileHeader = ({
   profile,

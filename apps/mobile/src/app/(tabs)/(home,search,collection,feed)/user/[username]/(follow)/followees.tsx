@@ -8,10 +8,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { userByUsernameOptions, userFollowingInfiniteOptions } from '@libs/query-client';
 import { UserSummary } from '@libs/api-js';
-import { RefreshableStateContainer } from 'apps/mobile/src/components/ui/RefreshableStateContainer';
-import { Icons } from 'apps/mobile/src/constants/Icons';
-import { CardError } from 'apps/mobile/src/components/cards/CardError';
-import { CardEmpty } from 'apps/mobile/src/components/cards/CardEmpty';
+import { RefreshableStateContainer } from '../../../../../../components/ui/RefreshableStateContainer';
+import { Icons } from '../../../../../../constants/Icons';
+import { CardError } from '../../../../../../components/cards/CardError';
+import { CardEmpty } from '../../../../../../components/cards/CardEmpty';
 import { useTranslations } from 'use-intl';
 
 const ProfileFolloweesScreen = () => {

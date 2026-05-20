@@ -29,7 +29,7 @@ import { FeedPersonItem } from '@libs/api-js';
 import { uiBackgroundsOptions } from '../../../../api/ui/uiOptions';
 import { RefreshableStateContainer } from '../../../../components/ui/RefreshableStateContainer';
 import { CardError } from '../../../../components/cards/CardError';
-import { CardEmpty } from 'apps/mobile/src/components/cards/CardEmpty';
+import { CardEmpty } from '../../../../components/cards/CardEmpty';
 
 const CastCrewFeedScreen = () => {
   const t = useTranslations();
