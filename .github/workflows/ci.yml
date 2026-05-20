@@ -3,6 +3,7 @@ name: CI Pipeline
 on:
   pull_request:
     branches: [main]
+    types: [opened, synchronize, reopened, closed]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -11,6 +12,7 @@ concurrency:
 jobs:
   main:
     name: 🧪 Lint, Test & Build
+    if: github.event.action != 'closed'
     runs-on: ubuntu-latest
     steps:
       - name: Skip for Release Please PRs
