@@ -9,9 +9,9 @@ FROM base AS installer
 WORKDIR /app
 
 COPY pnpm-workspace.yaml ./
-COPY dist/apps/worker/package.json ./
+COPY dist/apps/worker/package.json dist/apps/worker/pnpm-lock.yaml* dist/apps/worker/package-lock.json* dist/apps/worker/yarn.lock* ./
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
 
 # 3. Runner stage
 FROM base AS runner
