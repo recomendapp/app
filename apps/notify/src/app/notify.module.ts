@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { I18nModule } from 'nestjs-i18n';
+import { AcceptLanguageResolver, I18nModule } from 'nestjs-i18n';
 import { BullModule } from '@nestjs/bullmq';
 import { NotifySharedModule } from '@shared/notify';
 import { env } from '../env';
@@ -24,7 +24,8 @@ import { EnvModule, notifySchema } from '@libs/env';
       loaderOptions: {
         path: path.join(__dirname, '/assets/i18n/'),
         watch: true,
-      }
+      },
+      resolvers: [AcceptLanguageResolver],
     }),
     BullModule.forRoot({
       connection: {
@@ -36,12 +37,9 @@ import { EnvModule, notifySchema } from '@libs/env';
     DrizzleModule,
     FcmModule,
     ApnsModule,
-    NotifySharedModule
+    NotifySharedModule,
   ],
   controllers: [],
-  providers: [
-    NotifyService,
-    NotifyProcessor,
-  ],
+  providers: [NotifyService, NotifyProcessor],
 })
 export class NotifyModule {}
