@@ -1,4 +1,4 @@
-name: 📱 Mobile Router (OTA vs Native)
+name: 📱 Mobile Router
 
 on:
   push:
@@ -6,35 +6,13 @@ on:
       - 'mobile@*'
 
 jobs:
-  router:
-    name: 🧭 Determine Build Strategy
+  check-fingerprint:
+    name: 🔍 OTA or Native Build?
     runs-on: ubuntu-latest
     outputs:
-      strategy: ${{ steps.check.outputs.strategy }}
-    steps:
-      - name: Parse Version
-        id: check
-        run: |
-          VERSION=${GITHUB_REF_NAME#mobile@}
-          PATCH=$(echo $VERSION | awk -F'.' '{print $3}')
-
-          if [ "$PATCH" == "0" ]; then
-            echo "Version X.Y.0 detected -> Native Builds"
-            echo "strategy=native" >> $GITHUB_OUTPUT
-          else
-            echo "Patch detected -> OTA Update"
-            echo "strategy=ota" >> $GITHUB_OUTPUT
-          fi
-
-  ota-update:
-    name: ⚡ Deploy OTA Update
-    needs: router
-    if: needs.router.outputs.strategy == 'ota'
-    runs-on: ubuntu-latest
+      strategy: ${{ steps.decide.outputs.strategy }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - uses: pnpm/action-setup@v2
         with:
@@ -47,6 +25,86 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.INFISICAL_EXPO_TOKEN }}
+
+      - name: 📝 Prepare Environment Files
+        run: |
+          cat <<EOF > apps/mobile/.env
+          APP_VARIANT=production
+          EXPO_PUBLIC_API_URL="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_API_URL }}"
+          EXPO_PUBLIC_WEB_APP="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_WEB_APP }}"
+          EXPO_PUBLIC_FACEBOOK_APP_ID="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_FACEBOOK_APP_ID }}"
+          EXPO_PUBLIC_FACEBOOK_CLIENT_TOKEN="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_FACEBOOK_CLIENT_TOKEN }}"
+          EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID }}"
+          EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID }}"
+          EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY }}"
+          EXPO_PUBLIC_SENTRY_DSN="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_SENTRY_DSN }}"
+          SENTRY_AUTH_TOKEN="${{ secrets.INFISICAL_MOBILE_SENTRY_AUTH_TOKEN }}"
+          SENTRY_ORG="${{ secrets.INFISICAL_MOBILE_SENTRY_ORG }}"
+          SENTRY_PROJECT="${{ secrets.INFISICAL_MOBILE_SENTRY_PROJECT }}"
+          SENTRY_DISABLE_AUTO_UPLOAD="${{ secrets.INFISICAL_MOBILE_SENTRY_DISABLE_AUTO_UPLOAD }}"
+          TMDB_IMAGE_BASE_URL="${{ secrets.INFISICAL_MOBILE_TMDB_IMAGE_BASE_URL }}"
+          EOF
+
+      - name: 🔍 Calculate current fingerprint
+        id: current
+        working-directory: apps/mobile
+        run: |
+          HASH=$(npx -y @expo/fingerprint apps/mobile | jq -r '.hash')
+          echo "Current fingerprint: $HASH"
+          echo "hash=$HASH" >> $GITHUB_OUTPUT
+
+      - name: 💾 Retrieve last build fingerprint
+        id: cache
+        uses: actions/cache/restore@v4
+        with:
+          path: /tmp/last-build-fingerprint
+          key: mobile-fingerprint-last-build
+
+      - name: 🧭 Decide Strategy
+        id: decide
+        run: |
+          CURRENT="${{ steps.current.outputs.hash }}"
+
+          if [ -f /tmp/last-build-fingerprint ]; then
+            LAST=$(cat /tmp/last-build-fingerprint)
+            echo "Last build fingerprint: $LAST"
+          else
+            LAST=""
+            echo "No previous build found"
+          fi
+
+          if [ "$CURRENT" == "$LAST" ]; then
+            echo "✅ Identical fingerprint -> OTA"
+            echo "strategy=ota" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️ Different fingerprint -> Native Build"
+            echo "strategy=native" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 🧹 Cleanup
+        if: always()
+        run: rm -f apps/mobile/.env
+
+  ota-update:
+    name: ⚡ OTA Update
+    needs: check-fingerprint
+    if: needs.check-fingerprint.outputs.strategy == 'ota'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
       - uses: expo/expo-github-action@v8
         with:
           eas-version: latest
@@ -100,8 +158,13 @@ jobs:
           TYPESENSE_API_KEY="placeholder"
           EOF
 
-      - name: 🚀 Publish EAS Update
-        run: pnpm nx update mobile --channel production --message "Release ${{ github.ref_name }}" --environment production --non-interactive
+      - name: 🚀 EAS Update
+        run: |
+          pnpm nx update mobile \
+            --channel production \
+            --message "Release ${{ github.ref_name }}" \
+            --environment production \
+            --non-interactive
 
       - name: 🧹 Cleanup
         if: always()
@@ -110,15 +173,69 @@ jobs:
           rm -f apps/api/.env
 
   call-ios-build:
-    name: 🍏 Call iOS Build
-    needs: router
-    if: needs.router.outputs.strategy == 'native'
+    name: 🍏 Build iOS
+    needs: check-fingerprint
+    if: needs.check-fingerprint.outputs.strategy == 'native'
     uses: ./.github/workflows/build-submit-ios.yml
     secrets: inherit
 
   call-android-build:
-    name: 🤖 Call Android Build
-    needs: router
-    if: needs.router.outputs.strategy == 'native'
+    name: 🤖 Build Android
+    needs: check-fingerprint
+    if: needs.check-fingerprint.outputs.strategy == 'native'
     uses: ./.github/workflows/build-submit-android.yml
     secrets: inherit
+
+  save-fingerprint:
+    name: 💾 Save Fingerprint
+    needs: [check-fingerprint, call-ios-build, call-android-build]
+    if: |
+      needs.check-fingerprint.outputs.strategy == 'native' && 
+      needs.call-ios-build.result == 'success' && 
+      needs.call-android-build.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+
+      - name: 📝 Prepare Environment Files
+        run: |
+          cat <<EOF > apps/mobile/.env
+          APP_VARIANT=production
+          EXPO_PUBLIC_API_URL="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_API_URL }}"
+          EXPO_PUBLIC_WEB_APP="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_WEB_APP }}"
+          EXPO_PUBLIC_FACEBOOK_APP_ID="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_FACEBOOK_APP_ID }}"
+          EXPO_PUBLIC_FACEBOOK_CLIENT_TOKEN="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_FACEBOOK_CLIENT_TOKEN }}"
+          EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID }}"
+          EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID }}"
+          EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY }}"
+          EXPO_PUBLIC_SENTRY_DSN="${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_SENTRY_DSN }}"
+          SENTRY_AUTH_TOKEN="${{ secrets.INFISICAL_MOBILE_SENTRY_AUTH_TOKEN }}"
+          SENTRY_ORG="${{ secrets.INFISICAL_MOBILE_SENTRY_ORG }}"
+          SENTRY_PROJECT="${{ secrets.INFISICAL_MOBILE_SENTRY_PROJECT }}"
+          SENTRY_DISABLE_AUTO_UPLOAD="${{ secrets.INFISICAL_MOBILE_SENTRY_DISABLE_AUTO_UPLOAD }}"
+          TMDB_IMAGE_BASE_URL="${{ secrets.INFISICAL_MOBILE_TMDB_IMAGE_BASE_URL }}"
+          EOF
+
+      - name: 🔍 Re-calculate and save fingerprint
+        working-directory: apps/mobile
+        run: |
+          HASH=$(npx -y @expo/fingerprint apps/mobile | jq -r '.hash')
+          echo "$HASH" > /tmp/last-build-fingerprint
+
+      - name: 💾 Update Cache
+        uses: actions/cache/save@v4
+        with:
+          path: /tmp/last-build-fingerprint
+          key: mobile-fingerprint-last-build
+
+      - name: 🧹 Cleanup
+        if: always()
+        run: rm -f apps/mobile/.env
