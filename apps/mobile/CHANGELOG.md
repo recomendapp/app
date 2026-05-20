@@ -1,5 +1,12 @@
 # mobile
 
+## [1.2.0](https://github.com/recomendapp/app/compare/mobile@v1.1.2...mobile@v1.2.0) (2026-05-20)
+
+
+### Features
+
+* **mobile:** switch runtime version policy to fingerprint ([#12](https://github.com/recomendapp/app/issues/12)) ([962cff5](https://github.com/recomendapp/app/commit/962cff5fd793f93a9d54b9c0b75620d2d2417c01))
+
 ## [1.1.2](https://github.com/recomendapp/app/compare/mobile@v1.1.1...mobile@v1.1.2) (2026-05-20)
 
 
