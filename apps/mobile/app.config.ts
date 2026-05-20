@@ -43,7 +43,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   platforms: ['ios', 'android'],
   version: packageInfo.version,
   runtimeVersion: {
-    policy: 'appVersion',
+    policy: 'fingerprint',
   },
   updates: {
     checkAutomatically: 'ON_LOAD',
