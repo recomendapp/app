@@ -8,22 +8,64 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { userByUsernameOptions, userFollowersInfiniteOptions } from '@libs/query-client';
 import { UserSummary } from '@libs/api-js';
+import { RefreshableStateContainer } from '../../../../../../components/ui/RefreshableStateContainer';
+import { CardError } from '../../../../../../components/cards/CardError';
+import { Icons } from '../../../../../../constants/Icons';
+import { CardEmpty } from '../../../../../../components/cards/CardEmpty';
+import { useTranslations } from 'use-intl';
 
 const ProfileFollowersScreen = () => {
   const { username } = useLocalSearchParams<{ username: string }>();
   const { data: profile } = useQuery(userByUsernameOptions({ username: username }));
   const insets = useSafeAreaInsets();
+  const t = useTranslations();
   const { bottomOffset, tabBarHeight } = useTheme();
-  const { data, hasNextPage, fetchNextPage, refetch } = useInfiniteQuery(
-    userFollowersInfiniteOptions({
-      profileId: profile?.id,
-    }),
-  );
+  const { data, hasNextPage, fetchNextPage, refetch, isLoading, isError, isRefetching } =
+    useInfiniteQuery(
+      userFollowersInfiniteOptions({
+        profileId: profile?.id,
+      }),
+    );
   const followers = useMemo(() => data?.pages.flatMap((page) => page.data) ?? [], [data]);
   const renderItem = useCallback(
     ({ item }: { item: UserSummary }) => <CardUser variant="list" user={item} />,
     [],
   );
+  if (isLoading) {
+    return (
+      <RefreshableStateContainer
+        onRefresh={refetch}
+        refreshing={isRefetching}
+        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+      >
+        <Icons.Loader />
+      </RefreshableStateContainer>
+    );
+  }
+
+  if (isError) {
+    return (
+      <RefreshableStateContainer
+        onRefresh={refetch}
+        refreshing={isRefetching}
+        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+      >
+        <CardError />
+      </RefreshableStateContainer>
+    );
+  }
+
+  if (followers.length === 0) {
+    return (
+      <RefreshableStateContainer
+        onRefresh={refetch}
+        refreshing={isRefetching}
+        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+      >
+        <CardEmpty icon={'👥'} label={t('common.messages.no_followers')} />
+      </RefreshableStateContainer>
+    );
+  }
   return (
     <LegendList
       data={followers}

@@ -33,6 +33,9 @@ import { FlashList } from '@shopify/flash-list';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { theme } from '../../../../theme';
 import { useModalHeaderOptions } from '../../../../hooks/useModalHeaderOptions';
+import { RefreshableStateContainer } from '../../../../components/ui/RefreshableStateContainer';
+import { CardError } from '../../../../components/cards/CardError';
+import { CardEmpty } from '../../../../components/cards/CardEmpty';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -104,6 +107,8 @@ const RecoSend = () => {
     data: friends,
     isRefetching,
     refetch,
+    isLoading,
+    isError,
   } = useQuery(
     userRecoSendAllOptions({
       userId: user?.id,
@@ -322,37 +327,40 @@ const RecoSend = () => {
           )}
         </Stack.Toolbar>
       )}
-      <FlashList
-        data={resultsRender}
-        renderItem={renderItem}
-        ListEmptyComponent={
-          isSendingReco ? (
-            <Icons.Loader />
-          ) : (
-            <View style={tw`p-4`}>
-              <Text textColor="muted" style={tw`text-center`}>
-                {upperFirst(t('common.messages.no_results'))}
-              </Text>
-            </View>
-          )
-        }
-        keyExtractor={({ item }) => item.id}
-        refreshing={isRefetching}
-        onRefresh={refetch}
-        maintainVisibleContentPosition={{
-          disabled: true,
-        }}
-        contentContainerStyle={[
-          tw`gap-2`,
-          {
-            paddingBottom: isLiquidGlassAvailable
-              ? insets.bottom + PADDING_VERTICAL + IOS_TOOLBAR_HEIGHT
-              : 0,
-            paddingHorizontal: PADDING_HORIZONTAL,
-          },
-        ]}
-        keyboardShouldPersistTaps="handled"
-      />
+      {isLoading ? (
+        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
+          <Icons.Loader />
+        </RefreshableStateContainer>
+      ) : isError ? (
+        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
+          <CardError />
+        </RefreshableStateContainer>
+      ) : resultsRender.length === 0 ? (
+        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
+          <CardEmpty icon={'📬'} label={t('help_hints.recos.send_to.empty')} />
+        </RefreshableStateContainer>
+      ) : (
+        <FlashList
+          data={resultsRender}
+          renderItem={renderItem}
+          keyExtractor={({ item }) => item.id}
+          refreshing={isRefetching}
+          onRefresh={refetch}
+          maintainVisibleContentPosition={{
+            disabled: true,
+          }}
+          contentContainerStyle={[
+            tw`gap-2`,
+            {
+              paddingBottom: isLiquidGlassAvailable
+                ? insets.bottom + PADDING_VERTICAL + IOS_TOOLBAR_HEIGHT
+                : 0,
+              paddingHorizontal: PADDING_HORIZONTAL,
+            },
+          ]}
+          keyboardShouldPersistTaps="handled"
+        />
+      )}
       {!isLiquidGlassAvailable && (
         <>
           <Animated.View style={animatedFooterStyle} />

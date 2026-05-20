@@ -353,6 +353,7 @@ const PlaylistScreen = () => {
         }
         poster={playlist?.poster || undefined}
         posterType={'playlist'}
+        emptyStateMessage={t('help_hints.playlists.items.empty')}
         // Search
         searchPlaceholder={upperFirst(t('pages.playlist.search.placeholder'))}
         fuseKeys={[

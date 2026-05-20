@@ -27,7 +27,9 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { userFeedPersonsInfiniteOptions } from '@libs/query-client';
 import { FeedPersonItem } from '@libs/api-js';
 import { uiBackgroundsOptions } from '../../../../api/ui/uiOptions';
-import Empty from '../../../../components/ui/empty';
+import { RefreshableStateContainer } from '../../../../components/ui/RefreshableStateContainer';
+import { CardError } from '../../../../components/cards/CardError';
+import { CardEmpty } from '../../../../components/cards/CardEmpty';
 
 const CastCrewFeedScreen = () => {
   const t = useTranslations();
@@ -35,13 +37,13 @@ const CastCrewFeedScreen = () => {
   const { bottomOffset, tabBarHeight, colors } = useTheme();
   const { user } = useAuth();
   const { data: backgrounds } = useQuery(uiBackgroundsOptions());
-  const { data, isLoading, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery({
-    ...userFeedPersonsInfiniteOptions({
-      userId: user?.id,
-    }),
-    enabled: !!user?.isPremium,
-  });
-  const loading = isLoading || data === undefined;
+  const { data, isLoading, fetchNextPage, hasNextPage, refetch, isRefetching, isError } =
+    useInfiniteQuery({
+      ...userFeedPersonsInfiniteOptions({
+        userId: user?.id,
+      }),
+      enabled: !!user?.isPremium,
+    });
   const feed = useMemo(() => data?.pages.flatMap((page) => page.data) || [], [data]);
   // Render
   const renderItem = useCallback(
@@ -71,17 +73,6 @@ const CastCrewFeedScreen = () => {
       }
     },
     [colors.muted],
-  );
-  const renderEmpty = useCallback(
-    () =>
-      loading ? (
-        <Icons.Loader />
-      ) : (
-        <Empty description="blablabla">
-          <Text>{t('help_hints.feed_person.message')}</Text>
-        </Empty>
-      ),
-    [loading, t],
   );
   const keyExtractor = useCallback(
     (item: FeedPersonItem) => `${item.media.id}:${item.type}-${item.person.id}`,
@@ -151,12 +142,48 @@ const CastCrewFeedScreen = () => {
       </View>
     );
   }
+
+  if (isLoading) {
+    return (
+      <RefreshableStateContainer
+        onRefresh={refetch}
+        refreshing={isRefetching}
+        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+      >
+        <Icons.Loader />
+      </RefreshableStateContainer>
+    );
+  }
+
+  if (isError) {
+    return (
+      <RefreshableStateContainer
+        onRefresh={refetch}
+        refreshing={isRefetching}
+        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+      >
+        <CardError />
+      </RefreshableStateContainer>
+    );
+  }
+
+  if (feed.length === 0) {
+    return (
+      <RefreshableStateContainer
+        onRefresh={refetch}
+        refreshing={isRefetching}
+        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+      >
+        <CardEmpty icon={'⚡️'} label={t('help_hints.feed_person.message')} />
+      </RefreshableStateContainer>
+    );
+  }
+
   return (
     <>
       <LegendList
         data={feed}
         renderItem={renderItem}
-        ListEmptyComponent={renderEmpty}
         contentContainerStyle={{
           paddingHorizontal: PADDING_HORIZONTAL,
           paddingBottom: bottomOffset + PADDING_VERTICAL,

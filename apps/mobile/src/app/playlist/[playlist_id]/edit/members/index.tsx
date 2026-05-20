@@ -29,6 +29,9 @@ import { usePlaylistMembers } from '../../../../../hooks/usePlaylistMembers';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { KeyboardAvoidingLegendList } from '@legendapp/list/keyboard-test';
 import { LegendListRef } from '@legendapp/list/react-native';
+import { RefreshableStateContainer } from '../../../../../components/ui/RefreshableStateContainer';
+import { CardError } from '../../../../../components/cards/CardError';
+import { CardEmpty } from '../../../../../components/cards/CardEmpty';
 
 const RightActions = ({
   drag,
@@ -99,6 +102,7 @@ const ModalPlaylistEditMembers = () => {
     isLoading,
     isRefetching,
     refetch,
+    isError,
   } = useQuery(
     playlistMembersAllOptions({
       playlistId: playlist?.id,
@@ -304,27 +308,38 @@ const ModalPlaylistEditMembers = () => {
           ],
         }}
       />
-      <KeyboardAvoidingLegendList
-        ref={listRef}
-        data={results}
-        renderItem={renderItem}
-        ListEmptyComponent={
-          loading ? (
-            <Icons.Loader />
-          ) : (
-            <View style={tw`flex-1 items-center p-4`}>
-              <Text textColor="muted" style={tw`text-center`}>
-                {upperFirst(t('common.messages.no_results'))}
-              </Text>
-            </View>
-          )
-        }
-        keyExtractor={(item) => item.id.toString()}
-        refreshing={isRefetching}
-        onRefresh={refetch}
-        contentContainerStyle={[tw`gap-2 flex-grow`, { paddingBottom: insets.bottom }]}
-        keyboardShouldPersistTaps="handled"
-      />
+      {isLoading ? (
+        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
+          <Icons.Loader />
+        </RefreshableStateContainer>
+      ) : isError ? (
+        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
+          <CardError />
+        </RefreshableStateContainer>
+      ) : results.length === 0 && search.length > 0 ? (
+        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
+          <View style={tw`flex-1 items-center p-4`}>
+            <Text textColor="muted" style={tw`text-center`}>
+              {upperFirst(t('common.messages.no_results'))}
+            </Text>
+          </View>
+        </RefreshableStateContainer>
+      ) : results.length === 0 ? (
+        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
+          <CardEmpty icon={'🧑‍🤝‍🧑'} label={t('help_hints.playlists.members.empty')} />
+        </RefreshableStateContainer>
+      ) : (
+        <KeyboardAvoidingLegendList
+          ref={listRef}
+          data={results}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          refreshing={isRefetching}
+          onRefresh={refetch}
+          contentContainerStyle={[tw`gap-2 flex-grow`, { paddingBottom: insets.bottom }]}
+          keyboardShouldPersistTaps="handled"
+        />
+      )}
     </>
   );
 };

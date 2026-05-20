@@ -1,6 +1,5 @@
 import { CardUser } from '../components/cards/CardUser';
 import { Button } from '../components/ui/Button';
-import { Text } from '../components/ui/text';
 import { View } from '../components/ui/view';
 import { Icons } from '../constants/Icons';
 import tw from '../lib/tw';
@@ -21,6 +20,9 @@ import { useAuth } from '../providers/AuthProvider';
 import { FollowRequest } from '@libs/api-js';
 import { useModalHeaderOptions } from '../hooks/useModalHeaderOptions';
 import { Stack } from 'expo-router';
+import { RefreshableStateContainer } from '../components/ui/RefreshableStateContainer';
+import { CardError } from '../components/cards/CardError';
+import { CardEmpty } from '../components/cards/CardEmpty';
 
 const FollowRequestsScreen = () => {
   const t = useTranslations();
@@ -30,11 +32,12 @@ const FollowRequestsScreen = () => {
     forceCross: true,
   });
   const { bottomOffset, tabBarHeight } = useTheme();
-  const { data, isLoading, isRefetching, refetch, hasNextPage, fetchNextPage } = useInfiniteQuery(
-    userFollowRequestsInfiniteOptions({
-      userId: user?.id,
-    }),
-  );
+  const { data, isLoading, isRefetching, refetch, hasNextPage, fetchNextPage, isError } =
+    useInfiniteQuery(
+      userFollowRequestsInfiniteOptions({
+        userId: user?.id,
+      }),
+    );
   const requests = useMemo(() => data?.pages.flatMap((page) => page.data) || [], [data]);
   const loading = requests === undefined || isLoading;
 
@@ -119,35 +122,38 @@ const FollowRequestsScreen = () => {
   return (
     <>
       <Stack.Screen options={modalHeaderOptions} />
-      <LegendList
-        data={requests || []}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.user.id}
-        refreshing={isRefetching}
-        onRefresh={refetch}
-        onEndReached={() => hasNextPage && fetchNextPage()}
-        ListEmptyComponent={
-          loading ? (
-            <Icons.Loader />
-          ) : (
-            <View>
-              <Text textColor="muted" style={tw`text-center`}>
-                {upperFirst(t('common.messages.no_follow_requests'))}
-              </Text>
-            </View>
-          )
-        }
-        contentContainerStyle={[
-          {
-            gap: GAP,
-            paddingHorizontal: PADDING_HORIZONTAL,
-            paddingTop: PADDING_VERTICAL,
-            paddingBottom: bottomOffset + PADDING_VERTICAL,
-            flexGrow: 1,
-          },
-        ]}
-        scrollIndicatorInsets={{ bottom: tabBarHeight }}
-      />
+      {isLoading ? (
+        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
+          <Icons.Loader />
+        </RefreshableStateContainer>
+      ) : isError ? (
+        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
+          <CardError />
+        </RefreshableStateContainer>
+      ) : requests.length === 0 ? (
+        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
+          <CardEmpty icon={'⏳'} label={t('help_hints.follow-requests.empty')} />
+        </RefreshableStateContainer>
+      ) : (
+        <LegendList
+          data={requests}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.user.id}
+          refreshing={isRefetching}
+          onRefresh={refetch}
+          onEndReached={() => hasNextPage && fetchNextPage()}
+          contentContainerStyle={[
+            {
+              gap: GAP,
+              paddingHorizontal: PADDING_HORIZONTAL,
+              paddingTop: PADDING_VERTICAL,
+              paddingBottom: bottomOffset + PADDING_VERTICAL,
+              flexGrow: 1,
+            },
+          ]}
+          scrollIndicatorInsets={{ bottom: tabBarHeight }}
+        />
+      )}
     </>
   );
 };

@@ -16,6 +16,8 @@ import { useAuth } from '../../../../../providers/AuthProvider';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { movieLogOptions, movieOptions, movieReviewsInfiniteOptions } from '@libs/query-client';
 import { ReviewMovieWithAuthor } from '@libs/api-js';
+import { CardError } from '../../../../../components/cards/CardError';
+import { CardEmpty } from '../../../../../components/cards/CardEmpty';
 
 interface sortBy {
   label: string;
@@ -51,16 +53,16 @@ const FilmReviews = () => {
       movieId: movieId,
     }),
   );
-  const { data, isLoading, fetchNextPage, hasNextPage, isRefetching, refetch } = useInfiniteQuery(
-    movieReviewsInfiniteOptions({
-      movieId: movieId,
-      filters: {
-        sort_by: sortBy.value,
-        sort_order: sortOrder,
-      },
-    }),
-  );
-  const loading = data === undefined || isLoading;
+  const { data, isLoading, fetchNextPage, hasNextPage, isRefetching, refetch, isError } =
+    useInfiniteQuery(
+      movieReviewsInfiniteOptions({
+        movieId: movieId,
+        filters: {
+          sort_by: sortBy.value,
+          sort_order: sortOrder,
+        },
+      }),
+    );
   const reviews = useMemo(() => data?.pages.flatMap((page) => page.data) || [], [data]);
   // Handlers
   const handleSortBy = useCallback(() => {
@@ -180,15 +182,15 @@ const FilmReviews = () => {
           </View>
         }
         ListEmptyComponent={
-          loading ? (
-            <Icons.Loader />
-          ) : (
-            <View style={tw`flex-1 items-center justify-center p-4`}>
-              <Text style={[tw`text-center`, { color: colors.mutedForeground }]}>
-                {upperFirst(t('common.messages.no_results'))}
-              </Text>
-            </View>
-          )
+          <View style={tw`flex-1 items-center justify-center`}>
+            {isLoading ? (
+              <Icons.Loader />
+            ) : isError ? (
+              <CardError />
+            ) : (
+              <CardEmpty icon={'📝'} label={t('common.messages.no_reviews')} />
+            )}
+          </View>
         }
         onEndReached={useCallback(
           () => hasNextPage && fetchNextPage(),
@@ -199,6 +201,7 @@ const FilmReviews = () => {
           paddingHorizontal: PADDING_HORIZONTAL,
           paddingBottom: bottomOffset + PADDING_VERTICAL,
           gap: GAP,
+          flexGrow: 1,
         }}
         maintainVisibleContentPosition={false}
         scrollIndicatorInsets={{ bottom: tabBarHeight }}

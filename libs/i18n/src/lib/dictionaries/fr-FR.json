@@ -29,9 +29,9 @@
       "remove_from_watchlist": "retirer de la watchlist",
       "no_results": "aucun résultat",
       "no_results_for": "Aucun résultat pour <strong>{query}</strong>",
-      "no_followees": "aucun suivi(e)",
-      "no_followers": "aucun follower",
-      "no_rating": "aucune note",
+      "no_followees": "Aucun suivi(e)",
+      "no_followers": "Aucun follower",
+      "no_rating": "Aucune note",
       "must_watch_to_review": "vous devez avoir vu cette oeuvre pour la noter",
       "review_cannot_be_empty": "la critique ne peut pas être vide",
       "no_activity": "aucune activité",
@@ -94,11 +94,11 @@
       "recent": "{gender, select, female {récente} other {récent}}{count, plural, one {} other {s}}",
       "popular": "{count, plural, one {populaire} other {populaires}}",
       "popularity": "popularité",
-      "no_reviews": "aucune critique",
-      "no_playlists": "aucune playlist",
-      "no_playlists_found": "aucune playlist trouvée",
-      "no_films": "aucun film",
-      "no_tv_series": "aucune série",
+      "no_reviews": "Aucune critique",
+      "no_playlists": "Aucune playlist",
+      "no_playlists_found": "Aucune playlist trouvée",
+      "no_films": "Aucun film",
+      "no_tv_series": "Aucune série",
       "view_activity": "voir l'activité",
       "comment_count": "{count, plural, one {# commentaire} other {# commentaires}}",
       "write_review": "écrire une critique",
@@ -1242,6 +1242,33 @@
     },
     "feed_person": {
       "message": "Pour voir de l'activité ici, vous devez suivre des personnes impliquées dans des films ou séries."
+    },
+    "playlists": {
+      "items": {
+        "empty": "Aucun film ou série dans cette playlist. Ajoutez en pour la remplir !"
+      },
+      "add_to": {
+        "empty": "Vous n'avez aucune playlist. Créez-en une pour y ajouter des films ou séries et les retrouver facilement !"
+      },
+      "saved": {
+        "empty": "Vous n'avez aucune playlist sauvegardée. Sauvegardez une playlist pour la retrouver facilement dans votre bibliothèque !"
+      },
+      "members": {
+        "empty": "Cette playlist n'a aucun membre. Ajoutez en pour collaborer à plusieurs sur une même playlist !",
+        "search": "Rechercher des utilisateurs à ajouter à la playlist..."
+      }
+    },
+    "follow-requests": {
+      "empty": "Vous n'avez aucune demande de suivi en attente. Lorsque vous en aurez, elles apparaîtront ici !"
+    },
+    "recos": {
+      "empty": "Vous n'avez aucune recommandation. Lorsque vous en aurez, elles apparaîtront ici !",
+      "send_to": {
+        "empty": "Vous n'avez personne à qui envoyer une reco. Vous devez être ami avec quelqu'un pour pouvoir lui envoyer une reco (suivi mutuel) !"
+      }
+    },
+    "bookmarks": {
+      "empty": "Vous n'avez aucun film ou série enregistré pour plus tard. Lorsque vous en aurez, ils apparaîtront ici !"
     }
   },
   "notifications": {

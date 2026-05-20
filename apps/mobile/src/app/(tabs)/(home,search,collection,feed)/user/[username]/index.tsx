@@ -30,6 +30,7 @@ import {
   userPlaylistsInfiniteOptions,
   userTvSeriesLogsInfiniteOptions,
 } from '@libs/query-client';
+import { CardEmpty } from '../../../../../components/cards/CardEmpty';
 
 const ProfileHeader = ({
   profile,
@@ -272,6 +273,7 @@ const ProfileScreen = () => {
           gap: GAP,
           paddingTop: navigationHeaderHeight,
           paddingBottom: bottomOffset + PADDING_VERTICAL,
+          flexGrow: 1,
         }}
         scrollIndicatorInsets={{
           bottom: tabBarHeight,
@@ -283,11 +285,11 @@ const ProfileScreen = () => {
         ) : areWidgetsLoading ? (
           <ActivityIndicator />
         ) : !hasActivity ? (
-          <View style={tw`items-center justify-center p-8 gap-2`}>
-            <Text style={[{ color: colors.mutedForeground }]}>
-              {upperFirst(t('common.messages.this_user_has_no_activity'))}
-            </Text>
-          </View>
+          <CardEmpty
+            icon={'⚡️'}
+            label={t('common.messages.this_user_has_no_activity')}
+            style={tw`flex-1`}
+          />
         ) : (
           <>
             <ProfileWidgetLogMovie

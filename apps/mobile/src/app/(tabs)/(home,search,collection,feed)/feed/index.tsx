@@ -1,5 +1,4 @@
 import tw from '../../../../lib/tw';
-import { upperFirst } from 'lodash';
 import { LegendList, LegendListRef } from '@legendapp/list/react-native';
 import { View } from '../../../../components/ui/view';
 import { Text } from '../../../../components/ui/text';
@@ -18,18 +17,20 @@ import { useAuth } from '../../../../providers/AuthProvider';
 import { FeedItem } from '@libs/api-js';
 import { CardFeedLogTvSeries } from '../../../../components/cards/feed/CardFeedLogTvSeries';
 import { meFeedInfiniteOptions } from '@libs/query-client';
-import Empty from '../../../../components/ui/empty';
+import { RefreshableStateContainer } from '../../../../components/ui/RefreshableStateContainer';
+import { CardError } from '../../../../components/cards/CardError';
+import { CardEmpty } from '../../../../components/cards/CardEmpty';
 
 const FeedScreen = () => {
   const t = useTranslations();
   const { user } = useAuth();
   const { bottomOffset, tabBarHeight, colors } = useTheme();
-  const { data, isLoading, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery(
-    meFeedInfiniteOptions({
-      userId: user?.id,
-    }),
-  );
-  const loading = isLoading || data === undefined;
+  const { data, isLoading, fetchNextPage, hasNextPage, refetch, isRefetching, isError } =
+    useInfiniteQuery(
+      meFeedInfiniteOptions({
+        userId: user?.id,
+      }),
+    );
   const feed = useMemo(() => data?.pages.flatMap((page) => page.data) ?? [], [data]);
   // REFs
   const scrollRef = useRef<LegendListRef>(null);
@@ -61,24 +62,48 @@ const FeedScreen = () => {
     },
     [colors.muted],
   );
-  const renderEmpty = useCallback(
-    () =>
-      loading ? (
+
+  if (isLoading) {
+    return (
+      <RefreshableStateContainer
+        onRefresh={refetch}
+        refreshing={isRefetching}
+        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+      >
         <Icons.Loader />
-      ) : (
-        <Empty description="blablabla">
-          <Text>{t('help_hints.feed.message')}</Text>
-        </Empty>
-      ),
-    [t, loading],
-  );
+      </RefreshableStateContainer>
+    );
+  }
+
+  if (isError) {
+    return (
+      <RefreshableStateContainer
+        onRefresh={refetch}
+        refreshing={isRefetching}
+        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+      >
+        <CardError />
+      </RefreshableStateContainer>
+    );
+  }
+
+  if (feed.length === 0) {
+    return (
+      <RefreshableStateContainer
+        onRefresh={refetch}
+        refreshing={isRefetching}
+        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+      >
+        <CardEmpty icon={'⚡️'} label={t('help_hints.feed.message')} />
+      </RefreshableStateContainer>
+    );
+  }
 
   return (
     <LegendList
       ref={scrollRef}
       data={feed}
       renderItem={renderItem}
-      ListEmptyComponent={renderEmpty}
       contentContainerStyle={{
         paddingHorizontal: PADDING_HORIZONTAL,
         paddingBottom: bottomOffset + PADDING_VERTICAL,

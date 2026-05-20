@@ -3,7 +3,7 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useTranslations } from 'use-intl';
 import { upperFirst } from 'lodash';
 import { useAuth } from '../../../../../providers/AuthProvider';
-import { Text, useWindowDimensions, View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import tw from '../../../../../lib/tw';
 import { useTheme } from '../../../../../providers/ThemeProvider';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
@@ -16,6 +16,8 @@ import { CardPlaylist } from '../../../../../components/cards/CardPlaylist';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { tvSeriesOptions, tvSeriesPlaylistsInfiniteOptions } from '@libs/query-client';
 import { PlaylistWithOwner } from '@libs/api-js';
+import { CardError } from '../../../../../components/cards/CardError';
+import { CardEmpty } from '../../../../../components/cards/CardEmpty';
 
 interface sortBy {
   label: string;
@@ -44,16 +46,16 @@ const TvSeriesPlaylists = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   // Requests
   const { data: tvSeries } = useQuery(tvSeriesOptions({ tvSeriesId: seriesId }));
-  const { data, isLoading, fetchNextPage, hasNextPage, isRefetching, refetch } = useInfiniteQuery(
-    tvSeriesPlaylistsInfiniteOptions({
-      tvSeriesId: seriesId,
-      filters: {
-        sort_by: sortBy.value,
-        sort_order: sortOrder,
-      },
-    }),
-  );
-  const loading = data === undefined || isLoading;
+  const { data, isLoading, fetchNextPage, hasNextPage, isRefetching, refetch, isError } =
+    useInfiniteQuery(
+      tvSeriesPlaylistsInfiniteOptions({
+        tvSeriesId: seriesId,
+        filters: {
+          sort_by: sortBy.value,
+          sort_order: sortOrder,
+        },
+      }),
+    );
   const playlists = useMemo(() => data?.pages.flatMap((page) => page.data) || [], [data]);
   // Handlers
   const handleSortBy = useCallback(() => {
@@ -153,15 +155,15 @@ const TvSeriesPlaylists = () => {
           </View>
         }
         ListEmptyComponent={
-          loading ? (
-            <Icons.Loader />
-          ) : (
-            <View style={tw`flex-1 items-center justify-center p-4`}>
-              <Text style={[tw`text-center`, { color: colors.mutedForeground }]}>
-                {upperFirst(t('common.messages.no_results'))}
-              </Text>
-            </View>
-          )
+          <View style={tw`flex-1 items-center justify-center`}>
+            {isLoading ? (
+              <Icons.Loader />
+            ) : isError ? (
+              <CardError />
+            ) : (
+              <CardEmpty icon={'📚'} label={t('common.messages.no_playlists')} />
+            )}
+          </View>
         }
         numColumns={
           SCREEN_WIDTH < 360

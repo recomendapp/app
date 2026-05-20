@@ -1,10 +1,9 @@
 import { CardPlaylist } from '../../../../../components/cards/CardPlaylist';
 import { useAuth } from '../../../../../providers/AuthProvider';
 import tw from '../../../../../lib/tw';
-import { Text, useWindowDimensions, View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import { LegendList } from '@legendapp/list/react-native';
 import { Icons } from '../../../../../constants/Icons';
-import { upperFirst } from 'lodash';
 import { useTheme } from '../../../../../providers/ThemeProvider';
 import { useTranslations } from 'use-intl';
 import { useCallback, useMemo } from 'react';
@@ -12,17 +11,21 @@ import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globa
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { userPlaylistsSavedInfiniteOptions } from '@libs/query-client';
 import { PlaylistWithOwner } from '@libs/api-js';
+import { RefreshableStateContainer } from '../../../../../components/ui/RefreshableStateContainer';
+import { CardError } from '../../../../../components/cards/CardError';
+import { CardEmpty } from '../../../../../components/cards/CardEmpty';
 
 const CollectionSavedScreen = () => {
   const { user } = useAuth();
   const t = useTranslations();
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const { colors, bottomOffset, tabBarHeight } = useTheme();
-  const { data, isLoading, fetchNextPage, refetch, hasNextPage } = useInfiniteQuery(
-    userPlaylistsSavedInfiniteOptions({
-      userId: user?.id,
-    }),
-  );
+  const { data, isLoading, fetchNextPage, refetch, hasNextPage, isError, isRefetching } =
+    useInfiniteQuery(
+      userPlaylistsSavedInfiniteOptions({
+        userId: user?.id,
+      }),
+    );
   const loading = isLoading || data === undefined;
   const playlists = useMemo(() => data?.pages.flatMap((page) => page.data) ?? [], [data]);
 
@@ -34,21 +37,45 @@ const CollectionSavedScreen = () => {
     ),
     [],
   );
+  if (isLoading) {
+    return (
+      <RefreshableStateContainer
+        onRefresh={refetch}
+        refreshing={isRefetching}
+        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+      >
+        <Icons.Loader />
+      </RefreshableStateContainer>
+    );
+  }
+
+  if (isError) {
+    return (
+      <RefreshableStateContainer
+        onRefresh={refetch}
+        refreshing={isRefetching}
+        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+      >
+        <CardError />
+      </RefreshableStateContainer>
+    );
+  }
+
+  if (playlists.length === 0) {
+    return (
+      <RefreshableStateContainer
+        onRefresh={refetch}
+        refreshing={isRefetching}
+        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+      >
+        <CardEmpty icon={'📚'} label={t('help_hints.playlists.saved.empty')} />
+      </RefreshableStateContainer>
+    );
+  }
   return (
     <LegendList
       data={playlists}
       renderItem={renderItem}
-      ListEmptyComponent={
-        loading ? (
-          <Icons.Loader />
-        ) : (
-          <View style={tw`flex-1 items-center justify-center p-4`}>
-            <Text style={[tw`text-center`, { color: colors.mutedForeground }]}>
-              {upperFirst(t('common.messages.no_playlists_saved'))}
-            </Text>
-          </View>
-        )
-      }
       onRefresh={refetch}
       numColumns={
         SCREEN_WIDTH < 360

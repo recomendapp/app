@@ -204,6 +204,7 @@ const MyRecosScreen = () => {
             getFn: (item) => (item.type === 'movie' ? item.media.title : item.media.name) || '',
           },
         ]}
+        emptyStateMessage={t('help_hints.recos.empty')}
         // Sort
         sortByOptions={sortByOptions}
         // Getters

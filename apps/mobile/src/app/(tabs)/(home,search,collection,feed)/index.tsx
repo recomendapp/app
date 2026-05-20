@@ -186,6 +186,13 @@ const HomeScreen = () => {
           title: upperFirst(t('common.messages.home')),
           headerTitle: () => <></>,
           headerLeft: () => <HeaderLeft />,
+          unstable_headerLeftItems: () => [
+            {
+              type: 'custom',
+              element: <HeaderLeft />,
+              hidesSharedBackground: true,
+            },
+          ],
           headerRight: () => <HeaderRight />,
           unstable_headerRightItems: (props) => [
             ...(isDownloading
