@@ -1,294 +1,308 @@
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuAction, SidebarMenuButton, SidebarMenuItem, SidebarSeparator, useSidebar } from "@/components/ui/sidebar";
-import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
-import { Icons } from "@/config/icons";
-import { useAuth } from "@/context/auth-context";
-import { Link, usePathname } from "@/lib/i18n/navigation";
-import { cn } from "@/lib/utils";
-import { upperFirst } from "lodash";
-import { BookmarkIcon, SendIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { useEffect, useMemo } from "react";
-import { useInView } from "react-intersection-observer";
-import { useUI } from "@/context/ui-context";
-import { ContextMenuPlaylist } from "@/components/ContextMenu/ContextMenuPlaylist";
-import { useModal } from "@/context/modal-context";
-import { ModalPlaylist } from "@/components/Modals/playlists/ModalPlaylist";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { userPlaylistsInfiniteOptions } from "@libs/query-client";
+import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuAction,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarSeparator,
+  useSidebar,
+} from '@/components/ui/sidebar';
+import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
+import { Icons } from '@/config/icons';
+import { useAuth } from '@/context/auth-context';
+import { Link, usePathname } from '@/lib/i18n/navigation';
+import { cn } from '@/lib/utils';
+import { upperFirst } from 'lodash';
+import { BookmarkIcon, SendIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect, useMemo } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { useUI } from '@/context/ui-context';
+import { ContextMenuPlaylist } from '@/components/ContextMenu/ContextMenuPlaylist';
+import { useModal } from '@/context/modal-context';
+import { ModalPlaylist } from '@/components/Modals/playlists/ModalPlaylist';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { userPlaylistsInfiniteOptions } from '@libs/query-client';
 
 const SidebarCollectionContainerIcon = ({
-	className,
-	children,
-	from,
-	to,
-} : {
-	className?: string;
-	children: React.ReactNode;
-	from?: string;
-	to?: string;
+  className,
+  children,
+  from,
+  to,
+}: {
+  className?: string;
+  children: React.ReactNode;
+  from?: string;
+  to?: string;
 }) => {
-	return (
-	  <div
-		style={{
-		  backgroundImage: (from && to) ? `linear-gradient(to top right, ${from}, ${to})` : 'none',
-		}}
-		className={cn(
-		  "w-12 relative overflow-hidden",
-		  "aspect-square rounded-md flex items-center justify-center shrink-0 text-white",
-		  className
-		)}
-	  >
-		{children}
-	  </div>
-	);
-}
+  return (
+    <div
+      style={{
+        backgroundImage: from && to ? `linear-gradient(to top right, ${from}, ${to})` : 'none',
+      }}
+      className={cn(
+        'w-12 relative overflow-hidden',
+        'aspect-square rounded-md flex items-center justify-center shrink-0 text-white',
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
+};
 
 export const SidebarLeftRoutes = () => {
-	const { user } = useAuth();
-	const { open } = useSidebar();
-	const { isMobile } = useUI();
-	const t = useTranslations('common');
-	const pathname = usePathname();
-	const { openModal } = useModal();
-	const { ref, inView } = useInView();
+  const { user } = useAuth();
+  const { open } = useSidebar();
+  const { isMobile } = useUI();
+  const t = useTranslations('common');
+  const pathname = usePathname();
+  const { openModal } = useModal();
+  const { ref, inView } = useInView();
 
-	const routes = useMemo(
-		() => [
-		  {
-			icon: Icons.home,
-			label: upperFirst(t('messages.home')),
-			active: pathname === '/',
-			href: '/',
-		  },
-		  {
-			icon: Icons.explore,
-			label: upperFirst(t('messages.explore')),
-			active: pathname === '/explore',
-			href: '/explore',
-		  },
-		  {
-			icon: Icons.feed,
-			label: upperFirst(t('messages.feed')),
-			active: pathname.startsWith('/feed'),
-			href: '/feed',
-		  },
-		  {
-			icon: Icons.search,
-			label: upperFirst(t('messages.search')),
-			active: pathname.startsWith('/search') || pathname.startsWith('/movie'),
-			href: '/search',
-		  },
-		],
-		[pathname, t]
-	);
+  const routes = useMemo(
+    () => [
+      {
+        icon: Icons.home,
+        label: upperFirst(t('messages.home')),
+        active: pathname === '/',
+        href: '/',
+      },
+      {
+        icon: Icons.explore,
+        label: upperFirst(t('messages.explore')),
+        active: pathname === '/explore',
+        href: '/explore',
+      },
+      {
+        icon: Icons.feed,
+        label: upperFirst(t('messages.feed')),
+        active: pathname.startsWith('/feed'),
+        href: '/feed',
+      },
+      {
+        icon: Icons.search,
+        label: upperFirst(t('messages.search')),
+        active: pathname.startsWith('/search') || pathname.startsWith('/movie'),
+        href: '/search',
+      },
+    ],
+    [pathname, t],
+  );
 
-	const collectionRoutes = useMemo(() => [
-		{
-			icon: <SendIcon fill="#fff" className="w-2/5 h-2/5" />,
-			bgFrom: '#FBE773',
-			bgTo: '#F18E43',
-			label: upperFirst(t('messages.my_recos')),
-			active: pathname.startsWith('/collection/my-recos'),
-			href: '/collection/my-recos',
-		},
-		{
-			icon: <BookmarkIcon fill="#fff" className="w-2/5 h-2/5" />,
-			bgFrom: '#39BAED',
-			bgTo: '#32509e',
-			label: upperFirst(t('messages.for_later')),
-			active: pathname.startsWith('/collection/bookmarks'),
-			href: '/collection/bookmarks',
-		},
-	], [pathname, t]);
+  const collectionRoutes = useMemo(
+    () => [
+      {
+        icon: <SendIcon fill="#fff" className="w-2/5 h-2/5" />,
+        bgFrom: '#FBE773',
+        bgTo: '#F18E43',
+        label: upperFirst(t('messages.my_recos')),
+        active: pathname.startsWith('/collection/my-recos'),
+        href: '/collection/my-recos',
+      },
+      {
+        icon: <BookmarkIcon fill="#fff" className="w-2/5 h-2/5" />,
+        bgFrom: '#39BAED',
+        bgTo: '#32509e',
+        label: upperFirst(t('messages.for_later')),
+        active: pathname.startsWith('/collection/bookmarks'),
+        href: '/collection/bookmarks',
+      },
+    ],
+    [pathname, t],
+  );
 
-	const unloggedRoutes = useMemo(() => [
-		{
-			icon: Icons.shop,
-			label: upperFirst(t('messages.shop')),
-			active: false,
-			href: 'https://shop.recomend.app',
-			target: '_blank',
-		},
-		{
-			icon: Icons.help,
-			label: upperFirst(t('messages.help')),
-			active: false,
-			href: 'https://help.recomend.app',
-			target: '_blank',
-		  },
-		  {
-			icon: Icons.about,
-			label: upperFirst(t('messages.about')),
-			active: pathname.startsWith('/about'),
-			href: '/about',
-			target: undefined,
-		  },
-		  {
-			icon: Icons.legal,
-			label: upperFirst(t('messages.legal')),
-			active: pathname.startsWith('/legal'),
-			href: '/legal/terms-of-use',
-			target: undefined,
-		  }
-	], [pathname, t]);
+  const unloggedRoutes = useMemo(
+    () => [
+      {
+        icon: Icons.about,
+        label: upperFirst(t('messages.about')),
+        active: pathname.startsWith('/about'),
+        href: '/about',
+        target: undefined,
+      },
+      {
+        icon: Icons.legal,
+        label: upperFirst(t('messages.legal')),
+        active: pathname.startsWith('/legal'),
+        href: '/legal/terms-of-use',
+        target: undefined,
+      },
+    ],
+    [pathname, t],
+  );
 
-	const {
-		data: playlists,
-		fetchNextPage,
-		hasNextPage,
-	} = useInfiniteQuery(userPlaylistsInfiniteOptions({
-		userId: user?.id,
-		filters: {
-			sort_by: "updated_at",
-			sort_order: "desc",
-		}
-	}));
+  const {
+    data: playlists,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(
+    userPlaylistsInfiniteOptions({
+      userId: user?.id,
+      filters: {
+        sort_by: 'updated_at',
+        sort_order: 'desc',
+      },
+    }),
+  );
 
-	// Fix for sidebar issue with mobile and desktop using different open state
-	const sidebarOpen = useMemo(() => {
-		if (!isMobile) {
-			return open;
-		} else {
-			return true;
-		}
-	}, [isMobile, open]);
+  // Fix for sidebar issue with mobile and desktop using different open state
+  const sidebarOpen = useMemo(() => {
+    if (!isMobile) {
+      return open;
+    } else {
+      return true;
+    }
+  }, [isMobile, open]);
 
-	useEffect(() => {
-		if (inView && hasNextPage) {
-			fetchNextPage();
-		}
-	}, [inView, hasNextPage, playlists, fetchNextPage]);
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, playlists, fetchNextPage]);
 
-	return (
-		<>
-		<SidebarGroup>
-			<SidebarGroupLabel>{upperFirst(t('messages.navigation'))}</SidebarGroupLabel>
-			<nav>
-			<SidebarMenu>
-				{/* className={`${!sidebarOpen ? "items-center" : ""}`} */}
-				{routes.map((route, i) => (
-					<SidebarMenuItem key={i}>
-						<SidebarMenuButton tooltip={route.label} isActive={route.active} asChild>
-							<Link href={route.href}>
-								<route.icon />
-								<span className={`line-clamp-1 transition-all duration-300 ${!sidebarOpen ? "opacity-0 hidden" : "opacity-100"}`}>
-									{route.label}
-								</span>
-							</Link>
-						</SidebarMenuButton>
-					</SidebarMenuItem>
-				))}
-			</SidebarMenu>
-			</nav>
-		</SidebarGroup>
-		<SidebarSeparator />
-		<SidebarGroup className="overflow-hidden">
-			{user ? (
-			<SidebarMenu className="h-full">
-				<SidebarMenuItem>
-					<SidebarMenuButton tooltip={upperFirst(t('messages.library'))} isActive={pathname === '/collection'} asChild>
-						<Link href={"/collection"}>
-							<Icons.Library />
-							<span>
-								{upperFirst(t('messages.library'))}
-							</span>
-						</Link>
-					</SidebarMenuButton>
-					<SidebarMenuAction onClick={() => openModal(ModalPlaylist, {})}>
-						<Icons.add />
-						<span className="sr-only">{upperFirst(t('messages.create_a_playlist'))}</span>
-					</SidebarMenuAction>
-				</SidebarMenuItem>
-				<ScrollArea className="overflow-y-auto">
-					<div className={cn(
-						"flex flex-col transition-all",
-						!sidebarOpen ? "gap-1" : ""
-					)}>
-
-						{collectionRoutes.map((route, i) => (
-							<SidebarMenuItem key={i}>
-								<SidebarMenuButton tooltip={route.label} isActive={route.active} className="h-fit group-data-[collapsible=icon]:p-0!" asChild>
-									<Link href={route.href}>
-										<SidebarCollectionContainerIcon from={route.bgFrom} to={route.bgTo} className={`${sidebarOpen ? "w-12" : "w-8"}`}>
-											{route.icon}
-										</SidebarCollectionContainerIcon>
-										<span>
-											{route.label}
-										</span>
-									</Link>
-								</SidebarMenuButton>
-							</SidebarMenuItem>
-						))}
-						{playlists?.pages[0]?.data.length ? (
-							playlists?.pages.map(({ data }, i) => (
-								data?.map((playlist, index) => (
-								<SidebarMenuItem
-								key={index}
-								ref={(i === playlists.pages.length - 1 && index === data.length - 1) ? ref : undefined }
-								>
-									<ContextMenuPlaylist playlist={playlist}>
-										<SidebarMenuButton
-											tooltip={{
-												children: (
-													<>
-														{playlist.title}
-														<span className="ml-4 text-muted-foreground">
-															{playlist.itemsCount}
-														</span>
-													</>
-												)
-											}}
-											className="h-fit group-data-[collapsible=icon]:p-0!"
-											isActive={pathname === `/playlist/${playlist.id}`}
-											asChild
-										>
-											<Link href={`/playlist/${playlist.id}`}>
-												<SidebarCollectionContainerIcon className={`${sidebarOpen ? "w-12" : "w-8"}`}>
-													<ImageWithFallback
-														src={playlist.poster ?? ''}
-														alt={playlist.title ?? ''}
-														fill
-														className='object-cover'
-														type='playlist'
-													/>
-												</SidebarCollectionContainerIcon>
-												<div>
-													<p className="line-clamp-1">{playlist.title}</p>
-													<p className='text-muted-foreground line-clamp-1'>
-														{t('messages.item_count', { count: playlist.itemsCount ?? 0 })}
-													</p>
-												</div>
-											</Link>
-										</SidebarMenuButton>
-									</ContextMenuPlaylist>
-								</SidebarMenuItem>
-								))
-							))
-						) : null}
-					</div>
-				</ScrollArea>
-			</SidebarMenu>
-			) : (
-			<>
-				<SidebarGroupLabel>{upperFirst(t('messages.see_more'))}</SidebarGroupLabel>
-				<SidebarMenu>
-					{unloggedRoutes.map((route, i) => (
-						<SidebarMenuItem key={i}>
-							<SidebarMenuButton tooltip={route.label} isActive={route.active}  asChild>
-								<Link href={route.href} target={route.target}>
-									<route.icon />
-									<span>
-										{route.label}
-									</span>
-								</Link>
-							</SidebarMenuButton>
-						</SidebarMenuItem>
-					))}
-				</SidebarMenu>
-			</>
-			)}
-		</SidebarGroup>
-		</>
-	);
+  return (
+    <>
+      <SidebarGroup>
+        <SidebarGroupLabel>{upperFirst(t('messages.navigation'))}</SidebarGroupLabel>
+        <nav>
+          <SidebarMenu>
+            {/* className={`${!sidebarOpen ? "items-center" : ""}`} */}
+            {routes.map((route, i) => (
+              <SidebarMenuItem key={i}>
+                <SidebarMenuButton tooltip={route.label} isActive={route.active} asChild>
+                  <Link href={route.href}>
+                    <route.icon />
+                    <span
+                      className={`line-clamp-1 transition-all duration-300 ${!sidebarOpen ? 'opacity-0 hidden' : 'opacity-100'}`}
+                    >
+                      {route.label}
+                    </span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </nav>
+      </SidebarGroup>
+      <SidebarSeparator />
+      <SidebarGroup className="overflow-hidden">
+        {user ? (
+          <SidebarMenu className="h-full">
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                tooltip={upperFirst(t('messages.library'))}
+                isActive={pathname === '/collection'}
+                asChild
+              >
+                <Link href={'/collection'}>
+                  <Icons.Library />
+                  <span>{upperFirst(t('messages.library'))}</span>
+                </Link>
+              </SidebarMenuButton>
+              <SidebarMenuAction onClick={() => openModal(ModalPlaylist, {})}>
+                <Icons.add />
+                <span className="sr-only">{upperFirst(t('messages.create_a_playlist'))}</span>
+              </SidebarMenuAction>
+            </SidebarMenuItem>
+            <ScrollArea className="overflow-y-auto">
+              <div className={cn('flex flex-col transition-all', !sidebarOpen ? 'gap-1' : '')}>
+                {collectionRoutes.map((route, i) => (
+                  <SidebarMenuItem key={i}>
+                    <SidebarMenuButton
+                      tooltip={route.label}
+                      isActive={route.active}
+                      className="h-fit group-data-[collapsible=icon]:p-0!"
+                      asChild
+                    >
+                      <Link href={route.href}>
+                        <SidebarCollectionContainerIcon
+                          from={route.bgFrom}
+                          to={route.bgTo}
+                          className={`${sidebarOpen ? 'w-12' : 'w-8'}`}
+                        >
+                          {route.icon}
+                        </SidebarCollectionContainerIcon>
+                        <span>{route.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+                {playlists?.pages[0]?.data.length
+                  ? playlists?.pages.map(({ data }, i) =>
+                      data?.map((playlist, index) => (
+                        <SidebarMenuItem
+                          key={index}
+                          ref={
+                            i === playlists.pages.length - 1 && index === data.length - 1
+                              ? ref
+                              : undefined
+                          }
+                        >
+                          <ContextMenuPlaylist playlist={playlist}>
+                            <SidebarMenuButton
+                              tooltip={{
+                                children: (
+                                  <>
+                                    {playlist.title}
+                                    <span className="ml-4 text-muted-foreground">
+                                      {playlist.itemsCount}
+                                    </span>
+                                  </>
+                                ),
+                              }}
+                              className="h-fit group-data-[collapsible=icon]:p-0!"
+                              isActive={pathname === `/playlist/${playlist.id}`}
+                              asChild
+                            >
+                              <Link href={`/playlist/${playlist.id}`}>
+                                <SidebarCollectionContainerIcon
+                                  className={`${sidebarOpen ? 'w-12' : 'w-8'}`}
+                                >
+                                  <ImageWithFallback
+                                    src={playlist.poster ?? ''}
+                                    alt={playlist.title ?? ''}
+                                    fill
+                                    className="object-cover"
+                                    type="playlist"
+                                  />
+                                </SidebarCollectionContainerIcon>
+                                <div>
+                                  <p className="line-clamp-1">{playlist.title}</p>
+                                  <p className="text-muted-foreground line-clamp-1">
+                                    {t('messages.item_count', { count: playlist.itemsCount ?? 0 })}
+                                  </p>
+                                </div>
+                              </Link>
+                            </SidebarMenuButton>
+                          </ContextMenuPlaylist>
+                        </SidebarMenuItem>
+                      )),
+                    )
+                  : null}
+              </div>
+            </ScrollArea>
+          </SidebarMenu>
+        ) : (
+          <>
+            <SidebarGroupLabel>{upperFirst(t('messages.see_more'))}</SidebarGroupLabel>
+            <SidebarMenu>
+              {unloggedRoutes.map((route, i) => (
+                <SidebarMenuItem key={i}>
+                  <SidebarMenuButton tooltip={route.label} isActive={route.active} asChild>
+                    <Link href={route.href} target={route.target}>
+                      <route.icon />
+                      <span>{route.label}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </>
+        )}
+      </SidebarGroup>
+    </>
+  );
 };

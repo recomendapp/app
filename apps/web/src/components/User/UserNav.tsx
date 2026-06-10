@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -10,8 +10,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Link } from "@/lib/i18n/navigation";
+} from '@/components/ui/dropdown-menu';
+import { Link } from '@/lib/i18n/navigation';
 import { useAuth } from '@/context/auth-context';
 import { UserAvatar } from './UserAvatar';
 import { useTranslations } from 'next-intl';
@@ -31,53 +31,38 @@ type Route = {
   className?: string;
 };
 
-export function UserNav({
-  className,
-} : {
-  className?: string;
-}) {
+export function UserNav({ className }: { className?: string }) {
   const { user, logout } = useAuth();
   const t = useTranslations();
   const [isLoading, setIsLoading] = useState(false);
 
-  const routes = useMemo((): Route[] => [
-    {
-      icon: Icons.shop,
-      label: upperFirst(t('common.messages.shop')),
-      href: 'https://shop.recomend.app/',
-      shortcut: '↗',
-      target: '_blank',
-    },
-    {
-      icon: Icons.help,
-      label: upperFirst(t('common.messages.help')),
-      href: 'https://help.recomend.app/',
-      shortcut: '↗',
-      target: '_blank',
-    },
-    {
-      icon: Icons.about,
-      label: upperFirst(t('common.messages.about')),
-      href: '/about',
-    },
-    {
-      icon: Icons.legal,
-      label: upperFirst(t('common.messages.legal')),
-      href: '/legal/terms-of-use',
-    },
-    {
-      icon: Icons.premium,
-      label: upperFirst(t('common.messages.upgrade_to_plan', { plan: 'Premium' })),
-      href: '/upgrade',
-      visible: !user?.isPremium,
-      className: 'fill-accent-blue text-accent-blue!',
-    },
-    {
-      icon: Icons.settings,
-      label: upperFirst(t('common.messages.setting', { count: 0 })),
-      href: '/settings/profile',
-    },
-  ], [user, t]);
+  const routes = useMemo(
+    (): Route[] => [
+      {
+        icon: Icons.about,
+        label: upperFirst(t('common.messages.about')),
+        href: '/about',
+      },
+      {
+        icon: Icons.legal,
+        label: upperFirst(t('common.messages.legal')),
+        href: '/legal/terms-of-use',
+      },
+      {
+        icon: Icons.premium,
+        label: upperFirst(t('common.messages.upgrade_to_plan', { plan: 'Premium' })),
+        href: '/upgrade',
+        visible: !user?.isPremium,
+        className: 'fill-accent-blue text-accent-blue!',
+      },
+      {
+        icon: Icons.settings,
+        label: upperFirst(t('common.messages.setting', { count: 0 })),
+        href: '/settings/profile',
+      },
+    ],
+    [user, t],
+  );
 
   const handleLogout = useCallback(async () => {
     try {
@@ -93,14 +78,14 @@ export function UserNav({
       <Button variant={'outline'}>
         <Spinner />
       </Button>
-    );  
+    );
   }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className={cn("relative", className)}>
-          <UserAvatar className='h-6 w-6' avatarUrl={user.avatar} username={user.username} />
+        <Button variant="outline" className={cn('relative', className)}>
+          <UserAvatar className="h-6 w-6" avatarUrl={user.avatar} username={user.username} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -109,33 +94,31 @@ export function UserNav({
             <Link href={'/@' + user?.username} className="flex gap-2">
               <UserAvatar avatarUrl={user.avatar} username={user.username} />
               <div className="flex flex-col space-y-1 items-start!">
-                <p className="text-sm font-medium leading-none line-clamp-1">
-                  {user?.name}
-                </p>
-                <p className="text-xs leading-none text-muted-foreground">
-                  @{user?.username}
-                </p>
+                <p className="text-sm font-medium leading-none line-clamp-1">{user?.name}</p>
+                <p className="text-xs leading-none text-muted-foreground">@{user?.username}</p>
               </div>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          {routes.filter((route) => route.visible !== false).map((route, i) => (
-            <DropdownMenuItem key={i} className={route.className} asChild>
-              <Link href={route.href} target={route.target}>
-                <route.icon className={"w-4"} />
-                <span>{route.label}</span>
-                {route.shortcut && <DropdownMenuShortcut>{route.shortcut}</DropdownMenuShortcut>}
-              </Link>
-            </DropdownMenuItem>
-          ))}
+          {routes
+            .filter((route) => route.visible !== false)
+            .map((route, i) => (
+              <DropdownMenuItem key={i} className={route.className} asChild>
+                <Link href={route.href} target={route.target}>
+                  <route.icon className={'w-4'} />
+                  <span>{route.label}</span>
+                  {route.shortcut && <DropdownMenuShortcut>{route.shortcut}</DropdownMenuShortcut>}
+                </Link>
+              </DropdownMenuItem>
+            ))}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout} variant="destructive" disabled={isLoading}>
           <Icons.logout className="w-4" />
           {upperFirst(t('common.messages.logout'))}
-          </DropdownMenuItem>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

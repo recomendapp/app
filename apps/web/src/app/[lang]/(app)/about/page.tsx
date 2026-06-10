@@ -1,33 +1,32 @@
-import Marquee from "react-fast-marquee";
+import Marquee from 'react-fast-marquee';
 import { getTranslations } from 'next-intl/server';
-import { Link } from "@/lib/i18n/navigation";
+import { Link } from '@/lib/i18n/navigation';
 import { upperFirst } from 'lodash';
 import { Metadata } from 'next';
-import { SupportedLocale } from "@libs/i18n";
+import { SupportedLocale } from '@libs/i18n';
 
-export const generateMetadata = async (
-  props: {
-    params: Promise<{
-      lang: string;
-    }>;
-    }
-): Promise<Metadata> => {
+export const generateMetadata = async (props: {
+  params: Promise<{
+    lang: string;
+  }>;
+}): Promise<Metadata> => {
   const params = await props.params;
   const t = await getTranslations({ locale: params.lang as SupportedLocale, namespace: 'common' });
   return {
     title: upperFirst(t('messages.about')),
   };
-}
+};
 
-const About = async (
-  props: {
-    params: Promise<{
-      lang: string;
-    }>;
-  }
-) => {
+const About = async (props: {
+  params: Promise<{
+    lang: string;
+  }>;
+}) => {
   const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale, namespace: 'pages.about' });
+  const t = await getTranslations({
+    locale: params.lang as SupportedLocale,
+    namespace: 'pages.about',
+  });
 
   const resources = [
     {
@@ -100,13 +99,13 @@ const About = async (
     <div className="flex flex-col gap-4 items-center text-justify transition-all">
       {/* ABOUT */}
       <section id="about" className="w-full flex flex-col items-center gap-2">
-        <Marquee pauseOnHover className='bg-accent-blue py-1 uppercase z-0'>
-            {Array.from({ length: 3 }).map((_, index) => (
-              <p key={index} className='mr-8 font-bold text-accent-blue-foreground'>
-                {t('about.marquee')}
-              </p>
-            ))}
-          </Marquee>
+        <Marquee pauseOnHover className="bg-accent-blue py-1 uppercase z-0">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <p key={index} className="mr-8 font-bold text-accent-blue-foreground">
+              {t('about.marquee')}
+            </p>
+          ))}
+        </Marquee>
         <div className="px-4 flex flex-col gap-4 max-w-xl">
           <h2 className="text-center font-semibold text-3xl text-accent-yellow">
             {t('about.label')}
@@ -127,24 +126,18 @@ const About = async (
       </section>
       {/* TEAM */}
       <section id="team" className="w-full flex flex-col gap-4 px-4 max-w-xl">
-        <h2 className="text-center font-semibold text-3xl text-accent-yellow">
-          {t('team.label')}
-        </h2>
+        <h2 className="text-center font-semibold text-3xl text-accent-yellow">{t('team.label')}</h2>
         <p>{t('team.intro')}</p>
         {/* MEMBERS */}
         <div className="w-full space-y-4">
           {/* LOUP */}
           <div className="bg-muted rounded-md p-4 w-full">
-            <h3 className=" text-lg font-semibold">
-              {t('team.members.loup.name')}
-            </h3>
+            <h3 className=" text-lg font-semibold">{t('team.members.loup.name')}</h3>
             <p>{t('team.members.loup.description')}</p>
           </div>
           {/* YOANN */}
           <div className="bg-muted rounded-md p-4 w-full">
-            <h3 className=" text-lg font-semibold">
-              {t('team.members.yoann.name')}
-            </h3>
+            <h3 className=" text-lg font-semibold">{t('team.members.yoann.name')}</h3>
             <p>{t('team.members.yoann.description')}</p>
           </div>
         </div>
@@ -163,23 +156,15 @@ const About = async (
         </p>
       </section>
       {/* PRICING */}
-      <section
-        id="pricing"
-        className="w-full flex flex-col gap-4 px-4 max-w-xl"
-      >
+      <section id="pricing" className="w-full flex flex-col gap-4 px-4 max-w-xl">
         <h2 className="text-center font-semibold text-3xl text-accent-yellow">
           {t('pricing.label')}
         </h2>
         <p>{t('pricing.intro')}</p>
-        <p className="text-xs italic text-muted-foreground">
-          {t('pricing.subdescription')}
-        </p>
+        <p className="text-xs italic text-muted-foreground">{t('pricing.subdescription')}</p>
       </section>
       {/* BUSINESS MODEL */}
-      <section
-        id="businessmodel"
-        className="w-full flex flex-col gap-4 px-4 max-w-xl"
-      >
+      <section id="businessmodel" className="w-full flex flex-col gap-4 px-4 max-w-xl">
         <h2 className="text-center font-semibold text-3xl text-accent-yellow">
           {t('businessmodel.label')}
         </h2>
@@ -188,10 +173,7 @@ const About = async (
         <p>{t('businessmodel.paragraph.3')}</p>
       </section>
       {/* ROADMAP */}
-      <section
-        id="roadmap"
-        className="w-full flex flex-col gap-4 px-4 max-w-xl"
-      >
+      <section id="roadmap" className="w-full flex flex-col gap-4 px-4 max-w-xl">
         <h2 className="text-center font-semibold text-3xl text-accent-yellow">
           {t('roadmap.label')}
         </h2>
@@ -201,9 +183,7 @@ const About = async (
       </section>
       {/* DATA */}
       <section id="data" className="w-full flex flex-col gap-4 px-4 max-w-xl">
-        <h2 className="text-center font-semibold text-3xl text-accent-yellow">
-          {t('data.label')}
-        </h2>
+        <h2 className="text-center font-semibold text-3xl text-accent-yellow">{t('data.label')}</h2>
         <p>
           {t.rich('data.paragraph.1', {
             link: (chunks) => (
@@ -232,10 +212,7 @@ const About = async (
         </p>
       </section>
       {/* RESOURCES */}
-      <section
-        id="resources"
-        className="w-full flex flex-col gap-4 px-4 max-w-xl"
-      >
+      <section id="resources" className="w-full flex flex-col gap-4 px-4 max-w-xl">
         <h2 className="text-center font-semibold text-3xl text-accent-yellow">
           {t('resources.label')}
         </h2>
@@ -255,26 +232,10 @@ const About = async (
         </ul>
       </section>
       {/* CONTACT & SUPPORT */}
-      <section
-        id="contact-support"
-        className="w-full flex flex-col gap-4 px-4 max-w-xl"
-      >
+      <section id="contact-support" className="w-full flex flex-col gap-4 px-4 max-w-xl">
         <h2 className="text-center font-semibold text-3xl text-accent-yellow">
           {t('contact-support.label')}
         </h2>
-        <p>
-          {t.rich('contact-support.help-center', {
-            link: (chunks) => (
-              <Link
-                href="https://help.recomend.app/"
-                target="_blank"
-                className="underline underline-offset-2 hover:text-accent-pink"
-              >
-                {chunks}
-              </Link>
-            ),
-          })}
-        </p>
         <p>
           {t.rich('contact-support.technical-support', {
             email: (chunks) => (
@@ -313,10 +274,7 @@ const About = async (
         </p>
       </section>
       {/* QUOTE */}
-      <section
-        id="quote"
-        className="w-full flex flex-col gap-4 px-4 max-w-xl mt-5 py-8"
-      >
+      <section id="quote" className="w-full flex flex-col gap-4 px-4 max-w-xl mt-5 py-8">
         <blockquote className="relative">
           <svg
             className="absolute -top-6 -start-5 h-12 w-12 text-muted"
@@ -342,12 +300,10 @@ const About = async (
             </p>
           </div>
         </blockquote>
-        <p className="text-xs italic text-muted-foreground">
-          {t('quote.subdescription')}
-        </p>
+        <p className="text-xs italic text-muted-foreground">{t('quote.subdescription')}</p>
       </section>
     </div>
   );
-}
+};
 
 export default About;
