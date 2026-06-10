@@ -108,7 +108,6 @@ jobs:
       - name: Retag and Push to GHCR
         id: affected
         run: |
-          # Retrieve the list of projects affected by the commit
           AFFECTED=$(npx nx show projects --affected --with-target=docker-build --json)
           echo "Affected projects (JSON): $AFFECTED"
 
@@ -133,11 +132,14 @@ jobs:
               REMOTE_IMAGE="ghcr.io/${OWNER}/${PROJECT}"
               
               docker tag "${LOCAL_IMAGE}" "${REMOTE_IMAGE}:${VERSION}"
-              docker tag "${LOCAL_IMAGE}" "${REMOTE_IMAGE}:latest"
               
-              echo "⬆️ [${PROJECT}] Pushing..."
+              echo "⬆️ [${PROJECT}] Pushing ${VERSION}..."
               docker push "${REMOTE_IMAGE}:${VERSION}"
-              docker push "${REMOTE_IMAGE}:latest"
+              
+              echo "🏷️ [${PROJECT}] Tagging latest via imagetools..."
+              docker buildx imagetools create \
+                -t "${REMOTE_IMAGE}:latest" \
+                "${REMOTE_IMAGE}:${VERSION}"
               
               echo "✅ [${PROJECT}] Done."
             ) &
