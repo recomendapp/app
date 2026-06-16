@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
 import { Fragment, useState } from 'react';
-import { Link } from "@/lib/i18n/navigation";
+import { Link } from '@/lib/i18n/navigation';
 import YoutubeEmbed from '@/components/utils/Youtube';
 import { Button } from '@/components/ui/button';
 import {
@@ -42,16 +42,22 @@ import ButtonFollowersAvgRatingMovie from '@/components/buttons/ButtonFollowersA
 import { Genre, Movie, MovieTrailer } from '@libs/api-js';
 import ButtonUserRecoSend from '@/components/buttons/ButtonUserRecoSend';
 
-export const MovieHeader = ({
-  movie,
-}: {
-  movie: Movie;
-}) => {
+export const MovieHeader = ({ movie }: { movie: Movie }) => {
   const t = useTranslations();
   return (
     <div>
       <ContextMenuMovie movie={movie}>
-        <HeaderBox background={movie.backdropPath ? { src: `${TMDB_IMAGE_BASE_URL}/w1280${movie.backdropPath}`, alt: movie.title ?? '', unoptimized: true } : undefined}>
+        <HeaderBox
+          background={
+            movie.backdropPath
+              ? {
+                  src: `${TMDB_IMAGE_BASE_URL}/w1280${movie.backdropPath}`,
+                  alt: movie.title ?? '',
+                  unoptimized: true,
+                }
+              : undefined
+          }
+        >
           <div className="max-w-7xl flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
             {/* MOVIE POSTER */}
             <MediaPoster
@@ -61,38 +67,48 @@ export const MovieHeader = ({
               fill
               unoptimized
             >
-              <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
-                {movie.voteAverage ? <IconMediaRating
-                  rating={movie.voteAverage}
-                  variant="general"
-                  className="w-full"
-                /> : null}
+              <div className="absolute flex flex-col gap-2 top-2 right-2 w-12">
+                {movie.voteAverage ? (
+                  <IconMediaRating
+                    rating={movie.voteAverage}
+                    variant="general"
+                    className="w-full"
+                  />
+                ) : null}
                 <ButtonFollowersAvgRatingMovie movieId={movie.id} />
               </div>
-              {(movie.trailers && movie.trailers.length > 0) ? (
-                <MovieTrailerButton
-                videos={movie.trailers}
-                className="absolute bottom-2 right-2"
-                />
+              {movie.trailers && movie.trailers.length > 0 ? (
+                <MovieTrailerButton videos={movie.trailers} className="absolute bottom-2 right-2" />
               ) : null}
             </MediaPoster>
             {/* MOVIE MAIN DATA */}
             <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
               {/* TYPE & GENRES */}
               <div>
-                <span className='text-accent-yellow'>{upperFirst(t('common.messages.film', { count: 1 }))}</span>
-                {movie.genres ? <Genres genres={movie.genres} className="before:content-['_|_']" /> : null}
+                <span className="text-accent-yellow">
+                  {upperFirst(t('common.messages.film', { count: 1 }))}
+                </span>
+                {movie.genres ? (
+                  <Genres genres={movie.genres} className="before:content-['_|_']" />
+                ) : null}
               </div>
               {/* TITLE */}
               <h1 className="text-clamp space-x-1">
-                <span className='font-bold select-text'>{movie.title}</span>
+                <span className="font-bold select-text">{movie.title}</span>
                 {/* DATE */}
                 {movie.releaseDate && (
                   <sup>
-                    <DateOnlyYearTooltip date={movie.releaseDate} className=' text-base font-medium'/>
+                    <DateOnlyYearTooltip
+                      date={movie.releaseDate}
+                      className=" text-base font-medium"
+                    />
                   </sup>
                 )}
-                {movie.originalTitle !== movie.title ? <div className='text-base font-semibold text-muted-foreground'>{movie.originalTitle}</div> : null}
+                {movie.originalTitle !== movie.title ? (
+                  <div className="text-base font-semibold text-muted-foreground">
+                    {movie.originalTitle}
+                  </div>
+                ) : null}
               </h1>
               <div className=" space-y-2">
                 <div>
@@ -100,25 +116,30 @@ export const MovieHeader = ({
                     <Fragment key={index}>
                       {index > 0 && <span>, </span>}
                       <span key={index}>
-                        <Button
-                          variant="link"
-                          className="w-fit p-0 h-full"
-                          asChild
-                        >
-                          <Link href={`/person/${director?.slug ?? director?.id}`}>{director.name}</Link>
+                        <Button variant="link" className="w-fit p-0 h-full" asChild>
+                          <Link href={`/person/${director?.slug ?? director?.id}`}>
+                            {director.name}
+                          </Link>
                         </Button>
                       </span>
                     </Fragment>
-                  )) ?? <span className="text-muted-foreground italic">{upperFirst(t('common.messages.unknown'))}</span>}
+                  )) ?? (
+                    <span className="text-muted-foreground italic">
+                      {upperFirst(t('common.messages.unknown'))}
+                    </span>
+                  )}
                   {/* RUNTIME */}
-                  <RuntimeTooltip runtime={movie.runtime ?? 0} className=" before:content-['_•_']" />
+                  <RuntimeTooltip
+                    runtime={movie.runtime ?? 0}
+                    className=" before:content-['_•_']"
+                  />
                 </div>
               </div>
             </div>
           </div>
         </HeaderBox>
       </ContextMenuMovie>
-      <div className='flex flex-col items-center'>
+      <div className="flex flex-col items-center">
         <div className="max-w-7xl w-full flex justify-between gap-2 px-4 pb-4">
           <div className="flex gap-2 overflow-x-auto items-center">
             <ButtonLogMovieRating movieId={movie.id} />
@@ -135,18 +156,16 @@ export const MovieHeader = ({
       </div>
     </div>
   );
-}
+};
 
 export const MovieTrailerButton = ({
   videos,
   className,
-} : {
+}: {
   videos: MovieTrailer[];
   className?: string;
 }) => {
-  const [selectedTrailer, setSelectedTailer] = useState<string>(
-    videos[0].key ?? ''
-  );
+  const [selectedTrailer, setSelectedTailer] = useState<string>(videos[0].key ?? '');
 
   if (!videos?.length) return null;
 
@@ -154,11 +173,11 @@ export const MovieTrailerButton = ({
     <Dialog>
       <TooltipBox tooltip={videos.length > 1 ? 'Voir les trailers' : 'Voir le trailer'}>
         <DialogTrigger asChild>
-          <Button variant={'default'} className={cn("p-1.5 w-6 h-6 shrink-0 bg-foreground rounded-full", className)}>
-            <Play
-              size="icon"
-              className="text-background fill-background"
-            />
+          <Button
+            variant={'default'}
+            className={cn('p-1.5 w-6 h-6 shrink-0 bg-foreground rounded-full', className)}
+          >
+            <Play size="icon" className="text-background fill-background" />
           </Button>
         </DialogTrigger>
       </TooltipBox>
@@ -168,10 +187,7 @@ export const MovieTrailerButton = ({
             TRAILER
           </DialogTitle>
           <div className=" pt-4">
-            <Select
-              onValueChange={setSelectedTailer}
-              defaultValue={selectedTrailer}
-            >
+            <Select onValueChange={setSelectedTailer} defaultValue={selectedTrailer}>
               <SelectTrigger className="w-fit">
                 <SelectValue placeholder="Langue" />
               </SelectTrigger>
@@ -191,15 +207,9 @@ export const MovieTrailerButton = ({
       </DialogContent>
     </Dialog>
   );
-}
+};
 
-const Genres = ({
-  genres,
-  className,
-} : {
-  genres: Genre[];
-  className?: string;
-}) => {
+const Genres = ({ genres, className }: { genres: Genre[]; className?: string }) => {
   const locale = useLocale();
   const formattedGenres = new Intl.ListFormat(locale, {
     style: 'narrow',
@@ -207,23 +217,17 @@ const Genres = ({
   }).formatToParts(genres.map((genre) => genre.name));
 
   return (
-    <span className={cn("", className)}>
+    <span className={cn('', className)}>
       {formattedGenres.map((part, index) => {
         if (part.type === 'element') {
-          const genre = genres.find((g) => g.name === part.value);
           return (
-            <Button
-              key={index}
-              variant="link"
-              className="w-fit p-0 h-full font-normal"
-              asChild
-            >
-              <Link href={`/genre/${genre?.id}`}>{part.value}</Link>
-            </Button>
+            <span key={index} className="font-normal">
+              {part.value}
+            </span>
           );
         }
         return part.value;
       })}
     </span>
   );
-}
+};

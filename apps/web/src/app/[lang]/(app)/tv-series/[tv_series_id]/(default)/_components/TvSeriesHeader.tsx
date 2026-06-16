@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
 import { Fragment, useState } from 'react';
-import { Link } from "@/lib/i18n/navigation";
+import { Link } from '@/lib/i18n/navigation';
 import YoutubeEmbed from '@/components/utils/Youtube';
 import { Button } from '@/components/ui/button';
 import {
@@ -39,16 +39,22 @@ import ButtonFollowersAvgRatingTvSeries from '@/components/buttons/ButtonFollowe
 import { TvSeries, TvSeriesTrailer } from '@libs/api-js';
 import ButtonUserRecoSend from '@/components/buttons/ButtonUserRecoSend';
 
-export const TvSeriesHeader = ({
-  tvSeries,
-}: {
-  tvSeries: TvSeries;
-}) => {
+export const TvSeriesHeader = ({ tvSeries }: { tvSeries: TvSeries }) => {
   const t = useTranslations();
   return (
     <div>
       <ContextMenuTvSeries tvSeries={tvSeries}>
-        <HeaderBox background={tvSeries.backdropPath ? { src: getTmdbImage({ path: tvSeries.backdropPath, size: 'w1280' }), alt: tvSeries.name ?? '', unoptimized: true } : undefined}>
+        <HeaderBox
+          background={
+            tvSeries.backdropPath
+              ? {
+                  src: getTmdbImage({ path: tvSeries.backdropPath, size: 'w1280' }),
+                  alt: tvSeries.name ?? '',
+                  unoptimized: true,
+                }
+              : undefined
+          }
+        >
           <div className="max-w-7xl flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
             <MediaPoster
               className="w-[200px]"
@@ -57,18 +63,20 @@ export const TvSeriesHeader = ({
               fill
               unoptimized
             >
-                <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
-                  {tvSeries.voteAverage ? <IconMediaRating
+              <div className="absolute flex flex-col gap-2 top-2 right-2 w-12">
+                {tvSeries.voteAverage ? (
+                  <IconMediaRating
                     rating={tvSeries.voteAverage}
                     variant="general"
                     className="w-full"
-                  /> : null}
-                  <ButtonFollowersAvgRatingTvSeries tvSeriesId={tvSeries.id} />
-                </div>
-              {(tvSeries?.trailers && tvSeries.trailers.length > 0) ? (
+                  />
+                ) : null}
+                <ButtonFollowersAvgRatingTvSeries tvSeriesId={tvSeries.id} />
+              </div>
+              {tvSeries?.trailers && tvSeries.trailers.length > 0 ? (
                 <SerieTrailerButton
-                videos={tvSeries.trailers}
-                className="absolute bottom-2 right-2"
+                  videos={tvSeries.trailers}
+                  className="absolute bottom-2 right-2"
                 />
               ) : null}
             </MediaPoster>
@@ -76,18 +84,27 @@ export const TvSeriesHeader = ({
             <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
               {/* TYPE & GENRES */}
               <div>
-                <span className='text-accent-yellow'>{upperFirst(t('common.messages.tv_series', { count: 1 }))}</span>
-                {tvSeries.genres ? <Genres genres={tvSeries.genres} className="before:content-['_|_']" /> : null}
+                <span className="text-accent-yellow">
+                  {upperFirst(t('common.messages.tv_series', { count: 1 }))}
+                </span>
+                {tvSeries.genres ? (
+                  <Genres genres={tvSeries.genres} className="before:content-['_|_']" />
+                ) : null}
               </div>
               {/* TITLE */}
               <h1 className="text-clamp space-x-1">
-                <span className='font-bold select-text'>{tvSeries.name}</span>
+                <span className="font-bold select-text">{tvSeries.name}</span>
                 {/* DATE */}
                 <sup>
-                  <DateOnlyYearTooltip date={tvSeries.firstAirDate ?? ''} className=' text-base font-medium'/>
+                  <DateOnlyYearTooltip
+                    date={tvSeries.firstAirDate ?? ''}
+                    className=" text-base font-medium"
+                  />
                 </sup>
                 {tvSeries.originalName !== tvSeries.name && (
-                  <div className='text-base font-semibold text-muted-foreground'>{tvSeries.originalName}</div>
+                  <div className="text-base font-semibold text-muted-foreground">
+                    {tvSeries.originalName}
+                  </div>
                 )}
               </h1>
               <div className=" space-y-2">
@@ -96,16 +113,16 @@ export const TvSeriesHeader = ({
                     <Fragment key={index}>
                       {index > 0 && <span>, </span>}
                       <span key={index}>
-                        <Button
-                          variant="link"
-                          className="w-fit p-0 h-full"
-                          asChild
-                        >
+                        <Button variant="link" className="w-fit p-0 h-full" asChild>
                           <Link href={creator.url ?? ''}>{creator?.name}</Link>
                         </Button>
                       </span>
                     </Fragment>
-                  )) ?? <span className="text-muted-foreground italic">{upperFirst(t('common.messages.unknown'))}</span>}
+                  )) ?? (
+                    <span className="text-muted-foreground italic">
+                      {upperFirst(t('common.messages.unknown'))}
+                    </span>
+                  )}
                   {tvSeries.numberOfSeasons ? (
                     <span className="before:content-['_•_']">
                       {t('common.messages.tv_season_count', { count: tvSeries.numberOfSeasons })}
@@ -117,7 +134,7 @@ export const TvSeriesHeader = ({
           </div>
         </HeaderBox>
       </ContextMenuTvSeries>
-      <div className='flex flex-col items-center'>
+      <div className="flex flex-col items-center">
         <div className="max-w-7xl w-full flex justify-between gap-2 px-4 pb-4">
           <div className="flex gap-2 overflow-x-auto items-center">
             <ButtonLogTvSeriesRating tvSeries={tvSeries} />
@@ -126,25 +143,31 @@ export const TvSeriesHeader = ({
             <ButtonUserWatchlistTvSeries tvSeriesId={tvSeries.id} />
           </div>
           <div className="flex gap-2 items-center">
-            <ButtonPlaylistAdd mediaId={tvSeries.id} mediaType="tv_series" mediaTitle={tvSeries.name} />
-            <ButtonUserRecoSend mediaId={tvSeries.id} mediaType="tv_series" mediaTitle={tvSeries.name} />
+            <ButtonPlaylistAdd
+              mediaId={tvSeries.id}
+              mediaType="tv_series"
+              mediaTitle={tvSeries.name}
+            />
+            <ButtonUserRecoSend
+              mediaId={tvSeries.id}
+              mediaType="tv_series"
+              mediaTitle={tvSeries.name}
+            />
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export const SerieTrailerButton = ({
   videos,
   className,
-} : {
+}: {
   videos: TvSeriesTrailer[];
   className?: string;
 }) => {
-  const [selectedTrailer, setSelectedTailer] = useState<string>(
-    videos[0].key ?? ''
-  );
+  const [selectedTrailer, setSelectedTailer] = useState<string>(videos[0].key ?? '');
 
   if (!videos?.length) return null;
 
@@ -152,11 +175,11 @@ export const SerieTrailerButton = ({
     <Dialog>
       <TooltipBox tooltip={videos.length > 1 ? 'Voir les trailers' : 'Voir le trailer'}>
         <DialogTrigger asChild>
-          <Button variant={'default'} className={cn("p-1.5 w-6 h-6 shrink-0 bg-foreground rounded-full", className)}>
-            <Play
-              size="icon"
-              className="text-background fill-background"
-            />
+          <Button
+            variant={'default'}
+            className={cn('p-1.5 w-6 h-6 shrink-0 bg-foreground rounded-full', className)}
+          >
+            <Play size="icon" className="text-background fill-background" />
           </Button>
         </DialogTrigger>
       </TooltipBox>
@@ -166,10 +189,7 @@ export const SerieTrailerButton = ({
             TRAILER
           </DialogTitle>
           <div className=" pt-4">
-            <Select
-              onValueChange={setSelectedTailer}
-              defaultValue={selectedTrailer}
-            >
+            <Select onValueChange={setSelectedTailer} defaultValue={selectedTrailer}>
               <SelectTrigger className="w-fit">
                 <SelectValue placeholder="Langue" />
               </SelectTrigger>
@@ -189,12 +209,12 @@ export const SerieTrailerButton = ({
       </DialogContent>
     </Dialog>
   );
-}
+};
 
 const Genres = ({
   genres,
   className,
-} : {
+}: {
   genres: {
     id: number;
     name: string;
@@ -208,23 +228,17 @@ const Genres = ({
   }).formatToParts(genres.map((genre) => genre.name));
 
   return (
-    <span className={cn("", className)}>
+    <span className={cn('', className)}>
       {formattedGenres.map((part, index) => {
         if (part.type === 'element') {
-          const genre = genres.find((g) => g.name === part.value);
           return (
-            <Button
-              key={index}
-              variant="link"
-              className="w-fit p-0 h-full font-normal"
-              asChild
-            >
-              <Link href={`/genre/${genre?.id}`}>{part.value}</Link>
-            </Button>
+            <span key={index} className="font-normal">
+              {part.value}
+            </span>
           );
         }
         return part.value;
       })}
     </span>
   );
-}
+};
