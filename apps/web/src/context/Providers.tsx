@@ -14,7 +14,7 @@ import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
 import { SupportedLocale } from '@libs/i18n';
 import { getStatus } from '@/api/server/system';
-import { getMe } from '@/lib/auth/server';
+import { getMe, getSession } from '@/lib/auth/server';
 import { ApiProvider } from '@/lib/api/client';
 
 export const Providers = async ({
@@ -24,12 +24,8 @@ export const Providers = async ({
   children: React.ReactNode;
   locale: SupportedLocale;
 }) => {
-  const [
-    { data: user },
-    status,
-    cookiesStore,
-    device,
-  ] = await Promise.all([
+  const [session, { data: user }, status, cookiesStore, device] = await Promise.all([
+    getSession(),
     getMe({
       locale,
     }),
@@ -38,24 +34,26 @@ export const Providers = async ({
     getServerDevice(),
   ]);
   // UI
-  const layout = cookiesStore.get("ui:layout");
-  const sidebarOpen = cookiesStore.get("ui-sidebar:open");
-  const rightPanelOpen = cookiesStore.get("ui-right-panel:open");
+  const layout = cookiesStore.get('ui:layout');
+  const sidebarOpen = cookiesStore.get('ui-sidebar:open');
+  const rightPanelOpen = cookiesStore.get('ui-right-panel:open');
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
 
   return (
     <NextIntlClientProvider locale={locale}>
       <ReactQueryProvider>
         <ApiProvider>
-          <AuthProvider user={user || null}>
+          <AuthProvider session={session || null} user={user || null}>
             <NotificationsProvider>
               <MapContext>
-                <ThemeProvider attribute={'class'} defaultTheme='dark' enableSystem>
+                <ThemeProvider attribute={'class'} defaultTheme="dark" enableSystem>
                   <UIProvider
-                  defaultLayout={defaultLayout}
-                  cookieSidebarOpen={sidebarOpen ? JSON.parse(sidebarOpen.value) : undefined}
-                  cookieRightPanelOpen={rightPanelOpen ? JSON.parse(rightPanelOpen.value) : undefined}
-                  device={device}
+                    defaultLayout={defaultLayout}
+                    cookieSidebarOpen={sidebarOpen ? JSON.parse(sidebarOpen.value) : undefined}
+                    cookieRightPanelOpen={
+                      rightPanelOpen ? JSON.parse(rightPanelOpen.value) : undefined
+                    }
+                    device={device}
                   >
                     <TooltipProvider delayDuration={100}>
                       <ModalProvider>
@@ -80,7 +78,7 @@ export const Providers = async ({
                     </TooltipProvider>
                   </UIProvider>
                 </ThemeProvider>
-              </MapContext> 
+              </MapContext>
             </NotificationsProvider>
           </AuthProvider>
         </ApiProvider>
@@ -91,10 +89,10 @@ export const Providers = async ({
 
 const MaintenancePage: React.FC = () => {
   return (
-    <div className='h-screen w-screen p-4'>
-      <div className='w-full h-full bg-background p-4 rounded-md flex flex-col items-center justify-center'>
+    <div className="h-screen w-screen p-4">
+      <div className="w-full h-full bg-background p-4 rounded-md flex flex-col items-center justify-center">
         <Icons.site.logo className="fill-accent-yellow w-96" />
-        <h1 className=' text-muted-foreground text-2xl'>Maintenance Mode</h1>
+        <h1 className=" text-muted-foreground text-2xl">Maintenance Mode</h1>
       </div>
     </div>
   );

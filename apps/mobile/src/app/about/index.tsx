@@ -217,19 +217,6 @@ const AboutScreen = () => {
         content: (
           <View style={{ gap: GAP }}>
             <Text>
-              {t.rich('contact-support.help-center', {
-                link: (chunks) => (
-                  <Link
-                    href="https://help.recomend.app/"
-                    target="_blank"
-                    style={{ color: colors.accentPink }}
-                  >
-                    {chunks}
-                  </Link>
-                ),
-              })}
-            </Text>
-            <Text>
               {t.rich('contact-support.technical-support', {
                 email: (chunks) => (
                   <Link href="mailto:help@recomend.app" style={{ color: colors.accentPink }}>

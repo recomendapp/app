@@ -1,7 +1,7 @@
+import { Purchases } from '@revenuecat/purchases-js';
 import { queryOptions } from '@tanstack/react-query';
-import Purchases, { CustomerInfo } from 'react-native-purchases';
 import { authKeys } from './authKeys';
-import { authClient } from '../../lib/auth/client';
+import { authClient } from '@/lib/auth/client';
 
 export const authSessionOptions = () => {
   return queryOptions({
@@ -14,21 +14,14 @@ export const authSessionOptions = () => {
   });
 };
 
-export const authCustomerInfoOptions = ({
-  initialData,
-  enabled = true,
-}: {
-  initialData?: CustomerInfo;
-  enabled?: boolean;
-} = {}) => {
+export const authCustomerInfoOptions = ({ enabled = true }: { enabled?: boolean }) => {
   return queryOptions({
     queryKey: authKeys.customerInfo(),
     queryFn: async () => {
-      return await Purchases.getCustomerInfo();
+      return await Purchases.getSharedInstance().getCustomerInfo();
     },
     retry: 3,
     retryOnMount: true,
-    initialData,
     enabled,
   });
 };

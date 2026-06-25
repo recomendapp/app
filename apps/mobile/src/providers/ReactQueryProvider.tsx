@@ -9,6 +9,7 @@ import {
 import { persistKey } from '../api';
 import { meKeys, widgetKeys } from '@libs/query-client';
 import { uiKeys } from '../api/ui/uiKeys';
+import { authKeys } from '../api/auth/authKeys';
 // import { useReactQueryDevTools } from "@dev-plugins/react-query";
 
 const queryStorage = createMMKV({
@@ -41,7 +42,7 @@ const createMMKVPersister = (key: string) => ({
   },
 });
 
-const PERSISTED_QUERY_KEYS = [meKeys.base, uiKeys.base, widgetKeys, persistKey];
+const PERSISTED_QUERY_KEYS = [authKeys.base, meKeys.base, uiKeys.base, widgetKeys, persistKey];
 
 const createQueryClient = () =>
   new QueryClient({
