@@ -1,5 +1,12 @@
 # mobile
 
+## [1.3.0](https://github.com/recomendapp/app/compare/mobile@v1.2.0...mobile@v1.3.0) (2026-06-25)
+
+
+### Features
+
+* **auth:** integrate session management ([#14](https://github.com/recomendapp/app/issues/14)) ([b3f1fff](https://github.com/recomendapp/app/commit/b3f1fff2a5b296971439a62c8257d93cca2da91d))
+
 ## [1.2.0](https://github.com/recomendapp/app/compare/mobile@v1.1.2...mobile@v1.2.0) (2026-05-20)
 
 
