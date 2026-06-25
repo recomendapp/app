@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
-import { CustomerInfo, LogLevel, Purchases } from "@revenuecat/purchases-js";
-import { useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect, useState } from "react";
-import { authKeys } from "@/api/client/keys/authKeys";
-import { REVENUECAT_API_KEY } from "../env";
-import { User } from "@libs/api-js";
+import { CustomerInfo, LogLevel, Purchases } from '@revenuecat/purchases-js';
+import { useQueryClient } from '@tanstack/react-query';
+import { useCallback, useEffect, useState } from 'react';
+import { authKeys } from '@/api/client/auth/authKeys';
+import { REVENUECAT_API_KEY } from '../env';
+import { User } from '@libs/api-js';
 
 export const useRevenueCat = (user: User | null | undefined) => {
   const queryClient = useQueryClient();
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo | undefined>(undefined);
-  
+
   const init = useCallback(async (user: User) => {
     if (process.env.NODE_ENV === 'development') {
       Purchases.setLogLevel(LogLevel.Verbose);
     }
     if (!REVENUECAT_API_KEY) {
-      throw new Error("RevenueCat API key missing");
+      throw new Error('RevenueCat API key missing');
     }
     const purchases = Purchases.configure({
       apiKey: REVENUECAT_API_KEY,
@@ -25,7 +25,7 @@ export const useRevenueCat = (user: User | null | undefined) => {
     const customerInfo = await purchases.getCustomerInfo();
     await purchases.setAttributes({
       $email: user.email,
-    })
+    });
     return customerInfo;
   }, []);
 

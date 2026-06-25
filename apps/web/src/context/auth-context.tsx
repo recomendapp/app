@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
 import { createContext, use, useCallback, useEffect } from 'react';
 import { CustomerInfo } from '@revenuecat/purchases-js';
 import { useRevenueCat } from '@/lib/revenuecat/useRevenueCat';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useAuthCustomerInfoOptions } from '@/api/client/options/authOptions';
+import { authCustomerInfoOptions, authSessionOptions } from '@/api/client/auth/authOptions';
 import { SocialProvider } from 'better-auth/types';
 import { authClient } from '@/lib/auth/client';
 import toast from 'react-hot-toast';
@@ -16,27 +16,27 @@ import { User } from '@libs/api-js';
 
 export interface UserState {
   user: User | null | undefined;
+  session: typeof authClient.$Infer.Session | null | undefined;
   customerInfo: CustomerInfo | undefined;
-  login: (credentials: { 
-    password: string, 
-    redirectTo?: string | null 
-  } & (
-    | { email: string; username?: never }
-    | { username: string; email?: never }
-  )) => Promise<void>;
+  login: (
+    credentials: {
+      password: string;
+      redirectTo?: string | null;
+    } & ({ email: string; username?: never } | { username: string; email?: never }),
+  ) => Promise<void>;
   logout: () => Promise<void>;
   signup: ({
-      email,
-      name,
-      username,
-      password,
-      redirectTo,
-  } : {
-      email: string,
-      name: string,
-      username: string,
-      password: string,
-      redirectTo?: string | null,
+    email,
+    name,
+    username,
+    password,
+    redirectTo,
+  }: {
+    email: string;
+    name: string;
+    username: string;
+    password: string;
+    redirectTo?: string | null;
   }) => Promise<void>;
   loginOAuth2: (provider: SocialProvider, redirectTo?: string | null) => Promise<void>;
   loginWithMagicLink: (email: string, redirectTo?: string | null) => Promise<void>;
@@ -46,69 +46,85 @@ const AuthContext = createContext<UserState | undefined>(undefined);
 
 interface AuthProviderProps {
   user: User | null;
+  session: typeof authClient.$Infer.Session | null;
   children: React.ReactNode;
 }
 
-export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps) => {
+export const AuthProvider = ({
+  user: initialUser,
+  session: initialSession,
+  children,
+}: AuthProviderProps) => {
   const t = useTranslations();
   const router = useRouter();
   const locale = useLocale();
   const queryClient = useQueryClient();
-  
+
+  const { data: session } = useQuery({
+    ...authSessionOptions(),
+    initialData: initialSession || undefined,
+  });
   const { data: user } = useQuery({
     ...meOptions(),
     initialData: initialUser || undefined,
   });
   const { customerInfo: initCustomerInfo } = useRevenueCat(user);
-  const {
-    data: customerInfo,
-	} = useQuery(useAuthCustomerInfoOptions({
-    enabled: !!initCustomerInfo,
+  const { data: customerInfo } = useQuery({
+    ...authCustomerInfoOptions({
+      enabled: !!initCustomerInfo,
+    }),
     initialData: initCustomerInfo,
-	}));
+  });
 
   const { mutate: updateUser } = useMeUpdateMutation();
 
-  const login = useCallback(async (credentials: { 
-    password: string, 
-    redirectTo?: string | null 
-  } & (
-    | { email: string; username?: never }
-    | { username: string; email?: never }
-  )) => {
-    if (credentials.email) {
-      const { error } = await authClient.signIn.email({
-        email: credentials.email,
-        password: credentials.password,
-      });
-      if (error) {
-        switch (error.code) {
-          case 'INVALID_EMAIL_OR_PASSWORD':
-            toast.error(t('pages.auth.login.form.wrong_credentials'));
-            break;
-          default:
-            toast.error(upperFirst(t('common.messages.an_error_occurred')));
-            break;
+  const login = useCallback(
+    async (
+      credentials: {
+        password: string;
+        redirectTo?: string | null;
+      } & ({ email: string; username?: never } | { username: string; email?: never }),
+    ) => {
+      if (credentials.email) {
+        const { error } = await authClient.signIn.email({
+          email: credentials.email,
+          password: credentials.password,
+          rememberMe: true,
+        });
+        if (error) {
+          switch (error.code) {
+            case 'INVALID_EMAIL_OR_PASSWORD':
+              toast.error(t('pages.auth.login.form.wrong_credentials'));
+              break;
+            default:
+              toast.error(upperFirst(t('common.messages.an_error_occurred')));
+              break;
+          }
+          throw error;
         }
-        throw error;
-      };
-    } else if (credentials.username) {
-      const { error } = await authClient.signIn.username({
-        username: credentials.username,
-        password: credentials.password,
-      });
-      if (error) {
-        switch (error.code) {
-          default:
-            toast.error(upperFirst(t('common.messages.an_error_occurred')));
-            break;
+      } else if (credentials.username) {
+        const { error } = await authClient.signIn.username({
+          username: credentials.username,
+          password: credentials.password,
+          rememberMe: true,
+        });
+        if (error) {
+          switch (error.code) {
+            default:
+              toast.error(upperFirst(t('common.messages.an_error_occurred')));
+              break;
+          }
+          throw error;
         }
-        throw error;
-      };
-    }
-    await queryClient.invalidateQueries({ queryKey: meOptions().queryKey });
-    router.push(credentials.redirectTo || '/');
-  }, [t, router, queryClient]);
+      }
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: meOptions().queryKey }),
+        queryClient.invalidateQueries({ queryKey: authSessionOptions().queryKey }),
+      ]);
+      router.push(credentials.redirectTo || '/');
+    },
+    [t, router, queryClient],
+  );
 
   const logout = useCallback(async () => {
     if (!user) return;
@@ -122,74 +138,88 @@ export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps)
       throw error;
     }
     queryClient.setQueryData(meOptions().queryKey, null);
+    queryClient.setQueryData(authSessionOptions().queryKey, null);
     router.refresh();
   }, [user, t, router, queryClient]);
 
-  const signup = useCallback(async ({
-    email,
-    name,
-    username,
-    password,
-    redirectTo,
-  } : {
-    email: string,
-    name: string,
-    username: string,
-    password: string,
-    redirectTo?: string | null,
-  }) => {
-    const { error } = await authClient.signUp.email({
-      email: email,
-      name: name,
-      username: username,
-      password: password,
-      language: locale,
-      callbackURL: `${location.origin}/auth/callback${redirectTo ? `?redirect=${redirectTo}` : ''}`
-    });
-    if (error) {
-      switch (error.code) {
-        case 'USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL':
-          toast.error(t('common.form.email.error.unavailable'));
-          break;
-        default:
-          toast.error(upperFirst(t('common.messages.an_error_occurred')));
-          break;
-      }
-      throw error;
-    }
-    toast.success(t('pages.auth.signup.form.success', { email }));
-  }, [t, locale]);
-
-  const loginOAuth2 = useCallback(async (provider: SocialProvider, redirectTo?: string | null) => {
-    const { error } = await authClient.signIn.social({
-      provider: provider,
-      callbackURL: location.origin + (redirectTo ? !redirectTo?.startsWith('/') ? `/${redirectTo}` : redirectTo : ''),
-    });
-    if (error) {
-      switch (error.code) {
-        default:
-          toast.error(upperFirst(t('common.messages.an_error_occurred')));
-          break;
-      }
-      throw error;
-    };
-  }, [t]);
-
-  const loginWithMagicLink = useCallback(async (email: string, redirectTo?: string | null) => {
-    const { error } = await authClient.signIn.magicLink({
+  const signup = useCallback(
+    async ({
       email,
-      callbackURL: location.origin + (redirectTo ? !redirectTo?.startsWith('/') ? `/${redirectTo}` : redirectTo : ''),
-    });
-    if (error) {
-      switch (error.code) {
-        default:
-          toast.error(upperFirst(t('common.messages.an_error_occurred')));
-          break;
+      name,
+      username,
+      password,
+      redirectTo,
+    }: {
+      email: string;
+      name: string;
+      username: string;
+      password: string;
+      redirectTo?: string | null;
+    }) => {
+      const { error } = await authClient.signUp.email({
+        email: email,
+        name: name,
+        username: username,
+        password: password,
+        language: locale,
+        callbackURL: `${location.origin}/auth/callback${redirectTo ? `?redirect=${redirectTo}` : ''}`,
+      });
+      if (error) {
+        switch (error.code) {
+          case 'USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL':
+            toast.error(t('common.form.email.error.unavailable'));
+            break;
+          default:
+            toast.error(upperFirst(t('common.messages.an_error_occurred')));
+            break;
+        }
+        throw error;
       }
-      throw error;
-    };
-    toast.success(t('common.form.code_sent', { email }));
-  }, [t]);
+      toast.success(t('pages.auth.signup.form.success', { email }));
+    },
+    [t, locale],
+  );
+
+  const loginOAuth2 = useCallback(
+    async (provider: SocialProvider, redirectTo?: string | null) => {
+      const { error } = await authClient.signIn.social({
+        provider: provider,
+        callbackURL:
+          location.origin +
+          (redirectTo ? (!redirectTo?.startsWith('/') ? `/${redirectTo}` : redirectTo) : ''),
+      });
+      if (error) {
+        switch (error.code) {
+          default:
+            toast.error(upperFirst(t('common.messages.an_error_occurred')));
+            break;
+        }
+        throw error;
+      }
+    },
+    [t],
+  );
+
+  const loginWithMagicLink = useCallback(
+    async (email: string, redirectTo?: string | null) => {
+      const { error } = await authClient.signIn.magicLink({
+        email,
+        callbackURL:
+          location.origin +
+          (redirectTo ? (!redirectTo?.startsWith('/') ? `/${redirectTo}` : redirectTo) : ''),
+      });
+      if (error) {
+        switch (error.code) {
+          default:
+            toast.error(upperFirst(t('common.messages.an_error_occurred')));
+            break;
+        }
+        throw error;
+      }
+      toast.success(t('common.form.code_sent', { email }));
+    },
+    [t],
+  );
 
   useEffect(() => {
     if (user && locale && user.language !== locale) {
@@ -201,6 +231,7 @@ export const AuthProvider = ({ user: initialUser, children }: AuthProviderProps)
     <AuthContext.Provider
       value={{
         user,
+        session,
         customerInfo,
         login,
         logout,

@@ -1,18 +1,8 @@
-import { siteConfig } from '@/config/site'
-import { routing } from '@/lib/i18n/routing';
-import type { MetadataRoute } from 'next'
+import { siteConfig } from '@/config/site';
+import type { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const disallow = routing.locales.flatMap(lang => {
-    return siteConfig.routes.authRoutes.flatMap(route => {
-      const base = lang === routing.defaultLocale ? route : `/${lang}${route}`
-
-      return [
-        `${base}`,
-        `${base}/*`,
-      ]
-    })
-  })
+  const disallow = siteConfig.routes.authRoutes.flatMap((route) => [`${route}`, `${route}/*`]);
 
   const blockUserAgents = [
     '008',
@@ -143,8 +133,8 @@ export default function robots(): MetadataRoute.Robots {
     'wikiwix-bot-3.0',
     'WinHTTrack',
     'WWW-Collector-E',
-    'Xenu\'s',
-    'Xenu\'s Link Sleuth 1.1c',
+    "Xenu's",
+    "Xenu's Link Sleuth 1.1c",
     'YRSPider',
     'Zeus',
   ];
@@ -161,6 +151,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow,
       },
-    ]
-  }
+    ],
+  };
 }

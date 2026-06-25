@@ -21,9 +21,11 @@ import { defaultSupportedLocale, SupportedLocale, supportedLocales } from '@libs
 import { makeRedirectUri } from 'expo-auth-session';
 import { LoginManager, AccessToken, AuthenticationToken } from 'react-native-fbsdk-next';
 import { logger } from '../logger';
+import { authSessionOptions } from '../api/auth/authOptions';
 
 type AuthContextProps = {
   user: User | null | undefined;
+  session: typeof authClient.$Infer.Session | null | undefined;
   customerInfo: CustomerInfo | undefined;
   login: (
     credentials: { password: string } & ({ email: string } | { username: string }),
@@ -54,6 +56,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const queryClient = useQueryClient();
   const { setLocale } = useLocaleContext();
   const [pushToken, setPushToken] = useState<string | null>(null);
+  const { data: session } = useQuery(authSessionOptions());
   const { data: user } = useQuery(meOptions());
   const { customerInfo: initCustomerInfo } = useRevenueCat(user);
   const { data: customerInfo } = useAuthCustomerInfoQuery({
@@ -73,6 +76,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         const { error } = await authClient.signIn.email({
           email: credentials.email,
           password: credentials.password,
+          rememberMe: true,
         });
         if (error) {
           switch (error.code) {
@@ -89,6 +93,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         const { error } = await authClient.signIn.username({
           username: credentials.username,
           password: credentials.password,
+          rememberMe: true,
         });
         if (error) {
           switch (error.code) {
@@ -246,7 +251,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
           }
         }
         logger.metric('account:loggedInWithOAuth', { logContext: 'LoginForm', provider });
-        queryClient.invalidateQueries({ queryKey: meOptions().queryKey });
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: meOptions().queryKey }),
+          queryClient.invalidateQueries({ queryKey: authSessionOptions().queryKey }),
+        ]);
       } catch (error) {
         logger.error('oauth login error', { error, provider });
       }
@@ -331,6 +339,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     <AuthContext.Provider
       value={{
         user,
+        session,
         customerInfo,
         login,
         loginWithOAuth,
