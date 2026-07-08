@@ -14,11 +14,7 @@ import {
 import { tmdbMovie, tmdbTvSeries } from './tmdb';
 import { user } from './auth';
 
-export const recoStatusEnum = pgEnum('reco_status', [
-  'active',
-  'completed',
-  'deleted',
-]);
+export const recoStatusEnum = pgEnum('reco_status', ['active', 'completed', 'deleted']);
 export const recoTypeEnum = pgEnum('reco_type', ['movie', 'tv_series']);
 
 export const reco = pgTable(
@@ -41,10 +37,12 @@ export const reco = pgTable(
     comment: text(),
     // Type & References
     type: recoTypeEnum('type').notNull(),
-    movieId: bigint('movie_id', { mode: 'number' })
-      .references(() => tmdbMovie.id, { onDelete: 'cascade' }),
-    tvSeriesId: bigint('tv_series_id', { mode: 'number' })
-      .references(() => tmdbTvSeries.id, { onDelete: 'cascade' }),
+    movieId: bigint('movie_id', { mode: 'number' }).references(() => tmdbMovie.id, {
+      onDelete: 'cascade',
+    }),
+    tvSeriesId: bigint('tv_series_id', { mode: 'number' }).references(() => tmdbTvSeries.id, {
+      onDelete: 'cascade',
+    }),
   },
   (table) => [
     index('idx_reco_user_id').on(table.userId),
@@ -66,7 +64,7 @@ export const reco = pgTable(
     uniqueIndex('unique_reco_tv_series')
       .on(table.userId, table.senderId, table.tvSeriesId)
       .where(sql`${table.type} = 'tv_series'::reco_type`),
-  ]
+  ],
 );
 export const recoRelations = relations(reco, ({ one }) => ({
   user: one(user, {
@@ -93,8 +91,14 @@ export const recosTrending = pgMaterializedView('recos_trending').as((qb) => {
       mediaId: sql<number>`COALESCE(${reco.movieId}, ${reco.tvSeriesId})`.as('media_id'),
       type: reco.type,
       recommendationCount: sql<number>`cast(count(*) as int)`.as('recommendation_count'),
+      trendingScore: sql<number>`
+        SUM(
+          EXP(
+            - (EXTRACT(EPOCH FROM (now() - ${reco.createdAt})) / 86400.0) / 30.0
+          )
+        )
+      `.as('trending_score'),
     })
     .from(reco)
-    .where(sql`${reco.createdAt} > (now() - '30 days'::interval)`)
     .groupBy(sql`COALESCE(${reco.movieId}, ${reco.tvSeriesId})`, reco.type);
 });
