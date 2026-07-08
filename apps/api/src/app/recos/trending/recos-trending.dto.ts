@@ -1,14 +1,25 @@
-import { ApiProperty, ApiPropertyOptional, ApiSchema, IntersectionType, ApiExtraModels, getSchemaPath } from '@nestjs/swagger';
+import {
+  ApiProperty,
+  ApiPropertyOptional,
+  ApiSchema,
+  IntersectionType,
+  ApiExtraModels,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, ValidateNested } from 'class-validator';
 import { recoTypeEnum } from '@libs/db/schemas';
-import { MovieSummaryDto } from '../../movies/dto/movies.dto'; // <-- Ajuste les imports
+import { MovieSummaryDto } from '../../movies/dto/movies.dto';
 import { TvSeriesSummaryDto } from '../../tv-series/dto/tv-series.dto';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../common/dto/pagination.dto';
-import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../common/dto/cursor-pagination.dto';
+import {
+  CursorPaginatedResponseDto,
+  CursorPaginationQueryDto,
+} from '../../../common/dto/cursor-pagination.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 
 export enum RecoTrendingSortBy {
+  TRENDING_SCORE = 'trending_score',
   RECOMMENDATION_COUNT = 'recommendation_count',
 }
 
@@ -25,12 +36,16 @@ export class RecoTrendingDto {
     example: 'movie',
   })
   @Expose()
-  type!: typeof recoTypeEnum.enumValues[number];
+  type!: (typeof recoTypeEnum.enumValues)[number];
 
   @ApiProperty({ example: 42, description: 'Number of times this media was recommended' })
   @Expose()
   @IsInt()
   recommendationCount!: number;
+
+  @ApiProperty({ example: 4.25, description: 'The time-decayed trending score' })
+  @Expose()
+  trendingScore!: number;
 
   constructor(data: RecoTrendingDto) {
     Object.assign(this, data);
@@ -71,12 +86,12 @@ export type RecoTrendingWithMediaUnion = RecoTrendingWithMovieDto | RecoTrending
 export class BaseListRecosTrendingQueryDto {
   @ApiPropertyOptional({
     description: 'Field to sort trending recos by',
-    default: RecoTrendingSortBy.RECOMMENDATION_COUNT,
+    default: RecoTrendingSortBy.TRENDING_SCORE,
     enum: RecoTrendingSortBy,
   })
   @IsOptional()
   @IsEnum(RecoTrendingSortBy)
-  sort_by: RecoTrendingSortBy = RecoTrendingSortBy.RECOMMENDATION_COUNT;
+  sort_by: RecoTrendingSortBy = RecoTrendingSortBy.TRENDING_SCORE;
 
   @ApiPropertyOptional({
     description: 'Sort order',
@@ -91,13 +106,13 @@ export class BaseListRecosTrendingQueryDto {
 @ApiSchema({ name: 'ListPaginatedRecosTrendingQuery' })
 export class ListPaginatedRecosTrendingQueryDto extends IntersectionType(
   BaseListRecosTrendingQueryDto,
-  PaginationQueryDto
+  PaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListInfiniteRecosTrendingQuery' })
 export class ListInfiniteRecosTrendingQueryDto extends IntersectionType(
   BaseListRecosTrendingQueryDto,
-  CursorPaginationQueryDto
+  CursorPaginationQueryDto,
 ) {}
 
 /* ---------------------------------- Responses --------------------------------- */
@@ -140,7 +155,7 @@ export class ListPaginatedRecosTrendingDto extends PaginatedResponseDto<RecoTren
 }
 
 @ApiExtraModels(RecoTrendingWithMovieDto, RecoTrendingWithTvSeriesDto)
-@ApiSchema({ name: 'ListInfiniteRecosTrending'})
+@ApiSchema({ name: 'ListInfiniteRecosTrending' })
 export class ListInfiniteRecosTrendingDto extends CursorPaginatedResponseDto<RecoTrendingWithMediaUnion> {
   @ApiProperty({
     type: 'array',
