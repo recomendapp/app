@@ -447,7 +447,8 @@
       "invalid_token": "Invalid token",
       "new_notification": "new notification{count, plural, one {} other {s}}",
       "lets_go": "Let's go!",
-      "update_available": "Update available"
+      "update_available": "Update available",
+      "advertisement": "Advertisement{count, plural, one {} other {s}}"
     },
     "form": {
       "email": {
@@ -751,6 +752,12 @@
         "label": "Pricing",
         "intro": "This subscription model is primarily a way to support the project and help it continue to grow. The premium features are bonuses for advanced use of Recomend, justifying a small financial contribution. We will always maintain the option to access the site for free, without ads, and without feeling restricted.",
         "subdescription": "*If the extremely low price of this subscription is still beyond your means, please refer to your liberal government responsible for your loss of purchasing power."
+      },
+      "legal": {
+        "label": "Legal & Privacy",
+        "description": "We respect your privacy. The advertisements shown to guest users are managed by Google and require the use of technical cookies to limit display frequency and prevent fraud.",
+        "privacyPolicy": "Read our privacy policy",
+        "manageCookies": "Manage my advertising preferences (Cookies)"
       },
       "businessmodel": {
         "label": "Business Model",

@@ -447,7 +447,8 @@
       "invalid_token": "Token invalide",
       "new_notification": "{count, plural, one {nouvelle notification} other {nouvelles notifications}}",
       "lets_go": "C'est parti !",
-      "update_available": "Mise à jour disponible"
+      "update_available": "Mise à jour disponible",
+      "advertisement": "Publicité{count, plural, one {} other {s}}"
     },
     "form": {
       "email": {
@@ -751,6 +752,12 @@
         "label": "Tarifs",
         "intro": "Ce principe d’abonnement est avant tout un soutien pour faire vivre le projet et continuer de le développer. Les fonctionnalités premium sont des bonus destinés à des usages poussés de Recomend qui justifient une petite participation financière. On conservera toujours la possibilité d’accéder au site gratuitement sans pubs et sans se sentir restreint.",
         "subdescription": "*Si le prix extrêmement faible de cet abonnement reste au-dessus de vos moyens, veuillez-vous tourner vers votre gouvernement libéral responsable de votre perte de pouvoir d’achat"
+      },
+      "legal": {
+        "label": "Légal & Confidentialité",
+        "description": "Nous respectons votre vie privée. Les publicités affichées aux utilisateurs non connectés sont gérées par Google et nécessitent l'utilisation de cookies techniques pour limiter la fréquence d'affichage et prévenir la fraude.",
+        "privacyPolicy": "Lire notre politique de confidentialité",
+        "manageCookies": "Gérer mes préférences publicitaires (Cookies)"
       },
       "businessmodel": {
         "label": "Business model",

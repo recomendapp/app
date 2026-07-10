@@ -1,60 +1,56 @@
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarRail, SidebarSeparator } from "@/components/ui/sidebar";
-import { Link } from "@/lib/i18n/navigation";
-import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
-import { Icons } from "@/config/icons";
-import { SidebarLeftRoutes } from "./SidebarLeftRoutes";
-import { useUI } from "@/context/ui-context";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+  SidebarSeparator,
+} from '@/components/ui/sidebar';
+import { Icons } from '@/config/icons';
+import { SidebarLeftRoutes } from './SidebarLeftRoutes';
+import { useUI } from '@/context/ui-context';
+import { useAuth } from '@/context/auth-context';
+import AdBanner from '@/components/Ads/AdBanner';
+import { useTranslations } from 'next-intl';
 
 export const SidebarLeft = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
-	const { toggleSidebar, sidebarOpen: open } = useUI();
-	return (
-		<Sidebar collapsible="icon" {...props}>
-			<SidebarHeader>
-				<SidebarMenu>
-					<SidebarMenuItem>
-						<SidebarMenuButton onClick={toggleSidebar} className="fill-accent-yellow" asChild>
-							{open ? (
-								<Icons.site.logo className={`${open ? "w-full" : "w-0"}`} />
-							) : (
-								<Icons.site.icon className={`${open ? "w-8" : "w-4"}`} />
-							)}
-						</SidebarMenuButton>
-					</SidebarMenuItem>
-				</SidebarMenu>
-			</SidebarHeader>
-			<SidebarSeparator />
-			<SidebarContent>
-				<SidebarLeftRoutes />
-			</SidebarContent>
-			<SidebarSeparator />
-			<SidebarFooter>
-				<SidebarMenu>
-					<SidebarMenuItem>
-						<SidebarMenuButton
-						size="lg"
-						className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex justify-center items-center"
-					 	>
-							<Link
-							href={"https://oneummah.org.uk/appeals/gaza-emergency-appeal/"}
-							target="_blank"
-							className="relative w-full h-full"
-							>
-								<ImageWithFallback
-								src="/assets/free-palestine-min.webp"
-								alt="Free Palestine"
-								fill
-								sizes={`
-									(max-width: 640px) 40px,
-									80px
-								`}
-								className="object-contain"
-								/>
-							</Link>
-						</SidebarMenuButton>
-					</SidebarMenuItem>
-				</SidebarMenu>
-			</SidebarFooter>
-			<SidebarRail />
-		</Sidebar>
-	);
-}
+  const { toggleSidebar, sidebarOpen: open } = useUI();
+  const { session } = useAuth();
+  const t = useTranslations();
+  return (
+    <Sidebar collapsible="icon" {...props}>
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton onClick={toggleSidebar} className="fill-accent-yellow" asChild>
+              {open ? (
+                <Icons.site.logo className={`${open ? 'w-full' : 'w-0'}`} />
+              ) : (
+                <Icons.site.icon className={`${open ? 'w-8' : 'w-4'}`} />
+              )}
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
+      <SidebarSeparator />
+      <SidebarContent>
+        <SidebarLeftRoutes />
+      </SidebarContent>
+      <SidebarSeparator />
+      {session === null && (
+        <SidebarFooter>
+          <div className="w-full max-w-[250px] max-h-[250px] overflow-hidden">
+            <span className="text-[10px] text-muted-foreground uppercase tracking-widest mb-2 block text-center">
+              {t('common.messages.advertisement', { count: 1 })}
+            </span>
+            <AdBanner dataAdSlot="9520100200" className="my-0 min-h-[250px]" />
+          </div>
+        </SidebarFooter>
+      )}
+      <SidebarRail />
+    </Sidebar>
+  );
+};

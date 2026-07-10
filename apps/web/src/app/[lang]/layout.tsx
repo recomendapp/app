@@ -20,13 +20,13 @@ export const viewport: Viewport = {
 };
 
 export async function generateMetadata({
-  params
+  params,
 }: {
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
   const { lang } = await params;
   const t = await getTranslations();
-  
+
   return {
     title: {
       default: `${siteConfig.name} • ${t('site.tagline')}`,
@@ -54,8 +54,7 @@ export async function generateMetadata({
       siteName: siteConfig.name,
       title: `${siteConfig.name} • ${t('site.tagline')}`,
       description: t('site.description', { app: siteConfig.name }),
-      images: [
-      ],
+      images: [],
       type: 'website',
       url: siteConfig.url,
     },
@@ -68,8 +67,8 @@ export async function generateMetadata({
 
 export default async function LangLayout({
   children,
-  params
-} : {
+  params,
+}: {
   children: React.ReactNode;
   params: Promise<{ lang: string }>;
 }) {
@@ -79,14 +78,26 @@ export default async function LangLayout({
   return (
     <html lang={lang} suppressHydrationWarning>
       <head>
-        <link rel="search" type="application/opensearchdescription+xml" title="Recomend" href="/opensearch.xml" />
+        <link
+          rel="search"
+          type="application/opensearchdescription+xml"
+          title="Recomend"
+          href="/opensearch.xml"
+        />
       </head>
       {process.env.NODE_ENV === 'production' && (
-        <Script
-        defer
-        src={process.env.ANALYTICS_URL}
-        data-website-id={process.env.ANALYTICS_ID}
-        />
+        <>
+          <Script
+            defer
+            src={process.env.ANALYTICS_URL}
+            data-website-id={process.env.ANALYTICS_ID}
+          />
+          <Script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID}`}
+            crossOrigin="anonymous"
+          />
+        </>
       )}
       <body className={cn('font-sans antialiased', fontSans.variable)}>
         <Providers locale={lang as SupportedLocale}>{children}</Providers>

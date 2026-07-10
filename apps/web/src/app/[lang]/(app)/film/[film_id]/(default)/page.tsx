@@ -12,37 +12,42 @@ import { getMovie } from '@/api/server/medias';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { JustWatchWidget } from '@/components/JustWatch/JustWatchWidgetScript';
 import { MovieCasting } from './_components/MovieCasting';
+import { MovieAds } from './_components/MovieAds';
 
-export async function generateMetadata(
-  props: {
-      params: Promise<{
-        lang: SupportedLocale;
-        film_id: string;
-      }>;
-  }
-): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{
+    lang: SupportedLocale;
+    film_id: string;
+  }>;
+}): Promise<Metadata> {
   const { lang, film_id } = await props.params;
   const t = await getTranslations({ locale: lang as SupportedLocale });
-  const { id: movieId} = getIdFromSlug(film_id);
+  const { id: movieId } = getIdFromSlug(film_id);
   const { data: movie, error } = await getMovie(lang, movieId);
   if (error || !movie) {
     return { title: upperFirst(t('common.messages.film_not_found')) };
   }
   return {
-    title: t('pages.film.metadata.title', { title: movie.title!, year: new Date(String(movie.releaseDate)).getFullYear() }),
+    title: t('pages.film.metadata.title', {
+      title: movie.title!,
+      year: new Date(String(movie.releaseDate)).getFullYear(),
+    }),
     description: truncate(
       movie.directors
         ? t('pages.film.metadata.description', {
-          title: movie.title!,
-          directors: new Intl.ListFormat(lang, { style: 'long', type: 'conjunction' }).format(movie.directors.map((director) => director.name ?? '')),
-          year: new Date(String(movie.releaseDate)).getFullYear(),
-          overview: movie.overview || '',
-        }) : t('pages.film.metadata.description_no_director', {
-          title: movie.title!,
-          year: new Date(String(movie.releaseDate)).getFullYear(),
-          overview: movie.overview || ''
-        }),
-      { length: siteConfig.seo.description.limit }
+            title: movie.title!,
+            directors: new Intl.ListFormat(lang, { style: 'long', type: 'conjunction' }).format(
+              movie.directors.map((director) => director.name ?? ''),
+            ),
+            year: new Date(String(movie.releaseDate)).getFullYear(),
+            overview: movie.overview || '',
+          })
+        : t('pages.film.metadata.description_no_director', {
+            title: movie.title!,
+            year: new Date(String(movie.releaseDate)).getFullYear(),
+            overview: movie.overview || '',
+          }),
+      { length: siteConfig.seo.description.limit },
     ),
     alternates: generateAlternates(lang, `/film/${movie.slug}`),
     openGraph: {
@@ -51,35 +56,36 @@ export async function generateMetadata(
       description: truncate(
         movie.directors
           ? t('pages.film.metadata.description', {
-            title: movie.title!,
-            directors: new Intl.ListFormat(lang, { style: 'long', type: 'conjunction' }).format(movie.directors.map((director) => director.name ?? '')),
-            year: new Date(String(movie.releaseDate)).getFullYear(),
-            overview: movie.overview || '',
-          }) : t('pages.film.metadata.description_no_director', {
-            title: movie.title!,
-            year: new Date(String(movie.releaseDate)).getFullYear(),
-            overview: movie.overview || ''
-          }),
-        { length: siteConfig.seo.description.limit }
+              title: movie.title!,
+              directors: new Intl.ListFormat(lang, { style: 'long', type: 'conjunction' }).format(
+                movie.directors.map((director) => director.name ?? ''),
+              ),
+              year: new Date(String(movie.releaseDate)).getFullYear(),
+              overview: movie.overview || '',
+            })
+          : t('pages.film.metadata.description_no_director', {
+              title: movie.title!,
+              year: new Date(String(movie.releaseDate)).getFullYear(),
+              overview: movie.overview || '',
+            }),
+        { length: siteConfig.seo.description.limit },
       ),
       url: `${siteConfig.url}/${lang}/film/${movie.slug}`,
-      images: movie.posterPath ? [
-        { url: getTmdbImage({ path: movie.posterPath, size: 'w500' }) },
-      ] : undefined,
+      images: movie.posterPath
+        ? [{ url: getTmdbImage({ path: movie.posterPath, size: 'w500' }) }]
+        : undefined,
       type: 'video.movie',
       locale: lang,
-    }
+    },
   };
 }
 
-export default async function MoviePage(
-  props: {
-    params: Promise<{
-      lang: SupportedLocale;
-      film_id: string;
-    }>;
-  }
-) {
+export default async function MoviePage(props: {
+  params: Promise<{
+    lang: SupportedLocale;
+    film_id: string;
+  }>;
+}) {
   const { lang, film_id } = await props.params;
   const t = await getTranslations();
   const { id: movieId } = getIdFromSlug(film_id);
@@ -96,23 +102,29 @@ export default async function MoviePage(
     datePublished: movie.releaseDate ?? undefined,
     dateModified: new Date().toISOString(),
     duration: movie.runtime ? toISO8601Duration(movie.runtime) : undefined,
-    director: movie.directors
-      ?.map(director => ({
-        '@type': 'Person',
-        name: director.name ?? undefined,
-        image: director.profilePath ? getTmdbImage({ path: director.profilePath, size: 'w500' }) : undefined,
-      })),
-    aggregateRating: movie.voteAverage ? {
-      '@type': 'AggregateRating',
-      ratingValue: movie.voteAverage,
-      ratingCount: movie.voteCount ?? 0,
-      bestRating: 10,
-      worstRating: 1,
-    } : undefined,
+    director: movie.directors?.map((director) => ({
+      '@type': 'Person',
+      name: director.name ?? undefined,
+      image: director.profilePath
+        ? getTmdbImage({ path: director.profilePath, size: 'w500' })
+        : undefined,
+    })),
+    aggregateRating: movie.voteAverage
+      ? {
+          '@type': 'AggregateRating',
+          ratingValue: movie.voteAverage,
+          ratingCount: movie.voteCount ?? 0,
+          bestRating: 10,
+          worstRating: 1,
+        }
+      : undefined,
   };
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="@container/movie-details flex flex-col gap-4">
         <div className="flex flex-col @4xl/movie-details:flex-row gap-4 justify-between">
           <div>
@@ -128,8 +140,9 @@ export default async function MoviePage(
             className="min-w-[20%]"
           />
         </div>
+        <MovieAds />
         <div>
-			    <h2 className="text-lg font-medium">{upperFirst(t('common.messages.cast'))}</h2>
+          <h2 className="text-lg font-medium">{upperFirst(t('common.messages.cast'))}</h2>
           <MovieCasting movie={movie} />
         </div>
       </div>
