@@ -4,6 +4,7 @@ import { Link } from '@/lib/i18n/navigation';
 import { upperFirst } from 'lodash';
 import { Metadata } from 'next';
 import { SupportedLocale } from '@libs/i18n';
+import { ConsentButton } from '@/components/Ads/ConsentButton';
 
 export const generateMetadata = async (props: {
   params: Promise<{
@@ -162,6 +163,20 @@ const About = async (props: {
         </h2>
         <p>{t('pricing.intro')}</p>
         <p className="text-xs italic text-muted-foreground">{t('pricing.subdescription')}</p>
+      </section>
+
+      <section id="legal" className="w-full flex flex-col gap-4 px-4 max-w-xl">
+        <h2 className="text-center font-semibold text-3xl text-accent-yellow">
+          {t('legal.label')}
+        </h2>
+        <p>{t('legal.description')}</p>
+        <Link
+          href="/legal/privacy-policy"
+          className="font-bold text-accent-pink hover:underline underline-offset-2"
+        >
+          {t('legal.privacyPolicy')}
+        </Link>
+        <ConsentButton />
       </section>
       {/* BUSINESS MODEL */}
       <section id="businessmodel" className="w-full flex flex-col gap-4 px-4 max-w-xl">
