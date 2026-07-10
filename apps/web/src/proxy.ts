@@ -11,17 +11,15 @@ export async function proxy(request: NextRequest) {
   const response = intlMiddleware(request);
 
   const [, maybeLocale, ...rest] = new URL(
-    response.headers.get('x-middleware-rewrite') || request.url
+    response.headers.get('x-middleware-rewrite') || request.url,
   ).pathname.split('/');
   const isValidLocale = ([...routing.locales] as string[]).includes(maybeLocale);
   const locale = isValidLocale ? maybeLocale : routing.defaultLocale;
   const pathname = '/' + (isValidLocale ? rest.join('/') : [maybeLocale, ...rest].join('/'));
 
   const isBrowser =
-    request.headers.get("accept")?.includes("text/html") &&
-    /Mozilla|Chrome|Safari|Firefox|Edge/i.test(
-      request.headers.get("user-agent") || ""
-    );
+    request.headers.get('accept')?.includes('text/html') &&
+    /Mozilla|Chrome|Safari|Firefox|Edge/i.test(request.headers.get('user-agent') || '');
 
   const session = getSessionCookie(request);
 
@@ -35,14 +33,10 @@ export async function proxy(request: NextRequest) {
     const redirect = request.nextUrl.searchParams.get('redirect');
 
     if (redirect) {
-      return NextResponse.redirect(
-        new URL(`/${locale}${redirect}`, request.url)
-      )
+      return NextResponse.redirect(new URL(`/${locale}${redirect}`, request.url));
     }
 
-    return NextResponse.redirect(
-      new URL(`/${locale}`, request.url)
-    );
+    return NextResponse.redirect(new URL(`/${locale}`, request.url));
   }
 
   /**
@@ -54,18 +48,18 @@ export async function proxy(request: NextRequest) {
     }
     const redirectTo = encodeURIComponent(pathname);
     return NextResponse.redirect(
-      new URL(`/${locale}/auth/login?redirect=${redirectTo}`, request.url)
+      new URL(`/${locale}/auth/login?redirect=${redirectTo}`, request.url),
     );
   }
 
   ensureLocaleCookie(request, response, locale);
-  
-  return (response);
+
+  return response;
 }
 
 export const config = {
   matcher: [
-    "/((?!\\.well-known|api|_next|favicon\\.ico|robots\\.txt|manifest\\.webmanifest|sitemaps|opensearch\\.xml|assets|.*\\.(?:json|xml|js|css|png|jpg|jpeg|gif|svg)$).*)",
+    '/((?!\\.well-known|api|_next|favicon\\.ico|robots\\.txt|ads.txt|manifest\\.webmanifest|sitemaps|opensearch\\.xml|assets|.*\\.(?:json|xml|js|css|png|jpg|jpeg|gif|svg)$).*)',
   ],
 };
 
@@ -81,4 +75,4 @@ const isProtected = (pathname: string) => {
 };
 const isAnonOnly = (pathname: string) => {
   return siteConfig.routes.anonRoutes.some((path) => pathname.startsWith(path));
-}
+};
