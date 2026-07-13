@@ -6,16 +6,11 @@ import { AUTH_SERVICE, AuthService } from './auth.service';
 @ApiExcludeController()
 @Controller('auth')
 export class AuthController {
-  constructor(
-    @Inject(AUTH_SERVICE) private readonly auth: AuthService,
-  ) {}
+  constructor(@Inject(AUTH_SERVICE) private readonly auth: AuthService) {}
 
   @All('*')
   async handleAuth(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
-    const url = new URL(
-      req.raw.url || req.url,
-      `${req.protocol}://${req.hostname}`,
-    );
+    const url = new URL(req.raw.url || req.url, `${req.protocol}://${req.hostname}`);
 
     const headers = new Headers();
     Object.entries(req.headers).forEach(([key, value]) => {
@@ -40,8 +35,11 @@ export class AuthController {
       res.header(key, value);
     });
 
-    const body = response.body ? await response.json() : null;
+    if (!response.body) {
+      return res.send();
+    }
 
-    return res.send(body);
+    const textBody = await response.text();
+    return res.send(textBody);
   }
 }
