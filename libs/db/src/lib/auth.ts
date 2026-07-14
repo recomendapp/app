@@ -3,6 +3,7 @@ import { magicLink, openAPI, username } from 'better-auth/plugins';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { db } from './client';
 import { defaultSupportedLocale } from '@libs/i18n';
+import type { DBAdapter } from '@better-auth/core/db/adapter';
 import type {} from 'zod';
 
 export const additionalFields = {
@@ -13,7 +14,7 @@ export const additionalFields = {
     input: false,
   },
   language: {
-    type:  'string',
+    type: 'string',
     defaultValue: defaultSupportedLocale,
     required: true,
     input: true,
@@ -30,8 +31,10 @@ export const auth = betterAuth({
     openAPI(),
     magicLink({
       disableSignUp: true,
-      sendMagicLink: async () => { /* No-op for CLI */ },
-    })
+      sendMagicLink: async () => {
+        /* No-op for CLI */
+      },
+    }),
   ],
   emailAndPassword: {
     enabled: true,
