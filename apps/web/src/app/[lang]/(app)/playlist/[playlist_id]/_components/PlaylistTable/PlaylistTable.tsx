@@ -28,7 +28,7 @@ import {
 } from '@/components/ui/table';
 import { Columns } from './component/columns';
 import { useMediaQuery } from 'react-responsive';
-import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import toast from 'react-hot-toast';
 import {
@@ -42,11 +42,10 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { MouseSensor, TouchSensor } from '@/lib/dnd-kit/CustomSensor';
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { DataTableToolbar } from './component/data-table-toolbar';
-import { useAuth } from '@/context/auth-context';
 import { PlaylistItemWithMedia, PlaylistWithOwner } from '@libs/api-js';
 import { usePlaylist } from '@/hooks/use-playlist';
 import { usePlaylistItemUpdateMutation } from '@libs/query-client';
@@ -63,26 +62,25 @@ interface DataTableProps {
   // setPlaylistItems: React.Dispatch<React.SetStateAction<PlaylistItemMovie[]>>;
 }
 
-export default function PlaylistTable({
-  playlist,
-  items: itemsProp,
-}: DataTableProps) {
+export default function PlaylistTable({ playlist, items: itemsProp }: DataTableProps) {
   const common = useTranslations('common');
   const { canEdit } = usePlaylist({
     playlistId: playlist.id,
-  })
+  });
   // Mutations
   const { mutateAsync: updateItem } = usePlaylistItemUpdateMutation();
 
   const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [activeId, setActiveId] = React.useState<UniqueIdentifier | null>(null);
-  const items = React.useMemo<UniqueIdentifier[]>(() => itemsProp?.map((item) => item.id), [itemsProp]);
+  const items = React.useMemo<UniqueIdentifier[]>(
+    () => itemsProp?.map((item) => item.id),
+    [itemsProp],
+  );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = React.useState();
- 
+
   const table = useReactTable({
     data: itemsProp,
     columns: Columns(),
@@ -116,20 +114,14 @@ export default function PlaylistTable({
     if (isMobile) {
       table
         .getAllColumns()
-        .filter(
-          (column) =>
-            typeof column.accessorFn !== 'undefined' && column.getCanHide()
-        )
+        .filter((column) => typeof column.accessorFn !== 'undefined' && column.getCanHide())
         .forEach((column) => {
           column.toggleVisibility(false);
         });
     } else {
       table
         .getAllColumns()
-        .filter(
-          (column) =>
-            typeof column.accessorFn !== 'undefined' && column.getCanHide()
-        )
+        .filter((column) => typeof column.accessorFn !== 'undefined' && column.getCanHide())
         .forEach((column) => {
           column.toggleVisibility(true);
         });
@@ -148,34 +140,40 @@ export default function PlaylistTable({
         delay: 350,
         tolerance: 5,
       },
-    })
+    }),
   );
 
   const handleDragStart = React.useCallback((event: DragStartEvent) => {
     setActiveId(event.active.id);
   }, []);
 
-  const handleDragEnd = React.useCallback(async (event: DragEndEvent) => {
-    const { active, over } = event;
-    if (!active || !over) return;
-    if (active.id !== over?.id) {
-      const newIndex = items.indexOf(over.id);
-      await updateItem({
-        path: {
-          playlist_id: playlist.id,
-          item_id: Number(active.id),
-        },
-        body: {
-          position: newIndex + 1,
-        },
-      }, {
-        onError: () => {
-          toast.error(upperFirst(common('messages.an_error_occurred')));
-        }
-      });
-    }
-    setActiveId(null);
-  }, [updateItem, playlist.id, items, common]);
+  const handleDragEnd = React.useCallback(
+    async (event: DragEndEvent) => {
+      const { active, over } = event;
+      if (!active || !over) return;
+      if (active.id !== over?.id) {
+        const newIndex = items.indexOf(over.id);
+        await updateItem(
+          {
+            path: {
+              playlist_id: playlist.id,
+              item_id: Number(active.id),
+            },
+            body: {
+              position: newIndex + 1,
+            },
+          },
+          {
+            onError: () => {
+              toast.error(upperFirst(common('messages.an_error_occurred')));
+            },
+          },
+        );
+      }
+      setActiveId(null);
+    },
+    [updateItem, playlist.id, items, common],
+  );
 
   const handleDragCancel = React.useCallback(() => {
     setActiveId(null);
@@ -196,7 +194,7 @@ export default function PlaylistTable({
     <div className="flex flex-col gap-2 mx-4">
       <DataTableToolbar table={table} playlist={playlist} />
       <div className="rounded-md">
-        {(canEdit && !sorting.length && !globalFilter && !columnFilters.length) ? (
+        {canEdit && !sorting.length && !globalFilter && !columnFilters.length ? (
           <DndContext
             sensors={sensors}
             onDragEnd={handleDragEnd}
@@ -208,7 +206,7 @@ export default function PlaylistTable({
             <TableContainer table={table} items={items} />
             <DragOverlay>
               {activeId && (
-                <Table style={{ width: "100%" }}>
+                <Table style={{ width: '100%' }}>
                   <TableBody>
                     <StaticTableRow row={selectedRow} />
                   </TableBody>
@@ -227,13 +225,13 @@ export default function PlaylistTable({
 const TableContainer = ({
   table,
   items,
-} : {
+}: {
   table: TableType<PlaylistItemWithMedia>;
   items: UniqueIdentifier[];
 }) => {
   const common = useTranslations('common');
   return (
-  <Table>
+    <Table>
       <TableHeader>
         {table.getHeaderGroups().map((headerGroup) => (
           <TableRow key={headerGroup.id}>
@@ -241,12 +239,9 @@ const TableContainer = ({
               <TableHead key={header.id} className={!index ? 'pr-0' : ''}>
                 {header.isPlaceholder
                   ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
+                  : flexRender(header.column.columnDef.header, header.getContext())}
               </TableHead>
-              ))}
+            ))}
           </TableRow>
         ))}
       </TableHeader>
@@ -259,47 +254,35 @@ const TableContainer = ({
           </SortableContext>
         ) : (
           <TableRow>
-            <TableCell
-              colSpan={table.getAllColumns().length}
-              className="h-24 text-center"
-            >
-            {upperFirst(common('messages.no_results'))}
+            <TableCell colSpan={table.getAllColumns().length} className="h-24 text-center">
+              {upperFirst(common('messages.no_results'))}
             </TableCell>
           </TableRow>
         )}
       </TableBody>
     </Table>
-  )
-}
+  );
+};
 
-const DraggableTableRow = ({
-  row,
-} : {
-  row: Row<PlaylistItemWithMedia>;
-}) => {
+const DraggableTableRow = ({ row }: { row: Row<PlaylistItemWithMedia> }) => {
   const { canEdit } = usePlaylist({
     playlistId: row.original.playlistId,
   });
-  const {
-    attributes,
-    listeners,
-    transform,
-    transition,
-    setNodeRef,
-    isDragging
-  } = useSortable({
-    id: row.original.id
+  const { attributes, listeners, transform, transition, setNodeRef, isDragging } = useSortable({
+    id: row.original.id,
   });
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition: transition
+    transition: transition,
   };
 
   return (
-    <TableRow ref={setNodeRef} style={style} className='group'>
+    <TableRow ref={setNodeRef} style={style} className="group">
       {isDragging ? (
-        <TableCell className='bg-accent-yellow h-28' colSpan={row.getVisibleCells().length}>&nbsp;</TableCell>
+        <TableCell className="bg-accent-yellow h-28" colSpan={row.getVisibleCells().length}>
+          &nbsp;
+        </TableCell>
       ) : (
         row.getVisibleCells().map((cell) => (
           <TableCell
@@ -316,26 +299,23 @@ const DraggableTableRow = ({
   );
 };
 
-export const StaticTableRow = ({ row } : { row:  Row<PlaylistItemWithMedia> | null | undefined}) => {
+export const StaticTableRow = ({ row }: { row: Row<PlaylistItemWithMedia> | null | undefined }) => {
   return (
-    <TableRow className='bg-background'>
+    <TableRow className="bg-background">
       {row?.getVisibleCells().map((cell, i) => {
-          if (i === 0) {
-            return (
-              <TableCell key={cell.id}>
-                {flexRender(
-                  cell.column.columnDef.cell,
-                  cell.getContext()
-                )}
-              </TableCell>
-            );
-          }
+        if (i === 0) {
           return (
             <TableCell key={cell.id}>
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </TableCell>
           );
+        }
+        return (
+          <TableCell key={cell.id}>
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </TableCell>
+        );
       })}
     </TableRow>
-  )
-}
+  );
+};
