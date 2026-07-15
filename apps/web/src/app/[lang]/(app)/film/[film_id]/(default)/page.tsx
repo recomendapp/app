@@ -70,7 +70,7 @@ export async function generateMetadata(props: {
             }),
         { length: siteConfig.seo.description.limit },
       ),
-      url: `${siteConfig.url}/${lang}/film/${movie.slug}`,
+      url: `${siteConfig.url}/film/${movie.slug}`,
       images: movie.posterPath
         ? [{ url: getTmdbImage({ path: movie.posterPath, size: 'w500' }) }]
         : undefined,

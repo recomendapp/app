@@ -10,14 +10,12 @@ import { SupportedLocale } from '@libs/i18n';
 import { getTvSeries } from '@/api/server/medias';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{
-      lang: SupportedLocale;
-      tv_series_id: string;
-    }>;
-  }
-): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{
+    lang: SupportedLocale;
+    tv_series_id: string;
+  }>;
+}): Promise<Metadata> {
   const { lang, tv_series_id } = await props.params;
   const t = await getTranslations({ locale: lang });
   const { id: serieId } = getIdFromSlug(tv_series_id);
@@ -26,12 +24,15 @@ export async function generateMetadata(
     return { title: upperFirst(t('common.messages.tv_series_not_found')) };
   }
   return {
-    title: t('pages.tv_series.reviews.metadata.title', { title: tvSeries.name!, year: new Date(String(tvSeries.firstAirDate)).getFullYear() }),
+    title: t('pages.tv_series.reviews.metadata.title', {
+      title: tvSeries.name!,
+      year: new Date(String(tvSeries.firstAirDate)).getFullYear(),
+    }),
     description: truncate(
       t('pages.tv_series.reviews.metadata.description', {
         title: tvSeries.name!,
       }),
-      { length: siteConfig.seo.description.limit }
+      { length: siteConfig.seo.description.limit },
     ),
     alternates: generateAlternates(lang, `/tv-series/${tvSeries.slug}/reviews`),
     openGraph: {
@@ -41,26 +42,24 @@ export async function generateMetadata(
         t('pages.tv_series.reviews.metadata.description', {
           title: tvSeries.name!,
         }),
-        { length: siteConfig.seo.description.limit }
+        { length: siteConfig.seo.description.limit },
       ),
-      url: `${siteConfig.url}/${lang}/tv-series/${tvSeries.slug}/reviews`,
-      images: tvSeries.posterPath ? [
-        { url: getTmdbImage({ path: tvSeries.posterPath, size: 'w500' }) }
-      ] : undefined,
+      url: `${siteConfig.url}/tv-series/${tvSeries.slug}/reviews`,
+      images: tvSeries.posterPath
+        ? [{ url: getTmdbImage({ path: tvSeries.posterPath, size: 'w500' }) }]
+        : undefined,
       type: 'video.tv_show',
       locale: lang,
     },
   };
 }
 
-export default async function MovieReviewsPage(
-  props: {
-    params: Promise<{
-      lang: SupportedLocale;
-      tv_series_id: string;
-    }>;
-  }
-) {
+export default async function MovieReviewsPage(props: {
+  params: Promise<{
+    lang: SupportedLocale;
+    tv_series_id: string;
+  }>;
+}) {
   const { lang, tv_series_id } = await props.params;
   const { id: tvSeriesId } = getIdFromSlug(tv_series_id);
   const { data: tvSeries, error } = await getTvSeries(lang, tvSeriesId);

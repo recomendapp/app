@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   try {
     const sitemapIndexes = [
-      `${siteConfig.url}/sitemaps/statics.xml`,
+      `${siteConfig.url}/sitemaps/statics/index.xml`,
       `${siteConfig.url}/sitemaps/movies/index.xml.gz`,
       `${siteConfig.url}/sitemaps/tv-series/index.xml.gz`,
       `${siteConfig.url}/sitemaps/persons/index.xml.gz`,

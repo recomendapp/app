@@ -140,7 +140,7 @@ export default function robots(): MetadataRoute.Robots {
   ];
 
   return {
-    sitemap: `${siteConfig.url}/sitemaps/sitemap.xml`,
+    sitemap: `${siteConfig.url}/sitemaps/index.xml`,
     rules: [
       {
         userAgent: blockUserAgents,

@@ -36,7 +36,7 @@ export async function generateMetadata(props: {
       description: person.biography
         ? truncate(person.biography, { length: siteConfig.seo.description.limit })
         : undefined,
-      url: `${siteConfig.url}/${lang}/person/${person.slug}`,
+      url: `${siteConfig.url}/person/${person.slug}`,
       images: person.profilePath
         ? [{ url: getTmdbImage({ path: person.profilePath, size: 'w500' }) }]
         : undefined,

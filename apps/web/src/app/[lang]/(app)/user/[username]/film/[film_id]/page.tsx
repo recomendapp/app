@@ -60,7 +60,7 @@ export async function generateMetadata(props: {
         ),
         { length: siteConfig.seo.description.limit },
       ),
-      url: `${siteConfig.url}/${lang}/@${profile.username}`,
+      url: `${siteConfig.url}/@${profile.username}`,
       images: profile.avatar ? [{ url: profile.avatar }] : undefined,
       type: 'profile',
       locale: lang,
