@@ -1,6 +1,8 @@
 import { siteConfig } from '@/config/site';
 import { sitemapLocales } from '@/lib/i18n/routing';
+import { buildSitemap } from '@/lib/sitemap';
 import { NextResponse } from 'next/server';
+import type { MetadataRoute } from 'next';
 
 type StaticEntry = {
   path: string;
@@ -17,51 +19,23 @@ const STATIC_ENTRIES: StaticEntry[] = [
   { path: '/legal/privacy-policy', changeFrequency: 'monthly', priority: 0.5 },
 ];
 
-function escapeXml(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
-}
+function buildStaticEntries(): MetadataRoute.Sitemap {
+  const lastModified = new Date().toISOString().split('T')[0];
 
-function buildStaticSitemap(): string {
-  const lastMod = new Date().toISOString();
-
-  const urls = STATIC_ENTRIES.map((entry) => {
-    const loc = `${siteConfig.url}${entry.path}`;
-    const languages = sitemapLocales(entry.path);
-
-    const alternates = Object.entries(languages)
-      .map(
-        ([hreflang, href]) =>
-          `<xhtml:link rel="alternate" hreflang="${escapeXml(hreflang)}" href="${escapeXml(href)}"/>`,
-      )
-      .join('');
-
-    return (
-      `<url>` +
-      `<loc>${escapeXml(loc)}</loc>` +
-      `<lastmod>${lastMod}</lastmod>` +
-      `<changefreq>${entry.changeFrequency}</changefreq>` +
-      `<priority>${entry.priority}</priority>` +
-      alternates +
-      `</url>`
-    );
-  }).join('');
-
-  return (
-    `<?xml version="1.0" encoding="UTF-8"?>` +
-    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">` +
-    urls +
-    `</urlset>`
-  );
+  return STATIC_ENTRIES.map((entry) => ({
+    url: `${siteConfig.url}${entry.path}`,
+    lastModified,
+    changeFrequency: entry.changeFrequency,
+    priority: entry.priority,
+    alternates: {
+      languages: sitemapLocales(entry.path),
+    },
+  }));
 }
 
 export async function GET() {
   try {
-    const xml = buildStaticSitemap();
+    const xml = buildSitemap(buildStaticEntries());
     return new NextResponse(xml, {
       headers: {
         'Content-Type': 'application/xml',
