@@ -67,24 +67,8 @@ const nextConfig: NextConfig = {
       },
       // Sitemaps
       {
-        source: '/sitemaps/movies/:path*',
-        destination: 'https://medias.recomend.app/sitemaps/movies/:path*',
-      },
-      {
-        source: '/sitemaps/tv-series/:path*',
-        destination: 'https://medias.recomend.app/sitemaps/tv-series/:path*',
-      },
-      {
-        source: '/sitemaps/persons/:path*',
-        destination: 'https://medias.recomend.app/sitemaps/persons/:path*',
-      },
-      {
-        source: '/sitemaps/users/:path*',
-        destination: 'https://medias.recomend.app/sitemaps/users/:path*',
-      },
-      {
-        source: '/sitemaps/playlists/:path*',
-        destination: 'https://medias.recomend.app/sitemaps/playlists/:path*',
+        source: '/sitemaps/:path*',
+        destination: 'https://medias.recomend.app/sitemaps/:path*',
       },
     ];
   },
