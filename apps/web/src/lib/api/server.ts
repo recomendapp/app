@@ -1,9 +1,9 @@
-import { client } from '@libs/api-js';
 import { getLocale } from 'next-intl/server';
 import { headers } from 'next/headers';
 import { HEADER_LANGUAGE_KEY } from '@libs/i18n';
 import { SupportedLocale } from '@libs/i18n/src';
 import { INTERNAL_API_ENDPOINT } from '../env';
+import { createClient, createConfig } from '@libs/api-js';
 
 export interface GetApiOptions {
   headers?: Headers;
@@ -13,15 +13,15 @@ export interface GetApiOptions {
 export const getApi = async ({ headers: customHeaders, locale }: GetApiOptions = {}) => {
   const [h, l] = await Promise.all([customHeaders || headers(), locale || getLocale()]);
 
-  client.setConfig({
-    baseUrl: INTERNAL_API_ENDPOINT,
-    headers: {
-      cookie: h.get('cookie') || '',
-      [HEADER_LANGUAGE_KEY]: l,
-    },
-  });
-
-  return client;
+  return createClient(
+    createConfig({
+      baseUrl: INTERNAL_API_ENDPOINT,
+      headers: {
+        cookie: h.get('cookie') || '',
+        [HEADER_LANGUAGE_KEY]: l,
+      },
+    }),
+  );
 };
 
 export const getAnonApi = async ({
@@ -31,12 +31,12 @@ export const getAnonApi = async ({
 } = {}) => {
   const l = locale || (await getLocale());
 
-  client.setConfig({
-    baseUrl: INTERNAL_API_ENDPOINT,
-    headers: {
-      [HEADER_LANGUAGE_KEY]: l,
-    },
-  });
-
-  return client;
+  return createClient(
+    createConfig({
+      baseUrl: INTERNAL_API_ENDPOINT,
+      headers: {
+        [HEADER_LANGUAGE_KEY]: l,
+      },
+    }),
+  );
 };

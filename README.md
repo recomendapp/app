@@ -14,9 +14,8 @@ Monorepo of the **Recomend** app, dev by [@lxup](https://github.com/lxup).
 
 - ⚡️ [Next.js](https://nextjs.org/) – React Framework
 - 💳 [RevenueCat](https://www.revenuecat.com/) – Subscriptions
-- 🔔 [Novu](https://novu.co/) – In-app Notifications
 - 📲 [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging) – Push Notifications
-- ☁️ [Cloudflare R2](https://www.cloudflare.com/products/r2/) – Media Storage
+- ☁️ [Cloudflare R2](https://www.cloudflare.com/products/r2/) – Backups
 - ⚙️ [Prefect](https://www.prefect.io/) – DB Sync Scripts (with TMDB)
 - 🎞️ [TMDB](https://www.themoviedb.org/) – Movie & TV Metadata Provider
 
