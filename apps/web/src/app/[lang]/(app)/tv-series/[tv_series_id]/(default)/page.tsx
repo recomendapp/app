@@ -12,7 +12,6 @@ import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { JustWatchWidget } from '@/components/JustWatch/JustWatchWidgetScript';
 import { TvSeriesSeasons } from './_components/TvSeriesSeasons';
 import { TvSeriesCasting } from './_components/TvSeriesCasting';
-import { TvSeriesAds } from './_components/TvSeriesAds';
 
 export async function generateMetadata(props: {
   params: Promise<{
@@ -148,7 +147,7 @@ export default async function TvSeriesPage(props: {
           </h2>
           <TvSeriesSeasons tvSeries={tvSeries} />
         </div>
-        <TvSeriesAds />
+        {/*<TvSeriesAds />*/}
         <div>
           <h2 className="text-lg font-medium">{upperFirst(t('common.messages.cast'))}</h2>
           <TvSeriesCasting tvSeries={tvSeries} />

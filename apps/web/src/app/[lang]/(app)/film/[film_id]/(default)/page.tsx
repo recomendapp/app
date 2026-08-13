@@ -12,7 +12,6 @@ import { getMovie } from '@/api/server/medias';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { JustWatchWidget } from '@/components/JustWatch/JustWatchWidgetScript';
 import { MovieCasting } from './_components/MovieCasting';
-import { MovieAds } from './_components/MovieAds';
 
 export async function generateMetadata(props: {
   params: Promise<{
@@ -140,7 +139,7 @@ export default async function MoviePage(props: {
             className="min-w-[20%]"
           />
         </div>
-        <MovieAds />
+        {/*<MovieAds />*/}
         <div>
           <h2 className="text-lg font-medium">{upperFirst(t('common.messages.cast'))}</h2>
           <MovieCasting movie={movie} />

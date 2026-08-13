@@ -1,7 +1,6 @@
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -12,14 +11,9 @@ import {
 import { Icons } from '@/config/icons';
 import { SidebarLeftRoutes } from './SidebarLeftRoutes';
 import { useUI } from '@/context/ui-context';
-import { useAuth } from '@/context/auth-context';
-import AdBanner from '@/components/Ads/AdBanner';
-import { useTranslations } from 'next-intl';
 
 export const SidebarLeft = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
   const { toggleSidebar, sidebarOpen: open } = useUI();
-  const { session } = useAuth();
-  const t = useTranslations();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -40,7 +34,9 @@ export const SidebarLeft = ({ ...props }: React.ComponentProps<typeof Sidebar>) 
         <SidebarLeftRoutes />
       </SidebarContent>
       <SidebarSeparator />
-      {session === null && (
+      {/*{session === null && (
+      <>
+        <SidebarSeparator />
         <SidebarFooter>
           <div className="w-full max-w-[250px] max-h-[250px] overflow-hidden">
             <span className="text-[10px] text-muted-foreground uppercase tracking-widest mb-2 block text-center">
@@ -49,7 +45,8 @@ export const SidebarLeft = ({ ...props }: React.ComponentProps<typeof Sidebar>) 
             <AdBanner dataAdSlot="9520100200" className="my-0 min-h-[250px]" />
           </div>
         </SidebarFooter>
-      )}
+      </>
+      )}*/}
       <SidebarRail />
     </Sidebar>
   );

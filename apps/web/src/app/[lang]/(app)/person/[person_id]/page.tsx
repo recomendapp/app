@@ -9,7 +9,6 @@ import { getPerson } from '@/api/server/medias';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { WidgetPersonFilms } from './_components/WidgetPersonFilms';
 import { WidgetPersonTvSeries } from './_components/WidgetPersonTvSeries';
-import { PersonAds } from './_components/PersonAds';
 
 export async function generateMetadata(props: {
   params: Promise<{
@@ -59,7 +58,7 @@ export default async function Person(props: {
       <div className="max-w-7xl w-full">
         <WidgetPersonFilms personId={id} personSlug={person_id} />
         <WidgetPersonTvSeries personId={id} personSlug={person_id} />
-        <PersonAds />
+        {/*<PersonAds />*/}
       </div>
     </div>
   );
