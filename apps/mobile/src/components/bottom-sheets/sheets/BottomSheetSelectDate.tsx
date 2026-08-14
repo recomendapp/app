@@ -11,17 +11,20 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { upperFirst } from 'lodash';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import tw from '../../../lib/tw';
 
 interface BottomSheetSelectDateProps extends BottomSheetProps {
   defaultDate?: Date | null;
   onSave?: (newDate: Date) => Promise<void> | void;
   saveLabel?: string;
+  minDate?: Date;
+  maxDate?: Date;
 }
 
 export const BottomSheetSelectDate = React.forwardRef<
   React.ComponentRef<typeof TrueSheet>,
   BottomSheetSelectDateProps
->(({ id, defaultDate, onSave, saveLabel, ...props }, ref) => {
+>(({ id, defaultDate, onSave, saveLabel, minDate, maxDate, ...props }, ref) => {
   const { colors } = useTheme();
   const closeSheet = useBottomSheetStore((state) => state.closeSheet);
   const t = useTranslations();
@@ -58,7 +61,6 @@ export const BottomSheetSelectDate = React.forwardRef<
             paddingLeft: insets.left + PADDING_HORIZONTAL,
             paddingRight: insets.right + PADDING_HORIZONTAL,
             paddingTop: PADDING_VERTICAL,
-            backgroundColor: colors.background,
             borderTopColor: colors.border,
             borderTopWidth: 1,
           }}
@@ -68,7 +70,7 @@ export const BottomSheetSelectDate = React.forwardRef<
               footerHeight.value = e.nativeEvent.layout.height;
             }}
             disabled={!selectedDate}
-            variant="ghost"
+            variant="outline"
             size="lg"
             onPress={handleSave}
           >
@@ -78,11 +80,15 @@ export const BottomSheetSelectDate = React.forwardRef<
       }
       {...props}
     >
-      <RNDateTimePicker
-        value={selectedDate}
-        onChange={(e) => setSelectedDate(new Date(e.nativeEvent.timestamp))}
-        display="spinner"
-      />
+      <View style={tw`w-full items-center justify-center`}>
+        <RNDateTimePicker
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(new Date(e.nativeEvent.timestamp))}
+          display="spinner"
+          minimumDate={minDate}
+          maximumDate={maxDate}
+        />
+      </View>
       <Animated.View style={footerOffsetStyle} />
     </TrueSheet>
   );

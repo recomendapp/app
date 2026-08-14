@@ -101,7 +101,25 @@ const RootLayoutNav = () => {
       {/* MOVIES */}
       <Stack.Screen
         name="film/[film_id]/watched-dates"
-        options={{ title: upperFirst(t('common.messages.watched_dates')), presentation: 'modal' }}
+        options={{
+          title: upperFirst(t('common.messages.watched_dates')),
+          presentation:
+            Platform.OS === 'ios'
+              ? isLiquidGlassAvailable && osName !== 'iPadOS'
+                ? 'formSheet'
+                : 'modal'
+              : 'modal',
+          sheetGrabberVisible: true,
+          sheetAllowedDetents: [0.8],
+          sheetInitialDetentIndex: 0,
+          headerTransparent: false,
+          ...(isLiquidGlassAvailable
+            ? {
+                contentStyle: { backgroundColor: 'transparent' },
+                headerStyle: { backgroundColor: 'transparent' },
+              }
+            : {}),
+        }}
       />
       {/* RECOS */}
       <Stack.Protected guard={!!user}>

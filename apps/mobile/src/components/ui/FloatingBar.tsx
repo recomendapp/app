@@ -13,12 +13,13 @@ import tw from '../../lib/tw';
 import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { scheduleOnRN } from 'react-native-worklets';
+import { GlassView } from 'expo-glass-effect';
 
 interface FloatingBarProps {
   children: React.ReactNode;
   initialVisible?: boolean;
   initialAnimation?: boolean;
-  style?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
+  style?: StyleProp<ViewStyle>;
   containerStyle?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
   maxWidth?: number;
   animationDuration?: number;
@@ -50,7 +51,7 @@ export const FloatingBar = forwardRef<FloatingBarRef, FloatingBarProps>(
     ref,
   ) => {
     const insets = useSafeAreaInsets();
-    const { colors } = useTheme();
+    const { colors, isLiquidGlassAvailable } = useTheme();
 
     const shouldAnimateOnMount = initialVisible && initialAnimation;
     const isVisible = useSharedValue(initialVisible);
@@ -103,7 +104,6 @@ export const FloatingBar = forwardRef<FloatingBarRef, FloatingBarProps>(
 
     const animatedStyle = useAnimatedStyle(() => {
       return {
-        opacity: opacity.value,
         transform: [{ translateY: translateY.value }, { scale: scale.value }],
         pointerEvents: isVisible.value ? 'auto' : 'none',
       };
@@ -125,7 +125,7 @@ export const FloatingBar = forwardRef<FloatingBarRef, FloatingBarProps>(
           animatedStyle,
         ]}
       >
-        <Animated.View
+        <GlassView
           onLayout={(e) => {
             const newHeight = e.nativeEvent.layout.height;
             if (height) {
@@ -136,18 +136,17 @@ export const FloatingBar = forwardRef<FloatingBarRef, FloatingBarProps>(
           style={[
             tw`rounded-2xl shadow-lg w-full`,
             {
-              backgroundColor: colors.muted,
+              backgroundColor: !isLiquidGlassAvailable ? colors.muted : 'transparent',
               borderWidth: 1,
               borderColor: colors.border,
-              paddingVertical: PADDING_VERTICAL,
-              paddingHorizontal: PADDING_HORIZONTAL,
+              padding: PADDING_VERTICAL,
               maxWidth: maxWidth,
             },
             style,
           ]}
         >
           {children}
-        </Animated.View>
+        </GlassView>
       </Animated.View>
     );
   },
