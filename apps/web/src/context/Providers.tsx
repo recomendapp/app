@@ -16,6 +16,7 @@ import { SupportedLocale } from '@libs/i18n';
 import { getStatus } from '@/api/server/system';
 import { getMe, getSession } from '@/lib/auth/server';
 import { ApiProvider } from '@/lib/api/client';
+import { AuthPromptGate } from '@/components/Auth/AuthPromptGate';
 
 export const Providers = async ({
   children,
@@ -57,6 +58,7 @@ export const Providers = async ({
                   >
                     <TooltipProvider delayDuration={100}>
                       <ModalProvider>
+                        <AuthPromptGate />
                         <NextTopLoader
                           showSpinner={false}
                           easing="ease"

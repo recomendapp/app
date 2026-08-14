@@ -137,7 +137,7 @@ export const MovieWidget = () => {
               </div>
             </div>
           </div>
-          <div className="flex justify-between gap-2 px-4 pb-4">
+          <div className="flex justify-between gap-2">
             <div className="flex gap-2 overflow-x-auto items-center">
               <ButtonLogMovieRating movieId={movie.id} />
               <ButtonLogMovieLike movieId={movie.id} />
