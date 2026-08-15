@@ -1,0 +1,2 @@
+ALTER TABLE "explore_item" ADD CONSTRAINT "unique_explore_item_explore_movie" UNIQUE("explore_id","movie_id");--> statement-breakpoint
+ALTER TABLE "explore_item" ADD CONSTRAINT "unique_explore_item_explore_tv_series" UNIQUE("explore_id","tv_series_id");

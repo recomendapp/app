@@ -1,4 +1,14 @@
-// import { Camera, CameraRef, MapView, MapViewRef, MarkerView, OnPressEvent, ShapeSource, SymbolLayer } from "@maplibre/maplibre-react-native";
+import {
+  Camera,
+  CameraRef,
+  FilterSpecification,
+  GeoJSONSource,
+  Layer,
+  Map,
+  MapRef,
+  PressEventWithFeatures,
+} from '@maplibre/maplibre-react-native';
+import { NativeSyntheticEvent } from 'react-native';
 import styleJSON from '../../assets/map/style.json';
 import { Text } from '../../components/ui/text';
 import { View } from '../../components/ui/view';
@@ -10,10 +20,12 @@ import {
   PADDING_HORIZONTAL,
   PADDING_VERTICAL,
 } from '../../theme/globals';
+import { useQuery } from '@tanstack/react-query';
+import { exploreGenresOptions, useExplore, useExploreItemsAll } from '@libs/query-client';
+import { ExploreItemWithMovie, ExploreItemWithTvSeries } from '@libs/api-js';
 import { Stack, useRouter } from 'expo-router';
 import { useTheme } from '../../providers/ThemeProvider';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
-// import { ExploreTile } from "@recomendapp/types";
 import Color from 'color';
 import { Button } from '../../components/ui/Button';
 import { Icons } from '../../constants/Icons';
@@ -29,10 +41,12 @@ import { useExploreStore } from '../../stores/useExploreStore';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
 import { Input } from '../../components/ui/Input';
-import { useExploreTileMetaQuery, useExploreTileQuery } from '../../api/explore/exploreQueries';
 import { useUIStore } from '../../stores/useUIStore';
 
 const MOVE_DELAY = 500;
+const EXPLORE_SLUG = 'paradise-picture';
+
+type ExploreItem = ExploreItemWithMovie | ExploreItemWithTvSeries;
 
 const ExploreScreen = () => {
   const router = useRouter();
@@ -44,8 +58,8 @@ const ExploreScreen = () => {
   const { height: screenHeight } = useWindowDimensions();
 
   // REFs
-  // const mapRef = useRef<MapViewRef>(null);
-  // const cameraRef = useRef<CameraRef>(null);
+  const mapRef = useRef<MapRef>(null);
+  const cameraRef = useRef<CameraRef>(null);
   const searchRef = useRef<TrueSheet>(null);
   const locationDetailsRef = useRef<LocationDetailsBottomSheetMethods>(null);
 
@@ -60,46 +74,120 @@ const ExploreScreen = () => {
 
   // States
   const { map, setMapCamera } = useUIStore((state) => state);
-  // const [selectedMovie, setSelectedMovie] = useState<ExploreTile['features'][number] | null>(null);
+  const [selectedItem, setSelectedItem] = useState<ExploreItem | null>(null);
   const [showRecenter, setShowRecenter] = useState(false);
 
   const baseZoom = 8;
 
-  // const {
-  // 	data: genres,
-  // } = useMediaGenresQuery();
+  // `useExplore` persists its result and handles its own daily staleness/invalidation
+  // (see libs/query-client/src/lib/explore/exploreHooks.ts) — `items` is only refetched
+  // when it detects the explore's `updatedAt` changed.
+  const { data: explore } = useExplore({ identifier: EXPLORE_SLUG });
+  const { data: items } = useExploreItemsAll({ identifier: EXPLORE_SLUG });
 
-  const { data: tile, refetch: refetchTile } = useExploreTileQuery({ exploreId: 1 });
-  const { data: tileMeta } = useExploreTileMetaQuery({ exploreId: 1 });
+  // No separate genres fetch — useExploreItemsAll() derives this from `media.genres` across
+  // `items` and keeps it in this (persisted) query, recomputed only when the item list changes.
+  const { data: availableGenres } = useQuery(exploreGenresOptions({ identifier: EXPLORE_SLUG }));
+
+  // `Map` is shadowed by the maplibre `Map` component import above, hence the plain record.
+  const itemsById = useMemo(() => {
+    const byId: Record<number, ExploreItem> = {};
+    items?.forEach((item) => {
+      byId[item.id] = item;
+    });
+    return byId;
+  }, [items]);
+
+  // GeoJSON built client-side from the flat item list.
+  const featureCollection = useMemo(
+    (): GeoJSON.FeatureCollection => ({
+      type: 'FeatureCollection',
+      features: (items ?? []).map((item) => ({
+        type: 'Feature',
+        id: item.id,
+        geometry: {
+          type: 'Point',
+          coordinates: [item.location.lng, item.location.lat],
+        },
+        properties: {
+          id: item.id,
+          title: item.type === 'movie' ? item.media.title : item.media.name,
+          releaseDate: item.type === 'movie' ? item.media.releaseDate : item.media.firstAirDate,
+          genresIds: (item.media.genres ?? []).map((genre) => genre.id),
+        },
+      })),
+    }),
+    [items],
+  );
+
+  const symbolFilter = useMemo(
+    () =>
+      [
+        'all',
+        ...(filters.releaseDate.min
+          ? [['>=', ['slice', ['get', 'releaseDate'], 0, 4], String(filters.releaseDate.min)]]
+          : []),
+        ...(filters.releaseDate.max
+          ? [['<=', ['slice', ['get', 'releaseDate'], 0, 4], String(filters.releaseDate.max)]]
+          : []),
+        ...(filters.genres.selected.length > 0
+          ? [
+              filters.genres.match === 'all'
+                ? [
+                    'all',
+                    ...filters.genres.selected.map((genreId) => [
+                      'in',
+                      genreId,
+                      ['get', 'genresIds'],
+                    ]),
+                  ]
+                : [
+                    'any',
+                    ...filters.genres.selected.map((genreId) => [
+                      'in',
+                      genreId,
+                      ['get', 'genresIds'],
+                    ]),
+                  ],
+            ]
+          : []),
+      ] as unknown as FilterSpecification,
+    [filters],
+  );
 
   // Handlers
-  // const handleSaveCameraPosition = useCallback(async () => {
-  // 	if (!mapRef.current) return;
-  // 	try {
-  // 		const center = await mapRef.current.getCenter();
-  // 		const zoom = await mapRef.current.getZoom();
+  const handleSaveCameraPosition = useCallback(async () => {
+    if (!mapRef.current) return;
+    try {
+      const center = await mapRef.current.getCenter();
+      const zoom = await mapRef.current.getZoom();
 
-  // 		const lng = center[0];
-  // 		const lat = center[1];
+      const lng = center[0];
+      const lat = center[1];
 
-  // 		setMapCamera([lng, lat], zoom);
-  // 	} catch (error) {
-  // 		console.error('Error getting camera position:', error);
-  // 	}
-  // }, [setMapCamera]);
+      setMapCamera([lng, lat], zoom);
+    } catch (error) {
+      console.error('Error getting camera position:', error);
+    }
+  }, [setMapCamera]);
 
-  // const handleOnLocationPress = useCallback((e: OnPressEvent) => {
-  // 	const location = e.features.at(0) as ExploreTile['features'][number];
-  // 	if (!location) return;
-  // 	setSelectedMovie(location);
-  // }, []);
+  const handleOnLocationPress = useCallback(
+    (e: NativeSyntheticEvent<PressEventWithFeatures>) => {
+      const featureId = e.nativeEvent.features.at(0)?.properties?.id;
+      if (featureId === undefined) return;
+      const item = itemsById[featureId];
+      if (!item) return;
+      setSelectedItem(item);
+    },
+    [itemsById],
+  );
 
-  // const handleOnSearchItemPress = useCallback((item: ExploreTile['features'][number]) => {
-  // 	setSelectedMovie(item);
+  // const handleOnSearchItemPress = useCallback((item: ExploreItem) => {
+  // 	setSelectedItem(item);
   // }, []);
 
   // const handleOnLocationClose = useCallback(() => {
-  // 	setSelectedMovie(null);
+  // 	setSelectedItem(null);
   // }, []);
 
   // Styles
@@ -122,19 +210,20 @@ const ExploreScreen = () => {
   });
 
   // useEffects
-  // useEffect(() => {
-  // 	if (selectedMovie) {
-  // 		cameraRef.current?.flyTo(selectedMovie.geometry.coordinates, MOVE_DELAY);
-  // 		locationDetailsRef.current?.present(selectedMovie.properties);
-  // 	}
-  // 	setShowRecenter(false);
-  // }, [selectedMovie]);
-
   useEffect(() => {
-    if (tile && tileMeta && tile.updated_at !== tileMeta.updated_at) {
-      refetchTile();
+    if (selectedItem) {
+      cameraRef.current?.flyTo({
+        center: [selectedItem.location.lng, selectedItem.location.lat],
+        duration: MOVE_DELAY,
+      });
+      // The details sheet only supports movies for now — tv_series items are selectable
+      // (highlighted on the map) but don't open a sheet yet.
+      if (selectedItem.type === 'movie') {
+        locationDetailsRef.current?.present({ movieId: selectedItem.mediaId });
+      }
     }
-  }, [tile, tileMeta, refetchTile]);
+    setShowRecenter(false);
+  }, [selectedItem]);
 
   useLayoutEffect(() => {
     return () => {
@@ -144,167 +233,123 @@ const ExploreScreen = () => {
 
   return (
     <>
-      {/* <Stack.Screen
-		options={{
-			headerTitle: () => <></>,
-			headerShown: true,
-			headerTransparent: true,
-			headerStyle: {
-				backgroundColor: 'transparent',
-			},
-			headerLeft: () => (
-				<View>
-					<Button variant="muted" icon={Icons.ChevronLeft} size="icon" style={{ borderRadius: BORDER_RADIUS_FULL }} onPress={() => router.canGoBack() ? router.back() : router.replace({ pathname: '/(tabs)/(home)'})} />
-				</View>
-			),
-		}}
-		/> */}
-      {/* <MapView
-		ref={mapRef}
-		style={{ flex: 1 }}
-		mapStyle={styleJSON}
-		attributionEnabled={false}
-		onRegionDidChange={async () => {
-			handleSaveCameraPosition();
+      <Stack.Screen
+        options={{
+          headerTitle: () => <></>,
+          headerShown: true,
+          headerTransparent: true,
+          headerStyle: {
+            backgroundColor: 'transparent',
+          },
+        }}
+      />
+      <Map
+        ref={mapRef}
+        style={{ flex: 1 }}
+        mapStyle={JSON.stringify(styleJSON)}
+        attribution={false}
+        logo={false}
+        onRegionDidChange={async () => {
+          handleSaveCameraPosition();
 
-			if (!mapRef.current || !selectedMovie) return;
+          if (!mapRef.current || !selectedItem) return;
 
-			try {
-				const bounds = await mapRef.current.getVisibleBounds();
-				if (!bounds || bounds.length !== 2) return;
+          try {
+            const bounds = await mapRef.current.getBounds();
+            if (!bounds || bounds.length !== 4) return;
 
-				const [sw, ne] = bounds;
-				const [lng, lat] = selectedMovie.geometry.coordinates;
+            const minLng = bounds[0];
+            const minLat = bounds[1];
+            const maxLng = bounds[2];
+            const maxLat = bounds[3];
 
-				const minLng = Math.min(sw[0], ne[0]);
-				const maxLng = Math.max(sw[0], ne[0]);
-				const minLat = Math.min(sw[1], ne[1]);
-				const maxLat = Math.max(sw[1], ne[1]);
+            const lng = selectedItem.location.lng;
+            const lat = selectedItem.location.lat;
 
-				const isVisible =
-				lng >= minLng && lng <= maxLng &&
-				lat >= minLat && lat <= maxLat;
+            const isVisible = lng >= minLng && lng <= maxLng && lat >= minLat && lat <= maxLat;
 
-				setShowRecenter(!isVisible);
-
-			} catch (error) {
-				console.error('Error getting visible bounds:', error);
-			}
-		}}
-		>
-			<Camera
-			ref={cameraRef}
-			defaultSettings={{
-				centerCoordinate: map.center,
-				zoomLevel: map.zoom,
-			}}
-			maxZoomLevel={12}
-			minZoomLevel={7}
-			maxBounds={{
-				sw: [0.5, 47],
-				ne: [4.5, 50],
-			}}
-			/>
-			{genres && tile && (
-				<ShapeSource
-				id="explore-points"
-				shape={tile}
-				// onPress={handleOnLocationPress}
-				>
-					<SymbolLayer
-					id="movies"
-					filter={[
-						'all',
-						...(filters.releaseDate.min
-							? [['>=', ['slice', ['get', 'release_date', ['get', 'movie']], 0, 4], String(filters.releaseDate.min)]]
-							: []),
-						...(filters.releaseDate.max
-							? [['<=', ['slice', ['get', 'release_date', ['get', 'movie']], 0, 4], String(filters.releaseDate.max)]]
-							: []),
-						...(filters.runtime.min
-							? [['>=', ['get', 'runtime', ['get', 'movie']], filters.runtime.min]]
-							: []),
-						...(filters.runtime.max
-							? [['<=', ['get', 'runtime', ['get', 'movie']], filters.runtime.max]]
-							: []),
-						...(filters.genres.selected.length > 0
-							? [
-								filters.genres.match === 'all'
-								? [
-									'all',
-									...filters.genres.selected.map((genreId) => [
-										'in',
-										genreId,
-										['get', 'genres_ids', ['get', 'movie']],
-									]),
-									]
-								: [
-									'any',
-									...filters.genres.selected.map((genreId) => [
-										'in',
-										genreId,
-										['get', 'genres_ids', ['get', 'movie']],
-									]),
-									],
-							]
-							: []),
-						...(selectedMovie
-							? [['!=', ['get', 'id', ['get', 'movie']], selectedMovie.properties.movie.id]]
-							: []),
-					]}
-					style={{
-						// TEXT
-						textField: ['get', 'title', ['get', 'movie']],
-						textFont: ['Open Sans Bold'],
-						textSize: [
-							"interpolate",
-							["exponential", 2],
-							["zoom"],
-							0,
-							1.5 * Math.pow(2, 0 - baseZoom),
-							24,
-							1.5 * Math.pow(2, 24 - baseZoom)
-						],
-						textAllowOverlap: true,
-						textVariableAnchor: ['left', 'right', 'top-left', 'top-right', 'bottom-left', 'bottom-right'],
-						textOffset: [1, 0],
-						textColor: [
-							'case',
-							['==', ['get', 'id', ['get', 'movie']], selectedMovie?.properties.movie.id ?? -1],
-							Color(colors.accentBlue).hex(),
-							Color(colors.accentYellow).hex(),
-						],
-						textHaloColor: 'black',
-						textHaloWidth: [
-							'interpolate',
-							['exponential', 2],
-							['zoom'],
-							0,
-							0.01 * Math.pow(2, 0 - baseZoom),
-							24,
-							0.01 * Math.pow(2, 24 - baseZoom)
-						],
-						textHaloBlur: 1,
-						// ICON
-						iconImage: [
-							'coalesce',
-							['image', ['concat', 'genres/', ['to-string', ['get', 'id', ['at', 0, ['get', 'genres', ['get', 'movie']]]]]]],
-							'genres/default'
-						],
-						iconSize: [
-							"interpolate",
-							["exponential", 2],
-							["zoom"],
-							0,
-							0.08 * Math.pow(2, 0 - baseZoom),
-							24,
-							0.08 * Math.pow(2, 24 - baseZoom)
-						]
-					}}
-					/>
-				</ShapeSource>
-			)}
-		</MapView> */}
+            setShowRecenter(!isVisible);
+          } catch (error) {
+            console.error('Error getting visible bounds:', error);
+          }
+        }}
+      >
+        <Camera
+          ref={cameraRef}
+          initialViewState={{
+            center: map.center,
+            zoom: map.zoom,
+          }}
+          maxZoom={12}
+          minZoom={7}
+          maxBounds={[0.5, 47, 4.5, 50]}
+        />
+        <GeoJSONSource id="explore-items" data={featureCollection} onPress={handleOnLocationPress}>
+          <Layer
+            id="explore-items-symbols"
+            type="symbol"
+            filter={symbolFilter}
+            layout={{
+              // TEXT
+              'text-field': ['get', 'title'],
+              'text-font': ['Open Sans Bold'],
+              'text-size': [
+                'interpolate',
+                ['exponential', 2],
+                ['zoom'],
+                0,
+                1.5 * Math.pow(2, 0 - baseZoom),
+                24,
+                1.5 * Math.pow(2, 24 - baseZoom),
+              ],
+              'text-allow-overlap': true,
+              'text-variable-anchor': [
+                'left',
+                'right',
+                'top-left',
+                'top-right',
+                'bottom-left',
+                'bottom-right',
+              ],
+              'text-offset': [1, 0],
+              // ICON — sprite named after the item's first genre id, falling back to a default.
+              'icon-image': [
+                'coalesce',
+                ['image', ['concat', 'genres/', ['to-string', ['at', 0, ['get', 'genresIds']]]]],
+                'genres/default',
+              ],
+              'icon-size': [
+                'interpolate',
+                ['exponential', 2],
+                ['zoom'],
+                0,
+                0.08 * Math.pow(2, 0 - baseZoom),
+                24,
+                0.08 * Math.pow(2, 24 - baseZoom),
+              ],
+            }}
+            paint={{
+              'text-color': [
+                'case',
+                ['==', ['get', 'id'], selectedItem?.id ?? -1],
+                Color(colors.accentBlue).hex(),
+                Color(colors.accentYellow).hex(),
+              ],
+              'text-halo-color': '#000000',
+              'text-halo-width': [
+                'interpolate',
+                ['exponential', 2],
+                ['zoom'],
+                0,
+                0.01 * Math.pow(2, 0 - baseZoom),
+                24,
+                0.01 * Math.pow(2, 24 - baseZoom),
+              ],
+              'text-halo-blur': 1,
+            }}
+          />
+        </GeoJSONSource>
+      </Map>
 
       {/* <TrueSheet
 		ref={searchRef}
@@ -334,19 +379,28 @@ const ExploreScreen = () => {
           animatedOptionsStyle,
         ]}
       >
-        {/* {showRecenter && (
+        {showRecenter && (
           <Button
             icon={Icons.Navigation}
             size="icon"
             variant="muted"
             onPress={() => {
-              if (selectedMovie) {
-                cameraRef.current?.moveTo(selectedMovie.geometry.coordinates, MOVE_DELAY);
+              if (selectedItem) {
+                cameraRef.current?.flyTo({
+                  center: [selectedItem.location.lng, selectedItem.location.lat],
+                  duration: MOVE_DELAY,
+                });
               }
             }}
           />
-        )} */}
+        )}
       </Animated.View>
+      <LocationDetailsBottomSheet
+        ref={locationDetailsRef}
+        index={animatedPOIDetailsIndex}
+        position={animatedPOIDetailsPosition}
+        onClose={() => setSelectedItem(null)}
+      />
     </>
   );
 };

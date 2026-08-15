@@ -41,7 +41,7 @@ interface LocationDetailsBottomSheetProps {
 }
 
 export interface LocationDetailsBottomSheetMethods {
-  present: (item: ExploreTile['features'][number]['properties']) => void;
+  present: (item: { movieId: number }) => void;
 }
 
 export const LocationDetailsBottomSheet = forwardRef<
@@ -56,11 +56,10 @@ export const LocationDetailsBottomSheet = forwardRef<
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
   // States
-  const [selectedLocation, setSelectedLocation] =
-    useState<ExploreTile['features'][number]['properties']>();
+  const [selectedLocation, setSelectedLocation] = useState<{ movieId: number }>();
 
   // Queries
-  const { data: movie } = useQuery(movieOptions({ movieId: selectedLocation?.movie.id }));
+  const { data: movie } = useQuery(movieOptions({ movieId: selectedLocation?.movieId }));
 
   //#region hooks
   const headerHeight = useHeaderHeight();

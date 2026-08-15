@@ -1,5 +1,6 @@
 export * from './auth';
 export * from './bookmark';
+export * from './explore';
 export * from './i18n';
 export * from './log';
 export * from './playlist';
