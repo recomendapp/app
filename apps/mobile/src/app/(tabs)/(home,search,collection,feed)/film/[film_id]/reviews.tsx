@@ -65,7 +65,7 @@ const FilmReviews = () => {
     );
   const reviews = useMemo(() => data?.pages.flatMap((page) => page.data) || [], [data]);
   // Handlers
-  const handleSortBy = useCallback(() => {
+  const handleSortBy = () => {
     const sortByOptionsWithCancel = [
       ...sortByOptions,
       { label: upperFirst(t('common.messages.cancel')), value: 'cancel' },
@@ -84,10 +84,10 @@ const FilmReviews = () => {
         setSortBy(sortByOptionsWithCancel[selectedIndex] as sortBy);
       },
     );
-  }, [sortByOptions, showActionSheetWithOptions]);
-  const handleSortOrderToggle = useCallback(() => {
+  };
+  const handleSortOrderToggle = () => {
     setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-  }, []);
+  };
 
   const renderItem = useCallback(
     ({ item: { author, rating, ...review } }: { item: ReviewMovieWithAuthor }) => (

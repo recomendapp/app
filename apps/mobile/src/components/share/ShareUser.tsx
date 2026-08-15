@@ -310,6 +310,8 @@ export const ShareUser = forwardRef<ShareViewRef, ShareUserProps>(
     }, [editing, activeEditingOption]);
 
     // useEffects
+    // Resets bgColor from the async palette; bgColor stays independently user-editable afterward.
+    /* eslint-disable react-hooks/set-state-in-effect */
     useEffect(() => {
       if (palette) {
         setBgColor({ index: 0, color: palette[0] });
@@ -317,6 +319,7 @@ export const ShareUser = forwardRef<ShareViewRef, ShareUserProps>(
         setBgColor(null);
       }
     }, [palette]);
+    /* eslint-enable react-hooks/set-state-in-effect */
 
     return (
       <View style={{ gap: GAP }} {...props}>

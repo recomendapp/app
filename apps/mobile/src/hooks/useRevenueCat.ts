@@ -35,6 +35,8 @@ export const useRevenueCat = (user: User | null | undefined) => {
 
   useEffect(() => {
     if (!isInitialized && user?.id) {
+      // Purchases SDK init — imperative one-time setup, not derivable from render state.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       init(user?.id).catch(console.error);
       return;
     }

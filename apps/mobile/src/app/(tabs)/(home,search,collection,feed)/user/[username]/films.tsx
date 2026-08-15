@@ -53,7 +53,7 @@ const UserCollectionMovieScreen = () => {
     );
   const movies = useMemo(() => data?.pages.flatMap((page) => page.data) || [], [data]);
   // Handlers
-  const handleSortBy = useCallback(() => {
+  const handleSortBy = () => {
     const sortByOptionsWithCancel = [
       ...sortByOptions,
       { label: upperFirst(t('common.messages.cancel')), value: 'cancel' },
@@ -72,7 +72,7 @@ const UserCollectionMovieScreen = () => {
         setSortBy(sortByOptionsWithCancel[selectedIndex] as sortBy);
       },
     );
-  }, [sortByOptions, showActionSheetWithOptions, sortBy.value, t]);
+  };
 
   return (
     <>

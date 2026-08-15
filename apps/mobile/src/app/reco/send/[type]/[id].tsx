@@ -4,7 +4,7 @@ import { useAuth } from '../../../../providers/AuthProvider';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FlatList, Pressable } from 'react-native';
 import { useTranslations } from 'use-intl';
@@ -72,16 +72,7 @@ const RecoSend = () => {
 
   // States
   const [search, setSearch] = useState('');
-  const [results, setResults] = useState<typeof friends>([]);
   const [selected, setSelected] = useState<UserSummary[]>([]);
-  const resultsRender = useMemo(
-    () =>
-      results?.map((item) => ({
-        item: item,
-        isSelected: selected.some((selectedItem) => selectedItem.id === item.id),
-      })) || [],
-    [results, selected],
-  );
   const canSave = useMemo(() => {
     return selected.length > 0;
   }, [selected]);
@@ -114,13 +105,21 @@ const RecoSend = () => {
       threshold: 0.5,
     });
   }, [friends]);
-  useEffect(() => {
+  const results = useMemo(() => {
     if (search && search.length > 0) {
-      setResults(fuse?.search(search).map((result) => result.item));
-    } else {
-      setResults(friends);
+      return fuse?.search(search).map((result) => result.item);
     }
+    return friends;
   }, [search, friends, fuse]);
+
+  const resultsRender = useMemo(
+    () =>
+      results?.map((item) => ({
+        item: item,
+        isSelected: selected.some((selectedItem) => selectedItem.id === item.id),
+      })) || [],
+    [results, selected],
+  );
 
   // Handlers
   const handleToggleUser = useCallback((user: UserSummary) => {

@@ -52,7 +52,7 @@ const UserCollectionMovie = () => {
   const loading = data === undefined || isLoading;
   const movies = useMemo(() => data?.pages.flatMap((page) => page.data) || [], [data]);
   // Handlers
-  const handleSortBy = useCallback(() => {
+  const handleSortBy = () => {
     const sortByOptionsWithCancel = [
       ...sortByOptions,
       { label: upperFirst(t('common.messages.cancel')), value: 'cancel' },
@@ -71,10 +71,10 @@ const UserCollectionMovie = () => {
         setSortBy(sortByOptionsWithCancel[selectedIndex] as sortBy);
       },
     );
-  }, [sortByOptions, showActionSheetWithOptions, sortBy.value, t]);
-  const handleSortOrder = useCallback(() => {
+  };
+  const handleSortOrder = () => {
     setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-  }, []);
+  };
 
   const renderItem = useCallback(
     ({ item }: { item: LogMovieWithMovieNoReview }) => (

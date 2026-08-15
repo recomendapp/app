@@ -51,7 +51,7 @@ const UserCollectionTvSeries = () => {
   const loading = data === undefined || isLoading;
   const tvSeries = useMemo(() => data?.pages.flatMap((page) => page.data) || [], [data]);
   // Handlers
-  const handleSortBy = useCallback(() => {
+  const handleSortBy = () => {
     const sortByOptionsWithCancel = [
       ...sortByOptions,
       { label: upperFirst(t('common.messages.cancel')), value: 'cancel' },
@@ -70,10 +70,10 @@ const UserCollectionTvSeries = () => {
         setSortBy(sortByOptionsWithCancel[selectedIndex] as sortBy);
       },
     );
-  }, [sortByOptions, showActionSheetWithOptions, sortBy.value, t]);
-  const handleSortOrder = useCallback(() => {
+  };
+  const handleSortOrder = () => {
     setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-  }, []);
+  };
 
   const renderItem = useCallback(
     ({ item }: { item: LogTvSeriesWithTvSeriesNoReview }) => (

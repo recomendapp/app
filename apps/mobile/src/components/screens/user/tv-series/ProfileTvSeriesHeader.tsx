@@ -91,8 +91,11 @@ export const ProfileTvSeriesHeader: React.FC<ProfileTvSeriesHeaderProps> = ({
       onLayout={(event: LayoutChangeEvent) => {
         'worklet';
         const height = event.nativeEvent.layout.height;
+        // Reanimated shared value mutations on the UI thread.
+        /* eslint-disable react-hooks/immutability */
         headerHeight.value = height;
         triggerHeight.value = (height - navigationHeaderHeight) * 0.7;
+        /* eslint-enable react-hooks/immutability */
       }}
     >
       <Animated.View style={[tw`absolute inset-0`, bgAnim]}>

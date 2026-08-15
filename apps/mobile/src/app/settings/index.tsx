@@ -12,7 +12,7 @@ import { AuthError } from 'expo-auth-session';
 import { Href, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { LucideIcon } from 'lucide-react-native';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Alert, Pressable } from 'react-native';
 import { useTranslations } from 'use-intl';
 import * as Application from 'expo-application';
@@ -47,7 +47,7 @@ const SettingsScreen = () => {
   const router = useRouter();
   const t = useTranslations();
 
-  const [appVersion, setAppVersion] = useState<string | null>(null);
+  const appVersion = useMemo(() => Application.nativeApplicationVersion, []);
 
   const handleLogout = useCallback(async () => {
     try {
@@ -192,10 +192,6 @@ const SettingsScreen = () => {
     ),
     [appVersion, t],
   );
-
-  useEffect(() => {
-    setAppVersion(Application.nativeApplicationVersion);
-  }, []);
 
   return (
     <>

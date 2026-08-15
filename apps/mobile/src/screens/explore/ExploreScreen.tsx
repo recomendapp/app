@@ -222,6 +222,7 @@ const ExploreScreen = () => {
         locationDetailsRef.current?.present({ movieId: selectedItem.mediaId });
       }
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reacts to selection alongside the camera/sheet imperative calls above
     setShowRecenter(false);
   }, [selectedItem]);
 
@@ -368,6 +369,7 @@ const ExploreScreen = () => {
 			</View>
 		</TrueSheet> */}
       <Animated.View
+        // eslint-disable-next-line react-hooks/immutability -- Reanimated shared value mutation
         onLayout={(e) => (optionsHeight.value = e.nativeEvent.layout.height)}
         style={[
           {

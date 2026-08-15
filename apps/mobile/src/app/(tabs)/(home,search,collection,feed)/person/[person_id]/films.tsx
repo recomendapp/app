@@ -59,7 +59,7 @@ const PersonFilmsScreen = () => {
   const movies = useMemo(() => data?.pages.flatMap((page) => page.data), [data]);
   const loading = useMemo(() => data === undefined || isLoading, [data, isLoading]);
   // Handlers
-  const handleSortBy = useCallback(() => {
+  const handleSortBy = () => {
     const sortByOptionsWithCancel = [
       ...sortByOptions,
       { label: upperFirst(t('common.messages.cancel')), value: 'cancel' },
@@ -78,7 +78,7 @@ const PersonFilmsScreen = () => {
         setSortBy(sortByOptionsWithCancel[selectedIndex] as sortBy);
       },
     );
-  }, [sortByOptions, showActionSheetWithOptions, sortBy.value, t]);
+  };
 
   const renderItem = useCallback(
     ({ item: { movie } }: { item: PersonMovie }) => (

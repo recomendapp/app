@@ -148,11 +148,14 @@ const PlaylistSortScreen = () => {
   );
 
   // useEffects
+  // Seeds the locally-draggable copy once the query resolves; playlistItems then diverges via drag reordering.
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (playlistItemsRequest) {
       setPlaylistItems(playlistItemsRequest);
     }
   }, [playlistItemsRequest]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   if (canEditItem === false) {
     return <Redirect href={'..'} />;

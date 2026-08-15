@@ -312,6 +312,7 @@ const HomeScreen = () => {
           scrollY={scrollY}
           onLayout={(e) => {
             const { height } = e.nativeEvent.layout;
+            // eslint-disable-next-line react-hooks/immutability -- Reanimated shared value mutation
             triggerHeight.value = (height - navigationHeaderHeight) * 0.7;
           }}
         />

@@ -146,7 +146,8 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
   useEffect(() => {
     if (!user) return;
 
-    // Register token
+    // Register token — async registration, state updates happen in the resolved callback.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     handleRegisterForPushNotificationsAsync().then(
       (token) => {
         setPushToken(token);

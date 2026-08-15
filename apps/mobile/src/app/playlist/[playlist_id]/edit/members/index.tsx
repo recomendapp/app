@@ -129,19 +129,17 @@ const ModalPlaylistEditMembers = () => {
 
   // Search
   const [search, setSearch] = useState('');
-  const [results, setResults] = useState<PlaylistMemberWithUser[]>([]);
   const fuse = useMemo(() => {
     return new Fuse(members || [], {
       keys: ['user.username', 'user.name'],
       threshold: 0.5,
     });
   }, [members]);
-  useEffect(() => {
+  const results = useMemo(() => {
     if (search.length > 0) {
-      setResults(fuse?.search(search).map(({ item }) => item));
-    } else {
-      setResults(members || []);
+      return fuse?.search(search).map(({ item }) => item);
     }
+    return members || [];
   }, [search, members, fuse]);
   /* -------------------------------------------------------------------------- */
 

@@ -81,16 +81,7 @@ const PlaylistAddTo = () => {
 
   // States
   const [search, setSearch] = useState('');
-  const [results, setResults] = useState<typeof playlists>([]);
   const [selected, setSelected] = useState<PlaylistWithOwner[]>([]);
-  const resultsRender = useMemo(
-    () =>
-      results?.map((item) => ({
-        item: item,
-        isSelected: selected.some((selectedItem) => selectedItem.id === item.id),
-      })) || [],
-    [results, selected],
-  );
   const canSave = useMemo(() => selected.length > 0, [selected]);
 
   const modalHeaderOptions = useModalHeaderOptions({
@@ -120,13 +111,21 @@ const PlaylistAddTo = () => {
       threshold: 0.5,
     });
   }, [playlists]);
-  useEffect(() => {
+  const results = useMemo(() => {
     if (search && search.length > 0) {
-      setResults(fuse?.search(search).map((result) => result.item));
-    } else {
-      setResults(playlists);
+      return fuse?.search(search).map((result) => result.item);
     }
+    return playlists;
   }, [search, playlists, fuse]);
+
+  const resultsRender = useMemo(
+    () =>
+      results?.map((item) => ({
+        item: item,
+        isSelected: selected.some((selectedItem) => selectedItem.id === item.id),
+      })) || [],
+    [results, selected],
+  );
 
   // Handlers
   const handleTogglePlaylist = useCallback((playlist: PlaylistWithOwner) => {

@@ -59,7 +59,7 @@ const FilmPlaylists = () => {
   const loading = data === undefined || isLoading;
   const playlists = useMemo(() => data?.pages.flatMap((page) => page.data) || [], [data]);
   // Handlers
-  const handleSortBy = useCallback(() => {
+  const handleSortBy = () => {
     const sortByOptionsWithCancel = [
       ...sortByOptions,
       { label: upperFirst(t('common.messages.cancel')), value: 'cancel' },
@@ -78,11 +78,11 @@ const FilmPlaylists = () => {
         setSortBy(sortByOptionsWithCancel[selectedIndex] as sortBy);
       },
     );
-  }, [sortByOptions, showActionSheetWithOptions, t, sortBy.value]);
+  };
 
-  const handleSortOrderToggle = useCallback(() => {
+  const handleSortOrderToggle = () => {
     setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-  }, []);
+  };
 
   const renderItem = useCallback(
     ({ item: { owner, ...playlist } }: { item: PlaylistWithOwner }) => (

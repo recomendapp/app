@@ -122,8 +122,8 @@ const CollectionScreen = <T extends Record<string, any>>({
 
   const [view, setView] = React.useState<ViewType>(defaultView);
 
-  const [renderItems, setRenderItems] = React.useState<typeof data>([]);
   const [search, setSearch] = React.useState('');
+  const [debouncedSearch, setDebouncedSearch] = React.useState('');
   const [sortBy, setSortBy] = React.useState<SortByOption<T>>(sortByOptions[0]);
   const [sortOrder, setSortOrder] = React.useState<'asc' | 'desc'>(sortByOptions[0].defaultOrder);
 
@@ -146,18 +146,21 @@ const CollectionScreen = <T extends Record<string, any>>({
     },
   });
 
+  const filteredItems = React.useMemo(() => {
+    if (debouncedSearch.length > 0) {
+      return fuse.search(debouncedSearch).map(({ item }) => item);
+    }
+    return data || [];
+  }, [debouncedSearch, fuse, data]);
+
+  const renderItems = React.useMemo(() => {
+    if (sortBy && sortBy.sortFn) {
+      return [...filteredItems].sort((a, b) => sortBy.sortFn(a, b, sortOrder));
+    }
+    return filteredItems;
+  }, [filteredItems, sortBy, sortOrder]);
+
   // Handlers
-  const handleSearch = useCallback(
-    (query: string) => {
-      if (query.length > 0) {
-        const results = fuse.search(query).map(({ item }) => item);
-        setRenderItems(results);
-      } else {
-        setRenderItems(data || []);
-      }
-    },
-    [fuse, data],
-  );
   const handleViewChange = useCallback(
     (newView: ViewType) => {
       setView(newView);
@@ -165,7 +168,7 @@ const CollectionScreen = <T extends Record<string, any>>({
     },
     [onViewChange],
   );
-  const handleSortBy = useCallback(() => {
+  const handleSortBy = () => {
     openSheet(BottomSheetSort, {
       options: sortByOptions,
       selectedValue: sortBy.value,
@@ -175,7 +178,7 @@ const CollectionScreen = <T extends Record<string, any>>({
         setSortOrder(order);
       },
     });
-  }, [openSheet, sortByOptions, sortBy, sortOrder]);
+  };
 
   // Render
   const renderItem = useCallback(
@@ -210,18 +213,6 @@ const CollectionScreen = <T extends Record<string, any>>({
     ],
   );
 
-  React.useEffect(() => {
-    if (data) {
-      handleSearch(search);
-    }
-  }, [data, search]);
-
-  React.useEffect(() => {
-    if (sortBy && sortBy.sortFn) {
-      setRenderItems((prev) => [...(prev ?? [])].sort((a, b) => sortBy.sortFn(a, b, sortOrder)));
-    }
-  }, [sortBy, sortOrder, data, getItemTitle, getCreatedAt]);
-
   return (
     <>
       <AnimatedLegendList
@@ -247,7 +238,7 @@ const CollectionScreen = <T extends Record<string, any>>({
                 <MemoizedSearchBar
                   value={search}
                   onChangeText={setSearch}
-                  onSearch={handleSearch}
+                  onSearch={setDebouncedSearch}
                   debounceMs={200}
                   placeholder={searchPlaceholder}
                 />

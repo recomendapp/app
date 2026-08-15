@@ -58,7 +58,7 @@ const TvSeriesPlaylists = () => {
     );
   const playlists = useMemo(() => data?.pages.flatMap((page) => page.data) || [], [data]);
   // Handlers
-  const handleSortBy = useCallback(() => {
+  const handleSortBy = () => {
     const sortByOptionsWithCancel = [
       ...sortByOptions,
       { label: upperFirst(t('common.messages.cancel')), value: 'cancel' },
@@ -77,11 +77,11 @@ const TvSeriesPlaylists = () => {
         setSortBy(sortByOptionsWithCancel[selectedIndex] as sortBy);
       },
     );
-  }, [sortByOptions, showActionSheetWithOptions]);
+  };
 
-  const handleSortOrderToggle = useCallback(() => {
+  const handleSortOrderToggle = () => {
     setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-  }, []);
+  };
 
   const renderItem = useCallback(
     ({ item: { owner, ...playlist } }: { item: PlaylistWithOwner }) => (

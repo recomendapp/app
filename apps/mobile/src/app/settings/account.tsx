@@ -54,10 +54,9 @@ const SettingsAccountScreen = () => {
   const { verified: isVerified } = useMemo(() => verifiedSchema.parse(rawParams), [rawParams]);
 
   const now = useNow();
-  const dateLastUsernameUpdate = useMemo(
-    () => (user?.usernameUpdatedAt ? new Date(user.usernameUpdatedAt) : new Date('01/01/1970')),
-    [user?.usernameUpdatedAt],
-  );
+  const dateLastUsernameUpdate = user?.usernameUpdatedAt
+    ? new Date(user.usernameUpdatedAt)
+    : new Date('01/01/1970');
   const usernameDisabled =
     (now.getTime() - dateLastUsernameUpdate.getTime()) / (1000 * 60 * 60 * 24) < 30 ? true : false;
 
