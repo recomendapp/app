@@ -98,7 +98,7 @@ export const logMovieWatchedDate = pgTable(
     logMovieId: bigint('log_movie_id', { mode: 'number' })
       .notNull()
       .references(() => logMovie.id, { onDelete: 'cascade' }),
-    watchedDate: timestamp('watched_date', { withTimezone: true, mode: 'string' })
+    watchedDate: timestamp('watched_date', { withTimezone: true, mode: 'date' })
       .defaultNow()
       .notNull(),
     format: watchFormatEnum('format').default('theater').notNull(),

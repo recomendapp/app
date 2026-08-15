@@ -19,6 +19,8 @@ export function Card({ children, style }: CardProps) {
           width: '100%',
           backgroundColor: colors.card,
           borderRadius: BORDER_RADIUS,
+          borderWidth: 1,
+          borderColor: colors.border,
           padding: 18,
           shadowColor: colors.foreground,
           shadowOffset: { width: 0, height: 2 },
@@ -51,7 +53,7 @@ interface CardTitleProps {
 export function CardTitle({ children, style }: CardTitleProps) {
   return (
     <Text
-      variant='title'
+      variant="title"
       style={[
         {
           marginBottom: 4,
@@ -71,7 +73,7 @@ interface CardDescriptionProps {
 
 export function CardDescription({ children, style }: CardDescriptionProps) {
   return (
-    <Text variant='caption' style={[style]}>
+    <Text variant="caption" style={[style]}>
       {children}
     </Text>
   );

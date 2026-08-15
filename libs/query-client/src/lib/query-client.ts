@@ -1,3 +1,4 @@
+export * from './explore';
 export * from './playlists';
 export * from './users';
 export * from './me';

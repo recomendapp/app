@@ -44,8 +44,12 @@ import Color from 'color';
 import { ShapeVerticalRoundedBackground, ShapeVerticalRoundedForeground } from '../../lib/icons';
 import { getTmdbImage } from '../../lib/tmdb/getTmdbImage';
 import { TvSeriesCompact, TvSeriesImage } from '@libs/api-js';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { tvSeriesImagesInfiniteOptions } from '@libs/query-client';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { tvSeriesImagesInfiniteOptions, tvSeriesLogOptions } from '@libs/query-client';
+import { useAuth } from '../../providers/AuthProvider';
+import UserAvatar from '../user/UserAvatar';
+import Switch from '../ui/Switch';
+import { useTranslations } from 'use-intl';
 
 interface ShareTvSeriesProps extends React.ComponentProps<typeof ViewShot> {
   tvSeries: TvSeriesCompact;
@@ -123,13 +127,64 @@ const EditOptionsSelector = ({
 };
 
 /* -------------------------------- VARIANTS -------------------------------- */
+type ShareRating = {
+  rating: number;
+  name: string;
+  avatarUrl?: string | null;
+};
+
+const ShareRatingBadge = ({ rating, name, avatarUrl, scale }: ShareRating & { scale: number }) => {
+  const { colors } = useTheme();
+  return (
+    <Animated.View
+      entering={FadeInDown}
+      exiting={FadeOutDown}
+      style={[
+        tw`absolute inset-0 justify-center items-center`,
+        {
+          top: 12 * scale,
+          left: 0,
+          right: 0,
+        },
+      ]}
+    >
+      <View
+        style={[
+          tw`items-center`,
+          {
+            gap: 4 * scale,
+          },
+        ]}
+      >
+        <View
+          style={[
+            tw`items-center justify-center aspect-square rounded-full`,
+            {
+              backgroundColor: colors.accentYellowForeground,
+              borderColor: colors.accentYellow,
+              borderWidth: 2 * scale,
+              padding: 6 * scale,
+            },
+          ]}
+        >
+          <Text style={[tw`font-bold`, { color: colors.accentYellow, fontSize: 26 * scale }]}>
+            {rating % 1 === 0 ? rating : rating.toFixed(1)}
+          </Text>
+        </View>
+      </View>
+    </Animated.View>
+  );
+};
+
 const ShareTvSeriesDefault = ({
   tvSeries,
   posterUrl,
+  rating,
   scale = 1,
 }: {
   tvSeries: TvSeriesCompact;
   posterUrl: string | undefined;
+  rating?: ShareRating | null;
   scale?: number;
 }) => {
   const { colors } = useTheme();
@@ -146,18 +201,21 @@ const ShareTvSeriesDefault = ({
         padding: (PADDING / 2) * scale,
       }}
     >
-      <ImageWithFallback
-        source={{ uri: posterUrl ?? '' }}
-        alt={tvSeries.name ?? ''}
-        type={'tv_series'}
-        style={[
-          {
-            aspectRatio: 2 / 3,
-            borderRadius: BORDER_RADIUS * scale,
-          },
-          tw`w-full h-auto`,
-        ]}
-      />
+      <View style={tw`relative`}>
+        <ImageWithFallback
+          source={{ uri: posterUrl ?? '' }}
+          alt={tvSeries.name ?? ''}
+          type={'tv_series'}
+          style={[
+            {
+              aspectRatio: 2 / 3,
+              borderRadius: BORDER_RADIUS * scale,
+            },
+            tw`w-full h-auto`,
+          ]}
+        />
+        {rating ? <ShareRatingBadge {...rating} scale={scale} /> : null}
+      </View>
       <View>
         <Text style={[tw`font-bold`, { fontSize: 16 * scale }]}>{tvSeries.name}</Text>
         {creatorsText && (
@@ -166,6 +224,21 @@ const ShareTvSeriesDefault = ({
           </Text>
         )}
       </View>
+      {rating && (
+        <View style={[tw`flex-row items-center`, { gap: 4 * scale }]}>
+          <UserAvatar
+            full_name={rating.name}
+            avatar_url={rating.avatarUrl}
+            style={{ width: 16 * scale, height: 16 * scale }}
+          />
+          <Text
+            numberOfLines={1}
+            style={[tw`font-semibold shrink`, { color: colors.foreground, fontSize: 11 * scale }]}
+          >
+            {rating.name}
+          </Text>
+        </View>
+      )}
       <Icons.app.logo color={colors.accentYellow} height={10 * scale} />
     </View>
   );
@@ -364,6 +437,16 @@ export const ShareTvSeries = forwardRef<ShareViewRef, ShareTvSeriesProps>(
     const viewShotRef = useRef<ViewShot>(null);
     const { height: screenHeight } = useWindowDimensions();
     const { colors } = useTheme();
+    const t = useTranslations();
+    const { user } = useAuth();
+    const { data: log } = useQuery(
+      tvSeriesLogOptions({
+        userId: user?.id,
+        tvSeriesId: tvSeries.id,
+      }),
+    );
+    const hasRating = !!log?.rating;
+    const [showRating, setShowRating] = useState(false);
     // States
     const [poster, setPoster] = useState<TvSeriesImage | undefined>(undefined);
     const posterUrl = useMemo(
@@ -430,11 +513,25 @@ export const ShareTvSeries = forwardRef<ShareViewRef, ShareTvSeriesProps>(
       },
     }));
 
+    const ratingBadge = useMemo((): ShareRating | null => {
+      if (!showRating || !log?.rating) return null;
+      return {
+        rating: log.rating,
+        name: user?.name || user?.username || '',
+        avatarUrl: user?.avatar,
+      };
+    }, [showRating, log?.rating, user?.name, user?.username, user?.avatar]);
+
     const renderSticker = useCallback(
       (scale: number) => (
-        <ShareTvSeriesDefault tvSeries={tvSeries} posterUrl={posterUrl} scale={scale} />
+        <ShareTvSeriesDefault
+          tvSeries={tvSeries}
+          posterUrl={posterUrl}
+          rating={ratingBadge}
+          scale={scale}
+        />
       ),
-      [tvSeries, posterUrl],
+      [tvSeries, posterUrl, ratingBadge],
     );
 
     const handleEnableEditing = useCallback(() => {
@@ -515,6 +612,21 @@ export const ShareTvSeries = forwardRef<ShareViewRef, ShareTvSeriesProps>(
       return <View style={[tw`absolute w-full`, { bottom: PADDING_VERTICAL }]}>{content}</View>;
     }, [editing, activeEditingOption, bgType]);
 
+    const RatingToggle = useMemo(() => {
+      if (!hasRating) return null;
+      return (
+        <View
+          style={[
+            tw`flex-row items-center justify-between`,
+            { paddingHorizontal: PADDING_HORIZONTAL, gap: GAP },
+          ]}
+        >
+          <Text>{t('common.messages.share_my_rating')}</Text>
+          <Switch value={showRating} onValueChange={setShowRating} />
+        </View>
+      );
+    }, [hasRating, showRating, t]);
+
     // useEffects
     useEffect(() => {
       if (palette) {
@@ -556,6 +668,7 @@ export const ShareTvSeries = forwardRef<ShareViewRef, ShareTvSeriesProps>(
           {EditOptions}
         </View>
         {EditSelectors}
+        {RatingToggle}
       </View>
     );
   },

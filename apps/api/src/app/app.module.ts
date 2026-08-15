@@ -23,6 +23,8 @@ import { BullModule } from '@nestjs/bullmq';
 import { env } from '../env';
 import { WebhooksModule } from './webhooks/webhooks.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ExploreModule } from './explore/explore.module';
+import { CacheModule } from '../common/modules/cache/cache.module';
 
 @Module({
   imports: [
@@ -37,6 +39,7 @@ import { ScheduleModule } from '@nestjs/schedule';
       },
     }),
     DrizzleModule,
+    CacheModule,
     AuthModule,
     SystemModule,
     MeModule,
@@ -53,6 +56,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     SearchModule,
     UiModule,
     WebhooksModule,
+    ExploreModule,
   ],
   controllers: [AppController],
   providers: [AppService],

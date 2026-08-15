@@ -2,7 +2,16 @@ import { BadRequestException, Inject, Injectable, NotFoundException } from '@nes
 import { and, asc, desc, eq, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { logMovie, logMovieWatchedDate } from '@libs/db/schemas';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/drizzle/drizzle.module';
-import { ListInfiniteWatchedDatesDto, ListInfiniteWatchedDatesQueryDto, ListPaginatedWatchedDatesDto, ListPaginatedWatchedDatesQueryDto, WatchedDateCreateDto, WatchedDateResponseDto, WatchedDateSortBy, WatchedDateUpdateDto } from './dto/watched-dates.dto';
+import {
+  ListInfiniteWatchedDatesDto,
+  ListInfiniteWatchedDatesQueryDto,
+  ListPaginatedWatchedDatesDto,
+  ListPaginatedWatchedDatesQueryDto,
+  WatchedDateCreateDto,
+  WatchedDateResponseDto,
+  WatchedDateSortBy,
+  WatchedDateUpdateDto,
+} from './dto/watched-dates.dto';
 import { User } from '../../../auth/auth.service';
 import { DbTransaction } from '@libs/db';
 import { SortOrder } from '../../../../common/dto/sort.dto';
@@ -11,15 +20,13 @@ import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class MovieWatchedDatesService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
   /* --------------------------------- Helper --------------------------------- */
   private async syncLogDates(tx: DbTransaction, logMovieId: number) {
     const [aggregated] = await tx
       .select({
-        watchCount: sql<number>`count(*)::integer`, 
+        watchCount: sql<number>`count(*)::integer`,
         firstWatchedAt: sql<string>`min(${logMovieWatchedDate.watchedDate})`,
         lastWatchedAt: sql<string>`max(${logMovieWatchedDate.watchedDate})`,
       })
@@ -30,18 +37,19 @@ export class MovieWatchedDatesService {
     const first = aggregated?.firstWatchedAt || null;
     const last = aggregated?.lastWatchedAt || null;
 
-    await tx.update(logMovie)
-      .set({ 
-        watchCount: count, 
-        firstWatchedAt: first, 
+    await tx
+      .update(logMovie)
+      .set({
+        watchCount: count,
+        firstWatchedAt: first,
         lastWatchedAt: last,
       })
       .where(eq(logMovie.id, logMovieId));
 
-    return { 
-      watchCount: count, 
-      firstWatchedAt: first, 
-      lastWatchedAt: last 
+    return {
+      watchCount: count,
+      firstWatchedAt: first,
+      lastWatchedAt: last,
     };
   }
   /* -------------------------------------------------------------------------- */
@@ -62,12 +70,15 @@ export class MovieWatchedDatesService {
 
       if (!logEntry) throw new NotFoundException('Movie log not found');
 
-      const [newDate] = await tx.insert(logMovieWatchedDate).values({
-        logMovieId: logEntry.id,
-        watchedDate: dto.watchedDate,
-        format: dto.format,
-        comment: dto.comment,
-      }).returning();
+      const [newDate] = await tx
+        .insert(logMovieWatchedDate)
+        .values({
+          logMovieId: logEntry.id,
+          watchedDate: new Date(dto.watchedDate),
+          format: dto.format,
+          comment: dto.comment,
+        })
+        .returning();
 
       const syncResult = await this.syncLogDates(tx, logEntry.id);
 
@@ -83,9 +94,9 @@ export class MovieWatchedDatesService {
   }
 
   async update(
-    user: User, 
-    movieId: number, 
-    watchedDateId: number, 
+    user: User,
+    movieId: number,
+    watchedDateId: number,
     dto: WatchedDateUpdateDto,
   ): Promise<WatchedDateResponseDto> {
     return await this.db.transaction(async (tx) => {
@@ -94,18 +105,19 @@ export class MovieWatchedDatesService {
       });
 
       if (!logEntry) throw new NotFoundException('Movie log not found');
-      
-      const [updatedDate] = await tx.update(logMovieWatchedDate)
+
+      const [updatedDate] = await tx
+        .update(logMovieWatchedDate)
         .set({
-          watchedDate: dto.watchedDate,
+          watchedDate: dto.watchedDate !== undefined ? new Date(dto.watchedDate) : undefined,
           format: dto.format,
           comment: dto.comment !== undefined ? dto.comment : sql`${logMovieWatchedDate.comment}`,
         })
         .where(
           and(
             eq(logMovieWatchedDate.id, watchedDateId),
-            eq(logMovieWatchedDate.logMovieId, logEntry.id)
-          )
+            eq(logMovieWatchedDate.logMovieId, logEntry.id),
+          ),
         )
         .returning();
 
@@ -125,9 +137,9 @@ export class MovieWatchedDatesService {
   }
 
   async delete(
-    user: User, 
-    movieId: number, 
-    watchedDateId: number
+    user: User,
+    movieId: number,
+    watchedDateId: number,
   ): Promise<WatchedDateResponseDto> {
     return await this.db.transaction(async (tx) => {
       const logEntry = await tx.query.logMovie.findFirst({
@@ -136,19 +148,23 @@ export class MovieWatchedDatesService {
 
       if (!logEntry) throw new NotFoundException('Movie log not found');
 
-      const [countResult] = await tx.select({ count: sql<number>`count(*)` })
+      const [countResult] = await tx
+        .select({ count: sql<number>`count(*)` })
         .from(logMovieWatchedDate)
         .where(eq(logMovieWatchedDate.logMovieId, logEntry.id));
 
       if (Number(countResult.count) <= 1) {
-        throw new BadRequestException('Cannot delete the last watched date. Please delete the entire movie log instead.');
+        throw new BadRequestException(
+          'Cannot delete the last watched date. Please delete the entire movie log instead.',
+        );
       }
-      const [deletedDate] = await tx.delete(logMovieWatchedDate)
+      const [deletedDate] = await tx
+        .delete(logMovieWatchedDate)
         .where(
           and(
             eq(logMovieWatchedDate.id, watchedDateId),
-            eq(logMovieWatchedDate.logMovieId, logEntry.id)
-          )
+            eq(logMovieWatchedDate.logMovieId, logEntry.id),
+          ),
         )
         .returning();
 
@@ -175,7 +191,7 @@ export class MovieWatchedDatesService {
     sortOrder: SortOrder,
   ) {
     const direction = sortOrder === SortOrder.ASC ? asc : desc;
-    
+
     const orderBy = (() => {
       switch (sortBy) {
         case WatchedDateSortBy.WATCHED_DATE:
@@ -184,10 +200,7 @@ export class MovieWatchedDatesService {
       }
     })();
 
-    const whereClause = and(
-      eq(logMovie.movieId, movieId),
-      eq(logMovie.userId, currentUser.id)
-    );
+    const whereClause = and(eq(logMovie.movieId, movieId), eq(logMovie.userId, currentUser.id));
 
     return { whereClause, orderBy };
   }
@@ -204,7 +217,7 @@ export class MovieWatchedDatesService {
       movieId,
       currentUser,
       sort_by,
-      sort_order
+      sort_order,
     );
 
     const [dates, totalCountResult] = await Promise.all([
@@ -221,12 +234,12 @@ export class MovieWatchedDatesService {
         .orderBy(...orderBy)
         .limit(per_page)
         .offset(offset),
-      
+
       this.db
         .select({ count: sql<number>`count(*)` })
         .from(logMovieWatchedDate)
         .innerJoin(logMovie, eq(logMovie.id, logMovieWatchedDate.logMovieId))
-        .where(whereClause)
+        .where(whereClause),
     ]);
 
     const totalCount = Number(totalCountResult[0]?.count || 0);
@@ -255,7 +268,7 @@ export class MovieWatchedDatesService {
       movieId,
       currentUser,
       sort_by,
-      sort_order
+      sort_order,
     );
 
     let cursorWhereClause: SQL | undefined;
@@ -266,21 +279,21 @@ export class MovieWatchedDatesService {
       switch (sort_by) {
         case WatchedDateSortBy.WATCHED_DATE:
         default: {
-          const watchedDate = cursorData.value as string;
+          const watchedDate = new Date(cursorData.value as string); // <-- conversion en Date
           cursorWhereClause = or(
             operator(logMovieWatchedDate.watchedDate, watchedDate),
             and(
               eq(logMovieWatchedDate.watchedDate, watchedDate),
-              operator(logMovieWatchedDate.id, cursorData.id)
-            )
+              operator(logMovieWatchedDate.id, cursorData.id),
+            ),
           );
           break;
         }
       }
     }
 
-    const finalWhereClause = cursorWhereClause 
-      ? and(baseWhereClause, cursorWhereClause) 
+    const finalWhereClause = cursorWhereClause
+      ? and(baseWhereClause, cursorWhereClause)
       : baseWhereClause;
 
     const fetchLimit = per_page + 1;
@@ -310,7 +323,7 @@ export class MovieWatchedDatesService {
       switch (sort_by) {
         case WatchedDateSortBy.WATCHED_DATE:
         default:
-          cursorValue = lastItem.watchedDate;
+          cursorValue = lastItem.watchedDate.toISOString(); // <-- conversion en string
           break;
       }
 

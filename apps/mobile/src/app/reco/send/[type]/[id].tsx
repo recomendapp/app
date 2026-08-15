@@ -1,5 +1,4 @@
 import { Button } from '../../../../components/ui/Button';
-import { Text } from '../../../../components/ui/text';
 import { View } from '../../../../components/ui/view';
 import { useAuth } from '../../../../providers/AuthProvider';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,18 +6,13 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Pressable, TextInput, useWindowDimensions } from 'react-native';
+import { Pressable } from 'react-native';
 import { useTranslations } from 'use-intl';
 import { z } from 'zod';
 import { SelectionFooter } from '../../../../components/ui/SelectionFooter';
 import tw from '../../../../lib/tw';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
-import {
-  IOS_TOOLBAR_HEIGHT,
-  PADDING_HORIZONTAL,
-  PADDING_VERTICAL,
-} from '../../../../theme/globals';
-import { useTheme } from '../../../../providers/ThemeProvider';
+import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../theme/globals';
 import Fuse from 'fuse.js';
 import { Icons } from '../../../../constants/Icons';
 import { Badge } from '../../../../components/ui/Badge';
@@ -31,7 +25,6 @@ import { userRecoSendAllOptions, useUserRecoSendMutation } from '@libs/query-cli
 import { RecoTarget, UserSummary } from '@libs/api-js';
 import { FlashList } from '@shopify/flash-list';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { theme } from '../../../../theme';
 import { useModalHeaderOptions } from '../../../../hooks/useModalHeaderOptions';
 import { RefreshableStateContainer } from '../../../../components/ui/RefreshableStateContainer';
 import { CardError } from '../../../../components/cards/CardError';
@@ -43,15 +36,11 @@ const RecoSend = () => {
   const t = useTranslations();
   const router = useRouter();
   const toast = useToast();
-  const { colors, isLiquidGlassAvailable } = useTheme();
   const insets = useSafeAreaInsets();
   const { user } = useAuth();
-  const { width: SCREEN_WIDTH } = useWindowDimensions();
   const { type, id } = useLocalSearchParams();
   const mediaId = Number(id);
   const mediaType = type === 'movie' ? 'movie' : 'tv_series';
-
-  const [toolbarView, setToolbarView] = useState<'main' | 'comment' | 'targets'>('main');
 
   // Form
   const sendRecoFormSchema = z.object({
@@ -205,7 +194,11 @@ const RecoSend = () => {
           {alreadySeen && (
             <Badge variant="destructive">{upperFirst(t('common.messages.already_watched'))}</Badge>
           )}
-          <Checkbox checked={isSelected} onCheckedChange={() => handleToggleUser(friend)} />
+          <Checkbox
+            checked={isSelected}
+            onCheckedChange={() => handleToggleUser(friend)}
+            disabled={alreadySeen}
+          />
         </View>
       </Pressable>
     ),
@@ -222,111 +215,11 @@ const RecoSend = () => {
             placeholder: upperFirst(t('common.messages.search_user', { count: 1 })),
             onChangeText: (e) => setSearch(e.nativeEvent.text),
             hideNavigationBar: false,
+            allowToolbarIntegration: false,
+            hideWhenScrolling: false,
           },
-          headerRight: () => (
-            <Button
-              variant="outline"
-              icon={Icons.Reco}
-              size="icon"
-              onPress={form.handleSubmit(handleSubmit)}
-              disabled={isSendingReco || !canSave}
-              style={tw`rounded-full`}
-            />
-          ),
-          unstable_headerRightItems: (props) => [
-            {
-              type: 'button',
-              label: upperFirst(t('common.messages.send')),
-              onPress: form.handleSubmit(handleSubmit),
-              disabled: isSendingReco || !canSave,
-              icon: {
-                name: 'paperplane.fill',
-                type: 'sfSymbol',
-              },
-            },
-          ],
         }}
       />
-      {isLiquidGlassAvailable && (
-        <Stack.Toolbar>
-          {toolbarView === 'comment' ? (
-            <>
-              <Stack.Toolbar.View>
-                <View
-                  style={[
-                    tw`justify-center h-10`,
-                    { width: SCREEN_WIDTH - 80, paddingHorizontal: PADDING_HORIZONTAL },
-                  ]}
-                >
-                  <Controller
-                    name="comment"
-                    control={form.control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <TextInput
-                        placeholder={upperFirst(t('common.messages.add_comment', { count: 1 }))}
-                        autoCapitalize="sentences"
-                        value={value || ''}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                        multiline
-                        style={{
-                          color: colors.foreground,
-                        }}
-                        placeholderTextColor={colors.mutedForeground}
-                        autoFocus
-                      />
-                    )}
-                  />
-                </View>
-              </Stack.Toolbar.View>
-              <Stack.Toolbar.Button icon={'xmark'} onPress={() => setToolbarView('main')} />
-            </>
-          ) : toolbarView === 'targets' ? (
-            <>
-              <Stack.Toolbar.View>
-                <View style={[tw`justify-center h-20`, { width: SCREEN_WIDTH - 80 }]}>
-                  <FlashList
-                    horizontal
-                    data={selected}
-                    keyExtractor={(item) => item.id!.toString()}
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={[
-                      tw`items-center`,
-                      { paddingHorizontal: PADDING_HORIZONTAL, gap: theme.space12 },
-                    ]}
-                    renderItem={({ item }) => (
-                      <CardUser
-                        user={item}
-                        variant="icon"
-                        linked={false}
-                        onPress={() => handleToggleUser(item)}
-                        width={50}
-                        height={50}
-                      />
-                    )}
-                    ItemSeparatorComponent={() => <View style={{ width: theme.space12 }} />}
-                    ListEmptyComponent={
-                      <Text textColor="muted" style={tw`text-sm`}>
-                        {upperFirst(t('common.messages.select_users_to_send_reco'))}
-                      </Text>
-                    }
-                  />
-                </View>
-              </Stack.Toolbar.View>
-              <Stack.Toolbar.Button icon={'xmark'} onPress={() => setToolbarView('main')} />
-            </>
-          ) : (
-            <>
-              <Stack.Toolbar.SearchBarSlot />
-              <Stack.Toolbar.Button
-                icon={'text.aligncenter'}
-                onPress={() => setToolbarView('comment')}
-              />
-              <Stack.Toolbar.Button icon={'person'} onPress={() => setToolbarView('targets')} />
-            </>
-          )}
-        </Stack.Toolbar>
-      )}
       {isLoading ? (
         <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
           <Icons.Loader />
@@ -350,53 +243,56 @@ const RecoSend = () => {
             disabled: true,
           }}
           contentContainerStyle={[
-            tw`gap-2`,
             {
-              paddingBottom: isLiquidGlassAvailable
-                ? insets.bottom + PADDING_VERTICAL + IOS_TOOLBAR_HEIGHT
-                : 0,
               paddingHorizontal: PADDING_HORIZONTAL,
+              paddingBottom: PADDING_VERTICAL,
             },
           ]}
           keyboardShouldPersistTaps="handled"
         />
       )}
-      {!isLiquidGlassAvailable && (
-        <>
-          <Animated.View style={animatedFooterStyle} />
-          <SelectionFooter
-            data={selected}
-            visibleHeight={footerHeight}
-            renderItem={({ item }) => (
-              <CardUser
-                user={item}
-                variant="icon"
-                linked={false}
-                onPress={() => handleToggleUser(item)}
-                width={50}
-                height={50}
+      <Animated.View style={animatedFooterStyle} />
+      <SelectionFooter
+        data={selected}
+        visibleHeight={footerHeight}
+        renderItem={({ item }) => (
+          <CardUser
+            user={item}
+            variant="icon"
+            linked={false}
+            onPress={() => handleToggleUser(item)}
+            width={50}
+            height={50}
+          />
+        )}
+        keyExtractor={(item) => item.id.toString()}
+      >
+        <View style={tw`gap-2`}>
+          <Controller
+            name="comment"
+            control={form.control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                placeholder={upperFirst(t('common.messages.add_comment', { count: 1 }))}
+                autoCapitalize="sentences"
+                value={value || ''}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                disabled={isSendingReco}
+                error={form.formState.errors.comment?.message}
               />
             )}
-            keyExtractor={(item) => item.id.toString()}
+          />
+          <Button
+            disabled={!canSave || isSendingReco}
+            variant="outline"
+            size="lg"
+            onPress={form.handleSubmit(handleSubmit)}
           >
-            <Controller
-              name="comment"
-              control={form.control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                  placeholder={upperFirst(t('common.messages.add_comment', { count: 1 }))}
-                  autoCapitalize="sentences"
-                  value={value || ''}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  disabled={isSendingReco}
-                  error={form.formState.errors.comment?.message}
-                />
-              )}
-            />
-          </SelectionFooter>
-        </>
-      )}
+            {upperFirst(t('common.messages.send'))}
+          </Button>
+        </View>
+      </SelectionFooter>
     </>
   );
 };
