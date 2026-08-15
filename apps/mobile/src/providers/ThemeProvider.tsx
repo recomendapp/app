@@ -6,7 +6,7 @@ import { useBottomTabOverflow } from '../hooks/useBottomTabOverflow';
 import { setBackgroundColorAsync } from 'expo-system-ui';
 import { Appearance, Platform } from 'react-native';
 import { isLiquidGlassAvailable as utilsIsLiquidGlassAvailable } from 'expo-glass-effect';
-// import { setButtonStyleAsync } from 'expo-navigation-bar';
+import { setStyle as setNavigationBarStyle } from 'expo-navigation-bar';
 import { getModeFromColor } from '../utils/getModeFromColor';
 import { NativeStackNavigationOptions } from 'expo-router';
 
@@ -65,7 +65,7 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
   useEffect(() => {
     Appearance.setColorScheme(mode);
     if (Platform.OS === 'android') {
-      // setButtonStyleAsync(mode);
+      setNavigationBarStyle(mode);
     }
   }, [mode]);
 

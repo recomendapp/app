@@ -3,6 +3,7 @@ import { UserNav } from '../../../../../components/user/UserNav';
 import tw from '../../../../../lib/tw';
 import {
   createMaterialTopTabNavigator,
+  MaterialTopTabBarProps,
   MaterialTopTabNavigationEventMap,
   MaterialTopTabNavigationOptions,
 } from 'expo-router/js-top-tabs';
@@ -116,7 +117,9 @@ const CollectionLayout = () => {
           ],
         }}
       />
-      <MaterialTopTabs tabBar={(props) => <SegmentedControlTabBar {...props} />}>
+      <MaterialTopTabs
+        tabBar={(props: MaterialTopTabBarProps) => <SegmentedControlTabBar {...props} />}
+      >
         <MaterialTopTabs.Screen name="index" options={{ title: 'perso' }} />
         <MaterialTopTabs.Screen
           name="saved"

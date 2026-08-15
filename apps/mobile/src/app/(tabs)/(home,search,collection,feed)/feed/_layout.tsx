@@ -1,5 +1,6 @@
 import {
   createMaterialTopTabNavigator,
+  MaterialTopTabBarProps,
   MaterialTopTabNavigationEventMap,
   MaterialTopTabNavigationOptions,
 } from 'expo-router/js-top-tabs';
@@ -23,7 +24,7 @@ const FeedLayout = () => {
   return (
     <MaterialTopTabs
       initialRouteName="index"
-      tabBar={(props) => <SegmentedControlTabBar {...props} />}
+      tabBar={(props: MaterialTopTabBarProps) => <SegmentedControlTabBar {...props} />}
     >
       <MaterialTopTabs.Screen
         name="index"

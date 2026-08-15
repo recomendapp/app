@@ -46,7 +46,7 @@ const PERSISTED_QUERY_KEYS = [
   authKeys.base,
   meKeys.base,
   uiKeys.base,
-  widgetKeys,
+  widgetKeys.base,
   persistKey,
   exploreKeys.base,
 ];

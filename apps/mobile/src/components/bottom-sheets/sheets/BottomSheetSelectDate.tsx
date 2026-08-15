@@ -11,7 +11,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { upperFirst } from 'lodash';
 import DateTimePicker from '@expo/ui/community/datetime-picker';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
-import tw from '../../../lib/tw';
+import { isIOS } from '../../../platform/detection';
 
 interface BottomSheetSelectDateProps extends BottomSheetProps {
   defaultDate?: Date | null;
@@ -25,7 +25,7 @@ export const BottomSheetSelectDate = React.forwardRef<
   React.ComponentRef<typeof TrueSheet>,
   BottomSheetSelectDateProps
 >(({ id, defaultDate, onSave, saveLabel, minDate, maxDate, ...props }, ref) => {
-  const { colors } = useTheme();
+  const { colors, mode } = useTheme();
   const closeSheet = useBottomSheetStore((state) => state.closeSheet);
   const t = useTranslations();
   const insets = useSafeAreaInsets();
@@ -80,17 +80,17 @@ export const BottomSheetSelectDate = React.forwardRef<
       }
       {...props}
     >
-      <View style={tw`w-full items-center justify-center`}>
-        <DateTimePicker
-          value={selectedDate}
-          onValueChange={(event, newDate) => setSelectedDate(newDate)}
-          display="spinner"
-          mode="date"
-          presentation="inline"
-          minimumDate={minDate}
-          maximumDate={maxDate}
-        />
-      </View>
+      <DateTimePicker
+        value={selectedDate}
+        onValueChange={(event, newDate) => setSelectedDate(newDate)}
+        display={isIOS ? 'spinner' : 'clock'}
+        mode="date"
+        accentColor={colors.accentYellow}
+        presentation="inline"
+        minimumDate={minDate}
+        maximumDate={maxDate}
+        themeVariant={mode === 'dark' ? 'dark' : 'light'}
+      />
       <Animated.View style={footerOffsetStyle} />
     </TrueSheet>
   );

@@ -120,7 +120,7 @@ export function Splash({ children }: React.PropsWithChildren) {
   return (
     <View style={{ flex: 1 }} onLayout={onLayout}>
       {!isAnimationComplete && (
-        <View style={[{ backgroundColor: colors.background }, StyleSheet.absoluteFillObject]}>
+        <View style={[{ backgroundColor: colors.background }, StyleSheet.absoluteFill]}>
           <Animated.View
             style={[
               bottomLogoAnimation,
@@ -147,7 +147,7 @@ export function Splash({ children }: React.PropsWithChildren) {
           {!isAnimationComplete && (
             <Animated.View
               style={[
-                StyleSheet.absoluteFillObject,
+                StyleSheet.absoluteFill,
                 logoWrapperAnimation,
                 {
                   flex: 1,

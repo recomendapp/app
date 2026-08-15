@@ -10,7 +10,7 @@ import {
 import { View } from '../ui/view';
 import tw from '../../lib/tw';
 import { ImageWithFallback } from '../utils/ImageWithFallback';
-import ViewShot from 'react-native-view-shot';
+import ViewShot, { type ViewShotRef } from 'react-native-view-shot';
 import { Text } from '../ui/text';
 import { Icons } from '../../constants/Icons';
 import { Button } from '../ui/Button';
@@ -434,7 +434,7 @@ const BackdropImageSelector = ({
 
 export const ShareTvSeries = forwardRef<ShareViewRef, ShareTvSeriesProps>(
   ({ tvSeries, variant = 'default', isPremium, ...props }, ref) => {
-    const viewShotRef = useRef<ViewShot>(null);
+    const viewShotRef = useRef<ViewShotRef>(null);
     const { height: screenHeight } = useWindowDimensions();
     const { colors } = useTheme();
     const t = useTranslations();

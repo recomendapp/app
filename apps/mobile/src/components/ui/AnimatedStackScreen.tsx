@@ -132,7 +132,7 @@ const AnimatedStackScreen = forwardRef<
             <>
               <Animated.View
                 style={[
-                  StyleSheet.absoluteFillObject,
+                  StyleSheet.absoluteFill,
                   { backgroundColor: headerBackgroundColor || colors.background },
                   backgroundAnimatedStyle,
                 ]}

@@ -28,7 +28,7 @@ export const SegmentedControlTabBar = ({
       }}
     >
       <SegmentedControl
-        values={state.routes.map((option) => {
+        values={state.routes.map((option: (typeof state.routes)[number]) => {
           const { options } = descriptors[option.key];
           const label =
             options.tabBarLabel !== undefined && typeof options.tabBarLabel === 'string'
