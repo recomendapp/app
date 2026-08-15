@@ -11,7 +11,7 @@ import { useWindowDimensions, View } from 'react-native';
 import { useTranslations } from 'use-intl';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { CardMovie } from '../../../../../components/cards/CardMovie';
-import { HeaderTitle } from '@react-navigation/elements';
+import { HeaderTitle } from 'expo-router/react-navigation';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { userByUsernameOptions, userMovieLogsInfiniteOptions } from '@libs/query-client';
 import { CardError } from '../../../../../components/cards/CardError';

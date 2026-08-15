@@ -2,9 +2,8 @@ import {
   createMaterialTopTabNavigator,
   MaterialTopTabNavigationEventMap,
   MaterialTopTabNavigationOptions,
-  type MaterialTopTabBarProps,
-} from '@react-navigation/material-top-tabs';
-import { ParamListBase, TabNavigationState } from '@react-navigation/native';
+} from 'expo-router/js-top-tabs';
+import { ParamListBase, TabNavigationState } from 'expo-router/react-navigation';
 import { withLayoutContext } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';

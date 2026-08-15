@@ -18,7 +18,7 @@ import tw from '../../../lib/tw';
 import { useTranslations } from 'use-intl';
 import { Text } from '../../ui/text';
 import { BORDER_RADIUS, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { View } from '../../ui/view';
 import { useImagePalette } from '../../../hooks/useImagePalette';
 import { Person } from '@libs/api-js';

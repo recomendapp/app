@@ -9,7 +9,7 @@ import { CardFeedLogMovie } from '../../../../components/cards/feed/CardFeedLogM
 import { CardFeedPlaylistLike } from '../../../../components/cards/feed/CardFeedPlaylistLike';
 import { CardFeedReviewMovieLike } from '../../../../components/cards/feed/CardFeedReviewMovieLike';
 import { CardFeedReviewTvSeriesLike } from '../../../../components/cards/feed/CardFeedReviewTvSeriesLike';
-import { useScrollToTop } from '@react-navigation/native';
+import { useScrollToTop } from 'expo-router/react-navigation';
 import { useCallback, useMemo, useRef } from 'react';
 import { Icons } from '../../../../constants/Icons';
 import { useInfiniteQuery } from '@tanstack/react-query';

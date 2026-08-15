@@ -1,5 +1,5 @@
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { useBottomTabBarHeight } from 'expo-router/js-tabs';
 
 export const useKeyboardToolbarOffset = () => {
-	return useBottomTabBarHeight();
+  return useBottomTabBarHeight();
 };

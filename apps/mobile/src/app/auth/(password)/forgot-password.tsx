@@ -21,7 +21,7 @@ import { uiBackgroundsOptions } from '../../../api/ui/uiOptions';
 import { authClient } from '../../../lib/auth/client';
 import { makeRedirectUri } from 'expo-auth-session';
 import { MultiStepScreen } from '../../../components/ui/MultistepScreen';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useModalHeaderOptions } from '../../../hooks/useModalHeaderOptions';
 
 enum STEPS {

@@ -25,11 +25,11 @@ import { Button } from '../../../ui/Button';
 import { Icons } from '../../../../constants/Icons';
 import useBottomSheetStore from '../../../../stores/useBottomSheetStore';
 import { useAuth } from '../../../../providers/AuthProvider';
-import { NativeStackHeaderItem } from '@react-navigation/native-stack';
 import ButtonUserReviewTvSeriesLike from '../../../buttons/ButtonUserReviewTvSeriesLike';
 import { BottomSheetLogTvSeries } from '../../../bottom-sheets/sheets/BottomSheetLogTvSeries';
 import FeedUserLog from '../../feed/FeedUserLog';
 import { EnrichedMarkdownText } from '../../../RichText/EnrichedMarkdownText';
+import { NativeStackHeaderItem } from 'expo-router';
 
 export const ProfileTvSeries = ({
   username,

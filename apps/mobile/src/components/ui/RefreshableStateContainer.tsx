@@ -8,6 +8,7 @@ interface RefreshableStateContainerProps extends React.ComponentProps<typeof Scr
   children: React.ReactNode;
   onRefresh?: () => void;
   refreshing?: boolean;
+  bottomOffset?: number;
 }
 
 export const RefreshableStateContainer = ({
@@ -15,16 +16,18 @@ export const RefreshableStateContainer = ({
   onRefresh,
   refreshing = false,
   contentContainerStyle,
+  bottomOffset: bottomOffsetProp,
   ...props
 }: RefreshableStateContainerProps) => {
   const { bottomOffset } = useTheme();
+  const computedBottomOffset = bottomOffsetProp !== undefined ? bottomOffsetProp : bottomOffset;
   return (
     <ScrollView
       contentContainerStyle={[
         tw`flex-grow items-center justify-center`,
         {
           paddingHorizontal: PADDING_HORIZONTAL,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
+          paddingBottom: computedBottomOffset + PADDING_VERTICAL,
         },
         contentContainerStyle,
       ]}

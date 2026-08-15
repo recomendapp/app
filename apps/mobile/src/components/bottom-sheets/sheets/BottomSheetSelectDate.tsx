@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import useBottomSheetStore from '../../../stores/useBottomSheetStore';
 import { Button } from '../../ui/Button';
 import TrueSheet from '../../ui/TrueSheet';
@@ -9,7 +9,7 @@ import { View } from '../../ui/view';
 import { useTheme } from '../../../providers/ThemeProvider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { upperFirst } from 'lodash';
-import RNDateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from '@expo/ui/community/datetime-picker';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import tw from '../../../lib/tw';
 
@@ -81,10 +81,12 @@ export const BottomSheetSelectDate = React.forwardRef<
       {...props}
     >
       <View style={tw`w-full items-center justify-center`}>
-        <RNDateTimePicker
+        <DateTimePicker
           value={selectedDate}
-          onChange={(e) => setSelectedDate(new Date(e.nativeEvent.timestamp))}
+          onValueChange={(event, newDate) => setSelectedDate(newDate)}
           display="spinner"
+          mode="date"
+          presentation="inline"
           minimumDate={minDate}
           maximumDate={maxDate}
         />

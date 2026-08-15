@@ -79,16 +79,16 @@ const RootLayoutNav = () => {
           name="playlist/add/[type]/[id]"
           options={{
             title: upperFirst(t('common.messages.add_to_playlist')),
-            presentation:
-              Platform.OS === 'ios'
-                ? isLiquidGlassAvailable && osName !== 'iPadOS'
-                  ? 'formSheet'
-                  : 'modal'
-                : 'modal',
+            // presentation:
+            //   Platform.OS === 'ios'
+            //     ? isLiquidGlassAvailable && osName !== 'iPadOS'
+            //       ? 'formSheet'
+            //       : 'modal'
+            //     : 'modal',
+            presentation: 'modal',
             sheetGrabberVisible: true,
             sheetAllowedDetents: [0.8],
             sheetInitialDetentIndex: 0,
-            headerTransparent: false,
             ...(isLiquidGlassAvailable
               ? {
                   contentStyle: { backgroundColor: 'transparent' },
@@ -127,16 +127,16 @@ const RootLayoutNav = () => {
           name="reco/send/[type]/[id]"
           options={{
             title: upperFirst(t('common.messages.send_to_friend')),
-            presentation:
-              Platform.OS === 'ios'
-                ? isLiquidGlassAvailable && osName !== 'iPadOS'
-                  ? 'formSheet'
-                  : 'modal'
-                : 'modal',
+            // presentation:
+            //   Platform.OS === 'ios'
+            //     ? isLiquidGlassAvailable && osName !== 'iPadOS'
+            //       ? 'formSheet'
+            //       : 'modal'
+            //     : 'modal',
+            presentation: 'modal',
             sheetGrabberVisible: true,
             sheetAllowedDetents: [0.8],
             sheetInitialDetentIndex: 0,
-            headerTransparent: false,
             ...(isLiquidGlassAvailable
               ? {
                   contentStyle: { backgroundColor: 'transparent' },

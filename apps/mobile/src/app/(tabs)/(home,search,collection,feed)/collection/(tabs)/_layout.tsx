@@ -5,14 +5,13 @@ import {
   createMaterialTopTabNavigator,
   MaterialTopTabNavigationEventMap,
   MaterialTopTabNavigationOptions,
-} from '@react-navigation/material-top-tabs';
-import { ParamListBase, TabNavigationState } from '@react-navigation/native';
+} from 'expo-router/js-top-tabs';
+import { HeaderTitle, ParamListBase, TabNavigationState } from 'expo-router/react-navigation';
 import { Stack, useRouter, withLayoutContext } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useCallback } from 'react';
 import { View, Pressable } from 'react-native';
 import { useTranslations } from 'use-intl';
-import { HeaderTitle } from '@react-navigation/elements';
 import { useTheme } from '../../../../../providers/ThemeProvider';
 import UserAvatar from '../../../../../components/user/UserAvatar';
 import { useAuth } from '../../../../../providers/AuthProvider';

@@ -9,7 +9,7 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import { useTranslations } from 'use-intl';
-import { Stack, useNavigation } from 'expo-router';
+import { NativeStackHeaderItem, Stack, useNavigation } from 'expo-router';
 import { Button } from '../../ui/Button';
 import { CardMovie } from '../../cards/CardMovie';
 import { CardTvSeries } from '../../cards/CardTvSeries';
@@ -21,7 +21,7 @@ import { Input } from '../../ui/Input';
 import { useToast } from '../../Toast';
 import { EnrichedMarkdownTextInput } from '../../RichText/EnrichedMarkdownTextInput';
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller';
-import { usePreventRemove } from '@react-navigation/native';
+import { usePreventRemove } from 'expo-router/react-navigation';
 import { Alert } from 'react-native';
 import {
   Movie,
@@ -30,7 +30,6 @@ import {
   ReviewTvSeries as TReviewTvSeries,
 } from '@libs/api-js';
 import { Icons } from '../../../constants/Icons';
-import { NativeStackHeaderItem } from '@react-navigation/native-stack';
 import {
   EnrichedMarkdownTextInputInstance,
   EnrichedMarkdownTextInputProps,

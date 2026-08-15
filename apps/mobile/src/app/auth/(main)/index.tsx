@@ -13,7 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Color from 'color';
 import { Text } from '../../../components/ui/text';
 import { getMediaDetails } from '../../../components/utils/getMediaDetails';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useMemo, useState } from 'react';
 import { LoopCarousel } from '../../../components/ui/LoopCarousel';
 import { Image } from 'expo-image';

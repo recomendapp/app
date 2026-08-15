@@ -36,7 +36,7 @@ import {
   LocationDetailsBottomSheetMethods,
 } from './sheets/LocationDetailsBottomSheet';
 import { withModalProvider } from '../../components/utils/withModalProvider';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useExploreStore } from '../../stores/useExploreStore';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TrueSheet } from '@lodev09/react-native-true-sheet';

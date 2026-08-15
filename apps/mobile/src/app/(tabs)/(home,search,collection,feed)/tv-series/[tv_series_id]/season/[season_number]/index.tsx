@@ -25,7 +25,7 @@ import { IconMediaRating } from '../../../../../../../components/medias/IconMedi
 import { useFormatter, useTranslations } from 'use-intl';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../../../theme/globals';
 import AnimatedStackScreen from '../../../../../../../components/ui/AnimatedStackScreen';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useCallback, useMemo } from 'react';
 import { Text } from '../../../../../../../components/ui/text';
 import { getTmdbImage } from '../../../../../../../lib/tmdb/getTmdbImage';

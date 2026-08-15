@@ -1,5 +1,4 @@
 import { useAuth } from '../../../providers/AuthProvider';
-import { useRouter } from 'expo-router';
 import WidgetMostRecommended from '../../../components/widgets/WidgetMostRecommended';
 import tw from '../../../lib/tw';
 import { Button } from '../../../components/ui/Button';
@@ -11,7 +10,6 @@ import { WidgetUserDiscovery } from '../../../components/widgets/WidgetUserDisco
 import { useNow, useTranslations } from 'use-intl';
 import { useTheme } from '../../../providers/ThemeProvider';
 import { Icons } from '../../../constants/Icons';
-import { useScrollToTop } from '@react-navigation/native';
 import { Text } from '../../../components/ui/text';
 import app from '../../../constants/app';
 import { UserNav } from '../../../components/user/UserNav';
@@ -24,12 +22,12 @@ import { useRef, useState } from 'react';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import { Pressable, RefreshControl } from 'react-native';
 import { WidgetMostPopular } from '../../../components/widgets/WidgetMostPopular';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight, useScrollToTop } from 'expo-router/react-navigation';
 import { useQueryClient } from '@tanstack/react-query';
-import { NativeStackHeaderItem } from '@react-navigation/native-stack';
 import UserAvatar from '../../../components/user/UserAvatar';
 import { userKeys, widgetKeys } from '@libs/query-client';
 import { useUpdates, reloadAsync } from 'expo-updates';
+import { NativeStackHeaderItem, useRouter } from 'expo-router';
 
 const HeaderLeft = () => {
   const { user } = useAuth();

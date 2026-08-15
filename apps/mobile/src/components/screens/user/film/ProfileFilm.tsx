@@ -25,10 +25,10 @@ import { Icons } from '../../../../constants/Icons';
 import useBottomSheetStore from '../../../../stores/useBottomSheetStore';
 import ButtonUserReviewMovieLike from '../../../buttons/ButtonUserReviewMovieLike';
 import { useAuth } from '../../../../providers/AuthProvider';
-import { NativeStackHeaderItem } from '@react-navigation/native-stack';
 import { BottomSheetLogMovie } from '../../../bottom-sheets/sheets/BottomSheetLogMovie';
 import FeedUserLog from '../../feed/FeedUserLog';
 import { EnrichedMarkdownText } from '../../../RichText/EnrichedMarkdownText';
+import { NativeStackHeaderItem } from 'expo-router';
 
 export const ProfileFilm = ({ username, movieId }: { username: string; movieId: number }) => {
   const { user } = useAuth();

@@ -12,7 +12,7 @@ import tw from '../../../../../lib/tw';
 import { useTheme } from '../../../../../providers/ThemeProvider';
 import useSearchStore from '../../../../../stores/useSearchStore';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
-import { useScrollToTop } from '@react-navigation/native';
+import { useScrollToTop } from 'expo-router/react-navigation';
 import { Link } from 'expo-router';
 import { clamp, upperFirst } from 'lodash';
 import { useRef } from 'react';

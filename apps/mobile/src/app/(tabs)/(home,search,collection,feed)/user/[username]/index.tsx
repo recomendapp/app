@@ -10,7 +10,7 @@ import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-quer
 import { ExternalPathString, Link, Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
-import { HeaderTitle, useHeaderHeight } from '@react-navigation/elements';
+import { HeaderTitle, useHeaderHeight } from 'expo-router/react-navigation';
 import { View } from '../../../../../components/ui/view';
 import ProfileWidgetPlaylists from '../../../../../components/screens/user/ProfileWidgetPlaylists';
 import { Skeleton } from '../../../../../components/ui/Skeleton';

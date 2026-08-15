@@ -24,7 +24,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Color from 'color';
 import { useTheme } from '../../providers/ThemeProvider';
 import { Text } from '../ui/text';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { BORDER_RADIUS_FULL, GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { BadgeMedia } from '../badges/BadgeMedia';
 import { useTranslations } from 'use-intl';

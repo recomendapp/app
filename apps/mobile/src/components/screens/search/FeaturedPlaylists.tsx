@@ -4,7 +4,7 @@ import tw from '../../../lib/tw';
 import { StyleProp, useWindowDimensions, View, ViewStyle } from 'react-native';
 import { LegendList, LegendListRef } from '@legendapp/list/react-native';
 import { useCallback, useMemo, useRef } from 'react';
-import { useScrollToTop } from '@react-navigation/native';
+import { useScrollToTop } from 'expo-router/react-navigation';
 import { GAP, PADDING_VERTICAL } from '../../../theme/globals';
 import { Icons } from '../../../constants/Icons';
 import { Text } from '../../ui/text';

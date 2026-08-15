@@ -10,7 +10,7 @@ import useSearchStore from '../../../../../stores/useSearchStore';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { LegendList, LegendListRef } from '@legendapp/list/react-native';
 import { TrueSheet as RNTrueSheet } from '@lodev09/react-native-true-sheet';
-import { useScrollToTop } from '@react-navigation/native';
+import { useScrollToTop } from 'expo-router/react-navigation';
 // import { useNavigation } from "expo-router";
 import { upperFirst } from 'lodash';
 import { useRef, forwardRef, useMemo } from 'react';

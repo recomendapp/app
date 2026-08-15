@@ -21,7 +21,7 @@ import { IconMediaRating } from '../../../medias/IconMediaRating';
 import { useTranslations } from 'use-intl';
 import { Text } from '../../../ui/text';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../theme/globals';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useImagePalette } from '../../../../hooks/useImagePalette';
 import AnimatedImage from '../../../ui/AnimatedImage';
 import { getTmdbImage } from '../../../../lib/tmdb/getTmdbImage';

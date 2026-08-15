@@ -24,7 +24,7 @@ import { ImageWithFallback } from '../../../../components/utils/ImageWithFallbac
 import { Skeleton } from '../../../../components/ui/Skeleton';
 import { Alert, Pressable } from 'react-native';
 import { KeyboardAwareScrollView } from '../../../../components/ui/KeyboardAwareScrollView';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { LucideIcon } from 'lucide-react-native';
 import { Icons } from '../../../../constants/Icons';
 import { KeyboardToolbar } from '../../../../components/ui/KeyboardToolbar';

@@ -5,12 +5,11 @@ import {
   createMaterialTopTabNavigator,
   MaterialTopTabNavigationEventMap,
   MaterialTopTabNavigationOptions,
-} from '@react-navigation/material-top-tabs';
-import { ParamListBase, TabNavigationState } from '@react-navigation/native';
+} from 'expo-router/js-top-tabs';
+import { HeaderTitle, ParamListBase, TabNavigationState } from 'expo-router/react-navigation';
 import { Stack, useLocalSearchParams, withLayoutContext } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
-import { HeaderTitle } from '@react-navigation/elements';
 import { Icons } from '../../../../../../constants/Icons';
 import { useQuery } from '@tanstack/react-query';
 import { userByUsernameOptions } from '@libs/query-client';

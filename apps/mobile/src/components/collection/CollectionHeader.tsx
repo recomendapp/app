@@ -13,7 +13,7 @@ import Animated, {
 import useRandomBackdrop from '../../hooks/useRandomBackdrop';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { Skeleton } from '../ui/Skeleton';
 import { View } from '../ui/view';
 import { AnimatedImageWithFallback } from '../ui/AnimatedImageWithFallback';

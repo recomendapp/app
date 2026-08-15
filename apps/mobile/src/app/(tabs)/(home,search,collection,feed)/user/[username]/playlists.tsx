@@ -10,7 +10,7 @@ import { upperFirst } from 'lodash';
 import { useCallback, useMemo, useState } from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import { useTranslations } from 'use-intl';
-import { HeaderTitle } from '@react-navigation/elements';
+import { HeaderTitle } from 'expo-router/react-navigation';
 import { PADDING_VERTICAL } from '../../../../../theme/globals';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { userByUsernameOptions, userPlaylistsInfiniteOptions } from '@libs/query-client';

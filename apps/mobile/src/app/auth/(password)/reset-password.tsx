@@ -19,7 +19,7 @@ import { useQuery } from '@tanstack/react-query';
 import { uiBackgroundsOptions } from '../../../api/ui/uiOptions';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useModalHeaderOptions } from '../../../hooks/useModalHeaderOptions';
 
 const PASSWORD_MIN_LENGTH = 8;

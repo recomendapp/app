@@ -23,7 +23,7 @@ import { useLocale, useTranslations } from 'use-intl';
 import { Text, TextProps } from '../../ui/text';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import BottomSheetTvSeriesFollowersRating from '../../bottom-sheets/sheets/BottomSheetTvSeriesFollowersRating';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { TvSeriesHeaderInfo } from './TvSeriesHeaderInfo';
 import { useImagePalette } from '../../../hooks/useImagePalette';
 import AnimatedImage from '../../ui/AnimatedImage';

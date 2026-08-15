@@ -4,7 +4,7 @@ import { upperFirst } from 'lodash';
 import { useCallback, useMemo, useState } from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import { useTranslations } from 'use-intl';
-import { HeaderTitle } from '@react-navigation/elements';
+import { HeaderTitle } from 'expo-router/react-navigation';
 import { LegendList } from '@legendapp/list/react-native';
 import tw from '../../../../../lib/tw';
 import { Button } from '../../../../../components/ui/Button';
