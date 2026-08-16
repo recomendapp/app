@@ -1,4 +1,4 @@
-import { Href, Link, useLocalSearchParams } from 'expo-router';
+import { Href, Link, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { lowerCase, upperFirst } from 'lodash';
 import { Pressable, useWindowDimensions, View, ViewProps } from 'react-native';
 import tw from '../../../../../lib/tw';
@@ -29,12 +29,10 @@ import TvSeriesWidgetPlaylists from '../../../../../components/screens/tv-series
 import TvSeriesWidgetReviews from '../../../../../components/screens/tv-series/TvSeriesWidgetReviews';
 import { Button } from '../../../../../components/ui/Button';
 import { useAuth } from '../../../../../providers/AuthProvider';
+import { TvSeriesBottomAccessory } from '../../../../../components/screens/tv-series/TvSeriesBottomAccessory';
+import { TvSeriesActionButtons } from '../../../../../components/screens/tv-series/TvSeriesActionButtons';
+import useBottomAccessoryStore from '../../../../../stores/useBottomAccessoryStore';
 import { FloatingBar } from '../../../../../components/ui/FloatingBar';
-import ButtonUserLogTvSeriesRating from '../../../../../components/buttons/tv-series/ButtonUserLogTvSeriesRating';
-import ButtonUserLogTvSeriesLike from '../../../../../components/buttons/tv-series/ButtonUserLogTvSeriesLike';
-import ButtonUserLogTvSeriesWatch from '../../../../../components/buttons/tv-series/ButtonUserLogTvSeriesWatch';
-import { ButtonPlaylistAdd } from '../../../../../components/buttons/ButtonPlaylistAdd';
-import ButtonUserRecoSend from '../../../../../components/buttons/ButtonUserRecoSend';
 import AnimatedContentContainer from '../../../../../components/ui/AnimatedContentContainer';
 import { Icons } from '../../../../../constants/Icons';
 import YoutubePlayer from 'react-native-youtube-iframe';
@@ -44,7 +42,6 @@ import TvSeriesWidgetCast from '../../../../../components/screens/tv-series/TvSe
 import { useQuery } from '@tanstack/react-query';
 import { tvSeriesCastingOptions, tvSeriesOptions } from '@libs/query-client';
 import { TvSeries, TvSeriesTrailer } from '@libs/api-js';
-import { ButtonUserBookmark } from '../../../../../components/buttons/ButtonUserBookmark';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const TvSeriesScreen = () => {
@@ -53,7 +50,10 @@ const TvSeriesScreen = () => {
   const { user } = useAuth();
   const insets = useSafeAreaInsets();
   const t = useTranslations();
+  const { isLiquidGlassAvailable } = useTheme();
   const openSheet = useBottomSheetStore((state) => state.openSheet);
+  const setAccessory = useBottomAccessoryStore((state) => state.setAccessory);
+  const clearAccessory = useBottomAccessoryStore((state) => state.clearAccessory);
   const { data: series, isLoading } = useQuery(
     tvSeriesOptions({
       tvSeriesId: seriesId,
@@ -78,9 +78,14 @@ const TvSeriesScreen = () => {
 
   const animatedContentContainerStyle = useAnimatedStyle(() => {
     return {
-      paddingBottom: withTiming(insets.bottom + PADDING_VERTICAL * 2 + floatingBarHeight.value, {
-        duration: 300,
-      }),
+      paddingBottom: withTiming(
+        insets.bottom +
+          PADDING_VERTICAL * 2 +
+          (isLiquidGlassAvailable ? 0 : floatingBarHeight.value),
+        {
+          duration: 300,
+        },
+      ),
     };
   });
 
@@ -91,6 +96,17 @@ const TvSeriesScreen = () => {
       });
     }
   }, [series, openSheet]);
+
+  // Liquid Glass: native bottom accessory hosted by the tab bar (see (tabs)/_layout.tsx).
+  // Everywhere else (Android, iOS < 26): FloatingBar rendered directly below, see JSX.
+  useFocusEffect(
+    useCallback(() => {
+      if (series && user && isLiquidGlassAvailable) {
+        setAccessory(TvSeriesBottomAccessory, { tvSeries: series });
+      }
+      return () => clearAccessory();
+    }, [series, user, isLiquidGlassAvailable, setAccessory, clearAccessory]),
+  );
 
   return (
     <>
@@ -174,30 +190,9 @@ const TvSeriesScreen = () => {
           </View>
         )}
       </AnimatedContentContainer>
-      {series && user && (
-        <FloatingBar
-          height={floatingBarHeight}
-          containerStyle={{ paddingHorizontal: 0 }}
-          style={tw`flex-row items-center justify-between`}
-        >
-          <View style={tw`flex-row items-center gap-2`}>
-            <ButtonUserLogTvSeriesRating tvSeries={series} />
-            <ButtonUserLogTvSeriesLike tvSeries={series} />
-            <ButtonUserLogTvSeriesWatch tvSeries={series} />
-            <ButtonUserBookmark
-              mediaId={series.id}
-              mediaType="tv_series"
-              mediaTitle={series.name}
-            />
-          </View>
-          <View style={tw`flex-row items-center gap-2`}>
-            <ButtonPlaylistAdd mediaId={series.id} mediaType="tv_series" mediaTitle={series.name} />
-            <ButtonUserRecoSend
-              mediaId={series.id}
-              mediaType="tv_series"
-              mediaTitle={series.name}
-            />
-          </View>
+      {series && user && !isLiquidGlassAvailable && (
+        <FloatingBar height={floatingBarHeight} containerStyle={{ paddingHorizontal: 0 }}>
+          <TvSeriesActionButtons tvSeries={series} />
         </FloatingBar>
       )}
     </>

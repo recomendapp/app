@@ -1,4 +1,4 @@
-import { Href, Link, useLocalSearchParams } from 'expo-router';
+import { Href, Link, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { lowerCase, upperFirst } from 'lodash';
 import { Pressable, useWindowDimensions, ViewProps } from 'react-native';
 import tw from '../../../../../lib/tw';
@@ -28,14 +28,11 @@ import MovieWidgetReviews from '../../../../../components/screens/film/MovieWidg
 import MovieWidgetPlaylists from '../../../../../components/screens/film/MovieWidgetPlaylists';
 import { View } from '../../../../../components/ui/view';
 import { Button } from '../../../../../components/ui/Button';
-import { FloatingBar } from '../../../../../components/ui/FloatingBar';
 import { useAuth } from '../../../../../providers/AuthProvider';
-import ButtonUserLogMovieRating from '../../../../../components/buttons/movies/ButtonUserLogMovieRating';
-import ButtonUserLogMovieLike from '../../../../../components/buttons/movies/ButtonUserLogMovieLike';
-import ButtonUserLogMovieWatch from '../../../../../components/buttons/movies/ButtonUserLogMovieWatch';
-import ButtonUserLogMovieWatchDate from '../../../../../components/buttons/movies/ButtonUserLogMovieWatchDate';
-import { ButtonPlaylistAdd } from '../../../../../components/buttons/ButtonPlaylistAdd';
-import ButtonUserRecoSend from '../../../../../components/buttons/ButtonUserRecoSend';
+import { FilmBottomAccessory } from '../../../../../components/screens/film/FilmBottomAccessory';
+import { FilmActionButtons } from '../../../../../components/screens/film/FilmActionButtons';
+import useBottomAccessoryStore from '../../../../../stores/useBottomAccessoryStore';
+import { FloatingBar } from '../../../../../components/ui/FloatingBar';
 import AnimatedContentContainer from '../../../../../components/ui/AnimatedContentContainer';
 import { Icons } from '../../../../../constants/Icons';
 import YoutubePlayer from 'react-native-youtube-iframe';
@@ -45,7 +42,6 @@ import MovieWidgetCast from '../../../../../components/screens/film/MovieWidgetC
 import { useQuery } from '@tanstack/react-query';
 import { movieCastingOptions, movieOptions } from '@libs/query-client';
 import { Movie, MovieTrailer } from '@libs/api-js';
-import { ButtonUserBookmark } from '../../../../../components/buttons/ButtonUserBookmark';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const FilmScreen = () => {
@@ -54,7 +50,10 @@ const FilmScreen = () => {
   const { user } = useAuth();
   const insets = useSafeAreaInsets();
   const t = useTranslations();
+  const { isLiquidGlassAvailable } = useTheme();
   const openSheet = useBottomSheetStore((state) => state.openSheet);
+  const setAccessory = useBottomAccessoryStore((state) => state.setAccessory);
+  const clearAccessory = useBottomAccessoryStore((state) => state.clearAccessory);
 
   const { data: movie, isLoading } = useQuery(
     movieOptions({
@@ -80,9 +79,14 @@ const FilmScreen = () => {
 
   const animatedContentContainerStyle = useAnimatedStyle(() => {
     return {
-      paddingBottom: withTiming(insets.bottom + PADDING_VERTICAL * 2 + floatingBarHeight.value, {
-        duration: 300,
-      }),
+      paddingBottom: withTiming(
+        insets.bottom +
+          PADDING_VERTICAL * 2 +
+          (isLiquidGlassAvailable ? 0 : floatingBarHeight.value),
+        {
+          duration: 300,
+        },
+      ),
     };
   });
 
@@ -93,6 +97,17 @@ const FilmScreen = () => {
       });
     }
   }, [movie, openSheet]);
+
+  // Liquid Glass: native bottom accessory hosted by the tab bar (see (tabs)/_layout.tsx).
+  // Everywhere else (Android, iOS < 26): FloatingBar rendered directly below, see JSX.
+  useFocusEffect(
+    useCallback(() => {
+      if (movie && user && isLiquidGlassAvailable) {
+        setAccessory(FilmBottomAccessory, { movie });
+      }
+      return () => clearAccessory();
+    }, [movie, user, isLiquidGlassAvailable, setAccessory, clearAccessory]),
+  );
 
   return (
     <>
@@ -165,23 +180,9 @@ const FilmScreen = () => {
           </View>
         )}
       </AnimatedContentContainer>
-      {movie && user && (
-        <FloatingBar
-          height={floatingBarHeight}
-          containerStyle={{ paddingHorizontal: 0 }}
-          style={tw`flex-row items-center justify-between`}
-        >
-          <View style={tw`flex-row items-center gap-2`}>
-            <ButtonUserLogMovieRating movie={movie} />
-            <ButtonUserLogMovieLike movie={movie} />
-            <ButtonUserLogMovieWatch movie={movie} />
-            <ButtonUserBookmark mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
-            <ButtonUserLogMovieWatchDate movie={movie} />
-          </View>
-          <View style={tw`flex-row items-center gap-2`}>
-            <ButtonPlaylistAdd mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
-            <ButtonUserRecoSend mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
-          </View>
+      {movie && user && !isLiquidGlassAvailable && (
+        <FloatingBar height={floatingBarHeight} containerStyle={{ paddingHorizontal: 0 }}>
+          <FilmActionButtons movie={movie} />
         </FloatingBar>
       )}
     </>

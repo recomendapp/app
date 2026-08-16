@@ -18,6 +18,7 @@ import { ReviewMovieWithAuthor } from '@libs/api-js';
 import { CardError } from '../../../../../components/cards/CardError';
 import { CardEmpty } from '../../../../../components/cards/CardEmpty';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { isIOS } from '../../../../../platform/detection';
 
 interface sortBy {
   label: string;
@@ -138,47 +139,89 @@ const FilmReviews = () => {
                   />
                 )
               : undefined,
-          unstable_headerRightItems: user
-            ? (props) => [
-                ...(activity !== undefined
-                  ? ([
-                      {
-                        type: 'button',
-                        label: activity?.review
-                          ? upperFirst(t('common.messages.my_review', { count: 1 }))
-                          : upperFirst(t('common.messages.add_review')),
-                        onPress: handleViewOrCreateReview,
-                        icon: {
-                          name: activity?.review ? 'eye' : 'pencil',
-                          type: 'sfSymbol',
-                        },
+          unstable_headerRightItems: () => [
+            ...(user
+              ? activity !== undefined
+                ? [
+                    {
+                      type: 'button' as const,
+                      label: activity?.review
+                        ? upperFirst(t('common.messages.my_review', { count: 1 }))
+                        : upperFirst(t('common.messages.add_review')),
+                      onPress: handleViewOrCreateReview,
+                      icon: {
+                        name: (activity?.review ? 'eye' : 'pencil') as 'eye' | 'pencil',
+                        type: 'sfSymbol' as const,
                       },
-                    ] as const)
-                  : ([
-                      {
-                        type: 'custom',
-                        element: <ActivityIndicator size={36} />,
-                      },
-                    ] as const)),
-              ]
-            : undefined,
+                    },
+                  ]
+                : [
+                    {
+                      type: 'custom' as const,
+                      element: <ActivityIndicator size={36} />,
+                    },
+                  ]
+              : []),
+            {
+              type: 'menu' as const,
+              label: upperFirst(t('common.messages.sort_by')),
+              icon: {
+                type: 'sfSymbol' as const,
+                name: (sortOrder === 'desc' ? 'arrow.down' : 'arrow.up') as
+                  | 'arrow.down'
+                  | 'arrow.up',
+              },
+              menu: {
+                title: upperFirst(t('common.messages.sort_by')),
+                // Tapping the already-active field flips the order instead of no-op'ing —
+                // the order (asc/desc) isn't a separate selectable group, since a native
+                // switch control isn't available as a menu item type in this API.
+                items: sortByOptions.map((option) => {
+                  const isActive = option.value === sortBy.value;
+                  return {
+                    type: 'action' as const,
+                    label: option.label,
+                    description: isActive
+                      ? upperFirst(
+                          t(
+                            sortOrder === 'desc'
+                              ? 'common.messages.order_desc'
+                              : 'common.messages.order_asc',
+                          ),
+                        )
+                      : undefined,
+                    state: (isActive ? 'on' : 'off') as 'on' | 'off',
+                    onPress: () => {
+                      if (isActive) {
+                        setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc');
+                      } else {
+                        setSortBy(option);
+                      }
+                    },
+                  };
+                }),
+              },
+            },
+          ],
         }}
       />
       <LegendList
         data={reviews}
         renderItem={renderItem}
         ListHeaderComponent={
-          <View style={tw.style('flex flex-row justify-end items-center gap-2 py-2')}>
-            <Button
-              icon={sortOrder === 'desc' ? Icons.ArrowDown : Icons.ArrowUp}
-              variant="muted"
-              size="icon"
-              onPress={handleSortOrderToggle}
-            />
-            <Button icon={Icons.ChevronDown} variant="muted" onPress={handleSortBy}>
-              {sortBy.label}
-            </Button>
-          </View>
+          isIOS ? undefined : (
+            <View style={tw.style('flex flex-row justify-end items-center gap-2 py-2')}>
+              <Button
+                icon={sortOrder === 'desc' ? Icons.ArrowDown : Icons.ArrowUp}
+                variant="muted"
+                size="icon"
+                onPress={handleSortOrderToggle}
+              />
+              <Button icon={Icons.ChevronDown} variant="muted" onPress={handleSortBy}>
+                {sortBy.label}
+              </Button>
+            </View>
+          )
         }
         ListEmptyComponent={
           <View style={tw`flex-1 items-center justify-center`}>
