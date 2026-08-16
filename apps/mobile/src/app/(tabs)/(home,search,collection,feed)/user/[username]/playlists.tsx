@@ -2,12 +2,11 @@ import { CardPlaylist } from '../../../../../components/cards/CardPlaylist';
 import { Button } from '../../../../../components/ui/Button';
 import { Icons } from '../../../../../constants/Icons';
 import tw from '../../../../../lib/tw';
-import { useTheme } from '../../../../../providers/ThemeProvider';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { LegendList } from '@legendapp/list/react-native';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { upperFirst } from 'lodash';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import { useTranslations } from 'use-intl';
 import { HeaderTitle } from 'expo-router/react-navigation';
@@ -16,6 +15,7 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { userByUsernameOptions, userPlaylistsInfiniteOptions } from '@libs/query-client';
 import { CardError } from '../../../../../components/cards/CardError';
 import { CardEmpty } from '../../../../../components/cards/CardEmpty';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface sortBy {
   label: string;
@@ -27,7 +27,7 @@ const UserPlaylistsScreen = () => {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const { username } = useLocalSearchParams<{ username: string }>();
   const { data: profile } = useQuery(userByUsernameOptions({ username: username }));
-  const { bottomOffset, tabBarHeight } = useTheme();
+  const insets = useSafeAreaInsets();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(
@@ -130,14 +130,11 @@ const UserPlaylistsScreen = () => {
         onEndReachedThreshold={0.5}
         contentContainerStyle={[
           {
-            paddingBottom: bottomOffset + PADDING_VERTICAL,
+            paddingBottom: insets.bottom + PADDING_VERTICAL,
             flexGrow: 1,
           },
           tw`px-4`,
         ]}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
-        }}
         maintainVisibleContentPosition={false}
         keyExtractor={(item) => item.id.toString()}
         columnWrapperStyle={tw`gap-2`}

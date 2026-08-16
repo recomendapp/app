@@ -9,7 +9,6 @@ import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 import { useToast } from '../components/Toast';
 import { useCallback, useMemo } from 'react';
-import { useTheme } from '../providers/ThemeProvider';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import {
   userFollowRequestsInfiniteOptions,
@@ -23,6 +22,7 @@ import { Stack } from 'expo-router';
 import { RefreshableStateContainer } from '../components/ui/RefreshableStateContainer';
 import { CardError } from '../components/cards/CardError';
 import { CardEmpty } from '../components/cards/CardEmpty';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const FollowRequestsScreen = () => {
   const t = useTranslations();
@@ -31,7 +31,7 @@ const FollowRequestsScreen = () => {
   const modalHeaderOptions = useModalHeaderOptions({
     forceCross: true,
   });
-  const { bottomOffset, tabBarHeight } = useTheme();
+  const insets = useSafeAreaInsets();
   const { data, isLoading, isRefetching, refetch, hasNextPage, fetchNextPage, isError } =
     useInfiniteQuery(
       userFollowRequestsInfiniteOptions({
@@ -147,11 +147,10 @@ const FollowRequestsScreen = () => {
               gap: GAP,
               paddingHorizontal: PADDING_HORIZONTAL,
               paddingTop: PADDING_VERTICAL,
-              paddingBottom: bottomOffset + PADDING_VERTICAL,
+              paddingBottom: insets.bottom + PADDING_VERTICAL,
               flexGrow: 1,
             },
           ]}
-          scrollIndicatorInsets={{ bottom: tabBarHeight }}
         />
       )}
     </>

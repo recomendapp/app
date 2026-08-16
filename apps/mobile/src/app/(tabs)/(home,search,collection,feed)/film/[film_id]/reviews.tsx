@@ -1,10 +1,9 @@
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { getIdFromSlug } from '../../../../../utils/getIdFromSlug';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 import tw from '../../../../../lib/tw';
-import { useTheme } from '../../../../../providers/ThemeProvider';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { LegendList } from '@legendapp/list/react-native';
@@ -14,10 +13,11 @@ import { Button } from '../../../../../components/ui/Button';
 import { Icons } from '../../../../../constants/Icons';
 import { useAuth } from '../../../../../providers/AuthProvider';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { movieLogOptions, movieOptions, movieReviewsInfiniteOptions } from '@libs/query-client';
+import { movieLogOptions, movieReviewsInfiniteOptions } from '@libs/query-client';
 import { ReviewMovieWithAuthor } from '@libs/api-js';
 import { CardError } from '../../../../../components/cards/CardError';
 import { CardEmpty } from '../../../../../components/cards/CardEmpty';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface sortBy {
   label: string;
@@ -30,7 +30,7 @@ const FilmReviews = () => {
   const { user } = useAuth();
   const { film_id } = useLocalSearchParams<{ film_id: string }>();
   const { id: movieId } = getIdFromSlug(film_id);
-  const { colors, bottomOffset, tabBarHeight } = useTheme();
+  const insets = useSafeAreaInsets();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(
@@ -46,7 +46,6 @@ const FilmReviews = () => {
   const [sortBy, setSortBy] = useState<sortBy>(sortByOptions[0]);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   // Requests
-  const { data: movie } = useQuery(movieOptions({ movieId: movieId }));
   const { data: activity } = useQuery(
     movieLogOptions({
       userId: user?.id,
@@ -101,7 +100,7 @@ const FilmReviews = () => {
         }}
       />
     ),
-    [movie, movieId],
+    [],
   );
 
   const handleViewOrCreateReview = useCallback(() => {
@@ -121,7 +120,7 @@ const FilmReviews = () => {
         },
       });
     }
-  }, [activity?.review, router, movieId, user?.username]);
+  }, [activity?.review, router, movieId, user]);
 
   return (
     <>
@@ -199,12 +198,11 @@ const FilmReviews = () => {
         onEndReachedThreshold={0.5}
         contentContainerStyle={{
           paddingHorizontal: PADDING_HORIZONTAL,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
           gap: GAP,
           flexGrow: 1,
         }}
         maintainVisibleContentPosition={false}
-        scrollIndicatorInsets={{ bottom: tabBarHeight }}
         keyExtractor={(item) => item.id.toString()}
         refreshing={isRefetching}
         onRefresh={refetch}

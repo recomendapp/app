@@ -20,11 +20,13 @@ import { meFeedInfiniteOptions } from '@libs/query-client';
 import { RefreshableStateContainer } from '../../../../components/ui/RefreshableStateContainer';
 import { CardError } from '../../../../components/cards/CardError';
 import { CardEmpty } from '../../../../components/cards/CardEmpty';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const FeedScreen = () => {
   const t = useTranslations();
   const { user } = useAuth();
-  const { bottomOffset, tabBarHeight, colors } = useTheme();
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const { data, isLoading, fetchNextPage, hasNextPage, refetch, isRefetching, isError } =
     useInfiniteQuery(
       meFeedInfiniteOptions({
@@ -68,7 +70,7 @@ const FeedScreen = () => {
       <RefreshableStateContainer
         onRefresh={refetch}
         refreshing={isRefetching}
-        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + PADDING_VERTICAL }}
       >
         <Icons.Loader />
       </RefreshableStateContainer>
@@ -80,7 +82,7 @@ const FeedScreen = () => {
       <RefreshableStateContainer
         onRefresh={refetch}
         refreshing={isRefetching}
-        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + PADDING_VERTICAL }}
       >
         <CardError />
       </RefreshableStateContainer>
@@ -92,7 +94,7 @@ const FeedScreen = () => {
       <RefreshableStateContainer
         onRefresh={refetch}
         refreshing={isRefetching}
-        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + PADDING_VERTICAL }}
       >
         <CardEmpty icon={'⚡️'} label={t('help_hints.feed.message')} />
       </RefreshableStateContainer>
@@ -106,12 +108,12 @@ const FeedScreen = () => {
       renderItem={renderItem}
       contentContainerStyle={{
         paddingHorizontal: PADDING_HORIZONTAL,
-        paddingBottom: bottomOffset + PADDING_VERTICAL,
+        paddingBottom: insets.bottom + PADDING_VERTICAL,
         gap: GAP,
         flexGrow: 1,
       }}
       scrollIndicatorInsets={{
-        bottom: tabBarHeight,
+        bottom: insets.bottom,
       }}
       keyExtractor={(item) => item.id.toString()}
       onEndReached={hasNextPage ? () => fetchNextPage() : undefined}

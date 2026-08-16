@@ -30,6 +30,7 @@ import { BottomSheetLogTvSeries } from '../../../bottom-sheets/sheets/BottomShee
 import FeedUserLog from '../../feed/FeedUserLog';
 import { EnrichedMarkdownText } from '../../../RichText/EnrichedMarkdownText';
 import { NativeStackHeaderItem } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const ProfileTvSeries = ({
   username,
@@ -39,7 +40,8 @@ export const ProfileTvSeries = ({
   tvSeriesId: number;
 }) => {
   const { user } = useAuth();
-  const { colors, bottomOffset, tabBarHeight } = useTheme();
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const t = useTranslations();
   const openSheet = useBottomSheetStore((state) => state.openSheet);
   // Queries
@@ -69,7 +71,7 @@ export const ProfileTvSeries = ({
   });
   const animatedContentContainerStyle = useAnimatedStyle(() => {
     return {
-      paddingBottom: withTiming(bottomOffset + PADDING_VERTICAL * 2, { duration: 300 }),
+      paddingBottom: withTiming(insets.bottom + PADDING_VERTICAL, { duration: 300 }),
     };
   });
   return (
@@ -138,9 +140,6 @@ export const ProfileTvSeries = ({
         onScroll={scrollHandler}
         scrollToOverflowEnabled
         contentContainerStyle={animatedContentContainerStyle}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
-        }}
       >
         <ProfileTvSeriesHeader
           log={log}

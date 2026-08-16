@@ -31,6 +31,7 @@ import {
   userTvSeriesLogsInfiniteOptions,
 } from '@libs/query-client';
 import { CardEmpty } from '../../../../../components/cards/CardEmpty';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const ProfileHeader = ({
   profile,
@@ -133,7 +134,8 @@ const ProfileScreen = () => {
   const t = useTranslations();
   const { username } = useLocalSearchParams<{ username: string }>();
   const { user } = useAuth();
-  const { colors, bottomOffset, tabBarHeight, isLiquidGlassAvailable } = useTheme();
+  const { colors, isLiquidGlassAvailable } = useTheme();
+  const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -272,11 +274,8 @@ const ProfileScreen = () => {
         contentContainerStyle={{
           gap: GAP,
           paddingTop: navigationHeaderHeight,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
           flexGrow: 1,
-        }}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
         }}
       >
         <ProfileHeader {...(loading ? { skeleton: true } : { profile: profile })} />

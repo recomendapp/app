@@ -45,12 +45,13 @@ import { useQuery } from '@tanstack/react-query';
 import { tvSeriesCastingOptions, tvSeriesOptions } from '@libs/query-client';
 import { TvSeries, TvSeriesTrailer } from '@libs/api-js';
 import { ButtonUserBookmark } from '../../../../../components/buttons/ButtonUserBookmark';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const TvSeriesScreen = () => {
   const { tv_series_id } = useLocalSearchParams<{ tv_series_id: string }>();
   const { id: seriesId } = getIdFromSlug(tv_series_id);
-  const { bottomOffset, tabBarHeight } = useTheme();
   const { user } = useAuth();
+  const insets = useSafeAreaInsets();
   const t = useTranslations();
   const openSheet = useBottomSheetStore((state) => state.openSheet);
   const { data: series, isLoading } = useQuery(
@@ -77,7 +78,7 @@ const TvSeriesScreen = () => {
 
   const animatedContentContainerStyle = useAnimatedStyle(() => {
     return {
-      paddingBottom: withTiming(bottomOffset + PADDING_VERTICAL * 2 + floatingBarHeight.value, {
+      paddingBottom: withTiming(insets.bottom + PADDING_VERTICAL * 2 + floatingBarHeight.value, {
         duration: 300,
       }),
     };
@@ -118,9 +119,6 @@ const TvSeriesScreen = () => {
         onScroll={scrollHandler}
         scrollToOverflowEnabled
         contentContainerStyle={animatedContentContainerStyle}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
-        }}
       >
         <TvSeriesHeader
           tvSeries={series}
@@ -178,7 +176,6 @@ const TvSeriesScreen = () => {
       </AnimatedContentContainer>
       {series && user && (
         <FloatingBar
-          bottomOffset={bottomOffset + PADDING_VERTICAL}
           height={floatingBarHeight}
           containerStyle={{ paddingHorizontal: 0 }}
           style={tw`flex-row items-center justify-between`}

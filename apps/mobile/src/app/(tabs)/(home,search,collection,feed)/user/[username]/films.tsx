@@ -1,12 +1,11 @@
 import { Button } from '../../../../../components/ui/Button';
 import { Icons } from '../../../../../constants/Icons';
 import tw from '../../../../../lib/tw';
-import { useTheme } from '../../../../../providers/ThemeProvider';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { LegendList } from '@legendapp/list/react-native';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { upperFirst } from 'lodash';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import { useTranslations } from 'use-intl';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
@@ -16,6 +15,7 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { userByUsernameOptions, userMovieLogsInfiniteOptions } from '@libs/query-client';
 import { CardError } from '../../../../../components/cards/CardError';
 import { CardEmpty } from '../../../../../components/cards/CardEmpty';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface sortBy {
   label: string;
@@ -27,7 +27,7 @@ const UserCollectionMovieScreen = () => {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const { username } = useLocalSearchParams<{ username: string }>();
   const { data: profile } = useQuery(userByUsernameOptions({ username: username }));
-  const { bottomOffset, tabBarHeight } = useTheme();
+  const insets = useSafeAreaInsets();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(
@@ -149,10 +149,7 @@ const UserCollectionMovieScreen = () => {
         contentContainerStyle={{
           gap: GAP,
           paddingHorizontal: PADDING_HORIZONTAL,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
-        }}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
         }}
         maintainVisibleContentPosition={false}
         keyExtractor={(item) => item.id.toString()}

@@ -19,6 +19,7 @@ import * as Application from 'expo-application';
 import app from '../../constants/app';
 import { Badge } from '../../components/ui/Badge';
 import { client } from '@libs/api-js';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type BaseRoute = {
   label: string;
@@ -42,9 +43,10 @@ type Route = BaseRoute &
 
 const SettingsScreen = () => {
   const { user, customerInfo, logout, forceLogout } = useAuth();
-  const { colors, bottomOffset, tabBarHeight, mode } = useTheme();
+  const { colors, mode } = useTheme();
   const toast = useToast();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const t = useTranslations();
 
   const appVersion = useMemo(() => Application.nativeApplicationVersion, []);
@@ -199,10 +201,7 @@ const SettingsScreen = () => {
         data={routes}
         renderItem={renderItem}
         contentContainerStyle={{
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
-        }}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
         }}
         keyExtractor={useCallback((_: Route, number: number) => number.toString(), [])}
         ListFooterComponent={renderFooter}

@@ -10,7 +10,6 @@ import { Button } from '../../../../../components/ui/Button';
 import { Icons } from '../../../../../constants/Icons';
 import tw from '../../../../../lib/tw';
 import { useAuth } from '../../../../../providers/AuthProvider';
-import { useTheme } from '../../../../../providers/ThemeProvider';
 import useBottomSheetStore from '../../../../../stores/useBottomSheetStore';
 import { GAP, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { getIdFromSlug } from '../../../../../utils/getIdFromSlug';
@@ -20,12 +19,13 @@ import { useCallback, useMemo } from 'react';
 import { View } from 'react-native';
 import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
 import { useTranslations } from 'use-intl';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const PersonScreen = () => {
   const t = useTranslations();
   const { person_id } = useLocalSearchParams<{ person_id: string }>();
   const { id: personId } = getIdFromSlug(person_id);
-  const { bottomOffset, tabBarHeight } = useTheme();
+  const insets = useSafeAreaInsets();
   const { user } = useAuth();
   const openSheet = useBottomSheetStore((state) => state.openSheet);
   // Queries
@@ -91,13 +91,10 @@ const PersonScreen = () => {
         scrollToOverflowEnabled
         contentContainerStyle={[
           {
-            paddingBottom: bottomOffset + PADDING_VERTICAL,
+            paddingBottom: insets.bottom + PADDING_VERTICAL,
             gap: GAP,
           },
         ]}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
-        }}
       >
         <PersonHeader
           person={person}

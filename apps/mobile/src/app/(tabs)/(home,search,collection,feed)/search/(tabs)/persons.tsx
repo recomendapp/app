@@ -3,7 +3,6 @@ import ErrorMessage from '../../../../../components/ErrorMessage';
 import { Text } from '../../../../../components/ui/text';
 import { Icons } from '../../../../../constants/Icons';
 import tw from '../../../../../lib/tw';
-import { useTheme } from '../../../../../providers/ThemeProvider';
 import useSearchStore from '../../../../../stores/useSearchStore';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { LegendList, LegendListRef } from '@legendapp/list/react-native';
@@ -18,7 +17,6 @@ import { searchPersonsInfiniteOptions } from '@libs/query-client';
 
 const SearchPersonsScreen = () => {
   const insets = useSafeAreaInsets();
-  const { bottomOffset, tabBarHeight } = useTheme();
   const { isVisible: keyboardVisible, height: keyboardHeight } = useKeyboardState((state) => state);
   const t = useTranslations();
   const search = useSearchStore((state) => state.search);
@@ -50,11 +48,11 @@ const SearchPersonsScreen = () => {
         paddingRight: insets.right + PADDING_HORIZONTAL,
         paddingBottom: keyboardVisible
           ? keyboardHeight + PADDING_VERTICAL
-          : bottomOffset + PADDING_VERTICAL,
+          : insets.bottom + PADDING_VERTICAL,
         gap: GAP,
       }}
       scrollIndicatorInsets={{
-        bottom: keyboardVisible ? keyboardHeight - insets.bottom : tabBarHeight,
+        bottom: keyboardVisible ? keyboardHeight - insets.bottom : insets.bottom,
       }}
       keyExtractor={(item) => item.id.toString()}
       ListEmptyComponent={

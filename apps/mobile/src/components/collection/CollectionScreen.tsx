@@ -22,6 +22,7 @@ import useBottomSheetStore from '../../stores/useBottomSheetStore';
 import { ViewType } from '@libs/api-js';
 import { CardError } from '../cards/CardError';
 import { CardEmpty } from '../cards/CardEmpty';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const MemoizedSearchBar = React.memo(SearchBar);
 
@@ -108,7 +109,7 @@ const CollectionScreen = <T extends Record<string, any>>({
   fuseThreshold = 0.5,
   ...props
 }: CollectionScreenConfig<T>) => {
-  const { bottomOffset, tabBarHeight } = useTheme();
+  const insets = useSafeAreaInsets();
   const t = useTranslations();
   const openSheet = useBottomSheetStore((state) => state.openSheet);
   const { width: SCREEN_WIDTH } = useWindowDimensions();
@@ -278,12 +279,9 @@ const CollectionScreen = <T extends Record<string, any>>({
         onRefresh={refetch}
         contentContainerStyle={{
           paddingHorizontal: PADDING_HORIZONTAL,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
           gap: GAP,
           flexGrow: 1,
-        }}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
         }}
         maintainVisibleContentPosition={maintainVisibleContentPosition}
         numColumns={

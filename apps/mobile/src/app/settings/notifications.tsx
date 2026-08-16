@@ -11,10 +11,12 @@ import { Separator } from '../../components/ui/separator';
 import Constants from 'expo-constants';
 import { startActivityAsync, ActivityAction } from 'expo-intent-launcher';
 import { useCallback } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const SettingsNotificationsScreen = () => {
   const t = useTranslations();
-  const { colors, bottomOffset, tabBarHeight } = useTheme();
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const { permissionStatus } = useNotifications();
   const openAppSettings = useCallback(async () => {
     if (Platform.OS === 'android') {
@@ -53,12 +55,9 @@ const SettingsNotificationsScreen = () => {
             gap: GAP,
             paddingTop: PADDING_VERTICAL,
             paddingHorizontal: PADDING_HORIZONTAL,
-            paddingBottom: bottomOffset + PADDING_VERTICAL,
+            paddingBottom: insets.bottom + PADDING_VERTICAL,
           },
         ]}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
-        }}
       >
         {permissionStatus !== 'granted' && (
           <>

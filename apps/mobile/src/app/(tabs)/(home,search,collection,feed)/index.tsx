@@ -8,7 +8,6 @@ import { WidgetUserBookmarks } from '../../../components/widgets/WidgetUserBookm
 import { WidgetUserFriendsPlaylists } from '../../../components/widgets/WidgetUserFriendsPlaylists';
 import { WidgetUserDiscovery } from '../../../components/widgets/WidgetUserDiscovery';
 import { useNow, useTranslations } from 'use-intl';
-import { useTheme } from '../../../providers/ThemeProvider';
 import { Icons } from '../../../constants/Icons';
 import { Text } from '../../../components/ui/text';
 import app from '../../../constants/app';
@@ -28,6 +27,7 @@ import UserAvatar from '../../../components/user/UserAvatar';
 import { userKeys, widgetKeys } from '@libs/query-client';
 import { useUpdates, reloadAsync } from 'expo-updates';
 import { NativeStackHeaderItem, useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const HeaderLeft = () => {
   const { user } = useAuth();
@@ -136,8 +136,8 @@ const HomeScreen = () => {
   const t = useTranslations();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { bottomOffset, tabBarHeight } = useTheme();
   const { user } = useAuth();
+  const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
   const { isDownloading, isUpdatePending } = useUpdates();
   // States
@@ -300,10 +300,7 @@ const HomeScreen = () => {
         onScroll={scrollHandler}
         contentContainerStyle={{
           gap: GAP,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
-        }}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
         }}
         refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
         nestedScrollEnabled

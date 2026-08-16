@@ -17,6 +17,7 @@ import { CardTvSeries } from '../../../../../components/cards/CardTvSeries';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { personOptions, personTvSeriesInfiniteOptions } from '@libs/query-client';
 import { PersonTvSeries } from '@libs/api-js';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface sortBy {
   label: string;
@@ -28,7 +29,8 @@ const PersonTvSeriesScreen = () => {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const { person_id } = useLocalSearchParams<{ person_id: string }>();
   const { id: personId } = getIdFromSlug(person_id);
-  const { colors, bottomOffset, tabBarHeight } = useTheme();
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(
@@ -141,10 +143,9 @@ const PersonTvSeriesScreen = () => {
         onEndReachedThreshold={0.5}
         contentContainerStyle={{
           gap: GAP,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
           paddingHorizontal: PADDING_HORIZONTAL,
         }}
-        scrollIndicatorInsets={{ bottom: tabBarHeight }}
         keyExtractor={(item) => item.tvSeries.id.toString()}
         refreshing={isRefetching}
         onRefresh={refetch}

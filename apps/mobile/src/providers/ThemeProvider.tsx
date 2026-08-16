@@ -1,8 +1,6 @@
 import Colors, { TColors } from '../constants/Colors';
 import { DarkTheme, ThemeProvider as NativeThemeProvider } from 'expo-router/react-navigation';
 import { createContext, use, useCallback, useEffect, useMemo, useState } from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useBottomTabOverflow } from '../hooks/useBottomTabOverflow';
 import { setBackgroundColorAsync } from 'expo-system-ui';
 import { Appearance, Platform } from 'react-native';
 import { isLiquidGlassAvailable as utilsIsLiquidGlassAvailable } from 'expo-glass-effect';
@@ -15,9 +13,6 @@ type ThemeMode = 'light' | 'dark';
 type ThemeContextType = {
   colors: TColors;
   applyColors: (theme: keyof typeof Colors) => void;
-  tabBarHeight: number;
-  setTabBarHeight: (height: number) => void;
-  bottomOffset: number;
   defaultScreenOptions: NativeStackNavigationOptions;
   mode: ThemeMode;
   isLiquidGlassAvailable: boolean;
@@ -30,17 +25,12 @@ type ThemeProviderProps = {
 };
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  const insets = useSafeAreaInsets();
   const isLiquidGlassAvailable = utilsIsLiquidGlassAvailable();
   const [colors, setColors] = useState(Colors['dark']);
   const mode = useMemo((): ThemeMode => getModeFromColor(colors.background), [colors.background]);
   const applyColors = useCallback((theme: keyof typeof Colors) => {
     setColors(Colors[theme]);
   }, []);
-
-  const [tabBarHeight, setTabBarHeight] = useState(0);
-
-  const bottomOffset = useMemo(() => tabBarHeight + insets.bottom, [tabBarHeight, insets.bottom]);
 
   const defaultScreenOptions = useMemo<NativeStackNavigationOptions>(
     () => ({
@@ -93,9 +83,6 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
         value={{
           applyColors,
           colors,
-          tabBarHeight,
-          setTabBarHeight,
-          bottomOffset,
           defaultScreenOptions,
           mode,
           isLiquidGlassAvailable,
@@ -113,25 +100,4 @@ export const useTheme = () => {
     throw new Error('useTheme must be used within a ThemeProvider');
   }
   return context;
-};
-
-/* ---------------------------------- UTILS --------------------------------- */
-export const ThemeUpdater = () => {
-  return (
-    <>
-      <TabBarHeightUpdater />
-    </>
-  );
-};
-
-const TabBarHeightUpdater = () => {
-  const tabBarHeight = useBottomTabOverflow();
-  const { setTabBarHeight } = useTheme();
-  useEffect(() => {
-    setTabBarHeight(tabBarHeight);
-    return () => {
-      setTabBarHeight(0);
-    };
-  }, [tabBarHeight, setTabBarHeight]);
-  return null;
 };

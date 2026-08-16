@@ -17,6 +17,7 @@ import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { personMoviesInfiniteOptions, personOptions } from '@libs/query-client';
 import { PersonMovie } from '@libs/api-js';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface sortBy {
   label: string;
@@ -28,7 +29,8 @@ const PersonFilmsScreen = () => {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const { person_id } = useLocalSearchParams<{ person_id: string }>();
   const { id: personId } = getIdFromSlug(person_id);
-  const { colors, bottomOffset, tabBarHeight } = useTheme();
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(
@@ -142,9 +144,8 @@ const PersonFilmsScreen = () => {
         contentContainerStyle={{
           gap: GAP,
           paddingHorizontal: PADDING_HORIZONTAL,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
         }}
-        scrollIndicatorInsets={{ bottom: tabBarHeight }}
         keyExtractor={(item) => item.movie.id.toString()}
         refreshing={isRefetching}
         onRefresh={refetch}

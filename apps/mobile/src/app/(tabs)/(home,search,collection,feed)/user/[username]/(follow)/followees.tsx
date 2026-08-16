@@ -1,5 +1,4 @@
 import { CardUser } from '../../../../../../components/cards/CardUser';
-import { useTheme } from '../../../../../../providers/ThemeProvider';
 import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../../theme/globals';
 import { LegendList } from '@legendapp/list/react-native';
 import { useLocalSearchParams } from 'expo-router';
@@ -19,7 +18,6 @@ const ProfileFolloweesScreen = () => {
   const { data: profile } = useQuery(userByUsernameOptions({ username: username }));
   const insets = useSafeAreaInsets();
   const t = useTranslations();
-  const { bottomOffset, tabBarHeight } = useTheme();
   const { data, hasNextPage, fetchNextPage, refetch, isLoading, isError, isRefetching } =
     useInfiniteQuery(
       userFollowingInfiniteOptions({
@@ -36,7 +34,7 @@ const ProfileFolloweesScreen = () => {
       <RefreshableStateContainer
         onRefresh={refetch}
         refreshing={isRefetching}
-        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + PADDING_VERTICAL }}
       >
         <Icons.Loader />
       </RefreshableStateContainer>
@@ -48,7 +46,7 @@ const ProfileFolloweesScreen = () => {
       <RefreshableStateContainer
         onRefresh={refetch}
         refreshing={isRefetching}
-        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + PADDING_VERTICAL }}
       >
         <CardError />
       </RefreshableStateContainer>
@@ -60,7 +58,7 @@ const ProfileFolloweesScreen = () => {
       <RefreshableStateContainer
         onRefresh={refetch}
         refreshing={isRefetching}
-        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + PADDING_VERTICAL }}
       >
         <CardEmpty icon={'👥'} label={t('common.messages.no_followees')} />
       </RefreshableStateContainer>
@@ -73,10 +71,10 @@ const ProfileFolloweesScreen = () => {
       contentContainerStyle={{
         paddingLeft: insets.left + PADDING_HORIZONTAL,
         paddingRight: insets.right + PADDING_HORIZONTAL,
-        paddingBottom: bottomOffset + PADDING_VERTICAL,
+        paddingBottom: insets.bottom + PADDING_VERTICAL,
       }}
       scrollIndicatorInsets={{
-        bottom: tabBarHeight,
+        bottom: insets.bottom,
       }}
       keyExtractor={(item) => item.id}
       onEndReached={hasNextPage ? () => fetchNextPage() : undefined}

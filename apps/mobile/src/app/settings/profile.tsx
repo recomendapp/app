@@ -1,5 +1,4 @@
 import { useAuth } from '../../providers/AuthProvider';
-import { useTheme } from '../../providers/ThemeProvider';
 import tw from '../../lib/tw';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -30,6 +29,7 @@ import { Pressable } from 'react-native';
 import { KeyboardAwareScrollView } from '../../components/ui/KeyboardAwareScrollView';
 import { useMeUpdateMutation } from '@libs/query-client';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const FULL_NAME_MIN_LENGTH = 1;
 const FULL_NAME_MAX_LENGTH = 30;
@@ -38,7 +38,7 @@ const BIO_MAX_LENGTH = 150;
 const SettingsProfileScreen = () => {
   const { user } = useAuth();
   const toast = useToast();
-  const { bottomOffset, tabBarHeight } = useTheme();
+  const insets = useSafeAreaInsets();
   const t = useTranslations();
   const { showActionSheetWithOptions } = useActionSheet();
   const { mutateAsync: updateProfile, isPending } = useMeUpdateMutation();
@@ -270,12 +270,8 @@ const SettingsProfileScreen = () => {
           gap: GAP,
           paddingTop: PADDING_VERTICAL,
           paddingHorizontal: PADDING_HORIZONTAL,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
         }}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
-        }}
-        bottomOffset={bottomOffset + PADDING_VERTICAL}
       >
         <Pressable onPress={handleAvatarOptions} style={tw`items-center justify-center gap-2`}>
           {user ? (

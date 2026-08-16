@@ -5,7 +5,6 @@ import { upperFirst } from 'lodash';
 import { useAuth } from '../../../../../providers/AuthProvider';
 import { useWindowDimensions, View } from 'react-native';
 import tw from '../../../../../lib/tw';
-import { useTheme } from '../../../../../providers/ThemeProvider';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { LegendList } from '@legendapp/list/react-native';
@@ -18,6 +17,7 @@ import { movieOptions, moviePlaylistsInfiniteOptions } from '@libs/query-client'
 import { PlaylistWithOwner } from '@libs/api-js';
 import { CardError } from '../../../../../components/cards/CardError';
 import { CardEmpty } from '../../../../../components/cards/CardEmpty';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface sortBy {
   label: string;
@@ -31,7 +31,7 @@ const FilmPlaylists = () => {
   const { user } = useAuth();
   const { film_id } = useLocalSearchParams<{ film_id: string }>();
   const { id: movieId } = getIdFromSlug(film_id);
-  const { bottomOffset, tabBarHeight } = useTheme();
+  const insets = useSafeAreaInsets();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(
@@ -184,12 +184,11 @@ const FilmPlaylists = () => {
         onEndReachedThreshold={0.5}
         contentContainerStyle={{
           paddingHorizontal: PADDING_HORIZONTAL,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
           gap: GAP,
           flexGrow: 1,
         }}
         maintainVisibleContentPosition={false}
-        scrollIndicatorInsets={{ bottom: tabBarHeight }}
         keyExtractor={(item) => item.id.toString()}
         refreshing={isRefetching}
         onRefresh={refetch}

@@ -1,4 +1,5 @@
 // import { useMediaMovieCreditsQuery } from "@mobile/api/medias/mediaQueries";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CardPerson } from '../../../../../components/cards/CardPerson';
 import { Text } from '../../../../../components/ui/text';
 import { View } from '../../../../../components/ui/view';
@@ -18,7 +19,8 @@ const FilmDetailsScreen = () => {
   const { film_id } = useLocalSearchParams<{ film_id: string }>();
   const { id: movieId } = getIdFromSlug(film_id);
   const t = useTranslations();
-  const { colors, bottomOffset, tabBarHeight } = useTheme();
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
 
   // const {
   // 	data,
@@ -134,10 +136,7 @@ const FilmDetailsScreen = () => {
 			return `person-${item.department}-${item.job}-${item.person.id}`;
 		}, [])}
 		contentContainerStyle={{
-			paddingBottom: bottomOffset + PADDING_VERTICAL
-		}}
-		scrollIndicatorInsets={{
-			bottom: tabBarHeight,
+			paddingBottom: insets.bottom + PADDING_VERTICAL
 		}}
 		ListEmptyComponent={
 			loading ? <Icons.Loader />

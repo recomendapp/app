@@ -7,18 +7,18 @@ import tw from '../../../../../lib/tw';
 import { Link } from 'expo-router';
 import { useWindowDimensions, View } from 'react-native';
 import { LegendList } from '@legendapp/list/react-native';
-import { useTheme } from '../../../../../providers/ThemeProvider';
 import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { Text } from '../../../../../components/ui/text';
 import { useCallback, useMemo } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { userPlaylistsInfiniteOptions } from '@libs/query-client';
 import { Playlist } from '@libs/api-js';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const CollectionScreen = () => {
   const { user } = useAuth();
   const { width: SCREEN_WIDTH } = useWindowDimensions();
-  const { bottomOffset, tabBarHeight } = useTheme();
+  const insets = useSafeAreaInsets();
   const staticRoutes = useCollectionStaticRoutes();
   const {
     data: playlists,
@@ -94,9 +94,9 @@ const CollectionScreen = () => {
       }
       contentContainerStyle={{
         paddingHorizontal: PADDING_HORIZONTAL,
-        paddingBottom: bottomOffset + PADDING_VERTICAL,
+        paddingBottom: insets.bottom + PADDING_VERTICAL,
       }}
-      scrollIndicatorInsets={{ bottom: tabBarHeight }}
+      scrollIndicatorInsets={{ bottom: insets.bottom }}
       keyExtractor={(item) =>
         item.type === 'static' ? `static-${item.data.label}` : item.data.id.toString()
       }

@@ -49,7 +49,6 @@ interface SearchResultsProps extends React.ComponentPropsWithoutRef<typeof Scrol
 
 export const SearchResults = ({ search, ...props }: SearchResultsProps) => {
   const insets = useSafeAreaInsets();
-  const { bottomOffset, tabBarHeight } = useTheme();
   const t = useTranslations();
   const { isVisible: keyboardVisible, height: keyboardHeight } = useKeyboardState((state) => state);
 
@@ -71,11 +70,11 @@ export const SearchResults = ({ search, ...props }: SearchResultsProps) => {
       ref={scrollRef}
       contentContainerStyle={{
         gap: GAP,
-        paddingBottom: bottomOffset + PADDING_VERTICAL,
+        paddingBottom: insets.bottom + PADDING_VERTICAL,
       }}
       keyboardShouldPersistTaps="handled"
       scrollIndicatorInsets={{
-        bottom: keyboardVisible ? keyboardHeight - insets.bottom : tabBarHeight,
+        bottom: keyboardVisible ? keyboardHeight - insets.bottom : insets.bottom,
       }}
       refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
       {...props}

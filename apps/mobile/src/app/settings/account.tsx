@@ -27,6 +27,7 @@ import { meOptions, useMeUpdateMutation } from '@libs/query-client';
 import { authClient } from '../../lib/auth/client';
 import { makeRedirectUri } from 'expo-auth-session';
 import { useQueryClient } from '@tanstack/react-query';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 15;
@@ -44,7 +45,8 @@ const SettingsAccountScreen = () => {
   const format = useFormatter();
   const t = useTranslations();
   const toast = useToast();
-  const { colors, bottomOffset, tabBarHeight } = useTheme();
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const { mutateAsync: updateProfile } = useMeUpdateMutation();
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -243,12 +245,8 @@ const SettingsAccountScreen = () => {
           gap: GAP,
           paddingTop: PADDING_VERTICAL,
           paddingHorizontal: PADDING_HORIZONTAL,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
         }}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
-        }}
-        bottomOffset={bottomOffset + PADDING_VERTICAL}
       >
         <Controller
           name="username"

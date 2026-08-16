@@ -15,6 +15,7 @@ import { FadeInDown } from 'react-native-reanimated';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { userByUsernameOptions, userTvSeriesLogsInfiniteOptions } from '@libs/query-client';
 import { LogTvSeriesWithTvSeriesNoReview } from '@libs/api-js';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface sortBy {
   label: string;
@@ -26,7 +27,8 @@ const UserCollectionTvSeries = () => {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const { username } = useLocalSearchParams<{ username: string }>();
   const { data: profile } = useQuery(userByUsernameOptions({ username: username }));
-  const { colors, bottomOffset } = useTheme();
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(
@@ -138,7 +140,7 @@ const UserCollectionTvSeries = () => {
         onEndReachedThreshold={0.5}
         contentContainerStyle={{
           gap: GAP,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
           paddingHorizontal: PADDING_HORIZONTAL,
         }}
         keyExtractor={useCallback(

@@ -46,12 +46,13 @@ import { useQuery } from '@tanstack/react-query';
 import { movieCastingOptions, movieOptions } from '@libs/query-client';
 import { Movie, MovieTrailer } from '@libs/api-js';
 import { ButtonUserBookmark } from '../../../../../components/buttons/ButtonUserBookmark';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const FilmScreen = () => {
   const { film_id } = useLocalSearchParams<{ film_id: string }>();
   const { id: movieId } = getIdFromSlug(film_id);
   const { user } = useAuth();
-  const { bottomOffset, tabBarHeight } = useTheme();
+  const insets = useSafeAreaInsets();
   const t = useTranslations();
   const openSheet = useBottomSheetStore((state) => state.openSheet);
 
@@ -79,7 +80,7 @@ const FilmScreen = () => {
 
   const animatedContentContainerStyle = useAnimatedStyle(() => {
     return {
-      paddingBottom: withTiming(bottomOffset + PADDING_VERTICAL * 2 + floatingBarHeight.value, {
+      paddingBottom: withTiming(insets.bottom + PADDING_VERTICAL * 2 + floatingBarHeight.value, {
         duration: 300,
       }),
     };
@@ -120,9 +121,6 @@ const FilmScreen = () => {
         onScroll={scrollHandler}
         scrollToOverflowEnabled
         contentContainerStyle={animatedContentContainerStyle}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
-        }}
       >
         <MovieHeader
           movie={movie}
@@ -169,7 +167,6 @@ const FilmScreen = () => {
       </AnimatedContentContainer>
       {movie && user && (
         <FloatingBar
-          bottomOffset={bottomOffset + PADDING_VERTICAL}
           height={floatingBarHeight}
           containerStyle={{ paddingHorizontal: 0 }}
           style={tw`flex-row items-center justify-between`}

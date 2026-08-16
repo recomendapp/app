@@ -1,5 +1,5 @@
 import { useAuth } from '../../../providers/AuthProvider';
-import { ThemeUpdater, useTheme } from '../../../providers/ThemeProvider';
+import { useTheme } from '../../../providers/ThemeProvider';
 import { Stack } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useMemo } from 'react';
@@ -14,76 +14,75 @@ const AppLayout = ({ segment }: { segment: string }) => {
       case '(search)':
         return 'search';
       case '(feed)':
-        return 'feed';
+        // 'feed' is only registered in the Stack when guard={!!user} passes (see below).
+        return user ? 'feed' : 'index';
       case '(collection)':
-        return 'collection/(tabs)';
+        // 'collection/(tabs)' is only registered in the Stack when guard={!!user} passes (see below).
+        return user ? 'collection/(tabs)' : 'index';
       default:
         return 'index';
     }
-  }, [segment]);
+  }, [segment, user]);
 
   return (
-    <>
-      <ThemeUpdater />
-      <Stack initialRouteName={initialRouteName} screenOptions={defaultScreenOptions}>
-        <Stack.Protected guard={!!user}>
-          <Stack.Screen
-            name="feed"
-            options={{ headerTitle: upperFirst(t('common.messages.feed')) }}
-          />
-        </Stack.Protected>
-        {/* COLLECTION */}
-        <Stack.Protected guard={!!user}>
-          <Stack.Screen name="collection/(tabs)" />
-          <Stack.Screen
-            name="collection/bookmarks"
-            options={{ headerTitle: upperFirst(t('common.messages.for_later')) }}
-          />
-          <Stack.Screen
-            name="collection/my-recos"
-            options={{ headerTitle: upperFirst(t('common.messages.my_recos')) }}
-          />
-        </Stack.Protected>
-        {/* MOVIES */}
+    <Stack initialRouteName={initialRouteName} screenOptions={defaultScreenOptions}>
+      <Stack.Protected guard={!!user}>
         <Stack.Screen
-          name="film/[film_id]/details"
-          options={{ headerTitle: upperFirst(t('common.messages.detail', { count: 2 })) }}
+          name="feed"
+          options={{ headerTitle: upperFirst(t('common.messages.feed')) }}
+        />
+      </Stack.Protected>
+      {/* COLLECTION */}
+      <Stack.Protected guard={!!user}>
+        <Stack.Screen name="collection/(tabs)" />
+        <Stack.Screen
+          name="collection/bookmarks"
+          options={{ headerTitle: upperFirst(t('common.messages.for_later')) }}
         />
         <Stack.Screen
-          name="film/[film_id]/reviews"
-          options={{ headerTitle: upperFirst(t('common.messages.review', { count: 2 })) }}
+          name="collection/my-recos"
+          options={{ headerTitle: upperFirst(t('common.messages.my_recos')) }}
         />
+      </Stack.Protected>
+      {/* MOVIES */}
+      <Stack.Screen
+        name="film/[film_id]/details"
+        options={{ headerTitle: upperFirst(t('common.messages.detail', { count: 2 })) }}
+      />
+      <Stack.Screen
+        name="film/[film_id]/reviews"
+        options={{ headerTitle: upperFirst(t('common.messages.review', { count: 2 })) }}
+      />
+      <Stack.Screen
+        name="film/[film_id]/playlists"
+        options={{ headerTitle: upperFirst(t('common.messages.playlist', { count: 2 })) }}
+      />
+      <Stack.Protected guard={!!user}>
         <Stack.Screen
-          name="film/[film_id]/playlists"
-          options={{ headerTitle: upperFirst(t('common.messages.playlist', { count: 2 })) }}
+          name="film/[film_id]/review"
+          options={{ title: upperFirst(t('common.messages.new_review')) }}
         />
-        <Stack.Protected guard={!!user}>
-          <Stack.Screen
-            name="film/[film_id]/review"
-            options={{ title: upperFirst(t('common.messages.new_review')) }}
-          />
-        </Stack.Protected>
-        {/* TV SERIES */}
+      </Stack.Protected>
+      {/* TV SERIES */}
+      <Stack.Screen
+        name="tv-series/[tv_series_id]/details"
+        options={{ headerTitle: upperFirst(t('common.messages.detail', { count: 2 })) }}
+      />
+      <Stack.Screen
+        name="tv-series/[tv_series_id]/reviews"
+        options={{ headerTitle: upperFirst(t('common.messages.review', { count: 2 })) }}
+      />
+      <Stack.Screen
+        name="tv-series/[tv_series_id]/playlists"
+        options={{ headerTitle: upperFirst(t('common.messages.playlist', { count: 2 })) }}
+      />
+      <Stack.Protected guard={!!user}>
         <Stack.Screen
-          name="tv-series/[tv_series_id]/details"
-          options={{ headerTitle: upperFirst(t('common.messages.detail', { count: 2 })) }}
+          name="tv-series/[tv_series_id]/review"
+          options={{ title: upperFirst(t('common.messages.new_review')) }}
         />
-        <Stack.Screen
-          name="tv-series/[tv_series_id]/reviews"
-          options={{ headerTitle: upperFirst(t('common.messages.review', { count: 2 })) }}
-        />
-        <Stack.Screen
-          name="tv-series/[tv_series_id]/playlists"
-          options={{ headerTitle: upperFirst(t('common.messages.playlist', { count: 2 })) }}
-        />
-        <Stack.Protected guard={!!user}>
-          <Stack.Screen
-            name="tv-series/[tv_series_id]/review"
-            options={{ title: upperFirst(t('common.messages.new_review')) }}
-          />
-        </Stack.Protected>
-      </Stack>
-    </>
+      </Stack.Protected>
+    </Stack>
   );
 };
 

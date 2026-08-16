@@ -4,7 +4,6 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 import tw from '../../../../../lib/tw';
-import { useTheme } from '../../../../../providers/ThemeProvider';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { LegendList } from '@legendapp/list/react-native';
@@ -14,14 +13,11 @@ import { Icons } from '../../../../../constants/Icons';
 import { CardReviewTvSeries } from '../../../../../components/cards/reviews/CardReviewTvSeries';
 import { useAuth } from '../../../../../providers/AuthProvider';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import {
-  tvSeriesLogOptions,
-  tvSeriesOptions,
-  tvSeriesReviewsInfiniteOptions,
-} from '@libs/query-client';
+import { tvSeriesLogOptions, tvSeriesReviewsInfiniteOptions } from '@libs/query-client';
 import { ReviewTvSeriesWithAuthor } from '@libs/api-js';
 import { CardError } from '../../../../../components/cards/CardError';
 import { CardEmpty } from '../../../../../components/cards/CardEmpty';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface sortBy {
   label: string;
@@ -34,7 +30,7 @@ const TvSeriesReviews = () => {
   const { user } = useAuth();
   const { tv_series_id } = useLocalSearchParams<{ tv_series_id: string }>();
   const { id: tvSeriesId } = getIdFromSlug(tv_series_id);
-  const { bottomOffset, tabBarHeight } = useTheme();
+  const insets = useSafeAreaInsets();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(
@@ -50,7 +46,6 @@ const TvSeriesReviews = () => {
   const [sortBy, setSortBy] = useState<sortBy>(sortByOptions[0]);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   // Requests
-  const { data: tvSeries } = useQuery(tvSeriesOptions({ tvSeriesId: tvSeriesId }));
   const { data: activity } = useQuery(
     tvSeriesLogOptions({
       userId: user?.id,
@@ -105,7 +100,7 @@ const TvSeriesReviews = () => {
         }}
       />
     ),
-    [tvSeries, tvSeriesId],
+    [],
   );
 
   const handleViewOrCreateReview = useCallback(() => {
@@ -204,11 +199,10 @@ const TvSeriesReviews = () => {
         onEndReachedThreshold={0.5}
         contentContainerStyle={{
           paddingHorizontal: PADDING_HORIZONTAL,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
           gap: GAP,
         }}
         maintainVisibleContentPosition={false}
-        scrollIndicatorInsets={{ bottom: tabBarHeight }}
         keyExtractor={(item) => item.id.toString()}
         refreshing={isRefetching}
         onRefresh={refetch}

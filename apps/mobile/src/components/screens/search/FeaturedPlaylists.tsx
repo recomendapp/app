@@ -13,6 +13,7 @@ import { useTranslations } from 'use-intl';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { playlistFeaturedInfiniteOptions } from '@libs/query-client';
 import { PlaylistWithOwner } from '@libs/api-js';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface FeaturedPlaylistsProps {
   contentContainerStyle?: StyleProp<ViewStyle>;
@@ -21,7 +22,8 @@ interface FeaturedPlaylistsProps {
 const FeaturedPlaylists = ({ contentContainerStyle }: FeaturedPlaylistsProps) => {
   const t = useTranslations();
   const { width: SCREEN_WIDTH } = useWindowDimensions();
-  const { colors, bottomOffset, tabBarHeight } = useTheme();
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const { data, isLoading, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery(
     playlistFeaturedInfiniteOptions(),
   );
@@ -60,13 +62,10 @@ const FeaturedPlaylists = ({ contentContainerStyle }: FeaturedPlaylistsProps) =>
       contentContainerStyle={[
         {
           gap: GAP,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
         },
         contentContainerStyle,
       ]}
-      scrollIndicatorInsets={{
-        bottom: tabBarHeight,
-      }}
       ListEmptyComponent={
         isLoading ? (
           <Icons.Loader />

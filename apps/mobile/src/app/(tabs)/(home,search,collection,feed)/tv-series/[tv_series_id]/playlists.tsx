@@ -5,7 +5,6 @@ import { upperFirst } from 'lodash';
 import { useAuth } from '../../../../../providers/AuthProvider';
 import { useWindowDimensions, View } from 'react-native';
 import tw from '../../../../../lib/tw';
-import { useTheme } from '../../../../../providers/ThemeProvider';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { LegendList } from '@legendapp/list/react-native';
@@ -18,6 +17,7 @@ import { tvSeriesOptions, tvSeriesPlaylistsInfiniteOptions } from '@libs/query-c
 import { PlaylistWithOwner } from '@libs/api-js';
 import { CardError } from '../../../../../components/cards/CardError';
 import { CardEmpty } from '../../../../../components/cards/CardEmpty';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface sortBy {
   label: string;
@@ -31,7 +31,7 @@ const TvSeriesPlaylists = () => {
   const { user } = useAuth();
   const { tv_series_id } = useLocalSearchParams<{ tv_series_id: string }>();
   const { id: seriesId } = getIdFromSlug(tv_series_id);
-  const { colors, bottomOffset, tabBarHeight } = useTheme();
+  const insets = useSafeAreaInsets();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(
@@ -183,11 +183,10 @@ const TvSeriesPlaylists = () => {
         onEndReachedThreshold={0.5}
         contentContainerStyle={{
           paddingHorizontal: PADDING_HORIZONTAL,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
           gap: GAP,
         }}
         maintainVisibleContentPosition={false}
-        scrollIndicatorInsets={{ bottom: tabBarHeight }}
         keyExtractor={(item) => item.id.toString()}
         columnWrapperStyle={tw`gap-2`}
         refreshing={isRefetching}

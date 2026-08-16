@@ -73,7 +73,7 @@ const ReviewForm = ({
   const toast = useToast();
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
-  const { colors, bottomOffset } = useTheme();
+  const { colors } = useTheme();
   const t = useTranslations();
   const [title, setTitle] = useState(review?.title ?? '');
   const [defaultBody, setDefaultBody] = useState<string | undefined>(undefined);
@@ -127,7 +127,7 @@ const ReviewForm = ({
   }, [onDelete]);
 
   const scrollViewStyle = useAnimatedStyle(() => {
-    const closedPadding = bottomOffset + PADDING_VERTICAL;
+    const closedPadding = insets.bottom + PADDING_VERTICAL;
 
     const openPadding = -keyboardHeight.value + toolbarHeight.value + PADDING_VERTICAL * 2;
 

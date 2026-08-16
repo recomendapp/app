@@ -32,6 +32,7 @@ import { getTmdbImage } from '../../../../../../../lib/tmdb/getTmdbImage';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { tvSeasonEpisodesInfiniteOptions, tvSeasonOptions } from '@libs/query-client';
 import { TvEpisode, TvSeasonGet } from '@libs/api-js';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface MediaHeaderProps {
   season?: TvSeasonGet;
@@ -206,7 +207,8 @@ const TvSeriesSeasonScreen = () => {
     season_number: string;
   }>();
   const { id: seriesId } = getIdFromSlug(tv_series_id);
-  const { colors, bottomOffset, tabBarHeight } = useTheme();
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const formatter = useFormatter();
   const t = useTranslations();
   const {
@@ -358,10 +360,7 @@ const TvSeriesSeasonScreen = () => {
         }
         contentContainerStyle={{
           gap: GAP,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
-        }}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
         }}
         keyExtractor={(item) => item.id.toString()}
         refreshing={isRefetching}

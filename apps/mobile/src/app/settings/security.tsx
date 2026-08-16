@@ -4,7 +4,6 @@ import * as z from 'zod';
 import tw from '../../lib/tw';
 import { Label } from '../../components/ui/Label';
 import { Button } from '../../components/ui/Button';
-import { useTheme } from '../../providers/ThemeProvider';
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { upperFirst } from 'lodash';
@@ -17,11 +16,12 @@ import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { KeyboardToolbar } from '../../components/ui/KeyboardToolbar';
 import { useToast } from '../../components/Toast';
 import { authClient } from '../../lib/auth/client';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const SettingsSecurityScreen = () => {
   const toast = useToast();
-  const { bottomOffset, tabBarHeight } = useTheme();
   const t = useTranslations();
+  const insets = useSafeAreaInsets();
   const [isLoading, setIsLoading] = useState(false);
   const profileFormSchema = useMemo(
     () =>
@@ -147,12 +147,8 @@ const SettingsSecurityScreen = () => {
           gap: GAP,
           paddingTop: PADDING_VERTICAL,
           paddingHorizontal: PADDING_HORIZONTAL,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
         }}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
-        }}
-        bottomOffset={bottomOffset + PADDING_VERTICAL}
       >
         <Text textColor="muted" style={tw`text-sm text-justify`}>
           {t(`pages.settings.security.description`)}
