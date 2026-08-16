@@ -1,11 +1,24 @@
-import { SharedValue, useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
+import Animated, {
+  Extrapolation,
+  SharedValue,
+  interpolate,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
 import { useTranslations } from 'use-intl';
-import { useTheme } from '../../providers/ThemeProvider';
 import React, { useCallback } from 'react';
 import Fuse, { FuseOptionKey } from 'fuse.js';
-import { AnimatedLegendList } from '@legendapp/list/reanimated';
+import { AnimatedLegendListProps } from '@legendapp/list/reanimated';
+import { KeyboardAwareLegendList } from '@legendapp/list/keyboard';
+import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller';
+import { Stack } from 'expo-router';
+import type {
+  NativeStackHeaderItemMenuAction,
+  NativeStackHeaderItemMenuSubmenu,
+} from 'expo-router';
+import { upperFirst } from 'lodash';
 import CollectionHeader from './CollectionHeader';
-import { SearchBar } from '../ui/searchbar';
 import tw from '../../lib/tw';
 import { Icons } from '../../constants/Icons';
 import { View } from '../ui/view';
@@ -16,6 +29,7 @@ import { ImageType } from '../utils/ImageWithFallback';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { LegendListRenderItemProps } from '@legendapp/list/react-native';
 import { useWindowDimensions } from 'react-native';
+import { useReanimatedHeaderHeight } from 'react-native-screens/reanimated';
 import CollectionToolbar, { CollectionToolbarItem } from './CollectionToolbar';
 import BottomSheetSort from '../bottom-sheets/sheets/BottomSheetSort';
 import useBottomSheetStore from '../../stores/useBottomSheetStore';
@@ -23,8 +37,7 @@ import { ViewType } from '@libs/api-js';
 import { CardError } from '../cards/CardError';
 import { CardEmpty } from '../cards/CardEmpty';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-const MemoizedSearchBar = React.memo(SearchBar);
+import { isIOS } from '../../platform/detection';
 
 export interface SortByOption<T> {
   label: string;
@@ -41,8 +54,10 @@ export interface CollectionAction<T> {
   position: 'top' | 'bottom' | 'left' | 'right';
 }
 
-interface CollectionScreenConfig<T>
-  extends Omit<React.ComponentProps<typeof AnimatedLegendList<T>>, 'data'> {
+export type CollectionMenuItem = NativeStackHeaderItemMenuAction | NativeStackHeaderItemMenuSubmenu;
+type MenuItem = CollectionMenuItem;
+
+interface CollectionScreenConfig<T> extends Omit<AnimatedLegendListProps<T>, 'data'> {
   queryData: UseQueryResult<T[] | undefined>;
   scrollY?: SharedValue<number>;
   headerHeight?: SharedValue<number>;
@@ -60,6 +75,19 @@ interface CollectionScreenConfig<T>
   bottomSheetActions?: CollectionAction<T>[];
   customFilters?: React.ReactNode;
   additionalToolbarItems?: CollectionToolbarItem[];
+  /**
+   * Extra native menu items contributed by the screen embedding this CollectionScreen, merged
+   * into CollectionScreen's own single native "…" header menu on iOS (sort by / view toggle) —
+   * only one `unstable_headerRightItems` can be active per screen, so this is how a screen adds
+   * its own actions (e.g. like/save/share) without spawning a second header button.
+   *
+   * `Top` renders as an icon-only row at the top of the menu (Apple Music-style, no labels —
+   * see `layout: 'palette'`). `Bottom` renders as a normal labelled section at the end, after
+   * sort/view — unlike `additionalToolbarItems` (Android's in-content toolbar), this isn't
+   * auto-merged from anywhere, so the caller controls its exact ordering.
+   */
+  additionalHeaderRightItemsTop?: MenuItem[];
+  additionalHeaderRightItemsBottom?: MenuItem[];
   getItemId: (item: T) => string | number;
   getItemTitle: (item: T) => string;
   getItemSubtitle?: (item: T) => string;
@@ -93,6 +121,8 @@ const CollectionScreen = <T extends Record<string, any>>({
   bottomSheetActions,
   customFilters,
   additionalToolbarItems,
+  additionalHeaderRightItemsTop,
+  additionalHeaderRightItemsBottom,
   getItemId,
   getItemTitle,
   getItemSubtitle,
@@ -110,6 +140,7 @@ const CollectionScreen = <T extends Record<string, any>>({
   ...props
 }: CollectionScreenConfig<T>) => {
   const insets = useSafeAreaInsets();
+  const navigationHeaderHeight = useReanimatedHeaderHeight();
   const t = useTranslations();
   const openSheet = useBottomSheetStore((state) => state.openSheet);
   const { width: SCREEN_WIDTH } = useWindowDimensions();
@@ -123,10 +154,11 @@ const CollectionScreen = <T extends Record<string, any>>({
 
   const [view, setView] = React.useState<ViewType>(defaultView);
 
-  const [search, setSearch] = React.useState('');
-  const [debouncedSearch, setDebouncedSearch] = React.useState('');
+  const [nativeSearch, setNativeSearch] = React.useState('');
+  const [isSearchActive, setIsSearchActive] = React.useState(false);
   const [sortBy, setSortBy] = React.useState<SortByOption<T>>(sortByOptions[0]);
   const [sortOrder, setSortOrder] = React.useState<'asc' | 'desc'>(sortByOptions[0].defaultOrder);
+  const { progress: keyboardProgress } = useReanimatedKeyboardAnimation();
 
   const fuse = React.useMemo(() => {
     return new Fuse(data || [], {
@@ -148,11 +180,11 @@ const CollectionScreen = <T extends Record<string, any>>({
   });
 
   const filteredItems = React.useMemo(() => {
-    if (debouncedSearch.length > 0) {
-      return fuse.search(debouncedSearch).map(({ item }) => item);
+    if (nativeSearch.length > 0) {
+      return fuse.search(nativeSearch).map(({ item }) => item);
     }
     return data || [];
-  }, [debouncedSearch, fuse, data]);
+  }, [nativeSearch, fuse, data]);
 
   const renderItems = React.useMemo(() => {
     if (sortBy && sortBy.sortFn) {
@@ -180,6 +212,33 @@ const CollectionScreen = <T extends Record<string, any>>({
       },
     });
   };
+  // Native sort menu: tapping the already-active field flips its order, tapping a different
+  // field switches to it (resetting to that option's own default order).
+  const handleNativeSortSelect = useCallback(
+    (option: SortByOption<T>) => {
+      if (option.value === sortBy.value) {
+        setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+      } else {
+        setSortBy(option);
+        setSortOrder(option.defaultOrder);
+      }
+    },
+    [sortBy.value],
+  );
+
+  // Reserves insets.bottom as a footer that shrinks to 0 in sync with the keyboard's own
+  // animation curve — passing an animated value through contentContainerStyle directly isn't
+  // supported by this (non-Reanimated) list variant, so a genuine Animated.View footer is used
+  // instead, keeping the static PADDING_VERTICAL always applied via contentContainerStyle.
+  const keyboardFooterStyle = useAnimatedStyle(() => ({
+    height: interpolate(keyboardProgress.value, [0, 1], [insets.bottom, 0], Extrapolation.CLAMP),
+  }));
+
+  // Mirrors the native header's real (Reanimated-synced) height, including its search-bar
+  // collapse/expand transition — a plain useHeaderHeight() value doesn't react to that.
+  const searchSpacerStyle = useAnimatedStyle(() => ({
+    height: navigationHeaderHeight.value,
+  }));
 
   // Render
   const renderItem = useCallback(
@@ -216,33 +275,130 @@ const CollectionScreen = <T extends Record<string, any>>({
 
   return (
     <>
-      <AnimatedLegendList
+      <Stack.Screen
+        options={{
+          headerSearchBarOptions: {
+            placeholder: searchPlaceholder,
+            // Apple Music-style: hide on scroll down, reveal on scroll up.
+            hideWhenScrolling: true,
+            onChangeText: (e) => setNativeSearch(e.nativeEvent.text),
+            onFocus: () => setIsSearchActive(true),
+            onBlur: () => setIsSearchActive(false),
+            onCancelButtonPress: () => {
+              setNativeSearch('');
+              setIsSearchActive(false);
+            },
+          },
+          unstable_headerRightItems: () => [
+            {
+              type: 'menu' as const,
+              label: upperFirst(t('common.messages.menu')),
+              icon: { type: 'sfSymbol' as const, name: 'ellipsis' as const },
+              menu: {
+                items: [
+                  ...(additionalHeaderRightItemsTop && additionalHeaderRightItemsTop.length > 0
+                    ? [
+                        {
+                          type: 'submenu' as const,
+                          label: '',
+                          inline: true,
+                          layout: 'palette' as const,
+                          items: additionalHeaderRightItemsTop,
+                        },
+                      ]
+                    : []),
+                  {
+                    type: 'submenu' as const,
+                    label: '',
+                    inline: true,
+                    items: [
+                      {
+                        type: 'submenu' as const,
+                        label: upperFirst(t('common.messages.sort_by')),
+                        icon: {
+                          type: 'sfSymbol' as const,
+                          name: (sortOrder === 'desc' ? 'arrow.down' : 'arrow.up') as
+                            | 'arrow.down'
+                            | 'arrow.up',
+                        },
+                        items: sortByOptions.map((option) => {
+                          const isActive = option.value === sortBy.value;
+                          return {
+                            type: 'action' as const,
+                            label: option.label,
+                            description: isActive
+                              ? upperFirst(
+                                  t(
+                                    sortOrder === 'desc'
+                                      ? 'common.messages.order_desc'
+                                      : 'common.messages.order_asc',
+                                  ),
+                                )
+                              : undefined,
+                            state: (isActive ? 'on' : 'off') as 'on' | 'off',
+                            onPress: () => handleNativeSortSelect(option),
+                          };
+                        }),
+                      },
+                      {
+                        type: 'action' as const,
+                        label:
+                          view === 'grid'
+                            ? upperFirst(t('common.messages.grid', { count: 1 }))
+                            : upperFirst(t('common.messages.list', { count: 1 })),
+                        icon: {
+                          type: 'sfSymbol' as const,
+                          name: (view === 'grid' ? 'square.grid.2x2' : 'list.bullet') as
+                            | 'square.grid.2x2'
+                            | 'list.bullet',
+                        },
+                        onPress: () => handleViewChange(view === 'grid' ? 'list' : 'grid'),
+                      },
+                    ],
+                  },
+                  ...(additionalHeaderRightItemsBottom &&
+                  additionalHeaderRightItemsBottom.length > 0
+                    ? [
+                        {
+                          type: 'submenu' as const,
+                          label: '',
+                          inline: true,
+                          items: additionalHeaderRightItemsBottom,
+                        },
+                      ]
+                    : []),
+                ],
+              },
+            },
+          ],
+        }}
+      />
+      <KeyboardAwareLegendList
+        keyboardOffset={insets.bottom}
         onScroll={scrollHandler}
         ListHeaderComponent={
           <View>
-            {!hideHeader && (
-              <CollectionHeader
-                title={screenTitle}
-                hideTitle={hideTitle}
-                poster={poster}
-                posterType={posterType}
-                bottomText={screenSubtitle}
-                numberOfItems={data?.length || 0}
-                hideNumberOfItems={hideNumberOfItems}
-                scrollY={scrollY}
-                headerHeight={headerHeight}
-                backdrops={backdrops}
-              />
-            )}
-            {!isLoading && (
-              <View style={tw`gap-2`}>
-                <MemoizedSearchBar
-                  value={search}
-                  onChangeText={setSearch}
-                  onSearch={setDebouncedSearch}
-                  debounceMs={200}
-                  placeholder={searchPlaceholder}
+            {!hideHeader &&
+              (isSearchActive ? (
+                // CollectionHeader normally offsets its content by the (transparent) native
+                // header's height — preserve that spacing so the list doesn't scroll under it.
+                <Animated.View style={searchSpacerStyle} />
+              ) : (
+                <CollectionHeader
+                  title={screenTitle}
+                  hideTitle={hideTitle}
+                  poster={poster}
+                  posterType={posterType}
+                  bottomText={screenSubtitle}
+                  numberOfItems={data?.length || 0}
+                  hideNumberOfItems={hideNumberOfItems}
+                  scrollY={scrollY}
+                  headerHeight={headerHeight}
+                  backdrops={backdrops}
                 />
+              ))}
+            {!isLoading && !isIOS && (
+              <View style={tw`gap-2`}>
                 <CollectionToolbar
                   view={view}
                   onViewChange={handleViewChange}
@@ -267,6 +423,8 @@ const CollectionScreen = <T extends Record<string, any>>({
               <Icons.Loader />
             ) : isError ? (
               <CardError />
+            ) : nativeSearch.length > 0 ? (
+              <CardEmpty icon={'🔍'} label={upperFirst(t('common.messages.no_results'))} />
             ) : (
               <CardEmpty
                 icon={'🫙'}
@@ -275,13 +433,13 @@ const CollectionScreen = <T extends Record<string, any>>({
             )}
           </View>
         }
+        ListFooterComponent={<Animated.View style={keyboardFooterStyle} />}
         refreshing={isRefetching}
         onRefresh={refetch}
         contentContainerStyle={{
           paddingHorizontal: PADDING_HORIZONTAL,
-          paddingBottom: insets.bottom + PADDING_VERTICAL,
+          paddingBottom: PADDING_VERTICAL,
           gap: GAP,
-          flexGrow: 1,
         }}
         maintainVisibleContentPosition={maintainVisibleContentPosition}
         numColumns={

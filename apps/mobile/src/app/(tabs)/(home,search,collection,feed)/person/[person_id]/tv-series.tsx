@@ -4,7 +4,7 @@ import { upperFirst } from 'lodash';
 import { useCallback, useMemo, useState } from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import { useTranslations } from 'use-intl';
-import { HeaderTitle } from 'expo-router/react-navigation';
+import { HeaderTitle, useHeaderHeight } from 'expo-router/react-navigation';
 import { LegendList } from '@legendapp/list/react-native';
 import tw from '../../../../../lib/tw';
 import { Button } from '../../../../../components/ui/Button';
@@ -18,6 +18,7 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { personOptions, personTvSeriesInfiniteOptions } from '@libs/query-client';
 import { PersonTvSeries } from '@libs/api-js';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { isIOS } from '../../../../../platform/detection';
 
 interface sortBy {
   label: string;
@@ -29,7 +30,8 @@ const PersonTvSeriesScreen = () => {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const { person_id } = useLocalSearchParams<{ person_id: string }>();
   const { id: personId } = getIdFromSlug(person_id);
-  const { colors } = useTheme();
+  const { colors, isLiquidGlassAvailable } = useTheme();
+  const navigationHeaderHeight = useHeaderHeight();
   const insets = useSafeAreaInsets();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
@@ -94,28 +96,78 @@ const PersonTvSeriesScreen = () => {
       <Stack.Screen
         options={{
           title: person?.name || '',
+          headerTransparent: true,
+          ...(isLiquidGlassAvailable
+            ? {
+                headerStyle: { backgroundColor: 'transparent' },
+              }
+            : {}),
           headerTitle: (props) => (
             <HeaderTitle {...props}>
               {upperFirst(t('common.messages.tv_series', { count: 2 }))}
             </HeaderTitle>
           ),
+          unstable_headerRightItems: () => [
+            {
+              type: 'menu' as const,
+              label: upperFirst(t('common.messages.sort_by')),
+              icon: {
+                type: 'sfSymbol' as const,
+                name: (sortOrder === 'desc' ? 'arrow.down' : 'arrow.up') as
+                  | 'arrow.down'
+                  | 'arrow.up',
+              },
+              menu: {
+                title: upperFirst(t('common.messages.sort_by')),
+                // Tapping the already-active field flips the order instead of no-op'ing —
+                // the order (asc/desc) isn't a separate selectable group, since a native
+                // switch control isn't available as a menu item type in this API.
+                items: sortByOptions.map((option) => {
+                  const isActive = option.value === sortBy.value;
+                  return {
+                    type: 'action' as const,
+                    label: option.label,
+                    description: isActive
+                      ? upperFirst(
+                          t(
+                            sortOrder === 'desc'
+                              ? 'common.messages.order_desc'
+                              : 'common.messages.order_asc',
+                          ),
+                        )
+                      : undefined,
+                    state: (isActive ? 'on' : 'off') as 'on' | 'off',
+                    onPress: () => {
+                      if (isActive) {
+                        setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc');
+                      } else {
+                        setSortBy(option);
+                      }
+                    },
+                  };
+                }),
+              },
+            },
+          ],
         }}
       />
       <LegendList
         data={tvSeries}
         renderItem={renderItem}
         ListHeaderComponent={
-          <View style={tw`flex flex-row justify-end items-center gap-2 py-2`}>
-            <Button
-              icon={sortOrder === 'desc' ? Icons.ArrowDown : Icons.ArrowUp}
-              variant="muted"
-              size="icon"
-              onPress={() => setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'))}
-            />
-            <Button icon={Icons.ChevronDown} variant="muted" onPress={handleSortBy}>
-              {sortBy.label}
-            </Button>
-          </View>
+          isIOS ? undefined : (
+            <View style={tw`flex flex-row justify-end items-center gap-2 py-2`}>
+              <Button
+                icon={sortOrder === 'desc' ? Icons.ArrowDown : Icons.ArrowUp}
+                variant="muted"
+                size="icon"
+                onPress={() => setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'))}
+              />
+              <Button icon={Icons.ChevronDown} variant="muted" onPress={handleSortBy}>
+                {sortBy.label}
+              </Button>
+            </View>
+          )
         }
         ListEmptyComponent={
           loading ? (
@@ -143,6 +195,7 @@ const PersonTvSeriesScreen = () => {
         onEndReachedThreshold={0.5}
         contentContainerStyle={{
           gap: GAP,
+          paddingTop: navigationHeaderHeight,
           paddingBottom: insets.bottom + PADDING_VERTICAL,
           paddingHorizontal: PADDING_HORIZONTAL,
         }}

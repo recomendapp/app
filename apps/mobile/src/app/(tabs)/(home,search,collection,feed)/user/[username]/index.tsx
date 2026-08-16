@@ -18,8 +18,7 @@ import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/
 import ProfileWidgetLogMovie from '../../../../../components/screens/user/ProfileWidgetLogMovie';
 import ProfileWidgetLogTvSeries from '../../../../../components/screens/user/ProfileWidgetLogTvSeries';
 import { ActivityIndicator, Pressable, RefreshControl } from 'react-native';
-import useBottomSheetStore from '../../../../../stores/useBottomSheetStore';
-import BottomSheetUser from '../../../../../components/bottom-sheets/sheets/BottomSheetUser';
+import { useUserHeaderMenu } from '../../../../../components/header-menus/useUserHeaderMenu';
 import { useCallback, useMemo } from 'react';
 import Animated from 'react-native-reanimated';
 import { Profile } from '@libs/api-js';
@@ -139,7 +138,6 @@ const ProfileScreen = () => {
   const navigationHeaderHeight = useHeaderHeight();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const openSheet = useBottomSheetStore((state) => state.openSheet);
 
   const {
     data: profile,
@@ -195,6 +193,8 @@ const ProfileScreen = () => {
     }
   }, [refetch, profile?.id, user?.id, queryClient]);
 
+  const { onMenuPress, headerRightItems } = useUserHeaderMenu({ profile });
+
   return (
     <>
       <Stack.Screen
@@ -227,11 +227,7 @@ const ProfileScreen = () => {
                 variant="ghost"
                 size="icon"
                 icon={Icons.EllipsisVertical}
-                onPress={() =>
-                  openSheet(BottomSheetUser, {
-                    user: profile!,
-                  })
-                }
+                onPress={onMenuPress}
               />
             </>
           ),
@@ -247,25 +243,10 @@ const ProfileScreen = () => {
                       name: 'gearshape',
                       type: 'sfSymbol',
                     },
-                    visible: profile?.id === user?.id,
                   },
                 ] as const)
               : []),
-            {
-              type: 'button',
-              label: upperFirst(t('common.messages.menu')),
-              onPress: () =>
-                profile
-                  ? openSheet(BottomSheetUser, {
-                      user: profile,
-                    })
-                  : null,
-              tintColor: props.tintColor,
-              icon: {
-                name: 'ellipsis',
-                type: 'sfSymbol',
-              },
-            },
+            ...(headerRightItems ? headerRightItems() : []),
           ],
         }}
       />

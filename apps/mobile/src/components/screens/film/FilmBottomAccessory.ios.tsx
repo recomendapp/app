@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import { useTranslations } from 'use-intl';
@@ -15,6 +15,7 @@ import {
   strokeBorder,
   bold,
   shapes,
+  onLongPressGesture,
 } from '@expo/ui/swift-ui/modifiers';
 import { MovieCompact } from '@libs/api-js';
 import {
@@ -31,6 +32,7 @@ import { useToast } from '../../Toast';
 import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
 import useBottomSheetStore from '../../../stores/useBottomSheetStore';
 import BottomSheetRating from '../../bottom-sheets/sheets/BottomSheetRating';
+import { BottomSheetBookmarkComment } from '../../bottom-sheets/sheets/BottomSheetBookmarkComment';
 
 interface FilmBottomAccessoryProps {
   movie: MovieCompact;
@@ -47,7 +49,7 @@ export const FilmBottomAccessory = ({ movie }: FilmBottomAccessoryProps) => {
   const placement = NativeTabs.BottomAccessory.usePlacement();
   const isInline = placement === 'inline';
   const { user } = useAuth();
-  const { colors } = useTheme();
+  const { colors, mode } = useTheme();
   const toast = useToast();
   const t = useTranslations();
   const router = useRouter();
@@ -85,13 +87,27 @@ export const FilmBottomAccessory = ({ movie }: FilmBottomAccessoryProps) => {
     await setLog({ path: { movie_id: movie.id }, body: { isLiked: !log?.isLiked } }, { onError });
   }, [movie, log?.isLiked, setLog, onError]);
 
-  const handleWatchToggle = useCallback(async () => {
+  const handleWatchToggle = useCallback(() => {
     if (log) {
-      await deleteLog({ path: { movie_id: movie.id } }, { onError });
+      Alert.alert(
+        upperFirst(t('common.messages.are_u_sure')),
+        upperFirst(t('components.media.actions.watch.remove_from_watched.description')),
+        [
+          { text: upperFirst(t('common.messages.cancel')), style: 'cancel' },
+          {
+            text: upperFirst(t('common.messages.confirm')),
+            onPress: () => {
+              deleteLog({ path: { movie_id: movie.id } }, { onError });
+            },
+            style: 'destructive',
+          },
+        ],
+        { userInterfaceStyle: mode },
+      );
     } else {
-      await setLog({ path: { movie_id: movie.id }, body: {} }, { onError });
+      setLog({ path: { movie_id: movie.id }, body: {} }, { onError });
     }
-  }, [movie, log, setLog, deleteLog, onError]);
+  }, [movie, log, setLog, deleteLog, onError, t, mode]);
 
   const handleBookmarkToggle = useCallback(async () => {
     if (bookmark) {
@@ -103,6 +119,12 @@ export const FilmBottomAccessory = ({ movie }: FilmBottomAccessoryProps) => {
       await setBookmark({ path: { media_id: movie.id, type: 'movie' }, body: {} }, { onError });
     }
   }, [movie, bookmark, setBookmark, deleteBookmark, onError]);
+
+  const handleBookmarkLongPress = useCallback(() => {
+    if (bookmark?.id) {
+      openSheet(BottomSheetBookmarkComment, { data: bookmark });
+    }
+  }, [bookmark, openSheet]);
 
   const handleWatchDatePress = useCallback(() => {
     router.push({ pathname: '/film/[film_id]/watched-dates', params: { film_id: movie.id } });
@@ -180,7 +202,10 @@ export const FilmBottomAccessory = ({ movie }: FilmBottomAccessoryProps) => {
                     color={log ? colors.accentBlue : undefined}
                   />
                 </Button>
-                <Button onPress={handleBookmarkToggle} modifiers={[buttonStyle('glass')]}>
+                <Button
+                  onPress={handleBookmarkToggle}
+                  modifiers={[buttonStyle('glass'), onLongPressGesture(handleBookmarkLongPress)]}
+                >
                   <Image systemName={bookmark ? 'bookmark.fill' : 'bookmark'} />
                 </Button>
                 {!isInline && log && (

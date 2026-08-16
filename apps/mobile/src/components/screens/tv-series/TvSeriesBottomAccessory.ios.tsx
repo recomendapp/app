@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import { useTranslations } from 'use-intl';
@@ -15,6 +15,7 @@ import {
   strokeBorder,
   bold,
   shapes,
+  onLongPressGesture,
 } from '@expo/ui/swift-ui/modifiers';
 import { TvSeriesCompact } from '@libs/api-js';
 import {
@@ -31,6 +32,7 @@ import { useToast } from '../../Toast';
 import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
 import useBottomSheetStore from '../../../stores/useBottomSheetStore';
 import BottomSheetRating from '../../bottom-sheets/sheets/BottomSheetRating';
+import { BottomSheetBookmarkComment } from '../../bottom-sheets/sheets/BottomSheetBookmarkComment';
 
 interface TvSeriesBottomAccessoryProps {
   tvSeries: TvSeriesCompact;
@@ -47,7 +49,7 @@ const SCROLL_FADE_WIDTH = 24;
 export const TvSeriesBottomAccessory = ({ tvSeries }: TvSeriesBottomAccessoryProps) => {
   NativeTabs.BottomAccessory.usePlacement();
   const { user } = useAuth();
-  const { colors } = useTheme();
+  const { colors, mode } = useTheme();
   const toast = useToast();
   const t = useTranslations();
   const router = useRouter();
@@ -88,13 +90,27 @@ export const TvSeriesBottomAccessory = ({ tvSeries }: TvSeriesBottomAccessoryPro
     );
   }, [tvSeries, log?.isLiked, setLog, onError]);
 
-  const handleWatchToggle = useCallback(async () => {
+  const handleWatchToggle = useCallback(() => {
     if (log) {
-      await deleteLog({ path: { tv_series_id: tvSeries.id } }, { onError });
+      Alert.alert(
+        upperFirst(t('common.messages.are_u_sure')),
+        upperFirst(t('components.media.actions.watch.remove_from_watched.description')),
+        [
+          { text: upperFirst(t('common.messages.cancel')), style: 'cancel' },
+          {
+            text: upperFirst(t('common.messages.confirm')),
+            onPress: () => {
+              deleteLog({ path: { tv_series_id: tvSeries.id } }, { onError });
+            },
+            style: 'destructive',
+          },
+        ],
+        { userInterfaceStyle: mode },
+      );
     } else {
-      await setLog({ path: { tv_series_id: tvSeries.id }, body: {} }, { onError });
+      setLog({ path: { tv_series_id: tvSeries.id }, body: {} }, { onError });
     }
-  }, [tvSeries, log, setLog, deleteLog, onError]);
+  }, [tvSeries, log, setLog, deleteLog, onError, t, mode]);
 
   const handleBookmarkToggle = useCallback(async () => {
     if (bookmark) {
@@ -109,6 +125,12 @@ export const TvSeriesBottomAccessory = ({ tvSeries }: TvSeriesBottomAccessoryPro
       );
     }
   }, [tvSeries, bookmark, setBookmark, deleteBookmark, onError]);
+
+  const handleBookmarkLongPress = useCallback(() => {
+    if (bookmark?.id) {
+      openSheet(BottomSheetBookmarkComment, { data: bookmark });
+    }
+  }, [bookmark, openSheet]);
 
   const handlePlaylistAddPress = useCallback(() => {
     router.push({
@@ -182,7 +204,10 @@ export const TvSeriesBottomAccessory = ({ tvSeries }: TvSeriesBottomAccessoryPro
                     color={log ? colors.accentBlue : undefined}
                   />
                 </Button>
-                <Button onPress={handleBookmarkToggle} modifiers={[buttonStyle('glass')]}>
+                <Button
+                  onPress={handleBookmarkToggle}
+                  modifiers={[buttonStyle('glass'), onLongPressGesture(handleBookmarkLongPress)]}
+                >
                   <Image systemName={bookmark ? 'bookmark.fill' : 'bookmark'} />
                 </Button>
               </HStack>

@@ -10,7 +10,6 @@ import {
   withTiming,
 } from 'react-native-reanimated';
 import { getIdFromSlug } from '../../../../../utils/getIdFromSlug';
-import useBottomSheetStore from '../../../../../stores/useBottomSheetStore';
 import { useState, useCallback, useMemo } from 'react';
 import { useTranslations } from 'use-intl';
 import { Text, TextProps } from '../../../../../components/ui/text';
@@ -23,7 +22,7 @@ import {
   PADDING_VERTICAL,
 } from '../../../../../theme/globals';
 import MovieHeader from '../../../../../components/screens/film/MovieHeader';
-import BottomSheetMovie from '../../../../../components/bottom-sheets/sheets/BottomSheetMovie';
+import { useMovieHeaderMenu } from '../../../../../components/header-menus/useMovieHeaderMenu';
 import MovieWidgetReviews from '../../../../../components/screens/film/MovieWidgetReviews';
 import MovieWidgetPlaylists from '../../../../../components/screens/film/MovieWidgetPlaylists';
 import { View } from '../../../../../components/ui/view';
@@ -51,7 +50,6 @@ const FilmScreen = () => {
   const insets = useSafeAreaInsets();
   const t = useTranslations();
   const { isLiquidGlassAvailable } = useTheme();
-  const openSheet = useBottomSheetStore((state) => state.openSheet);
   const setAccessory = useBottomAccessoryStore((state) => state.setAccessory);
   const clearAccessory = useBottomAccessoryStore((state) => state.clearAccessory);
 
@@ -90,13 +88,7 @@ const FilmScreen = () => {
     };
   });
 
-  const handleMenuPress = useCallback(() => {
-    if (movie) {
-      openSheet(BottomSheetMovie, {
-        movie: movie,
-      });
-    }
-  }, [movie, openSheet]);
+  const { onMenuPress, headerRightItems } = useMovieHeaderMenu({ movie });
 
   // Liquid Glass: native bottom accessory hosted by the tab bar (see (tabs)/_layout.tsx).
   // Everywhere else (Android, iOS < 26): FloatingBar rendered directly below, see JSX.
@@ -115,22 +107,11 @@ const FilmScreen = () => {
         options={{
           headerTitle: movie?.title || '',
           headerTransparent: true,
-          unstable_headerRightItems: (props) => [
-            {
-              type: 'button',
-              label: upperFirst(t('common.messages.menu')),
-              onPress: handleMenuPress,
-              tintColor: props.tintColor,
-              icon: {
-                name: 'ellipsis',
-                type: 'sfSymbol',
-              },
-            },
-          ],
+          unstable_headerRightItems: headerRightItems,
         }}
         scrollY={scrollY}
         triggerHeight={headerHeight}
-        onMenuPress={movie ? handleMenuPress : undefined}
+        onMenuPress={movie ? onMenuPress : undefined}
       />
       <AnimatedContentContainer
         onScroll={scrollHandler}

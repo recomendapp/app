@@ -10,13 +10,14 @@ import { useWindowDimensions, View } from 'react-native';
 import { useTranslations } from 'use-intl';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { CardMovie } from '../../../../../components/cards/CardMovie';
-import { HeaderTitle } from 'expo-router/react-navigation';
+import { HeaderTitle, useHeaderHeight } from 'expo-router/react-navigation';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { userByUsernameOptions, userMovieLogsInfiniteOptions } from '@libs/query-client';
 import { CardError } from '../../../../../components/cards/CardError';
 import { CardEmpty } from '../../../../../components/cards/CardEmpty';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { isIOS } from '../../../../../platform/detection';
+import { useTheme } from '../../../../../providers/ThemeProvider';
 
 interface sortBy {
   label: string;
@@ -29,6 +30,8 @@ const UserCollectionMovieScreen = () => {
   const { username } = useLocalSearchParams<{ username: string }>();
   const { data: profile } = useQuery(userByUsernameOptions({ username: username }));
   const insets = useSafeAreaInsets();
+  const navigationHeaderHeight = useHeaderHeight();
+  const { isLiquidGlassAvailable } = useTheme();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(
@@ -80,6 +83,12 @@ const UserCollectionMovieScreen = () => {
       <Stack.Screen
         options={{
           title: profile ? `@${profile.username}` : '',
+          headerTransparent: true,
+          ...(isLiquidGlassAvailable
+            ? {
+                headerStyle: { backgroundColor: 'transparent' },
+              }
+            : {}),
           headerTitle: (props) => (
             <HeaderTitle {...props}>
               {upperFirst(t('common.messages.film', { count: 2 }))}
@@ -193,6 +202,7 @@ const UserCollectionMovieScreen = () => {
         onEndReachedThreshold={0.5}
         contentContainerStyle={{
           gap: GAP,
+          paddingTop: navigationHeaderHeight,
           paddingHorizontal: PADDING_HORIZONTAL,
           paddingBottom: insets.bottom + PADDING_VERTICAL,
         }}

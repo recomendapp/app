@@ -19,6 +19,8 @@ import { CardError } from '../../../../../components/cards/CardError';
 import { CardEmpty } from '../../../../../components/cards/CardEmpty';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { isIOS } from '../../../../../platform/detection';
+import { useHeaderHeight } from 'expo-router/react-navigation';
+import { useTheme } from '../../../../../providers/ThemeProvider';
 
 interface sortBy {
   label: string;
@@ -32,6 +34,8 @@ const TvSeriesReviews = () => {
   const { tv_series_id } = useLocalSearchParams<{ tv_series_id: string }>();
   const { id: tvSeriesId } = getIdFromSlug(tv_series_id);
   const insets = useSafeAreaInsets();
+  const navigationHeaderHeight = useHeaderHeight();
+  const { isLiquidGlassAvailable } = useTheme();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(
@@ -127,6 +131,12 @@ const TvSeriesReviews = () => {
     <>
       <Stack.Screen
         options={{
+          headerTransparent: true,
+          ...(isLiquidGlassAvailable
+            ? {
+                headerStyle: { backgroundColor: 'transparent' },
+              }
+            : {}),
           headerRight:
             activity !== undefined
               ? () => (
@@ -241,6 +251,7 @@ const TvSeriesReviews = () => {
         )}
         onEndReachedThreshold={0.5}
         contentContainerStyle={{
+          paddingTop: navigationHeaderHeight,
           paddingHorizontal: PADDING_HORIZONTAL,
           paddingBottom: insets.bottom + PADDING_VERTICAL,
           gap: GAP,

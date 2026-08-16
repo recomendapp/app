@@ -43,7 +43,7 @@ const TabsLayout = () => {
       backgroundColor={colors.muted}
       indicatorColor={colors.mutedForeground}
       disableTransparentOnScrollEdge
-      minimizeBehavior={AccessoryComponent ? 'onScrollDown' : undefined}
+      // minimizeBehavior={AccessoryComponent ? 'onScrollDown' : undefined}
     >
       {AccessoryComponent && (
         <NativeTabs.BottomAccessory>

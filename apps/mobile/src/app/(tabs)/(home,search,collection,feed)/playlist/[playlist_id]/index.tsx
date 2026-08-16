@@ -16,6 +16,7 @@ import { useAuth } from '../../../../../providers/AuthProvider';
 import {
   playlistItemsAllOptions,
   playlistOptions,
+  usePlaylistDeleteMutation,
   usePlaylistItemsDeleteMutation,
   usePlaylistItemUpdateMutation,
   usePlaylistRealtime,
@@ -26,14 +27,16 @@ import { useQuery } from '@tanstack/react-query';
 import { useUIStore } from '../../../../../stores/useUIStore';
 import { useToast } from '../../../../../components/Toast';
 import { useCallback, useMemo } from 'react';
-import { canEditPlaylistItem, PlaylistItemWithMedia } from '@libs/api-js';
+import { canEditPlaylist, canEditPlaylistItem, PlaylistItemWithMedia } from '@libs/api-js';
 import { Alert } from 'react-native';
 import richTextToPlainString from '../../../../../utils/richTextToPlainString';
 import { BottomSheetComment } from '../../../../../components/bottom-sheets/sheets/BottomSheetComment';
+import BottomSheetSharePlaylist from '../../../../../components/bottom-sheets/sheets/share/BottomSheetSharePlaylist';
 import { CardUser } from '../../../../../components/cards/CardUser';
 import { Text } from '../../../../../components/ui/text';
 import CollectionScreen, {
   CollectionAction,
+  CollectionMenuItem,
   SortByOption,
 } from '../../../../../components/collection/CollectionScreen';
 import BottomSheetMovie from '../../../../../components/bottom-sheets/sheets/BottomSheetMovie';
@@ -43,7 +46,7 @@ import { getTmdbImage } from '../../../../../lib/tmdb/getTmdbImage';
 const PlaylistScreen = () => {
   const t = useTranslations();
   const { user } = useAuth();
-  const { colors, mode } = useTheme();
+  const { mode } = useTheme();
   const { playlist_id } = useLocalSearchParams();
   const view = useUIStore((state) => state.playlistView);
   const setPlaylistView = useUIStore((state) => state.setPlaylistView);
@@ -79,7 +82,12 @@ const PlaylistScreen = () => {
   const { mutateAsync: deleteItem } = usePlaylistItemsDeleteMutation({
     userId: user?.id,
   });
+  const { mutateAsync: deletePlaylist } = usePlaylistDeleteMutation();
   const canEditItem = useMemo(() => canEditPlaylistItem(playlist?.role || null), [playlist?.role]);
+  const canEditThisPlaylist = useMemo(
+    () => canEditPlaylist(playlist?.role || null),
+    [playlist?.role],
+  );
 
   // SharedValues
   const scrollY = useSharedValue(0);
@@ -171,6 +179,44 @@ const PlaylistScreen = () => {
     },
     [openSheet, canEditItem, updateItem, toast, t],
   );
+  const handleDeletePlaylist = useCallback(() => {
+    if (!playlist) return;
+    Alert.alert(
+      upperFirst(t('common.messages.are_u_sure')),
+      upperFirst(
+        richTextToPlainString(
+          t.rich('pages.playlist.actions.delete.description', {
+            title: playlist.title,
+            important: (chunk) => `"${chunk}"`,
+          }),
+        ),
+      ),
+      [
+        { text: upperFirst(t('common.messages.cancel')), style: 'cancel' },
+        {
+          text: upperFirst(t('common.messages.delete')),
+          onPress: () => {
+            deletePlaylist(
+              { path: { playlist_id: playlist.id } },
+              {
+                onSuccess: () => {
+                  toast.success(upperFirst(t('common.messages.deleted')));
+                  router.replace('/collection');
+                },
+                onError: () => {
+                  toast.error(upperFirst(t('common.messages.error')), {
+                    description: upperFirst(t('common.messages.an_error_occurred')),
+                  });
+                },
+              },
+            );
+          },
+          style: 'destructive',
+        },
+      ],
+      { userInterfaceStyle: mode },
+    );
+  }, [playlist, deletePlaylist, toast, t, mode, router]);
 
   const sortByOptions = useMemo(
     (): SortByOption<PlaylistItemWithMedia>[] => [
@@ -269,6 +315,112 @@ const PlaylistScreen = () => {
     [bottomSheetActions, openSheet],
   );
 
+  // iOS: merged into CollectionScreen's own single native "…" menu (top row + bottom section).
+  const menuTopItems = useMemo((): CollectionMenuItem[] => {
+    if (!playlist) return [];
+    return [
+      ...(user && user.id !== playlist.userId
+        ? [
+            {
+              type: 'action' as const,
+              label: upperFirst(t('common.messages.like')),
+              icon: {
+                type: 'sfSymbol' as const,
+                name: (isLiked ? 'heart.fill' : 'heart') as 'heart.fill' | 'heart',
+              },
+              keepsMenuPresented: true,
+              onPress: toggleLike,
+            },
+            {
+              type: 'action' as const,
+              label: upperFirst(t('common.messages.save')),
+              icon: {
+                type: 'sfSymbol' as const,
+                name: (isSaved ? 'bookmark.fill' : 'bookmark') as 'bookmark.fill' | 'bookmark',
+              },
+              keepsMenuPresented: true,
+              onPress: toggleSaved,
+            },
+          ]
+        : []),
+      {
+        type: 'action' as const,
+        label: upperFirst(t('common.messages.share')),
+        icon: { type: 'sfSymbol' as const, name: 'square.and.arrow.up' as const },
+        onPress: () => openSheet(BottomSheetSharePlaylist, { playlist }),
+      },
+    ];
+  }, [playlist, user, isLiked, isSaved, toggleLike, toggleSaved, openSheet, t]);
+
+  const menuBottomItems = useMemo((): CollectionMenuItem[] => {
+    if (!playlist) return [];
+    return [
+      ...(playlist.owner
+        ? [
+            {
+              type: 'action' as const,
+              label: upperFirst(t('common.messages.go_to_user')),
+              icon: { type: 'sfSymbol' as const, name: 'person' as const },
+              onPress: () =>
+                router.push({
+                  pathname: '/user/[username]',
+                  params: { username: playlist.owner!.username },
+                }),
+            },
+          ]
+        : []),
+      ...(canEditItem
+        ? [
+            {
+              type: 'action' as const,
+              label: upperFirst(t('common.messages.edit_order')),
+              icon: { type: 'sfSymbol' as const, name: 'list.number' as const },
+              onPress: () =>
+                router.push({
+                  pathname: '/playlist/[playlist_id]/sort',
+                  params: { playlist_id: playlist.id },
+                }),
+            },
+          ]
+        : []),
+      ...(canEditThisPlaylist
+        ? [
+            {
+              type: 'action' as const,
+              label: upperFirst(t('common.messages.manage_members', { gender: 'male', count: 2 })),
+              icon: { type: 'sfSymbol' as const, name: 'person.2' as const },
+              onPress: () =>
+                router.push({
+                  pathname: '/playlist/[playlist_id]/edit/members',
+                  params: { playlist_id: playlist.id },
+                }),
+            },
+            {
+              type: 'action' as const,
+              label: upperFirst(t('common.messages.edit_playlist')),
+              icon: { type: 'sfSymbol' as const, name: 'gearshape' as const },
+              onPress: () =>
+                router.push({
+                  pathname: '/playlist/[playlist_id]/edit',
+                  params: { playlist_id: playlist.id },
+                }),
+            },
+          ]
+        : []),
+      ...(playlist.role === 'owner'
+        ? [
+            {
+              type: 'action' as const,
+              label: upperFirst(t('common.messages.delete')),
+              icon: { type: 'sfSymbol' as const, name: 'trash' as const },
+              destructive: true,
+              onPress: handleDeletePlaylist,
+            },
+          ]
+        : []),
+    ];
+  }, [playlist, canEditItem, canEditThisPlaylist, router, t, handleDeletePlaylist]);
+
   return (
     <>
       <AnimatedStackScreen
@@ -292,47 +444,6 @@ const PlaylistScreen = () => {
                 </View>
               )
             : undefined,
-          unstable_headerRightItems: (props) => [
-            ...(user && playlist && user.id !== playlist.userId
-              ? ([
-                  {
-                    type: 'button',
-                    label: upperFirst(t('common.messages.like')),
-                    onPress: toggleLike,
-                    icon: {
-                      name: isLiked ? 'heart.fill' : 'heart',
-                      type: 'sfSymbol',
-                    },
-                    tintColor: isLiked ? colors.accentPink : undefined,
-                  },
-                  {
-                    type: 'button',
-                    label: upperFirst(t('common.messages.save')),
-                    onPress: toggleSaved,
-                    icon: {
-                      name: isSaved ? 'bookmark.fill' : 'bookmark',
-                      type: 'sfSymbol',
-                    },
-                    tintColor: isSaved ? colors.foreground : undefined,
-                  },
-                ] as const)
-              : []),
-            {
-              type: 'button',
-              label: upperFirst(t('common.messages.menu')),
-              onPress: () => {
-                if (playlist) {
-                  openSheet(BottomSheetPlaylist, {
-                    playlist: playlist,
-                  });
-                }
-              },
-              icon: {
-                name: 'ellipsis',
-                type: 'sfSymbol',
-              },
-            },
-          ],
         }}
         scrollY={scrollY}
         triggerHeight={headerHeight}
@@ -355,7 +466,13 @@ const PlaylistScreen = () => {
         posterType={'playlist'}
         emptyStateMessage={t('help_hints.playlists.items.empty')}
         // Search
+        // Native header search bar on iOS is wired inside CollectionScreen itself.
         searchPlaceholder={upperFirst(t('pages.playlist.search.placeholder'))}
+        // Header (iOS: merged into CollectionScreen's own single native "…" menu, since only
+        // one unstable_headerRightItems can be active per screen — top row: like/save/share,
+        // bottom section: go to playlist / owner / manage members / edit / delete)
+        additionalHeaderRightItemsTop={menuTopItems}
+        additionalHeaderRightItemsBottom={menuBottomItems}
         fuseKeys={[
           {
             name: 'title',
@@ -394,6 +511,7 @@ const PlaylistScreen = () => {
                 {
                   label: upperFirst(t('common.messages.edit_order')),
                   icon: Icons.ListOrdered,
+                  sfSymbolName: 'list.number',
                   onPress: () =>
                     router.push({
                       pathname: '/playlist/[playlist_id]/sort',

@@ -19,6 +19,8 @@ import { CardError } from '../../../../../components/cards/CardError';
 import { CardEmpty } from '../../../../../components/cards/CardEmpty';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { isIOS } from '../../../../../platform/detection';
+import { useHeaderHeight } from 'expo-router/react-navigation';
+import { useTheme } from '../../../../../providers/ThemeProvider';
 
 interface sortBy {
   label: string;
@@ -33,6 +35,8 @@ const FilmPlaylists = () => {
   const { film_id } = useLocalSearchParams<{ film_id: string }>();
   const { id: movieId } = getIdFromSlug(film_id);
   const insets = useSafeAreaInsets();
+  const navigationHeaderHeight = useHeaderHeight();
+  const { isLiquidGlassAvailable } = useTheme();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(
@@ -96,6 +100,12 @@ const FilmPlaylists = () => {
     <>
       <Stack.Screen
         options={{
+          headerTransparent: true,
+          ...(isLiquidGlassAvailable
+            ? {
+                headerStyle: { backgroundColor: 'transparent' },
+              }
+            : {}),
           headerRight: user
             ? () => (
                 <Button
@@ -228,6 +238,7 @@ const FilmPlaylists = () => {
         )}
         onEndReachedThreshold={0.5}
         contentContainerStyle={{
+          paddingTop: navigationHeaderHeight,
           paddingHorizontal: PADDING_HORIZONTAL,
           paddingBottom: insets.bottom + PADDING_VERTICAL,
           gap: GAP,

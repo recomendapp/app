@@ -10,7 +10,6 @@ import {
   withTiming,
 } from 'react-native-reanimated';
 import { getIdFromSlug } from '../../../../../utils/getIdFromSlug';
-import useBottomSheetStore from '../../../../../stores/useBottomSheetStore';
 import { useCallback, useMemo, useState } from 'react';
 import TvSeriesWidgetSeasons from '../../../../../components/screens/tv-series/TvSeriesWidgetSeasons';
 import { useTranslations } from 'use-intl';
@@ -23,7 +22,7 @@ import {
   PADDING_HORIZONTAL,
   PADDING_VERTICAL,
 } from '../../../../../theme/globals';
-import BottomSheetTvSeries from '../../../../../components/bottom-sheets/sheets/BottomSheetTvSeries';
+import { useTvSeriesHeaderMenu } from '../../../../../components/header-menus/useTvSeriesHeaderMenu';
 import TvSeriesHeader from '../../../../../components/screens/tv-series/TvSeriesHeader';
 import TvSeriesWidgetPlaylists from '../../../../../components/screens/tv-series/TvSeriesWidgetPlaylists';
 import TvSeriesWidgetReviews from '../../../../../components/screens/tv-series/TvSeriesWidgetReviews';
@@ -51,7 +50,6 @@ const TvSeriesScreen = () => {
   const insets = useSafeAreaInsets();
   const t = useTranslations();
   const { isLiquidGlassAvailable } = useTheme();
-  const openSheet = useBottomSheetStore((state) => state.openSheet);
   const setAccessory = useBottomAccessoryStore((state) => state.setAccessory);
   const clearAccessory = useBottomAccessoryStore((state) => state.clearAccessory);
   const { data: series, isLoading } = useQuery(
@@ -89,13 +87,7 @@ const TvSeriesScreen = () => {
     };
   });
 
-  const handleMenuPress = useCallback(() => {
-    if (series) {
-      openSheet(BottomSheetTvSeries, {
-        tvSeries: series,
-      });
-    }
-  }, [series, openSheet]);
+  const { onMenuPress, headerRightItems } = useTvSeriesHeaderMenu({ tvSeries: series });
 
   // Liquid Glass: native bottom accessory hosted by the tab bar (see (tabs)/_layout.tsx).
   // Everywhere else (Android, iOS < 26): FloatingBar rendered directly below, see JSX.
@@ -114,22 +106,11 @@ const TvSeriesScreen = () => {
         options={{
           headerTitle: series?.name || '',
           headerTransparent: true,
-          unstable_headerRightItems: (props) => [
-            {
-              type: 'button',
-              label: upperFirst(t('common.messages.menu')),
-              onPress: handleMenuPress,
-              tintColor: props.tintColor,
-              icon: {
-                name: 'ellipsis',
-                type: 'sfSymbol',
-              },
-            },
-          ],
+          unstable_headerRightItems: headerRightItems,
         }}
         scrollY={scrollY}
         triggerHeight={headerHeight}
-        onMenuPress={series ? handleMenuPress : undefined}
+        onMenuPress={series ? onMenuPress : undefined}
       />
       <AnimatedContentContainer
         onScroll={scrollHandler}

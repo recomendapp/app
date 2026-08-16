@@ -8,11 +8,14 @@ import { GAP, PADDING_HORIZONTAL } from '../../theme/globals';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 import { ViewType } from '@libs/api-js';
+import { SFSymbol } from 'expo-symbols';
 
 interface CollectionToolbarItem {
   label?: string;
   icon: LucideIcon;
   onPress: () => void;
+  /** SF Symbol name used when this item is rendered in the native iOS header menu instead. */
+  sfSymbolName?: SFSymbol;
 }
 
 interface CollectionToolbarProps

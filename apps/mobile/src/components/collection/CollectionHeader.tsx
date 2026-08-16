@@ -1,7 +1,7 @@
 import { useTheme } from '../../providers/ThemeProvider';
 import useColorConverter from '../../hooks/useColorConverter';
 import tw from '../../lib/tw';
-import React, { forwardRef, memo, useMemo } from 'react';
+import React, { forwardRef, memo } from 'react';
 import { Dimensions, Text } from 'react-native';
 import Animated, {
   Extrapolation,
@@ -13,7 +13,7 @@ import Animated, {
 import useRandomBackdrop from '../../hooks/useRandomBackdrop';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useHeaderHeight } from 'expo-router/react-navigation';
+import { useReanimatedHeaderHeight } from 'react-native-screens/reanimated';
 import { Skeleton } from '../ui/Skeleton';
 import { View } from '../ui/view';
 import { AnimatedImageWithFallback } from '../ui/AnimatedImageWithFallback';
@@ -77,7 +77,7 @@ const CollectionHeader = forwardRef<
     const t = useTranslations();
     const bgBackdrop = useRandomBackdrop(backdrops || []);
     const bgColor = hslToRgb(colors.background);
-    const navigationHeaderHeight = useHeaderHeight();
+    const navigationHeaderHeight = useReanimatedHeaderHeight();
 
     const posterHeight = useSharedValue(0);
 
@@ -85,12 +85,15 @@ const CollectionHeader = forwardRef<
       return {
         opacity: interpolate(
           scrollY.get(),
-          [0, headerHeight.get() - navigationHeaderHeight / 0.9],
+          [0, headerHeight.get() - navigationHeaderHeight.value / 0.9],
           [1, 0],
           Extrapolation.CLAMP,
         ),
       };
     });
+    const marginTopAnim = useAnimatedStyle(() => ({
+      marginTop: navigationHeaderHeight.value,
+    }));
     const bgAnim = useAnimatedStyle(() => {
       const stretch = Math.max(-scrollY.value, 0);
       const base = Math.max(headerHeight.value, 1);
@@ -147,12 +150,7 @@ const CollectionHeader = forwardRef<
           />
         </Animated.View>
         <Animated.View
-          style={[
-            tw`items-center justify-center px-4 pb-4 min-h-40 gap-2`,
-            {
-              marginTop: navigationHeaderHeight,
-            },
-          ]}
+          style={[tw`items-center justify-center px-4 pb-4 min-h-40 gap-2`, marginTopAnim]}
         >
           <View style={tw`items-center justify-center`}>
             {poster &&

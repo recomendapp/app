@@ -9,7 +9,7 @@ import { upperFirst } from 'lodash';
 import { useMemo, useState } from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import { useTranslations } from 'use-intl';
-import { HeaderTitle } from 'expo-router/react-navigation';
+import { HeaderTitle, useHeaderHeight } from 'expo-router/react-navigation';
 import { PADDING_VERTICAL } from '../../../../../theme/globals';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { userByUsernameOptions, userPlaylistsInfiniteOptions } from '@libs/query-client';
@@ -17,6 +17,7 @@ import { CardError } from '../../../../../components/cards/CardError';
 import { CardEmpty } from '../../../../../components/cards/CardEmpty';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { isIOS } from '../../../../../platform/detection';
+import { useTheme } from '../../../../../providers/ThemeProvider';
 
 interface sortBy {
   label: string;
@@ -29,6 +30,8 @@ const UserPlaylistsScreen = () => {
   const { username } = useLocalSearchParams<{ username: string }>();
   const { data: profile } = useQuery(userByUsernameOptions({ username: username }));
   const insets = useSafeAreaInsets();
+  const navigationHeaderHeight = useHeaderHeight();
+  const { isLiquidGlassAvailable } = useTheme();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(
@@ -80,6 +83,12 @@ const UserPlaylistsScreen = () => {
       <Stack.Screen
         options={{
           title: profile ? `@${profile.username}` : '',
+          headerTransparent: true,
+          ...(isLiquidGlassAvailable
+            ? {
+                headerStyle: { backgroundColor: 'transparent' },
+              }
+            : {}),
           headerTitle: (props) => (
             <HeaderTitle {...props}>
               {upperFirst(t('common.messages.playlist', { count: 2 }))}
@@ -173,6 +182,7 @@ const UserPlaylistsScreen = () => {
         onEndReachedThreshold={0.5}
         contentContainerStyle={[
           {
+            paddingTop: navigationHeaderHeight,
             paddingBottom: insets.bottom + PADDING_VERTICAL,
             flexGrow: 1,
           },

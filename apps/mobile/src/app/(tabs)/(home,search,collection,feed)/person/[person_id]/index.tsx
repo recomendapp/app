@@ -1,7 +1,7 @@
 import { personOptions } from '@libs/query-client';
 import { useQuery } from '@tanstack/react-query';
-import BottomSheetPerson from '../../../../../components/bottom-sheets/sheets/BottomSheetPerson';
 import ButtonPersonFollow from '../../../../../components/buttons/ButtonPersonFollow';
+import { usePersonHeaderMenu } from '../../../../../components/header-menus/usePersonHeaderMenu';
 import { PersonHeader } from '../../../../../components/screens/person/PersonHeader';
 import PersonWidgetFilms from '../../../../../components/screens/person/PersonWidgetFilms';
 import PersonWidgetTvSeries from '../../../../../components/screens/person/PersonWidgetTvSeries';
@@ -10,24 +10,19 @@ import { Button } from '../../../../../components/ui/Button';
 import { Icons } from '../../../../../constants/Icons';
 import tw from '../../../../../lib/tw';
 import { useAuth } from '../../../../../providers/AuthProvider';
-import useBottomSheetStore from '../../../../../stores/useBottomSheetStore';
 import { GAP, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { getIdFromSlug } from '../../../../../utils/getIdFromSlug';
 import { useLocalSearchParams } from 'expo-router';
-import { upperFirst } from 'lodash';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { View } from 'react-native';
 import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
-import { useTranslations } from 'use-intl';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const PersonScreen = () => {
-  const t = useTranslations();
   const { person_id } = useLocalSearchParams<{ person_id: string }>();
   const { id: personId } = getIdFromSlug(person_id);
   const insets = useSafeAreaInsets();
   const { user } = useAuth();
-  const openSheet = useBottomSheetStore((state) => state.openSheet);
   // Queries
   const { data: person, isLoading } = useQuery(
     personOptions({
@@ -46,13 +41,7 @@ const PersonScreen = () => {
     },
   });
 
-  const handleMenuPress = useCallback(() => {
-    if (person) {
-      openSheet(BottomSheetPerson, {
-        person: person,
-      });
-    }
-  }, [openSheet, person]);
+  const { onMenuPress, headerRightItems } = usePersonHeaderMenu({ person });
 
   return (
     <>
@@ -67,21 +56,11 @@ const PersonScreen = () => {
                 variant="ghost"
                 size="icon"
                 icon={Icons.EllipsisVertical}
-                onPress={handleMenuPress}
+                onPress={onMenuPress}
               />
             </View>
           ),
-          unstable_headerRightItems: (props) => [
-            {
-              type: 'button',
-              label: upperFirst(t('common.messages.menu')),
-              onPress: handleMenuPress,
-              icon: {
-                name: 'ellipsis',
-                type: 'sfSymbol',
-              },
-            },
-          ],
+          unstable_headerRightItems: headerRightItems,
         }}
         scrollY={scrollY}
         triggerHeight={headerHeight}
