@@ -12,6 +12,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import useRandomBackdrop from '../../hooks/useRandomBackdrop';
 import { Image } from 'expo-image';
+import { Link } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useReanimatedHeaderHeight } from 'react-native-screens/reanimated';
 import { Skeleton } from '../ui/Skeleton';
@@ -155,16 +156,18 @@ const CollectionHeader = forwardRef<
           <View style={tw`items-center justify-center`}>
             {poster &&
               (!loading ? (
-                <AnimatedImageWithFallback
-                  onLayout={(e) => {
-                    posterHeight.value = e.nativeEvent.layout.height;
-                  }}
-                  transition={250}
-                  alt={title}
-                  source={{ uri: poster }}
-                  style={[{ aspectRatio: 1 / 1 }, tw`rounded-md w-48 h-auto mb-2`, posterAnim]}
-                  type={posterType}
-                />
+                <Link.AppleZoomTarget>
+                  <AnimatedImageWithFallback
+                    onLayout={(e) => {
+                      posterHeight.value = e.nativeEvent.layout.height;
+                    }}
+                    transition={250}
+                    alt={title}
+                    source={{ uri: poster }}
+                    style={[{ aspectRatio: 1 / 1 }, tw`rounded-md w-48 h-auto mb-2`, posterAnim]}
+                    type={posterType}
+                  />
+                </Link.AppleZoomTarget>
               ) : (
                 <Skeleton style={tw`w-48 h-48 rounded-md mb-2`} />
               ))}

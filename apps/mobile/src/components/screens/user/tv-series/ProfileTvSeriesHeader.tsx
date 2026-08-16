@@ -14,7 +14,7 @@ import { upperFirst } from 'lodash';
 import useColorConverter from '../../../../hooks/useColorConverter';
 import { Skeleton } from '../../../ui/Skeleton';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Link, useRouter } from 'expo-router';
+import { Link } from 'expo-router';
 import { useTheme } from '../../../../providers/ThemeProvider';
 import tw from '../../../../lib/tw';
 import { IconMediaRating } from '../../../medias/IconMediaRating';
@@ -28,7 +28,6 @@ import { getTmdbImage } from '../../../../lib/tmdb/getTmdbImage';
 import { UserTvSeriesWithUserTvSeries } from '@libs/api-js';
 import { CardUser } from '../../../cards/CardUser';
 import { Icons } from '../../../../constants/Icons';
-import BottomSheetTvSeriesFollowersRating from '../../../bottom-sheets/sheets/BottomSheetTvSeriesFollowersRating';
 
 interface ProfileTvSeriesHeaderProps {
   log?: UserTvSeriesWithUserTvSeries | null;
@@ -43,7 +42,6 @@ export const ProfileTvSeriesHeader: React.FC<ProfileTvSeriesHeaderProps> = ({
   triggerHeight,
 }) => {
   const t = useTranslations();
-  const router = useRouter();
   const { hslToRgb } = useColorConverter();
   const { colors } = useTheme();
   const navigationHeaderHeight = useHeaderHeight();
@@ -170,37 +168,37 @@ export const ProfileTvSeriesHeader: React.FC<ProfileTvSeriesHeaderProps> = ({
         </Animated.View>
         <Animated.View entering={FadeInDown.delay(200).duration(500)}>
           {!loading ? (
-            <Pressable
+            <Link
               disabled={!log?.tvSeriesId}
-              onPress={
-                log
-                  ? () =>
-                      router.push({
-                        pathname: '/tv-series/[tv_series_id]',
-                        params: {
-                          tv_series_id: log?.tvSeriesId,
-                        },
-                      })
-                  : undefined
-              }
+              href={{
+                pathname: '/tv-series/[tv_series_id]',
+                params: {
+                  tv_series_id: log?.tvSeriesId ?? '',
+                },
+              }}
+              asChild
             >
-              <AnimatedImageWithFallback
-                onLayout={(e) => {
-                  'worklet';
-                  posterHeight.value = e.nativeEvent.layout.height;
-                }}
-                transition={250}
-                alt={log?.tvSeries.name ?? ''}
-                source={{
-                  uri: getTmdbImage({ path: log?.tvSeries.posterPath, size: 'w780' }) ?? '',
-                }}
-                style={{
-                  ...{ aspectRatio: 2 / 3 },
-                  ...tw`rounded-md w-24 h-auto`,
-                }}
-                type={'tv_series'}
-              />
-            </Pressable>
+              <Pressable>
+                <Link.AppleZoom>
+                  <AnimatedImageWithFallback
+                    onLayout={(e) => {
+                      'worklet';
+                      posterHeight.value = e.nativeEvent.layout.height;
+                    }}
+                    transition={250}
+                    alt={log?.tvSeries.name ?? ''}
+                    source={{
+                      uri: getTmdbImage({ path: log?.tvSeries.posterPath, size: 'w780' }) ?? '',
+                    }}
+                    style={{
+                      ...{ aspectRatio: 2 / 3 },
+                      ...tw`rounded-md w-24 h-auto`,
+                    }}
+                    type={'tv_series'}
+                  />
+                </Link.AppleZoom>
+              </Pressable>
+            </Link>
           ) : (
             <Skeleton style={[{ aspectRatio: 2 / 3 }, tw`w-24`]} />
           )}

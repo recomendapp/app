@@ -221,7 +221,7 @@ const WidgetMostRecommendedItem = ({
             >
               {details?.title}
             </Text>
-            {item.media.overview?.length && (
+            {!!item.media.overview?.length && (
               <Text style={tw`text-base`} numberOfLines={2}>
                 {item.media.overview}
               </Text>

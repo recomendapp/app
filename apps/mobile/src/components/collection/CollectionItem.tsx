@@ -4,12 +4,12 @@ import tw from '../../lib/tw';
 import { Icons } from '../../constants/Icons';
 import { View } from '../ui/view';
 import { Text } from '../ui/text';
-import { LinkProps, useRouter } from 'expo-router';
+import { Link, LinkProps } from 'expo-router';
 import { ImageWithFallback } from '../utils/ImageWithFallback';
 import { Button } from '../ui/Button';
 import { CollectionAction } from './CollectionScreen';
 import { forwardRef, useCallback } from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, ViewStyle } from 'react-native';
 import { ViewType } from '@libs/api-js';
 
 interface CollectionItemProps<T> extends React.ComponentProps<typeof Animated.View> {
@@ -50,7 +50,6 @@ const CollectionItem = forwardRef<
     },
     ref,
   ) => {
-    const router = useRouter();
     const { colors } = useTheme();
 
     const title = getItemTitle?.(item);
@@ -59,14 +58,51 @@ const CollectionItem = forwardRef<
     const url = getItemUrl?.(item);
 
     // Handlers
-    const handlePress = useCallback(() => {
-      if (url) {
-        router.push(url as LinkProps['href']);
-      }
-    }, [url, router]);
     const handleLongPress = useCallback(() => {
       onItemAction?.(item);
     }, [item, onItemAction]);
+
+    // Only the poster image itself is the zoom source — never the row's title/subtitle text.
+    const posterImage = (
+      <ImageWithFallback
+        alt={title}
+        source={{ uri: image }}
+        type={type}
+        // Slot (used by Link.AppleZoom below) throws if its single child's style is an array —
+        // must be a flattened object instead.
+        style={
+          view === 'grid'
+            ? undefined
+            : ({
+                aspectRatio: 2 / 3,
+                height: 'fit-content',
+                ...tw`rounded-md w-16`,
+              } as unknown as ViewStyle)
+        }
+      />
+    );
+    // Link.AppleZoom throws when used outside a <Link>, so it's only rendered in the `url`
+    // branch below (the only place this poster is ever wrapped in one).
+    const zoomablePosterImage = url ? <Link.AppleZoom>{posterImage}</Link.AppleZoom> : posterImage;
+
+    const pressableContent =
+      view === 'grid' ? (
+        <Animated.View style={tw`relative flex items-center w-full aspect-2/3`}>
+          {zoomablePosterImage}
+        </Animated.View>
+      ) : (
+        <View style={tw`flex-row items-center gap-2`}>
+          {zoomablePosterImage}
+          <View style={tw`shrink`}>
+            <Text numberOfLines={1}>{title}</Text>
+            {subtitle && (
+              <Text numberOfLines={1} style={{ color: colors.mutedForeground }}>
+                {subtitle}
+              </Text>
+            )}
+          </View>
+        </View>
+      );
 
     // const RightActions = useCallback((prog: SharedValue<number>, drag: SharedValue<number>, item: any, swipeable: SwipeableMethods) => {
     //     if (!swipeActions?.length) return null;
@@ -106,30 +142,17 @@ const CollectionItem = forwardRef<
         style={[tw`flex-row items-center justify-between gap-2`, style]}
         {...props}
       >
-        <Pressable style={tw`flex-1`} onPress={handlePress} onLongPress={handleLongPress}>
-          {view === 'grid' ? (
-            <Animated.View style={tw`relative flex items-center w-full aspect-2/3`}>
-              <ImageWithFallback alt={title} source={{ uri: image }} type={type} />
-            </Animated.View>
-          ) : (
-            <View style={tw`flex-row items-center gap-2`}>
-              <ImageWithFallback
-                alt={title}
-                source={{ uri: image }}
-                type={type}
-                style={[{ aspectRatio: 2 / 3, height: 'fit-content' }, tw`rounded-md w-16`]}
-              />
-              <View style={tw`shrink`}>
-                <Text numberOfLines={1}>{title}</Text>
-                {subtitle && (
-                  <Text numberOfLines={1} style={{ color: colors.mutedForeground }}>
-                    {subtitle}
-                  </Text>
-                )}
-              </View>
-            </View>
-          )}
-        </Pressable>
+        {url ? (
+          <Link href={url as LinkProps['href']} asChild>
+            <Pressable style={tw`flex-1`} onLongPress={handleLongPress}>
+              {pressableContent}
+            </Pressable>
+          </Link>
+        ) : (
+          <Pressable style={tw`flex-1`} onLongPress={handleLongPress}>
+            {pressableContent}
+          </Pressable>
+        )}
 
         {view === 'list' && (
           <Button

@@ -147,7 +147,7 @@ const Item = ({ item, index, ...props }: ItemProps) => {
               )}
             </Link>
             {item.media.genres ? <Genres genres={item.media.genres} /> : null}
-            {item.media.overview?.length && (
+            {!!item.media.overview?.length && (
               <div className="max-w-xl line-clamp-2 pt-2">{item.media.overview}</div>
             )}
           </CardContent>

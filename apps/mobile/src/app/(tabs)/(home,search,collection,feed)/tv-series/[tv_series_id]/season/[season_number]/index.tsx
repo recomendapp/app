@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from 'expo-router';
+import { Link, useLocalSearchParams } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { LayoutChangeEvent, View } from 'react-native';
 import tw from '../../../../../../../lib/tw';
@@ -138,22 +138,24 @@ const TvSeriesSeasonHeader: React.FC<MediaHeaderProps> = ({
       </Animated.View>
       <Animated.View style={[tw`flex-row items-center gap-4`, textAnim]}>
         {!loading ? (
-          <AnimatedImageWithFallback
-            onLayout={(e) => {
-              'worklet';
-              posterHeight.value = e.nativeEvent.layout.height;
-            }}
-            alt={title ?? ''}
-            source={{ uri: getTmdbImage({ path: season?.posterPath, size: 'w342' }) ?? '' }}
-            style={[{ aspectRatio: 2 / 3 }, tw`rounded-md w-24 h-auto`]}
-            type={'tv_season'}
-          >
-            <IconMediaRating
-              rating={season?.voteAverage}
-              variant="general"
-              style={tw`absolute top-1 right-1`}
-            />
-          </AnimatedImageWithFallback>
+          <Link.AppleZoomTarget>
+            <AnimatedImageWithFallback
+              onLayout={(e) => {
+                'worklet';
+                posterHeight.value = e.nativeEvent.layout.height;
+              }}
+              alt={title ?? ''}
+              source={{ uri: getTmdbImage({ path: season?.posterPath, size: 'w342' }) ?? '' }}
+              style={[{ aspectRatio: 2 / 3 }, tw`rounded-md w-24 h-auto`]}
+              type={'tv_season'}
+            >
+              <IconMediaRating
+                rating={season?.voteAverage}
+                variant="general"
+                style={tw`absolute top-1 right-1`}
+              />
+            </AnimatedImageWithFallback>
+          </Link.AppleZoomTarget>
         ) : (
           <Skeleton style={[{ aspectRatio: 2 / 3 }, tw`w-24`]} />
         )}

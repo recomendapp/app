@@ -24,8 +24,11 @@ import { HeaderMenuReturn } from '.';
  * own layout since they don't share enough structure to be worth abstracting yet.
  *
  * Sectioned (each `inline` submenu becomes a divider-separated group):
- *   - top row: Follow/Unfollow (only when logged in) + Share, `layout: 'palette'`
- *   - bottom: go to person
+ *   - top row: Share only, `layout: 'palette'` (Apple Music-style icon row)
+ *   - middle: go to person
+ *   - bottom: Follow/Unfollow (only when logged in) — kept out of the palette row since
+ *     `layout: 'palette'` never shows labels, and this action needs its text to convey
+ *     follow / followed state clearly.
  */
 export const usePersonHeaderMenu = ({ person }: UsePersonHeaderMenuParams): HeaderMenuReturn => {
   const t = useTranslations();
@@ -87,24 +90,6 @@ export const usePersonHeaderMenu = ({ person }: UsePersonHeaderMenuParams): Head
               inline: true,
               layout: 'palette',
               items: [
-                ...(user
-                  ? [
-                      {
-                        type: 'action' as const,
-                        label: isFollowing
-                          ? upperFirst(t('common.messages.followed'))
-                          : upperFirst(t('common.messages.follow')),
-                        icon: {
-                          type: 'sfSymbol' as const,
-                          name: (isFollowing ? 'person.badge.minus' : 'person.badge.plus') as
-                            | 'person.badge.minus'
-                            | 'person.badge.plus',
-                        },
-                        keepsMenuPresented: true,
-                        onPress: handleFollowToggle,
-                      },
-                    ]
-                  : []),
                 {
                   type: 'action' as const,
                   label: upperFirst(t('common.messages.share')),
@@ -134,6 +119,31 @@ export const usePersonHeaderMenu = ({ person }: UsePersonHeaderMenuParams): Head
                   : []),
               ],
             },
+            ...(user
+              ? [
+                  {
+                    type: 'submenu' as const,
+                    label: '',
+                    inline: true,
+                    items: [
+                      {
+                        type: 'action' as const,
+                        label: isFollowing
+                          ? upperFirst(t('common.messages.followed'))
+                          : upperFirst(t('common.messages.follow')),
+                        icon: {
+                          type: 'sfSymbol' as const,
+                          name: (isFollowing ? 'person.badge.minus' : 'person.badge.plus') as
+                            | 'person.badge.minus'
+                            | 'person.badge.plus',
+                        },
+                        keepsMenuPresented: true,
+                        onPress: handleFollowToggle,
+                      },
+                    ],
+                  },
+                ]
+              : []),
           ],
         },
       },

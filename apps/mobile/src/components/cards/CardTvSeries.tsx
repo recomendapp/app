@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Animated from 'react-native-reanimated';
 import { ImageWithFallback } from '../utils/ImageWithFallback';
-import { Href, useRouter } from 'expo-router';
+import { Href, Link } from 'expo-router';
 import tw from '../../lib/tw';
 import { Pressable, View } from 'react-native';
 import { useTheme } from '../../providers/ThemeProvider';
@@ -133,44 +133,70 @@ CardTvSeriesDefault.displayName = 'CardTvSeriesDefault';
 
 const CardTvSeriesPoster = React.forwardRef<
   React.ComponentRef<typeof Animated.View>,
-  FixedOmit<CardTvSeriesProps, 'variant' | 'linked' | 'onPress' | 'onLongPress'>
->(({ style, tvSeries, skeleton, activity, profile, showRating, children, ...props }, ref) => {
-  return (
-    <Animated.View
-      ref={ref}
-      style={[
-        { aspectRatio: 2 / 3 },
-        tw.style(
-          'relative flex gap-4 items-center w-32 shrink-0 rounded-sm border-transparent overflow-hidden',
-        ),
-        style,
-      ]}
-      {...props}
-    >
-      {!skeleton ? (
-        <ImageWithFallback
-          source={{ uri: getTmdbImage({ path: tvSeries.posterPath, size: 'w342' }) ?? '' }}
-          alt={tvSeries.name ?? ''}
-          type={'tv_series'}
-        />
-      ) : (
-        <Skeleton style={tw.style('w-full h-full')} />
-      )}
-      {!skeleton &&
-      (tvSeries.voteAverage ||
-        profile?.log?.rating ||
-        profile?.log?.isLiked ||
-        profile?.log?.isReviewed) ? (
-        <View style={tw`absolute top-1 right-1 flex-col gap-1`}>
-          {tvSeries.voteAverage ? <IconMediaRating rating={tvSeries.voteAverage} /> : null}
-          {profile?.log?.isLiked || profile?.log?.rating || profile?.log?.isReviewed ? (
-            <IconMediaRating rating={profile?.log?.rating} variant="profile" />
-          ) : null}
-        </View>
-      ) : null}
-    </Animated.View>
-  );
-});
+  FixedOmit<CardTvSeriesProps, 'variant' | 'linked' | 'onPress' | 'onLongPress'> & {
+    // Only true when this card is actually rendered inside a <Link> (see CardTvSeries below) —
+    // Link.AppleZoom throws if used outside one.
+    enableZoomTransition?: boolean;
+  }
+>(
+  (
+    {
+      style,
+      tvSeries,
+      skeleton,
+      activity,
+      profile,
+      showRating,
+      children,
+      enableZoomTransition,
+      ...props
+    },
+    ref,
+  ) => {
+    const poster = (
+      <ImageWithFallback
+        source={{ uri: getTmdbImage({ path: tvSeries?.posterPath, size: 'w342' }) ?? '' }}
+        alt={tvSeries?.name ?? ''}
+        type={'tv_series'}
+      />
+    );
+    return (
+      <Animated.View
+        ref={ref}
+        style={[
+          { aspectRatio: 2 / 3 },
+          tw.style(
+            'relative flex gap-4 items-center w-32 shrink-0 rounded-sm border-transparent overflow-hidden',
+          ),
+          style,
+        ]}
+        {...props}
+      >
+        {!skeleton ? (
+          enableZoomTransition ? (
+            <Link.AppleZoom>{poster}</Link.AppleZoom>
+          ) : (
+            poster
+          )
+        ) : (
+          <Skeleton style={tw.style('w-full h-full')} />
+        )}
+        {!skeleton &&
+        (tvSeries.voteAverage ||
+          profile?.log?.rating ||
+          profile?.log?.isLiked ||
+          profile?.log?.isReviewed) ? (
+          <View style={tw`absolute top-1 right-1 flex-col gap-1`}>
+            {tvSeries.voteAverage ? <IconMediaRating rating={tvSeries.voteAverage} /> : null}
+            {profile?.log?.isLiked || profile?.log?.rating || profile?.log?.isReviewed ? (
+              <IconMediaRating rating={profile?.log?.rating} variant="profile" />
+            ) : null}
+          </View>
+        ) : null}
+      </Animated.View>
+    );
+  },
+);
 CardTvSeriesPoster.displayName = 'CardTvSeriesPoster';
 
 const CardTvSeriesList = React.forwardRef<
@@ -225,7 +251,7 @@ const CardTvSeriesList = React.forwardRef<
               (skeleton ? (
                 <Skeleton style={tw`w-20 h-5`} />
               ) : (
-                tvSeries.createdBy?.length && (
+                !!tvSeries.createdBy?.length && (
                   <Text style={tw`text-sm`} textColor="muted" numberOfLines={1}>
                     {tvSeries.createdBy.map((creator) => creator.name).join(', ')}
                   </Text>
@@ -255,47 +281,55 @@ CardTvSeriesList.displayName = 'CardTvSeriesList';
 
 const CardTvSeries = React.forwardRef<React.ComponentRef<typeof Animated.View>, CardTvSeriesProps>(
   ({ variant = 'default', href: hrefProps, onPress, onLongPress, ...props }, ref) => {
-    const router = useRouter();
     const openSheet = useBottomSheetStore((state) => state.openSheet);
     const href: Href | null | undefined =
       hrefProps ||
       (props.tvSeries
         ? { pathname: '/tv-series/[tv_series_id]', params: { tv_series_id: props.tvSeries.id } }
         : undefined);
+    // Zoom transition (see Link.AppleZoom in CardTvSeriesPoster) requires a real <Link>
+    // ancestor, so only offer it when this card actually navigates via one (href !== null).
+    const isLinked = !!href;
 
     const content =
       variant === 'default' ? (
         <CardTvSeriesDefault ref={ref} {...props} />
       ) : variant === 'poster' ? (
-        <CardTvSeriesPoster ref={ref} {...props} />
+        <CardTvSeriesPoster ref={ref} {...props} enableZoomTransition={isLinked} />
       ) : variant === 'list' ? (
         <CardTvSeriesList ref={ref} {...props} />
       ) : null;
 
     if (props.skeleton) return content;
 
+    const handleLongPress = () => {
+      openSheet(BottomSheetTvSeries, {
+        tvSeries: props.tvSeries,
+        log: props.profile
+          ? {
+              ...props.profile.log,
+              tvSeries: props.tvSeries,
+              user: props.profile.user,
+            }
+          : undefined,
+      });
+      onLongPress?.();
+    };
+
+    if (!href) {
+      return (
+        <Pressable onPress={onPress} onLongPress={handleLongPress}>
+          {content}
+        </Pressable>
+      );
+    }
+
     return (
-      <Pressable
-        onPress={() => {
-          if (href) router.push(href);
-          onPress?.();
-        }}
-        onLongPress={() => {
-          openSheet(BottomSheetTvSeries, {
-            tvSeries: props.tvSeries,
-            log: props.profile
-              ? {
-                  ...props.profile.log,
-                  tvSeries: props.tvSeries,
-                  user: props.profile.user,
-                }
-              : undefined,
-          });
-          onLongPress?.();
-        }}
-      >
-        {content}
-      </Pressable>
+      <Link href={href} asChild>
+        <Pressable onPress={onPress} onLongPress={handleLongPress}>
+          {content}
+        </Pressable>
+      </Link>
     );
   },
 );
