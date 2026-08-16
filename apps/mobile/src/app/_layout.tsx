@@ -121,6 +121,52 @@ const RootLayoutNav = () => {
             : {}),
         }}
       />
+      <Stack.Screen
+        name="film/[film_id]/log"
+        options={{
+          presentation: 'formSheet',
+          sheetGrabberVisible: true,
+          sheetAllowedDetents: 'fitToContents',
+          sheetInitialDetentIndex: 0,
+          ...(isLiquidGlassAvailable
+            ? {
+                contentStyle: { backgroundColor: 'transparent' },
+                headerStyle: { backgroundColor: 'transparent' },
+              }
+            : {}),
+        }}
+      />
+      {/* TV SERIES */}
+      <Stack.Screen
+        name="tv-series/[tv_series_id]/log"
+        options={{
+          presentation: 'formSheet',
+          sheetGrabberVisible: true,
+          sheetAllowedDetents: 'fitToContents',
+          sheetInitialDetentIndex: 0,
+          ...(isLiquidGlassAvailable
+            ? {
+                contentStyle: { backgroundColor: 'transparent' },
+                headerStyle: { backgroundColor: 'transparent' },
+              }
+            : {}),
+        }}
+      />
+      <Stack.Screen
+        name="tv-series/[tv_series_id]/season/[season_number]/log"
+        options={{
+          presentation: 'formSheet',
+          sheetGrabberVisible: true,
+          sheetAllowedDetents: 'fitToContents',
+          sheetInitialDetentIndex: 0,
+          ...(isLiquidGlassAvailable
+            ? {
+                contentStyle: { backgroundColor: 'transparent' },
+                headerStyle: { backgroundColor: 'transparent' },
+              }
+            : {}),
+        }}
+      />
       {/* RECOS */}
       <Stack.Protected guard={!!user}>
         <Stack.Screen

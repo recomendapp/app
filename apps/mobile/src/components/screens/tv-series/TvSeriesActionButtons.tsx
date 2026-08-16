@@ -3,9 +3,7 @@ import { View } from '../../ui/view';
 import tw from '../../../lib/tw';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import { TvSeriesCompact } from '@libs/api-js';
-import ButtonUserLogTvSeriesRating from '../../buttons/tv-series/ButtonUserLogTvSeriesRating';
-import ButtonUserLogTvSeriesLike from '../../buttons/tv-series/ButtonUserLogTvSeriesLike';
-import ButtonUserLogTvSeriesWatch from '../../buttons/tv-series/ButtonUserLogTvSeriesWatch';
+import ButtonUserLogTvSeries from '../../buttons/tv-series/ButtonUserLogTvSeries';
 import { ButtonPlaylistAdd } from '../../buttons/ButtonPlaylistAdd';
 import ButtonUserRecoSend from '../../buttons/ButtonUserRecoSend';
 import { ButtonUserBookmark } from '../../buttons/ButtonUserBookmark';
@@ -49,9 +47,7 @@ export const TvSeriesActionButtons = ({
           { paddingHorizontal: PADDING_HORIZONTAL },
         ]}
       >
-        <ButtonUserLogTvSeriesRating tvSeries={tvSeries} />
-        <ButtonUserLogTvSeriesLike tvSeries={tvSeries} />
-        <ButtonUserLogTvSeriesWatch tvSeries={tvSeries} />
+        <ButtonUserLogTvSeries tvSeries={tvSeries} />
         <ButtonUserBookmark
           mediaId={tvSeries.id}
           mediaType="tv_series"

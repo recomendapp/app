@@ -7,13 +7,13 @@ import { Dimensions, FlatList, Pressable, TouchableOpacity, View } from 'react-n
 import Animated, {
   clamp,
   interpolate,
-  runOnJS,
   SharedValue,
   useAnimatedProps,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
+import { scheduleOnRN } from 'react-native-worklets';
 import * as Haptics from 'expo-haptics';
 import { Icons } from '../../../constants/Icons';
 import { ImageType, ImageWithFallback } from '../../utils/ImageWithFallback';
@@ -115,7 +115,7 @@ const BottomSheetRating = React.forwardRef<
     const newActiveRating = Math.round(scrollX.get()) + 1;
     if (newActiveRating !== activeRating.get()) {
       activeRating.value = newActiveRating;
-      runOnJS(vibrate)();
+      scheduleOnRN(vibrate);
     }
   });
 

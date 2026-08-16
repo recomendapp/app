@@ -47,6 +47,9 @@ const CollectionLayout = () => {
         options={{
           headerTitle: () => <></>,
           title: upperFirst(t('common.messages.library')),
+          headerStyle: {
+            backgroundColor: 'transparent',
+          },
           headerLeft: () => (
             <HeaderTitle tintColor={colors.foreground}>
               {upperFirst(t('common.messages.library'))}

@@ -29,6 +29,9 @@ export type ColorTheme = {
   accentGreen: string;
   accentGreenForeground: string;
   accentGreenHover: string;
+  accentOrange: string;
+  accentOrangeForeground: string;
+  accentOrangeHover: string;
 };
 
 const sharedColors = {
@@ -77,6 +80,9 @@ const Colors: ColorPalettes = {
     accentGreen: 'hsl(145 63% 49%)',
     accentGreenForeground: sharedColors.black,
     accentGreenHover: 'hsl(145 63% 30%)',
+    accentOrange: 'hsl(28 100% 62%)',
+    accentOrangeForeground: sharedColors.black,
+    accentOrangeHover: 'hsl(24 100% 40%)',
     ...sharedColors,
   },
   light: {
@@ -110,6 +116,9 @@ const Colors: ColorPalettes = {
     accentGreen: 'hsl(145 63% 49%)',
     accentGreenForeground: sharedColors.black,
     accentGreenHover: 'hsl(145 63% 30%)',
+    accentOrange: 'hsl(28 100% 62%)',
+    accentOrangeForeground: sharedColors.black,
+    accentOrangeHover: 'hsl(24 100% 40%)',
     ...sharedColors,
   },
 };

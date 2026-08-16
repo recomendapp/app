@@ -1,4 +1,4 @@
-import { Link, useLocalSearchParams } from 'expo-router';
+import { Link, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { LayoutChangeEvent, View } from 'react-native';
 import tw from '../../../../../../../lib/tw';
@@ -26,13 +26,18 @@ import { useFormatter, useTranslations } from 'use-intl';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../../../theme/globals';
 import AnimatedStackScreen from '../../../../../../../components/ui/AnimatedStackScreen';
 import { useHeaderHeight } from 'expo-router/react-navigation';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Text } from '../../../../../../../components/ui/text';
 import { getTmdbImage } from '../../../../../../../lib/tmdb/getTmdbImage';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { tvSeasonEpisodesInfiniteOptions, tvSeasonOptions } from '@libs/query-client';
 import { TvEpisode, TvSeasonGet } from '@libs/api-js';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAuth } from '../../../../../../../providers/AuthProvider';
+import useBottomAccessoryStore from '../../../../../../../stores/useBottomAccessoryStore';
+import { TvSeasonBottomAccessory } from '../../../../../../../components/screens/tv-series/TvSeasonBottomAccessory';
+import { TvSeasonActionButtons } from '../../../../../../../components/screens/tv-series/TvSeasonActionButtons';
+import { FloatingBar } from '../../../../../../../components/ui/FloatingBar';
 
 interface MediaHeaderProps {
   season?: TvSeasonGet;
@@ -209,10 +214,14 @@ const TvSeriesSeasonScreen = () => {
     season_number: string;
   }>();
   const { id: seriesId } = getIdFromSlug(tv_series_id);
-  const { colors } = useTheme();
+  const { user } = useAuth();
+  const { colors, isLiquidGlassAvailable } = useTheme();
   const insets = useSafeAreaInsets();
   const formatter = useFormatter();
   const t = useTranslations();
+  const setAccessory = useBottomAccessoryStore((state) => state.setAccessory);
+  const clearAccessory = useBottomAccessoryStore((state) => state.clearAccessory);
+  const [floatingBarHeight, setFloatingBarHeight] = useState(0);
   const {
     data: season,
     isLoading,
@@ -225,6 +234,17 @@ const TvSeriesSeasonScreen = () => {
     }),
   );
   const seasonLoading = useMemo(() => season === undefined || isLoading, [season, isLoading]);
+
+  // Liquid Glass: native bottom accessory hosted by the tab bar (see (tabs)/_layout.tsx).
+  // Everywhere else (Android, iOS < 26): FloatingBar rendered directly below, see JSX.
+  useFocusEffect(
+    useCallback(() => {
+      if (season && user && isLiquidGlassAvailable) {
+        setAccessory(TvSeasonBottomAccessory, { tvSeason: season });
+      }
+      return () => clearAccessory();
+    }, [season, user, isLiquidGlassAvailable, setAccessory, clearAccessory]),
+  );
   const {
     data: episodes,
     isLoading: isEpisodesLoading,
@@ -362,7 +382,10 @@ const TvSeriesSeasonScreen = () => {
         }
         contentContainerStyle={{
           gap: GAP,
-          paddingBottom: insets.bottom + PADDING_VERTICAL,
+          paddingBottom:
+            insets.bottom +
+            PADDING_VERTICAL +
+            (!isLiquidGlassAvailable && user && season ? floatingBarHeight : 0),
         }}
         keyExtractor={(item) => item.id.toString()}
         refreshing={isRefetching}
@@ -372,6 +395,14 @@ const TvSeriesSeasonScreen = () => {
         }}
         onEndReached={() => hasNextPage && fetchNextPage()}
       />
+      {season && user && !isLiquidGlassAvailable && (
+        <FloatingBar
+          onHeightChange={setFloatingBarHeight}
+          containerStyle={{ paddingHorizontal: 0 }}
+        >
+          <TvSeasonActionButtons tvSeason={season} />
+        </FloatingBar>
+      )}
     </>
   );
 };

@@ -1235,6 +1235,13 @@
       }
     },
     "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "Are you sure you want to complete the series? All episodes in all seasons will be marked as watched."
+          }
+        }
+      },
       "season": {
         "actions": {
           "watch": {

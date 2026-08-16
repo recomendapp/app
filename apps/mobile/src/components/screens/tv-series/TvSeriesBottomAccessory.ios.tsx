@@ -1,11 +1,21 @@
 import { useCallback } from 'react';
-import { Alert, View } from 'react-native';
+import { View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import { useTranslations } from 'use-intl';
 import { upperFirst } from 'lodash';
 import { useQuery } from '@tanstack/react-query';
-import { Host, HStack, ScrollView, Mask, Rectangle, Button, Image, Text } from '@expo/ui/swift-ui';
+import {
+  Host,
+  HStack,
+  ZStack,
+  ScrollView,
+  Mask,
+  Rectangle,
+  Button,
+  Image,
+  Text,
+} from '@expo/ui/swift-ui';
 import {
   buttonStyle,
   frame,
@@ -15,23 +25,21 @@ import {
   strokeBorder,
   bold,
   shapes,
+  font,
+  offset,
   onLongPressGesture,
 } from '@expo/ui/swift-ui/modifiers';
 import { TvSeriesCompact } from '@libs/api-js';
 import {
   tvSeriesLogOptions,
   userBookmarkByMediaOptions,
-  useTvSeriesLogDeleteMutation,
-  useTvSeriesLogSetMutation,
   useUserBookmarkDeleteByMediaMutation,
   useUserBookmarkSetByMediaMutation,
 } from '@libs/query-client';
 import { useAuth } from '../../../providers/AuthProvider';
 import { useTheme } from '../../../providers/ThemeProvider';
 import { useToast } from '../../Toast';
-import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
 import useBottomSheetStore from '../../../stores/useBottomSheetStore';
-import BottomSheetRating from '../../bottom-sheets/sheets/BottomSheetRating';
 import { BottomSheetBookmarkComment } from '../../bottom-sheets/sheets/BottomSheetBookmarkComment';
 
 interface TvSeriesBottomAccessoryProps {
@@ -49,7 +57,7 @@ const SCROLL_FADE_WIDTH = 24;
 export const TvSeriesBottomAccessory = ({ tvSeries }: TvSeriesBottomAccessoryProps) => {
   NativeTabs.BottomAccessory.usePlacement();
   const { user } = useAuth();
-  const { colors, mode } = useTheme();
+  const { colors } = useTheme();
   const toast = useToast();
   const t = useTranslations();
   const router = useRouter();
@@ -59,8 +67,6 @@ export const TvSeriesBottomAccessory = ({ tvSeries }: TvSeriesBottomAccessoryPro
   const { data: bookmark } = useQuery(
     userBookmarkByMediaOptions({ mediaId: tvSeries.id, type: 'tv_series', userId: user?.id }),
   );
-  const { mutateAsync: setLog } = useTvSeriesLogSetMutation();
-  const { mutateAsync: deleteLog } = useTvSeriesLogDeleteMutation();
   const { mutateAsync: setBookmark } = useUserBookmarkSetByMediaMutation();
   const { mutateAsync: deleteBookmark } = useUserBookmarkDeleteByMediaMutation();
 
@@ -69,48 +75,14 @@ export const TvSeriesBottomAccessory = ({ tvSeries }: TvSeriesBottomAccessoryPro
     [toast, t],
   );
 
-  const handleRatingPress = useCallback(() => {
-    openSheet(BottomSheetRating, {
-      media: {
-        title: tvSeries.name || '',
-        imageUrl: getTmdbImage({ path: tvSeries.posterPath, size: 'w342' }) || '',
-        type: 'tv_series',
-      },
-      rating: log?.rating || null,
-      onRatingChange: async (rating) => {
-        await setLog({ path: { tv_series_id: tvSeries.id }, body: { rating } }, { onError });
-      },
+  // Opens the consolidated log sheet (rating, like, watched) instead of toggling anything
+  // directly — see tv-series/[tv_series_id]/log/index.tsx.
+  const handleOpenLogPress = useCallback(() => {
+    router.push({
+      pathname: '/tv-series/[tv_series_id]/log',
+      params: { tv_series_id: tvSeries.id },
     });
-  }, [tvSeries, log?.rating, openSheet, setLog, onError]);
-
-  const handleLikeToggle = useCallback(async () => {
-    await setLog(
-      { path: { tv_series_id: tvSeries.id }, body: { isLiked: !log?.isLiked } },
-      { onError },
-    );
-  }, [tvSeries, log?.isLiked, setLog, onError]);
-
-  const handleWatchToggle = useCallback(() => {
-    if (log) {
-      Alert.alert(
-        upperFirst(t('common.messages.are_u_sure')),
-        upperFirst(t('components.media.actions.watch.remove_from_watched.description')),
-        [
-          { text: upperFirst(t('common.messages.cancel')), style: 'cancel' },
-          {
-            text: upperFirst(t('common.messages.confirm')),
-            onPress: () => {
-              deleteLog({ path: { tv_series_id: tvSeries.id } }, { onError });
-            },
-            style: 'destructive',
-          },
-        ],
-        { userInterfaceStyle: mode },
-      );
-    } else {
-      setLog({ path: { tv_series_id: tvSeries.id }, body: {} }, { onError });
-    }
-  }, [tvSeries, log, setLog, deleteLog, onError, t, mode]);
+  }, [tvSeries, router]);
 
   const handleBookmarkToggle = useCallback(async () => {
     if (bookmark) {
@@ -163,47 +135,74 @@ export const TvSeriesBottomAccessory = ({ tvSeries }: TvSeriesBottomAccessoryPro
                 alignment="center"
                 modifiers={[padding({ leading: 16, trailing: 16, vertical: 6 })]}
               >
-                <Button
-                  onPress={handleRatingPress}
-                  modifiers={
-                    log?.rating
-                      ? [
-                          buttonStyle('plain'),
-                          padding({ horizontal: 10, vertical: 6 }),
-                          background(
-                            colors.accentYellowForeground,
-                            shapes.roundedRectangle({ cornerRadius: 8 }),
-                          ),
-                          strokeBorder({
-                            color: colors.accentYellow,
-                            shape: 'roundedRectangle',
-                            cornerRadius: 8,
-                          }),
-                          frame({ minWidth: 40, minHeight: 32, alignment: 'center' }),
-                        ]
-                      : [buttonStyle('glass')]
-                  }
+                <ZStack
+                  alignment="center"
+                  // Same minWidth/minHeight the Button below declares for itself, so the heart
+                  // badge's offset math has a known baseline box — using minWidth (not a fixed
+                  // width) lets the ZStack still grow with the button's actual content (e.g. a
+                  // two-digit rating needs more than 40pt); pinning it to an exact width clipped
+                  // the button and made it bleed into the next HStack item, killing the gap
+                  // between this button and the bookmark one.
+                  modifiers={[
+                    frame(
+                      log?.rating
+                        ? { minWidth: 40, minHeight: 32 }
+                        : { minWidth: 28, minHeight: 28 },
+                    ),
+                  ]}
                 >
-                  {log?.rating ? (
-                    <Text modifiers={[bold(), foregroundStyle(colors.accentYellow)]}>
-                      {String(log.rating)}
-                    </Text>
-                  ) : (
-                    <Image systemName="star" />
+                  <Button
+                    onPress={handleOpenLogPress}
+                    modifiers={
+                      log?.rating
+                        ? [
+                            buttonStyle('plain'),
+                            padding({ horizontal: 10, vertical: 6 }),
+                            background(
+                              colors.accentYellowForeground,
+                              shapes.roundedRectangle({ cornerRadius: 8 }),
+                            ),
+                            strokeBorder({
+                              color: colors.accentYellow,
+                              shape: 'roundedRectangle',
+                              cornerRadius: 8,
+                            }),
+                            frame({ minWidth: 40, minHeight: 32, alignment: 'center' }),
+                          ]
+                        : [buttonStyle('glass')]
+                    }
+                  >
+                    {log?.rating ? (
+                      <Text modifiers={[bold(), foregroundStyle(colors.accentYellow)]}>
+                        {String(log.rating)}
+                      </Text>
+                    ) : log?.status === 'watching' ? (
+                      <Image systemName="clock.fill" color={colors.accentOrange} />
+                    ) : (
+                      <Image
+                        systemName={log ? 'checkmark.circle.fill' : 'checkmark.circle'}
+                        color={log ? colors.accentBlue : undefined}
+                      />
+                    )}
+                  </Button>
+                  {/* Sibling of Button (not nested inside it) so it draws above the button's
+                      own border/background overlay — nesting it as a child put it BEHIND the
+                      strokeBorder on the rating chip. */}
+                  {log?.isLiked && (
+                    <Image
+                      systemName="heart.fill"
+                      color={colors.accentPink}
+                      modifiers={[
+                        font({ size: 13 }),
+                        // offset (not frame+alignment) so the badge doesn't expand the
+                        // ZStack — just nudges it so its own center lands on the ZStack's
+                        // (now fixed, see above) bottom-right corner — roughly half of its
+                        // own width/height.
+                        offset(log?.rating ? { x: 20, y: 16 } : { x: 14, y: 14 }),
+                      ]}
+                    />
                   )}
-                </Button>
-                <Button onPress={handleLikeToggle} modifiers={[buttonStyle('glass')]}>
-                  <Image
-                    systemName={log?.isLiked ? 'heart.fill' : 'heart'}
-                    color={log?.isLiked ? colors.accentPink : undefined}
-                  />
-                </Button>
-                <Button onPress={handleWatchToggle} modifiers={[buttonStyle('glass')]}>
-                  <Image
-                    systemName={log ? 'checkmark.circle.fill' : 'checkmark.circle'}
-                    color={log ? colors.accentBlue : undefined}
-                  />
-                </Button>
+                </ZStack>
                 <Button
                   onPress={handleBookmarkToggle}
                   modifiers={[buttonStyle('glass'), onLongPressGesture(handleBookmarkLongPress)]}

@@ -1,11 +1,21 @@
 import { useCallback } from 'react';
-import { Alert, View } from 'react-native';
+import { View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import { useTranslations } from 'use-intl';
 import { upperFirst } from 'lodash';
 import { useQuery } from '@tanstack/react-query';
-import { Host, HStack, ScrollView, Mask, Rectangle, Button, Image, Text } from '@expo/ui/swift-ui';
+import {
+  Host,
+  HStack,
+  ZStack,
+  ScrollView,
+  Mask,
+  Rectangle,
+  Button,
+  Image,
+  Text,
+} from '@expo/ui/swift-ui';
 import {
   buttonStyle,
   frame,
@@ -15,23 +25,21 @@ import {
   strokeBorder,
   bold,
   shapes,
+  font,
+  offset,
   onLongPressGesture,
 } from '@expo/ui/swift-ui/modifiers';
 import { MovieCompact } from '@libs/api-js';
 import {
   movieLogOptions,
   userBookmarkByMediaOptions,
-  useMovieLogDeleteMutation,
-  useMovieLogSetMutation,
   useUserBookmarkDeleteByMediaMutation,
   useUserBookmarkSetByMediaMutation,
 } from '@libs/query-client';
 import { useAuth } from '../../../providers/AuthProvider';
 import { useTheme } from '../../../providers/ThemeProvider';
 import { useToast } from '../../Toast';
-import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
 import useBottomSheetStore from '../../../stores/useBottomSheetStore';
-import BottomSheetRating from '../../bottom-sheets/sheets/BottomSheetRating';
 import { BottomSheetBookmarkComment } from '../../bottom-sheets/sheets/BottomSheetBookmarkComment';
 
 interface FilmBottomAccessoryProps {
@@ -46,10 +54,9 @@ const SCROLL_FADE_WIDTH = 24;
  * usePlacement() requires that context.
  */
 export const FilmBottomAccessory = ({ movie }: FilmBottomAccessoryProps) => {
-  const placement = NativeTabs.BottomAccessory.usePlacement();
-  const isInline = placement === 'inline';
+  NativeTabs.BottomAccessory.usePlacement();
   const { user } = useAuth();
-  const { colors, mode } = useTheme();
+  const { colors } = useTheme();
   const toast = useToast();
   const t = useTranslations();
   const router = useRouter();
@@ -59,8 +66,6 @@ export const FilmBottomAccessory = ({ movie }: FilmBottomAccessoryProps) => {
   const { data: bookmark } = useQuery(
     userBookmarkByMediaOptions({ mediaId: movie.id, type: 'movie', userId: user?.id }),
   );
-  const { mutateAsync: setLog } = useMovieLogSetMutation();
-  const { mutateAsync: deleteLog } = useMovieLogDeleteMutation();
   const { mutateAsync: setBookmark } = useUserBookmarkSetByMediaMutation();
   const { mutateAsync: deleteBookmark } = useUserBookmarkDeleteByMediaMutation();
 
@@ -69,45 +74,9 @@ export const FilmBottomAccessory = ({ movie }: FilmBottomAccessoryProps) => {
     [toast, t],
   );
 
-  const handleRatingPress = useCallback(() => {
-    openSheet(BottomSheetRating, {
-      media: {
-        title: movie.title || '',
-        imageUrl: getTmdbImage({ path: movie.posterPath, size: 'w342' }) || '',
-        type: 'movie',
-      },
-      rating: log?.rating || null,
-      onRatingChange: async (rating) => {
-        await setLog({ path: { movie_id: movie.id }, body: { rating } }, { onError });
-      },
-    });
-  }, [movie, log?.rating, openSheet, setLog, onError]);
-
-  const handleLikeToggle = useCallback(async () => {
-    await setLog({ path: { movie_id: movie.id }, body: { isLiked: !log?.isLiked } }, { onError });
-  }, [movie, log?.isLiked, setLog, onError]);
-
-  const handleWatchToggle = useCallback(() => {
-    if (log) {
-      Alert.alert(
-        upperFirst(t('common.messages.are_u_sure')),
-        upperFirst(t('components.media.actions.watch.remove_from_watched.description')),
-        [
-          { text: upperFirst(t('common.messages.cancel')), style: 'cancel' },
-          {
-            text: upperFirst(t('common.messages.confirm')),
-            onPress: () => {
-              deleteLog({ path: { movie_id: movie.id } }, { onError });
-            },
-            style: 'destructive',
-          },
-        ],
-        { userInterfaceStyle: mode },
-      );
-    } else {
-      setLog({ path: { movie_id: movie.id }, body: {} }, { onError });
-    }
-  }, [movie, log, setLog, deleteLog, onError, t, mode]);
+  const handleOpenLogPress = useCallback(() => {
+    router.push({ pathname: '/film/[film_id]/log', params: { film_id: movie.id } });
+  }, [movie, router]);
 
   const handleBookmarkToggle = useCallback(async () => {
     if (bookmark) {
@@ -125,10 +94,6 @@ export const FilmBottomAccessory = ({ movie }: FilmBottomAccessoryProps) => {
       openSheet(BottomSheetBookmarkComment, { data: bookmark });
     }
   }, [bookmark, openSheet]);
-
-  const handleWatchDatePress = useCallback(() => {
-    router.push({ pathname: '/film/[film_id]/watched-dates', params: { film_id: movie.id } });
-  }, [movie, router]);
 
   const handlePlaylistAddPress = useCallback(() => {
     router.push({
@@ -161,58 +126,78 @@ export const FilmBottomAccessory = ({ movie }: FilmBottomAccessoryProps) => {
                 alignment="center"
                 modifiers={[padding({ leading: 16, trailing: 16, vertical: 6 })]}
               >
-                <Button
-                  onPress={handleRatingPress}
-                  modifiers={
-                    log?.rating
-                      ? [
-                          buttonStyle('plain'),
-                          padding({ horizontal: 10, vertical: 6 }),
-                          background(
-                            colors.accentYellowForeground,
-                            shapes.roundedRectangle({ cornerRadius: 8 }),
-                          ),
-                          strokeBorder({
-                            color: colors.accentYellow,
-                            shape: 'roundedRectangle',
-                            cornerRadius: 8,
-                          }),
-                          frame({ minWidth: 40, minHeight: 32, alignment: 'center' }),
-                        ]
-                      : [buttonStyle('glass')]
-                  }
+                <ZStack
+                  alignment="center"
+                  // Same minWidth/minHeight the Button below declares for itself, so the heart
+                  // badge's offset math has a known baseline box — using minWidth (not a fixed
+                  // width) lets the ZStack still grow with the button's actual content (e.g. a
+                  // two-digit rating needs more than 40pt); pinning it to an exact width clipped
+                  // the button and made it bleed into the next HStack item, killing the gap
+                  // between this button and the bookmark one.
+                  modifiers={[
+                    frame(
+                      log?.rating
+                        ? { minWidth: 40, minHeight: 32 }
+                        : { minWidth: 28, minHeight: 28 },
+                    ),
+                  ]}
                 >
-                  {log?.rating ? (
-                    <Text modifiers={[bold(), foregroundStyle(colors.accentYellow)]}>
-                      {String(log.rating)}
-                    </Text>
-                  ) : (
-                    <Image systemName="star" />
+                  <Button
+                    onPress={handleOpenLogPress}
+                    modifiers={
+                      log?.rating
+                        ? [
+                            buttonStyle('plain'),
+                            padding({ horizontal: 10, vertical: 6 }),
+                            background(
+                              colors.accentYellowForeground,
+                              shapes.roundedRectangle({ cornerRadius: 8 }),
+                            ),
+                            strokeBorder({
+                              color: colors.accentYellow,
+                              shape: 'roundedRectangle',
+                              cornerRadius: 8,
+                            }),
+                            frame({ minWidth: 40, minHeight: 32, alignment: 'center' }),
+                          ]
+                        : [buttonStyle('glass')]
+                    }
+                  >
+                    {log?.rating ? (
+                      <Text modifiers={[bold(), foregroundStyle(colors.accentYellow)]}>
+                        {String(log.rating)}
+                      </Text>
+                    ) : (
+                      <Image
+                        systemName={log ? 'checkmark.circle.fill' : 'checkmark.circle'}
+                        color={log ? colors.accentBlue : undefined}
+                      />
+                    )}
+                  </Button>
+                  {/* Sibling of Button (not nested inside it) so it draws above the button's
+                      own border/background overlay — nesting it as a child put it BEHIND the
+                      strokeBorder on the rating chip. */}
+                  {log?.isLiked && (
+                    <Image
+                      systemName="heart.fill"
+                      color={colors.accentPink}
+                      modifiers={[
+                        font({ size: 13 }),
+                        // offset (not frame+alignment) so the badge doesn't expand the
+                        // ZStack — just nudges it so its own center lands on the ZStack's
+                        // (now fixed, see above) bottom-right corner — roughly half of its
+                        // own width/height.
+                        offset(log?.rating ? { x: 20, y: 16 } : { x: 14, y: 14 }),
+                      ]}
+                    />
                   )}
-                </Button>
-                <Button onPress={handleLikeToggle} modifiers={[buttonStyle('glass')]}>
-                  <Image
-                    systemName={log?.isLiked ? 'heart.fill' : 'heart'}
-                    color={log?.isLiked ? colors.accentPink : undefined}
-                  />
-                </Button>
-                <Button onPress={handleWatchToggle} modifiers={[buttonStyle('glass')]}>
-                  <Image
-                    systemName={log ? 'checkmark.circle.fill' : 'checkmark.circle'}
-                    color={log ? colors.accentBlue : undefined}
-                  />
-                </Button>
+                </ZStack>
                 <Button
                   onPress={handleBookmarkToggle}
                   modifiers={[buttonStyle('glass'), onLongPressGesture(handleBookmarkLongPress)]}
                 >
                   <Image systemName={bookmark ? 'bookmark.fill' : 'bookmark'} />
                 </Button>
-                {!isInline && log && (
-                  <Button onPress={handleWatchDatePress} modifiers={[buttonStyle('glass')]}>
-                    <Image systemName="calendar" />
-                  </Button>
-                )}
               </HStack>
             </ScrollView>
             <Mask.Content>
