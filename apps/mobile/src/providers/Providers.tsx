@@ -9,6 +9,7 @@ import { LocaleProvider } from './LocaleProvider';
 import { NotificationsProvider } from './NotificationsProvider';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { ReanimatedScreenProvider } from 'react-native-screens/reanimated';
 import { PropsWithChildren } from 'react';
 import { ToastProvider } from '../components/Toast';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
@@ -23,32 +24,34 @@ type ProvidersProps = {
 const Providers = ({ children }: ProvidersProps) => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <KeyboardProvider>
-        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-          <SplashScreenProvider>
-            <LocaleProvider>
-              <ThemeProvider>
-                <ToastProvider>
-                  <ActionSheetProvider>
-                    <ReactQueryProvider>
-                      <AuthProvider>
-                        <ApiProvider>
-                          <BottomSheetModalProvider>
-                            <NotificationsProvider>
-                              <ProvidersInner>{children}</ProvidersInner>
-                              <BottomSheetManager />
-                            </NotificationsProvider>
-                          </BottomSheetModalProvider>
-                        </ApiProvider>
-                      </AuthProvider>
-                    </ReactQueryProvider>
-                  </ActionSheetProvider>
-                </ToastProvider>
-              </ThemeProvider>
-            </LocaleProvider>
-          </SplashScreenProvider>
-        </SafeAreaProvider>
-      </KeyboardProvider>
+      <ReanimatedScreenProvider>
+        <KeyboardProvider>
+          <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+            <SplashScreenProvider>
+              <LocaleProvider>
+                <ThemeProvider>
+                  <ToastProvider>
+                    <ActionSheetProvider>
+                      <ReactQueryProvider>
+                        <AuthProvider>
+                          <ApiProvider>
+                            <BottomSheetModalProvider>
+                              <NotificationsProvider>
+                                <ProvidersInner>{children}</ProvidersInner>
+                                <BottomSheetManager />
+                              </NotificationsProvider>
+                            </BottomSheetModalProvider>
+                          </ApiProvider>
+                        </AuthProvider>
+                      </ReactQueryProvider>
+                    </ActionSheetProvider>
+                  </ToastProvider>
+                </ThemeProvider>
+              </LocaleProvider>
+            </SplashScreenProvider>
+          </SafeAreaProvider>
+        </KeyboardProvider>
+      </ReanimatedScreenProvider>
     </GestureHandlerRootView>
   );
 };

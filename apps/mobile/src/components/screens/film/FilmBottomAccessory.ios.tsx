@@ -136,7 +136,6 @@ export const FilmBottomAccessory = ({ movie }: FilmBottomAccessoryProps) => {
           <Mask alignment="center">
             <ScrollView axes="horizontal" showsIndicators={false}>
               <HStack
-                spacing={8}
                 alignment="center"
                 modifiers={[padding({ leading: 16, trailing: 16, vertical: 6 })]}
               >
