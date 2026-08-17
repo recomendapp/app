@@ -34,6 +34,12 @@ export const useTvSeriesHeaderMenu = ({
     if (!tvSeries) return [];
 
     const middleItems = [
+      {
+        type: 'action' as const,
+        label: upperFirst(t('common.messages.share')),
+        icon: { type: 'sfSymbol' as const, name: 'square.and.arrow.up' as const },
+        onPress: () => openSheet(BottomSheetShareTvSeries, { tvSeries }),
+      },
       ...(!pathname.startsWith(`/tv-series/${tvSeries.id}`)
         ? [
             {
@@ -93,20 +99,6 @@ export const useTvSeriesHeaderMenu = ({
         icon: { type: 'sfSymbol', name: 'ellipsis' },
         menu: {
           items: [
-            {
-              type: 'submenu',
-              label: '',
-              inline: true,
-              layout: 'palette',
-              items: [
-                {
-                  type: 'action',
-                  label: upperFirst(t('common.messages.share')),
-                  icon: { type: 'sfSymbol', name: 'square.and.arrow.up' },
-                  onPress: () => openSheet(BottomSheetShareTvSeries, { tvSeries }),
-                },
-              ],
-            },
             {
               type: 'submenu',
               label: '',

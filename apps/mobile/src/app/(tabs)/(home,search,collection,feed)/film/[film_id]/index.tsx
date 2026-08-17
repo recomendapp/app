@@ -1,6 +1,6 @@
-import { Href, Link, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { Href, Link, useLocalSearchParams } from 'expo-router';
 import { lowerCase, upperFirst } from 'lodash';
-import { Pressable, useWindowDimensions, ViewProps } from 'react-native';
+import { Pressable, ScrollView, useWindowDimensions, ViewProps } from 'react-native';
 import tw from '../../../../../lib/tw';
 import { useTheme } from '../../../../../providers/ThemeProvider';
 import {
@@ -28,9 +28,6 @@ import MovieWidgetPlaylists from '../../../../../components/screens/film/MovieWi
 import { View } from '../../../../../components/ui/view';
 import { Button } from '../../../../../components/ui/Button';
 import { useAuth } from '../../../../../providers/AuthProvider';
-import { FilmBottomAccessory } from '../../../../../components/screens/film/FilmBottomAccessory';
-import { FilmActionButtons } from '../../../../../components/screens/film/FilmActionButtons';
-import useBottomAccessoryStore from '../../../../../stores/useBottomAccessoryStore';
 import { FloatingBar } from '../../../../../components/ui/FloatingBar';
 import AnimatedContentContainer from '../../../../../components/ui/AnimatedContentContainer';
 import { Icons } from '../../../../../constants/Icons';
@@ -42,6 +39,10 @@ import { useQuery } from '@tanstack/react-query';
 import { movieCastingOptions, movieOptions } from '@libs/query-client';
 import { Movie, MovieTrailer } from '@libs/api-js';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ButtonUserBookmark } from '../../../../../components/buttons/ButtonUserBookmark';
+import { ButtonPlaylistAdd } from '../../../../../components/buttons/ButtonPlaylistAdd';
+import ButtonUserRecoSend from '../../../../../components/buttons/ButtonUserRecoSend';
+import ButtonUserLogMovie from '../../../../../components/buttons/movies/ButtonUserLogMovie';
 
 const FilmScreen = () => {
   const { film_id } = useLocalSearchParams<{ film_id: string }>();
@@ -49,9 +50,6 @@ const FilmScreen = () => {
   const { user } = useAuth();
   const insets = useSafeAreaInsets();
   const t = useTranslations();
-  const { isLiquidGlassAvailable } = useTheme();
-  const setAccessory = useBottomAccessoryStore((state) => state.setAccessory);
-  const clearAccessory = useBottomAccessoryStore((state) => state.clearAccessory);
 
   const { data: movie, isLoading } = useQuery(
     movieOptions({
@@ -77,29 +75,13 @@ const FilmScreen = () => {
 
   const animatedContentContainerStyle = useAnimatedStyle(() => {
     return {
-      paddingBottom: withTiming(
-        insets.bottom +
-          PADDING_VERTICAL * 2 +
-          (isLiquidGlassAvailable ? 0 : floatingBarHeight.value),
-        {
-          duration: 300,
-        },
-      ),
+      paddingBottom: withTiming(insets.bottom + PADDING_VERTICAL * 2 + floatingBarHeight.value, {
+        duration: 300,
+      }),
     };
   });
 
   const { onMenuPress, headerRightItems } = useMovieHeaderMenu({ movie });
-
-  // Liquid Glass: native bottom accessory hosted by the tab bar (see (tabs)/_layout.tsx).
-  // Everywhere else (Android, iOS < 26): FloatingBar rendered directly below, see JSX.
-  useFocusEffect(
-    useCallback(() => {
-      if (movie && user && isLiquidGlassAvailable) {
-        setAccessory(FilmBottomAccessory, { movie });
-      }
-      return () => clearAccessory();
-    }, [movie, user, isLiquidGlassAvailable, setAccessory, clearAccessory]),
-  );
 
   return (
     <>
@@ -161,9 +143,24 @@ const FilmScreen = () => {
           </View>
         )}
       </AnimatedContentContainer>
-      {movie && user && !isLiquidGlassAvailable && (
+      {movie && user && (
         <FloatingBar height={floatingBarHeight} containerStyle={{ paddingHorizontal: 0 }}>
-          <FilmActionButtons movie={movie} />
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={[
+              tw`items-center gap-2`,
+              {
+                paddingHorizontal: PADDING_HORIZONTAL,
+                paddingVertical: PADDING_VERTICAL,
+              },
+            ]}
+          >
+            <ButtonUserLogMovie movie={movie} />
+            <ButtonUserBookmark mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
+            <ButtonPlaylistAdd mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
+            <ButtonUserRecoSend mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
+          </ScrollView>
         </FloatingBar>
       )}
     </>

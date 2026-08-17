@@ -32,6 +32,12 @@ export const useMovieHeaderMenu = ({ movie }: UseMovieHeaderMenuParams): HeaderM
     if (!movie) return [];
 
     const middleItems = [
+      {
+        type: 'action' as const,
+        label: upperFirst(t('common.messages.share')),
+        icon: { type: 'sfSymbol' as const, name: 'square.and.arrow.up' as const },
+        onPress: () => openSheet(BottomSheetShareMovie, { movie }),
+      },
       ...(!pathname.startsWith(`/film/${movie.id}`)
         ? [
             {
@@ -88,20 +94,6 @@ export const useMovieHeaderMenu = ({ movie }: UseMovieHeaderMenuParams): HeaderM
         icon: { type: 'sfSymbol', name: 'ellipsis' },
         menu: {
           items: [
-            {
-              type: 'submenu',
-              label: '',
-              inline: true,
-              layout: 'palette',
-              items: [
-                {
-                  type: 'action',
-                  label: upperFirst(t('common.messages.share')),
-                  icon: { type: 'sfSymbol', name: 'square.and.arrow.up' },
-                  onPress: () => openSheet(BottomSheetShareMovie, { movie }),
-                },
-              ],
-            },
             {
               type: 'submenu',
               label: '',

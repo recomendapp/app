@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { Alert } from 'react-native';
-import Animated, { FadeInDown, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 import { upperFirst } from 'lodash';
@@ -89,10 +89,14 @@ const FilmLogScreen = () => {
     router.push({ pathname: '/film/[film_id]/watched-dates', params: { film_id: movieId } });
   }, [movieId, router]);
 
-  // Mirrors film/[film_id]/reviews.tsx's handleViewOrCreateReview.
   const handleViewOrCreateReview = useCallback(() => {
+    if (router.canDismiss()) {
+      router.dismiss();
+    } else if (router.canGoBack()) {
+      router.back();
+    }
     if (log?.review && user) {
-      router.replace({
+      router.push({
         pathname: '/user/[username]/film/[film_id]',
         params: { username: user.username, film_id: movieId },
       });
@@ -126,32 +130,6 @@ const FilmLogScreen = () => {
               )}
             </View>
           ),
-          // headerRight: () =>
-          //   log ? (
-          //     <Button
-          //       variant="ghost"
-          //       size="icon"
-          //       icon={Icons.Calendar}
-          //       style={tw`rounded-full`}
-          //       disabled={!log}
-          //       onPress={handleWatchDatePress}
-          //     />
-          //   ) : null,
-          // unstable_headerRightItems: () =>
-          //   log
-          //     ? [
-          //         {
-          //           type: 'button',
-          //           label: upperFirst(t('common.messages.watched_dates')),
-          //           onPress: handleWatchDatePress,
-          //           disabled: !log,
-          //           icon: {
-          //             name: 'calendar',
-          //             type: 'sfSymbol',
-          //           },
-          //         },
-          //       ]
-          //     : [],
         }}
       />
       <View style={[tw`flex-1 justify-between`, { gap: GAP_LG }]}>

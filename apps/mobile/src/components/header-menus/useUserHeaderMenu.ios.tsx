@@ -93,21 +93,13 @@ export const useUserHeaderMenu = ({ profile }: UseUserHeaderMenuParams): HeaderM
               type: 'submenu',
               label: '',
               inline: true,
-              layout: 'palette',
               items: [
                 {
-                  type: 'action',
+                  type: 'action' as const,
                   label: upperFirst(t('common.messages.share')),
-                  icon: { type: 'sfSymbol', name: 'square.and.arrow.up' },
+                  icon: { type: 'sfSymbol' as const, name: 'square.and.arrow.up' as const },
                   onPress: () => openSheet(BottomSheetShareUser, { user: profile }),
                 },
-              ],
-            },
-            {
-              type: 'submenu',
-              label: '',
-              inline: true,
-              items: [
                 ...(!pathname.startsWith(`/user/${profile.username}`)
                   ? [
                       {
@@ -136,7 +128,7 @@ export const useUserHeaderMenu = ({ profile }: UseUserHeaderMenuParams): HeaderM
                         label: isFollow
                           ? isFollow.status === 'pending'
                             ? upperFirst(t('common.messages.request_sent'))
-                            : upperFirst(t('common.messages.followed'))
+                            : upperFirst(t('common.messages.unfollow'))
                           : upperFirst(t('common.messages.follow')),
                         icon: {
                           type: 'sfSymbol' as const,

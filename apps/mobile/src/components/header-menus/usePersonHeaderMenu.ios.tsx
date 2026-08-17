@@ -88,7 +88,6 @@ export const usePersonHeaderMenu = ({ person }: UsePersonHeaderMenuParams): Head
               type: 'submenu',
               label: '',
               inline: true,
-              layout: 'palette',
               items: [
                 {
                   type: 'action' as const,
@@ -96,13 +95,6 @@ export const usePersonHeaderMenu = ({ person }: UsePersonHeaderMenuParams): Head
                   icon: { type: 'sfSymbol' as const, name: 'square.and.arrow.up' as const },
                   onPress: () => openSheet(BottomSheetSharePerson, { person }),
                 },
-              ],
-            },
-            {
-              type: 'submenu',
-              label: '',
-              inline: true,
-              items: [
                 ...(!pathname.startsWith(`/person/${person.id}`)
                   ? [
                       {
@@ -129,7 +121,7 @@ export const usePersonHeaderMenu = ({ person }: UsePersonHeaderMenuParams): Head
                       {
                         type: 'action' as const,
                         label: isFollowing
-                          ? upperFirst(t('common.messages.followed'))
+                          ? upperFirst(t('common.messages.unfollow'))
                           : upperFirst(t('common.messages.follow')),
                         icon: {
                           type: 'sfSymbol' as const,

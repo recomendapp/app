@@ -19,6 +19,9 @@ interface FloatingBarProps {
   children: React.ReactNode;
   initialVisible?: boolean;
   initialAnimation?: boolean;
+  /** Delay in ms before the mount-in animation starts (only applies when `initialAnimation` is
+   * true). @default 500 */
+  initialAnimationDelay?: number;
   style?: StyleProp<ViewStyle>;
   containerStyle?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
   maxWidth?: number;
@@ -40,6 +43,7 @@ export const FloatingBar = forwardRef<FloatingBarRef, FloatingBarProps>(
       children,
       initialVisible = true,
       initialAnimation = true,
+      initialAnimationDelay = 500,
       style,
       containerStyle,
       maxWidth = 600,
@@ -115,15 +119,16 @@ export const FloatingBar = forwardRef<FloatingBarRef, FloatingBarProps>(
     return (
       <Animated.View
         style={[
-          tw`absolute bottom-0 left-0 right-0 items-center`,
+          tw`absolute left-0 right-0 items-center`,
           {
-            paddingBottom: finalBottomOffset,
-            paddingLeft: insets.left + PADDING_HORIZONTAL / 2,
-            paddingRight: insets.right + PADDING_HORIZONTAL / 2,
+            bottom: finalBottomOffset,
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
           },
           containerStyle,
           animatedStyle,
         ]}
+        pointerEvents="none"
       >
         <GlassView
           onLayout={(e) => {
@@ -134,12 +139,11 @@ export const FloatingBar = forwardRef<FloatingBarRef, FloatingBarProps>(
             onHeightChange?.(newHeight);
           }}
           style={[
-            tw`rounded-2xl shadow-lg w-full`,
+            tw`rounded-full shadow-lg self-center overflow-hidden`,
             {
               backgroundColor: !isLiquidGlassAvailable ? colors.muted : 'transparent',
-              borderWidth: 1,
-              borderColor: colors.border,
-              padding: PADDING_VERTICAL,
+              borderWidth: !isLiquidGlassAvailable ? 1 : 0,
+              borderColor: !isLiquidGlassAvailable ? colors.border : 'transparent',
               maxWidth: maxWidth,
             },
             style,

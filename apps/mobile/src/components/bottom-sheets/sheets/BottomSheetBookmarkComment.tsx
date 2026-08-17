@@ -17,6 +17,8 @@ import { useToast } from '../../Toast';
 import { forwardRef, useCallback } from 'react';
 import { Bookmark } from '@libs/api-js';
 import { useUserBookmarkSetByMediaMutation } from '@libs/query-client';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { isIpad } from '../../../platform/detection';
 
 interface BottomSheetBookmarkCommentProps extends BottomSheetProps {
   data: Bookmark;
@@ -31,9 +33,11 @@ export const BottomSheetBookmarkComment = forwardRef<
 >(({ id, data, ...props }, ref) => {
   const toast = useToast();
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const closeSheet = useBottomSheetStore((state) => state.closeSheet);
   const t = useTranslations();
   const { mutateAsync: updateWatchlist, isPending } = useUserBookmarkSetByMediaMutation();
+  const bottomInset = isIpad ? insets.bottom : 0;
 
   /* ---------------------------------- FORM ---------------------------------- */
   const watchlistSchema = z.object({
@@ -91,7 +95,7 @@ export const BottomSheetBookmarkComment = forwardRef<
         },
       );
     },
-    [closeSheet, id, toast],
+    [closeSheet, id, toast, data, t, updateWatchlist],
   );
 
   return (
@@ -101,6 +105,7 @@ export const BottomSheetBookmarkComment = forwardRef<
         gap: GAP,
         paddingTop: PADDING_VERTICAL * 2,
         paddingHorizontal: PADDING_HORIZONTAL,
+        paddingBottom: bottomInset,
       }}
       {...props}
     >

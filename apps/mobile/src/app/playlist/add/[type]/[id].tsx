@@ -189,7 +189,6 @@ const PlaylistAddTo = () => {
       item: { item: PlaylistsAddTarget; isSelected: boolean };
     }) => (
       <Pressable
-        disabled={alreadyAdded}
         onPress={() => handleTogglePlaylist(playlist)}
         style={tw`flex-row items-center justify-between gap-2`}
       >
@@ -220,11 +219,7 @@ const PlaylistAddTo = () => {
               {upperFirst(t('common.messages.already_added', { count: 1, gender: 'male' }))}
             </Badge>
           )}
-          <Checkbox
-            checked={isSelected}
-            onCheckedChange={() => handleTogglePlaylist(playlist)}
-            disabled={alreadyAdded}
-          />
+          <Checkbox checked={isSelected} onCheckedChange={() => handleTogglePlaylist(playlist)} />
         </View>
       </Pressable>
     ),

@@ -26,8 +26,6 @@ import tw from '../../../lib/tw';
 import { GAP, GAP_LG, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import { Divider } from '../../../components/ui/Divider';
 
-// Same shape as film/[film_id]/log.tsx, minus watched dates — that concept doesn't exist for
-// TV series in this app (see FilmBottomAccessory.ios.tsx vs TvSeriesBottomAccessory.ios.tsx).
 const TvSeriesLogScreen = () => {
   const { tv_series_id } = useLocalSearchParams<{ tv_series_id: string }>();
   const { id: tvSeriesId } = getIdFromSlug(tv_series_id);
@@ -50,8 +48,6 @@ const TvSeriesLogScreen = () => {
     [toast, t],
   );
 
-  // TV series have no plain "watched" state — a log always carries a status, and (per the web
-  // ButtonLogTvSeriesWatch) completing one is one-way: there's no going back to "in progress".
   const handleMarkAsCompleted = useCallback(() => {
     Alert.alert(
       upperFirst(t('common.messages.are_u_sure')),
@@ -111,7 +107,6 @@ const TvSeriesLogScreen = () => {
         { userInterfaceStyle: mode },
       );
     } else if (log.status === 'completed') {
-      // Nothing left to offer besides removing the log entirely — completed is one-way.
       handleDeleteLog();
     } else {
       Alert.alert(
@@ -146,8 +141,12 @@ const TvSeriesLogScreen = () => {
     setLog({ path: { tv_series_id: tvSeriesId }, body: { rating: null } }, { onError });
   }, [tvSeriesId, setLog, onError]);
 
-  // Mirrors tv-series/[tv_series_id]/reviews.tsx's handleViewOrCreateReview.
   const handleViewOrCreateReview = useCallback(() => {
+    if (router.canDismiss()) {
+      router.dismiss();
+    } else if (router.canGoBack()) {
+      router.back();
+    }
     if (log?.review && user) {
       router.replace({
         pathname: '/user/[username]/tv-series/[tv_series_id]',

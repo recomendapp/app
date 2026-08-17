@@ -1,6 +1,6 @@
-import { Href, Link, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { Href, Link, useLocalSearchParams } from 'expo-router';
 import { lowerCase, upperFirst } from 'lodash';
-import { Pressable, useWindowDimensions, View, ViewProps } from 'react-native';
+import { ScrollView, Pressable, useWindowDimensions, View, ViewProps } from 'react-native';
 import tw from '../../../../../lib/tw';
 import { useTheme } from '../../../../../providers/ThemeProvider';
 import {
@@ -28,9 +28,6 @@ import TvSeriesWidgetPlaylists from '../../../../../components/screens/tv-series
 import TvSeriesWidgetReviews from '../../../../../components/screens/tv-series/TvSeriesWidgetReviews';
 import { Button } from '../../../../../components/ui/Button';
 import { useAuth } from '../../../../../providers/AuthProvider';
-import { TvSeriesBottomAccessory } from '../../../../../components/screens/tv-series/TvSeriesBottomAccessory';
-import { TvSeriesActionButtons } from '../../../../../components/screens/tv-series/TvSeriesActionButtons';
-import useBottomAccessoryStore from '../../../../../stores/useBottomAccessoryStore';
 import { FloatingBar } from '../../../../../components/ui/FloatingBar';
 import AnimatedContentContainer from '../../../../../components/ui/AnimatedContentContainer';
 import { Icons } from '../../../../../constants/Icons';
@@ -42,6 +39,10 @@ import { useQuery } from '@tanstack/react-query';
 import { tvSeriesCastingOptions, tvSeriesOptions } from '@libs/query-client';
 import { TvSeries, TvSeriesTrailer } from '@libs/api-js';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ButtonUserBookmark } from '../../../../../components/buttons/ButtonUserBookmark';
+import { ButtonPlaylistAdd } from '../../../../../components/buttons/ButtonPlaylistAdd';
+import ButtonUserRecoSend from '../../../../../components/buttons/ButtonUserRecoSend';
+import ButtonUserLogTvSeries from '../../../../../components/buttons/tv-series/ButtonUserLogTvSeries';
 
 const TvSeriesScreen = () => {
   const { tv_series_id } = useLocalSearchParams<{ tv_series_id: string }>();
@@ -49,9 +50,6 @@ const TvSeriesScreen = () => {
   const { user } = useAuth();
   const insets = useSafeAreaInsets();
   const t = useTranslations();
-  const { isLiquidGlassAvailable } = useTheme();
-  const setAccessory = useBottomAccessoryStore((state) => state.setAccessory);
-  const clearAccessory = useBottomAccessoryStore((state) => state.clearAccessory);
   const { data: series, isLoading } = useQuery(
     tvSeriesOptions({
       tvSeriesId: seriesId,
@@ -76,29 +74,13 @@ const TvSeriesScreen = () => {
 
   const animatedContentContainerStyle = useAnimatedStyle(() => {
     return {
-      paddingBottom: withTiming(
-        insets.bottom +
-          PADDING_VERTICAL * 2 +
-          (isLiquidGlassAvailable ? 0 : floatingBarHeight.value),
-        {
-          duration: 300,
-        },
-      ),
+      paddingBottom: withTiming(insets.bottom + PADDING_VERTICAL * 2 + floatingBarHeight.value, {
+        duration: 300,
+      }),
     };
   });
 
   const { onMenuPress, headerRightItems } = useTvSeriesHeaderMenu({ tvSeries: series });
-
-  // Liquid Glass: native bottom accessory hosted by the tab bar (see (tabs)/_layout.tsx).
-  // Everywhere else (Android, iOS < 26): FloatingBar rendered directly below, see JSX.
-  useFocusEffect(
-    useCallback(() => {
-      if (series && user && isLiquidGlassAvailable) {
-        setAccessory(TvSeriesBottomAccessory, { tvSeries: series });
-      }
-      return () => clearAccessory();
-    }, [series, user, isLiquidGlassAvailable, setAccessory, clearAccessory]),
-  );
 
   return (
     <>
@@ -171,9 +153,32 @@ const TvSeriesScreen = () => {
           </View>
         )}
       </AnimatedContentContainer>
-      {series && user && !isLiquidGlassAvailable && (
+      {series && user && (
         <FloatingBar height={floatingBarHeight} containerStyle={{ paddingHorizontal: 0 }}>
-          <TvSeriesActionButtons tvSeries={series} />
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={[
+              tw`items-center gap-2`,
+              {
+                paddingHorizontal: PADDING_HORIZONTAL,
+                paddingVertical: PADDING_VERTICAL,
+              },
+            ]}
+          >
+            <ButtonUserLogTvSeries tvSeries={series} />
+            <ButtonUserBookmark
+              mediaId={series.id}
+              mediaType="tv_series"
+              mediaTitle={series.name}
+            />
+            <ButtonPlaylistAdd mediaId={series.id} mediaType="tv_series" mediaTitle={series.name} />
+            <ButtonUserRecoSend
+              mediaId={series.id}
+              mediaType="tv_series"
+              mediaTitle={series.name}
+            />
+          </ScrollView>
         </FloatingBar>
       )}
     </>

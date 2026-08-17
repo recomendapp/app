@@ -11,74 +11,79 @@ import tw from '../../../lib/tw';
 import { MovieCompact } from '@libs/api-js';
 import { movieLogOptions } from '@libs/query-client';
 
-interface ButtonUserLogMovieProps extends React.ComponentProps<typeof Button> {
+interface ButtonUserLogMovieProps {
   movie: MovieCompact;
 }
 
-/**
- * Consolidated log entry point — replaces the separate rating/like/watch/watch-date buttons
- * with one that opens /film/[film_id]/log. Mirrors FilmBottomAccessory.ios.tsx's SwiftUI
- * version: rating number when rated, otherwise the watch checkmark (filled once watched), plus
- * a small heart badge in the corner when liked.
- */
-const ButtonUserLogMovie = forwardRef<React.ComponentRef<typeof Button>, ButtonUserLogMovieProps>(
-  ({ movie, style, onPress: onPressProps, ...props }, ref) => {
-    const { user } = useAuth();
-    const { colors } = useTheme();
-    const router = useRouter();
-    const pathname = usePathname();
-    const { data: log } = useQuery(
-      movieLogOptions({
-        userId: user?.id,
-        movieId: movie.id,
-      }),
-    );
+const ButtonUserLogMovie = forwardRef<View, ButtonUserLogMovieProps>(({ movie }, ref) => {
+  const { user } = useAuth();
+  const { colors } = useTheme();
+  const router = useRouter();
+  const pathname = usePathname();
+  const { data: log } = useQuery(
+    movieLogOptions({
+      userId: user?.id,
+      movieId: movie.id,
+    }),
+  );
 
-    const buttonStyle = log?.rating
-      ? { backgroundColor: colors.accentYellowForeground, borderColor: colors.accentYellow }
-      : { ...(log ? { backgroundColor: colors.accentBlue } : undefined), ...tw`rounded-full` };
+  const handlePress = () => {
+    if (user) {
+      router.push({ pathname: '/film/[film_id]/log', params: { film_id: movie.id } });
+    } else {
+      router.push({ pathname: '/auth', params: { redirect: pathname } });
+    }
+  };
 
-    return (
-      // overflow: 'visible' explicitly, since the heart badge below is deliberately
-      // positioned to poke out past the button's own edge.
-      <View style={[tw`relative`, { overflow: 'visible' }]}>
-        <Button
-          ref={ref}
-          variant="outline"
-          size={log?.rating ? 'default' : 'icon'}
-          icon={!log?.rating ? Icons.Check : undefined}
-          onPress={(e) => {
-            if (user) {
-              router.push({ pathname: '/film/[film_id]/log', params: { film_id: movie.id } });
-            } else {
-              router.push({
-                pathname: '/auth',
-                params: {
-                  redirect: pathname,
+  return (
+    <View ref={ref} style={[tw`relative`, { overflow: 'visible' }]}>
+      <Button
+        variant="outline"
+        size={log?.rating ? 'default' : 'icon'}
+        icon={!log?.rating ? Icons.Check : undefined}
+        onPress={handlePress}
+        style={
+          log?.rating
+            ? {
+                backgroundColor: colors.accentYellowForeground,
+                borderColor: colors.accentYellow,
+                aspectRatio: 4 / 3,
+              }
+            : log
+              ? { backgroundColor: colors.accentBlue, ...tw`rounded-full` }
+              : tw`rounded-full`
+        }
+      >
+        {log?.rating ? (
+          <Text style={[tw`font-bold text-lg`, { color: colors.accentYellow }]}>{log.rating}</Text>
+        ) : null}
+      </Button>
+      {log?.isLiked && (
+        <View
+          pointerEvents="none"
+          style={[
+            tw`absolute`,
+            {
+              zIndex: 1,
+              elevation: 1,
+            },
+            log.rating !== null
+              ? {
+                  bottom: 4,
+                  right: 4,
+                }
+              : {
+                  bottom: 0,
+                  right: 0,
                 },
-              });
-            }
-            onPressProps?.(e);
-          }}
-          style={{ ...buttonStyle, ...style }}
-          {...props}
+          ]}
         >
-          {log?.rating ? (
-            <Text style={[tw`font-bold`, { color: colors.accentYellow }]}>{log.rating}</Text>
-          ) : null}
-        </Button>
-        {log?.isLiked && (
-          <View
-            pointerEvents="none"
-            style={[tw`absolute bottom-0 right-0`, { zIndex: 1, elevation: 1 }]}
-          >
-            <Icons.like color={colors.accentPink} fill={colors.accentPink} size={14} />
-          </View>
-        )}
-      </View>
-    );
-  },
-);
+          <Icons.like color={colors.accentPink} fill={colors.accentPink} size={14} />
+        </View>
+      )}
+    </View>
+  );
+});
 ButtonUserLogMovie.displayName = 'ButtonUserLogMovie';
 
 export default ButtonUserLogMovie;

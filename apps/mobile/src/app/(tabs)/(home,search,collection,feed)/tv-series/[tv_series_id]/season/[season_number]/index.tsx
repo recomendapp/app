@@ -1,6 +1,6 @@
-import { Link, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { Link, useLocalSearchParams } from 'expo-router';
 import { upperFirst } from 'lodash';
-import { LayoutChangeEvent, View } from 'react-native';
+import { ScrollView, LayoutChangeEvent, View } from 'react-native';
 import tw from '../../../../../../../lib/tw';
 import { useTheme } from '../../../../../../../providers/ThemeProvider';
 import Animated, {
@@ -34,10 +34,8 @@ import { tvSeasonEpisodesInfiniteOptions, tvSeasonOptions } from '@libs/query-cl
 import { TvEpisode, TvSeasonGet } from '@libs/api-js';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../../../../../../../providers/AuthProvider';
-import useBottomAccessoryStore from '../../../../../../../stores/useBottomAccessoryStore';
-import { TvSeasonBottomAccessory } from '../../../../../../../components/screens/tv-series/TvSeasonBottomAccessory';
-import { TvSeasonActionButtons } from '../../../../../../../components/screens/tv-series/TvSeasonActionButtons';
 import { FloatingBar } from '../../../../../../../components/ui/FloatingBar';
+import ButtonUserLogTvSeason from '../../../../../../../components/buttons/tv-series/ButtonUserLogTvSeason';
 
 interface MediaHeaderProps {
   season?: TvSeasonGet;
@@ -215,12 +213,10 @@ const TvSeriesSeasonScreen = () => {
   }>();
   const { id: seriesId } = getIdFromSlug(tv_series_id);
   const { user } = useAuth();
-  const { colors, isLiquidGlassAvailable } = useTheme();
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const formatter = useFormatter();
   const t = useTranslations();
-  const setAccessory = useBottomAccessoryStore((state) => state.setAccessory);
-  const clearAccessory = useBottomAccessoryStore((state) => state.clearAccessory);
   const [floatingBarHeight, setFloatingBarHeight] = useState(0);
   const {
     data: season,
@@ -234,17 +230,6 @@ const TvSeriesSeasonScreen = () => {
     }),
   );
   const seasonLoading = useMemo(() => season === undefined || isLoading, [season, isLoading]);
-
-  // Liquid Glass: native bottom accessory hosted by the tab bar (see (tabs)/_layout.tsx).
-  // Everywhere else (Android, iOS < 26): FloatingBar rendered directly below, see JSX.
-  useFocusEffect(
-    useCallback(() => {
-      if (season && user && isLiquidGlassAvailable) {
-        setAccessory(TvSeasonBottomAccessory, { tvSeason: season });
-      }
-      return () => clearAccessory();
-    }, [season, user, isLiquidGlassAvailable, setAccessory, clearAccessory]),
-  );
   const {
     data: episodes,
     isLoading: isEpisodesLoading,
@@ -383,9 +368,7 @@ const TvSeriesSeasonScreen = () => {
         contentContainerStyle={{
           gap: GAP,
           paddingBottom:
-            insets.bottom +
-            PADDING_VERTICAL +
-            (!isLiquidGlassAvailable && user && season ? floatingBarHeight : 0),
+            insets.bottom + PADDING_VERTICAL + (user && season ? floatingBarHeight : 0),
         }}
         keyExtractor={(item) => item.id.toString()}
         refreshing={isRefetching}
@@ -395,12 +378,24 @@ const TvSeriesSeasonScreen = () => {
         }}
         onEndReached={() => hasNextPage && fetchNextPage()}
       />
-      {season && user && !isLiquidGlassAvailable && (
+      {season && user && (
         <FloatingBar
           onHeightChange={setFloatingBarHeight}
           containerStyle={{ paddingHorizontal: 0 }}
         >
-          <TvSeasonActionButtons tvSeason={season} />
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={[
+              tw`items-center gap-2`,
+              {
+                paddingHorizontal: PADDING_HORIZONTAL,
+                paddingVertical: PADDING_VERTICAL,
+              },
+            ]}
+          >
+            <ButtonUserLogTvSeason tvSeason={season} />
+          </ScrollView>
         </FloatingBar>
       )}
     </>
