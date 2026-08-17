@@ -105,26 +105,25 @@ const TvSeriesPlaylists = () => {
                 headerStyle: { backgroundColor: 'transparent' },
               }
             : {}),
-          headerRight: user
-            ? () => (
-                <Button
-                  variant="outline"
-                  size="icon"
-                  icon={Icons.AddPlaylist}
-                  style={tw`rounded-full`}
-                  onPress={() => {
-                    router.push({
-                      pathname: '/playlist/add/[type]/[id]',
-                      params: {
-                        type: 'tv-series',
-                        id: seriesId,
-                        title: tvSeries?.name,
-                      },
-                    });
-                  }}
-                />
-              )
-            : undefined,
+          headerRight: () =>
+            user ? (
+              <Button
+                variant="ghost"
+                size="icon"
+                icon={Icons.AddPlaylist}
+                style={tw`rounded-full`}
+                onPress={() => {
+                  router.push({
+                    pathname: '/playlist/add/[type]/[id]',
+                    params: {
+                      type: 'tv-series',
+                      id: seriesId,
+                      title: tvSeries?.name,
+                    },
+                  });
+                }}
+              />
+            ) : null,
           unstable_headerRightItems: () => [
             ...(user
               ? [

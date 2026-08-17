@@ -137,18 +137,16 @@ const FilmReviews = () => {
                 headerStyle: { backgroundColor: 'transparent' },
               }
             : {}),
-          headerRight:
-            activity !== undefined
-              ? () => (
-                  <Button
-                    variant={'outline'}
-                    size="icon"
-                    style={tw`rounded-full`}
-                    icon={activity?.review ? Icons.Eye : Icons.Edit}
-                    onPress={handleViewOrCreateReview}
-                  />
-                )
-              : undefined,
+          headerRight: () =>
+            activity !== undefined ? (
+              <Button
+                variant={'outline'}
+                size="icon"
+                style={tw`rounded-full`}
+                icon={activity?.review ? Icons.Eye : Icons.Edit}
+                onPress={handleViewOrCreateReview}
+              />
+            ) : null,
           unstable_headerRightItems: () => [
             ...(user
               ? activity !== undefined

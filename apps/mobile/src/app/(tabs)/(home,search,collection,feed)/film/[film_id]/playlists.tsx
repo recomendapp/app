@@ -106,26 +106,25 @@ const FilmPlaylists = () => {
                 headerStyle: { backgroundColor: 'transparent' },
               }
             : {}),
-          headerRight: user
-            ? () => (
-                <Button
-                  variant="outline"
-                  size="icon"
-                  icon={Icons.AddPlaylist}
-                  style={tw`rounded-full`}
-                  onPress={() => {
-                    router.push({
-                      pathname: '/playlist/add/[type]/[id]',
-                      params: {
-                        type: 'movie',
-                        id: movieId,
-                        title: movie?.title,
-                      },
-                    });
-                  }}
-                />
-              )
-            : undefined,
+          headerRight: () =>
+            user ? (
+              <Button
+                variant="ghost"
+                size="icon"
+                icon={Icons.AddPlaylist}
+                style={tw`rounded-full`}
+                onPress={() => {
+                  router.push({
+                    pathname: '/playlist/add/[type]/[id]',
+                    params: {
+                      type: 'movie',
+                      id: movieId,
+                      title: movie?.title,
+                    },
+                  });
+                }}
+              />
+            ) : null,
           unstable_headerRightItems: () => [
             ...(user
               ? [

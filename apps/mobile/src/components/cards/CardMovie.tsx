@@ -1,5 +1,4 @@
 import * as React from 'react';
-// import { UserActivityMovie, FixedOmit } from "@recomendapp/types";
 import Animated from 'react-native-reanimated';
 import { ImageWithFallback } from '../utils/ImageWithFallback';
 import { Href, Link } from 'expo-router';
@@ -11,7 +10,6 @@ import { IconMediaRating } from '../medias/IconMediaRating';
 import { Skeleton } from '../ui/Skeleton';
 import BottomSheetMovie from '../bottom-sheets/sheets/BottomSheetMovie';
 import { Text } from '../ui/text';
-import ButtonUserLogMovieRating from '../buttons/movies/ButtonUserLogMovieRating';
 import { GAP } from '../../theme/globals';
 import { getTmdbImage } from '../../lib/tmdb/getTmdbImage';
 import { LogMovie, LogMovieWithMovieNoReview, MovieCompact, UserSummary } from '@libs/api-js';

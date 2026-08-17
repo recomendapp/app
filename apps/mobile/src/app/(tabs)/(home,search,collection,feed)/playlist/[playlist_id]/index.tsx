@@ -426,24 +426,23 @@ const PlaylistScreen = () => {
       <AnimatedStackScreen
         options={{
           headerTitle: playlist?.title ?? '',
-          headerRight: playlist
-            ? () => (
-                <View style={tw`flex-row items-center`}>
-                  <ButtonActionPlaylistLike playlist={playlist} />
-                  <ButtonActionPlaylistSaved playlist={playlist} />
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    icon={Icons.EllipsisVertical}
-                    onPress={() =>
-                      openSheet(BottomSheetPlaylist, {
-                        playlist: playlist,
-                      })
-                    }
-                  />
-                </View>
-              )
-            : undefined,
+          headerRight: () =>
+            playlist ? (
+              <View style={tw`flex-row items-center`}>
+                <ButtonActionPlaylistLike playlist={playlist} />
+                <ButtonActionPlaylistSaved playlist={playlist} />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  icon={Icons.EllipsisVertical}
+                  onPress={() =>
+                    openSheet(BottomSheetPlaylist, {
+                      playlist: playlist,
+                    })
+                  }
+                />
+              </View>
+            ) : null,
         }}
         scrollY={scrollY}
         triggerHeight={headerHeight}
