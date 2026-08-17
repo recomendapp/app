@@ -230,12 +230,12 @@ export const SharePlaylist = forwardRef<ShareViewRef, SharePlaylistProps>(
     const { height: screenHeight } = useWindowDimensions();
     const { colors } = useTheme();
     // States
-    const [poster, setPoster] = useState(playlist.poster || undefined);
+    const [poster] = useState(playlist.poster || undefined);
     const { palette } = useImagePalette(poster);
     const [bgColor, setBgColor] = useState<{ index: number; color: string } | null>(
       palette ? { index: 0, color: palette[0] } : null,
     );
-    const [bgType, setBgType] = useState<'color' | 'image'>('color');
+    const [bgType] = useState<'color' | 'image'>('color');
     const [editing, setEditing] = useState(false);
     const editOptions = useMemo((): EditOption[] => {
       return [{ value: 'background', icon: ShapeVerticalRoundedBackground }];

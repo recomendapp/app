@@ -4,7 +4,7 @@ import { Icons } from '../../../constants/Icons';
 import tw from '../../../lib/tw';
 import { useTheme } from '../../../providers/ThemeProvider';
 import { GAP, GAP_XL, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
-import { Href, Link, Stack, useRouter } from 'expo-router';
+import { Href, Link, Stack } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { ScrollView, useWindowDimensions } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';

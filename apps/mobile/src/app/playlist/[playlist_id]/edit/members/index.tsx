@@ -1,6 +1,6 @@
 import { useAuth } from '../../../../../providers/AuthProvider';
 import tw from '../../../../../lib/tw';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { Button } from '../../../../../components/ui/Button';
 import { useTranslations } from 'use-intl';
 import { upperFirst } from 'lodash';
@@ -108,7 +108,6 @@ const ModalPlaylistEditMembers = () => {
       playlistId: playlist?.id,
     }),
   );
-  const loading = members === undefined || isLoading;
 
   // Mutations
   const { mutateAsync: updateMember, isPending: isUpdatingMember } =

@@ -26,7 +26,6 @@ const CollectionSavedScreen = () => {
         userId: user?.id,
       }),
     );
-  const loading = isLoading || data === undefined;
   const playlists = useMemo(() => data?.pages.flatMap((page) => page.data) ?? [], [data]);
 
   const renderItem = useCallback(

@@ -8,8 +8,7 @@ import AnimatedContentContainer from '../../../ui/AnimatedContentContainer';
 import AnimatedStackScreen from '../../../ui/AnimatedStackScreen';
 import { useTheme } from '../../../../providers/ThemeProvider';
 import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../theme/globals';
-import Animated, {
-  FadeIn,
+import {
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,

@@ -40,7 +40,7 @@ const SettingsNotificationsScreen = () => {
             },
           });
         }
-      } catch (error) {
+      } catch {
         await Linking.openSettings();
       }
     } else {

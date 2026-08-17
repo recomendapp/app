@@ -55,7 +55,6 @@ const UserPlaylistsScreen = () => {
       }),
     );
   const playlists = useMemo(() => data?.pages.flatMap((page) => page.data) || [], [data]);
-  const loading = data === undefined || isLoading;
   // Handlers
   const handleSortBy = () => {
     const sortByOptionsWithCancel = [

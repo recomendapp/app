@@ -61,7 +61,6 @@ const FilmPlaylists = () => {
         },
       }),
     );
-  const loading = data === undefined || isLoading;
   const playlists = useMemo(() => data?.pages.flatMap((page) => page.data) || [], [data]);
   // Handlers
   const handleSortBy = () => {

@@ -39,7 +39,6 @@ const FollowRequestsScreen = () => {
       }),
     );
   const requests = useMemo(() => data?.pages.flatMap((page) => page.data) || [], [data]);
-  const loading = requests === undefined || isLoading;
 
   // Mutations
   const { mutateAsync: acceptRequest } = useUserAcceptFollowMutation();

@@ -1,27 +1,6 @@
 // import { useMediaMovieCreditsQuery } from "@mobile/api/medias/mediaQueries";
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { CardPerson } from '../../../../../components/cards/CardPerson';
-import { Text } from '../../../../../components/ui/text';
-import { View } from '../../../../../components/ui/view';
-import { DEPARTMENT_ORDER, JOB_ORDER } from '../../../../../constants/creditsOrder';
-import { Icons } from '../../../../../constants/Icons';
-import tw from '../../../../../lib/tw';
-import { useTheme } from '../../../../../providers/ThemeProvider';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
-import { getIdFromSlug } from '../../../../../utils/getIdFromSlug';
-import { FlashList } from '@shopify/flash-list';
-import { useLocalSearchParams } from 'expo-router';
-import { upperFirst } from 'lodash';
-import { useCallback, useMemo } from 'react';
-import { useTranslations } from 'use-intl';
 
 const FilmDetailsScreen = () => {
-  const { film_id } = useLocalSearchParams<{ film_id: string }>();
-  const { id: movieId } = getIdFromSlug(film_id);
-  const t = useTranslations();
-  const { colors } = useTheme();
-  const insets = useSafeAreaInsets();
-
   // const {
   // 	data,
   // 	isLoading,

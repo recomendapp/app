@@ -442,7 +442,7 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
   ) => {
     const t = useTranslations();
     const [showPassword, setShowPassword] = useState(false);
-    const [isFocused, setIsFocused] = useState(false);
+    const [, setIsFocused] = useState(false);
 
     const { colors } = useTheme();
     const text = colors.foreground;

@@ -4,7 +4,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller';
 import { Icons } from '../../constants/Icons';
-import { useTheme } from '../../providers/ThemeProvider';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { KeyboardAwareScrollView } from './KeyboardAwareScrollView';
 import tw from '../../lib/tw';
@@ -47,15 +46,9 @@ export const MultiStepScreen = ({
 
   const paddingBottom = useMemo(() => footerHeight, [footerHeight]);
 
-  const paddingLeft = useMemo(
-    () => insets.left + PADDING_HORIZONTAL,
-    [insets.left],
-  );
+  const paddingLeft = useMemo(() => insets.left + PADDING_HORIZONTAL, [insets.left]);
 
-  const paddingRight = useMemo(
-    () => insets.right + PADDING_HORIZONTAL,
-    [insets.right],
-  );
+  const paddingRight = useMemo(() => insets.right + PADDING_HORIZONTAL, [insets.right]);
 
   const animatedFooterStyle = useAnimatedStyle(() => {
     const kbHeight = Math.abs(keyboardHeight.value);

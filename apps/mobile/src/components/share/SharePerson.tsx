@@ -219,14 +219,14 @@ export const SharePerson = forwardRef<ShareViewRef, SharePersonProps>(
     const { height: screenHeight } = useWindowDimensions();
     const { colors } = useTheme();
     // States
-    const [poster, setPoster] = useState(
+    const [poster] = useState(
       getTmdbImage({ path: person.profilePath, size: 'w780' }) || undefined,
     );
     const { palette } = useImagePalette(poster);
     const [bgColor, setBgColor] = useState<{ index: number; color: string } | null>(
       palette ? { index: 0, color: palette[0] } : null,
     );
-    const [bgType, setBgType] = useState<'color' | 'image'>('color');
+    const [bgType] = useState<'color' | 'image'>('color');
     const [editing, setEditing] = useState(false);
     const editOptions = useMemo((): EditOption[] => {
       return [{ value: 'background', icon: ShapeVerticalRoundedBackground }];

@@ -10,7 +10,7 @@ import { upperFirst } from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CustomerInfo } from 'react-native-purchases';
 import RevenueCatUI from 'react-native-purchases-ui';
-import Animated, { FadeIn, FadeInDown, FadeOut, ZoomIn } from 'react-native-reanimated'; // Imports d'animation
+import Animated, { FadeIn, FadeInDown, FadeOut } from 'react-native-reanimated'; // Imports d'animation
 import { useTranslations } from 'use-intl';
 import * as Haptics from 'expo-haptics';
 import { useUserCacheUpdate } from '@libs/query-client';

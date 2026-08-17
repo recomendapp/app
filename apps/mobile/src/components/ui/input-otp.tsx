@@ -68,7 +68,7 @@ export const InputOTP = forwardRef<InputOTPRef, InputOTPProps>(
     ref,
   ) => {
     const [isFocused, setIsFocused] = useState(false);
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [, setActiveIndex] = useState(0);
     const inputRef = useRef<TextInput>(null);
 
     // Theme colors

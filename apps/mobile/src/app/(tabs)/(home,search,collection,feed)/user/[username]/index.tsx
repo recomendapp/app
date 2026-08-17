@@ -7,7 +7,7 @@ import tw from '../../../../../lib/tw';
 import { useAuth } from '../../../../../providers/AuthProvider';
 import { useTheme } from '../../../../../providers/ThemeProvider';
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ExternalPathString, Link, Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 import { HeaderTitle, useHeaderHeight } from 'expo-router/react-navigation';

@@ -390,10 +390,8 @@ const SettingsAccountScreen = () => {
 };
 
 const DeleteAccountSection = () => {
-  const { user } = useAuth();
   const { colors, mode } = useTheme();
   const toast = useToast();
-  const format = useFormatter();
   const t = useTranslations();
   // Handlers
   const handleDeleteButtonPress = useCallback(() => {

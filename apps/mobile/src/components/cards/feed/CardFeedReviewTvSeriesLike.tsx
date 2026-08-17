@@ -4,7 +4,7 @@ import * as React from 'react';
 import Animated from 'react-native-reanimated';
 import { ImageWithFallback } from '../../utils/ImageWithFallback';
 import { Pressable, View } from 'react-native';
-import { Href, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { Text } from '../../ui/text';
 import { useTranslations } from 'use-intl';
 import { Skeleton } from '../../ui/Skeleton';

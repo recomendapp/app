@@ -25,7 +25,7 @@ import { useToast } from '../../../Toast';
 import { View } from '../../../ui/view';
 import { BrandIcon, BrandIconProps } from '../../../../lib/icons';
 import { useTheme } from '../../../../providers/ThemeProvider';
-import { Platform, ScrollView } from 'react-native';
+import { ScrollView } from 'react-native';
 import * as env from '../../../../env';
 import * as MediaLibrary from 'expo-media-library';
 import { File, Directory, Paths } from 'expo-file-system';

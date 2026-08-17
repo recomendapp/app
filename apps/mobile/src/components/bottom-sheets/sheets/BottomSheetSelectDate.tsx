@@ -9,7 +9,7 @@ import { View } from '../../ui/view';
 import { useTheme } from '../../../providers/ThemeProvider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { upperFirst } from 'lodash';
-import DateTimePicker from '@expo/ui/community/datetime-picker';
+import { DateTimePicker } from '@expo/ui/community/datetime-picker';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { isIOS } from '../../../platform/detection';
 

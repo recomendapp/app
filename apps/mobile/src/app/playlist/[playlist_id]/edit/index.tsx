@@ -22,7 +22,7 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import { Separator } from '../../../../components/ui/separator';
 import { ImageWithFallback } from '../../../../components/utils/ImageWithFallback';
 import { Skeleton } from '../../../../components/ui/Skeleton';
-import { Alert, Pressable } from 'react-native';
+import { Pressable } from 'react-native';
 import { KeyboardAwareScrollView } from '../../../../components/ui/KeyboardAwareScrollView';
 import { useHeaderHeight } from 'expo-router/react-navigation';
 import { LucideIcon } from 'lucide-react-native';
@@ -46,7 +46,7 @@ const ModalPlaylistEdit = () => {
   const playlistId = Number(playlist_id);
   const toast = useToast();
   const insets = useSafeAreaInsets();
-  const { colors, mode } = useTheme();
+  const { colors } = useTheme();
   const router = useRouter();
   const { user } = useAuth();
   const { showActionSheetWithOptions } = useActionSheet();

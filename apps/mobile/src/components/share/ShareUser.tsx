@@ -225,12 +225,12 @@ export const ShareUser = forwardRef<ShareViewRef, ShareUserProps>(
     const { height: screenHeight } = useWindowDimensions();
     const { colors } = useTheme();
     // States
-    const [poster, setPoster] = useState(user.avatar || undefined);
+    const [poster] = useState(user.avatar || undefined);
     const { palette } = useImagePalette(poster);
     const [bgColor, setBgColor] = useState<{ index: number; color: string } | null>(
       palette ? { index: 0, color: palette[0] } : null,
     );
-    const [bgType, setBgType] = useState<'color' | 'image'>('color');
+    const [bgType] = useState<'color' | 'image'>('color');
     const [editing, setEditing] = useState(false);
     const editOptions = useMemo((): EditOption[] => {
       return [{ value: 'background', icon: ShapeVerticalRoundedBackground }];

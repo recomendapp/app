@@ -1,4 +1,3 @@
-import { useModalHeaderOptions } from '../../../hooks/useModalHeaderOptions';
 import { useTheme } from '../../../providers/ThemeProvider';
 import { Stack } from 'expo-router';
 import { useTranslations } from 'use-intl';

@@ -4,7 +4,6 @@ import { Text } from '../ui/text';
 import { GAP } from '../../theme/globals';
 import { useCallback, useMemo } from 'react';
 import { useAuth } from '../../providers/AuthProvider';
-import { useTranslations } from 'use-intl';
 import { useTheme } from '../../providers/ThemeProvider';
 import { Icons } from '../../constants/Icons';
 import { BrandIcon, BrandIconProps } from '../../lib/icons';
@@ -29,7 +28,6 @@ export const OAuthProviders = ({
 }: OAuthProvidersProps) => {
   const { loginWithOAuth } = useAuth();
   const { colors, mode } = useTheme();
-  const t = useTranslations();
 
   const providers = useMemo(
     (): Provider[] =>

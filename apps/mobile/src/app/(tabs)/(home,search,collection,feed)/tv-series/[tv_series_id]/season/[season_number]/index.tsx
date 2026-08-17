@@ -233,7 +233,6 @@ const TvSeriesSeasonScreen = () => {
   const {
     data: episodes,
     isLoading: isEpisodesLoading,
-    isRefetching: isEpisodesRefetching,
     refetch: refetchEpisodes,
     fetchNextPage,
     hasNextPage,
