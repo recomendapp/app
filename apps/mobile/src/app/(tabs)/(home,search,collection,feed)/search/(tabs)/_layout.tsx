@@ -1,9 +1,8 @@
-import { Href, Stack, useRouter } from 'expo-router';
+import { Href, NativeStackHeaderProps, Stack, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 import { SegmentedControl } from '../../../../../components/ui/SegmentedControl';
 import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
-import { NativeStackHeaderProps } from '@react-navigation/native-stack';
 import { useMemo } from 'react';
 import useSearchStore, { SearchType } from '../../../../../stores/useSearchStore';
 import Animated, { FadeInUp } from 'react-native-reanimated';

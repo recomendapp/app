@@ -14,14 +14,14 @@ import { upperFirst } from 'lodash';
 import useColorConverter from '../../../../hooks/useColorConverter';
 import { Skeleton } from '../../../ui/Skeleton';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Link, useRouter } from 'expo-router';
+import { Link } from 'expo-router';
 import { useTheme } from '../../../../providers/ThemeProvider';
 import tw from '../../../../lib/tw';
 import { IconMediaRating } from '../../../medias/IconMediaRating';
 import { useTranslations } from 'use-intl';
 import { Text } from '../../../ui/text';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../theme/globals';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useImagePalette } from '../../../../hooks/useImagePalette';
 import AnimatedImage from '../../../ui/AnimatedImage';
 import { getTmdbImage } from '../../../../lib/tmdb/getTmdbImage';
@@ -42,7 +42,6 @@ export const ProfileFilmHeader: React.FC<ProfileFilmHeaderProps> = ({
   triggerHeight,
 }) => {
   const t = useTranslations();
-  const router = useRouter();
   const { hslToRgb } = useColorConverter();
   const { colors } = useTheme();
   const navigationHeaderHeight = useHeaderHeight();
@@ -90,8 +89,11 @@ export const ProfileFilmHeader: React.FC<ProfileFilmHeaderProps> = ({
       onLayout={(event: LayoutChangeEvent) => {
         'worklet';
         const height = event.nativeEvent.layout.height;
+        // Reanimated shared value mutations on the UI thread.
+        /* eslint-disable react-hooks/immutability */
         headerHeight.value = height;
         triggerHeight.value = (height - navigationHeaderHeight) * 0.7;
+        /* eslint-enable react-hooks/immutability */
       }}
     >
       <Animated.View style={[tw`absolute inset-0`, bgAnim]}>
@@ -164,35 +166,37 @@ export const ProfileFilmHeader: React.FC<ProfileFilmHeaderProps> = ({
         </Animated.View>
         <Animated.View entering={FadeInDown.delay(200).duration(500)}>
           {!loading ? (
-            <Pressable
+            <Link
               disabled={!log?.movieId}
-              onPress={
-                log
-                  ? () =>
-                      router.push({
-                        pathname: '/film/[film_id]',
-                        params: {
-                          film_id: log?.movieId,
-                        },
-                      })
-                  : undefined
-              }
+              href={{
+                pathname: '/film/[film_id]',
+                params: {
+                  film_id: log?.movieId ?? '',
+                },
+              }}
+              asChild
             >
-              <AnimatedImageWithFallback
-                onLayout={(e) => {
-                  'worklet';
-                  posterHeight.value = e.nativeEvent.layout.height;
-                }}
-                transition={250}
-                alt={log?.movie.title ?? ''}
-                source={{ uri: getTmdbImage({ path: log?.movie.posterPath, size: 'w780' }) ?? '' }}
-                style={{
-                  ...{ aspectRatio: 2 / 3 },
-                  ...tw`rounded-md w-24 h-auto`,
-                }}
-                type={'movie'}
-              />
-            </Pressable>
+              <Pressable>
+                <Link.AppleZoom>
+                  <AnimatedImageWithFallback
+                    onLayout={(e) => {
+                      'worklet';
+                      posterHeight.value = e.nativeEvent.layout.height;
+                    }}
+                    transition={250}
+                    alt={log?.movie.title ?? ''}
+                    source={{
+                      uri: getTmdbImage({ path: log?.movie.posterPath, size: 'w780' }) ?? '',
+                    }}
+                    style={{
+                      ...{ aspectRatio: 2 / 3 },
+                      ...tw`rounded-md w-24 h-auto`,
+                    }}
+                    type={'movie'}
+                  />
+                </Link.AppleZoom>
+              </Pressable>
+            </Link>
           ) : (
             <Skeleton style={[{ aspectRatio: 2 / 3 }, tw`w-24`]} />
           )}

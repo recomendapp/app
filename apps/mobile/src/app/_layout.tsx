@@ -79,16 +79,16 @@ const RootLayoutNav = () => {
           name="playlist/add/[type]/[id]"
           options={{
             title: upperFirst(t('common.messages.add_to_playlist')),
-            presentation:
-              Platform.OS === 'ios'
-                ? isLiquidGlassAvailable && osName !== 'iPadOS'
-                  ? 'formSheet'
-                  : 'modal'
-                : 'modal',
+            // presentation:
+            //   Platform.OS === 'ios'
+            //     ? isLiquidGlassAvailable && osName !== 'iPadOS'
+            //       ? 'formSheet'
+            //       : 'modal'
+            //     : 'modal',
+            presentation: 'modal',
             sheetGrabberVisible: true,
             sheetAllowedDetents: [0.8],
             sheetInitialDetentIndex: 0,
-            headerTransparent: false,
             ...(isLiquidGlassAvailable
               ? {
                   contentStyle: { backgroundColor: 'transparent' },
@@ -121,22 +121,68 @@ const RootLayoutNav = () => {
             : {}),
         }}
       />
+      <Stack.Screen
+        name="film/[film_id]/log"
+        options={{
+          presentation: 'formSheet',
+          sheetGrabberVisible: true,
+          sheetAllowedDetents: 'fitToContents',
+          sheetInitialDetentIndex: 0,
+          ...(isLiquidGlassAvailable
+            ? {
+                contentStyle: { backgroundColor: 'transparent' },
+                headerStyle: { backgroundColor: 'transparent' },
+              }
+            : {}),
+        }}
+      />
+      {/* TV SERIES */}
+      <Stack.Screen
+        name="tv-series/[tv_series_id]/log"
+        options={{
+          presentation: 'formSheet',
+          sheetGrabberVisible: true,
+          sheetAllowedDetents: 'fitToContents',
+          sheetInitialDetentIndex: 0,
+          ...(isLiquidGlassAvailable
+            ? {
+                contentStyle: { backgroundColor: 'transparent' },
+                headerStyle: { backgroundColor: 'transparent' },
+              }
+            : {}),
+        }}
+      />
+      <Stack.Screen
+        name="tv-series/[tv_series_id]/season/[season_number]/log"
+        options={{
+          presentation: 'formSheet',
+          sheetGrabberVisible: true,
+          sheetAllowedDetents: 'fitToContents',
+          sheetInitialDetentIndex: 0,
+          ...(isLiquidGlassAvailable
+            ? {
+                contentStyle: { backgroundColor: 'transparent' },
+                headerStyle: { backgroundColor: 'transparent' },
+              }
+            : {}),
+        }}
+      />
       {/* RECOS */}
       <Stack.Protected guard={!!user}>
         <Stack.Screen
           name="reco/send/[type]/[id]"
           options={{
             title: upperFirst(t('common.messages.send_to_friend')),
-            presentation:
-              Platform.OS === 'ios'
-                ? isLiquidGlassAvailable && osName !== 'iPadOS'
-                  ? 'formSheet'
-                  : 'modal'
-                : 'modal',
+            // presentation:
+            //   Platform.OS === 'ios'
+            //     ? isLiquidGlassAvailable && osName !== 'iPadOS'
+            //       ? 'formSheet'
+            //       : 'modal'
+            //     : 'modal',
+            presentation: 'modal',
             sheetGrabberVisible: true,
             sheetAllowedDetents: [0.8],
             sheetInitialDetentIndex: 0,
-            headerTransparent: false,
             ...(isLiquidGlassAvailable
               ? {
                   contentStyle: { backgroundColor: 'transparent' },

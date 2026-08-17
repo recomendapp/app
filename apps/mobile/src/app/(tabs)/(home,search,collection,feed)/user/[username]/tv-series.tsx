@@ -1,21 +1,23 @@
 import { Button } from '../../../../../components/ui/Button';
 import { Icons } from '../../../../../constants/Icons';
 import tw from '../../../../../lib/tw';
-import { useTheme } from '../../../../../providers/ThemeProvider';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { LegendList } from '@legendapp/list/react-native';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { upperFirst } from 'lodash';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import { useTranslations } from 'use-intl';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { CardTvSeries } from '../../../../../components/cards/CardTvSeries';
-import { HeaderTitle } from '@react-navigation/elements';
+import { HeaderTitle, useHeaderHeight } from 'expo-router/react-navigation';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { userByUsernameOptions, userTvSeriesLogsInfiniteOptions } from '@libs/query-client';
 import { CardError } from '../../../../../components/cards/CardError';
 import { CardEmpty } from '../../../../../components/cards/CardEmpty';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { isIOS } from '../../../../../platform/detection';
+import { useTheme } from '../../../../../providers/ThemeProvider';
 
 interface sortBy {
   label: string;
@@ -27,7 +29,9 @@ const UserCollectionTvSeries = () => {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const { username } = useLocalSearchParams<{ username: string }>();
   const { data: profile } = useQuery(userByUsernameOptions({ username: username }));
-  const { bottomOffset, tabBarHeight } = useTheme();
+  const insets = useSafeAreaInsets();
+  const navigationHeaderHeight = useHeaderHeight();
+  const { isLiquidGlassAvailable } = useTheme();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(
@@ -52,7 +56,7 @@ const UserCollectionTvSeries = () => {
     );
   const tvSeries = useMemo(() => data?.pages.flatMap((page) => page.data) || [], [data]);
   // Handlers
-  const handleSortBy = useCallback(() => {
+  const handleSortBy = () => {
     const sortByOptionsWithCancel = [
       ...sortByOptions,
       { label: upperFirst(t('common.messages.cancel')), value: 'cancel' },
@@ -71,18 +75,66 @@ const UserCollectionTvSeries = () => {
         setSortBy(sortByOptionsWithCancel[selectedIndex] as sortBy);
       },
     );
-  }, [sortByOptions, showActionSheetWithOptions, sortBy.value, t]);
+  };
 
   return (
     <>
       <Stack.Screen
         options={{
           title: profile ? `@${profile.username}` : '',
+          headerTransparent: true,
+          ...(isLiquidGlassAvailable
+            ? {
+                headerStyle: { backgroundColor: 'transparent' },
+              }
+            : {}),
           headerTitle: (props) => (
             <HeaderTitle {...props}>
               {upperFirst(t('common.messages.tv_series', { count: 2 }))}
             </HeaderTitle>
           ),
+          unstable_headerRightItems: () => [
+            {
+              type: 'menu' as const,
+              label: upperFirst(t('common.messages.sort_by')),
+              icon: {
+                type: 'sfSymbol' as const,
+                name: (sortOrder === 'desc' ? 'arrow.down' : 'arrow.up') as
+                  | 'arrow.down'
+                  | 'arrow.up',
+              },
+              menu: {
+                title: upperFirst(t('common.messages.sort_by')),
+                // Tapping the already-active field flips the order instead of no-op'ing —
+                // the order (asc/desc) isn't a separate selectable group, since a native
+                // switch control isn't available as a menu item type in this API.
+                items: sortByOptions.map((option) => {
+                  const isActive = option.value === sortBy.value;
+                  return {
+                    type: 'action' as const,
+                    label: option.label,
+                    description: isActive
+                      ? upperFirst(
+                          t(
+                            sortOrder === 'desc'
+                              ? 'common.messages.order_desc'
+                              : 'common.messages.order_asc',
+                          ),
+                        )
+                      : undefined,
+                    state: (isActive ? 'on' : 'off') as 'on' | 'off',
+                    onPress: () => {
+                      if (isActive) {
+                        setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc');
+                      } else {
+                        setSortBy(option);
+                      }
+                    },
+                  };
+                }),
+              },
+            },
+          ],
         }}
       />
       <LegendList
@@ -110,17 +162,19 @@ const UserCollectionTvSeries = () => {
           />
         )}
         ListHeaderComponent={
-          <View style={tw.style('flex flex-row justify-end items-center gap-2 py-2')}>
-            <Button
-              icon={sortOrder === 'desc' ? Icons.ArrowDown : Icons.ArrowUp}
-              variant="muted"
-              size="icon"
-              onPress={() => setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'))}
-            />
-            <Button icon={Icons.ChevronDown} variant="muted" onPress={handleSortBy}>
-              {sortBy.label}
-            </Button>
-          </View>
+          isIOS ? undefined : (
+            <View style={tw.style('flex flex-row justify-end items-center gap-2 py-2')}>
+              <Button
+                icon={sortOrder === 'desc' ? Icons.ArrowDown : Icons.ArrowUp}
+                variant="muted"
+                size="icon"
+                onPress={() => setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'))}
+              />
+              <Button icon={Icons.ChevronDown} variant="muted" onPress={handleSortBy}>
+                {sortBy.label}
+              </Button>
+            </View>
+          )
         }
         ListEmptyComponent={
           <View style={tw`flex-1 items-center justify-center`}>
@@ -147,11 +201,9 @@ const UserCollectionTvSeries = () => {
         onEndReachedThreshold={0.5}
         contentContainerStyle={{
           gap: GAP,
+          paddingTop: navigationHeaderHeight,
           paddingHorizontal: PADDING_HORIZONTAL,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
-        }}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
         }}
         maintainVisibleContentPosition={false}
         keyExtractor={(item) => item.id.toString()}

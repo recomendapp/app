@@ -1,8 +1,7 @@
 import * as React from 'react';
-// import { UserActivityMovie, FixedOmit } from "@recomendapp/types";
 import Animated from 'react-native-reanimated';
 import { ImageWithFallback } from '../utils/ImageWithFallback';
-import { Href, useRouter } from 'expo-router';
+import { Href, Link } from 'expo-router';
 import tw from '../../lib/tw';
 import { Pressable, View } from 'react-native';
 import { useTheme } from '../../providers/ThemeProvider';
@@ -11,7 +10,6 @@ import { IconMediaRating } from '../medias/IconMediaRating';
 import { Skeleton } from '../ui/Skeleton';
 import BottomSheetMovie from '../bottom-sheets/sheets/BottomSheetMovie';
 import { Text } from '../ui/text';
-import ButtonUserLogMovieRating from '../buttons/movies/ButtonUserLogMovieRating';
 import { GAP } from '../../theme/globals';
 import { getTmdbImage } from '../../lib/tmdb/getTmdbImage';
 import { LogMovie, LogMovieWithMovieNoReview, MovieCompact, UserSummary } from '@libs/api-js';
@@ -120,44 +118,70 @@ CardMovieDefault.displayName = 'CardMovieDefault';
 
 const CardMoviePoster = React.forwardRef<
   React.ComponentRef<typeof Animated.View>,
-  FixedOmit<CardMovieProps, 'variant' | 'linked' | 'onPress' | 'onLongPress'>
->(({ style, movie, skeleton, activity, profile, showRating, children, ...props }, ref) => {
-  return (
-    <Animated.View
-      ref={ref}
-      style={[
-        { aspectRatio: 2 / 3 },
-        tw.style(
-          'relative flex gap-4 items-center w-32 shrink-0 rounded-sm border-transparent overflow-hidden',
-        ),
-        style,
-      ]}
-      {...props}
-    >
-      {!skeleton ? (
-        <ImageWithFallback
-          source={{ uri: getTmdbImage({ path: movie.posterPath, size: 'w342' }) }}
-          alt={movie.title ?? ''}
-          type={'movie'}
-        />
-      ) : (
-        <Skeleton style={tw.style('w-full h-full')} />
-      )}
-      {!skeleton &&
-      (movie.voteAverage ||
-        profile?.log?.rating ||
-        profile?.log?.isLiked ||
-        profile?.log?.isReviewed) ? (
-        <View style={tw`absolute top-1 right-1 flex-col gap-1`}>
-          {movie.voteAverage ? <IconMediaRating rating={movie.voteAverage} /> : null}
-          {profile?.log?.isLiked || profile?.log?.rating || profile?.log?.isReviewed ? (
-            <IconMediaRating rating={profile?.log?.rating} variant="profile" />
-          ) : null}
-        </View>
-      ) : null}
-    </Animated.View>
-  );
-});
+  FixedOmit<CardMovieProps, 'variant' | 'linked' | 'onPress' | 'onLongPress'> & {
+    // Only true when this card is actually rendered inside a <Link> (see CardMovie below) —
+    // Link.AppleZoom throws if used outside one.
+    enableZoomTransition?: boolean;
+  }
+>(
+  (
+    {
+      style,
+      movie,
+      skeleton,
+      activity,
+      profile,
+      showRating,
+      children,
+      enableZoomTransition,
+      ...props
+    },
+    ref,
+  ) => {
+    const poster = (
+      <ImageWithFallback
+        source={{ uri: getTmdbImage({ path: movie?.posterPath, size: 'w342' }) }}
+        alt={movie?.title ?? ''}
+        type={'movie'}
+      />
+    );
+    return (
+      <Animated.View
+        ref={ref}
+        style={[
+          { aspectRatio: 2 / 3 },
+          tw.style(
+            'relative flex gap-4 items-center w-32 shrink-0 rounded-sm border-transparent overflow-hidden',
+          ),
+          style,
+        ]}
+        {...props}
+      >
+        {!skeleton ? (
+          enableZoomTransition ? (
+            <Link.AppleZoom>{poster}</Link.AppleZoom>
+          ) : (
+            poster
+          )
+        ) : (
+          <Skeleton style={tw.style('w-full h-full')} />
+        )}
+        {!skeleton &&
+        (movie.voteAverage ||
+          profile?.log?.rating ||
+          profile?.log?.isLiked ||
+          profile?.log?.isReviewed) ? (
+          <View style={tw`absolute top-1 right-1 flex-col gap-1`}>
+            {movie.voteAverage ? <IconMediaRating rating={movie.voteAverage} /> : null}
+            {profile?.log?.isLiked || profile?.log?.rating || profile?.log?.isReviewed ? (
+              <IconMediaRating rating={profile?.log?.rating} variant="profile" />
+            ) : null}
+          </View>
+        ) : null}
+      </Animated.View>
+    );
+  },
+);
 CardMoviePoster.displayName = 'CardMoviePoster';
 
 const CardMovieList = React.forwardRef<
@@ -212,7 +236,7 @@ const CardMovieList = React.forwardRef<
               (skeleton ? (
                 <Skeleton style={tw`w-20 h-5`} />
               ) : (
-                movie.directors?.length && (
+                !!movie.directors?.length && (
                   <Text style={tw`text-sm`} textColor="muted" numberOfLines={1}>
                     {movie.directors.map((director) => director.name).join(', ')}
                   </Text>
@@ -242,47 +266,55 @@ CardMovieList.displayName = 'CardMovieList';
 
 const CardMovie = React.forwardRef<React.ComponentRef<typeof Animated.View>, CardMovieProps>(
   ({ variant = 'default', href: hrefProps, onPress, onLongPress, ...props }, ref) => {
-    const router = useRouter();
     const openSheet = useBottomSheetStore((state) => state.openSheet);
     const href: Href | null | undefined =
       hrefProps ||
       (props.movie
         ? { pathname: '/film/[film_id]', params: { film_id: props.movie.id } }
         : undefined);
+    // Zoom transition (see Link.AppleZoom in CardMoviePoster) requires a real <Link> ancestor,
+    // so only offer it when this card actually navigates via one (href !== null).
+    const isLinked = !!href;
 
     const content =
       variant === 'default' ? (
         <CardMovieDefault ref={ref} {...props} />
       ) : variant === 'poster' ? (
-        <CardMoviePoster ref={ref} {...props} />
+        <CardMoviePoster ref={ref} {...props} enableZoomTransition={isLinked} />
       ) : variant === 'list' ? (
         <CardMovieList ref={ref} {...props} />
       ) : null;
 
     if (props.skeleton) return content;
 
+    const handleLongPress = () => {
+      openSheet(BottomSheetMovie, {
+        movie: props.movie,
+        log: props.profile
+          ? {
+              ...props.profile.log,
+              movie: props.movie,
+              user: props.profile.user,
+            }
+          : undefined,
+      });
+      onLongPress?.();
+    };
+
+    if (!href) {
+      return (
+        <Pressable onPress={onPress} onLongPress={handleLongPress}>
+          {content}
+        </Pressable>
+      );
+    }
+
     return (
-      <Pressable
-        onPress={() => {
-          if (href) router.push(href);
-          onPress?.();
-        }}
-        onLongPress={() => {
-          openSheet(BottomSheetMovie, {
-            movie: props.movie,
-            log: props.profile
-              ? {
-                  ...props.profile.log,
-                  movie: props.movie,
-                  user: props.profile.user,
-                }
-              : undefined,
-          });
-          onLongPress?.();
-        }}
-      >
-        {content}
-      </Pressable>
+      <Link href={href} asChild>
+        <Pressable onPress={onPress} onLongPress={handleLongPress}>
+          {content}
+        </Pressable>
+      </Link>
     );
   },
 );

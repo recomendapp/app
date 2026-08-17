@@ -18,7 +18,7 @@ import tw from '../../../lib/tw';
 import { useTranslations } from 'use-intl';
 import { Text } from '../../ui/text';
 import { BORDER_RADIUS, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { View } from '../../ui/view';
 import { useImagePalette } from '../../../hooks/useImagePalette';
 import { Person } from '@libs/api-js';
@@ -96,8 +96,11 @@ export const PersonHeader: React.FC<PersonHeaderProps> = ({
       onLayout={(event: LayoutChangeEvent) => {
         'worklet';
         const height = event.nativeEvent.layout.height;
+        // Reanimated shared value mutations on the UI thread.
+        /* eslint-disable react-hooks/immutability */
         headerHeight.value = height;
         triggerHeight.value = (height - navigationHeaderHeight) * 0.7;
+        /* eslint-enable react-hooks/immutability */
       }}
     >
       <Animated.View style={[tw`absolute inset-0`, bgAnim]}>

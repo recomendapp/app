@@ -232,6 +232,7 @@ const SignupScreen = () => {
 
   useEffect(() => {
     if (isVerified) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reacts to isVerified with a toast + timed transition, not pure derived state
       setCurrentStep(STEPS.EMAIL_VERIFICATION);
       toast.success(t('common.common.'), { duration: 3000 });
 

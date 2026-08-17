@@ -2,7 +2,7 @@ import { Text } from './text';
 import { useTheme } from '../../providers/ThemeProvider';
 import { BORDER_RADIUS, CORNERS, FONT_SIZE } from '../../theme/globals';
 import { Loader2 } from 'lucide-react-native';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { ActivityIndicator, Animated, StyleSheet, View, ViewStyle } from 'react-native';
 
 // Types
@@ -67,19 +67,21 @@ export function Spinner({
   color,
   speed = 'normal',
 }: SpinnerProps) {
-  const rotateAnim = useRef(new Animated.Value(0)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
-  const dotsAnim = useRef([
-    new Animated.Value(0.3),
-    new Animated.Value(0.3),
-    new Animated.Value(0.3),
-  ]).current;
-  const barsAnim = useRef([
-    new Animated.Value(0.3),
-    new Animated.Value(0.3),
-    new Animated.Value(0.3),
-    new Animated.Value(0.3),
-  ]).current;
+  const rotateAnim = useMemo(() => new Animated.Value(0), []);
+  const pulseAnim = useMemo(() => new Animated.Value(1), []);
+  const dotsAnim = useMemo(
+    () => [new Animated.Value(0.3), new Animated.Value(0.3), new Animated.Value(0.3)],
+    [],
+  );
+  const barsAnim = useMemo(
+    () => [
+      new Animated.Value(0.3),
+      new Animated.Value(0.3),
+      new Animated.Value(0.3),
+      new Animated.Value(0.3),
+    ],
+    [],
+  );
 
   // Theme colors
   const { colors } = useTheme();
@@ -307,7 +309,7 @@ export function LoadingOverlay({
   ...spinnerProps
 }: LoadingOverlayProps) {
   const { colors } = useTheme();
-  const overlayOpacity = useRef(new Animated.Value(0)).current;
+  const overlayOpacity = useMemo(() => new Animated.Value(0), []);
   const backgroundColor = colors.background;
   const cardColor = colors.card;
 

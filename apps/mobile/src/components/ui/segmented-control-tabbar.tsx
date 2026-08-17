@@ -1,4 +1,4 @@
-import type { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs';
+import type { MaterialTopTabBarProps } from 'expo-router/js-top-tabs';
 import { upperFirst } from 'lodash';
 import { View } from 'react-native';
 import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
@@ -9,11 +9,7 @@ export const SegmentedControlTabBar = ({
   descriptors,
   navigation,
 }: MaterialTopTabBarProps) => {
-  const onPressTab = (
-    item: (typeof state.routes)[number],
-    index: number,
-    isFocused: boolean,
-  ) => {
+  const onPressTab = (item: (typeof state.routes)[number], index: number, isFocused: boolean) => {
     const event = navigation.emit({
       type: 'tabPress',
       target: item.key,
@@ -32,11 +28,10 @@ export const SegmentedControlTabBar = ({
       }}
     >
       <SegmentedControl
-        values={state.routes.map((option) => {
+        values={state.routes.map((option: (typeof state.routes)[number]) => {
           const { options } = descriptors[option.key];
           const label =
-            options.tabBarLabel !== undefined &&
-            typeof options.tabBarLabel === 'string'
+            options.tabBarLabel !== undefined && typeof options.tabBarLabel === 'string'
               ? options.tabBarLabel
               : options.title !== undefined
                 ? options.title

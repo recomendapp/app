@@ -2,7 +2,7 @@ import { ImageWithFallback } from '../utils/ImageWithFallback';
 import React from 'react';
 import Animated from 'react-native-reanimated';
 import { Pressable, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { Link } from 'expo-router';
 import tw from '../../lib/tw';
 import { useTheme } from '../../providers/ThemeProvider';
 import useBottomSheetStore from '../../stores/useBottomSheetStore';
@@ -38,80 +38,43 @@ export type CardPlaylistProps = CardPlaylistBaseProps &
 
 const CardPlaylistDefault = React.forwardRef<
   React.ComponentRef<typeof Animated.View>,
-  FixedOmit<CardPlaylistProps, 'variant' | 'linked' | 'onPress' | 'onLongPress'>
->(({ style, playlist, owner, skeleton, showItemsCount = false, children, ...props }, ref) => {
-  const t = useTranslations();
-  const { colors } = useTheme();
-  return (
-    <Animated.View ref={ref} style={[tw`gap-2`, style]} {...props}>
-      {!skeleton ? (
-        <ImageWithFallback
-          source={{ uri: playlist.poster ?? '' }}
-          alt={playlist.title}
-          type="playlist"
-          style={tw`aspect-square w-auto h-auto`}
-        />
-      ) : (
-        <Skeleton style={tw`aspect-square w-auto h-auto`} />
-      )}
-      <View style={skeleton ? tw`gap-1` : undefined}>
+  FixedOmit<CardPlaylistProps, 'variant' | 'linked' | 'onPress' | 'onLongPress'> & {
+    // Only true when this card is actually rendered inside a <Link> (see CardPlaylist below) —
+    // Link.AppleZoom throws if used outside one.
+    enableZoomTransition?: boolean;
+  }
+>(
+  (
+    {
+      style,
+      playlist,
+      owner,
+      skeleton,
+      showItemsCount = false,
+      children,
+      enableZoomTransition,
+      ...props
+    },
+    ref,
+  ) => {
+    const t = useTranslations();
+    const { colors } = useTheme();
+    const poster = (
+      <ImageWithFallback
+        source={{ uri: playlist?.poster ?? '' }}
+        alt={playlist?.title ?? ''}
+        type="playlist"
+        style={tw`aspect-square w-auto h-auto`}
+      />
+    );
+    return (
+      <Animated.View ref={ref} style={[tw`gap-2`, style]} {...props}>
         {!skeleton ? (
-          <Text numberOfLines={2} style={tw`font-medium`}>
-            {playlist.title}
-          </Text>
-        ) : (
-          <Skeleton style={tw`w-24 h-5`} />
-        )}
-        {owner &&
-          (!skeleton ? (
-            <Text
-              style={{ color: colors.mutedForeground }}
-              numberOfLines={1}
-              className="text-sm italic"
-            >
-              {t('common.messages.by_name', { name: owner.username })}
-            </Text>
+          enableZoomTransition ? (
+            <Link.AppleZoom>{poster}</Link.AppleZoom>
           ) : (
-            <Skeleton style={tw`w-24 h-5`} />
-          ))}
-        {showItemsCount &&
-          (!skeleton ? (
-            <Text
-              style={{ color: colors.mutedForeground }}
-              numberOfLines={1}
-              className="text-sm italic"
-            >
-              {t('common.messages.item_count', { count: playlist.itemsCount })}
-            </Text>
-          ) : (
-            <Skeleton style={tw`w-10 h-5`} />
-          ))}
-      </View>
-    </Animated.View>
-  );
-});
-CardPlaylistDefault.displayName = 'CardPlaylistDefault';
-
-const CardPlaylistList = React.forwardRef<
-  React.ComponentRef<typeof Animated.View>,
-  FixedOmit<CardPlaylistProps, 'variant' | 'linked' | 'onPress' | 'onLongPress'>
->(({ style, playlist, owner, skeleton, showItemsCount, children, ...props }, ref) => {
-  const { colors } = useTheme();
-  const t = useTranslations();
-  return (
-    <Animated.View
-      ref={ref}
-      style={[tw`flex-row justify-between items-center p-1 h-20 gap-2`, style]}
-      {...props}
-    >
-      <View style={tw`flex-1 flex-row items-center gap-2`}>
-        {!skeleton ? (
-          <ImageWithFallback
-            source={{ uri: playlist.poster ?? '' }}
-            alt={playlist.title}
-            type="playlist"
-            style={tw`aspect-square w-auto`}
-          />
+            poster
+          )
         ) : (
           <Skeleton style={tw`aspect-square w-auto h-auto`} />
         )}
@@ -148,46 +111,128 @@ const CardPlaylistList = React.forwardRef<
               <Skeleton style={tw`w-10 h-5`} />
             ))}
         </View>
-      </View>
-    </Animated.View>
-  );
-});
+      </Animated.View>
+    );
+  },
+);
+CardPlaylistDefault.displayName = 'CardPlaylistDefault';
+
+const CardPlaylistList = React.forwardRef<
+  React.ComponentRef<typeof Animated.View>,
+  FixedOmit<CardPlaylistProps, 'variant' | 'linked' | 'onPress' | 'onLongPress'> & {
+    // Only true when this card is actually rendered inside a <Link> (see CardPlaylist below) —
+    // Link.AppleZoom throws if used outside one.
+    enableZoomTransition?: boolean;
+  }
+>(
+  (
+    { style, playlist, owner, skeleton, showItemsCount, children, enableZoomTransition, ...props },
+    ref,
+  ) => {
+    const { colors } = useTheme();
+    const t = useTranslations();
+    const poster = (
+      <ImageWithFallback
+        source={{ uri: playlist?.poster ?? '' }}
+        alt={playlist?.title ?? ''}
+        type="playlist"
+        style={tw`aspect-square w-auto`}
+      />
+    );
+    return (
+      <Animated.View
+        ref={ref}
+        style={[tw`flex-row justify-between items-center p-1 h-20 gap-2`, style]}
+        {...props}
+      >
+        <View style={tw`flex-1 flex-row items-center gap-2`}>
+          {!skeleton ? (
+            enableZoomTransition ? (
+              <Link.AppleZoom>{poster}</Link.AppleZoom>
+            ) : (
+              poster
+            )
+          ) : (
+            <Skeleton style={tw`aspect-square w-auto h-auto`} />
+          )}
+          <View style={skeleton ? tw`gap-1` : undefined}>
+            {!skeleton ? (
+              <Text numberOfLines={2} style={tw`font-medium`}>
+                {playlist.title}
+              </Text>
+            ) : (
+              <Skeleton style={tw`w-24 h-5`} />
+            )}
+            {owner &&
+              (!skeleton ? (
+                <Text
+                  style={{ color: colors.mutedForeground }}
+                  numberOfLines={1}
+                  className="text-sm italic"
+                >
+                  {t('common.messages.by_name', { name: owner.username })}
+                </Text>
+              ) : (
+                <Skeleton style={tw`w-24 h-5`} />
+              ))}
+            {showItemsCount &&
+              (!skeleton ? (
+                <Text
+                  style={{ color: colors.mutedForeground }}
+                  numberOfLines={1}
+                  className="text-sm italic"
+                >
+                  {t('common.messages.item_count', { count: playlist.itemsCount })}
+                </Text>
+              ) : (
+                <Skeleton style={tw`w-10 h-5`} />
+              ))}
+          </View>
+        </View>
+      </Animated.View>
+    );
+  },
+);
 CardPlaylistList.displayName = 'CardPlaylistList';
 
 const CardPlaylist = React.forwardRef<React.ComponentRef<typeof Animated.View>, CardPlaylistProps>(
   ({ variant = 'default', linked = true, onPress, onLongPress, ...props }, ref) => {
-    const router = useRouter();
     const openSheet = useBottomSheetStore((state) => state.openSheet);
 
     const content =
       variant === 'default' ? (
-        <CardPlaylistDefault ref={ref} {...props} />
+        <CardPlaylistDefault ref={ref} {...props} enableZoomTransition={linked} />
       ) : variant === 'list' ? (
-        <CardPlaylistList ref={ref} {...props} />
+        <CardPlaylistList ref={ref} {...props} enableZoomTransition={linked} />
       ) : null;
 
     if (props.skeleton) return content;
 
+    const handleLongPress = () => {
+      openSheet(BottomSheetPlaylist, {
+        playlist: props.playlist,
+        owner: props.owner,
+      });
+      onLongPress?.();
+    };
+
+    if (!linked) {
+      return (
+        <Pressable onPress={onPress} onLongPress={handleLongPress}>
+          {content}
+        </Pressable>
+      );
+    }
+
     return (
-      <Pressable
-        onPress={() => {
-          if (linked)
-            router.push({
-              pathname: '/playlist/[playlist_id]',
-              params: { playlist_id: props.playlist.id },
-            });
-          onPress?.();
-        }}
-        onLongPress={() => {
-          openSheet(BottomSheetPlaylist, {
-            playlist: props.playlist,
-            owner: props.owner,
-          });
-          onLongPress?.();
-        }}
+      <Link
+        href={{ pathname: '/playlist/[playlist_id]', params: { playlist_id: props.playlist.id } }}
+        asChild
       >
-        {content}
-      </Pressable>
+        <Pressable onPress={onPress} onLongPress={handleLongPress}>
+          {content}
+        </Pressable>
+      </Link>
     );
   },
 );

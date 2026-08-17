@@ -10,7 +10,7 @@ import {
 import { View } from '../ui/view';
 import tw from '../../lib/tw';
 import { ImageWithFallback } from '../utils/ImageWithFallback';
-import ViewShot from 'react-native-view-shot';
+import ViewShot, { type ViewShotRef } from 'react-native-view-shot';
 import { Text } from '../ui/text';
 import { Icons } from '../../constants/Icons';
 import { Button } from '../ui/Button';
@@ -434,7 +434,7 @@ const BackdropImageSelector = ({
 
 export const ShareTvSeries = forwardRef<ShareViewRef, ShareTvSeriesProps>(
   ({ tvSeries, variant = 'default', isPremium, ...props }, ref) => {
-    const viewShotRef = useRef<ViewShot>(null);
+    const viewShotRef = useRef<ViewShotRef>(null);
     const { height: screenHeight } = useWindowDimensions();
     const { colors } = useTheme();
     const t = useTranslations();
@@ -513,14 +513,14 @@ export const ShareTvSeries = forwardRef<ShareViewRef, ShareTvSeriesProps>(
       },
     }));
 
-    const ratingBadge = useMemo((): ShareRating | null => {
-      if (!showRating || !log?.rating) return null;
-      return {
-        rating: log.rating,
-        name: user?.name || user?.username || '',
-        avatarUrl: user?.avatar,
-      };
-    }, [showRating, log?.rating, user?.name, user?.username, user?.avatar]);
+    const ratingBadge: ShareRating | null =
+      showRating && log?.rating
+        ? {
+            rating: log.rating,
+            name: user?.name || user?.username || '',
+            avatarUrl: user?.avatar,
+          }
+        : null;
 
     const renderSticker = useCallback(
       (scale: number) => (
@@ -628,6 +628,8 @@ export const ShareTvSeries = forwardRef<ShareViewRef, ShareTvSeriesProps>(
     }, [hasRating, showRating, t]);
 
     // useEffects
+    // Resets bgColor from the async palette; bgColor stays independently user-editable afterward.
+    /* eslint-disable react-hooks/set-state-in-effect */
     useEffect(() => {
       if (palette) {
         setBgColor({ index: 0, color: palette[0] });
@@ -635,6 +637,7 @@ export const ShareTvSeries = forwardRef<ShareViewRef, ShareTvSeriesProps>(
         setBgColor(null);
       }
     }, [palette]);
+    /* eslint-enable react-hooks/set-state-in-effect */
 
     return (
       <View style={{ gap: GAP }} {...props}>

@@ -4,7 +4,6 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 import tw from '../../../../../lib/tw';
-import { useTheme } from '../../../../../providers/ThemeProvider';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { LegendList } from '@legendapp/list/react-native';
@@ -14,14 +13,14 @@ import { Icons } from '../../../../../constants/Icons';
 import { CardReviewTvSeries } from '../../../../../components/cards/reviews/CardReviewTvSeries';
 import { useAuth } from '../../../../../providers/AuthProvider';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import {
-  tvSeriesLogOptions,
-  tvSeriesOptions,
-  tvSeriesReviewsInfiniteOptions,
-} from '@libs/query-client';
+import { tvSeriesLogOptions, tvSeriesReviewsInfiniteOptions } from '@libs/query-client';
 import { ReviewTvSeriesWithAuthor } from '@libs/api-js';
 import { CardError } from '../../../../../components/cards/CardError';
 import { CardEmpty } from '../../../../../components/cards/CardEmpty';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { isIOS } from '../../../../../platform/detection';
+import { useHeaderHeight } from 'expo-router/react-navigation';
+import { useTheme } from '../../../../../providers/ThemeProvider';
 
 interface sortBy {
   label: string;
@@ -34,7 +33,9 @@ const TvSeriesReviews = () => {
   const { user } = useAuth();
   const { tv_series_id } = useLocalSearchParams<{ tv_series_id: string }>();
   const { id: tvSeriesId } = getIdFromSlug(tv_series_id);
-  const { bottomOffset, tabBarHeight } = useTheme();
+  const insets = useSafeAreaInsets();
+  const navigationHeaderHeight = useHeaderHeight();
+  const { isLiquidGlassAvailable } = useTheme();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(
@@ -50,7 +51,6 @@ const TvSeriesReviews = () => {
   const [sortBy, setSortBy] = useState<sortBy>(sortByOptions[0]);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   // Requests
-  const { data: tvSeries } = useQuery(tvSeriesOptions({ tvSeriesId: tvSeriesId }));
   const { data: activity } = useQuery(
     tvSeriesLogOptions({
       userId: user?.id,
@@ -69,7 +69,7 @@ const TvSeriesReviews = () => {
     );
   const reviews = useMemo(() => data?.pages.flatMap((page) => page.data) || [], [data]);
   // Handlers
-  const handleSortBy = useCallback(() => {
+  const handleSortBy = () => {
     const sortByOptionsWithCancel = [
       ...sortByOptions,
       { label: upperFirst(t('common.messages.cancel')), value: 'cancel' },
@@ -88,10 +88,10 @@ const TvSeriesReviews = () => {
         setSortBy(sortByOptionsWithCancel[selectedIndex] as sortBy);
       },
     );
-  }, [sortByOptions, showActionSheetWithOptions]);
-  const handleSortOrderToggle = useCallback(() => {
+  };
+  const handleSortOrderToggle = () => {
     setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-  }, []);
+  };
 
   const renderItem = useCallback(
     ({ item: { author, rating, ...review } }: { item: ReviewTvSeriesWithAuthor }) => (
@@ -105,7 +105,7 @@ const TvSeriesReviews = () => {
         }}
       />
     ),
-    [tvSeries, tvSeriesId],
+    [],
   );
 
   const handleViewOrCreateReview = useCallback(() => {
@@ -131,60 +131,106 @@ const TvSeriesReviews = () => {
     <>
       <Stack.Screen
         options={{
-          headerRight:
-            activity !== undefined
-              ? () => (
-                  <Button
-                    variant={'outline'}
-                    size="icon"
-                    style={tw`rounded-full`}
-                    icon={activity?.review ? Icons.Eye : Icons.Edit}
-                    onPress={handleViewOrCreateReview}
-                  />
-                )
-              : undefined,
-          unstable_headerRightItems: user
-            ? (props) => [
-                ...(activity !== undefined
-                  ? ([
-                      {
-                        type: 'button',
-                        label: activity?.review
-                          ? upperFirst(t('common.messages.my_review', { count: 1 }))
-                          : upperFirst(t('common.messages.add_review')),
-                        onPress: handleViewOrCreateReview,
-                        tintColor: props.tintColor,
-                        icon: {
-                          name: activity?.review ? 'eye' : 'pencil',
-                          type: 'sfSymbol',
-                        },
+          headerTransparent: true,
+          ...(isLiquidGlassAvailable
+            ? {
+                headerStyle: { backgroundColor: 'transparent' },
+              }
+            : {}),
+          headerRight: () =>
+            activity !== undefined ? (
+              <Button
+                variant={'outline'}
+                size="icon"
+                style={tw`rounded-full`}
+                icon={activity?.review ? Icons.Eye : Icons.Edit}
+                onPress={handleViewOrCreateReview}
+              />
+            ) : null,
+          unstable_headerRightItems: (props) => [
+            ...(user
+              ? activity !== undefined
+                ? [
+                    {
+                      type: 'button' as const,
+                      label: activity?.review
+                        ? upperFirst(t('common.messages.my_review', { count: 1 }))
+                        : upperFirst(t('common.messages.add_review')),
+                      onPress: handleViewOrCreateReview,
+                      tintColor: props.tintColor,
+                      icon: {
+                        name: (activity?.review ? 'eye' : 'pencil') as 'eye' | 'pencil',
+                        type: 'sfSymbol' as const,
                       },
-                    ] as const)
-                  : ([
-                      {
-                        type: 'custom',
-                        element: <ActivityIndicator size={36} />,
-                      },
-                    ] as const)),
-              ]
-            : undefined,
+                    },
+                  ]
+                : [
+                    {
+                      type: 'custom' as const,
+                      element: <ActivityIndicator size={36} />,
+                    },
+                  ]
+              : []),
+            {
+              type: 'menu' as const,
+              label: upperFirst(t('common.messages.sort_by')),
+              icon: {
+                type: 'sfSymbol' as const,
+                name: (sortOrder === 'desc' ? 'arrow.down' : 'arrow.up') as
+                  | 'arrow.down'
+                  | 'arrow.up',
+              },
+              menu: {
+                title: upperFirst(t('common.messages.sort_by')),
+                // Tapping the already-active field flips the order instead of no-op'ing —
+                // the order (asc/desc) isn't a separate selectable group, since a native
+                // switch control isn't available as a menu item type in this API.
+                items: sortByOptions.map((option) => {
+                  const isActive = option.value === sortBy.value;
+                  return {
+                    type: 'action' as const,
+                    label: option.label,
+                    description: isActive
+                      ? upperFirst(
+                          t(
+                            sortOrder === 'desc'
+                              ? 'common.messages.order_desc'
+                              : 'common.messages.order_asc',
+                          ),
+                        )
+                      : undefined,
+                    state: (isActive ? 'on' : 'off') as 'on' | 'off',
+                    onPress: () => {
+                      if (isActive) {
+                        setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc');
+                      } else {
+                        setSortBy(option);
+                      }
+                    },
+                  };
+                }),
+              },
+            },
+          ],
         }}
       />
       <LegendList
         data={reviews}
         renderItem={renderItem}
         ListHeaderComponent={
-          <View style={tw.style('flex flex-row justify-end items-center gap-2 py-2')}>
-            <Button
-              icon={sortOrder === 'desc' ? Icons.ArrowDown : Icons.ArrowUp}
-              variant="muted"
-              size="icon"
-              onPress={handleSortOrderToggle}
-            />
-            <Button icon={Icons.ChevronDown} variant="muted" onPress={handleSortBy}>
-              {sortBy.label}
-            </Button>
-          </View>
+          isIOS ? undefined : (
+            <View style={tw.style('flex flex-row justify-end items-center gap-2 py-2')}>
+              <Button
+                icon={sortOrder === 'desc' ? Icons.ArrowDown : Icons.ArrowUp}
+                variant="muted"
+                size="icon"
+                onPress={handleSortOrderToggle}
+              />
+              <Button icon={Icons.ChevronDown} variant="muted" onPress={handleSortBy}>
+                {sortBy.label}
+              </Button>
+            </View>
+          )
         }
         ListEmptyComponent={
           <View style={tw`flex-1 items-center justify-center`}>
@@ -203,12 +249,12 @@ const TvSeriesReviews = () => {
         )}
         onEndReachedThreshold={0.5}
         contentContainerStyle={{
+          paddingTop: navigationHeaderHeight,
           paddingHorizontal: PADDING_HORIZONTAL,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
           gap: GAP,
         }}
         maintainVisibleContentPosition={false}
-        scrollIndicatorInsets={{ bottom: tabBarHeight }}
         keyExtractor={(item) => item.id.toString()}
         refreshing={isRefetching}
         onRefresh={refetch}

@@ -1,6 +1,6 @@
-import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { UseHeaderSearchBarProps } from './useHeaderSearchBar';
 import { SearchBar } from '../components/ui/searchbar';
+import { NativeStackNavigationOptions } from 'expo-router';
 
 export const useHeaderSearchBar = ({
   placeholder,

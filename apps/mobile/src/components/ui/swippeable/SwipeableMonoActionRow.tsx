@@ -26,12 +26,12 @@ interface LeftActionProps {
 }
 
 const LeftAction = ({ dragX, swipeableRef, config }: LeftActionProps) => {
-  const { icon, backgroundColor = '#388e3c' } = config || {};
+  const { icon, backgroundColor = '#388e3c', threshold = 80 } = config || {};
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
       {
-        scale: interpolate(dragX.value, [0, config?.threshold || 80], [0, 1], Extrapolation.CLAMP),
+        scale: interpolate(dragX.value, [0, threshold], [0, 1], Extrapolation.CLAMP),
       },
     ],
   }));
@@ -59,17 +59,12 @@ interface RightActionProps {
 }
 
 const RightAction = ({ dragX, swipeableRef, config }: RightActionProps) => {
-  const { icon, backgroundColor = '#dd2c00' } = config || {};
+  const { icon, backgroundColor = '#dd2c00', threshold = 40 } = config || {};
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
       {
-        scale: interpolate(
-          dragX.value,
-          [-(config?.threshold || 40), 0],
-          [1, 0],
-          Extrapolation.CLAMP,
-        ),
+        scale: interpolate(dragX.value, [-threshold, 0], [1, 0], Extrapolation.CLAMP),
       },
     ],
   }));

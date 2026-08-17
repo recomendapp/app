@@ -4,7 +4,7 @@ import { StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import Animated, { SharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { Button } from './Button';
 import { Icons } from '../../constants/Icons';
-import { HeaderTitle, HeaderTitleProps } from '@react-navigation/elements';
+import { HeaderTitle, HeaderTitleProps } from 'expo-router/react-navigation';
 import { useTheme } from '../../providers/ThemeProvider';
 import { LinearGradient } from 'expo-linear-gradient';
 import Color from 'color';
@@ -132,7 +132,7 @@ const AnimatedStackScreen = forwardRef<
             <>
               <Animated.View
                 style={[
-                  StyleSheet.absoluteFillObject,
+                  StyleSheet.absoluteFill,
                   { backgroundColor: headerBackgroundColor || colors.background },
                   backgroundAnimatedStyle,
                 ]}

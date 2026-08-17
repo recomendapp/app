@@ -26,6 +26,13 @@
         "command": "APP_VARIANT=development nx run-android mobile"
       }
     },
+    "prebuild": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/mobile",
+        "command": "expo prebuild"
+      }
+    },
     "update": {
       "command": "eas update",
       "options": { "cwd": "{projectRoot}" },

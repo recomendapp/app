@@ -1,6 +1,6 @@
 import { Href, Link, useLocalSearchParams } from 'expo-router';
 import { lowerCase, upperFirst } from 'lodash';
-import { Pressable, useWindowDimensions, ViewProps } from 'react-native';
+import { Pressable, ScrollView, useWindowDimensions, ViewProps } from 'react-native';
 import tw from '../../../../../lib/tw';
 import { useTheme } from '../../../../../providers/ThemeProvider';
 import {
@@ -10,7 +10,6 @@ import {
   withTiming,
 } from 'react-native-reanimated';
 import { getIdFromSlug } from '../../../../../utils/getIdFromSlug';
-import useBottomSheetStore from '../../../../../stores/useBottomSheetStore';
 import { useState, useCallback, useMemo } from 'react';
 import { useTranslations } from 'use-intl';
 import { Text, TextProps } from '../../../../../components/ui/text';
@@ -23,19 +22,13 @@ import {
   PADDING_VERTICAL,
 } from '../../../../../theme/globals';
 import MovieHeader from '../../../../../components/screens/film/MovieHeader';
-import BottomSheetMovie from '../../../../../components/bottom-sheets/sheets/BottomSheetMovie';
+import { useMovieHeaderMenu } from '../../../../../components/header-menus/useMovieHeaderMenu';
 import MovieWidgetReviews from '../../../../../components/screens/film/MovieWidgetReviews';
 import MovieWidgetPlaylists from '../../../../../components/screens/film/MovieWidgetPlaylists';
 import { View } from '../../../../../components/ui/view';
 import { Button } from '../../../../../components/ui/Button';
-import { FloatingBar } from '../../../../../components/ui/FloatingBar';
 import { useAuth } from '../../../../../providers/AuthProvider';
-import ButtonUserLogMovieRating from '../../../../../components/buttons/movies/ButtonUserLogMovieRating';
-import ButtonUserLogMovieLike from '../../../../../components/buttons/movies/ButtonUserLogMovieLike';
-import ButtonUserLogMovieWatch from '../../../../../components/buttons/movies/ButtonUserLogMovieWatch';
-import ButtonUserLogMovieWatchDate from '../../../../../components/buttons/movies/ButtonUserLogMovieWatchDate';
-import { ButtonPlaylistAdd } from '../../../../../components/buttons/ButtonPlaylistAdd';
-import ButtonUserRecoSend from '../../../../../components/buttons/ButtonUserRecoSend';
+import { FloatingBar } from '../../../../../components/ui/FloatingBar';
 import AnimatedContentContainer from '../../../../../components/ui/AnimatedContentContainer';
 import { Icons } from '../../../../../constants/Icons';
 import YoutubePlayer from 'react-native-youtube-iframe';
@@ -45,15 +38,18 @@ import MovieWidgetCast from '../../../../../components/screens/film/MovieWidgetC
 import { useQuery } from '@tanstack/react-query';
 import { movieCastingOptions, movieOptions } from '@libs/query-client';
 import { Movie, MovieTrailer } from '@libs/api-js';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ButtonUserBookmark } from '../../../../../components/buttons/ButtonUserBookmark';
+import { ButtonPlaylistAdd } from '../../../../../components/buttons/ButtonPlaylistAdd';
+import ButtonUserRecoSend from '../../../../../components/buttons/ButtonUserRecoSend';
+import ButtonUserLogMovie from '../../../../../components/buttons/movies/ButtonUserLogMovie';
 
 const FilmScreen = () => {
   const { film_id } = useLocalSearchParams<{ film_id: string }>();
   const { id: movieId } = getIdFromSlug(film_id);
   const { user } = useAuth();
-  const { bottomOffset, tabBarHeight } = useTheme();
+  const insets = useSafeAreaInsets();
   const t = useTranslations();
-  const openSheet = useBottomSheetStore((state) => state.openSheet);
 
   const { data: movie, isLoading } = useQuery(
     movieOptions({
@@ -79,19 +75,13 @@ const FilmScreen = () => {
 
   const animatedContentContainerStyle = useAnimatedStyle(() => {
     return {
-      paddingBottom: withTiming(bottomOffset + PADDING_VERTICAL * 2 + floatingBarHeight.value, {
+      paddingBottom: withTiming(insets.bottom + PADDING_VERTICAL * 2 + floatingBarHeight.value, {
         duration: 300,
       }),
     };
   });
 
-  const handleMenuPress = useCallback(() => {
-    if (movie) {
-      openSheet(BottomSheetMovie, {
-        movie: movie,
-      });
-    }
-  }, [movie, openSheet]);
+  const { onMenuPress, headerRightItems } = useMovieHeaderMenu({ movie });
 
   return (
     <>
@@ -99,30 +89,16 @@ const FilmScreen = () => {
         options={{
           headerTitle: movie?.title || '',
           headerTransparent: true,
-          unstable_headerRightItems: (props) => [
-            {
-              type: 'button',
-              label: upperFirst(t('common.messages.menu')),
-              onPress: handleMenuPress,
-              tintColor: props.tintColor,
-              icon: {
-                name: 'ellipsis',
-                type: 'sfSymbol',
-              },
-            },
-          ],
+          unstable_headerRightItems: headerRightItems,
         }}
         scrollY={scrollY}
         triggerHeight={headerHeight}
-        onMenuPress={movie ? handleMenuPress : undefined}
+        onMenuPress={movie ? onMenuPress : undefined}
       />
       <AnimatedContentContainer
         onScroll={scrollHandler}
         scrollToOverflowEnabled
         contentContainerStyle={animatedContentContainerStyle}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
-        }}
       >
         <MovieHeader
           movie={movie}
@@ -168,23 +144,23 @@ const FilmScreen = () => {
         )}
       </AnimatedContentContainer>
       {movie && user && (
-        <FloatingBar
-          bottomOffset={bottomOffset + PADDING_VERTICAL}
-          height={floatingBarHeight}
-          containerStyle={{ paddingHorizontal: 0 }}
-          style={tw`flex-row items-center justify-between`}
-        >
-          <View style={tw`flex-row items-center gap-2`}>
-            <ButtonUserLogMovieRating movie={movie} />
-            <ButtonUserLogMovieLike movie={movie} />
-            <ButtonUserLogMovieWatch movie={movie} />
+        <FloatingBar height={floatingBarHeight} containerStyle={{ paddingHorizontal: 0 }}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={[
+              tw`items-center gap-2`,
+              {
+                paddingHorizontal: PADDING_HORIZONTAL,
+                paddingVertical: PADDING_VERTICAL,
+              },
+            ]}
+          >
+            <ButtonUserLogMovie movie={movie} />
             <ButtonUserBookmark mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
-            <ButtonUserLogMovieWatchDate movie={movie} />
-          </View>
-          <View style={tw`flex-row items-center gap-2`}>
             <ButtonPlaylistAdd mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
             <ButtonUserRecoSend mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
-          </View>
+          </ScrollView>
         </FloatingBar>
       )}
     </>

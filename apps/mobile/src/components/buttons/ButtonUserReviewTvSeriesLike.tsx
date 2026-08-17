@@ -5,8 +5,6 @@ import { Text } from '../ui/text';
 import { forwardRef, useEffect, useState } from 'react';
 import tw from '../../lib/tw';
 import { useAuth } from '../../providers/AuthProvider';
-import { useToast } from '../Toast';
-import { useTranslations } from 'use-intl';
 import { useUserReviewTvSeriesLike } from '@libs/query-client';
 
 interface ButtonUserReviewTvSeriesLikeProps extends React.ComponentProps<typeof Button> {
@@ -33,8 +31,6 @@ const ButtonUserReviewTvSeriesLike = forwardRef<
   ) => {
     const { colors } = useTheme();
     const { user } = useAuth();
-    const toast = useToast();
-    const t = useTranslations();
     const { isLiked, toggle } = useUserReviewTvSeriesLike({
       reviewId,
       userId: user?.id,

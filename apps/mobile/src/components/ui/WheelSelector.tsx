@@ -179,6 +179,7 @@ function WheelSelectorInner<T>(
 
   const onScroll = useAnimatedScrollHandler((e) => {
     'worklet';
+    // eslint-disable-next-line react-hooks/immutability -- Reanimated shared value mutation on the UI thread
     scrollX.value = clamp(e.contentOffset.x / totalItemWidth, 0, data.length - 1);
     const newActiveIndex = Math.round(scrollX.value);
 

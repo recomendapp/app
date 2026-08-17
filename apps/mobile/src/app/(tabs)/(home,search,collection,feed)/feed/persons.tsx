@@ -30,11 +30,13 @@ import { uiBackgroundsOptions } from '../../../../api/ui/uiOptions';
 import { RefreshableStateContainer } from '../../../../components/ui/RefreshableStateContainer';
 import { CardError } from '../../../../components/cards/CardError';
 import { CardEmpty } from '../../../../components/cards/CardEmpty';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const CastCrewFeedScreen = () => {
   const t = useTranslations();
   const router = useRouter();
-  const { bottomOffset, tabBarHeight, colors } = useTheme();
+  const insets = useSafeAreaInsets();
+  const { colors } = useTheme();
   const { user } = useAuth();
   const { data: backgrounds } = useQuery(uiBackgroundsOptions());
   const { data, isLoading, fetchNextPage, hasNextPage, refetch, isRefetching, isError } =
@@ -89,7 +91,7 @@ const CastCrewFeedScreen = () => {
       <View
         style={[
           tw`flex-1 items-center justify-center`,
-          { paddingTop: PADDING_VERTICAL, paddingBottom: bottomOffset + PADDING_VERTICAL },
+          { paddingTop: PADDING_VERTICAL, paddingBottom: insets.bottom + PADDING_VERTICAL },
         ]}
       >
         <Icons.Loader />
@@ -101,7 +103,7 @@ const CastCrewFeedScreen = () => {
       <View
         style={[
           tw`flex-1 items-center justify-center`,
-          { paddingTop: PADDING_VERTICAL, paddingBottom: bottomOffset + PADDING_VERTICAL },
+          { paddingTop: PADDING_VERTICAL, paddingBottom: insets.bottom + PADDING_VERTICAL },
         ]}
       >
         {backgrounds && (
@@ -148,7 +150,7 @@ const CastCrewFeedScreen = () => {
       <RefreshableStateContainer
         onRefresh={refetch}
         refreshing={isRefetching}
-        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + PADDING_VERTICAL }}
       >
         <Icons.Loader />
       </RefreshableStateContainer>
@@ -160,7 +162,7 @@ const CastCrewFeedScreen = () => {
       <RefreshableStateContainer
         onRefresh={refetch}
         refreshing={isRefetching}
-        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + PADDING_VERTICAL }}
       >
         <CardError />
       </RefreshableStateContainer>
@@ -172,7 +174,7 @@ const CastCrewFeedScreen = () => {
       <RefreshableStateContainer
         onRefresh={refetch}
         refreshing={isRefetching}
-        contentContainerStyle={{ paddingBottom: bottomOffset + PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + PADDING_VERTICAL }}
       >
         <CardEmpty icon={'⚡️'} label={t('help_hints.feed_person.message')} />
       </RefreshableStateContainer>
@@ -186,12 +188,12 @@ const CastCrewFeedScreen = () => {
         renderItem={renderItem}
         contentContainerStyle={{
           paddingHorizontal: PADDING_HORIZONTAL,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
           gap: GAP,
           flexGrow: 1,
         }}
         scrollIndicatorInsets={{
-          bottom: tabBarHeight,
+          bottom: insets.bottom,
         }}
         keyExtractor={keyExtractor}
         onEndReached={onEndReached}

@@ -1,4 +1,4 @@
-import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import { NativeStackNavigationOptions } from 'expo-router';
 import { SearchBarProps } from 'react-native-screens';
 
 export type UseHeaderSearchBarProps = Omit<SearchBarProps, 'placeholder' | 'onChangeText'> & {

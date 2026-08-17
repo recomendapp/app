@@ -1,18 +1,16 @@
-import { Tabs, useRouter, useSegments } from 'expo-router';
-import { Icons } from '../../constants/Icons';
-import { Platform } from 'react-native';
+import { useEffect } from 'react';
+import { useRouter, useSegments } from 'expo-router';
 import { useAuth } from '../../providers/AuthProvider';
 import { useTheme } from '../../providers/ThemeProvider';
-import { HapticTab } from '../../components/HapticTab';
-import TabBarBackground from '../../components/TabBar/TabBarBackground';
 import { useTranslations } from 'use-intl';
 import { upperFirst } from 'lodash';
-import { useEffect } from 'react';
 import { useUIStore } from '../../stores/useUIStore';
+import { NativeTabs } from 'expo-router/unstable-native-tabs';
+import { isIOS } from '../../platform/detection';
 
 const TabsLayout = () => {
   const { user } = useAuth();
-  const { colors } = useTheme();
+  const { colors, isLiquidGlassAvailable } = useTheme();
   const t = useTranslations();
   const router = useRouter();
   const hasOnboarded = useUIStore((state) => state.hasOnboarded);
@@ -25,77 +23,72 @@ const TabsLayout = () => {
   }, [hasOnboarded, router, segment]);
 
   return (
-    <Tabs
-      initialRouteName="(home)"
-      screenOptions={{
-        tabBarActiveTintColor: colors.tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: {
-          ...Platform.select({
-            android: { backgroundColor: colors.background },
-            default: {},
-          }),
-          position: 'absolute',
-        },
-        tabBarItemStyle: {
-          paddingTop: 4,
-        },
-        tabBarShowLabel: false,
-        lazy: true,
+    <NativeTabs
+      iconColor={{
+        default: colors.foreground,
+        selected: isIOS ? colors.primary : colors.foreground,
       }}
+      labelStyle={{
+        default: {
+          color: colors.foreground,
+        },
+        selected: {
+          color: isLiquidGlassAvailable ? colors.primary : colors.foreground,
+        },
+      }}
+      rippleColor={colors.primary}
+      backgroundColor={colors.muted}
+      indicatorColor={colors.mutedForeground}
+      disableTransparentOnScrollEdge
     >
-      <Tabs.Screen
-        name="(home)"
-        options={{
-          title: upperFirst(t('common.messages.home')),
-          tabBarIcon: ({ color }) => <Icons.home size={28} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="(search)"
-        options={{
-          title: upperFirst(t('common.messages.search')),
-          tabBarIcon: ({ color }) => <Icons.Search size={28} color={color} />,
-        }}
-      />
-
-      {/* LOGIN ONLY */}
-      <Tabs.Protected guard={!!user}>
-        <Tabs.Screen
-          name="(feed)"
-          options={{
-            title: upperFirst(t('common.messages.feed')),
-            tabBarIcon: ({ color }) => <Icons.Feed size={28} color={color} />,
-          }}
+      <NativeTabs.Trigger name="(home)" disableAutomaticContentInsets={isIOS}>
+        <NativeTabs.Trigger.Label hidden>
+          {upperFirst(t('common.messages.home'))}
+        </NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf={{ default: 'house', selected: 'house.fill' }} md="home" />
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="(search)" disableAutomaticContentInsets={isIOS}>
+        <NativeTabs.Trigger.Label hidden>
+          {upperFirst(t('common.messages.search'))}
+        </NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon
+          sf={{ default: 'magnifyingglass', selected: 'magnifyingglass' }}
+          md="search"
         />
-        <Tabs.Screen
-          name="(collection)"
-          options={{
-            title: upperFirst(t('common.messages.library')),
-            tabBarIcon: ({ color }) => <Icons.library size={28} color={color} />,
-          }}
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="(feed)" disableAutomaticContentInsets={isIOS} hidden={!user}>
+        <NativeTabs.Trigger.Label hidden>
+          {upperFirst(t('common.messages.feed', { count: 2 }))}
+        </NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf={{ default: 'bolt', selected: 'bolt.fill' }} md="bolt" />
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="(collection)" disableAutomaticContentInsets={isIOS} hidden={!user}>
+        <NativeTabs.Trigger.Label hidden>
+          {upperFirst(t('common.messages.library', { count: 2 }))}
+        </NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon
+          sf={{ default: 'books.vertical', selected: 'books.vertical.fill' }}
+          md="books_movies_and_music"
         />
-      </Tabs.Protected>
-
-      {/* ANON ONLY */}
-      <Tabs.Protected guard={!user}>
-        <Tabs.Screen
-          name="auth"
-          options={{
-            title: upperFirst(t('common.messages.login')),
-            tabBarIcon: ({ color }) => <Icons.User size={28} color={color} />,
-          }}
-          listeners={() => ({
-            tabPress: (e) => {
-              e.preventDefault();
-              router.push('/auth');
-            },
-          })}
-        />
-      </Tabs.Protected>
-    </Tabs>
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger
+        name="auth"
+        disableAutomaticContentInsets={isIOS}
+        hidden={!!user}
+        role="search"
+        disabled
+        listeners={() => ({
+          tabPress: () => {
+            router.push('/auth');
+          },
+        })}
+      >
+        <NativeTabs.Trigger.Label hidden>
+          {upperFirst(t('common.messages.login'))}
+        </NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf={{ default: 'person', selected: 'person.fill' }} md="person" />
+      </NativeTabs.Trigger>
+    </NativeTabs>
   );
 };
 

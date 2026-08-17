@@ -8,39 +8,28 @@ import {
   MapRef,
   PressEventWithFeatures,
 } from '@maplibre/maplibre-react-native';
-import { NativeSyntheticEvent } from 'react-native';
+import { NativeSyntheticEvent, useWindowDimensions } from 'react-native';
 import styleJSON from '../../assets/map/style.json';
-import { Text } from '../../components/ui/text';
-import { View } from '../../components/ui/view';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import {
-  BORDER_RADIUS,
-  BORDER_RADIUS_FULL,
-  GAP,
-  PADDING_HORIZONTAL,
-  PADDING_VERTICAL,
-} from '../../theme/globals';
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { useQuery } from '@tanstack/react-query';
 import { exploreGenresOptions, useExplore, useExploreItemsAll } from '@libs/query-client';
 import { ExploreItemWithMovie, ExploreItemWithTvSeries } from '@libs/api-js';
-import { Stack, useRouter } from 'expo-router';
+import { Stack } from 'expo-router';
 import { useTheme } from '../../providers/ThemeProvider';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import Color from 'color';
 import { Button } from '../../components/ui/Button';
 import { Icons } from '../../constants/Icons';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
-import { useWindowDimensions } from 'react-native';
 import {
   LocationDetailsBottomSheet,
   LocationDetailsBottomSheetMethods,
 } from './sheets/LocationDetailsBottomSheet';
 import { withModalProvider } from '../../components/utils/withModalProvider';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useExploreStore } from '../../stores/useExploreStore';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
-import { Input } from '../../components/ui/Input';
 import { useUIStore } from '../../stores/useUIStore';
 
 const MOVE_DELAY = 500;
@@ -49,7 +38,6 @@ const EXPLORE_SLUG = 'paradise-picture';
 type ExploreItem = ExploreItemWithMovie | ExploreItemWithTvSeries;
 
 const ExploreScreen = () => {
-  const router = useRouter();
   const filters = useExploreStore((state) => state.filters);
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
@@ -64,11 +52,9 @@ const ExploreScreen = () => {
   const locationDetailsRef = useRef<LocationDetailsBottomSheetMethods>(null);
 
   // SharedValues
-  const animatedPOIListIndex = useSharedValue(0);
   const animatedPOIListPosition = useSharedValue(screenHeight);
   const animatedPOIDetailsIndex = useSharedValue(0);
   const animatedPOIDetailsPosition = useSharedValue(screenHeight);
-  const animatedFiltersIndex = useSharedValue(0);
   const animatedFiltersPosition = useSharedValue(screenHeight);
   const optionsHeight = useSharedValue(0);
 
@@ -82,12 +68,12 @@ const ExploreScreen = () => {
   // `useExplore` persists its result and handles its own daily staleness/invalidation
   // (see libs/query-client/src/lib/explore/exploreHooks.ts) — `items` is only refetched
   // when it detects the explore's `updatedAt` changed.
-  const { data: explore } = useExplore({ identifier: EXPLORE_SLUG });
+  useExplore({ identifier: EXPLORE_SLUG });
   const { data: items } = useExploreItemsAll({ identifier: EXPLORE_SLUG });
 
   // No separate genres fetch — useExploreItemsAll() derives this from `media.genres` across
   // `items` and keeps it in this (persisted) query, recomputed only when the item list changes.
-  const { data: availableGenres } = useQuery(exploreGenresOptions({ identifier: EXPLORE_SLUG }));
+  useQuery(exploreGenresOptions({ identifier: EXPLORE_SLUG }));
 
   // `Map` is shadowed by the maplibre `Map` component import above, hence the plain record.
   const itemsById = useMemo(() => {
@@ -222,6 +208,7 @@ const ExploreScreen = () => {
         locationDetailsRef.current?.present({ movieId: selectedItem.mediaId });
       }
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reacts to selection alongside the camera/sheet imperative calls above
     setShowRecenter(false);
   }, [selectedItem]);
 
@@ -368,6 +355,7 @@ const ExploreScreen = () => {
 			</View>
 		</TrueSheet> */}
       <Animated.View
+        // eslint-disable-next-line react-hooks/immutability -- Reanimated shared value mutation
         onLayout={(e) => (optionsHeight.value = e.nativeEvent.layout.height)}
         style={[
           {

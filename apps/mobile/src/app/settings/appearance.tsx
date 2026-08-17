@@ -21,13 +21,15 @@ import { Platform } from 'react-native';
 import { useQueryClient } from '@tanstack/react-query';
 import { supportedLocales } from '@libs/i18n';
 import { useMeUpdateMutation } from '@libs/query-client';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const SettingsAppearanceScreen = () => {
   const { locale, setLocale } = useLocaleContext();
   const { user } = useAuth();
   const toast = useToast();
   const queryClient = useQueryClient();
-  const { colors, bottomOffset, tabBarHeight } = useTheme();
+  const insets = useSafeAreaInsets();
+  const { colors } = useTheme();
   const t = useTranslations();
   const [isLoading, setIsLoading] = useState(false);
   const locales = useLocalizedLanguageName(locale);
@@ -113,12 +115,8 @@ const SettingsAppearanceScreen = () => {
           gap: GAP,
           paddingTop: PADDING_VERTICAL,
           paddingHorizontal: PADDING_HORIZONTAL,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
         }}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
-        }}
-        bottomOffset={bottomOffset + PADDING_VERTICAL}
       >
         <Controller
           name="locale"

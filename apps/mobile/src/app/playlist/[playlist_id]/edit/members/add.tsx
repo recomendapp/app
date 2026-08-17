@@ -1,16 +1,14 @@
 import { CardUser } from '../../../../../components/cards/CardUser';
 import { Button } from '../../../../../components/ui/Button';
-import { SelectionFooter } from '../../../../../components/ui/SelectionFooter';
 import { Text } from '../../../../../components/ui/text';
 import { View } from '../../../../../components/ui/view';
 import { Icons } from '../../../../../constants/Icons';
 import tw from '../../../../../lib/tw';
-import { PADDING_HORIZONTAL } from '../../../../../theme/globals';
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import { FlatList, Pressable } from 'react-native';
 import { useTranslations } from 'use-intl';
 import { Checkbox } from '../../../../../components/ui/checkbox';
 import { useToast } from '../../../../../components/Toast';
@@ -23,9 +21,10 @@ import {
 import { UserSummary } from '@libs/api-js';
 import { useModalHeaderOptions } from '../../../../../hooks/useModalHeaderOptions';
 import useDebounce from '../../../../../hooks/useDebounce';
-import { FlashList } from '@shopify/flash-list';
+import { LegendList } from '@legendapp/list/react-native';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { Badge } from '../../../../../components/ui/Badge';
 import { SearchBarCommands } from 'react-native-screens';
 import { isIOS } from '../../../../../platform/detection';
@@ -33,6 +32,7 @@ import { SearchBar } from '../../../../../components/ui/searchbar';
 import { RefreshableStateContainer } from '../../../../../components/ui/RefreshableStateContainer';
 import { CardError } from '../../../../../components/cards/CardError';
 import { CardEmpty } from '../../../../../components/cards/CardEmpty';
+import { useTheme } from '../../../../../providers/ThemeProvider';
 
 const ModalPlaylistEditGuestsAdd = () => {
   const { playlist_id } = useLocalSearchParams<{ playlist_id: string }>();
@@ -41,6 +41,8 @@ const ModalPlaylistEditGuestsAdd = () => {
   const toast = useToast();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const headerHeight = useHeaderHeight();
+  const { colors } = useTheme();
 
   // Refs
   const searchBarRef = useRef<SearchBarCommands>(null);
@@ -53,10 +55,6 @@ const ModalPlaylistEditGuestsAdd = () => {
   );
   // Mutations
   const { mutateAsync: addMembers, isPending } = usePlaylistMembersAddMutation();
-
-  // SharedValues
-  const footerHeight = useSharedValue(0);
-  const { height: keyboardHeight } = useReanimatedKeyboardAnimation();
 
   // States
   const [search, setSearch] = useState('');
@@ -84,7 +82,7 @@ const ModalPlaylistEditGuestsAdd = () => {
           alreadyMember: members?.some((m) => m.user.id === user.id) || false,
         })),
       ) || [],
-    [data, selectedUsers],
+    [data, selectedUsers, members],
   );
 
   // Handlers
@@ -119,15 +117,7 @@ const ModalPlaylistEditGuestsAdd = () => {
         },
       },
     );
-  }, [selectedUsers, addMembers, toast, router, t]);
-
-  // AnimatedStyles
-  const animatedFooterStyle = useAnimatedStyle(() => {
-    const kHeight = Math.abs(keyboardHeight.value);
-    return {
-      height: Math.max(footerHeight.value + kHeight, insets.bottom),
-    };
-  });
+  }, [selectedUsers, addMembers, toast, router, t, playlistId]);
 
   // Render
   const renderItem = useCallback(
@@ -150,7 +140,7 @@ const ModalPlaylistEditGuestsAdd = () => {
         </View>
       </Pressable>
     ),
-    [handleToggleUser],
+    [handleToggleUser, t],
   );
 
   useEffect(() => {
@@ -181,98 +171,105 @@ const ModalPlaylistEditGuestsAdd = () => {
               }
             : undefined,
           headerTitle: upperFirst(t('common.messages.add_guest', { count: 2 })),
-          headerRight: () => (
-            <Button
-              variant="ghost"
-              size="icon"
-              icon={Icons.Check}
-              loading={isPending}
-              onPress={handleSubmit}
-              disabled={!canSave || isPending}
-            />
-          ),
-          unstable_headerRightItems: (props) => [
-            {
-              type: 'button',
-              label: upperFirst(t('common.messages.save')),
-              onPress: handleSubmit,
-              tintColor: props.tintColor,
-              disabled: !canSave || isPending,
-              icon: {
-                name: 'checkmark',
-                type: 'sfSymbol',
-              },
-            },
-          ],
         }}
       />
-      {isLoading ? (
-        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
-          <Icons.Loader />
-        </RefreshableStateContainer>
-      ) : isError ? (
-        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
-          <CardError />
-        </RefreshableStateContainer>
-      ) : users.length === 0 && search.length > 0 ? (
-        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
-          <View style={tw`flex-1 items-center p-4`}>
-            <Text textColor="muted" style={tw`text-center`}>
-              {upperFirst(t('common.messages.no_results'))}
-            </Text>
-          </View>
-        </RefreshableStateContainer>
-      ) : users.length === 0 ? (
-        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
-          <CardEmpty icon={'🧑‍🤝‍🧑'} label={t('help_hints.playlists.members.search')} />
-        </RefreshableStateContainer>
-      ) : (
-        <FlashList
-          data={users}
-          renderItem={renderItem}
-          ListHeaderComponent={
-            !isIOS ? (
-              <SearchBar
-                autoCapitalize="none"
-                autoFocus
-                placeholder={upperFirst(t('common.messages.search_user', { count: 1 }))}
-                onChangeText={(e) => setSearch(e)}
-              />
-            ) : null
-          }
-          keyExtractor={(item) => item.user.id}
-          refreshing={isRefetching}
-          onRefresh={refetch}
-          onEndReached={() => hasNextPage && fetchNextPage()}
-          onEndReachedThreshold={0.5}
-          maintainVisibleContentPosition={{
-            disabled: true,
-          }}
-          contentContainerStyle={[
-            tw`gap-2 flex-grow`,
-            {
-              paddingHorizontal: PADDING_HORIZONTAL,
-            },
-          ]}
-          keyboardShouldPersistTaps="handled"
-        />
-      )}
-      <Animated.View style={animatedFooterStyle} />
-      <SelectionFooter
-        data={selectedUsers}
-        visibleHeight={footerHeight}
-        renderItem={({ item }) => (
-          <CardUser
-            user={item}
-            variant="icon"
-            linked={false}
-            onPress={() => handleToggleUser(item)}
-            width={50}
-            height={50}
+      <KeyboardAvoidingView
+        style={tw`flex-1`}
+        behavior="padding"
+        keyboardVerticalOffset={insets.bottom}
+      >
+        {isLoading ? (
+          <RefreshableStateContainer bottomOffset={0} onRefresh={refetch} refreshing={isRefetching}>
+            <Icons.Loader />
+          </RefreshableStateContainer>
+        ) : isError ? (
+          <RefreshableStateContainer bottomOffset={0} onRefresh={refetch} refreshing={isRefetching}>
+            <CardError />
+          </RefreshableStateContainer>
+        ) : users.length === 0 && search.length > 0 ? (
+          <RefreshableStateContainer bottomOffset={0} onRefresh={refetch} refreshing={isRefetching}>
+            <View style={tw`flex-1 items-center p-4`}>
+              <Text textColor="muted" style={tw`text-center`}>
+                {upperFirst(t('common.messages.no_results'))}
+              </Text>
+            </View>
+          </RefreshableStateContainer>
+        ) : users.length === 0 ? (
+          <RefreshableStateContainer bottomOffset={0} onRefresh={refetch} refreshing={isRefetching}>
+            <CardEmpty icon={'🧑‍🤝‍🧑'} label={t('help_hints.playlists.members.search')} />
+          </RefreshableStateContainer>
+        ) : (
+          <LegendList
+            style={tw`flex-1`}
+            data={users}
+            renderItem={renderItem}
+            ListHeaderComponent={
+              !isIOS ? (
+                <SearchBar
+                  autoCapitalize="none"
+                  autoFocus
+                  placeholder={upperFirst(t('common.messages.search_user', { count: 1 }))}
+                  onChangeText={(e) => setSearch(e)}
+                />
+              ) : null
+            }
+            keyExtractor={(item) => item.user.id}
+            refreshing={isRefetching}
+            onRefresh={refetch}
+            onEndReached={() => hasNextPage && fetchNextPage()}
+            onEndReachedThreshold={0.5}
+            maintainVisibleContentPosition={false}
+            contentContainerStyle={[
+              tw`gap-2 flex-grow`,
+              {
+                paddingHorizontal: PADDING_HORIZONTAL,
+                paddingBottom: PADDING_VERTICAL,
+                paddingTop: headerHeight,
+              },
+            ]}
+            progressViewOffset={headerHeight}
+            keyboardShouldPersistTaps="handled"
           />
         )}
-        keyExtractor={(item) => item.id.toString()}
-      />
+        <View
+          style={[
+            tw`gap-2 border-t`,
+            {
+              borderColor: colors.border,
+              paddingHorizontal: PADDING_HORIZONTAL,
+              paddingTop: PADDING_VERTICAL,
+              paddingBottom: insets.bottom + PADDING_VERTICAL,
+            },
+          ]}
+        >
+          <FlatList
+            horizontal
+            data={selectedUsers}
+            renderItem={({ item }) => (
+              <CardUser
+                user={item}
+                variant="icon"
+                linked={false}
+                onPress={() => handleToggleUser(item)}
+                width={50}
+                height={50}
+              />
+            )}
+            keyExtractor={(item) => item.id.toString()}
+            showsHorizontalScrollIndicator={false}
+            ItemSeparatorComponent={() => <View style={{ width: GAP / 2 }} />}
+          />
+          <Button
+            disabled={!canSave || isPending}
+            loading={isPending}
+            variant="outline"
+            size="lg"
+            onPress={handleSubmit}
+          >
+            {upperFirst(t('common.messages.add', { count: selectedUsers.length }))}
+          </Button>
+        </View>
+      </KeyboardAvoidingView>
     </>
   );
 };

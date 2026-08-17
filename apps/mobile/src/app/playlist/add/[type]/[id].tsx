@@ -9,13 +9,12 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Pressable } from 'react-native';
+import { FlatList, Pressable } from 'react-native';
 import { useTranslations } from 'use-intl';
 import { z } from 'zod';
-import { SelectionFooter } from '../../../../components/ui/SelectionFooter';
 import { ImageWithFallback } from '../../../../components/utils/ImageWithFallback';
 import tw from '../../../../lib/tw';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../theme/globals';
 import Fuse from 'fuse.js';
 import { Icons } from '../../../../constants/Icons';
@@ -27,7 +26,9 @@ import { useToast } from '../../../../components/Toast';
 import { usePlaylistItemsAddMutation, userPlaylistsAddTargetsAllOptions } from '@libs/query-client';
 import { Playlist, PlaylistsAddTarget, PlaylistWithOwner } from '@libs/api-js';
 import { useTheme } from '../../../../providers/ThemeProvider';
-import { FlashList } from '@shopify/flash-list';
+import { LegendList } from '@legendapp/list/react-native';
+import { useHeaderHeight } from 'expo-router/react-navigation';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useModalHeaderOptions } from '../../../../hooks/useModalHeaderOptions';
 import { RefreshableStateContainer } from '../../../../components/ui/RefreshableStateContainer';
 import { CardError } from '../../../../components/cards/CardError';
@@ -40,6 +41,8 @@ const PlaylistAddTo = () => {
   const router = useRouter();
   const { colors } = useTheme();
   const toast = useToast();
+  const insets = useSafeAreaInsets();
+  const headerHeight = useHeaderHeight();
   const { user } = useAuth();
   const { type, id, title } = useLocalSearchParams();
   const mediaId = Number(id);
@@ -76,21 +79,9 @@ const PlaylistAddTo = () => {
   // REFs
   const BottomSheetPlaylistCreateRef = useRef<TrueSheet>(null);
 
-  // SharedValues
-  const footerHeight = useSharedValue(0);
-
   // States
   const [search, setSearch] = useState('');
-  const [results, setResults] = useState<typeof playlists>([]);
   const [selected, setSelected] = useState<PlaylistWithOwner[]>([]);
-  const resultsRender = useMemo(
-    () =>
-      results?.map((item) => ({
-        item: item,
-        isSelected: selected.some((selectedItem) => selectedItem.id === item.id),
-      })) || [],
-    [results, selected],
-  );
   const canSave = useMemo(() => selected.length > 0, [selected]);
 
   const modalHeaderOptions = useModalHeaderOptions({
@@ -120,13 +111,21 @@ const PlaylistAddTo = () => {
       threshold: 0.5,
     });
   }, [playlists]);
-  useEffect(() => {
+  const results = useMemo(() => {
     if (search && search.length > 0) {
-      setResults(fuse?.search(search).map((result) => result.item));
-    } else {
-      setResults(playlists);
+      return fuse?.search(search).map((result) => result.item);
     }
+    return playlists;
   }, [search, playlists, fuse]);
+
+  const resultsRender = useMemo(
+    () =>
+      results?.map((item) => ({
+        item: item,
+        isSelected: selected.some((selectedItem) => selectedItem.id === item.id),
+      })) || [],
+    [results, selected],
+  );
 
   // Handlers
   const handleTogglePlaylist = useCallback((playlist: PlaylistWithOwner) => {
@@ -179,13 +178,6 @@ const PlaylistAddTo = () => {
     [user],
   );
 
-  // AnimatedStyles
-  const animatedFooterStyle = useAnimatedStyle(() => {
-    return {
-      marginBottom: withTiming(footerHeight.value, { duration: 200 }),
-    };
-  });
-
   // Render
   const renderItem = useCallback(
     ({
@@ -197,7 +189,6 @@ const PlaylistAddTo = () => {
       item: { item: PlaylistsAddTarget; isSelected: boolean };
     }) => (
       <Pressable
-        disabled={alreadyAdded}
         onPress={() => handleTogglePlaylist(playlist)}
         style={tw`flex-row items-center justify-between gap-2`}
       >
@@ -228,11 +219,7 @@ const PlaylistAddTo = () => {
               {upperFirst(t('common.messages.already_added', { count: 1, gender: 'male' }))}
             </Badge>
           )}
-          <Checkbox
-            checked={isSelected}
-            onCheckedChange={() => handleTogglePlaylist(playlist)}
-            disabled={alreadyAdded}
-          />
+          <Checkbox checked={isSelected} onCheckedChange={() => handleTogglePlaylist(playlist)} />
         </View>
       </Pressable>
     ),
@@ -251,6 +238,7 @@ const PlaylistAddTo = () => {
       <Stack.Screen
         options={{
           ...modalHeaderOptions,
+          headerTransparent: true,
           headerSearchBarOptions: {
             autoCapitalize: 'none',
             placeholder: upperFirst(t('common.messages.search_playlist', { count: 1 })),
@@ -261,7 +249,7 @@ const PlaylistAddTo = () => {
           },
           headerRight: () => (
             <Button
-              variant="outline"
+              variant="ghost"
               icon={Icons.Add}
               size="icon"
               onPress={() => BottomSheetPlaylistCreateRef.current?.present()}
@@ -281,55 +269,80 @@ const PlaylistAddTo = () => {
           ],
         }}
       />
-      {isLoading ? (
-        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
-          <Icons.Loader />
-        </RefreshableStateContainer>
-      ) : isError ? (
-        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
-          <CardError />
-        </RefreshableStateContainer>
-      ) : resultsRender.length === 0 ? (
-        <RefreshableStateContainer onRefresh={refetch} refreshing={isRefetching}>
-          <CardEmpty icon={'▶️'} label={t('help_hints.playlists.add_to.empty')} />
-        </RefreshableStateContainer>
-      ) : (
-        <FlashList
-          data={resultsRender}
-          renderItem={renderItem}
-          keyExtractor={({ item }) => item.id.toString()}
-          refreshing={isRefetching}
-          onRefresh={refetch}
-          maintainVisibleContentPosition={{
-            disabled: true,
-          }}
-          ItemSeparatorComponent={() => <View style={{ height: GAP }} />}
-          contentContainerStyle={[
+      <KeyboardAvoidingView
+        style={tw`flex-1`}
+        behavior="padding"
+        keyboardVerticalOffset={insets.bottom}
+      >
+        {isLoading ? (
+          <RefreshableStateContainer bottomOffset={0} onRefresh={refetch} refreshing={isRefetching}>
+            <Icons.Loader />
+          </RefreshableStateContainer>
+        ) : isError ? (
+          <RefreshableStateContainer bottomOffset={0} onRefresh={refetch} refreshing={isRefetching}>
+            <CardError />
+          </RefreshableStateContainer>
+        ) : resultsRender.length === 0 && search.length > 0 ? (
+          <RefreshableStateContainer bottomOffset={0} onRefresh={refetch} refreshing={isRefetching}>
+            <View style={tw`flex-1 items-center p-4`}>
+              <Text textColor="muted" style={tw`text-center`}>
+                {upperFirst(t('common.messages.no_results'))}
+              </Text>
+            </View>
+          </RefreshableStateContainer>
+        ) : resultsRender.length === 0 ? (
+          <RefreshableStateContainer bottomOffset={0} onRefresh={refetch} refreshing={isRefetching}>
+            <CardEmpty icon={'▶️'} label={t('help_hints.playlists.add_to.empty')} />
+          </RefreshableStateContainer>
+        ) : (
+          <LegendList
+            style={tw`flex-1`}
+            data={resultsRender}
+            renderItem={renderItem}
+            keyExtractor={({ item }) => item.id.toString()}
+            refreshing={isRefetching}
+            onRefresh={refetch}
+            maintainVisibleContentPosition={false}
+            ItemSeparatorComponent={() => <View style={{ height: GAP }} />}
+            contentContainerStyle={[
+              {
+                paddingHorizontal: PADDING_HORIZONTAL,
+                paddingBottom: PADDING_VERTICAL,
+                paddingTop: headerHeight,
+              },
+            ]}
+            progressViewOffset={headerHeight}
+            keyboardShouldPersistTaps="handled"
+          />
+        )}
+        <View
+          style={[
+            tw`gap-2 border-t`,
             {
+              borderColor: colors.border,
               paddingHorizontal: PADDING_HORIZONTAL,
-              paddingBottom: PADDING_VERTICAL,
+              paddingTop: PADDING_VERTICAL,
+              paddingBottom: insets.bottom + PADDING_VERTICAL,
             },
           ]}
-          keyboardShouldPersistTaps="handled"
-        />
-      )}
-      <Animated.View style={animatedFooterStyle} />
-      <SelectionFooter
-        data={selected}
-        visibleHeight={footerHeight}
-        renderItem={({ item }) => (
-          <Pressable key={item.id} onPress={() => handleTogglePlaylist(item)}>
-            <ImageWithFallback
-              source={{ uri: item.poster ?? '' }}
-              alt={item.title}
-              style={tw`rounded-md w-10 h-10`}
-              type="playlist"
-            />
-          </Pressable>
-        )}
-        keyExtractor={(item) => item.id.toString()}
-      >
-        <View style={tw`gap-2`}>
+        >
+          <FlatList
+            horizontal
+            data={selected}
+            renderItem={({ item }) => (
+              <Pressable onPress={() => handleTogglePlaylist(item)}>
+                <ImageWithFallback
+                  source={{ uri: item.poster ?? '' }}
+                  alt={item.title}
+                  style={tw`rounded-md w-10 h-10`}
+                  type="playlist"
+                />
+              </Pressable>
+            )}
+            keyExtractor={(item) => item.id.toString()}
+            showsHorizontalScrollIndicator={false}
+            ItemSeparatorComponent={() => <View style={{ width: GAP / 2 }} />}
+          />
           <Controller
             name="comment"
             control={form.control}
@@ -354,7 +367,7 @@ const PlaylistAddTo = () => {
             {upperFirst(t('common.messages.add', { count: selected.length }))}
           </Button>
         </View>
-      </SelectionFooter>
+      </KeyboardAvoidingView>
       <BottomSheetPlaylistCreate
         ref={BottomSheetPlaylistCreateRef}
         id={`${mediaType}-${mediaId}-create-playlist`}

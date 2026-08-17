@@ -1,6 +1,6 @@
 import { Href, Link, useLocalSearchParams } from 'expo-router';
 import { lowerCase, upperFirst } from 'lodash';
-import { Pressable, useWindowDimensions, View, ViewProps } from 'react-native';
+import { ScrollView, Pressable, useWindowDimensions, View, ViewProps } from 'react-native';
 import tw from '../../../../../lib/tw';
 import { useTheme } from '../../../../../providers/ThemeProvider';
 import {
@@ -10,7 +10,6 @@ import {
   withTiming,
 } from 'react-native-reanimated';
 import { getIdFromSlug } from '../../../../../utils/getIdFromSlug';
-import useBottomSheetStore from '../../../../../stores/useBottomSheetStore';
 import { useCallback, useMemo, useState } from 'react';
 import TvSeriesWidgetSeasons from '../../../../../components/screens/tv-series/TvSeriesWidgetSeasons';
 import { useTranslations } from 'use-intl';
@@ -23,18 +22,13 @@ import {
   PADDING_HORIZONTAL,
   PADDING_VERTICAL,
 } from '../../../../../theme/globals';
-import BottomSheetTvSeries from '../../../../../components/bottom-sheets/sheets/BottomSheetTvSeries';
+import { useTvSeriesHeaderMenu } from '../../../../../components/header-menus/useTvSeriesHeaderMenu';
 import TvSeriesHeader from '../../../../../components/screens/tv-series/TvSeriesHeader';
 import TvSeriesWidgetPlaylists from '../../../../../components/screens/tv-series/TvSeriesWidgetPlaylists';
 import TvSeriesWidgetReviews from '../../../../../components/screens/tv-series/TvSeriesWidgetReviews';
 import { Button } from '../../../../../components/ui/Button';
 import { useAuth } from '../../../../../providers/AuthProvider';
 import { FloatingBar } from '../../../../../components/ui/FloatingBar';
-import ButtonUserLogTvSeriesRating from '../../../../../components/buttons/tv-series/ButtonUserLogTvSeriesRating';
-import ButtonUserLogTvSeriesLike from '../../../../../components/buttons/tv-series/ButtonUserLogTvSeriesLike';
-import ButtonUserLogTvSeriesWatch from '../../../../../components/buttons/tv-series/ButtonUserLogTvSeriesWatch';
-import { ButtonPlaylistAdd } from '../../../../../components/buttons/ButtonPlaylistAdd';
-import ButtonUserRecoSend from '../../../../../components/buttons/ButtonUserRecoSend';
 import AnimatedContentContainer from '../../../../../components/ui/AnimatedContentContainer';
 import { Icons } from '../../../../../constants/Icons';
 import YoutubePlayer from 'react-native-youtube-iframe';
@@ -44,15 +38,18 @@ import TvSeriesWidgetCast from '../../../../../components/screens/tv-series/TvSe
 import { useQuery } from '@tanstack/react-query';
 import { tvSeriesCastingOptions, tvSeriesOptions } from '@libs/query-client';
 import { TvSeries, TvSeriesTrailer } from '@libs/api-js';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ButtonUserBookmark } from '../../../../../components/buttons/ButtonUserBookmark';
+import { ButtonPlaylistAdd } from '../../../../../components/buttons/ButtonPlaylistAdd';
+import ButtonUserRecoSend from '../../../../../components/buttons/ButtonUserRecoSend';
+import ButtonUserLogTvSeries from '../../../../../components/buttons/tv-series/ButtonUserLogTvSeries';
 
 const TvSeriesScreen = () => {
   const { tv_series_id } = useLocalSearchParams<{ tv_series_id: string }>();
   const { id: seriesId } = getIdFromSlug(tv_series_id);
-  const { bottomOffset, tabBarHeight } = useTheme();
   const { user } = useAuth();
+  const insets = useSafeAreaInsets();
   const t = useTranslations();
-  const openSheet = useBottomSheetStore((state) => state.openSheet);
   const { data: series, isLoading } = useQuery(
     tvSeriesOptions({
       tvSeriesId: seriesId,
@@ -77,19 +74,13 @@ const TvSeriesScreen = () => {
 
   const animatedContentContainerStyle = useAnimatedStyle(() => {
     return {
-      paddingBottom: withTiming(bottomOffset + PADDING_VERTICAL * 2 + floatingBarHeight.value, {
+      paddingBottom: withTiming(insets.bottom + PADDING_VERTICAL * 2 + floatingBarHeight.value, {
         duration: 300,
       }),
     };
   });
 
-  const handleMenuPress = useCallback(() => {
-    if (series) {
-      openSheet(BottomSheetTvSeries, {
-        tvSeries: series,
-      });
-    }
-  }, [series, openSheet]);
+  const { onMenuPress, headerRightItems } = useTvSeriesHeaderMenu({ tvSeries: series });
 
   return (
     <>
@@ -97,30 +88,16 @@ const TvSeriesScreen = () => {
         options={{
           headerTitle: series?.name || '',
           headerTransparent: true,
-          unstable_headerRightItems: (props) => [
-            {
-              type: 'button',
-              label: upperFirst(t('common.messages.menu')),
-              onPress: handleMenuPress,
-              tintColor: props.tintColor,
-              icon: {
-                name: 'ellipsis',
-                type: 'sfSymbol',
-              },
-            },
-          ],
+          unstable_headerRightItems: headerRightItems,
         }}
         scrollY={scrollY}
         triggerHeight={headerHeight}
-        onMenuPress={series ? handleMenuPress : undefined}
+        onMenuPress={series ? onMenuPress : undefined}
       />
       <AnimatedContentContainer
         onScroll={scrollHandler}
         scrollToOverflowEnabled
         contentContainerStyle={animatedContentContainerStyle}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
-        }}
       >
         <TvSeriesHeader
           tvSeries={series}
@@ -177,30 +154,31 @@ const TvSeriesScreen = () => {
         )}
       </AnimatedContentContainer>
       {series && user && (
-        <FloatingBar
-          bottomOffset={bottomOffset + PADDING_VERTICAL}
-          height={floatingBarHeight}
-          containerStyle={{ paddingHorizontal: 0 }}
-          style={tw`flex-row items-center justify-between`}
-        >
-          <View style={tw`flex-row items-center gap-2`}>
-            <ButtonUserLogTvSeriesRating tvSeries={series} />
-            <ButtonUserLogTvSeriesLike tvSeries={series} />
-            <ButtonUserLogTvSeriesWatch tvSeries={series} />
+        <FloatingBar height={floatingBarHeight} containerStyle={{ paddingHorizontal: 0 }}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={[
+              tw`items-center gap-2`,
+              {
+                paddingHorizontal: PADDING_HORIZONTAL,
+                paddingVertical: PADDING_VERTICAL,
+              },
+            ]}
+          >
+            <ButtonUserLogTvSeries tvSeries={series} />
             <ButtonUserBookmark
               mediaId={series.id}
               mediaType="tv_series"
               mediaTitle={series.name}
             />
-          </View>
-          <View style={tw`flex-row items-center gap-2`}>
             <ButtonPlaylistAdd mediaId={series.id} mediaType="tv_series" mediaTitle={series.name} />
             <ButtonUserRecoSend
               mediaId={series.id}
               mediaType="tv_series"
               mediaTitle={series.name}
             />
-          </View>
+          </ScrollView>
         </FloatingBar>
       )}
     </>

@@ -1,12 +1,12 @@
-import { useNavigation, useRouter } from 'expo-router';
+import { NativeStackNavigationOptions, useNavigation, useRouter } from 'expo-router';
 import { useTranslations } from 'use-intl';
 import { upperFirst } from 'lodash';
-import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { Button } from '../components/ui/Button';
 import { Icons } from '../constants/Icons';
 import { useCallback, useMemo } from 'react';
 import { Alert } from 'react-native';
 import { useTheme } from '../providers/ThemeProvider';
+import tw from '../lib/tw';
 
 export const useModalHeaderOptions = ({
   isPending = false,
@@ -75,6 +75,7 @@ export const useModalHeaderOptions = ({
                   icon={Icons.X}
                   disabled={isPending}
                   onPress={handleExit}
+                  style={tw`rounded-full`}
                 />
               );
             },
@@ -95,6 +96,6 @@ export const useModalHeaderOptions = ({
             },
           }
         : {},
-    [handleExit, isPending, forceCross, t, shouldShowCross],
+    [handleExit, isPending, t, shouldShowCross],
   );
 };

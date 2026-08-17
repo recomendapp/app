@@ -27,6 +27,7 @@ import { meOptions, useMeUpdateMutation } from '@libs/query-client';
 import { authClient } from '../../lib/auth/client';
 import { makeRedirectUri } from 'expo-auth-session';
 import { useQueryClient } from '@tanstack/react-query';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 15;
@@ -44,7 +45,8 @@ const SettingsAccountScreen = () => {
   const format = useFormatter();
   const t = useTranslations();
   const toast = useToast();
-  const { colors, bottomOffset, tabBarHeight } = useTheme();
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const { mutateAsync: updateProfile } = useMeUpdateMutation();
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,10 +56,9 @@ const SettingsAccountScreen = () => {
   const { verified: isVerified } = useMemo(() => verifiedSchema.parse(rawParams), [rawParams]);
 
   const now = useNow();
-  const dateLastUsernameUpdate = useMemo(
-    () => (user?.usernameUpdatedAt ? new Date(user.usernameUpdatedAt) : new Date('01/01/1970')),
-    [user?.usernameUpdatedAt],
-  );
+  const dateLastUsernameUpdate = user?.usernameUpdatedAt
+    ? new Date(user.usernameUpdatedAt)
+    : new Date('01/01/1970');
   const usernameDisabled =
     (now.getTime() - dateLastUsernameUpdate.getTime()) / (1000 * 60 * 60 * 24) < 30 ? true : false;
 
@@ -244,12 +245,8 @@ const SettingsAccountScreen = () => {
           gap: GAP,
           paddingTop: PADDING_VERTICAL,
           paddingHorizontal: PADDING_HORIZONTAL,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
         }}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
-        }}
-        bottomOffset={bottomOffset + PADDING_VERTICAL}
       >
         <Controller
           name="username"
@@ -393,10 +390,8 @@ const SettingsAccountScreen = () => {
 };
 
 const DeleteAccountSection = () => {
-  const { user } = useAuth();
   const { colors, mode } = useTheme();
   const toast = useToast();
-  const format = useFormatter();
   const t = useTranslations();
   // Handlers
   const handleDeleteButtonPress = useCallback(() => {

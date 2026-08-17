@@ -12,13 +12,14 @@ import { AuthError } from 'expo-auth-session';
 import { Href, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { LucideIcon } from 'lucide-react-native';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Alert, Pressable } from 'react-native';
 import { useTranslations } from 'use-intl';
 import * as Application from 'expo-application';
 import app from '../../constants/app';
 import { Badge } from '../../components/ui/Badge';
 import { client } from '@libs/api-js';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type BaseRoute = {
   label: string;
@@ -42,12 +43,13 @@ type Route = BaseRoute &
 
 const SettingsScreen = () => {
   const { user, customerInfo, logout, forceLogout } = useAuth();
-  const { colors, bottomOffset, tabBarHeight, mode } = useTheme();
+  const { colors, mode } = useTheme();
   const toast = useToast();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const t = useTranslations();
 
-  const [appVersion, setAppVersion] = useState<string | null>(null);
+  const appVersion = useMemo(() => Application.nativeApplicationVersion, []);
 
   const handleLogout = useCallback(async () => {
     try {
@@ -193,20 +195,13 @@ const SettingsScreen = () => {
     [appVersion, t],
   );
 
-  useEffect(() => {
-    setAppVersion(Application.nativeApplicationVersion);
-  }, []);
-
   return (
     <>
       <LegendList
         data={routes}
         renderItem={renderItem}
         contentContainerStyle={{
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
-        }}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
         }}
         keyExtractor={useCallback((_: Route, number: number) => number.toString(), [])}
         ListFooterComponent={renderFooter}

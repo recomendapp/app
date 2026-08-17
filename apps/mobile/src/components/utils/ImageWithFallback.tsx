@@ -55,6 +55,8 @@ export const ImageWithFallback = React.forwardRef<View, ImageWithFallbackProps>(
     );
 
     useEffect(() => {
+      // Resets the fallback state whenever the source prop changes.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setImgSrc(source.uri && source.uri.length! > 0 ? source : null);
     }, [source]);
 

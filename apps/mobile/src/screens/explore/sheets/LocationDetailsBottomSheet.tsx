@@ -1,6 +1,6 @@
 import { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { SharedValue } from 'react-native-reanimated';
 import { Text } from '../../../components/ui/text';
 import { Button } from '../../../components/ui/Button';

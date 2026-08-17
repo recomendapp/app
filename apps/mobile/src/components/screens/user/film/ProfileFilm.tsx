@@ -25,14 +25,16 @@ import { Icons } from '../../../../constants/Icons';
 import useBottomSheetStore from '../../../../stores/useBottomSheetStore';
 import ButtonUserReviewMovieLike from '../../../buttons/ButtonUserReviewMovieLike';
 import { useAuth } from '../../../../providers/AuthProvider';
-import { NativeStackHeaderItem } from '@react-navigation/native-stack';
 import { BottomSheetLogMovie } from '../../../bottom-sheets/sheets/BottomSheetLogMovie';
 import FeedUserLog from '../../feed/FeedUserLog';
 import { EnrichedMarkdownText } from '../../../RichText/EnrichedMarkdownText';
+import { NativeStackHeaderItem } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const ProfileFilm = ({ username, movieId }: { username: string; movieId: number }) => {
   const { user } = useAuth();
-  const { colors, bottomOffset, tabBarHeight } = useTheme();
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const t = useTranslations();
   const openSheet = useBottomSheetStore((state) => state.openSheet);
   // Queries
@@ -62,7 +64,7 @@ export const ProfileFilm = ({ username, movieId }: { username: string; movieId: 
   });
   const animatedContentContainerStyle = useAnimatedStyle(() => {
     return {
-      paddingBottom: withTiming(bottomOffset + PADDING_VERTICAL * 2, { duration: 300 }),
+      paddingBottom: withTiming(insets.bottom + PADDING_VERTICAL, { duration: 300 }),
     };
   });
   return (
@@ -131,9 +133,6 @@ export const ProfileFilm = ({ username, movieId }: { username: string; movieId: 
         onScroll={scrollHandler}
         scrollToOverflowEnabled
         contentContainerStyle={animatedContentContainerStyle}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
-        }}
       >
         <ProfileFilmHeader
           log={log}

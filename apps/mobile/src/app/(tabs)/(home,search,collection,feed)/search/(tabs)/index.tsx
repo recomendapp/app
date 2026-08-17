@@ -12,7 +12,7 @@ import tw from '../../../../../lib/tw';
 import { useTheme } from '../../../../../providers/ThemeProvider';
 import useSearchStore from '../../../../../stores/useSearchStore';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
-import { useScrollToTop } from '@react-navigation/native';
+import { useScrollToTop } from 'expo-router/react-navigation';
 import { Link } from 'expo-router';
 import { clamp, upperFirst } from 'lodash';
 import { useRef } from 'react';
@@ -49,7 +49,6 @@ interface SearchResultsProps extends React.ComponentPropsWithoutRef<typeof Scrol
 
 export const SearchResults = ({ search, ...props }: SearchResultsProps) => {
   const insets = useSafeAreaInsets();
-  const { bottomOffset, tabBarHeight } = useTheme();
   const t = useTranslations();
   const { isVisible: keyboardVisible, height: keyboardHeight } = useKeyboardState((state) => state);
 
@@ -71,11 +70,11 @@ export const SearchResults = ({ search, ...props }: SearchResultsProps) => {
       ref={scrollRef}
       contentContainerStyle={{
         gap: GAP,
-        paddingBottom: bottomOffset + PADDING_VERTICAL,
+        paddingBottom: insets.bottom + PADDING_VERTICAL,
       }}
       keyboardShouldPersistTaps="handled"
       scrollIndicatorInsets={{
-        bottom: keyboardVisible ? keyboardHeight - insets.bottom : tabBarHeight,
+        bottom: keyboardVisible ? keyboardHeight - insets.bottom : insets.bottom,
       }}
       refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
       {...props}

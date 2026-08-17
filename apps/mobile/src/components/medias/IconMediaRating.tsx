@@ -21,7 +21,7 @@ const IconMediaRating = React.forwardRef<
         return {
           text: colors.accentBlue,
           border: colors.accentBlue,
-          background: colors.accentBlueForeground,
+          background: colors.background,
         };
       case 'profile':
         return {

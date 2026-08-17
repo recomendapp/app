@@ -24,7 +24,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Color from 'color';
 import { useTheme } from '../../providers/ThemeProvider';
 import { Text } from '../ui/text';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { BORDER_RADIUS_FULL, GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { BadgeMedia } from '../badges/BadgeMedia';
 import { useTranslations } from 'use-intl';
@@ -221,7 +221,7 @@ const WidgetMostRecommendedItem = ({
             >
               {details?.title}
             </Text>
-            {item.media.overview?.length && (
+            {!!item.media.overview?.length && (
               <Text style={tw`text-base`} numberOfLines={2}>
                 {item.media.overview}
               </Text>

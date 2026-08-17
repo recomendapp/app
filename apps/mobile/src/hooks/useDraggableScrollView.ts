@@ -73,6 +73,8 @@ export function useDraggableScroll<Scrollable extends ScrollView = ScrollView>({
     };
   }, [cursor]);
 
+  // Combines ref objects (not their `.current` values) into one ref callback — no render-time read.
+  // eslint-disable-next-line react-hooks/refs
   const refs = useMemo(() => mergeRefs(outerRef ? [ref, outerRef] : [ref]), [ref, outerRef]);
 
   return {

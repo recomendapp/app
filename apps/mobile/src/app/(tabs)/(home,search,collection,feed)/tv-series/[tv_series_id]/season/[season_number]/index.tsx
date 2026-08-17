@@ -1,6 +1,6 @@
-import { useLocalSearchParams } from 'expo-router';
+import { Link, useLocalSearchParams } from 'expo-router';
 import { upperFirst } from 'lodash';
-import { LayoutChangeEvent, View } from 'react-native';
+import { ScrollView, LayoutChangeEvent, View } from 'react-native';
 import tw from '../../../../../../../lib/tw';
 import { useTheme } from '../../../../../../../providers/ThemeProvider';
 import Animated, {
@@ -25,13 +25,17 @@ import { IconMediaRating } from '../../../../../../../components/medias/IconMedi
 import { useFormatter, useTranslations } from 'use-intl';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../../../theme/globals';
 import AnimatedStackScreen from '../../../../../../../components/ui/AnimatedStackScreen';
-import { useHeaderHeight } from '@react-navigation/elements';
-import { useCallback, useMemo } from 'react';
+import { useHeaderHeight } from 'expo-router/react-navigation';
+import { useCallback, useMemo, useState } from 'react';
 import { Text } from '../../../../../../../components/ui/text';
 import { getTmdbImage } from '../../../../../../../lib/tmdb/getTmdbImage';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { tvSeasonEpisodesInfiniteOptions, tvSeasonOptions } from '@libs/query-client';
 import { TvEpisode, TvSeasonGet } from '@libs/api-js';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAuth } from '../../../../../../../providers/AuthProvider';
+import { FloatingBar } from '../../../../../../../components/ui/FloatingBar';
+import ButtonUserLogTvSeason from '../../../../../../../components/buttons/tv-series/ButtonUserLogTvSeason';
 
 interface MediaHeaderProps {
   season?: TvSeasonGet;
@@ -103,8 +107,11 @@ const TvSeriesSeasonHeader: React.FC<MediaHeaderProps> = ({
       onLayout={(event: LayoutChangeEvent) => {
         'worklet';
         const height = event.nativeEvent.layout.height;
+        // Reanimated shared value mutations on the UI thread.
+        /* eslint-disable react-hooks/immutability */
         headerHeight.value = height;
         triggerHeight.value = (height - navigationHeaderHeight) * 0.7;
+        /* eslint-enable react-hooks/immutability */
       }}
       style={{
         paddingHorizontal: PADDING_HORIZONTAL,
@@ -134,22 +141,24 @@ const TvSeriesSeasonHeader: React.FC<MediaHeaderProps> = ({
       </Animated.View>
       <Animated.View style={[tw`flex-row items-center gap-4`, textAnim]}>
         {!loading ? (
-          <AnimatedImageWithFallback
-            onLayout={(e) => {
-              'worklet';
-              posterHeight.value = e.nativeEvent.layout.height;
-            }}
-            alt={title ?? ''}
-            source={{ uri: getTmdbImage({ path: season?.posterPath, size: 'w342' }) ?? '' }}
-            style={[{ aspectRatio: 2 / 3 }, tw`rounded-md w-24 h-auto`]}
-            type={'tv_season'}
-          >
-            <IconMediaRating
-              rating={season?.voteAverage}
-              variant="general"
-              style={tw`absolute top-1 right-1`}
-            />
-          </AnimatedImageWithFallback>
+          <Link.AppleZoomTarget>
+            <AnimatedImageWithFallback
+              onLayout={(e) => {
+                'worklet';
+                posterHeight.value = e.nativeEvent.layout.height;
+              }}
+              alt={title ?? ''}
+              source={{ uri: getTmdbImage({ path: season?.posterPath, size: 'w342' }) ?? '' }}
+              style={[{ aspectRatio: 2 / 3 }, tw`rounded-md w-24 h-auto`]}
+              type={'tv_season'}
+            >
+              <IconMediaRating
+                rating={season?.voteAverage}
+                variant="general"
+                style={tw`absolute top-1 right-1`}
+              />
+            </AnimatedImageWithFallback>
+          </Link.AppleZoomTarget>
         ) : (
           <Skeleton style={[{ aspectRatio: 2 / 3 }, tw`w-24`]} />
         )}
@@ -203,9 +212,12 @@ const TvSeriesSeasonScreen = () => {
     season_number: string;
   }>();
   const { id: seriesId } = getIdFromSlug(tv_series_id);
-  const { colors, bottomOffset, tabBarHeight } = useTheme();
+  const { user } = useAuth();
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const formatter = useFormatter();
   const t = useTranslations();
+  const [floatingBarHeight, setFloatingBarHeight] = useState(0);
   const {
     data: season,
     isLoading,
@@ -221,7 +233,6 @@ const TvSeriesSeasonScreen = () => {
   const {
     data: episodes,
     isLoading: isEpisodesLoading,
-    isRefetching: isEpisodesRefetching,
     refetch: refetchEpisodes,
     fetchNextPage,
     hasNextPage,
@@ -355,10 +366,8 @@ const TvSeriesSeasonScreen = () => {
         }
         contentContainerStyle={{
           gap: GAP,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
-        }}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
+          paddingBottom:
+            insets.bottom + PADDING_VERTICAL + (user && season ? floatingBarHeight : 0),
         }}
         keyExtractor={(item) => item.id.toString()}
         refreshing={isRefetching}
@@ -368,6 +377,26 @@ const TvSeriesSeasonScreen = () => {
         }}
         onEndReached={() => hasNextPage && fetchNextPage()}
       />
+      {season && user && (
+        <FloatingBar
+          onHeightChange={setFloatingBarHeight}
+          containerStyle={{ paddingHorizontal: 0 }}
+        >
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={[
+              tw`items-center gap-2`,
+              {
+                paddingHorizontal: PADDING_HORIZONTAL,
+                paddingVertical: PADDING_VERTICAL,
+              },
+            ]}
+          >
+            <ButtonUserLogTvSeason tvSeason={season} />
+          </ScrollView>
+        </FloatingBar>
+      )}
     </>
   );
 };

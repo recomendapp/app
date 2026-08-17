@@ -1,12 +1,14 @@
-import {Platform} from 'react-native'
+import { osName } from 'expo-device';
+import { Platform } from 'react-native';
 
-export const isIOS = Platform.OS === 'ios'
-export const isAndroid = Platform.OS === 'android'
-export const isNative = isIOS || isAndroid
-export const isWeb = !isNative
-export const isMobileWebMediaQuery = 'only screen and (max-width: 1300px)'
+export const isIOS = Platform.OS === 'ios';
+export const isIpad = isIOS && osName === 'iPadOS';
+export const isAndroid = Platform.OS === 'android';
+export const isNative = isIOS || isAndroid;
+export const isWeb = !isNative;
+export const isMobileWebMediaQuery = 'only screen and (max-width: 1300px)';
 export const isMobileWeb =
   isWeb &&
   // @ts-ignore we know window exists -prf
-  global.window.matchMedia(isMobileWebMediaQuery)?.matches
-export const isIPhoneWeb = isWeb && /iPhone/.test(navigator.userAgent)
+  global.window.matchMedia(isMobileWebMediaQuery)?.matches;
+export const isIPhoneWeb = isWeb && /iPhone/.test(navigator.userAgent);

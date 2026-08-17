@@ -7,10 +7,10 @@ import tw from '../../../../../lib/tw';
 import { useAuth } from '../../../../../providers/AuthProvider';
 import { useTheme } from '../../../../../providers/ThemeProvider';
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ExternalPathString, Link, Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
-import { HeaderTitle, useHeaderHeight } from '@react-navigation/elements';
+import { HeaderTitle, useHeaderHeight } from 'expo-router/react-navigation';
 import { View } from '../../../../../components/ui/view';
 import ProfileWidgetPlaylists from '../../../../../components/screens/user/ProfileWidgetPlaylists';
 import { Skeleton } from '../../../../../components/ui/Skeleton';
@@ -18,8 +18,7 @@ import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/
 import ProfileWidgetLogMovie from '../../../../../components/screens/user/ProfileWidgetLogMovie';
 import ProfileWidgetLogTvSeries from '../../../../../components/screens/user/ProfileWidgetLogTvSeries';
 import { ActivityIndicator, Pressable, RefreshControl } from 'react-native';
-import useBottomSheetStore from '../../../../../stores/useBottomSheetStore';
-import BottomSheetUser from '../../../../../components/bottom-sheets/sheets/BottomSheetUser';
+import { useUserHeaderMenu } from '../../../../../components/header-menus/useUserHeaderMenu';
 import { useCallback, useMemo } from 'react';
 import Animated from 'react-native-reanimated';
 import { Profile } from '@libs/api-js';
@@ -31,6 +30,7 @@ import {
   userTvSeriesLogsInfiniteOptions,
 } from '@libs/query-client';
 import { CardEmpty } from '../../../../../components/cards/CardEmpty';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const ProfileHeader = ({
   profile,
@@ -133,11 +133,11 @@ const ProfileScreen = () => {
   const t = useTranslations();
   const { username } = useLocalSearchParams<{ username: string }>();
   const { user } = useAuth();
-  const { colors, bottomOffset, tabBarHeight, isLiquidGlassAvailable } = useTheme();
+  const { colors, isLiquidGlassAvailable } = useTheme();
+  const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const openSheet = useBottomSheetStore((state) => state.openSheet);
 
   const {
     data: profile,
@@ -193,6 +193,8 @@ const ProfileScreen = () => {
     }
   }, [refetch, profile?.id, user?.id, queryClient]);
 
+  const { onMenuPress, headerRightItems } = useUserHeaderMenu({ profile });
+
   return (
     <>
       <Stack.Screen
@@ -225,11 +227,7 @@ const ProfileScreen = () => {
                 variant="ghost"
                 size="icon"
                 icon={Icons.EllipsisVertical}
-                onPress={() =>
-                  openSheet(BottomSheetUser, {
-                    user: profile!,
-                  })
-                }
+                onPress={onMenuPress}
               />
             </>
           ),
@@ -245,25 +243,10 @@ const ProfileScreen = () => {
                       name: 'gearshape',
                       type: 'sfSymbol',
                     },
-                    visible: profile?.id === user?.id,
                   },
                 ] as const)
               : []),
-            {
-              type: 'button',
-              label: upperFirst(t('common.messages.menu')),
-              onPress: () =>
-                profile
-                  ? openSheet(BottomSheetUser, {
-                      user: profile,
-                    })
-                  : null,
-              tintColor: props.tintColor,
-              icon: {
-                name: 'ellipsis',
-                type: 'sfSymbol',
-              },
-            },
+            ...(headerRightItems ? headerRightItems() : []),
           ],
         }}
       />
@@ -272,11 +255,8 @@ const ProfileScreen = () => {
         contentContainerStyle={{
           gap: GAP,
           paddingTop: navigationHeaderHeight,
-          paddingBottom: bottomOffset + PADDING_VERTICAL,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
           flexGrow: 1,
-        }}
-        scrollIndicatorInsets={{
-          bottom: tabBarHeight,
         }}
       >
         <ProfileHeader {...(loading ? { skeleton: true } : { profile: profile })} />

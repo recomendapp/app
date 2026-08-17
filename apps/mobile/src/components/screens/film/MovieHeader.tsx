@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { LayoutChangeEvent, Pressable, View } from 'react-native';
 import Animated, {
   Extrapolation,
@@ -14,7 +14,8 @@ import { upperFirst } from 'lodash';
 import useColorConverter from '../../../hooks/useColorConverter';
 import { Skeleton } from '../../ui/Skeleton';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
+import { ZoomTransitionTargetContext } from 'expo-router/build/link/zoom/zoom-transition-context';
 import { useTheme } from '../../../providers/ThemeProvider';
 import tw from '../../../lib/tw';
 import { IconMediaRating } from '../../medias/IconMediaRating';
@@ -23,7 +24,7 @@ import { useLocale, useTranslations } from 'use-intl';
 import { Text, TextProps } from '../../ui/text';
 import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import BottomSheetMovieFollowersRating from '../../bottom-sheets/sheets/BottomSheetMovieFollowersRating';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { MovieHeaderInfo } from './MovieHeaderInfo';
 import { useImagePalette } from '../../../hooks/useImagePalette';
 import AnimatedImage from '../../ui/AnimatedImage';
@@ -47,6 +48,11 @@ const MovieHeader: React.FC<MovieHeaderProps> = ({ movie, loading, scrollY, trig
   const { palette } = useImagePalette(
     getTmdbImage({ path: movie?.posterPath, size: 'w92' }) || undefined,
   );
+  // Skip the poster's entrance fade when this screen was reached via Link.AppleZoom — the
+  // native zoom transition already animates the poster into place, so layering FadeInDown on
+  // top would double-animate it.
+  const { identifier: zoomTransitionIdentifier } = useContext(ZoomTransitionTargetContext);
+  const isZoomTransitionTarget = !!zoomTransitionIdentifier;
   // SharedValue
   const posterHeight = useSharedValue(0);
   const headerHeight = useSharedValue(0);
@@ -97,8 +103,11 @@ const MovieHeader: React.FC<MovieHeaderProps> = ({ movie, loading, scrollY, trig
       onLayout={(event: LayoutChangeEvent) => {
         'worklet';
         const height = event.nativeEvent.layout.height;
+        // Reanimated shared value mutations on the UI thread.
+        /* eslint-disable react-hooks/immutability */
         headerHeight.value = height;
         triggerHeight.value = (height - navigationHeaderHeight) * 0.7;
+        /* eslint-enable react-hooks/immutability */
       }}
     >
       <Animated.View style={[tw`absolute inset-0`, bgAnim]}>
@@ -137,34 +146,38 @@ const MovieHeader: React.FC<MovieHeaderProps> = ({ movie, loading, scrollY, trig
           { paddingHorizontal: PADDING_HORIZONTAL, paddingVertical: PADDING_VERTICAL },
         ]}
       >
-        <Animated.View entering={FadeInDown.delay(200).duration(500)}>
+        <Animated.View
+          entering={isZoomTransitionTarget ? undefined : FadeInDown.delay(200).duration(500)}
+        >
           {!loading ? (
-            <AnimatedImageWithFallback
-              onLayout={(e) => {
-                'worklet';
-                posterHeight.value = e.nativeEvent.layout.height;
-              }}
-              transition={250}
-              alt={movie?.title ?? ''}
-              source={{ uri: getTmdbImage({ path: movie?.posterPath, size: 'w780' }) ?? '' }}
-              style={[{ aspectRatio: 2 / 3 }, tw`rounded-md w-48 h-auto`, posterAnim]}
-              type={'movie'}
-            >
-              <View style={tw`absolute gap-2 top-2 right-2`}>
-                {movie?.voteAverage ? (
-                  <IconMediaRating rating={movie.voteAverage} variant="general" />
-                ) : null}
-                {movie?.followerAvgRating && (
-                  <Pressable
-                    onPress={() =>
-                      openSheet(BottomSheetMovieFollowersRating, { movieId: movie.id })
-                    }
-                  >
-                    <IconMediaRating rating={movie.followerAvgRating} variant="follower" />
-                  </Pressable>
-                )}
-              </View>
-            </AnimatedImageWithFallback>
+            <Link.AppleZoomTarget>
+              <AnimatedImageWithFallback
+                onLayout={(e) => {
+                  'worklet';
+                  posterHeight.value = e.nativeEvent.layout.height;
+                }}
+                transition={250}
+                alt={movie?.title ?? ''}
+                source={{ uri: getTmdbImage({ path: movie?.posterPath, size: 'w780' }) ?? '' }}
+                style={[{ aspectRatio: 2 / 3 }, tw`rounded-md w-48 h-auto`, posterAnim]}
+                type={'movie'}
+              >
+                <View style={tw`absolute gap-2 top-2 right-2`}>
+                  {movie?.voteAverage ? (
+                    <IconMediaRating rating={movie.voteAverage} variant="general" />
+                  ) : null}
+                  {movie?.followerAvgRating && (
+                    <Pressable
+                      onPress={() =>
+                        openSheet(BottomSheetMovieFollowersRating, { movieId: movie.id })
+                      }
+                    >
+                      <IconMediaRating rating={movie.followerAvgRating} variant="follower" />
+                    </Pressable>
+                  )}
+                </View>
+              </AnimatedImageWithFallback>
+            </Link.AppleZoomTarget>
           ) : (
             <Skeleton style={[{ aspectRatio: 2 / 3 }, tw`w-48`, posterAnim]} />
           )}

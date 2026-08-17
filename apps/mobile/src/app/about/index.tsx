@@ -1,3 +1,4 @@
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text } from '../../components/ui/text';
 import { View } from '../../components/ui/view';
 import { Icons } from '../../constants/Icons';
@@ -10,7 +11,8 @@ import { ScrollView } from 'react-native';
 import { useTranslations } from 'use-intl';
 
 const AboutScreen = () => {
-  const { colors, bottomOffset, tabBarHeight } = useTheme();
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const t = useTranslations('pages.about');
 
   const resources = useMemo<{ name: string; link: ExternalPathString }[]>(
@@ -275,14 +277,11 @@ const AboutScreen = () => {
   return (
     <ScrollView
       contentContainerStyle={{
-        paddingBottom: bottomOffset + PADDING_VERTICAL,
+        paddingBottom: insets.bottom + PADDING_VERTICAL,
         paddingTop: PADDING_VERTICAL,
         gap: GAP_XL,
         justifyContent: 'center',
         alignItems: 'center',
-      }}
-      scrollIndicatorInsets={{
-        bottom: tabBarHeight,
       }}
     >
       {sections.map((section, index) => (
