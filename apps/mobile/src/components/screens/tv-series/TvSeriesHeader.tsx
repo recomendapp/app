@@ -184,7 +184,13 @@ const TvSeriesHeader: React.FC<TvSeriesHeaderProps> = ({
               </AnimatedImageWithFallback>
             </Link.AppleZoomTarget>
           ) : (
-            <Skeleton style={[{ aspectRatio: 2 / 3 }, tw.style('w-48'), posterAnim]} />
+            <Skeleton
+              onLayout={(e) => {
+                'worklet';
+                posterHeight.value = e.nativeEvent.layout.height;
+              }}
+              style={[{ aspectRatio: 2 / 3 }, tw.style('w-48'), posterAnim]}
+            />
           )}
         </Animated.View>
         <Animated.View style={[tw.style('w-full items-center'), { gap: GAP }, textAnim]}>

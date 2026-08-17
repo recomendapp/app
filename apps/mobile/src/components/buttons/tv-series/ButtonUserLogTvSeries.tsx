@@ -83,7 +83,7 @@ const ButtonUserLogTvSeries = forwardRef<View, ButtonUserLogTvSeriesProps>(({ tv
                 },
           ]}
         >
-          <Icons.like color={colors.accentPink} fill={colors.accentPink} size={14} />
+          <Icons.like color={colors.accentPink} fill={colors.accentPink} size={18} />
         </View>
       )}
     </View>

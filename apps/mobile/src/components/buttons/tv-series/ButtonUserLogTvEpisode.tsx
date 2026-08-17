@@ -8,35 +8,49 @@ import { Button } from '../../ui/Button';
 import { Text } from '../../ui/text';
 import { Icons } from '../../../constants/Icons';
 import tw from '../../../lib/tw';
-import { MovieCompact } from '@libs/api-js';
-import { movieLogOptions } from '@libs/query-client';
+import { TvEpisode } from '@libs/api-js';
+import { tvEpisodeLogOptions } from '@libs/query-client';
 
-interface ButtonUserLogMovieProps {
-  movie: MovieCompact;
+interface ButtonUserLogTvEpisodeProps {
+  episode: TvEpisode;
 }
 
-const ButtonUserLogMovie = forwardRef<View, ButtonUserLogMovieProps>(({ movie }, ref) => {
+/**
+ * Consolidated log entry point for an episode — same visual language as ButtonUserLogTvSeason.tsx,
+ * minus the "watching" status color: an episode log has no status, just watched/not-watched (see
+ * LogTvEpisodeRequest), plus an optional rating.
+ */
+const ButtonUserLogTvEpisode = forwardRef<View, ButtonUserLogTvEpisodeProps>(({ episode }, ref) => {
   const { user } = useAuth();
   const { colors } = useTheme();
   const router = useRouter();
   const pathname = usePathname();
   const { data: log } = useQuery(
-    movieLogOptions({
+    tvEpisodeLogOptions({
       userId: user?.id,
-      movieId: movie.id,
+      tvSeriesId: episode.tvSeriesId,
+      seasonNumber: episode.seasonNumber,
+      episodeNumber: episode.episodeNumber,
     }),
   );
 
   const handlePress = () => {
     if (user) {
-      router.push({ pathname: '/film/[film_id]/log', params: { film_id: movie.id } });
+      router.push({
+        pathname: '/tv-series/[tv_series_id]/season/[season_number]/episode/[episode_number]/log',
+        params: {
+          tv_series_id: episode.tvSeriesId,
+          season_number: episode.seasonNumber,
+          episode_number: episode.episodeNumber,
+        },
+      });
     } else {
       router.push({ pathname: '/auth', params: { redirect: pathname } });
     }
   };
 
   return (
-    <View ref={ref} style={[tw`relative`, { overflow: 'visible' }]}>
+    <View ref={ref} style={[{ overflow: 'visible' }]}>
       <Button
         variant="outline"
         size={log?.rating ? 'default' : 'icon'}
@@ -58,32 +72,9 @@ const ButtonUserLogMovie = forwardRef<View, ButtonUserLogMovieProps>(({ movie },
           <Text style={[tw`font-bold text-lg`, { color: colors.accentYellow }]}>{log.rating}</Text>
         ) : null}
       </Button>
-      {log?.isLiked && (
-        <View
-          pointerEvents="none"
-          style={[
-            tw`absolute`,
-            {
-              zIndex: 1,
-              elevation: 1,
-            },
-            log.rating !== null
-              ? {
-                  bottom: 4,
-                  right: 4,
-                }
-              : {
-                  bottom: 0,
-                  right: 0,
-                },
-          ]}
-        >
-          <Icons.like color={colors.accentPink} fill={colors.accentPink} size={18} />
-        </View>
-      )}
     </View>
   );
 });
-ButtonUserLogMovie.displayName = 'ButtonUserLogMovie';
+ButtonUserLogTvEpisode.displayName = 'ButtonUserLogTvEpisode';
 
-export default ButtonUserLogMovie;
+export default ButtonUserLogTvEpisode;
