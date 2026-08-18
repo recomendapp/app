@@ -5,8 +5,16 @@ import {
   IPlaylistItemUpdatedSignal,
   IPlaylistItemsDeletedSignal,
   IPlaylistDeletedSignal,
+  LogServerEvents,
 } from '@libs/realtime';
-import { Playlist } from './__generated__';
+import {
+  LogMovie,
+  LogTvSeasonUpdateResponse,
+  LogTvEpisodeUpdateResponse,
+  LogTvSeries,
+  Playlist,
+  WatchedDateResponse,
+} from './__generated__';
 import { PlaylistItemWithMedia } from './playlists';
 
 export interface PlaylistServerToClientEvents {
@@ -18,7 +26,21 @@ export interface PlaylistServerToClientEvents {
   [PlaylistServerEvents.ITEM_DELETED]: (signal: IPlaylistItemsDeletedSignal) => void;
 }
 
-export type RealtimeSocket = Socket<PlaylistServerToClientEvents>;
+export interface LogServerToClientEvents {
+  [LogServerEvents.MOVIE_LOG_SET]: (log: LogMovie) => void;
+  [LogServerEvents.MOVIE_LOG_DELETED]: (log: LogMovie) => void;
+  [LogServerEvents.TV_SERIES_LOG_SET]: (log: LogTvSeries) => void;
+  [LogServerEvents.TV_SERIES_LOG_DELETED]: (log: LogTvSeries) => void;
+  [LogServerEvents.TV_SEASON_LOG_SET]: (payload: LogTvSeasonUpdateResponse) => void;
+  [LogServerEvents.TV_SEASON_LOG_DELETED]: (payload: LogTvSeasonUpdateResponse) => void;
+  [LogServerEvents.TV_EPISODE_LOG_SET]: (payload: LogTvEpisodeUpdateResponse) => void;
+  [LogServerEvents.TV_EPISODE_LOG_DELETED]: (payload: LogTvEpisodeUpdateResponse) => void;
+  [LogServerEvents.MOVIE_WATCHED_DATE_SET]: (payload: WatchedDateResponse) => void;
+  [LogServerEvents.MOVIE_WATCHED_DATE_UPDATED]: (payload: WatchedDateResponse) => void;
+  [LogServerEvents.MOVIE_WATCHED_DATE_DELETED]: (payload: WatchedDateResponse) => void;
+}
+
+export type RealtimeSocket = Socket<PlaylistServerToClientEvents & LogServerToClientEvents>;
 
 export interface PlaylistCallbacks {
   onPlaylistCreated?: (playlist: Playlist) => void;
@@ -27,6 +49,20 @@ export interface PlaylistCallbacks {
   onItemAdded?: (items: PlaylistItemWithMedia[]) => void;
   onItemUpdated?: (item: IPlaylistItemUpdatedSignal) => void;
   onItemDeleted?: (signal: IPlaylistItemsDeletedSignal) => void;
+}
+
+export interface LogCallbacks {
+  onMovieLogSet?: (log: LogMovie) => void;
+  onMovieLogDeleted?: (log: LogMovie) => void;
+  onTvSeriesLogSet?: (log: LogTvSeries) => void;
+  onTvSeriesLogDeleted?: (log: LogTvSeries) => void;
+  onTvSeasonLogSet?: (payload: LogTvSeasonUpdateResponse) => void;
+  onTvSeasonLogDeleted?: (payload: LogTvSeasonUpdateResponse) => void;
+  onTvEpisodeLogSet?: (payload: LogTvEpisodeUpdateResponse) => void;
+  onTvEpisodeLogDeleted?: (payload: LogTvEpisodeUpdateResponse) => void;
+  onMovieWatchedDateSet?: (payload: WatchedDateResponse) => void;
+  onMovieWatchedDateUpdated?: (payload: WatchedDateResponse) => void;
+  onMovieWatchedDateDeleted?: (payload: WatchedDateResponse) => void;
 }
 
 export interface RealtimeConfig {
@@ -140,6 +176,100 @@ class RealtimeManager {
       }
       if (callbacks.onItemDeleted) {
         socketInstance.off(PlaylistServerEvents.ITEM_DELETED, callbacks.onItemDeleted);
+      }
+    };
+  }
+
+  /**
+   * Registers log event callbacks on the shared connection, connecting it first if needed.
+   * Returns an unsubscribe function. Meant to be called once app-wide (see `useRealtimeSync` in
+   * `@libs/query-client`) — events for every log the user creates, on any device, arrive here.
+   */
+  public onLogEvents(callbacks: LogCallbacks): () => void {
+    let isUnsubscribed = false;
+    let socketInstance: RealtimeSocket | null = null;
+
+    this.createSocket().then((socket) => {
+      if (isUnsubscribed) return;
+      socketInstance = socket;
+
+      if (callbacks.onMovieLogSet) {
+        socket.on(LogServerEvents.MOVIE_LOG_SET, callbacks.onMovieLogSet);
+      }
+      if (callbacks.onMovieLogDeleted) {
+        socket.on(LogServerEvents.MOVIE_LOG_DELETED, callbacks.onMovieLogDeleted);
+      }
+      if (callbacks.onTvSeriesLogSet) {
+        socket.on(LogServerEvents.TV_SERIES_LOG_SET, callbacks.onTvSeriesLogSet);
+      }
+      if (callbacks.onTvSeriesLogDeleted) {
+        socket.on(LogServerEvents.TV_SERIES_LOG_DELETED, callbacks.onTvSeriesLogDeleted);
+      }
+      if (callbacks.onTvSeasonLogSet) {
+        socket.on(LogServerEvents.TV_SEASON_LOG_SET, callbacks.onTvSeasonLogSet);
+      }
+      if (callbacks.onTvSeasonLogDeleted) {
+        socket.on(LogServerEvents.TV_SEASON_LOG_DELETED, callbacks.onTvSeasonLogDeleted);
+      }
+      if (callbacks.onTvEpisodeLogSet) {
+        socket.on(LogServerEvents.TV_EPISODE_LOG_SET, callbacks.onTvEpisodeLogSet);
+      }
+      if (callbacks.onTvEpisodeLogDeleted) {
+        socket.on(LogServerEvents.TV_EPISODE_LOG_DELETED, callbacks.onTvEpisodeLogDeleted);
+      }
+      if (callbacks.onMovieWatchedDateSet) {
+        socket.on(LogServerEvents.MOVIE_WATCHED_DATE_SET, callbacks.onMovieWatchedDateSet);
+      }
+      if (callbacks.onMovieWatchedDateUpdated) {
+        socket.on(LogServerEvents.MOVIE_WATCHED_DATE_UPDATED, callbacks.onMovieWatchedDateUpdated);
+      }
+      if (callbacks.onMovieWatchedDateDeleted) {
+        socket.on(LogServerEvents.MOVIE_WATCHED_DATE_DELETED, callbacks.onMovieWatchedDateDeleted);
+      }
+    });
+
+    return () => {
+      isUnsubscribed = true;
+      if (!socketInstance) return;
+
+      if (callbacks.onMovieLogSet) {
+        socketInstance.off(LogServerEvents.MOVIE_LOG_SET, callbacks.onMovieLogSet);
+      }
+      if (callbacks.onMovieLogDeleted) {
+        socketInstance.off(LogServerEvents.MOVIE_LOG_DELETED, callbacks.onMovieLogDeleted);
+      }
+      if (callbacks.onTvSeriesLogSet) {
+        socketInstance.off(LogServerEvents.TV_SERIES_LOG_SET, callbacks.onTvSeriesLogSet);
+      }
+      if (callbacks.onTvSeriesLogDeleted) {
+        socketInstance.off(LogServerEvents.TV_SERIES_LOG_DELETED, callbacks.onTvSeriesLogDeleted);
+      }
+      if (callbacks.onTvSeasonLogSet) {
+        socketInstance.off(LogServerEvents.TV_SEASON_LOG_SET, callbacks.onTvSeasonLogSet);
+      }
+      if (callbacks.onTvSeasonLogDeleted) {
+        socketInstance.off(LogServerEvents.TV_SEASON_LOG_DELETED, callbacks.onTvSeasonLogDeleted);
+      }
+      if (callbacks.onTvEpisodeLogSet) {
+        socketInstance.off(LogServerEvents.TV_EPISODE_LOG_SET, callbacks.onTvEpisodeLogSet);
+      }
+      if (callbacks.onTvEpisodeLogDeleted) {
+        socketInstance.off(LogServerEvents.TV_EPISODE_LOG_DELETED, callbacks.onTvEpisodeLogDeleted);
+      }
+      if (callbacks.onMovieWatchedDateSet) {
+        socketInstance.off(LogServerEvents.MOVIE_WATCHED_DATE_SET, callbacks.onMovieWatchedDateSet);
+      }
+      if (callbacks.onMovieWatchedDateUpdated) {
+        socketInstance.off(
+          LogServerEvents.MOVIE_WATCHED_DATE_UPDATED,
+          callbacks.onMovieWatchedDateUpdated,
+        );
+      }
+      if (callbacks.onMovieWatchedDateDeleted) {
+        socketInstance.off(
+          LogServerEvents.MOVIE_WATCHED_DATE_DELETED,
+          callbacks.onMovieWatchedDateDeleted,
+        );
       }
     };
   }

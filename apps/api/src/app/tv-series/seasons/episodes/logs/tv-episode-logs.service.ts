@@ -1,17 +1,27 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../../../common/modules/drizzle/drizzle.module';
+import {
+  DRIZZLE_SERVICE,
+  DrizzleService,
+} from '../../../../../common/modules/drizzle/drizzle.module';
 import { User } from '../../../../auth/auth.service';
 import { logTvEpisode, logTvSeries, tmdbTvEpisode, tmdbTvSeason } from '@libs/db/schemas';
 import { and, eq, inArray, sql } from 'drizzle-orm';
-import { LogTvEpisodeDto, LogTvEpisodeRequestDto, LogTvEpisodeUpdateResponseDto } from './tv-episode-logs.dto';
+import {
+  LogTvEpisodeDto,
+  LogTvEpisodeRequestDto,
+  LogTvEpisodeUpdateResponseDto,
+} from './tv-episode-logs.dto';
 import { plainToInstance } from 'class-transformer';
 import { TvLogsSyncService } from '../../../logs/sync/tv-logs-sync.service';
+import { LogServerEvents } from '@libs/realtime';
+import { RealtimeGateway } from '../../../../realtime/realtime.gateway';
 
 @Injectable()
 export class TvEpisodeLogsService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
     private readonly syncService: TvLogsSyncService,
+    private readonly realtimeGateway: RealtimeGateway,
   ) {}
 
   async get({
@@ -25,7 +35,8 @@ export class TvEpisodeLogsService {
     seasonNumber: number;
     episodeNumber: number;
   }): Promise<LogTvEpisodeDto | null> {
-    const [logEntry] = await this.db.select({ episode: logTvEpisode })
+    const [logEntry] = await this.db
+      .select({ episode: logTvEpisode })
       .from(logTvEpisode)
       .innerJoin(logTvSeries, eq(logTvSeries.id, logTvEpisode.logTvSeriesId))
       .where(
@@ -33,8 +44,8 @@ export class TvEpisodeLogsService {
           eq(logTvSeries.userId, currentUser.id),
           eq(logTvSeries.tvSeriesId, tvSeriesId),
           eq(logTvEpisode.seasonNumber, seasonNumber),
-          eq(logTvEpisode.episodeNumber, episodeNumber)
-        )
+          eq(logTvEpisode.episodeNumber, episodeNumber),
+        ),
       )
       .limit(1);
 
@@ -56,49 +67,74 @@ export class TvEpisodeLogsService {
     dto: LogTvEpisodeRequestDto;
   }): Promise<LogTvEpisodeUpdateResponseDto> {
     const result = await this.db.transaction(async (tx) => {
-      const [tmdbEp] = await tx.select({ id: tmdbTvEpisode.id })
+      const [tmdbEp] = await tx
+        .select({ id: tmdbTvEpisode.id })
         .from(tmdbTvEpisode)
         .innerJoin(tmdbTvSeason, eq(tmdbTvSeason.id, tmdbTvEpisode.tvSeasonId))
         .where(
           and(
             eq(tmdbTvSeason.tvSeriesId, tvSeriesId),
             eq(tmdbTvSeason.seasonNumber, seasonNumber),
-            eq(tmdbTvEpisode.episodeNumber, episodeNumber)
-          )
+            eq(tmdbTvEpisode.episodeNumber, episodeNumber),
+          ),
         );
 
       if (!tmdbEp) throw new NotFoundException('TMDB Episode not found');
 
-      const parents = await this.syncService.ensureParentsExist(tx, currentUser.id, tvSeriesId, seasonNumber);
-
-      const [episodeLog] = await tx.insert(logTvEpisode).values({
-        logTvSeriesId: parents.logTvSeriesId,
-        logTvSeasonId: parents.logTvSeasonId,
-        tvEpisodeId: tmdbEp.id,
+      const parents = await this.syncService.ensureParentsExist(
+        tx,
+        currentUser.id,
+        tvSeriesId,
         seasonNumber,
-        episodeNumber,
-        rating: dto.rating,
-        ratedAt: dto.rating != null ? sql`now()` : null,
-      })
-      .onConflictDoUpdate({
-        target: [logTvEpisode.logTvSeasonId, logTvEpisode.tvEpisodeId],
-        set: {
-          watchedAt: sql`now()`,
-          rating: dto.rating !== undefined ? dto.rating : sql`${logTvEpisode.rating}`,
-          ratedAt: dto.rating !== undefined ? (dto.rating != null ? sql`now()` : null) : sql`${logTvEpisode.ratedAt}`,
-        }
-      }).returning();
+      );
 
-      const { series, season } = await this.syncService.syncTree(tx, currentUser.id, tvSeriesId, seasonNumber);
+      const [episodeLog] = await tx
+        .insert(logTvEpisode)
+        .values({
+          logTvSeriesId: parents.logTvSeriesId,
+          logTvSeasonId: parents.logTvSeasonId,
+          tvEpisodeId: tmdbEp.id,
+          seasonNumber,
+          episodeNumber,
+          rating: dto.rating,
+          ratedAt: dto.rating != null ? sql`now()` : null,
+        })
+        .onConflictDoUpdate({
+          target: [logTvEpisode.logTvSeasonId, logTvEpisode.tvEpisodeId],
+          set: {
+            watchedAt: sql`now()`,
+            rating: dto.rating !== undefined ? dto.rating : sql`${logTvEpisode.rating}`,
+            ratedAt:
+              dto.rating !== undefined
+                ? dto.rating != null
+                  ? sql`now()`
+                  : null
+                : sql`${logTvEpisode.ratedAt}`,
+          },
+        })
+        .returning();
+
+      const { series, season } = await this.syncService.syncTree(
+        tx,
+        currentUser.id,
+        tvSeriesId,
+        seasonNumber,
+      );
 
       return {
         episode: episodeLog,
         season: season,
-        series: series
+        series: series,
       };
     });
 
-    return plainToInstance(LogTvEpisodeUpdateResponseDto, result, { excludeExtraneousValues: true });
+    const response = plainToInstance(LogTvEpisodeUpdateResponseDto, result, {
+      excludeExtraneousValues: true,
+    });
+
+    this.realtimeGateway.emitToUser(currentUser.id, LogServerEvents.TV_EPISODE_LOG_SET, response);
+
+    return response;
   }
 
   async delete({
@@ -112,7 +148,7 @@ export class TvEpisodeLogsService {
     seasonNumber: number;
     episodeNumber: number;
   }): Promise<LogTvEpisodeUpdateResponseDto> {
-    const result = await this.db.transaction(async (tx) => {      
+    const result = await this.db.transaction(async (tx) => {
       const episodeIdSubquery = tx
         .select({ id: logTvEpisode.id })
         .from(logTvEpisode)
@@ -122,8 +158,8 @@ export class TvEpisodeLogsService {
             eq(logTvSeries.userId, currentUser.id),
             eq(logTvSeries.tvSeriesId, tvSeriesId),
             eq(logTvEpisode.seasonNumber, seasonNumber),
-            eq(logTvEpisode.episodeNumber, episodeNumber)
-          )
+            eq(logTvEpisode.episodeNumber, episodeNumber),
+          ),
         );
 
       const [deletedEpisode] = await tx
@@ -135,15 +171,30 @@ export class TvEpisodeLogsService {
         throw new NotFoundException('Episode log not found');
       }
 
-      const { series, season } = await this.syncService.syncTree(tx, currentUser.id, tvSeriesId, seasonNumber);
+      const { series, season } = await this.syncService.syncTree(
+        tx,
+        currentUser.id,
+        tvSeriesId,
+        seasonNumber,
+      );
 
       return {
         episode: deletedEpisode,
         season: season,
-        series: series
+        series: series,
       };
     });
 
-    return plainToInstance(LogTvEpisodeUpdateResponseDto, result, { excludeExtraneousValues: true });
+    const response = plainToInstance(LogTvEpisodeUpdateResponseDto, result, {
+      excludeExtraneousValues: true,
+    });
+
+    this.realtimeGateway.emitToUser(
+      currentUser.id,
+      LogServerEvents.TV_EPISODE_LOG_DELETED,
+      response,
+    );
+
+    return response;
   }
 }
