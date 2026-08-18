@@ -17,10 +17,15 @@ import {
   ReviewTvSeriesInputDto,
   ReviewTvSeriesSortBy,
 } from '../../reviews/tv-series/dto/review-tv-series.dto';
+import { LogServerEvents } from '@libs/realtime';
+import { RealtimeGateway } from '../../realtime/realtime.gateway';
 
 @Injectable()
 export class TvSeriesReviewsService {
-  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
+  constructor(
+    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
+    private readonly realtimeGateway: RealtimeGateway,
+  ) {}
 
   async upsert({
     user,
@@ -63,11 +68,15 @@ export class TvSeriesReviewsService {
       })
       .returning();
 
-    return plainToInstance(ReviewTvSeriesDto, {
+    const result = plainToInstance(ReviewTvSeriesDto, {
       ...upsertedReview,
       userId: user.id,
       tvSeriesId: tvSeriesId,
     });
+
+    this.realtimeGateway.emitToUser(user.id, LogServerEvents.TV_SERIES_REVIEW_UPSERTED, result);
+
+    return result;
   }
 
   async delete({
@@ -97,11 +106,15 @@ export class TvSeriesReviewsService {
       throw new NotFoundException('Review not found');
     }
 
-    return plainToInstance(ReviewTvSeriesDto, {
+    const result = plainToInstance(ReviewTvSeriesDto, {
       ...deletedReview,
       userId: user.id,
       tvSeriesId: tvSeriesId,
     });
+
+    this.realtimeGateway.emitToUser(user.id, LogServerEvents.TV_SERIES_REVIEW_DELETED, result);
+
+    return result;
   }
 
   /* ---------------------------------- List ---------------------------------- */

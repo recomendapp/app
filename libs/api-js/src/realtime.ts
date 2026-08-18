@@ -6,16 +6,21 @@ import {
   IPlaylistItemsDeletedSignal,
   IPlaylistDeletedSignal,
   LogServerEvents,
+  BookmarkServerEvents,
 } from '@libs/realtime';
 import {
+  Bookmark,
   LogMovie,
   LogTvSeasonUpdateResponse,
   LogTvEpisodeUpdateResponse,
   LogTvSeries,
   Playlist,
+  ReviewMovie,
+  ReviewTvSeries,
   WatchedDateResponse,
 } from './__generated__';
 import { PlaylistItemWithMedia } from './playlists';
+import { BookmarkWithMedia } from './bookmarks';
 
 export interface PlaylistServerToClientEvents {
   [PlaylistServerEvents.CREATED]: (playlist: Playlist) => void;
@@ -38,9 +43,20 @@ export interface LogServerToClientEvents {
   [LogServerEvents.MOVIE_WATCHED_DATE_SET]: (payload: WatchedDateResponse) => void;
   [LogServerEvents.MOVIE_WATCHED_DATE_UPDATED]: (payload: WatchedDateResponse) => void;
   [LogServerEvents.MOVIE_WATCHED_DATE_DELETED]: (payload: WatchedDateResponse) => void;
+  [LogServerEvents.MOVIE_REVIEW_UPSERTED]: (review: ReviewMovie) => void;
+  [LogServerEvents.MOVIE_REVIEW_DELETED]: (review: ReviewMovie) => void;
+  [LogServerEvents.TV_SERIES_REVIEW_UPSERTED]: (review: ReviewTvSeries) => void;
+  [LogServerEvents.TV_SERIES_REVIEW_DELETED]: (review: ReviewTvSeries) => void;
 }
 
-export type RealtimeSocket = Socket<PlaylistServerToClientEvents & LogServerToClientEvents>;
+export interface BookmarkServerToClientEvents {
+  [BookmarkServerEvents.SET]: (bookmark: BookmarkWithMedia) => void;
+  [BookmarkServerEvents.DELETED]: (bookmark: Bookmark) => void;
+}
+
+export type RealtimeSocket = Socket<
+  PlaylistServerToClientEvents & LogServerToClientEvents & BookmarkServerToClientEvents
+>;
 
 export interface PlaylistCallbacks {
   onPlaylistCreated?: (playlist: Playlist) => void;
@@ -63,6 +79,15 @@ export interface LogCallbacks {
   onMovieWatchedDateSet?: (payload: WatchedDateResponse) => void;
   onMovieWatchedDateUpdated?: (payload: WatchedDateResponse) => void;
   onMovieWatchedDateDeleted?: (payload: WatchedDateResponse) => void;
+  onMovieReviewUpserted?: (review: ReviewMovie) => void;
+  onMovieReviewDeleted?: (review: ReviewMovie) => void;
+  onTvSeriesReviewUpserted?: (review: ReviewTvSeries) => void;
+  onTvSeriesReviewDeleted?: (review: ReviewTvSeries) => void;
+}
+
+export interface BookmarkCallbacks {
+  onBookmarkSet?: (bookmark: BookmarkWithMedia) => void;
+  onBookmarkDeleted?: (bookmark: Bookmark) => void;
 }
 
 export interface RealtimeConfig {
@@ -226,6 +251,18 @@ class RealtimeManager {
       if (callbacks.onMovieWatchedDateDeleted) {
         socket.on(LogServerEvents.MOVIE_WATCHED_DATE_DELETED, callbacks.onMovieWatchedDateDeleted);
       }
+      if (callbacks.onMovieReviewUpserted) {
+        socket.on(LogServerEvents.MOVIE_REVIEW_UPSERTED, callbacks.onMovieReviewUpserted);
+      }
+      if (callbacks.onMovieReviewDeleted) {
+        socket.on(LogServerEvents.MOVIE_REVIEW_DELETED, callbacks.onMovieReviewDeleted);
+      }
+      if (callbacks.onTvSeriesReviewUpserted) {
+        socket.on(LogServerEvents.TV_SERIES_REVIEW_UPSERTED, callbacks.onTvSeriesReviewUpserted);
+      }
+      if (callbacks.onTvSeriesReviewDeleted) {
+        socket.on(LogServerEvents.TV_SERIES_REVIEW_DELETED, callbacks.onTvSeriesReviewDeleted);
+      }
     });
 
     return () => {
@@ -270,6 +307,59 @@ class RealtimeManager {
           LogServerEvents.MOVIE_WATCHED_DATE_DELETED,
           callbacks.onMovieWatchedDateDeleted,
         );
+      }
+      if (callbacks.onMovieReviewUpserted) {
+        socketInstance.off(LogServerEvents.MOVIE_REVIEW_UPSERTED, callbacks.onMovieReviewUpserted);
+      }
+      if (callbacks.onMovieReviewDeleted) {
+        socketInstance.off(LogServerEvents.MOVIE_REVIEW_DELETED, callbacks.onMovieReviewDeleted);
+      }
+      if (callbacks.onTvSeriesReviewUpserted) {
+        socketInstance.off(
+          LogServerEvents.TV_SERIES_REVIEW_UPSERTED,
+          callbacks.onTvSeriesReviewUpserted,
+        );
+      }
+      if (callbacks.onTvSeriesReviewDeleted) {
+        socketInstance.off(
+          LogServerEvents.TV_SERIES_REVIEW_DELETED,
+          callbacks.onTvSeriesReviewDeleted,
+        );
+      }
+    };
+  }
+
+  /**
+   * Registers bookmark event callbacks on the shared connection, connecting it first if needed.
+   * Returns an unsubscribe function. Meant to be called once app-wide (see `useRealtimeSync` in
+   * `@libs/query-client`) — events for every bookmark the user creates, on any device, arrive
+   * here.
+   */
+  public onBookmarkEvents(callbacks: BookmarkCallbacks): () => void {
+    let isUnsubscribed = false;
+    let socketInstance: RealtimeSocket | null = null;
+
+    this.createSocket().then((socket) => {
+      if (isUnsubscribed) return;
+      socketInstance = socket;
+
+      if (callbacks.onBookmarkSet) {
+        socket.on(BookmarkServerEvents.SET, callbacks.onBookmarkSet);
+      }
+      if (callbacks.onBookmarkDeleted) {
+        socket.on(BookmarkServerEvents.DELETED, callbacks.onBookmarkDeleted);
+      }
+    });
+
+    return () => {
+      isUnsubscribed = true;
+      if (!socketInstance) return;
+
+      if (callbacks.onBookmarkSet) {
+        socketInstance.off(BookmarkServerEvents.SET, callbacks.onBookmarkSet);
+      }
+      if (callbacks.onBookmarkDeleted) {
+        socketInstance.off(BookmarkServerEvents.DELETED, callbacks.onBookmarkDeleted);
       }
     };
   }

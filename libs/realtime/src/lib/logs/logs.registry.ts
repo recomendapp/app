@@ -10,6 +10,10 @@ export const LogServerEvents = {
   MOVIE_WATCHED_DATE_SET: 'log:movie_watched_date_set',
   MOVIE_WATCHED_DATE_UPDATED: 'log:movie_watched_date_updated',
   MOVIE_WATCHED_DATE_DELETED: 'log:movie_watched_date_deleted',
+  MOVIE_REVIEW_UPSERTED: 'log:movie_review_upserted',
+  MOVIE_REVIEW_DELETED: 'log:movie_review_deleted',
+  TV_SERIES_REVIEW_UPSERTED: 'log:tv_series_review_upserted',
+  TV_SERIES_REVIEW_DELETED: 'log:tv_series_review_deleted',
 } as const;
 
 export type LogServerEventName = (typeof LogServerEvents)[keyof typeof LogServerEvents];

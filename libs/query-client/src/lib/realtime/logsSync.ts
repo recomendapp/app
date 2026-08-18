@@ -1,8 +1,16 @@
 import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { realtime } from '@libs/api-js';
-import { useMovieLogCacheUpdate, useMovieWatchedDateCacheUpdate } from '../movies';
-import { tvSeriesLogOptions, useTvSeriesLogCacheUpdate } from '../tv-series';
+import {
+  useMovieLogCacheUpdate,
+  useMovieReviewCacheUpdate,
+  useMovieWatchedDateCacheUpdate,
+} from '../movies';
+import {
+  tvSeriesLogOptions,
+  useTvSeriesLogCacheUpdate,
+  useTvSeriesReviewCacheUpdate,
+} from '../tv-series';
 import { tvSeasonLogOptions, useTvSeasonLogCacheUpdate } from '../tv-seasons';
 import { tvEpisodeLogOptions, useTvEpisodeLogCacheUpdate } from '../tv-episodes';
 
@@ -14,8 +22,12 @@ export function useRealtimeSyncLogs(enabled: boolean) {
     updateDate: updateMovieWatchedDate,
     deleteDate: deleteMovieWatchedDate,
   } = useMovieWatchedDateCacheUpdate();
+  const { upsertReview: upsertMovieReview, deleteReview: deleteMovieReview } =
+    useMovieReviewCacheUpdate();
   const { updateLog: updateTvSeriesLog, deleteLog: deleteTvSeriesLog } =
     useTvSeriesLogCacheUpdate();
+  const { upsertReview: upsertTvSeriesReview, deleteReview: deleteTvSeriesReview } =
+    useTvSeriesReviewCacheUpdate();
   const { setLog: setTvSeasonLog, deleteLog: deleteTvSeasonLog } = useTvSeasonLogCacheUpdate();
   const { setLog: setTvEpisodeLog, deleteLog: deleteTvEpisodeLog } = useTvEpisodeLogCacheUpdate();
 
@@ -126,6 +138,19 @@ export function useRealtimeSyncLogs(enabled: boolean) {
       onMovieWatchedDateDeleted: (payload) => {
         deleteMovieWatchedDate(payload);
       },
+
+      onMovieReviewUpserted: (review) => {
+        upsertMovieReview(review);
+      },
+      onMovieReviewDeleted: (review) => {
+        deleteMovieReview(review);
+      },
+      onTvSeriesReviewUpserted: (review) => {
+        upsertTvSeriesReview(review);
+      },
+      onTvSeriesReviewDeleted: (review) => {
+        deleteTvSeriesReview(review);
+      },
     });
   }, [
     enabled,
@@ -135,8 +160,12 @@ export function useRealtimeSyncLogs(enabled: boolean) {
     setMovieWatchedDate,
     updateMovieWatchedDate,
     deleteMovieWatchedDate,
+    upsertMovieReview,
+    deleteMovieReview,
     updateTvSeriesLog,
     deleteTvSeriesLog,
+    upsertTvSeriesReview,
+    deleteTvSeriesReview,
     setTvSeasonLog,
     deleteTvSeasonLog,
     setTvEpisodeLog,

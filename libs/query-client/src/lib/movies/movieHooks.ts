@@ -4,6 +4,7 @@ import {
   FeedItem,
   ListInfiniteBookmarks,
   ListInfiniteFeed,
+  ListInfiniteReviewsMovie,
   ListInfiniteUserMoviesWithMovie,
   ListInfiniteWatchedDates,
   ListPaginatedBookmarks,
@@ -12,6 +13,7 @@ import {
   ListPaginatedWatchedDates,
   LogMovie,
   LogMovieWithMovieNoReview,
+  ReviewMovie,
   WatchedDate,
   WatchedDateResponse,
 } from '@libs/api-js';
@@ -31,9 +33,15 @@ import {
   userMovieWatchedDatesInfiniteOptions,
   userMovieWatchedDatesPaginatedOptions,
 } from '../users';
-import { removeListItemFromAllCaches, updateListItemInAllCaches } from '../utils';
+import {
+  removeListItemFromAllCaches,
+  updateFromInfiniteCache,
+  updateListItemInAllCaches,
+} from '../utils';
 import { BookmarkWithMedia } from '../users/types';
 import { meFeedInfiniteOptions, meFeedPaginatedOptions, meKeys } from '../me';
+import { movieKeys } from './movieKeys';
+import { InfiniteData } from '@tanstack/react-query';
 
 export const useMovieLogCacheUpdate = () => {
   const queryClient = useQueryClient();
@@ -328,4 +336,101 @@ export const useMovieWatchedDateCacheUpdate = () => {
   );
 
   return { setDate, updateDate, deleteDate };
+};
+
+export const useMovieReviewCacheUpdate = () => {
+  const queryClient = useQueryClient();
+
+  const upsertReview = useCallback(
+    (data: ReviewMovie) => {
+      queryClient.setQueryData(
+        movieLogOptions({
+          userId: data.userId,
+          movieId: data.movieId,
+        }).queryKey,
+        (old) => {
+          if (!old) return undefined;
+          return {
+            ...old,
+            review: data,
+          };
+        },
+      );
+
+      const userMovieLogKey = userMovieLogOptions({
+        userId: data.userId,
+        movieId: data.movieId,
+      }).queryKey;
+      const oldUserMovieLog = queryClient.getQueryData(userMovieLogKey);
+      if (!oldUserMovieLog) {
+        queryClient.invalidateQueries({ queryKey: userMovieLogKey });
+      } else {
+        queryClient.setQueryData(userMovieLogKey, {
+          ...oldUserMovieLog,
+          review: data,
+        });
+      }
+
+      const isNewReview = data.createdAt === data.updatedAt;
+      if (isNewReview) {
+        queryClient.invalidateQueries({
+          queryKey: movieKeys.reviews({
+            movieId: data.movieId,
+          }),
+        });
+      } else {
+        queryClient.setQueriesData(
+          { queryKey: movieReviewsInfiniteOptions({ movieId: data.movieId }).queryKey },
+          (old: InfiniteData<ListInfiniteReviewsMovie> | undefined) => {
+            return updateFromInfiniteCache(old, data);
+          },
+        );
+      }
+    },
+    [queryClient],
+  );
+
+  const deleteReview = useCallback(
+    (data: ReviewMovie) => {
+      queryClient.setQueryData(
+        movieLogOptions({
+          userId: data.userId,
+          movieId: data.movieId,
+        }).queryKey,
+        (old) => {
+          if (!old) return undefined;
+          return {
+            ...old,
+            review: null,
+          };
+        },
+      );
+
+      queryClient.setQueryData(
+        userMovieLogOptions({
+          userId: data.userId,
+          movieId: data.movieId,
+        }).queryKey,
+        (old) => {
+          if (!old) return undefined;
+          return {
+            ...old,
+            review: null,
+          };
+        },
+      );
+
+      removeListItemFromAllCaches(
+        queryClient,
+        {
+          paginated: movieReviewsPaginatedOptions({ movieId: data.movieId }).queryKey,
+          infinite: movieReviewsInfiniteOptions({ movieId: data.movieId }).queryKey,
+        },
+        data.id,
+      );
+    },
+    [queryClient],
+  );
+
+  return { upsertReview, deleteReview };
 };
