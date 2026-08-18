@@ -1,18 +1,12 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app/app.module';
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify';
-import {
-  ClassSerializerInterceptor,
-  ValidationPipe,
-  VersioningType,
-} from '@nestjs/common';
+import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import { ClassSerializerInterceptor, ValidationPipe, VersioningType } from '@nestjs/common';
 import { env } from './env';
 import { setupVersionedDocs } from './utils/docs';
 import { API_VERSIONS } from './constants/api';
 import fastifyMultipart from '@fastify/multipart';
+import { RedisIoAdapter } from './app/realtime/redis-io.adapter';
 
 async function bootstrap() {
   const adapter = new FastifyAdapter();
@@ -22,10 +16,9 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     credentials: true,
   });
-  const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    adapter,
-  );
+  const app = await NestFactory.create<NestFastifyApplication>(AppModule, adapter);
+
+  app.enableShutdownHooks();
 
   app.enableVersioning({
     type: VersioningType.URI,
@@ -47,10 +40,14 @@ async function bootstrap() {
     limits: {
       fileSize: 5 * 1024 * 1024, // 5MB
       files: 1,
-    }
-  })
+    },
+  });
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+
+  const redisIoAdapter = new RedisIoAdapter(app);
+  await redisIoAdapter.connectToRedis();
+  app.useWebSocketAdapter(redisIoAdapter);
 
   setupVersionedDocs(app, API_VERSIONS);
 
