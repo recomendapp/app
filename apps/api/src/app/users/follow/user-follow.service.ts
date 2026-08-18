@@ -3,32 +3,31 @@ import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle
 import { and, eq, sql } from 'drizzle-orm';
 import { profile, follow } from '@libs/db/schemas';
 import { plainToInstance } from 'class-transformer';
-import { WorkerClient } from '@shared/worker';
 import { FollowDto } from './dto/user-follow.dto';
 import { NotifyClient } from '@shared/notify';
+import { UserFollowServerEvents } from '@libs/realtime';
+import { RealtimeGateway } from '../../realtime/realtime.gateway';
 
 @Injectable()
 export class UserFollowService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-    private readonly notify: NotifyClient, 
+    private readonly notify: NotifyClient,
+    private readonly realtimeGateway: RealtimeGateway,
   ) {}
 
   async get({
     currentUserId,
     targetUserId,
   }: {
-    currentUserId: string,
-    targetUserId: string
+    currentUserId: string;
+    targetUserId: string;
   }): Promise<FollowDto | null> {
     if (currentUserId === targetUserId) {
       throw new BadRequestException('You cannot follow yourself');
     }
     const followRecord = await this.db.query.follow.findFirst({
-      where: and(
-        eq(follow.followerId, currentUserId),
-        eq(follow.followingId, targetUserId)
-      )
+      where: and(eq(follow.followerId, currentUserId), eq(follow.followingId, targetUserId)),
     });
 
     if (!followRecord) {
@@ -65,10 +64,10 @@ export class UserFollowService {
                   ELSE 'accepted' 
                 END::follow_status_enum
               `.as('status'),
-              createdAt: sql`now()`.as('created_at'), 
+              createdAt: sql`now()`.as('created_at'),
             })
             .from(profile)
-            .where(eq(profile.id, targetUserId))
+            .where(eq(profile.id, targetUserId)),
         )
         .onConflictDoNothing()
         .returning();
@@ -84,15 +83,18 @@ export class UserFollowService {
             targetUserId: targetUserId,
           });
         }
-        return plainToInstance(FollowDto, newFollow, {
+        const result = plainToInstance(FollowDto, newFollow, {
           excludeExtraneousValues: true,
         });
+        this.realtimeGateway.emitToUsers(
+          [currentUserId, targetUserId],
+          UserFollowServerEvents.SET,
+          result,
+        );
+        return result;
       } else {
         const existingFollow = await tx.query.follow.findFirst({
-          where: and(
-            eq(follow.followerId, currentUserId),
-            eq(follow.followingId, targetUserId)
-          )
+          where: and(eq(follow.followerId, currentUserId), eq(follow.followingId, targetUserId)),
         });
         if (!existingFollow) {
           throw new NotFoundException('User to follow not found');
@@ -114,24 +116,25 @@ export class UserFollowService {
     if (currentUserId === targetUserId) {
       throw new BadRequestException('You cannot unfollow yourself');
     }
-  
+
     const [deletedFollow] = await this.db
       .delete(follow)
-      .where(
-        and(
-          eq(follow.followerId, currentUserId),
-          eq(follow.followingId, targetUserId)
-        )
-      )
+      .where(and(eq(follow.followerId, currentUserId), eq(follow.followingId, targetUserId)))
       .returning();
 
     if (!deletedFollow) {
       throw new NotFoundException('Follow relationship not found');
     }
 
-    return plainToInstance(FollowDto, deletedFollow, {
+    const result = plainToInstance(FollowDto, deletedFollow, {
       excludeExtraneousValues: true,
     });
+    this.realtimeGateway.emitToUsers(
+      [currentUserId, targetUserId],
+      UserFollowServerEvents.DELETED,
+      result,
+    );
+    return result;
   }
 
   async accept({
@@ -144,7 +147,7 @@ export class UserFollowService {
     if (currentUserId === targetUserId) {
       throw new BadRequestException('You cannot accept follow request from yourself');
     }
-  
+
     const [updatedFollow] = await this.db
       .update(follow)
       .set({ status: 'accepted' })
@@ -152,8 +155,8 @@ export class UserFollowService {
         and(
           eq(follow.followerId, targetUserId),
           eq(follow.followingId, currentUserId),
-          eq(follow.status, 'pending')
-        )
+          eq(follow.status, 'pending'),
+        ),
       )
       .returning();
 
@@ -165,9 +168,15 @@ export class UserFollowService {
     if (!updatedFollow) {
       throw new NotFoundException('Follow request not found');
     }
-    return plainToInstance(FollowDto, updatedFollow, {
+    const result = plainToInstance(FollowDto, updatedFollow, {
       excludeExtraneousValues: true,
     });
+    this.realtimeGateway.emitToUsers(
+      [currentUserId, targetUserId],
+      UserFollowServerEvents.ACCEPTED,
+      result,
+    );
+    return result;
   }
 
   async decline({
@@ -180,15 +189,15 @@ export class UserFollowService {
     if (currentUserId === targetUserId) {
       throw new BadRequestException('You cannot decline follow request from yourself');
     }
-  
+
     const [updatedFollow] = await this.db
       .delete(follow)
       .where(
         and(
           eq(follow.followerId, targetUserId),
           eq(follow.followingId, currentUserId),
-          eq(follow.status, 'pending')
-        )
+          eq(follow.status, 'pending'),
+        ),
       )
       .returning();
 
@@ -196,8 +205,14 @@ export class UserFollowService {
       throw new NotFoundException('Follow request not found');
     }
 
-    return plainToInstance(FollowDto, updatedFollow, {
+    const result = plainToInstance(FollowDto, updatedFollow, {
       excludeExtraneousValues: true,
     });
+    this.realtimeGateway.emitToUsers(
+      [currentUserId, targetUserId],
+      UserFollowServerEvents.DECLINED,
+      result,
+    );
+    return result;
   }
 }

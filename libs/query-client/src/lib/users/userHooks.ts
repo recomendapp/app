@@ -2,18 +2,38 @@ import { useQueryClient } from '@tanstack/react-query';
 import {
   Bookmark,
   BookmarkWithMedia,
+  FeedItem,
+  Follow,
+  FollowRequest,
   ListInfiniteBookmarks,
+  ListInfiniteFeed,
+  ListInfiniteFollowRequests,
+  ListInfinitePersonFeed,
   ListInfiniteRecos,
   ListInfiniteRecoTargets,
+  ListInfiniteUsers,
   ListPaginatedBookmarks,
+  ListPaginatedFeed,
+  ListPaginatedFollowRequests,
+  ListPaginatedPersonFeed,
   ListPaginatedRecos,
   ListPaginatedRecoTargets,
+  ListPaginatedUsers,
+  PersonFeedWithMovie,
+  PersonFeedWithTvSeries,
+  ListInfinitePlaylists,
+  ListPaginatedPlaylists,
+  PersonFollow,
+  Playlist,
+  PlaylistLike,
+  PlaylistSaved,
   Profile,
   Reco,
   RecoSendResponse,
   RecoTarget,
   RecoWithMedia,
   User,
+  UserSummary,
 } from '@libs/api-js';
 import {
   resolveUpdater,
@@ -31,9 +51,25 @@ import {
   userRecoSendPaginatedOptions,
   userRecoSendInfiniteOptions,
   userRecosAllOptions,
+  userFollowOptions,
+  userFollowersPaginatedOptions,
+  userFollowersInfiniteOptions,
+  userFollowingPaginatedOptions,
+  userFollowingInfiniteOptions,
+  userFollowRequestsPaginatedOptions,
+  userFollowRequestsInfiniteOptions,
+  userPersonFollowOptions,
+  userFeedPersonsPaginatedOptions,
+  userFeedPersonsInfiniteOptions,
+  userPlaylistLikeOptions,
+  userPlaylistSavedOptions,
+  userPlaylistsSavedPaginatedOptions,
+  userPlaylistsSavedInfiniteOptions,
+  userFeedPaginatedOptions,
+  userFeedInfiniteOptions,
   userKeys,
 } from '../users';
-import { meOptions } from '../me';
+import { meOptions, meFeedPaginatedOptions, meFeedInfiniteOptions } from '../me';
 import { useCallback } from 'react';
 
 export const useUserCacheUpdate = () => {
@@ -265,4 +301,261 @@ export const useRecoCacheUpdate = ({
   );
 
   return { upsertReceived, removeDeleted };
+};
+
+export const useUserFollowCacheUpdate = () => {
+  const queryClient = useQueryClient();
+
+  const setFollow = useCallback(
+    (data: Follow) => {
+      queryClient.setQueryData(
+        userFollowOptions({ userId: data.followerId, profileId: data.followingId }).queryKey,
+        data,
+      );
+
+      queryClient.invalidateQueries({
+        queryKey: userKeys.followers({ userId: data.followingId }),
+      });
+      queryClient.invalidateQueries({
+        queryKey: userKeys.following({ userId: data.followerId }),
+      });
+
+      if (data.status === 'pending') {
+        queryClient.invalidateQueries({
+          queryKey: userKeys.followRequests({ userId: data.followingId }),
+        });
+      }
+    },
+    [queryClient],
+  );
+
+  const deleteFollow = useCallback(
+    (data: Follow) => {
+      queryClient.setQueryData(
+        userFollowOptions({ userId: data.followerId, profileId: data.followingId }).queryKey,
+        null,
+      );
+
+      if (data.status === 'accepted') {
+        removeListItemFromAllCaches<UserSummary, ListPaginatedUsers, ListInfiniteUsers>(
+          queryClient,
+          {
+            paginated: userFollowingPaginatedOptions({ profileId: data.followerId }).queryKey,
+            infinite: userFollowingInfiniteOptions({ profileId: data.followerId }).queryKey,
+          },
+          (item) => item.id === data.followingId,
+        );
+        removeListItemFromAllCaches<UserSummary, ListPaginatedUsers, ListInfiniteUsers>(
+          queryClient,
+          {
+            paginated: userFollowersPaginatedOptions({ profileId: data.followingId }).queryKey,
+            infinite: userFollowersInfiniteOptions({ profileId: data.followingId }).queryKey,
+          },
+          (item) => item.id === data.followerId,
+        );
+      }
+
+      if (data.status === 'pending') {
+        removeListItemFromAllCaches<
+          FollowRequest,
+          ListPaginatedFollowRequests,
+          ListInfiniteFollowRequests
+        >(
+          queryClient,
+          {
+            paginated: userFollowRequestsPaginatedOptions({ userId: data.followingId }).queryKey,
+            infinite: userFollowRequestsInfiniteOptions({ userId: data.followingId }).queryKey,
+          },
+          (item) => item.user.id === data.followerId,
+        );
+      }
+    },
+    [queryClient],
+  );
+
+  const acceptFollow = useCallback(
+    (data: Follow) => {
+      queryClient.setQueryData(
+        userFollowOptions({ userId: data.followerId, profileId: data.followingId }).queryKey,
+        data,
+      );
+
+      removeListItemFromAllCaches<
+        FollowRequest,
+        ListPaginatedFollowRequests,
+        ListInfiniteFollowRequests
+      >(
+        queryClient,
+        {
+          paginated: userFollowRequestsPaginatedOptions({ userId: data.followingId }).queryKey,
+          infinite: userFollowRequestsInfiniteOptions({ userId: data.followingId }).queryKey,
+        },
+        (item) => item.user.id === data.followerId,
+      );
+
+      queryClient.invalidateQueries({
+        queryKey: userKeys.followers({ userId: data.followingId }),
+      });
+      queryClient.invalidateQueries({
+        queryKey: userKeys.following({ userId: data.followerId }),
+      });
+    },
+    [queryClient],
+  );
+
+  const declineFollow = useCallback(
+    (data: Follow) => {
+      queryClient.setQueryData(
+        userFollowOptions({ userId: data.followerId, profileId: data.followingId }).queryKey,
+        null,
+      );
+
+      removeListItemFromAllCaches<
+        FollowRequest,
+        ListPaginatedFollowRequests,
+        ListInfiniteFollowRequests
+      >(
+        queryClient,
+        {
+          paginated: userFollowRequestsPaginatedOptions({ userId: data.followingId }).queryKey,
+          infinite: userFollowRequestsInfiniteOptions({ userId: data.followingId }).queryKey,
+        },
+        (item) => item.user.id === data.followerId,
+      );
+    },
+    [queryClient],
+  );
+
+  return { setFollow, deleteFollow, acceptFollow, declineFollow };
+};
+
+export const usePersonFollowCacheUpdate = () => {
+  const queryClient = useQueryClient();
+
+  const setPersonFollow = useCallback(
+    (data: PersonFollow) => {
+      queryClient.setQueryData(
+        userPersonFollowOptions({ userId: data.userId, personId: data.personId }).queryKey,
+        true,
+      );
+
+      queryClient.invalidateQueries({ queryKey: userKeys.feedPersons({ userId: data.userId }) });
+    },
+    [queryClient],
+  );
+
+  const deletePersonFollow = useCallback(
+    (data: PersonFollow) => {
+      queryClient.setQueryData(
+        userPersonFollowOptions({ userId: data.userId, personId: data.personId }).queryKey,
+        false,
+      );
+
+      removeListItemFromAllCaches<
+        | ({ type: 'movie' } & PersonFeedWithMovie)
+        | ({ type: 'tv_series' } & PersonFeedWithTvSeries),
+        ListPaginatedPersonFeed,
+        ListInfinitePersonFeed
+      >(
+        queryClient,
+        {
+          paginated: userFeedPersonsPaginatedOptions({ userId: data.userId }).queryKey,
+          infinite: userFeedPersonsInfiniteOptions({ userId: data.userId }).queryKey,
+        },
+        (item) => item.person.id === data.personId,
+      );
+    },
+    [queryClient],
+  );
+
+  return { setPersonFollow, deletePersonFollow };
+};
+
+export const usePlaylistLikeCacheUpdate = () => {
+  const queryClient = useQueryClient();
+
+  const setPlaylistLike = useCallback(
+    (data: PlaylistLike) => {
+      queryClient.setQueryData(
+        userPlaylistLikeOptions({ userId: data.userId, playlistId: data.playlistId }).queryKey,
+        true,
+      );
+
+      queryClient.invalidateQueries({ queryKey: userKeys.feed({ userId: data.userId }) });
+    },
+    [queryClient],
+  );
+
+  const deletePlaylistLike = useCallback(
+    (data: PlaylistLike) => {
+      queryClient.setQueryData(
+        userPlaylistLikeOptions({ userId: data.userId, playlistId: data.playlistId }).queryKey,
+        false,
+      );
+
+      const isPlaylistLikeActivity = (item: FeedItem) =>
+        item.activityType === 'playlist_like' &&
+        item.content.id === data.playlistId &&
+        item.author.id === data.userId;
+
+      removeListItemFromAllCaches<FeedItem, ListPaginatedFeed, ListInfiniteFeed>(
+        queryClient,
+        {
+          paginated: meFeedPaginatedOptions({ userId: data.userId }).queryKey,
+          infinite: meFeedInfiniteOptions({ userId: data.userId }).queryKey,
+        },
+        isPlaylistLikeActivity,
+      );
+      removeListItemFromAllCaches<FeedItem, ListPaginatedFeed, ListInfiniteFeed>(
+        queryClient,
+        {
+          paginated: userFeedPaginatedOptions({ userId: data.userId }).queryKey,
+          infinite: userFeedInfiniteOptions({ userId: data.userId }).queryKey,
+        },
+        isPlaylistLikeActivity,
+      );
+    },
+    [queryClient],
+  );
+
+  return { setPlaylistLike, deletePlaylistLike };
+};
+
+export const usePlaylistSaveCacheUpdate = () => {
+  const queryClient = useQueryClient();
+
+  const setPlaylistSave = useCallback(
+    (data: PlaylistSaved) => {
+      queryClient.setQueryData(
+        userPlaylistSavedOptions({ userId: data.userId, playlistId: data.playlistId }).queryKey,
+        true,
+      );
+
+      queryClient.invalidateQueries({
+        queryKey: userKeys.playlistsSaved({ userId: data.userId }),
+      });
+    },
+    [queryClient],
+  );
+
+  const deletePlaylistSave = useCallback(
+    (data: PlaylistSaved) => {
+      queryClient.setQueryData(
+        userPlaylistSavedOptions({ userId: data.userId, playlistId: data.playlistId }).queryKey,
+        false,
+      );
+
+      removeListItemFromAllCaches<Playlist, ListPaginatedPlaylists, ListInfinitePlaylists>(
+        queryClient,
+        {
+          paginated: userPlaylistsSavedPaginatedOptions({ userId: data.userId }).queryKey,
+          infinite: userPlaylistsSavedInfiniteOptions({ userId: data.userId }).queryKey,
+        },
+        (item) => item.id === data.playlistId,
+      );
+    },
+    [queryClient],
+  );
+
+  return { setPlaylistSave, deletePlaylistSave };
 };

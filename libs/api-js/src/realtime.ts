@@ -9,14 +9,20 @@ import {
   BookmarkServerEvents,
   RecoServerEvents,
   MeServerEvents,
+  UserFollowServerEvents,
+  PersonFollowServerEvents,
 } from '@libs/realtime';
 import {
   Bookmark,
+  Follow,
   LogMovie,
   LogTvSeasonUpdateResponse,
   LogTvEpisodeUpdateResponse,
   LogTvSeries,
+  PersonFollow,
   Playlist,
+  PlaylistLike,
+  PlaylistSaved,
   Reco,
   RecoSendResponse,
   ReviewMovie,
@@ -35,6 +41,10 @@ export interface PlaylistServerToClientEvents {
   [PlaylistServerEvents.ITEM_ADDED]: (items: PlaylistItemWithMedia[]) => void;
   [PlaylistServerEvents.ITEM_UPDATED]: (item: IPlaylistItemUpdatedSignal) => void;
   [PlaylistServerEvents.ITEM_DELETED]: (signal: IPlaylistItemsDeletedSignal) => void;
+  [PlaylistServerEvents.LIKE_SET]: (like: PlaylistLike) => void;
+  [PlaylistServerEvents.LIKE_DELETED]: (like: PlaylistLike) => void;
+  [PlaylistServerEvents.SAVE_SET]: (save: PlaylistSaved) => void;
+  [PlaylistServerEvents.SAVE_DELETED]: (save: PlaylistSaved) => void;
 }
 
 export interface LogServerToClientEvents {
@@ -70,12 +80,26 @@ export interface MeServerToClientEvents {
   [MeServerEvents.UPDATED]: (user: User) => void;
 }
 
+export interface UserFollowServerToClientEvents {
+  [UserFollowServerEvents.SET]: (follow: Follow) => void;
+  [UserFollowServerEvents.DELETED]: (follow: Follow) => void;
+  [UserFollowServerEvents.ACCEPTED]: (follow: Follow) => void;
+  [UserFollowServerEvents.DECLINED]: (follow: Follow) => void;
+}
+
+export interface PersonFollowServerToClientEvents {
+  [PersonFollowServerEvents.SET]: (follow: PersonFollow) => void;
+  [PersonFollowServerEvents.DELETED]: (follow: PersonFollow) => void;
+}
+
 export type RealtimeSocket = Socket<
   PlaylistServerToClientEvents &
     LogServerToClientEvents &
     BookmarkServerToClientEvents &
     RecoServerToClientEvents &
-    MeServerToClientEvents
+    MeServerToClientEvents &
+    UserFollowServerToClientEvents &
+    PersonFollowServerToClientEvents
 >;
 
 export interface PlaylistCallbacks {
@@ -85,6 +109,10 @@ export interface PlaylistCallbacks {
   onItemAdded?: (items: PlaylistItemWithMedia[]) => void;
   onItemUpdated?: (item: IPlaylistItemUpdatedSignal) => void;
   onItemDeleted?: (signal: IPlaylistItemsDeletedSignal) => void;
+  onPlaylistLikeSet?: (like: PlaylistLike) => void;
+  onPlaylistLikeDeleted?: (like: PlaylistLike) => void;
+  onPlaylistSaveSet?: (save: PlaylistSaved) => void;
+  onPlaylistSaveDeleted?: (save: PlaylistSaved) => void;
 }
 
 export interface LogCallbacks {
@@ -118,6 +146,18 @@ export interface RecoCallbacks {
 
 export interface MeCallbacks {
   onMeUpdated?: (user: User) => void;
+}
+
+export interface UserFollowCallbacks {
+  onUserFollowSet?: (follow: Follow) => void;
+  onUserFollowDeleted?: (follow: Follow) => void;
+  onUserFollowAccepted?: (follow: Follow) => void;
+  onUserFollowDeclined?: (follow: Follow) => void;
+}
+
+export interface PersonFollowCallbacks {
+  onPersonFollowSet?: (follow: PersonFollow) => void;
+  onPersonFollowDeleted?: (follow: PersonFollow) => void;
 }
 
 export interface RealtimeConfig {
@@ -209,6 +249,18 @@ class RealtimeManager {
       if (callbacks.onItemDeleted) {
         socket.on(PlaylistServerEvents.ITEM_DELETED, callbacks.onItemDeleted);
       }
+      if (callbacks.onPlaylistLikeSet) {
+        socket.on(PlaylistServerEvents.LIKE_SET, callbacks.onPlaylistLikeSet);
+      }
+      if (callbacks.onPlaylistLikeDeleted) {
+        socket.on(PlaylistServerEvents.LIKE_DELETED, callbacks.onPlaylistLikeDeleted);
+      }
+      if (callbacks.onPlaylistSaveSet) {
+        socket.on(PlaylistServerEvents.SAVE_SET, callbacks.onPlaylistSaveSet);
+      }
+      if (callbacks.onPlaylistSaveDeleted) {
+        socket.on(PlaylistServerEvents.SAVE_DELETED, callbacks.onPlaylistSaveDeleted);
+      }
     });
 
     return () => {
@@ -231,6 +283,18 @@ class RealtimeManager {
       }
       if (callbacks.onItemDeleted) {
         socketInstance.off(PlaylistServerEvents.ITEM_DELETED, callbacks.onItemDeleted);
+      }
+      if (callbacks.onPlaylistLikeSet) {
+        socketInstance.off(PlaylistServerEvents.LIKE_SET, callbacks.onPlaylistLikeSet);
+      }
+      if (callbacks.onPlaylistLikeDeleted) {
+        socketInstance.off(PlaylistServerEvents.LIKE_DELETED, callbacks.onPlaylistLikeDeleted);
+      }
+      if (callbacks.onPlaylistSaveSet) {
+        socketInstance.off(PlaylistServerEvents.SAVE_SET, callbacks.onPlaylistSaveSet);
+      }
+      if (callbacks.onPlaylistSaveDeleted) {
+        socketInstance.off(PlaylistServerEvents.SAVE_DELETED, callbacks.onPlaylistSaveDeleted);
       }
     };
   }
@@ -460,6 +524,88 @@ class RealtimeManager {
 
       if (callbacks.onMeUpdated) {
         socketInstance.off(MeServerEvents.UPDATED, callbacks.onMeUpdated);
+      }
+    };
+  }
+
+  /**
+   * Registers user-follow event callbacks on the shared connection, connecting it first if
+   * needed. Returns an unsubscribe function. Meant to be called once app-wide (see
+   * `useRealtimeSync` in `@libs/query-client`) — covers both sides of a follow relationship: the
+   * follower and the user being followed each get their own devices synced.
+   */
+  public onUserFollowEvents(callbacks: UserFollowCallbacks): () => void {
+    let isUnsubscribed = false;
+    let socketInstance: RealtimeSocket | null = null;
+
+    this.createSocket().then((socket) => {
+      if (isUnsubscribed) return;
+      socketInstance = socket;
+
+      if (callbacks.onUserFollowSet) {
+        socket.on(UserFollowServerEvents.SET, callbacks.onUserFollowSet);
+      }
+      if (callbacks.onUserFollowDeleted) {
+        socket.on(UserFollowServerEvents.DELETED, callbacks.onUserFollowDeleted);
+      }
+      if (callbacks.onUserFollowAccepted) {
+        socket.on(UserFollowServerEvents.ACCEPTED, callbacks.onUserFollowAccepted);
+      }
+      if (callbacks.onUserFollowDeclined) {
+        socket.on(UserFollowServerEvents.DECLINED, callbacks.onUserFollowDeclined);
+      }
+    });
+
+    return () => {
+      isUnsubscribed = true;
+      if (!socketInstance) return;
+
+      if (callbacks.onUserFollowSet) {
+        socketInstance.off(UserFollowServerEvents.SET, callbacks.onUserFollowSet);
+      }
+      if (callbacks.onUserFollowDeleted) {
+        socketInstance.off(UserFollowServerEvents.DELETED, callbacks.onUserFollowDeleted);
+      }
+      if (callbacks.onUserFollowAccepted) {
+        socketInstance.off(UserFollowServerEvents.ACCEPTED, callbacks.onUserFollowAccepted);
+      }
+      if (callbacks.onUserFollowDeclined) {
+        socketInstance.off(UserFollowServerEvents.DECLINED, callbacks.onUserFollowDeclined);
+      }
+    };
+  }
+
+  /**
+   * Registers person-follow event callbacks on the shared connection, connecting it first if
+   * needed. Returns an unsubscribe function. Meant to be called once app-wide (see
+   * `useRealtimeSync` in `@libs/query-client`) — keeps a user's followed persons in sync across
+   * every one of their own devices.
+   */
+  public onPersonFollowEvents(callbacks: PersonFollowCallbacks): () => void {
+    let isUnsubscribed = false;
+    let socketInstance: RealtimeSocket | null = null;
+
+    this.createSocket().then((socket) => {
+      if (isUnsubscribed) return;
+      socketInstance = socket;
+
+      if (callbacks.onPersonFollowSet) {
+        socket.on(PersonFollowServerEvents.SET, callbacks.onPersonFollowSet);
+      }
+      if (callbacks.onPersonFollowDeleted) {
+        socket.on(PersonFollowServerEvents.DELETED, callbacks.onPersonFollowDeleted);
+      }
+    });
+
+    return () => {
+      isUnsubscribed = true;
+      if (!socketInstance) return;
+
+      if (callbacks.onPersonFollowSet) {
+        socketInstance.off(PersonFollowServerEvents.SET, callbacks.onPersonFollowSet);
+      }
+      if (callbacks.onPersonFollowDeleted) {
+        socketInstance.off(PersonFollowServerEvents.DELETED, callbacks.onPersonFollowDeleted);
       }
     };
   }

@@ -19,6 +19,8 @@ import {
   userPlaylistsAddTargetsAllOptions,
   userPlaylistsAddTargetsInfiniteOptions,
   userPlaylistsAddTargetsPaginatedOptions,
+  usePlaylistLikeCacheUpdate,
+  usePlaylistSaveCacheUpdate,
 } from '../users';
 import { usePlaylistCacheDelete, usePlaylistCacheUpdate } from '../playlists/playlistHooks';
 import { removeListItemFromAllCaches, updateListItemInAllCaches } from '../utils';
@@ -29,6 +31,8 @@ export function useRealtimeSyncPlaylists(enabled: boolean) {
   const { data: user } = useQuery(meOptions());
   const updatePlaylistCache = usePlaylistCacheUpdate({ userId: user?.id });
   const deletePlaylistCache = usePlaylistCacheDelete();
+  const { setPlaylistLike, deletePlaylistLike } = usePlaylistLikeCacheUpdate();
+  const { setPlaylistSave, deletePlaylistSave } = usePlaylistSaveCacheUpdate();
 
   useEffect(() => {
     if (!enabled) return;
@@ -176,6 +180,32 @@ export function useRealtimeSyncPlaylists(enabled: boolean) {
           itemsCount: Math.max((prev?.itemsCount || itemIds.length) - itemIds.length, 0),
         }));
       },
+
+      onPlaylistLikeSet: (like) => {
+        setPlaylistLike(like);
+      },
+
+      onPlaylistLikeDeleted: (like) => {
+        deletePlaylistLike(like);
+      },
+
+      onPlaylistSaveSet: (save) => {
+        setPlaylistSave(save);
+      },
+
+      onPlaylistSaveDeleted: (save) => {
+        deletePlaylistSave(save);
+      },
     });
-  }, [enabled, queryClient, updatePlaylistCache, deletePlaylistCache, user?.id]);
+  }, [
+    enabled,
+    queryClient,
+    updatePlaylistCache,
+    deletePlaylistCache,
+    setPlaylistLike,
+    deletePlaylistLike,
+    setPlaylistSave,
+    deletePlaylistSave,
+    user?.id,
+  ]);
 }
