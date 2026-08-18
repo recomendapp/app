@@ -9,3 +9,8 @@ export interface IPlaylistItemsDeletedSignal {
   playlistId: number;
   itemIds: number[];
 }
+
+export interface IPlaylistDeletedSignal {
+  playlistId: number;
+  userId: string;
+}

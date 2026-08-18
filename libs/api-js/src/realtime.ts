@@ -4,10 +4,15 @@ import {
   PlaylistServerEvents,
   IPlaylistItemUpdatedSignal,
   IPlaylistItemsDeletedSignal,
+  IPlaylistDeletedSignal,
 } from '@libs/realtime';
+import { Playlist } from './__generated__';
 import { PlaylistItemWithMedia } from './playlists';
 
 export interface PlaylistServerToClientEvents {
+  [PlaylistServerEvents.CREATED]: (playlist: Playlist) => void;
+  [PlaylistServerEvents.UPDATED]: (playlist: Playlist) => void;
+  [PlaylistServerEvents.DELETED]: (signal: IPlaylistDeletedSignal) => void;
   [PlaylistServerEvents.ITEM_ADDED]: (items: PlaylistItemWithMedia[]) => void;
   [PlaylistServerEvents.ITEM_UPDATED]: (item: IPlaylistItemUpdatedSignal) => void;
   [PlaylistServerEvents.ITEM_DELETED]: (signal: IPlaylistItemsDeletedSignal) => void;
@@ -16,6 +21,9 @@ export interface PlaylistServerToClientEvents {
 export type RealtimeSocket = Socket<PlaylistServerToClientEvents>;
 
 export interface PlaylistCallbacks {
+  onPlaylistCreated?: (playlist: Playlist) => void;
+  onPlaylistUpdated?: (playlist: Playlist) => void;
+  onPlaylistDeleted?: (signal: IPlaylistDeletedSignal) => void;
   onItemAdded?: (items: PlaylistItemWithMedia[]) => void;
   onItemUpdated?: (item: IPlaylistItemUpdatedSignal) => void;
   onItemDeleted?: (signal: IPlaylistItemsDeletedSignal) => void;
@@ -94,6 +102,15 @@ class RealtimeManager {
       if (isUnsubscribed) return;
       socketInstance = socket;
 
+      if (callbacks.onPlaylistCreated) {
+        socket.on(PlaylistServerEvents.CREATED, callbacks.onPlaylistCreated);
+      }
+      if (callbacks.onPlaylistUpdated) {
+        socket.on(PlaylistServerEvents.UPDATED, callbacks.onPlaylistUpdated);
+      }
+      if (callbacks.onPlaylistDeleted) {
+        socket.on(PlaylistServerEvents.DELETED, callbacks.onPlaylistDeleted);
+      }
       if (callbacks.onItemAdded) socket.on(PlaylistServerEvents.ITEM_ADDED, callbacks.onItemAdded);
       if (callbacks.onItemUpdated) {
         socket.on(PlaylistServerEvents.ITEM_UPDATED, callbacks.onItemUpdated);
@@ -107,6 +124,15 @@ class RealtimeManager {
       isUnsubscribed = true;
       if (!socketInstance) return;
 
+      if (callbacks.onPlaylistCreated) {
+        socketInstance.off(PlaylistServerEvents.CREATED, callbacks.onPlaylistCreated);
+      }
+      if (callbacks.onPlaylistUpdated) {
+        socketInstance.off(PlaylistServerEvents.UPDATED, callbacks.onPlaylistUpdated);
+      }
+      if (callbacks.onPlaylistDeleted) {
+        socketInstance.off(PlaylistServerEvents.DELETED, callbacks.onPlaylistDeleted);
+      }
       if (callbacks.onItemAdded)
         socketInstance.off(PlaylistServerEvents.ITEM_ADDED, callbacks.onItemAdded);
       if (callbacks.onItemUpdated) {

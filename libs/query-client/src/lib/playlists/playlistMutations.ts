@@ -1,14 +1,6 @@
 import {
-  FeedItem,
-  ListInfiniteFeed,
   ListInfinitePlaylistMembers,
-  ListInfinitePlaylists,
-  ListInfinitePlaylistsAddTargets,
-  ListInfinitePlaylistsWithOwner,
-  ListPaginatedFeed,
   ListPaginatedPlaylistMembers,
-  ListPaginatedPlaylists,
-  ListPaginatedPlaylistsAddTargets,
   Options,
   Playlist,
   playlistItemsControllerDeleteMutation,
@@ -20,51 +12,24 @@ import {
   playlistPosterControllerDelete,
   playlistPosterControllerSet,
   playlistsAddControllerAddMutation,
-  PlaylistsAddTarget,
   playlistsControllerCreate,
   PlaylistsControllerCreateData,
   playlistsControllerDeleteMutation,
   playlistsControllerUpdate,
   PlaylistsControllerUpdateData,
-  SearchResponse,
 } from '@libs/api-js';
-import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  userFeedInfiniteOptions,
-  userFeedPaginatedOptions,
-  userKeys,
-  userPlaylistsAddTargetsAllOptions,
-  userPlaylistsInfiniteOptions,
-  userPlaylistsPaginatedOptions,
-} from '../users';
-import {
-  playlistFeaturedInfiniteOptions,
-  playlistFeaturedPaginatedOptions,
   playlistItemsAllOptions,
   playlistMembersAllOptions,
   playlistMembersInfiniteOptions,
   playlistMembersPaginatedOptions,
-  playlistOptions,
 } from './playlistOptions';
-import {
-  removeFromInfiniteCache,
-  removeFromPaginatedCache,
-  removeListItemFromAllCaches,
-  updateListItemInAllCaches,
-} from '../utils';
-import { moviePlaylistsInfiniteOptions, moviePlaylistsPaginatedOptions } from '../movies';
-import { tvSeriesPlaylistsInfiniteOptions, tvSeriesPlaylistsPaginatedOptions } from '../tv-series';
+import { removeListItemFromAllCaches, updateListItemInAllCaches } from '../utils';
 import { usePlaylistCacheUpdate } from './playlistHooks';
 import { playlistKeys } from './playlistKeys';
-import {
-  searchGlobalOptions,
-  searchPlaylistsInfiniteOptions,
-  searchPlaylistsPaginatedOptions,
-} from '../search';
-import { meFeedInfiniteOptions, meFeedPaginatedOptions } from '../me';
 
 export const usePlaylistInsertMutation = () => {
-  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({
       body: { poster, ...body },
@@ -93,30 +58,10 @@ export const usePlaylistInsertMutation = () => {
       }
       return returnData;
     },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: userKeys.playlists({ userId: data.userId }),
-      });
-
-      const userPlaylistTargetKey = userPlaylistsAddTargetsAllOptions({
-        userId: data.userId,
-        mediaId: -1,
-        type: 'movie',
-      }).queryKey;
-      queryClient.invalidateQueries({
-        predicate: ({ queryKey }) =>
-          queryKey[0] === userPlaylistTargetKey[0] &&
-          queryKey[1] === userPlaylistTargetKey[1] &&
-          queryKey[2] === userPlaylistTargetKey[2],
-      });
-    },
   });
 };
 
-export const usePlaylistUpdateMutation = ({ userId }: { userId?: string }) => {
-  const updatePlaylistCache = usePlaylistCacheUpdate({
-    userId,
-  });
+export const usePlaylistUpdateMutation = () => {
   return useMutation({
     mutationFn: async ({
       body: { poster, ...body },
@@ -146,171 +91,12 @@ export const usePlaylistUpdateMutation = ({ userId }: { userId?: string }) => {
       if (data === undefined) throw new Error('No data');
       return data;
     },
-    onSuccess: (data) => {
-      updatePlaylistCache(data.id, data, data.userId);
-    },
   });
 };
 
 export const usePlaylistDeleteMutation = () => {
-  const queryClient = useQueryClient();
   return useMutation({
     ...playlistsControllerDeleteMutation(),
-    onSuccess: (data) => {
-      queryClient.setQueryData(playlistOptions({ playlistId: data.id }).queryKey, undefined);
-
-      removeListItemFromAllCaches(
-        queryClient,
-        {
-          paginated: userPlaylistsPaginatedOptions({ userId: data.userId }).queryKey,
-          infinite: userPlaylistsInfiniteOptions({ userId: data.userId }).queryKey,
-        },
-        data.id,
-      );
-
-      // Movies
-      removeFromPaginatedCache(
-        queryClient,
-        {
-          predicate: ({ queryKey }) => {
-            const refKey = moviePlaylistsPaginatedOptions({ movieId: -1 }).queryKey;
-            return (
-              queryKey[0] === refKey[0] &&
-              typeof queryKey[1] === typeof refKey[1] &&
-              queryKey[2] === refKey[2] &&
-              queryKey[3] === refKey[3]
-            );
-          },
-        },
-        data.id,
-      );
-      queryClient.setQueriesData(
-        {
-          predicate: ({ queryKey }) => {
-            const refKey = moviePlaylistsInfiniteOptions({ movieId: -1 }).queryKey;
-            return (
-              queryKey[0] === refKey[0] &&
-              typeof queryKey[1] === typeof refKey[1] &&
-              queryKey[2] === refKey[2] &&
-              queryKey[3] === refKey[3]
-            );
-          },
-        },
-        (old: InfiniteData<ListInfinitePlaylistsWithOwner> | undefined) => {
-          return removeFromInfiniteCache(old, data.id);
-        },
-      );
-
-      // Tv Series
-      removeFromPaginatedCache(
-        queryClient,
-        {
-          predicate: ({ queryKey }) => {
-            const refKey = tvSeriesPlaylistsPaginatedOptions({ tvSeriesId: -1 }).queryKey;
-            return (
-              queryKey[0] === refKey[0] &&
-              typeof queryKey[1] === typeof refKey[1] &&
-              queryKey[2] === refKey[2] &&
-              queryKey[3] === refKey[3]
-            );
-          },
-        },
-        data.id,
-      );
-      queryClient.setQueriesData(
-        {
-          predicate: ({ queryKey }) => {
-            const refKey = tvSeriesPlaylistsInfiniteOptions({ tvSeriesId: -1 }).queryKey;
-            return (
-              queryKey[0] === refKey[0] &&
-              typeof queryKey[1] === typeof refKey[1] &&
-              queryKey[2] === refKey[2] &&
-              queryKey[3] === refKey[3]
-            );
-          },
-        },
-        (old: InfiniteData<ListInfinitePlaylistsWithOwner> | undefined) => {
-          return removeFromInfiniteCache(old, data.id);
-        },
-      );
-
-      // User Playlists Add Targets
-      removeListItemFromAllCaches<
-        PlaylistsAddTarget,
-        ListPaginatedPlaylistsAddTargets,
-        ListInfinitePlaylistsAddTargets
-      >(
-        queryClient,
-        {
-          all: {
-            predicate: ({ queryKey }) =>
-              queryKey.includes('playlists_add_targets') && queryKey.includes('all'),
-          },
-          paginated: {
-            predicate: ({ queryKey }) =>
-              queryKey.includes('playlists_add_targets') && queryKey.includes('paginated'),
-          },
-          infinite: {
-            predicate: ({ queryKey }) =>
-              queryKey.includes('playlists_add_targets') && queryKey.includes('infinite'),
-          },
-        },
-        data.id,
-      );
-
-      // Feed
-      removeListItemFromAllCaches<FeedItem, ListPaginatedFeed, ListInfiniteFeed>(
-        queryClient,
-        {
-          paginated: meFeedPaginatedOptions({ userId: data.userId }).queryKey,
-          infinite: meFeedInfiniteOptions({ userId: data.userId }).queryKey,
-        },
-        (item) => item.activityType === 'playlist_like' && item.content.id === data.id,
-      );
-      removeListItemFromAllCaches<FeedItem, ListPaginatedFeed, ListInfiniteFeed>(
-        queryClient,
-        {
-          paginated: userFeedPaginatedOptions({ userId: data.userId }).queryKey,
-          infinite: userFeedInfiniteOptions({ userId: data.userId }).queryKey,
-        },
-        (item) => item.activityType === 'playlist_like' && item.content.id === data.id,
-      );
-
-      // Featured
-      removeListItemFromAllCaches(
-        queryClient,
-        {
-          paginated: playlistFeaturedPaginatedOptions().queryKey,
-          infinite: playlistFeaturedInfiniteOptions().queryKey,
-        },
-        data.id,
-      );
-
-      // Search
-      removeListItemFromAllCaches<Playlist, ListPaginatedPlaylists, ListInfinitePlaylists>(
-        queryClient,
-        {
-          paginated: searchPlaylistsPaginatedOptions().queryKey,
-          infinite: searchPlaylistsInfiniteOptions().queryKey,
-        },
-        data.id,
-      );
-      queryClient.setQueriesData(
-        {
-          predicate: (query) => {
-            const refKey = searchGlobalOptions().queryKey;
-            return query.queryKey[0] === refKey[0] && query.queryKey[1] === refKey[1];
-          },
-        },
-        (old: SearchResponse) => {
-          if (!old) return old;
-          return {
-            ...old,
-            playlists: old.playlists.filter((playlist) => playlist.id !== data.id),
-          };
-        },
-      );
-    },
   });
 };
 

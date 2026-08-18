@@ -14,6 +14,7 @@ import { SupportedLocale } from '@libs/i18n';
 import { IPlaylistItemUpdatedSignal, PlaylistServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../realtime/realtime.gateway';
 import { PlaylistItemWithMediaUnion } from './items/playlist-items.dto';
+import { PlaylistDto } from './dto/playlists.dto';
 
 interface Recipient {
   userId: string;
@@ -52,6 +53,11 @@ export class PlaylistsRealtimeService {
     return [...recipientsByUserId.values()];
   }
 
+  async getRecipientUserIds(playlistId: number): Promise<string[]> {
+    const recipients = await this.getRecipients(playlistId);
+    return recipients.map((recipient) => recipient.userId);
+  }
+
   private groupByLocale(recipients: Recipient[]): Map<SupportedLocale, string[]> {
     const userIdsByLocale = new Map<SupportedLocale, string[]>();
     for (const { userId, locale } of recipients) {
@@ -88,6 +94,22 @@ export class PlaylistsRealtimeService {
         }
         return { ...baseItem, type: 'tv_series', mediaId: tvSeriesId, media: row.tvSeries };
       });
+    });
+  }
+
+  broadcastPlaylistCreated(playlistDto: PlaylistDto) {
+    this.realtimeGateway.emitToUser(playlistDto.userId, PlaylistServerEvents.CREATED, playlistDto);
+  }
+
+  async broadcastPlaylistUpdated(playlistDto: PlaylistDto) {
+    const userIds = await this.getRecipientUserIds(playlistDto.id);
+    this.realtimeGateway.emitToUsers(userIds, PlaylistServerEvents.UPDATED, playlistDto);
+  }
+
+  broadcastPlaylistDeleted(playlistId: number, ownerId: string, recipientUserIds: string[]) {
+    this.realtimeGateway.emitToUsers(recipientUserIds, PlaylistServerEvents.DELETED, {
+      playlistId,
+      userId: ownerId,
     });
   }
 

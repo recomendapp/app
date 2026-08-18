@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -29,14 +29,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from '@/components/ui/alert-dialog';
 import { useAuth } from '@/context/auth-context';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { usePlaylistDeleteMutation, usePlaylistInsertMutation, usePlaylistUpdateMutation } from '@libs/query-client';
+import {
+  usePlaylistDeleteMutation,
+  usePlaylistInsertMutation,
+  usePlaylistUpdateMutation,
+} from '@libs/query-client';
 import { Playlist } from '@libs/api-js';
 import compressPicture from '@/lib/utils/compressPicture';
 
@@ -45,10 +49,7 @@ interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   playlist?: Playlist;
 }
 
-export function PlaylistForm({
-  onSave,
-  playlist,
-}: PlaylistFormProps) {
+export function PlaylistForm({ onSave, playlist }: PlaylistFormProps) {
   const { user } = useAuth();
   const t = useTranslations();
   const router = useRouter();
@@ -56,21 +57,25 @@ export function PlaylistForm({
   const [newPoster, setNewPoster] = useState<File>();
 
   // Mutations
-  const { mutateAsync: insertPlaylistMutation, isPending: insertPending } = usePlaylistInsertMutation();
-  const { mutateAsync: updatePlaylistMutation, isPending: updatePending } = usePlaylistUpdateMutation({
-    userId: user?.id,
-  });
-  const { mutateAsync: deletePlaylistMutation, isPending: deletePending } = usePlaylistDeleteMutation();
+  const { mutateAsync: insertPlaylistMutation, isPending: insertPending } =
+    usePlaylistInsertMutation();
+  const { mutateAsync: updatePlaylistMutation, isPending: updatePending } =
+    usePlaylistUpdateMutation();
+  const { mutateAsync: deletePlaylistMutation, isPending: deletePending } =
+    usePlaylistDeleteMutation();
 
   // Permissions
   const canEditVisibility = !playlist || playlist.role === 'owner';
   const canDeletePlaylist = playlist && playlist.role === 'owner';
-  
+
   // Form
-  const visibilityOptions: { value: Playlist['visibility'], label: string }[] = [
+  const visibilityOptions: { value: Playlist['visibility']; label: string }[] = [
     { value: 'public', label: upperFirst(t('common.messages.public')) },
     { value: 'followers', label: upperFirst(t('common.messages.follower', { count: 2 })) },
-    { value: 'private', label: upperFirst(t('common.messages.private', { count: 1, gender: 'female' })) },
+    {
+      value: 'private',
+      label: upperFirst(t('common.messages.private', { count: 1, gender: 'female' })),
+    },
   ];
   const CreatePlaylistFormSchema = z.object({
     title: z
@@ -103,79 +108,102 @@ export function PlaylistForm({
     defaultValues,
     mode: 'onChange',
   });
-  
 
   // Handlers
-  const handleInsert = useCallback(async (data: PlaylistFormValues) => {
-    if (!user) return;
-    const compressedFile = newPoster ? await compressPicture(newPoster, 400, 400) : undefined;
-    await insertPlaylistMutation({
-      body: {
+  const handleInsert = useCallback(
+    async (data: PlaylistFormValues) => {
+      if (!user) return;
+      const compressedFile = newPoster ? await compressPicture(newPoster, 400, 400) : undefined;
+      await insertPlaylistMutation(
+        {
+          body: {
+            title: data.title.replace(/\s+/g, ' ').trim(),
+            description: data.description?.trim() || null,
+            visibility: data.visibility,
+            poster: compressedFile,
+          },
+        },
+        {
+          onSuccess: async (data) => {
+            toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
+            onSave?.(data);
+          },
+          onError: () => {
+            toast.error(upperFirst(t('common.messages.an_error_occurred')));
+          },
+        },
+      );
+    },
+    [newPoster, insertPlaylistMutation, user, onSave, t],
+  );
+
+  const handleUpdate = useCallback(
+    async (data: PlaylistFormValues) => {
+      if (!user || !playlist) return;
+      if (
+        !newPoster &&
+        user.id === playlist.userId &&
+        playlist.title === data.title &&
+        playlist.description === data.description &&
+        playlist.visibility === data.visibility
+      )
+        return;
+
+      const poster: File | null | undefined = newPoster
+        ? await compressPicture(newPoster, 400, 400)
+        : undefined;
+
+      const payload: Partial<PlaylistFormValues> = {
         title: data.title.replace(/\s+/g, ' ').trim(),
-        description: data.description?.trim() || null,
-        visibility: data.visibility,
-        poster: compressedFile
+        description: data.description?.trim() || undefined,
+      };
+      if (canEditVisibility) {
+        payload.visibility = data.visibility;
       }
-    }, {
-      onSuccess: async (data) => {
-        toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
-        onSave?.(data);
-      },
-      onError: () => {
-        toast.error(upperFirst(t('common.messages.an_error_occurred')));
-      }
-    });
-  }, [newPoster, insertPlaylistMutation, user, onSave, t]);
 
-  const handleUpdate = useCallback(async (data: PlaylistFormValues) => {
-    if (!user || !playlist) return;
-    if (!newPoster && user.id === playlist.userId && playlist.title === data.title && playlist.description === data.description && playlist.visibility === data.visibility) return;
-
-    const poster: File | null | undefined = newPoster ? await compressPicture(newPoster, 400, 400) : undefined;
-
-    const payload: Partial<PlaylistFormValues> = {
-      title: data.title.replace(/\s+/g, ' ').trim(),
-      description: data.description?.trim() || undefined,
-    };
-    if (canEditVisibility) {
-      payload.visibility = data.visibility;
-    }
-
-    await updatePlaylistMutation({
-      path: {
-        playlist_id: playlist.id,
-      },
-      body: {
-        ...payload,
-        poster: poster,
-      },
-    }, {
-      onSuccess: async (data) => {
-        toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
-        onSave?.(data);
-      },
-      onError: () => {
-        toast.error(upperFirst(t('common.messages.an_error_occurred')));
-      }
-    });
-  }, [newPoster, updatePlaylistMutation, playlist, user, onSave, t, canEditVisibility]);
+      await updatePlaylistMutation(
+        {
+          path: {
+            playlist_id: playlist.id,
+          },
+          body: {
+            ...payload,
+            poster: poster,
+          },
+        },
+        {
+          onSuccess: async (data) => {
+            toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
+            onSave?.(data);
+          },
+          onError: () => {
+            toast.error(upperFirst(t('common.messages.an_error_occurred')));
+          },
+        },
+      );
+    },
+    [newPoster, updatePlaylistMutation, playlist, user, onSave, t, canEditVisibility],
+  );
 
   const handleDeletePlaylist = useCallback(async () => {
     if (!playlist) return;
-    await deletePlaylistMutation({
-      path: {
+    await deletePlaylistMutation(
+      {
+        path: {
           playlist_id: playlist.id,
+        },
       },
-    }, {
-      onSuccess: (data) => {
-        if (pathname.startsWith(`/playlist/${playlist.id}`)) router.push('/');
-        toast.success(upperFirst(t('common.messages.deleted')));
-        onSave?.(data);
+      {
+        onSuccess: (data) => {
+          if (pathname.startsWith(`/playlist/${playlist.id}`)) router.push('/');
+          toast.success(upperFirst(t('common.messages.deleted')));
+          onSave?.(data);
+        },
+        onError: () => {
+          toast.error(upperFirst(t('common.messages.an_error_occurred')));
+        },
       },
-      onError: () => {
-        toast.error(upperFirst(t('common.messages.an_error_occurred')));
-      }
-    });
+    );
   }, [deletePlaylistMutation, playlist, router, pathname, user, onSave, t]);
 
   return (
@@ -222,7 +250,7 @@ export function PlaylistForm({
                       onChange={(e) => {
                         const description = e.target.value
                           .replace(/[\r\n]+/g, '\n') // Multiple new lines
-                          .replace(/[^\S\r\n]+/g, ' ') // Multiple spaces
+                          .replace(/[^\S\r\n]+/g, ' '); // Multiple spaces
                         form.setValue('description', description);
                       }}
                     />
@@ -231,38 +259,43 @@ export function PlaylistForm({
                 </FormItem>
               )}
             />
-            {canEditVisibility && <FormField
-              control={form.control}
-              name="visibility"
-              render={({ field }) => (
-                <TooltipBox>
-                  <FormItem className={field.disabled ? 'text-muted-foreground cursor-not-allowed' : ''}>
-                    <FormLabel>{upperFirst(t('common.messages.visibility'))}</FormLabel>
-                    <FormControl className="grid grid-cols-2 gap-2">
-                      <RadioGroup value={field.value} onValueChange={field.onChange} disabled={field.disabled}>
-                      {visibilityOptions.map((option, index) => (
-                          <div key={index} className="flex items-center space-x-2">
-                            <RadioGroupItem value={option.value} id={`option-${index}`} />
-                            <Label htmlFor={`option-${index}`}>{option.label}</Label>
-                          </div>
-                      ))}
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                </TooltipBox>
-              )}
-            />}
+            {canEditVisibility && (
+              <FormField
+                control={form.control}
+                name="visibility"
+                render={({ field }) => (
+                  <TooltipBox>
+                    <FormItem
+                      className={field.disabled ? 'text-muted-foreground cursor-not-allowed' : ''}
+                    >
+                      <FormLabel>{upperFirst(t('common.messages.visibility'))}</FormLabel>
+                      <FormControl className="grid grid-cols-2 gap-2">
+                        <RadioGroup
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          disabled={field.disabled}
+                        >
+                          {visibilityOptions.map((option, index) => (
+                            <div key={index} className="flex items-center space-x-2">
+                              <RadioGroupItem value={option.value} id={`option-${index}`} />
+                              <Label htmlFor={`option-${index}`}>{option.label}</Label>
+                            </div>
+                          ))}
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  </TooltipBox>
+                )}
+              />
+            )}
           </div>
         </div>
         <DialogFooter>
           {canDeletePlaylist && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button
-                  type="button"
-                  variant={'outline'}
-                >
+                <Button type="button" variant={'outline'}>
                   {upperFirst(t('common.messages.delete'))}
                 </Button>
               </AlertDialogTrigger>
@@ -272,9 +305,7 @@ export function PlaylistForm({
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>{upperFirst(t('common.messages.cancel'))}</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={handleDeletePlaylist}
-                  >
+                  <AlertDialogAction onClick={handleDeletePlaylist}>
                     {upperFirst(t('common.messages.delete'))}
                   </AlertDialogAction>
                 </AlertDialogFooter>
@@ -282,8 +313,12 @@ export function PlaylistForm({
             </AlertDialog>
           )}
           <Button disabled={insertPending || updatePending || deletePending} type="submit">
-            {(insertPending || updatePending || deletePending) && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-            {playlist ? upperFirst(t('common.messages.save')) : upperFirst(t('common.messages.create'))}
+            {(insertPending || updatePending || deletePending) && (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            {playlist
+              ? upperFirst(t('common.messages.save'))
+              : upperFirst(t('common.messages.create'))}
           </Button>
         </DialogFooter>
       </form>

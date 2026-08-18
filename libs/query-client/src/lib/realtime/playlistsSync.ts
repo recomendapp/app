@@ -15,11 +15,12 @@ import {
   playlistItemsPaginatedOptions,
 } from '../playlists/playlistOptions';
 import {
+  userKeys,
   userPlaylistsAddTargetsAllOptions,
   userPlaylistsAddTargetsInfiniteOptions,
   userPlaylistsAddTargetsPaginatedOptions,
 } from '../users';
-import { usePlaylistCacheUpdate } from '../playlists/playlistHooks';
+import { usePlaylistCacheDelete, usePlaylistCacheUpdate } from '../playlists/playlistHooks';
 import { removeListItemFromAllCaches, updateListItemInAllCaches } from '../utils';
 import { meOptions } from '../me';
 
@@ -27,11 +28,38 @@ export function useRealtimeSyncPlaylists(enabled: boolean) {
   const queryClient = useQueryClient();
   const { data: user } = useQuery(meOptions());
   const updatePlaylistCache = usePlaylistCacheUpdate({ userId: user?.id });
+  const deletePlaylistCache = usePlaylistCacheDelete();
 
   useEffect(() => {
     if (!enabled) return;
 
     return realtime.onPlaylistEvents({
+      onPlaylistCreated: (playlist) => {
+        queryClient.invalidateQueries({
+          queryKey: userKeys.playlists({ userId: playlist.userId }),
+        });
+
+        const userPlaylistTargetKey = userPlaylistsAddTargetsAllOptions({
+          userId: playlist.userId,
+          mediaId: -1,
+          type: 'movie',
+        }).queryKey;
+        queryClient.invalidateQueries({
+          predicate: ({ queryKey }) =>
+            queryKey[0] === userPlaylistTargetKey[0] &&
+            queryKey[1] === userPlaylistTargetKey[1] &&
+            queryKey[2] === userPlaylistTargetKey[2],
+        });
+      },
+
+      onPlaylistUpdated: (playlist) => {
+        updatePlaylistCache(playlist.id, playlist, playlist.userId);
+      },
+
+      onPlaylistDeleted: ({ playlistId, userId: ownerId }) => {
+        deletePlaylistCache(playlistId, ownerId);
+      },
+
       onItemAdded: (items) => {
         const byPlaylistId = new Map<number, PlaylistItemWithMedia[]>();
         for (const item of items) {
@@ -149,5 +177,5 @@ export function useRealtimeSyncPlaylists(enabled: boolean) {
         }));
       },
     });
-  }, [enabled, queryClient, updatePlaylistCache, user?.id]);
+  }, [enabled, queryClient, updatePlaylistCache, deletePlaylistCache, user?.id]);
 }
