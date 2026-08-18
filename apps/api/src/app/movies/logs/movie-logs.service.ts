@@ -1,45 +1,59 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { LogMovieRequestDto, LogMovieDto } from './log-movie.dto';
 import { and, avg, desc, eq, isNotNull, sql } from 'drizzle-orm';
-import { bookmark, follow, logMovie, logMovieWatchedDate, profile, reviewMovie, user } from '@libs/db/schemas';
+import {
+  bookmark,
+  follow,
+  logMovie,
+  logMovieWatchedDate,
+  profile,
+  reviewMovie,
+  user,
+} from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import { MovieFollowingAverageRatingDto, MovieFollowingLogDto, MovieFollowingLogsQueryDto } from './movie-following-logs.dto';
+import {
+  MovieFollowingAverageRatingDto,
+  MovieFollowingLogDto,
+  MovieFollowingLogsQueryDto,
+} from './movie-following-logs.dto';
 import { RecosService } from '../../recos/recos.service';
 import { RecoType } from '../../recos/dto/recos.dto';
 import { plainToInstance } from 'class-transformer';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
+import { LogServerEvents } from '@libs/realtime';
+import { RealtimeGateway } from '../../realtime/realtime.gateway';
 
 @Injectable()
 export class MovieLogsService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
     private readonly recosService: RecosService,
+    private readonly realtimeGateway: RealtimeGateway,
   ) {}
 
   async get(user: User, movieId: number): Promise<LogMovieDto | null> {
     const logEntry = await this.db.query.logMovie.findFirst({
-      where: and(
-        eq(logMovie.userId, user.id),
-        eq(logMovie.movieId, movieId),
-      ),
+      where: and(eq(logMovie.userId, user.id), eq(logMovie.movieId, movieId)),
       with: {
-        review: true
-      }
-    })
+        review: true,
+      },
+    });
 
     if (!logEntry) return null;
     return plainToInstance(LogMovieDto, {
       ...logEntry,
-      review: logEntry.review ? {
-        ...logEntry.review,
-        userId: logEntry.userId,
-        movieId: logEntry.movieId,
-      } : null,
+      review: logEntry.review
+        ? {
+            ...logEntry.review,
+            userId: logEntry.userId,
+            movieId: logEntry.movieId,
+          }
+        : null,
     });
   }
 
-  async set(user: User, movieId: number, dto: LogMovieRequestDto): Promise<LogMovieDto> {    
+  async set(user: User, movieId: number, dto: LogMovieRequestDto): Promise<LogMovieDto> {
     await this.db.transaction(async (tx) => {
       const [logEntry] = await tx
         .insert(logMovie)
@@ -58,19 +72,25 @@ export class MovieLogsService {
           target: [logMovie.movieId, logMovie.userId],
           set: {
             rating: dto.rating !== undefined ? dto.rating : sql`${logMovie.rating}`,
-            ratedAt: dto.rating !== undefined 
-              ? (dto.rating === null ? null : sql`now()`) 
-              : sql`${logMovie.ratedAt}`,
+            ratedAt:
+              dto.rating !== undefined
+                ? dto.rating === null
+                  ? null
+                  : sql`now()`
+                : sql`${logMovie.ratedAt}`,
             isLiked: dto.isLiked !== undefined ? dto.isLiked : sql`${logMovie.isLiked}`,
-            likedAt: dto.isLiked !== undefined
-              ? (dto.isLiked ? sql`now()` : null)
-              : sql`${logMovie.likedAt}`,
+            likedAt:
+              dto.isLiked !== undefined
+                ? dto.isLiked
+                  ? sql`now()`
+                  : null
+                : sql`${logMovie.likedAt}`,
           },
         })
         .returning();
 
       const isInsert = logEntry.createdAt === logEntry.updatedAt;
-      
+
       if (isInsert) {
         await tx.insert(logMovieWatchedDate).values({
           logMovieId: logEntry.id,
@@ -79,86 +99,90 @@ export class MovieLogsService {
       }
 
       // Complete any active bookmarks for this movie
-      await tx.update(bookmark)
+      await tx
+        .update(bookmark)
         .set({ status: 'completed' })
         .where(
           and(
             eq(bookmark.userId, user.id),
             eq(bookmark.movieId, movieId),
             eq(bookmark.type, RecoType.MOVIE),
-            eq(bookmark.status, 'active')
-          )
+            eq(bookmark.status, 'active'),
+          ),
         );
-      
+
       // Complete any active recos for this movie
       await this.recosService.complete({
         userId: user.id,
         type: RecoType.MOVIE,
         mediaId: movieId,
         tx,
-      })
+      });
 
       return isInsert;
     });
 
     const logEntry = await this.db.query.logMovie.findFirst({
-      where: and(
-        eq(logMovie.userId, user.id),
-        eq(logMovie.movieId, movieId),
-      ),
+      where: and(eq(logMovie.userId, user.id), eq(logMovie.movieId, movieId)),
       with: {
         review: true,
-      }
+      },
     });
 
     if (!logEntry) {
       throw new NotFoundException('Log entry not found after upsert');
     }
 
-    return plainToInstance(LogMovieDto, {
+    const result = plainToInstance(LogMovieDto, {
       ...logEntry,
-      review: logEntry.review ? {
-        ...logEntry.review,
-        userId: logEntry.userId,
-        movieId: logEntry.movieId,
-      } : null,
+      review: logEntry.review
+        ? {
+            ...logEntry.review,
+            userId: logEntry.userId,
+            movieId: logEntry.movieId,
+          }
+        : null,
     });
+
+    this.realtimeGateway.emitToUser(user.id, LogServerEvents.MOVIE_LOG_SET, result);
+
+    return result;
   }
 
   async delete(user: User, movieId: number): Promise<LogMovieDto> {
     const deletedLog = await this.db.transaction(async (tx) => {
       const logEntry = await tx.query.logMovie.findFirst({
-        where: and(
-          eq(logMovie.userId, user.id),
-          eq(logMovie.movieId, movieId),
-        ),
+        where: and(eq(logMovie.userId, user.id), eq(logMovie.movieId, movieId)),
         with: {
           review: true,
-        }
+        },
       });
 
       if (!logEntry) {
         throw new NotFoundException('Log entry not found');
       }
 
-      await tx.delete(logMovie).where(
-        and(
-          eq(logMovie.userId, user.id),
-          eq(logMovie.movieId, movieId),
-        )
-      );
+      await tx
+        .delete(logMovie)
+        .where(and(eq(logMovie.userId, user.id), eq(logMovie.movieId, movieId)));
 
       return logEntry;
     });
 
-    return plainToInstance(LogMovieDto, {
+    const result = plainToInstance(LogMovieDto, {
       ...deletedLog,
-      review: deletedLog.review ? {
-        ...deletedLog.review,
-        userId: deletedLog.userId,
-        movieId: deletedLog.movieId,
-      } : null,
+      review: deletedLog.review
+        ? {
+            ...deletedLog.review,
+            userId: deletedLog.userId,
+            movieId: deletedLog.movieId,
+          }
+        : null,
     });
+
+    this.realtimeGateway.emitToUser(user.id, LogServerEvents.MOVIE_LOG_DELETED, result);
+
+    return result;
   }
 
   // Following
@@ -167,9 +191,9 @@ export class MovieLogsService {
     movieId,
     dto,
   }: {
-    currentUser: User,
-    movieId: number,
-    dto: MovieFollowingLogsQueryDto,
+    currentUser: User;
+    movieId: number;
+    dto: MovieFollowingLogsQueryDto;
   }): Promise<MovieFollowingLogDto[]> {
     const { has_rating } = dto;
 
@@ -177,7 +201,7 @@ export class MovieLogsService {
       eq(logMovie.movieId, movieId),
       eq(follow.followerId, currentUser.id),
       eq(follow.status, 'accepted'),
-      has_rating ? isNotNull(logMovie.rating) : undefined
+      has_rating ? isNotNull(logMovie.rating) : undefined,
     );
 
     const rows = await this.db
@@ -190,35 +214,36 @@ export class MovieLogsService {
       .innerJoin(follow, eq(follow.followingId, logMovie.userId))
       .innerJoin(user, eq(user.id, logMovie.userId))
       .innerJoin(profile, eq(profile.id, user.id))
-      .leftJoin(reviewMovie, eq(reviewMovie.id, logMovie.id))      .where(whereClause)
-      .groupBy(
-        logMovie.id,
-        user.id,
-        profile.id,
-        reviewMovie.id
-      )
+      .leftJoin(reviewMovie, eq(reviewMovie.id, logMovie.id))
+      .where(whereClause)
+      .groupBy(logMovie.id, user.id, profile.id, reviewMovie.id)
       .orderBy(desc(logMovie.createdAt));
-    return plainToInstance(MovieFollowingLogDto, rows.map(row => ({
-      ...row.log,
-      user: row.user,
-      review: row.review ? {
-        ...row.review,
-        userId: row.log.userId,
-        movieId: row.log.movieId,
-      } : null,
-    })));
+    return plainToInstance(
+      MovieFollowingLogDto,
+      rows.map((row) => ({
+        ...row.log,
+        user: row.user,
+        review: row.review
+          ? {
+              ...row.review,
+              userId: row.log.userId,
+              movieId: row.log.movieId,
+            }
+          : null,
+      })),
+    );
   }
 
   async getFollowingAverageRating({
-    currentUser, 
+    currentUser,
     movieId,
   }: {
-    currentUser: User, 
-    movieId: number
+    currentUser: User;
+    movieId: number;
   }): Promise<MovieFollowingAverageRatingDto> {
     const [result] = await this.db
       .select({
-        average: avg(logMovie.rating), 
+        average: avg(logMovie.rating),
       })
       .from(logMovie)
       .innerJoin(follow, eq(follow.followingId, logMovie.userId))
@@ -227,8 +252,8 @@ export class MovieLogsService {
           eq(logMovie.movieId, movieId),
           eq(follow.followerId, currentUser.id),
           eq(follow.status, 'accepted'),
-          isNotNull(logMovie.rating)
-        )
+          isNotNull(logMovie.rating),
+        ),
       );
 
     const averageValue = result?.average ? Number(result.average) : null;

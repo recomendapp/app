@@ -17,10 +17,15 @@ import { DbTransaction } from '@libs/db';
 import { SortOrder } from '../../../../common/dto/sort.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../../utils/cursor';
 import { plainToInstance } from 'class-transformer';
+import { LogServerEvents } from '@libs/realtime';
+import { RealtimeGateway } from '../../../realtime/realtime.gateway';
 
 @Injectable()
 export class MovieWatchedDatesService {
-  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
+  constructor(
+    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
+    private readonly realtimeGateway: RealtimeGateway,
+  ) {}
 
   /* --------------------------------- Helper --------------------------------- */
   private async syncLogDates(tx: DbTransaction, logMovieId: number) {
@@ -63,7 +68,7 @@ export class MovieWatchedDatesService {
     movieId: number;
     dto: WatchedDateCreateDto;
   }): Promise<WatchedDateResponseDto> {
-    return await this.db.transaction(async (tx) => {
+    const result = await this.db.transaction(async (tx) => {
       const logEntry = await tx.query.logMovie.findFirst({
         where: and(eq(logMovie.userId, user.id), eq(logMovie.movieId, movieId)),
       });
@@ -82,15 +87,21 @@ export class MovieWatchedDatesService {
 
       const syncResult = await this.syncLogDates(tx, logEntry.id);
 
-      return plainToInstance(WatchedDateResponseDto, {
+      return {
         watchedDate: newDate,
         log: {
           ...syncResult,
           userId: logEntry.userId,
           movieId: logEntry.movieId,
         },
-      });
+      };
     });
+
+    const response = plainToInstance(WatchedDateResponseDto, result);
+
+    this.realtimeGateway.emitToUser(user.id, LogServerEvents.MOVIE_WATCHED_DATE_SET, response);
+
+    return response;
   }
 
   async update(
@@ -99,7 +110,7 @@ export class MovieWatchedDatesService {
     watchedDateId: number,
     dto: WatchedDateUpdateDto,
   ): Promise<WatchedDateResponseDto> {
-    return await this.db.transaction(async (tx) => {
+    const result = await this.db.transaction(async (tx) => {
       const logEntry = await tx.query.logMovie.findFirst({
         where: and(eq(logMovie.userId, user.id), eq(logMovie.movieId, movieId)),
       });
@@ -125,15 +136,21 @@ export class MovieWatchedDatesService {
 
       const syncResult = await this.syncLogDates(tx, logEntry.id);
 
-      return plainToInstance(WatchedDateResponseDto, {
+      return {
         watchedDate: updatedDate,
         log: {
           ...syncResult,
           userId: logEntry.userId,
           movieId: logEntry.movieId,
         },
-      });
+      };
     });
+
+    const response = plainToInstance(WatchedDateResponseDto, result);
+
+    this.realtimeGateway.emitToUser(user.id, LogServerEvents.MOVIE_WATCHED_DATE_UPDATED, response);
+
+    return response;
   }
 
   async delete(
@@ -141,7 +158,7 @@ export class MovieWatchedDatesService {
     movieId: number,
     watchedDateId: number,
   ): Promise<WatchedDateResponseDto> {
-    return await this.db.transaction(async (tx) => {
+    const result = await this.db.transaction(async (tx) => {
       const logEntry = await tx.query.logMovie.findFirst({
         where: and(eq(logMovie.userId, user.id), eq(logMovie.movieId, movieId)),
       });
@@ -172,15 +189,21 @@ export class MovieWatchedDatesService {
 
       const syncResult = await this.syncLogDates(tx, logEntry.id);
 
-      return plainToInstance(WatchedDateResponseDto, {
+      return {
         watchedDate: deletedDate,
         log: {
           ...syncResult,
           userId: logEntry.userId,
           movieId: logEntry.movieId,
         },
-      });
+      };
     });
+
+    const response = plainToInstance(WatchedDateResponseDto, result);
+
+    this.realtimeGateway.emitToUser(user.id, LogServerEvents.MOVIE_WATCHED_DATE_DELETED, response);
+
+    return response;
   }
 
   /* ---------------------------------- List ---------------------------------- */

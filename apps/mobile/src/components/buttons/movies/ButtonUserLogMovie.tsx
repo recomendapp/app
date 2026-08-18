@@ -78,7 +78,7 @@ const ButtonUserLogMovie = forwardRef<View, ButtonUserLogMovieProps>(({ movie },
                 },
           ]}
         >
-          <Icons.like color={colors.accentPink} fill={colors.accentPink} size={14} />
+          <Icons.like color={colors.accentPink} fill={colors.accentPink} size={18} />
         </View>
       )}
     </View>

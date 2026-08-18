@@ -7,7 +7,7 @@ import { LexoRank } from 'lexorank';
 import { PlaylistsAddQueryDto } from './playlists-add.dto';
 import { plainToInstance } from 'class-transformer';
 import { PlaylistItemDto } from '../items/playlist-items.dto';
-import { PlaylistsGateway } from '../playlists.gateway';
+import { PlaylistsRealtimeService } from '../playlists-realtime.service';
 
 @Injectable()
 export class PlaylistsAddService {
@@ -15,7 +15,7 @@ export class PlaylistsAddService {
 
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-    private readonly playlistsGateway: PlaylistsGateway,
+    private readonly playlistsRealtimeService: PlaylistsRealtimeService,
   ) {}
 
   async add({
@@ -36,40 +36,39 @@ export class PlaylistsAddService {
       const authorizedPlaylistsQuery = await tx
         .select({ id: playlist.id })
         .from(playlist)
-        .leftJoin(playlistMember, and(
-          eq(playlistMember.playlistId, playlist.id),
-          eq(playlistMember.userId, user.id)
-        ))
+        .leftJoin(
+          playlistMember,
+          and(eq(playlistMember.playlistId, playlist.id), eq(playlistMember.userId, user.id)),
+        )
         .innerJoin(profile, eq(profile.id, playlist.userId))
         .where(
           and(
             inArray(playlist.id, uniquePlaylistIds),
             or(
               eq(playlist.userId, user.id),
-              and(
-                inArray(playlistMember.role, ['editor', 'admin']),
-                eq(profile.isPremium, true)
-              )
-            )
-          )
+              and(inArray(playlistMember.role, ['editor', 'admin']), eq(profile.isPremium, true)),
+            ),
+          ),
         );
 
-      const authIds = authorizedPlaylistsQuery.map(p => p.id);
+      const authIds = authorizedPlaylistsQuery.map((p) => p.id);
 
       if (authIds.length === 0) {
-        throw new ForbiddenException("You don't have permission to add items to any of the requested playlists.");
+        throw new ForbiddenException(
+          "You don't have permission to add items to any of the requested playlists.",
+        );
       }
 
       const ranksQuery = await tx
         .select({
           playlistId: playlistItem.playlistId,
-          maxRank: sql<string>`MAX(${playlistItem.rank})` 
+          maxRank: sql<string>`MAX(${playlistItem.rank})`,
         })
         .from(playlistItem)
         .where(inArray(playlistItem.playlistId, authIds))
         .groupBy(playlistItem.playlistId);
 
-      const rankMap = new Map(ranksQuery.map(r => [r.playlistId, r.maxRank]));
+      const rankMap = new Map(ranksQuery.map((r) => [r.playlistId, r.maxRank]));
 
       const valuesToInsert = authIds.map((pid): typeof playlistItem.$inferInsert => {
         const maxRankStr = rankMap.get(pid);
@@ -93,25 +92,29 @@ export class PlaylistsAddService {
         };
       });
 
-      return await tx.insert(playlistItem)
-        .values(valuesToInsert)
-        .returning();
+      return await tx.insert(playlistItem).values(valuesToInsert).returning();
     });
 
+    const itemIdsByPlaylist = new Map<number, number[]>();
     for (const item of insertedItems) {
-      this.playlistsGateway.broadcastItemAdded(item.playlistId, [{
-        id: item.id,
-        playlistId: item.playlistId,
-        mediaId: item.type === 'movie' ? item.movieId : item.tvSeriesId,
-        type: item.type,
-        rank: item.rank,
-        comment: item.comment,
-      }]);
+      const itemIds = itemIdsByPlaylist.get(item.playlistId) ?? [];
+      itemIds.push(item.id);
+      itemIdsByPlaylist.set(item.playlistId, itemIds);
+    }
+    for (const [playlistId, itemIds] of itemIdsByPlaylist) {
+      this.playlistsRealtimeService
+        .broadcastItemAdded(playlistId, itemIds)
+        .catch((err) =>
+          this.logger.error(`Failed to broadcast items added for playlist ${playlistId}`, err),
+        );
     }
 
-    return plainToInstance(PlaylistItemDto, insertedItems.map(({ movieId, tvSeriesId, ...item }) => ({
-      ...item,
-      mediaId: item.type === 'movie' ? movieId : tvSeriesId,
-    })));
+    return plainToInstance(
+      PlaylistItemDto,
+      insertedItems.map(({ movieId, tvSeriesId, ...item }) => ({
+        ...item,
+        mediaId: item.type === 'movie' ? movieId : tvSeriesId,
+      })),
+    );
   }
 }

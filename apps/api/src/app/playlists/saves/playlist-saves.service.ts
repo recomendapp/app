@@ -1,25 +1,25 @@
 import { Inject, Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { User } from '../../auth/auth.service';
-import { playlistSaved, playlist } from '@libs/db/schemas'; 
+import { playlistSaved, playlist } from '@libs/db/schemas';
 import { and, eq } from 'drizzle-orm';
 import { plainToInstance } from 'class-transformer';
 import { PlaylistSavedDto } from './dto/playlist-saved.dto';
+import { PlaylistServerEvents } from '@libs/realtime';
+import { RealtimeGateway } from '../../realtime/realtime.gateway';
 
 @Injectable()
 export class PlaylistSavesService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
+    private readonly realtimeGateway: RealtimeGateway,
   ) {}
 
   async get({ user, playlistId }: { user: User; playlistId: number }): Promise<boolean> {
     const save = await this.db.query.playlistSaved.findFirst({
-      where: and(
-        eq(playlistSaved.playlistId, playlistId),
-        eq(playlistSaved.userId, user.id)
-      )
+      where: and(eq(playlistSaved.playlistId, playlistId), eq(playlistSaved.userId, user.id)),
     });
-    
+
     return !!save;
   }
 
@@ -47,13 +47,10 @@ export class PlaylistSavesService {
       })
       .onConflictDoNothing()
       .returning();
-    
+
     if (!save) {
       const existingSave = await this.db.query.playlistSaved.findFirst({
-        where: and(
-          eq(playlistSaved.playlistId, playlistId),
-          eq(playlistSaved.userId, user.id)
-        )
+        where: and(eq(playlistSaved.playlistId, playlistId), eq(playlistSaved.userId, user.id)),
       });
       if (!existingSave) {
         throw new NotFoundException();
@@ -61,22 +58,29 @@ export class PlaylistSavesService {
       return plainToInstance(PlaylistSavedDto, existingSave, { excludeExtraneousValues: true });
     }
 
-    return plainToInstance(PlaylistSavedDto, save, { excludeExtraneousValues: true });
+    const result = plainToInstance(PlaylistSavedDto, save, { excludeExtraneousValues: true });
+    this.realtimeGateway.emitToUser(user.id, PlaylistServerEvents.SAVE_SET, result);
+    return result;
   }
 
-  async delete({ user, playlistId }: { user: User; playlistId: number }): Promise<PlaylistSavedDto | null> {
+  async delete({
+    user,
+    playlistId,
+  }: {
+    user: User;
+    playlistId: number;
+  }): Promise<PlaylistSavedDto | null> {
     const [deleted] = await this.db
       .delete(playlistSaved)
-      .where(and(
-        eq(playlistSaved.playlistId, playlistId),
-        eq(playlistSaved.userId, user.id)
-      ))
+      .where(and(eq(playlistSaved.playlistId, playlistId), eq(playlistSaved.userId, user.id)))
       .returning();
-    
+
     if (!deleted) {
       return null;
     }
 
-    return plainToInstance(PlaylistSavedDto, deleted, { excludeExtraneousValues: true });
+    const result = plainToInstance(PlaylistSavedDto, deleted, { excludeExtraneousValues: true });
+    this.realtimeGateway.emitToUser(user.id, PlaylistServerEvents.SAVE_DELETED, result);
+    return result;
   }
 }

@@ -1,16 +1,29 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { and, eq, sql } from 'drizzle-orm';
 import { User } from '../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
-import { BookmarkDto, BookmarkInputDto } from './dto/bookmarks.dto';
-import { bookmark } from '@libs/db/schemas';
+import {
+  BookmarkDto,
+  BookmarkInputDto,
+  BookmarkWithMediaUnion,
+  BookmarkWithMovieDto,
+  BookmarkWithTvSeriesDto,
+} from './dto/bookmarks.dto';
+import { bookmark, tmdbMovieView, tmdbTvSeriesView } from '@libs/db/schemas';
+import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
 import { BookmarkTarget } from './bookmarks.type';
 import { plainToInstance } from 'class-transformer';
+import { defaultSupportedLocale, SupportedLocale } from '@libs/i18n';
+import { BookmarkServerEvents } from '@libs/realtime';
+import { RealtimeGateway } from '../realtime/realtime.gateway';
 
 @Injectable()
 export class BookmarksService {
+  private readonly logger = new Logger(BookmarksService.name);
+
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
+    private readonly realtimeGateway: RealtimeGateway,
   ) {}
 
   private getWhereConditions(userId: string, target: BookmarkTarget) {
@@ -29,6 +42,45 @@ export class BookmarksService {
     return and(...conditions);
   }
 
+  private async getMedia(
+    type: BookmarkDto['type'],
+    mediaId: number,
+    locale: SupportedLocale,
+  ): Promise<BookmarkWithMediaUnion['media'] | null> {
+    return this.db.transaction(async (tx) => {
+      await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
+
+      if (type === 'movie') {
+        const [row] = await tx
+          .select(MOVIE_COMPACT_SELECT)
+          .from(tmdbMovieView)
+          .where(eq(tmdbMovieView.id, mediaId))
+          .limit(1);
+        return row ?? null;
+      }
+
+      const [row] = await tx
+        .select(TV_SERIES_COMPACT_SELECT)
+        .from(tmdbTvSeriesView)
+        .where(eq(tmdbTvSeriesView.id, mediaId))
+        .limit(1);
+      return row ?? null;
+    });
+  }
+
+  private async broadcastSet(user: User, dto: BookmarkDto) {
+    const locale = (user.language as SupportedLocale) || defaultSupportedLocale;
+    const media = await this.getMedia(dto.type, dto.mediaId, locale);
+    if (!media) return;
+
+    const payload =
+      dto.type === 'movie'
+        ? plainToInstance(BookmarkWithMovieDto, { ...dto, media })
+        : plainToInstance(BookmarkWithTvSeriesDto, { ...dto, media });
+
+    this.realtimeGateway.emitToUser(user.id, BookmarkServerEvents.SET, payload);
+  }
+
   async get({
     user,
     ...target
@@ -37,7 +89,7 @@ export class BookmarksService {
   } & BookmarkTarget): Promise<BookmarkDto | null> {
     const bookmarkEntry = await this.db.query.bookmark.findFirst({
       where: this.getWhereConditions(user.id, target),
-    })
+    });
     if (!bookmarkEntry) return null;
     return plainToInstance(BookmarkDto, {
       id: bookmarkEntry.id,
@@ -75,8 +127,10 @@ export class BookmarksService {
       result = updated;
     } else {
       const type = movieId ? 'movie' : 'tv_series';
-      const targetCols = movieId ? [bookmark.userId, bookmark.movieId] : [bookmark.userId, bookmark.tvSeriesId];
-      
+      const targetCols = movieId
+        ? [bookmark.userId, bookmark.movieId]
+        : [bookmark.userId, bookmark.tvSeriesId];
+
       const targetWhereSql = movieId
         ? sql`${bookmark.status} = 'active'::bookmark_status AND ${bookmark.type} = 'movie'::bookmark_type`
         : sql`${bookmark.status} = 'active'::bookmark_status AND ${bookmark.type} = 'tv_series'::bookmark_type`;
@@ -103,7 +157,7 @@ export class BookmarksService {
       result = upserted;
     }
 
-    return plainToInstance(BookmarkDto, {
+    const bookmarkDto = plainToInstance(BookmarkDto, {
       id: result.id,
       userId: result.userId,
       type: result.type,
@@ -113,6 +167,12 @@ export class BookmarksService {
       createdAt: result.createdAt,
       updatedAt: result.updatedAt,
     });
+
+    this.broadcastSet(user, bookmarkDto).catch((err) =>
+      this.logger.error(`Failed to broadcast bookmark set for bookmark ${bookmarkDto.id}`, err),
+    );
+
+    return bookmarkDto;
   }
 
   async delete({
@@ -121,7 +181,7 @@ export class BookmarksService {
   }: {
     user: User;
   } & BookmarkTarget): Promise<BookmarkDto> {
-    return await this.db.transaction(async (tx) => {
+    const deletedBookmark = await this.db.transaction(async (tx) => {
       const [deletedBookmark] = await tx
         .delete(bookmark)
         .where(this.getWhereConditions(user.id, target))
@@ -131,16 +191,22 @@ export class BookmarksService {
         throw new NotFoundException('Bookmark entry not found');
       }
 
-      return plainToInstance(BookmarkDto, {
-        id: deletedBookmark.id,
-        userId: deletedBookmark.userId,
-        type: deletedBookmark.type,
-        mediaId: deletedBookmark.movieId ?? deletedBookmark.tvSeriesId ?? 0,
-        status: deletedBookmark.status,
-        comment: deletedBookmark.comment,
-        createdAt: deletedBookmark.createdAt,
-        updatedAt: deletedBookmark.updatedAt,
-      });
+      return deletedBookmark;
     });
+
+    const bookmarkDto = plainToInstance(BookmarkDto, {
+      id: deletedBookmark.id,
+      userId: deletedBookmark.userId,
+      type: deletedBookmark.type,
+      mediaId: deletedBookmark.movieId ?? deletedBookmark.tvSeriesId ?? 0,
+      status: deletedBookmark.status,
+      comment: deletedBookmark.comment,
+      createdAt: deletedBookmark.createdAt,
+      updatedAt: deletedBookmark.updatedAt,
+    });
+
+    this.realtimeGateway.emitToUser(user.id, BookmarkServerEvents.DELETED, bookmarkDto);
+
+    return bookmarkDto;
   }
 }

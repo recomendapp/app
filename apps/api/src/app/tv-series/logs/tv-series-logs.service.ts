@@ -6,14 +6,21 @@ import { LogTvSeriesDto, LogTvSeriesRequestDto, LogTvStatus } from './tv-series-
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { TvLogsSyncService } from './sync/tv-logs-sync.service';
 import { User } from '../../auth/auth.service';
-import { TvSeriesFollowingAverageRatingDto, TvSeriesFollowingLogDto, TvSeriesFollowingLogsQueryDto } from './tv-series-following-logs.dto';
+import {
+  TvSeriesFollowingAverageRatingDto,
+  TvSeriesFollowingLogDto,
+  TvSeriesFollowingLogsQueryDto,
+} from './tv-series-following-logs.dto';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
+import { LogServerEvents } from '@libs/realtime';
+import { RealtimeGateway } from '../../realtime/realtime.gateway';
 
 @Injectable()
 export class TvSeriesLogsService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
     private readonly syncService: TvLogsSyncService,
+    private readonly realtimeGateway: RealtimeGateway,
   ) {}
 
   async get({
@@ -25,32 +32,39 @@ export class TvSeriesLogsService {
   }): Promise<LogTvSeriesDto | null> {
     const logEntry = await this.db.query.logTvSeries.findFirst({
       where: and(eq(logTvSeries.userId, currentUser.id), eq(logTvSeries.tvSeriesId, tvSeriesId)),
-      with: { 
+      with: {
         review: true,
         tvSeries: {
           columns: {
             id: true,
             numberOfEpisodes: true,
-          }
-        }
-      } 
+          },
+        },
+      },
     });
 
     if (!logEntry) return null;
 
-    return plainToInstance(LogTvSeriesDto, {
-      ...logEntry,
-      status: (
-        logEntry.status !== 'dropped'
-        && logEntry.tvSeries.numberOfEpisodes > 0
-        && logEntry.episodesWatchedCount >= logEntry.tvSeries.numberOfEpisodes
-      ) ? LogTvStatus.COMPLETED : logEntry.status as LogTvStatus,
-      review: logEntry.review ? {
-        ...logEntry.review,
-        userId: logEntry.userId,
-        tvSeriesId: logEntry.tvSeriesId,
-      } : null,
-    }, { excludeExtraneousValues: true })
+    return plainToInstance(
+      LogTvSeriesDto,
+      {
+        ...logEntry,
+        status:
+          logEntry.status !== 'dropped' &&
+          logEntry.tvSeries.numberOfEpisodes > 0 &&
+          logEntry.episodesWatchedCount >= logEntry.tvSeries.numberOfEpisodes
+            ? LogTvStatus.COMPLETED
+            : (logEntry.status as LogTvStatus),
+        review: logEntry.review
+          ? {
+              ...logEntry.review,
+              userId: logEntry.userId,
+              tvSeriesId: logEntry.tvSeriesId,
+            }
+          : null,
+      },
+      { excludeExtraneousValues: true },
+    );
   }
 
   async set({
@@ -61,32 +75,49 @@ export class TvSeriesLogsService {
     currentUser: User;
     tvSeriesId: number;
     dto: LogTvSeriesRequestDto;
-  }): Promise<LogTvSeriesDto> {    
+  }): Promise<LogTvSeriesDto> {
     let isInserted = false;
     let finalLogId: number;
 
     await this.db.transaction(async (tx) => {
-      const [tmdbSeries] = await tx.select({ id: tmdbTvSeries.id }).from(tmdbTvSeries).where(eq(tmdbTvSeries.id, tvSeriesId));
+      const [tmdbSeries] = await tx
+        .select({ id: tmdbTvSeries.id })
+        .from(tmdbTvSeries)
+        .where(eq(tmdbTvSeries.id, tvSeriesId));
       if (!tmdbSeries) throw new NotFoundException('TMDB Series not found');
-      const [seriesLog] = await tx.insert(logTvSeries).values({
-        userId: currentUser.id,
-        tvSeriesId: tvSeriesId,
-        rating: dto.rating,
-        ratedAt: dto.rating != null ? sql`now()` : null,
-        isLiked: dto.isLiked || false,
-        likedAt: dto.isLiked ? sql`now()` : null,
-        status: dto.status === 'completed' ? 'watching' : (dto.status || 'watching'),
-      })
-      .onConflictDoUpdate({
-        target: [logTvSeries.tvSeriesId, logTvSeries.userId],
-        set: {
-          rating: dto.rating !== undefined ? dto.rating : sql`${logTvSeries.rating}`,
-          ratedAt: dto.rating !== undefined ? (dto.rating != null ? sql`now()` : null) : sql`${logTvSeries.ratedAt}`,
-          isLiked: dto.isLiked !== undefined ? dto.isLiked : sql`${logTvSeries.isLiked}`,
-          likedAt: dto.isLiked !== undefined ? (dto.isLiked ? sql`now()` : null) : sql`${logTvSeries.likedAt}`,
-          status: dto.status === 'completed' ? 'watching' : (dto.status || sql`${logTvSeries.status}`),
-        }
-      }).returning();
+      const [seriesLog] = await tx
+        .insert(logTvSeries)
+        .values({
+          userId: currentUser.id,
+          tvSeriesId: tvSeriesId,
+          rating: dto.rating,
+          ratedAt: dto.rating != null ? sql`now()` : null,
+          isLiked: dto.isLiked || false,
+          likedAt: dto.isLiked ? sql`now()` : null,
+          status: dto.status === 'completed' ? 'watching' : dto.status || 'watching',
+        })
+        .onConflictDoUpdate({
+          target: [logTvSeries.tvSeriesId, logTvSeries.userId],
+          set: {
+            rating: dto.rating !== undefined ? dto.rating : sql`${logTvSeries.rating}`,
+            ratedAt:
+              dto.rating !== undefined
+                ? dto.rating != null
+                  ? sql`now()`
+                  : null
+                : sql`${logTvSeries.ratedAt}`,
+            isLiked: dto.isLiked !== undefined ? dto.isLiked : sql`${logTvSeries.isLiked}`,
+            likedAt:
+              dto.isLiked !== undefined
+                ? dto.isLiked
+                  ? sql`now()`
+                  : null
+                : sql`${logTvSeries.likedAt}`,
+            status:
+              dto.status === 'completed' ? 'watching' : dto.status || sql`${logTvSeries.status}`,
+          },
+        })
+        .returning();
 
       isInserted = seriesLog.createdAt === seriesLog.updatedAt;
       finalLogId = seriesLog.id;
@@ -121,26 +152,37 @@ export class TvSeriesLogsService {
 
     const completeLog = await this.db.query.logTvSeries.findFirst({
       where: eq(logTvSeries.id, finalLogId),
-      with: { review: true, tvSeries: { columns: { id: true, numberOfEpisodes: true } } }
+      with: { review: true, tvSeries: { columns: { id: true, numberOfEpisodes: true } } },
     });
 
     if (!completeLog) {
       throw new NotFoundException('Log entry not found after update');
     }
 
-    return plainToInstance(LogTvSeriesDto, {
-      ...completeLog,
-      status: (
-        completeLog.status !== 'dropped'
-        && completeLog.tvSeries.numberOfEpisodes > 0
-        && completeLog.episodesWatchedCount >= completeLog.tvSeries.numberOfEpisodes
-      ) ? LogTvStatus.COMPLETED : completeLog.status as LogTvStatus,
-      review: completeLog.review ? {
-        ...completeLog.review,
-        userId: completeLog.userId,
-        tvSeriesId: completeLog.tvSeriesId,
-      } : null,
-    }, { excludeExtraneousValues: true });
+    const result = plainToInstance(
+      LogTvSeriesDto,
+      {
+        ...completeLog,
+        status:
+          completeLog.status !== 'dropped' &&
+          completeLog.tvSeries.numberOfEpisodes > 0 &&
+          completeLog.episodesWatchedCount >= completeLog.tvSeries.numberOfEpisodes
+            ? LogTvStatus.COMPLETED
+            : (completeLog.status as LogTvStatus),
+        review: completeLog.review
+          ? {
+              ...completeLog.review,
+              userId: completeLog.userId,
+              tvSeriesId: completeLog.tvSeriesId,
+            }
+          : null,
+      },
+      { excludeExtraneousValues: true },
+    );
+
+    this.realtimeGateway.emitToUser(currentUser.id, LogServerEvents.TV_SERIES_LOG_SET, result);
+
+    return result;
   }
 
   async delete({
@@ -152,48 +194,53 @@ export class TvSeriesLogsService {
   }): Promise<LogTvSeriesDto> {
     const deletedLog = await this.db.transaction(async (tx) => {
       const logEntry = await tx.query.logTvSeries.findFirst({
-        where: and(
-          eq(logTvSeries.userId, currentUser.id),
-          eq(logTvSeries.tvSeriesId, tvSeriesId),
-        ),
+        where: and(eq(logTvSeries.userId, currentUser.id), eq(logTvSeries.tvSeriesId, tvSeriesId)),
         with: {
           review: true,
           tvSeries: {
             columns: {
               id: true,
               numberOfEpisodes: true,
-            }
-          }
-        }
+            },
+          },
+        },
       });
 
       if (!logEntry) {
         throw new NotFoundException('Series log not found');
       }
 
-      await tx.delete(logTvSeries).where(
-        and(
-          eq(logTvSeries.userId, currentUser.id),
-          eq(logTvSeries.tvSeriesId, tvSeriesId),
-        )
-      );
+      await tx
+        .delete(logTvSeries)
+        .where(and(eq(logTvSeries.userId, currentUser.id), eq(logTvSeries.tvSeriesId, tvSeriesId)));
 
       return logEntry;
     });
 
-    return plainToInstance(LogTvSeriesDto, {
-      ...deletedLog,
-      status: (
-        deletedLog.status !== 'dropped'
-        && deletedLog.tvSeries.numberOfEpisodes > 0
-        && deletedLog.episodesWatchedCount >= deletedLog.tvSeries.numberOfEpisodes
-      ) ? LogTvStatus.COMPLETED : deletedLog.status as LogTvStatus,
-      review: deletedLog.review ? {
-        ...deletedLog.review,
-        userId: deletedLog.userId,
-        tvSeriesId: deletedLog.tvSeriesId,
-      } : null,
-    }, { excludeExtraneousValues: true })
+    const result = plainToInstance(
+      LogTvSeriesDto,
+      {
+        ...deletedLog,
+        status:
+          deletedLog.status !== 'dropped' &&
+          deletedLog.tvSeries.numberOfEpisodes > 0 &&
+          deletedLog.episodesWatchedCount >= deletedLog.tvSeries.numberOfEpisodes
+            ? LogTvStatus.COMPLETED
+            : (deletedLog.status as LogTvStatus),
+        review: deletedLog.review
+          ? {
+              ...deletedLog.review,
+              userId: deletedLog.userId,
+              tvSeriesId: deletedLog.tvSeriesId,
+            }
+          : null,
+      },
+      { excludeExtraneousValues: true },
+    );
+
+    this.realtimeGateway.emitToUser(currentUser.id, LogServerEvents.TV_SERIES_LOG_DELETED, result);
+
+    return result;
   }
 
   // Following
@@ -202,9 +249,9 @@ export class TvSeriesLogsService {
     tvSeriesId,
     dto,
   }: {
-    currentUser: User,
-    tvSeriesId: number,
-    dto: TvSeriesFollowingLogsQueryDto,
+    currentUser: User;
+    tvSeriesId: number;
+    dto: TvSeriesFollowingLogsQueryDto;
   }): Promise<TvSeriesFollowingLogDto[]> {
     const { has_rating } = dto;
 
@@ -212,7 +259,7 @@ export class TvSeriesLogsService {
       eq(logTvSeries.tvSeriesId, tvSeriesId),
       eq(follow.followerId, currentUser.id),
       eq(follow.status, 'accepted'),
-      has_rating ? isNotNull(logTvSeries.rating) : undefined
+      has_rating ? isNotNull(logTvSeries.rating) : undefined,
     );
 
     const rows = await this.db
@@ -227,31 +274,31 @@ export class TvSeriesLogsService {
       .innerJoin(profile, eq(profile.id, user.id))
       .leftJoin(reviewTvSeries, eq(reviewTvSeries.id, logTvSeries.id))
       .where(whereClause)
-      .groupBy(
-        logTvSeries.id,
-        user.id,
-        profile.id,
-        reviewTvSeries.id
-      )
+      .groupBy(logTvSeries.id, user.id, profile.id, reviewTvSeries.id)
       .orderBy(desc(logTvSeries.createdAt));
 
-    return plainToInstance(TvSeriesFollowingLogDto, rows.map(row => ({
-      ...row.log,
-      user: row.user,
-      review: row.review ? {
-        ...row.review,
-        userId: row.log.userId,
-        tvSeriesId: row.log.tvSeriesId,
-      } : null,
-    })));
+    return plainToInstance(
+      TvSeriesFollowingLogDto,
+      rows.map((row) => ({
+        ...row.log,
+        user: row.user,
+        review: row.review
+          ? {
+              ...row.review,
+              userId: row.log.userId,
+              tvSeriesId: row.log.tvSeriesId,
+            }
+          : null,
+      })),
+    );
   }
 
   async getFollowingAverageRating({
-    currentUser, 
+    currentUser,
     tvSeriesId,
   }: {
-    currentUser: User,
-    tvSeriesId: number,
+    currentUser: User;
+    tvSeriesId: number;
   }): Promise<TvSeriesFollowingAverageRatingDto> {
     const [result] = await this.db
       .select({
@@ -264,8 +311,8 @@ export class TvSeriesLogsService {
           eq(logTvSeries.tvSeriesId, tvSeriesId),
           eq(follow.followerId, currentUser.id),
           eq(follow.status, 'accepted'),
-          isNotNull(logTvSeries.rating)
-        )
+          isNotNull(logTvSeries.rating),
+        ),
       );
 
     const averageValue = result?.average ? Number(result.average) : null;

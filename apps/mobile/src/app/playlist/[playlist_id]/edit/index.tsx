@@ -33,7 +33,6 @@ import { PADDING_VERTICAL } from '../../../../theme/globals';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery } from '@tanstack/react-query';
 import { playlistOptions, usePlaylistUpdateMutation } from '@libs/query-client';
-import { useAuth } from '../../../../providers/AuthProvider';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 import { useModalHeaderOptions } from '../../../../hooks/useModalHeaderOptions';
 
@@ -48,7 +47,6 @@ const ModalPlaylistEdit = () => {
   const insets = useSafeAreaInsets();
   const { colors } = useTheme();
   const router = useRouter();
-  const { user } = useAuth();
   const { showActionSheetWithOptions } = useActionSheet();
   const t = useTranslations();
   const headerHeight = useHeaderHeight();
@@ -59,9 +57,7 @@ const ModalPlaylistEdit = () => {
     }),
   );
   // Mutations
-  const { mutateAsync: updatePlaylist, isPending } = usePlaylistUpdateMutation({
-    userId: user?.id,
-  });
+  const { mutateAsync: updatePlaylist, isPending } = usePlaylistUpdateMutation();
 
   // States
   const [newPoster, setNewPoster] = useState<ImagePickerAsset | null | undefined>(undefined);

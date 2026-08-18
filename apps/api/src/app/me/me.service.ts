@@ -6,12 +6,15 @@ import { User } from '../auth/auth.service';
 import { WorkerClient } from '@shared/worker';
 import { UpdateUserDto, UserDto } from '../users/dto/users.dto';
 import { plainToInstance } from 'class-transformer';
+import { MeServerEvents } from '@libs/realtime';
+import { RealtimeGateway } from '../realtime/realtime.gateway';
 
 @Injectable()
 export class MeService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
     private readonly workerClient: WorkerClient,
+    private readonly realtimeGateway: RealtimeGateway,
   ) {}
 
   async get(loggedUser: User): Promise<UserDto> {
@@ -19,7 +22,7 @@ export class MeService {
       where: eq(user.id, loggedUser.id),
       with: {
         profile: true,
-      }
+      },
     });
 
     if (!fullUser) {
@@ -46,10 +49,7 @@ export class MeService {
     });
   }
 
-  async update(
-    loggedUser: User,
-    dto: UpdateUserDto,
-  ): Promise<UserDto> {
+  async update(loggedUser: User, dto: UpdateUserDto): Promise<UserDto> {
     const userUpdates: Partial<typeof user.$inferSelect> = {};
     let shouldSyncSearch = false;
 
@@ -68,7 +68,9 @@ export class MeService {
         const diff = now.getTime() - new Date(loggedUser.usernameUpdatedAt).getTime();
         const diffDays = diff / (1000 * 60 * 60 * 24);
         if (diffDays < 30) {
-          throw new BadRequestException(`Username can only be changed once every 30 days. Please try again in ${Math.ceil(30 - diffDays)} days.`);
+          throw new BadRequestException(
+            `Username can only be changed once every 30 days. Please try again in ${Math.ceil(30 - diffDays)} days.`,
+          );
         }
       }
       userUpdates.username = dto.username;
@@ -82,14 +84,10 @@ export class MeService {
 
     await this.db.transaction(async (tx) => {
       if (Object.keys(userUpdates).length > 0) {
-        await tx.update(user)
-          .set(userUpdates)
-          .where(eq(user.id, loggedUser.id));
+        await tx.update(user).set(userUpdates).where(eq(user.id, loggedUser.id));
       }
       if (Object.keys(profileUpdates).length > 0) {
-        await tx.update(profile)
-          .set(profileUpdates)
-          .where(eq(profile.id, loggedUser.id));
+        await tx.update(profile).set(profileUpdates).where(eq(profile.id, loggedUser.id));
       }
     });
 
@@ -97,6 +95,10 @@ export class MeService {
       await this.workerClient.emit('search:sync-user', { userId: loggedUser.id, action: 'upsert' });
     }
 
-    return this.get(loggedUser);
+    const updatedUser = await this.get(loggedUser);
+
+    this.realtimeGateway.emitToUser(loggedUser.id, MeServerEvents.UPDATED, updatedUser);
+
+    return updatedUser;
   }
 }

@@ -179,7 +179,13 @@ const MovieHeader: React.FC<MovieHeaderProps> = ({ movie, loading, scrollY, trig
               </AnimatedImageWithFallback>
             </Link.AppleZoomTarget>
           ) : (
-            <Skeleton style={[{ aspectRatio: 2 / 3 }, tw`w-48`, posterAnim]} />
+            <Skeleton
+              onLayout={(e) => {
+                'worklet';
+                posterHeight.value = e.nativeEvent.layout.height;
+              }}
+              style={[{ aspectRatio: 2 / 3 }, tw`w-48`, posterAnim]}
+            />
           )}
         </Animated.View>
         <Animated.View style={[tw`w-full items-center`, { gap: GAP }, textAnim]}>

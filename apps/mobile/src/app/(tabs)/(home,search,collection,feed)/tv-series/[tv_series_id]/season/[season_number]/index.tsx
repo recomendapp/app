@@ -36,6 +36,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../../../../../../../providers/AuthProvider';
 import { FloatingBar } from '../../../../../../../components/ui/FloatingBar';
 import ButtonUserLogTvSeason from '../../../../../../../components/buttons/tv-series/ButtonUserLogTvSeason';
+import ButtonUserLogTvEpisode from '../../../../../../../components/buttons/tv-series/ButtonUserLogTvEpisode';
 
 interface MediaHeaderProps {
   season?: TvSeasonGet;
@@ -286,6 +287,9 @@ const TvSeriesSeasonScreen = () => {
               variant="general"
               style={tw`absolute top-1 right-1 w-10`}
             />
+            <View style={tw`absolute inset-0 items-center justify-center`}>
+              <ButtonUserLogTvEpisode episode={item} />
+            </View>
           </ImageWithFallback>
           <View style={tw`shrink px-2 py-1 gap-1`}>
             <Text numberOfLines={1}>

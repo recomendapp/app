@@ -1,33 +1,82 @@
-import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Inject,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { aliasedTable, and, eq, inArray, isNull, sql } from 'drizzle-orm';
 import { User } from '../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { RecoDto, RecoSendDto, RecoSendResponseDto, RecoType } from './dto/recos.dto';
-import { follow, logMovie, logTvSeries, reco, recoTypeEnum } from '@libs/db/schemas';
+import {
+  follow,
+  logMovie,
+  logTvSeries,
+  reco,
+  recoTypeEnum,
+  user as userTable,
+} from '@libs/db/schemas';
 import { DbTransaction } from '@libs/db';
 import { NotifyClient } from '@shared/notify';
 import { plainToInstance } from 'class-transformer';
+import { defaultSupportedLocale, SupportedLocale } from '@libs/i18n';
+import { RecoServerEvents } from '@libs/realtime';
+import { RealtimeGateway } from '../realtime/realtime.gateway';
+import { UserRecosService } from '../users/recos/user-recos.service';
 
 @Injectable()
 export class RecosService {
+  private readonly logger = new Logger(RecosService.name);
+
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
     private readonly notify: NotifyClient,
+    private readonly realtimeGateway: RealtimeGateway,
+    private readonly userRecosService: UserRecosService,
   ) {}
+
+  private async broadcastReceived(
+    receiverIds: string[],
+    mediaId: number,
+    type: (typeof recoTypeEnum.enumValues)[number],
+  ) {
+    if (receiverIds.length === 0) return;
+
+    const receivers = await this.db
+      .select({ id: userTable.id, language: userTable.language })
+      .from(userTable)
+      .where(inArray(userTable.id, receiverIds));
+
+    await Promise.all(
+      receivers.map(async (receiver) => {
+        const locale = (receiver.language as SupportedLocale) || defaultSupportedLocale;
+        const grouped = await this.userRecosService.getGroupedReco({
+          targetUserId: receiver.id,
+          mediaId,
+          type,
+          locale,
+        });
+        if (!grouped) return;
+        this.realtimeGateway.emitToUser(receiver.id, RecoServerEvents.RECEIVED, grouped);
+      }),
+    );
+  }
 
   async send({
     user,
     type,
     mediaId,
-    dto
+    dto,
   }: {
     user: User;
-    type: typeof recoTypeEnum.enumValues[number];
+    type: (typeof recoTypeEnum.enumValues)[number];
     mediaId: number;
     dto: RecoSendDto;
   }): Promise<RecoSendResponseDto> {
     const followAlias = aliasedTable(follow, 'f2');
-    
+
     const baseQuery = this.db
       .select({ id: follow.followingId })
       .from(follow)
@@ -35,8 +84,8 @@ export class RecosService {
         followAlias,
         and(
           eq(follow.followerId, followAlias.followingId),
-          eq(follow.followingId, followAlias.followerId)
-        )
+          eq(follow.followingId, followAlias.followerId),
+        ),
       );
 
     const commonWhere = and(
@@ -46,26 +95,35 @@ export class RecosService {
       eq(followAlias.status, 'accepted'),
     );
 
-    const validReceiversResult = type === RecoType.MOVIE
-      ? await baseQuery
-          .leftJoin(logMovie, and(eq(logMovie.userId, follow.followingId), eq(logMovie.movieId, mediaId)))
-          .where(and(commonWhere, isNull(logMovie.id)))
-      : await baseQuery
-          .leftJoin(logTvSeries, and(eq(logTvSeries.userId, follow.followingId), eq(logTvSeries.tvSeriesId, mediaId)))
-          .where(and(commonWhere, isNull(logTvSeries.id)));
+    const validReceiversResult =
+      type === RecoType.MOVIE
+        ? await baseQuery
+            .leftJoin(
+              logMovie,
+              and(eq(logMovie.userId, follow.followingId), eq(logMovie.movieId, mediaId)),
+            )
+            .where(and(commonWhere, isNull(logMovie.id)))
+        : await baseQuery
+            .leftJoin(
+              logTvSeries,
+              and(eq(logTvSeries.userId, follow.followingId), eq(logTvSeries.tvSeriesId, mediaId)),
+            )
+            .where(and(commonWhere, isNull(logTvSeries.id)));
     const finalReceiverIds = validReceiversResult.map((r) => r.id);
 
     if (finalReceiverIds.length === 0) {
       throw new BadRequestException('No valid receivers found for the recommendation');
     }
 
-    const targetCols = type === RecoType.MOVIE
-      ? [reco.userId, reco.senderId, reco.movieId]
-      : [reco.userId, reco.senderId, reco.tvSeriesId];
+    const targetCols =
+      type === RecoType.MOVIE
+        ? [reco.userId, reco.senderId, reco.movieId]
+        : [reco.userId, reco.senderId, reco.tvSeriesId];
 
-    const whereSql = type === RecoType.MOVIE
-      ? sql`${reco.type} = 'movie'::reco_type`
-      : sql`${reco.type} = 'tv_series'::reco_type`;
+    const whereSql =
+      type === RecoType.MOVIE
+        ? sql`${reco.type} = 'movie'::reco_type`
+        : sql`${reco.type} = 'tv_series'::reco_type`;
 
     const insertValues = finalReceiverIds.map((receiverId) => ({
       userId: receiverId,
@@ -94,27 +152,35 @@ export class RecosService {
         comment: dto.comment || null,
         sent: [],
         requested: dto.userIds.length,
-      }
-    };
+      };
+    }
 
     await this.notify.emit('reco:received', {
       senderId: user.id,
-      receiverIds: returnedRecos.map(r => r.userId),
+      receiverIds: returnedRecos.map((r) => r.userId),
       mediaId,
       type,
       comment: dto.comment || null,
     });
-    
+
     const item = returnedRecos[0];
-    
-    return plainToInstance(RecoSendResponseDto, {
+
+    const responseDto = plainToInstance(RecoSendResponseDto, {
       mediaId: item.type === 'movie' ? item.movieId : item.tvSeriesId,
       type: item.type,
       senderId: item.senderId,
       comment: item.comment,
       requested: dto.userIds.length,
-      sent: returnedRecos.map(r => r.userId),
+      sent: returnedRecos.map((r) => r.userId),
     });
+
+    this.realtimeGateway.emitToUser(user.id, RecoServerEvents.SENT, responseDto);
+
+    this.broadcastReceived(responseDto.sent, mediaId, type).catch((err) =>
+      this.logger.error(`Failed to broadcast recos received for media ${type}:${mediaId}`, err),
+    );
+
+    return responseDto;
   }
 
   async deleteByMedia({
@@ -126,9 +192,8 @@ export class RecosService {
     type: RecoType;
     mediaId: number;
   }): Promise<RecoDto[]> {
-    const mediaCondition = type === RecoType.MOVIE 
-      ? eq(reco.movieId, mediaId) 
-      : eq(reco.tvSeriesId, mediaId);
+    const mediaCondition =
+      type === RecoType.MOVIE ? eq(reco.movieId, mediaId) : eq(reco.tvSeriesId, mediaId);
 
     const updatedRecos = await this.db
       .update(reco)
@@ -138,29 +203,28 @@ export class RecosService {
           eq(reco.type, type),
           mediaCondition,
           eq(reco.userId, user.id),
-          eq(reco.status, 'active')
-        )
+          eq(reco.status, 'active'),
+        ),
       )
       .returning();
 
-    return plainToInstance(RecoDto, updatedRecos.map(({ movieId, tvSeriesId, ...rest }) => ({
-      ...rest,
-      mediaId: movieId ?? tvSeriesId,
-    })));
+    const result = plainToInstance(
+      RecoDto,
+      updatedRecos.map(({ movieId, tvSeriesId, ...rest }) => ({
+        ...rest,
+        mediaId: movieId ?? tvSeriesId,
+      })),
+    );
+
+    if (result.length > 0) {
+      this.realtimeGateway.emitToUser(user.id, RecoServerEvents.DELETED, result);
+    }
+
+    return result;
   }
 
-  async deleteById({
-    id,
-    user,
-  }: {
-    id: number;
-    user: User;
-  }): Promise<RecoDto> {
-    const [existingReco] = await this.db
-      .select()
-      .from(reco)
-      .where(eq(reco.id, id))
-      .limit(1);
+  async deleteById({ id, user }: { id: number; user: User }): Promise<RecoDto> {
+    const [existingReco] = await this.db.select().from(reco).where(eq(reco.id, id)).limit(1);
 
     if (!existingReco) {
       throw new NotFoundException(`Reco with ID ${id} not found.`);
@@ -176,11 +240,8 @@ export class RecosService {
     let resultReco: typeof reco.$inferSelect;
 
     if (isSender) {
-      const [deletedReco] = await this.db
-        .delete(reco)
-        .where(eq(reco.id, id))
-        .returning();
-        
+      const [deletedReco] = await this.db.delete(reco).where(eq(reco.id, id)).returning();
+
       resultReco = deletedReco;
     } else {
       const [updatedReco] = await this.db
@@ -188,16 +249,20 @@ export class RecosService {
         .set({ status: 'deleted' })
         .where(eq(reco.id, id))
         .returning();
-        
+
       resultReco = updatedReco;
     }
 
     const { movieId, tvSeriesId, ...rest } = resultReco;
-    
-    return plainToInstance(RecoDto, {
+
+    const result = plainToInstance(RecoDto, {
       ...rest,
       mediaId: movieId ?? tvSeriesId,
     });
+
+    this.realtimeGateway.emitToUser(result.userId, RecoServerEvents.DELETED, [result]);
+
+    return result;
   }
 
   async complete({
@@ -207,7 +272,7 @@ export class RecosService {
     tx,
   }: {
     userId: string;
-    type: typeof recoTypeEnum.enumValues[number];
+    type: (typeof recoTypeEnum.enumValues)[number];
     mediaId: number;
     tx?: DbTransaction;
   }): Promise<RecoDto[]> {
@@ -215,7 +280,7 @@ export class RecosService {
 
     const completedRecos = await dbClient
       .update(reco)
-      .set({ 
+      .set({
         status: 'completed',
       })
       .where(
@@ -223,23 +288,26 @@ export class RecosService {
           eq(reco.userId, userId),
           eq(reco.type, type),
           type === RecoType.MOVIE ? eq(reco.movieId, mediaId) : eq(reco.tvSeriesId, mediaId),
-          eq(reco.status, 'active')
-        )
+          eq(reco.status, 'active'),
+        ),
       )
       .returning();
 
     if (completedRecos.length > 0) {
       this.notify.emit('reco:completed', {
         userId,
-        senderIds: completedRecos.map(r => r.senderId),
+        senderIds: completedRecos.map((r) => r.senderId),
         mediaId,
         type,
       });
     }
 
-    return plainToInstance(RecoDto, completedRecos.map(({ movieId, tvSeriesId, ...rest }) => ({
-      ...rest,
-      mediaId: movieId ?? tvSeriesId,
-    })));
+    return plainToInstance(
+      RecoDto,
+      completedRecos.map(({ movieId, tvSeriesId, ...rest }) => ({
+        ...rest,
+        mediaId: movieId ?? tvSeriesId,
+      })),
+    );
   }
 }

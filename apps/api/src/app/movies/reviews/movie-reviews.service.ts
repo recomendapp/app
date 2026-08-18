@@ -17,10 +17,15 @@ import { DbTransaction } from '@libs/db';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { plainToInstance } from 'class-transformer';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
+import { LogServerEvents } from '@libs/realtime';
+import { RealtimeGateway } from '../../realtime/realtime.gateway';
 
 @Injectable()
 export class MovieReviewsService {
-  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
+  constructor(
+    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
+    private readonly realtimeGateway: RealtimeGateway,
+  ) {}
 
   async upsert({
     user,
@@ -63,11 +68,15 @@ export class MovieReviewsService {
       })
       .returning();
 
-    return plainToInstance(ReviewMovieDto, {
+    const result = plainToInstance(ReviewMovieDto, {
       ...upsertedReview,
       userId: user.id,
       movieId: movieId,
     });
+
+    this.realtimeGateway.emitToUser(user.id, LogServerEvents.MOVIE_REVIEW_UPSERTED, result);
+
+    return result;
   }
 
   async delete({ user, movieId }: { user: User; movieId: number }): Promise<ReviewMovieDto> {
@@ -91,11 +100,15 @@ export class MovieReviewsService {
       throw new NotFoundException('Review not found');
     }
 
-    return plainToInstance(ReviewMovieDto, {
+    const result = plainToInstance(ReviewMovieDto, {
       ...deletedReview,
       userId: user.id,
       movieId: movieId,
     });
+
+    this.realtimeGateway.emitToUser(user.id, LogServerEvents.MOVIE_REVIEW_DELETED, result);
+
+    return result;
   }
 
   /* ---------------------------------- List ---------------------------------- */

@@ -5,37 +5,24 @@ import { playlistLike } from '@libs/db/schemas';
 import { and, eq } from 'drizzle-orm';
 import { plainToInstance } from 'class-transformer';
 import { PlaylistLikeDto } from './dto/playlist-likes.dto';
+import { PlaylistServerEvents } from '@libs/realtime';
+import { RealtimeGateway } from '../../realtime/realtime.gateway';
 
 @Injectable()
 export class PlaylistLikesService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
+    private readonly realtimeGateway: RealtimeGateway,
   ) {}
 
-  async get({
-    user,
-    playlistId,
-  }: {
-    user: User;
-    playlistId: number;
-  }): Promise<boolean> {
-    const like = await this.db.query.playlistLike
-      .findFirst({
-        where: and(
-          eq(playlistLike.playlistId, playlistId),
-          eq(playlistLike.userId, user.id)
-        )
-      });
+  async get({ user, playlistId }: { user: User; playlistId: number }): Promise<boolean> {
+    const like = await this.db.query.playlistLike.findFirst({
+      where: and(eq(playlistLike.playlistId, playlistId), eq(playlistLike.userId, user.id)),
+    });
     return !!like;
   }
 
-  async set({
-    user,
-    playlistId,
-  }: {
-    user: User;
-    playlistId: number;
-  }): Promise<PlaylistLikeDto> {
+  async set({ user, playlistId }: { user: User; playlistId: number }): Promise<PlaylistLikeDto> {
     const [like] = await this.db
       .insert(playlistLike)
       .values({
@@ -44,22 +31,20 @@ export class PlaylistLikesService {
       })
       .onConflictDoNothing()
       .returning();
-    
+
     if (!like) {
-      const existingLike = await this.db.query.playlistLike
-        .findFirst({
-          where: and(
-            eq(playlistLike.playlistId, playlistId),
-            eq(playlistLike.userId, user.id)
-          )
-        });
+      const existingLike = await this.db.query.playlistLike.findFirst({
+        where: and(eq(playlistLike.playlistId, playlistId), eq(playlistLike.userId, user.id)),
+      });
       if (!existingLike) {
         throw new NotFoundException('Playlist not found');
       }
       return plainToInstance(PlaylistLikeDto, existingLike, { excludeExtraneousValues: true });
     }
 
-    return plainToInstance(PlaylistLikeDto, like, { excludeExtraneousValues: true });
+    const result = plainToInstance(PlaylistLikeDto, like, { excludeExtraneousValues: true });
+    this.realtimeGateway.emitToUser(user.id, PlaylistServerEvents.LIKE_SET, result);
+    return result;
   }
 
   async delete({
@@ -71,16 +56,15 @@ export class PlaylistLikesService {
   }): Promise<PlaylistLikeDto | null> {
     const [deleted] = await this.db
       .delete(playlistLike)
-      .where(and(
-        eq(playlistLike.playlistId, playlistId),
-        eq(playlistLike.userId, user.id)
-      ))
+      .where(and(eq(playlistLike.playlistId, playlistId), eq(playlistLike.userId, user.id)))
       .returning();
-    
+
     if (!deleted) {
       return null;
     }
 
-    return plainToInstance(PlaylistLikeDto, deleted, { excludeExtraneousValues: true });
+    const result = plainToInstance(PlaylistLikeDto, deleted, { excludeExtraneousValues: true });
+    this.realtimeGateway.emitToUser(user.id, PlaylistServerEvents.LIKE_DELETED, result);
+    return result;
   }
 }
