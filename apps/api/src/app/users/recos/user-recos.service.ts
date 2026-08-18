@@ -1,12 +1,31 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, asc, desc, eq, gt, lt, or, SQL, sql } from 'drizzle-orm';
-import { profile, reco, recoStatusEnum, recoTypeEnum, tmdbMovieView, tmdbTvSeriesView, user } from '@libs/db/schemas';
+import {
+  profile,
+  reco,
+  recoStatusEnum,
+  recoTypeEnum,
+  tmdbMovieView,
+  tmdbTvSeriesView,
+  user,
+} from '@libs/db/schemas';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
-import { ListAllRecosQueryDto, ListInfiniteRecosDto, ListInfiniteRecosQueryDto, ListPaginatedRecosDto, ListPaginatedRecosQueryDto, RecoSortBy, RecoType, RecoWithMediaUnion, RecoWithMovieDto, RecoWithTvSeriesDto } from '../../recos/dto/recos.dto';
+import {
+  ListAllRecosQueryDto,
+  ListInfiniteRecosDto,
+  ListInfiniteRecosQueryDto,
+  ListPaginatedRecosDto,
+  ListPaginatedRecosQueryDto,
+  RecoSortBy,
+  RecoType,
+  RecoWithMediaUnion,
+  RecoWithMovieDto,
+  RecoWithTvSeriesDto,
+} from '../../recos/dto/recos.dto';
 import { UserSummaryDto } from '../dto/users.dto';
 import { User } from '../../auth/auth.service';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
@@ -14,27 +33,39 @@ import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UserRecosService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
-  private getListBaseQuery(tx: DbTransaction, targetUserId: string, status: typeof recoStatusEnum.enumValues[number], type?: typeof recoTypeEnum.enumValues[number]) {
-    const whereConditions = [
-      eq(reco.userId, targetUserId),
-      eq(reco.status, status)
-    ];
+  private getListBaseQuery(
+    tx: DbTransaction,
+    targetUserId: string,
+    status: (typeof recoStatusEnum.enumValues)[number],
+    type?: (typeof recoTypeEnum.enumValues)[number],
+    mediaId?: number,
+  ) {
+    const whereConditions = [eq(reco.userId, targetUserId), eq(reco.status, status)];
 
     if (type) {
       whereConditions.push(eq(reco.type, type));
     }
 
-    return tx.select({
+    if (mediaId !== undefined && type) {
+      whereConditions.push(
+        type === RecoType.MOVIE ? eq(reco.movieId, mediaId) : eq(reco.tvSeriesId, mediaId),
+      );
+    }
+
+    return tx
+      .select({
         mediaId: sql<number>`COALESCE(${reco.movieId}, ${reco.tvSeriesId})::int`.as('media_id'),
         type: reco.type,
         firstSendAt: sql<string>`MIN(${reco.createdAt})`.as('first_send_at'),
         lastSendAt: sql<string>`MAX(${reco.createdAt})`.as('last_send_at'),
         senderCount: sql<number>`COUNT(DISTINCT ${reco.senderId})`.as('sender_count'),
-        senders: sql<(Pick<typeof reco.$inferSelect, 'id' | 'comment' | 'createdAt'> & { user: UserSummaryDto })[]>`
+        senders: sql<
+          (Pick<typeof reco.$inferSelect, 'id' | 'comment' | 'createdAt'> & {
+            user: UserSummaryDto;
+          })[]
+        >`
           json_agg(
             json_build_object(
               'id', ${reco.id},
@@ -49,7 +80,7 @@ export class UserRecosService {
               )
             ) ORDER BY ${reco.createdAt} DESC
           )
-        `.as('senders')
+        `.as('senders'),
       })
       .from(reco)
       .innerJoin(user, eq(user.id, reco.senderId))
@@ -58,6 +89,77 @@ export class UserRecosService {
       .groupBy(reco.type, sql`COALESCE(${reco.movieId}, ${reco.tvSeriesId})`)
       .as('grouped_recos');
   }
+
+  /**
+   * Fetches the single grouped reco (with all senders and locale-aware compact media) for one
+   * receiver + media pair. Used by the realtime layer to broadcast a fully-formed item to a
+   * receiver right after a reco is sent, mirroring what they'd get from `listAll`/`listPaginated`.
+   */
+  async getGroupedReco({
+    targetUserId,
+    mediaId,
+    type,
+    locale,
+  }: {
+    targetUserId: string;
+    mediaId: number;
+    type: (typeof recoTypeEnum.enumValues)[number];
+    locale: SupportedLocale;
+  }): Promise<RecoWithMediaUnion | null> {
+    return this.db.transaction(async (tx) => {
+      await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
+
+      const groupedRecosSq = this.getListBaseQuery(tx, targetUserId, 'active', type, mediaId);
+
+      const [row] = await tx
+        .select({
+          grouped: {
+            mediaId: groupedRecosSq.mediaId,
+            type: groupedRecosSq.type,
+            senders: groupedRecosSq.senders,
+            lastSendAt: groupedRecosSq.lastSendAt,
+          },
+          movie: MOVIE_COMPACT_SELECT,
+          tvSeries: TV_SERIES_COMPACT_SELECT,
+        })
+        .from(groupedRecosSq)
+        .leftJoin(
+          tmdbMovieView,
+          and(eq(groupedRecosSq.type, 'movie'), eq(groupedRecosSq.mediaId, tmdbMovieView.id)),
+        )
+        .leftJoin(
+          tmdbTvSeriesView,
+          and(
+            eq(groupedRecosSq.type, 'tv_series'),
+            eq(groupedRecosSq.mediaId, tmdbTvSeriesView.id),
+          ),
+        )
+        .limit(1);
+
+      if (!row) return null;
+
+      const base = {
+        mediaId: row.grouped.mediaId,
+        type: row.grouped.type,
+        senders: row.grouped.senders,
+        latestCreatedAt: row.grouped.lastSendAt,
+      };
+
+      if (base.type === RecoType.MOVIE) {
+        return plainToInstance(RecoWithMovieDto, {
+          ...base,
+          type: RecoType.MOVIE,
+          media: row.movie,
+        });
+      }
+      return plainToInstance(RecoWithTvSeriesDto, {
+        ...base,
+        type: RecoType.TV_SERIES,
+        media: row.tvSeries,
+      });
+    });
+  }
+
   async listAll({
     targetUserId,
     query,
@@ -75,19 +177,24 @@ export class UserRecosService {
       await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
 
       const groupedRecosSq = this.getListBaseQuery(tx, targetUserId, status, type);
-      
+
       const direction = sort_order === SortOrder.ASC ? asc : desc;
       const orderBy = (() => {
         switch (sort_by) {
-          case RecoSortBy.RANDOM: return [sql`RANDOM()`];
-          case RecoSortBy.LAST_SEND_AT: return [direction(groupedRecosSq.lastSendAt), direction(groupedRecosSq.mediaId)];
-          case RecoSortBy.SENDER_COUNT: return [direction(groupedRecosSq.senderCount), direction(groupedRecosSq.mediaId)];
+          case RecoSortBy.RANDOM:
+            return [sql`RANDOM()`];
+          case RecoSortBy.LAST_SEND_AT:
+            return [direction(groupedRecosSq.lastSendAt), direction(groupedRecosSq.mediaId)];
+          case RecoSortBy.SENDER_COUNT:
+            return [direction(groupedRecosSq.senderCount), direction(groupedRecosSq.mediaId)];
           case RecoSortBy.FIRST_SEND_AT:
-          default: return [direction(groupedRecosSq.firstSendAt), direction(groupedRecosSq.mediaId)];
+          default:
+            return [direction(groupedRecosSq.firstSendAt), direction(groupedRecosSq.mediaId)];
         }
       })();
 
-      const results = await tx.select({
+      const results = await tx
+        .select({
           grouped: {
             mediaId: groupedRecosSq.mediaId,
             type: groupedRecosSq.type,
@@ -100,8 +207,17 @@ export class UserRecosService {
           tvSeries: TV_SERIES_COMPACT_SELECT,
         })
         .from(groupedRecosSq)
-        .leftJoin(tmdbMovieView, and(eq(groupedRecosSq.type, 'movie'), eq(groupedRecosSq.mediaId, tmdbMovieView.id)))
-        .leftJoin(tmdbTvSeriesView, and(eq(groupedRecosSq.type, 'tv_series'), eq(groupedRecosSq.mediaId, tmdbTvSeriesView.id)))
+        .leftJoin(
+          tmdbMovieView,
+          and(eq(groupedRecosSq.type, 'movie'), eq(groupedRecosSq.mediaId, tmdbMovieView.id)),
+        )
+        .leftJoin(
+          tmdbTvSeriesView,
+          and(
+            eq(groupedRecosSq.type, 'tv_series'),
+            eq(groupedRecosSq.mediaId, tmdbTvSeriesView.id),
+          ),
+        )
         .orderBy(...orderBy);
 
       return results.map((row) => {
@@ -117,14 +233,13 @@ export class UserRecosService {
             ...base,
             type: RecoType.MOVIE,
             media: row.movie,
-          })
-        } 
-        else {
+          });
+        } else {
           return plainToInstance(RecoWithTvSeriesDto, {
             ...base,
             type: RecoType.TV_SERIES,
             media: row.tvSeries,
-          })
+          });
         }
       });
     });
@@ -147,20 +262,25 @@ export class UserRecosService {
       await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
 
       const groupedRecosSq = this.getListBaseQuery(tx, targetUserId, status, type);
-      
+
       const direction = sort_order === SortOrder.ASC ? asc : desc;
       const orderBy = (() => {
         switch (sort_by) {
-          case RecoSortBy.RANDOM: return [sql`RANDOM()`];
-          case RecoSortBy.LAST_SEND_AT: return [direction(groupedRecosSq.lastSendAt), direction(groupedRecosSq.mediaId)];
-          case RecoSortBy.SENDER_COUNT: return [direction(groupedRecosSq.senderCount), direction(groupedRecosSq.mediaId)];
+          case RecoSortBy.RANDOM:
+            return [sql`RANDOM()`];
+          case RecoSortBy.LAST_SEND_AT:
+            return [direction(groupedRecosSq.lastSendAt), direction(groupedRecosSq.mediaId)];
+          case RecoSortBy.SENDER_COUNT:
+            return [direction(groupedRecosSq.senderCount), direction(groupedRecosSq.mediaId)];
           case RecoSortBy.FIRST_SEND_AT:
-          default: return [direction(groupedRecosSq.firstSendAt), direction(groupedRecosSq.mediaId)];
+          default:
+            return [direction(groupedRecosSq.firstSendAt), direction(groupedRecosSq.mediaId)];
         }
       })();
 
       const [results, [{ count: totalCount }]] = await Promise.all([
-        tx.select({
+        tx
+          .select({
             grouped: {
               mediaId: groupedRecosSq.mediaId,
               type: groupedRecosSq.type,
@@ -171,21 +291,33 @@ export class UserRecosService {
             tvSeries: TV_SERIES_COMPACT_SELECT,
           })
           .from(groupedRecosSq)
-          .leftJoin(tmdbMovieView, and(eq(groupedRecosSq.type, 'movie'), eq(groupedRecosSq.mediaId, tmdbMovieView.id)))
-          .leftJoin(tmdbTvSeriesView, and(eq(groupedRecosSq.type, 'tv_series'), eq(groupedRecosSq.mediaId, tmdbTvSeriesView.id)))
+          .leftJoin(
+            tmdbMovieView,
+            and(eq(groupedRecosSq.type, 'movie'), eq(groupedRecosSq.mediaId, tmdbMovieView.id)),
+          )
+          .leftJoin(
+            tmdbTvSeriesView,
+            and(
+              eq(groupedRecosSq.type, 'tv_series'),
+              eq(groupedRecosSq.mediaId, tmdbTvSeriesView.id),
+            ),
+          )
           .orderBy(...orderBy)
           .limit(per_page)
           .offset(offset),
-          
-        tx.select({ count: sql<number>`COUNT(DISTINCT CONCAT(${reco.type}, '_', COALESCE(${reco.movieId}, ${reco.tvSeriesId})))` })
+
+        tx
+          .select({
+            count: sql<number>`COUNT(DISTINCT CONCAT(${reco.type}, '_', COALESCE(${reco.movieId}, ${reco.tvSeriesId})))`,
+          })
           .from(reco)
           .where(
             and(
-              eq(reco.userId, targetUserId), 
+              eq(reco.userId, targetUserId),
               eq(reco.status, status),
-              type ? eq(reco.type, type) : undefined
-            )
-          )
+              type ? eq(reco.type, type) : undefined,
+            ),
+          ),
       ]);
 
       const mappedData: RecoWithMediaUnion[] = results.map((row) => {
@@ -232,15 +364,19 @@ export class UserRecosService {
       await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
 
       const groupedRecosSq = this.getListBaseQuery(tx, targetUserId, status, type);
-      
+
       const direction = sort_order === SortOrder.ASC ? asc : desc;
       const orderBy = (() => {
         switch (sort_by) {
-          case RecoSortBy.RANDOM: return [sql`RANDOM()`];
-          case RecoSortBy.LAST_SEND_AT: return [direction(groupedRecosSq.lastSendAt), direction(groupedRecosSq.mediaId)];
-          case RecoSortBy.SENDER_COUNT: return [direction(groupedRecosSq.senderCount), direction(groupedRecosSq.mediaId)];
+          case RecoSortBy.RANDOM:
+            return [sql`RANDOM()`];
+          case RecoSortBy.LAST_SEND_AT:
+            return [direction(groupedRecosSq.lastSendAt), direction(groupedRecosSq.mediaId)];
+          case RecoSortBy.SENDER_COUNT:
+            return [direction(groupedRecosSq.senderCount), direction(groupedRecosSq.mediaId)];
           case RecoSortBy.FIRST_SEND_AT:
-          default: return [direction(groupedRecosSq.firstSendAt), direction(groupedRecosSq.mediaId)];
+          default:
+            return [direction(groupedRecosSq.firstSendAt), direction(groupedRecosSq.mediaId)];
         }
       })();
 
@@ -256,8 +392,8 @@ export class UserRecosService {
               operator(groupedRecosSq.senderCount, countValue),
               and(
                 eq(groupedRecosSq.senderCount, countValue),
-                operator(groupedRecosSq.mediaId, cursorData.id)
-              )
+                operator(groupedRecosSq.mediaId, cursorData.id),
+              ),
             );
             break;
           }
@@ -267,8 +403,8 @@ export class UserRecosService {
               operator(groupedRecosSq.lastSendAt, dateValue),
               and(
                 eq(groupedRecosSq.lastSendAt, dateValue),
-                operator(groupedRecosSq.mediaId, cursorData.id)
-              )
+                operator(groupedRecosSq.mediaId, cursorData.id),
+              ),
             );
             break;
           }
@@ -281,8 +417,8 @@ export class UserRecosService {
               operator(groupedRecosSq.firstSendAt, dateValue),
               and(
                 eq(groupedRecosSq.firstSendAt, dateValue),
-                operator(groupedRecosSq.mediaId, cursorData.id)
-              )
+                operator(groupedRecosSq.mediaId, cursorData.id),
+              ),
             );
             break;
           }
@@ -292,7 +428,8 @@ export class UserRecosService {
       const fetchLimit = per_page + 1;
 
       const [results, totalCountResult] = await Promise.all([
-        tx.select({
+        tx
+          .select({
             grouped: {
               mediaId: groupedRecosSq.mediaId,
               type: groupedRecosSq.type,
@@ -305,23 +442,35 @@ export class UserRecosService {
             tvSeries: TV_SERIES_COMPACT_SELECT,
           })
           .from(groupedRecosSq)
-          .leftJoin(tmdbMovieView, and(eq(groupedRecosSq.type, 'movie'), eq(groupedRecosSq.mediaId, tmdbMovieView.id)))
-          .leftJoin(tmdbTvSeriesView, and(eq(groupedRecosSq.type, 'tv_series'), eq(groupedRecosSq.mediaId, tmdbTvSeriesView.id)))
+          .leftJoin(
+            tmdbMovieView,
+            and(eq(groupedRecosSq.type, 'movie'), eq(groupedRecosSq.mediaId, tmdbMovieView.id)),
+          )
+          .leftJoin(
+            tmdbTvSeriesView,
+            and(
+              eq(groupedRecosSq.type, 'tv_series'),
+              eq(groupedRecosSq.mediaId, tmdbTvSeriesView.id),
+            ),
+          )
           .where(cursorWhereClause)
           .orderBy(...orderBy)
           .limit(fetchLimit),
 
-        !cursorData 
-          ? tx.select({ count: sql<number>`COUNT(DISTINCT CONCAT(${reco.type}, '_', COALESCE(${reco.movieId}, ${reco.tvSeriesId})))` })
+        !cursorData
+          ? tx
+              .select({
+                count: sql<number>`COUNT(DISTINCT CONCAT(${reco.type}, '_', COALESCE(${reco.movieId}, ${reco.tvSeriesId})))`,
+              })
               .from(reco)
               .where(
                 and(
-                  eq(reco.userId, targetUserId), 
+                  eq(reco.userId, targetUserId),
                   eq(reco.status, status),
-                  type ? eq(reco.type, type) : undefined
-                )
+                  type ? eq(reco.type, type) : undefined,
+                ),
               )
-          : undefined
+          : undefined,
       ]);
 
       const hasNextPage = results.length > per_page;

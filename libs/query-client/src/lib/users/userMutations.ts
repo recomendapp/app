@@ -4,12 +4,8 @@ import {
   bookmarksControllerSetByMediaMutation,
   FollowRequest,
   ListInfiniteFollowRequests,
-  ListInfiniteRecos,
-  ListInfiniteRecoTargets,
   ListInfiniteUsers,
   ListPaginatedFollowRequests,
-  ListPaginatedRecos,
-  ListPaginatedRecoTargets,
   ListPaginatedUsers,
   personsControllerFollowMutation,
   personsControllerUnfollowMutation,
@@ -20,7 +16,6 @@ import {
   recosControllerDeleteByIdMutation,
   recosControllerDeleteByMediaMutation,
   recosControllerSendMutation,
-  RecoTarget,
   userFollowControllerAcceptMutation,
   userFollowControllerDeclineMutation,
   userFollowControllerDeleteMutation,
@@ -54,105 +49,26 @@ import {
   userPlaylistSavedOptions,
   userPlaylistsSavedInfiniteOptions,
   userPlaylistsSavedPaginatedOptions,
-  userRecosAllOptions,
-  userRecoSendAllOptions,
-  userRecoSendInfiniteOptions,
-  userRecoSendPaginatedOptions,
-  userRecosInfiniteOptions,
-  userRecosPaginatedOptions,
 } from './userOptions';
-import {
-  removeListItemFromAllCaches,
-  updateListItemInAllCaches,
-  updateOrRemoveListItemInAllCaches,
-} from '../utils';
+import { removeListItemFromAllCaches } from '../utils';
 import { userKeys } from './userKeys';
-import { RecoWithMedia } from './types';
 import { meFeedInfiniteOptions, meFeedPaginatedOptions } from '../query-client';
 
 /* ---------------------------------- Recos --------------------------------- */
 export const useUserRecoSendMutation = () => {
-  const queryClient = useQueryClient();
   return useMutation({
     ...recosControllerSendMutation(),
-    onSuccess: (data) => {
-      updateListItemInAllCaches<RecoTarget, ListPaginatedRecoTargets, ListInfiniteRecoTargets>(
-        queryClient,
-        {
-          all: userRecoSendAllOptions({
-            userId: data.senderId,
-            mediaId: data.mediaId,
-            mediaType: data.type,
-          }).queryKey,
-          paginated: userRecoSendPaginatedOptions({
-            userId: data.senderId,
-            mediaId: data.mediaId,
-            mediaType: data.type,
-          }).queryKey,
-          infinite: userRecoSendInfiniteOptions({
-            userId: data.senderId,
-            mediaId: data.mediaId,
-            mediaType: data.type,
-          }).queryKey,
-        },
-        { alreadySent: true },
-        (item) => data.sent.includes(item.id),
-      );
-    },
   });
 };
 
 export const useUserRecoDeleteByMediaMutation = () => {
-  const queryClient = useQueryClient();
   return useMutation({
     ...recosControllerDeleteByMediaMutation(),
-    onSuccess: (data) => {
-      const firstItem = data[0];
-      if (firstItem) {
-        removeListItemFromAllCaches<RecoWithMedia, ListPaginatedRecos, ListInfiniteRecos>(
-          queryClient,
-          {
-            all: userRecosAllOptions({ userId: firstItem.userId }).queryKey,
-            paginated: userRecosPaginatedOptions({ userId: firstItem.userId }).queryKey,
-            infinite: userRecosInfiniteOptions({ userId: firstItem.userId }).queryKey,
-          },
-          (item) => item.mediaId === firstItem.mediaId && item.type === firstItem.type,
-        );
-      }
-    },
   });
 };
 export const useUserRecoDeleteByIdMutation = () => {
-  const queryClient = useQueryClient();
   return useMutation({
     ...recosControllerDeleteByIdMutation(),
-    onSuccess: (data) => {
-      updateOrRemoveListItemInAllCaches<RecoWithMedia, ListPaginatedRecos, ListInfiniteRecos>(
-        queryClient,
-        {
-          all: userKeys.recos({ userId: data.userId, mode: 'all' }),
-          paginated: userKeys.recos({ userId: data.userId, mode: 'paginated' }),
-          infinite: userKeys.recos({ userId: data.userId, mode: 'infinite' }),
-        },
-        (item) => item.mediaId === data.mediaId && item.type === data.type,
-        (item) => {
-          const remainingSenders = item.senders.filter((s) => s.id !== data.id);
-
-          if (remainingSenders.length === 0) {
-            return null;
-          }
-
-          const newLatestCreatedAt = remainingSenders.reduce((latest, current) =>
-            current.createdAt > latest.createdAt ? current : latest,
-          ).createdAt;
-
-          return {
-            senders: remainingSenders,
-            latestCreatedAt: newLatestCreatedAt,
-          };
-        },
-      );
-    },
   });
 };
 

@@ -3,8 +3,16 @@ import {
   Bookmark,
   BookmarkWithMedia,
   ListInfiniteBookmarks,
+  ListInfiniteRecos,
+  ListInfiniteRecoTargets,
   ListPaginatedBookmarks,
+  ListPaginatedRecos,
+  ListPaginatedRecoTargets,
   Profile,
+  Reco,
+  RecoSendResponse,
+  RecoTarget,
+  RecoWithMedia,
   User,
 } from '@libs/api-js';
 import {
@@ -12,12 +20,17 @@ import {
   ItemUpdater,
   removeListItemFromAllCaches,
   updateListItemInAllCaches,
+  updateOrRemoveListItemInAllCaches,
 } from '../utils';
 import {
   userByIdOptions,
   userByUsernameOptions,
   userBookmarkByMediaOptions,
   userBookmarksAllOptions,
+  userRecoSendAllOptions,
+  userRecoSendPaginatedOptions,
+  userRecoSendInfiniteOptions,
+  userRecosAllOptions,
   userKeys,
 } from '../users';
 import { meOptions } from '../me';
@@ -135,4 +148,121 @@ export const useBookmarkCacheUpdate = () => {
   );
 
   return { setBookmark, deleteBookmark };
+};
+
+export const useRecoTargetCacheUpdate = () => {
+  const queryClient = useQueryClient();
+
+  const markSent = useCallback(
+    (data: RecoSendResponse) => {
+      updateListItemInAllCaches<RecoTarget, ListPaginatedRecoTargets, ListInfiniteRecoTargets>(
+        queryClient,
+        {
+          all: userRecoSendAllOptions({
+            userId: data.senderId,
+            mediaId: data.mediaId,
+            mediaType: data.type,
+          }).queryKey,
+          paginated: userRecoSendPaginatedOptions({
+            userId: data.senderId,
+            mediaId: data.mediaId,
+            mediaType: data.type,
+          }).queryKey,
+          infinite: userRecoSendInfiniteOptions({
+            userId: data.senderId,
+            mediaId: data.mediaId,
+            mediaType: data.type,
+          }).queryKey,
+        },
+        { alreadySent: true },
+        (item) => data.sent.includes(item.id),
+      );
+    },
+    [queryClient],
+  );
+
+  return { markSent };
+};
+
+export const useRecoCacheUpdate = ({
+  userId,
+}: {
+  userId?: string;
+} = {}) => {
+  const queryClient = useQueryClient();
+
+  // `RecoWithMedia` (the grouped-by-media DTO) has no `userId` field — it's always scoped to
+  // "the current user's received recos" implicitly. Realtime RECEIVED events are only ever
+  // delivered to the receiver's own room, so `userId` must come from the caller (the logged-in
+  // user), not from the payload.
+  const upsertReceived = useCallback(
+    (data: RecoWithMedia) => {
+      if (!userId) return;
+
+      // The unfiltered "all" cache can be upserted directly since the payload already carries
+      // the complete, correct senders array for this media (recomputed server-side) — no need to
+      // wait on a refetch for it.
+      queryClient.setQueryData(userRecosAllOptions({ userId }).queryKey, (old) => {
+        if (!old) return old;
+        const index = old.findIndex(
+          (item) => item.mediaId === data.mediaId && item.type === data.type,
+        );
+        if (index === -1) return [data, ...old];
+        const next = [...old];
+        next[index] = data;
+        return next;
+      });
+
+      // Paginated/infinite ordering depends on the server — invalidate rather than guess the
+      // insertion/reorder position. The unfiltered "all" cache was already patched above, so
+      // it's deliberately excluded here to avoid an immediate redundant refetch of it.
+      queryClient.invalidateQueries({
+        queryKey: userKeys.recos({ userId, mode: 'paginated' }),
+      });
+      queryClient.invalidateQueries({
+        queryKey: userKeys.recos({ userId, mode: 'infinite' }),
+      });
+    },
+    [queryClient, userId],
+  );
+
+  // `Reco` (bare, ungrouped) always carries `userId` — the receiver whose grouped list is
+  // affected — regardless of whether the sender or the receiver triggered the deletion.
+  const removeDeleted = useCallback(
+    (recos: Reco[]) => {
+      const firstReco = recos[0];
+      if (!firstReco) return;
+
+      const removedSenderIds = new Set(recos.map((r) => r.id));
+
+      updateOrRemoveListItemInAllCaches<RecoWithMedia, ListPaginatedRecos, ListInfiniteRecos>(
+        queryClient,
+        {
+          all: userKeys.recos({ userId: firstReco.userId, mode: 'all' }),
+          paginated: userKeys.recos({ userId: firstReco.userId, mode: 'paginated' }),
+          infinite: userKeys.recos({ userId: firstReco.userId, mode: 'infinite' }),
+        },
+        (item) => item.mediaId === firstReco.mediaId && item.type === firstReco.type,
+        (item) => {
+          const remainingSenders = item.senders.filter((s) => !removedSenderIds.has(s.id));
+
+          if (remainingSenders.length === 0) {
+            return null;
+          }
+
+          const newLatestCreatedAt = remainingSenders.reduce((latest, current) =>
+            current.createdAt > latest.createdAt ? current : latest,
+          ).createdAt;
+
+          return {
+            senders: remainingSenders,
+            latestCreatedAt: newLatestCreatedAt,
+          };
+        },
+      );
+    },
+    [queryClient],
+  );
+
+  return { upsertReceived, removeDeleted };
 };

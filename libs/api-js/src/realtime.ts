@@ -7,6 +7,8 @@ import {
   IPlaylistDeletedSignal,
   LogServerEvents,
   BookmarkServerEvents,
+  RecoServerEvents,
+  MeServerEvents,
 } from '@libs/realtime';
 import {
   Bookmark,
@@ -15,12 +17,16 @@ import {
   LogTvEpisodeUpdateResponse,
   LogTvSeries,
   Playlist,
+  Reco,
+  RecoSendResponse,
   ReviewMovie,
   ReviewTvSeries,
+  User,
   WatchedDateResponse,
 } from './__generated__';
 import { PlaylistItemWithMedia } from './playlists';
 import { BookmarkWithMedia } from './bookmarks';
+import { RecoWithMedia } from './recos';
 
 export interface PlaylistServerToClientEvents {
   [PlaylistServerEvents.CREATED]: (playlist: Playlist) => void;
@@ -54,8 +60,22 @@ export interface BookmarkServerToClientEvents {
   [BookmarkServerEvents.DELETED]: (bookmark: Bookmark) => void;
 }
 
+export interface RecoServerToClientEvents {
+  [RecoServerEvents.SENT]: (response: RecoSendResponse) => void;
+  [RecoServerEvents.RECEIVED]: (reco: RecoWithMedia) => void;
+  [RecoServerEvents.DELETED]: (recos: Reco[]) => void;
+}
+
+export interface MeServerToClientEvents {
+  [MeServerEvents.UPDATED]: (user: User) => void;
+}
+
 export type RealtimeSocket = Socket<
-  PlaylistServerToClientEvents & LogServerToClientEvents & BookmarkServerToClientEvents
+  PlaylistServerToClientEvents &
+    LogServerToClientEvents &
+    BookmarkServerToClientEvents &
+    RecoServerToClientEvents &
+    MeServerToClientEvents
 >;
 
 export interface PlaylistCallbacks {
@@ -88,6 +108,16 @@ export interface LogCallbacks {
 export interface BookmarkCallbacks {
   onBookmarkSet?: (bookmark: BookmarkWithMedia) => void;
   onBookmarkDeleted?: (bookmark: Bookmark) => void;
+}
+
+export interface RecoCallbacks {
+  onRecoSent?: (response: RecoSendResponse) => void;
+  onRecoReceived?: (reco: RecoWithMedia) => void;
+  onRecoDeleted?: (recos: Reco[]) => void;
+}
+
+export interface MeCallbacks {
+  onMeUpdated?: (user: User) => void;
 }
 
 export interface RealtimeConfig {
@@ -360,6 +390,76 @@ class RealtimeManager {
       }
       if (callbacks.onBookmarkDeleted) {
         socketInstance.off(BookmarkServerEvents.DELETED, callbacks.onBookmarkDeleted);
+      }
+    };
+  }
+
+  /**
+   * Registers reco event callbacks on the shared connection, connecting it first if needed.
+   * Returns an unsubscribe function. Meant to be called once app-wide (see `useRealtimeSync` in
+   * `@libs/query-client`) — covers both sides: the sender (`onRecoSent`, `onRecoDeleted`) and
+   * every receiver (`onRecoReceived`, `onRecoDeleted`).
+   */
+  public onRecoEvents(callbacks: RecoCallbacks): () => void {
+    let isUnsubscribed = false;
+    let socketInstance: RealtimeSocket | null = null;
+
+    this.createSocket().then((socket) => {
+      if (isUnsubscribed) return;
+      socketInstance = socket;
+
+      if (callbacks.onRecoSent) {
+        socket.on(RecoServerEvents.SENT, callbacks.onRecoSent);
+      }
+      if (callbacks.onRecoReceived) {
+        socket.on(RecoServerEvents.RECEIVED, callbacks.onRecoReceived);
+      }
+      if (callbacks.onRecoDeleted) {
+        socket.on(RecoServerEvents.DELETED, callbacks.onRecoDeleted);
+      }
+    });
+
+    return () => {
+      isUnsubscribed = true;
+      if (!socketInstance) return;
+
+      if (callbacks.onRecoSent) {
+        socketInstance.off(RecoServerEvents.SENT, callbacks.onRecoSent);
+      }
+      if (callbacks.onRecoReceived) {
+        socketInstance.off(RecoServerEvents.RECEIVED, callbacks.onRecoReceived);
+      }
+      if (callbacks.onRecoDeleted) {
+        socketInstance.off(RecoServerEvents.DELETED, callbacks.onRecoDeleted);
+      }
+    };
+  }
+
+  /**
+   * Registers "me" (own profile) event callbacks on the shared connection, connecting it first
+   * if needed. Returns an unsubscribe function. Meant to be called once app-wide (see
+   * `useRealtimeSync` in `@libs/query-client`) — keeps the current user's profile in sync across
+   * every one of their own devices.
+   */
+  public onMeEvents(callbacks: MeCallbacks): () => void {
+    let isUnsubscribed = false;
+    let socketInstance: RealtimeSocket | null = null;
+
+    this.createSocket().then((socket) => {
+      if (isUnsubscribed) return;
+      socketInstance = socket;
+
+      if (callbacks.onMeUpdated) {
+        socket.on(MeServerEvents.UPDATED, callbacks.onMeUpdated);
+      }
+    });
+
+    return () => {
+      isUnsubscribed = true;
+      if (!socketInstance) return;
+
+      if (callbacks.onMeUpdated) {
+        socketInstance.off(MeServerEvents.UPDATED, callbacks.onMeUpdated);
       }
     };
   }
