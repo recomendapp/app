@@ -19,7 +19,6 @@ import {
   usePlaylistDeleteMutation,
   usePlaylistItemsDeleteMutation,
   usePlaylistItemUpdateMutation,
-  usePlaylistRealtime,
   useUserPlaylistLike,
   useUserPlaylistSaved,
 } from '@libs/query-client';
@@ -73,15 +72,9 @@ const PlaylistScreen = () => {
     userId: user && playlist && user.id === playlist.userId ? undefined : user?.id,
     playlistId: playlist?.id,
   });
-  usePlaylistRealtime({
-    playlistId: playlist?.id,
-    role: playlist?.role,
-  });
   // Mutations
   const { mutateAsync: updateItem } = usePlaylistItemUpdateMutation();
-  const { mutateAsync: deleteItem } = usePlaylistItemsDeleteMutation({
-    userId: user?.id,
-  });
+  const { mutateAsync: deleteItem } = usePlaylistItemsDeleteMutation();
   const { mutateAsync: deletePlaylist } = usePlaylistDeleteMutation();
   const canEditItem = useMemo(() => canEditPlaylistItem(playlist?.role || null), [playlist?.role]);
   const canEditThisPlaylist = useMemo(

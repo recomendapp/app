@@ -1,22 +1,24 @@
 import { io, Socket } from 'socket.io-client';
-import { 
-  PLAYLISTS_NAMESPACE, 
-  PlaylistClientEvents,
+import {
+  REALTIME_NAMESPACE,
   PlaylistServerEvents,
-  PlaylistClientToServerEvents, 
-  PlaylistServerToClientEvents,
-  IPlaylistItemSignal
+  IPlaylistItemUpdatedSignal,
+  IPlaylistItemsDeletedSignal,
 } from '@libs/realtime';
+import { PlaylistItemWithMedia } from './playlists';
 
-export type PlaylistSocket = Socket<PlaylistServerToClientEvents, PlaylistClientToServerEvents>;
+export interface PlaylistServerToClientEvents {
+  [PlaylistServerEvents.ITEM_ADDED]: (items: PlaylistItemWithMedia[]) => void;
+  [PlaylistServerEvents.ITEM_UPDATED]: (item: IPlaylistItemUpdatedSignal) => void;
+  [PlaylistServerEvents.ITEM_DELETED]: (signal: IPlaylistItemsDeletedSignal) => void;
+}
 
-export type SubscribeTarget = 
-  | { playlist: number };
+export type RealtimeSocket = Socket<PlaylistServerToClientEvents>;
 
 export interface PlaylistCallbacks {
-  onItemAdded?: (items: IPlaylistItemSignal[]) => void;
-  onItemUpdated?: (item: Pick<IPlaylistItemSignal, 'id' | 'rank' | 'comment'>) => void;
-  onItemDeleted?: (itemIds: number[]) => void;
+  onItemAdded?: (items: PlaylistItemWithMedia[]) => void;
+  onItemUpdated?: (item: IPlaylistItemUpdatedSignal) => void;
+  onItemDeleted?: (signal: IPlaylistItemsDeletedSignal) => void;
 }
 
 export interface RealtimeConfig {
@@ -25,9 +27,8 @@ export interface RealtimeConfig {
 }
 
 class RealtimeManager {
-  private _playlists: PlaylistSocket | null = null;
-  private playlistSubscribers = new Map<number, number>();
-  private initializationPromise: Promise<PlaylistSocket> | null = null;
+  private socket: RealtimeSocket | null = null;
+  private connectPromise: Promise<RealtimeSocket> | null = null;
 
   private config: RealtimeConfig = {
     baseUrl: 'https://api.recomend.app',
@@ -38,12 +39,12 @@ class RealtimeManager {
     this.config = { ...this.config, ...newConfig };
   }
 
-  private async getSocket(): Promise<PlaylistSocket> {
-    if (this._playlists) return this._playlists;
-    if (this.initializationPromise) return this.initializationPromise;
+  private async createSocket(): Promise<RealtimeSocket> {
+    if (this.socket) return this.socket;
+    if (this.connectPromise) return this.connectPromise;
 
-    this.initializationPromise = (async () => {
-      let origin = this.config.baseUrl || 'https://api.recomend.app/v1';
+    this.connectPromise = (async () => {
+      let origin = this.config.baseUrl || 'https://api.recomend.app';
       try {
         origin = new URL(origin).origin;
       } catch {
@@ -52,84 +53,69 @@ class RealtimeManager {
 
       const cookie = this.config.getAuthCookie ? await this.config.getAuthCookie() : null;
 
-      this._playlists = io(`${origin}${PLAYLISTS_NAMESPACE}`, {
+      const socket: RealtimeSocket = io(`${origin}${REALTIME_NAMESPACE}`, {
         autoConnect: false,
         withCredentials: true,
         transports: ['websocket'],
         extraHeaders: cookie ? { Cookie: cookie } : {},
       });
 
-      this._playlists.on('connect', () => {
-        for (const playlistId of this.playlistSubscribers.keys()) {
-          this._playlists?.emit(PlaylistClientEvents.SUBSCRIBE, { playlistId }, (res) => {
-            if (res?.error) {
-              console.error(`[Realtime] Re-subscription error for playlist ${playlistId}:`, res.error);
-            }
-          });
-        }
-      });
-
-      this._playlists.connect();
-      return this._playlists;
+      socket.connect();
+      this.socket = socket;
+      return socket;
     })();
 
-    return this.initializationPromise;
+    return this.connectPromise;
   }
 
-  subscribe(target: SubscribeTarget, callbacks: PlaylistCallbacks): () => void {
-    const playlistId = target.playlist;
+  /** Opens the persistent connection. Idempotent — safe to call from multiple mount points. */
+  public connect(): Promise<RealtimeSocket> {
+    return this.createSocket();
+  }
+
+  /** Tears down the connection — call on logout. */
+  public disconnect() {
+    this.socket?.disconnect();
+    this.socket = null;
+    this.connectPromise = null;
+  }
+
+  /**
+   * Registers playlist event callbacks on the shared connection, connecting it first if needed.
+   * Returns an unsubscribe function. Meant to be called once app-wide (see `useRealtimeSync` in
+   * `@libs/query-client`), not per playlist screen — events for every playlist the user belongs
+   * to arrive here regardless of which one is being viewed.
+   */
+  public onPlaylistEvents(callbacks: PlaylistCallbacks): () => void {
     let isUnsubscribed = false;
-    let socketInstance: PlaylistSocket | null = null;
+    let socketInstance: RealtimeSocket | null = null;
 
-    const currentCount = this.playlistSubscribers.get(playlistId) || 0;
-    this.playlistSubscribers.set(playlistId, currentCount + 1);
-
-    this.getSocket().then((socket) => {
+    this.createSocket().then((socket) => {
       if (isUnsubscribed) return;
-      
       socketInstance = socket;
 
-      if (this.playlistSubscribers.get(playlistId) === 1) {
-        socket.emit(PlaylistClientEvents.SUBSCRIBE, { playlistId }, (res) => {
-          if (res?.error) {
-            console.error(`[Realtime] Subscription error for playlist ${playlistId}:`, res.error);
-          }
-        });
-      }
-
       if (callbacks.onItemAdded) socket.on(PlaylistServerEvents.ITEM_ADDED, callbacks.onItemAdded);
-      if (callbacks.onItemUpdated) socket.on(PlaylistServerEvents.ITEM_UPDATED, callbacks.onItemUpdated);
-      if (callbacks.onItemDeleted) socket.on(PlaylistServerEvents.ITEM_DELETED, callbacks.onItemDeleted);
+      if (callbacks.onItemUpdated) {
+        socket.on(PlaylistServerEvents.ITEM_UPDATED, callbacks.onItemUpdated);
+      }
+      if (callbacks.onItemDeleted) {
+        socket.on(PlaylistServerEvents.ITEM_DELETED, callbacks.onItemDeleted);
+      }
     });
 
     return () => {
       isUnsubscribed = true;
-      const newCount = (this.playlistSubscribers.get(playlistId) || 1) - 1;
-      
-      if (newCount === 0) {
-        this.playlistSubscribers.delete(playlistId);
-        if (socketInstance) {
-          socketInstance.emit(PlaylistClientEvents.UNSUBSCRIBE, { playlistId });
-        }
-      } else {
-        this.playlistSubscribers.set(playlistId, newCount);
-      }
+      if (!socketInstance) return;
 
-      if (socketInstance) {
-        if (callbacks.onItemAdded) socketInstance.off(PlaylistServerEvents.ITEM_ADDED, callbacks.onItemAdded);
-        if (callbacks.onItemUpdated) socketInstance.off(PlaylistServerEvents.ITEM_UPDATED, callbacks.onItemUpdated);
-        if (callbacks.onItemDeleted) socketInstance.off(PlaylistServerEvents.ITEM_DELETED, callbacks.onItemDeleted);
+      if (callbacks.onItemAdded)
+        socketInstance.off(PlaylistServerEvents.ITEM_ADDED, callbacks.onItemAdded);
+      if (callbacks.onItemUpdated) {
+        socketInstance.off(PlaylistServerEvents.ITEM_UPDATED, callbacks.onItemUpdated);
+      }
+      if (callbacks.onItemDeleted) {
+        socketInstance.off(PlaylistServerEvents.ITEM_DELETED, callbacks.onItemDeleted);
       }
     };
-  }
-
-  disconnectAll() {
-    if (this._playlists) {
-      this._playlists.disconnect();
-      this._playlists = null;
-      this.initializationPromise = null;
-    }
-    this.playlistSubscribers.clear();
   }
 }
 

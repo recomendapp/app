@@ -3,6 +3,7 @@ import { AuthProvider } from '@/context/auth-context';
 import { MapContext } from '@/context/map-context';
 import { NextIntlClientProvider } from 'next-intl';
 import { NotificationsProvider } from '@/context/notifications-context';
+import { RealtimeProvider } from '@/context/realtime-context';
 import { cookies } from 'next/headers';
 import { Icons } from '@/config/icons';
 import { getServerDevice } from '@/utils/get-device';
@@ -46,41 +47,43 @@ export const Providers = async ({
         <ApiProvider>
           <AuthProvider session={session || null} user={user || null}>
             <NotificationsProvider>
-              <MapContext>
-                <ThemeProvider attribute={'class'} defaultTheme="dark" enableSystem>
-                  <UIProvider
-                    defaultLayout={defaultLayout}
-                    cookieSidebarOpen={sidebarOpen ? JSON.parse(sidebarOpen.value) : undefined}
-                    cookieRightPanelOpen={
-                      rightPanelOpen ? JSON.parse(rightPanelOpen.value) : undefined
-                    }
-                    device={device}
-                  >
-                    <TooltipProvider delayDuration={100}>
-                      <ModalProvider>
-                        <AuthPromptGate />
-                        <NextTopLoader
-                          showSpinner={false}
-                          easing="ease"
-                          color="#FFE974"
-                          height={2}
-                        />
-                        <Toaster
-                          position="top-center"
-                          toastOptions={{
-                            style: {
-                              borderRadius: '10px',
-                              background: '#333',
-                              color: '#fff',
-                            },
-                          }}
-                        />
-                        {status?.isMaintenance ? <MaintenancePage /> : children}
-                      </ModalProvider>
-                    </TooltipProvider>
-                  </UIProvider>
-                </ThemeProvider>
-              </MapContext>
+              <RealtimeProvider>
+                <MapContext>
+                  <ThemeProvider attribute={'class'} defaultTheme="dark" enableSystem>
+                    <UIProvider
+                      defaultLayout={defaultLayout}
+                      cookieSidebarOpen={sidebarOpen ? JSON.parse(sidebarOpen.value) : undefined}
+                      cookieRightPanelOpen={
+                        rightPanelOpen ? JSON.parse(rightPanelOpen.value) : undefined
+                      }
+                      device={device}
+                    >
+                      <TooltipProvider delayDuration={100}>
+                        <ModalProvider>
+                          <AuthPromptGate />
+                          <NextTopLoader
+                            showSpinner={false}
+                            easing="ease"
+                            color="#FFE974"
+                            height={2}
+                          />
+                          <Toaster
+                            position="top-center"
+                            toastOptions={{
+                              style: {
+                                borderRadius: '10px',
+                                background: '#333',
+                                color: '#fff',
+                              },
+                            }}
+                          />
+                          {status?.isMaintenance ? <MaintenancePage /> : children}
+                        </ModalProvider>
+                      </TooltipProvider>
+                    </UIProvider>
+                  </ThemeProvider>
+                </MapContext>
+              </RealtimeProvider>
             </NotificationsProvider>
           </AuthProvider>
         </ApiProvider>

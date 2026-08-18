@@ -25,6 +25,7 @@ import { WebhooksModule } from './webhooks/webhooks.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ExploreModule } from './explore/explore.module';
 import { CacheModule } from '../common/modules/cache/cache.module';
+import { RealtimeModule } from './realtime/realtime.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { CacheModule } from '../common/modules/cache/cache.module';
     DrizzleModule,
     CacheModule,
     AuthModule,
+    RealtimeModule,
     SystemModule,
     MeModule,
     UsersModule,

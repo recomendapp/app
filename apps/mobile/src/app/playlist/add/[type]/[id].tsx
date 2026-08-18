@@ -72,9 +72,7 @@ const PlaylistAddTo = () => {
 
   // Mutations
   const { mutateAsync: addToPlaylistMutation, isPending: isAddingToPlaylist } =
-    usePlaylistItemsAddMutation({
-      userId: user?.id,
-    });
+    usePlaylistItemsAddMutation();
 
   // REFs
   const BottomSheetPlaylistCreateRef = useRef<TrueSheet>(null);

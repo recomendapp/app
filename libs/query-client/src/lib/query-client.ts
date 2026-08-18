@@ -10,5 +10,6 @@ export * from './persons';
 export * from './reviews';
 export * from './widgets';
 export * from './search';
+export * from './realtime';
 
 export * from './utils';

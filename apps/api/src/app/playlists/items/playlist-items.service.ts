@@ -1,19 +1,19 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { playlist, playlistItem, tmdbMovieView, tmdbTvSeriesView } from '@libs/db/schemas';
 import { and, asc, desc, eq, gt, inArray, lt, ne, or, sql, SQL } from 'drizzle-orm';
-import { 
-  PlaylistItemWithMediaUnion, 
-  ListAllPlaylistItemsQueryDto, 
-  ListPaginatedPlaylistItemsQueryDto, 
-  ListPaginatedPlaylistItemsDto, 
-  ListInfinitePlaylistItemsQueryDto, 
-  ListInfinitePlaylistItemsDto, 
+import {
+  PlaylistItemWithMediaUnion,
+  ListAllPlaylistItemsQueryDto,
+  ListPaginatedPlaylistItemsQueryDto,
+  ListPaginatedPlaylistItemsDto,
+  ListInfinitePlaylistItemsQueryDto,
+  ListInfinitePlaylistItemsDto,
   PlaylistItemSortBy,
   PlaylistItemDto,
   PlaylistItemsDeleteDto,
-  PlaylistItemUpdateDto
-} from './playlist-items.dto'; 
+  PlaylistItemUpdateDto,
+} from './playlist-items.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
 import { SupportedLocale } from '@libs/i18n';
@@ -21,13 +21,15 @@ import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
 import { plainToInstance } from 'class-transformer';
 import { LexoRank } from 'lexorank';
-import { PlaylistsGateway } from '../playlists.gateway';
+import { PlaylistsRealtimeService } from '../playlists-realtime.service';
 
 @Injectable()
 export class PlaylistItemsService {
+  private readonly logger = new Logger(PlaylistItemsService.name);
+
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-    private readonly playlistsGateway: PlaylistsGateway,
+    private readonly playlistsRealtimeService: PlaylistsRealtimeService,
   ) {}
 
   private async getListBaseQuery(
@@ -40,7 +42,7 @@ export class PlaylistItemsService {
     await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
 
     const direction = sortOrder === SortOrder.ASC ? asc : desc;
-    
+
     const orderBy = (() => {
       switch (sortBy) {
         case PlaylistItemSortBy.CREATED_AT:
@@ -67,9 +69,16 @@ export class PlaylistItemsService {
   }): Promise<PlaylistItemWithMediaUnion[]> {
     return await this.db.transaction(async (tx) => {
       const { sort_by, sort_order } = query;
-      const { whereClause, orderBy } = await this.getListBaseQuery(tx, playlistId, locale, sort_by, sort_order);
+      const { whereClause, orderBy } = await this.getListBaseQuery(
+        tx,
+        playlistId,
+        locale,
+        sort_by,
+        sort_order,
+      );
 
-      const results = await tx.select({
+      const results = await tx
+        .select({
           item: playlistItem,
           movie: MOVIE_COMPACT_SELECT,
           tvSeries: TV_SERIES_COMPACT_SELECT,
@@ -104,9 +113,16 @@ export class PlaylistItemsService {
       const { per_page, page, sort_by, sort_order } = query;
       const offset = (page - 1) * per_page;
 
-      const { whereClause, orderBy } = await this.getListBaseQuery(tx, playlistId, locale, sort_by, sort_order);
+      const { whereClause, orderBy } = await this.getListBaseQuery(
+        tx,
+        playlistId,
+        locale,
+        sort_by,
+        sort_order,
+      );
 
-      const paginatedItemsSubquery = tx.select({ id: playlistItem.id })
+      const paginatedItemsSubquery = tx
+        .select({ id: playlistItem.id })
         .from(playlistItem)
         .innerJoin(playlist, eq(playlist.id, playlistItem.playlistId))
         .where(whereClause)
@@ -116,7 +132,8 @@ export class PlaylistItemsService {
         .as('paginated_items');
 
       const [results, totalCountResult] = await Promise.all([
-        tx.select({
+        tx
+          .select({
             item: playlistItem,
             movie: MOVIE_COMPACT_SELECT,
             tvSeries: TV_SERIES_COMPACT_SELECT,
@@ -126,10 +143,11 @@ export class PlaylistItemsService {
           .leftJoin(tmdbMovieView, eq(playlistItem.movieId, tmdbMovieView.id))
           .leftJoin(tmdbTvSeriesView, eq(playlistItem.tvSeriesId, tmdbTvSeriesView.id))
           .orderBy(...orderBy),
-        tx.select({ count: sql<number>`cast(count(*) as int)` })
+        tx
+          .select({ count: sql<number>`cast(count(*) as int)` })
           .from(playlistItem)
           .innerJoin(playlist, eq(playlist.id, playlistItem.playlistId))
-          .where(whereClause)
+          .where(whereClause),
       ]);
 
       const totalCount = Number(totalCountResult[0]?.count || 0);
@@ -165,7 +183,13 @@ export class PlaylistItemsService {
       const { per_page, sort_order, sort_by, cursor } = query;
 
       const cursorData = cursor ? decodeCursor<BaseCursor<string, number>>(cursor) : null;
-      const { whereClause: baseWhereClause, orderBy } = await this.getListBaseQuery(tx, playlistId, locale, sort_by, sort_order);
+      const { whereClause: baseWhereClause, orderBy } = await this.getListBaseQuery(
+        tx,
+        playlistId,
+        locale,
+        sort_by,
+        sort_order,
+      );
 
       let cursorWhereClause: SQL | undefined;
 
@@ -176,26 +200,33 @@ export class PlaylistItemsService {
           case PlaylistItemSortBy.CREATED_AT:
             cursorWhereClause = or(
               operator(playlistItem.createdAt, cursorData.value),
-              and(eq(playlistItem.createdAt, cursorData.value), operator(playlistItem.id, cursorData.id))
+              and(
+                eq(playlistItem.createdAt, cursorData.value),
+                operator(playlistItem.id, cursorData.id),
+              ),
             );
             break;
           case PlaylistItemSortBy.RANK:
           default:
             cursorWhereClause = or(
               operator(playlistItem.rank, cursorData.value),
-              and(eq(playlistItem.rank, cursorData.value), operator(playlistItem.id, cursorData.id))
+              and(
+                eq(playlistItem.rank, cursorData.value),
+                operator(playlistItem.id, cursorData.id),
+              ),
             );
             break;
         }
       }
 
-      const finalWhereClause = cursorWhereClause 
-        ? and(baseWhereClause, cursorWhereClause) 
+      const finalWhereClause = cursorWhereClause
+        ? and(baseWhereClause, cursorWhereClause)
         : baseWhereClause;
 
       const fetchLimit = per_page + 1;
 
-      const paginatedItemsSubquery = tx.select({ id: playlistItem.id })
+      const paginatedItemsSubquery = tx
+        .select({ id: playlistItem.id })
         .from(playlistItem)
         .innerJoin(playlist, eq(playlist.id, playlistItem.playlistId))
         .where(finalWhereClause)
@@ -203,7 +234,8 @@ export class PlaylistItemsService {
         .limit(fetchLimit)
         .as('paginated_items');
 
-      const results = await tx.select({
+      const results = await tx
+        .select({
           item: playlistItem,
           movie: MOVIE_COMPACT_SELECT,
           tvSeries: TV_SERIES_COMPACT_SELECT,
@@ -252,7 +284,7 @@ export class PlaylistItemsService {
         meta: {
           next_cursor: nextCursor,
           per_page,
-        }
+        },
       });
     });
   }
@@ -269,7 +301,8 @@ export class PlaylistItemsService {
     return await this.db.transaction(async (tx) => {
       await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
 
-      const [row] = await tx.select({
+      const [row] = await tx
+        .select({
           item: playlistItem,
           movie: MOVIE_COMPACT_SELECT,
           tvSeries: TV_SERIES_COMPACT_SELECT,
@@ -299,14 +332,13 @@ export class PlaylistItemsService {
     itemId: number;
     dto: PlaylistItemUpdateDto;
   }): Promise<PlaylistItemDto> {
-    
     const result = await this.db.transaction(async (tx) => {
       let newRankString: string | undefined;
 
       if (dto.position !== undefined) {
-        
         if (dto.position <= 1) {
-          const [firstItem] = await tx.select({ rank: playlistItem.rank })
+          const [firstItem] = await tx
+            .select({ rank: playlistItem.rank })
             .from(playlistItem)
             .where(and(eq(playlistItem.playlistId, playlistId), ne(playlistItem.id, itemId)))
             .orderBy(asc(playlistItem.rank))
@@ -317,11 +349,11 @@ export class PlaylistItemsService {
           } else {
             newRankString = LexoRank.middle().toString();
           }
-
         } else {
           const offset = dto.position - 2;
 
-          const neighbors = await tx.select({ rank: playlistItem.rank })
+          const neighbors = await tx
+            .select({ rank: playlistItem.rank })
             .from(playlistItem)
             .where(and(eq(playlistItem.playlistId, playlistId), ne(playlistItem.id, itemId)))
             .orderBy(asc(playlistItem.rank))
@@ -332,35 +364,43 @@ export class PlaylistItemsService {
             const prev = LexoRank.parse(neighbors[0].rank);
             const next = LexoRank.parse(neighbors[1].rank);
             newRankString = prev.between(next).toString();
-          } 
-          else if (neighbors.length === 1) {
+          } else if (neighbors.length === 1) {
             newRankString = LexoRank.parse(neighbors[0].rank).genNext().toString();
-          } 
-          else {
-            const [lastItem] = await tx.select({ rank: playlistItem.rank })
+          } else {
+            const [lastItem] = await tx
+              .select({ rank: playlistItem.rank })
               .from(playlistItem)
               .where(and(eq(playlistItem.playlistId, playlistId), ne(playlistItem.id, itemId)))
               .orderBy(desc(playlistItem.rank))
               .limit(1);
-            
-            newRankString = lastItem ? LexoRank.parse(lastItem.rank).genNext().toString() : LexoRank.middle().toString();
+
+            newRankString = lastItem
+              ? LexoRank.parse(lastItem.rank).genNext().toString()
+              : LexoRank.middle().toString();
           }
         }
       }
 
       const updateData: Partial<typeof playlistItem.$inferInsert> = {};
-      
+
       if (dto.comment !== undefined) updateData.comment = dto.comment;
       if (newRankString !== undefined) updateData.rank = newRankString;
 
       if (Object.keys(updateData).length === 0) {
-        const [existing] = await tx.select().from(playlistItem).where(and(eq(playlistItem.id, itemId), eq(playlistItem.playlistId, playlistId)));
+        const [existing] = await tx
+          .select()
+          .from(playlistItem)
+          .where(and(eq(playlistItem.id, itemId), eq(playlistItem.playlistId, playlistId)));
         if (!existing) throw new NotFoundException('Playlist item not found.');
         const { movieId, tvSeriesId, ...existingItem } = existing;
-        return plainToInstance(PlaylistItemDto, { ...existingItem, mediaId: existingItem.type === 'movie' ? movieId : tvSeriesId });
+        return plainToInstance(PlaylistItemDto, {
+          ...existingItem,
+          mediaId: existingItem.type === 'movie' ? movieId : tvSeriesId,
+        });
       }
 
-      const [updated] = await tx.update(playlistItem)
+      const [updated] = await tx
+        .update(playlistItem)
         .set(updateData)
         .where(and(eq(playlistItem.id, itemId), eq(playlistItem.playlistId, playlistId)))
         .returning();
@@ -369,19 +409,27 @@ export class PlaylistItemsService {
         throw new NotFoundException('Playlist item not found.');
       }
 
-      await tx.update(playlist)
+      await tx
+        .update(playlist)
         .set({ updatedAt: sql`now()` })
         .where(eq(playlist.id, playlistId));
 
       const { movieId, tvSeriesId, ...updatedItem } = updated;
-      return plainToInstance(PlaylistItemDto, { ...updatedItem, mediaId: updatedItem.type === 'movie' ? movieId : tvSeriesId });
+      return plainToInstance(PlaylistItemDto, {
+        ...updatedItem,
+        mediaId: updatedItem.type === 'movie' ? movieId : tvSeriesId,
+      });
     });
 
-    this.playlistsGateway.broadcastItemUpdated(playlistId, {
-      id: result.id,
-      rank: result.rank,
-      comment: result.comment,
-    });
+    this.playlistsRealtimeService
+      .broadcastItemUpdated(playlistId, {
+        id: result.id,
+        rank: result.rank,
+        comment: result.comment,
+      })
+      .catch((err) =>
+        this.logger.error(`Failed to broadcast item updated for playlist ${playlistId}`, err),
+      );
 
     return result;
   }
@@ -396,22 +444,28 @@ export class PlaylistItemsService {
     const uniqueItemIds = [...new Set(dto.itemIds)];
     if (uniqueItemIds.length === 0) return [];
 
-    const deletedItems = await this.db.delete(playlistItem)
-      .where(
-        and(
-          eq(playlistItem.playlistId, playlistId),
-          inArray(playlistItem.id, uniqueItemIds)
-        )
-      )
+    const deletedItems = await this.db
+      .delete(playlistItem)
+      .where(and(eq(playlistItem.playlistId, playlistId), inArray(playlistItem.id, uniqueItemIds)))
       .returning();
-    
+
     if (deletedItems.length > 0) {
-      this.playlistsGateway.broadcastItemDeleted(playlistId, deletedItems.map(item => item.id));
+      this.playlistsRealtimeService
+        .broadcastItemDeleted(
+          playlistId,
+          deletedItems.map((item) => item.id),
+        )
+        .catch((err) =>
+          this.logger.error(`Failed to broadcast item deleted for playlist ${playlistId}`, err),
+        );
     }
 
-    return plainToInstance(PlaylistItemDto, deletedItems.map(({ movieId, tvSeriesId, ...item }) => ({
-      ...item,
-      mediaId: item.type === 'movie' ? movieId : tvSeriesId,
-    })));
+    return plainToInstance(
+      PlaylistItemDto,
+      deletedItems.map(({ movieId, tvSeriesId, ...item }) => ({
+        ...item,
+        mediaId: item.type === 'movie' ? movieId : tvSeriesId,
+      })),
+    );
   }
 }

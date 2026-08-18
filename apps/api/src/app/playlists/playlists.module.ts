@@ -8,10 +8,9 @@ import { StorageModule } from '../../common/modules/storage/storage.module';
 import { PlaylistMembersModule } from './members/playlist-members.module';
 import { PlaylistsAddModule } from './add/playlists-add.module';
 import { PlaylistItemsModule } from './items/playlist-items.module';
-import { PlaylistsGateway } from './playlists.gateway';
+import { PlaylistsRealtimeService } from './playlists-realtime.service';
 import { SharedWorkerModule } from '@shared/worker';
 import { PlaylistFeaturedModule } from './featured/playlist-featured.module';
-
 
 @Module({
   imports: [
@@ -26,13 +25,7 @@ import { PlaylistFeaturedModule } from './featured/playlist-featured.module';
     PlaylistFeaturedModule,
   ],
   controllers: [PlaylistsController],
-  providers: [
-    PlaylistsService,
-    PlaylistsGateway,
-  ],
-  exports: [
-    PlaylistsService,
-    PlaylistsGateway,
-  ],
+  providers: [PlaylistsService, PlaylistsRealtimeService],
+  exports: [PlaylistsService, PlaylistsRealtimeService],
 })
 export class PlaylistsModule {}
