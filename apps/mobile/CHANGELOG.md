@@ -1,5 +1,18 @@
 # mobile
 
+## [1.4.0](https://github.com/recomendapp/app/compare/mobile@v1.3.0...mobile@v1.4.0) (2026-08-18)
+
+
+### Features
+
+* **mobile:** force release for UI refactor ([222e99a](https://github.com/recomendapp/app/commit/222e99abcc5a9c7d05d0e02c5e23f9a4d121bcd9))
+* **mobile:** upgrade expo sdk to 57 ([#21](https://github.com/recomendapp/app/issues/21)) ([c1d568e](https://github.com/recomendapp/app/commit/c1d568ea5a8cfe2005a954701bdda9eac2431433))
+
+
+### Bug Fixes
+
+* **mobile:** implement episode logging and migrate to global realtime websockets ([#22](https://github.com/recomendapp/app/issues/22)) ([9d79ab5](https://github.com/recomendapp/app/commit/9d79ab595a52006450501801ea5bc70be641bc85))
+
 ## [1.3.0](https://github.com/recomendapp/app/compare/mobile@v1.2.0...mobile@v1.3.0) (2026-06-25)
 
 
