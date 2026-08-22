@@ -74,6 +74,9 @@ export const notifySchema = commonSchema.extend({
   RESEND_API_KEY: z.string().startsWith('re_'),
   RESEND_FROM_EMAIL: z.string().default('Recomend <hello@recomend.app>'),
 
+  // Static assets served from MinIO/S3 (see libs/assets), used in email templates
+  ASSETS_BASE_URL: z.url(),
+
   FIREBASE_PROJECT_ID: z.string(),
   FIREBASE_CLIENT_EMAIL: z.string(),
   FIREBASE_PRIVATE_KEY_B64: z.string().transform((str) => {
