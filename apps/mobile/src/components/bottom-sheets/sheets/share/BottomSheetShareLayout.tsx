@@ -27,7 +27,7 @@ import { BrandIcon, BrandIconProps } from '../../../../lib/icons';
 import { useTheme } from '../../../../providers/ThemeProvider';
 import { ScrollView } from 'react-native';
 import * as env from '../../../../env';
-import * as MediaLibrary from 'expo-media-library';
+import { Asset, getPermissionsAsync, requestPermissionsAsync } from 'expo-media-library';
 import { File, Directory, Paths } from 'expo-file-system';
 import { FlashList } from '@shopify/flash-list';
 
@@ -155,9 +155,9 @@ const BottomSheetShareLayout = forwardRef<
           const data = await contentRef.current?.capture();
           if (!data) return;
 
-          const { status, canAskAgain } = await MediaLibrary.getPermissionsAsync(true);
+          const { status, canAskAgain } = await getPermissionsAsync(true);
           if (status !== 'granted' && canAskAgain) {
-            const { status: newStatus } = await MediaLibrary.requestPermissionsAsync();
+            const { status: newStatus } = await requestPermissionsAsync();
             if (newStatus !== 'granted') {
               toast.error(upperFirst(t('common.messages.photo_library_permission_denied')));
               return;
@@ -191,10 +191,10 @@ const BottomSheetShareLayout = forwardRef<
               const base64Data = uri.split(',')[1];
               const bytes = Uint8Array.from(atob(base64Data), (c) => c.charCodeAt(0));
               file.write(bytes);
-              await MediaLibrary.saveToLibraryAsync(file.uri);
+              await Asset.create(file.uri);
               file.delete();
             } else {
-              await MediaLibrary.saveToLibraryAsync(uri);
+              await Asset.create(uri);
             }
           };
 
