@@ -2,6 +2,7 @@ export * from './auth';
 export * from './bookmark';
 export * from './explore';
 export * from './i18n';
+export * from './import';
 export * from './log';
 export * from './playlist';
 export * from './reco';

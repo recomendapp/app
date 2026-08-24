@@ -7,6 +7,7 @@ import { useRealtimeSyncRecos } from './recosSync';
 import { useRealtimeSyncMe } from './meSync';
 import { useRealtimeSyncUserFollow } from './userFollowSync';
 import { useRealtimeSyncPersonFollow } from './personFollowSync';
+import { useRealtimeSyncImports } from './importsSync';
 
 /**
  * Single entry point for the app's realtime connection: opens the persistent per-user socket
@@ -33,4 +34,5 @@ export function useRealtimeSync(enabled: boolean) {
   useRealtimeSyncMe(enabled);
   useRealtimeSyncUserFollow(enabled);
   useRealtimeSyncPersonFollow(enabled);
+  useRealtimeSyncImports(enabled);
 }

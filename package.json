@@ -105,6 +105,7 @@
     "@tanstack/react-query-devtools": "^5.79.0",
     "@tanstack/react-query-persist-client": "^5.90.17",
     "@tanstack/react-table": "^8.21.3",
+    "@tanstack/react-virtual": "^3.14.10",
     "@tiptap/core": "^3.13.0",
     "@tiptap/extension-bold": "^3.13.0",
     "@tiptap/extension-bubble-menu": "^3.13.0",

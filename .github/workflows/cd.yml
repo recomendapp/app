@@ -83,6 +83,9 @@ jobs:
           S3_SECRET_ACCESS_KEY="placeholder"
           TYPESENSE_HOST="localhost"
           TYPESENSE_API_KEY="placeholder"
+          PREFECT_API_URL="https://prefect.example.com/api"
+          PREFECT_API_AUTH_STRING="placeholder"
+          API_INTERNAL_IMPORTS_SECRET="placeholder"
           EOF
           # Web-app
           cat <<EOF > apps/web/.env

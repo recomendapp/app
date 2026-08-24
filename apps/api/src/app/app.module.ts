@@ -26,6 +26,8 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { ExploreModule } from './explore/explore.module';
 import { CacheModule } from '../common/modules/cache/cache.module';
 import { RealtimeModule } from './realtime/realtime.module';
+import { ImportsModule } from './imports/imports.module';
+import { InternalModule } from './internal/internal.module';
 
 @Module({
   imports: [
@@ -59,6 +61,8 @@ import { RealtimeModule } from './realtime/realtime.module';
     UiModule,
     WebhooksModule,
     ExploreModule,
+    ImportsModule,
+    InternalModule,
   ],
   controllers: [AppController],
   providers: [AppService],
