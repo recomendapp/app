@@ -317,7 +317,7 @@
       "remove": "remove",
       "deleted": "deleted",
       "share": "share",
-      "cancel": "cancel",
+      "cancel": "Cancel",
       "date": "date",
       "duration": "duration",
       "sort": "sort",
@@ -947,7 +947,48 @@
       },
       "data": {
         "label": "Data",
-        "description": "Import or export your data."
+        "description": "Import or export your data.",
+        "importer": {
+          "label": "Importer",
+          "select_source": "Select a source",
+          "browse_prompt": "Drop your file here, or <link>browse</link>",
+          "browse_folder_prompt": "Got a folder instead of a zip? <link>Select the folder</link>",
+          "zipping": "Compressing your files…",
+          "processing": "Analyzing your file…",
+          "review_title": "Review your import",
+          "review_summary": "{matched} of {total} matched",
+          "validate": "Validate import",
+          "validate_confirm_description": "This will import all matched, non-skipped items into your library. This can't be undone.",
+          "success_title": "Import complete",
+          "success_description": "Your data has been imported successfully.",
+          "failed_title": "Import failed",
+          "empty": "No imports yet.",
+          "delete_confirm_description": "This import and all its staged data will be permanently deleted. This can't be undone.",
+          "keep_existing": "Keep mine",
+          "use_imported": "Use imported",
+          "merge": "Merge",
+          "conflict": "Conflict",
+          "no_match": "No match",
+          "existing_rating": "Currently: {rating}",
+          "log_column": "Log",
+          "actions_column": "Actions",
+          "categories": {
+            "log_movies": "Films",
+            "log_tv_series": "TV Series",
+            "bookmarks": "Watchlist",
+            "playlists": "Lists"
+          },
+          "status": {
+            "pending": "Pending",
+            "processing": "Processing",
+            "awaiting_review": "Awaiting review",
+            "completed": "Completed",
+            "failed": "Failed"
+          }
+        },
+        "exporter": {
+          "label": "Exporter"
+        }
       }
     },
     "upgrade": {

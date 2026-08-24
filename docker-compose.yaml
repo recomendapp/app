@@ -72,6 +72,7 @@ services:
       MINIO_ROOT_USER: ${S3_ACCESS_KEY_ID:-admin}
       MINIO_ROOT_PASSWORD: ${S3_SECRET_ACCESS_KEY:-password123}
       S3_BUCKET: ${S3_BUCKET:-avatars}
+      S3_IMPORTS_BUCKET: ${S3_IMPORTS_BUCKET:-imports}
     entrypoint: >
       /bin/sh -c "
       echo Waiting for MinIO...;
@@ -80,11 +81,19 @@ services:
       if ! mc ls myminio/$${S3_BUCKET} > /dev/null 2>&1; then
         echo Creating bucket $${S3_BUCKET}...;
         mc mb myminio/$${S3_BUCKET};
-        
+
         mc anonymous set download myminio/$${S3_BUCKET};
         echo Bucket $${S3_BUCKET} created and set to public read.;
       else
         echo Bucket $${S3_BUCKET} already exists.;
+      fi
+
+      if ! mc ls myminio/$${S3_IMPORTS_BUCKET} > /dev/null 2>&1; then
+        echo Creating bucket $${S3_IMPORTS_BUCKET}...;
+        mc mb myminio/$${S3_IMPORTS_BUCKET};
+        echo Bucket $${S3_IMPORTS_BUCKET} created - private, no anonymous access.;
+      else
+        echo Bucket $${S3_IMPORTS_BUCKET} already exists.;
       fi
       "
 

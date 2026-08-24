@@ -21,6 +21,8 @@ export const s3Schema = z.object({
   S3_SECRET_ACCESS_KEY: z.string(),
   S3_BUCKET: z.string().default('medias'),
   S3_PUBLIC_ENDPOINT: z.url().optional(),
+  // Private bucket for import/export files (never made public) — see libs/db import.ts / apps/api imports module
+  S3_IMPORTS_BUCKET: z.string().default('imports'),
 });
 
 export const extensionSchema = redisSchema;
@@ -64,6 +66,11 @@ export const apiSchema = commonSchema
     // RevenueCat
     REVENUECAT_API_KEY: z.string(),
     REVENUECAT_WEBHOOK_SECRET: z.string(),
+
+    // Imports/exports — Prefect flow trigger (see db-sync/import_transfer) + internal webhook auth
+    PREFECT_API_URL: z.url(),
+    PREFECT_API_AUTH_STRING: z.string(),
+    API_INTERNAL_IMPORTS_SECRET: z.string(),
   });
 
 export const notifySchema = commonSchema.extend({

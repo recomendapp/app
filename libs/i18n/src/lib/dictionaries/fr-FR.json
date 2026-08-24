@@ -317,7 +317,7 @@
       "remove": "retirer",
       "deleted": "supprimé",
       "share": "partager",
-      "cancel": "annuler",
+      "cancel": "Annuler",
       "date": "date",
       "duration": "durée",
       "sort": "trier",
@@ -947,7 +947,48 @@
       },
       "data": {
         "label": "Données",
-        "description": "Importez ou exportez vos données."
+        "description": "Importez ou exportez vos données.",
+        "importer": {
+          "label": "Importer",
+          "select_source": "Choisissez une source",
+          "browse_prompt": "Déposez votre fichier ici, ou <link>parcourir</link>",
+          "browse_folder_prompt": "Vous avez un dossier au lieu d'un zip ? <link>Sélectionnez le dossier</link>",
+          "zipping": "Compression de vos fichiers…",
+          "processing": "Analyse de votre fichier…",
+          "review_title": "Vérifiez votre import",
+          "review_summary": "{matched} sur {total} trouvés",
+          "validate": "Valider l'import",
+          "validate_confirm_description": "Cela importera tous les éléments trouvés et non ignorés dans votre bibliothèque. Cette action est irréversible.",
+          "success_title": "Import terminé",
+          "success_description": "Vos données ont été importées avec succès.",
+          "failed_title": "Échec de l'import",
+          "empty": "Aucun import pour l'instant.",
+          "delete_confirm_description": "Cet import et toutes ses données seront définitivement supprimés. Cette action est irréversible.",
+          "keep_existing": "Garder le mien",
+          "use_imported": "Utiliser l'import",
+          "merge": "Fusionner",
+          "conflict": "Conflit",
+          "no_match": "Aucun match",
+          "existing_rating": "Actuellement : {rating}",
+          "log_column": "Journal",
+          "actions_column": "Actions",
+          "categories": {
+            "log_movies": "Films",
+            "log_tv_series": "Séries",
+            "bookmarks": "Watchlist",
+            "playlists": "Listes"
+          },
+          "status": {
+            "pending": "En attente",
+            "processing": "En cours",
+            "awaiting_review": "À vérifier",
+            "completed": "Terminé",
+            "failed": "Échoué"
+          }
+        },
+        "exporter": {
+          "label": "Exporter"
+        }
       }
     },
     "upgrade": {

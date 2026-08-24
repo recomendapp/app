@@ -11,10 +11,12 @@ import {
   MeServerEvents,
   UserFollowServerEvents,
   PersonFollowServerEvents,
+  ImportServerEvents,
 } from '@libs/realtime';
 import {
   Bookmark,
   Follow,
+  ImportJob,
   LogMovie,
   LogTvSeasonUpdateResponse,
   LogTvEpisodeUpdateResponse,
@@ -92,6 +94,13 @@ export interface PersonFollowServerToClientEvents {
   [PersonFollowServerEvents.DELETED]: (follow: PersonFollow) => void;
 }
 
+export interface ImportServerToClientEvents {
+  [ImportServerEvents.PROGRESS]: (job: ImportJob) => void;
+  [ImportServerEvents.STAGED]: (job: ImportJob) => void;
+  [ImportServerEvents.VALIDATED]: (job: ImportJob) => void;
+  [ImportServerEvents.FAILED]: (job: ImportJob) => void;
+}
+
 export type RealtimeSocket = Socket<
   PlaylistServerToClientEvents &
     LogServerToClientEvents &
@@ -99,7 +108,8 @@ export type RealtimeSocket = Socket<
     RecoServerToClientEvents &
     MeServerToClientEvents &
     UserFollowServerToClientEvents &
-    PersonFollowServerToClientEvents
+    PersonFollowServerToClientEvents &
+    ImportServerToClientEvents
 >;
 
 export interface PlaylistCallbacks {
@@ -158,6 +168,15 @@ export interface UserFollowCallbacks {
 export interface PersonFollowCallbacks {
   onPersonFollowSet?: (follow: PersonFollow) => void;
   onPersonFollowDeleted?: (follow: PersonFollow) => void;
+}
+
+export interface ImportCallbacks {
+  onImportProgress?: (job: ImportJob) => void;
+  /** Staging analysis finished — job is now awaiting_review, nothing real written yet. */
+  onImportStaged?: (job: ImportJob) => void;
+  /** The user validated the import — real rows (logs/bookmarks/playlists) now exist. */
+  onImportValidated?: (job: ImportJob) => void;
+  onImportFailed?: (job: ImportJob) => void;
 }
 
 export interface RealtimeConfig {
@@ -606,6 +625,53 @@ class RealtimeManager {
       }
       if (callbacks.onPersonFollowDeleted) {
         socketInstance.off(PersonFollowServerEvents.DELETED, callbacks.onPersonFollowDeleted);
+      }
+    };
+  }
+
+  /**
+   * Registers import-job event callbacks on the shared connection, connecting it first if
+   * needed. Returns an unsubscribe function. Meant to be called once app-wide (see
+   * `useRealtimeSync` in `@libs/query-client`) — covers every import job the user starts, on
+   * any device.
+   */
+  public onImportEvents(callbacks: ImportCallbacks): () => void {
+    let isUnsubscribed = false;
+    let socketInstance: RealtimeSocket | null = null;
+
+    this.createSocket().then((socket) => {
+      if (isUnsubscribed) return;
+      socketInstance = socket;
+
+      if (callbacks.onImportProgress) {
+        socket.on(ImportServerEvents.PROGRESS, callbacks.onImportProgress);
+      }
+      if (callbacks.onImportStaged) {
+        socket.on(ImportServerEvents.STAGED, callbacks.onImportStaged);
+      }
+      if (callbacks.onImportValidated) {
+        socket.on(ImportServerEvents.VALIDATED, callbacks.onImportValidated);
+      }
+      if (callbacks.onImportFailed) {
+        socket.on(ImportServerEvents.FAILED, callbacks.onImportFailed);
+      }
+    });
+
+    return () => {
+      isUnsubscribed = true;
+      if (!socketInstance) return;
+
+      if (callbacks.onImportProgress) {
+        socketInstance.off(ImportServerEvents.PROGRESS, callbacks.onImportProgress);
+      }
+      if (callbacks.onImportStaged) {
+        socketInstance.off(ImportServerEvents.STAGED, callbacks.onImportStaged);
+      }
+      if (callbacks.onImportValidated) {
+        socketInstance.off(ImportServerEvents.VALIDATED, callbacks.onImportValidated);
+      }
+      if (callbacks.onImportFailed) {
+        socketInstance.off(ImportServerEvents.FAILED, callbacks.onImportFailed);
       }
     };
   }

@@ -1,0 +1,1 @@
+ALTER TABLE "import_job_playlist" ADD COLUMN "match_status" "import_match_status" DEFAULT 'matched' NOT NULL;
