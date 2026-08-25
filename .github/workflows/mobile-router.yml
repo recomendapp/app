@@ -58,20 +58,14 @@ jobs:
           echo "Current fingerprint: $HASH"
           echo "hash=$HASH" >> $GITHUB_OUTPUT
 
-      - name: 💾 Retrieve last build fingerprint
-        id: cache
-        uses: actions/cache/restore@v6
-        with:
-          path: /tmp/last-build-fingerprint
-          key: mobile-fingerprint-last-build
-
       - name: 🧭 Decide Strategy
         id: decide
         run: |
           CURRENT="${{ steps.current.outputs.hash }}"
+          FILE=apps/mobile/.eas-fingerprint
 
-          if [ -f /tmp/last-build-fingerprint ]; then
-            LAST=$(cat /tmp/last-build-fingerprint)
+          if [ -f "$FILE" ]; then
+            LAST=$(cat "$FILE")
             echo "Last build fingerprint: $LAST"
           else
             LAST=""
@@ -194,10 +188,12 @@ jobs:
     name: 💾 Save Fingerprint
     needs: [check-fingerprint, call-ios-build, call-android-build]
     if: |
-      needs.check-fingerprint.outputs.strategy == 'native' && 
-      needs.call-ios-build.result == 'success' && 
+      needs.check-fingerprint.outputs.strategy == 'native' &&
+      needs.call-ios-build.result == 'success' &&
       needs.call-android-build.result == 'success'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
@@ -228,17 +224,35 @@ jobs:
           TMDB_IMAGE_BASE_URL="${{ secrets.INFISICAL_MOBILE_TMDB_IMAGE_BASE_URL }}"
           EOF
 
-      - name: 🔍 Re-calculate and save fingerprint
+      - name: 🔍 Re-calculate fingerprint
         working-directory: apps/mobile
         run: |
           HASH=$(npx -y @expo/fingerprint apps/mobile | jq -r '.hash')
-          echo "$HASH" > /tmp/last-build-fingerprint
+          echo "HASH=$HASH" >> "$GITHUB_ENV"
 
-      - name: 💾 Update Cache
-        uses: actions/cache/save@v6
-        with:
-          path: /tmp/last-build-fingerprint
-          key: mobile-fingerprint-last-build
+      - name: 💾 Commit and Push Fingerprint
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # This job checks out the tag that triggered the build, which can be
+          # behind main by the time the native builds finish. Committing the
+          # fingerprint straight onto main from that detached, possibly-stale
+          # checkout would risk a non-fast-forward push, so switch to main's
+          # current tip first — only the fingerprint file itself needs to land
+          # there, not the rest of the tag's tree.
+          git fetch origin main
+          git checkout -B main origin/main
+
+          echo "$HASH" > apps/mobile/.eas-fingerprint
+          git add apps/mobile/.eas-fingerprint
+
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore(mobile): update build fingerprint"
+            git push origin main
+          fi
 
       - name: 🧹 Cleanup
         if: always()
