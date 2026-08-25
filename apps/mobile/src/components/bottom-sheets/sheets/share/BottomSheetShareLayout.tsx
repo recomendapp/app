@@ -25,11 +25,12 @@ import { useToast } from '../../../Toast';
 import { View } from '../../../ui/view';
 import { BrandIcon, BrandIconProps } from '../../../../lib/icons';
 import { useTheme } from '../../../../providers/ThemeProvider';
-import { ScrollView } from 'react-native';
+import { Linking, ScrollView } from 'react-native';
 import * as env from '../../../../env';
-import * as MediaLibrary from 'expo-media-library';
+import { Asset, getPermissionsAsync, requestPermissionsAsync } from 'expo-media-library';
 import { File, Directory, Paths } from 'expo-file-system';
 import { FlashList } from '@shopify/flash-list';
+import { logger } from '../../../../logger';
 
 const SHARE_DIRECTORY = new Directory(Paths.cache, 'share_temp');
 
@@ -84,6 +85,7 @@ const BottomSheetShareLayout = forwardRef<
             backgroundTopColor: data.backgroundTopColor,
             backgroundBottomColor: data.backgroundBottomColor,
             backgroundVideo: data.backgroundVideo,
+            useInternalStorage: true,
           });
         },
       },
@@ -109,6 +111,7 @@ const BottomSheetShareLayout = forwardRef<
             appId: env.FACEBOOK_APP_ID,
             title: 'Recomend',
             message: url,
+            type: 'text/plain',
           });
         },
       },
@@ -116,11 +119,10 @@ const BottomSheetShareLayout = forwardRef<
         label: 'X',
         icon: { component: Icons.brands.x, props: { variant: mode } },
         onPress: async () => {
-          await Share.shareSingle({
-            social: Social.Twitter,
-            title: 'Recomend',
-            url: url,
-          });
+          const appUrl = `twitter://post?message=${encodeURIComponent(url)}`;
+          const webUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(url)}`;
+          const canOpenApp = await Linking.canOpenURL(appUrl);
+          await Linking.openURL(canOpenApp ? appUrl : webUrl);
         },
       },
       {
@@ -139,12 +141,9 @@ const BottomSheetShareLayout = forwardRef<
         label: 'Flux',
         icon: { component: Icons.brands.facebook },
         onPress: async () => {
-          await Share.shareSingle({
-            social: Social.Facebook,
-            appId: env.FACEBOOK_APP_ID,
-            title: 'Recomend',
-            url: url,
-          });
+          await Linking.openURL(
+            `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+          );
         },
       },
       {
@@ -155,9 +154,9 @@ const BottomSheetShareLayout = forwardRef<
           const data = await contentRef.current?.capture();
           if (!data) return;
 
-          const { status, canAskAgain } = await MediaLibrary.getPermissionsAsync(true);
+          const { status, canAskAgain } = await getPermissionsAsync(true);
           if (status !== 'granted' && canAskAgain) {
-            const { status: newStatus } = await MediaLibrary.requestPermissionsAsync();
+            const { status: newStatus } = await requestPermissionsAsync();
             if (newStatus !== 'granted') {
               toast.error(upperFirst(t('common.messages.photo_library_permission_denied')));
               return;
@@ -191,10 +190,10 @@ const BottomSheetShareLayout = forwardRef<
               const base64Data = uri.split(',')[1];
               const bytes = Uint8Array.from(atob(base64Data), (c) => c.charCodeAt(0));
               file.write(bytes);
-              await MediaLibrary.saveToLibraryAsync(file.uri);
+              await Asset.create(file.uri);
               file.delete();
             } else {
-              await MediaLibrary.saveToLibraryAsync(uri);
+              await Asset.create(uri);
             }
           };
 
@@ -234,12 +233,13 @@ const BottomSheetShareLayout = forwardRef<
       try {
         await item.onPress();
       } catch (error) {
-        console.error('Error sharing:', error);
+        logger.error('Error sharing', { error, tags: { platform: item.label } });
+        toast.error(upperFirst(t('common.messages.an_error_occurred')));
       } finally {
         setLoadingPlatform(null);
       }
     },
-    [],
+    [toast, t],
   );
 
   const renderItem = useCallback(
