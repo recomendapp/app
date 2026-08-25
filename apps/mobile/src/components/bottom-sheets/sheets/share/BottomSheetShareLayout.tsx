@@ -30,6 +30,7 @@ import * as env from '../../../../env';
 import { Asset, getPermissionsAsync, requestPermissionsAsync } from 'expo-media-library';
 import { File, Directory, Paths } from 'expo-file-system';
 import { FlashList } from '@shopify/flash-list';
+import { logger } from '../../../../logger';
 
 const SHARE_DIRECTORY = new Directory(Paths.cache, 'share_temp');
 
@@ -84,6 +85,7 @@ const BottomSheetShareLayout = forwardRef<
             backgroundTopColor: data.backgroundTopColor,
             backgroundBottomColor: data.backgroundBottomColor,
             backgroundVideo: data.backgroundVideo,
+            useInternalStorage: true,
           });
         },
       },
@@ -234,12 +236,13 @@ const BottomSheetShareLayout = forwardRef<
       try {
         await item.onPress();
       } catch (error) {
-        console.error('Error sharing:', error);
+        logger.error('Error sharing', { error, tags: { platform: item.label } });
+        toast.error(upperFirst(t('common.messages.an_error_occurred')));
       } finally {
         setLoadingPlatform(null);
       }
     },
-    [],
+    [toast, t],
   );
 
   const renderItem = useCallback(
