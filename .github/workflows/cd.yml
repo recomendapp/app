@@ -18,26 +18,26 @@ jobs:
       affected_projects: ${{ steps.affected.outputs.PROJECTS }}
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v6
         with:
           version: 9
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 24
           cache: 'pnpm'
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Initialize Nx SHAs
-        uses: nrwl/nx-set-shas@v4
+        uses: nrwl/nx-set-shas@v5
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v4
@@ -171,7 +171,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout Infra Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: ${{ github.repository_owner }}/infra
           token: ${{ secrets.PAT_TOKEN }}
@@ -229,26 +229,26 @@ jobs:
   #   runs-on: ubuntu-latest
   #   steps:
   #     - name: Checkout Code
-  #       uses: actions/checkout@v4
+  #       uses: actions/checkout@v7
   #       with:
   #         fetch-depth: 0
 
   #     - name: Install pnpm
-  #       uses: pnpm/action-setup@v2
+  #       uses: pnpm/action-setup@v6
   #       with:
   #         version: 9
 
   #     - name: Setup Node.js
-  #       uses: actions/setup-node@v4
+  #       uses: actions/setup-node@v7
   #       with:
-  #         node-version: 20
+  #         node-version: 24
   #         cache: 'pnpm'
 
   #     - name: Install Dependencies
   #       run: pnpm install --frozen-lockfile
 
   #     - name: Initialize Nx SHAs
-  #       uses: nrwl/nx-set-shas@v4
+  #       uses: nrwl/nx-set-shas@v5
 
   #     - name: Check if Mobile is Affected
   #       id: check-mobile
@@ -263,7 +263,7 @@ jobs:
 
   #     - name: 🔨 Setup EAS
   #       if: steps.check-mobile.outputs.IS_AFFECTED == 'true'
-  #       uses: expo/expo-github-action@v8
+  #       uses: expo/expo-github-action@v9
   #       with:
   #         eas-version: latest
   #         token: ${{ secrets.INFISICAL_EXPO_TOKEN }}
