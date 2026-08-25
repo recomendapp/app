@@ -1,5 +1,12 @@
 # mobile
 
+## [1.4.1](https://github.com/recomendapp/app/compare/mobile@v1.4.0...mobile@v1.4.1) (2026-08-25)
+
+
+### Bug Fixes
+
+* **mobile:** fix share options (save to library, error toast, Instagram Stories) ([#25](https://github.com/recomendapp/app/issues/25)) ([e05791e](https://github.com/recomendapp/app/commit/e05791e51a1debfbda5179b3989d6c7013880ef4))
+
 ## [1.4.0](https://github.com/recomendapp/app/compare/mobile@v1.3.0...mobile@v1.4.0) (2026-08-18)
 
 
