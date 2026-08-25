@@ -1367,7 +1367,7 @@ importers:
         version: 4.26.2(react-native@0.86.2(@babel/core@7.29.7)(@react-native/jest-preset@0.86.2(@babel/core@7.29.7)(react@19.2.5))(@react-native/metro-config@0.85.2(@babel/core@7.29.7))(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)
       react-native-share:
         specifier: '*'
-        version: 12.2.6
+        version: 12.3.1
       react-native-svg:
         specifier: '*'
         version: 15.15.4(react-native@0.86.2(@babel/core@7.29.7)(@react-native/jest-preset@0.86.2(@babel/core@7.29.7)(react@19.2.5))(@react-native/metro-config@0.85.2(@babel/core@7.29.7))(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)

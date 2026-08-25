@@ -25,7 +25,7 @@ import { useToast } from '../../../Toast';
 import { View } from '../../../ui/view';
 import { BrandIcon, BrandIconProps } from '../../../../lib/icons';
 import { useTheme } from '../../../../providers/ThemeProvider';
-import { ScrollView } from 'react-native';
+import { Linking, ScrollView } from 'react-native';
 import * as env from '../../../../env';
 import { Asset, getPermissionsAsync, requestPermissionsAsync } from 'expo-media-library';
 import { File, Directory, Paths } from 'expo-file-system';
@@ -111,6 +111,7 @@ const BottomSheetShareLayout = forwardRef<
             appId: env.FACEBOOK_APP_ID,
             title: 'Recomend',
             message: url,
+            type: 'text/plain',
           });
         },
       },
@@ -118,11 +119,10 @@ const BottomSheetShareLayout = forwardRef<
         label: 'X',
         icon: { component: Icons.brands.x, props: { variant: mode } },
         onPress: async () => {
-          await Share.shareSingle({
-            social: Social.Twitter,
-            title: 'Recomend',
-            url: url,
-          });
+          const appUrl = `twitter://post?message=${encodeURIComponent(url)}`;
+          const webUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(url)}`;
+          const canOpenApp = await Linking.canOpenURL(appUrl);
+          await Linking.openURL(canOpenApp ? appUrl : webUrl);
         },
       },
       {
@@ -141,12 +141,9 @@ const BottomSheetShareLayout = forwardRef<
         label: 'Flux',
         icon: { component: Icons.brands.facebook },
         onPress: async () => {
-          await Share.shareSingle({
-            social: Social.Facebook,
-            appId: env.FACEBOOK_APP_ID,
-            title: 'Recomend',
-            url: url,
-          });
+          await Linking.openURL(
+            `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+          );
         },
       },
       {
