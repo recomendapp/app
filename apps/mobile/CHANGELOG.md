@@ -1,5 +1,12 @@
 # mobile
 
+## [1.4.2](https://github.com/recomendapp/app/compare/mobile@v1.4.1...mobile@v1.4.2) (2026-08-26)
+
+
+### Bug Fixes
+
+* **mobile:** prevent splash screen from freezing forever on cold start ([#29](https://github.com/recomendapp/app/issues/29)) ([3f52594](https://github.com/recomendapp/app/commit/3f5259455c18b8a804d604f36e0faabe92f0b6fb))
+
 ## [1.4.1](https://github.com/recomendapp/app/compare/mobile@v1.4.0...mobile@v1.4.1) (2026-08-25)
 
 
