@@ -57,7 +57,16 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const { setLocale } = useLocaleContext();
   const [pushToken, setPushToken] = useState<string | null>(null);
   const { data: session } = useQuery(authSessionOptions());
-  const { data: user } = useQuery(meOptions());
+  const { data: user, status: userStatus } = useQuery({
+    ...meOptions(),
+    retry: (failureCount, error) => {
+      const status =
+        (error as { statusCode?: number; status?: number } | undefined)?.statusCode ??
+        (error as { statusCode?: number; status?: number } | undefined)?.status;
+      if (status === 401 || status === 403) return false;
+      return failureCount < 2;
+    },
+  });
   const { customerInfo: initCustomerInfo } = useRevenueCat(user);
   const { data: customerInfo } = useAuthCustomerInfoQuery({
     enabled: !!initCustomerInfo,
@@ -331,9 +340,11 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [user, syncLanguage]);
 
   useEffect(() => {
-    if (user === undefined) return;
+    // Fire on both success and error - a definitive "not logged in" must
+    // unblock the splash screen just as much as a successful fetch does.
+    if (userStatus === 'pending') return;
     auth.setReady(true);
-  }, [user, auth]);
+  }, [userStatus, auth]);
 
   return (
     <AuthContext.Provider

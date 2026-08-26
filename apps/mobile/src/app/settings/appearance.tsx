@@ -67,6 +67,8 @@ const SettingsAppearanceScreen = () => {
         await queryClient.resetQueries();
       } catch {
         toast.error(upperFirst(t('common.messages.an_error_occurred')));
+      } finally {
+        setIsLoading(false);
       }
     },
     [setLocale, user, updateUser, t, toast, queryClient, formReset],
@@ -90,7 +92,7 @@ const SettingsAppearanceScreen = () => {
               size="fit"
               loading={isLoading}
               onPress={form.handleSubmit(handleSubmit)}
-              disabled={!form.formState.isValid || isLoading}
+              disabled={!form.formState.isDirty || !form.formState.isValid || isLoading}
             >
               {upperFirst(t('common.messages.save'))}
             </Button>
@@ -101,7 +103,7 @@ const SettingsAppearanceScreen = () => {
               label: upperFirst(t('common.messages.save')),
               onPress: form.handleSubmit(handleSubmit),
               tintColor: props.tintColor,
-              disabled: !form.formState.isValid || isLoading,
+              disabled: !form.formState.isDirty || !form.formState.isValid || isLoading,
               icon: {
                 name: 'checkmark',
                 type: 'sfSymbol',

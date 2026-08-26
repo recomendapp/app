@@ -14,6 +14,7 @@ import { getLocale, initI18n, setLocale as setLocaleHook } from '../lib/i18n';
 import { useSplashScreen } from './SplashScreenProvider';
 import { getCalendars } from 'expo-localization';
 import { defaultSupportedLocale, SupportedLocale, supportedLocales } from '@libs/i18n';
+import { logger } from '../logger';
 
 type LocaleContextType = {
   locale: SupportedLocale;
@@ -50,14 +51,37 @@ export const LocaleProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     (async () => {
-      let initial = await getLocale();
+      let initial: string = defaultSupportedLocale;
+      try {
+        initial = await getLocale();
+      } catch (error) {
+        logger.error('Failed to read saved locale, falling back to default', { error });
+      }
       initial = supportedLocales.includes(initial as SupportedLocale)
         ? initial
         : defaultSupportedLocale;
-      const { messages } = await initI18n(initial as SupportedLocale);
-      setLocaleState(initial as SupportedLocale);
-      setMessages(messages);
-      i18n.setReady(true);
+
+      try {
+        const { messages } = await initI18n(initial as SupportedLocale);
+        setLocaleState(initial as SupportedLocale);
+        setMessages(messages);
+      } catch (error) {
+        logger.error('Failed to initialize locale, retrying with default', {
+          error,
+          locale: initial,
+        });
+        try {
+          const { messages } = await initI18n(defaultSupportedLocale);
+          setLocaleState(defaultSupportedLocale);
+          setMessages(messages);
+        } catch (fallbackError) {
+          logger.error('Failed to initialize default locale', { error: fallbackError });
+          setLocaleState(defaultSupportedLocale);
+          setMessages({});
+        }
+      } finally {
+        i18n.setReady(true);
+      }
     })();
   }, [i18n]);
 

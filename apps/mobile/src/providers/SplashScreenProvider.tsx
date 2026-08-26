@@ -1,4 +1,4 @@
-import { createContext, use, useEffect, useMemo, useState } from 'react';
+import { createContext, use, useEffect, useMemo, useRef, useState } from 'react';
 import { isAndroid, isIOS } from '../platform/detection';
 import * as SystemUI from 'expo-system-ui';
 import * as ScreenOrientation from 'expo-screen-orientation';
@@ -37,16 +37,44 @@ interface SplashScreenProviderProps {
   children?: React.ReactNode;
 }
 
+const READY_TIMEOUT_MS = 10_000;
+
 const SplashScreenProvider = ({ children }: SplashScreenProviderProps) => {
   const [authReady, setAuthReady] = useState(false);
   const [i18nReady, setI18nReady] = useState(false);
+  const [timedOut, setTimedOut] = useState(false);
+  const authReadyRef = useRef(authReady);
+  const i18nReadyRef = useRef(i18nReady);
 
-  const isReady = useMemo(() => authReady && i18nReady, [authReady, i18nReady]);
+  useEffect(() => {
+    authReadyRef.current = authReady;
+    i18nReadyRef.current = i18nReady;
+  }, [authReady, i18nReady]);
+
+  const bothReady = authReady && i18nReady;
+  const isReady = useMemo(() => bothReady || timedOut, [bothReady, timedOut]);
   const [state, setState] = useState<SplashScreenState>('loading');
 
   useEffect(() => {
+    if (bothReady) return;
+    const timer = setTimeout(() => {
+      logger.error('Splash screen readiness timed out, forcing app to continue', {
+        authReady: authReadyRef.current,
+        i18nReady: i18nReadyRef.current,
+      });
+      setTimedOut(true);
+    }, READY_TIMEOUT_MS);
+    return () => clearTimeout(timer);
+  }, [bothReady]);
+
+  useEffect(() => {
     if (isReady && state !== 'finished') {
-      SplashScreen.hideAsync().then(() => setState('finished'));
+      SplashScreen.hideAsync()
+        .then(() => setState('finished'))
+        .catch((error) => {
+          logger.debug('Could not hide splash screen', { safeMessage: error });
+          setState('finished');
+        });
     }
   }, [isReady, state]);
 
