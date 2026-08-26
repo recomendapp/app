@@ -186,6 +186,7 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
       if (initialResponse) {
         console.log('🔔 Initial notification response:', JSON.stringify(initialResponse, null, 2));
         handleResponse(initialResponse);
+        await Notifications.clearLastNotificationResponseAsync();
       }
     })();
 
