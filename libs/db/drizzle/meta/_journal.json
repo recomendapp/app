@@ -407,6 +407,20 @@
       "when": 1787574552665,
       "tag": "0057_elite_mojo",
       "breakpoints": true
+    },
+    {
+      "idx": 58,
+      "version": "7",
+      "when": 1787764229395,
+      "tag": "0058_striped_supreme_intelligence",
+      "breakpoints": true
+    },
+    {
+      "idx": 59,
+      "version": "7",
+      "when": 1787764256964,
+      "tag": "0059_military_wolfsbane",
+      "breakpoints": true
     }
   ]
 }

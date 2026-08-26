@@ -13,7 +13,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { relations, sql } from 'drizzle-orm';
 import { session, user } from './auth';
-import { tmdbPerson } from './tmdb';
+import { person } from './person';
 
 // Profile
 export const profile = pgTable(
@@ -28,12 +28,8 @@ export const profile = pgTable(
     isPremium: boolean('is_premium').default(false).notNull(),
     isPrivate: boolean('is_private').default(false).notNull(),
     // Counts
-    followersCount: bigint('followers_count', { mode: 'number' })
-      .default(0)
-      .notNull(),
-    followingCount: bigint('following_count', { mode: 'number' })
-      .default(0)
-      .notNull(),
+    followersCount: bigint('followers_count', { mode: 'number' }).default(0).notNull(),
+    followingCount: bigint('following_count', { mode: 'number' }).default(0).notNull(),
   },
   (table) => [
     check('check_profile_followers_count', sql`${table.followersCount} >= 0`),
@@ -53,19 +49,25 @@ export const profileRelations = relations(profile, ({ one }) => ({
 
 // Follow
 export const followStatusEnum = pgEnum('follow_status_enum', ['pending', 'accepted']);
-export const follow = pgTable('follow', {
-  followerId: uuid('follower_id')
-    .notNull()
-    .references(() => user.id, { onDelete: 'cascade' }),
-  followingId: uuid('following_id')
-    .notNull()
-    .references(() => user.id, { onDelete: 'cascade' }),
-  status: followStatusEnum('status').default('accepted').notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-}, (table) => [
-  primaryKey({ columns: [table.followerId, table.followingId] }),
-  check('check_follow_not_self', sql`${table.followerId} <> ${table.followingId}`)
-]);
+export const follow = pgTable(
+  'follow',
+  {
+    followerId: uuid('follower_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    followingId: uuid('following_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    status: followStatusEnum('status').default('accepted').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.followerId, table.followingId] }),
+    check('check_follow_not_self', sql`${table.followerId} <> ${table.followingId}`),
+  ],
+);
 export const followRelations = relations(follow, ({ one }) => ({
   follower: one(user, {
     fields: [follow.followerId],
@@ -77,27 +79,33 @@ export const followRelations = relations(follow, ({ one }) => ({
   }),
 }));
 
-export const followPerson = pgTable('follow_person', {
-  userId: uuid('user_id')
-    .notNull()
-    .references(() => user.id, { onDelete: 'cascade' }),
-  personId: bigint('person_id', { mode: 'number' })
-    .notNull()
-    .references(() => tmdbPerson.id, { onDelete: 'cascade' }),
-  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-}, (table) => [
-  primaryKey({ columns: [table.userId, table.personId] }),
-  index('idx_follow_person_user_id').on(table.userId),
-  index('idx_follow_person_person_id').on(table.personId),
-]);
+export const followPerson = pgTable(
+  'follow_person',
+  {
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    personId: bigint('person_id', { mode: 'number' })
+      .notNull()
+      .references(() => person.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.userId, table.personId] }),
+    index('idx_follow_person_user_id').on(table.userId),
+    index('idx_follow_person_person_id').on(table.personId),
+  ],
+);
 export const followPersonRelations = relations(followPerson, ({ one }) => ({
   user: one(user, {
     fields: [followPerson.userId],
     references: [user.id],
   }),
-  person: one(tmdbPerson, {
+  person: one(person, {
     fields: [followPerson.personId],
-    references: [tmdbPerson.id],
+    references: [person.id],
   }),
 }));
 
@@ -164,4 +172,3 @@ export const pushToken = pgTable(
     unique('unique_session_provider').on(table.sessionId, table.provider),
   ],
 );
-
