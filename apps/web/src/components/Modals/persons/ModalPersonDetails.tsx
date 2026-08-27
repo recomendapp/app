@@ -10,9 +10,11 @@ import { useQuery } from '@tanstack/react-query';
 import { personOptions } from '@libs/query-client';
 import { useEffect } from 'react';
 import { Icons } from '@/config/icons';
+import { Person } from '@libs/api-js';
 
 interface ModalPersonDetailsProps {
   personId: number;
+  person?: Person;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onCloseEnd?: () => void;
@@ -20,6 +22,7 @@ interface ModalPersonDetailsProps {
 
 export const ModalPersonDetails = ({
   personId,
+  person: personProp,
   open,
   onOpenChange,
   onCloseEnd,
@@ -27,13 +30,12 @@ export const ModalPersonDetails = ({
   const t = useTranslations();
   const format = useFormatter();
 
-  // Deep links (e.g. "/person/123/details") only carry the id, so fetch the
-  // person ourselves.
-  const { data: person, isError } = useQuery(personOptions({ personId }));
+  const { data: fetchedPerson, isError } = useQuery({
+    ...personOptions({ personId }),
+    enabled: personProp === undefined,
+  });
+  const person = personProp ?? fetchedPerson;
 
-  // A nonexistent person id (e.g. a stale/tampered deep link) surfaces as a
-  // fetch error here — same treatment as an invalid route: close right away
-  // instead of showing a broken modal.
   useEffect(() => {
     if (isError) {
       onOpenChange(false);

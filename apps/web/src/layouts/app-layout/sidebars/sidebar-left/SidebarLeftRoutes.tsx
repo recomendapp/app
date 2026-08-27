@@ -21,7 +21,8 @@ import { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useUI } from '@/context/ui-context';
 import { ContextMenuPlaylist } from '@/components/ContextMenu/ContextMenuPlaylist';
-import { getPlaylistCreateHref } from '@/utils/hrefs/get-playlist-create-href';
+import { useModal } from '@/context/modal-context';
+import { ModalPlaylist } from '@/components/Modals/playlists/ModalPlaylist';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { userPlaylistsInfiniteOptions } from '@libs/query-client';
 
@@ -58,6 +59,7 @@ export const SidebarLeftRoutes = () => {
   const { isMobile } = useUI();
   const t = useTranslations('common');
   const pathname = usePathname();
+  const { openModal } = useModal();
   const { ref, inView } = useInView();
 
   const routes = useMemo(
@@ -200,11 +202,9 @@ export const SidebarLeftRoutes = () => {
                   <span>{upperFirst(t('messages.library'))}</span>
                 </Link>
               </SidebarMenuButton>
-              <SidebarMenuAction asChild>
-                <Link href={getPlaylistCreateHref()}>
-                  <Icons.add />
-                  <span className="sr-only">{upperFirst(t('messages.create_a_playlist'))}</span>
-                </Link>
+              <SidebarMenuAction onClick={() => openModal(ModalPlaylist)}>
+                <Icons.add />
+                <span className="sr-only">{upperFirst(t('messages.create_a_playlist'))}</span>
               </SidebarMenuAction>
             </SidebarMenuItem>
             <ScrollArea className="overflow-y-auto">

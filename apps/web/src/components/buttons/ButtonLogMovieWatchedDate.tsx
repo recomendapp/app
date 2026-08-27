@@ -6,8 +6,8 @@ import { cn } from '@/lib/utils';
 import { CalendarDaysIcon } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { movieLogOptions } from '@libs/query-client';
-import { Link } from '@/lib/i18n/navigation';
-import { getLogMovieWatchedDatesHref } from '@/utils/hrefs/get-log-movie-watched-dates-href';
+import { useModal } from '@/context/modal-context';
+import { ModalLogMovieWatchedDates } from '../Modals/logs/ModalLogMovieWatchedDates';
 
 interface ButtonLogMovieWatchedDateProps extends React.ComponentProps<typeof Button> {
   movieId: number;
@@ -19,6 +19,7 @@ const ButtonLogMovieWatchedDate = React.forwardRef<
   ButtonLogMovieWatchedDateProps
 >(({ movieId, stopPropagation = true, className, ...props }, ref) => {
   const { user } = useAuth();
+  const { openModal } = useModal();
   const {
     data: activity,
     isLoading,
@@ -38,13 +39,11 @@ const ButtonLogMovieWatchedDate = React.forwardRef<
         disabled={isLoading || isError || activity === undefined}
         variant="outline"
         size="icon"
-        asChild
+        onClick={() => openModal(ModalLogMovieWatchedDates, { movieId })}
         className={cn('rounded-full flex gap-4', className)}
         {...props}
       >
-        <Link href={getLogMovieWatchedDatesHref(movieId)}>
-          <CalendarDaysIcon />
-        </Link>
+        <CalendarDaysIcon />
       </Button>
     </TooltipBox>
   );

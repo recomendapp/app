@@ -14,18 +14,13 @@ export default function PersonPoster({
   alt: string;
 }) {
   return (
-    <div
-      className={cn(
-        'shadow-md z-0 relative shrink-0 w-full aspect-square',
-        className
-      )}
-    >
+    <div className={cn('shadow-md z-0 relative shrink-0 w-full aspect-square', className)}>
       <ImageWithFallback
-      src={getTmdbImage({ path: poster_path, size: 'w1280' })}
-      alt={alt}
-      fill
-      unoptimized
-      className="rounded-md object-cover z-0"
+        src={getTmdbImage({ path: poster_path, size: 'w1280' })}
+        alt={alt}
+        fill
+        unoptimized
+        className="rounded-md object-cover z-0"
       />
     </div>
   );

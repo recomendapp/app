@@ -6,9 +6,10 @@ import { Link } from '@/lib/i18n/navigation';
 import { Icons } from '@/config/icons';
 import { usePathname } from '@/lib/i18n/navigation';
 import { cn } from '@/lib/utils';
+import { useModal } from '@/context/modal-context';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import { getRecoSendHref } from '@/utils/hrefs/get-reco-send-href';
+import { ModalRecoSend } from '../Modals/recos/ModalRecoSend';
 
 interface ButtonUserRecoSendProps extends React.ComponentProps<typeof Button> {
   mediaId: number;
@@ -22,12 +23,18 @@ const ButtonUserRecoSend = React.forwardRef<HTMLDivElement, ButtonUserRecoSendPr
     const { user } = useAuth();
     const t = useTranslations();
     const pathname = usePathname();
+    const { openModal } = useModal();
 
     const handleClick = React.useCallback(
       (e: React.MouseEvent) => {
         stopPropagation && e.stopPropagation();
+        openModal(ModalRecoSend, {
+          mediaId,
+          mediaType,
+          mediaTitle,
+        });
       },
-      [stopPropagation],
+      [stopPropagation, openModal, mediaId, mediaType, mediaTitle],
     );
 
     if (user === null) {
@@ -55,12 +62,10 @@ const ButtonUserRecoSend = React.forwardRef<HTMLDivElement, ButtonUserRecoSendPr
           size="icon"
           variant={'outline'}
           className={cn('rounded-full', className)}
-          asChild
+          onClick={handleClick}
           {...props}
         >
-          <Link href={getRecoSendHref(mediaType, mediaId, mediaTitle)} onClick={handleClick}>
-            {user === undefined ? <Icons.spinner className="animate-spin" /> : <Icons.send />}
-          </Link>
+          {user === undefined ? <Icons.spinner className="animate-spin" /> : <Icons.send />}
         </Button>
       </TooltipBox>
     );

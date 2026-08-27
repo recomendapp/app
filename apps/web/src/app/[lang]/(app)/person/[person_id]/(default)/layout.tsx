@@ -5,15 +5,13 @@ import { getPerson } from '@/api/server/medias';
 import { SupportedLocale } from '@libs/i18n';
 import { redirect } from '@/lib/i18n/navigation';
 
-export default async function PersonLayout(
-  props: {
-    children: React.ReactNode;
-    params: Promise<{
-      lang: string;
-      person_id: string;
-    }>;
-  }
-) {
+export default async function PersonLayout(props: {
+  children: React.ReactNode;
+  params: Promise<{
+    lang: string;
+    person_id: string;
+  }>;
+}) {
   const { lang, person_id } = await props.params;
   const { id } = getIdFromSlug(person_id);
   const person = await getPerson(lang as SupportedLocale, id);
@@ -24,7 +22,7 @@ export default async function PersonLayout(
     <>
       <PersonHeader person={person} />
       <div className="px-4 pb-4 flex flex-col items-center">
-        <div className='max-w-7xl w-full'>
+        <div className="max-w-7xl w-full">
           <PersonNavbar slug={person.slug || person.id.toString()} />
           {props.children}
         </div>

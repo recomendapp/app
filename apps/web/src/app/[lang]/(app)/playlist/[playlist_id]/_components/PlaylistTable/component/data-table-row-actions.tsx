@@ -19,7 +19,7 @@ import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import { useModal } from '@/context/modal-context';
 import { createShareController } from '@/components/ShareController/ShareController';
 import { ShareControllerMovie } from '@/components/ShareController/ShareControllerMovie';
-import { getRecoSendHref } from '@/utils/hrefs/get-reco-send-href';
+import { ModalRecoSend } from '@/components/Modals/recos/ModalRecoSend';
 import { usePlaylist } from '@/hooks/use-playlist';
 import { useCallback, useMemo } from 'react';
 import { getMediaDetails } from '@/utils/get-media-details';
@@ -27,7 +27,7 @@ import { ShareControllerTvSeries } from '@/components/ShareController/ShareContr
 import { PlaylistItemWithMedia } from '@libs/api-js';
 import ModalPlaylistComment from '@/components/Modals/playlists/ModalPlaylistComment';
 import { usePlaylistItemsDeleteMutation } from '@libs/query-client';
-import { getPlaylistAddHref } from '@/utils/hrefs/get-playlist-add-href';
+import { ModalPlaylistAdd } from '@/components/Modals/playlists/ModalPlaylistAdd';
 
 interface DataTableRowActionsProps {
   table: Table<PlaylistItemWithMedia>;
@@ -96,17 +96,29 @@ export function DataTableRowActions({ row, table, column, data }: DataTableRowAc
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" className="w-40">
-          <DropdownMenuItem asChild>
-            <Link href={getPlaylistAddHref(data.type, data.mediaId, details?.title)}>
-              <Icons.addPlaylist className="w-4" />
-              {upperFirst(t('common.messages.add_to_playlist'))}
-            </Link>
+          <DropdownMenuItem
+            onClick={() =>
+              openModal(ModalPlaylistAdd, {
+                mediaId: data.mediaId,
+                type: data.type,
+                mediaTitle: details?.title,
+              })
+            }
+          >
+            <Icons.addPlaylist className="w-4" />
+            {upperFirst(t('common.messages.add_to_playlist'))}
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href={getRecoSendHref(data.type, data.mediaId, details?.title)}>
-              <Icons.send className="w-4" />
-              {upperFirst(t('common.messages.send_to_friend'))}
-            </Link>
+          <DropdownMenuItem
+            onClick={() =>
+              openModal(ModalRecoSend, {
+                mediaId: data.mediaId,
+                mediaTitle: details?.title,
+                mediaType: data.type,
+              })
+            }
+          >
+            <Icons.send className="w-4" />
+            {upperFirst(t('common.messages.send_to_friend'))}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>

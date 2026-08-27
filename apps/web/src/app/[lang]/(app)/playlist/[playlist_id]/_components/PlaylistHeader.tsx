@@ -5,14 +5,13 @@ import { AspectRatio } from '@libs/ui/components/aspect-ratio';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { useAuth } from '@/context/auth-context';
 import { useModal } from '@/context/modal-context';
+import { ModalPlaylist } from '@/components/Modals/playlists/ModalPlaylist';
 import { useRandomImage } from '@/hooks/use-random-image';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { ConvertHoursMinutes } from '@/lib/utils';
 import { PlaylistWithOwner } from '@libs/api-js';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
-import { useRouter } from '@/lib/i18n/navigation';
-import { getPlaylistEditHref } from '@/utils/hrefs/get-playlist-edit-href';
 
 interface PlaylistHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   playlist: PlaylistWithOwner;
@@ -31,13 +30,12 @@ export function PlaylistHeader({
 }: PlaylistHeaderProps) {
   const { user } = useAuth();
   const t = useTranslations();
-  const router = useRouter();
-  const { createModal } = useModal();
+  const { openModal, createModal } = useModal();
   const backdrop = useRandomImage(backdrops?.map((src) => ({ src, alt: playlist.title })) || []);
 
   const openPlaylistModal = () => {
     if (playlist.userId !== user?.id) return;
-    router.push(getPlaylistEditHref(playlist.id));
+    openModal(ModalPlaylist, { playlistId: playlist.id, playlist });
   };
 
   return (

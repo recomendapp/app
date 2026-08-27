@@ -3,8 +3,8 @@
 import { Button } from '@libs/ui/components/button';
 import { Plus } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
-import { Link } from '@/lib/i18n/navigation';
-import { getPlaylistCreateHref } from '@/utils/hrefs/get-playlist-create-href';
+import { useModal } from '@/context/modal-context';
+import { ModalPlaylist } from '@/components/Modals/playlists/ModalPlaylist';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
@@ -18,19 +18,23 @@ export function PlaylistCreateButton({
   icon?: boolean;
 }) {
   const { user } = useAuth();
+  const { openModal } = useModal();
   const t = useTranslations();
 
   if (!user) return null;
 
   return (
     <TooltipBox tooltip={upperFirst(t('common.messages.create_a_playlist'))}>
-      <Button variant={'outline'} size={'icon'} className={cn(className)} asChild>
-        <Link href={getPlaylistCreateHref()}>
-          {icon ? <Plus /> : upperFirst(t('common.messages.create_a_playlist'))}
-          {icon && (
-            <span className="sr-only">{upperFirst(t('common.messages.create_a_playlist'))}</span>
-          )}
-        </Link>
+      <Button
+        variant={'outline'}
+        size={'icon'}
+        className={cn(className)}
+        onClick={() => openModal(ModalPlaylist)}
+      >
+        {icon ? <Plus /> : upperFirst(t('common.messages.create_a_playlist'))}
+        {icon && (
+          <span className="sr-only">{upperFirst(t('common.messages.create_a_playlist'))}</span>
+        )}
       </Button>
     </TooltipBox>
   );

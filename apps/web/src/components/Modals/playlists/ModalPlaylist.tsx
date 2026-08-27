@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuth } from '@/context/auth-context';
+import { useModal } from '@/context/modal-context';
 import { Modal, ModalBody, ModalHeader, ModalTitle } from '../Modal';
 import { Button } from '@libs/ui/components/button';
 import { UserCogIcon } from 'lucide-react';
@@ -9,8 +10,7 @@ import { PlaylistForm } from '@/components/Playlist/PlaylistForm/PlaylistForm';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { Playlist } from '@libs/api-js';
-import { Link } from '@/lib/i18n/navigation';
-import { getPlaylistMembersHref } from '@/utils/hrefs/get-playlist-members-href';
+import { ModalPlaylistMembers } from './ModalPlaylistMembers';
 import { useQuery } from '@tanstack/react-query';
 import { playlistOptions } from '@libs/query-client';
 import { useEffect } from 'react';
@@ -20,6 +20,8 @@ import { Icons } from '@/config/icons';
 interface ModalPlaylistProps {
   /** Omit to create a new playlist instead of editing one. */
   playlistId?: number;
+  /** Skips the fetch below when the caller already has it on hand. */
+  playlist?: Playlist;
   onSave?: (data: Playlist) => void;
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -28,6 +30,7 @@ interface ModalPlaylistProps {
 
 export function ModalPlaylist({
   playlistId,
+  playlist: playlistProp,
   onSave,
   open,
   onOpenChange,
@@ -35,11 +38,13 @@ export function ModalPlaylist({
 }: ModalPlaylistProps) {
   const t = useTranslations();
   const { session } = useAuth();
+  const { openModal } = useModal();
 
-  const { data: playlist, isError } = useQuery({
+  const { data: fetchedPlaylist, isError } = useQuery({
     ...playlistOptions({ playlistId }),
-    enabled: !!playlistId,
+    enabled: !!playlistId && playlistProp === undefined,
   });
+  const playlist = playlistProp ?? fetchedPlaylist;
 
   useEffect(() => {
     if (!session) {
@@ -66,10 +71,17 @@ export function ModalPlaylist({
             <TooltipBox
               tooltip={upperFirst(t('common.messages.guest', { count: 2, gender: 'male' }))}
             >
-              <Button variant={'outline'} size={'icon'} asChild>
-                <Link href={getPlaylistMembersHref(playlist.id)}>
-                  <UserCogIcon size={20} />
-                </Link>
+              <Button
+                variant={'outline'}
+                size={'icon'}
+                onClick={() =>
+                  openModal(ModalPlaylistMembers, {
+                    playlistId: playlist.id,
+                    playlist,
+                  })
+                }
+              >
+                <UserCogIcon size={20} />
               </Button>
             </TooltipBox>
           )}

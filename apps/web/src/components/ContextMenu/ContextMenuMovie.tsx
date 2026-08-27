@@ -19,9 +19,9 @@ import { upperFirst } from 'lodash';
 import { useAuth } from '@/context/auth-context';
 import { createShareController } from '../ShareController/ShareController';
 import { ShareControllerMovie } from '../ShareController/ShareControllerMovie';
-import { getPlaylistAddHref } from '@/utils/hrefs/get-playlist-add-href';
+import { ModalPlaylistAdd } from '../Modals/playlists/ModalPlaylistAdd';
 import { Movie, MovieCompact } from '@libs/api-js';
-import { getRecoSendHref } from '@/utils/hrefs/get-reco-send-href';
+import { ModalRecoSend } from '../Modals/recos/ModalRecoSend';
 
 interface Item {
   icon: React.ElementType;
@@ -58,12 +58,22 @@ export const ContextMenuMovie = ({
           ? [
               {
                 icon: Icons.addPlaylist,
-                href: getPlaylistAddHref('movie', movie.id, movie.title),
+                onClick: () =>
+                  openModal(ModalPlaylistAdd, {
+                    mediaId: movie.id,
+                    type: 'movie',
+                    mediaTitle: movie.title,
+                  }),
                 label: upperFirst(t('common.messages.add_to_playlist')),
               },
               {
                 icon: Icons.send,
-                href: getRecoSendHref('movie', movie.id, movie.title),
+                onClick: () =>
+                  openModal(ModalRecoSend, {
+                    mediaId: movie.id,
+                    mediaTitle: movie.title,
+                    mediaType: 'movie',
+                  }),
                 label: upperFirst(t('common.messages.send_to_friend')),
               },
             ]

@@ -14,8 +14,6 @@ export default function InterceptedPersonDetailsModal() {
   const parsedParams = personDetailsRouteParamsSchema.safeParse(rawParams);
 
   useEffect(() => {
-    // An unparseable deep link never had a real modal to show — close it
-    // immediately instead of rendering something broken.
     if (!parsedParams.success) {
       router.back();
     }

@@ -19,9 +19,9 @@ import { upperFirst } from 'lodash';
 import { useAuth } from '@/context/auth-context';
 import { createShareController } from '../ShareController/ShareController';
 import { ShareControllerTvSeries } from '../ShareController/ShareControllerTvSeries';
-import { getPlaylistAddHref } from '@/utils/hrefs/get-playlist-add-href';
+import { ModalPlaylistAdd } from '../Modals/playlists/ModalPlaylistAdd';
 import { TvSeries, TvSeriesCompact } from '@libs/api-js';
-import { getRecoSendHref } from '@/utils/hrefs/get-reco-send-href';
+import { ModalRecoSend } from '../Modals/recos/ModalRecoSend';
 
 interface Item {
   icon: React.ElementType;
@@ -58,12 +58,22 @@ export const ContextMenuTvSeries = ({
           ? [
               {
                 icon: Icons.addPlaylist,
-                href: getPlaylistAddHref('tv_series', tvSeries.id, tvSeries.name),
+                onClick: () =>
+                  openModal(ModalPlaylistAdd, {
+                    mediaId: tvSeries.id,
+                    type: 'tv_series',
+                    mediaTitle: tvSeries.name,
+                  }),
                 label: upperFirst(t('common.messages.add_to_playlist')),
               },
               {
                 icon: Icons.send,
-                href: getRecoSendHref('tv_series', tvSeries.id, tvSeries.name),
+                onClick: () =>
+                  openModal(ModalRecoSend, {
+                    mediaId: tvSeries.id,
+                    mediaType: 'tv_series',
+                    mediaTitle: tvSeries.name,
+                  }),
                 label: upperFirst(t('common.messages.send_to_friend')),
               },
             ]

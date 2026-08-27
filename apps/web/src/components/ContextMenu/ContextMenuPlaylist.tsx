@@ -16,8 +16,8 @@ import { ModalShare } from '../Modals/Share/ModalShare';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { useAuth } from '@/context/auth-context';
-import { getPlaylistEditHref } from '@/utils/hrefs/get-playlist-edit-href';
-import { getPlaylistMembersHref } from '@/utils/hrefs/get-playlist-members-href';
+import { ModalPlaylist } from '../Modals/playlists/ModalPlaylist';
+import { ModalPlaylistMembers } from '../Modals/playlists/ModalPlaylistMembers';
 import toast from 'react-hot-toast';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
 import { Playlist, User } from '@libs/api-js';
@@ -68,12 +68,20 @@ export const ContextMenuPlaylist = ({
           ? [
               {
                 icon: Icons.users,
-                href: getPlaylistMembersHref(playlist.id),
+                onClick: () =>
+                  openModal(ModalPlaylistMembers, {
+                    playlistId: playlist.id,
+                    playlist,
+                  }),
                 label: upperFirst(t('common.messages.manage_members', { count: 2 })),
               },
               {
                 icon: Icons.edit,
-                href: getPlaylistEditHref(playlist.id),
+                onClick: () =>
+                  openModal(ModalPlaylist, {
+                    playlistId: playlist.id,
+                    playlist,
+                  }),
                 label: upperFirst(t('common.messages.edit_playlist')),
               },
             ]

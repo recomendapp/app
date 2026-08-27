@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuth } from '@/context/auth-context';
+import { useModal } from '@/context/modal-context';
 import { Modal, ModalBody, ModalDescription, ModalHeader, ModalTitle } from '../Modal';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from '@libs/ui/components/button';
@@ -21,7 +22,7 @@ import {
   usePlaylistMembersDeleteMutation,
   usePlaylistMemberUpdateMutation,
 } from '@libs/query-client';
-import { ApiError, PlaylistMemberUpdate } from '@libs/api-js';
+import { ApiError, Playlist, PlaylistMemberUpdate } from '@libs/api-js';
 import Fuse from 'fuse.js';
 import {
   Select,
@@ -32,13 +33,13 @@ import {
 } from '@libs/ui/components/select';
 import { usePlaylistMembers } from '@/hooks/use-playlist-members';
 import { useTranslations } from 'next-intl';
-import { Link } from '@/lib/i18n/navigation';
-import { getPlaylistMembersAddHref } from '@/utils/hrefs/get-playlist-members-add-href';
+import { ModalPlaylistMembersAdd } from './ModalPlaylistMembersAdd';
 import { canManagePlaylist } from '@/utils/can-manage-playlist';
 import toast from 'react-hot-toast';
 
 interface ModalPlaylistMembersProps {
   playlistId: number;
+  playlist?: Playlist;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onCloseEnd?: () => void;
@@ -46,15 +47,21 @@ interface ModalPlaylistMembersProps {
 
 export function ModalPlaylistMembers({
   playlistId,
+  playlist: playlistProp,
   open,
   onOpenChange,
   onCloseEnd,
 }: ModalPlaylistMembersProps) {
   const { user, session } = useAuth();
+  const { openModal } = useModal();
   const t = useTranslations();
   const { playlistMembersRoleValues } = usePlaylistMembers();
 
-  const { data: playlist, isError: isPlaylistError } = useQuery(playlistOptions({ playlistId }));
+  const { data: fetchedPlaylist, isError: isPlaylistError } = useQuery({
+    ...playlistOptions({ playlistId }),
+    enabled: playlistProp === undefined,
+  });
+  const playlist = playlistProp ?? fetchedPlaylist;
 
   // Queries
   const { data: members, isError: isMembersError } = useQuery(
@@ -163,11 +170,12 @@ export function ModalPlaylistMembers({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <InputGroupButton variant={'outline'} asChild>
-              <Link href={getPlaylistMembersAddHref(playlistId)}>
-                <Icons.add />
-                {upperFirst(t('common.messages.add_member', { count: 2 }))}
-              </Link>
+            <InputGroupButton
+              variant={'outline'}
+              onClick={() => openModal(ModalPlaylistMembersAdd, { playlistId, playlist })}
+            >
+              <Icons.add />
+              {upperFirst(t('common.messages.add_member', { count: 2 }))}
             </InputGroupButton>
           </InputGroupAddon>
           <InputGroupAddon align="block-end">

@@ -19,7 +19,7 @@ import {
   searchUsersInfiniteOptions,
   usePlaylistMembersAddMutation,
 } from '@libs/query-client';
-import { UserSummary } from '@libs/api-js';
+import { Playlist, UserSummary } from '@libs/api-js';
 import { Badge } from '@libs/ui/components/badge';
 import useDebounce from '@/hooks/use-debounce';
 import { canManagePlaylist } from '@/utils/can-manage-playlist';
@@ -27,6 +27,8 @@ import { useAuth } from '@/context/auth-context';
 
 interface ModalPlaylistMembersAddProps {
   playlistId: number;
+  /** Skips the fetch below when the caller already has it on hand. */
+  playlist?: Playlist;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onCloseEnd?: () => void;
@@ -34,6 +36,7 @@ interface ModalPlaylistMembersAddProps {
 
 export function ModalPlaylistMembersAdd({
   playlistId,
+  playlist: playlistProp,
   open,
   onOpenChange,
   onCloseEnd,
@@ -42,7 +45,11 @@ export function ModalPlaylistMembersAdd({
   const t = useTranslations();
   const { inView, ref } = useInView();
 
-  const { data: playlist, isError: isPlaylistError } = useQuery(playlistOptions({ playlistId }));
+  const { data: fetchedPlaylist, isError: isPlaylistError } = useQuery({
+    ...playlistOptions({ playlistId }),
+    enabled: playlistProp === undefined,
+  });
+  const playlist = playlistProp ?? fetchedPlaylist;
 
   const { data: members, isError: isMembersError } = useQuery(
     playlistMembersAllOptions({

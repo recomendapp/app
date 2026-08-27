@@ -1,20 +1,21 @@
 'use client';
-import { Link } from '@/lib/i18n/navigation';
-import { getPersonDetailsHref } from '@/utils/hrefs/get-person-details-href';
+import { useModal } from '@/context/modal-context';
+import { ModalPersonDetails } from '@/components/Modals/persons/ModalPersonDetails';
 import { Person } from '@libs/api-js';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 
 export function PersonAbout({ person }: { person?: Person }) {
   const t = useTranslations();
+  const { openModal } = useModal();
   if (!person) return null;
   return (
     <>
-      <Link
-        href={getPersonDetailsHref(person.slug ?? person.id)}
+      <div
         className={`
-          block text-justify text-muted-foreground cursor-pointer
+          text-justify text-muted-foreground cursor-pointer
         `}
+        onClick={() => openModal(ModalPersonDetails, { personId: person.id, person })}
       >
         <p className="line-clamp-2 select-text">
           {person?.biography?.length
@@ -22,7 +23,7 @@ export function PersonAbout({ person }: { person?: Person }) {
             : upperFirst(t('common.messages.no_biography_available'))}
         </p>
         <p className="">Voir plus</p>
-      </Link>
+      </div>
     </>
   );
 }
