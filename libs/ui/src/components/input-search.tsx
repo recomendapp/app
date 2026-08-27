@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { SearchIcon } from 'lucide-react';
 import { Input } from './input';
-import { cn } from '@libs/ui/lib/utils';
+import { cn } from '../lib/utils';
 
 const InputSearch = React.forwardRef<
   React.ElementRef<typeof Input>,

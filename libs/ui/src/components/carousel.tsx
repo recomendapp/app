@@ -5,8 +5,8 @@ import useEmblaCarousel, { type UseEmblaCarouselType } from 'embla-carousel-reac
 import { type AutoplayType } from 'embla-carousel-autoplay';
 import { ArrowLeft, ArrowRight, PauseIcon, PlayIcon } from 'lucide-react';
 
-import { cn } from '@libs/ui/lib/utils';
-import { Button } from '@libs/ui/components/button';
+import { cn } from '../lib/utils';
+import { Button } from './button';
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
