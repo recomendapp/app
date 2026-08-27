@@ -1,11 +1,11 @@
 import { FormItem } from '@libs/ui/components/form';
 import { Label } from '@libs/ui/components/label';
-import { Slider } from '@libs/ui/components/slider';
 import { useMap } from '../../../../context/map-context';
 import { useEffect, useState } from 'react';
 import useDebounce from '@/hooks/use-debounce';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { RotateCcwIcon } from 'lucide-react';
+import { SliderRange } from '@libs/ui/components/slider-range';
 
 export const MapFilterDate = () => {
   const { filters } = useMap();
@@ -31,7 +31,7 @@ export const MapFilterDate = () => {
           </TooltipBox>
         )}
       </Label>
-      <Slider
+      <SliderRange
         min={filters.date.defaultValue[0]}
         value={value}
         max={filters.date.defaultValue[1]}
