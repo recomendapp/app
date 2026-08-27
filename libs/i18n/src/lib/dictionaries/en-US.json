@@ -390,6 +390,7 @@
       "user_liked_playlist": "<name></name> liked a playlist",
       "user_liked_review": "<name></name> liked a review",
       "runtime": "runtime",
+      "ends_at": "Ends at {value}",
       "this_user_has_no_activity": "This user has no activity",
       "notification_archived": "{count, plural, =1 {notification archived} other {notifications archived}}",
       "notification_unarchived": "{count, plural, =1 {notification unarchived} other {notifications unarchived}}",

@@ -16,9 +16,8 @@ const loadMessagesRecursive = async (locale: SupportedLocale): Promise<Record<st
   return deepmerge(fallbackMessages, userMessages);
 };
 
-
 export default getRequestConfig(async ({ requestLocale }) => {
-  let locale = await requestLocale as SupportedLocale;
+  let locale = (await requestLocale) as SupportedLocale;
 
   if (!locale || !routing.locales.includes(locale)) {
     locale = routing.defaultLocale;
@@ -28,6 +27,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
 
   return {
     locale,
+    timeZone: 'Etc/UTC',
     messages: messages,
   };
 });

@@ -8,13 +8,15 @@ import { SupportedLocale } from '@libs/i18n';
 export const LocaleProvider = ({
   locale,
   messages,
+  timeZone: initialTimeZone,
   children,
 }: {
   locale: SupportedLocale;
   messages: Awaited<ReturnType<typeof getMessages>>;
+  timeZone: string;
   children: React.ReactNode;
 }) => {
-  const [timeZone, setTimeZone] = useState<string | undefined>(undefined);
+  const [timeZone, setTimeZone] = useState(initialTimeZone);
 
   useEffect(() => {
     setTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
