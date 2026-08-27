@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { importsListPaginatedOptions } from '@libs/query-client';
+import { importsListPaginatedOptions, importSourcesListAllOptions } from '@libs/query-client';
+import { ImportSource } from '@libs/api-js';
 import { Button } from '@/components/ui/button';
 import { PlusIcon } from 'lucide-react';
 import { ImporterInitiator } from './ImporterInitiator';
@@ -17,51 +18,33 @@ export type ImporterSource = {
   source: string;
   name: string;
   description: string;
-  icon: string;
+  iconLight: string | null;
+  iconDark: string | null;
+  instructions: string | null;
   enabled: boolean;
-  fileTypes: string;
+  fileTypes: string[];
 };
 
-export const IMPORTER_SOURCES: ImporterSource[] = [
-  {
-    source: 'letterboxd',
-    name: 'Letterboxd',
-    description: 'Import your data from Letterboxd',
-    icon: 'letterboxd_vertical',
-    enabled: true,
-    fileTypes: 'zip, application/zip, application/x-zip-compressed, multipart/x-zip',
-  },
-  {
-    source: 'recomend',
-    name: 'Recomend',
-    description: 'Import your data from Recomend',
-    icon: 'recomend',
-    enabled: false,
-    fileTypes: 'json',
-  },
-  {
-    source: 'senscritique',
-    name: 'SensCritique',
-    description: 'Import your data from SensCritique',
-    icon: 'senscritique',
-    enabled: false,
-    fileTypes: 'json',
-  },
-  {
-    source: 'csv',
-    name: 'CSV',
-    description: 'Import your data from a CSV file',
-    icon: 'csv',
-    enabled: false,
-    fileTypes: 'csv',
-  },
-];
-
-export function Importer() {
+export function Importer({ initialSources }: { initialSources: ImportSource[] }) {
   const t = useTranslations();
   const [modalOpen, setModalOpen] = useState(false);
   const [resumeJobId, setResumeJobId] = useState<number | null>(null);
   const [page, setPage] = useState(1);
+
+  const { data: sourcesData } = useQuery({
+    ...importSourcesListAllOptions(),
+    initialData: initialSources,
+  });
+  const sources: ImporterSource[] = (sourcesData ?? []).map((source) => ({
+    source: source.provider,
+    name: source.name,
+    description: source.description ?? '',
+    iconLight: source.iconLight ?? null,
+    iconDark: source.iconDark ?? null,
+    instructions: source.instructions ?? null,
+    enabled: source.enabled,
+    fileTypes: source.fileTypes ?? [],
+  }));
 
   const { data: jobsPage } = useQuery(
     importsListPaginatedOptions({ filters: { page, per_page: JOBS_PER_PAGE } }),
@@ -112,7 +95,7 @@ export function Importer() {
       <Modal open={modalOpen} onOpenChange={setModalOpen} className="flex flex-col sm:max-w-4xl">
         <ImporterInitiator
           key={modalOpen ? `open-${resumeJobId ?? 'new'}` : 'closed'}
-          sources={IMPORTER_SOURCES}
+          sources={sources}
           setModalOpen={setModalOpen}
           resumeJobId={resumeJobId ?? undefined}
         />

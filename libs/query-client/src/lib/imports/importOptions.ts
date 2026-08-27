@@ -1,5 +1,6 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 import {
+  importSourcesControllerListAll,
   importsControllerListAll,
   importsControllerListPaginated,
   ImportsControllerListPaginatedData,
@@ -41,6 +42,20 @@ import { importKeys } from './importKeys';
 // `../realtime/importsSync.ts`).
 const ACTIVE_STATUSES = new Set(['pending', 'processing']);
 const POLL_INTERVAL_MS = 2000;
+
+/* -------------------------------- Sources --------------------------------- */
+
+export const importSourcesListAllOptions = () => {
+  return queryOptions({
+    queryKey: importKeys.sources(),
+    queryFn: async () => {
+      const { data, error } = await importSourcesControllerListAll();
+      if (error) throw error;
+      if (data === undefined) throw new Error('No data');
+      return data;
+    },
+  });
+};
 
 /* --------------------------------- Jobs ---------------------------------- */
 

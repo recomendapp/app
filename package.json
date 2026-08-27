@@ -190,7 +190,6 @@
     "input-otp": "^1.4.2",
     "ioredis": "5.10.1",
     "jose": "^6.2.2",
-    "jszip": "^3.10.1",
     "lexorank": "^1.0.5",
     "lodash": "^4.17.21",
     "lucide-react": "^0.513.0",

@@ -27,6 +27,7 @@ import { ExploreModule } from './explore/explore.module';
 import { CacheModule } from '../common/modules/cache/cache.module';
 import { RealtimeModule } from './realtime/realtime.module';
 import { ImportsModule } from './imports/imports.module';
+import { ExportsModule } from './exports/exports.module';
 import { InternalModule } from './internal/internal.module';
 
 @Module({
@@ -62,6 +63,7 @@ import { InternalModule } from './internal/internal.module';
     WebhooksModule,
     ExploreModule,
     ImportsModule,
+    ExportsModule,
     InternalModule,
   ],
   controllers: [AppController],

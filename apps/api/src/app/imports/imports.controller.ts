@@ -63,9 +63,6 @@ export class ImportsController {
     return this.importsService.listAll(user);
   }
 
-  // Declared before ':id' — as literal path segments they'd otherwise be shadowed by the
-  // dynamic ':id' route above them, since Nest/Fastify matches same-depth GET routes in
-  // registration order.
   @Get('paginated')
   @UseGuards(AuthGuard)
   @ApiOkResponse({ type: ListPaginatedImportJobsDto })

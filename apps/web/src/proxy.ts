@@ -4,8 +4,17 @@ import { routing } from './lib/i18n/routing';
 import { siteConfig } from './config/site';
 import { ensureLocaleCookie } from './lib/i18n/ensure-locale-cookie';
 import { getSessionCookie } from 'better-auth/cookies';
+import { authClient } from './lib/auth/client';
 
 const intlMiddleware = createIntlMiddleware(routing);
+
+function clearStaleAuthCookies(request: NextRequest, response: NextResponse) {
+  for (const cookie of request.cookies.getAll()) {
+    if (cookie.name.includes('better-auth')) {
+      response.cookies.delete(cookie.name);
+    }
+  }
+}
 
 export async function proxy(request: NextRequest) {
   const response = intlMiddleware(request);
@@ -21,12 +30,22 @@ export async function proxy(request: NextRequest) {
     request.headers.get('accept')?.includes('text/html') &&
     /Mozilla|Chrome|Safari|Firefox|Edge/i.test(request.headers.get('user-agent') || '');
 
-  const session = getSessionCookie(request);
+  const hasSessionCookie = getSessionCookie(request);
 
   /**
    * Redirect user if not logged in
    */
-  if (session && isAnonOnly(pathname)) {
+  if (hasSessionCookie && isAnonOnly(pathname)) {
+    const { data: session } = await authClient.getSession({
+      fetchOptions: { headers: request.headers },
+    });
+
+    if (!session) {
+      clearStaleAuthCookies(request, response);
+      ensureLocaleCookie(request, response, locale);
+      return response;
+    }
+
     if (!isBrowser) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
@@ -42,7 +61,7 @@ export async function proxy(request: NextRequest) {
   /**
    * Redirect user if logged in
    */
-  if (!session && isProtected(pathname)) {
+  if (!hasSessionCookie && isProtected(pathname)) {
     if (!isBrowser) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
