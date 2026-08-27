@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Button } from '../ui/button';
+import { Button } from '@libs/ui/components/button';
 import { useAuth } from '@/context/auth-context';
 
 export function ConsentButton() {

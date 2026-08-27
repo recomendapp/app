@@ -1,9 +1,9 @@
 'use client';
 
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ScrollArea } from '@libs/ui/components/scroll-area';
 import { Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../Modal';
 import { useModal } from '@/context/modal-context';
-import { Card } from '@/components/ui/card';
+import { Card } from '@libs/ui/components/card';
 import { upperFirst } from 'lodash';
 import { useFormatter, useLocale, useTranslations } from 'next-intl';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -14,9 +14,9 @@ import {
   userMovieWatchedDatesInfiniteOptions,
 } from '@libs/query-client';
 import { useAuth } from '@/context/auth-context';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@libs/ui/components/popover';
+import { Button } from '@libs/ui/components/button';
+import { Calendar } from '@libs/ui/components/calendar';
 import { useCallback, useEffect } from 'react';
 import { enUS, fr } from 'date-fns/locale';
 import { Icons } from '@/config/icons';

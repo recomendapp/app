@@ -9,7 +9,7 @@ import { Icons } from '@/config/icons';
 import { getServerDevice } from '@/utils/get-device';
 import { ThemeProvider } from 'next-themes';
 import { UIProvider } from './ui-context';
-import { TooltipProvider } from '@/components/ui/tooltip';
+import { TooltipProvider } from '@libs/ui/components/tooltip';
 import { ModalProvider } from './modal-context';
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';

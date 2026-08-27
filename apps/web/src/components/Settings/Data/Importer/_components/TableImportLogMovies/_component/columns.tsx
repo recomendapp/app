@@ -6,7 +6,7 @@ import { upperFirst } from 'lodash';
 import { useQuery } from '@tanstack/react-query';
 import { ImportJobLogMovie } from '@libs/api-js';
 import { movieLogOptions, useImportPatchLogMovieMutation } from '@libs/query-client';
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import { HeartIcon, Undo2Icon, XIcon } from 'lucide-react';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 import { useAuth } from '@/context/auth-context';

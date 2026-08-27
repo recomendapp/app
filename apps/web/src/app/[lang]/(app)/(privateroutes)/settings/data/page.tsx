@@ -1,4 +1,4 @@
-import { Separator } from '@/components/ui/separator';
+import { Separator } from '@libs/ui/components/separator';
 import { getTranslations } from 'next-intl/server';
 import { Importer } from '@/components/Settings/Data/Importer/Importer';
 import { Exporter } from '@/components/Settings/Data/Exporter/Exporter';

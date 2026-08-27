@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { capitalize } from 'lodash';
 import { Share2 } from 'lucide-react';
@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 export default function ButtonShare({
   url,
   icon,
-  className
+  className,
 }: {
   url: string;
   icon?: boolean;

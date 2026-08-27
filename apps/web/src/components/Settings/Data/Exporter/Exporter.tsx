@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { exportSourcesListAllOptions } from '@libs/query-client';

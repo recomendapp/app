@@ -8,7 +8,7 @@ import {
   PaginationEllipsis,
   PaginationItem,
 } from '@/components/ui/pagination';
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 
 export function ImporterJobsPagination({
   page,

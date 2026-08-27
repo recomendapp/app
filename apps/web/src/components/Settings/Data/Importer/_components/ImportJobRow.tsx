@@ -2,8 +2,8 @@
 
 import { ImportJob } from '@libs/api-js';
 import { useImportDeleteMutation } from '@libs/query-client';
-import { Badge, badgeVariants } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Badge, badgeVariants } from '@libs/ui/components/badge';
+import { Button } from '@libs/ui/components/button';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,7 +14,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+} from '@libs/ui/components/alert-dialog';
 import { Loader2Icon, TrashIcon } from 'lucide-react';
 import { useFormatter, useTranslations } from 'next-intl';
 import { VariantProps } from 'class-variance-authority';

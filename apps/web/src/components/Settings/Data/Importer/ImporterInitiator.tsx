@@ -1,10 +1,10 @@
 'use client';
 
-import { Input } from '@/components/ui/input';
+import { Input } from '@libs/ui/components/input';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ImporterSource } from './Importer';
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import { CheckCircle2Icon, Loader2Icon, UploadIcon, XCircleIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
@@ -22,7 +22,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/accordion';
+} from '@libs/ui/components/accordion';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -30,7 +30,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+} from '@libs/ui/components/breadcrumb';
 
 import {
   Select,
@@ -38,7 +38,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@libs/ui/components/select';
 import { ModalHeader, ModalTitle, ModalBody, ModalFooter } from '@/components/Modals/Modal';
 import {
   AlertDialog,
@@ -50,7 +50,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+} from '@libs/ui/components/alert-dialog';
 
 import { ImporterCategoryList, ReviewCategory } from './_components/ImporterCategoryList';
 import { ReviewCategoryLogMovies } from './_components/ReviewCategoryLogMovies';

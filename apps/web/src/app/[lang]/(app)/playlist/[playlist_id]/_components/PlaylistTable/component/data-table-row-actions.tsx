@@ -2,14 +2,14 @@
 
 import { Link } from '@/lib/i18n/navigation';
 import { Column, Row, Table } from '@tanstack/react-table';
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@libs/ui/components/dropdown-menu';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';

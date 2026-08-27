@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
 import { useAuth } from '@/context/auth-context';
 import { useModal } from '@/context/modal-context';
 import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from '../Modal';
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import { UserCogIcon } from 'lucide-react';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { ModalPlaylistMembers } from './ModalPlaylistMembers';
@@ -17,11 +17,7 @@ interface ModalPlaylistProps extends ModalType {
   onSave?: (data: Playlist) => void;
 }
 
-export function ModalPlaylist({
-  playlist,
-  onSave,
-  ...props
-} : ModalPlaylistProps) {
+export function ModalPlaylist({ playlist, onSave, ...props }: ModalPlaylistProps) {
   const t = useTranslations();
   const { user } = useAuth();
   const { openModal, closeModal } = useModal();
@@ -31,16 +27,20 @@ export function ModalPlaylist({
   return (
     <Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
       <ModalHeader>
-        <ModalTitle className='flex gap-4 items-center'>
-          {playlist ? upperFirst(t('common.messages.edit_playlist')) : upperFirst(t('common.messages.create_a_playlist'))}
+        <ModalTitle className="flex gap-4 items-center">
+          {playlist
+            ? upperFirst(t('common.messages.edit_playlist'))
+            : upperFirst(t('common.messages.create_a_playlist'))}
           {playlist && (
-            <TooltipBox tooltip={upperFirst(t('common.messages.guest', { count: 2, gender: 'male' }))}>
+            <TooltipBox
+              tooltip={upperFirst(t('common.messages.guest', { count: 2, gender: 'male' }))}
+            >
               <Button
-              variant={'outline'}
-              size={'icon'}
-              onClick={() => openModal(ModalPlaylistMembers, { playlist: playlist })}
+                variant={'outline'}
+                size={'icon'}
+                onClick={() => openModal(ModalPlaylistMembers, { playlist: playlist })}
               >
-                <UserCogIcon size={20}/>
+                <UserCogIcon size={20} />
               </Button>
             </TooltipBox>
           )}
@@ -48,13 +48,13 @@ export function ModalPlaylist({
       </ModalHeader>
       <ModalBody>
         <PlaylistForm
-        onSave={(data) => {
-          onSave?.(data);
-          closeModal(props.id);
-        }}
-        playlist={playlist}
+          onSave={(data) => {
+            onSave?.(data);
+            closeModal(props.id);
+          }}
+          playlist={playlist}
         />
       </ModalBody>
     </Modal>
-  )
+  );
 }

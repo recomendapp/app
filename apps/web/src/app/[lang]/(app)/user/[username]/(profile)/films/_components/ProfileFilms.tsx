@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import { useCallback, useEffect, useMemo } from 'react';
 import Loader from '@/components/Loader';
 import { useInView } from 'react-intersection-observer';
@@ -10,50 +10,52 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@libs/ui/components/select';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { useSearchParams } from 'next/navigation';
-import { z } from "zod";
+import { z } from 'zod';
 import { CardMovie } from '@/components/Card/CardMovie';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { ButtonGroup } from '@/components/ui/button-group';
+import { ButtonGroup } from '@libs/ui/components/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { Icons } from '@/config/icons';
-import { Spinner } from '@/components/ui/spinner';
+import { Spinner } from '@libs/ui/components/spinner';
 import { LayoutGridIcon, ListIcon } from 'lucide-react';
 import { userMovieLogsInfiniteOptions } from '@libs/query-client';
 import { UserSummary } from '@libs/api-js';
 
-const DISPLAY = ["grid", "row"] as const;
-type SortBy = "rating" | "updated_at" | "first_watched_at" | "random";
-const DEFAULT_DISPLAY = "grid";
-const DEFAULT_SORT_BY: SortBy = "first_watched_at";
-const DEFAULT_SORT_ORDER = "desc";
+const DISPLAY = ['grid', 'row'] as const;
+type SortBy = 'rating' | 'updated_at' | 'first_watched_at' | 'random';
+const DEFAULT_DISPLAY = 'grid';
+const DEFAULT_SORT_BY: SortBy = 'first_watched_at';
+const DEFAULT_SORT_ORDER = 'desc';
 
 // Display
 const displaySchema = z.enum(DISPLAY);
 const getValidatedDisplay = (display: string | null): z.infer<typeof displaySchema> => {
-  return displaySchema.safeParse(display).success ? display as z.infer<typeof displaySchema> : DEFAULT_DISPLAY;
+  return displaySchema.safeParse(display).success
+    ? (display as z.infer<typeof displaySchema>)
+    : DEFAULT_DISPLAY;
 };
 
 // SORT BY
-const sortBySchema = z.enum(["rating", "updated_at", "first_watched_at", "random"]);
+const sortBySchema = z.enum(['rating', 'updated_at', 'first_watched_at', 'random']);
 const getValidatedSortBy = (order?: string | null): z.infer<typeof sortBySchema> => {
-  return sortBySchema.safeParse(order).success ? order! as z.infer<typeof sortBySchema> : DEFAULT_SORT_BY;
+  return sortBySchema.safeParse(order).success
+    ? (order! as z.infer<typeof sortBySchema>)
+    : DEFAULT_SORT_BY;
 };
 
 // SORT ORDER
-const sortOrderSchema = z.enum(["asc", "desc"]);
+const sortOrderSchema = z.enum(['asc', 'desc']);
 const getValidatedSortOrder = (order?: string | null): z.infer<typeof sortOrderSchema> => {
-  return sortOrderSchema.safeParse(order).success ? order! as z.infer<typeof sortOrderSchema> : DEFAULT_SORT_ORDER;
-}
+  return sortOrderSchema.safeParse(order).success
+    ? (order! as z.infer<typeof sortOrderSchema>)
+    : DEFAULT_SORT_ORDER;
+};
 
-export default function ProfileFilms({
-  user
-} : {
-  user: UserSummary,
-}) {
+export default function ProfileFilms({ user }: { user: UserSummary }) {
   const t = useTranslations();
   const searchParams = useSearchParams();
   const display = getValidatedDisplay(searchParams.get('display'));
@@ -67,57 +69,89 @@ export default function ProfileFilms({
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useInfiniteQuery(userMovieLogsInfiniteOptions({
-    userId: user.id,
-    filters: {
-      sort_by: sortBy,
-      sort_order: sortOrder,
-    }
-  }))
+  } = useInfiniteQuery(
+    userMovieLogsInfiniteOptions({
+      userId: user.id,
+      filters: {
+        sort_by: sortBy,
+        sort_order: sortOrder,
+      },
+    }),
+  );
 
-  const sortOptions = useMemo((): { value: SortBy, label: string }[] => [
-    { value: "updated_at", label: upperFirst(t('common.messages.updated_at')) },
-    { value: "first_watched_at", label: upperFirst(t('common.messages.first_watched_at')) },
-    { value: "random", label: upperFirst(t('common.messages.random')) },
-    { value: "rating", label: upperFirst(t('common.messages.rating')) },
-  ], [t]);
+  const sortOptions = useMemo(
+    (): { value: SortBy; label: string }[] => [
+      { value: 'updated_at', label: upperFirst(t('common.messages.updated_at')) },
+      { value: 'first_watched_at', label: upperFirst(t('common.messages.first_watched_at')) },
+      { value: 'random', label: upperFirst(t('common.messages.random')) },
+      { value: 'rating', label: upperFirst(t('common.messages.rating')) },
+    ],
+    [t],
+  );
 
-  const handleChange = useCallback(({ name, value }: { name: string, value: string }) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set(name, value);
-    window.history.pushState(null, '', `?${params.toString()}`)
-  }, [searchParams]);
+  const handleChange = useCallback(
+    ({ name, value }: { name: string; value: string }) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+      window.history.pushState(null, '', `?${params.toString()}`);
+    },
+    [searchParams],
+  );
 
   useEffect(() => {
-    if (inView && hasNextPage)
-      fetchNextPage();
-   }, [inView, hasNextPage, activities, fetchNextPage]);
+    if (inView && hasNextPage) fetchNextPage();
+  }, [inView, hasNextPage, activities, fetchNextPage]);
 
   return (
     <div className="@container/profile-collection flex flex-col gap-2">
       <div className="flex justify-end items-center">
-        <ButtonGroup className='justify-end'>
+        <ButtonGroup className="justify-end">
           <ButtonGroup>
-            <TooltipBox tooltip={upperFirst(sortOrder === 'asc' ? t('common.messages.order_asc') : t('common.messages.order_desc'))}>
-              <Button variant={'outline'} onClick={() => handleChange({ name: 'sort_order', value: sortOrder === 'desc' ? 'asc' : 'desc' })}>
+            <TooltipBox
+              tooltip={upperFirst(
+                sortOrder === 'asc'
+                  ? t('common.messages.order_asc')
+                  : t('common.messages.order_desc'),
+              )}
+            >
+              <Button
+                variant={'outline'}
+                onClick={() =>
+                  handleChange({ name: 'sort_order', value: sortOrder === 'desc' ? 'asc' : 'desc' })
+                }
+              >
                 {sortOrder === 'desc' ? <Icons.orderDesc /> : <Icons.orderAsc />}
               </Button>
             </TooltipBox>
-            <Select defaultValue={sortBy} onValueChange={(e) => handleChange({ name: 'sort_by', value: e })}>
+            <Select
+              defaultValue={sortBy}
+              onValueChange={(e) => handleChange({ name: 'sort_by', value: e })}
+            >
               <SelectTrigger className="w-fit">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent align="end">
                 {sortOptions.map((sort) => (
-                  <SelectItem key={sort.value} value={sort.value}>{sort.label}</SelectItem>
+                  <SelectItem key={sort.value} value={sort.value}>
+                    {sort.label}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </ButtonGroup>
           <ButtonGroup>
-            <Button variant={'outline'} onClick={(e) => handleChange({ name: 'display', value: display === 'grid' ? 'row' : 'grid' })}>
+            <Button
+              variant={'outline'}
+              onClick={(e) =>
+                handleChange({ name: 'display', value: display === 'grid' ? 'row' : 'grid' })
+              }
+            >
               {display === 'grid' ? <LayoutGridIcon /> : <ListIcon />}
-              <span>{display === 'grid' ? upperFirst(t('common.messages.grid', { count: 1 })) : upperFirst(t('common.messages.list', { count: 1 }))}</span>
+              <span>
+                {display === 'grid'
+                  ? upperFirst(t('common.messages.grid', { count: 1 }))
+                  : upperFirst(t('common.messages.list', { count: 1 }))}
+              </span>
             </Button>
           </ButtonGroup>
         </ButtonGroup>
@@ -136,10 +170,14 @@ export default function ProfileFilms({
               }
           `}
         >
-          {activities.pages.map((page, i) => (
+          {activities.pages.map((page, i) =>
             page?.data.map(({ movie, ...log }, index) => (
-                <CardMovie
-                ref={(i === activities.pages?.length - 1) && (index === page?.data.length - 1) ? ref : undefined }
+              <CardMovie
+                ref={
+                  i === activities.pages?.length - 1 && index === page?.data.length - 1
+                    ? ref
+                    : undefined
+                }
                 key={index}
                 variant={display === 'grid' ? 'poster' : 'row'}
                 movie={movie}
@@ -147,16 +185,16 @@ export default function ProfileFilms({
                   log: log,
                   user: user,
                 }}
-                className='w-full'
-                />
-            ))
-          ))}
-          {isFetchingNextPage && (
-            <Loader/>
+                className="w-full"
+              />
+            )),
           )}
+          {isFetchingNextPage && <Loader />}
         </div>
       ) : (
-        <p className="text-center text-muted-foreground">{upperFirst(t('common.messages.no_activity'))}</p>
+        <p className="text-center text-muted-foreground">
+          {upperFirst(t('common.messages.no_activity'))}
+        </p>
       )}
     </div>
   );

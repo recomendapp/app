@@ -7,9 +7,9 @@ import {
   CarouselNext,
   CarouselPlayPause,
   CarouselPrevious,
-} from '@/components/ui/carousel';
-import { Card, CardContent, CardFooter, CardHeader } from '../ui/card';
-import { Button } from '../ui/button';
+} from '@libs/ui/components/carousel';
+import { Card, CardContent, CardFooter, CardHeader } from '@libs/ui/components/card';
+import { Button } from '@libs/ui/components/button';
 import { Link } from '@/lib/i18n/navigation';
 import { DateOnlyYearTooltip } from '../utils/Date';
 import { SendIcon } from 'lucide-react';
@@ -18,7 +18,7 @@ import Autoplay from 'embla-carousel-autoplay';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { TooltipBox } from '../Box/TooltipBox';
 import { cn } from '@/lib/utils';
-import { Skeleton } from '../ui/skeleton';
+import { Skeleton } from '@libs/ui/components/skeleton';
 import { useAuth } from '@/context/auth-context';
 import { useTranslations } from 'next-intl';
 import { BadgeMedia } from '../Badge/BadgeMedia';

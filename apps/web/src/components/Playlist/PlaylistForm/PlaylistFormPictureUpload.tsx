@@ -1,7 +1,7 @@
 'use client';
 
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { AspectRatio } from '@libs/ui/components/aspect-ratio';
 import { Loader2 } from 'lucide-react';
 import { Dispatch } from 'react';
 import { Playlist } from '@libs/api-js';
@@ -29,11 +29,7 @@ const PlaylistFormPictureUpload = ({
             </div>
           )}
           <ImageWithFallback
-            src={
-              newPoster
-                ? URL.createObjectURL(newPoster)
-                : playlist?.poster ?? ''
-            }
+            src={newPoster ? URL.createObjectURL(newPoster) : (playlist?.poster ?? '')}
             alt={playlist?.title ?? ''}
             fill
             className="rounded-md object-cover"

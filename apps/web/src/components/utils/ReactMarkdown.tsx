@@ -1,7 +1,7 @@
 import { Link } from '@/lib/i18n/navigation';
 import React from 'react';
 import ReactMarkdownPrimitive from 'react-markdown';
-import { buttonVariants } from '../ui/button';
+import { buttonVariants } from '@libs/ui/components/button';
 import { cn } from '@/lib/utils';
 
 export const ReactMarkdown = React.forwardRef<

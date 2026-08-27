@@ -8,8 +8,8 @@ import {
   SidebarMenuItem,
   SidebarRail,
   SidebarSeparator,
-} from '@/components/ui/sidebar';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+} from '@libs/ui/components/sidebar';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@libs/ui/components/tooltip';
 import { Icons } from '@/config/icons';
 import { SidebarLeftRoutes } from './SidebarLeftRoutes';
 import { useUI } from '@/context/ui-context';

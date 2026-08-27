@@ -7,9 +7,9 @@ import { cn } from '@/lib/utils';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import { Button } from '@/components/ui/button';
-import { ButtonGroup } from '@/components/ui/button-group';
-import { Input } from '@/components/ui/input';
+import { Button } from '@libs/ui/components/button';
+import { ButtonGroup } from '@libs/ui/components/button-group';
+import { Input } from '@libs/ui/components/input';
 import { Icons } from '@/config/icons';
 
 export default function SearchBar({ className }: React.HTMLAttributes<HTMLDivElement>) {

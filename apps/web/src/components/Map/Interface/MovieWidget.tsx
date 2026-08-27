@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import { useMap } from '../../../context/map-context';
 import { TriangleAlert, XIcon } from 'lucide-react';
 import MediaPoster from '@/components/Media/MediaPoster';

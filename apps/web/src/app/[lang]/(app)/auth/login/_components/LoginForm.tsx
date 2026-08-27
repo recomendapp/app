@@ -5,7 +5,7 @@ import { Icons } from '@/config/icons';
 import { Link } from '@/lib/i18n/navigation';
 import { useAuth } from '@/context/auth-context';
 import { useCallback, useMemo, useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import { RectangleEllipsisIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';

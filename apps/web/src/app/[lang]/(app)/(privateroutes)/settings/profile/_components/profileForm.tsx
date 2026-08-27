@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import {
   Form,
   FormControl,
@@ -12,9 +12,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+} from '@libs/ui/components/form';
+import { Input } from '@libs/ui/components/input';
+import { Textarea } from '@libs/ui/components/textarea';
 import toast from 'react-hot-toast';
 import PictureUpload from './pictureUpload';
 import { useAuth } from '@/context/auth-context';
@@ -49,7 +49,7 @@ export function ProfileForm() {
       .max(150, {
         message: t('pages.settings.profile.bio.form.max_length'),
       })
-      .optional()
+      .optional(),
   });
 
   type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -65,45 +65,55 @@ export function ProfileForm() {
     mode: 'onChange',
   });
 
-  const handleSubmit = useCallback(async (data: ProfileFormValues) => {
-    if (!user) return;
-    if (!newAvatar && user.name === data.name && user.bio === data.bio) return;
-    const avatar: File | null | undefined = newAvatar ? await compressPicture(newAvatar, 400, 400) : undefined;
-    await updateProfile({
-      body: {
-        name: data.name?.trim(),
-        bio: data.bio?.trim() || null,
-        avatar,
-      }
-    }, {
-      onSuccess: () => {
-        toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
-        setNewAvatar(undefined);
-      },
-      onError: () => {
-        toast.error(upperFirst(t('common.messages.an_error_occurred')));
-      },
-    });
-  }, [newAvatar, t, updateProfile, user]);
+  const handleSubmit = useCallback(
+    async (data: ProfileFormValues) => {
+      if (!user) return;
+      if (!newAvatar && user.name === data.name && user.bio === data.bio) return;
+      const avatar: File | null | undefined = newAvatar
+        ? await compressPicture(newAvatar, 400, 400)
+        : undefined;
+      await updateProfile(
+        {
+          body: {
+            name: data.name?.trim(),
+            bio: data.bio?.trim() || null,
+            avatar,
+          },
+        },
+        {
+          onSuccess: () => {
+            toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
+            setNewAvatar(undefined);
+          },
+          onError: () => {
+            toast.error(upperFirst(t('common.messages.an_error_occurred')));
+          },
+        },
+      );
+    },
+    [newAvatar, t, updateProfile, user],
+  );
 
   const handleDeleteAvatar = useCallback(async () => {
-    await updateProfile({
-      body: {
-        avatar: null,
-      }
-    }, {
-      onSuccess: () => {
-        toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
+    await updateProfile(
+      {
+        body: {
+          avatar: null,
+        },
       },
-      onError: () => {
-        toast.error(upperFirst(t('common.messages.an_error_occurred')));
+      {
+        onSuccess: () => {
+          toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
+        },
+        onError: () => {
+          toast.error(upperFirst(t('common.messages.an_error_occurred')));
+        },
       },
-    });
+    );
   }, [updateProfile, t]);
 
   useEffect(() => {
-    if (user)
-    {
+    if (user) {
       form.setValue('name', user.name);
       form.setValue('bio', user?.bio ?? undefined);
     }
@@ -122,7 +132,7 @@ export function ProfileForm() {
             setNewAvatar={setNewAvatar}
           />
           {user.avatar && (
-            <Button type='button' variant={'destructive'} onClick={handleDeleteAvatar}>
+            <Button type="button" variant={'destructive'} onClick={handleDeleteAvatar}>
               {t('pages.settings.profile.avatar.delete')}
             </Button>
           )}

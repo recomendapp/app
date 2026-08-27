@@ -1,13 +1,13 @@
 'use client';
 
 import { useAuth } from '@/context/auth-context';
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import { useModal } from '@/context/modal-context';
 import { useCallback, useMemo, useState } from 'react';
 import { Check } from 'lucide-react';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { Badge } from '@/components/ui/badge';
+import { AspectRatio } from '@libs/ui/components/aspect-ratio';
+import { Badge } from '@libs/ui/components/badge';
 import {
   Modal,
   ModalBody,
@@ -26,7 +26,7 @@ import { Playlist, PlaylistsAddTargetsControllerListAllData } from '@libs/api-js
 import z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormField } from '@/components/ui/form';
+import { FormField } from '@libs/ui/components/form';
 import {
   InputGroup,
   InputGroupAddon,
@@ -34,9 +34,9 @@ import {
   InputGroupInput,
   InputGroupText,
   InputGroupTextarea,
-} from '@/components/ui/input-group';
+} from '@libs/ui/components/input-group';
 import { cn } from '@/lib/utils';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { ScrollArea, ScrollBar } from '@libs/ui/components/scroll-area';
 import toast from 'react-hot-toast';
 import { ModalPlaylist } from './ModalPlaylist';
 import Fuse from 'fuse.js';

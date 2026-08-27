@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { Button } from '@libs/ui/components/button';
+import { ScrollArea, ScrollBar } from '@libs/ui/components/scroll-area';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
 
 type Route = {

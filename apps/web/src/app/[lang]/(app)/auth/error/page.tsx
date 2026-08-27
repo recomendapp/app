@@ -3,7 +3,7 @@
 import { Icons } from '@/config/icons';
 import { Images } from '@/config/images';
 import { useRandomImage } from '@/hooks/use-random-image';
-import { Link } from "@/lib/i18n/navigation";
+import { Link } from '@/lib/i18n/navigation';
 import {
   Card,
   CardContent,
@@ -11,10 +11,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Alert, AlertTitle } from '@/components/ui/alert';
+} from '@libs/ui/components/card';
+import { Alert, AlertTitle } from '@libs/ui/components/alert';
 import { useSearchParams } from 'next/navigation';
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import { useTranslations } from 'next-intl';
 
 export default function AuthError() {
@@ -33,20 +33,20 @@ export default function AuthError() {
       }}
     >
       <Card className="w-full max-w-[400px]">
-        <CardHeader className='gap-2'>
-          <CardTitle className='inline-flex gap-2 items-center justify-center'>
-            <Icons.site.icon className='fill-accent-yellow w-8' />
+        <CardHeader className="gap-2">
+          <CardTitle className="inline-flex gap-2 items-center justify-center">
+            <Icons.site.icon className="fill-accent-yellow w-8" />
             {t('label')}
           </CardTitle>
           <CardDescription>{t('description')}</CardDescription>
         </CardHeader>
-        <CardContent className='grid gap-4'>
+        <CardContent className="grid gap-4">
           <Alert>
-            <AlertTitle className='select-all'>{errorMsg}</AlertTitle>
+            <AlertTitle className="select-all">{errorMsg}</AlertTitle>
           </Alert>
         </CardContent>
         <CardFooter>
-          <Button className='w-full' asChild>
+          <Button className="w-full" asChild>
             <Link href="/auth/login">{t('return_to_login')}</Link>
           </Button>
         </CardFooter>

@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import { cn } from '@/lib/utils';
 import { ProfileFolloweesModal } from '@/components/Modals/profiles/ProfileFolloweesModal';
 import { useModal } from '@/context/modal-context';
@@ -16,10 +16,10 @@ interface ProfileFolloweesButtonProps {
 }
 
 export const ProfileFolloweesButton = ({
-	userId,
-	className,
+  userId,
+  className,
   disabled = false,
-} : ProfileFolloweesButtonProps) => {
+}: ProfileFolloweesButtonProps) => {
   const t = useTranslations();
   const { createModal } = useModal();
 
@@ -36,13 +36,13 @@ export const ProfileFolloweesButton = ({
   return (
     <TooltipBox tooltip={upperFirst(t('common.messages.see_followees'))}>
       <Button
-      variant={'outline'}
-      onClick={handleOpenFolloweesModal}
-      className={cn(className)}
-      disabled={disabled || !userId}
+        variant={'outline'}
+        onClick={handleOpenFolloweesModal}
+        className={cn(className)}
+        disabled={disabled || !userId}
       >
-      {t('common.messages.followee', { count: 2 })}
+        {t('common.messages.followee', { count: 2 })}
       </Button>
     </TooltipBox>
   );
-}
+};

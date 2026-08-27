@@ -4,7 +4,13 @@ import { LoginForm } from './_components/LoginForm';
 import { Icons } from '@/config/icons';
 import { Images } from '@/config/images';
 import { useSearchParams } from 'next/navigation';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@libs/ui/components/card';
 import { useRandomImage } from '@/hooks/use-random-image';
 import { useTranslations } from 'next-intl';
 

@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import {
   Form,
   FormControl,
@@ -12,8 +12,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+} from '@libs/ui/components/form';
+import { RadioGroup, RadioGroupItem } from '@libs/ui/components/radio-group';
 import { cn } from '@/lib/utils';
 import { useLocale, useTranslations } from 'next-intl';
 import {
@@ -23,7 +23,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from '@libs/ui/components/command';
 import { useTheme } from 'next-themes';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
@@ -31,7 +31,7 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { Icons } from '@/config/icons';
 import Loader from '@/components/Loader';
 import { useLocalizedLanguageName } from '@/hooks/use-localized-language-name';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@libs/ui/components/popover';
 import { ChevronsUpDown } from 'lucide-react';
 import { upperFirst } from 'lodash';
 import { supportedLocales } from '@libs/i18n';
@@ -60,10 +60,13 @@ export function AppearanceForm() {
 
   type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
 
-  const defaultValues = useMemo(() => ({
-    language: locale,
-    theme: theme as 'light' | 'dark' | undefined,
-  }), [locale, theme]);
+  const defaultValues = useMemo(
+    () => ({
+      language: locale,
+      theme: theme as 'light' | 'dark' | undefined,
+    }),
+    [locale, theme],
+  );
 
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
@@ -74,33 +77,39 @@ export function AppearanceForm() {
     form.reset(defaultValues);
   }, [defaultValues]);
 
-  const handleSubmit = useCallback(async (data: AppearanceFormValues) => {
-    if (data.theme !== theme) {
-      setTheme(data.theme);
-    }
-    if (data.language !== locale) {
-      await updateProfile({
-        body: {
-          language: data.language,
-        },
-      }, {
-        onSuccess: () => {
-          router.replace(
-            {
-              pathname: pathname,
+  const handleSubmit = useCallback(
+    async (data: AppearanceFormValues) => {
+      if (data.theme !== theme) {
+        setTheme(data.theme);
+      }
+      if (data.language !== locale) {
+        await updateProfile(
+          {
+            body: {
+              language: data.language,
             },
-            {
-              locale: data.language,
-            }
-          );
-          toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
-        },
-        onError: () => {
-          toast.error(upperFirst(t('common.messages.an_error_occurred')));
-        },
-      });
-    }
-  }, [locale, pathname, router, t, theme, updateProfile, setTheme]);
+          },
+          {
+            onSuccess: () => {
+              router.replace(
+                {
+                  pathname: pathname,
+                },
+                {
+                  locale: data.language,
+                },
+              );
+              toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
+            },
+            onError: () => {
+              toast.error(upperFirst(t('common.messages.an_error_occurred')));
+            },
+          },
+        );
+      }
+    },
+    [locale, pathname, router, t, theme, updateProfile, setTheme],
+  );
 
   if (!user) return <Loader />;
 
@@ -111,7 +120,7 @@ export function AppearanceForm() {
           control={form.control}
           name="language"
           render={({ field }) => (
-            <FormItem className='flex flex-col'>
+            <FormItem className="flex flex-col">
               <FormLabel>{t('pages.settings.appearance.language.label')}</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
@@ -120,40 +129,44 @@ export function AppearanceForm() {
                       variant={'outline'}
                       role="combobox"
                       className={cn(
-                        "max-w-[250px] justify-between",
+                        'max-w-[250px] justify-between',
                         !field.value && 'text-muted-foreground',
                       )}
                     >
-                      <span className='line-clamp-1'>
-                      {field.value ? (
-                        (() => {
-                          const locale = locales.find((locale) => locale.language === field.value);
-                          return `${locale?.flag} ${locale?.iso_639_1} (${locale?.iso_3166_1})`;
-                        })()
-                      ) : t('pages.settings.appearance.language.placeholder')}
+                      <span className="line-clamp-1">
+                        {field.value
+                          ? (() => {
+                              const locale = locales.find(
+                                (locale) => locale.language === field.value,
+                              );
+                              return `${locale?.flag} ${locale?.iso_639_1} (${locale?.iso_3166_1})`;
+                            })()
+                          : t('pages.settings.appearance.language.placeholder')}
                       </span>
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent align='start' className='max-w-xs p-0'>
+                <PopoverContent align="start" className="max-w-xs p-0">
                   <Command>
-                    <CommandInput placeholder={t('pages.settings.appearance.language.placeholder')} />
+                    <CommandInput
+                      placeholder={t('pages.settings.appearance.language.placeholder')}
+                    />
                     <CommandList>
-                      <CommandEmpty>{t('pages.settings.appearance.language.not_found')}</CommandEmpty>
+                      <CommandEmpty>
+                        {t('pages.settings.appearance.language.not_found')}
+                      </CommandEmpty>
                       <CommandGroup>
                         {locales.map((locale, i) => (
                           <CommandItem
-                          key={i}
-                          value={`${locale.iso_639_1} ${locale.iso_3166_1}`}
-                          onSelect={() => form.setValue('language', locale.language)}
+                            key={i}
+                            value={`${locale.iso_639_1} ${locale.iso_3166_1}`}
+                            onSelect={() => form.setValue('language', locale.language)}
                           >
                             <Icons.check
                               className={cn(
-                                "mr-2 h-4 w-4",
-                                locale.language === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
+                                'mr-2 h-4 w-4',
+                                locale.language === field.value ? 'opacity-100' : 'opacity-0',
                               )}
                             />
                             {locale.flag} {locale.iso_639_1} ({locale.iso_3166_1})
@@ -177,9 +190,7 @@ export function AppearanceForm() {
           render={({ field }) => (
             <FormItem className="space-y-1">
               <FormLabel>{t('pages.settings.appearance.theme.label')}</FormLabel>
-              <FormDescription>
-                {t('pages.settings.appearance.theme.description')}
-              </FormDescription>
+              <FormDescription>{t('pages.settings.appearance.theme.description')}</FormDescription>
               <FormMessage />
               <RadioGroup
                 onValueChange={field.onChange}

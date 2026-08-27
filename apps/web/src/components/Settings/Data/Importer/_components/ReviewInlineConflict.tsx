@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { Icons } from '@/config/icons';
 import { GitMergeIcon } from 'lucide-react';

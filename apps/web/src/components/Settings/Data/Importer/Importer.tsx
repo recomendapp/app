@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { importsListPaginatedOptions, importSourcesListAllOptions } from '@libs/query-client';
 import { ImportSource } from '@libs/api-js';
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import { PlusIcon } from 'lucide-react';
 import { ImporterInitiator } from './ImporterInitiator';
 import { Modal } from '@/components/Modals/Modal';

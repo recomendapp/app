@@ -2,13 +2,13 @@
 
 import { Link } from '@/lib/i18n/navigation';
 import { Icons } from '@/config/icons';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Button } from '@libs/ui/components/button';
+import { Input } from '@libs/ui/components/input';
+import { Label } from '@libs/ui/components/label';
 import * as z from 'zod';
 import { useAuth } from '@/context/auth-context';
 import { useCallback, useMemo, useState } from 'react';
-import { InputPassword } from '@/components/ui/input-password';
+import { InputPassword } from '@libs/ui/components/input-password';
 import { useTranslations } from 'next-intl';
 
 const identifierEmailSchema = z.string().email();

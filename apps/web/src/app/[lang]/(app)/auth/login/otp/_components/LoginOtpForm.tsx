@@ -1,15 +1,15 @@
 'use client';
 
 import { Icons } from '@/config/icons';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Button } from '@libs/ui/components/button';
+import { Input } from '@libs/ui/components/input';
+import { Label } from '@libs/ui/components/label';
 import toast from 'react-hot-toast';
 import * as z from 'zod';
 import { useCallback, useState } from 'react';
-import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '@libs/ui/components/input-otp';
 import { ArrowLeftIcon } from 'lucide-react';
-import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { CardContent, CardDescription, CardHeader, CardTitle } from '@libs/ui/components/card';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/lib/i18n/navigation';
 import { upperFirst } from 'lodash';
@@ -20,7 +20,7 @@ export function LoginOtpForm({
   className,
   redirectTo,
   ...props
-} : React.HTMLAttributes<HTMLDivElement> & { redirectTo: string | null }) {
+}: React.HTMLAttributes<HTMLDivElement> & { redirectTo: string | null }) {
   const t = useTranslations('pages.auth.login');
   const common = useTranslations('common');
   const queryClient = useQueryClient();
@@ -31,96 +31,107 @@ export function LoginOtpForm({
   const numberOfDigits = 6;
   const [showOtp, setShowOtp] = useState<boolean>(false);
 
-  const emailSchema = z
-    .email({
-      message: common('form.email.error.invalid'),
-    });
+  const emailSchema = z.email({
+    message: common('form.email.error.invalid'),
+  });
 
-  const handleSubmit = useCallback(async (event?: React.SyntheticEvent) => {
-    event?.preventDefault();
-    try {
-      setIsLoading(true);
-      emailSchema.parse(email);
-      const { error } = await authClient.emailOtp.sendVerificationOtp({
-        email,
-        type: 'sign-in',
-      });
-      if (error) {
-        switch (error.status) {
-          default:
-            toast.error(upperFirst(common('messages.an_error_occurred')));
+  const handleSubmit = useCallback(
+    async (event?: React.SyntheticEvent) => {
+      event?.preventDefault();
+      try {
+        setIsLoading(true);
+        emailSchema.parse(email);
+        const { error } = await authClient.emailOtp.sendVerificationOtp({
+          email,
+          type: 'sign-in',
+        });
+        if (error) {
+          switch (error.status) {
+            default:
+              toast.error(upperFirst(common('messages.an_error_occurred')));
+          }
+          return;
         }
-        return;
+        setShowOtp(true);
+      } finally {
+        setIsLoading(false);
       }
-      setShowOtp(true);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [email, emailSchema, common, t]);
+    },
+    [email, emailSchema, common, t],
+  );
 
-  const handleVerifyOtp = useCallback(async (otp: string) => {
-    try {
-      setIsLoading(true);
-      const { error } = await authClient.signIn.emailOtp({
-        email,
-        otp,
-      });
-      if (error) {
-        switch (error.code) {
-          case 'INVALID_OTP':
-            toast.error(common('form.error.invalid_code'));
-            break;
-          default:
-            toast.error(upperFirst(common('messages.an_error_occurred')));
+  const handleVerifyOtp = useCallback(
+    async (otp: string) => {
+      try {
+        setIsLoading(true);
+        const { error } = await authClient.signIn.emailOtp({
+          email,
+          otp,
+        });
+        if (error) {
+          switch (error.code) {
+            case 'INVALID_OTP':
+              toast.error(common('form.error.invalid_code'));
+              break;
+            default:
+              toast.error(upperFirst(common('messages.an_error_occurred')));
+          }
+          return;
         }
-        return;
+        toast.success(t('otp.form.success'));
+        router.push(redirectTo || '/');
+        await queryClient.resetQueries();
+      } finally {
+        setIsLoading(false);
       }
-      toast.success(t('otp.form.success'));
-      router.push(redirectTo || '/');
-      await queryClient.resetQueries();
-    } finally {
-      setIsLoading(false);
-    }
-  }, [email, common, t, router, redirectTo]);
+    },
+    [email, common, t, router, redirectTo],
+  );
 
-  if (showOtp) return (
-    <>
-      <CardHeader className='p-0'>
-        <CardTitle className='flex items-center gap-2'>
-          <Button variant={"ghost"} onClick={() => setShowOtp(false)}>
-            <ArrowLeftIcon className='w-6' />
-          </Button>
-          {t('otp.confirm_form.label')}
-        </CardTitle>
-        <CardDescription>
-          {t('otp.confirm_form.description', { email: email })}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className='p-0 grid gap-2 justify-items-center'>
-        <InputOTP disabled={isLoading} maxLength={numberOfDigits} onChange={(e) => e.length === numberOfDigits && handleVerifyOtp(e)}>
-          <InputOTPGroup>
-            {Array.from({ length: numberOfDigits }).map((_, index) => (
-              <InputOTPSlot key={index} index={index}/>
-            ))}
-          </InputOTPGroup>
-        </InputOTP>
-        <p className="px-8 text-center text-sm text-muted-foreground">
-          {common('form.error.not_received_code')}{' '}
-          <Button variant={"link"} className='p-0' onClick={() => handleSubmit()} disabled={isLoading}>
-            {common('form.resend_code')}
-          </Button>
-        </p>
-      </CardContent>
-    </>
-  )
+  if (showOtp)
+    return (
+      <>
+        <CardHeader className="p-0">
+          <CardTitle className="flex items-center gap-2">
+            <Button variant={'ghost'} onClick={() => setShowOtp(false)}>
+              <ArrowLeftIcon className="w-6" />
+            </Button>
+            {t('otp.confirm_form.label')}
+          </CardTitle>
+          <CardDescription>{t('otp.confirm_form.description', { email: email })}</CardDescription>
+        </CardHeader>
+        <CardContent className="p-0 grid gap-2 justify-items-center">
+          <InputOTP
+            disabled={isLoading}
+            maxLength={numberOfDigits}
+            onChange={(e) => e.length === numberOfDigits && handleVerifyOtp(e)}
+          >
+            <InputOTPGroup>
+              {Array.from({ length: numberOfDigits }).map((_, index) => (
+                <InputOTPSlot key={index} index={index} />
+              ))}
+            </InputOTPGroup>
+          </InputOTP>
+          <p className="px-8 text-center text-sm text-muted-foreground">
+            {common('form.error.not_received_code')}{' '}
+            <Button
+              variant={'link'}
+              className="p-0"
+              onClick={() => handleSubmit()}
+              disabled={isLoading}
+            >
+              {common('form.resend_code')}
+            </Button>
+          </p>
+        </CardContent>
+      </>
+    );
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="grid gap-2">
         <div className="grid gap-1">
-          <Label htmlFor="email">
-            {common('form.email.label')}
-          </Label>
+          <Label htmlFor="email">{common('form.email.label')}</Label>
           <Input
             id="email"
             type="email"
@@ -134,7 +145,7 @@ export function LoginOtpForm({
           />
         </div>
         <Button disabled={isLoading}>
-          {isLoading ? (<Icons.loader />) : null}
+          {isLoading ? <Icons.loader /> : null}
           {t('otp.form.submit')}
         </Button>
       </div>

@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Link } from "@/lib/i18n/navigation";
+import { Button } from '@libs/ui/components/button';
+import { Link } from '@/lib/i18n/navigation';
 import { UserNav } from '@/components/User/UserNav';
 import { Icons } from '@/config/icons';
 import { getTranslations } from 'next-intl/server';
@@ -9,15 +9,13 @@ import { getMe } from '@/lib/auth/server';
 export async function HeaderMinimal({ className }: React.HTMLAttributes<HTMLDivElement>) {
   const t = await getTranslations();
 
-  const {
-    data,
-  } = await getMe();
+  const { data } = await getMe();
 
   return (
     <header
       className={cn(
         'sticky top-0 z-1 bg-background flex justify-between items-center p-4 h-header w-screen',
-        className
+        className,
       )}
     >
       <Link href={'/'} className={'p-1'}>

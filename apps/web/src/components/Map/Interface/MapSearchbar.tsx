@@ -5,7 +5,7 @@ import MediaPoster from '@/components/Media/MediaPoster';
 import { SearchIcon } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import Fuse from 'fuse.js';
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import { Link } from '@/lib/i18n/navigation';
 import { LngLatLike, useMap as useMapContext } from 'react-map-gl/maplibre';
 
