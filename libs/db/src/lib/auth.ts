@@ -13,7 +13,7 @@ export const additionalFields = {
     input: false,
   },
   language: {
-    type:  'string',
+    type: 'string',
     defaultValue: defaultSupportedLocale,
     required: true,
     input: true,
@@ -30,8 +30,10 @@ export const auth = betterAuth({
     openAPI(),
     magicLink({
       disableSignUp: true,
-      sendMagicLink: async () => { /* No-op for CLI */ },
-    })
+      sendMagicLink: async () => {
+        /* No-op for CLI */
+      },
+    }),
   ],
   emailAndPassword: {
     enabled: true,
@@ -43,7 +45,9 @@ export const auth = betterAuth({
   user: {
     additionalFields: additionalFields,
   },
-  experimental: {
-    joins: true,
+  advanced: {
+    database: {
+      joins: true,
+    },
   },
 });

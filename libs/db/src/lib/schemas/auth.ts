@@ -1,12 +1,5 @@
 import { relations, sql } from 'drizzle-orm';
-import {
-  text,
-  timestamp,
-  boolean,
-  index,
-  pgSchema,
-  uuid,
-} from 'drizzle-orm/pg-core';
+import { text, timestamp, boolean, index, pgSchema, uuid } from 'drizzle-orm/pg-core';
 import { profile } from './user';
 import { supportedLanguages } from './i18n';
 
@@ -29,8 +22,8 @@ export const user = authSchema.table('user', {
   language: text('language')
     .default('en-US')
     .notNull()
-    .references(() => supportedLanguages.language, { 
-      onUpdate: 'cascade', 
+    .references(() => supportedLanguages.language, {
+      onUpdate: 'cascade',
       onDelete: 'restrict',
     }),
 });
@@ -60,6 +53,7 @@ export const account = authSchema.table(
     id: text('id').primaryKey(),
     accountId: text('account_id').notNull(),
     providerId: text('provider_id').notNull(),
+    issuer: text('issuer').notNull(),
     userId: uuid('user_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
@@ -104,7 +98,7 @@ export const userRelations = relations(user, ({ many, one }) => ({
   language: one(supportedLanguages, {
     fields: [user.language],
     references: [supportedLanguages.language],
-  })
+  }),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
