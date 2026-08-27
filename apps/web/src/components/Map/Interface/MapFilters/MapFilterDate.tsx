@@ -1,6 +1,6 @@
 import { FormItem } from '@libs/ui/components/form';
 import { Label } from '@libs/ui/components/label';
-import { SliderRange } from '@libs/ui/components/slider-range';
+import { Slider } from '@libs/ui/components/slider';
 import { useMap } from '../../../../context/map-context';
 import { useEffect, useState } from 'react';
 import useDebounce from '@/hooks/use-debounce';
@@ -31,7 +31,7 @@ export const MapFilterDate = () => {
           </TooltipBox>
         )}
       </Label>
-      <SliderRange
+      <Slider
         min={filters.date.defaultValue[0]}
         value={value}
         max={filters.date.defaultValue[1]}

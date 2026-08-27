@@ -1,7 +1,8 @@
 import { ReactQueryProvider } from '@/context/react-query-context';
 import { AuthProvider } from '@/context/auth-context';
 import { MapContext } from '@/context/map-context';
-import { NextIntlClientProvider } from 'next-intl';
+import { LocaleProvider } from '@/context/locale-context';
+import { getMessages } from 'next-intl/server';
 import { NotificationsProvider } from '@/context/notifications-context';
 import { RealtimeProvider } from '@/context/realtime-context';
 import { cookies } from 'next/headers';
@@ -26,7 +27,7 @@ export const Providers = async ({
   children: React.ReactNode;
   locale: SupportedLocale;
 }) => {
-  const [session, { data: user }, status, cookiesStore, device] = await Promise.all([
+  const [session, { data: user }, status, cookiesStore, device, messages] = await Promise.all([
     getSession(),
     getMe({
       locale,
@@ -34,6 +35,7 @@ export const Providers = async ({
     getStatus(),
     cookies(),
     getServerDevice(),
+    getMessages({ locale }),
   ]);
   // UI
   const layout = cookiesStore.get('ui:layout');
@@ -42,7 +44,7 @@ export const Providers = async ({
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
 
   return (
-    <NextIntlClientProvider locale={locale}>
+    <LocaleProvider locale={locale} messages={messages}>
       <ReactQueryProvider>
         <ApiProvider>
           <AuthProvider session={session || null} user={user || null}>
@@ -88,7 +90,7 @@ export const Providers = async ({
           </AuthProvider>
         </ApiProvider>
       </ReactQueryProvider>
-    </NextIntlClientProvider>
+    </LocaleProvider>
   );
 };
 
