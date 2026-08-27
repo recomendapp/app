@@ -1,7 +1,6 @@
 import { HeaderBox } from '@/components/Box/HeaderBox';
 import { CardUser } from '@/components/Card/CardUser';
 import { ContextMenuPlaylist } from '@/components/ContextMenu/ContextMenuPlaylist';
-import { ModalPlaylist } from '@/components/Modals/playlists/ModalPlaylist';
 import { AspectRatio } from '@libs/ui/components/aspect-ratio';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { useAuth } from '@/context/auth-context';
@@ -12,6 +11,8 @@ import { ConvertHoursMinutes } from '@/lib/utils';
 import { PlaylistWithOwner } from '@libs/api-js';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
+import { useRouter } from '@/lib/i18n/navigation';
+import { getPlaylistEditHref } from '@/utils/hrefs/get-playlist-edit-href';
 
 interface PlaylistHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   playlist: PlaylistWithOwner;
@@ -30,14 +31,13 @@ export function PlaylistHeader({
 }: PlaylistHeaderProps) {
   const { user } = useAuth();
   const t = useTranslations();
-  const { openModal, createModal } = useModal();
+  const router = useRouter();
+  const { createModal } = useModal();
   const backdrop = useRandomImage(backdrops?.map((src) => ({ src, alt: playlist.title })) || []);
 
   const openPlaylistModal = () => {
     if (playlist.userId !== user?.id) return;
-    openModal(ModalPlaylist, {
-      playlist,
-    });
+    router.push(getPlaylistEditHref(playlist.id));
   };
 
   return (

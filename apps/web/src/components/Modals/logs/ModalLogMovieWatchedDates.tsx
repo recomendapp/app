@@ -1,8 +1,7 @@
 'use client';
 
 import { ScrollArea } from '@libs/ui/components/scroll-area';
-import { Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../Modal';
-import { useModal } from '@/context/modal-context';
+import { Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle } from '../Modal';
 import { Card } from '@libs/ui/components/card';
 import { upperFirst } from 'lodash';
 import { useFormatter, useLocale, useTranslations } from 'next-intl';
@@ -24,18 +23,22 @@ import { WatchedDate } from '@libs/api-js';
 import toast from 'react-hot-toast';
 import { useInView } from 'react-intersection-observer';
 
-interface ModalLogMovieWatchedDatesProps extends ModalType {
+interface ModalLogMovieWatchedDatesProps {
   movieId: number;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onCloseEnd?: () => void;
 }
 
 export const ModalLogMovieWatchedDates = ({
   movieId,
-  ...props
+  open,
+  onOpenChange,
+  onCloseEnd,
 }: ModalLogMovieWatchedDatesProps) => {
   const t = useTranslations();
-  const { user } = useAuth();
+  const { user, session } = useAuth();
   const locale = useLocale();
-  const { closeModal } = useModal();
   const formatter = useFormatter();
   const { ref, inView } = useInView();
   const {
@@ -43,12 +46,24 @@ export const ModalLogMovieWatchedDates = ({
     hasNextPage,
     fetchNextPage,
     isFetching,
+    isError,
   } = useInfiniteQuery(
     userMovieWatchedDatesInfiniteOptions({
       userId: user?.id,
       movieId: movieId,
     }),
   );
+
+  useEffect(() => {
+    if (!session) {
+      onOpenChange(false);
+      onCloseEnd?.();
+      return;
+    }
+    if (isError) {
+      onOpenChange(false);
+    }
+  }, [session, isError, onOpenChange, onCloseEnd]);
 
   const { mutateAsync: setWatchedDate, isPending: isSetPending } = useMovieWatchedDateSetMutation();
   const { mutateAsync: updateWatchedDate, isPending: isUpdatePending } =
@@ -133,7 +148,7 @@ export const ModalLogMovieWatchedDates = ({
   }, [inView, hasNextPage, fetchNextPage]);
 
   return (
-    <Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
+    <Modal open={open} onOpenChange={onOpenChange} onCloseEnd={onCloseEnd}>
       <ModalHeader>
         <ModalTitle>{upperFirst(t('common.messages.watched_date', { count: 2 }))}</ModalTitle>
       </ModalHeader>

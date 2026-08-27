@@ -13,9 +13,8 @@ import { Button } from '@libs/ui/components/button';
 import { Link } from '@/lib/i18n/navigation';
 import { DateOnlyYearTooltip } from '../utils/Date';
 import { SendIcon } from 'lucide-react';
-import { useModal } from '@/context/modal-context';
 import Autoplay from 'embla-carousel-autoplay';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { TooltipBox } from '../Box/TooltipBox';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@libs/ui/components/skeleton';
@@ -29,7 +28,7 @@ import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { ContextMenuMovie } from '../ContextMenu/ContextMenuMovie';
 import { ContextMenuTvSeries } from '../ContextMenu/ContextMenuTvSeries';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { ModalRecoSend } from '../Modals/recos/ModalRecoSend';
+import { getRecoSendHref } from '@/utils/hrefs/get-reco-send-href';
 import { widgetRecosTrendingInfiniteOptions } from '@libs/query-client';
 import { Genre, RecoTrendingWithMovie, RecoTrendingWithTvSeries } from '@libs/api-js';
 import { useLocale } from 'next-intl';
@@ -91,7 +90,6 @@ type ItemProps = {
 
 const Item = ({ item, index, ...props }: ItemProps) => {
   const { user } = useAuth();
-  const { openModal } = useModal();
   const t = useTranslations('common');
   const details = useMemo(() => {
     switch (item.type) {
@@ -103,15 +101,6 @@ const Item = ({ item, index, ...props }: ItemProps) => {
         return null;
     }
   }, [item]);
-  const handleReco = useCallback(() => {
-    if (item.media) {
-      openModal(ModalRecoSend, {
-        mediaId: item.mediaId,
-        mediaTitle: details?.title ?? '',
-        mediaType: item.type,
-      });
-    }
-  }, [item, details, openModal]);
 
   if (!details) return null;
   return (
@@ -154,13 +143,10 @@ const Item = ({ item, index, ...props }: ItemProps) => {
           <CardFooter className="flex items-center gap-2">
             {user && (
               <TooltipBox tooltip={user ? 'Envoyer à un(e) ami(e)' : undefined}>
-                <Button
-                  size={'icon'}
-                  variant={'outline'}
-                  className="bg-red-500"
-                  onClick={handleReco}
-                >
-                  <SendIcon className="w-4 h-4 fill-foreground" />
+                <Button size={'icon'} variant={'outline'} className="bg-red-500" asChild>
+                  <Link href={getRecoSendHref(item.type, item.mediaId, details.title)}>
+                    <SendIcon className="w-4 h-4 fill-foreground" />
+                  </Link>
                 </Button>
               </TooltipBox>
             )}

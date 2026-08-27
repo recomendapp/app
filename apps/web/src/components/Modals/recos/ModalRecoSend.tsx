@@ -2,8 +2,7 @@
 
 import { useAuth } from '@/context/auth-context';
 import { Button } from '@libs/ui/components/button';
-import { useModal } from '@/context/modal-context';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Check } from 'lucide-react';
 import { Badge } from '@libs/ui/components/badge';
 import {
@@ -13,14 +12,18 @@ import {
   ModalFooter,
   ModalHeader,
   ModalTitle,
-  ModalType,
 } from '@/components/Modals/Modal';
 import { Icons } from '@/config/icons';
 import { UserAvatar } from '@/components/User/UserAvatar';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
-import { userRecoSendAllOptions, useUserRecoSendMutation } from '@libs/query-client';
+import {
+  movieOptions,
+  tvSeriesOptions,
+  userRecoSendAllOptions,
+  useUserRecoSendMutation,
+} from '@libs/query-client';
 import { UserSummary } from '@libs/api-js';
 import {
   InputGroup,
@@ -41,29 +44,58 @@ import Fuse from 'fuse.js';
 
 const COMMENT_MAX_LENGTH = 180;
 
-interface ModalUserRecoSendProps extends ModalType {
+interface ModalRecoSendProps {
   mediaId: number;
   mediaType: 'movie' | 'tv_series';
+  /** Skips the title fetch below when the caller already has it on hand. */
   mediaTitle?: string | null;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onCloseEnd?: () => void;
 }
 
 export const ModalRecoSend = ({
   mediaId,
   mediaType,
-  mediaTitle,
-  ...props
-}: ModalUserRecoSendProps) => {
+  mediaTitle: mediaTitleProp,
+  open,
+  onOpenChange,
+  onCloseEnd,
+}: ModalRecoSendProps) => {
   const t = useTranslations();
-  const { user } = useAuth();
-  const { closeModal } = useModal();
+  const { user, session } = useAuth();
   const [selectedUsers, setSelectedUsers] = useState<UserSummary[]>([]);
-  const { data: friends, isFetching } = useQuery(
+  const {
+    data: friends,
+    isFetching,
+    isError: isFriendsError,
+  } = useQuery(
     userRecoSendAllOptions({
       userId: user?.id,
       mediaId: mediaId,
       mediaType: mediaType,
     }),
   );
+  const { data: movie, isError: isMovieError } = useQuery({
+    ...movieOptions({ movieId: mediaType === 'movie' ? mediaId : undefined }),
+    enabled: mediaType === 'movie' && mediaTitleProp === undefined,
+  });
+  const { data: tvSeries, isError: isTvSeriesError } = useQuery({
+    ...tvSeriesOptions({ tvSeriesId: mediaType === 'tv_series' ? mediaId : undefined }),
+    enabled: mediaType === 'tv_series' && mediaTitleProp === undefined,
+  });
+  const mediaTitle = mediaTitleProp ?? (mediaType === 'movie' ? movie?.title : tvSeries?.name);
+
+  useEffect(() => {
+    if (!session) {
+      onOpenChange(false);
+      onCloseEnd?.();
+      return;
+    }
+    if (isFriendsError || isMovieError || isTvSeriesError) {
+      onOpenChange(false);
+    }
+  }, [session, isFriendsError, isMovieError, isTvSeriesError, onOpenChange, onCloseEnd]);
   // Search
   const [searchQuery, setSearchQuery] = useState('');
   const fuse = useMemo(() => {
@@ -124,7 +156,7 @@ export const ModalRecoSend = ({
                 t('common.messages.sent', { count: selectedUsers.length, gender: 'female' }),
               ),
             );
-            closeModal(props.id);
+            onOpenChange(false);
           },
           onError: (error) => {
             toast.error(error.message || upperFirst(t('common.messages.error_occurred')));
@@ -132,11 +164,11 @@ export const ModalRecoSend = ({
         },
       );
     },
-    [mediaId, mediaType, selectedUsers, send, t, closeModal, props.id],
+    [mediaId, mediaType, selectedUsers, send, t, onOpenChange],
   );
 
   return (
-    <Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
+    <Modal open={open} onOpenChange={onOpenChange} onCloseEnd={onCloseEnd}>
       <ModalHeader>
         <ModalTitle>{upperFirst(t('common.messages.send_to_friend'))}</ModalTitle>
         {mediaTitle && (

@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useRouter } from '@/lib/i18n/navigation';
+import { Link, usePathname, useRouter } from '@/lib/i18n/navigation';
 import SearchBar from '@/components/Search/SearchBar';
 import { SidebarTrigger } from '@libs/ui/components/sidebar';
 import { Button } from '@libs/ui/components/button';
@@ -8,8 +8,7 @@ import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 import { Icons } from '@/config/icons';
 import { ButtonGroup } from '@libs/ui/components/button-group';
-import { useModal } from '@/context/modal-context';
-import { ModalPlaylist } from '../Modals/playlists/ModalPlaylist';
+import { getPlaylistCreateHref } from '@/utils/hrefs/get-playlist-create-href';
 
 export default function HeaderLeftSide({ className }: { className?: string }) {
   const router = useRouter();
@@ -52,16 +51,17 @@ export default function HeaderLeftSide({ className }: { className?: string }) {
 
 const ButtonPlaylistCreate = () => {
   const t = useTranslations();
-  const { openModal } = useModal();
   return (
     <Button
       variant="outline"
       size="icon"
       aria-label={upperFirst(t('common.messages.create_a_playlist'))}
-      onClick={() => openModal(ModalPlaylist, {})}
+      asChild
     >
-      <Icons.add />
-      <span className="sr-only">{upperFirst(t('common.messages.create_a_playlist'))}</span>
+      <Link href={getPlaylistCreateHref()}>
+        <Icons.add />
+        <span className="sr-only">{upperFirst(t('common.messages.create_a_playlist'))}</span>
+      </Link>
     </Button>
   );
 };

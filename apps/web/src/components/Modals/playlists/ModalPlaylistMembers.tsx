@@ -1,9 +1,8 @@
 'use client';
 
 import { useAuth } from '@/context/auth-context';
-import { useModal } from '@/context/modal-context';
-import { Modal, ModalBody, ModalDescription, ModalHeader, ModalTitle, ModalType } from '../Modal';
-import { useCallback, useMemo, useState } from 'react';
+import { Modal, ModalBody, ModalDescription, ModalHeader, ModalTitle } from '../Modal';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from '@libs/ui/components/button';
 import { UserAvatar } from '@/components/User/UserAvatar';
 import { Icons } from '@/config/icons';
@@ -18,10 +17,11 @@ import {
 } from '@libs/ui/components/input-group';
 import {
   playlistMembersAllOptions,
+  playlistOptions,
   usePlaylistMembersDeleteMutation,
   usePlaylistMemberUpdateMutation,
 } from '@libs/query-client';
-import { ApiError, Playlist, PlaylistMemberUpdate } from '@libs/api-js';
+import { ApiError, PlaylistMemberUpdate } from '@libs/api-js';
 import Fuse from 'fuse.js';
 import {
   Select,
@@ -32,25 +32,49 @@ import {
 } from '@libs/ui/components/select';
 import { usePlaylistMembers } from '@/hooks/use-playlist-members';
 import { useTranslations } from 'next-intl';
-import { ModalPlaylistMembersAdd } from './ModalPlaylistMembersAdd';
+import { Link } from '@/lib/i18n/navigation';
+import { getPlaylistMembersAddHref } from '@/utils/hrefs/get-playlist-members-add-href';
+import { canManagePlaylist } from '@/utils/can-manage-playlist';
 import toast from 'react-hot-toast';
 
-interface ModalPlaylistMembersProps extends ModalType {
-  playlist: Playlist;
+interface ModalPlaylistMembersProps {
+  playlistId: number;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onCloseEnd?: () => void;
 }
 
-export function ModalPlaylistMembers({ playlist, ...props }: ModalPlaylistMembersProps) {
-  const { user } = useAuth();
-  const { closeModal, openModal } = useModal();
+export function ModalPlaylistMembers({
+  playlistId,
+  open,
+  onOpenChange,
+  onCloseEnd,
+}: ModalPlaylistMembersProps) {
+  const { user, session } = useAuth();
   const t = useTranslations();
   const { playlistMembersRoleValues } = usePlaylistMembers();
 
+  const { data: playlist, isError: isPlaylistError } = useQuery(playlistOptions({ playlistId }));
+
   // Queries
-  const { data: members } = useQuery(
+  const { data: members, isError: isMembersError } = useQuery(
     playlistMembersAllOptions({
-      playlistId: playlist.id,
+      playlistId,
     }),
   );
+
+  useEffect(() => {
+    if (!session) {
+      onOpenChange(false);
+      onCloseEnd?.();
+      return;
+    }
+    if (isPlaylistError || isMembersError) {
+      onOpenChange(false);
+    } else if (playlist && !canManagePlaylist(playlist.role)) {
+      onOpenChange(false);
+    }
+  }, [session, isPlaylistError, isMembersError, playlist, onOpenChange, onCloseEnd]);
 
   // Mutations
   const { mutateAsync: updateMember } = usePlaylistMemberUpdateMutation({
@@ -80,7 +104,7 @@ export function ModalPlaylistMembers({ playlist, ...props }: ModalPlaylistMember
       await updateMember(
         {
           path: {
-            playlist_id: playlist.id,
+            playlist_id: playlistId,
             user_id: userId,
           },
           body: dto,
@@ -99,14 +123,14 @@ export function ModalPlaylistMembers({ playlist, ...props }: ModalPlaylistMember
         },
       );
     },
-    [updateMember, playlist.id, t],
+    [updateMember, playlistId, t],
   );
   const handleDeleteMember = useCallback(
     async (userId: string) => {
       await deleteMember(
         {
           path: {
-            playlist_id: playlist.id,
+            playlist_id: playlistId,
           },
           body: {
             userIds: [userId],
@@ -119,11 +143,11 @@ export function ModalPlaylistMembers({ playlist, ...props }: ModalPlaylistMember
         },
       );
     },
-    [deleteMember, playlist.id, t],
+    [deleteMember, playlistId, t],
   );
 
   return (
-    <Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
+    <Modal open={open} onOpenChange={onOpenChange} onCloseEnd={onCloseEnd}>
       <ModalHeader>
         <ModalTitle>{upperFirst(t('common.messages.manage_members'))}</ModalTitle>
         <ModalDescription>
@@ -139,12 +163,11 @@ export function ModalPlaylistMembers({ playlist, ...props }: ModalPlaylistMember
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <InputGroupButton
-              variant={'outline'}
-              onClick={() => openModal(ModalPlaylistMembersAdd, { playlist: playlist })}
-            >
-              <Icons.add />
-              {upperFirst(t('common.messages.add_member', { count: 2 }))}
+            <InputGroupButton variant={'outline'} asChild>
+              <Link href={getPlaylistMembersAddHref(playlistId)}>
+                <Icons.add />
+                {upperFirst(t('common.messages.add_member', { count: 2 }))}
+              </Link>
             </InputGroupButton>
           </InputGroupAddon>
           <InputGroupAddon align="block-end">

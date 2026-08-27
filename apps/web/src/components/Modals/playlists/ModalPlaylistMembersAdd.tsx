@@ -1,15 +1,6 @@
 'use client';
 
-import { useModal } from '@/context/modal-context';
-import {
-  Modal,
-  ModalBody,
-  ModalDescription,
-  ModalFooter,
-  ModalHeader,
-  ModalTitle,
-  ModalType,
-} from '../Modal';
+import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle } from '../Modal';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from '@libs/ui/components/button';
 import { Check } from 'lucide-react';
@@ -24,27 +15,53 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@libs/ui/components/input-group';
 import {
   playlistMembersAllOptions,
+  playlistOptions,
   searchUsersInfiniteOptions,
   usePlaylistMembersAddMutation,
 } from '@libs/query-client';
-import { Playlist, UserSummary } from '@libs/api-js';
+import { UserSummary } from '@libs/api-js';
 import { Badge } from '@libs/ui/components/badge';
 import useDebounce from '@/hooks/use-debounce';
+import { canManagePlaylist } from '@/utils/can-manage-playlist';
+import { useAuth } from '@/context/auth-context';
 
-interface ModalPlaylistMembersAddProps extends ModalType {
-  playlist: Playlist;
+interface ModalPlaylistMembersAddProps {
+  playlistId: number;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onCloseEnd?: () => void;
 }
 
-export function ModalPlaylistMembersAdd({ id, playlist, ...props }: ModalPlaylistMembersAddProps) {
-  const { closeModal } = useModal();
+export function ModalPlaylistMembersAdd({
+  playlistId,
+  open,
+  onOpenChange,
+  onCloseEnd,
+}: ModalPlaylistMembersAddProps) {
+  const { session } = useAuth();
   const t = useTranslations();
   const { inView, ref } = useInView();
 
-  const { data: members } = useQuery(
+  const { data: playlist, isError: isPlaylistError } = useQuery(playlistOptions({ playlistId }));
+
+  const { data: members, isError: isMembersError } = useQuery(
     playlistMembersAllOptions({
-      playlistId: playlist.id,
+      playlistId,
     }),
   );
+
+  useEffect(() => {
+    if (!session) {
+      onOpenChange(false);
+      onCloseEnd?.();
+      return;
+    }
+    if (isPlaylistError || isMembersError) {
+      onOpenChange(false);
+    } else if (playlist && !canManagePlaylist(playlist.role)) {
+      onOpenChange(false);
+    }
+  }, [session, isPlaylistError, isMembersError, playlist, onOpenChange, onCloseEnd]);
 
   // Mutations
   const { mutateAsync: addMembers, isPending } = usePlaylistMembersAddMutation();
@@ -75,7 +92,7 @@ export function ModalPlaylistMembersAdd({ id, playlist, ...props }: ModalPlaylis
     await addMembers(
       {
         path: {
-          playlist_id: playlist.id,
+          playlist_id: playlistId,
         },
         body: {
           userIds: selectedUsers.map((user) => user.id),
@@ -86,14 +103,14 @@ export function ModalPlaylistMembersAdd({ id, playlist, ...props }: ModalPlaylis
           toast.success(
             upperFirst(t('common.messages.added', { gender: 'male', count: selectedUsers.length })),
           );
-          closeModal(id);
+          onOpenChange(false);
         },
         onError: () => {
           toast.error(upperFirst(t('common.messages.an_error_occurred')));
         },
       },
     );
-  }, [addMembers, playlist.id, selectedUsers, t, closeModal, id]);
+  }, [addMembers, playlistId, selectedUsers, t, onOpenChange]);
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -102,7 +119,7 @@ export function ModalPlaylistMembersAdd({ id, playlist, ...props }: ModalPlaylis
   }, [inView, hasNextPage, fetchNextPage]);
 
   return (
-    <Modal open={props.open} onOpenChange={(open) => !open && closeModal(id)}>
+    <Modal open={open} onOpenChange={onOpenChange} onCloseEnd={onCloseEnd}>
       <ModalHeader>
         <ModalTitle>{upperFirst(t('common.messages.add_member', { count: 2 }))}</ModalTitle>
         <ModalDescription className="text-left">

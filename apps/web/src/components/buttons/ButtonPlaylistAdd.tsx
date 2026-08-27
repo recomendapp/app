@@ -6,15 +6,14 @@ import { Link } from '@/lib/i18n/navigation';
 import { Icons } from '@/config/icons';
 import { usePathname } from '@/lib/i18n/navigation';
 import { cn } from '@/lib/utils';
-import { useModal } from '@/context/modal-context';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { PlaylistsAddTargetsControllerListAllData } from '@libs/api-js';
-import { ModalPlaylistAdd } from '../Modals/playlists/ModalPlaylistAdd';
+import { getPlaylistAddHref } from '@/utils/hrefs/get-playlist-add-href';
 
 interface ButtonPlaylistAddProps extends React.ComponentProps<typeof Button> {
   mediaId: PlaylistsAddTargetsControllerListAllData['path']['media_id'];
-  mediaType: PlaylistsAddTargetsControllerListAllData['path']['type'];
+  mediaType: 'movie' | 'tv_series';
   mediaTitle?: string | null;
   stopPropagation?: boolean;
 }
@@ -26,14 +25,12 @@ const ButtonPlaylistAdd = React.forwardRef<
   const { user } = useAuth();
   const t = useTranslations();
   const pathname = usePathname();
-  const { openModal } = useModal();
 
   const handleClick = React.useCallback(
     (e: React.MouseEvent) => {
       stopPropagation && e.stopPropagation();
-      openModal(ModalPlaylistAdd, { mediaId, type: mediaType, mediaTitle: mediaTitle });
     },
-    [stopPropagation, openModal, mediaId, mediaType, mediaTitle],
+    [stopPropagation],
   );
 
   if (user === null) {
@@ -63,10 +60,12 @@ const ButtonPlaylistAdd = React.forwardRef<
         size="icon"
         variant={'outline'}
         className={cn('rounded-full', className)}
-        onClick={handleClick}
+        asChild
         {...props}
       >
-        {user === undefined ? <Icons.spinner className="animate-spin" /> : <Icons.addPlaylist />}
+        <Link href={getPlaylistAddHref(mediaType, mediaId, mediaTitle)} onClick={handleClick}>
+          {user === undefined ? <Icons.spinner className="animate-spin" /> : <Icons.addPlaylist />}
+        </Link>
       </Button>
     </TooltipBox>
   );

@@ -21,7 +21,7 @@ import { ShareControllerMovie } from '@/components/ShareController/ShareControll
 import { useCallback, useMemo } from 'react';
 import { RecoWithMedia } from './types';
 import { getMediaDetails } from '@/utils/get-media-details';
-import { ModalRecoSend } from '@/components/Modals/recos/ModalRecoSend';
+import { getRecoSendHref } from '@/utils/hrefs/get-reco-send-href';
 import { ModalRecoSenders } from '@/components/Modals/recos/ModalRecoSenders';
 import { ShareControllerTvSeries } from '@/components/ShareController/ShareControllerTvSeries';
 import { useUserRecoDeleteByMediaMutation } from '@libs/query-client';
@@ -82,17 +82,17 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" className="w-40">
-          <DropdownMenuItem
-            onClick={() =>
-              openModal(ModalRecoSend, {
-                mediaId: data.mediaId,
-                mediaTitle: data.type === 'movie' ? data.media.title : data.media.name,
-                mediaType: data.type,
-              })
-            }
-          >
-            <Icons.send className="w-4" />
-            {upperFirst(t('common.messages.send_to_friend'))}
+          <DropdownMenuItem asChild>
+            <Link
+              href={getRecoSendHref(
+                data.type,
+                data.mediaId,
+                data.type === 'movie' ? data.media.title : data.media.name,
+              )}
+            >
+              <Icons.send className="w-4" />
+              {upperFirst(t('common.messages.send_to_friend'))}
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>

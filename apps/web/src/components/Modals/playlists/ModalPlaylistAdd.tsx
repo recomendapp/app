@@ -2,26 +2,22 @@
 
 import { useAuth } from '@/context/auth-context';
 import { Button } from '@libs/ui/components/button';
-import { useModal } from '@/context/modal-context';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Check } from 'lucide-react';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@libs/ui/components/aspect-ratio';
 import { Badge } from '@libs/ui/components/badge';
-import {
-  Modal,
-  ModalBody,
-  ModalDescription,
-  ModalFooter,
-  ModalHeader,
-  ModalTitle,
-  ModalType,
-} from '../Modal';
+import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle } from '../Modal';
 import { Icons } from '@/config/icons';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import { usePlaylistItemsAddMutation, userPlaylistsAddTargetsAllOptions } from '@libs/query-client';
+import {
+  movieOptions,
+  tvSeriesOptions,
+  usePlaylistItemsAddMutation,
+  userPlaylistsAddTargetsAllOptions,
+} from '@libs/query-client';
 import { Playlist, PlaylistsAddTargetsControllerListAllData } from '@libs/api-js';
 import z from 'zod';
 import { useForm } from 'react-hook-form';
@@ -43,24 +39,60 @@ import Fuse from 'fuse.js';
 
 const COMMENT_MAX_LENGTH = 180;
 
-interface ModalPlaylistAddProps extends ModalType {
+interface ModalPlaylistAddProps {
   mediaId: PlaylistsAddTargetsControllerListAllData['path']['media_id'];
-  type: PlaylistsAddTargetsControllerListAllData['path']['type'];
+  type: 'movie' | 'tv_series';
+  /** Skips the title fetch below when the caller already has it on hand. */
   mediaTitle?: string | null;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onCloseEnd?: () => void;
 }
 
-export function ModalPlaylistAdd({ mediaId, type, mediaTitle, ...props }: ModalPlaylistAddProps) {
-  const { user } = useAuth();
+export function ModalPlaylistAdd({
+  mediaId,
+  type,
+  mediaTitle: mediaTitleProp,
+  open,
+  onOpenChange,
+  onCloseEnd,
+}: ModalPlaylistAddProps) {
+  const { user, session } = useAuth();
   const t = useTranslations();
-  const { openModal, closeModal } = useModal();
+  const [isCreatePlaylistOpen, setIsCreatePlaylistOpen] = useState(false);
   const [selectedPlaylists, setSelectedPlaylists] = useState<Playlist[]>([]);
-  const { data: playlists, isFetching } = useQuery(
+  const {
+    data: playlists,
+    isFetching,
+    isError: isPlaylistsError,
+  } = useQuery(
     userPlaylistsAddTargetsAllOptions({
       userId: user?.id,
       mediaId: mediaId,
       type: type,
     }),
   );
+
+  const { data: movie, isError: isMovieError } = useQuery({
+    ...movieOptions({ movieId: type === 'movie' ? mediaId : undefined }),
+    enabled: type === 'movie' && mediaTitleProp === undefined,
+  });
+  const { data: tvSeries, isError: isTvSeriesError } = useQuery({
+    ...tvSeriesOptions({ tvSeriesId: type === 'tv_series' ? mediaId : undefined }),
+    enabled: type === 'tv_series' && mediaTitleProp === undefined,
+  });
+  const mediaTitle = mediaTitleProp ?? (type === 'movie' ? movie?.title : tvSeries?.name);
+
+  useEffect(() => {
+    if (!session) {
+      onOpenChange(false);
+      onCloseEnd?.();
+      return;
+    }
+    if (isPlaylistsError || isMovieError || isTvSeriesError) {
+      onOpenChange(false);
+    }
+  }, [session, isPlaylistsError, isMovieError, isTvSeriesError, onOpenChange, onCloseEnd]);
 
   // Search
   const [searchQuery, setSearchQuery] = useState('');
@@ -121,7 +153,7 @@ export function ModalPlaylistAdd({ mediaId, type, mediaTitle, ...props }: ModalP
                 t('common.messages.added', { gender: 'male', count: selectedPlaylists.length }),
               ),
             );
-            closeModal(props.id);
+            onOpenChange(false);
           },
           onError: () => {
             toast.error(upperFirst(t('common.messages.an_error_occurred')));
@@ -129,11 +161,11 @@ export function ModalPlaylistAdd({ mediaId, type, mediaTitle, ...props }: ModalP
         },
       );
     },
-    [mediaId, type, selectedPlaylists, add, t, closeModal, props.id],
+    [mediaId, type, selectedPlaylists, add, t, onOpenChange],
   );
 
   return (
-    <Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
+    <Modal open={open} onOpenChange={onOpenChange} onCloseEnd={onCloseEnd}>
       <ModalHeader>
         <ModalTitle>{upperFirst(t('common.messages.add_to_playlist'))}</ModalTitle>
         <ModalDescription>
@@ -152,14 +184,7 @@ export function ModalPlaylistAdd({ mediaId, type, mediaTitle, ...props }: ModalP
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <InputGroupButton
-              variant={'outline'}
-              onClick={() =>
-                openModal(ModalPlaylist, {
-                  onSave: (newPlaylist) => setSelectedPlaylists((prev) => [...prev, newPlaylist]),
-                })
-              }
-            >
+            <InputGroupButton variant={'outline'} onClick={() => setIsCreatePlaylistOpen(true)}>
               <Icons.add />
               {upperFirst(t('common.messages.create_a_playlist', { count: 2 }))}
             </InputGroupButton>
@@ -300,6 +325,13 @@ export function ModalPlaylistAdd({ mediaId, type, mediaTitle, ...props }: ModalP
           />
         </form>
       </ModalFooter>
+      {isCreatePlaylistOpen && (
+        <ModalPlaylist
+          open={isCreatePlaylistOpen}
+          onOpenChange={setIsCreatePlaylistOpen}
+          onSave={(newPlaylist) => setSelectedPlaylists((prev) => [...prev, newPlaylist])}
+        />
+      )}
     </Modal>
   );
 }

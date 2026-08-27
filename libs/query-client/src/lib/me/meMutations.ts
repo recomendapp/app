@@ -6,9 +6,11 @@ import {
   mePushTokensControllerSetMutation,
   Options,
 } from '@libs/api-js';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { meKeys } from './meKeys';
 
 export const useMeUpdateMutation = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({
       body: { avatar, ...body },
@@ -34,6 +36,9 @@ export const useMeUpdateMutation = () => {
       });
       if (data === undefined) throw new Error('No data');
       return data;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(meKeys.details(), data);
     },
   });
 };

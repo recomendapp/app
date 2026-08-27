@@ -115,21 +115,29 @@ export interface ModalType {
 /**
  * Modal component
  * @param children
+ * @param onCloseEnd Called once the close animation has finished playing (not on open).
+ *   Use this instead of a fixed timeout to defer work — like a route change — that would
+ *   otherwise unmount the modal before its exit animation gets to run.
  * @return on desktop: Dialog, on mobile: Drawer
  */
 const Modal = ({
   children,
   className,
+  onCloseEnd,
   ...props
-}: React.ComponentProps<typeof Dialog> & { className?: string }) => {
+}: React.ComponentProps<typeof Dialog> & { className?: string; onCloseEnd?: () => void }) => {
   const { device } = useUI();
   return device === 'desktop' ? (
     <Dialog {...props}>
-      <ModalContent className={cn('', className)}>{children}</ModalContent>
+      <ModalContent className={cn('', className)} onCloseEnd={onCloseEnd}>
+        {children}
+      </ModalContent>
     </Dialog>
   ) : (
     <Drawer {...props}>
-      <ModalContent className={cn('', className)}>{children}</ModalContent>
+      <ModalContent className={cn('', className)} onCloseEnd={onCloseEnd}>
+        {children}
+      </ModalContent>
     </Drawer>
   );
 };
@@ -141,13 +149,31 @@ const Modal = ({
  */
 const ModalContent = React.forwardRef<
   React.ElementRef<typeof DialogContent>,
-  React.ComponentPropsWithoutRef<typeof DrawerContent>
->(({ className, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof DrawerContent> & { onCloseEnd?: () => void }
+>(({ className, onCloseEnd, onAnimationEnd, ...props }, ref) => {
   const { device } = useUI();
+
+  const handleAnimationEnd = (event: React.AnimationEvent<HTMLDivElement>) => {
+    onAnimationEnd?.(event);
+    if (event.target === event.currentTarget && event.currentTarget.dataset.state === 'closed') {
+      onCloseEnd?.();
+    }
+  };
+
   return device === 'desktop' ? (
-    <DialogContent ref={ref} className={cn('max-h-[80%] overflow-auto', className)} {...props} />
+    <DialogContent
+      ref={ref}
+      className={cn('max-h-[80%] overflow-auto', className)}
+      onAnimationEnd={handleAnimationEnd}
+      {...props}
+    />
   ) : (
-    <DrawerContent ref={ref} className={cn('max-h-[95%]', className)} {...props} />
+    <DrawerContent
+      ref={ref}
+      className={cn('max-h-[95%]', className)}
+      onAnimationEnd={handleAnimationEnd}
+      {...props}
+    />
   );
 });
 ModalContent.displayName = 'ModalContent';

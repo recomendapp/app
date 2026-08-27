@@ -38,9 +38,15 @@ import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import ButtonFollowersAvgRatingTvSeries from '@/components/buttons/ButtonFollowersAvgRatingTvSeries';
 import { TvSeries, TvSeriesTrailer } from '@libs/api-js';
 import ButtonUserRecoSend from '@/components/buttons/ButtonUserRecoSend';
+import { useQuery } from '@tanstack/react-query';
+import { tvSeriesOptions } from '@libs/query-client';
 
-export const TvSeriesHeader = ({ tvSeries }: { tvSeries: TvSeries }) => {
+export const TvSeriesHeader = ({ tvSeries: initialTvSeries }: { tvSeries: TvSeries }) => {
   const t = useTranslations();
+  const { data: tvSeries } = useQuery({
+    ...tvSeriesOptions({ tvSeriesId: initialTvSeries.id }),
+    initialData: initialTvSeries,
+  });
   return (
     <div>
       <ContextMenuTvSeries tvSeries={tvSeries}>

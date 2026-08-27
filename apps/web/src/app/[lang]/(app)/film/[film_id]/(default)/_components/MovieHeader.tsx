@@ -41,9 +41,15 @@ import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import ButtonFollowersAvgRatingMovie from '@/components/buttons/ButtonFollowersAvgRatingMovie';
 import { Genre, Movie, MovieTrailer } from '@libs/api-js';
 import ButtonUserRecoSend from '@/components/buttons/ButtonUserRecoSend';
+import { useQuery } from '@tanstack/react-query';
+import { movieOptions } from '@libs/query-client';
 
-export const MovieHeader = ({ movie }: { movie: Movie }) => {
+export const MovieHeader = ({ movie: initialMovie }: { movie: Movie }) => {
   const t = useTranslations();
+  const { data: movie } = useQuery({
+    ...movieOptions({ movieId: initialMovie.id }),
+    initialData: initialMovie,
+  });
   return (
     <div>
       <ContextMenuMovie movie={movie}>

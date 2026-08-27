@@ -76,7 +76,7 @@ export const AuthProvider = ({
     initialData: initCustomerInfo,
   });
 
-  const { mutate: updateUser } = useMeUpdateMutation();
+  const { mutate: updateUser, isPending: isUpdatingUser } = useMeUpdateMutation();
 
   const login = useCallback(
     async (
@@ -222,10 +222,10 @@ export const AuthProvider = ({
   );
 
   useEffect(() => {
-    if (user && locale && user.language !== locale) {
+    if (user && locale && user.language !== locale && !isUpdatingUser) {
       updateUser({ body: { language: locale } });
     }
-  }, [user, locale, updateUser]);
+  }, [user, locale, updateUser, isUpdatingUser]);
 
   return (
     <AuthContext.Provider
