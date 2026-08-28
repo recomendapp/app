@@ -442,6 +442,13 @@
       "when": 1787854357606,
       "tag": "0062_make_account_issuer_not_null",
       "breakpoints": true
+    },
+    {
+      "idx": 63,
+      "version": "7",
+      "when": 1787909009377,
+      "tag": "0063_account_issuer_unique_index",
+      "breakpoints": true
     }
   ]
 }

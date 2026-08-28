@@ -272,7 +272,6 @@
   "devDependencies": {
     "@babel/core": "^7.28.0",
     "@babel/runtime": "~7.27.6",
-    "@better-auth/cli": "^1.4.17",
     "@commitlint/cli": "^20.5.3",
     "@commitlint/config-conventional": "^20.5.3",
     "@eslint/js": "^9.8.0",
@@ -321,6 +320,7 @@
     "@types/react-dom": "19.1.11",
     "@types/rtl-detect": "^1.0.3",
     "@types/socket.io": "^3.0.2",
+    "auth": "1.7.2",
     "autoprefixer": "10.4.13",
     "babel-jest": "^30.0.2",
     "babel-plugin-react-compiler": "^1.0.0",

@@ -4,15 +4,9 @@ import { execSync } from 'node:child_process';
 
 // --- CONFIGURATION ---
 const ROOT_DIR = process.cwd();
-const SCHEMA_INDEX_PATH = path.join(
-  ROOT_DIR,
-  'libs/db/src/lib/schemas/index.ts',
-);
+const SCHEMA_INDEX_PATH = path.join(ROOT_DIR, 'libs/db/src/lib/schemas/index.ts');
 const AUTH_CONFIG_PATH = path.join(ROOT_DIR, 'libs/db/src/lib/auth.ts');
-const OUTPUT_SCHEMA_PATH = path.join(
-  ROOT_DIR,
-  'libs/db/src/lib/schemas/auth.ts',
-);
+const OUTPUT_SCHEMA_PATH = path.join(ROOT_DIR, 'libs/db/src/lib/schemas/auth.ts');
 
 function toggleIndexExport(shouldComment: boolean) {
   if (!fs.existsSync(SCHEMA_INDEX_PATH)) return;
@@ -69,7 +63,7 @@ async function run() {
 
     console.log('🚀 Running better-auth generate...');
     execSync(
-      `npx @better-auth/cli generate --config ${AUTH_CONFIG_PATH} --output ${OUTPUT_SCHEMA_PATH} --yes`,
+      `npx auth generate --config ${AUTH_CONFIG_PATH} --output ${OUTPUT_SCHEMA_PATH} --yes`,
       { stdio: 'inherit' },
     );
 

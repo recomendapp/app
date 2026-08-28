@@ -1,5 +1,5 @@
 import { relations, sql } from 'drizzle-orm';
-import { text, timestamp, boolean, index, pgSchema, uuid } from 'drizzle-orm/pg-core';
+import { text, timestamp, boolean, index, pgSchema, uuid, uniqueIndex } from 'drizzle-orm/pg-core';
 import { profile } from './user';
 import { supportedLanguages } from './i18n';
 
@@ -69,7 +69,10 @@ export const account = authSchema.table(
       .$onUpdate(() => sql`now()`)
       .notNull(),
   },
-  (table) => [index('account_userId_idx').on(table.userId)],
+  (table) => [
+    index('account_userId_idx').on(table.userId),
+    uniqueIndex('account_issuer_accountId_uidx').on(table.issuer, table.accountId),
+  ],
 );
 
 export const verification = authSchema.table(
