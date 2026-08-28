@@ -1,15 +1,21 @@
 'use client';
 
 import Loader from '@/components/Loader';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+import { Button } from '@libs/ui/components/button';
+import { Separator } from '@libs/ui/components/separator';
 import { useAuth } from '@/context/auth-context';
 import { Sparkles } from 'lucide-react';
 import { useFormatter, useTranslations } from 'next-intl';
-import { Link } from "@/lib/i18n/navigation";
+import { Link } from '@/lib/i18n/navigation';
 import { useMemo } from 'react';
 import { upperFirst } from 'lodash';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@libs/ui/components/card';
 import { Icons } from '@/config/icons';
 
 export default function SettingsAccountPage() {
@@ -34,42 +40,43 @@ export default function SettingsAccountPage() {
           {activeSubscriptions.length > 0 ? (
             <>
               {activeSubscriptions.map((subscription) => (
-                <Card key={subscription.identifier} className='w-full'>
+                <Card key={subscription.identifier} className="w-full">
                   <CardHeader>
-                    <CardTitle>
-                      {upperFirst(subscription.identifier)}
-                    </CardTitle>
-                    <CardDescription>
-
-                    </CardDescription>
-                    
+                    <CardTitle>{upperFirst(subscription.identifier)}</CardTitle>
+                    <CardDescription></CardDescription>
                   </CardHeader>
-                  <CardContent className='text-muted-foreground'>
+                  <CardContent className="text-muted-foreground">
                     <p>
-                      {
-                        subscription.store === 'rc_billing'
-                          ? 'Web'
-                          : subscription.store === 'app_store'
+                      {subscription.store === 'rc_billing'
+                        ? 'Web'
+                        : subscription.store === 'app_store'
                           ? 'iOS'
                           : subscription.store === 'play_store'
-                          ? 'Android'
-                          : subscription.store
-                      }
+                            ? 'Android'
+                            : subscription.store}
                     </p>
                     <p>
-                      {upperFirst(t('common.messages.started_on_date', { date: formatter.dateTime(new Date(subscription.originalPurchaseDate), { dateStyle: 'long' }) }))}
+                      {upperFirst(
+                        t('common.messages.started_on_date', {
+                          date: formatter.dateTime(new Date(subscription.originalPurchaseDate), {
+                            dateStyle: 'long',
+                          }),
+                        }),
+                      )}
                     </p>
                     <p>
-                      {upperFirst(t('common.messages.last_renewed_on_date', { date: formatter.dateTime(new Date(subscription.latestPurchaseDate), { dateStyle: 'long' }) }))}
+                      {upperFirst(
+                        t('common.messages.last_renewed_on_date', {
+                          date: formatter.dateTime(new Date(subscription.latestPurchaseDate), {
+                            dateStyle: 'long',
+                          }),
+                        }),
+                      )}
                     </p>
                   </CardContent>
-                </Card>  
+                </Card>
               ))}
-              <Button
-              variant={'outline'}
-              disabled={!customerInfo.managementURL}
-              asChild
-              >
+              <Button variant={'outline'} disabled={!customerInfo.managementURL} asChild>
                 {customerInfo.managementURL ? (
                   <Link href={customerInfo.managementURL}>
                     {upperFirst(t('common.messages.manage_subscription'))}

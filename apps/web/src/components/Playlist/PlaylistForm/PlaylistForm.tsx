@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import {
   Form,
   FormControl,
@@ -11,12 +11,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { DialogFooter } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+} from '@libs/ui/components/form';
+import { DialogFooter } from '@libs/ui/components/dialog';
+import { Input } from '@libs/ui/components/input';
+import { Label } from '@libs/ui/components/label';
 import toast from 'react-hot-toast';
-import { Textarea } from '@/components/ui/textarea';
+import { Textarea } from '@libs/ui/components/textarea';
 import { useCallback, useState } from 'react';
 import PlaylistFormPictureUpload from './PlaylistFormPictureUpload';
 import { Icons } from '@/config/icons';
@@ -29,12 +29,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+} from '@libs/ui/components/alert-dialog';
 import { useAuth } from '@/context/auth-context';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { RadioGroup, RadioGroupItem } from '@libs/ui/components/radio-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import {
   usePlaylistDeleteMutation,

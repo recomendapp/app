@@ -1,4 +1,4 @@
-import '@/styles/globals.css';
+import '@libs/ui/styles/globals.css';
 import { Metadata, Viewport } from 'next';
 import { siteConfig } from '@/config/site';
 import { fontSans } from '@/lib/fonts';

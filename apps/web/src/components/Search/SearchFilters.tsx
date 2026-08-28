@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { ScrollArea, ScrollBar } from '../ui/scroll-area';
+import { Button } from '@libs/ui/components/button';
+import { ScrollArea, ScrollBar } from '@libs/ui/components/scroll-area';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
 
 export default function SearchFilters() {

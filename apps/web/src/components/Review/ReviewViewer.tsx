@@ -1,6 +1,6 @@
 'use client';
 
-import { buttonVariants } from '@/components/ui/button';
+import { buttonVariants } from '@libs/ui/components/button';
 import { cn } from '@/lib/utils';
 import {
   Card,
@@ -9,10 +9,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@libs/ui/components/card';
 import { CardUser } from '@/components/Card/CardUser';
 import { useTranslations } from 'next-intl';
-import { ButtonGroup } from '../ui/button-group';
+import { ButtonGroup } from '@libs/ui/components/button-group';
 import { ReviewMovieSettings } from './ReviewMovieSettings';
 import { ReviewTvSeriesSettings } from './ReviewTvSeriesSettings';
 import ButtonUserReviewMovieLike from '../buttons/ButtonUserReviewMovieLike';

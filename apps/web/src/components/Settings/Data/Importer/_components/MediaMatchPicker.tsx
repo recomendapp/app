@@ -4,8 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { searchMoviesInfiniteOptions, searchTvSeriesInfiniteOptions } from '@libs/query-client';
 import { Loader2Icon, SearchIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Button } from '@libs/ui/components/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@libs/ui/components/popover';
 import {
   Command,
   CommandEmpty,
@@ -13,7 +13,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/command';
+} from '@libs/ui/components/command';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import useDebounce from '@/hooks/use-debounce';

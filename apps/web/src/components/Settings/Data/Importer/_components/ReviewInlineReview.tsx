@@ -5,9 +5,9 @@ import {
   useImportPatchLogMovieReviewMutation,
   useImportPatchLogTvSeriesReviewMutation,
 } from '@libs/query-client';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@libs/ui/components/button';
+import { Badge } from '@libs/ui/components/badge';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@libs/ui/components/card';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { Icons } from '@/config/icons';
 import { MessageSquareTextIcon } from 'lucide-react';

@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import {
   Form,
   FormControl,
@@ -12,20 +12,20 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from '@libs/ui/components/form';
+import { Input } from '@libs/ui/components/input';
 import toast from 'react-hot-toast';
 import { useAuth } from '@/context/auth-context';
 import { Icons } from '@/config/icons';
 import { useCallback, useEffect } from 'react';
 import Loader from '@/components/Loader';
-import { Switch } from '@/components/ui/switch';
+import { Switch } from '@libs/ui/components/switch';
 import { useTranslations } from 'next-intl';
 import { useUsernameAvailability } from '@/hooks/use-username-availability';
 import useDebounce from '@/hooks/use-debounce';
 import { upperFirst } from 'lodash';
 import { useMeUpdateMutation } from '@libs/query-client';
-import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@libs/ui/components/input-group';
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 15;
@@ -63,8 +63,8 @@ export function AccountForm() {
       }),
     isPrivate: z.boolean(),
     email: z.email({
-        message: t('common.form.email.error.invalid'),
-      })
+      message: t('common.form.email.error.invalid'),
+    }),
   });
 
   type AccountFormValues = z.infer<typeof accountFormSchema>;
@@ -80,27 +80,33 @@ export function AccountForm() {
     mode: 'onChange',
   });
   const {
-		isAvailable: usernameAvailable,
-		isLoading: usernameAvailabilityLoading,
-		check,
-	} = useUsernameAvailability();;
+    isAvailable: usernameAvailable,
+    isLoading: usernameAvailabilityLoading,
+    check,
+  } = useUsernameAvailability();
   const usernameToCheck = useDebounce(form.watch('username'), 500);
 
-  const handleSubmit = useCallback(async (data: AccountFormValues) => {
-    await updateProfile({
-      body: {
-        username: data.username,
-        isPrivate: data.isPrivate,
-      }
-    }, {
-      onSuccess: () => {
-        toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
-      },
-      onError: () => {
-        toast.error(upperFirst(t('common.messages.an_error_occurred')));
-      },
-    });
-  }, [t, updateProfile]);
+  const handleSubmit = useCallback(
+    async (data: AccountFormValues) => {
+      await updateProfile(
+        {
+          body: {
+            username: data.username,
+            isPrivate: data.isPrivate,
+          },
+        },
+        {
+          onSuccess: () => {
+            toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
+          },
+          onError: () => {
+            toast.error(upperFirst(t('common.messages.an_error_occurred')));
+          },
+        },
+      );
+    },
+    [t, updateProfile],
+  );
 
   useEffect(() => {
     user &&
@@ -112,18 +118,22 @@ export function AccountForm() {
   }, [form, user]);
 
   useEffect(() => {
-		if (!form.formState.errors.username?.message && usernameToCheck && usernameToCheck !== user?.username) {
-			check(usernameToCheck);
-		}
-	}, [usernameToCheck]);
+    if (
+      !form.formState.errors.username?.message &&
+      usernameToCheck &&
+      usernameToCheck !== user?.username
+    ) {
+      check(usernameToCheck);
+    }
+  }, [usernameToCheck]);
 
-	useEffect(() => {
-		if (usernameAvailable === false) {
-			form.setError('username', {
-				message: t('common.form.username.schema.unavailable'),
-			});
-		}
-	}, [usernameAvailable, t]);
+  useEffect(() => {
+    if (usernameAvailable === false) {
+      form.setError('username', {
+        message: t('common.form.username.schema.unavailable'),
+      });
+    }
+  }, [usernameAvailable, t]);
 
   if (!user) return <Loader />;
 
@@ -143,8 +153,7 @@ export function AccountForm() {
                 <InputGroup>
                   <InputGroupInput
                     disabled={
-                      (date.getTime() - dateLastUsernameUpdate.getTime()) /
-                        (1000 * 60 * 60 * 24) <
+                      (date.getTime() - dateLastUsernameUpdate.getTime()) / (1000 * 60 * 60 * 24) <
                       30
                         ? true
                         : false
@@ -152,16 +161,18 @@ export function AccountForm() {
                     placeholder={t('pages.settings.account.username.placeholder')}
                     {...field}
                   />
-                  <InputGroupAddon align={"inline-end"}>
+                  <InputGroupAddon align={'inline-end'}>
                     {usernameAvailabilityLoading ? (
                       <Icons.loader />
                     ) : usernameAvailable === true ? (
-                      <Icons.check className='text-green-500' />
+                      <Icons.check className="text-green-500" />
                     ) : null}
                   </InputGroupAddon>
                 </InputGroup>
               </FormControl>
-              <FormDescription className="text-justify">{t('pages.settings.account.username.description')}</FormDescription>
+              <FormDescription className="text-justify">
+                {t('pages.settings.account.username.description')}
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -170,13 +181,10 @@ export function AccountForm() {
           control={form.control}
           name="isPrivate"
           render={({ field }) => (
-            <FormItem className='flex items-center gap-2'>
+            <FormItem className="flex items-center gap-2">
               <FormLabel>{t('pages.settings.account.private.label')}</FormLabel>
               <FormControl>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
+                <Switch checked={field.value} onCheckedChange={field.onChange} />
               </FormControl>
               {/* <FormDescription className="text-justify">{t('pages.settings.account.private.description')}</FormDescription> */}
               <FormMessage />
@@ -192,7 +200,9 @@ export function AccountForm() {
               <FormControl>
                 <Input placeholder={t('common.form.email.placeholder')} {...field} disabled />
               </FormControl>
-              <FormDescription className="flex flex-col md:flex-row w-full justify-between gap-4">{t('pages.settings.account.email.description')}</FormDescription>
+              <FormDescription className="flex flex-col md:flex-row w-full justify-between gap-4">
+                {t('pages.settings.account.email.description')}
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

@@ -1,6 +1,6 @@
 'use client';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@libs/ui/components/avatar';
 import { getInitiales } from '@/lib/utils';
 import { User } from '@libs/api-js';
 import { Loader2 } from 'lucide-react';
@@ -28,14 +28,10 @@ export default function PictureUpload({
           </div>
         )}
         <AvatarImage
-          src={
-            newAvatar ? URL.createObjectURL(newAvatar) : user?.avatar ?? ''
-          }
+          src={newAvatar ? URL.createObjectURL(newAvatar) : (user?.avatar ?? '')}
           alt={user?.username}
         />
-        <AvatarFallback className="text-[75px]">
-          {getInitiales(user.username)}
-        </AvatarFallback>
+        <AvatarFallback className="text-[75px]">{getInitiales(user.username)}</AvatarFallback>
       </Avatar>
       <input
         disabled={isUploading}

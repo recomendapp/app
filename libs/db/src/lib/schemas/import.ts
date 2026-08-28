@@ -6,6 +6,7 @@ import {
   integer,
   pgEnum,
   pgTable,
+  primaryKey,
   real,
   text,
   timestamp,
@@ -39,6 +40,29 @@ export const importResolutionEnum = pgEnum('import_resolution', [
   'use_imported',
   'merge',
 ]);
+
+/* -------------------------------------------------------------------------- */
+/*                                IMPORT SOURCE                               */
+/* -------------------------------------------------------------------------- */
+export const importSource = pgTable(
+  'import_source',
+  {
+    provider: importJobProviderEnum().notNull(),
+    direction: importJobDirectionEnum().notNull(),
+    name: text().notNull(),
+    description: text(),
+    // Relative paths into libs/assets/static (see @libs/assets) — resolved to full CDN
+    // URLs server-side. Two variants since some provider logos need a light/dark swap.
+    iconLight: text('icon_light'),
+    iconDark: text('icon_dark'),
+    // Markdown steps for how to obtain the export file from this provider.
+    instructions: text(),
+    fileTypes: text('file_types').array(),
+    enabled: boolean().default(false).notNull(),
+    position: integer().default(0).notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.provider, table.direction] })],
+);
 
 /* -------------------------------------------------------------------------- */
 /*                                 IMPORT JOB                                 */
@@ -170,11 +194,6 @@ export const importJobReviewMovieRelations = relations(importJobReviewMovie, ({ 
 /* -------------------------------------------------------------------------- */
 /*                                 TV SERIES                                  */
 /* -------------------------------------------------------------------------- */
-// Show-level only (rating/liked/status) — this app's own TV tracking goes down to
-// season/episode (see logTvSeason/logTvEpisode in log.ts), but no provider we support
-// (Letterboxd is movies-only; SensCritique exports at show level) gives us that
-// granularity to import, so staging it would be speculative. Easy to extend later.
-
 export const importJobLogTvSeries = pgTable(
   'import_job_log_tv_series',
   {
@@ -285,8 +304,6 @@ export const importJobBookmarkRelations = relations(importJobBookmark, ({ one })
 /* -------------------------------------------------------------------------- */
 /*                                  PLAYLIST                                  */
 /* -------------------------------------------------------------------------- */
-// Always additive at commit — an imported list never merges into an existing playlist
-// (see design discussion), so there's no existing-conflict tracking here.
 
 export const importJobPlaylistItemTypeEnum = pgEnum('import_job_playlist_item_type', [
   'movie',

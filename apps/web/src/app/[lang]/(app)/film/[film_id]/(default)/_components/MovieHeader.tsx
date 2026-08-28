@@ -3,14 +3,14 @@
 import { Fragment, useState } from 'react';
 import { Link } from '@/lib/i18n/navigation';
 import YoutubeEmbed from '@/components/utils/Youtube';
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from '@libs/ui/components/dialog';
 import {
   Select,
   SelectContent,
@@ -18,7 +18,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@libs/ui/components/select';
 import { Play } from 'lucide-react';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
 import MediaPoster from '@/components/Media/MediaPoster';
@@ -41,9 +41,15 @@ import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import ButtonFollowersAvgRatingMovie from '@/components/buttons/ButtonFollowersAvgRatingMovie';
 import { Genre, Movie, MovieTrailer } from '@libs/api-js';
 import ButtonUserRecoSend from '@/components/buttons/ButtonUserRecoSend';
+import { useQuery } from '@tanstack/react-query';
+import { movieOptions } from '@libs/query-client';
 
-export const MovieHeader = ({ movie }: { movie: Movie }) => {
+export const MovieHeader = ({ movie: initialMovie }: { movie: Movie }) => {
   const t = useTranslations();
+  const { data: movie } = useQuery({
+    ...movieOptions({ movieId: initialMovie.id }),
+    initialData: initialMovie,
+  });
   return (
     <div>
       <ContextMenuMovie movie={movie}>

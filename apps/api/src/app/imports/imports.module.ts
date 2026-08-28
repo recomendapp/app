@@ -8,11 +8,13 @@ import { ImportLogTvSeriesModule } from './log-tv-series/import-log-tv-series.mo
 import { ImportBookmarksModule } from './bookmarks/import-bookmarks.module';
 import { ImportPlaylistsModule } from './playlists/import-playlists.module';
 import { TvLogsSyncModule } from '../tv-series/logs/sync/tv-logs-sync.module';
+import { ImportSourcesModule } from './sources/import-sources.module';
 
 @Module({
   imports: [
     TransfersStorageModule,
     PrefectModule,
+    ImportSourcesModule,
     ImportLogMoviesModule,
     ImportLogTvSeriesModule,
     ImportBookmarksModule,

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useCallback, useEffect, useMemo } from 'react';
 import Loader from '@/components/Loader';
@@ -9,42 +9,48 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@libs/ui/components/select';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
-import { z } from "zod";
+import { z } from 'zod';
 import { CardPlaylist } from '@/components/Card/CardPlaylist';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { upperFirst } from 'lodash';
-import { ButtonGroup } from '@/components/ui/button-group';
+import { ButtonGroup } from '@libs/ui/components/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import { Icons } from '@/config/icons';
 import { userPlaylistsInfiniteOptions } from '@libs/query-client';
 
-const DISPLAY = ["grid", "row"] as const;
-type SortBy = "updated_at";
-const DEFAULT_DISPLAY = "grid";
-const DEFAULT_SORT_BY = "updated_at";
-const DEFAULT_SORT_ORDER = "desc";
+const DISPLAY = ['grid', 'row'] as const;
+type SortBy = 'updated_at';
+const DEFAULT_DISPLAY = 'grid';
+const DEFAULT_SORT_BY = 'updated_at';
+const DEFAULT_SORT_ORDER = 'desc';
 
 // Display
 const displaySchema = z.enum(DISPLAY);
 const getValidatedDisplay = (display: string | null): z.infer<typeof displaySchema> => {
-  return displaySchema.safeParse(display).success ? display as z.infer<typeof displaySchema> : DEFAULT_DISPLAY;
+  return displaySchema.safeParse(display).success
+    ? (display as z.infer<typeof displaySchema>)
+    : DEFAULT_DISPLAY;
 };
 
 // Order
-const sortBySchema = z.enum(["updated_at"]);
+const sortBySchema = z.enum(['updated_at']);
 const getValidatedOrder = (order: string | null): z.infer<typeof sortBySchema> => {
-  return sortBySchema.safeParse(order).success ? order as z.infer<typeof sortBySchema> : DEFAULT_SORT_BY;
+  return sortBySchema.safeParse(order).success
+    ? (order as z.infer<typeof sortBySchema>)
+    : DEFAULT_SORT_BY;
 };
 
 // SORT ORDER
-const sortOrderSchema = z.enum(["asc", "desc"]);
+const sortOrderSchema = z.enum(['asc', 'desc']);
 const getValidatedSortOrder = (order?: string | null): z.infer<typeof sortOrderSchema> => {
-  return sortOrderSchema.safeParse(order).success ? order! as z.infer<typeof sortOrderSchema> : DEFAULT_SORT_ORDER;
-}
+  return sortOrderSchema.safeParse(order).success
+    ? (order! as z.infer<typeof sortOrderSchema>)
+    : DEFAULT_SORT_ORDER;
+};
 
 interface UserPlaylistsProps {
   userId: string;
@@ -64,46 +70,69 @@ export default function ProfilePlaylists({ userId }: UserPlaylistsProps) {
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useInfiniteQuery(userPlaylistsInfiniteOptions({
-    userId: userId,
-    filters: {
-      sort_by: sortBy,
-      sort_order: sortOrder,
-    }
-  }))
+  } = useInfiniteQuery(
+    userPlaylistsInfiniteOptions({
+      userId: userId,
+      filters: {
+        sort_by: sortBy,
+        sort_order: sortOrder,
+      },
+    }),
+  );
 
-  const sortOptions = useMemo((): { value: SortBy, label: string }[] => [
-    { value: "updated_at", label: upperFirst(t('common.messages.updated_at')) },
-  ], [t]);
+  const sortOptions = useMemo(
+    (): { value: SortBy; label: string }[] => [
+      { value: 'updated_at', label: upperFirst(t('common.messages.updated_at')) },
+    ],
+    [t],
+  );
 
-  const handleChange = useCallback(({ name, value }: { name: string, value: string }) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set(name, value);
-    window.history.pushState(null, '', `?${params.toString()}`)
-  }, [searchParams]);
-  
+  const handleChange = useCallback(
+    ({ name, value }: { name: string; value: string }) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+      window.history.pushState(null, '', `?${params.toString()}`);
+    },
+    [searchParams],
+  );
+
   useEffect(() => {
-    if (inView && hasNextPage)
-      fetchNextPage();
-   }, [inView, hasNextPage, playlists, fetchNextPage]);
+    if (inView && hasNextPage) fetchNextPage();
+  }, [inView, hasNextPage, playlists, fetchNextPage]);
 
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-end items-center">
-        <ButtonGroup className='justify-end'>
+        <ButtonGroup className="justify-end">
           <ButtonGroup>
-            <TooltipBox tooltip={upperFirst(sortOrder === 'asc' ? t('common.messages.order_asc') : t('common.messages.order_desc'))}>
-              <Button variant={'outline'} onClick={() => handleChange({ name: 'sort_order', value: sortOrder === 'desc' ? 'asc' : 'desc' })}>
+            <TooltipBox
+              tooltip={upperFirst(
+                sortOrder === 'asc'
+                  ? t('common.messages.order_asc')
+                  : t('common.messages.order_desc'),
+              )}
+            >
+              <Button
+                variant={'outline'}
+                onClick={() =>
+                  handleChange({ name: 'sort_order', value: sortOrder === 'desc' ? 'asc' : 'desc' })
+                }
+              >
                 {sortOrder === 'desc' ? <Icons.orderDesc /> : <Icons.orderAsc />}
               </Button>
             </TooltipBox>
-            <Select defaultValue={sortBy} onValueChange={(e) => handleChange({ name: 'sort_by', value: e })}>
+            <Select
+              defaultValue={sortBy}
+              onValueChange={(e) => handleChange({ name: 'sort_by', value: e })}
+            >
               <SelectTrigger className="w-fit">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent align="end">
                 {sortOptions.map((sort) => (
-                  <SelectItem key={sort.value} value={sort.value}>{sort.label}</SelectItem>
+                  <SelectItem key={sort.value} value={sort.value}>
+                    {sort.label}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -124,23 +153,27 @@ export default function ProfilePlaylists({ userId }: UserPlaylistsProps) {
               }
           `}
         >
-          {playlists.pages.map((page, i) => (
+          {playlists.pages.map((page, i) =>
             page?.data.map((playlist, index) => (
               <CardPlaylist
-              key={playlist.id}
-              ref={(i === playlists.pages?.length - 1) && (index === page?.data.length - 1) ? ref : undefined }
-              playlist={playlist}
-              className={'w-full'}
-              showItemCount={true}
+                key={playlist.id}
+                ref={
+                  i === playlists.pages?.length - 1 && index === page?.data.length - 1
+                    ? ref
+                    : undefined
+                }
+                playlist={playlist}
+                className={'w-full'}
+                showItemCount={true}
               />
-            ))
-          ))}
-          {isFetchingNextPage && (
-            <Loader/>
+            )),
           )}
+          {isFetchingNextPage && <Loader />}
         </div>
       ) : (
-        <p className="text-center text-muted-foreground">{upperFirst(t('common.messages.no_playlists'))}</p>
+        <p className="text-center text-muted-foreground">
+          {upperFirst(t('common.messages.no_playlists'))}
+        </p>
       )}
     </div>
   );

@@ -1,24 +1,26 @@
-'use client';
+import { Separator } from '@libs/ui/components/separator';
+import { getTranslations } from 'next-intl/server';
+import { Importer } from '@/components/Settings/Data/Importer/Importer';
+import { Exporter } from '@/components/Settings/Data/Exporter/Exporter';
+import { getExportSources, getImportSources } from '@/api/server/data';
 
-import { Separator } from "@/components/ui/separator";
-import { useTranslations } from "next-intl";
-import { Importer } from "../../../../../../components/Settings/Data/Importer/Importer";
-import { Exporter } from "@/components/Settings/Data/Exporter/Exporter";
+export default async function SettingsDataPage() {
+  const t = await getTranslations('pages.settings');
+  const [importSources, exportSources] = await Promise.all([
+    getImportSources(),
+    getExportSources(),
+  ]);
 
-export default function SettingsDataPage() {
-  const t = useTranslations('pages.settings');
   return (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium">{t('data.label')}</h3>
-        <p className="text-sm text-muted-foreground text-justify">
-          {t('data.description')}
-        </p>
+        <p className="text-sm text-muted-foreground text-justify">{t('data.description')}</p>
       </div>
       <Separator />
-      <Importer />
+      <Importer initialSources={importSources} />
       <Separator />
-      <Exporter />
+      <Exporter initialDestinations={exportSources} />
     </div>
   );
 }

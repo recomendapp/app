@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
 import ButtonLogTvEpisodeWatch from '@/components/buttons/ButtonLogTvEpisodeWatch';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
-import { Card } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Card } from '@libs/ui/components/card';
+import { Skeleton } from '@libs/ui/components/skeleton';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { Icons } from '@/config/icons';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
@@ -15,87 +15,106 @@ import { useFormatter, useTranslations } from 'next-intl';
 import { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-export const TvSeasonDetails = ({
-  season,
-}: {
-  season: TvSeasonGet;
-}) => {
+export const TvSeasonDetails = ({ season }: { season: TvSeasonGet }) => {
   const t = useTranslations();
   const format = useFormatter();
   const { ref, inView } = useInView();
-  const {
-    data,
-    isLoading,
-    isFetching,
-    fetchNextPage,
-    hasNextPage,
-  } = useInfiniteQuery(tvSeasonEpisodesInfiniteOptions({
-    tvSeriesId: season.tvSeriesId,
-    seasonNumber: season.seasonNumber,
-  }));
-  const flatEpisodes = useMemo(() => data?.pages.flatMap(page => page.data) ?? [], [data]);
+  const { data, isLoading, isFetching, fetchNextPage, hasNextPage } = useInfiniteQuery(
+    tvSeasonEpisodesInfiniteOptions({
+      tvSeriesId: season.tvSeriesId,
+      seasonNumber: season.seasonNumber,
+    }),
+  );
+  const flatEpisodes = useMemo(() => data?.pages.flatMap((page) => page.data) ?? [], [data]);
 
   useEffect(() => {
     if (inView && hasNextPage) fetchNextPage();
   }, [inView, hasNextPage, fetchNextPage]);
 
   return (
-	<div className="@container/tv_season-details flex flex-col gap-4 max-w-7xl w-full">
-		<div>
-			<h2 className="text-lg font-medium">
-        {upperFirst(t('common.messages.tv_episode', { count: season.episodeCount }))}
-      </h2>
-      <div className='mx-auto max-w-xl space-y-2'>
-        {isLoading ? (
-          Array.from({ length: season.episodeCount || 5 }).map((_, i) => (
-            <Skeleton key={i} className="h-24 w-full rounded-md" style={{ animationDelay: `${i * 0.12}s` }} />
-          ))
-        ) : flatEpisodes?.map((episode, i) => (
-          <Card key={i} className="@container/episode-card flex flex-row items-center gap-2 p-2 hover:bg-muted-hover hover:cursor-pointer">
-            <div className="shrink-0 relative w-32 @sm/episode-card:w-40 @md/episode-card:w-48 aspect-video rounded-md overflow-hidden">
-              <ImageWithFallback
-                src={getTmdbImage({ path: episode.stillPath, size: 'w342' })}
-                alt={upperFirst(t('common.messages.tv_episode_value', { number: episode.episodeNumber }))}
-                fill
-                className="object-cover"
-                type="tv_episode"
-                sizes={`
+    <div className="@container/tv_season-details flex flex-col gap-4 max-w-7xl w-full">
+      <div>
+        <h2 className="text-lg font-medium">
+          {upperFirst(t('common.messages.tv_episode', { count: season.episodeCount }))}
+        </h2>
+        <div className="mx-auto max-w-xl space-y-2">
+          {isLoading
+            ? Array.from({ length: season.episodeCount || 5 }).map((_, i) => (
+                <Skeleton
+                  key={i}
+                  className="h-24 w-full rounded-md"
+                  style={{ animationDelay: `${i * 0.12}s` }}
+                />
+              ))
+            : flatEpisodes?.map((episode, i) => (
+                <Card
+                  key={i}
+                  className="@container/episode-card flex flex-row items-center gap-2 p-2 hover:bg-muted-hover hover:cursor-pointer"
+                >
+                  <div className="shrink-0 relative w-32 @sm/episode-card:w-40 @md/episode-card:w-48 aspect-video rounded-md overflow-hidden">
+                    <ImageWithFallback
+                      src={getTmdbImage({ path: episode.stillPath, size: 'w342' })}
+                      alt={upperFirst(
+                        t('common.messages.tv_episode_value', { number: episode.episodeNumber }),
+                      )}
+                      fill
+                      className="object-cover"
+                      type="tv_episode"
+                      sizes={`
                   (max-width: 640px) 96px,
                   (max-width: 1024px) 120px,
                   150px
                 `}
-              />
-              <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
-                {(episode.voteAverage) ? <IconMediaRating
-                  rating={episode.voteAverage}
-                  variant="general"
-                  className="w-full"
-                /> : null}
-              </div>
+                    />
+                    <div className="absolute flex flex-col gap-2 top-2 right-2 w-12">
+                      {episode.voteAverage ? (
+                        <IconMediaRating
+                          rating={episode.voteAverage}
+                          variant="general"
+                          className="w-full"
+                        />
+                      ) : null}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="line-clamp-2 wrap-break-word font-bold">
+                      <span className="text-accent-yellow font-normal">
+                        {upperFirst(
+                          t('common.messages.tv_episode_short', {
+                            seasonNumber: season.seasonNumber,
+                            episodeNumber: episode.episodeNumber,
+                          }),
+                        )}
+                      </span>
+                      {' • '}
+                      {episode.name ??
+                        upperFirst(
+                          t('common.messages.tv_episode_value', { number: episode.episodeNumber }),
+                        )}
+                    </h3>
+                    <p className="line-clamp-2 wrap-break-word">
+                      {episode.overview ?? upperFirst(t('common.messages.no_overview'))}
+                    </p>
+                    <h4 className="text-sm text-muted-foreground">{`${upperFirst(t('common.messages.first_air_date'))} : ${episode.airDate ? format.dateTime(new Date(episode.airDate), { year: 'numeric', month: 'long', day: 'numeric' }) : upperFirst(t('common.messages.unknown'))}`}</h4>
+                  </div>
+                  <div>
+                    <ButtonLogTvEpisodeWatch
+                      tvSeriesId={season.tvSeriesId}
+                      seasonNumber={season.seasonNumber}
+                      episodeNumber={episode.episodeNumber}
+                    />
+                  </div>
+                </Card>
+              ))}
+          {isFetching ? (
+            <div className="flex items-center justify-center p-4">
+              <Icons.loader />
             </div>
-            <div className='space-y-2'>
-              <h3 className="line-clamp-2 wrap-break-word font-bold">
-                <span className='text-accent-yellow font-normal'>{upperFirst(t('common.messages.tv_episode_short', { seasonNumber: season.seasonNumber, episodeNumber: episode.episodeNumber }))}</span>
-                {" • "}
-                {episode.name ?? upperFirst(t('common.messages.tv_episode_value', { number: episode.episodeNumber }))}
-              </h3>
-              <p className="line-clamp-2 wrap-break-word">{episode.overview ?? upperFirst(t('common.messages.no_overview'))}</p>
-              <h4 className='text-sm text-muted-foreground'>{`${upperFirst(t('common.messages.first_air_date'))} : ${episode.airDate ? format.dateTime(new Date(episode.airDate), { year: 'numeric', month: 'long', day: 'numeric' }) : upperFirst(t('common.messages.unknown'))}`}</h4>
-            </div>
-            <div>
-              <ButtonLogTvEpisodeWatch tvSeriesId={season.tvSeriesId} seasonNumber={season.seasonNumber} episodeNumber={episode.episodeNumber} />
-            </div>
-          </Card>
-        ))}
-        {isFetching ? (
-						<div className="flex items-center justify-center p-4">
-							<Icons.loader />
-						</div>
-					): (
-						<div ref={ref} />
-					)}
+          ) : (
+            <div ref={ref} />
+          )}
+        </div>
       </div>
-		</div>
-  </div>
+    </div>
   );
-}
+};

@@ -4,7 +4,7 @@ import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { useTranslations } from 'next-intl';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '@libs/ui/components/badge';
 
 export function MediaPreview({
   title,

@@ -1,4 +1,4 @@
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ScrollArea } from '@libs/ui/components/scroll-area';
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -8,7 +8,7 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
   useSidebar,
-} from '@/components/ui/sidebar';
+} from '@libs/ui/components/sidebar';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { Icons } from '@/config/icons';
 import { useAuth } from '@/context/auth-context';
@@ -202,7 +202,7 @@ export const SidebarLeftRoutes = () => {
                   <span>{upperFirst(t('messages.library'))}</span>
                 </Link>
               </SidebarMenuButton>
-              <SidebarMenuAction onClick={() => openModal(ModalPlaylist, {})}>
+              <SidebarMenuAction onClick={() => openModal(ModalPlaylist)}>
                 <Icons.add />
                 <span className="sr-only">{upperFirst(t('messages.create_a_playlist'))}</span>
               </SidebarMenuAction>

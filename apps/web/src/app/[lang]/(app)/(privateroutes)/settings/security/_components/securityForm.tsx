@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import {
   Form,
   FormControl,
@@ -12,8 +12,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from '@libs/ui/components/form';
+import { Input } from '@libs/ui/components/input';
 import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
@@ -25,36 +25,38 @@ export function SecurityForm() {
   const common = useTranslations('common');
   const [isLoading, setIsLoading] = useState(false);
 
-  const profileFormSchema = z.object({
-    currentPassword: z
-      .string({
-        message: t('security.current_password.form.invalid'),
-      })
-      .min(1, {
-        message: t('security.current_password.form.required'),
-      }),
-    newpassword: z
-      .string()
-      .min(8, {
-        message: t('security.new_password.form.min_length'),
-      })
-      .regex(/[A-Z]/, {
-        message: t('security.new_password.form.uppercase'),
-      })
-      .regex(/[a-z]/, {
-        message: t('security.new_password.form.lowercase'),
-      })
-      .regex(/[0-9]/, {
-        message: t('security.new_password.form.number'),
-      })
-      .regex(/[\W_]/, {
-        message: t('security.new_password.form.special'),
-      }),
-    confirmnewpassword: z.string(),
-  }).refine((data) => data.newpassword === data.confirmnewpassword, {
-    message: t('security.confirm_password.form.match'),
-    path: ['confirmnewpassword'],
-  });
+  const profileFormSchema = z
+    .object({
+      currentPassword: z
+        .string({
+          message: t('security.current_password.form.invalid'),
+        })
+        .min(1, {
+          message: t('security.current_password.form.required'),
+        }),
+      newpassword: z
+        .string()
+        .min(8, {
+          message: t('security.new_password.form.min_length'),
+        })
+        .regex(/[A-Z]/, {
+          message: t('security.new_password.form.uppercase'),
+        })
+        .regex(/[a-z]/, {
+          message: t('security.new_password.form.lowercase'),
+        })
+        .regex(/[0-9]/, {
+          message: t('security.new_password.form.number'),
+        })
+        .regex(/[\W_]/, {
+          message: t('security.new_password.form.special'),
+        }),
+      confirmnewpassword: z.string(),
+    })
+    .refine((data) => data.newpassword === data.confirmnewpassword, {
+      message: t('security.confirm_password.form.match'),
+      path: ['confirmnewpassword'],
+    });
 
   type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
@@ -89,7 +91,7 @@ export function SecurityForm() {
             break;
         }
         throw error;
-      };
+      }
       toast.success(upperFirst(common('messages.saved', { gender: 'male', count: 1 })));
       form.reset();
     } finally {
@@ -157,7 +159,9 @@ export function SecurityForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isLoading}>{upperFirst(common('messages.save'))}</Button>
+        <Button type="submit" disabled={isLoading}>
+          {upperFirst(common('messages.save'))}
+        </Button>
       </form>
     </Form>
   );

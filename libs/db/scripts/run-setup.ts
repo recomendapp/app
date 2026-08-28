@@ -1,6 +1,11 @@
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { db } from '../src/lib/client';
-import { seedExploreParadisePicture, seedI18n, seedSystemConfig } from '../src/lib/seed';
+import {
+  seedExploreParadisePicture,
+  seedI18n,
+  seedImportSources,
+  seedSystemConfig,
+} from '../src/lib/seed';
 
 async function main() {
   console.log('⏳ Starting database setup...');
@@ -14,6 +19,7 @@ async function main() {
     await seedI18n(db);
     await seedSystemConfig(db);
     await seedExploreParadisePicture(db);
+    await seedImportSources(db);
     console.log('✅ Seeding completed successfully!');
 
     process.exit(0);

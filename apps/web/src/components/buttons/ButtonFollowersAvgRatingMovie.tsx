@@ -1,61 +1,62 @@
-import { forwardRef, useCallback } from "react";
-import { Button } from "@/components/ui/button";
-import { TooltipBox } from "@/components/Box/TooltipBox";
-import { cn } from "@/lib/utils";
-import { useModal } from "@/context/modal-context";
-import { useTranslations } from "next-intl";
-import { upperFirst } from "lodash";
-import { ModalUserActivityMovieFollowersRating } from "../Modals/activities/ModalUserActivityMovieFollowersRating";
-import { useQuery } from "@tanstack/react-query";
-import { movieFollowingAverageRatingOptions } from "@libs/query-client";
-import { useAuth } from "@/context/auth-context";
+import { forwardRef, useCallback } from 'react';
+import { Button } from '@libs/ui/components/button';
+import { TooltipBox } from '@/components/Box/TooltipBox';
+import { cn } from '@/lib/utils';
+import { useModal } from '@/context/modal-context';
+import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
+import { ModalUserActivityMovieFollowersRating } from '../Modals/activities/ModalUserActivityMovieFollowersRating';
+import { useQuery } from '@tanstack/react-query';
+import { movieFollowingAverageRatingOptions } from '@libs/query-client';
+import { useAuth } from '@/context/auth-context';
 
-interface ButtonFollowersAvgRatingMovieProps
-	extends React.ComponentProps<typeof Button> {
-		movieId: number;
-		stopPropagation?: boolean;
-	}
+interface ButtonFollowersAvgRatingMovieProps extends React.ComponentProps<typeof Button> {
+  movieId: number;
+  stopPropagation?: boolean;
+}
 
 const ButtonFollowersAvgRatingMovie = forwardRef<
-	React.ComponentRef<typeof Button>,
-	ButtonFollowersAvgRatingMovieProps
+  React.ComponentRef<typeof Button>,
+  ButtonFollowersAvgRatingMovieProps
 >(({ movieId, stopPropagation = true, onClick, className, ...props }, ref) => {
-	const { user } = useAuth();
-	const t = useTranslations();
-	const { openModal } = useModal();
+  const { user } = useAuth();
+  const t = useTranslations();
+  const { openModal } = useModal();
 
-	const {
-		data,
-		isLoading
-	} = useQuery(movieFollowingAverageRatingOptions({
-		userId: user?.id,
-		movieId: movieId,
-	}));
+  const { data, isLoading } = useQuery(
+    movieFollowingAverageRatingOptions({
+      userId: user?.id,
+      movieId: movieId,
+    }),
+  );
 
-	const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-		stopPropagation && e.stopPropagation();
-		if (onClick) {
-			onClick(e);
-		} else {
-			openModal(ModalUserActivityMovieFollowersRating, { movieId: movieId } );
-		}
-	}, [stopPropagation, onClick, openModal, movieId]);
+  const handleClick = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      stopPropagation && e.stopPropagation();
+      if (onClick) {
+        onClick(e);
+      } else {
+        openModal(ModalUserActivityMovieFollowersRating, { movieId: movieId });
+      }
+    },
+    [stopPropagation, onClick, openModal, movieId],
+  );
 
-	if (!data?.averageRating || isLoading) return null;
+  if (!data?.averageRating || isLoading) return null;
 
-	return (
-	<TooltipBox tooltip={upperFirst(t('common.messages.followers_ratings'))}>
-		<Button
-		ref={ref}
-		variant={'outline'}
-		className={cn("bg-background! border-accent-blue! text-accent-blue! border-2", className)}
-		onClick={handleClick}
-		{...props}
-		>
-			<p className="font-bold text-lg">{data.averageRating}</p>
-		</Button>
-	</TooltipBox>
-	);
+  return (
+    <TooltipBox tooltip={upperFirst(t('common.messages.followers_ratings'))}>
+      <Button
+        ref={ref}
+        variant={'outline'}
+        className={cn('bg-background! border-accent-blue! text-accent-blue! border-2', className)}
+        onClick={handleClick}
+        {...props}
+      >
+        <p className="font-bold text-lg">{data.averageRating}</p>
+      </Button>
+    </TooltipBox>
+  );
 });
 ButtonFollowersAvgRatingMovie.displayName = 'ButtonFollowersAvgRatingMovie';
 

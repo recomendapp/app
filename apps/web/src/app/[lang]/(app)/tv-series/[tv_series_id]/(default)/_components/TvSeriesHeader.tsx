@@ -3,14 +3,14 @@
 import { Fragment, useState } from 'react';
 import { Link } from '@/lib/i18n/navigation';
 import YoutubeEmbed from '@/components/utils/Youtube';
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from '@libs/ui/components/dialog';
 import {
   Select,
   SelectContent,
@@ -18,7 +18,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@libs/ui/components/select';
 import { Play } from 'lucide-react';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
 import MediaPoster from '@/components/Media/MediaPoster';
@@ -38,9 +38,15 @@ import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import ButtonFollowersAvgRatingTvSeries from '@/components/buttons/ButtonFollowersAvgRatingTvSeries';
 import { TvSeries, TvSeriesTrailer } from '@libs/api-js';
 import ButtonUserRecoSend from '@/components/buttons/ButtonUserRecoSend';
+import { useQuery } from '@tanstack/react-query';
+import { tvSeriesOptions } from '@libs/query-client';
 
-export const TvSeriesHeader = ({ tvSeries }: { tvSeries: TvSeries }) => {
+export const TvSeriesHeader = ({ tvSeries: initialTvSeries }: { tvSeries: TvSeries }) => {
   const t = useTranslations();
+  const { data: tvSeries } = useQuery({
+    ...tvSeriesOptions({ tvSeriesId: initialTvSeries.id }),
+    initialData: initialTvSeries,
+  });
   return (
     <div>
       <ContextMenuTvSeries tvSeries={tvSeries}>

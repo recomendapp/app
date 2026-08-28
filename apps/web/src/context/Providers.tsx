@@ -1,7 +1,8 @@
 import { ReactQueryProvider } from '@/context/react-query-context';
 import { AuthProvider } from '@/context/auth-context';
 import { MapContext } from '@/context/map-context';
-import { NextIntlClientProvider } from 'next-intl';
+import { LocaleProvider } from '@/context/locale-context';
+import { getMessages, getTimeZone } from 'next-intl/server';
 import { NotificationsProvider } from '@/context/notifications-context';
 import { RealtimeProvider } from '@/context/realtime-context';
 import { cookies } from 'next/headers';
@@ -9,15 +10,15 @@ import { Icons } from '@/config/icons';
 import { getServerDevice } from '@/utils/get-device';
 import { ThemeProvider } from 'next-themes';
 import { UIProvider } from './ui-context';
-import { TooltipProvider } from '@/components/ui/tooltip';
+import { TooltipProvider } from '@libs/ui/components/tooltip';
 import { ModalProvider } from './modal-context';
+import { GateProvider } from './gate-context';
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
 import { SupportedLocale } from '@libs/i18n';
 import { getStatus } from '@/api/server/system';
 import { getMe, getSession } from '@/lib/auth/server';
 import { ApiProvider } from '@/lib/api/client';
-import { AuthPromptGate } from '@/components/Auth/AuthPromptGate';
 
 export const Providers = async ({
   children,
@@ -26,15 +27,18 @@ export const Providers = async ({
   children: React.ReactNode;
   locale: SupportedLocale;
 }) => {
-  const [session, { data: user }, status, cookiesStore, device] = await Promise.all([
-    getSession(),
-    getMe({
-      locale,
-    }),
-    getStatus(),
-    cookies(),
-    getServerDevice(),
-  ]);
+  const [session, { data: user }, status, cookiesStore, device, messages, timeZone] =
+    await Promise.all([
+      getSession(),
+      getMe({
+        locale,
+      }),
+      getStatus(),
+      cookies(),
+      getServerDevice(),
+      getMessages({ locale }),
+      getTimeZone(),
+    ]);
   // UI
   const layout = cookiesStore.get('ui:layout');
   const sidebarOpen = cookiesStore.get('ui-sidebar:open');
@@ -42,7 +46,7 @@ export const Providers = async ({
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
 
   return (
-    <NextIntlClientProvider locale={locale}>
+    <LocaleProvider locale={locale} messages={messages} timeZone={timeZone}>
       <ReactQueryProvider>
         <ApiProvider>
           <AuthProvider session={session || null} user={user || null}>
@@ -60,24 +64,25 @@ export const Providers = async ({
                     >
                       <TooltipProvider delayDuration={100}>
                         <ModalProvider>
-                          <AuthPromptGate />
-                          <NextTopLoader
-                            showSpinner={false}
-                            easing="ease"
-                            color="#FFE974"
-                            height={2}
-                          />
-                          <Toaster
-                            position="top-center"
-                            toastOptions={{
-                              style: {
-                                borderRadius: '10px',
-                                background: '#333',
-                                color: '#fff',
-                              },
-                            }}
-                          />
-                          {status?.isMaintenance ? <MaintenancePage /> : children}
+                          <GateProvider>
+                            <NextTopLoader
+                              showSpinner={false}
+                              easing="ease"
+                              color="#FFE974"
+                              height={2}
+                            />
+                            <Toaster
+                              position="top-center"
+                              toastOptions={{
+                                style: {
+                                  borderRadius: '10px',
+                                  background: '#333',
+                                  color: '#fff',
+                                },
+                              }}
+                            />
+                            {status?.isMaintenance ? <MaintenancePage /> : children}
+                          </GateProvider>
                         </ModalProvider>
                       </TooltipProvider>
                     </UIProvider>
@@ -88,7 +93,7 @@ export const Providers = async ({
           </AuthProvider>
         </ApiProvider>
       </ReactQueryProvider>
-    </NextIntlClientProvider>
+    </LocaleProvider>
   );
 };
 

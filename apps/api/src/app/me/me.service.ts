@@ -44,6 +44,7 @@ export class MeService {
       backgroundImage: fullUser.profile.backgroundImage,
       isPremium: fullUser.profile.isPremium,
       isPrivate: fullUser.profile.isPrivate,
+      welcomedAt: fullUser.profile.welcomedAt,
       followersCount: fullUser.profile.followersCount,
       followingCount: fullUser.profile.followingCount,
     });
@@ -81,6 +82,7 @@ export class MeService {
     const profileUpdates: Partial<typeof profile.$inferSelect> = {};
     if (dto.bio !== undefined) profileUpdates.bio = dto.bio;
     if (dto.isPrivate !== undefined) profileUpdates.isPrivate = dto.isPrivate;
+    if (dto.welcomed === true) profileUpdates.welcomedAt = new Date().toISOString();
 
     await this.db.transaction(async (tx) => {
       if (Object.keys(userUpdates).length > 0) {

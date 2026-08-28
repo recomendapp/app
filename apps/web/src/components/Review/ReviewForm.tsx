@@ -11,10 +11,10 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import toast from 'react-hot-toast';
 import { cn } from '@/lib/utils';
-import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@libs/ui/components/card';
 import { useFormatter, useNow, useTranslations } from 'next-intl';
 import { useEditor } from '@/components/tiptap/Tiptap';
 import { upperFirst } from 'lodash';
@@ -27,7 +27,7 @@ import {
   InputGroupButton,
   InputGroupText,
   InputGroupTextarea,
-} from '@/components/ui/input-group';
+} from '@libs/ui/components/input-group';
 import {
   BoldIcon,
   ItalicIcon,
@@ -37,13 +37,13 @@ import {
   UnderlineIcon,
   UndoIcon,
 } from 'lucide-react';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { Label } from '../ui/label';
-import { Input } from '../ui/input';
-import { ScrollArea, ScrollBar } from '../ui/scroll-area';
+import { Popover, PopoverContent, PopoverTrigger } from '@libs/ui/components/popover';
+import { Label } from '@libs/ui/components/label';
+import { Input } from '@libs/ui/components/input';
+import { ScrollArea, ScrollBar } from '@libs/ui/components/scroll-area';
 import { CardMovie } from '../Card/CardMovie';
 import { CardTvSeries } from '../Card/CardTvSeries';
-import { Spinner } from '../ui/spinner';
+import { Spinner } from '@libs/ui/components/spinner';
 import {
   Movie,
   TvSeries,

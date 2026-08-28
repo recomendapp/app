@@ -32,11 +32,17 @@ export const commonSchema = extensionSchema.extend({
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
   WEB_APP_URL: z.url().default('http://localhost:3000'),
 });
+
+// Static assets served from MinIO/S3 (see libs/assets)
+export const assetsSchema = z.object({
+  ASSETS_BASE_URL: z.url(),
+});
 /* -------------------------------------------------------------------------- */
 
 export const apiSchema = commonSchema
   .extend(s3Schema.shape)
   .extend(typesenseSchema.shape)
+  .extend(assetsSchema.shape)
   .extend({
     PORT: z.coerce.number().default(9000),
     HOST: z.string().default('0.0.0.0'),
@@ -73,16 +79,13 @@ export const apiSchema = commonSchema
     API_INTERNAL_IMPORTS_SECRET: z.string(),
   });
 
-export const notifySchema = commonSchema.extend({
+export const notifySchema = commonSchema.extend(assetsSchema.shape).extend({
   PORT: z.coerce.number().default(9001),
   HOST: z.string().default('0.0.0.0'),
   DATABASE_URL: z.string(),
 
   RESEND_API_KEY: z.string().startsWith('re_'),
   RESEND_FROM_EMAIL: z.string().default('Recomend <hello@recomend.app>'),
-
-  // Static assets served from MinIO/S3 (see libs/assets), used in email templates
-  ASSETS_BASE_URL: z.url(),
 
   FIREBASE_PROJECT_ID: z.string(),
   FIREBASE_CLIENT_EMAIL: z.string(),

@@ -8,7 +8,7 @@ client.setConfig({
 });
 
 client.interceptors.request.use(async (config) => {
-  const cookie = authClient.getCookie();
+  const cookie = await authClient.getCookie();
   if (cookie) {
     config.headers.set('Cookie', cookie);
   }
@@ -17,8 +17,8 @@ client.interceptors.request.use(async (config) => {
 
 realtime.setConfig({
   baseUrl: API_URL || 'https://api.recomend.app',
-  getAuthCookie: () => {
-    const token = authClient.getCookie();
+  getAuthCookie: async () => {
+    const token = await authClient.getCookie();
     return token;
   },
 });

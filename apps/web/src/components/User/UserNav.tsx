@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@libs/ui/components/dropdown-menu';
 import { Link } from '@/lib/i18n/navigation';
 import { useAuth } from '@/context/auth-context';
 import { UserAvatar } from './UserAvatar';
@@ -19,7 +19,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { Icons } from '@/config/icons';
 import { upperFirst } from 'lodash';
 import { cn } from '@/lib/utils';
-import { Spinner } from '../ui/spinner';
+import { Spinner } from '@libs/ui/components/spinner';
 
 type Route = {
   icon: React.ElementType;

@@ -1,65 +1,74 @@
 'use client';
 
-import { useAuth } from "@/context/auth-context";
-import { siteConfig } from "@/config/site";
-import { useNow, useTranslations } from "next-intl";
-import { useUI } from "@/context/ui-context";
-import HeaderRightSide from "@/components/Header/HeaderRightSide";
-import { WidgetRecomendShowcase } from "@/components/widgets/WidgetRecomendShowcase";
-import { WidgetUserFriendsPlaylists } from "@/components/widgets/WIdgetUserFriendsPlaylists";
-import { WidgetUserFeed } from "@/components/widgets/WidgetUserFeed";
-import { WidgetUserDiscovery } from "@/components/widgets/WidgetUserDiscovery";
-import { Button } from "@/components/ui/button";
-import { Link } from "@/lib/i18n/navigation";
-import { upperFirst } from "lodash";
-import { WidgetMostRecommended } from "@/components/widgets/WidgetMostRecommended";
-import { WidgetBookmarks } from "@/components/widgets/WidgetBookmarks";
-import { useMemo } from "react";
-import { WidgetRecos } from "@/components/widgets/WidgetRecos";
+import { useAuth } from '@/context/auth-context';
+import { siteConfig } from '@/config/site';
+import { useNow, useTranslations } from 'next-intl';
+import { useUI } from '@/context/ui-context';
+import HeaderRightSide from '@/components/Header/HeaderRightSide';
+import { WidgetRecomendShowcase } from '@/components/widgets/WidgetRecomendShowcase';
+import { WidgetUserFriendsPlaylists } from '@/components/widgets/WIdgetUserFriendsPlaylists';
+import { WidgetUserFeed } from '@/components/widgets/WidgetUserFeed';
+import { WidgetUserDiscovery } from '@/components/widgets/WidgetUserDiscovery';
+import { Button } from '@libs/ui/components/button';
+import { Link } from '@/lib/i18n/navigation';
+import { upperFirst } from 'lodash';
+import { WidgetMostRecommended } from '@/components/widgets/WidgetMostRecommended';
+import { WidgetBookmarks } from '@/components/widgets/WidgetBookmarks';
+import { useMemo } from 'react';
+import { WidgetRecos } from '@/components/widgets/WidgetRecos';
 
 export default function Home() {
-	const { user } = useAuth();
-	const { device } = useUI();
-	const t = useTranslations();
-	const now = useNow({ updateInterval: 1000 * 60 });
-	const getTimeOfDay = useMemo((): string => {
-		const hour = now.getHours();
-		if (hour < 5) return 'night';
-		if (hour < 12) return 'morning';
-		if (hour < 18) return 'afternoon';
-		return 'evening';
-	}, [now]);
+  const { user } = useAuth();
+  const { device } = useUI();
+  const t = useTranslations();
+  const now = useNow({ updateInterval: 1000 * 60 });
+  const getTimeOfDay = useMemo((): string => {
+    const hour = now.getHours();
+    if (hour < 5) return 'night';
+    if (hour < 12) return 'morning';
+    if (hour < 18) return 'afternoon';
+    return 'evening';
+  }, [now]);
 
-	return (
-		<div className="p-4 flex flex-col gap-4">
-			<div className="flex justify-between items-center w-full">
-				<h2 className="text-xl md:text-4xl break-all line-clamp-2">
-					{user ? upperFirst(t('common.messages.greeting_with_name', { timeOfDay: getTimeOfDay, name: user.name })) : upperFirst(t('common.messages.welcome_to_app', { app: siteConfig.name }))}
-				</h2>
-				{device === "mobile" ? <HeaderRightSide /> : null}
-			</div>
-			<WidgetMostRecommended className='col-span-full' />
-			<div className="gap-4 gap-x-8 grid grid-cols-1 @4xl/main:grid-cols-2">
-				{!user ? (
-					// Only non-logged users
-					<>
-					<Button className="col-span-full m-auto max-w-lg" asChild>
-						<Link href="/auth/login">{upperFirst(t('common.messages.get_started_its_free'))}</Link>
-					</Button>
-					<WidgetRecomendShowcase className='col-span-full'/>
-					</>
-				) : null}
-				{user ? (
-					// Only logged users
-					<>
-					<WidgetRecos />
-					<WidgetBookmarks />
-					<WidgetUserFriendsPlaylists />
-					<WidgetUserFeed />
-					<WidgetUserDiscovery className="h-[600px]" />
-					</>
-				) : null}
-			</div>
-		</div>
-	);
+  return (
+    <div className="p-4 flex flex-col gap-4">
+      <div className="flex justify-between items-center w-full">
+        <h2 className="text-xl md:text-4xl break-all line-clamp-2">
+          {user
+            ? upperFirst(
+                t('common.messages.greeting_with_name', {
+                  timeOfDay: getTimeOfDay,
+                  name: user.name,
+                }),
+              )
+            : upperFirst(t('common.messages.welcome_to_app', { app: siteConfig.name }))}
+        </h2>
+        {device === 'mobile' ? <HeaderRightSide /> : null}
+      </div>
+      <WidgetMostRecommended className="col-span-full" />
+      <div className="gap-4 gap-x-8 grid grid-cols-1 @4xl/main:grid-cols-2">
+        {!user ? (
+          // Only non-logged users
+          <>
+            <Button className="col-span-full m-auto max-w-lg" asChild>
+              <Link href="/auth/login">
+                {upperFirst(t('common.messages.get_started_its_free'))}
+              </Link>
+            </Button>
+            <WidgetRecomendShowcase className="col-span-full" />
+          </>
+        ) : null}
+        {user ? (
+          // Only logged users
+          <>
+            <WidgetRecos />
+            <WidgetBookmarks />
+            <WidgetUserFriendsPlaylists />
+            <WidgetUserFeed />
+            <WidgetUserDiscovery className="h-[600px]" />
+          </>
+        ) : null}
+      </div>
+    </div>
+  );
 }

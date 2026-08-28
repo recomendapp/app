@@ -24,7 +24,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@libs/*": ["../../libs/*"],
+      "@libs/ui": ["../../libs/ui/src/index.ts"],
+      "@libs/ui/*": ["../../libs/ui/src/*"],
+      "@libs/*": ["../../libs/*"]
     }
   },
   "include": [

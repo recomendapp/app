@@ -1,0 +1,1 @@
+ALTER TABLE "auth"."account" ALTER COLUMN "issuer" SET NOT NULL;

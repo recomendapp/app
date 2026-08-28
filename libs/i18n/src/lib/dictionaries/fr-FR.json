@@ -61,6 +61,7 @@
       "edit_comment": "modifier {count, plural, one {le commentaire} other {les commentaires}}",
       "get_started": "commencer",
       "get_started_its_free": "c'est parti 🎬, c'est gratuit !",
+      "import": "Importer",
       "upgrade_to_plan": "passer à {plan}",
       "choose_subscription_recurrence": "choisissez la récurrence de votre abonnement",
       "compare_plans": "comparer les plans",
@@ -390,6 +391,7 @@
       "user_liked_playlist": "<name></name> a aimé une playlist",
       "user_liked_review": "<name></name> a aimé une critique",
       "runtime": "durée",
+      "ends_at": "Se termine à {value}",
       "this_user_has_no_activity": "Cet(te) utilisateur(trice) n'a pas d'activité",
       "notification_archived": "{count, plural, =1 {notification archivée} other {notifications archivées}}",
       "notification_unarchived": "{count, plural, =1 {notification désarchivée} other {notifications désarchivées}}",
@@ -593,6 +595,13 @@
           "label": "Sans publicités",
           "description": "Profitez de Recomend sans publicités, pour toujours"
         }
+      }
+    },
+    "welcome": {
+      "title": "Merci de vous être inscrit !",
+      "description": "Voici un aperçu de ce que vous pouvez faire avec {app}.",
+      "import": {
+        "title": "Vous venez d'une autre plateforme ?"
       }
     },
     "collection": {
@@ -951,10 +960,12 @@
         "importer": {
           "label": "Importer",
           "select_source": "Choisissez une source",
+          "instructions_title": "Instructions",
           "browse_prompt": "Déposez votre fichier ici, ou <link>parcourir</link>",
-          "browse_folder_prompt": "Vous avez un dossier au lieu d'un zip ? <link>Sélectionnez le dossier</link>",
-          "zipping": "Compression de vos fichiers…",
+          "uploading": "Envoi en cours…",
           "processing": "Analyse de votre fichier…",
+          "upload_error": "Échec de l'envoi, veuillez réessayer.",
+          "invalid_file_type": "Ce type de fichier n'est pas pris en charge pour cette source.",
           "review_title": "Vérifiez votre import",
           "review_summary": "{matched} sur {total} trouvés",
           "validate": "Valider l'import",

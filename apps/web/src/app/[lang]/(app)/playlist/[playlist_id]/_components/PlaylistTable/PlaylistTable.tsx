@@ -25,7 +25,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from '@libs/ui/components/table';
 import { Columns } from './component/columns';
 import { useMediaQuery } from 'react-responsive';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';

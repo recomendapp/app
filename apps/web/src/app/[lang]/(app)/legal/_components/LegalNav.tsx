@@ -3,9 +3,9 @@
 import { Link } from '@/lib/i18n/navigation';
 import { usePathname } from '@/lib/i18n/navigation';
 import { cn } from '@/lib/utils';
-import { buttonVariants } from '@/components/ui/button';
+import { buttonVariants } from '@libs/ui/components/button';
 import { useTranslations } from 'next-intl';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { ScrollArea, ScrollBar } from '@libs/ui/components/scroll-area';
 import { upperFirst } from 'lodash';
 import { useMemo } from 'react';
 

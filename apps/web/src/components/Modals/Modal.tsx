@@ -1,6 +1,6 @@
-import * as React from "react"
- 
-import { cn } from "@/lib/utils"
+import * as React from 'react';
+
+import { cn } from '@/lib/utils';
 import {
   Dialog,
   DialogContent,
@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from '@libs/ui/components/dialog';
 import {
   Drawer,
   DrawerClose,
@@ -19,12 +19,12 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer"
-import { useUI } from "@/context/ui-context"
+} from '@libs/ui/components/drawer';
+import { useUI } from '@/context/ui-context';
 
 export interface ModalType {
-	id: string;
-	open: boolean;
+  id: string;
+  open: boolean;
 }
 
 // interface ModalProps {
@@ -48,7 +48,7 @@ export interface ModalType {
 // 	className,
 // } : ModalProps) => {
 // 	const { device } = useUI();
- 
+
 // 	if (device === 'desktop') {
 // 		return (
 // 			<Dialog open={open} onOpenChange={onOpenChange}>
@@ -115,28 +115,32 @@ export interface ModalType {
 /**
  * Modal component
  * @param children
+ * @param onCloseEnd Called once the close animation has finished playing (not on open).
+ *   Use this instead of a fixed timeout to defer work — like a route change — that would
+ *   otherwise unmount the modal before its exit animation gets to run.
  * @return on desktop: Dialog, on mobile: Drawer
  */
 const Modal = ({
-	children,
-	className,
-	...props
-}: React.ComponentProps<typeof Dialog> & { className?: string }) => {
-	const { device } = useUI();
-	return device === 'desktop' ? (
-		<Dialog {...props}>
-			<ModalContent className={cn('', className)}>
-				{children}
-			</ModalContent>
-		</Dialog>
-	) : (
-		<Drawer {...props}>
-			<ModalContent className={cn('', className)}>
-				{children}
-			</ModalContent>
-		</Drawer>
-	);
-}
+  children,
+  className,
+  onCloseEnd,
+  ...props
+}: React.ComponentProps<typeof Dialog> & { className?: string; onCloseEnd?: () => void }) => {
+  const { device } = useUI();
+  return device === 'desktop' ? (
+    <Dialog {...props}>
+      <ModalContent className={cn('', className)} onCloseEnd={onCloseEnd}>
+        {children}
+      </ModalContent>
+    </Dialog>
+  ) : (
+    <Drawer {...props}>
+      <ModalContent className={cn('', className)} onCloseEnd={onCloseEnd}>
+        {children}
+      </ModalContent>
+    </Drawer>
+  );
+};
 
 /**
  * Modal content component
@@ -144,36 +148,43 @@ const Modal = ({
  * @return on desktop: DialogContent, on mobile: DrawerContent
  */
 const ModalContent = React.forwardRef<
-	React.ElementRef<typeof DialogContent>,
-	React.ComponentPropsWithoutRef<typeof DrawerContent>
->(({ className, ...props }, ref) => {
-	const { device } = useUI();
-	return device === 'desktop' ? (
-		<DialogContent
-			ref={ref}
-			className={cn('max-h-[80%] overflow-auto', className)}
-			{...props}
-		/>
-	) : (
-		<DrawerContent
-			ref={ref}
-			className={cn('max-h-[95%]', className)}
-			{...props}
-		/>
-	);
+  React.ElementRef<typeof DialogContent>,
+  React.ComponentPropsWithoutRef<typeof DrawerContent> & { onCloseEnd?: () => void }
+>(({ className, onCloseEnd, onAnimationEnd, ...props }, ref) => {
+  const { device } = useUI();
+
+  const handleAnimationEnd = (event: React.AnimationEvent<HTMLDivElement>) => {
+    onAnimationEnd?.(event);
+    if (event.target === event.currentTarget && event.currentTarget.dataset.state === 'closed') {
+      onCloseEnd?.();
+    }
+  };
+
+  return device === 'desktop' ? (
+    <DialogContent
+      ref={ref}
+      className={cn('max-h-[80%] overflow-auto', className)}
+      onAnimationEnd={handleAnimationEnd}
+      {...props}
+    />
+  ) : (
+    <DrawerContent
+      ref={ref}
+      className={cn('max-h-[95%]', className)}
+      onAnimationEnd={handleAnimationEnd}
+      {...props}
+    />
+  );
 });
 ModalContent.displayName = 'ModalContent';
 
-const ModalBody = ({
-	className,
-	...props
-}: React.HTMLAttributes<HTMLDivElement>) => {
-	const { device } = useUI();
-	return device === 'desktop' ? (
-		<div className={cn('', className)} {...props} />
-	) : (
-		<div className={cn('p-4 overflow-auto', className)} {...props} />
-	);
+const ModalBody = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
+  const { device } = useUI();
+  return device === 'desktop' ? (
+    <div className={cn('', className)} {...props} />
+  ) : (
+    <div className={cn('p-4 overflow-auto', className)} {...props} />
+  );
 };
 ModalBody.displayName = 'ModalBody';
 
@@ -182,22 +193,13 @@ ModalBody.displayName = 'ModalBody';
  * @param children
  * @return on desktop: DialogHeader, on mobile: DrawerHeader
  */
-const ModalHeader = ({
-	className,
-	...props
-}: React.HTMLAttributes<HTMLDivElement>) => {
-	const { device } = useUI();
-	return device === 'desktop' ? (
-		<DialogHeader
-			className={cn('', className)}
-			{...props}
-		/>
-	) : (
-		<DrawerHeader
-			className={cn('', className)}
-			{...props}
-		/>
-	);
+const ModalHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
+  const { device } = useUI();
+  return device === 'desktop' ? (
+    <DialogHeader className={cn('', className)} {...props} />
+  ) : (
+    <DrawerHeader className={cn('', className)} {...props} />
+  );
 };
 ModalHeader.displayName = 'ModalHeader';
 
@@ -206,22 +208,13 @@ ModalHeader.displayName = 'ModalHeader';
  * @param children
  * @return on desktop: DialogFooter, on mobile: DrawerFooter
  */
-const ModalFooter = ({
-	className,
-	...props
-}: React.HTMLAttributes<HTMLDivElement>) => {
-	const { device } = useUI();
-	return device === 'desktop' ? (
-		<DialogFooter
-			className={cn('', className)}
-			{...props}
-		/>
-	) : (
-		<DrawerFooter
-			className={cn('pt-2', className)}
-			{...props}
-		/>
-	);
+const ModalFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
+  const { device } = useUI();
+  return device === 'desktop' ? (
+    <DialogFooter className={cn('', className)} {...props} />
+  ) : (
+    <DrawerFooter className={cn('pt-2', className)} {...props} />
+  );
 };
 ModalFooter.displayName = 'ModalFooter';
 
@@ -231,23 +224,15 @@ ModalFooter.displayName = 'ModalFooter';
  * @return On desktop: DialogTitle, On mobile: DrawerTitle
  */
 const ModalTitle = React.forwardRef<
-	React.ElementRef<typeof DialogTitle>,
-	React.ComponentPropsWithoutRef<typeof DrawerTitle>
+  React.ElementRef<typeof DialogTitle>,
+  React.ComponentPropsWithoutRef<typeof DrawerTitle>
 >(({ className, ...props }, ref) => {
-	const { device } = useUI();
-	return device === 'desktop' ? (
-		<DialogTitle
-			ref={ref}
-			className={cn('', className)}
-			{...props}
-		/>
-	) : (
-		<DrawerTitle
-			ref={ref}
-			className={cn('', className)}
-			{...props}
-		/>
-	);
+  const { device } = useUI();
+  return device === 'desktop' ? (
+    <DialogTitle ref={ref} className={cn('', className)} {...props} />
+  ) : (
+    <DrawerTitle ref={ref} className={cn('', className)} {...props} />
+  );
 });
 ModalTitle.displayName = 'ModalTitle';
 
@@ -257,38 +242,27 @@ ModalTitle.displayName = 'ModalTitle';
  * @return On desktop: DialogDescription, On mobile: DrawerDescription
  */
 const ModalDescription = React.forwardRef<
-	React.ElementRef<typeof DialogDescription>,
-	React.ComponentPropsWithoutRef<typeof DrawerDescription>
+  React.ElementRef<typeof DialogDescription>,
+  React.ComponentPropsWithoutRef<typeof DrawerDescription>
 >(({ className, ...props }, ref) => {
-	const { device } = useUI();
-	return device === 'desktop' ? (
-		<DialogDescription
-			ref={ref}
-			className={cn('', className)}
-			{...props}
-		/>
-	) : (
-		<DrawerDescription
-			ref={ref}
-			className={cn('', className)}
-			{...props}
-		/>
-	);
+  const { device } = useUI();
+  return device === 'desktop' ? (
+    <DialogDescription ref={ref} className={cn('', className)} {...props} />
+  ) : (
+    <DrawerDescription ref={ref} className={cn('', className)} {...props} />
+  );
 });
 ModalDescription.displayName = 'ModalDescription';
 
-
-
-
 export {
-	Modal,
-	// ModalPortal
-	// ModalOverlay,
-	// ModalTrigger,
-	ModalContent,
-	ModalBody,
-	ModalHeader,
-	ModalFooter,
-	ModalTitle,
-	ModalDescription,
-}
+  Modal,
+  // ModalPortal
+  // ModalOverlay,
+  // ModalTrigger,
+  ModalContent,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+  ModalTitle,
+  ModalDescription,
+};

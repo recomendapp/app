@@ -27,6 +27,8 @@ const modeSegments = ({ mode, filters }: { mode?: string; filters?: unknown }) =
 export const importKeys = {
   base: 'imports' as const,
 
+  sources: () => [importKeys.base, 'sources'] as const,
+
   lists: (
     params: ListModeParams<
       NonNullable<ImportsControllerListPaginatedData['query']>,

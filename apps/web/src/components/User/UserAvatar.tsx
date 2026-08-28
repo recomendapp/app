@@ -1,6 +1,6 @@
 'use client';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@libs/ui/components/avatar';
 import { cn, getInitiales } from '@/lib/utils';
 
 interface UserAvatarProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -8,12 +8,7 @@ interface UserAvatarProps extends React.HTMLAttributes<HTMLDivElement> {
   username: string;
 }
 
-export const UserAvatar = ({
-  avatarUrl,
-  username,
-  className,
-  ...props
-} : UserAvatarProps) => {
+export const UserAvatar = ({ avatarUrl, username, className, ...props }: UserAvatarProps) => {
   return (
     <Avatar className={cn('@container/avatar h-8 w-8', className)} {...props}>
       <AvatarImage src={avatarUrl ?? undefined} alt={username} />
@@ -22,4 +17,4 @@ export const UserAvatar = ({
       </AvatarFallback>
     </Avatar>
   );
-}
+};

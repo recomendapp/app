@@ -1,8 +1,8 @@
 'use client';
 
-import { Separator } from "@/components/ui/separator";
-import { useTranslations } from "next-intl";
-import { NotificationsForm } from "./_components/notificationsForm";
+import { Separator } from '@libs/ui/components/separator';
+import { useTranslations } from 'next-intl';
+import { NotificationsForm } from './_components/notificationsForm';
 
 export default function SettingsNotificationsPage() {
   const t = useTranslations('pages.settings');

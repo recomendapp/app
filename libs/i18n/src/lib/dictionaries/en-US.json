@@ -59,6 +59,7 @@
       "edit_comment": "edit {count, plural, one {the comment} other {comments}}",
       "get_started": "get started",
       "get_started_its_free": "get started 🎬, it's free !",
+      "import": "Import",
       "upgrade_to_plan": "upgrade to {plan}",
       "choose_subscription_recurrence": "Choose the recurrence of your subscription",
       "compare_plans": "compare plans",
@@ -390,6 +391,7 @@
       "user_liked_playlist": "<name></name> liked a playlist",
       "user_liked_review": "<name></name> liked a review",
       "runtime": "runtime",
+      "ends_at": "Ends at {value}",
       "this_user_has_no_activity": "This user has no activity",
       "notification_archived": "{count, plural, =1 {notification archived} other {notifications archived}}",
       "notification_unarchived": "{count, plural, =1 {notification unarchived} other {notifications unarchived}}",
@@ -593,6 +595,13 @@
           "label": "Sans publicités",
           "description": "Enjoy Recomend without ads, forever"
         }
+      }
+    },
+    "welcome": {
+      "title": "Thanks for signing up!",
+      "description": "Here's a quick look at what you can do with {app}.",
+      "import": {
+        "title": "Coming from another platform?"
       }
     },
     "collection": {
@@ -951,10 +960,12 @@
         "importer": {
           "label": "Importer",
           "select_source": "Select a source",
+          "instructions_title": "Instructions",
           "browse_prompt": "Drop your file here, or <link>browse</link>",
-          "browse_folder_prompt": "Got a folder instead of a zip? <link>Select the folder</link>",
-          "zipping": "Compressing your files…",
+          "uploading": "Uploading…",
           "processing": "Analyzing your file…",
+          "upload_error": "Upload failed, please try again.",
+          "invalid_file_type": "This file type isn't supported for this source.",
           "review_title": "Review your import",
           "review_summary": "{matched} of {total} matched",
           "validate": "Validate import",

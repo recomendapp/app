@@ -407,6 +407,48 @@
       "when": 1787574552665,
       "tag": "0057_elite_mojo",
       "breakpoints": true
+    },
+    {
+      "idx": 58,
+      "version": "7",
+      "when": 1787827072655,
+      "tag": "0058_silly_ma_gnuci",
+      "breakpoints": true
+    },
+    {
+      "idx": 59,
+      "version": "7",
+      "when": 1787834620620,
+      "tag": "0059_aberrant_alex_wilder",
+      "breakpoints": true
+    },
+    {
+      "idx": 60,
+      "version": "7",
+      "when": 1787854321674,
+      "tag": "0060_add_account_issuer_column",
+      "breakpoints": true
+    },
+    {
+      "idx": 61,
+      "version": "7",
+      "when": 1787854331312,
+      "tag": "0061_backfill_account_issuer",
+      "breakpoints": true
+    },
+    {
+      "idx": 62,
+      "version": "7",
+      "when": 1787854357606,
+      "tag": "0062_make_account_issuer_not_null",
+      "breakpoints": true
+    },
+    {
+      "idx": 63,
+      "version": "7",
+      "when": 1787909009377,
+      "tag": "0063_account_issuer_unique_index",
+      "breakpoints": true
     }
   ]
 }

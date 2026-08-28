@@ -1,10 +1,12 @@
 'use client';
 
-import { Input } from '@/components/ui/input';
+import { Input } from '@libs/ui/components/input';
 import { useEffect, useState } from 'react';
+import { cn } from '@/lib/utils';
 import { ImporterSource } from './Importer';
-import { Button } from '@/components/ui/button';
-import { CheckCircle2Icon, Loader2Icon, XCircleIcon } from 'lucide-react';
+import { Button } from '@libs/ui/components/button';
+import { CheckCircle2Icon, Loader2Icon, UploadIcon, XCircleIcon } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
 import {
   importOptions,
@@ -13,7 +15,14 @@ import {
 } from '@libs/query-client';
 import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
+import Markdown from 'react-markdown';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@libs/ui/components/accordion';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -21,7 +30,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+} from '@libs/ui/components/breadcrumb';
 
 import {
   Select,
@@ -29,7 +38,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@libs/ui/components/select';
 import { ModalHeader, ModalTitle, ModalBody, ModalFooter } from '@/components/Modals/Modal';
 import {
   AlertDialog,
@@ -41,14 +50,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+} from '@libs/ui/components/alert-dialog';
 
 import { ImporterCategoryList, ReviewCategory } from './_components/ImporterCategoryList';
 import { ReviewCategoryLogMovies } from './_components/ReviewCategoryLogMovies';
 import { ReviewCategoryLogTvSeries } from './_components/ReviewCategoryLogTvSeries';
 import { ReviewCategoryBookmarks } from './_components/ReviewCategoryBookmarks';
 import { ReviewCategoryPlaylists } from './_components/ReviewCategoryPlaylists';
-import { zipDirectoryFiles } from './_components/zipFolder';
 
 type Step = 'select-file' | 'processing' | 'review' | 'success' | 'failed';
 
@@ -76,7 +84,7 @@ export const ImporterInitiator = ({
   const [reviewCategory, setReviewCategory] = useState<ReviewCategory | null>(null);
   const [playlistId, setPlaylistId] = useState<number | null>(null);
   const [playlistTitle, setPlaylistTitle] = useState<string | null>(null);
-  const [isZipping, setIsZipping] = useState(false);
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
 
   const backToCategories = () => {
     setReviewCategory(null);
@@ -90,6 +98,7 @@ export const ImporterInitiator = ({
   };
 
   const createMutation = useImportCreateMutation();
+  const isUploading = createMutation.isPending;
   const validateMutation = useImportValidateMutation();
   const { data: job } = useQuery({
     ...importOptions(jobId ?? 0),
@@ -112,19 +121,31 @@ export const ImporterInitiator = ({
           setJobId(data.id);
           setStep('processing');
         },
+        onError: () => {
+          toast.error(t('pages.settings.data.importer.upload_error'));
+        },
       },
     );
   };
 
-  const handleFolderSelected = async (fileList: FileList) => {
-    if (!selectedSource || fileList.length === 0) return;
-    setIsZipping(true);
-    try {
-      const zipped = await zipDirectoryFiles(fileList, `${selectedSource.source}-export.zip`);
-      handleFileSelected(zipped);
-    } finally {
-      setIsZipping(false);
+  const handleFilesSelected = (fileList: FileList) => {
+    if (!selectedSource || fileList.length === 0 || isUploading) return;
+
+    if (fileList.length > 1) {
+      toast.error(t('pages.settings.data.importer.invalid_file_type'));
+      return;
     }
+
+    const file = fileList[0];
+    const acceptedExtensions = selectedSource.fileTypes.filter((type) => !type.includes('/'));
+    const extension = file.name.split('.').pop()?.toLowerCase();
+
+    if (!extension || !acceptedExtensions.includes(extension)) {
+      toast.error(t('pages.settings.data.importer.invalid_file_type'));
+      return;
+    }
+
+    handleFileSelected(file);
   };
 
   const handleClose = () => setModalOpen(false);
@@ -203,7 +224,7 @@ export const ImporterInitiator = ({
                       className="relative flex flex-col items-center gap-2 aspect-square h-full overflow-hidden"
                     >
                       <ImageWithFallback
-                        src={`/icons/${theme}/${source.icon}.svg`}
+                        src={theme === 'dark' ? source.iconDark : source.iconLight}
                         alt={source.name}
                         fill
                         sizes={`
@@ -243,63 +264,83 @@ export const ImporterInitiator = ({
               </Select>
             )}
 
+            {selectedSource?.instructions && (
+              <Accordion type="single" collapsible className="rounded-md border px-4">
+                <AccordionItem value="instructions" className="border-none">
+                  <AccordionTrigger>
+                    {t('pages.settings.data.importer.instructions_title')}
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="prose dark:prose-invert prose-sm max-w-none">
+                      <Markdown
+                        components={{
+                          a: ({ href, children }) => (
+                            <a href={href} target="_blank" rel="noopener noreferrer">
+                              {children}
+                            </a>
+                          ),
+                        }}
+                      >
+                        {selectedSource.instructions}
+                      </Markdown>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            )}
+
             {selectedSource && (
-              <div className="flex flex-col gap-2 text-center justify-center min-h-32 px-4 py-4 transition bg-background border-2 border-muted border-dashed rounded-md appearance-none">
-                {isZipping ? (
+              <div
+                className={cn(
+                  'flex flex-col gap-2 text-center justify-center min-h-32 px-4 py-4 transition bg-background border-2 border-dashed rounded-md appearance-none',
+                  isDraggingOver ? 'border-accent-yellow' : 'border-muted',
+                )}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  if (isUploading) return;
+                  if (!isDraggingOver) setIsDraggingOver(true);
+                }}
+                onDragLeave={(e) => {
+                  if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                    setIsDraggingOver(false);
+                  }
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setIsDraggingOver(false);
+                  if (isUploading) return;
+                  if (e.dataTransfer.files?.length) handleFilesSelected(e.dataTransfer.files);
+                }}
+              >
+                {isUploading ? (
                   <div className="flex flex-col items-center gap-2">
                     <Loader2Icon className="animate-spin text-muted-foreground" size={20} />
                     <span className="text-sm text-muted-foreground">
-                      {t('pages.settings.data.importer.zipping')}
+                      {t('pages.settings.data.importer.uploading')}
                     </span>
                   </div>
                 ) : (
-                  <>
-                    <label className="cursor-pointer">
-                      <span className="font-medium text-muted-foreground">
-                        {t.rich('pages.settings.data.importer.browse_prompt', {
-                          link: (chunks) => (
-                            <span className="text-accent-yellow underline">{chunks}</span>
-                          ),
-                        })}
-                      </span>
-                      <Input
-                        type="file"
-                        name="file"
-                        className="hidden"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) handleFileSelected(file);
-                        }}
-                        accept={selectedSource.fileTypes}
-                      />
-                    </label>
-                    {selectedSource.fileTypes.includes('zip') && (
-                      <label className="cursor-pointer">
-                        <span className="text-sm text-muted-foreground">
-                          {t.rich('pages.settings.data.importer.browse_folder_prompt', {
-                            link: (chunks) => (
-                              <span className="text-accent-yellow underline">{chunks}</span>
-                            ),
-                          })}
-                        </span>
-                        <Input
-                          type="file"
-                          name="folder"
-                          className="hidden"
-                          ref={(el) => {
-                            if (el) {
-                              el.setAttribute('webkitdirectory', '');
-                              el.setAttribute('directory', '');
-                            }
-                          }}
-                          onChange={(e) => {
-                            if (e.target.files?.length) handleFolderSelected(e.target.files);
-                            e.target.value = '';
-                          }}
-                        />
-                      </label>
-                    )}
-                  </>
+                  <label className="cursor-pointer flex flex-col items-center gap-2">
+                    <UploadIcon className="text-muted-foreground" size={24} />
+                    <span className="font-medium text-muted-foreground">
+                      {t.rich('pages.settings.data.importer.browse_prompt', {
+                        link: (chunks) => (
+                          <span className="text-accent-yellow underline">{chunks}</span>
+                        ),
+                      })}
+                    </span>
+                    <Input
+                      type="file"
+                      name="file"
+                      className="hidden"
+                      disabled={isUploading}
+                      accept={selectedSource.fileTypes.join(',')}
+                      onChange={(e) => {
+                        if (e.target.files?.length) handleFilesSelected(e.target.files);
+                        e.target.value = '';
+                      }}
+                    />
+                  </label>
                 )}
               </div>
             )}

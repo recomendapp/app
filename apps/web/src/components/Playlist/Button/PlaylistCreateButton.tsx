@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@libs/ui/components/button';
 import { Plus } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useModal } from '@/context/modal-context';
@@ -18,24 +18,24 @@ export function PlaylistCreateButton({
   icon?: boolean;
 }) {
   const { user } = useAuth();
-  const t = useTranslations();
   const { openModal } = useModal();
+  const t = useTranslations();
 
   if (!user) return null;
 
   return (
-      <TooltipBox tooltip={upperFirst(t('common.messages.create_a_playlist'))}>
-        <Button
-          variant={'outline'}
-          size={'icon'}
-          className={cn(className)}
-          onClick={() => openModal(ModalPlaylist)}
-        >
-          {icon ? <Plus /> : upperFirst(t('common.messages.create_a_playlist'))}
-          {icon && <span className="sr-only">
-            {upperFirst(t('common.messages.create_a_playlist'))}
-          </span>}
-        </Button>
-      </TooltipBox>
-  )
+    <TooltipBox tooltip={upperFirst(t('common.messages.create_a_playlist'))}>
+      <Button
+        variant={'outline'}
+        size={'icon'}
+        className={cn(className)}
+        onClick={() => openModal(ModalPlaylist)}
+      >
+        {icon ? <Plus /> : upperFirst(t('common.messages.create_a_playlist'))}
+        {icon && (
+          <span className="sr-only">{upperFirst(t('common.messages.create_a_playlist'))}</span>
+        )}
+      </Button>
+    </TooltipBox>
+  );
 }
