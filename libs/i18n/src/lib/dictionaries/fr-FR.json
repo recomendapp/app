@@ -61,6 +61,7 @@
       "edit_comment": "modifier {count, plural, one {le commentaire} other {les commentaires}}",
       "get_started": "commencer",
       "get_started_its_free": "c'est parti 🎬, c'est gratuit !",
+      "import": "Importer",
       "upgrade_to_plan": "passer à {plan}",
       "choose_subscription_recurrence": "choisissez la récurrence de votre abonnement",
       "compare_plans": "comparer les plans",
@@ -594,6 +595,13 @@
           "label": "Sans publicités",
           "description": "Profitez de Recomend sans publicités, pour toujours"
         }
+      }
+    },
+    "welcome": {
+      "title": "Merci de vous être inscrit !",
+      "description": "Voici un aperçu de ce que vous pouvez faire avec {app}.",
+      "import": {
+        "title": "Vous venez d'une autre plateforme ?"
       }
     },
     "collection": {

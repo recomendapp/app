@@ -59,6 +59,7 @@
       "edit_comment": "edit {count, plural, one {the comment} other {comments}}",
       "get_started": "get started",
       "get_started_its_free": "get started 🎬, it's free !",
+      "import": "Import",
       "upgrade_to_plan": "upgrade to {plan}",
       "choose_subscription_recurrence": "Choose the recurrence of your subscription",
       "compare_plans": "compare plans",
@@ -594,6 +595,13 @@
           "label": "Sans publicités",
           "description": "Enjoy Recomend without ads, forever"
         }
+      }
+    },
+    "welcome": {
+      "title": "Thanks for signing up!",
+      "description": "Here's a quick look at what you can do with {app}.",
+      "import": {
+        "title": "Coming from another platform?"
       }
     },
     "collection": {

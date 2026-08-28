@@ -12,13 +12,13 @@ import { ThemeProvider } from 'next-themes';
 import { UIProvider } from './ui-context';
 import { TooltipProvider } from '@libs/ui/components/tooltip';
 import { ModalProvider } from './modal-context';
+import { GateProvider } from './gate-context';
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
 import { SupportedLocale } from '@libs/i18n';
 import { getStatus } from '@/api/server/system';
 import { getMe, getSession } from '@/lib/auth/server';
 import { ApiProvider } from '@/lib/api/client';
-import { AuthPromptGate } from '@/components/Auth/AuthPromptGate';
 
 export const Providers = async ({
   children,
@@ -64,24 +64,25 @@ export const Providers = async ({
                     >
                       <TooltipProvider delayDuration={100}>
                         <ModalProvider>
-                          <AuthPromptGate />
-                          <NextTopLoader
-                            showSpinner={false}
-                            easing="ease"
-                            color="#FFE974"
-                            height={2}
-                          />
-                          <Toaster
-                            position="top-center"
-                            toastOptions={{
-                              style: {
-                                borderRadius: '10px',
-                                background: '#333',
-                                color: '#fff',
-                              },
-                            }}
-                          />
-                          {status?.isMaintenance ? <MaintenancePage /> : children}
+                          <GateProvider>
+                            <NextTopLoader
+                              showSpinner={false}
+                              easing="ease"
+                              color="#FFE974"
+                              height={2}
+                            />
+                            <Toaster
+                              position="top-center"
+                              toastOptions={{
+                                style: {
+                                  borderRadius: '10px',
+                                  background: '#333',
+                                  color: '#fff',
+                                },
+                              }}
+                            />
+                            {status?.isMaintenance ? <MaintenancePage /> : children}
+                          </GateProvider>
                         </ModalProvider>
                       </TooltipProvider>
                     </UIProvider>
