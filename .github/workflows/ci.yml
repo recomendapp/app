@@ -46,6 +46,7 @@ jobs:
         if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
         run: |
           cat <<EOF > apps/api/.env
+          ASSETS_BASE_URL=http://localhost/assets
           S3_ENDPOINT=http://localhost
           S3_ACCESS_KEY_ID=mock
           S3_SECRET_ACCESS_KEY=mock

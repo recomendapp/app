@@ -146,6 +146,7 @@ jobs:
           REVENUECAT_API_KEY="${{ secrets.INFISICAL_REVENUECAT_API_KEY }}"
           REVENUECAT_WEBHOOK_SECRET="${{ secrets.INFISICAL_REVENUECAT_WEBHOOK_SECRET }}"
           DATABASE_URL="postgres://localhost:5432/placeholder"
+          ASSETS_BASE_URL="https://assets.example.com"
           S3_ENDPOINT="https://s3.example.com"
           S3_ACCESS_KEY_ID="placeholder"
           S3_SECRET_ACCESS_KEY="placeholder"
