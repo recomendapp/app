@@ -460,7 +460,12 @@
       "new_notification": "{count, plural, one {nouvelle notification} other {nouvelles notifications}}",
       "lets_go": "C'est parti !",
       "update_available": "Mise à jour disponible",
-      "advertisement": "Publicité{count, plural, one {} other {s}}"
+      "advertisement": "Publicité{count, plural, one {} other {s}}",
+      "pending": "En attente",
+      "processing": "En cours",
+      "awaiting_review": "À vérifier",
+      "failed": "Échoué{gender, select, female {e} other {}}{count, plural, one {} other {s}}",
+      "data": "Donnée{count, plural, one {} other {s}}"
     },
     "form": {
       "email": {
@@ -962,6 +967,7 @@
           "select_source": "Choisissez une source",
           "instructions_title": "Instructions",
           "browse_prompt": "Déposez votre fichier ici, ou <link>parcourir</link>",
+          "browse_prompt_mobile": "Appuyez pour sélectionner un fichier",
           "uploading": "Envoi en cours…",
           "processing": "Analyse de votre fichier…",
           "upload_error": "Échec de l'envoi, veuillez réessayer.",

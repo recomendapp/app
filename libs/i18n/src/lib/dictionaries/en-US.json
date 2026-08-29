@@ -460,7 +460,12 @@
       "new_notification": "new notification{count, plural, one {} other {s}}",
       "lets_go": "Let's go!",
       "update_available": "Update available",
-      "advertisement": "Advertisement{count, plural, one {} other {s}}"
+      "advertisement": "Advertisement{count, plural, one {} other {s}}",
+      "pending": "Pending",
+      "processing": "Processing",
+      "awaiting_review": "Awaiting review",
+      "failed": "Failed",
+      "data": "Data"
     },
     "form": {
       "email": {
@@ -962,6 +967,7 @@
           "select_source": "Select a source",
           "instructions_title": "Instructions",
           "browse_prompt": "Drop your file here, or <link>browse</link>",
+          "browse_prompt_mobile": "Tap to select a file",
           "uploading": "Uploading…",
           "processing": "Analyzing your file…",
           "upload_error": "Upload failed, please try again.",

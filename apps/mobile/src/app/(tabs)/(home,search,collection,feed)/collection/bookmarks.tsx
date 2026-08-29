@@ -22,6 +22,7 @@ import CollectionScreen, {
 import BottomSheetMovie from '../../../../components/bottom-sheets/sheets/BottomSheetMovie';
 import BottomSheetTvSeries from '../../../../components/bottom-sheets/sheets/BottomSheetTvSeries';
 import { getTmdbImage } from '../../../../lib/tmdb/getTmdbImage';
+import { parseApiDate } from '../../../../utils/parseApiDate';
 
 const BookmarksScreen = () => {
   const t = useTranslations();
@@ -115,8 +116,8 @@ const BookmarksScreen = () => {
         value: 'created_at',
         defaultOrder: 'desc',
         sortFn: (a, b, order) => {
-          const aTime = new Date(a.createdAt).getTime();
-          const bTime = new Date(b.createdAt).getTime();
+          const aTime = parseApiDate(a.createdAt).getTime();
+          const bTime = parseApiDate(b.createdAt).getTime();
           return order === 'asc' ? aTime - bTime : bTime - aTime;
         },
       },

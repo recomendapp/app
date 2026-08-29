@@ -15,6 +15,9 @@ export const useMarkdownStyle = (): MarkdownStyle => {
       strong: {
         color: colors.accentYellow,
       },
+      list: {
+        color: colors.foreground,
+      },
     }),
     [colors],
   );

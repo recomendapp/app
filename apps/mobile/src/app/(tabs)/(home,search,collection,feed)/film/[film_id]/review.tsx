@@ -79,7 +79,7 @@ const MovieReviewScreen = () => {
         },
       );
     },
-    [upsertReview, router, movie, toast, t, user?.username],
+    [upsertReview, router, movie, toast, log, t, user],
   );
   const handleDelete = useCallback(async () => {
     if (!log?.review) return;

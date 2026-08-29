@@ -208,6 +208,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         iosUserTrackingPermission: false,
       },
     ],
+    [
+      'expo-document-picker',
+      {
+        filePermission: 'Select files to upload',
+      },
+    ],
   ],
   experiments: {
     typedRoutes: true,

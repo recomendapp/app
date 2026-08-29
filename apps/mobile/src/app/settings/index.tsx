@@ -124,6 +124,12 @@ const SettingsScreen = () => {
         authOnly: true,
       },
       {
+        label: upperFirst(t('pages.settings.data.label')),
+        route: '/settings/data/imports',
+        icon: Icons.Database,
+        authOnly: true,
+      },
+      {
         label: upperFirst(t('pages.settings.appearance.label')),
         route: '/settings/appearance',
         icon: Icons.Eye,

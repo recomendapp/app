@@ -34,6 +34,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery } from '@tanstack/react-query';
 import { playlistOptions, usePlaylistUpdateMutation } from '@libs/query-client';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
+import { File as ExpoFile } from 'expo-file-system';
 import { useModalHeaderOptions } from '../../../../hooks/useModalHeaderOptions';
 
 const TITLE_MIN_LENGTH = 1;
@@ -214,13 +215,7 @@ const ModalPlaylistEdit = () => {
           format: SaveFormat.JPEG,
         });
 
-        const filePayload = {
-          uri: processedImageCompressed.uri,
-          name: `poster_${playlist.id}.jpg`,
-          type: 'image/jpeg',
-        } as unknown as File;
-
-        poster = filePayload;
+        poster = new ExpoFile(processedImageCompressed.uri) as unknown as File;
       }
       await updatePlaylist(
         {

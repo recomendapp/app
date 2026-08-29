@@ -76,7 +76,6 @@ const ReviewForm = ({
   const { colors } = useTheme();
   const t = useTranslations();
   const [title, setTitle] = useState(review?.title ?? '');
-  const [defaultBody, setDefaultBody] = useState<string | undefined>(undefined);
   const [body, setBody] = useState<string | null>(null);
   const headerHeight = useSharedValue(0);
   const toolbarHeight = useSharedValue(0);
@@ -161,14 +160,15 @@ const ReviewForm = ({
   });
 
   /**
-   * Issue workaround:
-   * EnrichedTextInput has a bug where the scroll is not properly set when a long default value is set.
-   * See: https://github.com/software-mansion/react-native-enriched/issues/305
+   * `defaultValue` is frozen at mount by the library (v1.0+) — post-mount prop changes are
+   * ignored, so the existing review's body must be applied imperatively via `setValue` instead.
+   * The delay works around a bug where the scroll position isn't set correctly when a long
+   * value is applied right at mount. See: https://github.com/software-mansion/react-native-enriched/issues/305
    */
   useEffect(() => {
     if (!review) return;
     const timeout = setTimeout(() => {
-      setDefaultBody(review.body);
+      ref.current?.setValue(review.body);
     }, 500);
     return () => clearTimeout(timeout);
   }, [review]);
@@ -272,7 +272,6 @@ const ReviewForm = ({
         </View>
         <EnrichedMarkdownTextInput
           ref={ref}
-          defaultValue={defaultBody}
           onChangeMarkdown={(e) => setBody(e)}
           onChangeState={(e) => setStylesState(e)}
           onChangeSelection={(e) => setSelectionState(e)}
