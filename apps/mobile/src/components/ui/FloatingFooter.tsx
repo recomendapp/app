@@ -43,7 +43,7 @@ export const FloatingFooter = ({
       <Animated.View style={animatedInsetFooterStyle} />
       <Animated.View
         onLayout={(e) => {
-          // eslint-disable-next-line react-hooks/immutability -- Reanimated shared value mutation
+          // eslint-disable-next-line react-hooks/immutability, react-compiler/react-compiler -- Reanimated shared value mutation
           footerHeight.value = e.nativeEvent.layout.height;
         }}
         style={[
