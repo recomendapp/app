@@ -1,9 +1,34 @@
 import { useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { ImportJob, ListInfiniteImportJobs, ListPaginatedImportJobs } from '@libs/api-js';
+import {
+  ImportJob,
+  ImportJobBookmark,
+  ImportJobLogMovie,
+  ImportJobLogTvSeries,
+  ImportJobPlaylist,
+  ImportJobPlaylistItem,
+  ImportJobReview,
+  ListInfiniteImportBookmarks,
+  ListInfiniteImportJobs,
+  ListInfiniteImportLogMovies,
+  ListInfiniteImportLogTvSeries,
+  ListInfiniteImportPlaylistItems,
+  ListInfiniteImportPlaylists,
+  ListPaginatedImportBookmarks,
+  ListPaginatedImportJobs,
+  ListPaginatedImportLogMovies,
+  ListPaginatedImportLogTvSeries,
+  ListPaginatedImportPlaylistItems,
+  ListPaginatedImportPlaylists,
+} from '@libs/api-js';
 import { importKeys } from './importKeys';
-import { updateListItemInAllCaches } from '../utils';
+import { removeListItemFromAllCaches, updateListItemInAllCaches } from '../utils';
 import { userKeys } from '../users';
+import {
+  importsListAllOptions,
+  importsListInfiniteOptions,
+  importsListPaginatedOptions,
+} from './importOptions';
 
 export const useImportCacheUpdate = () => {
   const queryClient = useQueryClient();
@@ -25,15 +50,28 @@ export const useImportCacheUpdate = () => {
     [queryClient],
   );
 
-  // validate() writes logMovie/logTvSeries/bookmark/playlist/playlistItem rows directly via
-  // Drizzle, without emitting the normal domain events those entities' own sync hooks listen for
-  // (logsSync/bookmarksSync/playlistsSync) — a single import can touch hundreds of rows, so
-  // firing one realtime event per row isn't practical. Instead, once import:validated arrives,
-  // broadly invalidate the collection lists an import can affect. Omitting mode/filters gives
-  // each userKeys.* builder its bare prefix, so this matches every paginated/infinite/filtered
-  // variant already cached for that list, not just one. This runs wherever this hook is mounted
-  // (app root, via useRealtimeSync) — not scoped to the import modal being open — and on both
-  // web and mobile, since they share this same realtime sync setup.
+  const addJob = useCallback(() => {
+    queryClient.invalidateQueries({
+      queryKey: importKeys.lists(),
+    });
+  }, [queryClient]);
+
+  const removeJob = useCallback(
+    (jobId: number) => {
+      queryClient.removeQueries({ queryKey: importKeys.details(jobId) });
+      removeListItemFromAllCaches(
+        queryClient,
+        {
+          all: importsListAllOptions().queryKey,
+          paginated: importsListPaginatedOptions().queryKey,
+          infinite: importsListInfiniteOptions().queryKey,
+        },
+        jobId,
+      );
+    },
+    [queryClient],
+  );
+
   const invalidateImportedCollections = useCallback(
     (userId: string) => {
       queryClient.invalidateQueries({ queryKey: userKeys.movies({ userId }) });
@@ -44,5 +82,158 @@ export const useImportCacheUpdate = () => {
     [queryClient],
   );
 
-  return { setJob, invalidateImportedCollections };
+  const setLogMovie = useCallback(
+    (importJobId: number, item: ImportJobLogMovie) => {
+      updateListItemInAllCaches<
+        ImportJobLogMovie,
+        ListPaginatedImportLogMovies,
+        ListInfiniteImportLogMovies
+      >(
+        queryClient,
+        {
+          all: importKeys.logMovies(importJobId, { mode: 'all' }),
+          paginated: importKeys.logMovies(importJobId, { mode: 'paginated' }),
+          infinite: importKeys.logMovies(importJobId, { mode: 'infinite' }),
+        },
+        item,
+        item.id,
+      );
+    },
+    [queryClient],
+  );
+
+  // Merged into the parent log-movie's embedded `review` field — see IImportSubItemReviewPatchedSignal.
+  const setLogMovieReview = useCallback(
+    (importJobId: number, itemId: number, review: ImportJobReview) => {
+      updateListItemInAllCaches<
+        ImportJobLogMovie,
+        ListPaginatedImportLogMovies,
+        ListInfiniteImportLogMovies
+      >(
+        queryClient,
+        {
+          all: importKeys.logMovies(importJobId, { mode: 'all' }),
+          paginated: importKeys.logMovies(importJobId, { mode: 'paginated' }),
+          infinite: importKeys.logMovies(importJobId, { mode: 'infinite' }),
+        },
+        { review },
+        itemId,
+      );
+    },
+    [queryClient],
+  );
+
+  const setLogTvSeries = useCallback(
+    (importJobId: number, item: ImportJobLogTvSeries) => {
+      updateListItemInAllCaches<
+        ImportJobLogTvSeries,
+        ListPaginatedImportLogTvSeries,
+        ListInfiniteImportLogTvSeries
+      >(
+        queryClient,
+        {
+          all: importKeys.logTvSeries(importJobId, { mode: 'all' }),
+          paginated: importKeys.logTvSeries(importJobId, { mode: 'paginated' }),
+          infinite: importKeys.logTvSeries(importJobId, { mode: 'infinite' }),
+        },
+        item,
+        item.id,
+      );
+    },
+    [queryClient],
+  );
+
+  const setLogTvSeriesReview = useCallback(
+    (importJobId: number, itemId: number, review: ImportJobReview) => {
+      updateListItemInAllCaches<
+        ImportJobLogTvSeries,
+        ListPaginatedImportLogTvSeries,
+        ListInfiniteImportLogTvSeries
+      >(
+        queryClient,
+        {
+          all: importKeys.logTvSeries(importJobId, { mode: 'all' }),
+          paginated: importKeys.logTvSeries(importJobId, { mode: 'paginated' }),
+          infinite: importKeys.logTvSeries(importJobId, { mode: 'infinite' }),
+        },
+        { review },
+        itemId,
+      );
+    },
+    [queryClient],
+  );
+
+  const setBookmark = useCallback(
+    (importJobId: number, item: ImportJobBookmark) => {
+      updateListItemInAllCaches<
+        ImportJobBookmark,
+        ListPaginatedImportBookmarks,
+        ListInfiniteImportBookmarks
+      >(
+        queryClient,
+        {
+          all: importKeys.bookmarks(importJobId, { mode: 'all' }),
+          paginated: importKeys.bookmarks(importJobId, { mode: 'paginated' }),
+          infinite: importKeys.bookmarks(importJobId, { mode: 'infinite' }),
+        },
+        item,
+        item.id,
+      );
+    },
+    [queryClient],
+  );
+
+  const setPlaylist = useCallback(
+    (importJobId: number, item: ImportJobPlaylist) => {
+      updateListItemInAllCaches<
+        ImportJobPlaylist,
+        ListPaginatedImportPlaylists,
+        ListInfiniteImportPlaylists
+      >(
+        queryClient,
+        {
+          all: importKeys.playlists(importJobId, { mode: 'all' }),
+          paginated: importKeys.playlists(importJobId, { mode: 'paginated' }),
+          infinite: importKeys.playlists(importJobId, { mode: 'infinite' }),
+        },
+        item,
+        item.id,
+      );
+    },
+    [queryClient],
+  );
+
+  const setPlaylistItem = useCallback(
+    (importJobId: number, playlistId: number, item: ImportJobPlaylistItem) => {
+      updateListItemInAllCaches<
+        ImportJobPlaylistItem,
+        ListPaginatedImportPlaylistItems,
+        ListInfiniteImportPlaylistItems
+      >(
+        queryClient,
+        {
+          all: importKeys.playlistItems(importJobId, playlistId, { mode: 'all' }),
+          paginated: importKeys.playlistItems(importJobId, playlistId, { mode: 'paginated' }),
+          infinite: importKeys.playlistItems(importJobId, playlistId, { mode: 'infinite' }),
+        },
+        item,
+        item.id,
+      );
+    },
+    [queryClient],
+  );
+
+  return {
+    setJob,
+    addJob,
+    removeJob,
+    invalidateImportedCollections,
+    setLogMovie,
+    setLogMovieReview,
+    setLogTvSeries,
+    setLogTvSeriesReview,
+    setBookmark,
+    setPlaylist,
+    setPlaylistItem,
+  };
 };

@@ -28,7 +28,11 @@ interface LeftActionProps {
 const LeftAction = ({ dragX, swipeableRef, config }: LeftActionProps) => {
   const { icon, backgroundColor = '#388e3c', threshold = 80 } = config || {};
 
-  const animatedStyle = useAnimatedStyle(() => ({
+  const backgroundStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(dragX.value, [0, threshold], [0, 1], Extrapolation.CLAMP),
+  }));
+
+  const iconStyle = useAnimatedStyle(() => ({
     transform: [
       {
         scale: interpolate(dragX.value, [0, threshold], [0, 1], Extrapolation.CLAMP),
@@ -46,8 +50,9 @@ const LeftAction = ({ dragX, swipeableRef, config }: LeftActionProps) => {
   };
 
   return (
-    <RectButton style={[styles.leftAction, { backgroundColor }]} onPress={handlePress}>
-      <Animated.View style={[styles.actionIcon, animatedStyle]}>{icon}</Animated.View>
+    <RectButton style={styles.leftAction} onPress={handlePress}>
+      <Animated.View style={[StyleSheet.absoluteFill, { backgroundColor }, backgroundStyle]} />
+      <Animated.View style={[styles.actionIcon, iconStyle]}>{icon}</Animated.View>
     </RectButton>
   );
 };
@@ -61,7 +66,11 @@ interface RightActionProps {
 const RightAction = ({ dragX, swipeableRef, config }: RightActionProps) => {
   const { icon, backgroundColor = '#dd2c00', threshold = 40 } = config || {};
 
-  const animatedStyle = useAnimatedStyle(() => ({
+  const backgroundStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(dragX.value, [-threshold, 0], [1, 0], Extrapolation.CLAMP),
+  }));
+
+  const iconStyle = useAnimatedStyle(() => ({
     transform: [
       {
         scale: interpolate(dragX.value, [-threshold, 0], [1, 0], Extrapolation.CLAMP),
@@ -79,8 +88,9 @@ const RightAction = ({ dragX, swipeableRef, config }: RightActionProps) => {
   };
 
   return (
-    <RectButton style={[styles.rightAction, { backgroundColor }]} onPress={handlePress}>
-      <Animated.View style={[styles.actionIcon, animatedStyle]}>{icon}</Animated.View>
+    <RectButton style={styles.rightAction} onPress={handlePress}>
+      <Animated.View style={[StyleSheet.absoluteFill, { backgroundColor }, backgroundStyle]} />
+      <Animated.View style={[styles.actionIcon, iconStyle]}>{icon}</Animated.View>
     </RectButton>
   );
 };

@@ -2,9 +2,11 @@ import { BadRequestException, Inject, Injectable, NotFoundException } from '@nes
 import { and, asc, eq, gt } from 'drizzle-orm';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { importJob, importJobPlaylist } from '@libs/db/schemas';
+import { ImportServerEvents } from '@libs/realtime';
 import { PaginationQueryDto } from '../../../common/dto/pagination.dto';
 import { CursorPaginationQueryDto } from '../../../common/dto/cursor-pagination.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { RealtimeGateway } from '../../realtime/realtime.gateway';
 import { User } from '../../auth/auth.service';
 import { plainToInstance } from 'class-transformer';
 import {
@@ -16,7 +18,10 @@ import {
 
 @Injectable()
 export class ImportPlaylistsService {
-  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
+  constructor(
+    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
+    private readonly realtimeGateway: RealtimeGateway,
+  ) {}
 
   private async getOwnedJob(userId: string, importJobId: number) {
     const job = await this.db.query.importJob.findFirst({
@@ -140,6 +145,13 @@ export class ImportPlaylistsService {
 
     if (!updated) throw new NotFoundException('Import item not found');
 
-    return plainToInstance(ImportJobPlaylistDto, updated);
+    const result = plainToInstance(ImportJobPlaylistDto, updated);
+
+    this.realtimeGateway.emitToUser(user.id, ImportServerEvents.PLAYLIST_PATCHED, {
+      importJobId,
+      item: result,
+    });
+
+    return result;
   }
 }

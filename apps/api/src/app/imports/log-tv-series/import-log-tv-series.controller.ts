@@ -16,7 +16,7 @@ import {
 } from './import-log-tv-series.dto';
 
 @ApiTags('Imports')
-@Controller({ path: 'imports/:id/log-tv-series', version: '1' })
+@Controller({ path: 'import/:id/log-tv-series', version: '1' })
 export class ImportLogTvSeriesController {
   constructor(private readonly importLogTvSeriesService: ImportLogTvSeriesService) {}
 

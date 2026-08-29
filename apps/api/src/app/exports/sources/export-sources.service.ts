@@ -1,20 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { asc, eq } from 'drizzle-orm';
-import { plainToInstance } from 'class-transformer';
-import { importSource } from '@libs/db/schemas';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import { Injectable } from '@nestjs/common';
 import { ImportSourceDto } from '../../imports/sources/import-sources.dto';
 
 @Injectable()
 export class ExportSourcesService {
-  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
-
+  // No export_source table yet — import_source used to double as both directions via a
+  // `direction` column, now split so import_source is import-only. Once exports are actually
+  // implemented, add an export_source table mirroring import_source's shape (provider FK +
+  // instructions/fileTypes/enabled/position) and query it here the same way
+  // ImportSourcesService does.
   async listAll(): Promise<ImportSourceDto[]> {
-    const rows = await this.db.query.importSource.findMany({
-      where: eq(importSource.direction, 'export'),
-      orderBy: [asc(importSource.position)],
-    });
-
-    return rows.map((row) => plainToInstance(ImportSourceDto, row));
+    return [];
   }
 }

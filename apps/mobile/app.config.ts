@@ -110,6 +110,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   plugins: [
     'expo-router',
     'expo-localization',
+    'expo-video',
     [
       'expo-build-properties',
       {
@@ -206,6 +207,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         autoLogAppEventsEnabled: false,
         isAutoInitEnabled: true,
         iosUserTrackingPermission: false,
+      },
+    ],
+    [
+      'expo-document-picker',
+      {
+        filePermission: 'Select files to upload',
       },
     ],
   ],

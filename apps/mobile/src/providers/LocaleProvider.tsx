@@ -6,6 +6,7 @@ import '@formatjs/intl-datetimeformat/polyfill';
 import '@formatjs/intl-displaynames/polyfill';
 import '@formatjs/intl-listformat/polyfill';
 import '@formatjs/intl-durationformat/polyfill';
+import '@formatjs/intl-relativetimeformat/polyfill';
 /* -------------------------------------------------------------------------- */
 
 import { IntlProvider } from 'use-intl';

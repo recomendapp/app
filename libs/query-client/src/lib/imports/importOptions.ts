@@ -6,7 +6,7 @@ import {
   ImportsControllerListPaginatedData,
   importsControllerListInfinite,
   ImportsControllerListInfiniteData,
-  importsControllerGetById,
+  importControllerGetById,
   importLogMoviesControllerListAll,
   importLogMoviesControllerListPaginated,
   ImportLogMoviesControllerListPaginatedData,
@@ -36,12 +36,6 @@ import {
   ImportPlaylistItemsControllerListInfiniteData,
 } from '@libs/api-js';
 import { importKeys } from './importKeys';
-
-// Statuses where the job is still doing background work — used to auto-poll while true, as a
-// robust fallback alongside (not instead of) the realtime `import:*` events (see
-// `../realtime/importsSync.ts`).
-const ACTIVE_STATUSES = new Set(['pending', 'processing']);
-const POLL_INTERVAL_MS = 2000;
 
 /* -------------------------------- Sources --------------------------------- */
 
@@ -107,14 +101,12 @@ export const importOptions = (id: number) => {
   return queryOptions({
     queryKey: importKeys.details(id),
     queryFn: async () => {
-      const { data, error } = await importsControllerGetById({ path: { id } });
+      const { data, error } = await importControllerGetById({ path: { id } });
       if (error) throw error;
       if (data === undefined) throw new Error('No data');
       return data;
     },
     enabled: !!id,
-    refetchInterval: (query) =>
-      ACTIVE_STATUSES.has(query.state.data?.status ?? '') ? POLL_INTERVAL_MS : false,
   });
 };
 

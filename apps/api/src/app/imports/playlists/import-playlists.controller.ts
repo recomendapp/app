@@ -14,7 +14,7 @@ import {
 } from './import-playlists.dto';
 
 @ApiTags('Imports')
-@Controller({ path: 'imports/:id/playlists', version: '1' })
+@Controller({ path: 'import/:id/playlists', version: '1' })
 export class ImportPlaylistsController {
   constructor(private readonly importPlaylistsService: ImportPlaylistsService) {}
 

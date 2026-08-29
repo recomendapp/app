@@ -29,6 +29,7 @@ import { Pressable } from 'react-native';
 import { KeyboardAwareScrollView } from '../../components/ui/KeyboardAwareScrollView';
 import { useMeUpdateMutation } from '@libs/query-client';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
+import { File as ExpoFile } from 'expo-file-system';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const FULL_NAME_MIN_LENGTH = 1;
@@ -182,13 +183,7 @@ const SettingsProfileScreen = () => {
           format: SaveFormat.JPEG,
         });
 
-        const filePayload = {
-          uri: processedImageCompressed.uri,
-          name: `avatar_${user?.id}_${Date.now()}.jpg`,
-          type: 'image/jpeg',
-        } as unknown as File;
-
-        avatar = filePayload;
+        avatar = new ExpoFile(processedImageCompressed.uri) as unknown as File;
       }
       await updateProfile(
         {

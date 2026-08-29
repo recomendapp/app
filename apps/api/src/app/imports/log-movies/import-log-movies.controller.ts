@@ -16,7 +16,7 @@ import {
 } from './import-log-movies.dto';
 
 @ApiTags('Imports')
-@Controller({ path: 'imports/:id/log-movies', version: '1' })
+@Controller({ path: 'import/:id/log-movies', version: '1' })
 export class ImportLogMoviesController {
   constructor(private readonly importLogMoviesService: ImportLogMoviesService) {}
 

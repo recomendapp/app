@@ -233,6 +233,16 @@ const RootLayoutNav = () => {
           }}
         />
       </Stack.Protected>
+      {/* WELCOME */}
+      <Stack.Protected guard={!!user}>
+        <Stack.Screen
+          name="welcome"
+          options={{
+            headerShown: false,
+            presentation: 'fullScreenModal',
+          }}
+        />
+      </Stack.Protected>
       {/* NOTIFICATIONS */}
       <Stack.Protected guard={!!user}>
         <Stack.Screen
@@ -288,6 +298,44 @@ const RootLayoutNav = () => {
         <Stack.Screen
           name="settings/notifications"
           options={{ headerTitle: upperFirst(t('pages.settings.notifications.label')) }}
+        />
+        <Stack.Screen
+          name="settings/data/(main)"
+          options={{ headerTitle: upperFirst(t('pages.settings.data.label')) }}
+        />
+      </Stack.Protected>
+      {/* IMPORTS */}
+      <Stack.Protected guard={!!user}>
+        <Stack.Screen
+          name="settings/data/import/add"
+          options={{
+            headerShown: false,
+            presentation: 'formSheet',
+            sheetGrabberVisible: true,
+            sheetAllowedDetents: [0.4, 0.8],
+            sheetInitialDetentIndex: 0,
+            ...(isLiquidGlassAvailable
+              ? {
+                  contentStyle: { backgroundColor: 'transparent' },
+                  headerStyle: { backgroundColor: 'transparent' },
+                }
+              : {}),
+          }}
+        />
+        <Stack.Screen
+          name="settings/data/import/[import_id]"
+          options={{
+            headerShown: false,
+            presentation: 'modal',
+            headerTransparent: false,
+            gestureEnabled: false,
+            ...(isLiquidGlassAvailable
+              ? {
+                  contentStyle: { backgroundColor: 'transparent' },
+                  headerStyle: { backgroundColor: 'transparent' },
+                }
+              : {}),
+          }}
         />
       </Stack.Protected>
       {/* ABOUT */}

@@ -13,5 +13,6 @@ export * from './reviews';
 export * from './widgets';
 export * from './search';
 export * from './realtime';
+export * from './ui';
 
 export * from './utils';

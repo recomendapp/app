@@ -12,11 +12,21 @@ import {
   UserFollowServerEvents,
   PersonFollowServerEvents,
   ImportServerEvents,
+  IImportDeletedSignal,
+  IImportSubItemPatchedSignal,
+  IImportSubItemReviewPatchedSignal,
+  IImportPlaylistItemPatchedSignal,
 } from '@libs/realtime';
 import {
   Bookmark,
   Follow,
   ImportJob,
+  ImportJobBookmark,
+  ImportJobLogMovie,
+  ImportJobLogTvSeries,
+  ImportJobPlaylist,
+  ImportJobPlaylistItem,
+  ImportJobReview,
   LogMovie,
   LogTvSeasonUpdateResponse,
   LogTvEpisodeUpdateResponse,
@@ -95,10 +105,33 @@ export interface PersonFollowServerToClientEvents {
 }
 
 export interface ImportServerToClientEvents {
+  [ImportServerEvents.CREATED]: (job: ImportJob) => void;
   [ImportServerEvents.PROGRESS]: (job: ImportJob) => void;
   [ImportServerEvents.STAGED]: (job: ImportJob) => void;
   [ImportServerEvents.VALIDATED]: (job: ImportJob) => void;
   [ImportServerEvents.FAILED]: (job: ImportJob) => void;
+  [ImportServerEvents.DELETED]: (signal: IImportDeletedSignal) => void;
+  [ImportServerEvents.LOG_MOVIE_PATCHED]: (
+    signal: IImportSubItemPatchedSignal<ImportJobLogMovie>,
+  ) => void;
+  [ImportServerEvents.LOG_MOVIE_REVIEW_PATCHED]: (
+    signal: IImportSubItemReviewPatchedSignal<ImportJobReview>,
+  ) => void;
+  [ImportServerEvents.LOG_TV_SERIES_PATCHED]: (
+    signal: IImportSubItemPatchedSignal<ImportJobLogTvSeries>,
+  ) => void;
+  [ImportServerEvents.LOG_TV_SERIES_REVIEW_PATCHED]: (
+    signal: IImportSubItemReviewPatchedSignal<ImportJobReview>,
+  ) => void;
+  [ImportServerEvents.BOOKMARK_PATCHED]: (
+    signal: IImportSubItemPatchedSignal<ImportJobBookmark>,
+  ) => void;
+  [ImportServerEvents.PLAYLIST_PATCHED]: (
+    signal: IImportSubItemPatchedSignal<ImportJobPlaylist>,
+  ) => void;
+  [ImportServerEvents.PLAYLIST_ITEM_PATCHED]: (
+    signal: IImportPlaylistItemPatchedSignal<ImportJobPlaylistItem>,
+  ) => void;
 }
 
 export type RealtimeSocket = Socket<
@@ -171,12 +204,21 @@ export interface PersonFollowCallbacks {
 }
 
 export interface ImportCallbacks {
+  onImportCreated?: (job: ImportJob) => void;
   onImportProgress?: (job: ImportJob) => void;
   /** Staging analysis finished — job is now awaiting_review, nothing real written yet. */
   onImportStaged?: (job: ImportJob) => void;
   /** The user validated the import — real rows (logs/bookmarks/playlists) now exist. */
   onImportValidated?: (job: ImportJob) => void;
   onImportFailed?: (job: ImportJob) => void;
+  onImportDeleted?: (signal: IImportDeletedSignal) => void;
+  onLogMoviePatched?: (signal: IImportSubItemPatchedSignal<ImportJobLogMovie>) => void;
+  onLogMovieReviewPatched?: (signal: IImportSubItemReviewPatchedSignal<ImportJobReview>) => void;
+  onLogTvSeriesPatched?: (signal: IImportSubItemPatchedSignal<ImportJobLogTvSeries>) => void;
+  onLogTvSeriesReviewPatched?: (signal: IImportSubItemReviewPatchedSignal<ImportJobReview>) => void;
+  onBookmarkPatched?: (signal: IImportSubItemPatchedSignal<ImportJobBookmark>) => void;
+  onPlaylistPatched?: (signal: IImportSubItemPatchedSignal<ImportJobPlaylist>) => void;
+  onPlaylistItemPatched?: (signal: IImportPlaylistItemPatchedSignal<ImportJobPlaylistItem>) => void;
 }
 
 export interface RealtimeConfig {
@@ -643,6 +685,9 @@ class RealtimeManager {
       if (isUnsubscribed) return;
       socketInstance = socket;
 
+      if (callbacks.onImportCreated) {
+        socket.on(ImportServerEvents.CREATED, callbacks.onImportCreated);
+      }
       if (callbacks.onImportProgress) {
         socket.on(ImportServerEvents.PROGRESS, callbacks.onImportProgress);
       }
@@ -655,12 +700,42 @@ class RealtimeManager {
       if (callbacks.onImportFailed) {
         socket.on(ImportServerEvents.FAILED, callbacks.onImportFailed);
       }
+      if (callbacks.onImportDeleted) {
+        socket.on(ImportServerEvents.DELETED, callbacks.onImportDeleted);
+      }
+      if (callbacks.onLogMoviePatched) {
+        socket.on(ImportServerEvents.LOG_MOVIE_PATCHED, callbacks.onLogMoviePatched);
+      }
+      if (callbacks.onLogMovieReviewPatched) {
+        socket.on(ImportServerEvents.LOG_MOVIE_REVIEW_PATCHED, callbacks.onLogMovieReviewPatched);
+      }
+      if (callbacks.onLogTvSeriesPatched) {
+        socket.on(ImportServerEvents.LOG_TV_SERIES_PATCHED, callbacks.onLogTvSeriesPatched);
+      }
+      if (callbacks.onLogTvSeriesReviewPatched) {
+        socket.on(
+          ImportServerEvents.LOG_TV_SERIES_REVIEW_PATCHED,
+          callbacks.onLogTvSeriesReviewPatched,
+        );
+      }
+      if (callbacks.onBookmarkPatched) {
+        socket.on(ImportServerEvents.BOOKMARK_PATCHED, callbacks.onBookmarkPatched);
+      }
+      if (callbacks.onPlaylistPatched) {
+        socket.on(ImportServerEvents.PLAYLIST_PATCHED, callbacks.onPlaylistPatched);
+      }
+      if (callbacks.onPlaylistItemPatched) {
+        socket.on(ImportServerEvents.PLAYLIST_ITEM_PATCHED, callbacks.onPlaylistItemPatched);
+      }
     });
 
     return () => {
       isUnsubscribed = true;
       if (!socketInstance) return;
 
+      if (callbacks.onImportCreated) {
+        socketInstance.off(ImportServerEvents.CREATED, callbacks.onImportCreated);
+      }
       if (callbacks.onImportProgress) {
         socketInstance.off(ImportServerEvents.PROGRESS, callbacks.onImportProgress);
       }
@@ -672,6 +747,42 @@ class RealtimeManager {
       }
       if (callbacks.onImportFailed) {
         socketInstance.off(ImportServerEvents.FAILED, callbacks.onImportFailed);
+      }
+      if (callbacks.onImportDeleted) {
+        socketInstance.off(ImportServerEvents.DELETED, callbacks.onImportDeleted);
+      }
+      if (callbacks.onLogMoviePatched) {
+        socketInstance.off(ImportServerEvents.LOG_MOVIE_PATCHED, callbacks.onLogMoviePatched);
+      }
+      if (callbacks.onLogMovieReviewPatched) {
+        socketInstance.off(
+          ImportServerEvents.LOG_MOVIE_REVIEW_PATCHED,
+          callbacks.onLogMovieReviewPatched,
+        );
+      }
+      if (callbacks.onLogTvSeriesPatched) {
+        socketInstance.off(
+          ImportServerEvents.LOG_TV_SERIES_PATCHED,
+          callbacks.onLogTvSeriesPatched,
+        );
+      }
+      if (callbacks.onLogTvSeriesReviewPatched) {
+        socketInstance.off(
+          ImportServerEvents.LOG_TV_SERIES_REVIEW_PATCHED,
+          callbacks.onLogTvSeriesReviewPatched,
+        );
+      }
+      if (callbacks.onBookmarkPatched) {
+        socketInstance.off(ImportServerEvents.BOOKMARK_PATCHED, callbacks.onBookmarkPatched);
+      }
+      if (callbacks.onPlaylistPatched) {
+        socketInstance.off(ImportServerEvents.PLAYLIST_PATCHED, callbacks.onPlaylistPatched);
+      }
+      if (callbacks.onPlaylistItemPatched) {
+        socketInstance.off(
+          ImportServerEvents.PLAYLIST_ITEM_PATCHED,
+          callbacks.onPlaylistItemPatched,
+        );
       }
     };
   }

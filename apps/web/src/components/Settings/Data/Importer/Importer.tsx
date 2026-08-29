@@ -36,11 +36,11 @@ export function Importer({ initialSources }: { initialSources: ImportSource[] })
     initialData: initialSources,
   });
   const sources: ImporterSource[] = (sourcesData ?? []).map((source) => ({
-    source: source.provider,
-    name: source.name,
-    description: source.description ?? '',
-    iconLight: source.iconLight ?? null,
-    iconDark: source.iconDark ?? null,
+    source: source.provider.slug,
+    name: source.provider.name,
+    description: source.provider.description ?? '',
+    iconLight: source.provider.iconLight ?? null,
+    iconDark: source.provider.iconDark ?? null,
     instructions: source.instructions ?? null,
     enabled: source.enabled,
     fileTypes: source.fileTypes ?? [],

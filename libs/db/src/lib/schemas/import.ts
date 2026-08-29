@@ -6,7 +6,6 @@ import {
   integer,
   pgEnum,
   pgTable,
-  primaryKey,
   real,
   text,
   timestamp,
@@ -16,6 +15,7 @@ import { relations, sql } from 'drizzle-orm';
 import { user } from './auth';
 import { tmdbMovie, tmdbTvSeries } from './tmdb';
 import { logTvStatusEnum, watchFormatEnum } from './log';
+import { provider } from './provider';
 
 export const importJobStatusEnum = pgEnum('import_job_status', [
   'pending',
@@ -24,12 +24,6 @@ export const importJobStatusEnum = pgEnum('import_job_status', [
   'completed',
   'failed',
 ]);
-export const importJobProviderEnum = pgEnum('import_job_provider', [
-  'letterboxd',
-  'senscritique',
-  'recomend',
-]);
-export const importJobDirectionEnum = pgEnum('import_job_direction', ['import', 'export']);
 export const importMatchStatusEnum = pgEnum('import_match_status', [
   'matched',
   'unmatched',
@@ -44,25 +38,19 @@ export const importResolutionEnum = pgEnum('import_resolution', [
 /* -------------------------------------------------------------------------- */
 /*                                IMPORT SOURCE                               */
 /* -------------------------------------------------------------------------- */
-export const importSource = pgTable(
-  'import_source',
-  {
-    provider: importJobProviderEnum().notNull(),
-    direction: importJobDirectionEnum().notNull(),
-    name: text().notNull(),
-    description: text(),
-    // Relative paths into libs/assets/static (see @libs/assets) — resolved to full CDN
-    // URLs server-side. Two variants since some provider logos need a light/dark swap.
-    iconLight: text('icon_light'),
-    iconDark: text('icon_dark'),
-    // Markdown steps for how to obtain the export file from this provider.
-    instructions: text(),
-    fileTypes: text('file_types').array(),
-    enabled: boolean().default(false).notNull(),
-    position: integer().default(0).notNull(),
-  },
-  (table) => [primaryKey({ columns: [table.provider, table.direction] })],
-);
+
+export const importSource = pgTable('import_source', {
+  providerId: bigint('provider_id', { mode: 'number' })
+    .primaryKey()
+    .references(() => provider.id, { onDelete: 'cascade' }),
+  instructions: text(),
+  fileTypes: text('file_types').array(),
+  enabled: boolean().default(false).notNull(),
+  position: integer().default(0).notNull(),
+});
+export const importSourceRelations = relations(importSource, ({ one }) => ({
+  provider: one(provider, { fields: [importSource.providerId], references: [provider.id] }),
+}));
 
 /* -------------------------------------------------------------------------- */
 /*                                 IMPORT JOB                                 */
@@ -75,8 +63,9 @@ export const importJob = pgTable(
     userId: uuid('user_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
-    provider: importJobProviderEnum().notNull(),
-    direction: importJobDirectionEnum().notNull(),
+    providerId: bigint('provider_id', { mode: 'number' }).references(() => provider.id, {
+      onDelete: 'set null',
+    }),
     status: importJobStatusEnum().default('pending').notNull(),
     fileKey: text('file_key'),
     itemsTotal: integer('items_total').default(0).notNull(),
@@ -98,6 +87,7 @@ export const importJob = pgTable(
 );
 export const importJobRelations = relations(importJob, ({ one, many }) => ({
   user: one(user, { fields: [importJob.userId], references: [user.id] }),
+  provider: one(provider, { fields: [importJob.providerId], references: [provider.id] }),
   logMovies: many(importJobLogMovie),
   logTvSeries: many(importJobLogTvSeries),
   bookmarks: many(importJobBookmark),

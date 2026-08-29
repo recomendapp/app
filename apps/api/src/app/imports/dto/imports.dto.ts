@@ -1,33 +1,16 @@
 import { ApiProperty, ApiPropertyOptional, ApiSchema } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { IsIn, IsInt, IsOptional } from 'class-validator';
-import {
-  importJobStatusEnum,
-  importJobProviderEnum,
-  importJobDirectionEnum,
-  importResolutionEnum,
-} from '@libs/db/schemas';
+import { importJobStatusEnum, importResolutionEnum } from '@libs/db/schemas';
 import { PaginatedResponseDto } from '../../../common/dto/pagination.dto';
 import { CursorPaginatedResponseDto } from '../../../common/dto/cursor-pagination.dto';
-
-export enum ImportProvider {
-  LETTERBOXD = 'letterboxd',
-  SENSCRITIQUE = 'senscritique',
-  RECOMEND = 'recomend',
-}
 
 @ApiSchema({ name: 'ImportJob' })
 export class ImportJobDto {
   @ApiProperty() @Expose() id!: number;
   @ApiProperty() @Expose() userId!: string;
 
-  @ApiProperty({ enum: importJobProviderEnum.enumValues })
-  @Expose()
-  provider!: (typeof importJobProviderEnum.enumValues)[number];
-
-  @ApiProperty({ enum: importJobDirectionEnum.enumValues })
-  @Expose()
-  direction!: (typeof importJobDirectionEnum.enumValues)[number];
+  @ApiProperty({ nullable: true }) @Expose() provider!: string | null;
 
   @ApiProperty({ enum: importJobStatusEnum.enumValues })
   @Expose()

@@ -4,9 +4,11 @@ import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle
 import { importJob, importJobBookmark, tmdbMovieView, tmdbTvSeriesView } from '@libs/db/schemas';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
 import { SupportedLocale } from '@libs/i18n';
+import { ImportServerEvents } from '@libs/realtime';
 import { PaginationQueryDto } from '../../../common/dto/pagination.dto';
 import { CursorPaginationQueryDto } from '../../../common/dto/cursor-pagination.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { RealtimeGateway } from '../../realtime/realtime.gateway';
 import { User } from '../../auth/auth.service';
 import { plainToInstance } from 'class-transformer';
 import {
@@ -18,7 +20,10 @@ import {
 
 @Injectable()
 export class ImportBookmarksService {
-  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
+  constructor(
+    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
+    private readonly realtimeGateway: RealtimeGateway,
+  ) {}
 
   private async getOwnedJob(userId: string, importJobId: number) {
     const job = await this.db.query.importJob.findFirst({
@@ -223,10 +228,17 @@ export class ImportBookmarksService {
       updated.tvSeriesId ? [updated.tvSeriesId] : [],
     );
 
-    return plainToInstance(ImportJobBookmarkDto, {
+    const result = plainToInstance(ImportJobBookmarkDto, {
       ...updated,
       movie: updated.movieId ? (movies.get(updated.movieId) ?? null) : null,
       tvSeries: updated.tvSeriesId ? (tvSeries.get(updated.tvSeriesId) ?? null) : null,
     });
+
+    this.realtimeGateway.emitToUser(user.id, ImportServerEvents.BOOKMARK_PATCHED, {
+      importJobId,
+      item: result,
+    });
+
+    return result;
   }
 }

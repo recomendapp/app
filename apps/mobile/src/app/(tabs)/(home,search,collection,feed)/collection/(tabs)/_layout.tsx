@@ -75,6 +75,12 @@ const CollectionLayout = () => {
                 onPress={handleCreatePlaylist}
                 style={tw`rounded-full`}
               />
+              <Button
+                variant="ghost"
+                size="icon"
+                icon={Icons.settings}
+                onPress={() => router.push('/settings')}
+              />
               <UserNav />
             </View>
           ),
@@ -85,6 +91,16 @@ const CollectionLayout = () => {
               onPress: handleCreatePlaylist,
               icon: {
                 name: 'plus',
+                type: 'sfSymbol',
+              },
+            },
+            {
+              type: 'button',
+              label: upperFirst(t('common.messages.setting', { count: 2 })),
+              onPress: () => router.push('/settings'),
+              tintColor: props.tintColor,
+              icon: {
+                name: 'gearshape',
                 type: 'sfSymbol',
               },
             },

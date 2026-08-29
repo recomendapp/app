@@ -5,6 +5,7 @@ export * from './i18n';
 export * from './import';
 export * from './log';
 export * from './playlist';
+export * from './provider';
 export * from './reco';
 export * from './review';
 export * from './user';

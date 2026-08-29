@@ -1,31 +1,13 @@
 import { ApiProperty, ApiPropertyOptional, ApiSchema } from '@nestjs/swagger';
-import { Expose, Transform } from 'class-transformer';
-import { importJobDirectionEnum, importJobProviderEnum } from '@libs/db/schemas';
-import { getAssetUrl } from '../../../utils/get-asset-url';
+import { Expose, Type } from 'class-transformer';
+import { ProviderDto } from '../../providers/dto/providers.dto';
 
 @ApiSchema({ name: 'ImportSource' })
 export class ImportSourceDto {
-  @ApiProperty({ enum: importJobProviderEnum.enumValues })
+  @ApiProperty({ type: () => ProviderDto })
   @Expose()
-  provider!: (typeof importJobProviderEnum.enumValues)[number];
-
-  @ApiProperty({ enum: importJobDirectionEnum.enumValues })
-  @Expose()
-  direction!: (typeof importJobDirectionEnum.enumValues)[number];
-
-  @ApiProperty() @Expose() name!: string;
-
-  @ApiPropertyOptional({ nullable: true }) @Expose() description!: string | null;
-
-  @ApiPropertyOptional({ nullable: true, description: 'Full URL to the light-theme icon' })
-  @Expose()
-  @Transform(({ value }) => getAssetUrl(value))
-  iconLight!: string | null;
-
-  @ApiPropertyOptional({ nullable: true, description: 'Full URL to the dark-theme icon' })
-  @Expose()
-  @Transform(({ value }) => getAssetUrl(value))
-  iconDark!: string | null;
+  @Type(() => ProviderDto)
+  provider!: ProviderDto;
 
   @ApiPropertyOptional({
     nullable: true,
