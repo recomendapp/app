@@ -5,24 +5,24 @@
   },
   "common": {
     "messages": {
-      "welcome": "welcome",
-      "welcome_to_app": "welcome to {app}",
-      "hello": "hello",
+      "welcome": "Welcome",
+      "welcome_to_app": "Welcome to {app}",
+      "hello": "Hello",
       "greeting_with_name": "{timeOfDay, select, morning {Good morning, {name}} afternoon {Good afternoon, {name}} evening {Good evening, {name}} night {Good night, {name}} other {Hello, {name}}}",
-      "click_here": "click here",
-      "see_more": "see more",
-      "see_more_details": "see more details",
-      "more": "more",
-      "view_profile": "view profile",
-      "library": "library",
-      "watchlist": "watchlist",
-      "for_later": "for later",
-      "heart_pick": "heart {count, plural, one {pick} other {picks}}",
-      "add_to_heart_picks": "add to heart picks",
-      "remove_from_heart_picks": "remove from heart picks",
-      "add_rating": "add rating",
-      "edit_rating": "edit rating",
-      "remove_rating": "remove rating",
+      "click_here": "Click here",
+      "see_more": "See more",
+      "see_more_details": "See more details",
+      "more": "More",
+      "view_profile": "View profile",
+      "library": "Library",
+      "watchlist": "Watchlist",
+      "for_later": "For later",
+      "heart_pick": "Heart {count, plural, one {pick} other {picks}}",
+      "add_to_heart_picks": "Add to heart picks",
+      "remove_from_heart_picks": "Remove from heart picks",
+      "add_rating": "Add rating",
+      "edit_rating": "Edit rating",
+      "remove_rating": "Remove rating",
       "share_my_rating": "Share my rating",
       "add_to_watchlist": "add to watchlist",
       "remove_from_watchlist": "remove from watchlist",
@@ -608,6 +608,10 @@
     "welcome": {
       "title": "Thanks for signing up!",
       "description": "Here's a quick look at what you can do with {app}.",
+      "follow": {
+        "title": "Follow people",
+        "description": "Follow friends to see what they're watching."
+      },
       "import": {
         "title": "Coming from another platform?"
       }

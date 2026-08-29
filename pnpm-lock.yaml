@@ -509,6 +509,9 @@ importers:
       expo-updates:
         specifier: ^57.0.14
         version: 57.0.14(expo-dev-client@57.0.12(expo@57.0.13)(react-native@0.86.2(@babel/core@7.29.0)(@react-native/jest-preset@0.86.2(@babel/core@7.29.0)(react@19.2.5))(@react-native/metro-config@0.85.2(@babel/core@7.29.0))(@types/react@19.2.14)(react@19.2.5)))(expo@57.0.13)(react-native@0.86.2(@babel/core@7.29.0)(@react-native/jest-preset@0.86.2(@babel/core@7.29.0)(react@19.2.5))(@react-native/metro-config@0.85.2(@babel/core@7.29.0))(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)
+      expo-video:
+        specifier: ~57.0.3
+        version: 57.0.3(expo@57.0.13)(react-native@0.86.2(@babel/core@7.29.0)(@react-native/jest-preset@0.86.2(@babel/core@7.29.0)(react@19.2.5))(@react-native/metro-config@0.85.2(@babel/core@7.29.0))(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)
       expo-web-browser:
         specifier: ^57.0.2
         version: 57.0.2(expo@57.0.13)(react-native@0.86.2(@babel/core@7.29.0)(@react-native/jest-preset@0.86.2(@babel/core@7.29.0)(react@19.2.5))(@react-native/metro-config@0.85.2(@babel/core@7.29.0))(@types/react@19.2.14)(react@19.2.5))
@@ -1167,6 +1170,15 @@ importers:
       deepmerge:
         specifier: '*'
         version: 4.3.1
+      dotenv:
+        specifier: '*'
+        version: 17.4.2
+      drizzle-kit:
+        specifier: '*'
+        version: 0.31.10
+      drizzle-orm:
+        specifier: '*'
+        version: 0.45.2(@opentelemetry/api@1.9.1)(@prisma/client@5.22.0)(@types/pg@8.20.0)(better-sqlite3@12.9.0)(kysely@0.29.5)(pg@8.20.0)
       enhanced-resolve:
         specifier: '*'
         version: 5.21.0
@@ -1275,6 +1287,9 @@ importers:
       expo-updates:
         specifier: '*'
         version: 57.0.14(expo-dev-client@57.0.12(expo@57.0.13)(react-native@0.86.2(@babel/core@7.29.7)(@react-native/jest-preset@0.86.2(@babel/core@7.29.7)(react@19.2.5))(@react-native/metro-config@0.85.2(@babel/core@7.29.7))(@types/react@19.2.14)(react@19.2.5)))(expo@57.0.13)(react-native@0.86.2(@babel/core@7.29.7)(@react-native/jest-preset@0.86.2(@babel/core@7.29.7)(react@19.2.5))(@react-native/metro-config@0.85.2(@babel/core@7.29.7))(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)
+      expo-video:
+        specifier: '*'
+        version: 57.0.3(expo@57.0.13)(react-native@0.86.2(@babel/core@7.29.7)(@react-native/jest-preset@0.86.2(@babel/core@7.29.7)(react@19.2.5))(@react-native/metro-config@0.85.2(@babel/core@7.29.7))(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)
       expo-web-browser:
         specifier: '*'
         version: 57.0.2(expo@57.0.13)(react-native@0.86.2(@babel/core@7.29.7)(@react-native/jest-preset@0.86.2(@babel/core@7.29.7)(react@19.2.5))(@react-native/metro-config@0.85.2(@babel/core@7.29.7))(@types/react@19.2.14)(react@19.2.5))
@@ -1290,6 +1305,9 @@ importers:
       jsonc-eslint-parser:
         specifier: '*'
         version: 2.4.2
+      lexorank:
+        specifier: '*'
+        version: 1.0.5
       lodash:
         specifier: '*'
         version: 4.18.1
@@ -1305,6 +1323,9 @@ importers:
       nanoid:
         specifier: '*'
         version: 5.1.11
+      pg:
+        specifier: '*'
+        version: 8.20.0
       picocolors:
         specifier: '*'
         version: 1.1.1
@@ -12864,6 +12885,13 @@ packages:
     peerDependenciesMeta:
       expo-dev-client:
         optional: true
+
+  expo-video@57.0.3:
+    resolution: {integrity: sha512-Z+rLdBSzICwoHm/HUxND5fm5nfgqiB+QPWAOKxmA8ScYwvxG1UGjZ6OaayvPc3GkT4aucsbycmFO0uUv/qnIhg==}
+    peerDependencies:
+      expo: '*'
+      react: '*'
+      react-native: '*'
 
   expo-web-browser@57.0.2:
     resolution: {integrity: sha512-3vl5kvd7PB48ub6PpNIJUuPxO8xVa6D8RnIgNba6SXRwqFprOfeEZgwTgtm41kz0AAtvMOztUVNEUkwrHKjqMQ==}
@@ -36912,6 +36940,18 @@ snapshots:
       expo-dev-client: 57.0.12(expo@57.0.13)(react-native@0.86.2(@babel/core@7.29.7)(@react-native/jest-preset@0.86.2(@babel/core@7.29.7)(react@19.2.5))(@react-native/metro-config@0.85.2(@babel/core@7.29.7))(@types/react@19.2.14)(react@19.2.5))
     transitivePeerDependencies:
       - supports-color
+
+  expo-video@57.0.3(expo@57.0.13)(react-native@0.86.2(@babel/core@7.29.0)(@react-native/jest-preset@0.86.2(@babel/core@7.29.0)(react@19.2.5))(@react-native/metro-config@0.85.2(@babel/core@7.29.0))(@types/react@19.2.14)(react@19.2.5))(react@19.2.5):
+    dependencies:
+      expo: 57.0.13(3a76bd0b94b542f013123167abd04b64)
+      react: 19.2.5
+      react-native: 0.86.2(@babel/core@7.29.0)(@react-native/jest-preset@0.86.2(@babel/core@7.29.0)(react@19.2.5))(@react-native/metro-config@0.85.2(@babel/core@7.29.0))(@types/react@19.2.14)(react@19.2.5)
+
+  expo-video@57.0.3(expo@57.0.13)(react-native@0.86.2(@babel/core@7.29.7)(@react-native/jest-preset@0.86.2(@babel/core@7.29.7)(react@19.2.5))(@react-native/metro-config@0.85.2(@babel/core@7.29.7))(@types/react@19.2.14)(react@19.2.5))(react@19.2.5):
+    dependencies:
+      expo: 57.0.13(c99423de6496982128a4e2597ff1b45c)
+      react: 19.2.5
+      react-native: 0.86.2(@babel/core@7.29.7)(@react-native/jest-preset@0.86.2(@babel/core@7.29.7)(react@19.2.5))(@react-native/metro-config@0.85.2(@babel/core@7.29.7))(@types/react@19.2.14)(react@19.2.5)
 
   expo-web-browser@57.0.2(expo@57.0.13)(react-native@0.86.2(@babel/core@7.29.0)(@react-native/jest-preset@0.86.2(@babel/core@7.29.0)(react@19.2.5))(@react-native/metro-config@0.85.2(@babel/core@7.29.0))(@types/react@19.2.14)(react@19.2.5)):
     dependencies:

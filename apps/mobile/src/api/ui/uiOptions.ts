@@ -1,8 +1,8 @@
 import { queryOptions } from '@tanstack/react-query';
 import { File, Directory, Paths } from 'expo-file-system';
 import { logger } from '../../logger';
-import { uiKeys } from './uiKeys';
 import { uiBackgroundsControllerListAll } from '@libs/api-js';
+import { uiKeys } from '@libs/query-client';
 
 const UI_DIRECTORY = new Directory(Paths.cache, 'ui');
 const UI_BACKGROUND_DIRECTORY = new Directory(UI_DIRECTORY, 'backgrounds');

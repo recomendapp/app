@@ -27,10 +27,13 @@ import {
 import { Skeleton } from '@libs/ui/components/skeleton';
 import { HeaderBox } from '@/components/Box/HeaderBox';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { importSourcesListAllOptions, useMeUpdateMutation } from '@libs/query-client';
+import {
+  importSourcesListAllOptions,
+  uiFeaturesOptions,
+  useMeUpdateMutation,
+} from '@libs/query-client';
 import { Icons } from '@/config/icons';
 import { Images } from '@/config/images';
-import { Videos } from '@/config/videos';
 import { siteConfig } from '@/config/site';
 import { useRandomImage } from '@/hooks/use-random-image';
 import { Link } from '@/lib/i18n/navigation';
@@ -38,7 +41,6 @@ import { useQuery } from '@tanstack/react-query';
 import { upperFirst } from 'lodash';
 import { useTheme } from 'next-themes';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import { Card, CardAction, CardDescription, CardHeader, CardTitle } from '@libs/ui/components/card';
 import { useRef } from 'react';
 import Autoplay from 'embla-carousel-autoplay';
@@ -49,11 +51,10 @@ interface ModalWelcomeProps {
   onCloseEnd?: () => void;
 }
 
-const HIGHLIGHT_KEYS = ['tracking', 'recos', 'playlists', 'feed', 'watchlist'];
-
 export const ModalWelcome = ({ open, onOpenChange, onCloseEnd }: ModalWelcomeProps) => {
   const t = useTranslations();
   const { mutate: updateMe } = useMeUpdateMutation();
+  const { data: features, isLoading } = useQuery(uiFeaturesOptions());
   const bgImage = useRandomImage(Images.welcome.background);
 
   const markWelcomed = () => updateMe({ body: { welcomed: true } });
@@ -97,52 +98,39 @@ export const ModalWelcome = ({ open, onOpenChange, onCloseEnd }: ModalWelcomePro
             </AlertDialogDescription>
           </AlertDialogHeader>
 
-          <Carousel
-            opts={{
-              loop: true,
-            }}
-            className="w-full"
-            plugins={[autoplay.current]}
-            onMouseEnter={autoplay.current.stop}
-            onMouseLeave={() => autoplay.current.play()}
-          >
-            <CarouselContent>
-              {HIGHLIGHT_KEYS.map((key) => {
-                const video = Videos.welcome.features[key];
-                if (!video) return null;
-                const label = upperFirst(t(`pages.showcase.features.${key}.label`));
-                const description = upperFirst(t(`pages.showcase.features.${key}.description`));
-                return (
-                  <CarouselItem key={key}>
+          {features === undefined || isLoading ? (
+            <Skeleton className="h-full aspect-video rounded-md" />
+          ) : (
+            <Carousel
+              opts={{
+                loop: true,
+              }}
+              className="w-full"
+              plugins={[autoplay.current]}
+              onMouseEnter={autoplay.current.stop}
+              onMouseLeave={() => autoplay.current.play()}
+            >
+              <CarouselContent>
+                {(features ?? []).map((feature) => (
+                  <CarouselItem key={feature.key}>
                     <div className="relative aspect-video overflow-hidden rounded-md bg-muted">
-                      {video.sources.length > 0 ? (
-                        <video
-                          className="absolute inset-0 h-full w-full object-cover"
-                          poster={video.poster.src}
-                          autoPlay
-                          muted
-                          loop
-                          playsInline
-                        >
-                          {video.sources.map((source) => (
-                            <source key={source.src} src={source.src} type={source.type} />
-                          ))}
-                        </video>
-                      ) : (
-                        <Image
-                          src={video.poster.src}
-                          alt={video.poster.alt}
-                          fill
-                          className="object-cover"
-                          unoptimized
-                        />
-                      )}
+                      <video
+                        className="absolute inset-0 h-full w-full object-cover"
+                        poster={feature.poster.default}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                      >
+                        <source src={feature.video.webm} type="video/webm" />
+                        <source src={feature.video.default} type="video/mp4" />
+                      </video>
                       <TooltipBox
                         tooltip={{
                           children: (
                             <div className="max-w-56">
-                              <p className="font-medium">{label}</p>
-                              <p className="text-muted-foreground">{description}</p>
+                              <p className="font-medium">{feature.label}</p>
+                              <p className="text-muted-foreground">{feature.description}</p>
                             </div>
                           ),
                         }}
@@ -154,17 +142,17 @@ export const ModalWelcome = ({ open, onOpenChange, onCloseEnd }: ModalWelcomePro
                           className="absolute bottom-2 right-2 rounded-full bg-background/80 backdrop-blur"
                         >
                           <Icons.info className="w-4 h-4" />
-                          <span className="sr-only">{label}</span>
+                          <span className="sr-only">{feature.label}</span>
                         </Button>
                       </TooltipBox>
                     </div>
                   </CarouselItem>
-                );
-              })}
-            </CarouselContent>
-            <CarouselPrevious className="left-2 rounded-full bg-background/80 backdrop-blur" />
-            <CarouselNext className="right-2 rounded-full bg-background/80 backdrop-blur" />
-          </Carousel>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="left-2 rounded-full bg-background/80 backdrop-blur" />
+              <CarouselNext className="right-2 rounded-full bg-background/80 backdrop-blur" />
+            </Carousel>
+          )}
           <Card>
             <CardHeader>
               <CardAction>

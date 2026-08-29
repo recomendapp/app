@@ -5,6 +5,7 @@ import { useTheme } from '../../providers/ThemeProvider';
 import { useTranslations } from 'use-intl';
 import { upperFirst } from 'lodash';
 import { useUIStore } from '../../stores/useUIStore';
+import { useWelcomeGate } from '../../hooks/useWelcomeGate';
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import { isIOS } from '../../platform/detection';
 
@@ -21,6 +22,8 @@ const TabsLayout = () => {
       router.replace({ pathname: '/onboarding' });
     }
   }, [hasOnboarded, router, segment]);
+
+  useWelcomeGate();
 
   return (
     <NativeTabs

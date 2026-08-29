@@ -233,6 +233,23 @@ const RootLayoutNav = () => {
           }}
         />
       </Stack.Protected>
+      {/* WELCOME */}
+      <Stack.Protected guard={!!user}>
+        <Stack.Screen
+          name="welcome"
+          options={{
+            headerShown: false,
+            presentation: 'modal',
+            gestureEnabled: false,
+            ...(isLiquidGlassAvailable
+              ? {
+                  contentStyle: { backgroundColor: 'transparent' },
+                  headerStyle: { backgroundColor: 'transparent' },
+                }
+              : {}),
+          }}
+        />
+      </Stack.Protected>
       {/* NOTIFICATIONS */}
       <Stack.Protected guard={!!user}>
         <Stack.Screen

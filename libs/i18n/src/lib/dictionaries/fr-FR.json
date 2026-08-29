@@ -5,24 +5,24 @@
   },
   "common": {
     "messages": {
-      "welcome": "bienvenue",
-      "welcome_to_app": "bienvenue sur {app}",
-      "hello": "bonjour",
+      "welcome": "Bienvenue",
+      "welcome_to_app": "Bienvenue sur {app}",
+      "hello": "Bonjour",
       "greeting_with_name": "{timeOfDay, select, night {Bonsoir, {name}} evening {Bonsoir, {name}} other {Bonjour, {name}}}",
-      "click_here": "cliquez ici",
-      "see_more": "voir plus",
-      "see_more_details": "voir plus d'infos",
-      "more": "plus",
-      "view_profile": "voir le profil",
-      "library": "bibliothèque",
-      "watchlist": "watchlist",
-      "for_later": "pour plus tard",
-      "heart_pick": "{count, plural, one {coup} other {coups}} de coeurs",
-      "add_to_heart_picks": "ajouter aux coups de coeur",
-      "remove_from_heart_picks": "retirer des coups de coeur",
-      "add_rating": "ajouter une note",
-      "edit_rating": "modifier la note",
-      "remove_rating": "retirer la note",
+      "click_here": "Cliquez ici",
+      "see_more": "Voir plus",
+      "see_more_details": "Voir plus d'infos",
+      "more": "Plus",
+      "view_profile": "Voir le profil",
+      "library": "Bibliothèque",
+      "watchlist": "Watchlist",
+      "for_later": "Pour plus tard",
+      "heart_pick": "{count, plural, one {Coup} other {Coups}} de coeurs",
+      "add_to_heart_picks": "Ajouter aux coups de coeur",
+      "remove_from_heart_picks": "Retirer des coups de coeur",
+      "add_rating": "Ajouter une note",
+      "edit_rating": "Modifier la note",
+      "remove_rating": "Retirer la note",
       "share_my_rating": "Partager ma note",
       "mark_as_watched": "marquer comme vu",
       "remove_from_watched": "retirer des vus",
@@ -608,6 +608,10 @@
     "welcome": {
       "title": "Merci de vous être inscrit !",
       "description": "Voici un aperçu de ce que vous pouvez faire avec {app}.",
+      "follow": {
+        "title": "Suivez des personnes",
+        "description": "Suivez vos amis pour voir ce qu'ils regardent."
+      },
       "import": {
         "title": "Vous venez d'une autre plateforme ?"
       }

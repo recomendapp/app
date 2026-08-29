@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "Tracking",
+    "description": "Keep track of the movies and TV series you've watched"
+  },
+  "recos": {
+    "label": "Recos",
+    "description": "Send movie and TV series recommendations to your friends"
+  },
+  "playlists": {
+    "label": "Playlists",
+    "description": "Organize your movies and TV series into playlists and share them"
+  },
+  "feed": {
+    "label": "Feed",
+    "description": "Follow your friends' activity"
+  },
+  "bookmarks": {
+    "label": "For later",
+    "description": "Bookmark movies and TV series you want to watch"
+  }
+}

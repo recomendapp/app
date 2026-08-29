@@ -7,8 +7,7 @@ import {
   PersistQueryClientProviderProps,
 } from '@tanstack/react-query-persist-client';
 import { persistKey } from '../api';
-import { exploreKeys, meKeys, widgetKeys } from '@libs/query-client';
-import { uiKeys } from '../api/ui/uiKeys';
+import { exploreKeys, meKeys, widgetKeys, uiKeys } from '@libs/query-client';
 import { authKeys } from '../api/auth/authKeys';
 // import { useReactQueryDevTools } from "@dev-plugins/react-query";
 

@@ -110,6 +110,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   plugins: [
     'expo-router',
     'expo-localization',
+    'expo-video',
     [
       'expo-build-properties',
       {

@@ -86,7 +86,6 @@ const SettingsDataImportAddIndexScreen = () => {
           renderItem={renderSource}
           keyExtractor={(item) => item.provider.slug}
           showsHorizontalScrollIndicator={false}
-          ItemSeparatorComponent={() => <View style={{ width: GAP }} />}
           contentContainerStyle={{
             paddingTop: navigationHeaderHeight,
             paddingBottom: insets.bottom + PADDING_VERTICAL,
