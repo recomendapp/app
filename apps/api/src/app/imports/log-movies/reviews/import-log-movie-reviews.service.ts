@@ -2,13 +2,18 @@ import { BadRequestException, Inject, Injectable, NotFoundException } from '@nes
 import { and, eq } from 'drizzle-orm';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/drizzle/drizzle.module';
 import { importJob, importJobReviewMovie } from '@libs/db/schemas';
+import { ImportServerEvents } from '@libs/realtime';
+import { RealtimeGateway } from '../../../realtime/realtime.gateway';
 import { User } from '../../../auth/auth.service';
 import { plainToInstance } from 'class-transformer';
 import { ImportJobReviewDto, PatchImportJobReviewDto } from '../../dto/imports.dto';
 
 @Injectable()
 export class ImportLogMovieReviewsService {
-  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
+  constructor(
+    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
+    private readonly realtimeGateway: RealtimeGateway,
+  ) {}
 
   private async getOwnedJob(userId: string, importJobId: number) {
     const job = await this.db.query.importJob.findFirst({
@@ -50,6 +55,14 @@ export class ImportLogMovieReviewsService {
       .returning();
 
     if (!updated) throw new NotFoundException('Import review not found');
-    return plainToInstance(ImportJobReviewDto, updated);
+    const result = plainToInstance(ImportJobReviewDto, updated);
+
+    this.realtimeGateway.emitToUser(user.id, ImportServerEvents.LOG_MOVIE_REVIEW_PATCHED, {
+      importJobId,
+      itemId,
+      review: result,
+    });
+
+    return result;
   }
 }
