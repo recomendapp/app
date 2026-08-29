@@ -17,11 +17,13 @@ import {
   playlistItemsAllOptions,
   playlistOptions,
   usePlaylistDeleteMutation,
+  usePlaylistDuplicateMutation,
   usePlaylistItemsDeleteMutation,
   usePlaylistItemUpdateMutation,
   useUserPlaylistLike,
   useUserPlaylistSaved,
 } from '@libs/query-client';
+import app from '../../../../../constants/app';
 import { useQuery } from '@tanstack/react-query';
 import { useUIStore } from '../../../../../stores/useUIStore';
 import { useToast } from '../../../../../components/Toast';
@@ -76,6 +78,7 @@ const PlaylistScreen = () => {
   const { mutateAsync: updateItem } = usePlaylistItemUpdateMutation();
   const { mutateAsync: deleteItem } = usePlaylistItemsDeleteMutation();
   const { mutateAsync: deletePlaylist } = usePlaylistDeleteMutation();
+  const { mutateAsync: duplicatePlaylist } = usePlaylistDuplicateMutation();
   const canEditItem = useMemo(() => canEditPlaylistItem(playlist?.role || null), [playlist?.role]);
   const canEditThisPlaylist = useMemo(
     () => canEditPlaylist(playlist?.role || null),
@@ -210,6 +213,31 @@ const PlaylistScreen = () => {
       { userInterfaceStyle: mode },
     );
   }, [playlist, deletePlaylist, toast, t, mode, router]);
+
+  const handleDuplicatePlaylist = useCallback(() => {
+    if (!playlist) return;
+    if (!user?.isPremium) {
+      router.push({
+        pathname: '/upgrade',
+        params: { feature: app.features.playlist_duplicate },
+      });
+      return;
+    }
+    duplicatePlaylist(
+      { path: { playlist_id: playlist.id } },
+      {
+        onSuccess: (duplicatedPlaylist) => {
+          toast.success(upperFirst(t('common.messages.duplicated')));
+          router.push(`/playlist/${duplicatedPlaylist.id}`);
+        },
+        onError: () => {
+          toast.error(upperFirst(t('common.messages.error')), {
+            description: upperFirst(t('common.messages.an_error_occurred')),
+          });
+        },
+      },
+    );
+  }, [playlist, user?.isPremium, duplicatePlaylist, toast, t, router]);
 
   const sortByOptions = useMemo(
     (): SortByOption<PlaylistItemWithMedia>[] => [
@@ -362,6 +390,12 @@ const PlaylistScreen = () => {
             },
           ]
         : []),
+      {
+        type: 'action' as const,
+        label: upperFirst(t('common.messages.duplicate')),
+        icon: { type: 'sfSymbol' as const, name: 'plus.square.on.square' as const },
+        onPress: handleDuplicatePlaylist,
+      },
       ...(canEditItem
         ? [
             {
@@ -412,7 +446,15 @@ const PlaylistScreen = () => {
           ]
         : []),
     ];
-  }, [playlist, canEditItem, canEditThisPlaylist, router, t, handleDeletePlaylist]);
+  }, [
+    playlist,
+    canEditItem,
+    canEditThisPlaylist,
+    router,
+    t,
+    handleDeletePlaylist,
+    handleDuplicatePlaylist,
+  ]);
 
   return (
     <>

@@ -1,14 +1,31 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { PlaylistsService } from './playlists.service';
-import { PlaylistDto, PlaylistCreateDto, PlaylistUpdateDto, PlaylistWithOwnerDto } from './dto/playlists.dto';
+import {
+  PlaylistDto,
+  PlaylistCreateDto,
+  PlaylistUpdateDto,
+  PlaylistWithOwnerDto,
+} from './dto/playlists.dto';
 import { AuthGuard, OptionalAuthGuard } from '../auth/guards';
 import { User } from '../auth/auth.service';
 import { CurrentOptionalUser, CurrentUser } from '../auth/decorators';
 import { RequirePlaylistRoles } from './decorators/playlist-roles.decorator';
 import { PlaylistRolesGuard } from './guards/playlist-roles.guard';
+import { PlaylistVisibilityGuard } from './guards/playlist-visibility.guard';
 import { CurrentPlaylistRole } from './decorators/current-playlist-role.decorator';
 import { PlaylistRole } from './types/playlist-role.type';
+import { PremiumGuard } from '../../common/guards/premium.guard';
 
 @ApiTags('Playlists')
 @Controller({
@@ -36,14 +53,11 @@ export class PlaylistsController {
 
   @Post()
   @UseGuards(AuthGuard)
-  @ApiCreatedResponse({ 
+  @ApiCreatedResponse({
     description: 'The playlist has been successfully created.',
-    type: PlaylistDto
-  }) 
-  create(
-    @CurrentUser() user: User,
-    @Body() createPlaylistDto: PlaylistCreateDto,
-  ) {
+    type: PlaylistDto,
+  })
+  create(@CurrentUser() user: User, @Body() createPlaylistDto: PlaylistCreateDto) {
     return this.playlistsService.create(user, createPlaylistDto);
   }
 
@@ -56,13 +70,26 @@ export class PlaylistsController {
   })
   update(
     @CurrentPlaylistRole() role: PlaylistRole,
-    @Param('playlist_id', ParseIntPipe) playlistId: number, 
+    @Param('playlist_id', ParseIntPipe) playlistId: number,
     @Body() updatePlaylistDto: PlaylistUpdateDto,
   ) {
     return this.playlistsService.update({
       role,
       playlistId: playlistId,
       updatePlaylistDto,
+    });
+  }
+
+  @Post(':playlist_id/duplicate')
+  @UseGuards(AuthGuard, PremiumGuard, PlaylistVisibilityGuard)
+  @ApiCreatedResponse({
+    description: 'The playlist has been successfully duplicated.',
+    type: PlaylistDto,
+  })
+  duplicate(@CurrentUser() user: User, @Param('playlist_id', ParseIntPipe) playlistId: number) {
+    return this.playlistsService.duplicate({
+      user,
+      playlistId: playlistId,
     });
   }
 
@@ -73,9 +100,7 @@ export class PlaylistsController {
     description: 'The playlist has been successfully deleted.',
     type: PlaylistDto,
   })
-  delete(
-    @Param('playlist_id', ParseIntPipe) playlistId: number,
-  ) {
+  delete(@Param('playlist_id', ParseIntPipe) playlistId: number) {
     return this.playlistsService.delete({
       playlistId: playlistId,
     });

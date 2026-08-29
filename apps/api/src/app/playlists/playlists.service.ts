@@ -7,8 +7,8 @@ import {
   PlaylistUpdateDto,
   PlaylistWithOwnerDto,
 } from './dto/playlists.dto';
-import { playlist } from '@libs/db/schemas';
-import { and, eq } from 'drizzle-orm';
+import { playlist, playlistItem } from '@libs/db/schemas';
+import { and, eq, sql } from 'drizzle-orm';
 import { plainToInstance } from 'class-transformer';
 import { StorageService } from '../../common/modules/storage/storage.service';
 import { StorageFolders } from '../../common/modules/storage/storage.constants';
@@ -151,6 +151,61 @@ export class PlaylistsService {
           err,
         ),
       );
+
+    return playlistDto;
+  }
+
+  async duplicate({ user, playlistId }: { user: User; playlistId: number }): Promise<PlaylistDto> {
+    const duplicatedPlaylist = await this.db.transaction(async (tx) => {
+      const sourcePlaylist = await tx.query.playlist.findFirst({
+        where: eq(playlist.id, playlistId),
+      });
+
+      if (!sourcePlaylist) {
+        throw new NotFoundException('Playlist not found');
+      }
+
+      const [insertedPlaylist] = await tx
+        .insert(playlist)
+        .values({
+          userId: user.id,
+          title: sourcePlaylist.title,
+          description: sourcePlaylist.description,
+          visibility: 'private',
+        })
+        .returning();
+
+      await tx.execute(sql`
+        INSERT INTO ${playlistItem} (
+          playlist_id, user_id, type, movie_id, tv_series_id, comment, rank
+        )
+        SELECT 
+          ${insertedPlaylist.id}, 
+          ${user.id}, 
+          type, 
+          movie_id, 
+          tv_series_id, 
+          comment, 
+          rank
+        FROM ${playlistItem}
+        WHERE ${playlistItem.playlistId} = ${playlistId}
+      `);
+
+      return insertedPlaylist;
+    });
+
+    this.workerClient
+      .emit('search:sync-playlist', {
+        playlistId: duplicatedPlaylist.id,
+        action: 'upsert',
+      })
+      .catch((err) =>
+        this.logger.error(`Failed to emit search sync for playlist ${duplicatedPlaylist.id}`, err),
+      );
+
+    const playlistDto = plainToInstance(PlaylistDto, duplicatedPlaylist);
+
+    this.playlistsRealtimeService.broadcastPlaylistCreated(playlistDto);
 
     return playlistDto;
   }
