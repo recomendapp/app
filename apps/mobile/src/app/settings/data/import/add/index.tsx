@@ -13,11 +13,16 @@ import { Stack, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useCallback, useMemo } from 'react';
 import { useTranslations } from 'use-intl';
+import { Text } from '../../../../../components/ui/text';
+import { useHeaderHeight } from 'expo-router/react-navigation';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const SettingsDataImportAddIndexScreen = () => {
   const t = useTranslations();
   const router = useRouter();
-  const { mode } = useTheme();
+  const { mode, isLiquidGlassAvailable } = useTheme();
+  const navigationHeaderHeight = useHeaderHeight();
+  const insets = useSafeAreaInsets();
   const modalHeaderOptions = useModalHeaderOptions();
 
   const { data: sources } = useQuery(importSourcesListAllOptions());
@@ -43,16 +48,19 @@ const SettingsDataImportAddIndexScreen = () => {
         variant="outline"
         disabled={!item.enabled}
         onPress={() => handleSelectSource(item)}
-        style={tw`h-30 aspect-square`}
+        style={tw`h-20`}
       >
-        <ImageWithFallback
-          source={{
-            uri: (mode === 'dark' ? item.provider.iconDark : item.provider.iconLight) ?? '',
-          }}
-          alt={item.provider.name}
-          type="service"
-          contentFit="contain"
-        />
+        <View style={tw`h-full aspect-square`}>
+          <ImageWithFallback
+            source={{
+              uri: (mode === 'dark' ? item.provider.iconDark : item.provider.iconLight) ?? '',
+            }}
+            alt={item.provider.name}
+            type="service"
+            contentFit="contain"
+          />
+        </View>
+        <Text>{item.provider.name}</Text>
       </Button>
     ),
     [mode, handleSelectSource],
@@ -64,17 +72,27 @@ const SettingsDataImportAddIndexScreen = () => {
         options={{
           ...modalHeaderOptions,
           headerTitle: upperFirst(t('pages.settings.data.importer.select_source')),
+          headerTransparent: true,
+          ...(isLiquidGlassAvailable
+            ? {
+                headerStyle: { backgroundColor: 'transparent' },
+              }
+            : {}),
         }}
       />
       <View style={{ paddingVertical: PADDING_VERTICAL }}>
         <LegendList
-          horizontal
           data={sortedSources}
           renderItem={renderSource}
           keyExtractor={(item) => item.provider.slug}
           showsHorizontalScrollIndicator={false}
           ItemSeparatorComponent={() => <View style={{ width: GAP }} />}
-          contentContainerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
+          contentContainerStyle={{
+            paddingTop: navigationHeaderHeight,
+            paddingBottom: insets.bottom + PADDING_VERTICAL,
+            paddingHorizontal: PADDING_HORIZONTAL,
+            gap: GAP,
+          }}
         />
       </View>
     </>

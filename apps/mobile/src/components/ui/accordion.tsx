@@ -2,26 +2,16 @@ import { Text } from './text';
 import tw from '../../lib/tw';
 import * as Haptics from 'expo-haptics';
 import { forwardRef, useCallback } from 'react';
-import {
-  GestureResponderEvent,
-  Pressable,
-  TextStyle,
-  View,
-  ViewProps,
-  ViewStyle,
-} from 'react-native';
+import { LayoutChangeEvent, Pressable, TextStyle, View, ViewProps, ViewStyle } from 'react-native';
 import Animated, {
   Extrapolation,
   interpolate,
-  measure,
   SharedValue,
   useAnimatedReaction,
-  useAnimatedRef,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { runOnUI } from 'react-native-worklets';
 import { useTheme } from '../../providers/ThemeProvider';
 import { Icon } from './icon';
 import { Icons } from '../../constants/Icons';
@@ -53,8 +43,6 @@ export const Accordion = forwardRef<View, AccordionProps>(
     },
     ref,
   ) => {
-    // Refs
-    const contentRef = useAnimatedRef<Animated.View>();
     // Shared values
     const heightContent = useSharedValue(0);
     const open = useSharedValue(false);
@@ -82,19 +70,18 @@ export const Accordion = forwardRef<View, AccordionProps>(
     }, [haptic]);
 
     // Handle actual press action
-    const handlePress = useCallback(
-      (e: GestureResponderEvent) => {
-        if (heightContent.value === 0) {
-          runOnUI(() => {
-            'worklet';
-            heightContent.value = measure(contentRef)?.height || 0;
-          })();
-        }
-        triggerHapticFeedback();
-        // eslint-disable-next-line react-hooks/immutability -- Reanimated shared value, mutating .value is the intended API
-        open.value = !open.value;
+    const handlePress = useCallback(() => {
+      triggerHapticFeedback();
+      // eslint-disable-next-line react-hooks/immutability -- Reanimated shared value, mutating .value is the intended API
+      open.value = !open.value;
+    }, [triggerHapticFeedback, open]);
+
+    const handleContentLayout = useCallback(
+      (e: LayoutChangeEvent) => {
+        // eslint-disable-next-line react-hooks/immutability -- Reanimated shared value mutation
+        heightContent.value = e.nativeEvent.layout.height;
       },
-      [triggerHapticFeedback, heightContent, open, contentRef],
+      [heightContent],
     );
 
     return (
@@ -108,7 +95,7 @@ export const Accordion = forwardRef<View, AccordionProps>(
           <Chevron progress={progress} />
         </Pressable>
         <Animated.View style={[heightAnimationStyle, tw`overflow-hidden`]}>
-          <Animated.View ref={contentRef} style={tw`absolute w-full bottom-0`}>
+          <Animated.View onLayout={handleContentLayout} style={tw`absolute w-full bottom-0`}>
             {children}
           </Animated.View>
         </Animated.View>

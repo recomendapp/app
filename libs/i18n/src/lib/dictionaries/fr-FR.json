@@ -356,7 +356,8 @@
       "ignore": "ignorer",
       "ok": "ok",
       "title": "titre",
-      "skip": "passer",
+      "skip": "Passer",
+      "undo": "Annuler",
       "date_published": "date de publication",
       "date_created": "date de création",
       "date_updated": "date de modification",
@@ -465,7 +466,9 @@
       "processing": "En cours",
       "awaiting_review": "À vérifier",
       "failed": "Échoué{gender, select, female {e} other {}}{count, plural, one {} other {s}}",
-      "data": "Donnée{count, plural, one {} other {s}}"
+      "data": "Donnée{count, plural, one {} other {s}}",
+      "restore": "Restaurer",
+      "fix": "Corriger"
     },
     "form": {
       "email": {
@@ -979,6 +982,8 @@
           "success_title": "Import terminé",
           "success_description": "Vos données ont été importées avec succès.",
           "failed_title": "Échec de l'import",
+          "failed_description": "Une erreur est survenue lors du traitement de cet import.",
+          "pending_description": "Votre import est en attente et démarrera bientôt.",
           "empty": "Aucun import pour l'instant.",
           "delete_confirm_description": "Cet import et toutes ses données seront définitivement supprimés. Cette action est irréversible.",
           "keep_existing": "Garder le mien",

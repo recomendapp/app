@@ -35,10 +35,10 @@ const SettingsDataImportAddSourceScreen = () => {
   const t = useTranslations();
   const router = useRouter();
   const toast = useToast();
-  const { colors, mode } = useTheme();
+  const { colors, mode, isLiquidGlassAvailable } = useTheme();
   const { source: sourceParam } = useLocalSearchParams<{ source: string }>();
   const modalHeaderOptions = useModalHeaderOptions();
-  const headerHeight = useHeaderHeight();
+  const navigationHeaderHeight = useHeaderHeight();
   const insets = useSafeAreaInsets();
   const { data: sources } = useQuery(importSourcesListAllOptions());
   const selectedSource = useMemo(
@@ -121,11 +121,18 @@ const SettingsDataImportAddSourceScreen = () => {
         options={{
           ...modalHeaderOptions,
           headerTitle,
+          headerTransparent: true,
+          ...(isLiquidGlassAvailable
+            ? {
+                headerStyle: { backgroundColor: 'transparent' },
+              }
+            : {}),
         }}
       />
       <ScrollView
         contentContainerStyle={{
-          paddingBottom: insets.bottom + headerHeight + PADDING_VERTICAL,
+          paddingTop: navigationHeaderHeight,
+          paddingBottom: insets.bottom + PADDING_VERTICAL,
         }}
       >
         {step === 'success' ? (

@@ -66,15 +66,18 @@ import {
   TextIcon,
   TrashIcon,
   TvIcon,
+  Undo2Icon,
   UnderlineIcon,
   UploadIcon,
   UserIcon,
   UserPlusIcon,
   UsersIcon,
+  GitMergeIcon,
   WallpaperIcon,
   WindIcon,
   XIcon,
   ZapIcon,
+  PuzzleIcon,
 } from 'lucide-react-native';
 import { Premium } from '../lib/icons/Premium';
 import { ActivityIndicator } from 'react-native';
@@ -178,4 +181,7 @@ export const Icons = {
   Database: DatabaseIcon,
   Upload: UploadIcon,
   SuccessCircle: CircleCheckIcon,
+  Undo: Undo2Icon,
+  Merge: GitMergeIcon,
+  Puzzle: PuzzleIcon,
 };

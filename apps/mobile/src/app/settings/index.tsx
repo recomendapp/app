@@ -166,9 +166,7 @@ const SettingsScreen = () => {
           {
             paddingVertical: PADDING_HORIZONTAL,
             paddingHorizontal: PADDING_HORIZONTAL,
-            borderColor: colors.muted,
           },
-          index < routes.length - 1 ? tw`border-b` : tw``,
         ]}
       >
         <View style={tw`flex-1 flex-row items-center gap-2 justify-between`}>
@@ -180,7 +178,7 @@ const SettingsScreen = () => {
         </View>
       </Button>
     ),
-    [colors.muted, colors.mutedForeground, colors.foreground, router, routes.length],
+    [colors.foreground, colors.mutedForeground, router],
   );
 
   const renderFooter = useCallback(
@@ -209,6 +207,9 @@ const SettingsScreen = () => {
         contentContainerStyle={{
           paddingBottom: insets.bottom + PADDING_VERTICAL,
         }}
+        ItemSeparatorComponent={() => (
+          <View style={[{ backgroundColor: colors.muted, height: 1 }, tw` w-full`]} />
+        )}
         keyExtractor={useCallback((_: Route, number: number) => number.toString(), [])}
         ListFooterComponent={renderFooter}
       />

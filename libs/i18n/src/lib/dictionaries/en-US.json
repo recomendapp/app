@@ -356,7 +356,8 @@
       "ignore": "ignore",
       "ok": "ok",
       "title": "title",
-      "skip": "skip",
+      "skip": "Skip",
+      "undo": "Undo",
       "date_published": "date published",
       "date_created": "date created",
       "date_updated": "date updated",
@@ -465,7 +466,9 @@
       "processing": "Processing",
       "awaiting_review": "Awaiting review",
       "failed": "Failed",
-      "data": "Data"
+      "data": "Data",
+      "restore": "Restore",
+      "fix": "Fix"
     },
     "form": {
       "email": {
@@ -979,6 +982,8 @@
           "success_title": "Import complete",
           "success_description": "Your data has been imported successfully.",
           "failed_title": "Import failed",
+          "failed_description": "Something went wrong while processing this import.",
+          "pending_description": "Your import is queued and will start shortly.",
           "empty": "No imports yet.",
           "delete_confirm_description": "This import and all its staged data will be permanently deleted. This can't be undone.",
           "keep_existing": "Keep mine",
