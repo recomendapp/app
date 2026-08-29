@@ -167,6 +167,9 @@ export class ImportsService {
       .where(eq(importJob.id, created.id))
       .returning();
 
+    const createdDto = plainToInstance(ImportJobDto, updated);
+    this.realtimeGateway.emitToUser(user.id, ImportServerEvents.CREATED, createdDto);
+
     this.prefectService
       .triggerImportFlow({ importId: created.id, userId: user.id, s3Key: key, provider })
       .catch(async (err) => {
@@ -181,7 +184,7 @@ export class ImportsService {
         });
       });
 
-    return plainToInstance(ImportJobDto, updated);
+    return createdDto;
   }
 
   private getListBaseQuery(userId: string) {
@@ -283,6 +286,10 @@ export class ImportsService {
         .deleteFile(job.fileKey)
         .catch((err) => this.logger.error(`Failed to delete import file ${job.fileKey}`, err));
     }
+    this.realtimeGateway.emitToUser(user.id, ImportServerEvents.DELETED, {
+      importId: importJobId,
+      userId: user.id,
+    });
   }
 
   /* --------------------------------- Validate -------------------------------- */

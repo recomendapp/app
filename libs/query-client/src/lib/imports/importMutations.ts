@@ -18,20 +18,17 @@ import {
   ImportPlaylistItemsControllerPatchData,
   importPlaylistsControllerPatch,
   ImportPlaylistsControllerPatchData,
-  ImportJob,
   ImportJobBookmark,
   ImportJobLogMovie,
   ImportJobLogTvSeries,
   ImportJobPlaylist,
   ImportJobPlaylistItem,
   ListInfiniteImportBookmarks,
-  ListInfiniteImportJobs,
   ListInfiniteImportLogMovies,
   ListInfiniteImportLogTvSeries,
   ListInfiniteImportPlaylistItems,
   ListInfiniteImportPlaylists,
   ListPaginatedImportBookmarks,
-  ListPaginatedImportJobs,
   ListPaginatedImportLogMovies,
   ListPaginatedImportLogTvSeries,
   ListPaginatedImportPlaylistItems,
@@ -39,11 +36,9 @@ import {
   Options,
 } from '@libs/api-js';
 import { importKeys } from './importKeys';
-import { removeListItemFromAllCaches, updateListItemInAllCaches } from '../utils';
+import { updateListItemInAllCaches } from '../utils';
 
 export const useImportCreateMutation = () => {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: async ({
       file,
@@ -64,65 +59,26 @@ export const useImportCreateMutation = () => {
       if (data === undefined) throw new Error('No data');
       return data;
     },
-    onSuccess: (data) => {
-      // A brand-new job can't be spliced into an existing paginated/infinite page without
-      // breaking its offsets/cursor — only the flat "all" cache can be safely prepended to.
-      queryClient.setQueriesData<ImportJob[] | undefined>(
-        { queryKey: importKeys.lists({ mode: 'all' }) },
-        (old) => (old ? [data, ...old] : [data]),
-      );
-      queryClient.invalidateQueries({ queryKey: importKeys.lists({ mode: 'paginated' }) });
-      queryClient.invalidateQueries({ queryKey: importKeys.lists({ mode: 'infinite' }) });
-    },
   });
 };
 
 export const useImportDeleteMutation = () => {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: async ({ id }: { id: number }) => {
       const { error } = await importsControllerDelete({ path: { id } });
       if (error) throw error;
       return { id };
     },
-    onSuccess: ({ id }) => {
-      queryClient.removeQueries({ queryKey: importKeys.details(id) });
-      removeListItemFromAllCaches<ImportJob, ListPaginatedImportJobs, ListInfiniteImportJobs>(
-        queryClient,
-        {
-          all: importKeys.lists({ mode: 'all' }),
-          paginated: importKeys.lists({ mode: 'paginated' }),
-          infinite: importKeys.lists({ mode: 'infinite' }),
-        },
-        id,
-      );
-    },
   });
 };
 
 export const useImportValidateMutation = () => {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: async ({ id }: { id: number }) => {
       const { data, error } = await importsControllerValidate({ path: { id } });
       if (error) throw error;
       if (data === undefined) throw new Error('No data');
       return data;
-    },
-    onSuccess: (data) => {
-      queryClient.setQueryData(importKeys.details(data.id), data);
-      updateListItemInAllCaches<ImportJob, ListPaginatedImportJobs, ListInfiniteImportJobs>(
-        queryClient,
-        {
-          all: importKeys.lists({ mode: 'all' }),
-          paginated: importKeys.lists({ mode: 'paginated' }),
-          infinite: importKeys.lists({ mode: 'infinite' }),
-        },
-        data,
-        data.id,
-      );
     },
   });
 };

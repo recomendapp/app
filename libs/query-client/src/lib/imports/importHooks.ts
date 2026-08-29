@@ -2,8 +2,13 @@ import { useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { ImportJob, ListInfiniteImportJobs, ListPaginatedImportJobs } from '@libs/api-js';
 import { importKeys } from './importKeys';
-import { updateListItemInAllCaches } from '../utils';
+import { removeListItemFromAllCaches, updateListItemInAllCaches } from '../utils';
 import { userKeys } from '../users';
+import {
+  importsListAllOptions,
+  importsListInfiniteOptions,
+  importsListPaginatedOptions,
+} from './importOptions';
 
 export const useImportCacheUpdate = () => {
   const queryClient = useQueryClient();
@@ -25,15 +30,28 @@ export const useImportCacheUpdate = () => {
     [queryClient],
   );
 
-  // validate() writes logMovie/logTvSeries/bookmark/playlist/playlistItem rows directly via
-  // Drizzle, without emitting the normal domain events those entities' own sync hooks listen for
-  // (logsSync/bookmarksSync/playlistsSync) — a single import can touch hundreds of rows, so
-  // firing one realtime event per row isn't practical. Instead, once import:validated arrives,
-  // broadly invalidate the collection lists an import can affect. Omitting mode/filters gives
-  // each userKeys.* builder its bare prefix, so this matches every paginated/infinite/filtered
-  // variant already cached for that list, not just one. This runs wherever this hook is mounted
-  // (app root, via useRealtimeSync) — not scoped to the import modal being open — and on both
-  // web and mobile, since they share this same realtime sync setup.
+  const addJob = useCallback(() => {
+    queryClient.invalidateQueries({
+      queryKey: importKeys.lists(),
+    });
+  }, [queryClient]);
+
+  const removeJob = useCallback(
+    (jobId: number) => {
+      queryClient.removeQueries({ queryKey: importKeys.details(jobId) });
+      removeListItemFromAllCaches(
+        queryClient,
+        {
+          all: importsListAllOptions().queryKey,
+          paginated: importsListPaginatedOptions().queryKey,
+          infinite: importsListInfiniteOptions().queryKey,
+        },
+        jobId,
+      );
+    },
+    [queryClient],
+  );
+
   const invalidateImportedCollections = useCallback(
     (userId: string) => {
       queryClient.invalidateQueries({ queryKey: userKeys.movies({ userId }) });
@@ -44,5 +62,5 @@ export const useImportCacheUpdate = () => {
     [queryClient],
   );
 
-  return { setJob, invalidateImportedCollections };
+  return { setJob, addJob, removeJob, invalidateImportedCollections };
 };

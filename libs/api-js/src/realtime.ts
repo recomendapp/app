@@ -12,6 +12,7 @@ import {
   UserFollowServerEvents,
   PersonFollowServerEvents,
   ImportServerEvents,
+  IImportDeletedSignal,
 } from '@libs/realtime';
 import {
   Bookmark,
@@ -95,10 +96,12 @@ export interface PersonFollowServerToClientEvents {
 }
 
 export interface ImportServerToClientEvents {
+  [ImportServerEvents.CREATED]: (job: ImportJob) => void;
   [ImportServerEvents.PROGRESS]: (job: ImportJob) => void;
   [ImportServerEvents.STAGED]: (job: ImportJob) => void;
   [ImportServerEvents.VALIDATED]: (job: ImportJob) => void;
   [ImportServerEvents.FAILED]: (job: ImportJob) => void;
+  [ImportServerEvents.DELETED]: (signal: IImportDeletedSignal) => void;
 }
 
 export type RealtimeSocket = Socket<
@@ -171,12 +174,14 @@ export interface PersonFollowCallbacks {
 }
 
 export interface ImportCallbacks {
+  onImportCreated?: (job: ImportJob) => void;
   onImportProgress?: (job: ImportJob) => void;
   /** Staging analysis finished — job is now awaiting_review, nothing real written yet. */
   onImportStaged?: (job: ImportJob) => void;
   /** The user validated the import — real rows (logs/bookmarks/playlists) now exist. */
   onImportValidated?: (job: ImportJob) => void;
   onImportFailed?: (job: ImportJob) => void;
+  onImportDeleted?: (signal: IImportDeletedSignal) => void;
 }
 
 export interface RealtimeConfig {
@@ -643,6 +648,9 @@ class RealtimeManager {
       if (isUnsubscribed) return;
       socketInstance = socket;
 
+      if (callbacks.onImportCreated) {
+        socket.on(ImportServerEvents.CREATED, callbacks.onImportCreated);
+      }
       if (callbacks.onImportProgress) {
         socket.on(ImportServerEvents.PROGRESS, callbacks.onImportProgress);
       }
@@ -655,12 +663,18 @@ class RealtimeManager {
       if (callbacks.onImportFailed) {
         socket.on(ImportServerEvents.FAILED, callbacks.onImportFailed);
       }
+      if (callbacks.onImportDeleted) {
+        socket.on(ImportServerEvents.DELETED, callbacks.onImportDeleted);
+      }
     });
 
     return () => {
       isUnsubscribed = true;
       if (!socketInstance) return;
 
+      if (callbacks.onImportCreated) {
+        socketInstance.off(ImportServerEvents.CREATED, callbacks.onImportCreated);
+      }
       if (callbacks.onImportProgress) {
         socketInstance.off(ImportServerEvents.PROGRESS, callbacks.onImportProgress);
       }
@@ -672,6 +686,9 @@ class RealtimeManager {
       }
       if (callbacks.onImportFailed) {
         socketInstance.off(ImportServerEvents.FAILED, callbacks.onImportFailed);
+      }
+      if (callbacks.onImportDeleted) {
+        socketInstance.off(ImportServerEvents.DELETED, callbacks.onImportDeleted);
       }
     };
   }

@@ -37,12 +37,6 @@ import {
 } from '@libs/api-js';
 import { importKeys } from './importKeys';
 
-// Statuses where the job is still doing background work — used to auto-poll while true, as a
-// robust fallback alongside (not instead of) the realtime `import:*` events (see
-// `../realtime/importsSync.ts`).
-const ACTIVE_STATUSES = new Set(['pending', 'processing']);
-const POLL_INTERVAL_MS = 2000;
-
 /* -------------------------------- Sources --------------------------------- */
 
 export const importSourcesListAllOptions = () => {
@@ -113,8 +107,6 @@ export const importOptions = (id: number) => {
       return data;
     },
     enabled: !!id,
-    refetchInterval: (query) =>
-      ACTIVE_STATUSES.has(query.state.data?.status ?? '') ? POLL_INTERVAL_MS : false,
   });
 };
 
