@@ -26,11 +26,11 @@ export function Exporter({ initialDestinations }: { initialDestinations: ImportS
     initialData: initialDestinations,
   });
   const destinations: ExporterDestination[] = (destinationsData ?? []).map((destination) => ({
-    destination: destination.provider,
-    name: destination.name,
-    description: destination.description ?? '',
-    iconLight: destination.iconLight ?? null,
-    iconDark: destination.iconDark ?? null,
+    destination: destination.provider.slug,
+    name: destination.provider.name,
+    description: destination.provider.description ?? '',
+    iconLight: destination.provider.iconLight ?? null,
+    iconDark: destination.provider.iconDark ?? null,
     enabled: destination.enabled,
   }));
 

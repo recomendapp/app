@@ -3,7 +3,7 @@ import {
   seedI18n,
   seedSystemConfig,
   seedExploreParadisePicture,
-  seedImportSources,
+  seedProviders,
 } from '../src/lib/seed';
 
 async function main() {
@@ -13,7 +13,7 @@ async function main() {
     await seedI18n(db);
     await seedSystemConfig(db);
     await seedExploreParadisePicture(db);
-    await seedImportSources(db);
+    await seedProviders(db);
     console.log('🚀 Seeding completed successfully!');
     process.exit(0);
   } catch (error) {

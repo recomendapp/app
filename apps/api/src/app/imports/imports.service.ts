@@ -19,6 +19,7 @@ import {
   bookmark,
   playlist,
   playlistItem,
+  provider,
 } from '@libs/db/schemas';
 import { TransfersStorageService } from '../../common/modules/transfers-storage/transfers-storage.service';
 import { PrefectService } from '../../common/modules/prefect/prefect.service';
@@ -120,9 +121,27 @@ export class ImportsService {
   private async getOwnedJob(userId: string, importJobId: number) {
     const job = await this.db.query.importJob.findFirst({
       where: and(eq(importJob.id, importJobId), eq(importJob.userId, userId)),
+      with: { provider: true },
     });
     if (!job) throw new NotFoundException('Import job not found');
     return job;
+  }
+
+  // The `provider` column exposed on ImportJobDto is the slug, not the FK. For rows fetched
+  // with the `provider` relation joined (list/get queries), flatten it out of that relation.
+  private flattenJobRow<T extends { provider: { slug: string } | null }>(row: T) {
+    const { provider: providerRow, ...rest } = row;
+    return { ...rest, provider: providerRow?.slug ?? null };
+  }
+
+  // Same idea, for call sites (create, validate, recordEvent) whose final row comes from a raw
+  // `.returning()` that never joined `provider` — the slug has to be supplied explicitly, from
+  // whichever earlier query in that method already resolved it.
+  private toImportJobDto(
+    row: typeof importJob.$inferSelect,
+    providerSlug: string | null,
+  ): ImportJobDto {
+    return plainToInstance(ImportJobDto, { ...row, provider: providerSlug });
   }
 
   private assertAwaitingReview(status: string) {
@@ -133,11 +152,7 @@ export class ImportsService {
 
   /* --------------------------------- CRUD ---------------------------------- */
 
-  async create(
-    user: User,
-    provider: 'letterboxd' | 'senscritique' | 'recomend',
-    file: MultipartFile,
-  ): Promise<ImportJobDto> {
+  async create(user: User, providerSlug: string, file: MultipartFile): Promise<ImportJobDto> {
     // One active import at a time per user — avoids piling up concurrent Prefect runs (and
     // Postgres load) for the same person mashing "import", and avoids two runs racing to
     // write the same staging rows. Check-then-insert, not airtight under a true race, but
@@ -154,9 +169,16 @@ export class ImportsService {
       );
     }
 
+    const providerRow = await this.db.query.provider.findFirst({
+      where: eq(provider.slug, providerSlug),
+    });
+    if (!providerRow) {
+      throw new BadRequestException(`Unknown provider: ${providerSlug}`);
+    }
+
     const [created] = await this.db
       .insert(importJob)
-      .values({ userId: user.id, provider, direction: 'import', status: 'pending' })
+      .values({ userId: user.id, providerId: providerRow.id, status: 'pending' })
       .returning();
 
     const { key } = await this.transfersStorage.uploadImportFile(user.id, created.id, file);
@@ -167,11 +189,16 @@ export class ImportsService {
       .where(eq(importJob.id, created.id))
       .returning();
 
-    const createdDto = plainToInstance(ImportJobDto, updated);
+    const createdDto = this.toImportJobDto(updated, providerSlug);
     this.realtimeGateway.emitToUser(user.id, ImportServerEvents.CREATED, createdDto);
 
     this.prefectService
-      .triggerImportFlow({ importId: created.id, userId: user.id, s3Key: key, provider })
+      .triggerImportFlow({
+        importId: created.id,
+        userId: user.id,
+        s3Key: key,
+        provider: providerSlug,
+      })
       .catch(async (err) => {
         this.logger.error(`Failed to trigger Prefect flow for import ${created.id}`, err);
         await this.db
@@ -196,8 +223,12 @@ export class ImportsService {
 
   async listAll(user: User): Promise<ImportJobDto[]> {
     const { whereClause, orderBy } = this.getListBaseQuery(user.id);
-    const rows = await this.db.query.importJob.findMany({ where: whereClause, orderBy });
-    return rows.map((row) => plainToInstance(ImportJobDto, row));
+    const rows = await this.db.query.importJob.findMany({
+      where: whereClause,
+      orderBy,
+      with: { provider: true },
+    });
+    return rows.map((row) => plainToInstance(ImportJobDto, this.flattenJobRow(row)));
   }
 
   async listPaginated(user: User, query: PaginationQueryDto): Promise<ListPaginatedImportJobsDto> {
@@ -210,12 +241,13 @@ export class ImportsService {
         orderBy,
         limit: per_page,
         offset: (page - 1) * per_page,
+        with: { provider: true },
       }),
       this.db.$count(importJob, whereClause),
     ]);
 
     return plainToInstance(ListPaginatedImportJobsDto, {
-      data: rows,
+      data: rows.map((row) => this.flattenJobRow(row)),
       meta: {
         total_results: totalCount,
         total_pages: Math.ceil(totalCount / per_page),
@@ -248,6 +280,7 @@ export class ImportsService {
       where: finalWhereClause,
       orderBy,
       limit: per_page + 1,
+      with: { provider: true },
     });
 
     const hasNextPage = rows.length > per_page;
@@ -268,14 +301,14 @@ export class ImportsService {
         : undefined;
 
     return plainToInstance(ListInfiniteImportJobsDto, {
-      data: pageRows,
+      data: pageRows.map((row) => this.flattenJobRow(row)),
       meta: { next_cursor: nextCursor, per_page, total_results: totalCount },
     });
   }
 
   async getById(user: User, importJobId: number): Promise<ImportJobDto> {
     const job = await this.getOwnedJob(user.id, importJobId);
-    return plainToInstance(ImportJobDto, job);
+    return plainToInstance(ImportJobDto, this.flattenJobRow(job));
   }
 
   async delete(user: User, importJobId: number): Promise<void> {
@@ -295,9 +328,10 @@ export class ImportsService {
   /* --------------------------------- Validate -------------------------------- */
 
   async validate(user: User, importJobId: number): Promise<ImportJobDto> {
-    const result = await this.db.transaction(async (tx) => {
+    const { completed, providerSlug } = await this.db.transaction(async (tx) => {
       const job = await tx.query.importJob.findFirst({
         where: and(eq(importJob.id, importJobId), eq(importJob.userId, user.id)),
+        with: { provider: true },
       });
       if (!job) throw new NotFoundException('Import job not found');
       this.assertAwaitingReview(job.status);
@@ -570,10 +604,10 @@ export class ImportsService {
         .where(eq(importJob.id, importJobId))
         .returning();
 
-      return completed;
+      return { completed, providerSlug: job.provider?.slug ?? null };
     });
 
-    const dto = plainToInstance(ImportJobDto, result);
+    const dto = this.toImportJobDto(completed, providerSlug);
     // Real logMovie/logTvSeries/bookmark/playlist rows were just written outside the normal
     // domain write paths (raw Drizzle inserts above), so their own realtime events never fired —
     // this tells every connected client (any device, whether or not the import modal is open)
@@ -587,6 +621,7 @@ export class ImportsService {
   async recordEvent(importJobId: number, dto: ImportJobInternalEventDto): Promise<void> {
     const job = await this.db.query.importJob.findFirst({
       where: eq(importJob.id, importJobId),
+      with: { provider: true },
     });
     if (!job) throw new NotFoundException('Import job not found');
 
@@ -614,7 +649,11 @@ export class ImportsService {
           ? ImportServerEvents.STAGED
           : ImportServerEvents.PROGRESS;
 
-    this.realtimeGateway.emitToUser(job.userId, event, plainToInstance(ImportJobDto, updated));
+    this.realtimeGateway.emitToUser(
+      job.userId,
+      event,
+      this.toImportJobDto(updated, job.provider?.slug ?? null),
+    );
   }
 
   /* --------------------------------- Cleanup --------------------------------- */

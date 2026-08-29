@@ -31,7 +31,7 @@ const SettingsDataImportAddIndexScreen = () => {
     (source: ImportSource) => {
       router.push({
         pathname: '/settings/data/import/add/[source]',
-        params: { source: source.provider },
+        params: { source: source.provider.slug },
       });
     },
     [router],
@@ -46,8 +46,10 @@ const SettingsDataImportAddIndexScreen = () => {
         style={tw`h-30 aspect-square`}
       >
         <ImageWithFallback
-          source={{ uri: (mode === 'dark' ? item.iconDark : item.iconLight) ?? '' }}
-          alt={item.name}
+          source={{
+            uri: (mode === 'dark' ? item.provider.iconDark : item.provider.iconLight) ?? '',
+          }}
+          alt={item.provider.name}
           type="service"
           contentFit="contain"
         />
@@ -69,7 +71,7 @@ const SettingsDataImportAddIndexScreen = () => {
           horizontal
           data={sortedSources}
           renderItem={renderSource}
-          keyExtractor={(item) => item.provider}
+          keyExtractor={(item) => item.provider.slug}
           showsHorizontalScrollIndicator={false}
           ItemSeparatorComponent={() => <View style={{ width: GAP }} />}
           contentContainerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}

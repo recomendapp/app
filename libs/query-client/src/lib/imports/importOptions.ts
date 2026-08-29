@@ -6,7 +6,7 @@ import {
   ImportsControllerListPaginatedData,
   importsControllerListInfinite,
   ImportsControllerListInfiniteData,
-  importsControllerGetById,
+  importControllerGetById,
   importLogMoviesControllerListAll,
   importLogMoviesControllerListPaginated,
   ImportLogMoviesControllerListPaginatedData,
@@ -101,7 +101,7 @@ export const importOptions = (id: number) => {
   return queryOptions({
     queryKey: importKeys.details(id),
     queryFn: async () => {
-      const { data, error } = await importsControllerGetById({ path: { id } });
+      const { data, error } = await importControllerGetById({ path: { id } });
       if (error) throw error;
       if (data === undefined) throw new Error('No data');
       return data;

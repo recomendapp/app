@@ -207,12 +207,14 @@ const ImportSourcesPreview = () => {
   return (
     <AvatarGroup>
       {visibleSources.map((source) => (
-        <Avatar key={source.provider} size="lg" className="rounded-md">
+        <Avatar key={source.provider.slug} size="lg" className="rounded-md">
           <AvatarImage
-            src={(theme === 'dark' ? source.iconDark : source.iconLight) ?? undefined}
-            alt={source.name}
+            src={
+              (theme === 'dark' ? source.provider.iconDark : source.provider.iconLight) ?? undefined
+            }
+            alt={source.provider.name}
           />
-          <AvatarFallback>{source.name.charAt(0)}</AvatarFallback>
+          <AvatarFallback>{source.provider.name.charAt(0)}</AvatarFallback>
         </Avatar>
       ))}
       {remaining > 0 && <AvatarGroupCount className="rounded-md">+{remaining}</AvatarGroupCount>}

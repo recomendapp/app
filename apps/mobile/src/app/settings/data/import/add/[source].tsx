@@ -42,7 +42,7 @@ const SettingsDataImportAddSourceScreen = () => {
   const insets = useSafeAreaInsets();
   const { data: sources } = useQuery(importSourcesListAllOptions());
   const selectedSource = useMemo(
-    () => sources?.find((source) => source.provider === sourceParam) ?? null,
+    () => sources?.find((source) => source.provider.slug === sourceParam) ?? null,
     [sources, sourceParam],
   );
 
@@ -78,7 +78,7 @@ const SettingsDataImportAddSourceScreen = () => {
     createMutation.mutate(
       {
         file: file as unknown as File,
-        provider: selectedSource.provider as 'letterboxd' | 'senscritique' | 'recomend',
+        provider: selectedSource.provider.slug,
       },
       {
         onSuccess: (data) => {
@@ -148,13 +148,15 @@ const SettingsDataImportAddSourceScreen = () => {
                 <ImageWithFallback
                   source={{
                     uri:
-                      (mode === 'dark' ? selectedSource.iconDark : selectedSource.iconLight) ?? '',
+                      (mode === 'dark'
+                        ? selectedSource.provider.iconDark
+                        : selectedSource.provider.iconLight) ?? '',
                   }}
-                  alt={selectedSource.name}
+                  alt={selectedSource.provider.name}
                   type="service"
                   style={tw`w-10 h-10 rounded-lg`}
                 />
-                <Text style={tw`font-medium`}>{selectedSource.name}</Text>
+                <Text style={tw`font-medium`}>{selectedSource.provider.name}</Text>
               </View>
 
               {selectedSource.instructions && (

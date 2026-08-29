@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  importsControllerCreate,
-  ImportsControllerCreateData,
-  importsControllerDelete,
-  importsControllerValidate,
+  importControllerCreate,
+  ImportControllerCreateData,
+  importControllerDelete,
+  importControllerValidate,
   importLogMoviesControllerPatch,
   ImportLogMoviesControllerPatchData,
   importLogMovieReviewsControllerPatch,
@@ -45,15 +45,15 @@ export const useImportCreateMutation = () => {
       provider,
     }: {
       file: File;
-      provider: NonNullable<ImportsControllerCreateData['query']>['provider'];
+      provider: ImportControllerCreateData['path']['slug'];
     }) => {
       const formData = new FormData();
       formData.append('file', file);
 
-      const { data, error } = await importsControllerCreate({
-        query: { provider },
+      const { data, error } = await importControllerCreate({
+        path: { slug: provider },
         body: formData as unknown as string,
-        bodySerializer: (fd) => fd,
+        bodySerializer: (fd: FormData) => fd,
       });
       if (error) throw error;
       if (data === undefined) throw new Error('No data');
@@ -65,7 +65,7 @@ export const useImportCreateMutation = () => {
 export const useImportDeleteMutation = () => {
   return useMutation({
     mutationFn: async ({ id }: { id: number }) => {
-      const { error } = await importsControllerDelete({ path: { id } });
+      const { error } = await importControllerDelete({ path: { id } });
       if (error) throw error;
       return { id };
     },
@@ -75,7 +75,7 @@ export const useImportDeleteMutation = () => {
 export const useImportValidateMutation = () => {
   return useMutation({
     mutationFn: async ({ id }: { id: number }) => {
-      const { data, error } = await importsControllerValidate({ path: { id } });
+      const { data, error } = await importControllerValidate({ path: { id } });
       if (error) throw error;
       if (data === undefined) throw new Error('No data');
       return data;

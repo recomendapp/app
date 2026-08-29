@@ -106,7 +106,9 @@ const SettingsDataImportsScreen = () => {
               )}
               <View style={tw`shrink`}>
                 <Text style={tw`font-medium`} numberOfLines={1}>
-                  {upperFirst(item.provider)}
+                  {upperFirst(
+                    item.provider ?? t('common.messages.unknown', { gender: 'male', count: 1 }),
+                  )}
                 </Text>
                 <Text textColor="muted" style={tw`text-xs`}>
                   {format.relativeTime(parseApiDate(item.createdAt), new Date())}

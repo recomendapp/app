@@ -16,7 +16,7 @@ import {
 } from './import-bookmarks.dto';
 
 @ApiTags('Imports')
-@Controller({ path: 'imports/:id/bookmarks', version: '1' })
+@Controller({ path: 'import/:id/bookmarks', version: '1' })
 export class ImportBookmarksController {
   constructor(private readonly importBookmarksService: ImportBookmarksService) {}
 

@@ -7,7 +7,7 @@ import { ImportLogTvSeriesReviewsService } from './import-log-tv-series-reviews.
 import { ImportJobReviewDto, PatchImportJobReviewDto } from '../../dto/imports.dto';
 
 @ApiTags('Imports')
-@Controller({ path: 'imports/:id/log-tv-series/:itemId/review', version: '1' })
+@Controller({ path: 'import/:id/log-tv-series/:itemId/review', version: '1' })
 export class ImportLogTvSeriesReviewsController {
   constructor(private readonly importLogTvSeriesReviewsService: ImportLogTvSeriesReviewsService) {}
 
