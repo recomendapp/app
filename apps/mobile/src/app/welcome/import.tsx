@@ -30,13 +30,12 @@ const WelcomeImportScreen = () => {
   );
 
   const handleImport = () => {
-    // finish();
-    // router.dismiss();
     router.push('/settings/data/import/add');
   };
 
   const handleGetStarted = () => {
     finish();
+    router.dismissAll();
     router.dismiss();
   };
 

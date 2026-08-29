@@ -239,14 +239,7 @@ const RootLayoutNav = () => {
           name="welcome"
           options={{
             headerShown: false,
-            presentation: 'modal',
-            gestureEnabled: false,
-            ...(isLiquidGlassAvailable
-              ? {
-                  contentStyle: { backgroundColor: 'transparent' },
-                  headerStyle: { backgroundColor: 'transparent' },
-                }
-              : {}),
+            presentation: 'fullScreenModal',
           }}
         />
       </Stack.Protected>
