@@ -23,7 +23,12 @@ import ButtonActionPlaylistSaved from '../../buttons/ButtonActionPlaylistSaved';
 import { forwardRef, useMemo } from 'react';
 import { FlashList } from '@shopify/flash-list';
 import { Playlist, UserSummary } from '@libs/api-js';
-import { usePlaylistDeleteMutation, useUserPlaylistSaved } from '@libs/query-client';
+import {
+  usePlaylistDeleteMutation,
+  usePlaylistDuplicateMutation,
+  useUserPlaylistSaved,
+} from '@libs/query-client';
+import app from '../../../constants/app';
 
 interface BottomSheetPlaylistProps extends BottomSheetProps {
   playlist: Playlist;
@@ -57,6 +62,7 @@ const BottomSheetPlaylist = forwardRef<
     playlistId: playlist.id,
   });
   const { mutateAsync: deletePlaylist } = usePlaylistDeleteMutation();
+  const { mutateAsync: duplicatePlaylist } = usePlaylistDuplicateMutation();
 
   const items = useMemo<Item[]>(
     () => [
@@ -68,6 +74,38 @@ const BottomSheetPlaylist = forwardRef<
             playlist: playlist,
           }),
         label: upperFirst(t('common.messages.share')),
+      },
+      {
+        icon: Icons.Duplicate,
+        onPress: () => {
+          if (!user?.isPremium) {
+            router.push({
+              pathname: '/upgrade',
+              params: { feature: app.features.playlist_duplicate },
+            });
+            return;
+          }
+          duplicatePlaylist(
+            {
+              path: {
+                playlist_id: playlist.id,
+              },
+            },
+            {
+              onSuccess: (duplicatedPlaylist) => {
+                toast.success(upperFirst(t('common.messages.duplicated')));
+                router.push(`/playlist/${duplicatedPlaylist.id}`);
+              },
+              onError: () => {
+                toast.error(upperFirst(t('common.messages.error')), {
+                  description: upperFirst(t('common.messages.an_error_occurred')),
+                });
+              },
+            },
+          );
+        },
+        label: upperFirst(t('common.messages.duplicate')),
+        closeSheet: false,
       },
       ...(user?.id && playlist.userId !== user.id
         ? [
@@ -189,9 +227,11 @@ const BottomSheetPlaylist = forwardRef<
       router,
       pathname,
       user?.id,
+      user?.isPremium,
       t,
       toast,
       deletePlaylist,
+      duplicatePlaylist,
       isSaved,
       toggle,
     ],

@@ -318,6 +318,8 @@
       "remove": "remove",
       "deleted": "deleted",
       "share": "share",
+      "duplicate": "duplicate",
+      "duplicated": "duplicated",
       "cancel": "Cancel",
       "date": "date",
       "duration": "duration",

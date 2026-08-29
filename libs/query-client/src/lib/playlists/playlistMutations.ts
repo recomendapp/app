@@ -15,6 +15,7 @@ import {
   playlistsControllerCreate,
   PlaylistsControllerCreateData,
   playlistsControllerDeleteMutation,
+  playlistsControllerDuplicateMutation,
   playlistsControllerUpdate,
   PlaylistsControllerUpdateData,
 } from '@libs/api-js';
@@ -97,6 +98,12 @@ export const usePlaylistUpdateMutation = () => {
 export const usePlaylistDeleteMutation = () => {
   return useMutation({
     ...playlistsControllerDeleteMutation(),
+  });
+};
+
+export const usePlaylistDuplicateMutation = () => {
+  return useMutation({
+    ...playlistsControllerDuplicateMutation(),
   });
 };
 

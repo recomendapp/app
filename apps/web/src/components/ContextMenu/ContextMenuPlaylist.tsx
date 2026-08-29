@@ -21,7 +21,7 @@ import { ModalPlaylistMembers } from '../Modals/playlists/ModalPlaylistMembers';
 import toast from 'react-hot-toast';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
 import { Playlist, User } from '@libs/api-js';
-import { usePlaylistDeleteMutation } from '@libs/query-client';
+import { usePlaylistDeleteMutation, usePlaylistDuplicateMutation } from '@libs/query-client';
 
 interface Item {
   icon: React.ElementType;
@@ -46,6 +46,7 @@ export const ContextMenuPlaylist = ({
   const pathname = usePathname();
   const { openModal, createConfirmModal } = useModal();
   const { mutateAsync: playlistDeleteMutation } = usePlaylistDeleteMutation();
+  const { mutateAsync: playlistDuplicateMutation } = usePlaylistDuplicateMutation();
   const t = useTranslations();
   const items = useMemo((): Item[][] => {
     return [
@@ -98,6 +99,31 @@ export const ContextMenuPlaylist = ({
             }),
           label: upperFirst(t('common.messages.share')),
         },
+        {
+          icon: Icons.copy,
+          href: user?.isPremium ? undefined : '/upgrade',
+          onClick: user?.isPremium
+            ? () => {
+                playlistDuplicateMutation(
+                  {
+                    path: {
+                      playlist_id: playlist.id,
+                    },
+                  },
+                  {
+                    onSuccess: (duplicatedPlaylist) => {
+                      toast.success(upperFirst(t('common.messages.duplicated')));
+                      router.push(`/playlist/${duplicatedPlaylist.id}`);
+                    },
+                    onError: () => {
+                      toast.error(upperFirst(t('common.messages.an_error_occurred')));
+                    },
+                  },
+                );
+              }
+            : undefined,
+          label: upperFirst(t('common.messages.duplicate')),
+        },
         ...(user?.id === playlist.userId
           ? [
               {
@@ -138,7 +164,17 @@ export const ContextMenuPlaylist = ({
           : []),
       ],
     ];
-  }, [playlist, user, t, openModal, createConfirmModal, playlistDeleteMutation, pathname, router]);
+  }, [
+    playlist,
+    user,
+    t,
+    openModal,
+    createConfirmModal,
+    playlistDeleteMutation,
+    playlistDuplicateMutation,
+    pathname,
+    router,
+  ]);
   return (
     <ContextMenu>
       <ContextMenuTrigger>{children}</ContextMenuTrigger>
