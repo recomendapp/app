@@ -12,8 +12,8 @@ export const USER_RULES = {
   },
   BIO: {
     MAX: 150,
-    REGEX: /^(?!\s*$)(?!.*\n\s*\n).{1,150}$/, 
-  }
+    REGEX: /^(?!\s*$)(?!.*\n\s*\n).{1,150}$/,
+  },
 };
 
 export const PLAYLIST_RULES = {
@@ -25,15 +25,22 @@ export const PLAYLIST_RULES = {
   DESCRIPTION: {
     MIN: 1,
     MAX: 300,
-    REGEX: /^(?!\s+$)(?!.*\n\s*\n)[\s\S]*$/, 
-  }
-}
+    REGEX: /^(?!\s+$)(?!.*\n\s*\n)[\s\S]*$/,
+  },
+};
 
 export const PLAYLIST_ITEM_RULES = {
   COMMENT: {
     MAX: 180,
-  }
-}
+  },
+};
+
+export const PINNED_ITEM_RULES = {
+  MAX: {
+    FREE: 4,
+    PREMIUM: 10,
+  },
+};
 
 export const REVIEW_RULES = {
   TITLE: {
@@ -44,13 +51,13 @@ export const REVIEW_RULES = {
   BODY: {
     MIN: 1,
     MAX: 50000,
-  }
-}
+  },
+};
 
 export const WATCHED_DATE_RULES = {
   COMMENT: {
     MIN: 1,
     MAX: 180,
     REGEX: /^(?!\s+$)(?!.*\n\s*\n)[\s\S]*$/,
-  }
-}
+  },
+};

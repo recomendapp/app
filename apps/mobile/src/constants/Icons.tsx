@@ -79,6 +79,8 @@ import {
   XIcon,
   ZapIcon,
   PuzzleIcon,
+  PinIcon,
+  PinOffIcon,
 } from 'lucide-react-native';
 import { Premium } from '../lib/icons/Premium';
 import { ActivityIndicator } from 'react-native';
@@ -186,4 +188,6 @@ export const Icons = {
   Undo: Undo2Icon,
   Merge: GitMergeIcon,
   Puzzle: PuzzleIcon,
+  Pin: PinIcon,
+  UnPin: PinOffIcon,
 };

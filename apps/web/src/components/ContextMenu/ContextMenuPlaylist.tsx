@@ -22,6 +22,7 @@ import toast from 'react-hot-toast';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
 import { Playlist, User } from '@libs/api-js';
 import { usePlaylistDeleteMutation, usePlaylistDuplicateMutation } from '@libs/query-client';
+import { usePinnedItem } from '@/hooks/use-pinned-item';
 
 interface Item {
   icon: React.ElementType;
@@ -47,6 +48,15 @@ export const ContextMenuPlaylist = ({
   const { openModal, createConfirmModal } = useModal();
   const { mutateAsync: playlistDeleteMutation } = usePlaylistDeleteMutation();
   const { mutateAsync: playlistDuplicateMutation } = usePlaylistDuplicateMutation();
+  const {
+    isPinned,
+    pin,
+    unpin,
+    isPending: isPinPending,
+  } = usePinnedItem({
+    type: 'playlist',
+    mediaId: playlist.id,
+  });
   const t = useTranslations();
   const items = useMemo((): Item[][] => {
     return [
@@ -99,6 +109,21 @@ export const ContextMenuPlaylist = ({
             }),
           label: upperFirst(t('common.messages.share')),
         },
+        ...(user
+          ? [
+              {
+                icon: isPinned ? Icons.unpin : Icons.pin,
+                onClick: isPinPending ? undefined : isPinned ? unpin : pin,
+                label: upperFirst(
+                  t(
+                    isPinned
+                      ? 'common.messages.unpin_from_profile'
+                      : 'common.messages.pin_to_profile',
+                  ),
+                ),
+              },
+            ]
+          : []),
         {
           icon: Icons.copy,
           href: user?.isPremium ? undefined : '/upgrade',
@@ -174,6 +199,10 @@ export const ContextMenuPlaylist = ({
     playlistDuplicateMutation,
     pathname,
     router,
+    isPinned,
+    isPinPending,
+    pin,
+    unpin,
   ]);
   return (
     <ContextMenu>

@@ -43,6 +43,7 @@ import CollectionScreen, {
 import BottomSheetMovie from '../../../../../components/bottom-sheets/sheets/BottomSheetMovie';
 import BottomSheetTvSeries from '../../../../../components/bottom-sheets/sheets/BottomSheetTvSeries';
 import { getTmdbImage } from '../../../../../lib/tmdb/getTmdbImage';
+import { usePinnedItem } from '../../../../../hooks/usePinnedItem';
 
 const PlaylistScreen = () => {
   const t = useTranslations();
@@ -73,6 +74,15 @@ const PlaylistScreen = () => {
   const { isSaved, toggle: toggleSaved } = useUserPlaylistSaved({
     userId: user && playlist && user.id === playlist.userId ? undefined : user?.id,
     playlistId: playlist?.id,
+  });
+  const {
+    isPinned,
+    pin,
+    unpin,
+    isPending: isPinPending,
+  } = usePinnedItem({
+    type: 'playlist',
+    mediaId: playlist?.id,
   });
   // Mutations
   const { mutateAsync: updateItem } = usePlaylistItemUpdateMutation();
@@ -390,12 +400,27 @@ const PlaylistScreen = () => {
             },
           ]
         : []),
-      {
-        type: 'action' as const,
-        label: upperFirst(t('common.messages.duplicate')),
-        icon: { type: 'sfSymbol' as const, name: 'plus.square.on.square' as const },
-        onPress: handleDuplicatePlaylist,
-      },
+      ...(!!user
+        ? [
+            {
+              type: 'action' as const,
+              label: upperFirst(t('common.messages.duplicate')),
+              icon: { type: 'sfSymbol' as const, name: 'plus.square.on.square' as const },
+              onPress: handleDuplicatePlaylist,
+            },
+            {
+              type: 'action' as const,
+              label: t(
+                isPinned ? 'common.messages.unpin_from_profile' : 'common.messages.pin_to_profile',
+              ),
+              icon: {
+                type: 'sfSymbol' as const,
+                name: isPinned ? ('pin.slash' as const) : ('pin' as const),
+              },
+              onPress: isPinPending ? () => {} : isPinned ? unpin : pin,
+            },
+          ]
+        : []),
       ...(canEditItem
         ? [
             {
@@ -454,6 +479,11 @@ const PlaylistScreen = () => {
     t,
     handleDeletePlaylist,
     handleDuplicatePlaylist,
+    isPinned,
+    isPinPending,
+    pin,
+    unpin,
+    user,
   ]);
 
   return (

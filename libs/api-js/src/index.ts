@@ -9,6 +9,7 @@ export * from './search';
 export * from './feed';
 export * from './recos';
 export * from './bookmarks';
+export * from './pinned';
 export * from './utils';
 export * from './ui';
 export * from './notifications';

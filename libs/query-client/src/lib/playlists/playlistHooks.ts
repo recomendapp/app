@@ -12,6 +12,7 @@ import {
   ListPaginatedFeed,
   ListInfiniteFeed,
   SearchResponse,
+  PinnedItemWithData,
 } from '@libs/api-js';
 import {
   playlistFeaturedInfiniteOptions,
@@ -43,6 +44,9 @@ import {
 } from '../search';
 import { meFeedInfiniteOptions, meFeedPaginatedOptions } from '../me';
 import { useCallback } from 'react';
+
+const isPinnedQueryKey = (queryKey: readonly unknown[]) =>
+  queryKey[0] === 'user' && queryKey.length === 3 && queryKey[2] === 'pinned';
 
 export const usePlaylistCacheUpdate = ({
   userId,
@@ -271,6 +275,19 @@ export const usePlaylistCacheUpdate = ({
           };
         },
       );
+
+      // Pinned
+      queryClient.setQueriesData<PinnedItemWithData[]>(
+        { predicate: ({ queryKey }) => isPinnedQueryKey(queryKey) },
+        (old) => {
+          if (!old) return old;
+          return old.map((item) =>
+            item.type === 'playlist' && item.data && item.data.id === playlistId
+              ? { ...item, data: { ...item.data, ...resolveUpdater(item.data, updater) } }
+              : item,
+          );
+        },
+      );
     },
     [queryClient, userId],
   );
@@ -432,6 +449,14 @@ export const usePlaylistCacheDelete = () => {
             ...old,
             playlists: old.playlists.filter((playlist) => playlist.id !== playlistId),
           };
+        },
+      );
+
+      queryClient.setQueriesData<PinnedItemWithData[]>(
+        { predicate: ({ queryKey }) => isPinnedQueryKey(queryKey) },
+        (old) => {
+          if (!old) return old;
+          return old.filter((item) => !(item.type === 'playlist' && item.data?.id === playlistId));
         },
       );
     },

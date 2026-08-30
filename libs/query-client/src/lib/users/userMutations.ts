@@ -2,6 +2,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   bookmarksControllerDeleteByMediaMutation,
   bookmarksControllerSetByMediaMutation,
+  mePinnedControllerAddMutation,
+  mePinnedControllerDeleteMutation,
+  mePinnedControllerUpdateMutation,
   personsControllerFollowMutation,
   personsControllerUnfollowMutation,
   playlistLikesControllerDeleteMutation,
@@ -50,6 +53,25 @@ export const useUserBookmarkSetByMediaMutation = () => {
 export const useUserBookmarkDeleteByMediaMutation = () => {
   return useMutation({
     ...bookmarksControllerDeleteByMediaMutation(),
+  });
+};
+
+/* --------------------------------- Pinned --------------------------------- */
+export const useUserPinnedAddMutation = () => {
+  return useMutation({
+    ...mePinnedControllerAddMutation(),
+  });
+};
+
+export const useUserPinnedReorderMutation = () => {
+  return useMutation({
+    ...mePinnedControllerUpdateMutation(),
+  });
+};
+
+export const useUserPinnedDeleteMutation = () => {
+  return useMutation({
+    ...mePinnedControllerDeleteMutation(),
   });
 };
 

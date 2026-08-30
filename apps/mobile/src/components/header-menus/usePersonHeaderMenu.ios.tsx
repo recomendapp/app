@@ -17,6 +17,7 @@ import { useToast } from '../Toast';
 import BottomSheetSharePerson from '../bottom-sheets/sheets/share/BottomSheetSharePerson';
 import { UsePersonHeaderMenuParams } from './usePersonHeaderMenu';
 import { HeaderMenuReturn } from '.';
+import { usePinnedItem } from '../../hooks/usePinnedItem';
 
 /**
  * Native iOS header menu variant, replacing BottomSheetPerson for this header entry point.
@@ -38,6 +39,16 @@ export const usePersonHeaderMenu = ({ person }: UsePersonHeaderMenuParams): Head
   const { mode } = useTheme();
   const toast = useToast();
   const openSheet = useBottomSheetStore((state) => state.openSheet);
+
+  const {
+    isPinned,
+    pin,
+    unpin,
+    isPending: isPinPending,
+  } = usePinnedItem({
+    type: 'person',
+    mediaId: person?.id,
+  });
 
   const { data: isFollowing } = useQuery(
     userPersonFollowOptions({ userId: user?.id, personId: person?.id }),
@@ -136,11 +147,48 @@ export const usePersonHeaderMenu = ({ person }: UsePersonHeaderMenuParams): Head
                   },
                 ]
               : []),
+            ...(user
+              ? [
+                  {
+                    type: 'submenu' as const,
+                    label: '',
+                    inline: true,
+                    items: [
+                      {
+                        type: 'action' as const,
+                        label: t(
+                          isPinned
+                            ? 'common.messages.unpin_from_profile'
+                            : 'common.messages.pin_to_profile',
+                        ),
+                        icon: {
+                          type: 'sfSymbol' as const,
+                          name: isPinned ? ('pin.slash' as const) : ('pin' as const),
+                        },
+                        onPress: isPinPending ? () => {} : isPinned ? unpin : pin,
+                      },
+                    ],
+                  },
+                ]
+              : []),
           ],
         },
       },
     ];
-  }, [person, user, isFollowing, handleFollowToggle, pathname, router, t, openSheet]);
+  }, [
+    person,
+    user,
+    isFollowing,
+    handleFollowToggle,
+    pathname,
+    router,
+    t,
+    openSheet,
+    isPinned,
+    pin,
+    unpin,
+    isPinPending,
+  ]);
 
   return { onMenuPress, headerRightItems };
 };

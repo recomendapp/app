@@ -29,6 +29,7 @@ import {
   useUserPlaylistSaved,
 } from '@libs/query-client';
 import app from '../../../constants/app';
+import { usePinnedItem } from '../../../hooks/usePinnedItem';
 
 interface BottomSheetPlaylistProps extends BottomSheetProps {
   playlist: Playlist;
@@ -39,7 +40,7 @@ interface BottomSheetPlaylistProps extends BottomSheetProps {
 interface Item {
   icon: LucideIcon;
   label: string;
-  onPress: () => void;
+  onPress?: () => void;
   submenu?: Item[];
   closeSheet?: boolean;
   disabled?: boolean;
@@ -61,6 +62,15 @@ const BottomSheetPlaylist = forwardRef<
     userId: user?.id,
     playlistId: playlist.id,
   });
+  const {
+    isPinned,
+    pin,
+    unpin,
+    isPending: isPinPending,
+  } = usePinnedItem({
+    type: 'playlist',
+    mediaId: playlist.id,
+  });
   const { mutateAsync: deletePlaylist } = usePlaylistDeleteMutation();
   const { mutateAsync: duplicatePlaylist } = usePlaylistDuplicateMutation();
 
@@ -75,38 +85,49 @@ const BottomSheetPlaylist = forwardRef<
           }),
         label: upperFirst(t('common.messages.share')),
       },
-      {
-        icon: Icons.Duplicate,
-        onPress: () => {
-          if (!user?.isPremium) {
-            router.push({
-              pathname: '/upgrade',
-              params: { feature: app.features.playlist_duplicate },
-            });
-            return;
-          }
-          duplicatePlaylist(
+      ...(user
+        ? [
             {
-              path: {
-                playlist_id: playlist.id,
+              icon: Icons.Duplicate,
+              onPress: () => {
+                if (!user?.isPremium) {
+                  router.push({
+                    pathname: '/upgrade',
+                    params: { feature: app.features.playlist_duplicate },
+                  });
+                  return;
+                }
+                duplicatePlaylist(
+                  {
+                    path: {
+                      playlist_id: playlist.id,
+                    },
+                  },
+                  {
+                    onSuccess: (duplicatedPlaylist) => {
+                      toast.success(upperFirst(t('common.messages.duplicated')));
+                      router.push(`/playlist/${duplicatedPlaylist.id}`);
+                    },
+                    onError: () => {
+                      toast.error(upperFirst(t('common.messages.error')), {
+                        description: upperFirst(t('common.messages.an_error_occurred')),
+                      });
+                    },
+                  },
+                );
               },
+              label: upperFirst(t('common.messages.duplicate')),
+              closeSheet: false,
             },
             {
-              onSuccess: (duplicatedPlaylist) => {
-                toast.success(upperFirst(t('common.messages.duplicated')));
-                router.push(`/playlist/${duplicatedPlaylist.id}`);
-              },
-              onError: () => {
-                toast.error(upperFirst(t('common.messages.error')), {
-                  description: upperFirst(t('common.messages.an_error_occurred')),
-                });
-              },
+              icon: isPinned ? Icons.UnPin : Icons.Pin,
+              onPress: isPinPending ? undefined : isPinned ? unpin : pin,
+              label: t(
+                isPinned ? 'common.messages.unpin_from_profile' : 'common.messages.pin_to_profile',
+              ),
             },
-          );
-        },
-        label: upperFirst(t('common.messages.duplicate')),
-        closeSheet: false,
-      },
+          ]
+        : []),
       ...(user?.id && playlist.userId !== user.id
         ? [
             {
@@ -226,14 +247,18 @@ const BottomSheetPlaylist = forwardRef<
       playlist,
       router,
       pathname,
-      user?.id,
-      user?.isPremium,
+      user,
       t,
       toast,
       deletePlaylist,
       duplicatePlaylist,
       isSaved,
       toggle,
+      isPinned,
+      pin,
+      unpin,
+      isPinPending,
+      owner,
     ],
   );
 
@@ -293,7 +318,7 @@ const BottomSheetPlaylist = forwardRef<
                 if (item.closeSheet === undefined || item.closeSheet === true) {
                   closeSheet(id);
                 }
-                item.onPress();
+                item.onPress?.();
               }}
             >
               {item.label}

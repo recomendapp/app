@@ -67,6 +67,12 @@
       "is_empty": "It's a bit empty here",
       "add_to_playlist": "add to a playlist",
       "send_to_friend": "send to a friend",
+      "pin_to_profile": "Pin to profile",
+      "unpin_from_profile": "Unpin from profile",
+      "pinned": "Pinned",
+      "unpinned": "Unpinned",
+      "no_pinned": "No pinned items",
+      "pinned_limit_reached": "You've reached your maximum number of pinned items — unpin something to add a new one",
       "custom_sort": "custom sort",
       "quick_add": "quick add",
       "favorite_films": "favorite films",
@@ -314,9 +320,9 @@
       "login": "login",
       "signup": "sign up",
       "navigation": "navigation",
-      "delete": "delete",
-      "remove": "remove",
-      "deleted": "deleted",
+      "delete": "Delete",
+      "remove": "Remove",
+      "deleted": "Deleted",
       "share": "share",
       "duplicate": "duplicate",
       "duplicated": "duplicated",
@@ -470,7 +476,10 @@
       "failed": "Failed",
       "data": "Data",
       "restore": "Restore",
-      "fix": "Fix"
+      "fix": "Fix",
+      "not_found": "Not found",
+      "unavailable": "Unavailable",
+      "limit_reached": "Limit reached"
     },
     "form": {
       "email": {

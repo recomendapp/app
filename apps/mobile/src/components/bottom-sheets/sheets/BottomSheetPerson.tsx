@@ -18,6 +18,8 @@ import { FlashList } from '@shopify/flash-list';
 import { PADDING_VERTICAL } from '../../../theme/globals';
 import { PersonCompact } from '@libs/api-js';
 import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
+import { usePinnedItem } from '../../../hooks/usePinnedItem';
+import { useAuth } from '../../../providers/AuthProvider';
 
 interface BottomSheetPersonProps extends BottomSheetProps {
   person: PersonCompact;
@@ -28,7 +30,7 @@ interface BottomSheetPersonProps extends BottomSheetProps {
 interface Item {
   icon: LucideIcon;
   label: string;
-  onPress: () => void;
+  onPress?: () => void;
   submenu?: Item[];
   closeOnPress?: boolean;
   disabled?: boolean;
@@ -38,12 +40,22 @@ const BottomSheetPerson = React.forwardRef<
   React.ComponentRef<typeof TrueSheet>,
   BottomSheetPersonProps
 >(({ id, person, additionalItemsTop = [], additionalItemsBottom = [], ...props }, ref) => {
+  const { user } = useAuth();
   const openSheet = useBottomSheetStore((state) => state.openSheet);
   const closeSheet = useBottomSheetStore((state) => state.closeSheet);
   const { colors, mode, isLiquidGlassAvailable } = useTheme();
   const router = useRouter();
   const t = useTranslations();
   const pathname = usePathname();
+  const {
+    isPinned,
+    pin,
+    unpin,
+    isPending: isPinPending,
+  } = usePinnedItem({
+    type: 'person',
+    mediaId: person.id,
+  });
   // States
   const items: Item[] = React.useMemo(
     () => [
@@ -62,9 +74,33 @@ const BottomSheetPerson = React.forwardRef<
         label: upperFirst(t('common.messages.go_to_person')),
         disabled: person.url ? pathname.startsWith(person.url) : false,
       },
+      ...(user
+        ? [
+            {
+              icon: isPinned ? Icons.UnPin : Icons.Pin,
+              onPress: isPinPending ? undefined : isPinned ? unpin : pin,
+              label: t(
+                isPinned ? 'common.messages.unpin_from_profile' : 'common.messages.pin_to_profile',
+              ),
+            },
+          ]
+        : []),
       ...additionalItemsBottom,
     ],
-    [person, additionalItemsTop, additionalItemsBottom, openSheet, router, t, pathname],
+    [
+      additionalItemsTop,
+      additionalItemsBottom,
+      openSheet,
+      person,
+      t,
+      router,
+      pathname,
+      user,
+      isPinned,
+      pin,
+      unpin,
+      isPinPending,
+    ],
   );
 
   return (
@@ -100,11 +136,6 @@ const BottomSheetPerson = React.forwardRef<
                   <Text numberOfLines={2} style={tw`shrink`}>
                     {person.name}
                   </Text>
-                  {/* {person.known_for_department && (
-                  <Text numberOfLines={1} style={[{ color: colors.mutedForeground }, tw`shrink`]}>
-                    {person.known_for_department}
-                  </Text>
-                )} */}
                 </View>
               </View>
             </View>
@@ -121,7 +152,7 @@ const BottomSheetPerson = React.forwardRef<
                 if (item.closeOnPress || item.closeOnPress === undefined) {
                   closeSheet(id);
                 }
-                item.onPress();
+                item.onPress?.();
               }}
             >
               {item.label}

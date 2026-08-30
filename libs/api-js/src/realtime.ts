@@ -7,6 +7,9 @@ import {
   IPlaylistDeletedSignal,
   LogServerEvents,
   BookmarkServerEvents,
+  PinnedServerEvents,
+  IPinnedItemReorderedSignal,
+  IPinnedItemsDeletedSignal,
   RecoServerEvents,
   MeServerEvents,
   UserFollowServerEvents,
@@ -45,6 +48,7 @@ import {
 import { PlaylistItemWithMedia } from './playlists';
 import { BookmarkWithMedia } from './bookmarks';
 import { RecoWithMedia } from './recos';
+import { PinnedItemWithData } from './pinned';
 
 export interface PlaylistServerToClientEvents {
   [PlaylistServerEvents.CREATED]: (playlist: Playlist) => void;
@@ -80,6 +84,12 @@ export interface LogServerToClientEvents {
 export interface BookmarkServerToClientEvents {
   [BookmarkServerEvents.SET]: (bookmark: BookmarkWithMedia) => void;
   [BookmarkServerEvents.DELETED]: (bookmark: Bookmark) => void;
+}
+
+export interface PinnedServerToClientEvents {
+  [PinnedServerEvents.SET]: (item: PinnedItemWithData) => void;
+  [PinnedServerEvents.REORDERED]: (signals: IPinnedItemReorderedSignal[]) => void;
+  [PinnedServerEvents.DELETED]: (signal: IPinnedItemsDeletedSignal) => void;
 }
 
 export interface RecoServerToClientEvents {
@@ -138,6 +148,7 @@ export type RealtimeSocket = Socket<
   PlaylistServerToClientEvents &
     LogServerToClientEvents &
     BookmarkServerToClientEvents &
+    PinnedServerToClientEvents &
     RecoServerToClientEvents &
     MeServerToClientEvents &
     UserFollowServerToClientEvents &
@@ -179,6 +190,12 @@ export interface LogCallbacks {
 export interface BookmarkCallbacks {
   onBookmarkSet?: (bookmark: BookmarkWithMedia) => void;
   onBookmarkDeleted?: (bookmark: Bookmark) => void;
+}
+
+export interface PinnedCallbacks {
+  onPinnedSet?: (item: PinnedItemWithData) => void;
+  onPinnedReordered?: (signals: IPinnedItemReorderedSignal[]) => void;
+  onPinnedDeleted?: (signal: IPinnedItemsDeletedSignal) => void;
 }
 
 export interface RecoCallbacks {
@@ -515,6 +532,47 @@ class RealtimeManager {
       }
       if (callbacks.onBookmarkDeleted) {
         socketInstance.off(BookmarkServerEvents.DELETED, callbacks.onBookmarkDeleted);
+      }
+    };
+  }
+
+  /**
+   * Registers pinned-item event callbacks on the shared connection, connecting it first if
+   * needed. Returns an unsubscribe function. Meant to be called once app-wide (see
+   * `useRealtimeSync` in `@libs/query-client`) — events for every pinned item the user manages,
+   * on any device, arrive here.
+   */
+  public onPinnedEvents(callbacks: PinnedCallbacks): () => void {
+    let isUnsubscribed = false;
+    let socketInstance: RealtimeSocket | null = null;
+
+    this.createSocket().then((socket) => {
+      if (isUnsubscribed) return;
+      socketInstance = socket;
+
+      if (callbacks.onPinnedSet) {
+        socket.on(PinnedServerEvents.SET, callbacks.onPinnedSet);
+      }
+      if (callbacks.onPinnedReordered) {
+        socket.on(PinnedServerEvents.REORDERED, callbacks.onPinnedReordered);
+      }
+      if (callbacks.onPinnedDeleted) {
+        socket.on(PinnedServerEvents.DELETED, callbacks.onPinnedDeleted);
+      }
+    });
+
+    return () => {
+      isUnsubscribed = true;
+      if (!socketInstance) return;
+
+      if (callbacks.onPinnedSet) {
+        socketInstance.off(PinnedServerEvents.SET, callbacks.onPinnedSet);
+      }
+      if (callbacks.onPinnedReordered) {
+        socketInstance.off(PinnedServerEvents.REORDERED, callbacks.onPinnedReordered);
+      }
+      if (callbacks.onPinnedDeleted) {
+        socketInstance.off(PinnedServerEvents.DELETED, callbacks.onPinnedDeleted);
       }
     };
   }

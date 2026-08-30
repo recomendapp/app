@@ -21,6 +21,7 @@ import BottomSheetShareTvSeries from './share/BottomSheetShareTvSeries';
 import { FlashList } from '@shopify/flash-list';
 import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
 import { LogTvSeriesWithTvSeriesNoReview, TvSeriesCompact, UserSummary } from '@libs/api-js';
+import { usePinnedItem } from '../../../hooks/usePinnedItem';
 
 interface BottomSheetTvSeriesProps extends BottomSheetProps {
   tvSeries: TvSeriesCompact;
@@ -33,7 +34,7 @@ type Item =
   | {
       icon: LucideIcon;
       label: string;
-      onPress: () => void;
+      onPress?: () => void;
       submenu?: Item[];
       closeOnPress?: boolean;
       disabled?: boolean;
@@ -51,6 +52,15 @@ const BottomSheetTvSeries = React.forwardRef<
   const router = useRouter();
   const t = useTranslations();
   const pathname = usePathname();
+  const {
+    isPinned,
+    pin,
+    unpin,
+    isPending: isPinPending,
+  } = usePinnedItem({
+    type: 'tv_series',
+    mediaId: tvSeries.id,
+  });
   // REFs
   const BottomSheetMainCreditsRef = React.useRef<RNTrueSheet>(null);
   // States
@@ -148,6 +158,13 @@ const BottomSheetTvSeries = React.forwardRef<
                 }),
               label: upperFirst(t('common.messages.send_to_friend')),
             },
+            {
+              icon: isPinned ? Icons.UnPin : Icons.Pin,
+              onPress: isPinPending ? undefined : isPinned ? unpin : pin,
+              label: t(
+                isPinned ? 'common.messages.unpin_from_profile' : 'common.messages.pin_to_profile',
+              ),
+            },
           ]
         : []),
       ...additionalItemsBottom,
@@ -162,6 +179,10 @@ const BottomSheetTvSeries = React.forwardRef<
       pathname,
       log,
       user,
+      isPinned,
+      pin,
+      unpin,
+      isPinPending,
     ],
   );
 
@@ -213,7 +234,7 @@ const BottomSheetTvSeries = React.forwardRef<
             if (item.closeOnPress || item.closeOnPress === undefined) {
               closeSheet(id);
             }
-            item.onPress();
+            item.onPress?.();
           }}
         >
           {item.label}
