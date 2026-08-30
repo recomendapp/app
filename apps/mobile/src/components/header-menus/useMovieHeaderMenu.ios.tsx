@@ -8,6 +8,7 @@ import { useAuth } from '../../providers/AuthProvider';
 import BottomSheetShareMovie from '../bottom-sheets/sheets/share/BottomSheetShareMovie';
 import { UseMovieHeaderMenuParams } from './useMovieHeaderMenu';
 import { HeaderMenuReturn } from '.';
+import { usePinnedItem } from '../../hooks/usePinnedItem';
 
 /**
  * Native iOS header menu variant, replacing BottomSheetMovie for this header entry point.
@@ -25,6 +26,16 @@ export const useMovieHeaderMenu = ({ movie }: UseMovieHeaderMenuParams): HeaderM
   const pathname = usePathname();
   const { user } = useAuth();
   const openSheet = useBottomSheetStore((state) => state.openSheet);
+
+  const {
+    isPinned,
+    pin,
+    unpin,
+    isPending: isPinPending,
+  } = usePinnedItem({
+    type: 'movie',
+    mediaId: movie?.id,
+  });
 
   const onMenuPress = useCallback(() => {}, []);
 
@@ -131,11 +142,35 @@ export const useMovieHeaderMenu = ({ movie }: UseMovieHeaderMenuParams): HeaderM
                   },
                 ]
               : []),
+            ...(user
+              ? [
+                  {
+                    type: 'submenu' as const,
+                    label: '',
+                    inline: true,
+                    items: [
+                      {
+                        type: 'action' as const,
+                        label: t(
+                          isPinned
+                            ? 'common.messages.unpin_from_profile'
+                            : 'common.messages.pin_to_profile',
+                        ),
+                        icon: {
+                          type: 'sfSymbol' as const,
+                          name: isPinned ? ('pin.slash' as const) : ('pin' as const),
+                        },
+                        onPress: isPinPending ? () => {} : isPinned ? unpin : pin,
+                      },
+                    ],
+                  },
+                ]
+              : []),
           ],
         },
       },
     ];
-  }, [movie, pathname, router, t, user, openSheet]);
+  }, [movie, pathname, router, t, user, openSheet, isPinned, pin, unpin, isPinPending]);
 
   return { onMenuPress, headerRightItems };
 };

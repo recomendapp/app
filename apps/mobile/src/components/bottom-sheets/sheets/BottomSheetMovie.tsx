@@ -21,6 +21,7 @@ import BottomSheetShareMovie from './share/BottomSheetShareMovie';
 import { FlashList } from '@shopify/flash-list';
 import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
 import { LogMovieWithMovieNoReview, MovieCompact, UserSummary } from '@libs/api-js';
+import { usePinnedItem } from '../../../hooks/usePinnedItem';
 
 interface BottomSheetMovieProps extends BottomSheetProps {
   movie: MovieCompact;
@@ -33,7 +34,7 @@ type Item =
   | {
       icon: LucideIcon;
       label: string;
-      onPress: () => void;
+      onPress?: () => void;
       submenu?: Item[];
       closeOnPress?: boolean;
       disabled?: boolean;
@@ -51,6 +52,15 @@ const BottomSheetMovie = React.forwardRef<
   const router = useRouter();
   const t = useTranslations();
   const pathname = usePathname();
+  const {
+    isPinned,
+    pin,
+    unpin,
+    isPending: isPinPending,
+  } = usePinnedItem({
+    type: 'movie',
+    mediaId: movie.id,
+  });
   // REFs
   const BottomSheetMainCreditsRef = React.useRef<RNTrueSheet>(null);
   // States
@@ -144,11 +154,32 @@ const BottomSheetMovie = React.forwardRef<
                 }),
               label: upperFirst(t('common.messages.send_to_friend')),
             },
+            {
+              icon: isPinned ? Icons.UnPin : Icons.Pin,
+              onPress: isPinPending ? undefined : isPinned ? unpin : pin,
+              label: t(
+                isPinned ? 'common.messages.unpin_from_profile' : 'common.messages.pin_to_profile',
+              ),
+            },
           ]
         : []),
       ...additionalItemsBottom,
     ],
-    [movie, additionalItemsTop, additionalItemsBottom, openSheet, router, t, pathname, log, user],
+    [
+      additionalItemsTop,
+      additionalItemsBottom,
+      movie,
+      log,
+      user,
+      isPinned,
+      pin,
+      unpin,
+      isPinPending,
+      openSheet,
+      router,
+      pathname,
+      t,
+    ],
   );
 
   const renderItem = useCallback(
@@ -199,7 +230,7 @@ const BottomSheetMovie = React.forwardRef<
             if (item.closeOnPress || item.closeOnPress === undefined) {
               closeSheet(id);
             }
-            item.onPress();
+            item.onPress?.();
           }}
         >
           {item.label}

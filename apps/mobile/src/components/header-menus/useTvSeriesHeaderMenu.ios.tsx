@@ -8,6 +8,7 @@ import { useAuth } from '../../providers/AuthProvider';
 import BottomSheetShareTvSeries from '../bottom-sheets/sheets/share/BottomSheetShareTvSeries';
 import { UseTvSeriesHeaderMenuParams } from './useTvSeriesHeaderMenu';
 import { HeaderMenuReturn } from '.';
+import { usePinnedItem } from '../../hooks/usePinnedItem';
 
 /**
  * Native iOS header menu variant, replacing BottomSheetTvSeries for this header entry point.
@@ -27,6 +28,16 @@ export const useTvSeriesHeaderMenu = ({
   const pathname = usePathname();
   const { user } = useAuth();
   const openSheet = useBottomSheetStore((state) => state.openSheet);
+
+  const {
+    isPinned,
+    pin,
+    unpin,
+    isPending: isPinPending,
+  } = usePinnedItem({
+    type: 'tv_series',
+    mediaId: tvSeries?.id,
+  });
 
   const onMenuPress = useCallback(() => {}, []);
 
@@ -140,11 +151,35 @@ export const useTvSeriesHeaderMenu = ({
                   },
                 ]
               : []),
+            ...(user
+              ? [
+                  {
+                    type: 'submenu' as const,
+                    label: '',
+                    inline: true,
+                    items: [
+                      {
+                        type: 'action' as const,
+                        label: t(
+                          isPinned
+                            ? 'common.messages.unpin_from_profile'
+                            : 'common.messages.pin_to_profile',
+                        ),
+                        icon: {
+                          type: 'sfSymbol' as const,
+                          name: isPinned ? ('pin.slash' as const) : ('pin' as const),
+                        },
+                        onPress: isPinPending ? () => {} : isPinned ? unpin : pin,
+                      },
+                    ],
+                  },
+                ]
+              : []),
           ],
         },
       },
     ];
-  }, [tvSeries, pathname, router, t, user, openSheet]);
+  }, [tvSeries, pathname, router, t, user, openSheet, isPinned, pin, unpin, isPinPending]);
 
   return { onMenuPress, headerRightItems };
 };

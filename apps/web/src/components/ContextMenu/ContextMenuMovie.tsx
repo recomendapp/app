@@ -22,6 +22,7 @@ import { ShareControllerMovie } from '../ShareController/ShareControllerMovie';
 import { ModalPlaylistAdd } from '../Modals/playlists/ModalPlaylistAdd';
 import { Movie, MovieCompact } from '@libs/api-js';
 import { ModalRecoSend } from '../Modals/recos/ModalRecoSend';
+import { usePinnedItem } from '@/hooks/use-pinned-item';
 
 interface Item {
   icon: React.ElementType;
@@ -45,6 +46,15 @@ export const ContextMenuMovie = ({
   const { user } = useAuth();
   const { openModal } = useModal();
   const t = useTranslations();
+  const {
+    isPinned,
+    pin,
+    unpin,
+    isPending: isPinPending,
+  } = usePinnedItem({
+    type: 'movie',
+    mediaId: movie.id,
+  });
   const items: Item[][] = useMemo(() => {
     return [
       additionalItemsTop,
@@ -65,6 +75,15 @@ export const ContextMenuMovie = ({
                     mediaTitle: movie.title,
                   }),
                 label: upperFirst(t('common.messages.add_to_playlist')),
+              },
+              {
+                icon: isPinned ? Icons.unpin : Icons.pin,
+                onClick: isPinPending ? undefined : isPinned ? unpin : pin,
+                label: t(
+                  isPinned
+                    ? 'common.messages.unpin_from_profile'
+                    : 'common.messages.pin_to_profile',
+                ),
               },
               {
                 icon: Icons.send,
@@ -96,7 +115,18 @@ export const ContextMenuMovie = ({
         ...additionalItemsBottom,
       ],
     ];
-  }, [movie, user, t, openModal, additionalItemsTop, additionalItemsBottom]);
+  }, [
+    movie,
+    user,
+    t,
+    openModal,
+    additionalItemsTop,
+    additionalItemsBottom,
+    isPinned,
+    isPinPending,
+    pin,
+    unpin,
+  ]);
   return (
     <ContextMenu>
       <ContextMenuTrigger>{children}</ContextMenuTrigger>

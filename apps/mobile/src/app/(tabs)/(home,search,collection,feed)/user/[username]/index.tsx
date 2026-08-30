@@ -31,6 +31,7 @@ import {
 } from '@libs/query-client';
 import { CardEmpty } from '../../../../../components/cards/CardEmpty';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import ProfilePinned from '../../../../../components/screens/user/ProfilePinned';
 
 const ProfileHeader = ({
   profile,
@@ -54,8 +55,8 @@ const ProfileHeader = ({
     [profile?.username, router, t],
   );
   return (
-    <View style={[{ borderColor: colors.border }, tw`gap-2 p-4 border-b`]}>
-      <View style={tw`flex-row gap-4 shrink-0 items-start justify-between`}>
+    <View style={[{ borderColor: colors.border }, tw`gap-2 py-4 border-b`]}>
+      <View style={tw`flex-row gap-4 shrink-0 items-start justify-between px-4`}>
         <UserAvatar
           {...(!skeleton
             ? {
@@ -105,10 +106,13 @@ const ProfileHeader = ({
           </View>
         </View>
       </View>
-      {/* ACTION BUTTON */}
       {profile?.id && profile.id !== user?.id && (
-        <ButtonUserFollow {...(!skeleton ? { profileId: profile.id } : { skeleton: true })} />
+        <ButtonUserFollow
+          {...(!skeleton ? { profileId: profile.id } : { skeleton: true })}
+          containerStyle={tw`px-4`}
+        />
       )}
+      {profile && <ProfilePinned profileId={profile.id} />}
     </View>
   );
 };

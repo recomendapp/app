@@ -24,6 +24,7 @@ import {
   ListInfinitePlaylists,
   ListPaginatedPlaylists,
   PersonFollow,
+  PinnedItemWithData,
   Playlist,
   PlaylistLike,
   PlaylistSaved,
@@ -67,6 +68,7 @@ import {
   userPlaylistsSavedInfiniteOptions,
   userFeedPaginatedOptions,
   userFeedInfiniteOptions,
+  userPinnedOptions,
   userKeys,
 } from '../users';
 import { meOptions, meFeedPaginatedOptions, meFeedInfiniteOptions } from '../me';
@@ -184,6 +186,69 @@ export const useBookmarkCacheUpdate = () => {
   );
 
   return { setBookmark, deleteBookmark };
+};
+
+export const usePinnedCacheUpdate = () => {
+  const queryClient = useQueryClient();
+
+  const sortByRank = <T extends { rank: string }>(items: T[]) =>
+    [...items].sort((a, b) => a.rank.localeCompare(b.rank));
+
+  const setPinned = useCallback(
+    (item: PinnedItemWithData) => {
+      queryClient.setQueryData(userPinnedOptions({ userId: item.userId }).queryKey, (old) => {
+        if (!old) return old;
+        if (old.some((existing) => existing.id === item.id)) return old;
+        return sortByRank([...old, item]);
+      });
+    },
+    [queryClient],
+  );
+
+  type PinnedStatusSignal = {
+    id: number;
+    userId: string;
+    rank: string;
+    status: 'available' | 'unavailable' | 'over_limit';
+  };
+
+  const applyStatusSignals = (
+    old: PinnedItemWithData[] | undefined,
+    signals: PinnedStatusSignal[],
+  ) => {
+    if (!old) return old;
+    const byId = new Map(signals.map((signal) => [signal.id, signal]));
+    return sortByRank(
+      old.map((item) => {
+        const signal = byId.get(item.id);
+        return signal ? { ...item, rank: signal.rank, status: signal.status } : item;
+      }),
+    );
+  };
+
+  const reorderPinned = useCallback(
+    (signals: PinnedStatusSignal[]) => {
+      const userId = signals[0]?.userId;
+      if (!userId) return;
+      queryClient.setQueryData(userPinnedOptions({ userId }).queryKey, (old) =>
+        applyStatusSignals(old, signals),
+      );
+    },
+    [queryClient],
+  );
+
+  const deletePinned = useCallback(
+    (signal: { userId: string; deleted: number[]; updated: PinnedStatusSignal[] }) => {
+      queryClient.setQueryData(userPinnedOptions({ userId: signal.userId }).queryKey, (old) => {
+        if (!old) return old;
+        const remaining = old.filter((item) => !signal.deleted.includes(item.id));
+        return applyStatusSignals(remaining, signal.updated);
+      });
+    },
+    [queryClient],
+  );
+
+  return { setPinned, reorderPinned, deletePinned };
 };
 
 export const useRecoTargetCacheUpdate = () => {
