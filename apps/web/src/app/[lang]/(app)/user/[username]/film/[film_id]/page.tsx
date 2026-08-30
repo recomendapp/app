@@ -22,8 +22,8 @@ export async function generateMetadata(props: {
   const { lang, username, film_id } = await props.params;
   const { id: movieId } = getIdFromSlug(film_id);
   const t = await getTranslations({ locale: lang });
-  const profile = await getProfile(username);
-  if (!profile)
+  const { data: profile, error } = await getProfile(username);
+  if (error || !profile)
     return {
       title: upperFirst(t('common.messages.user_not_found')),
     };
@@ -78,8 +78,8 @@ export default async function UserMovie(props: {
   const { lang, username, film_id } = await props.params;
   const { id: movieId } = getIdFromSlug(film_id);
   const t = await getTranslations({ locale: lang });
-  const profile = await getProfile(username);
-  if (!profile) {
+  const { data: profile, error } = await getProfile(username);
+  if (error || !profile) {
     return notFound();
   }
   const log = await getUserMovie({
