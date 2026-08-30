@@ -43,6 +43,7 @@
     "@react-native-picker/picker": "*",
     "@react-native-segmented-control/segmented-control": "*",
     "@sentry/react-native": "*",
+    "@sentry/cli": "*",
     "@shopify/flash-list": "*",
     "@tanstack/react-query": "*",
     "@tanstack/react-query-persist-client": "*",

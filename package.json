@@ -299,6 +299,7 @@
     "@nx/webpack": "22.4.1",
     "@nx/workspace": "22.4.1",
     "@playwright/test": "^1.36.0",
+    "@sentry/cli": "^2.58.4",
     "@swc-node/register": "~1.9.1",
     "@swc/cli": "~0.6.0",
     "@swc/core": "~1.5.7",
