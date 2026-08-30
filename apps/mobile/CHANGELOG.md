@@ -1,5 +1,20 @@
 # mobile
 
+## [1.5.0](https://github.com/recomendapp/app/compare/mobile@v1.4.2...mobile@v1.5.0) (2026-08-30)
+
+
+### Features
+
+* add import/export catalog, deep-linkable modals, libs/ui, and post-signup onboarding ([#31](https://github.com/recomendapp/app/issues/31)) ([4993aed](https://github.com/recomendapp/app/commit/4993aed208f7a5b72dadbb12c3d144021438b180))
+* add playlist duplication for premium users ([#34](https://github.com/recomendapp/app/issues/34)) ([0b8a5d6](https://github.com/recomendapp/app/commit/0b8a5d661d31e8a4fb38bc72c9e26fc3588d48f4))
+* add profile pinned items feature ([#35](https://github.com/recomendapp/app/issues/35)) ([b954b8b](https://github.com/recomendapp/app/commit/b954b8badc40d2166225a78647770812e6dffe91))
+* **mobile:** add data import flow and post-signup welcome experience ([#33](https://github.com/recomendapp/app/issues/33)) ([bdab28c](https://github.com/recomendapp/app/commit/bdab28c470ac48936d5aa328cd25a4efcd8ccfcc))
+
+
+### Bug Fixes
+
+* refactor server error handling and refine pinned items UI ([#36](https://github.com/recomendapp/app/issues/36)) ([050eea8](https://github.com/recomendapp/app/commit/050eea88b952a5f29417aef7e98d679ab3442f2c))
+
 ## [1.4.2](https://github.com/recomendapp/app/compare/mobile@v1.4.1...mobile@v1.4.2) (2026-08-26)
 
 
