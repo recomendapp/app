@@ -9,7 +9,7 @@ import {
   useUserPinnedDeleteMutation,
   useUserPinnedReorderMutation,
 } from '@libs/query-client';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import DraggableFlatList, {
   DragEndParams,
   RenderItemParams,
@@ -137,18 +137,6 @@ const ProfilePinned = ({ profileId, containerStyle }: ProfilePinnedProps) => {
         Awaited<ReturnType<NonNullable<ReturnType<typeof userPinnedOptions>['queryFn']>>>
       >[number]
     >) => {
-      console.log(
-        'isDragDisabled',
-        isDragDisabled,
-        'isActive',
-        isActive,
-        'isEditing',
-        isEditing,
-        'item.type',
-        item.type,
-        'item.data',
-        item.data,
-      );
       const title =
         (item.type === 'movie'
           ? item.data.title
@@ -210,7 +198,7 @@ const ProfilePinned = ({ profileId, containerStyle }: ProfilePinnedProps) => {
               >
                 <View
                   style={{
-                    ...tw`overflow-hidden aspect-square rounded-full w-auto h-auto border border-2`,
+                    ...tw`overflow-hidden aspect-square rounded-md w-auto h-auto border border-2`,
                     ...{ borderColor: colors.muted },
                   }}
                 >
@@ -219,7 +207,7 @@ const ProfilePinned = ({ profileId, containerStyle }: ProfilePinnedProps) => {
                       source={{ uri: image }}
                       alt={title}
                       type={item.type}
-                      style={tw`aspect-square rounded-full w-auto h-auto`}
+                      style={tw`aspect-square rounded-md w-auto h-auto`}
                     />
                   </Link.AppleZoom>
                 </View>
