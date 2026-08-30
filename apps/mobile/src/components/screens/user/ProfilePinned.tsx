@@ -38,6 +38,11 @@ const ProfilePinned = ({ profileId, containerStyle }: ProfilePinnedProps) => {
 
   const { data: pinnedItems } = useQuery(userPinnedOptions({ userId: profileId }));
   const [items, setItems] = useState(pinnedItems ?? []);
+  const [prevPinnedItems, setPrevPinnedItems] = useState(pinnedItems);
+  if (pinnedItems !== prevPinnedItems) {
+    setPrevPinnedItems(pinnedItems);
+    setItems(pinnedItems ?? []);
+  }
   const [isEditing, setIsEditing] = useState(false);
   const isOwner = user?.id === profileId;
   const isDragDisabled = !isOwner || !isEditing || items.length <= 1;
@@ -121,12 +126,6 @@ const ProfilePinned = ({ profileId, containerStyle }: ProfilePinnedProps) => {
     },
     [items, reorderPinned, toast, t],
   );
-
-  useEffect(() => {
-    if (pinnedItems) {
-      setItems(pinnedItems);
-    }
-  }, [pinnedItems]);
 
   const renderItem = useCallback(
     ({
