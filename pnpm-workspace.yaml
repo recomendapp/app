@@ -11,12 +11,13 @@ allowBuilds:
   '@sentry/cli': true
   '@swc/core': true
   bcrypt: true
-  'better-sqlite3': true
+  better-sqlite3: true
   detox: true
-  'dtrace-provider': true
+  dtrace-provider: true
   esbuild: true
   msgpackr-extract: true
   nx: true
   protobufjs: true
+  react-native-enriched-markdown: true
   sharp: true
-  'unrs-resolver': true
+  unrs-resolver: true
