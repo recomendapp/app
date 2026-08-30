@@ -35,12 +35,13 @@ export const usePlaylistInsertMutation = () => {
     mutationFn: async ({
       body: { poster, ...body },
       ...variables
-    }: Options<PlaylistsControllerCreateData> & { body: { poster?: File } }) => {
+    }: Options<PlaylistsControllerCreateData, false> & { body: { poster?: File } }) => {
       let returnData: Playlist | undefined;
-      const { data } = await playlistsControllerCreate({
+      const { data, error } = await playlistsControllerCreate({
         ...variables,
         body,
       });
+      if (error) throw error;
       if (data === undefined) throw new Error('No data');
       returnData = data;
       if (poster) {
@@ -67,7 +68,7 @@ export const usePlaylistUpdateMutation = () => {
     mutationFn: async ({
       body: { poster, ...body },
       ...variables
-    }: Options<PlaylistsControllerUpdateData> & { body: { poster?: File | null } }) => {
+    }: Options<PlaylistsControllerUpdateData, false> & { body: { poster?: File | null } }) => {
       if (poster === null) {
         const { data, error } = await playlistPosterControllerDelete({
           path: variables.path,
@@ -85,10 +86,11 @@ export const usePlaylistUpdateMutation = () => {
         if (error) throw error;
         if (data === undefined) throw new Error('No data');
       }
-      const { data } = await playlistsControllerUpdate({
+      const { data, error } = await playlistsControllerUpdate({
         ...variables,
         body,
       });
+      if (error) throw error;
       if (data === undefined) throw new Error('No data');
       return data;
     },

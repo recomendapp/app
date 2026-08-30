@@ -13,8 +13,8 @@ export default async function Layout(props: {
   children: React.ReactNode;
 }) {
   const params = await props.params;
-  const profile = await getProfile(params.username);
-  if (!profile) return notFound();
+  const { data: profile, error } = await getProfile(params.username);
+  if (error || !profile) return notFound();
   return (
     <>
       <ProfileHeader profile={profile} />

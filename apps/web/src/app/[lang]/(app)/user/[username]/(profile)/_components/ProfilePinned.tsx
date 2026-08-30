@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, forwardRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   userPinnedOptions,
@@ -38,14 +38,16 @@ import { Button } from '@libs/ui/components/button';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
+import { useModal } from '@/context/modal-context';
 
-const PinnedItemCard = ({
-  item,
-}: {
-  item: NonNullable<
-    Awaited<ReturnType<NonNullable<ReturnType<typeof userPinnedOptions>['queryFn']>>>
-  >[number];
-}) => {
+const PinnedItemCard = forwardRef<
+  HTMLDivElement,
+  {
+    item: NonNullable<
+      Awaited<ReturnType<NonNullable<ReturnType<typeof userPinnedOptions>['queryFn']>>>
+    >[number];
+  } & React.HTMLAttributes<HTMLDivElement>
+>(({ item, ...props }, ref) => {
   const t = useTranslations();
   const title =
     (item.type === 'movie'
@@ -71,15 +73,15 @@ const PinnedItemCard = ({
             : null) || '';
   return (
     <div
+      ref={ref}
+      {...props}
       className={`
         gap-2 items-center w-20
         ${item.status !== 'available' ? 'opacity-50' : ''}
       `}
     >
       <div
-        className={
-          'relative w-full rounded-full overflow-hidden aspect-square border-2 border-muted'
-        }
+        className={'relative w-full rounded-md overflow-hidden aspect-square border-2 border-muted'}
       >
         <ImageWithFallback
           src={image}
@@ -93,7 +95,8 @@ const PinnedItemCard = ({
       <p className="text-center truncate text-sm">{title}</p>
     </div>
   );
-};
+});
+PinnedItemCard.displayName = 'PinnedItemCard';
 
 const SortablePinnedItem = ({
   item,
@@ -165,7 +168,7 @@ const SortablePinnedItem = ({
             e.stopPropagation();
             onRemove(Number(item.id));
           }}
-          className="absolute top-2 right-2 z-20 rounded-full opacity-0 group-hover:opacity-100 transition-all hover:scale-110"
+          className="absolute top-1 right-1 z-20 rounded-full opacity-0 group-hover:opacity-100 transition-all hover:scale-110"
         >
           <Icons.X />
         </Button>
@@ -207,7 +210,7 @@ export const ProfilePinned = ({ profileId }: { profileId: string }) => {
   const { user } = useAuth();
   const t = useTranslations();
   const { data: pinnedItems } = useQuery(userPinnedOptions({ userId: profileId }));
-
+  const { createConfirmModal } = useModal();
   const { mutateAsync: reorderPinned } = useUserPinnedReorderMutation();
   const { mutateAsync: deletePinned } = useUserPinnedDeleteMutation();
 
@@ -227,25 +230,29 @@ export const ProfilePinned = ({ profileId }: { profileId: string }) => {
   );
 
   const handleRemove = useCallback(
-    async (idToRemove: number) => {
-      const previousItems = items;
-      setItems((current) => current.filter((i) => i.id !== idToRemove));
+    (idToRemove: number) =>
+      createConfirmModal({
+        title: t('common.messages.are_u_sure'),
+        onConfirm: async () => {
+          const previousItems = items;
+          setItems((current) => current.filter((i) => i.id !== idToRemove));
 
-      await deletePinned(
-        {
-          body: { itemIds: [idToRemove] },
+          await deletePinned(
+            {
+              body: { itemIds: [idToRemove] },
+            },
+            {
+              onSuccess: () =>
+                toast.success(t('common.messages.unpinned', { gender: 'male', count: 1 })),
+              onError: () => {
+                setItems(previousItems);
+                toast.error(upperFirst(t('common.messages.an_error_occurred')));
+              },
+            },
+          );
         },
-        {
-          onSuccess: () =>
-            toast.success(t('common.messages.unpinned', { gender: 'male', count: 1 })),
-          onError: () => {
-            setItems(previousItems);
-            toast.error(upperFirst(t('common.messages.an_error_occurred')));
-          },
-        },
-      );
-    },
-    [items, deletePinned, toast, t],
+      }),
+    [items, deletePinned, t, createConfirmModal],
   );
 
   const handleDragEnd = useCallback(

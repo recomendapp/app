@@ -15,7 +15,7 @@ export const useMeUpdateMutation = () => {
     mutationFn: async ({
       body: { avatar, ...body },
       ...variables
-    }: Options<MeControllerUpdateData> & { body: { avatar?: File | null } }) => {
+    }: Options<MeControllerUpdateData, false> & { body: { avatar?: File | null } }) => {
       if (avatar === null) {
         const { data, error } = await meAvatarControllerDelete();
         if (error) throw error;
@@ -30,10 +30,11 @@ export const useMeUpdateMutation = () => {
         if (error) throw error;
         if (data === undefined) throw new Error('No data');
       }
-      const { data } = await meControllerUpdate({
+      const { data, error } = await meControllerUpdate({
         ...variables,
         body,
       });
+      if (error) throw error;
       if (data === undefined) throw new Error('No data');
       return data;
     },
