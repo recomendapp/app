@@ -206,6 +206,8 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v7
+        with:
+          token: ${{ secrets.MOBILE_FINGERPRINT_PAT }}
       - uses: pnpm/action-setup@v6
         with:
           version: 9
