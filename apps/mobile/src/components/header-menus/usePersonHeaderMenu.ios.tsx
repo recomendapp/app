@@ -143,17 +143,6 @@ export const usePersonHeaderMenu = ({ person }: UsePersonHeaderMenuParams): Head
                         keepsMenuPresented: true,
                         onPress: handleFollowToggle,
                       },
-                    ],
-                  },
-                ]
-              : []),
-            ...(user
-              ? [
-                  {
-                    type: 'submenu' as const,
-                    label: '',
-                    inline: true,
-                    items: [
                       {
                         type: 'action' as const,
                         label: t(
