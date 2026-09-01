@@ -33,8 +33,8 @@ const WelcomeImportScreen = () => {
     router.push('/settings/data/import/add');
   };
 
-  const handleGetStarted = () => {
-    finish();
+  const handleGetStarted = async () => {
+    await finish();
     router.dismissAll();
     router.dismiss();
   };

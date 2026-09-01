@@ -1,11 +1,12 @@
 import { createContext, useCallback, useContext, useEffect, useRef } from 'react';
 import { Stack } from 'expo-router';
-import { useMeUpdateMutation } from '@libs/query-client';
+import { useQueryClient } from '@tanstack/react-query';
+import { meOptions, useMeUpdateMutation } from '@libs/query-client';
 import { useTheme } from '../../providers/ThemeProvider';
 import { useTranslations } from 'use-intl';
 
 interface WelcomeContextValue {
-  finish: () => void;
+  finish: () => Promise<void>;
 }
 
 const WelcomeContext = createContext<WelcomeContextValue | undefined>(undefined);
@@ -19,16 +20,30 @@ export const useWelcomeFinish = () => {
 const WelcomeLayout = () => {
   const t = useTranslations();
   const { defaultScreenOptions } = useTheme();
-  const { mutate: updateMe } = useMeUpdateMutation();
-  const hasFinishedRef = useRef(false);
+  const queryClient = useQueryClient();
+  const { mutateAsync: updateMe } = useMeUpdateMutation();
+  const finishPromiseRef = useRef<Promise<void> | null>(null);
 
   const finish = useCallback(() => {
-    if (hasFinishedRef.current) return;
-    hasFinishedRef.current = true;
-    updateMe({ body: { welcomed: true } });
-  }, [updateMe]);
+    if (!finishPromiseRef.current) {
+      const previous = queryClient.getQueryData(meOptions().queryKey);
+      if (previous && previous.welcomedAt == null) {
+        queryClient.setQueryData(meOptions().queryKey, {
+          ...previous,
+          welcomedAt: new Date().toISOString(),
+        });
+      }
 
-  useEffect(() => () => finish(), [finish]);
+      finishPromiseRef.current = updateMe({ body: { welcomed: true } })
+        .then(() => undefined)
+        .catch(() => {
+          if (previous) queryClient.setQueryData(meOptions().queryKey, previous);
+        });
+    }
+    return finishPromiseRef.current;
+  }, [updateMe, queryClient]);
+
+  useEffect(() => () => void finish(), [finish]);
 
   return (
     <WelcomeContext.Provider value={{ finish }}>
