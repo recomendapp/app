@@ -21,6 +21,8 @@ import { LoopCarousel } from '../../components/ui/LoopCarousel';
 import Carousel, { ICarouselInstance, Pagination } from 'react-native-reanimated-carousel';
 import { useSharedValue } from 'react-native-reanimated';
 import { useHeaderHeight } from 'expo-router/react-navigation';
+import { Icons } from '../../constants/Icons';
+import { isAndroid } from '../../platform/detection';
 
 const WelcomeBackground = () => {
   const { colors } = useTheme();
@@ -131,6 +133,7 @@ const WelcomeCarouselScreen = () => {
           headerTransparent: true,
           headerTitle: () => <></>,
           headerStyle: { backgroundColor: 'transparent' },
+          headerLeft: isAndroid ? () => <></> : undefined,
         }}
       />
       <View style={tw`flex-1`}>
@@ -156,7 +159,7 @@ const WelcomeCarouselScreen = () => {
             setCarouselSpace({ width, height });
           }}
         >
-          {carouselSpace !== undefined && (
+          {features && carouselSpace !== undefined ? (
             <Carousel
               ref={ref}
               width={carouselSpace.width}
@@ -168,6 +171,10 @@ const WelcomeCarouselScreen = () => {
               autoPlayInterval={15000}
               style={{ overflow: 'visible' }}
             />
+          ) : (
+            <View style={tw`flex-1 items-center justify-center`}>
+              <Icons.Loader />
+            </View>
           )}
         </View>
         <Pagination.Basic

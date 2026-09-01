@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouter, useRootNavigationState } from 'expo-router';
 import { useAuth } from '../providers/AuthProvider';
 import { useUIStore } from '../stores/useUIStore';
@@ -17,12 +17,20 @@ export const useWelcomeGate = () => {
   const router = useRouter();
   const rootState = useRootNavigationState();
   const hasOnboarded = useUIStore((state) => state.hasOnboarded);
+  const hasRedirectedRef = useRef(false);
 
   const needsWelcome = !!user && user.welcomedAt == null;
   const isWelcomeOpen = isRouteInStack(rootState, 'welcome');
 
   useEffect(() => {
-    if (!hasOnboarded || !needsWelcome || isWelcomeOpen) return;
-    router.push('/welcome');
+    if (!needsWelcome) {
+      hasRedirectedRef.current = false;
+      return;
+    }
+    if (!hasOnboarded || isWelcomeOpen || hasRedirectedRef.current) return;
+    hasRedirectedRef.current = true;
+    router.push({
+      pathname: '/welcome',
+    });
   }, [hasOnboarded, needsWelcome, isWelcomeOpen, router]);
 };
