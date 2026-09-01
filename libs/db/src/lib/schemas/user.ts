@@ -171,6 +171,6 @@ export const pushToken = pgTable(
   (table) => [
     index('idx_push_token_user_id').on(table.userId),
     index('idx_push_token_session_id').on(table.sessionId),
-    unique('unique_session_provider').on(table.sessionId, table.provider),
+    unique('unique_user_token_provider').on(table.userId, table.token, table.provider),
   ],
 );

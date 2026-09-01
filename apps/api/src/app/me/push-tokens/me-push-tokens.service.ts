@@ -7,18 +7,11 @@ import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class MePushTokensService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
-  async set({
-    session,
-    dto,
-  }: {
-    session: Session,
-    dto: PushTokenSetDto,
-  }): Promise<PushTokenDto> {
-    const [upsertedToken] = await this.db.insert(pushToken)
+  async set({ session, dto }: { session: Session; dto: PushTokenSetDto }): Promise<PushTokenDto> {
+    const [upsertedToken] = await this.db
+      .insert(pushToken)
       .values({
         userId: session.userId,
         sessionId: session.id,
@@ -26,14 +19,13 @@ export class MePushTokensService {
         token: dto.token,
       })
       .onConflictDoUpdate({
-        target: [pushToken.sessionId, pushToken.provider],
+        target: [pushToken.userId, pushToken.token, pushToken.provider],
         set: {
-          token: dto.token,
-          userId: session.userId,
+          sessionId: session.id,
         },
       })
       .returning();
-    
+
     if (!upsertedToken) {
       throw new Error('Failed to upsert push token');
     }

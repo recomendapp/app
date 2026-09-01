@@ -7,8 +7,8 @@ import { render } from '@react-email/render';
 import { VerificationEmail } from '../templates/auth/verification-email';
 import { DeleteAccount } from '../templates/auth/delete-account';
 import { DRIZZLE_SERVICE, DrizzleService } from '../common/modules/drizzle.module';
-import { eq, inArray, sql } from 'drizzle-orm';
-import { pushToken, tmdbMovieView, tmdbTvSeriesView, user } from '@libs/db/schemas';
+import { and, eq, gt, inArray, sql } from 'drizzle-orm';
+import { pushToken, session, tmdbMovieView, tmdbTvSeriesView, user } from '@libs/db/schemas';
 import { defaultSupportedLocale } from '@libs/i18n';
 
 @Processor(NOTIFY_QUEUE)
@@ -33,14 +33,16 @@ export class NotifyProcessor extends WorkerHost {
           await this.notifyService.sendEmail(
             email,
             this.i18n.t('auth.verify_email.subject', { lang }),
-            await render(VerificationEmail({
-              url,
-              dictionary: {
-                title: this.i18n.t('auth.verify_email.title', { lang }),
-                text: this.i18n.t('auth.verify_email.text', { lang }),
-                button: this.i18n.t('auth.verify_email.button', { lang }),
-              },
-            })) 
+            await render(
+              VerificationEmail({
+                url,
+                dictionary: {
+                  title: this.i18n.t('auth.verify_email.title', { lang }),
+                  text: this.i18n.t('auth.verify_email.text', { lang }),
+                  button: this.i18n.t('auth.verify_email.button', { lang }),
+                },
+              }),
+            ),
           );
           break;
         }
@@ -49,14 +51,16 @@ export class NotifyProcessor extends WorkerHost {
           await this.notifyService.sendEmail(
             email,
             this.i18n.t('auth.delete_account_email.subject', { lang }),
-            await render(DeleteAccount({
-              url,
-              dictionary: {
-                title: this.i18n.t('auth.delete_account_email.title', { lang }),
-                text: this.i18n.t('auth.delete_account_email.text', { lang }),
-                button: this.i18n.t('auth.delete_account_email.button', { lang }),
-              },
-            }))
+            await render(
+              DeleteAccount({
+                url,
+                dictionary: {
+                  title: this.i18n.t('auth.delete_account_email.title', { lang }),
+                  text: this.i18n.t('auth.delete_account_email.text', { lang }),
+                  button: this.i18n.t('auth.delete_account_email.button', { lang }),
+                },
+              }),
+            ),
           );
           break;
         }
@@ -65,14 +69,16 @@ export class NotifyProcessor extends WorkerHost {
           await this.notifyService.sendEmail(
             email,
             this.i18n.t('auth.reset_password.subject', { lang }),
-            await render(VerificationEmail({
-              url,
-              dictionary: {
-                title: this.i18n.t('auth.reset_password.title', { lang }),
-                text: this.i18n.t('auth.reset_password.text', { lang }),
-                button: this.i18n.t('auth.reset_password.button', { lang }),
-              },
-            }))
+            await render(
+              VerificationEmail({
+                url,
+                dictionary: {
+                  title: this.i18n.t('auth.reset_password.title', { lang }),
+                  text: this.i18n.t('auth.reset_password.text', { lang }),
+                  button: this.i18n.t('auth.reset_password.button', { lang }),
+                },
+              }),
+            ),
           );
           break;
         }
@@ -108,13 +114,15 @@ export class NotifyProcessor extends WorkerHost {
           await this.notifyService.sendEmail(
             email,
             this.i18n.t(subjectKey, { lang }),
-            await render(VerificationEmail({
-              dictionary: {
-                title: this.i18n.t(titleKey, { lang }),
-                text: this.i18n.t(textKey, { lang, args: { otp } }),
-                button: this.i18n.t('auth.otp_email.button', { lang }),
-              },
-            }))
+            await render(
+              VerificationEmail({
+                dictionary: {
+                  title: this.i18n.t(titleKey, { lang }),
+                  text: this.i18n.t(textKey, { lang, args: { otp } }),
+                  button: this.i18n.t('auth.otp_email.button', { lang }),
+                },
+              }),
+            ),
           );
           break;
         }
@@ -134,9 +142,9 @@ export class NotifyProcessor extends WorkerHost {
           await Promise.all(
             Object.entries(groupedByLang).map(async ([lang, devices]) => {
               const title = this.i18n.t('follow.new.subject', { lang });
-              const body = this.i18n.t('follow.new.body', { 
-                lang, 
-                args: { actorName } 
+              const body = this.i18n.t('follow.new.body', {
+                lang,
+                args: { actorName },
               });
 
               await this.notifyService.sendPushNotifications(devices, {
@@ -147,9 +155,9 @@ export class NotifyProcessor extends WorkerHost {
                   url: `/@${actor.username}`,
                   actorId: actorId,
                   actorUsername: actor.username,
-                }
+                },
               });
-            })
+            }),
           );
 
           break;
@@ -170,9 +178,9 @@ export class NotifyProcessor extends WorkerHost {
           await Promise.all(
             Object.entries(groupedByLang).map(async ([lang, devices]) => {
               const title = this.i18n.t('follow.request.subject', { lang });
-              const body = this.i18n.t('follow.request.body', { 
-                lang, 
-                args: { actorName } 
+              const body = this.i18n.t('follow.request.body', {
+                lang,
+                args: { actorName },
               });
 
               await this.notifyService.sendPushNotifications(devices, {
@@ -183,9 +191,9 @@ export class NotifyProcessor extends WorkerHost {
                   url: `/@${actor.username}`,
                   actorId: actorId,
                   actorUsername: actor.username,
-                }
+                },
               });
-            })
+            }),
           );
           break;
         }
@@ -205,9 +213,9 @@ export class NotifyProcessor extends WorkerHost {
           await Promise.all(
             Object.entries(groupedByLang).map(async ([lang, devices]) => {
               const title = this.i18n.t('follow.accepted.subject', { lang });
-              const body = this.i18n.t('follow.accepted.body', { 
-                lang, 
-                args: { actorName } 
+              const body = this.i18n.t('follow.accepted.body', {
+                lang,
+                args: { actorName },
               });
 
               await this.notifyService.sendPushNotifications(devices, {
@@ -218,9 +226,9 @@ export class NotifyProcessor extends WorkerHost {
                   url: `/@${actor.username}`,
                   actorId: actorId,
                   actorUsername: actor.username,
-                }
+                },
               });
-            })
+            }),
           );
           break;
         }
@@ -246,30 +254,28 @@ export class NotifyProcessor extends WorkerHost {
             })
             .from(pushToken)
             .innerJoin(user, eq(user.id, pushToken.userId))
-            .where(inArray(pushToken.userId, senderIds));
-          
+            .innerJoin(session, eq(session.id, pushToken.sessionId))
+            .where(and(inArray(pushToken.userId, senderIds), gt(session.expiresAt, sql`now()`)));
+
           if (!sendersData.length) break;
 
-          const groupedByLang = sendersData.reduce((acc, current) => {
-            const lang = current.language || defaultSupportedLocale;
-            if (!acc[lang]) acc[lang] = [];
-            acc[lang].push(current);
-            return acc;
-          }, {} as Record<string, typeof sendersData>);
+          const groupedByLang = this.groupDevicesByLang(sendersData);
 
           await Promise.all(
             Object.entries(groupedByLang).map(async ([lang, devices]) => {
               const mediaData = await this.db.transaction(async (tx) => {
                 await tx.execute(sql`SELECT set_config('app.current_language', ${lang}, true)`);
-                
+
                 if (type === 'movie') {
-                  const result = await tx.select({ title: tmdbMovieView.title, url: tmdbMovieView.url })
+                  const result = await tx
+                    .select({ title: tmdbMovieView.title, url: tmdbMovieView.url })
                     .from(tmdbMovieView)
                     .where(eq(tmdbMovieView.id, mediaId))
                     .limit(1);
                   return result[0];
                 } else {
-                  const result = await tx.select({ title: tmdbTvSeriesView.name, url: tmdbTvSeriesView.url })
+                  const result = await tx
+                    .select({ title: tmdbTvSeriesView.name, url: tmdbTvSeriesView.url })
                     .from(tmdbTvSeriesView)
                     .where(eq(tmdbTvSeriesView.id, mediaId))
                     .limit(1);
@@ -279,14 +285,14 @@ export class NotifyProcessor extends WorkerHost {
 
               if (!mediaData) return;
 
-              const title = this.i18n.t('reco.completed.subject', { 
-                lang, 
-                args: { watcherName } 
+              const title = this.i18n.t('reco.completed.subject', {
+                lang,
+                args: { watcherName },
               });
-              
-              const body = this.i18n.t('reco.completed.body', { 
-                lang, 
-                args: { watcherName, mediaTitle: mediaData.title } 
+
+              const body = this.i18n.t('reco.completed.body', {
+                lang,
+                args: { watcherName, mediaTitle: mediaData.title },
               });
 
               await this.notifyService.sendPushNotifications(devices, {
@@ -297,9 +303,9 @@ export class NotifyProcessor extends WorkerHost {
                   url: mediaData.url || '/',
                   mediaId: mediaId.toString(),
                   mediaType: type,
-                }
+                },
               });
-            })
+            }),
           );
 
           break;
@@ -325,30 +331,28 @@ export class NotifyProcessor extends WorkerHost {
             })
             .from(pushToken)
             .innerJoin(user, eq(user.id, pushToken.userId))
-            .where(inArray(pushToken.userId, receiverIds));
-          
+            .innerJoin(session, eq(session.id, pushToken.sessionId))
+            .where(and(inArray(pushToken.userId, receiverIds), gt(session.expiresAt, sql`now()`)));
+
           if (!receiversData.length) break;
 
-          const groupedByLang = receiversData.reduce((acc, current) => {
-            const lang = current.language || defaultSupportedLocale;
-            if (!acc[lang]) acc[lang] = [];
-            acc[lang].push(current);
-            return acc;
-          }, {} as Record<string, typeof receiversData>);
+          const groupedByLang = this.groupDevicesByLang(receiversData);
 
           await Promise.all(
             Object.entries(groupedByLang).map(async ([lang, devices]) => {
               const mediaTitle = await this.db.transaction(async (tx) => {
                 await tx.execute(sql`SELECT set_config('app.current_language', ${lang}, true)`);
-                
+
                 if (type === 'movie') {
-                  const result = await tx.select({ title: tmdbMovieView.title, url: tmdbMovieView.url })
+                  const result = await tx
+                    .select({ title: tmdbMovieView.title, url: tmdbMovieView.url })
                     .from(tmdbMovieView)
                     .where(eq(tmdbMovieView.id, mediaId))
                     .limit(1);
                   return result[0];
                 } else {
-                  const result = await tx.select({ title: tmdbTvSeriesView.name, url: tmdbTvSeriesView.url })
+                  const result = await tx
+                    .select({ title: tmdbTvSeriesView.name, url: tmdbTvSeriesView.url })
                     .from(tmdbTvSeriesView)
                     .where(eq(tmdbTvSeriesView.id, mediaId))
                     .limit(1);
@@ -358,16 +362,19 @@ export class NotifyProcessor extends WorkerHost {
 
               if (!mediaTitle) return;
 
-              const title = this.i18n.t('reco.received.subject', { 
-                lang, 
-                args: { senderName } 
+              const title = this.i18n.t('reco.received.subject', {
+                lang,
+                args: { senderName },
               });
-              
-              const body = comment 
-                ? comment 
-                : this.i18n.t('reco.received.body', { 
-                    lang, 
-                    args: { senderName, mediaTitle: mediaTitle.title } 
+
+              const body = comment
+                ? this.i18n.t('reco.received.body_with_comment', {
+                    lang,
+                    args: { senderName, comment },
+                  })
+                : this.i18n.t('reco.received.body', {
+                    lang,
+                    args: { senderName, mediaTitle: mediaTitle.title },
                   });
 
               await this.notifyService.sendPushNotifications(devices, {
@@ -378,9 +385,9 @@ export class NotifyProcessor extends WorkerHost {
                   url: mediaTitle.url || '/',
                   mediaId: mediaId.toString(),
                   mediaType: type,
-                }
+                },
               });
-            })
+            }),
           );
 
           break;
@@ -407,13 +414,35 @@ export class NotifyProcessor extends WorkerHost {
       })
       .from(pushToken)
       .innerJoin(user, eq(user.id, pushToken.userId))
-      .where(inArray(pushToken.userId, userIds));
+      .innerJoin(session, eq(session.id, pushToken.sessionId))
+      // Belt-and-braces: session cleanup runs once a day (see
+      // apps/api/.../auth/session-cleanup.service.ts), so an expired-but-not-yet-purged
+      // session can still have a push_token row pointing at it. Skip those rather than
+      // pushing to a device whose owning session is already dead.
+      .where(and(inArray(pushToken.userId, userIds), gt(session.expiresAt, sql`now()`)));
 
-    return receiversData.reduce((acc, current) => {
-      const lang = current.language || defaultSupportedLocale;
-      if (!acc[lang]) acc[lang] = [];
-      acc[lang].push(current);
-      return acc;
-    }, {} as Record<string, typeof receiversData>);
+    return this.groupDevicesByLang(receiversData);
+  }
+
+  private groupDevicesByLang<
+    T extends { token: string; provider: string; language: string | null },
+  >(devices: T[]) {
+    const seen = new Set<string>();
+    const deduped = devices.filter((device) => {
+      const key = `${device.provider}:${device.token}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    return deduped.reduce(
+      (acc, current) => {
+        const lang = current.language || defaultSupportedLocale;
+        if (!acc[lang]) acc[lang] = [];
+        acc[lang].push(current);
+        return acc;
+      },
+      {} as Record<string, T[]>,
+    );
   }
 }
