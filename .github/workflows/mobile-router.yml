@@ -178,20 +178,29 @@ jobs:
     uses: ./.github/workflows/build-submit-ios.yml
     secrets: inherit
 
-  call-android-build:
-    name: 🤖 Build Android
+  call-android-build-eas:
+    name: 🤖☁️ Build Android (EAS Cloud)
     needs: check-fingerprint
     if: needs.check-fingerprint.outputs.strategy == 'native'
+    uses: ./.github/workflows/build-submit-android-eas.yml
+    secrets: inherit
+
+  call-android-build:
+    name: 🤖 Build Android (Self-Hosted fallback)
+    needs: [check-fingerprint, call-android-build-eas]
+    if: |
+      needs.check-fingerprint.outputs.strategy == 'native' &&
+      needs.call-android-build-eas.result == 'failure'
     uses: ./.github/workflows/build-submit-android.yml
     secrets: inherit
 
   save-fingerprint:
     name: 💾 Save Fingerprint
-    needs: [check-fingerprint, call-ios-build, call-android-build]
+    needs: [check-fingerprint, call-ios-build, call-android-build-eas, call-android-build]
     if: |
       needs.check-fingerprint.outputs.strategy == 'native' &&
       needs.call-ios-build.result == 'success' &&
-      needs.call-android-build.result == 'success'
+      (needs.call-android-build-eas.result == 'success' || needs.call-android-build.result == 'success')
     runs-on: ubuntu-latest
     permissions:
       contents: write
