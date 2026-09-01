@@ -4,23 +4,13 @@ import { AuthGuard, OptionalAuthGuard } from './guards';
 import { AUTH_SERVICE, AuthProvider } from './auth.service';
 import { NotifySharedModule } from '@shared/notify';
 import { SharedWorkerModule } from '@shared/worker';
+import { SessionCleanupService } from './session-cleanup.service';
 
 @Global()
 @Module({
-  imports: [
-    NotifySharedModule,
-    SharedWorkerModule,
-  ],
+  imports: [NotifySharedModule, SharedWorkerModule],
   controllers: [AuthController],
-  providers: [
-    AuthProvider,
-    AuthGuard,
-    OptionalAuthGuard
-  ],
-  exports: [
-    AUTH_SERVICE,
-    AuthGuard,
-    OptionalAuthGuard
-  ],
+  providers: [AuthProvider, AuthGuard, OptionalAuthGuard, SessionCleanupService],
+  exports: [AUTH_SERVICE, AuthGuard, OptionalAuthGuard],
 })
 export class AuthModule {}
