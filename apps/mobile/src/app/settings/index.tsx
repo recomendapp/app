@@ -20,6 +20,7 @@ import app from '../../constants/app';
 import { Badge } from '../../components/ui/Badge';
 import { client } from '@libs/api-js';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as WebBrowser from 'expo-web-browser';
 
 type BaseRoute = {
   label: string;
@@ -63,6 +64,9 @@ const SettingsScreen = () => {
       await forceLogout();
     }
   }, [logout, forceLogout, t, toast]);
+  const handleOpenLegalPage = useCallback((path: string) => {
+    WebBrowser.openBrowserAsync(`https://${app.webDomain}${path}`);
+  }, []);
   const handleLogoutButtonPress = useCallback(() => {
     Alert.alert(
       upperFirst(t('common.messages.are_u_sure')),
@@ -134,6 +138,16 @@ const SettingsScreen = () => {
         route: '/settings/appearance',
         icon: Icons.Eye,
       },
+      {
+        label: upperFirst(t('common.messages.terms_of_use')),
+        onPress: () => handleOpenLegalPage('/legal/terms-of-use'),
+        icon: Icons.TermsOfUse,
+      },
+      {
+        label: upperFirst(t('common.messages.privacy_policy')),
+        onPress: () => handleOpenLegalPage('/legal/privacy-policy'),
+        icon: Icons.PrivacyPolicy,
+      },
       { label: upperFirst(t('common.messages.about')), route: '/about', icon: Icons.info },
       {
         label: upperFirst(t('common.messages.logout')),
@@ -144,7 +158,15 @@ const SettingsScreen = () => {
       },
     ];
     return routes.filter((route) => !route.authOnly || (route.authOnly && user));
-  }, [t, user, handleLogoutButtonPress, colors.destructive, customerInfo, router]);
+  }, [
+    t,
+    user,
+    handleLogoutButtonPress,
+    handleOpenLegalPage,
+    colors.destructive,
+    customerInfo,
+    router,
+  ]);
 
   const renderItem = useCallback(
     ({ item, index }: { item: Route; index: number }) => (

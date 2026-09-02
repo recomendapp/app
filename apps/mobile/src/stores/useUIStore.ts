@@ -28,6 +28,12 @@ interface UIStore {
   hasOnboarded: boolean;
   setHasOnboarded: (hasOnboarded: boolean) => void;
 
+  // Rate app
+  appOpenCount: number;
+  incrementAppOpenCount: () => void;
+  hasRequestedReview: boolean;
+  setHasRequestedReview: (hasRequestedReview: boolean) => void;
+
   map: MapState;
   setMapCamera: (center: [number, number], zoom: number) => void;
   setSelectedMovieId: (id: number | null) => void;
@@ -64,6 +70,12 @@ export const useUIStore = create<UIStore>()(
       // Onboarding
       hasOnboarded: false,
       setHasOnboarded: (hasOnboarded) => set({ hasOnboarded }),
+
+      // Rate app
+      appOpenCount: 0,
+      incrementAppOpenCount: () => set((state) => ({ appOpenCount: state.appOpenCount + 1 })),
+      hasRequestedReview: false,
+      setHasRequestedReview: (hasRequestedReview) => set({ hasRequestedReview }),
 
       // Map
       map: {
