@@ -8,10 +8,10 @@ on:
 
 jobs:
   check-fingerprint:
-    name: 🔍 OTA or Native Build?
+    name: 🔍 Check Fingerprint
     runs-on: ubuntu-latest
     outputs:
-      strategy: ${{ steps.decide.outputs.strategy }}
+      fingerprint_changed: ${{ steps.decide.outputs.fingerprint_changed }}
     steps:
       - uses: actions/checkout@v7
 
@@ -58,7 +58,7 @@ jobs:
           echo "Current fingerprint: $HASH"
           echo "hash=$HASH" >> $GITHUB_OUTPUT
 
-      - name: 🧭 Decide Strategy
+      - name: 🧭 Compare Fingerprint
         id: decide
         run: |
           CURRENT="${{ steps.current.outputs.hash }}"
@@ -73,11 +73,11 @@ jobs:
           fi
 
           if [ "$CURRENT" == "$LAST" ]; then
-            echo "✅ Identical fingerprint -> OTA"
-            echo "strategy=ota" >> $GITHUB_OUTPUT
+            echo "✅ Identical fingerprint -> also push an OTA update for installs still on it"
+            echo "fingerprint_changed=false" >> $GITHUB_OUTPUT
           else
-            echo "⚠️ Different fingerprint -> Native Build"
-            echo "strategy=native" >> $GITHUB_OUTPUT
+            echo "⚠️ Different fingerprint -> native build only"
+            echo "fingerprint_changed=true" >> $GITHUB_OUTPUT
           fi
 
       - name: 🧹 Cleanup
@@ -87,7 +87,7 @@ jobs:
   ota-update:
     name: ⚡ OTA Update
     needs: check-fingerprint
-    if: needs.check-fingerprint.outputs.strategy == 'ota'
+    if: needs.check-fingerprint.outputs.fingerprint_changed == 'false'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -174,23 +174,19 @@ jobs:
   call-ios-build:
     name: 🍏 Build iOS
     needs: check-fingerprint
-    if: needs.check-fingerprint.outputs.strategy == 'native'
     uses: ./.github/workflows/build-submit-ios.yml
     secrets: inherit
 
   call-android-build-eas:
     name: 🤖☁️ Build Android (EAS Cloud)
     needs: check-fingerprint
-    if: needs.check-fingerprint.outputs.strategy == 'native'
     uses: ./.github/workflows/build-submit-android-eas.yml
     secrets: inherit
 
   call-android-build:
     name: 🤖 Build Android (Self-Hosted fallback)
     needs: [check-fingerprint, call-android-build-eas]
-    if: |
-      needs.check-fingerprint.outputs.strategy == 'native' &&
-      needs.call-android-build-eas.result == 'failure'
+    if: needs.call-android-build-eas.result == 'failure'
     uses: ./.github/workflows/build-submit-android.yml
     secrets: inherit
 
@@ -198,7 +194,6 @@ jobs:
     name: 💾 Save Fingerprint
     needs: [check-fingerprint, call-ios-build, call-android-build-eas, call-android-build]
     if: |
-      needs.check-fingerprint.outputs.strategy == 'native' &&
       needs.call-ios-build.result == 'success' &&
       (needs.call-android-build-eas.result == 'success' || needs.call-android-build.result == 'success')
     runs-on: ubuntu-latest
