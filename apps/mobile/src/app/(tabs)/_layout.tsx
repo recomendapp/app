@@ -1,11 +1,9 @@
-import { useEffect } from 'react';
-import { useRouter, useSegments } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useAuth } from '../../providers/AuthProvider';
 import { useTheme } from '../../providers/ThemeProvider';
 import { useTranslations } from 'use-intl';
 import { upperFirst } from 'lodash';
-import { useUIStore } from '../../stores/useUIStore';
-import { useWelcomeGate } from '../../hooks/useWelcomeGate';
+import { useAppGates } from '../../hooks/gates/useAppGates';
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import { isIOS } from '../../platform/detection';
 
@@ -14,16 +12,8 @@ const TabsLayout = () => {
   const { colors, isLiquidGlassAvailable } = useTheme();
   const t = useTranslations();
   const router = useRouter();
-  const hasOnboarded = useUIStore((state) => state.hasOnboarded);
-  const segment = useSegments();
 
-  useEffect(() => {
-    if (!hasOnboarded && !segment.some((seg) => seg === 'onboarding')) {
-      router.replace({ pathname: '/onboarding' });
-    }
-  }, [hasOnboarded, router, segment]);
-
-  useWelcomeGate();
+  useAppGates();
 
   return (
     <NativeTabs

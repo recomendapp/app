@@ -134,6 +134,16 @@ const SettingsScreen = () => {
         route: '/settings/appearance',
         icon: Icons.Eye,
       },
+      {
+        label: upperFirst(t('common.messages.terms_of_use')),
+        route: '/legal/terms-of-use',
+        icon: Icons.TermsOfUse,
+      },
+      {
+        label: upperFirst(t('common.messages.privacy_policy')),
+        route: '/legal/privacy-policy',
+        icon: Icons.PrivacyPolicy,
+      },
       { label: upperFirst(t('common.messages.about')), route: '/about', icon: Icons.info },
       {
         label: upperFirst(t('common.messages.logout')),

@@ -30,6 +30,7 @@ import {
   EllipsisVerticalIcon,
   EyeIcon,
   EyeOffIcon,
+  FileTextIcon,
   HeartIcon,
   HomeIcon,
   ImageIcon,
@@ -61,6 +62,7 @@ import {
   Settings2Icon,
   SettingsIcon,
   ShieldIcon,
+  ShieldCheckIcon,
   StarIcon,
   StoreIcon,
   StrikethroughIcon,
@@ -190,4 +192,6 @@ export const Icons = {
   Puzzle: PuzzleIcon,
   Pin: PinIcon,
   UnPin: PinOffIcon,
+  TermsOfUse: FileTextIcon,
+  PrivacyPolicy: ShieldCheckIcon,
 };
