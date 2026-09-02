@@ -11,7 +11,8 @@ jobs:
     name: 🔍 Check Fingerprint
     runs-on: ubuntu-latest
     outputs:
-      fingerprint_changed: ${{ steps.decide.outputs.fingerprint_changed }}
+      ios_fingerprint_changed: ${{ steps.decide.outputs.ios_fingerprint_changed }}
+      android_fingerprint_changed: ${{ steps.decide.outputs.android_fingerprint_changed }}
     steps:
       - uses: actions/checkout@v7
 
@@ -50,44 +51,64 @@ jobs:
           TMDB_IMAGE_BASE_URL="${{ secrets.INFISICAL_MOBILE_TMDB_IMAGE_BASE_URL }}"
           EOF
 
-      - name: 🔍 Calculate current fingerprint
+      - name: 🔑 Decode Google Services files
+        run: |
+          echo "${{ secrets.INFISICAL_MOBILE_GOOGLE_SERVICES_ANDROID_BASE64 }}" | base64 --decode > apps/mobile/google-services.json
+          echo "${{ secrets.INFISICAL_MOBILE_GOOGLE_SERVICES_IOS_BASE64 }}" | base64 --decode > apps/mobile/GoogleService-Info.plist
+
+      - name: 🔍 Calculate current fingerprints
         id: current
         working-directory: apps/mobile
         run: |
-          HASH=$(npx -y @expo/fingerprint apps/mobile | jq -r '.hash')
-          echo "Current fingerprint: $HASH"
-          echo "hash=$HASH" >> $GITHUB_OUTPUT
+          IOS_HASH=$(npx -y @expo/fingerprint fingerprint:generate --platform ios | jq -r '.hash')
+          ANDROID_HASH=$(npx -y @expo/fingerprint fingerprint:generate --platform android | jq -r '.hash')
+          echo "Current iOS fingerprint: $IOS_HASH"
+          echo "Current Android fingerprint: $ANDROID_HASH"
+          echo "ios_hash=$IOS_HASH" >> "$GITHUB_OUTPUT"
+          echo "android_hash=$ANDROID_HASH" >> "$GITHUB_OUTPUT"
 
-      - name: 🧭 Compare Fingerprint
+      - name: 🧭 Compare Fingerprints
         id: decide
         run: |
-          CURRENT="${{ steps.current.outputs.hash }}"
-          FILE=apps/mobile/.eas-fingerprint
+          compare() {
+            local platform="$1" current="$2" file="$3"
+            if [ -f "$file" ]; then
+              local last
+              last=$(cat "$file")
+              echo "Last $platform fingerprint: $last" >&2
+            else
+              local last=""
+              echo "No previous $platform build found" >&2
+            fi
 
-          if [ -f "$FILE" ]; then
-            LAST=$(cat "$FILE")
-            echo "Last build fingerprint: $LAST"
-          else
-            LAST=""
-            echo "No previous build found"
-          fi
+            if [ "$current" == "$last" ]; then
+              echo "✅ Identical $platform fingerprint -> also push an OTA update for installs still on it" >&2
+              echo "false"
+            else
+              echo "⚠️ Different $platform fingerprint -> native build" >&2
+              echo "true"
+            fi
+          }
 
-          if [ "$CURRENT" == "$LAST" ]; then
-            echo "✅ Identical fingerprint -> also push an OTA update for installs still on it"
-            echo "fingerprint_changed=false" >> $GITHUB_OUTPUT
-          else
-            echo "⚠️ Different fingerprint -> native build only"
-            echo "fingerprint_changed=true" >> $GITHUB_OUTPUT
-          fi
+          IOS_CHANGED=$(compare ios "${{ steps.current.outputs.ios_hash }}" apps/mobile/.eas-fingerprint-ios)
+          ANDROID_CHANGED=$(compare android "${{ steps.current.outputs.android_hash }}" apps/mobile/.eas-fingerprint-android)
+
+          echo "ios_fingerprint_changed=$IOS_CHANGED" >> "$GITHUB_OUTPUT"
+          echo "android_fingerprint_changed=$ANDROID_CHANGED" >> "$GITHUB_OUTPUT"
 
       - name: 🧹 Cleanup
         if: always()
-        run: rm -f apps/mobile/.env
+        run: |
+          rm -f apps/mobile/.env
+          rm -f apps/mobile/google-services.json
+          rm -f apps/mobile/GoogleService-Info.plist
 
   ota-update:
     name: ⚡ OTA Update
     needs: check-fingerprint
-    if: needs.check-fingerprint.outputs.fingerprint_changed == 'false'
+    if: |
+      needs.check-fingerprint.outputs.ios_fingerprint_changed == 'false' ||
+      needs.check-fingerprint.outputs.android_fingerprint_changed == 'false'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -157,12 +178,36 @@ jobs:
           API_INTERNAL_IMPORTS_SECRET="placeholder"
           EOF
 
+      - name: 🔑 Decode Google Services files
+        run: |
+          echo "${{ secrets.INFISICAL_MOBILE_GOOGLE_SERVICES_ANDROID_BASE64 }}" | base64 --decode > apps/mobile/google-services.json
+          echo "${{ secrets.INFISICAL_MOBILE_GOOGLE_SERVICES_IOS_BASE64 }}" | base64 --decode > apps/mobile/GoogleService-Info.plist
+
+      - name: 🧭 Resolve target platform
+        id: platforms
+        run: |
+          # `eas update --platform` only accepts a single value: android|ios|all.
+          IOS_OK="${{ needs.check-fingerprint.outputs.ios_fingerprint_changed == 'false' }}"
+          ANDROID_OK="${{ needs.check-fingerprint.outputs.android_fingerprint_changed == 'false' }}"
+
+          if [ "$IOS_OK" == "true" ] && [ "$ANDROID_OK" == "true" ]; then
+            PLATFORM="all"
+          elif [ "$IOS_OK" == "true" ]; then
+            PLATFORM="ios"
+          else
+            PLATFORM="android"
+          fi
+
+          echo "Publishing OTA for: $PLATFORM"
+          echo "value=$PLATFORM" >> "$GITHUB_OUTPUT"
+
       - name: 🚀 EAS Update
         run: |
           pnpm nx update mobile \
             --channel production \
             --message "Release ${{ github.ref_name }}" \
             --environment production \
+            --platform "${{ steps.platforms.outputs.value }}" \
             --non-interactive
 
       - name: 🧹 Cleanup
@@ -170,6 +215,8 @@ jobs:
         run: |
           rm -f apps/mobile/.env
           rm -f apps/api/.env
+          rm -f apps/mobile/google-services.json
+          rm -f apps/mobile/GoogleService-Info.plist
 
   call-ios-build:
     name: 🍏 Build iOS
@@ -231,11 +278,18 @@ jobs:
           TMDB_IMAGE_BASE_URL="${{ secrets.INFISICAL_MOBILE_TMDB_IMAGE_BASE_URL }}"
           EOF
 
-      - name: 🔍 Re-calculate fingerprint
+      - name: 🔑 Decode Google Services files
+        run: |
+          echo "${{ secrets.INFISICAL_MOBILE_GOOGLE_SERVICES_ANDROID_BASE64 }}" | base64 --decode > apps/mobile/google-services.json
+          echo "${{ secrets.INFISICAL_MOBILE_GOOGLE_SERVICES_IOS_BASE64 }}" | base64 --decode > apps/mobile/GoogleService-Info.plist
+
+      - name: 🔍 Re-calculate fingerprints
         working-directory: apps/mobile
         run: |
-          HASH=$(npx -y @expo/fingerprint apps/mobile | jq -r '.hash')
-          echo "HASH=$HASH" >> "$GITHUB_ENV"
+          IOS_HASH=$(npx -y @expo/fingerprint fingerprint:generate --platform ios | jq -r '.hash')
+          ANDROID_HASH=$(npx -y @expo/fingerprint fingerprint:generate --platform android | jq -r '.hash')
+          echo "IOS_HASH=$IOS_HASH" >> "$GITHUB_ENV"
+          echo "ANDROID_HASH=$ANDROID_HASH" >> "$GITHUB_ENV"
 
       - name: 💾 Commit and Push Fingerprint
         run: |
@@ -246,13 +300,14 @@ jobs:
           # behind main by the time the native builds finish. Committing the
           # fingerprint straight onto main from that detached, possibly-stale
           # checkout would risk a non-fast-forward push, so switch to main's
-          # current tip first — only the fingerprint file itself needs to land
-          # there, not the rest of the tag's tree.
+          # current tip first — only the fingerprint files themselves need to
+          # land there, not the rest of the tag's tree.
           git fetch origin main
           git checkout -B main origin/main
 
-          echo "$HASH" > apps/mobile/.eas-fingerprint
-          git add apps/mobile/.eas-fingerprint
+          echo "$IOS_HASH" > apps/mobile/.eas-fingerprint-ios
+          echo "$ANDROID_HASH" > apps/mobile/.eas-fingerprint-android
+          git add apps/mobile/.eas-fingerprint-ios apps/mobile/.eas-fingerprint-android
 
           if git diff --staged --quiet; then
             echo "No changes to commit"
@@ -263,4 +318,7 @@ jobs:
 
       - name: 🧹 Cleanup
         if: always()
-        run: rm -f apps/mobile/.env
+        run: |
+          rm -f apps/mobile/.env
+          rm -f apps/mobile/google-services.json
+          rm -f apps/mobile/GoogleService-Info.plist
