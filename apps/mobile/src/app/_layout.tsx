@@ -343,6 +343,9 @@ const RootLayoutNav = () => {
         name="about/index"
         options={{ headerTitle: upperFirst(t('common.messages.about')) }}
       />
+      {/* LEGAL */}
+      <Stack.Screen name="legal/terms-of-use" options={{ headerShown: false }} />
+      <Stack.Screen name="legal/privacy-policy" options={{ headerShown: false }} />
 
       <Stack.Screen
         name="explore"
