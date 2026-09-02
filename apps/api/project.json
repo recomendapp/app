@@ -8,6 +8,7 @@
     "generate-openapi": {
       "executor": "nx:run-commands",
       "cache": true,
+      "dependsOn": ["^generate"],
       "outputs": ["{projectRoot}/.openapi/*"],
       "inputs": [
         "default",
