@@ -44,32 +44,38 @@ jobs:
           TMDB_IMAGE_BASE_URL="${{ secrets.INFISICAL_MOBILE_TMDB_IMAGE_BASE_URL }}"
           EOF
 
-      - name: 🔑 Decode google-services.json
-        env:
-          GOOGLE_SERVICES_ANDROID_BASE64: ${{ secrets.INFISICAL_MOBILE_GOOGLE_SERVICES_ANDROID_BASE64 }}
+      - name: 🔑 Decode Google Services files
         run: |
-          echo $GOOGLE_SERVICES_ANDROID_BASE64 | base64 --decode > apps/mobile/google-services.json
+          echo "${{ secrets.INFISICAL_MOBILE_GOOGLE_SERVICES_ANDROID_BASE64 }}" | base64 --decode > apps/mobile/google-services.json
+          echo "${{ secrets.INFISICAL_MOBILE_GOOGLE_SERVICES_IOS_BASE64 }}" | base64 --decode > apps/mobile/GoogleService-Info.plist
 
-      - name: 🔍 Calculate current fingerprint
+      - name: 🔍 Calculate current fingerprints
         id: current
         working-directory: apps/mobile
         run: |
-          HASH=$(npx -y @expo/fingerprint apps/mobile | jq -r '.hash')
-          echo "Computed fingerprint: $HASH"
-          echo "hash=$HASH" >> "$GITHUB_OUTPUT"
+          IOS_HASH=$(npx -y @expo/fingerprint fingerprint:generate --platform ios | jq -r '.hash')
+          ANDROID_HASH=$(npx -y @expo/fingerprint fingerprint:generate --platform android | jq -r '.hash')
+          echo "Computed iOS fingerprint: $IOS_HASH"
+          echo "Computed Android fingerprint: $ANDROID_HASH"
+          echo "ios_hash=$IOS_HASH" >> "$GITHUB_OUTPUT"
+          echo "android_hash=$ANDROID_HASH" >> "$GITHUB_OUTPUT"
 
       - name: 💾 Commit and Push Fingerprint
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          echo "${{ steps.current.outputs.hash }}" > apps/mobile/.eas-fingerprint
-          git add apps/mobile/.eas-fingerprint
+          echo "${{ steps.current.outputs.ios_hash }}" > apps/mobile/.eas-fingerprint-ios
+          echo "${{ steps.current.outputs.android_hash }}" > apps/mobile/.eas-fingerprint-android
+          git add apps/mobile/.eas-fingerprint-ios apps/mobile/.eas-fingerprint-android
 
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "chore(mobile): seed baseline build fingerprint"
+            # Same message as save-fingerprint's commits (mobile-router.yml), so the
+            # CD Pipeline / Release Please skip guards already in place for it also
+            # apply here — no separate exclusion needed.
+            git commit -m "chore(mobile): update build fingerprint"
             git push origin HEAD:main
           fi
 
@@ -78,3 +84,4 @@ jobs:
         run: |
           rm -f apps/mobile/.env
           rm -f apps/mobile/google-services.json
+          rm -f apps/mobile/GoogleService-Info.plist
