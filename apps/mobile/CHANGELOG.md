@@ -1,5 +1,14 @@
 # mobile
 
+## [1.5.1](https://github.com/recomendapp/app/compare/mobile@v1.5.0...mobile@v1.5.1) (2026-09-02)
+
+
+### Bug Fixes
+
+* **mobile:** add legal links and a coordinated rate-app prompt ([#40](https://github.com/recomendapp/app/issues/40)) ([a4740c3](https://github.com/recomendapp/app/commit/a4740c3f84ceed206eaa875bbc3f375cc6190ad0))
+* **mobile:** stop welcome flow from re-opening right after it closes ([#38](https://github.com/recomendapp/app/issues/38)) ([9af4e96](https://github.com/recomendapp/app/commit/9af4e96f1b6533fbd6973b4c8851fc6af8c1c093))
+* resolve Sentry CLI module not found error ([522e0ea](https://github.com/recomendapp/app/commit/522e0ea6ae8b1531b08844d46054d840764bf5f6))
+
 ## [1.5.0](https://github.com/recomendapp/app/compare/mobile@v1.4.2...mobile@v1.5.0) (2026-08-30)
 
 
