@@ -18,7 +18,7 @@ jobs:
 
       - uses: pnpm/action-setup@v6
         with:
-          version: 9
+          version: 11.25.0
 
       - uses: actions/setup-node@v7
         with:
@@ -115,7 +115,7 @@ jobs:
 
       - uses: pnpm/action-setup@v6
         with:
-          version: 9
+          version: 11.25.0
       - uses: actions/setup-node@v7
         with:
           node-version: 24
@@ -222,12 +222,19 @@ jobs:
     name: 🍏 Build iOS
     needs: check-fingerprint
     uses: ./.github/workflows/build-submit-ios.yml
+    # This router already saves both platforms' fingerprints itself below,
+    # in one job — the called workflow's own Save Fingerprint job must stay
+    # off here or two parallel runs would race to push to main.
+    with:
+      skip_fingerprint_save: true
     secrets: inherit
 
   call-android-build-eas:
     name: 🤖☁️ Build Android (EAS Cloud)
     needs: check-fingerprint
     uses: ./.github/workflows/build-submit-android-eas.yml
+    with:
+      skip_fingerprint_save: true
     secrets: inherit
 
   call-android-build:
@@ -235,6 +242,8 @@ jobs:
     needs: [check-fingerprint, call-android-build-eas]
     if: needs.call-android-build-eas.result == 'failure'
     uses: ./.github/workflows/build-submit-android.yml
+    with:
+      skip_fingerprint_save: true
     secrets: inherit
 
   save-fingerprint:
@@ -254,7 +263,7 @@ jobs:
           token: ${{ secrets.MOBILE_FINGERPRINT_PAT }}
       - uses: pnpm/action-setup@v6
         with:
-          version: 9
+          version: 11.25.0
       - uses: actions/setup-node@v7
         with:
           node-version: 24

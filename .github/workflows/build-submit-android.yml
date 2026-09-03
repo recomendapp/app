@@ -3,6 +3,12 @@ name: Build and Submit Android
 on:
   workflow_dispatch:
   workflow_call:
+    inputs:
+      skip_fingerprint_save:
+        description: 'Set by Mobile Router, which already saves fingerprints itself after all builds finish'
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   build-android:
@@ -15,7 +21,7 @@ jobs:
       - name: 📦 Setup pnpm
         uses: pnpm/action-setup@v6
         with:
-          version: 9
+          version: 11.25.0
 
       - name: 🔧 Setup Node.js
         uses: actions/setup-node@v7
@@ -123,3 +129,18 @@ jobs:
           rm -f apps/mobile/.env
           rm -f apps/api/.env
           rm -f apps/mobile/google-services.json
+
+  save-fingerprint:
+    name: 💾 Save Fingerprint
+    needs: build-android
+    # Skipped when Mobile Router calls this workflow: it already saves both
+    # platforms' fingerprints itself in a single job, to avoid two parallel
+    # Save Fingerprint runs racing to push to main. github.event_name can't
+    # be used to detect that here (it's inherited from whatever triggered
+    # the caller, not set to 'workflow_call'), so Mobile Router passes this
+    # input explicitly instead.
+    if: inputs.skip_fingerprint_save != true
+    uses: ./.github/workflows/save-fingerprint.yml
+    with:
+      platform: android
+    secrets: inherit

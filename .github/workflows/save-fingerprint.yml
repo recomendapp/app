@@ -1,11 +1,16 @@
-name: 🌱 Seed Fingerprint
+name: 💾 Save Fingerprint
 
 on:
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      platform:
+        description: 'Platform whose fingerprint to (re)compute and commit'
+        required: true
+        type: string
 
 jobs:
-  seed-fingerprint:
-    name: 🌱 Compute & Commit Baseline Fingerprint
+  save-fingerprint:
+    name: 💾 Save Fingerprint (${{ inputs.platform }})
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -49,35 +54,46 @@ jobs:
           echo "${{ secrets.INFISICAL_MOBILE_GOOGLE_SERVICES_ANDROID_BASE64 }}" | base64 --decode > apps/mobile/google-services.json
           echo "${{ secrets.INFISICAL_MOBILE_GOOGLE_SERVICES_IOS_BASE64 }}" | base64 --decode > apps/mobile/GoogleService-Info.plist
 
-      - name: 🔍 Calculate current fingerprints
+      - name: 🔍 Calculate fingerprint
         id: current
         working-directory: apps/mobile
         run: |
-          IOS_HASH=$(npx -y @expo/fingerprint fingerprint:generate --platform ios | jq -r '.hash')
-          ANDROID_HASH=$(npx -y @expo/fingerprint fingerprint:generate --platform android | jq -r '.hash')
-          echo "Computed iOS fingerprint: $IOS_HASH"
-          echo "Computed Android fingerprint: $ANDROID_HASH"
-          echo "ios_hash=$IOS_HASH" >> "$GITHUB_OUTPUT"
-          echo "android_hash=$ANDROID_HASH" >> "$GITHUB_OUTPUT"
+          HASH=$(npx -y @expo/fingerprint fingerprint:generate --platform ${{ inputs.platform }} | jq -r '.hash')
+          echo "Computed ${{ inputs.platform }} fingerprint: $HASH"
+          echo "hash=$HASH" >> "$GITHUB_OUTPUT"
 
       - name: 💾 Commit and Push Fingerprint
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          echo "${{ steps.current.outputs.ios_hash }}" > apps/mobile/.eas-fingerprint-ios
-          echo "${{ steps.current.outputs.android_hash }}" > apps/mobile/.eas-fingerprint-android
-          git add apps/mobile/.eas-fingerprint-ios apps/mobile/.eas-fingerprint-android
+          FILE="apps/mobile/.eas-fingerprint-${{ inputs.platform }}"
 
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            # Same message as save-fingerprint's commits (mobile-router.yml), so the
-            # CD Pipeline / Release Please skip guards already in place for it also
-            # apply here — no separate exclusion needed.
+          # This job's checkout can be behind main by the time it runs (native
+          # builds take a while), and it may race another Save Fingerprint run
+          # for the other platform. Re-sync onto main's tip and retry the push
+          # a few times instead of failing outright on a non-fast-forward.
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git checkout -B main origin/main
+
+            echo "${{ steps.current.outputs.hash }}" > "$FILE"
+            git add "$FILE"
+
+            if git diff --staged --quiet; then
+              echo "No changes to commit"
+              break
+            fi
+
             git commit -m "chore(mobile): update build fingerprint"
-            git push origin HEAD:main
-          fi
+
+            if git push origin main; then
+              break
+            fi
+
+            echo "Push rejected (attempt $attempt/5), retrying..."
+            sleep $(( (RANDOM % 5) + 1 ))
+          done
 
       - name: 🧹 Cleanup
         if: always()
