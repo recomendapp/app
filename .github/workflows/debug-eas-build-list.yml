@@ -50,6 +50,31 @@ jobs:
           TMDB_IMAGE_BASE_URL="${{ secrets.INFISICAL_MOBILE_TMDB_IMAGE_BASE_URL }}"
           EOF
 
+      - name: 🔑 Decode google-services.json
+        run: |
+          echo "${{ secrets.INFISICAL_MOBILE_GOOGLE_SERVICES_ANDROID_BASE64 }}" | base64 --decode > apps/mobile/google-services.json
+
+      - name: 🩺 Show which env vars actually made it into .env (names only, no values)
+        working-directory: apps/mobile
+        run: |
+          echo "--- keys present in .env (values redacted) ---"
+          sed 's/=.*/=<redacted>/' .env
+          echo "--- any of these secrets literally empty at the GH Actions level? (true/false) ---"
+          echo "EXPO_PUBLIC_FACEBOOK_APP_ID empty: $([ -z "${{ secrets.INFISICAL_MOBILE_EXPO_PUBLIC_FACEBOOK_APP_ID }}" ] && echo true || echo false)"
+
+      - name: 🩺 Run npx expo config directly (bypassing eas-cli entirely)
+        working-directory: apps/mobile
+        run: |
+          set +e
+          npx expo config --json > /tmp/expo-config.stdout 2> /tmp/expo-config.stderr
+          echo "npx expo config exit code: $?"
+          echo "::group::npx expo config stderr"
+          cat /tmp/expo-config.stderr
+          echo "::endgroup::"
+          echo "::group::npx expo config stdout (first 2000 chars)"
+          head -c 2000 /tmp/expo-config.stdout
+          echo "::endgroup::"
+
       - name: 🩺 Capture raw pnpm exec eas output (no build triggered)
         working-directory: apps/mobile
         run: |
@@ -77,9 +102,12 @@ jobs:
           path: |
             /tmp/raw.stdout
             /tmp/raw.stderr
+            /tmp/expo-config.stdout
+            /tmp/expo-config.stderr
           retention-days: 7
 
       - name: 🧹 Cleanup
         if: always()
         run: |
           rm -f apps/mobile/.env
+          rm -f apps/mobile/google-services.json
