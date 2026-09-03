@@ -104,7 +104,7 @@ jobs:
       - name: ✅ Verify Build Actually Finished
         working-directory: apps/mobile
         run: |
-          STATUS=$(npx eas-cli build:list --platform android --build-profile production --limit 1 --non-interactive --json | jq -r '.[0].status')
+          STATUS=$(pnpm exec eas build:list --platform android --build-profile production --limit 1 --non-interactive --json | jq -r '.[0].status')
           echo "Latest Android build status: $STATUS"
           if [ "$STATUS" != "FINISHED" ]; then
             echo "::error::Android build did not finish (status: $STATUS) — failing this job so the self-hosted fallback can take over."
