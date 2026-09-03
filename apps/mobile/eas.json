@@ -14,7 +14,8 @@
       "env": {
         "APP_VARIANT": "development"
       },
-      "channel": "development"
+      "channel": "development",
+      "pnpm": "11.25.0"
     },
     "preview": {
       "channel": "preview",
@@ -22,14 +23,16 @@
       "env": {
         "APP_VARIANT": "preview"
       },
-      "autoIncrement": true
+      "autoIncrement": true,
+      "pnpm": "11.25.0"
     },
     "production": {
       "channel": "production",
       "env": {
         "APP_VARIANT": "production"
       },
-      "autoIncrement": true
+      "autoIncrement": true,
+      "pnpm": "11.25.0"
     }
   },
   "submit": {
