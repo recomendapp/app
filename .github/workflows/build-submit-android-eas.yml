@@ -104,6 +104,22 @@ jobs:
       - name: ✅ Verify Build Actually Finished
         working-directory: apps/mobile
         run: |
+          # eas-cli resolves app.config.ts locally to read the project id, and
+          # explicitly sets EXPO_NO_DOTENV=1 when it does so (it expects env
+          # vars for that to come from EAS's own "environment" system on the
+          # build server, not a local .env file) - see
+          # node_modules/eas-cli/build/project/expoConfig.js. Since our
+          # app.config.ts plugins read process.env.EXPO_PUBLIC_FACEBOOK_APP_ID
+          # directly, and .env here is only ever a file (never exported), that
+          # resolution fails with "missing appID in the plugin properties",
+          # and eas-cli prints that failure - not JSON - to stdout, which is
+          # what was actually breaking the jq parse below. Export .env's vars
+          # into the real environment so eas-cli's local config resolution
+          # has them, same as the EAS Cloud build server does for the actual
+          # build.
+          set -a
+          source .env
+          set +a
           STATUS=$(pnpm exec eas build:list --platform android --build-profile production --limit 1 --non-interactive --json | jq -r '.[0].status')
           echo "Latest Android build status: $STATUS"
           if [ "$STATUS" != "FINISHED" ]; then
