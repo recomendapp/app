@@ -6,6 +6,8 @@
 
 Monorepo of the **Recomend** app, dev by [@lxup](https://github.com/lxup).
 
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](./LICENSE)
+
 ## ✅ TODO
 
 - [ ] Update english translations
@@ -35,3 +37,13 @@ cp .env.template .env.local
 # Add your environment variables to .env.local
 pnpm start
 ```
+
+## 🤝 Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md) for how to submit issues and pull requests.
+
+## 📄 License
+
+This project is licensed under the [GNU Affero General Public License v3.0](./LICENSE) (AGPL-3.0-or-later).
+
+This means you are free to use, study, modify and share this code, including running a modified version as a network service — but any modified version you distribute or run as a service must also be made available under the same license, with its source code accessible to its users.
