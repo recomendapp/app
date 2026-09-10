@@ -47,7 +47,7 @@ export const TvSeriesHeaderInfo = forwardRef<
   return (
     <View ref={ref} style={[tw`flex-row flex-wrap items-center justify-center`, style]} {...props}>
       <Text style={[tw`mr-1`, { color: colors.accentYellow }]}>
-        {upperFirst(t('common.messages.film', { count: 1 }))}
+        {upperFirst(t('common.messages.tv_series', { count: 1 }))}
       </Text>
       {items.length > 0 && <Text style={{ color: colors.mutedForeground }}> • </Text>}
       {items.map((item, i) => (
