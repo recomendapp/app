@@ -296,27 +296,33 @@ export const ProfilePinned = ({ profileId }: { profileId: string }) => {
   if (!items.length) return null;
 
   return (
-    <ScrollArea className="rounded-md">
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-        modifiers={[restrictToHorizontalAxis]}
-      >
-        <SortableContext items={items.map((i) => i.id)} strategy={rectSortingStrategy}>
-          <div className="flex gap-2">
-            {items.map((item) => (
-              <SortablePinnedItem
-                key={item.id}
-                item={item}
-                disabled={!isOwner}
-                onRemove={handleRemove}
-              />
-            ))}
-          </div>
-        </SortableContext>
-      </DndContext>
-      <ScrollBar orientation="horizontal" className="hidden" />
-    </ScrollArea>
+    <div className="flex flex-col gap-1">
+      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+        <Icons.pin className="size-3" />
+        <span>{upperFirst(t('common.messages.pinned', { gender: 'male', count: 2 }))}</span>
+      </div>
+      <ScrollArea className="rounded-md">
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+          modifiers={[restrictToHorizontalAxis]}
+        >
+          <SortableContext items={items.map((i) => i.id)} strategy={rectSortingStrategy}>
+            <div className="flex gap-2">
+              {items.map((item) => (
+                <SortablePinnedItem
+                  key={item.id}
+                  item={item}
+                  disabled={!isOwner}
+                  onRemove={handleRemove}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
+        <ScrollBar orientation="horizontal" className="hidden" />
+      </ScrollArea>
+    </div>
   );
 };
