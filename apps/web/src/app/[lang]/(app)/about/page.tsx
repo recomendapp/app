@@ -5,6 +5,8 @@ import { upperFirst } from 'lodash';
 import { Metadata } from 'next';
 import { SupportedLocale } from '@libs/i18n';
 import { ConsentButton } from '@/components/Ads/ConsentButton';
+import { Icons } from '@/config/icons';
+import { siteConfig } from '@/config/site';
 
 export const generateMetadata = async (props: {
   params: Promise<{
@@ -177,6 +179,21 @@ const About = async (props: {
           {t('legal.privacyPolicy')}
         </Link>
         <ConsentButton />
+      </section>
+      {/* OPEN SOURCE */}
+      <section id="open-source" className="w-full flex flex-col gap-4 px-4 max-w-xl">
+        <h2 className="text-center font-semibold text-3xl text-accent-yellow">
+          {t('open-source.label')}
+        </h2>
+        <p>{t('open-source.intro')}</p>
+        <Link
+          href={siteConfig.socials.github.url}
+          target="_blank"
+          className="flex items-center gap-2 font-bold text-accent-pink hover:underline underline-offset-2 self-center"
+        >
+          <Icons.gitHub className="size-4" />
+          {t('open-source.star')}
+        </Link>
       </section>
       {/* BUSINESS MODEL */}
       <section id="businessmodel" className="w-full flex flex-col gap-4 px-4 max-w-xl">

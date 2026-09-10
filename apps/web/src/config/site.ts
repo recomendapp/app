@@ -8,7 +8,7 @@ export const siteConfig = {
   seo: {
     description: {
       limit: 160,
-    }
+    },
   },
   socials: {
     twitter: {
@@ -18,7 +18,11 @@ export const siteConfig = {
     instagram: {
       username: 'recomendhd',
       url: 'https://instagram.com/recomendhd',
-    }
+    },
+    github: {
+      username: 'recomendapp',
+      url: 'https://github.com/recomendapp/app',
+    },
   },
   features: [
     { icon: Icons.check, key: 'tracking', iconClass: '' },
@@ -39,16 +43,8 @@ export const siteConfig = {
     github: 'lxup',
   },
   routes: {
-    authRoutes: [
-      '/collection',
-      '/feed',
-      '/settings',
-    ],
-    anonRoutes: [
-      '/auth',
-    ],
-    premiumRoutes: [
-      '/feed/persons',
-    ]
-  }
+    authRoutes: ['/collection', '/feed', '/settings'],
+    anonRoutes: ['/auth'],
+    premiumRoutes: ['/feed/persons'],
+  },
 } as const;

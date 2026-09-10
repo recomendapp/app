@@ -479,7 +479,7 @@
       "fix": "Corriger",
       "not_found": "Introuvable",
       "unavailable": "Indisponible",
-      "limit_reached": "{count, plural, one {Limite atteinte} other {Limites atteintes}}"
+      "star_on_github": "Mettre une étoile sur GitHub"
     },
     "form": {
       "email": {
@@ -800,6 +800,11 @@
         "description": "Nous respectons votre vie privée. Les publicités affichées aux utilisateurs non connectés sont gérées par Google et nécessitent l'utilisation de cookies techniques pour limiter la fréquence d'affichage et prévenir la fraude.",
         "privacyPolicy": "Lire notre politique de confidentialité",
         "manageCookies": "Gérer mes préférences publicitaires (Cookies)"
+      },
+      "open-source": {
+        "label": "Open source",
+        "intro": "Recomend est open source : le code est public sur GitHub. Jetez-y un œil, contribuez, ou mettez-nous simplement une étoile !",
+        "star": "Mettez-nous une étoile sur GitHub"
       },
       "businessmodel": {
         "label": "Business model",

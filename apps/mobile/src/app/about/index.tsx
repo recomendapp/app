@@ -11,7 +11,7 @@ import { ScrollView } from 'react-native';
 import { useTranslations } from 'use-intl';
 
 const AboutScreen = () => {
-  const { colors } = useTheme();
+  const { colors, mode } = useTheme();
   const insets = useSafeAreaInsets();
   const t = useTranslations('pages.about');
 
@@ -155,6 +155,24 @@ const AboutScreen = () => {
         ),
       },
       {
+        title: t('open-source.label'),
+        content: (
+          <View style={{ gap: GAP }}>
+            <Text>{t('open-source.intro')}</Text>
+            <View style={[tw`flex-row items-center justify-center`, { gap: GAP_XS }]}>
+              <Icons.github size={16} variant={mode === 'dark' ? 'dark' : 'light'} />
+              <Link
+                href="https://github.com/recomendapp/app"
+                target="_blank"
+                style={{ color: colors.accentPink }}
+              >
+                {t('open-source.star')}
+              </Link>
+            </View>
+          </View>
+        ),
+      },
+      {
         title: t('businessmodel.label'),
         content: (
           <View style={{ gap: GAP }}>
@@ -271,6 +289,7 @@ const AboutScreen = () => {
       colors.muted,
       colors.mutedForeground,
       colors.accentYellow,
+      mode,
     ],
   );
 

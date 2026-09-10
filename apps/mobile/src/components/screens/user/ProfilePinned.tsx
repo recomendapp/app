@@ -24,6 +24,7 @@ import { withHaptic } from '../../../utils/with-haptic';
 import { Icons } from '../../../constants/Icons';
 import { Button } from '../../ui/Button';
 import Animated, { FadeIn, FadeInRight, FadeOut, FadeOutRight } from 'react-native-reanimated';
+import { upperFirst } from 'lodash';
 
 interface ProfilePinnedProps extends React.ComponentPropsWithoutRef<typeof View> {
   profileId: string;
@@ -237,31 +238,39 @@ const ProfilePinned = ({ profileId, containerStyle }: ProfilePinnedProps) => {
   if (!items?.length) return null;
 
   return (
-    <Animated.View entering={FadeIn} exiting={FadeOut} style={tw`relative`}>
-      {isOwner && (
-        <Animated.View
-          entering={FadeInRight}
-          exiting={FadeOutRight}
-          style={[tw`absolute -top-2 right-2 z-20`]}
-        >
-          <Button
-            variant="outline"
-            size="fit"
-            icon={isEditing ? Icons.Check : Icons.Edit}
-            onPress={() => setIsEditing((current) => !current)}
-            style={tw`rounded-full p-2`}
-          />
-        </Animated.View>
-      )}
-      <DraggableFlatList
-        data={items}
-        onDragEnd={handleDragEnd}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={[tw`px-4`, containerStyle]}
-      />
+    <Animated.View entering={FadeIn} exiting={FadeOut} style={tw`gap-1`}>
+      <View style={tw`flex-row items-center gap-1 px-4`}>
+        <Icons.Pin size={12} color={colors.mutedForeground} />
+        <Text style={[tw`text-xs`, { color: colors.mutedForeground }]}>
+          {upperFirst(t('common.messages.pinned', { gender: 'male', count: 2 }))}
+        </Text>
+      </View>
+      <View style={tw`relative`}>
+        {isOwner && (
+          <Animated.View
+            entering={FadeInRight}
+            exiting={FadeOutRight}
+            style={[tw`absolute -top-2 right-2 z-20`]}
+          >
+            <Button
+              variant="outline"
+              size="fit"
+              icon={isEditing ? Icons.Check : Icons.Edit}
+              onPress={() => setIsEditing((current) => !current)}
+              style={tw`rounded-full p-2`}
+            />
+          </Animated.View>
+        )}
+        <DraggableFlatList
+          data={items}
+          onDragEnd={handleDragEnd}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={[tw`px-4`, containerStyle]}
+        />
+      </View>
     </Animated.View>
   );
 };
