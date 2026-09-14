@@ -1239,29 +1239,33 @@
             "label": "3. Règles de Conduite",
             "content": "L'Utilisateur s'engage à rester courtois et respectueux dans ses avis et listes. Sont strictement interdits : les propos haineux, diffamatoires, racistes, le harcèlement, ainsi que le spam ou la promotion commerciale non sollicitée. L'Éditeur se réserve le droit de supprimer tout contenu contrevenant à ces règles et de suspendre le compte concerné sans préavis."
           },
+          "child_safety": {
+            "label": "4. Protection des Mineurs",
+            "content": "{app} applique une politique de tolérance zéro à l'égard de toute forme d'abus et d'exploitation sexuelle des enfants (« Child Sexual Abuse and Exploitation », ou CSAE). La création, le téléversement, le stockage, la diffusion, la sollicitation ou la promotion de tout contenu sexualisant, exploitant ou mettant autrement en danger des mineurs sont expressément et absolument interdits sur {app}. Tout compte reconnu coupable d'une violation de cette politique sera immédiatement et définitivement banni, et l'Éditeur signalera le contenu concerné, ainsi que toute information disponible sur l'utilisateur, au National Center for Missing & Exploited Children (NCMEC) et/ou aux autorités compétentes, conformément à la législation applicable. Tout utilisateur ayant connaissance d'un contenu ou d'un comportement pouvant constituer un cas de CSAE doit le signaler sans délai à : <email></email>."
+          },
           "intellectual_property": {
-            "label": "4. Propriété Intellectuelle",
+            "label": "5. Propriété Intellectuelle",
             "content": "L'Utilisateur reste propriétaire des avis qu'il rédige. Toutefois, en publiant sur {app}, il concède à l'Éditeur une licence gratuite et non-exclusive pour afficher, reproduire et adapter techniquement ce contenu au sein de l'application. Les éléments visuels, le code et le design de {app} sont la propriété exclusive de l'Éditeur."
           },
           "privacy": {
-            "label": "5. Données Personnelles",
+            "label": "6. Données Personnelles",
             "content": "Le respect de votre vie privée est notre priorité absolue. {app} ne revend, ne loue et ne partage aucune donnée personnelle à des tiers commerciaux ou publicitaires. Les données collectées (email, pseudonyme, activité sur l'app) servent uniquement au fonctionnement du service et à la gestion de votre compte. Vous pouvez exercer vos droits d'accès, de modification ou de suppression (RGPD) en contactant : <email></email>."
           },
           "cookies": {
-            "label": "6. Cookies et Traceurs",
+            "label": "7. Cookies et Traceurs",
             "content": "{app} n'utilise aucun cookie publicitaire et aucun traceur de comportement tiers. Seuls deux types de cookies techniques sont utilisés : un cookie d'authentification (pour vous garder connecté) et un cookie de préférence de langue (pour mémoriser votre choix). Ces cookies étant strictement nécessaires au service, ils sont dispensés de consentement préalable."
           },
           "ads": {
-            "label": "7. Publicité",
+            "label": "8. Publicité",
             "content": "L'application est actuellement proposée sans aucune publicité. Si ce modèle venait à évoluer, les utilisateurs en seraient informés via une mise à jour des présentes CGU."
           },
           "liability": {
-            "label": "8. Responsabilité",
+            "label": "9. Responsabilité",
             "content": "L'Éditeur s'efforce de maintenir {app} accessible 24h/24, mais ne garantit pas l'absence d'interruptions ou de bugs. Les informations sur les films proviennent de bases de données tierces ; l'Éditeur ne peut être tenu responsable d'éventuelles inexactitudes dans ces fiches."
           },
           "law": {
-            "label": "9. Droit Applicable",
-            "content": "Les présentes CGU sont soumises au droit français. En cas de litige n'ayant pu trouver de résolution amiable via l'adresse hello@recomend.app, les tribunaux de Paris seront seuls compétents."
+            "label": "10. Droit Applicable",
+            "content": "Les présentes CGU sont soumises au droit français. En cas de litige n'ayant pu trouver de résolution amiable via l'adresse <email></email>, les tribunaux de Paris seront seuls compétents."
           }
         }
       },

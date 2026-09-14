@@ -1239,29 +1239,33 @@
             "label": "3. Code of Conduct",
             "content": "The User agrees to remain courteous and respectful in their reviews and lists. Strictly prohibited are: hateful, defamatory, or racist remarks, harassment, as well as spam or unsolicited commercial promotion. The Publisher reserves the right to delete any content violating these rules and to suspend the account concerned without notice."
           },
+          "child_safety": {
+            "label": "4. Child Safety Policy",
+            "content": "{app} maintains a strict zero-tolerance policy against Child Sexual Abuse and Exploitation (CSAE). The creation, upload, storage, distribution, solicitation, or promotion of any content that sexualizes, exploits, or otherwise endangers minors is expressly and absolutely prohibited on {app}. Any account found to violate this policy will be immediately and permanently banned, and the Publisher will report the relevant content, together with any available user information, to the National Center for Missing & Exploited Children (NCMEC) and/or the competent law enforcement authorities, in accordance with applicable law. Any user who becomes aware of content or conduct that may constitute CSAE must report it without delay to: <email></email>."
+          },
           "intellectual_property": {
-            "label": "4. Intellectual Property",
+            "label": "5. Intellectual Property",
             "content": "The User remains the owner of the reviews they write. However, by publishing on {app}, they grant the Publisher a free, non-exclusive license to display, reproduce, and technically adapt this content within the application. Visual elements, code, and design of {app} are the exclusive property of the Publisher."
           },
           "privacy": {
-            "label": "5. Personal Data",
+            "label": "6. Personal Data",
             "content": "Respecting your privacy is our absolute priority. {app} does not sell, rent, or share any personal data with commercial or advertising third parties. Collected data (email, username, app activity) are used solely for the operation of the service and account management. You may exercise your rights of access, modification, or deletion (GDPR) by contacting: <email></email>."
           },
           "cookies": {
-            "label": "6. Cookies and Trackers",
+            "label": "7. Cookies and Trackers",
             "content": "{app} uses no advertising cookies and no third-party behavioral trackers. Only two types of technical cookies are used: an authentication cookie (to keep you logged in) and a language preference cookie (to remember your choice). As these cookies are strictly necessary for the service, they are exempt from prior consent."
           },
           "ads": {
-            "label": "7. Advertising",
+            "label": "8. Advertising",
             "content": "The application is currently offered without any advertising. Should this model change, users would be informed via an update to these Terms."
           },
           "liability": {
-            "label": "8. Liability",
+            "label": "9. Liability",
             "content": "The Publisher strives to keep {app} accessible 24/7 but does not guarantee the absence of interruptions or bugs. Movie information comes from third-party databases; the Publisher cannot be held responsible for potential inaccuracies in these records."
           },
           "law": {
-            "label": "9. Applicable Law",
-            "content": "These Terms are subject to French law. In the event of a dispute that cannot be resolved amicably via hello@recomend.app, the courts of Paris shall have exclusive jurisdiction."
+            "label": "10. Applicable Law",
+            "content": "These Terms are subject to French law. In the event of a dispute that cannot be resolved amicably via <email></email>, the courts of Paris shall have exclusive jurisdiction."
           }
         }
       },
