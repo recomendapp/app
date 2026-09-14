@@ -50,6 +50,10 @@ const createBetterAuth = async ({
     baseURL: env.API_URL,
     basePath: '/auth',
     secret: env.AUTH_SECRET,
+    session: {
+      expiresIn: 60 * 60 * 24 * 365, // 1 year
+      updateAge: 60 * 60 * 24, // 1 day
+    },
     advanced: {
       crossSubDomainCookies: {
         enabled: true,
