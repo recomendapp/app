@@ -9,7 +9,6 @@ import {
   SidebarRail,
   SidebarSeparator,
 } from '@libs/ui/components/sidebar';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@libs/ui/components/tooltip';
 import { Icons } from '@/config/icons';
 import { SidebarLeftRoutes } from './SidebarLeftRoutes';
 import { useUI } from '@/context/ui-context';
@@ -17,6 +16,7 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/lib/i18n/navigation';
 
 const IOS_APP_STORE_URL = 'https://apps.apple.com/app/recomend/id6749225891';
+const ANDROID_PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.recomend.app';
 
 export const SidebarLeft = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
   const { toggleSidebar, sidebarOpen: open } = useUI();
@@ -55,17 +55,12 @@ export const SidebarLeft = ({ ...props }: React.ComponentProps<typeof Sidebar>) 
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <span tabIndex={0}>
-                  <SidebarMenuButton disabled className="w-full">
-                    <Icons.android />
-                    <span className="sr-only">{t('messages.android_app')}</span>
-                  </SidebarMenuButton>
-                </span>
-              </TooltipTrigger>
-              <TooltipContent side="right">{t('messages.coming_soon')}</TooltipContent>
-            </Tooltip>
+            <SidebarMenuButton tooltip={t('messages.android_app')} asChild>
+              <Link href={ANDROID_PLAY_STORE_URL} target="_blank" rel="noopener noreferrer">
+                <Icons.android />
+                <span className="sr-only">{t('messages.android_app')}</span>
+              </Link>
+            </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
