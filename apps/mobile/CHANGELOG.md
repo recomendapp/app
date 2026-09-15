@@ -1,5 +1,13 @@
 # mobile
 
+## [1.5.2](https://github.com/recomendapp/app/compare/mobile@v1.5.1...mobile@v1.5.2) (2026-09-15)
+
+
+### Bug Fixes
+
+* **mobile:** pin pnpm version + save fingerprint after standalone builds ([#45](https://github.com/recomendapp/app/issues/45)) ([caf1c18](https://github.com/recomendapp/app/commit/caf1c180648197ea8e619dc646698a9aba5e6969))
+* **repo:** add GitHub star links and pinned items label ([#52](https://github.com/recomendapp/app/issues/52)) ([4dc917a](https://github.com/recomendapp/app/commit/4dc917a6093619f5ff49007513ca778c63efada1))
+
 ## [1.5.1](https://github.com/recomendapp/app/compare/mobile@v1.5.0...mobile@v1.5.1) (2026-09-02)
 
 
