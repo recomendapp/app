@@ -137,6 +137,7 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
         {
           description: notification.request.content.body ?? undefined,
           onPress: data && data.type ? () => handleRedirect(data) : undefined,
+          duration: 5000,
         },
       );
     },
