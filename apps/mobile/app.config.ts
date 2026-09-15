@@ -215,6 +215,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         filePermission: 'Select files to upload',
       },
     ],
+    './plugins/with-ios-scene-delegate.js',
   ],
   experiments: {
     typedRoutes: true,

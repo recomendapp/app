@@ -13,7 +13,11 @@ on:
 jobs:
   build-ios:
     name: 🍏 Build & Submit iOS
-    runs-on: macos-26
+    # xcode-27 runs macOS 27 (public preview) — matches the Xcode 27 SDK devs
+    # build against locally, so this is what actually exercises the
+    # UIScene-lifecycle workaround (apps/mobile/plugins/with-ios-scene-delegate.js)
+    # in CI. https://github.blog/changelog/2026-09-10-xcode-27-runner-image-now-runs-on-macos-27/
+    runs-on: xcode-27
     steps:
       - name: ⬇️ Checkout Code
         uses: actions/checkout@v7
