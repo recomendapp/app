@@ -117,6 +117,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         ios: {
           deploymentTarget: '16.4',
           useFrameworks: 'static',
+          enableSceneSupport: true,
         },
       },
     ],
@@ -215,7 +216,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         filePermission: 'Select files to upload',
       },
     ],
-    './plugins/with-ios-scene-delegate.js',
   ],
   experiments: {
     typedRoutes: true,
