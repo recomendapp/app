@@ -16,6 +16,7 @@
   "private": true,
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1000.0",
+    "@bacons/apple-targets": "^5.0.0",
     "@better-auth/core": "1.7.2",
     "@better-auth/expo": "1.7.2",
     "@dnd-kit/core": "^6.3.1",

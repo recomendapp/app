@@ -10,6 +10,7 @@ import { DRIZZLE_SERVICE, DrizzleService } from '../common/modules/drizzle.modul
 import { and, eq, gt, inArray, sql } from 'drizzle-orm';
 import { pushToken, session, tmdbMovieView, tmdbTvSeriesView, user } from '@libs/db/schemas';
 import { defaultSupportedLocale } from '@libs/i18n';
+import { env } from '../env';
 
 @Processor(NOTIFY_QUEUE)
 export class NotifyProcessor extends WorkerHost {
@@ -131,11 +132,12 @@ export class NotifyProcessor extends WorkerHost {
 
           const actor = await this.db.query.user.findFirst({
             where: eq(user.id, actorId),
-            columns: { username: true, name: true },
+            columns: { username: true, name: true, image: true },
           });
           if (!actor) break;
 
           const actorName = actor.name ?? actor.username;
+          const actorAvatarUrl = this.getAvatarUrl(actor.image);
 
           const groupedByLang = await this.getDevicesGroupedByLang([targetUserId]);
 
@@ -150,6 +152,9 @@ export class NotifyProcessor extends WorkerHost {
               await this.notifyService.sendPushNotifications(devices, {
                 title,
                 body,
+                avatar: actorAvatarUrl
+                  ? { url: actorAvatarUrl, name: actorName, id: actorId }
+                  : undefined,
                 data: {
                   type: job.name,
                   url: `/@${actor.username}`,
@@ -167,11 +172,12 @@ export class NotifyProcessor extends WorkerHost {
 
           const actor = await this.db.query.user.findFirst({
             where: eq(user.id, actorId),
-            columns: { username: true, name: true },
+            columns: { username: true, name: true, image: true },
           });
           if (!actor) break;
 
           const actorName = actor.name ?? actor.username;
+          const actorAvatarUrl = this.getAvatarUrl(actor.image);
 
           const groupedByLang = await this.getDevicesGroupedByLang([targetUserId]);
 
@@ -186,6 +192,9 @@ export class NotifyProcessor extends WorkerHost {
               await this.notifyService.sendPushNotifications(devices, {
                 title,
                 body,
+                avatar: actorAvatarUrl
+                  ? { url: actorAvatarUrl, name: actorName, id: actorId }
+                  : undefined,
                 data: {
                   type: job.name,
                   url: `/@${actor.username}`,
@@ -202,11 +211,12 @@ export class NotifyProcessor extends WorkerHost {
 
           const actor = await this.db.query.user.findFirst({
             where: eq(user.id, actorId),
-            columns: { username: true, name: true },
+            columns: { username: true, name: true, image: true },
           });
           if (!actor) break;
 
           const actorName = actor.name ?? actor.username;
+          const actorAvatarUrl = this.getAvatarUrl(actor.image);
 
           const groupedByLang = await this.getDevicesGroupedByLang([targetUserId]);
 
@@ -221,6 +231,9 @@ export class NotifyProcessor extends WorkerHost {
               await this.notifyService.sendPushNotifications(devices, {
                 title,
                 body,
+                avatar: actorAvatarUrl
+                  ? { url: actorAvatarUrl, name: actorName, id: actorId }
+                  : undefined,
                 data: {
                   type: job.name,
                   url: `/@${actor.username}`,
@@ -238,11 +251,12 @@ export class NotifyProcessor extends WorkerHost {
 
           const watcher = await this.db.query.user.findFirst({
             where: eq(user.id, userId),
-            columns: { username: true, name: true },
+            columns: { username: true, name: true, image: true },
           });
           if (!watcher) throw new Error('Watcher not found');
 
           const watcherName = watcher.name ?? watcher.username;
+          const watcherAvatarUrl = this.getAvatarUrl(watcher.image);
 
           const sendersData = await this.db
             .select({
@@ -268,14 +282,22 @@ export class NotifyProcessor extends WorkerHost {
 
                 if (type === 'movie') {
                   const result = await tx
-                    .select({ title: tmdbMovieView.title, url: tmdbMovieView.url })
+                    .select({
+                      title: tmdbMovieView.title,
+                      url: tmdbMovieView.url,
+                      posterPath: tmdbMovieView.posterPath,
+                    })
                     .from(tmdbMovieView)
                     .where(eq(tmdbMovieView.id, mediaId))
                     .limit(1);
                   return result[0];
                 } else {
                   const result = await tx
-                    .select({ title: tmdbTvSeriesView.name, url: tmdbTvSeriesView.url })
+                    .select({
+                      title: tmdbTvSeriesView.name,
+                      url: tmdbTvSeriesView.url,
+                      posterPath: tmdbTvSeriesView.posterPath,
+                    })
                     .from(tmdbTvSeriesView)
                     .where(eq(tmdbTvSeriesView.id, mediaId))
                     .limit(1);
@@ -298,6 +320,10 @@ export class NotifyProcessor extends WorkerHost {
               await this.notifyService.sendPushNotifications(devices, {
                 title,
                 body,
+                avatar: watcherAvatarUrl
+                  ? { url: watcherAvatarUrl, name: watcherName, id: userId }
+                  : undefined,
+                attachmentUrl: this.getTmdbPosterUrl(mediaData.posterPath),
                 data: {
                   type: job.name,
                   url: mediaData.url || '/',
@@ -316,10 +342,11 @@ export class NotifyProcessor extends WorkerHost {
 
           const sender = await this.db.query.user.findFirst({
             where: eq(user.id, senderId),
-            columns: { username: true, name: true },
+            columns: { username: true, name: true, image: true },
           });
 
           const senderName = sender?.name ?? sender?.username;
+          const senderAvatarUrl = this.getAvatarUrl(sender?.image);
 
           const receiversData = await this.db
             .select({
@@ -345,14 +372,22 @@ export class NotifyProcessor extends WorkerHost {
 
                 if (type === 'movie') {
                   const result = await tx
-                    .select({ title: tmdbMovieView.title, url: tmdbMovieView.url })
+                    .select({
+                      title: tmdbMovieView.title,
+                      url: tmdbMovieView.url,
+                      posterPath: tmdbMovieView.posterPath,
+                    })
                     .from(tmdbMovieView)
                     .where(eq(tmdbMovieView.id, mediaId))
                     .limit(1);
                   return result[0];
                 } else {
                   const result = await tx
-                    .select({ title: tmdbTvSeriesView.name, url: tmdbTvSeriesView.url })
+                    .select({
+                      title: tmdbTvSeriesView.name,
+                      url: tmdbTvSeriesView.url,
+                      posterPath: tmdbTvSeriesView.posterPath,
+                    })
                     .from(tmdbTvSeriesView)
                     .where(eq(tmdbTvSeriesView.id, mediaId))
                     .limit(1);
@@ -380,6 +415,11 @@ export class NotifyProcessor extends WorkerHost {
               await this.notifyService.sendPushNotifications(devices, {
                 title,
                 body,
+                avatar:
+                  senderAvatarUrl && senderName
+                    ? { url: senderAvatarUrl, name: senderName, id: senderId }
+                    : undefined,
+                attachmentUrl: this.getTmdbPosterUrl(mediaTitle.posterPath),
                 data: {
                   type: job.name,
                   url: mediaTitle.url || '/',
@@ -399,6 +439,25 @@ export class NotifyProcessor extends WorkerHost {
       this.logger.error(`Failed to process job ${job.name}: ${error}`);
       throw error;
     }
+  }
+
+  private getTmdbPosterUrl(posterPath: string | null | undefined) {
+    if (!posterPath) return undefined;
+    const cleanPath = posterPath.startsWith('/') ? posterPath : `/${posterPath}`;
+    return `${env.TMDB_IMAGE_BASE_URL}/w500${cleanPath}`;
+  }
+
+  // `user.image` stores a bare filename (see apps/api's
+  // MeAvatarService.set), not a URL — mirrors apps/api's getMediaUrl
+  // (apps/api/src/common/modules/storage/storage.utils.ts), scoped to
+  // avatars since that's the only media type notify ever needs a URL for.
+  private getAvatarUrl(filenameOrUrl: string | null | undefined) {
+    if (!filenameOrUrl) return undefined;
+    if (filenameOrUrl.startsWith('http://') || filenameOrUrl.startsWith('https://')) {
+      return filenameOrUrl;
+    }
+    const endpoint = env.S3_PUBLIC_ENDPOINT || env.S3_ENDPOINT;
+    return `${endpoint}/${env.S3_BUCKET}/avatars/${filenameOrUrl}`;
   }
 
   private async getDevicesGroupedByLang(userIds: string[]) {

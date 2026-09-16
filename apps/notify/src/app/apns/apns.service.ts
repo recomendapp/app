@@ -9,7 +9,13 @@ export class ApnsService {
 
   constructor(@Inject(APNS_CLIENT) private readonly apnProvider: apn.Provider) {}
 
-  async sendToDevices(tokens: string[], title: string, body: string, data?: Record<string, any>) {
+  async sendToDevices(
+    tokens: string[],
+    title: string,
+    body: string,
+    data?: Record<string, any>,
+    image?: { avatar?: { url: string; name: string; id: string }; attachmentUrl?: string },
+  ) {
     if (!tokens.length) return [];
 
     const note = new apn.Notification();
@@ -17,10 +23,20 @@ export class ApnsService {
     // Nested under `data`, not spread at the top level: the mobile client
     // reads click-through data at request.trigger.payload.data on iOS,
     // mirroring where Android/FCM puts it (request.content.data).
-    note.payload = { data: data || {} };
+    note.payload = {
+      data: data || {},
+      avatarUrl: image?.avatar?.url,
+      senderName: image?.avatar?.name,
+      senderId: image?.avatar?.id,
+      attachmentUrl: image?.attachmentUrl,
+    };
     note.topic = env.APNS_BUNDLE_ID;
     note.sound = 'ping.aiff';
     note.priority = 10;
+    // Required so iOS invokes the notification-service-extension, which
+    // downloads the image(s) above and attaches them before the
+    // notification is shown.
+    if (image?.avatar?.url || image?.attachmentUrl) note.mutableContent = true;
 
     try {
       const result = await this.apnProvider.send(note, tokens);
