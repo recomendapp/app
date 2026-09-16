@@ -17,6 +17,7 @@ import { KeyboardToolbar } from '../../components/ui/KeyboardToolbar';
 import { useToast } from '../../components/Toast';
 import { authClient } from '../../lib/auth/client';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { USER_RULES } from '@libs/rules';
 
 const SettingsSecurityScreen = () => {
   const toast = useToast();
@@ -36,7 +37,7 @@ const SettingsSecurityScreen = () => {
             }),
           newpassword: z
             .string()
-            .min(8, {
+            .min(USER_RULES.PASSWORD.MIN, {
               message: t('pages.settings.security.new_password.form.min_length'),
             })
             .regex(/[A-Z]/, {

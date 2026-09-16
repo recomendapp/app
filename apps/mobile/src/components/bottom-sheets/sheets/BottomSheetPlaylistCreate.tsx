@@ -17,14 +17,12 @@ import { forwardRef, useCallback } from 'react';
 import { Text } from '../../ui/text';
 import { Playlist } from '@libs/api-js';
 import { usePlaylistInsertMutation } from '@libs/query-client';
+import { PLAYLIST_RULES } from '@libs/rules';
 
 interface BottomSheetPlaylistCreateProps extends BottomSheetProps {
   onCreate?: (playlist: Playlist) => void;
   placeholder?: string | null;
 }
-
-const TITLE_MIN_LENGTH = 1;
-const TITLE_MAX_LENGTH = 100;
 
 const BottomSheetPlaylistCreate = forwardRef<
   React.ComponentRef<typeof TrueSheet>,
@@ -39,11 +37,11 @@ const BottomSheetPlaylistCreate = forwardRef<
   const playlistSchema = z.object({
     title: z
       .string()
-      .min(TITLE_MIN_LENGTH, {
-        message: upperFirst(t('common.form.length.char_min', { count: TITLE_MIN_LENGTH })),
+      .min(PLAYLIST_RULES.TITLE.MIN, {
+        message: upperFirst(t('common.form.length.char_min', { count: PLAYLIST_RULES.TITLE.MIN })),
       })
-      .max(TITLE_MAX_LENGTH, {
-        message: upperFirst(t('common.form.length.char_max', { count: TITLE_MIN_LENGTH })),
+      .max(PLAYLIST_RULES.TITLE.MAX, {
+        message: upperFirst(t('common.form.length.char_max', { count: PLAYLIST_RULES.TITLE.MAX })),
       }),
   });
   type PlaylistFormValues = z.infer<typeof playlistSchema>;

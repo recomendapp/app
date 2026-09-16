@@ -29,8 +29,7 @@ import { CardTvSeries } from '@/components/Card/CardTvSeries';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Playlist, TvSeriesCompact } from '@libs/api-js';
-
-const COMMENT_MAX_LENGTH = 180;
+import { PLAYLIST_ITEM_RULES } from '@libs/rules';
 
 interface ModalPlaylistTvSeriesQuickAddProps extends ModalType {
   playlist: Playlist;
@@ -163,7 +162,7 @@ export function ModalPlaylistTvSeriesQuickAdd({
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           placeholder={upperFirst(t('common.messages.add_comment', { count: 1 }))}
-          maxLength={COMMENT_MAX_LENGTH}
+          maxLength={PLAYLIST_ITEM_RULES.COMMENT.MAX}
         />
       </div>
       <ModalFooter className="flex items-center p-4 sm:justify-between">

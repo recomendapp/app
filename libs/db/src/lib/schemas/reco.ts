@@ -13,6 +13,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { tmdbMovie, tmdbTvSeries } from './tmdb';
 import { user } from './auth';
+import { RECO_RULES } from '@libs/rules';
 
 export const recoStatusEnum = pgEnum('reco_status', ['active', 'completed', 'deleted']);
 export const recoTypeEnum = pgEnum('reco_type', ['movie', 'tv_series']);
@@ -48,7 +49,10 @@ export const reco = pgTable(
     index('idx_reco_user_id').on(table.userId),
     index('idx_reco_sender_id').on(table.senderId),
     index('idx_reco_status').on(table.status),
-    check('check_user_reco_comment', sql`length(comment) <= 180`),
+    check(
+      'check_user_reco_comment',
+      sql`length(comment) <= ${sql.raw(String(RECO_RULES.COMMENT.MAX))}`,
+    ),
     check(
       'check_reco_type_references',
       sql`(

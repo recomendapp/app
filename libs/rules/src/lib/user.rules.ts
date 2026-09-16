@@ -14,4 +14,7 @@ export const USER_RULES = {
     MAX: 150,
     REGEX: /^(?!\s*$)(?!.*\n\s*\n).{1,150}$/,
   },
+  PASSWORD: {
+    MIN: 8,
+  },
 };

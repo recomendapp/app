@@ -38,12 +38,7 @@ import { Turnstile } from 'next-turnstile';
 import { upperFirst } from 'lodash';
 import { authClient } from '@/lib/auth/client';
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@libs/ui/components/input-group';
-
-const USERNAME_MIN_LENGTH = 3;
-const USERNAME_MAX_LENGTH = 15;
-const FULL_NAME_MIN_LENGTH = 1;
-const FULL_NAME_MAX_LENGTH = 30;
-const PASSWORD_MIN_LENGTH = 8;
+import { USER_RULES } from '@libs/rules';
 
 export default function Signup() {
   const { signup } = useAuth();
@@ -61,16 +56,16 @@ export default function Signup() {
   /* ------------------------------- FORM SCHEMA ------------------------------ */
   const signupSchema = z
     .object({
-      email: z.string().email({
+      email: z.email({
         message: common('form.email.error.invalid'),
       }),
       username: z
         .string()
-        .min(USERNAME_MIN_LENGTH, {
-          message: common('form.length.char_min', { count: USERNAME_MIN_LENGTH }),
+        .min(USER_RULES.USERNAME.MIN, {
+          message: common('form.length.char_min', { count: USER_RULES.USERNAME.MIN }),
         })
-        .max(USERNAME_MAX_LENGTH, {
-          message: common('form.length.char_max', { count: USERNAME_MAX_LENGTH }),
+        .max(USER_RULES.USERNAME.MAX, {
+          message: common('form.length.char_max', { count: USER_RULES.USERNAME.MAX }),
         })
         .regex(/^[^\W]/, {
           message: common('form.username.schema.first_char'),
@@ -86,19 +81,19 @@ export default function Signup() {
         }),
       full_name: z
         .string()
-        .min(FULL_NAME_MIN_LENGTH, {
-          message: common('form.length.char_min', { count: FULL_NAME_MIN_LENGTH }),
+        .min(USER_RULES.NAME.MIN, {
+          message: common('form.length.char_min', { count: USER_RULES.NAME.MIN }),
         })
-        .max(FULL_NAME_MAX_LENGTH, {
-          message: common('form.length.char_max', { count: FULL_NAME_MAX_LENGTH }),
+        .max(USER_RULES.NAME.MAX, {
+          message: common('form.length.char_max', { count: USER_RULES.NAME.MAX }),
         })
         .regex(/^[a-zA-Z0-9\s\S]*$/, {
           message: common('form.full_name.schema.format'),
         }),
       password: z
         .string()
-        .min(PASSWORD_MIN_LENGTH, {
-          message: common('form.length.char_min', { count: PASSWORD_MIN_LENGTH }),
+        .min(USER_RULES.PASSWORD.MIN, {
+          message: common('form.length.char_min', { count: USER_RULES.PASSWORD.MIN }),
         })
         .regex(/[A-Z]/, {
           message: common('form.password.schema.uppercase'),
@@ -249,8 +244,8 @@ export default function Signup() {
                       <FormLabel className="w-full flex justify-between gap-2">
                         {common('form.username.label')}
                         <span className="text-xs text-destructive">
-                          {field?.value && field?.value?.length > USERNAME_MAX_LENGTH
-                            ? `${field.value.length} / ${USERNAME_MAX_LENGTH}`
+                          {field?.value && field?.value?.length > USER_RULES.USERNAME.MAX
+                            ? `${field.value.length} / ${USER_RULES.USERNAME.MAX}`
                             : ''}
                         </span>
                       </FormLabel>
@@ -286,8 +281,8 @@ export default function Signup() {
                       <FormLabel className="w-full flex justify-between gap-2">
                         {common('form.full_name.label')}
                         <span className="text-xs text-destructive">
-                          {field?.value && field?.value?.length > FULL_NAME_MAX_LENGTH
-                            ? `${field.value.length} / ${FULL_NAME_MAX_LENGTH}`
+                          {field?.value && field?.value?.length > USER_RULES.NAME.MAX
+                            ? `${field.value.length} / ${USER_RULES.NAME.MAX}`
                             : ''}
                         </span>
                       </FormLabel>
