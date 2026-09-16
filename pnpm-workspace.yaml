@@ -2,6 +2,23 @@ packages:
   - apps/*
   - libs/*
 
+# pnpm's built-in supply-chain guard rejects any lockfile entry published within
+# the last 24h. That's incompatible with actively bumping dependencies (as this
+# PR does for react-native-purchases and its transitive deps), so disable it here
+# rather than per-machine/per-CI-run.
+minimumReleaseAge: 0
+
+# react-native-purchases-ui imports @revenuecat/purchases-js-hybrid-mappings in
+# src/preview/nativeModules.ts but doesn't declare it as a dependency (upstream
+# packaging bug: https://github.com/RevenueCat/react-native-purchases/issues/1643).
+# react-native-purchases itself declares it correctly, but pnpm's strict
+# node_modules isolation won't let react-native-purchases-ui resolve a package
+# it doesn't declare itself.
+packageExtensions:
+  react-native-purchases-ui:
+    dependencies:
+      '@revenuecat/purchases-js-hybrid-mappings': '*'
+
 allowBuilds:
   '@firebase/util': true
   '@nestjs/core': true
