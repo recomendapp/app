@@ -7,7 +7,7 @@ import {
 } from '@nestjs/swagger';
 import { IsNullable } from '../../../../../common/decorators/is-nullable.decorator';
 import { REVIEW_COMMENT_RULES } from '@libs/rules';
-import { Expose, Type } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import {
   IsDateString,
   IsEnum,
@@ -63,6 +63,7 @@ export class ReviewTvSeriesCommentDto {
     maxLength: REVIEW_COMMENT_RULES.BODY.MAX,
   })
   @Expose()
+  @Transform(({ obj }) => (obj.deletedAt ? null : obj.body))
   @IsNullable()
   @IsString()
   body!: string | null;

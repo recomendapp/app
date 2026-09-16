@@ -43,10 +43,6 @@ export class ReviewMovieCommentsService {
     return row;
   }
 
-  private maskDeleted<T extends { body: string | null; deletedAt: string | null }>(comment: T): T {
-    return comment.deletedAt ? { ...comment, body: null } : comment;
-  }
-
   private async getReviewOwnerAndMedia(reviewId: number) {
     const review = await this.db.query.reviewMovie.findFirst({
       where: eq(reviewMovie.id, reviewId),
@@ -130,7 +126,7 @@ export class ReviewMovieCommentsService {
     ]);
 
     return {
-      data: rows.map((row) => this.maskDeleted({ ...row.comment, author: row.author })),
+      data: rows.map((row) => ({ ...row.comment, author: row.author })),
       meta: {
         total_results: totalCount,
         total_pages: Math.ceil(totalCount / per_page),
@@ -181,7 +177,7 @@ export class ReviewMovieCommentsService {
     }
 
     return {
-      data: paginatedResults.map((row) => this.maskDeleted({ ...row.comment, author: row.author })),
+      data: paginatedResults.map((row) => ({ ...row.comment, author: row.author })),
       meta: { next_cursor: nextCursor, per_page },
     };
   }
@@ -337,7 +333,7 @@ export class ReviewMovieCommentsService {
 
       return plainToInstance(
         ReviewMovieCommentWithAuthorDto,
-        { ...deleted, body: null, author },
+        { ...deleted, author },
         { excludeExtraneousValues: true },
       );
     }

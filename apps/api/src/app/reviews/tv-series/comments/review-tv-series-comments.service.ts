@@ -43,10 +43,6 @@ export class ReviewTvSeriesCommentsService {
     return row;
   }
 
-  private maskDeleted<T extends { body: string | null; deletedAt: string | null }>(comment: T): T {
-    return comment.deletedAt ? { ...comment, body: null } : comment;
-  }
-
   private async getReviewOwnerAndMedia(reviewId: number) {
     const review = await this.db.query.reviewTvSeries.findFirst({
       where: eq(reviewTvSeries.id, reviewId),
@@ -133,7 +129,7 @@ export class ReviewTvSeriesCommentsService {
     ]);
 
     return {
-      data: rows.map((row) => this.maskDeleted({ ...row.comment, author: row.author })),
+      data: rows.map((row) => ({ ...row.comment, author: row.author })),
       meta: {
         total_results: totalCount,
         total_pages: Math.ceil(totalCount / per_page),
@@ -184,7 +180,7 @@ export class ReviewTvSeriesCommentsService {
     }
 
     return {
-      data: paginatedResults.map((row) => this.maskDeleted({ ...row.comment, author: row.author })),
+      data: paginatedResults.map((row) => ({ ...row.comment, author: row.author })),
       meta: { next_cursor: nextCursor, per_page },
     };
   }
@@ -340,7 +336,7 @@ export class ReviewTvSeriesCommentsService {
 
       return plainToInstance(
         ReviewTvSeriesCommentWithAuthorDto,
-        { ...deleted, body: null, author },
+        { ...deleted, author },
         { excludeExtraneousValues: true },
       );
     }
