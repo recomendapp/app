@@ -46,7 +46,9 @@ services:
       --enable-cors
 
   minio:
-    image: minio/minio:latest
+    # minio/minio was pulled from Docker Hub entirely; quay.io/minio is
+    # MinIO's own recommended mirror.
+    image: quay.io/minio/minio:latest
     restart: unless-stopped
     environment:
       MINIO_ROOT_USER: ${S3_ACCESS_KEY_ID:-admin}
@@ -64,7 +66,7 @@ services:
       retries: 5
 
   minio-setup:
-    image: minio/mc:latest
+    image: quay.io/minio/mc:latest
     depends_on:
       minio:
         condition: service_healthy
