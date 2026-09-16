@@ -43,6 +43,7 @@ import {
 } from '@libs/query-client';
 import { Playlist } from '@libs/api-js';
 import compressPicture from '@/lib/utils/compressPicture';
+import { PLAYLIST_RULES } from '@libs/rules';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onSave?: (data: Playlist) => void;
@@ -80,19 +81,19 @@ export function PlaylistForm({ onSave, playlist }: PlaylistFormProps) {
   const CreatePlaylistFormSchema = z.object({
     title: z
       .string()
-      .min(1, {
-        message: t('common.form.length.char_min', { count: 1 }),
+      .min(PLAYLIST_RULES.TITLE.MIN, {
+        message: t('common.form.length.char_min', { count: PLAYLIST_RULES.TITLE.MIN }),
       })
-      .max(100, {
-        message: t('common.form.length.char_max', { count: 100 }),
+      .max(PLAYLIST_RULES.TITLE.MAX, {
+        message: t('common.form.length.char_max', { count: PLAYLIST_RULES.TITLE.MAX }),
       })
       .regex(/^[a-zA-Z0-9\s\S]*$/, {
         message: t('common.form.format.only_letters_numbers_spaces'),
       }),
     description: z
       .string()
-      .max(300, {
-        message: t('common.form.length.char_max', { count: 300 }),
+      .max(PLAYLIST_RULES.DESCRIPTION.MAX, {
+        message: t('common.form.length.char_max', { count: PLAYLIST_RULES.DESCRIPTION.MAX }),
       })
       .optional(),
     visibility: z.enum(['public', 'private', 'followers']),
@@ -246,7 +247,7 @@ export function PlaylistForm({ onSave, playlist }: PlaylistFormProps) {
                       {...field}
                       placeholder={upperFirst(t('common.messages.add_a_description'))}
                       className="resize-none h-32"
-                      maxLength={300}
+                      maxLength={PLAYLIST_RULES.DESCRIPTION.MAX}
                       onChange={(e) => {
                         const description = e.target.value
                           .replace(/[\r\n]+/g, '\n') // Multiple new lines

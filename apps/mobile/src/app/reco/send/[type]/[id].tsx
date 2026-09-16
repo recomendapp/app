@@ -31,8 +31,7 @@ import { useTheme } from '../../../../providers/ThemeProvider';
 import { LegendList } from '@legendapp/list/react-native';
 import { useHeaderHeight } from 'expo-router/react-navigation';
 import { Text } from '../../../../components/ui/text';
-
-const COMMENT_MAX_LENGTH = 180;
+import { RECO_RULES } from '@libs/rules';
 
 const RecoSend = () => {
   const t = useTranslations();
@@ -50,8 +49,8 @@ const RecoSend = () => {
   const sendRecoFormSchema = z.object({
     comment: z
       .string()
-      .max(COMMENT_MAX_LENGTH, {
-        message: upperFirst(t('common.form.length.char_max', { count: COMMENT_MAX_LENGTH })),
+      .max(RECO_RULES.COMMENT.MAX, {
+        message: upperFirst(t('common.form.length.char_max', { count: RECO_RULES.COMMENT.MAX })),
       })
       .regex(/^(?!\s+$)(?!.*\n\s*\n)[\s\S]*$/)
       .optional()

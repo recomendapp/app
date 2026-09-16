@@ -28,9 +28,7 @@ import { authClient } from '../../lib/auth/client';
 import { makeRedirectUri } from 'expo-auth-session';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-const USERNAME_MIN_LENGTH = 3;
-const USERNAME_MAX_LENGTH = 15;
+import { USER_RULES } from '@libs/rules';
 
 const verifiedSchema = z.object({
   verified: z
@@ -68,11 +66,11 @@ const SettingsAccountScreen = () => {
       z.object({
         username: z
           .string()
-          .min(USERNAME_MIN_LENGTH, {
-            message: t('common.form.length.char_min', { count: USERNAME_MIN_LENGTH }),
+          .min(USER_RULES.USERNAME.MIN, {
+            message: t('common.form.length.char_min', { count: USER_RULES.USERNAME.MIN }),
           })
-          .max(USERNAME_MAX_LENGTH, {
-            message: t('common.form.length.char_max', { count: USERNAME_MAX_LENGTH }),
+          .max(USER_RULES.USERNAME.MAX, {
+            message: t('common.form.length.char_max', { count: USER_RULES.USERNAME.MAX }),
           })
           .regex(/^[^\W]/, {
             message: t('common.form.username.schema.first_char'),

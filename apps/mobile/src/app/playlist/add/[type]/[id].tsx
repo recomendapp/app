@@ -33,8 +33,7 @@ import { useModalHeaderOptions } from '../../../../hooks/useModalHeaderOptions';
 import { RefreshableStateContainer } from '../../../../components/ui/RefreshableStateContainer';
 import { CardError } from '../../../../components/cards/CardError';
 import { CardEmpty } from '../../../../components/cards/CardEmpty';
-
-const COMMENT_MAX_LENGTH = 180;
+import { PLAYLIST_ITEM_RULES } from '@libs/rules';
 
 const PlaylistAddTo = () => {
   const t = useTranslations();
@@ -53,8 +52,10 @@ const PlaylistAddTo = () => {
   const addToPlaylistFormSchema = z.object({
     comment: z
       .string()
-      .max(COMMENT_MAX_LENGTH, {
-        message: upperFirst(t('common.form.length.char_max', { count: COMMENT_MAX_LENGTH })),
+      .max(PLAYLIST_ITEM_RULES.COMMENT.MAX, {
+        message: upperFirst(
+          t('common.form.length.char_max', { count: PLAYLIST_ITEM_RULES.COMMENT.MAX }),
+        ),
       })
       .regex(/^(?!\s+$)(?!.*\n\s*\n)[\s\S]*$/)
       .optional()

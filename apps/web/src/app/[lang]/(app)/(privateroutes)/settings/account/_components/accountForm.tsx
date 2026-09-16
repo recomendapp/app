@@ -26,9 +26,7 @@ import useDebounce from '@/hooks/use-debounce';
 import { upperFirst } from 'lodash';
 import { useMeUpdateMutation } from '@libs/query-client';
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@libs/ui/components/input-group';
-
-const USERNAME_MIN_LENGTH = 3;
-const USERNAME_MAX_LENGTH = 15;
+import { USER_RULES } from '@libs/rules';
 
 export function AccountForm() {
   const t = useTranslations();
@@ -43,11 +41,11 @@ export function AccountForm() {
   const accountFormSchema = z.object({
     username: z
       .string()
-      .min(USERNAME_MIN_LENGTH, {
-        message: t('common.form.length.char_min', { count: USERNAME_MIN_LENGTH }),
+      .min(USER_RULES.USERNAME.MIN, {
+        message: t('common.form.length.char_min', { count: USER_RULES.USERNAME.MIN }),
       })
-      .max(USERNAME_MAX_LENGTH, {
-        message: t('common.form.length.char_max', { count: USERNAME_MAX_LENGTH }),
+      .max(USER_RULES.USERNAME.MAX, {
+        message: t('common.form.length.char_max', { count: USER_RULES.USERNAME.MAX }),
       })
       .regex(/^[^\W]/, {
         message: t('common.form.username.schema.first_char'),

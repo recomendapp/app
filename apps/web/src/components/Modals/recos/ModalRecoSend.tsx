@@ -41,8 +41,7 @@ import { FormField } from '@libs/ui/components/form';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
 import Fuse from 'fuse.js';
-
-const COMMENT_MAX_LENGTH = 180;
+import { RECO_RULES } from '@libs/rules';
 
 interface ModalRecoSendProps {
   mediaId: number;
@@ -118,8 +117,8 @@ export const ModalRecoSend = ({
   const recoSendFormSchema = z.object({
     comment: z
       .string()
-      .max(COMMENT_MAX_LENGTH, {
-        message: t('common.form.length.char_max', { count: COMMENT_MAX_LENGTH }),
+      .max(RECO_RULES.COMMENT.MAX, {
+        message: t('common.form.length.char_max', { count: RECO_RULES.COMMENT.MAX }),
       })
       .optional(),
   });
@@ -265,7 +264,7 @@ export const ModalRecoSend = ({
                       !!errors.comment && 'text-destructive',
                     )}
                   >
-                    {commentLength}/{COMMENT_MAX_LENGTH}
+                    {commentLength}/{RECO_RULES.COMMENT.MAX}
                   </InputGroupText>
                   <ScrollArea className="overflow-hidden">
                     {selectedUsers.length > 0 ? (

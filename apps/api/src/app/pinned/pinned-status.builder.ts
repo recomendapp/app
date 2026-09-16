@@ -4,7 +4,7 @@ import { pinnedItem, playlist } from '@libs/db/schemas';
 import { DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { User } from '../auth/auth.service';
 import { canViewPlaylist } from '../playlists/playlists.permission';
-import { PINNED_ITEM_RULES } from '../../config/validation-rules';
+import { PINNED_ITEM_RULES } from '@libs/rules';
 import { PinnedItemStatus } from './dto/pinned.dto';
 
 export interface PinnedItemStatusSignal {

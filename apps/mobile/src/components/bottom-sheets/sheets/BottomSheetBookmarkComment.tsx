@@ -19,13 +19,13 @@ import { Bookmark } from '@libs/api-js';
 import { useUserBookmarkSetByMediaMutation } from '@libs/query-client';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { isIpad } from '../../../platform/detection';
+import { BOOKMARK_RULES } from '@libs/rules';
 
 interface BottomSheetBookmarkCommentProps extends BottomSheetProps {
   data: Bookmark;
 }
 
 const COMMENT_MIN_LENGTH = 0;
-const COMMENT_MAX_LENGTH = 180;
 
 export const BottomSheetBookmarkComment = forwardRef<
   React.ComponentRef<typeof TrueSheet>,
@@ -46,8 +46,10 @@ export const BottomSheetBookmarkComment = forwardRef<
       .min(COMMENT_MIN_LENGTH, {
         message: upperFirst(t('common.form.length.char_min', { count: COMMENT_MIN_LENGTH })),
       })
-      .max(COMMENT_MAX_LENGTH, {
-        message: upperFirst(t('common.form.length.char_max', { count: COMMENT_MAX_LENGTH })),
+      .max(BOOKMARK_RULES.COMMENT.MAX, {
+        message: upperFirst(
+          t('common.form.length.char_max', { count: BOOKMARK_RULES.COMMENT.MAX }),
+        ),
       }),
   });
   type WatchlistFormValues = z.infer<typeof watchlistSchema>;

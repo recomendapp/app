@@ -18,7 +18,7 @@ import { User } from '../auth/auth.service';
 import { canViewPlaylist } from '../playlists/playlists.permission';
 import { PlaylistQueryBuilder } from '../playlists/playlists.query-builder';
 import { PlaylistRole } from '../playlists/types/playlist-role.type';
-import { PINNED_ITEM_RULES } from '../../config/validation-rules';
+import { PINNED_ITEM_RULES } from '@libs/rules';
 import { PinnedItemUnion } from './dto/pinned.dto';
 import { buildPinnedItemsResponse, PinnedItemRow } from './pinned.mapper';
 

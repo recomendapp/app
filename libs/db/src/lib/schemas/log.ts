@@ -16,6 +16,7 @@ import { tmdbTvSeries, tmdbTvSeason, tmdbTvEpisode, tmdbMovie } from './tmdb';
 import { user } from './auth';
 import { relations, sql } from 'drizzle-orm';
 import { reviewMovie, reviewTvSeries } from './review';
+import { WATCHED_DATE_RULES } from '@libs/rules';
 
 export const watchFormatEnum = pgEnum('watch_format_enum', [
   'theater',
@@ -107,7 +108,10 @@ export const logMovieWatchedDate = pgTable(
   (table) => [
     index('idx_log_movie_watched_date_log_movie_id').on(table.logMovieId),
     index('idx_log_movie_watched_date_watched_date').on(table.watchedDate),
-    check('check_log_movie_watched_date_comment', sql`length(comment) <= 180`),
+    check(
+      'check_log_movie_watched_date_comment',
+      sql`length(comment) <= ${sql.raw(String(WATCHED_DATE_RULES.COMMENT.MAX))}`,
+    ),
   ],
 );
 export const logMovieWatchedDateRelations = relations(logMovieWatchedDate, ({ one }) => ({

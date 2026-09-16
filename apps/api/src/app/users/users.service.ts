@@ -2,19 +2,24 @@ import { BadRequestException, Inject, Injectable, NotFoundException } from '@nes
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { and, asc, desc, eq, gt, lt, or, sql, SQL } from 'drizzle-orm';
 import { profile, user, follow } from '@libs/db/schemas';
-import { ListInfiniteUsersDto, ListInfiniteUsersQueryDto, ListPaginatedUsersDto, ListPaginatedUsersQueryDto, ProfileDto, UserSortBy } from './dto/users.dto';
+import {
+  ListInfiniteUsersDto,
+  ListInfiniteUsersQueryDto,
+  ListPaginatedUsersDto,
+  ListPaginatedUsersQueryDto,
+  ProfileDto,
+  UserSortBy,
+} from './dto/users.dto';
 import { User } from '../auth/auth.service';
 import { plainToInstance } from 'class-transformer';
 import { isUUID } from 'class-validator';
-import { USER_RULES } from '../../config/validation-rules';
+import { USER_RULES } from '@libs/rules';
 import { SortOrder } from '../../common/dto/sort.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../utils/cursor';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
   async get(identifier: string, currentUser: User | null): Promise<ProfileDto> {
     let isUsernameSearch = false;
@@ -27,7 +32,7 @@ export class UsersService {
         throw new BadRequestException('Invalid username format.');
       }
     } else {
-      if (!isUUID(identifier, '7')) { 
+      if (!isUUID(identifier, '7')) {
         throw new BadRequestException('Invalid User ID format. Use UUID or @username.');
       }
     }
@@ -37,10 +42,10 @@ export class UsersService {
 
     let isVisibleLogic: SQL;
 
-    const isOwner = currentUser && (
-      (isUsernameSearch && currentUser.username?.toLowerCase() === searchValue.toLowerCase()) ||
-      (!isUsernameSearch && currentUser.id === searchValue)
-    );
+    const isOwner =
+      currentUser &&
+      ((isUsernameSearch && currentUser.username?.toLowerCase() === searchValue.toLowerCase()) ||
+        (!isUsernameSearch && currentUser.id === searchValue));
 
     if (isOwner) {
       isVisibleLogic = sql<boolean>`true`;
@@ -93,7 +98,7 @@ export class UsersService {
   /* ---------------------------------- Helpers --------------------------------- */
   private getListBaseQuery(sortBy: UserSortBy, sortOrder: SortOrder) {
     const direction = sortOrder === SortOrder.ASC ? asc : desc;
-    
+
     const orderBy = (() => {
       switch (sortBy) {
         case UserSortBy.RANDOM:
@@ -133,15 +138,19 @@ export class UsersService {
       this.db.select({ count: sql<number>`cast(count(*) as int)` }).from(user),
     ]);
 
-    return plainToInstance(ListPaginatedUsersDto, {
-      data: results,
-      meta: {
-        total_results: totalCount,
-        total_pages: Math.ceil(totalCount / per_page),
-        current_page: page,
-        per_page,
+    return plainToInstance(
+      ListPaginatedUsersDto,
+      {
+        data: results,
+        meta: {
+          total_results: totalCount,
+          total_pages: Math.ceil(totalCount / per_page),
+          current_page: page,
+          per_page,
+        },
       },
-    }, { excludeExtraneousValues: true });
+      { excludeExtraneousValues: true },
+    );
   }
 
   /* ---------------------------------- Infinite --------------------------------- */
@@ -163,8 +172,8 @@ export class UsersService {
             operator(profile.followersCount, Number(cursorData.value)),
             and(
               eq(profile.followersCount, Number(cursorData.value)),
-              operator(user.id, cursorData.id)
-            )
+              operator(user.id, cursorData.id),
+            ),
           );
           break;
         }
@@ -177,10 +186,7 @@ export class UsersService {
           const createdDate = String(cursorData.value);
           cursorWhereClause = or(
             operator(user.createdAt, createdDate),
-            and(
-              eq(user.createdAt, createdDate),
-              operator(user.id, cursorData.id)
-            )
+            and(eq(user.createdAt, createdDate), operator(user.id, cursorData.id)),
           );
           break;
         }
@@ -198,16 +204,14 @@ export class UsersService {
           avatar: user.image,
           isPremium: profile.isPremium,
           createdAt: user.createdAt,
-          followersCount: profile.followersCount, 
+          followersCount: profile.followersCount,
         })
         .from(user)
         .leftJoin(profile, eq(user.id, profile.id))
         .where(cursorWhereClause)
         .orderBy(...orderBy)
         .limit(fetchLimit),
-      (!cursorData && include_total_count)
-        ? this.db.$count(user)
-        : Promise.resolve(undefined)
+      !cursorData && include_total_count ? this.db.$count(user) : Promise.resolve(undefined),
     ]);
 
     const hasNextPage = results.length > per_page;
@@ -237,13 +241,17 @@ export class UsersService {
       }
     }
 
-    return plainToInstance(ListInfiniteUsersDto, {
-      data: paginatedResults,
-      meta: {
-        next_cursor: nextCursor,
-        per_page,
-        total_results: totalCount,
+    return plainToInstance(
+      ListInfiniteUsersDto,
+      {
+        data: paginatedResults,
+        meta: {
+          next_cursor: nextCursor,
+          per_page,
+          total_results: totalCount,
+        },
       },
-    }, { excludeExtraneousValues: true });
+      { excludeExtraneousValues: true },
+    );
   }
 }

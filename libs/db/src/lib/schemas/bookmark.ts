@@ -12,11 +12,9 @@ import {
 } from 'drizzle-orm/pg-core';
 import { tmdbMovie, tmdbTvSeries } from './tmdb';
 import { user } from './auth';
+import { BOOKMARK_RULES } from '@libs/rules';
 
-export const bookmarkStatusEnum = pgEnum('bookmark_status', [
-  'active',
-  'completed',
-]);
+export const bookmarkStatusEnum = pgEnum('bookmark_status', ['active', 'completed']);
 export const bookmarkTypeEnum = pgEnum('bookmark_type', ['movie', 'tv_series']);
 
 export const bookmark = pgTable(
@@ -36,15 +34,20 @@ export const bookmark = pgTable(
     comment: text(),
     // Type & References
     type: bookmarkTypeEnum('type').notNull(),
-    movieId: bigint('movie_id', { mode: 'number' })
-      .references(() => tmdbMovie.id, { onDelete: 'cascade' }),
-    tvSeriesId: bigint('tv_series_id', { mode: 'number' })
-      .references(() => tmdbTvSeries.id, { onDelete: 'cascade' }),
+    movieId: bigint('movie_id', { mode: 'number' }).references(() => tmdbMovie.id, {
+      onDelete: 'cascade',
+    }),
+    tvSeriesId: bigint('tv_series_id', { mode: 'number' }).references(() => tmdbTvSeries.id, {
+      onDelete: 'cascade',
+    }),
   },
   (table) => [
     index('idx_bookmark_user_id').on(table.userId),
     index('idx_bookmark_status').on(table.status),
-    check('check_user_bookmark_comment', sql`length(comment) <= 180`),
+    check(
+      'check_user_bookmark_comment',
+      sql`length(comment) <= ${sql.raw(String(BOOKMARK_RULES.COMMENT.MAX))}`,
+    ),
     check(
       'check_bookmark_type_references',
       sql`(
@@ -55,11 +58,15 @@ export const bookmark = pgTable(
     ),
     uniqueIndex('unique_active_bookmark_movie')
       .on(table.userId, table.movieId)
-      .where(sql`${table.status} = 'active'::bookmark_status AND ${table.type} = 'movie'::bookmark_type`),
+      .where(
+        sql`${table.status} = 'active'::bookmark_status AND ${table.type} = 'movie'::bookmark_type`,
+      ),
 
     uniqueIndex('unique_active_bookmark_tv_series')
       .on(table.userId, table.tvSeriesId)
-      .where(sql`${table.status} = 'active'::bookmark_status AND ${table.type} = 'tv_series'::bookmark_type`),
+      .where(
+        sql`${table.status} = 'active'::bookmark_status AND ${table.type} = 'tv_series'::bookmark_type`,
+      ),
   ],
 );
 export const bookmarkRelations = relations(bookmark, ({ one }) => ({

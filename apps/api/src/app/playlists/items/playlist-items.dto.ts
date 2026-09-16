@@ -1,13 +1,37 @@
-import { ApiSchema, ApiProperty, PartialType, PickType, getSchemaPath, ApiPropertyOptional, ApiExtraModels, IntersectionType } from '@nestjs/swagger';
-import { ArrayMinSize, IsArray, IsDateString, IsEnum, IsIn, IsInt, IsOptional, IsString, MaxLength, Min, ValidateNested } from 'class-validator';
+import {
+  ApiSchema,
+  ApiProperty,
+  PartialType,
+  PickType,
+  getSchemaPath,
+  ApiPropertyOptional,
+  ApiExtraModels,
+  IntersectionType,
+} from '@nestjs/swagger';
+import {
+  ArrayMinSize,
+  IsArray,
+  IsDateString,
+  IsEnum,
+  IsIn,
+  IsInt,
+  IsOptional,
+  IsString,
+  MaxLength,
+  Min,
+  ValidateNested,
+} from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { playlistItemTypeEnum } from '@libs/db/schemas';
 import { MovieCompactDto } from '../../movies/dto/movies.dto';
 import { TvSeriesCompactDto } from '../../tv-series/dto/tv-series.dto';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../common/dto/pagination.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
-import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../common/dto/cursor-pagination.dto';
-import { PLAYLIST_ITEM_RULES } from '../../../config/validation-rules';
+import {
+  CursorPaginatedResponseDto,
+  CursorPaginationQueryDto,
+} from '../../../common/dto/cursor-pagination.dto';
+import { PLAYLIST_ITEM_RULES } from '@libs/rules';
 
 export enum PlaylistItemSortBy {
   RANK = 'rank',
@@ -36,9 +60,9 @@ export class PlaylistItemDto {
   userId!: string;
 
   @ApiProperty({
-	example: 'Must watch this weekend',
-	nullable: true,
-	maxLength: PLAYLIST_ITEM_RULES.COMMENT.MAX,
+    example: 'Must watch this weekend',
+    nullable: true,
+    maxLength: PLAYLIST_ITEM_RULES.COMMENT.MAX,
   })
   @Expose()
   @IsOptional()
@@ -46,7 +70,7 @@ export class PlaylistItemDto {
   @MaxLength(PLAYLIST_ITEM_RULES.COMMENT.MAX)
   comment!: string | null;
 
-  @ApiProperty({ example: '0|i0000r:' }) 
+  @ApiProperty({ example: '0|i0000r:' })
   @Expose()
   @IsString()
   rank!: string;
@@ -57,16 +81,16 @@ export class PlaylistItemDto {
   mediaId!: number;
 
   @ApiProperty({
-	  description: 'The type of the playlist item',
-	  enum: playlistItemTypeEnum.enumValues, 
-	  example: playlistItemTypeEnum.enumValues[0],
+    description: 'The type of the playlist item',
+    enum: playlistItemTypeEnum.enumValues,
+    example: playlistItemTypeEnum.enumValues[0],
   })
   @Expose()
   @IsString()
   @IsIn(playlistItemTypeEnum.enumValues, {
-	  message: `Type must be one of: ${playlistItemTypeEnum.enumValues.join(', ')}`
+    message: `Type must be one of: ${playlistItemTypeEnum.enumValues.join(', ')}`,
   })
-  type!: typeof playlistItemTypeEnum.enumValues[number];
+  type!: (typeof playlistItemTypeEnum.enumValues)[number];
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
@@ -79,7 +103,7 @@ export class PlaylistItemDto {
   updatedAt!: string;
 
   constructor(data: PlaylistItemDto) {
-	Object.assign(this, data);
+    Object.assign(this, data);
   }
 }
 
@@ -114,39 +138,41 @@ export type PlaylistItemWithMediaUnion = PlaylistItemWithMovieDto | PlaylistItem
 /* -------------------------------------------------------------------------- */
 
 @ApiSchema({ name: 'PlaylistItemInput' })
-export class PlaylistItemInputDto extends PartialType(PickType(PlaylistItemDto, ['rank', 'comment'] as const)) {}
+export class PlaylistItemInputDto extends PartialType(
+  PickType(PlaylistItemDto, ['rank', 'comment'] as const),
+) {}
 
 @ApiSchema({ name: 'BaseListPlaylistItemsQuery' })
 export class BaseListPlaylistItemsQueryDto {
-	@ApiPropertyOptional({
-	  description: 'Filter playlist items by type',
-	  enum: playlistItemTypeEnum.enumValues,
-	})
-	@IsOptional()
-	@IsIn(playlistItemTypeEnum.enumValues, {
-	  message: `Type must be one of: ${playlistItemTypeEnum.enumValues.join(', ')}`
-	})
-	type?: typeof playlistItemTypeEnum.enumValues[number];
+  @ApiPropertyOptional({
+    description: 'Filter playlist items by type',
+    enum: playlistItemTypeEnum.enumValues,
+  })
+  @IsOptional()
+  @IsIn(playlistItemTypeEnum.enumValues, {
+    message: `Type must be one of: ${playlistItemTypeEnum.enumValues.join(', ')}`,
+  })
+  type?: (typeof playlistItemTypeEnum.enumValues)[number];
 
-	@ApiPropertyOptional({
-		description: 'Field to sort playlist items by',
-		default: PlaylistItemSortBy.RANK,
-		example: PlaylistItemSortBy.RANK,
-		enum: PlaylistItemSortBy,
-	})
-	@IsOptional()
-	@IsEnum(PlaylistItemSortBy)
-	sort_by: PlaylistItemSortBy = PlaylistItemSortBy.RANK;
+  @ApiPropertyOptional({
+    description: 'Field to sort playlist items by',
+    default: PlaylistItemSortBy.RANK,
+    example: PlaylistItemSortBy.RANK,
+    enum: PlaylistItemSortBy,
+  })
+  @IsOptional()
+  @IsEnum(PlaylistItemSortBy)
+  sort_by: PlaylistItemSortBy = PlaylistItemSortBy.RANK;
 
-	@ApiPropertyOptional({
-		description: 'Sort order',
-		default: SortOrder.ASC,
-		example: SortOrder.ASC,
-		enum: SortOrder,
-	})
-	@IsOptional()
-	@IsEnum(SortOrder)
-	sort_order: SortOrder = SortOrder.ASC;
+  @ApiPropertyOptional({
+    description: 'Sort order',
+    default: SortOrder.ASC,
+    example: SortOrder.ASC,
+    enum: SortOrder,
+  })
+  @IsOptional()
+  @IsEnum(SortOrder)
+  sort_order: SortOrder = SortOrder.ASC;
 }
 
 @ApiSchema({ name: 'ListAllPlaylistItemsQuery' })
@@ -155,93 +181,97 @@ export class ListAllPlaylistItemsQueryDto extends BaseListPlaylistItemsQueryDto 
 @ApiSchema({ name: 'ListPaginatedPlaylistItemsQuery' })
 export class ListPaginatedPlaylistItemsQueryDto extends IntersectionType(
   BaseListPlaylistItemsQueryDto,
-  PaginationQueryDto
+  PaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListInfinitePlaylistItemsQuery' })
 export class ListInfinitePlaylistItemsQueryDto extends IntersectionType(
   BaseListPlaylistItemsQueryDto,
-  CursorPaginationQueryDto
+  CursorPaginationQueryDto,
 ) {}
 
 @ApiExtraModels(PlaylistItemWithMovieDto, PlaylistItemWithTvSeriesDto)
 @ApiSchema({ name: 'ListPaginatedPlaylistItems' })
 export class ListPaginatedPlaylistItemsDto extends PaginatedResponseDto<PlaylistItemWithMediaUnion> {
   @ApiProperty({
-	type: 'array',
-	items: {
-	  oneOf: [
-		{ $ref: getSchemaPath(PlaylistItemWithMovieDto) },
-		{ $ref: getSchemaPath(PlaylistItemWithTvSeriesDto) },
-	  ],
-	  discriminator: {
-		propertyName: 'type',
-		mapping: {
-		  movie: getSchemaPath(PlaylistItemWithMovieDto),
-		  tv_series: getSchemaPath(PlaylistItemWithTvSeriesDto),
-		},
-	  },
-	},
+    type: 'array',
+    items: {
+      oneOf: [
+        { $ref: getSchemaPath(PlaylistItemWithMovieDto) },
+        { $ref: getSchemaPath(PlaylistItemWithTvSeriesDto) },
+      ],
+      discriminator: {
+        propertyName: 'type',
+        mapping: {
+          movie: getSchemaPath(PlaylistItemWithMovieDto),
+          tv_series: getSchemaPath(PlaylistItemWithTvSeriesDto),
+        },
+      },
+    },
   })
   @Type(() => PlaylistItemDto, {
-	keepDiscriminatorProperty: true,
-	discriminator: {
-	  property: 'type',
-	  subTypes: [
-		{ value: PlaylistItemWithMovieDto, name: 'movie' },
-		{ value: PlaylistItemWithTvSeriesDto, name: 'tv_series' },
-	  ],
-	},
+    keepDiscriminatorProperty: true,
+    discriminator: {
+      property: 'type',
+      subTypes: [
+        { value: PlaylistItemWithMovieDto, name: 'movie' },
+        { value: PlaylistItemWithTvSeriesDto, name: 'tv_series' },
+      ],
+    },
   })
   data!: PlaylistItemWithMediaUnion[];
 
   constructor(partial: Partial<ListPaginatedPlaylistItemsDto>) {
-	super(partial);
-	Object.assign(this, partial);
+    super(partial);
+    Object.assign(this, partial);
   }
 }
 
 @ApiExtraModels(PlaylistItemWithMovieDto, PlaylistItemWithTvSeriesDto)
-@ApiSchema({ name: 'ListInfinitePlaylistItems'})
+@ApiSchema({ name: 'ListInfinitePlaylistItems' })
 export class ListInfinitePlaylistItemsDto extends CursorPaginatedResponseDto<PlaylistItemWithMediaUnion> {
   @ApiProperty({
-	type: 'array',
-	items: {
-	  oneOf: [
-		{ $ref: getSchemaPath(PlaylistItemWithMovieDto) },
-		{ $ref: getSchemaPath(PlaylistItemWithTvSeriesDto) },
-	  ],
-	  discriminator: {
-		propertyName: 'type',
-		mapping: {
-		  movie: getSchemaPath(PlaylistItemWithMovieDto),
-		  tv_series: getSchemaPath(PlaylistItemWithTvSeriesDto),
-		},
-	  },
-	},
+    type: 'array',
+    items: {
+      oneOf: [
+        { $ref: getSchemaPath(PlaylistItemWithMovieDto) },
+        { $ref: getSchemaPath(PlaylistItemWithTvSeriesDto) },
+      ],
+      discriminator: {
+        propertyName: 'type',
+        mapping: {
+          movie: getSchemaPath(PlaylistItemWithMovieDto),
+          tv_series: getSchemaPath(PlaylistItemWithTvSeriesDto),
+        },
+      },
+    },
   })
   @Type(() => PlaylistItemDto, {
-	keepDiscriminatorProperty: true,
-	discriminator: {
-	  property: 'type',
-	  subTypes: [
-		{ value: PlaylistItemWithMovieDto, name: 'movie' },
-		{ value: PlaylistItemWithTvSeriesDto, name: 'tv_series' },
-	  ],
-	},
+    keepDiscriminatorProperty: true,
+    discriminator: {
+      property: 'type',
+      subTypes: [
+        { value: PlaylistItemWithMovieDto, name: 'movie' },
+        { value: PlaylistItemWithTvSeriesDto, name: 'tv_series' },
+      ],
+    },
   })
   data!: PlaylistItemWithMediaUnion[];
 
   constructor(partial: Partial<ListInfinitePlaylistItemsDto>) {
-	super(partial);
-	Object.assign(this, partial);
+    super(partial);
+    Object.assign(this, partial);
   }
 }
 
 // Update
 @ApiSchema({ name: 'PlaylistItemUpdate' })
 export class PlaylistItemUpdateDto {
-  @ApiPropertyOptional({ description: 'Update the comment of the item', nullable: true, maxLength: 180 })
+  @ApiPropertyOptional({
+    description: 'Update the comment of the item',
+    nullable: true,
+    maxLength: 180,
+  })
   @IsOptional()
   @IsString()
   @MaxLength(180)

@@ -1,0 +1,2 @@
+ALTER TABLE "review_movie" ADD CONSTRAINT "check_review_movie_body" CHECK ((length(body) >= 1) AND (length(body) <= 50000));--> statement-breakpoint
+ALTER TABLE "review_tv_series" ADD CONSTRAINT "check_review_tv_series_body" CHECK ((length(body) >= 1) AND (length(body) <= 50000));

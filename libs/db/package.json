@@ -8,6 +8,7 @@
   "dependencies": {
     "@better-auth/core": "1.7.2",
     "@libs/i18n": "workspace:*",
+    "@libs/rules": "workspace:*",
     "better-auth": "1.7.2",
     "dotenv": "^17.2.3",
     "drizzle-kit": "^0.31.8",
