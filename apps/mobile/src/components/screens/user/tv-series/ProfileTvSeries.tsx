@@ -28,7 +28,7 @@ import ButtonUserReviewTvSeriesLike from '../../../buttons/ButtonUserReviewTvSer
 import { BottomSheetLogTvSeries } from '../../../bottom-sheets/sheets/BottomSheetLogTvSeries';
 import FeedUserLog from '../../feed/FeedUserLog';
 import { EnrichedMarkdownText } from '../../../RichText/EnrichedMarkdownText';
-import { NativeStackHeaderItem } from 'expo-router';
+import { NativeStackHeaderItem, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const ProfileTvSeries = ({
@@ -42,6 +42,7 @@ export const ProfileTvSeries = ({
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const t = useTranslations();
+  const router = useRouter();
   const openSheet = useBottomSheetStore((state) => state.openSheet);
   // Queries
   const { data: profile } = useQuery(
@@ -58,7 +59,15 @@ export const ProfileTvSeries = ({
   const { isLiked, toggle } = useUserReviewTvSeriesLike({
     userId: user?.id,
     reviewId: log?.review?.id,
+    tvSeriesId: tvSeriesId,
+    reviewAuthorId: profile?.id ?? '',
   });
+  const openComments = () => {
+    router.push({
+      pathname: '/user/[username]/tv-series/[tv_series_id]/comments',
+      params: { username, tv_series_id: tvSeriesId },
+    });
+  };
 
   // SharedValue
   const headerHeight = useSharedValue<number>(0);
@@ -82,7 +91,16 @@ export const ProfileTvSeries = ({
           headerRight: () => (
             <>
               {log?.review && (
-                <ButtonUserReviewTvSeriesLike variant="ghost" reviewId={log.review.id} />
+                <>
+                  <Button variant="ghost" size="icon" icon={Icons.Comment} onPress={openComments}>
+                    {log.review.commentsCount > 0 ? `${log.review.commentsCount}` : undefined}
+                  </Button>
+                  <ButtonUserReviewTvSeriesLike
+                    variant="ghost"
+                    review={log.review}
+                    showCount={false}
+                  />
+                </>
               )}
               <Button
                 variant="ghost"
@@ -102,6 +120,15 @@ export const ProfileTvSeries = ({
           unstable_headerRightItems: (props) => [
             ...(log?.review
               ? ([
+                  {
+                    type: 'button',
+                    label: upperFirst(t('common.messages.comment', { count: 2 })),
+                    onPress: openComments,
+                    icon: {
+                      name: 'bubble.right',
+                      type: 'sfSymbol',
+                    },
+                  },
                   {
                     type: 'button',
                     label: upperFirst(t('common.messages.like')),

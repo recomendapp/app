@@ -432,6 +432,226 @@ export class NotifyProcessor extends WorkerHost {
 
           break;
         }
+        case 'review:liked': {
+          const { actorId, targetUserId, reviewAuthorId, mediaId, mediaType } = job.data;
+
+          const actor = await this.db.query.user.findFirst({
+            where: eq(user.id, actorId),
+            columns: { username: true, name: true, image: true },
+          });
+          if (!actor) break;
+
+          const reviewAuthor = await this.db.query.user.findFirst({
+            where: eq(user.id, reviewAuthorId),
+            columns: { username: true },
+          });
+          if (!reviewAuthor) break;
+
+          const actorName = actor.name ?? actor.username;
+          const actorAvatarUrl = this.getAvatarUrl(actor.image);
+
+          const groupedByLang = await this.getDevicesGroupedByLang([targetUserId]);
+
+          await Promise.all(
+            Object.entries(groupedByLang).map(async ([lang, devices]) => {
+              const mediaData = await this.getMediaTitleAndPoster(mediaId, mediaType, lang);
+              if (!mediaData) return;
+
+              const title = this.i18n.t('review.liked.subject', { lang, args: { actorName } });
+              const body = this.i18n.t('review.liked.body', {
+                lang,
+                args: { actorName, mediaTitle: mediaData.title },
+              });
+
+              await this.notifyService.sendPushNotifications(devices, {
+                title,
+                body,
+                avatar: actorAvatarUrl
+                  ? { url: actorAvatarUrl, name: actorName, id: actorId }
+                  : undefined,
+                attachmentUrl: this.getTmdbPosterUrl(mediaData.posterPath),
+                data: {
+                  type: job.name,
+                  url: mediaData.url || '/',
+                  mediaId: mediaId.toString(),
+                  mediaType,
+                  reviewAuthorUsername: reviewAuthor.username,
+                },
+              });
+            }),
+          );
+
+          break;
+        }
+        case 'review:commented': {
+          const { actorId, targetUserId, reviewAuthorId, mediaId, mediaType, comment } = job.data;
+
+          const actor = await this.db.query.user.findFirst({
+            where: eq(user.id, actorId),
+            columns: { username: true, name: true, image: true },
+          });
+          if (!actor) break;
+
+          const reviewAuthor = await this.db.query.user.findFirst({
+            where: eq(user.id, reviewAuthorId),
+            columns: { username: true },
+          });
+          if (!reviewAuthor) break;
+
+          const actorName = actor.name ?? actor.username;
+          const actorAvatarUrl = this.getAvatarUrl(actor.image);
+
+          const groupedByLang = await this.getDevicesGroupedByLang([targetUserId]);
+
+          await Promise.all(
+            Object.entries(groupedByLang).map(async ([lang, devices]) => {
+              const mediaData = await this.getMediaTitleAndPoster(mediaId, mediaType, lang);
+              if (!mediaData) return;
+
+              const title = this.i18n.t('review.commented.subject', { lang, args: { actorName } });
+              const body = comment
+                ? this.i18n.t('review.commented.body_with_comment', {
+                    lang,
+                    args: { actorName, comment },
+                  })
+                : this.i18n.t('review.commented.body', {
+                    lang,
+                    args: { actorName, mediaTitle: mediaData.title },
+                  });
+
+              await this.notifyService.sendPushNotifications(devices, {
+                title,
+                body,
+                avatar: actorAvatarUrl
+                  ? { url: actorAvatarUrl, name: actorName, id: actorId }
+                  : undefined,
+                attachmentUrl: this.getTmdbPosterUrl(mediaData.posterPath),
+                data: {
+                  type: job.name,
+                  url: mediaData.url || '/',
+                  mediaId: mediaId.toString(),
+                  mediaType,
+                  reviewAuthorUsername: reviewAuthor.username,
+                },
+              });
+            }),
+          );
+
+          break;
+        }
+        case 'review-comment:liked': {
+          const { actorId, targetUserId, reviewAuthorId, mediaId, mediaType } = job.data;
+
+          const actor = await this.db.query.user.findFirst({
+            where: eq(user.id, actorId),
+            columns: { username: true, name: true, image: true },
+          });
+          if (!actor) break;
+
+          const reviewAuthor = await this.db.query.user.findFirst({
+            where: eq(user.id, reviewAuthorId),
+            columns: { username: true },
+          });
+          if (!reviewAuthor) break;
+
+          const actorName = actor.name ?? actor.username;
+          const actorAvatarUrl = this.getAvatarUrl(actor.image);
+
+          const groupedByLang = await this.getDevicesGroupedByLang([targetUserId]);
+
+          await Promise.all(
+            Object.entries(groupedByLang).map(async ([lang, devices]) => {
+              const mediaData = await this.getMediaTitleAndPoster(mediaId, mediaType, lang);
+              if (!mediaData) return;
+
+              const title = this.i18n.t('review.comment_liked.subject', {
+                lang,
+                args: { actorName },
+              });
+              const body = this.i18n.t('review.comment_liked.body', {
+                lang,
+                args: { actorName, mediaTitle: mediaData.title },
+              });
+
+              await this.notifyService.sendPushNotifications(devices, {
+                title,
+                body,
+                avatar: actorAvatarUrl
+                  ? { url: actorAvatarUrl, name: actorName, id: actorId }
+                  : undefined,
+                attachmentUrl: this.getTmdbPosterUrl(mediaData.posterPath),
+                data: {
+                  type: job.name,
+                  url: mediaData.url || '/',
+                  mediaId: mediaId.toString(),
+                  mediaType,
+                  reviewAuthorUsername: reviewAuthor.username,
+                },
+              });
+            }),
+          );
+
+          break;
+        }
+        case 'review-comment:replied': {
+          const { actorId, targetUserId, reviewAuthorId, mediaId, mediaType, comment } = job.data;
+
+          const actor = await this.db.query.user.findFirst({
+            where: eq(user.id, actorId),
+            columns: { username: true, name: true, image: true },
+          });
+          if (!actor) break;
+
+          const reviewAuthor = await this.db.query.user.findFirst({
+            where: eq(user.id, reviewAuthorId),
+            columns: { username: true },
+          });
+          if (!reviewAuthor) break;
+
+          const actorName = actor.name ?? actor.username;
+          const actorAvatarUrl = this.getAvatarUrl(actor.image);
+
+          const groupedByLang = await this.getDevicesGroupedByLang([targetUserId]);
+
+          await Promise.all(
+            Object.entries(groupedByLang).map(async ([lang, devices]) => {
+              const mediaData = await this.getMediaTitleAndPoster(mediaId, mediaType, lang);
+              if (!mediaData) return;
+
+              const title = this.i18n.t('review.comment_replied.subject', {
+                lang,
+                args: { actorName },
+              });
+              const body = comment
+                ? this.i18n.t('review.comment_replied.body_with_comment', {
+                    lang,
+                    args: { actorName, comment },
+                  })
+                : this.i18n.t('review.comment_replied.body', {
+                    lang,
+                    args: { actorName, mediaTitle: mediaData.title },
+                  });
+
+              await this.notifyService.sendPushNotifications(devices, {
+                title,
+                body,
+                avatar: actorAvatarUrl
+                  ? { url: actorAvatarUrl, name: actorName, id: actorId }
+                  : undefined,
+                attachmentUrl: this.getTmdbPosterUrl(mediaData.posterPath),
+                data: {
+                  type: job.name,
+                  url: mediaData.url || '/',
+                  mediaId: mediaId.toString(),
+                  mediaType,
+                  reviewAuthorUsername: reviewAuthor.username,
+                },
+              });
+            }),
+          );
+
+          break;
+        }
         default:
           this.logger.warn(`Unhandled job`);
       }
@@ -439,6 +659,36 @@ export class NotifyProcessor extends WorkerHost {
       this.logger.error(`Failed to process job ${job.name}: ${error}`);
       throw error;
     }
+  }
+
+  private async getMediaTitleAndPoster(mediaId: number, type: 'movie' | 'tv_series', lang: string) {
+    return this.db.transaction(async (tx) => {
+      await tx.execute(sql`SELECT set_config('app.current_language', ${lang}, true)`);
+
+      if (type === 'movie') {
+        const result = await tx
+          .select({
+            title: tmdbMovieView.title,
+            url: tmdbMovieView.url,
+            posterPath: tmdbMovieView.posterPath,
+          })
+          .from(tmdbMovieView)
+          .where(eq(tmdbMovieView.id, mediaId))
+          .limit(1);
+        return result[0];
+      } else {
+        const result = await tx
+          .select({
+            title: tmdbTvSeriesView.name,
+            url: tmdbTvSeriesView.url,
+            posterPath: tmdbTvSeriesView.posterPath,
+          })
+          .from(tmdbTvSeriesView)
+          .where(eq(tmdbTvSeriesView.id, mediaId))
+          .limit(1);
+        return result[0];
+      }
+    });
   }
 
   private getTmdbPosterUrl(posterPath: string | null | undefined) {

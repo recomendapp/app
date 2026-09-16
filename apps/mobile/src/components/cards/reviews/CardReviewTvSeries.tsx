@@ -86,10 +86,7 @@ const CardReviewTvSeriesDefault = React.forwardRef<
         )}
         {!skeleton && (
           <View style={tw.style('flex-row items-center justify-end m-1')}>
-            <ButtonUserReviewTvSeriesLike
-              reviewId={review?.id}
-              reviewLikesCount={review.likesCount}
-            />
+            <ButtonUserReviewTvSeriesLike review={review} />
           </View>
         )}
       </View>

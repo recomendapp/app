@@ -152,6 +152,39 @@ const RootLayoutNav = () => {
             : {}),
         }}
       />
+      {/* REVIEW COMMENTS */}
+      <Stack.Screen
+        name="user/[username]/film/[film_id]/comments"
+        options={{
+          presentation: 'formSheet',
+          sheetGrabberVisible: true,
+          sheetAllowedDetents: [0.8, 1],
+          sheetInitialDetentIndex: 0,
+          headerTransparent: true,
+          ...(isLiquidGlassAvailable
+            ? {
+                contentStyle: { backgroundColor: 'transparent' },
+                headerStyle: { backgroundColor: 'transparent' },
+              }
+            : {}),
+        }}
+      />
+      <Stack.Screen
+        name="user/[username]/tv-series/[tv_series_id]/comments"
+        options={{
+          presentation: 'formSheet',
+          sheetGrabberVisible: true,
+          sheetAllowedDetents: [0.8, 1],
+          sheetInitialDetentIndex: 0,
+          headerTransparent: true,
+          ...(isLiquidGlassAvailable
+            ? {
+                contentStyle: { backgroundColor: 'transparent' },
+                headerStyle: { backgroundColor: 'transparent' },
+              }
+            : {}),
+        }}
+      />
       <Stack.Screen
         name="tv-series/[tv_series_id]/season/[season_number]/log"
         options={{

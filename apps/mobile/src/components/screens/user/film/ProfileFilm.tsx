@@ -28,7 +28,7 @@ import { useAuth } from '../../../../providers/AuthProvider';
 import { BottomSheetLogMovie } from '../../../bottom-sheets/sheets/BottomSheetLogMovie';
 import FeedUserLog from '../../feed/FeedUserLog';
 import { EnrichedMarkdownText } from '../../../RichText/EnrichedMarkdownText';
-import { NativeStackHeaderItem } from 'expo-router';
+import { NativeStackHeaderItem, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const ProfileFilm = ({ username, movieId }: { username: string; movieId: number }) => {
@@ -36,6 +36,7 @@ export const ProfileFilm = ({ username, movieId }: { username: string; movieId: 
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const t = useTranslations();
+  const router = useRouter();
   const openSheet = useBottomSheetStore((state) => state.openSheet);
   // Queries
   const { data: profile } = useQuery(
@@ -52,7 +53,15 @@ export const ProfileFilm = ({ username, movieId }: { username: string; movieId: 
   const { isLiked, toggle } = useUserReviewMovieLike({
     userId: user?.id,
     reviewId: log?.review?.id,
+    movieId: movieId,
+    reviewAuthorId: profile?.id ?? '',
   });
+  const openComments = () => {
+    router.push({
+      pathname: '/user/[username]/film/[film_id]/comments',
+      params: { username, film_id: movieId },
+    });
+  };
 
   // SharedValue
   const headerHeight = useSharedValue<number>(0);
@@ -76,7 +85,16 @@ export const ProfileFilm = ({ username, movieId }: { username: string; movieId: 
           headerRight: () => (
             <>
               {log?.review && (
-                <ButtonUserReviewMovieLike variant="ghost" reviewId={log.review.id} />
+                <>
+                  <Button variant="ghost" size="icon" icon={Icons.Comment} onPress={openComments}>
+                    {log.review.commentsCount > 0 ? `${log.review.commentsCount}` : undefined}
+                  </Button>
+                  <ButtonUserReviewMovieLike
+                    variant="ghost"
+                    review={log.review}
+                    showCount={false}
+                  />
+                </>
               )}
               <Button
                 variant="ghost"
@@ -96,6 +114,15 @@ export const ProfileFilm = ({ username, movieId }: { username: string; movieId: 
           unstable_headerRightItems: (props) => [
             ...(log?.review
               ? ([
+                  {
+                    type: 'button',
+                    label: upperFirst(t('common.messages.comment', { count: 2 })),
+                    onPress: openComments,
+                    icon: {
+                      name: 'bubble.right',
+                      type: 'sfSymbol',
+                    },
+                  },
                   {
                     type: 'button',
                     label: upperFirst(t('common.messages.like')),
