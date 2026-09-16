@@ -1,13 +1,33 @@
 import { watchFormatEnum } from '@libs/db/schemas';
-import { ApiSchema, ApiProperty, PickType, PartialType, IntersectionType, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  ApiSchema,
+  ApiProperty,
+  PickType,
+  PartialType,
+  IntersectionType,
+  ApiPropertyOptional,
+} from '@nestjs/swagger';
 import { IsNullable } from '../../../../../common/decorators/is-nullable.decorator';
-import { WATCHED_DATE_RULES } from '../../../../../config/validation-rules';
+import { WATCHED_DATE_RULES } from '@libs/rules';
 import { Expose, Type } from 'class-transformer';
-import { IsDateString, IsEnum, IsIn, IsInt, IsOptional, IsString, Length, Matches, ValidateNested } from 'class-validator';
+import {
+  IsDateString,
+  IsEnum,
+  IsIn,
+  IsInt,
+  IsOptional,
+  IsString,
+  Length,
+  Matches,
+  ValidateNested,
+} from 'class-validator';
 import { LogMovieDto } from '../../log-movie.dto';
 import { SortOrder } from '../../../../../common/dto/sort.dto';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../../../common/dto/pagination.dto';
-import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../../../common/dto/cursor-pagination.dto';
+import {
+  CursorPaginatedResponseDto,
+  CursorPaginationQueryDto,
+} from '../../../../../common/dto/cursor-pagination.dto';
 
 export enum WatchedDateSortBy {
   WATCHED_DATE = 'watched_date',
@@ -32,9 +52,9 @@ export class WatchedDateDto {
   })
   @Expose()
   @IsIn(watchFormatEnum.enumValues, {
-    message: `Format must be one of: ${watchFormatEnum.enumValues.join(', ')}`
+    message: `Format must be one of: ${watchFormatEnum.enumValues.join(', ')}`,
   })
-  format!: typeof watchFormatEnum.enumValues[number];
+  format!: (typeof watchFormatEnum.enumValues)[number];
 
   @ApiProperty({
     example: 'Watched with friends at home',
@@ -48,7 +68,7 @@ export class WatchedDateDto {
   @IsNullable()
   @Length(WATCHED_DATE_RULES.COMMENT.MIN, WATCHED_DATE_RULES.COMMENT.MAX)
   @Matches(WATCHED_DATE_RULES.COMMENT.REGEX, {
-    message: 'Comment cannot be empty or contain excessive line breaks'
+    message: 'Comment cannot be empty or contain excessive line breaks',
   })
   comment!: string | null;
 
@@ -64,11 +84,9 @@ export class WatchedDateCreateDto extends IntersectionType(
 ) {}
 
 @ApiSchema({ name: 'WatchedDateUpdate' })
-export class WatchedDateUpdateDto extends PartialType(PickType(WatchedDateDto, [
-  'watchedDate',
-  'format',
-  'comment'
-] as const)) {}
+export class WatchedDateUpdateDto extends PartialType(
+  PickType(WatchedDateDto, ['watchedDate', 'format', 'comment'] as const),
+) {}
 
 @ApiSchema({ name: 'WatchedDateLogSync' })
 export class WatchedDateLogSyncDto extends PickType(LogMovieDto, [
@@ -96,37 +114,37 @@ export class WatchedDateResponseDto {
 
 @ApiSchema({ name: 'BaseListWatchedDatesQuery' })
 class BaseListWatchedDatesQueryDto {
-    @ApiPropertyOptional({
-        description: 'Field to sort by',
-        default: WatchedDateSortBy.WATCHED_DATE,
-        example: WatchedDateSortBy.WATCHED_DATE,
-        enum: WatchedDateSortBy,
-    })
-    @IsOptional()
-    @IsEnum(WatchedDateSortBy)
-    sort_by: WatchedDateSortBy = WatchedDateSortBy.WATCHED_DATE;
+  @ApiPropertyOptional({
+    description: 'Field to sort by',
+    default: WatchedDateSortBy.WATCHED_DATE,
+    example: WatchedDateSortBy.WATCHED_DATE,
+    enum: WatchedDateSortBy,
+  })
+  @IsOptional()
+  @IsEnum(WatchedDateSortBy)
+  sort_by: WatchedDateSortBy = WatchedDateSortBy.WATCHED_DATE;
 
-    @ApiPropertyOptional({
-        description: 'Sort order',
-        default: SortOrder.DESC,
-        example: SortOrder.DESC,
-        enum: SortOrder,
-    })
-    @IsOptional()
-    @IsEnum(SortOrder)
-    sort_order: SortOrder = SortOrder.DESC;
+  @ApiPropertyOptional({
+    description: 'Sort order',
+    default: SortOrder.DESC,
+    example: SortOrder.DESC,
+    enum: SortOrder,
+  })
+  @IsOptional()
+  @IsEnum(SortOrder)
+  sort_order: SortOrder = SortOrder.DESC;
 }
 
 @ApiSchema({ name: 'ListPaginatedWatchedDatesQuery' })
 export class ListPaginatedWatchedDatesQueryDto extends IntersectionType(
   BaseListWatchedDatesQueryDto,
-  PaginationQueryDto
+  PaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListInfiniteWatchedDatesQuery' })
 export class ListInfiniteWatchedDatesQueryDto extends IntersectionType(
   BaseListWatchedDatesQueryDto,
-  CursorPaginationQueryDto
+  CursorPaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListPaginatedWatchedDates' })
@@ -141,7 +159,7 @@ export class ListPaginatedWatchedDatesDto extends PaginatedResponseDto<WatchedDa
   }
 }
 
-@ApiSchema({ name: 'ListInfiniteWatchedDates'})
+@ApiSchema({ name: 'ListInfiniteWatchedDates' })
 export class ListInfiniteWatchedDatesDto extends CursorPaginatedResponseDto<WatchedDateDto> {
   @ApiProperty({ type: () => [WatchedDateDto] })
   @Type(() => WatchedDateDto)
@@ -152,4 +170,3 @@ export class ListInfiniteWatchedDatesDto extends CursorPaginatedResponseDto<Watc
     Object.assign(this, partial);
   }
 }
-

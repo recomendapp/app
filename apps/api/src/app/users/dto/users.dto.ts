@@ -6,7 +6,7 @@ import {
   PartialType,
   PickType,
 } from '@nestjs/swagger';
-import { USER_RULES } from '../../../config/validation-rules';
+import { USER_RULES } from '@libs/rules';
 import { Expose, Transform, Type } from 'class-transformer';
 import {
   IsBoolean,

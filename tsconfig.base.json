@@ -29,7 +29,8 @@
       "@shared/notify": ["libs/shared/notify/src/index.ts"],
       "@shared/worker": ["libs/shared/worker/src/index.ts"],
       "@libs/realtime": ["libs/realtime/src/index.ts"],
-      "@libs/notify-types": ["libs/notify-types/src/index.ts"]
+      "@libs/notify-types": ["libs/notify-types/src/index.ts"],
+      "@libs/rules": ["libs/rules/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
