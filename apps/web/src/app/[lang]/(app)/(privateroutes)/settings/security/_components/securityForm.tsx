@@ -19,6 +19,7 @@ import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { authClient } from '@/lib/auth/client';
 import { useState } from 'react';
+import { USER_RULES } from '@libs/rules';
 
 export function SecurityForm() {
   const t = useTranslations('pages.settings');
@@ -36,7 +37,7 @@ export function SecurityForm() {
         }),
       newpassword: z
         .string()
-        .min(8, {
+        .min(USER_RULES.PASSWORD.MIN, {
           message: t('security.new_password.form.min_length'),
         })
         .regex(/[A-Z]/, {

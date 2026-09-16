@@ -8,7 +8,7 @@ import { NotifyClient } from '@shared/notify';
 import { WorkerClient } from '@shared/worker';
 import { profile, user } from '@libs/db/schemas';
 import { v7 as uuidv7 } from 'uuid';
-import { USER_RULES } from '../../config/validation-rules';
+import { USER_RULES } from '@libs/rules';
 import bcrypt from 'bcrypt';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { defaultSupportedLocale, SupportedLocale } from '@libs/i18n';

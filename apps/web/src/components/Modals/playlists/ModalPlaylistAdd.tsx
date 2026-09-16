@@ -36,8 +36,7 @@ import { ScrollArea, ScrollBar } from '@libs/ui/components/scroll-area';
 import toast from 'react-hot-toast';
 import { ModalPlaylist } from './ModalPlaylist';
 import Fuse from 'fuse.js';
-
-const COMMENT_MAX_LENGTH = 180;
+import { PLAYLIST_ITEM_RULES } from '@libs/rules';
 
 interface ModalPlaylistAddProps {
   mediaId: PlaylistsAddTargetsControllerListAllData['path']['media_id'];
@@ -115,8 +114,8 @@ export function ModalPlaylistAdd({
   const playlistAddFormSchema = z.object({
     comment: z
       .string()
-      .max(COMMENT_MAX_LENGTH, {
-        message: t('common.form.length.char_max', { count: COMMENT_MAX_LENGTH }),
+      .max(PLAYLIST_ITEM_RULES.COMMENT.MAX, {
+        message: t('common.form.length.char_max', { count: PLAYLIST_ITEM_RULES.COMMENT.MAX }),
       })
       .optional(),
   });

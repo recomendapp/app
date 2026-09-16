@@ -28,12 +28,7 @@ import { uiBackgroundsOptions } from '../../../api/ui/uiOptions';
 import { authClient } from '../../../lib/auth/client';
 import { makeRedirectUri } from 'expo-auth-session';
 import { useModalHeaderOptions } from '../../../hooks/useModalHeaderOptions';
-
-const USERNAME_MIN_LENGTH = 3;
-const USERNAME_MAX_LENGTH = 15;
-const FULL_NAME_MIN_LENGTH = 1;
-const FULL_NAME_MAX_LENGTH = 50;
-const PASSWORD_MIN_LENGTH = 8;
+import { USER_RULES } from '@libs/rules';
 
 enum STEPS {
   EMAIL = 1,
@@ -71,11 +66,11 @@ const SignupScreen = () => {
       }),
       username: z
         .string()
-        .min(USERNAME_MIN_LENGTH, {
-          message: t('common.form.length.char_min', { count: USERNAME_MIN_LENGTH }),
+        .min(USER_RULES.USERNAME.MIN, {
+          message: t('common.form.length.char_min', { count: USER_RULES.USERNAME.MIN }),
         })
-        .max(USERNAME_MAX_LENGTH, {
-          message: t('common.form.length.char_max', { count: USERNAME_MAX_LENGTH }),
+        .max(USER_RULES.USERNAME.MAX, {
+          message: t('common.form.length.char_max', { count: USER_RULES.USERNAME.MAX }),
         })
         .regex(/^[^\W]/, {
           message: t('common.form.username.schema.first_char'),
@@ -91,19 +86,19 @@ const SignupScreen = () => {
         }),
       full_name: z
         .string()
-        .min(FULL_NAME_MIN_LENGTH, {
-          message: t('common.form.length.char_min', { count: FULL_NAME_MIN_LENGTH }),
+        .min(USER_RULES.NAME.MIN, {
+          message: t('common.form.length.char_min', { count: USER_RULES.NAME.MIN }),
         })
-        .max(FULL_NAME_MAX_LENGTH, {
-          message: t('common.form.length.char_max', { count: FULL_NAME_MAX_LENGTH }),
+        .max(USER_RULES.NAME.MAX, {
+          message: t('common.form.length.char_max', { count: USER_RULES.NAME.MAX }),
         })
         .regex(/^[a-zA-Z0-9\s\S]*$/, {
           message: t('common.form.full_name.schema.format'),
         }),
       password: z
         .string()
-        .min(PASSWORD_MIN_LENGTH, {
-          message: t('common.form.length.char_min', { count: PASSWORD_MIN_LENGTH }),
+        .min(USER_RULES.PASSWORD.MIN, {
+          message: t('common.form.length.char_min', { count: USER_RULES.PASSWORD.MIN }),
         })
         .regex(/[A-Z]/, {
           message: t('common.form.password.schema.uppercase'),
@@ -219,7 +214,7 @@ const SignupScreen = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [authClient, formGetValues, toast, t]);
+  }, [formGetValues, toast, t]);
 
   // useEffects
   useEffect(() => {
@@ -228,7 +223,7 @@ const SignupScreen = () => {
         message: t('common.form.username.schema.unavailable'),
       });
     }
-  }, [isUsernameAvailable, t]);
+  }, [isUsernameAvailable, t, formSetError]);
 
   useEffect(() => {
     if (isVerified) {

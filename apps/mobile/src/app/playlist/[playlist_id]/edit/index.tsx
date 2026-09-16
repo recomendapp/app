@@ -36,10 +36,7 @@ import { playlistOptions, usePlaylistUpdateMutation } from '@libs/query-client';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 import { File as ExpoFile } from 'expo-file-system';
 import { useModalHeaderOptions } from '../../../../hooks/useModalHeaderOptions';
-
-const TITLE_MIN_LENGTH = 1;
-const TITLE_MAX_LENGTH = 100;
-const DESCRIPTION_MAX_LENGTH = 300;
+import { PLAYLIST_RULES } from '@libs/rules';
 
 const ModalPlaylistEdit = () => {
   const { playlist_id } = useLocalSearchParams<{ playlist_id: string }>();
@@ -67,16 +64,18 @@ const ModalPlaylistEdit = () => {
   const playlistFormSchema = z.object({
     title: z
       .string()
-      .min(TITLE_MIN_LENGTH, {
-        message: upperFirst(t('common.form.length.char_min', { count: TITLE_MIN_LENGTH })),
+      .min(PLAYLIST_RULES.TITLE.MIN, {
+        message: upperFirst(t('common.form.length.char_min', { count: PLAYLIST_RULES.TITLE.MIN })),
       })
-      .max(TITLE_MAX_LENGTH, {
-        message: upperFirst(t('common.form.length.char_max', { count: TITLE_MIN_LENGTH })),
+      .max(PLAYLIST_RULES.TITLE.MAX, {
+        message: upperFirst(t('common.form.length.char_max', { count: PLAYLIST_RULES.TITLE.MAX })),
       }),
     description: z
       .string()
-      .max(DESCRIPTION_MAX_LENGTH, {
-        message: upperFirst(t('common.form.length.char_max', { count: DESCRIPTION_MAX_LENGTH })),
+      .max(PLAYLIST_RULES.DESCRIPTION.MAX, {
+        message: upperFirst(
+          t('common.form.length.char_max', { count: PLAYLIST_RULES.DESCRIPTION.MAX }),
+        ),
       })
       .regex(/^(?!\s+$)(?!.*\n\s*\n)[\s\S]*$/, {
         message: t('pages.playlist.form.error.format'),

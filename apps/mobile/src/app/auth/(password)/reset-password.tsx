@@ -21,8 +21,7 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useModalHeaderOptions } from '../../../hooks/useModalHeaderOptions';
-
-const PASSWORD_MIN_LENGTH = 8;
+import { USER_RULES } from '@libs/rules';
 
 enum STEPS {
   PASSWORD = 1,
@@ -49,8 +48,8 @@ const AuthResetPasswordScreen = () => {
         .object({
           newPassword: z
             .string()
-            .min(PASSWORD_MIN_LENGTH, {
-              message: t('common.form.length.char_min', { count: PASSWORD_MIN_LENGTH }),
+            .min(USER_RULES.PASSWORD.MIN, {
+              message: t('common.form.length.char_min', { count: USER_RULES.PASSWORD.MIN }),
             })
             .regex(/[A-Z]/, {
               message: t('common.form.password.schema.uppercase'),

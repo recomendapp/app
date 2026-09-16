@@ -498,6 +498,13 @@
       "when": 1788294829135,
       "tag": "0070_sudden_silver_sable",
       "breakpoints": true
+    },
+    {
+      "idx": 71,
+      "version": "7",
+      "when": 1789544775471,
+      "tag": "0071_mixed_runaways",
+      "breakpoints": true
     }
   ]
 }

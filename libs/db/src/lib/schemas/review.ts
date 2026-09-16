@@ -12,6 +12,7 @@ import {
 import { user } from './auth';
 import { relations, sql } from 'drizzle-orm';
 import { logMovie, logTvSeries } from './log';
+import { REVIEW_RULES } from '@libs/rules';
 
 /* ---------------------------------- MOVIE --------------------------------- */
 export const reviewMovie = pgTable(
@@ -42,7 +43,11 @@ export const reviewMovie = pgTable(
     index('idx_review_movie_comments_count').on(table.commentsCount),
     check(
       'check_review_movie_title',
-      sql`(title IS NULL) OR ((length(title) >= 1) AND (length(title) <= 100))`,
+      sql`(title IS NULL) OR ((length(title) >= ${sql.raw(String(REVIEW_RULES.TITLE.MIN))}) AND (length(title) <= ${sql.raw(String(REVIEW_RULES.TITLE.MAX))}))`,
+    ),
+    check(
+      'check_review_movie_body',
+      sql`(length(body) >= ${sql.raw(String(REVIEW_RULES.BODY.MIN))}) AND (length(body) <= ${sql.raw(String(REVIEW_RULES.BODY.MAX))})`,
     ),
   ],
 );
@@ -111,7 +116,11 @@ export const reviewTvSeries = pgTable(
     index('idx_review_tv_series_comments_count').on(table.commentsCount),
     check(
       'check_review_tv_series_title',
-      sql`(title IS NULL) OR ((length(title) >= 1) AND (length(title) <= 100))`,
+      sql`(title IS NULL) OR ((length(title) >= ${sql.raw(String(REVIEW_RULES.TITLE.MIN))}) AND (length(title) <= ${sql.raw(String(REVIEW_RULES.TITLE.MAX))}))`,
+    ),
+    check(
+      'check_review_tv_series_body',
+      sql`(length(body) >= ${sql.raw(String(REVIEW_RULES.BODY.MIN))}) AND (length(body) <= ${sql.raw(String(REVIEW_RULES.BODY.MAX))})`,
     ),
   ],
 );

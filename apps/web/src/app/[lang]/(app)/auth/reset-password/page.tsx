@@ -25,8 +25,7 @@ import {
   FormMessage,
 } from '@libs/ui/components/form';
 import { InputPassword } from '@libs/ui/components/input-password';
-
-const PASSWORD_MIN_LENGTH = 8;
+import { USER_RULES } from '@libs/rules';
 
 export default function ResetPassword() {
   const t = useTranslations('pages.auth.reset_password');
@@ -42,8 +41,8 @@ export default function ResetPassword() {
     .object({
       password: z
         .string()
-        .min(PASSWORD_MIN_LENGTH, {
-          message: common('form.length.char_min', { count: PASSWORD_MIN_LENGTH }),
+        .min(USER_RULES.PASSWORD.MIN, {
+          message: common('form.length.char_min', { count: USER_RULES.PASSWORD.MIN }),
         })
         .regex(/[A-Z]/, {
           message: common('form.password.schema.uppercase'),

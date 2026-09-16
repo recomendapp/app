@@ -22,7 +22,7 @@ import {
 } from '@libs/db/selectors';
 import { User } from '../../auth/auth.service';
 import { SupportedLocale } from '@libs/i18n';
-import { PINNED_ITEM_RULES } from '../../../config/validation-rules';
+import { PINNED_ITEM_RULES } from '@libs/rules';
 import { canViewPlaylist } from '../../playlists/playlists.permission';
 import { PlaylistQueryBuilder } from '../../playlists/playlists.query-builder';
 import { PlaylistRole } from '../../playlists/types/playlist-role.type';

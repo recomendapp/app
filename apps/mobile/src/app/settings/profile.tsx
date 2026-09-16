@@ -31,10 +31,7 @@ import { useMeUpdateMutation } from '@libs/query-client';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 import { File as ExpoFile } from 'expo-file-system';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-const FULL_NAME_MIN_LENGTH = 1;
-const FULL_NAME_MAX_LENGTH = 30;
-const BIO_MAX_LENGTH = 150;
+import { USER_RULES } from '@libs/rules';
 
 const SettingsProfileScreen = () => {
   const { user } = useAuth();
@@ -48,17 +45,17 @@ const SettingsProfileScreen = () => {
   const profileFormSchema = z.object({
     full_name: z
       .string()
-      .min(FULL_NAME_MIN_LENGTH, {
-        message: t('common.form.length.char_min', { count: FULL_NAME_MIN_LENGTH }),
+      .min(USER_RULES.NAME.MIN, {
+        message: t('common.form.length.char_min', { count: USER_RULES.NAME.MIN }),
       })
-      .max(FULL_NAME_MAX_LENGTH, {
-        message: t('common.form.length.char_max', { count: FULL_NAME_MAX_LENGTH }),
+      .max(USER_RULES.NAME.MAX, {
+        message: t('common.form.length.char_max', { count: USER_RULES.NAME.MAX }),
       })
       .regex(/^(?!\s+$)[\s\S]*$/),
     bio: z
       .string()
-      .max(BIO_MAX_LENGTH, {
-        message: t('common.form.length.char_max', { count: BIO_MAX_LENGTH }),
+      .max(USER_RULES.BIO.MAX, {
+        message: t('common.form.length.char_max', { count: USER_RULES.BIO.MAX }),
       })
       .regex(/^(?!\s+$)(?!.*\n\s*\n)[\s\S]*$/, {
         message: t('pages.settings.profile.bio.form.format'),
