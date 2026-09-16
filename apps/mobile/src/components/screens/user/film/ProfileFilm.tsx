@@ -89,11 +89,13 @@ export const ProfileFilm = ({ username, movieId }: { username: string; movieId: 
                   <Button variant="ghost" size="icon" icon={Icons.Comment} onPress={openComments}>
                     {log.review.commentsCount > 0 ? `${log.review.commentsCount}` : undefined}
                   </Button>
-                  <ButtonUserReviewMovieLike
-                    variant="ghost"
-                    review={log.review}
-                    showCount={false}
-                  />
+                  {user && (
+                    <ButtonUserReviewMovieLike
+                      variant="ghost"
+                      review={log.review}
+                      showCount={false}
+                    />
+                  )}
                 </>
               )}
               <Button
@@ -123,16 +125,20 @@ export const ProfileFilm = ({ username, movieId }: { username: string; movieId: 
                       type: 'sfSymbol',
                     },
                   },
-                  {
-                    type: 'button',
-                    label: upperFirst(t('common.messages.like')),
-                    onPress: toggle,
-                    icon: {
-                      name: isLiked ? 'heart.fill' : 'heart',
-                      type: 'sfSymbol',
-                    },
-                    tintColor: isLiked ? colors.accentPink : undefined,
-                  },
+                  ...(user
+                    ? ([
+                        {
+                          type: 'button',
+                          label: upperFirst(t('common.messages.like')),
+                          onPress: toggle,
+                          icon: {
+                            name: isLiked ? 'heart.fill' : 'heart',
+                            type: 'sfSymbol',
+                          },
+                          tintColor: isLiked ? colors.accentPink : undefined,
+                        },
+                      ] satisfies NativeStackHeaderItem[])
+                    : []),
                 ] satisfies NativeStackHeaderItem[])
               : []),
             {

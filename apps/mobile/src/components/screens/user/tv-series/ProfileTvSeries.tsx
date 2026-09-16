@@ -95,11 +95,13 @@ export const ProfileTvSeries = ({
                   <Button variant="ghost" size="icon" icon={Icons.Comment} onPress={openComments}>
                     {log.review.commentsCount > 0 ? `${log.review.commentsCount}` : undefined}
                   </Button>
-                  <ButtonUserReviewTvSeriesLike
-                    variant="ghost"
-                    review={log.review}
-                    showCount={false}
-                  />
+                  {user && (
+                    <ButtonUserReviewTvSeriesLike
+                      variant="ghost"
+                      review={log.review}
+                      showCount={false}
+                    />
+                  )}
                 </>
               )}
               <Button
@@ -129,16 +131,20 @@ export const ProfileTvSeries = ({
                       type: 'sfSymbol',
                     },
                   },
-                  {
-                    type: 'button',
-                    label: upperFirst(t('common.messages.like')),
-                    onPress: toggle,
-                    icon: {
-                      name: isLiked ? 'heart.fill' : 'heart',
-                      type: 'sfSymbol',
-                    },
-                    tintColor: isLiked ? colors.accentPink : undefined,
-                  },
+                  ...(user
+                    ? ([
+                        {
+                          type: 'button',
+                          label: upperFirst(t('common.messages.like')),
+                          onPress: toggle,
+                          icon: {
+                            name: isLiked ? 'heart.fill' : 'heart',
+                            type: 'sfSymbol',
+                          },
+                          tintColor: isLiked ? colors.accentPink : undefined,
+                        },
+                      ] satisfies NativeStackHeaderItem[])
+                    : []),
                 ] satisfies NativeStackHeaderItem[])
               : []),
             {

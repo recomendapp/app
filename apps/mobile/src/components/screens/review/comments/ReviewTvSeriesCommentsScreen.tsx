@@ -190,75 +190,69 @@ export const ReviewTvSeriesCommentsScreen = ({
         />
       </KeyboardGestureArea>
 
-      <KeyboardStickyView
-        offset={{ closed: -(GAP + insets.bottom), opened: -GAP }}
-        style={[tw`absolute left-0 right-0 overflow-hidden`, { bottom: 0 }]}
-      >
-        <RNView ref={composerRef} onLayout={onComposerLayout}>
-          <GlassView
-            style={[
-              {
-                borderRadius: BORDER_RADIUS_LG,
-                paddingVertical: PADDING_VERTICAL,
-                paddingHorizontal: PADDING_HORIZONTAL,
-                marginHorizontal: PADDING_HORIZONTAL,
-                gap: GAP,
-                backgroundColor: !isLiquidGlassAvailable ? colors.muted : 'transparent',
-                borderWidth: !isLiquidGlassAvailable ? 1 : 0,
-                borderColor: !isLiquidGlassAvailable ? colors.border : 'transparent',
-              },
-            ]}
-          >
-            {!user ? (
-              <Button variant="outline" onPress={() => router.push('/auth/(main)')}>
-                {upperFirst(t('common.messages.please_login'))}
-              </Button>
-            ) : (
-              <>
-                {replyingTo && (
-                  <View
-                    style={[
-                      tw`flex-row items-center justify-between gap-2 rounded-lg px-2 py-1`,
-                      { backgroundColor: colors.muted },
-                    ]}
-                  >
-                    <Text numberOfLines={1} textColor="muted" style={{ fontSize: 12, flex: 1 }}>
-                      {upperFirst(t('common.messages.reply'))} @{replyingTo.author.username}
-                    </Text>
-                    <Pressable onPress={() => setReplyingTo(null)} hitSlop={8}>
-                      <Icons.X size={16} color={colors.mutedForeground} />
-                    </Pressable>
-                  </View>
-                )}
-                <View style={tw`flex-row items-center`}>
-                  <TextInput
-                    placeholder={upperFirst(t('common.messages.write_your_comment_here'))}
-                    placeholderTextColor={colors.mutedForeground}
-                    autoCapitalize="sentences"
-                    value={body}
-                    onChangeText={setBody}
-                    editable={!isSending}
-                    multiline
-                    style={[
-                      tw`shrink flex-grow`,
-                      { minHeight: 40, maxHeight: 120, color: colors.foreground, padding: 10 },
-                    ]}
-                  />
-                  <Button
-                    icon={Icons.Reco}
-                    variant="ghost"
-                    style={tw`rounded-full`}
-                    containerStyle={tw`shrink-0`}
-                    size="icon"
-                    disabled={!body.trim() || isSending || !reviewId}
-                    onPress={handleSend}
-                  />
+      {user && (
+        <KeyboardStickyView
+          offset={{ closed: -(GAP + insets.bottom), opened: -GAP }}
+          style={[tw`absolute left-0 right-0 overflow-hidden`, { bottom: 0 }]}
+        >
+          <RNView ref={composerRef} onLayout={onComposerLayout}>
+            <GlassView
+              style={[
+                {
+                  borderRadius: BORDER_RADIUS_LG,
+                  paddingVertical: PADDING_VERTICAL,
+                  paddingHorizontal: PADDING_HORIZONTAL,
+                  marginHorizontal: PADDING_HORIZONTAL,
+                  gap: GAP,
+                  backgroundColor: !isLiquidGlassAvailable ? colors.muted : 'transparent',
+                  borderWidth: !isLiquidGlassAvailable ? 1 : 0,
+                  borderColor: !isLiquidGlassAvailable ? colors.border : 'transparent',
+                },
+              ]}
+            >
+              {replyingTo && (
+                <View
+                  style={[
+                    tw`flex-row items-center justify-between gap-2 rounded-lg px-2 py-1`,
+                    { backgroundColor: colors.muted },
+                  ]}
+                >
+                  <Text numberOfLines={1} textColor="muted" style={{ fontSize: 12, flex: 1 }}>
+                    {upperFirst(t('common.messages.reply'))} @{replyingTo.author.username}
+                  </Text>
+                  <Pressable onPress={() => setReplyingTo(null)} hitSlop={8}>
+                    <Icons.X size={16} color={colors.mutedForeground} />
+                  </Pressable>
                 </View>
-              </>
-            )}
-          </GlassView>
-        </RNView>
-      </KeyboardStickyView>
+              )}
+              <View style={tw`flex-row items-center`}>
+                <TextInput
+                  placeholder={upperFirst(t('common.messages.write_your_comment_here'))}
+                  placeholderTextColor={colors.mutedForeground}
+                  autoCapitalize="sentences"
+                  value={body}
+                  onChangeText={setBody}
+                  editable={!isSending}
+                  multiline
+                  style={[
+                    tw`shrink flex-grow`,
+                    { minHeight: 40, maxHeight: 120, color: colors.foreground, padding: 10 },
+                  ]}
+                />
+                <Button
+                  icon={Icons.Reco}
+                  variant="ghost"
+                  style={tw`rounded-full`}
+                  containerStyle={tw`shrink-0`}
+                  size="icon"
+                  disabled={!body.trim() || isSending || !reviewId}
+                  onPress={handleSend}
+                />
+              </View>
+            </GlassView>
+          </RNView>
+        </KeyboardStickyView>
+      )}
     </>
   );
 };
