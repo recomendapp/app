@@ -140,7 +140,7 @@ const WelcomeCarouselScreen = () => {
         <WelcomeBackground />
         <View
           style={{
-            paddingTop: navigationHeaderHeight,
+            paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
             paddingHorizontal: PADDING_HORIZONTAL,
             paddingBottom: PADDING_VERTICAL,
           }}

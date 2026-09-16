@@ -119,7 +119,7 @@ const SettingsDataImportPlaylistsScreen = () => {
             <View style={[{ backgroundColor: colors.muted, height: 1 }, tw`w-full`]} />
           )}
           contentContainerStyle={{
-            paddingTop: navigationHeaderHeight,
+            paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
             paddingBottom: insets.bottom + PADDING_VERTICAL,
           }}
         />

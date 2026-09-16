@@ -258,7 +258,7 @@ const ProfileScreen = () => {
         refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refresh} />}
         contentContainerStyle={{
           gap: GAP,
-          paddingTop: navigationHeaderHeight,
+          paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
           paddingBottom: insets.bottom + PADDING_VERTICAL,
           flexGrow: 1,
         }}

@@ -248,7 +248,7 @@ const FilmReviews = () => {
         )}
         onEndReachedThreshold={0.5}
         contentContainerStyle={{
-          paddingTop: navigationHeaderHeight,
+          paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
           paddingHorizontal: PADDING_HORIZONTAL,
           paddingBottom: insets.bottom + PADDING_VERTICAL,
           gap: GAP,

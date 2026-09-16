@@ -117,7 +117,7 @@ const TvSeriesSeasonHeader: React.FC<MediaHeaderProps> = ({
       style={{
         paddingHorizontal: PADDING_HORIZONTAL,
         paddingBottom: PADDING_VERTICAL,
-        paddingTop: navigationHeaderHeight,
+        paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
       }}
     >
       <Animated.View style={[tw`absolute inset-0`, bgAnim]}>

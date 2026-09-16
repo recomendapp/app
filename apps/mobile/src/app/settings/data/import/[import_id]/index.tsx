@@ -195,7 +195,7 @@ const ImportList = ({ job }: { job: ImportJob }) => {
           ) : null
         }
         contentContainerStyle={{
-          paddingTop: navigationHeaderHeight,
+          paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
           paddingBottom: !hasFooter ? insets.bottom + PADDING_VERTICAL : 0,
         }}
       />

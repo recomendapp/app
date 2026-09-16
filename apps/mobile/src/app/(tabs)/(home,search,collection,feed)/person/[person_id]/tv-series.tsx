@@ -195,7 +195,7 @@ const PersonTvSeriesScreen = () => {
         onEndReachedThreshold={0.5}
         contentContainerStyle={{
           gap: GAP,
-          paddingTop: navigationHeaderHeight,
+          paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
           paddingBottom: insets.bottom + PADDING_VERTICAL,
           paddingHorizontal: PADDING_HORIZONTAL,
         }}

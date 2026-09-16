@@ -181,7 +181,7 @@ const UserPlaylistsScreen = () => {
         onEndReachedThreshold={0.5}
         contentContainerStyle={[
           {
-            paddingTop: navigationHeaderHeight,
+            paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
             paddingBottom: insets.bottom + PADDING_VERTICAL,
             flexGrow: 1,
           },

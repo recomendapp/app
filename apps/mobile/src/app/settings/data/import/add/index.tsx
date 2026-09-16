@@ -87,7 +87,7 @@ const SettingsDataImportAddIndexScreen = () => {
           keyExtractor={(item) => item.provider.slug}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{
-            paddingTop: navigationHeaderHeight,
+            paddingTop: navigationHeaderHeight + insets.top + PADDING_VERTICAL,
             paddingBottom: insets.bottom + PADDING_VERTICAL,
             paddingHorizontal: PADDING_HORIZONTAL,
             gap: GAP,
