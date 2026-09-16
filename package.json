@@ -146,7 +146,7 @@
     "envalid": "^8.1.1",
     "eslint": "^9.27.0",
     "eslint-config-next": "16.0.3",
-    "expo": "~57.0.13",
+    "expo": "~57.0.23",
     "expo-apple-authentication": "^57.0.1",
     "expo-application": "^57.0.2",
     "expo-asset": "~57.0.11",

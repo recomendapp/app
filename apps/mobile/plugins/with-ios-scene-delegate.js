@@ -1,139 +1,127 @@
 const { withAppDelegate, withInfoPlist } = require('expo/config-plugins');
+const semver = require('semver');
 
-// The iOS 27 SDK refuses to launch an app that hasn't adopted the UIScene life
-// cycle ("UIScene life cycle is required for apps built with this SDK", a
-// SIGTRAP in _UIApplicationEvaluateRuntimeIssueForNoSceneLifecycleAdoption).
-// Neither React Native (through 0.87) nor Expo (through SDK 57) ships scene
-// support, so the app has to adopt it itself.
+// Vendored from expo/config-plugins PR #326 (merged 2026-09-15), published as
+// @config-plugins/expo-uiscene-lifecycle@0.1.0 but not yet on npm as of this
+// writing. Once `npx expo install @config-plugins/expo-uiscene-lifecycle`
+// resolves, delete this file, run `pnpm remove` on nothing (it was never a
+// package dependency), and swap the app.config.ts plugin entry for the
+// published package name.
 // https://github.com/expo/expo/issues/46664
+// https://github.com/expo/expo/pull/50191 (native ExpoAppSceneDelegate /
+// ExpoReactNativeFactoryProvider backport, required: expo >=57.0.23 <58.0.0)
+// https://github.com/expo/config-plugins/pull/326 (this plugin's source)
 //
-// Declaring the manifest alone is NOT enough: UIKit then creates the scene and
-// the process survives, but the window `AppDelegate` builds with
-// `UIWindow(frame: UIScreen.main.bounds)` is never attached to the scene and the
-// app renders black. The window has to be created FROM the UIWindowScene, which
-// means moving React Native's startup into the scene delegate.
-//
-// SceneDelegate is appended to AppDelegate.swift rather than added as its own
-// file so that no Xcode project surgery is needed — it lands in the same module,
-// which is what `$(PRODUCT_MODULE_NAME).SceneDelegate` below resolves against.
-const MARKER = '// recomend-scene-delegate';
+// This is Expo's own official (if still experimental) fix for the iOS 27
+// UIScene lifecycle crash, replacing our earlier hand-rolled SceneDelegate.
+// It's much thinner than that version: the scene delegate class itself
+// (EXExpoAppSceneDelegate, Objective-C name for ExpoAppSceneDelegate) now
+// ships natively in the `expo` package, so this plugin only has to make
+// AppDelegate conform to ExpoReactNativeFactoryProvider and stop creating the
+// window itself.
 
-const SCENE_DELEGATE = `
-${MARKER}
-class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-  var window: UIWindow?
-
-  func scene(
-    _ scene: UIScene,
-    willConnectTo session: UISceneSession,
-    options connectionOptions: UIScene.ConnectionOptions
-  ) {
-    guard let windowScene = scene as? UIWindowScene,
-          let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-          let factory = appDelegate.reactNativeFactory else {
-      return
-    }
-
-    let window = UIWindow(windowScene: windowScene)
-    self.window = window
-    // Keep AppDelegate.window pointing at the live window; code that reaches for
-    // it (React Native included) predates scenes and still expects it to be set.
-    appDelegate.window = window
-
+const PLUGIN_NAME = 'expo-uiscene-lifecycle';
+const MINIMUM_EXPO_VERSION = '57.0.23';
+const ORIGINAL_APP_DELEGATE = 'class AppDelegate: ExpoAppDelegate {';
+const SCENE_APP_DELEGATE = 'class AppDelegate: ExpoAppDelegate, ExpoReactNativeFactoryProvider {';
+const FACTORY_ASSIGNMENT = '    reactNativeFactory = factory';
+const LEGACY_STARTUP = `    window = UIWindow(frame: UIScreen.main.bounds)
     factory.startReactNative(
       withModuleName: "main",
       in: window,
-      launchOptions: appDelegate.launchOptions)
+      launchOptions: launchOptions)
+`;
+// Deviation from upstream: LEGACY_STARTUP alone only covers the inner
+// window/startReactNative lines, not the `#if os(iOS) || os(tvOS)` /
+// `#endif` guard the template wraps them in. Removing only the inner lines
+// (as upstream does) leaves `#if os(iOS) || os(tvOS)#endif` glued onto one
+// line — invalid Swift. Match and restore the whole guarded block instead.
+const LEGACY_STARTUP_BLOCK = `#if os(iOS) || os(tvOS)\n${LEGACY_STARTUP}#endif\n`;
 
-    // A deep link that cold-launches the app arrives in connectionOptions —
-    // application(_:open:options:) is never called under the scene life cycle.
-    // expo-dev-client relies on this to receive its Metro URL.
-    for context in connectionOptions.urlContexts {
-      RCTLinkingManager.application(UIApplication.shared, open: context.url, options: [:])
-    }
-    for activity in connectionOptions.userActivities {
-      RCTLinkingManager.application(
-        UIApplication.shared, continue: activity, restorationHandler: { _ in })
-    }
-  }
+const SCENE_MANIFEST = {
+  UIApplicationSupportsMultipleScenes: false,
+  UISceneConfigurations: {
+    UIWindowSceneSessionRoleApplication: [
+      {
+        UISceneConfigurationName: 'Default Configuration',
+        UISceneDelegateClassName: 'EXExpoAppSceneDelegate',
+      },
+    ],
+  },
+};
 
-  func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-    for context in URLContexts {
-      RCTLinkingManager.application(UIApplication.shared, open: context.url, options: [:])
-    }
-  }
-
-  func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-    RCTLinkingManager.application(
-      UIApplication.shared, continue: userActivity, restorationHandler: { _ in })
+function assertSdk57(sdkVersion) {
+  if (
+    !sdkVersion ||
+    semver.gt(MINIMUM_EXPO_VERSION, sdkVersion) ||
+    semver.gte(sdkVersion, '58.0.0')
+  ) {
+    throw new Error(
+      `${PLUGIN_NAME} supports Expo ${MINIMUM_EXPO_VERSION} through SDK 57 only (received ${JSON.stringify(sdkVersion ?? 'unknown')}).`,
+    );
   }
 }
-`;
 
-// The window is now built by SceneDelegate, so didFinishLaunchingWithOptions
-// only keeps the launch options around for it to use.
-//
-// These are matched separately rather than as one block: other config plugins
-// inject their own lines between them (@react-native-firebase/app drops
-// `FirebaseApp.configure()` right after the window is created), and that code
-// still has to run at didFinishLaunching time.
-const WINDOW_RE = /^[ \t]*window = UIWindow\(frame: UIScreen\.main\.bounds\)\r?\n/m;
-const START_RN_RE =
-  /^[ \t]*factory\.startReactNative\(\r?\n[\s\S]*?launchOptions: launchOptions\)\r?\n/m;
+function isOwnedManifest(manifest) {
+  return JSON.stringify(manifest) === JSON.stringify(SCENE_MANIFEST);
+}
 
-const NEW_WINDOW_LINE = `    // Window creation and startReactNative moved to SceneDelegate — under the
-    // UIScene life cycle the window must be created from the UIWindowScene.
-    self.launchOptions = launchOptions
-`;
+function updateAppDelegate(contents, enabled) {
+  const isEnabled = contents.includes(SCENE_APP_DELEGATE);
 
-const withSceneAppDelegate = (config) =>
-  withAppDelegate(config, (cfg) => {
-    let contents = cfg.modResults.contents;
-    if (contents.includes(MARKER)) {
-      return cfg;
+  if (enabled && isEnabled) {
+    return contents;
+  }
+  if (!enabled && !isEnabled) {
+    return contents;
+  }
+
+  if (enabled) {
+    const startup = `\n${LEGACY_STARTUP_BLOCK}`;
+    if (!contents.includes(ORIGINAL_APP_DELEGATE) || !contents.includes(startup)) {
+      throw new Error(`${PLUGIN_NAME} requires the standard Expo SDK 57 Swift AppDelegate.`);
     }
+    return contents.replace(ORIGINAL_APP_DELEGATE, SCENE_APP_DELEGATE).replace(startup, '\n');
+  }
 
-    for (const [re, what] of [
-      [WINDOW_RE, 'window creation'],
-      [START_RN_RE, 'startReactNative call'],
-    ]) {
-      if (!re.test(contents)) {
+  return contents
+    .replace(SCENE_APP_DELEGATE, ORIGINAL_APP_DELEGATE)
+    .replace(`${FACTORY_ASSIGNMENT}\n\n`, `${FACTORY_ASSIGNMENT}\n\n${LEGACY_STARTUP_BLOCK}\n`);
+}
+
+const withExpoUIScene = (config, options) => {
+  // Deviation from upstream: the original plugin asserts against
+  // `config.sdkVersion`, but that field is always pinned to `<major>.0.0`
+  // ("57.0.0") regardless of the installed npm patch, so a minimum version
+  // like "57.0.23" can never pass — this makes the check against the
+  // installed `expo` package version instead, which is what actually
+  // determines whether ExpoAppSceneDelegate / ExpoReactNativeFactoryProvider
+  // exist at build time.
+  assertSdk57(require('expo/package.json').version);
+  const enabled = options?.enabled !== false;
+
+  config = withAppDelegate(config, (config) => {
+    if (config.modResults.language !== 'swift') {
+      throw new Error(`${PLUGIN_NAME} requires the standard Expo SDK 57 Swift AppDelegate.`);
+    }
+    config.modResults.contents = updateAppDelegate(config.modResults.contents, enabled);
+    return config;
+  });
+
+  return withInfoPlist(config, (config) => {
+    const manifest = config.modResults.UIApplicationSceneManifest;
+    if (enabled) {
+      if (manifest !== undefined && !isOwnedManifest(manifest)) {
         throw new Error(
-          `with-ios-scene-delegate: AppDelegate.swift does not contain the expected ${what}; ` +
-            'the Expo template changed and this plugin needs updating',
+          `${PLUGIN_NAME} cannot enable because UIApplicationSceneManifest is already declared by the app.`,
         );
       }
+      config.modResults.UIApplicationSceneManifest = SCENE_MANIFEST;
+    } else if (isOwnedManifest(manifest)) {
+      delete config.modResults.UIApplicationSceneManifest;
     }
-    contents = contents.replace(WINDOW_RE, NEW_WINDOW_LINE).replace(START_RN_RE, '');
-
-    // SceneDelegate reads these back off the AppDelegate.
-    const anchor = '  var window: UIWindow?\n';
-    if (!contents.includes(anchor)) {
-      throw new Error("with-ios-scene-delegate: could not find AppDelegate's window property");
-    }
-    contents = contents.replace(
-      anchor,
-      anchor + '  var launchOptions: [UIApplication.LaunchOptionsKey: Any]?\n',
-    );
-
-    cfg.modResults.contents = contents + SCENE_DELEGATE;
-    return cfg;
+    return config;
   });
+};
 
-const withSceneManifest = (config) =>
-  withInfoPlist(config, (cfg) => {
-    cfg.modResults.UIApplicationSceneManifest = {
-      UIApplicationSupportsMultipleScenes: false,
-      UISceneConfigurations: {
-        UIWindowSceneSessionRoleApplication: [
-          {
-            UISceneConfigurationName: 'Default Configuration',
-            UISceneDelegateClassName: '$(PRODUCT_MODULE_NAME).SceneDelegate',
-          },
-        ],
-      },
-    };
-    return cfg;
-  });
-
-module.exports = (config) => withSceneManifest(withSceneAppDelegate(config));
+module.exports = withExpoUIScene;
