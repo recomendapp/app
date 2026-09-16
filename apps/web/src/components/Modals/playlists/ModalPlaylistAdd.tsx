@@ -275,7 +275,7 @@ export function ModalPlaylistAdd({
                       !!errors.comment && 'text-destructive',
                     )}
                   >
-                    {commentLength}/{COMMENT_MAX_LENGTH}
+                    {commentLength}/{PLAYLIST_ITEM_RULES.COMMENT.MAX}
                   </InputGroupText>
                   <ScrollArea className="overflow-hidden">
                     {selectedPlaylists.length > 0 ? (
