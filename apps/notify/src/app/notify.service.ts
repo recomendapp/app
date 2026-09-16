@@ -39,15 +39,32 @@ export class NotifyService {
   }
 
   async sendPushNotifications(
-    devices: { provider: typeof pushProviderEnum.enumValues[number]; token: string }[],
-    payload: { title: string; body: string; data: PushNotificationPayload }
+    devices: { provider: (typeof pushProviderEnum.enumValues)[number]; token: string }[],
+    payload: {
+      title: string;
+      body: string;
+      data: PushNotificationPayload;
+      // iOS: turns the notification into a Communication Notification —
+      // the sender's avatar replaces the app icon, which shrinks to a
+      // small badge (see targets/notification-service). Android: FCM
+      // shows the same image as the notification's large icon natively.
+      avatar?: { url: string; name: string; id: string };
+      // iOS: attached as a plain thumbnail on the trailing edge of the
+      // notification. Android: same large icon as `avatar` (native FCM),
+      // whichever of the two is set.
+      attachmentUrl?: string;
+    },
   ) {
-    const fcmTokens = devices.filter(d => d.provider === 'fcm').map(d => d.token);
-    const apnsTokens = devices.filter(d => d.provider === 'apns').map(d => d.token);
+    const fcmTokens = devices.filter((d) => d.provider === 'fcm').map((d) => d.token);
+    const apnsTokens = devices.filter((d) => d.provider === 'apns').map((d) => d.token);
+    const imageUrl = payload.avatar?.url ?? payload.attachmentUrl;
 
     const [failedFcm, failedApns] = await Promise.all([
-      this.fcmService.sendMulticast(fcmTokens, payload.title, payload.body, payload.data),
-      this.apnsService.sendToDevices(apnsTokens, payload.title, payload.body, payload.data),
+      this.fcmService.sendMulticast(fcmTokens, payload.title, payload.body, payload.data, imageUrl),
+      this.apnsService.sendToDevices(apnsTokens, payload.title, payload.body, payload.data, {
+        avatar: payload.avatar,
+        attachmentUrl: payload.attachmentUrl,
+      }),
     ]);
 
     const allFailedTokens = [...failedFcm, ...failedApns];

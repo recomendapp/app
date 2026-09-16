@@ -74,6 +74,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         'The camera is used to upload profile pictures, playlist covers, and story background images.',
       NSPhotoLibraryUsageDescription:
         'Photos are used to select profile images, playlist covers, and shared story backgrounds.',
+      // Required host-app side of Communication Notifications, alongside
+      // the entitlement below and the notification-service target's own
+      // Info.plist/entitlements (targets/notification-service).
+      NSUserActivityTypes: ['INSendMessageIntent'],
+    },
+    entitlements: {
+      'com.apple.developer.usernotifications.communication': true,
     },
     usesAppleSignIn: true,
   },
@@ -216,6 +223,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         filePermission: 'Select files to upload',
       },
     ],
+    '@bacons/apple-targets',
   ],
   experiments: {
     typedRoutes: true,
