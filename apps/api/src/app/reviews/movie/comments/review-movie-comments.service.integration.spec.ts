@@ -412,6 +412,54 @@ describe('ReviewMovieCommentsService', () => {
     expect(updatedParent.repliesCount).toBe(0);
   });
 
+  it('drops a soft-deleted comment from the list once its last reply is deleted', async () => {
+    const { user: author } = await createTestUser(testDb.db);
+    const { review } = await createTestReviewMovie(testDb.db, { userId: author.id });
+    const parent = await createTestReviewMovieComment(testDb.db, {
+      reviewId: review.id,
+      userId: author.id,
+    });
+    const reply = await createTestReviewMovieComment(testDb.db, {
+      reviewId: review.id,
+      userId: author.id,
+      parentId: parent.id,
+    });
+
+    const service = new ReviewMovieCommentsService(testDb.db, createFakeNotifyClient());
+
+    // Soft-deletes the parent while it still has a reply to hang onto.
+    const deletedParent = await service.delete({
+      user: asUser(author),
+      reviewId: review.id,
+      commentId: parent.id,
+    });
+    expect(deletedParent.body).toBeNull();
+
+    const listWithReply = await service.listPaginated({
+      reviewId: review.id,
+      query: listQuery(),
+      currentUser: asUser(author),
+    });
+    expect(listWithReply.data.map((c) => c.id)).toEqual([parent.id]);
+
+    // Deletes the only reply - the parent has nothing left to hang onto and
+    // should no longer be listed, mirroring getTopLevelWhereClause.
+    await service.delete({ user: asUser(author), reviewId: review.id, commentId: reply.id });
+
+    const listAfter = await service.listPaginated({
+      reviewId: review.id,
+      query: listQuery(),
+      currentUser: asUser(author),
+    });
+    expect(listAfter.data).toHaveLength(0);
+
+    const stillInDb = await testDb.db.query.reviewMovieComment.findFirst({
+      where: eq(reviewMovieComment.id, parent.id),
+    });
+    expect(stillInDb).toBeDefined();
+    expect(stillInDb?.repliesCount).toBe(0);
+  });
+
   it('lists top-level comments only, in descending creation order', async () => {
     const { user: author } = await createTestUser(testDb.db);
     const { review } = await createTestReviewMovie(testDb.db, { userId: author.id });
