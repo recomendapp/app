@@ -15,7 +15,10 @@ import { plainToInstance } from 'class-transformer';
 import { isUUID } from 'class-validator';
 import { USER_RULES } from '@libs/rules';
 import { SortOrder } from '../../common/dto/sort.dto';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../utils/cursor';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../utils/cursor';
+import { z } from 'zod';
+
+const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.string().min(1));
 
 @Injectable()
 export class UsersService {
@@ -157,7 +160,7 @@ export class UsersService {
   async listInfinite(query: ListInfiniteUsersQueryDto): Promise<ListInfiniteUsersDto> {
     const { per_page, sort_order, sort_by, cursor, include_total_count } = query;
 
-    const cursorData = cursor ? decodeCursor<BaseCursor<string | number, string>>(cursor) : null;
+    const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
 
     const { orderBy } = this.getListBaseQuery(sort_by, sort_order);
 

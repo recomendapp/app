@@ -3,17 +3,18 @@ import { Client as TypesenseClient } from 'typesense';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { User } from '../../auth/auth.service';
 import { TYPESENSE_CLIENT } from '../../../common/modules/typesense/typesense.module';
-import { 
-  BaseSearchMoviesQueryDto, 
-  ListInfiniteSearchMoviesQueryDto, 
-  ListPaginatedSearchMoviesQueryDto 
+import {
+  BaseSearchMoviesQueryDto,
+  ListInfiniteSearchMoviesQueryDto,
+  ListPaginatedSearchMoviesQueryDto,
 } from './search-movies.dto';
-import { 
-  ListInfiniteMoviesDto, 
-  ListPaginatedMoviesDto, 
-  MovieCompactDto 
+import {
+  ListInfiniteMoviesDto,
+  ListPaginatedMoviesDto,
+  MovieCompactDto,
 } from '../../movies/dto/movies.dto';
 import { decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { z } from 'zod';
 import { inArray, sql } from 'drizzle-orm';
 import { tmdbMovieView } from '@libs/db/schemas';
 import { SearchParams } from 'typesense/lib/Typesense/Documents';
@@ -22,6 +23,8 @@ import { MOVIE_COMPACT_SELECT } from '@libs/db/selectors';
 import { DbTransaction } from '@libs/db';
 import { plainToInstance } from 'class-transformer';
 
+const PageCursorSchema = z.object({ page: z.number().int().min(1) });
+
 @Injectable()
 export class SearchMoviesService {
   constructor(
@@ -29,15 +32,12 @@ export class SearchMoviesService {
     @Inject(TYPESENSE_CLIENT) private readonly typesenseClient: TypesenseClient,
   ) {}
 
-  private buildTypesenseParams(page: number, per_page: number, dto: BaseSearchMoviesQueryDto): SearchParams<{ id: string }> {
-    const {
-      q,
-      genre_ids,
-      runtime_min,
-      runtime_max,
-      release_date_min,
-      release_date_max,
-    } = dto;
+  private buildTypesenseParams(
+    page: number,
+    per_page: number,
+    dto: BaseSearchMoviesQueryDto,
+  ): SearchParams<{ id: string }> {
+    const { q, genre_ids, runtime_min, runtime_max, release_date_min, release_date_max } = dto;
 
     const filters: string[] = [];
 
@@ -89,10 +89,7 @@ export class SearchMoviesService {
     return searchParameters;
   }
 
-  public async hydrateMovies(
-    tx: DbTransaction, 
-    ids: string[]
-  ): Promise<MovieCompactDto[]> {
+  public async hydrateMovies(tx: DbTransaction, ids: string[]): Promise<MovieCompactDto[]> {
     if (ids.length === 0) return [];
 
     const numericIds = ids.map(Number);
@@ -103,10 +100,10 @@ export class SearchMoviesService {
       .where(inArray(tmdbMovieView.id, numericIds));
 
     const movieMap = new Map(dbMovies.map((m) => [String(m.id), m]));
-    
+
     return ids
-        .map((id) => movieMap.get(id))
-        .filter((movie): movie is MovieCompactDto => Boolean(movie));
+      .map((id) => movieMap.get(id))
+      .filter((movie): movie is MovieCompactDto => Boolean(movie));
   }
 
   async listPaginated({
@@ -125,9 +122,9 @@ export class SearchMoviesService {
       .collections<{ id: string }>('movies')
       .documents()
       .search(params);
-      
+
     const movieIds = typesenseResult.hits?.map((hit) => hit.document.id) || [];
-    
+
     return await this.db.transaction(async (tx) => {
       await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
       if (currentUser) {
@@ -136,15 +133,19 @@ export class SearchMoviesService {
 
       const hydratedMovies = await this.hydrateMovies(tx, movieIds);
 
-      return plainToInstance(ListPaginatedMoviesDto, {
-        data: hydratedMovies,
-        meta: {
-          total_results: typesenseResult.found,
-          total_pages: Math.ceil(typesenseResult.found / per_page),
-          current_page: page,
-          per_page: per_page,
+      return plainToInstance(
+        ListPaginatedMoviesDto,
+        {
+          data: hydratedMovies,
+          meta: {
+            total_results: typesenseResult.found,
+            total_pages: Math.ceil(typesenseResult.found / per_page),
+            current_page: page,
+            per_page: per_page,
+          },
         },
-      }, { excludeExtraneousValues: true });
+        { excludeExtraneousValues: true },
+      );
     });
   }
 
@@ -158,8 +159,8 @@ export class SearchMoviesService {
     dto: ListInfiniteSearchMoviesQueryDto;
   }): Promise<ListInfiniteMoviesDto> {
     const { cursor, per_page, include_total_count } = dto;
-    
-    const cursorData = cursor ? decodeCursor<{ page: number }>(cursor) : { page: 1 };
+
+    const cursorData = cursor ? decodeCursor(cursor, PageCursorSchema) : { page: 1 };
     const page = cursorData.page;
 
     const params = this.buildTypesenseParams(page, per_page, dto);
@@ -169,7 +170,7 @@ export class SearchMoviesService {
       .search(params);
 
     const movieIds = typesenseResult.hits?.map((hit) => hit.document.id) || [];
-    
+
     return await this.db.transaction(async (tx) => {
       await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
       if (currentUser) {
@@ -179,18 +180,20 @@ export class SearchMoviesService {
       const hydratedMovies = await this.hydrateMovies(tx, movieIds);
 
       const hasNextPage = page * per_page < typesenseResult.found;
-      const nextCursor = hasNextPage 
-          ? encodeCursor<{ page: number }>({ page: page + 1 }) 
-          : null;
+      const nextCursor = hasNextPage ? encodeCursor<{ page: number }>({ page: page + 1 }) : null;
 
-      return plainToInstance(ListInfiniteMoviesDto, {
-        data: hydratedMovies,
-        meta: {
-          next_cursor: nextCursor,
-          per_page,
-          total_results: include_total_count ? typesenseResult.found : undefined,
+      return plainToInstance(
+        ListInfiniteMoviesDto,
+        {
+          data: hydratedMovies,
+          meta: {
+            next_cursor: nextCursor,
+            per_page,
+            total_results: include_total_count ? typesenseResult.found : undefined,
+          },
         },
-      }, { excludeExtraneousValues: true });
+        { excludeExtraneousValues: true },
+      );
     });
   }
 }

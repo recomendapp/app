@@ -4,18 +4,25 @@ import { DbTransaction } from '@libs/db';
 import { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { and, asc, desc, eq, gt, isNotNull, lt, or, SQL, sql } from 'drizzle-orm';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { z } from 'zod';
 import { tmdbTvSeriesCredit, tmdbTvSeriesView } from '@libs/db/schemas';
 import { TvSeriesSortBy } from '../../tv-series/dto/tv-series.dto';
-import { ListInfinitePersonTvSeriesDto, ListInfinitePersonTvSeriesQueryDto, ListPaginatedPersonTvSeriesDto, ListPaginatedPersonTvSeriesQueryDto, PersonTvSeriesFacetsDto } from './dto/person-tv-series.dto';
+import {
+  ListInfinitePersonTvSeriesDto,
+  ListInfinitePersonTvSeriesQueryDto,
+  ListPaginatedPersonTvSeriesDto,
+  ListPaginatedPersonTvSeriesQueryDto,
+  PersonTvSeriesFacetsDto,
+} from './dto/person-tv-series.dto';
 import { plainToInstance } from 'class-transformer';
 import { TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
 
+const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.number());
+
 @Injectable()
 export class PersonTvSeriesService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
   /* ---------------------------------- List ---------------------------------- */
   private getFilteredCreditsSubquery(
@@ -25,14 +32,15 @@ export class PersonTvSeriesService {
     job?: string,
   ) {
     const creditConditions: SQL[] = [eq(tmdbTvSeriesCredit.personId, personId)];
-    
+
     if (department) creditConditions.push(eq(tmdbTvSeriesCredit.department, department));
     if (job) creditConditions.push(eq(tmdbTvSeriesCredit.job, job));
 
-    return tx.selectDistinct({ tvSeriesId: tmdbTvSeriesCredit.tvSeriesId })
+    return tx
+      .selectDistinct({ tvSeriesId: tmdbTvSeriesCredit.tvSeriesId })
       .from(tmdbTvSeriesCredit)
       .where(and(...creditConditions))
-      .as('filtered_credits'); 
+      .as('filtered_credits');
   }
   private getOrderBy(sortBy: TvSeriesSortBy, sortOrder: SortOrder) {
     const direction = sortOrder === SortOrder.ASC ? asc : desc;
@@ -64,7 +72,8 @@ export class PersonTvSeriesService {
       const orderBy = this.getOrderBy(sort_by, sort_order);
       const filteredCreditsSq = this.getFilteredCreditsSubquery(tx, personId, department, job);
 
-      const paginatedSubquery = tx.select({ id: tmdbTvSeriesView.id })
+      const paginatedSubquery = tx
+        .select({ id: tmdbTvSeriesView.id })
         .from(filteredCreditsSq)
         .innerJoin(tmdbTvSeriesView, eq(tmdbTvSeriesView.id, filteredCreditsSq.tvSeriesId))
         .where(isNotNull(tmdbTvSeriesView.lastAirDate)) // On s'assure d'avoir une date pour le tri
@@ -73,23 +82,25 @@ export class PersonTvSeriesService {
         .offset(offset)
         .as('paginated_tv_series');
 
-      const [results, totalCountResult] = await Promise.all([        
-        tx.select({
+      const [results, totalCountResult] = await Promise.all([
+        tx
+          .select({
             tvSeries: TV_SERIES_COMPACT_SELECT,
             credits: sql<Pick<typeof tmdbTvSeriesCredit.$inferSelect, 'department' | 'job'>[]>`(
               SELECT json_agg(json_build_object('department', mc.department, 'job', mc.job))
               FROM ${tmdbTvSeriesCredit} mc
               WHERE mc.tv_series_id = ${tmdbTvSeriesView.id} AND mc.person_id = ${personId}
-            )`.as('credits')
+            )`.as('credits'),
           })
           .from(paginatedSubquery)
           .innerJoin(tmdbTvSeriesView, eq(tmdbTvSeriesView.id, paginatedSubquery.id))
           .orderBy(...orderBy),
-          
-        tx.select({ count: sql<number>`count(*)` })
+
+        tx
+          .select({ count: sql<number>`count(*)` })
           .from(filteredCreditsSq)
           .innerJoin(tmdbTvSeriesView, eq(tmdbTvSeriesView.id, filteredCreditsSq.tvSeriesId))
-          .where(isNotNull(tmdbTvSeriesView.lastAirDate))
+          .where(isNotNull(tmdbTvSeriesView.lastAirDate)),
       ]);
 
       const totalCount = Number(totalCountResult[0]?.count || 0);
@@ -104,7 +115,7 @@ export class PersonTvSeriesService {
           total_pages: Math.ceil(totalCount / per_page),
           current_page: page,
           per_page,
-        }
+        },
       });
     });
   }
@@ -122,7 +133,7 @@ export class PersonTvSeriesService {
 
       const { per_page, sort_order, sort_by, cursor, department, job } = query;
 
-      const cursorData = cursor ? decodeCursor<BaseCursor<string | number, number>>(cursor) : null;
+      const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
       const orderBy = this.getOrderBy(sort_by, sort_order);
       const filteredCreditsSq = this.getFilteredCreditsSubquery(tx, personId, department, job);
 
@@ -137,8 +148,8 @@ export class PersonTvSeriesService {
               operator(tmdbTvSeriesView.voteAverage, Number(cursorData.value)),
               and(
                 eq(tmdbTvSeriesView.voteAverage, Number(cursorData.value)),
-                operator(tmdbTvSeriesView.id, cursorData.id)
-              )
+                operator(tmdbTvSeriesView.id, cursorData.id),
+              ),
             );
             break;
 
@@ -147,8 +158,8 @@ export class PersonTvSeriesService {
               operator(tmdbTvSeriesView.popularity, Number(cursorData.value)),
               and(
                 eq(tmdbTvSeriesView.popularity, Number(cursorData.value)),
-                operator(tmdbTvSeriesView.id, cursorData.id)
-              )
+                operator(tmdbTvSeriesView.id, cursorData.id),
+              ),
             );
             break;
 
@@ -158,8 +169,8 @@ export class PersonTvSeriesService {
               operator(tmdbTvSeriesView.lastAirDate, cursorData.value as string),
               and(
                 eq(tmdbTvSeriesView.lastAirDate, cursorData.value as string),
-                operator(tmdbTvSeriesView.id, cursorData.id)
-              )
+                operator(tmdbTvSeriesView.id, cursorData.id),
+              ),
             );
             break;
           }
@@ -167,32 +178,34 @@ export class PersonTvSeriesService {
       }
 
       const baseWhereClause = isNotNull(tmdbTvSeriesView.lastAirDate);
-      const finalWhereClause = cursorWhereClause 
-        ? and(baseWhereClause, cursorWhereClause) 
+      const finalWhereClause = cursorWhereClause
+        ? and(baseWhereClause, cursorWhereClause)
         : baseWhereClause;
 
       const fetchLimit = per_page + 1;
 
-      const paginatedSubquery = tx.select({ id: tmdbTvSeriesView.id })
+      const paginatedSubquery = tx
+        .select({ id: tmdbTvSeriesView.id })
         .from(filteredCreditsSq)
         .innerJoin(tmdbTvSeriesView, eq(tmdbTvSeriesView.id, filteredCreditsSq.tvSeriesId))
         .where(finalWhereClause)
         .orderBy(...orderBy)
         .limit(fetchLimit)
         .as('paginated_tv_series');
-      
-      const results = await tx.select({
+
+      const results = await tx
+        .select({
           tvSeries: TV_SERIES_COMPACT_SELECT,
           credits: sql<Pick<typeof tmdbTvSeriesCredit.$inferSelect, 'department' | 'job'>[]>`(
             SELECT json_agg(json_build_object('department', mc.department, 'job', mc.job))
             FROM ${tmdbTvSeriesCredit} mc
             WHERE mc.tv_series_id = ${tmdbTvSeriesView.id} AND mc.person_id = ${personId}
-          )`.as('credits')
+          )`.as('credits'),
         })
         .from(paginatedSubquery)
         .innerJoin(tmdbTvSeriesView, eq(tmdbTvSeriesView.id, paginatedSubquery.id))
         .orderBy(...orderBy);
-      
+
       const hasNextPage = results.length > per_page;
       const paginatedResults = hasNextPage ? results.slice(0, per_page) : results;
 
@@ -231,16 +244,12 @@ export class PersonTvSeriesService {
         meta: {
           next_cursor: nextCursor,
           per_page,
-        }
+        },
       });
     });
   }
   // Facets
-  async getFacets({
-    personId,
-  }: {
-    personId: number;
-  }): Promise<PersonTvSeriesFacetsDto> {
+  async getFacets({ personId }: { personId: number }): Promise<PersonTvSeriesFacetsDto> {
     const uniqueCredits = await this.db
       .selectDistinct({
         department: tmdbTvSeriesCredit.department,

@@ -10,12 +10,15 @@ import {
   ListInfiniteExploreItemsQueryDto,
   ListInfiniteExploreItemsDto,
 } from './explore-items.dto';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
 import { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { plainToInstance } from 'class-transformer';
+import { z } from 'zod';
 import { ExploreService } from '../explore.service';
+
+const CursorSchema = baseCursorSchema(z.number(), z.number());
 
 @Injectable()
 export class ExploreItemsService {
@@ -187,7 +190,7 @@ export class ExploreItemsService {
       const direction = sort_order === SortOrder.ASC ? asc : desc;
       const operator = sort_order === SortOrder.ASC ? gt : lt;
 
-      const cursorData = cursor ? decodeCursor<BaseCursor<number, number>>(cursor) : null;
+      const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
       const baseWhereClause = this.getWhereClause(exploreId, type);
 
       const finalWhereClause = cursorData

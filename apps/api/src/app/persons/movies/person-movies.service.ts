@@ -6,16 +6,23 @@ import { MovieSortBy } from '../../movies/dto/movies.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { and, asc, desc, eq, gt, isNotNull, lt, or, SQL, sql } from 'drizzle-orm';
 import { tmdbMovieCredit, tmdbMovieView } from '@libs/db/schemas';
-import { ListInfinitePersonMoviesDto, ListInfinitePersonMoviesQueryDto, ListPaginatedPersonMovieQueryDto, ListPaginatedPersonMoviesDto, PersonMovieFacetsDto } from './dto/person-movie.dto';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import {
+  ListInfinitePersonMoviesDto,
+  ListInfinitePersonMoviesQueryDto,
+  ListPaginatedPersonMovieQueryDto,
+  ListPaginatedPersonMoviesDto,
+  PersonMovieFacetsDto,
+} from './dto/person-movie.dto';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { z } from 'zod';
 import { plainToInstance } from 'class-transformer';
 import { MOVIE_COMPACT_SELECT } from '@libs/db/selectors';
 
+const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.number());
+
 @Injectable()
 export class PersonMoviesService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
   /* ---------------------------------- List ---------------------------------- */
   private getFilteredCreditsSubquery(
@@ -25,11 +32,12 @@ export class PersonMoviesService {
     job?: string,
   ) {
     const creditConditions: SQL[] = [eq(tmdbMovieCredit.personId, personId)];
-    
+
     if (department) creditConditions.push(eq(tmdbMovieCredit.department, department));
     if (job) creditConditions.push(eq(tmdbMovieCredit.job, job));
 
-    return tx.selectDistinct({ movieId: tmdbMovieCredit.movieId })
+    return tx
+      .selectDistinct({ movieId: tmdbMovieCredit.movieId })
       .from(tmdbMovieCredit)
       .where(and(...creditConditions))
       .as('filtered_credits');
@@ -64,7 +72,8 @@ export class PersonMoviesService {
       const orderBy = this.getOrderBy(sort_by, sort_order);
       const filteredCreditsSq = this.getFilteredCreditsSubquery(tx, personId, department, job);
 
-      const paginatedSubquery = tx.select({ id: tmdbMovieView.id })
+      const paginatedSubquery = tx
+        .select({ id: tmdbMovieView.id })
         .from(filteredCreditsSq)
         .innerJoin(tmdbMovieView, eq(tmdbMovieView.id, filteredCreditsSq.movieId))
         .where(isNotNull(tmdbMovieView.releaseDate))
@@ -73,23 +82,25 @@ export class PersonMoviesService {
         .offset(offset)
         .as('paginated_movies');
 
-      const [results, totalCountResult] = await Promise.all([        
-        tx.select({
+      const [results, totalCountResult] = await Promise.all([
+        tx
+          .select({
             movie: MOVIE_COMPACT_SELECT,
             credits: sql<Pick<typeof tmdbMovieCredit.$inferSelect, 'department' | 'job'>[]>`(
               SELECT json_agg(json_build_object('department', mc.department, 'job', mc.job))
               FROM ${tmdbMovieCredit} mc
               WHERE mc.movie_id = ${tmdbMovieView.id} AND mc.person_id = ${personId}
-            )`.as('credits')
+            )`.as('credits'),
           })
           .from(paginatedSubquery)
           .innerJoin(tmdbMovieView, eq(tmdbMovieView.id, paginatedSubquery.id))
           .orderBy(...orderBy),
-          
-        tx.select({ count: sql<number>`count(*)` })
+
+        tx
+          .select({ count: sql<number>`count(*)` })
           .from(filteredCreditsSq)
           .innerJoin(tmdbMovieView, eq(tmdbMovieView.id, filteredCreditsSq.movieId))
-          .where(isNotNull(tmdbMovieView.releaseDate))
+          .where(isNotNull(tmdbMovieView.releaseDate)),
       ]);
 
       const totalCount = Number(totalCountResult[0]?.count || 0);
@@ -104,7 +115,7 @@ export class PersonMoviesService {
           total_pages: Math.ceil(totalCount / per_page),
           current_page: page,
           per_page,
-        }
+        },
       });
     });
   }
@@ -122,7 +133,7 @@ export class PersonMoviesService {
 
       const { per_page, sort_order, sort_by, cursor, department, job } = query;
 
-      const cursorData = cursor ? decodeCursor<BaseCursor<string | number, number>>(cursor) : null;
+      const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
 
       const orderBy = this.getOrderBy(sort_by, sort_order);
       const filteredCreditsSq = this.getFilteredCreditsSubquery(tx, personId, department, job);
@@ -138,18 +149,18 @@ export class PersonMoviesService {
               operator(tmdbMovieView.voteAverage, Number(cursorData.value)),
               and(
                 eq(tmdbMovieView.voteAverage, Number(cursorData.value)),
-                operator(tmdbMovieView.id, cursorData.id)
-              )
+                operator(tmdbMovieView.id, cursorData.id),
+              ),
             );
             break;
-          
+
           case MovieSortBy.POPULARITY:
             cursorWhereClause = or(
               operator(tmdbMovieView.popularity, Number(cursorData.value)),
               and(
                 eq(tmdbMovieView.popularity, Number(cursorData.value)),
-                operator(tmdbMovieView.id, cursorData.id)
-              )
+                operator(tmdbMovieView.id, cursorData.id),
+              ),
             );
             break;
 
@@ -159,8 +170,8 @@ export class PersonMoviesService {
               operator(tmdbMovieView.releaseDate, cursorData.value as string),
               and(
                 eq(tmdbMovieView.releaseDate, cursorData.value as string),
-                operator(tmdbMovieView.id, cursorData.id)
-              )
+                operator(tmdbMovieView.id, cursorData.id),
+              ),
             );
             break;
           }
@@ -168,32 +179,34 @@ export class PersonMoviesService {
       }
 
       const baseWhereClause = isNotNull(tmdbMovieView.releaseDate);
-      const finalWhereClause = cursorWhereClause 
-        ? and(baseWhereClause, cursorWhereClause) 
+      const finalWhereClause = cursorWhereClause
+        ? and(baseWhereClause, cursorWhereClause)
         : baseWhereClause;
 
       const fetchLimit = per_page + 1;
 
-      const paginatedSubquery = tx.select({ id: tmdbMovieView.id })
+      const paginatedSubquery = tx
+        .select({ id: tmdbMovieView.id })
         .from(filteredCreditsSq)
         .innerJoin(tmdbMovieView, eq(tmdbMovieView.id, filteredCreditsSq.movieId))
         .where(finalWhereClause)
         .orderBy(...orderBy)
         .limit(fetchLimit)
         .as('paginated_movies');
-      
-      const results = await tx.select({
+
+      const results = await tx
+        .select({
           movie: MOVIE_COMPACT_SELECT,
           credits: sql<Pick<typeof tmdbMovieCredit.$inferSelect, 'department' | 'job'>[]>`(
             SELECT json_agg(json_build_object('department', mc.department, 'job', mc.job))
             FROM ${tmdbMovieCredit} mc
             WHERE mc.movie_id = ${tmdbMovieView.id} AND mc.person_id = ${personId}
-          )`.as('credits')
+          )`.as('credits'),
         })
         .from(paginatedSubquery)
         .innerJoin(tmdbMovieView, eq(tmdbMovieView.id, paginatedSubquery.id))
         .orderBy(...orderBy);
-      
+
       const hasNextPage = results.length > per_page;
       const paginatedResults = hasNextPage ? results.slice(0, per_page) : results;
 
@@ -232,16 +245,12 @@ export class PersonMoviesService {
         meta: {
           next_cursor: nextCursor,
           per_page,
-        }
+        },
       });
     });
   }
   // Facets
-  async getFacets({
-    personId,
-  }: {
-    personId: number;
-  }): Promise<PersonMovieFacetsDto> {
+  async getFacets({ personId }: { personId: number }): Promise<PersonMovieFacetsDto> {
     const uniqueCredits = await this.db
       .selectDistinct({
         department: tmdbMovieCredit.department,

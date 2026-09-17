@@ -3,20 +3,29 @@ import { and, asc, desc, eq, exists, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { follow, logMovie, profile, reviewMovie, tmdbMovieView } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import { ListInfiniteUserMoviesWithMovieDto, ListPaginatedUserMoviesWithMovieDto, UserMovieWithUserMovieDto } from './user-movies.dto';
+import {
+  ListInfiniteUserMoviesWithMovieDto,
+  ListPaginatedUserMoviesWithMovieDto,
+  UserMovieWithUserMovieDto,
+} from './user-movies.dto';
 import { SupportedLocale } from '@libs/i18n';
-import { ListInfiniteLogsMovieQueryDto, ListPaginatedLogsMovieQueryDto, LogMovieSortBy } from '../../movies/logs/log-movie.dto';
+import {
+  ListInfiniteLogsMovieQueryDto,
+  ListPaginatedLogsMovieQueryDto,
+  LogMovieSortBy,
+} from '../../movies/logs/log-movie.dto';
 import { DbTransaction } from '@libs/db';
 import { SortOrder } from '../../../common/dto/sort.dto';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { z } from 'zod';
 import { plainToInstance } from 'class-transformer';
 import { MOVIE_COMPACT_SELECT } from '@libs/db/selectors';
 
+const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.number());
+
 @Injectable()
 export class UserMoviesService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
   async get({
     userId,
@@ -32,8 +41,8 @@ export class UserMoviesService {
     return await this.db.transaction(async (tx) => {
       if (currentUser?.id !== userId) {
         const targetProfile = await tx.query.profile.findFirst({
-          where: eq(profile.id, userId)
-        })
+          where: eq(profile.id, userId),
+        });
 
         if (!targetProfile) {
           throw new NotFoundException('User not found.');
@@ -48,28 +57,23 @@ export class UserMoviesService {
             where: and(
               eq(follow.followerId, currentUser.id),
               eq(follow.followingId, userId),
-              eq(follow.status, 'accepted')
+              eq(follow.status, 'accepted'),
             ),
           });
 
           if (!amIFollowing) {
-            throw new ForbiddenException('This account is private. Follow this user to see their activity.');
+            throw new ForbiddenException(
+              'This account is private. Follow this user to see their activity.',
+            );
           }
         }
       }
-      await tx.execute(
-        sql`SELECT set_config('app.current_language', ${locale}, true)`
-      );
+      await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
       if (currentUser) {
-        await tx.execute(
-          sql`SELECT set_config('app.current_user_id', ${currentUser.id}, true)`
-        );
+        await tx.execute(sql`SELECT set_config('app.current_user_id', ${currentUser.id}, true)`);
       }
       const logEntry = await tx.query.logMovie.findFirst({
-        where: and(
-          eq(logMovie.userId, userId),
-          eq(logMovie.movieId, movieId),
-        ),
+        where: and(eq(logMovie.userId, userId), eq(logMovie.movieId, movieId)),
         with: {
           review: true,
           user: {
@@ -83,31 +87,34 @@ export class UserMoviesService {
               profile: {
                 columns: {
                   isPremium: true,
-                }
-              }
-            }
-          }
-        }
+                },
+              },
+            },
+          },
+        },
       });
 
       if (!logEntry) return null;
 
-      const [movie] = await tx.select(MOVIE_COMPACT_SELECT)
-      .from(tmdbMovieView)
-      .where(eq(tmdbMovieView.id, movieId))
-      .limit(1);
-      
+      const [movie] = await tx
+        .select(MOVIE_COMPACT_SELECT)
+        .from(tmdbMovieView)
+        .where(eq(tmdbMovieView.id, movieId))
+        .limit(1);
+
       if (!movie) throw new NotFoundException('Movie not found');
 
       const { user, review, ...logData } = logEntry;
 
       return plainToInstance(UserMovieWithUserMovieDto, {
         ...logData,
-        review: review ? {
-          ...review,
-          userId: logData.userId,
-          movieId: logData.movieId,
-        } : null,
+        review: review
+          ? {
+              ...review,
+              userId: logData.userId,
+              movieId: logData.movieId,
+            }
+          : null,
         user: {
           id: user.id,
           username: user.username,
@@ -139,7 +146,7 @@ export class UserMoviesService {
         case LogMovieSortBy.RANDOM:
           return [sql`RANDOM()`];
         case LogMovieSortBy.RATING:
-          return sortOrder === 'asc' 
+          return sortOrder === 'asc'
             ? [sql`${logMovie.rating} ASC NULLS LAST`, direction(logMovie.id)]
             : [sql`${logMovie.rating} DESC NULLS LAST`, direction(logMovie.id)];
         case LogMovieSortBy.FIRST_WATCHED_AT:
@@ -153,9 +160,10 @@ export class UserMoviesService {
     let privacyClause: SQL | undefined;
     if (currentUser?.id !== userId) {
       const isPublicProfile = exists(
-        tx.select({ id: profile.id })
+        tx
+          .select({ id: profile.id })
           .from(profile)
-          .where(and(eq(profile.id, userId), eq(profile.isPrivate, false)))
+          .where(and(eq(profile.id, userId), eq(profile.isPrivate, false))),
       );
 
       if (!currentUser) {
@@ -164,14 +172,17 @@ export class UserMoviesService {
         privacyClause = or(
           isPublicProfile,
           exists(
-            tx.select({ id: follow.followerId })
+            tx
+              .select({ id: follow.followerId })
               .from(follow)
-              .where(and(
-                eq(follow.followerId, currentUser.id),
-                eq(follow.followingId, userId),
-                eq(follow.status, 'accepted')
-              ))
-          )
+              .where(
+                and(
+                  eq(follow.followerId, currentUser.id),
+                  eq(follow.followingId, userId),
+                  eq(follow.status, 'accepted'),
+                ),
+              ),
+          ),
         );
       }
     }
@@ -179,9 +190,9 @@ export class UserMoviesService {
     const baseWhereConditions: SQL[] = [eq(logMovie.userId, userId)];
     if (privacyClause) baseWhereConditions.push(privacyClause);
 
-    return { 
-      whereClause: and(...baseWhereConditions), 
-      orderBy 
+    return {
+      whereClause: and(...baseWhereConditions),
+      orderBy,
     };
   }
   async listPaginated({
@@ -204,7 +215,7 @@ export class UserMoviesService {
         locale,
         currentUser,
         sort_by,
-        sort_order
+        sort_order,
       );
 
       const paginatedLogsSubquery = tx
@@ -216,18 +227,19 @@ export class UserMoviesService {
         .offset(offset)
         .as('paginated_logs');
 
-      const [results, totalCount] = await Promise.all([        
-        tx.select({
-            log: logMovie, 
+      const [results, totalCount] = await Promise.all([
+        tx
+          .select({
+            log: logMovie,
             isReviewed: sql<boolean>`${reviewMovie.id} IS NOT NULL`,
             movie: MOVIE_COMPACT_SELECT,
           })
           .from(paginatedLogsSubquery)
-          .innerJoin(logMovie, eq(logMovie.id, paginatedLogsSubquery.id)) 
+          .innerJoin(logMovie, eq(logMovie.id, paginatedLogsSubquery.id))
           .innerJoin(tmdbMovieView, eq(logMovie.movieId, tmdbMovieView.id))
           .leftJoin(reviewMovie, eq(logMovie.id, reviewMovie.id))
           .orderBy(...orderBy),
-        tx.$count(logMovie, whereClause)
+        tx.$count(logMovie, whereClause),
       ]);
 
       return plainToInstance(ListPaginatedUserMoviesWithMovieDto, {
@@ -241,7 +253,7 @@ export class UserMoviesService {
           total_pages: Math.ceil(totalCount / per_page),
           current_page: page,
           per_page,
-        }
+        },
       });
     });
   }
@@ -259,7 +271,7 @@ export class UserMoviesService {
     return await this.db.transaction(async (tx) => {
       const { per_page, sort_order, sort_by, cursor } = query;
 
-      const cursorData = cursor ? decodeCursor<BaseCursor<string | number, number>>(cursor) : null;
+      const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
 
       const { whereClause: baseWhereClause, orderBy } = await this.getListBaseQuery(
         tx,
@@ -267,7 +279,7 @@ export class UserMoviesService {
         locale,
         currentUser,
         sort_by,
-        sort_order
+        sort_order,
       );
 
       let cursorWhereClause: SQL | undefined;
@@ -281,8 +293,8 @@ export class UserMoviesService {
               operator(logMovie.rating, Number(cursorData.value)),
               and(
                 eq(logMovie.rating, Number(cursorData.value)),
-                operator(logMovie.id, cursorData.id)
-              )
+                operator(logMovie.id, cursorData.id),
+              ),
             );
             break;
 
@@ -292,8 +304,8 @@ export class UserMoviesService {
               operator(logMovie.firstWatchedAt, firstWatchedDate),
               and(
                 eq(logMovie.firstWatchedAt, firstWatchedDate),
-                operator(logMovie.id, cursorData.id)
-              )
+                operator(logMovie.id, cursorData.id),
+              ),
             );
             break;
           }
@@ -306,40 +318,39 @@ export class UserMoviesService {
             const updatedDate = String(cursorData.value);
             cursorWhereClause = or(
               operator(logMovie.updatedAt, updatedDate),
-              and(
-                eq(logMovie.updatedAt, updatedDate),
-                operator(logMovie.id, cursorData.id)
-              )
+              and(eq(logMovie.updatedAt, updatedDate), operator(logMovie.id, cursorData.id)),
             );
             break;
           }
         }
       }
 
-      const finalWhereClause = cursorWhereClause 
-        ? and(baseWhereClause, cursorWhereClause) 
+      const finalWhereClause = cursorWhereClause
+        ? and(baseWhereClause, cursorWhereClause)
         : baseWhereClause;
 
       const fetchLimit = per_page + 1;
 
-      const paginatedLogsSubquery = tx.select()
+      const paginatedLogsSubquery = tx
+        .select()
         .from(logMovie)
         .where(finalWhereClause)
         .orderBy(...orderBy)
         .limit(fetchLimit)
         .as('paginated_logs');
-      
-      const results = await tx.select({
-        log: logMovie, 
-        isReviewed: sql<boolean>`${reviewMovie.id} IS NOT NULL`,
-        movie: MOVIE_COMPACT_SELECT,
-      })
-      .from(paginatedLogsSubquery)
-      .innerJoin(logMovie, eq(logMovie.id, paginatedLogsSubquery.id)) 
-      .innerJoin(tmdbMovieView, eq(logMovie.movieId, tmdbMovieView.id))
-      .leftJoin(reviewMovie, eq(logMovie.id, reviewMovie.id))
-      .orderBy(...orderBy);
-      
+
+      const results = await tx
+        .select({
+          log: logMovie,
+          isReviewed: sql<boolean>`${reviewMovie.id} IS NOT NULL`,
+          movie: MOVIE_COMPACT_SELECT,
+        })
+        .from(paginatedLogsSubquery)
+        .innerJoin(logMovie, eq(logMovie.id, paginatedLogsSubquery.id))
+        .innerJoin(tmdbMovieView, eq(logMovie.movieId, tmdbMovieView.id))
+        .leftJoin(reviewMovie, eq(logMovie.id, reviewMovie.id))
+        .orderBy(...orderBy);
+
       const hasNextPage = results.length > per_page;
       const paginatedResults = hasNextPage ? results.slice(0, per_page) : results;
 
@@ -378,7 +389,7 @@ export class UserMoviesService {
         meta: {
           next_cursor: nextCursor,
           per_page,
-        }
+        },
       });
     });
   }

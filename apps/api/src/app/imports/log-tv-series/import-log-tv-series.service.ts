@@ -7,7 +7,8 @@ import { SupportedLocale } from '@libs/i18n';
 import { ImportServerEvents } from '@libs/realtime';
 import { PaginationQueryDto } from '../../../common/dto/pagination.dto';
 import { CursorPaginationQueryDto } from '../../../common/dto/cursor-pagination.dto';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { z } from 'zod';
 import { RealtimeGateway } from '../../realtime/realtime.gateway';
 import { User } from '../../auth/auth.service';
 import { plainToInstance } from 'class-transformer';
@@ -17,6 +18,8 @@ import {
   ListPaginatedImportLogTvSeriesDto,
   PatchImportJobLogTvSeriesDto,
 } from './import-log-tv-series.dto';
+
+const CursorSchema = baseCursorSchema(z.number(), z.number());
 
 @Injectable()
 export class ImportLogTvSeriesService {
@@ -132,7 +135,7 @@ export class ImportLogTvSeriesService {
   ): Promise<ListInfiniteImportLogTvSeriesDto> {
     await this.getOwnedJob(user.id, importJobId);
     const { per_page, cursor, include_total_count } = query;
-    const cursorData = cursor ? decodeCursor<BaseCursor<number, number>>(cursor) : null;
+    const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
     const { whereClause: baseWhereClause, orderBy } = this.getListBaseQuery(importJobId);
 
     const finalWhereClause = cursorData

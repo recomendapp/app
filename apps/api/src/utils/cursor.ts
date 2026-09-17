@@ -7,6 +7,18 @@ export interface BaseCursor<TValue = any, TId = string | number> {
 }
 
 /**
+ * Builds the zod schema for the most common cursor shape (`{ value, id }`)
+ * to pass to `decodeCursor`, instead of every call site hand-rolling the
+ * same `z.object({...})`.
+ */
+export function baseCursorSchema<TValue extends z.ZodTypeAny, TId extends z.ZodTypeAny>(
+  value: TValue,
+  id: TId,
+) {
+  return z.object({ value, id });
+}
+
+/**
  * Encodes a cursor object into a base64 string for use in pagination.
  * @param payload The cursor object containing the value and id to encode.
  * @returns A base64-encoded string representing the cursor.

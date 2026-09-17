@@ -4,28 +4,29 @@ import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/driz
 import { tmdbTvEpisode, tmdbTvSeasonView } from '@libs/db/schemas';
 import { User } from '../../../auth/auth.service';
 import { SupportedLocale } from '@libs/i18n';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../../utils/cursor';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../../utils/cursor';
+import { z } from 'zod';
 import { SortOrder } from '../../../../common/dto/sort.dto';
 import { plainToInstance } from 'class-transformer';
-import { 
-  ListAllTvEpisodesQueryDto, 
-  ListInfiniteTvEpisodesDto, 
-  ListInfiniteTvEpisodesQueryDto, 
-  ListPaginatedTvEpisodesDto, 
-  ListPaginatedTvEpisodesQueryDto, 
-  TvEpisodeDto, 
-  TvEpisodeSortBy 
+import {
+  ListAllTvEpisodesQueryDto,
+  ListInfiniteTvEpisodesDto,
+  ListInfiniteTvEpisodesQueryDto,
+  ListPaginatedTvEpisodesDto,
+  ListPaginatedTvEpisodesQueryDto,
+  TvEpisodeDto,
+  TvEpisodeSortBy,
 } from './tv-episodes.dto';
+
+const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.number());
 
 @Injectable()
 export class TvEpisodesService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
   private getListBaseQuery(sortBy: TvEpisodeSortBy, sortOrder: SortOrder) {
     const direction = sortOrder === SortOrder.ASC ? asc : desc;
-    
+
     let sortColumn: SQL | any;
     switch (sortBy) {
       case TvEpisodeSortBy.AIR_DATE:
@@ -41,11 +42,15 @@ export class TvEpisodesService {
   }
 
   private mapResultsToDto(results: any[]) {
-    return results.map(({ seasonUrl, ...episode }) => 
-      plainToInstance(TvEpisodeDto, {
-        ...episode,
-        url: seasonUrl ? `${seasonUrl}/episode/${episode.episodeNumber}` : null,
-      }, { excludeExtraneousValues: true })
+    return results.map(({ seasonUrl, ...episode }) =>
+      plainToInstance(
+        TvEpisodeDto,
+        {
+          ...episode,
+          url: seasonUrl ? `${seasonUrl}/episode/${episode.episodeNumber}` : null,
+        },
+        { excludeExtraneousValues: true },
+      ),
     );
   }
 
@@ -93,8 +98,8 @@ export class TvEpisodesService {
         .where(
           and(
             eq(tmdbTvSeasonView.tvSeriesId, tvSeriesId),
-            eq(tmdbTvSeasonView.seasonNumber, seasonNumber)
-          )
+            eq(tmdbTvSeasonView.seasonNumber, seasonNumber),
+          ),
         )
         .orderBy(...orderBy);
 
@@ -127,7 +132,7 @@ export class TvEpisodesService {
 
       const baseWhere = and(
         eq(tmdbTvSeasonView.tvSeriesId, tvSeriesId),
-        eq(tmdbTvSeasonView.seasonNumber, seasonNumber)
+        eq(tmdbTvSeasonView.seasonNumber, seasonNumber),
       );
 
       const [results, totalCountResult] = await Promise.all([
@@ -155,7 +160,8 @@ export class TvEpisodesService {
           .orderBy(...orderBy)
           .limit(per_page)
           .offset(offset),
-        tx.select({ count: sql<number>`cast(count(*) as int)` })
+        tx
+          .select({ count: sql<number>`cast(count(*) as int)` })
           .from(tmdbTvEpisode)
           .innerJoin(tmdbTvSeasonView, eq(tmdbTvSeasonView.id, tmdbTvEpisode.tvSeasonId))
           .where(baseWhere),
@@ -163,15 +169,19 @@ export class TvEpisodesService {
 
       const totalCount = totalCountResult[0].count;
 
-      return plainToInstance(ListPaginatedTvEpisodesDto, {
-        data: this.mapResultsToDto(results),
-        meta: {
-          total_results: totalCount,
-          total_pages: Math.ceil(totalCount / per_page),
-          current_page: page,
-          per_page,
+      return plainToInstance(
+        ListPaginatedTvEpisodesDto,
+        {
+          data: this.mapResultsToDto(results),
+          meta: {
+            total_results: totalCount,
+            total_pages: Math.ceil(totalCount / per_page),
+            current_page: page,
+            per_page,
+          },
         },
-      }, { excludeExtraneousValues: true });
+        { excludeExtraneousValues: true },
+      );
     });
   }
 
@@ -195,26 +205,24 @@ export class TvEpisodesService {
       }
 
       const { per_page, sort_order, sort_by, cursor, include_total_count } = query;
-      const cursorData = cursor ? decodeCursor<BaseCursor<string | number, number>>(cursor) : null;
+      const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
       const { sortColumn, orderBy } = this.getListBaseQuery(sort_by, sort_order);
 
       const baseWhere = and(
         eq(tmdbTvSeasonView.tvSeriesId, tvSeriesId),
-        eq(tmdbTvSeasonView.seasonNumber, seasonNumber)
+        eq(tmdbTvSeasonView.seasonNumber, seasonNumber),
       );
 
       let cursorWhereClause: SQL | undefined;
 
       if (cursorData) {
         const operator = sort_order === SortOrder.ASC ? gt : lt;
-        const cursorValue = sort_by === TvEpisodeSortBy.EPISODE_NUMBER ? Number(cursorData.value) : cursorData.value;
-        
+        const cursorValue =
+          sort_by === TvEpisodeSortBy.EPISODE_NUMBER ? Number(cursorData.value) : cursorData.value;
+
         cursorWhereClause = or(
           operator(sortColumn, cursorValue),
-          and(
-            eq(sortColumn, cursorValue),
-            operator(tmdbTvEpisode.id, cursorData.id)
-          )
+          and(eq(sortColumn, cursorValue), operator(tmdbTvEpisode.id, cursorData.id)),
         );
       }
 
@@ -244,12 +252,13 @@ export class TvEpisodesService {
           .where(and(baseWhere, cursorWhereClause))
           .orderBy(...orderBy)
           .limit(fetchLimit),
-        (!cursorData && include_total_count)
-          ? tx.select({ count: sql<number>`cast(count(*) as int)` })
+        !cursorData && include_total_count
+          ? tx
+              .select({ count: sql<number>`cast(count(*) as int)` })
               .from(tmdbTvEpisode)
               .innerJoin(tmdbTvSeasonView, eq(tmdbTvSeasonView.id, tmdbTvEpisode.tvSeasonId))
               .where(baseWhere)
-          : Promise.resolve(undefined)
+          : Promise.resolve(undefined),
       ]);
 
       const totalCount = totalCountResult ? totalCountResult[0].count : undefined;
@@ -261,19 +270,26 @@ export class TvEpisodesService {
       if (hasNextPage) {
         const lastItem = paginatedResults[paginatedResults.length - 1];
         nextCursor = encodeCursor<BaseCursor<string | number, number>>({
-          value: sort_by === TvEpisodeSortBy.AIR_DATE ? (lastItem.airDate as string) : lastItem.episodeNumber,
+          value:
+            sort_by === TvEpisodeSortBy.AIR_DATE
+              ? (lastItem.airDate as string)
+              : lastItem.episodeNumber,
           id: lastItem.id,
         });
       }
 
-      return plainToInstance(ListInfiniteTvEpisodesDto, {
-        data: this.mapResultsToDto(paginatedResults),
-        meta: {
-          next_cursor: nextCursor,
-          per_page,
-          total_results: totalCount,
+      return plainToInstance(
+        ListInfiniteTvEpisodesDto,
+        {
+          data: this.mapResultsToDto(paginatedResults),
+          meta: {
+            next_cursor: nextCursor,
+            per_page,
+            total_results: totalCount,
+          },
         },
-      }, { excludeExtraneousValues: true });
+        { excludeExtraneousValues: true },
+      );
     });
   }
 }

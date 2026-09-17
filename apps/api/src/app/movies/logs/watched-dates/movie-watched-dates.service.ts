@@ -15,10 +15,13 @@ import {
 import { User } from '../../../auth/auth.service';
 import { DbTransaction } from '@libs/db';
 import { SortOrder } from '../../../../common/dto/sort.dto';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../../utils/cursor';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../../utils/cursor';
+import { z } from 'zod';
 import { plainToInstance } from 'class-transformer';
 import { LogServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../../../realtime/realtime.gateway';
+
+const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.number());
 
 @Injectable()
 export class MovieWatchedDatesService {
@@ -285,7 +288,7 @@ export class MovieWatchedDatesService {
   ): Promise<ListInfiniteWatchedDatesDto> {
     const { per_page, sort_order, sort_by, cursor } = query;
 
-    const cursorData = cursor ? decodeCursor<BaseCursor<string | number, number>>(cursor) : null;
+    const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
 
     const { whereClause: baseWhereClause, orderBy } = this.getListBaseQuery(
       movieId,
