@@ -4,21 +4,22 @@ import { imageType, tmdbMovieImage } from '@libs/db/schemas';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { SupportedLocale } from '@libs/i18n';
 import { plainToInstance } from 'class-transformer';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
-import { 
-  ListInfiniteMovieImagesDto, 
-  ListInfiniteMovieImagesQueryDto, 
-  ListPaginatedMovieImagesDto, 
-  ListPaginatedMovieImagesQueryDto, 
+import { baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { z } from 'zod';
+import {
+  ListInfiniteMovieImagesDto,
+  ListInfiniteMovieImagesQueryDto,
+  ListPaginatedMovieImagesDto,
+  ListPaginatedMovieImagesQueryDto,
 } from './movie-images.dto';
+
+const CursorSchema = baseCursorSchema(z.number(), z.number());
 
 @Injectable()
 export class MovieImagesService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
-  private getListBaseQuery(movieId: number, type?: typeof imageType.enumValues[number]) {
+  private getListBaseQuery(movieId: number, type?: (typeof imageType.enumValues)[number]) {
     const whereConditions = [eq(tmdbMovieImage.movieId, movieId)];
     if (type) {
       whereConditions.push(eq(tmdbMovieImage.type, type));
@@ -60,28 +61,37 @@ export class MovieImagesService {
       const baseWhereClause = this.getListBaseQuery(movieId, type);
 
       const [rows, [{ count: totalCount }]] = await Promise.all([
-        tx.select(({ movie_image: tmdbMovieImage }))
+        tx
+          .select({ movie_image: tmdbMovieImage })
           .from(tmdbMovieImage)
-          .innerJoin(sql`LATERAL i18n.language() language(requested_language, fallback_language, default_language)`, sql`true`)
+          .innerJoin(
+            sql`LATERAL i18n.language() language(requested_language, fallback_language, default_language)`,
+            sql`true`,
+          )
           .where(baseWhereClause)
           .orderBy(this.getOrderBySql())
           .limit(per_page)
           .offset(offset),
-          
-        tx.select({ count: sql<number>`cast(count(*) as int)` })
+
+        tx
+          .select({ count: sql<number>`cast(count(*) as int)` })
           .from(tmdbMovieImage)
-          .where(baseWhereClause)
+          .where(baseWhereClause),
       ]);
 
-      return plainToInstance(ListPaginatedMovieImagesDto, {
-        data: rows.map(row => row.movie_image), 
-        meta: {
-          total_results: totalCount,
-          total_pages: Math.ceil(totalCount / per_page),
-          current_page: page,
-          per_page,
+      return plainToInstance(
+        ListPaginatedMovieImagesDto,
+        {
+          data: rows.map((row) => row.movie_image),
+          meta: {
+            total_results: totalCount,
+            total_pages: Math.ceil(totalCount / per_page),
+            current_page: page,
+            per_page,
+          },
         },
-      }, { excludeExtraneousValues: true });
+        { excludeExtraneousValues: true },
+      );
     });
   }
 
@@ -98,24 +108,28 @@ export class MovieImagesService {
       await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
 
       const { per_page, cursor, type } = query;
-      const cursorData = cursor ? decodeCursor<BaseCursor<number, number>>(cursor) : null;
+      const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
 
       const baseWhereClause = this.getListBaseQuery(movieId, type);
-      
+
       let cursorWhereClause;
       if (cursorData) {
         cursorWhereClause = sql`(${tmdbMovieImage.id}) > (${Number(cursorData.id)})`;
       }
 
-      const finalWhereClause = cursorWhereClause 
-        ? and(baseWhereClause, cursorWhereClause) 
+      const finalWhereClause = cursorWhereClause
+        ? and(baseWhereClause, cursorWhereClause)
         : baseWhereClause;
 
       const fetchLimit = per_page + 1;
 
-      const results = await tx.select(({ movie_image: tmdbMovieImage }))
+      const results = await tx
+        .select({ movie_image: tmdbMovieImage })
         .from(tmdbMovieImage)
-        .innerJoin(sql`LATERAL i18n.language() language(requested_language, fallback_language, default_language)`, sql`true`)
+        .innerJoin(
+          sql`LATERAL i18n.language() language(requested_language, fallback_language, default_language)`,
+          sql`true`,
+        )
         .where(finalWhereClause)
         .orderBy(this.getOrderBySql())
         .limit(fetchLimit);
@@ -132,13 +146,17 @@ export class MovieImagesService {
         });
       }
 
-      return plainToInstance(ListInfiniteMovieImagesDto, {
-        data: paginatedResults.map(row => row.movie_image),
-        meta: {
-          next_cursor: nextCursor,
-          per_page,
+      return plainToInstance(
+        ListInfiniteMovieImagesDto,
+        {
+          data: paginatedResults.map((row) => row.movie_image),
+          meta: {
+            next_cursor: nextCursor,
+            per_page,
+          },
         },
-      }, { excludeExtraneousValues: true });
+        { excludeExtraneousValues: true },
+      );
     });
   }
 }

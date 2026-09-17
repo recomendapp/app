@@ -5,9 +5,10 @@ import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { plainToInstance } from 'class-transformer';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
+import { z } from 'zod';
 import {
   ListInfiniteReviewsTvSeriesDto,
   ListInfiniteReviewsTvSeriesQueryDto,
@@ -19,6 +20,8 @@ import {
 } from '../../reviews/tv-series/dto/review-tv-series.dto';
 import { LogServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../../realtime/realtime.gateway';
+
+const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.number());
 
 @Injectable()
 export class TvSeriesReviewsService {
@@ -252,7 +255,7 @@ export class TvSeriesReviewsService {
     return await this.db.transaction(async (tx) => {
       const { per_page, sort_order, sort_by, cursor } = query;
 
-      const cursorData = cursor ? decodeCursor<BaseCursor<string | number, number>>(cursor) : null;
+      const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
 
       const { whereClause: baseWhereClause, orderBy } = this.getListBaseQuery(
         tx,

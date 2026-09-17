@@ -1,0 +1,13 @@
+import { Module } from '@nestjs/common';
+import { ReviewMovieCommentsController } from './review-movie-comments.controller';
+import { ReviewMovieCommentsService } from './review-movie-comments.service';
+import { ReviewMovieCommentLikesModule } from './likes/review-movie-comment-likes.module';
+import { NotifySharedModule } from '@shared/notify';
+
+@Module({
+  imports: [ReviewMovieCommentLikesModule, NotifySharedModule],
+  controllers: [ReviewMovieCommentsController],
+  providers: [ReviewMovieCommentsService],
+  exports: [ReviewMovieCommentsService],
+})
+export class ReviewMovieCommentsModule {}

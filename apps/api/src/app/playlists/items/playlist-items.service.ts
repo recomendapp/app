@@ -14,7 +14,8 @@ import {
   PlaylistItemsDeleteDto,
   PlaylistItemUpdateDto,
 } from './playlist-items.dto';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { z } from 'zod';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
 import { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
@@ -22,6 +23,8 @@ import { DbTransaction } from '@libs/db';
 import { plainToInstance } from 'class-transformer';
 import { LexoRank } from 'lexorank';
 import { PlaylistsRealtimeService } from '../playlists-realtime.service';
+
+const CursorSchema = baseCursorSchema(z.string().min(1), z.number());
 
 @Injectable()
 export class PlaylistItemsService {
@@ -182,7 +185,7 @@ export class PlaylistItemsService {
     return await this.db.transaction(async (tx) => {
       const { per_page, sort_order, sort_by, cursor } = query;
 
-      const cursorData = cursor ? decodeCursor<BaseCursor<string, number>>(cursor) : null;
+      const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
       const { whereClause: baseWhereClause, orderBy } = await this.getListBaseQuery(
         tx,
         playlistId,

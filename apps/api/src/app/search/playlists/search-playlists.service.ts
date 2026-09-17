@@ -6,11 +6,20 @@ import { plainToInstance } from 'class-transformer';
 import { playlist, user, profile, follow } from '@libs/db/schemas';
 import { and, eq, inArray } from 'drizzle-orm';
 import { decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { z } from 'zod';
 import { TYPESENSE_CLIENT } from '../../../common/modules/typesense/typesense.module';
-import { ListInfiniteSearchPlaylistsQueryDto, ListPaginatedSearchPlaylistsQueryDto } from './search-playlists.dto';
-import { ListInfinitePlaylistsWithOwnerDto, ListPaginatedPlaylistsWithOwnerDto } from '../../playlists/dto/playlists.dto';
+import {
+  ListInfiniteSearchPlaylistsQueryDto,
+  ListPaginatedSearchPlaylistsQueryDto,
+} from './search-playlists.dto';
+import {
+  ListInfinitePlaylistsWithOwnerDto,
+  ListPaginatedPlaylistsWithOwnerDto,
+} from '../../playlists/dto/playlists.dto';
 import { PlaylistQueryBuilder } from '../../playlists/playlists.query-builder';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
+
+const PageCursorSchema = z.object({ page: z.number().int().min(1) });
 
 @Injectable()
 export class SearchPlaylistsService {
@@ -27,14 +36,9 @@ export class SearchPlaylistsService {
     const followingRows = await this.db
       .select({ followingId: follow.followingId })
       .from(follow)
-      .where(
-        and(
-          eq(follow.followerId, currentUser.id),
-          eq(follow.status, 'accepted')
-        )
-      );
-    
-    const followingIds = followingRows.map(row => row.followingId);
+      .where(and(eq(follow.followerId, currentUser.id), eq(follow.status, 'accepted')));
+
+    const followingIds = followingRows.map((row) => row.followingId);
 
     const conditions = [
       'visibility:=public',
@@ -49,14 +53,19 @@ export class SearchPlaylistsService {
     return conditions.join(' || ');
   }
 
-  private async executeTypesenseSearch(q: string, page: number, per_page: number, filterBy: string) {
+  private async executeTypesenseSearch(
+    q: string,
+    page: number,
+    per_page: number,
+    filterBy: string,
+  ) {
     const searchParameters = {
       q,
       query_by: 'title,description',
       filter_by: filterBy,
       page,
       per_page,
-      sort_by: '_text_match(buckets: 10):desc,likes_count:desc', 
+      sort_by: '_text_match(buckets: 10):desc,likes_count:desc',
     };
 
     return this.typesenseClient
@@ -82,10 +91,8 @@ export class SearchPlaylistsService {
       .where(inArray(playlist.id, numericIds));
 
     const playlistMap = new Map(dbPlaylists.map((p) => [String(p.playlist.id), p]));
-    
-    return ids
-        .map((id) => playlistMap.get(id))
-        .filter(Boolean);
+
+    return ids.map((id) => playlistMap.get(id)).filter(Boolean);
   }
 
   async listPaginated({
@@ -100,22 +107,26 @@ export class SearchPlaylistsService {
     const filterBy = await this.buildFilterBy(currentUser);
     const typesenseResult = await this.executeTypesenseSearch(q, page, per_page, filterBy);
     const playlistIds = typesenseResult.hits?.map((hit) => hit.document.id) || [];
-    
+
     const hydratedPlaylists = await this.hydratePlaylists(playlistIds, currentUser);
 
-    return plainToInstance(ListPaginatedPlaylistsWithOwnerDto, {
-      data: hydratedPlaylists.map(row => ({
-        ...row.playlist,
-        role: row.role,
-        owner: row.owner,
-      })),
-      meta: {
-        total_results: typesenseResult.found,
-        total_pages: Math.ceil(typesenseResult.found / per_page),
-        current_page: page,
-        per_page: per_page,
+    return plainToInstance(
+      ListPaginatedPlaylistsWithOwnerDto,
+      {
+        data: hydratedPlaylists.map((row) => ({
+          ...row.playlist,
+          role: row.role,
+          owner: row.owner,
+        })),
+        meta: {
+          total_results: typesenseResult.found,
+          total_pages: Math.ceil(typesenseResult.found / per_page),
+          current_page: page,
+          per_page: per_page,
+        },
       },
-    }, { excludeExtraneousValues: true });
+      { excludeExtraneousValues: true },
+    );
   }
 
   async listInfinite({
@@ -126,32 +137,34 @@ export class SearchPlaylistsService {
     dto: ListInfiniteSearchPlaylistsQueryDto;
   }): Promise<ListInfinitePlaylistsWithOwnerDto> {
     const { q, cursor, per_page, include_total_count } = dto;
-    
-    const cursorData = cursor ? decodeCursor<{ page: number }>(cursor) : { page: 1 };
+
+    const cursorData = cursor ? decodeCursor(cursor, PageCursorSchema) : { page: 1 };
     const page = cursorData.page;
 
     const filterBy = await this.buildFilterBy(currentUser);
     const typesenseResult = await this.executeTypesenseSearch(q, page, per_page, filterBy);
     const playlistIds = typesenseResult.hits?.map((hit) => hit.document.id) || [];
-    
+
     const hydratedPlaylists = await this.hydratePlaylists(playlistIds, currentUser);
 
     const hasNextPage = page * per_page < typesenseResult.found;
-    const nextCursor = hasNextPage 
-        ? encodeCursor<{ page: number }>({ page: page + 1 }) 
-        : null;
+    const nextCursor = hasNextPage ? encodeCursor<{ page: number }>({ page: page + 1 }) : null;
 
-    return plainToInstance(ListInfinitePlaylistsWithOwnerDto, {
-      data: hydratedPlaylists.map(row => ({
-        ...row.playlist,
-        role: row.role,
-        owner: row.owner,
-      })),
-      meta: {
-        next_cursor: nextCursor,
-        per_page,
-        total_results: include_total_count ? typesenseResult.found : undefined,
+    return plainToInstance(
+      ListInfinitePlaylistsWithOwnerDto,
+      {
+        data: hydratedPlaylists.map((row) => ({
+          ...row.playlist,
+          role: row.role,
+          owner: row.owner,
+        })),
+        meta: {
+          next_cursor: nextCursor,
+          per_page,
+          total_results: include_total_count ? typesenseResult.found : undefined,
+        },
       },
-    }, { excludeExtraneousValues: true });
+      { excludeExtraneousValues: true },
+    );
   }
 }

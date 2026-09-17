@@ -82,3 +82,7 @@ jobs:
       - name: 🧪 Run Tests (Affected)
         if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
         run: pnpm nx affected -t test --parallel=3
+
+      - name: 🐘 Run Integration Tests (Affected)
+        if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
+        run: pnpm nx affected -t test-integration --parallel=1

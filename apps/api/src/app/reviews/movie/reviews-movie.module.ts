@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ReviewsMovieService } from './reviews-movie.service';
-import { ReviewsMovieController } from './reviews-movie.controller';
+import { ReviewMovieLikesModule } from './likes/review-movie-likes.module';
+import { ReviewMovieCommentsModule } from './comments/review-movie-comments.module';
 
 @Module({
-  controllers: [ReviewsMovieController],
-  providers: [ReviewsMovieService],
-  exports: [ReviewsMovieService],
+  imports: [ReviewMovieLikesModule, ReviewMovieCommentsModule],
 })
 export class ReviewsMovieModule {}

@@ -46,7 +46,7 @@ const CardReviewMovieDefault = React.forwardRef<
         {review?.title ? <p className="font-semibold line-clamp-1">{review?.title}</p> : null}
         <Overview data={review?.body} />
         <div className="flex items-center justify-end m-1">
-          <ButtonUserReviewMovieLike reviewId={review?.id} reviewLikesCount={review.likesCount} />
+          <ButtonUserReviewMovieLike review={review} />
         </div>
       </div>
     </Card>

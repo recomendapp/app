@@ -16,16 +16,17 @@ import {
   useReviewTvSeriesLikeMutation,
   useReviewTvSeriesUnlikeMutation,
 } from '@libs/query-client';
+import { ReviewTvSeries } from '@libs/api-js';
 
-interface ButtonUserReviewTvSeriesLikeProps extends React.ComponentProps<typeof Button> {
-  reviewId: number;
-  reviewLikesCount?: number;
+interface ButtonUserReviewTvSeriesLikeProps
+  extends Omit<React.ComponentProps<typeof Button>, 'children'> {
+  review: ReviewTvSeries;
 }
 
 const ButtonUserReviewTvSeriesLike = React.forwardRef<
   React.ComponentRef<typeof Button>,
   ButtonUserReviewTvSeriesLikeProps
->(({ reviewId, reviewLikesCount, className, ...props }, ref) => {
+>(({ review, className, ...props }, ref) => {
   const { user } = useAuth();
   const t = useTranslations();
   const pathname = usePathname();
@@ -35,16 +36,19 @@ const ButtonUserReviewTvSeriesLike = React.forwardRef<
     isError,
   } = useQuery(
     reviewTvSeriesLikeOptions({
-      reviewId: reviewId,
+      reviewId: review.id,
       userId: user?.id,
     }),
   );
-  const [likeCount, setLikeCount] = React.useState(reviewLikesCount ?? undefined);
   const { mutateAsync: insertLike, isPending: isInsertPending } = useReviewTvSeriesLikeMutation({
     userId: user?.id,
+    tvSeriesId: review.tvSeriesId,
+    reviewAuthorId: review.userId,
   });
   const { mutateAsync: deleteLike, isPending: isDeletePending } = useReviewTvSeriesUnlikeMutation({
     userId: user?.id,
+    tvSeriesId: review.tvSeriesId,
+    reviewAuthorId: review.userId,
   });
 
   const handleLike = React.useCallback(
@@ -53,20 +57,17 @@ const ButtonUserReviewTvSeriesLike = React.forwardRef<
       await insertLike(
         {
           path: {
-            review_id: reviewId,
+            review_id: review.id,
           },
         },
         {
-          onSuccess: () => {
-            setLikeCount((prev) => (prev ?? 0) + 1);
-          },
           onError: () => {
             toast.error(upperFirst(t('common.messages.an_error_occurred')));
           },
         },
       );
     },
-    [insertLike, reviewId, t],
+    [insertLike, review.id, t],
   );
 
   const handleUnlike = React.useCallback(
@@ -79,20 +80,17 @@ const ButtonUserReviewTvSeriesLike = React.forwardRef<
       await deleteLike(
         {
           path: {
-            review_id: reviewId,
+            review_id: review.id,
           },
         },
         {
-          onSuccess: () => {
-            setLikeCount((prev) => (prev ?? 0) - 1);
-          },
           onError: () => {
             toast.error(upperFirst(t('common.messages.an_error_occurred')));
           },
         },
       );
     },
-    [deleteLike, reviewId, t],
+    [deleteLike, review.id, like, t],
   );
 
   if (user == null) {
@@ -108,7 +106,7 @@ const ButtonUserReviewTvSeriesLike = React.forwardRef<
         >
           <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
             <Icons.like size={20} />
-            {likeCount != undefined ? ` ${likeCount}` : null}
+            {` ${review.likesCount}`}
           </Link>
         </Button>
       </TooltipBox>
@@ -148,7 +146,7 @@ const ButtonUserReviewTvSeriesLike = React.forwardRef<
 				`}
           />
         )}
-        {likeCount != undefined ? ` ${likeCount}` : null}
+        {` ${review.likesCount}`}
       </Button>
     </TooltipBox>
   );

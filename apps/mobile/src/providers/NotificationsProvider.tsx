@@ -106,6 +106,23 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
             params: { username: data.actorUsername },
           });
           break;
+        case 'review:liked':
+        case 'review:commented':
+        case 'review-comment:liked':
+        case 'review-comment:replied':
+          if (data.mediaType === 'movie') {
+            router.push({
+              pathname: '/user/[username]/film/[film_id]/comments',
+              params: { username: data.reviewAuthorUsername, film_id: data.mediaId },
+            });
+          }
+          if (data.mediaType === 'tv_series') {
+            router.push({
+              pathname: '/user/[username]/tv-series/[tv_series_id]/comments',
+              params: { username: data.reviewAuthorUsername, tv_series_id: data.mediaId },
+            });
+          }
+          break;
         default:
           break;
       }

@@ -1,4 +1,4 @@
-import { ProfileTvSeries } from '../../../../../../components/screens/user/tv-series/ProfileTvSeries';
+import { ProfileTvSeries } from '../../../../../../../components/screens/user/tv-series/ProfileTvSeries';
 import { useLocalSearchParams } from 'expo-router';
 
 const ProfileTvSeriesScreen = () => {

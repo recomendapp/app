@@ -2,14 +2,16 @@ import { useTheme } from '../../providers/ThemeProvider';
 import { Icons } from '../../constants/Icons';
 import { Button } from '../ui/Button';
 import { Text } from '../ui/text';
-import { forwardRef, useEffect, useState } from 'react';
+import { forwardRef } from 'react';
 import tw from '../../lib/tw';
-import { useAuth } from '../../providers/AuthProvider';
 import { useUserReviewTvSeriesLike } from '@libs/query-client';
+import { useAuth } from '../../providers/AuthProvider';
+import { ReviewTvSeries } from '@libs/api-js';
 
-interface ButtonUserReviewTvSeriesLikeProps extends React.ComponentProps<typeof Button> {
-  reviewId: number;
-  reviewLikesCount?: number;
+interface ButtonUserReviewTvSeriesLikeProps
+  extends Omit<React.ComponentProps<typeof Button>, 'children'> {
+  review: ReviewTvSeries;
+  showCount?: boolean;
 }
 
 const ButtonUserReviewTvSeriesLike = forwardRef<
@@ -18,8 +20,8 @@ const ButtonUserReviewTvSeriesLike = forwardRef<
 >(
   (
     {
-      reviewId,
-      reviewLikesCount,
+      review,
+      showCount = true,
       variant = 'outline',
       size,
       icon = Icons.like,
@@ -32,20 +34,17 @@ const ButtonUserReviewTvSeriesLike = forwardRef<
     const { colors } = useTheme();
     const { user } = useAuth();
     const { isLiked, toggle } = useUserReviewTvSeriesLike({
-      reviewId,
+      reviewId: review.id,
       userId: user?.id,
+      tvSeriesId: review.tvSeriesId,
+      reviewAuthorId: review.userId,
     });
-    const [likeCount, setLikeCount] = useState<number | undefined>(reviewLikesCount);
-
-    useEffect(() => {
-      setLikeCount(reviewLikesCount);
-    }, [reviewLikesCount]);
 
     return (
       <Button
         ref={ref}
         variant={variant}
-        size={size || reviewLikesCount === undefined ? 'icon' : undefined}
+        size={size || (showCount ? undefined : 'icon')}
         icon={icon}
         iconProps={{
           color: isLiked ? colors.accentPink : colors.foreground,
@@ -61,9 +60,9 @@ const ButtonUserReviewTvSeriesLike = forwardRef<
         }}
         {...props}
       >
-        {reviewLikesCount !== undefined && (
+        {showCount && (
           <Text style={[{ color: isLiked ? colors.accentPink : colors.foreground }]}>
-            {likeCount}
+            {review.likesCount}
           </Text>
         )}
       </Button>

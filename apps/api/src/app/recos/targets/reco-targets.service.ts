@@ -3,18 +3,27 @@ import { aliasedTable, and, asc, desc, eq, gt, ilike, lt, max, or, SQL, sql } fr
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { follow, logMovie, logTvSeries, profile, reco, user } from '@libs/db/schemas';
-import { ListAllRecoTargetsQueryDto, ListInfiniteRecoTargetsDto, ListInfiniteRecoTargetsQueryDto, ListPaginatedRecoTargetsDto, ListPaginatedRecoTargetsQueryDto, RecoTargetDto, RecoTargetSortBy } from './dto/reco-targets.dto';
+import {
+  ListAllRecoTargetsQueryDto,
+  ListInfiniteRecoTargetsDto,
+  ListInfiniteRecoTargetsQueryDto,
+  ListPaginatedRecoTargetsDto,
+  ListPaginatedRecoTargetsQueryDto,
+  RecoTargetDto,
+  RecoTargetSortBy,
+} from './dto/reco-targets.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { RecoType } from '../dto/recos.dto';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { z } from 'zod';
 import { plainToInstance } from 'class-transformer';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 
+const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.string().min(1));
+
 @Injectable()
 export class RecoTargetsService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
   private getListBaseQuery(
     currentUser: User,
@@ -43,7 +52,7 @@ export class RecoTargetsService {
         default:
           return [
             direction(sql`COALESCE(${latestRecoQuery.latestRecoDate}, ${follow.createdAt})`),
-            direction(follow.followingId)
+            direction(follow.followingId),
           ];
       }
     })();
@@ -52,7 +61,7 @@ export class RecoTargetsService {
       eq(follow.followerId, currentUser.id),
       eq(follow.status, 'accepted'),
       eq(followAlias.status, 'accepted'),
-      search ? ilike(user.username, `%${search}%`) : undefined
+      search ? ilike(user.username, `%${search}%`) : undefined,
     );
 
     const isMovie = type === RecoType.MOVIE;
@@ -64,11 +73,15 @@ export class RecoTargetsService {
           ...USER_COMPACT_SELECT,
           followersCount: profile.followersCount,
         },
-        alreadySeen: (isMovie 
+        alreadySeen: (isMovie
           ? sql<boolean>`${logMovie.id} IS NOT NULL`
-          : sql<boolean>`${logTvSeries.id} IS NOT NULL`).as('alreadySeen'),
+          : sql<boolean>`${logTvSeries.id} IS NOT NULL`
+        ).as('alreadySeen'),
         alreadySent: sql<boolean>`${reco.id} IS NOT NULL`.as('alreadySent'),
-        lastInteractionDate: sql<string>`COALESCE(${latestRecoQuery.latestRecoDate}, ${follow.createdAt})`.as('lastInteractionDate'),
+        lastInteractionDate:
+          sql<string>`COALESCE(${latestRecoQuery.latestRecoDate}, ${follow.createdAt})`.as(
+            'lastInteractionDate',
+          ),
       })
       .from(follow)
       .innerJoin(user, eq(user.id, follow.followingId))
@@ -77,31 +90,37 @@ export class RecoTargetsService {
         followAlias,
         and(
           eq(follow.followerId, followAlias.followingId),
-          eq(follow.followingId, followAlias.followerId)
-        )
+          eq(follow.followingId, followAlias.followerId),
+        ),
       )
       .leftJoin(latestRecoQuery, eq(latestRecoQuery.targetUserId, follow.followingId));
     const joinedQb = isMovie
       ? baseQb
-          .leftJoin(logMovie, and(
-              eq(logMovie.userId, follow.followingId), 
-              eq(logMovie.movieId, mediaId)
-          ))
-          .leftJoin(reco, and(
-              eq(reco.userId, follow.followingId), 
-              eq(reco.senderId, currentUser.id), 
-              eq(reco.movieId, mediaId)
-          ))
+          .leftJoin(
+            logMovie,
+            and(eq(logMovie.userId, follow.followingId), eq(logMovie.movieId, mediaId)),
+          )
+          .leftJoin(
+            reco,
+            and(
+              eq(reco.userId, follow.followingId),
+              eq(reco.senderId, currentUser.id),
+              eq(reco.movieId, mediaId),
+            ),
+          )
       : baseQb
-          .leftJoin(logTvSeries, and(
-              eq(logTvSeries.userId, follow.followingId), 
-              eq(logTvSeries.tvSeriesId, mediaId)
-          ))
-          .leftJoin(reco, and(
-              eq(reco.userId, follow.followingId), 
-              eq(reco.senderId, currentUser.id), 
-              eq(reco.tvSeriesId, mediaId)
-          ));
+          .leftJoin(
+            logTvSeries,
+            and(eq(logTvSeries.userId, follow.followingId), eq(logTvSeries.tvSeriesId, mediaId)),
+          )
+          .leftJoin(
+            reco,
+            and(
+              eq(reco.userId, follow.followingId),
+              eq(reco.senderId, currentUser.id),
+              eq(reco.tvSeriesId, mediaId),
+            ),
+          );
 
     return { joinedQb, whereClause, orderBy, followAlias };
   }
@@ -120,22 +139,28 @@ export class RecoTargetsService {
     const { sort_order, sort_by, search } = query;
 
     const { joinedQb, whereClause, orderBy } = this.getListBaseQuery(
-      currentUser, type, mediaId, sort_by, sort_order, search
+      currentUser,
+      type,
+      mediaId,
+      sort_by,
+      sort_order,
+      search,
     );
 
-    const results = await joinedQb
-      .where(whereClause)
-      .orderBy(...orderBy);
+    const results = await joinedQb.where(whereClause).orderBy(...orderBy);
 
-    return plainToInstance(RecoTargetDto, results.map((row) => ({
-      id: row.user.id,
-      name: row.user.name,
-      username: row.user.username,
-      avatar: row.user.avatar,
-      isPremium: row.user.isPremium,
-      alreadySeen: row.alreadySeen,
-      alreadySent: row.alreadySent,
-    })));
+    return plainToInstance(
+      RecoTargetDto,
+      results.map((row) => ({
+        id: row.user.id,
+        name: row.user.name,
+        username: row.user.username,
+        avatar: row.user.avatar,
+        isPremium: row.user.isPremium,
+        alreadySeen: row.alreadySeen,
+        alreadySent: row.alreadySent,
+      })),
+    );
   }
 
   async listPaginated({
@@ -153,7 +178,12 @@ export class RecoTargetsService {
     const offset = (page - 1) * per_page;
 
     const { joinedQb, whereClause, orderBy, followAlias } = this.getListBaseQuery(
-      currentUser, type, mediaId, sort_by, sort_order, search
+      currentUser,
+      type,
+      mediaId,
+      sort_by,
+      sort_order,
+      search,
     );
 
     const countQuery = this.db
@@ -164,8 +194,8 @@ export class RecoTargetsService {
         followAlias,
         and(
           eq(follow.followerId, followAlias.followingId),
-          eq(follow.followingId, followAlias.followerId)
-        )
+          eq(follow.followingId, followAlias.followerId),
+        ),
       )
       .where(whereClause);
 
@@ -210,11 +240,14 @@ export class RecoTargetsService {
   }): Promise<ListInfiniteRecoTargetsDto> {
     const { per_page, sort_order, sort_by, cursor, search } = query;
 
-    const cursorData = cursor ? decodeCursor<BaseCursor<string | number, string>>(cursor) : null;
+    const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
 
-    const { joinedQb, whereClause: baseWhereClause, orderBy, followAlias } = this.getListBaseQuery(
-      currentUser, type, mediaId, sort_by, sort_order, search
-    );
+    const {
+      joinedQb,
+      whereClause: baseWhereClause,
+      orderBy,
+      followAlias,
+    } = this.getListBaseQuery(currentUser, type, mediaId, sort_by, sort_order, search);
 
     let cursorWhereClause: SQL | undefined;
 
@@ -231,16 +264,16 @@ export class RecoTargetsService {
             operator(latestRecoDateCol, interactionDate),
             and(
               eq(latestRecoDateCol, interactionDate),
-              operator(follow.followingId, cursorData.id)
-            )
+              operator(follow.followingId, cursorData.id),
+            ),
           );
           break;
         }
       }
     }
 
-    const finalWhereClause = cursorWhereClause 
-      ? and(baseWhereClause, cursorWhereClause) 
+    const finalWhereClause = cursorWhereClause
+      ? and(baseWhereClause, cursorWhereClause)
       : baseWhereClause;
 
     const fetchLimit = per_page + 1;
@@ -253,8 +286,8 @@ export class RecoTargetsService {
         followAlias,
         and(
           eq(follow.followerId, followAlias.followingId),
-          eq(follow.followingId, followAlias.followerId)
-        )
+          eq(follow.followingId, followAlias.followerId),
+        ),
       )
       .where(baseWhereClause);
 

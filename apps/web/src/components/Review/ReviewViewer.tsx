@@ -17,6 +17,7 @@ import { ReviewMovieSettings } from './ReviewMovieSettings';
 import { ReviewTvSeriesSettings } from './ReviewTvSeriesSettings';
 import ButtonUserReviewMovieLike from '../buttons/ButtonUserReviewMovieLike';
 import ButtonUserReviewTvSeriesLike from '../buttons/ButtonUserReviewTvSeriesLike';
+import { ReviewComments } from './Comments/ReviewComments';
 import {
   MovieCompact,
   ReviewMovie as TReviewMovie,
@@ -59,69 +60,74 @@ export default function ReviewViewer({
 }: ReviewViewerProps) {
   const t = useTranslations();
   return (
-    <Card className={cn('w-full gap-4', className)}>
-      <CardHeader>
-        <CardTitle>
-          <div className="flex flex-row items-center gap-2">
-            <CardUser variant="inline" user={author} />
-            {rating !== null && (
-              <div
-                className={buttonVariants({
-                  variant: 'default',
-                  className: 'bg-background! border-accent-yellow! text-accent-yellow! border-2',
-                })}
-              >
-                <p className="font-bold text-lg">{rating}</p>
-              </div>
-            )}
-          </div>
-        </CardTitle>
-        <CardAction>
-          <ButtonGroup>
-            {type === 'movie' ? (
-              <>
-                <ReviewMovieSettings
-                  movieId={movie.id}
-                  movie={movie}
-                  review={review}
-                  author={author}
-                />
-              </>
-            ) : (
-              type === 'tv_series' && (
+    <div className={cn('w-full flex flex-col gap-4', className)}>
+      <Card className="w-full gap-4">
+        <CardHeader>
+          <CardTitle>
+            <div className="flex flex-row items-center gap-2">
+              <CardUser variant="inline" user={author} />
+              {rating !== null && (
+                <div
+                  className={buttonVariants({
+                    variant: 'default',
+                    className: 'bg-background! border-accent-yellow! text-accent-yellow! border-2',
+                  })}
+                >
+                  <p className="font-bold text-lg">{rating}</p>
+                </div>
+              )}
+            </div>
+          </CardTitle>
+          <CardAction>
+            <ButtonGroup>
+              {type === 'movie' ? (
                 <>
-                  <ReviewTvSeriesSettings
-                    tvSeriesId={tvSeries.id}
-                    tvSeries={tvSeries}
+                  <ReviewMovieSettings
+                    movieId={movie.id}
+                    movie={movie}
                     review={review}
                     author={author}
                   />
                 </>
-              )
-            )}
-          </ButtonGroup>
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-        <h1 className="text-5xl font-bold text-primary text-center">
-          {review.title || `${upperFirst(t('common.messages.review_by', { name: author.name }))}`}
-        </h1>
-        <div className="prose dark:prose-invert mt-4">
-          <Markdown>{review.body}</Markdown>
-        </div>
-      </CardContent>
-      <CardFooter className="justify-end">
-        {type === 'movie' ? (
-          <ButtonUserReviewMovieLike reviewId={review?.id} reviewLikesCount={review.likesCount} />
-        ) : (
-          type === 'tv_series' && (
-            <ButtonUserReviewTvSeriesLike
-              reviewId={review?.id}
-              reviewLikesCount={review.likesCount}
-            />
-          )
-        )}
-      </CardFooter>
-    </Card>
+              ) : (
+                type === 'tv_series' && (
+                  <>
+                    <ReviewTvSeriesSettings
+                      tvSeriesId={tvSeries.id}
+                      tvSeries={tvSeries}
+                      review={review}
+                      author={author}
+                    />
+                  </>
+                )
+              )}
+            </ButtonGroup>
+          </CardAction>
+        </CardHeader>
+        <CardContent>
+          <h1 className="text-5xl font-bold text-primary text-center">
+            {review.title || `${upperFirst(t('common.messages.review_by', { name: author.name }))}`}
+          </h1>
+          <div className="prose dark:prose-invert mt-4">
+            <Markdown>{review.body}</Markdown>
+          </div>
+        </CardContent>
+        <CardFooter className="justify-end">
+          {type === 'movie' ? (
+            <ButtonUserReviewMovieLike review={review} />
+          ) : (
+            type === 'tv_series' && <ButtonUserReviewTvSeriesLike review={review} />
+          )}
+        </CardFooter>
+      </Card>
+
+      <ReviewComments
+        type={type === 'movie' ? 'movie' : 'tv-series'}
+        reviewId={review.id}
+        reviewAuthorId={author.id}
+        mediaId={type === 'movie' ? movie.id : tvSeries.id}
+        commentsCount={review.commentsCount}
+      />
+    </div>
   );
 }

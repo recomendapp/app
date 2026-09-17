@@ -86,7 +86,7 @@ const CardReviewMovieDefault = React.forwardRef<
         )}
         {!skeleton && (
           <View style={tw.style('flex-row items-center justify-end m-1')}>
-            <ButtonUserReviewMovieLike reviewId={review?.id} reviewLikesCount={review.likesCount} />
+            <ButtonUserReviewMovieLike review={review} />
           </View>
         )}
       </View>

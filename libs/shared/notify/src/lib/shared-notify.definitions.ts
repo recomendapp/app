@@ -3,12 +3,13 @@ import {
   NotifyAuthRegistry,
   NotifyFollowRegistry,
   NotifyRecoRegistry,
+  NotifyReviewRegistry,
 } from '@libs/notify-types';
 
-export type NotifyRegistry =
-  NotifyAuthRegistry
-  & NotifyRecoRegistry 
-  & NotifyFollowRegistry;
+export type NotifyRegistry = NotifyAuthRegistry &
+  NotifyRecoRegistry &
+  NotifyFollowRegistry &
+  NotifyReviewRegistry;
 
 export type NotifyJobName = keyof NotifyRegistry;
 

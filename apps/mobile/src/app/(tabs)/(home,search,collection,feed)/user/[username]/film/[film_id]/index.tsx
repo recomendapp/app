@@ -1,4 +1,4 @@
-import { ProfileFilm } from '../../../../../../components/screens/user/film/ProfileFilm';
+import { ProfileFilm } from '../../../../../../../components/screens/user/film/ProfileFilm';
 import { useLocalSearchParams } from 'expo-router';
 
 const ProfileFilmScreen = () => {

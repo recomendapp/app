@@ -13,8 +13,11 @@ import { SortOrder } from '../../../common/dto/sort.dto';
 import { and, asc, desc, eq, gt, lt, or, sql, SQL } from 'drizzle-orm';
 import { MOVIE_SUMMARY_SELECT, TV_SERIES_SUMMARY_SELECT } from '@libs/db/selectors';
 import { plainToInstance } from 'class-transformer';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { z } from 'zod';
 import { SupportedLocale } from '@libs/i18n';
+
+const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.number());
 
 @Injectable()
 export class RecosTrendingService {
@@ -128,7 +131,7 @@ export class RecosTrendingService {
 
       const { per_page, sort_order, sort_by, cursor, include_total_count } = query;
 
-      const cursorData = cursor ? decodeCursor<BaseCursor<string | number, number>>(cursor) : null;
+      const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
       const { orderBy } = this.getListBaseQuery(sort_by, sort_order);
 
       let cursorWhereClause: SQL | undefined;

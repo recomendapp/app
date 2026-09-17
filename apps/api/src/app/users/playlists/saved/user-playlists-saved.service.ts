@@ -3,30 +3,32 @@ import { and, asc, desc, eq, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { playlist, playlistSaved, profile, user } from '@libs/db/schemas'; // 🔥 Ajout de profile et user
 import { User } from '../../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/drizzle/drizzle.module';
-import { ListInfinitePlaylistsWithOwnerDto, ListPaginatedPlaylistsWithOwnerDto } from '../../../playlists/dto/playlists.dto';
+import {
+  ListInfinitePlaylistsWithOwnerDto,
+  ListPaginatedPlaylistsWithOwnerDto,
+} from '../../../playlists/dto/playlists.dto';
 import { SortOrder } from '../../../../common/dto/sort.dto';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../../utils/cursor';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../../utils/cursor';
+import { z } from 'zod';
 import { plainToInstance } from 'class-transformer';
 import { PlaylistQueryBuilder } from '../../../playlists/playlists.query-builder';
-import { ListInfinitePlaylistsSavedQueryDto, ListPaginatedPlaylistsSavedQueryDto, PlaylistSavedSortBy } from '../../../playlists/saves/dto/playlist-saved.dto';
+import {
+  ListInfinitePlaylistsSavedQueryDto,
+  ListPaginatedPlaylistsSavedQueryDto,
+  PlaylistSavedSortBy,
+} from '../../../playlists/saves/dto/playlist-saved.dto';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
+
+const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.number());
 
 @Injectable()
 export class UserPlaylistsSavedService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
-  private getListBaseWhereClause(
-    targetUserId: string,
-    currentUser: User | null,
-  ) {
+  private getListBaseWhereClause(targetUserId: string, currentUser: User | null) {
     const visibilityCondition = PlaylistQueryBuilder.getVisibilityCondition(this.db, currentUser);
 
-    return and(
-      eq(playlistSaved.userId, targetUserId),
-      visibilityCondition
-    );
+    return and(eq(playlistSaved.userId, targetUserId), visibilityCondition);
   }
 
   private getOrderBy(sortBy: PlaylistSavedSortBy, sortOrder: SortOrder) {
@@ -44,21 +46,44 @@ export class UserPlaylistsSavedService {
     }
   }
 
-  private getCursorWhereClause(sortBy: PlaylistSavedSortBy, sortOrder: SortOrder, cursor?: string): SQL | undefined {
-    const cursorData = cursor ? decodeCursor<BaseCursor<string | number, number>>(cursor) : null;
+  private getCursorWhereClause(
+    sortBy: PlaylistSavedSortBy,
+    sortOrder: SortOrder,
+    cursor?: string,
+  ): SQL | undefined {
+    const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
     if (!cursorData) return undefined;
 
     const operator = sortOrder === SortOrder.ASC ? gt : lt;
 
     switch (sortBy) {
       case PlaylistSavedSortBy.LIKES_COUNT:
-        return or(operator(playlist.likesCount, Number(cursorData.value)), and(eq(playlist.likesCount, Number(cursorData.value)), operator(playlistSaved.id, cursorData.id)));
+        return or(
+          operator(playlist.likesCount, Number(cursorData.value)),
+          and(
+            eq(playlist.likesCount, Number(cursorData.value)),
+            operator(playlistSaved.id, cursorData.id),
+          ),
+        );
       case PlaylistSavedSortBy.UPDATED_AT:
-        return or(operator(playlist.updatedAt, String(cursorData.value)), and(eq(playlist.updatedAt, String(cursorData.value)), operator(playlistSaved.id, cursorData.id)));
-      case PlaylistSavedSortBy.RANDOM: return undefined;
+        return or(
+          operator(playlist.updatedAt, String(cursorData.value)),
+          and(
+            eq(playlist.updatedAt, String(cursorData.value)),
+            operator(playlistSaved.id, cursorData.id),
+          ),
+        );
+      case PlaylistSavedSortBy.RANDOM:
+        return undefined;
       case PlaylistSavedSortBy.SAVED_AT:
       default:
-        return or(operator(playlistSaved.createdAt, String(cursorData.value)), and(eq(playlistSaved.createdAt, String(cursorData.value)), operator(playlistSaved.id, cursorData.id)));
+        return or(
+          operator(playlistSaved.createdAt, String(cursorData.value)),
+          and(
+            eq(playlistSaved.createdAt, String(cursorData.value)),
+            operator(playlistSaved.id, cursorData.id),
+          ),
+        );
     }
   }
 
@@ -67,9 +92,9 @@ export class UserPlaylistsSavedService {
     query,
     currentUser,
   }: {
-    targetUserId: string,
-    query: ListPaginatedPlaylistsSavedQueryDto,
-    currentUser: User | null
+    targetUserId: string;
+    query: ListPaginatedPlaylistsSavedQueryDto;
+    currentUser: User | null;
   }): Promise<ListPaginatedPlaylistsWithOwnerDto> {
     const { per_page, sort_order, sort_by, page } = query;
     const offset = (page - 1) * per_page;
@@ -80,7 +105,7 @@ export class UserPlaylistsSavedService {
 
     const [results, [{ count: totalCount }]] = await Promise.all([
       this.db
-        .select({ 
+        .select({
           playlist: playlist,
           role: roleSelection,
           owner: USER_COMPACT_SELECT,
@@ -101,7 +126,7 @@ export class UserPlaylistsSavedService {
     ]);
 
     return plainToInstance(ListPaginatedPlaylistsWithOwnerDto, {
-      data: results.map(row => ({
+      data: results.map((row) => ({
         ...row.playlist,
         role: row.role,
         owner: row.owner,
@@ -120,9 +145,9 @@ export class UserPlaylistsSavedService {
     query,
     currentUser,
   }: {
-    targetUserId: string,
-    query: ListInfinitePlaylistsSavedQueryDto,
-    currentUser: User | null
+    targetUserId: string;
+    query: ListInfinitePlaylistsSavedQueryDto;
+    currentUser: User | null;
   }): Promise<ListInfinitePlaylistsWithOwnerDto> {
     const { per_page, sort_order, sort_by, cursor } = query;
 
@@ -131,19 +156,19 @@ export class UserPlaylistsSavedService {
     const roleSelection = PlaylistQueryBuilder.getRoleSelection(currentUser);
 
     const cursorWhereClause = this.getCursorWhereClause(sort_by, sort_order, cursor);
-    const finalWhereClause = cursorWhereClause 
-      ? and(baseWhereClause, cursorWhereClause) 
+    const finalWhereClause = cursorWhereClause
+      ? and(baseWhereClause, cursorWhereClause)
       : baseWhereClause;
 
     const fetchLimit = per_page + 1;
 
     const results = await this.db
-      .select({ 
-        playlist: playlist, 
+      .select({
+        playlist: playlist,
         role: roleSelection,
         owner: USER_COMPACT_SELECT,
         savedId: playlistSaved.id,
-        savedAt: playlistSaved.createdAt 
+        savedAt: playlistSaved.createdAt,
       })
       .from(playlistSaved)
       .innerJoin(playlist, eq(playlist.id, playlistSaved.playlistId))
@@ -184,7 +209,7 @@ export class UserPlaylistsSavedService {
     }
 
     return plainToInstance(ListInfinitePlaylistsWithOwnerDto, {
-      data: paginatedResults.map(r => ({
+      data: paginatedResults.map((r) => ({
         ...r.playlist,
         role: r.role,
         owner: r.owner,

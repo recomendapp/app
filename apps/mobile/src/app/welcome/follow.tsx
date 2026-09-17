@@ -81,7 +81,7 @@ const WelcomeFollowScreen = () => {
         ItemSeparatorComponent={() => <View style={tw`h-2`} />}
         contentContainerStyle={{
           gap: GAP,
-          paddingTop: navigationHeaderHeight,
+          paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
           paddingHorizontal: PADDING_HORIZONTAL,
           paddingBottom: insets.bottom + PADDING_VERTICAL,
         }}

@@ -4,16 +4,23 @@ import { follow, profile, user } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { SortOrder } from '../../../common/dto/sort.dto';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
-import { ListInfiniteUsersDto, ListInfiniteUsersQueryDto, ListPaginatedUsersDto, ListPaginatedUsersQueryDto, UserSortBy } from '../dto/users.dto';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { z } from 'zod';
+import {
+  ListInfiniteUsersDto,
+  ListInfiniteUsersQueryDto,
+  ListPaginatedUsersDto,
+  ListPaginatedUsersQueryDto,
+  UserSortBy,
+} from '../dto/users.dto';
 import { plainToInstance } from 'class-transformer';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 
+const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.string().min(1));
+
 @Injectable()
 export class UserFollowersService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
   private async getListBaseQuery(
     targetUserId: string,
@@ -47,13 +54,15 @@ export class UserFollowersService {
           throw new ForbiddenException('This account is private');
         }
         if (!targetData.isFollowing) {
-          throw new ForbiddenException('This account is private. Follow this user to see their followers.');
+          throw new ForbiddenException(
+            'This account is private. Follow this user to see their followers.',
+          );
         }
       }
     }
 
     const direction = sortOrder === SortOrder.ASC ? asc : desc;
-  
+
     const orderBy = (() => {
       switch (sortBy) {
         case UserSortBy.RANDOM:
@@ -66,10 +75,7 @@ export class UserFollowersService {
       }
     })();
 
-    const whereClause = and(
-      eq(follow.followingId, targetUserId),
-      eq(follow.status, 'accepted')
-    );
+    const whereClause = and(eq(follow.followingId, targetUserId), eq(follow.status, 'accepted'));
 
     return { whereClause, orderBy };
   }
@@ -78,9 +84,9 @@ export class UserFollowersService {
     query,
     currentUser,
   }: {
-    targetUserId: string,
-    query: ListPaginatedUsersQueryDto,
-    currentUser: User | null
+    targetUserId: string;
+    query: ListPaginatedUsersQueryDto;
+    currentUser: User | null;
   }): Promise<ListPaginatedUsersDto> {
     const { per_page, sort_order, sort_by, page } = query;
     const offset = (page - 1) * per_page;
@@ -89,7 +95,7 @@ export class UserFollowersService {
       targetUserId,
       currentUser,
       sort_by,
-      sort_order
+      sort_order,
     );
 
     const [followers, totalCount] = await Promise.all([
@@ -123,19 +129,19 @@ export class UserFollowersService {
     query,
     currentUser,
   }: {
-    targetUserId: string,
-    query: ListInfiniteUsersQueryDto,
-    currentUser: User | null
+    targetUserId: string;
+    query: ListInfiniteUsersQueryDto;
+    currentUser: User | null;
   }): Promise<ListInfiniteUsersDto> {
     const { per_page, sort_order, sort_by, cursor } = query;
 
-    const cursorData = cursor ? decodeCursor<BaseCursor<string | number, string>>(cursor) : null;
+    const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
 
     const { whereClause: baseWhereClause, orderBy } = await this.getListBaseQuery(
       targetUserId,
       currentUser,
       sort_by,
-      sort_order
+      sort_order,
     );
 
     let cursorWhereClause: SQL | undefined;
@@ -149,8 +155,8 @@ export class UserFollowersService {
             operator(profile.followersCount, Number(cursorData.value)),
             and(
               eq(profile.followersCount, Number(cursorData.value)),
-              operator(follow.followerId, cursorData.id)
-            )
+              operator(follow.followerId, cursorData.id),
+            ),
           );
           break;
         }
@@ -163,18 +169,15 @@ export class UserFollowersService {
           const createdDate = String(cursorData.value);
           cursorWhereClause = or(
             operator(follow.createdAt, createdDate),
-            and(
-              eq(follow.createdAt, createdDate),
-              operator(follow.followerId, cursorData.id)
-            )
+            and(eq(follow.createdAt, createdDate), operator(follow.followerId, cursorData.id)),
           );
           break;
         }
       }
     }
 
-    const finalWhereClause = cursorWhereClause 
-      ? and(baseWhereClause, cursorWhereClause) 
+    const finalWhereClause = cursorWhereClause
+      ? and(baseWhereClause, cursorWhereClause)
       : baseWhereClause;
 
     const fetchLimit = per_page + 1;

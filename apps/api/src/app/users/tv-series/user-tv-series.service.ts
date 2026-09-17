@@ -6,17 +6,26 @@ import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle
 import { SupportedLocale } from '@libs/i18n';
 import { DbTransaction } from '@libs/db';
 import { SortOrder } from '../../../common/dto/sort.dto';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { z } from 'zod';
 import { plainToInstance } from 'class-transformer';
-import { ListInfiniteUserTvSeriesWithTvSeriesDto, ListPaginatedUserTvSeriesWithTvSeriesDto, UserTvSeriesWithUserTvSeriesDto } from './user-tv-series.dto';
+import {
+  ListInfiniteUserTvSeriesWithTvSeriesDto,
+  ListPaginatedUserTvSeriesWithTvSeriesDto,
+  UserTvSeriesWithUserTvSeriesDto,
+} from './user-tv-series.dto';
 import { TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
-import { ListInfiniteLogsTvSeriesQueryDto, ListPaginatedLogsTvSeriesQueryDto, LogTvSeriesSortBy } from '../../tv-series/logs/tv-series-logs.dto';
+import {
+  ListInfiniteLogsTvSeriesQueryDto,
+  ListPaginatedLogsTvSeriesQueryDto,
+  LogTvSeriesSortBy,
+} from '../../tv-series/logs/tv-series-logs.dto';
+
+const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.number());
 
 @Injectable()
 export class UserTvSeriesService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
   async get({
     userId,
@@ -32,8 +41,8 @@ export class UserTvSeriesService {
     return await this.db.transaction(async (tx) => {
       if (currentUser?.id !== userId) {
         const targetProfile = await tx.query.profile.findFirst({
-          where: eq(profile.id, userId)
-        })
+          where: eq(profile.id, userId),
+        });
 
         if (!targetProfile) {
           throw new NotFoundException('User not found.');
@@ -48,28 +57,23 @@ export class UserTvSeriesService {
             where: and(
               eq(follow.followerId, currentUser.id),
               eq(follow.followingId, userId),
-              eq(follow.status, 'accepted')
+              eq(follow.status, 'accepted'),
             ),
           });
 
           if (!amIFollowing) {
-            throw new ForbiddenException('This account is private. Follow this user to see their activity.');
+            throw new ForbiddenException(
+              'This account is private. Follow this user to see their activity.',
+            );
           }
         }
       }
-      await tx.execute(
-        sql`SELECT set_config('app.current_language', ${locale}, true)`
-      );
+      await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
       if (currentUser) {
-        await tx.execute(
-          sql`SELECT set_config('app.current_user_id', ${currentUser.id}, true)`
-        );
+        await tx.execute(sql`SELECT set_config('app.current_user_id', ${currentUser.id}, true)`);
       }
       const logEntry = await tx.query.logTvSeries.findFirst({
-        where: and(
-          eq(logTvSeries.userId, userId),
-          eq(logTvSeries.tvSeriesId, tvSeriesId),
-        ),
+        where: and(eq(logTvSeries.userId, userId), eq(logTvSeries.tvSeriesId, tvSeriesId)),
         with: {
           review: true,
           user: {
@@ -83,31 +87,34 @@ export class UserTvSeriesService {
               profile: {
                 columns: {
                   isPremium: true,
-                }
-              }
-            }
-          }
-        }
+                },
+              },
+            },
+          },
+        },
       });
 
       if (!logEntry) return null;
 
-      const [tvSeries] = await tx.select(TV_SERIES_COMPACT_SELECT)
-      .from(tmdbTvSeriesView)
-      .where(eq(tmdbTvSeriesView.id, tvSeriesId))
-      .limit(1);
-      
+      const [tvSeries] = await tx
+        .select(TV_SERIES_COMPACT_SELECT)
+        .from(tmdbTvSeriesView)
+        .where(eq(tmdbTvSeriesView.id, tvSeriesId))
+        .limit(1);
+
       if (!tvSeries) throw new NotFoundException('TV series not found');
 
       const { user, review, ...logData } = logEntry;
 
       return plainToInstance(UserTvSeriesWithUserTvSeriesDto, {
         ...logData,
-        review: review ? {
-          ...review,
-          userId: logData.userId,
-          tvSeriesId: logData.tvSeriesId,
-        } : null,
+        review: review
+          ? {
+              ...review,
+              userId: logData.userId,
+              tvSeriesId: logData.tvSeriesId,
+            }
+          : null,
         user: {
           id: user.id,
           username: user.username,
@@ -139,7 +146,7 @@ export class UserTvSeriesService {
         case LogTvSeriesSortBy.RANDOM:
           return [sql`RANDOM()`];
         case LogTvSeriesSortBy.RATING:
-          return sortOrder === 'asc' 
+          return sortOrder === 'asc'
             ? [sql`${logTvSeries.rating} ASC NULLS LAST`, direction(logTvSeries.id)]
             : [sql`${logTvSeries.rating} DESC NULLS LAST`, direction(logTvSeries.id)];
         case LogTvSeriesSortBy.UPDATED_AT:
@@ -151,9 +158,10 @@ export class UserTvSeriesService {
     let privacyClause: SQL | undefined;
     if (currentUser?.id !== userId) {
       const isPublicProfile = exists(
-        tx.select({ id: profile.id })
+        tx
+          .select({ id: profile.id })
           .from(profile)
-          .where(and(eq(profile.id, userId), eq(profile.isPrivate, false)))
+          .where(and(eq(profile.id, userId), eq(profile.isPrivate, false))),
       );
 
       if (!currentUser) {
@@ -162,14 +170,17 @@ export class UserTvSeriesService {
         privacyClause = or(
           isPublicProfile,
           exists(
-            tx.select({ id: follow.followerId })
+            tx
+              .select({ id: follow.followerId })
               .from(follow)
-              .where(and(
-                eq(follow.followerId, currentUser.id),
-                eq(follow.followingId, userId),
-                eq(follow.status, 'accepted')
-              ))
-          )
+              .where(
+                and(
+                  eq(follow.followerId, currentUser.id),
+                  eq(follow.followingId, userId),
+                  eq(follow.status, 'accepted'),
+                ),
+              ),
+          ),
         );
       }
     }
@@ -177,9 +188,9 @@ export class UserTvSeriesService {
     const baseWhereConditions: SQL[] = [eq(logTvSeries.userId, userId)];
     if (privacyClause) baseWhereConditions.push(privacyClause);
 
-    return { 
-      whereClause: and(...baseWhereConditions), 
-      orderBy 
+    return {
+      whereClause: and(...baseWhereConditions),
+      orderBy,
     };
   }
   async listPaginated({
@@ -202,7 +213,7 @@ export class UserTvSeriesService {
         locale,
         currentUser,
         sort_by,
-        sort_order
+        sort_order,
       );
 
       const paginatedLogsSubquery = tx
@@ -214,18 +225,19 @@ export class UserTvSeriesService {
         .offset(offset)
         .as('paginated_logs');
 
-      const [results, totalCount] = await Promise.all([        
-        tx.select({
-            log: logTvSeries, 
+      const [results, totalCount] = await Promise.all([
+        tx
+          .select({
+            log: logTvSeries,
             isReviewed: sql<boolean>`${reviewTvSeries.id} IS NOT NULL`,
             tvSeries: TV_SERIES_COMPACT_SELECT,
           })
           .from(paginatedLogsSubquery)
-          .innerJoin(logTvSeries, eq(logTvSeries.id, paginatedLogsSubquery.id)) 
+          .innerJoin(logTvSeries, eq(logTvSeries.id, paginatedLogsSubquery.id))
           .innerJoin(tmdbTvSeriesView, eq(logTvSeries.tvSeriesId, tmdbTvSeriesView.id))
           .leftJoin(reviewTvSeries, eq(logTvSeries.id, reviewTvSeries.id))
           .orderBy(...orderBy),
-        tx.$count(logTvSeries, whereClause)
+        tx.$count(logTvSeries, whereClause),
       ]);
 
       return plainToInstance(ListPaginatedUserTvSeriesWithTvSeriesDto, {
@@ -239,7 +251,7 @@ export class UserTvSeriesService {
           total_pages: Math.ceil(totalCount / per_page),
           current_page: page,
           per_page,
-        }
+        },
       });
     });
   }
@@ -257,7 +269,7 @@ export class UserTvSeriesService {
     return await this.db.transaction(async (tx) => {
       const { per_page, sort_order, sort_by, cursor } = query;
 
-      const cursorData = cursor ? decodeCursor<BaseCursor<string | number, number>>(cursor) : null;
+      const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
 
       const { whereClause: baseWhereClause, orderBy } = await this.getListBaseQuery(
         tx,
@@ -265,7 +277,7 @@ export class UserTvSeriesService {
         locale,
         currentUser,
         sort_by,
-        sort_order
+        sort_order,
       );
 
       let cursorWhereClause: SQL | undefined;
@@ -279,8 +291,8 @@ export class UserTvSeriesService {
               operator(logTvSeries.rating, Number(cursorData.value)),
               and(
                 eq(logTvSeries.rating, Number(cursorData.value)),
-                operator(logTvSeries.id, cursorData.id)
-              )
+                operator(logTvSeries.id, cursorData.id),
+              ),
             );
             break;
 
@@ -292,40 +304,39 @@ export class UserTvSeriesService {
             const updatedDate = String(cursorData.value);
             cursorWhereClause = or(
               operator(logTvSeries.updatedAt, updatedDate),
-              and(
-                eq(logTvSeries.updatedAt, updatedDate),
-                operator(logTvSeries.id, cursorData.id)
-              )
+              and(eq(logTvSeries.updatedAt, updatedDate), operator(logTvSeries.id, cursorData.id)),
             );
             break;
           }
         }
       }
 
-      const finalWhereClause = cursorWhereClause 
-        ? and(baseWhereClause, cursorWhereClause) 
+      const finalWhereClause = cursorWhereClause
+        ? and(baseWhereClause, cursorWhereClause)
         : baseWhereClause;
 
       const fetchLimit = per_page + 1;
 
-      const paginatedLogsSubquery = tx.select()
+      const paginatedLogsSubquery = tx
+        .select()
         .from(logTvSeries)
         .where(finalWhereClause)
         .orderBy(...orderBy)
         .limit(fetchLimit)
         .as('paginated_logs');
-      
-      const results = await tx.select({
-        log: logTvSeries, 
-        isReviewed: sql<boolean>`${reviewTvSeries.id} IS NOT NULL`,
-        tvSeries: TV_SERIES_COMPACT_SELECT,
-      })
-      .from(paginatedLogsSubquery)
-      .innerJoin(logTvSeries, eq(logTvSeries.id, paginatedLogsSubquery.id)) 
-      .innerJoin(tmdbTvSeriesView, eq(logTvSeries.tvSeriesId, tmdbTvSeriesView.id))
-      .leftJoin(reviewTvSeries, eq(logTvSeries.id, reviewTvSeries.id))
-      .orderBy(...orderBy);
-      
+
+      const results = await tx
+        .select({
+          log: logTvSeries,
+          isReviewed: sql<boolean>`${reviewTvSeries.id} IS NOT NULL`,
+          tvSeries: TV_SERIES_COMPACT_SELECT,
+        })
+        .from(paginatedLogsSubquery)
+        .innerJoin(logTvSeries, eq(logTvSeries.id, paginatedLogsSubquery.id))
+        .innerJoin(tmdbTvSeriesView, eq(logTvSeries.tvSeriesId, tmdbTvSeriesView.id))
+        .leftJoin(reviewTvSeries, eq(logTvSeries.id, reviewTvSeries.id))
+        .orderBy(...orderBy);
+
       const hasNextPage = results.length > per_page;
       const paginatedResults = hasNextPage ? results.slice(0, per_page) : results;
 
@@ -361,7 +372,7 @@ export class UserTvSeriesService {
         meta: {
           next_cursor: nextCursor,
           per_page,
-        }
+        },
       });
     });
   }

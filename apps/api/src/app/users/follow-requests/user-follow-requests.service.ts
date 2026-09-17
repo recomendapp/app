@@ -1,25 +1,32 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import { FollowRequestSortBy, ListInfiniteFollowRequestsDto, ListInfiniteFollowRequestsQueryDto, ListPaginatedFollowRequestsDto, ListPaginatedFollowRequestsQueryDto } from './dto/user-follow-requests.dto';
+import {
+  FollowRequestSortBy,
+  ListInfiniteFollowRequestsDto,
+  ListInfiniteFollowRequestsQueryDto,
+  ListPaginatedFollowRequestsDto,
+  ListPaginatedFollowRequestsQueryDto,
+} from './dto/user-follow-requests.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { and, asc, desc, eq, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { follow, profile, user } from '@libs/db/schemas';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { z } from 'zod';
 import { plainToInstance } from 'class-transformer';
+
+const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.string().min(1));
 
 @Injectable()
 export class UserFollowRequestsService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
   private getListBaseQuery(
-    currentUserId: string, 
-    sortBy: FollowRequestSortBy, 
-    sortOrder: SortOrder
+    currentUserId: string,
+    sortBy: FollowRequestSortBy,
+    sortOrder: SortOrder,
   ) {
     const direction = sortOrder === SortOrder.ASC ? asc : desc;
-    
+
     const orderBy = (() => {
       switch (sortBy) {
         case FollowRequestSortBy.FOLLOWERs_COUNT:
@@ -30,10 +37,7 @@ export class UserFollowRequestsService {
       }
     })();
 
-    const whereClause = and(
-      eq(follow.followingId, currentUserId),
-      eq(follow.status, 'pending')
-    );
+    const whereClause = and(eq(follow.followingId, currentUserId), eq(follow.status, 'pending'));
 
     return { whereClause, orderBy };
   }
@@ -42,17 +46,13 @@ export class UserFollowRequestsService {
     currentUserId,
     query,
   }: {
-    currentUserId: string,
-    query: ListPaginatedFollowRequestsQueryDto
+    currentUserId: string;
+    query: ListPaginatedFollowRequestsQueryDto;
   }): Promise<ListPaginatedFollowRequestsDto> {
     const { per_page, sort_order, sort_by, page } = query;
     const offset = (page - 1) * per_page;
 
-    const { whereClause, orderBy } = this.getListBaseQuery(
-      currentUserId, 
-      sort_by, 
-      sort_order
-    );
+    const { whereClause, orderBy } = this.getListBaseQuery(currentUserId, sort_by, sort_order);
 
     const [requests, totalCount] = await Promise.all([
       this.db
@@ -80,7 +80,7 @@ export class UserFollowRequestsService {
           name: row.user.name,
           avatar: row.user.image,
           isPremium: row.profile.isPremium,
-        }
+        },
       })),
       meta: {
         total_results: totalCount,
@@ -95,17 +95,17 @@ export class UserFollowRequestsService {
     currentUserId,
     query,
   }: {
-    currentUserId: string,
-    query: ListInfiniteFollowRequestsQueryDto
+    currentUserId: string;
+    query: ListInfiniteFollowRequestsQueryDto;
   }): Promise<ListInfiniteFollowRequestsDto> {
     const { per_page, sort_order, sort_by, cursor } = query;
 
-    const cursorData = cursor ? decodeCursor<BaseCursor<string | number, string>>(cursor) : null;
+    const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
 
     const { whereClause: baseWhereClause, orderBy } = this.getListBaseQuery(
-      currentUserId, 
-      sort_by, 
-      sort_order
+      currentUserId,
+      sort_by,
+      sort_order,
     );
 
     let cursorWhereClause: SQL | undefined;
@@ -120,8 +120,8 @@ export class UserFollowRequestsService {
             operator(profile.followersCount, followersCount),
             and(
               eq(profile.followersCount, followersCount),
-              operator(follow.followerId, cursorData.id)
-            )
+              operator(follow.followerId, cursorData.id),
+            ),
           );
           break;
         }
@@ -130,18 +130,15 @@ export class UserFollowRequestsService {
           const createdDate = String(cursorData.value);
           cursorWhereClause = or(
             operator(follow.createdAt, createdDate),
-            and(
-              eq(follow.createdAt, createdDate),
-              operator(follow.followerId, cursorData.id)
-            )
+            and(eq(follow.createdAt, createdDate), operator(follow.followerId, cursorData.id)),
           );
           break;
         }
       }
     }
 
-    const finalWhereClause = cursorWhereClause 
-      ? and(baseWhereClause, cursorWhereClause) 
+    const finalWhereClause = cursorWhereClause
+      ? and(baseWhereClause, cursorWhereClause)
       : baseWhereClause;
 
     const fetchLimit = per_page + 1;
@@ -198,7 +195,7 @@ export class UserFollowRequestsService {
           name: row.user.name,
           avatar: row.user.image,
           isPremium: row.profile.isPremium,
-        }
+        },
       })),
       meta: {
         next_cursor: nextCursor,

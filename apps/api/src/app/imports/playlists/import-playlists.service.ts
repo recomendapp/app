@@ -5,7 +5,8 @@ import { importJob, importJobPlaylist } from '@libs/db/schemas';
 import { ImportServerEvents } from '@libs/realtime';
 import { PaginationQueryDto } from '../../../common/dto/pagination.dto';
 import { CursorPaginationQueryDto } from '../../../common/dto/cursor-pagination.dto';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { z } from 'zod';
 import { RealtimeGateway } from '../../realtime/realtime.gateway';
 import { User } from '../../auth/auth.service';
 import { plainToInstance } from 'class-transformer';
@@ -15,6 +16,8 @@ import {
   ListPaginatedImportPlaylistsDto,
   PatchImportJobPlaylistDto,
 } from './import-playlists.dto';
+
+const CursorSchema = baseCursorSchema(z.number(), z.number());
 
 @Injectable()
 export class ImportPlaylistsService {
@@ -89,7 +92,7 @@ export class ImportPlaylistsService {
   ): Promise<ListInfiniteImportPlaylistsDto> {
     await this.getOwnedJob(user.id, importJobId);
     const { per_page, cursor, include_total_count } = query;
-    const cursorData = cursor ? decodeCursor<BaseCursor<number, number>>(cursor) : null;
+    const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
     const { whereClause: baseWhereClause, orderBy } = this.getListBaseQuery(importJobId);
 
     const finalWhereClause = cursorData

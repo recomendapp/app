@@ -36,7 +36,8 @@ import {
 } from './dto/imports.dto';
 import { PaginationQueryDto } from '../../common/dto/pagination.dto';
 import { CursorPaginationQueryDto } from '../../common/dto/cursor-pagination.dto';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../utils/cursor';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../utils/cursor';
+import { z } from 'zod';
 
 // review_movie/review_tv_series title has a check constraint: null, or 1-100 chars.
 function sanitizeReviewTitle(title: string | null): string | null {
@@ -51,6 +52,8 @@ function sanitizePlaylistTitle(title: string): string {
   const trimmed = title.trim();
   return (trimmed || 'Imported playlist').slice(0, 100);
 }
+
+const CursorSchema = baseCursorSchema(z.string().min(1), z.number());
 
 @Injectable()
 export class ImportsService {
@@ -262,7 +265,7 @@ export class ImportsService {
     query: CursorPaginationQueryDto,
   ): Promise<ListInfiniteImportJobsDto> {
     const { per_page, cursor, include_total_count } = query;
-    const cursorData = cursor ? decodeCursor<BaseCursor<string, number>>(cursor) : null;
+    const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
     const { whereClause: baseWhereClause, orderBy } = this.getListBaseQuery(user.id);
 
     const cursorWhereClause = cursorData

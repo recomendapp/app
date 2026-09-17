@@ -3,18 +3,28 @@ import { and, asc, desc, eq, exists, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { bookmark, follow, profile, tmdbMovieView, tmdbTvSeriesView } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import { BaseListBookmarksQueryDto, BookmarkSortBy, BookmarkWithMediaUnion, ListAllBookmarksQueryDto, ListInfiniteBookmarksDto, ListInfiniteBookmarksQueryDto, ListPaginatedBookmarksDto, ListPaginatedBookmarksQueryDto } from '../../bookmarks/dto/bookmarks.dto';
+import {
+  BaseListBookmarksQueryDto,
+  BookmarkSortBy,
+  BookmarkWithMediaUnion,
+  ListAllBookmarksQueryDto,
+  ListInfiniteBookmarksDto,
+  ListInfiniteBookmarksQueryDto,
+  ListPaginatedBookmarksDto,
+  ListPaginatedBookmarksQueryDto,
+} from '../../bookmarks/dto/bookmarks.dto';
 import { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { z } from 'zod';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
+
+const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.number());
 
 @Injectable()
 export class UserBookmarksService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
   /* ---------------------------------- List ---------------------------------- */
   private async getListBaseQuery(
@@ -33,7 +43,7 @@ export class UserBookmarksService {
     }
 
     const direction = sortOrder === SortOrder.ASC ? asc : desc;
-    
+
     const orderBy = (() => {
       switch (sortBy) {
         case BookmarkSortBy.RANDOM:
@@ -49,9 +59,10 @@ export class UserBookmarksService {
     let privacyClause: SQL | undefined;
     if (currentUser?.id !== targetUserId) {
       const isPublicProfile = exists(
-        tx.select({ id: profile.id })
+        tx
+          .select({ id: profile.id })
           .from(profile)
-          .where(and(eq(profile.id, targetUserId), eq(profile.isPrivate, false)))
+          .where(and(eq(profile.id, targetUserId), eq(profile.isPrivate, false))),
       );
 
       if (!currentUser) {
@@ -60,16 +71,17 @@ export class UserBookmarksService {
         privacyClause = or(
           isPublicProfile,
           exists(
-            tx.select({ id: follow.followerId })
+            tx
+              .select({ id: follow.followerId })
               .from(follow)
               .where(
                 and(
                   eq(follow.followerId, currentUser.id),
                   eq(follow.followingId, targetUserId),
-                  eq(follow.status, 'accepted')
-                )
-              )
-          )
+                  eq(follow.status, 'accepted'),
+                ),
+              ),
+          ),
         );
       }
     }
@@ -80,9 +92,9 @@ export class UserBookmarksService {
     if (type) baseWhereConditions.push(eq(bookmark.type, type));
     if (privacyClause) baseWhereConditions.push(privacyClause);
 
-    return { 
-      whereClause: and(...baseWhereConditions), 
-      orderBy 
+    return {
+      whereClause: and(...baseWhereConditions),
+      orderBy,
     };
   }
   async listAll({
@@ -107,10 +119,11 @@ export class UserBookmarksService {
         sort_by,
         sort_order,
         status,
-        type
+        type,
       );
 
-      const results = await tx.select({
+      const results = await tx
+        .select({
           bookmark: bookmark,
           movie: MOVIE_COMPACT_SELECT,
           tvSeries: TV_SERIES_COMPACT_SELECT,
@@ -163,10 +176,11 @@ export class UserBookmarksService {
         sort_by,
         sort_order,
         status,
-        type
+        type,
       );
 
-      const paginatedBookmarksSubquery = tx.select()
+      const paginatedBookmarksSubquery = tx
+        .select()
         .from(bookmark)
         .where(whereClause)
         .orderBy(...orderBy)
@@ -175,7 +189,8 @@ export class UserBookmarksService {
         .as('paginated_bookmarks');
 
       const [results, totalCount] = await Promise.all([
-        tx.select({
+        tx
+          .select({
             bookmark: bookmark,
             movie: MOVIE_COMPACT_SELECT,
             tvSeries: TV_SERIES_COMPACT_SELECT,
@@ -185,7 +200,7 @@ export class UserBookmarksService {
           .leftJoin(tmdbMovieView, eq(bookmark.movieId, tmdbMovieView.id))
           .leftJoin(tmdbTvSeriesView, eq(bookmark.tvSeriesId, tmdbTvSeriesView.id))
           .orderBy(...orderBy),
-        tx.$count(bookmark, whereClause)
+        tx.$count(bookmark, whereClause),
       ]);
 
       return {
@@ -197,14 +212,14 @@ export class UserBookmarksService {
               type: 'movie',
               mediaId: movieId,
               media: row.movie,
-            }
+            };
           }
           return {
             ...baseBookmark,
             type: 'tv_series',
             mediaId: tvSeriesId,
             media: row.tvSeries,
-          }
+          };
         }),
         meta: {
           total_results: totalCount,
@@ -229,7 +244,7 @@ export class UserBookmarksService {
     return await this.db.transaction(async (tx) => {
       const { per_page, sort_order, sort_by, cursor, status, type } = query;
 
-      const cursorData = cursor ? decodeCursor<BaseCursor<string | number, number>>(cursor) : null;
+      const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
 
       const { whereClause: baseWhereClause, orderBy } = await this.getListBaseQuery(
         tx,
@@ -239,7 +254,7 @@ export class UserBookmarksService {
         sort_by,
         sort_order,
         status,
-        type
+        type,
       );
 
       let cursorWhereClause: SQL | undefined;
@@ -252,10 +267,7 @@ export class UserBookmarksService {
             const updatedDate = String(cursorData.value);
             cursorWhereClause = or(
               operator(bookmark.updatedAt, updatedDate),
-              and(
-                eq(bookmark.updatedAt, updatedDate),
-                operator(bookmark.id, cursorData.id)
-              )
+              and(eq(bookmark.updatedAt, updatedDate), operator(bookmark.id, cursorData.id)),
             );
             break;
           }
@@ -268,23 +280,21 @@ export class UserBookmarksService {
             const createdDate = String(cursorData.value);
             cursorWhereClause = or(
               operator(bookmark.createdAt, createdDate),
-              and(
-                eq(bookmark.createdAt, createdDate),
-                operator(bookmark.id, cursorData.id)
-              )
+              and(eq(bookmark.createdAt, createdDate), operator(bookmark.id, cursorData.id)),
             );
             break;
           }
         }
       }
 
-      const finalWhereClause = cursorWhereClause 
-        ? and(baseWhereClause, cursorWhereClause) 
+      const finalWhereClause = cursorWhereClause
+        ? and(baseWhereClause, cursorWhereClause)
         : baseWhereClause;
 
       const fetchLimit = per_page + 1;
 
-      const paginatedBookmarksSubquery = tx.select()
+      const paginatedBookmarksSubquery = tx
+        .select()
         .from(bookmark)
         .where(finalWhereClause)
         .orderBy(...orderBy)
@@ -292,10 +302,11 @@ export class UserBookmarksService {
         .as('paginated_bookmarks');
 
       const [results, totalCount] = await Promise.all([
-        tx.select({
-          bookmark: bookmark,
-          movie: MOVIE_COMPACT_SELECT,
-          tvSeries: TV_SERIES_COMPACT_SELECT,
+        tx
+          .select({
+            bookmark: bookmark,
+            movie: MOVIE_COMPACT_SELECT,
+            tvSeries: TV_SERIES_COMPACT_SELECT,
           })
           .from(paginatedBookmarksSubquery)
           .innerJoin(bookmark, eq(bookmark.id, paginatedBookmarksSubquery.id))
@@ -341,20 +352,20 @@ export class UserBookmarksService {
               type: 'movie',
               mediaId: movieId,
               media: row.movie,
-            }
+            };
           }
           return {
             ...baseBookmark,
             type: 'tv_series',
             mediaId: tvSeriesId,
             media: row.tvSeries,
-          }
+          };
         }),
         meta: {
           next_cursor: nextCursor,
           per_page,
           total_results: totalCount,
-        }
+        },
       };
     });
   }

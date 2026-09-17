@@ -88,7 +88,7 @@ const SettingsDataImportLogTvSeriesScreen = () => {
           contentContainerStyle={{
             gap: GAP,
             paddingHorizontal: PADDING_HORIZONTAL,
-            paddingTop: navigationHeaderHeight,
+            paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
             paddingBottom: insets.bottom + PADDING_VERTICAL,
           }}
         />

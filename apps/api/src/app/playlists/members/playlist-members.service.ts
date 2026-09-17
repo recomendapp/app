@@ -3,22 +3,25 @@ import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle
 import { playlist, playlistMember, profile, user } from '@libs/db/schemas';
 import { and, asc, desc, eq, gt, ilike, inArray, lt, or, SQL, sql } from 'drizzle-orm';
 import { plainToInstance } from 'class-transformer';
-import { 
-  ListAllPlaylistMembersQueryDto, 
-  ListInfinitePlaylistMembersDto, 
-  ListInfinitePlaylistMembersQueryDto, 
-  ListPaginatedPlaylistMembersDto, 
-  ListPaginatedPlaylistMembersQueryDto, 
-  PlaylistMemberAddDto, 
-  PlaylistMemberDto, 
-  PlaylistMemberSortBy, 
-  PlaylistMemberUpdateDto, 
-  PlaylistMemberWithUserDto 
+import {
+  ListAllPlaylistMembersQueryDto,
+  ListInfinitePlaylistMembersDto,
+  ListInfinitePlaylistMembersQueryDto,
+  ListPaginatedPlaylistMembersDto,
+  ListPaginatedPlaylistMembersQueryDto,
+  PlaylistMemberAddDto,
+  PlaylistMemberDto,
+  PlaylistMemberSortBy,
+  PlaylistMemberUpdateDto,
+  PlaylistMemberWithUserDto,
 } from './playlist-members.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { z } from 'zod';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 import { WorkerClient } from '@shared/worker';
+
+const CursorSchema = baseCursorSchema(z.string().min(1), z.number());
 
 @Injectable()
 export class PlaylistMembersService {
@@ -47,7 +50,7 @@ export class PlaylistMembersService {
 
     const whereClause = and(
       eq(playlistMember.playlistId, playlistId),
-      search ? ilike(user.username, `%${search}%`) : undefined
+      search ? ilike(user.username, `%${search}%`) : undefined,
     );
 
     const joinedQb = this.db
@@ -69,14 +72,22 @@ export class PlaylistMembersService {
     query: ListAllPlaylistMembersQueryDto;
   }): Promise<PlaylistMemberWithUserDto[]> {
     const { sort_order, sort_by, search } = query;
-    const { joinedQb, whereClause, orderBy } = this.getListBaseQuery(playlistId, sort_by, sort_order, search);
+    const { joinedQb, whereClause, orderBy } = this.getListBaseQuery(
+      playlistId,
+      sort_by,
+      sort_order,
+      search,
+    );
 
     const results = await joinedQb.where(whereClause).orderBy(...orderBy);
 
-    return plainToInstance(PlaylistMemberWithUserDto, results.map((row) => ({
-      ...row.member,
-      user: row.user,
-    })));
+    return plainToInstance(
+      PlaylistMemberWithUserDto,
+      results.map((row) => ({
+        ...row.member,
+        user: row.user,
+      })),
+    );
   }
   async listPaginated({
     playlistId,
@@ -88,7 +99,12 @@ export class PlaylistMembersService {
     const { per_page, page, sort_order, sort_by, search } = query;
     const offset = (page - 1) * per_page;
 
-    const { joinedQb, whereClause, orderBy } = this.getListBaseQuery(playlistId, sort_by, sort_order, search);
+    const { joinedQb, whereClause, orderBy } = this.getListBaseQuery(
+      playlistId,
+      sort_by,
+      sort_order,
+      search,
+    );
 
     const [results, [{ count: totalCount }]] = await Promise.all([
       joinedQb
@@ -100,21 +116,25 @@ export class PlaylistMembersService {
         .select({ count: sql<number>`cast(count(*) as int)` })
         .from(playlistMember)
         .innerJoin(user, eq(user.id, playlistMember.userId))
-        .where(whereClause)
+        .where(whereClause),
     ]);
 
-    return plainToInstance(ListPaginatedPlaylistMembersDto, {
-      data: results.map((row) => ({
-        ...row.member,
-        user: row.user,
-      })),
-      meta: {
-        total_results: totalCount,
-        total_pages: Math.ceil(totalCount / per_page),
-        current_page: page,
-        per_page,
+    return plainToInstance(
+      ListPaginatedPlaylistMembersDto,
+      {
+        data: results.map((row) => ({
+          ...row.member,
+          user: row.user,
+        })),
+        meta: {
+          total_results: totalCount,
+          total_pages: Math.ceil(totalCount / per_page),
+          current_page: page,
+          per_page,
+        },
       },
-    }, { excludeExtraneousValues: true });
+      { excludeExtraneousValues: true },
+    );
   }
   async listInfinite({
     playlistId,
@@ -124,9 +144,13 @@ export class PlaylistMembersService {
     query: ListInfinitePlaylistMembersQueryDto;
   }): Promise<ListInfinitePlaylistMembersDto> {
     const { per_page, sort_order, sort_by, cursor, search, include_total_count } = query;
-    const cursorData = cursor ? decodeCursor<BaseCursor<string, number>>(cursor) : null;
+    const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
 
-    const { joinedQb, whereClause: baseWhereClause, orderBy } = this.getListBaseQuery(playlistId, sort_by, sort_order, search);
+    const {
+      joinedQb,
+      whereClause: baseWhereClause,
+      orderBy,
+    } = this.getListBaseQuery(playlistId, sort_by, sort_order, search);
 
     let cursorWhereClause: SQL | undefined;
 
@@ -139,15 +163,17 @@ export class PlaylistMembersService {
             operator(playlistMember.createdAt, String(cursorData.value)),
             and(
               eq(playlistMember.createdAt, String(cursorData.value)),
-              operator(playlistMember.id, Number(cursorData.id))
-            )
+              operator(playlistMember.id, Number(cursorData.id)),
+            ),
           );
           break;
         }
       }
     }
 
-    const finalWhereClause = cursorWhereClause ? and(baseWhereClause, cursorWhereClause) : baseWhereClause;
+    const finalWhereClause = cursorWhereClause
+      ? and(baseWhereClause, cursorWhereClause)
+      : baseWhereClause;
     const fetchLimit = per_page + 1;
 
     const [results, totalCountResult] = await Promise.all([
@@ -155,13 +181,13 @@ export class PlaylistMembersService {
         .where(finalWhereClause)
         .orderBy(...orderBy)
         .limit(fetchLimit),
-      (!cursorData && include_total_count)
+      !cursorData && include_total_count
         ? this.db
             .select({ count: sql<number>`cast(count(*) as int)` })
             .from(playlistMember)
             .innerJoin(user, eq(user.id, playlistMember.userId))
             .where(baseWhereClause)
-        : Promise.resolve(undefined)
+        : Promise.resolve(undefined),
     ]);
 
     const totalCount = totalCountResult ? totalCountResult[0].count : undefined;
@@ -177,17 +203,21 @@ export class PlaylistMembersService {
       });
     }
 
-    return plainToInstance(ListInfinitePlaylistMembersDto, {
-      data: paginatedResults.map((row) => ({
-        ...row.member,
-        user: row.user
-      })),
-      meta: {
-        next_cursor: nextCursor,
-        per_page,
-        total_results: totalCount,
+    return plainToInstance(
+      ListInfinitePlaylistMembersDto,
+      {
+        data: paginatedResults.map((row) => ({
+          ...row.member,
+          user: row.user,
+        })),
+        meta: {
+          next_cursor: nextCursor,
+          per_page,
+          total_results: totalCount,
+        },
       },
-    }, { excludeExtraneousValues: true });
+      { excludeExtraneousValues: true },
+    );
   }
 
   async add({
@@ -200,13 +230,14 @@ export class PlaylistMembersService {
     if (dto.userIds.length === 0) return [];
 
     const result = await this.db.transaction(async (tx) => {
-      const valuesToInsert = dto.userIds.map(userId => ({
+      const valuesToInsert = dto.userIds.map((userId) => ({
         playlistId,
         userId,
-        role: 'viewer' as const
+        role: 'viewer' as const,
       }));
 
-      const insertedMembers = await tx.insert(playlistMember)
+      const insertedMembers = await tx
+        .insert(playlistMember)
         .values(valuesToInsert)
         .onConflictDoNothing()
         .returning();
@@ -215,10 +246,17 @@ export class PlaylistMembersService {
     });
 
     if (result.length > 0) {
-      this.workerClient.emit('search:sync-playlist', {
-        playlistId: playlistId,
-        action: 'upsert'
-      }).catch(err => this.logger.error(`Failed to emit search sync after adding members to playlist ${playlistId}`, err));
+      this.workerClient
+        .emit('search:sync-playlist', {
+          playlistId: playlistId,
+          action: 'upsert',
+        })
+        .catch((err) =>
+          this.logger.error(
+            `Failed to emit search sync after adding members to playlist ${playlistId}`,
+            err,
+          ),
+        );
     }
 
     return result;
@@ -240,24 +278,26 @@ export class PlaylistMembersService {
         .innerJoin(profile, eq(profile.id, playlist.userId))
         .where(eq(playlist.id, playlistId))
         .limit(1)
-        .then(res => res[0]);
+        .then((res) => res[0]);
 
       if (!ownerProfile || !ownerProfile.isPremium) {
-        throw new ForbiddenException('The playlist owner must be Premium to assign another role than viewer');
+        throw new ForbiddenException(
+          'The playlist owner must be Premium to assign another role than viewer',
+        );
       }
     }
 
     return await this.db.transaction(async (tx) => {
-      const [updatedMember] = await tx.update(playlistMember)
+      const [updatedMember] = await tx
+        .update(playlistMember)
         .set({ role: dto.role })
-        .where(and(
-          eq(playlistMember.playlistId, playlistId),
-          eq(playlistMember.userId, targetUserId)
-        ))
+        .where(
+          and(eq(playlistMember.playlistId, playlistId), eq(playlistMember.userId, targetUserId)),
+        )
         .returning();
 
       if (!updatedMember) {
-         throw new ForbiddenException('Member not found in this playlist');
+        throw new ForbiddenException('Member not found in this playlist');
       }
 
       return plainToInstance(PlaylistMemberDto, updatedMember);
@@ -273,18 +313,25 @@ export class PlaylistMembersService {
   }): Promise<PlaylistMemberDto[]> {
     if (userIds.length === 0) return [];
 
-    const deletedMembers = await this.db.delete(playlistMember)
-      .where(and(
-        eq(playlistMember.playlistId, playlistId),
-        inArray(playlistMember.userId, userIds) 
-      ))
+    const deletedMembers = await this.db
+      .delete(playlistMember)
+      .where(
+        and(eq(playlistMember.playlistId, playlistId), inArray(playlistMember.userId, userIds)),
+      )
       .returning();
 
     if (deletedMembers.length > 0) {
-      this.workerClient.emit('search:sync-playlist', {
-        playlistId: playlistId,
-        action: 'upsert'
-      }).catch(err => this.logger.error(`Failed to emit search sync after deleting members from playlist ${playlistId}`, err));
+      this.workerClient
+        .emit('search:sync-playlist', {
+          playlistId: playlistId,
+          action: 'upsert',
+        })
+        .catch((err) =>
+          this.logger.error(
+            `Failed to emit search sync after deleting members from playlist ${playlistId}`,
+            err,
+          ),
+        );
     }
 
     return plainToInstance(PlaylistMemberDto, deletedMembers);

@@ -13,7 +13,8 @@ import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle
 import { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { z } from 'zod';
 import {
   ListAllRecosQueryDto,
   ListInfiniteRecosDto,
@@ -30,6 +31,8 @@ import { UserSummaryDto } from '../dto/users.dto';
 import { User } from '../../auth/auth.service';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
 import { plainToInstance } from 'class-transformer';
+
+const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.number());
 
 @Injectable()
 export class UserRecosService {
@@ -358,7 +361,7 @@ export class UserRecosService {
     currentUser: User | null;
   }): Promise<ListInfiniteRecosDto> {
     const { per_page, sort_order, sort_by, cursor, status, type } = query;
-    const cursorData = cursor ? decodeCursor<BaseCursor<string | number, number>>(cursor) : null;
+    const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
 
     return await this.db.transaction(async (tx) => {
       await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);

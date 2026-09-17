@@ -2,14 +2,20 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Client as TypesenseClient } from 'typesense';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { User } from '../../auth/auth.service';
-import { ListInfiniteSearchUsersQueryDto, ListPaginatedSearchUsersQueryDto } from './search-users.dto';
+import {
+  ListInfiniteSearchUsersQueryDto,
+  ListPaginatedSearchUsersQueryDto,
+} from './search-users.dto';
 import { ListInfiniteUsersDto, ListPaginatedUsersDto } from '../../users/dto/users.dto';
 import { plainToInstance } from 'class-transformer';
 import { user, profile } from '@libs/db/schemas';
 import { eq, inArray } from 'drizzle-orm';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 import { decodeCursor, encodeCursor } from '../../../utils/cursor';
+import { z } from 'zod';
 import { TYPESENSE_CLIENT } from '../../../common/modules/typesense/typesense.module';
+
+const PageCursorSchema = z.object({ page: z.number().int().min(1) });
 
 @Injectable()
 export class SearchUsersService {
@@ -45,10 +51,8 @@ export class SearchUsersService {
       .where(inArray(user.id, ids));
 
     const userMap = new Map(dbUsers.map((u) => [u.user.id, u.user]));
-    
-    return ids
-        .map((id) => userMap.get(id))
-        .filter(Boolean);
+
+    return ids.map((id) => userMap.get(id)).filter(Boolean);
   }
 
   async listPaginated({
@@ -62,18 +66,22 @@ export class SearchUsersService {
 
     const typesenseResult = await this.executeTypesenseSearch(q, page, per_page);
     const userIds = typesenseResult.hits?.map((hit) => hit.document.id as string) || [];
-    
+
     const hydratedUsers = await this.hydrateUsers(userIds);
 
-    return plainToInstance(ListPaginatedUsersDto, {
-      data: hydratedUsers,
-      meta: {
-        total_results: typesenseResult.found,
-        total_pages: Math.ceil(typesenseResult.found / per_page),
-        current_page: page,
-        per_page: per_page,
+    return plainToInstance(
+      ListPaginatedUsersDto,
+      {
+        data: hydratedUsers,
+        meta: {
+          total_results: typesenseResult.found,
+          total_pages: Math.ceil(typesenseResult.found / per_page),
+          current_page: page,
+          per_page: per_page,
+        },
       },
-    }, { excludeExtraneousValues: true });
+      { excludeExtraneousValues: true },
+    );
   }
 
   async listInfinite({
@@ -84,27 +92,29 @@ export class SearchUsersService {
     dto: ListInfiniteSearchUsersQueryDto;
   }): Promise<ListInfiniteUsersDto> {
     const { q, cursor, per_page, include_total_count } = dto;
-    
-    const cursorData = cursor ? decodeCursor<{ page: number }>(cursor) : { page: 1 };
+
+    const cursorData = cursor ? decodeCursor(cursor, PageCursorSchema) : { page: 1 };
     const page = cursorData.page;
 
     const typesenseResult = await this.executeTypesenseSearch(q, page, per_page);
     const userIds = typesenseResult.hits?.map((hit) => hit.document.id as string) || [];
-    
+
     const hydratedUsers = await this.hydrateUsers(userIds);
 
     const hasNextPage = page * per_page < typesenseResult.found;
-    const nextCursor = hasNextPage 
-        ? encodeCursor<{ page: number }>({ page: page + 1 }) 
-        : null;
+    const nextCursor = hasNextPage ? encodeCursor<{ page: number }>({ page: page + 1 }) : null;
 
-    return plainToInstance(ListInfiniteUsersDto, {
-      data: hydratedUsers,
-      meta: {
-        next_cursor: nextCursor,
-        per_page,
-        total_results: include_total_count ? typesenseResult.found : undefined,
+    return plainToInstance(
+      ListInfiniteUsersDto,
+      {
+        data: hydratedUsers,
+        meta: {
+          next_cursor: nextCursor,
+          per_page,
+          total_results: include_total_count ? typesenseResult.found : undefined,
+        },
       },
-    }, { excludeExtraneousValues: true });
+      { excludeExtraneousValues: true },
+    );
   }
 }

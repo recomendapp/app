@@ -44,10 +44,7 @@ const CardReviewTvSeriesDefault = React.forwardRef<
         {review?.title ? <p className="font-semibold line-clamp-1">{review?.title}</p> : null}
         <Overview data={review?.body} />
         <div className="flex items-center justify-end m-1">
-          <ButtonUserReviewTvSeriesLike
-            reviewId={review?.id}
-            reviewLikesCount={review.likesCount}
-          />
+          <ButtonUserReviewTvSeriesLike review={review} />
         </div>
       </div>
     </Card>
