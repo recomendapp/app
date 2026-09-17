@@ -9,7 +9,7 @@ import {
 import { LegendListRef } from '@legendapp/list/react-native';
 import { useDerivedValue } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Stack, useRouter } from 'expo-router';
+import { Stack } from 'expo-router';
 import { useTranslations } from 'use-intl';
 import { upperFirst } from 'lodash';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
@@ -49,7 +49,6 @@ export const ReviewMovieCommentsScreen = ({
   movieId: number;
 }) => {
   const t = useTranslations();
-  const router = useRouter();
   const { user } = useAuth();
   const navigationHeaderHeight = useHeaderHeight();
   const { colors, isLiquidGlassAvailable } = useTheme();
@@ -59,6 +58,7 @@ export const ReviewMovieCommentsScreen = ({
 
   const listRef = useRef<LegendListRef>(null);
   const composerRef = useRef<RNView>(null);
+  const inputRef = useRef<TextInput>(null);
 
   const [body, setBody] = useState('');
   const [replyingTo, setReplyingTo] = useState<ReviewComment | null>(null);
@@ -94,6 +94,7 @@ export const ReviewMovieCommentsScreen = ({
 
   const handleReply = useCallback((comment: ReviewComment) => {
     setReplyingTo(comment);
+    inputRef.current?.focus();
   }, []);
 
   const handleSend = useCallback(async () => {
@@ -226,6 +227,7 @@ export const ReviewMovieCommentsScreen = ({
               )}
               <View style={tw`flex-row items-center`}>
                 <TextInput
+                  ref={inputRef}
                   placeholder={upperFirst(t('common.messages.write_your_comment_here'))}
                   placeholderTextColor={colors.mutedForeground}
                   autoCapitalize="sentences"

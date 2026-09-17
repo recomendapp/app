@@ -20,6 +20,7 @@ import {
   updateListItemInAllCaches,
   removeListItemFromAllCaches,
   prependListItemToAllCaches,
+  updateOrRemoveListItemInAllCaches,
 } from '../utils';
 import { reviewMovieKeys, reviewTvSeriesKeys } from './reviewKeys';
 import { movieKeys, movieLogOptions } from '../movies';
@@ -170,7 +171,10 @@ export const useReviewMovieCommentsCacheUpdate = () => {
         comment.id,
       );
 
-      updateListItemInAllCaches<
+      // A soft-deleted parent only stays visible while it has replies (mirrors
+      // the server's getTopLevelWhereClause) - once its last reply is gone,
+      // drop it from the cache instead of leaving it stuck at "0 replies".
+      updateOrRemoveListItemInAllCaches<
         ReviewMovieCommentWithAuthor,
         ListPaginatedReviewMovieComments,
         ListInfiniteReviewMovieComments
@@ -180,8 +184,11 @@ export const useReviewMovieCommentsCacheUpdate = () => {
           paginated: reviewMovieKeys.comments({ id: comment.reviewId, mode: 'paginated' }),
           infinite: reviewMovieKeys.comments({ id: comment.reviewId, mode: 'infinite' }),
         },
-        (item) => ({ repliesCount: Math.max(0, item.repliesCount - 1) }),
-        parentId,
+        (item) => item.id === parentId,
+        (item) => {
+          const repliesCount = Math.max(0, item.repliesCount - 1);
+          return item.deletedAt && repliesCount === 0 ? null : { repliesCount };
+        },
       );
     },
     [queryClient, updateComment],
@@ -334,7 +341,10 @@ export const useReviewTvSeriesCommentsCacheUpdate = () => {
         comment.id,
       );
 
-      updateListItemInAllCaches<
+      // A soft-deleted parent only stays visible while it has replies (mirrors
+      // the server's getTopLevelWhereClause) - once its last reply is gone,
+      // drop it from the cache instead of leaving it stuck at "0 replies".
+      updateOrRemoveListItemInAllCaches<
         ReviewTvSeriesCommentWithAuthor,
         ListPaginatedReviewTvSeriesComments,
         ListInfiniteReviewTvSeriesComments
@@ -344,8 +354,11 @@ export const useReviewTvSeriesCommentsCacheUpdate = () => {
           paginated: reviewTvSeriesKeys.comments({ id: comment.reviewId, mode: 'paginated' }),
           infinite: reviewTvSeriesKeys.comments({ id: comment.reviewId, mode: 'infinite' }),
         },
-        (item) => ({ repliesCount: Math.max(0, item.repliesCount - 1) }),
-        parentId,
+        (item) => item.id === parentId,
+        (item) => {
+          const repliesCount = Math.max(0, item.repliesCount - 1);
+          return item.deletedAt && repliesCount === 0 ? null : { repliesCount };
+        },
       );
     },
     [queryClient, updateComment],
