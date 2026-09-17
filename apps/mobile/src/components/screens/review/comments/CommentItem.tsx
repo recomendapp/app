@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Alert, Pressable } from 'react-native';
 import { useTranslations, useFormatter } from 'use-intl';
 import { upperFirst } from 'lodash';
@@ -14,7 +13,6 @@ import { Icons } from '../../../../constants/Icons';
 import tw from '../../../../lib/tw';
 import ButtonUserReviewMovieCommentLike from '../../../buttons/ButtonUserReviewMovieCommentLike';
 import ButtonUserReviewTvSeriesCommentLike from '../../../buttons/ButtonUserReviewTvSeriesCommentLike';
-import { CommentReplies } from './CommentReplies';
 import {
   useReviewMovieCommentDeleteMutation,
   useReviewTvSeriesCommentDeleteMutation,
@@ -31,6 +29,8 @@ interface CommentItemProps {
   comment: ReviewComment;
   isReply?: boolean;
   onReply?: (comment: ReviewComment) => void;
+  repliesExpanded?: boolean;
+  onToggleReplies?: (comment: ReviewComment) => void;
 }
 
 export const CommentItem = ({
@@ -41,13 +41,14 @@ export const CommentItem = ({
   comment,
   isReply,
   onReply,
+  repliesExpanded,
+  onToggleReplies,
 }: CommentItemProps) => {
   const t = useTranslations();
   const format = useFormatter();
   const { colors } = useTheme();
   const { user } = useAuth();
   const toast = useToast();
-  const [showReplies, setShowReplies] = useState(false);
 
   const { mutateAsync: deleteMovieComment } = useReviewMovieCommentDeleteMutation({
     movieId: mediaId,
@@ -144,23 +145,15 @@ export const CommentItem = ({
           </View>
         )}
 
-        {!isReply && comment.repliesCount > 0 && (
+        {!isReply && comment.repliesCount > 0 && onToggleReplies && (
           <View style={tw`mt-2`}>
-            {!showReplies ? (
-              <Pressable onPress={() => setShowReplies(true)} hitSlop={8}>
-                <Text textColor="muted" style={{ fontSize: 12, fontWeight: '600' }}>
-                  {upperFirst(t('common.messages.view_replies', { count: comment.repliesCount }))}
-                </Text>
-              </Pressable>
-            ) : (
-              <CommentReplies
-                type={type}
-                reviewId={reviewId}
-                reviewAuthorId={reviewAuthorId}
-                mediaId={mediaId}
-                parentId={comment.id}
-              />
-            )}
+            <Pressable onPress={() => onToggleReplies(comment)} hitSlop={8}>
+              <Text textColor="muted" style={{ fontSize: 12, fontWeight: '600' }}>
+                {repliesExpanded
+                  ? upperFirst(t('common.messages.hide_replies'))
+                  : upperFirst(t('common.messages.view_replies', { count: comment.repliesCount }))}
+              </Text>
+            </Pressable>
           </View>
         )}
       </View>

@@ -1,39 +1,38 @@
+import { useEffect, useMemo } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useTranslations } from 'use-intl';
-import { upperFirst } from 'lodash';
-import { Pressable } from 'react-native';
-import { View } from '../../../ui/view';
-import { Text } from '../../../ui/text';
-import { Icons } from '../../../../constants/Icons';
-import { useTheme } from '../../../../providers/ThemeProvider';
-import tw from '../../../../lib/tw';
-import { CommentItem } from './CommentItem';
 import {
   reviewMovieCommentRepliesInfiniteOptions,
   reviewTvSeriesCommentRepliesInfiniteOptions,
 } from '@libs/query-client';
+import { ReviewComment } from './CommentItem';
 
-interface CommentRepliesProps {
-  type: 'movie' | 'tv-series';
-  reviewId: number;
-  reviewAuthorId: string;
-  mediaId: number;
-  parentId: number;
+export interface RepliesState {
+  replies: ReviewComment[];
+  hasNextPage: boolean;
+  isFetchingNextPage: boolean;
+  isLoading: boolean;
+  fetchNextPage: () => void;
 }
 
-export const CommentReplies = ({
+interface CommentRepliesLoaderProps {
+  type: 'movie' | 'tv-series';
+  reviewId: number;
+  parentId: number;
+  onChange: (parentId: number, state: RepliesState) => void;
+}
+
+/**
+ * Renders nothing - just keeps a replies infinite query alive for one
+ * expanded comment and reports its state up to the screen, which flattens
+ * it into the single LegendList data array (see ReviewMovieCommentsScreen).
+ * One of these gets mounted per currently-expanded top-level comment.
+ */
+export const CommentRepliesLoader = ({
   type,
   reviewId,
-  reviewAuthorId,
-  mediaId,
   parentId,
-}: CommentRepliesProps) => {
-  const t = useTranslations();
-  const { colors } = useTheme();
-
-  // Replies aren't auto-loaded on scroll (they live inside a comment item, not the
-  // outer list) - "load more" is a manual tap, reusing the same infinite query as
-  // the top-level comment list.
+  onChange,
+}: CommentRepliesLoaderProps) => {
   const movieQuery = useInfiniteQuery(
     reviewMovieCommentRepliesInfiniteOptions({
       reviewId: type === 'movie' ? reviewId : undefined,
@@ -49,38 +48,20 @@ export const CommentReplies = ({
     }),
   );
 
-  const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } =
-    type === 'movie' ? movieQuery : tvSeriesQuery;
+  const query = type === 'movie' ? movieQuery : tvSeriesQuery;
+  const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } = query;
 
-  const replies = data?.pages.flatMap((page) => page.data) ?? [];
+  const replies = useMemo(() => data?.pages.flatMap((page) => page.data) ?? [], [data]);
 
-  return (
-    <View style={[tw`gap-3 mt-2 pl-3 border-l-2`, { borderColor: colors.border }]}>
-      {isLoading ? (
-        <Icons.Loader />
-      ) : (
-        replies.map((reply) => (
-          <CommentItem
-            key={reply.id}
-            type={type}
-            reviewId={reviewId}
-            reviewAuthorId={reviewAuthorId}
-            mediaId={mediaId}
-            comment={reply}
-            isReply
-          />
-        ))
-      )}
-      {hasNextPage &&
-        (isFetchingNextPage ? (
-          <Icons.Loader />
-        ) : (
-          <Pressable onPress={() => fetchNextPage()} hitSlop={8}>
-            <Text textColor="muted" style={{ fontSize: 12, fontWeight: '600' }}>
-              {upperFirst(t('common.messages.load_more_replies'))}
-            </Text>
-          </Pressable>
-        ))}
-    </View>
-  );
+  useEffect(() => {
+    onChange(parentId, {
+      replies,
+      hasNextPage: !!hasNextPage,
+      isFetchingNextPage,
+      isLoading,
+      fetchNextPage,
+    });
+  }, [onChange, parentId, replies, hasNextPage, isFetchingNextPage, isLoading, fetchNextPage]);
+
+  return null;
 };
