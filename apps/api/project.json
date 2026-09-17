@@ -82,6 +82,14 @@
       "options": {
         "passWithNoTests": true
       }
+    },
+    "test-integration": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/api-integration"],
+      "options": {
+        "jestConfig": "apps/api/jest.integration.config.cts",
+        "passWithNoTests": true
+      }
     }
   }
 }

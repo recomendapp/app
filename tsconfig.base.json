@@ -30,7 +30,9 @@
       "@shared/worker": ["libs/shared/worker/src/index.ts"],
       "@libs/realtime": ["libs/realtime/src/index.ts"],
       "@libs/notify-types": ["libs/notify-types/src/index.ts"],
-      "@libs/rules": ["libs/rules/src/index.ts"]
+      "@libs/rules": ["libs/rules/src/index.ts"],
+      "@libs/testing": ["libs/testing/src/index.ts"],
+      "@libs/testing/*": ["libs/testing/src/lib/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]
