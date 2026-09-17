@@ -1,6 +1,12 @@
 import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
-import { profile, reviewMovie, reviewMovieComment } from '@libs/db/schemas';
+import {
+  logMovie,
+  profile,
+  reviewMovie,
+  reviewMovieComment,
+  reviewMovieCommentLike,
+} from '@libs/db/schemas';
 import {
   createFakeNotifyClient,
   createTestReviewMovie,
@@ -628,5 +634,158 @@ describe('ReviewMovieCommentsService', () => {
         currentUser: asUser(stranger),
       }),
     ).rejects.toThrow(NotFoundException);
+  });
+
+  // The tests above only ever insert/delete one comment row per service
+  // call, which the old FOR EACH ROW triggers already handled fine. The
+  // ones below exercise the statement-level counter triggers
+  // (0076_batch_comment_counters_triggers.sql) directly with multi-row and
+  // cascading operations - the thing that actually changed. A self-
+  // referential UPDATE on review_movie_comment (repliesCount) caused
+  // "stack depth limit exceeded" here until guarded with EXISTS checks.
+  it('counts a multi-row INSERT of top-level comments in one statement', async () => {
+    const { user: author } = await createTestUser(testDb.db);
+    const { review } = await createTestReviewMovie(testDb.db, { userId: author.id });
+
+    await testDb.db.insert(reviewMovieComment).values(
+      Array.from({ length: 7 }, () => ({
+        reviewId: review.id,
+        userId: author.id,
+        body: 'Batch comment',
+      })),
+    );
+
+    const [updated] = await testDb.db
+      .select({ commentsCount: reviewMovie.commentsCount })
+      .from(reviewMovie)
+      .where(eq(reviewMovie.id, review.id));
+    expect(updated.commentsCount).toBe(7);
+  });
+
+  it('counts a multi-row INSERT of replies to the same parent in one statement', async () => {
+    const { user: author } = await createTestUser(testDb.db);
+    const { review } = await createTestReviewMovie(testDb.db, { userId: author.id });
+    const parent = await createTestReviewMovieComment(testDb.db, {
+      reviewId: review.id,
+      userId: author.id,
+    });
+
+    await testDb.db.insert(reviewMovieComment).values(
+      Array.from({ length: 5 }, () => ({
+        reviewId: review.id,
+        userId: author.id,
+        parentId: parent.id,
+        body: 'Batch reply',
+      })),
+    );
+
+    const [updatedParent] = await testDb.db
+      .select({ repliesCount: reviewMovieComment.repliesCount })
+      .from(reviewMovieComment)
+      .where(eq(reviewMovieComment.id, parent.id));
+    expect(updatedParent.repliesCount).toBe(5);
+  });
+
+  it('counts a multi-row INSERT of likes on the same comment in one statement', async () => {
+    const { user: author } = await createTestUser(testDb.db);
+    const { review } = await createTestReviewMovie(testDb.db, { userId: author.id });
+    const comment = await createTestReviewMovieComment(testDb.db, {
+      reviewId: review.id,
+      userId: author.id,
+    });
+    const likers = await Promise.all(Array.from({ length: 10 }, () => createTestUser(testDb.db)));
+
+    await testDb.db
+      .insert(reviewMovieCommentLike)
+      .values(likers.map(({ user }) => ({ commentId: comment.id, userId: user.id })));
+
+    const [updatedComment] = await testDb.db
+      .select({ likesCount: reviewMovieComment.likesCount })
+      .from(reviewMovieComment)
+      .where(eq(reviewMovieComment.id, comment.id));
+    expect(updatedComment.likesCount).toBe(10);
+  });
+
+  it('survives cascade-deleting a review with many comments, replies, and comment likes', async () => {
+    const { user: author } = await createTestUser(testDb.db);
+    const { log, review } = await createTestReviewMovie(testDb.db, { userId: author.id });
+
+    // Several parents, each with a reply and a like - the exact shape that
+    // caused infinite recursion before the EXISTS guards: cascade-deleting
+    // the review deletes all these review_movie_comment rows (parents AND
+    // replies together) in one statement, so the reply-count trigger's
+    // self-referential UPDATE must not re-fire itself forever.
+    const parents = await testDb.db
+      .insert(reviewMovieComment)
+      .values(
+        Array.from({ length: 6 }, () => ({
+          reviewId: review.id,
+          userId: author.id,
+          body: 'Parent',
+        })),
+      )
+      .returning();
+
+    await testDb.db.insert(reviewMovieComment).values(
+      parents.map((parent) => ({
+        reviewId: review.id,
+        userId: author.id,
+        parentId: parent.id,
+        body: 'Reply',
+      })),
+    );
+
+    const { user: liker } = await createTestUser(testDb.db);
+    await testDb.db
+      .insert(reviewMovieCommentLike)
+      .values(parents.map((parent) => ({ commentId: parent.id, userId: liker.id })));
+
+    // Deleting the log cascades: log_movie -> review_movie ->
+    // review_movie_comment (both parents and replies) ->
+    // review_movie_comment_like, all in one transaction. Just completing
+    // without erroring proves the trigger recursion is fixed.
+    await testDb.db.delete(logMovie).where(eq(logMovie.id, log.id));
+
+    const remainingComments = await testDb.db.query.reviewMovieComment.findMany({
+      where: eq(reviewMovieComment.reviewId, review.id),
+    });
+    expect(remainingComments).toHaveLength(0);
+
+    // The DB is reset before each test, so this test's own likes are the
+    // only rows that could exist here - an empty table confirms the
+    // cascade reached review_movie_comment_like too.
+    const remainingLikes = await testDb.db.query.reviewMovieCommentLike.findMany();
+    expect(remainingLikes).toHaveLength(0);
+  });
+
+  it('drops replies_count to zero when every reply is cascade-deleted alongside its still-existing parent', async () => {
+    const { user: author } = await createTestUser(testDb.db);
+    const { review } = await createTestReviewMovie(testDb.db, { userId: author.id });
+    const parent = await createTestReviewMovieComment(testDb.db, {
+      reviewId: review.id,
+      userId: author.id,
+    });
+    const replies = await testDb.db
+      .insert(reviewMovieComment)
+      .values(
+        Array.from({ length: 4 }, () => ({
+          reviewId: review.id,
+          userId: author.id,
+          parentId: parent.id,
+          body: 'Reply',
+        })),
+      )
+      .returning();
+    expect(replies).toHaveLength(4);
+
+    // Bulk-delete just the replies (parent survives) - a multi-row DELETE
+    // that does NOT cascade from a parent-side delete, unlike the test above.
+    await testDb.db.delete(reviewMovieComment).where(eq(reviewMovieComment.parentId, parent.id));
+
+    const [updatedParent] = await testDb.db
+      .select({ repliesCount: reviewMovieComment.repliesCount })
+      .from(reviewMovieComment)
+      .where(eq(reviewMovieComment.id, parent.id));
+    expect(updatedParent.repliesCount).toBe(0);
   });
 });

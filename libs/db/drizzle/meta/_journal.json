@@ -519,6 +519,34 @@
       "when": 1789563876649,
       "tag": "0073_setup_comment_counters_triggers",
       "breakpoints": true
+    },
+    {
+      "idx": 74,
+      "version": "7",
+      "when": 1789664933667,
+      "tag": "0074_batch_follow_playlist_counters_triggers",
+      "breakpoints": true
+    },
+    {
+      "idx": 75,
+      "version": "7",
+      "when": 1789664942218,
+      "tag": "0075_batch_review_like_counters_triggers",
+      "breakpoints": true
+    },
+    {
+      "idx": 76,
+      "version": "7",
+      "when": 1789664944185,
+      "tag": "0076_batch_comment_counters_triggers",
+      "breakpoints": true
+    },
+    {
+      "idx": 77,
+      "version": "7",
+      "when": 1789664946189,
+      "tag": "0077_batch_feed_sync_triggers",
+      "breakpoints": true
     }
   ]
 }
