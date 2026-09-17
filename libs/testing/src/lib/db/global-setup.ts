@@ -48,7 +48,7 @@ export default async function globalSetup(): Promise<void> {
   // Opt-in local dev speedup: keeps the same container (already migrated +
   // seeded + snapshotted) alive across separate `nx test-integration` runs
   // instead of rebuilding it from scratch every time. Never enable in CI.
-  if (process.env.TESTCONTAINERS_REUSE_ENABLE === 'true') {
+  if (process.env['TESTCONTAINERS_REUSE_ENABLE'] === 'true') {
     builder = builder.withReuse();
   }
 
