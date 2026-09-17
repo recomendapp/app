@@ -1,5 +1,6 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { and, desc, eq, lt, or } from 'drizzle-orm';
+import { z } from 'zod';
 import { User } from '../../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/drizzle/drizzle.module';
 import {
@@ -15,6 +16,11 @@ import { CursorPaginationQueryDto } from '../../../../common/dto/cursor-paginati
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../../utils/cursor';
 import { assertReviewMovieVisible } from '../review-movie-visibility';
 import { NotifyClient } from '@shared/notify';
+
+const LikesCursorSchema = z.object({
+  value: z.string().min(1),
+  id: z.uuid(),
+});
 
 @Injectable()
 export class ReviewMovieLikesService {
@@ -134,7 +140,7 @@ export class ReviewMovieLikesService {
     await assertReviewMovieVisible({ db: this.db, reviewId, user: currentUser });
 
     const { per_page, cursor } = query;
-    const cursorData = cursor ? decodeCursor<BaseCursor<string, string>>(cursor) : null;
+    const cursorData = cursor ? decodeCursor(cursor, LikesCursorSchema) : null;
 
     const baseWhereClause = eq(reviewMovieLike.reviewId, reviewId);
     const cursorWhereClause = cursorData

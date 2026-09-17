@@ -6,6 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { and, asc, desc, eq, gt, isNull, lt, or, SQL, sql } from 'drizzle-orm';
+import { z } from 'zod';
 import { User } from '../../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/drizzle/drizzle.module';
 import { profile, reviewTvSeries, reviewTvSeriesComment, user } from '@libs/db/schemas';
@@ -25,6 +26,11 @@ import {
   ReviewTvSeriesCommentUpdateInputDto,
   ReviewTvSeriesCommentWithAuthorDto,
 } from './dto/review-tv-series-comments.dto';
+
+const CommentsCursorSchema = z.object({
+  value: z.union([z.string().min(1), z.number()]),
+  id: z.number(),
+});
 
 @Injectable()
 export class ReviewTvSeriesCommentsService {
@@ -87,7 +93,7 @@ export class ReviewTvSeriesCommentsService {
   private buildCursorClause(
     sortBy: ReviewTvSeriesCommentSortBy,
     sortOrder: SortOrder,
-    cursorData: BaseCursor<string | number, number> | null,
+    cursorData: z.infer<typeof CommentsCursorSchema> | null,
   ): SQL | undefined {
     if (!cursorData) return undefined;
     const operator = sortOrder === SortOrder.ASC ? gt : lt;
@@ -147,7 +153,7 @@ export class ReviewTvSeriesCommentsService {
     cursor: string | undefined,
     per_page: number,
   ) {
-    const cursorData = cursor ? decodeCursor<BaseCursor<string | number, number>>(cursor) : null;
+    const cursorData = cursor ? decodeCursor(cursor, CommentsCursorSchema) : null;
     const cursorClause = this.buildCursorClause(sortBy, sortOrder, cursorData);
     const finalWhereClause = cursorClause
       ? (and(baseWhereClause, cursorClause) as SQL)
