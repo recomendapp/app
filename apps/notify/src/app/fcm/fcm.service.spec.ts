@@ -1,3 +1,16 @@
+// fcm.service.ts imports FCM_CLIENT from ./fcm.provider, which imports
+// ../../env at module scope — env.ts eagerly calls validateEnv() and
+// process.exit(1)s on failure, so merely importing this file (even without
+// ever invoking the provider factory) can kill the whole Jest worker if the
+// ambient environment doesn't happen to satisfy notifySchema.
+jest.mock('../../env', () => ({
+  env: {
+    FIREBASE_PROJECT_ID: 'test-project',
+    FIREBASE_CLIENT_EMAIL: 'test@test-project.iam.gserviceaccount.com',
+    FIREBASE_PRIVATE_KEY_B64: 'test-key',
+  },
+}));
+
 import { FcmService } from './fcm.service';
 
 describe('FcmService', () => {

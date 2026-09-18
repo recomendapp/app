@@ -14,6 +14,9 @@
       },
       "inputs": ["{projectRoot}/static/**/*", "{projectRoot}/scripts/generate-manifest.ts"],
       "outputs": ["{projectRoot}/src/__generated__"]
+    },
+    "test": {
+      "dependsOn": ["^generate", "generate"]
     }
   }
 }

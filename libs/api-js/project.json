@@ -12,12 +12,15 @@
   },
   "tags": [],
   "targets": {
-    "codegen": {
+    "generate": {
       "executor": "nx:run-commands",
+      "cache": true,
       "options": {
         "cwd": "{projectRoot}",
         "command": "npx openapi-ts"
       },
+      "inputs": ["{projectRoot}/openapi-ts.config.ts", "{workspaceRoot}/apps/api/.openapi/*"],
+      "outputs": ["{projectRoot}/src/__generated__"],
       "dependsOn": [
         {
           "target": "generate-openapi",
@@ -27,7 +30,7 @@
     },
     "build": {
       "executor": "@nx/js:tsc",
-      "dependsOn": ["codegen"],
+      "dependsOn": ["generate"],
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/api-js",
@@ -40,6 +43,9 @@
       "options": {
         "packageRoot": "dist/{projectRoot}"
       }
+    },
+    "test": {
+      "dependsOn": ["^generate", "generate"]
     }
   }
 }
