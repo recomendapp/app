@@ -309,12 +309,12 @@ export class NotifyProcessor extends WorkerHost {
 
               const title = this.i18n.t('reco.completed.subject', {
                 lang,
-                args: { watcherName },
+                args: { receiverName: watcherName },
               });
 
               const body = this.i18n.t('reco.completed.body', {
                 lang,
-                args: { watcherName, mediaTitle: mediaData.title },
+                args: { receiverName: watcherName, mediaTitle: mediaData.title },
               });
 
               await this.notifyService.sendPushNotifications(devices, {
@@ -344,9 +344,10 @@ export class NotifyProcessor extends WorkerHost {
             where: eq(user.id, senderId),
             columns: { username: true, name: true, image: true },
           });
+          if (!sender) break;
 
-          const senderName = sender?.name ?? sender?.username;
-          const senderAvatarUrl = this.getAvatarUrl(sender?.image);
+          const senderName = sender.name ?? sender.username;
+          const senderAvatarUrl = this.getAvatarUrl(sender.image);
 
           const receiversData = await this.db
             .select({
