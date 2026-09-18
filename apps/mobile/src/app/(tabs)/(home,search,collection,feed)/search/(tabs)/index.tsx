@@ -40,7 +40,7 @@ const SearchScreen = () => {
     return <SearchResults search={search} />;
   }
 
-  return <FeaturedPlaylists contentContainerStyle={tw`px-4`} />;
+  return <FeaturedPlaylists />;
 };
 
 interface SearchResultsProps extends React.ComponentPropsWithoutRef<typeof ScrollView> {
@@ -118,8 +118,15 @@ export const SearchResults = ({ search, ...props }: SearchResultsProps) => {
 /* --------------------------------- WIDGETS -------------------------------- */
 const SearchBestResult = ({ best }: { best: SearchBestResultItem | null }) => {
   const t = useTranslations();
+  const insets = useSafeAreaInsets();
   return (
-    <View style={{ marginHorizontal: PADDING_HORIZONTAL, gap: GAP }}>
+    <View
+      style={{
+        marginLeft: insets.left + PADDING_HORIZONTAL,
+        marginRight: insets.right + PADDING_HORIZONTAL,
+        gap: GAP,
+      }}
+    >
       <Text style={tw`font-semibold text-xl`}>{upperFirst(t('common.messages.top_result'))}</Text>
       {best?.type === 'movie' ? (
         <CardMovie variant="list" movie={best.data} />
@@ -152,6 +159,7 @@ const SearchResultSection = <T,>({
   keyExtractor: (item: T) => string;
 }) => {
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const { width: screenWidth } = useWindowDimensions();
   const width = clamp(screenWidth - (PADDING_HORIZONTAL * 2 + GAP * 2), 400);
 
@@ -162,7 +170,10 @@ const SearchResultSection = <T,>({
           pathname: pathname as any,
           params: { query: search },
         }}
-        style={{ paddingHorizontal: PADDING_HORIZONTAL }}
+        style={{
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
+        }}
       >
         <View style={tw`flex-row items-center`}>
           <Text style={tw`font-semibold text-xl`} numberOfLines={1}>
@@ -176,7 +187,8 @@ const SearchResultSection = <T,>({
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         contentContainerStyle={{
-          paddingHorizontal: PADDING_HORIZONTAL,
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
           gap: GAP,
         }}
         keyboardShouldPersistTaps="handled"

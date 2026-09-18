@@ -112,18 +112,30 @@ const TvSeriesScreen = () => {
               <View style={{ gap: GAP_XS }}>
                 <TvSeriesSynopsis
                   tvSeries={series}
-                  containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
+                  containerStyle={{
+                    paddingLeft: insets.left + PADDING_HORIZONTAL,
+                    paddingRight: insets.right + PADDING_HORIZONTAL,
+                  }}
                 />
                 <TvSeriesOriginalTitle
                   tvSeries={series}
-                  style={{ marginHorizontal: PADDING_HORIZONTAL }}
+                  style={{
+                    marginLeft: insets.left + PADDING_HORIZONTAL,
+                    marginRight: insets.right + PADDING_HORIZONTAL,
+                  }}
                 />
               </View>
               <TvSeriesWidgetCast tvSeriesId={series.id} />
               <TvSeriesWidgetSeasons
                 tvSeries={series}
-                containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
-                labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
+                containerStyle={{
+                  paddingLeft: insets.left + PADDING_HORIZONTAL,
+                  paddingRight: insets.right + PADDING_HORIZONTAL,
+                }}
+                labelStyle={{
+                  paddingLeft: insets.left + PADDING_HORIZONTAL,
+                  paddingRight: insets.right + PADDING_HORIZONTAL,
+                }}
               />
               <Link
                 href={{
@@ -132,7 +144,13 @@ const TvSeriesScreen = () => {
                 }}
                 asChild
               >
-                <Button variant="outline" style={{ marginHorizontal: PADDING_HORIZONTAL }}>
+                <Button
+                  variant="outline"
+                  style={{
+                    marginLeft: insets.left + PADDING_HORIZONTAL,
+                    marginRight: insets.right + PADDING_HORIZONTAL,
+                  }}
+                >
                   {upperFirst(t('common.messages.see_more_details'))}
                 </Button>
               </Link>
@@ -141,14 +159,26 @@ const TvSeriesScreen = () => {
             <TvSeriesWidgetPlaylists
               tvSeriesId={series.id}
               url={series.url as Href}
-              containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
-              labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
+              containerStyle={{
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              }}
+              labelStyle={{
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              }}
             />
             <TvSeriesWidgetReviews
               tvSeries={series}
               url={series.url as Href}
-              containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
-              labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
+              containerStyle={{
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              }}
+              labelStyle={{
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              }}
             />
           </View>
         )}
@@ -161,7 +191,8 @@ const TvSeriesScreen = () => {
             contentContainerStyle={[
               tw`items-center gap-2`,
               {
-                paddingHorizontal: PADDING_HORIZONTAL,
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
                 paddingVertical: PADDING_VERTICAL,
               },
             ]}
@@ -246,6 +277,7 @@ const TvSeriesOriginalTitle = ({
 const TvSeriesTrailers = ({ tvSeries }: { tvSeries: TvSeries }) => {
   const { colors } = useTheme();
   const t = useTranslations();
+  const insets = useSafeAreaInsets();
   // UI
   const { width } = useWindowDimensions();
   const playerWidth = width - PADDING_HORIZONTAL * 2;
@@ -275,13 +307,27 @@ const TvSeriesTrailers = ({ tvSeries }: { tvSeries: TvSeries }) => {
   if (!tvSeries.trailers?.length || !selectedTrailer) return null;
   return (
     <View style={{ gap: GAP }}>
-      <View style={[tw`flex-row items-center`, { gap: GAP, marginHorizontal: PADDING_HORIZONTAL }]}>
+      <View
+        style={[
+          tw`flex-row items-center`,
+          {
+            gap: GAP,
+            marginLeft: insets.left + PADDING_HORIZONTAL,
+            marginRight: insets.right + PADDING_HORIZONTAL,
+          },
+        ]}
+      >
         <Icons.PlayCircle color={colors.foreground} />
         <Text style={tw`text-lg font-medium`}>
           {upperFirst(t('common.messages.trailer', { count: 2 }))}
         </Text>
       </View>
-      <View style={{ marginHorizontal: PADDING_HORIZONTAL }}>
+      <View
+        style={{
+          marginLeft: insets.left + PADDING_HORIZONTAL,
+          marginRight: insets.right + PADDING_HORIZONTAL,
+        }}
+      >
         {normalizedSite === 'youtube' ? (
           <YoutubePlayer height={playerHeight} videoId={selectedTrailer.key} />
         ) : normalizedSite === 'vimeo' ? (
@@ -309,7 +355,11 @@ const TvSeriesTrailers = ({ tvSeries }: { tvSeries: TvSeries }) => {
         renderItem={renderItem}
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: PADDING_HORIZONTAL, gap: GAP }}
+        contentContainerStyle={{
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
+          gap: GAP,
+        }}
       />
     </View>
   );

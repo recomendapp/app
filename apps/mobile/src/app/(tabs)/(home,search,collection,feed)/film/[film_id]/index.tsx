@@ -113,16 +113,31 @@ const FilmScreen = () => {
               <View style={{ gap: GAP_XS }}>
                 <FilmSynopsis
                   movie={movie}
-                  containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
+                  containerStyle={{
+                    paddingLeft: insets.left + PADDING_HORIZONTAL,
+                    paddingRight: insets.right + PADDING_HORIZONTAL,
+                  }}
                 />
-                <FilmOriginalTitle movie={movie} style={{ marginHorizontal: PADDING_HORIZONTAL }} />
+                <FilmOriginalTitle
+                  movie={movie}
+                  style={{
+                    marginLeft: insets.left + PADDING_HORIZONTAL,
+                    marginRight: insets.right + PADDING_HORIZONTAL,
+                  }}
+                />
               </View>
               <MovieWidgetCast movieId={movie.id} />
               <Link
                 href={{ pathname: '/film/[film_id]/details', params: { film_id: movie.id } }}
                 asChild
               >
-                <Button variant="outline" style={{ marginHorizontal: PADDING_HORIZONTAL }}>
+                <Button
+                  variant="outline"
+                  style={{
+                    marginLeft: insets.left + PADDING_HORIZONTAL,
+                    marginRight: insets.right + PADDING_HORIZONTAL,
+                  }}
+                >
                   {upperFirst(t('common.messages.see_more_details'))}
                 </Button>
               </Link>
@@ -131,14 +146,26 @@ const FilmScreen = () => {
             <MovieWidgetPlaylists
               movieId={movie.id!}
               url={movie.url as Href}
-              containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
-              labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
+              containerStyle={{
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              }}
+              labelStyle={{
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              }}
             />
             <MovieWidgetReviews
               movie={movie}
               url={movie.url as Href}
-              containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
-              labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
+              containerStyle={{
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              }}
+              labelStyle={{
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              }}
             />
           </View>
         )}
@@ -151,7 +178,8 @@ const FilmScreen = () => {
             contentContainerStyle={[
               tw`items-center gap-2`,
               {
-                paddingHorizontal: PADDING_HORIZONTAL,
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
                 paddingVertical: PADDING_VERTICAL,
               },
             ]}
@@ -229,6 +257,7 @@ const FilmOriginalTitle = ({
 const FilmTrailers = ({ movie }: { movie: Movie }) => {
   const { colors } = useTheme();
   const t = useTranslations();
+  const insets = useSafeAreaInsets();
   // UI
   const { width } = useWindowDimensions();
   const playerWidth = width - PADDING_HORIZONTAL * 2;
@@ -258,13 +287,27 @@ const FilmTrailers = ({ movie }: { movie: Movie }) => {
   if (!movie.trailers?.length || !selectedTrailer) return null;
   return (
     <View style={{ gap: GAP }}>
-      <View style={[tw`flex-row items-center`, { gap: GAP, marginHorizontal: PADDING_HORIZONTAL }]}>
+      <View
+        style={[
+          tw`flex-row items-center`,
+          {
+            gap: GAP,
+            marginLeft: insets.left + PADDING_HORIZONTAL,
+            marginRight: insets.right + PADDING_HORIZONTAL,
+          },
+        ]}
+      >
         <Icons.PlayCircle color={colors.foreground} />
         <Text style={tw`text-lg font-medium`}>
           {upperFirst(t('common.messages.trailer', { count: 2 }))}
         </Text>
       </View>
-      <View style={{ marginHorizontal: PADDING_HORIZONTAL }}>
+      <View
+        style={{
+          marginLeft: insets.left + PADDING_HORIZONTAL,
+          marginRight: insets.right + PADDING_HORIZONTAL,
+        }}
+      >
         {normalizedSite === 'youtube' ? (
           <YoutubePlayer height={playerHeight} videoId={selectedTrailer.key} />
         ) : normalizedSite === 'vimeo' ? (
@@ -292,7 +335,11 @@ const FilmTrailers = ({ movie }: { movie: Movie }) => {
         renderItem={renderItem}
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: PADDING_HORIZONTAL, gap: GAP }}
+        contentContainerStyle={{
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
+          gap: GAP,
+        }}
       />
     </View>
   );

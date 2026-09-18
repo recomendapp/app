@@ -10,7 +10,7 @@ import { useMemo, useState } from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import { useTranslations } from 'use-intl';
 import { HeaderTitle, useHeaderHeight } from 'expo-router/react-navigation';
-import { PADDING_VERTICAL } from '../../../../../theme/globals';
+import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { userByUsernameOptions, userPlaylistsInfiniteOptions } from '@libs/query-client';
 import { CardError } from '../../../../../components/cards/CardError';
@@ -182,10 +182,11 @@ const UserPlaylistsScreen = () => {
         contentContainerStyle={[
           {
             paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
             paddingBottom: insets.bottom + PADDING_VERTICAL,
             flexGrow: 1,
           },
-          tw`px-4`,
         ]}
         maintainVisibleContentPosition={false}
         keyExtractor={(item) => item.id.toString()}

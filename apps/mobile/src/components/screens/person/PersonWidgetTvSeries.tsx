@@ -13,6 +13,7 @@ import { useMemo } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { personTvSeriesInfiniteOptions } from '@libs/query-client';
 import { PersonTvSeries } from '@libs/api-js';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface PersonWidgetTvSeriesProps extends React.ComponentPropsWithoutRef<typeof View> {
   personId: number;
@@ -22,6 +23,7 @@ interface PersonWidgetTvSeriesProps extends React.ComponentPropsWithoutRef<typeo
 const PersonWidgetTvSeries = ({ personId, url, style }: PersonWidgetTvSeriesProps) => {
   const { colors } = useTheme();
   const t = useTranslations();
+  const insets = useSafeAreaInsets();
   const { width: screenWidth } = useWindowDimensions();
   const width = useMemo(
     () => clamp(screenWidth - (PADDING_HORIZONTAL * 2 + GAP * 2), 400),
@@ -36,7 +38,13 @@ const PersonWidgetTvSeries = ({ personId, url, style }: PersonWidgetTvSeriesProp
   const loading = data === undefined || isLoading;
   return (
     <View style={[tw`gap-1`, style]}>
-      <Link href={url} style={{ paddingHorizontal: PADDING_HORIZONTAL }}>
+      <Link
+        href={url}
+        style={{
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
+        }}
+      >
         <View style={tw`flex-row items-center`}>
           <Text style={tw`font-medium text-lg`} numberOfLines={1}>
             {upperFirst(t('common.messages.tv_series', { count: 2 }))}

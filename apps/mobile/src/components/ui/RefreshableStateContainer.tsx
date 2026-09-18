@@ -26,7 +26,8 @@ export const RefreshableStateContainer = ({
       contentContainerStyle={[
         tw`flex-grow items-center justify-center`,
         {
-          paddingHorizontal: PADDING_HORIZONTAL,
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
           paddingBottom: computedBottomOffset + PADDING_VERTICAL,
         },
         contentContainerStyle,

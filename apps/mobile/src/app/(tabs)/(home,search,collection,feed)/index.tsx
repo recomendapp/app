@@ -106,23 +106,48 @@ const HeaderRight = () => {
 };
 
 const AuthenticatedWidgets = () => {
+  const insets = useSafeAreaInsets();
   return (
     <>
       <WidgetUserRecos
-        labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
-        containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
+        labelStyle={{
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
+        }}
+        containerStyle={{
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
+        }}
       />
       <WidgetUserBookmarks
-        labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
-        containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
+        labelStyle={{
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
+        }}
+        containerStyle={{
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
+        }}
       />
       <WidgetUserFriendsPlaylists
-        labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
-        containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
+        labelStyle={{
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
+        }}
+        containerStyle={{
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
+        }}
       />
       <WidgetUserDiscovery
-        labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
-        containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
+        labelStyle={{
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
+        }}
+        containerStyle={{
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
+        }}
       />
     </>
   );
@@ -314,8 +339,14 @@ const HomeScreen = () => {
           }}
         />
         <WidgetMostPopular
-          labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
-          containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
+          labelStyle={{
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
+          }}
+          containerStyle={{
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
+          }}
         />
         {user ? <AuthenticatedWidgets /> : <UnauthenticatedContent />}
       </Animated.ScrollView>

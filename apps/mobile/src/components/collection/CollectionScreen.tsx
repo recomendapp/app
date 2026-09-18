@@ -437,7 +437,8 @@ const CollectionScreen = <T extends Record<string, any>>({
         refreshing={isRefetching}
         onRefresh={refetch}
         contentContainerStyle={{
-          paddingHorizontal: PADDING_HORIZONTAL,
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
           paddingBottom: PADDING_VERTICAL,
           gap: GAP,
         }}

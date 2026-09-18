@@ -69,6 +69,7 @@ const ProfileFolloweesScreen = () => {
       data={followees}
       renderItem={renderItem}
       contentContainerStyle={{
+        paddingTop: PADDING_VERTICAL,
         paddingLeft: insets.left + PADDING_HORIZONTAL,
         paddingRight: insets.right + PADDING_HORIZONTAL,
         paddingBottom: insets.bottom + PADDING_VERTICAL,

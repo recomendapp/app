@@ -147,7 +147,8 @@ const SettingsSecurityScreen = () => {
         contentContainerStyle={{
           gap: GAP,
           paddingTop: PADDING_VERTICAL,
-          paddingHorizontal: PADDING_HORIZONTAL,
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
           paddingBottom: insets.bottom + PADDING_VERTICAL,
         }}
       >

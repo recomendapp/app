@@ -36,6 +36,7 @@ import { getTmdbImage } from '../../lib/tmdb/getTmdbImage';
 import { RecoTrendingWithMovie, RecoTrendingWithTvSeries } from '@libs/api-js';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { widgetRecosTrendingInfiniteOptions } from '@libs/query-client';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface WidgetMostRecommendedProps extends ViewProps {
   scrollY?: SharedValue<number>;
@@ -128,6 +129,7 @@ const WidgetMostRecommendedItem = ({
   const router = useRouter();
   const { colors } = useTheme();
   const t = useTranslations();
+  const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
   const details =
     item.type === 'movie'
@@ -201,7 +203,12 @@ const WidgetMostRecommendedItem = ({
         <View
           style={[
             tw`flex-1 justify-end`,
-            { gap: GAP, paddingHorizontal: PADDING_HORIZONTAL, paddingBottom: PADDING_VERTICAL },
+            {
+              gap: GAP,
+              paddingLeft: insets.left + PADDING_HORIZONTAL,
+              paddingRight: insets.right + PADDING_HORIZONTAL,
+              paddingBottom: PADDING_VERTICAL,
+            },
           ]}
         >
           <View style={[{ gap: GAP * 2 }, tw`flex-row items-center justify-between`]}>

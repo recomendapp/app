@@ -197,7 +197,8 @@ const PersonTvSeriesScreen = () => {
           gap: GAP,
           paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
           paddingBottom: insets.bottom + PADDING_VERTICAL,
-          paddingHorizontal: PADDING_HORIZONTAL,
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
         }}
         keyExtractor={(item) => item.tvSeries.id.toString()}
         refreshing={isRefetching}

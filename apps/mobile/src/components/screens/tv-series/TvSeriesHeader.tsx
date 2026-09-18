@@ -31,6 +31,7 @@ import AnimatedImage from '../../ui/AnimatedImage';
 import BottomSheetPerson from '../../bottom-sheets/sheets/BottomSheetPerson';
 import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
 import { PersonCompact, TvSeries } from '@libs/api-js';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface TvSeriesHeaderProps {
   tvSeries?: TvSeries | null;
@@ -48,6 +49,7 @@ const TvSeriesHeader: React.FC<TvSeriesHeaderProps> = ({
   const t = useTranslations();
   const { hslToRgb } = useColorConverter();
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
   const bgColor = hslToRgb(colors.background);
   const { palette } = useImagePalette(
@@ -148,7 +150,11 @@ const TvSeriesHeader: React.FC<TvSeriesHeaderProps> = ({
       <Animated.View
         style={[
           tw.style('items-center gap-4'),
-          { paddingHorizontal: PADDING_HORIZONTAL, paddingVertical: PADDING_VERTICAL },
+          {
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
+            paddingVertical: PADDING_VERTICAL,
+          },
         ]}
       >
         <Animated.View

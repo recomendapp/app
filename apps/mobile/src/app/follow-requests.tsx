@@ -144,7 +144,8 @@ const FollowRequestsScreen = () => {
           contentContainerStyle={[
             {
               gap: GAP,
-              paddingHorizontal: PADDING_HORIZONTAL,
+              paddingLeft: insets.left + PADDING_HORIZONTAL,
+              paddingRight: insets.right + PADDING_HORIZONTAL,
               paddingTop: PADDING_VERTICAL,
               paddingBottom: insets.bottom + PADDING_VERTICAL,
               flexGrow: 1,

@@ -24,6 +24,7 @@ import { useImagePalette } from '../../../hooks/useImagePalette';
 import { Person } from '@libs/api-js';
 import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
 import ButtonPersonFollow from '../../buttons/ButtonPersonFollow';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface PersonHeaderProps {
   person?: Person | null;
@@ -40,6 +41,7 @@ export const PersonHeader: React.FC<PersonHeaderProps> = ({
   const t = useTranslations();
   const { hslToRgb } = useColorConverter();
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
   const bgColor = hslToRgb(colors.background);
   const { palette } = useImagePalette(
@@ -118,7 +120,11 @@ export const PersonHeader: React.FC<PersonHeaderProps> = ({
       <Animated.View
         style={[
           tw`items-center gap-4`,
-          { paddingHorizontal: PADDING_HORIZONTAL, paddingVertical: PADDING_VERTICAL },
+          {
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
+            paddingVertical: PADDING_VERTICAL,
+          },
         ]}
       >
         <Animated.View entering={FadeInDown.delay(200).duration(500)}>

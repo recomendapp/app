@@ -270,7 +270,8 @@ const TvSeriesSeasonScreen = () => {
           {
             backgroundColor: colors.card,
             borderColor: colors.border,
-            marginHorizontal: PADDING_HORIZONTAL,
+            marginLeft: insets.left + PADDING_HORIZONTAL,
+            marginRight: insets.right + PADDING_HORIZONTAL,
           },
           tw`flex-row justify-between items-center rounded-xl h-24 gap-2 border overflow-hidden`,
         ]}
@@ -325,7 +326,7 @@ const TvSeriesSeasonScreen = () => {
         </View>
       </Animated.View>
     ),
-    [colors, season, t, formatter],
+    [colors, season, t, formatter, insets],
   );
 
   return (
@@ -359,7 +360,11 @@ const TvSeriesSeasonScreen = () => {
             <View
               style={[
                 tw`flex-1 items-center justify-center`,
-                { paddingHorizontal: PADDING_HORIZONTAL, paddingVertical: PADDING_VERTICAL },
+                {
+                  paddingLeft: insets.left + PADDING_HORIZONTAL,
+                  paddingRight: insets.right + PADDING_HORIZONTAL,
+                  paddingVertical: PADDING_VERTICAL,
+                },
               ]}
             >
               <Text style={[tw`text-center`, { color: colors.mutedForeground }]}>

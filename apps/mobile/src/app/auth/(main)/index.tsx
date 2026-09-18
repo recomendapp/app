@@ -29,6 +29,7 @@ const AuthHeader = ({
   onBackgroundChange: (background: UiBackground | null) => void;
 }) => {
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const headerHeight = useHeaderHeight();
   const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = useWindowDimensions();
   const bgColor = useMemo(() => Color(colors.background).rgb().object(), [colors.background]);
@@ -40,6 +41,8 @@ const AuthHeader = ({
         {
           paddingHorizontal: PADDING_HORIZONTAL,
           paddingVertical: PADDING_VERTICAL,
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
           paddingTop: headerHeight,
           height: SCREEN_HEIGHT * 0.5,
         },
@@ -69,7 +72,7 @@ const AuthHeader = ({
           ]}
         />
       </Animated.View>
-      <Icons.app.logo color={colors.accentYellow} width={SCREEN_WIDTH * 0.75} />
+      <Icons.app.logo color={colors.accentYellow} width={SCREEN_WIDTH * 0.6} />
     </View>
   );
 };
@@ -120,7 +123,13 @@ const AuthScreen = () => {
         showsVerticalScrollIndicator={false}
       >
         <AuthHeader onBackgroundChange={setActiveBackground} />
-        <View style={{ gap: GAP, paddingHorizontal: PADDING_HORIZONTAL }}>
+        <View
+          style={{
+            gap: GAP,
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
+          }}
+        >
           {routes.map((route, index) => (
             <Link key={index} href={route.href} asChild>
               <Button variant="muted" textStyle={tw`font-semibold`}>
@@ -129,7 +138,12 @@ const AuthScreen = () => {
             </Link>
           ))}
         </View>
-        <View style={{ paddingHorizontal: PADDING_HORIZONTAL }}>
+        <View
+          style={{
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
+          }}
+        >
           {activeDetails && (
             <Animated.Text
               key={activeBackground?.id}

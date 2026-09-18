@@ -20,7 +20,8 @@ import { View } from '../ui/view';
 import { AnimatedImageWithFallback } from '../ui/AnimatedImageWithFallback';
 import { ImageType } from '../utils/ImageWithFallback';
 import { useTranslations } from 'use-intl';
-import { PADDING_HORIZONTAL } from '../../theme/globals';
+import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface CollectionHeaderBaseProps extends React.ComponentPropsWithoutRef<typeof Animated.View> {
   headerHeight: SharedValue<number>;
@@ -76,6 +77,7 @@ const CollectionHeader = forwardRef<
     const { colors } = useTheme();
     const { hslToRgb } = useColorConverter();
     const t = useTranslations();
+    const insets = useSafeAreaInsets();
     const bgBackdrop = useRandomBackdrop(backdrops || []);
     const bgColor = hslToRgb(colors.background);
     const navigationHeaderHeight = useReanimatedHeaderHeight();
@@ -151,7 +153,15 @@ const CollectionHeader = forwardRef<
           />
         </Animated.View>
         <Animated.View
-          style={[tw`items-center justify-center px-4 pb-4 min-h-40 gap-2`, marginTopAnim]}
+          style={[
+            tw`items-center justify-center min-h-40 gap-2`,
+            {
+              paddingLeft: insets.left + PADDING_HORIZONTAL,
+              paddingRight: insets.right + PADDING_HORIZONTAL,
+              paddingBottom: PADDING_VERTICAL,
+            },
+            marginTopAnim,
+          ]}
         >
           <View style={tw`items-center justify-center`}>
             {poster &&

@@ -93,7 +93,9 @@ const CollectionScreen = () => {
                 : 6
       }
       contentContainerStyle={{
-        paddingHorizontal: PADDING_HORIZONTAL,
+        paddingTop: PADDING_VERTICAL,
+        paddingLeft: insets.left + PADDING_HORIZONTAL,
+        paddingRight: insets.right + PADDING_HORIZONTAL,
         paddingBottom: insets.bottom + PADDING_VERTICAL,
       }}
       scrollIndicatorInsets={{ bottom: insets.bottom }}

@@ -4,7 +4,14 @@ import { View } from '../../components/ui/view';
 import { Icons } from '../../constants/Icons';
 import tw from '../../lib/tw';
 import { useTheme } from '../../providers/ThemeProvider';
-import { GAP, GAP_LG, GAP_XL, GAP_XS, PADDING_VERTICAL } from '../../theme/globals';
+import {
+  GAP,
+  GAP_LG,
+  GAP_XL,
+  GAP_XS,
+  PADDING_HORIZONTAL,
+  PADDING_VERTICAL,
+} from '../../theme/globals';
 import { ExternalPathString, Link } from 'expo-router';
 import { useMemo } from 'react';
 import { ScrollView } from 'react-native';
@@ -304,7 +311,17 @@ const AboutScreen = () => {
       }}
     >
       {sections.map((section, index) => (
-        <View key={index} style={[tw`px-4 flex flex-col max-w-xl`, { gap: GAP }]}>
+        <View
+          key={index}
+          style={[
+            tw`flex flex-col max-w-xl`,
+            {
+              paddingLeft: insets.left + PADDING_HORIZONTAL,
+              paddingRight: insets.right + PADDING_HORIZONTAL,
+              gap: GAP,
+            },
+          ]}
+        >
           {section.title && (
             <Text variant="title" style={[tw`text-center`, { color: colors.accentYellow }]}>
               {section.title}
