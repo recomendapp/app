@@ -41,6 +41,7 @@ export class PlaylistItemsService {
     locale: SupportedLocale,
     sortBy: PlaylistItemSortBy,
     sortOrder: SortOrder,
+    type?: (typeof playlistItem.$inferSelect)['type'],
   ) {
     await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
 
@@ -56,7 +57,10 @@ export class PlaylistItemsService {
       }
     })();
 
-    const whereClause = eq(playlistItem.playlistId, playlistId);
+    const whereClause = and(
+      eq(playlistItem.playlistId, playlistId),
+      type ? eq(playlistItem.type, type) : undefined,
+    ) as SQL;
 
     return { whereClause, orderBy };
   }
@@ -71,13 +75,14 @@ export class PlaylistItemsService {
     locale: SupportedLocale;
   }): Promise<PlaylistItemWithMediaUnion[]> {
     return await this.db.transaction(async (tx) => {
-      const { sort_by, sort_order } = query;
+      const { sort_by, sort_order, type } = query;
       const { whereClause, orderBy } = await this.getListBaseQuery(
         tx,
         playlistId,
         locale,
         sort_by,
         sort_order,
+        type,
       );
 
       const results = await tx
@@ -113,7 +118,7 @@ export class PlaylistItemsService {
     locale: SupportedLocale;
   }): Promise<ListPaginatedPlaylistItemsDto> {
     return await this.db.transaction(async (tx) => {
-      const { per_page, page, sort_by, sort_order } = query;
+      const { per_page, page, sort_by, sort_order, type } = query;
       const offset = (page - 1) * per_page;
 
       const { whereClause, orderBy } = await this.getListBaseQuery(
@@ -122,6 +127,7 @@ export class PlaylistItemsService {
         locale,
         sort_by,
         sort_order,
+        type,
       );
 
       const paginatedItemsSubquery = tx
@@ -183,7 +189,7 @@ export class PlaylistItemsService {
     locale: SupportedLocale;
   }): Promise<ListInfinitePlaylistItemsDto> {
     return await this.db.transaction(async (tx) => {
-      const { per_page, sort_order, sort_by, cursor } = query;
+      const { per_page, sort_order, sort_by, cursor, type } = query;
 
       const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
       const { whereClause: baseWhereClause, orderBy } = await this.getListBaseQuery(
@@ -192,6 +198,7 @@ export class PlaylistItemsService {
         locale,
         sort_by,
         sort_order,
+        type,
       );
 
       let cursorWhereClause: SQL | undefined;

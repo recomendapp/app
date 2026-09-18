@@ -1,6 +1,7 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { and, asc, desc, eq, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import {
+  follow,
   profile,
   reco,
   recoStatusEnum,
@@ -37,6 +38,46 @@ const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), 
 @Injectable()
 export class UserRecosService {
   constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
+
+  /**
+   * Recos received are private activity, same as watch logs or playlists: a private
+   * profile's recos must be hidden from anyone but the owner and their accepted followers.
+   */
+  private async assertCanView(
+    tx: DbTransaction,
+    targetUserId: string,
+    currentUser: User | null,
+  ): Promise<void> {
+    if (currentUser?.id === targetUserId) return;
+
+    const targetProfile = await tx.query.profile.findFirst({
+      where: eq(profile.id, targetUserId),
+    });
+
+    if (!targetProfile) {
+      throw new NotFoundException('User not found.');
+    }
+
+    if (targetProfile.isPrivate) {
+      if (!currentUser) {
+        throw new ForbiddenException('This account is private.');
+      }
+
+      const amIFollowing = await tx.query.follow.findFirst({
+        where: and(
+          eq(follow.followerId, currentUser.id),
+          eq(follow.followingId, targetUserId),
+          eq(follow.status, 'accepted'),
+        ),
+      });
+
+      if (!amIFollowing) {
+        throw new ForbiddenException(
+          'This account is private. Follow this user to see their activity.',
+        );
+      }
+    }
+  }
 
   private getListBaseQuery(
     tx: DbTransaction,
@@ -178,6 +219,7 @@ export class UserRecosService {
 
     return await this.db.transaction(async (tx) => {
       await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
+      await this.assertCanView(tx, targetUserId, currentUser);
 
       const groupedRecosSq = this.getListBaseQuery(tx, targetUserId, status, type);
 
@@ -263,6 +305,7 @@ export class UserRecosService {
 
     return await this.db.transaction(async (tx) => {
       await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
+      await this.assertCanView(tx, targetUserId, currentUser);
 
       const groupedRecosSq = this.getListBaseQuery(tx, targetUserId, status, type);
 
@@ -365,6 +408,7 @@ export class UserRecosService {
 
     return await this.db.transaction(async (tx) => {
       await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
+      await this.assertCanView(tx, targetUserId, currentUser);
 
       const groupedRecosSq = this.getListBaseQuery(tx, targetUserId, status, type);
 
