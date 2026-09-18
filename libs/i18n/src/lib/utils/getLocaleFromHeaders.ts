@@ -1,5 +1,9 @@
-import { defaultSupportedLocale, HEADER_LANGUAGE_KEY, SupportedLocale, supportedLocales } from '../locales';
-
+import {
+  defaultSupportedLocale,
+  HEADER_LANGUAGE_KEY,
+  SupportedLocale,
+  supportedLocales,
+} from '../locales';
 
 export function getLocaleFromHeaders(headers: any): SupportedLocale {
   if (!headers) return defaultSupportedLocale;
@@ -8,7 +12,9 @@ export function getLocaleFromHeaders(headers: any): SupportedLocale {
     if (typeof headers.get === 'function') {
       return headers.get(key);
     }
-    return headers[key] || headers[key.toLowerCase()];
+    const lowerKey = key.toLowerCase();
+    const matchedKey = Object.keys(headers).find((k) => k.toLowerCase() === lowerKey);
+    return matchedKey ? headers[matchedKey] : undefined;
   };
 
   let locale = getHeader(HEADER_LANGUAGE_KEY);
@@ -16,13 +22,13 @@ export function getLocaleFromHeaders(headers: any): SupportedLocale {
   if (!locale) {
     const acceptLang = getHeader('accept-language');
     if (acceptLang) {
-      locale = acceptLang.split(',')[0];
+      locale = acceptLang.split(',')[0]?.split(';')[0]?.trim();
     }
   }
 
   if (locale && supportedLocales.includes(locale as SupportedLocale)) {
     return locale as SupportedLocale;
   }
-  
+
   return defaultSupportedLocale;
 }
