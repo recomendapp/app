@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
 import { createMMKV } from 'react-native-mmkv';
-import { focusManager, QueryClient } from '@tanstack/react-query';
+import { focusManager, keepPreviousData, QueryClient } from '@tanstack/react-query';
 import {
   PersistQueryClientProvider,
   PersistQueryClientProviderProps,
@@ -58,6 +58,7 @@ const createQueryClient = () =>
         retry: false,
         staleTime: 5 * 60 * 1000,
         gcTime: 10 * 60 * 1000,
+        placeholderData: keepPreviousData,
       },
     },
   });
