@@ -26,7 +26,7 @@ import { Button } from '../../ui/Button';
 import Animated, { FadeIn, FadeInRight, FadeOut, FadeOutRight } from 'react-native-reanimated';
 import { upperFirst } from 'lodash';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { PADDING_HORIZONTAL } from 'apps/mobile/src/theme/globals';
+import { PADDING_HORIZONTAL } from '../../../theme/globals';
 
 interface ProfilePinnedProps extends React.ComponentPropsWithoutRef<typeof View> {
   profileId: string;
