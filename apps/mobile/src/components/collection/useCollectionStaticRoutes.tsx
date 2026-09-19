@@ -5,6 +5,7 @@ import { capitalize } from 'lodash';
 import { Href } from 'expo-router';
 import { useTheme } from '../../providers/ThemeProvider';
 import { useTranslations } from 'use-intl';
+import Color from 'color';
 
 interface CollectionStaticRoute {
   type: 'static';
@@ -16,12 +17,16 @@ interface CollectionStaticRoute {
 const useCollectionStaticRoutes = () => {
   const t = useTranslations();
   const { colors } = useTheme();
+
   const routes = useMemo(
     (): CollectionStaticRoute[] => [
       {
         type: 'static',
         icon: (
-          <CollectionIcon from="#FBE773" to="#F18E43">
+          <CollectionIcon
+            from={Color(colors.accentYellow).hex()}
+            to={Color(colors.accentYellow).rotate(-30).darken(0.1).hex()}
+          >
             <Icons.Reco color={colors.white} fill={colors.white} className="w-2/5 h-2/5" />
           </CollectionIcon>
         ),
@@ -31,7 +36,10 @@ const useCollectionStaticRoutes = () => {
       {
         type: 'static',
         icon: (
-          <CollectionIcon from="#39BAED" to="#32509e">
+          <CollectionIcon
+            from={Color(colors.accentBlue).hex()}
+            to={Color(colors.accentBlue).rotate(-30).darken(0.1).hex()}
+          >
             <Icons.Bookmark color={colors.white} fill={colors.white} className="w-2/5 h-2/5" />
           </CollectionIcon>
         ),
@@ -41,6 +49,7 @@ const useCollectionStaticRoutes = () => {
     ],
     [t, colors],
   );
+
   return routes;
 };
 
