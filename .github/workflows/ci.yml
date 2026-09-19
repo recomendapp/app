@@ -69,6 +69,9 @@ jobs:
           AUTH_APPLE_BUNDLE_ID=mock
           REVENUECAT_API_KEY=mock
           REVENUECAT_WEBHOOK_SECRET=mock
+          PREFECT_API_URL=http://localhost
+          PREFECT_API_AUTH_STRING=mock
+          API_INTERNAL_IMPORTS_SECRET=mock
           EOF
 
       - name: 🧠 Initialize Nx SHAs
