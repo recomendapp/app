@@ -45,6 +45,7 @@ jobs:
       - name: 📝 Prepare Mock Env for CI
         if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
         run: |
+          MOCK_APPLE_PRIVATE_KEY=$(openssl ecparam -genkey -name prime256v1 -noout | openssl pkcs8 -topk8 -nocrypt | awk '{printf "%s\\n", $0}')
           cat <<EOF > apps/api/.env
           ASSETS_BASE_URL=http://localhost/assets
           S3_ENDPOINT=http://localhost
@@ -65,7 +66,7 @@ jobs:
           AUTH_APPLE_CLIENT_ID=mock
           AUTH_APPLE_TEAM_ID=mock
           AUTH_APPLE_KEY_ID=mock
-          AUTH_APPLE_PRIVATE_KEY=mock
+          AUTH_APPLE_PRIVATE_KEY=${MOCK_APPLE_PRIVATE_KEY}
           AUTH_APPLE_BUNDLE_ID=mock
           REVENUECAT_API_KEY=mock
           REVENUECAT_WEBHOOK_SECRET=mock
