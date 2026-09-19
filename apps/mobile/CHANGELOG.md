@@ -1,5 +1,23 @@
 # mobile
 
+## [1.6.0](https://github.com/recomendapp/app/compare/mobile@v1.5.1...mobile@v1.6.0) (2026-09-19)
+
+
+### Features
+
+* add sender avatar and media poster images to push notifications ([#59](https://github.com/recomendapp/app/issues/59)) ([130158b](https://github.com/recomendapp/app/commit/130158b0c4d6ef52e8160320ed6cfbad44b82b6f))
+* **mobile:** add home screen widgets for watchlist and recos ([#65](https://github.com/recomendapp/app/issues/65)) ([2159258](https://github.com/recomendapp/app/commit/21592581b2f6e0f4e9d0036f11e401181466203e))
+* **mobile:** support asymmetric safe area insets for foldable devices ([#63](https://github.com/recomendapp/app/issues/63)) ([abb6715](https://github.com/recomendapp/app/commit/abb6715eb3dda7e7114a91661b69325606cd8324))
+* **repo:** review comments/likes, push notifications, test infra ([#60](https://github.com/recomendapp/app/issues/60)) ([a191a8f](https://github.com/recomendapp/app/commit/a191a8f74c4b829380141568419fc10218ffc31d))
+
+
+### Bug Fixes
+
+* **mobile:** correct recos date sort and keep stale query data visible ([#64](https://github.com/recomendapp/app/issues/64)) ([4167fdb](https://github.com/recomendapp/app/commit/4167fdb2e5dac652de88895da99d4a8bfa7713e2))
+* **mobile:** pin pnpm version + save fingerprint after standalone builds ([#45](https://github.com/recomendapp/app/issues/45)) ([caf1c18](https://github.com/recomendapp/app/commit/caf1c180648197ea8e619dc646698a9aba5e6969))
+* **repo:** add GitHub star links and pinned items label ([#52](https://github.com/recomendapp/app/issues/52)) ([4dc917a](https://github.com/recomendapp/app/commit/4dc917a6093619f5ff49007513ca778c63efada1))
+* resolve push notification delivery and iOS 27 launch/build crash ([#54](https://github.com/recomendapp/app/issues/54)) ([665e662](https://github.com/recomendapp/app/commit/665e6620340b6d6a54aed8472ed077eee18f7706))
+
 ## [1.5.1](https://github.com/recomendapp/app/compare/mobile@v1.5.0...mobile@v1.5.1) (2026-09-02)
 
 
