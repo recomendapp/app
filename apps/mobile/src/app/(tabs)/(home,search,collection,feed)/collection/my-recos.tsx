@@ -13,6 +13,7 @@ import { userRecosAllOptions, useUserRecoDeleteByMediaMutation } from '@libs/que
 import { useCallback, useMemo } from 'react';
 import { Alert } from 'react-native';
 import richTextToPlainString from '../../../../utils/richTextToPlainString';
+import { parseApiDate } from '../../../../utils/parseApiDate';
 import { RecoWithMedia } from '@libs/api-js';
 import CollectionScreen, {
   CollectionAction,
@@ -106,8 +107,8 @@ const MyRecosScreen = () => {
         value: 'created_at',
         defaultOrder: 'desc',
         sortFn: (a, b, order) => {
-          const aTime = new Date(a.latestCreatedAt).getTime();
-          const bTime = new Date(b.latestCreatedAt).getTime();
+          const aTime = parseApiDate(a.latestCreatedAt).getTime();
+          const bTime = parseApiDate(b.latestCreatedAt).getTime();
           return order === 'asc' ? aTime - bTime : bTime - aTime;
         },
       },
