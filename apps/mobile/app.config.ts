@@ -224,6 +224,59 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     '@bacons/apple-targets',
+    [
+      'expo-widgets',
+      {
+        widgets: [
+          {
+            name: 'BookmarksWidget',
+            displayName: 'For later',
+            description: 'Your saved movies and TV series.',
+            ios: {
+              supportedFamilies: ['systemSmall', 'systemMedium'],
+              configuration: {
+                title: 'Order',
+                description: 'Choose how items are ordered.',
+                parameters: {
+                  order: {
+                    title: 'Order',
+                    type: 'enum',
+                    default: 'recent',
+                    values: [
+                      { name: 'Recently added', value: 'recent' },
+                      { name: 'Random', value: 'random' },
+                    ],
+                  },
+                },
+              },
+            },
+          },
+          {
+            name: 'RecosWidget',
+            displayName: 'Recos',
+            description: 'Movies and TV series recommended to you.',
+            ios: {
+              supportedFamilies: ['systemSmall', 'systemMedium'],
+              configuration: {
+                title: 'Order',
+                description: 'Choose how items are ordered.',
+                parameters: {
+                  order: {
+                    title: 'Order',
+                    type: 'enum',
+                    default: 'recent',
+                    values: [
+                      { name: 'Recently received', value: 'recent' },
+                      { name: 'Random', value: 'random' },
+                    ],
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+    ],
   ],
   experiments: {
     typedRoutes: true,
