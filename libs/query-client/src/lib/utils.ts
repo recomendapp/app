@@ -192,17 +192,22 @@ export const removeFromInfiniteCache = <TItem, TPage extends InfinitePaginatedRe
 ): InfiniteData<TPage> | undefined => {
   if (!oldData) return oldData;
 
+  const isMatch = (item: TItem) =>
+    typeof matcher === 'function' ? matcher(item) : (item as any).id === matcher;
+
+  // Only decrement total_results when something was actually removed — this
+  // helper is called broadly (via removeListItemFromAllCaches) against every
+  // cached infinite query matching a filter, many of which may not have the
+  // removed item loaded into their pages at all.
+  const wasRemoved = oldData.pages.some((page) => page.data.some(isMatch));
+
   return {
     ...oldData,
     pages: oldData.pages.map((page, index) => {
-      const newData = page.data.filter((item) => {
-        const isMatch =
-          typeof matcher === 'function' ? matcher(item) : (item as any).id === matcher;
-        return !isMatch;
-      });
+      const newData = page.data.filter((item) => !isMatch(item));
 
       let newMeta = page.meta;
-      if (index === 0 && typeof newMeta.total_results === 'number') {
+      if (index === 0 && wasRemoved && typeof newMeta.total_results === 'number') {
         newMeta = {
           ...newMeta,
           total_results: Math.max(0, newMeta.total_results - 1),

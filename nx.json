@@ -37,11 +37,7 @@
       "options": {
         "targetName": "test"
       },
-      "exclude": [
-        "apps/api-e2e/**/*",
-        "apps/notify-e2e/**/*",
-        "apps/worker-e2e/**/*"
-      ]
+      "exclude": ["apps/api-e2e/**/*", "apps/notify-e2e/**/*", "apps/worker-e2e/**/*"]
     },
     {
       "plugin": "@nx/docker",
@@ -49,12 +45,7 @@
         "buildTarget": {
           "name": "docker-build",
           "cwd": "{workspaceRoot}",
-          "args": [
-            "-f",
-            "{projectRoot}/Dockerfile",
-            "--tag",
-            "{projectName}:latest"
-          ]
+          "args": ["-f", "{projectRoot}/Dockerfile", "--tag", "{projectName}:latest"]
         }
       }
     },
@@ -97,6 +88,12 @@
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
+    },
+    "test": {
+      "dependsOn": ["^generate"]
+    },
+    "test-integration": {
+      "dependsOn": ["^generate"]
     }
   },
   "release": {

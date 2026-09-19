@@ -1,6 +1,14 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { and, avg, desc, eq, isNotNull, sql } from 'drizzle-orm';
-import { follow, logTvSeries, profile, reviewTvSeries, tmdbTvSeries, user } from '@libs/db/schemas';
+import {
+  bookmark,
+  follow,
+  logTvSeries,
+  profile,
+  reviewTvSeries,
+  tmdbTvSeries,
+  user,
+} from '@libs/db/schemas';
 import { plainToInstance } from 'class-transformer';
 import { LogTvSeriesDto, LogTvSeriesRequestDto, LogTvStatus } from './tv-series-logs.dto';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
@@ -14,6 +22,8 @@ import {
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 import { LogServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../../realtime/realtime.gateway';
+import { RecosService } from '../../recos/recos.service';
+import { RecoType } from '../../recos/dto/recos.dto';
 
 @Injectable()
 export class TvSeriesLogsService {
@@ -21,6 +31,7 @@ export class TvSeriesLogsService {
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
     private readonly syncService: TvLogsSyncService,
     private readonly realtimeGateway: RealtimeGateway,
+    private readonly recosService: RecosService,
   ) {}
 
   async get({
@@ -121,6 +132,27 @@ export class TvSeriesLogsService {
 
       isInserted = seriesLog.createdAt === seriesLog.updatedAt;
       finalLogId = seriesLog.id;
+
+      if (isInserted) {
+        await tx
+          .update(bookmark)
+          .set({ status: 'completed' })
+          .where(
+            and(
+              eq(bookmark.userId, currentUser.id),
+              eq(bookmark.tvSeriesId, tvSeriesId),
+              eq(bookmark.type, RecoType.TV_SERIES),
+              eq(bookmark.status, 'active'),
+            ),
+          );
+
+        await this.recosService.complete({
+          userId: currentUser.id,
+          type: RecoType.TV_SERIES,
+          mediaId: tvSeriesId,
+          tx,
+        });
+      }
 
       if (dto.status === 'completed') {
         await tx.execute(sql`

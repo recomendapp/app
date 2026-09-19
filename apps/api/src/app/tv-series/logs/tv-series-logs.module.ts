@@ -2,11 +2,10 @@ import { Module } from '@nestjs/common';
 import { TvSeriesLogsService } from './tv-series-logs.service';
 import { TvSeriesLogsController } from './tv-series-logs.controller';
 import { TvLogsSyncModule } from './sync/tv-logs-sync.module';
+import { RecosModule } from '../../recos/recos.module';
 
 @Module({
-  imports: [
-    TvLogsSyncModule,
-  ],
+  imports: [TvLogsSyncModule, RecosModule],
   controllers: [TvSeriesLogsController],
   providers: [TvSeriesLogsService],
   exports: [TvSeriesLogsService],

@@ -106,6 +106,7 @@ export class RecoTargetsService {
               eq(reco.userId, follow.followingId),
               eq(reco.senderId, currentUser.id),
               eq(reco.movieId, mediaId),
+              eq(reco.status, 'active'),
             ),
           )
       : baseQb
@@ -119,6 +120,7 @@ export class RecoTargetsService {
               eq(reco.userId, follow.followingId),
               eq(reco.senderId, currentUser.id),
               eq(reco.tvSeriesId, mediaId),
+              eq(reco.status, 'active'),
             ),
           );
 

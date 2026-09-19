@@ -5,3 +5,8 @@ export * from './lib/fixtures/movie.fixture';
 export * from './lib/fixtures/tv-series.fixture';
 export * from './lib/fixtures/log.fixture';
 export * from './lib/fixtures/review.fixture';
+export * from './lib/fixtures/explore.fixture';
+export * from './lib/fixtures/playlist.fixture';
+export * from './lib/fixtures/import.fixture';
+export * from './lib/fixtures/session.fixture';
+export * from './lib/fixtures/person.fixture';

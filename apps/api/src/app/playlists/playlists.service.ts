@@ -191,7 +191,14 @@ export class PlaylistsService {
         WHERE ${playlistItem.playlistId} = ${playlistId}
       `);
 
-      return insertedPlaylist;
+      // items_count is maintained by a statement-level trigger on playlist_item,
+      // so it isn't reflected in insertedPlaylist's RETURNING from before the copy.
+      const [refreshedPlaylist] = await tx
+        .select()
+        .from(playlist)
+        .where(eq(playlist.id, insertedPlaylist.id));
+
+      return refreshedPlaylist;
     });
 
     this.workerClient

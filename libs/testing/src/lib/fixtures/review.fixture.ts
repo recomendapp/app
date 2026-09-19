@@ -1,8 +1,10 @@
 import {
   reviewMovie,
   reviewMovieComment,
+  reviewMovieLike,
   reviewTvSeries,
   reviewTvSeriesComment,
+  reviewTvSeriesLike,
 } from '@libs/db/schemas';
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import type { Schema } from '../db/test-database';
@@ -17,6 +19,8 @@ export type TestReviewMovie = typeof reviewMovie.$inferSelect;
 export type TestReviewTvSeries = typeof reviewTvSeries.$inferSelect;
 export type TestReviewMovieComment = typeof reviewMovieComment.$inferSelect;
 export type TestReviewTvSeriesComment = typeof reviewTvSeriesComment.$inferSelect;
+export type TestReviewMovieLike = typeof reviewMovieLike.$inferSelect;
+export type TestReviewTvSeriesLike = typeof reviewTvSeriesLike.$inferSelect;
 
 /**
  * Inserts a log + a review on top of it (a review is 1:1 with its log —
@@ -82,4 +86,26 @@ export async function createTestReviewTvSeriesComment(
     })
     .returning();
   return comment;
+}
+
+export async function createTestReviewMovieLike(
+  db: NodePgDatabase<Schema>,
+  params: { reviewId: number; userId: string },
+): Promise<TestReviewMovieLike> {
+  const [like] = await db
+    .insert(reviewMovieLike)
+    .values({ reviewId: params.reviewId, userId: params.userId })
+    .returning();
+  return like;
+}
+
+export async function createTestReviewTvSeriesLike(
+  db: NodePgDatabase<Schema>,
+  params: { reviewId: number; userId: string },
+): Promise<TestReviewTvSeriesLike> {
+  const [like] = await db
+    .insert(reviewTvSeriesLike)
+    .values({ reviewId: params.reviewId, userId: params.userId })
+    .returning();
+  return like;
 }

@@ -66,6 +66,14 @@
       "options": {
         "passWithNoTests": true
       }
+    },
+    "test-integration": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/notify-integration"],
+      "options": {
+        "jestConfig": "apps/notify/jest.integration.config.cts",
+        "passWithNoTests": true
+      }
     }
   }
 }

@@ -92,7 +92,11 @@ export const recoRelations = relations(reco, ({ one }) => ({
 export const recosTrending = pgMaterializedView('recos_trending').as((qb) => {
   return qb
     .select({
-      mediaId: sql<number>`COALESCE(${reco.movieId}, ${reco.tvSeriesId})`.as('media_id'),
+      // Cast to integer: COALESCE of two bigint columns comes back from postgres as a string
+      // (node-postgres doesn't parse int8), which silently broke cursor pagination — the
+      // encoded cursor's `id` failed the `z.number()` decode schema on any page past the first.
+      // TMDB ids stay well under the int4 range, so this is a safe narrowing.
+      mediaId: sql<number>`COALESCE(${reco.movieId}, ${reco.tvSeriesId})::integer`.as('media_id'),
       type: reco.type,
       recommendationCount: sql<number>`cast(count(*) as int)`.as('recommendation_count'),
       trendingScore: sql<number>`

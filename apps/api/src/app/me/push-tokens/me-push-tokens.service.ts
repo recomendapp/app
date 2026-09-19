@@ -17,11 +17,13 @@ export class MePushTokensService {
         sessionId: session.id,
         provider: dto.provider,
         token: dto.token,
+        deviceType: dto.deviceType,
       })
       .onConflictDoUpdate({
         target: [pushToken.userId, pushToken.token, pushToken.provider],
         set: {
           sessionId: session.id,
+          deviceType: dto.deviceType,
         },
       })
       .returning();
