@@ -14,6 +14,7 @@ import { Stack } from 'expo-router';
 import { enableFreeze, enableScreens } from 'react-native-screens';
 import { useTheme } from '../providers/ThemeProvider';
 import { useAuth } from '../providers/AuthProvider';
+import { useHomeWidgetsSync } from '../hooks/useHomeWidgetsSync';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 import { Platform } from 'react-native';
@@ -33,6 +34,7 @@ const RootLayoutNav = () => {
   const t = useTranslations();
   const { user } = useAuth();
   const { defaultScreenOptions, isLiquidGlassAvailable } = useTheme();
+  useHomeWidgetsSync();
   return (
     <Stack initialRouteName="(tabs)" screenOptions={defaultScreenOptions}>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

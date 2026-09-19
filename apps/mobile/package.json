@@ -98,6 +98,7 @@
     "expo-updates": "*",
     "expo-video": "*",
     "expo-web-browser": "*",
+    "expo-widgets": "*",
     "fuse.js": "*",
     "html-to-text": "*",
     "jest-expo": "*",
