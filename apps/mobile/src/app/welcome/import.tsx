@@ -15,11 +15,13 @@ import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { LegendList } from '@legendapp/list/react-native';
 import { useCallback, useMemo } from 'react';
 import { ImportSource } from '@libs/api-js';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const WelcomeImportScreen = () => {
   const t = useTranslations();
   const router = useRouter();
   const { mode } = useTheme();
+  const insets = useSafeAreaInsets();
   const finish = useWelcomeFinish();
 
   const { data: sources } = useQuery(importSourcesListAllOptions());
@@ -75,7 +77,16 @@ const WelcomeImportScreen = () => {
 
   return (
     <>
-      <View style={tw`items-center p-4 shrink-0`}>
+      <View
+        style={[
+          tw`items-center shrink-0`,
+          {
+            paddingVertical: PADDING_VERTICAL,
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
+          },
+        ]}
+      >
         <Text style={tw`text-2xl font-bold text-center`}>
           {upperFirst(t('pages.welcome.import.title'))}
         </Text>
@@ -86,8 +97,10 @@ const WelcomeImportScreen = () => {
         keyExtractor={(item) => item.provider.slug}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
+          paddingTop: PADDING_VERTICAL,
           paddingBottom: PADDING_VERTICAL,
-          paddingHorizontal: PADDING_HORIZONTAL,
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
           gap: GAP,
         }}
       />

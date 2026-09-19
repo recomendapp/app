@@ -131,7 +131,8 @@ const ImportList = ({ job }: { job: ImportJob }) => {
         style={[
           {
             paddingVertical: PADDING_HORIZONTAL,
-            paddingHorizontal: PADDING_HORIZONTAL,
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
           },
         ]}
       >
@@ -144,7 +145,7 @@ const ImportList = ({ job }: { job: ImportJob }) => {
         </View>
       </Button>
     ),
-    [colors.mutedForeground, router],
+    [colors.mutedForeground, router, insets.left, insets.right],
   );
 
   const handleValidate = useCallback(() => {

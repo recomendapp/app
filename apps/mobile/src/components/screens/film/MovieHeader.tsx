@@ -31,6 +31,7 @@ import AnimatedImage from '../../ui/AnimatedImage';
 import BottomSheetPerson from '../../bottom-sheets/sheets/BottomSheetPerson';
 import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
 import { Movie, PersonCompact } from '@libs/api-js';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface MovieHeaderProps {
   movie?: Movie | null;
@@ -43,6 +44,7 @@ const MovieHeader: React.FC<MovieHeaderProps> = ({ movie, loading, scrollY, trig
   const t = useTranslations();
   const { hslToRgb } = useColorConverter();
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
   const bgColor = hslToRgb(colors.background);
   const { palette } = useImagePalette(
@@ -143,7 +145,11 @@ const MovieHeader: React.FC<MovieHeaderProps> = ({ movie, loading, scrollY, trig
       <Animated.View
         style={[
           tw`items-center gap-4`,
-          { paddingHorizontal: PADDING_HORIZONTAL, paddingVertical: PADDING_VERTICAL },
+          {
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
+            paddingVertical: PADDING_VERTICAL,
+          },
         ]}
       >
         <Animated.View

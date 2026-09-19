@@ -175,7 +175,8 @@ const SettingsScreen = () => {
         style={[
           {
             paddingVertical: PADDING_HORIZONTAL,
-            paddingHorizontal: PADDING_HORIZONTAL,
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
           },
         ]}
       >
@@ -188,7 +189,7 @@ const SettingsScreen = () => {
         </View>
       </Button>
     ),
-    [colors.foreground, colors.mutedForeground, router],
+    [colors.foreground, colors.mutedForeground, router, insets.left, insets.right],
   );
 
   const renderFooter = useCallback(
@@ -197,7 +198,11 @@ const SettingsScreen = () => {
         onPress={() => Alert.alert(`DEBUG`, `Api URL: ${client.getConfig().baseUrl}`)}
         style={[
           tw`items-center justify-center`,
-          { paddingHorizontal: PADDING_HORIZONTAL, paddingVertical: PADDING_VERTICAL * 2 },
+          {
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
+            paddingVertical: PADDING_VERTICAL * 2,
+          },
         ]}
       >
         <Text textColor="muted">
@@ -206,7 +211,7 @@ const SettingsScreen = () => {
         </Text>
       </Pressable>
     ),
-    [appVersion, t],
+    [appVersion, t, insets.left, insets.right],
   );
 
   return (

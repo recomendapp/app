@@ -39,6 +39,7 @@ const ProfileHeader = ({
 }: { skeleton: true; profile?: never } | { skeleton?: false; profile: Profile }) => {
   const router = useRouter();
   const { user } = useAuth();
+  const insets = useSafeAreaInsets();
   const { colors } = useTheme();
   const t = useTranslations();
   const routesFollow = useMemo(
@@ -56,7 +57,15 @@ const ProfileHeader = ({
   );
   return (
     <View style={[{ borderColor: colors.border }, tw`gap-2 py-4 border-b`]}>
-      <View style={tw`flex-row gap-4 shrink-0 items-start justify-between px-4`}>
+      <View
+        style={[
+          tw`flex-row gap-4 shrink-0 items-start justify-between`,
+          {
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
+          },
+        ]}
+      >
         <UserAvatar
           {...(!skeleton
             ? {
@@ -278,18 +287,36 @@ const ProfileScreen = () => {
           <>
             <ProfileWidgetLogMovie
               profile={profile}
-              labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
-              containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
+              labelStyle={{
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              }}
+              containerStyle={{
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              }}
             />
             <ProfileWidgetLogTvSeries
               profile={profile}
-              labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
-              containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
+              labelStyle={{
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              }}
+              containerStyle={{
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              }}
             />
             <ProfileWidgetPlaylists
               profile={profile}
-              labelStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
-              containerStyle={{ paddingHorizontal: PADDING_HORIZONTAL }}
+              labelStyle={{
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              }}
+              containerStyle={{
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              }}
             />
           </>
         )}

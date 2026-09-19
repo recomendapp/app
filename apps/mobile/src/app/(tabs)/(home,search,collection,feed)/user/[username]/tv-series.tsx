@@ -202,7 +202,8 @@ const UserCollectionTvSeries = () => {
         contentContainerStyle={{
           gap: GAP,
           paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
-          paddingHorizontal: PADDING_HORIZONTAL,
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
           paddingBottom: insets.bottom + PADDING_VERTICAL,
         }}
         maintainVisibleContentPosition={false}

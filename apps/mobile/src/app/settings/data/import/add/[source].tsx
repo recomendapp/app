@@ -147,7 +147,8 @@ const SettingsDataImportAddSourceScreen = () => {
             <View
               style={{
                 gap: GAP_LG,
-                paddingHorizontal: PADDING_HORIZONTAL,
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
                 paddingVertical: PADDING_VERTICAL,
               }}
             >

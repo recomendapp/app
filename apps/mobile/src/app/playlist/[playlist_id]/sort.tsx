@@ -201,7 +201,8 @@ const PlaylistSortScreen = () => {
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={{
-            paddingHorizontal: PADDING_HORIZONTAL,
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
             paddingBottom: PADDING_VERTICAL + insets.bottom,
             paddingTop: headerHeight,
           }}

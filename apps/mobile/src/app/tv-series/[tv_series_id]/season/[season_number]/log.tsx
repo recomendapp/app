@@ -25,6 +25,7 @@ import { getIdFromSlug } from '../../../../../utils/getIdFromSlug';
 import tw from '../../../../../lib/tw';
 import { GAP, GAP_LG, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { Divider } from '../../../../../components/ui/Divider';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Same shape as tv-series/[tv_series_id]/log.tsx, minus like and review — seasons have neither
 // (see ButtonLogTvSeasonWatch.tsx / ButtonLogTvSeasonRating.tsx on web).
@@ -40,6 +41,7 @@ const TvSeasonLogScreen = () => {
   const router = useRouter();
   const t = useTranslations();
   const toast = useToast();
+  const insets = useSafeAreaInsets();
 
   const { data: season } = useQuery(tvSeasonOptions({ tvSeriesId, seasonNumber }));
   const { data: log } = useQuery(
@@ -205,7 +207,10 @@ const TvSeasonLogScreen = () => {
           <View
             style={[
               tw`flex-row items-center justify-center gap-2`,
-              { paddingHorizontal: PADDING_HORIZONTAL },
+              {
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              },
             ]}
           >
             <LogActionButton
@@ -238,7 +243,12 @@ const TvSeasonLogScreen = () => {
           </View>
           <Divider />
           <Animated.View style={[{ gap: GAP }, ratingOpacityStyle]}>
-            <View style={{ paddingHorizontal: PADDING_HORIZONTAL }}>
+            <View
+              style={{
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              }}
+            >
               <Text variant="title" style={tw`font-medium text-center`}>
                 {upperFirst(t('common.messages.rating'))}
               </Text>
@@ -252,7 +262,8 @@ const TvSeasonLogScreen = () => {
         </View>
         <View
           style={{
-            paddingHorizontal: PADDING_HORIZONTAL,
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
             paddingBottom: PADDING_VERTICAL,
           }}
         >

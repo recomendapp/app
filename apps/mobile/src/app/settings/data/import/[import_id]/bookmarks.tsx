@@ -77,7 +77,8 @@ const SettingsDataImportBookmarksScreen = () => {
           onEndReached={() => hasNextPage && fetchNextPage()}
           contentContainerStyle={{
             gap: GAP,
-            paddingHorizontal: PADDING_HORIZONTAL,
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
             paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
             paddingBottom: insets.bottom + PADDING_VERTICAL,
           }}

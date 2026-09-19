@@ -9,7 +9,12 @@ import Animated, {
 import { OnboardingData } from '../data';
 import tw from '../../../lib/tw';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BORDER_RADIUS_LG, GAP_LG, PADDING_HORIZONTAL } from '../../../theme/globals';
+import {
+  BORDER_RADIUS_LG,
+  GAP_LG,
+  PADDING_HORIZONTAL,
+  PADDING_VERTICAL,
+} from '../../../theme/globals';
 import { Image } from 'expo-image';
 
 type Props = {
@@ -20,7 +25,7 @@ type Props = {
 
 const RenderItem = ({ index, x, item }: Props) => {
   const insets = useSafeAreaInsets();
-  const { width: SCREEN_WIDTH } = useWindowDimensions();
+  const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = useWindowDimensions();
 
   const circleAnimation = useAnimatedStyle(() => {
     const scale = interpolate(
@@ -47,7 +52,13 @@ const RenderItem = ({ index, x, item }: Props) => {
     };
   });
   return (
-    <View style={[styles.itemContainer, { width: SCREEN_WIDTH, paddingTop: insets.top }]}>
+    <View
+      style={[
+        styles.itemContainer,
+        tw`w-full`,
+        { width: SCREEN_WIDTH, paddingTop: insets.top + PADDING_VERTICAL },
+      ]}
+    >
       <View style={tw`absolute inset-0 items-center justify-end`}>
         <Animated.View
           style={[
@@ -61,14 +72,19 @@ const RenderItem = ({ index, x, item }: Props) => {
           ]}
         />
       </View>
-      <Animated.View style={[tw`items-center justify-center w-full`, { gap: GAP_LG }]}>
+      <Animated.View
+        style={[
+          tw`items-center justify-center w-full`,
+          { gap: GAP_LG, paddingLeft: insets.left, paddingRight: insets.right },
+        ]}
+      >
         <Image
           transition={500}
           source={item.image}
           style={[
             tw`w-full h-full max-w-lg`,
             {
-              maxHeight: 700,
+              maxHeight: SCREEN_HEIGHT * 0.6,
               borderRadius: BORDER_RADIUS_LG,
             },
           ]}

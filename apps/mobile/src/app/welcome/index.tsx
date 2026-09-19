@@ -23,6 +23,7 @@ import { useSharedValue } from 'react-native-reanimated';
 import { useHeaderHeight } from 'expo-router/react-navigation';
 import { Icons } from '../../constants/Icons';
 import { isAndroid } from '../../platform/detection';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const WelcomeBackground = () => {
   const { colors } = useTheme();
@@ -60,6 +61,7 @@ const FeatureSlide = ({
   width: number;
   height: number;
 }) => {
+  const insets = useSafeAreaInsets();
   const player = useVideoPlayer(feature.video.mobile, (p) => {
     p.loop = true;
     p.muted = true;
@@ -67,7 +69,17 @@ const FeatureSlide = ({
   });
 
   return (
-    <View style={[tw`items-center justify-center gap-4`, { width, height }]}>
+    <View
+      style={[
+        tw`items-center justify-center gap-4`,
+        {
+          width,
+          height,
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
+        },
+      ]}
+    >
       <View
         style={[
           { aspectRatio: 3 / 4, width: width * 0.6, backgroundColor: 'black' },
@@ -99,6 +111,7 @@ const WelcomeCarouselScreen = () => {
   const t = useTranslations();
   const router = useRouter();
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
 
   const { data: features } = useQuery(uiFeaturesOptions());
@@ -141,7 +154,8 @@ const WelcomeCarouselScreen = () => {
         <View
           style={{
             paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
-            paddingHorizontal: PADDING_HORIZONTAL,
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
             paddingBottom: PADDING_VERTICAL,
           }}
         >
@@ -188,7 +202,8 @@ const WelcomeCarouselScreen = () => {
           containerStyle={{
             gap: 5,
             paddingBottom: PADDING_VERTICAL,
-            paddingHorizontal: PADDING_HORIZONTAL,
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
           }}
           onPress={onPressPagination}
         />

@@ -28,6 +28,7 @@ import { getTmdbImage } from '../../../../lib/tmdb/getTmdbImage';
 import { UserTvSeriesWithUserTvSeries } from '@libs/api-js';
 import { CardUser } from '../../../cards/CardUser';
 import { Icons } from '../../../../constants/Icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface ProfileTvSeriesHeaderProps {
   log?: UserTvSeriesWithUserTvSeries | null;
@@ -44,6 +45,7 @@ export const ProfileTvSeriesHeader: React.FC<ProfileTvSeriesHeaderProps> = ({
   const t = useTranslations();
   const { hslToRgb } = useColorConverter();
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
   const bgColor = hslToRgb(colors.background);
   const { palette } = useImagePalette(
@@ -131,7 +133,11 @@ export const ProfileTvSeriesHeader: React.FC<ProfileTvSeriesHeaderProps> = ({
       <Animated.View
         style={[
           tw`flex-row justify-between items-center gap-4`,
-          { paddingHorizontal: PADDING_HORIZONTAL, paddingVertical: PADDING_VERTICAL },
+          {
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
+            paddingVertical: PADDING_VERTICAL,
+          },
           textAnim,
         ]}
       >

@@ -57,6 +57,7 @@ const TvSeriesSeasonHeader: React.FC<MediaHeaderProps> = ({
   const navigationHeaderHeight = useHeaderHeight();
   const { hslToRgb } = useColorConverter();
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const title = useMemo(
     () =>
       season
@@ -115,7 +116,8 @@ const TvSeriesSeasonHeader: React.FC<MediaHeaderProps> = ({
         /* eslint-enable react-hooks/immutability */
       }}
       style={{
-        paddingHorizontal: PADDING_HORIZONTAL,
+        paddingLeft: insets.left + PADDING_HORIZONTAL,
+        paddingRight: insets.right + PADDING_HORIZONTAL,
         paddingBottom: PADDING_VERTICAL,
         paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
       }}
@@ -270,7 +272,8 @@ const TvSeriesSeasonScreen = () => {
           {
             backgroundColor: colors.card,
             borderColor: colors.border,
-            marginHorizontal: PADDING_HORIZONTAL,
+            marginLeft: insets.left + PADDING_HORIZONTAL,
+            marginRight: insets.right + PADDING_HORIZONTAL,
           },
           tw`flex-row justify-between items-center rounded-xl h-24 gap-2 border overflow-hidden`,
         ]}
@@ -325,7 +328,7 @@ const TvSeriesSeasonScreen = () => {
         </View>
       </Animated.View>
     ),
-    [colors, season, t, formatter],
+    [colors, season, t, formatter, insets],
   );
 
   return (
@@ -359,7 +362,11 @@ const TvSeriesSeasonScreen = () => {
             <View
               style={[
                 tw`flex-1 items-center justify-center`,
-                { paddingHorizontal: PADDING_HORIZONTAL, paddingVertical: PADDING_VERTICAL },
+                {
+                  paddingLeft: insets.left + PADDING_HORIZONTAL,
+                  paddingRight: insets.right + PADDING_HORIZONTAL,
+                  paddingVertical: PADDING_VERTICAL,
+                },
               ]}
             >
               <Text style={[tw`text-center`, { color: colors.mutedForeground }]}>

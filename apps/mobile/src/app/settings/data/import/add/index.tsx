@@ -89,7 +89,8 @@ const SettingsDataImportAddIndexScreen = () => {
           contentContainerStyle={{
             paddingTop: navigationHeaderHeight + insets.top + PADDING_VERTICAL,
             paddingBottom: insets.bottom + PADDING_VERTICAL,
-            paddingHorizontal: PADDING_HORIZONTAL,
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
             gap: GAP,
           }}
         />

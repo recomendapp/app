@@ -25,6 +25,8 @@ import { Icons } from '../../../constants/Icons';
 import { Button } from '../../ui/Button';
 import Animated, { FadeIn, FadeInRight, FadeOut, FadeOutRight } from 'react-native-reanimated';
 import { upperFirst } from 'lodash';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { PADDING_HORIZONTAL } from '../../../theme/globals';
 
 interface ProfilePinnedProps extends React.ComponentPropsWithoutRef<typeof View> {
   profileId: string;
@@ -35,6 +37,7 @@ const ProfilePinned = ({ profileId, containerStyle }: ProfilePinnedProps) => {
   const t = useTranslations();
   const toast = useToast();
   const { user } = useAuth();
+  const insets = useSafeAreaInsets();
   const { colors, mode } = useTheme();
 
   const { data: pinnedItems } = useQuery(userPinnedOptions({ userId: profileId }));
@@ -239,7 +242,15 @@ const ProfilePinned = ({ profileId, containerStyle }: ProfilePinnedProps) => {
 
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut} style={tw`gap-1`}>
-      <View style={tw`flex-row items-center gap-1 px-4`}>
+      <View
+        style={[
+          tw`flex-row items-center gap-1`,
+          {
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
+          },
+        ]}
+      >
         <Icons.Pin size={12} color={colors.mutedForeground} />
         <Text style={[tw`text-xs`, { color: colors.mutedForeground }]}>
           {upperFirst(t('common.messages.pinned', { gender: 'male', count: 2 }))}
@@ -250,7 +261,12 @@ const ProfilePinned = ({ profileId, containerStyle }: ProfilePinnedProps) => {
           <Animated.View
             entering={FadeInRight}
             exiting={FadeOutRight}
-            style={[tw`absolute -top-2 right-2 z-20`]}
+            style={[
+              tw`absolute -top-2 z-20`,
+              {
+                right: insets.right + PADDING_HORIZONTAL,
+              },
+            ]}
           >
             <Button
               variant="outline"
@@ -268,7 +284,13 @@ const ProfilePinned = ({ profileId, containerStyle }: ProfilePinnedProps) => {
           keyExtractor={(item) => item.id.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={[tw`px-4`, containerStyle]}
+          contentContainerStyle={[
+            {
+              paddingLeft: insets.left + PADDING_HORIZONTAL,
+              paddingRight: insets.right + PADDING_HORIZONTAL,
+            },
+            containerStyle,
+          ]}
         />
       </View>
     </Animated.View>

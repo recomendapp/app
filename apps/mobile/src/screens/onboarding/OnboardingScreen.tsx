@@ -59,7 +59,9 @@ const OnboardingScreen = () => {
           paddingBottom: insets.bottom + PADDING_VERTICAL + 50,
         }}
       />
-      <View style={styles.bottomContainer}>
+      <View
+        style={[styles.bottomContainer, { paddingLeft: insets.left, paddingRight: insets.right }]}
+      >
         <Pagination data={data} x={x} />
         <CustomButton flatListRef={flatListRef} flatListIndex={flatListIndex} x={x} data={data} />
       </View>

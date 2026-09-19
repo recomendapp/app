@@ -9,6 +9,7 @@ import { useMemo } from 'react';
 import { CardPerson } from '../../cards/CardPerson';
 import { useQuery } from '@tanstack/react-query';
 import { movieCastingOptions } from '@libs/query-client';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface MovieWidgetCastProps extends React.ComponentPropsWithoutRef<typeof View> {
   movieId: number;
@@ -16,6 +17,7 @@ interface MovieWidgetCastProps extends React.ComponentPropsWithoutRef<typeof Vie
 
 const MovieWidgetCast = ({ movieId, style }: MovieWidgetCastProps) => {
   const t = useTranslations();
+  const insets = useSafeAreaInsets();
   const { width: screenWidth } = useWindowDimensions();
   const width = useMemo(
     () => clamp(screenWidth * 0.8 - (PADDING_HORIZONTAL * 2 + GAP * 2), 400),
@@ -32,7 +34,15 @@ const MovieWidgetCast = ({ movieId, style }: MovieWidgetCastProps) => {
 
   return (
     <View>
-      <Text style={[tw`text-sm font-medium`, { marginHorizontal: PADDING_HORIZONTAL }]}>
+      <Text
+        style={[
+          tw`text-sm font-medium`,
+          {
+            marginLeft: insets.left + PADDING_HORIZONTAL,
+            marginRight: insets.right + PADDING_HORIZONTAL,
+          },
+        ]}
+      >
         {`${upperFirst(t('common.messages.starring'))} :`}
       </Text>
       <MultiRowHorizontalList
@@ -40,7 +50,8 @@ const MovieWidgetCast = ({ movieId, style }: MovieWidgetCastProps) => {
         renderItem={(item) => <CardPerson variant="list" person={item.person} style={tw`h-12`} />}
         keyExtractor={(item) => item.personId.toString()}
         contentContainerStyle={{
-          paddingHorizontal: PADDING_HORIZONTAL,
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
           gap: GAP,
         }}
         columnStyle={{

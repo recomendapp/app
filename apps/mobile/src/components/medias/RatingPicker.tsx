@@ -14,6 +14,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import * as Haptics from 'expo-haptics';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icons } from '../../constants/Icons';
 
 const ITEM_SPACING = 8;
@@ -98,7 +99,16 @@ export const RatingPicker = ({ rating, onRatingChange, onClear }: RatingPickerPr
   // whenever this renders inside something narrower than the window itself (e.g. a bottom sheet
   // on iPad, where the sheet is a fraction of the screen's width).
   const [width, setWidth] = useState(0);
-  const itemWidth = width * 0.2;
+  // This component deliberately spans the full width of its parent (unlike siblings around it,
+  // which get explicit horizontal padding) so the horizontal scroller has room to breathe edge to
+  // edge. That means, unlike those siblings, it has to account for left/right insets itself —
+  // otherwise on a device with asymmetric insets (e.g. a foldable's hinge/notch sitting to one
+  // side) the fixed selection slot below would center on the geometric middle of `width` instead
+  // of the middle of the actually-safe area, landing partly behind the unsafe zone.
+  const insets = useSafeAreaInsets();
+  const safeWidth = width - insets.left - insets.right;
+  const safeCenterX = insets.left + safeWidth / 2;
+  const itemWidth = safeWidth * 0.2;
   const itemTotalSize = itemWidth + ITEM_SPACING;
   // Size of the fixed selection slot the numbers scroll behind — see RatingPicker's overlay.
   const slotWidth = itemWidth;
@@ -201,7 +211,10 @@ export const RatingPicker = ({ rating, onRatingChange, onClear }: RatingPickerPr
           <Animated.View>
             <Animated.View
               pointerEvents="none"
-              style={tw`absolute inset-0 items-center justify-center`}
+              style={[
+                tw`absolute top-0 bottom-0 items-center justify-center`,
+                { left: insets.left, right: insets.right },
+              ]}
             >
               <Animated.View
                 style={[
@@ -250,7 +263,11 @@ export const RatingPicker = ({ rating, onRatingChange, onClear }: RatingPickerPr
               }}
               contentContainerStyle={{
                 gap: ITEM_SPACING,
-                paddingHorizontal: (width - itemWidth) / 2,
+                // Split rather than symmetric `paddingHorizontal` — with asymmetric insets, the
+                // padding on each side must differ so that scrolling to a given index still lands
+                // that item's center on `safeCenterX`, not on `width / 2`.
+                paddingLeft: safeCenterX - itemWidth / 2,
+                paddingRight: width - safeCenterX - itemWidth / 2,
               }}
               onScroll={onScroll}
               scrollEventThrottle={1000 / 60}
@@ -262,7 +279,12 @@ export const RatingPicker = ({ rating, onRatingChange, onClear }: RatingPickerPr
               onScrollEndDrag={commitRating}
             />
           </Animated.View>
-          <Animated.View style={[tw`flex-row items-center justify-center gap-4`]}>
+          <Animated.View
+            style={[
+              tw`flex-row items-center justify-center gap-4`,
+              { paddingLeft: insets.left, paddingRight: insets.right },
+            ]}
+          >
             <AnimatedTouchableOpacity
               style={[
                 { backgroundColor: colors.background },

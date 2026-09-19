@@ -5,7 +5,7 @@ import { StyleProp, useWindowDimensions, View, ViewStyle } from 'react-native';
 import { LegendList, LegendListRef } from '@legendapp/list/react-native';
 import { useCallback, useMemo, useRef } from 'react';
 import { useScrollToTop } from 'expo-router/react-navigation';
-import { GAP, PADDING_VERTICAL } from '../../../theme/globals';
+import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import { Icons } from '../../../constants/Icons';
 import { Text } from '../../ui/text';
 import { upperFirst } from 'lodash';
@@ -63,6 +63,8 @@ const FeaturedPlaylists = ({ contentContainerStyle }: FeaturedPlaylistsProps) =>
         {
           gap: GAP,
           paddingBottom: insets.bottom + PADDING_VERTICAL,
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
         },
         contentContainerStyle,
       ]}

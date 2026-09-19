@@ -25,6 +25,7 @@ import { getIdFromSlug } from '../../../utils/getIdFromSlug';
 import tw from '../../../lib/tw';
 import { GAP, GAP_LG, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import { Divider } from '../../../components/ui/Divider';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const TvSeriesLogScreen = () => {
   const { tv_series_id } = useLocalSearchParams<{ tv_series_id: string }>();
@@ -35,6 +36,7 @@ const TvSeriesLogScreen = () => {
   const t = useTranslations();
   const formatter = useFormatter();
   const toast = useToast();
+  const insets = useSafeAreaInsets();
 
   const { data: tvSeries } = useQuery(tvSeriesOptions({ tvSeriesId }));
   const { data: log } = useQuery(tvSeriesLogOptions({ userId: user?.id, tvSeriesId }));
@@ -192,7 +194,10 @@ const TvSeriesLogScreen = () => {
           <View
             style={[
               tw`flex-row items-center justify-center gap-2`,
-              { paddingHorizontal: PADDING_HORIZONTAL },
+              {
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              },
             ]}
           >
             <LogActionButton
@@ -234,7 +239,12 @@ const TvSeriesLogScreen = () => {
           </View>
           <Divider />
           <Animated.View style={[{ gap: GAP }, ratingOpacityStyle]}>
-            <View style={{ paddingHorizontal: PADDING_HORIZONTAL }}>
+            <View
+              style={{
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              }}
+            >
               <Text variant="title" style={tw`font-medium text-center`}>
                 {upperFirst(t('common.messages.rating'))}
               </Text>
@@ -251,7 +261,10 @@ const TvSeriesLogScreen = () => {
               <View
                 style={[
                   tw`flex-col items-center justify-center gap-2`,
-                  { paddingHorizontal: PADDING_HORIZONTAL },
+                  {
+                    paddingLeft: insets.left + PADDING_HORIZONTAL,
+                    paddingRight: insets.right + PADDING_HORIZONTAL,
+                  },
                 ]}
               >
                 <Button
@@ -269,7 +282,8 @@ const TvSeriesLogScreen = () => {
         </View>
         <View
           style={{
-            paddingHorizontal: PADDING_HORIZONTAL,
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
             paddingBottom: PADDING_VERTICAL,
           }}
         >

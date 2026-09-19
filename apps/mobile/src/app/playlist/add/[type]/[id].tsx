@@ -305,7 +305,8 @@ const PlaylistAddTo = () => {
             ItemSeparatorComponent={() => <View style={{ height: GAP }} />}
             contentContainerStyle={[
               {
-                paddingHorizontal: PADDING_HORIZONTAL,
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
                 paddingBottom: PADDING_VERTICAL,
                 paddingTop: headerHeight,
               },
@@ -319,7 +320,8 @@ const PlaylistAddTo = () => {
             tw`gap-2 border-t`,
             {
               borderColor: colors.border,
-              paddingHorizontal: PADDING_HORIZONTAL,
+              paddingLeft: insets.left + PADDING_HORIZONTAL,
+              paddingRight: insets.right + PADDING_HORIZONTAL,
               paddingTop: PADDING_VERTICAL,
               paddingBottom: insets.bottom + PADDING_VERTICAL,
             },
