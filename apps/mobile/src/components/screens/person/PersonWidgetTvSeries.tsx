@@ -74,7 +74,8 @@ const PersonWidgetTvSeries = ({ personId, url, style }: PersonWidgetTvSeriesProp
         }
         keyExtractor={(item, index) => (loading ? index.toString() : item.tvSeries.id.toString())}
         contentContainerStyle={{
-          paddingHorizontal: PADDING_HORIZONTAL,
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
           gap: GAP,
         }}
         columnStyle={{

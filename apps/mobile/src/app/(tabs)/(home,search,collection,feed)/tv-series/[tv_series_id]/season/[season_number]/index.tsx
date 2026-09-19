@@ -57,6 +57,7 @@ const TvSeriesSeasonHeader: React.FC<MediaHeaderProps> = ({
   const navigationHeaderHeight = useHeaderHeight();
   const { hslToRgb } = useColorConverter();
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const title = useMemo(
     () =>
       season
@@ -115,7 +116,8 @@ const TvSeriesSeasonHeader: React.FC<MediaHeaderProps> = ({
         /* eslint-enable react-hooks/immutability */
       }}
       style={{
-        paddingHorizontal: PADDING_HORIZONTAL,
+        paddingLeft: insets.left + PADDING_HORIZONTAL,
+        paddingRight: insets.right + PADDING_HORIZONTAL,
         paddingBottom: PADDING_VERTICAL,
         paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
       }}

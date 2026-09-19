@@ -300,7 +300,8 @@ export const ReviewMovieCommentsScreen = ({
           onEndReached={() => hasNextPage && fetchNextPage()}
           onEndReachedThreshold={0.5}
           contentContainerStyle={{
-            paddingHorizontal: PADDING_HORIZONTAL,
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
           }}
           contentInset={{
             top: navigationHeaderHeight + PADDING_VERTICAL,
@@ -328,7 +329,8 @@ export const ReviewMovieCommentsScreen = ({
                   borderRadius: BORDER_RADIUS_LG,
                   paddingVertical: PADDING_VERTICAL,
                   paddingHorizontal: PADDING_HORIZONTAL,
-                  marginHorizontal: PADDING_HORIZONTAL,
+                  marginLeft: insets.left + PADDING_HORIZONTAL,
+                  marginRight: insets.right + PADDING_HORIZONTAL,
                   gap: GAP,
                   backgroundColor: !isLiquidGlassAvailable ? colors.muted : 'transparent',
                   borderWidth: !isLiquidGlassAvailable ? 1 : 0,

@@ -180,7 +180,13 @@ export const ProfileTvSeries = ({
           triggerHeight={headerHeight}
         />
         {log && (
-          <View style={{ paddingHorizontal: PADDING_HORIZONTAL }}>
+          <View
+            style={{
+              paddingLeft: insets.left + PADDING_HORIZONTAL,
+              paddingRight: insets.right + PADDING_HORIZONTAL,
+              paddingVertical: PADDING_VERTICAL,
+            }}
+          >
             {log.review ? (
               <>
                 <View style={tw`justify-center items-center`}>

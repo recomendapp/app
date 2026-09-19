@@ -131,6 +131,7 @@ const SettingsDataImportsScreen = () => {
       handleDelete,
       getImporterStatusBadgeVariant,
       getImporterStatusLabel,
+      t,
     ],
   );
 
@@ -161,6 +162,8 @@ const SettingsDataImportsScreen = () => {
             {
               gap: GAP,
               paddingTop: PADDING_VERTICAL,
+              paddingLeft: insets.left,
+              paddingRight: insets.right,
               paddingBottom: insets.bottom + PADDING_VERTICAL,
             },
           ]}

@@ -9,6 +9,7 @@ import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 import { ViewType } from '@libs/api-js';
 import { SFSymbol } from 'expo-symbols';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface CollectionToolbarItem {
   label?: string;
@@ -43,6 +44,7 @@ const CollectionToolbar = forwardRef<React.ComponentRef<typeof FlashList>, Colle
     ref,
   ) => {
     const t = useTranslations();
+    const insets = useSafeAreaInsets();
     const { width: SCREEN_WIDTH } = useWindowDimensions();
     const items = useMemo(
       () => [
@@ -86,7 +88,8 @@ const CollectionToolbar = forwardRef<React.ComponentRef<typeof FlashList>, Colle
         contentContainerStyle={[
           {
             gap: GAP,
-            paddingHorizontal: PADDING_HORIZONTAL,
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
           },
           contentContainerStyle,
         ]}

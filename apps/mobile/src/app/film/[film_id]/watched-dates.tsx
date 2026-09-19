@@ -29,6 +29,7 @@ import { Card } from '../../../components/ui/card';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useWatchedDateFormats } from '../../../hooks/useWatchedDateFormats';
 import { PADDING_HORIZONTAL } from '../../../theme/globals';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const FilmWatchedDatesScreen = () => {
   const { user } = useAuth();
@@ -39,6 +40,7 @@ const FilmWatchedDatesScreen = () => {
   const { film_id } = useLocalSearchParams<{ film_id: string }>();
   const { id: movieId } = getIdFromSlug(film_id);
   const toast = useToast();
+  const insets = useSafeAreaInsets();
   const openSheet = useBottomSheetStore((state) => state.openSheet);
   const { showActionSheetWithOptions } = useActionSheet();
   const { getWatchedDateFormatLabel, watchedDateFormatValues } = useWatchedDateFormats();
@@ -252,7 +254,13 @@ const FilmWatchedDatesScreen = () => {
             </View>
           )
         }
-        contentContainerStyle={tw`gap-2`}
+        contentContainerStyle={[
+          tw`gap-2`,
+          {
+            paddingLeft: insets.left,
+            paddingRight: insets.right,
+          },
+        ]}
         maintainVisibleContentPosition={false}
         onRefresh={refetch}
         onEndReached={() => hasNextPage && fetchNextPage()}

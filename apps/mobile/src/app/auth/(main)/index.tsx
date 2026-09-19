@@ -39,7 +39,6 @@ const AuthHeader = ({
       style={[
         tw`items-center justify-end`,
         {
-          paddingHorizontal: PADDING_HORIZONTAL,
           paddingVertical: PADDING_VERTICAL,
           paddingLeft: insets.left + PADDING_HORIZONTAL,
           paddingRight: insets.right + PADDING_HORIZONTAL,

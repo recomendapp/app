@@ -25,6 +25,7 @@ import { getIdFromSlug } from '../../../utils/getIdFromSlug';
 import tw from '../../../lib/tw';
 import { GAP, GAP_LG, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import { Divider } from '../../../components/ui/Divider';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const FilmLogScreen = () => {
   const { film_id } = useLocalSearchParams<{ film_id: string }>();
@@ -35,6 +36,7 @@ const FilmLogScreen = () => {
   const t = useTranslations();
   const formatter = useFormatter();
   const toast = useToast();
+  const insets = useSafeAreaInsets();
 
   const { data: movie } = useQuery(movieOptions({ movieId }));
   const { data: log } = useQuery(movieLogOptions({ userId: user?.id, movieId }));
@@ -137,7 +139,10 @@ const FilmLogScreen = () => {
           <View
             style={[
               tw`flex-row items-center justify-center gap-2`,
-              { paddingHorizontal: PADDING_HORIZONTAL },
+              {
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              },
             ]}
           >
             <LogActionButton
@@ -161,7 +166,12 @@ const FilmLogScreen = () => {
           </View>
           <Divider />
           <Animated.View style={[{ gap: GAP }, ratingOpacityStyle]}>
-            <View style={{ paddingHorizontal: PADDING_HORIZONTAL }}>
+            <View
+              style={{
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              }}
+            >
               <Text variant="title" style={tw`font-medium text-center`}>
                 {upperFirst(t('common.messages.rating'))}
               </Text>
@@ -178,7 +188,10 @@ const FilmLogScreen = () => {
               <View
                 style={[
                   tw`flex-col items-center justify-center gap-2`,
-                  { paddingHorizontal: PADDING_HORIZONTAL },
+                  {
+                    paddingLeft: insets.left + PADDING_HORIZONTAL,
+                    paddingRight: insets.right + PADDING_HORIZONTAL,
+                  },
                 ]}
               >
                 <Button variant="outline" icon={Icons.Calendar} onPress={handleWatchDatePress}>
@@ -199,7 +212,8 @@ const FilmLogScreen = () => {
         </View>
         <View
           style={{
-            paddingHorizontal: PADDING_HORIZONTAL,
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
             paddingBottom: PADDING_VERTICAL,
           }}
         >

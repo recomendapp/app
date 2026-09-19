@@ -254,7 +254,7 @@ const ModalPlaylistEditMembers = () => {
         </Swipeable>
       );
     },
-    [handleDeleteMember],
+    [handleDeleteMember, handleSelectRole, playlistMembersRoleValues],
   );
 
   return (
@@ -333,7 +333,14 @@ const ModalPlaylistEditMembers = () => {
           keyExtractor={(item) => item.id.toString()}
           refreshing={isRefetching}
           onRefresh={refetch}
-          contentContainerStyle={[tw`gap-2 flex-grow`, { paddingBottom: insets.bottom }]}
+          contentContainerStyle={[
+            tw`gap-2 flex-grow`,
+            {
+              paddingBottom: insets.bottom,
+              paddingLeft: insets.left,
+              paddingRight: insets.right,
+            },
+          ]}
           keyboardShouldPersistTaps="handled"
         />
       )}

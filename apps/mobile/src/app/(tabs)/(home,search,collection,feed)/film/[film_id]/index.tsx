@@ -178,8 +178,7 @@ const FilmScreen = () => {
             contentContainerStyle={[
               tw`items-center gap-2`,
               {
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
+                paddingHorizontal: PADDING_HORIZONTAL,
                 paddingVertical: PADDING_VERTICAL,
               },
             ]}

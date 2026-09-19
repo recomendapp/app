@@ -6,11 +6,13 @@ import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globa
 import { useMemo } from 'react';
 import useSearchStore, { SearchType } from '../../../../../stores/useSearchStore';
 import Animated, { FadeInUp } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Filter = (props: NativeStackHeaderProps) => {
   const { search, isFocused, type } = useSearchStore((state) => state);
   const t = useTranslations();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const routes = useMemo(
     (): { type: SearchType; label: string; href: Href }[] => [
       {
@@ -56,7 +58,11 @@ const Filter = (props: NativeStackHeaderProps) => {
   return (
     <Animated.View
       entering={FadeInUp}
-      style={{ paddingHorizontal: PADDING_HORIZONTAL, paddingBottom: PADDING_VERTICAL }}
+      style={{
+        paddingLeft: insets.left + PADDING_HORIZONTAL,
+        paddingRight: insets.right + PADDING_HORIZONTAL,
+        paddingBottom: PADDING_VERTICAL,
+      }}
     >
       <SegmentedControl
         values={routes.map((route) => route.label)}

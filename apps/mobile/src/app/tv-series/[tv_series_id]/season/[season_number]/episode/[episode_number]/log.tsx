@@ -30,6 +30,7 @@ import {
   PADDING_VERTICAL,
 } from '../../../../../../../theme/globals';
 import { Divider } from '../../../../../../../components/ui/Divider';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Same shape as season/[season_number]/log.tsx, minus status states and the like/review actions
 // — an episode log is a plain watched/not-watched record with an optional rating (see
@@ -49,6 +50,7 @@ const TvEpisodeLogScreen = () => {
   const router = useRouter();
   const t = useTranslations();
   const toast = useToast();
+  const insets = useSafeAreaInsets();
 
   const { data: season } = useQuery(tvSeasonOptions({ tvSeriesId, seasonNumber }));
   const { data: log } = useQuery(
@@ -173,7 +175,10 @@ const TvEpisodeLogScreen = () => {
           <View
             style={[
               tw`flex-row items-center justify-center gap-2`,
-              { paddingHorizontal: PADDING_HORIZONTAL },
+              {
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              },
             ]}
           >
             <LogActionButton
@@ -188,7 +193,12 @@ const TvEpisodeLogScreen = () => {
           </View>
           <Divider />
           <Animated.View style={[{ gap: GAP }, ratingOpacityStyle]}>
-            <View style={{ paddingHorizontal: PADDING_HORIZONTAL }}>
+            <View
+              style={{
+                paddingLeft: insets.left + PADDING_HORIZONTAL,
+                paddingRight: insets.right + PADDING_HORIZONTAL,
+              }}
+            >
               <Text variant="title" style={tw`font-medium text-center`}>
                 {upperFirst(t('common.messages.rating'))}
               </Text>
@@ -202,7 +212,8 @@ const TvEpisodeLogScreen = () => {
         </View>
         <View
           style={{
-            paddingHorizontal: PADDING_HORIZONTAL,
+            paddingLeft: insets.left + PADDING_HORIZONTAL,
+            paddingRight: insets.right + PADDING_HORIZONTAL,
             paddingBottom: PADDING_VERTICAL,
           }}
         >

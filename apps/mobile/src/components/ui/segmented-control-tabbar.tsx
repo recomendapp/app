@@ -3,12 +3,14 @@ import { upperFirst } from 'lodash';
 import { View } from 'react-native';
 import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { SegmentedControl } from './SegmentedControl';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const SegmentedControlTabBar = ({
   state,
   descriptors,
   navigation,
 }: MaterialTopTabBarProps) => {
+  const insets = useSafeAreaInsets();
   const onPressTab = (item: (typeof state.routes)[number], index: number, isFocused: boolean) => {
     const event = navigation.emit({
       type: 'tabPress',
@@ -23,7 +25,8 @@ export const SegmentedControlTabBar = ({
   return (
     <View
       style={{
-        paddingHorizontal: PADDING_HORIZONTAL,
+        paddingLeft: insets.left + PADDING_HORIZONTAL,
+        paddingRight: insets.right + PADDING_HORIZONTAL,
         paddingBottom: PADDING_VERTICAL,
       }}
     >

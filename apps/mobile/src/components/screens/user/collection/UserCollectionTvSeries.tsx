@@ -141,7 +141,8 @@ const UserCollectionTvSeries = () => {
         contentContainerStyle={{
           gap: GAP,
           paddingBottom: insets.bottom + PADDING_VERTICAL,
-          paddingHorizontal: PADDING_HORIZONTAL,
+          paddingLeft: insets.left + PADDING_HORIZONTAL,
+          paddingRight: insets.right + PADDING_HORIZONTAL,
         }}
         keyExtractor={useCallback(
           (item: LogTvSeriesWithTvSeriesNoReview) => item.id.toString(),
