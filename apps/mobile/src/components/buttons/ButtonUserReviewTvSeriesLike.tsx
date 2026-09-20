@@ -7,11 +7,14 @@ import tw from '../../lib/tw';
 import { useUserReviewTvSeriesLike } from '@libs/query-client';
 import { useAuth } from '../../providers/AuthProvider';
 import { ReviewTvSeries } from '@libs/api-js';
+import { Pressable } from 'react-native';
+import { formatCompactCount } from '../../utils/formatCompactCount';
 
 interface ButtonUserReviewTvSeriesLikeProps
   extends Omit<React.ComponentProps<typeof Button>, 'children'> {
   review: ReviewTvSeries;
   showCount?: boolean;
+  compact?: boolean;
 }
 
 const ButtonUserReviewTvSeriesLike = forwardRef<
@@ -22,6 +25,7 @@ const ButtonUserReviewTvSeriesLike = forwardRef<
     {
       review,
       showCount = true,
+      compact = false,
       variant = 'outline',
       size,
       icon = Icons.like,
@@ -33,12 +37,33 @@ const ButtonUserReviewTvSeriesLike = forwardRef<
   ) => {
     const { colors } = useTheme();
     const { user } = useAuth();
-    const { isLiked, toggle } = useUserReviewTvSeriesLike({
+    const { isLiked, isLoading, isPending, toggle } = useUserReviewTvSeriesLike({
       reviewId: review.id,
       userId: user?.id,
       tvSeriesId: review.tvSeriesId,
       reviewAuthorId: review.userId,
     });
+
+    const color = isLiked ? colors.accentPink : colors.mutedForeground;
+
+    if (compact) {
+      return (
+        <Pressable
+          onPress={(event) => {
+            toggle();
+            onPress?.(event);
+          }}
+          disabled={!user || isLoading || isLiked === undefined || isPending}
+          hitSlop={8}
+          style={tw`flex-row items-center gap-1 py-1`}
+        >
+          <Icons.like size={14} color={color} fill={isLiked ? colors.accentPink : 'transparent'} />
+          {review.likesCount > 0 && (
+            <Text style={{ fontSize: 12, color }}>{formatCompactCount(review.likesCount)}</Text>
+          )}
+        </Pressable>
+      );
+    }
 
     return (
       <Button
@@ -62,7 +87,7 @@ const ButtonUserReviewTvSeriesLike = forwardRef<
       >
         {showCount && (
           <Text style={[{ color: isLiked ? colors.accentPink : colors.foreground }]}>
-            {review.likesCount}
+            {formatCompactCount(review.likesCount)}
           </Text>
         )}
       </Button>

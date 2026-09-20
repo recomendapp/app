@@ -1,8 +1,4 @@
-import {
-  userByUsernameOptions,
-  userMovieLogOptions,
-  useUserReviewMovieLike,
-} from '@libs/query-client';
+import { userByUsernameOptions, userMovieLogOptions } from '@libs/query-client';
 import { useQuery } from '@tanstack/react-query';
 import AnimatedContentContainer from '../../../ui/AnimatedContentContainer';
 import AnimatedStackScreen from '../../../ui/AnimatedStackScreen';
@@ -24,15 +20,15 @@ import { Button } from '../../../ui/Button';
 import { Icons } from '../../../../constants/Icons';
 import useBottomSheetStore from '../../../../stores/useBottomSheetStore';
 import ButtonUserReviewMovieLike from '../../../buttons/ButtonUserReviewMovieLike';
-import { useAuth } from '../../../../providers/AuthProvider';
 import { BottomSheetLogMovie } from '../../../bottom-sheets/sheets/BottomSheetLogMovie';
 import FeedUserLog from '../../feed/FeedUserLog';
 import { EnrichedMarkdownText } from '../../../RichText/EnrichedMarkdownText';
-import { NativeStackHeaderItem, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Pressable } from 'react-native';
+import { formatCompactCount } from '../../../../utils/formatCompactCount';
 
 export const ProfileFilm = ({ username, movieId }: { username: string; movieId: number }) => {
-  const { user } = useAuth();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const t = useTranslations();
@@ -50,12 +46,6 @@ export const ProfileFilm = ({ username, movieId }: { username: string; movieId: 
       movieId,
     }),
   );
-  const { isLiked, toggle } = useUserReviewMovieLike({
-    userId: user?.id,
-    reviewId: log?.review?.id,
-    movieId: movieId,
-    reviewAuthorId: profile?.id ?? '',
-  });
   const openComments = () => {
     router.push({
       pathname: '/user/[username]/film/[film_id]/comments',
@@ -84,20 +74,6 @@ export const ProfileFilm = ({ username, movieId }: { username: string; movieId: 
           headerTransparent: true,
           headerRight: () => (
             <>
-              {log?.review && (
-                <>
-                  <Button variant="ghost" size="icon" icon={Icons.Comment} onPress={openComments}>
-                    {log.review.commentsCount > 0 ? `${log.review.commentsCount}` : undefined}
-                  </Button>
-                  {user && (
-                    <ButtonUserReviewMovieLike
-                      variant="ghost"
-                      review={log.review}
-                      showCount={false}
-                    />
-                  )}
-                </>
-              )}
               <Button
                 variant="ghost"
                 size="icon"
@@ -113,34 +89,7 @@ export const ProfileFilm = ({ username, movieId }: { username: string; movieId: 
               />
             </>
           ),
-          unstable_headerRightItems: (props) => [
-            ...(log?.review
-              ? ([
-                  {
-                    type: 'button',
-                    label: upperFirst(t('common.messages.comment', { count: 2 })),
-                    onPress: openComments,
-                    icon: {
-                      name: 'bubble.right',
-                      type: 'sfSymbol',
-                    },
-                  },
-                  ...(user
-                    ? ([
-                        {
-                          type: 'button',
-                          label: upperFirst(t('common.messages.like')),
-                          onPress: toggle,
-                          icon: {
-                            name: isLiked ? 'heart.fill' : 'heart',
-                            type: 'sfSymbol',
-                          },
-                          tintColor: isLiked ? colors.accentPink : undefined,
-                        },
-                      ] satisfies NativeStackHeaderItem[])
-                    : []),
-                ] satisfies NativeStackHeaderItem[])
-              : []),
+          unstable_headerRightItems: () => [
             {
               type: 'button',
               label: upperFirst(t('common.messages.menu')),
@@ -193,6 +142,21 @@ export const ProfileFilm = ({ username, movieId }: { username: string; movieId: 
                   </Text>
                 </View>
                 <EnrichedMarkdownText markdown={log.review.body} />
+                <View style={tw`flex-row items-center gap-3 mt-3`}>
+                  <ButtonUserReviewMovieLike review={log.review} compact />
+                  <Pressable
+                    onPress={openComments}
+                    hitSlop={8}
+                    style={tw`flex-row items-center gap-1 py-1`}
+                  >
+                    <Icons.Comment size={14} color={colors.mutedForeground} />
+                    {log.review.commentsCount > 0 && (
+                      <Text style={{ fontSize: 12, color: colors.mutedForeground }}>
+                        {formatCompactCount(log.review.commentsCount)}
+                      </Text>
+                    )}
+                  </Pressable>
+                </View>
               </>
             ) : (
               <FeedUserLog author={log?.user} log={log} />
