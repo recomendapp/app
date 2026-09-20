@@ -1,4 +1,4 @@
-import { createContext, use, useEffect, useMemo, useRef, useState } from 'react';
+import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { isAndroid, isIOS } from '../platform/detection';
 import * as SystemUI from 'expo-system-ui';
 import * as ScreenOrientation from 'expo-screen-orientation';
@@ -29,6 +29,7 @@ interface SplashScreenContextProps {
   };
   isReady: boolean;
   state: SplashScreenState;
+  hideNativeSplash: () => void;
 }
 
 const SplashScreenContext = createContext<SplashScreenContextProps | undefined>(undefined);
@@ -54,6 +55,17 @@ const SplashScreenProvider = ({ children }: SplashScreenProviderProps) => {
   const bothReady = authReady && i18nReady;
   const isReady = useMemo(() => bothReady || timedOut, [bothReady, timedOut]);
   const [state, setState] = useState<SplashScreenState>('loading');
+  const hasHiddenNativeSplash = useRef(false);
+
+  const hideNativeSplash = useCallback(() => {
+    if (hasHiddenNativeSplash.current) return;
+    hasHiddenNativeSplash.current = true;
+    SplashScreen.hideAsync()
+      .catch((error) => {
+        logger.debug('Could not hide splash screen', { safeMessage: error });
+      })
+      .finally(() => setState('finished'));
+  }, []);
 
   useEffect(() => {
     if (bothReady) return;
@@ -66,17 +78,6 @@ const SplashScreenProvider = ({ children }: SplashScreenProviderProps) => {
     }, READY_TIMEOUT_MS);
     return () => clearTimeout(timer);
   }, [bothReady]);
-
-  useEffect(() => {
-    if (isReady && state !== 'finished') {
-      SplashScreen.hideAsync()
-        .then(() => setState('finished'))
-        .catch((error) => {
-          logger.debug('Could not hide splash screen', { safeMessage: error });
-          setState('finished');
-        });
-    }
-  }, [isReady, state]);
 
   return (
     <SplashScreenContext.Provider
@@ -91,6 +92,7 @@ const SplashScreenProvider = ({ children }: SplashScreenProviderProps) => {
         },
         isReady: isReady,
         state: state,
+        hideNativeSplash,
       }}
     >
       {children}

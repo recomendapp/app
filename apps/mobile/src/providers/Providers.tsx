@@ -17,6 +17,7 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { ApiProvider } from './ApiProvider';
 import { useQuery } from '@tanstack/react-query';
 import { uiBackgroundsOptions } from '../api/ui/uiOptions';
+import { Splash } from '../components/Splash/Splash';
 
 type ProvidersProps = {
   children: React.ReactNode;
@@ -39,8 +40,10 @@ const Providers = ({ children }: ProvidersProps) => {
                             <BottomSheetModalProvider>
                               <NotificationsProvider>
                                 <RealtimeProvider>
-                                  <ProvidersInner>{children}</ProvidersInner>
-                                  <BottomSheetManager />
+                                  <Splash>
+                                    <ProvidersInner>{children}</ProvidersInner>
+                                    <BottomSheetManager />
+                                  </Splash>
                                 </RealtimeProvider>
                               </NotificationsProvider>
                             </BottomSheetModalProvider>
