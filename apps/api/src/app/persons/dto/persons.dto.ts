@@ -28,6 +28,16 @@ export class PersonDto {
   path?: string;
 
   @ApiProperty({
+    description: 'Legacy alias of path for older mobile clients',
+    example: '/person/525-christopher-nolan',
+    deprecated: true,
+  })
+  @Expose()
+  @Transform(({ obj }) => personPath(obj.id, obj.name))
+  @IsString()
+  url?: string;
+
+  @ApiProperty({
     description: "The person's name",
     example: 'Christopher Nolan',
     type: String,
@@ -155,6 +165,7 @@ export class PersonCompactDto extends PickType(PersonDto, [
   'profilePath',
   'slug',
   'path',
+  'url',
 ] as const) {}
 
 @ApiSchema({ name: 'ListPaginatedPersons' })

@@ -42,6 +42,16 @@ export class MovieDto {
   path?: string;
 
   @ApiProperty({
+    description: 'Legacy alias of path for older mobile clients',
+    example: '/film/157336-interstellar',
+    deprecated: true,
+  })
+  @Expose()
+  @Transform(({ obj }) => moviePath(obj.id, obj.title ?? obj.originalTitle ?? null))
+  @IsString()
+  url?: string;
+
+  @ApiProperty({
     description: 'The title of the movie',
     example: 'Interstellar',
     type: String,
@@ -300,6 +310,7 @@ export class MovieCompactDto extends PickType(MovieDto, [
   'title',
   'slug',
   'path',
+  'url',
   'posterPath',
   'backdropPath',
   'directors',
@@ -317,6 +328,7 @@ export class MovieSummaryDto extends PickType(MovieDto, [
   'title',
   'slug',
   'path',
+  'url',
   'overview',
   'posterPath',
   'backdropPath',

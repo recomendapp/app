@@ -6,6 +6,7 @@ import {
   tvSeasonPath,
   tvSeriesPath,
 } from '@libs/db/utils/media-path';
+import { TvSeriesMinimalDto } from '../app/tv-series/dto/tv-series.dto';
 import { PersonCompactDto } from '../app/persons/dto/persons.dto';
 import { PlaylistItemWithMovieDto } from '../app/playlists/items/playlist-items.dto';
 import { parseResponseDto } from './parse-response-dto';
@@ -39,8 +40,20 @@ describe('media paths', () => {
       id: 525,
       slug: '525-christopher-nolan',
       path: '/person/525-christopher-nolan',
+      url: '/person/525-christopher-nolan',
     });
-    expect(person).not.toHaveProperty('url');
+  });
+
+  it('preserves the legacy URL in minimal TV series responses', () => {
+    const series = parseResponseDto(TvSeriesMinimalDto, {
+      id: 1396,
+      name: 'Breaking Bad',
+    });
+
+    expect(series).toMatchObject({
+      path: '/tv-series/1396-breaking-bad',
+      url: '/tv-series/1396-breaking-bad',
+    });
   });
 
   it('accepts a person with no gender', () => {
@@ -83,6 +96,7 @@ describe('media paths', () => {
     expect(item.media).toMatchObject({
       slug: '157336-interstellar',
       path: '/film/157336-interstellar',
+      url: '/film/157336-interstellar',
     });
   });
 });

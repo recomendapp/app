@@ -41,6 +41,16 @@ export class TvSeriesDto {
   path?: string;
 
   @ApiProperty({
+    description: 'Legacy alias of path for older mobile clients',
+    example: '/tv-series/1396-breaking-bad',
+    deprecated: true,
+  })
+  @Expose()
+  @Transform(({ obj }) => tvSeriesPath(obj.id, obj.name ?? obj.originalName ?? null))
+  @IsString()
+  url?: string;
+
+  @ApiProperty({
     description: 'The name of the TV series',
     example: 'Game of Thrones',
     type: String,
@@ -259,6 +269,7 @@ export class TvSeriesCompactDto extends PickType(TvSeriesDto, [
   'name',
   'slug',
   'path',
+  'url',
   'posterPath',
   'backdropPath',
   'createdBy',
@@ -277,6 +288,7 @@ export class TvSeriesSummaryDto extends PickType(TvSeriesDto, [
   'name',
   'slug',
   'path',
+  'url',
   'overview',
   'posterPath',
   'backdropPath',
@@ -296,6 +308,7 @@ export class TvSeriesMinimalDto extends PickType(TvSeriesDto, [
   'name',
   'slug',
   'path',
+  'url',
 ] as const) {}
 
 @ApiSchema({ name: 'ListPaginatedTvSeries' })
