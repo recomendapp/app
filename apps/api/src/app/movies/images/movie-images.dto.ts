@@ -1,8 +1,11 @@
 import { ApiProperty, ApiPropertyOptional, ApiSchema, IntersectionType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../common/dto/pagination.dto';
-import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../common/dto/cursor-pagination.dto';
+import {
+  CursorPaginatedResponseDto,
+  CursorPaginationQueryDto,
+} from '../../../common/dto/cursor-pagination.dto';
 
 export enum MovieImageType {
   POSTER = 'poster',
@@ -62,19 +65,21 @@ export class BaseMovieImagesQueryDto {
 @ApiSchema({ name: 'ListPaginatedMovieImagesQuery' })
 export class ListPaginatedMovieImagesQueryDto extends IntersectionType(
   BaseMovieImagesQueryDto,
-  PaginationQueryDto
+  PaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListInfiniteMovieImagesQuery' })
 export class ListInfiniteMovieImagesQueryDto extends IntersectionType(
   BaseMovieImagesQueryDto,
-  CursorPaginationQueryDto
+  CursorPaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListPaginatedMovieImages' })
 export class ListPaginatedMovieImagesDto extends PaginatedResponseDto<MovieImageDto> {
   @ApiProperty({ type: () => [MovieImageDto] })
   @Type(() => MovieImageDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: MovieImageDto[];
 
   constructor(partial: Partial<ListPaginatedMovieImagesDto>) {
@@ -87,6 +92,8 @@ export class ListPaginatedMovieImagesDto extends PaginatedResponseDto<MovieImage
 export class ListInfiniteMovieImagesDto extends CursorPaginatedResponseDto<MovieImageDto> {
   @ApiProperty({ type: () => [MovieImageDto] })
   @Type(() => MovieImageDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: MovieImageDto[];
 
   constructor(partial: Partial<ListInfiniteMovieImagesDto>) {

@@ -2,7 +2,7 @@ import { ApiProperty, ApiSchema, PickType } from '@nestjs/swagger';
 import { CursorPaginatedResponseDto } from '../../../common/dto/cursor-pagination.dto';
 import { PaginatedResponseDto } from '../../../common/dto/pagination.dto';
 import { Expose, Transform, Type } from 'class-transformer';
-import { IsInt, IsString, IsUrl, IsNumber } from 'class-validator';
+import { IsInt, IsString, IsUrl, IsNumber, ValidateNested } from 'class-validator';
 import { mediaSlug, personPath } from '@libs/db/utils/media-path';
 import { IsNullable } from '../../../common/decorators/is-nullable.decorator';
 
@@ -161,6 +161,8 @@ export class PersonCompactDto extends PickType(PersonDto, [
 export class ListPaginatedPersonsDto extends PaginatedResponseDto<PersonCompactDto> {
   @ApiProperty({ type: () => [PersonCompactDto] })
   @Type(() => PersonCompactDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: PersonCompactDto[];
 
   constructor(partial: Partial<ListPaginatedPersonsDto>) {
@@ -173,6 +175,8 @@ export class ListPaginatedPersonsDto extends PaginatedResponseDto<PersonCompactD
 export class ListInfinitePersonsDto extends CursorPaginatedResponseDto<PersonCompactDto> {
   @ApiProperty({ type: () => [PersonCompactDto] })
   @Type(() => PersonCompactDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: PersonCompactDto[];
 
   constructor(partial: Partial<ListInfinitePersonsDto>) {

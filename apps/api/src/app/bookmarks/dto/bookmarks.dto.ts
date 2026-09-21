@@ -223,6 +223,7 @@ export class ListPaginatedBookmarksDto extends PaginatedResponseDto<BookmarkWith
     },
   })
   @ValidateNested({ each: true })
+  @Expose()
   data!: BookmarkWithMediaUnion[];
 
   constructor(partial: Partial<ListPaginatedBookmarksDto>) {
@@ -261,6 +262,7 @@ export class ListInfiniteBookmarksDto extends CursorPaginatedResponseDto<Bookmar
     },
   })
   @ValidateNested({ each: true })
+  @Expose()
   data!: BookmarkWithMediaUnion[];
 
   constructor(partial: Partial<ListInfiniteBookmarksDto>) {

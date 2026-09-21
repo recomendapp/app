@@ -71,13 +71,21 @@ export class PersonsService {
       .onConflictDoNothing()
       .returning();
 
+    if (!newFollow) {
+      const existingFollow = await this.db.query.followPerson.findFirst({
+        where: and(eq(followPerson.userId, currentUserId), eq(followPerson.personId, personId)),
+      });
+
+      return parseResponseDto(PersonFollowDto, existingFollow, {
+        excludeExtraneousValues: true,
+      });
+    }
+
     const result = parseResponseDto(PersonFollowDto, newFollow, {
       excludeExtraneousValues: true,
     });
 
-    if (newFollow) {
-      this.realtimeGateway.emitToUser(currentUserId, PersonFollowServerEvents.SET, result);
-    }
+    this.realtimeGateway.emitToUser(currentUserId, PersonFollowServerEvents.SET, result);
 
     return result;
   }

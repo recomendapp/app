@@ -1,6 +1,6 @@
 import { ApiProperty, ApiSchema } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { IsDateString } from 'class-validator';
+import { IsDateString, ValidateNested } from 'class-validator';
 import { PaginatedResponseDto } from '../../../../../common/dto/pagination.dto';
 import { CursorPaginatedResponseDto } from '../../../../../common/dto/cursor-pagination.dto';
 import { UserSummaryDto } from '../../../../users/dto/users.dto';
@@ -26,6 +26,8 @@ export class ReviewMovieLikeDto {
 export class ListPaginatedReviewMovieLikesDto extends PaginatedResponseDto<UserSummaryDto> {
   @ApiProperty({ type: () => [UserSummaryDto] })
   @Type(() => UserSummaryDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: UserSummaryDto[];
 
   constructor(partial: Partial<ListPaginatedReviewMovieLikesDto>) {
@@ -38,6 +40,8 @@ export class ListPaginatedReviewMovieLikesDto extends PaginatedResponseDto<UserS
 export class ListInfiniteReviewMovieLikesDto extends CursorPaginatedResponseDto<UserSummaryDto> {
   @ApiProperty({ type: () => [UserSummaryDto] })
   @Type(() => UserSummaryDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: UserSummaryDto[];
 
   constructor(partial: Partial<ListInfiniteReviewMovieLikesDto>) {

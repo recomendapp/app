@@ -19,6 +19,7 @@ import {
   IsUrl,
   Length,
   Matches,
+  ValidateNested,
 } from 'class-validator';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../common/dto/pagination.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
@@ -254,6 +255,8 @@ export class ListInfiniteUsersQueryDto extends IntersectionType(
 export class ListPaginatedUsersDto extends PaginatedResponseDto<UserSummaryDto> {
   @ApiProperty({ type: () => [UserSummaryDto] })
   @Type(() => UserSummaryDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: UserSummaryDto[];
 
   constructor(partial: Partial<ListPaginatedUsersDto>) {
@@ -266,6 +269,8 @@ export class ListPaginatedUsersDto extends PaginatedResponseDto<UserSummaryDto> 
 export class ListInfiniteUsersDto extends CursorPaginatedResponseDto<UserSummaryDto> {
   @ApiProperty({ type: () => [UserSummaryDto] })
   @Type(() => UserSummaryDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: UserSummaryDto[];
 
   constructor(partial: Partial<ListInfiniteUsersDto>) {

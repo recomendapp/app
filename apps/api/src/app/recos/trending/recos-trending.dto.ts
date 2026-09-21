@@ -147,6 +147,8 @@ export class ListPaginatedRecosTrendingDto extends PaginatedResponseDto<RecoTren
       ],
     },
   })
+  @ValidateNested({ each: true })
+  @Expose()
   data!: RecoTrendingWithMediaUnion[];
 
   constructor(partial: Partial<ListPaginatedRecosTrendingDto>) {
@@ -184,6 +186,8 @@ export class ListInfiniteRecosTrendingDto extends CursorPaginatedResponseDto<Rec
       ],
     },
   })
+  @ValidateNested({ each: true })
+  @Expose()
   data!: RecoTrendingWithMediaUnion[];
 
   constructor(partial: Partial<ListInfiniteRecosTrendingDto>) {

@@ -180,12 +180,14 @@ export class RecoSendResponseDto extends PickType(RecoDto, [
     example: 2,
     description: 'Number of recos requested to be sent (including those that failed)',
   })
+  @Expose()
   requested!: number;
 
   @ApiProperty({
     example: ['user-uuid-123', 'user-uuid-456'],
     description: 'List of user IDs the reco was sent to',
   })
+  @Expose()
   sent!: string[];
 }
 
@@ -276,6 +278,7 @@ export class ListPaginatedRecosDto extends PaginatedResponseDto<RecoWithMediaUni
       ],
     },
   })
+  @Expose()
   data!: RecoWithMediaUnion[];
 
   constructor(partial: Partial<ListPaginatedRecosDto>) {
@@ -313,6 +316,7 @@ export class ListInfiniteRecosDto extends CursorPaginatedResponseDto<RecoWithMed
       ],
     },
   })
+  @Expose()
   data!: RecoWithMediaUnion[];
 
   constructor(partial: Partial<ListInfiniteRecosDto>) {

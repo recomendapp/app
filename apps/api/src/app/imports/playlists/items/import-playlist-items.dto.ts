@@ -63,6 +63,8 @@ export class PatchImportJobPlaylistItemDto {
 export class ListPaginatedImportPlaylistItemsDto extends PaginatedResponseDto<ImportJobPlaylistItemDto> {
   @ApiProperty({ type: () => [ImportJobPlaylistItemDto] })
   @Type(() => ImportJobPlaylistItemDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: ImportJobPlaylistItemDto[];
 
   constructor(partial: Partial<ListPaginatedImportPlaylistItemsDto>) {
@@ -75,6 +77,8 @@ export class ListPaginatedImportPlaylistItemsDto extends PaginatedResponseDto<Im
 export class ListInfiniteImportPlaylistItemsDto extends CursorPaginatedResponseDto<ImportJobPlaylistItemDto> {
   @ApiProperty({ type: () => [ImportJobPlaylistItemDto] })
   @Type(() => ImportJobPlaylistItemDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: ImportJobPlaylistItemDto[];
 
   constructor(partial: Partial<ListInfiniteImportPlaylistItemsDto>) {

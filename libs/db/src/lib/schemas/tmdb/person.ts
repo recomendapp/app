@@ -124,7 +124,7 @@ export const tmdbPersonView = tmdbSchema
     person.place_of_birth, 
     person.gender, 
     person.biography, 
-    person.popularity, 
+    person.popularity 
   FROM ( 
     SELECT 
       c.id, 

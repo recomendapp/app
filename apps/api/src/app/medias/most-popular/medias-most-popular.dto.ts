@@ -1,10 +1,20 @@
-import { ApiProperty, ApiPropertyOptional, ApiSchema, IntersectionType, ApiExtraModels, getSchemaPath } from '@nestjs/swagger';
+import {
+  ApiProperty,
+  ApiPropertyOptional,
+  ApiSchema,
+  IntersectionType,
+  ApiExtraModels,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { IsEnum, IsInt, IsNumber, IsOptional, ValidateNested } from 'class-validator';
 import { MovieCompactDto } from '../../movies/dto/movies.dto';
 import { TvSeriesCompactDto } from '../../tv-series/dto/tv-series.dto';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../common/dto/pagination.dto';
-import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../common/dto/cursor-pagination.dto';
+import {
+  CursorPaginatedResponseDto,
+  CursorPaginationQueryDto,
+} from '../../../common/dto/cursor-pagination.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 
 export enum MediaMostPopularSortBy {
@@ -62,7 +72,9 @@ export class MediaMostPopularWithTvSeriesDto extends MediaMostPopularDto {
   media!: TvSeriesCompactDto;
 }
 
-export type MediaMostPopularWithMediaUnion = MediaMostPopularWithMovieDto | MediaMostPopularWithTvSeriesDto;
+export type MediaMostPopularWithMediaUnion =
+  | MediaMostPopularWithMovieDto
+  | MediaMostPopularWithTvSeriesDto;
 
 /* ---------------------------------- Queries --------------------------------- */
 
@@ -90,13 +102,13 @@ export class BaseListMediasMostPopularQueryDto {
 @ApiSchema({ name: 'ListPaginatedMediasMostPopularQuery' })
 export class ListPaginatedMediasMostPopularQueryDto extends IntersectionType(
   BaseListMediasMostPopularQueryDto,
-  PaginationQueryDto
+  PaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListInfiniteMediasMostPopularQuery' })
 export class ListInfiniteMediasMostPopularQueryDto extends IntersectionType(
   BaseListMediasMostPopularQueryDto,
-  CursorPaginationQueryDto
+  CursorPaginationQueryDto,
 ) {}
 
 /* ---------------------------------- Responses --------------------------------- */
@@ -130,6 +142,8 @@ export class ListPaginatedMediasMostPopularDto extends PaginatedResponseDto<Medi
       ],
     },
   })
+  @ValidateNested({ each: true })
+  @Expose()
   data!: MediaMostPopularWithMediaUnion[];
 
   constructor(partial: Partial<ListPaginatedMediasMostPopularDto>) {
@@ -139,7 +153,7 @@ export class ListPaginatedMediasMostPopularDto extends PaginatedResponseDto<Medi
 }
 
 @ApiExtraModels(MediaMostPopularWithMovieDto, MediaMostPopularWithTvSeriesDto)
-@ApiSchema({ name: 'ListInfiniteMediasMostPopular'})
+@ApiSchema({ name: 'ListInfiniteMediasMostPopular' })
 export class ListInfiniteMediasMostPopularDto extends CursorPaginatedResponseDto<MediaMostPopularWithMediaUnion> {
   @ApiProperty({
     type: 'array',
@@ -167,6 +181,8 @@ export class ListInfiniteMediasMostPopularDto extends CursorPaginatedResponseDto
       ],
     },
   })
+  @ValidateNested({ each: true })
+  @Expose()
   data!: MediaMostPopularWithMediaUnion[];
 
   constructor(partial: Partial<ListInfiniteMediasMostPopularDto>) {

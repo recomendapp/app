@@ -172,6 +172,7 @@ export class ListPaginatedExploreItemsDto extends PaginatedResponseDto<ExploreIt
     },
   })
   @ValidateNested({ each: true })
+  @Expose()
   data!: ExploreItemWithMediaUnion[];
 
   constructor(partial: Partial<ListPaginatedExploreItemsDto>) {
@@ -210,6 +211,7 @@ export class ListInfiniteExploreItemsDto extends CursorPaginatedResponseDto<Expl
     },
   })
   @ValidateNested({ each: true })
+  @Expose()
   data!: ExploreItemWithMediaUnion[];
 
   constructor(partial: Partial<ListInfiniteExploreItemsDto>) {

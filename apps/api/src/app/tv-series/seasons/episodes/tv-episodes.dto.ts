@@ -1,5 +1,13 @@
 import { ApiSchema, ApiProperty, ApiPropertyOptional, IntersectionType } from '@nestjs/swagger';
-import { IsDateString, IsEnum, IsInt, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsEnum,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { Expose, Transform, Type } from 'class-transformer';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../../common/dto/pagination.dto';
 import { SortOrder } from '../../../../common/dto/sort.dto';
@@ -171,6 +179,8 @@ export class ListInfiniteTvEpisodesQueryDto extends IntersectionType(
 export class ListPaginatedTvEpisodesDto extends PaginatedResponseDto<TvEpisodeDto> {
   @ApiProperty({ type: [TvEpisodeDto] })
   @Type(() => TvEpisodeDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: TvEpisodeDto[];
 
   constructor(partial: Partial<ListPaginatedTvEpisodesDto>) {
@@ -183,6 +193,8 @@ export class ListPaginatedTvEpisodesDto extends PaginatedResponseDto<TvEpisodeDt
 export class ListInfiniteTvEpisodesDto extends CursorPaginatedResponseDto<TvEpisodeDto> {
   @ApiProperty({ type: [TvEpisodeDto] })
   @Type(() => TvEpisodeDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: TvEpisodeDto[];
 
   constructor(partial: Partial<ListInfiniteTvEpisodesDto>) {

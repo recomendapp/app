@@ -5,7 +5,10 @@ import { UserSummaryDto } from '../dto/users.dto';
 import { PaginatedResponseDto } from '../../../common/dto/pagination.dto';
 import { CursorPaginatedResponseDto } from '../../../common/dto/cursor-pagination.dto';
 import { TvSeriesCompactDto } from '../../tv-series/dto/tv-series.dto';
-import { LogTvSeriesDto, LogTvSeriesWithTvSeriesNoReviewDto } from '../../tv-series/logs/tv-series-logs.dto';
+import {
+  LogTvSeriesDto,
+  LogTvSeriesWithTvSeriesNoReviewDto,
+} from '../../tv-series/logs/tv-series-logs.dto';
 
 @ApiSchema({ name: 'UserTvSeriesWithUserTvSeries' })
 export class UserTvSeriesWithUserTvSeriesDto extends LogTvSeriesDto {
@@ -22,11 +25,12 @@ export class UserTvSeriesWithUserTvSeriesDto extends LogTvSeriesDto {
   tvSeries!: TvSeriesCompactDto;
 }
 
-
-@ApiSchema({ name: 'ListPaginatedUserTvSeriesWithTvSeries'})
+@ApiSchema({ name: 'ListPaginatedUserTvSeriesWithTvSeries' })
 export class ListPaginatedUserTvSeriesWithTvSeriesDto extends PaginatedResponseDto<LogTvSeriesWithTvSeriesNoReviewDto> {
   @ApiProperty({ type: () => [LogTvSeriesWithTvSeriesNoReviewDto] })
   @Type(() => LogTvSeriesWithTvSeriesNoReviewDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: LogTvSeriesWithTvSeriesNoReviewDto[];
 
   constructor(partial: Partial<ListPaginatedUserTvSeriesWithTvSeriesDto>) {
@@ -35,10 +39,12 @@ export class ListPaginatedUserTvSeriesWithTvSeriesDto extends PaginatedResponseD
   }
 }
 
-@ApiSchema({ name: 'ListInfiniteUserTvSeriesWithTvSeries'})
+@ApiSchema({ name: 'ListInfiniteUserTvSeriesWithTvSeries' })
 export class ListInfiniteUserTvSeriesWithTvSeriesDto extends CursorPaginatedResponseDto<LogTvSeriesWithTvSeriesNoReviewDto> {
   @ApiProperty({ type: () => [LogTvSeriesWithTvSeriesNoReviewDto] })
   @Type(() => LogTvSeriesWithTvSeriesNoReviewDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: LogTvSeriesWithTvSeriesNoReviewDto[];
 
   constructor(partial: Partial<ListInfiniteUserTvSeriesWithTvSeriesDto>) {

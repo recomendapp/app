@@ -333,6 +333,8 @@ export class MovieSummaryDto extends PickType(MovieDto, [
 export class ListPaginatedMoviesDto extends PaginatedResponseDto<MovieCompactDto> {
   @ApiProperty({ type: () => [MovieCompactDto] })
   @Type(() => MovieCompactDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: MovieCompactDto[];
 
   constructor(partial: Partial<ListPaginatedMoviesDto>) {
@@ -345,6 +347,8 @@ export class ListPaginatedMoviesDto extends PaginatedResponseDto<MovieCompactDto
 export class ListInfiniteMoviesDto extends CursorPaginatedResponseDto<MovieCompactDto> {
   @ApiProperty({ type: () => [MovieCompactDto] })
   @Type(() => MovieCompactDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: MovieCompactDto[];
 
   constructor(partial: Partial<ListInfiniteMoviesDto>) {

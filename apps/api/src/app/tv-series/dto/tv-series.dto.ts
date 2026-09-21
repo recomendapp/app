@@ -3,7 +3,6 @@ import { Expose, Transform, Type } from 'class-transformer';
 import {
   IsInt,
   IsString,
-  IsUrl,
   IsNumber,
   IsArray,
   IsDateString,
@@ -303,6 +302,8 @@ export class TvSeriesMinimalDto extends PickType(TvSeriesDto, [
 export class ListPaginatedTvSeriesDto extends PaginatedResponseDto<TvSeriesCompactDto> {
   @ApiProperty({ type: () => [TvSeriesCompactDto] })
   @Type(() => TvSeriesCompactDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: TvSeriesCompactDto[];
 
   constructor(partial: Partial<ListPaginatedTvSeriesDto>) {
@@ -315,6 +316,8 @@ export class ListPaginatedTvSeriesDto extends PaginatedResponseDto<TvSeriesCompa
 export class ListInfiniteTvSeriesDto extends CursorPaginatedResponseDto<TvSeriesCompactDto> {
   @ApiProperty({ type: () => [TvSeriesCompactDto] })
   @Type(() => TvSeriesCompactDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: TvSeriesCompactDto[];
 
   constructor(partial: Partial<ListInfiniteTvSeriesDto>) {

@@ -69,6 +69,8 @@ export class PatchImportJobLogMovieDto {
 export class ListPaginatedImportLogMoviesDto extends PaginatedResponseDto<ImportJobLogMovieDto> {
   @ApiProperty({ type: () => [ImportJobLogMovieDto] })
   @Type(() => ImportJobLogMovieDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: ImportJobLogMovieDto[];
 
   constructor(partial: Partial<ListPaginatedImportLogMoviesDto>) {
@@ -81,6 +83,8 @@ export class ListPaginatedImportLogMoviesDto extends PaginatedResponseDto<Import
 export class ListInfiniteImportLogMoviesDto extends CursorPaginatedResponseDto<ImportJobLogMovieDto> {
   @ApiProperty({ type: () => [ImportJobLogMovieDto] })
   @Type(() => ImportJobLogMovieDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: ImportJobLogMovieDto[];
 
   constructor(partial: Partial<ListInfiniteImportLogMoviesDto>) {

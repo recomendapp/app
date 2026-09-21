@@ -152,6 +152,8 @@ export class ListInfiniteWatchedDatesQueryDto extends IntersectionType(
 export class ListPaginatedWatchedDatesDto extends PaginatedResponseDto<WatchedDateDto> {
   @ApiProperty({ type: () => [WatchedDateDto] })
   @Type(() => WatchedDateDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: WatchedDateDto[];
 
   constructor(partial: Partial<ListPaginatedWatchedDatesDto>) {
@@ -164,6 +166,8 @@ export class ListPaginatedWatchedDatesDto extends PaginatedResponseDto<WatchedDa
 export class ListInfiniteWatchedDatesDto extends CursorPaginatedResponseDto<WatchedDateDto> {
   @ApiProperty({ type: () => [WatchedDateDto] })
   @Type(() => WatchedDateDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: WatchedDateDto[];
 
   constructor(partial: Partial<ListInfiniteWatchedDatesDto>) {

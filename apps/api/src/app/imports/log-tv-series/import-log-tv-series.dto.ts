@@ -72,6 +72,8 @@ export class PatchImportJobLogTvSeriesDto {
 export class ListPaginatedImportLogTvSeriesDto extends PaginatedResponseDto<ImportJobLogTvSeriesDto> {
   @ApiProperty({ type: () => [ImportJobLogTvSeriesDto] })
   @Type(() => ImportJobLogTvSeriesDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: ImportJobLogTvSeriesDto[];
 
   constructor(partial: Partial<ListPaginatedImportLogTvSeriesDto>) {
@@ -84,6 +86,8 @@ export class ListPaginatedImportLogTvSeriesDto extends PaginatedResponseDto<Impo
 export class ListInfiniteImportLogTvSeriesDto extends CursorPaginatedResponseDto<ImportJobLogTvSeriesDto> {
   @ApiProperty({ type: () => [ImportJobLogTvSeriesDto] })
   @Type(() => ImportJobLogTvSeriesDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: ImportJobLogTvSeriesDto[];
 
   constructor(partial: Partial<ListInfiniteImportLogTvSeriesDto>) {

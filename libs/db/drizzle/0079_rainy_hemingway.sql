@@ -1,6 +1,54 @@
 DROP VIEW "tmdb"."movie_view";--> statement-breakpoint
-DROP VIEW "tmdb"."person_view";--> statement-breakpoint
 DROP VIEW "tmdb"."tv_series_view";--> statement-breakpoint
+DROP VIEW "tmdb"."tv_season_view";--> statement-breakpoint
+DROP VIEW "tmdb"."person_view";--> statement-breakpoint
+CREATE VIEW "tmdb"."person_view" AS (SELECT 
+    person.id, 
+    person.name, 
+    person.profile_path, 
+    person.birthday, 
+    person.deathday, 
+    person.homepage, 
+    person.imdb_id, 
+    person.known_for_department, 
+    person.place_of_birth, 
+    person.gender, 
+    person.biography, 
+    person.popularity 
+  FROM ( 
+    SELECT 
+      c.id, 
+      c.gender, 
+      c.known_for_department, 
+      c.name, 
+      c.popularity, 
+      c.birthday, 
+      c.deathday, 
+      c.homepage, 
+      c.imdb_id, 
+      c.place_of_birth, 
+      ( SELECT ci.file_path 
+        FROM tmdb.person_image ci 
+        WHERE ci.person_id = c.id 
+        ORDER BY ci.vote_average DESC NULLS LAST LIMIT 1
+      ) AS profile_path, 
+      COALESCE(
+        ( SELECT NULLIF(t.biography, ''::text) 
+          FROM tmdb.person_translation t 
+          WHERE t.person_id = c.id 
+          AND t.iso_639_1 = (language.requested_language).iso_639_1 
+          AND t.iso_3166_1 = (language.requested_language).iso_3166_1 LIMIT 1
+        ), 
+        ( SELECT NULLIF(t.biography, ''::text) 
+          FROM tmdb.person_translation t 
+          WHERE t.person_id = c.id 
+          AND t.iso_639_1 = (language.fallback_language).iso_639_1 
+          AND t.iso_3166_1 = (language.fallback_language).iso_3166_1 LIMIT 1
+        )
+      ) AS biography 
+    FROM tmdb.person c, 
+    LATERAL i18n.language() language(requested_language, fallback_language, default_language)
+  ) person);--> statement-breakpoint
 CREATE VIEW "tmdb"."movie_view" AS (SELECT 
     movie.id, 
     COALESCE(movie.title, movie.original_title) AS title, 
@@ -200,53 +248,6 @@ CREATE VIEW "tmdb"."movie_view" AS (SELECT
     FROM tmdb.movie m, 
     LATERAL i18n.language() language(requested_language, fallback_language, default_language)
   ) movie);--> statement-breakpoint
-CREATE VIEW "tmdb"."person_view" AS (SELECT 
-    person.id, 
-    person.name, 
-    person.profile_path, 
-    person.birthday, 
-    person.deathday, 
-    person.homepage, 
-    person.imdb_id, 
-    person.known_for_department, 
-    person.place_of_birth, 
-    person.gender, 
-    person.biography, 
-    person.popularity, 
-  FROM ( 
-    SELECT 
-      c.id, 
-      c.gender, 
-      c.known_for_department, 
-      c.name, 
-      c.popularity, 
-      c.birthday, 
-      c.deathday, 
-      c.homepage, 
-      c.imdb_id, 
-      c.place_of_birth, 
-      ( SELECT ci.file_path 
-        FROM tmdb.person_image ci 
-        WHERE ci.person_id = c.id 
-        ORDER BY ci.vote_average DESC NULLS LAST LIMIT 1
-      ) AS profile_path, 
-      COALESCE(
-        ( SELECT NULLIF(t.biography, ''::text) 
-          FROM tmdb.person_translation t 
-          WHERE t.person_id = c.id 
-          AND t.iso_639_1 = (language.requested_language).iso_639_1 
-          AND t.iso_3166_1 = (language.requested_language).iso_3166_1 LIMIT 1
-        ), 
-        ( SELECT NULLIF(t.biography, ''::text) 
-          FROM tmdb.person_translation t 
-          WHERE t.person_id = c.id 
-          AND t.iso_639_1 = (language.fallback_language).iso_639_1 
-          AND t.iso_3166_1 = (language.fallback_language).iso_3166_1 LIMIT 1
-        )
-      ) AS biography 
-    FROM tmdb.person c, 
-    LATERAL i18n.language() language(requested_language, fallback_language, default_language)
-  ) person);--> statement-breakpoint
 CREATE VIEW "tmdb"."tv_series_view" AS (SELECT 
     serie.id, 
     COALESCE(serie.name, serie.original_name) AS name, 
@@ -409,4 +410,42 @@ CREATE VIEW "tmdb"."tv_series_view" AS (SELECT
       ) AS trailers
     FROM tmdb.tv_series s, 
     LATERAL i18n.language() language(requested_language, fallback_language, default_language)
-  ) serie);
+  ) serie);--> statement-breakpoint
+CREATE VIEW "tmdb"."tv_season_view" AS (SELECT 
+    s.id,
+    s.tv_series_id,
+    s.season_number,
+    (
+      SELECT COALESCE(
+        NULLIF(t.name, ''), 
+        NULL
+      )
+      FROM tmdb.tv_season_translation t 
+      WHERE t.tv_season_id = s.id 
+      ORDER BY ( 
+        CASE 
+          WHEN t.iso_639_1 = (language.requested_language).iso_639_1 AND t.iso_3166_1 = (language.requested_language).iso_3166_1 THEN 1 
+          WHEN t.iso_639_1 = (language.fallback_language).iso_639_1 AND t.iso_3166_1 = (language.fallback_language).iso_3166_1 THEN 2 
+          WHEN t.iso_639_1 = (language.default_language).iso_639_1 AND t.iso_3166_1 = (language.default_language).iso_3166_1 THEN 3 
+          ELSE 4 
+        END) 
+      LIMIT 1
+    ) AS name,
+    (
+      SELECT NULLIF(t.overview, '')
+      FROM tmdb.tv_season_translation t 
+      WHERE t.tv_season_id = s.id 
+      ORDER BY ( 
+        CASE 
+          WHEN t.iso_639_1 = (language.requested_language).iso_639_1 AND t.iso_3166_1 = (language.requested_language).iso_3166_1 THEN 1 
+          WHEN t.iso_639_1 = (language.fallback_language).iso_639_1 AND t.iso_3166_1 = (language.fallback_language).iso_3166_1 THEN 2 
+          ELSE 3 
+        END) 
+      LIMIT 1
+    ) AS overview,
+    s.poster_path,
+    s.vote_average,
+    s.vote_count,
+    s.episode_count
+  FROM tmdb.tv_season s,
+  LATERAL i18n.language() language(requested_language, fallback_language, default_language));

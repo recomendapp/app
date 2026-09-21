@@ -147,6 +147,8 @@ export class ReviewMovieInputDto extends PickType(ReviewMovieDto, [
 export class ListPaginatedReviewsMovieDto extends PaginatedResponseDto<ReviewMovieWithAuthorDto> {
   @ApiProperty({ type: () => [ReviewMovieWithAuthorDto] })
   @Type(() => ReviewMovieWithAuthorDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: ReviewMovieWithAuthorDto[];
 
   constructor(partial: Partial<ListPaginatedReviewsMovieDto>) {
@@ -159,6 +161,8 @@ export class ListPaginatedReviewsMovieDto extends PaginatedResponseDto<ReviewMov
 export class ListInfiniteReviewsMovieDto extends CursorPaginatedResponseDto<ReviewMovieWithAuthorDto> {
   @ApiProperty({ type: () => [ReviewMovieWithAuthorDto] })
   @Type(() => ReviewMovieWithAuthorDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: ReviewMovieWithAuthorDto[];
 
   constructor(partial: Partial<ListInfiniteReviewsMovieDto>) {
