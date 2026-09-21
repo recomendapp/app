@@ -219,6 +219,7 @@ export class ListPaginatedPlaylistItemsDto extends PaginatedResponseDto<Playlist
       ],
     },
   })
+  @ValidateNested({ each: true })
   data!: PlaylistItemWithMediaUnion[];
 
   constructor(partial: Partial<ListPaginatedPlaylistItemsDto>) {
@@ -256,6 +257,7 @@ export class ListInfinitePlaylistItemsDto extends CursorPaginatedResponseDto<Pla
       ],
     },
   })
+  @ValidateNested({ each: true })
   data!: PlaylistItemWithMediaUnion[];
 
   constructor(partial: Partial<ListInfinitePlaylistItemsDto>) {

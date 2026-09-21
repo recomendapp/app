@@ -20,7 +20,7 @@ interface CardPersonProps extends React.ComponentProps<typeof Card> {
 const CardPersonDefault = React.forwardRef<HTMLDivElement, Omit<CardPersonProps, 'variant'>>(
   ({ className, person, children, linked, posterClassName, ...props }, ref) => {
     return (
-      <WithLink href={person.url ?? undefined}>
+      <WithLink href={`/person/${person.slug || person.id}`}>
         <Card
           ref={ref}
           className={cn(
@@ -81,7 +81,7 @@ const CardPersonRow = React.forwardRef<HTMLDivElement, Omit<CardPersonProps, 'va
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <WithLink
-                href={linked ? (person.url ?? '') : undefined}
+                href={linked ? `/person/${person.slug || person.id}` : undefined}
                 className="line-clamp-2 wrap-break-word"
                 onClick={linked ? (e) => e.stopPropagation() : undefined}
               >
@@ -105,8 +105,10 @@ const CardPerson = React.forwardRef<HTMLDivElement, CardPersonProps>(
   ({ className, onClick, linked = true, variant = 'default', ...props }, ref) => {
     const router = useRouter();
     const customOnClick = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (linked && props.person.url) {
-        router.push(props.person.url);
+      if (linked) {
+        router.push({
+          pathname: `/person/${props.person.slug || props.person.id}`,
+        });
       }
       onClick && onClick(e);
     };

@@ -3,7 +3,7 @@ import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/driz
 import { User } from '../../../auth/auth.service';
 import { logTvSeason, logTvSeries, tmdbTvSeason, tmdbTvSeries } from '@libs/db/schemas';
 import { and, eq, inArray, sql } from 'drizzle-orm';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../../utils/parse-response-dto';
 import {
   LogTvSeasonDto,
   LogTvSeasonRequestDto,
@@ -50,7 +50,7 @@ export class TvSeasonLogsService {
 
     if (!logEntry) return null;
 
-    return plainToInstance(
+    return parseResponseDto(
       LogTvSeasonDto,
       {
         ...logEntry.season,
@@ -137,7 +137,7 @@ export class TvSeasonLogsService {
       };
     });
 
-    const response = plainToInstance(LogTvSeasonUpdateResponseDto, result, {
+    const response = parseResponseDto(LogTvSeasonUpdateResponseDto, result, {
       excludeExtraneousValues: true,
     });
 
@@ -185,7 +185,7 @@ export class TvSeasonLogsService {
       };
     });
 
-    const response = plainToInstance(LogTvSeasonUpdateResponseDto, result, {
+    const response = parseResponseDto(LogTvSeasonUpdateResponseDto, result, {
       excludeExtraneousValues: true,
     });
 

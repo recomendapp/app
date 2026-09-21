@@ -1,12 +1,33 @@
-import { ApiSchema, ApiProperty, PartialType, PickType, getSchemaPath, ApiPropertyOptional, ApiExtraModels, IntersectionType } from '@nestjs/swagger';
-import { IsDateString, IsEnum, IsIn, IsInt, IsOptional, IsString, MaxLength, ValidateNested } from 'class-validator';
+import {
+  ApiSchema,
+  ApiProperty,
+  PartialType,
+  PickType,
+  getSchemaPath,
+  ApiPropertyOptional,
+  ApiExtraModels,
+  IntersectionType,
+} from '@nestjs/swagger';
+import {
+  IsDateString,
+  IsEnum,
+  IsIn,
+  IsInt,
+  IsOptional,
+  IsString,
+  MaxLength,
+  ValidateNested,
+} from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { bookmarkStatusEnum, bookmarkTypeEnum } from '@libs/db/schemas';
 import { MovieCompactDto } from '../../movies/dto/movies.dto';
 import { TvSeriesCompactDto } from '../../tv-series/dto/tv-series.dto';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../common/dto/pagination.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
-import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../common/dto/cursor-pagination.dto';
+import {
+  CursorPaginatedResponseDto,
+  CursorPaginationQueryDto,
+} from '../../../common/dto/cursor-pagination.dto';
 
 export enum BookmarkSortBy {
   CREATED_AT = 'created_at',
@@ -38,16 +59,16 @@ export class BookmarkDto {
   comment!: string | null;
 
   @ApiProperty({
-      description: 'The status of the bookmark',
-      enum: bookmarkStatusEnum.enumValues, 
-      example: bookmarkStatusEnum.enumValues[0],
+    description: 'The status of the bookmark',
+    enum: bookmarkStatusEnum.enumValues,
+    example: bookmarkStatusEnum.enumValues[0],
   })
   @Expose()
   @IsString()
   @IsIn(bookmarkStatusEnum.enumValues, {
-      message: `Status must be one of: ${bookmarkStatusEnum.enumValues.join(', ')}`
+    message: `Status must be one of: ${bookmarkStatusEnum.enumValues.join(', ')}`,
   })
-  status!: typeof bookmarkStatusEnum.enumValues[number];
+  status!: (typeof bookmarkStatusEnum.enumValues)[number];
 
   @ApiProperty({ example: 123456 })
   @Expose()
@@ -55,16 +76,16 @@ export class BookmarkDto {
   mediaId!: number;
 
   @ApiProperty({
-      description: 'The type of the bookmark',
-      enum: bookmarkTypeEnum.enumValues, 
-      example: bookmarkTypeEnum.enumValues[0],
+    description: 'The type of the bookmark',
+    enum: bookmarkTypeEnum.enumValues,
+    example: bookmarkTypeEnum.enumValues[0],
   })
   @Expose()
   @IsString()
   @IsIn(bookmarkTypeEnum.enumValues, {
-      message: `Type must be one of: ${bookmarkTypeEnum.enumValues.join(', ')}`
+    message: `Type must be one of: ${bookmarkTypeEnum.enumValues.join(', ')}`,
   })
-  type!: typeof bookmarkTypeEnum.enumValues[number];
+  type!: (typeof bookmarkTypeEnum.enumValues)[number];
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
@@ -116,45 +137,45 @@ export class BookmarkInputDto extends PartialType(PickType(BookmarkDto, ['commen
 
 @ApiSchema({ name: 'BaseListBookmarksQuery' })
 export class BaseListBookmarksQueryDto {
-    @ApiPropertyOptional({
-      enum: bookmarkStatusEnum.enumValues,
-      default: 'active',
-    })
-    @IsOptional()
-    @IsIn(bookmarkStatusEnum.enumValues, {
-      message: `Status must be one of: ${bookmarkStatusEnum.enumValues.join(', ')}`
-    })
-    status: typeof bookmarkStatusEnum.enumValues[number] = 'active';
+  @ApiPropertyOptional({
+    enum: bookmarkStatusEnum.enumValues,
+    default: 'active',
+  })
+  @IsOptional()
+  @IsIn(bookmarkStatusEnum.enumValues, {
+    message: `Status must be one of: ${bookmarkStatusEnum.enumValues.join(', ')}`,
+  })
+  status: (typeof bookmarkStatusEnum.enumValues)[number] = 'active';
 
-    @ApiPropertyOptional({
-      description: 'Filter bookmarks by type',
-      enum: bookmarkTypeEnum.enumValues,
-    })
-    @IsOptional()
-    @IsIn(bookmarkTypeEnum.enumValues, {
-      message: `Type must be one of: ${bookmarkTypeEnum.enumValues.join(', ')}`
-    })
-    type?: typeof bookmarkTypeEnum.enumValues[number];
+  @ApiPropertyOptional({
+    description: 'Filter bookmarks by type',
+    enum: bookmarkTypeEnum.enumValues,
+  })
+  @IsOptional()
+  @IsIn(bookmarkTypeEnum.enumValues, {
+    message: `Type must be one of: ${bookmarkTypeEnum.enumValues.join(', ')}`,
+  })
+  type?: (typeof bookmarkTypeEnum.enumValues)[number];
 
-    @ApiPropertyOptional({
-        description: 'Field to sort bookmarks by',
-        default: BookmarkSortBy.CREATED_AT,
-        example: BookmarkSortBy.CREATED_AT,
-        enum: BookmarkSortBy,
-    })
-    @IsOptional()
-    @IsEnum(BookmarkSortBy)
-    sort_by: BookmarkSortBy = BookmarkSortBy.CREATED_AT;
+  @ApiPropertyOptional({
+    description: 'Field to sort bookmarks by',
+    default: BookmarkSortBy.CREATED_AT,
+    example: BookmarkSortBy.CREATED_AT,
+    enum: BookmarkSortBy,
+  })
+  @IsOptional()
+  @IsEnum(BookmarkSortBy)
+  sort_by: BookmarkSortBy = BookmarkSortBy.CREATED_AT;
 
-    @ApiPropertyOptional({
-        description: 'Sort order',
-        default: SortOrder.ASC,
-        example: SortOrder.ASC,
-        enum: SortOrder,
-    })
-    @IsOptional()
-    @IsEnum(SortOrder)
-    sort_order: SortOrder = SortOrder.ASC;
+  @ApiPropertyOptional({
+    description: 'Sort order',
+    default: SortOrder.ASC,
+    example: SortOrder.ASC,
+    enum: SortOrder,
+  })
+  @IsOptional()
+  @IsEnum(SortOrder)
+  sort_order: SortOrder = SortOrder.ASC;
 }
 
 @ApiSchema({ name: 'ListAllBookmarksQuery' })
@@ -163,13 +184,13 @@ export class ListAllBookmarksQueryDto extends BaseListBookmarksQueryDto {}
 @ApiSchema({ name: 'ListPaginatedBookmarksQuery' })
 export class ListPaginatedBookmarksQueryDto extends IntersectionType(
   BaseListBookmarksQueryDto,
-  PaginationQueryDto
+  PaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListInfiniteBookmarksQuery' })
 export class ListInfiniteBookmarksQueryDto extends IntersectionType(
   BaseListBookmarksQueryDto,
-  CursorPaginationQueryDto
+  CursorPaginationQueryDto,
 ) {}
 
 @ApiExtraModels(BookmarkWithMovieDto, BookmarkWithTvSeriesDto)
@@ -201,6 +222,7 @@ export class ListPaginatedBookmarksDto extends PaginatedResponseDto<BookmarkWith
       ],
     },
   })
+  @ValidateNested({ each: true })
   data!: BookmarkWithMediaUnion[];
 
   constructor(partial: Partial<ListPaginatedBookmarksDto>) {
@@ -210,7 +232,7 @@ export class ListPaginatedBookmarksDto extends PaginatedResponseDto<BookmarkWith
 }
 
 @ApiExtraModels(BookmarkWithMovieDto, BookmarkWithTvSeriesDto)
-@ApiSchema({ name: 'ListInfiniteBookmarks'})
+@ApiSchema({ name: 'ListInfiniteBookmarks' })
 export class ListInfiniteBookmarksDto extends CursorPaginatedResponseDto<BookmarkWithMediaUnion> {
   @ApiProperty({
     type: 'array',
@@ -238,6 +260,7 @@ export class ListInfiniteBookmarksDto extends CursorPaginatedResponseDto<Bookmar
       ],
     },
   })
+  @ValidateNested({ each: true })
   data!: BookmarkWithMediaUnion[];
 
   constructor(partial: Partial<ListInfiniteBookmarksDto>) {

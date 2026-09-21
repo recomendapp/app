@@ -1,5 +1,11 @@
-import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
-import { ApiExtraModels, ApiProperty, ApiPropertyOptional, ApiSchema, getSchemaPath } from '@nestjs/swagger';
+import { IsInt, IsOptional, IsString, Max, Min, ValidateNested } from 'class-validator';
+import {
+  ApiExtraModels,
+  ApiProperty,
+  ApiPropertyOptional,
+  ApiSchema,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import { Expose, Transform, Type } from 'class-transformer';
 
 import { MovieCompactDto } from '../movies/dto/movies.dto';
@@ -30,6 +36,7 @@ export class BestResultMovie {
 
   @ApiProperty({ type: () => MovieCompactDto })
   @Expose()
+  @ValidateNested()
   @Type(() => MovieCompactDto)
   data!: MovieCompactDto;
 }
@@ -41,6 +48,7 @@ export class BestResultTvSeries {
 
   @ApiProperty({ type: () => TvSeriesCompactDto })
   @Expose()
+  @ValidateNested()
   @Type(() => TvSeriesCompactDto)
   data!: TvSeriesCompactDto;
 }
@@ -52,6 +60,7 @@ export class BestResultPerson {
 
   @ApiProperty({ type: () => PersonCompactDto })
   @Expose()
+  @ValidateNested()
   @Type(() => PersonCompactDto)
   data!: PersonCompactDto;
 }
@@ -63,6 +72,7 @@ export class BestResultUser {
 
   @ApiProperty({ type: () => UserSummaryDto })
   @Expose()
+  @ValidateNested()
   @Type(() => UserSummaryDto)
   data!: UserSummaryDto;
 }
@@ -74,6 +84,7 @@ export class BestResultPlaylist {
 
   @ApiProperty({ type: () => PlaylistWithOwnerDto })
   @Expose()
+  @ValidateNested()
   @Type(() => PlaylistWithOwnerDto)
   data!: PlaylistWithOwnerDto;
 }
@@ -85,10 +96,16 @@ export type BestResultUnion =
   | BestResultUser
   | BestResultPlaylist;
 
-@ApiExtraModels(BestResultMovie, BestResultTvSeries, BestResultPerson, BestResultUser, BestResultPlaylist)
+@ApiExtraModels(
+  BestResultMovie,
+  BestResultTvSeries,
+  BestResultPerson,
+  BestResultUser,
+  BestResultPlaylist,
+)
 @ApiSchema({ name: 'SearchResponse' })
 export class SearchResponseDto {
-  @ApiPropertyOptional({ 
+  @ApiPropertyOptional({
     description: 'Best overall result across all categories',
     oneOf: [
       { $ref: getSchemaPath(BestResultMovie) },
@@ -126,26 +143,31 @@ export class SearchResponseDto {
 
   @ApiProperty({ type: () => [MovieCompactDto] })
   @Expose()
+  @ValidateNested({ each: true })
   @Type(() => MovieCompactDto)
   movies!: MovieCompactDto[];
 
   @ApiProperty({ type: () => [TvSeriesCompactDto] })
   @Expose()
+  @ValidateNested({ each: true })
   @Type(() => TvSeriesCompactDto)
   tv_series!: TvSeriesCompactDto[];
 
   @ApiProperty({ type: () => [PersonCompactDto] })
   @Expose()
+  @ValidateNested({ each: true })
   @Type(() => PersonCompactDto)
   persons!: PersonCompactDto[];
 
   @ApiProperty({ type: () => [UserSummaryDto] })
   @Expose()
+  @ValidateNested({ each: true })
   @Type(() => UserSummaryDto)
   users!: UserSummaryDto[];
 
   @ApiProperty({ type: () => [PlaylistWithOwnerDto] })
   @Expose()
+  @ValidateNested({ each: true })
   @Type(() => PlaylistWithOwnerDto)
   playlists!: PlaylistWithOwnerDto[];
 }

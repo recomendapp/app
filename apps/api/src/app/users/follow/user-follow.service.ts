@@ -2,7 +2,7 @@ import { BadRequestException, Inject, Injectable, NotFoundException } from '@nes
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { and, eq, sql } from 'drizzle-orm';
 import { profile, follow } from '@libs/db/schemas';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { FollowDto } from './dto/user-follow.dto';
 import { NotifyClient } from '@shared/notify';
 import { UserFollowServerEvents } from '@libs/realtime';
@@ -34,7 +34,7 @@ export class UserFollowService {
       return null;
     }
 
-    return plainToInstance(FollowDto, followRecord, {
+    return parseResponseDto(FollowDto, followRecord, {
       excludeExtraneousValues: true,
     });
   }
@@ -83,7 +83,7 @@ export class UserFollowService {
             targetUserId: targetUserId,
           });
         }
-        const result = plainToInstance(FollowDto, newFollow, {
+        const result = parseResponseDto(FollowDto, newFollow, {
           excludeExtraneousValues: true,
         });
         this.realtimeGateway.emitToUsers(
@@ -99,7 +99,7 @@ export class UserFollowService {
         if (!existingFollow) {
           throw new NotFoundException('User to follow not found');
         }
-        return plainToInstance(FollowDto, existingFollow, {
+        return parseResponseDto(FollowDto, existingFollow, {
           excludeExtraneousValues: true,
         });
       }
@@ -126,7 +126,7 @@ export class UserFollowService {
       throw new NotFoundException('Follow relationship not found');
     }
 
-    const result = plainToInstance(FollowDto, deletedFollow, {
+    const result = parseResponseDto(FollowDto, deletedFollow, {
       excludeExtraneousValues: true,
     });
     this.realtimeGateway.emitToUsers(
@@ -168,7 +168,7 @@ export class UserFollowService {
     if (!updatedFollow) {
       throw new NotFoundException('Follow request not found');
     }
-    const result = plainToInstance(FollowDto, updatedFollow, {
+    const result = parseResponseDto(FollowDto, updatedFollow, {
       excludeExtraneousValues: true,
     });
     this.realtimeGateway.emitToUsers(
@@ -205,7 +205,7 @@ export class UserFollowService {
       throw new NotFoundException('Follow request not found');
     }
 
-    const result = plainToInstance(FollowDto, updatedFollow, {
+    const result = parseResponseDto(FollowDto, updatedFollow, {
       excludeExtraneousValues: true,
     });
     this.realtimeGateway.emitToUsers(

@@ -5,7 +5,7 @@ import { profile, user } from '@libs/db/schemas';
 import { User } from '../auth/auth.service';
 import { WorkerClient } from '@shared/worker';
 import { UpdateUserDto, UserDto } from '../users/dto/users.dto';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../utils/parse-response-dto';
 import { MeServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../realtime/realtime.gateway';
 
@@ -29,7 +29,7 @@ export class MeService {
       throw new NotFoundException('User not found');
     }
 
-    return plainToInstance(UserDto, {
+    return parseResponseDto(UserDto, {
       id: fullUser.id,
       updatedAt: fullUser.updatedAt,
       createdAt: fullUser.createdAt,

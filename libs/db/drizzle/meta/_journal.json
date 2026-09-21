@@ -554,6 +554,27 @@
       "when": 1789686619828,
       "tag": "0078_cuddly_plazm",
       "breakpoints": true
+    },
+    {
+      "idx": 79,
+      "version": "7",
+      "when": 1789978560629,
+      "tag": "0079_sloppy_chimera",
+      "breakpoints": true
+    },
+    {
+      "idx": 80,
+      "version": "7",
+      "when": 1789981089019,
+      "tag": "0080_wild_daredevil",
+      "breakpoints": true
+    },
+    {
+      "idx": 81,
+      "version": "7",
+      "when": 1789981586545,
+      "tag": "0081_glamorous_green_goblin",
+      "breakpoints": true
     }
   ]
 }

@@ -11,7 +11,7 @@ import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../
 import { z } from 'zod';
 import { RealtimeGateway } from '../../realtime/realtime.gateway';
 import { User } from '../../auth/auth.service';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import {
   ImportJobLogMovieDto,
   ListInfiniteImportLogMoviesDto,
@@ -90,7 +90,7 @@ export class ImportLogMoviesService {
     });
 
     const withMovies = await this.withMovies(locale, rows);
-    return withMovies.map((row) => plainToInstance(ImportJobLogMovieDto, row));
+    return withMovies.map((row) => parseResponseDto(ImportJobLogMovieDto, row));
   }
 
   async listPaginated(
@@ -116,7 +116,7 @@ export class ImportLogMoviesService {
 
     const withMovies = await this.withMovies(locale, rows);
 
-    return plainToInstance(ListPaginatedImportLogMoviesDto, {
+    return parseResponseDto(ListPaginatedImportLogMoviesDto, {
       data: withMovies,
       meta: {
         total_results: totalCount,
@@ -168,7 +168,7 @@ export class ImportLogMoviesService {
 
     const withMovies = await this.withMovies(locale, pageRows);
 
-    return plainToInstance(ListInfiniteImportLogMoviesDto, {
+    return parseResponseDto(ListInfiniteImportLogMoviesDto, {
       data: withMovies,
       meta: { next_cursor: nextCursor, per_page, total_results: totalCount },
     });
@@ -204,7 +204,7 @@ export class ImportLogMoviesService {
       ? (await this.fetchMovies(locale, [updated.movieId])).get(updated.movieId)
       : null;
 
-    const result = plainToInstance(ImportJobLogMovieDto, { ...updated, movie: movie ?? null });
+    const result = parseResponseDto(ImportJobLogMovieDto, { ...updated, movie: movie ?? null });
 
     this.realtimeGateway.emitToUser(user.id, ImportServerEvents.LOG_MOVIE_PATCHED, {
       importJobId,

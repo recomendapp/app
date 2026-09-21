@@ -192,7 +192,7 @@ const CardMovieRow = React.forwardRef<HTMLDivElement, Omit<CardMovieProps, 'vari
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <WithLink
-                href={linked ? (movie.url ?? '') : undefined}
+                href={linked ? `/film/${movie.slug ?? movie.id}` : undefined}
                 className="line-clamp-2 wrap-break-word"
                 onClick={linked ? (e) => e.stopPropagation() : undefined}
               >
@@ -264,8 +264,10 @@ const CardMovie = React.forwardRef<HTMLDivElement, CardMovieProps>(
   ) => {
     const router = useRouter();
     const customOnClick = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (linked && movie.url) {
-        router.push(movie.url);
+      if (linked) {
+        router.push({
+          pathname: `/film/${movie.slug || movie.id}`,
+        });
       }
       onClick && onClick(e);
     };
@@ -334,7 +336,7 @@ const Credits = ({
             asChild
           >
             <WithLink
-              href={linked ? (credit.url ?? '') : undefined}
+              href={linked ? `/person/${credit.slug || credit.id}` : undefined}
               onClick={linked ? (e) => e.stopPropagation() : undefined}
             >
               {credit.name}

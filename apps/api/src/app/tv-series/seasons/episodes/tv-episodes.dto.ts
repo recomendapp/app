@@ -1,9 +1,13 @@
 import { ApiSchema, ApiProperty, ApiPropertyOptional, IntersectionType } from '@nestjs/swagger';
-import { IsDateString, IsEnum, IsInt, IsNumber, IsOptional, IsString, IsUrl } from 'class-validator';
-import { Expose, Type } from 'class-transformer';
+import { IsDateString, IsEnum, IsInt, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Expose, Transform, Type } from 'class-transformer';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../../common/dto/pagination.dto';
 import { SortOrder } from '../../../../common/dto/sort.dto';
-import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../../common/dto/cursor-pagination.dto';
+import {
+  CursorPaginatedResponseDto,
+  CursorPaginationQueryDto,
+} from '../../../../common/dto/cursor-pagination.dto';
+import { tvEpisodePath } from '@libs/db/utils/media-path';
 
 export enum TvEpisodeSortBy {
   EPISODE_NUMBER = 'episode_number',
@@ -37,12 +41,22 @@ export class TvEpisodeDto {
   @IsInt()
   episodeNumber!: number;
 
-  @ApiProperty({ description: 'The date the episode first aired', example: '2011-04-17', type: String, nullable: true })
+  @ApiProperty({
+    description: 'The date the episode first aired',
+    example: '2011-04-17',
+    type: String,
+    nullable: true,
+  })
   @Expose()
   @IsDateString()
   airDate!: string | null;
 
-  @ApiProperty({ description: 'The name of the TV episode', example: 'Winter Is Coming', type: String, nullable: true })
+  @ApiProperty({
+    description: 'The name of the TV episode',
+    example: 'Winter Is Coming',
+    type: String,
+    nullable: true,
+  })
   @Expose()
   @IsString()
   name!: string | null;
@@ -52,7 +66,12 @@ export class TvEpisodeDto {
   @IsString()
   episodeType!: string | null;
 
-  @ApiProperty({ description: 'Overview of the TV episode', example: 'Seven noble families fight...', type: String, nullable: true })
+  @ApiProperty({
+    description: 'Overview of the TV episode',
+    example: 'Seven noble families fight...',
+    type: String,
+    nullable: true,
+  })
   @Expose()
   @IsString()
   overview!: string | null;
@@ -67,25 +86,45 @@ export class TvEpisodeDto {
   @IsString()
   productionCode!: string | null;
 
-  @ApiProperty({ description: 'Still path of the TV episode', example: '/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg', type: String, nullable: true })
+  @ApiProperty({
+    description: 'Still path of the TV episode',
+    example: '/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg',
+    type: String,
+    nullable: true,
+  })
   @Expose()
   @IsString()
   stillPath!: string | null;
 
-  @ApiProperty({ description: 'Vote average of the TV season', example: 8.442, type: Number, nullable: false })
+  @ApiProperty({
+    description: 'Vote average of the TV season',
+    example: 8.442,
+    type: Number,
+    nullable: false,
+  })
   @Expose()
   @IsNumber()
   voteAverage!: number;
 
-  @ApiProperty({ description: 'Vote count of the TV season', example: 22881, type: Number, nullable: false })
+  @ApiProperty({
+    description: 'Vote count of the TV season',
+    example: 22881,
+    type: Number,
+    nullable: false,
+  })
   @Expose()
   @IsInt()
   voteCount!: number;
 
-  @ApiProperty({ description: 'URL to the TV season page', example: '/tv-series/1399-game-of-thrones/season/1/episode/1', type: String, nullable: true })
+  @ApiProperty({
+    description: 'Internal path to the TV episode page',
+    example: '/tv-series/1399/season/1/episode/1',
+    type: String,
+  })
   @Expose()
-  @IsUrl()
-  url!: string | null;
+  @Transform(({ obj }) => tvEpisodePath(obj.tvSeriesId, obj.seasonNumber, obj.episodeNumber))
+  @IsString()
+  path?: string;
 
   constructor(data: TvEpisodeDto) {
     Object.assign(this, data);
@@ -119,13 +158,13 @@ export class ListAllTvEpisodesQueryDto extends BaseListTvEpisodesQueryDto {}
 @ApiSchema({ name: 'ListPaginatedTvEpisodesQuery' })
 export class ListPaginatedTvEpisodesQueryDto extends IntersectionType(
   BaseListTvEpisodesQueryDto,
-  PaginationQueryDto
+  PaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListInfiniteTvEpisodesQuery' })
 export class ListInfiniteTvEpisodesQueryDto extends IntersectionType(
   BaseListTvEpisodesQueryDto,
-  CursorPaginationQueryDto
+  CursorPaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListPaginatedTvEpisodes' })
@@ -140,7 +179,7 @@ export class ListPaginatedTvEpisodesDto extends PaginatedResponseDto<TvEpisodeDt
   }
 }
 
-@ApiSchema({ name: 'ListInfiniteTvEpisodes'})
+@ApiSchema({ name: 'ListInfiniteTvEpisodes' })
 export class ListInfiniteTvEpisodesDto extends CursorPaginatedResponseDto<TvEpisodeDto> {
   @ApiProperty({ type: [TvEpisodeDto] })
   @Type(() => TvEpisodeDto)

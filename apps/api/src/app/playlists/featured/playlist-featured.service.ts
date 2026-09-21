@@ -5,38 +5,31 @@ import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { DbTransaction } from '@libs/db';
 import { encodeCursor } from '../../../utils/cursor';
-import { 
-  ListInfinitePlaylistsQueryDto, 
-  ListInfinitePlaylistsWithOwnerDto, 
-  ListPaginatedPlaylistsQueryDto, 
-  ListPaginatedPlaylistsWithOwnerDto 
+import {
+  ListInfinitePlaylistsQueryDto,
+  ListInfinitePlaylistsWithOwnerDto,
+  ListPaginatedPlaylistsQueryDto,
+  ListPaginatedPlaylistsWithOwnerDto,
 } from '../dto/playlists.dto';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { PlaylistQueryBuilder } from '../playlists.query-builder';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 
 @Injectable()
 export class PlaylistFeaturedService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
-  private getListBaseWhereClause(
-    tx: DbTransaction,
-    currentUser: User | null,
-  ) {
+  private getListBaseWhereClause(tx: DbTransaction, currentUser: User | null) {
     const visibilityCondition = PlaylistQueryBuilder.getVisibilityCondition(tx, currentUser);
 
     const isFeaturedCondition = exists(
-      tx.select({ id: playlistFeatured.id })
+      tx
+        .select({ id: playlistFeatured.id })
         .from(playlistFeatured)
-        .where(eq(playlistFeatured.playlistId, playlist.id))
+        .where(eq(playlistFeatured.playlistId, playlist.id)),
     );
 
-    return and(
-      isFeaturedCondition,
-      visibilityCondition
-    );
+    return and(isFeaturedCondition, visibilityCondition);
   }
 
   async listPaginated({
@@ -55,7 +48,8 @@ export class PlaylistFeaturedService {
       const roleSelection = PlaylistQueryBuilder.getRoleSelection(currentUser);
 
       const [rows, totalCountResult] = await Promise.all([
-        tx.select({
+        tx
+          .select({
             playlist: playlist,
             role: roleSelection,
             owner: USER_COMPACT_SELECT,
@@ -67,14 +61,15 @@ export class PlaylistFeaturedService {
           .orderBy(...orderBy)
           .limit(per_page)
           .offset(offset),
-        tx.select({ count: sql<number>`count(*)` })
+        tx
+          .select({ count: sql<number>`count(*)` })
           .from(playlist)
-          .where(baseWhereClause)
+          .where(baseWhereClause),
       ]);
-    
+
       const totalCount = Number(totalCountResult[0]?.count || 0);
 
-      return plainToInstance(ListPaginatedPlaylistsWithOwnerDto, {
+      return parseResponseDto(ListPaginatedPlaylistsWithOwnerDto, {
         data: rows.map((row) => ({
           ...row.playlist,
           role: row.role,
@@ -103,10 +98,14 @@ export class PlaylistFeaturedService {
       const baseWhereClause = this.getListBaseWhereClause(tx, currentUser);
       const orderBy = PlaylistQueryBuilder.getOrderBy(sort_by, sort_order);
       const roleSelection = PlaylistQueryBuilder.getRoleSelection(currentUser);
-      
-      const cursorWhereClause = PlaylistQueryBuilder.getCursorWhereClause(sort_by, sort_order, cursor);
-      const finalWhereClause = cursorWhereClause 
-        ? and(baseWhereClause, cursorWhereClause) 
+
+      const cursorWhereClause = PlaylistQueryBuilder.getCursorWhereClause(
+        sort_by,
+        sort_order,
+        cursor,
+      );
+      const finalWhereClause = cursorWhereClause
+        ? and(baseWhereClause, cursorWhereClause)
         : baseWhereClause;
 
       const fetchLimit = per_page + 1;
@@ -141,7 +140,7 @@ export class PlaylistFeaturedService {
         }
       }
 
-      return plainToInstance(ListInfinitePlaylistsWithOwnerDto, {
+      return parseResponseDto(ListInfinitePlaylistsWithOwnerDto, {
         data: paginatedResults.map((row) => ({
           ...row.playlist,
           role: row.role,

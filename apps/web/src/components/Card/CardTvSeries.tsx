@@ -56,7 +56,7 @@ const CardTvSeriesDefault = React.forwardRef<HTMLDivElement, Omit<CardTvSeriesPr
     ref,
   ) => {
     return (
-      <WithLink href={tvSeries.url ?? undefined}>
+      <WithLink href={linked ? `/tv-series/${tvSeries.slug ?? tvSeries.id}` : undefined}>
         <Card
           ref={ref}
           className={cn(
@@ -206,7 +206,7 @@ const CardTvSeriesRow = React.forwardRef<HTMLDivElement, Omit<CardTvSeriesProps,
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <WithLink
-                href={linked ? (tvSeries.url ?? '') : undefined}
+                href={linked ? `/tv-series/${tvSeries.slug ?? tvSeries.id}` : undefined}
                 className="line-clamp-2 wrap-break-word"
                 onClick={linked ? (e) => e.stopPropagation() : undefined}
               >
@@ -278,8 +278,10 @@ const CardTvSeries = React.forwardRef<HTMLDivElement, CardTvSeriesProps>(
   ) => {
     const router = useRouter();
     const customOnClick = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (linked && tvSeries.url) {
-        router.push(tvSeries.url);
+      if (linked) {
+        router.push({
+          pathname: `/tv-series/${tvSeries.slug ?? tvSeries.id}`,
+        });
       }
       onClick && onClick(e);
     };
@@ -354,7 +356,7 @@ const Credits = ({
             asChild
           >
             <WithLink
-              href={linked ? (credit.url ?? '') : undefined}
+              href={linked ? `/person/${credit.slug || credit.id}` : undefined}
               onClick={linked ? (e) => e.stopPropagation() : undefined}
             >
               {credit.name}

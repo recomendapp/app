@@ -4,7 +4,7 @@ import tw from '../../lib/tw';
 import { Icons } from '../../constants/Icons';
 import { View } from '../ui/view';
 import { Text } from '../ui/text';
-import { Link, LinkProps } from 'expo-router';
+import { Href, Link, LinkProps } from 'expo-router';
 import { ImageWithFallback } from '../utils/ImageWithFallback';
 import { Button } from '../ui/Button';
 import { CollectionAction } from './CollectionScreen';
@@ -20,7 +20,7 @@ interface CollectionItemProps<T> extends React.ComponentProps<typeof Animated.Vi
   getItemTitle: (item: T) => string;
   getItemSubtitle?: (item: T) => string;
   getItemImageUrl?: (item: T) => string;
-  getItemUrl?: (item: T) => string;
+  getItemUrl?: (item: T) => Href;
   onItemAction?: (item: T) => void;
   view?: ViewType;
   type?: 'movie' | 'tv_series';
@@ -143,7 +143,7 @@ const CollectionItem = forwardRef<
         {...props}
       >
         {url ? (
-          <Link href={url as LinkProps['href']} asChild>
+          <Link href={url} asChild>
             <Pressable style={tw`flex-1`} onLongPress={handleLongPress}>
               {pressableContent}
             </Pressable>

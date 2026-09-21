@@ -3,7 +3,7 @@ import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle
 import { Session } from '../../auth/auth.service';
 import { PushTokenDto, PushTokenSetDto } from './me-push-tokens.dto';
 import { pushToken } from '@libs/db/schemas';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 
 @Injectable()
 export class MePushTokensService {
@@ -32,7 +32,7 @@ export class MePushTokensService {
       throw new Error('Failed to upsert push token');
     }
 
-    return plainToInstance(PushTokenDto, upsertedToken, {
+    return parseResponseDto(PushTokenDto, upsertedToken, {
       excludeExtraneousValues: true,
     });
   }

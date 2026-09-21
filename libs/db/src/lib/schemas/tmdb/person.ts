@@ -110,8 +110,6 @@ export const tmdbPersonView = tmdbSchema
     gender: bigint({ mode: 'number' }),
     biography: text(),
     popularity: real(),
-    slug: text(),
-    url: text(),
   })
   .as(
     sql`SELECT 
@@ -127,8 +125,6 @@ export const tmdbPersonView = tmdbSchema
     person.gender, 
     person.biography, 
     person.popularity, 
-    (person.id || '-'::text) || public.slugify(person.name) AS slug, 
-    ('/person/'::text || (person.id || '-'::text)) || public.slugify(person.name) AS url 
   FROM ( 
     SELECT 
       c.id, 

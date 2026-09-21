@@ -1,5 +1,14 @@
 import { ApiSchema, ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsEnum, IsInt, IsNumber, IsOptional, Max, Min } from 'class-validator';
+import {
+  IsDateString,
+  IsEnum,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  Max,
+  Min,
+  ValidateNested,
+} from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { LogTvSeriesDto, LogTvStatus } from '../../logs/tv-series-logs.dto';
 
@@ -12,7 +21,7 @@ export class LogTvSeasonRequestDto {
   @Min(0.5)
   @Max(10)
   rating?: number | null;
-  
+
   @ApiProperty({
     required: false,
     description: 'The status of the series',
@@ -21,7 +30,7 @@ export class LogTvSeasonRequestDto {
   })
   @IsOptional()
   @IsEnum(LogTvStatus, {
-    message: `Status must be one of: ${Object.values(LogTvStatus).join(', ')}`
+    message: `Status must be one of: ${Object.values(LogTvStatus).join(', ')}`,
   })
   status?: LogTvStatus;
 }
@@ -47,7 +56,7 @@ export class LogTvSeasonDto {
   @Expose()
   @IsInt()
   seasonNumber!: number;
-  
+
   @ApiProperty({
     description: 'The status of the series',
     enum: LogTvStatus,
@@ -55,7 +64,7 @@ export class LogTvSeasonDto {
   })
   @Expose()
   @IsEnum(LogTvStatus, {
-    message: `Status must be one of: ${Object.values(LogTvStatus).join(', ')}`
+    message: `Status must be one of: ${Object.values(LogTvStatus).join(', ')}`,
   })
   status!: LogTvStatus;
 
@@ -63,7 +72,7 @@ export class LogTvSeasonDto {
   @Expose()
   @IsInt()
   episodesWatchedCount!: number;
-  
+
   @ApiProperty({ nullable: true })
   @Expose()
   @IsOptional()
@@ -95,11 +104,13 @@ export class LogTvSeasonDto {
 export class LogTvSeasonUpdateResponseDto {
   @ApiProperty({ type: () => LogTvSeasonDto })
   @Expose()
+  @ValidateNested()
   @Type(() => LogTvSeasonDto)
   season!: LogTvSeasonDto;
 
   @ApiProperty({ type: () => LogTvSeriesDto })
   @Expose()
+  @ValidateNested()
   @Type(() => LogTvSeriesDto)
   series!: LogTvSeriesDto;
 }

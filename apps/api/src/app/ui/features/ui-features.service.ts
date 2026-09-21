@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { assetPaths } from '@libs/assets';
 import { SupportedLocale } from '@libs/i18n';
 import { UiFeatureDto } from './ui-features.dto';
@@ -89,7 +89,7 @@ export class UiFeaturesService {
 
   listAll(locale: SupportedLocale): UiFeatureDto[] {
     return FEATURES.map((feature) =>
-      plainToInstance(UiFeatureDto, {
+      parseResponseDto(UiFeatureDto, {
         key: feature.key,
         label: this.i18n.t(`features.${feature.key}.label`, { lang: locale }),
         description: this.i18n.t(`features.${feature.key}.description`, { lang: locale }),

@@ -12,7 +12,7 @@ import {
 import { bookmark, tmdbMovieView, tmdbTvSeriesView } from '@libs/db/schemas';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
 import { BookmarkTarget } from './bookmarks.type';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../utils/parse-response-dto';
 import { defaultSupportedLocale, SupportedLocale } from '@libs/i18n';
 import { BookmarkServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../realtime/realtime.gateway';
@@ -75,8 +75,8 @@ export class BookmarksService {
 
     const payload =
       dto.type === 'movie'
-        ? plainToInstance(BookmarkWithMovieDto, { ...dto, media })
-        : plainToInstance(BookmarkWithTvSeriesDto, { ...dto, media });
+        ? parseResponseDto(BookmarkWithMovieDto, { ...dto, media })
+        : parseResponseDto(BookmarkWithTvSeriesDto, { ...dto, media });
 
     this.realtimeGateway.emitToUser(user.id, BookmarkServerEvents.SET, payload);
   }
@@ -91,7 +91,7 @@ export class BookmarksService {
       where: this.getWhereConditions(user.id, target),
     });
     if (!bookmarkEntry) return null;
-    return plainToInstance(BookmarkDto, {
+    return parseResponseDto(BookmarkDto, {
       id: bookmarkEntry.id,
       userId: bookmarkEntry.userId,
       type: bookmarkEntry.type,
@@ -157,7 +157,7 @@ export class BookmarksService {
       result = upserted;
     }
 
-    const bookmarkDto = plainToInstance(BookmarkDto, {
+    const bookmarkDto = parseResponseDto(BookmarkDto, {
       id: result.id,
       userId: result.userId,
       type: result.type,
@@ -194,7 +194,7 @@ export class BookmarksService {
       return deletedBookmark;
     });
 
-    const bookmarkDto = plainToInstance(BookmarkDto, {
+    const bookmarkDto = parseResponseDto(BookmarkDto, {
       id: deletedBookmark.id,
       userId: deletedBookmark.userId,
       type: deletedBookmark.type,

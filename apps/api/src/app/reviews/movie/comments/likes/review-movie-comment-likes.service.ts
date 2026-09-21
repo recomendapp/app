@@ -19,7 +19,7 @@ import {
   user,
 } from '@libs/db/schemas';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../../../utils/parse-response-dto';
 import { PaginationQueryDto } from '../../../../../common/dto/pagination.dto';
 import { CursorPaginationQueryDto } from '../../../../../common/dto/cursor-pagination.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../../../utils/cursor';
@@ -94,7 +94,7 @@ export class ReviewMovieCommentLikesService {
           eq(reviewMovieCommentLike.userId, user.id),
         ),
       });
-      return plainToInstance(ReviewMovieCommentLikeDto, existingLike, {
+      return parseResponseDto(ReviewMovieCommentLikeDto, existingLike, {
         excludeExtraneousValues: true,
       });
     }
@@ -117,7 +117,7 @@ export class ReviewMovieCommentLikesService {
       }
     }
 
-    return plainToInstance(ReviewMovieCommentLikeDto, like, { excludeExtraneousValues: true });
+    return parseResponseDto(ReviewMovieCommentLikeDto, like, { excludeExtraneousValues: true });
   }
 
   async unlike({
@@ -145,7 +145,7 @@ export class ReviewMovieCommentLikesService {
       throw new NotFoundException('Like not found');
     }
 
-    return plainToInstance(ReviewMovieCommentLikeDto, deleted, { excludeExtraneousValues: true });
+    return parseResponseDto(ReviewMovieCommentLikeDto, deleted, { excludeExtraneousValues: true });
   }
 
   async listPaginated({
@@ -179,7 +179,7 @@ export class ReviewMovieCommentLikesService {
       this.db.$count(reviewMovieCommentLike, whereClause),
     ]);
 
-    return plainToInstance(ListPaginatedReviewMovieCommentLikesDto, {
+    return parseResponseDto(ListPaginatedReviewMovieCommentLikesDto, {
       data: likes.map((row) => row.user),
       meta: {
         total_results: totalCount,
@@ -245,7 +245,7 @@ export class ReviewMovieCommentLikesService {
       });
     }
 
-    return plainToInstance(ListInfiniteReviewMovieCommentLikesDto, {
+    return parseResponseDto(ListInfiniteReviewMovieCommentLikesDto, {
       data: paginatedResults.map((row) => row.user),
       meta: {
         next_cursor: nextCursor,

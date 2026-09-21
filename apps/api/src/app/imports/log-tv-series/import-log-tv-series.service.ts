@@ -11,7 +11,7 @@ import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../
 import { z } from 'zod';
 import { RealtimeGateway } from '../../realtime/realtime.gateway';
 import { User } from '../../auth/auth.service';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import {
   ImportJobLogTvSeriesDto,
   ListInfiniteImportLogTvSeriesDto,
@@ -90,7 +90,7 @@ export class ImportLogTvSeriesService {
     });
 
     const withTvSeries = await this.withTvSeries(locale, rows);
-    return withTvSeries.map((row) => plainToInstance(ImportJobLogTvSeriesDto, row));
+    return withTvSeries.map((row) => parseResponseDto(ImportJobLogTvSeriesDto, row));
   }
 
   async listPaginated(
@@ -116,7 +116,7 @@ export class ImportLogTvSeriesService {
 
     const withTvSeries = await this.withTvSeries(locale, rows);
 
-    return plainToInstance(ListPaginatedImportLogTvSeriesDto, {
+    return parseResponseDto(ListPaginatedImportLogTvSeriesDto, {
       data: withTvSeries,
       meta: {
         total_results: totalCount,
@@ -168,7 +168,7 @@ export class ImportLogTvSeriesService {
 
     const withTvSeries = await this.withTvSeries(locale, pageRows);
 
-    return plainToInstance(ListInfiniteImportLogTvSeriesDto, {
+    return parseResponseDto(ListInfiniteImportLogTvSeriesDto, {
       data: withTvSeries,
       meta: { next_cursor: nextCursor, per_page, total_results: totalCount },
     });
@@ -206,7 +206,7 @@ export class ImportLogTvSeriesService {
       ? (await this.fetchTvSeries(locale, [updated.tvSeriesId])).get(updated.tvSeriesId)
       : null;
 
-    const result = plainToInstance(ImportJobLogTvSeriesDto, {
+    const result = parseResponseDto(ImportJobLogTvSeriesDto, {
       ...updated,
       tvSeries: tvSeries ?? null,
     });

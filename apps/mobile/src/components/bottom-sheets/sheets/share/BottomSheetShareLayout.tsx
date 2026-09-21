@@ -31,6 +31,7 @@ import { Asset, getPermissionsAsync, requestPermissionsAsync } from 'expo-media-
 import { File, Directory, Paths } from 'expo-file-system';
 import { FlashList } from '@shopify/flash-list';
 import { logger } from '../../../../logger';
+import { Href, Link } from 'expo-router';
 
 const SHARE_DIRECTORY = new Directory(Paths.cache, 'share_temp');
 
@@ -43,7 +44,7 @@ type SharePlatform = {
 };
 
 interface BottomSheetShareLayoutProps extends BottomSheetProps {
-  path: string;
+  path: Href;
   contentRef: React.RefObject<ShareViewRef | null>;
   children?: React.ReactNode;
 }
@@ -55,7 +56,8 @@ const BottomSheetShareLayout = forwardRef<
   const toast = useToast();
   const t = useTranslations();
   const { colors, mode } = useTheme();
-  const url = `https://${Constants.expoConfig?.extra?.webDomain}${path}`;
+  const stringPath = useMemo(() => Link.resolveHref(path), [path]);
+  const url = `https://${Constants.expoConfig?.extra?.webDomain}${stringPath}`;
 
   // REFs
   const [loadingPlatform, setLoadingPlatform] = useState<number | null>(null);

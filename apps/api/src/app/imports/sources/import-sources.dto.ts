@@ -1,11 +1,13 @@
 import { ApiProperty, ApiPropertyOptional, ApiSchema } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { ProviderDto } from '../../providers/dto/providers.dto';
 
 @ApiSchema({ name: 'ImportSource' })
 export class ImportSourceDto {
   @ApiProperty({ type: () => ProviderDto })
   @Expose()
+  @ValidateNested()
   @Type(() => ProviderDto)
   provider!: ProviderDto;
 

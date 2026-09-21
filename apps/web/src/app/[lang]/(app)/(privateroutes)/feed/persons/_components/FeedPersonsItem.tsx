@@ -38,7 +38,7 @@ const FeedPersonsItemDefault = forwardRef<HTMLDivElement, FeedPersonsItemProps>(
         {...props}
       >
         <div
-          // href={activity?.movie?.url ?? ''}
+          // href={activity?.movie?.path ?? ''}
           className="w-20 @md/feed-item:w-24 relative h-full shrink-0 rounded-md overflow-hidden aspect-2/3"
         >
           <ImageWithFallback
@@ -54,7 +54,12 @@ const FeedPersonsItemDefault = forwardRef<HTMLDivElement, FeedPersonsItemProps>(
           <div className="flex justify-between gap-2">
             {/* PERSON */}
             <div className="flex gap-2">
-              <Link href={item.person.url || ''} className="shrink-0">
+              <Link
+                href={{
+                  pathname: `/person/${item.person.slug || item.person.id}`,
+                }}
+                className="shrink-0"
+              >
                 <UserAvatar
                   className="w-8 h-8 rounded-md"
                   avatarUrl={getTmdbImage({ path: item.person.profilePath, size: 'w92' })}
@@ -70,7 +75,9 @@ const FeedPersonsItemDefault = forwardRef<HTMLDivElement, FeedPersonsItemProps>(
                   titleMedia: details?.title || t('common.messages.unknown'),
                   linkPerson: (chunk) => (
                     <Link
-                      href={item.person.url ?? ''}
+                      href={{
+                        pathname: `/person/${item.person.slug || item.person.id}`,
+                      }}
                       className="text-foreground hover:underline underline-offset-2 hover:text-accent-pink"
                     >
                       {chunk}
@@ -78,7 +85,12 @@ const FeedPersonsItemDefault = forwardRef<HTMLDivElement, FeedPersonsItemProps>(
                   ),
                   linkMedia: (chunk) => (
                     <Link
-                      href={item.media.url ?? ''}
+                      href={{
+                        pathname:
+                          item.type === 'tv_series'
+                            ? `/tv-series/${item.media.slug || item.media.id}`
+                            : `/film/${item.media.slug || item.media.id}`,
+                      }}
                       className="text-foreground hover:underline underline-offset-2 hover:text-accent-pink"
                     >
                       {chunk}
@@ -95,7 +107,15 @@ const FeedPersonsItemDefault = forwardRef<HTMLDivElement, FeedPersonsItemProps>(
             ) : null}
           </div>
           {item.media && (
-            <Link href={item.media.url ?? ''} className="space-y-2">
+            <Link
+              href={{
+                pathname:
+                  item.type === 'tv_series'
+                    ? `/tv-series/${item.media.slug || item.media.id}`
+                    : `/film/${item.media.slug || item.media.id}`,
+              }}
+              className="space-y-2"
+            >
               <div className="text-md @md/feed-item:text-xl space-x-1 line-clamp-2">
                 <span className="font-bold">{details?.title}</span>
                 {item.type === 'movie' && item.media.releaseDate && (

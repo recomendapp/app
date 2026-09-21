@@ -1,10 +1,8 @@
-import { tmdbTvSeriesView } from "../schemas";
+import { tmdbTvSeriesView } from '../schemas';
 
 export const TV_SERIES_COMPACT_SELECT = {
   id: tmdbTvSeriesView.id,
   name: tmdbTvSeriesView.name,
-  slug: tmdbTvSeriesView.slug,
-  url: tmdbTvSeriesView.url,
   posterPath: tmdbTvSeriesView.posterPath,
   backdropPath: tmdbTvSeriesView.backdropPath,
   createdBy: tmdbTvSeriesView.createdBy,
@@ -20,8 +18,6 @@ export const TV_SERIES_COMPACT_SELECT = {
 export const TV_SERIES_SUMMARY_SELECT = {
   id: tmdbTvSeriesView.id,
   name: tmdbTvSeriesView.name,
-  slug: tmdbTvSeriesView.slug,
-  url: tmdbTvSeriesView.url,
   overview: tmdbTvSeriesView.overview,
   posterPath: tmdbTvSeriesView.posterPath,
   backdropPath: tmdbTvSeriesView.backdropPath,

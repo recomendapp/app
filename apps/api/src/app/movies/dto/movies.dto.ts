@@ -1,5 +1,5 @@
 import { ApiProperty, ApiSchema, PickType } from '@nestjs/swagger';
-import { Expose, Type } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import {
   IsInt,
   IsString,
@@ -14,6 +14,7 @@ import { PersonCompactDto } from '../../persons/dto/persons.dto';
 import { GenreDto } from './genres.dto';
 import { PaginatedResponseDto } from '../../../common/dto/pagination.dto';
 import { CursorPaginatedResponseDto } from '../../../common/dto/cursor-pagination.dto';
+import { mediaSlug, moviePath } from '@libs/db/utils/media-path';
 
 export enum MovieSortBy {
   RELEASE_DATE = 'release_date',
@@ -30,6 +31,15 @@ export class MovieDto {
   @Expose()
   @IsInt()
   id!: number;
+
+  @ApiProperty({
+    description: 'Internal path to the movie page',
+    example: '/film/157336-interstellar',
+  })
+  @Expose()
+  @Transform(({ obj }) => moviePath(obj.id, obj.title ?? obj.originalTitle ?? null))
+  @IsString()
+  path?: string;
 
   @ApiProperty({
     description: 'The title of the movie',
@@ -215,25 +225,11 @@ export class MovieDto {
   @IsInt()
   voteCount!: number;
 
-  @ApiProperty({
-    description: 'Slug of the movie',
-    example: '157336-interstellar',
-    type: String,
-    nullable: true,
-  })
+  @ApiProperty({ description: 'Slug of the movie', example: '157336-interstellar' })
   @Expose()
+  @Transform(({ obj }) => mediaSlug(obj.id, obj.title ?? obj.originalTitle ?? null))
   @IsString()
-  slug!: string | null;
-
-  @ApiProperty({
-    description: 'URL to the movie page',
-    example: '/film/157336-interstellar',
-    type: String,
-    nullable: true,
-  })
-  @Expose()
-  @IsUrl()
-  url!: string | null;
+  slug?: string;
 
   @ApiProperty({
     description: 'Followers average rating of the movie',
@@ -303,7 +299,7 @@ export class MovieCompactDto extends PickType(MovieDto, [
   'id',
   'title',
   'slug',
-  'url',
+  'path',
   'posterPath',
   'backdropPath',
   'directors',
@@ -320,7 +316,7 @@ export class MovieSummaryDto extends PickType(MovieDto, [
   'id',
   'title',
   'slug',
-  'url',
+  'path',
   'overview',
   'posterPath',
   'backdropPath',

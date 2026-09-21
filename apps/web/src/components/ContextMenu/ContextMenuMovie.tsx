@@ -61,7 +61,7 @@ export const ContextMenuMovie = ({
       [
         {
           icon: Icons.movie,
-          href: movie.url ?? '',
+          href: `/film/${movie.slug || movie.id}`,
           label: upperFirst(t('common.messages.go_to_film')),
         },
         ...(user
@@ -105,7 +105,7 @@ export const ContextMenuMovie = ({
             openModal(ModalShare, {
               title: movie.title,
               type: 'movie',
-              path: movie.url ?? '',
+              path: `/film/${movie.slug || movie.id}`,
               shareController: createShareController(ShareControllerMovie, {
                 movie: movie,
               }),

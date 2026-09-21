@@ -12,7 +12,7 @@ import { and, asc, desc, eq, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { follow, profile, user } from '@libs/db/schemas';
 import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { z } from 'zod';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 
 const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.string().min(1));
 
@@ -71,7 +71,7 @@ export class UserFollowRequestsService {
       this.db.$count(follow, whereClause),
     ]);
 
-    return plainToInstance(ListPaginatedFollowRequestsDto, {
+    return parseResponseDto(ListPaginatedFollowRequestsDto, {
       data: requests.map((row) => ({
         createdAt: row.follow.createdAt,
         user: {
@@ -186,7 +186,7 @@ export class UserFollowRequestsService {
       }
     }
 
-    return plainToInstance(ListInfiniteFollowRequestsDto, {
+    return parseResponseDto(ListInfiniteFollowRequestsDto, {
       data: paginatedResults.map((row) => ({
         createdAt: row.follow.createdAt,
         user: {

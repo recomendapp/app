@@ -1,6 +1,6 @@
 import Animated from 'react-native-reanimated';
 import { ImageWithFallback } from '../utils/ImageWithFallback';
-import { Href, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import tw from '../../lib/tw';
 import { Pressable, View } from 'react-native';
 import { useTheme } from '../../providers/ThemeProvider';
@@ -248,7 +248,14 @@ const CardPerson = forwardRef<React.ComponentRef<typeof Animated.View>, CardPers
     return (
       <Pressable
         onPress={() => {
-          if (linked) router.push(props.person.url as Href);
+          if (linked) {
+            router.push({
+              pathname: '/person/[person_id]',
+              params: {
+                person_id: props.person.id,
+              },
+            });
+          }
           onPress?.();
         }}
         onLongPress={() => {

@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional, ApiSchema } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { IsIn, IsInt, IsOptional } from 'class-validator';
+import { IsIn, IsInt, IsOptional, ValidateNested } from 'class-validator';
 import { importJobBookmarkTypeEnum, importMatchStatusEnum } from '@libs/db/schemas';
 import { MovieCompactDto } from '../../movies/dto/movies.dto';
 import { TvSeriesCompactDto } from '../../tv-series/dto/tv-series.dto';
@@ -26,11 +26,13 @@ export class ImportJobBookmarkDto {
 
   @ApiPropertyOptional({ type: () => MovieCompactDto, nullable: true })
   @Expose()
+  @ValidateNested()
   @Type(() => MovieCompactDto)
   movie?: MovieCompactDto | null;
 
   @ApiPropertyOptional({ type: () => TvSeriesCompactDto, nullable: true })
   @Expose()
+  @ValidateNested()
   @Type(() => TvSeriesCompactDto)
   tvSeries?: TvSeriesCompactDto | null;
 

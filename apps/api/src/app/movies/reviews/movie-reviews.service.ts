@@ -15,7 +15,7 @@ import {
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
 import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 import { LogServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../../realtime/realtime.gateway';
@@ -71,7 +71,7 @@ export class MovieReviewsService {
       })
       .returning();
 
-    const result = plainToInstance(ReviewMovieDto, {
+    const result = parseResponseDto(ReviewMovieDto, {
       ...upsertedReview,
       userId: user.id,
       movieId: movieId,
@@ -103,7 +103,7 @@ export class MovieReviewsService {
       throw new NotFoundException('Review not found');
     }
 
-    const result = plainToInstance(ReviewMovieDto, {
+    const result = parseResponseDto(ReviewMovieDto, {
       ...deletedReview,
       userId: user.id,
       movieId: movieId,
@@ -214,7 +214,7 @@ export class MovieReviewsService {
 
       const totalCount = Number(totalCountResult[0]?.count || 0);
 
-      return plainToInstance(ListPaginatedReviewsMovieDto, {
+      return parseResponseDto(ListPaginatedReviewsMovieDto, {
         data: reviewsData.map((row) => ({
           ...row.review,
           userId: row.log.userId,
@@ -364,7 +364,7 @@ export class MovieReviewsService {
         }
       }
 
-      return plainToInstance(ListInfiniteReviewsMovieDto, {
+      return parseResponseDto(ListInfiniteReviewsMovieDto, {
         data: paginatedResults.map((row) => ({
           ...row.review,
           userId: row.log.userId,

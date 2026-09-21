@@ -22,7 +22,9 @@ export const UserTvSeriesLog = ({ log: logProp }: { log: UserTvSeriesWithUserTvS
 
   useEffect(() => {
     if (log === null && !isLoading) {
-      router.replace(logProp.tvSeries.url || '/');
+      router.replace({
+        pathname: `/tv-series/${logProp.tvSeries.slug ?? logProp.tvSeries.id}`,
+      });
     }
   }, [log, isLoading, router]);
 

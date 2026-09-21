@@ -61,7 +61,7 @@ export const ContextMenuTvSeries = ({
       [
         {
           icon: Icons.movie,
-          href: tvSeries.url ?? '',
+          href: `/tv-series/${tvSeries.slug || tvSeries.id}`,
           label: upperFirst(t('common.messages.go_to_tv_series')),
         },
         ...(user
@@ -107,7 +107,7 @@ export const ContextMenuTvSeries = ({
             openModal(ModalShare, {
               title: tvSeries.name,
               type: 'tv_series',
-              path: tvSeries.url ?? '',
+              path: `/tv-series/${tvSeries.slug || tvSeries.id}`,
               shareController: createShareController(ShareControllerTvSeries, {
                 tvSeries: tvSeries,
               }),

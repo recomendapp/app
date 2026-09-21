@@ -1,10 +1,8 @@
-import { tmdbMovieView } from "../schemas";
+import { tmdbMovieView } from '../schemas';
 
 export const MOVIE_COMPACT_SELECT = {
   id: tmdbMovieView.id,
   title: tmdbMovieView.title,
-  slug: tmdbMovieView.slug,
-  url: tmdbMovieView.url,
   posterPath: tmdbMovieView.posterPath,
   backdropPath: tmdbMovieView.backdropPath,
   directors: tmdbMovieView.directors,
@@ -19,8 +17,6 @@ export const MOVIE_COMPACT_SELECT = {
 export const MOVIE_SUMMARY_SELECT = {
   id: tmdbMovieView.id,
   title: tmdbMovieView.title,
-  slug: tmdbMovieView.slug,
-  url: tmdbMovieView.url,
   overview: tmdbMovieView.overview,
   posterPath: tmdbMovieView.posterPath,
   backdropPath: tmdbMovieView.backdropPath,

@@ -1,18 +1,26 @@
 import { ApiSchema, ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsInt, IsNumber, IsOptional, Max, Min } from 'class-validator';
+import {
+  IsDateString,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  Max,
+  Min,
+  ValidateNested,
+} from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { LogTvSeasonDto } from '../../logs/tv-season-logs.dto';
 import { LogTvSeriesDto } from '../../../logs/tv-series-logs.dto';
 
 @ApiSchema({ name: 'LogTvEpisodeRequest' })
 export class LogTvEpisodeRequestDto {
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'Rating from 0.5 to 10. If set to null, removes existing rating.',
     required: false,
     nullable: true,
     minimum: 0.5,
     maximum: 10,
-    example: 8.5
+    example: 8.5,
   })
   @IsOptional()
   @Type(() => Number)
@@ -90,16 +98,19 @@ export class LogTvEpisodeDto {
 export class LogTvEpisodeUpdateResponseDto {
   @ApiProperty({ type: () => LogTvEpisodeDto })
   @Expose()
+  @ValidateNested()
   @Type(() => LogTvEpisodeDto)
   episode!: LogTvEpisodeDto;
 
   @ApiProperty({ type: () => LogTvSeasonDto })
   @Expose()
+  @ValidateNested()
   @Type(() => LogTvSeasonDto)
   season!: LogTvSeasonDto;
 
   @ApiProperty({ type: () => LogTvSeriesDto })
   @Expose()
+  @ValidateNested()
   @Type(() => LogTvSeriesDto)
   series!: LogTvSeriesDto;
 }

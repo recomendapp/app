@@ -10,7 +10,7 @@ import {
 import { SortOrder } from '../../../../common/dto/sort.dto';
 import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../../utils/cursor';
 import { z } from 'zod';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../../utils/parse-response-dto';
 import { PlaylistQueryBuilder } from '../../../playlists/playlists.query-builder';
 import {
   ListInfinitePlaylistsSavedQueryDto,
@@ -125,7 +125,7 @@ export class UserPlaylistsSavedService {
         .where(baseWhereClause),
     ]);
 
-    return plainToInstance(ListPaginatedPlaylistsWithOwnerDto, {
+    return parseResponseDto(ListPaginatedPlaylistsWithOwnerDto, {
       data: results.map((row) => ({
         ...row.playlist,
         role: row.role,
@@ -208,7 +208,7 @@ export class UserPlaylistsSavedService {
       }
     }
 
-    return plainToInstance(ListInfinitePlaylistsWithOwnerDto, {
+    return parseResponseDto(ListInfinitePlaylistsWithOwnerDto, {
       data: paginatedResults.map((r) => ({
         ...r.playlist,
         role: r.role,

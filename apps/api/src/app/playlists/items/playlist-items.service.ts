@@ -4,6 +4,8 @@ import { playlist, playlistItem, tmdbMovieView, tmdbTvSeriesView } from '@libs/d
 import { and, asc, desc, eq, gt, inArray, lt, ne, or, sql, SQL } from 'drizzle-orm';
 import {
   PlaylistItemWithMediaUnion,
+  PlaylistItemWithMovieDto,
+  PlaylistItemWithTvSeriesDto,
   ListAllPlaylistItemsQueryDto,
   ListPaginatedPlaylistItemsQueryDto,
   ListPaginatedPlaylistItemsDto,
@@ -20,7 +22,7 @@ import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selecto
 import { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { LexoRank } from 'lexorank';
 import { PlaylistsRealtimeService } from '../playlists-realtime.service';
 
@@ -101,9 +103,19 @@ export class PlaylistItemsService {
       return results.map((row): PlaylistItemWithMediaUnion => {
         const { movieId, tvSeriesId, ...baseItem } = row.item;
         if (baseItem.type === 'movie') {
-          return { ...baseItem, type: 'movie', mediaId: movieId, media: row.movie };
+          return parseResponseDto(PlaylistItemWithMovieDto, {
+            ...baseItem,
+            type: 'movie',
+            mediaId: movieId,
+            media: row.movie,
+          });
         }
-        return { ...baseItem, type: 'tv_series', mediaId: tvSeriesId, media: row.tvSeries };
+        return parseResponseDto(PlaylistItemWithTvSeriesDto, {
+          ...baseItem,
+          type: 'tv_series',
+          mediaId: tvSeriesId,
+          media: row.tvSeries,
+        });
       });
     });
   }
@@ -161,7 +173,7 @@ export class PlaylistItemsService {
 
       const totalCount = Number(totalCountResult[0]?.count || 0);
 
-      return plainToInstance(ListPaginatedPlaylistItemsDto, {
+      return parseResponseDto(ListPaginatedPlaylistItemsDto, {
         data: results.map((row): ListPaginatedPlaylistItemsDto['data'][number] => {
           const { movieId, tvSeriesId, ...baseItem } = row.item;
           if (baseItem.type === 'movie') {
@@ -283,7 +295,7 @@ export class PlaylistItemsService {
         }
       }
 
-      return plainToInstance(ListInfinitePlaylistItemsDto, {
+      return parseResponseDto(ListInfinitePlaylistItemsDto, {
         data: paginatedResults.map((row): ListInfinitePlaylistItemsDto['data'][number] => {
           const { movieId, tvSeriesId, ...baseItem } = row.item;
           if (baseItem.type === 'movie') {
@@ -403,7 +415,7 @@ export class PlaylistItemsService {
           .where(and(eq(playlistItem.id, itemId), eq(playlistItem.playlistId, playlistId)));
         if (!existing) throw new NotFoundException('Playlist item not found.');
         const { movieId, tvSeriesId, ...existingItem } = existing;
-        return plainToInstance(PlaylistItemDto, {
+        return parseResponseDto(PlaylistItemDto, {
           ...existingItem,
           mediaId: existingItem.type === 'movie' ? movieId : tvSeriesId,
         });
@@ -425,7 +437,7 @@ export class PlaylistItemsService {
         .where(eq(playlist.id, playlistId));
 
       const { movieId, tvSeriesId, ...updatedItem } = updated;
-      return plainToInstance(PlaylistItemDto, {
+      return parseResponseDto(PlaylistItemDto, {
         ...updatedItem,
         mediaId: updatedItem.type === 'movie' ? movieId : tvSeriesId,
       });
@@ -470,7 +482,7 @@ export class PlaylistItemsService {
         );
     }
 
-    return plainToInstance(
+    return parseResponseDto(
       PlaylistItemDto,
       deletedItems.map(({ movieId, tvSeriesId, ...item }) => ({
         ...item,

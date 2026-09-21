@@ -8,7 +8,7 @@ import { DbTransaction } from '@libs/db';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { z } from 'zod';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import {
   ListInfiniteUserTvSeriesWithTvSeriesDto,
   ListPaginatedUserTvSeriesWithTvSeriesDto,
@@ -106,7 +106,7 @@ export class UserTvSeriesService {
 
       const { user, review, ...logData } = logEntry;
 
-      return plainToInstance(UserTvSeriesWithUserTvSeriesDto, {
+      return parseResponseDto(UserTvSeriesWithUserTvSeriesDto, {
         ...logData,
         review: review
           ? {
@@ -240,7 +240,7 @@ export class UserTvSeriesService {
         tx.$count(logTvSeries, whereClause),
       ]);
 
-      return plainToInstance(ListPaginatedUserTvSeriesWithTvSeriesDto, {
+      return parseResponseDto(ListPaginatedUserTvSeriesWithTvSeriesDto, {
         data: results.map(({ log, tvSeries, isReviewed }) => ({
           ...log,
           isReviewed,
@@ -363,7 +363,7 @@ export class UserTvSeriesService {
           });
         }
       }
-      return plainToInstance(ListInfiniteUserTvSeriesWithTvSeriesDto, {
+      return parseResponseDto(ListInfiniteUserTvSeriesWithTvSeriesDto, {
         data: paginatedResults.map(({ log, tvSeries, isReviewed }) => ({
           ...log,
           isReviewed,

@@ -28,7 +28,6 @@ const TvSeriesWidgetPlaylists = ({
 }: TvSeriesWidgetPlaylistsProps) => {
   const { colors } = useTheme();
   const t = useTranslations();
-  const urlPlaylists = `${url}/playlists` as Href;
   const {
     data: playlists,
     isLoading,
@@ -44,7 +43,7 @@ const TvSeriesWidgetPlaylists = ({
 
   return (
     <View style={[tw`gap-1`, style]}>
-      <Link href={urlPlaylists} style={labelStyle}>
+      <Link href={url} style={labelStyle}>
         <View style={tw`flex-row items-center`}>
           <Text style={tw`font-medium text-lg`} numberOfLines={1}>
             {upperFirst(t('common.messages.playlist', { count: 2 }))}

@@ -354,10 +354,7 @@ export const tmdbTvSeriesView = tmdbSchema
     backdropPath: text('backdrop_path'),
     createdBy:
       jsonb('created_by').$type<
-        Pick<
-          typeof tmdbPersonView.$inferSelect,
-          'id' | 'name' | 'gender' | 'profilePath' | 'slug' | 'url'
-        >[]
+        Pick<typeof tmdbPersonView.$inferSelect, 'id' | 'name' | 'gender' | 'profilePath'>[]
       >(),
     genres: jsonb().$type<(typeof tmdbGenre.$inferSelect & { name: string })[]>(),
     trailers:
@@ -389,8 +386,6 @@ export const tmdbTvSeriesView = tmdbSchema
     popularity: real(),
     voteAverage: real('vote_average'),
     voteCount: real('vote_count'),
-    slug: text(),
-    url: text(),
     followerAvgRating: real('follower_avg_rating'),
   })
   .as(
@@ -415,8 +410,6 @@ export const tmdbTvSeriesView = tmdbSchema
     serie.popularity, 
     serie.vote_average, 
     serie.vote_count, 
-    (serie.id || '-'::text) || public.slugify(serie.name) AS slug, 
-    ('/tv-series/'::text || (serie.id || '-'::text)) || public.slugify(serie.name) AS url,
     (
       SELECT AVG(ua.rating)
       FROM public.log_tv_series ua
@@ -495,9 +488,7 @@ export const tmdbTvSeriesView = tmdbSchema
               'id', p.id,
               'name', p.name,
               'gender', p.gender,
-              'profilePath', p.profile_path,
-              'slug', p.slug,
-              'url', p.url
+              'profilePath', p.profile_path
             )
           )
           FROM tmdb.tv_series_credit sc 

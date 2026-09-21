@@ -5,7 +5,7 @@ import { mediaMostPopular, tmdbMovieView, tmdbTvSeriesView } from '@libs/db/sche
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { and, asc, desc, eq, gt, lt, or, sql, SQL } from 'drizzle-orm';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { z } from 'zod';
 import { SupportedLocale } from '@libs/i18n';
@@ -94,7 +94,7 @@ export class MediasMostPopularService {
         tx.$count(mediaMostPopular),
       ]);
 
-      return plainToInstance(
+      return parseResponseDto(
         ListPaginatedMediasMostPopularDto,
         {
           data: results.map((row) => ({
@@ -186,7 +186,7 @@ export class MediasMostPopularService {
         });
       }
 
-      return plainToInstance(
+      return parseResponseDto(
         ListInfiniteMediasMostPopularDto,
         {
           data: paginatedResults.map((row) => ({

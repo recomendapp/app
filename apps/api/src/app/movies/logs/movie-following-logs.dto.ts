@@ -1,5 +1,5 @@
 import { ApiSchema, ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean, IsOptional } from 'class-validator';
+import { IsBoolean, IsOptional, ValidateNested } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { LogMovieDto } from './log-movie.dto';
 import { UserSummaryDto } from '../../users/dto/users.dto';
@@ -19,6 +19,7 @@ export class MovieFollowingLogsQueryDto {
 @ApiSchema({ name: 'MovieFollowingLog' })
 export class MovieFollowingLogDto extends LogMovieDto {
   @ApiProperty({ type: () => UserSummaryDto })
+  @ValidateNested()
   @Type(() => UserSummaryDto)
   user!: UserSummaryDto;
 }

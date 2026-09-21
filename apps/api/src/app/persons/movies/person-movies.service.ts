@@ -15,7 +15,7 @@ import {
 } from './dto/person-movie.dto';
 import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { z } from 'zod';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { MOVIE_COMPACT_SELECT } from '@libs/db/selectors';
 
 const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.number());
@@ -105,7 +105,7 @@ export class PersonMoviesService {
 
       const totalCount = Number(totalCountResult[0]?.count || 0);
 
-      return plainToInstance(ListPaginatedPersonMoviesDto, {
+      return parseResponseDto(ListPaginatedPersonMoviesDto, {
         data: results.map((row) => ({
           movie: row.movie,
           credits: row.credits || [],
@@ -237,7 +237,7 @@ export class PersonMoviesService {
         }
       }
 
-      return plainToInstance(ListInfinitePersonMoviesDto, {
+      return parseResponseDto(ListInfinitePersonMoviesDto, {
         data: paginatedResults.map((row) => ({
           movie: row.movie,
           credits: row.credits || [],
@@ -275,6 +275,6 @@ export class PersonMoviesService {
       }))
       .sort((a, b) => a.department.localeCompare(b.department));
 
-    return plainToInstance(PersonMovieFacetsDto, { departments });
+    return parseResponseDto(PersonMovieFacetsDto, { departments });
   }
 }

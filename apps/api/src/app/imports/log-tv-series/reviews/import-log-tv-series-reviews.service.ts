@@ -5,7 +5,7 @@ import { importJob, importJobReviewTvSeries } from '@libs/db/schemas';
 import { ImportServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../../../realtime/realtime.gateway';
 import { User } from '../../../auth/auth.service';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../../utils/parse-response-dto';
 import { ImportJobReviewDto, PatchImportJobReviewDto } from '../../dto/imports.dto';
 
 @Injectable()
@@ -36,7 +36,7 @@ export class ImportLogTvSeriesReviewsService {
       with: { importJobLogTvSeries: true },
     });
     if (!row || row.importJobLogTvSeries.importJobId !== importJobId) return null;
-    return plainToInstance(ImportJobReviewDto, row);
+    return parseResponseDto(ImportJobReviewDto, row);
   }
 
   async patch(
@@ -55,7 +55,7 @@ export class ImportLogTvSeriesReviewsService {
       .returning();
 
     if (!updated) throw new NotFoundException('Import review not found');
-    const result = plainToInstance(ImportJobReviewDto, updated);
+    const result = parseResponseDto(ImportJobReviewDto, updated);
 
     this.realtimeGateway.emitToUser(user.id, ImportServerEvents.LOG_TV_SERIES_REVIEW_PATCHED, {
       importJobId,

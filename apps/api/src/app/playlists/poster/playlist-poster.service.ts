@@ -5,7 +5,7 @@ import { StorageFolders } from '../../../common/modules/storage/storage.constant
 import { MultipartFile } from '@fastify/multipart';
 import { eq } from 'drizzle-orm';
 import { playlist } from '@libs/db/schemas';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { PlaylistDto } from '../dto/playlists.dto';
 
 @Injectable()
@@ -21,10 +21,9 @@ export class PlaylistPosterService {
     playlistId,
     file,
   }: {
-    playlistId: number,
-    file: MultipartFile,
+    playlistId: number;
+    file: MultipartFile;
   }): Promise<PlaylistDto> {
-
     const existingPlaylist = await this.db.query.playlist.findFirst({
       where: eq(playlist.id, playlistId),
       columns: { poster: true },
@@ -35,29 +34,28 @@ export class PlaylistPosterService {
     }
 
     const { filename: newAvatarFilename } = await this.storageService.uploadFile(
-      file, 
-      StorageFolders.PLAYLIST_POSTERS
+      file,
+      StorageFolders.PLAYLIST_POSTERS,
     );
 
-    const [updatedPlaylist] = await this.db.update(playlist)
+    const [updatedPlaylist] = await this.db
+      .update(playlist)
       .set({ poster: newAvatarFilename })
       .where(eq(playlist.id, playlistId))
       .returning();
 
     if (existingPlaylist.poster) {
-      this.storageService.deleteFile(existingPlaylist.poster, StorageFolders.PLAYLIST_POSTERS).catch(err => 
-        this.logger.error(`Failed to delete old poster: ${existingPlaylist.poster}`, err)
-      );
+      this.storageService
+        .deleteFile(existingPlaylist.poster, StorageFolders.PLAYLIST_POSTERS)
+        .catch((err) =>
+          this.logger.error(`Failed to delete old poster: ${existingPlaylist.poster}`, err),
+        );
     }
 
-    return plainToInstance(PlaylistDto, updatedPlaylist);
+    return parseResponseDto(PlaylistDto, updatedPlaylist);
   }
 
-  async delete({
-    playlistId,
-  }: {
-    playlistId: number,
-  }): Promise<PlaylistDto> {
+  async delete({ playlistId }: { playlistId: number }): Promise<PlaylistDto> {
     const existingPlaylist = await this.db.query.playlist.findFirst({
       where: eq(playlist.id, playlistId),
       columns: { poster: true },
@@ -70,13 +68,14 @@ export class PlaylistPosterService {
       throw new BadRequestException('This playlist does not have a poster to delete');
     }
 
-    const [deletedPlaylist] = await this.db.update(playlist)
+    const [deletedPlaylist] = await this.db
+      .update(playlist)
       .set({ poster: null })
       .where(eq(playlist.id, playlistId))
       .returning();
 
     await this.storageService.deleteFile(existingPlaylist.poster, StorageFolders.PLAYLIST_POSTERS);
 
-    return plainToInstance(PlaylistDto, deletedPlaylist);
+    return parseResponseDto(PlaylistDto, deletedPlaylist);
   }
 }

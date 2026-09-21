@@ -6,7 +6,7 @@ import {
   ApiExtraModels,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { Expose, Type } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, ValidateNested } from 'class-validator';
 import { recoTypeEnum } from '@libs/db/schemas';
 import { MovieSummaryDto } from '../../movies/dto/movies.dto';
@@ -27,6 +27,7 @@ export enum RecoTrendingSortBy {
 export class RecoTrendingDto {
   @ApiProperty({ example: 123456 })
   @Expose()
+  @Transform(({ value }) => (typeof value === 'string' ? Number(value) : value))
   @IsInt()
   mediaId!: number;
 

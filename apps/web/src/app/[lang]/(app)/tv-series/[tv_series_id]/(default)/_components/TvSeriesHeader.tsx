@@ -120,7 +120,9 @@ export const TvSeriesHeader = ({ tvSeries: initialTvSeries }: { tvSeries: TvSeri
                       {index > 0 && <span>, </span>}
                       <span key={index}>
                         <Button variant="link" className="w-fit p-0 h-full" asChild>
-                          <Link href={creator.url ?? ''}>{creator?.name}</Link>
+                          <Link href={{ pathname: `/person/${creator.slug || creator.id}` }}>
+                            {creator?.name}
+                          </Link>
                         </Button>
                       </span>
                     </Fragment>

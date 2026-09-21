@@ -10,6 +10,7 @@ import { DRIZZLE_SERVICE, DrizzleService } from '../common/modules/drizzle.modul
 import { and, eq, gt, inArray, sql } from 'drizzle-orm';
 import { pushToken, session, tmdbMovieView, tmdbTvSeriesView, user } from '@libs/db/schemas';
 import { defaultSupportedLocale } from '@libs/i18n';
+import { moviePath, tvSeriesPath } from '@libs/db/utils/media-path';
 import { env } from '../env';
 
 @Processor(NOTIFY_QUEUE)
@@ -284,7 +285,6 @@ export class NotifyProcessor extends WorkerHost {
                   const result = await tx
                     .select({
                       title: tmdbMovieView.title,
-                      url: tmdbMovieView.url,
                       posterPath: tmdbMovieView.posterPath,
                     })
                     .from(tmdbMovieView)
@@ -295,7 +295,6 @@ export class NotifyProcessor extends WorkerHost {
                   const result = await tx
                     .select({
                       title: tmdbTvSeriesView.name,
-                      url: tmdbTvSeriesView.url,
                       posterPath: tmdbTvSeriesView.posterPath,
                     })
                     .from(tmdbTvSeriesView)
@@ -326,7 +325,7 @@ export class NotifyProcessor extends WorkerHost {
                 attachmentUrl: this.getTmdbPosterUrl(mediaData.posterPath),
                 data: {
                   type: job.name,
-                  url: mediaData.url || '/',
+                  url: this.getMediaPath(mediaId, type, mediaData.title),
                   mediaId: mediaId.toString(),
                   mediaType: type,
                 },
@@ -375,7 +374,6 @@ export class NotifyProcessor extends WorkerHost {
                   const result = await tx
                     .select({
                       title: tmdbMovieView.title,
-                      url: tmdbMovieView.url,
                       posterPath: tmdbMovieView.posterPath,
                     })
                     .from(tmdbMovieView)
@@ -386,7 +384,6 @@ export class NotifyProcessor extends WorkerHost {
                   const result = await tx
                     .select({
                       title: tmdbTvSeriesView.name,
-                      url: tmdbTvSeriesView.url,
                       posterPath: tmdbTvSeriesView.posterPath,
                     })
                     .from(tmdbTvSeriesView)
@@ -423,7 +420,7 @@ export class NotifyProcessor extends WorkerHost {
                 attachmentUrl: this.getTmdbPosterUrl(mediaTitle.posterPath),
                 data: {
                   type: job.name,
-                  url: mediaTitle.url || '/',
+                  url: this.getMediaPath(mediaId, type, mediaTitle.title),
                   mediaId: mediaId.toString(),
                   mediaType: type,
                 },
@@ -473,7 +470,7 @@ export class NotifyProcessor extends WorkerHost {
                 attachmentUrl: this.getTmdbPosterUrl(mediaData.posterPath),
                 data: {
                   type: job.name,
-                  url: mediaData.url || '/',
+                  url: this.getMediaPath(mediaId, mediaType, mediaData.title),
                   mediaId: mediaId.toString(),
                   mediaType,
                   reviewAuthorUsername: reviewAuthor.username,
@@ -529,7 +526,7 @@ export class NotifyProcessor extends WorkerHost {
                 attachmentUrl: this.getTmdbPosterUrl(mediaData.posterPath),
                 data: {
                   type: job.name,
-                  url: mediaData.url || '/',
+                  url: this.getMediaPath(mediaId, mediaType, mediaData.title),
                   mediaId: mediaId.toString(),
                   mediaType,
                   reviewAuthorUsername: reviewAuthor.username,
@@ -583,7 +580,7 @@ export class NotifyProcessor extends WorkerHost {
                 attachmentUrl: this.getTmdbPosterUrl(mediaData.posterPath),
                 data: {
                   type: job.name,
-                  url: mediaData.url || '/',
+                  url: this.getMediaPath(mediaId, mediaType, mediaData.title),
                   mediaId: mediaId.toString(),
                   mediaType,
                   reviewAuthorUsername: reviewAuthor.username,
@@ -642,7 +639,7 @@ export class NotifyProcessor extends WorkerHost {
                 attachmentUrl: this.getTmdbPosterUrl(mediaData.posterPath),
                 data: {
                   type: job.name,
-                  url: mediaData.url || '/',
+                  url: this.getMediaPath(mediaId, mediaType, mediaData.title),
                   mediaId: mediaId.toString(),
                   mediaType,
                   reviewAuthorUsername: reviewAuthor.username,
@@ -670,7 +667,6 @@ export class NotifyProcessor extends WorkerHost {
         const result = await tx
           .select({
             title: tmdbMovieView.title,
-            url: tmdbMovieView.url,
             posterPath: tmdbMovieView.posterPath,
           })
           .from(tmdbMovieView)
@@ -681,7 +677,6 @@ export class NotifyProcessor extends WorkerHost {
         const result = await tx
           .select({
             title: tmdbTvSeriesView.name,
-            url: tmdbTvSeriesView.url,
             posterPath: tmdbTvSeriesView.posterPath,
           })
           .from(tmdbTvSeriesView)
@@ -690,6 +685,14 @@ export class NotifyProcessor extends WorkerHost {
         return result[0];
       }
     });
+  }
+
+  private getMediaPath(
+    mediaId: number,
+    type: 'movie' | 'tv_series',
+    title: string | null | undefined,
+  ): string {
+    return type === 'movie' ? moviePath(mediaId, title) : tvSeriesPath(mediaId, title);
   }
 
   private getTmdbPosterUrl(posterPath: string | null | undefined) {

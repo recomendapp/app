@@ -21,7 +21,7 @@ import { SearchParams } from 'typesense/lib/Typesense/Documents';
 import { SupportedLocale } from '@libs/i18n';
 import { MOVIE_COMPACT_SELECT } from '@libs/db/selectors';
 import { DbTransaction } from '@libs/db';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 
 const PageCursorSchema = z.object({ page: z.number().int().min(1) });
 
@@ -133,7 +133,7 @@ export class SearchMoviesService {
 
       const hydratedMovies = await this.hydrateMovies(tx, movieIds);
 
-      return plainToInstance(
+      return parseResponseDto(
         ListPaginatedMoviesDto,
         {
           data: hydratedMovies,
@@ -182,7 +182,7 @@ export class SearchMoviesService {
       const hasNextPage = page * per_page < typesenseResult.found;
       const nextCursor = hasNextPage ? encodeCursor<{ page: number }>({ page: page + 1 }) : null;
 
-      return plainToInstance(
+      return parseResponseDto(
         ListInfiniteMoviesDto,
         {
           data: hydratedMovies,

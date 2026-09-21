@@ -2,7 +2,7 @@ import { ForbiddenException, Inject, Injectable, Logger } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { playlist, playlistMember, profile, user } from '@libs/db/schemas';
 import { and, asc, desc, eq, gt, ilike, inArray, lt, or, SQL, sql } from 'drizzle-orm';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import {
   ListAllPlaylistMembersQueryDto,
   ListInfinitePlaylistMembersDto,
@@ -81,7 +81,7 @@ export class PlaylistMembersService {
 
     const results = await joinedQb.where(whereClause).orderBy(...orderBy);
 
-    return plainToInstance(
+    return parseResponseDto(
       PlaylistMemberWithUserDto,
       results.map((row) => ({
         ...row.member,
@@ -119,7 +119,7 @@ export class PlaylistMembersService {
         .where(whereClause),
     ]);
 
-    return plainToInstance(
+    return parseResponseDto(
       ListPaginatedPlaylistMembersDto,
       {
         data: results.map((row) => ({
@@ -203,7 +203,7 @@ export class PlaylistMembersService {
       });
     }
 
-    return plainToInstance(
+    return parseResponseDto(
       ListInfinitePlaylistMembersDto,
       {
         data: paginatedResults.map((row) => ({
@@ -242,7 +242,7 @@ export class PlaylistMembersService {
         .onConflictDoNothing()
         .returning();
 
-      return plainToInstance(PlaylistMemberDto, insertedMembers);
+      return parseResponseDto(PlaylistMemberDto, insertedMembers);
     });
 
     if (result.length > 0) {
@@ -300,7 +300,7 @@ export class PlaylistMembersService {
         throw new ForbiddenException('Member not found in this playlist');
       }
 
-      return plainToInstance(PlaylistMemberDto, updatedMember);
+      return parseResponseDto(PlaylistMemberDto, updatedMember);
     });
   }
 
@@ -334,6 +334,6 @@ export class PlaylistMembersService {
         );
     }
 
-    return plainToInstance(PlaylistMemberDto, deletedMembers);
+    return parseResponseDto(PlaylistMemberDto, deletedMembers);
   }
 }

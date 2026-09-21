@@ -21,7 +21,10 @@ const BottomSheetSharePlaylist = forwardRef<
   return (
     <BottomSheetShareLayout
       ref={ref}
-      path={`/playlist/${playlist.id}`}
+      path={{
+        pathname: '/playlist/[playlist_id]',
+        params: { playlist_id: playlist.id },
+      }}
       contentRef={shareViewRef}
       {...props}
     >

@@ -12,6 +12,7 @@ import {
   IsBoolean,
   IsDateString,
   IsEnum,
+  IsEmail,
   IsLocale,
   IsOptional,
   IsString,
@@ -27,6 +28,7 @@ import {
 } from '../../../common/dto/cursor-pagination.dto';
 import { getMediaUrl } from '../../../common/modules/storage/storage.utils';
 import { StorageFolders } from '../../../common/modules/storage/storage.constants';
+import { IsNullable } from '../../../common/decorators/is-nullable.decorator';
 
 export enum UserSortBy {
   CREATED_AT = 'created_at',
@@ -38,6 +40,7 @@ export enum UserSortBy {
 export class UserDto {
   @ApiProperty({ example: 'ciud123', description: 'The unique ID of the user' })
   @Expose()
+  @IsString()
   id!: string;
 
   @ApiProperty({
@@ -81,10 +84,12 @@ export class UserDto {
 
   @ApiProperty({ example: 'loup@recomend.com' })
   @Expose()
+  @IsEmail()
   email!: string;
 
   @ApiProperty()
   @Expose()
+  @IsBoolean()
   emailVerified!: boolean;
 
   @ApiProperty({
@@ -108,6 +113,7 @@ export class UserDto {
   })
   @Expose()
   @Transform(({ value }) => getMediaUrl(value, StorageFolders.AVATARS))
+  @IsNullable()
   @IsUrl()
   avatar!: string | null;
 
@@ -118,6 +124,7 @@ export class UserDto {
   })
   @Expose()
   @Transform(({ value }) => getMediaUrl(value, StorageFolders.USER_BACKGROUNDS))
+  @IsNullable()
   @IsUrl()
   backgroundImage!: string | null;
 
@@ -128,10 +135,12 @@ export class UserDto {
 
   @ApiProperty({ description: 'Whether the user has a premium account' })
   @Expose()
+  @IsBoolean()
   isPremium!: boolean;
 
   @ApiProperty({ description: 'Whether the user profile is private' })
   @Expose()
+  @IsBoolean()
   isPrivate!: boolean;
 
   // Dates

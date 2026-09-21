@@ -1,12 +1,34 @@
-import { ApiSchema, ApiProperty, PartialType, PickType, getSchemaPath, ApiPropertyOptional, ApiExtraModels, IntersectionType } from '@nestjs/swagger';
-import { IsDateString, IsEnum, IsIn, IsInt, IsOptional, IsString, IsUUID, MaxLength, ValidateNested } from 'class-validator';
+import {
+  ApiSchema,
+  ApiProperty,
+  PartialType,
+  PickType,
+  getSchemaPath,
+  ApiPropertyOptional,
+  ApiExtraModels,
+  IntersectionType,
+} from '@nestjs/swagger';
+import {
+  IsDateString,
+  IsEnum,
+  IsIn,
+  IsInt,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+  ValidateNested,
+} from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { recoStatusEnum, recoTypeEnum } from '@libs/db/schemas';
 import { MovieCompactDto } from '../../movies/dto/movies.dto';
 import { TvSeriesCompactDto } from '../../tv-series/dto/tv-series.dto';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../common/dto/pagination.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
-import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../common/dto/cursor-pagination.dto';
+import {
+  CursorPaginatedResponseDto,
+  CursorPaginationQueryDto,
+} from '../../../common/dto/cursor-pagination.dto';
 import { UserSummaryDto } from '../../users/dto/users.dto';
 
 export enum RecoSortBy {
@@ -44,16 +66,16 @@ export class RecoDto {
   comment!: string | null;
 
   @ApiProperty({
-      description: 'The status of the reco',
-      enum: recoStatusEnum.enumValues, 
-      example: recoStatusEnum.enumValues[0],
+    description: 'The status of the reco',
+    enum: recoStatusEnum.enumValues,
+    example: recoStatusEnum.enumValues[0],
   })
   @Expose()
   @IsString()
   @IsIn(recoStatusEnum.enumValues, {
-      message: `Status must be one of: ${recoStatusEnum.enumValues.join(', ')}`
+    message: `Status must be one of: ${recoStatusEnum.enumValues.join(', ')}`,
   })
-  status!: typeof recoStatusEnum.enumValues[number];
+  status!: (typeof recoStatusEnum.enumValues)[number];
 
   @ApiProperty({ example: 123456 })
   @Expose()
@@ -61,16 +83,16 @@ export class RecoDto {
   mediaId!: number;
 
   @ApiProperty({
-      description: 'The type of the reco',
-      enum: recoTypeEnum.enumValues, 
-      example: recoTypeEnum.enumValues[0],
+    description: 'The type of the reco',
+    enum: recoTypeEnum.enumValues,
+    example: recoTypeEnum.enumValues[0],
   })
   @Expose()
   @IsString()
   @IsIn(recoTypeEnum.enumValues, {
-      message: `Type must be one of: ${recoTypeEnum.enumValues.join(', ')}`
+    message: `Type must be one of: ${recoTypeEnum.enumValues.join(', ')}`,
   })
-  type!: typeof recoTypeEnum.enumValues[number];
+  type!: (typeof recoTypeEnum.enumValues)[number];
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
@@ -91,18 +113,19 @@ export class RecoDto {
 export class RecoSenderDto extends PickType(RecoDto, ['id', 'comment', 'createdAt'] as const) {
   @ApiProperty({ type: () => UserSummaryDto })
   @Expose()
+  @ValidateNested()
   @Type(() => UserSummaryDto)
   user!: UserSummaryDto;
 }
 
 @ApiSchema({ name: 'RecoGrouped' })
 export class RecoGroupedDto extends PickType(RecoDto, ['mediaId', 'type'] as const) {
-
   @ApiProperty({ type: () => [RecoSenderDto] })
   @Expose()
+  @ValidateNested({ each: true })
   @Type(() => RecoSenderDto)
   senders!: RecoSenderDto[];
-  
+
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
   latestCreatedAt!: string;
@@ -147,55 +170,66 @@ export class RecoSendDto extends PartialType(PickType(RecoDto, ['comment'] as co
 }
 
 @ApiSchema({ name: 'RecoSendResponse' })
-export class RecoSendResponseDto extends PickType(RecoDto, ['mediaId', 'type', 'senderId', 'comment'] as const) {
-    @ApiProperty({ example: 2, description: 'Number of recos requested to be sent (including those that failed)' })
-    requested!: number;
+export class RecoSendResponseDto extends PickType(RecoDto, [
+  'mediaId',
+  'type',
+  'senderId',
+  'comment',
+] as const) {
+  @ApiProperty({
+    example: 2,
+    description: 'Number of recos requested to be sent (including those that failed)',
+  })
+  requested!: number;
 
-    @ApiProperty({ example: ['user-uuid-123', 'user-uuid-456'], description: 'List of user IDs the reco was sent to' })
-    sent!: string[];
+  @ApiProperty({
+    example: ['user-uuid-123', 'user-uuid-456'],
+    description: 'List of user IDs the reco was sent to',
+  })
+  sent!: string[];
 }
 
 @ApiSchema({ name: 'BaseListRecosQuery' })
 export class BaseListRecosQueryDto {
-    @ApiPropertyOptional({
-      enum: recoStatusEnum.enumValues,
-      default: 'active',
-    })
-    @IsOptional()
-    @IsIn(recoStatusEnum.enumValues, {
-      message: `Status must be one of: ${recoStatusEnum.enumValues.join(', ')}`
-    })
-    status: typeof recoStatusEnum.enumValues[number] = 'active';
+  @ApiPropertyOptional({
+    enum: recoStatusEnum.enumValues,
+    default: 'active',
+  })
+  @IsOptional()
+  @IsIn(recoStatusEnum.enumValues, {
+    message: `Status must be one of: ${recoStatusEnum.enumValues.join(', ')}`,
+  })
+  status: (typeof recoStatusEnum.enumValues)[number] = 'active';
 
-    @ApiPropertyOptional({
-      description: 'Filter recos by type',
-      enum: recoTypeEnum.enumValues,
-    })
-    @IsOptional()
-    @IsIn(recoTypeEnum.enumValues, {
-      message: `Type must be one of: ${recoTypeEnum.enumValues.join(', ')}`
-    })
-    type?: typeof recoTypeEnum.enumValues[number];
+  @ApiPropertyOptional({
+    description: 'Filter recos by type',
+    enum: recoTypeEnum.enumValues,
+  })
+  @IsOptional()
+  @IsIn(recoTypeEnum.enumValues, {
+    message: `Type must be one of: ${recoTypeEnum.enumValues.join(', ')}`,
+  })
+  type?: (typeof recoTypeEnum.enumValues)[number];
 
-    @ApiPropertyOptional({
-        description: 'Field to sort recos by',
-        default: RecoSortBy.FIRST_SEND_AT,
-        example: RecoSortBy.FIRST_SEND_AT,
-        enum: RecoSortBy,
-    })
-    @IsOptional()
-    @IsEnum(RecoSortBy)
-    sort_by: RecoSortBy = RecoSortBy.FIRST_SEND_AT;
+  @ApiPropertyOptional({
+    description: 'Field to sort recos by',
+    default: RecoSortBy.FIRST_SEND_AT,
+    example: RecoSortBy.FIRST_SEND_AT,
+    enum: RecoSortBy,
+  })
+  @IsOptional()
+  @IsEnum(RecoSortBy)
+  sort_by: RecoSortBy = RecoSortBy.FIRST_SEND_AT;
 
-    @ApiPropertyOptional({
-        description: 'Sort order',
-        default: SortOrder.ASC,
-        example: SortOrder.ASC,
-        enum: SortOrder,
-    })
-    @IsOptional()
-    @IsEnum(SortOrder)
-    sort_order: SortOrder = SortOrder.ASC;
+  @ApiPropertyOptional({
+    description: 'Sort order',
+    default: SortOrder.ASC,
+    example: SortOrder.ASC,
+    enum: SortOrder,
+  })
+  @IsOptional()
+  @IsEnum(SortOrder)
+  sort_order: SortOrder = SortOrder.ASC;
 }
 
 @ApiSchema({ name: 'ListAllRecosQuery' })
@@ -204,13 +238,13 @@ export class ListAllRecosQueryDto extends BaseListRecosQueryDto {}
 @ApiSchema({ name: 'ListPaginatedRecosQuery' })
 export class ListPaginatedRecosQueryDto extends IntersectionType(
   BaseListRecosQueryDto,
-  PaginationQueryDto
+  PaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListInfiniteRecosQuery' })
 export class ListInfiniteRecosQueryDto extends IntersectionType(
   BaseListRecosQueryDto,
-  CursorPaginationQueryDto
+  CursorPaginationQueryDto,
 ) {}
 
 @ApiExtraModels(RecoWithMovieDto, RecoWithTvSeriesDto)
@@ -251,7 +285,7 @@ export class ListPaginatedRecosDto extends PaginatedResponseDto<RecoWithMediaUni
 }
 
 @ApiExtraModels(RecoWithMovieDto, RecoWithTvSeriesDto)
-@ApiSchema({ name: 'ListInfiniteRecos'})
+@ApiSchema({ name: 'ListInfiniteRecos' })
 export class ListInfiniteRecosDto extends CursorPaginatedResponseDto<RecoWithMediaUnion> {
   @ApiProperty({
     type: 'array',
@@ -286,4 +320,3 @@ export class ListInfiniteRecosDto extends CursorPaginatedResponseDto<RecoWithMed
     Object.assign(this, partial);
   }
 }
-

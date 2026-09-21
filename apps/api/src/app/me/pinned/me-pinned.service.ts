@@ -27,7 +27,7 @@ import { canViewPlaylist } from '../../playlists/playlists.permission';
 import { PlaylistQueryBuilder } from '../../playlists/playlists.query-builder';
 import { PlaylistRole } from '../../playlists/types/playlist-role.type';
 import { LexoRank } from 'lexorank';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { PinnedServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../../realtime/realtime.gateway';
 import {
@@ -271,7 +271,7 @@ export class MePinnedService {
       });
 
       const { movieId, tvSeriesId, playlistId, personId, ...base } = updated;
-      return { result: plainToInstance(PinnedItemDto, base), statusSignals };
+      return { result: parseResponseDto(PinnedItemDto, base), statusSignals };
     });
 
     this.realtimeGateway.emitToUser(currentUser.id, PinnedServerEvents.REORDERED, statusSignals);
@@ -294,7 +294,7 @@ export class MePinnedService {
       .where(and(eq(pinnedItem.userId, currentUser.id), inArray(pinnedItem.id, uniqueItemIds)))
       .returning();
 
-    const result = plainToInstance(
+    const result = parseResponseDto(
       PinnedItemDto,
       deletedItems.map(({ movieId, tvSeriesId, playlistId, personId, ...item }) => item),
     );
