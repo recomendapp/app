@@ -14,12 +14,17 @@ import useBottomSheetStore from '../../../stores/useBottomSheetStore';
 import { convert } from 'html-to-text';
 import { ReviewMovie, UserSummary } from '@libs/api-js';
 import { FixedOmit } from '../../../utils/fixed-omit';
+import UserAvatar from '../../user/UserAvatar';
+import { Icons } from '../../../constants/Icons';
+import { formatCompactCount } from '../../../utils/formatCompactCount';
+import { AnimatedPressable } from '../../ui/AnimatedPressable';
 
 interface CardReviewMovieBaseProps extends React.ComponentPropsWithRef<typeof Animated.View> {
   variant?: 'default';
   onPress?: () => void;
   onLongPress?: () => void;
   linked?: boolean;
+  onCommentPress?: () => void;
 }
 
 type CardReviewMovieSkeletonProps = {
@@ -44,52 +49,71 @@ export type CardReviewMovieProps = CardReviewMovieBaseProps &
 const CardReviewMovieDefault = React.forwardRef<
   React.ComponentRef<typeof Animated.View>,
   FixedOmit<CardReviewMovieProps, 'variant' | 'linked' | 'onPress' | 'onLongPress' | 'url'>
->(({ review, rating, skeleton, author, children, style, ...props }, ref) => {
+>(({ review, rating, skeleton, author, onCommentPress, style, ...props }, ref) => {
   const { colors } = useTheme();
   return (
-    <Animated.View
-      ref={ref}
-      style={[
-        { backgroundColor: colors.card, borderColor: colors.muted },
-        tw.style('flex-row gap-2 p-1 w-full rounded-md border'),
-        style,
-      ]}
-      {...props}
-    >
-      {rating !== undefined && (
-        <View style={tw.style('items-center gap-1 shrink')}>
-          <IconMediaRating rating={rating} skeleton={skeleton} />
+    <Animated.View ref={ref} style={[tw.style('flex-col w-full'), style]} {...props}>
+      <View style={tw.style('flex-row gap-2')}>
+        <View style={tw.style('items-center self-stretch gap-1')}>
+          {!skeleton ? (
+            <UserAvatar
+              full_name={author.name}
+              avatar_url={author.avatar}
+              style={{ width: 32, height: 32 }}
+            />
+          ) : (
+            <UserAvatar skeleton style={{ width: 32, height: 32 }} />
+          )}
+          <View style={[tw.style('w-px flex-1'), { backgroundColor: colors.muted }]} />
         </View>
-      )}
-      <View style={tw.style('w-full flex-col gap-1 shrink')}>
-        {!skeleton ? (
-          <CardUser variant="inline" user={author} />
-        ) : (
-          <CardUser variant="inline" skeleton={skeleton} />
-        )}
-        {review?.title &&
-          (!skeleton ? (
-            <Text numberOfLines={1} style={tw.style('font-semibold')}>
-              {review?.title}
+        <View style={tw.style('flex-1 gap-1')}>
+          <View style={tw.style('flex-row h-8 items-center justify-between gap-2')}>
+            {!skeleton ? (
+              <CardUser variant="username" user={author} />
+            ) : (
+              <Skeleton style={tw.style('h-4 w-20')} />
+            )}
+            {rating !== undefined && <IconMediaRating rating={rating} skeleton={skeleton} />}
+          </View>
+          {review?.title &&
+            (!skeleton ? (
+              <Text numberOfLines={1} style={tw.style('font-semibold')}>
+                {review?.title}
+              </Text>
+            ) : (
+              <Skeleton style={tw.style('h-4 w-1/3')} />
+            ))}
+          {!skeleton ? (
+            <Text numberOfLines={3} style={tw.style('text-sm text-justify')}>
+              {convert(review.body, {
+                selectors: [{ selector: 'a', options: { ignoreHref: true } }],
+              })}
             </Text>
           ) : (
-            <Skeleton style={tw.style('h-4 w-1/3')} />
-          ))}
-        {!skeleton ? (
-          <Text numberOfLines={3} style={tw.style('text-sm text-justify')}>
-            {convert(review.body, {
-              selectors: [{ selector: 'a', options: { ignoreHref: true } }],
-            })}
-          </Text>
-        ) : (
-          <Skeleton style={tw.style('h-12 w-full')} />
-        )}
-        {!skeleton && (
-          <View style={tw.style('flex-row items-center justify-end m-1')}>
-            <ButtonUserReviewMovieLike review={review} />
-          </View>
-        )}
+            <Skeleton style={tw.style('h-12 w-full')} />
+          )}
+        </View>
       </View>
+      {!skeleton && (
+        <View style={tw.style('flex-row items-center gap-3 mt-2')}>
+          <ButtonUserReviewMovieLike review={review} compact />
+          <AnimatedPressable
+            onPress={(event) => {
+              event.stopPropagation();
+              onCommentPress?.();
+            }}
+            hitSlop={8}
+            style={tw.style('flex-row items-center gap-1 py-1')}
+          >
+            <Icons.Comment size={14} color={colors.mutedForeground} />
+            {review.commentsCount > 0 && (
+              <Text style={{ fontSize: 12, color: colors.mutedForeground }}>
+                {formatCompactCount(review.commentsCount)}
+              </Text>
+            )}
+          </AnimatedPressable>
+        </View>
+      )}
     </Animated.View>
   );
 });
@@ -98,32 +122,55 @@ CardReviewMovieDefault.displayName = 'CardReviewMovieDefault';
 const CardReviewMovie = React.forwardRef<
   React.ComponentRef<typeof Animated.View>,
   CardReviewMovieProps
->(({ linked = true, variant = 'default', url, onPress, onLongPress, ...props }, ref) => {
-  const router = useRouter();
-  const openSheet = useBottomSheetStore((state) => state.openSheet);
+>(
+  (
+    { linked = true, variant = 'default', url, onPress, onLongPress, onCommentPress, ...props },
+    ref,
+  ) => {
+    const router = useRouter();
+    const openSheet = useBottomSheetStore((state) => state.openSheet);
+    const handlePress = () => {
+      if (linked) router.push(url as Href);
+      onPress?.();
+    };
+    const handleCommentPress = () => {
+      if (props.skeleton) return;
+      router.push({
+        pathname: '/user/[username]/film/[film_id]/comments',
+        params: {
+          username: props.author.username,
+          film_id: props.review.movieId,
+        },
+      });
+    };
 
-  const content = variant === 'default' ? <CardReviewMovieDefault ref={ref} {...props} /> : null;
+    const content =
+      variant === 'default' ? (
+        <CardReviewMovieDefault
+          ref={ref}
+          onCommentPress={onCommentPress ?? handleCommentPress}
+          {...props}
+        />
+      ) : null;
 
-  if (props.skeleton) return content;
+    if (props.skeleton) return content;
 
-  return (
-    <Pressable
-      onPress={() => {
-        if (linked) router.push(url as Href);
-        onPress?.();
-      }}
-      onLongPress={() => {
-        openSheet(BottomSheetReviewMovie, {
-          review: props.review,
-          author: props.author,
-        });
-        onLongPress?.();
-      }}
-    >
-      {content}
-    </Pressable>
-  );
-});
+    return (
+      <Pressable
+        onPress={handlePress}
+        onLongPress={() => {
+          openSheet(BottomSheetReviewMovie, {
+            review: props.review,
+            author: props.author,
+          });
+          onLongPress?.();
+        }}
+      >
+        {content}
+      </Pressable>
+    );
+  },
+);
 CardReviewMovie.displayName = 'CardReviewMovie';
 
 export { CardReviewMovie, CardReviewMovieDefault };

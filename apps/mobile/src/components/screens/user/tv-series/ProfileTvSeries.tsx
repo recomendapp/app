@@ -1,8 +1,4 @@
-import {
-  userByUsernameOptions,
-  userTvSeriesLogOptions,
-  useUserReviewTvSeriesLike,
-} from '@libs/query-client';
+import { userByUsernameOptions, userTvSeriesLogOptions } from '@libs/query-client';
 import { useQuery } from '@tanstack/react-query';
 import AnimatedContentContainer from '../../../ui/AnimatedContentContainer';
 import AnimatedStackScreen from '../../../ui/AnimatedStackScreen';
@@ -23,13 +19,14 @@ import { useTranslations } from 'use-intl';
 import { Button } from '../../../ui/Button';
 import { Icons } from '../../../../constants/Icons';
 import useBottomSheetStore from '../../../../stores/useBottomSheetStore';
-import { useAuth } from '../../../../providers/AuthProvider';
 import ButtonUserReviewTvSeriesLike from '../../../buttons/ButtonUserReviewTvSeriesLike';
 import { BottomSheetLogTvSeries } from '../../../bottom-sheets/sheets/BottomSheetLogTvSeries';
 import FeedUserLog from '../../feed/FeedUserLog';
 import { EnrichedMarkdownText } from '../../../RichText/EnrichedMarkdownText';
-import { NativeStackHeaderItem, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { formatCompactCount } from '../../../../utils/formatCompactCount';
+import { AnimatedPressable } from '../../../ui/AnimatedPressable';
 
 export const ProfileTvSeries = ({
   username,
@@ -38,7 +35,6 @@ export const ProfileTvSeries = ({
   username: string;
   tvSeriesId: number;
 }) => {
-  const { user } = useAuth();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const t = useTranslations();
@@ -56,12 +52,6 @@ export const ProfileTvSeries = ({
       tvSeriesId,
     }),
   );
-  const { isLiked, toggle } = useUserReviewTvSeriesLike({
-    userId: user?.id,
-    reviewId: log?.review?.id,
-    tvSeriesId: tvSeriesId,
-    reviewAuthorId: profile?.id ?? '',
-  });
   const openComments = () => {
     router.push({
       pathname: '/user/[username]/tv-series/[tv_series_id]/comments',
@@ -90,20 +80,6 @@ export const ProfileTvSeries = ({
           headerTransparent: true,
           headerRight: () => (
             <>
-              {log?.review && (
-                <>
-                  <Button variant="ghost" size="icon" icon={Icons.Comment} onPress={openComments}>
-                    {log.review.commentsCount > 0 ? `${log.review.commentsCount}` : undefined}
-                  </Button>
-                  {user && (
-                    <ButtonUserReviewTvSeriesLike
-                      variant="ghost"
-                      review={log.review}
-                      showCount={false}
-                    />
-                  )}
-                </>
-              )}
               <Button
                 variant="ghost"
                 size="icon"
@@ -119,34 +95,7 @@ export const ProfileTvSeries = ({
               />
             </>
           ),
-          unstable_headerRightItems: (props) => [
-            ...(log?.review
-              ? ([
-                  {
-                    type: 'button',
-                    label: upperFirst(t('common.messages.comment', { count: 2 })),
-                    onPress: openComments,
-                    icon: {
-                      name: 'bubble.right',
-                      type: 'sfSymbol',
-                    },
-                  },
-                  ...(user
-                    ? ([
-                        {
-                          type: 'button',
-                          label: upperFirst(t('common.messages.like')),
-                          onPress: toggle,
-                          icon: {
-                            name: isLiked ? 'heart.fill' : 'heart',
-                            type: 'sfSymbol',
-                          },
-                          tintColor: isLiked ? colors.accentPink : undefined,
-                        },
-                      ] satisfies NativeStackHeaderItem[])
-                    : []),
-                ] satisfies NativeStackHeaderItem[])
-              : []),
+          unstable_headerRightItems: () => [
             {
               type: 'button',
               label: upperFirst(t('common.messages.menu')),
@@ -199,6 +148,21 @@ export const ProfileTvSeries = ({
                   </Text>
                 </View>
                 <EnrichedMarkdownText markdown={log.review.body} />
+                <View style={tw`flex-row items-center gap-3 mt-3`}>
+                  <ButtonUserReviewTvSeriesLike review={log.review} compact />
+                  <AnimatedPressable
+                    onPress={openComments}
+                    hitSlop={8}
+                    style={tw`flex-row items-center gap-1 py-1`}
+                  >
+                    <Icons.Comment size={14} color={colors.mutedForeground} />
+                    {log.review.commentsCount > 0 && (
+                      <Text style={{ fontSize: 12, color: colors.mutedForeground }}>
+                        {formatCompactCount(log.review.commentsCount)}
+                      </Text>
+                    )}
+                  </AnimatedPressable>
+                </View>
               </>
             ) : (
               <FeedUserLog author={log?.user} log={log} />

@@ -15,6 +15,9 @@ import {
   ReviewTvSeriesWithAuthor,
   ListPaginatedReviewsTvSeries,
   ListInfiniteReviewsTvSeries,
+  FeedItem,
+  ListPaginatedFeed,
+  ListInfiniteFeed,
 } from '@libs/api-js';
 import {
   updateListItemInAllCaches,
@@ -26,6 +29,7 @@ import { reviewMovieKeys, reviewTvSeriesKeys } from './reviewKeys';
 import { movieKeys, movieLogOptions } from '../movies';
 import { tvSeriesKeys, tvSeriesLogOptions } from '../tv-series';
 import { userMovieLogOptions, userTvSeriesLogOptions } from '../users';
+import { meFeedInfiniteOptions, meFeedPaginatedOptions } from '../me';
 
 /**
  * Cache updates for movie review comments. Not wired automatically into the
@@ -373,8 +377,8 @@ export const useReviewTvSeriesCommentsCacheUpdate = () => {
 // by DB triggers, not returned by those endpoints), so whoever finishes the
 // mutation (the like mutation, the comment create/delete mutation) applies the
 // delta itself everywhere the review is cached: the log it belongs to (both
-// the movie/tv-series-scoped and the user-scoped copy) and the movie/tv-series
-// review list. Centralized here so every mutation - and every future consumer
+// the movie/tv-series-scoped and the user-scoped copy), review lists, and feed
+// activities. Centralized here so every mutation - and every future consumer
 // (mobile) - gets this for free instead of re-implementing it per screen.
 
 type ReviewMovieCountPatch = {
@@ -415,6 +419,39 @@ export const useReviewMovieCountsCacheUpdate = () => {
         },
         (item) => ({ [field]: Math.max(0, item[field] + delta) }) as Partial<ReviewMovieWithAuthor>,
         reviewId,
+      );
+
+      updateListItemInAllCaches<FeedItem, ListPaginatedFeed, ListInfiniteFeed>(
+        queryClient,
+        {
+          paginated: meFeedPaginatedOptions({ userId }).queryKey,
+          infinite: meFeedInfiniteOptions({ userId }).queryKey,
+        },
+        (item) => {
+          if (item.activityType === 'log_movie' && item.content.review?.id === reviewId) {
+            return {
+              content: {
+                ...item.content,
+                review: {
+                  ...item.content.review,
+                  [field]: Math.max(0, item.content.review[field] + delta),
+                },
+              },
+            };
+          }
+          if (item.activityType === 'review_movie_like' && item.content.id === reviewId) {
+            return {
+              content: {
+                ...item.content,
+                [field]: Math.max(0, item.content[field] + delta),
+              },
+            };
+          }
+          return item;
+        },
+        (item) =>
+          (item.activityType === 'log_movie' && item.content.review?.id === reviewId) ||
+          (item.activityType === 'review_movie_like' && item.content.id === reviewId),
       );
     },
     [queryClient],
@@ -473,6 +510,39 @@ export const useReviewTvSeriesCountsCacheUpdate = () => {
         (item) =>
           ({ [field]: Math.max(0, item[field] + delta) }) as Partial<ReviewTvSeriesWithAuthor>,
         reviewId,
+      );
+
+      updateListItemInAllCaches<FeedItem, ListPaginatedFeed, ListInfiniteFeed>(
+        queryClient,
+        {
+          paginated: meFeedPaginatedOptions({ userId }).queryKey,
+          infinite: meFeedInfiniteOptions({ userId }).queryKey,
+        },
+        (item) => {
+          if (item.activityType === 'log_tv_series' && item.content.review?.id === reviewId) {
+            return {
+              content: {
+                ...item.content,
+                review: {
+                  ...item.content.review,
+                  [field]: Math.max(0, item.content.review[field] + delta),
+                },
+              },
+            };
+          }
+          if (item.activityType === 'review_tv_series_like' && item.content.id === reviewId) {
+            return {
+              content: {
+                ...item.content,
+                [field]: Math.max(0, item.content[field] + delta),
+              },
+            };
+          }
+          return item;
+        },
+        (item) =>
+          (item.activityType === 'log_tv_series' && item.content.review?.id === reviewId) ||
+          (item.activityType === 'review_tv_series_like' && item.content.id === reviewId),
       );
     },
     [queryClient],
