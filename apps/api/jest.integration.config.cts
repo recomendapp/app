@@ -8,6 +8,7 @@ module.exports = {
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/apps/api-integration',
   testMatch: ['<rootDir>/src/**/*.integration.spec.ts'],
+  setupFiles: ['<rootDir>/src/test-setup.integration.ts'],
   globalSetup: '../../libs/testing/src/lib/db/global-setup.ts',
   globalTeardown: '../../libs/testing/src/lib/db/global-teardown.ts',
   maxWorkers: 1,
