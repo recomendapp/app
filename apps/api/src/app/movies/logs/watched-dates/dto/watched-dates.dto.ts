@@ -9,7 +9,7 @@ import {
 } from '@nestjs/swagger';
 import { IsNullable } from '../../../../../common/decorators/is-nullable.decorator';
 import { WATCHED_DATE_RULES } from '@libs/rules';
-import { Expose, Type } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import {
   IsDateString,
   IsEnum,
@@ -42,6 +42,7 @@ export class WatchedDateDto {
 
   @ApiProperty({ example: '2023-10-27T10:00:00.000Z' })
   @Expose()
+  @Transform(({ value }) => (value instanceof Date ? value.toISOString() : value))
   @IsDateString()
   watchedDate!: string;
 
@@ -151,6 +152,8 @@ export class ListInfiniteWatchedDatesQueryDto extends IntersectionType(
 export class ListPaginatedWatchedDatesDto extends PaginatedResponseDto<WatchedDateDto> {
   @ApiProperty({ type: () => [WatchedDateDto] })
   @Type(() => WatchedDateDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: WatchedDateDto[];
 
   constructor(partial: Partial<ListPaginatedWatchedDatesDto>) {
@@ -163,6 +166,8 @@ export class ListPaginatedWatchedDatesDto extends PaginatedResponseDto<WatchedDa
 export class ListInfiniteWatchedDatesDto extends CursorPaginatedResponseDto<WatchedDateDto> {
   @ApiProperty({ type: () => [WatchedDateDto] })
   @Type(() => WatchedDateDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: WatchedDateDto[];
 
   constructor(partial: Partial<ListInfiniteWatchedDatesDto>) {

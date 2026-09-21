@@ -4,6 +4,8 @@ import { exploreItem, tmdbMovieView, tmdbTvSeriesView } from '@libs/db/schemas';
 import { and, asc, desc, eq, gt, lt, sql, SQL } from 'drizzle-orm';
 import {
   ExploreItemWithMediaUnion,
+  ExploreItemWithMovieDto,
+  ExploreItemWithTvSeriesDto,
   ListAllExploreItemsQueryDto,
   ListPaginatedExploreItemsQueryDto,
   ListPaginatedExploreItemsDto,
@@ -14,7 +16,7 @@ import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
 import { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { z } from 'zod';
 import { ExploreService } from '../explore.service';
 
@@ -70,21 +72,21 @@ export class ExploreItemsService {
         const { movieId, tvSeriesId, location, ...baseItem } = row.item;
         const mappedLocation = { lat: location.y, lng: location.x };
         if (baseItem.type === 'movie') {
-          return {
+          return parseResponseDto(ExploreItemWithMovieDto, {
             ...baseItem,
             location: mappedLocation,
             type: 'movie',
             mediaId: movieId,
             media: row.movie,
-          };
+          });
         }
-        return {
+        return parseResponseDto(ExploreItemWithTvSeriesDto, {
           ...baseItem,
           location: mappedLocation,
           type: 'tv_series',
           mediaId: tvSeriesId,
           media: row.tvSeries,
-        };
+        });
       });
     });
   }
@@ -137,7 +139,7 @@ export class ExploreItemsService {
 
       const totalCount = Number(totalCountResult[0]?.count || 0);
 
-      return plainToInstance(
+      return parseResponseDto(
         ListPaginatedExploreItemsDto,
         {
           data: results.map((row): ExploreItemWithMediaUnion => {
@@ -239,7 +241,7 @@ export class ExploreItemsService {
         });
       }
 
-      return plainToInstance(
+      return parseResponseDto(
         ListInfiniteExploreItemsDto,
         {
           data: paginatedResults.map((row): ExploreItemWithMediaUnion => {

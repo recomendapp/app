@@ -3,7 +3,7 @@ import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle
 import { User } from '../../auth/auth.service';
 import { playlistSaved, playlist } from '@libs/db/schemas';
 import { and, eq } from 'drizzle-orm';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { PlaylistSavedDto } from './dto/playlist-saved.dto';
 import { PlaylistServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../../realtime/realtime.gateway';
@@ -55,10 +55,10 @@ export class PlaylistSavesService {
       if (!existingSave) {
         throw new NotFoundException();
       }
-      return plainToInstance(PlaylistSavedDto, existingSave, { excludeExtraneousValues: true });
+      return parseResponseDto(PlaylistSavedDto, existingSave, { excludeExtraneousValues: true });
     }
 
-    const result = plainToInstance(PlaylistSavedDto, save, { excludeExtraneousValues: true });
+    const result = parseResponseDto(PlaylistSavedDto, save, { excludeExtraneousValues: true });
     this.realtimeGateway.emitToUser(user.id, PlaylistServerEvents.SAVE_SET, result);
     return result;
   }
@@ -79,7 +79,7 @@ export class PlaylistSavesService {
       return null;
     }
 
-    const result = plainToInstance(PlaylistSavedDto, deleted, { excludeExtraneousValues: true });
+    const result = parseResponseDto(PlaylistSavedDto, deleted, { excludeExtraneousValues: true });
     this.realtimeGateway.emitToUser(user.id, PlaylistServerEvents.SAVE_DELETED, result);
     return result;
   }

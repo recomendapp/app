@@ -31,7 +31,7 @@ import {
 import { UserSummaryDto } from '../dto/users.dto';
 import { User } from '../../auth/auth.service';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 
 const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.number());
 
@@ -190,13 +190,13 @@ export class UserRecosService {
       };
 
       if (base.type === RecoType.MOVIE) {
-        return plainToInstance(RecoWithMovieDto, {
+        return parseResponseDto(RecoWithMovieDto, {
           ...base,
           type: RecoType.MOVIE,
           media: row.movie,
         });
       }
-      return plainToInstance(RecoWithTvSeriesDto, {
+      return parseResponseDto(RecoWithTvSeriesDto, {
         ...base,
         type: RecoType.TV_SERIES,
         media: row.tvSeries,
@@ -274,13 +274,13 @@ export class UserRecosService {
         };
 
         if (base.type === RecoType.MOVIE) {
-          return plainToInstance(RecoWithMovieDto, {
+          return parseResponseDto(RecoWithMovieDto, {
             ...base,
             type: RecoType.MOVIE,
             media: row.movie,
           });
         } else {
-          return plainToInstance(RecoWithTvSeriesDto, {
+          return parseResponseDto(RecoWithTvSeriesDto, {
             ...base,
             type: RecoType.TV_SERIES,
             media: row.tvSeries,
@@ -381,7 +381,7 @@ export class UserRecosService {
         }
       });
 
-      return plainToInstance(ListPaginatedRecosDto, {
+      return parseResponseDto(ListPaginatedRecosDto, {
         data: mappedData,
         meta: {
           total_results: Number(totalCount),
@@ -565,7 +565,7 @@ export class UserRecosService {
         }
       });
 
-      return plainToInstance(ListInfiniteRecosDto, {
+      return parseResponseDto(ListInfiniteRecosDto, {
         data: mappedData,
         meta: {
           next_cursor: nextCursor,

@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional, ApiSchema } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { IsInt, IsOptional, Max, Min } from 'class-validator';
+import { IsArray, IsInt, IsOptional, Max, Min, ValidateNested } from 'class-validator';
 
 @ApiSchema({ name: 'PaginationQuery' })
 export class PaginationQueryDto {
@@ -37,18 +37,22 @@ export class PaginationQueryDto {
 export class PaginationMetaDto {
   @ApiProperty()
   @Expose()
+  @IsInt()
   total_results!: number;
 
   @ApiProperty()
   @Expose()
+  @IsInt()
   total_pages!: number;
 
   @ApiProperty()
   @Expose()
+  @IsInt()
   current_page!: number;
 
   @ApiProperty()
   @Expose()
+  @IsInt()
   per_page!: number;
 }
 
@@ -56,11 +60,14 @@ export class PaginationMetaDto {
 export class PaginatedResponseDto<T> {
   @ApiProperty({ isArray: true })
   @Expose()
+  @IsArray()
+  @ValidateNested({ each: true })
   data!: T[];
 
   @ApiProperty({ type: PaginationMetaDto })
   @Expose()
   @Type(() => PaginationMetaDto)
+  @ValidateNested()
   meta!: PaginationMetaDto;
 
   constructor(partial: Partial<PaginatedResponseDto<T>>) {

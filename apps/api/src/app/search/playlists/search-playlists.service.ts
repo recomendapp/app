@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Client as TypesenseClient } from 'typesense';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { User } from '../../auth/auth.service';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { playlist, user, profile, follow } from '@libs/db/schemas';
 import { and, eq, inArray } from 'drizzle-orm';
 import { decodeCursor, encodeCursor } from '../../../utils/cursor';
@@ -110,7 +110,7 @@ export class SearchPlaylistsService {
 
     const hydratedPlaylists = await this.hydratePlaylists(playlistIds, currentUser);
 
-    return plainToInstance(
+    return parseResponseDto(
       ListPaginatedPlaylistsWithOwnerDto,
       {
         data: hydratedPlaylists.map((row) => ({
@@ -150,7 +150,7 @@ export class SearchPlaylistsService {
     const hasNextPage = page * per_page < typesenseResult.found;
     const nextCursor = hasNextPage ? encodeCursor<{ page: number }>({ page: page + 1 }) : null;
 
-    return plainToInstance(
+    return parseResponseDto(
       ListInfinitePlaylistsWithOwnerDto,
       {
         data: hydratedPlaylists.map((row) => ({

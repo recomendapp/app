@@ -5,7 +5,7 @@ import { and, eq, inArray, or, sql } from 'drizzle-orm';
 import { User } from '../../auth/auth.service';
 import { LexoRank } from 'lexorank';
 import { PlaylistsAddQueryDto } from './playlists-add.dto';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { PlaylistItemDto } from '../items/playlist-items.dto';
 import { PlaylistsRealtimeService } from '../playlists-realtime.service';
 
@@ -109,7 +109,7 @@ export class PlaylistsAddService {
         );
     }
 
-    return plainToInstance(
+    return parseResponseDto(
       PlaylistItemDto,
       insertedItems.map(({ movieId, tvSeriesId, ...item }) => ({
         ...item,

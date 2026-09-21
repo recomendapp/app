@@ -1,5 +1,13 @@
 import { ApiProperty, ApiSchema, getSchemaPath } from '@nestjs/swagger';
-import { ArrayMinSize, IsArray, IsDateString, IsIn, IsInt, Min } from 'class-validator';
+import {
+  ArrayMinSize,
+  IsArray,
+  IsDateString,
+  IsIn,
+  IsInt,
+  Min,
+  ValidateNested,
+} from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { pinnedItemTypeEnum } from '@libs/db/schemas';
 import { MovieCompactDto } from '../../movies/dto/movies.dto';
@@ -77,6 +85,7 @@ export class PinnedItemWithMovieDto extends PinnedItemDto {
 
   @ApiProperty({ type: () => MovieCompactDto })
   @Expose()
+  @ValidateNested()
   @Type(() => MovieCompactDto)
   data!: MovieCompactDto;
 }
@@ -100,6 +109,7 @@ export class PinnedItemWithTvSeriesDto extends PinnedItemDto {
 
   @ApiProperty({ type: () => TvSeriesCompactDto })
   @Expose()
+  @ValidateNested()
   @Type(() => TvSeriesCompactDto)
   data!: TvSeriesCompactDto;
 }
@@ -130,6 +140,7 @@ export class PinnedItemWithPlaylistDto extends PinnedItemDto {
   })
   @Expose()
   @IsNullable()
+  @ValidateNested()
   @Type(() => PlaylistDto)
   data!: PlaylistDto | null;
 }
@@ -153,6 +164,7 @@ export class PinnedItemWithPersonDto extends PinnedItemDto {
 
   @ApiProperty({ type: () => PersonCompactDto })
   @Expose()
+  @ValidateNested()
   @Type(() => PersonCompactDto)
   data!: PersonCompactDto;
 }

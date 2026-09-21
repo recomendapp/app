@@ -1,5 +1,22 @@
-import { ApiSchema, ApiProperty, OmitType, ApiPropertyOptional, IntersectionType } from '@nestjs/swagger';
-import { IsBoolean, IsDateString, IsEnum, IsInt, IsNumber, IsOptional, Max, Min, ValidateNested } from 'class-validator';
+import {
+  ApiSchema,
+  ApiProperty,
+  OmitType,
+  ApiPropertyOptional,
+  IntersectionType,
+} from '@nestjs/swagger';
+import {
+  IsBoolean,
+  IsDateString,
+  IsEnum,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Max,
+  Min,
+  ValidateNested,
+} from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { ReviewMovieDto } from '../../reviews/movie/dto/reviews-movie.dto';
 import { IsNullable } from '../../../common/decorators/is-nullable.decorator';
@@ -10,23 +27,22 @@ import { CursorPaginationQueryDto } from '../../../common/dto/cursor-pagination.
 
 @ApiSchema({ name: 'LogMovieRequest' })
 export class LogMovieRequestDto {
-  
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'Date used ONLY if this is the first time the user logs this movie.',
     required: false,
-    example: '2023-10-27T10:00:00Z'
+    example: '2023-10-27T10:00:00Z',
   })
   @IsOptional()
   @IsDateString()
   watchedAt?: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'Rating from 0.5 to 10. If set to null, removes existing rating.',
     required: false,
     nullable: true,
     minimum: 0.5,
     maximum: 10,
-    example: 8.5
+    example: 8.5,
   })
   @IsOptional()
   @Type(() => Number)
@@ -55,10 +71,12 @@ export class LogMovieDto {
 
   @ApiProperty({ example: 'user-uuid-123' })
   @Expose()
+  @IsString()
   userId!: string;
 
   @ApiProperty({ example: 8.5, nullable: true })
   @Expose()
+  @IsNullable()
   @IsNumber()
   rating!: number | null;
 
@@ -114,6 +132,7 @@ export class LogMovieWithMovieNoReviewDto extends OmitType(LogMovieDto, ['review
   isReviewed!: boolean;
 
   @ApiProperty({ description: 'The movie details' })
+  @ValidateNested()
   @Type(() => MovieCompactDto)
   @Expose()
   movie!: MovieCompactDto;
@@ -122,6 +141,7 @@ export class LogMovieWithMovieNoReviewDto extends OmitType(LogMovieDto, ['review
 @ApiSchema({ name: 'LogMovieWithMovie' })
 export class LogMovieWithMovieDto extends LogMovieDto {
   @ApiProperty({ description: 'The movie details' })
+  @ValidateNested()
   @Type(() => MovieCompactDto)
   @Expose()
   movie!: MovieCompactDto;
@@ -136,35 +156,35 @@ export enum LogMovieSortBy {
 
 @ApiSchema({ name: 'BaseListLogsMovieQuery' })
 class BaseListLogsMovieQueryDto {
-    @ApiPropertyOptional({
-        description: 'Field to sort logs by',
-        default: LogMovieSortBy.UPDATED_AT,
-        example: LogMovieSortBy.UPDATED_AT,
-        enum: LogMovieSortBy,
-    })
-    @IsOptional()
-    @IsEnum(LogMovieSortBy)
-    sort_by: LogMovieSortBy = LogMovieSortBy.UPDATED_AT;
+  @ApiPropertyOptional({
+    description: 'Field to sort logs by',
+    default: LogMovieSortBy.UPDATED_AT,
+    example: LogMovieSortBy.UPDATED_AT,
+    enum: LogMovieSortBy,
+  })
+  @IsOptional()
+  @IsEnum(LogMovieSortBy)
+  sort_by: LogMovieSortBy = LogMovieSortBy.UPDATED_AT;
 
-    @ApiPropertyOptional({
-        description: 'Sort order',
-        default: SortOrder.DESC,
-        example: SortOrder.DESC,
-        enum: SortOrder,
-    })
-    @IsOptional()
-    @IsEnum(SortOrder)
-    sort_order: SortOrder = SortOrder.DESC;
+  @ApiPropertyOptional({
+    description: 'Sort order',
+    default: SortOrder.DESC,
+    example: SortOrder.DESC,
+    enum: SortOrder,
+  })
+  @IsOptional()
+  @IsEnum(SortOrder)
+  sort_order: SortOrder = SortOrder.DESC;
 }
 
 @ApiSchema({ name: 'ListPaginatedLogsMovieQuery' })
 export class ListPaginatedLogsMovieQueryDto extends IntersectionType(
   BaseListLogsMovieQueryDto,
-  PaginationQueryDto
+  PaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListInfiniteLogsMovieQuery' })
 export class ListInfiniteLogsMovieQueryDto extends IntersectionType(
   BaseListLogsMovieQueryDto,
-  CursorPaginationQueryDto
+  CursorPaginationQueryDto,
 ) {}

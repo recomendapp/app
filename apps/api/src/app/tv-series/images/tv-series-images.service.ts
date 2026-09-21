@@ -3,7 +3,7 @@ import { and, eq, sql } from 'drizzle-orm';
 import { imageType, tmdbTvSeriesImage } from '@libs/db/schemas';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { SupportedLocale } from '@libs/i18n';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { z } from 'zod';
 import {
@@ -79,7 +79,7 @@ export class TvSeriesImagesService {
           .where(baseWhereClause),
       ]);
 
-      return plainToInstance(
+      return parseResponseDto(
         ListPaginatedTvSeriesImagesDto,
         {
           data: rows.map((row) => row.tv_series_image),
@@ -146,7 +146,7 @@ export class TvSeriesImagesService {
         });
       }
 
-      return plainToInstance(
+      return parseResponseDto(
         ListInfiniteTvSeriesImagesDto,
         {
           data: paginatedResults.map((row) => row.tv_series_image),

@@ -6,7 +6,7 @@ import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { DbTransaction } from '@libs/db';
 import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 import { z } from 'zod';
 import {
@@ -71,7 +71,7 @@ export class TvSeriesReviewsService {
       })
       .returning();
 
-    const result = plainToInstance(ReviewTvSeriesDto, {
+    const result = parseResponseDto(ReviewTvSeriesDto, {
       ...upsertedReview,
       userId: user.id,
       tvSeriesId: tvSeriesId,
@@ -109,7 +109,7 @@ export class TvSeriesReviewsService {
       throw new NotFoundException('Review not found');
     }
 
-    const result = plainToInstance(ReviewTvSeriesDto, {
+    const result = parseResponseDto(ReviewTvSeriesDto, {
       ...deletedReview,
       userId: user.id,
       tvSeriesId: tvSeriesId,
@@ -220,7 +220,7 @@ export class TvSeriesReviewsService {
 
       const totalCount = Number(totalCountResult[0]?.count || 0);
 
-      return plainToInstance(ListPaginatedReviewsTvSeriesDto, {
+      return parseResponseDto(ListPaginatedReviewsTvSeriesDto, {
         data: reviewsData.map((row) => ({
           ...row.review,
           userId: row.log.userId,
@@ -376,7 +376,7 @@ export class TvSeriesReviewsService {
         }
       }
 
-      return plainToInstance(ListInfiniteReviewsTvSeriesDto, {
+      return parseResponseDto(ListInfiniteReviewsTvSeriesDto, {
         data: paginatedResults.map((row) => ({
           ...row.review,
           userId: row.log.userId,

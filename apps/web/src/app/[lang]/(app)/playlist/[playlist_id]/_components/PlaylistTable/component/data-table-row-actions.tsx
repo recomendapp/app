@@ -122,7 +122,14 @@ export function DataTableRowActions({ row, table, column, data }: DataTableRowAc
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href={data.media.url ?? ''}>
+            <Link
+              href={{
+                pathname:
+                  data.type === 'tv_series'
+                    ? `/tv-series/${data.media.slug || data.media.id}`
+                    : `/film/${data.media.slug || data.media.id}`,
+              }}
+            >
               <Icons.eye className="w-4" />
               {upperFirst(t('common.messages.go_to_film'))}
             </Link>
@@ -141,7 +148,10 @@ export function DataTableRowActions({ row, table, column, data }: DataTableRowAc
               openModal(ModalShare, {
                 title: details?.title || '',
                 type: data.type,
-                path: data.media.url || '',
+                path:
+                  data.type === 'tv_series'
+                    ? `/tv-series/${data.media.slug || data.media.id}`
+                    : `/film/${data.media.slug || data.media.id}`,
                 shareController:
                   data.type === 'movie'
                     ? createShareController(ShareControllerMovie, { movie: data.media })

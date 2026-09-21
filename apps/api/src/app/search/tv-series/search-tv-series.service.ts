@@ -21,7 +21,7 @@ import { tmdbTvSeriesView } from '@libs/db/schemas';
 import { SearchParams } from 'typesense/lib/Typesense/Documents';
 import { DbTransaction } from '@libs/db';
 import { TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 
 const PageCursorSchema = z.object({ page: z.number().int().min(1) });
 
@@ -152,7 +152,7 @@ export class SearchTvSeriesService {
 
       const hydratedSeries = await this.hydrateTvSeries(tx, seriesIds);
 
-      return plainToInstance(
+      return parseResponseDto(
         ListPaginatedTvSeriesDto,
         {
           data: hydratedSeries,
@@ -202,7 +202,7 @@ export class SearchTvSeriesService {
       const hasNextPage = page * per_page < typesenseResult.found;
       const nextCursor = hasNextPage ? encodeCursor<{ page: number }>({ page: page + 1 }) : null;
 
-      return plainToInstance(
+      return parseResponseDto(
         ListInfiniteTvSeriesDto,
         {
           data: hydratedSeries,

@@ -141,6 +141,8 @@ export class ReviewMovieCommentUpdateInputDto extends PickType(ReviewMovieCommen
 export class ListPaginatedReviewMovieCommentsDto extends PaginatedResponseDto<ReviewMovieCommentWithAuthorDto> {
   @ApiProperty({ type: () => [ReviewMovieCommentWithAuthorDto] })
   @Type(() => ReviewMovieCommentWithAuthorDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: ReviewMovieCommentWithAuthorDto[];
 
   constructor(partial: Partial<ListPaginatedReviewMovieCommentsDto>) {
@@ -153,6 +155,8 @@ export class ListPaginatedReviewMovieCommentsDto extends PaginatedResponseDto<Re
 export class ListInfiniteReviewMovieCommentsDto extends CursorPaginatedResponseDto<ReviewMovieCommentWithAuthorDto> {
   @ApiProperty({ type: () => [ReviewMovieCommentWithAuthorDto] })
   @Type(() => ReviewMovieCommentWithAuthorDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: ReviewMovieCommentWithAuthorDto[];
 
   constructor(partial: Partial<ListInfiniteReviewMovieCommentsDto>) {

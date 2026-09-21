@@ -10,7 +10,7 @@ import {
 } from './dto/review-movie-like.dto';
 import { profile, reviewMovie, reviewMovieLike, user } from '@libs/db/schemas';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../../utils/parse-response-dto';
 import { PaginationQueryDto } from '../../../../common/dto/pagination.dto';
 import { CursorPaginationQueryDto } from '../../../../common/dto/cursor-pagination.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../../utils/cursor';
@@ -52,7 +52,7 @@ export class ReviewMovieLikesService {
       const existingLike = await this.db.query.reviewMovieLike.findFirst({
         where: and(eq(reviewMovieLike.reviewId, reviewId), eq(reviewMovieLike.userId, user.id)),
       });
-      return plainToInstance(ReviewMovieLikeDto, existingLike, { excludeExtraneousValues: true });
+      return parseResponseDto(ReviewMovieLikeDto, existingLike, { excludeExtraneousValues: true });
     }
 
     const review = await this.db.query.reviewMovie.findFirst({
@@ -70,7 +70,7 @@ export class ReviewMovieLikesService {
       });
     }
 
-    return plainToInstance(ReviewMovieLikeDto, like, { excludeExtraneousValues: true });
+    return parseResponseDto(ReviewMovieLikeDto, like, { excludeExtraneousValues: true });
   }
 
   async unlike({ user, reviewId }: { user: User; reviewId: number }): Promise<ReviewMovieLikeDto> {
@@ -83,7 +83,7 @@ export class ReviewMovieLikesService {
       throw new NotFoundException('Like not found');
     }
 
-    return plainToInstance(ReviewMovieLikeDto, deleted, { excludeExtraneousValues: true });
+    return parseResponseDto(ReviewMovieLikeDto, deleted, { excludeExtraneousValues: true });
   }
 
   async listPaginated({
@@ -117,7 +117,7 @@ export class ReviewMovieLikesService {
       this.db.$count(reviewMovieLike, whereClause),
     ]);
 
-    return plainToInstance(ListPaginatedReviewMovieLikesDto, {
+    return parseResponseDto(ListPaginatedReviewMovieLikesDto, {
       data: likes.map((row) => row.user),
       meta: {
         total_results: totalCount,
@@ -183,7 +183,7 @@ export class ReviewMovieLikesService {
       });
     }
 
-    return plainToInstance(ListInfiniteReviewMovieLikesDto, {
+    return parseResponseDto(ListInfiniteReviewMovieLikesDto, {
       data: paginatedResults.map((row) => row.user),
       meta: {
         next_cursor: nextCursor,

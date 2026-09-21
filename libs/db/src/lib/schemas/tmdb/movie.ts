@@ -348,10 +348,7 @@ export const tmdbMovieView = tmdbSchema
     backdropPath: text('backdrop_path'),
     directors:
       jsonb().$type<
-        Pick<
-          typeof tmdbPersonView.$inferSelect,
-          'id' | 'name' | 'gender' | 'profilePath' | 'slug' | 'url'
-        >[]
+        Pick<typeof tmdbPersonView.$inferSelect, 'id' | 'name' | 'gender' | 'profilePath'>[]
       >(),
     genres: jsonb().$type<(typeof tmdbGenre.$inferSelect & { name: string })[]>(),
     trailers:
@@ -382,8 +379,6 @@ export const tmdbMovieView = tmdbSchema
     popularity: real(),
     voteAverage: real('vote_average'),
     voteCount: real('vote_count'),
-    slug: text(),
-    url: text(),
     followerAvgRating: real('follower_avg_rating'),
   })
   .as(
@@ -407,8 +402,6 @@ export const tmdbMovieView = tmdbSchema
     movie.popularity, 
     movie.vote_average, 
     movie.vote_count, 
-    (movie.id || '-'::text) || public.slugify(movie.title) AS slug, 
-    ('/film/'::text || (movie.id || '-'::text)) || public.slugify(movie.title) AS url,
     (
       SELECT AVG(lm.rating)
       FROM public.log_movie lm
@@ -524,9 +517,7 @@ export const tmdbMovieView = tmdbSchema
               'id', p.id,
               'name', p.name,
               'gender', p.gender,
-              'profilePath', p.profile_path,
-              'slug', p.slug,
-              'url', p.url
+              'profilePath', p.profile_path
             )
           )
           FROM tmdb.movie_credit mc 

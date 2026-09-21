@@ -236,6 +236,7 @@ describe('FeedService', () => {
       expect(item.content.review).not.toBeNull();
       expect(item.content.review?.id).toBe(review.id);
       expect(item.content.review?.body).toBe(review.body);
+      expect(item.content.review?.movieId).toBe(log.movieId);
     });
 
     it('builds log_tv_series content without a review', async () => {
@@ -273,6 +274,7 @@ describe('FeedService', () => {
       const item = result.data.find((i) => i.activityId === log.id) as FeedItemLogTvSeriesDto;
       expect(item.content.review).not.toBeNull();
       expect(item.content.review?.id).toBe(review.id);
+      expect(item.content.review?.tvSeriesId).toBe(log.tvSeriesId);
     });
 
     it('builds review_movie_like content with the review author, not the liker', async () => {
@@ -295,6 +297,7 @@ describe('FeedService', () => {
       expect(item).toBeDefined();
       expect(item.author.id).toBe(liker.id); // the feed entry belongs to the liker...
       expect(item.content.id).toBe(review.id);
+      expect(item.content.movieId).toBe(log.movieId);
       expect(item.content.movie.id).toBe(log.movieId);
       expect((item.content as unknown as { author: { id: string } }).author.id).toBe(author.id); // ...but content.author is the review's author
     });
@@ -320,6 +323,7 @@ describe('FeedService', () => {
       ) as FeedItemReviewTvSeriesLikeDto;
       expect(item).toBeDefined();
       expect(item.content.id).toBe(review.id);
+      expect(item.content.tvSeriesId).toBe(log.tvSeriesId);
       expect(item.content.tvSeries.id).toBe(log.tvSeriesId);
       expect((item.content as unknown as { author: { id: string } }).author.id).toBe(author.id);
     });

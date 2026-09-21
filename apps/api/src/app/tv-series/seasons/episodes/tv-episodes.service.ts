@@ -7,7 +7,7 @@ import { SupportedLocale } from '@libs/i18n';
 import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../../utils/cursor';
 import { z } from 'zod';
 import { SortOrder } from '../../../../common/dto/sort.dto';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../../utils/parse-response-dto';
 import {
   ListAllTvEpisodesQueryDto,
   ListInfiniteTvEpisodesDto,
@@ -42,15 +42,8 @@ export class TvEpisodesService {
   }
 
   private mapResultsToDto(results: any[]) {
-    return results.map(({ seasonUrl, ...episode }) =>
-      plainToInstance(
-        TvEpisodeDto,
-        {
-          ...episode,
-          url: seasonUrl ? `${seasonUrl}/episode/${episode.episodeNumber}` : null,
-        },
-        { excludeExtraneousValues: true },
-      ),
+    return results.map((episode) =>
+      parseResponseDto(TvEpisodeDto, episode as object, { excludeExtraneousValues: true }),
     );
   }
 
@@ -91,7 +84,6 @@ export class TvEpisodesService {
           stillPath: tmdbTvEpisode.stillPath,
           voteAverage: tmdbTvEpisode.voteAverage,
           voteCount: tmdbTvEpisode.voteCount,
-          seasonUrl: tmdbTvSeasonView.url,
         })
         .from(tmdbTvEpisode)
         .innerJoin(tmdbTvSeasonView, eq(tmdbTvSeasonView.id, tmdbTvEpisode.tvSeasonId))
@@ -152,7 +144,6 @@ export class TvEpisodesService {
             stillPath: tmdbTvEpisode.stillPath,
             voteAverage: tmdbTvEpisode.voteAverage,
             voteCount: tmdbTvEpisode.voteCount,
-            seasonUrl: tmdbTvSeasonView.url,
           })
           .from(tmdbTvEpisode)
           .innerJoin(tmdbTvSeasonView, eq(tmdbTvSeasonView.id, tmdbTvEpisode.tvSeasonId))
@@ -169,7 +160,7 @@ export class TvEpisodesService {
 
       const totalCount = totalCountResult[0].count;
 
-      return plainToInstance(
+      return parseResponseDto(
         ListPaginatedTvEpisodesDto,
         {
           data: this.mapResultsToDto(results),
@@ -245,7 +236,6 @@ export class TvEpisodesService {
             stillPath: tmdbTvEpisode.stillPath,
             voteAverage: tmdbTvEpisode.voteAverage,
             voteCount: tmdbTvEpisode.voteCount,
-            seasonUrl: tmdbTvSeasonView.url,
           })
           .from(tmdbTvEpisode)
           .innerJoin(tmdbTvSeasonView, eq(tmdbTvSeasonView.id, tmdbTvEpisode.tvSeasonId))
@@ -278,7 +268,7 @@ export class TvEpisodesService {
         });
       }
 
-      return plainToInstance(
+      return parseResponseDto(
         ListInfiniteTvEpisodesDto,
         {
           data: this.mapResultsToDto(paginatedResults),

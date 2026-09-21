@@ -1,6 +1,15 @@
 import { ApiProperty, ApiPropertyOptional, ApiSchema } from '@nestjs/swagger';
 import { Expose, Transform, Type } from 'class-transformer';
-import { IsBoolean, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsInt,
+  IsOptional,
+  IsString,
+  Max,
+  Min,
+  ValidateNested,
+} from 'class-validator';
 
 @ApiSchema({ name: 'CursorPaginationQuery' })
 export class CursorPaginationQueryDto {
@@ -42,20 +51,25 @@ export class CursorPaginationQueryDto {
 export class CursorPaginationMetaDto {
   @ApiProperty()
   @Expose()
+  @IsInt()
   per_page!: number;
 
-  @ApiPropertyOptional({ 
+  @ApiPropertyOptional({
     description: 'The cursor to send for the next fetch. Null if end of list.',
-    nullable: true 
+    nullable: true,
   })
   @Expose()
+  @IsOptional()
+  @IsString()
   next_cursor!: string | null;
 
   @ApiPropertyOptional({
-	description: 'Total number of results (only provided on the first page)',
-	example: 123,
+    description: 'Total number of results (only provided on the first page)',
+    example: 123,
   })
   @Expose()
+  @IsOptional()
+  @IsInt()
   total_results?: number;
 }
 
@@ -63,11 +77,14 @@ export class CursorPaginationMetaDto {
 export class CursorPaginatedResponseDto<T> {
   @ApiProperty({ isArray: true })
   @Expose()
+  @IsArray()
+  @ValidateNested({ each: true })
   data!: T[];
 
   @ApiProperty({ type: CursorPaginationMetaDto })
   @Expose()
   @Type(() => CursorPaginationMetaDto)
+  @ValidateNested()
   meta!: CursorPaginationMetaDto;
 
   constructor(partial: Partial<CursorPaginatedResponseDto<T>>) {

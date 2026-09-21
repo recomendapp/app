@@ -12,7 +12,7 @@ import {
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { and, asc, desc, eq, gt, lt, or, sql, SQL } from 'drizzle-orm';
 import { MOVIE_SUMMARY_SELECT, TV_SERIES_SUMMARY_SELECT } from '@libs/db/selectors';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { z } from 'zod';
 import { SupportedLocale } from '@libs/i18n';
@@ -97,7 +97,7 @@ export class RecosTrendingService {
         tx.$count(recosTrending),
       ]);
 
-      return plainToInstance(
+      return parseResponseDto(
         ListPaginatedRecosTrendingDto,
         {
           data: results.map((row) => ({
@@ -211,7 +211,7 @@ export class RecosTrendingService {
         });
       }
 
-      return plainToInstance(
+      return parseResponseDto(
         ListInfiniteRecosTrendingDto,
         {
           data: paginatedResults.map((row) => ({

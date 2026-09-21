@@ -2,7 +2,7 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { explore } from '@libs/db/schemas';
 import { eq } from 'drizzle-orm';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../utils/parse-response-dto';
 import { ExploreDto } from './dto/explore.dto';
 
 const IDENTIFIER_ID_REGEX = /^\d+$/;
@@ -28,7 +28,7 @@ export class ExploreService {
       throw new NotFoundException('Explore not found');
     }
 
-    return plainToInstance(ExploreDto, result, { excludeExtraneousValues: true });
+    return parseResponseDto(ExploreDto, result, { excludeExtraneousValues: true });
   }
 
   /** Resolves a slug or numeric id to the explore's numeric id, for use by sub-resources. */

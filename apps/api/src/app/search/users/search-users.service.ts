@@ -7,7 +7,7 @@ import {
   ListPaginatedSearchUsersQueryDto,
 } from './search-users.dto';
 import { ListInfiniteUsersDto, ListPaginatedUsersDto } from '../../users/dto/users.dto';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { user, profile } from '@libs/db/schemas';
 import { eq, inArray } from 'drizzle-orm';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
@@ -69,7 +69,7 @@ export class SearchUsersService {
 
     const hydratedUsers = await this.hydrateUsers(userIds);
 
-    return plainToInstance(
+    return parseResponseDto(
       ListPaginatedUsersDto,
       {
         data: hydratedUsers,
@@ -104,7 +104,7 @@ export class SearchUsersService {
     const hasNextPage = page * per_page < typesenseResult.found;
     const nextCursor = hasNextPage ? encodeCursor<{ page: number }>({ page: page + 1 }) : null;
 
-    return plainToInstance(
+    return parseResponseDto(
       ListInfiniteUsersDto,
       {
         data: hydratedUsers,

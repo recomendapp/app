@@ -28,7 +28,6 @@ const TvSeriesWidgetReviews = ({
 }: TvSeriesWidgetReviewsProps) => {
   const { colors } = useTheme();
   const t = useTranslations();
-  const urlReviews = `${url}/reviews` as Href;
   const {
     data: reviews,
     isLoading,
@@ -44,7 +43,7 @@ const TvSeriesWidgetReviews = ({
 
   return (
     <View style={[tw`gap-1`, style]}>
-      <Link href={urlReviews} style={labelStyle}>
+      <Link href={url} style={labelStyle}>
         <View style={tw`flex-row items-center`}>
           <Text style={tw`font-medium text-lg`} numberOfLines={1}>
             {upperFirst(t('common.messages.review', { count: 2 }))}

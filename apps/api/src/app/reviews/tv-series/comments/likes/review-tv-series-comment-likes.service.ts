@@ -19,7 +19,7 @@ import {
   user,
 } from '@libs/db/schemas';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../../../utils/parse-response-dto';
 import { PaginationQueryDto } from '../../../../../common/dto/pagination.dto';
 import { CursorPaginationQueryDto } from '../../../../../common/dto/cursor-pagination.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../../../utils/cursor';
@@ -97,7 +97,7 @@ export class ReviewTvSeriesCommentLikesService {
           eq(reviewTvSeriesCommentLike.userId, user.id),
         ),
       });
-      return plainToInstance(ReviewTvSeriesCommentLikeDto, existingLike, {
+      return parseResponseDto(ReviewTvSeriesCommentLikeDto, existingLike, {
         excludeExtraneousValues: true,
       });
     }
@@ -120,7 +120,7 @@ export class ReviewTvSeriesCommentLikesService {
       }
     }
 
-    return plainToInstance(ReviewTvSeriesCommentLikeDto, like, { excludeExtraneousValues: true });
+    return parseResponseDto(ReviewTvSeriesCommentLikeDto, like, { excludeExtraneousValues: true });
   }
 
   async unlike({
@@ -148,7 +148,7 @@ export class ReviewTvSeriesCommentLikesService {
       throw new NotFoundException('Like not found');
     }
 
-    return plainToInstance(ReviewTvSeriesCommentLikeDto, deleted, {
+    return parseResponseDto(ReviewTvSeriesCommentLikeDto, deleted, {
       excludeExtraneousValues: true,
     });
   }
@@ -184,7 +184,7 @@ export class ReviewTvSeriesCommentLikesService {
       this.db.$count(reviewTvSeriesCommentLike, whereClause),
     ]);
 
-    return plainToInstance(ListPaginatedReviewTvSeriesCommentLikesDto, {
+    return parseResponseDto(ListPaginatedReviewTvSeriesCommentLikesDto, {
       data: likes.map((row) => row.user),
       meta: {
         total_results: totalCount,
@@ -250,7 +250,7 @@ export class ReviewTvSeriesCommentLikesService {
       });
     }
 
-    return plainToInstance(ListInfiniteReviewTvSeriesCommentLikesDto, {
+    return parseResponseDto(ListInfiniteReviewTvSeriesCommentLikesDto, {
       data: paginatedResults.map((row) => row.user),
       meta: {
         next_cursor: nextCursor,

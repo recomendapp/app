@@ -3,7 +3,7 @@ import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle
 import { User } from '../../auth/auth.service';
 import { playlistLike } from '@libs/db/schemas';
 import { and, eq } from 'drizzle-orm';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { PlaylistLikeDto } from './dto/playlist-likes.dto';
 import { PlaylistServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../../realtime/realtime.gateway';
@@ -39,10 +39,10 @@ export class PlaylistLikesService {
       if (!existingLike) {
         throw new NotFoundException('Playlist not found');
       }
-      return plainToInstance(PlaylistLikeDto, existingLike, { excludeExtraneousValues: true });
+      return parseResponseDto(PlaylistLikeDto, existingLike, { excludeExtraneousValues: true });
     }
 
-    const result = plainToInstance(PlaylistLikeDto, like, { excludeExtraneousValues: true });
+    const result = parseResponseDto(PlaylistLikeDto, like, { excludeExtraneousValues: true });
     this.realtimeGateway.emitToUser(user.id, PlaylistServerEvents.LIKE_SET, result);
     return result;
   }
@@ -63,7 +63,7 @@ export class PlaylistLikesService {
       return null;
     }
 
-    const result = plainToInstance(PlaylistLikeDto, deleted, { excludeExtraneousValues: true });
+    const result = parseResponseDto(PlaylistLikeDto, deleted, { excludeExtraneousValues: true });
     this.realtimeGateway.emitToUser(user.id, PlaylistServerEvents.LIKE_DELETED, result);
     return result;
   }

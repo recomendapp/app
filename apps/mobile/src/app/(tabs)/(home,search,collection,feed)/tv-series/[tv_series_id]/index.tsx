@@ -1,4 +1,4 @@
-import { Href, Link, useLocalSearchParams } from 'expo-router';
+import { Link, useLocalSearchParams } from 'expo-router';
 import { lowerCase, upperFirst } from 'lodash';
 import { ScrollView, Pressable, useWindowDimensions, View, ViewProps } from 'react-native';
 import tw from '../../../../../lib/tw';
@@ -158,7 +158,10 @@ const TvSeriesScreen = () => {
             <TvSeriesTrailers tvSeries={series} />
             <TvSeriesWidgetPlaylists
               tvSeriesId={series.id}
-              url={series.url as Href}
+              url={{
+                pathname: '/tv-series/[tv_series_id]/playlists',
+                params: { tv_series_id: series.id },
+              }}
               containerStyle={{
                 paddingLeft: insets.left + PADDING_HORIZONTAL,
                 paddingRight: insets.right + PADDING_HORIZONTAL,
@@ -170,7 +173,10 @@ const TvSeriesScreen = () => {
             />
             <TvSeriesWidgetReviews
               tvSeries={series}
-              url={series.url as Href}
+              url={{
+                pathname: '/tv-series/[tv_series_id]/reviews',
+                params: { tv_series_id: series.id },
+              }}
               containerStyle={{
                 paddingLeft: insets.left + PADDING_HORIZONTAL,
                 paddingRight: insets.right + PADDING_HORIZONTAL,

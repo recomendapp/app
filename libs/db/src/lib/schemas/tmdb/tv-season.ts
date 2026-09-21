@@ -88,7 +88,6 @@ export const tmdbTvSeasonView = tmdbSchema
     voteAverage: real('vote_average'),
     voteCount: integer('vote_count'),
     episodeCount: integer('episode_count'),
-    url: text(),
   })
   .as(
     sql`SELECT 
@@ -126,8 +125,7 @@ export const tmdbTvSeasonView = tmdbSchema
     s.poster_path,
     s.vote_average,
     s.vote_count,
-    s.episode_count,
-    ('/tv-series/'::text || s.tv_series_id || '/season/' || s.season_number) AS url
+    s.episode_count
   FROM tmdb.tv_season s,
   LATERAL i18n.language() language(requested_language, fallback_language, default_language)`,
   );

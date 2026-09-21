@@ -22,11 +22,12 @@ export class UserMovieWithUserMovieDto extends LogMovieDto {
   movie!: MovieCompactDto;
 }
 
-
-@ApiSchema({ name: 'ListPaginatedUserMoviesWithMovie'})
+@ApiSchema({ name: 'ListPaginatedUserMoviesWithMovie' })
 export class ListPaginatedUserMoviesWithMovieDto extends PaginatedResponseDto<LogMovieWithMovieNoReviewDto> {
   @ApiProperty({ type: () => [LogMovieWithMovieNoReviewDto] })
   @Type(() => LogMovieWithMovieNoReviewDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: LogMovieWithMovieNoReviewDto[];
 
   constructor(partial: Partial<ListPaginatedUserMoviesWithMovieDto>) {
@@ -35,10 +36,12 @@ export class ListPaginatedUserMoviesWithMovieDto extends PaginatedResponseDto<Lo
   }
 }
 
-@ApiSchema({ name: 'ListInfiniteUserMoviesWithMovie'})
+@ApiSchema({ name: 'ListInfiniteUserMoviesWithMovie' })
 export class ListInfiniteUserMoviesWithMovieDto extends CursorPaginatedResponseDto<LogMovieWithMovieNoReviewDto> {
   @ApiProperty({ type: () => [LogMovieWithMovieNoReviewDto] })
   @Type(() => LogMovieWithMovieNoReviewDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: LogMovieWithMovieNoReviewDto[];
 
   constructor(partial: Partial<ListInfiniteUserMoviesWithMovieDto>) {

@@ -1,19 +1,23 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
-import { tmdbPersonView, tmdbTvSeasonView, tmdbTvSeriesCredit, tmdbTvSeriesRole, tmdbTvSeriesView } from '@libs/db/schemas';
+import {
+  tmdbPersonView,
+  tmdbTvSeasonView,
+  tmdbTvSeriesCredit,
+  tmdbTvSeriesRole,
+  tmdbTvSeriesView,
+} from '@libs/db/schemas';
 import { and, asc, eq, sql } from 'drizzle-orm';
 import { User } from '../auth/auth.service';
 import { SupportedLocale } from '@libs/i18n';
 import { TvSeriesDto } from './dto/tv-series.dto';
 import { TvSeriesCastingDto } from './dto/tv-series-credits.dto';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../utils/parse-response-dto';
 import { TvSeasonCompactDto } from './seasons/tv-seasons.dto';
 
 @Injectable()
 export class TvSeriesService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
   async get({
     tvSeriesId,
@@ -25,13 +29,9 @@ export class TvSeriesService {
     locale: SupportedLocale;
   }): Promise<TvSeriesDto> {
     return await this.db.transaction(async (tx) => {
-      await tx.execute(
-        sql`SELECT set_config('app.current_language', ${locale}, true)`
-      );
+      await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
       if (currentUser) {
-        await tx.execute(
-          sql`SELECT set_config('app.current_user_id', ${currentUser.id}, true)`
-        );
+        await tx.execute(sql`SELECT set_config('app.current_user_id', ${currentUser.id}, true)`);
       }
 
       const [tvSeries] = await tx
@@ -44,7 +44,7 @@ export class TvSeriesService {
         throw new NotFoundException(`TV Series with id ${tvSeriesId} not found`);
       }
 
-      return plainToInstance(TvSeriesDto, tvSeries);
+      return parseResponseDto(TvSeriesDto, tvSeries);
     });
   }
 
@@ -56,9 +56,7 @@ export class TvSeriesService {
     locale: SupportedLocale;
   }): Promise<TvSeasonCompactDto[]> {
     return await this.db.transaction(async (tx) => {
-      await tx.execute(
-        sql`SELECT set_config('app.current_language', ${locale}, true)`
-      );
+      await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
 
       const seasons = await tx
         .select({
@@ -69,19 +67,18 @@ export class TvSeriesService {
           episodeCount: tmdbTvSeasonView.episodeCount,
           voteAverage: tmdbTvSeasonView.voteAverage,
           voteCount: tmdbTvSeasonView.voteCount,
-          url: tmdbTvSeasonView.url,
         })
         .from(tmdbTvSeasonView)
         .where(eq(tmdbTvSeasonView.tvSeriesId, tvSeriesId))
         .orderBy(
           asc(sql`CASE WHEN ${tmdbTvSeasonView.seasonNumber} = 0 THEN 1 ELSE 0 END`),
-          asc(tmdbTvSeasonView.seasonNumber)
+          asc(tmdbTvSeasonView.seasonNumber),
         );
-      
-      return plainToInstance(TvSeasonCompactDto, seasons);
+
+      return parseResponseDto(TvSeasonCompactDto, seasons);
     });
   }
-    
+
   async getCasting({
     tvSeriesId,
     locale,
@@ -90,13 +87,11 @@ export class TvSeriesService {
     locale: SupportedLocale;
   }): Promise<TvSeriesCastingDto[]> {
     return await this.db.transaction(async (tx) => {
-      await tx.execute(
-        sql`SELECT set_config('app.current_language', ${locale}, true)`
-      );
+      await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
 
       const aggregatedCastingSq = tx
         .select({
-          tvSeriesId: tmdbTvSeriesCredit.tvSeriesId, 
+          tvSeriesId: tmdbTvSeriesCredit.tvSeriesId,
           personId: tmdbTvSeriesCredit.personId,
           order: sql<number>`MIN(${tmdbTvSeriesRole.order})`.as('min_order'),
           roles: sql<Pick<typeof tmdbTvSeriesRole.$inferSelect, 'character' | 'order'>[]>`
@@ -111,10 +106,7 @@ export class TvSeriesService {
         .from(tmdbTvSeriesCredit)
         .leftJoin(tmdbTvSeriesRole, eq(tmdbTvSeriesRole.creditId, tmdbTvSeriesCredit.id))
         .where(
-          and(
-            eq(tmdbTvSeriesCredit.tvSeriesId, tvSeriesId),
-            eq(tmdbTvSeriesCredit.job, 'Actor')
-          )
+          and(eq(tmdbTvSeriesCredit.tvSeriesId, tvSeriesId), eq(tmdbTvSeriesCredit.job, 'Actor')),
         )
         .groupBy(tmdbTvSeriesCredit.tvSeriesId, tmdbTvSeriesCredit.personId)
         .as('aggregated_casting');
@@ -128,16 +120,15 @@ export class TvSeriesService {
           person: {
             id: tmdbPersonView.id,
             name: tmdbPersonView.name,
+            gender: tmdbPersonView.gender,
             profilePath: tmdbPersonView.profilePath,
-            slug: tmdbPersonView.slug,
-            url: tmdbPersonView.url,
           },
         })
         .from(aggregatedCastingSq)
         .innerJoin(tmdbPersonView, eq(tmdbPersonView.id, aggregatedCastingSq.personId))
         .orderBy(asc(aggregatedCastingSq.order));
-      
-      return plainToInstance(TvSeriesCastingDto, castingData);
+
+      return parseResponseDto(TvSeriesCastingDto, castingData);
     });
   }
 }

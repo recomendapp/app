@@ -136,7 +136,12 @@ const Item = ({ item, index, ...props }: ItemProps) => {
           </CardHeader>
           <CardContent>
             <Link
-              href={item.media.url ?? ''}
+              href={{
+                pathname:
+                  item.type === 'tv_series'
+                    ? `/tv-series/${item.media.slug || item.media.id}`
+                    : `/film/${item.media.slug || item.media.id}`,
+              }}
               className="w-fit text-clamp-title line-clamp-2 font-semibold"
             >
               {details.title}

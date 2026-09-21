@@ -81,7 +81,11 @@ export const useTvSeriesHeaderMenu = ({
                     type: 'action' as const,
                     label: creator.name || '',
                     icon: { type: 'sfSymbol' as const, name: 'person' as const },
-                    onPress: () => router.push(creator.url as Href),
+                    onPress: () =>
+                      router.push({
+                        pathname: '/person/[person_id]',
+                        params: { person_id: creator.id },
+                      }),
                   })),
                 }
               : {

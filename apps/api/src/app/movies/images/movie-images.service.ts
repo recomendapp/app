@@ -3,7 +3,7 @@ import { and, eq, sql } from 'drizzle-orm';
 import { imageType, tmdbMovieImage } from '@libs/db/schemas';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { SupportedLocale } from '@libs/i18n';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { z } from 'zod';
 import {
@@ -79,7 +79,7 @@ export class MovieImagesService {
           .where(baseWhereClause),
       ]);
 
-      return plainToInstance(
+      return parseResponseDto(
         ListPaginatedMovieImagesDto,
         {
           data: rows.map((row) => row.movie_image),
@@ -146,7 +146,7 @@ export class MovieImagesService {
         });
       }
 
-      return plainToInstance(
+      return parseResponseDto(
         ListInfiniteMovieImagesDto,
         {
           data: paginatedResults.map((row) => row.movie_image),

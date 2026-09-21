@@ -3,40 +3,36 @@ import { and, eq, exists, sql } from 'drizzle-orm';
 import { follow, playlist, profile, user } from '@libs/db/schemas';
 import { User } from '../../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/drizzle/drizzle.module';
-import { 
-  ListPaginatedPlaylistsQueryDto, 
-  ListInfinitePlaylistsQueryDto, 
+import {
+  ListPaginatedPlaylistsQueryDto,
+  ListInfinitePlaylistsQueryDto,
   ListPaginatedPlaylistsWithOwnerDto,
-  ListInfinitePlaylistsWithOwnerDto
+  ListInfinitePlaylistsWithOwnerDto,
 } from '../../../playlists/dto/playlists.dto';
 import { encodeCursor } from '../../../../utils/cursor';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../../utils/parse-response-dto';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 import { PlaylistQueryBuilder } from '../../../playlists/playlists.query-builder';
 
 @Injectable()
 export class MePlaylistsFollowingService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
   private getListBaseWhereClause(currentUser: User) {
-    const isFollowingSubquery = this.db.select({ id: follow.followerId })
+    const isFollowingSubquery = this.db
+      .select({ id: follow.followerId })
       .from(follow)
       .where(
         and(
           eq(follow.followerId, currentUser.id),
           eq(follow.followingId, playlist.userId),
-          eq(follow.status, 'accepted')
-        )
+          eq(follow.status, 'accepted'),
+        ),
       );
 
     const visibilityCondition = PlaylistQueryBuilder.getVisibilityCondition(this.db, currentUser);
 
-    return and(
-      exists(isFollowingSubquery),
-      visibilityCondition
-    );
+    return and(exists(isFollowingSubquery), visibilityCondition);
   }
 
   async listPaginated({
@@ -70,19 +66,23 @@ export class MePlaylistsFollowingService {
       this.db.$count(playlist, baseWhereClause),
     ]);
 
-    return plainToInstance(ListPaginatedPlaylistsWithOwnerDto, {
-      data: results.map(row => ({
-        ...row.playlist,
-        role: row.role,
-        owner: row.owner,
-      })),
-      meta: {
-        total_results: totalCount,
-        total_pages: Math.ceil(totalCount / per_page),
-        current_page: page,
-        per_page,
+    return parseResponseDto(
+      ListPaginatedPlaylistsWithOwnerDto,
+      {
+        data: results.map((row) => ({
+          ...row.playlist,
+          role: row.role,
+          owner: row.owner,
+        })),
+        meta: {
+          total_results: totalCount,
+          total_pages: Math.ceil(totalCount / per_page),
+          current_page: page,
+          per_page,
+        },
       },
-    }, { excludeExtraneousValues: true });
+      { excludeExtraneousValues: true },
+    );
   }
 
   async listInfinite({
@@ -98,9 +98,13 @@ export class MePlaylistsFollowingService {
     const orderBy = PlaylistQueryBuilder.getOrderBy(sort_by, sort_order);
     const roleSelection = PlaylistQueryBuilder.getRoleSelection(currentUser);
 
-    const cursorWhereClause = PlaylistQueryBuilder.getCursorWhereClause(sort_by, sort_order, cursor);
-    const finalWhereClause = cursorWhereClause 
-      ? and(baseWhereClause, cursorWhereClause) 
+    const cursorWhereClause = PlaylistQueryBuilder.getCursorWhereClause(
+      sort_by,
+      sort_order,
+      cursor,
+    );
+    const finalWhereClause = cursorWhereClause
+      ? and(baseWhereClause, cursorWhereClause)
       : baseWhereClause;
 
     const fetchLimit = per_page + 1;
@@ -118,9 +122,12 @@ export class MePlaylistsFollowingService {
         .where(finalWhereClause)
         .orderBy(...orderBy)
         .limit(fetchLimit),
-      (include_total_count && !cursor)
-        ? this.db.select({ count: sql<number>`cast(count(*) as int)` }).from(playlist).where(baseWhereClause)
-        : Promise.resolve(undefined)
+      include_total_count && !cursor
+        ? this.db
+            .select({ count: sql<number>`cast(count(*) as int)` })
+            .from(playlist)
+            .where(baseWhereClause)
+        : Promise.resolve(undefined),
     ]);
 
     const totalCount = totalCountResult ? totalCountResult[0].count : undefined;
@@ -134,24 +141,28 @@ export class MePlaylistsFollowingService {
       const cursorValue = PlaylistQueryBuilder.getNextCursorValue(lastItem, sort_by);
 
       if (cursorValue !== null) {
-        nextCursor = encodeCursor({ 
-          value: cursorValue, 
-          id: lastItem.id 
+        nextCursor = encodeCursor({
+          value: cursorValue,
+          id: lastItem.id,
         });
       }
     }
 
-    return plainToInstance(ListInfinitePlaylistsWithOwnerDto, {
-      data: paginatedResults.map(row => ({
-        ...row.playlist,
-        role: row.role,
-        owner: row.owner,
-      })),
-      meta: {
-        next_cursor: nextCursor,
-        per_page,
-        total_results: totalCount,
+    return parseResponseDto(
+      ListInfinitePlaylistsWithOwnerDto,
+      {
+        data: paginatedResults.map((row) => ({
+          ...row.playlist,
+          role: row.role,
+          owner: row.owner,
+        })),
+        meta: {
+          next_cursor: nextCursor,
+          per_page,
+          total_results: totalCount,
+        },
       },
-    }, { excludeExtraneousValues: true });
+      { excludeExtraneousValues: true },
+    );
   }
 }

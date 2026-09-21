@@ -19,7 +19,7 @@ import {
 } from './movie-following-logs.dto';
 import { RecosService } from '../../recos/recos.service';
 import { RecoType } from '../../recos/dto/recos.dto';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 import { LogServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../../realtime/realtime.gateway';
@@ -41,7 +41,7 @@ export class MovieLogsService {
     });
 
     if (!logEntry) return null;
-    return plainToInstance(LogMovieDto, {
+    return parseResponseDto(LogMovieDto, {
       ...logEntry,
       review: logEntry.review
         ? {
@@ -133,7 +133,7 @@ export class MovieLogsService {
       throw new NotFoundException('Log entry not found after upsert');
     }
 
-    const result = plainToInstance(LogMovieDto, {
+    const result = parseResponseDto(LogMovieDto, {
       ...logEntry,
       review: logEntry.review
         ? {
@@ -169,7 +169,7 @@ export class MovieLogsService {
       return logEntry;
     });
 
-    const result = plainToInstance(LogMovieDto, {
+    const result = parseResponseDto(LogMovieDto, {
       ...deletedLog,
       review: deletedLog.review
         ? {
@@ -218,7 +218,7 @@ export class MovieLogsService {
       .where(whereClause)
       .groupBy(logMovie.id, user.id, profile.id, reviewMovie.id)
       .orderBy(desc(logMovie.createdAt));
-    return plainToInstance(
+    return parseResponseDto(
       MovieFollowingLogDto,
       rows.map((row) => ({
         ...row.log,
@@ -258,7 +258,7 @@ export class MovieLogsService {
 
     const averageValue = result?.average ? Number(result.average) : null;
 
-    return plainToInstance(MovieFollowingAverageRatingDto, {
+    return parseResponseDto(MovieFollowingAverageRatingDto, {
       averageRating: averageValue !== null ? Math.round(averageValue * 10) / 10 : null,
     });
   }

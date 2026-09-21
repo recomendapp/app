@@ -20,7 +20,10 @@ const BottomSheetSharePerson = forwardRef<
   return (
     <BottomSheetShareLayout
       ref={ref}
-      path={person.url || `/person/${person.slug || person.id}`}
+      path={{
+        pathname: '/person/[person_id]',
+        params: { person_id: person.slug || person.id },
+      }}
       contentRef={shareViewRef}
       {...props}
     >

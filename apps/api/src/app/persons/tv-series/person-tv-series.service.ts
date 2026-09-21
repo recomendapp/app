@@ -15,7 +15,7 @@ import {
   ListPaginatedPersonTvSeriesQueryDto,
   PersonTvSeriesFacetsDto,
 } from './dto/person-tv-series.dto';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
 
 const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.number());
@@ -105,7 +105,7 @@ export class PersonTvSeriesService {
 
       const totalCount = Number(totalCountResult[0]?.count || 0);
 
-      return plainToInstance(ListPaginatedPersonTvSeriesDto, {
+      return parseResponseDto(ListPaginatedPersonTvSeriesDto, {
         data: results.map((row) => ({
           tvSeries: row.tvSeries,
           credits: row.credits || [],
@@ -236,7 +236,7 @@ export class PersonTvSeriesService {
         }
       }
 
-      return plainToInstance(ListInfinitePersonTvSeriesDto, {
+      return parseResponseDto(ListInfinitePersonTvSeriesDto, {
         data: paginatedResults.map((row) => ({
           tvSeries: row.tvSeries,
           credits: row.credits || [],
@@ -274,6 +274,6 @@ export class PersonTvSeriesService {
       }))
       .sort((a, b) => a.department.localeCompare(b.department));
 
-    return plainToInstance(PersonTvSeriesFacetsDto, { departments });
+    return parseResponseDto(PersonTvSeriesFacetsDto, { departments });
   }
 }

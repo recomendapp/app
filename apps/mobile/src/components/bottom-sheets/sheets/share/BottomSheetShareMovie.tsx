@@ -20,7 +20,10 @@ const BottomSheetShareMovie = forwardRef<
   return (
     <BottomSheetShareLayout
       ref={ref}
-      path={movie.url || `/film/${movie.slug || movie.id}`}
+      path={{
+        pathname: '/film/[film_id]',
+        params: { film_id: movie.slug || movie.id },
+      }}
       contentRef={shareViewRef}
       {...props}
     >

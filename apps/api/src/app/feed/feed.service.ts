@@ -16,7 +16,7 @@ import {
   tmdbTvSeriesView,
   user,
 } from '@libs/db/schemas';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../utils/parse-response-dto';
 import {
   MOVIE_SUMMARY_SELECT,
   TV_SERIES_SUMMARY_SELECT,
@@ -72,7 +72,7 @@ export class FeedService {
       sql<FeedLogMovieContentDto>`(
         SELECT ${buildJsonbObject(logMovie)} || jsonb_build_object(
           'movie', ${movieFeedJsonb},
-          'review', CASE WHEN ${reviewMovie.id} IS NOT NULL THEN ${buildJsonbObject(reviewMovie)} ELSE NULL END
+          'review', CASE WHEN ${reviewMovie.id} IS NOT NULL THEN ${buildJsonbObject(reviewMovie)} || jsonb_build_object('movieId', ${logMovie.movieId}) ELSE NULL END
         )
         FROM ${logMovie}
         LEFT JOIN ${tmdbMovieView} ON ${tmdbMovieView.id} = ${logMovie.movieId}
@@ -85,7 +85,7 @@ export class FeedService {
         sql<FeedLogTvSeriesContentDto>`(
         SELECT ${buildJsonbObject(logTvSeries)} || jsonb_build_object(
           'tvSeries', ${tvSeriesFeedJsonb},
-          'review', CASE WHEN ${reviewTvSeries.id} IS NOT NULL THEN ${buildJsonbObject(reviewTvSeries)} ELSE NULL END
+          'review', CASE WHEN ${reviewTvSeries.id} IS NOT NULL THEN ${buildJsonbObject(reviewTvSeries)} || jsonb_build_object('tvSeriesId', ${logTvSeries.tvSeriesId}) ELSE NULL END
         )
         FROM ${logTvSeries}
         LEFT JOIN ${tmdbTvSeriesView} ON ${tmdbTvSeriesView.id} = ${logTvSeries.tvSeriesId}
@@ -106,6 +106,8 @@ export class FeedService {
         eq(activityTypeText, 'review_movie_like'),
         sql<FeedReviewMovieLikeContentDto>`(
         SELECT ${buildJsonbObject(reviewMovie)} || jsonb_build_object(
+          'movieId', ${logMovie.movieId},
+          'rating', ${logMovie.rating},
           'movie', ${movieFeedJsonb},
           'author', ${userCompactJsonb}
         )
@@ -122,6 +124,8 @@ export class FeedService {
         eq(activityTypeText, 'review_tv_series_like'),
         sql<FeedReviewTvSeriesLikeContentDto>`(
         SELECT ${buildJsonbObject(reviewTvSeries)} || jsonb_build_object(
+          'tvSeriesId', ${logTvSeries.tvSeriesId},
+          'rating', ${logTvSeries.rating},
           'tvSeries', ${tvSeriesFeedJsonb},
           'author', ${userCompactJsonb}
         )
@@ -236,7 +240,7 @@ export class FeedService {
           .where(baseWhere),
       ]);
 
-      return plainToInstance(
+      return parseResponseDto(
         ListPaginatedFeedDto,
         {
           data: feedRows.map((row) => ({
@@ -314,7 +318,7 @@ export class FeedService {
         });
       }
 
-      return plainToInstance(
+      return parseResponseDto(
         ListInfiniteFeedDto,
         {
           data: paginatedRows.map((row) => ({

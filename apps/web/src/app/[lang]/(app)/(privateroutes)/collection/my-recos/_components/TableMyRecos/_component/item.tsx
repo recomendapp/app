@@ -46,7 +46,15 @@ export const Item = forwardRef<HTMLDivElement, ItemProps>(({ data, className, ..
         />
       </div>
       <div className="flex-1 space-y-0.5">
-        <Link href={data.media.url ?? ''} className="font-medium line-clamp-2">
+        <Link
+          href={{
+            pathname:
+              data.type === 'tv_series'
+                ? `/tv-series/${data.media.slug || data.media.id}`
+                : `/film/${data.media.slug || data.media.id}`,
+          }}
+          className="font-medium line-clamp-2"
+        >
           {details.title}
         </Link>
         <p className="line-clamp-1 text-muted-foreground">
@@ -75,7 +83,7 @@ const Credits = ({ credits }: { credits: PersonCompact[] | null }) => {
           className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-yellow transition"
           asChild
         >
-          <Link href={credit.url ?? ''}>{credit.name}</Link>
+          <Link href={{ pathname: `/person/${credit.slug || credit.id}` }}>{credit.name}</Link>
         </Button>
       )),
     [credits],

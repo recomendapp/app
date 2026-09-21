@@ -10,7 +10,7 @@ import { SearchTvSeriesService } from './tv-series/search-tv-series.service';
 import { SearchPersonsService } from './persons/search-persons.service';
 import { SearchUsersService } from './users/search-users.service';
 import { SearchPlaylistsService } from './playlists/search-playlists.service';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../utils/parse-response-dto';
 import { TypesenseSearchResult } from '../../common/modules/typesense/typesense.type';
 import { SearchQueryDto, SearchResponseDto } from './search.dto';
 
@@ -82,11 +82,12 @@ export class SearchService {
           filter_by: playlistFilter,
           sort_by: '_text_match(buckets: 10):desc,likes_count:desc',
         },
-      ].map(search => ({ ...search, page: 1, per_page: limit })),
+      ].map((search) => ({ ...search, page: 1, per_page: limit })),
     };
 
     const { results } = await this.typesenseClient.multiSearch.perform(multiSearchPayload);
-    const [moviesRes, tvRes, personsRes, usersRes, playlistsRes] = results as TypesenseSearchResult<any>[];
+    const [moviesRes, tvRes, personsRes, usersRes, playlistsRes] =
+      results as TypesenseSearchResult<any>[];
 
     const movieIds = moviesRes.hits?.map((h: TypesenseHit) => h.document.id) || [];
     const tvIds = tvRes.hits?.map((h: TypesenseHit) => h.document.id) || [];
@@ -94,17 +95,19 @@ export class SearchService {
     const userIds = usersRes.hits?.map((h: TypesenseHit) => h.document.id) || [];
     const playlistIds = playlistsRes.hits?.map((h: TypesenseHit) => h.document.id) || [];
 
-    const [hydratedMovies, hydratedTvSeries, hydratedPersons] = await this.db.transaction(async (tx) => {
-      await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
-      if (currentUser) {
-        await tx.execute(sql`SELECT set_config('app.current_user_id', ${currentUser.id}, true)`);
-      }
-      return Promise.all([
-        this.searchMoviesService.hydrateMovies(tx, movieIds),
-        this.searchTvSeriesService.hydrateTvSeries(tx, tvIds),
-        this.searchPersonsService.hydratePersons(tx, personIds),
-      ]);
-    });
+    const [hydratedMovies, hydratedTvSeries, hydratedPersons] = await this.db.transaction(
+      async (tx) => {
+        await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
+        if (currentUser) {
+          await tx.execute(sql`SELECT set_config('app.current_user_id', ${currentUser.id}, true)`);
+        }
+        return Promise.all([
+          this.searchMoviesService.hydrateMovies(tx, movieIds),
+          this.searchTvSeriesService.hydrateTvSeries(tx, tvIds),
+          this.searchPersonsService.hydratePersons(tx, personIds),
+        ]);
+      },
+    );
 
     const [hydratedUsers, rawHydratedPlaylists] = await Promise.all([
       this.searchUsersService.hydrateUsers(userIds),
@@ -123,23 +126,33 @@ export class SearchService {
       { type: 'person', hit: personsRes.hits?.[0] as TypesenseHit, data: hydratedPersons[0] },
       { type: 'user', hit: usersRes.hits?.[0] as TypesenseHit, data: hydratedUsers[0] },
       { type: 'playlist', hit: playlistsRes.hits?.[0] as TypesenseHit, data: hydratedPlaylists[0] },
-    ].filter(c => c.hit && c.data);
+    ].filter((c) => c.hit && c.data);
 
     let bestResult = null;
-    
+
     if (candidates.length > 0) {
-      const maxTextScore = Math.max(...candidates.map(c => c.hit.text_match || 0), 1);
+      const maxTextScore = Math.max(...candidates.map((c) => c.hit.text_match || 0), 1);
       const maxPop = Math.max(
-        ...candidates.map(c => c.hit.document.popularity || c.hit.document.followers_count || c.hit.document.likes_count || 0), 
-        1
+        ...candidates.map(
+          (c) =>
+            c.hit.document.popularity ||
+            c.hit.document.followers_count ||
+            c.hit.document.likes_count ||
+            0,
+        ),
+        1,
       );
 
       let highestScore = -1;
 
       for (const candidate of candidates) {
         const textScore = candidate.hit.text_match || 0;
-        const pop = candidate.hit.document.popularity || candidate.hit.document.followers_count || candidate.hit.document.likes_count || 0;
-        
+        const pop =
+          candidate.hit.document.popularity ||
+          candidate.hit.document.followers_count ||
+          candidate.hit.document.likes_count ||
+          0;
+
         const hybridScore = (textScore / maxTextScore) * 0.9 + (pop / maxPop) * 0.1;
 
         if (hybridScore > highestScore) {
@@ -151,13 +164,17 @@ export class SearchService {
         }
       }
     }
-    return plainToInstance(SearchResponseDto, {
-      best_result: bestResult,
-      movies: hydratedMovies,
-      tv_series: hydratedTvSeries,
-      persons: hydratedPersons,
-      users: hydratedUsers,
-      playlists: hydratedPlaylists,
-    }, { excludeExtraneousValues: true });
+    return parseResponseDto(
+      SearchResponseDto,
+      {
+        best_result: bestResult,
+        movies: hydratedMovies,
+        tv_series: hydratedTvSeries,
+        persons: hydratedPersons,
+        users: hydratedUsers,
+        playlists: hydratedPlaylists,
+      },
+      { excludeExtraneousValues: true },
+    );
   }
 }

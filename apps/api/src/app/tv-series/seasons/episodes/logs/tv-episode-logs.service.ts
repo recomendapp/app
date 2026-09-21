@@ -11,7 +11,7 @@ import {
   LogTvEpisodeRequestDto,
   LogTvEpisodeUpdateResponseDto,
 } from './tv-episode-logs.dto';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../../../utils/parse-response-dto';
 import { TvLogsSyncService } from '../../../logs/sync/tv-logs-sync.service';
 import { LogServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../../../../realtime/realtime.gateway';
@@ -50,7 +50,7 @@ export class TvEpisodeLogsService {
       .limit(1);
 
     if (!logEntry) return null;
-    return plainToInstance(LogTvEpisodeDto, logEntry.episode, { excludeExtraneousValues: true });
+    return parseResponseDto(LogTvEpisodeDto, logEntry.episode, { excludeExtraneousValues: true });
   }
 
   async set({
@@ -128,7 +128,7 @@ export class TvEpisodeLogsService {
       };
     });
 
-    const response = plainToInstance(LogTvEpisodeUpdateResponseDto, result, {
+    const response = parseResponseDto(LogTvEpisodeUpdateResponseDto, result, {
       excludeExtraneousValues: true,
     });
 
@@ -185,7 +185,7 @@ export class TvEpisodeLogsService {
       };
     });
 
-    const response = plainToInstance(LogTvEpisodeUpdateResponseDto, result, {
+    const response = parseResponseDto(LogTvEpisodeUpdateResponseDto, result, {
       excludeExtraneousValues: true,
     });
 

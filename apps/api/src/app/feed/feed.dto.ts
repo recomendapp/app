@@ -1,21 +1,31 @@
-import { 
-  ApiProperty, 
-  ApiPropertyOptional, 
-  ApiSchema, 
-  IntersectionType, 
-  getSchemaPath, 
-  ApiExtraModels, 
-  OmitType
+import {
+  ApiProperty,
+  ApiPropertyOptional,
+  ApiSchema,
+  IntersectionType,
+  getSchemaPath,
+  ApiExtraModels,
+  OmitType,
 } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../common/dto/pagination.dto';
-import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../common/dto/cursor-pagination.dto';
+import {
+  CursorPaginatedResponseDto,
+  CursorPaginationQueryDto,
+} from '../../common/dto/cursor-pagination.dto';
 import { feedTypeEnum } from '@libs/db/schemas';
 import { UserSummaryDto } from '../users/dto/users.dto';
 import { PlaylistDto } from '../playlists/dto/playlists.dto';
 import { LogMovieWithMovieDto } from '../movies/logs/log-movie.dto';
 import { LogTvSeriesWithTvSeriesDto } from '../tv-series/logs/tv-series-logs.dto';
-import { IsOptional, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsDateString,
+  IsInt,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { ReviewMovieWithAuthorMovieDto } from '../reviews/movie/dto/reviews-movie.dto';
 import { ReviewTvSeriesWithAuthorTvSeriesDto } from '../reviews/tv-series/dto/review-tv-series.dto';
 import { MovieSummaryDto } from '../movies/dto/movies.dto';
@@ -24,24 +34,29 @@ import { TvSeriesSummaryDto } from '../tv-series/dto/tv-series.dto';
 class BaseFeedItemDto {
   @ApiProperty({ example: 42 })
   @Expose()
+  @IsInt()
   id!: number;
 
   @ApiProperty({ example: '2024-01-30T12:00:00Z' })
   @Expose()
+  @IsDateString()
   createdAt!: string;
 
   @ApiProperty({ type: () => UserSummaryDto })
   @Expose()
   @Type(() => UserSummaryDto)
+  @ValidateNested()
   author!: UserSummaryDto;
 
   @ApiProperty({ description: 'The id of the activity' })
   @Expose()
+  @IsInt()
   activityId!: number;
 
   @ApiProperty({ enum: feedTypeEnum.enumValues })
   @Expose()
-  activityType!: typeof feedTypeEnum.enumValues[number];
+  @IsString()
+  activityType!: (typeof feedTypeEnum.enumValues)[number];
 }
 
 @ApiSchema({ name: 'FeedLogMovieContent' })
@@ -49,6 +64,7 @@ export class FeedLogMovieContentDto extends OmitType(LogMovieWithMovieDto, ['mov
   @ApiProperty({ type: () => MovieSummaryDto })
   @Expose()
   @Type(() => MovieSummaryDto)
+  @ValidateNested()
   movie!: MovieSummaryDto;
 }
 
@@ -57,22 +73,30 @@ export class FeedLogTvSeriesContentDto extends OmitType(LogTvSeriesWithTvSeriesD
   @ApiProperty({ type: () => TvSeriesSummaryDto })
   @Expose()
   @Type(() => TvSeriesSummaryDto)
+  @ValidateNested()
   tvSeries!: TvSeriesSummaryDto;
 }
 
 @ApiSchema({ name: 'FeedReviewMovieLikeContent' })
-export class FeedReviewMovieLikeContentDto extends OmitType(ReviewMovieWithAuthorMovieDto, ['movie']) {
+export class FeedReviewMovieLikeContentDto extends OmitType(ReviewMovieWithAuthorMovieDto, [
+  'movie',
+]) {
   @ApiProperty({ type: () => MovieSummaryDto })
   @Expose()
   @Type(() => MovieSummaryDto)
+  @ValidateNested()
   movie!: MovieSummaryDto;
 }
 
 @ApiSchema({ name: 'FeedReviewTvSeriesLikeContent' })
-export class FeedReviewTvSeriesLikeContentDto extends OmitType(ReviewTvSeriesWithAuthorTvSeriesDto, ['tvSeries']) {
+export class FeedReviewTvSeriesLikeContentDto extends OmitType(
+  ReviewTvSeriesWithAuthorTvSeriesDto,
+  ['tvSeries'],
+) {
   @ApiProperty({ type: () => TvSeriesSummaryDto })
   @Expose()
   @Type(() => TvSeriesSummaryDto)
+  @ValidateNested()
   tvSeries!: TvSeriesSummaryDto;
 }
 
@@ -80,11 +104,13 @@ export class FeedReviewTvSeriesLikeContentDto extends OmitType(ReviewTvSeriesWit
 export class FeedItemLogMovieDto extends BaseFeedItemDto {
   @ApiProperty({ enum: ['log_movie'] as const })
   @Expose()
+  @IsString()
   activityType!: 'log_movie';
 
   @ApiProperty({ type: () => FeedLogMovieContentDto })
   @Expose()
   @Type(() => FeedLogMovieContentDto)
+  @ValidateNested()
   content!: FeedLogMovieContentDto;
 }
 
@@ -92,11 +118,13 @@ export class FeedItemLogMovieDto extends BaseFeedItemDto {
 export class FeedItemLogTvSeriesDto extends BaseFeedItemDto {
   @ApiProperty({ enum: ['log_tv_series'] as const })
   @Expose()
+  @IsString()
   activityType!: 'log_tv_series';
 
   @ApiProperty({ type: () => FeedLogTvSeriesContentDto })
   @Expose()
   @Type(() => FeedLogTvSeriesContentDto)
+  @ValidateNested()
   content!: FeedLogTvSeriesContentDto;
 }
 
@@ -104,11 +132,13 @@ export class FeedItemLogTvSeriesDto extends BaseFeedItemDto {
 export class FeedItemPlaylistLikeDto extends BaseFeedItemDto {
   @ApiProperty({ enum: ['playlist_like'] as const })
   @Expose()
+  @IsString()
   activityType!: 'playlist_like';
 
   @ApiProperty({ type: () => PlaylistDto })
   @Expose()
   @Type(() => PlaylistDto)
+  @ValidateNested()
   content!: PlaylistDto;
 }
 
@@ -116,11 +146,13 @@ export class FeedItemPlaylistLikeDto extends BaseFeedItemDto {
 export class FeedItemReviewMovieLikeDto extends BaseFeedItemDto {
   @ApiProperty({ enum: ['review_movie_like'] as const })
   @Expose()
+  @IsString()
   activityType!: 'review_movie_like';
 
   @ApiProperty({ type: () => FeedReviewMovieLikeContentDto })
   @Expose()
   @Type(() => FeedReviewMovieLikeContentDto)
+  @ValidateNested()
   content!: FeedReviewMovieLikeContentDto;
 }
 
@@ -128,21 +160,22 @@ export class FeedItemReviewMovieLikeDto extends BaseFeedItemDto {
 export class FeedItemReviewTvSeriesLikeDto extends BaseFeedItemDto {
   @ApiProperty({ enum: ['review_tv_series_like'] as const })
   @Expose()
+  @IsString()
   activityType!: 'review_tv_series_like';
 
   @ApiProperty({ type: () => FeedReviewTvSeriesLikeContentDto })
   @Expose()
   @Type(() => FeedReviewTvSeriesLikeContentDto)
+  @ValidateNested()
   content!: FeedReviewTvSeriesLikeContentDto;
 }
 
-export type FeedItemUnion = 
-  | FeedItemLogMovieDto 
-  | FeedItemLogTvSeriesDto 
+export type FeedItemUnion =
+  | FeedItemLogMovieDto
+  | FeedItemLogTvSeriesDto
   | FeedItemPlaylistLikeDto
   | FeedItemReviewMovieLikeDto
   | FeedItemReviewTvSeriesLikeDto;
-
 
 export class BaseListFeedQueryDto {
   @ApiPropertyOptional({
@@ -151,19 +184,19 @@ export class BaseListFeedQueryDto {
   })
   @IsOptional()
   @IsString()
-  activity_type?: typeof feedTypeEnum.enumValues[number];
+  activity_type?: (typeof feedTypeEnum.enumValues)[number];
 }
 
 @ApiSchema({ name: 'ListPaginatedFeedQuery' })
 export class ListPaginatedFeedQueryDto extends IntersectionType(
   BaseListFeedQueryDto,
-  PaginationQueryDto
+  PaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListInfiniteFeedQuery' })
 export class ListInfiniteFeedQueryDto extends IntersectionType(
   BaseListFeedQueryDto,
-  CursorPaginationQueryDto
+  CursorPaginationQueryDto,
 ) {}
 
 @ApiExtraModels(
@@ -171,7 +204,7 @@ export class ListInfiniteFeedQueryDto extends IntersectionType(
   FeedItemLogTvSeriesDto,
   FeedItemPlaylistLikeDto,
   FeedItemReviewMovieLikeDto,
-  FeedItemReviewTvSeriesLikeDto
+  FeedItemReviewTvSeriesLikeDto,
 )
 @ApiSchema({ name: 'ListPaginatedFeed' })
 export class ListPaginatedFeedDto extends PaginatedResponseDto<FeedItemUnion> {
@@ -197,6 +230,7 @@ export class ListPaginatedFeedDto extends PaginatedResponseDto<FeedItemUnion> {
       },
     },
   })
+  @Expose()
   @Type(() => BaseFeedItemDto, {
     keepDiscriminatorProperty: true,
     discriminator: {
@@ -210,6 +244,8 @@ export class ListPaginatedFeedDto extends PaginatedResponseDto<FeedItemUnion> {
       ],
     },
   })
+  @IsArray()
+  @ValidateNested({ each: true })
   data!: FeedItemUnion[];
 
   constructor(partial: Partial<ListPaginatedFeedDto>) {
@@ -223,7 +259,7 @@ export class ListPaginatedFeedDto extends PaginatedResponseDto<FeedItemUnion> {
   FeedItemLogTvSeriesDto,
   FeedItemPlaylistLikeDto,
   FeedItemReviewMovieLikeDto,
-  FeedItemReviewTvSeriesLikeDto
+  FeedItemReviewTvSeriesLikeDto,
 )
 @ApiSchema({ name: 'ListInfiniteFeed' })
 export class ListInfiniteFeedDto extends CursorPaginatedResponseDto<FeedItemUnion> {
@@ -249,6 +285,7 @@ export class ListInfiniteFeedDto extends CursorPaginatedResponseDto<FeedItemUnio
       },
     },
   })
+  @Expose()
   @Type(() => BaseFeedItemDto, {
     keepDiscriminatorProperty: true,
     discriminator: {
@@ -262,6 +299,8 @@ export class ListInfiniteFeedDto extends CursorPaginatedResponseDto<FeedItemUnio
       ],
     },
   })
+  @IsArray()
+  @ValidateNested({ each: true })
   data!: FeedItemUnion[];
 
   constructor(partial: Partial<ListInfiniteFeedDto>) {

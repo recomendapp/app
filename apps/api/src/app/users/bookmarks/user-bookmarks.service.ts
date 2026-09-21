@@ -6,7 +6,9 @@ import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle
 import {
   BaseListBookmarksQueryDto,
   BookmarkSortBy,
+  BookmarkWithMovieDto,
   BookmarkWithMediaUnion,
+  BookmarkWithTvSeriesDto,
   ListAllBookmarksQueryDto,
   ListInfiniteBookmarksDto,
   ListInfiniteBookmarksQueryDto,
@@ -19,6 +21,7 @@ import { DbTransaction } from '@libs/db';
 import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { z } from 'zod';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 
 const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.number());
 
@@ -137,19 +140,19 @@ export class UserBookmarksService {
       return results.map((row): BookmarkWithMediaUnion => {
         const { movieId, tvSeriesId, ...baseBookmark } = row.bookmark;
         if (baseBookmark.type === 'movie') {
-          return {
+          return parseResponseDto(BookmarkWithMovieDto, {
             ...baseBookmark,
             type: 'movie',
             mediaId: movieId,
             media: row.movie,
-          };
+          });
         }
-        return {
+        return parseResponseDto(BookmarkWithTvSeriesDto, {
           ...baseBookmark,
           type: 'tv_series',
           mediaId: tvSeriesId,
           media: row.tvSeries,
-        };
+        });
       });
     });
   }
@@ -203,7 +206,7 @@ export class UserBookmarksService {
         tx.$count(bookmark, whereClause),
       ]);
 
-      return {
+      return parseResponseDto(ListPaginatedBookmarksDto, {
         data: results.map((row): ListInfiniteBookmarksDto['data'][number] => {
           const { movieId, tvSeriesId, ...baseBookmark } = row.bookmark;
           if (baseBookmark.type === 'movie') {
@@ -227,7 +230,7 @@ export class UserBookmarksService {
           current_page: page,
           per_page,
         },
-      };
+      });
     });
   }
   async listInfinite({
@@ -343,7 +346,7 @@ export class UserBookmarksService {
         }
       }
 
-      return {
+      return parseResponseDto(ListInfiniteBookmarksDto, {
         data: paginatedResults.map((row): ListInfiniteBookmarksDto['data'][number] => {
           const { movieId, tvSeriesId, ...baseBookmark } = row.bookmark;
           if (baseBookmark.type === 'movie') {
@@ -366,7 +369,7 @@ export class UserBookmarksService {
           per_page,
           total_results: totalCount,
         },
-      };
+      });
     });
   }
 }

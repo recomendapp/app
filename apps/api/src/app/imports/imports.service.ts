@@ -27,7 +27,7 @@ import { TvLogsSyncService } from '../tv-series/logs/sync/tv-logs-sync.service';
 import { RealtimeGateway } from '../realtime/realtime.gateway';
 import { ImportServerEvents } from '@libs/realtime';
 import { User } from '../auth/auth.service';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../utils/parse-response-dto';
 import {
   ImportJobDto,
   ImportJobInternalEventDto,
@@ -144,7 +144,7 @@ export class ImportsService {
     row: typeof importJob.$inferSelect,
     providerSlug: string | null,
   ): ImportJobDto {
-    return plainToInstance(ImportJobDto, { ...row, provider: providerSlug });
+    return parseResponseDto(ImportJobDto, { ...row, provider: providerSlug });
   }
 
   private assertAwaitingReview(status: string) {
@@ -231,7 +231,7 @@ export class ImportsService {
       orderBy,
       with: { provider: true },
     });
-    return rows.map((row) => plainToInstance(ImportJobDto, this.flattenJobRow(row)));
+    return rows.map((row) => parseResponseDto(ImportJobDto, this.flattenJobRow(row)));
   }
 
   async listPaginated(user: User, query: PaginationQueryDto): Promise<ListPaginatedImportJobsDto> {
@@ -249,7 +249,7 @@ export class ImportsService {
       this.db.$count(importJob, whereClause),
     ]);
 
-    return plainToInstance(ListPaginatedImportJobsDto, {
+    return parseResponseDto(ListPaginatedImportJobsDto, {
       data: rows.map((row) => this.flattenJobRow(row)),
       meta: {
         total_results: totalCount,
@@ -303,7 +303,7 @@ export class ImportsService {
         ? await this.db.$count(importJob, baseWhereClause)
         : undefined;
 
-    return plainToInstance(ListInfiniteImportJobsDto, {
+    return parseResponseDto(ListInfiniteImportJobsDto, {
       data: pageRows.map((row) => this.flattenJobRow(row)),
       meta: { next_cursor: nextCursor, per_page, total_results: totalCount },
     });
@@ -311,7 +311,7 @@ export class ImportsService {
 
   async getById(user: User, importJobId: number): Promise<ImportJobDto> {
     const job = await this.getOwnedJob(user.id, importJobId);
-    return plainToInstance(ImportJobDto, this.flattenJobRow(job));
+    return parseResponseDto(ImportJobDto, this.flattenJobRow(job));
   }
 
   async delete(user: User, importJobId: number): Promise<void> {

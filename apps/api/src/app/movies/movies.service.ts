@@ -6,13 +6,11 @@ import { and, asc, eq, sql } from 'drizzle-orm';
 import { User } from '../auth/auth.service';
 import { SupportedLocale } from '@libs/i18n';
 import { MovieCastingDto } from './dto/movie-credits.dto';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../utils/parse-response-dto';
 
 @Injectable()
 export class MoviesService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
   async get({
     movieId,
@@ -24,13 +22,9 @@ export class MoviesService {
     locale: SupportedLocale;
   }): Promise<MovieDto> {
     return await this.db.transaction(async (tx) => {
-      await tx.execute(
-        sql`SELECT set_config('app.current_language', ${locale}, true)`
-      );
+      await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
       if (currentUser) {
-        await tx.execute(
-          sql`SELECT set_config('app.current_user_id', ${currentUser.id}, true)`
-        );
+        await tx.execute(sql`SELECT set_config('app.current_user_id', ${currentUser.id}, true)`);
       }
 
       const [movie] = await tx
@@ -43,7 +37,7 @@ export class MoviesService {
         throw new NotFoundException(`Movie with id ${movieId} not found`);
       }
 
-      return plainToInstance(MovieDto, movie);
+      return parseResponseDto(MovieDto, movie);
     });
   }
 
@@ -55,9 +49,7 @@ export class MoviesService {
     locale: SupportedLocale;
   }): Promise<MovieCastingDto[]> {
     return await this.db.transaction(async (tx) => {
-      await tx.execute(
-        sql`SELECT set_config('app.current_language', ${locale}, true)`
-      );
+      await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
 
       const aggregatedCastingSq = tx
         .select({
@@ -75,12 +67,7 @@ export class MoviesService {
         })
         .from(tmdbMovieCredit)
         .leftJoin(tmdbMovieRole, eq(tmdbMovieRole.creditId, tmdbMovieCredit.id))
-        .where(
-          and(
-            eq(tmdbMovieCredit.movieId, movieId),
-            eq(tmdbMovieCredit.job, 'Actor')
-          )
-        )
+        .where(and(eq(tmdbMovieCredit.movieId, movieId), eq(tmdbMovieCredit.job, 'Actor')))
         .groupBy(tmdbMovieCredit.movieId, tmdbMovieCredit.personId)
         .as('aggregated_casting');
 
@@ -93,16 +80,15 @@ export class MoviesService {
           person: {
             id: tmdbPersonView.id,
             name: tmdbPersonView.name,
+            gender: tmdbPersonView.gender,
             profilePath: tmdbPersonView.profilePath,
-            slug: tmdbPersonView.slug,
-            url: tmdbPersonView.url,
           },
         })
         .from(aggregatedCastingSq)
         .innerJoin(tmdbPersonView, eq(tmdbPersonView.id, aggregatedCastingSq.personId))
         .orderBy(asc(aggregatedCastingSq.order));
-      
-      return plainToInstance(MovieCastingDto, castingData);
+
+      return parseResponseDto(MovieCastingDto, castingData);
     });
   }
 }
