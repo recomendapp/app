@@ -17,6 +17,7 @@ import { FixedOmit } from '../../../utils/fixed-omit';
 import UserAvatar from '../../user/UserAvatar';
 import { Icons } from '../../../constants/Icons';
 import { formatCompactCount } from '../../../utils/formatCompactCount';
+import { AnimatedPressable } from '../../ui/AnimatedPressable';
 
 interface CardReviewMovieBaseProps extends React.ComponentPropsWithRef<typeof Animated.View> {
   variant?: 'default';
@@ -96,7 +97,7 @@ const CardReviewMovieDefault = React.forwardRef<
       {!skeleton && (
         <View style={tw.style('flex-row items-center gap-3 mt-2')}>
           <ButtonUserReviewMovieLike review={review} compact />
-          <Pressable
+          <AnimatedPressable
             onPress={(event) => {
               event.stopPropagation();
               onCommentPress?.();
@@ -110,7 +111,7 @@ const CardReviewMovieDefault = React.forwardRef<
                 {formatCompactCount(review.commentsCount)}
               </Text>
             )}
-          </Pressable>
+          </AnimatedPressable>
         </View>
       )}
     </Animated.View>

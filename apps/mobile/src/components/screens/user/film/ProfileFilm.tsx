@@ -25,8 +25,8 @@ import FeedUserLog from '../../feed/FeedUserLog';
 import { EnrichedMarkdownText } from '../../../RichText/EnrichedMarkdownText';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Pressable } from 'react-native';
 import { formatCompactCount } from '../../../../utils/formatCompactCount';
+import { AnimatedPressable } from '../../../ui/AnimatedPressable';
 
 export const ProfileFilm = ({ username, movieId }: { username: string; movieId: number }) => {
   const { colors } = useTheme();
@@ -144,7 +144,7 @@ export const ProfileFilm = ({ username, movieId }: { username: string; movieId: 
                 <EnrichedMarkdownText markdown={log.review.body} />
                 <View style={tw`flex-row items-center gap-3 mt-3`}>
                   <ButtonUserReviewMovieLike review={log.review} compact />
-                  <Pressable
+                  <AnimatedPressable
                     onPress={openComments}
                     hitSlop={8}
                     style={tw`flex-row items-center gap-1 py-1`}
@@ -155,7 +155,7 @@ export const ProfileFilm = ({ username, movieId }: { username: string; movieId: 
                         {formatCompactCount(log.review.commentsCount)}
                       </Text>
                     )}
-                  </Pressable>
+                  </AnimatedPressable>
                 </View>
               </>
             ) : (

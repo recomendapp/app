@@ -7,8 +7,8 @@ import tw from '../../lib/tw';
 import { useUserReviewMovieLike } from '@libs/query-client';
 import { useAuth } from '../../providers/AuthProvider';
 import { ReviewMovie } from '@libs/api-js';
-import { Pressable } from 'react-native';
 import { formatCompactCount } from '../../utils/formatCompactCount';
+import { AnimatedPressable } from '../ui/AnimatedPressable';
 
 interface ButtonUserReviewMovieLikeProps
   extends Omit<React.ComponentProps<typeof Button>, 'children'> {
@@ -48,7 +48,7 @@ const ButtonUserReviewMovieLike = forwardRef<
 
     if (compact) {
       return (
-        <Pressable
+        <AnimatedPressable
           onPress={(event) => {
             toggle();
             onPress?.(event);
@@ -61,7 +61,7 @@ const ButtonUserReviewMovieLike = forwardRef<
           {review.likesCount > 0 && (
             <Text style={{ fontSize: 12, color }}>{formatCompactCount(review.likesCount)}</Text>
           )}
-        </Pressable>
+        </AnimatedPressable>
       );
     }
 
