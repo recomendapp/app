@@ -141,6 +141,8 @@ export class ReviewTvSeriesCommentUpdateInputDto extends PickType(ReviewTvSeries
 export class ListPaginatedReviewTvSeriesCommentsDto extends PaginatedResponseDto<ReviewTvSeriesCommentWithAuthorDto> {
   @ApiProperty({ type: () => [ReviewTvSeriesCommentWithAuthorDto] })
   @Type(() => ReviewTvSeriesCommentWithAuthorDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: ReviewTvSeriesCommentWithAuthorDto[];
 
   constructor(partial: Partial<ListPaginatedReviewTvSeriesCommentsDto>) {
@@ -153,6 +155,8 @@ export class ListPaginatedReviewTvSeriesCommentsDto extends PaginatedResponseDto
 export class ListInfiniteReviewTvSeriesCommentsDto extends CursorPaginatedResponseDto<ReviewTvSeriesCommentWithAuthorDto> {
   @ApiProperty({ type: () => [ReviewTvSeriesCommentWithAuthorDto] })
   @Type(() => ReviewTvSeriesCommentWithAuthorDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: ReviewTvSeriesCommentWithAuthorDto[];
 
   constructor(partial: Partial<ListInfiniteReviewTvSeriesCommentsDto>) {

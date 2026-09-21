@@ -20,7 +20,10 @@ const BottomSheetShareTvSeries = forwardRef<
   return (
     <BottomSheetShareLayout
       ref={ref}
-      path={tvSeries.url || `/tv-series/${tvSeries.slug || tvSeries.id}`}
+      path={{
+        pathname: '/tv-series/[tv_series_id]',
+        params: { tv_series_id: tvSeries.slug || tvSeries.id },
+      }}
       contentRef={shareViewRef}
       {...props}
     >

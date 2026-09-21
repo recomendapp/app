@@ -9,7 +9,7 @@ import {
   tmdbTvSeries,
   user,
 } from '@libs/db/schemas';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { LogTvSeriesDto, LogTvSeriesRequestDto, LogTvStatus } from './tv-series-logs.dto';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { TvLogsSyncService } from './sync/tv-logs-sync.service';
@@ -56,7 +56,7 @@ export class TvSeriesLogsService {
 
     if (!logEntry) return null;
 
-    return plainToInstance(
+    return parseResponseDto(
       LogTvSeriesDto,
       {
         ...logEntry,
@@ -191,7 +191,7 @@ export class TvSeriesLogsService {
       throw new NotFoundException('Log entry not found after update');
     }
 
-    const result = plainToInstance(
+    const result = parseResponseDto(
       LogTvSeriesDto,
       {
         ...completeLog,
@@ -249,7 +249,7 @@ export class TvSeriesLogsService {
       return logEntry;
     });
 
-    const result = plainToInstance(
+    const result = parseResponseDto(
       LogTvSeriesDto,
       {
         ...deletedLog,
@@ -309,7 +309,7 @@ export class TvSeriesLogsService {
       .groupBy(logTvSeries.id, user.id, profile.id, reviewTvSeries.id)
       .orderBy(desc(logTvSeries.createdAt));
 
-    return plainToInstance(
+    return parseResponseDto(
       TvSeriesFollowingLogDto,
       rows.map((row) => ({
         ...row.log,
@@ -349,7 +349,7 @@ export class TvSeriesLogsService {
 
     const averageValue = result?.average ? Number(result.average) : null;
 
-    return plainToInstance(TvSeriesFollowingAverageRatingDto, {
+    return parseResponseDto(TvSeriesFollowingAverageRatingDto, {
       averageRating: averageValue !== null ? Math.round(averageValue * 10) / 10 : null,
     });
   }

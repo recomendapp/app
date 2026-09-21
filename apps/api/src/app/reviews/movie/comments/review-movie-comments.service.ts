@@ -11,7 +11,7 @@ import { User } from '../../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/drizzle/drizzle.module';
 import { profile, reviewMovie, reviewMovieComment, user } from '@libs/db/schemas';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../../utils/parse-response-dto';
 import { SortOrder } from '../../../../common/dto/sort.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../../utils/cursor';
 import { assertReviewMovieVisible } from '../review-movie-visibility';
@@ -253,7 +253,7 @@ export class ReviewMovieCommentsService {
 
     const author = await this.getAuthor(currentUser.id);
 
-    return plainToInstance(
+    return parseResponseDto(
       ReviewMovieCommentWithAuthorDto,
       { ...comment, author },
       { excludeExtraneousValues: true },
@@ -288,7 +288,7 @@ export class ReviewMovieCommentsService {
 
     const author = await this.getAuthor(currentUser.id);
 
-    return plainToInstance(
+    return parseResponseDto(
       ReviewMovieCommentWithAuthorDto,
       { ...updated, author },
       { excludeExtraneousValues: true },
@@ -337,7 +337,7 @@ export class ReviewMovieCommentsService {
 
       const author = await this.getAuthor(deleted.userId);
 
-      return plainToInstance(
+      return parseResponseDto(
         ReviewMovieCommentWithAuthorDto,
         { ...deleted, author },
         { excludeExtraneousValues: true },
@@ -351,7 +351,7 @@ export class ReviewMovieCommentsService {
 
     const author = await this.getAuthor(deleted.userId);
 
-    return plainToInstance(
+    return parseResponseDto(
       ReviewMovieCommentWithAuthorDto,
       { ...deleted, author },
       { excludeExtraneousValues: true },
@@ -375,7 +375,7 @@ export class ReviewMovieCommentsService {
     const orderBy = this.getOrderBy(sort_by, sort_order);
     const result = await this.fetchPaginated(whereClause, orderBy, page, per_page);
 
-    return plainToInstance(ListPaginatedReviewMovieCommentsDto, result);
+    return parseResponseDto(ListPaginatedReviewMovieCommentsDto, result);
   }
 
   async listInfinite({
@@ -401,7 +401,7 @@ export class ReviewMovieCommentsService {
       per_page,
     );
 
-    return plainToInstance(ListInfiniteReviewMovieCommentsDto, result);
+    return parseResponseDto(ListInfiniteReviewMovieCommentsDto, result);
   }
 
   async listRepliesPaginated({
@@ -423,7 +423,7 @@ export class ReviewMovieCommentsService {
     const orderBy = this.getOrderBy(sort_by, sort_order);
     const result = await this.fetchPaginated(whereClause, orderBy, page, per_page);
 
-    return plainToInstance(ListPaginatedReviewMovieCommentsDto, result);
+    return parseResponseDto(ListPaginatedReviewMovieCommentsDto, result);
   }
 
   async listRepliesInfinite({
@@ -452,6 +452,6 @@ export class ReviewMovieCommentsService {
       per_page,
     );
 
-    return plainToInstance(ListInfiniteReviewMovieCommentsDto, result);
+    return parseResponseDto(ListInfiniteReviewMovieCommentsDto, result);
   }
 }

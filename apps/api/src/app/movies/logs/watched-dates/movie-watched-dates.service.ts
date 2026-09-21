@@ -17,7 +17,7 @@ import { DbTransaction } from '@libs/db';
 import { SortOrder } from '../../../../common/dto/sort.dto';
 import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../../utils/cursor';
 import { z } from 'zod';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../../utils/parse-response-dto';
 import { LogServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../../../realtime/realtime.gateway';
 
@@ -100,7 +100,7 @@ export class MovieWatchedDatesService {
       };
     });
 
-    const response = plainToInstance(WatchedDateResponseDto, result);
+    const response = parseResponseDto(WatchedDateResponseDto, result);
 
     this.realtimeGateway.emitToUser(user.id, LogServerEvents.MOVIE_WATCHED_DATE_SET, response);
 
@@ -149,7 +149,7 @@ export class MovieWatchedDatesService {
       };
     });
 
-    const response = plainToInstance(WatchedDateResponseDto, result);
+    const response = parseResponseDto(WatchedDateResponseDto, result);
 
     this.realtimeGateway.emitToUser(user.id, LogServerEvents.MOVIE_WATCHED_DATE_UPDATED, response);
 
@@ -202,7 +202,7 @@ export class MovieWatchedDatesService {
       };
     });
 
-    const response = plainToInstance(WatchedDateResponseDto, result);
+    const response = parseResponseDto(WatchedDateResponseDto, result);
 
     this.realtimeGateway.emitToUser(user.id, LogServerEvents.MOVIE_WATCHED_DATE_DELETED, response);
 
@@ -270,7 +270,7 @@ export class MovieWatchedDatesService {
 
     const totalCount = Number(totalCountResult[0]?.count || 0);
 
-    return plainToInstance(ListPaginatedWatchedDatesDto, {
+    return parseResponseDto(ListPaginatedWatchedDatesDto, {
       data: dates,
       meta: {
         total_results: totalCount,
@@ -361,7 +361,7 @@ export class MovieWatchedDatesService {
       }
     }
 
-    return plainToInstance(ListInfiniteWatchedDatesDto, {
+    return parseResponseDto(ListInfiniteWatchedDatesDto, {
       data: paginatedResults,
       meta: {
         next_cursor: nextCursor,

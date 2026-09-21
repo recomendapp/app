@@ -16,7 +16,7 @@ import { SortOrder } from '../../../common/dto/sort.dto';
 import { RecoType } from '../dto/recos.dto';
 import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { z } from 'zod';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 
 const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.string().min(1));
@@ -151,7 +151,7 @@ export class RecoTargetsService {
 
     const results = await joinedQb.where(whereClause).orderBy(...orderBy);
 
-    return plainToInstance(
+    return parseResponseDto(
       RecoTargetDto,
       results.map((row) => ({
         id: row.user.id,
@@ -210,7 +210,7 @@ export class RecoTargetsService {
       countQuery,
     ]);
 
-    return plainToInstance(ListPaginatedRecoTargetsDto, {
+    return parseResponseDto(ListPaginatedRecoTargetsDto, {
       data: followers.map((row) => ({
         id: row.user.id,
         name: row.user.name,
@@ -326,7 +326,7 @@ export class RecoTargetsService {
       }
     }
 
-    return plainToInstance(ListInfiniteRecoTargetsDto, {
+    return parseResponseDto(ListInfiniteRecoTargetsDto, {
       data: paginatedResults.map((row) => ({
         id: row.user.id,
         name: row.user.name,

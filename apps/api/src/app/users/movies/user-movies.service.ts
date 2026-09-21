@@ -18,7 +18,7 @@ import { DbTransaction } from '@libs/db';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { z } from 'zod';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { MOVIE_COMPACT_SELECT } from '@libs/db/selectors';
 
 const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.number());
@@ -106,7 +106,7 @@ export class UserMoviesService {
 
       const { user, review, ...logData } = logEntry;
 
-      return plainToInstance(UserMovieWithUserMovieDto, {
+      return parseResponseDto(UserMovieWithUserMovieDto, {
         ...logData,
         review: review
           ? {
@@ -242,7 +242,7 @@ export class UserMoviesService {
         tx.$count(logMovie, whereClause),
       ]);
 
-      return plainToInstance(ListPaginatedUserMoviesWithMovieDto, {
+      return parseResponseDto(ListPaginatedUserMoviesWithMovieDto, {
         data: results.map(({ log, movie, isReviewed }) => ({
           ...log,
           isReviewed,
@@ -380,7 +380,7 @@ export class UserMoviesService {
           });
         }
       }
-      return plainToInstance(ListInfiniteUserMoviesWithMovieDto, {
+      return parseResponseDto(ListInfiniteUserMoviesWithMovieDto, {
         data: paginatedResults.map(({ log, movie, isReviewed }) => ({
           ...log,
           isReviewed,

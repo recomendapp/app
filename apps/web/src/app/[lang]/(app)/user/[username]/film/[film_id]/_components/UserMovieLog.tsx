@@ -22,7 +22,9 @@ export const UserMovieLog = ({ log: logProp }: { log: UserMovieWithUserMovie }) 
 
   useEffect(() => {
     if (log === null && !isLoading) {
-      router.replace(logProp.movie.url || '/');
+      router.replace({
+        pathname: `/film/${logProp.movie.slug ?? logProp.movie.id}`,
+      });
     }
   }, [log, isLoading, router]);
 

@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional, ApiSchema } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { IsIn, IsOptional } from 'class-validator';
+import { IsIn, IsOptional, ValidateNested } from 'class-validator';
 import { importMatchStatusEnum } from '@libs/db/schemas';
 import { PaginatedResponseDto } from '../../../common/dto/pagination.dto';
 import { CursorPaginatedResponseDto } from '../../../common/dto/cursor-pagination.dto';
@@ -35,6 +35,8 @@ export class PatchImportJobPlaylistDto {
 export class ListPaginatedImportPlaylistsDto extends PaginatedResponseDto<ImportJobPlaylistDto> {
   @ApiProperty({ type: () => [ImportJobPlaylistDto] })
   @Type(() => ImportJobPlaylistDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: ImportJobPlaylistDto[];
 
   constructor(partial: Partial<ListPaginatedImportPlaylistsDto>) {
@@ -47,6 +49,8 @@ export class ListPaginatedImportPlaylistsDto extends PaginatedResponseDto<Import
 export class ListInfiniteImportPlaylistsDto extends CursorPaginatedResponseDto<ImportJobPlaylistDto> {
   @ApiProperty({ type: () => [ImportJobPlaylistDto] })
   @Type(() => ImportJobPlaylistDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: ImportJobPlaylistDto[];
 
   constructor(partial: Partial<ListInfiniteImportPlaylistsDto>) {

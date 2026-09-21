@@ -128,11 +128,13 @@ export class PlaylistDto {
     enum: [...playlistMemberRoleEnum.enumValues, 'owner', null],
     example: 'owner',
     nullable: true,
+    required: false,
   })
   @Expose()
+  @IsOptional()
   @IsString()
   @IsNullable()
-  role!: (typeof playlistMemberRoleEnum.enumValues)[number] | 'owner' | null;
+  role?: (typeof playlistMemberRoleEnum.enumValues)[number] | 'owner' | null;
 }
 
 @ApiSchema({ name: 'PlaylistWithOwner' })
@@ -192,6 +194,8 @@ export class PlaylistUpdateDto extends PartialType(PlaylistCreateDto) {}
 @ApiSchema({ name: 'ListPaginatedPlaylists' })
 export class ListPaginatedPlaylistsDto extends PaginatedResponseDto<PlaylistDto> {
   @ApiProperty({ type: () => [PlaylistDto] })
+  @Expose()
+  @ValidateNested({ each: true })
   @Type(() => PlaylistDto)
   data!: PlaylistDto[];
 
@@ -204,6 +208,8 @@ export class ListPaginatedPlaylistsDto extends PaginatedResponseDto<PlaylistDto>
 @ApiSchema({ name: 'ListInfinitePlaylists' })
 export class ListInfinitePlaylistsDto extends CursorPaginatedResponseDto<PlaylistDto> {
   @ApiProperty({ type: () => [PlaylistDto] })
+  @Expose()
+  @ValidateNested({ each: true })
   @Type(() => PlaylistDto)
   data!: PlaylistDto[];
 
@@ -216,6 +222,8 @@ export class ListInfinitePlaylistsDto extends CursorPaginatedResponseDto<Playlis
 @ApiSchema({ name: 'ListPaginatedPlaylistsWithOwner' })
 export class ListPaginatedPlaylistsWithOwnerDto extends PaginatedResponseDto<PlaylistWithOwnerDto> {
   @ApiProperty({ type: () => [PlaylistWithOwnerDto] })
+  @Expose()
+  @ValidateNested({ each: true })
   @Type(() => PlaylistWithOwnerDto)
   data!: PlaylistWithOwnerDto[];
 
@@ -228,6 +236,8 @@ export class ListPaginatedPlaylistsWithOwnerDto extends PaginatedResponseDto<Pla
 @ApiSchema({ name: 'ListInfinitePlaylistsWithOwner' })
 export class ListInfinitePlaylistsWithOwnerDto extends CursorPaginatedResponseDto<PlaylistWithOwnerDto> {
   @ApiProperty({ type: () => [PlaylistWithOwnerDto] })
+  @Expose()
+  @ValidateNested({ each: true })
   @Type(() => PlaylistWithOwnerDto)
   data!: PlaylistWithOwnerDto[];
 

@@ -1,5 +1,21 @@
-import { ApiSchema, ApiProperty, OmitType, ApiPropertyOptional, IntersectionType } from '@nestjs/swagger';
-import { IsBoolean, IsDateString, IsEnum, IsInt, IsNumber, IsOptional, Max, Min, ValidateNested } from 'class-validator';
+import {
+  ApiSchema,
+  ApiProperty,
+  OmitType,
+  ApiPropertyOptional,
+  IntersectionType,
+} from '@nestjs/swagger';
+import {
+  IsBoolean,
+  IsDateString,
+  IsEnum,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  Max,
+  Min,
+  ValidateNested,
+} from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { ReviewTvSeriesDto } from '../../reviews/tv-series/dto/review-tv-series.dto';
 import { TvSeriesCompactDto } from '../dto/tv-series.dto';
@@ -36,7 +52,7 @@ export class LogTvSeriesRequestDto {
   })
   @IsOptional()
   @IsEnum(LogTvStatus, {
-    message: `Status must be one of: ${Object.values(LogTvStatus).join(', ')}`
+    message: `Status must be one of: ${Object.values(LogTvStatus).join(', ')}`,
   })
   status?: LogTvStatus;
 }
@@ -59,14 +75,14 @@ export class LogTvSeriesDto {
 
   @ApiProperty({
     enum: LogTvStatus,
-    example: LogTvStatus.WATCHING
+    example: LogTvStatus.WATCHING,
   })
   @Expose()
   @IsEnum(LogTvStatus, {
-	  message: `Status must be one of: ${Object.values(LogTvStatus).join(', ')}`
+    message: `Status must be one of: ${Object.values(LogTvStatus).join(', ')}`,
   })
   status!: LogTvStatus;
-  
+
   @ApiProperty()
   @Expose()
   @IsInt()
@@ -76,7 +92,7 @@ export class LogTvSeriesDto {
   @Expose()
   @IsInt()
   watchCount!: number;
-  
+
   @ApiProperty()
   @Expose()
   @IsBoolean()
@@ -99,7 +115,7 @@ export class LogTvSeriesDto {
   @IsOptional()
   @IsDateString()
   ratedAt!: string | null;
-  
+
   @ApiProperty({ nullable: true })
   @Expose()
   @IsOptional()
@@ -149,6 +165,7 @@ export class LogTvSeriesWithTvSeriesNoReviewDto extends OmitType(LogTvSeriesDto,
   isReviewed!: boolean;
 
   @ApiProperty({ description: 'The tv series details' })
+  @ValidateNested()
   @Type(() => TvSeriesCompactDto)
   @Expose()
   tvSeries!: TvSeriesCompactDto;
@@ -157,6 +174,7 @@ export class LogTvSeriesWithTvSeriesNoReviewDto extends OmitType(LogTvSeriesDto,
 @ApiSchema({ name: 'LogTvSeriesWithTvSeries' })
 export class LogTvSeriesWithTvSeriesDto extends LogTvSeriesDto {
   @ApiProperty({ description: 'The tv series details' })
+  @ValidateNested()
   @Type(() => TvSeriesCompactDto)
   @Expose()
   tvSeries!: TvSeriesCompactDto;
@@ -170,35 +188,35 @@ export enum LogTvSeriesSortBy {
 
 @ApiSchema({ name: 'BaseListLogsTvSeriesQuery' })
 class BaseListLogsTvSeriesQueryDto {
-	@ApiPropertyOptional({
-		description: 'Field to sort logs by',
-		default: LogTvSeriesSortBy.UPDATED_AT,
-		example: LogTvSeriesSortBy.UPDATED_AT,
-		enum: LogTvSeriesSortBy,
-	})
-	@IsOptional()
-	@IsEnum(LogTvSeriesSortBy)
-	sort_by: LogTvSeriesSortBy = LogTvSeriesSortBy.UPDATED_AT;
+  @ApiPropertyOptional({
+    description: 'Field to sort logs by',
+    default: LogTvSeriesSortBy.UPDATED_AT,
+    example: LogTvSeriesSortBy.UPDATED_AT,
+    enum: LogTvSeriesSortBy,
+  })
+  @IsOptional()
+  @IsEnum(LogTvSeriesSortBy)
+  sort_by: LogTvSeriesSortBy = LogTvSeriesSortBy.UPDATED_AT;
 
-	@ApiPropertyOptional({
-		description: 'Sort order',
-		default: SortOrder.DESC,
-		example: SortOrder.DESC,
-		enum: SortOrder,
-	})
-	@IsOptional()
-	@IsEnum(SortOrder)
-	sort_order: SortOrder = SortOrder.DESC;
+  @ApiPropertyOptional({
+    description: 'Sort order',
+    default: SortOrder.DESC,
+    example: SortOrder.DESC,
+    enum: SortOrder,
+  })
+  @IsOptional()
+  @IsEnum(SortOrder)
+  sort_order: SortOrder = SortOrder.DESC;
 }
 
 @ApiSchema({ name: 'ListPaginatedLogsTvSeriesQuery' })
 export class ListPaginatedLogsTvSeriesQueryDto extends IntersectionType(
   BaseListLogsTvSeriesQueryDto,
-  PaginationQueryDto
+  PaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListInfiniteLogsTvSeriesQuery' })
 export class ListInfiniteLogsTvSeriesQueryDto extends IntersectionType(
   BaseListLogsTvSeriesQueryDto,
-  CursorPaginationQueryDto
+  CursorPaginationQueryDto,
 ) {}

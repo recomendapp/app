@@ -9,7 +9,7 @@ import {
 } from './dto/playlists.dto';
 import { playlist, playlistItem } from '@libs/db/schemas';
 import { and, eq, sql } from 'drizzle-orm';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../utils/parse-response-dto';
 import { StorageService } from '../../common/modules/storage/storage.service';
 import { StorageFolders } from '../../common/modules/storage/storage.constants';
 import { canViewPlaylist } from './playlists.permission';
@@ -64,7 +64,7 @@ export class PlaylistsService {
 
     const { user, role, ...playlistData } = result;
 
-    return plainToInstance(
+    return parseResponseDto(
       PlaylistWithOwnerDto,
       {
         ...playlistData,
@@ -103,7 +103,7 @@ export class PlaylistsService {
         this.logger.error(`Failed to emit search sync for playlist ${insertedPlaylist.id}`, err),
       );
 
-    const playlistDto = plainToInstance(PlaylistDto, insertedPlaylist);
+    const playlistDto = parseResponseDto(PlaylistDto, insertedPlaylist);
 
     this.playlistsRealtimeService.broadcastPlaylistCreated(playlistDto);
 
@@ -141,7 +141,7 @@ export class PlaylistsService {
         this.logger.error(`Failed to emit search sync for playlist ${updatedPlaylist.id}`, err),
       );
 
-    const playlistDto = plainToInstance(PlaylistDto, updatedPlaylist);
+    const playlistDto = parseResponseDto(PlaylistDto, updatedPlaylist);
 
     this.playlistsRealtimeService
       .broadcastPlaylistUpdated(playlistDto)
@@ -210,7 +210,7 @@ export class PlaylistsService {
         this.logger.error(`Failed to emit search sync for playlist ${duplicatedPlaylist.id}`, err),
       );
 
-    const playlistDto = plainToInstance(PlaylistDto, duplicatedPlaylist);
+    const playlistDto = parseResponseDto(PlaylistDto, duplicatedPlaylist);
 
     this.playlistsRealtimeService.broadcastPlaylistCreated(playlistDto);
 
@@ -252,6 +252,6 @@ export class PlaylistsService {
       recipientUserIds,
     );
 
-    return plainToInstance(PlaylistDto, deletedPlaylist);
+    return parseResponseDto(PlaylistDto, deletedPlaylist);
   }
 }

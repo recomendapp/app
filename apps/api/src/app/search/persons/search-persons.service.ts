@@ -21,6 +21,7 @@ import { tmdbPersonView } from '@libs/db/schemas';
 import { SearchParams } from 'typesense/lib/Typesense/Documents';
 import { DbTransaction } from '@libs/db';
 import { PERSON_COMPACT_SELECT } from '@libs/db/selectors';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 
 const PageCursorSchema = z.object({ page: z.number().int().min(1) });
 
@@ -94,7 +95,7 @@ export class SearchPersonsService {
 
       const hydratedPersons = await this.hydratePersons(tx, personIds);
 
-      return {
+      return parseResponseDto(ListPaginatedPersonsDto, {
         data: hydratedPersons,
         meta: {
           total_results: typesenseResult.found,
@@ -102,7 +103,7 @@ export class SearchPersonsService {
           current_page: page,
           per_page: per_page,
         },
-      };
+      });
     });
   }
 
@@ -140,14 +141,14 @@ export class SearchPersonsService {
       const hasNextPage = page * per_page < typesenseResult.found;
       const nextCursor = hasNextPage ? encodeCursor<{ page: number }>({ page: page + 1 }) : null;
 
-      return {
+      return parseResponseDto(ListInfinitePersonsDto, {
         data: hydratedPersons,
         meta: {
           next_cursor: nextCursor,
           per_page,
           total_results: include_total_count ? typesenseResult.found : undefined,
         },
-      };
+      });
     });
   }
 }

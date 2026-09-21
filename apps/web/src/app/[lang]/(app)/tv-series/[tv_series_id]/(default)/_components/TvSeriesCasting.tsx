@@ -41,7 +41,7 @@ export const TvSeriesCasting = ({ tvSeries }: { tvSeries: TvSeries }) => {
               />
             ))
           : data?.map(({ person, roles }, i) => (
-              <Link key={i} href={person.url ?? ''}>
+              <Link key={i} href={{ pathname: `/person/${person.slug || person.id}` }}>
                 <Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
                   <div className="relative w-full aspect-3/4 rounded-md overflow-hidden">
                     <ImageWithFallback

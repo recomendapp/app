@@ -3,27 +3,30 @@ import { and, eq } from 'drizzle-orm';
 import { follow, playlist } from '@libs/db/schemas';
 import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import { ListPaginatedPlaylistsQueryDto, ListPaginatedPlaylistsDto, ListInfinitePlaylistsQueryDto, ListInfinitePlaylistsDto } from '../../playlists/dto/playlists.dto';
+import {
+  ListPaginatedPlaylistsQueryDto,
+  ListPaginatedPlaylistsDto,
+  ListInfinitePlaylistsQueryDto,
+  ListInfinitePlaylistsDto,
+} from '../../playlists/dto/playlists.dto';
 import { encodeCursor } from '../../../utils/cursor';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { PlaylistQueryBuilder } from '../../playlists/playlists.query-builder';
 
 @Injectable()
 export class UserPlaylistsService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
   private async getIsFollowing(targetUserId: string, currentUser: User | null): Promise<boolean> {
     if (!currentUser || currentUser.id === targetUserId) return false;
-    
+
     const followRecord = await this.db.query.follow.findFirst({
       where: and(
         eq(follow.followerId, currentUser.id),
         eq(follow.followingId, targetUserId),
-        eq(follow.status, 'accepted')
+        eq(follow.status, 'accepted'),
       ),
-      columns: { followerId: true }
+      columns: { followerId: true },
     });
     return !!followRecord;
   }
@@ -33,18 +36,18 @@ export class UserPlaylistsService {
     query,
     currentUser,
   }: {
-    targetUserId: string,
-    query: ListPaginatedPlaylistsQueryDto,
-    currentUser: User | null
+    targetUserId: string;
+    query: ListPaginatedPlaylistsQueryDto;
+    currentUser: User | null;
   }): Promise<ListPaginatedPlaylistsDto> {
     const { per_page, sort_order, sort_by, page } = query;
     const offset = (page - 1) * per_page;
 
     const isFollowing = await this.getIsFollowing(targetUserId, currentUser);
-    
+
     const visibilityCondition = PlaylistQueryBuilder.getVisibilityCondition(this.db, currentUser, {
       targetUserId,
-      isFollowingTarget: isFollowing
+      isFollowingTarget: isFollowing,
     });
     const orderBy = PlaylistQueryBuilder.getOrderBy(sort_by, sort_order);
     const roleSelection = PlaylistQueryBuilder.getRoleSelection(currentUser);
@@ -65,8 +68,8 @@ export class UserPlaylistsService {
       this.db.$count(playlist, whereClause),
     ]);
 
-    return plainToInstance(ListPaginatedPlaylistsDto, {
-      data: results.map(row => ({
+    return parseResponseDto(ListPaginatedPlaylistsDto, {
+      data: results.map((row) => ({
         ...row.playlist,
         role: row.role,
       })),
@@ -84,9 +87,9 @@ export class UserPlaylistsService {
     query,
     currentUser,
   }: {
-    targetUserId: string,
-    query: ListInfinitePlaylistsQueryDto,
-    currentUser: User | null
+    targetUserId: string;
+    query: ListInfinitePlaylistsQueryDto;
+    currentUser: User | null;
   }): Promise<ListInfinitePlaylistsDto> {
     const { per_page, sort_order, sort_by, cursor } = query;
 
@@ -94,15 +97,19 @@ export class UserPlaylistsService {
 
     const visibilityCondition = PlaylistQueryBuilder.getVisibilityCondition(this.db, currentUser, {
       targetUserId,
-      isFollowingTarget: isFollowing
+      isFollowingTarget: isFollowing,
     });
     const orderBy = PlaylistQueryBuilder.getOrderBy(sort_by, sort_order);
     const roleSelection = PlaylistQueryBuilder.getRoleSelection(currentUser);
-    const cursorWhereClause = PlaylistQueryBuilder.getCursorWhereClause(sort_by, sort_order, cursor);
+    const cursorWhereClause = PlaylistQueryBuilder.getCursorWhereClause(
+      sort_by,
+      sort_order,
+      cursor,
+    );
 
     const baseWhereClause = and(eq(playlist.userId, targetUserId), visibilityCondition);
-    const finalWhereClause = cursorWhereClause 
-      ? and(baseWhereClause, cursorWhereClause) 
+    const finalWhereClause = cursorWhereClause
+      ? and(baseWhereClause, cursorWhereClause)
       : baseWhereClause;
 
     const fetchLimit = per_page + 1;
@@ -125,7 +132,7 @@ export class UserPlaylistsService {
     if (hasNextPage) {
       const lastItem = paginatedResults[paginatedResults.length - 1].playlist;
       const cursorValue = PlaylistQueryBuilder.getNextCursorValue(lastItem, sort_by);
-      
+
       if (cursorValue !== null) {
         nextCursor = encodeCursor({
           value: cursorValue,
@@ -134,8 +141,8 @@ export class UserPlaylistsService {
       }
     }
 
-    return plainToInstance(ListInfinitePlaylistsDto, {
-      data: paginatedResults.map(row => ({
+    return parseResponseDto(ListInfinitePlaylistsDto, {
+      data: paginatedResults.map((row) => ({
         ...row.playlist,
         role: row.role,
       })),

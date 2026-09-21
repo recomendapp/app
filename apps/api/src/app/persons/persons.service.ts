@@ -2,7 +2,7 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { and, eq, sql } from 'drizzle-orm';
 import { followPerson, tmdbPersonView } from '@libs/db/schemas';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../utils/parse-response-dto';
 import { PersonFollowDto } from './dto/person-follow.dto';
 import { User } from '../auth/auth.service';
 import { SupportedLocale } from '@libs/i18n';
@@ -42,7 +42,7 @@ export class PersonsService {
         throw new NotFoundException(`Person with id ${personId} not found`);
       }
 
-      return plainToInstance(PersonDto, person);
+      return parseResponseDto(PersonDto, person);
     });
   }
 
@@ -56,7 +56,7 @@ export class PersonsService {
       return null;
     }
 
-    return plainToInstance(PersonFollowDto, followRecord, {
+    return parseResponseDto(PersonFollowDto, followRecord, {
       excludeExtraneousValues: true,
     });
   }
@@ -71,13 +71,21 @@ export class PersonsService {
       .onConflictDoNothing()
       .returning();
 
-    const result = plainToInstance(PersonFollowDto, newFollow, {
+    if (!newFollow) {
+      const existingFollow = await this.db.query.followPerson.findFirst({
+        where: and(eq(followPerson.userId, currentUserId), eq(followPerson.personId, personId)),
+      });
+
+      return parseResponseDto(PersonFollowDto, existingFollow, {
+        excludeExtraneousValues: true,
+      });
+    }
+
+    const result = parseResponseDto(PersonFollowDto, newFollow, {
       excludeExtraneousValues: true,
     });
 
-    if (newFollow) {
-      this.realtimeGateway.emitToUser(currentUserId, PersonFollowServerEvents.SET, result);
-    }
+    this.realtimeGateway.emitToUser(currentUserId, PersonFollowServerEvents.SET, result);
 
     return result;
   }
@@ -92,7 +100,7 @@ export class PersonsService {
       throw new NotFoundException('Follow relationship not found');
     }
 
-    const result = plainToInstance(PersonFollowDto, deletedFollow, {
+    const result = parseResponseDto(PersonFollowDto, deletedFollow, {
       excludeExtraneousValues: true,
     });
 

@@ -222,7 +222,23 @@ const MyRecosScreen = () => {
         getItemImageUrl={(item) =>
           getTmdbImage({ path: item.media.posterPath, size: 'w342' }) || ''
         }
-        getItemUrl={(item) => item.media.url || ''}
+        getItemUrl={(item) => {
+          if (item.type === 'tv_series') {
+            return {
+              pathname: '/tv-series/[tv_series_id]',
+              params: {
+                tv_series_id: item.media.id,
+              },
+            };
+          } else {
+            return {
+              pathname: '/film/[film_id]',
+              params: {
+                film_id: item.media.id,
+              },
+            };
+          }
+        }}
         getItemBackdropUrl={(item) =>
           getTmdbImage({ path: item.media.backdropPath, size: 'w780' }) || ''
         }

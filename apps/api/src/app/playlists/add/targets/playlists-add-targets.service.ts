@@ -13,7 +13,7 @@ import {
 import { SortOrder } from '../../../../common/dto/sort.dto';
 import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../../utils/cursor';
 import { z } from 'zod';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../../utils/parse-response-dto';
 import { PlaylistQueryBuilder } from '../../playlists.query-builder';
 import { PlaylistSortBy } from '../../dto/playlists.dto';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
@@ -151,7 +151,7 @@ export class PlaylistsAddTargetsService {
 
     const results = await joinedQb.where(whereClause).orderBy(...orderBy);
 
-    return plainToInstance(
+    return parseResponseDto(
       PlaylistsAddTargetDto,
       results.map((row) => ({
         ...row.playlist,
@@ -195,7 +195,7 @@ export class PlaylistsAddTargetsService {
       this.db.$count(playlist, whereClause),
     ]);
 
-    return plainToInstance(ListPaginatedPlaylistsAddTargetsDto, {
+    return parseResponseDto(ListPaginatedPlaylistsAddTargetsDto, {
       data: results.map((row) => ({
         ...row.playlist,
         role: row.role,
@@ -268,7 +268,7 @@ export class PlaylistsAddTargetsService {
       }
     }
 
-    return plainToInstance(ListInfinitePlaylistsAddTargetsDto, {
+    return parseResponseDto(ListInfinitePlaylistsAddTargetsDto, {
       data: paginatedResults.map((row) => ({
         ...row.playlist,
         role: row.role,

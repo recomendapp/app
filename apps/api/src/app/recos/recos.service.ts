@@ -20,7 +20,7 @@ import {
 } from '@libs/db/schemas';
 import { DbTransaction } from '@libs/db';
 import { NotifyClient } from '@shared/notify';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../utils/parse-response-dto';
 import { defaultSupportedLocale, SupportedLocale } from '@libs/i18n';
 import { RecoServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../realtime/realtime.gateway';
@@ -165,7 +165,7 @@ export class RecosService {
 
     const item = returnedRecos[0];
 
-    const responseDto = plainToInstance(RecoSendResponseDto, {
+    const responseDto = parseResponseDto(RecoSendResponseDto, {
       mediaId: item.type === 'movie' ? item.movieId : item.tvSeriesId,
       type: item.type,
       senderId: item.senderId,
@@ -208,7 +208,7 @@ export class RecosService {
       )
       .returning();
 
-    const result = plainToInstance(
+    const result = parseResponseDto(
       RecoDto,
       updatedRecos.map(({ movieId, tvSeriesId, ...rest }) => ({
         ...rest,
@@ -255,7 +255,7 @@ export class RecosService {
 
     const { movieId, tvSeriesId, ...rest } = resultReco;
 
-    const result = plainToInstance(RecoDto, {
+    const result = parseResponseDto(RecoDto, {
       ...rest,
       mediaId: movieId ?? tvSeriesId,
     });
@@ -302,7 +302,7 @@ export class RecosService {
       });
     }
 
-    return plainToInstance(
+    return parseResponseDto(
       RecoDto,
       completedRecos.map(({ movieId, tvSeriesId, ...rest }) => ({
         ...rest,

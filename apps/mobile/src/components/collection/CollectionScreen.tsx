@@ -14,6 +14,7 @@ import { KeyboardAwareLegendList } from '@legendapp/list/keyboard';
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller';
 import { Stack } from 'expo-router';
 import type {
+  Href,
   NativeStackHeaderItemMenuAction,
   NativeStackHeaderItemMenuSubmenu,
 } from 'expo-router';
@@ -92,7 +93,7 @@ interface CollectionScreenConfig<T> extends Omit<AnimatedLegendListProps<T>, 'da
   getItemTitle: (item: T) => string;
   getItemSubtitle?: (item: T) => string;
   getItemImageUrl?: (item: T) => string;
-  getItemUrl?: (item: T) => string;
+  getItemUrl?: (item: T) => Href;
   getItemBackdropUrl?: (item: T) => string;
   getCreatedAt?: (item: T) => string;
   onItemAction?: (item: T) => void;

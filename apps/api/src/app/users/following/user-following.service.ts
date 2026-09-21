@@ -13,7 +13,7 @@ import {
   ListPaginatedUsersQueryDto,
   UserSortBy,
 } from '../dto/users.dto';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 
 const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.string().min(1));
@@ -114,7 +114,7 @@ export class UserFollowingService {
       this.db.$count(follow, whereClause),
     ]);
 
-    return plainToInstance(ListPaginatedUsersDto, {
+    return parseResponseDto(ListPaginatedUsersDto, {
       data: followers.map((row) => row.user),
       meta: {
         total_results: totalCount,
@@ -224,7 +224,7 @@ export class UserFollowingService {
       }
     }
 
-    return plainToInstance(ListInfiniteUsersDto, {
+    return parseResponseDto(ListInfiniteUsersDto, {
       data: paginatedResults.map((row) => ({
         id: row.user.id,
         name: row.user.name,

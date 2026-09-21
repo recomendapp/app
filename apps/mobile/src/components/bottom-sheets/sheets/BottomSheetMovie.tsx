@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import tw from '../../../lib/tw';
 import { Icons } from '../../../constants/Icons';
-import { LinkProps, usePathname, useRouter } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
 import { LucideIcon } from 'lucide-react-native';
 import { useTheme } from '../../../providers/ThemeProvider';
 import { upperFirst } from 'lodash';
@@ -93,7 +93,7 @@ const BottomSheetMovie = React.forwardRef<
         icon: Icons.Movie,
         onPress: () => router.push({ pathname: '/film/[film_id]', params: { film_id: movie.id } }),
         label: upperFirst(t('common.messages.go_to_film')),
-        disabled: movie.url ? pathname.startsWith(movie.url) : false,
+        disabled: pathname.startsWith(`/film/${movie.id}`),
       },
       ...(movie.directors && movie.directors.length > 0
         ? [
@@ -263,7 +263,10 @@ const BottomSheetMovie = React.forwardRef<
                 onPress={() => {
                   BottomSheetMainCreditsRef.current?.dismiss();
                   closeSheet(id);
-                  router.push(item.url as LinkProps['href']);
+                  router.push({
+                    pathname: '/person/[person_id]',
+                    params: { person_id: item.id },
+                  });
                 }}
                 style={[
                   { paddingVertical: PADDING_HORIZONTAL, paddingHorizontal: PADDING_HORIZONTAL },

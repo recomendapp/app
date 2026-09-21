@@ -2,7 +2,10 @@ import { ApiSchema, ApiProperty, ApiPropertyOptional, IntersectionType } from '@
 import { IsEnum, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../../common/dto/pagination.dto';
-import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../../common/dto/cursor-pagination.dto';
+import {
+  CursorPaginatedResponseDto,
+  CursorPaginationQueryDto,
+} from '../../../../common/dto/cursor-pagination.dto';
 import { SortOrder } from '../../../../common/dto/sort.dto';
 import { TvSeriesCompactDto, TvSeriesSortBy } from '../../../tv-series/dto/tv-series.dto';
 
@@ -24,7 +27,7 @@ export class PersonTvSeriesDto {
   @ValidateNested()
   @Type(() => TvSeriesCompactDto)
   tvSeries!: TvSeriesCompactDto;
-  
+
   @ApiProperty({
     type: [PersonTvSeriesCreditDto],
     description: 'List of credits the person has for this TV series',
@@ -35,10 +38,12 @@ export class PersonTvSeriesDto {
   credits!: PersonTvSeriesCreditDto[];
 }
 
-@ApiSchema({ name: 'ListPaginatedPersonTvSeries'})
+@ApiSchema({ name: 'ListPaginatedPersonTvSeries' })
 export class ListPaginatedPersonTvSeriesDto extends PaginatedResponseDto<PersonTvSeriesDto> {
   @ApiProperty({ type: () => [PersonTvSeriesDto] })
   @Type(() => PersonTvSeriesDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: PersonTvSeriesDto[];
 
   constructor(partial: Partial<ListPaginatedPersonTvSeriesDto>) {
@@ -47,10 +52,12 @@ export class ListPaginatedPersonTvSeriesDto extends PaginatedResponseDto<PersonT
   }
 }
 
-@ApiSchema({ name: 'ListInfinitePersonTvSeries'})
+@ApiSchema({ name: 'ListInfinitePersonTvSeries' })
 export class ListInfinitePersonTvSeriesDto extends CursorPaginatedResponseDto<PersonTvSeriesDto> {
   @ApiProperty({ type: () => [PersonTvSeriesDto] })
   @Type(() => PersonTvSeriesDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: PersonTvSeriesDto[];
 
   constructor(partial: Partial<ListInfinitePersonTvSeriesDto>) {
@@ -62,36 +69,36 @@ export class ListInfinitePersonTvSeriesDto extends CursorPaginatedResponseDto<Pe
 @ApiSchema({ name: 'BaseListPersonTvSeriesQuery' })
 class BaseListPersonTvSeriesQueryDto {
   @ApiPropertyOptional({
-      description: 'Filter TV series by department (e.g. Acting, Directing)',
-      example: 'Acting',
+    description: 'Filter TV series by department (e.g. Acting, Directing)',
+    example: 'Acting',
   })
   @IsOptional()
   @IsString()
   department?: string;
 
   @ApiPropertyOptional({
-      description: 'Filter TV series by job (e.g. Lead, Director)',
-      example: 'Lead',
+    description: 'Filter TV series by job (e.g. Lead, Director)',
+    example: 'Lead',
   })
   @IsOptional()
   @IsString()
   job?: string;
 
   @ApiPropertyOptional({
-      description: 'Field to sort TV series by',
-      default: TvSeriesSortBy.LAST_AIR_DATE,
-      example: TvSeriesSortBy.LAST_AIR_DATE,
-      enum: TvSeriesSortBy,
+    description: 'Field to sort TV series by',
+    default: TvSeriesSortBy.LAST_AIR_DATE,
+    example: TvSeriesSortBy.LAST_AIR_DATE,
+    enum: TvSeriesSortBy,
   })
   @IsOptional()
   @IsEnum(TvSeriesSortBy)
   sort_by: TvSeriesSortBy = TvSeriesSortBy.LAST_AIR_DATE;
 
   @ApiPropertyOptional({
-      description: 'Sort order',
-      default: SortOrder.DESC,
-      example: SortOrder.DESC,
-      enum: SortOrder,
+    description: 'Sort order',
+    default: SortOrder.DESC,
+    example: SortOrder.DESC,
+    enum: SortOrder,
   })
   @IsOptional()
   @IsEnum(SortOrder)
@@ -101,13 +108,13 @@ class BaseListPersonTvSeriesQueryDto {
 @ApiSchema({ name: 'ListPaginatedPersonTvSeriesQuery' })
 export class ListPaginatedPersonTvSeriesQueryDto extends IntersectionType(
   BaseListPersonTvSeriesQueryDto,
-  PaginationQueryDto
+  PaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListInfinitePersonTvSeriesQuery' })
 export class ListInfinitePersonTvSeriesQueryDto extends IntersectionType(
   BaseListPersonTvSeriesQueryDto,
-  CursorPaginationQueryDto
+  CursorPaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'PersonTvSeriesFacetDepartment' })
@@ -116,7 +123,10 @@ export class PersonTvSeriesFacetDepartmentDto {
   @Expose()
   department!: string;
 
-  @ApiProperty({ example: ['Director', 'Producer'], description: 'Available jobs in this department for this person' })
+  @ApiProperty({
+    example: ['Director', 'Producer'],
+    description: 'Available jobs in this department for this person',
+  })
   @Expose()
   jobs!: string[];
 }
@@ -125,7 +135,8 @@ export class PersonTvSeriesFacetDepartmentDto {
 export class PersonTvSeriesFacetsDto {
   @ApiProperty({
     type: () => [PersonTvSeriesFacetDepartmentDto],
-    description: 'List of departments the person has worked in, along with available jobs in each department'
+    description:
+      'List of departments the person has worked in, along with available jobs in each department',
   })
   @Expose()
   @ValidateNested({ each: true })

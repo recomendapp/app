@@ -10,7 +10,7 @@ import { CursorPaginationQueryDto } from '../../../common/dto/cursor-pagination.
 import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { RealtimeGateway } from '../../realtime/realtime.gateway';
 import { User } from '../../auth/auth.service';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { z } from 'zod';
 import {
   ImportJobBookmarkDto,
@@ -111,7 +111,7 @@ export class ImportBookmarksService {
 
     const rows = await this.db.query.importJobBookmark.findMany({ where: whereClause, orderBy });
     const withMedia = await this.withMedia(locale, rows);
-    return withMedia.map((row) => plainToInstance(ImportJobBookmarkDto, row));
+    return withMedia.map((row) => parseResponseDto(ImportJobBookmarkDto, row));
   }
 
   async listPaginated(
@@ -136,7 +136,7 @@ export class ImportBookmarksService {
 
     const withMedia = await this.withMedia(locale, rows);
 
-    return plainToInstance(ListPaginatedImportBookmarksDto, {
+    return parseResponseDto(ListPaginatedImportBookmarksDto, {
       data: withMedia,
       meta: {
         total_results: totalCount,
@@ -187,7 +187,7 @@ export class ImportBookmarksService {
 
     const withMedia = await this.withMedia(locale, pageRows);
 
-    return plainToInstance(ListInfiniteImportBookmarksDto, {
+    return parseResponseDto(ListInfiniteImportBookmarksDto, {
       data: withMedia,
       meta: { next_cursor: nextCursor, per_page, total_results: totalCount },
     });
@@ -231,7 +231,7 @@ export class ImportBookmarksService {
       updated.tvSeriesId ? [updated.tvSeriesId] : [],
     );
 
-    const result = plainToInstance(ImportJobBookmarkDto, {
+    const result = parseResponseDto(ImportJobBookmarkDto, {
       ...updated,
       movie: updated.movieId ? (movies.get(updated.movieId) ?? null) : null,
       tvSeries: updated.tvSeriesId ? (tvSeries.get(updated.tvSeriesId) ?? null) : null,

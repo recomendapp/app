@@ -1,7 +1,7 @@
 import React from 'react';
 import tw from '../../../lib/tw';
 import { Icons } from '../../../constants/Icons';
-import { LinkProps, usePathname, useRouter } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
 import { LucideIcon } from 'lucide-react-native';
 import { useTheme } from '../../../providers/ThemeProvider';
 import { upperFirst } from 'lodash';
@@ -70,9 +70,10 @@ const BottomSheetPerson = React.forwardRef<
       },
       {
         icon: Icons.User,
-        onPress: () => router.push(person.url as LinkProps['href']),
+        onPress: () =>
+          router.push({ pathname: '/person/[person_id]', params: { person_id: person.id } }),
         label: upperFirst(t('common.messages.go_to_person')),
-        disabled: person.url ? pathname.startsWith(person.url) : false,
+        disabled: pathname.startsWith(`/person/${person.id}`),
       },
       ...(user
         ? [

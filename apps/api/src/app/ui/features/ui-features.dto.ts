@@ -1,5 +1,6 @@
 import { ApiProperty, ApiSchema } from '@nestjs/swagger';
 import { Expose, Transform, Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { getAssetUrl } from '../../../utils/get-asset-url';
 
 @ApiSchema({ name: 'UiFeatureAsset' })
@@ -50,11 +51,13 @@ export class UiFeatureDto {
 
   @ApiProperty({ type: () => UiFeatureVideoAssetDto })
   @Expose()
+  @ValidateNested()
   @Type(() => UiFeatureVideoAssetDto)
   video!: UiFeatureVideoAssetDto;
 
   @ApiProperty({ type: () => UiFeatureAssetDto })
   @Expose()
+  @ValidateNested()
   @Type(() => UiFeatureAssetDto)
   poster!: UiFeatureAssetDto;
 

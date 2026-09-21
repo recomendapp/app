@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional, ApiSchema } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { IsIn, IsInt, IsOptional } from 'class-validator';
+import { IsIn, IsInt, IsOptional, ValidateNested } from 'class-validator';
 import { importMatchStatusEnum, importResolutionEnum } from '@libs/db/schemas';
 import { ImportJobReviewDto } from '../dto/imports.dto';
 import { MovieCompactDto } from '../../movies/dto/movies.dto';
@@ -27,11 +27,13 @@ export class ImportJobLogMovieDto {
 
   @ApiPropertyOptional({ type: () => ImportJobReviewDto, nullable: true })
   @Expose()
+  @ValidateNested()
   @Type(() => ImportJobReviewDto)
   review?: ImportJobReviewDto | null;
 
   @ApiPropertyOptional({ type: () => MovieCompactDto, nullable: true })
   @Expose()
+  @ValidateNested()
   @Type(() => MovieCompactDto)
   movie?: MovieCompactDto | null;
 
@@ -67,6 +69,8 @@ export class PatchImportJobLogMovieDto {
 export class ListPaginatedImportLogMoviesDto extends PaginatedResponseDto<ImportJobLogMovieDto> {
   @ApiProperty({ type: () => [ImportJobLogMovieDto] })
   @Type(() => ImportJobLogMovieDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: ImportJobLogMovieDto[];
 
   constructor(partial: Partial<ListPaginatedImportLogMoviesDto>) {
@@ -79,6 +83,8 @@ export class ListPaginatedImportLogMoviesDto extends PaginatedResponseDto<Import
 export class ListInfiniteImportLogMoviesDto extends CursorPaginatedResponseDto<ImportJobLogMovieDto> {
   @ApiProperty({ type: () => [ImportJobLogMovieDto] })
   @Type(() => ImportJobLogMovieDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: ImportJobLogMovieDto[];
 
   constructor(partial: Partial<ListInfiniteImportLogMoviesDto>) {

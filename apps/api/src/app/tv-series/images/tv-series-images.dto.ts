@@ -1,8 +1,11 @@
 import { ApiProperty, ApiPropertyOptional, ApiSchema, IntersectionType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../common/dto/pagination.dto';
-import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../common/dto/cursor-pagination.dto';
+import {
+  CursorPaginatedResponseDto,
+  CursorPaginationQueryDto,
+} from '../../../common/dto/cursor-pagination.dto';
 
 export enum TvSeriesImageType {
   POSTER = 'poster',
@@ -62,19 +65,21 @@ export class BaseTvSeriesImagesQueryDto {
 @ApiSchema({ name: 'ListPaginatedTvSeriesImagesQuery' })
 export class ListPaginatedTvSeriesImagesQueryDto extends IntersectionType(
   BaseTvSeriesImagesQueryDto,
-  PaginationQueryDto
+  PaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListInfiniteTvSeriesImagesQuery' })
 export class ListInfiniteTvSeriesImagesQueryDto extends IntersectionType(
   BaseTvSeriesImagesQueryDto,
-  CursorPaginationQueryDto
+  CursorPaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListPaginatedTvSeriesImages' })
 export class ListPaginatedTvSeriesImagesDto extends PaginatedResponseDto<TvSeriesImageDto> {
   @ApiProperty({ type: () => [TvSeriesImageDto] })
   @Type(() => TvSeriesImageDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: TvSeriesImageDto[];
 
   constructor(partial: Partial<ListPaginatedTvSeriesImagesDto>) {
@@ -87,6 +92,8 @@ export class ListPaginatedTvSeriesImagesDto extends PaginatedResponseDto<TvSerie
 export class ListInfiniteTvSeriesImagesDto extends CursorPaginatedResponseDto<TvSeriesImageDto> {
   @ApiProperty({ type: () => [TvSeriesImageDto] })
   @Type(() => TvSeriesImageDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: TvSeriesImageDto[];
 
   constructor(partial: Partial<ListInfiniteTvSeriesImagesDto>) {

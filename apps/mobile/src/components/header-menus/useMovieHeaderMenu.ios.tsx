@@ -76,7 +76,11 @@ export const useMovieHeaderMenu = ({ movie }: UseMovieHeaderMenuParams): HeaderM
                     type: 'action' as const,
                     label: director.name || '',
                     icon: { type: 'sfSymbol' as const, name: 'person' as const },
-                    onPress: () => router.push(director.url as Href),
+                    onPress: () =>
+                      router.push({
+                        pathname: '/person/[person_id]',
+                        params: { person_id: director.id },
+                      }),
                   })),
                 }
               : {

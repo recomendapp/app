@@ -2,13 +2,15 @@ import { ApiProperty, ApiSchema } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { IsInt, IsString, ValidateNested } from 'class-validator';
 import { PersonCompactDto } from '../../persons/dto/persons.dto';
+import { IsNullable } from '../../../common/decorators/is-nullable.decorator';
 
 @ApiSchema({ name: 'MovieRole' })
 export class MovieRoleDto {
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Expose()
+  @IsNullable()
   @IsString()
-  character!: string;
+  character!: string | null;
 
   @ApiProperty()
   @Expose()

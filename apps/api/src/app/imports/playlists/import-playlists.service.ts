@@ -9,7 +9,7 @@ import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../
 import { z } from 'zod';
 import { RealtimeGateway } from '../../realtime/realtime.gateway';
 import { User } from '../../auth/auth.service';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import {
   ImportJobPlaylistDto,
   ListInfiniteImportPlaylistsDto,
@@ -52,7 +52,7 @@ export class ImportPlaylistsService {
     const { whereClause, orderBy } = this.getListBaseQuery(importJobId);
 
     const rows = await this.db.query.importJobPlaylist.findMany({ where: whereClause, orderBy });
-    return rows.map((row) => plainToInstance(ImportJobPlaylistDto, row));
+    return rows.map((row) => parseResponseDto(ImportJobPlaylistDto, row));
   }
 
   async listPaginated(
@@ -74,7 +74,7 @@ export class ImportPlaylistsService {
       this.db.$count(importJobPlaylist, whereClause),
     ]);
 
-    return plainToInstance(ListPaginatedImportPlaylistsDto, {
+    return parseResponseDto(ListPaginatedImportPlaylistsDto, {
       data: rows,
       meta: {
         total_results: totalCount,
@@ -122,7 +122,7 @@ export class ImportPlaylistsService {
         ? await this.db.$count(importJobPlaylist, baseWhereClause)
         : undefined;
 
-    return plainToInstance(ListInfiniteImportPlaylistsDto, {
+    return parseResponseDto(ListInfiniteImportPlaylistsDto, {
       data: pageRows,
       meta: { next_cursor: nextCursor, per_page, total_results: totalCount },
     });
@@ -148,7 +148,7 @@ export class ImportPlaylistsService {
 
     if (!updated) throw new NotFoundException('Import item not found');
 
-    const result = plainToInstance(ImportJobPlaylistDto, updated);
+    const result = parseResponseDto(ImportJobPlaylistDto, updated);
 
     this.realtimeGateway.emitToUser(user.id, ImportServerEvents.PLAYLIST_PATCHED, {
       importJobId,

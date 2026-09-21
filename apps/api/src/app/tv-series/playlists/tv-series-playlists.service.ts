@@ -5,45 +5,37 @@ import { User } from '../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import { DbTransaction } from '@libs/db';
 import { encodeCursor } from '../../../utils/cursor';
-import { 
-  ListInfinitePlaylistsQueryDto, 
-  ListInfinitePlaylistsWithOwnerDto, 
-  ListPaginatedPlaylistsQueryDto, 
-  ListPaginatedPlaylistsWithOwnerDto 
+import {
+  ListInfinitePlaylistsQueryDto,
+  ListInfinitePlaylistsWithOwnerDto,
+  ListPaginatedPlaylistsQueryDto,
+  ListPaginatedPlaylistsWithOwnerDto,
 } from '../../playlists/dto/playlists.dto';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { PlaylistQueryBuilder } from '../../playlists/playlists.query-builder';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 
 @Injectable()
 export class TvSeriesPlaylistsService {
-  constructor(
-    @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
-  ) {}
+  constructor(@Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService) {}
 
-  private getListBaseWhereClause(
-    tx: DbTransaction,
-    tvSeriesId: number,
-    currentUser: User | null,
-  ) {
+  private getListBaseWhereClause(tx: DbTransaction, tvSeriesId: number, currentUser: User | null) {
     const visibilityCondition = PlaylistQueryBuilder.getVisibilityCondition(tx, currentUser);
 
     const containsTvSeriesCondition = exists(
-      tx.select({ id: playlistItem.id })
+      tx
+        .select({ id: playlistItem.id })
         .from(playlistItem)
         .where(
           and(
             eq(playlistItem.playlistId, playlist.id),
             eq(playlistItem.tvSeriesId, tvSeriesId),
-            eq(playlistItem.type, 'tv_series')
-          )
-        )
+            eq(playlistItem.type, 'tv_series'),
+          ),
+        ),
     );
 
-    return and(
-      containsTvSeriesCondition,
-      visibilityCondition
-    );
+    return and(containsTvSeriesCondition, visibilityCondition);
   }
 
   async listPaginated({
@@ -64,7 +56,8 @@ export class TvSeriesPlaylistsService {
       const roleSelection = PlaylistQueryBuilder.getRoleSelection(currentUser);
 
       const [rows, totalCountResult] = await Promise.all([
-        tx.select({
+        tx
+          .select({
             playlist: playlist,
             role: roleSelection,
             owner: USER_COMPACT_SELECT,
@@ -76,14 +69,15 @@ export class TvSeriesPlaylistsService {
           .orderBy(...orderBy)
           .limit(per_page)
           .offset(offset),
-        tx.select({ count: sql<number>`count(*)` })
+        tx
+          .select({ count: sql<number>`count(*)` })
           .from(playlist)
-          .where(baseWhereClause)
+          .where(baseWhereClause),
       ]);
-    
+
       const totalCount = Number(totalCountResult[0]?.count || 0);
 
-      return plainToInstance(ListPaginatedPlaylistsWithOwnerDto, {
+      return parseResponseDto(ListPaginatedPlaylistsWithOwnerDto, {
         data: rows.map((row) => ({
           ...row.playlist,
           role: row.role,
@@ -114,10 +108,14 @@ export class TvSeriesPlaylistsService {
       const baseWhereClause = this.getListBaseWhereClause(tx, tvSeriesId, currentUser);
       const orderBy = PlaylistQueryBuilder.getOrderBy(sort_by, sort_order);
       const roleSelection = PlaylistQueryBuilder.getRoleSelection(currentUser);
-      
-      const cursorWhereClause = PlaylistQueryBuilder.getCursorWhereClause(sort_by, sort_order, cursor);
-      const finalWhereClause = cursorWhereClause 
-        ? and(baseWhereClause, cursorWhereClause) 
+
+      const cursorWhereClause = PlaylistQueryBuilder.getCursorWhereClause(
+        sort_by,
+        sort_order,
+        cursor,
+      );
+      const finalWhereClause = cursorWhereClause
+        ? and(baseWhereClause, cursorWhereClause)
         : baseWhereClause;
 
       const fetchLimit = per_page + 1;
@@ -152,7 +150,7 @@ export class TvSeriesPlaylistsService {
         }
       }
 
-      return plainToInstance(ListInfinitePlaylistsWithOwnerDto, {
+      return parseResponseDto(ListInfinitePlaylistsWithOwnerDto, {
         data: paginatedResults.map((row) => ({
           ...row.playlist,
           role: row.role,

@@ -13,7 +13,7 @@ import { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { z } from 'zod';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../utils/parse-response-dto';
 import {
   MOVIE_SUMMARY_SELECT,
   PERSON_COMPACT_SELECT,
@@ -160,7 +160,7 @@ export class FeedPersonsService {
           .where(baseWhere),
       ]);
 
-      return plainToInstance(
+      return parseResponseDto(
         ListPaginatedPersonFeedDto,
         {
           data: results.map(
@@ -306,7 +306,7 @@ export class FeedPersonsService {
         });
       }
 
-      return plainToInstance(
+      return parseResponseDto(
         ListInfinitePersonFeedDto,
         {
           data: paginatedResults.map(

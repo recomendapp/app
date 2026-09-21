@@ -127,7 +127,9 @@ export const MovieWidget = () => {
                         className="w-fit p-0 h-full hover:text-accent-yellow transition"
                         asChild
                       >
-                        <Link href={person.url ?? ''}>{person.name}</Link>
+                        <Link href={{ pathname: `/person/${person.slug || person.id}` }}>
+                          {person.name}
+                        </Link>
                       </Button>
                     </span>
                   </>

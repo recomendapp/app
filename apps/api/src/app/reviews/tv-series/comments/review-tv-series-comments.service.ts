@@ -11,7 +11,7 @@ import { User } from '../../../auth/auth.service';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/drizzle/drizzle.module';
 import { profile, reviewTvSeries, reviewTvSeriesComment, user } from '@libs/db/schemas';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../../utils/parse-response-dto';
 import { SortOrder } from '../../../../common/dto/sort.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../../utils/cursor';
 import { assertReviewTvSeriesVisible } from '../review-tv-series-visibility';
@@ -256,7 +256,7 @@ export class ReviewTvSeriesCommentsService {
 
     const author = await this.getAuthor(currentUser.id);
 
-    return plainToInstance(
+    return parseResponseDto(
       ReviewTvSeriesCommentWithAuthorDto,
       { ...comment, author },
       { excludeExtraneousValues: true },
@@ -291,7 +291,7 @@ export class ReviewTvSeriesCommentsService {
 
     const author = await this.getAuthor(currentUser.id);
 
-    return plainToInstance(
+    return parseResponseDto(
       ReviewTvSeriesCommentWithAuthorDto,
       { ...updated, author },
       { excludeExtraneousValues: true },
@@ -340,7 +340,7 @@ export class ReviewTvSeriesCommentsService {
 
       const author = await this.getAuthor(deleted.userId);
 
-      return plainToInstance(
+      return parseResponseDto(
         ReviewTvSeriesCommentWithAuthorDto,
         { ...deleted, author },
         { excludeExtraneousValues: true },
@@ -354,7 +354,7 @@ export class ReviewTvSeriesCommentsService {
 
     const author = await this.getAuthor(deleted.userId);
 
-    return plainToInstance(
+    return parseResponseDto(
       ReviewTvSeriesCommentWithAuthorDto,
       { ...deleted, author },
       { excludeExtraneousValues: true },
@@ -378,7 +378,7 @@ export class ReviewTvSeriesCommentsService {
     const orderBy = this.getOrderBy(sort_by, sort_order);
     const result = await this.fetchPaginated(whereClause, orderBy, page, per_page);
 
-    return plainToInstance(ListPaginatedReviewTvSeriesCommentsDto, result);
+    return parseResponseDto(ListPaginatedReviewTvSeriesCommentsDto, result);
   }
 
   async listInfinite({
@@ -404,7 +404,7 @@ export class ReviewTvSeriesCommentsService {
       per_page,
     );
 
-    return plainToInstance(ListInfiniteReviewTvSeriesCommentsDto, result);
+    return parseResponseDto(ListInfiniteReviewTvSeriesCommentsDto, result);
   }
 
   async listRepliesPaginated({
@@ -426,7 +426,7 @@ export class ReviewTvSeriesCommentsService {
     const orderBy = this.getOrderBy(sort_by, sort_order);
     const result = await this.fetchPaginated(whereClause, orderBy, page, per_page);
 
-    return plainToInstance(ListPaginatedReviewTvSeriesCommentsDto, result);
+    return parseResponseDto(ListPaginatedReviewTvSeriesCommentsDto, result);
   }
 
   async listRepliesInfinite({
@@ -455,6 +455,6 @@ export class ReviewTvSeriesCommentsService {
       per_page,
     );
 
-    return plainToInstance(ListInfiniteReviewTvSeriesCommentsDto, result);
+    return parseResponseDto(ListInfiniteReviewTvSeriesCommentsDto, result);
   }
 }

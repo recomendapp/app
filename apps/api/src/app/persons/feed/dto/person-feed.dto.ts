@@ -1,11 +1,29 @@
-import { ApiSchema, ApiProperty, ApiPropertyOptional, ApiExtraModels, IntersectionType, getSchemaPath } from '@nestjs/swagger';
-import { IsDateString, IsEnum, IsInt, IsOptional, ValidateNested, IsString, IsArray } from 'class-validator';
+import {
+  ApiSchema,
+  ApiProperty,
+  ApiPropertyOptional,
+  ApiExtraModels,
+  IntersectionType,
+  getSchemaPath,
+} from '@nestjs/swagger';
+import {
+  IsDateString,
+  IsEnum,
+  IsInt,
+  IsOptional,
+  ValidateNested,
+  IsString,
+  IsArray,
+} from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { MovieSummaryDto } from '../../../movies/dto/movies.dto'; // Ajuste les imports
 import { TvSeriesSummaryDto } from '../../../tv-series/dto/tv-series.dto';
 import { PersonCompactDto } from '../../../persons/dto/persons.dto';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../../common/dto/pagination.dto';
-import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../../common/dto/cursor-pagination.dto';
+import {
+  CursorPaginatedResponseDto,
+  CursorPaginationQueryDto,
+} from '../../../../common/dto/cursor-pagination.dto';
 import { SortOrder } from '../../../../common/dto/sort.dto';
 
 export enum PersonFeedSortBy {
@@ -117,13 +135,13 @@ export class BaseListPersonFeedQueryDto {
 @ApiSchema({ name: 'ListPaginatedPersonFeedQuery' })
 export class ListPaginatedPersonFeedQueryDto extends IntersectionType(
   BaseListPersonFeedQueryDto,
-  PaginationQueryDto
+  PaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListInfinitePersonFeedQuery' })
 export class ListInfinitePersonFeedQueryDto extends IntersectionType(
   BaseListPersonFeedQueryDto,
-  CursorPaginationQueryDto
+  CursorPaginationQueryDto,
 ) {}
 
 /* ---------------------------------- Responses --------------------------------- */
@@ -157,6 +175,8 @@ export class ListPaginatedPersonFeedDto extends PaginatedResponseDto<PersonFeedU
       ],
     },
   })
+  @ValidateNested({ each: true })
+  @Expose()
   data!: PersonFeedUnion[];
 
   constructor(partial: Partial<ListPaginatedPersonFeedDto>) {
@@ -166,7 +186,7 @@ export class ListPaginatedPersonFeedDto extends PaginatedResponseDto<PersonFeedU
 }
 
 @ApiExtraModels(PersonFeedWithMovieDto, PersonFeedWithTvSeriesDto)
-@ApiSchema({ name: 'ListInfinitePersonFeed'})
+@ApiSchema({ name: 'ListInfinitePersonFeed' })
 export class ListInfinitePersonFeedDto extends CursorPaginatedResponseDto<PersonFeedUnion> {
   @ApiProperty({
     type: 'array',
@@ -194,6 +214,8 @@ export class ListInfinitePersonFeedDto extends CursorPaginatedResponseDto<Person
       ],
     },
   })
+  @ValidateNested({ each: true })
+  @Expose()
   data!: PersonFeedUnion[];
 
   constructor(partial: Partial<ListInfinitePersonFeedDto>) {

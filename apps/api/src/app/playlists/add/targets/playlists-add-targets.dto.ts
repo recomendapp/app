@@ -1,9 +1,12 @@
 import { ApiProperty, ApiPropertyOptional, ApiSchema, IntersectionType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsEnum, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { SortOrder } from '../../../../common/dto/sort.dto';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../../common/dto/pagination.dto';
-import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../../common/dto/cursor-pagination.dto';
+import {
+  CursorPaginatedResponseDto,
+  CursorPaginationQueryDto,
+} from '../../../../common/dto/cursor-pagination.dto';
 import { PlaylistSortBy, PlaylistWithOwnerDto } from '../../dto/playlists.dto';
 
 export enum PlaylistTargetFilter {
@@ -16,6 +19,7 @@ export enum PlaylistTargetFilter {
 export class PlaylistsAddTargetDto extends PlaylistWithOwnerDto {
   @ApiProperty({ description: 'True if the media is already in this playlist' })
   @Expose()
+  @IsBoolean()
   alreadyAdded!: boolean;
 }
 
@@ -62,19 +66,21 @@ export class ListAllPlaylistsAddTargetsQueryDto extends BaseListPlaylistsAddTarg
 @ApiSchema({ name: 'ListPaginatedPlaylistsAddTargetsQuery' })
 export class ListPaginatedPlaylistsAddTargetsQueryDto extends IntersectionType(
   BaseListPlaylistsAddTargetsQueryDto,
-  PaginationQueryDto
+  PaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListInfinitePlaylistsAddTargetsQuery' })
 export class ListInfinitePlaylistsAddTargetsQueryDto extends IntersectionType(
   BaseListPlaylistsAddTargetsQueryDto,
-  CursorPaginationQueryDto
+  CursorPaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListPaginatedPlaylistsAddTargets' })
 export class ListPaginatedPlaylistsAddTargetsDto extends PaginatedResponseDto<PlaylistsAddTargetDto> {
   @ApiProperty({ type: () => [PlaylistsAddTargetDto] })
   @Type(() => PlaylistsAddTargetDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: PlaylistsAddTargetDto[];
 
   constructor(partial: Partial<ListPaginatedPlaylistsAddTargetsDto>) {
@@ -87,6 +93,8 @@ export class ListPaginatedPlaylistsAddTargetsDto extends PaginatedResponseDto<Pl
 export class ListInfinitePlaylistsAddTargetsDto extends CursorPaginatedResponseDto<PlaylistsAddTargetDto> {
   @ApiProperty({ type: () => [PlaylistsAddTargetDto] })
   @Type(() => PlaylistsAddTargetDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: PlaylistsAddTargetDto[];
 
   constructor(partial: Partial<ListInfinitePlaylistsAddTargetsDto>) {

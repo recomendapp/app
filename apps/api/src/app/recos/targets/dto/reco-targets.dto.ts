@@ -1,8 +1,11 @@
 import { ApiProperty, ApiPropertyOptional, ApiSchema, IntersectionType } from '@nestjs/swagger';
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../../common/dto/pagination.dto';
-import { CursorPaginatedResponseDto, CursorPaginationQueryDto } from '../../../../common/dto/cursor-pagination.dto';
+import {
+  CursorPaginatedResponseDto,
+  CursorPaginationQueryDto,
+} from '../../../../common/dto/cursor-pagination.dto';
 import { UserSummaryDto } from '../../../users/dto/users.dto';
 import { SortOrder } from '../../../../common/dto/sort.dto';
 
@@ -16,7 +19,9 @@ export class RecoTargetDto extends UserSummaryDto {
   @Expose()
   alreadySeen!: boolean;
 
-  @ApiProperty({ description: 'True if you have already sent an active reco to this user for this media' })
+  @ApiProperty({
+    description: 'True if you have already sent an active reco to this user for this media',
+  })
   @Expose()
   alreadySent!: boolean;
 }
@@ -54,19 +59,21 @@ export class ListAllRecoTargetsQueryDto extends BaseListRecoTargetsQueryDto {}
 @ApiSchema({ name: 'ListPaginatedRecoTargetsQuery' })
 export class ListPaginatedRecoTargetsQueryDto extends IntersectionType(
   BaseListRecoTargetsQueryDto,
-  PaginationQueryDto
+  PaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListInfiniteRecoTargetsQuery' })
 export class ListInfiniteRecoTargetsQueryDto extends IntersectionType(
   BaseListRecoTargetsQueryDto,
-  CursorPaginationQueryDto
+  CursorPaginationQueryDto,
 ) {}
 
 @ApiSchema({ name: 'ListPaginatedRecoTargets' })
 export class ListPaginatedRecoTargetsDto extends PaginatedResponseDto<RecoTargetDto> {
   @ApiProperty({ type: () => [RecoTargetDto] })
   @Type(() => RecoTargetDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: RecoTargetDto[];
 
   constructor(partial: Partial<ListPaginatedRecoTargetsDto>) {
@@ -79,6 +86,8 @@ export class ListPaginatedRecoTargetsDto extends PaginatedResponseDto<RecoTarget
 export class ListInfiniteRecoTargetsDto extends CursorPaginatedResponseDto<RecoTargetDto> {
   @ApiProperty({ type: () => [RecoTargetDto] })
   @Type(() => RecoTargetDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: RecoTargetDto[];
 
   constructor(partial: Partial<ListInfiniteRecoTargetsDto>) {

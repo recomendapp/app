@@ -11,7 +11,7 @@ import {
   UserSortBy,
 } from './dto/users.dto';
 import { User } from '../auth/auth.service';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../utils/parse-response-dto';
 import { isUUID } from 'class-validator';
 import { USER_RULES } from '@libs/rules';
 import { SortOrder } from '../../common/dto/sort.dto';
@@ -93,7 +93,7 @@ export class UsersService {
       throw new NotFoundException('User profile not found');
     }
 
-    return plainToInstance(ProfileDto, result, {
+    return parseResponseDto(ProfileDto, result, {
       excludeExtraneousValues: true,
     });
   }
@@ -141,7 +141,7 @@ export class UsersService {
       this.db.select({ count: sql<number>`cast(count(*) as int)` }).from(user),
     ]);
 
-    return plainToInstance(
+    return parseResponseDto(
       ListPaginatedUsersDto,
       {
         data: results,
@@ -244,7 +244,7 @@ export class UsersService {
       }
     }
 
-    return plainToInstance(
+    return parseResponseDto(
       ListInfiniteUsersDto,
       {
         data: paginatedResults,

@@ -17,7 +17,7 @@ import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../
 import { z } from 'zod';
 import { RealtimeGateway } from '../../../realtime/realtime.gateway';
 import { User } from '../../../auth/auth.service';
-import { plainToInstance } from 'class-transformer';
+import { parseResponseDto } from '../../../../utils/parse-response-dto';
 import {
   ImportJobPlaylistItemDto,
   ListInfiniteImportPlaylistItemsDto,
@@ -130,7 +130,7 @@ export class ImportPlaylistItemsService {
       orderBy,
     });
     const withMedia = await this.withMedia(locale, rows);
-    return withMedia.map((row) => plainToInstance(ImportJobPlaylistItemDto, row));
+    return withMedia.map((row) => parseResponseDto(ImportJobPlaylistItemDto, row));
   }
 
   async listPaginated(
@@ -156,7 +156,7 @@ export class ImportPlaylistItemsService {
 
     const withMedia = await this.withMedia(locale, rows);
 
-    return plainToInstance(ListPaginatedImportPlaylistItemsDto, {
+    return parseResponseDto(ListPaginatedImportPlaylistItemsDto, {
       data: withMedia,
       meta: {
         total_results: totalCount,
@@ -218,7 +218,7 @@ export class ImportPlaylistItemsService {
 
     const withMedia = await this.withMedia(locale, pageRows);
 
-    return plainToInstance(ListInfiniteImportPlaylistItemsDto, {
+    return parseResponseDto(ListInfiniteImportPlaylistItemsDto, {
       data: withMedia,
       meta: { next_cursor: nextCursor, per_page, total_results: totalCount },
     });
@@ -269,7 +269,7 @@ export class ImportPlaylistItemsService {
       updated.tvSeriesId ? [updated.tvSeriesId] : [],
     );
 
-    const result = plainToInstance(ImportJobPlaylistItemDto, {
+    const result = parseResponseDto(ImportJobPlaylistItemDto, {
       ...updated,
       movie: updated.movieId ? (movies.get(updated.movieId) ?? null) : null,
       tvSeries: updated.tvSeriesId ? (tvSeries.get(updated.tvSeriesId) ?? null) : null,

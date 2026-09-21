@@ -1,9 +1,8 @@
 import { ApiProperty, ApiSchema, PickType } from '@nestjs/swagger';
-import { Expose, Type } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import {
   IsInt,
   IsString,
-  IsUrl,
   IsNumber,
   IsArray,
   IsDateString,
@@ -14,6 +13,7 @@ import { PersonCompactDto } from '../../persons/dto/persons.dto';
 import { GenreDto } from '../../movies/dto/genres.dto';
 import { PaginatedResponseDto } from '../../../common/dto/pagination.dto';
 import { CursorPaginatedResponseDto } from '../../../common/dto/cursor-pagination.dto';
+import { mediaSlug, tvSeriesPath } from '@libs/db/utils/media-path';
 
 export enum TvSeriesSortBy {
   LAST_AIR_DATE = 'last_air_date',
@@ -30,6 +30,25 @@ export class TvSeriesDto {
   @Expose()
   @IsInt()
   id!: number;
+
+  @ApiProperty({
+    description: 'Internal path to the TV series page',
+    example: '/tv-series/1396-breaking-bad',
+  })
+  @Expose()
+  @Transform(({ obj }) => tvSeriesPath(obj.id, obj.name ?? obj.originalName ?? null))
+  @IsString()
+  path?: string;
+
+  @ApiProperty({
+    description: 'Legacy alias of path for older mobile clients',
+    example: '/tv-series/1396-breaking-bad',
+    deprecated: true,
+  })
+  @Expose()
+  @Transform(({ obj }) => tvSeriesPath(obj.id, obj.name ?? obj.originalName ?? null))
+  @IsString()
+  url?: string;
 
   @ApiProperty({
     description: 'The name of the TV series',
@@ -119,8 +138,7 @@ export class TvSeriesDto {
 
   @ApiProperty({
     description: 'Overview of the TV series',
-    example:
-      'Seven noble families fight for control of the mythical land of Westeros.',
+    example: 'Seven noble families fight for control of the mythical land of Westeros.',
     type: String,
     nullable: true,
   })
@@ -228,25 +246,11 @@ export class TvSeriesDto {
   @IsInt()
   voteCount!: number;
 
-  @ApiProperty({
-    description: 'Slug of the TV series',
-    example: '1399-game-of-thrones',
-    type: String,
-    nullable: true,
-  })
+  @ApiProperty({ description: 'Slug of the TV series', example: '1399-game-of-thrones' })
   @Expose()
+  @Transform(({ obj }) => mediaSlug(obj.id, obj.name ?? obj.originalName ?? null))
   @IsString()
-  slug!: string | null;
-
-  @ApiProperty({
-    description: 'URL to the TV series page',
-    example: '/tv-series/1399-game-of-thrones',
-    type: String,
-    nullable: true,
-  })
-  @Expose()
-  @IsUrl()
-  url!: string | null;
+  slug?: string;
 
   @ApiProperty({
     description: 'Followers average rating of the TV series',
@@ -264,6 +268,7 @@ export class TvSeriesCompactDto extends PickType(TvSeriesDto, [
   'id',
   'name',
   'slug',
+  'path',
   'url',
   'posterPath',
   'backdropPath',
@@ -282,6 +287,7 @@ export class TvSeriesSummaryDto extends PickType(TvSeriesDto, [
   'id',
   'name',
   'slug',
+  'path',
   'url',
   'overview',
   'posterPath',
@@ -301,6 +307,7 @@ export class TvSeriesMinimalDto extends PickType(TvSeriesDto, [
   'id',
   'name',
   'slug',
+  'path',
   'url',
 ] as const) {}
 
@@ -308,6 +315,8 @@ export class TvSeriesMinimalDto extends PickType(TvSeriesDto, [
 export class ListPaginatedTvSeriesDto extends PaginatedResponseDto<TvSeriesCompactDto> {
   @ApiProperty({ type: () => [TvSeriesCompactDto] })
   @Type(() => TvSeriesCompactDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: TvSeriesCompactDto[];
 
   constructor(partial: Partial<ListPaginatedTvSeriesDto>) {
@@ -320,6 +329,8 @@ export class ListPaginatedTvSeriesDto extends PaginatedResponseDto<TvSeriesCompa
 export class ListInfiniteTvSeriesDto extends CursorPaginatedResponseDto<TvSeriesCompactDto> {
   @ApiProperty({ type: () => [TvSeriesCompactDto] })
   @Type(() => TvSeriesCompactDto)
+  @ValidateNested({ each: true })
+  @Expose()
   data!: TvSeriesCompactDto[];
 
   constructor(partial: Partial<ListInfiniteTvSeriesDto>) {
@@ -380,4 +391,3 @@ export class TvSeriesTrailerDto {
   @IsString()
   iso31661!: string | null;
 }
-

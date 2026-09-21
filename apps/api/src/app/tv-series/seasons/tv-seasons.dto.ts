@@ -1,13 +1,8 @@
 import { ApiProperty, ApiSchema, PickType } from '@nestjs/swagger';
-import { Expose, Type } from 'class-transformer';
-import {
-  IsInt,
-  IsString,
-  IsUrl,
-  IsNumber,
-  ValidateNested,
-} from 'class-validator';
+import { Expose, Transform, Type } from 'class-transformer';
+import { IsInt, IsString, IsNumber, ValidateNested } from 'class-validator';
 import { TvSeriesMinimalDto } from '../dto/tv-series.dto';
+import { tvSeasonPath } from '@libs/db/utils/media-path';
 
 @ApiSchema({ name: 'TvSeason' })
 export class TvSeasonDto {
@@ -47,15 +42,13 @@ export class TvSeasonDto {
 
   @ApiProperty({
     description: 'Overview of the TV season',
-    example:
-      'Seven noble families fight for control of the mythical land of Westeros.',
+    example: 'Seven noble families fight for control of the mythical land of Westeros.',
     type: String,
     nullable: true,
   })
   @Expose()
   @IsString()
   overview!: string | null;
-
 
   @ApiProperty({
     description: 'Poster path of the TV season',
@@ -98,14 +91,14 @@ export class TvSeasonDto {
   voteCount!: number;
 
   @ApiProperty({
-    description: 'URL to the TV season page',
-    example: '/tv-series/1399-game-of-thrones/season/1',
+    description: 'Internal path to the TV season page',
+    example: '/tv-series/1399/season/1',
     type: String,
-    nullable: true,
   })
   @Expose()
-  @IsUrl()
-  url!: string | null;
+  @Transform(({ obj }) => tvSeasonPath(obj.tvSeriesId, obj.seasonNumber))
+  @IsString()
+  path?: string;
 }
 
 @ApiSchema({ name: 'TvSeasonCompact' })
@@ -117,14 +110,14 @@ export class TvSeasonCompactDto extends PickType(TvSeasonDto, [
   'episodeCount',
   'voteAverage',
   'voteCount',
-  'url',
+  'path',
 ] as const) {}
 
 @ApiSchema({ name: 'TvSeasonGet' })
 export class TvSeasonGetDTO extends TvSeasonDto {
-    @ApiProperty({ type: () => TvSeriesMinimalDto, description: 'The TV series object' })
-    @Expose()
-    @ValidateNested({ each: true })
-    @Type(() => TvSeriesMinimalDto)
-    tvSeries!: TvSeriesMinimalDto;
+  @ApiProperty({ type: () => TvSeriesMinimalDto, description: 'The TV series object' })
+  @Expose()
+  @ValidateNested({ each: true })
+  @Type(() => TvSeriesMinimalDto)
+  tvSeries!: TvSeriesMinimalDto;
 }
