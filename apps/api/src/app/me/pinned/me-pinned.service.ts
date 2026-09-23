@@ -1,10 +1,5 @@
-import {
-  ConflictException,
-  ForbiddenException,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { apiException } from '../../../common/dto/api-error.dto';
 import { and, asc, desc, eq, inArray, ne, SQL, sql } from 'drizzle-orm';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
 import {
@@ -36,6 +31,7 @@ import {
   PinnedItemUnion,
   PinnedItemUpdateDto,
   PinnedItemsDeleteDto,
+  PinnedLimitReachedErrorDto,
 } from '../../pinned/dto/pinned.dto';
 import { buildPinnedItemsResponse } from '../../pinned/pinned.mapper';
 import { computePinnedItemStatusSignals } from '../../pinned/pinned-status.builder';
@@ -76,9 +72,8 @@ export class MePinnedService {
         .where(eq(pinnedItem.userId, currentUser.id));
 
       if (count >= maxAllowed) {
-        throw new ForbiddenException({
-          statusCode: 403,
-          error: 'Forbidden',
+        throw apiException(PinnedLimitReachedErrorDto, {
+          code: 'PINNED_LIMIT_REACHED',
           message: `You have reached the maximum of ${maxAllowed} pinned items allowed for your plan.`,
           // Free users hitting their cap could raise it by upgrading; premium users hitting the
           // hard cap (10) can't — they just need to unpin something first. Lets the client decide

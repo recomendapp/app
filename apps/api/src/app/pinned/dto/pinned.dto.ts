@@ -247,6 +247,12 @@ export class PinnedItemsDeleteDto {
 // Errors
 @ApiSchema({ name: 'PinnedLimitReachedError' })
 export class PinnedLimitReachedErrorDto extends ApiErrorDto {
+  static readonly httpStatus = 403;
+  static readonly errorName = 'Forbidden';
+
+  @ApiProperty({ enum: ['PINNED_LIMIT_REACHED'] })
+  code!: 'PINNED_LIMIT_REACHED';
+
   @ApiProperty({
     description:
       'Whether upgrading to premium would raise the pin limit and allow this item to ' +
