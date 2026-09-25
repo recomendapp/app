@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import toast from 'react-hot-toast';
-import { PinnedItemCreate } from '@libs/api-js';
+import { MePinnedControllerAddError, PinnedItemCreate } from '@libs/api-js';
 import {
   userPinnedOptions,
   useUserPinnedAddMutation,
@@ -34,14 +34,9 @@ export const usePinnedItem = ({
   const { mutateAsync: deletePinned, isPending: isDeletePending } = useUserPinnedDeleteMutation();
 
   const handleError = useCallback(
-    (error: unknown) => {
-      const errorObject =
-        error && typeof error === 'object' ? (error as Record<string, unknown>) : undefined;
-      const statusCode =
-        typeof errorObject?.statusCode === 'number' ? errorObject.statusCode : undefined;
-
-      if (statusCode === 403) {
-        if (errorObject?.upgradable === true) {
+    (error: MePinnedControllerAddError | Error) => {
+      if ('code' in error && error.code === 'PINNED_LIMIT_REACHED') {
+        if (error.upgradable) {
           router.push('/upgrade');
           return;
         }

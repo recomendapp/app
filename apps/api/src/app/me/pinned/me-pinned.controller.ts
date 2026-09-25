@@ -11,11 +11,11 @@ import {
 import {
   ApiConflictResponse,
   ApiExtraModels,
-  ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { ApiErrorResponse } from '../../../common/decorators/api-error.decorator';
 import { AuthGuard } from '../../auth/guards';
 import { CurrentUser } from '../../auth/decorators';
 import { User } from '../../auth/auth.service';
@@ -57,12 +57,11 @@ export class MePinnedController {
     description: 'Pin a movie, tv series, or playlist to your profile.',
     schema: PINNED_ITEM_UNION_SCHEMA,
   })
-  @ApiForbiddenResponse({
-    description:
-      "The plan's pin limit has been reached (free: 4, premium: 10). " +
+  @ApiErrorResponse(
+    PinnedLimitReachedErrorDto,
+    "The plan's pin limit has been reached (free: 4, premium: 10). " +
       '`upgradable` tells the client whether upgrading would raise the limit.',
-    type: PinnedLimitReachedErrorDto,
-  })
+  )
   @ApiConflictResponse({
     description: 'This item is already pinned.',
     type: ApiErrorDto,

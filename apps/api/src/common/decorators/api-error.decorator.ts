@@ -1,14 +1,16 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { ApiErrorDto } from '../dto/api-error.dto';
+import { ApiErrorDto, ApiErrorDtoClass } from '../dto/api-error.dto';
 
-export function ApiErrors(...codes: number[]) {
+export function ApiErrorResponse<T extends ApiErrorDto>(
+  ErrorDto: ApiErrorDtoClass<T>,
+  description: string,
+) {
   return applyDecorators(
-    ...codes.map(code =>
-      ApiResponse({
-        status: code,
-        type: ApiErrorDto,
-      }),
-    ),
+    ApiResponse({
+      status: ErrorDto.httpStatus,
+      type: ErrorDto,
+      description,
+    }),
   );
 }
