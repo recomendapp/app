@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
+import { UsersTool } from './users.tool';
 import { UsersService } from './users.service';
 import { UserMoviesModule } from './movies/user-movies.module';
 import { UserPlaylistsModule } from './playlists/user-playlists.module';
@@ -27,7 +28,7 @@ import { UserPinnedModule } from './pinned/user-pinned.module';
     UserFeedModule,
     UserPinnedModule,
   ],
-  controllers: [UsersController],
+  controllers: [UsersController, UsersTool],
   providers: [UsersService],
   exports: [UsersService],
 })
