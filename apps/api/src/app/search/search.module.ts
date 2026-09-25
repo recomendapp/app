@@ -7,6 +7,7 @@ import { SearchTvSeriesModule } from './tv-series/search-tv-series.module';
 import { SearchPersonsModule } from './persons/search-persons.module';
 import { SearchController } from './search.controller';
 import { SearchService } from './search.service';
+import { SearchTool } from './search.tool';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { SearchService } from './search.service';
     SearchTvSeriesModule,
     SearchPersonsModule,
   ],
-  controllers: [SearchController],
+  controllers: [SearchController, SearchTool],
   providers: [SearchService],
 })
 export class SearchModule {}
