@@ -21,7 +21,7 @@ export type ImageType =
   | 'user'
   | null;
 
-interface ImageWithFallbackProps extends ComponentProps<typeof Animated.View> {
+export interface ImageWithFallbackProps extends ComponentProps<typeof Animated.View> {
   source: ImageSource;
   contentFit?: ImageProps['contentFit'];
   transition?: ImageProps['transition'];
