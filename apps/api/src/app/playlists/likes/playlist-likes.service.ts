@@ -7,6 +7,7 @@ import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { PlaylistLikeDto } from './dto/playlist-likes.dto';
 import { PlaylistServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../../realtime/realtime.gateway';
+import { assertPlaylistVisible } from '../playlists.permission';
 
 @Injectable()
 export class PlaylistLikesService {
@@ -23,6 +24,8 @@ export class PlaylistLikesService {
   }
 
   async set({ user, playlistId }: { user: User; playlistId: number }): Promise<PlaylistLikeDto> {
+    await assertPlaylistVisible(this.db, user, playlistId);
+
     const [like] = await this.db
       .insert(playlistLike)
       .values({

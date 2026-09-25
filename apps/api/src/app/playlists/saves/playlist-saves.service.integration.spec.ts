@@ -135,4 +135,20 @@ describe('PlaylistSavesService', () => {
       expect(gateway.emitToUser).not.toHaveBeenCalled();
     });
   });
+
+  describe('visibility', () => {
+    it('hides a private playlist of another user behind a NotFoundException', async () => {
+      const { user: owner } = await createTestUser(testDb.db);
+      const { user: stranger } = await createTestUser(testDb.db);
+      const p = await createTestPlaylist(
+        testDb.db,
+        { userId: owner.id },
+        { visibility: 'private' },
+      );
+
+      await expect(service().set({ user: asUser(stranger), playlistId: p.id })).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
 });
