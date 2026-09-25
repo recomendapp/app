@@ -195,7 +195,7 @@ describe('MePinnedService', () => {
           locale: defaultSupportedLocale,
         }),
       ).rejects.toMatchObject({
-        response: expect.objectContaining({ upgradable: true }),
+        response: expect.objectContaining({ code: 'PINNED_LIMIT_REACHED', upgradable: true }),
       });
     });
 
@@ -226,7 +226,7 @@ describe('MePinnedService', () => {
           locale: defaultSupportedLocale,
         }),
       ).rejects.toMatchObject({
-        response: expect.objectContaining({ upgradable: false }),
+        response: expect.objectContaining({ code: 'PINNED_LIMIT_REACHED', upgradable: false }),
       });
     });
 
