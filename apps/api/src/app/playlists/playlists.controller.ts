@@ -20,12 +20,6 @@ import {
 import { AuthGuard, OptionalAuthGuard } from '../auth/guards';
 import { User } from '../auth/auth.service';
 import { CurrentOptionalUser, CurrentUser } from '../auth/decorators';
-import { RequirePlaylistRoles } from './decorators/playlist-roles.decorator';
-import { PlaylistRolesGuard } from './guards/playlist-roles.guard';
-import { PlaylistVisibilityGuard } from './guards/playlist-visibility.guard';
-import { CurrentPlaylistRole } from './decorators/current-playlist-role.decorator';
-import { PlaylistRole } from './types/playlist-role.type';
-import { PremiumGuard } from '../../common/guards/premium.guard';
 
 @ApiTags('Playlists')
 @Controller({
@@ -62,26 +56,25 @@ export class PlaylistsController {
   }
 
   @Patch(':playlist_id')
-  @UseGuards(AuthGuard, PlaylistRolesGuard)
-  @RequirePlaylistRoles('owner', 'admin')
+  @UseGuards(AuthGuard)
   @ApiOkResponse({
     description: 'The playlist has been successfully updated.',
     type: PlaylistDto,
   })
   update(
-    @CurrentPlaylistRole() role: PlaylistRole,
+    @CurrentUser() user: User,
     @Param('playlist_id', ParseIntPipe) playlistId: number,
     @Body() updatePlaylistDto: PlaylistUpdateDto,
   ) {
     return this.playlistsService.update({
-      role,
+      user,
       playlistId: playlistId,
       updatePlaylistDto,
     });
   }
 
   @Post(':playlist_id/duplicate')
-  @UseGuards(AuthGuard, PremiumGuard, PlaylistVisibilityGuard)
+  @UseGuards(AuthGuard)
   @ApiCreatedResponse({
     description: 'The playlist has been successfully duplicated.',
     type: PlaylistDto,
@@ -94,14 +87,14 @@ export class PlaylistsController {
   }
 
   @Delete(':playlist_id')
-  @UseGuards(AuthGuard, PlaylistRolesGuard)
-  @RequirePlaylistRoles('owner')
+  @UseGuards(AuthGuard)
   @ApiOkResponse({
     description: 'The playlist has been successfully deleted.',
     type: PlaylistDto,
   })
-  delete(@Param('playlist_id', ParseIntPipe) playlistId: number) {
+  delete(@CurrentUser() user: User, @Param('playlist_id', ParseIntPipe) playlistId: number) {
     return this.playlistsService.delete({
+      user,
       playlistId: playlistId,
     });
   }

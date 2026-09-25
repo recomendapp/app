@@ -1,11 +1,13 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import type { MultipartFile } from '@fastify/multipart';
 import { createTestPlaylist, createTestUser, TestDatabase } from '@libs/testing';
 import type { StorageService } from '../../../common/modules/storage/storage.service';
 import { PlaylistPosterService } from './playlist-poster.service';
+import { User } from '../../auth/auth.service';
 
 describe('PlaylistPosterService', () => {
   let testDb: TestDatabase;
+  const asUser = (row: { id: string }) => row as unknown as User;
 
   beforeAll(async () => {
     testDb = await TestDatabase.create();
@@ -37,9 +39,21 @@ describe('PlaylistPosterService', () => {
 
   describe('set', () => {
     it('throws when the playlist does not exist', async () => {
-      await expect(service().set({ playlistId: 999999, file: fakeFile })).rejects.toThrow(
-        NotFoundException,
-      );
+      const { user } = await createTestUser(testDb.db);
+
+      await expect(
+        service().set({ user: asUser(user), playlistId: 999999, file: fakeFile }),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('throws when the user is not the owner or an admin', async () => {
+      const { user: owner } = await createTestUser(testDb.db);
+      const { user: stranger } = await createTestUser(testDb.db);
+      const p = await createTestPlaylist(testDb.db, { userId: owner.id });
+
+      await expect(
+        service().set({ user: asUser(stranger), playlistId: p.id, file: fakeFile }),
+      ).rejects.toThrow(ForbiddenException);
     });
 
     it('uploads the file and updates the poster', async () => {
@@ -47,7 +61,11 @@ describe('PlaylistPosterService', () => {
       const p = await createTestPlaylist(testDb.db, { userId: user.id });
       const storage = fakeStorage();
 
-      const result = await service(storage).set({ playlistId: p.id, file: fakeFile });
+      const result = await service(storage).set({
+        user: asUser(user),
+        playlistId: p.id,
+        file: fakeFile,
+      });
 
       expect(storage.uploadFile).toHaveBeenCalledWith(fakeFile, expect.any(String));
       expect(result.poster).not.toBeNull();
@@ -62,7 +80,7 @@ describe('PlaylistPosterService', () => {
       );
       const storage = fakeStorage();
 
-      await service(storage).set({ playlistId: p.id, file: fakeFile });
+      await service(storage).set({ user: asUser(user), playlistId: p.id, file: fakeFile });
 
       expect(storage.deleteFile).toHaveBeenCalledWith('old-poster.png', expect.any(String));
     });
@@ -72,7 +90,7 @@ describe('PlaylistPosterService', () => {
       const p = await createTestPlaylist(testDb.db, { userId: user.id });
       const storage = fakeStorage();
 
-      await service(storage).set({ playlistId: p.id, file: fakeFile });
+      await service(storage).set({ user: asUser(user), playlistId: p.id, file: fakeFile });
 
       expect(storage.deleteFile).not.toHaveBeenCalled();
     });
@@ -80,14 +98,30 @@ describe('PlaylistPosterService', () => {
 
   describe('delete', () => {
     it('throws when the playlist does not exist', async () => {
-      await expect(service().delete({ playlistId: 999999 })).rejects.toThrow(NotFoundException);
+      const { user } = await createTestUser(testDb.db);
+
+      await expect(service().delete({ user: asUser(user), playlistId: 999999 })).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+
+    it('throws when the user is not the owner or an admin', async () => {
+      const { user: owner } = await createTestUser(testDb.db);
+      const { user: stranger } = await createTestUser(testDb.db);
+      const p = await createTestPlaylist(testDb.db, { userId: owner.id }, { poster: 'cover.png' });
+
+      await expect(service().delete({ user: asUser(stranger), playlistId: p.id })).rejects.toThrow(
+        ForbiddenException,
+      );
     });
 
     it('throws when the playlist has no poster to delete', async () => {
       const { user } = await createTestUser(testDb.db);
       const p = await createTestPlaylist(testDb.db, { userId: user.id });
 
-      await expect(service().delete({ playlistId: p.id })).rejects.toThrow(BadRequestException);
+      await expect(service().delete({ user: asUser(user), playlistId: p.id })).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('clears the poster and deletes the file', async () => {
@@ -95,7 +129,7 @@ describe('PlaylistPosterService', () => {
       const p = await createTestPlaylist(testDb.db, { userId: user.id }, { poster: 'cover.png' });
       const storage = fakeStorage();
 
-      const result = await service(storage).delete({ playlistId: p.id });
+      const result = await service(storage).delete({ user: asUser(user), playlistId: p.id });
 
       expect(result.poster).toBeNull();
       expect(storage.deleteFile).toHaveBeenCalledWith('cover.png', expect.any(String));

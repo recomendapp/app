@@ -20,6 +20,8 @@ import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../
 import { z } from 'zod';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 import { WorkerClient } from '@shared/worker';
+import { User } from '../../auth/auth.service';
+import { assertPlaylistRole } from '../playlists.permission';
 
 const CursorSchema = baseCursorSchema(z.string().min(1), z.number());
 
@@ -65,12 +67,16 @@ export class PlaylistMembersService {
     return { joinedQb, whereClause, orderBy };
   }
   async listAll({
+    currentUser,
     playlistId,
     query,
   }: {
+    currentUser: User;
     playlistId: number;
     query: ListAllPlaylistMembersQueryDto;
   }): Promise<PlaylistMemberWithUserDto[]> {
+    await assertPlaylistRole(this.db, currentUser, playlistId, []);
+
     const { sort_order, sort_by, search } = query;
     const { joinedQb, whereClause, orderBy } = this.getListBaseQuery(
       playlistId,
@@ -90,12 +96,16 @@ export class PlaylistMembersService {
     );
   }
   async listPaginated({
+    currentUser,
     playlistId,
     query,
   }: {
+    currentUser: User;
     playlistId: number;
     query: ListPaginatedPlaylistMembersQueryDto;
   }): Promise<ListPaginatedPlaylistMembersDto> {
+    await assertPlaylistRole(this.db, currentUser, playlistId, []);
+
     const { per_page, page, sort_order, sort_by, search } = query;
     const offset = (page - 1) * per_page;
 
@@ -137,12 +147,16 @@ export class PlaylistMembersService {
     );
   }
   async listInfinite({
+    currentUser,
     playlistId,
     query,
   }: {
+    currentUser: User;
     playlistId: number;
     query: ListInfinitePlaylistMembersQueryDto;
   }): Promise<ListInfinitePlaylistMembersDto> {
+    await assertPlaylistRole(this.db, currentUser, playlistId, []);
+
     const { per_page, sort_order, sort_by, cursor, search, include_total_count } = query;
     const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
 
@@ -221,12 +235,16 @@ export class PlaylistMembersService {
   }
 
   async add({
+    currentUser,
     playlistId,
     dto,
   }: {
+    currentUser: User;
     playlistId: number;
     dto: PlaylistMemberAddDto;
   }): Promise<PlaylistMemberDto[]> {
+    await assertPlaylistRole(this.db, currentUser, playlistId, ['owner', 'admin']);
+
     if (dto.userIds.length === 0) return [];
 
     const result = await this.db.transaction(async (tx) => {
@@ -263,14 +281,18 @@ export class PlaylistMembersService {
   }
 
   async update({
+    currentUser,
     playlistId,
     targetUserId,
     dto,
   }: {
+    currentUser: User;
     playlistId: number;
     targetUserId: string;
     dto: PlaylistMemberUpdateDto;
   }): Promise<PlaylistMemberDto> {
+    await assertPlaylistRole(this.db, currentUser, playlistId, ['owner', 'admin']);
+
     if (dto.role !== 'viewer') {
       const ownerProfile = await this.db
         .select({ isPremium: profile.isPremium })
@@ -305,12 +327,16 @@ export class PlaylistMembersService {
   }
 
   async delete({
+    currentUser,
     playlistId,
     userIds,
   }: {
+    currentUser: User;
     playlistId: number;
     userIds: string[];
   }): Promise<PlaylistMemberDto[]> {
+    await assertPlaylistRole(this.db, currentUser, playlistId, ['owner', 'admin']);
+
     if (userIds.length === 0) return [];
 
     const deletedMembers = await this.db

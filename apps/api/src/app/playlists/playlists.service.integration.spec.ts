@@ -1,6 +1,6 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
-import { playlist, playlistItem, playlistMember } from '@libs/db/schemas';
+import { playlist, playlistItem, playlistMember, profile } from '@libs/db/schemas';
 import { createTestMovie, createTestPlaylist, createTestUser, TestDatabase } from '@libs/testing';
 import { PlaylistServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../realtime/realtime.gateway';
@@ -52,6 +52,16 @@ describe('PlaylistsService', () => {
     const realtime = new PlaylistsRealtimeService(testDb.db, gateway);
     const service = new PlaylistsService(testDb.db, storage, worker, realtime);
     return { service, gateway, worker, storage };
+  }
+
+  async function makePremium(userId: string) {
+    await testDb.db.update(profile).set({ isPremium: true }).where(eq(profile.id, userId));
+  }
+
+  // Admin rights only apply when the owner is premium.
+  async function makeAdmin(playlistId: number, ownerId: string, adminId: string) {
+    await makePremium(ownerId);
+    await testDb.db.insert(playlistMember).values({ playlistId, userId: adminId, role: 'admin' });
   }
 
   async function waitFor(mockFn: { mock: { calls: unknown[] } }, timeoutMs = 2000) {
@@ -186,12 +196,14 @@ describe('PlaylistsService', () => {
   describe('update', () => {
     it('throws when a non-owner tries to change visibility', async () => {
       const { user: owner } = await createTestUser(testDb.db);
+      const { user: admin } = await createTestUser(testDb.db);
       const p = await createTestPlaylist(testDb.db, { userId: owner.id });
+      await makeAdmin(p.id, owner.id, admin.id);
       const { service } = buildService();
 
       await expect(
         service.update({
-          role: 'admin',
+          user: asUser(admin),
           playlistId: p.id,
           updatePlaylistDto: { visibility: 'private' },
         }),
@@ -200,11 +212,13 @@ describe('PlaylistsService', () => {
 
     it('allows an admin to update the title without touching visibility', async () => {
       const { user: owner } = await createTestUser(testDb.db);
+      const { user: admin } = await createTestUser(testDb.db);
       const p = await createTestPlaylist(testDb.db, { userId: owner.id }, { title: 'Old Title' });
+      await makeAdmin(p.id, owner.id, admin.id);
       const { service } = buildService();
 
       const result = await service.update({
-        role: 'admin',
+        user: asUser(admin),
         playlistId: p.id,
         updatePlaylistDto: { title: 'New Title' },
       });
@@ -218,7 +232,7 @@ describe('PlaylistsService', () => {
       const { service } = buildService();
 
       const result = await service.update({
-        role: 'owner',
+        user: asUser(owner),
         playlistId: p.id,
         updatePlaylistDto: { visibility: 'private' },
       });
@@ -227,11 +241,35 @@ describe('PlaylistsService', () => {
     });
 
     it('throws when the playlist does not exist', async () => {
+      const { user } = await createTestUser(testDb.db);
       const { service } = buildService();
 
       await expect(
-        service.update({ role: 'owner', playlistId: 999999, updatePlaylistDto: { title: 'X' } }),
+        service.update({
+          user: asUser(user),
+          playlistId: 999999,
+          updatePlaylistDto: { title: 'X' },
+        }),
       ).rejects.toThrow(NotFoundException);
+    });
+
+    it('throws when the user is an editor', async () => {
+      const { user: owner } = await createTestUser(testDb.db);
+      const { user: editor } = await createTestUser(testDb.db);
+      const p = await createTestPlaylist(testDb.db, { userId: owner.id });
+      await makePremium(owner.id);
+      await testDb.db
+        .insert(playlistMember)
+        .values({ playlistId: p.id, userId: editor.id, role: 'editor' });
+      const { service } = buildService();
+
+      await expect(
+        service.update({
+          user: asUser(editor),
+          playlistId: p.id,
+          updatePlaylistDto: { title: 'X' },
+        }),
+      ).rejects.toThrow(ForbiddenException);
     });
   });
 
@@ -239,6 +277,7 @@ describe('PlaylistsService', () => {
     it('copies title and description but forces the visibility to private', async () => {
       const { user: owner } = await createTestUser(testDb.db);
       const { user: duplicator } = await createTestUser(testDb.db);
+      await makePremium(duplicator.id);
       const source = await createTestPlaylist(
         testDb.db,
         { userId: owner.id },
@@ -257,17 +296,16 @@ describe('PlaylistsService', () => {
     it('copies the items of the source playlist, preserving rank', async () => {
       const { user: owner } = await createTestUser(testDb.db);
       const { user: duplicator } = await createTestUser(testDb.db);
+      await makePremium(duplicator.id);
       const source = await createTestPlaylist(testDb.db, { userId: owner.id });
       const movie = await createTestMovie(testDb.db);
-      await testDb.db
-        .insert(playlistItem)
-        .values({
-          playlistId: source.id,
-          userId: owner.id,
-          type: 'movie',
-          movieId: movie.id,
-          rank: '0|i0000r:',
-        });
+      await testDb.db.insert(playlistItem).values({
+        playlistId: source.id,
+        userId: owner.id,
+        type: 'movie',
+        movieId: movie.id,
+        rank: '0|i0000r:',
+      });
       const { service } = buildService();
 
       const result = await service.duplicate({ user: asUser(duplicator), playlistId: source.id });
@@ -287,11 +325,39 @@ describe('PlaylistsService', () => {
 
     it('throws when the source playlist does not exist', async () => {
       const { user } = await createTestUser(testDb.db);
+      await makePremium(user.id);
       const { service } = buildService();
 
       await expect(service.duplicate({ user: asUser(user), playlistId: 999999 })).rejects.toThrow(
         NotFoundException,
       );
+    });
+
+    it('throws when the user is not premium', async () => {
+      const { user: owner } = await createTestUser(testDb.db);
+      const { user: duplicator } = await createTestUser(testDb.db);
+      const source = await createTestPlaylist(testDb.db, { userId: owner.id });
+      const { service } = buildService();
+
+      await expect(
+        service.duplicate({ user: asUser(duplicator), playlistId: source.id }),
+      ).rejects.toThrow(ForbiddenException);
+    });
+
+    it('hides a private source playlist behind a NotFoundException', async () => {
+      const { user: owner } = await createTestUser(testDb.db);
+      const { user: duplicator } = await createTestUser(testDb.db);
+      await makePremium(duplicator.id);
+      const source = await createTestPlaylist(
+        testDb.db,
+        { userId: owner.id },
+        { visibility: 'private' },
+      );
+      const { service } = buildService();
+
+      await expect(
+        service.duplicate({ user: asUser(duplicator), playlistId: source.id }),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -300,18 +366,16 @@ describe('PlaylistsService', () => {
       const { user: owner } = await createTestUser(testDb.db);
       const p = await createTestPlaylist(testDb.db, { userId: owner.id });
       const movie = await createTestMovie(testDb.db);
-      await testDb.db
-        .insert(playlistItem)
-        .values({
-          playlistId: p.id,
-          userId: owner.id,
-          type: 'movie',
-          movieId: movie.id,
-          rank: '0|i0000r:',
-        });
+      await testDb.db.insert(playlistItem).values({
+        playlistId: p.id,
+        userId: owner.id,
+        type: 'movie',
+        movieId: movie.id,
+        rank: '0|i0000r:',
+      });
       const { service } = buildService();
 
-      await service.delete({ playlistId: p.id });
+      await service.delete({ user: asUser(owner), playlistId: p.id });
 
       const remaining = await testDb.db.select().from(playlist).where(eq(playlist.id, p.id));
       expect(remaining).toHaveLength(0);
@@ -333,20 +397,35 @@ describe('PlaylistsService', () => {
       const storage = fakeStorage();
       const { service } = buildService({ storage });
 
-      await service.delete({ playlistId: withPoster.id });
+      await service.delete({ user: asUser(owner), playlistId: withPoster.id });
       await waitFor(storage.deleteFile);
       expect(storage.deleteFile).toHaveBeenCalledWith('cover.jpg', expect.any(String));
 
       storage.deleteFile.mockClear();
-      await service.delete({ playlistId: withoutPoster.id });
+      await service.delete({ user: asUser(owner), playlistId: withoutPoster.id });
       await new Promise((r) => setTimeout(r, 50));
       expect(storage.deleteFile).not.toHaveBeenCalled();
     });
 
     it('throws when the playlist does not exist', async () => {
+      const { user } = await createTestUser(testDb.db);
       const { service } = buildService();
 
-      await expect(service.delete({ playlistId: 999999 })).rejects.toThrow(NotFoundException);
+      await expect(service.delete({ user: asUser(user), playlistId: 999999 })).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+
+    it('throws when the user is not the owner', async () => {
+      const { user: owner } = await createTestUser(testDb.db);
+      const { user: admin } = await createTestUser(testDb.db);
+      const p = await createTestPlaylist(testDb.db, { userId: owner.id });
+      await makeAdmin(p.id, owner.id, admin.id);
+      const { service } = buildService();
+
+      await expect(service.delete({ user: asUser(admin), playlistId: p.id })).rejects.toThrow(
+        ForbiddenException,
+      );
     });
   });
 });
