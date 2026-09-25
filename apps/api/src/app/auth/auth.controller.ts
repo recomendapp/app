@@ -4,13 +4,20 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { AUTH_SERVICE, AuthService } from './auth.service';
 
 @ApiExcludeController()
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(@Inject(AUTH_SERVICE) private readonly auth: AuthService) {}
 
-  @All('*')
+  @All([
+    'auth/*',
+    '.well-known/oauth-authorization-server',
+    '.well-known/oauth-authorization-server/*',
+    '.well-known/oauth-protected-resource',
+    '.well-known/oauth-protected-resource/*',
+    '.well-known/openid-configuration',
+  ])
   async handleAuth(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
-    const url = new URL(req.raw.url || req.url, `${req.protocol}://${req.hostname}`);
+    const url = new URL(req.raw.url || req.url, `${req.protocol}://${req.host}`);
 
     const headers = new Headers();
     Object.entries(req.headers).forEach(([key, value]) => {

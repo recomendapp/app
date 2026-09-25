@@ -691,6 +691,20 @@
       }
     },
     "auth": {
+      "mcp_consent": {
+        "label": "Authorize application",
+        "description_generic": "An application is requesting access to your account.",
+        "description": "{client} wants to access your account.",
+        "scopes_label": "This will allow the application to:",
+        "accept": "Allow",
+        "deny": "Deny",
+        "error": {
+          "invalid_request": "Invalid or expired request",
+          "invalid_request_description": "Restart the authorization process from the application that sent you here.",
+          "client_not_found": "This application could not be found.",
+          "submit_failed": "Something went wrong. Please try again."
+        }
+      },
       "login": {
         "metadata": {
           "description": "Log in to your {app} account."

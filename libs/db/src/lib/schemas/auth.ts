@@ -1,5 +1,15 @@
 import { relations, sql } from 'drizzle-orm';
-import { text, timestamp, boolean, index, pgSchema, uuid, uniqueIndex } from 'drizzle-orm/pg-core';
+import {
+  text,
+  timestamp,
+  boolean,
+  integer,
+  jsonb,
+  index,
+  uniqueIndex,
+  pgSchema,
+  uuid,
+} from 'drizzle-orm/pg-core';
 import { profile } from './user';
 import { supportedLanguages } from './i18n';
 
@@ -56,7 +66,10 @@ export const account = authSchema.table(
     id: text('id').primaryKey(),
     accountId: text('account_id').notNull(),
     providerId: text('provider_id').notNull(),
-    issuer: text('issuer').notNull(),
+    // Better Auth 1.7.0-1.7.2 required this column; 1.7.3 reverted account
+    // identity to (providerId, accountId), same as 1.6. Kept nullable rather
+    // than dropped: https://www.better-auth.com/docs/guides/1-7-upgrade-guide
+    issuer: text('issuer'),
     userId: uuid('user_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
@@ -72,10 +85,7 @@ export const account = authSchema.table(
       .$onUpdate(() => sql`now()`)
       .notNull(),
   },
-  (table) => [
-    index('account_userId_idx').on(table.userId),
-    uniqueIndex('account_issuer_accountId_uidx').on(table.issuer, table.accountId),
-  ],
+  (table) => [index('account_userId_idx').on(table.userId)],
 );
 
 export const verification = authSchema.table(
@@ -94,6 +104,196 @@ export const verification = authSchema.table(
   (table) => [index('verification_identifier_idx').on(table.identifier)],
 );
 
+// --- OAuth Provider (@better-auth/mcp, @better-auth/cimd, @better-auth/oauth-provider) + jwt() ---
+// Generated via `nx run db:auth-generate`, then hand-merged with the tables
+// above: uuid() for every FK into user.id (matching user.id's own type and
+// the app's uuidv7 id generator) and { mode: 'string' } on every timestamp,
+// consistent with the rest of this file.
+
+export const jwks = authSchema.table('jwks', {
+  id: text('id').primaryKey(),
+  publicKey: text('public_key').notNull(),
+  privateKey: text('private_key').notNull(),
+  createdAt: timestamp('created_at', { mode: 'string' }).notNull(),
+  expiresAt: timestamp('expires_at', { mode: 'string' }),
+  alg: text('alg'),
+  crv: text('crv'),
+});
+
+export const oauthClient = authSchema.table(
+  'oauth_client',
+  {
+    id: text('id').primaryKey(),
+    clientId: text('client_id').notNull().unique(),
+    clientSecret: text('client_secret'),
+    clientDiscoveryId: text('client_discovery_id'),
+    disabled: boolean('disabled').default(false),
+    skipConsent: boolean('skip_consent'),
+    enableEndSession: boolean('enable_end_session'),
+    subjectType: text('subject_type'),
+    scopes: text('scopes').array(),
+    clientCredentialsScopes: text('client_credentials_scopes').array().default([]),
+    userId: uuid('user_id').references(() => user.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at', { mode: 'string' }),
+    updatedAt: timestamp('updated_at', { mode: 'string' }),
+    name: text('name'),
+    uri: text('uri'),
+    icon: text('icon'),
+    contacts: text('contacts').array(),
+    tos: text('tos'),
+    policy: text('policy'),
+    softwareId: text('software_id'),
+    softwareVersion: text('software_version'),
+    softwareStatement: text('software_statement'),
+    redirectUris: text('redirect_uris').array().notNull(),
+    postLogoutRedirectUris: text('post_logout_redirect_uris').array(),
+    backchannelLogoutUri: text('backchannel_logout_uri'),
+    backchannelLogoutSessionRequired: boolean('backchannel_logout_session_required'),
+    tokenEndpointAuthMethod: text('token_endpoint_auth_method'),
+    applicationType: text('application_type'),
+    jwks: text('jwks'),
+    jwksUri: text('jwks_uri'),
+    grantTypes: text('grant_types').array(),
+    responseTypes: text('response_types').array(),
+    requirePKCE: boolean('require_pkce'),
+    dpopBoundAccessTokens: boolean('dpop_bound_access_tokens').default(false),
+    referenceId: text('reference_id'),
+    metadata: jsonb('metadata'),
+  },
+  (table) => [index('oauthClient_userId_idx').on(table.userId)],
+);
+
+export const oauthResource = authSchema.table('oauth_resource', {
+  id: text('id').primaryKey(),
+  identifier: text('identifier').notNull().unique(),
+  name: text('name').notNull(),
+  accessTokenTtl: integer('access_token_ttl'),
+  refreshTokenTtl: integer('refresh_token_ttl'),
+  signingAlgorithm: text('signing_algorithm'),
+  signingKeyId: text('signing_key_id'),
+  allowedScopes: text('allowed_scopes').array(),
+  customClaims: jsonb('custom_claims'),
+  dpopBoundAccessTokensRequired: boolean('dpop_bound_access_tokens_required').default(false),
+  disabled: boolean('disabled').default(false),
+  createdAt: timestamp('created_at', { mode: 'string' }),
+  updatedAt: timestamp('updated_at', { mode: 'string' }),
+  policyVersion: integer('policy_version').default(1),
+  metadata: jsonb('metadata'),
+});
+
+export const oauthClientResource = authSchema.table(
+  'oauth_client_resource',
+  {
+    id: text('id').primaryKey(),
+    clientId: text('client_id')
+      .notNull()
+      .references(() => oauthClient.clientId, { onDelete: 'cascade' }),
+    resourceId: text('resource_id')
+      .notNull()
+      .references(() => oauthResource.identifier, { onDelete: 'cascade' }),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at', { mode: 'string' }),
+  },
+  (table) => [
+    uniqueIndex('oauthClientResource_clientId_resourceId_uidx').on(
+      table.clientId,
+      table.resourceId,
+    ),
+    index('oauthClientResource_clientId_idx').on(table.clientId),
+    index('oauthClientResource_resourceId_idx').on(table.resourceId),
+  ],
+);
+
+export const oauthRefreshToken = authSchema.table(
+  'oauth_refresh_token',
+  {
+    id: text('id').primaryKey(),
+    token: text('token').notNull().unique(),
+    clientId: text('client_id')
+      .notNull()
+      .references(() => oauthClient.clientId, { onDelete: 'cascade' }),
+    sessionId: text('session_id').references(() => session.id, { onDelete: 'set null' }),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    referenceId: text('reference_id'),
+    authorizationCodeId: text('authorization_code_id'),
+    resources: text('resources').array(),
+    requestedUserInfoClaims: text('requested_user_info_claims').array(),
+    expiresAt: timestamp('expires_at', { mode: 'string' }).notNull(),
+    createdAt: timestamp('created_at', { mode: 'string' }).notNull(),
+    revoked: timestamp('revoked', { mode: 'string' }),
+    rotatedAt: timestamp('rotated_at', { mode: 'string' }),
+    rotationReplayResponse: text('rotation_replay_response'),
+    rotationReplayExpiresAt: timestamp('rotation_replay_expires_at', { mode: 'string' }),
+    authTime: timestamp('auth_time', { mode: 'string' }),
+    confirmation: jsonb('confirmation'),
+    scopes: text('scopes').array().notNull(),
+  },
+  (table) => [
+    index('oauthRefreshToken_clientId_idx').on(table.clientId),
+    index('oauthRefreshToken_sessionId_idx').on(table.sessionId),
+    index('oauthRefreshToken_userId_idx').on(table.userId),
+    index('oauthRefreshToken_authorizationCodeId_idx').on(table.authorizationCodeId),
+  ],
+);
+
+export const oauthAccessToken = authSchema.table(
+  'oauth_access_token',
+  {
+    id: text('id').primaryKey(),
+    token: text('token').notNull().unique(),
+    clientId: text('client_id')
+      .notNull()
+      .references(() => oauthClient.clientId, { onDelete: 'cascade' }),
+    sessionId: text('session_id').references(() => session.id, { onDelete: 'set null' }),
+    userId: uuid('user_id').references(() => user.id, { onDelete: 'cascade' }),
+    referenceId: text('reference_id'),
+    authorizationCodeId: text('authorization_code_id'),
+    resources: text('resources').array(),
+    requestedUserInfoClaims: text('requested_user_info_claims').array(),
+    refreshId: text('refresh_id').references(() => oauthRefreshToken.id, { onDelete: 'cascade' }),
+    expiresAt: timestamp('expires_at', { mode: 'string' }).notNull(),
+    createdAt: timestamp('created_at', { mode: 'string' }).notNull(),
+    revoked: timestamp('revoked', { mode: 'string' }),
+    confirmation: jsonb('confirmation'),
+    scopes: text('scopes').array().notNull(),
+  },
+  (table) => [
+    index('oauthAccessToken_clientId_idx').on(table.clientId),
+    index('oauthAccessToken_sessionId_idx').on(table.sessionId),
+    index('oauthAccessToken_userId_idx').on(table.userId),
+    index('oauthAccessToken_authorizationCodeId_idx').on(table.authorizationCodeId),
+    index('oauthAccessToken_refreshId_idx').on(table.refreshId),
+  ],
+);
+
+export const oauthConsent = authSchema.table(
+  'oauth_consent',
+  {
+    id: text('id').primaryKey(),
+    clientId: text('client_id')
+      .notNull()
+      .references(() => oauthClient.clientId, { onDelete: 'cascade' }),
+    userId: uuid('user_id').references(() => user.id, { onDelete: 'cascade' }),
+    referenceId: text('reference_id'),
+    resources: text('resources').array(),
+    requestedUserInfoClaims: text('requested_user_info_claims').array(),
+    scopes: text('scopes').array().notNull(),
+    createdAt: timestamp('created_at', { mode: 'string' }).notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'string' }).notNull(),
+  },
+  (table) => [
+    index('oauthConsent_clientId_idx').on(table.clientId),
+    index('oauthConsent_userId_idx').on(table.userId),
+  ],
+);
+
+export const oauthClientAssertion = authSchema.table('oauth_client_assertion', {
+  id: text('id').primaryKey(),
+  expiresAt: timestamp('expires_at', { mode: 'string' }).notNull(),
+});
+
 export const userRelations = relations(user, ({ many, one }) => ({
   sessions: many(session),
   accounts: many(account),
@@ -105,18 +305,96 @@ export const userRelations = relations(user, ({ many, one }) => ({
     fields: [user.language],
     references: [supportedLanguages.language],
   }),
+  oauthClients: many(oauthClient),
+  oauthRefreshTokens: many(oauthRefreshToken),
+  oauthAccessTokens: many(oauthAccessToken),
+  oauthConsents: many(oauthConsent),
 }));
 
-export const sessionRelations = relations(session, ({ one }) => ({
+export const sessionRelations = relations(session, ({ one, many }) => ({
   user: one(user, {
     fields: [session.userId],
     references: [user.id],
   }),
+  oauthRefreshTokens: many(oauthRefreshToken),
+  oauthAccessTokens: many(oauthAccessToken),
 }));
 
 export const accountRelations = relations(account, ({ one }) => ({
   user: one(user, {
     fields: [account.userId],
+    references: [user.id],
+  }),
+}));
+
+export const oauthClientRelations = relations(oauthClient, ({ one, many }) => ({
+  user: one(user, {
+    fields: [oauthClient.userId],
+    references: [user.id],
+  }),
+  oauthClientResources: many(oauthClientResource),
+  oauthRefreshTokens: many(oauthRefreshToken),
+  oauthAccessTokens: many(oauthAccessToken),
+  oauthConsents: many(oauthConsent),
+}));
+
+export const oauthResourceRelations = relations(oauthResource, ({ many }) => ({
+  oauthClientResources: many(oauthClientResource),
+}));
+
+export const oauthClientResourceRelations = relations(oauthClientResource, ({ one }) => ({
+  oauthClient: one(oauthClient, {
+    fields: [oauthClientResource.clientId],
+    references: [oauthClient.clientId],
+  }),
+  oauthResource: one(oauthResource, {
+    fields: [oauthClientResource.resourceId],
+    references: [oauthResource.identifier],
+  }),
+}));
+
+export const oauthRefreshTokenRelations = relations(oauthRefreshToken, ({ one, many }) => ({
+  oauthClient: one(oauthClient, {
+    fields: [oauthRefreshToken.clientId],
+    references: [oauthClient.clientId],
+  }),
+  session: one(session, {
+    fields: [oauthRefreshToken.sessionId],
+    references: [session.id],
+  }),
+  user: one(user, {
+    fields: [oauthRefreshToken.userId],
+    references: [user.id],
+  }),
+  oauthAccessTokens: many(oauthAccessToken),
+}));
+
+export const oauthAccessTokenRelations = relations(oauthAccessToken, ({ one }) => ({
+  oauthClient: one(oauthClient, {
+    fields: [oauthAccessToken.clientId],
+    references: [oauthClient.clientId],
+  }),
+  session: one(session, {
+    fields: [oauthAccessToken.sessionId],
+    references: [session.id],
+  }),
+  user: one(user, {
+    fields: [oauthAccessToken.userId],
+    references: [user.id],
+  }),
+  oauthRefreshToken: one(oauthRefreshToken, {
+    fields: [oauthAccessToken.refreshId],
+    references: [oauthRefreshToken.id],
+  }),
+}));
+
+export const oauthConsentRelations = relations(oauthConsent, ({ one }) => ({
+  oauthClient: one(oauthClient, {
+    fields: [oauthConsent.clientId],
+    references: [oauthClient.clientId],
+  }),
+  user: one(user, {
+    fields: [oauthConsent.userId],
     references: [user.id],
   }),
 }));

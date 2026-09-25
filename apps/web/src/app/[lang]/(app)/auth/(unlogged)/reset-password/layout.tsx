@@ -2,15 +2,16 @@ import { SupportedLocale } from '@libs/i18n';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{
-      lang: string;
-    }>;
-  }
-): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{
+    lang: string;
+  }>;
+}): Promise<Metadata> {
   const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale, namespace: 'pages.auth.reset_password' });
+  const t = await getTranslations({
+    locale: params.lang as SupportedLocale,
+    namespace: 'pages.auth.reset_password',
+  });
   return {
     title: t('metadata.title'),
     description: t('metadata.description'),
@@ -22,5 +23,5 @@ interface ResetPasswordLayoutProps {
 }
 
 export default function ResetPasswordLayout({ children }: ResetPasswordLayoutProps) {
-  return (children);
+  return children;
 }

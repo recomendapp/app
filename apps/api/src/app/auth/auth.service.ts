@@ -1,7 +1,10 @@
 import { Provider } from '@nestjs/common';
-import { APIError, betterAuth } from 'better-auth';
-import { emailOTP, openAPI, username } from 'better-auth/plugins';
+import { APIError, betterAuth, type BetterAuthPlugin } from 'better-auth';
+import { emailOTP, jwt, openAPI, username } from 'better-auth/plugins';
 import { expo } from '@better-auth/expo';
+import { mcp } from '@better-auth/mcp';
+import { cimd } from '@better-auth/cimd';
+import { fetchClientMetadataResource } from '@better-auth/cimd/node';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { ENV_SERVICE, EnvService } from '@libs/env';
 import { NotifyClient } from '@shared/notify';
@@ -115,6 +118,20 @@ const createBetterAuth = async ({
         },
       }),
       expo(),
+      // Explicit issuer: oauth-provider's init() reads `jwt.issuer ?? ctx.baseURL`
+      // for its own JWT issuer sanity check, but runs before better-auth's core
+      // context has finished resolving `ctx.baseURL` from `baseURL` above — the
+      // fallback throws `TypeError: Invalid URL` otherwise (verified locally).
+      jwt({ jwt: { issuer: env.API_URL } }),
+      mcp({
+        loginPage: new URL('/auth/login', env.WEB_APP_URL).toString(),
+        consentPage: new URL('/auth/mcp-consent', env.WEB_APP_URL).toString(),
+        resource: new URL('/mcp', env.API_URL).toString(),
+      }) as unknown as BetterAuthPlugin,
+      cimd({
+        fetchClientMetadataResource,
+        metadataProfile: 'mcp-2026-07-28',
+      }),
     ],
     databaseHooks: {
       user: {

@@ -4,13 +4,11 @@ import { upperFirst } from 'lodash';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{
-      lang: string;
-    }>;
-  }
-): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{
+    lang: string;
+  }>;
+}): Promise<Metadata> {
   const params = await props.params;
   const t = await getTranslations({ locale: params.lang as SupportedLocale });
   return {
@@ -24,5 +22,5 @@ interface SignupLayoutProps {
 }
 
 export default function SignupLayout({ children }: SignupLayoutProps) {
-  return (children);
+  return children;
 }
