@@ -5,23 +5,8 @@ import { mcp } from '@better-auth/mcp';
 import { cimd } from '@better-auth/cimd';
 import { fetchClientMetadataResource } from '@better-auth/cimd/node';
 import { db } from './client';
-import { defaultSupportedLocale } from '@libs/i18n';
+import { additionalFields } from './auth-fields';
 import type {} from 'zod';
-
-export const additionalFields = {
-  usernameUpdatedAt: {
-    type: 'date',
-    required: false,
-    defaultValue: null,
-    input: false,
-  },
-  language: {
-    type: 'string',
-    defaultValue: defaultSupportedLocale,
-    required: true,
-    input: true,
-  },
-} as const;
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {

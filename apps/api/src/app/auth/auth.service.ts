@@ -15,7 +15,7 @@ import { USER_RULES } from '@libs/rules';
 import bcrypt from 'bcrypt';
 import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { defaultSupportedLocale, SupportedLocale } from '@libs/i18n';
-import { additionalFields, auth } from '@libs/db';
+import { additionalFields, type auth } from '@libs/db';
 import { generateUniqueUsername } from '../../utils/generate-username';
 import { eq } from 'drizzle-orm';
 import { createAuthMiddleware } from 'better-auth/api';
