@@ -8,6 +8,7 @@ import { PlaylistsAddQueryDto } from './playlists-add.dto';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { PlaylistItemDto } from '../items/playlist-items.dto';
 import { PlaylistsRealtimeService } from '../playlists-realtime.service';
+import { assertMediaExists } from '../../../utils/assert-media-exists';
 
 @Injectable()
 export class PlaylistsAddService {
@@ -29,6 +30,8 @@ export class PlaylistsAddService {
     mediaId: number;
     dto: PlaylistsAddQueryDto;
   }): Promise<PlaylistItemDto[]> {
+    await assertMediaExists(this.db, type, mediaId);
+
     const uniquePlaylistIds = [...new Set(dto.playlistIds)];
     if (uniquePlaylistIds.length === 0) return [];
 

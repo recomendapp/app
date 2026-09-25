@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { follow, reco } from '@libs/db/schemas';
 import { createTestLogMovie, createTestMovie, createTestUser, TestDatabase } from '@libs/testing';
 import { User } from '../../auth/auth.service';
@@ -109,15 +109,13 @@ describe('RecoTargetsService', () => {
       const { user: friend } = await createTestUser(testDb.db);
       await mutualFollow(user.id, friend.id);
       const movie = await createTestMovie(testDb.db);
-      await testDb.db
-        .insert(reco)
-        .values({
-          userId: friend.id,
-          senderId: user.id,
-          type: 'movie',
-          movieId: movie.id,
-          status: 'active',
-        });
+      await testDb.db.insert(reco).values({
+        userId: friend.id,
+        senderId: user.id,
+        type: 'movie',
+        movieId: movie.id,
+        status: 'active',
+      });
 
       const [target] = await service().listAll({
         currentUser: asUser(user),
@@ -134,15 +132,13 @@ describe('RecoTargetsService', () => {
       const { user: friend } = await createTestUser(testDb.db);
       await mutualFollow(user.id, friend.id);
       const movie = await createTestMovie(testDb.db);
-      await testDb.db
-        .insert(reco)
-        .values({
-          userId: friend.id,
-          senderId: user.id,
-          type: 'movie',
-          movieId: movie.id,
-          status: 'deleted',
-        });
+      await testDb.db.insert(reco).values({
+        userId: friend.id,
+        senderId: user.id,
+        type: 'movie',
+        movieId: movie.id,
+        status: 'deleted',
+      });
 
       const [target] = await service().listAll({
         currentUser: asUser(user),
@@ -216,15 +212,13 @@ describe('RecoTargetsService', () => {
       await mutualFollow(user.id, freshFriend.id);
       const movieA = await createTestMovie(testDb.db);
       const movieB = await createTestMovie(testDb.db);
-      await testDb.db
-        .insert(reco)
-        .values({
-          userId: freshFriend.id,
-          senderId: user.id,
-          type: 'movie',
-          movieId: movieA.id,
-          status: 'active',
-        });
+      await testDb.db.insert(reco).values({
+        userId: freshFriend.id,
+        senderId: user.id,
+        type: 'movie',
+        movieId: movieA.id,
+        status: 'active',
+      });
 
       const result = await service().listInfinite({
         currentUser: asUser(user),
@@ -280,6 +274,47 @@ describe('RecoTargetsService', () => {
           query: { ...baseQuery, per_page: 10, cursor: 'not-a-valid-cursor' },
         }),
       ).rejects.toThrow(BadRequestException);
+    });
+  });
+
+  describe('media existence', () => {
+    it('listAll throws NotFoundException when the movie does not exist', async () => {
+      const { user } = await createTestUser(testDb.db);
+
+      await expect(
+        service().listAll({
+          currentUser: asUser(user),
+          type: RecoType.MOVIE,
+          mediaId: 999999,
+          query: baseQuery,
+        }),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('listPaginated throws NotFoundException when the tv series does not exist', async () => {
+      const { user } = await createTestUser(testDb.db);
+
+      await expect(
+        service().listPaginated({
+          currentUser: asUser(user),
+          type: RecoType.TV_SERIES,
+          mediaId: 999999,
+          query: { ...baseQuery, page: 1, per_page: 10 },
+        }),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('listInfinite throws NotFoundException when the movie does not exist', async () => {
+      const { user } = await createTestUser(testDb.db);
+
+      await expect(
+        service().listInfinite({
+          currentUser: asUser(user),
+          type: RecoType.MOVIE,
+          mediaId: 999999,
+          query: { ...baseQuery, per_page: 10 },
+        }),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 });

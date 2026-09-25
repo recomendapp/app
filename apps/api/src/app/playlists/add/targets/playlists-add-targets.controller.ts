@@ -1,17 +1,24 @@
-import { Controller, Param, ParseIntPipe, ParseEnumPipe, Get, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Param,
+  ParseIntPipe,
+  ParseEnumPipe,
+  Get,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '../../../auth/decorators';
 import { User } from '../../../auth/auth.service';
 import { AuthGuard } from '../../../auth/guards';
-import { MediaExistsGuard } from '../../../../common/guards/media-exists.guard';
 import { PlaylistsAddTargetsService } from './playlists-add-targets.service';
-import { 
-  ListAllPlaylistsAddTargetsQueryDto, 
-  ListInfinitePlaylistsAddTargetsDto, 
-  ListInfinitePlaylistsAddTargetsQueryDto, 
-  ListPaginatedPlaylistsAddTargetsDto, 
-  ListPaginatedPlaylistsAddTargetsQueryDto, 
-  PlaylistsAddTargetDto 
+import {
+  ListAllPlaylistsAddTargetsQueryDto,
+  ListInfinitePlaylistsAddTargetsDto,
+  ListInfinitePlaylistsAddTargetsQueryDto,
+  ListPaginatedPlaylistsAddTargetsDto,
+  ListPaginatedPlaylistsAddTargetsQueryDto,
+  PlaylistsAddTargetDto,
 } from './playlists-add-targets.dto';
 import { PlaylistItemType } from '../../items/playlist-items.dto';
 
@@ -24,7 +31,7 @@ export class PlaylistsAddTargetsController {
   constructor(private readonly targetsService: PlaylistsAddTargetsService) {}
 
   @Get()
-  @UseGuards(AuthGuard, MediaExistsGuard)
+  @UseGuards(AuthGuard)
   @ApiOkResponse({ type: PlaylistsAddTargetDto, isArray: true })
   async listAll(
     @Param('type', new ParseEnumPipe(PlaylistItemType)) type: PlaylistItemType,
@@ -36,7 +43,7 @@ export class PlaylistsAddTargetsController {
   }
 
   @Get('paginated')
-  @UseGuards(AuthGuard, MediaExistsGuard)
+  @UseGuards(AuthGuard)
   @ApiOkResponse({ type: ListPaginatedPlaylistsAddTargetsDto })
   async listPaginated(
     @Param('type', new ParseEnumPipe(PlaylistItemType)) type: PlaylistItemType,
@@ -48,7 +55,7 @@ export class PlaylistsAddTargetsController {
   }
 
   @Get('infinite')
-  @UseGuards(AuthGuard, MediaExistsGuard)
+  @UseGuards(AuthGuard)
   @ApiOkResponse({ type: ListInfinitePlaylistsAddTargetsDto })
   async listInfinite(
     @Param('type', new ParseEnumPipe(PlaylistItemType)) type: PlaylistItemType,

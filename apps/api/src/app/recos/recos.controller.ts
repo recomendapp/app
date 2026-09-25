@@ -1,11 +1,19 @@
-import { Controller, Post, Param, Body, UseGuards, ParseIntPipe, ParseEnumPipe, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Param,
+  Body,
+  UseGuards,
+  ParseIntPipe,
+  ParseEnumPipe,
+  Delete,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/guards';
 import { CurrentUser } from '../auth/decorators';
 import { User } from '../auth/auth.service';
 import { RecosService } from './recos.service';
 import { RecoDto, RecoSendDto, RecoSendResponseDto, RecoType } from './dto/recos.dto';
-import { MediaExistsGuard } from '../../common/guards/media-exists.guard';
 
 @ApiTags('Recos')
 @Controller({
@@ -16,7 +24,7 @@ export class RecosController {
   constructor(private readonly recosService: RecosService) {}
 
   @Post(':type/:media_id')
-  @UseGuards(AuthGuard, MediaExistsGuard)
+  @UseGuards(AuthGuard)
   @ApiResponse({
     status: 200,
     type: RecoSendResponseDto,
@@ -31,12 +39,12 @@ export class RecosController {
       user,
       type,
       mediaId,
-      dto
+      dto,
     });
   }
 
   @Delete(':type/:media_id')
-  @UseGuards(AuthGuard, MediaExistsGuard)
+  @UseGuards(AuthGuard)
   @ApiOkResponse({
     description: 'Delete all recos for a given media that user received (only)',
     type: [RecoDto],

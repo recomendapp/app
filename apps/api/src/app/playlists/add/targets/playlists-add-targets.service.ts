@@ -26,6 +26,7 @@ import {
   PlaylistsAddTargetDto,
   PlaylistTargetFilter,
 } from './playlists-add-targets.dto';
+import { assertMediaExists } from '../../../../utils/assert-media-exists';
 
 const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.number());
 
@@ -138,6 +139,8 @@ export class PlaylistsAddTargetsService {
     mediaId: number;
     query: ListAllPlaylistsAddTargetsQueryDto;
   }): Promise<PlaylistsAddTargetDto[]> {
+    await assertMediaExists(this.db, type, mediaId);
+
     const { sort_order, sort_by, search, filter } = query;
     const { joinedQb, whereClause, orderBy } = this.getListBaseQuery(
       currentUser,
@@ -173,6 +176,8 @@ export class PlaylistsAddTargetsService {
     mediaId: number;
     query: ListPaginatedPlaylistsAddTargetsQueryDto;
   }): Promise<ListPaginatedPlaylistsAddTargetsDto> {
+    await assertMediaExists(this.db, type, mediaId);
+
     const { per_page, sort_order, sort_by, page, search, filter } = query;
     const offset = (page - 1) * per_page;
 
@@ -222,6 +227,8 @@ export class PlaylistsAddTargetsService {
     mediaId: number;
     query: ListInfinitePlaylistsAddTargetsQueryDto;
   }): Promise<ListInfinitePlaylistsAddTargetsDto> {
+    await assertMediaExists(this.db, type, mediaId);
+
     const { per_page, sort_order, sort_by, cursor, search, include_total_count, filter } = query;
     const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;
 

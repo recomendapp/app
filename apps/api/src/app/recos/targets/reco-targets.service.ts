@@ -18,6 +18,7 @@ import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../
 import { z } from 'zod';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
+import { assertMediaExists } from '../../../utils/assert-media-exists';
 
 const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.string().min(1));
 
@@ -138,6 +139,8 @@ export class RecoTargetsService {
     mediaId: number;
     query: ListAllRecoTargetsQueryDto;
   }): Promise<RecoTargetDto[]> {
+    await assertMediaExists(this.db, type, mediaId);
+
     const { sort_order, sort_by, search } = query;
 
     const { joinedQb, whereClause, orderBy } = this.getListBaseQuery(
@@ -176,6 +179,8 @@ export class RecoTargetsService {
     mediaId: number;
     query: ListPaginatedRecoTargetsQueryDto;
   }): Promise<ListPaginatedRecoTargetsDto> {
+    await assertMediaExists(this.db, type, mediaId);
+
     const { per_page, sort_order, sort_by, page, search } = query;
     const offset = (page - 1) * per_page;
 
@@ -240,6 +245,8 @@ export class RecoTargetsService {
     mediaId: number;
     query: ListInfiniteRecoTargetsQueryDto;
   }): Promise<ListInfiniteRecoTargetsDto> {
+    await assertMediaExists(this.db, type, mediaId);
+
     const { per_page, sort_order, sort_by, cursor, search } = query;
 
     const cursorData = cursor ? decodeCursor(cursor, CursorSchema) : null;

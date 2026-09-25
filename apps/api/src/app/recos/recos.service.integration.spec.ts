@@ -424,4 +424,33 @@ describe('RecosService', () => {
       expect(notify.emit).not.toHaveBeenCalled();
     });
   });
+
+  describe('media existence', () => {
+    it('send throws NotFoundException when the movie does not exist', async () => {
+      const { user: sender } = await createTestUser(testDb.db);
+      const { user: target } = await createTestUser(testDb.db);
+      await mutualFollow(sender.id, target.id);
+
+      await expect(
+        buildService().send({
+          user: asUser(sender),
+          type: RecoType.MOVIE,
+          mediaId: 999999,
+          dto: { userIds: [target.id] },
+        }),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('deleteByMedia throws NotFoundException when the tv series does not exist', async () => {
+      const { user } = await createTestUser(testDb.db);
+
+      await expect(
+        buildService().deleteByMedia({
+          user: asUser(user),
+          type: RecoType.TV_SERIES,
+          mediaId: 999999,
+        }),
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
 });

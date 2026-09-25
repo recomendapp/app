@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { playlistItem, playlistMember, playlistSaved, profile } from '@libs/db/schemas';
 import {
@@ -182,15 +183,13 @@ describe('PlaylistsAddTargetsService', () => {
       const { user } = await createTestUser(testDb.db);
       const p = await createTestPlaylist(testDb.db, { userId: user.id });
       const movie = await createTestMovie(testDb.db);
-      await testDb.db
-        .insert(playlistItem)
-        .values({
-          playlistId: p.id,
-          userId: user.id,
-          type: 'movie',
-          movieId: movie.id,
-          rank: '0|i0000r:',
-        });
+      await testDb.db.insert(playlistItem).values({
+        playlistId: p.id,
+        userId: user.id,
+        type: 'movie',
+        movieId: movie.id,
+        rank: '0|i0000r:',
+      });
 
       const result = await listAllIds(asUser(user), movie.id);
 
@@ -202,15 +201,13 @@ describe('PlaylistsAddTargetsService', () => {
       const p = await createTestPlaylist(testDb.db, { userId: user.id });
       const inPlaylist = await createTestMovie(testDb.db);
       const other = await createTestMovie(testDb.db);
-      await testDb.db
-        .insert(playlistItem)
-        .values({
-          playlistId: p.id,
-          userId: user.id,
-          type: 'movie',
-          movieId: inPlaylist.id,
-          rank: '0|i0000r:',
-        });
+      await testDb.db.insert(playlistItem).values({
+        playlistId: p.id,
+        userId: user.id,
+        type: 'movie',
+        movieId: inPlaylist.id,
+        rank: '0|i0000r:',
+      });
 
       const result = await listAllIds(asUser(user), other.id);
 
@@ -221,17 +218,16 @@ describe('PlaylistsAddTargetsService', () => {
       const { user } = await createTestUser(testDb.db);
       const p = await createTestPlaylist(testDb.db, { userId: user.id });
       const tvSeries = await createTestTvSeries(testDb.db);
-      await testDb.db
-        .insert(playlistItem)
-        .values({
-          playlistId: p.id,
-          userId: user.id,
-          type: 'tv_series',
-          tvSeriesId: tvSeries.id,
-          rank: '0|i0000r:',
-        });
+      await testDb.db.insert(playlistItem).values({
+        playlistId: p.id,
+        userId: user.id,
+        type: 'tv_series',
+        tvSeriesId: tvSeries.id,
+        rank: '0|i0000r:',
+      });
 
       // Same numeric id coincidentally used as a movie id.
+      await createTestMovie(testDb.db, { id: tvSeries.id });
       const result = await service().listAll({
         currentUser: asUser(user),
         type: 'movie',
@@ -313,6 +309,40 @@ describe('PlaylistsAddTargetsService', () => {
       });
       expect(secondPage.data).toHaveLength(1);
       expect(secondPage.meta.next_cursor).toBeNull();
+    });
+  });
+
+  describe('media existence', () => {
+    it('listAll throws NotFoundException when the movie does not exist', async () => {
+      const { user } = await createTestUser(testDb.db);
+
+      await expect(listAllIds(asUser(user), 999999)).rejects.toThrow(NotFoundException);
+    });
+
+    it('listPaginated throws NotFoundException when the tv series does not exist', async () => {
+      const { user } = await createTestUser(testDb.db);
+
+      await expect(
+        service().listPaginated({
+          currentUser: asUser(user),
+          type: 'tv_series',
+          mediaId: 999999,
+          query: { ...baseQuery, page: 1, per_page: 10, filter: PlaylistTargetFilter.ALL },
+        }),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('listInfinite throws NotFoundException when the movie does not exist', async () => {
+      const { user } = await createTestUser(testDb.db);
+
+      await expect(
+        service().listInfinite({
+          currentUser: asUser(user),
+          type: 'movie',
+          mediaId: 999999,
+          query: { ...baseQuery, per_page: 10, filter: PlaylistTargetFilter.ALL },
+        }),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 });
