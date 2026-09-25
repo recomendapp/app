@@ -166,10 +166,10 @@ const SettingsScreen = () => {
           color: item.color || colors.foreground,
         }}
         onPress={() => {
-          if (item.route) {
-            router.push(item.route);
-          } else {
+          if ('onPress' in item && item.onPress) {
             item.onPress();
+          } else if (item.route) {
+            router.push(item.route);
           }
         }}
         style={[

@@ -229,7 +229,7 @@ const LoginOtpScreen = () => {
                 <Text textColor="muted">{t('common.form.error.not_received_code')} </Text>
                 <Button
                   variant="ghost"
-                  className="p-0"
+                  style={tw`p-0`}
                   disabled={isLoading}
                   onPress={form.handleSubmit(handleSubmit)}
                 >

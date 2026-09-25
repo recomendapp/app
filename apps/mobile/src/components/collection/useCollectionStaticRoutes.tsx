@@ -27,7 +27,7 @@ const useCollectionStaticRoutes = () => {
             from={Color(colors.accentYellow).hex()}
             to={Color(colors.accentYellow).rotate(-30).darken(0.1).hex()}
           >
-            <Icons.Reco color={colors.white} fill={colors.white} className="w-2/5 h-2/5" />
+            <Icons.Reco color={colors.white} fill={colors.white} width="20%" height="20%" />
           </CollectionIcon>
         ),
         label: capitalize(t('common.messages.my_recos')),
@@ -40,7 +40,7 @@ const useCollectionStaticRoutes = () => {
             from={Color(colors.accentBlue).hex()}
             to={Color(colors.accentBlue).rotate(-30).darken(0.1).hex()}
           >
-            <Icons.Bookmark color={colors.white} fill={colors.white} className="w-2/5 h-2/5" />
+            <Icons.Bookmark color={colors.white} fill={colors.white} width="20%" height="20%" />
           </CollectionIcon>
         ),
         label: capitalize(t('common.messages.for_later')),
