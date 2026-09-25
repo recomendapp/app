@@ -1532,9 +1532,6 @@ importers:
       '@better-auth/mcp':
         specifier: 1.7.5
         version: 1.7.5(a26f9e792777ce4cc96372527f94ca24)
-      '@better-auth/oauth-provider':
-        specifier: 1.7.5
-        version: 1.7.5(a26f9e792777ce4cc96372527f94ca24)
       '@libs/i18n':
         specifier: workspace:*
         version: link:../i18n
