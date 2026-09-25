@@ -24,6 +24,7 @@ import { PaginationQueryDto } from '../../../../../common/dto/pagination.dto';
 import { CursorPaginationQueryDto } from '../../../../../common/dto/cursor-pagination.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../../../utils/cursor';
 import { NotifyClient } from '@shared/notify';
+import { assertReviewMovieVisible } from '../../review-movie-visibility';
 
 const LikesCursorSchema = z.object({
   value: z.string().min(1),
@@ -37,7 +38,9 @@ export class ReviewMovieCommentLikesService {
     private readonly notify: NotifyClient,
   ) {}
 
-  private async assertCommentLikable(reviewId: number, commentId: number) {
+  // The comment is only reachable when its review is visible to `viewer`.
+  private async assertCommentLikable(reviewId: number, commentId: number, viewer: User | null) {
+    await assertReviewMovieVisible({ db: this.db, reviewId, user: viewer });
     const comment = await this.db.query.reviewMovieComment.findFirst({
       where: and(eq(reviewMovieComment.id, commentId), eq(reviewMovieComment.reviewId, reviewId)),
     });
@@ -56,7 +59,7 @@ export class ReviewMovieCommentLikesService {
     reviewId: number;
     commentId: number;
   }): Promise<boolean> {
-    await this.assertCommentLikable(reviewId, commentId);
+    await this.assertCommentLikable(reviewId, commentId, user);
 
     const like = await this.db.query.reviewMovieCommentLike.findFirst({
       where: and(
@@ -76,7 +79,7 @@ export class ReviewMovieCommentLikesService {
     reviewId: number;
     commentId: number;
   }): Promise<ReviewMovieCommentLikeDto> {
-    const comment = await this.assertCommentLikable(reviewId, commentId);
+    const comment = await this.assertCommentLikable(reviewId, commentId, user);
 
     const [like] = await this.db
       .insert(reviewMovieCommentLike)
@@ -129,7 +132,7 @@ export class ReviewMovieCommentLikesService {
     reviewId: number;
     commentId: number;
   }): Promise<ReviewMovieCommentLikeDto> {
-    await this.assertCommentLikable(reviewId, commentId);
+    await this.assertCommentLikable(reviewId, commentId, user);
 
     const [deleted] = await this.db
       .delete(reviewMovieCommentLike)
@@ -150,14 +153,16 @@ export class ReviewMovieCommentLikesService {
 
   async listPaginated({
     reviewId,
+    currentUser,
     commentId,
     query,
   }: {
     reviewId: number;
+    currentUser: User | null;
     commentId: number;
     query: PaginationQueryDto;
   }): Promise<ListPaginatedReviewMovieCommentLikesDto> {
-    await this.assertCommentLikable(reviewId, commentId);
+    await this.assertCommentLikable(reviewId, commentId, currentUser);
 
     const { per_page, page } = query;
     const offset = (page - 1) * per_page;
@@ -192,14 +197,16 @@ export class ReviewMovieCommentLikesService {
 
   async listInfinite({
     reviewId,
+    currentUser,
     commentId,
     query,
   }: {
     reviewId: number;
+    currentUser: User | null;
     commentId: number;
     query: CursorPaginationQueryDto;
   }): Promise<ListInfiniteReviewMovieCommentLikesDto> {
-    await this.assertCommentLikable(reviewId, commentId);
+    await this.assertCommentLikable(reviewId, commentId, currentUser);
 
     const { per_page, cursor } = query;
     const cursorData = cursor ? decodeCursor(cursor, LikesCursorSchema) : null;

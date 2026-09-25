@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, OptionalAuthGuard } from '../../../../auth/guards';
-import { CurrentUser } from '../../../../auth/decorators';
+import { CurrentOptionalUser, CurrentUser } from '../../../../auth/decorators';
 import { User } from '../../../../auth/auth.service';
 import { ReviewTvSeriesCommentLikesService } from './review-tv-series-comment-likes.service';
 import {
@@ -81,8 +81,9 @@ export class ReviewTvSeriesCommentLikesController {
     @Param('review_id', ParseIntPipe) reviewId: number,
     @Param('comment_id', ParseIntPipe) commentId: number,
     @Query() query: PaginationQueryDto,
+    @CurrentOptionalUser() currentUser: User | null,
   ): Promise<ListPaginatedReviewTvSeriesCommentLikesDto> {
-    return this.likesService.listPaginated({ reviewId, commentId, query });
+    return this.likesService.listPaginated({ reviewId, commentId, query, currentUser });
   }
 
   @Get('likes/infinite')
@@ -95,7 +96,8 @@ export class ReviewTvSeriesCommentLikesController {
     @Param('review_id', ParseIntPipe) reviewId: number,
     @Param('comment_id', ParseIntPipe) commentId: number,
     @Query() query: CursorPaginationQueryDto,
+    @CurrentOptionalUser() currentUser: User | null,
   ): Promise<ListInfiniteReviewTvSeriesCommentLikesDto> {
-    return this.likesService.listInfinite({ reviewId, commentId, query });
+    return this.likesService.listInfinite({ reviewId, commentId, query, currentUser });
   }
 }
