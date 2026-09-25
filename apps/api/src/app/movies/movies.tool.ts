@@ -20,9 +20,6 @@ export class MoviesTool {
       idempotentHint: true,
     },
   })
-  // No @UseGuards() here: McpHttpController's McpBearerAuthGuard already
-  // authenticates every MCP request before it reaches any tool — the whole
-  // server requires a logged-in user, there is no public tool.
   async getMovie(
     @Payload() { movieId }: { movieId: number },
     @McpRawRequest() request: McpAuthenticatedRequest,
@@ -35,6 +32,31 @@ export class MoviesTool {
 
     return {
       content: [{ type: 'text' as const, text: JSON.stringify(movie) }],
+    };
+  }
+
+  @Tool({
+    name: 'get-movie-casting',
+    description: 'Get the cast of a movie',
+    parameters: z.object({
+      movieId: z.number().int().describe('The TMDB id of the movie'),
+    }),
+    annotations: {
+      readOnlyHint: true,
+      idempotentHint: true,
+    },
+  })
+  async getMovieCasting(
+    @Payload() { movieId }: { movieId: number },
+    @McpRawRequest() request: McpAuthenticatedRequest,
+  ) {
+    const casting = await this.moviesService.getCasting({
+      movieId,
+      locale: getLocaleFromHeaders(request.headers),
+    });
+
+    return {
+      content: [{ type: 'text' as const, text: JSON.stringify(casting) }],
     };
   }
 }
