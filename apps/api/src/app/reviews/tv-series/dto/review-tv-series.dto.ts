@@ -70,8 +70,8 @@ export class ReviewTvSeriesDto {
   title!: string | null;
 
   @ApiProperty({
-    description: 'The content of the review wrapped in <html> tags',
-    example: '<html><p>Best tv series ever!</p></html>',
+    description: 'The content of the review, in Markdown',
+    example: 'Best tv series ever!',
     maxLength: REVIEW_RULES.BODY.MAX,
   })
   @Expose()
