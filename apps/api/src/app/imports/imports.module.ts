@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ImportsService } from './imports.service';
 import { ImportsController } from './imports.controller';
+import { ImportsTool } from './imports.tool';
 import { ImportController } from './import.controller';
 import { TransfersStorageModule } from '../../common/modules/transfers-storage/transfers-storage.module';
 import { PrefectModule } from '../../common/modules/prefect/prefect.module';
@@ -23,7 +24,7 @@ import { ImportSourcesModule } from './sources/import-sources.module';
     TvLogsSyncModule,
   ],
   providers: [ImportsService],
-  controllers: [ImportsController, ImportController],
+  controllers: [ImportsController, ImportController, ImportsTool],
   exports: [ImportsService],
 })
 export class ImportsModule {}
