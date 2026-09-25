@@ -1,5 +1,8 @@
+import { ForbiddenException } from '@nestjs/common';
+import { eq } from 'drizzle-orm';
 import {
   followPerson,
+  profile,
   tmdbCountry,
   tmdbMovieCredit,
   tmdbMovieReleaseDate,
@@ -48,6 +51,13 @@ describe('FeedPersonsService', () => {
 
   const asUser = (row: { id: string }) => row as unknown as User;
   const service = () => new FeedPersonsService(testDb.db);
+
+  // The person feed is a Premium feature.
+  async function createPremiumUser() {
+    const created = await createTestUser(testDb.db);
+    await testDb.db.update(profile).set({ isPremium: true }).where(eq(profile.id, created.user.id));
+    return created;
+  }
   const baseQuery = {
     sort_by: PersonFeedSortBy.DATE,
     sort_order: SortOrder.ASC,
@@ -109,8 +119,20 @@ describe('FeedPersonsService', () => {
   });
 
   describe('listPaginated', () => {
-    it('returns an empty feed when following nobody', async () => {
+    it('throws ForbiddenException when the user is not premium', async () => {
       const { user } = await createTestUser(testDb.db);
+
+      await expect(
+        service().listPaginated({
+          currentUser: asUser(user),
+          query: { ...baseQuery, page: 1, per_page: 10 },
+          locale: defaultSupportedLocale,
+        }),
+      ).rejects.toThrow(ForbiddenException);
+    });
+
+    it('returns an empty feed when following nobody', async () => {
+      const { user } = await createPremiumUser();
 
       const result = await service().listPaginated({
         query: { ...baseQuery, page: 1, per_page: 10 },
@@ -122,7 +144,7 @@ describe('FeedPersonsService', () => {
     });
 
     it('includes a movie credit from a followed person, once the view is refreshed', async () => {
-      const { user } = await createTestUser(testDb.db);
+      const { user } = await createPremiumUser();
       const person = await createTestPerson(testDb.db);
       const movie = await createTestMovie(testDb.db);
       await addMovieCredit(movie.id, person.id);
@@ -145,7 +167,7 @@ describe('FeedPersonsService', () => {
     });
 
     it('excludes a movie credit from a person the user does not follow', async () => {
-      const { user } = await createTestUser(testDb.db);
+      const { user } = await createPremiumUser();
       const person = await createTestPerson(testDb.db);
       const movie = await createTestMovie(testDb.db);
       await addMovieCredit(movie.id, person.id);
@@ -163,7 +185,7 @@ describe('FeedPersonsService', () => {
     });
 
     it('excludes a movie credit that has no release date', async () => {
-      const { user } = await createTestUser(testDb.db);
+      const { user } = await createPremiumUser();
       const person = await createTestPerson(testDb.db);
       const movie = await createTestMovie(testDb.db);
       await addMovieCredit(movie.id, person.id);
@@ -181,7 +203,7 @@ describe('FeedPersonsService', () => {
     });
 
     it('includes a tv series credit from a followed person, dated from its episode air date', async () => {
-      const { user } = await createTestUser(testDb.db);
+      const { user } = await createPremiumUser();
       const person = await createTestPerson(testDb.db);
       const series = await createTestTvSeries(testDb.db);
       await addTvSeriesCreditWithAirDate(series.id, person.id, '2021-06-15');
@@ -199,7 +221,7 @@ describe('FeedPersonsService', () => {
     });
 
     it('filters out items outside the min_date/max_date range', async () => {
-      const { user } = await createTestUser(testDb.db);
+      const { user } = await createPremiumUser();
       const person = await createTestPerson(testDb.db);
       const early = await createTestMovie(testDb.db);
       const late = await createTestMovie(testDb.db);
@@ -226,7 +248,7 @@ describe('FeedPersonsService', () => {
     });
 
     it('sorts by date ascending by default', async () => {
-      const { user } = await createTestUser(testDb.db);
+      const { user } = await createPremiumUser();
       const person = await createTestPerson(testDb.db);
       const older = await createTestMovie(testDb.db);
       const newer = await createTestMovie(testDb.db);
@@ -247,7 +269,7 @@ describe('FeedPersonsService', () => {
     });
 
     it('paginates results and reports accurate meta', async () => {
-      const { user } = await createTestUser(testDb.db);
+      const { user } = await createPremiumUser();
       const person = await createTestPerson(testDb.db);
       for (let i = 0; i < 3; i++) {
         const movie = await createTestMovie(testDb.db);
@@ -274,7 +296,7 @@ describe('FeedPersonsService', () => {
 
   describe('listInfinite', () => {
     it('paginates with a cursor until there is no next page', async () => {
-      const { user } = await createTestUser(testDb.db);
+      const { user } = await createPremiumUser();
       const person = await createTestPerson(testDb.db);
       const movies = [];
       for (let i = 0; i < 3; i++) {
