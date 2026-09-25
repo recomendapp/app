@@ -20,42 +20,33 @@ export class PlaylistLikesController {
     description: 'Get like status of the playlist for the current user.',
     type: Boolean,
   })
-  get(
-    @CurrentUser() user: User,
-    @Param('playlist_id', ParseIntPipe) playlistId: number,
-  ) {
+  get(@CurrentUser() user: User, @Param('playlist_id', ParseIntPipe) playlistId: number) {
     return this.likesService.get({
       user,
       playlistId,
     });
   }
 
-  @Post(':playlist_id/like')
+  @Post('like')
   @UseGuards(AuthGuard)
   @ApiOkResponse({
     description: 'Like the playlist for the current user.',
     type: PlaylistLikeDto,
   })
-  set(
-    @CurrentUser() user: User,
-    @Param('playlist_id', ParseIntPipe) playlistId: number,
-  ) {
+  set(@CurrentUser() user: User, @Param('playlist_id', ParseIntPipe) playlistId: number) {
     return this.likesService.set({
       user,
       playlistId,
     });
   }
 
-  @Delete(':playlist_id/like')
+  @Delete('like')
   @UseGuards(AuthGuard)
   @ApiOkResponse({
     description: 'Unlike the playlist for the current user.',
     type: PlaylistLikeDto,
   })
-  delete(
-    @CurrentUser() user: User,
-    @Param('playlist_id', ParseIntPipe) playlistId: number,
-  ) {
+  delete(@CurrentUser() user: User, @Param('playlist_id', ParseIntPipe) playlistId: number) {
     return this.likesService.delete({
       user,
       playlistId,
