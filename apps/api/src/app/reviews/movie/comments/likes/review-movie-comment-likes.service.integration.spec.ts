@@ -1,6 +1,6 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
-import { reviewMovieComment } from '@libs/db/schemas';
+import { profile, reviewMovieComment } from '@libs/db/schemas';
 import {
   createFakeNotifyClient,
   createTestReviewMovie,
@@ -198,6 +198,7 @@ describe('ReviewMovieCommentLikesService', () => {
     await service.like({ user: asUser(liker), reviewId: review.id, commentId: comment.id });
 
     const result = await service.listPaginated({
+      currentUser: null,
       reviewId: review.id,
       commentId: comment.id,
       query: { page: 1, per_page: 20 },
@@ -222,6 +223,7 @@ describe('ReviewMovieCommentLikesService', () => {
     await service.like({ user: asUser(secondLiker), reviewId: review.id, commentId: comment.id });
 
     const firstPage = await service.listInfinite({
+      currentUser: null,
       reviewId: review.id,
       commentId: comment.id,
       query: { per_page: 1 },
@@ -231,6 +233,7 @@ describe('ReviewMovieCommentLikesService', () => {
     expect(firstPage.meta.next_cursor).not.toBeNull();
 
     const secondPage = await service.listInfinite({
+      currentUser: null,
       reviewId: review.id,
       commentId: comment.id,
       query: { per_page: 1, cursor: firstPage.meta.next_cursor ?? undefined },
@@ -252,6 +255,7 @@ describe('ReviewMovieCommentLikesService', () => {
 
     await expect(
       service.listInfinite({
+        currentUser: null,
         reviewId: review.id,
         commentId: comment.id,
         query: { per_page: 10, cursor: 'not-a-valid-cursor' },
@@ -272,10 +276,35 @@ describe('ReviewMovieCommentLikesService', () => {
 
     await expect(
       service.listInfinite({
+        currentUser: null,
         reviewId: review.id,
         commentId: comment.id,
         query: { per_page: 10, cursor: wrongShapeCursor },
       }),
     ).rejects.toThrow(BadRequestException);
+  });
+
+  it('hides comments under a private review from a stranger', async () => {
+    const { user: author } = await createTestUser(testDb.db);
+    const { user: stranger } = await createTestUser(testDb.db);
+    await testDb.db.update(profile).set({ isPrivate: true }).where(eq(profile.id, author.id));
+    const { review } = await createTestReviewMovie(testDb.db, { userId: author.id });
+    const comment = await createTestReviewMovieComment(testDb.db, {
+      reviewId: review.id,
+      userId: author.id,
+    });
+    const service = new ReviewMovieCommentLikesService(testDb.db, createFakeNotifyClient());
+
+    await expect(
+      service.like({ user: asUser(stranger), reviewId: review.id, commentId: comment.id }),
+    ).rejects.toThrow(NotFoundException);
+    await expect(
+      service.listPaginated({
+        reviewId: review.id,
+        commentId: comment.id,
+        currentUser: asUser(stranger),
+        query: { page: 1, per_page: 10 },
+      }),
+    ).rejects.toThrow(NotFoundException);
   });
 });

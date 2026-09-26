@@ -11,7 +11,7 @@ type Props<Scrollable extends ScrollView = ScrollView> = {
 export function useDraggableScroll<Scrollable extends ScrollView = ScrollView>({
   outerRef,
   cursor = 'grab',
-}: Props<Scrollable> = {}) {
+}: Props<Scrollable> = {}): { refs: (instance: Scrollable | null) => void } {
   const ref = useRef<Scrollable>(null);
 
   useEffect(() => {

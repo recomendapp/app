@@ -12,8 +12,8 @@ import { and, eq, sql } from 'drizzle-orm';
 import { parseResponseDto } from '../../utils/parse-response-dto';
 import { StorageService } from '../../common/modules/storage/storage.service';
 import { StorageFolders } from '../../common/modules/storage/storage.constants';
-import { canViewPlaylist } from './playlists.permission';
-import { PlaylistRole } from './types/playlist-role.type';
+import { assertPlaylistRole, assertPlaylistVisible, canViewPlaylist } from './playlists.permission';
+import { assertPremium } from '../../utils/assert-premium';
 import { PlaylistQueryBuilder } from './playlists.query-builder';
 import { WorkerClient } from '@shared/worker';
 import { PlaylistsRealtimeService } from './playlists-realtime.service';
@@ -111,14 +111,15 @@ export class PlaylistsService {
   }
 
   async update({
-    role,
+    user,
     playlistId,
     updatePlaylistDto,
   }: {
-    role: PlaylistRole;
+    user: User;
     playlistId: number;
     updatePlaylistDto: PlaylistUpdateDto;
   }): Promise<PlaylistDto> {
+    const role = await assertPlaylistRole(this.db, user, playlistId, ['owner', 'admin']);
     if (role != 'owner' && updatePlaylistDto.visibility !== undefined) {
       throw new ForbiddenException('Only the owner can change the playlist visibility.');
     }
@@ -156,6 +157,9 @@ export class PlaylistsService {
   }
 
   async duplicate({ user, playlistId }: { user: User; playlistId: number }): Promise<PlaylistDto> {
+    await assertPremium(this.db, user.id);
+    await assertPlaylistVisible(this.db, user, playlistId);
+
     const duplicatedPlaylist = await this.db.transaction(async (tx) => {
       const sourcePlaylist = await tx.query.playlist.findFirst({
         where: eq(playlist.id, playlistId),
@@ -217,7 +221,9 @@ export class PlaylistsService {
     return playlistDto;
   }
 
-  async delete({ playlistId }: { playlistId: number }): Promise<PlaylistDto> {
+  async delete({ user, playlistId }: { user: User; playlistId: number }): Promise<PlaylistDto> {
+    await assertPlaylistRole(this.db, user, playlistId, ['owner']);
+
     const recipientUserIds = await this.playlistsRealtimeService.getRecipientUserIds(playlistId);
 
     const [deletedPlaylist] = await this.db

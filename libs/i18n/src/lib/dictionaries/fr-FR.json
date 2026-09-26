@@ -691,6 +691,20 @@
       }
     },
     "auth": {
+      "consent": {
+        "label": "Autoriser l'application",
+        "description_generic": "Une application demande l'accès à votre compte.",
+        "description": "{client} souhaite accéder à votre compte.",
+        "scopes_label": "Cela permettra à l'application de :",
+        "accept": "Autoriser",
+        "deny": "Refuser",
+        "error": {
+          "invalid_request": "Requête invalide ou expirée",
+          "invalid_request_description": "Recommencez le processus depuis l'application qui vous a envoyé ici.",
+          "client_not_found": "Cette application est introuvable.",
+          "submit_failed": "Une erreur est survenue. Réessayez."
+        }
+      },
       "login": {
         "metadata": {
           "description": "Connectez-vous à votre compte {app}."

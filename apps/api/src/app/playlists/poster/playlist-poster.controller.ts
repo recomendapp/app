@@ -1,12 +1,21 @@
-import { BadRequestException, Controller, Delete, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Controller,
+  Delete,
+  Param,
+  ParseIntPipe,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBody, ApiConsumes, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { PlaylistPosterService } from './playlist-poster.service';
 import { AuthGuard } from '../../auth/guards';
 import { PlaylistPosterUploadDto } from './dto/playlist-poster.dto';
 import { FastifyRequest } from 'fastify';
 import { PlaylistDto } from '../dto/playlists.dto';
-import { PlaylistRolesGuard } from '../guards/playlist-roles.guard';
-import { RequirePlaylistRoles } from '../decorators/playlist-roles.decorator';
+import { CurrentUser } from '../../auth/decorators';
+import { User } from '../../auth/auth.service';
 
 @ApiTags('Playlists')
 @Controller({
@@ -17,8 +26,7 @@ export class PlaylistPosterController {
   constructor(private readonly playlistPosterService: PlaylistPosterService) {}
 
   @Post()
-  @UseGuards(AuthGuard, PlaylistRolesGuard)
-  @RequirePlaylistRoles('owner', 'admin')
+  @UseGuards(AuthGuard)
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: 'Poster file',
@@ -29,6 +37,7 @@ export class PlaylistPosterController {
     type: PlaylistDto,
   })
   async set(
+    @CurrentUser() user: User,
     @Req() req: FastifyRequest,
     @Param('playlist_id', ParseIntPipe) playlistId: number,
   ): Promise<PlaylistDto> {
@@ -42,22 +51,24 @@ export class PlaylistPosterController {
     }
 
     return this.playlistPosterService.set({
+      user,
       playlistId,
       file,
     });
   }
 
   @Delete()
-  @UseGuards(AuthGuard, PlaylistRolesGuard)
-  @RequirePlaylistRoles('owner', 'admin')
+  @UseGuards(AuthGuard)
   @ApiOkResponse({
     description: 'Poster deleted successfully',
     type: PlaylistDto,
   })
   async delete(
+    @CurrentUser() user: User,
     @Param('playlist_id', ParseIntPipe) playlistId: number,
   ): Promise<PlaylistDto> {
     return this.playlistPosterService.delete({
+      user,
       playlistId,
     });
   }

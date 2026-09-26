@@ -1,7 +1,7 @@
 'use client';
 
 import { Modal, ModalBody, ModalDescription, ModalHeader, ModalTitle } from '../Modal';
-import { LoginForm } from '@/app/[lang]/(app)/auth/login/_components/LoginForm';
+import { LoginForm } from '@/app/[lang]/(app)/auth/(unlogged)/login/_components/LoginForm';
 import { useAuthPromptStore } from '@/stores/useAuthPromptStore';
 import { usePathname } from '@/lib/i18n/navigation';
 import { useTranslations } from 'next-intl';

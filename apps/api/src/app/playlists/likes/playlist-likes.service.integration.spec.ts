@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { playlist, playlistLike } from '@libs/db/schemas';
 import { createTestPlaylist, createTestUser, TestDatabase } from '@libs/testing';
@@ -138,6 +139,22 @@ describe('PlaylistLikesService', () => {
       expect(await service().get({ user: asUser(userB), playlistId: p.id })).toBe(true);
       const updated = await testDb.db.query.playlist.findFirst({ where: eq(playlist.id, p.id) });
       expect(updated?.likesCount).toBe(1);
+    });
+  });
+
+  describe('visibility', () => {
+    it('hides a private playlist of another user behind a NotFoundException', async () => {
+      const { user: owner } = await createTestUser(testDb.db);
+      const { user: stranger } = await createTestUser(testDb.db);
+      const p = await createTestPlaylist(
+        testDb.db,
+        { userId: owner.id },
+        { visibility: 'private' },
+      );
+
+      await expect(service().set({ user: asUser(stranger), playlistId: p.id })).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 });

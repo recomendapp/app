@@ -434,4 +434,24 @@ describe('BookmarksService', () => {
     const created = await service.set({ user: asUser(user), dto: {}, movieId: movie.id });
     expect(await service.get({ user: asUser(user), id: created.id })).not.toBeNull();
   });
+
+  describe('media existence', () => {
+    it('set throws NotFoundException when the movie does not exist', async () => {
+      const { user } = await createTestUser(testDb.db);
+      const service = new BookmarksService(testDb.db, fakeRealtimeGateway());
+
+      await expect(service.set({ user: asUser(user), dto: {}, movieId: 999999 })).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+
+    it('set throws NotFoundException when the tv series does not exist', async () => {
+      const { user } = await createTestUser(testDb.db);
+      const service = new BookmarksService(testDb.db, fakeRealtimeGateway());
+
+      await expect(
+        service.set({ user: asUser(user), dto: {}, tvSeriesId: 999999 }),
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
 });

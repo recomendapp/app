@@ -24,6 +24,7 @@ import { PaginationQueryDto } from '../../../../../common/dto/pagination.dto';
 import { CursorPaginationQueryDto } from '../../../../../common/dto/cursor-pagination.dto';
 import { BaseCursor, decodeCursor, encodeCursor } from '../../../../../utils/cursor';
 import { NotifyClient } from '@shared/notify';
+import { assertReviewTvSeriesVisible } from '../../review-tv-series-visibility';
 
 const LikesCursorSchema = z.object({
   value: z.string().min(1),
@@ -37,7 +38,9 @@ export class ReviewTvSeriesCommentLikesService {
     private readonly notify: NotifyClient,
   ) {}
 
-  private async assertCommentLikable(reviewId: number, commentId: number) {
+  // The comment is only reachable when its review is visible to `viewer`.
+  private async assertCommentLikable(reviewId: number, commentId: number, viewer: User | null) {
+    await assertReviewTvSeriesVisible({ db: this.db, reviewId, user: viewer });
     const comment = await this.db.query.reviewTvSeriesComment.findFirst({
       where: and(
         eq(reviewTvSeriesComment.id, commentId),
@@ -59,7 +62,7 @@ export class ReviewTvSeriesCommentLikesService {
     reviewId: number;
     commentId: number;
   }): Promise<boolean> {
-    await this.assertCommentLikable(reviewId, commentId);
+    await this.assertCommentLikable(reviewId, commentId, user);
 
     const like = await this.db.query.reviewTvSeriesCommentLike.findFirst({
       where: and(
@@ -79,7 +82,7 @@ export class ReviewTvSeriesCommentLikesService {
     reviewId: number;
     commentId: number;
   }): Promise<ReviewTvSeriesCommentLikeDto> {
-    const comment = await this.assertCommentLikable(reviewId, commentId);
+    const comment = await this.assertCommentLikable(reviewId, commentId, user);
 
     const [like] = await this.db
       .insert(reviewTvSeriesCommentLike)
@@ -132,7 +135,7 @@ export class ReviewTvSeriesCommentLikesService {
     reviewId: number;
     commentId: number;
   }): Promise<ReviewTvSeriesCommentLikeDto> {
-    await this.assertCommentLikable(reviewId, commentId);
+    await this.assertCommentLikable(reviewId, commentId, user);
 
     const [deleted] = await this.db
       .delete(reviewTvSeriesCommentLike)
@@ -155,14 +158,16 @@ export class ReviewTvSeriesCommentLikesService {
 
   async listPaginated({
     reviewId,
+    currentUser,
     commentId,
     query,
   }: {
     reviewId: number;
+    currentUser: User | null;
     commentId: number;
     query: PaginationQueryDto;
   }): Promise<ListPaginatedReviewTvSeriesCommentLikesDto> {
-    await this.assertCommentLikable(reviewId, commentId);
+    await this.assertCommentLikable(reviewId, commentId, currentUser);
 
     const { per_page, page } = query;
     const offset = (page - 1) * per_page;
@@ -197,14 +202,16 @@ export class ReviewTvSeriesCommentLikesService {
 
   async listInfinite({
     reviewId,
+    currentUser,
     commentId,
     query,
   }: {
     reviewId: number;
+    currentUser: User | null;
     commentId: number;
     query: CursorPaginationQueryDto;
   }): Promise<ListInfiniteReviewTvSeriesCommentLikesDto> {
-    await this.assertCommentLikable(reviewId, commentId);
+    await this.assertCommentLikable(reviewId, commentId, currentUser);
 
     const { per_page, cursor } = query;
     const cursorData = cursor ? decodeCursor(cursor, LikesCursorSchema) : null;

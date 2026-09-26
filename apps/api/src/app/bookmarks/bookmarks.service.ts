@@ -16,6 +16,7 @@ import { parseResponseDto } from '../../utils/parse-response-dto';
 import { defaultSupportedLocale, SupportedLocale } from '@libs/i18n';
 import { BookmarkServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../realtime/realtime.gateway';
+import { assertMediaExists } from '../../utils/assert-media-exists';
 
 @Injectable()
 export class BookmarksService {
@@ -127,6 +128,7 @@ export class BookmarksService {
       result = updated;
     } else {
       const type = movieId ? 'movie' : 'tv_series';
+      await assertMediaExists(this.db, type, movieId ?? tvSeriesId ?? 0);
       const targetCols = movieId
         ? [bookmark.userId, bookmark.movieId]
         : [bookmark.userId, bookmark.tvSeriesId];

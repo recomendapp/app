@@ -54,7 +54,7 @@ const FeedUserLog = forwardRef<React.ComponentRef<typeof View>, FeedUserLogProps
                 })}
               </Text>
             )}
-            {log.rating && <IconMediaRating rating={log.rating} className="inline-flex" />}
+            {log.rating && <IconMediaRating rating={log.rating} />}
             {log.isLiked && (
               <Icons.like size={24} color={colors.background} fill={colors.accentPink} />
             )}

@@ -1,4 +1,4 @@
-import { ForbiddenException } from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { playlistItem, playlistMember, profile } from '@libs/db/schemas';
 import { createTestMovie, createTestPlaylist, createTestUser, TestDatabase } from '@libs/testing';
@@ -237,5 +237,35 @@ describe('PlaylistsAddService', () => {
       where: (pl, { eq: eqOp }) => eqOp(pl.id, p.id),
     });
     expect(updated?.itemsCount).toBe(1);
+  });
+
+  describe('media existence', () => {
+    it('throws NotFoundException when the movie does not exist', async () => {
+      const { user: owner } = await createTestUser(testDb.db);
+      const p = await createTestPlaylist(testDb.db, { userId: owner.id });
+
+      await expect(
+        service().add({
+          user: asUser(owner),
+          type: 'movie',
+          mediaId: 999999,
+          dto: { playlistIds: [p.id], comment: null },
+        }),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('throws NotFoundException when the tv series does not exist', async () => {
+      const { user: owner } = await createTestUser(testDb.db);
+      const p = await createTestPlaylist(testDb.db, { userId: owner.id });
+
+      await expect(
+        service().add({
+          user: asUser(owner),
+          type: 'tv_series',
+          mediaId: 999999,
+          dto: { playlistIds: [p.id], comment: null },
+        }),
+      ).rejects.toThrow(NotFoundException);
+    });
   });
 });

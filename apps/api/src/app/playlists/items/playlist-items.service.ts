@@ -25,6 +25,8 @@ import { DbTransaction } from '@libs/db';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { LexoRank } from 'lexorank';
 import { PlaylistsRealtimeService } from '../playlists-realtime.service';
+import { User } from '../../auth/auth.service';
+import { assertPlaylistRole, assertPlaylistVisible } from '../playlists.permission';
 
 const CursorSchema = baseCursorSchema(z.string().min(1), z.number());
 
@@ -68,14 +70,18 @@ export class PlaylistItemsService {
   }
 
   async listAll({
+    currentUser,
     playlistId,
     query,
     locale,
   }: {
+    currentUser: User | null;
     playlistId: number;
     query: ListAllPlaylistItemsQueryDto;
     locale: SupportedLocale;
   }): Promise<PlaylistItemWithMediaUnion[]> {
+    await assertPlaylistVisible(this.db, currentUser, playlistId);
+
     return await this.db.transaction(async (tx) => {
       const { sort_by, sort_order, type } = query;
       const { whereClause, orderBy } = await this.getListBaseQuery(
@@ -121,14 +127,18 @@ export class PlaylistItemsService {
   }
 
   async listPaginated({
+    currentUser,
     playlistId,
     query,
     locale,
   }: {
+    currentUser: User | null;
     playlistId: number;
     query: ListPaginatedPlaylistItemsQueryDto;
     locale: SupportedLocale;
   }): Promise<ListPaginatedPlaylistItemsDto> {
+    await assertPlaylistVisible(this.db, currentUser, playlistId);
+
     return await this.db.transaction(async (tx) => {
       const { per_page, page, sort_by, sort_order, type } = query;
       const offset = (page - 1) * per_page;
@@ -192,14 +202,18 @@ export class PlaylistItemsService {
   }
 
   async listInfinite({
+    currentUser,
     playlistId,
     query,
     locale,
   }: {
+    currentUser: User | null;
     playlistId: number;
     query: ListInfinitePlaylistItemsQueryDto;
     locale: SupportedLocale;
   }): Promise<ListInfinitePlaylistItemsDto> {
+    await assertPlaylistVisible(this.db, currentUser, playlistId);
+
     return await this.db.transaction(async (tx) => {
       const { per_page, sort_order, sort_by, cursor, type } = query;
 
@@ -312,14 +326,18 @@ export class PlaylistItemsService {
   }
 
   async get({
+    currentUser,
     playlistId,
     itemId,
     locale,
   }: {
+    currentUser: User | null;
     playlistId: number;
     itemId: number;
     locale: SupportedLocale;
   }): Promise<PlaylistItemWithMediaUnion> {
+    await assertPlaylistVisible(this.db, currentUser, playlistId);
+
     return await this.db.transaction(async (tx) => {
       await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
 
@@ -346,14 +364,18 @@ export class PlaylistItemsService {
   }
 
   async update({
+    user,
     playlistId,
     itemId,
     dto,
   }: {
+    user: User;
     playlistId: number;
     itemId: number;
     dto: PlaylistItemUpdateDto;
   }): Promise<PlaylistItemDto> {
+    await assertPlaylistRole(this.db, user, playlistId, ['owner', 'admin', 'editor']);
+
     const result = await this.db.transaction(async (tx) => {
       let newRankString: string | undefined;
 
@@ -457,12 +479,16 @@ export class PlaylistItemsService {
   }
 
   async delete({
+    user,
     playlistId,
     dto,
   }: {
+    user: User;
     playlistId: number;
     dto: PlaylistItemsDeleteDto;
   }): Promise<PlaylistItemDto[]> {
+    await assertPlaylistRole(this.db, user, playlistId, ['owner', 'admin', 'editor']);
+
     const uniqueItemIds = [...new Set(dto.itemIds)];
     if (uniqueItemIds.length === 0) return [];
 

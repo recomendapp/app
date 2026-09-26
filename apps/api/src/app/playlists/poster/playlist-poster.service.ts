@@ -7,6 +7,8 @@ import { eq } from 'drizzle-orm';
 import { playlist } from '@libs/db/schemas';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { PlaylistDto } from '../dto/playlists.dto';
+import { User } from '../../auth/auth.service';
+import { assertPlaylistRole } from '../playlists.permission';
 
 @Injectable()
 export class PlaylistPosterService {
@@ -18,12 +20,16 @@ export class PlaylistPosterService {
   ) {}
 
   async set({
+    user,
     playlistId,
     file,
   }: {
+    user: User;
     playlistId: number;
     file: MultipartFile;
   }): Promise<PlaylistDto> {
+    await assertPlaylistRole(this.db, user, playlistId, ['owner', 'admin']);
+
     const existingPlaylist = await this.db.query.playlist.findFirst({
       where: eq(playlist.id, playlistId),
       columns: { poster: true },
@@ -55,7 +61,9 @@ export class PlaylistPosterService {
     return parseResponseDto(PlaylistDto, updatedPlaylist);
   }
 
-  async delete({ playlistId }: { playlistId: number }): Promise<PlaylistDto> {
+  async delete({ user, playlistId }: { user: User; playlistId: number }): Promise<PlaylistDto> {
+    await assertPlaylistRole(this.db, user, playlistId, ['owner', 'admin']);
+
     const existingPlaylist = await this.db.query.playlist.findFirst({
       where: eq(playlist.id, playlistId),
       columns: { poster: true },

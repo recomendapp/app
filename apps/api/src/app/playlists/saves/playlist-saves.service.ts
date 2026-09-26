@@ -7,6 +7,7 @@ import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { PlaylistSavedDto } from './dto/playlist-saved.dto';
 import { PlaylistServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../../realtime/realtime.gateway';
+import { assertPlaylistVisible } from '../playlists.permission';
 
 @Injectable()
 export class PlaylistSavesService {
@@ -24,6 +25,8 @@ export class PlaylistSavesService {
   }
 
   async set({ user, playlistId }: { user: User; playlistId: number }): Promise<PlaylistSavedDto> {
+    await assertPlaylistVisible(this.db, user, playlistId);
+
     const existingPlaylist = await this.db.query.playlist.findFirst({
       where: eq(playlist.id, playlistId),
       columns: {

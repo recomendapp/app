@@ -1,13 +1,12 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { PlaylistItemsController } from './playlist-items.controller';
+import { PlaylistItemsTool } from './playlist-items.tool';
 import { PlaylistItemsService } from './playlist-items.service';
 import { PlaylistsModule } from '../playlists.module';
 
 @Module({
-  imports: [
-    forwardRef(() => PlaylistsModule),
-  ],
-  controllers: [PlaylistItemsController],
+  imports: [forwardRef(() => PlaylistsModule)],
+  controllers: [PlaylistItemsController, PlaylistItemsTool],
   providers: [PlaylistItemsService],
   exports: [PlaylistItemsService],
 })

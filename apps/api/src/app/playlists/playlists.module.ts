@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PlaylistsController } from './playlists.controller';
+import { PlaylistsTool } from './playlists.tool';
 import { PlaylistsService } from './playlists.service';
 import { PlaylistLikesModule } from './likes/playlist-likes.module';
 import { PlaylistSavesModule } from './saves/playlist-saves.module';
@@ -24,7 +25,7 @@ import { PlaylistFeaturedModule } from './featured/playlist-featured.module';
     PlaylistItemsModule,
     PlaylistFeaturedModule,
   ],
-  controllers: [PlaylistsController],
+  controllers: [PlaylistsController, PlaylistsTool],
   providers: [PlaylistsService, PlaylistsRealtimeService],
   exports: [PlaylistsService, PlaylistsRealtimeService],
 })

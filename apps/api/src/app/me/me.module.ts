@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MeController } from './me.controller';
 import { MeService } from './me.service';
+import { MeTool } from './me.tool';
 import { SharedWorkerModule } from '@shared/worker';
 import { MeAvatarModule } from './avatar/me-avatar.module';
 import { MePlaylistsFollowingModule } from './playlists/following/me-playlists-following.module';
@@ -15,7 +16,7 @@ import { MePinnedModule } from './pinned/me-pinned.module';
     MePlaylistsFollowingModule,
     MePinnedModule,
   ],
-  controllers: [MeController],
+  controllers: [MeController, MeTool],
   providers: [MeService],
   exports: [MeService],
 })

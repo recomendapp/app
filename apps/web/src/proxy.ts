@@ -65,7 +65,7 @@ export async function proxy(request: NextRequest) {
     if (!isBrowser) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
-    const redirectTo = encodeURIComponent(pathname);
+    const redirectTo = encodeURIComponent(pathname + request.nextUrl.search);
     return NextResponse.redirect(
       new URL(`/${locale}/auth/login?redirect=${redirectTo}`, request.url),
     );

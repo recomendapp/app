@@ -14,6 +14,7 @@ import { SortOrder } from '../../../common/dto/sort.dto';
 import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { z } from 'zod';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
+import { assertPremium } from '../../../utils/assert-premium';
 import {
   MOVIE_SUMMARY_SELECT,
   PERSON_COMPACT_SELECT,
@@ -89,6 +90,8 @@ export class FeedPersonsService {
     currentUser: User;
     locale: SupportedLocale;
   }): Promise<ListPaginatedPersonFeedDto> {
+    await assertPremium(this.db, currentUser.id);
+
     return await this.db.transaction(async (tx) => {
       await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
 
@@ -206,6 +209,8 @@ export class FeedPersonsService {
     currentUser: User;
     locale: SupportedLocale;
   }): Promise<ListInfinitePersonFeedDto> {
+    await assertPremium(this.db, currentUser.id);
+
     return await this.db.transaction(async (tx) => {
       await tx.execute(sql`SELECT set_config('app.current_language', ${locale}, true)`);
 

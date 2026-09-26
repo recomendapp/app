@@ -6,9 +6,11 @@ import type { WorkerClient } from '@shared/worker';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { PlaylistMemberSortBy } from './playlist-members.dto';
 import { PlaylistMembersService } from './playlist-members.service';
+import { User } from '../../auth/auth.service';
 
 describe('PlaylistMembersService', () => {
   let testDb: TestDatabase;
+  const asUser = (row: { id: string }) => row as unknown as User;
 
   beforeAll(async () => {
     testDb = await TestDatabase.create();
@@ -48,7 +50,11 @@ describe('PlaylistMembersService', () => {
       const p = await createTestPlaylist(testDb.db, { userId: owner.id });
       await addMember(p.id, member.id, 'editor');
 
-      const result = await service().listAll({ playlistId: p.id, query: baseQuery });
+      const result = await service().listAll({
+        currentUser: asUser(owner),
+        playlistId: p.id,
+        query: baseQuery,
+      });
 
       expect(result).toHaveLength(1);
       expect(result[0].userId).toBe(member.id);
@@ -67,6 +73,7 @@ describe('PlaylistMembersService', () => {
       await addMember(p.id, bob.id);
 
       const result = await service().listAll({
+        currentUser: asUser(owner),
         playlistId: p.id,
         query: { ...baseQuery, search: 'alice' },
       });
@@ -81,7 +88,11 @@ describe('PlaylistMembersService', () => {
       const p2 = await createTestPlaylist(testDb.db, { userId: owner.id });
       await addMember(p1.id, member.id);
 
-      const result = await service().listAll({ playlistId: p2.id, query: baseQuery });
+      const result = await service().listAll({
+        currentUser: asUser(owner),
+        playlistId: p2.id,
+        query: baseQuery,
+      });
 
       expect(result).toEqual([]);
     });
@@ -97,6 +108,7 @@ describe('PlaylistMembersService', () => {
       }
 
       const result = await service().listPaginated({
+        currentUser: asUser(owner),
         playlistId: p.id,
         query: { ...baseQuery, page: 1, per_page: 2 },
       });
@@ -122,6 +134,7 @@ describe('PlaylistMembersService', () => {
       }
 
       const firstPage = await service().listInfinite({
+        currentUser: asUser(owner),
         playlistId: p.id,
         query: { ...baseQuery, per_page: 2 },
       });
@@ -129,6 +142,7 @@ describe('PlaylistMembersService', () => {
       expect(firstPage.meta.next_cursor).not.toBeNull();
 
       const secondPage = await service().listInfinite({
+        currentUser: asUser(owner),
         playlistId: p.id,
         query: { ...baseQuery, per_page: 2, cursor: firstPage.meta.next_cursor ?? undefined },
       });
@@ -142,7 +156,11 @@ describe('PlaylistMembersService', () => {
       const { user: owner } = await createTestUser(testDb.db);
       const p = await createTestPlaylist(testDb.db, { userId: owner.id });
 
-      const result = await service().add({ playlistId: p.id, dto: { userIds: [] } });
+      const result = await service().add({
+        currentUser: asUser(owner),
+        playlistId: p.id,
+        dto: { userIds: [] },
+      });
 
       expect(result).toEqual([]);
     });
@@ -153,7 +171,11 @@ describe('PlaylistMembersService', () => {
       const { user: b } = await createTestUser(testDb.db);
       const p = await createTestPlaylist(testDb.db, { userId: owner.id });
 
-      const result = await service().add({ playlistId: p.id, dto: { userIds: [a.id, b.id] } });
+      const result = await service().add({
+        currentUser: asUser(owner),
+        playlistId: p.id,
+        dto: { userIds: [a.id, b.id] },
+      });
 
       expect(result).toHaveLength(2);
       expect(result.every((m) => m.role === 'viewer')).toBe(true);
@@ -165,7 +187,11 @@ describe('PlaylistMembersService', () => {
       const p = await createTestPlaylist(testDb.db, { userId: owner.id });
       await addMember(p.id, a.id, 'admin');
 
-      const result = await service().add({ playlistId: p.id, dto: { userIds: [a.id] } });
+      const result = await service().add({
+        currentUser: asUser(owner),
+        playlistId: p.id,
+        dto: { userIds: [a.id] },
+      });
 
       expect(result).toEqual([]);
       const stored = await testDb.db.query.playlistMember.findFirst({
@@ -180,7 +206,11 @@ describe('PlaylistMembersService', () => {
       const p = await createTestPlaylist(testDb.db, { userId: owner.id });
       const worker = fakeWorker();
 
-      await service(worker).add({ playlistId: p.id, dto: { userIds: [a.id] } });
+      await service(worker).add({
+        currentUser: asUser(owner),
+        playlistId: p.id,
+        dto: { userIds: [a.id] },
+      });
 
       expect(worker.emit).toHaveBeenCalledWith(
         'search:sync-playlist',
@@ -188,7 +218,11 @@ describe('PlaylistMembersService', () => {
       );
 
       worker.emit.mockClear();
-      await service(worker).add({ playlistId: p.id, dto: { userIds: [a.id] } });
+      await service(worker).add({
+        currentUser: asUser(owner),
+        playlistId: p.id,
+        dto: { userIds: [a.id] },
+      });
       expect(worker.emit).not.toHaveBeenCalled();
     });
   });
@@ -200,7 +234,12 @@ describe('PlaylistMembersService', () => {
       const p = await createTestPlaylist(testDb.db, { userId: owner.id });
 
       await expect(
-        service().update({ playlistId: p.id, targetUserId: stranger.id, dto: { role: 'viewer' } }),
+        service().update({
+          currentUser: asUser(owner),
+          playlistId: p.id,
+          targetUserId: stranger.id,
+          dto: { role: 'viewer' },
+        }),
       ).rejects.toThrow(ForbiddenException);
     });
 
@@ -211,6 +250,7 @@ describe('PlaylistMembersService', () => {
       await addMember(p.id, member.id, 'editor');
 
       const result = await service().update({
+        currentUser: asUser(owner),
         playlistId: p.id,
         targetUserId: member.id,
         dto: { role: 'viewer' },
@@ -226,7 +266,12 @@ describe('PlaylistMembersService', () => {
       await addMember(p.id, member.id, 'viewer');
 
       await expect(
-        service().update({ playlistId: p.id, targetUserId: member.id, dto: { role: 'admin' } }),
+        service().update({
+          currentUser: asUser(owner),
+          playlistId: p.id,
+          targetUserId: member.id,
+          dto: { role: 'admin' },
+        }),
       ).rejects.toThrow(ForbiddenException);
     });
 
@@ -238,6 +283,7 @@ describe('PlaylistMembersService', () => {
       await addMember(p.id, member.id, 'viewer');
 
       const result = await service().update({
+        currentUser: asUser(owner),
         playlistId: p.id,
         targetUserId: member.id,
         dto: { role: 'admin' },
@@ -252,7 +298,11 @@ describe('PlaylistMembersService', () => {
       const { user: owner } = await createTestUser(testDb.db);
       const p = await createTestPlaylist(testDb.db, { userId: owner.id });
 
-      const result = await service().delete({ playlistId: p.id, userIds: [] });
+      const result = await service().delete({
+        currentUser: asUser(owner),
+        playlistId: p.id,
+        userIds: [],
+      });
 
       expect(result).toEqual([]);
     });
@@ -265,7 +315,11 @@ describe('PlaylistMembersService', () => {
       await addMember(p.id, a.id);
       await addMember(p.id, b.id);
 
-      const result = await service().delete({ playlistId: p.id, userIds: [a.id] });
+      const result = await service().delete({
+        currentUser: asUser(owner),
+        playlistId: p.id,
+        userIds: [a.id],
+      });
 
       expect(result.map((m) => m.userId)).toEqual([a.id]);
       const remaining = await testDb.db.query.playlistMember.findMany({
@@ -281,13 +335,73 @@ describe('PlaylistMembersService', () => {
       const p2 = await createTestPlaylist(testDb.db, { userId: owner.id });
       await addMember(p1.id, a.id);
 
-      const result = await service().delete({ playlistId: p2.id, userIds: [a.id] });
+      const result = await service().delete({
+        currentUser: asUser(owner),
+        playlistId: p2.id,
+        userIds: [a.id],
+      });
 
       expect(result).toEqual([]);
       const stillThere = await testDb.db.query.playlistMember.findFirst({
         where: eq(playlistMember.playlistId, p1.id),
       });
       expect(stillThere).toBeDefined();
+    });
+  });
+
+  describe('permissions', () => {
+    it('forbids a non-member from listing the members', async () => {
+      const { user: owner } = await createTestUser(testDb.db);
+      const { user: stranger } = await createTestUser(testDb.db);
+      const p = await createTestPlaylist(testDb.db, { userId: owner.id });
+
+      await expect(
+        service().listAll({ currentUser: asUser(stranger), playlistId: p.id, query: baseQuery }),
+      ).rejects.toThrow(ForbiddenException);
+    });
+
+    it('lets a viewer list the members', async () => {
+      const { user: owner } = await createTestUser(testDb.db);
+      const { user: viewer } = await createTestUser(testDb.db);
+      const p = await createTestPlaylist(testDb.db, { userId: owner.id });
+      await addMember(p.id, viewer.id, 'viewer');
+
+      const result = await service().listAll({
+        currentUser: asUser(viewer),
+        playlistId: p.id,
+        query: baseQuery,
+      });
+
+      expect(result.map((m) => m.userId)).toEqual([viewer.id]);
+    });
+
+    it('forbids an editor from adding members', async () => {
+      const { user: owner } = await createTestUser(testDb.db);
+      const { user: editor } = await createTestUser(testDb.db);
+      const { user: newcomer } = await createTestUser(testDb.db);
+      const p = await createTestPlaylist(testDb.db, { userId: owner.id });
+      await testDb.db.update(profile).set({ isPremium: true }).where(eq(profile.id, owner.id));
+      await addMember(p.id, editor.id, 'editor');
+
+      await expect(
+        service().add({
+          currentUser: asUser(editor),
+          playlistId: p.id,
+          dto: { userIds: [newcomer.id] },
+        }),
+      ).rejects.toThrow(ForbiddenException);
+    });
+
+    it('forbids a stranger from removing members', async () => {
+      const { user: owner } = await createTestUser(testDb.db);
+      const { user: member } = await createTestUser(testDb.db);
+      const { user: stranger } = await createTestUser(testDb.db);
+      const p = await createTestPlaylist(testDb.db, { userId: owner.id });
+      await addMember(p.id, member.id);
+
+      await expect(
+        service().delete({ currentUser: asUser(stranger), playlistId: p.id, userIds: [member.id] }),
+      ).rejects.toThrow(ForbiddenException);
     });
   });
 });

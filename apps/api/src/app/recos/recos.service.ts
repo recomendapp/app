@@ -25,6 +25,7 @@ import { defaultSupportedLocale, SupportedLocale } from '@libs/i18n';
 import { RecoServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../realtime/realtime.gateway';
 import { UserRecosService } from '../users/recos/user-recos.service';
+import { assertMediaExists } from '../../utils/assert-media-exists';
 
 @Injectable()
 export class RecosService {
@@ -75,6 +76,8 @@ export class RecosService {
     mediaId: number;
     dto: RecoSendDto;
   }): Promise<RecoSendResponseDto> {
+    await assertMediaExists(this.db, type, mediaId);
+
     const followAlias = aliasedTable(follow, 'f2');
 
     const baseQuery = this.db
@@ -192,6 +195,8 @@ export class RecosService {
     type: RecoType;
     mediaId: number;
   }): Promise<RecoDto[]> {
+    await assertMediaExists(this.db, type, mediaId);
+
     const mediaCondition =
       type === RecoType.MOVIE ? eq(reco.movieId, mediaId) : eq(reco.tvSeriesId, mediaId);
 

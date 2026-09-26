@@ -83,6 +83,10 @@ jobs:
         if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
         run: pnpm nx affected -t lint --parallel=3
 
+      - name: 🔎 Run Typecheck (Affected)
+        if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
+        run: pnpm nx affected -t typecheck --parallel=3
+
       - name: 🧪 Run Tests (Affected)
         if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
         run: pnpm nx affected -t test --parallel=3

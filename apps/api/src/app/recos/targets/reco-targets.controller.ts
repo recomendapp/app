@@ -1,11 +1,25 @@
-import { Controller, Param, ParseIntPipe, ParseEnumPipe, Get, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Param,
+  ParseIntPipe,
+  ParseEnumPipe,
+  Get,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '../../auth/decorators';
 import { User } from '../../auth/auth.service';
 import { RecoTargetsService } from './reco-targets.service';
-import { ListAllRecoTargetsQueryDto, ListInfiniteRecoTargetsDto, ListInfiniteRecoTargetsQueryDto, ListPaginatedRecoTargetsDto, ListPaginatedRecoTargetsQueryDto, RecoTargetDto } from './dto/reco-targets.dto';
+import {
+  ListAllRecoTargetsQueryDto,
+  ListInfiniteRecoTargetsDto,
+  ListInfiniteRecoTargetsQueryDto,
+  ListPaginatedRecoTargetsDto,
+  ListPaginatedRecoTargetsQueryDto,
+  RecoTargetDto,
+} from './dto/reco-targets.dto';
 import { AuthGuard } from '../../auth/guards';
-import { MediaExistsGuard } from '../../../common/guards/media-exists.guard';
 import { RecoType } from '../dto/recos.dto';
 
 @ApiTags('Recos')
@@ -17,7 +31,7 @@ export class RecoTargetsController {
   constructor(private readonly recoTargetsService: RecoTargetsService) {}
 
   @Get()
-  @UseGuards(AuthGuard, MediaExistsGuard)
+  @UseGuards(AuthGuard)
   @ApiOkResponse({ type: RecoTargetDto, isArray: true })
   async listAll(
     @Param('type', new ParseEnumPipe(RecoType)) type: RecoType,
@@ -29,12 +43,12 @@ export class RecoTargetsController {
       currentUser,
       type,
       mediaId,
-      query
+      query,
     });
   }
 
   @Get('paginated')
-  @UseGuards(AuthGuard, MediaExistsGuard)
+  @UseGuards(AuthGuard)
   @ApiOkResponse({ type: ListPaginatedRecoTargetsDto })
   async listPaginated(
     @Param('type', new ParseEnumPipe(RecoType)) type: RecoType,
@@ -46,12 +60,12 @@ export class RecoTargetsController {
       currentUser,
       type,
       mediaId,
-      query
+      query,
     });
   }
 
   @Get('infinite')
-  @UseGuards(AuthGuard, MediaExistsGuard)
+  @UseGuards(AuthGuard)
   @ApiOkResponse({ type: ListInfiniteRecoTargetsDto })
   async listInfinite(
     @Param('type', new ParseEnumPipe(RecoType)) type: RecoType,
@@ -63,7 +77,7 @@ export class RecoTargetsController {
       currentUser,
       type,
       mediaId,
-      query
+      query,
     });
   }
 }

@@ -8,6 +8,15 @@
     "build": {
       "dependsOn": ["^build"]
     },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "dependsOn": ["^generate"],
+      "inputs": ["default", "^default"],
+      "options": {
+        "command": "tsc --noEmit -p apps/mobile/tsconfig.app.json"
+      }
+    },
     "dev": {
       "executor": "nx:run-commands",
       "options": {

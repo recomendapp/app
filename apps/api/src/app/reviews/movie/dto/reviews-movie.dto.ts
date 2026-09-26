@@ -70,8 +70,8 @@ export class ReviewMovieDto {
   title!: string | null;
 
   @ApiProperty({
-    description: 'The content of the review wrapped in <html> tags',
-    example: '<html><p>Best movie ever!</p></html>',
+    description: 'The content of the review, in Markdown',
+    example: 'Best movie ever!',
     maxLength: REVIEW_RULES.BODY.MAX,
   })
   @Expose()

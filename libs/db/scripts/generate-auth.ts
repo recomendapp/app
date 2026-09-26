@@ -39,7 +39,7 @@ function fixAuthSchemaNamespace() {
   if (!content.includes('pgSchema')) {
     content = content.replace(
       '} from "drizzle-orm/pg-core";',
-      ', pgSchema } from "drizzle-orm/pg-core";',
+      '  pgSchema,\n} from "drizzle-orm/pg-core";',
     );
   }
 
@@ -72,7 +72,7 @@ async function run() {
     console.log('✅ Auth generation complete.');
   } catch (error) {
     console.error('❌ Error during generation:', error);
-    process.exit(1);
+    process.exitCode = 1;
   } finally {
     toggleIndexExport(false);
   }

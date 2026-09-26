@@ -1,3 +1,4 @@
+import { McpStrategy } from '@rekog/mcp-nest';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
@@ -15,8 +16,13 @@ async function bootstrap() {
     // origin: [env.WEB_APP_URL || 'http://localhost:3000'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     credentials: true,
+    exposedHeaders: ['WWW-Authenticate'],
   });
-  const app = await NestFactory.create<NestFastifyApplication>(AppModule, adapter);
+  const app = await NestFactory.create<NestFastifyApplication>(AppModule, adapter, {
+    // Keeps the exact request bytes on `req.rawBody` so AuthController can
+    // forward bodies to Better Auth untouched (see auth.controller.ts).
+    rawBody: true,
+  });
 
   app.enableShutdownHooks();
 
@@ -50,6 +56,11 @@ async function bootstrap() {
   app.useWebSocketAdapter(redisIoAdapter);
 
   setupVersionedDocs(app, API_VERSIONS);
+
+  const mcp = app.get(McpStrategy);
+  mcp.setHttpAdapter(app.getHttpAdapter());
+  app.connectMicroservice({ strategy: mcp });
+  await app.startAllMicroservices();
 
   await app.listen({
     port: env.PORT,

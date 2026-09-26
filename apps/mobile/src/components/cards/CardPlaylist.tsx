@@ -89,9 +89,8 @@ const CardPlaylistDefault = React.forwardRef<
           {owner &&
             (!skeleton ? (
               <Text
-                style={{ color: colors.mutedForeground }}
+                style={[{ color: colors.mutedForeground }, tw`text-sm italic`]}
                 numberOfLines={1}
-                className="text-sm italic"
               >
                 {t('common.messages.by_name', { name: owner.username })}
               </Text>
@@ -101,9 +100,8 @@ const CardPlaylistDefault = React.forwardRef<
           {showItemsCount &&
             (!skeleton ? (
               <Text
-                style={{ color: colors.mutedForeground }}
+                style={[{ color: colors.mutedForeground }, tw`text-sm italic`]}
                 numberOfLines={1}
-                className="text-sm italic"
               >
                 {t('common.messages.item_count', { count: playlist.itemsCount })}
               </Text>
@@ -166,9 +164,8 @@ const CardPlaylistList = React.forwardRef<
             {owner &&
               (!skeleton ? (
                 <Text
-                  style={{ color: colors.mutedForeground }}
+                  style={[{ color: colors.mutedForeground }, tw`text-sm italic`]}
                   numberOfLines={1}
-                  className="text-sm italic"
                 >
                   {t('common.messages.by_name', { name: owner.username })}
                 </Text>
@@ -178,9 +175,8 @@ const CardPlaylistList = React.forwardRef<
             {showItemsCount &&
               (!skeleton ? (
                 <Text
-                  style={{ color: colors.mutedForeground }}
+                  style={[{ color: colors.mutedForeground }, tw`text-sm italic`]}
                   numberOfLines={1}
-                  className="text-sm italic"
                 >
                   {t('common.messages.item_count', { count: playlist.itemsCount })}
                 </Text>

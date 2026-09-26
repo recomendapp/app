@@ -29,6 +29,7 @@ import { RealtimeModule } from './realtime/realtime.module';
 import { ImportsModule } from './imports/imports.module';
 import { ExportsModule } from './exports/exports.module';
 import { InternalModule } from './internal/internal.module';
+import { McpModule } from './mcp/mcp.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { InternalModule } from './internal/internal.module';
     }),
     DrizzleModule,
     CacheModule,
+    McpModule,
     AuthModule,
     RealtimeModule,
     SystemModule,

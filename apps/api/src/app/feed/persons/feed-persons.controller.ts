@@ -2,10 +2,14 @@ import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { FeedPersonsService } from './feed-persons.service';
 import { AuthGuard } from '../../auth/guards';
-import { ListInfinitePersonFeedDto, ListInfinitePersonFeedQueryDto, ListPaginatedPersonFeedDto, ListPaginatedPersonFeedQueryDto } from '../../persons/feed/dto/person-feed.dto';
+import {
+  ListInfinitePersonFeedDto,
+  ListInfinitePersonFeedQueryDto,
+  ListPaginatedPersonFeedDto,
+  ListPaginatedPersonFeedQueryDto,
+} from '../../persons/feed/dto/person-feed.dto';
 import { CurrentUser } from '../../auth/decorators';
 import { CurrentLocale } from '../../../common/decorators/current-locale.decorator';
-import { PremiumGuard } from '../../../common/guards/premium.guard';
 import { User } from '../../auth/auth.service';
 import { SupportedLocale } from '@libs/i18n';
 
@@ -18,7 +22,7 @@ export class FeedPersonsController {
   constructor(private readonly feedPersonService: FeedPersonsService) {}
 
   @Get('paginated')
-  @UseGuards(AuthGuard, PremiumGuard) 
+  @UseGuards(AuthGuard)
   @ApiOkResponse({
     description: 'Get paginated feed of recent media from followed persons (Premium only)',
     type: ListPaginatedPersonFeedDto,
@@ -32,9 +36,10 @@ export class FeedPersonsController {
   }
 
   @Get('infinite')
-  @UseGuards(AuthGuard, PremiumGuard)
+  @UseGuards(AuthGuard)
   @ApiOkResponse({
-    description: 'Get an infinite scrolling feed of recent media from followed persons (Premium only)',
+    description:
+      'Get an infinite scrolling feed of recent media from followed persons (Premium only)',
     type: ListInfinitePersonFeedDto,
   })
   async listInfinite(
