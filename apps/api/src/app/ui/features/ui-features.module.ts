@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { I18nModule } from 'nestjs-i18n';
+import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import * as path from 'path';
-import { defaultSupportedLocale, SupportedLocale } from '@libs/i18n';
+import { defaultSupportedLocale, HEADER_LANGUAGE_KEY, SupportedLocale } from '@libs/i18n';
 import { UiFeaturesController } from './ui-features.controller';
 import { UiFeaturesService } from './ui-features.service';
 
@@ -17,6 +17,7 @@ import { UiFeaturesService } from './ui-features.service';
         path: path.join(__dirname, '/assets/i18n/'),
         watch: true,
       },
+      resolvers: [{ use: HeaderResolver, options: [HEADER_LANGUAGE_KEY] }],
     }),
   ],
   controllers: [UiFeaturesController],
