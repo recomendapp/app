@@ -1,3 +1,4 @@
+import type { BetterAuthOptions } from '@better-auth/core';
 import { defaultSupportedLocale } from '@libs/i18n';
 
 export const additionalFields = {
@@ -13,4 +14,4 @@ export const additionalFields = {
     required: true,
     input: true,
   },
-} as const;
+} satisfies NonNullable<BetterAuthOptions['user']>['additionalFields'];
