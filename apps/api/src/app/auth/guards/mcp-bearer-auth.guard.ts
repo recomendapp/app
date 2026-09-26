@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   Inject,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { verifyAccessTokenRequest } from 'better-auth/oauth2';
@@ -30,6 +31,8 @@ import { User } from '../auth.service';
 // generic tool-call failure buried in a 200 JSON-RPC response.
 @Injectable()
 export class McpBearerAuthGuard implements CanActivate {
+  private readonly logger = new Logger(McpBearerAuthGuard.name);
+
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
     @Inject(ENV_SERVICE) private readonly env: EnvService,
@@ -54,10 +57,13 @@ export class McpBearerAuthGuard implements CanActivate {
             issuer: this.env.API_URL,
             audience: new URL('/mcp', this.env.API_URL).toString(),
           },
-          jwksUrl: new URL('/auth/jwks', this.env.API_URL).toString(),
+          jwksUrl: `http://127.0.0.1:${this.env.PORT}/auth/jwks`,
         },
       );
-    } catch {
+    } catch (error) {
+      if (!(error instanceof Error && error.name === 'APIError')) {
+        this.logger.error('MCP access token verification failed', error);
+      }
       this.challenge(context);
       throw new UnauthorizedException();
     }

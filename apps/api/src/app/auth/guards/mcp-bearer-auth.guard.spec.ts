@@ -1,4 +1,4 @@
-import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { ExecutionContext, Logger, UnauthorizedException } from '@nestjs/common';
 import { verifyAccessTokenRequest } from 'better-auth/oauth2';
 import { eq } from 'drizzle-orm';
 import { user } from '@libs/db/schemas';
@@ -17,7 +17,7 @@ jest.mock('drizzle-orm', () => ({ eq: jest.fn(() => 'user-id-filter') }));
 describe('McpBearerAuthGuard', () => {
   const verify = jest.mocked(verifyAccessTokenRequest);
   const findFirst = jest.fn();
-  const env = { API_URL: 'https://api.example.com' } as EnvService;
+  const env = { API_URL: 'https://api.example.com', PORT: 9000 } as EnvService;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -48,7 +48,7 @@ describe('McpBearerAuthGuard', () => {
       },
       {
         verifyOptions: { issuer: env.API_URL, audience: 'https://api.example.com/mcp' },
-        jwksUrl: 'https://api.example.com/auth/jwks',
+        jwksUrl: 'http://127.0.0.1:9000/auth/jwks',
       },
     );
     expect(eq).toHaveBeenCalledWith(user.id, 'user-1');
@@ -88,6 +88,24 @@ describe('McpBearerAuthGuard', () => {
       );
     },
   );
+
+  it('logs verification failures that are not token rejections', async () => {
+    const { context, guard } = setup();
+    const logError = jest.spyOn(Logger.prototype, 'error').mockImplementation();
+    const failure = new Error('Jwks failed: Forbidden');
+    verify.mockRejectedValue(failure);
+    await expect(guard.canActivate(context)).rejects.toBeInstanceOf(UnauthorizedException);
+    expect(logError).toHaveBeenCalledWith('MCP access token verification failed', failure);
+  });
+
+  it('does not log expected token rejections', async () => {
+    const { context, guard } = setup();
+    const logError = jest.spyOn(Logger.prototype, 'error').mockImplementation();
+    const rejection = Object.assign(new Error('invalid access token'), { name: 'APIError' });
+    verify.mockRejectedValue(rejection);
+    await expect(guard.canActivate(context)).rejects.toBeInstanceOf(UnauthorizedException);
+    expect(logError).not.toHaveBeenCalled();
+  });
 
   it.each([undefined, ''])('rejects claims without a usable subject (%j)', async (sub) => {
     const { request, context, header, guard } = setup();
