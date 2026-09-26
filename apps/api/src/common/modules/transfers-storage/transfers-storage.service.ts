@@ -11,7 +11,7 @@ import { MultipartFile } from '@fastify/multipart';
 
 const ALLOWED_MIME_TYPES = ['application/zip', 'application/x-zip-compressed'];
 
-// Bucket is private (no `mc anonymous set download` applied — see infra/apps/services/backend/minio/setup-job.yaml).
+// Bucket is private (no `rc bucket anonymous set download` applied — see infra/apps/services/backend/rustfs/setup-job.yaml).
 // Unlike StorageService's public medias bucket, files here are only ever read by this API
 // (never a direct client -> S3 URL), so there is no getFileUrl()/public endpoint concept.
 @Injectable()
