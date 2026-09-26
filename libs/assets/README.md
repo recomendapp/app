@@ -7,7 +7,7 @@ RustFS (`S3_BUCKET`, prefix `static/` by default).
 ## Folder structure
 
 `static/` is organized by **purpose**, one top-level folder per category.
-`mc mirror` preserves the tree as-is, so the folder layout _is_ the URL
+`rc mirror` preserves the tree as-is, so the folder layout _is_ the URL
 structure — keep it intentional.
 
 ```
@@ -52,8 +52,8 @@ Resulting public URLs (`${S3_PUBLIC_ENDPOINT}/${S3_BUCKET}/static/...`):
 - The CD pipeline (`nx affected -t docker-build`) builds this project like any
   other Docker-shipped app, pushes `ghcr.io/recomendapp/assets:<version>`, and
   bumps the image tag in the infra repo's `assets-sync` Job manifest.
-- On deploy, that Job runs `mc mirror --remove` (still MinIO's `mc` client —
-  it's a generic S3 CLI, works against RustFS too, see `libs/assets/Dockerfile`)
+- On deploy, that Job runs `rc mirror --remove` (RustFS.s S3 CLI, see
+  `libs/assets/Dockerfile`)
   from the baked-in `/static` folder to `s3/${S3_BUCKET}/${S3_ASSETS_PREFIX}`
   — uploading new/changed files and **deleting** remote files that were removed
   from `static/`.
