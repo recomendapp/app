@@ -25,7 +25,7 @@ const publicClientSchema = z.object({
 });
 
 export function ConsentForm() {
-  const t = useTranslations('pages.auth.mcp_consent');
+  const t = useTranslations('pages.auth.consent');
   const searchParams = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState<'accept' | 'deny' | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);

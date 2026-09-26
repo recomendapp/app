@@ -43,7 +43,7 @@ export const siteConfig = {
     github: 'lxup',
   },
   routes: {
-    authRoutes: ['/collection', '/feed', '/settings', '/auth/mcp-consent'],
+    authRoutes: ['/collection', '/feed', '/settings', '/auth/consent'],
     anonRoutes: ['/auth/login', '/auth/signup', '/auth/forgot-password', '/auth/reset-password'],
     premiumRoutes: ['/feed/persons'],
   },

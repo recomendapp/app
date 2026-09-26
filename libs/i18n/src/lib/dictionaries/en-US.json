@@ -691,7 +691,7 @@
       }
     },
     "auth": {
-      "mcp_consent": {
+      "consent": {
         "label": "Authorize application",
         "description_generic": "An application is requesting access to your account.",
         "description": "{client} wants to access your account.",

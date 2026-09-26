@@ -39,7 +39,7 @@ export const auth = betterAuth({
       // against its own baseURL (the API's origin), not the frontend's — a
       // relative path here 404s on the API itself.
       loginPage: 'https://recomend.app/auth/login',
-      consentPage: 'https://recomend.app/auth/mcp-consent',
+      consentPage: 'https://recomend.app/auth/consent',
       resource: 'https://api.recomend.app/mcp',
     }) as unknown as BetterAuthPlugin,
     cimd({

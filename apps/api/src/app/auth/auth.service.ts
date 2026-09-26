@@ -125,7 +125,7 @@ const createBetterAuth = async ({
       jwt({ jwt: { issuer: env.API_URL } }),
       mcp({
         loginPage: new URL('/auth/login', env.WEB_APP_URL).toString(),
-        consentPage: new URL('/auth/mcp-consent', env.WEB_APP_URL).toString(),
+        consentPage: new URL('/auth/consent', env.WEB_APP_URL).toString(),
         resource: new URL('/mcp', env.API_URL).toString(),
       }) as unknown as BetterAuthPlugin,
       cimd({

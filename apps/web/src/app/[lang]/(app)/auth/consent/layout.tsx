@@ -9,7 +9,7 @@ export async function generateMetadata(props: {
   const params = await props.params;
   const t = await getTranslations({ locale: params.lang as SupportedLocale });
   return {
-    title: upperFirst(t('pages.auth.mcp_consent.label')),
+    title: upperFirst(t('pages.auth.consent.label')),
     robots: {
       index: false,
       follow: false,
@@ -17,10 +17,10 @@ export async function generateMetadata(props: {
   };
 }
 
-interface McpConsentLayoutProps {
+interface ConsentLayoutProps {
   children: React.ReactNode;
 }
 
-const McpConsentLayout = ({ children }: McpConsentLayoutProps) => children;
+const ConsentLayout = ({ children }: ConsentLayoutProps) => children;
 
-export default McpConsentLayout;
+export default ConsentLayout;

@@ -12,12 +12,12 @@ import {
   CardTitle,
 } from '@libs/ui/components/card';
 
-interface McpConsentPageProps {
+interface ConsentPageProps {
   params: Promise<{ lang: string }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-export default async function McpConsent({ params, searchParams }: McpConsentPageProps) {
+export default async function Consent({ params, searchParams }: ConsentPageProps) {
   const { lang } = await params;
   const query = await searchParams;
 
@@ -32,7 +32,7 @@ export default async function McpConsent({ params, searchParams }: McpConsentPag
       href: {
         pathname: '/auth/login',
         query: {
-          redirect: currentSearch ? `/auth/mcp-consent?${currentSearch}` : '/auth/mcp-consent',
+          redirect: currentSearch ? `/auth/consent?${currentSearch}` : '/auth/consent',
         },
       },
       locale: lang as SupportedLocale,
@@ -41,7 +41,7 @@ export default async function McpConsent({ params, searchParams }: McpConsentPag
 
   const t = await getTranslations({
     locale: lang as SupportedLocale,
-    namespace: 'pages.auth.mcp_consent',
+    namespace: 'pages.auth.consent',
   });
 
   return (
