@@ -10,7 +10,10 @@ export const authClient = createAppAuthClient(INTERNAL_API_URL);
 export const getSessionFromHeaders = async (h: Headers) => {
   const { data: session } = await authClient.getSession({
     fetchOptions: {
-      headers: { cookie: h.get('cookie') || '' },
+      headers: {
+        cookie: h.get('cookie') || '',
+        'cf-connecting-ip': h.get('cf-connecting-ip') || '',
+      },
     },
   });
   return session;

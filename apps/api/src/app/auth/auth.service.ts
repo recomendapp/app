@@ -63,6 +63,12 @@ const createBetterAuth = async ({
         domain: env.NODE_ENV === 'production' ? env.AUTH_COOKIE_DOMAIN : undefined,
       },
       useSecureCookies: env.NODE_ENV === 'production',
+      // Traffic reaches the API through Cloudflare, then the Hetzner load
+      // balancer and Traefik, so x-forwarded-for only holds an in-cluster IP
+      // and every client would share the same rate limit bucket.
+      ipAddress: {
+        ipAddressHeaders: ['cf-connecting-ip'],
+      },
       database: {
         generateId: () => uuidv7(),
         joins: true,
