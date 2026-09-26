@@ -1,24 +1,6 @@
-import { createAuthClient } from 'better-auth/react';
-import {
-  emailOTPClient,
-  inferAdditionalFields,
-  magicLinkClient,
-  usernameClient,
-} from 'better-auth/client/plugins';
-import { oauthProviderClient } from '@better-auth/oauth-provider/client';
+import { createAppAuthClient } from '.';
 import { API_URL } from '../env';
-import type { auth } from '@libs/db';
 
-export const authClient = createAuthClient({
-  baseURL: API_URL,
-  basePath: '/auth',
-  plugins: [
-    usernameClient(),
-    magicLinkClient(),
-    inferAdditionalFields<typeof auth>(),
-    emailOTPClient(),
-    oauthProviderClient(),
-  ],
-});
+export const authClient = createAppAuthClient(API_URL);
 
 export const { signIn, signUp, useSession, signOut } = authClient;
