@@ -4,14 +4,17 @@ import { routing } from './lib/i18n/routing';
 import { siteConfig } from './config/site';
 import { ensureLocaleCookie } from './lib/i18n/ensure-locale-cookie';
 import { getSessionCookie } from 'better-auth/cookies';
-import { authClient } from './lib/auth/client';
+import { getSessionFromHeaders } from './lib/auth/server';
 
 const intlMiddleware = createIntlMiddleware(routing);
 
 function clearStaleAuthCookies(request: NextRequest, response: NextResponse) {
   for (const cookie of request.cookies.getAll()) {
     if (cookie.name.includes('better-auth')) {
-      response.cookies.delete(cookie.name);
+      // __Secure-/__Host- cookies are rejected by the browser if the deleting
+      // Set-Cookie omits `Secure`, even though the value is empty.
+      const secure = cookie.name.startsWith('__Secure-') || cookie.name.startsWith('__Host-');
+      response.cookies.delete({ name: cookie.name, secure });
     }
   }
 }
@@ -36,9 +39,7 @@ export async function proxy(request: NextRequest) {
    * Redirect user if not logged in
    */
   if (hasSessionCookie && isAnonOnly(pathname)) {
-    const { data: session } = await authClient.getSession({
-      fetchOptions: { headers: request.headers },
-    });
+    const session = await getSessionFromHeaders(request.headers);
 
     if (!session) {
       clearStaleAuthCookies(request, response);
