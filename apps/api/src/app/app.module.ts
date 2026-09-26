@@ -30,6 +30,9 @@ import { ImportsModule } from './imports/imports.module';
 import { ExportsModule } from './exports/exports.module';
 import { InternalModule } from './internal/internal.module';
 import { McpModule } from './mcp/mcp.module';
+import { HeaderResolver, I18nModule } from 'nestjs-i18n';
+import * as path from 'path';
+import { defaultSupportedLocale, HEADER_LANGUAGE_KEY, SupportedLocale } from '@libs/i18n';
 
 @Module({
   imports: [
@@ -42,6 +45,18 @@ import { McpModule } from './mcp/mcp.module';
         port: env.REDIS_PORT,
         password: env.REDIS_PASSWORD,
       },
+    }),
+    I18nModule.forRoot({
+      fallbackLanguage: defaultSupportedLocale,
+      fallbacks: {
+        'en-*': 'en-US' as SupportedLocale,
+        'fr-*': 'fr-FR' as SupportedLocale,
+      },
+      loaderOptions: {
+        path: path.join(__dirname, '/assets/i18n/'),
+        watch: true,
+      },
+      resolvers: [{ use: HeaderResolver, options: [HEADER_LANGUAGE_KEY] }],
     }),
     DrizzleModule,
     CacheModule,
