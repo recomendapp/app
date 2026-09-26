@@ -18,7 +18,11 @@ async function bootstrap() {
     credentials: true,
     exposedHeaders: ['WWW-Authenticate'],
   });
-  const app = await NestFactory.create<NestFastifyApplication>(AppModule, adapter);
+  const app = await NestFactory.create<NestFastifyApplication>(AppModule, adapter, {
+    // Keeps the exact request bytes on `req.rawBody` so AuthController can
+    // forward bodies to Better Auth untouched (see auth.controller.ts).
+    rawBody: true,
+  });
 
   app.enableShutdownHooks();
 

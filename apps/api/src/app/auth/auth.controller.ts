@@ -1,4 +1,4 @@
-import { Controller, All, Req, Res, Inject } from '@nestjs/common';
+import { Controller, All, Req, Res, Inject, RawBodyRequest } from '@nestjs/common';
 import { ApiExcludeController } from '@nestjs/swagger';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { AUTH_SERVICE, AuthService } from './auth.service';
@@ -16,7 +16,7 @@ export class AuthController {
     '.well-known/oauth-protected-resource/*',
     '.well-known/openid-configuration',
   ])
-  async handleAuth(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+  async handleAuth(@Req() req: RawBodyRequest<FastifyRequest>, @Res() res: FastifyReply) {
     const url = new URL(req.raw.url || req.url, `${req.protocol}://${req.host}`);
 
     const headers = new Headers();
@@ -28,10 +28,14 @@ export class AuthController {
       }
     });
 
+    // Forward the exact bytes received rather than re-serializing the parsed
+    // body: Better Auth parses it itself according to the forwarded
+    // content-type (JSON for sign-in, form-encoded for /auth/oauth2/token per
+    // RFC 6749). Requires `rawBody: true` on the Nest app (main.ts).
     const request = new Request(url.toString(), {
       method: req.method,
       headers,
-      body: req.body ? JSON.stringify(req.body) : undefined,
+      body: req.rawBody && new Uint8Array(req.rawBody),
     });
 
     const response = await this.auth.handler(request);

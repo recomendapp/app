@@ -15,7 +15,9 @@ describe('Better Auth HTTP routes', () => {
       controllers: [AuthController],
       providers: [{ provide: AUTH_SERVICE, useValue: { handler } }],
     }).compile();
-    app = module.createNestApplication<NestFastifyApplication>(new FastifyAdapter());
+    app = module.createNestApplication<NestFastifyApplication>(new FastifyAdapter(), {
+      rawBody: true,
+    });
     app.enableVersioning({ type: VersioningType.URI });
     await app.init();
     await app.getHttpAdapter().getInstance().ready();
@@ -69,6 +71,21 @@ describe('Better Auth HTTP routes', () => {
     const request = handler.mock.calls[0][0] as Request;
     expect(request.headers.get('cookie')).toBe('session=test');
     expect(await request.json()).toEqual({ email: 'user@example.com', password: 'test' });
+  });
+
+  it('forwards form-encoded OAuth token requests as form data', async () => {
+    handler.mockResolvedValue(Response.json({ access_token: 'token' }));
+    await app.inject({
+      method: 'POST',
+      url: '/auth/oauth2/token',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      payload: 'grant_type=authorization_code&code=abc&resource=a&resource=b',
+    });
+    const request = handler.mock.calls[0][0] as Request;
+    const form = await request.formData();
+    expect(form.get('grant_type')).toBe('authorization_code');
+    expect(form.get('code')).toBe('abc');
+    expect(form.getAll('resource')).toEqual(['a', 'b']);
   });
 
   it('does not capture unrelated routes', async () => {
