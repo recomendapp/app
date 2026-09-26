@@ -1,5 +1,20 @@
 # mobile
 
+## [1.7.0](https://github.com/recomendapp/app/compare/mobile@v1.6.0...mobile@v1.7.0) (2026-09-26)
+
+
+### Features
+
+* **api:** expose the API as an OAuth 2.1 protected MCP server ([#71](https://github.com/recomendapp/app/issues/71)) ([4d80859](https://github.com/recomendapp/app/commit/4d808599a670e0f7ec715bc3e8a51cbebf008ec2))
+* **api:** typed error DTOs with machine-readable code discriminant ([#70](https://github.com/recomendapp/app/issues/70)) ([5992750](https://github.com/recomendapp/app/commit/5992750fa027cfb3d0c0c36b1af846fb4499edd7))
+* **mobile:** improve review interactions ([#68](https://github.com/recomendapp/app/issues/68)) ([394de75](https://github.com/recomendapp/app/commit/394de753e53885d2fc014ada4b2b805cba7e5c72))
+
+
+### Bug Fixes
+
+* **api:** validate response DTOs ([#67](https://github.com/recomendapp/app/issues/67)) ([e7f8cc4](https://github.com/recomendapp/app/commit/e7f8cc46178f5c71137b7b4443c4cdb1925fc122))
+* **mobile:** animate startup splash ([#66](https://github.com/recomendapp/app/issues/66)) ([420dc6f](https://github.com/recomendapp/app/commit/420dc6f780d507bff8340b9572220fc54875652d))
+
 ## [1.6.0](https://github.com/recomendapp/app/compare/mobile@v1.5.1...mobile@v1.6.0) (2026-09-19)
 
 
