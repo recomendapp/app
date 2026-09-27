@@ -1,3 +1,5 @@
+import { describe, it, expect, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import type { I18nService } from 'nestjs-i18n';
 import { defaultSupportedLocale } from '@libs/i18n';
 import { UiFeaturesService } from './ui-features.service';
@@ -5,8 +7,8 @@ import { UiFeaturesService } from './ui-features.service';
 describe('UiFeaturesService', () => {
   function fakeI18n() {
     return {
-      t: jest.fn((key: string, options: { lang: string }) => `${key}:${options.lang}`),
-    } as unknown as jest.Mocked<I18nService>;
+      t: mock((key: string, options: { lang: string }) => `${key}:${options.lang}`),
+    } as unknown as Mocked<I18nService>;
   }
 
   it('lists all known features with a translated label and description', () => {

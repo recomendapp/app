@@ -351,6 +351,7 @@
     "@testing-library/react": "catalog:",
     "@testing-library/react-native": "catalog:",
     "@types/bcrypt": "catalog:",
+    "@types/bun": "catalog:",
     "@types/color": "catalog:",
     "@types/d3-interpolate": "catalog:",
     "@types/geojson": "catalog:",
@@ -382,9 +383,7 @@
     "husky": "catalog:",
     "jest": "catalog:",
     "jest-environment-jsdom": "catalog:",
-    "jest-environment-node": "catalog:",
     "jest-expo": "catalog:",
-    "jest-util": "catalog:",
     "jsonc-eslint-parser": "catalog:",
     "lint-staged": "catalog:",
     "metro-config": "catalog:",
@@ -392,7 +391,6 @@
     "nx": "catalog:",
     "tailwindcss": "catalog:",
     "testcontainers": "catalog:",
-    "ts-jest": "catalog:",
     "ts-node": "catalog:",
     "ts-proto": "catalog:",
     "tsconfig-paths": "catalog:",
@@ -753,9 +751,7 @@
     "husky": "^9.1.7",
     "jest": "^30.0.2",
     "jest-environment-jsdom": "^30.0.2",
-    "jest-environment-node": "^30.0.2",
     "jest-expo": "^57.0.4",
-    "jest-util": "^30.0.2",
     "jsonc-eslint-parser": "^2.1.0",
     "lint-staged": "^16.4.0",
     "metro-config": "~0.84.4",
@@ -763,7 +759,6 @@
     "nx": "23.2.1",
     "tailwindcss": "4.1.17",
     "testcontainers": "^12.1.0",
-    "ts-jest": "^29.4.0",
     "ts-node": "10.9.1",
     "ts-proto": "^2.11.0",
     "tsx": "^4.21.0",
@@ -779,6 +774,7 @@
     "enhanced-resolve": "5.25.1",
     "picocolors": "1.1.1",
     "semver": "^7.8.5",
-    "tsconfig-paths": "4.2.0"
+    "tsconfig-paths": "4.2.0",
+    "@types/bun": "1.4.2"
   }
 }

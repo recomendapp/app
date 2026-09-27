@@ -1,34 +1,37 @@
+import { describe, it, expect, beforeAll, beforeEach, afterAll, mock } from 'bun:test';
 import { Global, Module } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fastify';
 import { McpStrategy } from '@rekog/mcp-nest';
-import { verifyAccessTokenRequest } from 'better-auth/oauth2';
-import { ENV_SERVICE } from '@libs/env';
-import { DRIZZLE_SERVICE } from '../../common/modules/drizzle/drizzle.module';
-import { McpModule } from './mcp.module';
-import { MoviesTool } from '../movies/movies.tool';
-import { MoviesService } from '../movies/movies.service';
-import { MeTool } from '../me/me.tool';
-import { MeService } from '../me/me.service';
-import { McpBearerAuthGuard } from '../auth/guards';
 
-jest.mock('better-auth/oauth2', () => ({ verifyAccessTokenRequest: jest.fn() }));
-jest.mock('better-auth/node', () => ({ fromNodeHeaders: jest.fn() }));
-jest.mock('@libs/db/schemas', () => ({ user: { id: 'user.id' } }));
-jest.mock('drizzle-orm', () => ({ eq: jest.fn() }));
-jest.mock('@libs/env', () => ({ ENV_SERVICE: 'ENV_SERVICE' }));
-jest.mock('../../common/modules/drizzle/drizzle.module', () => ({
+const verifyAccessTokenRequest = mock();
+const ENV_SERVICE = 'ENV_SERVICE';
+
+mock.module('better-auth/oauth2', () => ({ verifyAccessTokenRequest }));
+mock.module('better-auth/node', () => ({ fromNodeHeaders: mock() }));
+mock.module('@libs/db/schemas', () => ({ user: { id: 'user.id' } }));
+mock.module('drizzle-orm', () => ({ eq: mock() }));
+mock.module('@libs/env', () => ({ ENV_SERVICE }));
+mock.module('../../common/modules/drizzle/drizzle.module', () => ({
   DRIZZLE_SERVICE: 'DRIZZLE_SERVICE',
 }));
-jest.mock('../auth/auth.service', () => ({ AUTH_SERVICE: 'AUTH_SERVICE' }));
-jest.mock('../movies/movies.service', () => ({ MoviesService: class {} }));
-jest.mock('../me/me.service', () => ({ MeService: class {} }));
+mock.module('../auth/auth.service', () => ({ AUTH_SERVICE: 'AUTH_SERVICE' }));
+mock.module('../movies/movies.service', () => ({ MoviesService: class {} }));
+mock.module('../me/me.service', () => ({ MeService: class {} }));
+
+const { DRIZZLE_SERVICE } = await import('../../common/modules/drizzle/drizzle.module');
+const { McpModule } = await import('./mcp.module');
+const { MoviesTool } = await import('../movies/movies.tool');
+const { MoviesService } = await import('../movies/movies.service');
+const { MeTool } = await import('../me/me.tool');
+const { MeService } = await import('../me/me.service');
+const { McpBearerAuthGuard } = await import('../auth/guards');
 
 describe('MCP HTTP transport', () => {
   let app: NestFastifyApplication;
   let baseUrl: string;
-  const getMovie = jest.fn().mockResolvedValue({ id: 157336 });
-  const getMe = jest.fn().mockResolvedValue({ id: 'user-1' });
+  const getMovie = mock().mockResolvedValue({ id: 157336 });
+  const getMe = mock().mockResolvedValue({ id: 'user-1' });
 
   beforeAll(async () => {
     @Global()
@@ -39,7 +42,7 @@ describe('MCP HTTP transport', () => {
         {
           provide: DRIZZLE_SERVICE,
           useValue: {
-            query: { user: { findFirst: jest.fn().mockResolvedValue({ id: 'user-1' }) } },
+            query: { user: { findFirst: mock().mockResolvedValue({ id: 'user-1' }) } },
           },
         },
       ],
@@ -70,8 +73,8 @@ describe('MCP HTTP transport', () => {
     await app?.close();
   });
   beforeEach(() => {
-    jest.clearAllMocks();
-    jest.mocked(verifyAccessTokenRequest).mockResolvedValue({ sub: 'user-1' });
+    mock.clearAllMocks();
+    verifyAccessTokenRequest.mockResolvedValue({ sub: 'user-1' });
   });
 
   async function call(method: string, params: Record<string, unknown>, authorization?: string) {
@@ -102,7 +105,7 @@ describe('MCP HTTP transport', () => {
   }
 
   it('rejects an unauthenticated request with a 401 and WWW-Authenticate challenge', async () => {
-    jest.mocked(verifyAccessTokenRequest).mockRejectedValue(new Error('Missing token'));
+    verifyAccessTokenRequest.mockRejectedValue(new Error('Missing token'));
     const response = await call('initialize', {
       protocolVersion: '2025-11-25',
       capabilities: {},
@@ -115,7 +118,7 @@ describe('MCP HTTP transport', () => {
   });
 
   it('rejects an invalid bearer token with a 401', async () => {
-    jest.mocked(verifyAccessTokenRequest).mockRejectedValue(new Error('Invalid token'));
+    verifyAccessTokenRequest.mockRejectedValue(new Error('Invalid token'));
     const response = await call(
       'tools/call',
       { name: 'get-movie', arguments: { movieId: 157336 } },

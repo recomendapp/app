@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { LexoRank } from 'lexorank';
 import { eq } from 'drizzle-orm';
@@ -10,17 +12,16 @@ import {
   TestDatabase,
 } from '@libs/testing';
 import { defaultSupportedLocale } from '@libs/i18n';
-import { SortOrder } from '../../../common/dto/sort.dto';
 import type { RealtimeGateway } from '../../realtime/realtime.gateway';
-import { PlaylistItemSortBy } from './playlist-items.dto';
 import type { User } from '../../auth/auth.service';
 
-jest.mock('../../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
+mock.module('../../realtime/realtime.gateway', () => ({ RealtimeGateway: mock() }));
 
-const { PlaylistItemsService } =
-  require('./playlist-items.service') as typeof import('./playlist-items.service');
-const { PlaylistsRealtimeService } =
-  require('../playlists-realtime.service') as typeof import('../playlists-realtime.service');
+const { SortOrder } = await import('../../../common/dto/sort.dto');
+const { PlaylistItemSortBy } = await import('./playlist-items.dto');
+
+const { PlaylistItemsService } = await import('./playlist-items.service');
+const { PlaylistsRealtimeService } = await import('../playlists-realtime.service');
 
 function sequentialRanks(count: number): string[] {
   const ranks: string[] = [];
@@ -49,9 +50,9 @@ describe('PlaylistItemsService', () => {
   });
 
   const fakeGateway = () =>
-    ({ emitToUser: jest.fn(), emitToUsers: jest.fn() }) as unknown as jest.Mocked<RealtimeGateway>;
+    ({ emitToUser: mock(), emitToUsers: mock() }) as unknown as Mocked<RealtimeGateway>;
 
-  function buildService(gateway?: jest.Mocked<RealtimeGateway>) {
+  function buildService(gateway?: Mocked<RealtimeGateway>) {
     const realtime = new PlaylistsRealtimeService(testDb.db, gateway ?? fakeGateway());
     return new PlaylistItemsService(testDb.db, realtime);
   }

@@ -67,16 +67,28 @@
       }
     },
     "test": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["default", "^production"],
       "options": {
-        "passWithNoTests": true
+        "cwd": "{projectRoot}",
+        "command": "bun test --parallel --no-env-file --path-ignore-patterns=\"**/*.integration.spec.ts\""
       }
     },
     "test-integration": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/apps/notify-integration"],
+      "executor": "nx:run-commands",
       "options": {
-        "jestConfig": "apps/notify/jest.integration.config.cts",
-        "passWithNoTests": true
+        "cwd": "{projectRoot}",
+        "command": "bun --no-env-file ../../libs/testing/src/lib/db/run-integration-tests.ts --isolate --no-env-file --timeout 60000 integration.spec"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["default", "^production"],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "tsc -p tsconfig.spec.json --noEmit"
       }
     }
   }

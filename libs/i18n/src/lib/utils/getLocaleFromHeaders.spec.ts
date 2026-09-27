@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'bun:test';
 import { getLocaleFromHeaders } from './getLocaleFromHeaders';
 import { HEADER_LANGUAGE_KEY } from '../locales';
 

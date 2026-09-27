@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'bun:test';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { follow, reco } from '@libs/db/schemas';
 import { createTestLogMovie, createTestMovie, createTestUser, TestDatabase } from '@libs/testing';

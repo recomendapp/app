@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach, afterEach, mock, spyOn } from 'bun:test';
 import {
   apiSchema,
   assetsSchema,
@@ -233,12 +234,12 @@ describe('validateEnv', () => {
 
   afterEach(() => {
     process.env = originalEnv;
-    jest.restoreAllMocks();
+    mock.restore();
   });
 
   it('returns the parsed environment when validation succeeds', () => {
     process.env['ASSETS_BASE_URL'] = 'https://assets.example.com';
-    const exitSpy = jest.spyOn(process, 'exit').mockImplementation(() => undefined as never);
+    const exitSpy = spyOn(process, 'exit').mockImplementation(() => undefined as never);
 
     const result = validateEnv(assetsSchema);
 
@@ -248,8 +249,8 @@ describe('validateEnv', () => {
 
   it('logs the validation error and exits the process when validation fails', () => {
     delete process.env['ASSETS_BASE_URL'];
-    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
-    const exitSpy = jest.spyOn(process, 'exit').mockImplementation(() => undefined as never);
+    const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
+    const exitSpy = spyOn(process, 'exit').mockImplementation(() => undefined as never);
 
     validateEnv(assetsSchema);
 

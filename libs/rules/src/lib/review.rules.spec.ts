@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'bun:test';
 import { REVIEW_RULES } from './review.rules';
 
 describe('REVIEW_RULES.TITLE.REGEX', () => {

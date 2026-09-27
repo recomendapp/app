@@ -1,32 +1,35 @@
+import { describe, it, expect, mock } from 'bun:test';
 import { type ExecutionContext, Global, Module } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
-import { verifyAccessTokenRequest } from 'better-auth/oauth2';
-import { ENV_SERVICE } from '@libs/env';
-import { DRIZZLE_SERVICE } from '../../common/modules/drizzle/drizzle.module';
-import { AuthModule } from './auth.module';
-import { McpBearerAuthGuard } from './guards';
 
-jest.mock('better-auth/oauth2', () => ({ verifyAccessTokenRequest: jest.fn() }));
-jest.mock('better-auth/node', () => ({ fromNodeHeaders: jest.fn() }));
-jest.mock('@libs/db/schemas', () => ({ user: { id: 'user.id' } }));
-jest.mock('drizzle-orm', () => ({ eq: jest.fn() }));
-jest.mock('@libs/env', () => ({ ENV_SERVICE: 'ENV_SERVICE' }));
-jest.mock('../../common/modules/drizzle/drizzle.module', () => ({
+const verifyAccessTokenRequest = mock();
+const ENV_SERVICE = 'ENV_SERVICE';
+
+mock.module('better-auth/oauth2', () => ({ verifyAccessTokenRequest }));
+mock.module('better-auth/node', () => ({ fromNodeHeaders: mock() }));
+mock.module('@libs/db/schemas', () => ({ user: { id: 'user.id' } }));
+mock.module('drizzle-orm', () => ({ eq: mock() }));
+mock.module('@libs/env', () => ({ ENV_SERVICE }));
+mock.module('../../common/modules/drizzle/drizzle.module', () => ({
   DRIZZLE_SERVICE: 'DRIZZLE_SERVICE',
 }));
-jest.mock('@shared/notify', () => ({ NotifySharedModule: class {} }));
-jest.mock('@shared/worker', () => ({ SharedWorkerModule: class {} }));
-jest.mock('./auth.controller', () => ({ AuthController: class {} }));
-jest.mock('./session-cleanup.service', () => ({ SessionCleanupService: class {} }));
-jest.mock('./auth.service', () => ({
+mock.module('@shared/notify', () => ({ NotifySharedModule: class {} }));
+mock.module('@shared/worker', () => ({ SharedWorkerModule: class {} }));
+mock.module('./auth.controller', () => ({ AuthController: class {} }));
+mock.module('./session-cleanup.service', () => ({ SessionCleanupService: class {} }));
+mock.module('./auth.service', () => ({
   AUTH_SERVICE: 'AUTH_SERVICE',
   AuthProvider: { provide: 'AUTH_SERVICE', useValue: {} },
 }));
 
+const { DRIZZLE_SERVICE } = await import('../../common/modules/drizzle/drizzle.module');
+const { AuthModule } = await import('./auth.module');
+const { McpBearerAuthGuard } = await import('./guards');
+
 describe('AuthModule MCP guard registration', () => {
   it('resolves McpBearerAuthGuard as MCP does and injects inherited dependencies', async () => {
-    const findFirst = jest.fn().mockResolvedValue({ id: 'user-1' });
+    const findFirst = mock().mockResolvedValue({ id: 'user-1' });
     @Global()
     @Module({
       providers: [
@@ -43,7 +46,7 @@ describe('AuthModule MCP guard registration', () => {
 
     try {
       const moduleRef = module.get(ModuleRef);
-      jest.mocked(verifyAccessTokenRequest).mockResolvedValue({ sub: 'user-1' });
+      verifyAccessTokenRequest.mockResolvedValue({ sub: 'user-1' });
       const guard = moduleRef.get(McpBearerAuthGuard, { strict: false });
       const request = {
         headers: { authorization: 'Bearer token' },
@@ -54,7 +57,7 @@ describe('AuthModule MCP guard registration', () => {
       const context = {
         switchToHttp: () => ({
           getRequest: () => request,
-          getResponse: () => ({ header: jest.fn() }),
+          getResponse: () => ({ header: mock() }),
         }),
       } as unknown as ExecutionContext;
       await expect(guard.canActivate(context)).resolves.toBe(true);

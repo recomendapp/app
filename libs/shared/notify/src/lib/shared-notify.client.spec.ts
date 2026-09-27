@@ -1,8 +1,9 @@
+import { describe, it, expect, mock } from 'bun:test';
 import { NotifyClient } from './shared-notify.client';
 
 describe('NotifyClient', () => {
   function createClient() {
-    const queue = { add: jest.fn().mockResolvedValue(undefined) };
+    const queue = { add: mock().mockResolvedValue(undefined) };
     const client = new NotifyClient(queue as any);
     return { client, queue };
   }

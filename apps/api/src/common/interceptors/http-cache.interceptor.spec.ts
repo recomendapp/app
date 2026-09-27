@@ -1,3 +1,5 @@
+import { describe, it, expect, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import type { CallHandler, ExecutionContext } from '@nestjs/common';
 import type { Reflector } from '@nestjs/core';
 import { of } from 'rxjs';
@@ -10,18 +12,18 @@ import {
 } from '../decorators/cacheable.constants';
 
 describe('HttpCacheInterceptor', () => {
-  function fakeCacheService(overrides?: Partial<jest.Mocked<CacheService>>) {
+  function fakeCacheService(overrides?: Partial<Mocked<CacheService>>) {
     return {
-      get: jest.fn().mockResolvedValue(null),
-      set: jest.fn().mockResolvedValue(undefined),
-      del: jest.fn(),
+      get: mock().mockResolvedValue(null),
+      set: mock().mockResolvedValue(undefined),
+      del: mock(),
       ...overrides,
-    } as unknown as jest.Mocked<CacheService>;
+    } as unknown as Mocked<CacheService>;
   }
 
   function fakeReflector(metadata: { prefix?: string; ttl?: number }): Reflector {
     return {
-      get: jest.fn((key: string) => {
+      get: mock((key: string) => {
         if (key === CACHEABLE_PREFIX_METADATA) return metadata.prefix;
         if (key === CACHEABLE_TTL_METADATA) return metadata.ttl;
         return undefined;
@@ -36,7 +38,7 @@ describe('HttpCacheInterceptor', () => {
   ): ExecutionContext {
     return {
       switchToHttp: () => ({ getRequest: () => ({ method, url, headers }) }),
-      getHandler: () => jest.fn(),
+      getHandler: () => mock(),
     } as unknown as ExecutionContext;
   }
 
@@ -77,9 +79,9 @@ describe('HttpCacheInterceptor', () => {
   });
 
   it('returns the cached value directly on a cache hit, without calling the handler', async () => {
-    const cache = fakeCacheService({ get: jest.fn().mockResolvedValue({ cached: true }) });
+    const cache = fakeCacheService({ get: mock().mockResolvedValue({ cached: true }) });
     const interceptor = new HttpCacheInterceptor(cache, fakeReflector({ prefix: 'p', ttl: 60 }));
-    const handle = jest.fn().mockReturnValue(of({ fresh: true }));
+    const handle = mock().mockReturnValue(of({ fresh: true }));
 
     const result = await firstValueFrom(
       await interceptor.intercept(contextFor('GET', '/x'), { handle }),

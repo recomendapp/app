@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'bun:test';
 import { NotifyFollowNewSchema } from './follow.dto';
 
 describe('NotifyFollowNewSchema', () => {

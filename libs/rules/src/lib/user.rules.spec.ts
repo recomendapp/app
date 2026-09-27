@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'bun:test';
 import { USER_RULES } from './user.rules';
 
 describe('USER_RULES.USERNAME.REGEX', () => {

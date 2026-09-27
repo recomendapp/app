@@ -1,26 +1,27 @@
-const mockSend = jest.fn();
+import { describe, it, expect, beforeEach, mock, type Mock } from 'bun:test';
+const mockSend = mock();
 
-jest.mock('resend', () => ({
-  Resend: jest.fn().mockImplementation(() => ({
+mock.module('resend', () => ({
+  Resend: mock().mockImplementation(() => ({
     emails: { send: mockSend },
   })),
 }));
 
-jest.mock('../env', () => ({
+mock.module('../env', () => ({
   env: { RESEND_API_KEY: 're_test_key', RESEND_FROM_EMAIL: 'noreply@recomend.test' },
 }));
 
-import { NotifyService } from './notify.service';
+const { NotifyService } = await import('./notify.service');
 
 describe('NotifyService', () => {
-  let fcmService: { sendMulticast: jest.Mock };
-  let apnsService: { sendToDevices: jest.Mock };
-  let service: NotifyService;
+  let fcmService: { sendMulticast: Mock<(...args: any[]) => any> };
+  let apnsService: { sendToDevices: Mock<(...args: any[]) => any> };
+  let service: InstanceType<typeof NotifyService>;
 
   beforeEach(() => {
     mockSend.mockReset();
-    fcmService = { sendMulticast: jest.fn().mockResolvedValue([]) };
-    apnsService = { sendToDevices: jest.fn().mockResolvedValue([]) };
+    fcmService = { sendMulticast: mock().mockResolvedValue([]) };
+    apnsService = { sendToDevices: mock().mockResolvedValue([]) };
     service = new NotifyService(fcmService as any, apnsService as any);
   });
 
@@ -36,7 +37,7 @@ describe('NotifyService', () => {
         subject: 'Subject',
         html: '<p>Hi</p>',
       });
-      expect(result).toEqual({ data: { id: 'email-1' }, error: null });
+      expect<unknown>(result).toEqual({ data: { id: 'email-1' }, error: null });
     });
 
     it('throws when Resend reports an error in the response body', async () => {

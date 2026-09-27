@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { playlist, playlistSaved } from '@libs/db/schemas';
@@ -6,10 +8,9 @@ import { PlaylistServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../../realtime/realtime.gateway';
 import type { User } from '../../auth/auth.service';
 
-jest.mock('../../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
+mock.module('../../realtime/realtime.gateway', () => ({ RealtimeGateway: mock() }));
 
-const { PlaylistSavesService } =
-  require('./playlist-saves.service') as typeof import('./playlist-saves.service');
+const { PlaylistSavesService } = await import('./playlist-saves.service');
 
 describe('PlaylistSavesService', () => {
   let testDb: TestDatabase;
@@ -27,8 +28,8 @@ describe('PlaylistSavesService', () => {
   });
 
   const asUser = (row: { id: string }) => row as unknown as User;
-  const fakeGateway = () => ({ emitToUser: jest.fn() }) as unknown as jest.Mocked<RealtimeGateway>;
-  const service = (gateway?: jest.Mocked<RealtimeGateway>) =>
+  const fakeGateway = () => ({ emitToUser: mock() }) as unknown as Mocked<RealtimeGateway>;
+  const service = (gateway?: Mocked<RealtimeGateway>) =>
     new PlaylistSavesService(testDb.db, gateway ?? fakeGateway());
 
   describe('get', () => {

@@ -1,33 +1,35 @@
+import { describe, it, expect, beforeEach, mock, spyOn } from 'bun:test';
 import { type ExecutionContext, Logger, UnauthorizedException } from '@nestjs/common';
-import { verifyAccessTokenRequest } from 'better-auth/oauth2';
-import { eq } from 'drizzle-orm';
-import { user } from '@libs/db/schemas';
 import type { EnvService } from '@libs/env';
 import type { DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import { McpBearerAuthGuard } from './mcp-bearer-auth.guard';
 
-jest.mock('better-auth/oauth2', () => ({ verifyAccessTokenRequest: jest.fn() }));
-jest.mock('@libs/db/schemas', () => ({ user: { id: 'user.id' } }));
-jest.mock('@libs/env', () => ({ ENV_SERVICE: 'ENV_SERVICE' }));
-jest.mock('../../../common/modules/drizzle/drizzle.module', () => ({
+const verify = mock();
+const eq = mock(() => 'user-id-filter');
+const user = { id: 'user.id' };
+
+mock.module('better-auth/oauth2', () => ({ verifyAccessTokenRequest: verify }));
+mock.module('@libs/db/schemas', () => ({ user }));
+mock.module('@libs/env', () => ({ ENV_SERVICE: 'ENV_SERVICE' }));
+mock.module('../../../common/modules/drizzle/drizzle.module', () => ({
   DRIZZLE_SERVICE: 'DRIZZLE_SERVICE',
 }));
-jest.mock('drizzle-orm', () => ({ eq: jest.fn(() => 'user-id-filter') }));
+mock.module('drizzle-orm', () => ({ eq }));
+
+const { McpBearerAuthGuard } = await import('./mcp-bearer-auth.guard');
 
 describe('McpBearerAuthGuard', () => {
-  const verify = jest.mocked(verifyAccessTokenRequest);
-  const findFirst = jest.fn();
+  const findFirst = mock();
   const env = { API_URL: 'https://api.example.com', PORT: 9000 } as EnvService;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    mock.clearAllMocks();
     verify.mockResolvedValue({ sub: 'user-1' });
     findFirst.mockReset().mockResolvedValue({ id: 'user-1' });
   });
 
   function setup(headers: Record<string, string | string[]> = { authorization: 'Bearer token' }) {
     const request: Record<string, unknown> = { headers, method: 'POST', url: '/mcp', raw: {} };
-    const header = jest.fn();
+    const header = mock();
     const reply = { header };
     const context = {
       switchToHttp: () => ({ getRequest: () => request, getResponse: () => reply }),
@@ -58,7 +60,7 @@ describe('McpBearerAuthGuard', () => {
     expect(request).not.toHaveProperty('session');
   });
 
-  it.each(['proof', ['proof', 'other-proof']])(
+  it.each<string | string[]>(['proof', ['proof', 'other-proof']])(
     'forwards the first DPoP proof (%j)',
     async (dpop) => {
       const { context, guard } = setup({ authorization: 'DPoP token', dpop });
@@ -91,7 +93,7 @@ describe('McpBearerAuthGuard', () => {
 
   it('logs verification failures that are not token rejections', async () => {
     const { context, guard } = setup();
-    const logError = jest.spyOn(Logger.prototype, 'error').mockImplementation();
+    const logError = spyOn(Logger.prototype, 'error').mockImplementation(() => undefined);
     const failure = new Error('Jwks failed: Forbidden');
     verify.mockRejectedValue(failure);
     await expect(guard.canActivate(context)).rejects.toBeInstanceOf(UnauthorizedException);
@@ -100,7 +102,7 @@ describe('McpBearerAuthGuard', () => {
 
   it('does not log expected token rejections', async () => {
     const { context, guard } = setup();
-    const logError = jest.spyOn(Logger.prototype, 'error').mockImplementation();
+    const logError = spyOn(Logger.prototype, 'error').mockImplementation(() => undefined);
     const rejection = Object.assign(new Error('invalid access token'), { name: 'APIError' });
     verify.mockRejectedValue(rejection);
     await expect(guard.canActivate(context)).rejects.toBeInstanceOf(UnauthorizedException);

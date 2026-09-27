@@ -1,3 +1,4 @@
+import { describe, it, expect, mock, spyOn } from 'bun:test';
 import { QueryClient } from '@tanstack/react-query';
 import {
   prependListItemToAllCaches,
@@ -189,14 +190,14 @@ describe('removeFromPaginatedCache', () => {
 
     removeFromPaginatedCache<Item, any>(client, ['items', 'paginated'], 2);
 
-    expect(client.getQueryData(page1Key)).toEqual({
+    expect<unknown>(client.getQueryData(page1Key)).toEqual({
       data: [
         { id: 1, name: 'a' },
         { id: 3, name: 'c' },
       ],
       meta: { total_results: 2, total_pages: 1, current_page: 1, per_page: perPage },
     });
-    expect(client.getQueryData(page2Key)).toEqual({
+    expect<unknown>(client.getQueryData(page2Key)).toEqual({
       data: [],
       meta: { total_results: 2, total_pages: 1, current_page: 2, per_page: perPage },
     });
@@ -207,7 +208,7 @@ describe('removeFromPaginatedCache', () => {
     const page1Key = ['items', 'paginated', 1];
     const page2Key = ['items', 'paginated', 2];
     seedTwoPages(client, page1Key, page2Key);
-    const invalidateSpy = jest.spyOn(client, 'invalidateQueries');
+    const invalidateSpy = spyOn(client, 'invalidateQueries');
 
     removeFromPaginatedCache<Item, any>(client, ['items', 'paginated'], 2);
 
@@ -224,8 +225,8 @@ describe('removeFromPaginatedCache', () => {
 
     removeFromPaginatedCache<Item, any>(client, ['items', 'paginated'], 999);
 
-    expect(client.getQueryData(page1Key)).toEqual(before1);
-    expect(client.getQueryData(page2Key)).toEqual(before2);
+    expect<unknown>(client.getQueryData(page1Key)).toEqual(before1);
+    expect<unknown>(client.getQueryData(page2Key)).toEqual(before2);
   });
 });
 
@@ -452,7 +453,7 @@ describe('updateOrRemoveListItemInAllCaches', () => {
     const allKey = ['items', 'all'];
     const original = [{ id: 1, name: 'a' }];
     client.setQueryData<Item[]>(allKey, original);
-    const modifier = jest.fn();
+    const modifier = mock();
 
     updateOrRemoveListItemInAllCaches<Item, any, any>(
       client,

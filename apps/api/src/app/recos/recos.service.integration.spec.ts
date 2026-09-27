@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { and, eq } from 'drizzle-orm';
 import { follow, reco } from '@libs/db/schemas';
@@ -13,13 +15,13 @@ import type { User } from '../auth/auth.service';
 import { RecoServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../realtime/realtime.gateway';
 import type { NotifyClient } from '@shared/notify';
-import { RecoType } from './dto/recos.dto';
 
-jest.mock('../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
+mock.module('../realtime/realtime.gateway', () => ({ RealtimeGateway: mock() }));
 
-const { RecosService } = require('./recos.service') as typeof import('./recos.service');
-const { UserRecosService } =
-  require('../users/recos/user-recos.service') as typeof import('../users/recos/user-recos.service');
+const { RecoType } = await import('./dto/recos.dto');
+
+const { RecosService } = await import('./recos.service');
+const { UserRecosService } = await import('../users/recos/user-recos.service');
 
 describe('RecosService', () => {
   let testDb: TestDatabase;
@@ -37,11 +39,11 @@ describe('RecosService', () => {
   });
 
   const asUser = (row: { id: string }) => row as unknown as User;
-  const fakeGateway = () => ({ emitToUser: jest.fn() }) as unknown as jest.Mocked<RealtimeGateway>;
+  const fakeGateway = () => ({ emitToUser: mock() }) as unknown as Mocked<RealtimeGateway>;
 
   function buildService(opts?: {
-    notify?: jest.Mocked<NotifyClient>;
-    gateway?: jest.Mocked<RealtimeGateway>;
+    notify?: Mocked<NotifyClient>;
+    gateway?: Mocked<RealtimeGateway>;
   }) {
     const userRecosService = new UserRecosService(testDb.db);
     return new RecosService(

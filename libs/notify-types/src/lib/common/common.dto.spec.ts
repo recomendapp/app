@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'bun:test';
 import { LangSchema } from './common.dto';
 
 describe('LangSchema', () => {

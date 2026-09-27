@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { playlist, playlistItem, playlistMember, profile } from '@libs/db/schemas';
@@ -8,11 +10,10 @@ import type { WorkerClient } from '@shared/worker';
 import type { StorageService } from '../../common/modules/storage/storage.service';
 import type { User } from '../auth/auth.service';
 
-jest.mock('../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
+mock.module('../realtime/realtime.gateway', () => ({ RealtimeGateway: mock() }));
 
-const { PlaylistsService } = require('./playlists.service') as typeof import('./playlists.service');
-const { PlaylistsRealtimeService } =
-  require('./playlists-realtime.service') as typeof import('./playlists-realtime.service');
+const { PlaylistsService } = await import('./playlists.service');
+const { PlaylistsRealtimeService } = await import('./playlists-realtime.service');
 
 describe('PlaylistsService', () => {
   let testDb: TestDatabase;
@@ -31,20 +32,20 @@ describe('PlaylistsService', () => {
 
   const asUser = (row: { id: string }) => row as unknown as User;
   const fakeGateway = () =>
-    ({ emitToUser: jest.fn(), emitToUsers: jest.fn() }) as unknown as jest.Mocked<RealtimeGateway>;
+    ({ emitToUser: mock(), emitToUsers: mock() }) as unknown as Mocked<RealtimeGateway>;
   const fakeWorker = () =>
-    ({ emit: jest.fn().mockResolvedValue(undefined) }) as unknown as jest.Mocked<WorkerClient>;
+    ({ emit: mock().mockResolvedValue(undefined) }) as unknown as Mocked<WorkerClient>;
   const fakeStorage = () =>
     ({
-      uploadFile: jest.fn(),
-      deleteFile: jest.fn().mockResolvedValue(undefined),
-      getFileUrl: jest.fn(),
-    }) as unknown as jest.Mocked<StorageService>;
+      uploadFile: mock(),
+      deleteFile: mock().mockResolvedValue(undefined),
+      getFileUrl: mock(),
+    }) as unknown as Mocked<StorageService>;
 
   function buildService(overrides?: {
-    gateway?: jest.Mocked<RealtimeGateway>;
-    worker?: jest.Mocked<WorkerClient>;
-    storage?: jest.Mocked<StorageService>;
+    gateway?: Mocked<RealtimeGateway>;
+    worker?: Mocked<WorkerClient>;
+    storage?: Mocked<StorageService>;
   }) {
     const gateway = overrides?.gateway ?? fakeGateway();
     const worker = overrides?.worker ?? fakeWorker();

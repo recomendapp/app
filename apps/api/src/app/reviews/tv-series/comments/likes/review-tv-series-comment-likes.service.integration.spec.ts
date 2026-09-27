@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'bun:test';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { profile, reviewTvSeriesComment } from '@libs/db/schemas';

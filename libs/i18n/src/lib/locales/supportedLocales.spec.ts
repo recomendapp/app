@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'bun:test';
 import { defaultSupportedLocale, isSupportedLocale, supportedLocales } from './supportedLocales';
 
 describe('isSupportedLocale', () => {

@@ -1,29 +1,29 @@
 import { execFileSync } from 'node:child_process';
-import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { GenericContainer } from 'testcontainers';
 import { PostgreSqlContainer } from '@testcontainers/postgresql';
-import { POSTGRES_IMAGE_TAG, TEST_DB_STATE_FILE } from './constants';
+import { POSTGRES_IMAGE_TAG } from './constants';
 
-function runDbCommand(args: string[], workspaceRoot: string, databaseUrl: string): void {
-  execFileSync('npx', args, {
+const workspaceRoot = join(__dirname, '../../../../..');
+
+function runDbCommand(command: string, args: string[], databaseUrl: string): void {
+  execFileSync(command, args, {
     cwd: workspaceRoot,
     env: { ...process.env, DATABASE_URL: databaseUrl },
     stdio: 'inherit',
   });
 }
 
-/**
- * Jest `globalSetup` for the `test-integration` project: boots ONE Postgres
- * testcontainer for the whole run, migrated + seeded + snapshotted, and
- * hands its connection string to every spec file via TEST_DB_STATE_FILE
- * (see TestDatabase in test-database.ts). Runs once, in Jest's main
- * process — never assume anything in here shares JS memory with a spec
- * file, which runs in its own isolated module registry.
- */
-export default async function globalSetup(): Promise<void> {
-  const workspaceRoot = process.cwd();
+export interface StartedTestDatabase {
+  databaseUrl: string;
+  stop(): Promise<void>;
+}
 
+/**
+ * Boots ONE Postgres testcontainer for a whole integration run: migrated,
+ * seeded, and snapshotted so TestDatabase#reset() can restore it quickly.
+ */
+export async function startTestDatabase(): Promise<StartedTestDatabase> {
   // Build the exact same image docker-compose.yaml uses for local dev
   // (apps/postgres/Dockerfile adds the postgis/unaccent extensions the
   // migrations need on top of the official postgres image) so tests run
@@ -48,7 +48,8 @@ export default async function globalSetup(): Promise<void> {
   // Opt-in local dev speedup: keeps the same container (already migrated +
   // seeded + snapshotted) alive across separate `nx test-integration` runs
   // instead of rebuilding it from scratch every time. Never enable in CI.
-  if (process.env['TESTCONTAINERS_REUSE_ENABLE'] === 'true') {
+  const reuse = process.env['TESTCONTAINERS_REUSE_ENABLE'] === 'true';
+  if (reuse) {
     builder = builder.withReuse();
   }
 
@@ -56,27 +57,21 @@ export default async function globalSetup(): Promise<void> {
   const databaseUrl = container.getConnectionUri();
 
   runDbCommand(
+    'bunx',
     ['drizzle-kit', 'migrate', '--config=libs/db/drizzle.config.ts'],
-    workspaceRoot,
     databaseUrl,
   );
-  runDbCommand(
-    ['tsx', '--tsconfig', 'tsconfig.base.json', 'libs/db/scripts/seed.ts'],
-    workspaceRoot,
-    databaseUrl,
-  );
+  runDbCommand('bun', ['--no-env-file', 'libs/db/scripts/seed.ts'], databaseUrl);
 
   // Snapshots the freshly migrated+seeded database as a template so
   // TestDatabase#reset() can restore to this exact state in a fraction of
   // the time a full re-migrate would take.
   await container.snapshot();
 
-  writeFileSync(TEST_DB_STATE_FILE, JSON.stringify({ databaseUrl }), 'utf-8');
-
-  // No container.stop() here: this process (and Jest's globalTeardown,
-  // which runs as a separate module instance with no reference to
-  // `container`) can't reliably do it either way. Ryuk — the reaper
-  // sidecar testcontainers starts automatically — kills every container
-  // it started the moment this process tree exits, which is the standard
-  // testcontainers cleanup story for exactly this situation.
+  return {
+    databaseUrl,
+    stop: async () => {
+      if (!reuse) await container.stop();
+    },
+  };
 }

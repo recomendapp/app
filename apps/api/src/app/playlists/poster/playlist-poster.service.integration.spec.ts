@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import type { MultipartFile } from '@fastify/multipart';
 import { createTestPlaylist, createTestUser, TestDatabase } from '@libs/testing';
@@ -23,18 +25,19 @@ describe('PlaylistPosterService', () => {
 
   const fakeFile = {} as MultipartFile;
 
-  function fakeStorage(overrides?: Partial<jest.Mocked<StorageService>>) {
+  function fakeStorage(overrides?: Partial<Mocked<StorageService>>) {
     return {
-      uploadFile: jest
-        .fn()
-        .mockResolvedValue({ filename: 'new-poster.png', url: 'https://cdn.test/new-poster.png' }),
-      deleteFile: jest.fn().mockResolvedValue(undefined),
-      getFileUrl: jest.fn(),
+      uploadFile: mock().mockResolvedValue({
+        filename: 'new-poster.png',
+        url: 'https://cdn.test/new-poster.png',
+      }),
+      deleteFile: mock().mockResolvedValue(undefined),
+      getFileUrl: mock(),
       ...overrides,
-    } as unknown as jest.Mocked<StorageService>;
+    } as unknown as Mocked<StorageService>;
   }
 
-  const service = (storage?: jest.Mocked<StorageService>) =>
+  const service = (storage?: Mocked<StorageService>) =>
     new PlaylistPosterService(testDb.db, storage ?? fakeStorage());
 
   describe('set', () => {

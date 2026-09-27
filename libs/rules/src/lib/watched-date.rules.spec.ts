@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'bun:test';
 import { WATCHED_DATE_RULES } from './watched-date.rules';
 
 describe('WATCHED_DATE_RULES.COMMENT.REGEX', () => {

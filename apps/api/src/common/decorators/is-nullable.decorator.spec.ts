@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'bun:test';
 import 'reflect-metadata';
 import { validate } from 'class-validator';
 import { IsString, Length } from 'class-validator';

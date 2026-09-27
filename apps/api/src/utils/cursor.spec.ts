@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'bun:test';
 import { BadRequestException } from '@nestjs/common';
 import { z } from 'zod';
 import { baseCursorSchema, decodeCursor, encodeCursor } from './cursor';

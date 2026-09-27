@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import {
   createTestImportJob,
@@ -12,10 +14,9 @@ import type { User } from '../../auth/auth.service';
 import { ImportServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../../realtime/realtime.gateway';
 
-jest.mock('../../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
+mock.module('../../realtime/realtime.gateway', () => ({ RealtimeGateway: mock() }));
 
-const { ImportBookmarksService } =
-  require('./import-bookmarks.service') as typeof import('./import-bookmarks.service');
+const { ImportBookmarksService } = await import('./import-bookmarks.service');
 
 describe('ImportBookmarksService', () => {
   let testDb: TestDatabase;
@@ -33,7 +34,7 @@ describe('ImportBookmarksService', () => {
   });
 
   const asUser = (row: { id: string }) => row as unknown as User;
-  const fakeGateway = () => ({ emitToUser: jest.fn() }) as unknown as jest.Mocked<RealtimeGateway>;
+  const fakeGateway = () => ({ emitToUser: mock() }) as unknown as Mocked<RealtimeGateway>;
 
   describe('listAll', () => {
     it('throws when the job is not found or not owned', async () => {

@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'bun:test';
 import { tmdbMovieImage } from '@libs/db/schemas';
 import { createTestMovie, TestDatabase } from '@libs/testing';
 import { defaultSupportedLocale } from '@libs/i18n';

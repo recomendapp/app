@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import {
   createTestImportJob,
@@ -13,10 +15,9 @@ import type { User } from '../../../auth/auth.service';
 import { ImportServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../../../realtime/realtime.gateway';
 
-jest.mock('../../../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
+mock.module('../../../realtime/realtime.gateway', () => ({ RealtimeGateway: mock() }));
 
-const { ImportPlaylistItemsService } =
-  require('./import-playlist-items.service') as typeof import('./import-playlist-items.service');
+const { ImportPlaylistItemsService } = await import('./import-playlist-items.service');
 
 describe('ImportPlaylistItemsService', () => {
   let testDb: TestDatabase;
@@ -34,7 +35,7 @@ describe('ImportPlaylistItemsService', () => {
   });
 
   const asUser = (row: { id: string }) => row as unknown as User;
-  const fakeGateway = () => ({ emitToUser: jest.fn() }) as unknown as jest.Mocked<RealtimeGateway>;
+  const fakeGateway = () => ({ emitToUser: mock() }) as unknown as Mocked<RealtimeGateway>;
 
   describe('listAll', () => {
     it('throws when the job is not found or not owned', async () => {

@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'bun:test';
 import { BadRequestException } from '@nestjs/common';
 import { reco } from '@libs/db/schemas';
 import { createTestMovie, createTestTvSeries, createTestUser, TestDatabase } from '@libs/testing';
@@ -27,17 +28,15 @@ describe('RecosTrendingService', () => {
   };
 
   async function sendRecos(movieId: number, senderId: string, receiverIds: string[]) {
-    await testDb.db
-      .insert(reco)
-      .values(
-        receiverIds.map((userId) => ({
-          userId,
-          senderId,
-          type: 'movie' as const,
-          movieId,
-          status: 'active' as const,
-        })),
-      );
+    await testDb.db.insert(reco).values(
+      receiverIds.map((userId) => ({
+        userId,
+        senderId,
+        type: 'movie' as const,
+        movieId,
+        status: 'active' as const,
+      })),
+    );
   }
 
   describe('refreshTrendingView', () => {

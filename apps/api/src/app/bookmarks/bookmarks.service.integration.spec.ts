@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { NotFoundException } from '@nestjs/common';
 import { and, eq } from 'drizzle-orm';
 import { bookmark, profile } from '@libs/db/schemas';
@@ -6,14 +8,13 @@ import type { User } from '../auth/auth.service';
 import { BookmarkServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../realtime/realtime.gateway';
 
-// `RealtimeGateway` pulls in `better-auth/node`, which ships ESM-only and
-// isn't transformed by ts-jest, so importing it for real crashes the spec.
 // The gateway is only used here for its two `emit*` methods (stubbed
 // below), so a bare mock keeps `BookmarksService`'s constructor-typed
-// import satisfied without loading the real module chain.
-jest.mock('../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
+// import satisfied without loading the real module chain (better-auth,
+// socket.io, ...).
+mock.module('../realtime/realtime.gateway', () => ({ RealtimeGateway: mock() }));
 
-const { BookmarksService } = require('./bookmarks.service') as typeof import('./bookmarks.service');
+const { BookmarksService } = await import('./bookmarks.service');
 
 describe('BookmarksService', () => {
   let testDb: TestDatabase;
@@ -36,7 +37,7 @@ describe('BookmarksService', () => {
   const asUser = (row: { id: string; language?: string | null }) => row as unknown as User;
 
   const fakeRealtimeGateway = () =>
-    ({ emitToUser: jest.fn(), emitToUsers: jest.fn() }) as unknown as jest.Mocked<RealtimeGateway>;
+    ({ emitToUser: mock(), emitToUsers: mock() }) as unknown as Mocked<RealtimeGateway>;
 
   // `broadcastSet` is fired-and-forgotten (`.catch()`, not `await`ed) by
   // `set()`, and does its own DB round trip to fetch media, so a single

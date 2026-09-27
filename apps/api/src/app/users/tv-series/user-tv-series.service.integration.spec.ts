@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'bun:test';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { follow, logTvSeries } from '@libs/db/schemas';
 import { createTestTvSeries, createTestUser, TestDatabase } from '@libs/testing';

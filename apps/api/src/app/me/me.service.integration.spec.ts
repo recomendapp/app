@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { user } from '@libs/db/schemas';
@@ -8,9 +10,9 @@ import { MeServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../realtime/realtime.gateway';
 import type { WorkerClient } from '@shared/worker';
 
-jest.mock('../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
+mock.module('../realtime/realtime.gateway', () => ({ RealtimeGateway: mock() }));
 
-const { MeService } = require('./me.service') as typeof import('./me.service');
+const { MeService } = await import('./me.service');
 
 describe('MeService', () => {
   let testDb: TestDatabase;
@@ -28,13 +30,13 @@ describe('MeService', () => {
   });
 
   const asUser = (row: { id: string }) => row as unknown as User;
-  const fakeGateway = () => ({ emitToUser: jest.fn() }) as unknown as jest.Mocked<RealtimeGateway>;
+  const fakeGateway = () => ({ emitToUser: mock() }) as unknown as Mocked<RealtimeGateway>;
   const fakeWorker = () =>
-    ({ emit: jest.fn().mockResolvedValue(undefined) }) as unknown as jest.Mocked<WorkerClient>;
+    ({ emit: mock().mockResolvedValue(undefined) }) as unknown as Mocked<WorkerClient>;
 
   function buildService(opts?: {
-    worker?: jest.Mocked<WorkerClient>;
-    gateway?: jest.Mocked<RealtimeGateway>;
+    worker?: Mocked<WorkerClient>;
+    gateway?: Mocked<RealtimeGateway>;
   }) {
     return new MeService(testDb.db, opts?.worker ?? fakeWorker(), opts?.gateway ?? fakeGateway());
   }

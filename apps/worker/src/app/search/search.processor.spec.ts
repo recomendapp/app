@@ -1,10 +1,11 @@
+import { describe, it, expect, mock } from 'bun:test';
 import { SearchProcessor } from './search.processor';
 
 describe('SearchProcessor', () => {
   function createProcessor() {
     const searchService = {
-      syncUser: jest.fn().mockResolvedValue(undefined),
-      syncPlaylist: jest.fn().mockResolvedValue(undefined),
+      syncUser: mock().mockResolvedValue(undefined),
+      syncPlaylist: mock().mockResolvedValue(undefined),
     };
     const processor = new SearchProcessor(searchService as any);
     return { processor, searchService };

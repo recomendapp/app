@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { NotFoundException } from '@nestjs/common';
 import { and, eq } from 'drizzle-orm';
 import {
@@ -18,16 +20,14 @@ import {
 import type { User } from '../../auth/auth.service';
 import { LogServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../../realtime/realtime.gateway';
-import { RecoType } from '../../recos/dto/recos.dto';
 
-jest.mock('../../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
+mock.module('../../realtime/realtime.gateway', () => ({ RealtimeGateway: mock() }));
 
-const { MovieLogsService } =
-  require('./movie-logs.service') as typeof import('./movie-logs.service');
-const { RecosService } =
-  require('../../recos/recos.service') as typeof import('../../recos/recos.service');
-const { UserRecosService } =
-  require('../../users/recos/user-recos.service') as typeof import('../../users/recos/user-recos.service');
+const { RecoType } = await import('../../recos/dto/recos.dto');
+
+const { MovieLogsService } = await import('./movie-logs.service');
+const { RecosService } = await import('../../recos/recos.service');
+const { UserRecosService } = await import('../../users/recos/user-recos.service');
 
 describe('MovieLogsService', () => {
   let testDb: TestDatabase;
@@ -45,9 +45,9 @@ describe('MovieLogsService', () => {
   });
 
   const asUser = (row: { id: string }) => row as unknown as User;
-  const fakeGateway = () => ({ emitToUser: jest.fn() }) as unknown as jest.Mocked<RealtimeGateway>;
+  const fakeGateway = () => ({ emitToUser: mock() }) as unknown as Mocked<RealtimeGateway>;
 
-  function buildService(gateway?: jest.Mocked<RealtimeGateway>) {
+  function buildService(gateway?: Mocked<RealtimeGateway>) {
     const userRecosService = new UserRecosService(testDb.db);
     const recosService = new RecosService(
       testDb.db,

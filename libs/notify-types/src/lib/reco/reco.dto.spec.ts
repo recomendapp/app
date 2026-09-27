@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'bun:test';
 import { NotifyRecoCompletedSchema, NotifyRecoReceivedSchema } from './reco.dto';
 
 const validUuid = '3f6b6a2e-6d8b-4b3a-9f0e-2a2b7e6c9d1a';

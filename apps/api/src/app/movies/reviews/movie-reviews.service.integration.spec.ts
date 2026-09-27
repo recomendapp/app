@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { eq, sql } from 'drizzle-orm';
 import { follow, profile, reviewMovie } from '@libs/db/schemas';
@@ -10,13 +12,13 @@ import {
 import type { User } from '../../auth/auth.service';
 import { LogServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../../realtime/realtime.gateway';
-import { ReviewMovieSortBy } from '../../reviews/movie/dto/reviews-movie.dto';
-import { SortOrder } from '../../../common/dto/sort.dto';
 
-jest.mock('../../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
+mock.module('../../realtime/realtime.gateway', () => ({ RealtimeGateway: mock() }));
 
-const { MovieReviewsService } =
-  require('./movie-reviews.service') as typeof import('./movie-reviews.service');
+const { ReviewMovieSortBy } = await import('../../reviews/movie/dto/reviews-movie.dto');
+const { SortOrder } = await import('../../../common/dto/sort.dto');
+
+const { MovieReviewsService } = await import('./movie-reviews.service');
 
 describe('MovieReviewsService', () => {
   let testDb: TestDatabase;
@@ -34,9 +36,9 @@ describe('MovieReviewsService', () => {
   });
 
   const asUser = (row: { id: string }) => row as unknown as User;
-  const fakeGateway = () => ({ emitToUser: jest.fn() }) as unknown as jest.Mocked<RealtimeGateway>;
+  const fakeGateway = () => ({ emitToUser: mock() }) as unknown as Mocked<RealtimeGateway>;
 
-  function buildService(gateway?: jest.Mocked<RealtimeGateway>) {
+  function buildService(gateway?: Mocked<RealtimeGateway>) {
     return new MovieReviewsService(testDb.db, gateway ?? fakeGateway());
   }
 

@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'bun:test';
 import { NotFoundException } from '@nestjs/common';
 import { randomBytes } from 'node:crypto';
 import { tmdbMovieCredit, tmdbMovieRole } from '@libs/db/schemas';

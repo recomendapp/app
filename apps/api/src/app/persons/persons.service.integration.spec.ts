@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { NotFoundException } from '@nestjs/common';
 import { followPerson } from '@libs/db/schemas';
 import { createTestPerson, createTestUser, TestDatabase } from '@libs/testing';
@@ -5,9 +7,9 @@ import { defaultSupportedLocale } from '@libs/i18n';
 import { PersonFollowServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../realtime/realtime.gateway';
 
-jest.mock('../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
+mock.module('../realtime/realtime.gateway', () => ({ RealtimeGateway: mock() }));
 
-const { PersonsService } = require('./persons.service') as typeof import('./persons.service');
+const { PersonsService } = await import('./persons.service');
 
 describe('PersonsService', () => {
   let testDb: TestDatabase;
@@ -24,8 +26,8 @@ describe('PersonsService', () => {
     await testDb.close();
   });
 
-  const fakeGateway = () => ({ emitToUser: jest.fn() }) as unknown as jest.Mocked<RealtimeGateway>;
-  const service = (gateway?: jest.Mocked<RealtimeGateway>) =>
+  const fakeGateway = () => ({ emitToUser: mock() }) as unknown as Mocked<RealtimeGateway>;
+  const service = (gateway?: Mocked<RealtimeGateway>) =>
     new (PersonsService as new (
       db: typeof testDb.db,
       gateway: RealtimeGateway,

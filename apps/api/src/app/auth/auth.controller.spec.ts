@@ -1,14 +1,16 @@
+import { describe, it, expect, beforeAll, beforeEach, afterAll, mock } from 'bun:test';
 import { Test } from '@nestjs/testing';
 import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fastify';
 import { VersioningType } from '@nestjs/common';
-import { AuthController } from './auth.controller';
-import { AUTH_SERVICE } from './auth.service';
 
-jest.mock('./auth.service', () => ({ AUTH_SERVICE: 'AUTH_SERVICE' }));
+mock.module('./auth.service', () => ({ AUTH_SERVICE: 'AUTH_SERVICE' }));
+
+const { AuthController } = await import('./auth.controller');
+const { AUTH_SERVICE } = await import('./auth.service');
 
 describe('Better Auth HTTP routes', () => {
   let app: NestFastifyApplication;
-  const handler = jest.fn();
+  const handler = mock();
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
@@ -49,7 +51,7 @@ describe('Better Auth HTTP routes', () => {
     );
     const response = await app.inject({ method: 'GET', url, headers: { host: 'localhost:9000' } });
     expect(response.statusCode).toBe(200);
-    expect(response.json()).toEqual({ issuer: 'http://localhost:9000' });
+    expect(response.json<{ issuer: string }>()).toEqual({ issuer: 'http://localhost:9000' });
     expect(response.headers['cache-control']).toBe('public, max-age=60');
     const request = handler.mock.calls[0][0] as Request;
     expect(request.url).toBe(`http://localhost:9000${url}`);

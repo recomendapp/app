@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'bun:test';
 import { NotFoundException } from '@nestjs/common';
 import { createTestMovie, createTestTvSeries, TestDatabase } from '@libs/testing';
 import { assertMediaExists } from './assert-media-exists';

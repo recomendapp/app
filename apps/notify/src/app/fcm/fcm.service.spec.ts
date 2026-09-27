@@ -1,9 +1,10 @@
+import { describe, it, expect, mock, type Mock } from 'bun:test';
 // fcm.service.ts imports FCM_CLIENT from ./fcm.provider, which imports
 // ../../env at module scope — env.ts eagerly calls validateEnv() and
 // process.exit(1)s on failure, so merely importing this file (even without
-// ever invoking the provider factory) can kill the whole Jest worker if the
+// ever invoking the provider factory) can kill the whole test process if the
 // ambient environment doesn't happen to satisfy notifySchema.
-jest.mock('../../env', () => ({
+mock.module('../../env', () => ({
   env: {
     FIREBASE_PROJECT_ID: 'test-project',
     FIREBASE_CLIENT_EMAIL: 'test@test-project.iam.gserviceaccount.com',
@@ -11,16 +12,16 @@ jest.mock('../../env', () => ({
   },
 }));
 
-import { FcmService } from './fcm.service';
+const { FcmService } = await import('./fcm.service');
 
 describe('FcmService', () => {
-  function createService(sendEachForMulticast: jest.Mock) {
+  function createService(sendEachForMulticast: Mock<(...args: any[]) => any>) {
     const messaging = { sendEachForMulticast } as any;
     return new FcmService(messaging);
   }
 
   it('returns an empty array and never calls the SDK when there are no tokens', async () => {
-    const sendEachForMulticast = jest.fn();
+    const sendEachForMulticast = mock();
     const service = createService(sendEachForMulticast);
 
     const result = await service.sendMulticast([], 'title', 'body');
@@ -30,7 +31,7 @@ describe('FcmService', () => {
   });
 
   it('sends a multicast with the given title/body/data and returns no failed tokens on success', async () => {
-    const sendEachForMulticast = jest.fn().mockResolvedValue({ failureCount: 0, responses: [] });
+    const sendEachForMulticast = mock().mockResolvedValue({ failureCount: 0, responses: [] });
     const service = createService(sendEachForMulticast);
 
     const result = await service.sendMulticast(
@@ -55,7 +56,7 @@ describe('FcmService', () => {
   });
 
   it('omits android.notification and webpush when there is no imageUrl/data.url', async () => {
-    const sendEachForMulticast = jest.fn().mockResolvedValue({ failureCount: 0, responses: [] });
+    const sendEachForMulticast = mock().mockResolvedValue({ failureCount: 0, responses: [] });
     const service = createService(sendEachForMulticast);
 
     await service.sendMulticast(['token-1'], 'Hello', 'World');
@@ -69,7 +70,7 @@ describe('FcmService', () => {
   });
 
   it('returns only the tokens whose response failed on partial failure', async () => {
-    const sendEachForMulticast = jest.fn().mockResolvedValue({
+    const sendEachForMulticast = mock().mockResolvedValue({
       failureCount: 1,
       responses: [{ success: true }, { success: false }],
     });
@@ -81,7 +82,7 @@ describe('FcmService', () => {
   });
 
   it('treats a thrown SDK error as every token failing', async () => {
-    const sendEachForMulticast = jest.fn().mockRejectedValue(new Error('network down'));
+    const sendEachForMulticast = mock().mockRejectedValue(new Error('network down'));
     const service = createService(sendEachForMulticast);
 
     const result = await service.sendMulticast(['token-1', 'token-2'], 'Hello', 'World');

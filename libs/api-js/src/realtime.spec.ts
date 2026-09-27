@@ -1,23 +1,24 @@
+import { describe, it, expect, beforeEach, mock, spyOn } from 'bun:test';
 function flushPromises() {
   return new Promise((resolve) => setImmediate(resolve));
 }
 
 function createFakeSocket() {
   return {
-    connect: jest.fn(),
-    disconnect: jest.fn(),
-    on: jest.fn(),
-    off: jest.fn(),
+    connect: mock(),
+    disconnect: mock(),
+    on: mock(),
+    off: mock(),
   };
 }
 
-const ioMock = jest.fn();
+const ioMock = mock();
 
-jest.mock('socket.io-client', () => ({
+mock.module('socket.io-client', () => ({
   io: (...args: unknown[]) => ioMock(...args),
 }));
 
-import { realtime } from './realtime';
+const { realtime } = await import('./realtime');
 import { BookmarkServerEvents } from '@libs/realtime';
 
 describe('RealtimeManager', () => {
@@ -48,8 +49,8 @@ describe('RealtimeManager', () => {
       const [a, b] = await Promise.all([realtime.connect(), realtime.connect()]);
 
       expect(ioMock).toHaveBeenCalledTimes(1);
-      expect(a).toBe(fakeSocket);
-      expect(b).toBe(fakeSocket);
+      expect<unknown>(a).toBe(fakeSocket);
+      expect<unknown>(b).toBe(fakeSocket);
     });
 
     it('reuses the existing socket on a subsequent connect() after the first resolved', async () => {
@@ -90,10 +91,10 @@ describe('RealtimeManager', () => {
     it('falls back gracefully to the raw base url when it cannot be parsed', async () => {
       const fakeSocket = createFakeSocket();
       ioMock.mockReturnValue(fakeSocket);
-      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+      const warnSpy = spyOn(console, 'warn').mockImplementation(() => undefined);
       realtime.setConfig({ baseUrl: 'not a valid url' });
 
-      await expect(realtime.connect()).resolves.toBe(fakeSocket);
+      await expect<Promise<unknown>>(realtime.connect()).resolves.toBe(fakeSocket);
 
       expect(warnSpy).toHaveBeenCalled();
       warnSpy.mockRestore();
@@ -115,7 +116,7 @@ describe('RealtimeManager', () => {
       const reconnected = await realtime.connect();
 
       expect(ioMock).toHaveBeenCalledTimes(2);
-      expect(reconnected).toBe(fakeSocket2);
+      expect<unknown>(reconnected).toBe(fakeSocket2);
     });
   });
 
@@ -123,8 +124,8 @@ describe('RealtimeManager', () => {
     it('registers the provided callbacks on the shared socket once connected', async () => {
       const fakeSocket = createFakeSocket();
       ioMock.mockReturnValue(fakeSocket);
-      const onBookmarkSet = jest.fn();
-      const onBookmarkDeleted = jest.fn();
+      const onBookmarkSet = mock();
+      const onBookmarkDeleted = mock();
 
       realtime.onBookmarkEvents({ onBookmarkSet, onBookmarkDeleted });
       await flushPromises();
@@ -136,7 +137,7 @@ describe('RealtimeManager', () => {
     it('only registers callbacks that were actually provided', async () => {
       const fakeSocket = createFakeSocket();
       ioMock.mockReturnValue(fakeSocket);
-      const onBookmarkSet = jest.fn();
+      const onBookmarkSet = mock();
 
       realtime.onBookmarkEvents({ onBookmarkSet });
       await flushPromises();
@@ -151,8 +152,8 @@ describe('RealtimeManager', () => {
     it('the returned unsubscribe function detaches every registered callback', async () => {
       const fakeSocket = createFakeSocket();
       ioMock.mockReturnValue(fakeSocket);
-      const onBookmarkSet = jest.fn();
-      const onBookmarkDeleted = jest.fn();
+      const onBookmarkSet = mock();
+      const onBookmarkDeleted = mock();
 
       const unsubscribe = realtime.onBookmarkEvents({ onBookmarkSet, onBookmarkDeleted });
       await flushPromises();
@@ -166,7 +167,7 @@ describe('RealtimeManager', () => {
     it('never attaches listeners if unsubscribed before the connection resolves', async () => {
       const fakeSocket = createFakeSocket();
       ioMock.mockReturnValue(fakeSocket);
-      const onBookmarkSet = jest.fn();
+      const onBookmarkSet = mock();
 
       const unsubscribe = realtime.onBookmarkEvents({ onBookmarkSet });
       unsubscribe();

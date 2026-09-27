@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { playlistItem, playlistMember, profile } from '@libs/db/schemas';
@@ -5,12 +7,10 @@ import { createTestMovie, createTestPlaylist, createTestUser, TestDatabase } fro
 import type { RealtimeGateway } from '../../realtime/realtime.gateway';
 import type { User } from '../../auth/auth.service';
 
-jest.mock('../../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
+mock.module('../../realtime/realtime.gateway', () => ({ RealtimeGateway: mock() }));
 
-const { PlaylistsAddService } =
-  require('./playlists-add.service') as typeof import('./playlists-add.service');
-const { PlaylistsRealtimeService } =
-  require('../playlists-realtime.service') as typeof import('../playlists-realtime.service');
+const { PlaylistsAddService } = await import('./playlists-add.service');
+const { PlaylistsRealtimeService } = await import('../playlists-realtime.service');
 
 describe('PlaylistsAddService', () => {
   let testDb: TestDatabase;
@@ -29,8 +29,8 @@ describe('PlaylistsAddService', () => {
 
   const asUser = (row: { id: string }) => row as unknown as User;
   const fakeGateway = () =>
-    ({ emitToUser: jest.fn(), emitToUsers: jest.fn() }) as unknown as jest.Mocked<RealtimeGateway>;
-  const service = (gateway?: jest.Mocked<RealtimeGateway>) =>
+    ({ emitToUser: mock(), emitToUsers: mock() }) as unknown as Mocked<RealtimeGateway>;
+  const service = (gateway?: Mocked<RealtimeGateway>) =>
     new PlaylistsAddService(
       testDb.db,
       new PlaylistsRealtimeService(testDb.db, gateway ?? fakeGateway()),

@@ -13,6 +13,24 @@
         "tsConfig": "libs/rules/tsconfig.lib.json",
         "assets": ["libs/rules/*.md"]
       }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["default", "^production"],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "bun test --parallel --no-env-file --path-ignore-patterns=\"**/*.integration.spec.ts\""
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["default", "^production"],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "tsc -p tsconfig.spec.json --noEmit"
+      }
     }
   },
   "tags": []

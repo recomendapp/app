@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'bun:test';
 import { SendOtpEmailSchema, SendVerificationEmailSchema } from './auth.dto';
 
 describe('SendVerificationEmailSchema', () => {
