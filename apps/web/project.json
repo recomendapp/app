@@ -6,8 +6,26 @@
   "tags": [],
   "// targets": "to see all targets run: nx show project web --web",
   "targets": {
+    "build": {
+      "options": {
+        "command": "bun --bun next build"
+      }
+    },
     "serve": {
-      "dependsOn": ["^build", "api:serve"]
+      "dependsOn": ["^build", "api:serve"],
+      "options": {
+        "command": "bun --bun next dev"
+      }
+    },
+    "start": {
+      "options": {
+        "command": "bun --bun next start"
+      }
+    },
+    "serve-static": {
+      "options": {
+        "command": "bun --bun next start"
+      }
     },
     "test": {
       "executor": "nx:run-commands",
