@@ -14,16 +14,13 @@
       "internalConsoleOptions": "neverOpen",
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
-      "outFiles": [
-        "${workspaceFolder}/apps/api/dist/**/*.(m|c|)js",
-        "!**/node_modules/**"
-      ]
+      "outFiles": ["${workspaceFolder}/apps/api/dist/**/*.(m|c|)js", "!**/node_modules/**"]
     },
     {
       "type": "node",
       "request": "launch",
       "name": "Debug notify with Nx",
-      "runtimeExecutable": "pnpm exec",
+      "runtimeExecutable": "bunx",
       "runtimeArgs": ["nx", "serve", "notify"],
       "env": {
         "NODE_OPTIONS": "--inspect=9233"
@@ -32,16 +29,13 @@
       "internalConsoleOptions": "neverOpen",
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
-      "outFiles": [
-        "${workspaceFolder}/apps/notify/dist/**/*.(m|c|)js",
-        "!**/node_modules/**"
-      ]
+      "outFiles": ["${workspaceFolder}/apps/notify/dist/**/*.(m|c|)js", "!**/node_modules/**"]
     },
     {
       "type": "node",
       "request": "launch",
       "name": "Debug worker with Nx",
-      "runtimeExecutable": "pnpm exec",
+      "runtimeExecutable": "bunx",
       "runtimeArgs": ["nx", "serve", "worker"],
       "env": {
         "NODE_OPTIONS": "--inspect=9234"
@@ -50,10 +44,7 @@
       "internalConsoleOptions": "neverOpen",
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
-      "outFiles": [
-        "${workspaceFolder}/apps/worker/dist/**/*.(m|c|)js",
-        "!**/node_modules/**"
-      ]
+      "outFiles": ["${workspaceFolder}/apps/worker/dist/**/*.(m|c|)js", "!**/node_modules/**"]
     }
   ]
 }

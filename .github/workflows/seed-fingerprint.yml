@@ -14,16 +14,15 @@ jobs:
         with:
           token: ${{ secrets.MOBILE_FINGERPRINT_PAT }}
 
-      - uses: pnpm/action-setup@v6
+      - uses: oven-sh/setup-bun@v2
         with:
-          version: 11.25.0
+          bun-version: 1.4.2
 
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache: 'pnpm'
 
-      - run: pnpm install --frozen-lockfile
+      - run: bun install --frozen-lockfile
 
       - name: 📝 Prepare Environment Files
         run: |
@@ -53,8 +52,8 @@ jobs:
         id: current
         working-directory: apps/mobile
         run: |
-          IOS_HASH=$(npx -y @expo/fingerprint fingerprint:generate --platform ios | jq -r '.hash')
-          ANDROID_HASH=$(npx -y @expo/fingerprint fingerprint:generate --platform android | jq -r '.hash')
+          IOS_HASH=$(bunx @expo/fingerprint fingerprint:generate --platform ios | jq -r '.hash')
+          ANDROID_HASH=$(bunx @expo/fingerprint fingerprint:generate --platform android | jq -r '.hash')
           echo "Computed iOS fingerprint: $IOS_HASH"
           echo "Computed Android fingerprint: $ANDROID_HASH"
           echo "ios_hash=$IOS_HASH" >> "$GITHUB_OUTPUT"

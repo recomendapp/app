@@ -8,19 +8,16 @@
     "auth-generate": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npx tsx libs/db/scripts/generate-auth.ts",
+        "command": "bunx tsx libs/db/scripts/generate-auth.ts",
         "cwd": "."
       },
-      "inputs": [
-        "{projectRoot}/src/lib/auth.ts",
-        "{projectRoot}/scripts/generate-auth.ts"
-      ],
+      "inputs": ["{projectRoot}/src/lib/auth.ts", "{projectRoot}/scripts/generate-auth.ts"],
       "outputs": ["{projectRoot}/src/lib/schemas/auth.ts"]
     },
     "db-seed": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npx tsx --tsconfig tsconfig.base.json libs/db/scripts/seed.ts",
+        "command": "bunx tsx --tsconfig tsconfig.base.json libs/db/scripts/seed.ts",
         "cwd": "."
       }
     },
@@ -74,7 +71,7 @@
         "bundle": true,
         "format": ["cjs"],
         "generatePackageJson": true,
-        "thirdParty": false, 
+        "thirdParty": false,
         "assets": [
           {
             "glob": "**/*",
@@ -88,9 +85,7 @@
       "dependsOn": ["build-migrator"],
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "docker build -f libs/db/Dockerfile --tag db:latest ."
-        ],
+        "commands": ["docker build -f libs/db/Dockerfile --tag db:latest ."],
         "parallel": false
       }
     }

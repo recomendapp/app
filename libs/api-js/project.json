@@ -17,7 +17,7 @@
       "cache": true,
       "options": {
         "cwd": "{projectRoot}",
-        "command": "npx openapi-ts"
+        "command": "bunx openapi-ts"
       },
       "inputs": ["{projectRoot}/openapi-ts.config.ts", "{workspaceRoot}/apps/api/.openapi/*"],
       "outputs": ["{projectRoot}/src/__generated__"],

@@ -63,7 +63,7 @@ async function run() {
 
     console.log('🚀 Running better-auth generate...');
     execSync(
-      `npx auth generate --config ${AUTH_CONFIG_PATH} --output ${OUTPUT_SCHEMA_PATH} --yes`,
+      `bunx auth generate --config ${AUTH_CONFIG_PATH} --output ${OUTPUT_SCHEMA_PATH} --yes`,
       { stdio: 'inherit' },
     );
 

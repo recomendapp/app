@@ -17,7 +17,7 @@
         "{projectRoot}/tsconfig.app.json"
       ],
       "options": {
-        "command": "npx ts-node -r tsconfig-paths/register --project apps/api/tsconfig.app.json apps/api/scripts/generate-openapi.ts",
+        "command": "bunx ts-node -r tsconfig-paths/register --project apps/api/tsconfig.app.json apps/api/scripts/generate-openapi.ts",
         "cwd": "."
       }
     },
@@ -35,30 +35,22 @@
         }
       }
     },
-    "prune-lockfile": {
+    "generate-bun-lockfile": {
       "dependsOn": ["build"],
       "cache": true,
-      "executor": "@nx/js:prune-lockfile",
-      "outputs": [
-        "{workspaceRoot}/dist/apps/api/package.json",
-        "{workspaceRoot}/dist/apps/api/pnpm-lock.yaml"
-      ],
+      "inputs": ["default", "{workspaceRoot}/bun.lock"],
+      "outputs": ["{workspaceRoot}/dist/apps/api/bun.lock"],
+      "executor": "nx:run-commands",
       "options": {
-        "buildTarget": "build"
-      }
-    },
-    "copy-workspace-modules": {
-      "dependsOn": ["build"],
-      "cache": true,
-      "outputs": ["{workspaceRoot}/dist/apps/api/workspace_modules"],
-      "executor": "@nx/js:copy-workspace-modules",
-      "options": {
-        "buildTarget": "build"
+        "command": "bun install --cwd=dist/apps/api --lockfile-only"
       }
     },
     "prune": {
-      "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
+      "dependsOn": ["generate-bun-lockfile"],
       "executor": "nx:noop"
+    },
+    "docker-build": {
+      "dependsOn": ["build", "^build", "prune"]
     },
     "serve": {
       "continuous": true,
@@ -82,11 +74,11 @@
       "continuous": true,
       "executor": "nx:run-commands",
       "options": {
-        "command": "HOST=localhost npx @modelcontextprotocol/inspector --web --transport http --server-url http://localhost:9000/mcp"
+        "command": "HOST=localhost bunx @modelcontextprotocol/inspector --web --transport http --server-url http://localhost:9000/mcp"
       },
       "configurations": {
         "cli": {
-          "command": "HOST=localhost npx @modelcontextprotocol/inspector --cli --transport http --server-url http://localhost:9000/mcp"
+          "command": "HOST=localhost bunx @modelcontextprotocol/inspector --cli --transport http --server-url http://localhost:9000/mcp"
         }
       }
     },

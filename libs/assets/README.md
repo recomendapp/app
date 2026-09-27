@@ -82,7 +82,7 @@ same pattern as `libs/api-js`'s OpenAPI codegen. Regenerate after
 adding/renaming/removing a file:
 
 ```sh
-npx nx run assets:generate
+bunx nx run assets:generate
 ```
 
 Any project whose `build` target should always see a fresh manifest declares
@@ -104,7 +104,7 @@ local RustFS. The compose service bind-mounts `./libs/assets/static` over the
 image's baked-in copy, so new files show up without rebuilding the image —
 just re-run `docker compose up assets-sync`.
 
-Don't forget to also run `npx nx run assets:generate` after adding files so
+Don't forget to also run `bunx nx run assets:generate` after adding files so
 `@libs/assets` picks them up for TypeScript consumers.
 
 ## Why a dedicated bucket prefix

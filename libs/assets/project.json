@@ -9,7 +9,7 @@
       "executor": "nx:run-commands",
       "cache": true,
       "options": {
-        "command": "npx tsx libs/assets/scripts/generate-manifest.ts",
+        "command": "bunx tsx libs/assets/scripts/generate-manifest.ts",
         "cwd": "."
       },
       "inputs": ["{projectRoot}/static/**/*", "{projectRoot}/scripts/generate-manifest.ts"],

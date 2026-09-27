@@ -1,17 +1,16 @@
 # 1. Base stage
 FROM node:22-alpine AS base
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+
+FROM oven/bun:1.4.2-alpine AS bun
 
 # 2. Installer stage
 FROM base AS installer
+COPY --from=bun /usr/local/bin/bun /usr/local/bin/bun
 WORKDIR /app
 
-COPY pnpm-workspace.yaml ./
-COPY dist/apps/worker/package.json dist/apps/worker/pnpm-lock.yaml* dist/apps/worker/package-lock.json* dist/apps/worker/yarn.lock* ./
+COPY dist/apps/worker/package.json dist/apps/worker/bun.lock ./
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+RUN bun install --production --frozen-lockfile
 
 # 3. Runner stage
 FROM base AS runner

@@ -15,7 +15,7 @@
         "APP_VARIANT": "development"
       },
       "channel": "development",
-      "pnpm": "11.25.0"
+      "bun": "1.4.2"
     },
     "preview": {
       "channel": "preview",
@@ -24,7 +24,7 @@
         "APP_VARIANT": "preview"
       },
       "autoIncrement": true,
-      "pnpm": "11.25.0"
+      "bun": "1.4.2"
     },
     "production": {
       "channel": "production",
@@ -32,7 +32,7 @@
         "APP_VARIANT": "production"
       },
       "autoIncrement": true,
-      "pnpm": "11.25.0"
+      "bun": "1.4.2"
     }
   },
   "submit": {
