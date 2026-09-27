@@ -8,6 +8,15 @@
   "targets": {
     "serve": {
       "dependsOn": ["^build", "api:serve"]
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["default", "^production"],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "bun test --parallel --no-env-file --pass-with-no-tests"
+      }
     }
   }
 }

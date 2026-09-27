@@ -345,8 +345,6 @@
     "@tailwindcss/postcss": "catalog:",
     "@tailwindcss/typography": "catalog:",
     "@testcontainers/postgresql": "catalog:",
-    "@testing-library/dom": "catalog:",
-    "@testing-library/react": "catalog:",
     "@testing-library/react-native": "catalog:",
     "@types/bcrypt": "catalog:",
     "@types/bun": "catalog:",
@@ -379,7 +377,6 @@
     "eslint-plugin-react-hooks": "catalog:",
     "husky": "catalog:",
     "jest": "catalog:",
-    "jest-environment-jsdom": "catalog:",
     "jest-expo": "catalog:",
     "jsonc-eslint-parser": "catalog:",
     "lint-staged": "catalog:",
@@ -388,7 +385,6 @@
     "nx": "catalog:",
     "tailwindcss": "catalog:",
     "testcontainers": "catalog:",
-    "ts-jest": "catalog:",
     "ts-node": "catalog:",
     "ts-proto": "catalog:",
     "tsconfig-paths": "catalog:",
@@ -711,8 +707,6 @@
     "@tailwindcss/postcss": "^4.1.17",
     "@tailwindcss/typography": "^0.5.9",
     "@testcontainers/postgresql": "^12.1.0",
-    "@testing-library/dom": "10.4.0",
-    "@testing-library/react": "16.3.0",
     "@testing-library/react-native": "~13.2.0",
     "@types/bcrypt": "^6.0.0",
     "@types/color": "^4.2.0",
@@ -744,7 +738,6 @@
     "eslint-plugin-react-hooks": "5.0.0",
     "husky": "^9.1.7",
     "jest": "^30.0.2",
-    "jest-environment-jsdom": "^30.0.2",
     "jest-expo": "^57.0.4",
     "jsonc-eslint-parser": "^2.1.0",
     "lint-staged": "^16.4.0",
@@ -768,7 +761,6 @@
     "picocolors": "1.1.1",
     "semver": "^7.8.5",
     "tsconfig-paths": "4.2.0",
-    "@types/bun": "1.4.2",
-    "ts-jest": "^29.4.0"
+    "@types/bun": "1.4.2"
   }
 }
