@@ -8,7 +8,7 @@
     "auth-generate": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "bunx tsx libs/db/scripts/generate-auth.ts",
+        "command": "bun libs/db/scripts/generate-auth.ts",
         "cwd": "."
       },
       "inputs": ["{projectRoot}/src/lib/auth.ts", "{projectRoot}/scripts/generate-auth.ts"],
