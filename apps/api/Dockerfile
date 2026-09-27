@@ -1,11 +1,8 @@
 # 1. Base stage
-FROM node:22-alpine AS base
-
-FROM oven/bun:1.4.2-alpine AS bun
+FROM oven/bun:1.4.2-alpine AS base
 
 # 2. Installer stage
 FROM base AS installer
-COPY --from=bun /usr/local/bin/bun /usr/local/bin/bun
 WORKDIR /app
 
 COPY dist/apps/api/package.json dist/apps/api/bun.lock ./
@@ -28,4 +25,4 @@ EXPOSE 3000
 
 USER nestjs
 
-CMD ["node", "main.js"]
+CMD ["bun", "main.js"]

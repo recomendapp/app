@@ -1,9 +1,8 @@
-FROM node:22-alpine
+FROM oven/bun:1.4.2-alpine
 
 WORKDIR /app
 
-RUN npm install drizzle-orm pg && npm cache clean --force
-
+# drizzle-orm and pg are bundled into run-setup.cjs (build-migrator), nothing to install
 COPY dist/libs/db-migrator ./
 
-CMD ["node", "run-setup.cjs"]
+CMD ["bun", "run-setup.cjs"]

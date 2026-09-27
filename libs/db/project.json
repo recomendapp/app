@@ -17,7 +17,7 @@
     "db-seed": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "bunx tsx --tsconfig tsconfig.base.json libs/db/scripts/seed.ts",
+        "command": "bun libs/db/scripts/seed.ts",
         "cwd": "."
       }
     },
@@ -70,15 +70,16 @@
         "platform": "node",
         "bundle": true,
         "format": ["cjs"],
-        "generatePackageJson": true,
-        "thirdParty": false,
+        "generatePackageJson": false,
+        "thirdParty": true,
         "assets": [
           {
             "glob": "**/*",
             "input": "libs/db/drizzle",
             "output": "./drizzle"
           }
-        ]
+        ],
+        "external": ["pg-native"]
       }
     },
     "docker-build": {

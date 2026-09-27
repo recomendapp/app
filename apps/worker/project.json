@@ -44,19 +44,24 @@
     },
     "serve": {
       "continuous": true,
-      "executor": "@nx/js:node",
+      "executor": "nx:run-commands",
       "defaultConfiguration": "development",
       "dependsOn": ["build"],
       "options": {
-        "buildTarget": "worker:build",
-        "runBuildTargetDependencies": false
+        "cwd": "apps/worker",
+        "parallel": true,
+        "commands": [
+          "webpack-cli build --node-env=development --watch --no-output-clean",
+          "bun --watch --no-clear-screen ../../dist/apps/worker/main.js"
+        ]
       },
       "configurations": {
-        "development": {
-          "buildTarget": "worker:build:development"
-        },
+        "development": {},
         "production": {
-          "buildTarget": "worker:build:production"
+          "commands": [
+            "webpack-cli build --node-env=production --watch --no-output-clean",
+            "bun --watch --no-clear-screen ../../dist/apps/worker/main.js"
+          ]
         }
       }
     },
