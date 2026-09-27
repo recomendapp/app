@@ -25,12 +25,19 @@ jobs:
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
         with:
-          bun-version: 1.4.2
+          bun-version-file: package.json
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: 24
+
+      - name: 🗄️ Cache Bun install
+        uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}
+          restore-keys: ${{ runner.os }}-bun-
 
       - name: Install Dependencies
         run: bun install --frozen-lockfile
@@ -236,7 +243,7 @@ jobs:
   #     - name: Install Bun
   #       uses: oven-sh/setup-bun@v2
   #       with:
-  #         bun-version: 1.4.2
+  #         bun-version-file: package.json
 
   #     - name: Setup Node.js
   #       uses: actions/setup-node@v7

@@ -13,6 +13,7 @@
     "@next/eslint-plugin-next": "catalog:",
     "@nx/eslint-plugin": "catalog:",
     "@nx/next": "catalog:",
+    "@nx/react": "catalog:",
     "@radix-ui/react-checkbox": "catalog:",
     "@radix-ui/react-dropdown-menu": "catalog:",
     "@radix-ui/react-icons": "catalog:",

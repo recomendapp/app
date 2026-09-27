@@ -10,7 +10,7 @@ WORKDIR /app
 
 COPY dist/apps/notify/package.json dist/apps/notify/bun.lock ./
 
-RUN bun install --production --frozen-lockfile
+RUN --mount=type=cache,id=bun,target=/root/.bun/install/cache bun install --production --frozen-lockfile
 
 # 3. Runner stage
 FROM base AS runner

@@ -10,7 +10,7 @@ WORKDIR /app
 
 COPY dist/apps/api/package.json dist/apps/api/bun.lock ./
 
-RUN bun install --production --frozen-lockfile
+RUN --mount=type=cache,id=bun,target=/root/.bun/install/cache bun install --production --frozen-lockfile
 
 # 3. Runner stage
 FROM base AS runner

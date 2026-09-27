@@ -38,11 +38,18 @@
     "generate-bun-lockfile": {
       "dependsOn": ["build"],
       "cache": true,
-      "inputs": ["default", "{workspaceRoot}/bun.lock"],
-      "outputs": ["{workspaceRoot}/dist/apps/api/bun.lock"],
+      "inputs": [
+        "default",
+        "{workspaceRoot}/bun.lock",
+        "{workspaceRoot}/tools/scripts/prune-bun-lockfile.mjs"
+      ],
+      "outputs": [
+        "{workspaceRoot}/dist/apps/api/package.json",
+        "{workspaceRoot}/dist/apps/api/bun.lock"
+      ],
       "executor": "nx:run-commands",
       "options": {
-        "command": "bun install --cwd=dist/apps/api --lockfile-only"
+        "command": "node tools/scripts/prune-bun-lockfile.mjs dist/apps/api"
       }
     },
     "prune": {
