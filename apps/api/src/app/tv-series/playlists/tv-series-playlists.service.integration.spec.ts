@@ -6,7 +6,7 @@ import {
   createTestUser,
   TestDatabase,
 } from '@libs/testing';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { PlaylistSortBy } from '../../playlists/dto/playlists.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { TvSeriesPlaylistsService } from './tv-series-playlists.service';

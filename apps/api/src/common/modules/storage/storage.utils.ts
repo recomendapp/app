@@ -1,6 +1,9 @@
-import { StorageFolder } from './storage.constants';
+import type { StorageFolder } from './storage.constants';
 
-export function getMediaUrl(filenameOrUrl: string | null | undefined, folder: StorageFolder): string | null {
+export function getMediaUrl(
+  filenameOrUrl: string | null | undefined,
+  folder: StorageFolder,
+): string | null {
   if (!filenameOrUrl) return null;
 
   if (filenameOrUrl.startsWith('http://') || filenameOrUrl.startsWith('https://')) {

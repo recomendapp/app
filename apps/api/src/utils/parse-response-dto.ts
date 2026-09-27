@@ -1,5 +1,9 @@
-import { ClassConstructor, ClassTransformOptions, plainToInstance } from 'class-transformer';
-import { validateSync, ValidationError, ValidatorOptions } from 'class-validator';
+import {
+  type ClassConstructor,
+  type ClassTransformOptions,
+  plainToInstance,
+} from 'class-transformer';
+import { validateSync, ValidationError, type ValidatorOptions } from 'class-validator';
 
 const RESPONSE_VALIDATION_OPTIONS: ValidatorOptions = {
   forbidNonWhitelisted: false,

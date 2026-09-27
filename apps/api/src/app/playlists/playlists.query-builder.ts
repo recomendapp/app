@@ -3,10 +3,10 @@ import { follow, playlist, playlistMember, profile } from '@libs/db/schemas';
 import { SortOrder } from '../../common/dto/sort.dto';
 import { PlaylistSortBy } from './dto/playlists.dto';
 import { baseCursorSchema, decodeCursor } from '../../utils/cursor';
-import { User } from '../auth/auth.service';
-import { DbTransaction } from '@libs/db';
-import { DrizzleService } from '../../common/modules/drizzle/drizzle.module';
-import { PlaylistRole } from './types/playlist-role.type';
+import type { User } from '../auth/auth.service';
+import type { DbTransaction } from '@libs/db';
+import type { DrizzleService } from '../../common/modules/drizzle/drizzle.module';
+import type { PlaylistRole } from './types/playlist-role.type';
 import { z } from 'zod';
 
 const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.number());

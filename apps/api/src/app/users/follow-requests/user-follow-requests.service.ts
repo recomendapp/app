@@ -1,5 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
 import {
   FollowRequestSortBy,
   ListInfiniteFollowRequestsDto,
@@ -10,7 +13,12 @@ import {
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { and, asc, desc, eq, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { follow, profile, user } from '@libs/db/schemas';
-import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import {
+  type BaseCursor,
+  baseCursorSchema,
+  decodeCursor,
+  encodeCursor,
+} from '../../../utils/cursor';
 import { z } from 'zod';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
 

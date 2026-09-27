@@ -1,4 +1,4 @@
-import { ExecutionContext, Logger, UnauthorizedException } from '@nestjs/common';
+import { type ExecutionContext, Logger, UnauthorizedException } from '@nestjs/common';
 import { verifyAccessTokenRequest } from 'better-auth/oauth2';
 import { eq } from 'drizzle-orm';
 import { user } from '@libs/db/schemas';

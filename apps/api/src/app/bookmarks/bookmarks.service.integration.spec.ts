@@ -2,7 +2,7 @@ import { NotFoundException } from '@nestjs/common';
 import { and, eq } from 'drizzle-orm';
 import { bookmark, profile } from '@libs/db/schemas';
 import { createTestMovie, createTestTvSeries, createTestUser, TestDatabase } from '@libs/testing';
-import { User } from '../auth/auth.service';
+import type { User } from '../auth/auth.service';
 import { BookmarkServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../realtime/realtime.gateway';
 

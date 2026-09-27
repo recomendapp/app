@@ -2,7 +2,7 @@ import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { follow, logTvSeries } from '@libs/db/schemas';
 import { createTestTvSeries, createTestUser, TestDatabase } from '@libs/testing';
 import { defaultSupportedLocale } from '@libs/i18n';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { LogTvSeriesSortBy } from '../../tv-series/logs/tv-series-logs.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { UserTvSeriesService } from './user-tv-series.service';

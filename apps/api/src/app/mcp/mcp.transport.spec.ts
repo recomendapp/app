@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fastify';
 import { McpStrategy } from '@rekog/mcp-nest';
 import { verifyAccessTokenRequest } from 'better-auth/oauth2';
 import { ENV_SERVICE } from '@libs/env';

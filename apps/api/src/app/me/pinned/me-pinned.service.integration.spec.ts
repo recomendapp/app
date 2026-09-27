@@ -10,7 +10,7 @@ import {
   TestDatabase,
 } from '@libs/testing';
 import { defaultSupportedLocale } from '@libs/i18n';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { PinnedServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../../realtime/realtime.gateway';
 import { PinnedItemWithMovieDto, PinnedItemWithPlaylistDto } from '../../pinned/dto/pinned.dto';

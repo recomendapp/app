@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm';
 import { playlistItem, playlistMember, profile } from '@libs/db/schemas';
 import { createTestMovie, createTestPlaylist, createTestUser, TestDatabase } from '@libs/testing';
 import type { RealtimeGateway } from '../../realtime/realtime.gateway';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 
 jest.mock('../../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
 

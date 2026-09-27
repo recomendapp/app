@@ -1,8 +1,8 @@
-import { drizzle, NodePgQueryResultHKT } from 'drizzle-orm/node-postgres';
+import { drizzle, type NodePgQueryResultHKT } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 import * as schema from './schemas';
 import { PgTransaction } from 'drizzle-orm/pg-core';
-import { ExtractTablesWithRelations } from 'drizzle-orm';
+import type { ExtractTablesWithRelations } from 'drizzle-orm';
 
 const pool = new Pool({
   connectionString: process.env['DATABASE_URL'],

@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { lt } from 'drizzle-orm';
 import { session } from '@libs/db/schemas';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
+import { DRIZZLE_SERVICE, type DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 
 @Injectable()
 export class SessionCleanupService {

@@ -1,4 +1,4 @@
-import { Provider } from '@nestjs/common';
+import type { Provider } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import { env } from '../../env';
 

@@ -1,5 +1,8 @@
 import { ForbiddenException, Inject, Injectable, Logger } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
 import { playlist, playlistMember, profile, user } from '@libs/db/schemas';
 import { and, asc, desc, eq, gt, ilike, inArray, lt, or, SQL, sql } from 'drizzle-orm';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
@@ -16,11 +19,16 @@ import {
   PlaylistMemberWithUserDto,
 } from './playlist-members.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
-import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import {
+  type BaseCursor,
+  baseCursorSchema,
+  decodeCursor,
+  encodeCursor,
+} from '../../../utils/cursor';
 import { z } from 'zod';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 import { WorkerClient } from '@shared/worker';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { assertPlaylistRole } from '../playlists.permission';
 
 const CursorSchema = baseCursorSchema(z.string().min(1), z.number());

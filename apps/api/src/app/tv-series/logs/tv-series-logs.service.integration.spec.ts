@@ -17,7 +17,7 @@ import {
 } from '@libs/testing';
 import { RecoType } from '../../recos/dto/recos.dto';
 import { LogTvStatus } from './tv-series-logs.dto';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import type { RealtimeGateway } from '../../realtime/realtime.gateway';
 import { LogServerEvents } from '@libs/realtime';
 
@@ -130,14 +130,12 @@ describe('TvSeriesLogsService', () => {
     it('completes an active bookmark when the series log is created for the first time', async () => {
       const { user } = await createTestUser(testDb.db);
       const series = await createTestTvSeries(testDb.db);
-      await testDb.db
-        .insert(bookmark)
-        .values({
-          userId: user.id,
-          tvSeriesId: series.id,
-          type: RecoType.TV_SERIES,
-          status: 'active',
-        });
+      await testDb.db.insert(bookmark).values({
+        userId: user.id,
+        tvSeriesId: series.id,
+        type: RecoType.TV_SERIES,
+        status: 'active',
+      });
       const service = buildService();
 
       await service.set({ currentUser: asUser(user), tvSeriesId: series.id, dto: {} });
@@ -171,14 +169,12 @@ describe('TvSeriesLogsService', () => {
       const service = buildService();
       await service.set({ currentUser: asUser(user), tvSeriesId: series.id, dto: {} });
 
-      await testDb.db
-        .insert(bookmark)
-        .values({
-          userId: user.id,
-          tvSeriesId: series.id,
-          type: RecoType.TV_SERIES,
-          status: 'active',
-        });
+      await testDb.db.insert(bookmark).values({
+        userId: user.id,
+        tvSeriesId: series.id,
+        type: RecoType.TV_SERIES,
+        status: 'active',
+      });
       await service.set({ currentUser: asUser(user), tvSeriesId: series.id, dto: { rating: 7 } });
 
       const b = await testDb.db.query.bookmark.findFirst({ where: eq(bookmark.userId, user.id) });

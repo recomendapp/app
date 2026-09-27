@@ -3,7 +3,7 @@ import { playlistFeatured, playlistMember } from '@libs/db/schemas';
 import { createTestPlaylist, createTestUser, TestDatabase } from '@libs/testing';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { PlaylistSortBy } from '../dto/playlists.dto';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { PlaylistFeaturedService } from './playlist-featured.service';
 
 describe('PlaylistFeaturedService', () => {

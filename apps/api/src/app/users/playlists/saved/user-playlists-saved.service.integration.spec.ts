@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { playlistSaved } from '@libs/db/schemas';
 import { createTestPlaylist, createTestUser, TestDatabase } from '@libs/testing';
-import { User } from '../../../auth/auth.service';
+import type { User } from '../../../auth/auth.service';
 import { PlaylistSavedSortBy } from '../../../playlists/saves/dto/playlist-saved.dto';
 import { SortOrder } from '../../../../common/dto/sort.dto';
 import { UserPlaylistsSavedService } from './user-playlists-saved.service';

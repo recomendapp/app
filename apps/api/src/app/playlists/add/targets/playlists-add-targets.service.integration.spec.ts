@@ -10,7 +10,7 @@ import {
 } from '@libs/testing';
 import { SortOrder } from '../../../../common/dto/sort.dto';
 import { PlaylistSortBy } from '../../dto/playlists.dto';
-import { User } from '../../../auth/auth.service';
+import type { User } from '../../../auth/auth.service';
 import { PlaylistTargetFilter } from './playlists-add-targets.dto';
 import { PlaylistsAddTargetsService } from './playlists-add-targets.service';
 

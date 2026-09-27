@@ -1,7 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { aliasedTable, and, asc, desc, eq, gt, ilike, lt, max, or, SQL, sql } from 'drizzle-orm';
-import { User } from '../../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import type { User } from '../../auth/auth.service';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
 import { follow, logMovie, logTvSeries, profile, reco, user } from '@libs/db/schemas';
 import {
   ListAllRecoTargetsQueryDto,
@@ -14,7 +17,12 @@ import {
 } from './dto/reco-targets.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { RecoType } from '../dto/recos.dto';
-import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import {
+  type BaseCursor,
+  baseCursorSchema,
+  decodeCursor,
+  encodeCursor,
+} from '../../../utils/cursor';
 import { z } from 'zod';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';

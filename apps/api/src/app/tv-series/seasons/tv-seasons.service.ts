@@ -1,8 +1,11 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
 import { and, eq, sql } from 'drizzle-orm';
-import { User } from '../../auth/auth.service';
-import { SupportedLocale } from '@libs/i18n';
+import type { User } from '../../auth/auth.service';
+import type { SupportedLocale } from '@libs/i18n';
 import { TvSeasonGetDTO } from './tv-seasons.dto';
 import { tmdbTvSeasonView, tmdbTvSeriesView } from '@libs/db/schemas';
 import { parseResponseDto } from '../../../utils/parse-response-dto';

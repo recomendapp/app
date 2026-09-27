@@ -1,4 +1,4 @@
-import { Provider } from '@nestjs/common';
+import type { Provider } from '@nestjs/common';
 import * as apn from '@parse/node-apn';
 import { env } from '../../env';
 

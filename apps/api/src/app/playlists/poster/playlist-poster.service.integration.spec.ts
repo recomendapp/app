@@ -3,7 +3,7 @@ import type { MultipartFile } from '@fastify/multipart';
 import { createTestPlaylist, createTestUser, TestDatabase } from '@libs/testing';
 import type { StorageService } from '../../../common/modules/storage/storage.service';
 import { PlaylistPosterService } from './playlist-poster.service';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 
 describe('PlaylistPosterService', () => {
   let testDb: TestDatabase;

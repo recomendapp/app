@@ -1,8 +1,8 @@
 import { NotFoundException } from '@nestjs/common';
 import { eq, sql } from 'drizzle-orm';
 import { follow, logMovie, profile, reviewMovie } from '@libs/db/schemas';
-import { DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import { User } from '../../auth/auth.service';
+import type { DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import type { User } from '../../auth/auth.service';
 
 export async function assertReviewMovieVisible({
   db,

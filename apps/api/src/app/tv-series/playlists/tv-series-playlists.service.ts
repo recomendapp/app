@@ -1,9 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, eq, exists, sql } from 'drizzle-orm';
 import { playlist, playlistItem, profile, user } from '@libs/db/schemas';
-import { User } from '../../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import { DbTransaction } from '@libs/db';
+import type { User } from '../../auth/auth.service';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
+import type { DbTransaction } from '@libs/db';
 import { encodeCursor } from '../../../utils/cursor';
 import {
   ListInfinitePlaylistsQueryDto,

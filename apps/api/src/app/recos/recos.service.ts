@@ -7,8 +7,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { aliasedTable, and, eq, inArray, isNull, sql } from 'drizzle-orm';
-import { User } from '../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
+import type { User } from '../auth/auth.service';
+import { DRIZZLE_SERVICE, type DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { RecoDto, RecoSendDto, RecoSendResponseDto, RecoType } from './dto/recos.dto';
 import {
   follow,
@@ -18,10 +18,10 @@ import {
   recoTypeEnum,
   user as userTable,
 } from '@libs/db/schemas';
-import { DbTransaction } from '@libs/db';
+import type { DbTransaction } from '@libs/db';
 import { NotifyClient } from '@shared/notify';
 import { parseResponseDto } from '../../utils/parse-response-dto';
-import { defaultSupportedLocale, SupportedLocale } from '@libs/i18n';
+import { defaultSupportedLocale, type SupportedLocale } from '@libs/i18n';
 import { RecoServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../realtime/realtime.gateway';
 import { UserRecosService } from '../users/recos/user-recos.service';

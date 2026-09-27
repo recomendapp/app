@@ -13,7 +13,7 @@ import { defaultSupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import type { RealtimeGateway } from '../../realtime/realtime.gateway';
 import { PlaylistItemSortBy } from './playlist-items.dto';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 
 jest.mock('../../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
 

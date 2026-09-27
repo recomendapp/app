@@ -1,10 +1,10 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { SQL, and, eq, exists, or, sql } from 'drizzle-orm';
 import { follow, playlist, playlistMember, profile } from '@libs/db/schemas';
-import { DbTransaction } from '@libs/db';
-import { User } from '../auth/auth.service';
-import { DrizzleService } from '../../common/modules/drizzle/drizzle.module';
-import { PlaylistRole } from './types/playlist-role.type';
+import type { DbTransaction } from '@libs/db';
+import type { User } from '../auth/auth.service';
+import type { DrizzleService } from '../../common/modules/drizzle/drizzle.module';
+import type { PlaylistRole } from './types/playlist-role.type';
 
 export function canViewPlaylist(db: DbTransaction | DrizzleService, currentUser: User | null): SQL {
   if (!currentUser) {

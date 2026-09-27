@@ -1,6 +1,9 @@
 import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { and, asc, eq, SQL, sql } from 'drizzle-orm';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
 import {
   follow,
   pinnedItem,
@@ -15,14 +18,14 @@ import {
   PERSON_COMPACT_SELECT,
   TV_SERIES_COMPACT_SELECT,
 } from '@libs/db/selectors';
-import { User } from '../../auth/auth.service';
-import { SupportedLocale } from '@libs/i18n';
+import type { User } from '../../auth/auth.service';
+import type { SupportedLocale } from '@libs/i18n';
 import { PINNED_ITEM_RULES } from '@libs/rules';
 import { canViewPlaylist } from '../../playlists/playlists.permission';
 import { PlaylistQueryBuilder } from '../../playlists/playlists.query-builder';
-import { PlaylistRole } from '../../playlists/types/playlist-role.type';
-import { PinnedItemUnion } from '../../pinned/dto/pinned.dto';
-import { buildPinnedItemsResponse, PinnedItemRow } from '../../pinned/pinned.mapper';
+import type { PlaylistRole } from '../../playlists/types/playlist-role.type';
+import type { PinnedItemUnion } from '../../pinned/dto/pinned.dto';
+import { buildPinnedItemsResponse, type PinnedItemRow } from '../../pinned/pinned.mapper';
 import { buildOwnPinnedItemsList } from '../../pinned/pinned-list.builder';
 
 @Injectable()

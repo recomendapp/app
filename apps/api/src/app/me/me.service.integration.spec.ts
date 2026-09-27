@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm';
 import { user } from '@libs/db/schemas';
 import { createTestUser, TestDatabase } from '@libs/testing';
 import { defaultSupportedLocale } from '@libs/i18n';
-import { User } from '../auth/auth.service';
+import type { User } from '../auth/auth.service';
 import { MeServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../realtime/realtime.gateway';
 import type { WorkerClient } from '@shared/worker';

@@ -1,5 +1,5 @@
 import {
-  AnyPgColumn,
+  type AnyPgColumn,
   bigint,
   boolean,
   check,

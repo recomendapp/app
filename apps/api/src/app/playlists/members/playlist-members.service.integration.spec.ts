@@ -6,7 +6,7 @@ import type { WorkerClient } from '@shared/worker';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { PlaylistMemberSortBy } from './playlist-members.dto';
 import { PlaylistMembersService } from './playlist-members.service';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 
 describe('PlaylistMembersService', () => {
   let testDb: TestDatabase;

@@ -23,10 +23,10 @@ jest.mock('../env', () => ({
 
 import { randomUUID } from 'node:crypto';
 import * as path from 'path';
-import { INestApplication } from '@nestjs/common';
+import type { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { AcceptLanguageResolver, I18nModule, I18nService } from 'nestjs-i18n';
-import { defaultSupportedLocale, SupportedLocale } from '@libs/i18n';
+import { defaultSupportedLocale, type SupportedLocale } from '@libs/i18n';
 import { pushToken, tmdbMovieImage } from '@libs/db/schemas';
 import {
   createTestMovie,

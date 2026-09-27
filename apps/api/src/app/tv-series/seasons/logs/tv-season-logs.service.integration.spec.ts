@@ -9,7 +9,7 @@ import {
 } from '@libs/testing';
 import { RecoType } from '../../../recos/dto/recos.dto';
 import { LogTvStatus } from '../../logs/tv-series-logs.dto';
-import { User } from '../../../auth/auth.service';
+import type { User } from '../../../auth/auth.service';
 import type { RealtimeGateway } from '../../../realtime/realtime.gateway';
 import { LogServerEvents } from '@libs/realtime';
 
@@ -114,14 +114,12 @@ describe('TvSeasonLogsService', () => {
       const { user } = await createTestUser(testDb.db);
       const series = await createTestTvSeries(testDb.db, { numberOfEpisodes: 2 });
       await addSeason(series.id, 1, 2);
-      await testDb.db
-        .insert(bookmark)
-        .values({
-          userId: user.id,
-          tvSeriesId: series.id,
-          type: RecoType.TV_SERIES,
-          status: 'active',
-        });
+      await testDb.db.insert(bookmark).values({
+        userId: user.id,
+        tvSeriesId: series.id,
+        type: RecoType.TV_SERIES,
+        status: 'active',
+      });
       const service = buildService();
 
       await service.set({

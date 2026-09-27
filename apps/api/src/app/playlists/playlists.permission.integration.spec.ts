@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { follow, playlistMember } from '@libs/db/schemas';
 import { createTestPlaylist, createTestUser, TestDatabase } from '@libs/testing';
 import { playlist as playlistTable } from '@libs/db/schemas';
-import { User } from '../auth/auth.service';
+import type { User } from '../auth/auth.service';
 import { canViewPlaylist } from './playlists.permission';
 
 describe('canViewPlaylist', () => {

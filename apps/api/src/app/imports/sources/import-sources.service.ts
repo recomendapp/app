@@ -2,7 +2,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import { asc } from 'drizzle-orm';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { importSource } from '@libs/db/schemas';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
 import { ImportSourceDto } from './import-sources.dto';
 
 @Injectable()

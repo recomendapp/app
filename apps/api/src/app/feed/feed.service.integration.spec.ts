@@ -25,7 +25,7 @@ import {
   TestDatabase,
 } from '@libs/testing';
 import { defaultSupportedLocale } from '@libs/i18n';
-import { User } from '../auth/auth.service';
+import type { User } from '../auth/auth.service';
 import { FeedService } from './feed.service';
 import {
   FeedItemLogMovieDto,

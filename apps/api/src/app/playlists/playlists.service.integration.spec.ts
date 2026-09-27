@@ -6,7 +6,7 @@ import { PlaylistServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../realtime/realtime.gateway';
 import type { WorkerClient } from '@shared/worker';
 import type { StorageService } from '../../common/modules/storage/storage.service';
-import { User } from '../auth/auth.service';
+import type { User } from '../auth/auth.service';
 
 jest.mock('../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
 

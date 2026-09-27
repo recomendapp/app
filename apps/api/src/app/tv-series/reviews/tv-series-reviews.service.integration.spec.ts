@@ -4,7 +4,7 @@ import { follow, logTvSeries, profile, reviewTvSeries } from '@libs/db/schemas';
 import { createTestTvSeries, createTestUser, TestDatabase } from '@libs/testing';
 import { LogServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../../realtime/realtime.gateway';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { ReviewTvSeriesSortBy } from '../../reviews/tv-series/dto/review-tv-series.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 

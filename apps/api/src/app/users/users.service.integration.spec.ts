@@ -2,7 +2,7 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { v7 as uuidv7 } from 'uuid';
 import { follow } from '@libs/db/schemas';
 import { createTestUser, TestDatabase } from '@libs/testing';
-import { User } from '../auth/auth.service';
+import type { User } from '../auth/auth.service';
 import { UserSortBy } from './dto/users.dto';
 import { SortOrder } from '../../common/dto/sort.dto';
 import { UsersService } from './users.service';

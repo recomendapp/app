@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import { Inject, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
-import { EnvService, ENV_SERVICE } from '@libs/env';
+import { type EnvService, ENV_SERVICE } from '@libs/env';
 
 interface CsrfTokenResponse {
   token: string;

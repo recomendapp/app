@@ -1,4 +1,4 @@
-import { NotifyRecoCompletedDto, NotifyRecoReceivedDto } from './reco.dto';
+import type { NotifyRecoCompletedDto, NotifyRecoReceivedDto } from './reco.dto';
 
 export type NotifyRecoRegistry = {
   'reco:received': NotifyRecoReceivedDto;

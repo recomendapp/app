@@ -10,11 +10,19 @@ import {
   tmdbTvSeriesView,
   user,
 } from '@libs/db/schemas';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import { SupportedLocale } from '@libs/i18n';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
+import type { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
-import { DbTransaction } from '@libs/db';
-import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import type { DbTransaction } from '@libs/db';
+import {
+  type BaseCursor,
+  baseCursorSchema,
+  decodeCursor,
+  encodeCursor,
+} from '../../../utils/cursor';
 import { z } from 'zod';
 import {
   ListAllRecosQueryDto,
@@ -24,12 +32,12 @@ import {
   ListPaginatedRecosQueryDto,
   RecoSortBy,
   RecoType,
-  RecoWithMediaUnion,
+  type RecoWithMediaUnion,
   RecoWithMovieDto,
   RecoWithTvSeriesDto,
 } from '../../recos/dto/recos.dto';
 import { UserSummaryDto } from '../dto/users.dto';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
 

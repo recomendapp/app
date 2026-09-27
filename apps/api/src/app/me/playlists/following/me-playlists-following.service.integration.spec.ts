@@ -1,6 +1,6 @@
 import { follow, playlistMember } from '@libs/db/schemas';
 import { createTestPlaylist, createTestUser, TestDatabase } from '@libs/testing';
-import { User } from '../../../auth/auth.service';
+import type { User } from '../../../auth/auth.service';
 import { PlaylistSortBy } from '../../../playlists/dto/playlists.dto';
 import { SortOrder } from '../../../../common/dto/sort.dto';
 import { MePlaylistsFollowingService } from './me-playlists-following.service';

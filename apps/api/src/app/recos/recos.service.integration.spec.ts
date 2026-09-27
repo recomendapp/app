@@ -9,7 +9,7 @@ import {
   createTestUser,
   TestDatabase,
 } from '@libs/testing';
-import { User } from '../auth/auth.service';
+import type { User } from '../auth/auth.service';
 import { RecoServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../realtime/realtime.gateway';
 import type { NotifyClient } from '@shared/notify';

@@ -1,16 +1,24 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { and, asc, eq, gt, inArray, sql } from 'drizzle-orm';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
 import { importJob, importJobLogTvSeries, tmdbTvSeriesView } from '@libs/db/schemas';
 import { TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
-import { SupportedLocale } from '@libs/i18n';
+import type { SupportedLocale } from '@libs/i18n';
 import { ImportServerEvents } from '@libs/realtime';
 import { PaginationQueryDto } from '../../../common/dto/pagination.dto';
 import { CursorPaginationQueryDto } from '../../../common/dto/cursor-pagination.dto';
-import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import {
+  type BaseCursor,
+  baseCursorSchema,
+  decodeCursor,
+  encodeCursor,
+} from '../../../utils/cursor';
 import { z } from 'zod';
 import { RealtimeGateway } from '../../realtime/realtime.gateway';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
 import {
   ImportJobLogTvSeriesDto,

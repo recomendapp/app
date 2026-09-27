@@ -5,7 +5,7 @@ import {
   createTestUser,
   TestDatabase,
 } from '@libs/testing';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { ImportServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../../realtime/realtime.gateway';
 

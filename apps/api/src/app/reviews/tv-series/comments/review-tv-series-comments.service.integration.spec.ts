@@ -14,7 +14,7 @@ import {
   createTestUser,
   TestDatabase,
 } from '@libs/testing';
-import { User } from '../../../auth/auth.service';
+import type { User } from '../../../auth/auth.service';
 import { SortOrder } from '../../../../common/dto/sort.dto';
 import { ReviewTvSeriesCommentSortBy } from './dto/review-tv-series-comments.dto';
 import { ReviewTvSeriesCommentsService } from './review-tv-series-comments.service';

@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fastify';
 import { VersioningType } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AUTH_SERVICE } from './auth.service';

@@ -2,7 +2,7 @@ import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { follow, playlistMember, profile } from '@libs/db/schemas';
 import { createTestPlaylist, createTestUser, TestDatabase } from '@libs/testing';
-import { User } from '../auth/auth.service';
+import type { User } from '../auth/auth.service';
 import { assertPlaylistRole, assertPlaylistVisible, getPlaylistRole } from './playlists.permission';
 
 describe('playlist permission asserts', () => {

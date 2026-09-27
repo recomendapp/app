@@ -1,8 +1,11 @@
 import { Injectable, Inject, Logger } from '@nestjs/common';
-import { ENV_SERVICE, EnvService } from '@libs/env';
+import { ENV_SERVICE, type EnvService } from '@libs/env';
 import { profile } from '@libs/db/schemas';
 import { eq } from 'drizzle-orm';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
 import { z } from 'zod';
 
 @Injectable()

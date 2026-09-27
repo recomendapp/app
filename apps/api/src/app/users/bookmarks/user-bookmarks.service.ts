@@ -1,13 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, asc, desc, eq, exists, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { bookmark, follow, profile, tmdbMovieView, tmdbTvSeriesView } from '@libs/db/schemas';
-import { User } from '../../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import type { User } from '../../auth/auth.service';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
 import {
   BaseListBookmarksQueryDto,
   BookmarkSortBy,
   BookmarkWithMovieDto,
-  BookmarkWithMediaUnion,
+  type BookmarkWithMediaUnion,
   BookmarkWithTvSeriesDto,
   ListAllBookmarksQueryDto,
   ListInfiniteBookmarksDto,
@@ -15,10 +18,15 @@ import {
   ListPaginatedBookmarksDto,
   ListPaginatedBookmarksQueryDto,
 } from '../../bookmarks/dto/bookmarks.dto';
-import { SupportedLocale } from '@libs/i18n';
+import type { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
-import { DbTransaction } from '@libs/db';
-import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import type { DbTransaction } from '@libs/db';
+import {
+  type BaseCursor,
+  baseCursorSchema,
+  decodeCursor,
+  encodeCursor,
+} from '../../../utils/cursor';
 import { z } from 'zod';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
 import { parseResponseDto } from '../../../utils/parse-response-dto';

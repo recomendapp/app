@@ -1,6 +1,6 @@
 import {
-  CanActivate,
-  ExecutionContext,
+  type CanActivate,
+  type ExecutionContext,
   Inject,
   Injectable,
   Logger,
@@ -10,10 +10,13 @@ import { verifyAccessTokenRequest } from 'better-auth/oauth2';
 import { eq } from 'drizzle-orm';
 import type { FastifyReply } from 'fastify';
 import { user } from '@libs/db/schemas';
-import { ENV_SERVICE, EnvService } from '@libs/env';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import { McpAuthenticatedRequest } from '../types/fastify';
-import { User } from '../auth.service';
+import { ENV_SERVICE, type EnvService } from '@libs/env';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
+import type { McpAuthenticatedRequest } from '../types/fastify';
+import type { User } from '../auth.service';
 
 // Whole-endpoint guard on McpHttpController: validates the RFC 6750 Bearer
 // access token an MCP client sends on every request, after completing the

@@ -8,7 +8,7 @@ import {
   TestDatabase,
 } from '@libs/testing';
 import { defaultSupportedLocale } from '@libs/i18n';
-import { User } from '../auth/auth.service';
+import type { User } from '../auth/auth.service';
 import { SearchMoviesService } from './movies/search-movies.service';
 import { SearchTvSeriesService } from './tv-series/search-tv-series.service';
 import { SearchPersonsService } from './persons/search-persons.service';

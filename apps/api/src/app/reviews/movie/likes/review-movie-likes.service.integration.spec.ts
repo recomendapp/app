@@ -7,7 +7,7 @@ import {
   createTestUser,
   TestDatabase,
 } from '@libs/testing';
-import { User } from '../../../auth/auth.service';
+import type { User } from '../../../auth/auth.service';
 import { ReviewMovieLikesService } from './review-movie-likes.service';
 
 describe('ReviewMovieLikesService', () => {

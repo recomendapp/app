@@ -1,7 +1,7 @@
 import {
   defaultSupportedLocale,
   HEADER_LANGUAGE_KEY,
-  SupportedLocale,
+  type SupportedLocale,
   supportedLocales,
 } from '../locales';
 

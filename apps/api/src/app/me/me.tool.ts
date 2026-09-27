@@ -4,7 +4,7 @@ import { supportedLocales } from '@libs/i18n';
 import { USER_RULES } from '@libs/rules';
 import { z } from 'zod';
 import { MeService } from './me.service';
-import { McpAuthenticatedRequest } from '../auth/types/fastify';
+import type { McpAuthenticatedRequest } from '../auth/types/fastify';
 
 const updateMeParameters = z.object({
   name: z

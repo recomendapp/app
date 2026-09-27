@@ -2,7 +2,7 @@ import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { follow, reco } from '@libs/db/schemas';
 import { createTestMovie, createTestUser, TestDatabase } from '@libs/testing';
 import { defaultSupportedLocale } from '@libs/i18n';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { RecoSortBy, RecoType } from '../../recos/dto/recos.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { UserRecosService } from './user-recos.service';
@@ -198,15 +198,13 @@ describe('UserRecosService', () => {
       const { user: target } = await createTestUser(testDb.db);
       const { user: sender } = await createTestUser(testDb.db);
       const movie = await createTestMovie(testDb.db);
-      await testDb.db
-        .insert(reco)
-        .values({
-          userId: target.id,
-          senderId: sender.id,
-          movieId: movie.id,
-          type: RecoType.MOVIE,
-          status: 'completed',
-        });
+      await testDb.db.insert(reco).values({
+        userId: target.id,
+        senderId: sender.id,
+        movieId: movie.id,
+        type: RecoType.MOVIE,
+        status: 'completed',
+      });
 
       const activeResult = await service().listAll({
         targetUserId: target.id,

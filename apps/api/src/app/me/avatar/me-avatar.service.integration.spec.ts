@@ -2,7 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { user } from '@libs/db/schemas';
 import { createTestUser, TestDatabase } from '@libs/testing';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import type { RealtimeGateway } from '../../realtime/realtime.gateway';
 import type { WorkerClient } from '@shared/worker';
 import type { StorageService } from '../../../common/modules/storage/storage.service';
@@ -36,12 +36,10 @@ describe('MeAvatarService', () => {
 
   function fakeStorage(overrides?: Partial<jest.Mocked<StorageService>>) {
     return {
-      uploadFile: jest
-        .fn()
-        .mockResolvedValue({
-          filename: 'new-avatar.png',
-          url: 'https://cdn.test/avatars/new-avatar.png',
-        }),
+      uploadFile: jest.fn().mockResolvedValue({
+        filename: 'new-avatar.png',
+        url: 'https://cdn.test/avatars/new-avatar.png',
+      }),
       deleteFile: jest.fn().mockResolvedValue(undefined),
       getFileUrl: jest.fn(),
       ...overrides,

@@ -4,7 +4,7 @@ import { playlist, playlistLike } from '@libs/db/schemas';
 import { createTestPlaylist, createTestUser, TestDatabase } from '@libs/testing';
 import { PlaylistServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../../realtime/realtime.gateway';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 
 jest.mock('../../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
 

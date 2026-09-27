@@ -1,7 +1,7 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { follow, reco } from '@libs/db/schemas';
 import { createTestLogMovie, createTestMovie, createTestUser, TestDatabase } from '@libs/testing';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { RecoType } from '../dto/recos.dto';
 import { RecoTargetSortBy } from './dto/reco-targets.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';

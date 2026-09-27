@@ -7,7 +7,7 @@ import {
   createTestUser,
   TestDatabase,
 } from '@libs/testing';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { LogServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../../realtime/realtime.gateway';
 import { ReviewMovieSortBy } from '../../reviews/movie/dto/reviews-movie.dto';

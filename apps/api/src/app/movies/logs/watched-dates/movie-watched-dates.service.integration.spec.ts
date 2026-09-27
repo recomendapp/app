@@ -2,7 +2,7 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { logMovieWatchedDate } from '@libs/db/schemas';
 import { createTestLogMovie, createTestMovie, createTestUser, TestDatabase } from '@libs/testing';
-import { User } from '../../../auth/auth.service';
+import type { User } from '../../../auth/auth.service';
 import { LogServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../../../realtime/realtime.gateway';
 import { WatchedDateSortBy } from './dto/watched-dates.dto';

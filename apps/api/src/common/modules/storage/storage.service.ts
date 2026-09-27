@@ -1,10 +1,16 @@
-import { Injectable, Logger, InternalServerErrorException, BadRequestException, Inject } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  InternalServerErrorException,
+  BadRequestException,
+  Inject,
+} from '@nestjs/common';
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { randomUUID } from 'crypto';
 import { extname } from 'path';
-import { EnvService, ENV_SERVICE } from '@libs/env';
-import { AllowedMimeTypes, StorageFolder } from './storage.constants';
-import { MultipartFile } from '@fastify/multipart';
+import { type EnvService, ENV_SERVICE } from '@libs/env';
+import { AllowedMimeTypes, type StorageFolder } from './storage.constants';
+import type { MultipartFile } from '@fastify/multipart';
 import { z } from 'zod';
 
 @Injectable()
@@ -16,9 +22,7 @@ export class StorageService {
 
   private readonly urlSchema = z.url();
 
-  constructor(
-    @Inject(ENV_SERVICE) private readonly env: EnvService
-  ) {
+  constructor(@Inject(ENV_SERVICE) private readonly env: EnvService) {
     this.bucketName = this.env.S3_BUCKET;
     this.publicEndpoint = this.env.S3_PUBLIC_ENDPOINT || this.env.S3_ENDPOINT;
 
@@ -45,7 +49,7 @@ export class StorageService {
 
   getFileUrl(filenameOrUrl: string | null, folder: StorageFolder): string | null {
     if (!filenameOrUrl) return null;
-    
+
     if (this.isAbsoluteUrl(filenameOrUrl)) {
       return filenameOrUrl;
     }
@@ -54,14 +58,15 @@ export class StorageService {
   }
 
   async uploadFile(
-    file: MultipartFile, 
-    folder: StorageFolder
+    file: MultipartFile,
+    folder: StorageFolder,
   ): Promise<{ filename: string; url: string }> {
-    
     const allowedTypes = AllowedMimeTypes[folder];
 
     if (!allowedTypes.includes(file.mimetype)) {
-      throw new BadRequestException(`Invalid file type for ${folder}. Allowed: ${allowedTypes.join(', ')}`);
+      throw new BadRequestException(
+        `Invalid file type for ${folder}. Allowed: ${allowedTypes.join(', ')}`,
+      );
     }
 
     const filename = this.generateFilename(file.filename);
@@ -78,10 +83,10 @@ export class StorageService {
 
     try {
       await this.s3Client.send(command);
-      
+
       return {
         filename,
-        url: this.getFileUrl(filename, folder) as string, 
+        url: this.getFileUrl(filename, folder) as string,
       };
     } catch (error) {
       this.logger.error(`Failed to upload file to ${folder}:`, error);

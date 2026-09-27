@@ -1,5 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
+import { DRIZZLE_SERVICE, type DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { explore } from '@libs/db/schemas';
 import { eq } from 'drizzle-orm';
 import { parseResponseDto } from '../../utils/parse-response-dto';

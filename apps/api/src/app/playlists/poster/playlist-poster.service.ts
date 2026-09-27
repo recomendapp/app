@@ -1,13 +1,16 @@
 import { BadRequestException, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
 import { StorageService } from '../../../common/modules/storage/storage.service';
 import { StorageFolders } from '../../../common/modules/storage/storage.constants';
-import { MultipartFile } from '@fastify/multipart';
+import type { MultipartFile } from '@fastify/multipart';
 import { eq } from 'drizzle-orm';
 import { playlist } from '@libs/db/schemas';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { PlaylistDto } from '../dto/playlists.dto';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { assertPlaylistRole } from '../playlists.permission';
 
 @Injectable()
