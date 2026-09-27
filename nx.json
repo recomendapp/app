@@ -87,6 +87,9 @@
     },
     "test-integration": {
       "dependsOn": ["^generate"]
+    },
+    "typecheck": {
+      "dependsOn": ["^generate"]
     }
   },
   "release": {

@@ -55,6 +55,7 @@
       }
     },
     "typecheck": {
+      "dependsOn": ["^generate", "generate"],
       "executor": "nx:run-commands",
       "cache": true,
       "inputs": ["default", "^production"],
