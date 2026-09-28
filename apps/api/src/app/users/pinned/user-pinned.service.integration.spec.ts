@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'bun:test';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { follow, pinnedItem, playlist, profile } from '@libs/db/schemas';
@@ -10,8 +11,12 @@ import {
   TestDatabase,
 } from '@libs/testing';
 import { defaultSupportedLocale } from '@libs/i18n';
-import { User } from '../../auth/auth.service';
-import { PinnedItemWithMovieDto, PinnedItemWithPlaylistDto } from '../../pinned/dto/pinned.dto';
+import type { User } from '../../auth/auth.service';
+import {
+  PinnedItemStatus,
+  PinnedItemWithMovieDto,
+  PinnedItemWithPlaylistDto,
+} from '../../pinned/dto/pinned.dto';
 import { UserPinnedService } from './user-pinned.service';
 
 describe('UserPinnedService', () => {
@@ -224,7 +229,7 @@ describe('UserPinnedService', () => {
 
         expect(result).toHaveLength(5);
         expect(result.slice(0, 4).every((r) => r.status === 'available')).toBe(true);
-        expect(result[4].status).toBe('over_limit');
+        expect(result[4].status).toBe(PinnedItemStatus.OVER_LIMIT);
       });
     });
 
@@ -249,7 +254,7 @@ describe('UserPinnedService', () => {
 
         expect(result).toHaveLength(1);
         expect(result[0].data?.id).toBe(p.id);
-        expect(result[0].status).toBe('available');
+        expect(result[0].status).toBe(PinnedItemStatus.AVAILABLE);
       });
 
       it('drops an inaccessible playlist pin entirely for a non-owner viewer', async () => {
@@ -294,7 +299,7 @@ describe('UserPinnedService', () => {
         })) as PinnedItemWithPlaylistDto[];
 
         expect(result).toHaveLength(1);
-        expect(result[0].status).toBe('unavailable');
+        expect(result[0].status).toBe(PinnedItemStatus.UNAVAILABLE);
         expect(result[0].data).toBeNull();
       });
     });

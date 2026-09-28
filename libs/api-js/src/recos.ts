@@ -1,6 +1,5 @@
-import { RecoWithMovie, RecoWithTvSeries } from "./__generated__";
+import type { RecoWithMovie, RecoWithTvSeries } from './__generated__';
 
-export type RecoWithMedia = (
-	| ({ type: 'movie' } & RecoWithMovie)
-	| ({ type: 'tv_series' } & RecoWithTvSeries)
-);
+export type RecoWithMedia =
+  | ({ type: 'movie' } & RecoWithMovie)
+  | ({ type: 'tv_series' } & RecoWithTvSeries);

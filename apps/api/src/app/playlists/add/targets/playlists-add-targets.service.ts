@@ -1,7 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, eq, exists, ilike, inArray, or, sql, SQL } from 'drizzle-orm';
-import { User } from '../../../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/drizzle/drizzle.module';
+import type { User } from '../../../auth/auth.service';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../../common/modules/drizzle/drizzle.module';
 import {
   playlist,
   playlistItem,
@@ -11,7 +14,12 @@ import {
   user,
 } from '@libs/db/schemas';
 import { SortOrder } from '../../../../common/dto/sort.dto';
-import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../../utils/cursor';
+import {
+  type BaseCursor,
+  baseCursorSchema,
+  decodeCursor,
+  encodeCursor,
+} from '../../../../utils/cursor';
 import { z } from 'zod';
 import { parseResponseDto } from '../../../../utils/parse-response-dto';
 import { PlaylistQueryBuilder } from '../../playlists.query-builder';

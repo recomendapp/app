@@ -1,3 +1,9 @@
+import type {
+  PinnedItemWithMovieDto,
+  PinnedItemWithPlaylistDto,
+} from '../../pinned/dto/pinned.dto';
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { ConflictException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { asc, eq } from 'drizzle-orm';
 import { pinnedItem, profile } from '@libs/db/schemas';
@@ -10,14 +16,14 @@ import {
   TestDatabase,
 } from '@libs/testing';
 import { defaultSupportedLocale } from '@libs/i18n';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { PinnedServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../../realtime/realtime.gateway';
-import { PinnedItemWithMovieDto, PinnedItemWithPlaylistDto } from '../../pinned/dto/pinned.dto';
 
-jest.mock('../../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
+mock.module('../../realtime/realtime.gateway', () => ({ RealtimeGateway: mock() }));
 
-const { MePinnedService } = require('./me-pinned.service') as typeof import('./me-pinned.service');
+const { PinnedItemStatus } = await import('../../pinned/dto/pinned.dto');
+const { MePinnedService } = await import('./me-pinned.service');
 
 describe('MePinnedService', () => {
   let testDb: TestDatabase;
@@ -35,9 +41,9 @@ describe('MePinnedService', () => {
   });
 
   const asUser = (row: { id: string }) => row as unknown as User;
-  const fakeGateway = () => ({ emitToUser: jest.fn() }) as unknown as jest.Mocked<RealtimeGateway>;
+  const fakeGateway = () => ({ emitToUser: mock() }) as unknown as Mocked<RealtimeGateway>;
 
-  function buildService(gateway?: jest.Mocked<RealtimeGateway>) {
+  function buildService(gateway?: Mocked<RealtimeGateway>) {
     return new MePinnedService(testDb.db, gateway ?? fakeGateway());
   }
 
@@ -90,7 +96,7 @@ describe('MePinnedService', () => {
 
       expect(result.type).toBe('movie');
       expect(result.data.id).toBe(movie.id);
-      expect(result.status).toBe('available');
+      expect(result.status).toBe(PinnedItemStatus.AVAILABLE);
     });
 
     it('pins a tv series', async () => {

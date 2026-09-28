@@ -1,9 +1,10 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'bun:test';
 import { BadRequestException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { bookmark, follow, profile } from '@libs/db/schemas';
 import { createTestMovie, createTestTvSeries, createTestUser, TestDatabase } from '@libs/testing';
 import { defaultSupportedLocale } from '@libs/i18n';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { UserBookmarksService } from './user-bookmarks.service';
 import { BookmarkSortBy } from '../../bookmarks/dto/bookmarks.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';

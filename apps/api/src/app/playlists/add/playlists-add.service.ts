@@ -1,8 +1,11 @@
 import { ForbiddenException, Inject, Injectable, Logger } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
 import { playlist, playlistItem, playlistMember, profile } from '@libs/db/schemas';
 import { and, eq, inArray, or, sql } from 'drizzle-orm';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { LexoRank } from 'lexorank';
 import { PlaylistsAddQueryDto } from './playlists-add.dto';
 import { parseResponseDto } from '../../../utils/parse-response-dto';

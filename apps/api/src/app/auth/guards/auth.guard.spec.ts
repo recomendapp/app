@@ -1,17 +1,18 @@
+import { describe, it, expect, mock, type Mock } from 'bun:test';
 import { UnauthorizedException } from '@nestjs/common';
 import type { ExecutionContext } from '@nestjs/common';
 import { WsException } from '@nestjs/websockets';
 import type { AuthService } from '../auth.service';
 
-jest.mock('better-auth/node', () => ({ fromNodeHeaders: jest.fn((h) => h) }));
-jest.mock('../auth.service', () => ({ AUTH_SERVICE: 'AUTH_SERVICE' }));
+mock.module('better-auth/node', () => ({ fromNodeHeaders: mock((h) => h) }));
+mock.module('../auth.service', () => ({ AUTH_SERVICE: 'AUTH_SERVICE' }));
 
-const { AuthGuard } = require('./auth.guard') as typeof import('./auth.guard');
+const { AuthGuard } = await import('./auth.guard');
 
 describe('AuthGuard', () => {
   const session = { session: { id: 'session-1' }, user: { id: 'user-1' } };
 
-  function fakeAuth(getSession: jest.Mock) {
+  function fakeAuth(getSession: Mock<(...args: any[]) => any>) {
     return { api: { getSession } } as unknown as AuthService;
   }
 
@@ -30,7 +31,7 @@ describe('AuthGuard', () => {
   }
 
   it('allows the request and attaches user/session when a session exists (http)', async () => {
-    const getSession = jest.fn().mockResolvedValue(session);
+    const getSession = mock().mockResolvedValue(session);
     const guard = new AuthGuard(fakeAuth(getSession));
     const request: Record<string, unknown> = { headers: { cookie: 'a=b' } };
 
@@ -42,7 +43,7 @@ describe('AuthGuard', () => {
   });
 
   it('throws UnauthorizedException over http when there is no session', async () => {
-    const getSession = jest.fn().mockResolvedValue(null);
+    const getSession = mock().mockResolvedValue(null);
     const guard = new AuthGuard(fakeAuth(getSession));
 
     await expect(guard.canActivate(httpContext({ headers: {} }))).rejects.toThrow(
@@ -51,7 +52,7 @@ describe('AuthGuard', () => {
   });
 
   it('allows the request and attaches user/session when a session exists (ws)', async () => {
-    const getSession = jest.fn().mockResolvedValue(session);
+    const getSession = mock().mockResolvedValue(session);
     const guard = new AuthGuard(fakeAuth(getSession));
     const client: Record<string, unknown> = { handshake: { headers: {} } };
 
@@ -63,7 +64,7 @@ describe('AuthGuard', () => {
   });
 
   it('throws WsException (not UnauthorizedException) over ws when there is no session', async () => {
-    const getSession = jest.fn().mockResolvedValue(null);
+    const getSession = mock().mockResolvedValue(null);
     const guard = new AuthGuard(fakeAuth(getSession));
     const client = { handshake: { headers: {} } };
 

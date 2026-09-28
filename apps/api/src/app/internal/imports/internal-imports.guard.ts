@@ -1,11 +1,11 @@
 import {
-  CanActivate,
-  ExecutionContext,
+  type CanActivate,
+  type ExecutionContext,
   Injectable,
   Inject,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ENV_SERVICE, EnvService } from '@libs/env';
+import { ENV_SERVICE, type EnvService } from '@libs/env';
 
 // Guards the /internal/imports/* routes called by the Prefect flow (db-sync/import_transfer),
 // not by end users — same shared-secret pattern as RevenueCatGuard.

@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Client as TypesenseClient } from 'typesense';
 import { TYPESENSE_CLIENT } from '../../common/modules/typesense/typesense.module';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
-import { User } from '../auth/auth.service';
-import { SupportedLocale } from '@libs/i18n';
+import { DRIZZLE_SERVICE, type DrizzleService } from '../../common/modules/drizzle/drizzle.module';
+import type { User } from '../auth/auth.service';
+import type { SupportedLocale } from '@libs/i18n';
 import { sql } from 'drizzle-orm';
 import { SearchMoviesService } from './movies/search-movies.service';
 import { SearchTvSeriesService } from './tv-series/search-tv-series.service';
@@ -11,7 +11,7 @@ import { SearchPersonsService } from './persons/search-persons.service';
 import { SearchUsersService } from './users/search-users.service';
 import { SearchPlaylistsService } from './playlists/search-playlists.service';
 import { parseResponseDto } from '../../utils/parse-response-dto';
-import { TypesenseSearchResult } from '../../common/modules/typesense/typesense.type';
+import type { TypesenseSearchResult } from '../../common/modules/typesense/typesense.type';
 import { SearchQueryDto, SearchResponseDto } from './search.dto';
 
 type TypesenseHit = {

@@ -18,60 +18,76 @@
         }
       }
     },
-    "prune-lockfile": {
+    "generate-bun-lockfile": {
       "dependsOn": ["build"],
       "cache": true,
-      "executor": "@nx/js:prune-lockfile",
+      "inputs": [
+        "default",
+        "{workspaceRoot}/bun.lock",
+        "{workspaceRoot}/tools/scripts/prune-bun-lockfile.mjs"
+      ],
       "outputs": [
         "{workspaceRoot}/dist/apps/worker/package.json",
-        "{workspaceRoot}/dist/apps/worker/pnpm-lock.yaml"
+        "{workspaceRoot}/dist/apps/worker/bun.lock"
       ],
+      "executor": "nx:run-commands",
       "options": {
-        "buildTarget": "build"
-      }
-    },
-    "copy-workspace-modules": {
-      "dependsOn": ["build"],
-      "cache": true,
-      "outputs": ["{workspaceRoot}/dist/apps/worker/workspace_modules"],
-      "executor": "@nx/js:copy-workspace-modules",
-      "options": {
-        "buildTarget": "build"
+        "command": "node tools/scripts/prune-bun-lockfile.mjs dist/apps/worker"
       }
     },
     "prune": {
-      "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
+      "dependsOn": ["generate-bun-lockfile"],
       "executor": "nx:noop"
+    },
+    "docker-build": {
+      "dependsOn": ["build", "^build", "prune"]
     },
     "serve": {
       "continuous": true,
-      "executor": "@nx/js:node",
+      "executor": "nx:run-commands",
       "defaultConfiguration": "development",
       "dependsOn": ["build"],
       "options": {
-        "buildTarget": "worker:build",
-        "runBuildTargetDependencies": false
+        "cwd": "apps/worker",
+        "parallel": true,
+        "commands": [
+          "webpack-cli build --node-env=development --watch --no-output-clean",
+          "bun --watch --no-clear-screen ../../dist/apps/worker/main.js"
+        ]
       },
       "configurations": {
-        "development": {
-          "buildTarget": "worker:build:development"
-        },
+        "development": {},
         "production": {
-          "buildTarget": "worker:build:production"
+          "commands": [
+            "webpack-cli build --node-env=production --watch --no-output-clean",
+            "bun --watch --no-clear-screen ../../dist/apps/worker/main.js"
+          ]
         }
       }
     },
     "test": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["default", "^production"],
       "options": {
-        "passWithNoTests": true
+        "cwd": "{projectRoot}",
+        "command": "bun test --parallel --no-env-file --path-ignore-patterns=\"**/*.integration.spec.ts\""
       }
     },
     "test-integration": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/apps/worker-integration"],
+      "executor": "nx:run-commands",
       "options": {
-        "jestConfig": "apps/worker/jest.integration.config.cts",
-        "passWithNoTests": true
+        "cwd": "{projectRoot}",
+        "command": "bun --no-env-file ../../libs/testing/src/lib/db/run-integration-tests.ts --isolate --no-env-file --timeout 60000 integration.spec"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["default", "^production"],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "tsc -p tsconfig.spec.json --noEmit"
       }
     }
   }

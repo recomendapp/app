@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { bookmark, logTvEpisode, tmdbTvEpisode, tmdbTvSeason } from '@libs/db/schemas';
@@ -7,22 +9,19 @@ import {
   createTestUser,
   TestDatabase,
 } from '@libs/testing';
-import { RecoType } from '../../../../recos/dto/recos.dto';
-import { LogTvStatus } from '../../../logs/tv-series-logs.dto';
-import { User } from '../../../../auth/auth.service';
+import type { User } from '../../../../auth/auth.service';
 import type { RealtimeGateway } from '../../../../realtime/realtime.gateway';
 import { LogServerEvents } from '@libs/realtime';
 
-jest.mock('../../../../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
+mock.module('../../../../realtime/realtime.gateway', () => ({ RealtimeGateway: mock() }));
 
-const { TvEpisodeLogsService } =
-  require('./tv-episode-logs.service') as typeof import('./tv-episode-logs.service');
-const { TvLogsSyncService } =
-  require('../../../logs/sync/tv-logs-sync.service') as typeof import('../../../logs/sync/tv-logs-sync.service');
-const { RecosService } =
-  require('../../../../recos/recos.service') as typeof import('../../../../recos/recos.service');
-const { UserRecosService } =
-  require('../../../../users/recos/user-recos.service') as typeof import('../../../../users/recos/user-recos.service');
+const { RecoType } = await import('../../../../recos/dto/recos.dto');
+const { LogTvStatus } = await import('../../../logs/tv-series-logs.dto');
+
+const { TvEpisodeLogsService } = await import('./tv-episode-logs.service');
+const { TvLogsSyncService } = await import('../../../logs/sync/tv-logs-sync.service');
+const { RecosService } = await import('../../../../recos/recos.service');
+const { UserRecosService } = await import('../../../../users/recos/user-recos.service');
 
 function randomTmdbId(): number {
   return Math.floor(Math.random() * 1_000_000_000) + 1;
@@ -45,9 +44,9 @@ describe('TvEpisodeLogsService', () => {
 
   const asUser = (row: { id: string }) => row as unknown as User;
   const fakeGateway = () =>
-    ({ emitToUser: jest.fn(), emitToUsers: jest.fn() }) as unknown as jest.Mocked<RealtimeGateway>;
+    ({ emitToUser: mock(), emitToUsers: mock() }) as unknown as Mocked<RealtimeGateway>;
 
-  function buildService(gateway?: jest.Mocked<RealtimeGateway>) {
+  function buildService(gateway?: Mocked<RealtimeGateway>) {
     const g = gateway ?? fakeGateway();
     const userRecosService = new UserRecosService(testDb.db);
     const recosService = new RecosService(testDb.db, createFakeNotifyClient(), g, userRecosService);
@@ -139,14 +138,12 @@ describe('TvEpisodeLogsService', () => {
       const { user } = await createTestUser(testDb.db);
       const series = await createTestTvSeries(testDb.db, { numberOfEpisodes: 3 });
       await addSeason(series.id, 1, 3);
-      await testDb.db
-        .insert(bookmark)
-        .values({
-          userId: user.id,
-          tvSeriesId: series.id,
-          type: RecoType.TV_SERIES,
-          status: 'active',
-        });
+      await testDb.db.insert(bookmark).values({
+        userId: user.id,
+        tvSeriesId: series.id,
+        type: RecoType.TV_SERIES,
+        status: 'active',
+      });
       const service = buildService();
 
       const result = await service.set({

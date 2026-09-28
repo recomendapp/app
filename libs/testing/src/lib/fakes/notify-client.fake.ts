@@ -1,7 +1,9 @@
+import { mock } from 'bun:test';
+import type { Mocked } from '../mocks';
 import type { NotifyClient } from '@shared/notify';
 
 /**
- * A jest-mocked stand-in for `NotifyClient`, for constructing services
+ * A mock-backed stand-in for `NotifyClient`, for constructing services
  * directly (`new SomeService(testDb.db, createFakeNotifyClient())`) without
  * wiring up a real BullMQ queue/Redis connection.
  *
@@ -10,8 +12,8 @@ import type { NotifyClient } from '@shared/notify';
  * check on class types rejects a structurally-matching object literal even
  * though only the public `emit` method is ever called in tests.
  */
-export function createFakeNotifyClient(): jest.Mocked<NotifyClient> {
+export function createFakeNotifyClient(): Mocked<NotifyClient> {
   return {
-    emit: jest.fn().mockResolvedValue(undefined),
-  } as unknown as jest.Mocked<NotifyClient>;
+    emit: mock().mockResolvedValue(undefined),
+  } as unknown as Mocked<NotifyClient>;
 }

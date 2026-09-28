@@ -1,8 +1,9 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'bun:test';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { follow, logMovie } from '@libs/db/schemas';
 import { createTestMovie, createTestUser, TestDatabase } from '@libs/testing';
 import { defaultSupportedLocale } from '@libs/i18n';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { LogMovieSortBy } from '../../movies/logs/log-movie.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { UserMoviesService } from './user-movies.service';

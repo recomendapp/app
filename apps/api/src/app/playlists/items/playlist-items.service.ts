@@ -1,9 +1,12 @@
 import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
 import { playlist, playlistItem, tmdbMovieView, tmdbTvSeriesView } from '@libs/db/schemas';
 import { and, asc, desc, eq, gt, inArray, lt, ne, or, sql, SQL } from 'drizzle-orm';
 import {
-  PlaylistItemWithMediaUnion,
+  type PlaylistItemWithMediaUnion,
   PlaylistItemWithMovieDto,
   PlaylistItemWithTvSeriesDto,
   ListAllPlaylistItemsQueryDto,
@@ -16,16 +19,21 @@ import {
   PlaylistItemsDeleteDto,
   PlaylistItemUpdateDto,
 } from './playlist-items.dto';
-import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import {
+  type BaseCursor,
+  baseCursorSchema,
+  decodeCursor,
+  encodeCursor,
+} from '../../../utils/cursor';
 import { z } from 'zod';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
-import { SupportedLocale } from '@libs/i18n';
+import type { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
-import { DbTransaction } from '@libs/db';
+import type { DbTransaction } from '@libs/db';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { LexoRank } from 'lexorank';
 import { PlaylistsRealtimeService } from '../playlists-realtime.service';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { assertPlaylistRole, assertPlaylistVisible } from '../playlists.permission';
 
 const CursorSchema = baseCursorSchema(z.string().min(1), z.number());

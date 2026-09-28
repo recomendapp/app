@@ -18,19 +18,25 @@ jobs:
       - name: ⬇️ Checkout Code
         uses: actions/checkout@v7
 
-      - name: 📦 Setup pnpm
-        uses: pnpm/action-setup@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: 11.25.0
+          bun-version-file: package.json
 
       - name: 🔧 Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache: 'pnpm'
+
+      - name: 🗄️ Cache Bun install
+        uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}
+          restore-keys: ${{ runner.os }}-bun-
 
       - name: ⚙️ Install Dependencies
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
       - name: 🔨 Setup EAS
         uses: expo/expo-github-action@v9
@@ -99,7 +105,7 @@ jobs:
 
       - name: ☁️ EAS Build (via Nx, EAS Cloud)
         timeout-minutes: 300
-        run: pnpm nx build mobile --platform android --profile production --non-interactive
+        run: bunx nx build mobile --platform android --profile production --non-interactive
 
       - name: ✅ Verify Build Actually Finished
         working-directory: apps/mobile
@@ -120,7 +126,7 @@ jobs:
           set -a
           source .env
           set +a
-          STATUS=$(pnpm exec eas build:list --platform android --build-profile production --limit 1 --non-interactive --json | jq -r '.[0].status')
+          STATUS=$(bunx eas build:list --platform android --build-profile production --limit 1 --non-interactive --json | jq -r '.[0].status')
           echo "Latest Android build status: $STATUS"
           if [ "$STATUS" != "FINISHED" ]; then
             echo "::error::Android build did not finish (status: $STATUS) — failing this job so the self-hosted fallback can take over."
@@ -128,7 +134,7 @@ jobs:
           fi
 
       - name: 🚀 EAS Submit (via Nx)
-        run: pnpm nx submit mobile --platform android --profile production --latest --non-interactive --no-wait
+        run: bunx nx submit mobile --platform android --profile production --latest --non-interactive --no-wait
 
       - name: 🧹 Cleanup
         if: always()

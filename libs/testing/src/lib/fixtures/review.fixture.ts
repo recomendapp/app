@@ -11,8 +11,8 @@ import type { Schema } from '../db/test-database';
 import {
   createTestLogMovie,
   createTestLogTvSeries,
-  TestLogMovie,
-  TestLogTvSeries,
+  type TestLogMovie,
+  type TestLogTvSeries,
 } from './log.fixture';
 
 export type TestReviewMovie = typeof reviewMovie.$inferSelect;

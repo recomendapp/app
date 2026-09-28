@@ -1,12 +1,12 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Inject, Logger } from '@nestjs/common';
-import { NOTIFY_QUEUE, NotifyJob } from '@shared/notify';
+import { NOTIFY_QUEUE, type NotifyJob } from '@shared/notify';
 import { NotifyService } from './notify.service';
 import { I18nService } from 'nestjs-i18n';
 import { render } from '@react-email/render';
 import { VerificationEmail } from '../templates/auth/verification-email';
 import { DeleteAccount } from '../templates/auth/delete-account';
-import { DRIZZLE_SERVICE, DrizzleService } from '../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, type DrizzleService } from '../common/modules/drizzle.module';
 import { and, eq, gt, inArray, sql } from 'drizzle-orm';
 import { pushToken, session, tmdbMovieView, tmdbTvSeriesView, user } from '@libs/db/schemas';
 import { defaultSupportedLocale } from '@libs/i18n';

@@ -1,8 +1,11 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { and, desc, eq, lt, or } from 'drizzle-orm';
 import { z } from 'zod';
-import { User } from '../../../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/drizzle/drizzle.module';
+import type { User } from '../../../auth/auth.service';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../../common/modules/drizzle/drizzle.module';
 import {
   ReviewTvSeriesLikeDto,
   ListPaginatedReviewTvSeriesLikesDto,
@@ -13,7 +16,7 @@ import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 import { parseResponseDto } from '../../../../utils/parse-response-dto';
 import { PaginationQueryDto } from '../../../../common/dto/pagination.dto';
 import { CursorPaginationQueryDto } from '../../../../common/dto/cursor-pagination.dto';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../../utils/cursor';
+import { type BaseCursor, decodeCursor, encodeCursor } from '../../../../utils/cursor';
 import { assertReviewTvSeriesVisible } from '../review-tv-series-visibility';
 import { NotifyClient } from '@shared/notify';
 

@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'bun:test';
 import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import {
@@ -14,7 +15,7 @@ import {
   createTestUser,
   TestDatabase,
 } from '@libs/testing';
-import { User } from '../../../auth/auth.service';
+import type { User } from '../../../auth/auth.service';
 import { SortOrder } from '../../../../common/dto/sort.dto';
 import { ReviewMovieCommentSortBy } from './dto/review-movie-comments.dto';
 import { ReviewMovieCommentsService } from './review-movie-comments.service';

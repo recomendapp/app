@@ -1,15 +1,15 @@
 import {
   WebSocketGateway,
   WebSocketServer,
-  OnGatewayConnection,
-  OnGatewayDisconnect,
+  type OnGatewayConnection,
+  type OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import { Inject, Logger } from '@nestjs/common';
 import { Server } from 'socket.io';
 import { fromNodeHeaders } from 'better-auth/node';
 import { REALTIME_NAMESPACE, getUserRoomName } from '@libs/realtime';
-import { AUTH_SERVICE, AuthService } from '../auth/auth.service';
-import { AuthenticatedSocket } from '../auth/types/fastify';
+import { AUTH_SERVICE, type AuthService } from '../auth/auth.service';
+import type { AuthenticatedSocket } from '../auth/types/fastify';
 
 @WebSocketGateway({
   namespace: REALTIME_NAMESPACE,

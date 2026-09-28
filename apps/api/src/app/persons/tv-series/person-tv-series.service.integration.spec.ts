@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'bun:test';
 import { tmdbTvSeriesCredit } from '@libs/db/schemas';
 import { createTestPerson, createTestTvSeries, TestDatabase } from '@libs/testing';
 import { defaultSupportedLocale } from '@libs/i18n';

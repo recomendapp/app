@@ -1,7 +1,8 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'bun:test';
 import { and, eq } from 'drizzle-orm';
 import { playlistItem, playlistMember } from '@libs/db/schemas';
 import { createTestMovie, createTestPlaylist, createTestUser, TestDatabase } from '@libs/testing';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { PlaylistSortBy } from '../../playlists/dto/playlists.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { MoviePlaylistsService } from './movie-playlists.service';

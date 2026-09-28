@@ -1,7 +1,7 @@
-import { Controller, All, Req, Res, Inject, RawBodyRequest } from '@nestjs/common';
+import { Controller, All, Req, Res, Inject, type RawBodyRequest } from '@nestjs/common';
 import { ApiExcludeController } from '@nestjs/swagger';
-import { FastifyRequest, FastifyReply } from 'fastify';
-import { AUTH_SERVICE, AuthService } from './auth.service';
+import type { FastifyRequest, FastifyReply } from 'fastify';
+import { AUTH_SERVICE, type AuthService } from './auth.service';
 
 @ApiExcludeController()
 @Controller()

@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'bun:test';
 import { NotFoundException } from '@nestjs/common';
 import { tmdbTvSeason } from '@libs/db/schemas';
 import { createTestTvSeries, TestDatabase } from '@libs/testing';
@@ -41,16 +42,14 @@ describe('TvSeasonsService', () => {
 
     it('returns the season with its parent tv series', async () => {
       const series = await createTestTvSeries(testDb.db);
-      await testDb.db
-        .insert(tmdbTvSeason)
-        .values({
-          id: randomTmdbId(),
-          tvSeriesId: series.id,
-          seasonNumber: 1,
-          episodeCount: 8,
-          voteAverage: 0,
-          voteCount: 0,
-        });
+      await testDb.db.insert(tmdbTvSeason).values({
+        id: randomTmdbId(),
+        tvSeriesId: series.id,
+        seasonNumber: 1,
+        episodeCount: 8,
+        voteAverage: 0,
+        voteCount: 0,
+      });
 
       const result = await service().get({
         tvSeriesId: series.id,
@@ -67,16 +66,14 @@ describe('TvSeasonsService', () => {
     it('does not leak a season from another series', async () => {
       const seriesA = await createTestTvSeries(testDb.db);
       const seriesB = await createTestTvSeries(testDb.db);
-      await testDb.db
-        .insert(tmdbTvSeason)
-        .values({
-          id: randomTmdbId(),
-          tvSeriesId: seriesB.id,
-          seasonNumber: 1,
-          episodeCount: 8,
-          voteAverage: 0,
-          voteCount: 0,
-        });
+      await testDb.db.insert(tmdbTvSeason).values({
+        id: randomTmdbId(),
+        tvSeriesId: seriesB.id,
+        seasonNumber: 1,
+        episodeCount: 8,
+        voteAverage: 0,
+        voteCount: 0,
+      });
 
       await expect(
         service().get({

@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'bun:test';
 import { ForbiddenException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import {
@@ -19,7 +20,7 @@ import {
   TestDatabase,
 } from '@libs/testing';
 import { defaultSupportedLocale } from '@libs/i18n';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { PersonFeedSortBy } from '../../persons/feed/dto/person-feed.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { FeedPersonsService } from './feed-persons.service';

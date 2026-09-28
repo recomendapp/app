@@ -25,22 +25,29 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 📦 Setup pnpm
+      - name: 📦 Setup Bun
         if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
-        uses: pnpm/action-setup@v6
+        uses: oven-sh/setup-bun@v2
         with:
-          version: 11.25.0
+          bun-version-file: package.json
 
       - name: 🔧 Setup Node.js
         if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
         uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache: 'pnpm'
+
+      - name: 🗄️ Cache Bun install
+        if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
+        uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}
+          restore-keys: ${{ runner.os }}-bun-
 
       - name: ⚙️ Install Dependencies
         if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
       - name: 📝 Prepare Mock Env for CI
         if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
@@ -81,16 +88,16 @@ jobs:
 
       - name: 🧹 Run Lint (Affected)
         if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
-        run: pnpm nx affected -t lint --parallel=3
+        run: bunx nx affected -t lint --parallel=3
 
       - name: 🔎 Run Typecheck (Affected)
         if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
-        run: pnpm nx affected -t typecheck --parallel=3
+        run: bunx nx affected -t typecheck --parallel=3
 
       - name: 🧪 Run Tests (Affected)
         if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
-        run: pnpm nx affected -t test --parallel=3
+        run: bunx nx affected -t test --parallel=3
 
       - name: 🐘 Run Integration Tests (Affected)
         if: ${{ !startsWith(github.head_ref, 'release-please--branches') }}
-        run: pnpm nx affected -t test-integration --parallel=1
+        run: bunx nx affected -t test-integration --parallel=1

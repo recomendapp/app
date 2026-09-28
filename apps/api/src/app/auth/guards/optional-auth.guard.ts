@@ -1,18 +1,16 @@
-import { CanActivate, ExecutionContext, Inject, Injectable } from '@nestjs/common';
+import { type CanActivate, type ExecutionContext, Inject, Injectable } from '@nestjs/common';
 import { fromNodeHeaders } from 'better-auth/node';
-import { IncomingHttpHeaders } from 'node:http';
-import { OptionalAuthenticatedRequest, OptionalAuthenticatedSocket } from '../types/fastify';
-import { AUTH_SERVICE, AuthService } from '../auth.service';
+import type { IncomingHttpHeaders } from 'node:http';
+import type { OptionalAuthenticatedRequest, OptionalAuthenticatedSocket } from '../types/fastify';
+import { AUTH_SERVICE, type AuthService } from '../auth.service';
 
 @Injectable()
 export class OptionalAuthGuard implements CanActivate {
-  constructor(
-    @Inject(AUTH_SERVICE) private readonly auth: AuthService,
-  ) {}
-  
+  constructor(@Inject(AUTH_SERVICE) private readonly auth: AuthService) {}
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isWs = context.getType() === 'ws';
-    
+
     let requestOrClient: OptionalAuthenticatedRequest | OptionalAuthenticatedSocket;
     let rawHeaders: IncomingHttpHeaders;
 

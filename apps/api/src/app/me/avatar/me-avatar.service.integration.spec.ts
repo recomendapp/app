@@ -1,17 +1,19 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { BadRequestException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { user } from '@libs/db/schemas';
 import { createTestUser, TestDatabase } from '@libs/testing';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import type { RealtimeGateway } from '../../realtime/realtime.gateway';
 import type { WorkerClient } from '@shared/worker';
 import type { StorageService } from '../../../common/modules/storage/storage.service';
 import type { MultipartFile } from '@fastify/multipart';
 
-jest.mock('../../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
+mock.module('../../realtime/realtime.gateway', () => ({ RealtimeGateway: mock() }));
 
-const { MeAvatarService } = require('./me-avatar.service') as typeof import('./me-avatar.service');
-const { MeService } = require('../me.service') as typeof import('../me.service');
+const { MeAvatarService } = await import('./me-avatar.service');
+const { MeService } = await import('../me.service');
 
 describe('MeAvatarService', () => {
   let testDb: TestDatabase;
@@ -29,26 +31,24 @@ describe('MeAvatarService', () => {
   });
 
   const asUser = (row: { id: string; image?: string | null }) => row as unknown as User;
-  const fakeGateway = () => ({ emitToUser: jest.fn() }) as unknown as jest.Mocked<RealtimeGateway>;
+  const fakeGateway = () => ({ emitToUser: mock() }) as unknown as Mocked<RealtimeGateway>;
   const fakeWorker = () =>
-    ({ emit: jest.fn().mockResolvedValue(undefined) }) as unknown as jest.Mocked<WorkerClient>;
+    ({ emit: mock().mockResolvedValue(undefined) }) as unknown as Mocked<WorkerClient>;
   const fakeFile = {} as MultipartFile;
 
-  function fakeStorage(overrides?: Partial<jest.Mocked<StorageService>>) {
+  function fakeStorage(overrides?: Partial<Mocked<StorageService>>) {
     return {
-      uploadFile: jest
-        .fn()
-        .mockResolvedValue({
-          filename: 'new-avatar.png',
-          url: 'https://cdn.test/avatars/new-avatar.png',
-        }),
-      deleteFile: jest.fn().mockResolvedValue(undefined),
-      getFileUrl: jest.fn(),
+      uploadFile: mock().mockResolvedValue({
+        filename: 'new-avatar.png',
+        url: 'https://cdn.test/avatars/new-avatar.png',
+      }),
+      deleteFile: mock().mockResolvedValue(undefined),
+      getFileUrl: mock(),
       ...overrides,
-    } as unknown as jest.Mocked<StorageService>;
+    } as unknown as Mocked<StorageService>;
   }
 
-  function buildService(storage?: jest.Mocked<StorageService>) {
+  function buildService(storage?: Mocked<StorageService>) {
     const meService = new MeService(testDb.db, fakeWorker(), fakeGateway());
     return new MeAvatarService(testDb.db, storage ?? fakeStorage(), meService);
   }

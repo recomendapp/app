@@ -22,19 +22,25 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v6
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: 11.25.0
+          bun-version-file: package.json
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache: 'pnpm'
+
+      - name: 🗄️ Cache Bun install
+        uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}
+          restore-keys: ${{ runner.os }}-bun-
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
       - name: Initialize Nx SHAs
         uses: nrwl/nx-set-shas@v5
@@ -108,12 +114,12 @@ jobs:
           EOF
 
       - name: Build Docker Images (Nx Affected)
-        run: npx nx affected -t docker-build --parallel=3
+        run: bunx nx affected -t docker-build --parallel=3
 
       - name: Retag and Push to GHCR
         id: affected
         run: |
-          AFFECTED=$(npx nx show projects --affected --with-target=docker-build --json)
+          AFFECTED=$(bunx nx show projects --affected --with-target=docker-build --json)
           echo "Affected projects (JSON): $AFFECTED"
 
           PROJECTS=$(echo $AFFECTED | jq -r '.[]')
@@ -234,19 +240,18 @@ jobs:
   #       with:
   #         fetch-depth: 0
 
-  #     - name: Install pnpm
-  #       uses: pnpm/action-setup@v6
+  #     - name: Install Bun
+  #       uses: oven-sh/setup-bun@v2
   #       with:
-  #         version: 11.25.0
+  #         bun-version-file: package.json
 
   #     - name: Setup Node.js
   #       uses: actions/setup-node@v7
   #       with:
   #         node-version: 24
-  #         cache: 'pnpm'
 
   #     - name: Install Dependencies
-  #       run: pnpm install --frozen-lockfile
+  #       run: bun install --frozen-lockfile
 
   #     - name: Initialize Nx SHAs
   #       uses: nrwl/nx-set-shas@v5
@@ -254,7 +259,7 @@ jobs:
   #     - name: Check if Mobile is Affected
   #       id: check-mobile
   #       run: |
-  #         AFFECTED=$(npx nx show projects --affected --json)
+  #         AFFECTED=$(bunx nx show projects --affected --json)
   #         echo "Affected projects: $AFFECTED"
   #         if echo "$AFFECTED" | grep -q '"mobile"'; then
   #           echo "IS_AFFECTED=true" >> $GITHUB_OUTPUT
@@ -323,7 +328,7 @@ jobs:
   #     - name: 🚀 Publish EAS Update
   #       if: steps.check-mobile.outputs.IS_AFFECTED == 'true'
   #       run: |
-  #         pnpm nx update mobile --channel production --message "CI Update: ${{ github.event.head_commit.message }}" --environment production --non-interactive
+  #         bunx nx update mobile --channel production --message "CI Update: ${{ github.event.head_commit.message }}" --environment production --non-interactive
 
   #     - name: 🧹 Cleanup
   #       if: always()

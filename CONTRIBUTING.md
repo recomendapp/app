@@ -12,7 +12,7 @@ Thanks for your interest in contributing! This project is open source under the 
 1. Fork the repository and create your branch from `main`.
 2. Follow the existing code style and conventions in the file(s) you touch.
 3. Keep pull requests focused on a single change.
-4. Make sure the project builds and lints locally (`pnpm lint`, `pnpm test`) before opening the PR.
+4. Make sure the project builds and lints locally (`bun run lint`, `bun run test`) before opening the PR.
 5. PR titles must follow [Conventional Commits](https://www.conventionalcommits.org/) (checked automatically, see `.github/workflows/pr-title.yml`).
 
 ## License of contributions

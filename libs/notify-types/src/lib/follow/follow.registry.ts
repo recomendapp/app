@@ -1,7 +1,7 @@
-import { 
-  NotifyFollowAcceptedDto, 
-  NotifyFollowNewDto, 
-  NotifyFollowRequestDto 
+import type {
+  NotifyFollowAcceptedDto,
+  NotifyFollowNewDto,
+  NotifyFollowRequestDto,
 } from './follow.dto';
 
 export type NotifyFollowRegistry = {

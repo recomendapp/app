@@ -1,3 +1,4 @@
+export * from './lib/mocks';
 export * from './lib/db/test-database';
 export * from './lib/fakes/notify-client.fake';
 export * from './lib/fixtures/user.fixture';

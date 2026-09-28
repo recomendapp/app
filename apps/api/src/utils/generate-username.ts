@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { user } from '@libs/db/schemas';
 import { USER_RULES } from '@libs/rules';
-import { DrizzleService } from '../common/modules/drizzle/drizzle.module';
+import type { DrizzleService } from '../common/modules/drizzle/drizzle.module';
 
 export const generateUniqueUsername = async ({
   email,

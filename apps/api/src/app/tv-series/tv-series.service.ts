@@ -1,5 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
+import { DRIZZLE_SERVICE, type DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import {
   tmdbPersonView,
   tmdbTvSeasonView,
@@ -8,8 +8,8 @@ import {
   tmdbTvSeriesView,
 } from '@libs/db/schemas';
 import { and, asc, eq, sql } from 'drizzle-orm';
-import { User } from '../auth/auth.service';
-import { SupportedLocale } from '@libs/i18n';
+import type { User } from '../auth/auth.service';
+import type { SupportedLocale } from '@libs/i18n';
 import { TvSeriesDto } from './dto/tv-series.dto';
 import { TvSeriesCastingDto } from './dto/tv-series-credits.dto';
 import { parseResponseDto } from '../../utils/parse-response-dto';

@@ -1,10 +1,10 @@
 import { BadRequestException, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { and, desc, eq, inArray, lt, or, sql } from 'drizzle-orm';
-import { MultipartFile } from '@fastify/multipart';
+import type { MultipartFile } from '@fastify/multipart';
 import { LexoRank } from 'lexorank';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
-import { DbTransaction } from '@libs/db';
+import { DRIZZLE_SERVICE, type DrizzleService } from '../../common/modules/drizzle/drizzle.module';
+import type { DbTransaction } from '@libs/db';
 import {
   importJob,
   importJobLogMovie,
@@ -26,7 +26,7 @@ import { PrefectService } from '../../common/modules/prefect/prefect.service';
 import { TvLogsSyncService } from '../tv-series/logs/sync/tv-logs-sync.service';
 import { RealtimeGateway } from '../realtime/realtime.gateway';
 import { ImportServerEvents } from '@libs/realtime';
-import { User } from '../auth/auth.service';
+import type { User } from '../auth/auth.service';
 import { parseResponseDto } from '../../utils/parse-response-dto';
 import {
   ImportJobDto,
@@ -36,7 +36,7 @@ import {
 } from './dto/imports.dto';
 import { PaginationQueryDto } from '../../common/dto/pagination.dto';
 import { CursorPaginationQueryDto } from '../../common/dto/cursor-pagination.dto';
-import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../utils/cursor';
+import { type BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../utils/cursor';
 import { z } from 'zod';
 
 // review_movie/review_tv_series title has a check constraint: null, or 1-100 chars.

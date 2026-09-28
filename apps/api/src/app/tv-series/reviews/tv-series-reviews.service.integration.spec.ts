@@ -1,17 +1,19 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { follow, logTvSeries, profile, reviewTvSeries } from '@libs/db/schemas';
 import { createTestTvSeries, createTestUser, TestDatabase } from '@libs/testing';
 import { LogServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../../realtime/realtime.gateway';
-import { User } from '../../auth/auth.service';
-import { ReviewTvSeriesSortBy } from '../../reviews/tv-series/dto/review-tv-series.dto';
-import { SortOrder } from '../../../common/dto/sort.dto';
+import type { User } from '../../auth/auth.service';
 
-jest.mock('../../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
+mock.module('../../realtime/realtime.gateway', () => ({ RealtimeGateway: mock() }));
 
-const { TvSeriesReviewsService } =
-  require('./tv-series-reviews.service') as typeof import('./tv-series-reviews.service');
+const { ReviewTvSeriesSortBy } = await import('../../reviews/tv-series/dto/review-tv-series.dto');
+const { SortOrder } = await import('../../../common/dto/sort.dto');
+
+const { TvSeriesReviewsService } = await import('./tv-series-reviews.service');
 
 describe('TvSeriesReviewsService', () => {
   let testDb: TestDatabase;
@@ -30,8 +32,8 @@ describe('TvSeriesReviewsService', () => {
 
   const asUser = (row: { id: string }) => row as unknown as User;
   const fakeGateway = () =>
-    ({ emitToUser: jest.fn(), emitToUsers: jest.fn() }) as unknown as jest.Mocked<RealtimeGateway>;
-  const service = (gateway?: jest.Mocked<RealtimeGateway>) =>
+    ({ emitToUser: mock(), emitToUsers: mock() }) as unknown as Mocked<RealtimeGateway>;
+  const service = (gateway?: Mocked<RealtimeGateway>) =>
     new TvSeriesReviewsService(testDb.db, gateway ?? fakeGateway());
 
   async function addLog(userId: string, tvSeriesId: number, rating?: number) {

@@ -6,8 +6,8 @@ import {
   Inject,
 } from '@nestjs/common';
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
-import { EnvService, ENV_SERVICE } from '@libs/env';
-import { MultipartFile } from '@fastify/multipart';
+import { type EnvService, ENV_SERVICE } from '@libs/env';
+import type { MultipartFile } from '@fastify/multipart';
 
 const ALLOWED_MIME_TYPES = ['application/zip', 'application/x-zip-compressed'];
 

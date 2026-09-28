@@ -27,21 +27,21 @@ import {
   FeedLogTvSeriesContentDto,
   FeedReviewMovieLikeContentDto,
   FeedReviewTvSeriesLikeContentDto,
-  FeedItemUnion,
+  type FeedItemUnion,
   ListInfiniteFeedDto,
   ListInfiniteFeedQueryDto,
   ListPaginatedFeedDto,
   ListPaginatedFeedQueryDto,
 } from './feed.dto';
-import { DbTransaction } from '@libs/db';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
-import { User } from '../auth/auth.service';
-import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../utils/cursor';
+import type { DbTransaction } from '@libs/db';
+import { DRIZZLE_SERVICE, type DrizzleService } from '../../common/modules/drizzle/drizzle.module';
+import type { User } from '../auth/auth.service';
+import { type BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../utils/cursor';
 import { z } from 'zod';
 import { caseWhen } from '../../utils/sql-case';
 import { PlaylistDto } from '../playlists/dto/playlists.dto';
 import { buildJsonbObject } from '../../utils/sql';
-import { SupportedLocale } from '@libs/i18n';
+import type { SupportedLocale } from '@libs/i18n';
 import { PlaylistQueryBuilder } from '../playlists/playlists.query-builder';
 
 const CursorSchema = baseCursorSchema(z.string().min(1), z.number());

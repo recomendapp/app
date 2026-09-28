@@ -1,7 +1,10 @@
 import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { apiException } from '../../../common/dto/api-error.dto';
 import { and, asc, desc, eq, inArray, ne, SQL, sql } from 'drizzle-orm';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
 import {
   pinnedItem,
   playlist,
@@ -15,12 +18,12 @@ import {
   PERSON_COMPACT_SELECT,
   TV_SERIES_COMPACT_SELECT,
 } from '@libs/db/selectors';
-import { User } from '../../auth/auth.service';
-import { SupportedLocale } from '@libs/i18n';
+import type { User } from '../../auth/auth.service';
+import type { SupportedLocale } from '@libs/i18n';
 import { PINNED_ITEM_RULES } from '@libs/rules';
 import { canViewPlaylist } from '../../playlists/playlists.permission';
 import { PlaylistQueryBuilder } from '../../playlists/playlists.query-builder';
-import { PlaylistRole } from '../../playlists/types/playlist-role.type';
+import type { PlaylistRole } from '../../playlists/types/playlist-role.type';
 import { LexoRank } from 'lexorank';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { PinnedServerEvents } from '@libs/realtime';
@@ -28,7 +31,7 @@ import { RealtimeGateway } from '../../realtime/realtime.gateway';
 import {
   PinnedItemCreateDto,
   PinnedItemDto,
-  PinnedItemUnion,
+  type PinnedItemUnion,
   PinnedItemUpdateDto,
   PinnedItemsDeleteDto,
   PinnedLimitReachedErrorDto,

@@ -10,7 +10,7 @@ coverage/
 
 node_modules/
 package-lock.json
-pnpm-lock.yaml
+bun.lock
 yarn.lock
 npm-debug.log
 yarn-error.log

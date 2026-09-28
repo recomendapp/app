@@ -1,4 +1,4 @@
-import { assetUrl, AssetPath } from '@libs/assets';
+import { assetUrl, type AssetPath } from '@libs/assets';
 
 export function getAssetUrl(assetPath: string | null | undefined): string | null {
   if (!assetPath) return null;

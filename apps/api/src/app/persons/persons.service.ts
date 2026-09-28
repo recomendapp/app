@@ -1,11 +1,11 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
+import { DRIZZLE_SERVICE, type DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { and, eq, sql } from 'drizzle-orm';
 import { followPerson, tmdbPersonView } from '@libs/db/schemas';
 import { parseResponseDto } from '../../utils/parse-response-dto';
 import { PersonFollowDto } from './dto/person-follow.dto';
-import { User } from '../auth/auth.service';
-import { SupportedLocale } from '@libs/i18n';
+import type { User } from '../auth/auth.service';
+import type { SupportedLocale } from '@libs/i18n';
 import { PersonDto } from './dto/persons.dto';
 import { PersonFollowServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../realtime/realtime.gateway';

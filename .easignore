@@ -15,8 +15,12 @@ web-build
 
 node_modules
 
-/apps/*
-!/apps/mobile
+# Only apps/mobile is built on EAS, but Bun needs every workspace's package.json to
+# install the same dependency graph as bun.lock (and the same isolated store paths,
+# which Expo's fingerprint depends on).
+/apps/*/*
+!/apps/*/package.json
+!/apps/mobile/*
 
 ios/
 android/

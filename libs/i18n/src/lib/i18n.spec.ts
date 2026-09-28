@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'bun:test';
 import { getFallbackLocale } from './i18n';
 
 describe('getFallbackLocale', () => {

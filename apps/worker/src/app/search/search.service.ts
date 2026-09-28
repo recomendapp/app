@@ -1,10 +1,10 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle.module';
+import { DRIZZLE_SERVICE, type DrizzleService } from '../../common/modules/drizzle.module';
 import { TYPESENSE_CLIENT } from '../../common/modules/typesense.module';
 import { Client as TypesenseClient } from 'typesense';
 import { eq } from 'drizzle-orm';
 import { playlist, user } from '@libs/db/schemas';
-import { SearchRegistry } from '@shared/worker';
+import type { SearchRegistry } from '@shared/worker';
 
 @Injectable()
 export class SearchService {

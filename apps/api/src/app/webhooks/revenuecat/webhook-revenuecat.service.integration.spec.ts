@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, spyOn, type Mock } from 'bun:test';
 import { eq } from 'drizzle-orm';
 import { profile } from '@libs/db/schemas';
 import { createTestUser, TestDatabase } from '@libs/testing';
@@ -6,7 +7,7 @@ import { WebhookRevenuecatService } from './webhook-revenuecat.service';
 
 describe('WebhookRevenuecatService', () => {
   let testDb: TestDatabase;
-  let fetchSpy: jest.SpiedFunction<typeof fetch>;
+  let fetchSpy: Mock<typeof fetch>;
 
   beforeAll(async () => {
     testDb = await TestDatabase.create();
@@ -28,7 +29,7 @@ describe('WebhookRevenuecatService', () => {
   }
 
   function mockSubscriberResponse(entitlements: Record<string, { expires_date: string | null }>) {
-    fetchSpy = jest.spyOn(global, 'fetch').mockResolvedValue({
+    fetchSpy = spyOn(global, 'fetch').mockResolvedValue({
       ok: true,
       status: 200,
       statusText: 'OK',
@@ -182,7 +183,7 @@ describe('WebhookRevenuecatService', () => {
 
     it('throws when the RevenueCat API call fails', async () => {
       const { user } = await createTestUser(testDb.db);
-      fetchSpy = jest.spyOn(global, 'fetch').mockResolvedValue({
+      fetchSpy = spyOn(global, 'fetch').mockResolvedValue({
         ok: false,
         status: 500,
         statusText: 'Internal Server Error',

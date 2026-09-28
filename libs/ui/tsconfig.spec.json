@@ -2,16 +2,13 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "module": "commonjs",
-    "moduleResolution": "node10",
+    "target": "es2021",
+    "module": "preserve",
+    "moduleResolution": "bundler",
     "jsx": "react-jsx",
-    "types": ["jest", "node"]
+    "types": ["bun"],
+    "verbatimModuleSyntax": true
   },
-  "include": [
-    "jest.config.ts",
-    "jest.config.cts",
-    "src/**/*.test.ts",
-    "src/**/*.spec.ts",
-    "src/**/*.d.ts"
-  ]
+  "include": ["src/**/*.test.ts", "src/**/*.spec.ts", "src/**/*.d.ts"],
+  "exclude": ["node_modules"]
 }

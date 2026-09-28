@@ -1,9 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
 import { exploreItem, tmdbMovieView, tmdbTvSeriesView } from '@libs/db/schemas';
 import { and, asc, desc, eq, gt, lt, sql, SQL } from 'drizzle-orm';
 import {
-  ExploreItemWithMediaUnion,
+  type ExploreItemWithMediaUnion,
   ExploreItemWithMovieDto,
   ExploreItemWithTvSeriesDto,
   ListAllExploreItemsQueryDto,
@@ -12,9 +15,14 @@ import {
   ListInfiniteExploreItemsQueryDto,
   ListInfiniteExploreItemsDto,
 } from './explore-items.dto';
-import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import {
+  type BaseCursor,
+  baseCursorSchema,
+  decodeCursor,
+  encodeCursor,
+} from '../../../utils/cursor';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
-import { SupportedLocale } from '@libs/i18n';
+import type { SupportedLocale } from '@libs/i18n';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { z } from 'zod';

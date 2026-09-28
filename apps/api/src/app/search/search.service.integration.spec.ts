@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
 import type { Client as TypesenseClient } from 'typesense';
 import {
   createTestMovie,
@@ -8,7 +9,7 @@ import {
   TestDatabase,
 } from '@libs/testing';
 import { defaultSupportedLocale } from '@libs/i18n';
-import { User } from '../auth/auth.service';
+import type { User } from '../auth/auth.service';
 import { SearchMoviesService } from './movies/search-movies.service';
 import { SearchTvSeriesService } from './tv-series/search-tv-series.service';
 import { SearchPersonsService } from './persons/search-persons.service';
@@ -28,7 +29,7 @@ function fakeMultiSearchClient(hitsByCollection: {
   users?: Hit[];
   playlists?: Hit[];
 }) {
-  const perform = jest.fn().mockResolvedValue({
+  const perform = mock().mockResolvedValue({
     results: [
       { hits: hitsByCollection.movies ?? [] },
       { hits: hitsByCollection.tv_series ?? [] },

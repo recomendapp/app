@@ -2,25 +2,25 @@ import { io, Socket } from 'socket.io-client';
 import {
   REALTIME_NAMESPACE,
   PlaylistServerEvents,
-  IPlaylistItemUpdatedSignal,
-  IPlaylistItemsDeletedSignal,
-  IPlaylistDeletedSignal,
+  type IPlaylistItemUpdatedSignal,
+  type IPlaylistItemsDeletedSignal,
+  type IPlaylistDeletedSignal,
   LogServerEvents,
   BookmarkServerEvents,
   PinnedServerEvents,
-  IPinnedItemReorderedSignal,
-  IPinnedItemsDeletedSignal,
+  type IPinnedItemReorderedSignal,
+  type IPinnedItemsDeletedSignal,
   RecoServerEvents,
   MeServerEvents,
   UserFollowServerEvents,
   PersonFollowServerEvents,
   ImportServerEvents,
-  IImportDeletedSignal,
-  IImportSubItemPatchedSignal,
-  IImportSubItemReviewPatchedSignal,
-  IImportPlaylistItemPatchedSignal,
+  type IImportDeletedSignal,
+  type IImportSubItemPatchedSignal,
+  type IImportSubItemReviewPatchedSignal,
+  type IImportPlaylistItemPatchedSignal,
 } from '@libs/realtime';
-import {
+import type {
   Bookmark,
   Follow,
   ImportJob,
@@ -45,10 +45,10 @@ import {
   User,
   WatchedDateResponse,
 } from './__generated__';
-import { PlaylistItemWithMedia } from './playlists';
-import { BookmarkWithMedia } from './bookmarks';
-import { RecoWithMedia } from './recos';
-import { PinnedItemWithData } from './pinned';
+import type { PlaylistItemWithMedia } from './playlists';
+import type { BookmarkWithMedia } from './bookmarks';
+import type { RecoWithMedia } from './recos';
+import type { PinnedItemWithData } from './pinned';
 
 export interface PlaylistServerToClientEvents {
   [PlaylistServerEvents.CREATED]: (playlist: Playlist) => void;

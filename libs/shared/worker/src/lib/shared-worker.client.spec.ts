@@ -1,8 +1,9 @@
+import { describe, it, expect, mock } from 'bun:test';
 import { WorkerClient } from './shared-worker.client';
 
 describe('WorkerClient', () => {
   function createClient() {
-    const searchQueue = { add: jest.fn().mockResolvedValue(undefined) };
+    const searchQueue = { add: mock().mockResolvedValue(undefined) };
     const client = new WorkerClient(searchQueue as any);
     return { client, searchQueue };
   }

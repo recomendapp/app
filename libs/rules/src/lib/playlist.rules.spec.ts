@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'bun:test';
 import { PLAYLIST_RULES } from './playlist.rules';
 
 describe('PLAYLIST_RULES.TITLE.REGEX', () => {

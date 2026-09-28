@@ -1,12 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { eq, sql } from 'drizzle-orm';
 import { uiBackground, tmdbMovieView, tmdbTvSeriesView } from '@libs/db/schemas';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import { SupportedLocale } from '@libs/i18n';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
+import type { SupportedLocale } from '@libs/i18n';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
 import {
   ListAllUiBackgroundsQueryDto,
-  UiBackgroundWithMediaUnion,
+  type UiBackgroundWithMediaUnion,
   UiBackgroundWithMovieDto,
   UiBackgroundWithTvSeriesDto,
 } from './ui-backgrounds.dto';

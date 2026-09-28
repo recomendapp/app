@@ -11,9 +11,12 @@ import {
 } from '@libs/db/schemas';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { LogTvSeriesDto, LogTvSeriesRequestDto, LogTvStatus } from './tv-series-logs.dto';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
 import { TvLogsSyncService } from './sync/tv-logs-sync.service';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import {
   TvSeriesFollowingAverageRatingDto,
   TvSeriesFollowingLogDto,

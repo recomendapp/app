@@ -2,7 +2,7 @@ import { plainToInstance } from 'class-transformer';
 import { pinnedItem } from '@libs/db/schemas';
 import {
   PinnedItemStatus,
-  PinnedItemUnion,
+  type PinnedItemUnion,
   PinnedItemWithMovieDto,
   PinnedItemWithPersonDto,
   PinnedItemWithPlaylistDto,

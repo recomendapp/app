@@ -1,12 +1,20 @@
 import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { and, asc, desc, eq, exists, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { follow, logTvSeries, profile, reviewTvSeries, tmdbTvSeriesView } from '@libs/db/schemas';
-import { User } from '../../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import { SupportedLocale } from '@libs/i18n';
-import { DbTransaction } from '@libs/db';
+import type { User } from '../../auth/auth.service';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
+import type { SupportedLocale } from '@libs/i18n';
+import type { DbTransaction } from '@libs/db';
 import { SortOrder } from '../../../common/dto/sort.dto';
-import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import {
+  type BaseCursor,
+  baseCursorSchema,
+  decodeCursor,
+  encodeCursor,
+} from '../../../utils/cursor';
 import { z } from 'zod';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
 import {

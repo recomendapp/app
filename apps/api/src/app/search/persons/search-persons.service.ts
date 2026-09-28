@@ -1,9 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Client as TypesenseClient } from 'typesense';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import { User } from '../../auth/auth.service';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
+import type { User } from '../../auth/auth.service';
 import { TYPESENSE_CLIENT } from '../../../common/modules/typesense/typesense.module';
-import { SupportedLocale } from '@libs/i18n';
+import type { SupportedLocale } from '@libs/i18n';
 import {
   ListInfinitePersonsDto,
   ListPaginatedPersonsDto,
@@ -18,8 +21,8 @@ import { decodeCursor, encodeCursor } from '../../../utils/cursor';
 import { z } from 'zod';
 import { inArray, sql } from 'drizzle-orm';
 import { tmdbPersonView } from '@libs/db/schemas';
-import { SearchParams } from 'typesense/lib/Typesense/Documents';
-import { DbTransaction } from '@libs/db';
+import type { SearchParams } from 'typesense/lib/Typesense/Documents';
+import type { DbTransaction } from '@libs/db';
 import { PERSON_COMPACT_SELECT } from '@libs/db/selectors';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
 

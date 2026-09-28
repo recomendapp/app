@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { assetPaths } from '@libs/assets';
-import { SupportedLocale } from '@libs/i18n';
+import type { SupportedLocale } from '@libs/i18n';
 import { UiFeatureDto } from './ui-features.dto';
 
 interface FeatureAssetPaths {

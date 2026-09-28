@@ -32,10 +32,10 @@ Monorepo of the **Recomend** app, dev by [@lxup](https://github.com/lxup).
 ## 📦 Installation
 
 ```bash
-pnpm install
+bun install
 cp .env.template .env.local
 # Add your environment variables to .env.local
-pnpm start
+bun run start
 ```
 
 ## 🤝 Contributing

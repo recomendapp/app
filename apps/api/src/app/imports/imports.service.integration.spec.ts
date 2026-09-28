@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { and, eq } from 'drizzle-orm';
 import {
@@ -31,22 +33,19 @@ import {
   createFakeNotifyClient,
   TestDatabase,
 } from '@libs/testing';
-import { User } from '../auth/auth.service';
+import type { User } from '../auth/auth.service';
 import { ImportServerEvents } from '@libs/realtime';
 import type { RealtimeGateway } from '../realtime/realtime.gateway';
 import type { TransfersStorageService } from '../../common/modules/transfers-storage/transfers-storage.service';
 import type { PrefectService } from '../../common/modules/prefect/prefect.service';
 import type { MultipartFile } from '@fastify/multipart';
 
-jest.mock('../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
+mock.module('../realtime/realtime.gateway', () => ({ RealtimeGateway: mock() }));
 
-const { ImportsService } = require('./imports.service') as typeof import('./imports.service');
-const { TvLogsSyncService } =
-  require('../tv-series/logs/sync/tv-logs-sync.service') as typeof import('../tv-series/logs/sync/tv-logs-sync.service');
-const { RecosService } =
-  require('../recos/recos.service') as typeof import('../recos/recos.service');
-const { UserRecosService } =
-  require('../users/recos/user-recos.service') as typeof import('../users/recos/user-recos.service');
+const { ImportsService } = await import('./imports.service');
+const { TvLogsSyncService } = await import('../tv-series/logs/sync/tv-logs-sync.service');
+const { RecosService } = await import('../recos/recos.service');
+const { UserRecosService } = await import('../users/recos/user-recos.service');
 
 describe('ImportsService', () => {
   let testDb: TestDatabase;
@@ -64,27 +63,27 @@ describe('ImportsService', () => {
   });
 
   const asUser = (row: { id: string }) => row as unknown as User;
-  const fakeGateway = () => ({ emitToUser: jest.fn() }) as unknown as jest.Mocked<RealtimeGateway>;
+  const fakeGateway = () => ({ emitToUser: mock() }) as unknown as Mocked<RealtimeGateway>;
 
-  function fakeTransfersStorage(overrides?: Partial<jest.Mocked<TransfersStorageService>>) {
+  function fakeTransfersStorage(overrides?: Partial<Mocked<TransfersStorageService>>) {
     return {
-      uploadImportFile: jest.fn().mockResolvedValue({ key: 'fake/import/key.zip' }),
-      deleteFile: jest.fn().mockResolvedValue(undefined),
+      uploadImportFile: mock().mockResolvedValue({ key: 'fake/import/key.zip' }),
+      deleteFile: mock().mockResolvedValue(undefined),
       ...overrides,
-    } as unknown as jest.Mocked<TransfersStorageService>;
+    } as unknown as Mocked<TransfersStorageService>;
   }
 
-  function fakePrefect(overrides?: Partial<jest.Mocked<PrefectService>>) {
+  function fakePrefect(overrides?: Partial<Mocked<PrefectService>>) {
     return {
-      triggerImportFlow: jest.fn().mockResolvedValue({ id: 'run-id' }),
+      triggerImportFlow: mock().mockResolvedValue({ id: 'run-id' }),
       ...overrides,
-    } as unknown as jest.Mocked<PrefectService>;
+    } as unknown as Mocked<PrefectService>;
   }
 
   function buildService(opts?: {
-    transfersStorage?: jest.Mocked<TransfersStorageService>;
-    prefect?: jest.Mocked<PrefectService>;
-    gateway?: jest.Mocked<RealtimeGateway>;
+    transfersStorage?: Mocked<TransfersStorageService>;
+    prefect?: Mocked<PrefectService>;
+    gateway?: Mocked<RealtimeGateway>;
   }) {
     const userRecosService = new UserRecosService(testDb.db);
     const recosService = new RecosService(
@@ -191,7 +190,7 @@ describe('ImportsService', () => {
       const { user } = await createTestUser(testDb.db);
       const provider = await createTestProvider(testDb.db);
       const prefect = fakePrefect({
-        triggerImportFlow: jest.fn().mockRejectedValue(new Error('boom')),
+        triggerImportFlow: mock().mockRejectedValue(new Error('boom')),
       });
       const gateway = fakeGateway();
       const service = buildService({ prefect, gateway });

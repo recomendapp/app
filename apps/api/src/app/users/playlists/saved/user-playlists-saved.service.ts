@@ -1,14 +1,22 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, asc, desc, eq, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { playlist, playlistSaved, profile, user } from '@libs/db/schemas'; // 🔥 Ajout de profile et user
-import { User } from '../../../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/drizzle/drizzle.module';
+import type { User } from '../../../auth/auth.service';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../../common/modules/drizzle/drizzle.module';
 import {
   ListInfinitePlaylistsWithOwnerDto,
   ListPaginatedPlaylistsWithOwnerDto,
 } from '../../../playlists/dto/playlists.dto';
 import { SortOrder } from '../../../../common/dto/sort.dto';
-import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../../utils/cursor';
+import {
+  type BaseCursor,
+  baseCursorSchema,
+  decodeCursor,
+  encodeCursor,
+} from '../../../../utils/cursor';
 import { z } from 'zod';
 import { parseResponseDto } from '../../../../utils/parse-response-dto';
 import { PlaylistQueryBuilder } from '../../../playlists/playlists.query-builder';

@@ -1,7 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
-import { DbTransaction } from '@libs/db';
-import { SupportedLocale } from '@libs/i18n';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
+import type { DbTransaction } from '@libs/db';
+import type { SupportedLocale } from '@libs/i18n';
 import { MovieSortBy } from '../../movies/dto/movies.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { and, asc, desc, eq, gt, isNotNull, lt, or, SQL, sql } from 'drizzle-orm';
@@ -13,7 +16,12 @@ import {
   ListPaginatedPersonMoviesDto,
   PersonMovieFacetsDto,
 } from './dto/person-movie.dto';
-import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import {
+  type BaseCursor,
+  baseCursorSchema,
+  decodeCursor,
+  encodeCursor,
+} from '../../../utils/cursor';
 import { z } from 'zod';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { MOVIE_COMPACT_SELECT } from '@libs/db/selectors';

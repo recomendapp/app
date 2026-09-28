@@ -1,6 +1,6 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
-import { SEARCH_QUEUE, SearchJob } from '@shared/worker';
+import { SEARCH_QUEUE, type SearchJob } from '@shared/worker';
 import { SearchService } from './search.service';
 
 @Processor(SEARCH_QUEUE)
@@ -29,7 +29,7 @@ export class SearchProcessor extends WorkerHost {
       }
     } catch (error) {
       this.logger.error(`Failed to process ${job.name}`, error);
-      throw error; 
+      throw error;
     }
   }
 }

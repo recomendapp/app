@@ -1,7 +1,10 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { and, asc, desc, eq, gt, lt, or, SQL, sql } from 'drizzle-orm';
 import { logMovie, logMovieWatchedDate } from '@libs/db/schemas';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/drizzle/drizzle.module';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../../common/modules/drizzle/drizzle.module';
 import {
   ListInfiniteWatchedDatesDto,
   ListInfiniteWatchedDatesQueryDto,
@@ -12,10 +15,15 @@ import {
   WatchedDateSortBy,
   WatchedDateUpdateDto,
 } from './dto/watched-dates.dto';
-import { User } from '../../../auth/auth.service';
-import { DbTransaction } from '@libs/db';
+import type { User } from '../../../auth/auth.service';
+import type { DbTransaction } from '@libs/db';
 import { SortOrder } from '../../../../common/dto/sort.dto';
-import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../../utils/cursor';
+import {
+  type BaseCursor,
+  baseCursorSchema,
+  decodeCursor,
+  encodeCursor,
+} from '../../../../utils/cursor';
 import { z } from 'zod';
 import { parseResponseDto } from '../../../../utils/parse-response-dto';
 import { LogServerEvents } from '@libs/realtime';

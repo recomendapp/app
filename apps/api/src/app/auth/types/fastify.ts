@@ -1,5 +1,5 @@
-import { FastifyRequest } from 'fastify';
-import { Session, User } from '../auth.service';
+import type { FastifyRequest } from 'fastify';
+import type { Session, User } from '../auth.service';
 import { Socket } from 'socket.io';
 
 export interface AuthenticatedRequest extends FastifyRequest {

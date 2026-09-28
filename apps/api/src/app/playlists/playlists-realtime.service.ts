@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, eq, inArray, sql } from 'drizzle-orm';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
+import { DRIZZLE_SERVICE, type DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import {
   playlist,
   playlistItem,
@@ -10,10 +10,10 @@ import {
   user,
 } from '@libs/db/schemas';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
-import { SupportedLocale } from '@libs/i18n';
-import { IPlaylistItemUpdatedSignal, PlaylistServerEvents } from '@libs/realtime';
+import type { SupportedLocale } from '@libs/i18n';
+import { type IPlaylistItemUpdatedSignal, PlaylistServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../realtime/realtime.gateway';
-import { PlaylistItemWithMediaUnion } from './items/playlist-items.dto';
+import type { PlaylistItemWithMediaUnion } from './items/playlist-items.dto';
 import { PlaylistDto } from './dto/playlists.dto';
 
 interface Recipient {

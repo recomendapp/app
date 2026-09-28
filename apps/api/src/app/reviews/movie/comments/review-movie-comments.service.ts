@@ -7,13 +7,16 @@ import {
 } from '@nestjs/common';
 import { and, asc, desc, eq, gt, isNull, lt, or, SQL, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { User } from '../../../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/drizzle/drizzle.module';
+import type { User } from '../../../auth/auth.service';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../../common/modules/drizzle/drizzle.module';
 import { profile, reviewMovie, reviewMovieComment, user } from '@libs/db/schemas';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 import { parseResponseDto } from '../../../../utils/parse-response-dto';
 import { SortOrder } from '../../../../common/dto/sort.dto';
-import { BaseCursor, decodeCursor, encodeCursor } from '../../../../utils/cursor';
+import { type BaseCursor, decodeCursor, encodeCursor } from '../../../../utils/cursor';
 import { assertReviewMovieVisible } from '../review-movie-visibility';
 import { NotifyClient } from '@shared/notify';
 import {

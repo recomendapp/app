@@ -1,17 +1,18 @@
-jest.mock('../../env', () => ({
+import { describe, it, expect, mock, type Mock } from 'bun:test';
+mock.module('../../env', () => ({
   env: { APNS_BUNDLE_ID: 'com.recomend.test' },
 }));
 
-import { ApnsService } from './apns.service';
+const { ApnsService } = await import('./apns.service');
 
 describe('ApnsService', () => {
-  function createService(send: jest.Mock) {
+  function createService(send: Mock<(...args: any[]) => any>) {
     const apnProvider = { send } as any;
     return new ApnsService(apnProvider);
   }
 
   it('returns an empty array and never calls the SDK when there are no tokens', async () => {
-    const send = jest.fn();
+    const send = mock();
     const service = createService(send);
 
     const result = await service.sendToDevices([], 'title', 'body');
@@ -21,7 +22,7 @@ describe('ApnsService', () => {
   });
 
   it('builds a notification with the given title/body/data and topic, and returns no failed tokens on success', async () => {
-    const send = jest.fn().mockResolvedValue({ failed: [] });
+    const send = mock().mockResolvedValue({ failed: [] });
     const service = createService(send);
 
     const result = await service.sendToDevices(['device-1'], 'Hello', 'World', { url: '/path' });
@@ -43,7 +44,7 @@ describe('ApnsService', () => {
   });
 
   it('nests avatar/attachment data under payload and enables mutableContent when an avatar is present', async () => {
-    const send = jest.fn().mockResolvedValue({ failed: [] });
+    const send = mock().mockResolvedValue({ failed: [] });
     const service = createService(send);
 
     await service.sendToDevices(['device-1'], 'Hello', 'World', undefined, {
@@ -58,7 +59,7 @@ describe('ApnsService', () => {
   });
 
   it('enables mutableContent when only an attachmentUrl is present', async () => {
-    const send = jest.fn().mockResolvedValue({ failed: [] });
+    const send = mock().mockResolvedValue({ failed: [] });
     const service = createService(send);
 
     await service.sendToDevices(['device-1'], 'Hello', 'World', undefined, {
@@ -71,7 +72,7 @@ describe('ApnsService', () => {
   });
 
   it('returns the device tokens for entries reported as failed', async () => {
-    const send = jest.fn().mockResolvedValue({
+    const send = mock().mockResolvedValue({
       failed: [
         { device: 'device-1', error: new Error('bad token') },
         { device: 'device-2', status: '410' },
@@ -90,7 +91,7 @@ describe('ApnsService', () => {
   });
 
   it('treats a thrown SDK error as every token failing', async () => {
-    const send = jest.fn().mockRejectedValue(new Error('network down'));
+    const send = mock().mockRejectedValue(new Error('network down'));
     const service = createService(send);
 
     const result = await service.sendToDevices(['device-1', 'device-2'], 'Hello', 'World');

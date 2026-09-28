@@ -1,8 +1,8 @@
 import { NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { tmdbMovie, tmdbTvSeries } from '@libs/db/schemas';
-import { DbTransaction } from '@libs/db';
-import { DrizzleService } from '../common/modules/drizzle/drizzle.module';
+import type { DbTransaction } from '@libs/db';
+import type { DrizzleService } from '../common/modules/drizzle/drizzle.module';
 
 export const assertMediaExists = async (
   db: DrizzleService | DbTransaction,

@@ -2,58 +2,31 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "node",
+      "type": "bun",
       "request": "launch",
-      "name": "Debug api with Nx",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["nx", "serve", "api"],
-      "env": {
-        "NODE_OPTIONS": "--inspect=9230"
-      },
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "skipFiles": ["<node_internals>/**"],
-      "sourceMaps": true,
-      "outFiles": [
-        "${workspaceFolder}/apps/api/dist/**/*.(m|c|)js",
-        "!**/node_modules/**"
-      ]
+      "name": "Debug api",
+      "preLaunchTask": "build api",
+      "program": "${workspaceFolder}/dist/apps/api/main.js",
+      "cwd": "${workspaceFolder}",
+      "runtimeArgs": ["--env-file=.env", "--env-file=apps/api/.env"]
     },
     {
-      "type": "node",
+      "type": "bun",
       "request": "launch",
-      "name": "Debug notify with Nx",
-      "runtimeExecutable": "pnpm exec",
-      "runtimeArgs": ["nx", "serve", "notify"],
-      "env": {
-        "NODE_OPTIONS": "--inspect=9233"
-      },
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "skipFiles": ["<node_internals>/**"],
-      "sourceMaps": true,
-      "outFiles": [
-        "${workspaceFolder}/apps/notify/dist/**/*.(m|c|)js",
-        "!**/node_modules/**"
-      ]
+      "name": "Debug notify",
+      "preLaunchTask": "build notify",
+      "program": "${workspaceFolder}/dist/apps/notify/main.js",
+      "cwd": "${workspaceFolder}",
+      "runtimeArgs": ["--env-file=.env", "--env-file=apps/notify/.env"]
     },
     {
-      "type": "node",
+      "type": "bun",
       "request": "launch",
-      "name": "Debug worker with Nx",
-      "runtimeExecutable": "pnpm exec",
-      "runtimeArgs": ["nx", "serve", "worker"],
-      "env": {
-        "NODE_OPTIONS": "--inspect=9234"
-      },
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "skipFiles": ["<node_internals>/**"],
-      "sourceMaps": true,
-      "outFiles": [
-        "${workspaceFolder}/apps/worker/dist/**/*.(m|c|)js",
-        "!**/node_modules/**"
-      ]
+      "name": "Debug worker",
+      "preLaunchTask": "build worker",
+      "program": "${workspaceFolder}/dist/apps/worker/main.js",
+      "cwd": "${workspaceFolder}",
+      "runtimeArgs": ["--env-file=.env", "--env-file=apps/worker/.env"]
     }
   ]
 }

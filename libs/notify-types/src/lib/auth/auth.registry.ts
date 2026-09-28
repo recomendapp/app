@@ -1,4 +1,9 @@
-import { SendDeleteAccountVerificationEmailDto, SendOtpEmailDto, SendResetPasswordEmailDto, SendVerificationEmailDto } from "./auth.dto";
+import type {
+  SendDeleteAccountVerificationEmailDto,
+  SendOtpEmailDto,
+  SendResetPasswordEmailDto,
+  SendVerificationEmailDto,
+} from './auth.dto';
 
 export type NotifyAuthRegistry = {
   'auth:verification-email': SendVerificationEmailDto;

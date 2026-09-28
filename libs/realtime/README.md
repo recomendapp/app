@@ -8,4 +8,4 @@ Run `nx build realtime` to build the library.
 
 ## Running unit tests
 
-Run `nx test realtime` to execute the unit tests via [Jest](https://jestjs.io).
+Run `nx test realtime` to execute the unit tests via `bun test`.

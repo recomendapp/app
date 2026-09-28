@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
+import { DRIZZLE_SERVICE, type DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { StatusDto } from './dto/status.dto';
 import { systemConfig } from '@libs/db/schemas';
 import { inArray } from 'drizzle-orm';

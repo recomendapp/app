@@ -1,17 +1,15 @@
 import {
-  CanActivate,
-  ExecutionContext,
+  type CanActivate,
+  type ExecutionContext,
   Injectable,
   Inject,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ENV_SERVICE, EnvService } from '@libs/env';
+import { ENV_SERVICE, type EnvService } from '@libs/env';
 
 @Injectable()
 export class RevenueCatGuard implements CanActivate {
-  constructor(
-    @Inject(ENV_SERVICE) private readonly env: EnvService,
-  ) {}
+  constructor(@Inject(ENV_SERVICE) private readonly env: EnvService) {}
 
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();

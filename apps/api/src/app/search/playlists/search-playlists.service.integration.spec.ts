@@ -1,16 +1,17 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
 import { BadRequestException } from '@nestjs/common';
 import type { Client as TypesenseClient } from 'typesense';
 import { follow, playlistMember, profile } from '@libs/db/schemas';
 import { createTestPlaylist, createTestUser, TestDatabase } from '@libs/testing';
 import { eq } from 'drizzle-orm';
 import { encodeCursor } from '../../../utils/cursor';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 import { SearchPlaylistsService } from './search-playlists.service';
 
 function fakeTypesense(response: { hits: { document: { id: string } }[]; found: number }) {
-  const search = jest.fn().mockResolvedValue(response);
-  const documents = jest.fn().mockReturnValue({ search });
-  const collections = jest.fn().mockReturnValue({ documents });
+  const search = mock().mockResolvedValue(response);
+  const documents = mock().mockReturnValue({ search });
+  const collections = mock().mockReturnValue({ documents });
   return { client: { collections } as unknown as TypesenseClient, search };
 }
 

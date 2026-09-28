@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'bun:test';
 import { createTestUser, TestDatabase } from '@libs/testing';
 import { USER_RULES } from '@libs/rules';
 import { generateUniqueUsername } from './generate-username';

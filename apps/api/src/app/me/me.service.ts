@@ -1,8 +1,8 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
+import { DRIZZLE_SERVICE, type DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { eq } from 'drizzle-orm';
 import { profile, user } from '@libs/db/schemas';
-import { User } from '../auth/auth.service';
+import type { User } from '../auth/auth.service';
 import { WorkerClient } from '@shared/worker';
 import { UpdateUserDto, UserDto } from '../users/dto/users.dto';
 import { parseResponseDto } from '../../utils/parse-response-dto';

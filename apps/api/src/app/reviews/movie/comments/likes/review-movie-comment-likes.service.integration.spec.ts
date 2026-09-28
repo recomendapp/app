@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'bun:test';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { profile, reviewMovieComment } from '@libs/db/schemas';
@@ -8,7 +9,7 @@ import {
   createTestUser,
   TestDatabase,
 } from '@libs/testing';
-import { User } from '../../../../auth/auth.service';
+import type { User } from '../../../../auth/auth.service';
 import { ReviewMovieCommentLikesService } from './review-movie-comment-likes.service';
 
 describe('ReviewMovieCommentLikesService', () => {

@@ -9,14 +9,31 @@
       "executor": "nx:run-commands",
       "cache": true,
       "options": {
-        "command": "npx tsx libs/assets/scripts/generate-manifest.ts",
+        "command": "bun libs/assets/scripts/generate-manifest.ts",
         "cwd": "."
       },
       "inputs": ["{projectRoot}/static/**/*", "{projectRoot}/scripts/generate-manifest.ts"],
       "outputs": ["{projectRoot}/src/__generated__"]
     },
     "test": {
-      "dependsOn": ["^generate", "generate"]
+      "dependsOn": ["^generate", "generate"],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["default", "^production"],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "bun test --parallel --no-env-file --path-ignore-patterns=\"**/*.integration.spec.ts\""
+      }
+    },
+    "typecheck": {
+      "dependsOn": ["^generate", "generate"],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["default", "^production"],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "tsc -p tsconfig.spec.json --noEmit"
+      }
     }
   }
 }

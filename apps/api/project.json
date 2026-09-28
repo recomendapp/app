@@ -17,7 +17,7 @@
         "{projectRoot}/tsconfig.app.json"
       ],
       "options": {
-        "command": "npx ts-node -r tsconfig-paths/register --project apps/api/tsconfig.app.json apps/api/scripts/generate-openapi.ts",
+        "command": "bunx ts-node -r tsconfig-paths/register --project apps/api/tsconfig.app.json apps/api/scripts/generate-openapi.ts",
         "cwd": "."
       }
     },
@@ -35,46 +35,50 @@
         }
       }
     },
-    "prune-lockfile": {
+    "generate-bun-lockfile": {
       "dependsOn": ["build"],
       "cache": true,
-      "executor": "@nx/js:prune-lockfile",
+      "inputs": [
+        "default",
+        "{workspaceRoot}/bun.lock",
+        "{workspaceRoot}/tools/scripts/prune-bun-lockfile.mjs"
+      ],
       "outputs": [
         "{workspaceRoot}/dist/apps/api/package.json",
-        "{workspaceRoot}/dist/apps/api/pnpm-lock.yaml"
+        "{workspaceRoot}/dist/apps/api/bun.lock"
       ],
+      "executor": "nx:run-commands",
       "options": {
-        "buildTarget": "build"
-      }
-    },
-    "copy-workspace-modules": {
-      "dependsOn": ["build"],
-      "cache": true,
-      "outputs": ["{workspaceRoot}/dist/apps/api/workspace_modules"],
-      "executor": "@nx/js:copy-workspace-modules",
-      "options": {
-        "buildTarget": "build"
+        "command": "node tools/scripts/prune-bun-lockfile.mjs dist/apps/api"
       }
     },
     "prune": {
-      "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
+      "dependsOn": ["generate-bun-lockfile"],
       "executor": "nx:noop"
+    },
+    "docker-build": {
+      "dependsOn": ["build", "^build", "prune"]
     },
     "serve": {
       "continuous": true,
-      "executor": "@nx/js:node",
+      "executor": "nx:run-commands",
       "defaultConfiguration": "development",
       "dependsOn": ["build"],
       "options": {
-        "buildTarget": "api:build",
-        "runBuildTargetDependencies": false
+        "cwd": "apps/api",
+        "parallel": true,
+        "commands": [
+          "webpack-cli build --node-env=development --watch --no-output-clean",
+          "bun --watch --no-clear-screen ../../dist/apps/api/main.js"
+        ]
       },
       "configurations": {
-        "development": {
-          "buildTarget": "api:build:development"
-        },
+        "development": {},
         "production": {
-          "buildTarget": "api:build:production"
+          "commands": [
+            "webpack-cli build --node-env=production --watch --no-output-clean",
+            "bun --watch --no-clear-screen ../../dist/apps/api/main.js"
+          ]
         }
       }
     },
@@ -82,25 +86,37 @@
       "continuous": true,
       "executor": "nx:run-commands",
       "options": {
-        "command": "HOST=localhost npx @modelcontextprotocol/inspector --web --transport http --server-url http://localhost:9000/mcp"
+        "command": "HOST=localhost bunx @modelcontextprotocol/inspector --web --transport http --server-url http://localhost:9000/mcp"
       },
       "configurations": {
         "cli": {
-          "command": "HOST=localhost npx @modelcontextprotocol/inspector --cli --transport http --server-url http://localhost:9000/mcp"
+          "command": "HOST=localhost bunx @modelcontextprotocol/inspector --cli --transport http --server-url http://localhost:9000/mcp"
         }
       }
     },
     "test": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["default", "^production"],
       "options": {
-        "passWithNoTests": true
+        "cwd": "{projectRoot}",
+        "command": "bun test --parallel --no-env-file --path-ignore-patterns=\"**/*.integration.spec.ts\""
       }
     },
     "test-integration": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/apps/api-integration"],
+      "executor": "nx:run-commands",
       "options": {
-        "jestConfig": "apps/api/jest.integration.config.cts",
-        "passWithNoTests": true
+        "cwd": "{projectRoot}",
+        "command": "bun --no-env-file ../../libs/testing/src/lib/db/run-integration-tests.ts --isolate --no-env-file --timeout 60000 --preload ./src/test-setup.integration.ts integration.spec"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["default", "^production"],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "tsc -p tsconfig.spec.json --noEmit"
       }
     }
   }

@@ -1,5 +1,5 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
+import { DRIZZLE_SERVICE, type DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { and, asc, desc, eq, gt, lt, or, sql, SQL } from 'drizzle-orm';
 import { profile, user, follow } from '@libs/db/schemas';
 import {
@@ -10,12 +10,12 @@ import {
   ProfileDto,
   UserSortBy,
 } from './dto/users.dto';
-import { User } from '../auth/auth.service';
+import type { User } from '../auth/auth.service';
 import { parseResponseDto } from '../../utils/parse-response-dto';
 import { isUUID } from 'class-validator';
 import { USER_RULES } from '@libs/rules';
 import { SortOrder } from '../../common/dto/sort.dto';
-import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../utils/cursor';
+import { type BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../utils/cursor';
 import { z } from 'zod';
 
 const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.string().min(1));

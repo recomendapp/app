@@ -1,5 +1,5 @@
 import { Job } from 'bullmq';
-import {
+import type {
   NotifyAuthRegistry,
   NotifyFollowRegistry,
   NotifyRecoRegistry,

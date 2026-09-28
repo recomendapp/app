@@ -1,10 +1,13 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { and, eq } from 'drizzle-orm';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/drizzle/drizzle.module';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../../common/modules/drizzle/drizzle.module';
 import { importJob, importJobReviewTvSeries } from '@libs/db/schemas';
 import { ImportServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../../../realtime/realtime.gateway';
-import { User } from '../../../auth/auth.service';
+import type { User } from '../../../auth/auth.service';
 import { parseResponseDto } from '../../../../utils/parse-response-dto';
 import { ImportJobReviewDto, PatchImportJobReviewDto } from '../../dto/imports.dto';
 

@@ -10,8 +10,11 @@ import {
   reviewMovie,
   user,
 } from '@libs/db/schemas';
-import { User } from '../../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import type { User } from '../../auth/auth.service';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
 import {
   MovieFollowingAverageRatingDto,
   MovieFollowingLogDto,

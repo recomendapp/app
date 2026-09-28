@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'bun:test';
 import { getDictionary } from './getDictionary';
 
 describe('getDictionary (web/dynamic-import variant)', () => {

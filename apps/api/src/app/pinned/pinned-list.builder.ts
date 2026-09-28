@@ -1,5 +1,5 @@
 import { asc, eq, SQL, sql } from 'drizzle-orm';
-import { DbTransaction } from '@libs/db';
+import type { DbTransaction } from '@libs/db';
 import {
   pinnedItem,
   playlist,
@@ -12,15 +12,15 @@ import {
   PERSON_COMPACT_SELECT,
   TV_SERIES_COMPACT_SELECT,
 } from '@libs/db/selectors';
-import { SupportedLocale } from '@libs/i18n';
-import { DrizzleService } from '../../common/modules/drizzle/drizzle.module';
-import { User } from '../auth/auth.service';
+import type { SupportedLocale } from '@libs/i18n';
+import type { DrizzleService } from '../../common/modules/drizzle/drizzle.module';
+import type { User } from '../auth/auth.service';
 import { canViewPlaylist } from '../playlists/playlists.permission';
 import { PlaylistQueryBuilder } from '../playlists/playlists.query-builder';
-import { PlaylistRole } from '../playlists/types/playlist-role.type';
+import type { PlaylistRole } from '../playlists/types/playlist-role.type';
 import { PINNED_ITEM_RULES } from '@libs/rules';
-import { PinnedItemUnion } from './dto/pinned.dto';
-import { buildPinnedItemsResponse, PinnedItemRow } from './pinned.mapper';
+import type { PinnedItemUnion } from './dto/pinned.dto';
+import { buildPinnedItemsResponse, type PinnedItemRow } from './pinned.mapper';
 
 export async function buildOwnPinnedItemsList({
   tx,

@@ -1,6 +1,9 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../../common/modules/drizzle/drizzle.module';
-import { User } from '../../../auth/auth.service';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../../common/modules/drizzle/drizzle.module';
+import type { User } from '../../../auth/auth.service';
 import { logTvSeason, logTvSeries, tmdbTvSeason, tmdbTvSeries } from '@libs/db/schemas';
 import { and, eq, inArray, sql } from 'drizzle-orm';
 import { parseResponseDto } from '../../../../utils/parse-response-dto';

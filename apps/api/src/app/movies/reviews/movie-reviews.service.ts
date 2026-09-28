@@ -1,8 +1,11 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { and, asc, desc, eq, exists, gt, lt, or, sql, SQL } from 'drizzle-orm';
 import { follow, logMovie, profile, reviewMovie, user } from '@libs/db/schemas';
-import { User } from '../../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import type { User } from '../../auth/auth.service';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
 import {
   ListInfiniteReviewsMovieDto,
   ListInfiniteReviewsMovieQueryDto,
@@ -13,8 +16,13 @@ import {
   ReviewMovieSortBy,
 } from '../../reviews/movie/dto/reviews-movie.dto';
 import { SortOrder } from '../../../common/dto/sort.dto';
-import { DbTransaction } from '@libs/db';
-import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import type { DbTransaction } from '@libs/db';
+import {
+  type BaseCursor,
+  baseCursorSchema,
+  decodeCursor,
+  encodeCursor,
+} from '../../../utils/cursor';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
 import { USER_COMPACT_SELECT } from '@libs/db/selectors';
 import { LogServerEvents } from '@libs/realtime';

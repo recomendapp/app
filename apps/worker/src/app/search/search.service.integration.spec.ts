@@ -1,12 +1,13 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
 import { createTestPlaylist, createTestUser, TestDatabase } from '@libs/testing';
 import { playlistMember } from '@libs/db/schemas';
 import { SearchService } from './search.service';
 
 function createFakeTypesense() {
-  const deleteFn = jest.fn().mockResolvedValue(undefined);
-  const upsertFn = jest.fn().mockResolvedValue(undefined);
-  const documentsFn = jest.fn().mockReturnValue({ delete: deleteFn, upsert: upsertFn });
-  const collectionsFn = jest.fn().mockReturnValue({ documents: documentsFn });
+  const deleteFn = mock().mockResolvedValue(undefined);
+  const upsertFn = mock().mockResolvedValue(undefined);
+  const documentsFn = mock().mockReturnValue({ delete: deleteFn, upsert: upsertFn });
+  const collectionsFn = mock().mockReturnValue({ documents: documentsFn });
 
   return {
     client: { collections: collectionsFn } as any,

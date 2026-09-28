@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { eq } from 'drizzle-orm';
 import {
   bookmark,
@@ -14,18 +16,16 @@ import {
   createTestUser,
   TestDatabase,
 } from '@libs/testing';
-import { RecoType } from '../../../recos/dto/recos.dto';
-import { LogTvStatus } from '../tv-series-logs.dto';
 import type { RealtimeGateway } from '../../../realtime/realtime.gateway';
 
-jest.mock('../../../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
+mock.module('../../../realtime/realtime.gateway', () => ({ RealtimeGateway: mock() }));
 
-const { TvLogsSyncService } =
-  require('./tv-logs-sync.service') as typeof import('./tv-logs-sync.service');
-const { RecosService } =
-  require('../../../recos/recos.service') as typeof import('../../../recos/recos.service');
-const { UserRecosService } =
-  require('../../../users/recos/user-recos.service') as typeof import('../../../users/recos/user-recos.service');
+const { RecoType } = await import('../../../recos/dto/recos.dto');
+const { LogTvStatus } = await import('../tv-series-logs.dto');
+
+const { TvLogsSyncService } = await import('./tv-logs-sync.service');
+const { RecosService } = await import('../../../recos/recos.service');
+const { UserRecosService } = await import('../../../users/recos/user-recos.service');
 
 function randomTmdbId(): number {
   return Math.floor(Math.random() * 1_000_000_000) + 1;
@@ -52,7 +52,7 @@ describe('TvLogsSyncService', () => {
   });
 
   const fakeGateway = () =>
-    ({ emitToUser: jest.fn(), emitToUsers: jest.fn() }) as unknown as jest.Mocked<RealtimeGateway>;
+    ({ emitToUser: mock(), emitToUsers: mock() }) as unknown as Mocked<RealtimeGateway>;
 
   function buildService() {
     const gateway = fakeGateway();
@@ -133,14 +133,12 @@ describe('TvLogsSyncService', () => {
     it('completes an active bookmark for the series on first creation only', async () => {
       const { user } = await createTestUser(testDb.db);
       const series = await createTestTvSeries(testDb.db);
-      await testDb.db
-        .insert(bookmark)
-        .values({
-          userId: user.id,
-          tvSeriesId: series.id,
-          type: RecoType.TV_SERIES,
-          status: 'active',
-        });
+      await testDb.db.insert(bookmark).values({
+        userId: user.id,
+        tvSeriesId: series.id,
+        type: RecoType.TV_SERIES,
+        status: 'active',
+      });
       const service = buildService();
 
       await testDb.db.transaction((tx) => service.ensureParentsExist(tx, user.id, series.id));
@@ -174,14 +172,12 @@ describe('TvLogsSyncService', () => {
       const service = buildService();
       await testDb.db.transaction((tx) => service.ensureParentsExist(tx, user.id, series.id));
 
-      await testDb.db
-        .insert(bookmark)
-        .values({
-          userId: user.id,
-          tvSeriesId: series.id,
-          type: RecoType.TV_SERIES,
-          status: 'active',
-        });
+      await testDb.db.insert(bookmark).values({
+        userId: user.id,
+        tvSeriesId: series.id,
+        type: RecoType.TV_SERIES,
+        status: 'active',
+      });
       await testDb.db.transaction((tx) => service.ensureParentsExist(tx, user.id, series.id));
 
       const b = await testDb.db.query.bookmark.findFirst({ where: eq(bookmark.userId, user.id) });
@@ -380,8 +376,8 @@ describe('TvLogsSyncService', () => {
         service.syncTree(tx, user.id, series.id, 1),
       );
 
-      expect(result.season?.status).toBe('dropped');
-      expect(result.series?.status).toBe('dropped');
+      expect(result.season?.status).toBe(LogTvStatus.DROPPED);
+      expect(result.series?.status).toBe(LogTvStatus.DROPPED);
     });
 
     it('returns a null season when no seasonNumber is provided', async () => {

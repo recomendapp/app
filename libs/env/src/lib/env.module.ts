@@ -1,5 +1,5 @@
-import { DynamicModule, Global, Module } from '@nestjs/common';
-import { apiSchema, validateEnv } from './env.validation'
+import { type DynamicModule, Global, Module } from '@nestjs/common';
+import { apiSchema, validateEnv } from './env.validation';
 import z from 'zod';
 
 export const ENV_SERVICE = Symbol('ENV_SERVICE');

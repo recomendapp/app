@@ -18,27 +18,33 @@ jobs:
       - name: ⬇️ Checkout Code
         uses: actions/checkout@v7
 
-      - name: 📦 Setup pnpm
-        uses: pnpm/action-setup@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: 11.25.0
+          bun-version-file: package.json
 
       - name: 🔧 Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache: 'pnpm'
 
       - name: 💾 Cache CocoaPods
         uses: actions/cache@v6
         with:
           path: apps/mobile/ios/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/bun.lock') }}
           restore-keys: |
             ${{ runner.os }}-pods-
 
+      - name: 🗄️ Cache Bun install
+        uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}
+          restore-keys: ${{ runner.os }}-bun-
+
       - name: ⚙️ Install Dependencies
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
       - name: 🔨 Setup EAS
         uses: expo/expo-github-action@v9
@@ -47,7 +53,7 @@ jobs:
           token: ${{ secrets.INFISICAL_EXPO_TOKEN }}
 
       - name: ⛏️ Setup EAS local builds
-        run: pnpm add -g eas-cli-local-build-plugin
+        run: bun add -g eas-cli-local-build-plugin
 
       - name: 📝 Prepare Environment Files
         run: |
@@ -112,7 +118,7 @@ jobs:
         timeout-minutes: 60
         env:
           GOOGLE_SERVICES_IOS_BASE64: ${{ secrets.INFISICAL_MOBILE_GOOGLE_SERVICES_IOS_BASE64 }}
-        run: pnpm nx build mobile --platform ios --profile production --local --non-interactive --output build.ipa
+        run: bunx nx build mobile --platform ios --profile production --local --non-interactive --output build.ipa
 
       - name: 💾 Upload Artifact
         uses: actions/upload-artifact@v7
@@ -122,7 +128,7 @@ jobs:
           retention-days: 7
 
       - name: 🚀 EAS Submit (via Nx)
-        run: pnpm nx submit mobile --platform ios --path build.ipa --profile production --non-interactive --no-wait
+        run: bunx nx submit mobile --platform ios --path build.ipa --profile production --non-interactive --no-wait
 
       - name: 🧹 Cleanup
         if: always()

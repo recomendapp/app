@@ -1,19 +1,19 @@
 import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { and, eq, sql } from 'drizzle-orm';
-import { User } from '../auth/auth.service';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
+import type { User } from '../auth/auth.service';
+import { DRIZZLE_SERVICE, type DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import {
   BookmarkDto,
   BookmarkInputDto,
-  BookmarkWithMediaUnion,
+  type BookmarkWithMediaUnion,
   BookmarkWithMovieDto,
   BookmarkWithTvSeriesDto,
 } from './dto/bookmarks.dto';
 import { bookmark, tmdbMovieView, tmdbTvSeriesView } from '@libs/db/schemas';
 import { MOVIE_COMPACT_SELECT, TV_SERIES_COMPACT_SELECT } from '@libs/db/selectors';
-import { BookmarkTarget } from './bookmarks.type';
+import type { BookmarkTarget } from './bookmarks.type';
 import { parseResponseDto } from '../../utils/parse-response-dto';
-import { defaultSupportedLocale, SupportedLocale } from '@libs/i18n';
+import { defaultSupportedLocale, type SupportedLocale } from '@libs/i18n';
 import { BookmarkServerEvents } from '@libs/realtime';
 import { RealtimeGateway } from '../realtime/realtime.gateway';
 import { assertMediaExists } from '../../utils/assert-media-exists';

@@ -17,7 +17,7 @@
       "cache": true,
       "options": {
         "cwd": "{projectRoot}",
-        "command": "npx openapi-ts"
+        "command": "bunx openapi-ts"
       },
       "inputs": ["{projectRoot}/openapi-ts.config.ts", "{workspaceRoot}/apps/api/.openapi/*"],
       "outputs": ["{projectRoot}/src/__generated__"],
@@ -45,7 +45,24 @@
       }
     },
     "test": {
-      "dependsOn": ["^generate", "generate"]
+      "dependsOn": ["^generate", "generate"],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["default", "^production"],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "bun test --parallel --no-env-file --path-ignore-patterns=\"**/*.integration.spec.ts\""
+      }
+    },
+    "typecheck": {
+      "dependsOn": ["^generate", "generate"],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["default", "^production"],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "tsc -p tsconfig.spec.json --noEmit"
+      }
     }
   }
 }

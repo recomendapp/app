@@ -1,5 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../../common/modules/drizzle/drizzle.module';
+import {
+  DRIZZLE_SERVICE,
+  type DrizzleService,
+} from '../../../common/modules/drizzle/drizzle.module';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { recosTrending, tmdbMovieView, tmdbTvSeriesView } from '@libs/db/schemas';
 import {
@@ -13,9 +16,14 @@ import { SortOrder } from '../../../common/dto/sort.dto';
 import { and, asc, desc, eq, gt, lt, or, sql, SQL } from 'drizzle-orm';
 import { MOVIE_SUMMARY_SELECT, TV_SERIES_SUMMARY_SELECT } from '@libs/db/selectors';
 import { parseResponseDto } from '../../../utils/parse-response-dto';
-import { BaseCursor, baseCursorSchema, decodeCursor, encodeCursor } from '../../../utils/cursor';
+import {
+  type BaseCursor,
+  baseCursorSchema,
+  decodeCursor,
+  encodeCursor,
+} from '../../../utils/cursor';
 import { z } from 'zod';
-import { SupportedLocale } from '@libs/i18n';
+import type { SupportedLocale } from '@libs/i18n';
 
 const CursorSchema = baseCursorSchema(z.union([z.string().min(1), z.number()]), z.number());
 

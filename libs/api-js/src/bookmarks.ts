@@ -1,6 +1,5 @@
-import { BookmarkWithMovie, BookmarkWithTvSeries } from "./__generated__";
+import type { BookmarkWithMovie, BookmarkWithTvSeries } from './__generated__';
 
-export type BookmarkWithMedia = (
-	| ({ type: 'movie' } & BookmarkWithMovie)
-	| ({ type: 'tv_series' } & BookmarkWithTvSeries)
-);
+export type BookmarkWithMedia =
+  | ({ type: 'movie' } & BookmarkWithMovie)
+  | ({ type: 'tv_series' } & BookmarkWithTvSeries);

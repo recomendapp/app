@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { profile } from '@libs/db/schemas';
@@ -5,10 +7,9 @@ import { createFakeNotifyClient, createTestUser, TestDatabase } from '@libs/test
 import type { RealtimeGateway } from '../../realtime/realtime.gateway';
 import { UserFollowServerEvents } from '@libs/realtime';
 
-jest.mock('../../realtime/realtime.gateway', () => ({ RealtimeGateway: jest.fn() }));
+mock.module('../../realtime/realtime.gateway', () => ({ RealtimeGateway: mock() }));
 
-const { UserFollowService } =
-  require('./user-follow.service') as typeof import('./user-follow.service');
+const { UserFollowService } = await import('./user-follow.service');
 
 describe('UserFollowService', () => {
   let testDb: TestDatabase;
@@ -26,9 +27,9 @@ describe('UserFollowService', () => {
   });
 
   const fakeGateway = () =>
-    ({ emitToUser: jest.fn(), emitToUsers: jest.fn() }) as unknown as jest.Mocked<RealtimeGateway>;
+    ({ emitToUser: mock(), emitToUsers: mock() }) as unknown as Mocked<RealtimeGateway>;
 
-  function buildService(gateway?: jest.Mocked<RealtimeGateway>) {
+  function buildService(gateway?: Mocked<RealtimeGateway>) {
     return new UserFollowService(testDb.db, createFakeNotifyClient(), gateway ?? fakeGateway());
   }
 

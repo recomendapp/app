@@ -1,10 +1,10 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { MovieDto } from './dto/movies.dto';
-import { DRIZZLE_SERVICE, DrizzleService } from '../../common/modules/drizzle/drizzle.module';
+import { DRIZZLE_SERVICE, type DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { tmdbMovieCredit, tmdbMovieRole, tmdbMovieView, tmdbPersonView } from '@libs/db/schemas';
 import { and, asc, eq, sql } from 'drizzle-orm';
-import { User } from '../auth/auth.service';
-import { SupportedLocale } from '@libs/i18n';
+import type { User } from '../auth/auth.service';
+import type { SupportedLocale } from '@libs/i18n';
 import { MovieCastingDto } from './dto/movie-credits.dto';
 import { parseResponseDto } from '../../utils/parse-response-dto';
 

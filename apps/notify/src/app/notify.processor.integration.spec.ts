@@ -1,17 +1,15 @@
-// @react-email/render's `render()` does a dynamic `import('react-dom/server')`
-// internally, which Jest's CJS runtime can't execute without
-// --experimental-vm-modules. react-dom/server has a synchronous CJS export
-// (renderToStaticMarkup) that produces equivalent markup for our purposes
-// (asserting translated copy landed in the rendered html), so we use that
-// instead of pulling in the ESM-only code path.
-jest.mock('@react-email/render', () => ({
-  render: async (element: any) => {
-    const ReactDOMServer = require('react-dom/server');
-    return ReactDOMServer.renderToStaticMarkup(element);
-  },
-}));
-
-jest.mock('../env', () => ({
+import {
+  describe,
+  it,
+  expect,
+  beforeAll,
+  beforeEach,
+  afterAll,
+  afterEach,
+  mock,
+  type Mock,
+} from 'bun:test';
+mock.module('../env', () => ({
   env: {
     TMDB_IMAGE_BASE_URL: 'https://image.tmdb.org/t/p',
     S3_ENDPOINT: 'https://s3.internal.test',
@@ -21,12 +19,14 @@ jest.mock('../env', () => ({
   },
 }));
 
+const { NotifyProcessor } = await import('./notify.processor');
+
 import { randomUUID } from 'node:crypto';
 import * as path from 'path';
-import { INestApplication } from '@nestjs/common';
+import type { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { AcceptLanguageResolver, I18nModule, I18nService } from 'nestjs-i18n';
-import { defaultSupportedLocale, SupportedLocale } from '@libs/i18n';
+import { defaultSupportedLocale, type SupportedLocale } from '@libs/i18n';
 import { pushToken, tmdbMovieImage } from '@libs/db/schemas';
 import {
   createTestMovie,
@@ -35,7 +35,6 @@ import {
   createTestUser,
   TestDatabase,
 } from '@libs/testing';
-import { NotifyProcessor } from './notify.processor';
 
 type Device = { userId: string; provider: 'fcm' | 'apns'; token?: string };
 
@@ -75,8 +74,11 @@ describe('NotifyProcessor', () => {
   let testDb: TestDatabase;
   let app: INestApplication;
   let i18n: I18nService;
-  let notifyService: { sendEmail: jest.Mock; sendPushNotifications: jest.Mock };
-  let processor: NotifyProcessor;
+  let notifyService: {
+    sendEmail: Mock<(...args: any[]) => any>;
+    sendPushNotifications: Mock<(...args: any[]) => any>;
+  };
+  let processor: InstanceType<typeof NotifyProcessor>;
 
   beforeAll(async () => {
     testDb = await TestDatabase.create();
@@ -114,8 +116,8 @@ describe('NotifyProcessor', () => {
 
   beforeEach(() => {
     notifyService = {
-      sendEmail: jest.fn().mockResolvedValue(undefined),
-      sendPushNotifications: jest.fn().mockResolvedValue(undefined),
+      sendEmail: mock().mockResolvedValue(undefined),
+      sendPushNotifications: mock().mockResolvedValue(undefined),
     };
     processor = new NotifyProcessor(notifyService as any, i18n, testDb.db);
   });

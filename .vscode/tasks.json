@@ -1,0 +1,23 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build api",
+      "type": "shell",
+      "command": "bun nx build api --configuration=development",
+      "problemMatcher": []
+    },
+    {
+      "label": "build notify",
+      "type": "shell",
+      "command": "bun nx build notify --configuration=development",
+      "problemMatcher": []
+    },
+    {
+      "label": "build worker",
+      "type": "shell",
+      "command": "bun nx build worker --configuration=development",
+      "problemMatcher": []
+    }
+  ]
+}

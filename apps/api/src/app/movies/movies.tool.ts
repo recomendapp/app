@@ -3,7 +3,7 @@ import { McpController, McpRawRequest, Tool } from '@rekog/mcp-nest';
 import { getLocaleFromHeaders } from '@libs/i18n';
 import { z } from 'zod';
 import { MoviesService } from './movies.service';
-import { McpAuthenticatedRequest } from '../auth/types/fastify';
+import type { McpAuthenticatedRequest } from '../auth/types/fastify';
 
 @McpController()
 export class MoviesTool {

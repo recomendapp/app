@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeAll, afterAll, afterEach, mock } from 'bun:test';
+import type { Mocked } from '@libs/testing';
 import { ForbiddenException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { playlistMember, profile } from '@libs/db/schemas';
@@ -6,7 +8,7 @@ import type { WorkerClient } from '@shared/worker';
 import { SortOrder } from '../../../common/dto/sort.dto';
 import { PlaylistMemberSortBy } from './playlist-members.dto';
 import { PlaylistMembersService } from './playlist-members.service';
-import { User } from '../../auth/auth.service';
+import type { User } from '../../auth/auth.service';
 
 describe('PlaylistMembersService', () => {
   let testDb: TestDatabase;
@@ -25,8 +27,8 @@ describe('PlaylistMembersService', () => {
   });
 
   const fakeWorker = () =>
-    ({ emit: jest.fn().mockResolvedValue(undefined) }) as unknown as jest.Mocked<WorkerClient>;
-  const service = (worker?: jest.Mocked<WorkerClient>) =>
+    ({ emit: mock().mockResolvedValue(undefined) }) as unknown as Mocked<WorkerClient>;
+  const service = (worker?: Mocked<WorkerClient>) =>
     new PlaylistMembersService(testDb.db, worker ?? fakeWorker());
 
   async function addMember(

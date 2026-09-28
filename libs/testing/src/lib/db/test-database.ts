@@ -1,29 +1,27 @@
-import { readFileSync } from 'node:fs';
 import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { Client, Pool } from 'pg';
 import * as schema from '@libs/db/schemas';
-import { SNAPSHOT_NAME, TEST_DB_STATE_FILE } from './constants';
+import { SNAPSHOT_NAME, TEST_DATABASE_URL_ENV } from './constants';
 
 export type Schema = typeof schema;
 
 function readDatabaseUrl(): string {
-  try {
-    const raw = readFileSync(TEST_DB_STATE_FILE, 'utf-8');
-    return JSON.parse(raw).databaseUrl;
-  } catch {
+  const databaseUrl = process.env[TEST_DATABASE_URL_ENV];
+  if (!databaseUrl) {
     throw new Error(
       'No test database connection found. Integration specs (*.integration.spec.ts) must run ' +
         "through the `test-integration` Nx target (e.g. `nx test-integration api`) — it's the " +
-        "one that sets Jest's globalSetup to boot the shared Postgres testcontainer.",
+        'one that boots the shared Postgres testcontainer (see run-integration-tests.ts).',
     );
   }
+  return databaseUrl;
 }
 
 /**
  * A connection to the shared ephemeral test Postgres container, scoped to
  * a single spec file. The container itself is started once for the whole
- * test run by Jest's globalSetup (see global-setup.ts); this just connects
- * to it using the connection string it left behind.
+ * integration run by run-integration-tests.ts; this just connects to it
+ * using the connection string it passes down.
  *
  * Usage:
  * ```ts

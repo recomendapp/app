@@ -1,17 +1,13 @@
 # 1. Base stage
-FROM node:22-alpine AS base
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+FROM oven/bun:1.4.2-alpine AS base
 
 # 2. Installer stage
 FROM base AS installer
 WORKDIR /app
 
-COPY pnpm-workspace.yaml ./
-COPY dist/apps/api/package.json dist/apps/api/pnpm-lock.yaml* dist/apps/api/package-lock.json* dist/apps/api/yarn.lock* ./
+COPY dist/apps/api/package.json dist/apps/api/bun.lock ./
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+RUN --mount=type=cache,id=bun,target=/root/.bun/install/cache bun install --production --frozen-lockfile
 
 # 3. Runner stage
 FROM base AS runner
@@ -29,4 +25,4 @@ EXPOSE 3000
 
 USER nestjs
 
-CMD ["node", "main.js"]
+CMD ["bun", "main.js"]
