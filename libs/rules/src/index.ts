@@ -6,3 +6,4 @@ export * from './lib/review-comment.rules';
 export * from './lib/watched-date.rules';
 export * from './lib/reco.rules';
 export * from './lib/bookmark.rules';
+export * from './lib/app-version.rules';

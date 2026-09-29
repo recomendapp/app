@@ -43,6 +43,17 @@ export class PrefectService {
     });
   }
 
+  // See db-sync/store_release_watch: short, self-rescheduling checks (not one long-lived
+  // process) so a slow App Store review never ties up a cluster pod for days.
+  async triggerStoreReleaseWatch(payload: { platform: string; version: string }): Promise<{
+    id: string;
+  }> {
+    return this.triggerFlowRun('check_store_release', 'check_store_release', {
+      platform: payload.platform,
+      version: payload.version,
+    });
+  }
+
   private async triggerFlowRun(
     flowName: string,
     deploymentName: string,
