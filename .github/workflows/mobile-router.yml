@@ -188,6 +188,7 @@ jobs:
           PREFECT_API_URL="https://prefect.example.com/api"
           PREFECT_API_AUTH_STRING="placeholder"
           API_INTERNAL_IMPORTS_SECRET="placeholder"
+          API_INTERNAL_VERSION_POLICY_SECRET="placeholder"
           EOF
 
       - name: 🔑 Decode Google Services files
@@ -368,3 +369,47 @@ jobs:
           rm -f apps/mobile/.env
           rm -f apps/mobile/google-services.json
           rm -f apps/mobile/GoogleService-Info.plist
+
+  update-version-policy:
+    name: 🔢 Update Version Policy
+    needs: [call-ios-build, call-android-build-eas, call-android-build]
+    # Native build+submit runs unconditionally on every tag (unlike ota-update, which is
+    # gated on the fingerprint), so its success is the "this version shipped" signal.
+    if: |
+      always() &&
+      (needs.call-ios-build.result == 'success' ||
+       needs.call-android-build-eas.result == 'success' ||
+       needs.call-android-build.result == 'success')
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔢 Extract version from tag
+        id: version
+        run: |
+          # Tag is `mobile@X.Y.Z` (release-please-config.json's tag-separator).
+          echo "value=${GITHUB_REF_NAME#mobile@}" >> "$GITHUB_OUTPUT"
+
+      - name: 📡 Report shipped versions
+        run: |
+          VERSION="${{ steps.version.outputs.value }}"
+          API_URL="${{ secrets.INFISICAL_API_URL }}"
+          SECRET="${{ secrets.INFISICAL_API_INTERNAL_VERSION_POLICY_SECRET }}"
+
+          report() {
+            local platform="$1"
+            echo "Reporting $platform@$VERSION as the latest version"
+            curl --fail --silent --show-error --max-time 15 \
+              -X POST "$API_URL/v1/internal/version-policy" \
+              -H "Authorization: Bearer $SECRET" \
+              -H "Content-Type: application/json" \
+              -d "{\"platform\":\"$platform\",\"version\":\"$VERSION\",\"isBreaking\":false}"
+          }
+
+          # `isBreaking` is hardcoded false for now: this only ever raises `latestVersion`
+          # (a soft nudge). Detecting a breaking (release-please MAJOR) release to also
+          # raise `minVersion` and force-block old installs is a follow-up.
+          if [ "${{ needs.call-ios-build.result }}" == "success" ]; then
+            report ios
+          fi
+          if [ "${{ needs.call-android-build-eas.result == 'success' || needs.call-android-build.result == 'success' }}" == "true" ]; then
+            report android
+          fi

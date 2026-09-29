@@ -80,6 +80,7 @@ jobs:
           PREFECT_API_URL=http://localhost
           PREFECT_API_AUTH_STRING=mock
           API_INTERNAL_IMPORTS_SECRET=mock
+          API_INTERNAL_VERSION_POLICY_SECRET=mock
           EOF
 
       - name: 🧠 Initialize Nx SHAs
