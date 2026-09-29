@@ -3,7 +3,6 @@ import { systemConfig, versionPolicy } from '@libs/db/schemas';
 import { SystemService } from './system.service';
 import type { DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import type { CacheService } from '../../common/modules/cache/cache.service';
-import type { PrefectService } from '../../common/modules/prefect/prefect.service';
 
 const policyRows = [{ platform: 'ios', version: '1.0.0', isBreaking: false, state: 'live' }];
 const configRows = [{ key: 'is_maintenance', value: false }];
@@ -31,13 +30,11 @@ const fakeCache = (calls: { count: number }) =>
     del: async () => undefined,
   }) as unknown as CacheService;
 
-const fakePrefect = {} as unknown as PrefectService;
-
 describe('SystemService (L1 cache)', () => {
   it('serves back-to-back calls from L1 without touching Redis or the DB again', async () => {
     const cacheCalls = { count: 0 };
     const dbCalls = { count: 0 };
-    const service = new SystemService(fakeDb(dbCalls), fakeCache(cacheCalls), fakePrefect);
+    const service = new SystemService(fakeDb(dbCalls), fakeCache(cacheCalls));
 
     await service.getStatus(null);
     await service.getStatus(null);
@@ -50,7 +47,7 @@ describe('SystemService (L1 cache)', () => {
   it('dedupes concurrent calls into a single Redis/DB round trip', async () => {
     const cacheCalls = { count: 0 };
     const dbCalls = { count: 0 };
-    const service = new SystemService(fakeDb(dbCalls), fakeCache(cacheCalls), fakePrefect);
+    const service = new SystemService(fakeDb(dbCalls), fakeCache(cacheCalls));
 
     await Promise.all([
       service.getStatus(null),
@@ -66,7 +63,7 @@ describe('SystemService (L1 cache)', () => {
   it('worst case (L1 miss) still resolves correctly, matching the no-L1 behavior', async () => {
     const cacheCalls = { count: 0 };
     const dbCalls = { count: 0 };
-    const service = new SystemService(fakeDb(dbCalls), fakeCache(cacheCalls), fakePrefect);
+    const service = new SystemService(fakeDb(dbCalls), fakeCache(cacheCalls));
 
     const result = await service.getStatus({ platform: 'ios', version: '0.9.0' });
 

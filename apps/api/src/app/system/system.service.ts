@@ -13,7 +13,6 @@ import {
 } from '@libs/rules';
 import { DRIZZLE_SERVICE, type DrizzleService } from '../../common/modules/drizzle/drizzle.module';
 import { CacheService } from '../../common/modules/cache/cache.service';
-import { PrefectService } from '../../common/modules/prefect/prefect.service';
 import { parseResponseDto } from '../../utils/parse-response-dto';
 import { StatusDto } from './dto/status.dto';
 import { VersionReleaseStateDto } from './dto/version-release-state.dto';
@@ -60,7 +59,6 @@ export class SystemService {
   constructor(
     @Inject(DRIZZLE_SERVICE) private readonly db: DrizzleService,
     private readonly cache: CacheService,
-    private readonly prefect: PrefectService,
   ) {}
 
   /**
@@ -149,50 +147,28 @@ export class SystemService {
   }
 
   /**
-   * Called by mobile CI (see `.github/workflows/mobile-router.yml`) once a new
-   * version has actually been submitted for `platform`. This does NOT move
+   * Records a new release as `pending` for `platform`. This does NOT move
    * `minVersion`/`latestVersion` yet -- a store submission can sit in review
    * for hours or days, and enforcing (or even nudging towards) a version
    * nobody can download yet would be worse than not enforcing anything.
-   *
-   * Instead it records the release as `pending` and hands off to a Prefect
-   * flow (db-sync/store_release_watch) that checks store availability on an
-   * interval and calls `confirmVersionLive` once it's actually out. A repeat
-   * report for the same (platform, version) -- e.g. a CI retry -- is a no-op:
-   * a watch for it is already running.
+   * `confirmVersionLive` is what actually takes effect, once the store
+   * confirms the version is available (see the provider webhooks under
+   * `apps/api/src/app/webhooks`).
    */
   async updateVersionPolicy(
     platform: AppPlatform,
     version: string,
     isBreaking: boolean,
   ): Promise<void> {
-    const [inserted] = await this.db
+    await this.db
       .insert(versionPolicy)
       .values({ platform, version, isBreaking })
-      .onConflictDoNothing({ target: [versionPolicy.platform, versionPolicy.version] })
-      .returning();
-
-    if (!inserted) return;
-
-    try {
-      await this.prefect.triggerStoreReleaseWatch({ platform, version });
-    } catch (error) {
-      this.logger.error(
-        `Failed to start the store-release watch for ${platform}@${version}, rolling back`,
-        error instanceof Error ? error.stack : error,
-      );
-      await this.db
-        .delete(versionPolicy)
-        .where(and(eq(versionPolicy.platform, platform), eq(versionPolicy.version, version)));
-      throw error;
-    }
+      .onConflictDoNothing({ target: [versionPolicy.platform, versionPolicy.version] });
   }
 
   /**
-   * Polled by the Prefect flow on every check, before it calls the store APIs:
    * `superseded` means a *later* version of the same platform already went
-   * live, so this one no longer matters and the flow should stop rescheduling
-   * itself -- no active cancellation needed, it just stops on its own next tick.
+   * live, so this one no longer matters.
    */
   async getVersionReleaseState(
     platform: AppPlatform,
@@ -221,7 +197,7 @@ export class SystemService {
     });
   }
 
-  /** Called by the Prefect flow once the store confirms `version` is available. */
+  /** Called once a store confirms `version` is actually available (see the provider webhooks). */
   async confirmVersionLive(platform: AppPlatform, version: string): Promise<void> {
     await this.db
       .update(versionPolicy)

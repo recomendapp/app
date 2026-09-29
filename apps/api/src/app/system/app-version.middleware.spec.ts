@@ -6,7 +6,6 @@ import { versionPolicy, systemConfig } from '@libs/db/schemas';
 import { SystemModule } from './system.module';
 import { DRIZZLE_SERVICE } from '../../common/modules/drizzle/drizzle.module';
 import { CacheService } from '../../common/modules/cache/cache.service';
-import { PrefectService } from '../../common/modules/prefect/prefect.service';
 
 @Controller()
 class PingController {
@@ -17,7 +16,6 @@ class PingController {
 }
 
 const fakeCache = { get: async () => null, set: async () => undefined };
-const fakePrefect = { triggerStoreReleaseWatch: async () => ({ id: 'fake' }) };
 
 const policyRows = [
   { platform: 'ios', version: '2.0.0', isBreaking: true, state: 'live' },
@@ -36,16 +34,15 @@ const fakeDb = {
   }),
 };
 
-// DRIZZLE_SERVICE, CacheService and PrefectService are real @Global() providers in
-// the app; stand them in the same way for this isolated module test.
+// DRIZZLE_SERVICE and CacheService are real @Global() providers in the app;
+// stand them in the same way for this isolated module test.
 @Global()
 @Module({
   providers: [
     { provide: DRIZZLE_SERVICE, useValue: fakeDb },
     { provide: CacheService, useValue: fakeCache },
-    { provide: PrefectService, useValue: fakePrefect },
   ],
-  exports: [DRIZZLE_SERVICE, CacheService, PrefectService],
+  exports: [DRIZZLE_SERVICE, CacheService],
 })
 class FakeGlobalsModule {}
 

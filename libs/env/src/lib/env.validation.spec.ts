@@ -136,7 +136,6 @@ describe('apiSchema', () => {
     PREFECT_API_URL: 'https://prefect.example.com',
     PREFECT_API_AUTH_STRING: 'x',
     API_INTERNAL_IMPORTS_SECRET: 'x',
-    API_INTERNAL_VERSION_POLICY_SECRET: 'x',
   };
 
   it('accepts a fully-populated environment', () => {

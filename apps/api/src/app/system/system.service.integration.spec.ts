@@ -4,7 +4,6 @@ import { systemConfig, versionPolicy } from '@libs/db/schemas';
 import { TestDatabase } from '@libs/testing';
 import { SystemService } from './system.service';
 import type { CacheService } from '../../common/modules/cache/cache.service';
-import type { PrefectService } from '../../common/modules/prefect/prefect.service';
 
 /** In-memory stand-in for the Redis-backed CacheService; TTL is ignored on purpose. */
 class FakeCacheService {
@@ -25,18 +24,6 @@ class FakeCacheService {
   }
 }
 
-/** Records every trigger call; can be made to fail on demand. */
-class FakePrefectService {
-  calls: { platform: string; version: string }[] = [];
-  shouldFail = false;
-
-  async triggerStoreReleaseWatch(payload: { platform: string; version: string }) {
-    this.calls.push(payload);
-    if (this.shouldFail) throw new Error('Prefect is down');
-    return { id: 'fake-flow-run-id' };
-  }
-}
-
 describe('SystemService', () => {
   let testDb: TestDatabase;
 
@@ -52,12 +39,8 @@ describe('SystemService', () => {
     await testDb.close();
   });
 
-  const createService = (prefect: FakePrefectService = new FakePrefectService()) =>
-    new SystemService(
-      testDb.db,
-      new FakeCacheService() as unknown as CacheService,
-      prefect as unknown as PrefectService,
-    );
+  const createService = () =>
+    new SystemService(testDb.db, new FakeCacheService() as unknown as CacheService);
 
   describe('getStatus', () => {
     it('reflects the seeded defaults (not under maintenance, up to date at 1.0.0)', async () => {
@@ -182,11 +165,7 @@ describe('SystemService', () => {
 
     it('caches the base status so a second call does not hit the database again', async () => {
       const cache = new FakeCacheService();
-      const service = new SystemService(
-        testDb.db,
-        cache as unknown as CacheService,
-        new FakePrefectService() as unknown as PrefectService,
-      );
+      const service = new SystemService(testDb.db, cache as unknown as CacheService);
 
       await service.getStatus(null);
       await testDb.db
@@ -202,11 +181,7 @@ describe('SystemService', () => {
 
     it('serves back-to-back calls from L1 without touching Redis again', async () => {
       const cache = new FakeCacheService();
-      const service = new SystemService(
-        testDb.db,
-        cache as unknown as CacheService,
-        new FakePrefectService() as unknown as PrefectService,
-      );
+      const service = new SystemService(testDb.db, cache as unknown as CacheService);
 
       await service.getStatus(null);
       await service.getStatus(null);
@@ -217,11 +192,7 @@ describe('SystemService', () => {
 
     it('dedupes concurrent calls into a single Redis read', async () => {
       const cache = new FakeCacheService();
-      const service = new SystemService(
-        testDb.db,
-        cache as unknown as CacheService,
-        new FakePrefectService() as unknown as PrefectService,
-      );
+      const service = new SystemService(testDb.db, cache as unknown as CacheService);
 
       await Promise.all([
         service.getStatus(null),
@@ -282,37 +253,17 @@ describe('SystemService', () => {
       });
     });
 
-    it('triggers the store-release watch with the right platform/version', async () => {
-      const prefect = new FakePrefectService();
-      const service = createService(prefect);
-
-      await service.updateVersionPolicy('ios', '1.7.0', false);
-
-      expect(prefect.calls).toEqual([{ platform: 'ios', version: '1.7.0' }]);
-    });
-
     it('is a no-op the second time the same (platform, version) is reported', async () => {
-      const prefect = new FakePrefectService();
-      const service = createService(prefect);
+      const service = createService();
 
       await service.updateVersionPolicy('ios', '1.7.0', false);
       await service.updateVersionPolicy('ios', '1.7.0', false);
 
-      expect(prefect.calls.length).toBe(1);
-    });
-
-    it('rolls back the pending row when triggering the watch fails', async () => {
-      const prefect = new FakePrefectService();
-      prefect.shouldFail = true;
-      const service = createService(prefect);
-
-      await expect(service.updateVersionPolicy('ios', '1.7.0', false)).rejects.toThrow();
-
-      const [row] = await testDb.db
+      const rows = await testDb.db
         .select()
         .from(versionPolicy)
         .where(and(eq(versionPolicy.platform, 'ios'), eq(versionPolicy.version, '1.7.0')));
-      expect(row).toBeUndefined();
+      expect(rows.length).toBe(1);
     });
   });
 

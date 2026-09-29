@@ -77,9 +77,6 @@ export const apiSchema = commonSchema
     PREFECT_API_URL: z.url(),
     PREFECT_API_AUTH_STRING: z.string(),
     API_INTERNAL_IMPORTS_SECRET: z.string(),
-
-    // Mobile CI (see .github/workflows/mobile-router.yml) writing the version_policy table
-    API_INTERNAL_VERSION_POLICY_SECRET: z.string(),
   });
 
 export const notifySchema = commonSchema

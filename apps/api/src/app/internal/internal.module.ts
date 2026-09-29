@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { InternalImportsModule } from './imports/internal-imports.module';
-import { InternalVersionPolicyModule } from './version-policy/internal-version-policy.module';
 
 @Module({
-  imports: [InternalImportsModule, InternalVersionPolicyModule],
+  imports: [InternalImportsModule],
 })
 export class InternalModule {}

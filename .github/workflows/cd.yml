@@ -93,7 +93,6 @@ jobs:
           PREFECT_API_URL="https://prefect.example.com/api"
           PREFECT_API_AUTH_STRING="placeholder"
           API_INTERNAL_IMPORTS_SECRET="placeholder"
-          API_INTERNAL_VERSION_POLICY_SECRET="placeholder"
           EOF
           # Web-app
           cat <<EOF > apps/web/.env
