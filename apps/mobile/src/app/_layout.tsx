@@ -14,6 +14,7 @@ import { Stack } from 'expo-router';
 import { enableFreeze, enableScreens } from 'react-native-screens';
 import { useTheme } from '../providers/ThemeProvider';
 import { useAuth } from '../providers/AuthProvider';
+import { useVersionPolicy } from '../providers/VersionPolicyProvider';
 import { useHomeWidgetsSync } from '../hooks/useHomeWidgetsSync';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
@@ -33,32 +34,86 @@ configureReanimatedLogger({
 const RootLayoutNav = () => {
   const t = useTranslations();
   const { user } = useAuth();
+  const { isUpdateRequired } = useVersionPolicy();
   const { defaultScreenOptions, isLiquidGlassAvailable } = useTheme();
   useHomeWidgetsSync();
   return (
     <Stack initialRouteName="(tabs)" screenOptions={defaultScreenOptions}>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      {/* PLAYLISTS */}
-      <Stack.Protected guard={!!user}>
+      <Stack.Protected guard={isUpdateRequired}>
         <Stack.Screen
-          name="playlist/[playlist_id]/edit"
-          options={{
-            headerShown: false,
-            presentation: 'modal',
-            headerTransparent: false,
-            ...(isLiquidGlassAvailable
-              ? {
-                  contentStyle: { backgroundColor: 'transparent' },
-                  headerStyle: { backgroundColor: 'transparent' },
-                }
-              : {}),
-            gestureEnabled: false,
-          }}
+          name="update-required"
+          options={{ headerShown: false, gestureEnabled: false }}
         />
+      </Stack.Protected>
+      <Stack.Protected guard={!isUpdateRequired}>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        {/* PLAYLISTS */}
+        <Stack.Protected guard={!!user}>
+          <Stack.Screen
+            name="playlist/[playlist_id]/edit"
+            options={{
+              headerShown: false,
+              presentation: 'modal',
+              headerTransparent: false,
+              ...(isLiquidGlassAvailable
+                ? {
+                    contentStyle: { backgroundColor: 'transparent' },
+                    headerStyle: { backgroundColor: 'transparent' },
+                  }
+                : {}),
+              gestureEnabled: false,
+            }}
+          />
+          <Stack.Screen
+            name="playlist/[playlist_id]/sort"
+            options={{
+              title: upperFirst(t('common.messages.edit_order')),
+              presentation:
+                Platform.OS === 'ios'
+                  ? isLiquidGlassAvailable && osName !== 'iPadOS'
+                    ? 'formSheet'
+                    : 'modal'
+                  : 'modal',
+              sheetGrabberVisible: true,
+              sheetAllowedDetents: [0.8],
+              sheetInitialDetentIndex: 0,
+              headerTransparent: true,
+              ...(isLiquidGlassAvailable
+                ? {
+                    contentStyle: { backgroundColor: 'transparent' },
+                    headerStyle: { backgroundColor: 'transparent' },
+                  }
+                : {}),
+            }}
+          />
+          <Stack.Screen
+            name="playlist/add/[type]/[id]"
+            options={{
+              title: upperFirst(t('common.messages.add_to_playlist')),
+              // presentation:
+              //   Platform.OS === 'ios'
+              //     ? isLiquidGlassAvailable && osName !== 'iPadOS'
+              //       ? 'formSheet'
+              //       : 'modal'
+              //     : 'modal',
+              presentation: 'modal',
+              sheetGrabberVisible: true,
+              sheetAllowedDetents: [0.8],
+              sheetInitialDetentIndex: 0,
+              ...(isLiquidGlassAvailable
+                ? {
+                    contentStyle: { backgroundColor: 'transparent' },
+                    headerStyle: { backgroundColor: 'transparent' },
+                  }
+                : {}),
+            }}
+          />
+        </Stack.Protected>
+        {/* MOVIES */}
         <Stack.Screen
-          name="playlist/[playlist_id]/sort"
+          name="film/[film_id]/watched-dates"
           options={{
-            title: upperFirst(t('common.messages.edit_order')),
+            title: upperFirst(t('common.messages.watched_dates')),
             presentation:
               Platform.OS === 'ios'
                 ? isLiquidGlassAvailable && osName !== 'iPadOS'
@@ -67,6 +122,54 @@ const RootLayoutNav = () => {
                 : 'modal',
             sheetGrabberVisible: true,
             sheetAllowedDetents: [0.8],
+            sheetInitialDetentIndex: 0,
+            headerTransparent: false,
+            ...(isLiquidGlassAvailable
+              ? {
+                  contentStyle: { backgroundColor: 'transparent' },
+                  headerStyle: { backgroundColor: 'transparent' },
+                }
+              : {}),
+          }}
+        />
+        <Stack.Screen
+          name="film/[film_id]/log"
+          options={{
+            presentation: 'formSheet',
+            sheetGrabberVisible: true,
+            sheetAllowedDetents: 'fitToContents',
+            sheetInitialDetentIndex: 0,
+            ...(isLiquidGlassAvailable
+              ? {
+                  contentStyle: { backgroundColor: 'transparent' },
+                  headerStyle: { backgroundColor: 'transparent' },
+                }
+              : {}),
+          }}
+        />
+        {/* TV SERIES */}
+        <Stack.Screen
+          name="tv-series/[tv_series_id]/log"
+          options={{
+            presentation: 'formSheet',
+            sheetGrabberVisible: true,
+            sheetAllowedDetents: 'fitToContents',
+            sheetInitialDetentIndex: 0,
+            ...(isLiquidGlassAvailable
+              ? {
+                  contentStyle: { backgroundColor: 'transparent' },
+                  headerStyle: { backgroundColor: 'transparent' },
+                }
+              : {}),
+          }}
+        />
+        {/* REVIEW COMMENTS */}
+        <Stack.Screen
+          name="user/[username]/film/[film_id]/comments"
+          options={{
+            presentation: 'formSheet',
+            sheetGrabberVisible: true,
+            sheetAllowedDetents: [0.8, 1],
             sheetInitialDetentIndex: 0,
             headerTransparent: true,
             ...(isLiquidGlassAvailable
@@ -78,276 +181,27 @@ const RootLayoutNav = () => {
           }}
         />
         <Stack.Screen
-          name="playlist/add/[type]/[id]"
+          name="user/[username]/tv-series/[tv_series_id]/comments"
           options={{
-            title: upperFirst(t('common.messages.add_to_playlist')),
-            // presentation:
-            //   Platform.OS === 'ios'
-            //     ? isLiquidGlassAvailable && osName !== 'iPadOS'
-            //       ? 'formSheet'
-            //       : 'modal'
-            //     : 'modal',
-            presentation: 'modal',
-            sheetGrabberVisible: true,
-            sheetAllowedDetents: [0.8],
-            sheetInitialDetentIndex: 0,
-            ...(isLiquidGlassAvailable
-              ? {
-                  contentStyle: { backgroundColor: 'transparent' },
-                  headerStyle: { backgroundColor: 'transparent' },
-                }
-              : {}),
-          }}
-        />
-      </Stack.Protected>
-      {/* MOVIES */}
-      <Stack.Screen
-        name="film/[film_id]/watched-dates"
-        options={{
-          title: upperFirst(t('common.messages.watched_dates')),
-          presentation:
-            Platform.OS === 'ios'
-              ? isLiquidGlassAvailable && osName !== 'iPadOS'
-                ? 'formSheet'
-                : 'modal'
-              : 'modal',
-          sheetGrabberVisible: true,
-          sheetAllowedDetents: [0.8],
-          sheetInitialDetentIndex: 0,
-          headerTransparent: false,
-          ...(isLiquidGlassAvailable
-            ? {
-                contentStyle: { backgroundColor: 'transparent' },
-                headerStyle: { backgroundColor: 'transparent' },
-              }
-            : {}),
-        }}
-      />
-      <Stack.Screen
-        name="film/[film_id]/log"
-        options={{
-          presentation: 'formSheet',
-          sheetGrabberVisible: true,
-          sheetAllowedDetents: 'fitToContents',
-          sheetInitialDetentIndex: 0,
-          ...(isLiquidGlassAvailable
-            ? {
-                contentStyle: { backgroundColor: 'transparent' },
-                headerStyle: { backgroundColor: 'transparent' },
-              }
-            : {}),
-        }}
-      />
-      {/* TV SERIES */}
-      <Stack.Screen
-        name="tv-series/[tv_series_id]/log"
-        options={{
-          presentation: 'formSheet',
-          sheetGrabberVisible: true,
-          sheetAllowedDetents: 'fitToContents',
-          sheetInitialDetentIndex: 0,
-          ...(isLiquidGlassAvailable
-            ? {
-                contentStyle: { backgroundColor: 'transparent' },
-                headerStyle: { backgroundColor: 'transparent' },
-              }
-            : {}),
-        }}
-      />
-      {/* REVIEW COMMENTS */}
-      <Stack.Screen
-        name="user/[username]/film/[film_id]/comments"
-        options={{
-          presentation: 'formSheet',
-          sheetGrabberVisible: true,
-          sheetAllowedDetents: [0.8, 1],
-          sheetInitialDetentIndex: 0,
-          headerTransparent: true,
-          ...(isLiquidGlassAvailable
-            ? {
-                contentStyle: { backgroundColor: 'transparent' },
-                headerStyle: { backgroundColor: 'transparent' },
-              }
-            : {}),
-        }}
-      />
-      <Stack.Screen
-        name="user/[username]/tv-series/[tv_series_id]/comments"
-        options={{
-          presentation: 'formSheet',
-          sheetGrabberVisible: true,
-          sheetAllowedDetents: [0.8, 1],
-          sheetInitialDetentIndex: 0,
-          headerTransparent: true,
-          ...(isLiquidGlassAvailable
-            ? {
-                contentStyle: { backgroundColor: 'transparent' },
-                headerStyle: { backgroundColor: 'transparent' },
-              }
-            : {}),
-        }}
-      />
-      <Stack.Screen
-        name="tv-series/[tv_series_id]/season/[season_number]/log"
-        options={{
-          presentation: 'formSheet',
-          sheetGrabberVisible: true,
-          sheetAllowedDetents: 'fitToContents',
-          sheetInitialDetentIndex: 0,
-          ...(isLiquidGlassAvailable
-            ? {
-                contentStyle: { backgroundColor: 'transparent' },
-                headerStyle: { backgroundColor: 'transparent' },
-              }
-            : {}),
-        }}
-      />
-      <Stack.Screen
-        name="tv-series/[tv_series_id]/season/[season_number]/episode/[episode_number]/log"
-        options={{
-          presentation: 'formSheet',
-          sheetGrabberVisible: true,
-          sheetAllowedDetents: 'fitToContents',
-          sheetInitialDetentIndex: 0,
-          ...(isLiquidGlassAvailable
-            ? {
-                contentStyle: { backgroundColor: 'transparent' },
-                headerStyle: { backgroundColor: 'transparent' },
-              }
-            : {}),
-        }}
-      />
-      {/* RECOS */}
-      <Stack.Protected guard={!!user}>
-        <Stack.Screen
-          name="reco/send/[type]/[id]"
-          options={{
-            title: upperFirst(t('common.messages.send_to_friend')),
-            // presentation:
-            //   Platform.OS === 'ios'
-            //     ? isLiquidGlassAvailable && osName !== 'iPadOS'
-            //       ? 'formSheet'
-            //       : 'modal'
-            //     : 'modal',
-            presentation: 'modal',
-            sheetGrabberVisible: true,
-            sheetAllowedDetents: [0.8],
-            sheetInitialDetentIndex: 0,
-            ...(isLiquidGlassAvailable
-              ? {
-                  contentStyle: { backgroundColor: 'transparent' },
-                  headerStyle: { backgroundColor: 'transparent' },
-                }
-              : {}),
-          }}
-        />
-      </Stack.Protected>
-      {/* AUTH */}
-      <Stack.Protected guard={!user}>
-        <Stack.Screen
-          name="auth/(main)"
-          options={{
-            headerShown: false,
-            presentation: Platform.select({
-              ios: 'modal',
-              android: 'formSheet',
-              default: 'modal',
-            }),
-          }}
-        />
-        <Stack.Screen
-          name="auth/(password)"
-          options={{
-            title: t('common.messages.forgot_password'),
-            headerShown: false,
-            presentation: Platform.select({
-              ios: 'modal',
-              android: 'formSheet',
-              default: 'modal',
-            }),
-          }}
-        />
-      </Stack.Protected>
-      {/* WELCOME */}
-      <Stack.Protected guard={!!user}>
-        <Stack.Screen
-          name="welcome"
-          options={{
-            headerShown: false,
-            presentation: 'fullScreenModal',
-          }}
-        />
-      </Stack.Protected>
-      {/* NOTIFICATIONS */}
-      <Stack.Protected guard={!!user}>
-        <Stack.Screen
-          name="notifications"
-          options={{
-            title: upperFirst(t('common.messages.notification', { count: 2 })),
-            presentation: Platform.select({
-              android: 'formSheet',
-              default: 'modal',
-            }),
-          }}
-        />
-      </Stack.Protected>
-      {/* FOLLOW REQUESTS */}
-      <Stack.Protected guard={!!user}>
-        <Stack.Screen
-          name="follow-requests"
-          options={{
-            title: upperFirst(t('common.messages.follow_requests')),
-            presentation: Platform.select({
-              android: 'formSheet',
-              default: 'modal',
-            }),
-          }}
-        />
-      </Stack.Protected>
-      {/* SETTINGS */}
-      <Stack.Screen
-        name="settings/index"
-        options={{ headerTitle: upperFirst(t('pages.settings.label')) }}
-      />
-      <Stack.Screen
-        name="settings/appearance"
-        options={{ headerTitle: upperFirst(t('pages.settings.appearance.label')) }}
-      />
-      <Stack.Protected guard={!!user}>
-        <Stack.Screen
-          name="settings/profile"
-          options={{ headerTitle: upperFirst(t('pages.settings.profile.label')) }}
-        />
-        <Stack.Screen
-          name="settings/account"
-          options={{ headerTitle: upperFirst(t('pages.settings.account.label')) }}
-        />
-        <Stack.Screen
-          name="settings/subscription"
-          options={{ headerTitle: upperFirst(t('pages.settings.subscription.label')) }}
-        />
-        <Stack.Screen
-          name="settings/security"
-          options={{ headerTitle: upperFirst(t('pages.settings.security.label')) }}
-        />
-        <Stack.Screen
-          name="settings/notifications"
-          options={{ headerTitle: upperFirst(t('pages.settings.notifications.label')) }}
-        />
-        <Stack.Screen
-          name="settings/data/(main)"
-          options={{ headerTitle: upperFirst(t('pages.settings.data.label')) }}
-        />
-      </Stack.Protected>
-      {/* IMPORTS */}
-      <Stack.Protected guard={!!user}>
-        <Stack.Screen
-          name="settings/data/import/add"
-          options={{
-            headerShown: false,
             presentation: 'formSheet',
             sheetGrabberVisible: true,
-            sheetAllowedDetents: [0.4, 0.8],
+            sheetAllowedDetents: [0.8, 1],
+            sheetInitialDetentIndex: 0,
+            headerTransparent: true,
+            ...(isLiquidGlassAvailable
+              ? {
+                  contentStyle: { backgroundColor: 'transparent' },
+                  headerStyle: { backgroundColor: 'transparent' },
+                }
+              : {}),
+          }}
+        />
+        <Stack.Screen
+          name="tv-series/[tv_series_id]/season/[season_number]/log"
+          options={{
+            presentation: 'formSheet',
+            sheetGrabberVisible: true,
+            sheetAllowedDetents: 'fitToContents',
             sheetInitialDetentIndex: 0,
             ...(isLiquidGlassAvailable
               ? {
@@ -358,12 +212,12 @@ const RootLayoutNav = () => {
           }}
         />
         <Stack.Screen
-          name="settings/data/import/[import_id]"
+          name="tv-series/[tv_series_id]/season/[season_number]/episode/[episode_number]/log"
           options={{
-            headerShown: false,
-            presentation: 'modal',
-            headerTransparent: false,
-            gestureEnabled: false,
+            presentation: 'formSheet',
+            sheetGrabberVisible: true,
+            sheetAllowedDetents: 'fitToContents',
+            sheetInitialDetentIndex: 0,
             ...(isLiquidGlassAvailable
               ? {
                   contentStyle: { backgroundColor: 'transparent' },
@@ -372,30 +226,186 @@ const RootLayoutNav = () => {
               : {}),
           }}
         />
-      </Stack.Protected>
-      {/* ABOUT */}
-      <Stack.Screen
-        name="about/index"
-        options={{ headerTitle: upperFirst(t('common.messages.about')) }}
-      />
-      {/* LEGAL */}
-      <Stack.Screen name="legal/terms-of-use" options={{ headerShown: false }} />
-      <Stack.Screen name="legal/privacy-policy" options={{ headerShown: false }} />
+        {/* RECOS */}
+        <Stack.Protected guard={!!user}>
+          <Stack.Screen
+            name="reco/send/[type]/[id]"
+            options={{
+              title: upperFirst(t('common.messages.send_to_friend')),
+              // presentation:
+              //   Platform.OS === 'ios'
+              //     ? isLiquidGlassAvailable && osName !== 'iPadOS'
+              //       ? 'formSheet'
+              //       : 'modal'
+              //     : 'modal',
+              presentation: 'modal',
+              sheetGrabberVisible: true,
+              sheetAllowedDetents: [0.8],
+              sheetInitialDetentIndex: 0,
+              ...(isLiquidGlassAvailable
+                ? {
+                    contentStyle: { backgroundColor: 'transparent' },
+                    headerStyle: { backgroundColor: 'transparent' },
+                  }
+                : {}),
+            }}
+          />
+        </Stack.Protected>
+        {/* AUTH */}
+        <Stack.Protected guard={!user}>
+          <Stack.Screen
+            name="auth/(main)"
+            options={{
+              headerShown: false,
+              presentation: Platform.select({
+                ios: 'modal',
+                android: 'formSheet',
+                default: 'modal',
+              }),
+            }}
+          />
+          <Stack.Screen
+            name="auth/(password)"
+            options={{
+              title: t('common.messages.forgot_password'),
+              headerShown: false,
+              presentation: Platform.select({
+                ios: 'modal',
+                android: 'formSheet',
+                default: 'modal',
+              }),
+            }}
+          />
+        </Stack.Protected>
+        {/* WELCOME */}
+        <Stack.Protected guard={!!user}>
+          <Stack.Screen
+            name="welcome"
+            options={{
+              headerShown: false,
+              presentation: 'fullScreenModal',
+            }}
+          />
+        </Stack.Protected>
+        {/* NOTIFICATIONS */}
+        <Stack.Protected guard={!!user}>
+          <Stack.Screen
+            name="notifications"
+            options={{
+              title: upperFirst(t('common.messages.notification', { count: 2 })),
+              presentation: Platform.select({
+                android: 'formSheet',
+                default: 'modal',
+              }),
+            }}
+          />
+        </Stack.Protected>
+        {/* FOLLOW REQUESTS */}
+        <Stack.Protected guard={!!user}>
+          <Stack.Screen
+            name="follow-requests"
+            options={{
+              title: upperFirst(t('common.messages.follow_requests')),
+              presentation: Platform.select({
+                android: 'formSheet',
+                default: 'modal',
+              }),
+            }}
+          />
+        </Stack.Protected>
+        {/* SETTINGS */}
+        <Stack.Screen
+          name="settings/index"
+          options={{ headerTitle: upperFirst(t('pages.settings.label')) }}
+        />
+        <Stack.Screen
+          name="settings/appearance"
+          options={{ headerTitle: upperFirst(t('pages.settings.appearance.label')) }}
+        />
+        <Stack.Protected guard={!!user}>
+          <Stack.Screen
+            name="settings/profile"
+            options={{ headerTitle: upperFirst(t('pages.settings.profile.label')) }}
+          />
+          <Stack.Screen
+            name="settings/account"
+            options={{ headerTitle: upperFirst(t('pages.settings.account.label')) }}
+          />
+          <Stack.Screen
+            name="settings/subscription"
+            options={{ headerTitle: upperFirst(t('pages.settings.subscription.label')) }}
+          />
+          <Stack.Screen
+            name="settings/security"
+            options={{ headerTitle: upperFirst(t('pages.settings.security.label')) }}
+          />
+          <Stack.Screen
+            name="settings/notifications"
+            options={{ headerTitle: upperFirst(t('pages.settings.notifications.label')) }}
+          />
+          <Stack.Screen
+            name="settings/data/(main)"
+            options={{ headerTitle: upperFirst(t('pages.settings.data.label')) }}
+          />
+        </Stack.Protected>
+        {/* IMPORTS */}
+        <Stack.Protected guard={!!user}>
+          <Stack.Screen
+            name="settings/data/import/add"
+            options={{
+              headerShown: false,
+              presentation: 'formSheet',
+              sheetGrabberVisible: true,
+              sheetAllowedDetents: [0.4, 0.8],
+              sheetInitialDetentIndex: 0,
+              ...(isLiquidGlassAvailable
+                ? {
+                    contentStyle: { backgroundColor: 'transparent' },
+                    headerStyle: { backgroundColor: 'transparent' },
+                  }
+                : {}),
+            }}
+          />
+          <Stack.Screen
+            name="settings/data/import/[import_id]"
+            options={{
+              headerShown: false,
+              presentation: 'modal',
+              headerTransparent: false,
+              gestureEnabled: false,
+              ...(isLiquidGlassAvailable
+                ? {
+                    contentStyle: { backgroundColor: 'transparent' },
+                    headerStyle: { backgroundColor: 'transparent' },
+                  }
+                : {}),
+            }}
+          />
+        </Stack.Protected>
+        {/* ABOUT */}
+        <Stack.Screen
+          name="about/index"
+          options={{ headerTitle: upperFirst(t('common.messages.about')) }}
+        />
+        {/* LEGAL */}
+        <Stack.Screen name="legal/terms-of-use" options={{ headerShown: false }} />
+        <Stack.Screen name="legal/privacy-policy" options={{ headerShown: false }} />
 
-      <Stack.Screen
-        name="explore"
-        options={{
-          title: upperFirst(t('common.messages.explore')),
-          headerTitle: () => <></>,
-          headerTransparent: true,
-          headerStyle: { backgroundColor: 'transparent' },
-        }}
-      />
-      <Stack.Screen name="upgrade" options={{ presentation: 'fullScreenModal' }} />
-      <Stack.Screen
-        name="onboarding"
-        options={{ headerShown: false, animation: 'slide_from_bottom', animationDuration: 250 }}
-      />
+        <Stack.Screen
+          name="explore"
+          options={{
+            title: upperFirst(t('common.messages.explore')),
+            headerTitle: () => <></>,
+            headerTransparent: true,
+            headerStyle: { backgroundColor: 'transparent' },
+          }}
+        />
+        <Stack.Screen name="upgrade" options={{ presentation: 'fullScreenModal' }} />
+        <Stack.Screen
+          name="onboarding"
+          options={{ headerShown: false, animation: 'slide_from_bottom', animationDuration: 250 }}
+        />
+      </Stack.Protected>
     </Stack>
   );
 };

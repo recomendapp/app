@@ -1,7 +1,13 @@
 import { useMemo } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
 import { createMMKV } from 'react-native-mmkv';
-import { focusManager, keepPreviousData, QueryClient } from '@tanstack/react-query';
+import {
+  focusManager,
+  keepPreviousData,
+  MutationCache,
+  QueryCache,
+  QueryClient,
+} from '@tanstack/react-query';
 import {
   PersistQueryClientProvider,
   PersistQueryClientProviderProps,
@@ -9,6 +15,7 @@ import {
 import { persistKey } from '../api';
 import { exploreKeys, meKeys, widgetKeys, uiKeys } from '@libs/query-client';
 import { authKeys } from '../api/auth/authKeys';
+import { handleUpgradeRequiredError } from '../lib/api/app-version';
 // import { useReactQueryDevTools } from "@dev-plugins/react-query";
 
 const queryStorage = createMMKV({
@@ -50,8 +57,14 @@ const PERSISTED_QUERY_KEYS = [
   exploreKeys.base,
 ];
 
-const createQueryClient = () =>
-  new QueryClient({
+const createQueryClient = () => {
+  const queryClient: QueryClient = new QueryClient({
+    queryCache: new QueryCache({
+      onError: (error) => handleUpgradeRequiredError(queryClient, error),
+    }),
+    mutationCache: new MutationCache({
+      onError: (error) => handleUpgradeRequiredError(queryClient, error),
+    }),
     defaultOptions: {
       queries: {
         refetchOnWindowFocus: false,
@@ -62,6 +75,8 @@ const createQueryClient = () =>
       },
     },
   });
+  return queryClient;
+};
 
 const dehydrateOptions: PersistQueryClientProviderProps['persistOptions']['dehydrateOptions'] = {
   shouldDehydrateMutation: () => false,

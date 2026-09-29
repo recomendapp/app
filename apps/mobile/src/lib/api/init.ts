@@ -1,6 +1,7 @@
 import { API_ENDPOINT, API_URL } from '../../env';
 import { client, realtime } from '@libs/api-js';
 import { authClient } from '../auth/client';
+import { MOBILE_APP_HEADERS } from './app-version';
 
 client.setConfig({
   baseUrl: API_ENDPOINT || 'https://api.recomend.app/v1',
@@ -11,6 +12,9 @@ client.interceptors.request.use(async (config) => {
   const cookie = await authClient.getCookie();
   if (cookie) {
     config.headers.set('Cookie', cookie);
+  }
+  for (const [name, value] of Object.entries(MOBILE_APP_HEADERS)) {
+    config.headers.set(name, value);
   }
   return config;
 });
