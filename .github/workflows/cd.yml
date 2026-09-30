@@ -97,6 +97,7 @@ jobs:
           APP_STORE_CONNECT_ISSUER_ID="placeholder"
           APP_STORE_CONNECT_PRIVATE_KEY="placeholder"
           APP_STORE_CONNECT_APP_ID="placeholder"
+          APP_STORE_CONNECT_WEBHOOK_SECRET="placeholder"
           EOF
           # Web-app
           cat <<EOF > apps/web/.env

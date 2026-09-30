@@ -84,6 +84,7 @@ export const apiSchema = commonSchema
     APP_STORE_CONNECT_ISSUER_ID: z.string(),
     APP_STORE_CONNECT_PRIVATE_KEY: z.string(),
     APP_STORE_CONNECT_APP_ID: z.string(),
+    APP_STORE_CONNECT_WEBHOOK_SECRET: z.string(),
   });
 
 export const notifySchema = commonSchema

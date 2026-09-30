@@ -140,6 +140,7 @@ describe('apiSchema', () => {
     APP_STORE_CONNECT_ISSUER_ID: 'x',
     APP_STORE_CONNECT_PRIVATE_KEY: 'x',
     APP_STORE_CONNECT_APP_ID: 'x',
+    APP_STORE_CONNECT_WEBHOOK_SECRET: 'x',
   };
 
   it('accepts a fully-populated environment', () => {

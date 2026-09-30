@@ -239,91 +239,11 @@ describe('SystemService', () => {
     });
   });
 
-  describe('updateVersionPolicy', () => {
-    it('records the release as pending and does not move getStatus yet', async () => {
-      const service = createService();
-
-      await service.updateVersionPolicy('ios', '1.7.0', false);
-
-      const result = await service.getStatus({ platform: 'ios', version: '1.6.0' });
-      expect(result.version).toEqual({
-        status: 'up_to_date',
-        minVersion: '1.0.0',
-        latestVersion: '1.0.0',
-      });
-    });
-
-    it('is a no-op the second time the same (platform, version) is reported', async () => {
-      const service = createService();
-
-      await service.updateVersionPolicy('ios', '1.7.0', false);
-      await service.updateVersionPolicy('ios', '1.7.0', false);
-
-      const rows = await testDb.db
-        .select()
-        .from(versionPolicy)
-        .where(and(eq(versionPolicy.platform, 'ios'), eq(versionPolicy.version, '1.7.0')));
-      expect(rows.length).toBe(1);
-    });
-  });
-
-  describe('getVersionReleaseState', () => {
-    it('returns null for a (platform, version) that was never reported', async () => {
-      const service = createService();
-
-      const result = await service.getVersionReleaseState('ios', '9.9.9');
-
-      expect(result).toBeNull();
-    });
-
-    it('returns pending for a freshly reported release', async () => {
-      const service = createService();
-      await service.updateVersionPolicy('ios', '1.7.0', false);
-
-      const result = await service.getVersionReleaseState('ios', '1.7.0');
-
-      expect(result?.state).toBe('pending');
-    });
-
-    it('returns live once confirmed', async () => {
-      const service = createService();
-      await service.updateVersionPolicy('ios', '1.7.0', false);
-      await service.confirmVersionLive('ios', '1.7.0');
-
-      const result = await service.getVersionReleaseState('ios', '1.7.0');
-
-      expect(result?.state).toBe('live');
-    });
-
-    it('returns superseded once a later version of the same platform is live', async () => {
-      const service = createService();
-      await service.updateVersionPolicy('ios', '1.7.0', false); // pending, never confirmed
-      await service.updateVersionPolicy('ios', '1.8.0', false);
-      await service.confirmVersionLive('ios', '1.8.0');
-
-      const result = await service.getVersionReleaseState('ios', '1.7.0');
-
-      expect(result?.state).toBe('superseded');
-    });
-
-    it('does not consider a different platform when checking for supersession', async () => {
-      const service = createService();
-      await service.updateVersionPolicy('ios', '1.7.0', false);
-      await service.updateVersionPolicy('android', '1.8.0', false);
-      await service.confirmVersionLive('android', '1.8.0');
-
-      const result = await service.getVersionReleaseState('ios', '1.7.0');
-
-      expect(result?.state).toBe('pending');
-    });
-  });
-
   describe('confirmVersionLive', () => {
-    it('moves getStatus once confirmed', async () => {
+    it('creates the row live when none existed yet (the webhook is the sole source of truth)', async () => {
       const service = createService();
-      await service.updateVersionPolicy('ios', '1.7.0', false);
 
-      await service.confirmVersionLive('ios', '1.7.0');
+      await service.confirmVersionLive('ios', '1.7.0', false);
       const result = await service.getStatus({ platform: 'ios', version: '1.6.0' });
 
       expect(result.version).toEqual({
@@ -333,12 +253,34 @@ describe('SystemService', () => {
       });
     });
 
+    it('is idempotent: confirming the same (platform, version) twice does not duplicate it', async () => {
+      const service = createService();
+
+      await service.confirmVersionLive('ios', '1.7.0', false);
+      await service.confirmVersionLive('ios', '1.7.0', false);
+
+      const rows = await testDb.db
+        .select()
+        .from(versionPolicy)
+        .where(and(eq(versionPolicy.platform, 'ios'), eq(versionPolicy.version, '1.7.0')));
+      expect(rows.length).toBe(1);
+    });
+
+    it('raises minVersion too when the release is breaking', async () => {
+      const service = createService();
+
+      await service.confirmVersionLive('ios', '2.0.0', true);
+      const result = await service.getStatus({ platform: 'ios', version: '1.9.0' });
+
+      expect(result.version.status).toBe('update_required');
+      expect(result.version.minVersion).toBe('2.0.0');
+    });
+
     it('takes effect immediately, bypassing the cache TTL', async () => {
       const service = createService();
-      await service.updateVersionPolicy('ios', '1.7.0', false);
 
       await service.getStatus({ platform: 'ios', version: '1.6.0' }); // warms the cache
-      await service.confirmVersionLive('ios', '1.7.0');
+      await service.confirmVersionLive('ios', '1.7.0', false);
       const result = await service.getStatus({ platform: 'ios', version: '1.6.0' });
 
       expect(result.version.latestVersion).toBe('1.7.0');

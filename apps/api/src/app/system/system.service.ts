@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { IncomingHttpHeaders } from 'http';
-import { and, eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { systemConfig, versionPolicy } from '@libs/db/schemas';
 import {
   compareAppVersions,
@@ -15,7 +15,6 @@ import { DRIZZLE_SERVICE, type DrizzleService } from '../../common/modules/drizz
 import { CacheService } from '../../common/modules/cache/cache.service';
 import { parseResponseDto } from '../../utils/parse-response-dto';
 import { StatusDto } from './dto/status.dto';
-import { VersionReleaseStateDto } from './dto/version-release-state.dto';
 
 const STATUS_CACHE_KEY = 'system:status-base';
 
@@ -29,8 +28,6 @@ type StatusBase = {
   isMaintenance: boolean;
   versionPolicies: Record<AppPlatform, AppVersionPolicy>;
 };
-
-type VersionReleaseRow = { platform: AppPlatform; version: string; isBreaking: boolean };
 
 const NEUTRAL_VERSION_POLICY: AppVersionPolicy = { minVersion: null, latestVersion: null };
 
@@ -147,62 +144,23 @@ export class SystemService {
   }
 
   /**
-   * Records a new release as `pending` for `platform`. This does NOT move
-   * `minVersion`/`latestVersion` yet -- a store submission can sit in review
-   * for hours or days, and enforcing (or even nudging towards) a version
-   * nobody can download yet would be worse than not enforcing anything.
-   * `confirmVersionLive` is what actually takes effect, once the store
-   * confirms the version is available (see the provider webhooks under
-   * `apps/api/src/app/webhooks`).
+   * Called once a store confirms `version` is actually available (see the provider
+   * webhooks under `apps/api/src/app/webhooks`). Upserts rather than requiring a
+   * pre-existing row: nothing registers a release ahead of time anymore, the
+   * webhook is the sole source of truth, end to end.
    */
-  async updateVersionPolicy(
+  async confirmVersionLive(
     platform: AppPlatform,
     version: string,
     isBreaking: boolean,
   ): Promise<void> {
     await this.db
       .insert(versionPolicy)
-      .values({ platform, version, isBreaking })
-      .onConflictDoNothing({ target: [versionPolicy.platform, versionPolicy.version] });
-  }
-
-  /**
-   * `superseded` means a *later* version of the same platform already went
-   * live, so this one no longer matters.
-   */
-  async getVersionReleaseState(
-    platform: AppPlatform,
-    version: string,
-  ): Promise<VersionReleaseStateDto | null> {
-    const [row] = await this.db
-      .select()
-      .from(versionPolicy)
-      .where(and(eq(versionPolicy.platform, platform), eq(versionPolicy.version, version)));
-    if (!row) return null;
-    if (row.state === 'live') {
-      return parseResponseDto(VersionReleaseStateDto, { state: 'live', createdAt: row.createdAt });
-    }
-
-    const liveRows: VersionReleaseRow[] = await this.db
-      .select()
-      .from(versionPolicy)
-      .where(and(eq(versionPolicy.platform, platform), eq(versionPolicy.state, 'live')));
-    const supersededByLater = liveRows.some(
-      (live) => compareAppVersions(live.version, version) > 0,
-    );
-
-    return parseResponseDto(VersionReleaseStateDto, {
-      state: supersededByLater ? 'superseded' : 'pending',
-      createdAt: row.createdAt,
-    });
-  }
-
-  /** Called once a store confirms `version` is actually available (see the provider webhooks). */
-  async confirmVersionLive(platform: AppPlatform, version: string): Promise<void> {
-    await this.db
-      .update(versionPolicy)
-      .set({ state: 'live' })
-      .where(and(eq(versionPolicy.platform, platform), eq(versionPolicy.version, version)));
+      .values({ platform, version, isBreaking, state: 'live' })
+      .onConflictDoUpdate({
+        target: [versionPolicy.platform, versionPolicy.version],
+        set: { state: 'live' },
+      });
 
     // Take effect immediately on this pod, and on the next L1 miss elsewhere,
     // rather than waiting out the TTLs -- this is a rare, deliberate write,

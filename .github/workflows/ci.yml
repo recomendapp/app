@@ -84,6 +84,7 @@ jobs:
           APP_STORE_CONNECT_ISSUER_ID=mock
           APP_STORE_CONNECT_PRIVATE_KEY=mock
           APP_STORE_CONNECT_APP_ID=mock
+          APP_STORE_CONNECT_WEBHOOK_SECRET=mock
           EOF
 
       - name: 🧠 Initialize Nx SHAs
