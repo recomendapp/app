@@ -188,6 +188,10 @@ jobs:
           PREFECT_API_URL="https://prefect.example.com/api"
           PREFECT_API_AUTH_STRING="placeholder"
           API_INTERNAL_IMPORTS_SECRET="placeholder"
+          APP_STORE_CONNECT_KEY_ID="placeholder"
+          APP_STORE_CONNECT_ISSUER_ID="placeholder"
+          APP_STORE_CONNECT_PRIVATE_KEY="placeholder"
+          APP_STORE_CONNECT_APP_ID="placeholder"
           EOF
 
       - name: 🔑 Decode Google Services files

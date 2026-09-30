@@ -136,6 +136,10 @@ describe('apiSchema', () => {
     PREFECT_API_URL: 'https://prefect.example.com',
     PREFECT_API_AUTH_STRING: 'x',
     API_INTERNAL_IMPORTS_SECRET: 'x',
+    APP_STORE_CONNECT_KEY_ID: 'x',
+    APP_STORE_CONNECT_ISSUER_ID: 'x',
+    APP_STORE_CONNECT_PRIVATE_KEY: 'x',
+    APP_STORE_CONNECT_APP_ID: 'x',
   };
 
   it('accepts a fully-populated environment', () => {

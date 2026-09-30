@@ -80,6 +80,10 @@ jobs:
           PREFECT_API_URL=http://localhost
           PREFECT_API_AUTH_STRING=mock
           API_INTERNAL_IMPORTS_SECRET=mock
+          APP_STORE_CONNECT_KEY_ID=mock
+          APP_STORE_CONNECT_ISSUER_ID=mock
+          APP_STORE_CONNECT_PRIVATE_KEY=mock
+          APP_STORE_CONNECT_APP_ID=mock
           EOF
 
       - name: 🧠 Initialize Nx SHAs
