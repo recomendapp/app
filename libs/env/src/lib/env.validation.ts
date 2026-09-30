@@ -121,6 +121,10 @@ export const workerSchema = commonSchema.extend(typesenseSchema.shape).extend({
 });
 
 export function validateEnv<T extends z.ZodType>(schema: T): z.infer<T> {
+  if (process.env['SKIP_ENV_VALIDATION'] === 'true') {
+    return mockParse(schema);
+  }
+
   const parsed = schema.safeParse(process.env);
 
   if (!parsed.success) {
@@ -129,4 +133,65 @@ export function validateEnv<T extends z.ZodType>(schema: T): z.infer<T> {
   }
 
   return parsed.data;
+}
+
+/** A value that would satisfy `issue` were it substituted in, or `null` if we don't know one. */
+function mockValueFor(issue: z.core.$ZodIssue): string | null {
+  if (issue.code === 'invalid_type') {
+    if (issue.expected === 'number') return '0';
+    if (issue.expected === 'string') return 'mock';
+    return null;
+  }
+  if (issue.code === 'invalid_format') {
+    if (issue.format === 'url') return 'https://example.com';
+    if (issue.format === 'email') return 'mock@example.com';
+    // Zod's `$ZodIssue` union doesn't carry `prefix`/`suffix` on the common
+    // invalid_format shape even though these two formats always set them.
+    if (issue.format === 'starts_with') {
+      return `${(issue as z.core.$ZodIssueStringStartsWith).prefix}mock`;
+    }
+    if (issue.format === 'ends_with') {
+      return `mock${(issue as z.core.$ZodIssueStringEndsWith).suffix}`;
+    }
+    return 'mock';
+  }
+  return null;
+}
+
+/**
+ * Used only by build-time tooling (OpenAPI generation, and the typed API client
+ * codegen that depends on it) that never actually reads these values -- it just
+ * needs the Nest module graph to construct without crashing, since some providers
+ * read env straight from their constructor (e.g. PrefectService). Real values in
+ * `process.env` always win; this only fills in whatever's missing or malformed,
+ * one Zod issue at a time, so a schema change never needs a matching update here.
+ */
+function mockParse<T extends z.ZodType>(schema: T): z.infer<T> {
+  const candidate: Record<string, unknown> = { ...process.env };
+
+  // Each pass can only see issues Zod reports for the *current* candidate (e.g. a
+  // missing field reports as invalid_type until it's filled with some string, only
+  // then do that string's own format checks -- url, startsWith, ... -- surface) --
+  // a handful of passes is always enough for a flat env schema.
+  for (let attempt = 0; attempt < 10; attempt++) {
+    const parsed = schema.safeParse(candidate);
+    if (parsed.success) return parsed.data;
+
+    let fixedAny = false;
+    for (const issue of parsed.error.issues) {
+      if (issue.path.length !== 1) continue;
+      const mock = mockValueFor(issue);
+      if (mock === null) continue;
+      candidate[String(issue.path[0])] = mock;
+      fixedAny = true;
+    }
+
+    if (!fixedAny) {
+      console.error('❌ Could not mock environment variables:', parsed.error.format());
+      process.exit(1);
+    }
+  }
+
+  console.error('❌ Could not mock environment variables after 10 attempts');
+  process.exit(1);
 }

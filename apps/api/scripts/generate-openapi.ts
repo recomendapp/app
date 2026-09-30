@@ -1,3 +1,12 @@
+// This script only ever reads controller/route metadata -- it never touches a real
+// DB/Redis or real secrets. But every provider in the module graph is instantiated
+// eagerly by Nest, and some read env values straight from their constructor (e.g.
+// PrefectService), so `EnvModule` still needs *some* defined value per required key.
+// Set before any other import (this compiles to CommonJS, so -- unlike ESM -- these
+// `require` calls run in source order) so nothing needs a real `apps/api/.env`, here
+// or in the CI workflows that transitively run this via `libs/api-js`'s `generate`.
+process.env.SKIP_ENV_VALIDATION = 'true';
+
 import { Test } from '@nestjs/testing';
 import { AppModule } from '../src/app/app.module';
 import { AUTH_SERVICE } from '../src/app/auth/auth.service';

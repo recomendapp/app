@@ -262,4 +262,65 @@ describe('validateEnv', () => {
     expect(errorSpy).toHaveBeenCalledWith('❌ Invalid environment variables:', expect.anything());
     expect(exitSpy).toHaveBeenCalledWith(1);
   });
+
+  describe('with SKIP_ENV_VALIDATION=true', () => {
+    beforeEach(() => {
+      process.env['SKIP_ENV_VALIDATION'] = 'true';
+    });
+
+    it('mocks every field of a fully-empty apiSchema without exiting', () => {
+      for (const key of Object.keys(apiSchema.shape)) delete process.env[key];
+      const exitSpy = spyOn(process, 'exit').mockImplementation(() => undefined as never);
+
+      const result = validateEnv(apiSchema);
+
+      expect(exitSpy).not.toHaveBeenCalled();
+      expect(apiSchema.safeParse(result).success).toBe(true);
+    });
+
+    it('still coerces numbers and applies defaults, not just strings', () => {
+      for (const key of Object.keys(apiSchema.shape)) delete process.env[key];
+
+      const result = validateEnv(apiSchema);
+
+      expect(result.PORT).toBe(9000);
+      expect(result.TYPESENSE_PORT).toBe(8108);
+    });
+
+    it('lets a real value in process.env win over the mock', () => {
+      for (const key of Object.keys(apiSchema.shape)) delete process.env[key];
+      process.env['DATABASE_URL'] = 'postgres://real-host/real-db';
+
+      const result = validateEnv(apiSchema);
+
+      expect(result.DATABASE_URL).toBe('postgres://real-host/real-db');
+    });
+
+    it('mocks url-checked fields with an actual valid URL', () => {
+      for (const key of Object.keys(apiSchema.shape)) delete process.env[key];
+
+      const result = validateEnv(apiSchema);
+
+      expect(() => new URL(result.PREFECT_API_URL)).not.toThrow();
+      expect(() => new URL(result.S3_ENDPOINT)).not.toThrow();
+    });
+
+    it("mocks a startsWith-constrained field (e.g. notifySchema's RESEND_API_KEY) so it still satisfies the check", () => {
+      for (const key of Object.keys(notifySchema.shape)) delete process.env[key];
+
+      const result = validateEnv(notifySchema);
+
+      expect(result.RESEND_API_KEY.startsWith('re_')).toBe(true);
+    });
+
+    it('does not mock an unrelated schema that has nothing to do with the empty one', () => {
+      for (const key of Object.keys(workerSchema.shape)) delete process.env[key];
+      const exitSpy = spyOn(process, 'exit').mockImplementation(() => undefined as never);
+
+      const result = validateEnv(workerSchema);
+
+      expect(exitSpy).not.toHaveBeenCalled();
+      expect(workerSchema.safeParse(result).success).toBe(true);
+    });
+  });
 });
