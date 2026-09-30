@@ -1,8 +1,28 @@
 import { describe, it, expect, beforeAll, afterAll, afterEach } from 'bun:test';
-import { eq } from 'drizzle-orm';
-import { systemConfig } from '@libs/db/schemas';
+import { and, eq } from 'drizzle-orm';
+import { systemConfig, versionPolicy } from '@libs/db/schemas';
 import { TestDatabase } from '@libs/testing';
 import { SystemService } from './system.service';
+import type { CacheService } from '../../common/modules/cache/cache.service';
+
+/** In-memory stand-in for the Redis-backed CacheService; TTL is ignored on purpose. */
+class FakeCacheService {
+  private readonly store = new Map<string, unknown>();
+  getCallCount = 0;
+
+  async get<T>(key: string): Promise<T | null> {
+    this.getCallCount++;
+    return (this.store.get(key) as T | undefined) ?? null;
+  }
+
+  async set(key: string, value: unknown): Promise<void> {
+    this.store.set(key, value);
+  }
+
+  async del(key: string | string[]): Promise<void> {
+    for (const k of Array.isArray(key) ? key : [key]) this.store.delete(k);
+  }
+}
 
 describe('SystemService', () => {
   let testDb: TestDatabase;
@@ -19,14 +39,19 @@ describe('SystemService', () => {
     await testDb.close();
   });
 
+  const createService = () =>
+    new SystemService(testDb.db, new FakeCacheService() as unknown as CacheService);
+
   describe('getStatus', () => {
-    it('reflects the seeded defaults (not under maintenance, min version 1.0.0)', async () => {
-      const service = new SystemService(testDb.db);
+    it('reflects the seeded defaults (not under maintenance, up to date at 1.0.0)', async () => {
+      const service = createService();
 
-      const result = await service.getStatus();
+      const result = await service.getStatus({ platform: 'ios', version: '1.6.0' });
 
-      expect(result.isMaintenance).toBe(false);
-      expect(result.minMobileVersion).toBe('1.0.0');
+      expect(result).toEqual({
+        isMaintenance: false,
+        version: { status: 'up_to_date', minVersion: '1.0.0', latestVersion: '1.0.0' },
+      });
     });
 
     it('reflects maintenance mode once flipped on', async () => {
@@ -34,34 +59,262 @@ describe('SystemService', () => {
         .update(systemConfig)
         .set({ value: true })
         .where(eq(systemConfig.key, 'is_maintenance'));
-      const service = new SystemService(testDb.db);
+      const service = createService();
 
-      const result = await service.getStatus();
+      const result = await service.getStatus(null);
 
       expect(result.isMaintenance).toBe(true);
     });
 
-    it('reflects an updated minimum mobile version', async () => {
-      await testDb.db
-        .update(systemConfig)
-        .set({ value: '2.3.1' })
-        .where(eq(systemConfig.key, 'min_mobile_version'));
-      const service = new SystemService(testDb.db);
+    it('is neutral (up to date, null versions) when the caller sent no app headers', async () => {
+      const service = createService();
 
-      const result = await service.getStatus();
+      const result = await service.getStatus(null);
 
-      expect(result.minMobileVersion).toBe('2.3.1');
+      expect(result.version).toEqual({
+        status: 'up_to_date',
+        minVersion: null,
+        latestVersion: null,
+      });
     });
 
-    it('falls back to safe defaults when a config row is missing', async () => {
-      await testDb.db.delete(systemConfig).where(eq(systemConfig.key, 'is_maintenance'));
-      await testDb.db.delete(systemConfig).where(eq(systemConfig.key, 'min_mobile_version'));
-      const service = new SystemService(testDb.db);
+    it('requires an update below a live breaking release', async () => {
+      await testDb.db
+        .insert(versionPolicy)
+        .values({ platform: 'ios', version: '2.0.0', isBreaking: true, state: 'live' });
+      const service = createService();
 
-      const result = await service.getStatus();
+      const result = await service.getStatus({ platform: 'ios', version: '1.9.0' });
+
+      expect(result.version.status).toBe('update_required');
+      expect(result.version.minVersion).toBe('2.0.0');
+    });
+
+    it('offers an update between minVersion and a live non-breaking latest', async () => {
+      await testDb.db
+        .insert(versionPolicy)
+        .values({ platform: 'ios', version: '1.5.0', isBreaking: false, state: 'live' });
+      const service = createService();
+
+      const result = await service.getStatus({ platform: 'ios', version: '1.2.0' });
+
+      expect(result.version.status).toBe('update_available');
+      expect(result.version.minVersion).toBe('1.0.0');
+      expect(result.version.latestVersion).toBe('1.5.0');
+    });
+
+    it('ignores a pending release: only `live` rows count', async () => {
+      await testDb.db
+        .insert(versionPolicy)
+        .values({ platform: 'ios', version: '9.9.9', isBreaking: true, state: 'pending' });
+      const service = createService();
+
+      const result = await service.getStatus({ platform: 'ios', version: '1.0.0' });
+
+      expect(result.version).toEqual({
+        status: 'up_to_date',
+        minVersion: '1.0.0',
+        latestVersion: '1.0.0',
+      });
+    });
+
+    it('only applies a platform policy to its own platform', async () => {
+      await testDb.db
+        .insert(versionPolicy)
+        .values({ platform: 'ios', version: '2.0.0', isBreaking: true, state: 'live' });
+      const service = createService();
+
+      const android = await service.getStatus({ platform: 'android', version: '1.0.0' });
+
+      expect(android.version.minVersion).toBe('1.0.0');
+    });
+
+    it('supports the web platform the same way, once a policy is live for it', async () => {
+      await testDb.db
+        .insert(versionPolicy)
+        .values({ platform: 'web', version: '3.0.0', isBreaking: true, state: 'live' });
+      const service = createService();
+
+      const result = await service.getStatus({ platform: 'web', version: '2.9.0' });
+
+      expect(result.version.status).toBe('update_required');
+      expect(result.version.minVersion).toBe('3.0.0');
+    });
+
+    it('falls back to no policy when a platform has no live row', async () => {
+      await testDb.db.delete(versionPolicy).where(eq(versionPolicy.platform, 'ios'));
+      const service = createService();
+
+      const result = await service.getStatus({ platform: 'ios', version: '0.0.1' });
+
+      expect(result.version).toEqual({
+        status: 'up_to_date',
+        minVersion: null,
+        latestVersion: null,
+      });
+    });
+
+    it('falls back to safe defaults when the maintenance config row is missing', async () => {
+      await testDb.db.delete(systemConfig).where(eq(systemConfig.key, 'is_maintenance'));
+      const service = createService();
+
+      const result = await service.getStatus(null);
 
       expect(result.isMaintenance).toBe(false);
-      expect(result.minMobileVersion).toBe('1.0.0');
+    });
+
+    it('caches the base status so a second call does not hit the database again', async () => {
+      const cache = new FakeCacheService();
+      const service = new SystemService(testDb.db, cache as unknown as CacheService);
+
+      await service.getStatus(null);
+      await testDb.db
+        .update(systemConfig)
+        .set({ value: true })
+        .where(eq(systemConfig.key, 'is_maintenance'));
+
+      // Still reflects the value cached from the first call, not the update above.
+      const result = await service.getStatus(null);
+
+      expect(result.isMaintenance).toBe(false);
+    });
+
+    it('serves back-to-back calls from L1 without touching Redis again', async () => {
+      const cache = new FakeCacheService();
+      const service = new SystemService(testDb.db, cache as unknown as CacheService);
+
+      await service.getStatus(null);
+      await service.getStatus(null);
+      await service.getStatus(null);
+
+      expect(cache.getCallCount).toBe(1);
+    });
+
+    it('dedupes concurrent calls into a single Redis read', async () => {
+      const cache = new FakeCacheService();
+      const service = new SystemService(testDb.db, cache as unknown as CacheService);
+
+      await Promise.all([
+        service.getStatus(null),
+        service.getStatus(null),
+        service.getStatus(null),
+      ]);
+
+      expect(cache.getCallCount).toBe(1);
+    });
+  });
+
+  describe('getRequiredUpdate', () => {
+    it('returns the required update for an outdated app', async () => {
+      await testDb.db
+        .insert(versionPolicy)
+        .values({ platform: 'ios', version: '2.0.0', isBreaking: true, state: 'live' });
+      const service = createService();
+
+      const result = await service.getRequiredUpdate({
+        'x-app-platform': 'ios',
+        'x-app-version': '1.0.0',
+      });
+
+      expect(result).toEqual({ minVersion: '2.0.0' });
+    });
+
+    it('lets a supported app through', async () => {
+      const service = createService();
+
+      const result = await service.getRequiredUpdate({
+        'x-app-platform': 'ios',
+        'x-app-version': '1.6.0',
+      });
+
+      expect(result).toBeNull();
+    });
+
+    it('ignores requests without app headers', async () => {
+      const service = createService();
+
+      const result = await service.getRequiredUpdate({});
+
+      expect(result).toBeNull();
+    });
+  });
+
+  describe('updateVersionPolicy', () => {
+    it('records the release as pending and does not move getStatus yet', async () => {
+      const service = createService();
+
+      await service.updateVersionPolicy('ios', '1.7.0', false);
+
+      const result = await service.getStatus({ platform: 'ios', version: '1.6.0' });
+      expect(result.version).toEqual({
+        status: 'up_to_date',
+        minVersion: '1.0.0',
+        latestVersion: '1.0.0',
+      });
+    });
+
+    it('is a no-op the second time the same (platform, version) is reported', async () => {
+      const service = createService();
+
+      await service.updateVersionPolicy('ios', '1.7.0', false);
+      await service.updateVersionPolicy('ios', '1.7.0', false);
+
+      const rows = await testDb.db
+        .select()
+        .from(versionPolicy)
+        .where(and(eq(versionPolicy.platform, 'ios'), eq(versionPolicy.version, '1.7.0')));
+      expect(rows.length).toBe(1);
+    });
+  });
+
+  describe('confirmVersionLive', () => {
+    it('moves getStatus once confirmed', async () => {
+      const service = createService();
+      await service.updateVersionPolicy('ios', '1.7.0', false);
+
+      await service.confirmVersionLive('ios', '1.7.0');
+      const result = await service.getStatus({ platform: 'ios', version: '1.6.0' });
+
+      expect(result.version).toEqual({
+        status: 'update_available',
+        minVersion: '1.0.0',
+        latestVersion: '1.7.0',
+      });
+    });
+
+    it('is a no-op when the (platform, version) was never reported -- it never guesses isBreaking', async () => {
+      const service = createService();
+
+      await service.confirmVersionLive('ios', '9.9.9');
+      const result = await service.getStatus({ platform: 'ios', version: '1.6.0' });
+
+      expect(result.version).toEqual({
+        status: 'up_to_date',
+        minVersion: '1.0.0',
+        latestVersion: '1.0.0',
+      });
+    });
+
+    it('raises minVersion too when the reported release was breaking', async () => {
+      const service = createService();
+      await service.updateVersionPolicy('ios', '2.0.0', true);
+
+      await service.confirmVersionLive('ios', '2.0.0');
+      const result = await service.getStatus({ platform: 'ios', version: '1.9.0' });
+
+      expect(result.version.status).toBe('update_required');
+      expect(result.version.minVersion).toBe('2.0.0');
+    });
+
+    it('takes effect immediately, bypassing the cache TTL', async () => {
+      const service = createService();
+      await service.updateVersionPolicy('ios', '1.7.0', false);
+
+      await service.getStatus({ platform: 'ios', version: '1.6.0' }); // warms the cache
+      await service.confirmVersionLive('ios', '1.7.0');
+      const result = await service.getStatus({ platform: 'ios', version: '1.6.0' });
+
+      expect(result.version.latestVersion).toBe('1.7.0');
     });
   });
 });

@@ -15,6 +15,7 @@ import { PropsWithChildren } from 'react';
 import { ToastProvider } from '../components/Toast';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { ApiProvider } from './ApiProvider';
+import { VersionPolicyProvider } from './VersionPolicyProvider';
 import { useQuery } from '@tanstack/react-query';
 import { uiBackgroundsOptions } from '../api/ui/uiOptions';
 import { Splash } from '../components/Splash/Splash';
@@ -35,20 +36,22 @@ const Providers = ({ children }: ProvidersProps) => {
                   <ToastProvider>
                     <ActionSheetProvider>
                       <ReactQueryProvider>
-                        <AuthProvider>
-                          <ApiProvider>
-                            <BottomSheetModalProvider>
-                              <NotificationsProvider>
-                                <RealtimeProvider>
-                                  <Splash>
-                                    <ProvidersInner>{children}</ProvidersInner>
-                                    <BottomSheetManager />
-                                  </Splash>
-                                </RealtimeProvider>
-                              </NotificationsProvider>
-                            </BottomSheetModalProvider>
-                          </ApiProvider>
-                        </AuthProvider>
+                        <VersionPolicyProvider>
+                          <AuthProvider>
+                            <ApiProvider>
+                              <BottomSheetModalProvider>
+                                <NotificationsProvider>
+                                  <RealtimeProvider>
+                                    <Splash>
+                                      <ProvidersInner>{children}</ProvidersInner>
+                                      <BottomSheetManager />
+                                    </Splash>
+                                  </RealtimeProvider>
+                                </NotificationsProvider>
+                              </BottomSheetModalProvider>
+                            </ApiProvider>
+                          </AuthProvider>
+                        </VersionPolicyProvider>
                       </ReactQueryProvider>
                     </ActionSheetProvider>
                   </ToastProvider>
