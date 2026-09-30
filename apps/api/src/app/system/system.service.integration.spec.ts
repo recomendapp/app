@@ -239,11 +239,40 @@ describe('SystemService', () => {
     });
   });
 
-  describe('confirmVersionLive', () => {
-    it('creates the row live when none existed yet (the webhook is the sole source of truth)', async () => {
+  describe('updateVersionPolicy', () => {
+    it('records the release as pending and does not move getStatus yet', async () => {
       const service = createService();
 
-      await service.confirmVersionLive('ios', '1.7.0', false);
+      await service.updateVersionPolicy('ios', '1.7.0', false);
+
+      const result = await service.getStatus({ platform: 'ios', version: '1.6.0' });
+      expect(result.version).toEqual({
+        status: 'up_to_date',
+        minVersion: '1.0.0',
+        latestVersion: '1.0.0',
+      });
+    });
+
+    it('is a no-op the second time the same (platform, version) is reported', async () => {
+      const service = createService();
+
+      await service.updateVersionPolicy('ios', '1.7.0', false);
+      await service.updateVersionPolicy('ios', '1.7.0', false);
+
+      const rows = await testDb.db
+        .select()
+        .from(versionPolicy)
+        .where(and(eq(versionPolicy.platform, 'ios'), eq(versionPolicy.version, '1.7.0')));
+      expect(rows.length).toBe(1);
+    });
+  });
+
+  describe('confirmVersionLive', () => {
+    it('moves getStatus once confirmed', async () => {
+      const service = createService();
+      await service.updateVersionPolicy('ios', '1.7.0', false);
+
+      await service.confirmVersionLive('ios', '1.7.0');
       const result = await service.getStatus({ platform: 'ios', version: '1.6.0' });
 
       expect(result.version).toEqual({
@@ -253,23 +282,24 @@ describe('SystemService', () => {
       });
     });
 
-    it('is idempotent: confirming the same (platform, version) twice does not duplicate it', async () => {
+    it('is a no-op when the (platform, version) was never reported -- it never guesses isBreaking', async () => {
       const service = createService();
 
-      await service.confirmVersionLive('ios', '1.7.0', false);
-      await service.confirmVersionLive('ios', '1.7.0', false);
+      await service.confirmVersionLive('ios', '9.9.9');
+      const result = await service.getStatus({ platform: 'ios', version: '1.6.0' });
 
-      const rows = await testDb.db
-        .select()
-        .from(versionPolicy)
-        .where(and(eq(versionPolicy.platform, 'ios'), eq(versionPolicy.version, '1.7.0')));
-      expect(rows.length).toBe(1);
+      expect(result.version).toEqual({
+        status: 'up_to_date',
+        minVersion: '1.0.0',
+        latestVersion: '1.0.0',
+      });
     });
 
-    it('raises minVersion too when the release is breaking', async () => {
+    it('raises minVersion too when the reported release was breaking', async () => {
       const service = createService();
+      await service.updateVersionPolicy('ios', '2.0.0', true);
 
-      await service.confirmVersionLive('ios', '2.0.0', true);
+      await service.confirmVersionLive('ios', '2.0.0');
       const result = await service.getStatus({ platform: 'ios', version: '1.9.0' });
 
       expect(result.version.status).toBe('update_required');
@@ -278,9 +308,10 @@ describe('SystemService', () => {
 
     it('takes effect immediately, bypassing the cache TTL', async () => {
       const service = createService();
+      await service.updateVersionPolicy('ios', '1.7.0', false);
 
       await service.getStatus({ platform: 'ios', version: '1.6.0' }); // warms the cache
-      await service.confirmVersionLive('ios', '1.7.0', false);
+      await service.confirmVersionLive('ios', '1.7.0');
       const result = await service.getStatus({ platform: 'ios', version: '1.6.0' });
 
       expect(result.version.latestVersion).toBe('1.7.0');

@@ -49,7 +49,11 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     if (isToastAction(action)) {
-      return <Button onPress={action.onClick}>{action.label}</Button>;
+      return (
+        <Button variant="outline" onPress={action.onClick}>
+          {action.label}
+        </Button>
+      );
     }
 
     return action;

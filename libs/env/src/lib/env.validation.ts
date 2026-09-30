@@ -78,6 +78,9 @@ export const apiSchema = commonSchema
     PREFECT_API_AUTH_STRING: z.string(),
     API_INTERNAL_IMPORTS_SECRET: z.string(),
 
+    // Mobile CI (see .github/workflows/mobile-router.yml) writing the version_policy table
+    API_INTERNAL_VERSION_POLICY_SECRET: z.string(),
+
     // App Store Connect — JWT auth to resolve the appStoreVersions id an incoming
     // webhook event refers to into an actual version/platform (see apps/api/src/app/webhooks)
     APP_STORE_CONNECT_KEY_ID: z.string(),

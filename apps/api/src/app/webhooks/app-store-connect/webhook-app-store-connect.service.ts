@@ -58,10 +58,8 @@ export class WebhookAppStoreConnectService {
     }
 
     this.logger.log(`ios@${version.versionString} is now live`);
-    // `isBreaking` isn't something the App Store Connect API can tell us; this only
-    // ever raises `latestVersion` (a soft nudge) for now. Detecting a breaking
-    // (release-please MAJOR) release to also raise `minVersion` is a follow-up.
-    await this.systemService.confirmVersionLive('ios', version.versionString, false);
+
+    await this.systemService.confirmVersionLive('ios', version.versionString);
 
     return { success: true };
   }

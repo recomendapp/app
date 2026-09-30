@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { IncomingHttpHeaders } from 'http';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { systemConfig, versionPolicy } from '@libs/db/schemas';
 import {
   compareAppVersions,
@@ -144,23 +144,38 @@ export class SystemService {
   }
 
   /**
-   * Called once a store confirms `version` is actually available (see the provider
-   * webhooks under `apps/api/src/app/webhooks`). Upserts rather than requiring a
-   * pre-existing row: nothing registers a release ahead of time anymore, the
-   * webhook is the sole source of truth, end to end.
+   * Records a new release as `pending` for `platform`. This does NOT move
+   * `minVersion`/`latestVersion` yet -- a store submission can sit in review
+   * for hours or days, and enforcing (or even nudging towards) a version
+   * nobody can download yet would be worse than not enforcing anything.
+   * `confirmVersionLive` is what actually takes effect, once the store
+   * confirms the version is available (see the provider webhooks under
+   * `apps/api/src/app/webhooks`). `isBreaking` can only be known here --
+   * from release-please's version bump, at release time -- never from the
+   * store itself, so it's set once, on insert, and never touched again.
    */
-  async confirmVersionLive(
+  async updateVersionPolicy(
     platform: AppPlatform,
     version: string,
     isBreaking: boolean,
   ): Promise<void> {
     await this.db
       .insert(versionPolicy)
-      .values({ platform, version, isBreaking, state: 'live' })
-      .onConflictDoUpdate({
-        target: [versionPolicy.platform, versionPolicy.version],
-        set: { state: 'live' },
-      });
+      .values({ platform, version, isBreaking })
+      .onConflictDoNothing({ target: [versionPolicy.platform, versionPolicy.version] });
+  }
+
+  /**
+   * Called once a store confirms `version` is actually available (see the provider
+   * webhooks under `apps/api/src/app/webhooks`). A plain update, not an upsert --
+   * `updateVersionPolicy` is what creates the row (with the right `isBreaking`);
+   * if it hasn't run yet, this is a no-op rather than guessing.
+   */
+  async confirmVersionLive(platform: AppPlatform, version: string): Promise<void> {
+    await this.db
+      .update(versionPolicy)
+      .set({ state: 'live' })
+      .where(and(eq(versionPolicy.platform, platform), eq(versionPolicy.version, version)));
 
     // Take effect immediately on this pod, and on the next L1 miss elsewhere,
     // rather than waiting out the TTLs -- this is a rare, deliberate write,
