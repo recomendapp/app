@@ -13,10 +13,11 @@ import { Button } from '../../ui/Button';
 import { useAuth } from '../../../providers/AuthProvider';
 import { PADDING_VERTICAL } from '../../../theme/globals';
 import { FlashList } from '@shopify/flash-list';
-import { LogTvSeries, UserSummary } from '@libs/api-js';
+import { UserTvSeriesWithUserTvSeries, UserSummary } from '@libs/api-js';
+import BottomSheetShareReviewTvSeries from './share/BottomSheetShareReviewTvSeries';
 
 interface BottomSheetLogTvSeriesProps extends BottomSheetProps {
-  log: LogTvSeries;
+  log: UserTvSeriesWithUserTvSeries;
   profile: UserSummary;
   additionalItemsTop?: Item[];
   additionalItemsBottom?: Item[];
@@ -36,6 +37,7 @@ export const BottomSheetLogTvSeries = forwardRef<
   BottomSheetLogTvSeriesProps
 >(({ id, log, profile, additionalItemsTop = [], additionalItemsBottom = [], ...props }, ref) => {
   const closeSheet = useBottomSheetStore((state) => state.closeSheet);
+  const openSheet = useBottomSheetStore((state) => state.openSheet);
   const { colors, mode } = useTheme();
   const { user } = useAuth();
   const router = useRouter();
@@ -45,6 +47,21 @@ export const BottomSheetLogTvSeries = forwardRef<
   const items = useMemo<Item[]>(
     () => [
       ...additionalItemsTop,
+      ...(log.review
+        ? [
+            {
+              icon: Icons.Share,
+              onPress: () =>
+                openSheet(BottomSheetShareReviewTvSeries, {
+                  tvSeries: log.tvSeries,
+                  review: log.review!,
+                  author: profile,
+                  rating: log.rating,
+                }),
+              label: upperFirst(t('common.messages.share_review')),
+            },
+          ]
+        : []),
       {
         icon: Icons.Feed,
         onPress: () =>
@@ -102,12 +119,15 @@ export const BottomSheetLogTvSeries = forwardRef<
       additionalItemsTop,
       additionalItemsBottom,
       log.tvSeriesId,
+      log.tvSeries,
+      log.review,
+      log.rating,
       pathname,
-      profile.username,
+      profile,
       router,
       t,
       user?.id,
-      profile.id,
+      openSheet,
     ],
   );
 

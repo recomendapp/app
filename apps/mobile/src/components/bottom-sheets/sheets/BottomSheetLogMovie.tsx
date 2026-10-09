@@ -13,10 +13,11 @@ import { Button } from '../../ui/Button';
 import { useAuth } from '../../../providers/AuthProvider';
 import { PADDING_VERTICAL } from '../../../theme/globals';
 import { FlashList } from '@shopify/flash-list';
-import { LogMovie, UserSummary } from '@libs/api-js';
+import { UserMovieWithUserMovie, UserSummary } from '@libs/api-js';
+import BottomSheetShareReviewMovie from './share/BottomSheetShareReviewMovie';
 
 interface BottomSheetLogMovieProps extends BottomSheetProps {
-  log: LogMovie;
+  log: UserMovieWithUserMovie;
   profile: UserSummary;
   additionalItemsTop?: Item[];
   additionalItemsBottom?: Item[];
@@ -36,6 +37,7 @@ export const BottomSheetLogMovie = forwardRef<
   BottomSheetLogMovieProps
 >(({ id, log, profile, additionalItemsTop = [], additionalItemsBottom = [], ...props }, ref) => {
   const closeSheet = useBottomSheetStore((state) => state.closeSheet);
+  const openSheet = useBottomSheetStore((state) => state.openSheet);
   const { colors, mode } = useTheme();
   const { user } = useAuth();
   const router = useRouter();
@@ -45,6 +47,21 @@ export const BottomSheetLogMovie = forwardRef<
   const items = useMemo<Item[]>(
     () => [
       ...additionalItemsTop,
+      ...(log.review
+        ? [
+            {
+              icon: Icons.Share,
+              onPress: () =>
+                openSheet(BottomSheetShareReviewMovie, {
+                  movie: log.movie,
+                  review: log.review!,
+                  author: profile,
+                  rating: log.rating,
+                }),
+              label: upperFirst(t('common.messages.share_review')),
+            },
+          ]
+        : []),
       {
         icon: Icons.Feed,
         onPress: () =>
@@ -102,12 +119,15 @@ export const BottomSheetLogMovie = forwardRef<
       additionalItemsTop,
       additionalItemsBottom,
       log.movieId,
+      log.movie,
+      log.review,
+      log.rating,
       pathname,
-      profile.username,
+      profile,
       router,
       t,
       user?.id,
-      profile.id,
+      openSheet,
     ],
   );
 
