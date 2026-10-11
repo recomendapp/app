@@ -368,6 +368,15 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
+      # The "previous tag" regenerated below for Signal B can predate #78 (the
+      # Bun migration), when the repo used pnpm. Keep pnpm on PATH so that
+      # worktree's install doesn't fail for lack of a package manager -- pinned
+      # to the version mobile-router.yml itself used pre-migration, since that's
+      # the one known to satisfy those older pnpm-lock.yaml files.
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.25.0
+
       - name: 🔢 Extract version from tag
         id: version
         run: |
@@ -406,15 +415,28 @@ jobs:
           SKIP_ENV_VALIDATION=true bunx nx run api:generate-openapi
           cp apps/api/.openapi/openapi.json /tmp/current-openapi.json
 
+          # The previous tag's own install step, package manager and all --
+          # picked by whichever lockfile that tag committed, not today's.
+          install_previous_release() (
+            cd /tmp/previous-worktree
+            if [ -f bun.lock ]; then
+              bun install --frozen-lockfile && SKIP_ENV_VALIDATION=true bunx nx run api:generate-openapi
+            elif [ -f pnpm-lock.yaml ]; then
+              pnpm install --frozen-lockfile && SKIP_ENV_VALIDATION=true pnpm exec nx run api:generate-openapi
+            else
+              echo "No recognized lockfile (bun.lock/pnpm-lock.yaml) at $PREVIOUS_TAG -- skipping"
+              return 1
+            fi
+          )
+
           if [ -n "$PREVIOUS_TAG" ]; then
-            if git worktree add /tmp/previous-worktree "$PREVIOUS_TAG" --detach &&
-               (cd /tmp/previous-worktree && bun install --frozen-lockfile && SKIP_ENV_VALIDATION=true bunx nx run api:generate-openapi); then
+            if git worktree add /tmp/previous-worktree "$PREVIOUS_TAG" --detach && install_previous_release; then
               curl -fsSL https://raw.githubusercontent.com/oasdiff/oasdiff/main/install.sh | sh
               if ! oasdiff breaking --fail-on ERR /tmp/previous-worktree/apps/api/.openapi/openapi.json /tmp/current-openapi.json; then
                 SIGNAL_B=true
               fi
             else
-              echo "Could not regenerate $PREVIOUS_TAG's OpenAPI schema (older commit predating this check?) -- skipping"
+              echo "Could not regenerate $PREVIOUS_TAG's OpenAPI schema -- skipping"
             fi
             git worktree remove /tmp/previous-worktree --force 2>/dev/null || true
           else
