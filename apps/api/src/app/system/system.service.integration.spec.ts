@@ -19,7 +19,10 @@ class FakeCacheService {
     this.store.set(key, value);
   }
 
+  delCallCount = 0;
+
   async del(key: string | string[]): Promise<void> {
+    this.delCallCount++;
     for (const k of Array.isArray(key) ? key : [key]) this.store.delete(k);
   }
 }
@@ -41,6 +44,11 @@ describe('SystemService', () => {
 
   const createService = () =>
     new SystemService(testDb.db, new FakeCacheService() as unknown as CacheService);
+
+  const createServiceWithCache = () => {
+    const cache = new FakeCacheService();
+    return { service: new SystemService(testDb.db, cache as unknown as CacheService), cache };
+  };
 
   describe('getStatus', () => {
     it('reflects the seeded defaults (not under maintenance, up to date at 1.0.0)', async () => {
@@ -315,6 +323,41 @@ describe('SystemService', () => {
       const result = await service.getStatus({ platform: 'ios', version: '1.6.0' });
 
       expect(result.version.latestVersion).toBe('1.7.0');
+    });
+
+    // Android is polled hourly with no webhook, so the live version is re-confirmed
+    // for the rest of its life. `updated_at` is the only record of when a store
+    // actually confirmed it, so a re-confirmation must not touch the row.
+    it('leaves updated_at alone when the version is already live', async () => {
+      const service = createService();
+      await service.updateVersionPolicy('ios', '1.7.0', false);
+      await service.confirmVersionLive('ios', '1.7.0');
+      const [before] = await testDb.db
+        .select()
+        .from(versionPolicy)
+        .where(and(eq(versionPolicy.platform, 'ios'), eq(versionPolicy.version, '1.7.0')));
+
+      await service.confirmVersionLive('ios', '1.7.0');
+
+      const [after] = await testDb.db
+        .select()
+        .from(versionPolicy)
+        .where(and(eq(versionPolicy.platform, 'ios'), eq(versionPolicy.version, '1.7.0')));
+      expect(after.updatedAt).toBe(before.updatedAt);
+    });
+
+    // `getStatus` runs on (almost) every request, so flushing its cache on every poll
+    // would turn a read into a database round trip 24 times a day for no reason.
+    it('does not flush the cache when the version is already live', async () => {
+      const { service, cache } = createServiceWithCache();
+      await service.updateVersionPolicy('ios', '1.7.0', false);
+      await service.confirmVersionLive('ios', '1.7.0');
+      const flushesAfterRealConfirmation = cache.delCallCount;
+
+      await service.confirmVersionLive('ios', '1.7.0');
+
+      expect(flushesAfterRealConfirmation).toBe(1);
+      expect(cache.delCallCount).toBe(1);
     });
   });
 });
