@@ -121,6 +121,14 @@ export const workerSchema = commonSchema.extend(typesenseSchema.shape).extend({
   PORT: z.coerce.number().default(9002),
   HOST: z.string().default('0.0.0.0'),
   DATABASE_URL: z.string(),
+
+  // Google Play release polling (see apps/worker/src/app/store-release). Optional on
+  // purpose: unset, the poller logs that it is disabled and the worker still boots.
+  ANDROID_PACKAGE_NAME: z.string().optional(),
+  GOOGLE_PLAY_RELEASE_READER_B64: z
+    .string()
+    .optional()
+    .transform((value) => (value ? Buffer.from(value, 'base64').toString('utf-8') : undefined)),
 });
 
 export function validateEnv<T extends z.ZodType>(schema: T): z.infer<T> {
