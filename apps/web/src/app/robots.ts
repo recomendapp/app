@@ -2,7 +2,9 @@ import { siteConfig } from '@/config/site';
 import type { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const disallow = siteConfig.routes.authRoutes.flatMap((route) => [`${route}`, `${route}/*`]);
+  const disallow = [...siteConfig.routes.authRoutes, ...siteConfig.routes.anonRoutes].flatMap(
+    (route) => [`${route}`, `${route}/*`],
+  );
 
   const blockUserAgents = [
     '008',
