@@ -3,9 +3,10 @@ import { getTranslations } from 'next-intl/server';
 import { truncate } from 'lodash';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
-import { generateAlternates } from '@/lib/i18n/routing';
+import { generateLocalizedAlternates } from '@/lib/i18n/routing';
+import { enforceCanonicalSlug } from '@/lib/seo/canonical-slug';
 import { SupportedLocale } from '@libs/i18n';
-import { getPerson } from '@/api/server/medias';
+import { getPerson, getPersonMetadata } from '@/api/server/medias';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { WidgetPersonFilms } from './_components/WidgetPersonFilms';
 import { WidgetPersonTvSeries } from './_components/WidgetPersonTvSeries';
@@ -19,7 +20,14 @@ export async function generateMetadata(props: {
   const { lang, person_id } = await props.params;
   const t = await getTranslations({ locale: lang });
   const { id } = getIdFromSlug(person_id);
-  const person = await getPerson(lang, id);
+  const [person, metadata] = await Promise.all([getPerson(lang, id), getPersonMetadata(id)]);
+  enforceCanonicalSlug({
+    locale: lang,
+    requested: person_id,
+    canonical: person.slug,
+    href: `/person/${person.slug}`,
+  });
+
   return {
     title: t('pages.person.metadata.title', {
       name: person.name!,
@@ -28,7 +36,7 @@ export async function generateMetadata(props: {
     description: person.biography
       ? truncate(person.biography, { length: siteConfig.seo.description.limit })
       : undefined,
-    alternates: generateAlternates(lang, `/person/${person.slug}`),
+    alternates: generateLocalizedAlternates(lang, `/person/${person.slug}`, metadata?.alternates),
     openGraph: {
       siteName: siteConfig.name,
       title: `${person.name} • ${person.knownForDepartment} • ${siteConfig.name}`,

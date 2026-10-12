@@ -2,6 +2,7 @@ import { truncate, upperFirst } from 'lodash';
 import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
 import { generateAlternates } from '@/lib/i18n/routing';
+import { enforceCanonicalSlug } from '@/lib/seo/canonical-slug';
 import { getTranslations } from 'next-intl/server';
 import { SupportedLocale } from '@libs/i18n';
 import { getProfile, getUserMovie } from '@/api/server/users';
@@ -37,6 +38,13 @@ export async function generateMetadata(props: {
       title: upperFirst(t('common.messages.log_not_found')),
     };
   }
+  enforceCanonicalSlug({
+    locale: lang,
+    requested: film_id,
+    canonical: log.movie.slug,
+    href: `/@${profile.username}/film/${log.movie.slug}`,
+  });
+
   return {
     title: upperFirst(
       t('pages.user.metadata.title', { full_name: profile.name, username: profile.username }),
@@ -47,7 +55,7 @@ export async function generateMetadata(props: {
       ),
       { length: siteConfig.seo.description.limit },
     ),
-    alternates: generateAlternates(lang, `/@${profile.username}`),
+    alternates: generateAlternates(lang, `/@${profile.username}/film/${log.movie.slug}`),
     openGraph: {
       siteName: siteConfig.name,
       title: `${upperFirst(t('pages.user.metadata.title', { full_name: profile.name, username: profile.username }))} • ${siteConfig.name}`,

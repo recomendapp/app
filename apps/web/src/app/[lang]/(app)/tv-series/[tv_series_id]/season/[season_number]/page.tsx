@@ -4,9 +4,10 @@ import { truncate, upperFirst } from 'lodash';
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import { TVSeason, WithContext } from 'schema-dts';
-import { generateAlternates } from '@/lib/i18n/routing';
+import { generateLocalizedAlternates, withSubPath } from '@/lib/i18n/routing';
+import { enforceCanonicalSlug } from '@/lib/seo/canonical-slug';
 import { SupportedLocale } from '@libs/i18n';
-import { getTvSeason } from '@/api/server/medias';
+import { getTvSeason, getTvSeriesMetadata } from '@/api/server/medias';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { TvSeasonHeader } from './_components/TvSeasonHeader';
 import { TvSeasonDetails } from './_components/TvSeasonDetails';
@@ -22,10 +23,22 @@ export async function generateMetadata(props: {
   const { lang, tv_series_id, season_number } = await props.params;
   const t = await getTranslations({ locale: lang });
   const { id: serieId } = getIdFromSlug(tv_series_id);
-  const { data: tvSeason, error } = await getTvSeason(lang, serieId, Number(season_number));
+  const [{ data: tvSeason, error }, metadata] = await Promise.all([
+    getTvSeason(lang, serieId, Number(season_number)),
+    getTvSeriesMetadata(serieId),
+  ]);
   if (error || !tvSeason) {
     return { title: upperFirst(t('common.messages.tv_season_not_found')) };
   }
+  const seasonPath = `/tv-series/${tvSeason.tvSeries.slug}/season/${season_number}`;
+
+  enforceCanonicalSlug({
+    locale: lang,
+    requested: tv_series_id,
+    canonical: tvSeason.tvSeries.slug,
+    href: seasonPath,
+  });
+
   return {
     title: t('pages.tv_series.seasons.season.metadata.title', {
       title: tvSeason.tvSeries.name!,
@@ -38,7 +51,11 @@ export async function generateMetadata(props: {
       }),
       { length: siteConfig.seo.description.limit },
     ),
-    alternates: generateAlternates(lang, `/tv-series/${tv_series_id}/season/${season_number}`),
+    alternates: generateLocalizedAlternates(
+      lang,
+      seasonPath,
+      withSubPath(metadata?.alternates, `/season/${season_number}`),
+    ),
     openGraph: {
       siteName: siteConfig.name,
       title: `${t('pages.tv_series.seasons.season.metadata.title', { title: tvSeason.tvSeries.name!, number: tvSeason.seasonNumber })} • ${siteConfig.name}`,
@@ -49,7 +66,7 @@ export async function generateMetadata(props: {
         }),
         { length: siteConfig.seo.description.limit },
       ),
-      url: `${siteConfig.url}/tv-series/${tv_series_id}/season/${season_number}`,
+      url: `${siteConfig.url}${seasonPath}`,
       images: tvSeason.posterPath
         ? [{ url: getTmdbImage({ path: tvSeason.posterPath, size: 'w500' }) }]
         : undefined,

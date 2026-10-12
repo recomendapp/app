@@ -6,9 +6,16 @@ import { MoviesTool } from './movies.tool';
 import { MovieReviewsModule } from './reviews/movie-reviews.module';
 import { MoviePlaylistsModule } from './playlists/movie-playlists.module';
 import { MovieImagesModule } from './images/movie-images.module';
+import { MovieMetadataModule } from './metadata/movie-metadata.module';
 
 @Module({
-  imports: [MovieLogsModule, MoviePlaylistsModule, MovieReviewsModule, MovieImagesModule],
+  imports: [
+    MovieLogsModule,
+    MoviePlaylistsModule,
+    MovieReviewsModule,
+    MovieImagesModule,
+    MovieMetadataModule,
+  ],
   controllers: [MoviesController, MoviesTool],
   providers: [MoviesService],
   exports: [MoviesService],

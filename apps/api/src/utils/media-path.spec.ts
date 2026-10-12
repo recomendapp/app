@@ -18,14 +18,20 @@ describe('media paths', () => {
     expect(moviePath(157336, 'Interstellar')).toBe('/film/157336-interstellar');
     expect(tvSeriesPath(1396, 'Breaking Bad')).toBe('/tv-series/1396-breaking-bad');
     expect(personPath(525, 'Christopher Nolan')).toBe('/person/525-christopher-nolan');
-    expect(tvSeasonPath(1399, 1)).toBe('/tv-series/1399/season/1');
-    expect(tvEpisodePath(1399, 1, 1)).toBe('/tv-series/1399/season/1/episode/1');
+    expect(tvSeasonPath(1399, 1, 'Game of Thrones')).toBe(
+      '/tv-series/1399-game-of-thrones/season/1',
+    );
+    expect(tvEpisodePath(1399, 1, 1, 'Game of Thrones')).toBe(
+      '/tv-series/1399-game-of-thrones/season/1/episode/1',
+    );
   });
 
   it('uses only the id when no title is available', () => {
     expect(mediaSlug(157336, null)).toBe('157336');
     expect(moviePath(157336, null)).toBe('/film/157336');
     expect(tvSeriesPath(1396, undefined)).toBe('/tv-series/1396');
+    expect(tvSeasonPath(1399, 1)).toBe('/tv-series/1399/season/1');
+    expect(tvEpisodePath(1399, 1, 1)).toBe('/tv-series/1399/season/1/episode/1');
     expect(personPath(525, null)).toBe('/person/525');
   });
 

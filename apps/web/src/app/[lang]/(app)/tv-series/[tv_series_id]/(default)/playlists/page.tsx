@@ -3,12 +3,13 @@ import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { Metadata } from 'next';
 import { TvSeriesPlaylists } from './_components/TvSeriesPlaylists';
 import { truncate, upperFirst } from 'lodash';
-import { generateAlternates } from '@/lib/i18n/routing';
+import { generateLocalizedAlternates, withSubPath } from '@/lib/i18n/routing';
+import { enforceCanonicalSlug } from '@/lib/seo/canonical-slug';
 import { getTranslations } from 'next-intl/server';
 import { SupportedLocale } from '@libs/i18n';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { notFound } from 'next/navigation';
-import { getTvSeries } from '@/api/server/medias';
+import { getTvSeries, getTvSeriesMetadata } from '@/api/server/medias';
 
 export async function generateMetadata(props: {
   params: Promise<{
@@ -19,10 +20,20 @@ export async function generateMetadata(props: {
   const { lang, tv_series_id } = await props.params;
   const t = await getTranslations({ locale: lang });
   const { id: serieId } = getIdFromSlug(tv_series_id);
-  const { data: tvSeries, error } = await getTvSeries(lang, serieId);
+  const [{ data: tvSeries, error }, metadata] = await Promise.all([
+    getTvSeries(lang, serieId),
+    getTvSeriesMetadata(serieId),
+  ]);
   if (error || !tvSeries) {
     return { title: upperFirst(t('common.messages.tv_series_not_found')) };
   }
+  enforceCanonicalSlug({
+    locale: lang,
+    requested: tv_series_id,
+    canonical: tvSeries.slug,
+    href: `/tv-series/${tvSeries.slug}/playlists`,
+  });
+
   return {
     title: t('pages.tv_series.playlists.metadata.title', {
       title: tvSeries.name!,
@@ -34,7 +45,11 @@ export async function generateMetadata(props: {
       }),
       { length: siteConfig.seo.description.limit },
     ),
-    alternates: generateAlternates(lang, `/tv-series/${tvSeries.slug}/playlists`),
+    alternates: generateLocalizedAlternates(
+      lang,
+      `/tv-series/${tvSeries.slug}/playlists`,
+      withSubPath(metadata?.alternates, '/playlists'),
+    ),
     openGraph: {
       siteName: siteConfig.name,
       title: `${t('pages.tv_series.playlists.metadata.title', { title: tvSeries.name!, year: new Date(String(tvSeries.firstAirDate)).getFullYear() })} • ${siteConfig.name}`,

@@ -24,14 +24,26 @@ export function personPath(id: number, name: string | null | undefined): string 
   return `/person/${mediaSlug(id, name)}`;
 }
 
-export function tvSeasonPath(tvSeriesId: number, seasonNumber: number): string {
-  return `/tv-series/${tvSeriesId}/season/${seasonNumber}`;
+/**
+ * `tvSeriesName` is optional because not every caller has it to hand, and `mediaSlug`
+ * already degrades to the bare id without one. Pass it wherever it is available: a
+ * season URL carries the *series* slug, so omitting the name yields `/tv-series/1399/...`
+ * while the series page itself canonicalises to `/tv-series/1399-game-of-thrones`, and
+ * the two then disagree about the same show.
+ */
+export function tvSeasonPath(
+  tvSeriesId: number,
+  seasonNumber: number,
+  tvSeriesName?: string | null,
+): string {
+  return `${tvSeriesPath(tvSeriesId, tvSeriesName)}/season/${seasonNumber}`;
 }
 
 export function tvEpisodePath(
   tvSeriesId: number,
   seasonNumber: number,
   episodeNumber: number,
+  tvSeriesName?: string | null,
 ): string {
-  return `${tvSeasonPath(tvSeriesId, seasonNumber)}/episode/${episodeNumber}`;
+  return `${tvSeasonPath(tvSeriesId, seasonNumber, tvSeriesName)}/episode/${episodeNumber}`;
 }

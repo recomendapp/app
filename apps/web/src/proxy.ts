@@ -84,15 +84,28 @@ export const config = {
 };
 
 // Utils
-const isProtected = (pathname: string) => {
-  return (
-    /^\/film\/[^/]+\/review\/create$/.test(pathname) ||
-    /^\/film\/[^/]+\/review\/[^/]+\/edit$/.test(pathname) ||
-    /^\/tv-series\/[^/]+\/review\/create$/.test(pathname) ||
-    /^\/tv-series\/[^/]+\/review\/[^/]+\/edit$/.test(pathname) ||
-    siteConfig.routes.authRoutes.some((path) => pathname.startsWith(path))
-  );
-};
-const isAnonOnly = (pathname: string) => {
+/*
+ * Routes that only make sense signed in, and whose id sits mid-path so `authRoutes`
+ * cannot express them as a prefix.
+ *
+ * These are all deep-link entry points for a modal (see the `@modal` intercepting
+ * routes): reached in-app they open over the current page, reached directly they render
+ * standalone. Either way the modal behind them reads the current user, so none of them
+ * has anything to show a visitor -- or a crawler.
+ *
+ * The `/review/create` and `/review/<id>/edit` patterns this list used to carry had no
+ * page behind them anywhere in the app, while `/review` itself -- the only route of its
+ * kind that exists -- was left unguarded.
+ */
+const PROTECTED_PATTERNS = [
+  /^\/(film|tv-series)\/[^/]+\/review$/,
+  /^\/film\/[^/]+\/watched-dates$/,
+  /^\/playlist\/[^/]+\/edit(\/.*)?$/,
+];
+
+export const isProtected = (pathname: string) =>
+  PROTECTED_PATTERNS.some((pattern) => pattern.test(pathname)) ||
+  siteConfig.routes.authRoutes.some((path) => pathname.startsWith(path));
+export const isAnonOnly = (pathname: string) => {
   return siteConfig.routes.anonRoutes.some((path) => pathname.startsWith(path));
 };

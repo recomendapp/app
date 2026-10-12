@@ -3,11 +3,12 @@ import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import { truncate, upperFirst } from 'lodash';
-import { generateAlternates } from '@/lib/i18n/routing';
+import { generateLocalizedAlternates, withSubPath } from '@/lib/i18n/routing';
+import { enforceCanonicalSlug } from '@/lib/seo/canonical-slug';
 import { getTranslations } from 'next-intl/server';
 import { MovieReviews } from './_components/MovieReviews';
 import { SupportedLocale } from '@libs/i18n';
-import { getMovie } from '@/api/server/medias';
+import { getMovie, getMovieMetadata } from '@/api/server/medias';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 
 export async function generateMetadata(props: {
@@ -19,10 +20,20 @@ export async function generateMetadata(props: {
   const { lang, film_id } = await props.params;
   const t = await getTranslations({ locale: lang });
   const { id: movieId } = getIdFromSlug(film_id);
-  const { data: movie, error } = await getMovie(lang, movieId);
+  const [{ data: movie, error }, metadata] = await Promise.all([
+    getMovie(lang, movieId),
+    getMovieMetadata(movieId),
+  ]);
   if (error || !movie) {
     return { title: upperFirst(t('common.messages.film_not_found')) };
   }
+  enforceCanonicalSlug({
+    locale: lang,
+    requested: film_id,
+    canonical: movie.slug,
+    href: `/film/${movie.slug}/reviews`,
+  });
+
   return {
     title: t('pages.film.reviews.metadata.title', {
       title: movie.title!,
@@ -34,7 +45,11 @@ export async function generateMetadata(props: {
       }),
       { length: siteConfig.seo.description.limit },
     ),
-    alternates: generateAlternates(lang, `/film/${movie.slug}/reviews`),
+    alternates: generateLocalizedAlternates(
+      lang,
+      `/film/${movie.slug}/reviews`,
+      withSubPath(metadata?.alternates, '/reviews'),
+    ),
     openGraph: {
       siteName: siteConfig.name,
       title: `${t('pages.film.reviews.metadata.title', { title: movie.title!, year: new Date(String(movie.releaseDate)).getFullYear() })} • ${siteConfig.name}`,
