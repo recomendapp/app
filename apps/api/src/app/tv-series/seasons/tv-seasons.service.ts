@@ -35,6 +35,7 @@ export class TvSeasonsService {
         .select({
           id: tmdbTvSeasonView.id,
           tvSeriesId: tmdbTvSeasonView.tvSeriesId,
+          tvSeriesName: tmdbTvSeriesView.name,
           seasonNumber: tmdbTvSeasonView.seasonNumber,
           name: tmdbTvSeasonView.name,
           overview: tmdbTvSeasonView.overview,

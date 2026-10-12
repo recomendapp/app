@@ -2,7 +2,8 @@ import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getTranslations } from 'next-intl/server';
 import { truncate } from 'lodash';
 import { siteConfig } from '@/config/site';
-import { generateAlternates } from '@/lib/i18n/routing';
+import { generateLocalizedAlternates, withSubPath } from '@/lib/i18n/routing';
+import { enforceCanonicalSlug } from '@/lib/seo/canonical-slug';
 import { Metadata } from 'next';
 import {
   getValidatedDisplay,
@@ -16,7 +17,12 @@ import { SupportedLocale } from '@libs/i18n';
 import { Filters } from './_components/Filters';
 import { Pagination } from './_components/Pagination';
 import { ActiveFilters } from './_components/ActiveFilters';
-import { getPerson, getPersonTvSeries, getPersonTvSeriesFacets } from '@/api/server/medias';
+import {
+  getPerson,
+  getPersonMetadata,
+  getPersonTvSeries,
+  getPersonTvSeriesFacets,
+} from '@/api/server/medias';
 import { redirect } from '@/lib/i18n/navigation';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
@@ -30,14 +36,25 @@ export async function generateMetadata(props: {
   const { lang, person_id } = await props.params;
   const t = await getTranslations({ locale: lang });
   const { id } = getIdFromSlug(person_id);
-  const person = await getPerson(lang, id);
+  const [person, metadata] = await Promise.all([getPerson(lang, id), getPersonMetadata(id)]);
+  enforceCanonicalSlug({
+    locale: lang,
+    requested: person_id,
+    canonical: person.slug,
+    href: `/person/${person.slug}/tv-series`,
+  });
+
   return {
     title: t('pages.person.tv_series.metadata.title', { name: person.name! }),
     description: truncate(
       t('pages.person.tv_series.metadata.description', { name: person.name! }),
       { length: siteConfig.seo.description.limit },
     ),
-    alternates: generateAlternates(lang, `/person/${person.slug}/tv-series`),
+    alternates: generateLocalizedAlternates(
+      lang,
+      `/person/${person.slug}/tv-series`,
+      withSubPath(metadata?.alternates, '/tv-series'),
+    ),
     openGraph: {
       siteName: siteConfig.name,
       title: `${t('pages.person.tv_series.metadata.title', { name: person.name! })} • ${siteConfig.name}`,

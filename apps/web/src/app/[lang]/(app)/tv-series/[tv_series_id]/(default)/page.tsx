@@ -4,10 +4,11 @@ import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
 import { siteConfig } from '@/config/site';
-import { generateAlternates } from '@/lib/i18n/routing';
+import { generateLocalizedAlternates } from '@/lib/i18n/routing';
+import { enforceCanonicalSlug } from '@/lib/seo/canonical-slug';
 import { TVSeries, WithContext } from 'schema-dts';
 import { SupportedLocale } from '@libs/i18n';
-import { getTvSeries } from '@/api/server/medias';
+import { getTvSeries, getTvSeriesMetadata } from '@/api/server/medias';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { JustWatchWidget } from '@/components/JustWatch/JustWatchWidgetScript';
 import { TvSeriesSeasons } from './_components/TvSeriesSeasons';
@@ -22,10 +23,20 @@ export async function generateMetadata(props: {
   const { lang, tv_series_id } = await props.params;
   const t = await getTranslations({ locale: lang });
   const { id: tvSeriesId } = getIdFromSlug(tv_series_id);
-  const { data: tvSeries, error } = await getTvSeries(lang, tvSeriesId);
+  const [{ data: tvSeries, error }, metadata] = await Promise.all([
+    getTvSeries(lang, tvSeriesId),
+    getTvSeriesMetadata(tvSeriesId),
+  ]);
   if (error || !tvSeries) {
     return { title: upperFirst(t('common.messages.tv_series_not_found')) };
   }
+  enforceCanonicalSlug({
+    locale: lang,
+    requested: tv_series_id,
+    canonical: tvSeries.slug,
+    href: `/tv-series/${tvSeries.slug}`,
+  });
+
   return {
     title: t('pages.tv_series.metadata.title', {
       title: tvSeries.name!,
@@ -48,7 +59,11 @@ export async function generateMetadata(props: {
           }),
       { length: siteConfig.seo.description.limit },
     ),
-    alternates: generateAlternates(lang, `/tv-series/${tvSeries.slug}`),
+    alternates: generateLocalizedAlternates(
+      lang,
+      `/tv-series/${tvSeries.slug}`,
+      metadata?.alternates,
+    ),
     openGraph: {
       siteName: siteConfig.name,
       title: `${t('pages.tv_series.metadata.title', { title: tvSeries.name!, year: new Date(String(tvSeries.firstAirDate)).getFullYear() })} • ${siteConfig.name}`,

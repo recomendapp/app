@@ -62,6 +62,7 @@ export class TvSeriesService {
         .select({
           id: tmdbTvSeasonView.id,
           tvSeriesId: tmdbTvSeasonView.tvSeriesId,
+          tvSeriesName: tmdbTvSeriesView.name,
           seasonNumber: tmdbTvSeasonView.seasonNumber,
           posterPath: tmdbTvSeasonView.posterPath,
           episodeCount: tmdbTvSeasonView.episodeCount,
@@ -69,6 +70,7 @@ export class TvSeriesService {
           voteCount: tmdbTvSeasonView.voteCount,
         })
         .from(tmdbTvSeasonView)
+        .innerJoin(tmdbTvSeriesView, eq(tmdbTvSeriesView.id, tmdbTvSeasonView.tvSeriesId))
         .where(eq(tmdbTvSeasonView.tvSeriesId, tvSeriesId))
         .orderBy(
           asc(sql`CASE WHEN ${tmdbTvSeasonView.seasonNumber} = 0 THEN 1 ELSE 0 END`),

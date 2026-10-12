@@ -4,7 +4,7 @@ import {
   DRIZZLE_SERVICE,
   type DrizzleService,
 } from '../../../../common/modules/drizzle/drizzle.module';
-import { tmdbTvEpisode, tmdbTvSeasonView } from '@libs/db/schemas';
+import { tmdbTvEpisode, tmdbTvSeasonView, tmdbTvSeriesView } from '@libs/db/schemas';
 import type { User } from '../../../auth/auth.service';
 import type { SupportedLocale } from '@libs/i18n';
 import {
@@ -81,6 +81,7 @@ export class TvEpisodesService {
           id: tmdbTvEpisode.id,
           tvSeasonId: tmdbTvEpisode.tvSeasonId,
           tvSeriesId: tmdbTvSeasonView.tvSeriesId,
+          tvSeriesName: tmdbTvSeriesView.name,
           seasonNumber: tmdbTvSeasonView.seasonNumber,
           episodeNumber: tmdbTvEpisode.episodeNumber,
           name: tmdbTvEpisode.name,
@@ -95,6 +96,7 @@ export class TvEpisodesService {
         })
         .from(tmdbTvEpisode)
         .innerJoin(tmdbTvSeasonView, eq(tmdbTvSeasonView.id, tmdbTvEpisode.tvSeasonId))
+        .innerJoin(tmdbTvSeriesView, eq(tmdbTvSeriesView.id, tmdbTvSeasonView.tvSeriesId))
         .where(
           and(
             eq(tmdbTvSeasonView.tvSeriesId, tvSeriesId),
@@ -141,6 +143,7 @@ export class TvEpisodesService {
             id: tmdbTvEpisode.id,
             tvSeasonId: tmdbTvEpisode.tvSeasonId,
             tvSeriesId: tmdbTvSeasonView.tvSeriesId,
+            tvSeriesName: tmdbTvSeriesView.name,
             seasonNumber: tmdbTvSeasonView.seasonNumber,
             episodeNumber: tmdbTvEpisode.episodeNumber,
             name: tmdbTvEpisode.name,
@@ -155,6 +158,7 @@ export class TvEpisodesService {
           })
           .from(tmdbTvEpisode)
           .innerJoin(tmdbTvSeasonView, eq(tmdbTvSeasonView.id, tmdbTvEpisode.tvSeasonId))
+          .innerJoin(tmdbTvSeriesView, eq(tmdbTvSeriesView.id, tmdbTvSeasonView.tvSeriesId))
           .where(baseWhere)
           .orderBy(...orderBy)
           .limit(per_page)
@@ -233,6 +237,7 @@ export class TvEpisodesService {
             id: tmdbTvEpisode.id,
             tvSeasonId: tmdbTvEpisode.tvSeasonId,
             tvSeriesId: tmdbTvSeasonView.tvSeriesId,
+            tvSeriesName: tmdbTvSeriesView.name,
             seasonNumber: tmdbTvSeasonView.seasonNumber,
             episodeNumber: tmdbTvEpisode.episodeNumber,
             name: tmdbTvEpisode.name,
@@ -247,6 +252,7 @@ export class TvEpisodesService {
           })
           .from(tmdbTvEpisode)
           .innerJoin(tmdbTvSeasonView, eq(tmdbTvSeasonView.id, tmdbTvEpisode.tvSeasonId))
+          .innerJoin(tmdbTvSeriesView, eq(tmdbTvSeriesView.id, tmdbTvSeasonView.tvSeriesId))
           .where(and(baseWhere, cursorWhereClause))
           .orderBy(...orderBy)
           .limit(fetchLimit),

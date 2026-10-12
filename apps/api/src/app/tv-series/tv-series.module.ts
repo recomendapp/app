@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { TvSeriesMetadataModule } from './metadata/tv-series-metadata.module';
 import { TvSeriesController } from './tv-series.controller';
 import { TvSeriesTool } from './tv-series.tool';
 import { TvSeriesService } from './tv-series.service';
@@ -10,6 +11,7 @@ import { TvSeriesImagesModule } from './images/tv-series-images.module';
 
 @Module({
   imports: [
+    TvSeriesMetadataModule,
     TvSeasonsModule,
     TvSeriesLogsModule,
     TvSeriesPlaylistsModule,

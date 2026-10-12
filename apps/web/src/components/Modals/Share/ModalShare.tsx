@@ -17,9 +17,10 @@ import {
   XIcon,
 } from 'react-share';
 import { ButtonCopy } from '@/components/utils/ButtonCopy';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { useMemo, useState } from 'react';
+import { routing } from '@/lib/i18n/routing';
 import { Icons } from '@/config/icons';
 import { Button } from '@libs/ui/components/button';
 import toast from 'react-hot-toast';
@@ -42,7 +43,13 @@ export const ModalShare = <T,>({
 }: ModalShareProps<T>) => {
   const { closeModal } = useModal();
   const common = useTranslations('common');
-  const url = useMemo(() => `${location.origin}${path}`, [path]);
+  const locale = useLocale();
+  // A shared link should open in the language the sharer was reading, so it carries the
+  // locale prefix -- except the default locale, which `as-needed` leaves unprefixed.
+  const url = useMemo(
+    () => `${location.origin}${locale === routing.defaultLocale ? '' : `/${locale}`}${path}`,
+    [path, locale],
+  );
   const sharedData: ShareData = useMemo(
     () => ({
       title: title ?? '',

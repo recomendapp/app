@@ -12,6 +12,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { profile } from './user';
 import { supportedLanguages } from './i18n';
+import { defaultSupportedLocale } from '@libs/i18n';
 
 export const authSchema = pgSchema('auth');
 
@@ -30,11 +31,11 @@ export const user = authSchema.table('user', {
   displayUsername: text('display_username'),
   usernameUpdatedAt: timestamp('username_updated_at', { withTimezone: true, mode: 'string' }),
   language: text('language')
-    .default('en-US')
+    .default(defaultSupportedLocale)
     .notNull()
     .references(() => supportedLanguages.language, {
       onUpdate: 'cascade',
-      onDelete: 'restrict',
+      onDelete: 'set default',
     }),
 });
 

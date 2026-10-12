@@ -130,7 +130,9 @@ export class TvEpisodeDto {
     type: String,
   })
   @Expose()
-  @Transform(({ obj }) => tvEpisodePath(obj.tvSeriesId, obj.seasonNumber, obj.episodeNumber))
+  @Transform(({ obj }) =>
+    tvEpisodePath(obj.tvSeriesId, obj.seasonNumber, obj.episodeNumber, obj.tvSeriesName),
+  )
   @IsString()
   path?: string;
 
