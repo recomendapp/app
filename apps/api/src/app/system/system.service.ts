@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { IncomingHttpHeaders } from 'http';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, ne } from 'drizzle-orm';
 import { systemConfig, versionPolicy } from '@libs/db/schemas';
 import {
   compareAppVersions,
@@ -172,10 +172,25 @@ export class SystemService {
    * if it hasn't run yet, this is a no-op rather than guessing.
    */
   async confirmVersionLive(platform: AppPlatform, version: string): Promise<void> {
-    await this.db
+    // `ne(state, 'live')` makes a re-confirmation a genuine no-op, not just an
+    // idempotent one. The App Store Connect webhook fires once per release, but
+    // Android has no webhook and is polled hourly, so the already-live version is
+    // re-confirmed all day: without this it would rewrite the row (moving
+    // `updated_at`, the only evidence of when a store actually confirmed) and
+    // flush the cache below on every poll.
+    const changed = await this.db
       .update(versionPolicy)
       .set({ state: 'live' })
-      .where(and(eq(versionPolicy.platform, platform), eq(versionPolicy.version, version)));
+      .where(
+        and(
+          eq(versionPolicy.platform, platform),
+          eq(versionPolicy.version, version),
+          ne(versionPolicy.state, 'live'),
+        ),
+      )
+      .returning({ version: versionPolicy.version });
+
+    if (changed.length === 0) return;
 
     // Take effect immediately on this pod, and on the next L1 miss elsewhere,
     // rather than waiting out the TTLs -- this is a rare, deliberate write,

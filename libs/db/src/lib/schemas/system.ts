@@ -22,9 +22,10 @@ export const systemConfig = systemSchema.table('config', {
 export const appPlatformEnum = systemSchema.enum('platform', ['ios', 'android', 'web']);
 
 // One row per (platform, version) ever reported, not one row per platform: a version
-// stays `pending` until a background check (see db-sync/store_release_watch) confirms
-// it's actually live on the store, since store review can lag the CI publish step by
-// hours or days. `minVersion`/`latestVersion` are derived from the `live` rows, not
+// stays `pending` until a store confirms it's actually live -- the App Store Connect
+// webhook for iOS, an hourly Play Developer API poll for Android (see
+// apps/worker/src/app/store-release) -- since store review can lag the CI publish
+// step by hours or days. `minVersion`/`latestVersion` are derived from the `live` rows, not
 // stored directly -- see SystemService.
 export const versionReleaseStateEnum = systemSchema.enum('version_release_state', [
   'pending',
