@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} liker anmeldelsen din!",
+    "body": "{actorName} liker anmeldelsen din av {mediaTitle}"
+  },
+  "commented": {
+    "subject": "Ny kommentar på anmeldelsen din!",
+    "body": "{actorName} har kommentert anmeldelsen din av {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} liker kommentaren din!",
+    "body": "{actorName} liker kommentaren din på {mediaTitle}"
+  },
+  "comment_replied": {
+    "subject": "Nytt svar på kommentaren din!",
+    "body": "{actorName} har svart på kommentaren din på {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

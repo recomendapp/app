@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "Jauns reco no {senderName}!",
+    "body": "{senderName} tev ieteica {mediaTitle}",
+    "body_with_comment": "{senderName}: {comment}"
+  },
+  "completed": {
+    "subject": "Tavs reco ir pabeigts!",
+    "body": "{receiverName} noskatījās {mediaTitle}, ko tu ieteici"
+  }
+}

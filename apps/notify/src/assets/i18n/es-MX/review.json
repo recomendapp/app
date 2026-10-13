@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "¡A {actorName} le gustó tu reseña!",
+    "body": "A {actorName} le gustó tu reseña de {mediaTitle}"
+  },
+  "commented": {
+    "subject": "¡Nuevo comentario en tu reseña!",
+    "body": "{actorName} comentó tu reseña de {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "¡A {actorName} le gustó tu comentario!",
+    "body": "A {actorName} le gustó tu comentario sobre {mediaTitle}"
+  },
+  "comment_replied": {
+    "subject": "¡Nueva respuesta a tu comentario!",
+    "body": "{actorName} respondió a tu comentario sobre {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

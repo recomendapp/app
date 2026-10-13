@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "Uusi reco käyttäjältä {senderName}!",
+    "body": "{senderName} recosi sinulle {mediaTitle}",
+    "body_with_comment": "{senderName}: {comment}"
+  },
+  "completed": {
+    "subject": "Recosi on valmis!",
+    "body": "{receiverName} katsoi {mediaTitle}, jonka recosit"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "reco تازه از {senderName}!",
+    "body": "{senderName} به تو {mediaTitle} را پیشنهاد داد",
+    "body_with_comment": "{senderName}: {comment}"
+  },
+  "completed": {
+    "subject": "reco تو کامل شد!",
+    "body": "{receiverName} فیلم {mediaTitle} را که پیشنهاد دادی تماشا کرد"
+  }
+}

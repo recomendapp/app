@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "Nieuwe reco van {senderName}!",
+    "body": "{senderName} heeft je {mediaTitle} gerecood",
+    "body_with_comment": "{senderName}: {comment}"
+  },
+  "completed": {
+    "subject": "Je reco is afgerond!",
+    "body": "{receiverName} heeft {mediaTitle} gezien die jij had gerecood"
+  }
+}

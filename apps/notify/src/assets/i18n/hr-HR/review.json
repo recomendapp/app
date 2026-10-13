@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} je lajkao tvoju kritiku!",
+    "body": "{actorName} je lajkao tvoju kritiku filma {mediaTitle}"
+  },
+  "commented": {
+    "subject": "Novi komentar na tvoju kritiku!",
+    "body": "{actorName} je komentirao tvoju kritiku {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} je lajkao tvoj komentar!",
+    "body": "{actorName} je lajkao tvoj komentar na {mediaTitle}"
+  },
+  "comment_replied": {
+    "subject": "Novi odgovor na tvoj komentar!",
+    "body": "{actorName} je odgovorio na tvoj komentar na {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

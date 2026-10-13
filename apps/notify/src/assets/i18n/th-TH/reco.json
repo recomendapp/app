@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "reco ใหม่จาก {senderName}!",
+    "body": "{senderName} แนะนำ {mediaTitle} ให้คุณ",
+    "body_with_comment": "{senderName}: {comment}"
+  },
+  "completed": {
+    "subject": "reco ของคุณเสร็จสมบูรณ์แล้ว!",
+    "body": "{receiverName} ดู {mediaTitle} ที่คุณแนะนำแล้ว"
+  }
+}

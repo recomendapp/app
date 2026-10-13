@@ -1,0 +1,14 @@
+{
+  "new": {
+    "subject": "Nieuwe volger!",
+    "body": "{actorName} volgt je nu"
+  },
+  "request": {
+    "subject": "Nieuw volgverzoek!",
+    "body": "{actorName} wil je volgen"
+  },
+  "accepted": {
+    "subject": "Volgverzoek geaccepteerd!",
+    "body": "{actorName} heeft je volgverzoek geaccepteerd"
+  }
+}

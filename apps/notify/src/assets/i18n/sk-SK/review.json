@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} dal like tvojej recenzii!",
+    "body": "{actorName} dal like tvojej recenzii na {mediaTitle}"
+  },
+  "commented": {
+    "subject": "Nový komentár k tvojej recenzii!",
+    "body": "{actorName} okomentoval tvoju recenziu na {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} dal like tvojmu komentáru!",
+    "body": "{actorName} dal like tvojmu komentáru k {mediaTitle}"
+  },
+  "comment_replied": {
+    "subject": "Nová odpoveď na tvoj komentár!",
+    "body": "{actorName} odpovedal na tvoj komentár k {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

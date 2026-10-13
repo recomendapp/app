@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "Un reco nou de la {senderName}!",
+    "body": "{senderName} ți-a recomandat {mediaTitle}",
+    "body_with_comment": "{senderName}: {comment}"
+  },
+  "completed": {
+    "subject": "Reco-ul tău a fost finalizat!",
+    "body": "{receiverName} a văzut {mediaTitle}, pe care i l-ai recomandat"
+  }
+}

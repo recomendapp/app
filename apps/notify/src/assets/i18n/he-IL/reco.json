@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "reco חדש מ-{senderName}!",
+    "body": "{senderName} המליץ לך על {mediaTitle}",
+    "body_with_comment": "{senderName}: {comment}"
+  },
+  "completed": {
+    "subject": "ה-reco שלך הושלם!",
+    "body": "{receiverName} צפה ב-{mediaTitle} שהמלצת עליו"
+  }
+}

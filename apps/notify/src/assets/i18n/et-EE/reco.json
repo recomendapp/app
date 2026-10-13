@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "Uus reco kasutajalt {senderName}!",
+    "body": "{senderName} soovitas sulle {mediaTitle}",
+    "body_with_comment": "{senderName}: {comment}"
+  },
+  "completed": {
+    "subject": "Sinu reco on lõpetatud!",
+    "body": "{receiverName} vaatas {mediaTitle}, mille sa soovitasid"
+  }
+}

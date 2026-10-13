@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} 讚了你的影評！",
+    "body": "{actorName} 讚了你關於 {mediaTitle} 的影評"
+  },
+  "commented": {
+    "subject": "你的影評有新評論！",
+    "body": "{actorName} 評論了你關於 {mediaTitle} 的影評",
+    "body_with_comment": "{actorName}：{comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} 讚了你的評論！",
+    "body": "{actorName} 讚了你在 {mediaTitle} 下的評論"
+  },
+  "comment_replied": {
+    "subject": "你的評論有新回覆！",
+    "body": "{actorName} 回覆了你在 {mediaTitle} 下的評論",
+    "body_with_comment": "{actorName}：{comment}"
+  }
+}

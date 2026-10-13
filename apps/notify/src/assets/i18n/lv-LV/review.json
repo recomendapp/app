@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} patīk tava recenzija!",
+    "body": "{actorName} patīk tava recenzija par {mediaTitle}"
+  },
+  "commented": {
+    "subject": "Jauns komentārs tavai recenzijai!",
+    "body": "{actorName} komentēja tavu recenziju par {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} patīk tavs komentārs!",
+    "body": "{actorName} patīk tavs komentārs par {mediaTitle}"
+  },
+  "comment_replied": {
+    "subject": "Jauna atbilde uz tavu komentāru!",
+    "body": "{actorName} atbildēja uz tavu komentāru par {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

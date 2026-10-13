@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} mag deine Kritik!",
+    "body": "{actorName} mag deine Kritik zu {mediaTitle}"
+  },
+  "commented": {
+    "subject": "Neuer Kommentar zu deiner Kritik!",
+    "body": "{actorName} hat deine Kritik zu {mediaTitle} kommentiert",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} mag deinen Kommentar!",
+    "body": "{actorName} mag deinen Kommentar zu {mediaTitle}"
+  },
+  "comment_replied": {
+    "subject": "Neue Antwort auf deinen Kommentar!",
+    "body": "{actorName} hat auf deinen Kommentar zu {mediaTitle} geantwortet",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

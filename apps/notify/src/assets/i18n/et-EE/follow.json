@@ -1,0 +1,14 @@
+{
+  "new": {
+    "subject": "Uus jälgija!",
+    "body": "{actorName} hakkas sind jälgima"
+  },
+  "request": {
+    "subject": "Uus jälgimistaotlus!",
+    "body": "{actorName} soovib sind jälgida"
+  },
+  "accepted": {
+    "subject": "Jälgimistaotlus vastu võetud!",
+    "body": "{actorName} võttis sinu jälgimistaotluse vastu"
+  }
+}

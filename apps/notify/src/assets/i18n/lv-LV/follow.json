@@ -1,0 +1,14 @@
+{
+  "new": {
+    "subject": "Jauns sekotājs!",
+    "body": "{actorName} sāka tev sekot"
+  },
+  "request": {
+    "subject": "Jauns sekošanas pieprasījums!",
+    "body": "{actorName} vēlas tev sekot"
+  },
+  "accepted": {
+    "subject": "Sekošanas pieprasījums apstiprināts!",
+    "body": "{actorName} apstiprināja tavu sekošanas pieprasījumu"
+  }
+}

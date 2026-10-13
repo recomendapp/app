@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} tykkää arviostasi!",
+    "body": "{actorName} tykkää arviostasi teoksesta {mediaTitle}"
+  },
+  "commented": {
+    "subject": "Uusi kommentti arvioosi!",
+    "body": "{actorName} kommentoi arviotasi teoksesta {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} tykkää kommentistasi!",
+    "body": "{actorName} tykkää kommentistasi teokseen {mediaTitle}"
+  },
+  "comment_replied": {
+    "subject": "Uusi vastaus kommenttiisi!",
+    "body": "{actorName} vastasi kommenttiisi teoksesta {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

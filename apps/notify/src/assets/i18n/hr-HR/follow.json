@@ -1,0 +1,14 @@
+{
+  "new": {
+    "subject": "Novi pratitelj!",
+    "body": "{actorName} te počeo pratiti"
+  },
+  "request": {
+    "subject": "Novi zahtjev za praćenje!",
+    "body": "{actorName} te želi pratiti"
+  },
+  "accepted": {
+    "subject": "Zahtjev za praćenje prihvaćen!",
+    "body": "{actorName} je prihvatio tvoj zahtjev za praćenje"
+  }
+}

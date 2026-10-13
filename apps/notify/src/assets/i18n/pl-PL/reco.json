@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "Nowe reco od {senderName}!",
+    "body": "{senderName} poleca Ci {mediaTitle}",
+    "body_with_comment": "{senderName}: {comment}"
+  },
+  "completed": {
+    "subject": "Twoje reco zostało zrealizowane!",
+    "body": "{receiverName} obejrzał {mediaTitle} z Twojego reco"
+  }
+}

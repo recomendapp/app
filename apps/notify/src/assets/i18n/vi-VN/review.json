@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} đã thích bài đánh giá của bạn!",
+    "body": "{actorName} đã thích bài đánh giá của bạn về {mediaTitle}"
+  },
+  "commented": {
+    "subject": "Có bình luận mới trong bài đánh giá của bạn!",
+    "body": "{actorName} đã bình luận bài đánh giá của bạn về {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} đã thích bình luận của bạn!",
+    "body": "{actorName} đã thích bình luận của bạn ở {mediaTitle}"
+  },
+  "comment_replied": {
+    "subject": "Có trả lời mới cho bình luận của bạn!",
+    "body": "{actorName} đã trả lời bình luận của bạn ở {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

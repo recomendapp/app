@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} curtiu sua crítica!",
+    "body": "{actorName} curtiu sua crítica de {mediaTitle}"
+  },
+  "commented": {
+    "subject": "Novo comentário na sua crítica!",
+    "body": "{actorName} comentou sua crítica de {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} curtiu seu comentário!",
+    "body": "{actorName} curtiu seu comentário sobre {mediaTitle}"
+  },
+  "comment_replied": {
+    "subject": "Nova resposta ao seu comentário!",
+    "body": "{actorName} respondeu ao seu comentário sobre {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

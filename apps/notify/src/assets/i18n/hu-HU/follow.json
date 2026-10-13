@@ -1,0 +1,14 @@
+{
+  "new": {
+    "subject": "Új követő!",
+    "body": "{actorName} követni kezdett"
+  },
+  "request": {
+    "subject": "Új követési kérés!",
+    "body": "{actorName} követni szeretne"
+  },
+  "accepted": {
+    "subject": "Követési kérés elfogadva!",
+    "body": "{actorName} elfogadta a követési kérésedet"
+  }
+}

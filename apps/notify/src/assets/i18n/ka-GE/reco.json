@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "ახალი reco {senderName}-გან!",
+    "body": "{senderName}-მა გირჩია {mediaTitle}",
+    "body_with_comment": "{senderName}: {comment}"
+  },
+  "completed": {
+    "subject": "შენი reco დასრულდა!",
+    "body": "{receiverName}-მა ნახა {mediaTitle}, რომელიც ურჩიე"
+  }
+}

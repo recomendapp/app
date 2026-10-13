@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} vindt je review leuk!",
+    "body": "{actorName} vindt je review van {mediaTitle} leuk"
+  },
+  "commented": {
+    "subject": "Nieuwe reactie op je review!",
+    "body": "{actorName} heeft gereageerd op je review van {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} vindt je reactie leuk!",
+    "body": "{actorName} vindt je reactie op {mediaTitle} leuk"
+  },
+  "comment_replied": {
+    "subject": "Nieuw antwoord op je reactie!",
+    "body": "{actorName} heeft geantwoord op je reactie op {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

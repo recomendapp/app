@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} хареса критиката ти!",
+    "body": "{actorName} хареса критиката ти за {mediaTitle}"
+  },
+  "commented": {
+    "subject": "Нов коментар към критиката ти!",
+    "body": "{actorName} коментира критиката ти за {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} хареса коментара ти!",
+    "body": "{actorName} хареса коментара ти за {mediaTitle}"
+  },
+  "comment_replied": {
+    "subject": "Нов отговор на коментара ти!",
+    "body": "{actorName} отговори на коментара ти за {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} ไลก์รีวิวของคุณ!",
+    "body": "{actorName} ไลก์รีวิว {mediaTitle} ของคุณ"
+  },
+  "commented": {
+    "subject": "มีความคิดเห็นใหม่ในรีวิวของคุณ!",
+    "body": "{actorName} แสดงความคิดเห็นในรีวิว {mediaTitle} ของคุณ",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} ไลก์ความคิดเห็นของคุณ!",
+    "body": "{actorName} ไลก์ความคิดเห็นของคุณใน {mediaTitle}"
+  },
+  "comment_replied": {
+    "subject": "มีการตอบกลับความคิดเห็นของคุณ!",
+    "body": "{actorName} ตอบกลับความคิดเห็นของคุณใน {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

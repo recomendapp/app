@@ -1,0 +1,14 @@
+{
+  "new": {
+    "subject": "עוקב חדש!",
+    "body": "{actorName} התחיל לעקוב אחריך"
+  },
+  "request": {
+    "subject": "בקשת מעקב חדשה!",
+    "body": "{actorName} ביקש לעקוב אחריך"
+  },
+  "accepted": {
+    "subject": "בקשת המעקב אושרה!",
+    "body": "{actorName} אישר את בקשת המעקב שלך"
+  }
+}

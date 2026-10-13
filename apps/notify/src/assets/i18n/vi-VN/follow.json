@@ -1,0 +1,14 @@
+{
+  "new": {
+    "subject": "Có người theo dõi mới!",
+    "body": "{actorName} đã bắt đầu theo dõi bạn"
+  },
+  "request": {
+    "subject": "Có yêu cầu theo dõi mới!",
+    "body": "{actorName} đã xin theo dõi bạn"
+  },
+  "accepted": {
+    "subject": "Yêu cầu theo dõi đã được chấp nhận!",
+    "body": "{actorName} đã chấp nhận yêu cầu theo dõi của bạn"
+  }
+}

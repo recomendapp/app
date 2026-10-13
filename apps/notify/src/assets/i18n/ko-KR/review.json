@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName}님이 당신의 리뷰를 좋아합니다!",
+    "body": "{actorName}님이 {mediaTitle}에 쓴 당신의 리뷰를 좋아합니다"
+  },
+  "commented": {
+    "subject": "당신의 리뷰에 새 댓글!",
+    "body": "{actorName}님이 {mediaTitle}에 쓴 당신의 리뷰에 댓글을 남겼습니다",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName}님이 당신의 댓글을 좋아합니다!",
+    "body": "{actorName}님이 {mediaTitle}에 쓴 당신의 댓글을 좋아합니다"
+  },
+  "comment_replied": {
+    "subject": "당신의 댓글에 새 답글!",
+    "body": "{actorName}님이 {mediaTitle}에 쓴 당신의 댓글에 답글을 남겼습니다",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

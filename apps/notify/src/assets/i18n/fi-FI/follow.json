@@ -1,0 +1,14 @@
+{
+  "new": {
+    "subject": "Uusi seuraaja!",
+    "body": "{actorName} alkoi seurata sinua"
+  },
+  "request": {
+    "subject": "Uusi seurauspyyntö!",
+    "body": "{actorName} haluaa seurata sinua"
+  },
+  "accepted": {
+    "subject": "Seurauspyyntö hyväksytty!",
+    "body": "{actorName} hyväksyi seurauspyyntösi"
+  }
+}

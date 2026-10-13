@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} a apreciat cronica ta!",
+    "body": "{actorName} a apreciat cronica ta la {mediaTitle}"
+  },
+  "commented": {
+    "subject": "Un comentariu nou la cronica ta!",
+    "body": "{actorName} a comentat cronica ta la {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} a apreciat comentariul tău!",
+    "body": "{actorName} a apreciat comentariul tău la {mediaTitle}"
+  },
+  "comment_replied": {
+    "subject": "Un răspuns nou la comentariul tău!",
+    "body": "{actorName} a răspuns la comentariul tău la {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

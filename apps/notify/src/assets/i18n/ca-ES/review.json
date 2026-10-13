@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "A {actorName} li agrada la teva crítica!",
+    "body": "A {actorName} li agrada la teva crítica de {mediaTitle}"
+  },
+  "commented": {
+    "subject": "Nou comentari a la teva crítica!",
+    "body": "{actorName} ha comentat la teva crítica de {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "A {actorName} li agrada el teu comentari!",
+    "body": "A {actorName} li agrada el teu comentari sobre {mediaTitle}"
+  },
+  "comment_replied": {
+    "subject": "Nova resposta al teu comentari!",
+    "body": "{actorName} ha respost al teu comentari sobre {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

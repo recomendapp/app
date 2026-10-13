@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "Új reco {senderName} felhasználótól!",
+    "body": "{senderName} ajánlotta neked: {mediaTitle}",
+    "body_with_comment": "{senderName}: {comment}"
+  },
+  "completed": {
+    "subject": "A recód befejeződött!",
+    "body": "{receiverName} megnézte a(z) {mediaTitle} címet, amit ajánlottál"
+  }
+}

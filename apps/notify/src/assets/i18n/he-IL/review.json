@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} עשה לייק לביקורת שלך!",
+    "body": "{actorName} עשה לייק לביקורת שלך על {mediaTitle}"
+  },
+  "commented": {
+    "subject": "תגובה חדשה לביקורת שלך!",
+    "body": "{actorName} הגיב לביקורת שלך על {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} עשה לייק לתגובה שלך!",
+    "body": "{actorName} עשה לייק לתגובה שלך על {mediaTitle}"
+  },
+  "comment_replied": {
+    "subject": "תשובה חדשה לתגובה שלך!",
+    "body": "{actorName} השיב לתגובה שלך על {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}
