@@ -161,7 +161,7 @@
       "collection": "{count, plural, one {collection} other {collections}}",
       "most_recent": "{gender, select, female {{count, plural, one {plus récente} other {plus récentes}}} other {{count, plural, one {plus récent} other {plus récents}}}}",
       "most_popular": "{count, plural, one {le plus populaire} other {les plus populaires}}",
-      "most_old": "{{gender, select, female {{count, plural, one {plus ancienne} other {plus anciennes}}} other {{count, plural, one {plus ancien} other {plus anciens}}}}",
+      "most_old": "{gender, select, female {{count, plural, one {plus ancienne} other {plus anciennes}}} other {{count, plural, one {plus ancien} other {plus anciens}}}}",
       "known_for": "Connu pour",
       "release_date": "date de sortie",
       "last_appearance_date": "dernière apparition",
