@@ -52,19 +52,16 @@ export const LocaleProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     (async () => {
-      let initial: string = defaultSupportedLocale;
+      let initial: SupportedLocale = defaultSupportedLocale;
       try {
         initial = await getLocale();
       } catch (error) {
         logger.error('Failed to read saved locale, falling back to default', { error });
       }
-      initial = supportedLocales.includes(initial as SupportedLocale)
-        ? initial
-        : defaultSupportedLocale;
 
       try {
-        const { messages } = await initI18n(initial as SupportedLocale);
-        setLocaleState(initial as SupportedLocale);
+        const { messages } = await initI18n(initial);
+        setLocaleState(initial);
         setMessages(messages);
       } catch (error) {
         logger.error('Failed to initialize locale, retrying with default', {
