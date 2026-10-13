@@ -933,7 +933,7 @@
         },
         "email": {
           "description": "驗證郵件會同時發到你當前的電子郵件和新電子郵件。兩邊都確認後更改才會生效。",
-          "change_pending": "驗證郵件已發送至你的新電子郵件 <strong>{email}</strong>。點擊連結或輸入驗證碼來確認更改。",
+          "change_pending": "驗證郵件已於 <strong>{date}</strong> 發送至你的新電子郵件 <strong>{email}</strong>。點擊連結或輸入驗證碼來確認更改。",
           "confirm_email_code": {
             "description": "輸入發送到 <strong>{email}</strong> 的驗證碼，以確認此次更改。"
           },

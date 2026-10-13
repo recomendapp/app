@@ -933,7 +933,7 @@
         },
         "email": {
           "description": "验证邮件会同时发到你当前的邮箱和新邮箱。两边都确认后更改才会生效。",
-          "change_pending": "验证邮件已发送至你的新邮箱 <strong>{email}</strong>。点击链接或输入验证码来确认更改。",
+          "change_pending": "验证邮件已于 <strong>{date}</strong> 发送至你的新邮箱 <strong>{email}</strong>。点击链接或输入验证码来确认更改。",
           "confirm_email_code": {
             "description": "输入发送到 <strong>{email}</strong> 的验证码，以确认此次更改。"
           },

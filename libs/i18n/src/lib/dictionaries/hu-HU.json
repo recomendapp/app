@@ -933,7 +933,7 @@
         },
         "email": {
           "description": "Ellenőrző e-mailt küldünk a jelenlegi és az új e-mail-címedre is. A módosítás csak akkor lép életbe, ha mindkettőt megerősíted.",
-          "change_pending": "Ellenőrző e-mailt küldtünk az új e-mail-címedre: <strong>{email}</strong>. Kattints a linkre, vagy írd be az ellenőrző kódot a módosítás megerősítéséhez.",
+          "change_pending": "Ellenőrző e-mailt küldtünk az új e-mail-címedre: <strong>{email}</strong>. Elküldve: <strong>{date}</strong>. Kattints a linkre, vagy írd be az ellenőrző kódot a módosítás megerősítéséhez.",
           "confirm_email_code": {
             "description": "Írd be a <strong>{email}</strong> címre küldött ellenőrző kódot a módosítás megerősítéséhez."
           },

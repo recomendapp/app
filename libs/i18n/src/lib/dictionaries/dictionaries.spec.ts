@@ -48,7 +48,7 @@ describe('dictionaries (libs/i18n)', () => {
   });
 
   it('only lets fr-FR add the arguments the call sites pass on top of en-US', () => {
-    expect(implicitArguments).toEqual(['count', 'date', 'gender']);
+    expect(implicitArguments).toEqual(['count', 'gender']);
   });
 
   it('has the same keys, placeholders and tags as the reference locale in every locale', () => {

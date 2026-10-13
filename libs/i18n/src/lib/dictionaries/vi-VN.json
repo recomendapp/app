@@ -933,7 +933,7 @@
         },
         "email": {
           "description": "Một email xác minh sẽ được gửi tới cả địa chỉ hiện tại và địa chỉ mới. Bạn phải xác nhận cả hai để thay đổi có hiệu lực.",
-          "change_pending": "Một email xác minh đã được gửi tới địa chỉ mới của bạn <strong>{email}</strong>. Hãy nhấn vào liên kết hoặc nhập mã xác minh để xác nhận thay đổi.",
+          "change_pending": "Một email xác minh đã được gửi vào <strong>{date}</strong> tới địa chỉ mới của bạn <strong>{email}</strong>. Hãy nhấn vào liên kết hoặc nhập mã xác minh để xác nhận thay đổi.",
           "confirm_email_code": {
             "description": "Nhập mã xác minh đã gửi tới địa chỉ <strong>{email}</strong> để xác nhận thay đổi."
           },

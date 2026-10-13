@@ -933,7 +933,7 @@
         },
         "email": {
           "description": "Hem mevcut hem de yeni e-posta adresine bir doğrulama e-postası gönderilecek. Değişikliğin geçerli olması için ikisini de onaylaman gerekiyor.",
-          "change_pending": "Yeni e-posta adresine <strong>{email}</strong> bir doğrulama e-postası gönderildi. Değişikliği onaylamak için bağlantıya tıkla ya da doğrulama kodunu gir.",
+          "change_pending": "<strong>{date}</strong> tarihinde yeni e-posta adresine <strong>{email}</strong> bir doğrulama e-postası gönderildi. Değişikliği onaylamak için bağlantıya tıkla ya da doğrulama kodunu gir.",
           "confirm_email_code": {
             "description": "Değişikliği onaylamak için <strong>{email}</strong> adresine gönderilen doğrulama kodunu gir."
           },

@@ -933,7 +933,7 @@
         },
         "email": {
           "description": "確認メールは現在のアドレスと新しいアドレスの両方に送られます。変更を有効にするには両方で確認してください。",
-          "change_pending": "確認メールを新しいアドレス<strong>{email}</strong>に送信しました。リンクをクリックするか、確認コードを入力して変更を確定してください。",
+          "change_pending": "<strong>{date}</strong>に確認メールを新しいアドレス<strong>{email}</strong>へ送信しました。リンクをクリックするか、確認コードを入力して変更を確定してください。",
           "confirm_email_code": {
             "description": "変更を確定するには、<strong>{email}</strong>に送られた確認コードを入力してください。"
           },
