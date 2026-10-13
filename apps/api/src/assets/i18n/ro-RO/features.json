@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "Urmărire",
+    "description": "Ține socoteala filmelor și serialelor pe care le-ai văzut"
+  },
+  "recos": {
+    "label": "Reco",
+    "description": "Trimite-le amicilor recomandări de filme și seriale"
+  },
+  "playlists": {
+    "label": "Liste",
+    "description": "Îți organizezi filmele și serialele în liste și le împarți cu alții"
+  },
+  "feed": {
+    "label": "Flux",
+    "description": "Urmărește activitatea amicilor tăi"
+  },
+  "bookmarks": {
+    "label": "Pentru mai târziu",
+    "description": "Salvează filmele și serialele pe care vrei să le vezi"
+  }
+}

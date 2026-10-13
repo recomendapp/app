@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "记录",
+    "description": "记下你看过的电影和剧集"
+  },
+  "recos": {
+    "label": "Reco",
+    "description": "给朋友发电影和剧集推荐"
+  },
+  "playlists": {
+    "label": "片单",
+    "description": "把电影和剧集整理成片单并分享出去"
+  },
+  "feed": {
+    "label": "动态",
+    "description": "关注朋友们的动态"
+  },
+  "bookmarks": {
+    "label": "留着以后看",
+    "description": "收藏你想看的电影和剧集"
+  }
+}

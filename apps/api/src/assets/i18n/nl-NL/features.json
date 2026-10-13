@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "Bijhouden",
+    "description": "Houd bij welke films en series je hebt gezien"
+  },
+  "recos": {
+    "label": "Recos",
+    "description": "Stuur film- en serietips naar je vrienden"
+  },
+  "playlists": {
+    "label": "Playlists",
+    "description": "Zet je films en series in playlists en deel ze"
+  },
+  "feed": {
+    "label": "Feed",
+    "description": "Volg wat je vrienden doen"
+  },
+  "bookmarks": {
+    "label": "Voor later",
+    "description": "Bewaar films en series die je wilt zien"
+  }
+}

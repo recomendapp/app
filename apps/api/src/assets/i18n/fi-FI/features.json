@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "Seuranta",
+    "description": "Pidä kirjaa näkemistäsi elokuvista ja sarjoista"
+  },
+  "recos": {
+    "label": "Recot",
+    "description": "Lähetä elokuva- ja sarjasuosituksia kavereillesi"
+  },
+  "playlists": {
+    "label": "Listat",
+    "description": "Järjestä elokuvasi ja sarjasi listoihin ja jaa ne"
+  },
+  "feed": {
+    "label": "Syöte",
+    "description": "Seuraa kavereidesi tekemisiä"
+  },
+  "bookmarks": {
+    "label": "Myöhemmäksi",
+    "description": "Tallenna elokuvat ja sarjat, jotka haluat nähdä"
+  }
+}

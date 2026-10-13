@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "Uzskaite",
+    "description": "Seko līdzi filmām un seriāliem, ko esi noskatījies"
+  },
+  "recos": {
+    "label": "Reco",
+    "description": "Sūti draugiem filmu un seriālu ieteikumus"
+  },
+  "playlists": {
+    "label": "Saraksti",
+    "description": "Sakārto savas filmas un seriālus sarakstos un dalies ar tiem"
+  },
+  "feed": {
+    "label": "Plūsma",
+    "description": "Seko tam, ko dara tavi draugi"
+  },
+  "bookmarks": {
+    "label": "Vēlākam laikam",
+    "description": "Saglabā filmas un seriālus, ko vēlies noskatīties"
+  }
+}

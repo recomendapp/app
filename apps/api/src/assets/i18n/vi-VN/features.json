@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "Ghi lại",
+    "description": "Lưu lại những phim và phim bộ bạn đã xem"
+  },
+  "recos": {
+    "label": "Reco",
+    "description": "Gửi phim và phim bộ bạn muốn giới thiệu cho bạn bè"
+  },
+  "playlists": {
+    "label": "Danh sách",
+    "description": "Sắp xếp phim và phim bộ của bạn thành danh sách và chia sẻ"
+  },
+  "feed": {
+    "label": "Bảng tin",
+    "description": "Theo dõi hoạt động của bạn bè"
+  },
+  "bookmarks": {
+    "label": "Để sau",
+    "description": "Lưu những phim và phim bộ bạn muốn xem"
+  }
+}

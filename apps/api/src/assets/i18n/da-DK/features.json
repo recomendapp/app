@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "Registrering",
+    "description": "Hold styr på de film og serier, du har set"
+  },
+  "recos": {
+    "label": "Recos",
+    "description": "Send film- og serieanbefalinger til dine venner"
+  },
+  "playlists": {
+    "label": "Lister",
+    "description": "Organiser dine film og serier i lister og del dem"
+  },
+  "feed": {
+    "label": "Feed",
+    "description": "Følg dine venners aktivitet"
+  },
+  "bookmarks": {
+    "label": "Til senere",
+    "description": "Gem film og serier, du vil se"
+  }
+}

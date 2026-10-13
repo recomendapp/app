@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "記録",
+    "description": "観た映画やシリーズを記録しておけます"
+  },
+  "recos": {
+    "label": "Reco",
+    "description": "友達に映画やシリーズのおすすめを送れます"
+  },
+  "playlists": {
+    "label": "プレイリスト",
+    "description": "映画やシリーズをプレイリストにまとめて共有できます"
+  },
+  "feed": {
+    "label": "フィード",
+    "description": "友達のアクティビティをフォローできます"
+  },
+  "bookmarks": {
+    "label": "あとで見る",
+    "description": "観たい映画やシリーズを保存しておけます"
+  }
+}

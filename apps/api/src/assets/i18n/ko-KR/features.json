@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "기록",
+    "description": "본 영화와 시리즈를 기록해 두세요"
+  },
+  "recos": {
+    "label": "Reco",
+    "description": "친구에게 영화와 시리즈 추천을 보내세요"
+  },
+  "playlists": {
+    "label": "플레이리스트",
+    "description": "영화와 시리즈를 플레이리스트로 정리하고 공유하세요"
+  },
+  "feed": {
+    "label": "피드",
+    "description": "친구들의 활동을 따라가세요"
+  },
+  "bookmarks": {
+    "label": "나중에 보기",
+    "description": "보고 싶은 영화와 시리즈를 저장해 두세요"
+  }
+}

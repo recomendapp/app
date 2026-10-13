@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "Beleženje",
+    "description": "Imej pregled nad filmi in serijami, ki si jih videl"
+  },
+  "recos": {
+    "label": "Reco",
+    "description": "Pošiljaj prijateljem priporočila filmov in serij"
+  },
+  "playlists": {
+    "label": "Seznami",
+    "description": "Uredi svoje filme in serije v sezname ter jih deli"
+  },
+  "feed": {
+    "label": "Vir",
+    "description": "Spremljaj dejavnost svojih prijateljev"
+  },
+  "bookmarks": {
+    "label": "Za pozneje",
+    "description": "Shrani filme in serije, ki si jih želiš ogledati"
+  }
+}
