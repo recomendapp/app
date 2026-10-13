@@ -16,10 +16,12 @@ import { useAuth } from '@/context/auth-context';
 import { Popover, PopoverContent, PopoverTrigger } from '@libs/ui/components/popover';
 import { Button } from '@libs/ui/components/button';
 import { Calendar } from '@libs/ui/components/calendar';
-import { useCallback, useEffect } from 'react';
-import { enUS, fr } from 'date-fns/locale';
+import { useCallback, useEffect, useState } from 'react';
+import type { Locale } from 'date-fns';
+import { loadDateFnsLocale } from '@/lib/i18n/dateFnsLocale';
 import { Icons } from '@/config/icons';
 import { WatchedDate } from '@libs/api-js';
+import type { SupportedLocale } from '@libs/i18n';
 import toast from 'react-hot-toast';
 import { useInView } from 'react-intersection-observer';
 
@@ -38,7 +40,8 @@ export const ModalLogMovieWatchedDates = ({
 }: ModalLogMovieWatchedDatesProps) => {
   const t = useTranslations();
   const { user, session } = useAuth();
-  const locale = useLocale();
+  const locale = useLocale() as SupportedLocale;
+  const [calendarLocale, setCalendarLocale] = useState<Locale>();
   const formatter = useFormatter();
   const { ref, inView } = useInView();
   const {
@@ -147,6 +150,11 @@ export const ModalLogMovieWatchedDates = ({
     if (inView && hasNextPage) fetchNextPage();
   }, [inView, hasNextPage, fetchNextPage]);
 
+  // Loaded on mount, so the chunk is there before the date popover opens.
+  useEffect(() => {
+    loadDateFnsLocale(locale).then(setCalendarLocale);
+  }, [locale]);
+
   return (
     <Modal open={open} onOpenChange={onOpenChange} onCloseEnd={onCloseEnd}>
       <ModalHeader>
@@ -170,7 +178,7 @@ export const ModalLogMovieWatchedDates = ({
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0 flex flex-col justify-center">
                       <Calendar
-                        locale={locale == 'fr-FR' ? fr : enUS}
+                        locale={calendarLocale}
                         mode="single"
                         selected={new Date(date.watchedDate ?? '')}
                         onSelect={(newDate) =>
