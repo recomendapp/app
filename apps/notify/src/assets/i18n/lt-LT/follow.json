@@ -1,0 +1,14 @@
+{
+  "new": {
+    "subject": "Naujas sekėjas!",
+    "body": "{actorName} pradėjo tave sekti"
+  },
+  "request": {
+    "subject": "Naujas sekimo prašymas!",
+    "body": "{actorName} nori tave sekti"
+  },
+  "accepted": {
+    "subject": "Sekimo prašymas priimtas!",
+    "body": "{actorName} priėmė tavo sekimo prašymą"
+  }
+}

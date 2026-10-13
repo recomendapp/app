@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "Teine viis kino avastada",
+    "description": "{app} on sotsiaalvõrgustik kinosõpradele. Avasta, jaga ja uuri filme ja sarju koos sõpradega."
+  },
+  "common": {
+    "messages": {
+      "welcome": "Tere tulemast",
+      "welcome_to_app": "Tere tulemast {app}i",
+      "hello": "Tere",
+      "greeting_with_name": "{timeOfDay, select, morning {Tere hommikust, {name}} afternoon {Tere päevast, {name}} evening {Tere õhtust, {name}} night {Head ööd, {name}} other {Tere, {name}}}",
+      "click_here": "Klõpsa siia",
+      "see_more": "Vaata rohkem",
+      "see_more_details": "Vaata rohkem üksikasju",
+      "more": "Rohkem",
+      "view_profile": "Vaata profiili",
+      "library": "Raamatukogu",
+      "watchlist": "Vaatamisnimekiri",
+      "for_later": "Hilisemaks",
+      "heart_pick": "{count, plural, one {südamevalik} other {südamevalikud}}",
+      "add_to_heart_picks": "Lisa südamevalikutesse",
+      "remove_from_heart_picks": "Eemalda südamevalikutest",
+      "add_rating": "Lisa hinnang",
+      "edit_rating": "Muuda hinnangut",
+      "remove_rating": "Eemalda hinnang",
+      "share_my_rating": "Jaga minu hinnangut",
+      "share_review": "Jaga arvustust",
+      "show_likes_count": "Näita meeldimiste arvu",
+      "show_comments_count": "Näita kommentaaride arvu",
+      "add_to_watchlist": "lisa vaatamisnimekirja",
+      "remove_from_watchlist": "eemalda vaatamisnimekirjast",
+      "no_results": "tulemusi pole",
+      "no_results_for": "Päringule <strong>{query}</strong> tulemusi ei leitud",
+      "no_followees": "Sa ei jälgi kedagi",
+      "no_followers": "Jälgijaid pole",
+      "no_rating": "Hinnang puudub",
+      "must_watch_to_review": "pead seda teost olema näinud, et seda hinnata",
+      "review_cannot_be_empty": "arvustus ei saa olla tühi",
+      "no_activity": "tegevus puudub",
+      "followers_ratings": "jälgijate hinnangud",
+      "added_by": "lisas",
+      "sort_by": "sorteeri",
+      "sort_order": "sortimisjärjekord",
+      "go_to_film": "mine filmi juurde",
+      "go_to_tv_series": "mine sarja juurde",
+      "go_to_user": "mine kasutaja juurde",
+      "go_to_person": "mine isiku juurde",
+      "go_to_activity": "mine tegevuse juurde",
+      "go_to_playlist": "mine esitusloendi juurde",
+      "go_to_review": "mine arvustuse juurde",
+      "go_to_director": "{count, plural, one {mine režissööri juurde} other {mine režissööride juurde}}",
+      "go_to_creator": "{count, plural, one {mine looja juurde} other {mine loojate juurde}}",
+      "show_director": "{count, plural, one {näita režissööri} other {näita režissööre}}",
+      "show_creator": "{count, plural, one {näita loojat} other {näita loojaid}}",
+      "show_credit": "{count, plural, one {näita krediiti} other {näita krediite}}",
+      "credits": "lõputiitrid",
+      "view_recommendation": "{count, plural, one {vaata recot} other {vaata recosid}}",
+      "view_directors": "{count, plural, one {vaata režissööri} other {vaata režissööre}}",
+      "no_director": "režissöör puudub",
+      "view_comment": "{count, plural, one {vaata kommentaari} other {vaata kommentaare}}",
+      "add_comment": "{count, plural, one {lisa kommentaar} other {lisa kommentaare}}",
+      "edit_comment": "{count, plural, one {muuda kommentaari} other {muuda kommentaare}}",
+      "delete_comment": "Kustuta kommentaar",
+      "do_you_really_want_to_delete_this_comment": "Kas soovid tõesti selle kommentaari kustutada?",
+      "comment_deleted": "See kommentaar on kustutatud",
+      "write_your_comment_here": "Kirjuta kommentaar...",
+      "reply": "Vasta",
+      "replies_count": "{count, plural, one {# vastus} other {# vastust}}",
+      "view_replies": "Vaata {count, plural, one {# vastust} other {# vastust}}",
+      "hide_replies": "Peida vastused",
+      "load_more_replies": "Vaata rohkem vastuseid",
+      "get_started": "alusta",
+      "get_started_its_free": "lähme 🎬, see on tasuta!",
+      "import": "Impordi",
+      "upgrade_to_plan": "vaheta {plan}ile",
+      "choose_subscription_recurrence": "vali oma tellimuse arveldusperiood",
+      "compare_plans": "võrdle pakette",
+      "save_up_to_percent": "säästa kuni {percent}%",
+      "is_empty": "Siin on pisut tühi",
+      "add_to_playlist": "lisa esitusloendisse",
+      "send_to_friend": "saada sõbrale",
+      "pin_to_profile": "Kinnita profiilile",
+      "unpin_from_profile": "Eemalda profiililt",
+      "pinned": "Kinnitatud",
+      "unpinned": "Kinnitus eemaldatud",
+      "no_pinned": "Kinnitatud elemente pole",
+      "pinned_limit_reached": "Oled jõudnud kinnitatud elementide ülempiirini — eemalda üks, et lisada uus",
+      "custom_sort": "oma järjestus",
+      "quick_add": "kiirlisamine",
+      "favorite_films": "lemmikfilmid",
+      "follow": "jälgi",
+      "followed": "jälgitud",
+      "request_sent": "Taotlus saadetud",
+      "follow_requests": "jälgimistaotlused",
+      "no_follow_requests": "jälgimistaotlusi pole",
+      "follower": "{count, plural, one {jälgija} other {jälgijat}}",
+      "follower_count": "{count} jälgijat",
+      "see_followers": "vaata jälgijaid",
+      "followee": "{count, plural, one {jälgitav} other {jälgitavat}}",
+      "followee_count": "{count} jälgitavat",
+      "see_followees": "vaata, keda sa jälgid",
+      "last_activities": "viimased tegevused",
+      "last_updated": "viimati uuendatud",
+      "last_updated_at_date": "viimati uuendatud {date}",
+      "show_all": "näita kõiki",
+      "this_account_is_private": "see konto on privaatne",
+      "follow_to_see_activities": "jälgi, et näha tegevusi",
+      "review": "{count, plural, one {arvustus} other {arvustust}}",
+      "no_overview": "sisukokkuvõte puudub",
+      "cast": "osatäitjad",
+      "no_cast": "osatäitjaid pole",
+      "recent": "uusim",
+      "popular": "populaarne",
+      "popularity": "populaarsus",
+      "no_reviews": "Arvustusi pole",
+      "no_playlists": "Esitusloendeid pole",
+      "no_playlists_found": "Esitusloendeid ei leitud",
+      "no_films": "Filme pole",
+      "no_tv_series": "Sarju pole",
+      "view_activity": "vaata tegevust",
+      "comment_count": "{count, plural, one {# kommentaar} other {# kommentaari}}",
+      "write_review": "kirjuta arvustus",
+      "new_review": "uus arvustus",
+      "edit_review": "muuda arvustust",
+      "review_by": "arvustuse autor {name}",
+      "my_review": "{count, plural, one {minu arvustus} other {minu arvustused}}",
+      "add_review": "lisa arvustus",
+      "tv_series": "{count, plural, one {sari} other {sarja}}",
+      "film": "{count, plural, one {film} other {filmi}}",
+      "movie": "{count, plural, one {film} other {filmi}}",
+      "media": "{count, plural, one {teos} other {teost}}",
+      "tv_season": "{count, plural, one {hooaeg} other {hooaega}}",
+      "tv_season_count": "{count, plural, one {# hooaeg} other {# hooaega}}",
+      "tv_season_value": "hooaeg {number}",
+      "tv_season_short": "H{number}",
+      "tv_episode": "{count, plural, one {osa} other {osa}}",
+      "tv_episode_count": "{count, plural, one {# osa} other {# osa}}",
+      "tv_episode_value": "osa {number}",
+      "tv_episode_short": "H{seasonNumber}O{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {eriosa} other {eriosa}}",
+      "first_air_date": "esmaeetris",
+      "last_air_date": "viimati eetris",
+      "see_film": "vaata filmi",
+      "see_tv_series": "vaata sarja",
+      "watch_film_title": "vaata {title}",
+      "watch_film_streaming_or_download": "Vaata <important>{title}</important> voogedastuses või laadi seaduslikult alla",
+      "download": "laadi alla",
+      "downloaded": "alla laaditud",
+      "person": "{count, plural, one {isik} other {isikut}}",
+      "top_result": "parim tulemus",
+      "user": "{count, plural, one {kasutaja} other {kasutajat}}",
+      "reco": "{count, plural, one {reco} other {recot}}",
+      "my_recos": "minu recod",
+      "item": "{count, plural, one {element} other {elementi}}",
+      "item_count": "{count, plural, one {# element} other {# elementi}}",
+      "type": "tüüp",
+      "complete": "lõpeta",
+      "completed": "lõpetatud",
+      "collection": "{count, plural, one {kogu} other {kogu}}",
+      "most_recent": "uuemad",
+      "most_popular": "populaarsemad",
+      "most_old": "vanemad",
+      "known_for": "Tuntud teostest",
+      "release_date": "esilinastus",
+      "last_appearance_date": "viimane esinemine",
+      "vote_average": "keskmine hinne",
+      "added": "lisatud",
+      "added_date": "lisamise kuupäev",
+      "added_at": "lisatud",
+      "add": "lisa",
+      "playlist_name": "esitusloendi nimi",
+      "updated_at": "uuendatud",
+      "created_at": "loodud",
+      "likes": "meeldimised",
+      "likes_count": "meeldimiste arv",
+      "search_media": "otsi teost",
+      "search_film": "otsi filmi",
+      "start_typing_to_search_films": "alusta kirjutamist, et otsida filme",
+      "search_tv_series": "otsi sarja",
+      "start_typing_to_search_tv_series": "alusta kirjutamist, et otsida sarju",
+      "search_person": "otsi isikut",
+      "start_typing_to_search_persons": "alusta kirjutamist, et otsida isikuid",
+      "search_user": "{count, plural, one {otsi kasutajat} other {otsi kasutajaid}}",
+      "start_typing_to_search_users": "alusta kirjutamist, et otsida kasutajaid",
+      "search_playlist": "otsi esitusloendit",
+      "start_typing_to_search_playlists": "alusta kirjutamist, et otsida esitusloendeid",
+      "search_film_or_tv_series": "otsi filmi või sarja",
+      "watched_date": "{count, plural, one {vaatamise kuupäev} other {vaatamise kuupäevad}}",
+      "mark_as_watched": "märgi nähtuks",
+      "remove_from_watched": "eemalda nähtute hulgast",
+      "rating": "hinnang",
+      "create_a_playlist": "loo esitusloend",
+      "by_name": "autor {name}",
+      "reset": "lähtesta",
+      "job": "{count, plural, one {amet} other {ametit}}",
+      "department": "{count, plural, one {osakond} other {osakonda}}",
+      "share_title_via": "Jaga <strong>{title}</strong> kaudu",
+      "share_title": "Jaga <strong>{title}</strong>",
+      "link": "link",
+      "copy_link": "kopeeri link",
+      "copied": "Kopeeritud",
+      "other": "{count, plural, one {Muu} other {Muud}}",
+      "via": "kaudu",
+      "edit": "muuda",
+      "guest": "{count, plural, one {külaline} other {külalist}}",
+      "are_u_sure": "Kas oled kindel?",
+      "backward": "eelmine",
+      "forward": "järgmine",
+      "back": "tagasi",
+      "next": "järgmine",
+      "notification": "{count, plural, one {teavitus} other {teavitust}}",
+      "see_notifications": "vaata teavitusi",
+      "open_social_panel": "ava sotsiaalne paneel",
+      "cancel_change": "{count, plural, one {tühista muudatus} other {tühista muudatused}}",
+      "do_you_really_want_to_cancel_change": "Kas soovid tõesti {count, plural, one {muudatuse} other {muudatused}} tühistada?",
+      "continue_editing": "jätka muutmist",
+      "confirm": "kinnita",
+      "terms_of_use": "kasutustingimused",
+      "privacy_policy": "privaatsuspoliitika",
+      "request_made": "taotlus esitatud",
+      "request_canceled": "taotlus tühistatud",
+      "cancel_request": "tühista taotlus",
+      "open_menu": "ava menüü",
+      "feed": "voog",
+      "about": "meist",
+      "home": "avaleht",
+      "search": "otsing",
+      "explore": "uuri",
+      "shop": "pood",
+      "help": "abi",
+      "legal": "õiguslik",
+      "setting": "{count, plural, one {seade} other {seaded}}",
+      "logout": "logi välja",
+      "to_watch": "vaadata",
+      "reco_by_your_friends": "sõprade recod",
+      "friends_playlists": "sõprade esitusloendid",
+      "latest_activity": "{count, plural, one {viimane tegevus} other {viimased tegevused}}",
+      "discover_users": "avasta kasutajaid",
+      "most_recommended": "enim soovitatud",
+      "archive": "arhiveeri",
+      "unarchive": "taasta arhiivist",
+      "mark_as_read": "{count, plural, one {märgi loetuks} other {märgi loetuks}}",
+      "mark_as_unread": "{count, plural, one {märgi lugemata} other {märgi lugemata}}",
+      "accept": "nõustu",
+      "accepted": "vastu võetud",
+      "decline": "keeldu",
+      "declined": "tagasi lükatud",
+      "request_accepted": "{count, plural, one {taotlus vastu võetud} other {taotlused vastu võetud}}",
+      "request_declined": "{count, plural, one {taotlus tagasi lükatud} other {taotlused tagasi lükatud}}",
+      "unread": "{count, plural, one {lugemata} other {lugemata}}",
+      "archived": "{count, plural, one {arhiveeritud} other {arhiveeritud}}",
+      "no_notifications": "teavitusi pole",
+      "all": "kõik",
+      "mark_all_as_read": "märgi kõik loetuks",
+      "archive_all": "arhiveeri kõik",
+      "archive_all_read": "arhiveeri kõik loetud",
+      "please_login": "logi sisse",
+      "like": "meeldib",
+      "unlike": "eemalda meeldimine",
+      "unfollow": "lõpeta jälgimine",
+      "name": "nimi",
+      "add_a_name": "lisa nimi",
+      "add_a_description": "lisa kirjeldus",
+      "visibility": "nähtavus",
+      "search_an_user": "otsi kasutajat",
+      "select_an_item_to_add_to_playlist": "vali element, mida esitusloendisse lisada",
+      "select_a_film_to_add_to_playlist": "vali film, mida esitusloendisse lisada",
+      "select_a_tv_series_to_add_to_playlist": "vali sari, mida esitusloendisse lisada",
+      "add_one_or_more_items_to": "Lisa üks või mitu elementi loendisse <important>{title}</important>",
+      "add_one_or_more_films_to": "Lisa üks või mitu filmi loendisse <important>{title}</important>",
+      "add_one_or_more_tv_series_to": "Lisa üks või mitu sarja loendisse <important>{title}</important>",
+      "manage_playlist_access_rights": "halda esitusloendi õigusi",
+      "add_guest": "{count, plural, one {lisa külaline} other {lisa külalisi}}",
+      "manage_members": "halda liikmeid",
+      "no_member": "liikmeid pole",
+      "add_member": "{count, plural, one {lisa liige} other {lisa liikmeid}}",
+      "manage_guests": "halda külalisi",
+      "add_guests_to_your_playlist": "lisa külalisi oma esitusloendisse",
+      "select_users_to_add_to_playlist": "vali kasutajad, keda esitusloendisse lisada",
+      "select_users_to_send_reco": "vali, kellele reco saata",
+      "select_playlists_to_add_the_item": "vali esitusloendid, kuhu element lisada",
+      "send": "saada",
+      "sent": "saadetud",
+      "select_row": "vali rida",
+      "select_all": "vali kõik",
+      "no_selected_users": "kasutajaid pole valitud",
+      "selection_count": "valitud {number}/{total} {type}",
+      "about_title": "teosest {title}",
+      "detail": "{count, plural, one {üksikasi} other {üksikasjad}}",
+      "genre": "{count, plural, one {žanr} other {žanri}}",
+      "male": "{count, plural, one {mees} other {meest}}",
+      "female": "{count, plural, one {naine} other {naist}}",
+      "non_binary": "{count, plural, one {mittebinaarne} other {mittebinaarset}}",
+      "unspecified": "määramata",
+      "date_of_birth": "sünnikuupäev",
+      "date_of_death": "surmakuupäev",
+      "place_of_birth": "sünnikoht",
+      "age_years": "{count} {count, plural, one {aasta} other {aastat}}",
+      "biography": "elulugu",
+      "no_biography_available": "elulugu pole saadaval",
+      "no_information_available": "teavet pole saadaval",
+      "already_sent": "juba saadetud",
+      "already_watched": "juba nähtud",
+      "already_added": "juba lisatud",
+      "recommend_to_friend_to_discover": "Soovita <strong>{title}</strong> sõbrale, kes pole seda veel näinud",
+      "add_to_one_or_more_playlists": "Lisa <strong>{title}</strong> ühte või mitmesse oma esitusloendisse",
+      "my_playlist": "{count, plural, one {minu esitusloend} other {minu esitusloendid}}",
+      "what_is_title": "Mis on <strong>{title}</strong>?",
+      "try_again": "Proovi uuesti",
+      "error": "viga",
+      "not_logged_in": "sa pole sisse logitud",
+      "an_error_occurred": "Tekkis viga",
+      "playlist_not_found": "esitusloendit ei leitud",
+      "user_not_found": "kasutajat ei leitud",
+      "film_not_found": "filmi ei leitud",
+      "media_not_found": "teost ei leitud",
+      "review_not_found": "arvustust ei leitud",
+      "person_not_found": "isikut ei leitud",
+      "tv_series_not_found": "sarja ei leitud",
+      "tv_episode_not_found": "osa ei leitud",
+      "tv_season_not_found": "hooaega ei leitud",
+      "wrong_arguments": "valed argumendid",
+      "no_media_found": "teoseid ei leitud",
+      "unknown_action": "tundmatu toiming",
+      "no_user_found": "kasutajaid ei leitud",
+      "no_tv_episodes": "osi pole",
+      "save": "salvesta",
+      "saved": "salvestatud",
+      "create": "loo",
+      "film_count": "{count, plural, one {# film} other {# filmi}}",
+      "tv_series_count": "{count, plural, one {# sari} other {# sarja}}",
+      "login": "logi sisse",
+      "signup": "loo konto",
+      "navigation": "navigeerimine",
+      "delete": "Kustuta",
+      "remove": "Eemalda",
+      "deleted": "Kustutatud",
+      "share": "jaga",
+      "duplicate": "dubleeri",
+      "duplicated": "dubleeritud",
+      "cancel": "Tühista",
+      "date": "kuupäev",
+      "duration": "kestus",
+      "sort": "sorteeri",
+      "show": "näita",
+      "column": "{count, plural, one {veerg} other {veergu}}",
+      "comment": "{count, plural, one {kommentaar} other {kommentaari}}",
+      "unknown": "tundmatu",
+      "community": "kogukond",
+      "cast_and_crew": "osatäitjad ja meeskond",
+      "soon": "varsti",
+      "ios_app": "iOS-i rakendus",
+      "android_app": "Androidi rakendus",
+      "coming_soon": "Varsti saadaval",
+      "new_mobile_app": "Uus mobiilirakendus!",
+      "manage": "halda",
+      "monthly": "igakuine",
+      "yearly": "iga-aastane",
+      "day": "päev",
+      "week": "nädal",
+      "month": "kuu",
+      "year": "aasta",
+      "price": "hind",
+      "free": "tasuta",
+      "playlist": "{count, plural, one {esitusloend} other {esitusloendit}}",
+      "public": "avalik",
+      "publish": "avalda",
+      "private": "privaatne",
+      "description": "kirjeldus",
+      "details": "üksikasjad",
+      "profile": "profiil",
+      "overview": "sisukokkuvõte",
+      "no_playlists_saved": "salvestatud esitusloendeid pole",
+      "camera_permission_denied": "kaamera kasutusluba keelatud",
+      "photo_library_permission_denied": "fotokogu kasutusluba keelatud",
+      "ignore": "eira",
+      "ok": "ok",
+      "title": "pealkiri",
+      "skip": "Jäta vahele",
+      "undo": "Võta tagasi",
+      "date_published": "avaldamise kuupäev",
+      "date_created": "loomise kuupäev",
+      "date_updated": "muutmise kuupäev",
+      "alphabetical": "tähestikuline",
+      "date_added": "lisamise kuupäev",
+      "number_of_likes": "meeldimiste arv",
+      "number_of_seasons": "hooaegade arv",
+      "add_to_this_playlist": "lisa sellesse esitusloendisse",
+      "save_to_library": "salvesta raamatukokku",
+      "remove_from_library": "eemalda raamatukogust",
+      "otp": "OTP",
+      "ratings_from_followees": "jälgitavate hinnangud",
+      "choose_from_the_library": "vali kogust",
+      "take_a_photo": "tee foto",
+      "delete_current_image": "kustuta praegune pilt",
+      "edit_image": "muuda pilti",
+      "add_image": "lisa pilt",
+      "verify_with_a_code": "kinnita koodiga",
+      "order": "järjestus",
+      "edit_order": "muuda järjestust",
+      "done": "valmis",
+      "can_edit": "tohib muuta?",
+      "upgrade": "uuenda",
+      "no_description": "Kirjeldus puudub",
+      "no_comment": "Kommentaare pole",
+      "close": "sulge",
+      "edit_playlist": "muuda esitusloendit",
+      "universe": "universum",
+      "cannot_be_changed": "ei saa muuta",
+      "delete_review": "kustuta arvustus",
+      "do_you_really_want_to_delete_this_review": "Kas soovid tõesti selle arvustuse kustutada?",
+      "user_liked_playlist": "<name></name> märkis esitusloendi meeldivaks",
+      "user_liked_review": "<name></name> märkis arvustuse meeldivaks",
+      "runtime": "kestus",
+      "ends_at": "Lõpeb kell {value}",
+      "this_user_has_no_activity": "Sellel kasutajal pole tegevusi",
+      "notification_archived": "{count, plural, one {teavitus arhiveeritud} other {teavitused arhiveeritud}}",
+      "notification_unarchived": "{count, plural, one {teavitus arhiivist taastatud} other {teavitused arhiivist taastatud}}",
+      "notification_marked_as_read": "{count, plural, one {teavitus märgitud loetuks} other {teavitused märgitud loetuks}}",
+      "notification_marked_as_unread": "{count, plural, one {teavitus märgitud lugemata} other {teavitused märgitud lugemata}}",
+      "or_continue_with": "või jätka teenusega",
+      "message": "{count, plural, one {sõnum} other {sõnumit}}",
+      "story": "{count, plural, one {story} other {storyt}}",
+      "new_playlist": "uus esitusloend",
+      "select_a_type": "vali tüüp",
+      "filter": "{count, plural, one {filter} other {filtrit}}",
+      "hide_watched": "peida nähtud",
+      "show_me_around": "näita mulle ringi",
+      "artwork_from": "Illustratsioon: <important>{source}</important>",
+      "no_active_subscription": "aktiivne tellimus puudub",
+      "manage_subscription": "halda tellimust",
+      "started_on_date": "algas: {date}",
+      "last_renewed_on_date": "viimati uuendatud: {date}",
+      "version_value": "versioon {value}",
+      "original_title": "originaalpealkiri",
+      "starring": "osades",
+      "write_your_review_here": "kirjuta oma arvustus siia...",
+      "insert": "sisesta",
+      "trailer": "{count, plural, one {treiler} other {treilerit}}",
+      "list": "{count, plural, one {loend} other {loendit}}",
+      "grid": "{count, plural, one {ruudustik} other {ruudustikku}}",
+      "order_asc": "kasvav järjestus",
+      "order_desc": "kahanev järjestus",
+      "menu": "menüü",
+      "at_least_one_watched_date_required": "vaja on vähemalt üht vaatamise kuupäeva",
+      "viewer": "{count, plural, one {Vaataja} other {Vaatajad}}",
+      "editor": "{count, plural, one {Toimetaja} other {Toimetajad}}",
+      "admin": "{count, plural, one {Administraator} other {Administraatorid}}",
+      "owner": "{count, plural, one {Omanik} other {Omanikud}}",
+      "you_dont_have_permission_to_do_this_action": "Sul pole õigust seda toimingut teha",
+      "in_progress": "käimas",
+      "give_up": "loobu",
+      "random": "juhuslik",
+      "reset_password": "Lähtesta parool",
+      "password_reset": "Parool lähtestatud",
+      "return_to_login": "Tagasi sisselogimisse",
+      "invalid_code": "Vigane kood",
+      "no_token_found": "Tokenit ei leitud",
+      "first_watched_at": "esimene vaatamise kuupäev",
+      "watched_dates": "vaatamise kuupäevad",
+      "no_watched_dates": "vaatamise kuupäevi pole",
+      "select_role": "vali roll",
+      "select_format": "vali vorming",
+      "theater": "Kino",
+      "physical": "Füüsiline kandja",
+      "digital": "Digitaalne",
+      "streaming": "Voogedastus",
+      "you_must_be_premium_to_change_member_role": "Liikme rolli muutmiseks pead olema premium-kasutaja",
+      "already_member": "juba liige",
+      "email_already_used": "See e-posti aadress on juba kasutusel",
+      "email_confirmed": "E-post kinnitatud",
+      "confirmation_email_sent": "Kinnituskiri saadetud",
+      "continue": "Jätka",
+      "finish": "Lõpeta",
+      "forgot_password": "Unustasid parooli",
+      "new_password": "Uus parool",
+      "confirm_password": "Kinnita parool",
+      "password_reseted": "Parool lähtestatud",
+      "reset_your_password": "Lähtesta oma parool",
+      "invalid_token": "Vigane token",
+      "new_notification": "{count, plural, one {uus teavitus} other {uut teavitust}}",
+      "lets_go": "Lähme!",
+      "update_available": "Saadaval on uuendus",
+      "update_available_description": "Uuenda rakendust, et kasutada viimaseid täiustusi.",
+      "update_required_title": "Uuendus on kohustuslik",
+      "update_required_description": "Seda rakenduse versiooni enam ei toetata. Uuenda seda, et Recomendi kasutamist jätkata.",
+      "update_app": "Uuenda",
+      "advertisement": "{count, plural, one {Reklaam} other {Reklaamid}}",
+      "pending": "Ootel",
+      "processing": "Käimas",
+      "awaiting_review": "Kontrollimist ootav",
+      "failed": "Ebaõnnestus",
+      "data": "{count, plural, one {Andmed} other {Andmed}}",
+      "restore": "Taasta",
+      "fix": "Paranda",
+      "not_found": "Ei leitud",
+      "unavailable": "Pole saadaval",
+      "star_on_github": "Anna GitHubis täht"
+    },
+    "form": {
+      "email": {
+        "label": "E-posti aadress",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "E-posti aadress pole korrektne",
+          "unavailable": "See e-posti aadress on juba kasutusel"
+        },
+        "verified": "E-post kinnitatud"
+      },
+      "username": {
+        "label": "Kasutajanimi",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "Esimene märk peab olema täht või number",
+          "double_dot": "Kaks punkti järjest pole lubatud",
+          "ends_with_dot": "Punkt lõpus pole lubatud",
+          "format": "Lubatud on ainult tähed, numbrid ning märgid '_' ja '.'",
+          "unavailable": "See kasutajanimi on juba võetud"
+        }
+      },
+      "full_name": {
+        "label": "Nimi",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "Lubatud on ainult tähed, numbrid ja tühikud"
+        }
+      },
+      "password": {
+        "label": "Parool",
+        "placeholder": "Sisesta oma parool",
+        "schema": {
+          "uppercase": "Vaja on vähemalt üht suurtähte",
+          "lowercase": "Vaja on vähemalt üht väiketähte",
+          "number": "Vaja on vähemalt üht numbrit",
+          "special": "Vaja on vähemalt üht erimärki",
+          "match": "Paroolid ei kattu"
+        },
+        "confirm": {
+          "label": "Kinnita parool",
+          "placeholder": "Kinnita oma parool"
+        }
+      },
+      "length": {
+        "char_min": "vähemalt {count, plural, one {# märk} other {# märki}}",
+        "char_max": "kuni {count, plural, one {# märk} other {# märki}}"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "Lubatud on ainult tähed, numbrid ja tühikud"
+      },
+      "error": {
+        "too_many_attempts": "Liiga palju katseid, proovi hiljem uuesti",
+        "not_received_code": "Kas sa ei saanud koodi?",
+        "invalid_code": "Vigane kood",
+        "turnstile": "Kinnitamine ebaõnnestus, proovi uuesti"
+      },
+      "resend_code": "Saada kood uuesti",
+      "resend_email": "Saada kiri uuesti",
+      "code_verified": "Kood kinnitatud",
+      "code_sent": "Kood saadetud"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "lehte ei leitud",
+        "description": "oih, seda lehte pole olemas..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "jälgimine",
+        "description": "Avasta, hinda ja jaga oma lemmikfilme ja -sarju."
+      },
+      "recos": {
+        "label": "recod",
+        "description": "Saada ja võta vastu sõprade recosid. Kõik ühes kohas."
+      },
+      "playlists": {
+        "label": "esitusloendid",
+        "description": "Korralda, jaga ja koosta esitusloendeid koos."
+      },
+      "feed": {
+        "label": "voog",
+        "description": "Jälgi sõpru, et näha, mida nad vaatavad, millele meeldivaks märgivad ja mida hindavad."
+      },
+      "social_sharing": {
+        "label": "jagamine sotsiaalmeedias",
+        "description": "Jaga kõike, mida armastad, Instagramis või teistes võrgustikes."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "Jälgimine",
+          "description": "Hoia silm peal filmidel, mida oled näinud"
+        },
+        "recos": {
+          "label": "Recod",
+          "description": "Saada sõpradele filmisoovitusi"
+        },
+        "explore": {
+          "label": "Uuri",
+          "description": "Avasta uusi filme Paradise Picturesis, interaktiivsel kaardil, millel on üle 1400 filmi"
+        },
+        "like": {
+          "label": "Meeldimine",
+          "description": "Näita armastust oma lemmikfilmide, -esitusloendite ja -arvustuste vastu"
+        },
+        "rating": {
+          "label": "Hinnang",
+          "description": "Hinda filme, mida oled näinud"
+        },
+        "watchlist": {
+          "label": "Vaatamisnimekiri",
+          "description": "Salvesta filmid, mida tahad näha"
+        },
+        "playlists": {
+          "label": "Esitusloendid",
+          "description": "Korralda oma filmid esitusloenditesse ja jaga neid"
+        },
+        "reviews": {
+          "label": "Arvustused",
+          "description": "Kirjuta arvustusi ja lase endas peituv kibestunud kinosõber välja"
+        },
+        "feed": {
+          "label": "Voog",
+          "description": "Jälgi oma sõprade tegevust"
+        },
+        "adsFree": {
+          "label": "Reklaamivaba",
+          "description": "Naudi Recomendi reklaamideta, igavesti"
+        }
+      }
+    },
+    "welcome": {
+      "title": "Aitäh, et liitusid!",
+      "description": "Siin on kiire ülevaade sellest, mida saad {app}iga teha.",
+      "follow": {
+        "title": "Jälgi inimesi",
+        "description": "Jälgi sõpru, et näha, mida nad vaatavad."
+      },
+      "import": {
+        "title": "Kas tuled teiselt platvormilt?"
+      }
+    },
+    "collection": {
+      "label": "raamatukogu",
+      "my_recos": {
+        "label": "minu recod",
+        "search": {
+          "placeholder": "otsi minu recodest..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "kustuta minu recodest",
+            "description": "Kas soovid tõesti kustutada <important>{title}</important> oma recodest?"
+          },
+          "complete_confirm": {
+            "title": "lõpeta reco",
+            "description": "Kas soovid tõesti lõpetada reco <important>{title}</important>?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "otsi vaatamisnimekirjast..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "kustuta vaatamisnimekirjast",
+            "description": "Kas soovid tõesti kustutada <important>{title}</important> oma vaatamisnimekirjast?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "otsi südamevalikutest..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "kustuta südamevalikutest",
+            "description": "Kas soovid tõesti kustutada <important>{title}</important> oma südamevalikutest?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> vaatas",
+        "rated": "<name></name> hindas",
+        "liked": "<name></name> märkis meeldivaks",
+        "rated_liked": "<name></name> märkis meeldivaks ja hindas",
+        "reviewed": "<name></name> kirjutas arvustuse"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> on <important>{roles}</important> teoses <linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> on <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "Luba rakendus",
+        "description_generic": "Rakendus taotleb juurdepääsu sinu kontole.",
+        "description": "{client} soovib pääseda sinu kontole.",
+        "scopes_label": "See lubab rakendusel:",
+        "accept": "Luba",
+        "deny": "Keeldu",
+        "error": {
+          "invalid_request": "Vigane või aegunud taotlus",
+          "invalid_request_description": "Alusta protsessi uuesti rakendusest, mis sind siia saatis.",
+          "client_not_found": "Seda rakendust ei leitud.",
+          "submit_failed": "Midagi läks valesti. Proovi uuesti."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "Logi sisse oma {app}i kontole."
+        },
+        "label": "Logi sisse",
+        "description": "Avasta parimad filmisoovitused.",
+        "or_continue_with": "Või jätka teenusega",
+        "no_account_yet": "Kas sul pole veel kontot?",
+        "form": {
+          "identifier": {
+            "label": "E-post või kasutajanimi",
+            "placeholder": "Sisesta oma e-post või kasutajanimi"
+          },
+          "password": {
+            "label": "Parool",
+            "placeholder": "Sisesta oma parool"
+          },
+          "submit": "Logi sisse",
+          "forgot_password": "Kas unustasid parooli?",
+          "wrong_credentials": "E-post või parool on vale"
+        },
+        "otp": {
+          "password_login": "Kas eelistad sisse logida parooliga?",
+          "form": {
+            "submit": "Saa kood",
+            "no_user_found": "Selle e-postiga kasutajat ei leitud",
+            "success": "Sisse logitud"
+          },
+          "confirm_form": {
+            "label": "Kinnita kood",
+            "description": "Kinnituskood saadeti aadressile {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "Liitu {app}iga, et avastada ja jagada filmisoovitusi."
+        },
+        "description": "Loo konto, et soovitada filmi sellele sõbrale, kes ei mäleta kunagi pealkirju.",
+        "form": {
+          "success": "Kinnituskiri saadeti aadressile {email}"
+        },
+        "confirm_form": {
+          "label": "Kinnita e-post",
+          "description": "Kinnituslink saadeti aadressile {email}"
+        },
+        "return_to_login": "Oih, mul ongi juba konto."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "Unustasid parooli",
+          "description": "Lähtesta oma parool."
+        },
+        "label": "Unustasid parooli",
+        "description": "Sa peaksid kasutama paroolihaldurit, see on tõesti mugav.",
+        "return_to_login": "Oih, mäletangi oma parooli.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "Lähtesta parool",
+          "code_sent": "Taotlus saadetud"
+        },
+        "confirm_form": {
+          "label": "Kinnita kood",
+          "description": "Kinnituskood saadeti aadressile {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "Parooli lähtestamine",
+          "description": "Vali oma kontole uus parool."
+        }
+      },
+      "error": {
+        "label": "Viga",
+        "description": "Sisselogimise käigus tekkis viga.",
+        "return_to_login": "Tagasi turvalisse kohta"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "Meist",
+        "marquee": "Kas sinu elus pole midagi põnevamat kui vaadata internetis 'Meist'-lehti?",
+        "intro": "<strong>Recomend</strong> on koht, mis on pühendatud filmide avastamisele, soovitamisele ja korraldamisele. Kõik on loodud selleks, et anda suust suhu levivale sõnale parim võimalik digitaalne kuju. Meie lähenemine keskendub inimestele ja nende suhetele enesekeskse tarbimise ajastul — või õigemini 'sulle soovitatu' ajastul.",
+        "slogan": {
+          "1": "See on reklaamideta ja ilma kahtlaste lubadusteta. 🍆",
+          "2": "See on korraga sotsiaalvõrgustik ja tööriist.",
+          "3": "See on kodus tehtud, kirglike inimeste poolt.",
+          "4": "See on amatöörlik sõna otseses tähenduses."
+        },
+        "last": "Recomendi saab kasutada üksi või koos teistega, avalikult või privaatselt, päeval või öösel — aga mitte kunagi filmi ees, keskendu palun!"
+      },
+      "team": {
+        "label": "Meeskond",
+        "intro": "Recomendi lõid kaks kinohullu venda, kes armastavad kulutada oma aega liiga ambitsioonikatele projektidele, mille saatus pole sugugi kindel.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "Hüperaktiivne arhitekt-insener, kes ei suuda leppida ühe tööga (see õige start-up nation): Yoann on selle idee algataja, et teha filmikaart, millel oli alguses vaid tagasihoidlik eesmärk saada plakatiks tema vannitoa seinale. Loupi saabumine lasi eesmärkidel täiesti plahvatada ja, sündmustest pisut üle sõidetud, tegeleb ta kogu kaardi ja veebilehe graafilise poolega ning kogu kommunikatsiooniga (isegi kui see talle ei meeldi). Ta avaldab ka arvamust UX/UI kohta ja pakub välja hulga funktsioone, ilma et tal oleks selget arusaama, kui raske neid on programmeerida (mõningane edasiminek on toimunud)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "Täielik iseõppija, kes sai siiski hariduse, mis viis enne 25. eluaastat tasustamata töötuseni. Tõeline šveitsi nuga: Loup tegeleb veebidisainiga ja programmeerib liidese, mille kujutame ette nii mugavana kui võimalik. Loup tahaks tänada kõiki koodifoorumeid, mis vastasid tema (väga) paljudele küsimustele, ning kõiki India YouTube'ereid, kes saatsid teda nende kuude jooksul nagu kasuisad. Tema ema on muide veendunud, et vend on ta selle projekti jaoks orjastanud (kõik on hästi, ema)."
+          }
+        },
+        "last": "Kui tahad meiega või teiste kogukonna liikmetega rääkida, liitu meie <link>Discordiga</link>!"
+      },
+      "pricing": {
+        "label": "Hinnad",
+        "intro": "See tellimusmudel on eelkõige tugi, et hoida projekti elus ja arendada seda edasi. Premium-funktsioonid on lisad Recomendi edasijõudnud kasutamiseks, mis õigustavad väikest rahalist panust. Säilitame alati võimaluse kasutada lehte tasuta, reklaamideta ja ilma piiratud tunnet.",
+        "subdescription": "*Kui selle tellimuse äärmiselt madal hind käib sulle siiski üle jõu, pöördu liberaalse valitsuse poole, kes vastutab sinu ostujõu languse eest."
+      },
+      "legal": {
+        "label": "Õiguslik ja privaatsus",
+        "description": "Me austame sinu privaatsust. Sisse logimata kasutajatele näidatavaid reklaame haldab Google ja need vajavad tehnilisi küpsiseid, et piirata näitamise sagedust ja takistada pettusi.",
+        "privacyPolicy": "Loe meie privaatsuspoliitikat",
+        "manageCookies": "Halda minu reklaamieelistusi (küpsised)"
+      },
+      "open-source": {
+        "label": "Avatud lähtekood",
+        "intro": "Recomend on avatud lähtekoodiga: kood on GitHubis avalik. Vaata ringi, panusta või jäta meile lihtsalt täht!",
+        "star": "Anna meile GitHubis täht"
+      },
+      "businessmodel": {
+        "label": "Ärimudel",
+        "paragraph": {
+          "1": "Võid arvata, et meie väheturunduslike profiilidega pole me päriselt aru saanud, mis kasu ärimudelist meile praegu oleks...",
+          "2": "Kui Recomendi tulevik seda nõuab, vaatame küsimust lähemalt, ümbritsedes end õigete inimestega — või vähemalt inimestega, keda see huvitab rohkem kui meid.",
+          "3": "Seniks, olgem ausad, on muud teha."
+        }
+      },
+      "roadmap": {
+        "label": "Teekaart"
+      },
+      "data": {
+        "label": "Andmed",
+        "paragraph": {
+          "1": "Kõik Recomendis kasutatavad metaandmed pärinevad <link>The Movie Database'ist (TMDb)</link> platvormi API kaudu. Teeme seega täpselt nagu kõik teised, nagu tublid lambad.",
+          "2": "Vigade või puuduvate filmide korral pöördu seega <link>TMDb</link> poole."
+        }
+      },
+      "resources": {
+        "label": "Ressursid",
+        "intro": "Sellel pole kinoga eriti pistmist, aga siin on nimekiri lehtedest, mis meile meeldivad:"
+      },
+      "contact-support": {
+        "label": "Kontakt ja tugi",
+        "help-center": "Leia vastused oma eksistentsiaalsetele küsimustele meie <link>abikeskusest</link>.",
+        "technical-support": "Tehniliste küsimuste jaoks: <email></email>",
+        "suggest-a-feature": "Ettepanekute jaoks: <email></email>",
+        "contact-us": "Kui tahad lihtsalt meiega ühendust võtta: <email></email>"
+      },
+      "quote": {
+        "label": "Tsitaat",
+        "quote": "« Ma vihkan sõna professionaal. Kõik need näitlejad ja teised, kes ütlevad: mina olen professionaal, mina olen proff! Mis see on? Kas on kurvemat sõna? Sest amatöör tuleb sõnast armastus. Asju tuleb teha armastusest, muidu oleme idioodid. »",
+        "author": "Orson Wells",
+        "date": "1972",
+        "subdescription": "*Me kahtlesime, kas seda lisada, sest see kõlab kiiresti pretensioonikalt, aga see peegeldab hästi meie tunnet projekti suhtes. Kui sulle aga ei meeldi, võtame selle ära."
+      }
+    },
+    "settings": {
+      "label": "Seaded",
+      "description": "Halda oma konto seadeid.",
+      "profile": {
+        "label": "Profiil",
+        "description": "Nii näevad teised sind sellel lehel.",
+        "avatar": {
+          "label": "Avatar",
+          "delete": "Kustuta"
+        },
+        "full_name": {
+          "label": "Nimi",
+          "description": "See on nimi, mida näidatakse sinu profiilil ja e-kirjades.",
+          "placeholder": "Sisesta oma nimi",
+          "form": {
+            "min_length": "Nimi peab olema vähemalt 1 märk",
+            "max_length": "Nimi ei tohi ületada 50 märki"
+          }
+        },
+        "bio": {
+          "label": "Tutvustus",
+          "description": "Räägi endast midagi, see ilmub sinu profiilil.",
+          "placeholder": "Kirjuta endast midagi",
+          "form": {
+            "max_length": "Tutvustus ei tohi ületada 150 märki",
+            "format": "Tutvustus ei tohi sisaldada tühje ridu ega koosneda ainult tühikutest."
+          }
+        },
+        "favorite_films": {
+          "label": "Lemmikfilmid",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "URL pole korrektne"
+          }
+        }
+      },
+      "account": {
+        "label": "Konto",
+        "description": "Uuenda oma konto seadeid.",
+        "username": {
+          "label": "Kasutajanimi",
+          "description": "See on sinu kasutajanimi, mille abil teised sind leiavad ja sinu profiilile pääsevad. Saad seda muuta vaid korra iga 30 päeva jooksul.",
+          "placeholder": "Sisesta oma kasutajanimi",
+          "form": {
+            "min_length": "Kasutajanimi peab olema vähemalt 3 märki",
+            "max_length": "Kasutajanimi ei tohi ületada 15 märki",
+            "invalid": "Kasutajanimi võib sisaldada ainult tähti, numbreid ning märke '_' ja '.'",
+            "unavailable": "See kasutajanimi on juba võetud"
+          }
+        },
+        "private": {
+          "label": "Privaatne konto",
+          "description": "Kui sinu konto on privaatne, näevad sinu tegevusi ainult need kasutajad, kelle sa heaks kiidad."
+        },
+        "email": {
+          "description": "Kinnituskiri saadetakse sinu praegusele ja uuele e-posti aadressile. Pead mõlemad kinnitama, et muudatus jõustuks.",
+          "change_pending": "<strong>{date}</strong> saadeti kinnituskiri sinu uuele e-posti aadressile <strong>{email}</strong>. Muudatuse kinnitamiseks klõpsa lingil või sisesta kinnituskood.",
+          "confirm_email_code": {
+            "description": "Sisesta kinnituskood, mis saadeti sinu aadressile <strong>{email}</strong>."
+          },
+          "change_success": "Sinu e-posti aadress on edukalt uuendatud"
+        },
+        "delete_account": {
+          "button": "Kustuta minu konto",
+          "confirm": {
+            "description": "Sinu konto kustutatakse jäädavalt ja sa ei saa seda taastada.",
+            "confirm_email_sent": "Kinnituskiri saadeti sinu e-posti aadressile"
+          }
+        }
+      },
+      "appearance": {
+        "label": "Välimus",
+        "description": "Kohanda rakenduse välimust. Vaheta automaatselt päeva- ja öörežiimi vahel.",
+        "language": {
+          "label": "Keel",
+          "description": "Vali keel — muudatused jõustuvad pärast rakenduse taaskäivitamist",
+          "placeholder": "Vali keel",
+          "not_found": "Keelt ei leitud"
+        },
+        "theme": {
+          "label": "Teema",
+          "description": "Vali liidese teema.",
+          "options": {
+            "light": "Hele",
+            "dark": "Tume"
+          }
+        }
+      },
+      "subscription": {
+        "label": "Tellimus",
+        "description": "Halda oma premium-tellimust."
+      },
+      "security": {
+        "label": "Turvalisus",
+        "description": "Parooli muutmine logib sind välja kõigist seadmetest, välja arvatud see, mida praegu kasutad.",
+        "current_password": {
+          "label": "Praegune parool",
+          "placeholder": "Sisesta oma praegune parool",
+          "form": {
+            "required": "Praegune parool on kohustuslik",
+            "invalid": "Praegune parool on vale"
+          }
+        },
+        "new_password": {
+          "label": "Uus parool",
+          "placeholder": "Sisesta oma uus parool",
+          "form": {
+            "min_length": "Parool peab olema vähemalt 8 märki",
+            "uppercase": "Vaja on vähemalt üht suurtähte",
+            "lowercase": "Vaja on vähemalt üht väiketähte",
+            "number": "Vaja on vähemalt üht numbrit",
+            "special": "Vaja on vähemalt üht erimärki"
+          }
+        },
+        "confirm_password": {
+          "label": "Kinnita uus parool",
+          "placeholder": "Kinnita oma uus parool",
+          "form": {
+            "match": "Paroolid ei kattu"
+          }
+        }
+      },
+      "notifications": {
+        "label": "Teavitused",
+        "description": "Kohanda, milliseid teavitusi sa saad.",
+        "push_notifications": {
+          "label": "Push-teavitused",
+          "form": {
+            "enable": "Luba push-teavitused"
+          },
+          "already_granted": "Teavitusluba on juba küsitud; selle muutmiseks mine oma brauseri seadetesse.",
+          "no_enabled": "Luba teavitused oma seadme seadetes, et saada push-teavitusi.",
+          "open_settings": "Ava seadme seaded"
+        }
+      },
+      "data": {
+        "label": "Andmed",
+        "description": "Impordi või ekspordi oma andmed.",
+        "importer": {
+          "label": "Import",
+          "select_source": "Vali allikas",
+          "instructions_title": "Juhised",
+          "browse_prompt": "Lohista fail siia või <link>sirvi</link>",
+          "browse_prompt_mobile": "Puuduta faili valimiseks",
+          "uploading": "Üleslaadimine…",
+          "processing": "Faili analüüsimine…",
+          "upload_error": "Üleslaadimine ebaõnnestus, proovi uuesti.",
+          "invalid_file_type": "Seda failitüüpi see allikas ei toeta.",
+          "review_title": "Kontrolli oma importi",
+          "review_summary": "leitud {matched}/{total}",
+          "validate": "Kinnita import",
+          "validate_confirm_description": "See impordib sinu raamatukokku kõik leitud ja vahele jätmata elemendid. Seda ei saa tagasi võtta.",
+          "success_title": "Import lõpetatud",
+          "success_description": "Sinu andmed on edukalt imporditud.",
+          "failed_title": "Import ebaõnnestus",
+          "failed_description": "Selle impordi töötlemisel läks midagi valesti.",
+          "pending_description": "Sinu import on järjekorras ja algab varsti.",
+          "empty": "Imporde veel pole.",
+          "delete_confirm_description": "See import ja kõik selle andmed kustutatakse jäädavalt. Seda ei saa tagasi võtta.",
+          "keep_existing": "Säilita minu omad",
+          "use_imported": "Kasuta imporditut",
+          "merge": "Ühenda",
+          "conflict": "Konflikt",
+          "no_match": "Vastet pole",
+          "existing_rating": "Praegu: {rating}",
+          "log_column": "Logi",
+          "actions_column": "Toimingud",
+          "categories": {
+            "log_movies": "Filmid",
+            "log_tv_series": "Sarjad",
+            "bookmarks": "Vaatamisnimekiri",
+            "playlists": "Loendid"
+          },
+          "status": {
+            "pending": "Ootel",
+            "processing": "Käimas",
+            "awaiting_review": "Kontrollimist ootav",
+            "completed": "Lõpetatud",
+            "failed": "Ebaõnnestus"
+          }
+        },
+        "exporter": {
+          "label": "Eksport"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "vaheta Premiumile",
+        "description": "Vaheta premium-kontole, et kasutada kõiki {app}i funktsioone."
+      },
+      "header": {
+        "title": "laienda oma kinomaailma, jaga rohkem, toeta {app}i",
+        "subtitle": "proovi 1 kuu tasuta, seejärel {price}/kuus"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "tegevused",
+            "unlimited_activities": {
+              "label": "piiramatud tegevused",
+              "description": "hinnangud, meeldimised, arvustused, vaatamisnimekiri ja soovitused"
+            },
+            "favorites": {
+              "label": "lemmikud",
+              "description": "lisa oma lemmikfilmid oma profiilile"
+            }
+          },
+          "playlists": {
+            "label": "esitusloendid",
+            "unlimited_playlists": {
+              "label": "piiramatud",
+              "description": "loo piiramatu arv esitusloendeid"
+            },
+            "shared_playlists": {
+              "label": "jagatud",
+              "description": "jaga oma esitusloendeid teiste kasutajatega"
+            },
+            "collaborative_playlists": {
+              "label": "ühised",
+              "description": "loo ühiseid esitusloendeid teiste kasutajatega"
+            }
+          },
+          "feed": {
+            "label": "voog",
+            "followees": {
+              "label": "jälgitavad kasutajad",
+              "description": "näe nende kasutajate tegevusi, keda sa jälgid"
+            },
+            "cast_and_crew": {
+              "label": "osatäitjad ja meeskond",
+              "description": "jälgi filmidega seotud inimeste tegevusi"
+            }
+          },
+          "support": {
+            "label": "toetus",
+            "team": {
+              "label": "Toeta {app}i meeskonda"
+            },
+            "credits": {
+              "label": "lõputiitrid",
+              "description": "sinu profiil rakenduse lõputiitrites"
+            }
+          }
+        },
+        "success": {
+          "label": "Aitäh sinu toetuse eest!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} - @{username} esitusloend",
+        "description": "Avasta kasutaja @{username} filmide esitusloend {app}is."
+      },
+      "actions": {
+        "delete": {
+          "description": "See kustutab <important>{title}</important> jäädavalt sinu esitusloenditest."
+        }
+      },
+      "search": {
+        "placeholder": "otsi esitusloendist..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "Kas soovid tõesti kustutada <important>{title}</important> oma esitusloendist?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "Sisesta esitusloendi pealkiri"
+        },
+        "description": {
+          "placeholder": "Sisesta esitusloendi kirjeldus"
+        },
+        "error": {
+          "format": "Kirjeldus ei tohi sisaldada tühje ridu ega koosneda ainult tühikutest."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "Avasta kasutaja @{username} profiil {app}is."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year}) • Film",
+        "description": "{title} on {directors} film aastast {year}. Sisu: {overview}",
+        "description_no_director": "{title} on film aastast {year}. Sisu: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Esitusloendid",
+          "description": "Avasta kõik esitusloendid, mis sisaldavad filmi {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Arvustused",
+          "description": "Avasta kõik filmi {title} arvustused."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} on {creators} sari, mis jõudis esmaeetrisse aastal {year}. Sisu: {overview}",
+        "description_no_creator": "{title} on sari, mis jõudis esmaeetrisse aastal {year}. Sisu: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Esitusloendid",
+          "description": "Avasta kõik esitusloendid, mis sisaldavad sarja {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Arvustused",
+          "description": "Avasta kõik sarja {title} arvustused."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • Hooajad",
+          "description": "Avasta kõik sarja {title} hooajad."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • Hooaeg {number}",
+            "description": "Avasta kõik sarja {title} hooaja {number} osad."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • Filmid",
+          "description": "Avasta kõik filmid, kus {name} on mänginud või osalenud."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • Sarjad",
+          "description": "Avasta kõik sarjad, kus {name} on mänginud või osalenud."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "Teose {title} arvustus kasutajalt @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "Kirjuta arvustus teosest {title}",
+          "description": "Jaga oma arvamust teosest {title}."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Uuri Paradise Picturesit",
+        "description": "Mine avastama saart ja selle mitmekesiseid kulisse. Paljud seda asustavad filmid on paigutatud oma diegeetilisse keskkonda. Kas sul õnnestub uurida selle iga nurka?"
+      }
+    },
+    "legal": {
+      "label": "Õiguslik",
+      "description": "Loe {app}i õiguslikke dokumente.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "Üldised kasutustingimused",
+          "description": "Loe {app}i kasutustingimusi."
+        },
+        "sections": {
+          "intro": "Käesolevad üldised kasutustingimused (edaspidi 'Tingimused') reguleerivad rakenduse {app} kasutamist ja sellele juurdepääsu. Rakenduse väljaandja on Loup (edaspidi 'Väljaandja'), asukoht Pariis. Registreerumine {app}is tähendab käesolevate Tingimuste tingimusteta aktsepteerimist.",
+          "presentation": {
+            "label": "1. Teenuse tutvustus",
+            "content": "{app} on tasuta rakendus, mis võimaldab kasutajatel vaadata teavet filmide kohta, avaldada arvustusi, hinnata teoseid ja luua isiklikke loendeid."
+          },
+          "account": {
+            "label": "2. Konto ja turvalisus",
+            "content": "Panustamisfunktsioonide kasutamine eeldab konto loomist. Kasutaja vastutab oma sisselogimisandmete konfidentsiaalsuse eest. Pettuse või häkkimise kahtluse korral peab Kasutaja viivitamatult pöörduma toe poole aadressil: <email></email>."
+          },
+          "conduct": {
+            "label": "3. Käitumisreeglid",
+            "content": "Kasutaja kohustub jääma oma arvamustes ja loendites viisakaks ja lugupidavaks. Rangelt keelatud on: vihkamist õhutav, laimav või rassistlik sisu, ahistamine ning rämpspost või soovimatu kaubanduslik reklaam. Väljaandja jätab endale õiguse kustutada igasugune neid reegleid rikkuv sisu ja peatada asjaomane konto ilma etteteatamiseta."
+          },
+          "child_safety": {
+            "label": "4. Alaealiste kaitse",
+            "content": "{app} rakendab ranget nulltolerantsi igasuguse laste seksuaalse väärkohtlemise ja ärakasutamise ('Child Sexual Abuse and Exploitation' ehk CSAE) suhtes. Igasuguse sellise sisu loomine, üleslaadimine, salvestamine, levitamine, küsimine või edendamine, mis seksualiseerib, ärakasutab või muul viisil ohustab alaealisi, on {app}is sõnaselgelt ja absoluutselt keelatud. Iga konto, mille puhul tuvastatakse selle poliitika rikkumine, suletakse viivitamatult ja jäädavalt ning Väljaandja teavitab asjaomasest sisust koos kogu kättesaadava kasutajateabega organisatsiooni National Center for Missing & Exploited Children (NCMEC) ja/või pädevaid õiguskaitseasutusi kooskõlas kohaldatava õigusega. Iga kasutaja, kes saab teada sisust või käitumisest, mis võib kujutada endast CSAE juhtumit, peab sellest viivitamatult teatama aadressil: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. Intellektuaalomand",
+            "content": "Kasutaja jääb enda kirjutatud arvamuste omanikuks. {app}is avaldades annab Kasutaja Väljaandjale siiski tasuta mitteainuõigusliku litsentsi selle sisu kuvamiseks, taasesitamiseks ja tehniliseks kohandamiseks rakenduse sees. {app}i visuaalsed elemendid, kood ja disain on Väljaandja ainuomand."
+          },
+          "privacy": {
+            "label": "6. Isikuandmed",
+            "content": "Sinu privaatsuse austamine on meie absoluutne prioriteet. {app} ei müü, rendi ega jaga ükskõik milliseid isikuandmeid kaubanduslikele kolmandatele isikutele ega reklaamijatele. Kogutud andmeid (e-post, kasutajanimi, tegevus rakenduses) kasutatakse ainult teenuse toimimiseks ja sinu konto haldamiseks. Saad kasutada oma õigusi andmetega tutvumiseks, nende muutmiseks või kustutamiseks (GDPR), võttes ühendust aadressil: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Küpsised ja jälgijad",
+            "content": "{app} ei kasuta ühtegi reklaamiküpsist ega kolmandate isikute käitumisjälgijat. Kasutusel on vaid kaks tehniliste küpsiste tüüpi: autentimisküpsis (et hoida sind sisse logituna) ja keele-eelistuse küpsis (et sinu valik meelde jätta). Kuna need küpsised on teenuse jaoks hädavajalikud, ei vaja need eelnevat nõusolekut."
+          },
+          "ads": {
+            "label": "8. Reklaam",
+            "content": "Rakendust pakutakse praegu täiesti reklaamideta. Kui see mudel peaks muutuma, teavitatakse kasutajaid sellest käesolevate Tingimuste uuendusega."
+          },
+          "liability": {
+            "label": "9. Vastutus",
+            "content": "Väljaandja püüab hoida {app}i ööpäev läbi kättesaadavana, kuid ei garanteeri katkestuste ega vigade puudumist. Teave filmide kohta pärineb kolmandate isikute andmebaasidest; Väljaandjat ei saa pidada vastutavaks võimalike ebatäpsuste eest neis andmetes."
+          },
+          "law": {
+            "label": "10. Kohaldatav õigus",
+            "content": "Käesolevatele Tingimustele kohaldatakse Prantsuse õigust. Kui vaidlust ei õnnestu lahendada rahumeelselt aadressi <email></email> kaudu, on ainupädevad Pariisi kohtud."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "Privaatsuspoliitika",
+          "description": "Loe {app}i privaatsuspoliitikat."
+        },
+        "sections": {
+          "intro": "Andmekaitse on {app}i filosoofia südames. See poliitika selgitab, milliseid andmeid me kogume, miks me neid kogume ja kuidas me neid kaitseme. Lühidalt: me ei müü sinu andmeid.",
+          "controller": {
+            "label": "1. Vastutav töötleja",
+            "content": "Andmete vastutav töötleja on Loup, asukoht Pariis (Prantsusmaa). Kõigi privaatsusega seotud küsimuste korral võid pöörduda aadressil: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. Kogutavad andmed",
+            "content": "Me kogume ainult rakenduse toimimiseks hädavajalikke andmeid: sinu e-posti aadress (autentimiseks), sinu kasutajanimi ja sinu kasutusandmed (hinnatud filmid, arvustused, loendid). Sinu paroolid salvestatakse krüpteeritult (räsituna) ja turvaliselt."
+          },
+          "purpose": {
+            "label": "3. Töötlemise eesmärk",
+            "content": "Sinu andmeid töödeldakse ainult selleks, et: võimaldada sul konto luua ja hallata, kuvada sinu loendeid ja hinnanguid ning tagada teenuse tehniline toimimine. Me ei kasuta sinu andmeid reklaamiprofiilide koostamiseks."
+          },
+          "sharing": {
+            "label": "4. Andmete jagamine",
+            "content": "Sinu isikuandmeid ei müüda, rendita ega anta kunagi edasi kolmandatele isikutele. Neid võivad majutada meie tehnilised teenusepakkujad (majutus, tehingukirjade saatmise teenus), kellel on range konfidentsiaalsuskohustus ja kes järgivad GDPR-i."
+          },
+          "retention": {
+            "label": "5. Säilitamise aeg",
+            "content": "Sinu andmeid säilitatakse nii kaua, kuni sinu konto on aktiivne. Kui otsustad oma konto kustutada, kustutatakse kõik sinu isikuandmed (e-post, kasutajanimi, arvamused) jäädavalt meie andmebaasidest."
+          },
+          "rights": {
+            "label": "6. Sinu õigused (GDPR)",
+            "content": "Vastavalt õigusaktidele on sul õigus andmetega tutvuda, neid parandada, üle kanda ja kustutada. Saad neid õigusi kasutada igal ajal otse rakenduses või kirjutades meile aadressil: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Küpsised",
+            "content": "Nagu meie kasutustingimustes märgitud, kasutame ainult hädavajalikke tehnilisi küpsiseid (sessioon ja keel). Sinu seadmesse ei paigaldata ühtegi kolmanda isiku reklaami- või jälgimisküpsist."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "Otsi filmi, sarja, esitusloendit, isikut või kasutajat..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "Kas soovid tõesti selle teose nähtute loendist eemaldada? Kui sul on hinnang või arvustus, kustutatakse ka need."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "Kas soovid tõesti sarja lõpetada? Kõigi hooaegade kõik osad märgitakse nähtuks."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "Kas soovid tõesti hooaja {seasonNumber} lõpetada? Kõik hooaja osad märgitakse nähtuks."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "Et siin tegevust näha, peavad sina või sinu jälgitavad kasutajad hindama filme, sarju, ..."
+    },
+    "feed_person": {
+      "message": "Et siin tegevust näha, pead jälgima inimesi, kes on filmide või sarjadega seotud."
+    },
+    "playlists": {
+      "items": {
+        "empty": "Selles esitusloendis pole ühtegi filmi ega sarja. Lisa neid, et see täita!"
+      },
+      "add_to": {
+        "empty": "Sul pole ühtegi esitusloendit. Loo üks, et lisada filme või sarju ja need kergesti üles leida!"
+      },
+      "saved": {
+        "empty": "Sul pole ühtegi salvestatud esitusloendit. Salvesta esitusloend, et see oma raamatukogust kergesti üles leida!"
+      },
+      "members": {
+        "empty": "Sellel esitusloendil pole ühtegi liiget. Lisa neid, et sama esitusloendi kallal koos töötada!",
+        "search": "Otsi kasutajaid, keda esitusloendisse lisada..."
+      }
+    },
+    "follow-requests": {
+      "empty": "Sul pole ootel ühtegi jälgimistaotlust. Kui neid tuleb, ilmuvad need siia!"
+    },
+    "recos": {
+      "empty": "Sul pole ühtegi soovitust. Kui neid tuleb, ilmuvad need siia!",
+      "send_to": {
+        "empty": "Sul pole kedagi, kellele recot saata. Pead kellegagi sõber olema, et talle recot saata (vastastikune jälgimine)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "Sul pole veel ühtegi hilisemaks salvestatud filmi ega sarja. Kui neid tuleb, ilmuvad need siia!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> recos sulle filmi <movie></movie>"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> recos sulle sarja <tv_series></tv_series>"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> vaatas filmi <movie></movie>, mille sa olid reconud"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> vaatas sarja <tv_series></tv_series>, mille sa olid reconud"
+    },
+    "follower_created": {
+      "description": "<user></user> hakkas sind jälgima"
+    },
+    "follower_accepted": {
+      "description": "<user></user> võttis sinu jälgimistaotluse vastu"
+    },
+    "follower_request": {
+      "description": "<user></user> soovib sind jälgida"
+    },
+    "friend_created": {
+      "description": "<user></user> on nüüd sinu sõber"
+    }
+  }
+}

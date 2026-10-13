@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "طريقة أخرى لاكتشاف السينما",
+    "description": "{app} شبكة اجتماعية لمحبي السينما. اكتشف الأفلام والمسلسلات وشاركها وتصفّحها مع أصدقائك."
+  },
+  "common": {
+    "messages": {
+      "welcome": "مرحبًا",
+      "welcome_to_app": "مرحبًا بك في {app}",
+      "hello": "أهلًا",
+      "greeting_with_name": "{timeOfDay, select, morning {صباح الخير يا {name}} afternoon {نهارك سعيد يا {name}} evening {مساء الخير يا {name}} night {ليلة هانئة يا {name}} other {أهلًا يا {name}}}",
+      "click_here": "اضغط هنا",
+      "see_more": "عرض المزيد",
+      "see_more_details": "عرض تفاصيل أكثر",
+      "more": "المزيد",
+      "view_profile": "عرض الملف الشخصي",
+      "library": "المكتبة",
+      "watchlist": "قائمة المشاهدة",
+      "for_later": "لوقت لاحق",
+      "heart_pick": "{count, plural, one {اختيار القلب} two {اختيارا القلب} few {اختيارات القلب} many {اختيارات القلب} other {اختيارات القلب}}",
+      "add_to_heart_picks": "إضافة إلى اختيارات القلب",
+      "remove_from_heart_picks": "إزالة من اختيارات القلب",
+      "add_rating": "إضافة تقييم",
+      "edit_rating": "تعديل التقييم",
+      "remove_rating": "إزالة التقييم",
+      "share_my_rating": "مشاركة تقييمي",
+      "share_review": "مشاركة المراجعة",
+      "show_likes_count": "عرض عدد الإعجابات",
+      "show_comments_count": "عرض عدد التعليقات",
+      "add_to_watchlist": "إضافة إلى قائمة المشاهدة",
+      "remove_from_watchlist": "إزالة من قائمة المشاهدة",
+      "no_results": "لا نتائج",
+      "no_results_for": "لا نتائج لـ <strong>{query}</strong>",
+      "no_followees": "لا تتابع أي شخص",
+      "no_followers": "لا متابعين",
+      "no_rating": "لا تقييم",
+      "must_watch_to_review": "يجب أن تشاهد هذا العمل لتكتب عنه مراجعة",
+      "review_cannot_be_empty": "لا يمكن أن تكون المراجعة فارغة",
+      "no_activity": "لا نشاط",
+      "followers_ratings": "تقييمات المتابعين",
+      "added_by": "أضافه",
+      "sort_by": "الترتيب حسب",
+      "sort_order": "اتجاه الترتيب",
+      "go_to_film": "الانتقال إلى الفيلم",
+      "go_to_tv_series": "الانتقال إلى المسلسل",
+      "go_to_user": "الانتقال إلى المستخدم",
+      "go_to_person": "الانتقال إلى الشخص",
+      "go_to_activity": "الانتقال إلى النشاط",
+      "go_to_playlist": "الانتقال إلى القائمة",
+      "go_to_review": "الانتقال إلى المراجعة",
+      "go_to_director": "{count, plural, one {الانتقال إلى المخرج} two {الانتقال إلى المخرجين} few {الانتقال إلى المخرجين} many {الانتقال إلى المخرجين} other {الانتقال إلى المخرجين}}",
+      "go_to_creator": "{count, plural, one {الانتقال إلى المبتكر} two {الانتقال إلى المبتكرين} few {الانتقال إلى المبتكرين} many {الانتقال إلى المبتكرين} other {الانتقال إلى المبتكرين}}",
+      "show_director": "{count, plural, one {عرض المخرج} two {عرض المخرجين} few {عرض المخرجين} many {عرض المخرجين} other {عرض المخرجين}}",
+      "show_creator": "{count, plural, one {عرض المبتكر} two {عرض المبتكرين} few {عرض المبتكرين} many {عرض المبتكرين} other {عرض المبتكرين}}",
+      "show_credit": "{count, plural, one {عرض المشاركة} two {عرض المشاركات} few {عرض المشاركات} many {عرض المشاركات} other {عرض المشاركات}}",
+      "credits": "أسماء المشاركين",
+      "view_recommendation": "{count, plural, one {عرض الـ reco} two {عرض الـ reco} few {عرض الـ reco} many {عرض الـ reco} other {عرض الـ reco}}",
+      "view_directors": "{count, plural, one {عرض المخرج} two {عرض المخرجين} few {عرض المخرجين} many {عرض المخرجين} other {عرض المخرجين}}",
+      "no_director": "لا مخرج",
+      "view_comment": "{count, plural, one {عرض التعليق} two {عرض التعليقين} few {عرض التعليقات} many {عرض التعليقات} other {عرض التعليقات}}",
+      "add_comment": "{count, plural, one {إضافة تعليق} two {إضافة تعليقات} few {إضافة تعليقات} many {إضافة تعليقات} other {إضافة تعليقات}}",
+      "edit_comment": "{count, plural, one {تعديل التعليق} two {تعديل التعليقين} few {تعديل التعليقات} many {تعديل التعليقات} other {تعديل التعليقات}}",
+      "delete_comment": "حذف التعليق",
+      "do_you_really_want_to_delete_this_comment": "هل تريد فعلًا حذف هذا التعليق؟",
+      "comment_deleted": "تم حذف هذا التعليق",
+      "write_your_comment_here": "اكتب تعليقًا...",
+      "reply": "رد",
+      "replies_count": "{count, plural, one {رد واحد} two {ردان} few {# ردود} many {# ردًا} other {# رد}}",
+      "view_replies": "{count, plural, one {عرض رد واحد} two {عرض ردين} few {عرض # ردود} many {عرض # ردًا} other {عرض # رد}}",
+      "hide_replies": "إخفاء الردود",
+      "load_more_replies": "تحميل ردود أخرى",
+      "get_started": "ابدأ",
+      "get_started_its_free": "هيا نبدأ 🎬، مجانًا!",
+      "import": "استيراد",
+      "upgrade_to_plan": "الترقية إلى {plan}",
+      "choose_subscription_recurrence": "اختر دورة الفوترة لاشتراكك",
+      "compare_plans": "مقارنة الخطط",
+      "save_up_to_percent": "وفّر حتى {percent}%",
+      "is_empty": "المكان فارغ قليلًا هنا",
+      "add_to_playlist": "إضافة إلى قائمة",
+      "send_to_friend": "إرسال إلى صديق",
+      "pin_to_profile": "تثبيت في الملف الشخصي",
+      "unpin_from_profile": "إلغاء التثبيت من الملف الشخصي",
+      "pinned": "مثبّت",
+      "unpinned": "تم إلغاء التثبيت",
+      "no_pinned": "لا عناصر مثبّتة",
+      "pinned_limit_reached": "وصلت إلى الحد الأقصى للعناصر المثبّتة — ألغِ تثبيت أحدها لإضافة عنصر جديد",
+      "custom_sort": "ترتيب مخصص",
+      "quick_add": "إضافة سريعة",
+      "favorite_films": "الأفلام المفضلة",
+      "follow": "متابعة",
+      "followed": "تتابعه",
+      "request_sent": "تم إرسال الطلب",
+      "follow_requests": "طلبات المتابعة",
+      "no_follow_requests": "لا طلبات متابعة",
+      "follower": "{count, plural, one {متابع} two {متابعان} few {متابعون} many {متابعًا} other {متابع}}",
+      "follower_count": "{count} متابع",
+      "see_followers": "عرض المتابعين",
+      "followee": "{count, plural, one {متابَع} two {متابَعان} few {متابَعون} many {متابَعًا} other {متابَع}}",
+      "followee_count": "يتابع {count}",
+      "see_followees": "عرض من تتابعهم",
+      "last_activities": "آخر الأنشطة",
+      "last_updated": "آخر تحديث",
+      "last_updated_at_date": "آخر تحديث في {date}",
+      "show_all": "عرض الكل",
+      "this_account_is_private": "هذا الحساب خاص",
+      "follow_to_see_activities": "تابِع لرؤية الأنشطة",
+      "review": "{count, plural, one {مراجعة} two {مراجعتان} few {مراجعات} many {مراجعة} other {مراجعة}}",
+      "no_overview": "لا ملخص",
+      "cast": "طاقم التمثيل",
+      "no_cast": "لا طاقم تمثيل",
+      "recent": "الأحدث",
+      "popular": "الأكثر شعبية",
+      "popularity": "الشعبية",
+      "no_reviews": "لا مراجعات",
+      "no_playlists": "لا قوائم",
+      "no_playlists_found": "لم نجد أي قائمة",
+      "no_films": "لا أفلام",
+      "no_tv_series": "لا مسلسلات",
+      "view_activity": "عرض النشاط",
+      "comment_count": "{count, plural, one {تعليق واحد} two {تعليقان} few {# تعليقات} many {# تعليقًا} other {# تعليق}}",
+      "write_review": "كتابة مراجعة",
+      "new_review": "مراجعة جديدة",
+      "edit_review": "تعديل المراجعة",
+      "review_by": "مراجعة بقلم {name}",
+      "my_review": "{count, plural, one {مراجعتي} two {مراجعتاي} few {مراجعاتي} many {مراجعاتي} other {مراجعاتي}}",
+      "add_review": "إضافة مراجعة",
+      "tv_series": "{count, plural, one {مسلسل} two {مسلسلان} few {مسلسلات} many {مسلسلًا} other {مسلسل}}",
+      "film": "{count, plural, one {فيلم} two {فيلمان} few {أفلام} many {فيلمًا} other {فيلم}}",
+      "movie": "{count, plural, one {فيلم} two {فيلمان} few {أفلام} many {فيلمًا} other {فيلم}}",
+      "media": "{count, plural, one {عنوان} two {عنوانان} few {عناوين} many {عنوانًا} other {عنوان}}",
+      "tv_season": "{count, plural, one {موسم} two {موسمان} few {مواسم} many {موسمًا} other {موسم}}",
+      "tv_season_count": "{count, plural, one {موسم واحد} two {موسمان} few {# مواسم} many {# موسمًا} other {# موسم}}",
+      "tv_season_value": "الموسم {number}",
+      "tv_season_short": "م{number}",
+      "tv_episode": "{count, plural, one {حلقة} two {حلقتان} few {حلقات} many {حلقة} other {حلقة}}",
+      "tv_episode_count": "{count, plural, one {حلقة واحدة} two {حلقتان} few {# حلقات} many {# حلقة} other {# حلقة}}",
+      "tv_episode_value": "الحلقة {number}",
+      "tv_episode_short": "م{seasonNumber}ح{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {حلقة خاصة} two {حلقتان خاصتان} few {حلقات خاصة} many {حلقة خاصة} other {حلقة خاصة}}",
+      "first_air_date": "أول عرض",
+      "last_air_date": "آخر عرض",
+      "see_film": "عرض الفيلم",
+      "see_tv_series": "عرض المسلسل",
+      "watch_film_title": "مشاهدة {title}",
+      "watch_film_streaming_or_download": "شاهد <important>{title}</important> عبر البث أو بتحميل قانوني",
+      "download": "تحميل",
+      "downloaded": "تم التحميل",
+      "person": "{count, plural, one {شخص} two {شخصان} few {أشخاص} many {شخصًا} other {شخص}}",
+      "top_result": "أفضل نتيجة",
+      "user": "{count, plural, one {مستخدم} two {مستخدمان} few {مستخدمون} many {مستخدمًا} other {مستخدم}}",
+      "reco": "{count, plural, one {reco} two {reco} few {reco} many {reco} other {reco}}",
+      "my_recos": "الـ reco الخاصة بي",
+      "item": "{count, plural, one {عنصر} two {عنصران} few {عناصر} many {عنصرًا} other {عنصر}}",
+      "item_count": "{count, plural, one {عنصر واحد} two {عنصران} few {# عناصر} many {# عنصرًا} other {# عنصر}}",
+      "type": "النوع",
+      "complete": "إكمال",
+      "completed": "مكتمل",
+      "collection": "{count, plural, one {مجموعة} two {مجموعتان} few {مجموعات} many {مجموعة} other {مجموعة}}",
+      "most_recent": "الأحدث",
+      "most_popular": "الأكثر شعبية",
+      "most_old": "الأقدم",
+      "known_for": "معروف بـ",
+      "release_date": "تاريخ الإصدار",
+      "last_appearance_date": "آخر ظهور",
+      "vote_average": "متوسط التقييم",
+      "added": "أُضيف",
+      "added_date": "تاريخ الإضافة",
+      "added_at": "أُضيف في",
+      "add": "إضافة",
+      "playlist_name": "اسم القائمة",
+      "updated_at": "حُدِّث في",
+      "created_at": "أُنشئ في",
+      "likes": "الإعجابات",
+      "likes_count": "عدد الإعجابات",
+      "search_media": "البحث عن عنوان",
+      "search_film": "البحث عن فيلم",
+      "start_typing_to_search_films": "ابدأ الكتابة للبحث عن أفلام",
+      "search_tv_series": "البحث عن مسلسل",
+      "start_typing_to_search_tv_series": "ابدأ الكتابة للبحث عن مسلسلات",
+      "search_person": "البحث عن شخص",
+      "start_typing_to_search_persons": "ابدأ الكتابة للبحث عن أشخاص",
+      "search_user": "{count, plural, one {البحث عن مستخدم} two {البحث عن مستخدمين} few {البحث عن مستخدمين} many {البحث عن مستخدمين} other {البحث عن مستخدمين}}",
+      "start_typing_to_search_users": "ابدأ الكتابة للبحث عن مستخدمين",
+      "search_playlist": "البحث عن قائمة",
+      "start_typing_to_search_playlists": "ابدأ الكتابة للبحث عن قوائم",
+      "search_film_or_tv_series": "البحث عن فيلم أو مسلسل",
+      "watched_date": "{count, plural, one {تاريخ المشاهدة} two {تاريخا المشاهدة} few {تواريخ المشاهدة} many {تواريخ المشاهدة} other {تواريخ المشاهدة}}",
+      "mark_as_watched": "تحديد كمشاهَد",
+      "remove_from_watched": "إزالة من المشاهَدة",
+      "rating": "التقييم",
+      "create_a_playlist": "إنشاء قائمة",
+      "by_name": "بقلم {name}",
+      "reset": "إعادة تعيين",
+      "job": "{count, plural, one {مهمة} two {مهمتان} few {مهام} many {مهمة} other {مهمة}}",
+      "department": "{count, plural, one {قسم} two {قسمان} few {أقسام} many {قسمًا} other {قسم}}",
+      "share_title_via": "شارك <strong>{title}</strong> عبر",
+      "share_title": "مشاركة <strong>{title}</strong>",
+      "link": "رابط",
+      "copy_link": "نسخ الرابط",
+      "copied": "تم النسخ",
+      "other": "{count, plural, one {آخر} two {آخران} few {أخرى} many {أخرى} other {أخرى}}",
+      "via": "عبر",
+      "edit": "تعديل",
+      "guest": "{count, plural, one {ضيف} two {ضيفان} few {ضيوف} many {ضيفًا} other {ضيف}}",
+      "are_u_sure": "هل أنت متأكد؟",
+      "backward": "للخلف",
+      "forward": "للأمام",
+      "back": "رجوع",
+      "next": "التالي",
+      "notification": "{count, plural, one {إشعار} two {إشعاران} few {إشعارات} many {إشعارًا} other {إشعار}}",
+      "see_notifications": "عرض الإشعارات",
+      "open_social_panel": "فتح اللوحة الاجتماعية",
+      "cancel_change": "{count, plural, one {إلغاء التغيير} two {إلغاء التغييرين} few {إلغاء التغييرات} many {إلغاء التغييرات} other {إلغاء التغييرات}}",
+      "do_you_really_want_to_cancel_change": "هل تريد فعلًا إلغاء {count, plural, one {التغيير} two {التغييرين} few {التغييرات} many {التغييرات} other {التغييرات}}؟",
+      "continue_editing": "متابعة التعديل",
+      "confirm": "تأكيد",
+      "terms_of_use": "شروط الاستخدام",
+      "privacy_policy": "سياسة الخصوصية",
+      "request_made": "تم إرسال الطلب",
+      "request_canceled": "تم إلغاء الطلب",
+      "cancel_request": "إلغاء الطلب",
+      "open_menu": "فتح القائمة",
+      "feed": "الموجز",
+      "about": "حول",
+      "home": "الرئيسية",
+      "search": "بحث",
+      "explore": "استكشاف",
+      "shop": "المتجر",
+      "help": "المساعدة",
+      "legal": "قانوني",
+      "setting": "{count, plural, one {إعداد} two {إعدادان} few {إعدادات} many {إعدادات} other {إعدادات}}",
+      "logout": "تسجيل الخروج",
+      "to_watch": "للمشاهدة",
+      "reco_by_your_friends": "الـ reco من أصدقائك",
+      "friends_playlists": "قوائم أصدقائك",
+      "latest_activity": "{count, plural, one {آخر نشاط} two {آخر نشاطين} few {آخر الأنشطة} many {آخر الأنشطة} other {آخر الأنشطة}}",
+      "discover_users": "اكتشاف المستخدمين",
+      "most_recommended": "الأكثر توصية",
+      "archive": "أرشفة",
+      "unarchive": "إلغاء الأرشفة",
+      "mark_as_read": "{count, plural, one {تحديد كمقروء} two {تحديد كمقروءين} few {تحديد كمقروءة} many {تحديد كمقروءة} other {تحديد كمقروءة}}",
+      "mark_as_unread": "{count, plural, one {تحديد كغير مقروء} two {تحديد كغير مقروءين} few {تحديد كغير مقروءة} many {تحديد كغير مقروءة} other {تحديد كغير مقروءة}}",
+      "accept": "قبول",
+      "accepted": "تم القبول",
+      "decline": "رفض",
+      "declined": "تم الرفض",
+      "request_accepted": "{count, plural, one {تم قبول الطلب} two {تم قبول الطلبين} few {تم قبول الطلبات} many {تم قبول الطلبات} other {تم قبول الطلبات}}",
+      "request_declined": "{count, plural, one {تم رفض الطلب} two {تم رفض الطلبين} few {تم رفض الطلبات} many {تم رفض الطلبات} other {تم رفض الطلبات}}",
+      "unread": "{count, plural, one {غير مقروء} two {غير مقروءين} few {غير مقروءة} many {غير مقروءة} other {غير مقروءة}}",
+      "archived": "{count, plural, one {مؤرشف} two {مؤرشفان} few {مؤرشفة} many {مؤرشفة} other {مؤرشفة}}",
+      "no_notifications": "لا إشعارات",
+      "all": "الكل",
+      "mark_all_as_read": "تحديد الكل كمقروء",
+      "archive_all": "أرشفة الكل",
+      "archive_all_read": "أرشفة كل المقروء",
+      "please_login": "سجّل الدخول",
+      "like": "إعجاب",
+      "unlike": "إلغاء الإعجاب",
+      "unfollow": "إلغاء المتابعة",
+      "name": "الاسم",
+      "add_a_name": "أضف اسمًا",
+      "add_a_description": "أضف وصفًا",
+      "visibility": "الظهور",
+      "search_an_user": "البحث عن مستخدم",
+      "select_an_item_to_add_to_playlist": "اختر العنصر الذي ستضيفه إلى القائمة",
+      "select_a_film_to_add_to_playlist": "اختر الفيلم الذي ستضيفه إلى القائمة",
+      "select_a_tv_series_to_add_to_playlist": "اختر المسلسل الذي ستضيفه إلى القائمة",
+      "add_one_or_more_items_to": "أضف عنصرًا واحدًا أو أكثر إلى <important>{title}</important>",
+      "add_one_or_more_films_to": "أضف فيلمًا واحدًا أو أكثر إلى <important>{title}</important>",
+      "add_one_or_more_tv_series_to": "أضف مسلسلًا واحدًا أو أكثر إلى <important>{title}</important>",
+      "manage_playlist_access_rights": "إدارة حقوق الوصول إلى القائمة",
+      "add_guest": "{count, plural, one {إضافة ضيف} two {إضافة ضيفين} few {إضافة ضيوف} many {إضافة ضيوف} other {إضافة ضيوف}}",
+      "manage_members": "إدارة الأعضاء",
+      "no_member": "لا أعضاء",
+      "add_member": "{count, plural, one {إضافة عضو} two {إضافة عضوين} few {إضافة أعضاء} many {إضافة أعضاء} other {إضافة أعضاء}}",
+      "manage_guests": "إدارة الضيوف",
+      "add_guests_to_your_playlist": "أضف ضيوفًا إلى قائمتك",
+      "select_users_to_add_to_playlist": "اختر المستخدمين الذين ستضيفهم إلى القائمة",
+      "select_users_to_send_reco": "اختر من ستُرسل إليه الـ reco",
+      "select_playlists_to_add_the_item": "اختر القوائم التي ستُضيف إليها العنصر",
+      "send": "إرسال",
+      "sent": "تم الإرسال",
+      "select_row": "تحديد الصف",
+      "select_all": "تحديد الكل",
+      "no_selected_users": "لا مستخدمين محددين",
+      "selection_count": "تم تحديد {number} من {total} {type}",
+      "about_title": "حول {title}",
+      "detail": "{count, plural, one {تفصيل} two {تفصيلان} few {تفاصيل} many {تفاصيل} other {تفاصيل}}",
+      "genre": "{count, plural, one {تصنيف} two {تصنيفان} few {تصنيفات} many {تصنيفًا} other {تصنيف}}",
+      "male": "{count, plural, one {ذكر} two {ذكران} few {ذكور} many {ذكرًا} other {ذكر}}",
+      "female": "{count, plural, one {أنثى} two {أنثيان} few {إناث} many {أنثى} other {أنثى}}",
+      "non_binary": "{count, plural, one {غير ثنائي} two {غير ثنائيين} few {غير ثنائيين} many {غير ثنائيين} other {غير ثنائي}}",
+      "unspecified": "غير محدد",
+      "date_of_birth": "تاريخ الميلاد",
+      "date_of_death": "تاريخ الوفاة",
+      "place_of_birth": "مكان الميلاد",
+      "age_years": "{count, plural, one {سنة واحدة} two {سنتان} few {{count} سنوات} many {{count} سنة} other {{count} سنة}}",
+      "biography": "السيرة",
+      "no_biography_available": "لا سيرة متاحة",
+      "no_information_available": "لا معلومات متاحة",
+      "already_sent": "أُرسل بالفعل",
+      "already_watched": "شوهد بالفعل",
+      "already_added": "أُضيف بالفعل",
+      "recommend_to_friend_to_discover": "أوصِ بـ <strong>{title}</strong> لصديق لم يشاهده بعد",
+      "add_to_one_or_more_playlists": "أضف <strong>{title}</strong> إلى قائمة أو أكثر من قوائمك",
+      "my_playlist": "{count, plural, one {قائمتي} two {قائمتاي} few {قوائمي} many {قوائمي} other {قوائمي}}",
+      "what_is_title": "ما هو <strong>{title}</strong>؟",
+      "try_again": "حاول مرة أخرى",
+      "error": "خطأ",
+      "not_logged_in": "لم تسجّل الدخول",
+      "an_error_occurred": "حدث خطأ",
+      "playlist_not_found": "لم يتم العثور على القائمة",
+      "user_not_found": "لم يتم العثور على المستخدم",
+      "film_not_found": "لم يتم العثور على الفيلم",
+      "media_not_found": "لم يتم العثور على العنوان",
+      "review_not_found": "لم يتم العثور على المراجعة",
+      "person_not_found": "لم يتم العثور على الشخص",
+      "tv_series_not_found": "لم يتم العثور على المسلسل",
+      "tv_episode_not_found": "لم يتم العثور على الحلقة",
+      "tv_season_not_found": "لم يتم العثور على الموسم",
+      "wrong_arguments": "معطيات غير صحيحة",
+      "no_media_found": "لم يتم العثور على أي عنوان",
+      "unknown_action": "إجراء غير معروف",
+      "no_user_found": "لم يتم العثور على أي مستخدم",
+      "no_tv_episodes": "لا حلقات",
+      "save": "حفظ",
+      "saved": "تم الحفظ",
+      "create": "إنشاء",
+      "film_count": "{count, plural, one {فيلم واحد} two {فيلمان} few {# أفلام} many {# فيلمًا} other {# فيلم}}",
+      "tv_series_count": "{count, plural, one {مسلسل واحد} two {مسلسلان} few {# مسلسلات} many {# مسلسلًا} other {# مسلسل}}",
+      "login": "تسجيل الدخول",
+      "signup": "إنشاء حساب",
+      "navigation": "التنقل",
+      "delete": "حذف",
+      "remove": "إزالة",
+      "deleted": "تم الحذف",
+      "share": "مشاركة",
+      "duplicate": "تكرار",
+      "duplicated": "تم التكرار",
+      "cancel": "إلغاء",
+      "date": "التاريخ",
+      "duration": "المدة",
+      "sort": "ترتيب",
+      "show": "عرض",
+      "column": "{count, plural, one {عمود} two {عمودان} few {أعمدة} many {عمودًا} other {عمود}}",
+      "comment": "{count, plural, one {تعليق} two {تعليقان} few {تعليقات} many {تعليقًا} other {تعليق}}",
+      "unknown": "غير معروف",
+      "community": "المجتمع",
+      "cast_and_crew": "طاقم التمثيل والعمل",
+      "soon": "قريبًا",
+      "ios_app": "تطبيق iOS",
+      "android_app": "تطبيق Android",
+      "coming_soon": "قريبًا",
+      "new_mobile_app": "تطبيق جديد للهاتف!",
+      "manage": "إدارة",
+      "monthly": "شهري",
+      "yearly": "سنوي",
+      "day": "يوم",
+      "week": "أسبوع",
+      "month": "شهر",
+      "year": "سنة",
+      "price": "السعر",
+      "free": "مجاني",
+      "playlist": "{count, plural, one {قائمة} two {قائمتان} few {قوائم} many {قائمة} other {قائمة}}",
+      "public": "عامة",
+      "publish": "نشر",
+      "private": "خاصة",
+      "description": "الوصف",
+      "details": "التفاصيل",
+      "profile": "الملف الشخصي",
+      "overview": "الملخص",
+      "no_playlists_saved": "لا قوائم محفوظة",
+      "camera_permission_denied": "تم رفض الوصول إلى الكاميرا",
+      "photo_library_permission_denied": "تم رفض الوصول إلى مكتبة الصور",
+      "ignore": "تجاهل",
+      "ok": "حسنًا",
+      "title": "العنوان",
+      "skip": "تخطّي",
+      "undo": "تراجع",
+      "date_published": "تاريخ النشر",
+      "date_created": "تاريخ الإنشاء",
+      "date_updated": "تاريخ التحديث",
+      "alphabetical": "أبجديًا",
+      "date_added": "تاريخ الإضافة",
+      "number_of_likes": "عدد الإعجابات",
+      "number_of_seasons": "عدد المواسم",
+      "add_to_this_playlist": "إضافة إلى هذه القائمة",
+      "save_to_library": "حفظ في المكتبة",
+      "remove_from_library": "إزالة من المكتبة",
+      "otp": "رمز لمرة واحدة",
+      "ratings_from_followees": "تقييمات من تتابعهم",
+      "choose_from_the_library": "اختر من المعرض",
+      "take_a_photo": "التقط صورة",
+      "delete_current_image": "حذف الصورة الحالية",
+      "edit_image": "تعديل الصورة",
+      "add_image": "إضافة صورة",
+      "verify_with_a_code": "التحقق برمز",
+      "order": "الترتيب",
+      "edit_order": "تعديل الترتيب",
+      "done": "تم",
+      "can_edit": "يمكنه التعديل؟",
+      "upgrade": "ترقية",
+      "no_description": "لا وصف",
+      "no_comment": "لا تعليقات",
+      "close": "إغلاق",
+      "edit_playlist": "تعديل القائمة",
+      "universe": "العالم",
+      "cannot_be_changed": "لا يمكن تغييره",
+      "delete_review": "حذف المراجعة",
+      "do_you_really_want_to_delete_this_review": "هل تريد فعلًا حذف هذه المراجعة؟",
+      "user_liked_playlist": "أعجب <name></name> بقائمة",
+      "user_liked_review": "أعجب <name></name> بمراجعة",
+      "runtime": "مدة العرض",
+      "ends_at": "ينتهي في {value}",
+      "this_user_has_no_activity": "هذا المستخدم ليس له أي نشاط",
+      "notification_archived": "{count, plural, one {تم أرشفة الإشعار} two {تم أرشفة الإشعارين} few {تم أرشفة الإشعارات} many {تم أرشفة الإشعارات} other {تم أرشفة الإشعارات}}",
+      "notification_unarchived": "{count, plural, one {تم إلغاء أرشفة الإشعار} two {تم إلغاء أرشفة الإشعارين} few {تم إلغاء أرشفة الإشعارات} many {تم إلغاء أرشفة الإشعارات} other {تم إلغاء أرشفة الإشعارات}}",
+      "notification_marked_as_read": "{count, plural, one {تم تحديد الإشعار كمقروء} two {تم تحديد الإشعارين كمقروءين} few {تم تحديد الإشعارات كمقروءة} many {تم تحديد الإشعارات كمقروءة} other {تم تحديد الإشعارات كمقروءة}}",
+      "notification_marked_as_unread": "{count, plural, one {تم تحديد الإشعار كغير مقروء} two {تم تحديد الإشعارين كغير مقروءين} few {تم تحديد الإشعارات كغير مقروءة} many {تم تحديد الإشعارات كغير مقروءة} other {تم تحديد الإشعارات كغير مقروءة}}",
+      "or_continue_with": "أو تابع باستخدام",
+      "message": "{count, plural, one {رسالة} two {رسالتان} few {رسائل} many {رسالة} other {رسالة}}",
+      "story": "{count, plural, one {ستوري} two {ستوري} few {ستوري} many {ستوري} other {ستوري}}",
+      "new_playlist": "قائمة جديدة",
+      "select_a_type": "اختر نوعًا",
+      "filter": "{count, plural, one {مُرشِّح} two {مُرشِّحان} few {مُرشِّحات} many {مُرشِّحات} other {مُرشِّح}}",
+      "hide_watched": "إخفاء ما شوهد",
+      "show_me_around": "خُذني في جولة",
+      "artwork_from": "الرسوم من <important>{source}</important>",
+      "no_active_subscription": "لا اشتراك نشط",
+      "manage_subscription": "إدارة الاشتراك",
+      "started_on_date": "بدأ في {date}",
+      "last_renewed_on_date": "آخر تجديد في {date}",
+      "version_value": "الإصدار {value}",
+      "original_title": "العنوان الأصلي",
+      "starring": "بطولة",
+      "write_your_review_here": "اكتب مراجعتك هنا...",
+      "insert": "إدراج",
+      "trailer": "{count, plural, one {إعلان تشويقي} two {إعلانان تشويقيان} few {إعلانات تشويقية} many {إعلانات تشويقية} other {إعلان تشويقي}}",
+      "list": "{count, plural, one {قائمة} two {قائمتان} few {قوائم} many {قائمة} other {قائمة}}",
+      "grid": "{count, plural, one {شبكة} two {شبكتان} few {شبكات} many {شبكة} other {شبكة}}",
+      "order_asc": "ترتيب تصاعدي",
+      "order_desc": "ترتيب تنازلي",
+      "menu": "القائمة",
+      "at_least_one_watched_date_required": "يجب تحديد تاريخ مشاهدة واحد على الأقل",
+      "viewer": "{count, plural, one {مُشاهد} two {مُشاهدان} few {مُشاهدون} many {مُشاهدًا} other {مُشاهد}}",
+      "editor": "{count, plural, one {محرّر} two {محرّران} few {محرّرون} many {محرّرًا} other {محرّر}}",
+      "admin": "{count, plural, one {مسؤول} two {مسؤولان} few {مسؤولون} many {مسؤولًا} other {مسؤول}}",
+      "owner": "{count, plural, one {مالك} two {مالكان} few {مالكون} many {مالكًا} other {مالك}}",
+      "you_dont_have_permission_to_do_this_action": "ليست لديك صلاحية القيام بهذا الإجراء",
+      "in_progress": "جارٍ",
+      "give_up": "استسلام",
+      "random": "عشوائي",
+      "reset_password": "إعادة تعيين كلمة المرور",
+      "password_reset": "تمت إعادة تعيين كلمة المرور",
+      "return_to_login": "العودة إلى تسجيل الدخول",
+      "invalid_code": "رمز غير صالح",
+      "no_token_found": "لم يتم العثور على رمز",
+      "first_watched_at": "تاريخ أول مشاهدة",
+      "watched_dates": "تواريخ المشاهدة",
+      "no_watched_dates": "لا تواريخ مشاهدة",
+      "select_role": "اختر دورًا",
+      "select_format": "اختر صيغة",
+      "theater": "السينما",
+      "physical": "نسخة مادية",
+      "digital": "رقمي",
+      "streaming": "بث",
+      "you_must_be_premium_to_change_member_role": "يجب أن تكون مشتركًا في Premium لتغيير دور عضو",
+      "already_member": "عضو بالفعل",
+      "email_already_used": "هذا البريد الإلكتروني مستخدم بالفعل",
+      "email_confirmed": "تم تأكيد البريد الإلكتروني",
+      "confirmation_email_sent": "تم إرسال بريد التأكيد",
+      "continue": "متابعة",
+      "finish": "إنهاء",
+      "forgot_password": "نسيت كلمة المرور",
+      "new_password": "كلمة مرور جديدة",
+      "confirm_password": "تأكيد كلمة المرور",
+      "password_reseted": "تمت إعادة تعيين كلمة المرور",
+      "reset_your_password": "أعد تعيين كلمة مرورك",
+      "invalid_token": "رمز غير صالح",
+      "new_notification": "{count, plural, one {إشعار جديد} two {إشعاران جديدان} few {إشعارات جديدة} many {إشعارات جديدة} other {إشعار جديد}}",
+      "lets_go": "هيا بنا!",
+      "update_available": "يتوفر تحديث",
+      "update_available_description": "حدِّث التطبيق للاستفادة من آخر التحسينات.",
+      "update_required_title": "التحديث مطلوب",
+      "update_required_description": "هذا الإصدار من التطبيق لم يصبح مدعومًا. حدِّثه لمتابعة استخدام Recomend.",
+      "update_app": "تحديث",
+      "advertisement": "{count, plural, one {إعلان} two {إعلانان} few {إعلانات} many {إعلانًا} other {إعلان}}",
+      "pending": "في الانتظار",
+      "processing": "قيد المعالجة",
+      "awaiting_review": "في انتظار المراجعة",
+      "failed": "فشل",
+      "data": "{count, plural, one {بيان} two {بيانان} few {بيانات} many {بيانات} other {بيانات}}",
+      "restore": "استعادة",
+      "fix": "إصلاح",
+      "not_found": "غير موجود",
+      "unavailable": "غير متاح",
+      "star_on_github": "ضع لنا نجمة على GitHub"
+    },
+    "form": {
+      "email": {
+        "label": "البريد الإلكتروني",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "البريد الإلكتروني غير صالح",
+          "unavailable": "هذا البريد الإلكتروني مستخدم بالفعل"
+        },
+        "verified": "تم التحقق من البريد الإلكتروني"
+      },
+      "username": {
+        "label": "اسم المستخدم",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "يجب أن يكون الحرف الأول حرفًا أو رقمًا",
+          "double_dot": "لا يُسمح بنقطتين متتاليتين",
+          "ends_with_dot": "لا يُسمح بنقطة في النهاية",
+          "format": "يُسمح فقط بالحروف والأرقام والرمزين '_' و'.'",
+          "unavailable": "اسم المستخدم هذا مستخدم بالفعل"
+        }
+      },
+      "full_name": {
+        "label": "الاسم",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "يُسمح فقط بالحروف والأرقام والمسافات"
+        }
+      },
+      "password": {
+        "label": "كلمة المرور",
+        "placeholder": "أدخل كلمة المرور",
+        "schema": {
+          "uppercase": "يجب أن تحتوي على حرف كبير واحد على الأقل",
+          "lowercase": "يجب أن تحتوي على حرف صغير واحد على الأقل",
+          "number": "يجب أن تحتوي على رقم واحد على الأقل",
+          "special": "يجب أن تحتوي على رمز خاص واحد على الأقل",
+          "match": "كلمتا المرور غير متطابقتين"
+        },
+        "confirm": {
+          "label": "تأكيد كلمة المرور",
+          "placeholder": "أكّد كلمة المرور"
+        }
+      },
+      "length": {
+        "char_min": "{count, plural, one {حرف واحد} two {حرفان} few {# أحرف} many {# حرفًا} other {# حرف}} على الأقل",
+        "char_max": "{count, plural, one {حرف واحد} two {حرفان} few {# أحرف} many {# حرفًا} other {# حرف}} كحد أقصى"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "يُسمح فقط بالحروف والأرقام والمسافات"
+      },
+      "error": {
+        "too_many_attempts": "محاولات كثيرة جدًا، حاول لاحقًا",
+        "not_received_code": "لم تستلم الرمز؟",
+        "invalid_code": "رمز غير صالح",
+        "turnstile": "فشل التحقق، حاول مرة أخرى"
+      },
+      "resend_code": "إعادة إرسال الرمز",
+      "resend_email": "إعادة إرسال البريد",
+      "code_verified": "تم التحقق من الرمز",
+      "code_sent": "تم إرسال الرمز"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "الصفحة غير موجودة",
+        "description": "عذرًا، هذه الصفحة غير موجودة..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "التتبّع",
+        "description": "اكتشف أفلامك ومسلسلاتك المفضلة وقيّمها وشاركها."
+      },
+      "recos": {
+        "label": "الـ reco",
+        "description": "أرسل واستقبل الـ reco من أصدقائك. كل شيء في مكان واحد."
+      },
+      "playlists": {
+        "label": "القوائم",
+        "description": "نظّم القوائم وشاركها وابنِها مع الآخرين."
+      },
+      "feed": {
+        "label": "الموجز",
+        "description": "تابِع أصدقاءك لترى ما يشاهدونه وما يعجبهم وما يكتبون عنه."
+      },
+      "social_sharing": {
+        "label": "المشاركة الاجتماعية",
+        "description": "شارك كل ما تحبه على إنستغرام أو غيره من الشبكات."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "التتبّع",
+          "description": "تابِع الأفلام التي شاهدتها"
+        },
+        "recos": {
+          "label": "الـ Reco",
+          "description": "أرسل توصيات بالأفلام إلى أصدقائك"
+        },
+        "explore": {
+          "label": "الاستكشاف",
+          "description": "اكتشف أفلامًا جديدة على Paradise Pictures، خريطة تفاعلية تضم أكثر من 1400 فيلم"
+        },
+        "like": {
+          "label": "الإعجاب",
+          "description": "أظهر محبتك لأفلامك وقوائمك ومراجعاتك المفضلة"
+        },
+        "rating": {
+          "label": "التقييم",
+          "description": "قيّم الأفلام التي شاهدتها"
+        },
+        "watchlist": {
+          "label": "قائمة المشاهدة",
+          "description": "احفظ الأفلام التي تريد مشاهدتها"
+        },
+        "playlists": {
+          "label": "القوائم",
+          "description": "نظّم أفلامك في قوائم وشاركها"
+        },
+        "reviews": {
+          "label": "المراجعات",
+          "description": "اكتب مراجعات وأطلِق عاشق السينما اللاذع الذي في داخلك"
+        },
+        "feed": {
+          "label": "الموجز",
+          "description": "تابِع نشاط أصدقائك"
+        },
+        "adsFree": {
+          "label": "بلا إعلانات",
+          "description": "استمتع بـ Recomend بلا إعلانات، إلى الأبد"
+        }
+      }
+    },
+    "welcome": {
+      "title": "شكرًا لتسجيلك!",
+      "description": "إليك نظرة سريعة على ما يمكنك فعله مع {app}.",
+      "follow": {
+        "title": "تابِع الآخرين",
+        "description": "تابِع أصدقاءك لترى ما يشاهدونه."
+      },
+      "import": {
+        "title": "أتيت من منصة أخرى؟"
+      }
+    },
+    "collection": {
+      "label": "المكتبة",
+      "my_recos": {
+        "label": "الـ reco الخاصة بي",
+        "search": {
+          "placeholder": "ابحث في الـ reco الخاصة بي..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "الحذف من الـ reco الخاصة بي",
+            "description": "هل تريد فعلًا حذف <important>{title}</important> من الـ reco الخاصة بك؟"
+          },
+          "complete_confirm": {
+            "title": "إكمال الـ reco",
+            "description": "هل تريد فعلًا إكمال الـ reco <important>{title}</important>؟"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "ابحث في قائمة المشاهدة..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "الحذف من قائمة المشاهدة",
+            "description": "هل تريد فعلًا حذف <important>{title}</important> من قائمة مشاهدتك؟"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "ابحث في اختيارات القلب..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "الحذف من اختيارات القلب",
+            "description": "هل تريد فعلًا حذف <important>{title}</important> من اختيارات قلبك؟"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "شاهد <name></name>",
+        "rated": "قيّم <name></name>",
+        "liked": "أعجب <name></name>",
+        "rated_liked": "أعجب <name></name> وقيّم",
+        "reviewed": "كتب <name></name> مراجعة"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> هو <important>{roles}</important> في <linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> هو <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "تصريح للتطبيق",
+        "description_generic": "يطلب أحد التطبيقات الوصول إلى حسابك.",
+        "description": "يطلب {client} الوصول إلى حسابك.",
+        "scopes_label": "سيسمح هذا للتطبيق بما يلي:",
+        "accept": "السماح",
+        "deny": "الرفض",
+        "error": {
+          "invalid_request": "طلب غير صالح أو منتهي الصلاحية",
+          "invalid_request_description": "ابدأ عملية التصريح من جديد من التطبيق الذي أحالك إلى هنا.",
+          "client_not_found": "لم يتم العثور على هذا التطبيق.",
+          "submit_failed": "حدث خطأ ما. حاول مرة أخرى."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "سجّل الدخول إلى حسابك في {app}."
+        },
+        "label": "تسجيل الدخول",
+        "description": "اكتشف أفضل توصيات الأفلام.",
+        "or_continue_with": "أو تابع باستخدام",
+        "no_account_yet": "ليس لديك حساب بعد؟",
+        "form": {
+          "identifier": {
+            "label": "البريد الإلكتروني أو اسم المستخدم",
+            "placeholder": "أدخل بريدك الإلكتروني أو اسم المستخدم"
+          },
+          "password": {
+            "label": "كلمة المرور",
+            "placeholder": "أدخل كلمة المرور"
+          },
+          "submit": "تسجيل الدخول",
+          "forgot_password": "نسيت كلمة المرور؟",
+          "wrong_credentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة"
+        },
+        "otp": {
+          "password_login": "تفضّل تسجيل الدخول بكلمة مرور؟",
+          "form": {
+            "submit": "استلام الرمز",
+            "no_user_found": "لم يتم العثور على مستخدم بهذا البريد الإلكتروني",
+            "success": "تم تسجيل الدخول"
+          },
+          "confirm_form": {
+            "label": "تأكيد الرمز",
+            "description": "تم إرسال رمز تحقق إلى العنوان {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "أنشئ حسابًا في {app} لتكتشف توصيات الأفلام وتشاركها."
+        },
+        "description": "أنشئ حسابًا لتوصي بفيلم لصديقك الذي ينسى العناوين دائمًا.",
+        "form": {
+          "success": "تم إرسال بريد تحقق إلى {email}"
+        },
+        "confirm_form": {
+          "label": "تأكيد البريد الإلكتروني",
+          "description": "تم إرسال رابط تحقق إلى العنوان {email}"
+        },
+        "return_to_login": "عذرًا، لديّ حساب بالفعل."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "نسيت كلمة المرور",
+          "description": "أعد تعيين كلمة مرورك."
+        },
+        "label": "نسيت كلمة المرور",
+        "description": "من الأفضل أن تستخدم مدير كلمات مرور، إنه مريح جدًا.",
+        "return_to_login": "عذرًا، تذكّرت كلمة مروري في النهاية.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "إعادة تعيين كلمة المرور",
+          "code_sent": "تم إرسال الطلب"
+        },
+        "confirm_form": {
+          "label": "تأكيد الرمز",
+          "description": "تم إرسال رمز تحقق إلى العنوان {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "إعادة تعيين كلمة المرور",
+          "description": "اختر كلمة مرور جديدة لحسابك."
+        }
+      },
+      "error": {
+        "label": "خطأ",
+        "description": "حدث خطأ أثناء عملية المصادقة.",
+        "return_to_login": "العودة إلى الأمان"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "حول",
+        "marquee": "أليس في حياتك ما هو أكثر إثارة من تصفّح صفحات «حول» على الإنترنت؟",
+        "intro": "<strong>Recomend</strong> مساحة مخصصة لاكتشاف الأفلام والتوصية بها وتنظيمها. صممنا كل شيء ليحصل التناقل الشفهي أخيرًا على أفضل سند رقمي ممكن. مقاربتنا تضع الناس وعلاقاتهم في المركز، في زمن تدور فيه عادات الاستهلاك حول الذات، أو بالأحرى حول عبارة «موصى به لك».",
+        "slogan": {
+          "1": "بلا إعلانات وبلا وعود مشبوهة. 🍆",
+          "2": "إنه شبكة اجتماعية وأداة في الوقت نفسه.",
+          "3": "صناعة منزلية بأيدي عاشقين.",
+          "4": "هاوٍ، بأصدق معاني الكلمة."
+        },
+        "last": "يمكن استخدام Recomend وحدك أو مع الآخرين، علنًا أو في الخفاء، في النهار أو الليل، لكن أبدًا أمام فيلم — ركّز من فضلك!"
+      },
+      "team": {
+        "label": "الفريق",
+        "intro": "أنشأ Recomend شقيقان مفتونان بالسينما، يحبّان استثمار وقتهما في مشاريع طموحة أكثر من اللازم وقد لا ترى النور أبدًا.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "مهندس ومعماري مفرط النشاط لا تكفيه وظيفة واحدة (أمة الشركات الناشئة الحقيقية)، Yoann هو صاحب فكرة خريطة الأفلام، التي كان طموحها الأول متواضعًا: أن تصبح ملصقًا في حمّامه. وبانضمام Loup حلّقت الأهداف إلى السماء، وإذ شعر بأن الأمور تجرفه قليلًا، تولّى كل الجانب الجرافيكي للخريطة والموقع، وكذلك كل ما يتعلق بالتواصل (حتى إن لم يكن يحب ذلك). كما يشارك آراءه في تجربة المستخدم والواجهة ويقترح ميزات كثيرة من دون أن يدرك تمامًا صعوبة برمجتها (لقد تحسّن في هذا الأمر)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "علّم نفسه بنفسه تمامًا، ومع ذلك تمكّن من إكمال دراسة أوصلته إلى بطالة بلا راتب قبل سن الخامسة والعشرين. صاحب مهارات متعددة بحق، يتولّى Loup الجانب الإلكتروني فيبرمج واجهة يريدها مريحة بأقصى ما يمكن. يودّ Loup أن يشكر كل منتديات البرمجة التي أجابت أسئلته (الكثيرة جدًا)، وكل اليوتيوبرز الهنود الذين أرشدوه كآباء بالتبنّي خلال هذه الأشهر. أما والدته فهي مقتنعة بأن أخاه استعبده من أجل هذا المشروع (أنا بخير يا أمي)."
+          }
+        },
+        "last": "للتواصل معنا أو مع أعضاء المجتمع الآخرين، انضم إلى <link>Discord</link> الخاص بنا!"
+      },
+      "pricing": {
+        "label": "الأسعار",
+        "intro": "نموذج الاشتراك هذا هو في الأساس وسيلة لدعم المشروع ومساعدته على النمو. ميزات Premium إضافات لاستخدام أكثر تقدمًا لـ Recomend، وهي تبرّر مساهمة مالية صغيرة. وسنحافظ دائمًا على إمكانية استخدام الموقع مجانًا، بلا إعلانات وبلا إحساس بالقيود.",
+        "subdescription": "*إذا كان السعر المنخفض إلى حد السخرية لهذا الاشتراك يتجاوز قدرتك مع ذلك، فتوجّه إلى حكومتك الليبرالية المسؤولة عن فقدان قوتك الشرائية."
+      },
+      "legal": {
+        "label": "القانون والخصوصية",
+        "description": "نحن نحترم خصوصيتك. الإعلانات التي تُعرض على المستخدمين الزوار تديرها Google وتتطلب ملفات تعريف ارتباط تقنية للحدّ من تكرار العرض ومنع الاحتيال.",
+        "privacyPolicy": "اقرأ سياسة الخصوصية لدينا",
+        "manageCookies": "إدارة تفضيلاتي الإعلانية (ملفات تعريف الارتباط)"
+      },
+      "open-source": {
+        "label": "المصدر المفتوح",
+        "intro": "Recomend مفتوح المصدر: الكود متاح للجميع على GitHub. ألقِ نظرة، أو ساهم، أو اترك لنا نجمة فقط!",
+        "star": "ضع لنا نجمة على GitHub"
+      },
+      "businessmodel": {
+        "label": "نموذج العمل",
+        "paragraph": {
+          "1": "كما تتوقع من ملفاتنا غير التجارية إطلاقًا، لم نفهم بعد ما يمكن أن يقدّمه لنا نموذج عمل في الوقت الحالي...",
+          "2": "إذا تطلّب مستقبل Recomend ذلك، فسننظر في الأمر ونحيط أنفسنا بالأشخاص المناسبين — أو على الأقل بأشخاص يهمهم الأمر أكثر منا.",
+          "3": "وحتى ذلك الحين، لنكن صريحين، لدينا أمور أخرى نهتم بها."
+        }
+      },
+      "roadmap": {
+        "label": "خطة الطريق"
+      },
+      "data": {
+        "label": "البيانات",
+        "paragraph": {
+          "1": "كل البيانات الوصفية المستخدمة في Recomend توفّرها <link>The Movie Database (TMDb)</link> عبر واجهة المنصة البرمجية. نفعل ما يفعله الجميع، كخراف مطيعة.",
+          "2": "بخصوص الأخطاء أو الأفلام الناقصة، توجّه إلى <link>TMDb</link>."
+        }
+      },
+      "resources": {
+        "label": "المصادر",
+        "intro": "لا علاقة لهذا بالسينما حقًا، لكن هذه قائمة بمواقع نحبها:"
+      },
+      "contact-support": {
+        "label": "التواصل والدعم",
+        "help-center": "اعثر على أجوبة لأسئلتك الوجودية في <link>مركز المساعدة</link> لدينا.",
+        "technical-support": "للأسئلة التقنية: <email></email>",
+        "suggest-a-feature": "للاقتراحات: <email></email>",
+        "contact-us": "للتواصل معنا فقط: <email></email>"
+      },
+      "quote": {
+        "label": "اقتباس",
+        "quote": "« أكره كلمة مهني. كل هؤلاء الممثلين وغيرهم الذين يقولون: أنا مهني، أنا محترف! ما معنى هذا؟ هل توجد كلمة أكثر حزنًا؟ لأن كلمة «هاوٍ» مشتقة من المحبة. يجب أن نفعل الأشياء بمحبة، وإلا فنحن حمقى. »",
+        "author": "أورسون ويلز",
+        "date": "1972",
+        "subdescription": "*تردّدنا في وضعه لأنه قد يبدو متكبّرًا بسرعة، لكنه يعكس مزاجنا تجاه المشروع. ومع ذلك، إن لم يعجبك، سنحذفه."
+      }
+    },
+    "settings": {
+      "label": "الإعدادات",
+      "description": "أدِر إعدادات حسابك.",
+      "profile": {
+        "label": "الملف الشخصي",
+        "description": "هكذا سيراك الآخرون في الموقع.",
+        "avatar": {
+          "label": "الصورة الرمزية",
+          "delete": "حذف"
+        },
+        "full_name": {
+          "label": "الاسم",
+          "description": "هذا هو الاسم الذي سيظهر في ملفك الشخصي وفي رسائل البريد.",
+          "placeholder": "أدخل اسمك",
+          "form": {
+            "min_length": "يجب أن يتكون الاسم من حرف واحد على الأقل",
+            "max_length": "لا يجب أن يتجاوز الاسم 50 حرفًا"
+          }
+        },
+        "bio": {
+          "label": "نبذة",
+          "description": "أخبرنا شيئًا عنك، سيظهر في ملفك الشخصي.",
+          "placeholder": "حدّثنا عن نفسك",
+          "form": {
+            "max_length": "لا يجب أن تتجاوز النبذة 150 حرفًا",
+            "format": "لا يمكن أن تحتوي النبذة على أسطر فارغة أو أن تتكون من مسافات فقط."
+          }
+        },
+        "favorite_films": {
+          "label": "الأفلام المفضلة",
+          "description": ""
+        },
+        "url": {
+          "label": "الرابط",
+          "description": "",
+          "form": {
+            "invalid": "رابط غير صالح"
+          }
+        }
+      },
+      "account": {
+        "label": "الحساب",
+        "description": "حدّث إعدادات حسابك.",
+        "username": {
+          "label": "اسم المستخدم",
+          "description": "هذا هو اسم المستخدم الذي يمكن للآخرين أن يجدوك به ويدخلوا إلى ملفك الشخصي. يمكن تغييره مرة واحدة فقط كل 30 يومًا.",
+          "placeholder": "أدخل اسم المستخدم",
+          "form": {
+            "min_length": "يجب أن يتكون اسم المستخدم من 3 أحرف على الأقل",
+            "max_length": "لا يجب أن يتجاوز اسم المستخدم 15 حرفًا",
+            "invalid": "يمكن أن يحتوي اسم المستخدم على حروف وأرقام والرمزين '_' و'.' فقط",
+            "unavailable": "اسم المستخدم هذا مستخدم بالفعل"
+          }
+        },
+        "private": {
+          "label": "حساب خاص",
+          "description": "عندما يكون حسابك خاصًا، لا يرى أنشطتك إلا أصدقاؤك."
+        },
+        "email": {
+          "description": "سيُرسَل بريد تحقق إلى عنوانك الحالي وإلى العنوان الجديد. يجب تأكيدهما كليهما ليسري التغيير.",
+          "change_pending": "أُرسل بريد تحقق في <strong>{date}</strong> إلى عنوانك الجديد <strong>{email}</strong>. اضغط على الرابط أو أدخل رمز التحقق لتأكيد التغيير.",
+          "confirm_email_code": {
+            "description": "أدخل رمز التحقق المرسل إلى العنوان <strong>{email}</strong> لتأكيد التغيير."
+          },
+          "change_success": "تم تغيير بريدك الإلكتروني بنجاح"
+        },
+        "delete_account": {
+          "button": "حذف حسابي",
+          "confirm": {
+            "description": "هل تريد فعلًا حذف حسابك؟ هذا الإجراء لا رجوع فيه.",
+            "confirm_email_sent": "أُرسل بريد تحقق إلى عنوان بريدك الإلكتروني"
+          }
+        }
+      },
+      "appearance": {
+        "label": "المظهر",
+        "description": "خصّص مظهر التطبيق. التبديل التلقائي بين السمة النهارية والليلية.",
+        "language": {
+          "label": "اللغة",
+          "description": "اختر اللغة – سيسري التغيير بعد إعادة تشغيل التطبيق",
+          "placeholder": "اختر اللغة",
+          "not_found": "لم يتم العثور على اللغة"
+        },
+        "theme": {
+          "label": "السمة",
+          "description": "اختر سمة الواجهة.",
+          "options": {
+            "light": "فاتحة",
+            "dark": "داكنة"
+          }
+        }
+      },
+      "subscription": {
+        "label": "الاشتراك",
+        "description": "أدِر اشتراكك للوصول إلى ميزات Premium."
+      },
+      "security": {
+        "label": "الأمان",
+        "description": "تغيير كلمة مرورك سيُسجّل خروجك من كل الأجهزة، ما عدا الجهاز الذي تستخدمه الآن.",
+        "current_password": {
+          "label": "كلمة المرور الحالية",
+          "placeholder": "أدخل كلمة المرور الحالية",
+          "form": {
+            "required": "من فضلك أدخل كلمة المرور الحالية",
+            "invalid": "كلمة المرور الحالية غير صحيحة"
+          }
+        },
+        "new_password": {
+          "label": "كلمة المرور الجديدة",
+          "placeholder": "أدخل كلمة المرور الجديدة",
+          "form": {
+            "min_length": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
+            "uppercase": "يجب أن تحتوي على حرف كبير واحد على الأقل",
+            "lowercase": "يجب أن تحتوي على حرف صغير واحد على الأقل",
+            "number": "يجب أن تحتوي على رقم واحد على الأقل",
+            "special": "يجب أن تحتوي على رمز خاص واحد على الأقل"
+          }
+        },
+        "confirm_password": {
+          "label": "تأكيد كلمة المرور الجديدة",
+          "placeholder": "أكّد كلمة المرور الجديدة",
+          "form": {
+            "match": "كلمتا المرور غير متطابقتين"
+          }
+        }
+      },
+      "notifications": {
+        "label": "الإشعارات",
+        "description": "أدِر إعدادات إشعاراتك.",
+        "push_notifications": {
+          "label": "الإشعارات الفورية",
+          "form": {
+            "enable": "تفعيل الإشعارات الفورية"
+          },
+          "already_granted": "تم طلب الإشعارات من قبل؛ لتعديل ذلك، انتقل إلى إعدادات المتصفح.",
+          "no_enabled": "فعّل الإشعارات في إعدادات جهازك لاستلام الإشعارات الفورية.",
+          "open_settings": "الانتقال إلى إعدادات الجهاز"
+        }
+      },
+      "data": {
+        "label": "البيانات",
+        "description": "استورد بياناتك أو صدّرها.",
+        "importer": {
+          "label": "الاستيراد",
+          "select_source": "اختر مصدرًا",
+          "instructions_title": "الإرشادات",
+          "browse_prompt": "أفلِت ملفك هنا، أو <link>استعرض</link>",
+          "browse_prompt_mobile": "انقر لاختيار ملف",
+          "uploading": "جارٍ الرفع…",
+          "processing": "جارٍ تحليل ملفك…",
+          "upload_error": "فشل الرفع، حاول مرة أخرى.",
+          "invalid_file_type": "نوع الملف هذا غير مدعوم لهذا المصدر.",
+          "review_title": "راجِع عملية الاستيراد",
+          "review_summary": "تمت مطابقة {matched} من {total}",
+          "validate": "تأكيد الاستيراد",
+          "validate_confirm_description": "سيؤدي هذا إلى استيراد كل العناصر المطابقة غير المتخطّاة إلى مكتبتك. لا يمكن التراجع عن ذلك.",
+          "success_title": "تم الاستيراد",
+          "success_description": "تم استيراد بياناتك بنجاح.",
+          "failed_title": "فشل الاستيراد",
+          "failed_description": "حدث خطأ ما أثناء معالجة هذا الاستيراد.",
+          "pending_description": "عملية الاستيراد في قائمة الانتظار وستبدأ قريبًا.",
+          "empty": "لا عمليات استيراد بعد.",
+          "delete_confirm_description": "سيُحذف هذا الاستيراد وكل بياناته المُعدّة نهائيًا. لا يمكن التراجع عن ذلك.",
+          "keep_existing": "أبقِ ما عندي",
+          "use_imported": "استخدم المستورد",
+          "merge": "دمج",
+          "conflict": "تعارض",
+          "no_match": "لا تطابق",
+          "existing_rating": "حاليًا: {rating}",
+          "log_column": "السجل",
+          "actions_column": "الإجراءات",
+          "categories": {
+            "log_movies": "الأفلام",
+            "log_tv_series": "المسلسلات",
+            "bookmarks": "قائمة المشاهدة",
+            "playlists": "القوائم"
+          },
+          "status": {
+            "pending": "في الانتظار",
+            "processing": "قيد المعالجة",
+            "awaiting_review": "في انتظار المراجعة",
+            "completed": "مكتمل",
+            "failed": "فشل"
+          }
+        },
+        "exporter": {
+          "label": "التصدير"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "الترقية إلى Premium",
+        "description": "ارتقِ إلى حساب Premium للوصول إلى كل ميزات {app}."
+      },
+      "header": {
+        "title": "وسّع سينماك، شارك أكثر، ادعم {app}",
+        "subtitle": "جرّب شهرًا واحدًا مجانًا، ثم {price} شهريًا"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "الأنشطة",
+            "unlimited_activities": {
+              "label": "أنشطة بلا حدود",
+              "description": "التقييمات والإعجابات والمراجعات وقائمة المشاهدة والتوصيات"
+            },
+            "favorites": {
+              "label": "المفضلات",
+              "description": "أضف أفلامك المفضلة إلى ملفك الشخصي"
+            }
+          },
+          "playlists": {
+            "label": "القوائم",
+            "unlimited_playlists": {
+              "label": "بلا حدود",
+              "description": "أنشئ عددًا غير محدود من القوائم"
+            },
+            "shared_playlists": {
+              "label": "مشتركة",
+              "description": "شارك قوائمك مع مستخدمين آخرين"
+            },
+            "collaborative_playlists": {
+              "label": "تعاونية",
+              "description": "أنشئ قوائم تعاونية مع مستخدمين آخرين"
+            }
+          },
+          "feed": {
+            "label": "الموجز",
+            "followees": {
+              "label": "المستخدمون الذين تتابعهم",
+              "description": "شاهد أنشطة المستخدمين الذين تتابعهم"
+            },
+            "cast_and_crew": {
+              "label": "طاقم التمثيل والعمل",
+              "description": "تابِع نشاط الأشخاص المشاركين في الأفلام"
+            }
+          },
+          "support": {
+            "label": "الدعم",
+            "team": {
+              "label": "ادعم فريق {app}"
+            },
+            "credits": {
+              "label": "أسماء المشاركين",
+              "description": "ملفك الشخصي في قائمة المشاركين في التطبيق"
+            }
+          }
+        },
+        "success": {
+          "label": "شكرًا على دعمك!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} – قائمة من @{username}",
+        "description": "اكتشف قائمة أفلام @{username} على {app}."
+      },
+      "actions": {
+        "delete": {
+          "description": "سيؤدي هذا إلى حذف <important>{title}</important> نهائيًا من قوائمك."
+        }
+      },
+      "search": {
+        "placeholder": "ابحث في القائمة..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "هل تريد فعلًا حذف <important>{title}</important> من قائمتك؟"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "أدخل عنوان القائمة"
+        },
+        "description": {
+          "placeholder": "أدخل وصفًا للقائمة"
+        },
+        "error": {
+          "format": "لا يمكن أن يحتوي الوصف على أسطر فارغة أو أن يتكون من مسافات فقط."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "اكتشف ملف @{username} الشخصي على {app}."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} فيلم من إخراج {directors} صدر عام {year}. القصة: {overview}",
+        "description_no_director": "{title} فيلم صدر عام {year}. القصة: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • القوائم",
+          "description": "اكتشف كل القوائم التي تضم فيلم {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • المراجعات",
+          "description": "اكتشف كل المراجعات عن فيلم {title}."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} مسلسل من إبداع {creators} عُرض أول مرة عام {year}. القصة: {overview}",
+        "description_no_creator": "{title} مسلسل عُرض أول مرة عام {year}. القصة: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • القوائم",
+          "description": "اكتشف كل القوائم التي تضم مسلسل {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • المراجعات",
+          "description": "اكتشف كل المراجعات عن مسلسل {title}."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • المواسم",
+          "description": "اكتشف كل مواسم مسلسل {title}."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • الموسم {number}",
+            "description": "اكتشف كل حلقات الموسم {number} من مسلسل {title}."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • الأفلام",
+          "description": "اكتشف كل الأفلام التي مثّل فيها {name} أو شارك فيها."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • المسلسلات",
+          "description": "اكتشف كل المسلسلات التي مثّل فيها {name} أو شارك فيها."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "مراجعة {title} بقلم @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "اكتب مراجعة عن {title}",
+          "description": "شارك رأيك في {title}."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "استكشف Paradise Pictures",
+        "description": "انطلق في رحلة لاكتشاف الجزيرة ومناظرها المتنوعة. الأفلام الكثيرة التي تسكنها موضوعة في عوالمها الخاصة. هل ستنجح في استكشاف كل زاوية فيها؟"
+      }
+    },
+    "legal": {
+      "label": "قانوني",
+      "description": "اقرأ المستندات القانونية لـ {app}.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "شروط الاستخدام",
+          "description": "اقرأ شروط استخدام {app}."
+        },
+        "sections": {
+          "intro": "تنظّم شروط الاستخدام هذه (ويُشار إليها لاحقًا بـ «الشروط») الوصول إلى تطبيق {app} واستخدامه. يصدر التطبيق عن Loup (ويُشار إليه لاحقًا بـ «الناشر») ومقره باريس. ويعني التسجيل في {app} قبول هذه الشروط دون أي تحفّظ.",
+          "presentation": {
+            "label": "1. تعريف الخدمة",
+            "content": "{app} تطبيق مجاني يتيح لمستخدميه الاطلاع على معلومات عن الأفلام، ونشر المراجعات، وتقييم الأعمال، وإنشاء قوائم شخصية."
+          },
+          "account": {
+            "label": "2. الحساب والأمان",
+            "content": "يتطلب الوصول إلى ميزات المشاركة إنشاء حساب. والمستخدم مسؤول عن سرية بيانات دخوله. وفي حال الاستخدام الاحتيالي أو الاشتباه في اختراق، يجب على المستخدم التواصل فورًا مع الدعم على: <email></email>."
+          },
+          "conduct": {
+            "label": "3. قواعد السلوك",
+            "content": "يتعهّد المستخدم بأن يبقى مهذّبًا ومحترمًا في مراجعاته وقوائمه. ويُحظر حظرًا تامًا: الخطاب التحريضي على الكراهية، والعبارات التشهيرية أو العنصرية، والتحرش، وكذلك الرسائل المزعجة والترويج التجاري غير المرغوب فيه. ويحتفظ الناشر بحق حذف أي محتوى يخالف هذه القواعد وتعليق الحساب المعني دون إشعار مسبق."
+          },
+          "child_safety": {
+            "label": "4. سياسة حماية الأطفال",
+            "content": "يعتمد {app} سياسة عدم تهاون مطلق تجاه الاعتداء الجنسي على الأطفال واستغلالهم (CSAE). ويُحظر صراحةً وبصورة مطلقة على {app} إنشاء أو رفع أو تخزين أو توزيع أو طلب أو ترويج أي محتوى يُصوّر القُصّر تصويرًا جنسيًا أو يستغلهم أو يعرّضهم للخطر بأي شكل آخر. وأي حساب يثبت انتهاكه لهذه السياسة يُحظر فورًا وبشكل نهائي، ويبلّغ الناشر عن المحتوى المعني، مع كل معلومات المستخدم المتاحة، إلى National Center for Missing & Exploited Children (NCMEC) و/أو إلى سلطات إنفاذ القانون المختصة، وفقًا للقانون المعمول به. وعلى كل مستخدم يطّلع على محتوى أو سلوك قد يشكّل CSAE أن يبلّغ عنه دون تأخير على: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. الملكية الفكرية",
+            "content": "يبقى المستخدم مالكًا للمراجعات التي يكتبها. إلا أنه بالنشر على {app} يمنح الناشر ترخيصًا مجانيًا وغير حصري لعرض هذا المحتوى ونسخه وتكييفه تقنيًا داخل التطبيق. وتظل العناصر البصرية والكود والتصميم الخاصة بـ {app} ملكية حصرية للناشر."
+          },
+          "privacy": {
+            "label": "6. البيانات الشخصية",
+            "content": "احترام خصوصيتك هو أولويتنا المطلقة. لا يبيع {app} أي بيانات شخصية ولا يؤجّرها ولا يشاركها مع أطراف ثالثة تجارية أو إعلانية. وتُستخدم البيانات المجمّعة (البريد الإلكتروني، اسم المستخدم، النشاط في التطبيق) لتشغيل الخدمة وإدارة الحساب فقط. ويمكنك ممارسة حقوقك في الوصول أو التعديل أو الحذف (اللائحة العامة لحماية البيانات) بالتواصل على: <email></email>."
+          },
+          "cookies": {
+            "label": "7. ملفات تعريف الارتباط وأدوات التتبّع",
+            "content": "لا يستخدم {app} أي ملفات تعريف ارتباط إعلانية ولا أي أدوات تتبّع سلوكي من أطراف ثالثة. ويُستخدم نوعان فقط من ملفات تعريف الارتباط التقنية: ملف للمصادقة (ليبقى تسجيل دخولك قائمًا) وملف لتفضيل اللغة (لتذكّر اختيارك). ولأن هذين الملفين ضروريان تمامًا للخدمة، فهما معفيان من الموافقة المسبقة."
+          },
+          "ads": {
+            "label": "8. الإعلانات",
+            "content": "يُقدَّم التطبيق حاليًا دون أي إعلانات. وإذا تغيّر هذا النموذج، سيُبلّغ المستخدمون عبر تحديث لهذه الشروط."
+          },
+          "liability": {
+            "label": "9. المسؤولية",
+            "content": "يسعى الناشر إلى إبقاء {app} متاحًا على مدار الساعة، لكنه لا يضمن خلوّه من الانقطاعات أو الأخطاء. وتأتي المعلومات عن الأفلام من قواعد بيانات تابعة لأطراف ثالثة؛ ولا يمكن تحميل الناشر مسؤولية أي معلومات غير دقيقة فيها."
+          },
+          "law": {
+            "label": "10. القانون المعمول به",
+            "content": "تخضع هذه الشروط للقانون الفرنسي. وفي حال نزاع لا يمكن تسويته وديًا عبر <email></email>، تكون محاكم باريس هي المختصة حصرًا."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "سياسة الخصوصية",
+          "description": "اقرأ سياسة الخصوصية لـ {app}."
+        },
+        "sections": {
+          "intro": "حماية البيانات في صميم فلسفة {app}. توضّح هذه السياسة البيانات التي نجمعها، وسبب جمعها، وكيف نحميها. باختصار: نحن لا نبيع بياناتك.",
+          "controller": {
+            "label": "1. المسؤول عن معالجة البيانات",
+            "content": "المسؤول عن معالجة البيانات هو Loup، ومقره باريس (فرنسا). لأي سؤال يتعلق بالخصوصية، يمكنك التواصل على: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. البيانات المجمّعة",
+            "content": "نجمع فقط البيانات اللازمة تمامًا لعمل التطبيق: عنوان بريدك الإلكتروني (للمصادقة)، واسم المستخدم، وبيانات استخدامك (الأفلام المقيَّمة، المراجعات، القوائم). وتُخزَّن كلمات مرورك بصورة مشفّرة (مُهشَّمة) وآمنة."
+          },
+          "purpose": {
+            "label": "3. أغراض المعالجة",
+            "content": "تُعالَج بياناتك حصرًا لتتيح لك إنشاء حسابك وإدارته، ولعرض قوائمك وتقييماتك، ولضمان التشغيل التقني للخدمة. ولا نستخدم بياناتك لأغراض التوصيف الإعلاني."
+          },
+          "sharing": {
+            "label": "4. مشاركة البيانات",
+            "content": "لا تُباع بياناتك الشخصية ولا تُؤجَّر ولا تُنقل إلى أطراف ثالثة أبدًا. وقد تُستضاف عند مزوّدينا التقنيين (الاستضافة، خدمة البريد الإجرائي) الملتزمين بسرية صارمة والمتوافقين مع اللائحة العامة لحماية البيانات."
+          },
+          "retention": {
+            "label": "5. مدة الاحتفاظ",
+            "content": "تُحفظ بياناتك طالما ظل حسابك نشطًا. وإذا قررت حذف حسابك، فستُمحى كل بياناتك الشخصية (البريد الإلكتروني، اسم المستخدم، المراجعات) نهائيًا من قواعد بياناتنا."
+          },
+          "rights": {
+            "label": "6. حقوقك (اللائحة العامة لحماية البيانات)",
+            "content": "وفقًا للتنظيمات، لك حق الوصول إلى بياناتك وتصحيحها ونقلها وحذفها. ويمكنك ممارسة هذه الحقوق في أي وقت مباشرةً داخل التطبيق أو بالكتابة إلينا على: <email></email>."
+          },
+          "cookies": {
+            "label": "7. ملفات تعريف الارتباط",
+            "content": "كما ورد في شروط الاستخدام، لا نستخدم إلا ملفات تعريف الارتباط التقنية الضرورية (الجلسة واللغة). ولا يوضع على جهازك أي ملف تعريف ارتباط إعلاني أو تتبّعي تابع لأطراف ثالثة."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "ابحث عن فيلم أو مسلسل أو قائمة أو شخص أو مستخدم..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "هل تريد فعلًا إزالة هذا العمل من قائمة ما شاهدته؟ إذا كان لديك تقييم أو مراجعة، فسيُحذفان أيضًا."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "هل تريد فعلًا إكمال المسلسل؟ ستُحدَّد كل حلقات كل المواسم كمشاهَدة."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "هل تريد فعلًا إكمال الموسم {seasonNumber}؟ ستُحدَّد كل حلقات الموسم كمشاهَدة."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "لرؤية نشاط هنا، يجب أن تقيّم أنت أو المستخدمون الذين تتابعهم أفلامًا ومسلسلات، ..."
+    },
+    "feed_person": {
+      "message": "لرؤية نشاط هنا، يجب أن تتابع أشخاصًا مشاركين في أفلام أو مسلسلات."
+    },
+    "playlists": {
+      "items": {
+        "empty": "لا أفلام أو مسلسلات في هذه القائمة. أضف بعضها لتملأها!"
+      },
+      "add_to": {
+        "empty": "ليست لديك قوائم. أنشئ واحدة لتضيف أفلامًا أو مسلسلات وتجدها بسهولة!"
+      },
+      "saved": {
+        "empty": "ليست لديك قوائم محفوظة. احفظ قائمة لتجدها بسهولة في مكتبتك!"
+      },
+      "members": {
+        "empty": "ليس لهذه القائمة أعضاء. أضف بعضهم للعمل مع الآخرين على القائمة نفسها!",
+        "search": "ابحث عن مستخدمين لإضافتهم إلى القائمة..."
+      }
+    },
+    "follow-requests": {
+      "empty": "ليست لديك طلبات متابعة معلّقة. وعندما تصل، ستظهر هنا!"
+    },
+    "recos": {
+      "empty": "ليست لديك توصيات. وعندما تصل، ستظهر هنا!",
+      "send_to": {
+        "empty": "لا أحد لديك لترسل إليه توصية. يجب أن تكونا صديقين لتتمكن من إرسال توصية (متابعة متبادلة)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "لم تحفظ شيئًا بعد. وعندما تحفظ، سيظهر هنا!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "أوصى <user></user> لك بفيلم <movie></movie>"
+    },
+    "reco_sent_tv_series": {
+      "description": "أوصى <user></user> لك بمسلسل <tv_series></tv_series>"
+    },
+    "reco_completed_movie": {
+      "description": "شاهد <user></user> فيلم <movie></movie> الذي أوصيت به"
+    },
+    "reco_completed_tv_series": {
+      "description": "شاهد <user></user> مسلسل <tv_series></tv_series> الذي أوصيت به"
+    },
+    "follower_created": {
+      "description": "بدأ <user></user> متابعتك"
+    },
+    "follower_accepted": {
+      "description": "قبل <user></user> طلب متابعتك"
+    },
+    "follower_request": {
+      "description": "يريد <user></user> متابعتك"
+    },
+    "friend_created": {
+      "description": "أصبح <user></user> صديقك الآن"
+    }
+  }
+}

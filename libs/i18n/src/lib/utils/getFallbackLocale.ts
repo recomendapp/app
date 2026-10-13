@@ -1,20 +1,40 @@
 import { defaultSupportedLocale, type SupportedLocale } from '../locales';
 
 /**
- * Get the fallback language for a given locale
+ * Locales that are merged under another locale before the default one, because
+ * a closer variant of the same language reads better than English for a key
+ * that locale is missing.
  *
- * @param locale - The locale to get the fallback language for
- * @returns The fallback language or null if the locale is the default
+ * zh-CN and zh-TW are deliberately absent: they use different scripts, so
+ * mixing them on one screen is worse than falling back to English.
+ */
+const CLOSEST_SUPPORTED_LOCALE: Partial<Record<SupportedLocale, SupportedLocale>> = {
+  'es-MX': 'es-ES',
+  'fr-CA': 'fr-FR',
+  'pt-BR': 'pt-PT',
+  'zh-HK': 'zh-TW',
+};
+
+/**
+ * Get the fallback locale for a given locale
+ *
+ * Callers merge dictionaries from the end of the chain up, so every chain has
+ * to end on `defaultSupportedLocale` and must never loop.
+ *
+ * @param locale - The locale to get the fallback locale for
+ * @returns The fallback locale or null if the locale is the default
  * @category i18n
- * @module getFallbackLanguage
+ * @module getFallbackLocale
  *
  * @example
  * ```tsx
- * const fallbackLanguage = getFallbackLanguage({ locale: 'fr-CA' });
+ * // 'fr-FR', which in turn falls back to 'en-US'
+ * const fallbackLocale = getFallbackLocale({ locale: 'fr-CA' });
  * ```
  * @example
  * ```tsx
- * const fallbackLanguage = getFallbackLanguage({ locale: 'en' });
+ * // 'en-US'
+ * const fallbackLocale = getFallbackLocale({ locale: 'de-DE' });
  * ```
  */
 export const getFallbackLocale = ({
@@ -23,85 +43,6 @@ export const getFallbackLocale = ({
   locale: SupportedLocale;
 }): SupportedLocale | null => {
   if (locale === defaultSupportedLocale) return null;
-  switch (locale) {
-    // // English
-    // case 'en-AG':
-    // case 'en-AU':
-    // case 'en-BB':
-    // case 'en-BZ':
-    // case 'en-CA':
-    // case 'en-CM':
-    // case 'en-GB':
-    // case 'en-GG':
-    // case 'en-GH':
-    // case 'en-GI':
-    // case 'en-GY':
-    // case 'en-IE':
-    // case 'en-JM':
-    // case 'en-KE':
-    // case 'en-LC':
-    // case 'en-MW':
-    // case 'en-NZ':
-    // case 'en-PG':
-    // case 'en-TC':
-    // case 'en-ZM':
-    // case 'en-ZW':
-    // 	return 'en-US';
-    // // French
-    // case 'fr-BF':
-    // case 'fr-CA':
-    // case 'fr-CD':
-    // case 'fr-CI':
-    // case 'fr-GF':
-    // case 'fr-GP':
-    // case 'fr-MC':
-    // case 'fr-ML':
-    // case 'fr-MU':
-    // case 'fr-PF':
-    // 	return 'fr-FR';
-    // // Arabic
-    // case 'ar-AE':
-    // case 'ar-BH':
-    // case 'ar-EG':
-    // case 'ar-IQ':
-    // case 'ar-JO':
-    // case 'ar-LY':
-    // case 'ar-MA':
-    // case 'ar-QA':
-    // case 'ar-TD':
-    // case 'ar-YE':
-    // 	return 'ar-SA';
-    // // Spanish
-    // case 'es-AR':
-    // case 'es-CL':
-    // case 'es-DO':
-    // case 'es-EC':
-    // case 'es-GQ':
-    // case 'es-GT':
-    // case 'es-HN':
-    // case 'es-MX':
-    // case 'es-NI':
-    // case 'es-PA':
-    // case 'es-PE':
-    // case 'es-PY':
-    // case 'es-SV':
-    // case 'es-UY':
-    // 	return 'es-ES';
-    // // Russian
-    // case 'be-BY':
-    // case 'uk-UA':
-    // case 'kk-KZ':
-    // case 'ky-KG':
-    // case 'uz-UZ':
-    // 	return 'ru-RU';
 
-    // // Default fallbacks
-    // case 'af-ZA':
-    // case 'ar-SA':
-    // case 'es-ES':
-    // case 'ru-RU':
-    // case 'fr-FR':
-    default:
-      return defaultSupportedLocale;
-  }
+  return CLOSEST_SUPPORTED_LOCALE[locale] ?? defaultSupportedLocale;
 };

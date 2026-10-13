@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} نقدت را لایک کرد!",
+    "body": "{actorName} نقدت را درباره {mediaTitle} لایک کرد"
+  },
+  "commented": {
+    "subject": "نظر تازه روی نقدت!",
+    "body": "{actorName} روی نقدت درباره {mediaTitle} نظر داد",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} نظرت را لایک کرد!",
+    "body": "{actorName} نظرت را درباره {mediaTitle} لایک کرد"
+  },
+  "comment_replied": {
+    "subject": "پاسخ تازه به نظرت!",
+    "body": "{actorName} به نظرت درباره {mediaTitle} پاسخ داد",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

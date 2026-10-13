@@ -1,9 +1,5 @@
-import {
-  defaultSupportedLocale,
-  HEADER_LANGUAGE_KEY,
-  type SupportedLocale,
-  supportedLocales,
-} from '../locales';
+import { defaultSupportedLocale, HEADER_LANGUAGE_KEY, type SupportedLocale } from '../locales';
+import { resolveSupportedLocale } from './resolveSupportedLocale';
 
 export function getLocaleFromHeaders(headers: any): SupportedLocale {
   if (!headers) return defaultSupportedLocale;
@@ -26,9 +22,5 @@ export function getLocaleFromHeaders(headers: any): SupportedLocale {
     }
   }
 
-  if (locale && supportedLocales.includes(locale as SupportedLocale)) {
-    return locale as SupportedLocale;
-  }
-
-  return defaultSupportedLocale;
+  return resolveSupportedLocale(locale);
 }

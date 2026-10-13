@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} like-olta a kritikádat!",
+    "body": "{actorName} like-olta a(z) {mediaTitle} kritikádat"
+  },
+  "commented": {
+    "subject": "Új hozzászólás a kritikádhoz!",
+    "body": "{actorName} hozzászólt a(z) {mediaTitle} kritikádhoz",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} like-olta a hozzászólásodat!",
+    "body": "{actorName} like-olta a hozzászólásodat ehhez: {mediaTitle}"
+  },
+  "comment_replied": {
+    "subject": "Új válasz a hozzászólásodra!",
+    "body": "{actorName} válaszolt a hozzászólásodra itt: {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "Novi reco od {senderName}!",
+    "body": "{senderName} ti je preporučio {mediaTitle}",
+    "body_with_comment": "{senderName}: {comment}"
+  },
+  "completed": {
+    "subject": "Tvoj reco je dovršen!",
+    "body": "{receiverName} je pogledao {mediaTitle} iz tvog reco"
+  }
+}

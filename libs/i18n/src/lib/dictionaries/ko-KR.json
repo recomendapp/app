@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "영화를 만나는 또 하나의 방법",
+    "description": "{app}은 영화를 사랑하는 사람들을 위한 소셜 네트워크입니다. 친구들과 함께 영화와 시리즈를 발견하고, 공유하고, 둘러보세요."
+  },
+  "common": {
+    "messages": {
+      "welcome": "환영합니다",
+      "welcome_to_app": "{app}에 오신 것을 환영합니다",
+      "hello": "안녕하세요",
+      "greeting_with_name": "{timeOfDay, select, morning {좋은 아침이에요, {name}님} afternoon {좋은 오후예요, {name}님} evening {좋은 저녁이에요, {name}님} night {좋은 밤이에요, {name}님} other {안녕하세요, {name}님}}",
+      "click_here": "여기를 클릭하세요",
+      "see_more": "더 보기",
+      "see_more_details": "자세히 더 보기",
+      "more": "더보기",
+      "view_profile": "프로필 보기",
+      "library": "라이브러리",
+      "watchlist": "볼 목록",
+      "for_later": "나중에 보기",
+      "heart_pick": "마음의 선택",
+      "add_to_heart_picks": "마음의 선택에 추가",
+      "remove_from_heart_picks": "마음의 선택에서 삭제",
+      "add_rating": "평점 추가",
+      "edit_rating": "평점 수정",
+      "remove_rating": "평점 삭제",
+      "share_my_rating": "내 평점 공유",
+      "share_review": "리뷰 공유",
+      "show_likes_count": "좋아요 수 표시",
+      "show_comments_count": "댓글 수 표시",
+      "add_to_watchlist": "볼 목록에 추가",
+      "remove_from_watchlist": "볼 목록에서 삭제",
+      "no_results": "결과 없음",
+      "no_results_for": "<strong>{query}</strong>에 대한 결과가 없습니다",
+      "no_followees": "아직 아무도 팔로우하지 않았습니다",
+      "no_followers": "팔로워가 없습니다",
+      "no_rating": "평점이 없습니다",
+      "must_watch_to_review": "리뷰를 쓰려면 이 작품을 봐야 합니다",
+      "review_cannot_be_empty": "리뷰는 비워둘 수 없습니다",
+      "no_activity": "활동이 없습니다",
+      "followers_ratings": "팔로워의 평점",
+      "added_by": "추가한 사람",
+      "sort_by": "정렬 기준",
+      "sort_order": "정렬 순서",
+      "go_to_film": "영화로 이동",
+      "go_to_tv_series": "시리즈로 이동",
+      "go_to_user": "사용자로 이동",
+      "go_to_person": "인물로 이동",
+      "go_to_activity": "활동으로 이동",
+      "go_to_playlist": "플레이리스트로 이동",
+      "go_to_review": "리뷰로 이동",
+      "go_to_director": "감독으로 이동",
+      "go_to_creator": "제작자로 이동",
+      "show_director": "감독 표시",
+      "show_creator": "제작자 표시",
+      "show_credit": "참여 작품 표시",
+      "credits": "크레딧",
+      "view_recommendation": "reco 보기",
+      "view_directors": "감독 보기",
+      "no_director": "감독 정보 없음",
+      "view_comment": "댓글 보기",
+      "add_comment": "댓글 추가",
+      "edit_comment": "댓글 수정",
+      "delete_comment": "댓글 삭제",
+      "do_you_really_want_to_delete_this_comment": "이 댓글을 삭제할까요?",
+      "comment_deleted": "이 댓글은 삭제되었습니다",
+      "write_your_comment_here": "댓글을 써보세요...",
+      "reply": "답글",
+      "replies_count": "답글 {count}개",
+      "view_replies": "답글 {count}개 보기",
+      "hide_replies": "답글 숨기기",
+      "load_more_replies": "답글 더 불러오기",
+      "get_started": "시작하기",
+      "get_started_its_free": "시작해요 🎬 무료입니다!",
+      "import": "가져오기",
+      "upgrade_to_plan": "{plan}으로 업그레이드",
+      "choose_subscription_recurrence": "구독 결제 주기를 선택하세요",
+      "compare_plans": "플랜 비교",
+      "save_up_to_percent": "최대 {percent}% 절약",
+      "is_empty": "여기는 조금 비어 있네요",
+      "add_to_playlist": "플레이리스트에 추가",
+      "send_to_friend": "친구에게 보내기",
+      "pin_to_profile": "프로필에 고정",
+      "unpin_from_profile": "프로필 고정 해제",
+      "pinned": "고정됨",
+      "unpinned": "고정 해제됨",
+      "no_pinned": "고정된 항목이 없습니다",
+      "pinned_limit_reached": "고정 항목의 최대 개수에 도달했습니다 — 새로 추가하려면 하나를 해제하세요",
+      "custom_sort": "직접 정렬",
+      "quick_add": "빠른 추가",
+      "favorite_films": "좋아하는 영화",
+      "follow": "팔로우",
+      "followed": "팔로잉",
+      "request_sent": "요청을 보냈습니다",
+      "follow_requests": "팔로우 요청",
+      "no_follow_requests": "팔로우 요청이 없습니다",
+      "follower": "팔로워",
+      "follower_count": "팔로워 {count}명",
+      "see_followers": "팔로워 보기",
+      "followee": "팔로잉",
+      "followee_count": "팔로잉 {count}명",
+      "see_followees": "팔로우한 사람 보기",
+      "last_activities": "최근 활동",
+      "last_updated": "마지막 업데이트",
+      "last_updated_at_date": "마지막 업데이트 {date}",
+      "show_all": "모두 보기",
+      "this_account_is_private": "이 계정은 비공개입니다",
+      "follow_to_see_activities": "활동을 보려면 팔로우하세요",
+      "review": "리뷰",
+      "no_overview": "줄거리가 없습니다",
+      "cast": "출연진",
+      "no_cast": "출연진 정보가 없습니다",
+      "recent": "최신",
+      "popular": "인기",
+      "popularity": "인기도",
+      "no_reviews": "리뷰가 없습니다",
+      "no_playlists": "플레이리스트가 없습니다",
+      "no_playlists_found": "플레이리스트를 찾을 수 없습니다",
+      "no_films": "영화가 없습니다",
+      "no_tv_series": "시리즈가 없습니다",
+      "view_activity": "활동 보기",
+      "comment_count": "댓글 {count}개",
+      "write_review": "리뷰 쓰기",
+      "new_review": "새 리뷰",
+      "edit_review": "리뷰 수정",
+      "review_by": "{name}님의 리뷰",
+      "my_review": "내 리뷰",
+      "add_review": "리뷰 추가",
+      "tv_series": "시리즈",
+      "film": "영화",
+      "movie": "영화",
+      "media": "작품",
+      "tv_season": "시즌",
+      "tv_season_count": "시즌 {count}개",
+      "tv_season_value": "시즌 {number}",
+      "tv_season_short": "S{number}",
+      "tv_episode": "에피소드",
+      "tv_episode_count": "에피소드 {count}개",
+      "tv_episode_value": "{number}화",
+      "tv_episode_short": "S{seasonNumber}E{episodeNumber}",
+      "tv_special_episode": "특별편",
+      "first_air_date": "첫 방영",
+      "last_air_date": "마지막 방영",
+      "see_film": "영화 보기",
+      "see_tv_series": "시리즈 보기",
+      "watch_film_title": "{title} 감상하기",
+      "watch_film_streaming_or_download": "<important>{title}</important>을 스트리밍이나 합법 다운로드로 감상하세요",
+      "download": "다운로드",
+      "downloaded": "다운로드됨",
+      "person": "인물",
+      "top_result": "가장 일치하는 결과",
+      "user": "사용자",
+      "reco": "reco",
+      "my_recos": "내 reco",
+      "item": "항목",
+      "item_count": "항목 {count}개",
+      "type": "종류",
+      "complete": "완료로 표시",
+      "completed": "완료",
+      "collection": "컬렉션",
+      "most_recent": "최신순",
+      "most_popular": "인기순",
+      "most_old": "오래된순",
+      "known_for": "대표 작품",
+      "release_date": "개봉일",
+      "last_appearance_date": "마지막 출연",
+      "vote_average": "평균 평점",
+      "added": "추가됨",
+      "added_date": "추가한 날짜",
+      "added_at": "추가 시각",
+      "add": "추가",
+      "playlist_name": "플레이리스트 이름",
+      "updated_at": "수정 시각",
+      "created_at": "생성 시각",
+      "likes": "좋아요",
+      "likes_count": "좋아요 수",
+      "search_media": "작품 검색",
+      "search_film": "영화 검색",
+      "start_typing_to_search_films": "입력하면 영화를 검색할 수 있어요",
+      "search_tv_series": "시리즈 검색",
+      "start_typing_to_search_tv_series": "입력하면 시리즈를 검색할 수 있어요",
+      "search_person": "인물 검색",
+      "start_typing_to_search_persons": "입력하면 인물을 검색할 수 있어요",
+      "search_user": "사용자 검색",
+      "start_typing_to_search_users": "입력하면 사용자를 검색할 수 있어요",
+      "search_playlist": "플레이리스트 검색",
+      "start_typing_to_search_playlists": "입력하면 플레이리스트를 검색할 수 있어요",
+      "search_film_or_tv_series": "영화나 시리즈 검색",
+      "watched_date": "본 날짜",
+      "mark_as_watched": "본 것으로 표시",
+      "remove_from_watched": "본 목록에서 삭제",
+      "rating": "평점",
+      "create_a_playlist": "플레이리스트 만들기",
+      "by_name": "{name} 작품",
+      "reset": "초기화",
+      "job": "역할",
+      "department": "부문",
+      "share_title_via": "<strong>{title}</strong> 공유 방법",
+      "share_title": "<strong>{title}</strong> 공유",
+      "link": "링크",
+      "copy_link": "링크 복사",
+      "copied": "복사했습니다",
+      "other": "기타",
+      "via": "공유 수단",
+      "edit": "수정",
+      "guest": "게스트",
+      "are_u_sure": "정말 하시겠어요?",
+      "backward": "뒤로",
+      "forward": "앞으로",
+      "back": "돌아가기",
+      "next": "다음",
+      "notification": "알림",
+      "see_notifications": "알림 보기",
+      "open_social_panel": "소셜 패널 열기",
+      "cancel_change": "변경 취소",
+      "do_you_really_want_to_cancel_change": "변경을 취소할까요?",
+      "continue_editing": "계속 편집",
+      "confirm": "확인",
+      "terms_of_use": "이용약관",
+      "privacy_policy": "개인정보 처리방침",
+      "request_made": "요청을 보냈습니다",
+      "request_canceled": "요청을 취소했습니다",
+      "cancel_request": "요청 취소",
+      "open_menu": "메뉴 열기",
+      "feed": "피드",
+      "about": "소개",
+      "home": "홈",
+      "search": "검색",
+      "explore": "탐색",
+      "shop": "스토어",
+      "help": "도움말",
+      "legal": "법적 정보",
+      "setting": "설정",
+      "logout": "로그아웃",
+      "to_watch": "볼 작품",
+      "reco_by_your_friends": "친구들의 reco",
+      "friends_playlists": "친구들의 플레이리스트",
+      "latest_activity": "최근 활동",
+      "discover_users": "사용자 찾아보기",
+      "most_recommended": "가장 많이 추천된",
+      "archive": "보관",
+      "unarchive": "보관 취소",
+      "mark_as_read": "읽음으로 표시",
+      "mark_as_unread": "읽지 않음으로 표시",
+      "accept": "수락",
+      "accepted": "수락했습니다",
+      "decline": "거절",
+      "declined": "거절했습니다",
+      "request_accepted": "요청을 수락했습니다",
+      "request_declined": "요청을 거절했습니다",
+      "unread": "읽지 않음",
+      "archived": "보관됨",
+      "no_notifications": "알림이 없습니다",
+      "all": "전체",
+      "mark_all_as_read": "모두 읽음으로 표시",
+      "archive_all": "모두 보관",
+      "archive_all_read": "읽은 알림 모두 보관",
+      "please_login": "로그인해 주세요",
+      "like": "좋아요",
+      "unlike": "좋아요 취소",
+      "unfollow": "팔로우 취소",
+      "name": "이름",
+      "add_a_name": "이름을 입력하세요",
+      "add_a_description": "설명을 입력하세요",
+      "visibility": "공개 범위",
+      "search_an_user": "사용자 검색",
+      "select_an_item_to_add_to_playlist": "플레이리스트에 추가할 항목을 선택하세요",
+      "select_a_film_to_add_to_playlist": "플레이리스트에 추가할 영화를 선택하세요",
+      "select_a_tv_series_to_add_to_playlist": "플레이리스트에 추가할 시리즈를 선택하세요",
+      "add_one_or_more_items_to": "<important>{title}</important>에 항목을 하나 이상 추가하세요",
+      "add_one_or_more_films_to": "<important>{title}</important>에 영화를 하나 이상 추가하세요",
+      "add_one_or_more_tv_series_to": "<important>{title}</important>에 시리즈를 하나 이상 추가하세요",
+      "manage_playlist_access_rights": "플레이리스트 접근 권한 관리",
+      "add_guest": "게스트 추가",
+      "manage_members": "멤버 관리",
+      "no_member": "멤버가 없습니다",
+      "add_member": "멤버 추가",
+      "manage_guests": "게스트 관리",
+      "add_guests_to_your_playlist": "플레이리스트에 게스트를 추가하세요",
+      "select_users_to_add_to_playlist": "플레이리스트에 추가할 사용자를 선택하세요",
+      "select_users_to_send_reco": "reco를 보낼 사람을 선택하세요",
+      "select_playlists_to_add_the_item": "항목을 추가할 플레이리스트를 선택하세요",
+      "send": "보내기",
+      "sent": "보냈습니다",
+      "select_row": "행 선택",
+      "select_all": "전체 선택",
+      "no_selected_users": "선택된 사용자가 없습니다",
+      "selection_count": "{total} 중 {number} {type} 선택",
+      "about_title": "{title} 정보",
+      "detail": "세부 정보",
+      "genre": "장르",
+      "male": "남성",
+      "female": "여성",
+      "non_binary": "논바이너리",
+      "unspecified": "미지정",
+      "date_of_birth": "생년월일",
+      "date_of_death": "사망일",
+      "place_of_birth": "출생지",
+      "age_years": "{count}세",
+      "biography": "약력",
+      "no_biography_available": "약력이 없습니다",
+      "no_information_available": "정보가 없습니다",
+      "already_sent": "이미 보냈습니다",
+      "already_watched": "이미 봤습니다",
+      "already_added": "이미 추가했습니다",
+      "recommend_to_friend_to_discover": "아직 보지 않은 친구에게 <strong>{title}</strong>을 추천해 보세요",
+      "add_to_one_or_more_playlists": "<strong>{title}</strong>을 하나 이상의 플레이리스트에 추가하세요",
+      "my_playlist": "내 플레이리스트",
+      "what_is_title": "<strong>{title}</strong>은 무엇인가요?",
+      "try_again": "다시 시도하세요",
+      "error": "오류",
+      "not_logged_in": "로그인하지 않았습니다",
+      "an_error_occurred": "오류가 발생했습니다",
+      "playlist_not_found": "플레이리스트를 찾을 수 없습니다",
+      "user_not_found": "사용자를 찾을 수 없습니다",
+      "film_not_found": "영화를 찾을 수 없습니다",
+      "media_not_found": "작품을 찾을 수 없습니다",
+      "review_not_found": "리뷰를 찾을 수 없습니다",
+      "person_not_found": "인물을 찾을 수 없습니다",
+      "tv_series_not_found": "시리즈를 찾을 수 없습니다",
+      "tv_episode_not_found": "에피소드를 찾을 수 없습니다",
+      "tv_season_not_found": "시즌을 찾을 수 없습니다",
+      "wrong_arguments": "잘못된 매개변수",
+      "no_media_found": "작품을 찾을 수 없습니다",
+      "unknown_action": "알 수 없는 동작",
+      "no_user_found": "사용자를 찾을 수 없습니다",
+      "no_tv_episodes": "에피소드가 없습니다",
+      "save": "저장",
+      "saved": "저장했습니다",
+      "create": "만들기",
+      "film_count": "영화 {count}편",
+      "tv_series_count": "시리즈 {count}편",
+      "login": "로그인",
+      "signup": "회원가입",
+      "navigation": "내비게이션",
+      "delete": "삭제",
+      "remove": "제거",
+      "deleted": "삭제했습니다",
+      "share": "공유",
+      "duplicate": "복제",
+      "duplicated": "복제했습니다",
+      "cancel": "취소",
+      "date": "날짜",
+      "duration": "길이",
+      "sort": "정렬",
+      "show": "표시",
+      "column": "열",
+      "comment": "댓글",
+      "unknown": "알 수 없음",
+      "community": "커뮤니티",
+      "cast_and_crew": "출연진과 제작진",
+      "soon": "곧",
+      "ios_app": "iOS 앱",
+      "android_app": "Android 앱",
+      "coming_soon": "곧 공개",
+      "new_mobile_app": "새 모바일 앱!",
+      "manage": "관리",
+      "monthly": "월간",
+      "yearly": "연간",
+      "day": "일",
+      "week": "주",
+      "month": "월",
+      "year": "년",
+      "price": "가격",
+      "free": "무료",
+      "playlist": "플레이리스트",
+      "public": "공개",
+      "publish": "공개하기",
+      "private": "비공개",
+      "description": "설명",
+      "details": "세부 정보",
+      "profile": "프로필",
+      "overview": "줄거리",
+      "no_playlists_saved": "저장한 플레이리스트가 없습니다",
+      "camera_permission_denied": "카메라 접근이 거부되었습니다",
+      "photo_library_permission_denied": "사진 라이브러리 접근이 거부되었습니다",
+      "ignore": "무시",
+      "ok": "확인",
+      "title": "제목",
+      "skip": "건너뛰기",
+      "undo": "되돌리기",
+      "date_published": "공개한 날짜",
+      "date_created": "만든 날짜",
+      "date_updated": "수정한 날짜",
+      "alphabetical": "이름순",
+      "date_added": "추가한 날짜",
+      "number_of_likes": "좋아요 수",
+      "number_of_seasons": "시즌 수",
+      "add_to_this_playlist": "이 플레이리스트에 추가",
+      "save_to_library": "라이브러리에 저장",
+      "remove_from_library": "라이브러리에서 삭제",
+      "otp": "일회용 코드",
+      "ratings_from_followees": "팔로우한 사람들의 평점",
+      "choose_from_the_library": "갤러리에서 선택",
+      "take_a_photo": "사진 촬영",
+      "delete_current_image": "현재 이미지 삭제",
+      "edit_image": "이미지 수정",
+      "add_image": "이미지 추가",
+      "verify_with_a_code": "코드로 인증",
+      "order": "순서",
+      "edit_order": "순서 수정",
+      "done": "완료",
+      "can_edit": "수정 가능?",
+      "upgrade": "업그레이드",
+      "no_description": "설명이 없습니다",
+      "no_comment": "댓글이 없습니다",
+      "close": "닫기",
+      "edit_playlist": "플레이리스트 수정",
+      "universe": "유니버스",
+      "cannot_be_changed": "변경할 수 없습니다",
+      "delete_review": "리뷰 삭제",
+      "do_you_really_want_to_delete_this_review": "이 리뷰를 삭제할까요?",
+      "user_liked_playlist": "<name></name>님이 플레이리스트를 좋아합니다",
+      "user_liked_review": "<name></name>님이 리뷰를 좋아합니다",
+      "runtime": "상영 시간",
+      "ends_at": "{value}에 종료",
+      "this_user_has_no_activity": "이 사용자의 활동이 없습니다",
+      "notification_archived": "알림을 보관했습니다",
+      "notification_unarchived": "알림의 보관을 취소했습니다",
+      "notification_marked_as_read": "알림을 읽음으로 표시했습니다",
+      "notification_marked_as_unread": "알림을 읽지 않음으로 표시했습니다",
+      "or_continue_with": "또는 다음으로 계속",
+      "message": "메시지",
+      "story": "스토리",
+      "new_playlist": "새 플레이리스트",
+      "select_a_type": "종류를 선택하세요",
+      "filter": "필터",
+      "hide_watched": "본 작품 숨기기",
+      "show_me_around": "한 바퀴 안내해 주세요",
+      "artwork_from": "일러스트: <important>{source}</important>",
+      "no_active_subscription": "활성 구독이 없습니다",
+      "manage_subscription": "구독 관리",
+      "started_on_date": "{date} 시작",
+      "last_renewed_on_date": "마지막 갱신 {date}",
+      "version_value": "버전 {value}",
+      "original_title": "원제",
+      "starring": "주연",
+      "write_your_review_here": "여기에 리뷰를 써보세요...",
+      "insert": "삽입",
+      "trailer": "예고편",
+      "list": "목록",
+      "grid": "그리드",
+      "order_asc": "오름차순",
+      "order_desc": "내림차순",
+      "menu": "메뉴",
+      "at_least_one_watched_date_required": "본 날짜를 하나 이상 입력해야 합니다",
+      "viewer": "열람자",
+      "editor": "편집자",
+      "admin": "관리자",
+      "owner": "소유자",
+      "you_dont_have_permission_to_do_this_action": "이 작업을 할 권한이 없습니다",
+      "in_progress": "진행 중",
+      "give_up": "포기",
+      "random": "무작위",
+      "reset_password": "비밀번호 재설정",
+      "password_reset": "비밀번호를 재설정했습니다",
+      "return_to_login": "로그인으로 돌아가기",
+      "invalid_code": "잘못된 코드",
+      "no_token_found": "토큰을 찾을 수 없습니다",
+      "first_watched_at": "처음 본 날짜",
+      "watched_dates": "본 날짜",
+      "no_watched_dates": "본 날짜가 없습니다",
+      "select_role": "역할을 선택하세요",
+      "select_format": "형식을 선택하세요",
+      "theater": "극장",
+      "physical": "실물 매체",
+      "digital": "디지털",
+      "streaming": "스트리밍",
+      "you_must_be_premium_to_change_member_role": "멤버의 역할을 바꾸려면 Premium이 필요합니다",
+      "already_member": "이미 멤버입니다",
+      "email_already_used": "이미 사용 중인 이메일입니다",
+      "email_confirmed": "이메일을 확인했습니다",
+      "confirmation_email_sent": "확인 메일을 보냈습니다",
+      "continue": "계속",
+      "finish": "완료",
+      "forgot_password": "비밀번호를 잊으셨나요",
+      "new_password": "새 비밀번호",
+      "confirm_password": "비밀번호 확인",
+      "password_reseted": "비밀번호를 재설정했습니다",
+      "reset_your_password": "비밀번호를 재설정하세요",
+      "invalid_token": "잘못된 토큰",
+      "new_notification": "새 알림",
+      "lets_go": "출발!",
+      "update_available": "업데이트가 있습니다",
+      "update_available_description": "최신 개선 사항을 쓰려면 앱을 업데이트하세요.",
+      "update_required_title": "업데이트가 필요합니다",
+      "update_required_description": "이 버전의 앱은 더 이상 지원되지 않습니다. Recomend를 계속 쓰려면 업데이트하세요.",
+      "update_app": "업데이트",
+      "advertisement": "광고",
+      "pending": "대기 중",
+      "processing": "처리 중",
+      "awaiting_review": "검토 대기",
+      "failed": "실패",
+      "data": "데이터",
+      "restore": "복원",
+      "fix": "수정",
+      "not_found": "찾을 수 없음",
+      "unavailable": "사용할 수 없음",
+      "star_on_github": "GitHub에서 스타 주기"
+    },
+    "form": {
+      "email": {
+        "label": "이메일",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "이메일 형식이 올바르지 않습니다",
+          "unavailable": "이미 사용 중인 이메일입니다"
+        },
+        "verified": "이메일을 인증했습니다"
+      },
+      "username": {
+        "label": "사용자 이름",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "첫 글자는 문자나 숫자여야 합니다",
+          "double_dot": "점을 두 번 연속 쓸 수 없습니다",
+          "ends_with_dot": "점으로 끝낼 수 없습니다",
+          "format": "문자, 숫자, '_'와 '.'만 쓸 수 있습니다",
+          "unavailable": "이미 사용 중인 사용자 이름입니다"
+        }
+      },
+      "full_name": {
+        "label": "이름",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "문자, 숫자, 공백만 쓸 수 있습니다"
+        }
+      },
+      "password": {
+        "label": "비밀번호",
+        "placeholder": "비밀번호를 입력하세요",
+        "schema": {
+          "uppercase": "대문자를 하나 이상 포함해야 합니다",
+          "lowercase": "소문자를 하나 이상 포함해야 합니다",
+          "number": "숫자를 하나 이상 포함해야 합니다",
+          "special": "특수문자를 하나 이상 포함해야 합니다",
+          "match": "비밀번호가 일치하지 않습니다"
+        },
+        "confirm": {
+          "label": "비밀번호 확인",
+          "placeholder": "비밀번호를 다시 입력하세요"
+        }
+      },
+      "length": {
+        "char_min": "최소 {count}자",
+        "char_max": "최대 {count}자"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "문자, 숫자, 공백만 쓸 수 있습니다"
+      },
+      "error": {
+        "too_many_attempts": "시도가 너무 많습니다. 잠시 후 다시 시도하세요",
+        "not_received_code": "코드를 받지 못했나요?",
+        "invalid_code": "잘못된 코드",
+        "turnstile": "인증에 실패했습니다. 다시 시도하세요"
+      },
+      "resend_code": "코드 다시 보내기",
+      "resend_email": "메일 다시 보내기",
+      "code_verified": "코드를 확인했습니다",
+      "code_sent": "코드를 보냈습니다"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "페이지를 찾을 수 없습니다",
+        "description": "앗, 이 페이지는 존재하지 않습니다..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "기록",
+        "description": "좋아하는 영화와 시리즈를 발견하고, 평점을 주고, 공유하세요."
+      },
+      "recos": {
+        "label": "reco",
+        "description": "친구들의 reco를 보내고 받아보세요. 모두 한곳에서."
+      },
+      "playlists": {
+        "label": "플레이리스트",
+        "description": "정리하고, 공유하고, 함께 만들어 보세요."
+      },
+      "feed": {
+        "label": "피드",
+        "description": "친구를 팔로우하면 무엇을 보고, 무엇을 좋아하고, 무엇을 쓰는지 알 수 있어요."
+      },
+      "social_sharing": {
+        "label": "소셜 공유",
+        "description": "좋아하는 것을 Instagram이나 다른 소셜에 공유하세요."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "기록",
+          "description": "본 영화를 한눈에 챙기세요"
+        },
+        "recos": {
+          "label": "Reco",
+          "description": "친구에게 영화 추천을 보내세요"
+        },
+        "explore": {
+          "label": "탐색",
+          "description": "1400편이 넘는 영화가 담긴 인터랙티브 지도, Paradise Pictures에서 새 영화를 발견하세요"
+        },
+        "like": {
+          "label": "좋아요",
+          "description": "좋아하는 영화, 플레이리스트, 리뷰에 애정을 표현하세요"
+        },
+        "rating": {
+          "label": "평점",
+          "description": "본 영화에 평점을 주세요"
+        },
+        "watchlist": {
+          "label": "볼 목록",
+          "description": "보고 싶은 영화를 저장하세요"
+        },
+        "playlists": {
+          "label": "플레이리스트",
+          "description": "영화를 플레이리스트로 정리하고 공유하세요"
+        },
+        "reviews": {
+          "label": "리뷰",
+          "description": "리뷰를 써서 내 안의 까다로운 시네필을 꺼내 보세요"
+        },
+        "feed": {
+          "label": "피드",
+          "description": "친구들의 활동을 따라가세요"
+        },
+        "adsFree": {
+          "label": "광고 없음",
+          "description": "Recomend를 광고 없이, 언제까지나"
+        }
+      }
+    },
+    "welcome": {
+      "title": "가입해 주셔서 감사합니다!",
+      "description": "{app}으로 할 수 있는 일을 간단히 살펴보세요.",
+      "follow": {
+        "title": "사람들을 팔로우하세요",
+        "description": "친구를 팔로우하면 무엇을 보는지 알 수 있어요."
+      },
+      "import": {
+        "title": "다른 서비스에서 오셨나요?"
+      }
+    },
+    "collection": {
+      "label": "라이브러리",
+      "my_recos": {
+        "label": "내 reco",
+        "search": {
+          "placeholder": "내 reco에서 검색..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "내 reco에서 삭제",
+            "description": "<important>{title}</important>을 내 reco에서 삭제할까요?"
+          },
+          "complete_confirm": {
+            "title": "reco 완료하기",
+            "description": "reco <important>{title}</important>을 완료할까요?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "볼 목록에서 검색..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "볼 목록에서 삭제",
+            "description": "<important>{title}</important>을 볼 목록에서 삭제할까요?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "마음의 선택에서 검색..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "마음의 선택에서 삭제",
+            "description": "<important>{title}</important>을 마음의 선택에서 삭제할까요?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name>님이 봤습니다",
+        "rated": "<name></name>님이 평점을 줬습니다",
+        "liked": "<name></name>님이 좋아합니다",
+        "rated_liked": "<name></name>님이 좋아하고 평점을 줬습니다",
+        "reviewed": "<name></name>님이 리뷰를 썼습니다"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson>님이 <linkMedia>{titleMedia}</linkMedia>에서 <important>{roles}</important>을 맡았습니다",
+        "label": "<linkPerson>{name}</linkPerson>님은 <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "앱 승인",
+        "description_generic": "어떤 앱이 계정 접근을 요청하고 있습니다.",
+        "description": "{client}이 계정 접근을 요청합니다.",
+        "scopes_label": "승인하면 앱이 다음을 할 수 있습니다:",
+        "accept": "허용",
+        "deny": "거부",
+        "error": {
+          "invalid_request": "잘못되었거나 만료된 요청",
+          "invalid_request_description": "여기로 보낸 앱에서 승인 과정을 다시 시작하세요.",
+          "client_not_found": "이 앱을 찾을 수 없습니다.",
+          "submit_failed": "문제가 발생했습니다. 다시 시도하세요."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "{app} 계정에 로그인하세요."
+        },
+        "label": "로그인",
+        "description": "가장 좋은 영화 추천을 발견하세요.",
+        "or_continue_with": "또는 다음으로 계속",
+        "no_account_yet": "계정이 없으신가요?",
+        "form": {
+          "identifier": {
+            "label": "이메일 또는 사용자 이름",
+            "placeholder": "이메일이나 사용자 이름을 입력하세요"
+          },
+          "password": {
+            "label": "비밀번호",
+            "placeholder": "비밀번호를 입력하세요"
+          },
+          "submit": "로그인",
+          "forgot_password": "비밀번호를 잊으셨나요?",
+          "wrong_credentials": "이메일 또는 비밀번호가 올바르지 않습니다"
+        },
+        "otp": {
+          "password_login": "비밀번호로 로그인하시겠어요?",
+          "form": {
+            "submit": "코드 받기",
+            "no_user_found": "이 이메일로 가입한 사용자가 없습니다",
+            "success": "로그인했습니다"
+          },
+          "confirm_form": {
+            "label": "코드 확인",
+            "description": "{email} 주소로 인증 코드를 보냈습니다"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "{app}에 가입해 영화 추천을 발견하고 공유하세요."
+        },
+        "description": "제목을 늘 잊어버리는 친구에게 영화를 추천하려면 계정을 만드세요.",
+        "form": {
+          "success": "{email} 주소로 인증 메일을 보냈습니다"
+        },
+        "confirm_form": {
+          "label": "이메일 확인",
+          "description": "{email} 주소로 인증 링크를 보냈습니다"
+        },
+        "return_to_login": "앗, 이미 계정이 있어요."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "비밀번호를 잊으셨나요",
+          "description": "비밀번호를 재설정하세요."
+        },
+        "label": "비밀번호를 잊으셨나요",
+        "description": "비밀번호 관리 앱을 쓰시면 정말 편해요.",
+        "return_to_login": "앗, 비밀번호가 생각났어요.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "비밀번호 재설정",
+          "code_sent": "요청을 보냈습니다"
+        },
+        "confirm_form": {
+          "label": "코드 확인",
+          "description": "{email} 주소로 인증 코드를 보냈습니다"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "비밀번호 재설정",
+          "description": "계정에 쓸 새 비밀번호를 선택하세요."
+        }
+      },
+      "error": {
+        "label": "오류",
+        "description": "인증 과정에서 오류가 발생했습니다.",
+        "return_to_login": "안전한 곳으로 돌아가기"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "소개",
+        "marquee": "인터넷에서 '소개' 페이지를 읽는 것보다 더 신나는 일이 삶에 없나요?",
+        "intro": "<strong>Recomend</strong>는 영화를 발견하고, 추천하고, 정리하기 위한 공간입니다. 입소문이 마침내 가장 좋은 디지털 받침을 얻도록 모든 것을 설계했습니다. 우리의 방식은 소비가 자기 자신을, 더 정확히는 '당신을 위한 추천'을 중심으로 돌아가는 시대에 사람과 사람 사이의 관계를 가운데에 둡니다.",
+        "slogan": {
+          "1": "광고도, 수상한 약속도 없습니다. 🍆",
+          "2": "소셜 네트워크이면서 동시에 도구입니다.",
+          "3": "좋아하는 사람들이 손으로 만들었습니다.",
+          "4": "말 그대로의 뜻에서 아마추어입니다."
+        },
+        "last": "Recomend는 혼자서든 여럿이서든, 공개로든 비공개로든, 낮이든 밤이든 쓸 수 있습니다. 다만 영화를 보는 중에는 안 됩니다 — 영화에 집중하세요!"
+      },
+      "team": {
+        "label": "팀",
+        "intro": "Recomend는 영화에 푹 빠진 두 형제가 만들었습니다. 끝내 세상에 나오지 못할지도 모르는, 지나치게 야심찬 프로젝트에 시간을 쏟기를 좋아하는 둘입니다.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "직업 하나로는 만족하지 못하는 과활동적인 건축가 겸 엔지니어(진짜 스타트업 네이션). 영화 지도라는 아이디어는 Yoann에게서 나왔고, 처음의 야망은 '자기 화장실에 붙일 포스터'라는 소박한 것이었습니다. Loup이 합류하면서 목표는 하늘로 치솟았고, 흐름에 조금 휩쓸린 채 지도와 사이트의 그래픽 전부, 그리고 커뮤니케이션까지 맡았습니다(좋아하지는 않지만요). 거기에 UX/UI에 의견을 내고, 코드로 옮기기가 얼마나 어려운지 잘 모른 채 수많은 기능을 제안합니다(이 부분은 많이 나아졌습니다)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "완전한 독학파이지만, 스물다섯 전에 '무급 실업'으로 이어지는 학업은 어쨌든 마쳤습니다. 진짜 만능 일꾼인 Loup은 웹 쪽을 맡아, 가능한 한 편한 인터페이스를 만들고 있습니다. Loup은 (아주) 많은 질문에 답해 준 모든 프로그래밍 포럼과, 이 몇 달 동안 양아버지처럼 길을 보여준 인도 YouTuber들에게 감사를 전하고 싶어 합니다. 한편 어머니는 이 프로젝트 때문에 형이 그를 노예로 삼았다고 굳게 믿고 계십니다(저 괜찮아요, 엄마)."
+          }
+        },
+        "last": "저희나 커뮤니티의 다른 멤버들과 이야기하려면 <link>Discord</link>에 들러 주세요!"
+      },
+      "pricing": {
+        "label": "가격",
+        "intro": "이 구독 모델은 먼저 프로젝트를 지원하고 성장을 돕기 위한 방법입니다. Premium 기능은 Recomend를 더 깊이 쓰는 분들을 위한 덧붙임이며, 작은 금전적 보탬에 어울립니다. 광고 없이, 제약을 느끼지 않고 무료로 사이트를 쓸 수 있는 길은 앞으로도 꼭 남겨 둡니다.",
+        "subdescription": "*이 구독의 우스울 만큼 낮은 가격조차 부담스럽다면, 당신의 구매력을 깎아낸 자유주의 정부에 문의해 보세요."
+      },
+      "legal": {
+        "label": "법적 정보와 개인정보",
+        "description": "저희는 당신의 개인정보를 존중합니다. 게스트 사용자에게 보이는 광고는 Google이 관리하며, 노출 빈도를 제한하고 부정 사용을 막기 위해 기술적 쿠키가 필요합니다.",
+        "privacyPolicy": "개인정보 처리방침 읽기",
+        "manageCookies": "광고 설정 관리(쿠키)"
+      },
+      "open-source": {
+        "label": "오픈 소스",
+        "intro": "Recomend는 오픈 소스입니다. 코드는 GitHub에 공개되어 있어요. 구경하거나, 기여하거나, 그냥 스타만 남겨 주셔도 좋습니다!",
+        "star": "GitHub에서 스타 주기"
+      },
+      "businessmodel": {
+        "label": "비즈니스 모델",
+        "paragraph": {
+          "1": "전혀 상업적이지 않은 저희 프로필에서 짐작하셨겠지만, 지금 비즈니스 모델이 저희에게 무엇을 해줄 수 있을지 아직 잘 모르겠습니다...",
+          "2": "Recomend의 앞날이 그것을 요구한다면, 알맞은 사람들 — 적어도 저희보다 이 일에 관심이 많은 사람들 — 과 함께 들여다보겠습니다.",
+          "3": "그때까지는, 솔직히 말해 신경 쓸 다른 일들이 있습니다."
+        }
+      },
+      "roadmap": {
+        "label": "로드맵"
+      },
+      "data": {
+        "label": "데이터",
+        "paragraph": {
+          "1": "Recomend에서 쓰는 모든 메타데이터는 <link>The Movie Database (TMDb)</link>가 플랫폼 API를 통해 제공합니다. 저희도 남들처럼 합니다. 착한 양처럼요.",
+          "2": "오류나 빠진 영화는 <link>TMDb</link>에 알려 주세요."
+        }
+      },
+      "resources": {
+        "label": "자료",
+        "intro": "영화와 큰 관련은 없지만, 저희가 좋아하는 사이트 목록입니다:"
+      },
+      "contact-support": {
+        "label": "문의와 지원",
+        "help-center": "실존적인 질문의 답은 저희 <link>도움말 센터</link>에서 찾아보세요.",
+        "technical-support": "기술적인 질문: <email></email>",
+        "suggest-a-feature": "제안: <email></email>",
+        "contact-us": "그냥 연락하고 싶다면: <email></email>"
+      },
+      "quote": {
+        "label": "인용",
+        "quote": "「나는 '프로'라는 말이 싫다. 배우들과 다른 사람들이 말한다. 나는 프로다, 나는 프로페셔널이다! 그게 뭔가? 이보다 슬픈 말이 있는가? '아마추어'라는 말은 사랑에서 왔으니까. 일은 사랑으로 해야 한다. 그렇지 않으면 우리는 바보다.」",
+        "author": "오슨 웰스",
+        "date": "1972년",
+        "subdescription": "*넣을지 망설였습니다. 쉽게 건방지게 들리니까요. 그래도 프로젝트에 대한 저희 마음을 잘 담고 있습니다. 마음에 들지 않으시면 빼겠습니다."
+      }
+    },
+    "settings": {
+      "label": "설정",
+      "description": "계정 설정을 관리하세요.",
+      "profile": {
+        "label": "프로필",
+        "description": "사이트에서 다른 사람에게는 이렇게 보입니다.",
+        "avatar": {
+          "label": "프로필 사진",
+          "delete": "삭제"
+        },
+        "full_name": {
+          "label": "이름",
+          "description": "프로필과 메일에 표시되는 이름입니다.",
+          "placeholder": "이름을 입력하세요",
+          "form": {
+            "min_length": "이름은 1자 이상이어야 합니다",
+            "max_length": "이름은 50자를 넘을 수 없습니다"
+          }
+        },
+        "bio": {
+          "label": "소개",
+          "description": "자신에 대해 조금 알려 주세요. 프로필에 표시됩니다.",
+          "placeholder": "자신에 대해 알려 주세요",
+          "form": {
+            "max_length": "소개는 150자를 넘을 수 없습니다",
+            "format": "소개에는 빈 줄만 있는 내용이나 공백만으로 된 내용을 쓸 수 없습니다."
+          }
+        },
+        "favorite_films": {
+          "label": "좋아하는 영화",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "잘못된 URL"
+          }
+        }
+      },
+      "account": {
+        "label": "계정",
+        "description": "계정 설정을 업데이트하세요.",
+        "username": {
+          "label": "사용자 이름",
+          "description": "다른 사람이 당신을 찾아 프로필에 올 때 쓰는 사용자 이름입니다. 30일에 한 번만 바꿀 수 있습니다.",
+          "placeholder": "사용자 이름을 입력하세요",
+          "form": {
+            "min_length": "사용자 이름은 3자 이상이어야 합니다",
+            "max_length": "사용자 이름은 15자를 넘을 수 없습니다",
+            "invalid": "사용자 이름에는 문자, 숫자, '_'와 '.'만 쓸 수 있습니다",
+            "unavailable": "이미 사용 중인 사용자 이름입니다"
+          }
+        },
+        "private": {
+          "label": "비공개 계정",
+          "description": "계정이 비공개이면 친구만 당신의 활동을 볼 수 있습니다."
+        },
+        "email": {
+          "description": "인증 메일이 현재 주소와 새 주소 양쪽으로 발송됩니다. 변경이 적용되려면 둘 다 확인해야 합니다.",
+          "change_pending": "<strong>{date}</strong>에 새 이메일 주소 <strong>{email}</strong>로 인증 메일을 보냈습니다. 링크를 누르거나 인증 코드를 입력해 변경을 확정하세요.",
+          "confirm_email_code": {
+            "description": "변경을 확정하려면 <strong>{email}</strong>로 보낸 인증 코드를 입력하세요."
+          },
+          "change_success": "이메일 주소를 변경했습니다"
+        },
+        "delete_account": {
+          "button": "내 계정 삭제",
+          "confirm": {
+            "description": "계정을 삭제할까요? 이 작업은 되돌릴 수 없습니다.",
+            "confirm_email_sent": "이메일 주소로 인증 메일을 보냈습니다"
+          }
+        }
+      },
+      "appearance": {
+        "label": "모양",
+        "description": "앱의 모양을 맞춤 설정하세요. 낮과 밤 테마가 자동으로 바뀝니다.",
+        "language": {
+          "label": "언어",
+          "description": "언어를 선택하세요 – 변경은 앱을 다시 시작한 뒤에 적용됩니다",
+          "placeholder": "언어 선택",
+          "not_found": "언어를 찾을 수 없습니다"
+        },
+        "theme": {
+          "label": "테마",
+          "description": "인터페이스 테마를 선택하세요.",
+          "options": {
+            "light": "밝게",
+            "dark": "어둡게"
+          }
+        }
+      },
+      "subscription": {
+        "label": "구독",
+        "description": "Premium 기능을 쓰려면 구독을 관리하세요."
+      },
+      "security": {
+        "label": "보안",
+        "description": "비밀번호를 바꾸면 지금 쓰고 있는 기기를 뺀 모든 기기에서 로그아웃됩니다.",
+        "current_password": {
+          "label": "현재 비밀번호",
+          "placeholder": "현재 비밀번호를 입력하세요",
+          "form": {
+            "required": "현재 비밀번호를 입력해 주세요",
+            "invalid": "현재 비밀번호가 올바르지 않습니다"
+          }
+        },
+        "new_password": {
+          "label": "새 비밀번호",
+          "placeholder": "새 비밀번호를 입력하세요",
+          "form": {
+            "min_length": "비밀번호는 8자 이상이어야 합니다",
+            "uppercase": "대문자를 하나 이상 포함해야 합니다",
+            "lowercase": "소문자를 하나 이상 포함해야 합니다",
+            "number": "숫자를 하나 이상 포함해야 합니다",
+            "special": "특수문자를 하나 이상 포함해야 합니다"
+          }
+        },
+        "confirm_password": {
+          "label": "새 비밀번호 확인",
+          "placeholder": "새 비밀번호를 다시 입력하세요",
+          "form": {
+            "match": "비밀번호가 일치하지 않습니다"
+          }
+        }
+      },
+      "notifications": {
+        "label": "알림",
+        "description": "알림 설정을 관리하세요.",
+        "push_notifications": {
+          "label": "푸시 알림",
+          "form": {
+            "enable": "푸시 알림 켜기"
+          },
+          "already_granted": "알림 권한을 이미 요청했습니다. 바꾸려면 브라우저 설정으로 가세요.",
+          "no_enabled": "푸시 알림을 받으려면 기기 설정에서 알림을 켜세요.",
+          "open_settings": "기기 설정으로 가기"
+        }
+      },
+      "data": {
+        "label": "데이터",
+        "description": "데이터를 가져오거나 내보내세요.",
+        "importer": {
+          "label": "가져오기",
+          "select_source": "출처를 선택하세요",
+          "instructions_title": "안내",
+          "browse_prompt": "파일을 여기에 놓거나 <link>직접 선택</link>하세요",
+          "browse_prompt_mobile": "탭해서 파일 선택",
+          "uploading": "업로드 중…",
+          "processing": "파일을 분석하는 중…",
+          "upload_error": "업로드에 실패했습니다. 다시 시도하세요.",
+          "invalid_file_type": "이 출처에서는 이 파일 형식을 쓸 수 없습니다.",
+          "review_title": "가져올 내용을 확인하세요",
+          "review_summary": "{total}개 중 {matched}개 일치",
+          "validate": "가져오기 확정",
+          "validate_confirm_description": "일치하고 건너뛰지 않은 모든 항목을 라이브러리로 가져옵니다. 되돌릴 수 없습니다.",
+          "success_title": "가져오기 완료",
+          "success_description": "데이터를 잘 가져왔습니다.",
+          "failed_title": "가져오기 실패",
+          "failed_description": "이 가져오기를 처리하는 중 문제가 발생했습니다.",
+          "pending_description": "가져오기가 대기 중이며 곧 시작됩니다.",
+          "empty": "아직 가져온 내역이 없습니다.",
+          "delete_confirm_description": "이 가져오기와 준비된 모든 데이터가 완전히 삭제됩니다. 되돌릴 수 없습니다.",
+          "keep_existing": "내 것 유지",
+          "use_imported": "가져온 것 사용",
+          "merge": "병합",
+          "conflict": "충돌",
+          "no_match": "일치 없음",
+          "existing_rating": "현재: {rating}",
+          "log_column": "로그",
+          "actions_column": "작업",
+          "categories": {
+            "log_movies": "영화",
+            "log_tv_series": "시리즈",
+            "bookmarks": "볼 목록",
+            "playlists": "목록"
+          },
+          "status": {
+            "pending": "대기 중",
+            "processing": "처리 중",
+            "awaiting_review": "검토 대기",
+            "completed": "완료",
+            "failed": "실패"
+          }
+        },
+        "exporter": {
+          "label": "내보내기"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "Premium으로 업그레이드",
+        "description": "{app}의 모든 기능을 쓰려면 Premium 계정으로 업그레이드하세요."
+      },
+      "header": {
+        "title": "영화의 세계를 넓히고, 더 많이 공유하고, {app}을 응원하세요",
+        "subtitle": "1개월 무료로 써보고, 이후 월 {price}"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "활동",
+            "unlimited_activities": {
+              "label": "무제한 활동",
+              "description": "평점, 좋아요, 리뷰, 볼 목록, 추천"
+            },
+            "favorites": {
+              "label": "즐겨찾기",
+              "description": "좋아하는 영화를 프로필에 추가"
+            }
+          },
+          "playlists": {
+            "label": "플레이리스트",
+            "unlimited_playlists": {
+              "label": "무제한",
+              "description": "플레이리스트를 개수 제한 없이 만들기"
+            },
+            "shared_playlists": {
+              "label": "공유",
+              "description": "플레이리스트를 다른 사용자와 공유"
+            },
+            "collaborative_playlists": {
+              "label": "공동 작업",
+              "description": "다른 사용자와 함께 플레이리스트 만들기"
+            }
+          },
+          "feed": {
+            "label": "피드",
+            "followees": {
+              "label": "팔로우한 사용자",
+              "description": "팔로우한 사용자의 활동 보기"
+            },
+            "cast_and_crew": {
+              "label": "출연진과 제작진",
+              "description": "영화에 참여한 사람들의 활동 따라가기"
+            }
+          },
+          "support": {
+            "label": "응원",
+            "team": {
+              "label": "{app} 팀 응원하기"
+            },
+            "credits": {
+              "label": "크레딧",
+              "description": "앱 크레딧에 당신의 프로필을"
+            }
+          }
+        },
+        "success": {
+          "label": "응원해 주셔서 감사합니다!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} - @{username}의 플레이리스트",
+        "description": "{app}에서 @{username}의 영화 플레이리스트를 만나보세요."
+      },
+      "actions": {
+        "delete": {
+          "description": "<important>{title}</important>을 플레이리스트에서 완전히 삭제합니다."
+        }
+      },
+      "search": {
+        "placeholder": "플레이리스트에서 검색..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "<important>{title}</important>을 플레이리스트에서 삭제할까요?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "플레이리스트 제목을 입력하세요"
+        },
+        "description": {
+          "placeholder": "플레이리스트 설명을 입력하세요"
+        },
+        "error": {
+          "format": "설명에는 빈 줄만 있는 내용이나 공백만으로 된 내용을 쓸 수 없습니다."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "{app}에서 @{username}의 프로필을 만나보세요."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title}은 {directors}의 영화로 {year}년에 개봉했습니다. 줄거리: {overview}",
+        "description_no_director": "{title}은 {year}년에 개봉한 영화입니다. 줄거리: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • 플레이리스트",
+          "description": "영화 {title}이 담긴 플레이리스트를 모두 만나보세요."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • 리뷰",
+          "description": "영화 {title}의 리뷰를 모두 만나보세요."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title}은 {creators}의 시리즈로 {year}년에 처음 방영되었습니다. 줄거리: {overview}",
+        "description_no_creator": "{title}은 {year}년에 처음 방영된 시리즈입니다. 줄거리: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • 플레이리스트",
+          "description": "시리즈 {title}이 담긴 플레이리스트를 모두 만나보세요."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • 리뷰",
+          "description": "시리즈 {title}의 리뷰를 모두 만나보세요."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • 시즌",
+          "description": "시리즈 {title}의 시즌을 모두 만나보세요."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • 시즌 {number}",
+            "description": "시리즈 {title} 시즌 {number}의 에피소드를 모두 만나보세요."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • 영화",
+          "description": "{name}이 출연하거나 참여한 영화를 모두 만나보세요."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • 시리즈",
+          "description": "{name}이 출연하거나 참여한 시리즈를 모두 만나보세요."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "@{username}의 {title} 리뷰"
+      },
+      "create": {
+        "metadata": {
+          "title": "{title} 리뷰 쓰기",
+          "description": "{title}에 대한 생각을 공유하세요."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Paradise Pictures 탐색하기",
+        "description": "섬과 다양한 풍경을 발견하는 여행을 떠나 보세요. 섬에 사는 수많은 영화는 각자의 이야기 속 세계에 놓여 있습니다. 모든 구석까지 둘러볼 수 있을까요?"
+      }
+    },
+    "legal": {
+      "label": "법적 정보",
+      "description": "{app}의 법적 문서를 읽어보세요.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "이용약관",
+          "description": "{app}의 이용약관을 읽어보세요."
+        },
+        "sections": {
+          "intro": "본 이용약관(이하 \"약관\")은 앱 {app}에 대한 접근과 이용을 규율합니다. 본 앱은 파리에 기반을 둔 Loup(이하 \"발행자\")가 제공합니다. {app}에 가입하는 것은 본 약관을 조건 없이 받아들이는 것을 뜻합니다.",
+          "presentation": {
+            "label": "1. 서비스 소개",
+            "content": "{app}은 사용자가 영화 정보를 보고, 리뷰를 공개하고, 작품에 평점을 주고, 개인 목록을 만들 수 있는 무료 앱입니다."
+          },
+          "account": {
+            "label": "2. 계정과 보안",
+            "content": "참여 기능을 쓰려면 계정을 만들어야 합니다. 사용자는 자신의 로그인 정보를 비밀로 지킬 책임이 있습니다. 부정 사용이나 계정 탈취가 의심되면 사용자는 즉시 지원에 연락해야 합니다: <email></email>."
+          },
+          "conduct": {
+            "label": "3. 행동 규칙",
+            "content": "사용자는 리뷰와 목록에서 예의와 존중을 지키기로 합니다. 다음은 엄격히 금지됩니다: 혐오 발언, 명예를 훼손하거나 인종차별적인 표현, 괴롭힘, 그리고 스팸이나 원치 않는 상업적 홍보. 발행자는 이 규칙을 어기는 모든 콘텐츠를 삭제하고 해당 계정을 사전 통지 없이 정지할 권리를 갖습니다."
+          },
+          "child_safety": {
+            "label": "4. 아동 보호 정책",
+            "content": "{app}은 아동 성적 학대 및 착취(CSAE)에 대해 엄격한 무관용 정책을 둡니다. 미성년자를 성적으로 묘사하거나, 착취하거나, 그 밖의 방법으로 위험에 빠뜨리는 어떠한 콘텐츠의 생성, 업로드, 저장, 배포, 요청, 홍보도 {app}에서 명백하고 절대적으로 금지됩니다. 이 정책을 어긴 것으로 확인된 계정은 즉시 영구히 차단되며, 발행자는 해당 콘텐츠와 확보 가능한 사용자 정보를 적용 법령에 따라 National Center for Missing & Exploited Children(NCMEC) 및/또는 관할 수사기관에 신고합니다. CSAE에 해당할 수 있는 콘텐츠나 행위를 알게 된 사용자는 지체 없이 다음으로 신고해야 합니다: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. 지식재산",
+            "content": "사용자는 자신이 쓴 리뷰의 권리자로 남습니다. 다만 {app}에 공개함으로써, 사용자는 발행자에게 해당 콘텐츠를 앱 안에서 표시하고 복제하고 기술적으로 조정할 수 있는 무상의 비독점적 이용 허락을 부여합니다. {app}의 시각 요소, 코드, 디자인은 발행자의 고유 재산입니다."
+          },
+          "privacy": {
+            "label": "6. 개인정보",
+            "content": "당신의 개인정보를 존중하는 것이 저희의 절대적인 우선순위입니다. {app}은 어떠한 개인정보도 상업적 또는 광고 목적의 제3자에게 판매하거나 대여하거나 공유하지 않습니다. 수집하는 정보(이메일, 사용자 이름, 앱 내 활동)는 서비스 운영과 계정 관리에만 씁니다. 접근, 수정, 삭제의 권리(GDPR)는 다음으로 연락해 행사할 수 있습니다: <email></email>."
+          },
+          "cookies": {
+            "label": "7. 쿠키와 추적 도구",
+            "content": "{app}은 광고 쿠키도, 제3자의 행동 추적 도구도 쓰지 않습니다. 쓰는 것은 기술적 쿠키 두 가지뿐입니다: 인증 쿠키(로그인 상태를 유지하기 위해)와 언어 설정 쿠키(선택을 기억하기 위해)입니다. 이 쿠키들은 서비스에 꼭 필요하므로 사전 동의가 면제됩니다."
+          },
+          "ads": {
+            "label": "8. 광고",
+            "content": "본 앱은 현재 어떠한 광고도 없이 제공됩니다. 이 방식이 바뀌는 경우, 본 약관의 업데이트로 사용자에게 알립니다."
+          },
+          "liability": {
+            "label": "9. 책임",
+            "content": "발행자는 {app}을 하루 종일 쓸 수 있도록 노력하지만, 중단이나 오류가 없음을 보장하지는 않습니다. 영화 정보는 제3자 데이터베이스에서 옵니다. 그 안에 있을 수 있는 부정확한 내용에 대해 발행자는 책임지지 않습니다."
+          },
+          "law": {
+            "label": "10. 적용 법률",
+            "content": "본 약관에는 프랑스 법이 적용됩니다. <email></email>을 통해 원만히 해결되지 않는 분쟁이 생기면, 파리의 법원이 전속 관할권을 가집니다."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "개인정보 처리방침",
+          "description": "{app}의 개인정보 처리방침을 읽어보세요."
+        },
+        "sections": {
+          "intro": "데이터 보호는 {app}의 철학의 중심에 있습니다. 이 방침은 어떤 데이터를 모으고, 왜 모으며, 어떻게 보호하는지 설명합니다. 요약하면: 저희는 당신의 데이터를 팔지 않습니다.",
+          "controller": {
+            "label": "1. 데이터 관리자",
+            "content": "데이터 관리자는 파리(프랑스)에 기반을 둔 Loup입니다. 개인정보에 관한 문의는 다음으로 보내 주세요: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. 수집하는 데이터",
+            "content": "앱이 돌아가는 데 꼭 필요한 데이터만 모읍니다: 이메일 주소(인증용), 사용자 이름, 이용 데이터(평점을 준 영화, 리뷰, 목록). 비밀번호는 암호화(해시)되어 안전하게 저장됩니다."
+          },
+          "purpose": {
+            "label": "3. 처리 목적",
+            "content": "당신의 데이터는 다음 목적으로만 처리합니다: 계정을 만들고 관리할 수 있게 하기, 목록과 평점을 표시하기, 서비스의 기술적 운영을 보장하기. 광고 프로파일링에는 쓰지 않습니다."
+          },
+          "sharing": {
+            "label": "4. 데이터 공유",
+            "content": "당신의 개인정보는 결코 판매, 대여되거나 제3자에게 넘겨지지 않습니다. 엄격한 비밀 유지 의무를 지고 GDPR을 따르는 기술 제공자(호스팅, 트랜잭션 메일 서비스)가 보관할 수 있습니다."
+          },
+          "retention": {
+            "label": "5. 보관 기간",
+            "content": "데이터는 계정이 활성 상태인 동안 보관됩니다. 계정을 삭제하기로 하면, 모든 개인정보(이메일, 사용자 이름, 리뷰)가 데이터베이스에서 완전히 지워집니다."
+          },
+          "rights": {
+            "label": "6. 당신의 권리(GDPR)",
+            "content": "법령에 따라 당신은 자신의 데이터에 접근하고, 바로잡고, 옮기고, 지울 권리가 있습니다. 이 권리는 앱 안에서 직접, 또는 다음 주소로 연락해 언제든 행사할 수 있습니다: <email></email>."
+          },
+          "cookies": {
+            "label": "7. 쿠키",
+            "content": "이용약관에 적힌 대로, 저희는 꼭 필요한 기술적 쿠키(세션과 언어)만 씁니다. 제3자의 광고 쿠키나 추적 쿠키는 당신의 기기에 두지 않습니다."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "영화, 시리즈, 플레이리스트, 인물, 사용자 검색..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "이 작품을 본 목록에서 지울까요? 평점이나 리뷰가 있으면 함께 삭제됩니다."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "이 시리즈를 완료할까요? 모든 시즌의 모든 에피소드가 본 것으로 표시됩니다."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "시즌 {seasonNumber}을 완료할까요? 이 시즌의 모든 에피소드가 본 것으로 표시됩니다."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "여기에 활동이 보이려면, 당신이나 팔로우한 사용자가 영화, 시리즈 등에 평점을 줘야 합니다..."
+    },
+    "feed_person": {
+      "message": "여기에 활동이 보이려면, 영화나 시리즈에 참여한 인물을 팔로우해야 합니다."
+    },
+    "playlists": {
+      "items": {
+        "empty": "이 플레이리스트에 영화나 시리즈가 없습니다. 몇 편 넣어 채워 보세요!"
+      },
+      "add_to": {
+        "empty": "플레이리스트가 없습니다. 하나 만들어 영화나 시리즈를 넣고 쉽게 찾아보세요!"
+      },
+      "saved": {
+        "empty": "저장한 플레이리스트가 없습니다. 저장하면 라이브러리에서 쉽게 찾을 수 있어요!"
+      },
+      "members": {
+        "empty": "이 플레이리스트에 멤버가 없습니다. 멤버를 넣어 같은 플레이리스트를 함께 꾸려 보세요!",
+        "search": "플레이리스트에 추가할 사용자 검색..."
+      }
+    },
+    "follow-requests": {
+      "empty": "대기 중인 팔로우 요청이 없습니다. 생기면 여기에 표시됩니다!"
+    },
+    "recos": {
+      "empty": "추천이 없습니다. 생기면 여기에 표시됩니다!",
+      "send_to": {
+        "empty": "추천을 보낼 사람이 없습니다. 추천을 보내려면 친구(서로 팔로우)여야 합니다!"
+      }
+    },
+    "bookmarks": {
+      "empty": "아직 저장한 것이 없습니다. 저장하면 여기에 표시됩니다!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user>님이 영화 <movie></movie>를 추천했습니다"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user>님이 시리즈 <tv_series></tv_series>를 추천했습니다"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user>님이 당신이 추천한 영화 <movie></movie>를 봤습니다"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user>님이 당신이 추천한 시리즈 <tv_series></tv_series>를 봤습니다"
+    },
+    "follower_created": {
+      "description": "<user></user>님이 당신을 팔로우했습니다"
+    },
+    "follower_accepted": {
+      "description": "<user></user>님이 당신의 팔로우 요청을 수락했습니다"
+    },
+    "follower_request": {
+      "description": "<user></user>님이 당신을 팔로우하고 싶어 합니다"
+    },
+    "friend_created": {
+      "description": "<user></user>님과 친구가 되었습니다"
+    }
+  }
+}

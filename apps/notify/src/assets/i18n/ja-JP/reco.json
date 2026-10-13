@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "{senderName}さんから新しいreco！",
+    "body": "{senderName}さんが{mediaTitle}をおすすめしました",
+    "body_with_comment": "{senderName}: {comment}"
+  },
+  "completed": {
+    "subject": "あなたのrecoが完了しました！",
+    "body": "{receiverName}さんが、あなたのおすすめした{mediaTitle}を観ました"
+  }
+}

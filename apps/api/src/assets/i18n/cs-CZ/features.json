@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "Sledování",
+    "description": "Měj přehled o filmech a seriálech, které jsi viděl"
+  },
+  "recos": {
+    "label": "Reco",
+    "description": "Posílej kamarádům tipy na filmy a seriály"
+  },
+  "playlists": {
+    "label": "Seznamy",
+    "description": "Třiď filmy a seriály do seznamů a sdílej je"
+  },
+  "feed": {
+    "label": "Feed",
+    "description": "Sleduj, co dělají tví kamarádi"
+  },
+  "bookmarks": {
+    "label": "Na později",
+    "description": "Ulož si filmy a seriály, které chceš vidět"
+  }
+}

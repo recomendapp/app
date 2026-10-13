@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "Praćenje",
+    "description": "Vodi evidenciju filmova i serija koje si gledao"
+  },
+  "recos": {
+    "label": "Reco",
+    "description": "Šalji prijateljima preporuke filmova i serija"
+  },
+  "playlists": {
+    "label": "Liste",
+    "description": "Složi svoje filmove i serije u liste i podijeli ih"
+  },
+  "feed": {
+    "label": "Feed",
+    "description": "Prati što rade tvoji prijatelji"
+  },
+  "bookmarks": {
+    "label": "Za poslije",
+    "description": "Spremi filmove i serije koje želiš pogledati"
+  }
+}

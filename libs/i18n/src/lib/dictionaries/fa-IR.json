@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "راهی دیگر برای کشف سینما",
+    "description": "{app} یک شبکه اجتماعی برای عاشقان سینماست. فیلم‌ها و سریال‌ها را با دوستانت کشف کن، به اشتراک بگذار و مرور کن."
+  },
+  "common": {
+    "messages": {
+      "welcome": "خوش آمدی",
+      "welcome_to_app": "به {app} خوش آمدی",
+      "hello": "سلام",
+      "greeting_with_name": "{timeOfDay, select, morning {صبح بخیر، {name}} afternoon {بعدازظهر بخیر، {name}} evening {عصر بخیر، {name}} night {شب بخیر، {name}} other {سلام، {name}}}",
+      "click_here": "اینجا کلیک کن",
+      "see_more": "نمایش بیشتر",
+      "see_more_details": "نمایش جزئیات بیشتر",
+      "more": "بیشتر",
+      "view_profile": "مشاهده پروفایل",
+      "library": "کتابخانه",
+      "watchlist": "فهرست تماشا",
+      "for_later": "برای بعد",
+      "heart_pick": "{count, plural, one {انتخاب دل} other {انتخاب‌های دل}}",
+      "add_to_heart_picks": "افزودن به انتخاب‌های دل",
+      "remove_from_heart_picks": "حذف از انتخاب‌های دل",
+      "add_rating": "افزودن امتیاز",
+      "edit_rating": "ویرایش امتیاز",
+      "remove_rating": "حذف امتیاز",
+      "share_my_rating": "اشتراک‌گذاری امتیاز من",
+      "share_review": "اشتراک‌گذاری نقد",
+      "show_likes_count": "نمایش تعداد لایک‌ها",
+      "show_comments_count": "نمایش تعداد نظرها",
+      "add_to_watchlist": "افزودن به فهرست تماشا",
+      "remove_from_watchlist": "حذف از فهرست تماشا",
+      "no_results": "نتیجه‌ای نیست",
+      "no_results_for": "نتیجه‌ای برای <strong>{query}</strong> پیدا نشد",
+      "no_followees": "کسی را دنبال نمی‌کنی",
+      "no_followers": "دنبال‌کننده‌ای نیست",
+      "no_rating": "امتیازی نیست",
+      "must_watch_to_review": "برای نوشتن نقد باید این اثر را دیده باشی",
+      "review_cannot_be_empty": "نقد نمی‌تواند خالی باشد",
+      "no_activity": "فعالیتی نیست",
+      "followers_ratings": "امتیازهای دنبال‌کنندگان",
+      "added_by": "افزوده‌شده توسط",
+      "sort_by": "مرتب‌سازی بر اساس",
+      "sort_order": "ترتیب مرتب‌سازی",
+      "go_to_film": "رفتن به فیلم",
+      "go_to_tv_series": "رفتن به سریال",
+      "go_to_user": "رفتن به کاربر",
+      "go_to_person": "رفتن به شخص",
+      "go_to_activity": "رفتن به فعالیت",
+      "go_to_playlist": "رفتن به فهرست",
+      "go_to_review": "رفتن به نقد",
+      "go_to_director": "{count, plural, one {رفتن به کارگردان} other {رفتن به کارگردانان}}",
+      "go_to_creator": "{count, plural, one {رفتن به سازنده} other {رفتن به سازندگان}}",
+      "show_director": "{count, plural, one {نمایش کارگردان} other {نمایش کارگردانان}}",
+      "show_creator": "{count, plural, one {نمایش سازنده} other {نمایش سازندگان}}",
+      "show_credit": "{count, plural, one {نمایش همکاری} other {نمایش همکاری‌ها}}",
+      "credits": "عوامل",
+      "view_recommendation": "{count, plural, one {مشاهده reco} other {مشاهده reco‌ها}}",
+      "view_directors": "{count, plural, one {مشاهده کارگردان} other {مشاهده کارگردانان}}",
+      "no_director": "کارگردانی ثبت نشده",
+      "view_comment": "{count, plural, one {مشاهده نظر} other {مشاهده نظرها}}",
+      "add_comment": "{count, plural, one {افزودن نظر} other {افزودن نظر}}",
+      "edit_comment": "{count, plural, one {ویرایش نظر} other {ویرایش نظرها}}",
+      "delete_comment": "حذف نظر",
+      "do_you_really_want_to_delete_this_comment": "مطمئنی می‌خواهی این نظر را حذف کنی؟",
+      "comment_deleted": "این نظر حذف شد",
+      "write_your_comment_here": "نظری بنویس...",
+      "reply": "پاسخ",
+      "replies_count": "{count, plural, one {# پاسخ} other {# پاسخ}}",
+      "view_replies": "مشاهده {count, plural, one {# پاسخ} other {# پاسخ}}",
+      "hide_replies": "پنهان کردن پاسخ‌ها",
+      "load_more_replies": "بارگذاری پاسخ‌های بیشتر",
+      "get_started": "شروع کن",
+      "get_started_its_free": "شروع کنیم 🎬، رایگان است!",
+      "import": "درون‌ریزی",
+      "upgrade_to_plan": "ارتقا به {plan}",
+      "choose_subscription_recurrence": "دوره پرداخت اشتراکت را انتخاب کن",
+      "compare_plans": "مقایسه طرح‌ها",
+      "save_up_to_percent": "تا {percent}% صرفه‌جویی کن",
+      "is_empty": "اینجا کمی خالی است",
+      "add_to_playlist": "افزودن به یک فهرست",
+      "send_to_friend": "فرستادن برای یک دوست",
+      "pin_to_profile": "سنجاق کردن به پروفایل",
+      "unpin_from_profile": "برداشتن سنجاق از پروفایل",
+      "pinned": "سنجاق شد",
+      "unpinned": "سنجاق برداشته شد",
+      "no_pinned": "موردی سنجاق نشده",
+      "pinned_limit_reached": "به حد نهایی موارد سنجاق‌شده رسیدی — برای افزودن مورد تازه، سنجاق یکی را بردار",
+      "custom_sort": "مرتب‌سازی دلخواه",
+      "quick_add": "افزودن سریع",
+      "favorite_films": "فیلم‌های محبوب",
+      "follow": "دنبال کردن",
+      "followed": "دنبال می‌کنی",
+      "request_sent": "درخواست فرستاده شد",
+      "follow_requests": "درخواست‌های دنبال کردن",
+      "no_follow_requests": "درخواست دنبال کردنی نیست",
+      "follower": "{count, plural, one {دنبال‌کننده} other {دنبال‌کننده}}",
+      "follower_count": "{count} دنبال‌کننده",
+      "see_followers": "مشاهده دنبال‌کنندگان",
+      "followee": "{count, plural, one {دنبال‌شده} other {دنبال‌شده}}",
+      "followee_count": "{count} دنبال‌شده",
+      "see_followees": "مشاهده کسانی که دنبال می‌کنی",
+      "last_activities": "آخرین فعالیت‌ها",
+      "last_updated": "آخرین به‌روزرسانی",
+      "last_updated_at_date": "آخرین به‌روزرسانی در {date}",
+      "show_all": "نمایش همه",
+      "this_account_is_private": "این حساب خصوصی است",
+      "follow_to_see_activities": "برای دیدن فعالیت‌ها دنبال کن",
+      "review": "{count, plural, one {نقد} other {نقد}}",
+      "no_overview": "خلاصه‌ای نیست",
+      "cast": "بازیگران",
+      "no_cast": "بازیگری ثبت نشده",
+      "recent": "جدیدترین‌ها",
+      "popular": "محبوب",
+      "popularity": "محبوبیت",
+      "no_reviews": "نقدی نیست",
+      "no_playlists": "فهرستی نیست",
+      "no_playlists_found": "هیچ فهرستی پیدا نشد",
+      "no_films": "فیلمی نیست",
+      "no_tv_series": "سریالی نیست",
+      "view_activity": "مشاهده فعالیت",
+      "comment_count": "{count, plural, one {# نظر} other {# نظر}}",
+      "write_review": "نوشتن نقد",
+      "new_review": "نقد جدید",
+      "edit_review": "ویرایش نقد",
+      "review_by": "نقد از {name}",
+      "my_review": "{count, plural, one {نقد من} other {نقدهای من}}",
+      "add_review": "افزودن نقد",
+      "tv_series": "{count, plural, one {سریال} other {سریال}}",
+      "film": "{count, plural, one {فیلم} other {فیلم}}",
+      "movie": "{count, plural, one {فیلم} other {فیلم}}",
+      "media": "{count, plural, one {عنوان} other {عنوان}}",
+      "tv_season": "{count, plural, one {فصل} other {فصل}}",
+      "tv_season_count": "{count, plural, one {# فصل} other {# فصل}}",
+      "tv_season_value": "فصل {number}",
+      "tv_season_short": "ف{number}",
+      "tv_episode": "{count, plural, one {قسمت} other {قسمت}}",
+      "tv_episode_count": "{count, plural, one {# قسمت} other {# قسمت}}",
+      "tv_episode_value": "قسمت {number}",
+      "tv_episode_short": "ف{seasonNumber}ق{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {قسمت ویژه} other {قسمت ویژه}}",
+      "first_air_date": "اولین پخش",
+      "last_air_date": "آخرین پخش",
+      "see_film": "مشاهده فیلم",
+      "see_tv_series": "مشاهده سریال",
+      "watch_film_title": "تماشای {title}",
+      "watch_film_streaming_or_download": "<important>{title}</important> را با پخش آنلاین یا دانلود قانونی تماشا کن",
+      "download": "دانلود",
+      "downloaded": "دانلود شد",
+      "person": "{count, plural, one {شخص} other {شخص}}",
+      "top_result": "بهترین نتیجه",
+      "user": "{count, plural, one {کاربر} other {کاربر}}",
+      "reco": "{count, plural, one {reco} other {reco}}",
+      "my_recos": "reco‌های من",
+      "item": "{count, plural, one {مورد} other {مورد}}",
+      "item_count": "{count, plural, one {# مورد} other {# مورد}}",
+      "type": "نوع",
+      "complete": "تکمیل",
+      "completed": "تکمیل شد",
+      "collection": "{count, plural, one {مجموعه} other {مجموعه}}",
+      "most_recent": "جدیدترین",
+      "most_popular": "محبوب‌ترین",
+      "most_old": "قدیمی‌ترین",
+      "known_for": "شناخته‌شده برای",
+      "release_date": "تاریخ اکران",
+      "last_appearance_date": "آخرین حضور",
+      "vote_average": "میانگین امتیاز",
+      "added": "افزوده شد",
+      "added_date": "تاریخ افزودن",
+      "added_at": "افزوده‌شده در",
+      "add": "افزودن",
+      "playlist_name": "نام فهرست",
+      "updated_at": "به‌روزشده در",
+      "created_at": "ساخته‌شده در",
+      "likes": "لایک‌ها",
+      "likes_count": "تعداد لایک‌ها",
+      "search_media": "جست‌وجوی عنوان",
+      "search_film": "جست‌وجوی فیلم",
+      "start_typing_to_search_films": "برای جست‌وجوی فیلم شروع به تایپ کن",
+      "search_tv_series": "جست‌وجوی سریال",
+      "start_typing_to_search_tv_series": "برای جست‌وجوی سریال شروع به تایپ کن",
+      "search_person": "جست‌وجوی شخص",
+      "start_typing_to_search_persons": "برای جست‌وجوی اشخاص شروع به تایپ کن",
+      "search_user": "{count, plural, one {جست‌وجوی کاربر} other {جست‌وجوی کاربران}}",
+      "start_typing_to_search_users": "برای جست‌وجوی کاربران شروع به تایپ کن",
+      "search_playlist": "جست‌وجوی فهرست",
+      "start_typing_to_search_playlists": "برای جست‌وجوی فهرست‌ها شروع به تایپ کن",
+      "search_film_or_tv_series": "جست‌وجوی فیلم یا سریال",
+      "watched_date": "{count, plural, one {تاریخ تماشا} other {تاریخ‌های تماشا}}",
+      "mark_as_watched": "علامت‌گذاری به‌عنوان دیده‌شده",
+      "remove_from_watched": "حذف از دیده‌شده‌ها",
+      "rating": "امتیاز",
+      "create_a_playlist": "ساختن فهرست",
+      "by_name": "از {name}",
+      "reset": "بازنشانی",
+      "job": "{count, plural, one {نقش} other {نقش}}",
+      "department": "{count, plural, one {بخش} other {بخش}}",
+      "share_title_via": "<strong>{title}</strong> را با این اشتراک بگذار:",
+      "share_title": "اشتراک‌گذاری <strong>{title}</strong>",
+      "link": "پیوند",
+      "copy_link": "کپی پیوند",
+      "copied": "کپی شد",
+      "other": "{count, plural, one {سایر} other {سایر}}",
+      "via": "با",
+      "edit": "ویرایش",
+      "guest": "{count, plural, one {مهمان} other {مهمان}}",
+      "are_u_sure": "مطمئنی؟",
+      "backward": "عقب",
+      "forward": "جلو",
+      "back": "بازگشت",
+      "next": "بعدی",
+      "notification": "{count, plural, one {اعلان} other {اعلان}}",
+      "see_notifications": "مشاهده اعلان‌ها",
+      "open_social_panel": "باز کردن پنل اجتماعی",
+      "cancel_change": "{count, plural, one {لغو تغییر} other {لغو تغییرات}}",
+      "do_you_really_want_to_cancel_change": "مطمئنی می‌خواهی {count, plural, one {تغییر} other {تغییرات}} را لغو کنی؟",
+      "continue_editing": "ادامه ویرایش",
+      "confirm": "تأیید",
+      "terms_of_use": "شرایط استفاده",
+      "privacy_policy": "سیاست حفظ حریم خصوصی",
+      "request_made": "درخواست فرستاده شد",
+      "request_canceled": "درخواست لغو شد",
+      "cancel_request": "لغو درخواست",
+      "open_menu": "باز کردن منو",
+      "feed": "خوراک",
+      "about": "درباره",
+      "home": "خانه",
+      "search": "جست‌وجو",
+      "explore": "کشف",
+      "shop": "فروشگاه",
+      "help": "راهنما",
+      "legal": "حقوقی",
+      "setting": "{count, plural, one {تنظیم} other {تنظیمات}}",
+      "logout": "خروج",
+      "to_watch": "برای تماشا",
+      "reco_by_your_friends": "reco‌های دوستانت",
+      "friends_playlists": "فهرست‌های دوستانت",
+      "latest_activity": "{count, plural, one {آخرین فعالیت} other {آخرین فعالیت‌ها}}",
+      "discover_users": "کشف کاربران",
+      "most_recommended": "پرتوصیه‌ترین‌ها",
+      "archive": "بایگانی",
+      "unarchive": "خارج کردن از بایگانی",
+      "mark_as_read": "{count, plural, one {علامت‌گذاری به‌عنوان خوانده‌شده} other {علامت‌گذاری به‌عنوان خوانده‌شده}}",
+      "mark_as_unread": "{count, plural, one {علامت‌گذاری به‌عنوان خوانده‌نشده} other {علامت‌گذاری به‌عنوان خوانده‌نشده}}",
+      "accept": "پذیرفتن",
+      "accepted": "پذیرفته شد",
+      "decline": "رد کردن",
+      "declined": "رد شد",
+      "request_accepted": "{count, plural, one {درخواست پذیرفته شد} other {درخواست‌ها پذیرفته شدند}}",
+      "request_declined": "{count, plural, one {درخواست رد شد} other {درخواست‌ها رد شدند}}",
+      "unread": "{count, plural, one {خوانده‌نشده} other {خوانده‌نشده}}",
+      "archived": "{count, plural, one {بایگانی‌شده} other {بایگانی‌شده}}",
+      "no_notifications": "اعلانی نیست",
+      "all": "همه",
+      "mark_all_as_read": "علامت‌گذاری همه به‌عنوان خوانده‌شده",
+      "archive_all": "بایگانی همه",
+      "archive_all_read": "بایگانی همه خوانده‌شده‌ها",
+      "please_login": "وارد شو",
+      "like": "لایک",
+      "unlike": "برداشتن لایک",
+      "unfollow": "لغو دنبال کردن",
+      "name": "نام",
+      "add_a_name": "یک نام بگذار",
+      "add_a_description": "یک توضیح بنویس",
+      "visibility": "نمایانی",
+      "search_an_user": "جست‌وجوی کاربر",
+      "select_an_item_to_add_to_playlist": "موردی را برای افزودن به فهرست انتخاب کن",
+      "select_a_film_to_add_to_playlist": "فیلمی را برای افزودن به فهرست انتخاب کن",
+      "select_a_tv_series_to_add_to_playlist": "سریالی را برای افزودن به فهرست انتخاب کن",
+      "add_one_or_more_items_to": "یک یا چند مورد به <important>{title}</important> اضافه کن",
+      "add_one_or_more_films_to": "یک یا چند فیلم به <important>{title}</important> اضافه کن",
+      "add_one_or_more_tv_series_to": "یک یا چند سریال به <important>{title}</important> اضافه کن",
+      "manage_playlist_access_rights": "مدیریت دسترسی‌های فهرست",
+      "add_guest": "{count, plural, one {افزودن مهمان} other {افزودن مهمان}}",
+      "manage_members": "مدیریت اعضا",
+      "no_member": "عضوی نیست",
+      "add_member": "{count, plural, one {افزودن عضو} other {افزودن عضو}}",
+      "manage_guests": "مدیریت مهمان‌ها",
+      "add_guests_to_your_playlist": "به فهرستت مهمان اضافه کن",
+      "select_users_to_add_to_playlist": "کاربرانی را برای افزودن به فهرست انتخاب کن",
+      "select_users_to_send_reco": "انتخاب کن که reco را برای چه کسانی می‌فرستی",
+      "select_playlists_to_add_the_item": "فهرست‌هایی را که مورد به آن‌ها اضافه می‌شود انتخاب کن",
+      "send": "فرستادن",
+      "sent": "فرستاده شد",
+      "select_row": "انتخاب سطر",
+      "select_all": "انتخاب همه",
+      "no_selected_users": "کاربری انتخاب نشده",
+      "selection_count": "{number} از {total} {type} انتخاب شد",
+      "about_title": "درباره {title}",
+      "detail": "{count, plural, one {جزئیات} other {جزئیات}}",
+      "genre": "{count, plural, one {ژانر} other {ژانر}}",
+      "male": "{count, plural, one {مرد} other {مرد}}",
+      "female": "{count, plural, one {زن} other {زن}}",
+      "non_binary": "{count, plural, one {غیردوگانه} other {غیردوگانه}}",
+      "unspecified": "مشخص نشده",
+      "date_of_birth": "تاریخ تولد",
+      "date_of_death": "تاریخ مرگ",
+      "place_of_birth": "محل تولد",
+      "age_years": "{count} {count, plural, one {سال} other {سال}}",
+      "biography": "زندگی‌نامه",
+      "no_biography_available": "زندگی‌نامه‌ای موجود نیست",
+      "no_information_available": "اطلاعاتی موجود نیست",
+      "already_sent": "قبلاً فرستاده شده",
+      "already_watched": "قبلاً دیده شده",
+      "already_added": "قبلاً افزوده شده",
+      "recommend_to_friend_to_discover": "<strong>{title}</strong> را به دوستی که ندیده‌اش توصیه کن",
+      "add_to_one_or_more_playlists": "<strong>{title}</strong> را به یک یا چند فهرستت اضافه کن",
+      "my_playlist": "{count, plural, one {فهرست من} other {فهرست‌های من}}",
+      "what_is_title": "<strong>{title}</strong> چیست؟",
+      "try_again": "دوباره تلاش کن",
+      "error": "خطا",
+      "not_logged_in": "وارد نشده‌ای",
+      "an_error_occurred": "خطایی رخ داد",
+      "playlist_not_found": "فهرست پیدا نشد",
+      "user_not_found": "کاربر پیدا نشد",
+      "film_not_found": "فیلم پیدا نشد",
+      "media_not_found": "عنوان پیدا نشد",
+      "review_not_found": "نقد پیدا نشد",
+      "person_not_found": "شخص پیدا نشد",
+      "tv_series_not_found": "سریال پیدا نشد",
+      "tv_episode_not_found": "قسمت پیدا نشد",
+      "tv_season_not_found": "فصل پیدا نشد",
+      "wrong_arguments": "پارامترهای نادرست",
+      "no_media_found": "هیچ عنوانی پیدا نشد",
+      "unknown_action": "عمل ناشناخته",
+      "no_user_found": "هیچ کاربری پیدا نشد",
+      "no_tv_episodes": "قسمتی نیست",
+      "save": "ذخیره",
+      "saved": "ذخیره شد",
+      "create": "ساختن",
+      "film_count": "{count, plural, one {# فیلم} other {# فیلم}}",
+      "tv_series_count": "{count, plural, one {# سریال} other {# سریال}}",
+      "login": "ورود",
+      "signup": "ثبت‌نام",
+      "navigation": "ناوبری",
+      "delete": "حذف",
+      "remove": "برداشتن",
+      "deleted": "حذف شد",
+      "share": "اشتراک‌گذاری",
+      "duplicate": "تکثیر",
+      "duplicated": "تکثیر شد",
+      "cancel": "لغو",
+      "date": "تاریخ",
+      "duration": "مدت",
+      "sort": "مرتب‌سازی",
+      "show": "نمایش",
+      "column": "{count, plural, one {ستون} other {ستون}}",
+      "comment": "{count, plural, one {نظر} other {نظر}}",
+      "unknown": "ناشناخته",
+      "community": "اجتماع",
+      "cast_and_crew": "بازیگران و عوامل",
+      "soon": "به‌زودی",
+      "ios_app": "اپلیکیشن iOS",
+      "android_app": "اپلیکیشن Android",
+      "coming_soon": "به‌زودی",
+      "new_mobile_app": "اپلیکیشن موبایل تازه!",
+      "manage": "مدیریت",
+      "monthly": "ماهانه",
+      "yearly": "سالانه",
+      "day": "روز",
+      "week": "هفته",
+      "month": "ماه",
+      "year": "سال",
+      "price": "قیمت",
+      "free": "رایگان",
+      "playlist": "{count, plural, one {فهرست} other {فهرست}}",
+      "public": "عمومی",
+      "publish": "انتشار",
+      "private": "خصوصی",
+      "description": "توضیح",
+      "details": "جزئیات",
+      "profile": "پروفایل",
+      "overview": "خلاصه",
+      "no_playlists_saved": "فهرست ذخیره‌شده‌ای نیست",
+      "camera_permission_denied": "دسترسی به دوربین رد شد",
+      "photo_library_permission_denied": "دسترسی به گالری عکس رد شد",
+      "ignore": "نادیده گرفتن",
+      "ok": "باشه",
+      "title": "عنوان",
+      "skip": "رد کردن",
+      "undo": "واگرد",
+      "date_published": "تاریخ انتشار",
+      "date_created": "تاریخ ساخت",
+      "date_updated": "تاریخ به‌روزرسانی",
+      "alphabetical": "الفبایی",
+      "date_added": "تاریخ افزودن",
+      "number_of_likes": "تعداد لایک‌ها",
+      "number_of_seasons": "تعداد فصل‌ها",
+      "add_to_this_playlist": "افزودن به این فهرست",
+      "save_to_library": "ذخیره در کتابخانه",
+      "remove_from_library": "حذف از کتابخانه",
+      "otp": "رمز یک‌بارمصرف",
+      "ratings_from_followees": "امتیازهای کسانی که دنبال می‌کنی",
+      "choose_from_the_library": "انتخاب از گالری",
+      "take_a_photo": "گرفتن عکس",
+      "delete_current_image": "حذف تصویر فعلی",
+      "edit_image": "ویرایش تصویر",
+      "add_image": "افزودن تصویر",
+      "verify_with_a_code": "تأیید با کد",
+      "order": "ترتیب",
+      "edit_order": "ویرایش ترتیب",
+      "done": "تمام",
+      "can_edit": "اجازه ویرایش دارد؟",
+      "upgrade": "ارتقا",
+      "no_description": "توضیحی نیست",
+      "no_comment": "نظری نیست",
+      "close": "بستن",
+      "edit_playlist": "ویرایش فهرست",
+      "universe": "جهان",
+      "cannot_be_changed": "قابل تغییر نیست",
+      "delete_review": "حذف نقد",
+      "do_you_really_want_to_delete_this_review": "مطمئنی می‌خواهی این نقد را حذف کنی؟",
+      "user_liked_playlist": "<name></name> یک فهرست را لایک کرد",
+      "user_liked_review": "<name></name> یک نقد را لایک کرد",
+      "runtime": "مدت زمان",
+      "ends_at": "پایان در {value}",
+      "this_user_has_no_activity": "این کاربر هیچ فعالیتی ندارد",
+      "notification_archived": "{count, plural, one {اعلان بایگانی شد} other {اعلان‌ها بایگانی شدند}}",
+      "notification_unarchived": "{count, plural, one {اعلان از بایگانی خارج شد} other {اعلان‌ها از بایگانی خارج شدند}}",
+      "notification_marked_as_read": "{count, plural, one {اعلان خوانده‌شده علامت خورد} other {اعلان‌ها خوانده‌شده علامت خوردند}}",
+      "notification_marked_as_unread": "{count, plural, one {اعلان خوانده‌نشده علامت خورد} other {اعلان‌ها خوانده‌نشده علامت خوردند}}",
+      "or_continue_with": "یا با این ادامه بده",
+      "message": "{count, plural, one {پیام} other {پیام}}",
+      "story": "{count, plural, one {استوری} other {استوری}}",
+      "new_playlist": "فهرست تازه",
+      "select_a_type": "یک نوع انتخاب کن",
+      "filter": "{count, plural, one {فیلتر} other {فیلتر}}",
+      "hide_watched": "پنهان کردن دیده‌شده‌ها",
+      "show_me_around": "یک دور بگردانم",
+      "artwork_from": "تصویرسازی از <important>{source}</important>",
+      "no_active_subscription": "اشتراک فعالی نیست",
+      "manage_subscription": "مدیریت اشتراک",
+      "started_on_date": "شروع در {date}",
+      "last_renewed_on_date": "آخرین تمدید در {date}",
+      "version_value": "نسخه {value}",
+      "original_title": "عنوان اصلی",
+      "starring": "با بازی",
+      "write_your_review_here": "نقدت را اینجا بنویس...",
+      "insert": "درج",
+      "trailer": "{count, plural, one {تریلر} other {تریلر}}",
+      "list": "{count, plural, one {فهرست} other {فهرست}}",
+      "grid": "{count, plural, one {شبکه} other {شبکه}}",
+      "order_asc": "ترتیب صعودی",
+      "order_desc": "ترتیب نزولی",
+      "menu": "منو",
+      "at_least_one_watched_date_required": "حداقل یک تاریخ تماشا لازم است",
+      "viewer": "{count, plural, one {بیننده} other {بینندگان}}",
+      "editor": "{count, plural, one {ویرایشگر} other {ویرایشگران}}",
+      "admin": "{count, plural, one {مدیر} other {مدیران}}",
+      "owner": "{count, plural, one {مالک} other {مالکان}}",
+      "you_dont_have_permission_to_do_this_action": "اجازه انجام این کار را نداری",
+      "in_progress": "در جریان",
+      "give_up": "بی‌خیال",
+      "random": "تصادفی",
+      "reset_password": "بازنشانی گذرواژه",
+      "password_reset": "گذرواژه بازنشانی شد",
+      "return_to_login": "بازگشت به ورود",
+      "invalid_code": "کد نامعتبر",
+      "no_token_found": "توکنی پیدا نشد",
+      "first_watched_at": "تاریخ اولین تماشا",
+      "watched_dates": "تاریخ‌های تماشا",
+      "no_watched_dates": "تاریخ تماشایی نیست",
+      "select_role": "یک نقش انتخاب کن",
+      "select_format": "یک قالب انتخاب کن",
+      "theater": "سینما",
+      "physical": "نسخه فیزیکی",
+      "digital": "دیجیتال",
+      "streaming": "پخش آنلاین",
+      "you_must_be_premium_to_change_member_role": "برای تغییر نقش یک عضو باید اشتراک Premium داشته باشی",
+      "already_member": "از قبل عضو است",
+      "email_already_used": "این ایمیل قبلاً استفاده شده است",
+      "email_confirmed": "ایمیل تأیید شد",
+      "confirmation_email_sent": "ایمیل تأیید فرستاده شد",
+      "continue": "ادامه",
+      "finish": "پایان",
+      "forgot_password": "گذرواژه را فراموش کردم",
+      "new_password": "گذرواژه تازه",
+      "confirm_password": "تأیید گذرواژه",
+      "password_reseted": "گذرواژه بازنشانی شد",
+      "reset_your_password": "گذرواژه‌ات را بازنشانی کن",
+      "invalid_token": "توکن نامعتبر",
+      "new_notification": "{count, plural, one {اعلان تازه} other {اعلان تازه}}",
+      "lets_go": "بزن بریم!",
+      "update_available": "به‌روزرسانی موجود است",
+      "update_available_description": "اپلیکیشن را به‌روز کن تا از آخرین بهبودها لذت ببری.",
+      "update_required_title": "به‌روزرسانی لازم است",
+      "update_required_description": "این نسخه از اپلیکیشن دیگر پشتیبانی نمی‌شود. برای ادامه استفاده از Recomend آن را به‌روز کن.",
+      "update_app": "به‌روزرسانی",
+      "advertisement": "{count, plural, one {تبلیغ} other {تبلیغ}}",
+      "pending": "در انتظار",
+      "processing": "در حال پردازش",
+      "awaiting_review": "در انتظار بررسی",
+      "failed": "ناموفق",
+      "data": "{count, plural, one {داده} other {داده‌ها}}",
+      "restore": "بازگردانی",
+      "fix": "اصلاح",
+      "not_found": "پیدا نشد",
+      "unavailable": "در دسترس نیست",
+      "star_on_github": "در GitHub به ما ستاره بده"
+    },
+    "form": {
+      "email": {
+        "label": "ایمیل",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "ایمیل معتبر نیست",
+          "unavailable": "این ایمیل قبلاً استفاده شده است"
+        },
+        "verified": "ایمیل تأیید شد"
+      },
+      "username": {
+        "label": "نام کاربری",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "نخستین نویسه باید حرف یا رقم باشد",
+          "double_dot": "دو نقطه پشت‌سرهم مجاز نیست",
+          "ends_with_dot": "نقطه در پایان مجاز نیست",
+          "format": "تنها حروف، ارقام و نویسه‌های '_' و '.' مجاز است",
+          "unavailable": "این نام کاربری گرفته شده است"
+        }
+      },
+      "full_name": {
+        "label": "نام",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "تنها حروف، ارقام و فاصله مجاز است"
+        }
+      },
+      "password": {
+        "label": "گذرواژه",
+        "placeholder": "گذرواژه‌ات را وارد کن",
+        "schema": {
+          "uppercase": "حداقل یک حرف بزرگ لازم است",
+          "lowercase": "حداقل یک حرف کوچک لازم است",
+          "number": "حداقل یک رقم لازم است",
+          "special": "حداقل یک نویسه ویژه لازم است",
+          "match": "گذرواژه‌ها یکسان نیستند"
+        },
+        "confirm": {
+          "label": "تأیید گذرواژه",
+          "placeholder": "گذرواژه‌ات را تأیید کن"
+        }
+      },
+      "length": {
+        "char_min": "حداقل {count, plural, one {# نویسه} other {# نویسه}}",
+        "char_max": "حداکثر {count, plural, one {# نویسه} other {# نویسه}}"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "تنها حروف، ارقام و فاصله مجاز است"
+      },
+      "error": {
+        "too_many_attempts": "تلاش‌های بسیار زیاد، بعداً دوباره امتحان کن",
+        "not_received_code": "کد را نگرفتی؟",
+        "invalid_code": "کد نامعتبر",
+        "turnstile": "تأیید ناموفق بود، دوباره تلاش کن"
+      },
+      "resend_code": "فرستادن دوباره کد",
+      "resend_email": "فرستادن دوباره ایمیل",
+      "code_verified": "کد تأیید شد",
+      "code_sent": "کد فرستاده شد"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "صفحه پیدا نشد",
+        "description": "اوپس، این صفحه وجود ندارد..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "ثبت تماشا",
+        "description": "فیلم‌ها و سریال‌های محبوبت را کشف کن، امتیاز بده و به اشتراک بگذار."
+      },
+      "recos": {
+        "label": "reco‌ها",
+        "description": "reco‌های دوستانت را بفرست و بگیر. همه در یک جا."
+      },
+      "playlists": {
+        "label": "فهرست‌ها",
+        "description": "فهرست‌ها را سازمان بده، به اشتراک بگذار و با هم بساز."
+      },
+      "feed": {
+        "label": "خوراک",
+        "description": "دوستانت را دنبال کن تا ببینی چه می‌بینند، چه را لایک می‌کنند و چه می‌نویسند."
+      },
+      "social_sharing": {
+        "label": "اشتراک در شبکه‌های اجتماعی",
+        "description": "هر چه را دوست داری در اینستاگرام یا شبکه‌های دیگر به اشتراک بگذار."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "ثبت تماشا",
+          "description": "فیلم‌هایی که دیده‌ای را زیر نظر داشته باش"
+        },
+        "recos": {
+          "label": "Reco‌ها",
+          "description": "برای دوستانت فیلم پیشنهاد بفرست"
+        },
+        "explore": {
+          "label": "کشف",
+          "description": "فیلم‌های تازه را در Paradise Pictures کشف کن، نقشه‌ای تعاملی با بیش از ۱۴۰۰ فیلم"
+        },
+        "like": {
+          "label": "لایک",
+          "description": "عشقت را به فیلم‌ها، فهرست‌ها و نقدهای محبوبت نشان بده"
+        },
+        "rating": {
+          "label": "امتیاز",
+          "description": "به فیلم‌هایی که دیده‌ای امتیاز بده"
+        },
+        "watchlist": {
+          "label": "فهرست تماشا",
+          "description": "فیلم‌هایی را که می‌خواهی ببینی ذخیره کن"
+        },
+        "playlists": {
+          "label": "فهرست‌ها",
+          "description": "فیلم‌هایت را در فهرست‌ها سازمان بده و به اشتراک بگذار"
+        },
+        "reviews": {
+          "label": "نقدها",
+          "description": "نقد بنویس و سینمادوست سخت‌پسند درونت را بیرون بیاور"
+        },
+        "feed": {
+          "label": "خوراک",
+          "description": "فعالیت دوستانت را دنبال کن"
+        },
+        "adsFree": {
+          "label": "بدون تبلیغ",
+          "description": "از Recomend بدون تبلیغ لذت ببر، برای همیشه"
+        }
+      }
+    },
+    "welcome": {
+      "title": "ممنون که ثبت‌نام کردی!",
+      "description": "نگاهی سریع به کارهایی که با {app} می‌توانی انجام دهی.",
+      "follow": {
+        "title": "دیگران را دنبال کن",
+        "description": "دوستانت را دنبال کن تا ببینی چه می‌بینند."
+      },
+      "import": {
+        "title": "از پلتفرم دیگری می‌آیی؟"
+      }
+    },
+    "collection": {
+      "label": "کتابخانه",
+      "my_recos": {
+        "label": "reco‌های من",
+        "search": {
+          "placeholder": "جست‌وجو در reco‌های من..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "حذف از reco‌های من",
+            "description": "مطمئنی می‌خواهی <important>{title}</important> را از reco‌هایت حذف کنی؟"
+          },
+          "complete_confirm": {
+            "title": "تکمیل reco",
+            "description": "مطمئنی می‌خواهی reco <important>{title}</important> را تکمیل کنی؟"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "جست‌وجو در فهرست تماشا..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "حذف از فهرست تماشا",
+            "description": "مطمئنی می‌خواهی <important>{title}</important> را از فهرست تماشایت حذف کنی؟"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "جست‌وجو در انتخاب‌های دل..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "حذف از انتخاب‌های دل",
+            "description": "مطمئنی می‌خواهی <important>{title}</important> را از انتخاب‌های دلت حذف کنی؟"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> تماشا کرد",
+        "rated": "<name></name> امتیاز داد",
+        "liked": "<name></name> لایک کرد",
+        "rated_liked": "<name></name> لایک کرد و امتیاز داد",
+        "reviewed": "<name></name> نقد نوشت"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> در <linkMedia>{titleMedia}</linkMedia> نقش <important>{roles}</important> دارد",
+        "label": "<linkPerson>{name}</linkPerson> نقش <important>{roles}</important> دارد"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "اجازه به اپلیکیشن",
+        "description_generic": "یک اپلیکیشن درخواست دسترسی به حسابت را دارد.",
+        "description": "{client} درخواست دسترسی به حسابت را دارد.",
+        "scopes_label": "این کار به اپلیکیشن اجازه می‌دهد:",
+        "accept": "اجازه می‌دهم",
+        "deny": "رد می‌کنم",
+        "error": {
+          "invalid_request": "درخواست نامعتبر یا منقضی",
+          "invalid_request_description": "فرایند اجازه را از همان اپلیکیشنی که تو را به اینجا فرستاد از نو آغاز کن.",
+          "client_not_found": "این اپلیکیشن پیدا نشد.",
+          "submit_failed": "چیزی درست پیش نرفت. دوباره تلاش کن."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "به حساب {app} خودت وارد شو."
+        },
+        "label": "ورود",
+        "description": "بهترین پیشنهادهای فیلم را کشف کن.",
+        "or_continue_with": "یا با این ادامه بده",
+        "no_account_yet": "هنوز حساب نداری؟",
+        "form": {
+          "identifier": {
+            "label": "ایمیل یا نام کاربری",
+            "placeholder": "ایمیل یا نام کاربری‌ات را وارد کن"
+          },
+          "password": {
+            "label": "گذرواژه",
+            "placeholder": "گذرواژه‌ات را وارد کن"
+          },
+          "submit": "ورود",
+          "forgot_password": "گذرواژه را فراموش کردی؟",
+          "wrong_credentials": "ایمیل یا گذرواژه نادرست است"
+        },
+        "otp": {
+          "password_login": "ترجیح می‌دهی با گذرواژه وارد شوی؟",
+          "form": {
+            "submit": "دریافت کد",
+            "no_user_found": "کاربری با این ایمیل پیدا نشد",
+            "success": "وارد شدی"
+          },
+          "confirm_form": {
+            "label": "تأیید کد",
+            "description": "یک کد تأیید به نشانی {email} فرستاده شد"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "در {app} ثبت‌نام کن تا پیشنهادهای فیلم را کشف کنی و به اشتراک بگذاری."
+        },
+        "description": "حساب بساز تا به دوستی که همیشه نام فیلم‌ها را فراموش می‌کند فیلم پیشنهاد بدهی.",
+        "form": {
+          "success": "یک ایمیل تأیید به {email} فرستاده شد"
+        },
+        "confirm_form": {
+          "label": "تأیید ایمیل",
+          "description": "یک پیوند تأیید به نشانی {email} فرستاده شد"
+        },
+        "return_to_login": "اوپس، من از قبل حساب دارم."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "گذرواژه را فراموش کردم",
+          "description": "گذرواژه‌ات را بازنشانی کن."
+        },
+        "label": "گذرواژه را فراموش کردم",
+        "description": "بهتر است از یک مدیر گذرواژه استفاده کنی، واقعاً راحت است.",
+        "return_to_login": "اوپس، در واقع گذرواژه‌ام یادم آمد.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "بازنشانی گذرواژه",
+          "code_sent": "درخواست فرستاده شد"
+        },
+        "confirm_form": {
+          "label": "تأیید کد",
+          "description": "یک کد تأیید به نشانی {email} فرستاده شد"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "بازنشانی گذرواژه",
+          "description": "برای حسابت گذرواژه تازه‌ای انتخاب کن."
+        }
+      },
+      "error": {
+        "label": "خطا",
+        "description": "در فرایند احراز هویت خطایی رخ داد.",
+        "return_to_login": "بازگشت به جای امن"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "درباره",
+        "marquee": "در زندگی‌ات چیزی هیجان‌انگیزتر از خواندن صفحه‌های «درباره» در اینترنت نیست؟",
+        "intro": "<strong>Recomend</strong> فضایی است که به کشف فیلم، پیشنهاد دادن و سازمان دادن آن اختصاص دارد. همه چیز را طوری چیدیم که توصیه‌های دهان‌به‌دهان سرانجام بهترین تکیه‌گاه دیجیتال را پیدا کنند. رویکرد ما آدم‌ها و رابطه‌هایشان را در مرکز می‌گذارد، در روزگاری که مصرف حول خودمان می‌گردد، یا بهتر بگوییم حول «پیشنهاد ویژه تو».",
+        "slogan": {
+          "1": "بدون تبلیغ و بدون وعده‌های مشکوک. 🍆",
+          "2": "هم شبکه اجتماعی است و هم ابزار.",
+          "3": "خانگی و ساخته‌دست دلبستگان.",
+          "4": "آماتور، به راست‌ترین معنای کلمه."
+        },
+        "last": "Recomend را می‌توانی تنها یا با دیگران، علنی یا پنهانی، روز یا شب استفاده کنی، اما هرگز مقابل یک فیلم — لطفاً تمرکز کن!"
+      },
+      "team": {
+        "label": "تیم",
+        "intro": "Recomend را دو برادر شیفته سینما ساختند که دوست دارند وقتشان را روی پروژه‌های بیش از حد جسورانه بگذارند؛ پروژه‌هایی که شاید هرگز به سرانجام نرسند.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "معمار-مهندسی بیش‌فعال که یک شغل راضی‌اش نمی‌کند (ملت استارتاپی واقعی)، Yoann همان کسی است که فکر نقشه فیلم‌ها از او بود؛ نقشه‌ای که در آغاز آرزوی ساده‌ای داشت: پوستری برای حمام خودش. با آمدن Loup هدف‌ها سر به آسمان گذاشتند و او که کمی احساس می‌کرد جریان او را با خود می‌برد، تمام کار گرافیک نقشه و سایت و همچنین همه ارتباطات را بر دوش گرفت (هرچند دوستش ندارد). علاوه بر این نظرش را درباره UX/UI می‌گوید و قابلیت‌های بسیاری پیشنهاد می‌دهد، بی‌آنکه کامل بفهمد کدنویسی‌شان چقدر سخت است (در این زمینه پیشرفت کرده)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "کاملاً خودآموخته، با این حال موفق شد تحصیلاتی را تمام کند که پیش از ۲۵ سالگی به بیکاری بی‌حقوق رساندش. آچارفرانسه‌ای واقعی؛ Loup سمت وب را پیش می‌برد و رابطی می‌نویسد که می‌خواهد تا جای ممکن دلچسب باشد. Loup می‌خواهد از همه انجمن‌های برنامه‌نویسی که به پرسش‌های (خیلی) زیادش پاسخ دادند تشکر کند، و همچنین از همه یوتیوبرهای هندی که در این ماه‌ها مثل پدرخوانده‌ها راهنمایش بودند. مادرش هم مطمئن است که برادرش او را برای این پروژه به بردگی گرفته (حالم خوب است مامان)."
+          }
+        },
+        "last": "برای ارتباط با ما یا دیگر اعضای جامعه، به <link>Discord</link> ما بپیوند!"
+      },
+      "pricing": {
+        "label": "قیمت‌ها",
+        "intro": "این مدل اشتراک پیش از هر چیز راهی است برای پشتیبانی از پروژه و کمک به رشدش. قابلیت‌های Premium افزوده‌هایی برای استفاده پیشرفته‌تر از Recomend هستند و همین مشارکت مالی کوچک را توجیه می‌کنند. ما همیشه امکان استفاده رایگان از سایت را نگه می‌داریم؛ بدون تبلیغ و بدون احساس محدودیت.",
+        "subdescription": "*اگر همین قیمت خنده‌دار پایین اشتراک هم از توان تو بیشتر است، به دولت لیبرالت مراجعه کن که مسئول از دست رفتن قدرت خریدت است."
+      },
+      "legal": {
+        "label": "حقوقی و حریم خصوصی",
+        "description": "ما به حریم خصوصی‌ات احترام می‌گذاریم. تبلیغ‌هایی که به کاربران مهمان نشان داده می‌شود توسط Google مدیریت می‌شود و برای محدود کردن تکرار نمایش و جلوگیری از تقلب به کوکی‌های فنی نیاز دارد.",
+        "privacyPolicy": "سیاست حفظ حریم خصوصی ما را بخوان",
+        "manageCookies": "مدیریت تنظیمات تبلیغاتی من (کوکی‌ها)"
+      },
+      "open-source": {
+        "label": "متن‌باز",
+        "intro": "Recomend متن‌باز است: کد روی GitHub در دسترس همه است. نگاهی بینداز، مشارکت کن، یا فقط برایمان یک ستاره بگذار!",
+        "star": "در GitHub به ما ستاره بده"
+      },
+      "businessmodel": {
+        "label": "مدل کسب‌وکار",
+        "paragraph": {
+          "1": "همان‌طور که از پروفایل‌های کاملاً غیرتجاری ما می‌توان حدس زد، هنوز نفهمیده‌ایم یک مدل کسب‌وکار در حال حاضر چه چیزی برای ما دارد...",
+          "2": "اگر آینده Recomend اقتضا کند، سراغش می‌رویم و خودمان را با آدم‌های درست احاطه می‌کنیم — یا دست‌کم با آدم‌هایی که بیشتر از ما به این موضوع علاقه دارند.",
+          "3": "تا آن وقت، راستش را بگوییم، کارهای دیگری هم هست."
+        }
+      },
+      "roadmap": {
+        "label": "نقشه راه"
+      },
+      "data": {
+        "label": "داده‌ها",
+        "paragraph": {
+          "1": "همه فرادادهٔ استفاده‌شده در Recomend را <link>The Movie Database (TMDb)</link> از طریق API این پلتفرم فراهم می‌کند. مثل همه عمل می‌کنیم، مثل گوسفندهای خوب.",
+          "2": "برای خطاها یا فیلم‌های جاافتاده به <link>TMDb</link> مراجعه کن."
+        }
+      },
+      "resources": {
+        "label": "منابع",
+        "intro": "ربط زیادی به سینما ندارد، اما این فهرست سایت‌هایی است که دوست داریم:"
+      },
+      "contact-support": {
+        "label": "تماس و پشتیبانی",
+        "help-center": "پاسخ پرسش‌های وجودی‌ات را در <link>مرکز راهنما</link> ما پیدا کن.",
+        "technical-support": "برای پرسش‌های فنی: <email></email>",
+        "suggest-a-feature": "برای پیشنهادها: <email></email>",
+        "contact-us": "برای اینکه فقط با ما در تماس باشی: <email></email>"
+      },
+      "quote": {
+        "label": "نقل قول",
+        "quote": "« از واژه حرفه‌ای بیزارم. همه آن بازیگران و دیگرانی که می‌گویند: من حرفه‌ای‌ام، من پروفشنالم! این چیست؟ واژه‌ای غم‌انگیزتر از این هست؟ چون آماتور از واژه عشق می‌آید. کارها را باید از عشق انجام داد، وگرنه احمقیم. »",
+        "author": "اورسن ولز",
+        "date": "۱۹۷۲",
+        "subdescription": "*دو دل بودیم که بگذاریمش، چون زود به گوش خودپسندانه می‌آید، اما حال و هوای ما درباره پروژه را خوب نشان می‌دهد. با این حال اگر خوشت نیامد، برمی‌داریمش."
+      }
+    },
+    "settings": {
+      "label": "تنظیمات",
+      "description": "تنظیمات حسابت را مدیریت کن.",
+      "profile": {
+        "label": "پروفایل",
+        "description": "دیگران تو را در سایت این‌طور می‌بینند.",
+        "avatar": {
+          "label": "آواتار",
+          "delete": "حذف"
+        },
+        "full_name": {
+          "label": "نام",
+          "description": "این نام در پروفایلت و در ایمیل‌ها نمایش داده می‌شود.",
+          "placeholder": "نامت را وارد کن",
+          "form": {
+            "min_length": "نام باید حداقل ۱ نویسه باشد",
+            "max_length": "نام نباید از ۵۰ نویسه بیشتر شود"
+          }
+        },
+        "bio": {
+          "label": "معرفی",
+          "description": "چیزی از خودت بگو، در پروفایلت نمایش داده می‌شود.",
+          "placeholder": "از خودت برایمان بگو",
+          "form": {
+            "max_length": "معرفی نباید از ۱۵۰ نویسه بیشتر شود",
+            "format": "معرفی نمی‌تواند خط خالی داشته باشد یا فقط از فاصله تشکیل شود."
+          }
+        },
+        "favorite_films": {
+          "label": "فیلم‌های محبوب",
+          "description": ""
+        },
+        "url": {
+          "label": "نشانی وب",
+          "description": "",
+          "form": {
+            "invalid": "نشانی وب نامعتبر"
+          }
+        }
+      },
+      "account": {
+        "label": "حساب",
+        "description": "تنظیمات حسابت را به‌روز کن.",
+        "username": {
+          "label": "نام کاربری",
+          "description": "این همان نام کاربری است که دیگران با آن تو را پیدا می‌کنند و به پروفایلت می‌روند. هر ۳۰ روز فقط یک بار می‌توانی تغییرش دهی.",
+          "placeholder": "نام کاربری‌ات را وارد کن",
+          "form": {
+            "min_length": "نام کاربری باید حداقل ۳ نویسه باشد",
+            "max_length": "نام کاربری نباید از ۱۵ نویسه بیشتر شود",
+            "invalid": "نام کاربری تنها می‌تواند حروف، ارقام و نمادهای '_' و '.' داشته باشد",
+            "unavailable": "این نام کاربری گرفته شده است"
+          }
+        },
+        "private": {
+          "label": "حساب خصوصی",
+          "description": "وقتی حسابت خصوصی باشد، تنها دوستانت فعالیت‌هایت را می‌بینند."
+        },
+        "email": {
+          "description": "یک ایمیل تأیید به نشانی فعلی و نشانی تازه فرستاده می‌شود. برای اعمال تغییر باید هر دو را تأیید کنی.",
+          "change_pending": "یک ایمیل تأیید در <strong>{date}</strong> به نشانی تازه‌ات <strong>{email}</strong> فرستاده شد. برای تأیید تغییر روی پیوند بزن یا کد تأیید را وارد کن.",
+          "confirm_email_code": {
+            "description": "برای تأیید تغییر، کد تأییدی که به نشانی <strong>{email}</strong> فرستاده شد را وارد کن."
+          },
+          "change_success": "ایمیلت با موفقیت تغییر کرد"
+        },
+        "delete_account": {
+          "button": "حذف حساب من",
+          "confirm": {
+            "description": "مطمئنی می‌خواهی حسابت را حذف کنی؟ این کار بازگشت‌پذیر نیست.",
+            "confirm_email_sent": "یک ایمیل تأیید به نشانی ایمیلت فرستاده شد"
+          }
+        }
+      },
+      "appearance": {
+        "label": "ظاهر",
+        "description": "ظاهر اپلیکیشن را دلخواه کن. جابه‌جایی خودکار میان پوسته روز و شب.",
+        "language": {
+          "label": "زبان",
+          "description": "زبان را انتخاب کن – تغییر پس از راه‌اندازی دوباره اپلیکیشن اعمال می‌شود",
+          "placeholder": "زبان را انتخاب کن",
+          "not_found": "زبان پیدا نشد"
+        },
+        "theme": {
+          "label": "پوسته",
+          "description": "پوسته رابط را انتخاب کن.",
+          "options": {
+            "light": "روشن",
+            "dark": "تیره"
+          }
+        }
+      },
+      "subscription": {
+        "label": "اشتراک",
+        "description": "اشتراکت را مدیریت کن تا به قابلیت‌های Premium دسترسی داشته باشی."
+      },
+      "security": {
+        "label": "امنیت",
+        "description": "تغییر گذرواژه تو را از همه دستگاه‌ها خارج می‌کند، به‌جز دستگاهی که همین حالا از آن استفاده می‌کنی.",
+        "current_password": {
+          "label": "گذرواژه فعلی",
+          "placeholder": "گذرواژه فعلی‌ات را وارد کن",
+          "form": {
+            "required": "لطفاً گذرواژه فعلی‌ات را وارد کن",
+            "invalid": "گذرواژه فعلی نادرست است"
+          }
+        },
+        "new_password": {
+          "label": "گذرواژه تازه",
+          "placeholder": "گذرواژه تازه‌ات را وارد کن",
+          "form": {
+            "min_length": "گذرواژه باید حداقل ۸ نویسه باشد",
+            "uppercase": "حداقل یک حرف بزرگ لازم است",
+            "lowercase": "حداقل یک حرف کوچک لازم است",
+            "number": "حداقل یک رقم لازم است",
+            "special": "حداقل یک نویسه ویژه لازم است"
+          }
+        },
+        "confirm_password": {
+          "label": "تأیید گذرواژه تازه",
+          "placeholder": "گذرواژه تازه‌ات را تأیید کن",
+          "form": {
+            "match": "گذرواژه‌ها یکسان نیستند"
+          }
+        }
+      },
+      "notifications": {
+        "label": "اعلان‌ها",
+        "description": "تنظیمات اعلان‌هایت را مدیریت کن.",
+        "push_notifications": {
+          "label": "اعلان‌های فوری",
+          "form": {
+            "enable": "فعال کردن اعلان‌های فوری"
+          },
+          "already_granted": "درخواست اعلان پیش از این انجام شده؛ برای تغییرش به تنظیمات مرورگرت برو.",
+          "no_enabled": "برای دریافت اعلان‌های فوری، اعلان‌ها را در تنظیمات دستگاهت فعال کن.",
+          "open_settings": "رفتن به تنظیمات دستگاه"
+        }
+      },
+      "data": {
+        "label": "داده‌ها",
+        "description": "داده‌هایت را درون‌ریزی یا برون‌بری کن.",
+        "importer": {
+          "label": "درون‌ریزی",
+          "select_source": "یک منبع انتخاب کن",
+          "instructions_title": "راهنما",
+          "browse_prompt": "فایلت را اینجا بینداز، یا <link>انتخاب کن</link>",
+          "browse_prompt_mobile": "برای انتخاب فایل بزن",
+          "uploading": "در حال بارگذاری…",
+          "processing": "در حال تحلیل فایلت…",
+          "upload_error": "بارگذاری ناموفق بود، دوباره تلاش کن.",
+          "invalid_file_type": "این نوع فایل برای این منبع پشتیبانی نمی‌شود.",
+          "review_title": "درون‌ریزی‌ات را بررسی کن",
+          "review_summary": "{matched} از {total} مطابقت یافت",
+          "validate": "تأیید درون‌ریزی",
+          "validate_confirm_description": "این کار همه موارد مطابق و رد‌نشده را به کتابخانه‌ات می‌آورد. بازگشت‌پذیر نیست.",
+          "success_title": "درون‌ریزی کامل شد",
+          "success_description": "داده‌هایت با موفقیت درون‌ریزی شد.",
+          "failed_title": "درون‌ریزی ناموفق بود",
+          "failed_description": "در پردازش این درون‌ریزی چیزی درست پیش نرفت.",
+          "pending_description": "درون‌ریزی‌ات در نوبت است و به‌زودی آغاز می‌شود.",
+          "empty": "هنوز درون‌ریزی‌ای نیست.",
+          "delete_confirm_description": "این درون‌ریزی و همه داده‌های آماده‌شده‌اش برای همیشه حذف می‌شوند. بازگشت‌پذیر نیست.",
+          "keep_existing": "مال خودم بماند",
+          "use_imported": "از درون‌ریزی‌شده استفاده کن",
+          "merge": "ادغام",
+          "conflict": "تضاد",
+          "no_match": "مطابقتی نیست",
+          "existing_rating": "اکنون: {rating}",
+          "log_column": "گزارش",
+          "actions_column": "کارها",
+          "categories": {
+            "log_movies": "فیلم‌ها",
+            "log_tv_series": "سریال‌ها",
+            "bookmarks": "فهرست تماشا",
+            "playlists": "فهرست‌ها"
+          },
+          "status": {
+            "pending": "در انتظار",
+            "processing": "در حال پردازش",
+            "awaiting_review": "در انتظار بررسی",
+            "completed": "کامل شد",
+            "failed": "ناموفق"
+          }
+        },
+        "exporter": {
+          "label": "برون‌بری"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "ارتقا به Premium",
+        "description": "به حساب Premium ارتقا بده تا به همه قابلیت‌های {app} دسترسی داشته باشی."
+      },
+      "header": {
+        "title": "سینمایت را گسترش بده، بیشتر به اشتراک بگذار، از {app} پشتیبانی کن",
+        "subtitle": "۱ ماه رایگان امتحان کن، سپس ماهی {price}"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "فعالیت‌ها",
+            "unlimited_activities": {
+              "label": "فعالیت بی‌حدومرز",
+              "description": "امتیازها، لایک‌ها، نقدها، فهرست تماشا و پیشنهادها"
+            },
+            "favorites": {
+              "label": "محبوب‌ها",
+              "description": "فیلم‌های محبوبت را به پروفایلت اضافه کن"
+            }
+          },
+          "playlists": {
+            "label": "فهرست‌ها",
+            "unlimited_playlists": {
+              "label": "بی‌حدومرز",
+              "description": "به تعداد نامحدود فهرست بساز"
+            },
+            "shared_playlists": {
+              "label": "اشتراکی",
+              "description": "فهرست‌هایت را با کاربران دیگر به اشتراک بگذار"
+            },
+            "collaborative_playlists": {
+              "label": "همکاری‌محور",
+              "description": "با کاربران دیگر فهرست‌های مشترک بساز"
+            }
+          },
+          "feed": {
+            "label": "خوراک",
+            "followees": {
+              "label": "کاربرانی که دنبال می‌کنی",
+              "description": "فعالیت کاربرانی را که دنبال می‌کنی ببین"
+            },
+            "cast_and_crew": {
+              "label": "بازیگران و عوامل",
+              "description": "فعالیت افرادی را که در فیلم‌ها نقش دارند دنبال کن"
+            }
+          },
+          "support": {
+            "label": "پشتیبانی",
+            "team": {
+              "label": "از تیم {app} پشتیبانی کن"
+            },
+            "credits": {
+              "label": "عوامل",
+              "description": "پروفایلت در فهرست عوامل اپلیکیشن"
+            }
+          }
+        },
+        "success": {
+          "label": "ممنون از پشتیبانی‌ات!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} – فهرستی از @{username}",
+        "description": "فهرست فیلم‌های @{username} را در {app} کشف کن."
+      },
+      "actions": {
+        "delete": {
+          "description": "این کار <important>{title}</important> را برای همیشه از فهرست‌هایت حذف می‌کند."
+        }
+      },
+      "search": {
+        "placeholder": "جست‌وجو در فهرست..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "مطمئنی می‌خواهی <important>{title}</important> را از فهرستت حذف کنی؟"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "عنوان فهرست را وارد کن"
+        },
+        "description": {
+          "placeholder": "توضیحی برای فهرست وارد کن"
+        },
+        "error": {
+          "format": "توضیح نمی‌تواند خط خالی داشته باشد یا فقط از فاصله تشکیل شود."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "پروفایل @{username} را در {app} کشف کن."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} فیلمی از {directors} است که در {year} اکران شد. خلاصه: {overview}",
+        "description_no_director": "{title} فیلمی است که در {year} اکران شد. خلاصه: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • فهرست‌ها",
+          "description": "همه فهرست‌هایی را که فیلم {title} در آن‌ها هست کشف کن."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • نقدها",
+          "description": "همه نقدهای فیلم {title} را کشف کن."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} سریالی از {creators} است که نخستین بار در {year} پخش شد. خلاصه: {overview}",
+        "description_no_creator": "{title} سریالی است که نخستین بار در {year} پخش شد. خلاصه: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • فهرست‌ها",
+          "description": "همه فهرست‌هایی را که سریال {title} در آن‌ها هست کشف کن."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • نقدها",
+          "description": "همه نقدهای سریال {title} را کشف کن."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • فصل‌ها",
+          "description": "همه فصل‌های سریال {title} را کشف کن."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • فصل {number}",
+            "description": "همه قسمت‌های فصل {number} سریال {title} را کشف کن."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • فیلم‌ها",
+          "description": "همه فیلم‌هایی را که {name} در آن‌ها بازی کرده یا نقش داشته کشف کن."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • سریال‌ها",
+          "description": "همه سریال‌هایی را که {name} در آن‌ها بازی کرده یا نقش داشته کشف کن."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "نقد {title} به قلم @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "نقدی بر {title} بنویس",
+          "description": "نظرت را درباره {title} به اشتراک بگذار."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Paradise Pictures را کشف کن",
+        "description": "سفری را آغاز کن تا جزیره و چشم‌اندازهای گوناگونش را کشف کنی. فیلم‌های بی‌شماری که در آن زندگی می‌کنند، در دل جهان خودشان جای گرفته‌اند. می‌توانی همه گوشه‌هایش را بگردی؟"
+      }
+    },
+    "legal": {
+      "label": "حقوقی",
+      "description": "اسناد حقوقی {app} را بخوان.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "شرایط استفاده",
+          "description": "شرایط استفاده از {app} را بخوان."
+        },
+        "sections": {
+          "intro": "این شرایط استفاده (از این پس «شرایط») دسترسی به اپلیکیشن {app} و استفاده از آن را تنظیم می‌کند. اپلیکیشن توسط Loup (از این پس «ناشر») با اقامت در پاریس منتشر می‌شود. ثبت‌نام در {app} به معنای پذیرش بی‌قیدوشرط این شرایط است.",
+          "presentation": {
+            "label": "۱. معرفی سرویس",
+            "content": "{app} اپلیکیشنی رایگان است که به کاربرانش امکان می‌دهد اطلاعات فیلم‌ها را ببینند، نقد منتشر کنند، آثار را امتیاز دهند و فهرست‌های شخصی بسازند."
+          },
+          "account": {
+            "label": "۲. حساب و امنیت",
+            "content": "دسترسی به قابلیت‌های مشارکت نیازمند ساختن حساب است. کاربر مسئول محرمانه نگه‌داشتن اطلاعات ورود خود است. در صورت استفاده متقلبانه یا گمان نفوذ، کاربر باید بی‌درنگ با پشتیبانی تماس بگیرد: <email></email>."
+          },
+          "conduct": {
+            "label": "۳. قواعد رفتاری",
+            "content": "کاربر متعهد می‌شود در نقدها و فهرست‌هایش مؤدب و محترم بماند. این موارد به‌کل ممنوع است: سخن نفرت‌پراکن، اظهارات افتراآمیز یا نژادپرستانه، آزار و اذیت، و همچنین هرزنامه و تبلیغ تجاری ناخواسته. ناشر این حق را برای خود نگه می‌دارد که هر محتوای ناقض این قواعد را حذف کند و حساب مربوط را بدون اطلاع پیشین معلق کند."
+          },
+          "child_safety": {
+            "label": "۴. سیاست حفاظت از کودکان",
+            "content": "{app} سیاست تحمل صفر و سختگیرانه‌ای در برابر سوءاستفاده و بهره‌کشی جنسی از کودکان (CSAE) دارد. ساختن، بارگذاری، ذخیره، توزیع، درخواست یا ترویج هر محتوایی که خردسالان را به شکل جنسی به تصویر بکشد، از آن‌ها بهره‌کشی کند یا آن‌ها را به هر شکل دیگری در خطر بیندازد، در {app} صریحاً و به‌طور مطلق ممنوع است. هر حسابی که ناقض این سیاست شناخته شود بی‌درنگ و برای همیشه مسدود می‌شود و ناشر محتوای مربوط را، همراه با همه اطلاعات موجود کاربر، بر اساس قانون جاری به National Center for Missing & Exploited Children (NCMEC) و/یا مقامات مجری قانون گزارش می‌دهد. هر کاربری که از محتوا یا رفتاری آگاه شود که ممکن است CSAE باشد، باید بی‌درنگ آن را گزارش کند: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "۵. مالکیت فکری",
+            "content": "کاربر مالک نقدهایی که می‌نویسد باقی می‌ماند. با این حال، با انتشار در {app} به ناشر مجوزی رایگان و غیرانحصاری می‌دهد تا این محتوا را درون اپلیکیشن نمایش دهد، بازتولید کند و از نظر فنی سازگار کند. عناصر بصری، کد و طراحی {app} دارایی انحصاری ناشر است."
+          },
+          "privacy": {
+            "label": "۶. داده‌های شخصی",
+            "content": "احترام به حریم خصوصی تو اولویت مطلق ماست. {app} هیچ داده شخصی‌ای را به اشخاص ثالث تجاری یا تبلیغاتی نمی‌فروشد، اجاره نمی‌دهد و به اشتراک نمی‌گذارد. داده‌های گردآوری‌شده (ایمیل، نام کاربری، فعالیت در اپلیکیشن) تنها برای کارکرد سرویس و مدیریت حساب به کار می‌رود. می‌توانی حق دسترسی، اصلاح یا حذف (GDPR) را با تماس به این نشانی اعمال کنی: <email></email>."
+          },
+          "cookies": {
+            "label": "۷. کوکی‌ها و ردیاب‌ها",
+            "content": "{app} هیچ کوکی تبلیغاتی و هیچ ردیاب رفتاری متعلق به اشخاص ثالث به کار نمی‌برد. تنها دو نوع کوکی فنی استفاده می‌شود: یک کوکی احراز هویت (تا وارد بمانی) و یک کوکی ترجیح زبان (تا انتخابت به خاطر بماند). چون این کوکی‌ها برای سرویس کاملاً ضروری‌اند، از رضایت پیشین مستثنا هستند."
+          },
+          "ads": {
+            "label": "۸. تبلیغات",
+            "content": "اپلیکیشن در حال حاضر بدون هیچ تبلیغی ارائه می‌شود. اگر این مدل تغییر کند، کاربران با به‌روزرسانی همین شرایط آگاه می‌شوند."
+          },
+          "liability": {
+            "label": "۹. مسئولیت",
+            "content": "ناشر می‌کوشد {app} شبانه‌روز در دسترس باشد، اما نبود قطعی یا اشکال را تضمین نمی‌کند. اطلاعات فیلم‌ها از پایگاه‌داده‌های اشخاص ثالث می‌آید؛ ناشر را نمی‌توان مسئول نادرستی‌های احتمالی آن‌ها دانست."
+          },
+          "law": {
+            "label": "۱۰. قانون حاکم",
+            "content": "این شرایط تابع قانون فرانسه است. در صورت اختلافی که از راه <email></email> به‌صورت دوستانه حل نشود، دادگاه‌های پاریس صلاحیت انحصاری دارند."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "سیاست حفظ حریم خصوصی",
+          "description": "سیاست حفظ حریم خصوصی {app} را بخوان."
+        },
+        "sections": {
+          "intro": "حفاظت از داده‌ها در قلب فلسفه {app} است. این سیاست توضیح می‌دهد چه داده‌هایی گردآوری می‌کنیم، چرا گردآوری می‌کنیم و چگونه از آن‌ها محافظت می‌کنیم. خلاصه: ما داده‌هایت را نمی‌فروشیم.",
+          "controller": {
+            "label": "۱. مسئول پردازش داده‌ها",
+            "content": "مسئول پردازش داده‌ها Loup است، با اقامت در پاریس (فرانسه). برای هر پرسش مربوط به حریم خصوصی می‌توانی به این نشانی بنویسی: <email></email>."
+          },
+          "collected_data": {
+            "label": "۲. داده‌های گردآوری‌شده",
+            "content": "تنها داده‌هایی را گردآوری می‌کنیم که برای کارکرد اپلیکیشن کاملاً لازم‌اند: نشانی ایمیلت (برای احراز هویت)، نام کاربری‌ات و داده‌های استفاده‌ات (فیلم‌های امتیازداده‌شده، نقدها، فهرست‌ها). گذرواژه‌هایت به شکل رمزنگاری‌شده (هش‌شده) و ایمن ذخیره می‌شود."
+          },
+          "purpose": {
+            "label": "۳. هدف پردازش",
+            "content": "داده‌هایت تنها برای این موارد پردازش می‌شود: اینکه بتوانی حسابت را بسازی و مدیریت کنی، اینکه فهرست‌ها و امتیازهایت نمایش داده شود، و اینکه کارکرد فنی سرویس تأمین شود. داده‌هایت را برای نمایه‌سازی تبلیغاتی به کار نمی‌بریم."
+          },
+          "sharing": {
+            "label": "۴. اشتراک داده‌ها",
+            "content": "داده‌های شخصی‌ات هرگز فروخته، اجاره یا به اشخاص ثالث منتقل نمی‌شود. ممکن است نزد تأمین‌کنندگان فنی ما (میزبانی، سرویس ایمیل تراکنشی) نگهداری شود که به محرمانگی سختگیرانه متعهدند و با GDPR سازگارند."
+          },
+          "retention": {
+            "label": "۵. مدت نگهداری",
+            "content": "داده‌هایت تا زمانی که حسابت فعال باشد نگه داشته می‌شود. اگر تصمیم بگیری حسابت را حذف کنی، همه داده‌های شخصی‌ات (ایمیل، نام کاربری، نقدها) برای همیشه از پایگاه‌داده‌های ما پاک می‌شود."
+          },
+          "rights": {
+            "label": "۶. حقوق تو (GDPR)",
+            "content": "بر اساس مقررات، حق دسترسی، اصلاح، انتقال و حذف داده‌هایت را داری. می‌توانی این حقوق را هر زمان مستقیماً در اپلیکیشن یا با نوشتن به این نشانی اعمال کنی: <email></email>."
+          },
+          "cookies": {
+            "label": "۷. کوکی‌ها",
+            "content": "همان‌طور که در شرایط استفاده آمده، تنها از کوکی‌های فنی ضروری (نشست و زبان) استفاده می‌کنیم. هیچ کوکی تبلیغاتی یا ردیاب متعلق به اشخاص ثالث روی دستگاهت گذاشته نمی‌شود."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "جست‌وجوی فیلم، سریال، فهرست، شخص یا کاربر..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "مطمئنی می‌خواهی این اثر را از دیده‌شده‌ها برداری؟ اگر امتیاز یا نقدی داشته باشی، آن‌ها هم حذف می‌شوند."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "مطمئنی می‌خواهی سریال را تکمیل کنی؟ همه قسمت‌های همه فصل‌ها دیده‌شده علامت می‌خورند."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "مطمئنی می‌خواهی فصل {seasonNumber} را تکمیل کنی؟ همه قسمت‌های این فصل دیده‌شده علامت می‌خورند."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "برای دیدن فعالیت در اینجا، تو یا کاربرانی که دنبال می‌کنی باید به فیلم‌ها، سریال‌ها و ... امتیاز بدهید."
+    },
+    "feed_person": {
+      "message": "برای دیدن فعالیت در اینجا، باید افرادی را که در فیلم‌ها یا سریال‌ها نقش دارند دنبال کنی."
+    },
+    "playlists": {
+      "items": {
+        "empty": "در این فهرست فیلم یا سریالی نیست. چندتایی اضافه کن تا پر شود!"
+      },
+      "add_to": {
+        "empty": "هیچ فهرستی نداری. یکی بساز تا فیلم یا سریال اضافه کنی و راحت پیدایشان کنی!"
+      },
+      "saved": {
+        "empty": "فهرست ذخیره‌شده‌ای نداری. فهرستی را ذخیره کن تا در کتابخانه‌ات راحت پیدایش کنی!"
+      },
+      "members": {
+        "empty": "این فهرست عضوی ندارد. چند نفر اضافه کن تا با دیگران روی یک فهرست کار کنی!",
+        "search": "برای افزودن به فهرست، کاربران را جست‌وجو کن..."
+      }
+    },
+    "follow-requests": {
+      "empty": "درخواست دنبال کردن در انتظاری نداری. وقتی بیاید، همین‌جا نمایش داده می‌شود!"
+    },
+    "recos": {
+      "empty": "هیچ پیشنهادی نداری. وقتی بیاید، همین‌جا نمایش داده می‌شود!",
+      "send_to": {
+        "empty": "کسی نداری که برایش پیشنهاد بفرستی. برای فرستادن پیشنهاد باید دوست باشید (دنبال کردن دوطرفه)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "هنوز چیزی ذخیره نکرده‌ای. وقتی ذخیره کنی، همین‌جا نمایش داده می‌شود!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> فیلم <movie></movie> را به تو پیشنهاد داد"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> سریال <tv_series></tv_series> را به تو پیشنهاد داد"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> فیلم <movie></movie> را که پیشنهاد دادی تماشا کرد"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> سریال <tv_series></tv_series> را که پیشنهاد دادی تماشا کرد"
+    },
+    "follower_created": {
+      "description": "<user></user> شروع به دنبال کردنت کرد"
+    },
+    "follower_accepted": {
+      "description": "<user></user> درخواست دنبال کردنت را پذیرفت"
+    },
+    "follower_request": {
+      "description": "<user></user> می‌خواهد تو را دنبال کند"
+    },
+    "friend_created": {
+      "description": "<user></user> حالا دوست تو است"
+    }
+  }
+}

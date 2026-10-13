@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName}-მა მოიწონა შენი მიმოხილვა!",
+    "body": "{actorName}-მა მოიწონა შენი მიმოხილვა {mediaTitle}-ზე"
+  },
+  "commented": {
+    "subject": "ახალი კომენტარი შენს მიმოხილვაზე!",
+    "body": "{actorName}-მა დაწერა კომენტარი შენს მიმოხილვაზე {mediaTitle}-ზე",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName}-მა მოიწონა შენი კომენტარი!",
+    "body": "{actorName}-მა მოიწონა შენი კომენტარი {mediaTitle}-ზე"
+  },
+  "comment_replied": {
+    "subject": "ახალი პასუხი შენს კომენტარზე!",
+    "body": "{actorName}-მა გიპასუხა კომენტარზე {mediaTitle}-ზე",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

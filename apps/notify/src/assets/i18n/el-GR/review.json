@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "Στον/Στην {actorName} άρεσε η κριτική σου!",
+    "body": "Στον/Στην {actorName} άρεσε η κριτική σου για το {mediaTitle}"
+  },
+  "commented": {
+    "subject": "Νέο σχόλιο στην κριτική σου!",
+    "body": "Ο/Η {actorName} σχολίασε την κριτική σου για το {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "Στον/Στην {actorName} άρεσε το σχόλιό σου!",
+    "body": "Στον/Στην {actorName} άρεσε το σχόλιό σου για το {mediaTitle}"
+  },
+  "comment_replied": {
+    "subject": "Νέα απάντηση στο σχόλιό σου!",
+    "body": "Ο/Η {actorName} απάντησε στο σχόλιό σου για το {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

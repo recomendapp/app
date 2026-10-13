@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "Śledzenie",
+    "description": "Zapisuj filmy i seriale, które już obejrzałeś"
+  },
+  "recos": {
+    "label": "Reco",
+    "description": "Wysyłaj znajomym polecane filmy i seriale"
+  },
+  "playlists": {
+    "label": "Listy",
+    "description": "Porządkuj filmy i seriale w listach i udostępniaj je"
+  },
+  "feed": {
+    "label": "Aktualności",
+    "description": "Śledź aktywność znajomych"
+  },
+  "bookmarks": {
+    "label": "Na później",
+    "description": "Zapisuj filmy i seriale, które chcesz obejrzeć"
+  }
+}

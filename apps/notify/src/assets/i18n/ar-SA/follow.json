@@ -1,0 +1,14 @@
+{
+  "new": {
+    "subject": "متابع جديد!",
+    "body": "بدأ {actorName} متابعتك"
+  },
+  "request": {
+    "subject": "طلب متابعة جديد!",
+    "body": "طلب {actorName} متابعتك"
+  },
+  "accepted": {
+    "subject": "تم قبول طلب المتابعة!",
+    "body": "قبل {actorName} طلب متابعتك"
+  }
+}

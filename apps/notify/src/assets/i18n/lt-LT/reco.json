@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "Naujas reco nuo {senderName}!",
+    "body": "{senderName} tau rekomendavo {mediaTitle}",
+    "body_with_comment": "{senderName}: {comment}"
+  },
+  "completed": {
+    "subject": "Tavo reco įvykdytas!",
+    "body": "{receiverName} pamatė {mediaTitle}, kurį rekomendavai"
+  }
+}

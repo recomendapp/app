@@ -1,0 +1,14 @@
+{
+  "new": {
+    "subject": "Nouvel abonné !",
+    "body": "{actorName} a commencé à vous suivre"
+  },
+  "request": {
+    "subject": "Nouvelle demande d'abonnement !",
+    "body": "{actorName} a demandé à vous suivre"
+  },
+  "accepted": {
+    "subject": "Demande d'abonnement acceptée !",
+    "body": "{actorName} a accepté votre demande d'abonnement"
+  }
+}

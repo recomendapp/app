@@ -1,0 +1,14 @@
+{
+  "new": {
+    "subject": "Un nou urmăritor!",
+    "body": "{actorName} a început să te urmărească"
+  },
+  "request": {
+    "subject": "Cerere nouă de urmărire!",
+    "body": "{actorName} a cerut să te urmărească"
+  },
+  "accepted": {
+    "subject": "Cererea de urmărire a fost acceptată!",
+    "body": "{actorName} a acceptat cererea ta de urmărire"
+  }
+}

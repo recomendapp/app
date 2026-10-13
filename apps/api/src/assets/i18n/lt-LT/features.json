@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "Žymėjimas",
+    "description": "Fiksuok filmus ir serialus, kuriuos jau matei"
+  },
+  "recos": {
+    "label": "Reco",
+    "description": "Siųsk draugams filmų ir serialų rekomendacijas"
+  },
+  "playlists": {
+    "label": "Sąrašai",
+    "description": "Sudėk savo filmus ir serialus į sąrašus ir dalykis jais"
+  },
+  "feed": {
+    "label": "Srautas",
+    "description": "Sek, ką veikia tavo draugai"
+  },
+  "bookmarks": {
+    "label": "Vėliau",
+    "description": "Išsaugok filmus ir serialus, kuriuos nori pamatyti"
+  }
+}

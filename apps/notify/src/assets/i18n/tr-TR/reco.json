@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "{senderName} kullanıcısından yeni reco!",
+    "body": "{senderName} sana {mediaTitle} önerdi",
+    "body_with_comment": "{senderName}: {comment}"
+  },
+  "completed": {
+    "subject": "Reco'n tamamlandı!",
+    "body": "{receiverName}, önerdiğin {mediaTitle} adlı yapımı izledi"
+  }
+}

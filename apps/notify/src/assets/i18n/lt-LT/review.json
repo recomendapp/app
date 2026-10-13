@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} patiko tavo recenzija!",
+    "body": "{actorName} patiko tavo recenzija apie {mediaTitle}"
+  },
+  "commented": {
+    "subject": "Naujas komentaras po tavo recenzija!",
+    "body": "{actorName} pakomentavo tavo recenziją apie {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} patiko tavo komentaras!",
+    "body": "{actorName} patiko tavo komentaras apie {mediaTitle}"
+  },
+  "comment_replied": {
+    "subject": "Naujas atsakymas į tavo komentarą!",
+    "body": "{actorName} atsakė į tavo komentarą apie {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

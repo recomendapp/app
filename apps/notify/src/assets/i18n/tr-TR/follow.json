@@ -1,0 +1,14 @@
+{
+  "new": {
+    "subject": "Yeni takipçi!",
+    "body": "{actorName} seni takip etmeye başladı"
+  },
+  "request": {
+    "subject": "Yeni takip isteği!",
+    "body": "{actorName} seni takip etmek istiyor"
+  },
+  "accepted": {
+    "subject": "Takip isteği kabul edildi!",
+    "body": "{actorName} takip isteğini kabul etti"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "{senderName}님의 새 reco!",
+    "body": "{senderName}님이 {mediaTitle}을 추천했습니다",
+    "body_with_comment": "{senderName}: {comment}"
+  },
+  "completed": {
+    "subject": "당신의 reco가 완료되었습니다!",
+    "body": "{receiverName}님이 당신이 추천한 {mediaTitle}을 봤습니다"
+  }
+}

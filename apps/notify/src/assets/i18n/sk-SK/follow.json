@@ -1,0 +1,14 @@
+{
+  "new": {
+    "subject": "Nový sledujúci!",
+    "body": "{actorName} ťa začal sledovať"
+  },
+  "request": {
+    "subject": "Nová žiadosť o sledovanie!",
+    "body": "{actorName} žiada o možnosť sledovať ťa"
+  },
+  "accepted": {
+    "subject": "Žiadosť o sledovanie prijatá!",
+    "body": "{actorName} prijal tvoju žiadosť o sledovanie"
+  }
+}

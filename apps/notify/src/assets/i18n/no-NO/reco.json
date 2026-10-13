@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "Ny reco fra {senderName}!",
+    "body": "{senderName} har recoet {mediaTitle} til deg",
+    "body_with_comment": "{senderName}: {comment}"
+  },
+  "completed": {
+    "subject": "Recoen din er fullført!",
+    "body": "{receiverName} har sett {mediaTitle} som du recoet"
+  }
+}

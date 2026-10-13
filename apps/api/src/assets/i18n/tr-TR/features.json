@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "Takip",
+    "description": "İzlediğin film ve dizileri kayda geçir"
+  },
+  "recos": {
+    "label": "Reco",
+    "description": "Arkadaşlarına film ve dizi önerileri gönder"
+  },
+  "playlists": {
+    "label": "Listeler",
+    "description": "Film ve dizilerini listeler hâlinde düzenle ve paylaş"
+  },
+  "feed": {
+    "label": "Akış",
+    "description": "Arkadaşlarının etkinliklerini takip et"
+  },
+  "bookmarks": {
+    "label": "Sonrası için",
+    "description": "İzlemek istediğin film ve dizileri kaydet"
+  }
+}

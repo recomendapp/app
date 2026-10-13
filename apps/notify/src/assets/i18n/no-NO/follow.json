@@ -1,0 +1,14 @@
+{
+  "new": {
+    "subject": "Ny følger!",
+    "body": "{actorName} har begynt å følge deg"
+  },
+  "request": {
+    "subject": "Ny følgeforespørsel!",
+    "body": "{actorName} vil følge deg"
+  },
+  "accepted": {
+    "subject": "Følgeforespørsel godtatt!",
+    "body": "{actorName} har godtatt følgeforespørselen din"
+  }
+}

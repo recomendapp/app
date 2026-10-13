@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} incelemeni beğendi!",
+    "body": "{actorName}, {mediaTitle} hakkındaki incelemeni beğendi"
+  },
+  "commented": {
+    "subject": "İncelemene yeni yorum!",
+    "body": "{actorName}, {mediaTitle} hakkındaki incelemene yorum yaptı",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} yorumunu beğendi!",
+    "body": "{actorName}, {mediaTitle} altındaki yorumunu beğendi"
+  },
+  "comment_replied": {
+    "subject": "Yorumuna yeni yanıt!",
+    "body": "{actorName}, {mediaTitle} altındaki yorumuna yanıt verdi",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

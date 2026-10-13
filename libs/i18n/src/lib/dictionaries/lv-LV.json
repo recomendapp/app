@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "Cits veids, kā atklāt kino",
+    "description": "{app} ir sociālais tīkls kino mīļotājiem. Atklāj, dalies un izpēti filmas un seriālus kopā ar draugiem."
+  },
+  "common": {
+    "messages": {
+      "welcome": "Laipni lūdzam",
+      "welcome_to_app": "Laipni lūdzam {app}!",
+      "hello": "Sveiks",
+      "greeting_with_name": "{timeOfDay, select, morning {Labrīt, {name}} afternoon {Labdien, {name}} evening {Labvakar, {name}} night {Ar labu nakti, {name}} other {Sveiks, {name}}}",
+      "click_here": "Klikšķini šeit",
+      "see_more": "Skatīt vairāk",
+      "see_more_details": "Skatīt vairāk informācijas",
+      "more": "Vairāk",
+      "view_profile": "Skatīt profilu",
+      "library": "Bibliotēka",
+      "watchlist": "Skatīšanās saraksts",
+      "for_later": "Vēlākam",
+      "heart_pick": "{count, plural, zero {sirdsfilmas} one {sirdsfilma} other {sirdsfilmas}}",
+      "add_to_heart_picks": "Pievienot sirdsfilmām",
+      "remove_from_heart_picks": "Izņemt no sirdsfilmām",
+      "add_rating": "Pievienot vērtējumu",
+      "edit_rating": "Rediģēt vērtējumu",
+      "remove_rating": "Noņemt vērtējumu",
+      "share_my_rating": "Dalīties ar manu vērtējumu",
+      "share_review": "Dalīties ar recenziju",
+      "show_likes_count": "Rādīt patīk skaitu",
+      "show_comments_count": "Rādīt komentāru skaitu",
+      "add_to_watchlist": "pievienot skatīšanās sarakstam",
+      "remove_from_watchlist": "izņemt no skatīšanās saraksta",
+      "no_results": "nav rezultātu",
+      "no_results_for": "Nav rezultātu vaicājumam <strong>{query}</strong>",
+      "no_followees": "Tu nevienu neseko",
+      "no_followers": "Nav sekotāju",
+      "no_rating": "Nav vērtējuma",
+      "must_watch_to_review": "tev jābūt redzējušam šo darbu, lai to novērtētu",
+      "review_cannot_be_empty": "recenzija nevar būt tukša",
+      "no_activity": "nav aktivitātes",
+      "followers_ratings": "sekotāju vērtējumi",
+      "added_by": "pievienoja",
+      "sort_by": "kārtot pēc",
+      "sort_order": "kārtošanas secība",
+      "go_to_film": "doties uz filmu",
+      "go_to_tv_series": "doties uz seriālu",
+      "go_to_user": "doties uz lietotāju",
+      "go_to_person": "doties uz personu",
+      "go_to_activity": "doties uz aktivitāti",
+      "go_to_playlist": "doties uz atskaņošanas sarakstu",
+      "go_to_review": "doties uz recenziju",
+      "go_to_director": "{count, plural, zero {doties uz režisoriem} one {doties uz režisoru} other {doties uz režisoriem}}",
+      "go_to_creator": "{count, plural, zero {doties uz veidotājiem} one {doties uz veidotāju} other {doties uz veidotājiem}}",
+      "show_director": "{count, plural, zero {rādīt režisorus} one {rādīt režisoru} other {rādīt režisorus}}",
+      "show_creator": "{count, plural, zero {rādīt veidotājus} one {rādīt veidotāju} other {rādīt veidotājus}}",
+      "show_credit": "{count, plural, zero {rādīt titrus} one {rādīt titru} other {rādīt titrus}}",
+      "credits": "titri",
+      "view_recommendation": "{count, plural, zero {skatīt reco} one {skatīt reco} other {skatīt reco}}",
+      "view_directors": "{count, plural, zero {skatīt režisorus} one {skatīt režisoru} other {skatīt režisorus}}",
+      "no_director": "nav režisora",
+      "view_comment": "{count, plural, zero {skatīt komentārus} one {skatīt komentāru} other {skatīt komentārus}}",
+      "add_comment": "{count, plural, zero {pievienot komentārus} one {pievienot komentāru} other {pievienot komentārus}}",
+      "edit_comment": "{count, plural, zero {rediģēt komentārus} one {rediģēt komentāru} other {rediģēt komentārus}}",
+      "delete_comment": "Dzēst komentāru",
+      "do_you_really_want_to_delete_this_comment": "Vai tiešām vēlies dzēst šo komentāru?",
+      "comment_deleted": "Šis komentārs ir dzēsts",
+      "write_your_comment_here": "Uzraksti komentāru...",
+      "reply": "Atbildēt",
+      "replies_count": "{count, plural, zero {# atbilžu} one {# atbilde} other {# atbildes}}",
+      "view_replies": "Skatīt {count, plural, zero {# atbilžu} one {# atbildi} other {# atbildes}}",
+      "hide_replies": "Slēpt atbildes",
+      "load_more_replies": "Skatīt vairāk atbilžu",
+      "get_started": "sākt",
+      "get_started_its_free": "ejam 🎬, tas ir bez maksas!",
+      "import": "Importēt",
+      "upgrade_to_plan": "pāriet uz {plan}",
+      "choose_subscription_recurrence": "izvēlies abonementa norēķinu periodu",
+      "compare_plans": "salīdzināt plānus",
+      "save_up_to_percent": "ietaupi līdz {percent}%",
+      "is_empty": "Šeit ir mazliet tukši",
+      "add_to_playlist": "pievienot atskaņošanas sarakstam",
+      "send_to_friend": "nosūtīt draugam",
+      "pin_to_profile": "Piespraust profilam",
+      "unpin_from_profile": "Atspraust no profila",
+      "pinned": "Piesprausts",
+      "unpinned": "Atsprausts",
+      "no_pinned": "Nav piesprausto vienumu",
+      "pinned_limit_reached": "Tu esi sasniedzis maksimālo piesprausto vienumu skaitu — atsprauž vienu, lai pievienotu jaunu",
+      "custom_sort": "pielāgota kārtošana",
+      "quick_add": "ātra pievienošana",
+      "favorite_films": "mīļākās filmas",
+      "follow": "sekot",
+      "followed": "sekots",
+      "request_sent": "Pieprasījums nosūtīts",
+      "follow_requests": "sekošanas pieprasījumi",
+      "no_follow_requests": "nav sekošanas pieprasījumu",
+      "follower": "{count, plural, zero {sekotāju} one {sekotājs} other {sekotāji}}",
+      "follower_count": "{count} sekotāji",
+      "see_followers": "skatīt sekotājus",
+      "followee": "{count, plural, zero {sekoto} one {sekotais} other {sekotie}}",
+      "followee_count": "{count} sekotie",
+      "see_followees": "skatīt, kam tu seko",
+      "last_activities": "pēdējās aktivitātes",
+      "last_updated": "pēdējo reizi atjaunināts",
+      "last_updated_at_date": "pēdējo reizi atjaunināts {date}",
+      "show_all": "rādīt visus",
+      "this_account_is_private": "šis konts ir privāts",
+      "follow_to_see_activities": "seko, lai redzētu aktivitātes",
+      "review": "{count, plural, zero {recenziju} one {recenzija} other {recenzijas}}",
+      "no_overview": "nav kopsavilkuma",
+      "cast": "aktieri",
+      "no_cast": "nav aktieru",
+      "recent": "jaunākais",
+      "popular": "populārs",
+      "popularity": "popularitāte",
+      "no_reviews": "Nav recenziju",
+      "no_playlists": "Nav atskaņošanas sarakstu",
+      "no_playlists_found": "Atskaņošanas saraksti nav atrasti",
+      "no_films": "Nav filmu",
+      "no_tv_series": "Nav seriālu",
+      "view_activity": "skatīt aktivitāti",
+      "comment_count": "{count, plural, zero {# komentāru} one {# komentārs} other {# komentāri}}",
+      "write_review": "uzrakstīt recenziju",
+      "new_review": "jauna recenzija",
+      "edit_review": "rediģēt recenziju",
+      "review_by": "recenzijas autors {name}",
+      "my_review": "{count, plural, zero {manas recenzijas} one {mana recenzija} other {manas recenzijas}}",
+      "add_review": "pievienot recenziju",
+      "tv_series": "{count, plural, zero {seriālu} one {seriāls} other {seriāli}}",
+      "film": "{count, plural, zero {filmu} one {filma} other {filmas}}",
+      "movie": "{count, plural, zero {filmu} one {filma} other {filmas}}",
+      "media": "{count, plural, zero {darbu} one {darbs} other {darbi}}",
+      "tv_season": "{count, plural, zero {sezonu} one {sezona} other {sezonas}}",
+      "tv_season_count": "{count, plural, zero {# sezonu} one {# sezona} other {# sezonas}}",
+      "tv_season_value": "{number}. sezona",
+      "tv_season_short": "S{number}",
+      "tv_episode": "{count, plural, zero {epizožu} one {epizode} other {epizodes}}",
+      "tv_episode_count": "{count, plural, zero {# epizožu} one {# epizode} other {# epizodes}}",
+      "tv_episode_value": "{number}. epizode",
+      "tv_episode_short": "S{seasonNumber}E{episodeNumber}",
+      "tv_special_episode": "{count, plural, zero {speciālepizožu} one {speciālepizode} other {speciālepizodes}}",
+      "first_air_date": "pirmizrāde",
+      "last_air_date": "pēdējā pārraide",
+      "see_film": "skatīt filmu",
+      "see_tv_series": "skatīt seriālu",
+      "watch_film_title": "skatīties {title}",
+      "watch_film_streaming_or_download": "Skatīties <important>{title}</important> straumējot vai legāli lejupielādējot",
+      "download": "lejupielādēt",
+      "downloaded": "lejupielādēts",
+      "person": "{count, plural, zero {personu} one {persona} other {personas}}",
+      "top_result": "labākais rezultāts",
+      "user": "{count, plural, zero {lietotāju} one {lietotājs} other {lietotāji}}",
+      "reco": "{count, plural, zero {reco} one {reco} other {reco}}",
+      "my_recos": "manas reco",
+      "item": "{count, plural, zero {vienumu} one {vienums} other {vienumi}}",
+      "item_count": "{count, plural, zero {# vienumu} one {# vienums} other {# vienumi}}",
+      "type": "veids",
+      "complete": "pabeigt",
+      "completed": "pabeigts",
+      "collection": "{count, plural, zero {kolekciju} one {kolekcija} other {kolekcijas}}",
+      "most_recent": "jaunākie",
+      "most_popular": "populārākie",
+      "most_old": "vecākie",
+      "known_for": "Pazīstams ar",
+      "release_date": "pirmizrādes datums",
+      "last_appearance_date": "pēdējā parādīšanās",
+      "vote_average": "vidējais vērtējums",
+      "added": "pievienots",
+      "added_date": "pievienošanas datums",
+      "added_at": "pievienots",
+      "add": "pievienot",
+      "playlist_name": "atskaņošanas saraksta nosaukums",
+      "updated_at": "atjaunināts",
+      "created_at": "izveidots",
+      "likes": "patīk",
+      "likes_count": "patīk skaits",
+      "search_media": "meklēt darbu",
+      "search_film": "meklēt filmu",
+      "start_typing_to_search_films": "sāc rakstīt, lai meklētu filmas",
+      "search_tv_series": "meklēt seriālu",
+      "start_typing_to_search_tv_series": "sāc rakstīt, lai meklētu seriālus",
+      "search_person": "meklēt personu",
+      "start_typing_to_search_persons": "sāc rakstīt, lai meklētu personas",
+      "search_user": "{count, plural, zero {meklēt lietotājus} one {meklēt lietotāju} other {meklēt lietotājus}}",
+      "start_typing_to_search_users": "sāc rakstīt, lai meklētu lietotājus",
+      "search_playlist": "meklēt atskaņošanas sarakstu",
+      "start_typing_to_search_playlists": "sāc rakstīt, lai meklētu atskaņošanas sarakstus",
+      "search_film_or_tv_series": "meklēt filmu vai seriālu",
+      "watched_date": "{count, plural, zero {skatīšanās datumu} one {skatīšanās datums} other {skatīšanās datumi}}",
+      "mark_as_watched": "atzīmēt kā noskatītu",
+      "remove_from_watched": "izņemt no noskatītajiem",
+      "rating": "vērtējums",
+      "create_a_playlist": "izveidot atskaņošanas sarakstu",
+      "by_name": "autors {name}",
+      "reset": "atiestatīt",
+      "job": "{count, plural, zero {amatu} one {amats} other {amati}}",
+      "department": "{count, plural, zero {nodaļu} one {nodaļa} other {nodaļas}}",
+      "share_title_via": "Dalīties ar <strong>{title}</strong> caur",
+      "share_title": "Dalīties ar <strong>{title}</strong>",
+      "link": "saite",
+      "copy_link": "kopēt saiti",
+      "copied": "Nokopēts",
+      "other": "{count, plural, zero {Citi} one {Cits} other {Citi}}",
+      "via": "caur",
+      "edit": "rediģēt",
+      "guest": "{count, plural, zero {viesu} one {viesis} other {viesi}}",
+      "are_u_sure": "Vai esi pārliecināts?",
+      "backward": "iepriekšējais",
+      "forward": "nākamais",
+      "back": "atpakaļ",
+      "next": "nākamais",
+      "notification": "{count, plural, zero {paziņojumu} one {paziņojums} other {paziņojumi}}",
+      "see_notifications": "skatīt paziņojumus",
+      "open_social_panel": "atvērt sociālo paneli",
+      "cancel_change": "{count, plural, zero {atcelt izmaiņas} one {atcelt izmaiņu} other {atcelt izmaiņas}}",
+      "do_you_really_want_to_cancel_change": "Vai tiešām vēlies atcelt {count, plural, zero {izmaiņas} one {izmaiņu} other {izmaiņas}}?",
+      "continue_editing": "turpināt rediģēšanu",
+      "confirm": "apstiprināt",
+      "terms_of_use": "lietošanas noteikumi",
+      "privacy_policy": "privātuma politika",
+      "request_made": "pieprasījums izveidots",
+      "request_canceled": "pieprasījums atcelts",
+      "cancel_request": "atcelt pieprasījumu",
+      "open_menu": "atvērt izvēlni",
+      "feed": "plūsma",
+      "about": "par mums",
+      "home": "sākums",
+      "search": "meklēt",
+      "explore": "izpētīt",
+      "shop": "veikals",
+      "help": "palīdzība",
+      "legal": "juridiskā informācija",
+      "setting": "{count, plural, zero {iestatījumu} one {iestatījums} other {iestatījumi}}",
+      "logout": "izrakstīties",
+      "to_watch": "noskatīties",
+      "reco_by_your_friends": "draugu reco",
+      "friends_playlists": "draugu atskaņošanas saraksti",
+      "latest_activity": "{count, plural, zero {pēdējās aktivitātes} one {pēdējā aktivitāte} other {pēdējās aktivitātes}}",
+      "discover_users": "atklāt lietotājus",
+      "most_recommended": "visvairāk ieteiktie",
+      "archive": "arhivēt",
+      "unarchive": "atjaunot no arhīva",
+      "mark_as_read": "{count, plural, zero {atzīmēt kā lasītus} one {atzīmēt kā lasītu} other {atzīmēt kā lasītus}}",
+      "mark_as_unread": "{count, plural, zero {atzīmēt kā nelasītus} one {atzīmēt kā nelasītu} other {atzīmēt kā nelasītus}}",
+      "accept": "pieņemt",
+      "accepted": "pieņemts",
+      "decline": "atteikt",
+      "declined": "atteikts",
+      "request_accepted": "{count, plural, zero {pieprasījumi pieņemti} one {pieprasījums pieņemts} other {pieprasījumi pieņemti}}",
+      "request_declined": "{count, plural, zero {pieprasījumi atteikti} one {pieprasījums atteikts} other {pieprasījumi atteikti}}",
+      "unread": "{count, plural, zero {nelasīti} one {nelasīts} other {nelasīti}}",
+      "archived": "{count, plural, zero {arhivēti} one {arhivēts} other {arhivēti}}",
+      "no_notifications": "nav paziņojumu",
+      "all": "visi",
+      "mark_all_as_read": "atzīmēt visus kā lasītus",
+      "archive_all": "arhivēt visus",
+      "archive_all_read": "arhivēt visu, kas ir lasīts",
+      "please_login": "pieraksties",
+      "like": "patīk",
+      "unlike": "nepatīk vairs",
+      "unfollow": "pārtraukt sekošanu",
+      "name": "nosaukums",
+      "add_a_name": "pievienot nosaukumu",
+      "add_a_description": "pievienot aprakstu",
+      "visibility": "redzamība",
+      "search_an_user": "meklēt lietotāju",
+      "select_an_item_to_add_to_playlist": "izvēlies vienumu, ko pievienot atskaņošanas sarakstam",
+      "select_a_film_to_add_to_playlist": "izvēlies filmu, ko pievienot atskaņošanas sarakstam",
+      "select_a_tv_series_to_add_to_playlist": "izvēlies seriālu, ko pievienot atskaņošanas sarakstam",
+      "add_one_or_more_items_to": "Pievienot vienu vai vairākus vienumus sarakstam <important>{title}</important>",
+      "add_one_or_more_films_to": "Pievienot vienu vai vairākas filmas sarakstam <important>{title}</important>",
+      "add_one_or_more_tv_series_to": "Pievienot vienu vai vairākus seriālus sarakstam <important>{title}</important>",
+      "manage_playlist_access_rights": "pārvaldīt atskaņošanas saraksta piekļuves tiesības",
+      "add_guest": "{count, plural, zero {pievienot viesus} one {pievienot viesi} other {pievienot viesus}}",
+      "manage_members": "pārvaldīt dalībniekus",
+      "no_member": "nav dalībnieku",
+      "add_member": "{count, plural, zero {pievienot dalībniekus} one {pievienot dalībnieku} other {pievienot dalībniekus}}",
+      "manage_guests": "pārvaldīt viesus",
+      "add_guests_to_your_playlist": "pievienot viesus savam atskaņošanas sarakstam",
+      "select_users_to_add_to_playlist": "izvēlies lietotājus, ko pievienot atskaņošanas sarakstam",
+      "select_users_to_send_reco": "izvēlies, kam nosūtīt reco",
+      "select_playlists_to_add_the_item": "izvēlies atskaņošanas sarakstus, kuriem pievienot vienumu",
+      "send": "sūtīt",
+      "sent": "nosūtīts",
+      "select_row": "izvēlēties rindu",
+      "select_all": "izvēlēties visu",
+      "no_selected_users": "nav izvēlētu lietotāju",
+      "selection_count": "izvēlēti {number} no {total} {type}",
+      "about_title": "par {title}",
+      "detail": "{count, plural, zero {detaļu} one {detaļa} other {detaļas}}",
+      "genre": "{count, plural, zero {žanru} one {žanrs} other {žanri}}",
+      "male": "{count, plural, zero {vīriešu} one {vīrietis} other {vīrieši}}",
+      "female": "{count, plural, zero {sieviešu} one {sieviete} other {sievietes}}",
+      "non_binary": "{count, plural, zero {nebinārie} one {nebinārs} other {nebinārie}}",
+      "unspecified": "nav norādīts",
+      "date_of_birth": "dzimšanas datums",
+      "date_of_death": "miršanas datums",
+      "place_of_birth": "dzimšanas vieta",
+      "age_years": "{count} {count, plural, zero {gadu} one {gads} other {gadi}}",
+      "biography": "biogrāfija",
+      "no_biography_available": "biogrāfija nav pieejama",
+      "no_information_available": "informācija nav pieejama",
+      "already_sent": "jau nosūtīts",
+      "already_watched": "jau noskatīts",
+      "already_added": "jau pievienots",
+      "recommend_to_friend_to_discover": "Iesaki <strong>{title}</strong> draugam, kas to vēl nav redzējis",
+      "add_to_one_or_more_playlists": "Pievieno <strong>{title}</strong> vienam vai vairākiem saviem atskaņošanas sarakstiem",
+      "my_playlist": "{count, plural, zero {mani atskaņošanas saraksti} one {mans atskaņošanas saraksts} other {mani atskaņošanas saraksti}}",
+      "what_is_title": "Kas ir <strong>{title}</strong>?",
+      "try_again": "Mēģināt vēlreiz",
+      "error": "kļūda",
+      "not_logged_in": "tu neesi pierakstījies",
+      "an_error_occurred": "Radās kļūda",
+      "playlist_not_found": "atskaņošanas saraksts nav atrasts",
+      "user_not_found": "lietotājs nav atrasts",
+      "film_not_found": "filma nav atrasta",
+      "media_not_found": "darbs nav atrasts",
+      "review_not_found": "recenzija nav atrasta",
+      "person_not_found": "persona nav atrasta",
+      "tv_series_not_found": "seriāls nav atrasts",
+      "tv_episode_not_found": "epizode nav atrasta",
+      "tv_season_not_found": "sezona nav atrasta",
+      "wrong_arguments": "nepareizi argumenti",
+      "no_media_found": "darbi nav atrasti",
+      "unknown_action": "nezināma darbība",
+      "no_user_found": "lietotāji nav atrasti",
+      "no_tv_episodes": "nav epizožu",
+      "save": "saglabāt",
+      "saved": "saglabāts",
+      "create": "izveidot",
+      "film_count": "{count, plural, zero {# filmu} one {# filma} other {# filmas}}",
+      "tv_series_count": "{count, plural, zero {# seriālu} one {# seriāls} other {# seriāli}}",
+      "login": "pierakstīties",
+      "signup": "reģistrēties",
+      "navigation": "navigācija",
+      "delete": "Dzēst",
+      "remove": "Izņemt",
+      "deleted": "Dzēsts",
+      "share": "dalīties",
+      "duplicate": "dublēt",
+      "duplicated": "dublēts",
+      "cancel": "Atcelt",
+      "date": "datums",
+      "duration": "ilgums",
+      "sort": "kārtot",
+      "show": "rādīt",
+      "column": "{count, plural, zero {kolonnu} one {kolonna} other {kolonnas}}",
+      "comment": "{count, plural, zero {komentāru} one {komentārs} other {komentāri}}",
+      "unknown": "nezināms",
+      "community": "kopiena",
+      "cast_and_crew": "aktieri un komanda",
+      "soon": "drīz",
+      "ios_app": "iOS lietotne",
+      "android_app": "Android lietotne",
+      "coming_soon": "Drīzumā pieejams",
+      "new_mobile_app": "Jauna mobilā lietotne!",
+      "manage": "pārvaldīt",
+      "monthly": "mēneša",
+      "yearly": "gada",
+      "day": "diena",
+      "week": "nedēļa",
+      "month": "mēnesis",
+      "year": "gads",
+      "price": "cena",
+      "free": "bez maksas",
+      "playlist": "{count, plural, zero {atskaņošanas sarakstu} one {atskaņošanas saraksts} other {atskaņošanas saraksti}}",
+      "public": "publisks",
+      "publish": "publicēt",
+      "private": "privāts",
+      "description": "apraksts",
+      "details": "detaļas",
+      "profile": "profils",
+      "overview": "kopsavilkums",
+      "no_playlists_saved": "nav saglabātu atskaņošanas sarakstu",
+      "camera_permission_denied": "kameras atļauja liegta",
+      "photo_library_permission_denied": "fotoattēlu bibliotēkas atļauja liegta",
+      "ignore": "ignorēt",
+      "ok": "labi",
+      "title": "nosaukums",
+      "skip": "Izlaist",
+      "undo": "Atsaukt",
+      "date_published": "publicēšanas datums",
+      "date_created": "izveidošanas datums",
+      "date_updated": "izmaiņu datums",
+      "alphabetical": "alfabētiski",
+      "date_added": "pievienošanas datums",
+      "number_of_likes": "patīk skaits",
+      "number_of_seasons": "sezonu skaits",
+      "add_to_this_playlist": "pievienot šim atskaņošanas sarakstam",
+      "save_to_library": "saglabāt bibliotēkā",
+      "remove_from_library": "izņemt no bibliotēkas",
+      "otp": "OTP",
+      "ratings_from_followees": "to vērtējumi, kam tu seko",
+      "choose_from_the_library": "izvēlēties no bibliotēkas",
+      "take_a_photo": "uzņemt fotoattēlu",
+      "delete_current_image": "dzēst pašreizējo attēlu",
+      "edit_image": "rediģēt attēlu",
+      "add_image": "pievienot attēlu",
+      "verify_with_a_code": "apstiprināt ar kodu",
+      "order": "secība",
+      "edit_order": "rediģēt secību",
+      "done": "gatavs",
+      "can_edit": "var rediģēt?",
+      "upgrade": "jaunināt",
+      "no_description": "Nav apraksta",
+      "no_comment": "Nav komentāru",
+      "close": "aizvērt",
+      "edit_playlist": "rediģēt atskaņošanas sarakstu",
+      "universe": "universs",
+      "cannot_be_changed": "nevar mainīt",
+      "delete_review": "dzēst recenziju",
+      "do_you_really_want_to_delete_this_review": "Vai tiešām vēlies dzēst šo recenziju?",
+      "user_liked_playlist": "<name></name> atzīmēja atskaņošanas sarakstu ar patīk",
+      "user_liked_review": "<name></name> atzīmēja recenziju ar patīk",
+      "runtime": "ilgums",
+      "ends_at": "Beidzas plkst. {value}",
+      "this_user_has_no_activity": "Šim lietotājam nav aktivitātes",
+      "notification_archived": "{count, plural, zero {paziņojumi arhivēti} one {paziņojums arhivēts} other {paziņojumi arhivēti}}",
+      "notification_unarchived": "{count, plural, zero {paziņojumi atjaunoti no arhīva} one {paziņojums atjaunots no arhīva} other {paziņojumi atjaunoti no arhīva}}",
+      "notification_marked_as_read": "{count, plural, zero {paziņojumi atzīmēti kā lasīti} one {paziņojums atzīmēts kā lasīts} other {paziņojumi atzīmēti kā lasīti}}",
+      "notification_marked_as_unread": "{count, plural, zero {paziņojumi atzīmēti kā nelasīti} one {paziņojums atzīmēts kā nelasīts} other {paziņojumi atzīmēti kā nelasīti}}",
+      "or_continue_with": "vai turpināt ar",
+      "message": "{count, plural, zero {ziņu} one {ziņa} other {ziņas}}",
+      "story": "{count, plural, zero {story} one {story} other {story}}",
+      "new_playlist": "jauns atskaņošanas saraksts",
+      "select_a_type": "izvēlies veidu",
+      "filter": "{count, plural, zero {filtru} one {filtrs} other {filtri}}",
+      "hide_watched": "slēpt noskatītos",
+      "show_me_around": "izrādi man visu",
+      "artwork_from": "Ilustrācija: <important>{source}</important>",
+      "no_active_subscription": "nav aktīva abonementa",
+      "manage_subscription": "pārvaldīt abonementu",
+      "started_on_date": "sākts: {date}",
+      "last_renewed_on_date": "pēdējā atjaunošana: {date}",
+      "version_value": "versija {value}",
+      "original_title": "oriģinālais nosaukums",
+      "starring": "galvenajās lomās",
+      "write_your_review_here": "raksti savu recenziju šeit...",
+      "insert": "ievietot",
+      "trailer": "{count, plural, zero {treileru} one {treilers} other {treileri}}",
+      "list": "{count, plural, zero {sarakstu} one {saraksts} other {saraksti}}",
+      "grid": "{count, plural, zero {režģu} one {režģis} other {režģi}}",
+      "order_asc": "augoša secība",
+      "order_desc": "dilstoša secība",
+      "menu": "izvēlne",
+      "at_least_one_watched_date_required": "nepieciešams vismaz viens skatīšanās datums",
+      "viewer": "{count, plural, zero {Skatītāju} one {Skatītājs} other {Skatītāji}}",
+      "editor": "{count, plural, zero {Redaktoru} one {Redaktors} other {Redaktori}}",
+      "admin": "{count, plural, zero {Administratoru} one {Administrators} other {Administratori}}",
+      "owner": "{count, plural, zero {Īpašnieku} one {Īpašnieks} other {Īpašnieki}}",
+      "you_dont_have_permission_to_do_this_action": "Tev nav atļaujas veikt šo darbību",
+      "in_progress": "notiek",
+      "give_up": "padoties",
+      "random": "nejaušs",
+      "reset_password": "Atiestatīt paroli",
+      "password_reset": "Parole atiestatīta",
+      "return_to_login": "Atpakaļ uz pierakstīšanos",
+      "invalid_code": "Nederīgs kods",
+      "no_token_found": "Marķieris nav atrasts",
+      "first_watched_at": "pirmais skatīšanās datums",
+      "watched_dates": "skatīšanās datumi",
+      "no_watched_dates": "nav skatīšanās datumu",
+      "select_role": "izvēlies lomu",
+      "select_format": "izvēlies formātu",
+      "theater": "Kinoteātris",
+      "physical": "Fizisks nesējs",
+      "digital": "Digitāls",
+      "streaming": "Straumēšana",
+      "you_must_be_premium_to_change_member_role": "Lai mainītu dalībnieka lomu, tev jābūt premium lietotājam",
+      "already_member": "jau dalībnieks",
+      "email_already_used": "Šī e-pasta adrese jau tiek izmantota",
+      "email_confirmed": "E-pasts apstiprināts",
+      "confirmation_email_sent": "Apstiprinājuma e-pasts nosūtīts",
+      "continue": "Turpināt",
+      "finish": "Pabeigt",
+      "forgot_password": "Aizmirsi paroli",
+      "new_password": "Jauna parole",
+      "confirm_password": "Apstiprināt paroli",
+      "password_reseted": "Parole atiestatīta",
+      "reset_your_password": "Atiestati savu paroli",
+      "invalid_token": "Nederīgs marķieris",
+      "new_notification": "{count, plural, zero {jaunu paziņojumu} one {jauns paziņojums} other {jauni paziņojumi}}",
+      "lets_go": "Ejam!",
+      "update_available": "Pieejams atjauninājums",
+      "update_available_description": "Atjaunini lietotni, lai izmantotu jaunākos uzlabojumus.",
+      "update_required_title": "Nepieciešams atjauninājums",
+      "update_required_description": "Šī lietotnes versija vairs netiek atbalstīta. Atjaunini to, lai turpinātu lietot Recomend.",
+      "update_app": "Atjaunināt",
+      "advertisement": "{count, plural, zero {Reklāmu} one {Reklāma} other {Reklāmas}}",
+      "pending": "Gaida",
+      "processing": "Notiek",
+      "awaiting_review": "Jāpārbauda",
+      "failed": "Neizdevās",
+      "data": "{count, plural, zero {Datu} one {Dati} other {Dati}}",
+      "restore": "Atjaunot",
+      "fix": "Labot",
+      "not_found": "Nav atrasts",
+      "unavailable": "Nav pieejams",
+      "star_on_github": "Iedot zvaigzni GitHub"
+    },
+    "form": {
+      "email": {
+        "label": "E-pasta adrese",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "E-pasta adrese nav derīga",
+          "unavailable": "Šī e-pasta adrese jau tiek izmantota"
+        },
+        "verified": "E-pasts apstiprināts"
+      },
+      "username": {
+        "label": "Lietotājvārds",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "Pirmajai rakstzīmei jābūt burtam vai ciparam",
+          "double_dot": "Divi punkti pēc kārtas nav atļauti",
+          "ends_with_dot": "Punkts beigās nav atļauts",
+          "format": "Atļauti tikai burti, cipari un simboli '_' un '.'",
+          "unavailable": "Šis lietotājvārds jau ir aizņemts"
+        }
+      },
+      "full_name": {
+        "label": "Vārds",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "Atļauti tikai burti, cipari un atstarpes"
+        }
+      },
+      "password": {
+        "label": "Parole",
+        "placeholder": "Ievadi savu paroli",
+        "schema": {
+          "uppercase": "Nepieciešams vismaz viens lielais burts",
+          "lowercase": "Nepieciešams vismaz viens mazais burts",
+          "number": "Nepieciešams vismaz viens cipars",
+          "special": "Nepieciešama vismaz viena speciālā rakstzīme",
+          "match": "Paroles nesakrīt"
+        },
+        "confirm": {
+          "label": "Apstiprināt paroli",
+          "placeholder": "Apstiprini savu paroli"
+        }
+      },
+      "length": {
+        "char_min": "vismaz {count, plural, zero {# rakstzīmju} one {# rakstzīme} other {# rakstzīmes}}",
+        "char_max": "ne vairāk par {count, plural, zero {# rakstzīmēm} one {# rakstzīmi} other {# rakstzīmēm}}"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "Atļauti tikai burti, cipari un atstarpes"
+      },
+      "error": {
+        "too_many_attempts": "Pārāk daudz mēģinājumu, mēģini vēlāk vēlreiz",
+        "not_received_code": "Vai nesaņēmi kodu?",
+        "invalid_code": "Nederīgs kods",
+        "turnstile": "Pārbaude neizdevās, mēģini vēlreiz"
+      },
+      "resend_code": "Nosūtīt kodu vēlreiz",
+      "resend_email": "Nosūtīt e-pastu vēlreiz",
+      "code_verified": "Kods apstiprināts",
+      "code_sent": "Kods nosūtīts"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "lapa nav atrasta",
+        "description": "ups, šī lapa nepastāv..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "uzskaite",
+        "description": "Atklāj, novērtē un dalies ar savām mīļākajām filmām un seriāliem."
+      },
+      "recos": {
+        "label": "reco",
+        "description": "Sūti un saņem draugu reco. Viss vienā vietā."
+      },
+      "playlists": {
+        "label": "atskaņošanas saraksti",
+        "description": "Kārto, dalies un veido atskaņošanas sarakstus kopā."
+      },
+      "feed": {
+        "label": "plūsma",
+        "description": "Seko draugiem, lai redzētu, ko viņi skatās, kas viņiem patīk un ko viņi vērtē."
+      },
+      "social_sharing": {
+        "label": "dalīšanās sociālajos tīklos",
+        "description": "Dalies ar visu, ko mīli, Instagram vai citos tīklos."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "Uzskaite",
+          "description": "Seko līdzi filmām, ko esi redzējis"
+        },
+        "recos": {
+          "label": "Reco",
+          "description": "Sūti draugiem filmu ieteikumus"
+        },
+        "explore": {
+          "label": "Izpētīt",
+          "description": "Atklāj jaunas filmas Paradise Pictures — interaktīvā kartē ar vairāk nekā 1400 filmām"
+        },
+        "like": {
+          "label": "Patīk",
+          "description": "Parādi savu mīlestību pret mīļākajām filmām, atskaņošanas sarakstiem un recenzijām"
+        },
+        "rating": {
+          "label": "Vērtējums",
+          "description": "Novērtē filmas, ko esi redzējis"
+        },
+        "watchlist": {
+          "label": "Skatīšanās saraksts",
+          "description": "Saglabā filmas, ko vēlies redzēt"
+        },
+        "playlists": {
+          "label": "Atskaņošanas saraksti",
+          "description": "Kārto savas filmas atskaņošanas sarakstos un dalies ar tiem"
+        },
+        "reviews": {
+          "label": "Recenzijas",
+          "description": "Raksti recenzijas, lai izlaistu ārā sevī mītošo sarūgtināto kinomānu"
+        },
+        "feed": {
+          "label": "Plūsma",
+          "description": "Seko savu draugu aktivitātei"
+        },
+        "adsFree": {
+          "label": "Bez reklāmām",
+          "description": "Izbaudi Recomend bez reklāmām, mūžīgi"
+        }
+      }
+    },
+    "welcome": {
+      "title": "Paldies, ka reģistrējies!",
+      "description": "Šeit ir īss ieskats tajā, ko vari darīt ar {app}.",
+      "follow": {
+        "title": "Seko cilvēkiem",
+        "description": "Seko draugiem, lai redzētu, ko viņi skatās."
+      },
+      "import": {
+        "title": "Vai nāc no citas platformas?"
+      }
+    },
+    "collection": {
+      "label": "bibliotēka",
+      "my_recos": {
+        "label": "manas reco",
+        "search": {
+          "placeholder": "meklēt manās reco..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "dzēst no manām reco",
+            "description": "Vai tiešām vēlies dzēst <important>{title}</important> no savām reco?"
+          },
+          "complete_confirm": {
+            "title": "pabeigt reco",
+            "description": "Vai tiešām vēlies pabeigt reco <important>{title}</important>?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "meklēt skatīšanās sarakstā..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "dzēst no skatīšanās saraksta",
+            "description": "Vai tiešām vēlies dzēst <important>{title}</important> no sava skatīšanās saraksta?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "meklēt sirdsfilmās..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "dzēst no sirdsfilmām",
+            "description": "Vai tiešām vēlies dzēst <important>{title}</important> no savām sirdsfilmām?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> noskatījās",
+        "rated": "<name></name> novērtēja",
+        "liked": "<name></name> atzīmēja ar patīk",
+        "rated_liked": "<name></name> atzīmēja ar patīk un novērtēja",
+        "reviewed": "<name></name> uzrakstīja recenziju"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> ir <important>{roles}</important> darbā <linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> ir <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "Atļaut lietotni",
+        "description_generic": "Lietotne pieprasa piekļuvi tavam kontam.",
+        "description": "{client} vēlas piekļūt tavam kontam.",
+        "scopes_label": "Tas ļaus lietotnei:",
+        "accept": "Atļaut",
+        "deny": "Atteikt",
+        "error": {
+          "invalid_request": "Nederīgs vai beidzies pieprasījums",
+          "invalid_request_description": "Sāc procesu no jauna lietotnē, kas tevi atsūtīja šeit.",
+          "client_not_found": "Šī lietotne nav atrasta.",
+          "submit_failed": "Kaut kas nogāja greizi. Mēģini vēlreiz."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "Pieraksties savā {app} kontā."
+        },
+        "label": "Pierakstīties",
+        "description": "Atklāj labākos filmu ieteikumus.",
+        "or_continue_with": "Vai turpināt ar",
+        "no_account_yet": "Vai tev vēl nav konta?",
+        "form": {
+          "identifier": {
+            "label": "E-pasts vai lietotājvārds",
+            "placeholder": "Ievadi savu e-pastu vai lietotājvārdu"
+          },
+          "password": {
+            "label": "Parole",
+            "placeholder": "Ievadi savu paroli"
+          },
+          "submit": "Pierakstīties",
+          "forgot_password": "Aizmirsi paroli?",
+          "wrong_credentials": "E-pasts vai parole ir nepareiza"
+        },
+        "otp": {
+          "password_login": "Vai labāk pierakstīties ar paroli?",
+          "form": {
+            "submit": "Saņemt kodu",
+            "no_user_found": "Ar šo e-pastu lietotājs nav atrasts",
+            "success": "Pierakstījies"
+          },
+          "confirm_form": {
+            "label": "Apstiprināt kodu",
+            "description": "Apstiprinājuma kods nosūtīts uz adresi {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "Reģistrējies {app}, lai atklātu un dalītos ar filmu ieteikumiem."
+        },
+        "description": "Izveido kontu, lai ieteiktu filmu tam draugam, kas nekad neatceras nosaukumus.",
+        "form": {
+          "success": "Apstiprinājuma e-pasts nosūtīts uz {email}"
+        },
+        "confirm_form": {
+          "label": "Apstiprināt e-pastu",
+          "description": "Apstiprinājuma saite nosūtīta uz adresi {email}"
+        },
+        "return_to_login": "Ups, man tomēr jau ir konts."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "Aizmirsi paroli",
+          "description": "Atiestati savu paroli."
+        },
+        "label": "Aizmirsi paroli",
+        "description": "Tev vajadzētu lietot paroļu pārvaldnieku, tas ir tiešām ērti.",
+        "return_to_login": "Ups, es tomēr atceros savu paroli.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "Atiestatīt paroli",
+          "code_sent": "Pieprasījums nosūtīts"
+        },
+        "confirm_form": {
+          "label": "Apstiprināt kodu",
+          "description": "Apstiprinājuma kods nosūtīts uz adresi {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "Paroles atiestatīšana",
+          "description": "Izvēlies savam kontam jaunu paroli."
+        }
+      },
+      "error": {
+        "label": "Kļūda",
+        "description": "Autentifikācijas laikā radās kļūda.",
+        "return_to_login": "Atpakaļ drošībā"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "Par mums",
+        "marquee": "Vai tavā dzīvē nav nekā aizraujošāka par 'Par mums' lapu lasīšanu internetā?",
+        "intro": "<strong>Recomend</strong> ir vieta, kas veltīta filmu atklāšanai, ieteikšanai un kārtošanai. Viss ir izdomāts tā, lai mutvārdu ieteikumiem dotu vislabāko iespējamo digitālo formu. Mūsu pieeja ir vērsta uz cilvēku un viņa attiecībām pašcentrētā patēriņa laikmetā — vai, pareizāk sakot, 'ieteikts tev' laikmetā.",
+        "slogan": {
+          "1": "Tas ir bez reklāmām un bez apšaubāmiem solījumiem. 🍆",
+          "2": "Tas ir gan sociālais tīkls, gan rīks.",
+          "3": "Tas ir mājās darināts, entuziastu rokām.",
+          "4": "Tas ir amatieriski — vārda tiešākajā nozīmē."
+        },
+        "last": "Recomend var lietot viens vai kopā ar citiem, publiski vai privāti, dienā un naktī — bet nekad filmas priekšā, lūdzu, koncentrējies!"
+      },
+      "team": {
+        "label": "Komanda",
+        "intro": "Recomend izveidoja divi kino aizrautīgi brāļi, kuriem patīk ieguldīt savu laiku pārāk ambiciozos projektos, par kuriem nav zināms, vai tie vispār kādreiz ieraudzīs dienas gaismu.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "Hiperaktīvs arhitekts-inženieris, kas nespēj samierināties ar vienu darbu (īstā start-up nation): Yoann ir tas, kam radās ideja uzzīmēt filmu karti, kurai sākumā bija vien pieticīgs mērķis kļūt par plakātu viņa tualetē. Ar Loup parādīšanos mērķi pilnībā uzsprāga, un, nedaudz notikumu pārsteigts, viņš rūpējas par visu kartes un vietnes grafisko daļu, kā arī par visu komunikāciju (pat ja viņam tas nepatīk). Viņš arī izsaka viedokli par UX/UI un piedāvā veselu kaudzi funkciju, pilnībā neaptverot, cik grūti tās ir ieprogrammēt (zināms progress ir)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "Pilnīgs pašmācības cilvēks, kas tomēr pabeidza studijas, kuras noveda pie neapmaksāta bezdarba pirms 25 gadu vecuma. Īsts šveices nazis: Loup rūpējas par tīmekļa dizainu un programmē saskarni, ko iztēlojamies pēc iespējas ērtāku. Loup vēlētos pateikties visiem koda forumiem, kas atbildēja uz viņa (ļoti) daudzajiem jautājumiem, kā arī visiem Indijas jutūberiem, kas šos mēnešus pavadīja viņam blakus kā adoptētie tēvi. Viņa māte, starp citu, ir pārliecināta, ka brālis viņu šim projektam ir paverdzinājis (viss kārtībā, mamma)."
+          }
+        },
+        "last": "Lai sarunātos ar mums vai citiem kopienas dalībniekiem, pievienojies mūsu <link>Discord</link>!"
+      },
+      "pricing": {
+        "label": "Cenas",
+        "intro": "Šis abonementa modelis pirmām kārtām ir atbalsts, lai projekts dzīvotu un turpinātu attīstīties. Premium funkcijas ir papildinājumi Recomend padziļinātai lietošanai, kas attaisno nelielu finansiālu ieguldījumu. Mēs vienmēr saglabāsim iespēju lietot vietni bez maksas, bez reklāmām un nejūtoties ierobežotam.",
+        "subdescription": "*Ja šī abonementa ārkārtīgi zemā cena tev tomēr ir par augstu, lūdzu, griezies pie liberālās valdības, kas ir atbildīga par tavas pirktspējas zudumu."
+      },
+      "legal": {
+        "label": "Juridiskā informācija un privātums",
+        "description": "Mēs respektējam tavu privātumu. Reklāmas, kas tiek rādītas nepierakstītiem lietotājiem, pārvalda Google, un tām nepieciešamas tehniskās sīkdatnes, lai ierobežotu rādīšanas biežumu un novērstu krāpšanu.",
+        "privacyPolicy": "Lasi mūsu privātuma politiku",
+        "manageCookies": "Pārvaldīt manas reklāmu preferences (sīkdatnes)"
+      },
+      "open-source": {
+        "label": "Atvērtais kods",
+        "intro": "Recomend ir ar atvērtu kodu: kods ir publiski pieejams GitHub. Ieskaties, piedalies vai vienkārši iedod mums zvaigzni!",
+        "star": "Iedod mums zvaigzni GitHub"
+      },
+      "businessmodel": {
+        "label": "Biznesa modelis",
+        "paragraph": {
+          "1": "Vari nojaust, ka ar mūsu maz komerciālajiem profiliem mēs neesam īsti sapratuši, kam mums šobrīd varētu noderēt biznesa modelis...",
+          "2": "Ja Recomend nākotne to prasīs, mēs izpētīsim šo jautājumu, apkārt sev pulcējot pareizos cilvēkus — vai vismaz tādus, kurus tas interesē vairāk nekā mūs.",
+          "3": "Līdz tam, būsim godīgi, ir citas lietas, ko darīt."
+        }
+      },
+      "roadmap": {
+        "label": "Ceļa karte"
+      },
+      "data": {
+        "label": "Dati",
+        "paragraph": {
+          "1": "Visus Recomend izmantotos metadatus nodrošina <link>The Movie Database (TMDb)</link> caur platformas API. Mēs tātad darām tieši tāpat kā visi citi, kā labas aitas.",
+          "2": "Par kļūdām vai trūkstošām filmām tāpēc griezies pie <link>TMDb</link>."
+        }
+      },
+      "resources": {
+        "label": "Resursi",
+        "intro": "Tam nav īsti saistības ar kino, bet šeit ir saraksts ar vietnēm, kas mums patīk:"
+      },
+      "contact-support": {
+        "label": "Kontakti un atbalsts",
+        "help-center": "Atrodi atbildes uz saviem eksistenciālajiem jautājumiem mūsu <link>palīdzības centrā</link>.",
+        "technical-support": "Tehniskiem jautājumiem: <email></email>",
+        "suggest-a-feature": "Ierosinājumiem: <email></email>",
+        "contact-us": "Ja vienkārši vēlies ar mums sazināties: <email></email>"
+      },
+      "quote": {
+        "label": "Citāts",
+        "quote": "« Es ienīstu vārdu profesionālis. Visi tie aktieri un pārējie, kas saka: es esmu profesionālis, es esmu profis! Kas tas ir? Vai ir skumjāks vārds? Jo amatieris nāk no vārda mīlestība. Lietas jādara mīlestības dēļ, citādi mēs esam idioti. »",
+        "author": "Orson Wells",
+        "date": "1972",
+        "subdescription": "*Mēs vilcinājāmies to ievietot, jo tas ātri izklausās pretenciozi, bet tas labi atspoguļo mūsu sajūtu par projektu. Ja tev nepatīk, mēs to noņemsim."
+      }
+    },
+    "settings": {
+      "label": "Iestatījumi",
+      "description": "Pārvaldi sava konta iestatījumus.",
+      "profile": {
+        "label": "Profils",
+        "description": "Tā citi tevi redzēs vietnē.",
+        "avatar": {
+          "label": "Avatars",
+          "delete": "Dzēst"
+        },
+        "full_name": {
+          "label": "Vārds",
+          "description": "Šis vārds tiks rādīts tavā profilā un e-pastos.",
+          "placeholder": "Ievadi savu vārdu",
+          "form": {
+            "min_length": "Vārdam jābūt vismaz 1 rakstzīmi garam",
+            "max_length": "Vārds nedrīkst pārsniegt 50 rakstzīmes"
+          }
+        },
+        "bio": {
+          "label": "Apraksts",
+          "description": "Pastāsti kaut ko par sevi, tas parādīsies tavā profilā.",
+          "placeholder": "Uzraksti kaut ko par sevi",
+          "form": {
+            "max_length": "Apraksts nedrīkst pārsniegt 150 rakstzīmes",
+            "format": "Biogrāfija nedrīkst saturēt tukšas rindas vai sastāvēt tikai no atstarpēm."
+          }
+        },
+        "favorite_films": {
+          "label": "Mīļākās filmas",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "URL nav derīgs"
+          }
+        }
+      },
+      "account": {
+        "label": "Konts",
+        "description": "Atjaunini sava konta iestatījumus.",
+        "username": {
+          "label": "Lietotājvārds",
+          "description": "Šis ir tavs lietotājvārds, ar kuru citi var tevi atrast un piekļūt tavam profilam. To var mainīt tikai reizi 30 dienās.",
+          "placeholder": "Ievadi savu lietotājvārdu",
+          "form": {
+            "min_length": "Lietotājvārdam jābūt vismaz 3 rakstzīmes garam",
+            "max_length": "Lietotājvārds nedrīkst pārsniegt 15 rakstzīmes",
+            "invalid": "Lietotājvārds var saturēt tikai burtus, ciparus un simbolus '_' un '.'",
+            "unavailable": "Šis lietotājvārds jau ir aizņemts"
+          }
+        },
+        "private": {
+          "label": "Privāts konts",
+          "description": "Kad tavs konts ir privāts, tavas aktivitātes var redzēt tikai tie lietotāji, ko tu apstiprini."
+        },
+        "email": {
+          "description": "Apstiprinājuma e-pasts tiks nosūtīts uz tavu pašreizējo un jauno e-pasta adresi. Lai izmaiņas stātos spēkā, jāapstiprina abas.",
+          "change_pending": "<strong>{date}</strong> apstiprinājuma e-pasts tika nosūtīts uz tavu jauno e-pasta adresi <strong>{email}</strong>. Noklikšķini uz saites vai ievadi apstiprinājuma kodu, lai apstiprinātu izmaiņas.",
+          "confirm_email_code": {
+            "description": "Ievadi apstiprinājuma kodu, kas nosūtīts uz tavu adresi <strong>{email}</strong>."
+          },
+          "change_success": "Tava e-pasta adrese ir veiksmīgi atjaunināta"
+        },
+        "delete_account": {
+          "button": "Dzēst manu kontu",
+          "confirm": {
+            "description": "Tavs konts tiks neatgriezeniski dzēsts, un tu to nevarēsi atgūt.",
+            "confirm_email_sent": "Apstiprinājuma e-pasts nosūtīts uz tavu e-pasta adresi"
+          }
+        }
+      },
+      "appearance": {
+        "label": "Izskats",
+        "description": "Pielāgo lietotnes izskatu. Automātiski pārslēdzies starp dienas un nakts tēmu.",
+        "language": {
+          "label": "Valoda",
+          "description": "Izvēlies valodu — izmaiņas tiks piemērotas pēc lietotnes restartēšanas",
+          "placeholder": "Izvēlies valodu",
+          "not_found": "Valoda nav atrasta"
+        },
+        "theme": {
+          "label": "Tēma",
+          "description": "Izvēlies saskarnes tēmu.",
+          "options": {
+            "light": "Gaiša",
+            "dark": "Tumša"
+          }
+        }
+      },
+      "subscription": {
+        "label": "Abonements",
+        "description": "Pārvaldi savu premium abonementu."
+      },
+      "security": {
+        "label": "Drošība",
+        "description": "Mainot paroli, tu tiksi izrakstīts no visām ierīcēm, izņemot to, kuru lieto tagad.",
+        "current_password": {
+          "label": "Pašreizējā parole",
+          "placeholder": "Ievadi savu pašreizējo paroli",
+          "form": {
+            "required": "Pašreizējā parole ir obligāta",
+            "invalid": "Pašreizējā parole ir nepareiza"
+          }
+        },
+        "new_password": {
+          "label": "Jauna parole",
+          "placeholder": "Ievadi savu jauno paroli",
+          "form": {
+            "min_length": "Parolei jābūt vismaz 8 rakstzīmes garai",
+            "uppercase": "Nepieciešams vismaz viens lielais burts",
+            "lowercase": "Nepieciešams vismaz viens mazais burts",
+            "number": "Nepieciešams vismaz viens cipars",
+            "special": "Nepieciešama vismaz viena speciālā rakstzīme"
+          }
+        },
+        "confirm_password": {
+          "label": "Apstiprināt jauno paroli",
+          "placeholder": "Apstiprini savu jauno paroli",
+          "form": {
+            "match": "Paroles nesakrīt"
+          }
+        }
+      },
+      "notifications": {
+        "label": "Paziņojumi",
+        "description": "Pielāgo, kādus paziņojumus saņem.",
+        "push_notifications": {
+          "label": "Push paziņojumi",
+          "form": {
+            "enable": "Ieslēgt push paziņojumus"
+          },
+          "already_granted": "Paziņojumu pieprasījums jau ir veikts; lai to mainītu, dodies uz pārlūka iestatījumiem.",
+          "no_enabled": "Ieslēdz paziņojumus ierīces iestatījumos, lai saņemtu push paziņojumus.",
+          "open_settings": "Doties uz ierīces iestatījumiem"
+        }
+      },
+      "data": {
+        "label": "Dati",
+        "description": "Importē vai eksportē savus datus.",
+        "importer": {
+          "label": "Imports",
+          "select_source": "Izvēlies avotu",
+          "instructions_title": "Instrukcijas",
+          "browse_prompt": "Ievelc failu šeit vai <link>pārlūko</link>",
+          "browse_prompt_mobile": "Pieskaries, lai izvēlētos failu",
+          "uploading": "Augšupielādē…",
+          "processing": "Analizē tavu failu…",
+          "upload_error": "Augšupielāde neizdevās, mēģini vēlreiz.",
+          "invalid_file_type": "Šis faila veids šim avotam netiek atbalstīts.",
+          "review_title": "Pārbaudi savu importu",
+          "review_summary": "atrasti {matched} no {total}",
+          "validate": "Apstiprināt importu",
+          "validate_confirm_description": "Tas importēs tavā bibliotēkā visus atrastos un neizlaistos vienumus. To nevar atsaukt.",
+          "success_title": "Imports pabeigts",
+          "success_description": "Tavi dati ir veiksmīgi importēti.",
+          "failed_title": "Imports neizdevās",
+          "failed_description": "Apstrādājot šo importu, kaut kas nogāja greizi.",
+          "pending_description": "Tavs imports ir rindā un sāksies drīz.",
+          "empty": "Vēl nav importu.",
+          "delete_confirm_description": "Šis imports un visi tā dati tiks neatgriezeniski dzēsti. To nevar atsaukt.",
+          "keep_existing": "Paturēt manus",
+          "use_imported": "Lietot importēto",
+          "merge": "Apvienot",
+          "conflict": "Konflikts",
+          "no_match": "Nav atbilsmes",
+          "existing_rating": "Pašlaik: {rating}",
+          "log_column": "Žurnāls",
+          "actions_column": "Darbības",
+          "categories": {
+            "log_movies": "Filmas",
+            "log_tv_series": "Seriāli",
+            "bookmarks": "Skatīšanās saraksts",
+            "playlists": "Saraksti"
+          },
+          "status": {
+            "pending": "Gaida",
+            "processing": "Notiek",
+            "awaiting_review": "Jāpārbauda",
+            "completed": "Pabeigts",
+            "failed": "Neizdevās"
+          }
+        },
+        "exporter": {
+          "label": "Eksports"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "pāriet uz Premium",
+        "description": "Pārej uz premium kontu, lai piekļūtu visām {app} funkcijām."
+      },
+      "header": {
+        "title": "paplašini savu kino, dalies vairāk, atbalsti {app}",
+        "subtitle": "izmēģini 1 mēnesi bez maksas, pēc tam {price}/mēnesī"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "aktivitātes",
+            "unlimited_activities": {
+              "label": "neierobežotas aktivitātes",
+              "description": "vērtējumi, patīk, recenzijas, skatīšanās saraksts un ieteikumi"
+            },
+            "favorites": {
+              "label": "mīļākie",
+              "description": "pievieno savas mīļākās filmas savam profilam"
+            }
+          },
+          "playlists": {
+            "label": "atskaņošanas saraksti",
+            "unlimited_playlists": {
+              "label": "neierobežoti",
+              "description": "izveido neierobežotu skaitu atskaņošanas sarakstu"
+            },
+            "shared_playlists": {
+              "label": "koplietoti",
+              "description": "dalies ar saviem atskaņošanas sarakstiem ar citiem lietotājiem"
+            },
+            "collaborative_playlists": {
+              "label": "kopdarbības",
+              "description": "izveido kopdarbības atskaņošanas sarakstus ar citiem lietotājiem"
+            }
+          },
+          "feed": {
+            "label": "plūsma",
+            "followees": {
+              "label": "sekotie lietotāji",
+              "description": "skati to lietotāju aktivitātes, kuriem tu seko"
+            },
+            "cast_and_crew": {
+              "label": "aktieri un komanda",
+              "description": "seko to cilvēku aktivitātēm, kas iesaistīti filmās"
+            }
+          },
+          "support": {
+            "label": "atbalsts",
+            "team": {
+              "label": "Atbalsti {app} komandu"
+            },
+            "credits": {
+              "label": "titri",
+              "description": "tavs profils lietotnes titros"
+            }
+          }
+        },
+        "success": {
+          "label": "Paldies par tavu atbalstu!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} - @{username} atskaņošanas saraksts",
+        "description": "Atklāj @{username} filmu atskaņošanas sarakstu vietnē {app}."
+      },
+      "actions": {
+        "delete": {
+          "description": "Tas neatgriezeniski dzēsīs <important>{title}</important> no taviem atskaņošanas sarakstiem."
+        }
+      },
+      "search": {
+        "placeholder": "meklēt atskaņošanas sarakstā..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "Vai tiešām vēlies dzēst <important>{title}</important> no sava atskaņošanas saraksta?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "Ievadi atskaņošanas saraksta nosaukumu"
+        },
+        "description": {
+          "placeholder": "Ievadi atskaņošanas saraksta aprakstu"
+        },
+        "error": {
+          "format": "Apraksts nedrīkst saturēt tukšas rindas vai sastāvēt tikai no atstarpēm."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "Atklāj @{username} profilu vietnē {app}."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year}) • Filma",
+        "description": "{title} ir {directors} filma, kas iznāca {year}. gadā. Kopsavilkums: {overview}",
+        "description_no_director": "{title} ir filma, kas iznāca {year}. gadā. Kopsavilkums: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Atskaņošanas saraksti",
+          "description": "Atklāj visus atskaņošanas sarakstus, kuros ir filma {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Recenzijas",
+          "description": "Atklāj visas filmas {title} recenzijas."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} ir {creators} seriāls, kas pirmo reizi tika pārraidīts {year}. gadā. Kopsavilkums: {overview}",
+        "description_no_creator": "{title} ir seriāls, kas pirmo reizi tika pārraidīts {year}. gadā. Kopsavilkums: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Atskaņošanas saraksti",
+          "description": "Atklāj visus atskaņošanas sarakstus, kuros ir seriāls {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Recenzijas",
+          "description": "Atklāj visas seriāla {title} recenzijas."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • Sezonas",
+          "description": "Atklāj visas seriāla {title} sezonas."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • {number}. sezona",
+            "description": "Atklāj visas seriāla {title} {number}. sezonas epizodes."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • Filmas",
+          "description": "Atklāj visas filmas, kurās {name} ir spēlējis vai bijis iesaistīts."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • Seriāli",
+          "description": "Atklāj visus seriālus, kuros {name} ir spēlējis vai bijis iesaistīts."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "{title} recenzija no @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "Uzrakstīt recenziju par {title}",
+          "description": "Dalies ar savu viedokli par {title}."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Izpēti Paradise Pictures",
+        "description": "Dodies atklāt salu un tās daudzveidīgās ainavas. Daudzās filmas, kas to apdzīvo, ir izvietotas savā diegētiskajā vidē. Vai tev izdosies izpētīt katru tās nostūri?"
+      }
+    },
+    "legal": {
+      "label": "Juridiskā informācija",
+      "description": "Lasi {app} juridiskos dokumentus.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "Vispārīgie lietošanas noteikumi",
+          "description": "Lasi {app} lietošanas noteikumus."
+        },
+        "sections": {
+          "intro": "Šie vispārīgie lietošanas noteikumi (turpmāk 'Noteikumi') regulē piekļuvi lietotnei {app} un tās lietošanu. Lietotni izdod Loup (turpmāk 'Izdevējs'), kura adrese ir Parīzē. Reģistrēšanās {app} nozīmē šo Noteikumu pieņemšanu bez atrunām.",
+          "presentation": {
+            "label": "1. Pakalpojuma apraksts",
+            "content": "{app} ir bezmaksas lietotne, kas ļauj lietotājiem aplūkot informāciju par filmām, publicēt recenzijas, vērtēt darbus un veidot personalizētus sarakstus."
+          },
+          "account": {
+            "label": "2. Konts un drošība",
+            "content": "Lai piekļūtu satura veidošanas funkcijām, nepieciešams izveidot kontu. Lietotājs ir atbildīgs par savu pieteikšanās datu konfidencialitāti. Krāpnieciskas izmantošanas vai uzlaušanas aizdomu gadījumā Lietotājam nekavējoties jāsazinās ar atbalsta dienestu: <email></email>."
+          },
+          "conduct": {
+            "label": "3. Uzvedības noteikumi",
+            "content": "Lietotājs apņemas savos viedokļos un sarakstos palikt pieklājīgs un cieņpilns. Stingri aizliegts ir: naidīgi, neslavu celoši vai rasistiski izteikumi, aizskaršana, kā arī mēstules vai nepieprasīta komerciāla reklāma. Izdevējs patur tiesības dzēst jebkuru šos noteikumus pārkāpušu saturu un bez brīdinājuma apturēt attiecīgo kontu."
+          },
+          "child_safety": {
+            "label": "4. Nepilngadīgo aizsardzība",
+            "content": "{app} piemēro stingru pilnīgas neiecietības politiku pret jebkādu bērnu seksuālu vardarbību un izmantošanu ('Child Sexual Abuse and Exploitation' jeb CSAE). Jebkura satura, kas seksualizē, izmanto vai citādi apdraud nepilngadīgos, radīšana, augšupielāde, uzglabāšana, izplatīšana, pieprasīšana vai veicināšana {app} ir nepārprotami un absolūti aizliegta. Jebkurš konts, par kuru konstatēts šīs politikas pārkāpums, tiks nekavējoties un neatgriezeniski bloķēts, un Izdevējs ziņos par attiecīgo saturu, kā arī par visu pieejamo informāciju par lietotāju organizācijai National Center for Missing & Exploited Children (NCMEC) un/vai kompetentajām iestādēm saskaņā ar piemērojamiem tiesību aktiem. Jebkuram lietotājam, kas uzzina par saturu vai uzvedību, kas varētu būt CSAE gadījums, nekavējoties jāziņo par to: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. Intelektuālais īpašums",
+            "content": "Lietotājs paliek savu rakstīto viedokļu īpašnieks. Tomēr, publicējot {app}, Lietotājs piešķir Izdevējam bezmaksas neekskluzīvu licenci šo saturu rādīt, reproducēt un tehniski pielāgot lietotnes ietvaros. {app} vizuālie elementi, kods un dizains ir Izdevēja ekskluzīvs īpašums."
+          },
+          "privacy": {
+            "label": "6. Personas dati",
+            "content": "Tava privātuma ievērošana ir mūsu absolūtā prioritāte. {app} nepārdod, neiznomā un nekopīgo nekādus personas datus ar komerciālām trešajām personām vai reklāmdevējiem. Savāktie dati (e-pasts, lietotājvārds, aktivitāte lietotnē) tiek izmantoti tikai pakalpojuma darbībai un tava konta pārvaldīšanai. Savas tiesības uz piekļuvi, labošanu vai dzēšanu (VDAR) vari izmantot, rakstot uz: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Sīkdatnes un izsekotāji",
+            "content": "{app} neizmanto nevienu reklāmas sīkdatni un nevienu trešo personu uzvedības izsekotāju. Tiek izmantoti tikai divi tehnisko sīkdatņu veidi: autentifikācijas sīkdatne (lai tu paliktu pierakstījies) un valodas izvēles sīkdatne (lai atcerētos tavu izvēli). Tā kā šīs sīkdatnes ir noteikti nepieciešamas pakalpojumam, tām nav vajadzīga iepriekšēja piekrišana."
+          },
+          "ads": {
+            "label": "8. Reklāma",
+            "content": "Lietotne pašlaik tiek piedāvāta pilnīgi bez reklāmas. Ja šis modelis mainītos, lietotāji par to tiktu informēti, atjauninot šos Noteikumus."
+          },
+          "liability": {
+            "label": "9. Atbildība",
+            "content": "Izdevējs cenšas nodrošināt {app} pieejamību visu diennakti, taču negarantē, ka nebūs pārtraukumu vai kļūdu. Informācija par filmām nāk no trešo personu datubāzēm; Izdevēju nevar uzskatīt par atbildīgu par iespējamām neprecizitātēm šajos datos."
+          },
+          "law": {
+            "label": "10. Piemērojamie tiesību akti",
+            "content": "Šiem Noteikumiem piemēro Francijas tiesību aktus. Ja strīdu nav izdevies atrisināt mierizlīguma ceļā, izmantojot adresi <email></email>, vienīgā kompetence ir Parīzes tiesām."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "Privātuma politika",
+          "description": "Lasi {app} privātuma politiku."
+        },
+        "sections": {
+          "intro": "Datu aizsardzība ir {app} filozofijas pamatā. Šī politika detalizēti apraksta, kādus datus mēs vācam, kāpēc mēs tos vācam un kā mēs tos aizsargājam. Īsumā: mēs nepārdodam tavus datus.",
+          "controller": {
+            "label": "1. Datu pārzinis",
+            "content": "Datu pārzinis ir Loup, kura adrese ir Parīzē (Francijā). Ar visiem privātuma jautājumiem vari sazināties: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. Savāktie dati",
+            "content": "Mēs vācam tikai lietotnes darbībai noteikti nepieciešamos datus: tavu e-pasta adresi (autentifikācijai), tavu lietotājvārdu un tavus lietošanas datus (novērtētās filmas, recenzijas, saraksti). Tavas paroles tiek glabātas šifrētas (jauktas) un drošā veidā."
+          },
+          "purpose": {
+            "label": "3. Apstrādes nolūks",
+            "content": "Tavi dati tiek apstrādāti tikai, lai: ļautu tev izveidot un pārvaldīt savu kontu, parādītu tavus sarakstus un vērtējumus un nodrošinātu pakalpojuma tehnisko darbību. Mēs neizmantojam tavus datus reklāmas profilēšanai."
+          },
+          "sharing": {
+            "label": "4. Datu kopīgošana",
+            "content": "Tavi personas dati nekad netiek pārdoti, iznomāti vai nodoti trešajām personām. Tos var mitināt mūsu tehniskie pakalpojumu sniedzēji (mitināšana, darījumu e-pastu sūtīšanas pakalpojums), kuriem ir stingra konfidencialitātes saistība un kas ievēro VDAR."
+          },
+          "retention": {
+            "label": "5. Glabāšanas termiņš",
+            "content": "Tavi dati tiek glabāti tik ilgi, kamēr tavs konts ir aktīvs. Ja nolemsi dzēst savu kontu, visi tavi personas dati (e-pasts, lietotājvārds, viedokļi) tiks neatgriezeniski izdzēsti no mūsu datubāzēm."
+          },
+          "rights": {
+            "label": "6. Tavas tiesības (VDAR)",
+            "content": "Saskaņā ar regulējumu tev ir tiesības uz piekļuvi, labošanu, pārnesamību un dzēšanu. Šīs tiesības vari izmantot jebkurā laikā tieši lietotnē vai rakstot mums uz: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Sīkdatnes",
+            "content": "Kā norādīts mūsu lietošanas noteikumos, mēs izmantojam tikai būtiskās tehniskās sīkdatnes (sesija un valoda). Tavā ierīcē netiek ievietota neviena trešo personu reklāmas vai izsekošanas sīkdatne."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "Meklē filmu, seriālu, atskaņošanas sarakstu, personu vai lietotāju..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "Vai tiešām vēlies izņemt šo darbu no sava noskatīto saraksta? Ja tev ir vērtējums vai recenzija, arī tie tiks dzēsti."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "Vai tiešām vēlies pabeigt seriālu? Visas visu sezonu epizodes tiks atzīmētas kā noskatītas."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "Vai tiešām vēlies pabeigt {seasonNumber}. sezonu? Visas sezonas epizodes tiks atzīmētas kā noskatītas."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "Lai šeit redzētu aktivitāti, tev vai lietotājiem, kuriem tu seko, jānovērtē filmas, seriāli, ..."
+    },
+    "feed_person": {
+      "message": "Lai šeit redzētu aktivitāti, tev jāseko cilvēkiem, kas iesaistīti filmās vai seriālos."
+    },
+    "playlists": {
+      "items": {
+        "empty": "Šajā atskaņošanas sarakstā nav nevienas filmas vai seriāla. Pievieno dažus, lai to piepildītu!"
+      },
+      "add_to": {
+        "empty": "Tev nav neviena atskaņošanas saraksta. Izveido vienu, lai pievienotu filmas vai seriālus un viegli tos atrastu!"
+      },
+      "saved": {
+        "empty": "Tev nav neviena saglabāta atskaņošanas saraksta. Saglabā atskaņošanas sarakstu, lai viegli to atrastu savā bibliotēkā!"
+      },
+      "members": {
+        "empty": "Šim atskaņošanas sarakstam nav neviena dalībnieka. Pievieno dažus, lai kopā strādātu pie viena saraksta!",
+        "search": "Meklē lietotājus, ko pievienot atskaņošanas sarakstam..."
+      }
+    },
+    "follow-requests": {
+      "empty": "Tev nav neviena gaidoša sekošanas pieprasījuma. Kad tie būs, tie parādīsies šeit!"
+    },
+    "recos": {
+      "empty": "Tev nav neviena ieteikuma. Kad tie būs, tie parādīsies šeit!",
+      "send_to": {
+        "empty": "Tev nav neviena, kam nosūtīt reco. Lai kādam nosūtītu reco, jums jābūt draugiem (abpusēja sekošana)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "Tev vēl nav neviena vēlākam saglabāta filma vai seriāls. Kad tie būs, tie parādīsies šeit!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> nosūtīja tev reco par filmu <movie></movie>"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> nosūtīja tev reco par seriālu <tv_series></tv_series>"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> noskatījās <movie></movie>, ko tu biji ieteicis"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> noskatījās <tv_series></tv_series>, ko tu biji ieteicis"
+    },
+    "follower_created": {
+      "description": "<user></user> sāka tev sekot"
+    },
+    "follower_accepted": {
+      "description": "<user></user> pieņēma tavu sekošanas pieprasījumu"
+    },
+    "follower_request": {
+      "description": "<user></user> vēlas tev sekot"
+    },
+    "friend_created": {
+      "description": "<user></user> tagad ir tavs draugs"
+    }
+  }
+}

@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "En annen måte å oppdage film",
+    "description": "{app} er et sosialt nettverk for filmelskere. Oppdag, del og utforsk filmer og serier med vennene dine."
+  },
+  "common": {
+    "messages": {
+      "welcome": "Velkommen",
+      "welcome_to_app": "Velkommen til {app}",
+      "hello": "Hei",
+      "greeting_with_name": "{timeOfDay, select, morning {God morgen, {name}} afternoon {God dag, {name}} evening {God kveld, {name}} night {God natt, {name}} other {Hei, {name}}}",
+      "click_here": "Klikk her",
+      "see_more": "Se mer",
+      "see_more_details": "Se flere detaljer",
+      "more": "Mer",
+      "view_profile": "Se profilen",
+      "library": "Bibliotek",
+      "watchlist": "Watchlist",
+      "for_later": "Til senere",
+      "heart_pick": "{count, plural, one {hjertefavoritt} other {hjertefavoritter}}",
+      "add_to_heart_picks": "Legg til blant hjertefavorittene",
+      "remove_from_heart_picks": "Fjern fra hjertefavorittene",
+      "add_rating": "Legg til en vurdering",
+      "edit_rating": "Endre vurderingen",
+      "remove_rating": "Fjern vurderingen",
+      "share_my_rating": "Del vurderingen min",
+      "share_review": "Del anmeldelsen",
+      "show_likes_count": "Vis antall likes",
+      "show_comments_count": "Vis antall kommentarer",
+      "add_to_watchlist": "legg til i watchlist",
+      "remove_from_watchlist": "fjern fra watchlist",
+      "no_results": "ingen resultater",
+      "no_results_for": "Ingen resultater for <strong>{query}</strong>",
+      "no_followees": "Du følger ingen",
+      "no_followers": "Ingen følgere",
+      "no_rating": "Ingen vurdering",
+      "must_watch_to_review": "du må ha sett dette verket for å kunne vurdere det",
+      "review_cannot_be_empty": "anmeldelsen kan ikke være tom",
+      "no_activity": "ingen aktivitet",
+      "followers_ratings": "følgernes vurderinger",
+      "added_by": "lagt til av",
+      "sort_by": "sorter etter",
+      "sort_order": "sorteringsrekkefølge",
+      "go_to_film": "gå til filmen",
+      "go_to_tv_series": "gå til serien",
+      "go_to_user": "gå til brukeren",
+      "go_to_person": "gå til personen",
+      "go_to_activity": "gå til aktiviteten",
+      "go_to_playlist": "gå til spillelisten",
+      "go_to_review": "gå til anmeldelsen",
+      "go_to_director": "{count, plural, one {gå til regissøren} other {gå til regissørene}}",
+      "go_to_creator": "{count, plural, one {gå til skaperen} other {gå til skaperne}}",
+      "show_director": "{count, plural, one {vis regissøren} other {vis regissørene}}",
+      "show_creator": "{count, plural, one {vis skaperen} other {vis skaperne}}",
+      "show_credit": "{count, plural, one {vis krediteringen} other {vis krediteringene}}",
+      "credits": "krediteringer",
+      "view_recommendation": "{count, plural, one {se recoen} other {se recoene}}",
+      "view_directors": "{count, plural, one {se regissøren} other {se regissørene}}",
+      "no_director": "ingen regissør",
+      "view_comment": "{count, plural, one {se kommentaren} other {se kommentarene}}",
+      "add_comment": "{count, plural, one {legg til en kommentar} other {legg til kommentarer}}",
+      "edit_comment": "{count, plural, one {endre kommentaren} other {endre kommentarene}}",
+      "delete_comment": "Slett kommentaren",
+      "do_you_really_want_to_delete_this_comment": "Vil du virkelig slette denne kommentaren?",
+      "comment_deleted": "Denne kommentaren er slettet",
+      "write_your_comment_here": "Skriv en kommentar...",
+      "reply": "Svar",
+      "replies_count": "{count, plural, one {# svar} other {# svar}}",
+      "view_replies": "Se {count, plural, one {# svar} other {# svar}}",
+      "hide_replies": "Skjul svarene",
+      "load_more_replies": "Se flere svar",
+      "get_started": "kom i gang",
+      "get_started_its_free": "nå kjører vi 🎬, det er gratis!",
+      "import": "Importer",
+      "upgrade_to_plan": "bytt til {plan}",
+      "choose_subscription_recurrence": "velg hvor ofte du vil betale for abonnementet",
+      "compare_plans": "sammenlign planene",
+      "save_up_to_percent": "spar opptil {percent}%",
+      "is_empty": "Det er litt tomt her",
+      "add_to_playlist": "legg til i en spilleliste",
+      "send_to_friend": "send til en venn",
+      "pin_to_profile": "Fest til profilen",
+      "unpin_from_profile": "Løsne fra profilen",
+      "pinned": "Festet",
+      "unpinned": "Løsnet",
+      "no_pinned": "Ingen festede elementer",
+      "pinned_limit_reached": "Du har nådd det maksimale antallet festede elementer — løsne et for å legge til et nytt",
+      "custom_sort": "egen sortering",
+      "quick_add": "rask tillegging",
+      "favorite_films": "favorittfilmer",
+      "follow": "følg",
+      "followed": "fulgt",
+      "request_sent": "Forespørsel sendt",
+      "follow_requests": "følgeforespørsler",
+      "no_follow_requests": "ingen følgeforespørsler",
+      "follower": "{count, plural, one {følger} other {følgere}}",
+      "follower_count": "{count} følgere",
+      "see_followers": "se følgerne",
+      "followee": "{count, plural, one {fulgt} other {fulgte}}",
+      "followee_count": "{count} fulgte",
+      "see_followees": "se hvem du følger",
+      "last_activities": "siste aktiviteter",
+      "last_updated": "sist oppdatert",
+      "last_updated_at_date": "sist oppdatert den {date}",
+      "show_all": "vis alle",
+      "this_account_is_private": "denne kontoen er privat",
+      "follow_to_see_activities": "følg for å se aktivitetene",
+      "review": "{count, plural, one {anmeldelse} other {anmeldelser}}",
+      "no_overview": "ingen synopsis",
+      "cast": "skuespillere",
+      "no_cast": "ingen skuespillere",
+      "recent": "nyeste",
+      "popular": "populær",
+      "popularity": "popularitet",
+      "no_reviews": "Ingen anmeldelser",
+      "no_playlists": "Ingen spillelister",
+      "no_playlists_found": "Ingen spillelister funnet",
+      "no_films": "Ingen filmer",
+      "no_tv_series": "Ingen serier",
+      "view_activity": "se aktiviteten",
+      "comment_count": "{count, plural, one {# kommentar} other {# kommentarer}}",
+      "write_review": "skriv en anmeldelse",
+      "new_review": "ny anmeldelse",
+      "edit_review": "endre anmeldelsen",
+      "review_by": "anmeldelse av {name}",
+      "my_review": "{count, plural, one {min anmeldelse} other {mine anmeldelser}}",
+      "add_review": "legg til en anmeldelse",
+      "tv_series": "{count, plural, one {serie} other {serier}}",
+      "film": "{count, plural, one {film} other {filmer}}",
+      "movie": "{count, plural, one {film} other {filmer}}",
+      "media": "{count, plural, one {tittel} other {titler}}",
+      "tv_season": "{count, plural, one {sesong} other {sesonger}}",
+      "tv_season_count": "{count, plural, one {# sesong} other {# sesonger}}",
+      "tv_season_value": "sesong {number}",
+      "tv_season_short": "S{number}",
+      "tv_episode": "{count, plural, one {episode} other {episoder}}",
+      "tv_episode_count": "{count, plural, one {# episode} other {# episoder}}",
+      "tv_episode_value": "episode {number}",
+      "tv_episode_short": "S{seasonNumber}E{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {spesialepisode} other {spesialepisoder}}",
+      "first_air_date": "første visning",
+      "last_air_date": "siste visning",
+      "see_film": "se filmen",
+      "see_tv_series": "se serien",
+      "watch_film_title": "se {title}",
+      "watch_film_streaming_or_download": "Se <important>{title}</important> som strømming eller lovlig nedlasting",
+      "download": "last ned",
+      "downloaded": "lastet ned",
+      "person": "{count, plural, one {person} other {personer}}",
+      "top_result": "beste resultat",
+      "user": "{count, plural, one {bruker} other {brukere}}",
+      "reco": "{count, plural, one {reco} other {recoer}}",
+      "my_recos": "mine recoer",
+      "item": "{count, plural, one {element} other {elementer}}",
+      "item_count": "{count, plural, one {# element} other {# elementer}}",
+      "type": "type",
+      "complete": "fullfør",
+      "completed": "fullført",
+      "collection": "{count, plural, one {samling} other {samlinger}}",
+      "most_recent": "nyeste",
+      "most_popular": "mest populære",
+      "most_old": "eldste",
+      "known_for": "Kjent for",
+      "release_date": "premieredato",
+      "last_appearance_date": "siste opptreden",
+      "vote_average": "gjennomsnittsvurdering",
+      "added": "lagt til",
+      "added_date": "dato lagt til",
+      "added_at": "lagt til den",
+      "add": "legg til",
+      "playlist_name": "navnet på spillelisten",
+      "updated_at": "oppdatert den",
+      "created_at": "opprettet den",
+      "likes": "likes",
+      "likes_count": "antall likes",
+      "search_media": "søk etter en tittel",
+      "search_film": "søk etter en film",
+      "start_typing_to_search_films": "begynn å skrive for å søke etter filmer",
+      "search_tv_series": "søk etter en serie",
+      "start_typing_to_search_tv_series": "begynn å skrive for å søke etter serier",
+      "search_person": "søk etter en person",
+      "start_typing_to_search_persons": "begynn å skrive for å søke etter personer",
+      "search_user": "{count, plural, one {søk etter en bruker} other {søk etter brukere}}",
+      "start_typing_to_search_users": "begynn å skrive for å søke etter brukere",
+      "search_playlist": "søk etter en spilleliste",
+      "start_typing_to_search_playlists": "begynn å skrive for å søke etter spillelister",
+      "search_film_or_tv_series": "søk etter en film eller en serie",
+      "watched_date": "{count, plural, one {visningsdato} other {visningsdatoer}}",
+      "mark_as_watched": "merk som sett",
+      "remove_from_watched": "fjern fra sette",
+      "rating": "vurdering",
+      "create_a_playlist": "opprett en spilleliste",
+      "by_name": "av {name}",
+      "reset": "nullstill",
+      "job": "{count, plural, one {funksjon} other {funksjoner}}",
+      "department": "{count, plural, one {avdeling} other {avdelinger}}",
+      "share_title_via": "Del <strong>{title}</strong> via",
+      "share_title": "Del <strong>{title}</strong>",
+      "link": "lenke",
+      "copy_link": "kopier lenken",
+      "copied": "Kopiert",
+      "other": "{count, plural, one {Annet} other {Andre}}",
+      "via": "via",
+      "edit": "endre",
+      "guest": "{count, plural, one {gjest} other {gjester}}",
+      "are_u_sure": "Er du sikker?",
+      "backward": "forrige",
+      "forward": "neste",
+      "back": "tilbake",
+      "next": "neste",
+      "notification": "{count, plural, one {varsel} other {varsler}}",
+      "see_notifications": "se varslene",
+      "open_social_panel": "åpne det sosiale panelet",
+      "cancel_change": "{count, plural, one {forkast endringen} other {forkast endringene}}",
+      "do_you_really_want_to_cancel_change": "Vil du virkelig forkaste {count, plural, one {endringen} other {endringene}}?",
+      "continue_editing": "fortsett å redigere",
+      "confirm": "bekreft",
+      "terms_of_use": "bruksvilkår",
+      "privacy_policy": "personvernerklæring",
+      "request_made": "forespørsel sendt",
+      "request_canceled": "forespørsel avbrutt",
+      "cancel_request": "avbryt forespørselen",
+      "open_menu": "åpne menyen",
+      "feed": "feed",
+      "about": "om oss",
+      "home": "hjem",
+      "search": "søk",
+      "explore": "utforsk",
+      "shop": "butikk",
+      "help": "hjelp",
+      "legal": "juridisk",
+      "setting": "{count, plural, one {innstilling} other {innstillinger}}",
+      "logout": "logg ut",
+      "to_watch": "å se",
+      "reco_by_your_friends": "recoer fra vennene dine",
+      "friends_playlists": "vennenes spillelister",
+      "latest_activity": "{count, plural, one {siste aktivitet} other {siste aktiviteter}}",
+      "discover_users": "oppdag brukere",
+      "most_recommended": "mest anbefalte",
+      "archive": "arkiver",
+      "unarchive": "ta ut av arkivet",
+      "mark_as_read": "{count, plural, one {merk som lest} other {merk som leste}}",
+      "mark_as_unread": "{count, plural, one {merk som ulest} other {merk som uleste}}",
+      "accept": "godta",
+      "accepted": "godtatt",
+      "decline": "avslå",
+      "declined": "avslått",
+      "request_accepted": "{count, plural, one {forespørsel godtatt} other {forespørsler godtatt}}",
+      "request_declined": "{count, plural, one {forespørsel avslått} other {forespørsler avslått}}",
+      "unread": "{count, plural, one {ulest} other {uleste}}",
+      "archived": "{count, plural, one {arkivert} other {arkiverte}}",
+      "no_notifications": "ingen varsler",
+      "all": "alle",
+      "mark_all_as_read": "merk alle som lest",
+      "archive_all": "arkiver alle",
+      "archive_all_read": "arkiver alt som er lest",
+      "please_login": "logg inn",
+      "like": "lik",
+      "unlike": "fjern like",
+      "unfollow": "slutt å følge",
+      "name": "navn",
+      "add_a_name": "legg til et navn",
+      "add_a_description": "legg til en beskrivelse",
+      "visibility": "synlighet",
+      "search_an_user": "søk etter en bruker",
+      "select_an_item_to_add_to_playlist": "velg et element som skal legges til i spillelisten",
+      "select_a_film_to_add_to_playlist": "velg en film som skal legges til i spillelisten",
+      "select_a_tv_series_to_add_to_playlist": "velg en serie som skal legges til i spillelisten",
+      "add_one_or_more_items_to": "Legg til ett eller flere elementer i <important>{title}</important>",
+      "add_one_or_more_films_to": "Legg til én eller flere filmer i <important>{title}</important>",
+      "add_one_or_more_tv_series_to": "Legg til én eller flere serier i <important>{title}</important>",
+      "manage_playlist_access_rights": "administrer tilgangene til spillelisten",
+      "add_guest": "{count, plural, one {legg til en gjest} other {legg til gjester}}",
+      "manage_members": "administrer medlemmene",
+      "no_member": "ingen medlemmer",
+      "add_member": "{count, plural, one {legg til et medlem} other {legg til medlemmer}}",
+      "manage_guests": "administrer gjestene",
+      "add_guests_to_your_playlist": "legg til gjester i spillelisten din",
+      "select_users_to_add_to_playlist": "velg brukerne som skal legges til i spillelisten",
+      "select_users_to_send_reco": "velg hvem recoen skal sendes til",
+      "select_playlists_to_add_the_item": "velg spillelistene elementet skal legges til i",
+      "send": "send",
+      "sent": "sendt",
+      "select_row": "velg raden",
+      "select_all": "velg alle",
+      "no_selected_users": "ingen brukere valgt",
+      "selection_count": "{number} av {total} {type} valgt",
+      "about_title": "om {title}",
+      "detail": "{count, plural, one {detalj} other {detaljer}}",
+      "genre": "{count, plural, one {sjanger} other {sjangere}}",
+      "male": "{count, plural, one {mann} other {menn}}",
+      "female": "{count, plural, one {kvinne} other {kvinner}}",
+      "non_binary": "{count, plural, one {ikke-binær} other {ikke-binære}}",
+      "unspecified": "ikke oppgitt",
+      "date_of_birth": "fødselsdato",
+      "date_of_death": "dødsdato",
+      "place_of_birth": "fødested",
+      "age_years": "{count} {count, plural, one {år} other {år}}",
+      "biography": "biografi",
+      "no_biography_available": "ingen biografi tilgjengelig",
+      "no_information_available": "ingen informasjon tilgjengelig",
+      "already_sent": "allerede sendt",
+      "already_watched": "allerede sett",
+      "already_added": "allerede lagt til",
+      "recommend_to_friend_to_discover": "Anbefal <strong>{title}</strong> til en venn som skal oppdage den",
+      "add_to_one_or_more_playlists": "Legg <strong>{title}</strong> til i én eller flere av spillelistene dine",
+      "my_playlist": "{count, plural, one {min spilleliste} other {mine spillelister}}",
+      "what_is_title": "Hva er <strong>{title}</strong>?",
+      "try_again": "Prøv igjen",
+      "error": "feil",
+      "not_logged_in": "du er ikke logget inn",
+      "an_error_occurred": "Det oppsto en feil",
+      "playlist_not_found": "spillelisten ble ikke funnet",
+      "user_not_found": "brukeren ble ikke funnet",
+      "film_not_found": "filmen ble ikke funnet",
+      "media_not_found": "tittelen ble ikke funnet",
+      "review_not_found": "anmeldelsen ble ikke funnet",
+      "person_not_found": "personen ble ikke funnet",
+      "tv_series_not_found": "serien ble ikke funnet",
+      "tv_episode_not_found": "episoden ble ikke funnet",
+      "tv_season_not_found": "sesongen ble ikke funnet",
+      "wrong_arguments": "feil argumenter",
+      "no_media_found": "ingen tittel funnet",
+      "unknown_action": "ukjent handling",
+      "no_user_found": "ingen bruker funnet",
+      "no_tv_episodes": "ingen episoder",
+      "save": "lagre",
+      "saved": "lagret",
+      "create": "opprett",
+      "film_count": "{count, plural, one {# film} other {# filmer}}",
+      "tv_series_count": "{count, plural, one {# serie} other {# serier}}",
+      "login": "logg inn",
+      "signup": "opprett konto",
+      "navigation": "navigasjon",
+      "delete": "Slett",
+      "remove": "Fjern",
+      "deleted": "Slettet",
+      "share": "del",
+      "duplicate": "dupliser",
+      "duplicated": "duplisert",
+      "cancel": "Avbryt",
+      "date": "dato",
+      "duration": "varighet",
+      "sort": "sorter",
+      "show": "vis",
+      "column": "{count, plural, one {kolonne} other {kolonner}}",
+      "comment": "{count, plural, one {kommentar} other {kommentarer}}",
+      "unknown": "ukjent",
+      "community": "fellesskap",
+      "cast_and_crew": "skuespillere & team",
+      "soon": "snart",
+      "ios_app": "iOS-app",
+      "android_app": "Android-app",
+      "coming_soon": "Snart tilgjengelig",
+      "new_mobile_app": "Ny mobilapp!",
+      "manage": "administrer",
+      "monthly": "månedlig",
+      "yearly": "årlig",
+      "day": "dag",
+      "week": "uke",
+      "month": "måned",
+      "year": "år",
+      "price": "pris",
+      "free": "gratis",
+      "playlist": "{count, plural, one {spilleliste} other {spillelister}}",
+      "public": "offentlig",
+      "publish": "publiser",
+      "private": "privat",
+      "description": "beskrivelse",
+      "details": "detaljer",
+      "profile": "profil",
+      "overview": "synopsis",
+      "no_playlists_saved": "ingen lagrede spillelister",
+      "camera_permission_denied": "tilgang til kameraet ble avslått",
+      "photo_library_permission_denied": "tilgang til bildebiblioteket ble avslått",
+      "ignore": "ignorer",
+      "ok": "ok",
+      "title": "tittel",
+      "skip": "Hopp over",
+      "undo": "Angre",
+      "date_published": "publiseringsdato",
+      "date_created": "opprettelsesdato",
+      "date_updated": "endringsdato",
+      "alphabetical": "alfabetisk",
+      "date_added": "dato lagt til",
+      "number_of_likes": "antall likes",
+      "number_of_seasons": "antall sesonger",
+      "add_to_this_playlist": "legg til i denne spillelisten",
+      "save_to_library": "lagre i biblioteket",
+      "remove_from_library": "fjern fra biblioteket",
+      "otp": "OTP",
+      "ratings_from_followees": "vurderinger fra dem du følger",
+      "choose_from_the_library": "velg fra biblioteket",
+      "take_a_photo": "ta et bilde",
+      "delete_current_image": "slett det nåværende bildet",
+      "edit_image": "endre bildet",
+      "add_image": "legg til et bilde",
+      "verify_with_a_code": "bekreft med en kode",
+      "order": "rekkefølge",
+      "edit_order": "endre rekkefølgen",
+      "done": "ferdig",
+      "can_edit": "kan redigere?",
+      "upgrade": "oppgrader",
+      "no_description": "Ingen beskrivelse",
+      "no_comment": "Ingen kommentarer",
+      "close": "lukk",
+      "edit_playlist": "endre spillelisten",
+      "universe": "univers",
+      "cannot_be_changed": "kan ikke endres",
+      "delete_review": "slett anmeldelsen",
+      "do_you_really_want_to_delete_this_review": "Vil du virkelig slette denne anmeldelsen?",
+      "user_liked_playlist": "<name></name> likte en spilleliste",
+      "user_liked_review": "<name></name> likte en anmeldelse",
+      "runtime": "spilletid",
+      "ends_at": "Slutter kl. {value}",
+      "this_user_has_no_activity": "Denne brukeren har ingen aktivitet",
+      "notification_archived": "{count, plural, one {varsel arkivert} other {varsler arkivert}}",
+      "notification_unarchived": "{count, plural, one {varsel tatt ut av arkivet} other {varsler tatt ut av arkivet}}",
+      "notification_marked_as_read": "{count, plural, one {varsel merket som lest} other {varsler merket som leste}}",
+      "notification_marked_as_unread": "{count, plural, one {varsel merket som ulest} other {varsler merket som uleste}}",
+      "or_continue_with": "eller fortsett med",
+      "message": "{count, plural, one {melding} other {meldinger}}",
+      "story": "{count, plural, one {story} other {stories}}",
+      "new_playlist": "ny spilleliste",
+      "select_a_type": "velg en type",
+      "filter": "{count, plural, one {filter} other {filtre}}",
+      "hide_watched": "skjul de sette",
+      "show_me_around": "vis meg rundt",
+      "artwork_from": "Illustrasjon av <important>{source}</important>",
+      "no_active_subscription": "ingen aktivt abonnement",
+      "manage_subscription": "administrer abonnementet",
+      "started_on_date": "startet den: {date}",
+      "last_renewed_on_date": "sist fornyet den: {date}",
+      "version_value": "versjon {value}",
+      "original_title": "originaltittel",
+      "starring": "med",
+      "write_your_review_here": "skriv anmeldelsen din her...",
+      "insert": "sett inn",
+      "trailer": "{count, plural, one {trailer} other {trailere}}",
+      "list": "{count, plural, one {liste} other {lister}}",
+      "grid": "{count, plural, one {rutenett} other {rutenett}}",
+      "order_asc": "stigende rekkefølge",
+      "order_desc": "synkende rekkefølge",
+      "menu": "meny",
+      "at_least_one_watched_date_required": "det kreves minst én visningsdato",
+      "viewer": "{count, plural, one {Seer} other {Seere}}",
+      "editor": "{count, plural, one {Redaktør} other {Redaktører}}",
+      "admin": "{count, plural, one {Administrator} other {Administratorer}}",
+      "owner": "{count, plural, one {Eier} other {Eiere}}",
+      "you_dont_have_permission_to_do_this_action": "Du har ikke tillatelse til å utføre denne handlingen",
+      "in_progress": "pågår",
+      "give_up": "gi opp",
+      "random": "tilfeldig",
+      "reset_password": "Nullstill passordet",
+      "password_reset": "Passordet er nullstilt",
+      "return_to_login": "Tilbake til innloggingen",
+      "invalid_code": "Ugyldig kode",
+      "no_token_found": "Ingen token funnet",
+      "first_watched_at": "første visningsdato",
+      "watched_dates": "visningsdatoer",
+      "no_watched_dates": "ingen visningsdatoer",
+      "select_role": "velg en rolle",
+      "select_format": "velg et format",
+      "theater": "Kino",
+      "physical": "Fysisk medium",
+      "digital": "Digitalt",
+      "streaming": "Strømming",
+      "you_must_be_premium_to_change_member_role": "Du må være premium for å endre rollen til et medlem",
+      "already_member": "allerede medlem",
+      "email_already_used": "Denne e-postadressen er allerede i bruk",
+      "email_confirmed": "E-postadressen er bekreftet",
+      "confirmation_email_sent": "Bekreftelsesmail sendt",
+      "continue": "Fortsett",
+      "finish": "Avslutt",
+      "forgot_password": "Glemt passord",
+      "new_password": "Nytt passord",
+      "confirm_password": "Bekreft passordet",
+      "password_reseted": "Passordet er nullstilt",
+      "reset_your_password": "Nullstill passordet ditt",
+      "invalid_token": "Ugyldig token",
+      "new_notification": "{count, plural, one {nytt varsel} other {nye varsler}}",
+      "lets_go": "Nå kjører vi!",
+      "update_available": "Oppdatering tilgjengelig",
+      "update_available_description": "Oppdater appen for å få de nyeste forbedringene.",
+      "update_required_title": "Oppdatering kreves",
+      "update_required_description": "Denne versjonen av appen støttes ikke lenger. Oppdater den for å fortsette å bruke Recomend.",
+      "update_app": "Oppdater",
+      "advertisement": "{count, plural, one {Annonse} other {Annonser}}",
+      "pending": "Venter",
+      "processing": "Pågår",
+      "awaiting_review": "Skal sjekkes",
+      "failed": "Mislykket",
+      "data": "{count, plural, one {Data} other {Data}}",
+      "restore": "Gjenopprett",
+      "fix": "Rett",
+      "not_found": "Ikke funnet",
+      "unavailable": "Ikke tilgjengelig",
+      "star_on_github": "Gi en stjerne på GitHub"
+    },
+    "form": {
+      "email": {
+        "label": "E-postadresse",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "E-postadressen er ikke gyldig",
+          "unavailable": "Denne e-postadressen er allerede i bruk"
+        },
+        "verified": "E-postadressen er bekreftet"
+      },
+      "username": {
+        "label": "Brukernavn",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "Det første tegnet må være en bokstav eller et tall",
+          "double_dot": "To punktum etter hverandre er ikke tillatt",
+          "ends_with_dot": "Et punktum på slutten er ikke tillatt",
+          "format": "Bare bokstaver, tall og tegnene '_' og '.' er tillatt",
+          "unavailable": "Dette brukernavnet er allerede tatt"
+        }
+      },
+      "full_name": {
+        "label": "Navn",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "Bare bokstaver, tall og mellomrom er tillatt"
+        }
+      },
+      "password": {
+        "label": "Passord",
+        "placeholder": "Skriv inn passordet ditt",
+        "schema": {
+          "uppercase": "Det kreves minst én stor bokstav",
+          "lowercase": "Det kreves minst én liten bokstav",
+          "number": "Det kreves minst ett tall",
+          "special": "Det kreves minst ett spesialtegn",
+          "match": "Passordene er ikke like"
+        },
+        "confirm": {
+          "label": "Bekreft passordet",
+          "placeholder": "Bekreft passordet ditt"
+        }
+      },
+      "length": {
+        "char_min": "minst {count, plural, one {# tegn} other {# tegn}}",
+        "char_max": "maks {count, plural, one {# tegn} other {# tegn}}"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "Bare bokstaver, tall og mellomrom er tillatt"
+      },
+      "error": {
+        "too_many_attempts": "For mange forsøk, prøv igjen senere",
+        "not_received_code": "Har du ikke fått koden?",
+        "invalid_code": "Ugyldig kode",
+        "turnstile": "Bekreftelsen mislyktes, prøv igjen"
+      },
+      "resend_code": "Send koden på nytt",
+      "resend_email": "Send e-posten på nytt",
+      "code_verified": "Koden er bekreftet",
+      "code_sent": "Koden er sendt"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "siden ble ikke funnet",
+        "description": "oi, denne siden finnes ikke..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "oversikt",
+        "description": "Oppdag, vurder og del favorittfilmene og -seriene dine."
+      },
+      "recos": {
+        "label": "recoer",
+        "description": "Send og motta recoene fra vennene dine. Alt på ett sted."
+      },
+      "playlists": {
+        "label": "spillelister",
+        "description": "Organiser, del og bygg spillelister sammen."
+      },
+      "feed": {
+        "label": "feed",
+        "description": "Følg vennene dine og se hva de ser, liker og vurderer."
+      },
+      "social_sharing": {
+        "label": "deling på sosiale medier",
+        "description": "Del det du elsker på Instagram eller andre nettverk."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "Oversikt",
+          "description": "Hold oversikt over filmene du har sett"
+        },
+        "recos": {
+          "label": "Recoer",
+          "description": "Send filmanbefalinger til vennene dine"
+        },
+        "explore": {
+          "label": "Utforsk",
+          "description": "Oppdag nye filmer på Paradise Pictures, et interaktivt kart med mer enn 1400 filmer"
+        },
+        "like": {
+          "label": "Like",
+          "description": "Vis kjærligheten din for favorittfilmene, -spillelistene og -anmeldelsene dine"
+        },
+        "rating": {
+          "label": "Vurdering",
+          "description": "Vurder filmene du har sett"
+        },
+        "watchlist": {
+          "label": "Watchlist",
+          "description": "Lagre filmene du vil se"
+        },
+        "playlists": {
+          "label": "Spillelister",
+          "description": "Organiser filmene dine i spillelister og del dem"
+        },
+        "reviews": {
+          "label": "Anmeldelser",
+          "description": "Skriv anmeldelser og slipp løs den bitre cinefilen i deg"
+        },
+        "feed": {
+          "label": "Feed",
+          "description": "Følg aktiviteten til vennene dine"
+        },
+        "adsFree": {
+          "label": "Uten reklame",
+          "description": "Nyt Recomend uten reklame, for alltid"
+        }
+      }
+    },
+    "welcome": {
+      "title": "Takk for at du registrerte deg!",
+      "description": "Her er en rask oversikt over hva du kan gjøre med {app}.",
+      "follow": {
+        "title": "Følg folk",
+        "description": "Følg vennene dine og se hva de ser på."
+      },
+      "import": {
+        "title": "Kommer du fra en annen plattform?"
+      }
+    },
+    "collection": {
+      "label": "bibliotek",
+      "my_recos": {
+        "label": "mine recoer",
+        "search": {
+          "placeholder": "søk i mine recoer..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "slett fra mine recoer",
+            "description": "Vil du virkelig slette <important>{title}</important> fra recoene dine?"
+          },
+          "complete_confirm": {
+            "title": "fullfør recoen",
+            "description": "Vil du virkelig fullføre recoen <important>{title}</important>?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "søk i watchlisten..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "slett fra watchlisten",
+            "description": "Vil du virkelig slette <important>{title}</important> fra watchlisten din?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "søk blant hjertefavorittene..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "slett fra hjertefavorittene",
+            "description": "Vil du virkelig slette <important>{title}</important> fra hjertefavorittene dine?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> har sett",
+        "rated": "<name></name> har vurdert",
+        "liked": "<name></name> likte",
+        "rated_liked": "<name></name> likte og vurderte",
+        "reviewed": "<name></name> har skrevet en anmeldelse"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> er <important>{roles}</important> i <linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> er <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "Gi appen tilgang",
+        "description_generic": "En app ber om tilgang til kontoen din.",
+        "description": "{client} vil ha tilgang til kontoen din.",
+        "scopes_label": "Dette gir appen mulighet til å:",
+        "accept": "Tillat",
+        "deny": "Avslå",
+        "error": {
+          "invalid_request": "Ugyldig eller utløpt forespørsel",
+          "invalid_request_description": "Start prosessen på nytt fra appen som sendte deg hit.",
+          "client_not_found": "Denne appen ble ikke funnet.",
+          "submit_failed": "Noe gikk galt. Prøv igjen."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "Logg inn på {app}-kontoen din."
+        },
+        "label": "Logg inn",
+        "description": "Oppdag de beste filmanbefalingene.",
+        "or_continue_with": "Eller fortsett med",
+        "no_account_yet": "Har du ikke konto ennå?",
+        "form": {
+          "identifier": {
+            "label": "E-postadresse eller brukernavn",
+            "placeholder": "Skriv inn e-postadressen eller brukernavnet ditt"
+          },
+          "password": {
+            "label": "Passord",
+            "placeholder": "Skriv inn passordet ditt"
+          },
+          "submit": "Logg inn",
+          "forgot_password": "Glemt passordet?",
+          "wrong_credentials": "E-postadressen eller passordet er feil"
+        },
+        "otp": {
+          "password_login": "Vil du heller logge inn med et passord?",
+          "form": {
+            "submit": "Få koden",
+            "no_user_found": "Ingen bruker funnet med denne e-postadressen",
+            "success": "Logget inn"
+          },
+          "confirm_form": {
+            "label": "Bekreft koden",
+            "description": "En bekreftelseskode er sendt til adressen {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "Registrer deg på {app} for å oppdage og dele filmanbefalinger."
+        },
+        "description": "Opprett en konto for å anbefale en film til den kompisen som alltid glemmer titlene.",
+        "form": {
+          "success": "En bekreftelsesmail er sendt til {email}"
+        },
+        "confirm_form": {
+          "label": "Bekreft e-postadressen",
+          "description": "En bekreftelseslenke er sendt til adressen {email}"
+        },
+        "return_to_login": "Oi, jeg har visst konto likevel."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "Glemt passord",
+          "description": "Nullstill passordet ditt."
+        },
+        "label": "Glemt passord",
+        "description": "Du burde bruke en passordbehandler, det er faktisk veldig praktisk.",
+        "return_to_login": "Oi, jeg husker visst passordet mitt likevel.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "Nullstill passordet",
+          "code_sent": "Forespørsel sendt"
+        },
+        "confirm_form": {
+          "label": "Bekreft koden",
+          "description": "En bekreftelseskode er sendt til adressen {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "Nullstilling av passord",
+          "description": "Velg et nytt passord til kontoen din."
+        }
+      },
+      "error": {
+        "label": "Feil",
+        "description": "Det oppsto en feil under innloggingen.",
+        "return_to_login": "Tilbake i trygghet"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "Om oss",
+        "marquee": "Er det ikke noe mer spennende i livet ditt enn å se på 'Om oss'-sider på internett?",
+        "intro": "<strong>Recomend</strong> er et sted viet til å oppdage, anbefale og organisere filmer. Alt er laget for å gi ryktet den beste digitale formen som finnes. Vår tilnærming handler om mennesker og relasjonene deres i en tid med selvsentrert forbruk — eller rettere sagt 'anbefalt for deg'.",
+        "slogan": {
+          "1": "Det er uten reklame og uten tvilsomme løfter. 🍆",
+          "2": "Det er både et sosialt nettverk og et verktøy.",
+          "3": "Det er hjemmelaget av entusiaster.",
+          "4": "Det er amatørmessig i ordets egentlige betydning."
+        },
+        "last": "Recomend kan brukes alene eller sammen med andre, offentlig eller privat, dag og natt — men aldri foran en film, konsentrer deg nå!"
+      },
+      "team": {
+        "label": "Teamet",
+        "intro": "Recomend er laget av to filmgale brødre som elsker å bruke tiden sin på alt for ambisiøse prosjekter som ingen vet om noensinne ser dagens lys.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "Hyperaktiv arkitekt og ingeniør som ikke klarer å nøye seg med én jobb (den ekte start-up nation): Yoann står bak idéen om å lage et filmkart, som i starten bare hadde den beskjedne ambisjonen om å bli en plakat til toalettet hans. Med Loups ankomst eksploderte målene fullstendig, og litt overkjørt av hendelsene tar han seg av hele den grafiske delen av kartet og nettstedet samt all kommunikasjon (selv om han ikke liker det). Han gir også sin mening om UX/UI og foreslår en haug av funksjoner uten helt å forstå hvor vanskelige de er å kode (han har gjort noen fremskritt)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "Fullstendig autodidakt som likevel tok en utdanning som førte til ulønnet arbeidsledighet før han ble 25. En skikkelig sveitsisk lommekniv: Loup tar seg av webdesignet og koder et grensesnitt vi forestiller oss så brukervennlig som mulig. Loup vil takke alle kodeforumene som svarte på hans (svært) mange spørsmål, og alle de indiske YouTuberne som fulgte ham gjennom disse månedene som adoptivfedre. Moren hans er for øvrig overbevist om at broren har gjort ham til slave for dette prosjektet (det går fint, mamma)."
+          }
+        },
+        "last": "Vil du prate med oss eller med andre i fellesskapet? Bli med på vår <link>Discord</link>!"
+      },
+      "pricing": {
+        "label": "Priser",
+        "intro": "Denne abonnementsmodellen er først og fremst en støtte for å holde prosjektet i live og fortsette å utvikle det. Premium-funksjonene er ekstrafunksjoner for avansert bruk av Recomend, som rettferdiggjør et lite økonomisk bidrag. Vi vil alltid beholde muligheten til å bruke nettstedet gratis, uten reklame og uten å føle seg begrenset.",
+        "subdescription": "*Hvis den ekstremt lave prisen på dette abonnementet likevel er over det du har råd til, så henvend deg til den liberale regjeringen som er ansvarlig for tapet av kjøpekraften din."
+      },
+      "legal": {
+        "label": "Juridisk & personvern",
+        "description": "Vi respekterer personvernet ditt. Reklamen som vises til brukere som ikke er innlogget, administreres av Google og krever tekniske cookies for å begrense visningsfrekvensen og hindre svindel.",
+        "privacyPolicy": "Les personvernerklæringen vår",
+        "manageCookies": "Administrer reklamepreferansene mine (cookies)"
+      },
+      "open-source": {
+        "label": "Åpen kildekode",
+        "intro": "Recomend har åpen kildekode: koden er offentlig på GitHub. Ta en titt, bidra, eller bare gi oss en stjerne!",
+        "star": "Gi oss en stjerne på GitHub"
+      },
+      "businessmodel": {
+        "label": "Forretningsmodell",
+        "paragraph": {
+          "1": "Du kan sikkert gjette at vi med våre lite kommersielle profiler ikke helt har forstått hva en forretningsmodell skulle gjøre for oss nå...",
+          "2": "Hvis Recomends fremtid krever det, ser vi på spørsmålet ved å omgi oss med de rette folkene — eller i hvert fall folk som er mer interessert i det enn vi er.",
+          "3": "Til da, la oss være ærlige, er det andre ting å gjøre."
+        }
+      },
+      "roadmap": {
+        "label": "Roadmap"
+      },
+      "data": {
+        "label": "Data",
+        "paragraph": {
+          "1": "Alle metadataene som brukes på Recomend, leveres av <link>The Movie Database (TMDb)</link> via plattformens API. Vi gjør altså akkurat som alle andre, som lydige sauer.",
+          "2": "Ved feil eller manglende filmer må du derfor henvende deg til <link>TMDb</link>."
+        }
+      },
+      "resources": {
+        "label": "Ressurser",
+        "intro": "Det har egentlig ikke så mye med film å gjøre, men her er en liste over nettsteder vi liker:"
+      },
+      "contact-support": {
+        "label": "Kontakt & støtte",
+        "help-center": "Finn svarene på de eksistensielle spørsmålene dine i vårt <link>hjelpesenter</link>.",
+        "technical-support": "For tekniske spørsmål: <email></email>",
+        "suggest-a-feature": "For forslag: <email></email>",
+        "contact-us": "Hvis du bare vil komme i kontakt med oss: <email></email>"
+      },
+      "quote": {
+        "label": "Sitat",
+        "quote": "« Jeg hater ordet profesjonell. Alle skuespillerne og alle de andre som sier: jeg er profesjonell, jeg er en pro! Hva er det? Finnes det et tristere ord? For amatør kommer av ordet kjærlighet. Man må gjøre ting av kjærlighet, ellers er vi idioter. »",
+        "author": "Orson Wells",
+        "date": "1972",
+        "subdescription": "*Vi var i tvil om vi skulle ta det med, for det høres fort pretensiøst ut, men det speiler ganske godt vår mood rundt prosjektet. Men liker du det ikke, så fjerner vi det."
+      }
+    },
+    "settings": {
+      "label": "Innstillinger",
+      "description": "Administrer innstillingene for kontoen din.",
+      "profile": {
+        "label": "Profil",
+        "description": "Det er slik andre ser deg på nettstedet.",
+        "avatar": {
+          "label": "Avatar",
+          "delete": "Slett"
+        },
+        "full_name": {
+          "label": "Navn",
+          "description": "Det er navnet som vises på profilen din og i e-poster.",
+          "placeholder": "Skriv inn navnet ditt",
+          "form": {
+            "min_length": "Navnet må være på minst 1 tegn",
+            "max_length": "Navnet kan ikke være lengre enn 50 tegn"
+          }
+        },
+        "bio": {
+          "label": "Bio",
+          "description": "Fortell noe om deg selv — det vises på profilen din.",
+          "placeholder": "Skriv noe om deg selv",
+          "form": {
+            "max_length": "Bioen kan ikke være lengre enn 150 tegn",
+            "format": "Biografien kan ikke inneholde tomme linjer eller bare bestå av mellomrom."
+          }
+        },
+        "favorite_films": {
+          "label": "Favorittfilmer",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "URL-en er ikke gyldig"
+          }
+        }
+      },
+      "account": {
+        "label": "Konto",
+        "description": "Oppdater innstillingene for kontoen din.",
+        "username": {
+          "label": "Brukernavn",
+          "description": "Dette er brukernavnet ditt, som andre kan finne deg og profilen din med. Du kan bare endre det én gang hver 30. dag.",
+          "placeholder": "Skriv inn brukernavnet ditt",
+          "form": {
+            "min_length": "Brukernavnet må være på minst 3 tegn",
+            "max_length": "Brukernavnet kan ikke være lengre enn 15 tegn",
+            "invalid": "Brukernavnet kan bare inneholde bokstaver, tall og tegnene '_' og '.'",
+            "unavailable": "Dette brukernavnet er allerede tatt"
+          }
+        },
+        "private": {
+          "label": "Privat konto",
+          "description": "Når kontoen din er privat, er det bare brukerne du godkjenner som kan se aktivitetene dine."
+        },
+        "email": {
+          "description": "Det sendes en bekreftelsesmail til den nåværende e-postadressen din og til den nye adressen. Du må bekrefte begge før endringen trer i kraft.",
+          "change_pending": "Den <strong>{date}</strong> ble det sendt en bekreftelsesmail til den nye e-postadressen din <strong>{email}</strong>. Klikk på lenken eller skriv inn bekreftelseskoden for å bekrefte endringen.",
+          "confirm_email_code": {
+            "description": "Skriv inn bekreftelseskoden som er sendt til adressen <strong>{email}</strong>."
+          },
+          "change_success": "E-postadressen din er oppdatert"
+        },
+        "delete_account": {
+          "button": "Slett kontoen min",
+          "confirm": {
+            "description": "Kontoen din slettes permanent, og du kan ikke få den tilbake.",
+            "confirm_email_sent": "Det er sendt en bekreftelsesmail til e-postadressen din"
+          }
+        }
+      },
+      "appearance": {
+        "label": "Utseende",
+        "description": "Tilpass utseendet til appen. Bytt automatisk mellom dag- og natt-tema.",
+        "language": {
+          "label": "Språk",
+          "description": "Velg et språk — endringene trer i kraft når du starter appen på nytt",
+          "placeholder": "Velg et språk",
+          "not_found": "Språket ble ikke funnet"
+        },
+        "theme": {
+          "label": "Tema",
+          "description": "Velg tema for grensesnittet.",
+          "options": {
+            "light": "Lyst",
+            "dark": "Mørkt"
+          }
+        }
+      },
+      "subscription": {
+        "label": "Abonnement",
+        "description": "Administrer premium-abonnementet ditt."
+      },
+      "security": {
+        "label": "Sikkerhet",
+        "description": "Hvis du endrer passordet ditt, blir du logget ut på alle enheter bortsett fra den du bruker nå.",
+        "current_password": {
+          "label": "Nåværende passord",
+          "placeholder": "Skriv inn det nåværende passordet ditt",
+          "form": {
+            "required": "Det nåværende passordet er påkrevd",
+            "invalid": "Det nåværende passordet er feil"
+          }
+        },
+        "new_password": {
+          "label": "Nytt passord",
+          "placeholder": "Skriv inn det nye passordet ditt",
+          "form": {
+            "min_length": "Passordet må være på minst 8 tegn",
+            "uppercase": "Det kreves minst én stor bokstav",
+            "lowercase": "Det kreves minst én liten bokstav",
+            "number": "Det kreves minst ett tall",
+            "special": "Det kreves minst ett spesialtegn"
+          }
+        },
+        "confirm_password": {
+          "label": "Bekreft det nye passordet",
+          "placeholder": "Bekreft det nye passordet ditt",
+          "form": {
+            "match": "Passordene er ikke like"
+          }
+        }
+      },
+      "notifications": {
+        "label": "Varsler",
+        "description": "Velg hvilke varsler du får.",
+        "push_notifications": {
+          "label": "Push-varsler",
+          "form": {
+            "enable": "Slå på push-varsler"
+          },
+          "already_granted": "Det er allerede sendt en varselforespørsel. Gå til innstillingene i nettleseren din for å endre den.",
+          "no_enabled": "Slå på varsler i innstillingene på enheten din for å få push-varsler.",
+          "open_settings": "Gå til innstillingene på enheten"
+        }
+      },
+      "data": {
+        "label": "Data",
+        "description": "Importer eller eksporter dataene dine.",
+        "importer": {
+          "label": "Importer",
+          "select_source": "Velg en kilde",
+          "instructions_title": "Instruksjoner",
+          "browse_prompt": "Slipp filen din her, eller <link>velg</link>",
+          "browse_prompt_mobile": "Trykk for å velge en fil",
+          "uploading": "Laster opp…",
+          "processing": "Analyserer filen din…",
+          "upload_error": "Opplastingen mislyktes, prøv igjen.",
+          "invalid_file_type": "Denne filtypen støttes ikke for denne kilden.",
+          "review_title": "Gå gjennom importen din",
+          "review_summary": "{matched} av {total} funnet",
+          "validate": "Godkjenn importen",
+          "validate_confirm_description": "Dette importerer alle funnede elementer som ikke er hoppet over, til biblioteket ditt. Det kan ikke angres.",
+          "success_title": "Importen er fullført",
+          "success_description": "Dataene dine er importert.",
+          "failed_title": "Importen mislyktes",
+          "failed_description": "Noe gikk galt under behandlingen av denne importen.",
+          "pending_description": "Importen din står i kø og starter snart.",
+          "empty": "Ingen importer ennå.",
+          "delete_confirm_description": "Denne importen og alle dataene dens slettes permanent. Det kan ikke angres.",
+          "keep_existing": "Behold mine",
+          "use_imported": "Bruk importen",
+          "merge": "Slå sammen",
+          "conflict": "Konflikt",
+          "no_match": "Ingen treff",
+          "existing_rating": "Nå: {rating}",
+          "log_column": "Logg",
+          "actions_column": "Handlinger",
+          "categories": {
+            "log_movies": "Filmer",
+            "log_tv_series": "Serier",
+            "bookmarks": "Watchlist",
+            "playlists": "Lister"
+          },
+          "status": {
+            "pending": "Venter",
+            "processing": "Pågår",
+            "awaiting_review": "Skal sjekkes",
+            "completed": "Fullført",
+            "failed": "Mislykket"
+          }
+        },
+        "exporter": {
+          "label": "Eksporter"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "bytt til Premium",
+        "description": "Bytt til en premium-konto for å få tilgang til alle funksjonene i {app}."
+      },
+      "header": {
+        "title": "utvid kinoen din, del mer, støtt {app}",
+        "subtitle": "prøv 1 måned gratis, deretter {price}/måned"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "aktiviteter",
+            "unlimited_activities": {
+              "label": "ubegrensede aktiviteter",
+              "description": "vurderinger, likes, anmeldelser, watchlist og anbefalinger"
+            },
+            "favorites": {
+              "label": "favoritter",
+              "description": "legg favorittfilmene dine til på profilen din"
+            }
+          },
+          "playlists": {
+            "label": "spillelister",
+            "unlimited_playlists": {
+              "label": "ubegrensede",
+              "description": "opprett et ubegrenset antall spillelister"
+            },
+            "shared_playlists": {
+              "label": "delte",
+              "description": "del spillelistene dine med andre brukere"
+            },
+            "collaborative_playlists": {
+              "label": "felles",
+              "description": "opprett felles spillelister med andre brukere"
+            }
+          },
+          "feed": {
+            "label": "feed",
+            "followees": {
+              "label": "fulgte brukere",
+              "description": "se aktivitetene til brukerne du følger"
+            },
+            "cast_and_crew": {
+              "label": "skuespillere & team",
+              "description": "følg aktivitetene til folkene som jobber med filmene"
+            }
+          },
+          "support": {
+            "label": "støtte",
+            "team": {
+              "label": "Støtt {app}-teamet"
+            },
+            "credits": {
+              "label": "rulletekst",
+              "description": "profilen din i rulleteksten i appen"
+            }
+          }
+        },
+        "success": {
+          "label": "Takk for støtten!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} - spilleliste av @{username}",
+        "description": "Oppdag filmspillelisten til @{username} på {app}."
+      },
+      "actions": {
+        "delete": {
+          "description": "Dette sletter <important>{title}</important> permanent fra spillelistene dine."
+        }
+      },
+      "search": {
+        "placeholder": "søk i spillelisten..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "Vil du virkelig slette <important>{title}</important> fra spillelisten din?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "Skriv inn tittelen på spillelisten"
+        },
+        "description": {
+          "placeholder": "Skriv inn en beskrivelse av spillelisten"
+        },
+        "error": {
+          "format": "Beskrivelsen kan ikke inneholde tomme linjer eller bare bestå av mellomrom."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "Oppdag profilen til @{username} på {app}."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year}) • Film",
+        "description": "{title} er en film av {directors} fra {year}. Synopsis: {overview}",
+        "description_no_director": "{title} er en film fra {year}. Synopsis: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Spillelister",
+          "description": "Oppdag alle spillelistene som inneholder filmen {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Anmeldelser",
+          "description": "Oppdag alle anmeldelsene av filmen {title}."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} er en serie av {creators} som ble vist første gang i {year}. Synopsis: {overview}",
+        "description_no_creator": "{title} er en serie som ble vist første gang i {year}. Synopsis: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Spillelister",
+          "description": "Oppdag alle spillelistene som inneholder serien {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Anmeldelser",
+          "description": "Oppdag alle anmeldelsene av serien {title}."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • Sesonger",
+          "description": "Oppdag alle sesongene av serien {title}."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • Sesong {number}",
+            "description": "Oppdag alle episodene i sesong {number} av serien {title}."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • Filmer",
+          "description": "Oppdag alle filmene {name} har spilt i eller jobbet med."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • Serier",
+          "description": "Oppdag alle seriene {name} har spilt i eller jobbet med."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "Anmeldelse av {title} av @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "Skriv en anmeldelse av {title}",
+          "description": "Del meningen din om {title}."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Utforsk Paradise Pictures",
+        "description": "Dra ut og oppdag øya og de mange ulike kulissene. De mange filmene som befolker den, er plassert i sitt diegetiske miljø. Klarer du å utforske hver krik og krok?"
+      }
+    },
+    "legal": {
+      "label": "Juridisk",
+      "description": "Les de juridiske dokumentene for {app}.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "Generelle bruksvilkår",
+          "description": "Les bruksvilkårene for {app}."
+        },
+        "sections": {
+          "intro": "Disse bruksvilkårene (nedenfor 'Vilkårene') regulerer tilgangen til og bruken av appen {app}. Appen utgis av Loup (nedenfor 'Utgiveren'), med adresse i Paris. Å registrere seg på {app} betyr at du godtar disse Vilkårene uten forbehold.",
+          "presentation": {
+            "label": "1. Beskrivelse av tjenesten",
+            "content": "{app} er en gratis app der brukerne kan se informasjon om filmer, publisere anmeldelser, vurdere verk og lage egne lister."
+          },
+          "account": {
+            "label": "2. Konto og sikkerhet",
+            "content": "Tilgang til funksjonene der man bidrar, krever at det opprettes en konto. Brukeren er ansvarlig for at innloggingsopplysningene holdes konfidensielle. Ved svindel eller mistanke om hacking skal Brukeren umiddelbart kontakte støtten på: <email></email>."
+          },
+          "conduct": {
+            "label": "3. Atferdsregler",
+            "content": "Brukeren forplikter seg til å være høflig og respektfull i sine vurderinger og lister. Strengt forbudt er: hatefulle, ærekrenkende eller rasistiske ytringer, trakassering, samt spam eller kommersiell reklame som ikke er etterspurt. Utgiveren forbeholder seg retten til å slette alt innhold som bryter med disse reglene, og til å stenge den aktuelle kontoen uten varsel."
+          },
+          "child_safety": {
+            "label": "4. Beskyttelse av mindreårige",
+            "content": "{app} har en streng nulltoleranse mot enhver form for seksuelt misbruk og seksuell utnyttelse av barn ('Child Sexual Abuse and Exploitation', eller CSAE). Det er uttrykkelig og absolutt forbudt på {app} å lage, laste opp, lagre, spre, etterspørre eller fremme innhold som seksualiserer, utnytter eller på annen måte setter mindreårige i fare. Enhver konto som viser seg å bryte med dette regelverket, stenges umiddelbart og permanent, og Utgiveren rapporterer det aktuelle innholdet, sammen med all tilgjengelig informasjon om brukeren, til National Center for Missing & Exploited Children (NCMEC) og/eller til kompetente myndigheter i samsvar med gjeldende lov. Enhver bruker som får kjennskap til innhold eller atferd som kan utgjøre et tilfelle av CSAE, skal uten opphold rapportere det til: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. Immaterielle rettigheter",
+            "content": "Brukeren forblir eier av de vurderingene brukeren skriver. Men ved å publisere på {app} gir brukeren Utgiveren en gratis, ikke-eksklusiv lisens til å vise, gjengi og teknisk tilpasse dette innholdet i appen. De visuelle elementene, koden og designet til {app} tilhører utelukkende Utgiveren."
+          },
+          "privacy": {
+            "label": "6. Personopplysninger",
+            "content": "Respekt for personvernet ditt er vår absolutt høyeste prioritet. {app} selger, leier ut eller deler ingen personopplysninger med kommersielle tredjeparter eller annonsører. Opplysningene som samles inn (e-postadresse, brukernavn, aktivitet i appen), brukes bare til å drive tjenesten og til å administrere kontoen din. Du kan utøve rettighetene dine til innsyn, endring eller sletting (GDPR) ved å kontakte: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookies og sporere",
+            "content": "{app} bruker ingen reklamecookies og ingen atferdssporere fra tredjeparter. Bare to typer tekniske cookies brukes: en innloggingscookie (for å holde deg innlogget) og en språkcookie (for å huske valget ditt). Siden disse cookiene er strengt nødvendige for tjenesten, er de unntatt krav om forhåndssamtykke."
+          },
+          "ads": {
+            "label": "8. Reklame",
+            "content": "Appen tilbys i dag helt uten reklame. Skulle denne modellen endre seg, blir brukerne informert via en oppdatering av disse Vilkårene."
+          },
+          "liability": {
+            "label": "9. Ansvar",
+            "content": "Utgiveren bestreber seg på å holde {app} tilgjengelig døgnet rundt, men garanterer ikke at det ikke forekommer avbrudd eller feil. Informasjonen om filmene kommer fra tredjeparters databaser; Utgiveren kan ikke holdes ansvarlig for eventuelle unøyaktigheter i disse dataene."
+          },
+          "law": {
+            "label": "10. Gjeldende rett",
+            "content": "Disse Vilkårene er underlagt fransk rett. Ved en tvist som ikke kan løses i enighet via <email></email>, er domstolene i Paris alene kompetente."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "Personvernerklæring",
+          "description": "Les personvernerklæringen for {app}."
+        },
+        "sections": {
+          "intro": "Personvern står i sentrum av filosofien til {app}. Denne erklæringen beskriver hvilke opplysninger vi samler inn, hvorfor vi samler dem inn, og hvordan vi beskytter dem. Kort sagt: vi selger ikke opplysningene dine.",
+          "controller": {
+            "label": "1. Behandlingsansvarlig",
+            "content": "Behandlingsansvarlig er Loup, med adresse i Paris (Frankrike). Har du spørsmål om personvern, kan du kontakte: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. Innsamlede opplysninger",
+            "content": "Vi samler bare inn de opplysningene som er strengt nødvendige for at appen skal fungere: e-postadressen din (til innloggingen), brukernavnet ditt og bruksdataene dine (vurderte filmer, anmeldelser, lister). Passordene dine lagres kryptert (hashet) og sikkert."
+          },
+          "purpose": {
+            "label": "3. Formålet med behandlingen",
+            "content": "Opplysningene dine behandles utelukkende for å: gi deg mulighet til å opprette og administrere kontoen din, vise listene og vurderingene dine, og sikre den tekniske driften av tjenesten. Vi bruker ikke opplysningene dine til reklameprofilering."
+          },
+          "sharing": {
+            "label": "4. Deling av opplysninger",
+            "content": "Personopplysningene dine selges, leies ut eller overdras aldri til tredjeparter. De kan lagres hos våre tekniske leverandører (hosting, tjeneste for transaksjonsmail) som er underlagt streng konfidensialitet og følger GDPR."
+          },
+          "retention": {
+            "label": "5. Lagringstid",
+            "content": "Opplysningene dine lagres så lenge kontoen din er aktiv. Hvis du velger å slette kontoen din, slettes alle personopplysningene dine (e-postadresse, brukernavn, vurderinger) permanent fra databasene våre."
+          },
+          "rights": {
+            "label": "6. Rettighetene dine (GDPR)",
+            "content": "I henhold til regelverket har du rett til innsyn, retting, dataportabilitet og sletting av opplysningene dine. Du kan utøve disse rettighetene når som helst direkte i appen eller ved å skrive til oss på: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookies",
+            "content": "Som angitt i bruksvilkårene våre bruker vi bare nødvendige tekniske cookies (sesjon og språk). Ingen reklame- eller sporingscookies fra tredjeparter plasseres på enheten din."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "Søk etter en film, serie, spilleliste, person eller bruker..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "Vil du virkelig fjerne dette verket fra listen over sette titler? Hvis du har en vurdering eller en anmeldelse, slettes også de."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "Vil du virkelig fullføre serien? Alle episodene i alle sesongene merkes som sette."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "Vil du virkelig fullføre sesong {seasonNumber}? Alle episodene i sesongen merkes som sette."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "For å se aktivitet her må du eller brukerne du følger vurdere filmer, serier, ..."
+    },
+    "feed_person": {
+      "message": "For å se aktivitet her må du følge folk som jobber med filmer eller serier."
+    },
+    "playlists": {
+      "items": {
+        "empty": "Ingen filmer eller serier i denne spillelisten. Legg til noen så den fylles opp!"
+      },
+      "add_to": {
+        "empty": "Du har ingen spillelister. Opprett en så du kan legge til filmer eller serier og finne dem igjen!"
+      },
+      "saved": {
+        "empty": "Du har ingen lagrede spillelister. Lagre en spilleliste så du lett finner den i biblioteket ditt!"
+      },
+      "members": {
+        "empty": "Denne spillelisten har ingen medlemmer. Legg til noen så dere kan samarbeide om den samme spillelisten!",
+        "search": "Søk etter brukere som skal legges til i spillelisten..."
+      }
+    },
+    "follow-requests": {
+      "empty": "Du har ingen ventende følgeforespørsler. Når du får noen, vises de her!"
+    },
+    "recos": {
+      "empty": "Du har ingen anbefalinger. Når du får noen, vises de her!",
+      "send_to": {
+        "empty": "Du har ingen å sende en reco til. Dere må være venner for at du skal kunne sende en reco (dere må følge hverandre)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "Du har ingen filmer eller serier lagret til senere ennå. Når du får noen, vises de her!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> har recoet filmen <movie></movie> til deg"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> har recoet serien <tv_series></tv_series> til deg"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> har sett <movie></movie> som du hadde recoet"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> har sett <tv_series></tv_series> som du hadde recoet"
+    },
+    "follower_created": {
+      "description": "<user></user> har begynt å følge deg"
+    },
+    "follower_accepted": {
+      "description": "<user></user> har godtatt følgeforespørselen din"
+    },
+    "follower_request": {
+      "description": "<user></user> vil følge deg"
+    },
+    "friend_created": {
+      "description": "<user></user> er nå vennen din"
+    }
+  }
+}

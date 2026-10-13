@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "Kitas būdas atrasti kiną",
+    "description": "{app} yra socialinis tinklas kino mėgėjams. Atrask, dalykis ir tyrinėk filmus bei serialus su draugais."
+  },
+  "common": {
+    "messages": {
+      "welcome": "Sveiki",
+      "welcome_to_app": "Sveiki prisijungę prie {app}",
+      "hello": "Sveikas",
+      "greeting_with_name": "{timeOfDay, select, morning {Labas rytas, {name}} afternoon {Laba diena, {name}} evening {Labas vakaras, {name}} night {Labos nakties, {name}} other {Sveikas, {name}}}",
+      "click_here": "Spausk čia",
+      "see_more": "Rodyti daugiau",
+      "see_more_details": "Rodyti daugiau informacijos",
+      "more": "Daugiau",
+      "view_profile": "Rodyti profilį",
+      "library": "Biblioteka",
+      "watchlist": "Žiūrėjimo sąrašas",
+      "for_later": "Vėliau",
+      "heart_pick": "{count, plural, one {širdies filmas} few {širdies filmai} other {širdies filmų}}",
+      "add_to_heart_picks": "Įtraukti į širdies filmus",
+      "remove_from_heart_picks": "Išimti iš širdies filmų",
+      "add_rating": "Pridėti vertinimą",
+      "edit_rating": "Redaguoti vertinimą",
+      "remove_rating": "Pašalinti vertinimą",
+      "share_my_rating": "Dalytis mano vertinimu",
+      "share_review": "Dalytis recenzija",
+      "show_likes_count": "Rodyti patikimų skaičių",
+      "show_comments_count": "Rodyti komentarų skaičių",
+      "add_to_watchlist": "įtraukti į žiūrėjimo sąrašą",
+      "remove_from_watchlist": "išimti iš žiūrėjimo sąrašo",
+      "no_results": "nėra rezultatų",
+      "no_results_for": "Nėra rezultatų užklausai <strong>{query}</strong>",
+      "no_followees": "Tu nieko neseki",
+      "no_followers": "Nėra sekėjų",
+      "no_rating": "Nėra vertinimo",
+      "must_watch_to_review": "turi būti matęs šį kūrinį, kad galėtum jį įvertinti",
+      "review_cannot_be_empty": "recenzija negali būti tuščia",
+      "no_activity": "nėra veiklos",
+      "followers_ratings": "sekėjų vertinimai",
+      "added_by": "įtraukė",
+      "sort_by": "rikiuoti pagal",
+      "sort_order": "rikiavimo tvarka",
+      "go_to_film": "eiti į filmą",
+      "go_to_tv_series": "eiti į serialą",
+      "go_to_user": "eiti į naudotoją",
+      "go_to_person": "eiti į asmenį",
+      "go_to_activity": "eiti į veiklą",
+      "go_to_playlist": "eiti į sąrašą",
+      "go_to_review": "eiti į recenziją",
+      "go_to_director": "{count, plural, one {eiti į režisierių} few {eiti į režisierius} other {eiti į režisierių}}",
+      "go_to_creator": "{count, plural, one {eiti į kūrėją} few {eiti į kūrėjus} other {eiti į kūrėjų}}",
+      "show_director": "{count, plural, one {rodyti režisierių} few {rodyti režisierius} other {rodyti režisierius}}",
+      "show_creator": "{count, plural, one {rodyti kūrėją} few {rodyti kūrėjus} other {rodyti kūrėjus}}",
+      "show_credit": "{count, plural, one {rodyti kreditą} few {rodyti kreditus} other {rodyti kreditus}}",
+      "credits": "titrai",
+      "view_recommendation": "{count, plural, one {rodyti reco} few {rodyti reco} other {rodyti reco}}",
+      "view_directors": "{count, plural, one {rodyti režisierių} few {rodyti režisierius} other {rodyti režisierius}}",
+      "no_director": "nėra režisieriaus",
+      "view_comment": "{count, plural, one {rodyti komentarą} few {rodyti komentarus} other {rodyti komentarus}}",
+      "add_comment": "{count, plural, one {pridėti komentarą} few {pridėti komentarus} other {pridėti komentarų}}",
+      "edit_comment": "{count, plural, one {redaguoti komentarą} few {redaguoti komentarus} other {redaguoti komentarus}}",
+      "delete_comment": "Ištrinti komentarą",
+      "do_you_really_want_to_delete_this_comment": "Ar tikrai nori ištrinti šį komentarą?",
+      "comment_deleted": "Šis komentaras ištrintas",
+      "write_your_comment_here": "Parašyk komentarą...",
+      "reply": "Atsakyti",
+      "replies_count": "{count, plural, one {# atsakymas} few {# atsakymai} other {# atsakymų}}",
+      "view_replies": "Rodyti {count, plural, one {# atsakymą} few {# atsakymus} other {# atsakymų}}",
+      "hide_replies": "Slėpti atsakymus",
+      "load_more_replies": "Rodyti daugiau atsakymų",
+      "get_started": "pradėti",
+      "get_started_its_free": "einam 🎬, tai nemokama!",
+      "import": "Importuoti",
+      "upgrade_to_plan": "pereiti į {plan}",
+      "choose_subscription_recurrence": "pasirink savo prenumeratos atsiskaitymo periodą",
+      "compare_plans": "palyginti planus",
+      "save_up_to_percent": "sutaupyk iki {percent}%",
+      "is_empty": "Čia šiek tiek tuščia",
+      "add_to_playlist": "įtraukti į sąrašą",
+      "send_to_friend": "išsiųsti draugui",
+      "pin_to_profile": "Prisegti prie profilio",
+      "unpin_from_profile": "Atsegti nuo profilio",
+      "pinned": "Prisegta",
+      "unpinned": "Atsegta",
+      "no_pinned": "Nėra prisegtų elementų",
+      "pinned_limit_reached": "Pasiekei didžiausią prisegtų elementų skaičių — atsek vieną, kad pridėtum naują",
+      "custom_sort": "pasirinktinis rikiavimas",
+      "quick_add": "greitas pridėjimas",
+      "favorite_films": "mėgstamiausi filmai",
+      "follow": "sekti",
+      "followed": "sekama",
+      "request_sent": "Užklausa išsiųsta",
+      "follow_requests": "sekimo užklausos",
+      "no_follow_requests": "nėra sekimo užklausų",
+      "follower": "{count, plural, one {sekėjas} few {sekėjai} other {sekėjų}}",
+      "follower_count": "{count} sekėjų",
+      "see_followers": "rodyti sekėjus",
+      "followee": "{count, plural, one {sekamas} few {sekami} other {sekamų}}",
+      "followee_count": "{count} sekamų",
+      "see_followees": "rodyti, ką seki",
+      "last_activities": "paskutinės veiklos",
+      "last_updated": "paskutinį kartą atnaujinta",
+      "last_updated_at_date": "paskutinį kartą atnaujinta {date}",
+      "show_all": "rodyti visus",
+      "this_account_is_private": "ši paskyra yra privati",
+      "follow_to_see_activities": "sek, kad matytum veiklas",
+      "review": "{count, plural, one {recenzija} few {recenzijos} other {recenzijų}}",
+      "no_overview": "nėra aprašymo",
+      "cast": "aktoriai",
+      "no_cast": "nėra aktorių",
+      "recent": "naujausias",
+      "popular": "populiarus",
+      "popularity": "populiarumas",
+      "no_reviews": "Nėra recenzijų",
+      "no_playlists": "Nėra sąrašų",
+      "no_playlists_found": "Sąrašų nerasta",
+      "no_films": "Nėra filmų",
+      "no_tv_series": "Nėra serialų",
+      "view_activity": "rodyti veiklą",
+      "comment_count": "{count, plural, one {# komentaras} few {# komentarai} other {# komentarų}}",
+      "write_review": "parašyti recenziją",
+      "new_review": "nauja recenzija",
+      "edit_review": "redaguoti recenziją",
+      "review_by": "recenzijos autorius {name}",
+      "my_review": "{count, plural, one {mano recenzija} few {mano recenzijos} other {mano recenzijų}}",
+      "add_review": "pridėti recenziją",
+      "tv_series": "{count, plural, one {serialas} few {serialai} other {serialų}}",
+      "film": "{count, plural, one {filmas} few {filmai} other {filmų}}",
+      "movie": "{count, plural, one {filmas} few {filmai} other {filmų}}",
+      "media": "{count, plural, one {kūrinys} few {kūriniai} other {kūrinių}}",
+      "tv_season": "{count, plural, one {sezonas} few {sezonai} other {sezonų}}",
+      "tv_season_count": "{count, plural, one {# sezonas} few {# sezonai} other {# sezonų}}",
+      "tv_season_value": "{number} sezonas",
+      "tv_season_short": "S{number}",
+      "tv_episode": "{count, plural, one {epizodas} few {epizodai} other {epizodų}}",
+      "tv_episode_count": "{count, plural, one {# epizodas} few {# epizodai} other {# epizodų}}",
+      "tv_episode_value": "{number} epizodas",
+      "tv_episode_short": "S{seasonNumber}E{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {specialus epizodas} few {specialūs epizodai} other {specialių epizodų}}",
+      "first_air_date": "pirmoji transliacija",
+      "last_air_date": "paskutinė transliacija",
+      "see_film": "rodyti filmą",
+      "see_tv_series": "rodyti serialą",
+      "watch_film_title": "žiūrėti {title}",
+      "watch_film_streaming_or_download": "Žiūrėk <important>{title}</important> srautu arba legaliai atsisiųsk",
+      "download": "atsisiųsti",
+      "downloaded": "atsiųsta",
+      "person": "{count, plural, one {asmuo} few {asmenys} other {asmenų}}",
+      "top_result": "geriausias rezultatas",
+      "user": "{count, plural, one {naudotojas} few {naudotojai} other {naudotojų}}",
+      "reco": "{count, plural, one {reco} few {reco} other {reco}}",
+      "my_recos": "mano reco",
+      "item": "{count, plural, one {elementas} few {elementai} other {elementų}}",
+      "item_count": "{count, plural, one {# elementas} few {# elementai} other {# elementų}}",
+      "type": "tipas",
+      "complete": "užbaigti",
+      "completed": "užbaigta",
+      "collection": "{count, plural, one {kolekcija} few {kolekcijos} other {kolekcijų}}",
+      "most_recent": "naujausi",
+      "most_popular": "populiariausi",
+      "most_old": "seniausi",
+      "known_for": "Žinomas dėl",
+      "release_date": "premjeros data",
+      "last_appearance_date": "paskutinis pasirodymas",
+      "vote_average": "vidutinis vertinimas",
+      "added": "įtraukta",
+      "added_date": "įtraukimo data",
+      "added_at": "įtraukta",
+      "add": "pridėti",
+      "playlist_name": "sąrašo pavadinimas",
+      "updated_at": "atnaujinta",
+      "created_at": "sukurta",
+      "likes": "patikimai",
+      "likes_count": "patikimų skaičius",
+      "search_media": "ieškoti kūrinio",
+      "search_film": "ieškoti filmo",
+      "start_typing_to_search_films": "pradėk rašyti, kad ieškotum filmų",
+      "search_tv_series": "ieškoti serialo",
+      "start_typing_to_search_tv_series": "pradėk rašyti, kad ieškotum serialų",
+      "search_person": "ieškoti asmens",
+      "start_typing_to_search_persons": "pradėk rašyti, kad ieškotum asmenų",
+      "search_user": "{count, plural, one {ieškoti naudotojo} few {ieškoti naudotojų} other {ieškoti naudotojų}}",
+      "start_typing_to_search_users": "pradėk rašyti, kad ieškotum naudotojų",
+      "search_playlist": "ieškoti sąrašo",
+      "start_typing_to_search_playlists": "pradėk rašyti, kad ieškotum sąrašų",
+      "search_film_or_tv_series": "ieškoti filmo arba serialo",
+      "watched_date": "{count, plural, one {žiūrėjimo data} few {žiūrėjimo datos} other {žiūrėjimo datų}}",
+      "mark_as_watched": "pažymėti kaip matytą",
+      "remove_from_watched": "išimti iš matytų",
+      "rating": "vertinimas",
+      "create_a_playlist": "sukurti sąrašą",
+      "by_name": "autorius {name}",
+      "reset": "atstatyti",
+      "job": "{count, plural, one {pareiga} few {pareigos} other {pareigų}}",
+      "department": "{count, plural, one {skyrius} few {skyriai} other {skyrių}}",
+      "share_title_via": "Dalytis <strong>{title}</strong> per",
+      "share_title": "Dalytis <strong>{title}</strong>",
+      "link": "nuoroda",
+      "copy_link": "kopijuoti nuorodą",
+      "copied": "Nukopijuota",
+      "other": "{count, plural, one {Kita} few {Kiti} other {Kitų}}",
+      "via": "per",
+      "edit": "redaguoti",
+      "guest": "{count, plural, one {svečias} few {svečiai} other {svečių}}",
+      "are_u_sure": "Ar tikrai?",
+      "backward": "ankstesnis",
+      "forward": "kitas",
+      "back": "atgal",
+      "next": "kitas",
+      "notification": "{count, plural, one {pranešimas} few {pranešimai} other {pranešimų}}",
+      "see_notifications": "rodyti pranešimus",
+      "open_social_panel": "atidaryti socialinį skydą",
+      "cancel_change": "{count, plural, one {atšaukti pakeitimą} few {atšaukti pakeitimus} other {atšaukti pakeitimus}}",
+      "do_you_really_want_to_cancel_change": "Ar tikrai nori atšaukti {count, plural, one {pakeitimą} few {pakeitimus} other {pakeitimus}}?",
+      "continue_editing": "toliau redaguoti",
+      "confirm": "patvirtinti",
+      "terms_of_use": "naudojimo taisyklės",
+      "privacy_policy": "privatumo politika",
+      "request_made": "užklausa pateikta",
+      "request_canceled": "užklausa atšaukta",
+      "cancel_request": "atšaukti užklausą",
+      "open_menu": "atidaryti meniu",
+      "feed": "srautas",
+      "about": "apie mus",
+      "home": "pradžia",
+      "search": "paieška",
+      "explore": "tyrinėti",
+      "shop": "parduotuvė",
+      "help": "pagalba",
+      "legal": "teisinė informacija",
+      "setting": "{count, plural, one {nustatymas} few {nustatymai} other {nustatymų}}",
+      "logout": "atsijungti",
+      "to_watch": "žiūrėti",
+      "reco_by_your_friends": "draugų reco",
+      "friends_playlists": "draugų sąrašai",
+      "latest_activity": "{count, plural, one {paskutinė veikla} few {paskutinės veiklos} other {paskutinių veiklų}}",
+      "discover_users": "atrasti naudotojų",
+      "most_recommended": "labiausiai rekomenduojami",
+      "archive": "archyvuoti",
+      "unarchive": "grąžinti iš archyvo",
+      "mark_as_read": "{count, plural, one {pažymėti kaip perskaitytą} few {pažymėti kaip perskaitytus} other {pažymėti kaip perskaitytus}}",
+      "mark_as_unread": "{count, plural, one {pažymėti kaip neperskaitytą} few {pažymėti kaip neperskaitytus} other {pažymėti kaip neperskaitytus}}",
+      "accept": "priimti",
+      "accepted": "priimta",
+      "decline": "atmesti",
+      "declined": "atmesta",
+      "request_accepted": "{count, plural, one {užklausa priimta} few {užklausos priimtos} other {užklausų priimta}}",
+      "request_declined": "{count, plural, one {užklausa atmesta} few {užklausos atmestos} other {užklausų atmesta}}",
+      "unread": "{count, plural, one {neperskaitytas} few {neperskaityti} other {neperskaitytų}}",
+      "archived": "{count, plural, one {archyvuotas} few {archyvuoti} other {archyvuotų}}",
+      "no_notifications": "nėra pranešimų",
+      "all": "visi",
+      "mark_all_as_read": "pažymėti visus kaip perskaitytus",
+      "archive_all": "archyvuoti visus",
+      "archive_all_read": "archyvuoti viską, kas perskaityta",
+      "please_login": "prisijunk",
+      "like": "patinka",
+      "unlike": "nebepatinka",
+      "unfollow": "nebesekti",
+      "name": "pavadinimas",
+      "add_a_name": "pridėti pavadinimą",
+      "add_a_description": "pridėti aprašymą",
+      "visibility": "matomumas",
+      "search_an_user": "ieškoti naudotojo",
+      "select_an_item_to_add_to_playlist": "pasirink elementą, kurį įtraukti į sąrašą",
+      "select_a_film_to_add_to_playlist": "pasirink filmą, kurį įtraukti į sąrašą",
+      "select_a_tv_series_to_add_to_playlist": "pasirink serialą, kurį įtraukti į sąrašą",
+      "add_one_or_more_items_to": "Įtraukti vieną ar daugiau elementų į <important>{title}</important>",
+      "add_one_or_more_films_to": "Įtraukti vieną ar daugiau filmų į <important>{title}</important>",
+      "add_one_or_more_tv_series_to": "Įtraukti vieną ar daugiau serialų į <important>{title}</important>",
+      "manage_playlist_access_rights": "tvarkyti sąrašo prieigos teises",
+      "add_guest": "{count, plural, one {pridėti svečią} few {pridėti svečius} other {pridėti svečių}}",
+      "manage_members": "tvarkyti narius",
+      "no_member": "nėra narių",
+      "add_member": "{count, plural, one {pridėti narį} few {pridėti narius} other {pridėti narių}}",
+      "manage_guests": "tvarkyti svečius",
+      "add_guests_to_your_playlist": "pridėti svečių į savo sąrašą",
+      "select_users_to_add_to_playlist": "pasirink naudotojus, kuriuos įtraukti į sąrašą",
+      "select_users_to_send_reco": "pasirink, kam išsiųsti reco",
+      "select_playlists_to_add_the_item": "pasirink sąrašus, į kuriuos įtraukti elementą",
+      "send": "siųsti",
+      "sent": "išsiųsta",
+      "select_row": "pasirinkti eilutę",
+      "select_all": "pasirinkti viską",
+      "no_selected_users": "nepasirinkta naudotojų",
+      "selection_count": "pasirinkta {number} iš {total} {type}",
+      "about_title": "apie {title}",
+      "detail": "{count, plural, one {detalė} few {detalės} other {detalių}}",
+      "genre": "{count, plural, one {žanras} few {žanrai} other {žanrų}}",
+      "male": "{count, plural, one {vyras} few {vyrai} other {vyrų}}",
+      "female": "{count, plural, one {moteris} few {moterys} other {moterų}}",
+      "non_binary": "{count, plural, one {nebinaris} few {nebinariai} other {nebinarių}}",
+      "unspecified": "nenurodyta",
+      "date_of_birth": "gimimo data",
+      "date_of_death": "mirties data",
+      "place_of_birth": "gimimo vieta",
+      "age_years": "{count} {count, plural, one {metai} few {metai} other {metų}}",
+      "biography": "biografija",
+      "no_biography_available": "biografijos nėra",
+      "no_information_available": "informacijos nėra",
+      "already_sent": "jau išsiųsta",
+      "already_watched": "jau matyta",
+      "already_added": "jau įtraukta",
+      "recommend_to_friend_to_discover": "Rekomenduok <strong>{title}</strong> draugui, kuris dar jo nematė",
+      "add_to_one_or_more_playlists": "Įtrauk <strong>{title}</strong> į vieną ar kelis savo sąrašus",
+      "my_playlist": "{count, plural, one {mano sąrašas} few {mano sąrašai} other {mano sąrašų}}",
+      "what_is_title": "Kas yra <strong>{title}</strong>?",
+      "try_again": "Bandyti dar kartą",
+      "error": "klaida",
+      "not_logged_in": "tu neprisijungęs",
+      "an_error_occurred": "Įvyko klaida",
+      "playlist_not_found": "sąrašas nerastas",
+      "user_not_found": "naudotojas nerastas",
+      "film_not_found": "filmas nerastas",
+      "media_not_found": "kūrinys nerastas",
+      "review_not_found": "recenzija nerasta",
+      "person_not_found": "asmuo nerastas",
+      "tv_series_not_found": "serialas nerastas",
+      "tv_episode_not_found": "epizodas nerastas",
+      "tv_season_not_found": "sezonas nerastas",
+      "wrong_arguments": "netinkami argumentai",
+      "no_media_found": "kūrinių nerasta",
+      "unknown_action": "nežinomas veiksmas",
+      "no_user_found": "naudotojų nerasta",
+      "no_tv_episodes": "nėra epizodų",
+      "save": "išsaugoti",
+      "saved": "išsaugota",
+      "create": "sukurti",
+      "film_count": "{count, plural, one {# filmas} few {# filmai} other {# filmų}}",
+      "tv_series_count": "{count, plural, one {# serialas} few {# serialai} other {# serialų}}",
+      "login": "prisijungti",
+      "signup": "registruotis",
+      "navigation": "navigacija",
+      "delete": "Ištrinti",
+      "remove": "Pašalinti",
+      "deleted": "Ištrinta",
+      "share": "dalytis",
+      "duplicate": "dubliuoti",
+      "duplicated": "dubliuota",
+      "cancel": "Atšaukti",
+      "date": "data",
+      "duration": "trukmė",
+      "sort": "rikiuoti",
+      "show": "rodyti",
+      "column": "{count, plural, one {stulpelis} few {stulpeliai} other {stulpelių}}",
+      "comment": "{count, plural, one {komentaras} few {komentarai} other {komentarų}}",
+      "unknown": "nežinoma",
+      "community": "bendruomenė",
+      "cast_and_crew": "aktoriai ir komanda",
+      "soon": "greitai",
+      "ios_app": "iOS programa",
+      "android_app": "Android programa",
+      "coming_soon": "Greitai pasiekiama",
+      "new_mobile_app": "Nauja mobilioji programa!",
+      "manage": "tvarkyti",
+      "monthly": "kas mėnesį",
+      "yearly": "kas metus",
+      "day": "diena",
+      "week": "savaitė",
+      "month": "mėnuo",
+      "year": "metai",
+      "price": "kaina",
+      "free": "nemokama",
+      "playlist": "{count, plural, one {sąrašas} few {sąrašai} other {sąrašų}}",
+      "public": "viešas",
+      "publish": "publikuoti",
+      "private": "privatus",
+      "description": "aprašymas",
+      "details": "detalės",
+      "profile": "profilis",
+      "overview": "aprašymas",
+      "no_playlists_saved": "nėra išsaugotų sąrašų",
+      "camera_permission_denied": "kameros leidimas atmestas",
+      "photo_library_permission_denied": "nuotraukų bibliotekos leidimas atmestas",
+      "ignore": "ignoruoti",
+      "ok": "gerai",
+      "title": "pavadinimas",
+      "skip": "Praleisti",
+      "undo": "Atšaukti",
+      "date_published": "publikavimo data",
+      "date_created": "sukūrimo data",
+      "date_updated": "pakeitimo data",
+      "alphabetical": "abėcėlės tvarka",
+      "date_added": "įtraukimo data",
+      "number_of_likes": "patikimų skaičius",
+      "number_of_seasons": "sezonų skaičius",
+      "add_to_this_playlist": "įtraukti į šį sąrašą",
+      "save_to_library": "išsaugoti bibliotekoje",
+      "remove_from_library": "išimti iš bibliotekos",
+      "otp": "OTP",
+      "ratings_from_followees": "sekamų naudotojų vertinimai",
+      "choose_from_the_library": "pasirinkti iš bibliotekos",
+      "take_a_photo": "nufotografuoti",
+      "delete_current_image": "ištrinti esamą vaizdą",
+      "edit_image": "redaguoti vaizdą",
+      "add_image": "pridėti vaizdą",
+      "verify_with_a_code": "patvirtinti kodu",
+      "order": "tvarka",
+      "edit_order": "redaguoti tvarką",
+      "done": "baigta",
+      "can_edit": "gali redaguoti?",
+      "upgrade": "atnaujinti",
+      "no_description": "Nėra aprašymo",
+      "no_comment": "Nėra komentarų",
+      "close": "uždaryti",
+      "edit_playlist": "redaguoti sąrašą",
+      "universe": "visata",
+      "cannot_be_changed": "negalima pakeisti",
+      "delete_review": "ištrinti recenziją",
+      "do_you_really_want_to_delete_this_review": "Ar tikrai nori ištrinti šią recenziją?",
+      "user_liked_playlist": "<name></name> pažymėjo sąrašą kaip patinkantį",
+      "user_liked_review": "<name></name> pažymėjo recenziją kaip patinkančią",
+      "runtime": "trukmė",
+      "ends_at": "Baigiasi {value}",
+      "this_user_has_no_activity": "Šis naudotojas neturi veiklos",
+      "notification_archived": "{count, plural, one {pranešimas archyvuotas} few {pranešimai archyvuoti} other {pranešimų archyvuota}}",
+      "notification_unarchived": "{count, plural, one {pranešimas grąžintas iš archyvo} few {pranešimai grąžinti iš archyvo} other {pranešimų grąžinta iš archyvo}}",
+      "notification_marked_as_read": "{count, plural, one {pranešimas pažymėtas kaip perskaitytas} few {pranešimai pažymėti kaip perskaityti} other {pranešimų pažymėta kaip perskaityti}}",
+      "notification_marked_as_unread": "{count, plural, one {pranešimas pažymėtas kaip neperskaitytas} few {pranešimai pažymėti kaip neperskaityti} other {pranešimų pažymėta kaip neperskaityti}}",
+      "or_continue_with": "arba tęsti su",
+      "message": "{count, plural, one {pranešimas} few {pranešimai} other {pranešimų}}",
+      "story": "{count, plural, one {story} few {story} other {story}}",
+      "new_playlist": "naujas sąrašas",
+      "select_a_type": "pasirink tipą",
+      "filter": "{count, plural, one {filtras} few {filtrai} other {filtrų}}",
+      "hide_watched": "slėpti matytus",
+      "show_me_around": "parodyk man viską",
+      "artwork_from": "Iliustracija: <important>{source}</important>",
+      "no_active_subscription": "nėra aktyvios prenumeratos",
+      "manage_subscription": "tvarkyti prenumeratą",
+      "started_on_date": "pradėta: {date}",
+      "last_renewed_on_date": "paskutinį kartą atnaujinta: {date}",
+      "version_value": "versija {value}",
+      "original_title": "originalus pavadinimas",
+      "starring": "vaidina",
+      "write_your_review_here": "rašyk savo recenziją čia...",
+      "insert": "įterpti",
+      "trailer": "{count, plural, one {anonsas} few {anonsai} other {anonsų}}",
+      "list": "{count, plural, one {sąrašas} few {sąrašai} other {sąrašų}}",
+      "grid": "{count, plural, one {tinklelis} few {tinkleliai} other {tinklelių}}",
+      "order_asc": "didėjimo tvarka",
+      "order_desc": "mažėjimo tvarka",
+      "menu": "meniu",
+      "at_least_one_watched_date_required": "reikia bent vienos žiūrėjimo datos",
+      "viewer": "{count, plural, one {Žiūrėtojas} few {Žiūrėtojai} other {Žiūrėtojų}}",
+      "editor": "{count, plural, one {Redaktorius} few {Redaktoriai} other {Redaktorių}}",
+      "admin": "{count, plural, one {Administratorius} few {Administratoriai} other {Administratorių}}",
+      "owner": "{count, plural, one {Savininkas} few {Savininkai} other {Savininkų}}",
+      "you_dont_have_permission_to_do_this_action": "Tu neturi leidimo atlikti šį veiksmą",
+      "in_progress": "vykdoma",
+      "give_up": "pasiduoti",
+      "random": "atsitiktinis",
+      "reset_password": "Atstatyti slaptažodį",
+      "password_reset": "Slaptažodis atstatytas",
+      "return_to_login": "Atgal į prisijungimą",
+      "invalid_code": "Netinkamas kodas",
+      "no_token_found": "Žymė nerasta",
+      "first_watched_at": "pirmoji žiūrėjimo data",
+      "watched_dates": "žiūrėjimo datos",
+      "no_watched_dates": "nėra žiūrėjimo datų",
+      "select_role": "pasirink rolę",
+      "select_format": "pasirink formatą",
+      "theater": "Kino teatras",
+      "physical": "Fizinė laikmena",
+      "digital": "Skaitmeninė",
+      "streaming": "Srautinė",
+      "you_must_be_premium_to_change_member_role": "Kad pakeistum nario rolę, turi būti premium naudotojas",
+      "already_member": "jau narys",
+      "email_already_used": "Šis el. pašto adresas jau naudojamas",
+      "email_confirmed": "El. paštas patvirtintas",
+      "confirmation_email_sent": "Patvirtinimo laiškas išsiųstas",
+      "continue": "Tęsti",
+      "finish": "Baigti",
+      "forgot_password": "Pamiršai slaptažodį",
+      "new_password": "Naujas slaptažodis",
+      "confirm_password": "Patvirtinti slaptažodį",
+      "password_reseted": "Slaptažodis atstatytas",
+      "reset_your_password": "Atstatyk savo slaptažodį",
+      "invalid_token": "Netinkama žymė",
+      "new_notification": "{count, plural, one {naujas pranešimas} few {nauji pranešimai} other {naujų pranešimų}}",
+      "lets_go": "Einam!",
+      "update_available": "Yra atnaujinimas",
+      "update_available_description": "Atnaujink programą, kad naudotumeisi naujausiais patobulinimais.",
+      "update_required_title": "Reikalingas atnaujinimas",
+      "update_required_description": "Ši programos versija nebepalaikoma. Atnaujink ją, kad galėtum toliau naudotis Recomend.",
+      "update_app": "Atnaujinti",
+      "advertisement": "{count, plural, one {Reklama} few {Reklamos} other {Reklamų}}",
+      "pending": "Laukia",
+      "processing": "Vykdoma",
+      "awaiting_review": "Reikia patikrinti",
+      "failed": "Nepavyko",
+      "data": "{count, plural, one {Duomenys} few {Duomenys} other {Duomenų}}",
+      "restore": "Atkurti",
+      "fix": "Pataisyti",
+      "not_found": "Nerasta",
+      "unavailable": "Nepasiekiama",
+      "star_on_github": "Duoti žvaigždę GitHub"
+    },
+    "form": {
+      "email": {
+        "label": "El. pašto adresas",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "El. pašto adresas netinkamas",
+          "unavailable": "Šis el. pašto adresas jau naudojamas"
+        },
+        "verified": "El. paštas patvirtintas"
+      },
+      "username": {
+        "label": "Naudotojo vardas",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "Pirmas simbolis turi būti raidė arba skaitmuo",
+          "double_dot": "Du taškai iš eilės neleidžiami",
+          "ends_with_dot": "Taškas gale neleidžiamas",
+          "format": "Leidžiamos tik raidės, skaitmenys ir simboliai '_' bei '.'",
+          "unavailable": "Šis naudotojo vardas jau užimtas"
+        }
+      },
+      "full_name": {
+        "label": "Vardas",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "Leidžiamos tik raidės, skaitmenys ir tarpai"
+        }
+      },
+      "password": {
+        "label": "Slaptažodis",
+        "placeholder": "Įvesk savo slaptažodį",
+        "schema": {
+          "uppercase": "Reikia bent vienos didžiosios raidės",
+          "lowercase": "Reikia bent vienos mažosios raidės",
+          "number": "Reikia bent vieno skaitmens",
+          "special": "Reikia bent vieno specialaus simbolio",
+          "match": "Slaptažodžiai nesutampa"
+        },
+        "confirm": {
+          "label": "Patvirtinti slaptažodį",
+          "placeholder": "Patvirtink savo slaptažodį"
+        }
+      },
+      "length": {
+        "char_min": "bent {count, plural, one {# simbolis} few {# simboliai} other {# simbolių}}",
+        "char_max": "ne daugiau kaip {count, plural, one {# simbolis} few {# simboliai} other {# simbolių}}"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "Leidžiamos tik raidės, skaitmenys ir tarpai"
+      },
+      "error": {
+        "too_many_attempts": "Per daug bandymų, pabandyk vėliau",
+        "not_received_code": "Negavai kodo?",
+        "invalid_code": "Netinkamas kodas",
+        "turnstile": "Patikra nepavyko, pabandyk dar kartą"
+      },
+      "resend_code": "Siųsti kodą dar kartą",
+      "resend_email": "Siųsti laišką dar kartą",
+      "code_verified": "Kodas patvirtintas",
+      "code_sent": "Kodas išsiųstas"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "puslapis nerastas",
+        "description": "ups, šio puslapio nėra..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "sekimas",
+        "description": "Atrask, vertink ir dalykis mėgstamiausiais filmais bei serialais."
+      },
+      "recos": {
+        "label": "reco",
+        "description": "Siųsk ir gauk draugų reco. Viskas vienoje vietoje."
+      },
+      "playlists": {
+        "label": "sąrašai",
+        "description": "Tvarkyk, dalykis ir kurk sąrašus kartu."
+      },
+      "feed": {
+        "label": "srautas",
+        "description": "Sek draugus ir matyk, ką jie žiūri, kas jiems patinka ir ką jie vertina."
+      },
+      "social_sharing": {
+        "label": "dalijimasis socialiniuose tinkluose",
+        "description": "Dalykis tuo, kas tau patinka, Instagrame ar kituose tinkluose."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "Sekimas",
+          "description": "Sek filmus, kuriuos matei"
+        },
+        "recos": {
+          "label": "Reco",
+          "description": "Siųsk draugams filmų rekomendacijas"
+        },
+        "explore": {
+          "label": "Tyrinėti",
+          "description": "Atrask naujų filmų Paradise Pictures — interaktyviame žemėlapyje su daugiau nei 1400 filmų"
+        },
+        "like": {
+          "label": "Patinka",
+          "description": "Parodyk savo meilę mėgstamiausiems filmams, sąrašams ir recenzijoms"
+        },
+        "rating": {
+          "label": "Vertinimas",
+          "description": "Vertink filmus, kuriuos matei"
+        },
+        "watchlist": {
+          "label": "Žiūrėjimo sąrašas",
+          "description": "Išsaugok filmus, kuriuos nori pamatyti"
+        },
+        "playlists": {
+          "label": "Sąrašai",
+          "description": "Tvarkyk savo filmus sąrašuose ir dalykis jais"
+        },
+        "reviews": {
+          "label": "Recenzijos",
+          "description": "Rašyk recenzijas ir išleisk į laisvę savyje slypintį suirzusį kinomaną"
+        },
+        "feed": {
+          "label": "Srautas",
+          "description": "Sek savo draugų veiklą"
+        },
+        "adsFree": {
+          "label": "Be reklamos",
+          "description": "Naudokis Recomend be reklamos, visada"
+        }
+      }
+    },
+    "welcome": {
+      "title": "Dėkojame, kad užsiregistravai!",
+      "description": "Čia trumpa apžvalga, ką gali veikti su {app}.",
+      "follow": {
+        "title": "Sek žmones",
+        "description": "Sek draugus ir matyk, ką jie žiūri."
+      },
+      "import": {
+        "title": "Ar atėjai iš kitos platformos?"
+      }
+    },
+    "collection": {
+      "label": "biblioteka",
+      "my_recos": {
+        "label": "mano reco",
+        "search": {
+          "placeholder": "ieškoti mano reco..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "ištrinti iš mano reco",
+            "description": "Ar tikrai nori ištrinti <important>{title}</important> iš savo reco?"
+          },
+          "complete_confirm": {
+            "title": "užbaigti reco",
+            "description": "Ar tikrai nori užbaigti reco <important>{title}</important>?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "ieškoti žiūrėjimo sąraše..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "ištrinti iš žiūrėjimo sąrašo",
+            "description": "Ar tikrai nori ištrinti <important>{title}</important> iš savo žiūrėjimo sąrašo?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "ieškoti širdies filmuose..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "ištrinti iš širdies filmų",
+            "description": "Ar tikrai nori ištrinti <important>{title}</important> iš savo širdies filmų?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> pamatė",
+        "rated": "<name></name> įvertino",
+        "liked": "<name></name> pamėgo",
+        "rated_liked": "<name></name> pamėgo ir įvertino",
+        "reviewed": "<name></name> parašė recenziją"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> yra <important>{roles}</important> kūrinyje <linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> yra <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "Leisti programai",
+        "description_generic": "Programa prašo prieigos prie tavo paskyros.",
+        "description": "{client} nori pasiekti tavo paskyrą.",
+        "scopes_label": "Tai leis programai:",
+        "accept": "Leisti",
+        "deny": "Atmesti",
+        "error": {
+          "invalid_request": "Netinkama arba pasibaigusi užklausa",
+          "invalid_request_description": "Pradėk procesą iš naujo toje programoje, kuri tave čia atsiuntė.",
+          "client_not_found": "Ši programa nerasta.",
+          "submit_failed": "Kažkas nutiko. Pabandyk dar kartą."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "Prisijunk prie savo {app} paskyros."
+        },
+        "label": "Prisijungti",
+        "description": "Atrask geriausias filmų rekomendacijas.",
+        "or_continue_with": "Arba tęsti su",
+        "no_account_yet": "Dar neturi paskyros?",
+        "form": {
+          "identifier": {
+            "label": "El. paštas arba naudotojo vardas",
+            "placeholder": "Įvesk savo el. paštą arba naudotojo vardą"
+          },
+          "password": {
+            "label": "Slaptažodis",
+            "placeholder": "Įvesk savo slaptažodį"
+          },
+          "submit": "Prisijungti",
+          "forgot_password": "Pamiršai slaptažodį?",
+          "wrong_credentials": "El. paštas arba slaptažodis neteisingas"
+        },
+        "otp": {
+          "password_login": "Gal nori prisijungti su slaptažodžiu?",
+          "form": {
+            "submit": "Gauti kodą",
+            "no_user_found": "Su šiuo el. paštu naudotojas nerastas",
+            "success": "Prisijungta"
+          },
+          "confirm_form": {
+            "label": "Patvirtinti kodą",
+            "description": "Patvirtinimo kodas išsiųstas adresu {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "Užsiregistruok {app}, kad atrastum ir dalytumeisi filmų rekomendacijomis."
+        },
+        "description": "Sukurk paskyrą, kad rekomenduotum filmą tam draugui, kuris niekada neatsimena pavadinimų.",
+        "form": {
+          "success": "Patvirtinimo laiškas išsiųstas adresu {email}"
+        },
+        "confirm_form": {
+          "label": "Patvirtinti el. paštą",
+          "description": "Patvirtinimo nuoroda išsiųsta adresu {email}"
+        },
+        "return_to_login": "Ups, vis dėlto jau turiu paskyrą."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "Pamiršai slaptažodį",
+          "description": "Atstatyk savo slaptažodį."
+        },
+        "label": "Pamiršai slaptažodį",
+        "description": "Turėtum naudoti slaptažodžių tvarkyklę, tai tikrai patogu.",
+        "return_to_login": "Ups, vis dėlto atsimenu savo slaptažodį.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "Atstatyti slaptažodį",
+          "code_sent": "Užklausa išsiųsta"
+        },
+        "confirm_form": {
+          "label": "Patvirtinti kodą",
+          "description": "Patvirtinimo kodas išsiųstas adresu {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "Slaptažodžio atstatymas",
+          "description": "Pasirink naują savo paskyros slaptažodį."
+        }
+      },
+      "error": {
+        "label": "Klaida",
+        "description": "Autentifikacijos metu įvyko klaida.",
+        "return_to_login": "Atgal į saugią vietą"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "Apie mus",
+        "marquee": "Nejau tavo gyvenime nėra nieko įdomesnio už 'Apie mus' puslapių skaitymą internete?",
+        "intro": "<strong>Recomend</strong> yra vieta, skirta filmų atradimui, rekomendavimui ir tvarkymui. Viskas sukurta taip, kad gandams iš lūpų į lūpas būtų suteikta geriausia įmanoma skaitmeninė forma. Mūsų požiūris sutelktas į žmogų ir jo santykius savimi apsiribojusio vartojimo — arba veikiau 'rekomenduojama tau' — epochoje.",
+        "slogan": {
+          "1": "Be reklamos ir be įtartinų pažadų. 🍆",
+          "2": "Tai ir socialinis tinklas, ir įrankis.",
+          "3": "Tai namuose daryta, entuziastų rankomis.",
+          "4": "Tai mėgėjiška tikrąja to žodžio prasme."
+        },
+        "last": "Recomend galima naudoti vienam ar su kitais, viešai ar privačiai, dieną ir naktį — bet niekada prieš filmą, prašom susikaupti!"
+      },
+      "team": {
+        "label": "Komanda",
+        "intro": "Recomend sukūrė du kinu besižavintys broliai, kurie mėgsta investuoti savo laiką į pernelyg ambicingus projektus, apie kuriuos neaišku, ar jie kada nors išvys dienos šviesą.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "Hiperaktyvus architektas-inžinierius, nesugebantis pasitenkinti vienu darbu (ta tikroji start-up nation): Yoann yra idėjos nupiešti filmų žemėlapį autorius, nors pradžioje tas žemėlapis turėjo tik kuklų tikslą tapti plakatu jo tualete. Loup atėjimas visiškai susprogdino tikslus ir, kiek apstulbęs įvykių, jis tvarko visą žemėlapio ir svetainės grafinę dalį bei visą komunikaciją (nors jam tai nepatinka). Jis taip pat išsako nuomonę apie UX/UI ir siūlo kalnus funkcijų, nelabai suprasdamas, kaip sunku jas užprogramuoti (tam tikros pažangos yra)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "Visiškas savamokslis, kuris vis dėlto baigė studijas, nuvedusias į neapmokamą bedarbystę dar nesulaukus 25 metų. Tikras šveicariškas peilis: Loup tvarko interneto dizainą ir programuoja sąsają, kurią įsivaizduojame kuo patogesnę. Loup norėtų padėkoti visiems kodo forumams, atsakiusiems į jo (labai) daugybę klausimų, ir visiems indų jutūberiams, kurie šiais mėnesiais lydėjo jį tarsi įtėviai. Jo mama, beje, įsitikinusi, kad brolis jį šiam projektui pavergė (viskas gerai, mama)."
+          }
+        },
+        "last": "Jei nori pasikalbėti su mumis ar su kitais bendruomenės nariais, prisijunk prie mūsų <link>Discord</link>!"
+      },
+      "pricing": {
+        "label": "Kainos",
+        "intro": "Šis prenumeratos modelis visų pirma yra palaikymas, kad projektas gyvuotų ir toliau būtų plėtojamas. Premium funkcijos yra priedai pažengusiam Recomend naudojimui, kurie pateisina nedidelį finansinį įnašą. Mes visada išsaugosime galimybę naudotis svetaine nemokamai, be reklamos ir nesijaučiant apribotam.",
+        "subdescription": "*Jei itin maža šios prenumeratos kaina vis tiek viršija tavo galimybes, kreipkis į liberalią vyriausybę, atsakingą už tavo pirkimo galios smukimą."
+      },
+      "legal": {
+        "label": "Teisinė informacija ir privatumas",
+        "description": "Mes gerbiame tavo privatumą. Neprisijungusiems naudotojams rodomas reklamas tvarko Google ir jos reikalauja techninių slapukų, kad būtų apribotas rodymo dažnumas ir išvengta apgaulės.",
+        "privacyPolicy": "Perskaityk mūsų privatumo politiką",
+        "manageCookies": "Tvarkyti mano reklamos nuostatas (slapukai)"
+      },
+      "open-source": {
+        "label": "Atvirasis kodas",
+        "intro": "Recomend yra atvirojo kodo: kodas viešai prieinamas GitHub. Užmesk akį, prisidėk arba tiesiog duok mums žvaigždę!",
+        "star": "Duok mums žvaigždę GitHub"
+      },
+      "businessmodel": {
+        "label": "Verslo modelis",
+        "paragraph": {
+          "1": "Tikriausiai nuspėji, kad su mūsų menkai komerciniais profiliais mes nelabai supratome, kam mums šiuo metu galėtų praversti verslo modelis...",
+          "2": "Jei Recomend ateitis to pareikalaus, panagrinėsime šį klausimą apsupdami save tinkamais žmonėmis — arba bent jau tokiais, kuriems tai įdomiau nei mums.",
+          "3": "Kol kas, būkime atviri, yra ir kitų darbų."
+        }
+      },
+      "roadmap": {
+        "label": "Planas"
+      },
+      "data": {
+        "label": "Duomenys",
+        "paragraph": {
+          "1": "Visus Recomend naudojamus metaduomenis teikia <link>The Movie Database (TMDb)</link> per platformos API. Taigi darome lygiai taip, kaip ir visi kiti, tarsi klusnios avys.",
+          "2": "Dėl klaidų ar trūkstamų filmų kreipkis į <link>TMDb</link>."
+        }
+      },
+      "resources": {
+        "label": "Išteklius",
+        "intro": "Tai nelabai susiję su kinu, bet čia sąrašas svetainių, kurios mums patinka:"
+      },
+      "contact-support": {
+        "label": "Kontaktai ir pagalba",
+        "help-center": "Rask atsakymus į savo egzistencinius klausimus mūsų <link>pagalbos centre</link>.",
+        "technical-support": "Techniniams klausimams: <email></email>",
+        "suggest-a-feature": "Pasiūlymams: <email></email>",
+        "contact-us": "Jei tiesiog nori su mumis susisiekti: <email></email>"
+      },
+      "quote": {
+        "label": "Citata",
+        "quote": "« Nekenčiu žodžio profesionalas. Visi tie aktoriai ir kiti, kurie sako: aš esu profesionalas, aš esu profas! Kas tai? Ar yra liūdnesnis žodis? Juk mėgėjas kyla iš žodžio meilė. Reikia daryti dalykus iš meilės, kitaip esame idiotai. »",
+        "author": "Orson Wells",
+        "date": "1972",
+        "subdescription": "*Dvejojome, ar ją įdėti, nes greitai pasigirsta pretenzingai, bet ji gerai atspindi mūsų nuotaiką dėl projekto. Jei tau nepatiks, nuimsime."
+      }
+    },
+    "settings": {
+      "label": "Nustatymai",
+      "description": "Tvarkyk savo paskyros nustatymus.",
+      "profile": {
+        "label": "Profilis",
+        "description": "Būtent taip kiti tave matys svetainėje.",
+        "avatar": {
+          "label": "Avataras",
+          "delete": "Ištrinti"
+        },
+        "full_name": {
+          "label": "Vardas",
+          "description": "Tai vardas, kuris bus rodomas tavo profilyje ir el. laiškuose.",
+          "placeholder": "Įvesk savo vardą",
+          "form": {
+            "min_length": "Vardą turi sudaryti bent 1 simbolis",
+            "max_length": "Vardas negali būti ilgesnis nei 50 simbolių"
+          }
+        },
+        "bio": {
+          "label": "Aprašymas",
+          "description": "Papasakok apie save — tai atsiras tavo profilyje.",
+          "placeholder": "Parašyk ką nors apie save",
+          "form": {
+            "max_length": "Aprašymas negali būti ilgesnis nei 150 simbolių",
+            "format": "Biografija negali turėti tuščių eilučių ar būti sudaryta tik iš tarpų."
+          }
+        },
+        "favorite_films": {
+          "label": "Mėgstamiausi filmai",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "URL netinkamas"
+          }
+        }
+      },
+      "account": {
+        "label": "Paskyra",
+        "description": "Atnaujink savo paskyros nustatymus.",
+        "username": {
+          "label": "Naudotojo vardas",
+          "description": "Tai tavo naudotojo vardas, kuriuo kiti gali tave rasti ir pasiekti tavo profilį. Jį galima pakeisti tik kartą per 30 dienų.",
+          "placeholder": "Įvesk savo naudotojo vardą",
+          "form": {
+            "min_length": "Naudotojo vardą turi sudaryti bent 3 simboliai",
+            "max_length": "Naudotojo vardas negali būti ilgesnis nei 15 simbolių",
+            "invalid": "Naudotojo vardą gali sudaryti tik raidės, skaitmenys ir simboliai '_' bei '.'",
+            "unavailable": "Šis naudotojo vardas jau užimtas"
+          }
+        },
+        "private": {
+          "label": "Privati paskyra",
+          "description": "Kai tavo paskyra privati, tavo veiklas gali matyti tik tie naudotojai, kuriuos patvirtini."
+        },
+        "email": {
+          "description": "Patvirtinimo laiškas bus išsiųstas tavo esamu ir nauju el. pašto adresu. Kad pakeitimas įsigaliotų, turi patvirtinti abu.",
+          "change_pending": "<strong>{date}</strong> patvirtinimo laiškas buvo išsiųstas tavo nauju el. pašto adresu <strong>{email}</strong>. Spausk nuorodą arba įvesk patvirtinimo kodą, kad patvirtintum pakeitimą.",
+          "confirm_email_code": {
+            "description": "Įvesk patvirtinimo kodą, išsiųstą tavo adresu <strong>{email}</strong>."
+          },
+          "change_success": "Tavo el. pašto adresas sėkmingai atnaujintas"
+        },
+        "delete_account": {
+          "button": "Ištrinti mano paskyrą",
+          "confirm": {
+            "description": "Tavo paskyra bus negrįžtamai ištrinta ir jos nebus galima atkurti.",
+            "confirm_email_sent": "Patvirtinimo laiškas išsiųstas tavo el. pašto adresu"
+          }
+        }
+      },
+      "appearance": {
+        "label": "Išvaizda",
+        "description": "Pritaikyk programos išvaizdą. Automatiškai perjunk dienos ir nakties temą.",
+        "language": {
+          "label": "Kalba",
+          "description": "Pasirink kalbą — pakeitimai bus pritaikyti perkrovus programą",
+          "placeholder": "Pasirink kalbą",
+          "not_found": "Kalba nerasta"
+        },
+        "theme": {
+          "label": "Tema",
+          "description": "Pasirink sąsajos temą.",
+          "options": {
+            "light": "Šviesi",
+            "dark": "Tamsi"
+          }
+        }
+      },
+      "subscription": {
+        "label": "Prenumerata",
+        "description": "Tvarkyk savo premium prenumeratą."
+      },
+      "security": {
+        "label": "Saugumas",
+        "description": "Pakeitus slaptažodį, būsi atjungtas visuose įrenginiuose, išskyrus tą, kurį naudoji dabar.",
+        "current_password": {
+          "label": "Esamas slaptažodis",
+          "placeholder": "Įvesk savo esamą slaptažodį",
+          "form": {
+            "required": "Esamas slaptažodis būtinas",
+            "invalid": "Esamas slaptažodis neteisingas"
+          }
+        },
+        "new_password": {
+          "label": "Naujas slaptažodis",
+          "placeholder": "Įvesk savo naują slaptažodį",
+          "form": {
+            "min_length": "Slaptažodį turi sudaryti bent 8 simboliai",
+            "uppercase": "Reikia bent vienos didžiosios raidės",
+            "lowercase": "Reikia bent vienos mažosios raidės",
+            "number": "Reikia bent vieno skaitmens",
+            "special": "Reikia bent vieno specialaus simbolio"
+          }
+        },
+        "confirm_password": {
+          "label": "Patvirtinti naują slaptažodį",
+          "placeholder": "Patvirtink savo naują slaptažodį",
+          "form": {
+            "match": "Slaptažodžiai nesutampa"
+          }
+        }
+      },
+      "notifications": {
+        "label": "Pranešimai",
+        "description": "Pritaikyk, kokius pranešimus gauni.",
+        "push_notifications": {
+          "label": "Push pranešimai",
+          "form": {
+            "enable": "Įjungti push pranešimus"
+          },
+          "already_granted": "Pranešimų užklausa jau pateikta; kad ją pakeistum, eik į naršyklės nustatymus.",
+          "no_enabled": "Įjunk pranešimus savo įrenginio nustatymuose, kad gautum push pranešimus.",
+          "open_settings": "Eiti į įrenginio nustatymus"
+        }
+      },
+      "data": {
+        "label": "Duomenys",
+        "description": "Importuok arba eksportuok savo duomenis.",
+        "importer": {
+          "label": "Importas",
+          "select_source": "Pasirink šaltinį",
+          "instructions_title": "Instrukcijos",
+          "browse_prompt": "Nutempk failą čia arba <link>naršyk</link>",
+          "browse_prompt_mobile": "Bakstelėk, kad pasirinktum failą",
+          "uploading": "Įkeliama…",
+          "processing": "Analizuojamas tavo failas…",
+          "upload_error": "Įkelti nepavyko, pabandyk dar kartą.",
+          "invalid_file_type": "Šis failo tipas šiam šaltiniui nepalaikomas.",
+          "review_title": "Patikrink savo importą",
+          "review_summary": "rasta {matched} iš {total}",
+          "validate": "Patvirtinti importą",
+          "validate_confirm_description": "Tai importuos į tavo biblioteką visus rastus ir nepraleistus elementus. Šio veiksmo negalima atšaukti.",
+          "success_title": "Importas baigtas",
+          "success_description": "Tavo duomenys sėkmingai importuoti.",
+          "failed_title": "Importas nepavyko",
+          "failed_description": "Apdorojant šį importą kažkas nutiko.",
+          "pending_description": "Tavo importas eilėje ir pradės veikti greitai.",
+          "empty": "Dar nėra importų.",
+          "delete_confirm_description": "Šis importas ir visi jo duomenys bus negrįžtamai ištrinti. Šio veiksmo negalima atšaukti.",
+          "keep_existing": "Palikti manus",
+          "use_imported": "Naudoti importuotus",
+          "merge": "Sulieti",
+          "conflict": "Konfliktas",
+          "no_match": "Nėra atitikties",
+          "existing_rating": "Šiuo metu: {rating}",
+          "log_column": "Žurnalas",
+          "actions_column": "Veiksmai",
+          "categories": {
+            "log_movies": "Filmai",
+            "log_tv_series": "Serialai",
+            "bookmarks": "Žiūrėjimo sąrašas",
+            "playlists": "Sąrašai"
+          },
+          "status": {
+            "pending": "Laukia",
+            "processing": "Vykdoma",
+            "awaiting_review": "Reikia patikrinti",
+            "completed": "Baigta",
+            "failed": "Nepavyko"
+          }
+        },
+        "exporter": {
+          "label": "Eksportas"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "pereiti į Premium",
+        "description": "Pereik į premium paskyrą, kad galėtum naudoti visas {app} funkcijas."
+      },
+      "header": {
+        "title": "išplėsk savo kiną, dalykis daugiau, paremk {app}",
+        "subtitle": "išbandyk 1 mėnesį nemokamai, vėliau {price}/mėn."
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "veiklos",
+            "unlimited_activities": {
+              "label": "neribotos veiklos",
+              "description": "vertinimai, patikimai, recenzijos, žiūrėjimo sąrašas ir rekomendacijos"
+            },
+            "favorites": {
+              "label": "mėgstamiausi",
+              "description": "įtrauk mėgstamiausius filmus į savo profilį"
+            }
+          },
+          "playlists": {
+            "label": "sąrašai",
+            "unlimited_playlists": {
+              "label": "neriboti",
+              "description": "sukurk neribotą skaičių sąrašų"
+            },
+            "shared_playlists": {
+              "label": "bendrinami",
+              "description": "dalykis savo sąrašais su kitais naudotojais"
+            },
+            "collaborative_playlists": {
+              "label": "bendri",
+              "description": "kurk bendrus sąrašus su kitais naudotojais"
+            }
+          },
+          "feed": {
+            "label": "srautas",
+            "followees": {
+              "label": "sekami naudotojai",
+              "description": "matyk naudotojų, kuriuos seki, veiklas"
+            },
+            "cast_and_crew": {
+              "label": "aktoriai ir komanda",
+              "description": "sek žmonių, dirbančių prie filmų, veiklas"
+            }
+          },
+          "support": {
+            "label": "parama",
+            "team": {
+              "label": "Paremk {app} komandą"
+            },
+            "credits": {
+              "label": "titrai",
+              "description": "tavo profilis programos titruose"
+            }
+          }
+        },
+        "success": {
+          "label": "Dėkojame už tavo paramą!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} - @{username} sąrašas",
+        "description": "Atrask @{username} filmų sąrašą {app}."
+      },
+      "actions": {
+        "delete": {
+          "description": "Tai negrįžtamai ištrins <important>{title}</important> iš tavo sąrašų."
+        }
+      },
+      "search": {
+        "placeholder": "ieškoti sąraše..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "Ar tikrai nori ištrinti <important>{title}</important> iš savo sąrašo?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "Įvesk sąrašo pavadinimą"
+        },
+        "description": {
+          "placeholder": "Įvesk sąrašo aprašymą"
+        },
+        "error": {
+          "format": "Aprašymas negali turėti tuščių eilučių ar būti sudarytas tik iš tarpų."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "Atrask @{username} profilį {app}."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year}) • Filmas",
+        "description": "{title} yra {directors} filmas, išleistas {year} m. Aprašymas: {overview}",
+        "description_no_director": "{title} yra filmas, išleistas {year} m. Aprašymas: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Sąrašai",
+          "description": "Atrask visus sąrašus, kuriuose yra filmas {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Recenzijos",
+          "description": "Atrask visas filmo {title} recenzijas."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} yra {creators} serialas, pirmą kartą parodytas {year} m. Aprašymas: {overview}",
+        "description_no_creator": "{title} yra serialas, pirmą kartą parodytas {year} m. Aprašymas: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Sąrašai",
+          "description": "Atrask visus sąrašus, kuriuose yra serialas {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Recenzijos",
+          "description": "Atrask visas serialo {title} recenzijas."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • Sezonai",
+          "description": "Atrask visus serialo {title} sezonus."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • {number} sezonas",
+            "description": "Atrask visus serialo {title} {number} sezono epizodus."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • Filmai",
+          "description": "Atrask visus filmus, kuriuose {name} vaidino ar dalyvavo."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • Serialai",
+          "description": "Atrask visus serialus, kuriuose {name} vaidino ar dalyvavo."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "{title} recenzija, autorius @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "Parašyti recenziją apie {title}",
+          "description": "Pasidalyk savo nuomone apie {title}."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Tyrinėk Paradise Pictures",
+        "description": "Leiskis atrasti salą ir jos įvairias dekoracijas. Daugybė ją apgyvendinusių filmų išdėstyti savo diegetinėje aplinkoje. Ar pavyks tau ištyrinėti kiekvieną jos kampelį?"
+      }
+    },
+    "legal": {
+      "label": "Teisinė informacija",
+      "description": "Perskaityk {app} teisinius dokumentus.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "Bendrosios naudojimo taisyklės",
+          "description": "Perskaityk {app} naudojimo taisykles."
+        },
+        "sections": {
+          "intro": "Šios bendrosios naudojimo taisyklės (toliau 'Taisyklės') reglamentuoja prieigą prie programos {app} ir jos naudojimą. Programą leidžia Loup (toliau 'Leidėjas'), kurio buveinė yra Paryžiuje. Registracija {app} reiškia besąlygišką šių Taisyklių priėmimą.",
+          "presentation": {
+            "label": "1. Paslaugos aprašymas",
+            "content": "{app} yra nemokama programa, leidžianti naudotojams peržiūrėti informaciją apie filmus, publikuoti recenzijas, vertinti kūrinius ir kurti asmeninius sąrašus."
+          },
+          "account": {
+            "label": "2. Paskyra ir saugumas",
+            "content": "Norint naudotis turinio kūrimo funkcijomis, reikia sukurti paskyrą. Naudotojas atsako už savo prisijungimo duomenų konfidencialumą. Nesąžiningo naudojimo ar įsilaužimo atveju Naudotojas turi nedelsdamas susisiekti su pagalba adresu: <email></email>."
+          },
+          "conduct": {
+            "label": "3. Elgesio taisyklės",
+            "content": "Naudotojas įsipareigoja savo atsiliepimuose ir sąrašuose būti mandagus ir pagarbus. Griežtai draudžiama: neapykantą kurstantys, šmeižiantys ar rasistiniai pasisakymai, priekabiavimas, taip pat brukalas ar neužsakyta komercinė reklama. Leidėjas pasilieka teisę ištrinti bet kokį šias taisykles pažeidžiantį turinį ir be išankstinio pranešimo sustabdyti atitinkamą paskyrą."
+          },
+          "child_safety": {
+            "label": "4. Nepilnamečių apsauga",
+            "content": "{app} taiko griežtą visiško netolerantiškumo politiką bet kokiai vaikų seksualinio išnaudojimo ir smurto formai ('Child Sexual Abuse and Exploitation' arba CSAE). Bet kokio turinio, kuris seksualizuoja, išnaudoja ar kitaip kelia pavojų nepilnamečiams, kūrimas, įkėlimas, saugojimas, platinimas, prašymas ar skatinimas {app} yra aiškiai ir absoliučiai uždraustas. Bet kuri paskyra, pažeidusi šią politiką, bus nedelsiant ir visam laikui užblokuota, o Leidėjas praneš apie atitinkamą turinį bei visą prieinamą informaciją apie naudotoją organizacijai National Center for Missing & Exploited Children (NCMEC) ir (arba) kompetentingoms institucijoms pagal taikomus teisės aktus. Bet kuris naudotojas, sužinojęs apie turinį ar elgesį, galintį būti CSAE atveju, turi nedelsdamas apie tai pranešti adresu: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. Intelektinė nuosavybė",
+            "content": "Naudotojas lieka savo rašomų atsiliepimų savininkas. Tačiau publikuodamas {app}, Naudotojas suteikia Leidėjui nemokamą neišimtinę licenciją šį turinį rodyti, atkurti ir techniškai pritaikyti programoje. {app} vaizdiniai elementai, kodas ir dizainas yra išimtinė Leidėjo nuosavybė."
+          },
+          "privacy": {
+            "label": "6. Asmens duomenys",
+            "content": "Tavo privatumo gerbimas yra mūsų absoliutus prioritetas. {app} neparduoda, neišnuomoja ir nesidalija jokiais asmens duomenimis su komercinėmis trečiosiomis šalimis ar reklamos teikėjais. Surinkti duomenys (el. paštas, naudotojo vardas, veikla programoje) naudojami tik paslaugos veikimui ir tavo paskyros tvarkymui. Savo teisėmis susipažinti su duomenimis, juos pakeisti ar ištrinti (BDAR) gali pasinaudoti rašydamas adresu: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Slapukai ir sekliai",
+            "content": "{app} nenaudoja jokių reklaminių slapukų ir jokių trečiųjų šalių elgesio seklių. Naudojami tik du techninių slapukų tipai: autentifikacijos slapukas (kad liktum prisijungęs) ir kalbos nuostatos slapukas (kad būtų įsiminta tavo pasirinkimas). Kadangi šie slapukai yra būtini paslaugai, jiems netaikomas išankstinio sutikimo reikalavimas."
+          },
+          "ads": {
+            "label": "8. Reklama",
+            "content": "Šiuo metu programa teikiama visiškai be reklamos. Jei šis modelis pasikeistų, naudotojai apie tai būtų informuoti atnaujinus šias Taisykles."
+          },
+          "liability": {
+            "label": "9. Atsakomybė",
+            "content": "Leidėjas stengiasi, kad {app} būtų prieinama visą parą, tačiau negarantuoja, jog nebus trikdžių ar klaidų. Informacija apie filmus gaunama iš trečiųjų šalių duomenų bazių; Leidėjas negali būti laikomas atsakingu už galimus netikslumus šiuose duomenyse."
+          },
+          "law": {
+            "label": "10. Taikoma teisė",
+            "content": "Šioms Taisyklėms taikoma Prancūzijos teisė. Jei ginčo nepavyksta išspręsti draugiškai adresu <email></email>, vienintelę jurisdikciją turi Paryžiaus teismai."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "Privatumo politika",
+          "description": "Perskaityk {app} privatumo politiką."
+        },
+        "sections": {
+          "intro": "Duomenų apsauga yra {app} filosofijos pagrindas. Ši politika detaliai aprašo, kokius duomenis renkame, kodėl juos renkame ir kaip juos saugome. Trumpai: mes neparduodame tavo duomenų.",
+          "controller": {
+            "label": "1. Duomenų valdytojas",
+            "content": "Duomenų valdytojas yra Loup, kurio buveinė yra Paryžiuje (Prancūzijoje). Visais privatumo klausimais gali kreiptis adresu: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. Renkami duomenys",
+            "content": "Renkame tik programos veikimui būtinus duomenis: tavo el. pašto adresą (autentifikacijai), tavo naudotojo vardą ir tavo naudojimo duomenis (įvertinti filmai, recenzijos, sąrašai). Tavo slaptažodžiai saugomi užšifruoti (sumaišyti) ir saugiai."
+          },
+          "purpose": {
+            "label": "3. Duomenų tvarkymo tikslas",
+            "content": "Tavo duomenys tvarkomi tik tam, kad: galėtum sukurti ir tvarkyti savo paskyrą, būtų parodyti tavo sąrašai ir vertinimai ir būtų užtikrintas techninis paslaugos veikimas. Mes nenaudojame tavo duomenų reklamos profiliavimui."
+          },
+          "sharing": {
+            "label": "4. Duomenų bendrinimas",
+            "content": "Tavo asmens duomenys niekada neparduodami, neišnuomojami ir neperduodami tretiesiems asmenims. Jie gali būti talpinami mūsų techninių paslaugų teikėjų (talpinimas, operacinių el. laiškų paslauga), kuriems taikomas griežtas konfidencialumas ir kurie laikosi BDAR."
+          },
+          "retention": {
+            "label": "5. Saugojimo terminas",
+            "content": "Tavo duomenys saugomi tol, kol tavo paskyra aktyvi. Jei nuspręsi ištrinti savo paskyrą, visi tavo asmens duomenys (el. paštas, naudotojo vardas, atsiliepimai) bus negrįžtamai pašalinti iš mūsų duomenų bazių."
+          },
+          "rights": {
+            "label": "6. Tavo teisės (BDAR)",
+            "content": "Pagal teisės aktus turi teisę susipažinti su duomenimis, juos ištaisyti, perkelti ir ištrinti. Šiomis teisėmis gali pasinaudoti bet kada tiesiogiai programoje arba rašydamas mums adresu: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Slapukai",
+            "content": "Kaip nurodyta mūsų naudojimo taisyklėse, naudojame tik būtinus techninius slapukus (sesija ir kalba). Tavo įrenginyje neįrašomas nė vienas trečiųjų šalių reklamos ar sekimo slapukas."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "Ieškok filmo, serialo, sąrašo, asmens ar naudotojo..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "Ar tikrai nori išimti šį kūrinį iš savo matytų sąrašo? Jei turi vertinimą ar recenziją, jie taip pat bus ištrinti."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "Ar tikrai nori užbaigti serialą? Visi visų sezonų epizodai bus pažymėti kaip matyti."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "Ar tikrai nori užbaigti {seasonNumber} sezoną? Visi sezono epizodai bus pažymėti kaip matyti."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "Kad čia matytum veiklą, tu arba tavo sekami naudotojai turite vertinti filmus, serialus, ..."
+    },
+    "feed_person": {
+      "message": "Kad čia matytum veiklą, turi sekti žmones, dirbančius prie filmų ar serialų."
+    },
+    "playlists": {
+      "items": {
+        "empty": "Šiame sąraše nėra nė vieno filmo ar serialo. Pridėk kelis, kad jį užpildytum!"
+      },
+      "add_to": {
+        "empty": "Tu neturi nė vieno sąrašo. Sukurk vieną, kad galėtum įtraukti filmus ar serialus ir lengvai juos rasti!"
+      },
+      "saved": {
+        "empty": "Tu neturi nė vieno išsaugoto sąrašo. Išsaugok sąrašą, kad lengvai jį rastum savo bibliotekoje!"
+      },
+      "members": {
+        "empty": "Šis sąrašas neturi nė vieno nario. Pridėk kelis, kad kartu tvarkytumėte tą patį sąrašą!",
+        "search": "Ieškok naudotojų, kuriuos įtraukti į sąrašą..."
+      }
+    },
+    "follow-requests": {
+      "empty": "Tu neturi nė vienos laukiančios sekimo užklausos. Kai jų bus, jos atsiras čia!"
+    },
+    "recos": {
+      "empty": "Tu neturi nė vienos rekomendacijos. Kai jų bus, jos atsiras čia!",
+      "send_to": {
+        "empty": "Tu neturi kam išsiųsti reco. Kad galėtum kam nors nusiųsti reco, turite būti draugai (abipusis sekimas)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "Tu dar neturi nė vieno vėliau išsaugoto filmo ar serialo. Kai jų bus, jie atsiras čia!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> nusiuntė tau reco apie filmą <movie></movie>"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> nusiuntė tau reco apie serialą <tv_series></tv_series>"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> pamatė <movie></movie>, kurį buvai rekomendavęs"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> pamatė <tv_series></tv_series>, kurį buvai rekomendavęs"
+    },
+    "follower_created": {
+      "description": "<user></user> pradėjo tave sekti"
+    },
+    "follower_accepted": {
+      "description": "<user></user> priėmė tavo sekimo užklausą"
+    },
+    "follower_request": {
+      "description": "<user></user> nori tave sekti"
+    },
+    "friend_created": {
+      "description": "<user></user> dabar yra tavo draugas"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "{senderName} की ओर से नया reco!",
+    "body": "{senderName} ने आपको {mediaTitle} सुझाया",
+    "body_with_comment": "{senderName}: {comment}"
+  },
+  "completed": {
+    "subject": "आपका reco पूरा हुआ!",
+    "body": "{receiverName} ने आपका सुझाया {mediaTitle} देखा"
+  }
+}

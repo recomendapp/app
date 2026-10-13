@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "Seguimiento",
+    "description": "Lleva la cuenta de las películas y series que has visto"
+  },
+  "recos": {
+    "label": "Recos",
+    "description": "Envía recomendaciones de películas y series a tus amigos"
+  },
+  "playlists": {
+    "label": "Playlists",
+    "description": "Organiza tus películas y series en playlists y compártelas"
+  },
+  "feed": {
+    "label": "Feed",
+    "description": "Sigue la actividad de tus amigos"
+  },
+  "bookmarks": {
+    "label": "Para después",
+    "description": "Guarda las películas y series que quieres ver"
+  }
+}

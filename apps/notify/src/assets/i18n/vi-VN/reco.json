@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "Reco mới từ {senderName}!",
+    "body": "{senderName} vừa giới thiệu {mediaTitle} cho bạn",
+    "body_with_comment": "{senderName}: {comment}"
+  },
+  "completed": {
+    "subject": "Reco của bạn đã hoàn tất!",
+    "body": "{receiverName} đã xem {mediaTitle} mà bạn giới thiệu"
+  }
+}

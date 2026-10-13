@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} оценил вашу рецензию!",
+    "body": "{actorName} оценил вашу рецензию на {mediaTitle}"
+  },
+  "commented": {
+    "subject": "Новый комментарий к вашей рецензии!",
+    "body": "{actorName} прокомментировал вашу рецензию на {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} оценил ваш комментарий!",
+    "body": "{actorName} оценил ваш комментарий к {mediaTitle}"
+  },
+  "comment_replied": {
+    "subject": "Новый ответ на ваш комментарий!",
+    "body": "{actorName} ответил на ваш комментарий к {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

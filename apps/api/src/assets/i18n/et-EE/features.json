@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "Jälgimine",
+    "description": "Pea arvet filmide ja sarjade üle, mida oled näinud"
+  },
+  "recos": {
+    "label": "Recod",
+    "description": "Saada sõpradele filmi- ja sarjasoovitusi"
+  },
+  "playlists": {
+    "label": "Nimekirjad",
+    "description": "Korralda oma filmid ja sarjad nimekirjadesse ja jaga neid"
+  },
+  "feed": {
+    "label": "Voog",
+    "description": "Jälgi oma sõprade tegemisi"
+  },
+  "bookmarks": {
+    "label": "Hiljemaks",
+    "description": "Salvesta filmid ja sarjad, mida tahad näha"
+  }
+}

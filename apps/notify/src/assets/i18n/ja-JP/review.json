@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName}さんがあなたのレビューにいいねしました！",
+    "body": "{actorName}さんが{mediaTitle}のレビューにいいねしました"
+  },
+  "commented": {
+    "subject": "あなたのレビューに新しいコメント！",
+    "body": "{actorName}さんが{mediaTitle}のレビューにコメントしました",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName}さんがあなたのコメントにいいねしました！",
+    "body": "{actorName}さんが{mediaTitle}のコメントにいいねしました"
+  },
+  "comment_replied": {
+    "subject": "あなたのコメントに新しい返信！",
+    "body": "{actorName}さんが{mediaTitle}のコメントに返信しました",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

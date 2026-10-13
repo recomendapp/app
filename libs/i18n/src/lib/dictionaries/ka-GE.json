@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "კინოს აღმოჩენის სხვა გზა",
+    "description": "{app} არის სოციალური ქსელი კინოს მოყვარულებისთვის. აღმოაჩინე, გაუზიარე და დაათვალიერე ფილმები და სერიალები მეგობრებთან ერთად."
+  },
+  "common": {
+    "messages": {
+      "welcome": "მოგესალმებით",
+      "welcome_to_app": "კეთილი იყოს შენი მობრძანება {app}-ზე",
+      "hello": "სალამი",
+      "greeting_with_name": "{timeOfDay, select, morning {დილა მშვიდობისა, {name}} afternoon {დღე მშვიდობისა, {name}} evening {საღამო მშვიდობისა, {name}} night {ღამე მშვიდობისა, {name}} other {სალამი, {name}}}",
+      "click_here": "დააჭირე აქ",
+      "see_more": "მეტის ნახვა",
+      "see_more_details": "მეტი დეტალის ნახვა",
+      "more": "მეტი",
+      "view_profile": "პროფილის ნახვა",
+      "library": "ბიბლიოთეკა",
+      "watchlist": "სანახავების სია",
+      "for_later": "მოგვიანებისთვის",
+      "heart_pick": "{count, plural, one {გულის რჩეული} other {გულის რჩეულები}}",
+      "add_to_heart_picks": "გულის რჩეულებში დამატება",
+      "remove_from_heart_picks": "გულის რჩეულებიდან ამოღება",
+      "add_rating": "შეფასების დამატება",
+      "edit_rating": "შეფასების შეცვლა",
+      "remove_rating": "შეფასების ამოღება",
+      "share_my_rating": "ჩემი შეფასების გაზიარება",
+      "share_review": "მიმოხილვის გაზიარება",
+      "show_likes_count": "მოწონებების რაოდენობის ჩვენება",
+      "show_comments_count": "კომენტარების რაოდენობის ჩვენება",
+      "add_to_watchlist": "სანახავების სიაში დამატება",
+      "remove_from_watchlist": "სანახავების სიიდან ამოღება",
+      "no_results": "შედეგები არ არის",
+      "no_results_for": "შედეგი ვერ მოიძებნა: <strong>{query}</strong>",
+      "no_followees": "არავის მიჰყვები",
+      "no_followers": "მიმდევრები არ არის",
+      "no_rating": "შეფასება არ არის",
+      "must_watch_to_review": "მიმოხილვის დასაწერად ეს ნამუშევარი უნდა ნახო",
+      "review_cannot_be_empty": "მიმოხილვა ცარიელი ვერ იქნება",
+      "no_activity": "აქტივობა არ არის",
+      "followers_ratings": "მიმდევრების შეფასებები",
+      "added_by": "დამატებულია",
+      "sort_by": "დალაგება",
+      "sort_order": "დალაგების მიმდევრობა",
+      "go_to_film": "ფილმზე გადასვლა",
+      "go_to_tv_series": "სერიალზე გადასვლა",
+      "go_to_user": "მომხმარებელზე გადასვლა",
+      "go_to_person": "პიროვნებაზე გადასვლა",
+      "go_to_activity": "აქტივობაზე გადასვლა",
+      "go_to_playlist": "სიაზე გადასვლა",
+      "go_to_review": "მიმოხილვაზე გადასვლა",
+      "go_to_director": "{count, plural, one {რეჟისორზე გადასვლა} other {რეჟისორებზე გადასვლა}}",
+      "go_to_creator": "{count, plural, one {შემქმნელზე გადასვლა} other {შემქმნელებზე გადასვლა}}",
+      "show_director": "{count, plural, one {რეჟისორის ჩვენება} other {რეჟისორების ჩვენება}}",
+      "show_creator": "{count, plural, one {შემქმნელის ჩვენება} other {შემქმნელების ჩვენება}}",
+      "show_credit": "{count, plural, one {მონაწილეობის ჩვენება} other {მონაწილეობების ჩვენება}}",
+      "credits": "ტიტრები",
+      "view_recommendation": "{count, plural, one {reco-ს ნახვა} other {reco-ების ნახვა}}",
+      "view_directors": "{count, plural, one {რეჟისორის ნახვა} other {რეჟისორების ნახვა}}",
+      "no_director": "რეჟისორი არ არის",
+      "view_comment": "{count, plural, one {კომენტარის ნახვა} other {კომენტარების ნახვა}}",
+      "add_comment": "{count, plural, one {კომენტარის დამატება} other {კომენტარების დამატება}}",
+      "edit_comment": "{count, plural, one {კომენტარის შეცვლა} other {კომენტარების შეცვლა}}",
+      "delete_comment": "კომენტარის წაშლა",
+      "do_you_really_want_to_delete_this_comment": "ნამდვილად გინდა ამ კომენტარის წაშლა?",
+      "comment_deleted": "ეს კომენტარი წაიშალა",
+      "write_your_comment_here": "დაწერე კომენტარი...",
+      "reply": "პასუხი",
+      "replies_count": "{count, plural, one {# პასუხი} other {# პასუხი}}",
+      "view_replies": "{count, plural, one {# პასუხის ნახვა} other {# პასუხის ნახვა}}",
+      "hide_replies": "პასუხების დამალვა",
+      "load_more_replies": "მეტი პასუხის ჩატვირთვა",
+      "get_started": "დაიწყე",
+      "get_started_its_free": "დავიწყოთ 🎬, უფასოა!",
+      "import": "იმპორტი",
+      "upgrade_to_plan": "{plan}-ზე გადასვლა",
+      "choose_subscription_recurrence": "აირჩიე გამოწერის ანგარიშსწორების პერიოდი",
+      "compare_plans": "გეგმების შედარება",
+      "save_up_to_percent": "დაზოგე {percent}%-მდე",
+      "is_empty": "აქ ცოტა ცარიელია",
+      "add_to_playlist": "სიაში დამატება",
+      "send_to_friend": "მეგობართან გაგზავნა",
+      "pin_to_profile": "პროფილზე მიმაგრება",
+      "unpin_from_profile": "პროფილიდან მოხსნა",
+      "pinned": "მიმაგრებულია",
+      "unpinned": "მოხსნილია",
+      "no_pinned": "მიმაგრებული ერთეული არ არის",
+      "pinned_limit_reached": "მიმაგრებული ერთეულების ზღვარს მიაღწიე — ახლის დასამატებლად მოხსენი ერთი",
+      "custom_sort": "ხელით დალაგება",
+      "quick_add": "სწრაფი დამატება",
+      "favorite_films": "საყვარელი ფილმები",
+      "follow": "მიდევნება",
+      "followed": "მიჰყვები",
+      "request_sent": "მოთხოვნა გაიგზავნა",
+      "follow_requests": "მიდევნების მოთხოვნები",
+      "no_follow_requests": "მიდევნების მოთხოვნები არ არის",
+      "follower": "{count, plural, one {მიმდევარი} other {მიმდევარი}}",
+      "follower_count": "{count} მიმდევარი",
+      "see_followers": "მიმდევრების ნახვა",
+      "followee": "{count, plural, one {მიდევნებული} other {მიდევნებული}}",
+      "followee_count": "{count} მიდევნებული",
+      "see_followees": "ნახე, ვის მიჰყვები",
+      "last_activities": "ბოლო აქტივობები",
+      "last_updated": "ბოლო განახლება",
+      "last_updated_at_date": "ბოლო განახლება: {date}",
+      "show_all": "ყველას ჩვენება",
+      "this_account_is_private": "ეს ანგარიში დახურულია",
+      "follow_to_see_activities": "მიჰყევი, რომ აქტივობები დაინახო",
+      "review": "{count, plural, one {მიმოხილვა} other {მიმოხილვა}}",
+      "no_overview": "აღწერა არ არის",
+      "cast": "მსახიობები",
+      "no_cast": "მსახიობები არ არის",
+      "recent": "უახლესი",
+      "popular": "პოპულარული",
+      "popularity": "პოპულარობა",
+      "no_reviews": "მიმოხილვები არ არის",
+      "no_playlists": "სიები არ არის",
+      "no_playlists_found": "სია ვერ მოიძებნა",
+      "no_films": "ფილმები არ არის",
+      "no_tv_series": "სერიალები არ არის",
+      "view_activity": "აქტივობის ნახვა",
+      "comment_count": "{count, plural, one {# კომენტარი} other {# კომენტარი}}",
+      "write_review": "მიმოხილვის დაწერა",
+      "new_review": "ახალი მიმოხილვა",
+      "edit_review": "მიმოხილვის შეცვლა",
+      "review_by": "მიმოხილვა: {name}",
+      "my_review": "{count, plural, one {ჩემი მიმოხილვა} other {ჩემი მიმოხილვები}}",
+      "add_review": "მიმოხილვის დამატება",
+      "tv_series": "{count, plural, one {სერიალი} other {სერიალი}}",
+      "film": "{count, plural, one {ფილმი} other {ფილმი}}",
+      "movie": "{count, plural, one {ფილმი} other {ფილმი}}",
+      "media": "{count, plural, one {დასახელება} other {დასახელება}}",
+      "tv_season": "{count, plural, one {სეზონი} other {სეზონი}}",
+      "tv_season_count": "{count, plural, one {# სეზონი} other {# სეზონი}}",
+      "tv_season_value": "სეზონი {number}",
+      "tv_season_short": "ს{number}",
+      "tv_episode": "{count, plural, one {ეპიზოდი} other {ეპიზოდი}}",
+      "tv_episode_count": "{count, plural, one {# ეპიზოდი} other {# ეპიზოდი}}",
+      "tv_episode_value": "ეპიზოდი {number}",
+      "tv_episode_short": "ს{seasonNumber}ე{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {სპეციალური ეპიზოდი} other {სპეციალური ეპიზოდი}}",
+      "first_air_date": "პირველი ჩვენება",
+      "last_air_date": "ბოლო ჩვენება",
+      "see_film": "ფილმის ნახვა",
+      "see_tv_series": "სერიალის ნახვა",
+      "watch_film_title": "ნახე {title}",
+      "watch_film_streaming_or_download": "ნახე <important>{title}</important> სტრიმინგით ან ლეგალური ჩამოტვირთვით",
+      "download": "ჩამოტვირთვა",
+      "downloaded": "ჩამოიტვირთა",
+      "person": "{count, plural, one {პიროვნება} other {პიროვნება}}",
+      "top_result": "საუკეთესო შედეგი",
+      "user": "{count, plural, one {მომხმარებელი} other {მომხმარებელი}}",
+      "reco": "{count, plural, one {reco} other {reco}}",
+      "my_recos": "ჩემი reco-ები",
+      "item": "{count, plural, one {ერთეული} other {ერთეული}}",
+      "item_count": "{count, plural, one {# ერთეული} other {# ერთეული}}",
+      "type": "ტიპი",
+      "complete": "დასრულება",
+      "completed": "დასრულდა",
+      "collection": "{count, plural, one {კოლექცია} other {კოლექცია}}",
+      "most_recent": "უახლესი",
+      "most_popular": "ყველაზე პოპულარული",
+      "most_old": "ყველაზე ძველი",
+      "known_for": "ცნობილია ამით",
+      "release_date": "გამოსვლის თარიღი",
+      "last_appearance_date": "ბოლო გამოჩენა",
+      "vote_average": "საშუალო შეფასება",
+      "added": "დამატებულია",
+      "added_date": "დამატების თარიღი",
+      "added_at": "დამატებულია",
+      "add": "დამატება",
+      "playlist_name": "სიის სახელი",
+      "updated_at": "განახლებულია",
+      "created_at": "შექმნილია",
+      "likes": "მოწონებები",
+      "likes_count": "მოწონებების რაოდენობა",
+      "search_media": "დასახელების ძიება",
+      "search_film": "ფილმის ძიება",
+      "start_typing_to_search_films": "დაიწყე წერა ფილმების საძიებლად",
+      "search_tv_series": "სერიალის ძიება",
+      "start_typing_to_search_tv_series": "დაიწყე წერა სერიალების საძიებლად",
+      "search_person": "პიროვნების ძიება",
+      "start_typing_to_search_persons": "დაიწყე წერა პიროვნებების საძიებლად",
+      "search_user": "{count, plural, one {მომხმარებლის ძიება} other {მომხმარებლების ძიება}}",
+      "start_typing_to_search_users": "დაიწყე წერა მომხმარებლების საძიებლად",
+      "search_playlist": "სიის ძიება",
+      "start_typing_to_search_playlists": "დაიწყე წერა სიების საძიებლად",
+      "search_film_or_tv_series": "ფილმის ან სერიალის ძიება",
+      "watched_date": "{count, plural, one {ნახვის თარიღი} other {ნახვის თარიღები}}",
+      "mark_as_watched": "ნანახად მონიშვნა",
+      "remove_from_watched": "ნანახებიდან ამოღება",
+      "rating": "შეფასება",
+      "create_a_playlist": "სიის შექმნა",
+      "by_name": "ავტორი: {name}",
+      "reset": "განულება",
+      "job": "{count, plural, one {როლი} other {როლი}}",
+      "department": "{count, plural, one {განყოფილება} other {განყოფილება}}",
+      "share_title_via": "გაუზიარე <strong>{title}</strong> ამით:",
+      "share_title": "გაუზიარე <strong>{title}</strong>",
+      "link": "ბმული",
+      "copy_link": "ბმულის კოპირება",
+      "copied": "დაკოპირდა",
+      "other": "{count, plural, one {სხვა} other {სხვა}}",
+      "via": "ამით:",
+      "edit": "შეცვლა",
+      "guest": "{count, plural, one {სტუმარი} other {სტუმარი}}",
+      "are_u_sure": "დარწმუნებული ხარ?",
+      "backward": "უკან",
+      "forward": "წინ",
+      "back": "დაბრუნება",
+      "next": "შემდეგი",
+      "notification": "{count, plural, one {შეტყობინება} other {შეტყობინება}}",
+      "see_notifications": "შეტყობინებების ნახვა",
+      "open_social_panel": "სოციალური პანელის გახსნა",
+      "cancel_change": "{count, plural, one {ცვლილების გაუქმება} other {ცვლილებების გაუქმება}}",
+      "do_you_really_want_to_cancel_change": "ნამდვილად გინდა {count, plural, one {ცვლილების} other {ცვლილებების}} გაუქმება?",
+      "continue_editing": "რედაქტირების გაგრძელება",
+      "confirm": "დადასტურება",
+      "terms_of_use": "მოხმარების წესები",
+      "privacy_policy": "კონფიდენციალურობის პოლიტიკა",
+      "request_made": "მოთხოვნა გაიგზავნა",
+      "request_canceled": "მოთხოვნა გაუქმდა",
+      "cancel_request": "მოთხოვნის გაუქმება",
+      "open_menu": "მენიუს გახსნა",
+      "feed": "ფიდი",
+      "about": "შესახებ",
+      "home": "მთავარი",
+      "search": "ძიება",
+      "explore": "აღმოჩენა",
+      "shop": "მაღაზია",
+      "help": "დახმარება",
+      "legal": "იურიდიული",
+      "setting": "{count, plural, one {პარამეტრი} other {პარამეტრები}}",
+      "logout": "გასვლა",
+      "to_watch": "სანახავი",
+      "reco_by_your_friends": "მეგობრების reco-ები",
+      "friends_playlists": "მეგობრების სიები",
+      "latest_activity": "{count, plural, one {ბოლო აქტივობა} other {ბოლო აქტივობები}}",
+      "discover_users": "მომხმარებლების აღმოჩენა",
+      "most_recommended": "ყველაზე რეკომენდებული",
+      "archive": "არქივში გადატანა",
+      "unarchive": "არქივიდან დაბრუნება",
+      "mark_as_read": "{count, plural, one {წაკითხულად მონიშვნა} other {წაკითხულად მონიშვნა}}",
+      "mark_as_unread": "{count, plural, one {წაუკითხავად მონიშვნა} other {წაუკითხავად მონიშვნა}}",
+      "accept": "დათანხმება",
+      "accepted": "დათანხმდი",
+      "decline": "უარი",
+      "declined": "უარი თქვი",
+      "request_accepted": "{count, plural, one {მოთხოვნა მიღებულია} other {მოთხოვნები მიღებულია}}",
+      "request_declined": "{count, plural, one {მოთხოვნა უარყოფილია} other {მოთხოვნები უარყოფილია}}",
+      "unread": "{count, plural, one {წაუკითხავი} other {წაუკითხავი}}",
+      "archived": "{count, plural, one {არქივირებული} other {არქივირებული}}",
+      "no_notifications": "შეტყობინებები არ არის",
+      "all": "ყველა",
+      "mark_all_as_read": "ყველას წაკითხულად მონიშვნა",
+      "archive_all": "ყველას არქივში გადატანა",
+      "archive_all_read": "ყველა წაკითხულის არქივში გადატანა",
+      "please_login": "გაიარე ავტორიზაცია",
+      "like": "მოწონება",
+      "unlike": "მოწონების მოხსნა",
+      "unfollow": "მიდევნების შეწყვეტა",
+      "name": "სახელი",
+      "add_a_name": "დაამატე სახელი",
+      "add_a_description": "დაამატე აღწერა",
+      "visibility": "ხილვადობა",
+      "search_an_user": "მომხმარებლის ძიება",
+      "select_an_item_to_add_to_playlist": "აირჩიე ერთეული სიაში დასამატებლად",
+      "select_a_film_to_add_to_playlist": "აირჩიე ფილმი სიაში დასამატებლად",
+      "select_a_tv_series_to_add_to_playlist": "აირჩიე სერიალი სიაში დასამატებლად",
+      "add_one_or_more_items_to": "დაამატე ერთი ან მეტი ერთეული სიაში <important>{title}</important>",
+      "add_one_or_more_films_to": "დაამატე ერთი ან მეტი ფილმი სიაში <important>{title}</important>",
+      "add_one_or_more_tv_series_to": "დაამატე ერთი ან მეტი სერიალი სიაში <important>{title}</important>",
+      "manage_playlist_access_rights": "სიის წვდომის უფლებების მართვა",
+      "add_guest": "{count, plural, one {სტუმრის დამატება} other {სტუმრების დამატება}}",
+      "manage_members": "წევრების მართვა",
+      "no_member": "წევრები არ არის",
+      "add_member": "{count, plural, one {წევრის დამატება} other {წევრების დამატება}}",
+      "manage_guests": "სტუმრების მართვა",
+      "add_guests_to_your_playlist": "დაამატე სტუმრები შენს სიაში",
+      "select_users_to_add_to_playlist": "აირჩიე მომხმარებლები სიაში დასამატებლად",
+      "select_users_to_send_reco": "აირჩიე, ვის გაუგზავნო reco",
+      "select_playlists_to_add_the_item": "აირჩიე სიები, სადაც ერთეულს დაამატებ",
+      "send": "გაგზავნა",
+      "sent": "გაიგზავნა",
+      "select_row": "მწკრივის არჩევა",
+      "select_all": "ყველას არჩევა",
+      "no_selected_users": "არჩეული მომხმარებელი არ არის",
+      "selection_count": "არჩეულია {number} / {total} {type}",
+      "about_title": "{title}-ის შესახებ",
+      "detail": "{count, plural, one {დეტალი} other {დეტალები}}",
+      "genre": "{count, plural, one {ჟანრი} other {ჟანრი}}",
+      "male": "{count, plural, one {მამრობითი} other {მამრობითი}}",
+      "female": "{count, plural, one {მდედრობითი} other {მდედრობითი}}",
+      "non_binary": "{count, plural, one {არაბინარული} other {არაბინარული}}",
+      "unspecified": "არ არის მითითებული",
+      "date_of_birth": "დაბადების თარიღი",
+      "date_of_death": "გარდაცვალების თარიღი",
+      "place_of_birth": "დაბადების ადგილი",
+      "age_years": "{count} {count, plural, one {წლის} other {წლის}}",
+      "biography": "ბიოგრაფია",
+      "no_biography_available": "ბიოგრაფია მიუწვდომელია",
+      "no_information_available": "ინფორმაცია მიუწვდომელია",
+      "already_sent": "უკვე გაგზავნილია",
+      "already_watched": "უკვე ნანახია",
+      "already_added": "უკვე დამატებულია",
+      "recommend_to_friend_to_discover": "ურჩიე <strong>{title}</strong> მეგობარს, რომელსაც ის არ უნახავს",
+      "add_to_one_or_more_playlists": "დაამატე <strong>{title}</strong> ერთ ან რამდენიმე სიაში",
+      "my_playlist": "{count, plural, one {ჩემი სია} other {ჩემი სიები}}",
+      "what_is_title": "რა არის <strong>{title}</strong>?",
+      "try_again": "სცადე ხელახლა",
+      "error": "შეცდომა",
+      "not_logged_in": "არ ხარ შესული",
+      "an_error_occurred": "მოხდა შეცდომა",
+      "playlist_not_found": "სია ვერ მოიძებნა",
+      "user_not_found": "მომხმარებელი ვერ მოიძებნა",
+      "film_not_found": "ფილმი ვერ მოიძებნა",
+      "media_not_found": "დასახელება ვერ მოიძებნა",
+      "review_not_found": "მიმოხილვა ვერ მოიძებნა",
+      "person_not_found": "პიროვნება ვერ მოიძებნა",
+      "tv_series_not_found": "სერიალი ვერ მოიძებნა",
+      "tv_episode_not_found": "ეპიზოდი ვერ მოიძებნა",
+      "tv_season_not_found": "სეზონი ვერ მოიძებნა",
+      "wrong_arguments": "არასწორი არგუმენტები",
+      "no_media_found": "დასახელება ვერ მოიძებნა",
+      "unknown_action": "უცნობი მოქმედება",
+      "no_user_found": "მომხმარებელი ვერ მოიძებნა",
+      "no_tv_episodes": "ეპიზოდები არ არის",
+      "save": "შენახვა",
+      "saved": "შენახულია",
+      "create": "შექმნა",
+      "film_count": "{count, plural, one {# ფილმი} other {# ფილმი}}",
+      "tv_series_count": "{count, plural, one {# სერიალი} other {# სერიალი}}",
+      "login": "შესვლა",
+      "signup": "რეგისტრაცია",
+      "navigation": "ნავიგაცია",
+      "delete": "წაშლა",
+      "remove": "ამოღება",
+      "deleted": "წაიშალა",
+      "share": "გაზიარება",
+      "duplicate": "დუბლირება",
+      "duplicated": "დუბლირდა",
+      "cancel": "გაუქმება",
+      "date": "თარიღი",
+      "duration": "ხანგრძლივობა",
+      "sort": "დალაგება",
+      "show": "ჩვენება",
+      "column": "{count, plural, one {სვეტი} other {სვეტი}}",
+      "comment": "{count, plural, one {კომენტარი} other {კომენტარი}}",
+      "unknown": "უცნობი",
+      "community": "საზოგადოება",
+      "cast_and_crew": "მსახიობები და გადამღები ჯგუფი",
+      "soon": "მალე",
+      "ios_app": "iOS აპლიკაცია",
+      "android_app": "Android აპლიკაცია",
+      "coming_soon": "მალე იქნება",
+      "new_mobile_app": "ახალი მობილური აპლიკაცია!",
+      "manage": "მართვა",
+      "monthly": "თვიური",
+      "yearly": "წლიური",
+      "day": "დღე",
+      "week": "კვირა",
+      "month": "თვე",
+      "year": "წელი",
+      "price": "ფასი",
+      "free": "უფასო",
+      "playlist": "{count, plural, one {სია} other {სია}}",
+      "public": "საჯარო",
+      "publish": "გამოქვეყნება",
+      "private": "დახურული",
+      "description": "აღწერა",
+      "details": "დეტალები",
+      "profile": "პროფილი",
+      "overview": "მიმოხილვა",
+      "no_playlists_saved": "შენახული სიები არ არის",
+      "camera_permission_denied": "კამერაზე წვდომა უარყოფილია",
+      "photo_library_permission_denied": "ფოტოების ბიბლიოთეკაზე წვდომა უარყოფილია",
+      "ignore": "იგნორი",
+      "ok": "კარგი",
+      "title": "სათაური",
+      "skip": "გამოტოვება",
+      "undo": "მოქმედების გაუქმება",
+      "date_published": "გამოქვეყნების თარიღი",
+      "date_created": "შექმნის თარიღი",
+      "date_updated": "განახლების თარიღი",
+      "alphabetical": "ანბანურად",
+      "date_added": "დამატების თარიღი",
+      "number_of_likes": "მოწონებების რაოდენობა",
+      "number_of_seasons": "სეზონების რაოდენობა",
+      "add_to_this_playlist": "ამ სიაში დამატება",
+      "save_to_library": "ბიბლიოთეკაში შენახვა",
+      "remove_from_library": "ბიბლიოთეკიდან ამოღება",
+      "otp": "ერთჯერადი კოდი",
+      "ratings_from_followees": "მათი შეფასებები, ვისაც მიჰყვები",
+      "choose_from_the_library": "აირჩიე გალერეიდან",
+      "take_a_photo": "გადაიღე ფოტო",
+      "delete_current_image": "მიმდინარე სურათის წაშლა",
+      "edit_image": "სურათის შეცვლა",
+      "add_image": "სურათის დამატება",
+      "verify_with_a_code": "კოდით დადასტურება",
+      "order": "რიგითობა",
+      "edit_order": "რიგითობის შეცვლა",
+      "done": "მზადაა",
+      "can_edit": "შეუძლია რედაქტირება?",
+      "upgrade": "განახლება",
+      "no_description": "აღწერა არ არის",
+      "no_comment": "კომენტარები არ არის",
+      "close": "დახურვა",
+      "edit_playlist": "სიის შეცვლა",
+      "universe": "სამყარო",
+      "cannot_be_changed": "ვერ შეიცვლება",
+      "delete_review": "მიმოხილვის წაშლა",
+      "do_you_really_want_to_delete_this_review": "ნამდვილად გინდა ამ მიმოხილვის წაშლა?",
+      "user_liked_playlist": "<name></name>-მა მოიწონა სია",
+      "user_liked_review": "<name></name>-მა მოიწონა მიმოხილვა",
+      "runtime": "ხანგრძლივობა",
+      "ends_at": "მთავრდება {value}",
+      "this_user_has_no_activity": "ამ მომხმარებელს აქტივობა არ აქვს",
+      "notification_archived": "{count, plural, one {შეტყობინება არქივშია} other {შეტყობინება არქივშია}}",
+      "notification_unarchived": "{count, plural, one {შეტყობინება არქივიდან დაბრუნდა} other {შეტყობინება არქივიდან დაბრუნდა}}",
+      "notification_marked_as_read": "{count, plural, one {შეტყობინება წაკითხულად მოინიშნა} other {შეტყობინება წაკითხულად მოინიშნა}}",
+      "notification_marked_as_unread": "{count, plural, one {შეტყობინება წაუკითხავად მოინიშნა} other {შეტყობინება წაუკითხავად მოინიშნა}}",
+      "or_continue_with": "ან გააგრძელე ამით",
+      "message": "{count, plural, one {შეტყობინება} other {შეტყობინება}}",
+      "story": "{count, plural, one {სთორი} other {სთორი}}",
+      "new_playlist": "ახალი სია",
+      "select_a_type": "აირჩიე ტიპი",
+      "filter": "{count, plural, one {ფილტრი} other {ფილტრი}}",
+      "hide_watched": "ნანახების დამალვა",
+      "show_me_around": "გამომიარე ყველაფერი",
+      "artwork_from": "ილუსტრაცია: <important>{source}</important>",
+      "no_active_subscription": "აქტიური გამოწერა არ არის",
+      "manage_subscription": "გამოწერის მართვა",
+      "started_on_date": "დაიწყო {date}",
+      "last_renewed_on_date": "ბოლო განახლება {date}",
+      "version_value": "ვერსია {value}",
+      "original_title": "ორიგინალური სათაური",
+      "starring": "მთავარ როლებში",
+      "write_your_review_here": "დაწერე მიმოხილვა აქ...",
+      "insert": "ჩასმა",
+      "trailer": "{count, plural, one {ტრეილერი} other {ტრეილერი}}",
+      "list": "{count, plural, one {სია} other {სია}}",
+      "grid": "{count, plural, one {ბადე} other {ბადე}}",
+      "order_asc": "ზრდადობით",
+      "order_desc": "კლებადობით",
+      "menu": "მენიუ",
+      "at_least_one_watched_date_required": "საჭიროა მინიმუმ ერთი ნახვის თარიღი",
+      "viewer": "{count, plural, one {მნახველი} other {მნახველები}}",
+      "editor": "{count, plural, one {რედაქტორი} other {რედაქტორები}}",
+      "admin": "{count, plural, one {ადმინისტრატორი} other {ადმინისტრატორები}}",
+      "owner": "{count, plural, one {მფლობელი} other {მფლობელები}}",
+      "you_dont_have_permission_to_do_this_action": "ამ მოქმედების უფლება არ გაქვს",
+      "in_progress": "მიმდინარეობს",
+      "give_up": "დანებება",
+      "random": "შემთხვევითი",
+      "reset_password": "პაროლის აღდგენა",
+      "password_reset": "პაროლი აღდგა",
+      "return_to_login": "შესვლის გვერდზე დაბრუნება",
+      "invalid_code": "არასწორი კოდი",
+      "no_token_found": "ტოკენი ვერ მოიძებნა",
+      "first_watched_at": "პირველი ნახვის თარიღი",
+      "watched_dates": "ნახვის თარიღები",
+      "no_watched_dates": "ნახვის თარიღები არ არის",
+      "select_role": "აირჩიე როლი",
+      "select_format": "აირჩიე ფორმატი",
+      "theater": "კინოთეატრი",
+      "physical": "ფიზიკური ასლი",
+      "digital": "ციფრული",
+      "streaming": "სტრიმინგი",
+      "you_must_be_premium_to_change_member_role": "წევრის როლის შესაცვლელად Premium უნდა გქონდეს",
+      "already_member": "უკვე წევრია",
+      "email_already_used": "ეს ელფოსტა უკვე გამოყენებულია",
+      "email_confirmed": "ელფოსტა დადასტურდა",
+      "confirmation_email_sent": "დასადასტურებელი წერილი გაიგზავნა",
+      "continue": "გაგრძელება",
+      "finish": "დასრულება",
+      "forgot_password": "დაგავიწყდა პაროლი",
+      "new_password": "ახალი პაროლი",
+      "confirm_password": "პაროლის დადასტურება",
+      "password_reseted": "პაროლი აღდგა",
+      "reset_your_password": "აღადგინე პაროლი",
+      "invalid_token": "არასწორი ტოკენი",
+      "new_notification": "{count, plural, one {ახალი შეტყობინება} other {ახალი შეტყობინება}}",
+      "lets_go": "დავიწყოთ!",
+      "update_available": "ხელმისაწვდომია განახლება",
+      "update_available_description": "განაახლე აპლიკაცია, რომ უახლესი გაუმჯობესებებით ისარგებლო.",
+      "update_required_title": "საჭიროა განახლება",
+      "update_required_description": "აპლიკაციის ეს ვერსია აღარ მუშაობს. განაახლე, რომ Recomend-ის გამოყენება გააგრძელო.",
+      "update_app": "განახლება",
+      "advertisement": "{count, plural, one {რეკლამა} other {რეკლამა}}",
+      "pending": "მოლოდინში",
+      "processing": "მუშავდება",
+      "awaiting_review": "ელოდება შემოწმებას",
+      "failed": "ჩაიშალა",
+      "data": "{count, plural, one {მონაცემი} other {მონაცემები}}",
+      "restore": "აღდგენა",
+      "fix": "გასწორება",
+      "not_found": "ვერ მოიძებნა",
+      "unavailable": "მიუწვდომელია",
+      "star_on_github": "დაგვიდე ვარსკვლავი GitHub-ზე"
+    },
+    "form": {
+      "email": {
+        "label": "ელფოსტა",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "ელფოსტა არასწორია",
+          "unavailable": "ეს ელფოსტა უკვე გამოყენებულია"
+        },
+        "verified": "ელფოსტა დადასტურდა"
+      },
+      "username": {
+        "label": "მომხმარებლის სახელი",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "პირველი სიმბოლო უნდა იყოს ასო ან ციფრი",
+          "double_dot": "ორი წერტილი ზედიზედ არ დაიშვება",
+          "ends_with_dot": "ბოლოში წერტილი არ დაიშვება",
+          "format": "დაიშვება მხოლოდ ასოები, ციფრები და სიმბოლოები '_' და '.'",
+          "unavailable": "ეს მომხმარებლის სახელი უკვე დაკავებულია"
+        }
+      },
+      "full_name": {
+        "label": "სახელი",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "დაიშვება მხოლოდ ასოები, ციფრები და შორისები"
+        }
+      },
+      "password": {
+        "label": "პაროლი",
+        "placeholder": "შეიყვანე პაროლი",
+        "schema": {
+          "uppercase": "საჭიროა მინიმუმ ერთი დიდი ასო",
+          "lowercase": "საჭიროა მინიმუმ ერთი პატარა ასო",
+          "number": "საჭიროა მინიმუმ ერთი ციფრი",
+          "special": "საჭიროა მინიმუმ ერთი სპეციალური სიმბოლო",
+          "match": "პაროლები არ ემთხვევა"
+        },
+        "confirm": {
+          "label": "პაროლის დადასტურება",
+          "placeholder": "დაადასტურე პაროლი"
+        }
+      },
+      "length": {
+        "char_min": "მინიმუმ {count, plural, one {# სიმბოლო} other {# სიმბოლო}}",
+        "char_max": "მაქსიმუმ {count, plural, one {# სიმბოლო} other {# სიმბოლო}}"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "დაიშვება მხოლოდ ასოები, ციფრები და შორისები"
+      },
+      "error": {
+        "too_many_attempts": "ძალიან ბევრი მცდელობა, სცადე მოგვიანებით",
+        "not_received_code": "კოდი ვერ მიიღე?",
+        "invalid_code": "არასწორი კოდი",
+        "turnstile": "შემოწმება ჩაიშალა, სცადე ხელახლა"
+      },
+      "resend_code": "კოდის ხელახალი გაგზავნა",
+      "resend_email": "წერილის ხელახალი გაგზავნა",
+      "code_verified": "კოდი დადასტურდა",
+      "code_sent": "კოდი გაიგზავნა"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "გვერდი ვერ მოიძებნა",
+        "description": "უი, ეს გვერდი არ არსებობს..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "აღრიცხვა",
+        "description": "აღმოაჩინე, შეაფასე და გაუზიარე საყვარელი ფილმები და სერიალები."
+      },
+      "recos": {
+        "label": "reco-ები",
+        "description": "გააგზავნე და მიიღე მეგობრების reco-ები. ყველაფერი ერთ ადგილას."
+      },
+      "playlists": {
+        "label": "სიები",
+        "description": "მოაწესრიგე, გაუზიარე და ერთად შექმენი სიები."
+      },
+      "feed": {
+        "label": "ფიდი",
+        "description": "მიჰყევი მეგობრებს და ნახე, რას უყურებენ, რას იწონებენ და რას წერენ."
+      },
+      "social_sharing": {
+        "label": "სოციალური გაზიარება",
+        "description": "გაუზიარე ყველაფერი, რაც გიყვარს, Instagram-ზე ან სხვა სოციალურ ქსელებში."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "აღრიცხვა",
+          "description": "თვალი ადევნე ფილმებს, რომლებიც ნახე"
+        },
+        "recos": {
+          "label": "Reco-ები",
+          "description": "გაუგზავნე მეგობრებს ფილმების რეკომენდაციები"
+        },
+        "explore": {
+          "label": "აღმოჩენა",
+          "description": "აღმოაჩინე ახალი ფილმები Paradise Pictures-ზე — ინტერაქტიულ რუკაზე, სადაც 1400-ზე მეტი ფილმია"
+        },
+        "like": {
+          "label": "მოწონება",
+          "description": "გამოხატე სიყვარული საყვარელი ფილმების, სიებისა და მიმოხილვების მიმართ"
+        },
+        "rating": {
+          "label": "შეფასება",
+          "description": "შეაფასე ფილმები, რომლებიც ნახე"
+        },
+        "watchlist": {
+          "label": "სანახავების სია",
+          "description": "შეინახე ფილმები, რომელთა ნახვაც გინდა"
+        },
+        "playlists": {
+          "label": "სიები",
+          "description": "მოაწესრიგე ფილმები სიებად და გაუზიარე"
+        },
+        "reviews": {
+          "label": "მიმოხილვები",
+          "description": "დაწერე მიმოხილვები და გამოუშვი შიგნიდან მკაცრი კინომოყვარული"
+        },
+        "feed": {
+          "label": "ფიდი",
+          "description": "მიჰყევი მეგობრების აქტივობას"
+        },
+        "adsFree": {
+          "label": "რეკლამის გარეშე",
+          "description": "ისარგებლე Recomend-ით რეკლამის გარეშე, სამუდამოდ"
+        }
+      }
+    },
+    "welcome": {
+      "title": "გმადლობთ რეგისტრაციისთვის!",
+      "description": "აქ არის სწრაფი მიმოხილვა იმისა, რისი გაკეთებაც შეგიძლია {app}-ით.",
+      "follow": {
+        "title": "მიჰყევი ადამიანებს",
+        "description": "მიჰყევი მეგობრებს და ნახე, რას უყურებენ."
+      },
+      "import": {
+        "title": "სხვა პლატფორმიდან მოდი?"
+      }
+    },
+    "collection": {
+      "label": "ბიბლიოთეკა",
+      "my_recos": {
+        "label": "ჩემი reco-ები",
+        "search": {
+          "placeholder": "ძიება ჩემს reco-ებში..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "ჩემი reco-ებიდან წაშლა",
+            "description": "ნამდვილად გინდა <important>{title}</important> წაშალო შენი reco-ებიდან?"
+          },
+          "complete_confirm": {
+            "title": "reco-ს დასრულება",
+            "description": "ნამდვილად გინდა დაასრულო reco <important>{title}</important>?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "ძიება სანახავების სიაში..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "სანახავების სიიდან წაშლა",
+            "description": "ნამდვილად გინდა <important>{title}</important> წაშალო სანახავების სიიდან?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "ძიება გულის რჩეულებში..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "გულის რჩეულებიდან წაშლა",
+            "description": "ნამდვილად გინდა <important>{title}</important> წაშალო გულის რჩეულებიდან?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name>-მა ნახა",
+        "rated": "<name></name>-მა შეაფასა",
+        "liked": "<name></name>-მა მოიწონა",
+        "rated_liked": "<name></name>-მა მოიწონა და შეაფასა",
+        "reviewed": "<name></name>-მა დაწერა მიმოხილვა"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> არის <important>{roles}</important> ფილმში <linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> არის <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "აპლიკაციის ავტორიზაცია",
+        "description_generic": "აპლიკაცია ითხოვს წვდომას შენს ანგარიშზე.",
+        "description": "{client} ითხოვს წვდომას შენს ანგარიშზე.",
+        "scopes_label": "ეს აპლიკაციას საშუალებას მისცემს:",
+        "accept": "დავრთო ნება",
+        "deny": "უარი",
+        "error": {
+          "invalid_request": "არასწორი ან ვადაგასული მოთხოვნა",
+          "invalid_request_description": "ავტორიზაცია ხელახლა დაიწყე იმ აპლიკაციიდან, რომელმაც აქ მოგიყვანა.",
+          "client_not_found": "ეს აპლიკაცია ვერ მოიძებნა.",
+          "submit_failed": "რამე ვერ გამოვიდა. სცადე ხელახლა."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "შედი შენს {app}-ანგარიშში."
+        },
+        "label": "შესვლა",
+        "description": "აღმოაჩინე საუკეთესო ფილმების რეკომენდაციები.",
+        "or_continue_with": "ან გააგრძელე ამით",
+        "no_account_yet": "ჯერ არ გაქვს ანგარიში?",
+        "form": {
+          "identifier": {
+            "label": "ელფოსტა ან მომხმარებლის სახელი",
+            "placeholder": "შეიყვანე ელფოსტა ან მომხმარებლის სახელი"
+          },
+          "password": {
+            "label": "პაროლი",
+            "placeholder": "შეიყვანე პაროლი"
+          },
+          "submit": "შესვლა",
+          "forgot_password": "დაგავიწყდა პაროლი?",
+          "wrong_credentials": "ელფოსტა ან პაროლი არასწორია"
+        },
+        "otp": {
+          "password_login": "პაროლით შესვლა გირჩევნია?",
+          "form": {
+            "submit": "კოდის მიღება",
+            "no_user_found": "ამ ელფოსტით მომხმარებელი ვერ მოიძებნა",
+            "success": "შესული ხარ"
+          },
+          "confirm_form": {
+            "label": "კოდის დადასტურება",
+            "description": "დასადასტურებელი კოდი გაიგზავნა მისამართზე {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "დარეგისტრირდი {app}-ზე, რომ ფილმების რეკომენდაციები აღმოაჩინო და გაუზიარო."
+        },
+        "description": "შექმენი ანგარიში, რომ ფილმი ურჩიო მეგობარს, რომელსაც ყოველთვის ავიწყდება სათაურები.",
+        "form": {
+          "success": "დასადასტურებელი წერილი გაიგზავნა მისამართზე {email}"
+        },
+        "confirm_form": {
+          "label": "ელფოსტის დადასტურება",
+          "description": "დასადასტურებელი ბმული გაიგზავნა მისამართზე {email}"
+        },
+        "return_to_login": "უი, ანგარიში უკვე მაქვს."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "დაგავიწყდა პაროლი",
+          "description": "აღადგინე პაროლი."
+        },
+        "label": "დაგავიწყდა პაროლი",
+        "description": "პაროლების მენეჯერი გამოიყენე, მართლაც მოსახერხებელია.",
+        "return_to_login": "უი, საბოლოოდ მახსოვს პაროლი.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "პაროლის აღდგენა",
+          "code_sent": "მოთხოვნა გაიგზავნა"
+        },
+        "confirm_form": {
+          "label": "კოდის დადასტურება",
+          "description": "დასადასტურებელი კოდი გაიგზავნა მისამართზე {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "პაროლის აღდგენა",
+          "description": "აირჩიე ახალი პაროლი შენი ანგარიშისთვის."
+        }
+      },
+      "error": {
+        "label": "შეცდომა",
+        "description": "ავთენტიკაციის დროს მოხდა შეცდომა.",
+        "return_to_login": "დაბრუნება უსაფრთხო ადგილას"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "შესახებ",
+        "marquee": "ცხოვრებაში უფრო საინტერესო არაფერი გაქვს, ვიდრე ინტერნეტში „შესახებ“ გვერდების კითხვა?",
+        "intro": "<strong>Recomend</strong> არის სივრცე, რომელიც ფილმების აღმოჩენას, რეკომენდაციასა და მოწესრიგებას ეძღვნება. ყველაფერი ისე მოვიფიქრეთ, რომ „ზეპირსიტყვიერმა“ რეკომენდაციამ საბოლოოდ საუკეთესო ციფრული საყრდენი მიიღოს. ჩვენი მიდგომა ადამიანებსა და მათ ურთიერთობებს აყენებს ცენტრში იმ ეპოქაში, როცა მოხმარება საკუთარი თავის — უფრო სწორად, „შენთვის რეკომენდებულის“ — გარშემო ბრუნავს.",
+        "slogan": {
+          "1": "რეკლამის გარეშე და საეჭვო დანაპირებების გარეშე. 🍆",
+          "2": "ერთდროულად სოციალური ქსელიცაა და ხელსაწყოც.",
+          "3": "სახლში, მოყვარულების ხელით გაკეთებული.",
+          "4": "მოყვარულური — სიტყვის პირდაპირი მნიშვნელობით."
+        },
+        "last": "Recomend-ით სარგებლობა შეიძლება მარტოც და სხვებთან ერთადაც, საჯაროდ თუ დახურულად, დღისითაც და ღამითაც, მაგრამ არასდროს ფილმის მსვლელობისას — გეთაყვა, კონცენტრირდი!"
+      },
+      "team": {
+        "label": "გუნდი",
+        "intro": "Recomend შექმნა ორმა ძმამ, რომლებსაც კინო უყვართ და უყვართ დროის დახარჯვა გადამეტებულად ამბიციურ პროექტებზე, რომლებიც შესაძლოა არც არასდროს დაიბადონ.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "ჰიპერაქტიული არქიტექტორი-ინჟინერი, რომელსაც ერთი საქმე არ აკმაყოფილებს (ნამდვილი start-up nation), Yoann-ს ეკუთვნის ფილმების რუკის იდეა, რომელსაც თავდაპირველად მოკრძალებული ამბიცია ჰქონდა — გამხდარიყო პოსტერი მის აბაზანაში. Loup-ის მოსვლასთან ერთად მიზნები ცაში აიტაცა და, ოდნავ მოვლენებით გატაცებულმა, თავად აიღო რუკისა და საიტის მთელი გრაფიკა, ასევე მთელი კომუნიკაცია (თუმცა ეს არ უყვარს). გარდა ამისა, გამოთქვამს მოსაზრებებს UX/UI-ზე და ბევრ ფუნქციას სთავაზობს, სრულად ვერ აწონავს, რამდენად რთულია მათი დაპროგრამება (თუმცა ამ მხრივ წინ წაიწია)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "სრულიად თვითნასწავლი, რომელმაც მაინც მოახერხა მიეღო განათლება, რომელმაც 25 წლამდე უხელფასო უმუშევრობამდე მიიყვანა. ნამდვილი ყოვლისმცოდნე ხელოსანი, Loup-ი ვებზე მუშაობს და აწყობს ინტერფეისს, რომელიც რაც შეიძლება მოსახერხებელი უნდა იყოს. Loup-ს უნდა მადლობა გადაუხადოს ყველა პროგრამისტულ ფორუმს, რომლებმაც მის (ძალიან) მრავალ კითხვას უპასუხეს, და ყველა ინდოელ YouTuber-ს, რომლებმაც ამ თვეების განმავლობაში მამობრივად უძღვებოდნენ. დედა კი დარწმუნებულია, რომ ძმამ ის ამ პროექტისთვის მონად აქცია (კარგად ვარ, დედა)."
+          }
+        },
+        "last": "ჩვენთან ან საზოგადოების სხვა წევრებთან დასაკავშირებლად შემოდი ჩვენს <link>Discord</link>-ზე!"
+      },
+      "pricing": {
+        "label": "ფასები",
+        "intro": "ეს გამოწერის მოდელი უპირველეს ყოვლისა პროექტის მხარდაჭერისა და მისი ზრდის ხელშეწყობის საშუალებაა. Premium-ფუნქციები დამატებითი შესაძლებლობებია Recomend-ის უფრო ღრმად გამოყენებისთვის და მცირე ფინანსურ წვლილს ამართლებს. ჩვენ ყოველთვის შევინარჩუნებთ საიტზე უფასო წვდომას — რეკლამის გარეშე და შეზღუდვების შეგრძნების გარეშე.",
+        "subdescription": "*თუ ამ გამოწერის სასაცილოდ დაბალი ფასიც კი შენს შესაძლებლობებს აღემატება, მიმართე შენს ლიბერალურ მთავრობას, რომელიც პასუხისმგებელია შენი მსყიდველობითი უნარის დაკარგვაზე."
+      },
+      "legal": {
+        "label": "იურიდიული და კონფიდენციალურობა",
+        "description": "ჩვენ პატივს ვცემთ შენს კონფიდენციალურობას. სტუმარ მომხმარებლებს ნაჩვენები რეკლამები Google-ის მიერ იმართება და საჭიროებს ტექნიკურ ქუქი-ფაილებს ჩვენების სიხშირის შეზღუდვისა და თაღლითობის თავიდან აცილებისთვის.",
+        "privacyPolicy": "წაიკითხე ჩვენი კონფიდენციალურობის პოლიტიკა",
+        "manageCookies": "ჩემი სარეკლამო პარამეტრების მართვა (ქუქი-ფაილები)"
+      },
+      "open-source": {
+        "label": "ღია კოდი",
+        "intro": "Recomend ღია კოდისაა: კოდი საჯაროა GitHub-ზე. გადახედე, შეიტანე წვლილი ან უბრალოდ დაგვიდე ვარსკვლავი!",
+        "star": "დაგვიდე ვარსკვლავი GitHub-ზე"
+      },
+      "businessmodel": {
+        "label": "ბიზნესმოდელი",
+        "paragraph": {
+          "1": "როგორც ჩვენი სრულიად არაკომერციული პროფილებიდან მიხვდები, ჯერ კიდევ ვერ გავარკვიეთ, რას მოგვცემდა ამჟამად ბიზნესმოდელი...",
+          "2": "თუ Recomend-ის მომავალი ამას მოითხოვს, განვიხილავთ და სწორი ადამიანებით შემოვიკრებთ თავს — ან სულ მცირე ისეთებით, რომლებსაც ეს ჩვენზე მეტად აინტერესებს.",
+          "3": "მანამდე კი, გულწრფელად ვთქვათ, სხვა საქმეებიც გვაქვს."
+        }
+      },
+      "roadmap": {
+        "label": "სამოქმედო გეგმა"
+      },
+      "data": {
+        "label": "მონაცემები",
+        "paragraph": {
+          "1": "Recomend-ზე გამოყენებულ ყველა მეტამონაცემს პლატფორმის API-ის მეშვეობით გვაწვდის <link>The Movie Database (TMDb)</link>. ისე ვიქცევით, როგორც ყველა, კეთილშობილი ცხვრებივით.",
+          "2": "შეცდომების ან ნაკლული ფილმების შესახებ მიმართე <link>TMDb</link>-ს."
+        }
+      },
+      "resources": {
+        "label": "რესურსები",
+        "intro": "ამას კინოსთან დიდი კავშირი არ აქვს, მაგრამ აქ არის საიტების სია, რომლებიც გვიყვარს:"
+      },
+      "contact-support": {
+        "label": "კონტაქტი და მხარდაჭერა",
+        "help-center": "იპოვე პასუხები შენს ეგზისტენციალურ კითხვებზე ჩვენს <link>დახმარების ცენტრში</link>.",
+        "technical-support": "ტექნიკური კითხვებისთვის: <email></email>",
+        "suggest-a-feature": "შემოთავაზებებისთვის: <email></email>",
+        "contact-us": "უბრალოდ დასაკავშირებლად: <email></email>"
+      },
+      "quote": {
+        "label": "ციტატა",
+        "quote": "« მეზიზღება სიტყვა „პროფესიონალი“. ყველა ის მსახიობი და სხვა, რომლებიც ამბობენ: მე პროფესიონალი ვარ, მე პრო ვარ! ეს რა არის? არსებობს უფრო სევდიანი სიტყვა? რადგან „მოყვარული“ სიტყვა სიყვარულიდან მოდის. საქმეები სიყვარულით უნდა გააკეთო, თორემ სულელები ვართ. »",
+        "author": "ორსონ უელსი",
+        "date": "1972",
+        "subdescription": "*ვყოყმანობდით, ჩავსვათ თუ არა, რადგან ადვილად ჟღერს ამპარტავნულად, მაგრამ კარგად გამოხატავს ჩვენს განწყობას პროექტის მიმართ. თუმცა თუ არ მოგეწონა, მოვაშორებთ."
+      }
+    },
+    "settings": {
+      "label": "პარამეტრები",
+      "description": "მართე ანგარიშის პარამეტრები.",
+      "profile": {
+        "label": "პროფილი",
+        "description": "ასე დაგინახავენ სხვები საიტზე.",
+        "avatar": {
+          "label": "ავატარი",
+          "delete": "წაშლა"
+        },
+        "full_name": {
+          "label": "სახელი",
+          "description": "ეს სახელი გამოჩნდება შენს პროფილზე და წერილებში.",
+          "placeholder": "შეიყვანე სახელი",
+          "form": {
+            "min_length": "სახელი უნდა იყოს მინიმუმ 1 სიმბოლო",
+            "max_length": "სახელი არ უნდა აღემატებოდეს 50 სიმბოლოს"
+          }
+        },
+        "bio": {
+          "label": "ბიო",
+          "description": "მოგვიყევი რამე საკუთარ თავზე — ეს პროფილზე გამოჩნდება.",
+          "placeholder": "მოგვიყევი საკუთარ თავზე",
+          "form": {
+            "max_length": "ბიო არ უნდა აღემატებოდეს 150 სიმბოლოს",
+            "format": "ბიო არ უნდა შეიცავდეს ცარიელ ხაზებს და არ უნდა შედგებოდეს მხოლოდ შორისებისგან."
+          }
+        },
+        "favorite_films": {
+          "label": "საყვარელი ფილმები",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "არასწორი URL"
+          }
+        }
+      },
+      "account": {
+        "label": "ანგარიში",
+        "description": "განაახლე ანგარიშის პარამეტრები.",
+        "username": {
+          "label": "მომხმარებლის სახელი",
+          "description": "ეს არის მომხმარებლის სახელი, რომლითაც სხვები გიპოვებენ და შენს პროფილზე შემოვლენ. შეცვლა მხოლოდ 30 დღეში ერთხელ შეიძლება.",
+          "placeholder": "შეიყვანე მომხმარებლის სახელი",
+          "form": {
+            "min_length": "მომხმარებლის სახელი უნდა იყოს მინიმუმ 3 სიმბოლო",
+            "max_length": "მომხმარებლის სახელი არ უნდა აღემატებოდეს 15 სიმბოლოს",
+            "invalid": "მომხმარებლის სახელი შეიძლება შეიცავდეს მხოლოდ ასოებს, ციფრებს და სიმბოლოებს '_' და '.'",
+            "unavailable": "ეს მომხმარებლის სახელი უკვე დაკავებულია"
+          }
+        },
+        "private": {
+          "label": "დახურული ანგარიში",
+          "description": "როცა ანგარიში დახურულია, შენს აქტივობებს მხოლოდ მეგობრები ხედავენ."
+        },
+        "email": {
+          "description": "დასადასტურებელი წერილი გაიგზავნება როგორც მიმდინარე, ისე ახალ ელფოსტაზე. ცვლილების ძალაში შესვლისთვის ორივე უნდა დაადასტურო.",
+          "change_pending": "დასადასტურებელი წერილი გაიგზავნა შენს ახალ ელფოსტაზე <strong>{email}</strong>. გაგზავნის თარიღი: <strong>{date}</strong>. ცვლილების დასადასტურებლად დააჭირე ბმულს ან შეიყვანე დასადასტურებელი კოდი.",
+          "confirm_email_code": {
+            "description": "ცვლილების დასადასტურებლად შეიყვანე კოდი, რომელიც გაიგზავნა მისამართზე <strong>{email}</strong>."
+          },
+          "change_success": "შენი ელფოსტა წარმატებით შეიცვალა"
+        },
+        "delete_account": {
+          "button": "ჩემი ანგარიშის წაშლა",
+          "confirm": {
+            "description": "ნამდვილად გინდა ანგარიშის წაშლა? ეს მოქმედება შეუქცევადია.",
+            "confirm_email_sent": "დასადასტურებელი წერილი გაიგზავნა შენს ელფოსტაზე"
+          }
+        }
+      },
+      "appearance": {
+        "label": "გარეგნობა",
+        "description": "მოირგე აპლიკაციის იერსახე. დღისა და ღამის თემები ავტომატურად იცვლება.",
+        "language": {
+          "label": "ენა",
+          "description": "აირჩიე ენა — ცვლილება აპლიკაციის ხელახალი გაშვების შემდეგ ამოქმედდება",
+          "placeholder": "აირჩიე ენა",
+          "not_found": "ენა ვერ მოიძებნა"
+        },
+        "theme": {
+          "label": "თემა",
+          "description": "აირჩიე ინტერფეისის თემა.",
+          "options": {
+            "light": "ნათელი",
+            "dark": "მუქი"
+          }
+        }
+      },
+      "subscription": {
+        "label": "გამოწერა",
+        "description": "მართე გამოწერა, რომ Premium-ფუნქციებზე წვდომა გქონდეს."
+      },
+      "security": {
+        "label": "უსაფრთხოება",
+        "description": "პაროლის შეცვლა ყველა მოწყობილობიდან გამოგიყვანს, გარდა იმისა, რომელსაც ახლა იყენებ.",
+        "current_password": {
+          "label": "მიმდინარე პაროლი",
+          "placeholder": "შეიყვანე მიმდინარე პაროლი",
+          "form": {
+            "required": "გთხოვთ, შეიყვანე მიმდინარე პაროლი",
+            "invalid": "მიმდინარე პაროლი არასწორია"
+          }
+        },
+        "new_password": {
+          "label": "ახალი პაროლი",
+          "placeholder": "შეიყვანე ახალი პაროლი",
+          "form": {
+            "min_length": "პაროლი უნდა იყოს მინიმუმ 8 სიმბოლო",
+            "uppercase": "საჭიროა მინიმუმ ერთი დიდი ასო",
+            "lowercase": "საჭიროა მინიმუმ ერთი პატარა ასო",
+            "number": "საჭიროა მინიმუმ ერთი ციფრი",
+            "special": "საჭიროა მინიმუმ ერთი სპეციალური სიმბოლო"
+          }
+        },
+        "confirm_password": {
+          "label": "ახალი პაროლის დადასტურება",
+          "placeholder": "დაადასტურე ახალი პაროლი",
+          "form": {
+            "match": "პაროლები არ ემთხვევა"
+          }
+        }
+      },
+      "notifications": {
+        "label": "შეტყობინებები",
+        "description": "მართე შეტყობინებების პარამეტრები.",
+        "push_notifications": {
+          "label": "Push-შეტყობინებები",
+          "form": {
+            "enable": "Push-შეტყობინებების ჩართვა"
+          },
+          "already_granted": "შეტყობინებების ნებართვა უკვე მოთხოვნილია; შესაცვლელად გადადი ბრაუზერის პარამეტრებში.",
+          "no_enabled": "Push-შეტყობინებების მისაღებად ჩართე შეტყობინებები მოწყობილობის პარამეტრებში.",
+          "open_settings": "მოწყობილობის პარამეტრებზე გადასვლა"
+        }
+      },
+      "data": {
+        "label": "მონაცემები",
+        "description": "შემოიტანე ან გაიტანე შენი მონაცემები.",
+        "importer": {
+          "label": "იმპორტი",
+          "select_source": "აირჩიე წყარო",
+          "instructions_title": "ინსტრუქცია",
+          "browse_prompt": "ჩააგდე ფაილი აქ ან <link>აირჩიე</link>",
+          "browse_prompt_mobile": "შეეხე ფაილის ასარჩევად",
+          "uploading": "იტვირთება…",
+          "processing": "ფაილი მუშავდება…",
+          "upload_error": "ატვირთვა ჩაიშალა, სცადე ხელახლა.",
+          "invalid_file_type": "ეს ფაილის ტიპი ამ წყაროსთვის არ არის მხარდაჭერილი.",
+          "review_title": "გადახედე იმპორტს",
+          "review_summary": "{total}-დან {matched} დაემთხვა",
+          "validate": "იმპორტის დადასტურება",
+          "validate_confirm_description": "ეს ბიბლიოთეკაში შემოიტანს ყველა დამთხვეულ, გამოუტოვებელ ერთეულს. ამის გაუქმება ვერ მოხდება.",
+          "success_title": "იმპორტი დასრულდა",
+          "success_description": "შენი მონაცემები წარმატებით შემოვიტანეთ.",
+          "failed_title": "იმპორტი ჩაიშალა",
+          "failed_description": "ამ იმპორტის დამუშავებისას რამე ვერ გამოვიდა.",
+          "pending_description": "შენი იმპორტი რიგშია და მალე დაიწყება.",
+          "empty": "ჯერ არ არის იმპორტი.",
+          "delete_confirm_description": "ეს იმპორტი და მისი ყველა მომზადებული მონაცემი სამუდამოდ წაიშლება. ამის გაუქმება ვერ მოხდება.",
+          "keep_existing": "დავიტოვო ჩემი",
+          "use_imported": "შემოტანილის გამოყენება",
+          "merge": "შერწყმა",
+          "conflict": "კონფლიქტი",
+          "no_match": "დამთხვევა არ არის",
+          "existing_rating": "ამჟამად: {rating}",
+          "log_column": "ჟურნალი",
+          "actions_column": "მოქმედებები",
+          "categories": {
+            "log_movies": "ფილმები",
+            "log_tv_series": "სერიალები",
+            "bookmarks": "სანახავების სია",
+            "playlists": "სიები"
+          },
+          "status": {
+            "pending": "მოლოდინში",
+            "processing": "მუშავდება",
+            "awaiting_review": "ელოდება შემოწმებას",
+            "completed": "დასრულდა",
+            "failed": "ჩაიშალა"
+          }
+        },
+        "exporter": {
+          "label": "ექსპორტი"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "Premium-ზე გადასვლა",
+        "description": "გადადი Premium-ანგარიშზე, რომ {app}-ის ყველა ფუნქციაზე წვდომა გქონდეს."
+      },
+      "header": {
+        "title": "გაფართოვე შენი კინო, მეტი გაუზიარე, მხარი დაუჭირე {app}-ს",
+        "subtitle": "სცადე 1 თვე უფასოდ, შემდეგ {price}/თვეში"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "აქტივობები",
+            "unlimited_activities": {
+              "label": "შეუზღუდავი აქტივობები",
+              "description": "შეფასებები, მოწონებები, მიმოხილვები, სანახავების სია და რეკომენდაციები"
+            },
+            "favorites": {
+              "label": "რჩეულები",
+              "description": "დაამატე საყვარელი ფილმები შენს პროფილზე"
+            }
+          },
+          "playlists": {
+            "label": "სიები",
+            "unlimited_playlists": {
+              "label": "შეუზღუდავი",
+              "description": "შექმენი შეუზღუდავი რაოდენობის სია"
+            },
+            "shared_playlists": {
+              "label": "გაზიარებული",
+              "description": "გაუზიარე სიები სხვა მომხმარებლებს"
+            },
+            "collaborative_playlists": {
+              "label": "ერთობლივი",
+              "description": "შექმენი ერთობლივი სიები სხვა მომხმარებლებთან"
+            }
+          },
+          "feed": {
+            "label": "ფიდი",
+            "followees": {
+              "label": "მიდევნებული მომხმარებლები",
+              "description": "ნახე იმ მომხმარებლების აქტივობები, რომლებსაც მიჰყვები"
+            },
+            "cast_and_crew": {
+              "label": "მსახიობები და გადამღები ჯგუფი",
+              "description": "მიჰყევი ფილმებში მონაწილე ადამიანების აქტივობას"
+            }
+          },
+          "support": {
+            "label": "მხარდაჭერა",
+            "team": {
+              "label": "დაუჭირე მხარი {app}-ის გუნდს"
+            },
+            "credits": {
+              "label": "ტიტრები",
+              "description": "შენი პროფილი აპლიკაციის ტიტრებში"
+            }
+          }
+        },
+        "success": {
+          "label": "გმადლობთ მხარდაჭერისთვის!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} — @{username}-ის სია",
+        "description": "აღმოაჩინე @{username}-ის ფილმების სია {app}-ზე."
+      },
+      "actions": {
+        "delete": {
+          "description": "ეს სამუდამოდ წაშლის <important>{title}</important>-ს შენი სიებიდან."
+        }
+      },
+      "search": {
+        "placeholder": "ძიება სიაში..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "ნამდვილად გინდა <important>{title}</important> წაშალო შენი სიიდან?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "შეიყვანე სიის სათაური"
+        },
+        "description": {
+          "placeholder": "შეიყვანე სიის აღწერა"
+        },
+        "error": {
+          "format": "აღწერა არ უნდა შეიცავდეს ცარიელ ხაზებს და არ უნდა შედგებოდეს მხოლოდ შორისებისგან."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "აღმოაჩინე @{username}-ის პროფილი {app}-ზე."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} არის {directors}-ის ფილმი, რომელიც გამოვიდა {year} წელს. სიუჟეტი: {overview}",
+        "description_no_director": "{title} არის ფილმი, რომელიც გამოვიდა {year} წელს. სიუჟეტი: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • სიები",
+          "description": "აღმოაჩინე ყველა სია, რომელშიც ფილმი {title} შედის."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • მიმოხილვები",
+          "description": "აღმოაჩინე ფილმის {title} ყველა მიმოხილვა."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} არის {creators}-ის სერიალი, რომლის პირველი ჩვენებაც {year} წელს მოხდა. სიუჟეტი: {overview}",
+        "description_no_creator": "{title} არის სერიალი, რომლის პირველი ჩვენებაც {year} წელს მოხდა. სიუჟეტი: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • სიები",
+          "description": "აღმოაჩინე ყველა სია, რომელშიც სერიალი {title} შედის."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • მიმოხილვები",
+          "description": "აღმოაჩინე სერიალის {title} ყველა მიმოხილვა."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • სეზონები",
+          "description": "აღმოაჩინე სერიალის {title} ყველა სეზონი."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • სეზონი {number}",
+            "description": "აღმოაჩინე სერიალის {title} {number}-ე სეზონის ყველა ეპიზოდი."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • ფილმები",
+          "description": "აღმოაჩინე ყველა ფილმი, რომელშიც {name} ითამაშა ან მონაწილეობდა."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • სერიალები",
+          "description": "აღმოაჩინე ყველა სერიალი, რომელშიც {name} ითამაშა ან მონაწილეობდა."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "{title}-ის მიმოხილვა @{username}-ისგან"
+      },
+      "create": {
+        "metadata": {
+          "title": "დაწერე მიმოხილვა {title}-ზე",
+          "description": "გაუზიარე შენი აზრი {title}-ზე."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "აღმოაჩინე Paradise Pictures",
+        "description": "დაიწყე მოგზაურობა კუნძულისა და მისი მრავალფეროვანი ლანდშაფტების აღმოსაჩენად. ურიცხვი ფილმი, რომელიც აქ ცხოვრობს, საკუთარ სამყაროშია მოთავსებული. მოახერხებ ყველა კუნჭულის მოვლას?"
+      }
+    },
+    "legal": {
+      "label": "იურიდიული",
+      "description": "წაიკითხე {app}-ის იურიდიული დოკუმენტები.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "მოხმარების წესები",
+          "description": "წაიკითხე {app}-ის მოხმარების წესები."
+        },
+        "sections": {
+          "intro": "მოხმარების წინამდებარე წესები (შემდგომში „წესები“) არეგულირებს {app} აპლიკაციაზე წვდომასა და მის გამოყენებას. აპლიკაციას გამოსცემს Loup (შემდგომში „გამომცემელი“), რომელიც პარიზშია დაფუძნებული. {app}-ზე რეგისტრაცია ნიშნავს ამ წესების უპირობო მიღებას.",
+          "presentation": {
+            "label": "1. სერვისის აღწერა",
+            "content": "{app} არის უფასო აპლიკაცია, რომელიც მომხმარებლებს საშუალებას აძლევს იხილონ ინფორმაცია ფილმებზე, გამოაქვეყნონ მიმოხილვები, შეაფასონ ნამუშევრები და შექმნან პერსონალური სიები."
+          },
+          "account": {
+            "label": "2. ანგარიში და უსაფრთხოება",
+            "content": "კონტრიბუციის ფუნქციებზე წვდომა ანგარიშის შექმნას მოითხოვს. მომხმარებელი პასუხისმგებელია საავტორიზაციო მონაცემების კონფიდენციალურობაზე. თაღლითური გამოყენების ან ანგარიშის გატეხვის ეჭვის შემთხვევაში მომხმარებელმა დაუყოვნებლივ უნდა დაუკავშირდეს მხარდაჭერას: <email></email>."
+          },
+          "conduct": {
+            "label": "3. ქცევის წესები",
+            "content": "მომხმარებელი იღებს ვალდებულებას, თავის მიმოხილვებსა და სიებში დარჩეს თავაზიანი და პატივისცემით განწყობილი. მკაცრად იკრძალება: სიძულვილის, ცილისმწამებლური ან რასისტული გამონათქვამები, შევიწროება, ასევე სპამი და არასასურველი კომერციული რეკლამა. გამომცემელი იტოვებს უფლებას წაშალოს ამ წესების დამრღვევი ნებისმიერი კონტენტი და შეაჩეროს შესაბამისი ანგარიში გაფრთხილების გარეშე."
+          },
+          "child_safety": {
+            "label": "4. ბავშვთა უსაფრთხოების პოლიტიკა",
+            "content": "{app} ატარებს მკაცრი ნულოვანი ტოლერანტობის პოლიტიკას ბავშვების სექსუალური ძალადობისა და ექსპლუატაციის (CSAE) მიმართ. {app}-ზე მკაცრად და უპირობოდ იკრძალება ნებისმიერი ისეთი კონტენტის შექმნა, ატვირთვა, შენახვა, გავრცელება, მოთხოვნა ან პოპულარიზაცია, რომელიც არასრულწლოვნებს სექსუალიზებს, ექსპლუატაციას უწევს ან სხვაგვარად საფრთხეში აყენებს. ყველა ანგარიში, რომელიც ამ პოლიტიკას დაარღვევს, დაუყოვნებლივ და სამუდამოდ დაიბლოკება, ხოლო გამომცემელი შესაბამის კონტენტს, ყველა ხელმისაწვდომ მომხმარებლის მონაცემთან ერთად, მოქმედი კანონმდებლობის შესაბამისად მიაწოდებს ორგანიზაციას National Center for Missing & Exploited Children (NCMEC) და/ან კომპეტენტურ სამართალდამცავ ორგანოებს. ყველა მომხმარებელი, რომელიც შეიტყობს CSAE-ს შემადგენელი კონტენტის ან ქცევის შესახებ, ვალდებულია დაუყოვნებლივ შეატყობინოს: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. ინტელექტუალური საკუთრება",
+            "content": "მომხმარებელი რჩება მის მიერ დაწერილი მიმოხილვების მფლობელად. თუმცა {app}-ზე გამოქვეყნებით ის გამომცემელს აძლევს უფასო, არაექსკლუზიურ ლიცენზიას, რათა ეს კონტენტი აპლიკაციის ფარგლებში აჩვენოს, გაამრავლოს და ტექნიკურად მოარგოს. {app}-ის ვიზუალური ელემენტები, კოდი და დიზაინი გამომცემლის ექსკლუზიური საკუთრებაა."
+          },
+          "privacy": {
+            "label": "6. პერსონალური მონაცემები",
+            "content": "შენი კონფიდენციალურობის დაცვა ჩვენი უპირობო პრიორიტეტია. {app} არანაირ პერსონალურ მონაცემს არ ყიდის, არ აქირავებს და არ უზიარებს კომერციულ ან სარეკლამო მესამე მხარეებს. შეგროვებული მონაცემები (ელფოსტა, მომხმარებლის სახელი, აქტივობა აპლიკაციაში) გამოიყენება მხოლოდ სერვისის მუშაობისა და ანგარიშის მართვისთვის. წვდომის, შესწორების ან წაშლის უფლებებს (GDPR) ამ მისამართზე მიმართვით გამოიყენებ: <email></email>."
+          },
+          "cookies": {
+            "label": "7. ქუქი-ფაილები და ტრეკერები",
+            "content": "{app} არ იყენებს არანაირ სარეკლამო ქუქი-ფაილს და არანაირ მესამე მხარის ქცევით ტრეკერს. გამოიყენება მხოლოდ ორი ტიპის ტექნიკური ქუქი-ფაილი: ავთენტიკაციის ქუქი (რომ შესული დარჩე) და ენის პარამეტრის ქუქი (რომ შენი არჩევანი დაიმახსოვროს). ვინაიდან ეს ქუქი-ფაილები სერვისისთვის მკაცრად აუცილებელია, მათზე წინასწარი თანხმობა არ მოითხოვება."
+          },
+          "ads": {
+            "label": "8. რეკლამა",
+            "content": "აპლიკაცია ამჟამად არანაირ რეკლამას არ შეიცავს. თუ ეს მოდელი შეიცვლება, მომხმარებლები ამ წესების განახლებით შეიტყობენ."
+          },
+          "liability": {
+            "label": "9. პასუხისმგებლობა",
+            "content": "გამომცემელი ცდილობს, {app} ხელმისაწვდომი იყოს დღე-ღამის განმავლობაში, თუმცა არ იძლევა გარანტიას შეფერხებებისა და ხარვეზების სრულ არარსებობაზე. ფილმების შესახებ ინფორმაცია მესამე მხარის მონაცემთა ბაზებიდან მოდის; გამომცემელი არ არის პასუხისმგებელი მათში არსებულ შესაძლო უზუსტობებზე."
+          },
+          "law": {
+            "label": "10. მოქმედი სამართალი",
+            "content": "ეს წესები ფრანგულ სამართალს ემორჩილება. დავის შემთხვევაში, რომელიც <email></email>-ის მეშვეობით მშვიდობიანად ვერ გადაწყდება, ექსკლუზიური იურისდიქცია აქვს პარიზის სასამართლოებს."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "კონფიდენციალურობის პოლიტიკა",
+          "description": "წაიკითხე {app}-ის კონფიდენციალურობის პოლიტიკა."
+        },
+        "sections": {
+          "intro": "მონაცემთა დაცვა {app}-ის ფილოსოფიის გულშია. ეს პოლიტიკა დეტალურად აღწერს, რა მონაცემებს ვაგროვებთ, რისთვის ვაგროვებთ და როგორ ვიცავთ მათ. მოკლედ: ჩვენ შენს მონაცემებს არ ვყიდით.",
+          "controller": {
+            "label": "1. მონაცემთა დამმუშავებელი",
+            "content": "მონაცემთა დამმუშავებელია Loup, რომელიც პარიზში (საფრანგეთი) არის დაფუძნებული. კონფიდენციალურობის ყველა საკითხზე დაგვიკავშირდი: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. შეგროვებული მონაცემები",
+            "content": "ჩვენ ვაგროვებთ მხოლოდ იმ მონაცემებს, რომლებიც აპლიკაციის მუშაობისთვის მკაცრად აუცილებელია: შენს ელფოსტას (ავთენტიკაციისთვის), მომხმარებლის სახელს და გამოყენების მონაცემებს (შეფასებული ფილმები, მიმოხილვები, სიები). პაროლები ინახება დაშიფრული (ჰეშირებული) და დაცული სახით."
+          },
+          "purpose": {
+            "label": "3. დამუშავების მიზანი",
+            "content": "შენი მონაცემები მუშავდება მხოლოდ იმისთვის, რომ: შეძლო ანგარიშის შექმნა და მართვა, გამოჩნდეს შენი სიები და შეფასებები და უზრუნველყოფილი იყოს სერვისის ტექნიკური მუშაობა. შენს მონაცემებს სარეკლამო პროფილირებისთვის არ ვიყენებთ."
+          },
+          "sharing": {
+            "label": "4. მონაცემების გაზიარება",
+            "content": "შენი პერსონალური მონაცემები არასდროს იყიდება, არ ქირავდება და არ გადაეცემა მესამე მხარეებს. მათი ჰოსტინგი შესაძლოა ჩვენმა ტექნიკურმა მომწოდებლებმა განახორციელონ (ჰოსტინგი, ტრანზაქციული ელფოსტის სერვისი), რომლებიც მკაცრი კონფიდენციალურობით არიან შეზღუდულნი და GDPR-ს შეესაბამებიან."
+          },
+          "retention": {
+            "label": "5. შენახვის ვადა",
+            "content": "შენი მონაცემები ინახება მანამ, სანამ ანგარიში აქტიურია. თუ გადაწყვებ ანგარიშის წაშლას, ყველა შენი პერსონალური მონაცემი (ელფოსტა, მომხმარებლის სახელი, მიმოხილვები) სამუდამოდ წაიშლება ჩვენი მონაცემთა ბაზებიდან."
+          },
+          "rights": {
+            "label": "6. შენი უფლებები (GDPR)",
+            "content": "რეგულაციის შესაბამისად, გაქვს უფლება მიიღო წვდომა, შეასწორო, გადაიტანო და წაშალო შენი მონაცემები. ამ უფლებებს ნებისმიერ დროს გამოიყენებ პირდაპირ აპლიკაციაში ან ამ მისამართზე მოწერით: <email></email>."
+          },
+          "cookies": {
+            "label": "7. ქუქი-ფაილები",
+            "content": "როგორც ჩვენს მოხმარების წესებშია აღნიშნული, ვიყენებთ მხოლოდ აუცილებელ ტექნიკურ ქუქი-ფაილებს (სესია და ენა). შენს მოწყობილობაზე არანაირი მესამე მხარის სარეკლამო ან თვალთვალის ქუქი-ფაილი არ იდება."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "მოძებნე ფილმი, სერიალი, სია, პიროვნება ან მომხმარებელი..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "ნამდვილად გინდა ეს ნამუშევარი ნანახებიდან ამოიღო? თუ შეფასება ან მიმოხილვა გაქვს, ისინიც წაიშლება."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "ნამდვილად გინდა სერიალის დასრულება? ყველა სეზონის ყველა ეპიზოდი ნანახად მოინიშნება."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "ნამდვილად გინდა {seasonNumber}-ე სეზონის დასრულება? სეზონის ყველა ეპიზოდი ნანახად მოინიშნება."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "რომ აქ აქტივობა გამოჩნდეს, შენ ან მომხმარებლებმა, რომლებსაც მიჰყვები, უნდა შეაფასოთ ფილმები, სერიალები, ..."
+    },
+    "feed_person": {
+      "message": "რომ აქ აქტივობა გამოჩნდეს, უნდა მიჰყვე ფილმებსა თუ სერიალებში მონაწილე ადამიანებს."
+    },
+    "playlists": {
+      "items": {
+        "empty": "ამ სიაში ფილმები ან სერიალები არ არის. დაამატე რამდენიმე, რომ შეავსო!"
+      },
+      "add_to": {
+        "empty": "სიები არ გაქვს. შექმენი ერთი, რომ ფილმები ან სერიალები დაამატო და იოლად იპოვო!"
+      },
+      "saved": {
+        "empty": "შენახული სიები არ გაქვს. შეინახე სია, რომ ბიბლიოთეკაში იოლად იპოვო!"
+      },
+      "members": {
+        "empty": "ამ სიას წევრები არ აქვს. დაამატე რამდენიმე, რომ სხვებთან ერთად იმუშაო ერთ სიაზე!",
+        "search": "მოძებნე მომხმარებლები სიაში დასამატებლად..."
+      }
+    },
+    "follow-requests": {
+      "empty": "მოლოდინში მიდევნების მოთხოვნები არ გაქვს. როცა გექნება, აქ გამოჩნდება!"
+    },
+    "recos": {
+      "empty": "რეკომენდაციები არ გაქვს. როცა გექნება, აქ გამოჩნდება!",
+      "send_to": {
+        "empty": "არავინ გყავს, ვისაც რეკომენდაციას გაუგზავნი. რეკომენდაციის გასაგზავნად მეგობრები უნდა იყოთ (ორმხრივი მიდევნება)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "ჯერ არაფერი შეგინახავს. როცა შეინახავ, აქ გამოჩნდება!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user>-მა გირჩია ფილმი <movie></movie>"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user>-მა გირჩია სერიალი <tv_series></tv_series>"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user>-მა ნახა ფილმი <movie></movie>, რომელიც ურჩიე"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user>-მა ნახა სერიალი <tv_series></tv_series>, რომელიც ურჩიე"
+    },
+    "follower_created": {
+      "description": "<user></user> დაგიწყო მიდევნება"
+    },
+    "follower_accepted": {
+      "description": "<user></user>-მა მიიღო შენი მიდევნების მოთხოვნა"
+    },
+    "follower_request": {
+      "description": "<user></user>-ს უნდა, რომ მოგყვეს"
+    },
+    "friend_created": {
+      "description": "<user></user> ახლა შენი მეგობარია"
+    }
+  }
+}

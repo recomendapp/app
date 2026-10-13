@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "Ett annat sätt att upptäcka film",
+    "description": "{app} är ett socialt nätverk för filmälskare. Upptäck, dela och utforska filmer och serier med dina vänner."
+  },
+  "common": {
+    "messages": {
+      "welcome": "Välkommen",
+      "welcome_to_app": "Välkommen till {app}",
+      "hello": "Hej",
+      "greeting_with_name": "{timeOfDay, select, morning {God morgon, {name}} afternoon {God dag, {name}} evening {God kväll, {name}} night {God natt, {name}} other {Hej, {name}}}",
+      "click_here": "Klicka här",
+      "see_more": "Se mer",
+      "see_more_details": "Se mer information",
+      "more": "Mer",
+      "view_profile": "Se profilen",
+      "library": "Bibliotek",
+      "watchlist": "Watchlist",
+      "for_later": "Till senare",
+      "heart_pick": "{count, plural, one {hjärtefavorit} other {hjärtefavoriter}}",
+      "add_to_heart_picks": "Lägg till bland hjärtefavoriterna",
+      "remove_from_heart_picks": "Ta bort från hjärtefavoriterna",
+      "add_rating": "Lägg till ett betyg",
+      "edit_rating": "Ändra betyget",
+      "remove_rating": "Ta bort betyget",
+      "share_my_rating": "Dela mitt betyg",
+      "share_review": "Dela recensionen",
+      "show_likes_count": "Visa antal likes",
+      "show_comments_count": "Visa antal kommentarer",
+      "add_to_watchlist": "lägg till i watchlist",
+      "remove_from_watchlist": "ta bort från watchlist",
+      "no_results": "inga resultat",
+      "no_results_for": "Inga resultat för <strong>{query}</strong>",
+      "no_followees": "Du följer ingen",
+      "no_followers": "Inga följare",
+      "no_rating": "Inget betyg",
+      "must_watch_to_review": "du måste ha sett det här verket för att kunna betygsätta det",
+      "review_cannot_be_empty": "recensionen får inte vara tom",
+      "no_activity": "ingen aktivitet",
+      "followers_ratings": "följarnas betyg",
+      "added_by": "tillagd av",
+      "sort_by": "sortera efter",
+      "sort_order": "sorteringsordning",
+      "go_to_film": "gå till filmen",
+      "go_to_tv_series": "gå till serien",
+      "go_to_user": "gå till användaren",
+      "go_to_person": "gå till personen",
+      "go_to_activity": "gå till aktiviteten",
+      "go_to_playlist": "gå till spellistan",
+      "go_to_review": "gå till recensionen",
+      "go_to_director": "{count, plural, one {gå till regissören} other {gå till regissörerna}}",
+      "go_to_creator": "{count, plural, one {gå till skaparen} other {gå till skaparna}}",
+      "show_director": "{count, plural, one {visa regissören} other {visa regissörerna}}",
+      "show_creator": "{count, plural, one {visa skaparen} other {visa skaparna}}",
+      "show_credit": "{count, plural, one {visa medverkan} other {visa medverkande}}",
+      "credits": "eftertexter",
+      "view_recommendation": "{count, plural, one {se recot} other {se recos}}",
+      "view_directors": "{count, plural, one {se regissören} other {se regissörerna}}",
+      "no_director": "ingen regissör",
+      "view_comment": "{count, plural, one {se kommentaren} other {se kommentarerna}}",
+      "add_comment": "{count, plural, one {lägg till en kommentar} other {lägg till kommentarer}}",
+      "edit_comment": "{count, plural, one {ändra kommentaren} other {ändra kommentarerna}}",
+      "delete_comment": "Ta bort kommentaren",
+      "do_you_really_want_to_delete_this_comment": "Vill du verkligen ta bort den här kommentaren?",
+      "comment_deleted": "Den här kommentaren har tagits bort",
+      "write_your_comment_here": "Skriv en kommentar...",
+      "reply": "Svara",
+      "replies_count": "{count, plural, one {# svar} other {# svar}}",
+      "view_replies": "Visa {count, plural, one {# svar} other {# svar}}",
+      "hide_replies": "Dölj svaren",
+      "load_more_replies": "Visa fler svar",
+      "get_started": "kom igång",
+      "get_started_its_free": "nu kör vi 🎬, det är gratis!",
+      "import": "Importera",
+      "upgrade_to_plan": "byt till {plan}",
+      "choose_subscription_recurrence": "välj hur ofta du vill betala för din prenumeration",
+      "compare_plans": "jämför planerna",
+      "save_up_to_percent": "spara upp till {percent}%",
+      "is_empty": "Det är lite tomt här",
+      "add_to_playlist": "lägg till i en spellista",
+      "send_to_friend": "skicka till en vän",
+      "pin_to_profile": "Fäst på profilen",
+      "unpin_from_profile": "Lossa från profilen",
+      "pinned": "Fäst",
+      "unpinned": "Lossad",
+      "no_pinned": "Inga fästa objekt",
+      "pinned_limit_reached": "Du har nått det maximala antalet fästa objekt — lossa ett för att lägga till ett nytt",
+      "custom_sort": "egen sortering",
+      "quick_add": "snabbt tillägg",
+      "favorite_films": "favoritfilmer",
+      "follow": "följ",
+      "followed": "följd",
+      "request_sent": "Förfrågan skickad",
+      "follow_requests": "följarförfrågningar",
+      "no_follow_requests": "inga följarförfrågningar",
+      "follower": "{count, plural, one {följare} other {följare}}",
+      "follower_count": "{count} följare",
+      "see_followers": "se följarna",
+      "followee": "{count, plural, one {följd} other {följda}}",
+      "followee_count": "{count} följda",
+      "see_followees": "se vilka du följer",
+      "last_activities": "senaste aktiviteterna",
+      "last_updated": "senast uppdaterad",
+      "last_updated_at_date": "senast uppdaterad den {date}",
+      "show_all": "visa alla",
+      "this_account_is_private": "det här kontot är privat",
+      "follow_to_see_activities": "följ för att se aktiviteterna",
+      "review": "{count, plural, one {recension} other {recensioner}}",
+      "no_overview": "ingen synopsis",
+      "cast": "skådespelare",
+      "no_cast": "inga skådespelare",
+      "recent": "senaste",
+      "popular": "populär",
+      "popularity": "popularitet",
+      "no_reviews": "Inga recensioner",
+      "no_playlists": "Inga spellistor",
+      "no_playlists_found": "Inga spellistor hittades",
+      "no_films": "Inga filmer",
+      "no_tv_series": "Inga serier",
+      "view_activity": "se aktiviteten",
+      "comment_count": "{count, plural, one {# kommentar} other {# kommentarer}}",
+      "write_review": "skriv en recension",
+      "new_review": "ny recension",
+      "edit_review": "ändra recensionen",
+      "review_by": "recension av {name}",
+      "my_review": "{count, plural, one {min recension} other {mina recensioner}}",
+      "add_review": "lägg till en recension",
+      "tv_series": "{count, plural, one {serie} other {serier}}",
+      "film": "{count, plural, one {film} other {filmer}}",
+      "movie": "{count, plural, one {film} other {filmer}}",
+      "media": "{count, plural, one {titel} other {titlar}}",
+      "tv_season": "{count, plural, one {säsong} other {säsonger}}",
+      "tv_season_count": "{count, plural, one {# säsong} other {# säsonger}}",
+      "tv_season_value": "säsong {number}",
+      "tv_season_short": "S{number}",
+      "tv_episode": "{count, plural, one {avsnitt} other {avsnitt}}",
+      "tv_episode_count": "{count, plural, one {# avsnitt} other {# avsnitt}}",
+      "tv_episode_value": "avsnitt {number}",
+      "tv_episode_short": "S{seasonNumber}E{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {specialavsnitt} other {specialavsnitt}}",
+      "first_air_date": "första sändning",
+      "last_air_date": "senaste sändning",
+      "see_film": "se filmen",
+      "see_tv_series": "se serien",
+      "watch_film_title": "se {title}",
+      "watch_film_streaming_or_download": "Se <important>{title}</important> som streaming eller laglig nedladdning",
+      "download": "ladda ner",
+      "downloaded": "nedladdad",
+      "person": "{count, plural, one {person} other {personer}}",
+      "top_result": "bästa resultat",
+      "user": "{count, plural, one {användare} other {användare}}",
+      "reco": "{count, plural, one {reco} other {recos}}",
+      "my_recos": "mina recos",
+      "item": "{count, plural, one {objekt} other {objekt}}",
+      "item_count": "{count, plural, one {# objekt} other {# objekt}}",
+      "type": "typ",
+      "complete": "slutför",
+      "completed": "slutförd",
+      "collection": "{count, plural, one {samling} other {samlingar}}",
+      "most_recent": "senaste",
+      "most_popular": "mest populära",
+      "most_old": "äldsta",
+      "known_for": "Känd för",
+      "release_date": "premiärdatum",
+      "last_appearance_date": "senaste medverkan",
+      "vote_average": "snittbetyg",
+      "added": "tillagd",
+      "added_date": "tillagd datum",
+      "added_at": "tillagd den",
+      "add": "lägg till",
+      "playlist_name": "spellistans namn",
+      "updated_at": "uppdaterad den",
+      "created_at": "skapad den",
+      "likes": "likes",
+      "likes_count": "antal likes",
+      "search_media": "sök en titel",
+      "search_film": "sök en film",
+      "start_typing_to_search_films": "börja skriva för att söka filmer",
+      "search_tv_series": "sök en serie",
+      "start_typing_to_search_tv_series": "börja skriva för att söka serier",
+      "search_person": "sök en person",
+      "start_typing_to_search_persons": "börja skriva för att söka personer",
+      "search_user": "{count, plural, one {sök en användare} other {sök användare}}",
+      "start_typing_to_search_users": "börja skriva för att söka användare",
+      "search_playlist": "sök en spellista",
+      "start_typing_to_search_playlists": "börja skriva för att söka spellistor",
+      "search_film_or_tv_series": "sök en film eller en serie",
+      "watched_date": "{count, plural, one {visningsdatum} other {visningsdatum}}",
+      "mark_as_watched": "markera som sedd",
+      "remove_from_watched": "ta bort från sedda",
+      "rating": "betyg",
+      "create_a_playlist": "skapa en spellista",
+      "by_name": "av {name}",
+      "reset": "återställ",
+      "job": "{count, plural, one {roll} other {roller}}",
+      "department": "{count, plural, one {avdelning} other {avdelningar}}",
+      "share_title_via": "Dela <strong>{title}</strong> via",
+      "share_title": "Dela <strong>{title}</strong>",
+      "link": "länk",
+      "copy_link": "kopiera länken",
+      "copied": "Kopierad",
+      "other": "{count, plural, one {Annat} other {Andra}}",
+      "via": "via",
+      "edit": "ändra",
+      "guest": "{count, plural, one {gäst} other {gäster}}",
+      "are_u_sure": "Är du säker?",
+      "backward": "föregående",
+      "forward": "nästa",
+      "back": "tillbaka",
+      "next": "nästa",
+      "notification": "{count, plural, one {notis} other {notiser}}",
+      "see_notifications": "se notiserna",
+      "open_social_panel": "öppna den sociala panelen",
+      "cancel_change": "{count, plural, one {ångra ändringen} other {ångra ändringarna}}",
+      "do_you_really_want_to_cancel_change": "Vill du verkligen ångra {count, plural, one {ändringen} other {ändringarna}}?",
+      "continue_editing": "fortsätt redigera",
+      "confirm": "bekräfta",
+      "terms_of_use": "användarvillkor",
+      "privacy_policy": "integritetspolicy",
+      "request_made": "förfrågan skickad",
+      "request_canceled": "förfrågan avbruten",
+      "cancel_request": "avbryt förfrågan",
+      "open_menu": "öppna menyn",
+      "feed": "flöde",
+      "about": "om oss",
+      "home": "hem",
+      "search": "sök",
+      "explore": "utforska",
+      "shop": "butik",
+      "help": "hjälp",
+      "legal": "juridik",
+      "setting": "{count, plural, one {inställning} other {inställningar}}",
+      "logout": "logga ut",
+      "to_watch": "att se",
+      "reco_by_your_friends": "recos från dina vänner",
+      "friends_playlists": "dina vänners spellistor",
+      "latest_activity": "{count, plural, one {senaste aktiviteten} other {senaste aktiviteterna}}",
+      "discover_users": "upptäck användare",
+      "most_recommended": "mest rekommenderade",
+      "archive": "arkivera",
+      "unarchive": "ta ur arkivet",
+      "mark_as_read": "{count, plural, one {markera som läst} other {markera som lästa}}",
+      "mark_as_unread": "{count, plural, one {markera som oläst} other {markera som olästa}}",
+      "accept": "acceptera",
+      "accepted": "accepterad",
+      "decline": "avslå",
+      "declined": "avslagen",
+      "request_accepted": "{count, plural, one {förfrågan accepterad} other {förfrågningar accepterade}}",
+      "request_declined": "{count, plural, one {förfrågan avslagen} other {förfrågningar avslagna}}",
+      "unread": "{count, plural, one {oläst} other {olästa}}",
+      "archived": "{count, plural, one {arkiverad} other {arkiverade}}",
+      "no_notifications": "inga notiser",
+      "all": "alla",
+      "mark_all_as_read": "markera allt som läst",
+      "archive_all": "arkivera allt",
+      "archive_all_read": "arkivera allt som är läst",
+      "please_login": "logga in",
+      "like": "gilla",
+      "unlike": "sluta gilla",
+      "unfollow": "sluta följa",
+      "name": "namn",
+      "add_a_name": "lägg till ett namn",
+      "add_a_description": "lägg till en beskrivning",
+      "visibility": "synlighet",
+      "search_an_user": "sök en användare",
+      "select_an_item_to_add_to_playlist": "välj ett objekt att lägga till i spellistan",
+      "select_a_film_to_add_to_playlist": "välj en film att lägga till i spellistan",
+      "select_a_tv_series_to_add_to_playlist": "välj en serie att lägga till i spellistan",
+      "add_one_or_more_items_to": "Lägg till ett eller flera objekt i <important>{title}</important>",
+      "add_one_or_more_films_to": "Lägg till en eller flera filmer i <important>{title}</important>",
+      "add_one_or_more_tv_series_to": "Lägg till en eller flera serier i <important>{title}</important>",
+      "manage_playlist_access_rights": "hantera spellistans behörigheter",
+      "add_guest": "{count, plural, one {lägg till en gäst} other {lägg till gäster}}",
+      "manage_members": "hantera medlemmarna",
+      "no_member": "inga medlemmar",
+      "add_member": "{count, plural, one {lägg till en medlem} other {lägg till medlemmar}}",
+      "manage_guests": "hantera gästerna",
+      "add_guests_to_your_playlist": "lägg till gäster i din spellista",
+      "select_users_to_add_to_playlist": "välj användare att lägga till i spellistan",
+      "select_users_to_send_reco": "välj vem recot ska skickas till",
+      "select_playlists_to_add_the_item": "välj vilka spellistor objektet ska läggas till i",
+      "send": "skicka",
+      "sent": "skickad",
+      "select_row": "välj raden",
+      "select_all": "välj alla",
+      "no_selected_users": "inga användare valda",
+      "selection_count": "{number} av {total} {type} valda",
+      "about_title": "om {title}",
+      "detail": "{count, plural, one {detalj} other {detaljer}}",
+      "genre": "{count, plural, one {genre} other {genrer}}",
+      "male": "{count, plural, one {man} other {män}}",
+      "female": "{count, plural, one {kvinna} other {kvinnor}}",
+      "non_binary": "{count, plural, one {icke-binär} other {icke-binära}}",
+      "unspecified": "ej angivet",
+      "date_of_birth": "födelsedatum",
+      "date_of_death": "dödsdatum",
+      "place_of_birth": "födelseort",
+      "age_years": "{count} {count, plural, one {år} other {år}}",
+      "biography": "biografi",
+      "no_biography_available": "ingen biografi tillgänglig",
+      "no_information_available": "ingen information tillgänglig",
+      "already_sent": "redan skickad",
+      "already_watched": "redan sedd",
+      "already_added": "redan tillagd",
+      "recommend_to_friend_to_discover": "Rekommendera <strong>{title}</strong> till en vän som ska upptäcka den",
+      "add_to_one_or_more_playlists": "Lägg till <strong>{title}</strong> i en eller flera av dina spellistor",
+      "my_playlist": "{count, plural, one {min spellista} other {mina spellistor}}",
+      "what_is_title": "Vad är <strong>{title}</strong>?",
+      "try_again": "Försök igen",
+      "error": "fel",
+      "not_logged_in": "du är inte inloggad",
+      "an_error_occurred": "Ett fel uppstod",
+      "playlist_not_found": "spellistan hittades inte",
+      "user_not_found": "användaren hittades inte",
+      "film_not_found": "filmen hittades inte",
+      "media_not_found": "titeln hittades inte",
+      "review_not_found": "recensionen hittades inte",
+      "person_not_found": "personen hittades inte",
+      "tv_series_not_found": "serien hittades inte",
+      "tv_episode_not_found": "avsnittet hittades inte",
+      "tv_season_not_found": "säsongen hittades inte",
+      "wrong_arguments": "felaktiga argument",
+      "no_media_found": "ingen titel hittades",
+      "unknown_action": "okänd åtgärd",
+      "no_user_found": "ingen användare hittades",
+      "no_tv_episodes": "inga avsnitt",
+      "save": "spara",
+      "saved": "sparad",
+      "create": "skapa",
+      "film_count": "{count, plural, one {# film} other {# filmer}}",
+      "tv_series_count": "{count, plural, one {# serie} other {# serier}}",
+      "login": "logga in",
+      "signup": "skapa konto",
+      "navigation": "navigering",
+      "delete": "Ta bort",
+      "remove": "Ta bort",
+      "deleted": "Borttagen",
+      "share": "dela",
+      "duplicate": "duplicera",
+      "duplicated": "duplicerad",
+      "cancel": "Avbryt",
+      "date": "datum",
+      "duration": "längd",
+      "sort": "sortera",
+      "show": "visa",
+      "column": "{count, plural, one {kolumn} other {kolumner}}",
+      "comment": "{count, plural, one {kommentar} other {kommentarer}}",
+      "unknown": "okänd",
+      "community": "community",
+      "cast_and_crew": "skådespelare & team",
+      "soon": "snart",
+      "ios_app": "iOS-app",
+      "android_app": "Android-app",
+      "coming_soon": "Snart tillgänglig",
+      "new_mobile_app": "Ny mobilapp!",
+      "manage": "hantera",
+      "monthly": "månadsvis",
+      "yearly": "årsvis",
+      "day": "dag",
+      "week": "vecka",
+      "month": "månad",
+      "year": "år",
+      "price": "pris",
+      "free": "gratis",
+      "playlist": "{count, plural, one {spellista} other {spellistor}}",
+      "public": "offentlig",
+      "publish": "publicera",
+      "private": "privat",
+      "description": "beskrivning",
+      "details": "detaljer",
+      "profile": "profil",
+      "overview": "synopsis",
+      "no_playlists_saved": "inga sparade spellistor",
+      "camera_permission_denied": "åtkomst till kameran nekades",
+      "photo_library_permission_denied": "åtkomst till bildbiblioteket nekades",
+      "ignore": "ignorera",
+      "ok": "ok",
+      "title": "titel",
+      "skip": "Hoppa över",
+      "undo": "Ångra",
+      "date_published": "publiceringsdatum",
+      "date_created": "skapad datum",
+      "date_updated": "ändringsdatum",
+      "alphabetical": "alfabetisk",
+      "date_added": "tillagd datum",
+      "number_of_likes": "antal likes",
+      "number_of_seasons": "antal säsonger",
+      "add_to_this_playlist": "lägg till i den här spellistan",
+      "save_to_library": "spara i biblioteket",
+      "remove_from_library": "ta bort från biblioteket",
+      "otp": "OTP",
+      "ratings_from_followees": "betyg från dem du följer",
+      "choose_from_the_library": "välj från biblioteket",
+      "take_a_photo": "ta ett foto",
+      "delete_current_image": "ta bort den nuvarande bilden",
+      "edit_image": "ändra bilden",
+      "add_image": "lägg till en bild",
+      "verify_with_a_code": "verifiera med en kod",
+      "order": "ordning",
+      "edit_order": "ändra ordningen",
+      "done": "klar",
+      "can_edit": "får redigera?",
+      "upgrade": "uppgradera",
+      "no_description": "Ingen beskrivning",
+      "no_comment": "Inga kommentarer",
+      "close": "stäng",
+      "edit_playlist": "ändra spellistan",
+      "universe": "universum",
+      "cannot_be_changed": "kan inte ändras",
+      "delete_review": "ta bort recensionen",
+      "do_you_really_want_to_delete_this_review": "Vill du verkligen ta bort den här recensionen?",
+      "user_liked_playlist": "<name></name> gillade en spellista",
+      "user_liked_review": "<name></name> gillade en recension",
+      "runtime": "speltid",
+      "ends_at": "Slutar {value}",
+      "this_user_has_no_activity": "Den här användaren har ingen aktivitet",
+      "notification_archived": "{count, plural, one {notis arkiverad} other {notiser arkiverade}}",
+      "notification_unarchived": "{count, plural, one {notis tagen ur arkivet} other {notiser tagna ur arkivet}}",
+      "notification_marked_as_read": "{count, plural, one {notis markerad som läst} other {notiser markerade som lästa}}",
+      "notification_marked_as_unread": "{count, plural, one {notis markerad som oläst} other {notiser markerade som olästa}}",
+      "or_continue_with": "eller fortsätt med",
+      "message": "{count, plural, one {meddelande} other {meddelanden}}",
+      "story": "{count, plural, one {story} other {stories}}",
+      "new_playlist": "ny spellista",
+      "select_a_type": "välj en typ",
+      "filter": "{count, plural, one {filter} other {filter}}",
+      "hide_watched": "dölj sedda",
+      "show_me_around": "visa mig runt",
+      "artwork_from": "Illustration av <important>{source}</important>",
+      "no_active_subscription": "ingen aktiv prenumeration",
+      "manage_subscription": "hantera prenumerationen",
+      "started_on_date": "startad den: {date}",
+      "last_renewed_on_date": "senast förnyad den: {date}",
+      "version_value": "version {value}",
+      "original_title": "originaltitel",
+      "starring": "med",
+      "write_your_review_here": "skriv din recension här...",
+      "insert": "infoga",
+      "trailer": "{count, plural, one {trailer} other {trailers}}",
+      "list": "{count, plural, one {lista} other {listor}}",
+      "grid": "{count, plural, one {rutnät} other {rutnät}}",
+      "order_asc": "stigande ordning",
+      "order_desc": "fallande ordning",
+      "menu": "meny",
+      "at_least_one_watched_date_required": "minst ett visningsdatum krävs",
+      "viewer": "{count, plural, one {Tittare} other {Tittare}}",
+      "editor": "{count, plural, one {Redigerare} other {Redigerare}}",
+      "admin": "{count, plural, one {Administratör} other {Administratörer}}",
+      "owner": "{count, plural, one {Ägare} other {Ägare}}",
+      "you_dont_have_permission_to_do_this_action": "Du har inte behörighet att utföra den här åtgärden",
+      "in_progress": "pågår",
+      "give_up": "ge upp",
+      "random": "slumpmässig",
+      "reset_password": "Återställ lösenordet",
+      "password_reset": "Lösenordet är återställt",
+      "return_to_login": "Tillbaka till inloggningen",
+      "invalid_code": "Ogiltig kod",
+      "no_token_found": "Ingen token hittades",
+      "first_watched_at": "första visningsdatum",
+      "watched_dates": "visningsdatum",
+      "no_watched_dates": "inga visningsdatum",
+      "select_role": "välj en roll",
+      "select_format": "välj ett format",
+      "theater": "Bio",
+      "physical": "Fysiskt medium",
+      "digital": "Digitalt",
+      "streaming": "Streaming",
+      "you_must_be_premium_to_change_member_role": "Du måste vara premium för att ändra en medlems roll",
+      "already_member": "redan medlem",
+      "email_already_used": "Den här e-postadressen används redan",
+      "email_confirmed": "E-postadressen är bekräftad",
+      "confirmation_email_sent": "Bekräftelsemail skickat",
+      "continue": "Fortsätt",
+      "finish": "Avsluta",
+      "forgot_password": "Glömt lösenordet",
+      "new_password": "Nytt lösenord",
+      "confirm_password": "Bekräfta lösenordet",
+      "password_reseted": "Lösenordet är återställt",
+      "reset_your_password": "Återställ ditt lösenord",
+      "invalid_token": "Ogiltig token",
+      "new_notification": "{count, plural, one {ny notis} other {nya notiser}}",
+      "lets_go": "Nu kör vi!",
+      "update_available": "Uppdatering tillgänglig",
+      "update_available_description": "Uppdatera appen för att få de senaste förbättringarna.",
+      "update_required_title": "Uppdatering krävs",
+      "update_required_description": "Den här versionen av appen stöds inte längre. Uppdatera den för att fortsätta använda Recomend.",
+      "update_app": "Uppdatera",
+      "advertisement": "{count, plural, one {Annons} other {Annonser}}",
+      "pending": "Väntar",
+      "processing": "Pågår",
+      "awaiting_review": "Ska kontrolleras",
+      "failed": "Misslyckad",
+      "data": "{count, plural, one {Data} other {Data}}",
+      "restore": "Återställ",
+      "fix": "Rätta",
+      "not_found": "Hittades inte",
+      "unavailable": "Inte tillgänglig",
+      "star_on_github": "Ge en stjärna på GitHub"
+    },
+    "form": {
+      "email": {
+        "label": "E-postadress",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "E-postadressen är inte giltig",
+          "unavailable": "Den här e-postadressen används redan"
+        },
+        "verified": "E-postadressen är verifierad"
+      },
+      "username": {
+        "label": "Användarnamn",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "Det första tecknet måste vara en bokstav eller en siffra",
+          "double_dot": "Två punkter i rad är inte tillåtet",
+          "ends_with_dot": "En punkt på slutet är inte tillåtet",
+          "format": "Endast bokstäver, siffror och tecknen '_' och '.' är tillåtna",
+          "unavailable": "Det här användarnamnet är redan taget"
+        }
+      },
+      "full_name": {
+        "label": "Namn",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "Endast bokstäver, siffror och mellanslag är tillåtna"
+        }
+      },
+      "password": {
+        "label": "Lösenord",
+        "placeholder": "Ange ditt lösenord",
+        "schema": {
+          "uppercase": "Minst en stor bokstav krävs",
+          "lowercase": "Minst en liten bokstav krävs",
+          "number": "Minst en siffra krävs",
+          "special": "Minst ett specialtecken krävs",
+          "match": "Lösenorden stämmer inte överens"
+        },
+        "confirm": {
+          "label": "Bekräfta lösenordet",
+          "placeholder": "Bekräfta ditt lösenord"
+        }
+      },
+      "length": {
+        "char_min": "minst {count, plural, one {# tecken} other {# tecken}}",
+        "char_max": "högst {count, plural, one {# tecken} other {# tecken}}"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "Endast bokstäver, siffror och mellanslag är tillåtna"
+      },
+      "error": {
+        "too_many_attempts": "För många försök, försök igen senare",
+        "not_received_code": "Har du inte fått koden?",
+        "invalid_code": "Ogiltig kod",
+        "turnstile": "Verifieringen misslyckades, försök igen"
+      },
+      "resend_code": "Skicka koden igen",
+      "resend_email": "Skicka e-postmeddelandet igen",
+      "code_verified": "Koden är verifierad",
+      "code_sent": "Koden är skickad"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "sidan hittades inte",
+        "description": "oj, den här sidan finns inte..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "koll",
+        "description": "Upptäck, betygsätt och dela dina favoritfilmer och -serier."
+      },
+      "recos": {
+        "label": "recos",
+        "description": "Skicka och ta emot dina vänners recos. Allt på samma plats."
+      },
+      "playlists": {
+        "label": "spellistor",
+        "description": "Organisera, dela och bygg spellistor tillsammans."
+      },
+      "feed": {
+        "label": "flöde",
+        "description": "Följ dina vänner och se vad de ser, gillar och betygsätter."
+      },
+      "social_sharing": {
+        "label": "dela socialt",
+        "description": "Dela det du älskar på Instagram eller andra nätverk."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "Koll",
+          "description": "Håll koll på de filmer du har sett"
+        },
+        "recos": {
+          "label": "Recos",
+          "description": "Skicka filmtips till dina vänner"
+        },
+        "explore": {
+          "label": "Utforska",
+          "description": "Upptäck nya filmer på Paradise Pictures, en interaktiv karta med mer än 1400 filmer"
+        },
+        "like": {
+          "label": "Like",
+          "description": "Visa din kärlek till dina favoritfilmer, -spellistor och -recensioner"
+        },
+        "rating": {
+          "label": "Betyg",
+          "description": "Betygsätt de filmer du har sett"
+        },
+        "watchlist": {
+          "label": "Watchlist",
+          "description": "Spara de filmer du vill se"
+        },
+        "playlists": {
+          "label": "Spellistor",
+          "description": "Organisera dina filmer i spellistor och dela dem"
+        },
+        "reviews": {
+          "label": "Recensioner",
+          "description": "Skriv recensioner och släpp fram den bittra cinefilen i dig"
+        },
+        "feed": {
+          "label": "Flöde",
+          "description": "Följ dina vänners aktivitet"
+        },
+        "adsFree": {
+          "label": "Utan reklam",
+          "description": "Njut av Recomend utan reklam, för alltid"
+        }
+      }
+    },
+    "welcome": {
+      "title": "Tack för att du skapade ett konto!",
+      "description": "Här är en snabb överblick över vad du kan göra med {app}.",
+      "follow": {
+        "title": "Följ folk",
+        "description": "Följ dina vänner och se vad de ser."
+      },
+      "import": {
+        "title": "Kommer du från en annan plattform?"
+      }
+    },
+    "collection": {
+      "label": "bibliotek",
+      "my_recos": {
+        "label": "mina recos",
+        "search": {
+          "placeholder": "sök i mina recos..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "ta bort från mina recos",
+            "description": "Vill du verkligen ta bort <important>{title}</important> från dina recos?"
+          },
+          "complete_confirm": {
+            "title": "slutför recot",
+            "description": "Vill du verkligen slutföra recot <important>{title}</important>?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "sök i watchlisten..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "ta bort från watchlisten",
+            "description": "Vill du verkligen ta bort <important>{title}</important> från din watchlist?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "sök bland hjärtefavoriterna..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "ta bort från hjärtefavoriterna",
+            "description": "Vill du verkligen ta bort <important>{title}</important> från dina hjärtefavoriter?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> har sett",
+        "rated": "<name></name> har betygsatt",
+        "liked": "<name></name> gillade",
+        "rated_liked": "<name></name> gillade och betygsatte",
+        "reviewed": "<name></name> har skrivit en recension"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> är <important>{roles}</important> i <linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> är <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "Godkänn appen",
+        "description_generic": "En app begär åtkomst till ditt konto.",
+        "description": "{client} vill komma åt ditt konto.",
+        "scopes_label": "Det ger appen möjlighet att:",
+        "accept": "Tillåt",
+        "deny": "Neka",
+        "error": {
+          "invalid_request": "Ogiltig eller utgången begäran",
+          "invalid_request_description": "Börja om från den app som skickade dig hit.",
+          "client_not_found": "Den här appen hittades inte.",
+          "submit_failed": "Något gick fel. Försök igen."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "Logga in på ditt {app}-konto."
+        },
+        "label": "Logga in",
+        "description": "Upptäck de bästa filmtipsen.",
+        "or_continue_with": "Eller fortsätt med",
+        "no_account_yet": "Har du inget konto än?",
+        "form": {
+          "identifier": {
+            "label": "E-postadress eller användarnamn",
+            "placeholder": "Ange din e-postadress eller ditt användarnamn"
+          },
+          "password": {
+            "label": "Lösenord",
+            "placeholder": "Ange ditt lösenord"
+          },
+          "submit": "Logga in",
+          "forgot_password": "Glömt lösenordet?",
+          "wrong_credentials": "E-postadressen eller lösenordet är felaktigt"
+        },
+        "otp": {
+          "password_login": "Vill du hellre logga in med ett lösenord?",
+          "form": {
+            "submit": "Få koden",
+            "no_user_found": "Ingen användare hittades med den här e-postadressen",
+            "success": "Inloggad"
+          },
+          "confirm_form": {
+            "label": "Bekräfta koden",
+            "description": "En verifieringskod har skickats till adressen {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "Skapa ett konto på {app} för att upptäcka och dela filmtips."
+        },
+        "description": "Skapa ett konto för att tipsa den där vännen som alltid glömmer titlarna om en film.",
+        "form": {
+          "success": "Ett verifieringsmail har skickats till {email}"
+        },
+        "confirm_form": {
+          "label": "Bekräfta e-postadressen",
+          "description": "En verifieringslänk har skickats till adressen {email}"
+        },
+        "return_to_login": "Oj, jag har visst redan ett konto."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "Glömt lösenordet",
+          "description": "Återställ ditt lösenord."
+        },
+        "label": "Glömt lösenordet",
+        "description": "Du borde använda en lösenordshanterare, det är riktigt smidigt.",
+        "return_to_login": "Oj, jag kommer visst ihåg mitt lösenord.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "Återställ lösenordet",
+          "code_sent": "Förfrågan skickad"
+        },
+        "confirm_form": {
+          "label": "Bekräfta koden",
+          "description": "En verifieringskod har skickats till adressen {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "Återställning av lösenord",
+          "description": "Välj ett nytt lösenord till ditt konto."
+        }
+      },
+      "error": {
+        "label": "Fel",
+        "description": "Ett fel uppstod under inloggningen.",
+        "return_to_login": "Tillbaka till tryggheten"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "Om oss",
+        "marquee": "Finns det inget mer spännande i ditt liv än att titta på 'Om oss'-sidor på internet?",
+        "intro": "<strong>Recomend</strong> är en plats som ägnas åt att upptäcka, rekommendera och organisera filmer. Allt är gjort för att ge mun-till-mun den bästa möjliga digitala formen. Vårt förhållningssätt sätter människan och hennes relationer i centrum i en tid av självcentrerad konsumtion — eller snarare 'rekommenderat för dig'.",
+        "slogan": {
+          "1": "Det är utan reklam och utan tvivelaktiga löften. 🍆",
+          "2": "Det är både ett socialt nätverk och ett verktyg.",
+          "3": "Det är hemmagjort av entusiaster.",
+          "4": "Det är amatörmässigt i ordets egentliga mening."
+        },
+        "last": "Recomend kan användas ensam eller tillsammans med andra, offentligt eller privat, dag som natt — men aldrig framför en film, koncentrera dig nu!"
+      },
+      "team": {
+        "label": "Teamet",
+        "intro": "Recomend skapades av två filmtokiga bröder som älskar att lägga sin tid på alldeles för ambitiösa projekt som ingen vet om de någonsin ser dagens ljus.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "Hyperaktiv arkitekt och ingenjör som inte kan nöja sig med ett enda jobb (den riktiga start-up nation): Yoann är upphovet till idén att göra en filmkarta, som i början bara hade den anspråkslösa ambitionen att bli en poster till hans toalett. Med Loups ankomst exploderade målen fullständigt och, en smula överkörd av händelserna, sköter han hela den grafiska delen av kartan och sajten samt all kommunikation (även om han inte gillar det). Han har också åsikter om UX/UI och föreslår massor av funktioner utan att riktigt förstå hur svåra de är att koda (han har gjort vissa framsteg)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "Fullständig autodidakt som ändå lyckades skaffa sig en utbildning som ledde till obetald arbetslöshet före 25 års ålder. En riktig schweizisk armékniv: Loup sköter webbdesignen och kodar ett gränssnitt som vi föreställer oss så användarvänligt som möjligt. Loup vill tacka alla kodforum som svarade på hans (väldigt) många frågor, och alla indiska YouTubers som följde honom genom dessa månader som adoptivpappor. Hans mamma är för övrigt övertygad om att hans bror har förslavat honom för det här projektet (det är lugnt, mamma)."
+          }
+        },
+        "last": "Vill du snacka med oss eller med andra i communityn? Häng med på vår <link>Discord</link>!"
+      },
+      "pricing": {
+        "label": "Priser",
+        "intro": "Den här prenumerationsmodellen är först och främst ett stöd för att hålla projektet levande och fortsätta utveckla det. Premium-funktionerna är extrafunktioner för avancerad användning av Recomend, som motiverar ett litet ekonomiskt bidrag. Vi kommer alltid att behålla möjligheten att använda sajten gratis, utan reklam och utan att känna sig begränsad.",
+        "subdescription": "*Om det extremt låga priset för den här prenumerationen ändå är över dina tillgångar, vänd dig till den liberala regering som är ansvarig för din förlorade köpkraft."
+      },
+      "legal": {
+        "label": "Juridik & integritet",
+        "description": "Vi respekterar din integritet. Den reklam som visas för icke-inloggade användare hanteras av Google och kräver tekniska cookies för att begränsa visningsfrekvensen och förhindra bedrägeri.",
+        "privacyPolicy": "Läs vår integritetspolicy",
+        "manageCookies": "Hantera mina reklaminställningar (cookies)"
+      },
+      "open-source": {
+        "label": "Öppen källkod",
+        "intro": "Recomend har öppen källkod: koden är publik på GitHub. Ta en titt, bidra, eller ge oss bara en stjärna!",
+        "star": "Ge oss en stjärna på GitHub"
+      },
+      "businessmodel": {
+        "label": "Affärsmodell",
+        "paragraph": {
+          "1": "Du kan nog gissa att vi med våra knappast kommersiella profiler inte riktigt har förstått vad en affärsmodell skulle göra för oss just nu...",
+          "2": "Om Recomends framtid kräver det tittar vi på frågan genom att omge oss med rätt personer — eller i alla fall personer som är mer intresserade av det än vi.",
+          "3": "Till dess, låt oss vara ärliga, finns det annat att göra."
+        }
+      },
+      "roadmap": {
+        "label": "Roadmap"
+      },
+      "data": {
+        "label": "Data",
+        "paragraph": {
+          "1": "All metadata som används på Recomend kommer från <link>The Movie Database (TMDb)</link> via plattformens API. Vi gör alltså precis som alla andra, som lydiga får.",
+          "2": "Vid fel eller filmer som saknas får du alltså vända dig till <link>TMDb</link>."
+        }
+      },
+      "resources": {
+        "label": "Resurser",
+        "intro": "Det har inte så mycket med film att göra, men här är en lista med sajter vi gillar:"
+      },
+      "contact-support": {
+        "label": "Kontakt & support",
+        "help-center": "Hitta svaren på dina existentiella frågor i vårt <link>hjälpcenter</link>.",
+        "technical-support": "För tekniska frågor: <email></email>",
+        "suggest-a-feature": "För förslag: <email></email>",
+        "contact-us": "Om du bara vill komma i kontakt med oss: <email></email>"
+      },
+      "quote": {
+        "label": "Citat",
+        "quote": "« Jag hatar ordet professionell. Alla skådespelare och alla andra som säger: jag är professionell, jag är en pro! Vad är det? Finns det ett sorgligare ord? För amatör kommer av ordet kärlek. Man måste göra saker av kärlek, annars är vi idioter. »",
+        "author": "Orson Wells",
+        "date": "1972",
+        "subdescription": "*Vi tvekade om vi skulle ha med det, för det låter snabbt pretentiöst, men det speglar vår mood kring projektet ganska bra. Men gillar du det inte så tar vi bort det."
+      }
+    },
+    "settings": {
+      "label": "Inställningar",
+      "description": "Hantera inställningarna för ditt konto.",
+      "profile": {
+        "label": "Profil",
+        "description": "Så här ser andra dig på sajten.",
+        "avatar": {
+          "label": "Avatar",
+          "delete": "Ta bort"
+        },
+        "full_name": {
+          "label": "Namn",
+          "description": "Det är det namn som visas på din profil och i e-postmeddelanden.",
+          "placeholder": "Ange ditt namn",
+          "form": {
+            "min_length": "Namnet måste vara minst 1 tecken",
+            "max_length": "Namnet får inte vara längre än 50 tecken"
+          }
+        },
+        "bio": {
+          "label": "Bio",
+          "description": "Berätta något om dig själv, det visas på din profil.",
+          "placeholder": "Skriv något om dig själv",
+          "form": {
+            "max_length": "Bion får inte vara längre än 150 tecken",
+            "format": "Biografin får inte innehålla tomma rader eller bara bestå av mellanslag."
+          }
+        },
+        "favorite_films": {
+          "label": "Favoritfilmer",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "URL:en är inte giltig"
+          }
+        }
+      },
+      "account": {
+        "label": "Konto",
+        "description": "Uppdatera inställningarna för ditt konto.",
+        "username": {
+          "label": "Användarnamn",
+          "description": "Det här är ditt användarnamn, som andra kan hitta dig och din profil med. Du kan bara ändra det en gång var 30:e dag.",
+          "placeholder": "Ange ditt användarnamn",
+          "form": {
+            "min_length": "Användarnamnet måste vara minst 3 tecken",
+            "max_length": "Användarnamnet får inte vara längre än 15 tecken",
+            "invalid": "Användarnamnet får bara innehålla bokstäver, siffror och tecknen '_' och '.'",
+            "unavailable": "Det här användarnamnet är redan taget"
+          }
+        },
+        "private": {
+          "label": "Privat konto",
+          "description": "När ditt konto är privat kan bara de användare du godkänner se dina aktiviteter."
+        },
+        "email": {
+          "description": "Ett verifieringsmail skickas till din nuvarande e-postadress och till den nya adressen. Du måste bekräfta båda för att ändringen ska gälla.",
+          "change_pending": "Den <strong>{date}</strong> skickades ett verifieringsmail till din nya e-postadress <strong>{email}</strong>. Klicka på länken eller ange verifieringskoden för att bekräfta ändringen.",
+          "confirm_email_code": {
+            "description": "Ange den verifieringskod som skickats till din adress <strong>{email}</strong>."
+          },
+          "change_success": "Din e-postadress har uppdaterats"
+        },
+        "delete_account": {
+          "button": "Ta bort mitt konto",
+          "confirm": {
+            "description": "Ditt konto tas bort permanent och du kan inte få tillbaka det.",
+            "confirm_email_sent": "Ett verifieringsmail har skickats till din e-postadress"
+          }
+        }
+      },
+      "appearance": {
+        "label": "Utseende",
+        "description": "Anpassa appens utseende. Växla automatiskt mellan dag- och nattläge.",
+        "language": {
+          "label": "Språk",
+          "description": "Välj ett språk — ändringarna börjar gälla när du startar om appen",
+          "placeholder": "Välj ett språk",
+          "not_found": "Språket hittades inte"
+        },
+        "theme": {
+          "label": "Tema",
+          "description": "Välj tema för gränssnittet.",
+          "options": {
+            "light": "Ljust",
+            "dark": "Mörkt"
+          }
+        }
+      },
+      "subscription": {
+        "label": "Prenumeration",
+        "description": "Hantera din premium-prenumeration."
+      },
+      "security": {
+        "label": "Säkerhet",
+        "description": "Om du ändrar ditt lösenord loggas du ut på alla enheter utom den du använder nu.",
+        "current_password": {
+          "label": "Nuvarande lösenord",
+          "placeholder": "Ange ditt nuvarande lösenord",
+          "form": {
+            "required": "Det nuvarande lösenordet krävs",
+            "invalid": "Det nuvarande lösenordet är felaktigt"
+          }
+        },
+        "new_password": {
+          "label": "Nytt lösenord",
+          "placeholder": "Ange ditt nya lösenord",
+          "form": {
+            "min_length": "Lösenordet måste vara minst 8 tecken",
+            "uppercase": "Minst en stor bokstav krävs",
+            "lowercase": "Minst en liten bokstav krävs",
+            "number": "Minst en siffra krävs",
+            "special": "Minst ett specialtecken krävs"
+          }
+        },
+        "confirm_password": {
+          "label": "Bekräfta det nya lösenordet",
+          "placeholder": "Bekräfta ditt nya lösenord",
+          "form": {
+            "match": "Lösenorden stämmer inte överens"
+          }
+        }
+      },
+      "notifications": {
+        "label": "Notiser",
+        "description": "Välj vilka notiser du får.",
+        "push_notifications": {
+          "label": "Push-notiser",
+          "form": {
+            "enable": "Aktivera push-notiser"
+          },
+          "already_granted": "En notisförfrågan har redan gjorts. Gå till din webbläsares inställningar för att ändra den.",
+          "no_enabled": "Aktivera notiser i din enhets inställningar för att få push-notiser.",
+          "open_settings": "Gå till enhetens inställningar"
+        }
+      },
+      "data": {
+        "label": "Data",
+        "description": "Importera eller exportera dina data.",
+        "importer": {
+          "label": "Importera",
+          "select_source": "Välj en källa",
+          "instructions_title": "Instruktioner",
+          "browse_prompt": "Släpp din fil här, eller <link>välj</link>",
+          "browse_prompt_mobile": "Tryck för att välja en fil",
+          "uploading": "Laddar upp…",
+          "processing": "Analyserar din fil…",
+          "upload_error": "Uppladdningen misslyckades, försök igen.",
+          "invalid_file_type": "Den här filtypen stöds inte för den här källan.",
+          "review_title": "Granska din import",
+          "review_summary": "{matched} av {total} hittade",
+          "validate": "Godkänn importen",
+          "validate_confirm_description": "Det här importerar alla hittade objekt som inte hoppats över till ditt bibliotek. Det går inte att ångra.",
+          "success_title": "Importen är klar",
+          "success_description": "Dina data har importerats.",
+          "failed_title": "Importen misslyckades",
+          "failed_description": "Något gick fel när den här importen behandlades.",
+          "pending_description": "Din import står i kö och börjar snart.",
+          "empty": "Inga importer än.",
+          "delete_confirm_description": "Den här importen och alla dess data tas bort permanent. Det går inte att ångra.",
+          "keep_existing": "Behåll mina",
+          "use_imported": "Använd importen",
+          "merge": "Slå samman",
+          "conflict": "Konflikt",
+          "no_match": "Ingen träff",
+          "existing_rating": "Nu: {rating}",
+          "log_column": "Logg",
+          "actions_column": "Åtgärder",
+          "categories": {
+            "log_movies": "Filmer",
+            "log_tv_series": "Serier",
+            "bookmarks": "Watchlist",
+            "playlists": "Listor"
+          },
+          "status": {
+            "pending": "Väntar",
+            "processing": "Pågår",
+            "awaiting_review": "Ska kontrolleras",
+            "completed": "Klar",
+            "failed": "Misslyckad"
+          }
+        },
+        "exporter": {
+          "label": "Exportera"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "byt till Premium",
+        "description": "Byt till ett premium-konto för att få tillgång till alla funktioner i {app}."
+      },
+      "header": {
+        "title": "utöka din bio, dela mer, stötta {app}",
+        "subtitle": "testa 1 månad gratis, sedan {price}/månad"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "aktiviteter",
+            "unlimited_activities": {
+              "label": "obegränsade aktiviteter",
+              "description": "betyg, likes, recensioner, watchlist och rekommendationer"
+            },
+            "favorites": {
+              "label": "favoriter",
+              "description": "lägg till dina favoritfilmer på din profil"
+            }
+          },
+          "playlists": {
+            "label": "spellistor",
+            "unlimited_playlists": {
+              "label": "obegränsade",
+              "description": "skapa ett obegränsat antal spellistor"
+            },
+            "shared_playlists": {
+              "label": "delade",
+              "description": "dela dina spellistor med andra användare"
+            },
+            "collaborative_playlists": {
+              "label": "gemensamma",
+              "description": "skapa gemensamma spellistor med andra användare"
+            }
+          },
+          "feed": {
+            "label": "flöde",
+            "followees": {
+              "label": "följda användare",
+              "description": "se aktiviteterna från de användare du följer"
+            },
+            "cast_and_crew": {
+              "label": "skådespelare & team",
+              "description": "följ aktiviteterna från de personer som jobbar med filmerna"
+            }
+          },
+          "support": {
+            "label": "stöd",
+            "team": {
+              "label": "Stötta {app}-teamet"
+            },
+            "credits": {
+              "label": "eftertexter",
+              "description": "din profil i appens eftertexter"
+            }
+          }
+        },
+        "success": {
+          "label": "Tack för ditt stöd!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} - spellista av @{username}",
+        "description": "Upptäck filmspellistan från @{username} på {app}."
+      },
+      "actions": {
+        "delete": {
+          "description": "Det här tar bort <important>{title}</important> permanent från dina spellistor."
+        }
+      },
+      "search": {
+        "placeholder": "sök i spellistan..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "Vill du verkligen ta bort <important>{title}</important> från din spellista?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "Ange spellistans titel"
+        },
+        "description": {
+          "placeholder": "Ange en beskrivning av spellistan"
+        },
+        "error": {
+          "format": "Beskrivningen får inte innehålla tomma rader eller bara bestå av mellanslag."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "Upptäck profilen för @{username} på {app}."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year}) • Film",
+        "description": "{title} är en film av {directors} från {year}. Synopsis: {overview}",
+        "description_no_director": "{title} är en film från {year}. Synopsis: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Spellistor",
+          "description": "Upptäck alla spellistor som innehåller filmen {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Recensioner",
+          "description": "Upptäck alla recensioner av filmen {title}."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} är en serie av {creators} som sändes första gången {year}. Synopsis: {overview}",
+        "description_no_creator": "{title} är en serie som sändes första gången {year}. Synopsis: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Spellistor",
+          "description": "Upptäck alla spellistor som innehåller serien {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Recensioner",
+          "description": "Upptäck alla recensioner av serien {title}."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • Säsonger",
+          "description": "Upptäck alla säsonger av serien {title}."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • Säsong {number}",
+            "description": "Upptäck alla avsnitt i säsong {number} av serien {title}."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • Filmer",
+          "description": "Upptäck alla filmer där {name} har spelat eller medverkat."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • Serier",
+          "description": "Upptäck alla serier där {name} har spelat eller medverkat."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "Recension av {title} av @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "Skriv en recension av {title}",
+          "description": "Dela din åsikt om {title}."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Utforska Paradise Pictures",
+        "description": "Ge dig ut och upptäck ön och dess många olika miljöer. De många filmer som befolkar den är placerade i sin diegetiska omgivning. Lyckas du utforska varje vrå?"
+      }
+    },
+    "legal": {
+      "label": "Juridik",
+      "description": "Läs de juridiska dokumenten för {app}.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "Allmänna användarvillkor",
+          "description": "Läs användarvillkoren för {app}."
+        },
+        "sections": {
+          "intro": "Dessa allmänna användarvillkor (nedan 'Villkoren') reglerar åtkomsten till och användningen av appen {app}. Appen ges ut av Loup (nedan 'Utgivaren'), med adress i Paris. Att registrera sig på {app} innebär att du godtar dessa Villkor utan förbehåll.",
+          "presentation": {
+            "label": "1. Beskrivning av tjänsten",
+            "content": "{app} är en gratisapp där användarna kan läsa information om filmer, publicera recensioner, betygsätta verk och skapa egna listor."
+          },
+          "account": {
+            "label": "2. Konto och säkerhet",
+            "content": "För att använda funktionerna där man bidrar måste ett konto skapas. Användaren ansvarar för att hålla sina inloggningsuppgifter hemliga. Vid bedräglig användning eller misstanke om hackning ska Användaren omedelbart kontakta supporten på: <email></email>."
+          },
+          "conduct": {
+            "label": "3. Uppförandekod",
+            "content": "Användaren förbinder sig att vara artig och respektfull i sina omdömen och listor. Strängt förbjudet är: hatfullt, förtalande eller rasistiskt innehåll, trakasserier, samt spam eller kommersiell reklam som inte efterfrågats. Utgivaren förbehåller sig rätten att ta bort allt innehåll som bryter mot dessa regler och att stänga av det berörda kontot utan förvarning."
+          },
+          "child_safety": {
+            "label": "4. Skydd av minderåriga",
+            "content": "{app} tillämpar en strikt nolltolerans mot varje form av sexuella övergrepp mot och sexuell exploatering av barn ('Child Sexual Abuse and Exploitation', eller CSAE). Att skapa, ladda upp, lagra, sprida, efterfråga eller främja innehåll som sexualiserar, exploaterar eller på annat sätt utsätter minderåriga för fara är uttryckligen och absolut förbjudet på {app}. Varje konto som visar sig bryta mot denna policy stängs omedelbart och permanent, och Utgivaren rapporterar det berörda innehållet, tillsammans med all tillgänglig information om användaren, till National Center for Missing & Exploited Children (NCMEC) och/eller till behöriga myndigheter i enlighet med gällande lag. Varje användare som får kännedom om innehåll eller beteende som kan utgöra ett fall av CSAE ska utan dröjsmål rapportera det till: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. Immateriella rättigheter",
+            "content": "Användaren förblir ägare till de omdömen som användaren skriver. Genom att publicera på {app} ger användaren dock Utgivaren en gratis, icke-exklusiv licens att visa, återge och tekniskt anpassa detta innehåll inom appen. De visuella elementen, koden och designen i {app} tillhör uteslutande Utgivaren."
+          },
+          "privacy": {
+            "label": "6. Personuppgifter",
+            "content": "Respekten för din integritet är vår absoluta högsta prioritet. {app} säljer, hyr ut eller delar inga personuppgifter med kommersiella tredje parter eller annonsörer. De uppgifter som samlas in (e-postadress, användarnamn, aktivitet i appen) används enbart för att driva tjänsten och hantera ditt konto. Du kan utöva dina rättigheter till tillgång, ändring eller radering (GDPR) genom att kontakta: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookies och spårare",
+            "content": "{app} använder inga reklamcookies och inga beteendespårare från tredje part. Bara två typer av tekniska cookies används: en inloggningscookie (för att hålla dig inloggad) och en språkcookie (för att komma ihåg ditt val). Eftersom dessa cookies är strikt nödvändiga för tjänsten är de undantagna från krav på föregående samtycke."
+          },
+          "ads": {
+            "label": "8. Reklam",
+            "content": "Appen erbjuds i nuläget helt utan reklam. Om den här modellen skulle ändras informeras användarna via en uppdatering av dessa Villkor."
+          },
+          "liability": {
+            "label": "9. Ansvar",
+            "content": "Utgivaren strävar efter att hålla {app} tillgänglig dygnet runt, men garanterar inte att det inte förekommer avbrott eller buggar. Informationen om filmerna kommer från tredje parters databaser; Utgivaren kan inte hållas ansvarig för eventuella felaktigheter i dessa uppgifter."
+          },
+          "law": {
+            "label": "10. Tillämplig lag",
+            "content": "Dessa Villkor omfattas av fransk rätt. Vid en tvist som inte kunnat lösas i godo via <email></email> är domstolarna i Paris ensamt behöriga."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "Integritetspolicy",
+          "description": "Läs integritetspolicyn för {app}."
+        },
+        "sections": {
+          "intro": "Dataskydd står i centrum för {app}s filosofi. Den här policyn beskriver vilka uppgifter vi samlar in, varför vi samlar in dem och hur vi skyddar dem. Kort sagt: vi säljer inte dina uppgifter.",
+          "controller": {
+            "label": "1. Personuppgiftsansvarig",
+            "content": "Personuppgiftsansvarig är Loup, med adress i Paris (Frankrike). Har du frågor om integritet kan du kontakta: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. Insamlade uppgifter",
+            "content": "Vi samlar bara in de uppgifter som är strikt nödvändiga för att appen ska fungera: din e-postadress (för inloggningen), ditt användarnamn och dina användningsdata (betygsatta filmer, recensioner, listor). Dina lösenord lagras krypterat (hashat) och säkert."
+          },
+          "purpose": {
+            "label": "3. Syftet med behandlingen",
+            "content": "Dina uppgifter behandlas uteslutande för att: ge dig möjlighet att skapa och hantera ditt konto, visa dina listor och betyg samt säkerställa tjänstens tekniska drift. Vi använder inte dina uppgifter för reklamprofilering."
+          },
+          "sharing": {
+            "label": "4. Delning av uppgifter",
+            "content": "Dina personuppgifter säljs, hyrs ut eller överlåts aldrig till tredje part. De kan lagras hos våra tekniska leverantörer (webbhotell, tjänst för transaktionsmail) som omfattas av strikt sekretess och följer GDPR."
+          },
+          "retention": {
+            "label": "5. Lagringstid",
+            "content": "Dina uppgifter sparas så länge ditt konto är aktivt. Om du väljer att ta bort ditt konto raderas alla dina personuppgifter (e-postadress, användarnamn, omdömen) permanent från våra databaser."
+          },
+          "rights": {
+            "label": "6. Dina rättigheter (GDPR)",
+            "content": "I enlighet med regelverket har du rätt till tillgång, rättelse, dataportabilitet och radering av dina uppgifter. Du kan utöva dessa rättigheter när som helst direkt i appen eller genom att skriva till oss på: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookies",
+            "content": "Som anges i våra användarvillkor använder vi bara nödvändiga tekniska cookies (session och språk). Inga reklam- eller spårningscookies från tredje part placeras på din enhet."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "Sök en film, serie, spellista, person eller användare..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "Vill du verkligen ta bort det här verket från din lista över sedda titlar? Om du har ett betyg eller en recension tas de också bort."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "Vill du verkligen slutföra serien? Alla avsnitt i alla säsonger markeras som sedda."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "Vill du verkligen slutföra säsong {seasonNumber}? Alla avsnitt i säsongen markeras som sedda."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "För att se aktivitet här måste du eller de användare du följer betygsätta filmer, serier, ..."
+    },
+    "feed_person": {
+      "message": "För att se aktivitet här måste du följa personer som jobbar med filmer eller serier."
+    },
+    "playlists": {
+      "items": {
+        "empty": "Inga filmer eller serier i den här spellistan. Lägg till några så att den fylls!"
+      },
+      "add_to": {
+        "empty": "Du har inga spellistor. Skapa en så att du kan lägga till filmer eller serier och hitta dem igen!"
+      },
+      "saved": {
+        "empty": "Du har inga sparade spellistor. Spara en spellista så hittar du den lätt i ditt bibliotek!"
+      },
+      "members": {
+        "empty": "Den här spellistan har inga medlemmar. Lägg till några så att ni kan samarbeta om samma spellista!",
+        "search": "Sök användare att lägga till i spellistan..."
+      }
+    },
+    "follow-requests": {
+      "empty": "Du har inga väntande följarförfrågningar. När du får några visas de här!"
+    },
+    "recos": {
+      "empty": "Du har inga rekommendationer. När du får några visas de här!",
+      "send_to": {
+        "empty": "Du har ingen att skicka ett reco till. Ni måste vara vänner för att du ska kunna skicka ett reco (ni måste följa varandra)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "Du har inga filmer eller serier sparade till senare än. När du får några visas de här!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> har recoat filmen <movie></movie> till dig"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> har recoat serien <tv_series></tv_series> till dig"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> har sett <movie></movie> som du hade recoat"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> har sett <tv_series></tv_series> som du hade recoat"
+    },
+    "follower_created": {
+      "description": "<user></user> har börjat följa dig"
+    },
+    "follower_accepted": {
+      "description": "<user></user> har accepterat din följarförfrågan"
+    },
+    "follower_request": {
+      "description": "<user></user> vill följa dig"
+    },
+    "friend_created": {
+      "description": "<user></user> är nu din vän"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "received": {
+    "subject": "{senderName} 发来新的 reco！",
+    "body": "{senderName} 向你推荐了 {mediaTitle}",
+    "body_with_comment": "{senderName}：{comment}"
+  },
+  "completed": {
+    "subject": "你的 reco 已完成！",
+    "body": "{receiverName} 看了你推荐的 {mediaTitle}"
+  }
+}

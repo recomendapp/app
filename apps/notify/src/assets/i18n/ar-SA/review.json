@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "أعجبت {actorName} مراجعتك!",
+    "body": "أعجبت {actorName} مراجعتك لـ {mediaTitle}"
+  },
+  "commented": {
+    "subject": "تعليق جديد على مراجعتك!",
+    "body": "علّق {actorName} على مراجعتك لـ {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "أعجب {actorName} بتعليقك!",
+    "body": "أعجب {actorName} بتعليقك على {mediaTitle}"
+  },
+  "comment_replied": {
+    "subject": "رد جديد على تعليقك!",
+    "body": "ردّ {actorName} على تعليقك على {mediaTitle}",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

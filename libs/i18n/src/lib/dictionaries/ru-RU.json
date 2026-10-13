@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "Другой способ открывать кино",
+    "description": "{app} — социальная сеть для любителей кино. Открывай, делись и исследуй фильмы и сериалы вместе с друзьями."
+  },
+  "common": {
+    "messages": {
+      "welcome": "Добро пожаловать",
+      "welcome_to_app": "Добро пожаловать в {app}",
+      "hello": "Привет",
+      "greeting_with_name": "{timeOfDay, select, morning {Доброе утро, {name}} afternoon {Добрый день, {name}} evening {Добрый вечер, {name}} night {Доброй ночи, {name}} other {Привет, {name}}}",
+      "click_here": "Нажми здесь",
+      "see_more": "Показать больше",
+      "see_more_details": "Показать больше подробностей",
+      "more": "Ещё",
+      "view_profile": "Посмотреть профиль",
+      "library": "Библиотека",
+      "watchlist": "Список к просмотру",
+      "for_later": "На потом",
+      "heart_pick": "{count, plural, one {сердечный фаворит} few {сердечных фаворита} many {сердечных фаворитов} other {сердечного фаворита}}",
+      "add_to_heart_picks": "Добавить в сердечные фавориты",
+      "remove_from_heart_picks": "Убрать из сердечных фаворитов",
+      "add_rating": "Добавить оценку",
+      "edit_rating": "Изменить оценку",
+      "remove_rating": "Убрать оценку",
+      "share_my_rating": "Поделиться моей оценкой",
+      "share_review": "Поделиться рецензией",
+      "show_likes_count": "Показать число лайков",
+      "show_comments_count": "Показать число комментариев",
+      "add_to_watchlist": "добавить в список к просмотру",
+      "remove_from_watchlist": "убрать из списка к просмотру",
+      "no_results": "нет результатов",
+      "no_results_for": "Нет результатов по запросу <strong>{query}</strong>",
+      "no_followees": "Ты ни на кого не подписан",
+      "no_followers": "Нет подписчиков",
+      "no_rating": "Без оценки",
+      "must_watch_to_review": "чтобы оценить это произведение, его нужно посмотреть",
+      "review_cannot_be_empty": "рецензия не может быть пустой",
+      "no_activity": "нет активности",
+      "followers_ratings": "оценки подписчиков",
+      "added_by": "добавил",
+      "sort_by": "сортировать по",
+      "sort_order": "порядок сортировки",
+      "go_to_film": "перейти к фильму",
+      "go_to_tv_series": "перейти к сериалу",
+      "go_to_user": "перейти к пользователю",
+      "go_to_person": "перейти к человеку",
+      "go_to_activity": "перейти к активности",
+      "go_to_playlist": "перейти к плейлисту",
+      "go_to_review": "перейти к рецензии",
+      "go_to_director": "{count, plural, one {перейти к режиссёру} few {перейти к режиссёрам} many {перейти к режиссёрам} other {перейти к режиссёрам}}",
+      "go_to_creator": "{count, plural, one {перейти к создателю} few {перейти к создателям} many {перейти к создателям} other {перейти к создателям}}",
+      "show_director": "{count, plural, one {показать режиссёра} few {показать режиссёров} many {показать режиссёров} other {показать режиссёров}}",
+      "show_creator": "{count, plural, one {показать создателя} few {показать создателей} many {показать создателей} other {показать создателей}}",
+      "show_credit": "{count, plural, one {показать участие} few {показать участия} many {показать участия} other {показать участия}}",
+      "credits": "финальные титры",
+      "view_recommendation": "{count, plural, one {посмотреть реко} few {посмотреть реко} many {посмотреть реко} other {посмотреть реко}}",
+      "view_directors": "{count, plural, one {посмотреть режиссёра} few {посмотреть режиссёров} many {посмотреть режиссёров} other {посмотреть режиссёров}}",
+      "no_director": "без режиссёра",
+      "view_comment": "{count, plural, one {посмотреть комментарий} few {посмотреть комментарии} many {посмотреть комментарии} other {посмотреть комментарии}}",
+      "add_comment": "{count, plural, one {добавить комментарий} few {добавить комментарии} many {добавить комментарии} other {добавить комментарии}}",
+      "edit_comment": "{count, plural, one {изменить комментарий} few {изменить комментарии} many {изменить комментарии} other {изменить комментарии}}",
+      "delete_comment": "Удалить комментарий",
+      "do_you_really_want_to_delete_this_comment": "Ты правда хочешь удалить этот комментарий?",
+      "comment_deleted": "Этот комментарий был удалён",
+      "write_your_comment_here": "Напиши комментарий...",
+      "reply": "Ответить",
+      "replies_count": "{count, plural, one {# ответ} few {# ответа} many {# ответов} other {# ответа}}",
+      "view_replies": "Показать {count, plural, one {# ответ} few {# ответа} many {# ответов} other {# ответа}}",
+      "hide_replies": "Скрыть ответы",
+      "load_more_replies": "Показать ещё ответы",
+      "get_started": "начать",
+      "get_started_its_free": "поехали 🎬, это бесплатно!",
+      "import": "Импортировать",
+      "upgrade_to_plan": "перейти на {plan}",
+      "choose_subscription_recurrence": "выбери период оплаты подписки",
+      "compare_plans": "сравнить тарифы",
+      "save_up_to_percent": "экономь до {percent}%",
+      "is_empty": "Здесь немного пусто",
+      "add_to_playlist": "добавить в плейлист",
+      "send_to_friend": "отправить другу",
+      "pin_to_profile": "Закрепить в профиле",
+      "unpin_from_profile": "Открепить от профиля",
+      "pinned": "Закреплено",
+      "unpinned": "Откреплено",
+      "no_pinned": "Нет закреплённых элементов",
+      "pinned_limit_reached": "Ты достиг максимального числа закреплённых элементов — открепи один, чтобы добавить новый",
+      "custom_sort": "своя сортировка",
+      "quick_add": "быстрое добавление",
+      "favorite_films": "любимые фильмы",
+      "follow": "подписаться",
+      "followed": "подписан",
+      "request_sent": "Запрос отправлен",
+      "follow_requests": "запросы на подписку",
+      "no_follow_requests": "нет запросов на подписку",
+      "follower": "{count, plural, one {подписчик} few {подписчика} many {подписчиков} other {подписчика}}",
+      "follower_count": "{count} подписчиков",
+      "see_followers": "посмотреть подписчиков",
+      "followee": "{count, plural, one {подписка} few {подписки} many {подписок} other {подписки}}",
+      "followee_count": "{count} подписок",
+      "see_followees": "посмотреть, на кого ты подписан",
+      "last_activities": "последние активности",
+      "last_updated": "последнее обновление",
+      "last_updated_at_date": "последнее обновление {date}",
+      "show_all": "показать всё",
+      "this_account_is_private": "этот аккаунт закрытый",
+      "follow_to_see_activities": "подпишись, чтобы видеть активности",
+      "review": "{count, plural, one {рецензия} few {рецензии} many {рецензий} other {рецензии}}",
+      "no_overview": "без описания",
+      "cast": "актёры",
+      "no_cast": "без актёров",
+      "recent": "новое",
+      "popular": "популярное",
+      "popularity": "популярность",
+      "no_reviews": "Нет рецензий",
+      "no_playlists": "Нет плейлистов",
+      "no_playlists_found": "Плейлисты не найдены",
+      "no_films": "Нет фильмов",
+      "no_tv_series": "Нет сериалов",
+      "view_activity": "посмотреть активность",
+      "comment_count": "{count, plural, one {# комментарий} few {# комментария} many {# комментариев} other {# комментария}}",
+      "write_review": "написать рецензию",
+      "new_review": "новая рецензия",
+      "edit_review": "изменить рецензию",
+      "review_by": "рецензия от {name}",
+      "my_review": "{count, plural, one {моя рецензия} few {мои рецензии} many {моих рецензий} other {моей рецензии}}",
+      "add_review": "добавить рецензию",
+      "tv_series": "{count, plural, one {сериал} few {сериала} many {сериалов} other {сериала}}",
+      "film": "{count, plural, one {фильм} few {фильма} many {фильмов} other {фильма}}",
+      "movie": "{count, plural, one {фильм} few {фильма} many {фильмов} other {фильма}}",
+      "media": "{count, plural, one {тайтл} few {тайтла} many {тайтлов} other {тайтла}}",
+      "tv_season": "{count, plural, one {сезон} few {сезона} many {сезонов} other {сезона}}",
+      "tv_season_count": "{count, plural, one {# сезон} few {# сезона} many {# сезонов} other {# сезона}}",
+      "tv_season_value": "сезон {number}",
+      "tv_season_short": "С{number}",
+      "tv_episode": "{count, plural, one {эпизод} few {эпизода} many {эпизодов} other {эпизода}}",
+      "tv_episode_count": "{count, plural, one {# эпизод} few {# эпизода} many {# эпизодов} other {# эпизода}}",
+      "tv_episode_value": "эпизод {number}",
+      "tv_episode_short": "С{seasonNumber}Э{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {спецэпизод} few {спецэпизода} many {спецэпизодов} other {спецэпизода}}",
+      "first_air_date": "первый показ",
+      "last_air_date": "последний показ",
+      "see_film": "посмотреть фильм",
+      "see_tv_series": "посмотреть сериал",
+      "watch_film_title": "смотреть {title}",
+      "watch_film_streaming_or_download": "Смотреть <important>{title}</important> в стриминге или легально скачать",
+      "download": "скачать",
+      "downloaded": "скачано",
+      "person": "{count, plural, one {человек} few {человека} many {человек} other {человека}}",
+      "top_result": "лучший результат",
+      "user": "{count, plural, one {пользователь} few {пользователя} many {пользователей} other {пользователя}}",
+      "reco": "{count, plural, one {реко} few {реко} many {реко} other {реко}}",
+      "my_recos": "мои реко",
+      "item": "{count, plural, one {элемент} few {элемента} many {элементов} other {элемента}}",
+      "item_count": "{count, plural, one {# элемент} few {# элемента} many {# элементов} other {# элемента}}",
+      "type": "тип",
+      "complete": "завершить",
+      "completed": "завершено",
+      "collection": "{count, plural, one {коллекция} few {коллекции} many {коллекций} other {коллекции}}",
+      "most_recent": "самые новые",
+      "most_popular": "самые популярные",
+      "most_old": "самые старые",
+      "known_for": "Известен по",
+      "release_date": "дата премьеры",
+      "last_appearance_date": "последнее появление",
+      "vote_average": "средняя оценка",
+      "added": "добавлено",
+      "added_date": "дата добавления",
+      "added_at": "добавлено",
+      "add": "добавить",
+      "playlist_name": "название плейлиста",
+      "updated_at": "обновлено",
+      "created_at": "создано",
+      "likes": "лайки",
+      "likes_count": "число лайков",
+      "search_media": "найти тайтл",
+      "search_film": "найти фильм",
+      "start_typing_to_search_films": "начни печатать, чтобы искать фильмы",
+      "search_tv_series": "найти сериал",
+      "start_typing_to_search_tv_series": "начни печатать, чтобы искать сериалы",
+      "search_person": "найти человека",
+      "start_typing_to_search_persons": "начни печатать, чтобы искать людей",
+      "search_user": "{count, plural, one {найти пользователя} few {найти пользователей} many {найти пользователей} other {найти пользователей}}",
+      "start_typing_to_search_users": "начни печатать, чтобы искать пользователей",
+      "search_playlist": "найти плейлист",
+      "start_typing_to_search_playlists": "начни печатать, чтобы искать плейлисты",
+      "search_film_or_tv_series": "найти фильм или сериал",
+      "watched_date": "{count, plural, one {дата просмотра} few {даты просмотра} many {дат просмотра} other {даты просмотра}}",
+      "mark_as_watched": "отметить как просмотренное",
+      "remove_from_watched": "убрать из просмотренных",
+      "rating": "оценка",
+      "create_a_playlist": "создать плейлист",
+      "by_name": "автор {name}",
+      "reset": "сбросить",
+      "job": "{count, plural, one {должность} few {должности} many {должностей} other {должности}}",
+      "department": "{count, plural, one {отдел} few {отдела} many {отделов} other {отдела}}",
+      "share_title_via": "Поделиться <strong>{title}</strong> через",
+      "share_title": "Поделиться <strong>{title}</strong>",
+      "link": "ссылка",
+      "copy_link": "скопировать ссылку",
+      "copied": "Скопировано",
+      "other": "{count, plural, one {Другое} few {Другие} many {Других} other {Другого}}",
+      "via": "через",
+      "edit": "изменить",
+      "guest": "{count, plural, one {гость} few {гостя} many {гостей} other {гостя}}",
+      "are_u_sure": "Ты уверен?",
+      "backward": "назад",
+      "forward": "вперёд",
+      "back": "назад",
+      "next": "далее",
+      "notification": "{count, plural, one {уведомление} few {уведомления} many {уведомлений} other {уведомления}}",
+      "see_notifications": "посмотреть уведомления",
+      "open_social_panel": "открыть социальную панель",
+      "cancel_change": "{count, plural, one {отменить изменение} few {отменить изменения} many {отменить изменения} other {отменить изменения}}",
+      "do_you_really_want_to_cancel_change": "Ты правда хочешь отменить {count, plural, one {изменение} few {изменения} many {изменения} other {изменения}}?",
+      "continue_editing": "продолжить редактирование",
+      "confirm": "подтвердить",
+      "terms_of_use": "условия использования",
+      "privacy_policy": "политика конфиденциальности",
+      "request_made": "запрос отправлен",
+      "request_canceled": "запрос отменён",
+      "cancel_request": "отменить запрос",
+      "open_menu": "открыть меню",
+      "feed": "лента",
+      "about": "о нас",
+      "home": "главная",
+      "search": "поиск",
+      "explore": "исследовать",
+      "shop": "магазин",
+      "help": "помощь",
+      "legal": "правовая информация",
+      "setting": "{count, plural, one {настройка} few {настройки} many {настроек} other {настройки}}",
+      "logout": "выйти",
+      "to_watch": "к просмотру",
+      "reco_by_your_friends": "реко от друзей",
+      "friends_playlists": "плейлисты друзей",
+      "latest_activity": "{count, plural, one {последняя активность} few {последние активности} many {последних активностей} other {последней активности}}",
+      "discover_users": "находить пользователей",
+      "most_recommended": "чаще всего рекомендуют",
+      "archive": "архивировать",
+      "unarchive": "вернуть из архива",
+      "mark_as_read": "{count, plural, one {отметить как прочитанное} few {отметить как прочитанные} many {отметить как прочитанные} other {отметить как прочитанные}}",
+      "mark_as_unread": "{count, plural, one {отметить как непрочитанное} few {отметить как непрочитанные} many {отметить как непрочитанные} other {отметить как непрочитанные}}",
+      "accept": "принять",
+      "accepted": "принято",
+      "decline": "отклонить",
+      "declined": "отклонено",
+      "request_accepted": "{count, plural, one {запрос принят} few {запроса приняты} many {запросов приняты} other {запроса приняты}}",
+      "request_declined": "{count, plural, one {запрос отклонён} few {запроса отклонены} many {запросов отклонены} other {запроса отклонены}}",
+      "unread": "{count, plural, one {непрочитанное} few {непрочитанные} many {непрочитанных} other {непрочитанного}}",
+      "archived": "{count, plural, one {архивировано} few {архивированы} many {архивированы} other {архивировано}}",
+      "no_notifications": "нет уведомлений",
+      "all": "все",
+      "mark_all_as_read": "отметить всё как прочитанное",
+      "archive_all": "архивировать всё",
+      "archive_all_read": "архивировать всё прочитанное",
+      "please_login": "войди в аккаунт",
+      "like": "лайкнуть",
+      "unlike": "убрать лайк",
+      "unfollow": "отписаться",
+      "name": "название",
+      "add_a_name": "добавить название",
+      "add_a_description": "добавить описание",
+      "visibility": "видимость",
+      "search_an_user": "найти пользователя",
+      "select_an_item_to_add_to_playlist": "выбери элемент для добавления в плейлист",
+      "select_a_film_to_add_to_playlist": "выбери фильм для добавления в плейлист",
+      "select_a_tv_series_to_add_to_playlist": "выбери сериал для добавления в плейлист",
+      "add_one_or_more_items_to": "Добавить один или несколько элементов в <important>{title}</important>",
+      "add_one_or_more_films_to": "Добавить один или несколько фильмов в <important>{title}</important>",
+      "add_one_or_more_tv_series_to": "Добавить один или несколько сериалов в <important>{title}</important>",
+      "manage_playlist_access_rights": "управлять правами доступа к плейлисту",
+      "add_guest": "{count, plural, one {добавить гостя} few {добавить гостей} many {добавить гостей} other {добавить гостей}}",
+      "manage_members": "управлять участниками",
+      "no_member": "нет участников",
+      "add_member": "{count, plural, one {добавить участника} few {добавить участников} many {добавить участников} other {добавить участников}}",
+      "manage_guests": "управлять гостями",
+      "add_guests_to_your_playlist": "добавить гостей в свой плейлист",
+      "select_users_to_add_to_playlist": "выбери пользователей для добавления в плейлист",
+      "select_users_to_send_reco": "выбери, кому отправить реко",
+      "select_playlists_to_add_the_item": "выбери плейлисты, куда добавить элемент",
+      "send": "отправить",
+      "sent": "отправлено",
+      "select_row": "выбрать строку",
+      "select_all": "выбрать всё",
+      "no_selected_users": "пользователи не выбраны",
+      "selection_count": "выбрано {number} из {total} {type}",
+      "about_title": "о {title}",
+      "detail": "{count, plural, one {подробность} few {подробности} many {подробностей} other {подробности}}",
+      "genre": "{count, plural, one {жанр} few {жанра} many {жанров} other {жанра}}",
+      "male": "{count, plural, one {мужчина} few {мужчины} many {мужчин} other {мужчины}}",
+      "female": "{count, plural, one {женщина} few {женщины} many {женщин} other {женщины}}",
+      "non_binary": "{count, plural, one {небинарный} few {небинарных} many {небинарных} other {небинарного}}",
+      "unspecified": "не указано",
+      "date_of_birth": "дата рождения",
+      "date_of_death": "дата смерти",
+      "place_of_birth": "место рождения",
+      "age_years": "{count} {count, plural, one {год} few {года} many {лет} other {года}}",
+      "biography": "биография",
+      "no_biography_available": "биография недоступна",
+      "no_information_available": "информация недоступна",
+      "already_sent": "уже отправлено",
+      "already_watched": "уже просмотрено",
+      "already_added": "уже добавлено",
+      "recommend_to_friend_to_discover": "Порекомендуй <strong>{title}</strong> другу, который это ещё не видел",
+      "add_to_one_or_more_playlists": "Добавь <strong>{title}</strong> в один или несколько своих плейлистов",
+      "my_playlist": "{count, plural, one {мой плейлист} few {мои плейлисты} many {моих плейлистов} other {моего плейлиста}}",
+      "what_is_title": "Что такое <strong>{title}</strong>?",
+      "try_again": "Попробовать снова",
+      "error": "ошибка",
+      "not_logged_in": "ты не вошёл в аккаунт",
+      "an_error_occurred": "Произошла ошибка",
+      "playlist_not_found": "плейлист не найден",
+      "user_not_found": "пользователь не найден",
+      "film_not_found": "фильм не найден",
+      "media_not_found": "тайтл не найден",
+      "review_not_found": "рецензия не найдена",
+      "person_not_found": "человек не найден",
+      "tv_series_not_found": "сериал не найден",
+      "tv_episode_not_found": "эпизод не найден",
+      "tv_season_not_found": "сезон не найден",
+      "wrong_arguments": "неверные аргументы",
+      "no_media_found": "тайтлы не найдены",
+      "unknown_action": "неизвестное действие",
+      "no_user_found": "пользователи не найдены",
+      "no_tv_episodes": "нет эпизодов",
+      "save": "сохранить",
+      "saved": "сохранено",
+      "create": "создать",
+      "film_count": "{count, plural, one {# фильм} few {# фильма} many {# фильмов} other {# фильма}}",
+      "tv_series_count": "{count, plural, one {# сериал} few {# сериала} many {# сериалов} other {# сериала}}",
+      "login": "войти",
+      "signup": "зарегистрироваться",
+      "navigation": "навигация",
+      "delete": "Удалить",
+      "remove": "Убрать",
+      "deleted": "Удалено",
+      "share": "поделиться",
+      "duplicate": "дублировать",
+      "duplicated": "дублировано",
+      "cancel": "Отмена",
+      "date": "дата",
+      "duration": "длительность",
+      "sort": "сортировать",
+      "show": "показать",
+      "column": "{count, plural, one {столбец} few {столбца} many {столбцов} other {столбца}}",
+      "comment": "{count, plural, one {комментарий} few {комментария} many {комментариев} other {комментария}}",
+      "unknown": "неизвестно",
+      "community": "сообщество",
+      "cast_and_crew": "актёры и команда",
+      "soon": "скоро",
+      "ios_app": "Приложение для iOS",
+      "android_app": "Приложение для Android",
+      "coming_soon": "Скоро доступно",
+      "new_mobile_app": "Новое мобильное приложение!",
+      "manage": "управлять",
+      "monthly": "ежемесячно",
+      "yearly": "ежегодно",
+      "day": "день",
+      "week": "неделя",
+      "month": "месяц",
+      "year": "год",
+      "price": "цена",
+      "free": "бесплатно",
+      "playlist": "{count, plural, one {плейлист} few {плейлиста} many {плейлистов} other {плейлиста}}",
+      "public": "публичный",
+      "publish": "опубликовать",
+      "private": "приватный",
+      "description": "описание",
+      "details": "подробности",
+      "profile": "профиль",
+      "overview": "описание",
+      "no_playlists_saved": "нет сохранённых плейлистов",
+      "camera_permission_denied": "доступ к камере запрещён",
+      "photo_library_permission_denied": "доступ к библиотеке фото запрещён",
+      "ignore": "игнорировать",
+      "ok": "ок",
+      "title": "название",
+      "skip": "Пропустить",
+      "undo": "Отменить",
+      "date_published": "дата публикации",
+      "date_created": "дата создания",
+      "date_updated": "дата изменения",
+      "alphabetical": "по алфавиту",
+      "date_added": "дата добавления",
+      "number_of_likes": "число лайков",
+      "number_of_seasons": "число сезонов",
+      "add_to_this_playlist": "добавить в этот плейлист",
+      "save_to_library": "сохранить в библиотеку",
+      "remove_from_library": "убрать из библиотеки",
+      "otp": "OTP",
+      "ratings_from_followees": "оценки тех, на кого ты подписан",
+      "choose_from_the_library": "выбрать из библиотеки",
+      "take_a_photo": "сделать фото",
+      "delete_current_image": "удалить текущее изображение",
+      "edit_image": "изменить изображение",
+      "add_image": "добавить изображение",
+      "verify_with_a_code": "подтвердить кодом",
+      "order": "порядок",
+      "edit_order": "изменить порядок",
+      "done": "готово",
+      "can_edit": "может редактировать?",
+      "upgrade": "улучшить",
+      "no_description": "Без описания",
+      "no_comment": "Нет комментариев",
+      "close": "закрыть",
+      "edit_playlist": "изменить плейлист",
+      "universe": "вселенная",
+      "cannot_be_changed": "нельзя изменить",
+      "delete_review": "удалить рецензию",
+      "do_you_really_want_to_delete_this_review": "Ты правда хочешь удалить эту рецензию?",
+      "user_liked_playlist": "<name></name> лайкнул плейлист",
+      "user_liked_review": "<name></name> лайкнул рецензию",
+      "runtime": "длительность",
+      "ends_at": "Заканчивается в {value}",
+      "this_user_has_no_activity": "У этого пользователя нет активности",
+      "notification_archived": "{count, plural, one {уведомление архивировано} few {уведомления архивированы} many {уведомлений архивировано} other {уведомления архивировано}}",
+      "notification_unarchived": "{count, plural, one {уведомление возвращено из архива} few {уведомления возвращены из архива} many {уведомлений возвращено из архива} other {уведомления возвращено из архива}}",
+      "notification_marked_as_read": "{count, plural, one {уведомление отмечено как прочитанное} few {уведомления отмечены как прочитанные} many {уведомлений отмечено как прочитанные} other {уведомления отмечено как прочитанное}}",
+      "notification_marked_as_unread": "{count, plural, one {уведомление отмечено как непрочитанное} few {уведомления отмечены как непрочитанные} many {уведомлений отмечено как непрочитанные} other {уведомления отмечено как непрочитанное}}",
+      "or_continue_with": "или продолжи через",
+      "message": "{count, plural, one {сообщение} few {сообщения} many {сообщений} other {сообщения}}",
+      "story": "{count, plural, one {сторис} few {сторис} many {сторис} other {сторис}}",
+      "new_playlist": "новый плейлист",
+      "select_a_type": "выбери тип",
+      "filter": "{count, plural, one {фильтр} few {фильтра} many {фильтров} other {фильтра}}",
+      "hide_watched": "скрыть просмотренные",
+      "show_me_around": "покажи мне всё",
+      "artwork_from": "Иллюстрация: <important>{source}</important>",
+      "no_active_subscription": "нет активной подписки",
+      "manage_subscription": "управлять подпиской",
+      "started_on_date": "начата: {date}",
+      "last_renewed_on_date": "последнее продление: {date}",
+      "version_value": "версия {value}",
+      "original_title": "оригинальное название",
+      "starring": "в главных ролях",
+      "write_your_review_here": "напиши свою рецензию здесь...",
+      "insert": "вставить",
+      "trailer": "{count, plural, one {трейлер} few {трейлера} many {трейлеров} other {трейлера}}",
+      "list": "{count, plural, one {список} few {списка} many {списков} other {списка}}",
+      "grid": "{count, plural, one {сетка} few {сетки} many {сеток} other {сетки}}",
+      "order_asc": "по возрастанию",
+      "order_desc": "по убыванию",
+      "menu": "меню",
+      "at_least_one_watched_date_required": "нужна хотя бы одна дата просмотра",
+      "viewer": "{count, plural, one {Зритель} few {Зрителя} many {Зрителей} other {Зрителя}}",
+      "editor": "{count, plural, one {Редактор} few {Редактора} many {Редакторов} other {Редактора}}",
+      "admin": "{count, plural, one {Администратор} few {Администратора} many {Администраторов} other {Администратора}}",
+      "owner": "{count, plural, one {Владелец} few {Владельца} many {Владельцев} other {Владельца}}",
+      "you_dont_have_permission_to_do_this_action": "У тебя нет прав на это действие",
+      "in_progress": "в процессе",
+      "give_up": "сдаться",
+      "random": "случайно",
+      "reset_password": "Сбросить пароль",
+      "password_reset": "Пароль сброшен",
+      "return_to_login": "Вернуться к входу",
+      "invalid_code": "Неверный код",
+      "no_token_found": "Токен не найден",
+      "first_watched_at": "первая дата просмотра",
+      "watched_dates": "даты просмотра",
+      "no_watched_dates": "нет дат просмотра",
+      "select_role": "выбери роль",
+      "select_format": "выбери формат",
+      "theater": "Кинотеатр",
+      "physical": "Физический носитель",
+      "digital": "Цифровой",
+      "streaming": "Стриминг",
+      "you_must_be_premium_to_change_member_role": "Чтобы изменить роль участника, нужен премиум",
+      "already_member": "уже участник",
+      "email_already_used": "Этот email уже используется",
+      "email_confirmed": "Email подтверждён",
+      "confirmation_email_sent": "Письмо с подтверждением отправлено",
+      "continue": "Продолжить",
+      "finish": "Завершить",
+      "forgot_password": "Забыл пароль",
+      "new_password": "Новый пароль",
+      "confirm_password": "Подтвердить пароль",
+      "password_reseted": "Пароль сброшен",
+      "reset_your_password": "Сбрось свой пароль",
+      "invalid_token": "Неверный токен",
+      "new_notification": "{count, plural, one {новое уведомление} few {новых уведомления} many {новых уведомлений} other {нового уведомления}}",
+      "lets_go": "Поехали!",
+      "update_available": "Доступно обновление",
+      "update_available_description": "Обнови приложение, чтобы пользоваться последними улучшениями.",
+      "update_required_title": "Требуется обновление",
+      "update_required_description": "Эта версия приложения больше не поддерживается. Обнови её, чтобы продолжить пользоваться Recomend.",
+      "update_app": "Обновить",
+      "advertisement": "{count, plural, one {Реклама} few {Рекламы} many {Реклам} other {Рекламы}}",
+      "pending": "В ожидании",
+      "processing": "В процессе",
+      "awaiting_review": "На проверку",
+      "failed": "Не удалось",
+      "data": "{count, plural, one {Данные} few {Данные} many {Данных} other {Данных}}",
+      "restore": "Восстановить",
+      "fix": "Исправить",
+      "not_found": "Не найдено",
+      "unavailable": "Недоступно",
+      "star_on_github": "Поставить звезду на GitHub"
+    },
+    "form": {
+      "email": {
+        "label": "Адрес email",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "Email некорректен",
+          "unavailable": "Этот email уже используется"
+        },
+        "verified": "Email подтверждён"
+      },
+      "username": {
+        "label": "Имя пользователя",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "Первый символ должен быть буквой или цифрой",
+          "double_dot": "Две точки подряд не допускаются",
+          "ends_with_dot": "Точка в конце не допускается",
+          "format": "Допустимы только буквы, цифры и символы '_' и '.'",
+          "unavailable": "Это имя пользователя уже занято"
+        }
+      },
+      "full_name": {
+        "label": "Имя",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "Допустимы только буквы, цифры и пробелы"
+        }
+      },
+      "password": {
+        "label": "Пароль",
+        "placeholder": "Введи свой пароль",
+        "schema": {
+          "uppercase": "Нужна хотя бы одна заглавная буква",
+          "lowercase": "Нужна хотя бы одна строчная буква",
+          "number": "Нужна хотя бы одна цифра",
+          "special": "Нужен хотя бы один специальный символ",
+          "match": "Пароли не совпадают"
+        },
+        "confirm": {
+          "label": "Подтвердить пароль",
+          "placeholder": "Подтверди свой пароль"
+        }
+      },
+      "length": {
+        "char_min": "минимум {count, plural, one {# символ} few {# символа} many {# символов} other {# символа}}",
+        "char_max": "максимум {count, plural, one {# символ} few {# символа} many {# символов} other {# символа}}"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "Допустимы только буквы, цифры и пробелы"
+      },
+      "error": {
+        "too_many_attempts": "Слишком много попыток, попробуй позже",
+        "not_received_code": "Не получил код?",
+        "invalid_code": "Неверный код",
+        "turnstile": "Проверка не прошла, попробуй снова"
+      },
+      "resend_code": "Отправить код снова",
+      "resend_email": "Отправить письмо снова",
+      "code_verified": "Код подтверждён",
+      "code_sent": "Код отправлен"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "страница не найдена",
+        "description": "упс, такой страницы не существует..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "отслеживание",
+        "description": "Открывай, оценивай и делись любимыми фильмами и сериалами."
+      },
+      "recos": {
+        "label": "реко",
+        "description": "Отправляй и получай реко от друзей. Всё в одном месте."
+      },
+      "playlists": {
+        "label": "плейлисты",
+        "description": "Организуй, делись и создавайте плейлисты вместе."
+      },
+      "feed": {
+        "label": "лента",
+        "description": "Подписывайся на друзей и смотри, что они смотрят, лайкают и оценивают."
+      },
+      "social_sharing": {
+        "label": "шеринг в соцсети",
+        "description": "Делись всем, что любишь, в Instagram или других сетях."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "Отслеживание",
+          "description": "Держи на виду фильмы, которые ты посмотрел"
+        },
+        "recos": {
+          "label": "Реко",
+          "description": "Отправляй друзьям рекомендации фильмов"
+        },
+        "explore": {
+          "label": "Исследовать",
+          "description": "Открывай новые фильмы на Paradise Pictures — интерактивной карте с более чем 1400 фильмами"
+        },
+        "like": {
+          "label": "Лайк",
+          "description": "Покажи любовь к любимым фильмам, плейлистам и рецензиям"
+        },
+        "rating": {
+          "label": "Оценка",
+          "description": "Оценивай фильмы, которые ты посмотрел"
+        },
+        "watchlist": {
+          "label": "Список к просмотру",
+          "description": "Сохраняй фильмы, которые хочешь посмотреть"
+        },
+        "playlists": {
+          "label": "Плейлисты",
+          "description": "Организуй свои фильмы в плейлисты и делись ими"
+        },
+        "reviews": {
+          "label": "Рецензии",
+          "description": "Пиши рецензии и выпусти наружу озлобленного синефила, что сидит в тебе"
+        },
+        "feed": {
+          "label": "Лента",
+          "description": "Следи за активностью друзей"
+        },
+        "adsFree": {
+          "label": "Без рекламы",
+          "description": "Пользуйся Recomend без рекламы, навсегда"
+        }
+      }
+    },
+    "welcome": {
+      "title": "Спасибо за регистрацию!",
+      "description": "Вот краткий обзор того, что можно делать с {app}.",
+      "follow": {
+        "title": "Подписывайся на людей",
+        "description": "Подписывайся на друзей и смотри, что они смотрят."
+      },
+      "import": {
+        "title": "Пришёл с другой платформы?"
+      }
+    },
+    "collection": {
+      "label": "библиотека",
+      "my_recos": {
+        "label": "мои реко",
+        "search": {
+          "placeholder": "искать в моих реко..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "удалить из моих реко",
+            "description": "Ты правда хочешь удалить <important>{title}</important> из своих реко?"
+          },
+          "complete_confirm": {
+            "title": "завершить реко",
+            "description": "Ты правда хочешь завершить реко <important>{title}</important>?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "искать в списке к просмотру..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "удалить из списка к просмотру",
+            "description": "Ты правда хочешь удалить <important>{title}</important> из своего списка к просмотру?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "искать в сердечных фаворитах..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "удалить из сердечных фаворитов",
+            "description": "Ты правда хочешь удалить <important>{title}</important> из своих сердечных фаворитов?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> посмотрел",
+        "rated": "<name></name> оценил",
+        "liked": "<name></name> лайкнул",
+        "rated_liked": "<name></name> лайкнул и оценил",
+        "reviewed": "<name></name> написал рецензию"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> — <important>{roles}</important> в <linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> — <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "Разрешить приложение",
+        "description_generic": "Приложение запрашивает доступ к твоему аккаунту.",
+        "description": "{client} хочет получить доступ к твоему аккаунту.",
+        "scopes_label": "Это позволит приложению:",
+        "accept": "Разрешить",
+        "deny": "Отклонить",
+        "error": {
+          "invalid_request": "Неверный или истёкший запрос",
+          "invalid_request_description": "Начни процесс заново в приложении, которое тебя сюда отправило.",
+          "client_not_found": "Это приложение не найдено.",
+          "submit_failed": "Что-то пошло не так. Попробуй снова."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "Войди в свой аккаунт {app}."
+        },
+        "label": "Вход",
+        "description": "Открой лучшие рекомендации фильмов.",
+        "or_continue_with": "Или продолжи через",
+        "no_account_yet": "Ещё нет аккаунта?",
+        "form": {
+          "identifier": {
+            "label": "Email или имя пользователя",
+            "placeholder": "Введи свой email или имя пользователя"
+          },
+          "password": {
+            "label": "Пароль",
+            "placeholder": "Введи свой пароль"
+          },
+          "submit": "Войти",
+          "forgot_password": "Забыл пароль?",
+          "wrong_credentials": "Email или пароль неверны"
+        },
+        "otp": {
+          "password_login": "Предпочитаешь войти с паролем?",
+          "form": {
+            "submit": "Получить код",
+            "no_user_found": "Пользователь с таким email не найден",
+            "success": "Вход выполнен"
+          },
+          "confirm_form": {
+            "label": "Подтвердить код",
+            "description": "Код подтверждения отправлен на адрес {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "Зарегистрируйся в {app}, чтобы открывать и делиться рекомендациями фильмов."
+        },
+        "description": "Создай аккаунт, чтобы порекомендовать фильм тому другу, который вечно забывает названия.",
+        "form": {
+          "success": "Письмо с подтверждением отправлено на {email}"
+        },
+        "confirm_form": {
+          "label": "Подтвердить email",
+          "description": "Ссылка для подтверждения отправлена на адрес {email}"
+        },
+        "return_to_login": "Упс, у меня же уже есть аккаунт."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "Забыл пароль",
+          "description": "Сбрось свой пароль."
+        },
+        "label": "Забыл пароль",
+        "description": "Тебе стоит пользоваться менеджером паролей, это правда удобно.",
+        "return_to_login": "Упс, я всё-таки помню свой пароль.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "Сбросить пароль",
+          "code_sent": "Запрос отправлен"
+        },
+        "confirm_form": {
+          "label": "Подтвердить код",
+          "description": "Код подтверждения отправлен на адрес {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "Сброс пароля",
+          "description": "Выбери новый пароль для своего аккаунта."
+        }
+      },
+      "error": {
+        "label": "Ошибка",
+        "description": "Во время входа произошла ошибка.",
+        "return_to_login": "Вернуться в безопасное место"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "О нас",
+        "marquee": "Неужели в твоей жизни нет ничего интереснее, чем листать страницы «О нас» в интернете?",
+        "intro": "<strong>Recomend</strong> — это пространство, посвящённое открытию, рекомендации и организации фильмов. Всё здесь создано, чтобы дать сарафанному радио лучшую возможную цифровую форму. Наш подход сосредоточен на человеке и его связях в эпоху самоцентричного потребления — или, скорее, «рекомендовано для тебя».",
+        "slogan": {
+          "1": "Без рекламы и без сомнительных обещаний. 🍆",
+          "2": "Это одновременно соцсеть и инструмент.",
+          "3": "Это домашняя работа, сделанная энтузиастами.",
+          "4": "Это любительское в прямом смысле слова."
+        },
+        "last": "Recomend можно использовать одному или вместе, публично или приватно, днём и ночью — но никогда перед фильмом, сосредоточься, пожалуйста!"
+      },
+      "team": {
+        "label": "Команда",
+        "intro": "Recomend создали два брата, помешанных на кино, которые любят вкладывать своё время в слишком амбициозные проекты, о которых неизвестно, увидят ли они когда-нибудь свет.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "Гиперактивный архитектор и инженер, не способный довольствоваться одной работой (та самая настоящая start-up nation): Yoann — автор идеи сделать карту фильмов, у которой поначалу была лишь скромная цель стать плакатом в его туалете. С приходом Loup цели полностью взорвались, и, немного смятённый происходящим, он занимается всей графикой карты и сайта, а также всей коммуникацией (хотя ему это не нравится). Он также высказывает мнение об UX/UI и предлагает кучу функций, не вполне понимая, насколько сложно их запрограммировать (кое-какой прогресс есть)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "Полный самоучка, который всё же получил образование, приведшее к неоплачиваемой безработице до 25 лет. Настоящий швейцарский нож: Loup занимается веб-дизайном и программирует интерфейс, который мы представляем максимально удобным. Loup хотел бы поблагодарить все форумы о коде, ответившие на его (очень) многочисленные вопросы, а также всех индийских ютуберов, сопровождавших его эти месяцы как приёмные отцы. Его мама, кстати, убеждена, что брат сделал его рабом этого проекта (всё хорошо, мам)."
+          }
+        },
+        "last": "Чтобы поболтать с нами или с другими участниками сообщества, заходи в наш <link>Discord</link>!"
+      },
+      "pricing": {
+        "label": "Цены",
+        "intro": "Эта модель подписки — прежде всего поддержка, чтобы проект жил и продолжал развиваться. Премиум-функции — это бонусы для продвинутого использования Recomend, которые оправдывают небольшой финансовый вклад. Мы всегда сохраним возможность пользоваться сайтом бесплатно, без рекламы и без ощущения ограниченности.",
+        "subdescription": "*Если крайне низкая цена этой подписки всё же выше твоих возможностей, обратись к либеральному правительству, ответственному за потерю твоей покупательной способности."
+      },
+      "legal": {
+        "label": "Правовая информация и конфиденциальность",
+        "description": "Мы уважаем твою конфиденциальность. Реклама, показываемая неавторизованным пользователям, управляется Google и требует технических cookie, чтобы ограничить частоту показа и предотвратить мошенничество.",
+        "privacyPolicy": "Прочитать нашу политику конфиденциальности",
+        "manageCookies": "Управлять моими рекламными настройками (cookie)"
+      },
+      "open-source": {
+        "label": "Открытый код",
+        "intro": "Recomend с открытым кодом: код публично доступен на GitHub. Посмотри, внеси вклад или просто поставь нам звезду!",
+        "star": "Поставь нам звезду на GitHub"
+      },
+      "businessmodel": {
+        "label": "Бизнес-модель",
+        "paragraph": {
+          "1": "Ты догадываешься, что с нашими мало коммерческими профилями мы так и не поняли, зачем нам сейчас может пригодиться бизнес-модель...",
+          "2": "Если будущее Recomend того потребует, мы изучим вопрос, окружив себя правильными людьми — или хотя бы людьми, которым это интереснее, чем нам.",
+          "3": "А пока, будем честны, есть и другие дела."
+        }
+      },
+      "roadmap": {
+        "label": "Роадмап"
+      },
+      "data": {
+        "label": "Данные",
+        "paragraph": {
+          "1": "Все метаданные, используемые в Recomend, предоставляет <link>The Movie Database (TMDb)</link> через API платформы. То есть мы делаем ровно как все остальные, как послушные овцы.",
+          "2": "По поводу ошибок или отсутствующих фильмов обращайся к <link>TMDb</link>."
+        }
+      },
+      "resources": {
+        "label": "Ресурсы",
+        "intro": "С кино это не очень связано, но вот список сайтов, которые нам нравятся:"
+      },
+      "contact-support": {
+        "label": "Контакты и поддержка",
+        "help-center": "Найди ответы на свои экзистенциальные вопросы в нашем <link>центре помощи</link>.",
+        "technical-support": "По техническим вопросам: <email></email>",
+        "suggest-a-feature": "По предложениям: <email></email>",
+        "contact-us": "Если просто хочешь с нами связаться: <email></email>"
+      },
+      "quote": {
+        "label": "Цитата",
+        "quote": "« Ненавижу слово профессионал. Все эти актёры и прочие, которые говорят: я профессионал, я про! Что это такое? Есть ли слово печальнее? Ведь любитель происходит от слова любовь. Вещи нужно делать из любви, иначе мы идиоты. »",
+        "author": "Orson Wells",
+        "date": "1972",
+        "subdescription": "*Мы сомневались, стоит ли её вставлять, потому что это быстро звучит претенциозно, но она хорошо отражает наш настрой насчёт проекта. Если тебе не нравится, уберём."
+      }
+    },
+    "settings": {
+      "label": "Настройки",
+      "description": "Управляй настройками своего аккаунта.",
+      "profile": {
+        "label": "Профиль",
+        "description": "Вот так тебя будут видеть другие на сайте.",
+        "avatar": {
+          "label": "Аватар",
+          "delete": "Удалить"
+        },
+        "full_name": {
+          "label": "Имя",
+          "description": "Это имя будет отображаться в твоём профиле и в письмах.",
+          "placeholder": "Введи своё имя",
+          "form": {
+            "min_length": "Имя должно содержать хотя бы 1 символ",
+            "max_length": "Имя не должно превышать 50 символов"
+          }
+        },
+        "bio": {
+          "label": "Описание",
+          "description": "Расскажи что-нибудь о себе — это появится в твоём профиле.",
+          "placeholder": "Напиши что-нибудь о себе",
+          "form": {
+            "max_length": "Описание не должно превышать 150 символов",
+            "format": "Биография не может содержать пустые строки или состоять только из пробелов."
+          }
+        },
+        "favorite_films": {
+          "label": "Любимые фильмы",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "URL некорректен"
+          }
+        }
+      },
+      "account": {
+        "label": "Аккаунт",
+        "description": "Обнови настройки своего аккаунта.",
+        "username": {
+          "label": "Имя пользователя",
+          "description": "Это твоё имя пользователя, по которому другие могут тебя найти и зайти в твой профиль. Менять его можно только раз в 30 дней.",
+          "placeholder": "Введи своё имя пользователя",
+          "form": {
+            "min_length": "Имя пользователя должно содержать хотя бы 3 символа",
+            "max_length": "Имя пользователя не должно превышать 15 символов",
+            "invalid": "Имя пользователя может содержать только буквы, цифры и символы '_' и '.'",
+            "unavailable": "Это имя пользователя уже занято"
+          }
+        },
+        "private": {
+          "label": "Закрытый аккаунт",
+          "description": "Когда твой аккаунт закрытый, твои активности видят только те пользователи, которых ты одобрил."
+        },
+        "email": {
+          "description": "Письмо с подтверждением будет отправлено на твой текущий и на новый email. Чтобы изменение вступило в силу, нужно подтвердить оба.",
+          "change_pending": "<strong>{date}</strong> письмо с подтверждением было отправлено на твой новый адрес <strong>{email}</strong>. Нажми ссылку или введи код подтверждения, чтобы подтвердить изменение.",
+          "confirm_email_code": {
+            "description": "Введи код подтверждения, отправленный на твой адрес <strong>{email}</strong>."
+          },
+          "change_success": "Твой email успешно обновлён"
+        },
+        "delete_account": {
+          "button": "Удалить мой аккаунт",
+          "confirm": {
+            "description": "Твой аккаунт будет удалён окончательно, и восстановить его не получится.",
+            "confirm_email_sent": "Письмо с подтверждением отправлено на твой email"
+          }
+        }
+      },
+      "appearance": {
+        "label": "Внешний вид",
+        "description": "Настрой внешний вид приложения. Переключайся автоматически между дневной и ночной темой.",
+        "language": {
+          "label": "Язык",
+          "description": "Выбери язык — изменения применятся после перезапуска приложения",
+          "placeholder": "Выбери язык",
+          "not_found": "Язык не найден"
+        },
+        "theme": {
+          "label": "Тема",
+          "description": "Выбери тему интерфейса.",
+          "options": {
+            "light": "Светлая",
+            "dark": "Тёмная"
+          }
+        }
+      },
+      "subscription": {
+        "label": "Подписка",
+        "description": "Управляй своей премиум-подпиской."
+      },
+      "security": {
+        "label": "Безопасность",
+        "description": "Смена пароля выйдет из аккаунта на всех устройствах, кроме того, которым ты пользуешься сейчас.",
+        "current_password": {
+          "label": "Текущий пароль",
+          "placeholder": "Введи свой текущий пароль",
+          "form": {
+            "required": "Текущий пароль обязателен",
+            "invalid": "Текущий пароль неверен"
+          }
+        },
+        "new_password": {
+          "label": "Новый пароль",
+          "placeholder": "Введи свой новый пароль",
+          "form": {
+            "min_length": "Пароль должен содержать хотя бы 8 символов",
+            "uppercase": "Нужна хотя бы одна заглавная буква",
+            "lowercase": "Нужна хотя бы одна строчная буква",
+            "number": "Нужна хотя бы одна цифра",
+            "special": "Нужен хотя бы один специальный символ"
+          }
+        },
+        "confirm_password": {
+          "label": "Подтвердить новый пароль",
+          "placeholder": "Подтверди свой новый пароль",
+          "form": {
+            "match": "Пароли не совпадают"
+          }
+        }
+      },
+      "notifications": {
+        "label": "Уведомления",
+        "description": "Настрой, какие уведомления ты получаешь.",
+        "push_notifications": {
+          "label": "Push-уведомления",
+          "form": {
+            "enable": "Включить push-уведомления"
+          },
+          "already_granted": "Запрос на уведомления уже был отправлен; чтобы изменить его, зайди в настройки своего браузера.",
+          "no_enabled": "Включи уведомления в настройках своего устройства, чтобы получать push-уведомления.",
+          "open_settings": "Перейти в настройки устройства"
+        }
+      },
+      "data": {
+        "label": "Данные",
+        "description": "Импортируй или экспортируй свои данные.",
+        "importer": {
+          "label": "Импорт",
+          "select_source": "Выбери источник",
+          "instructions_title": "Инструкции",
+          "browse_prompt": "Перетащи сюда файл или <link>выбери</link>",
+          "browse_prompt_mobile": "Нажми, чтобы выбрать файл",
+          "uploading": "Загрузка…",
+          "processing": "Анализируем твой файл…",
+          "upload_error": "Загрузка не удалась, попробуй снова.",
+          "invalid_file_type": "Этот тип файла не поддерживается для этого источника.",
+          "review_title": "Проверь свой импорт",
+          "review_summary": "найдено {matched} из {total}",
+          "validate": "Подтвердить импорт",
+          "validate_confirm_description": "Это импортирует в твою библиотеку все найденные и не пропущенные элементы. Отменить это нельзя.",
+          "success_title": "Импорт завершён",
+          "success_description": "Твои данные успешно импортированы.",
+          "failed_title": "Импорт не удался",
+          "failed_description": "Что-то пошло не так при обработке этого импорта.",
+          "pending_description": "Твой импорт в очереди и начнётся скоро.",
+          "empty": "Импортов пока нет.",
+          "delete_confirm_description": "Этот импорт и все его данные будут удалены окончательно. Отменить это нельзя.",
+          "keep_existing": "Оставить мои",
+          "use_imported": "Использовать импортированные",
+          "merge": "Объединить",
+          "conflict": "Конфликт",
+          "no_match": "Нет совпадения",
+          "existing_rating": "Сейчас: {rating}",
+          "log_column": "Журнал",
+          "actions_column": "Действия",
+          "categories": {
+            "log_movies": "Фильмы",
+            "log_tv_series": "Сериалы",
+            "bookmarks": "Список к просмотру",
+            "playlists": "Списки"
+          },
+          "status": {
+            "pending": "В ожидании",
+            "processing": "В процессе",
+            "awaiting_review": "На проверку",
+            "completed": "Завершён",
+            "failed": "Не удался"
+          }
+        },
+        "exporter": {
+          "label": "Экспорт"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "перейти на Премиум",
+        "description": "Перейди на премиум-аккаунт, чтобы пользоваться всеми функциями {app}."
+      },
+      "header": {
+        "title": "расширь своё кино, делись больше, поддержи {app}",
+        "subtitle": "попробуй 1 месяц бесплатно, затем {price}/месяц"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "активности",
+            "unlimited_activities": {
+              "label": "неограниченные активности",
+              "description": "оценки, лайки, рецензии, список к просмотру и рекомендации"
+            },
+            "favorites": {
+              "label": "избранное",
+              "description": "добавь любимые фильмы в свой профиль"
+            }
+          },
+          "playlists": {
+            "label": "плейлисты",
+            "unlimited_playlists": {
+              "label": "неограниченные",
+              "description": "создавай неограниченное число плейлистов"
+            },
+            "shared_playlists": {
+              "label": "общие",
+              "description": "делись своими плейлистами с другими пользователями"
+            },
+            "collaborative_playlists": {
+              "label": "совместные",
+              "description": "создавай совместные плейлисты с другими пользователями"
+            }
+          },
+          "feed": {
+            "label": "лента",
+            "followees": {
+              "label": "подписки",
+              "description": "смотри активности пользователей, на которых ты подписан"
+            },
+            "cast_and_crew": {
+              "label": "актёры и команда",
+              "description": "следи за активностями людей, работающих над фильмами"
+            }
+          },
+          "support": {
+            "label": "поддержка",
+            "team": {
+              "label": "Поддержи команду {app}"
+            },
+            "credits": {
+              "label": "титры",
+              "description": "твой профиль в титрах приложения"
+            }
+          }
+        },
+        "success": {
+          "label": "Спасибо за поддержку!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} — плейлист @{username}",
+        "description": "Открой плейлист фильмов @{username} в {app}."
+      },
+      "actions": {
+        "delete": {
+          "description": "Это окончательно удалит <important>{title}</important> из твоих плейлистов."
+        }
+      },
+      "search": {
+        "placeholder": "искать в плейлисте..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "Ты правда хочешь удалить <important>{title}</important> из своего плейлиста?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "Введи название плейлиста"
+        },
+        "description": {
+          "placeholder": "Введи описание плейлиста"
+        },
+        "error": {
+          "format": "Описание не может содержать пустые строки или состоять только из пробелов."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "Открой профиль @{username} в {app}."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year}) • Фильм",
+        "description": "{title} — фильм {directors}, вышедший в {year} году. Описание: {overview}",
+        "description_no_director": "{title} — фильм, вышедший в {year} году. Описание: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Плейлисты",
+          "description": "Открой все плейлисты, в которых есть фильм {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Рецензии",
+          "description": "Открой все рецензии на фильм {title}."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} — сериал {creators}, впервые показанный в {year} году. Описание: {overview}",
+        "description_no_creator": "{title} — сериал, впервые показанный в {year} году. Описание: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Плейлисты",
+          "description": "Открой все плейлисты, в которых есть сериал {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Рецензии",
+          "description": "Открой все рецензии на сериал {title}."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • Сезоны",
+          "description": "Открой все сезоны сериала {title}."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • Сезон {number}",
+            "description": "Открой все эпизоды сезона {number} сериала {title}."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • Фильмы",
+          "description": "Открой все фильмы, в которых {name} играл или участвовал."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • Сериалы",
+          "description": "Открой все сериалы, в которых {name} играл или участвовал."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "Рецензия на {title} от @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "Написать рецензию на {title}",
+          "description": "Поделись своим мнением о {title}."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Исследовать Paradise Pictures",
+        "description": "Отправляйся открывать остров и его разнообразные декорации. Многочисленные фильмы, населяющие его, размещены в своей диегетической среде. Получится ли у тебя исследовать каждый его уголок?"
+      }
+    },
+    "legal": {
+      "label": "Правовая информация",
+      "description": "Прочитай правовые документы {app}.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "Общие условия использования",
+          "description": "Прочитай условия использования {app}."
+        },
+        "sections": {
+          "intro": "Настоящие общие условия использования (далее «Условия») регулируют доступ к приложению {app} и его использование. Приложение издаётся Loup (далее «Издатель») с местонахождением в Париже. Регистрация в {app} означает безоговорочное принятие настоящих Условий.",
+          "presentation": {
+            "label": "1. Описание сервиса",
+            "content": "{app} — бесплатное приложение, позволяющее своим пользователям просматривать информацию о фильмах, публиковать рецензии, оценивать произведения и создавать персональные списки."
+          },
+          "account": {
+            "label": "2. Аккаунт и безопасность",
+            "content": "Доступ к функциям для вклада требует создания аккаунта. Пользователь отвечает за конфиденциальность своих данных для входа. В случае мошеннического использования или подозрения на взлом Пользователь должен немедленно связаться с поддержкой по адресу: <email></email>."
+          },
+          "conduct": {
+            "label": "3. Правила поведения",
+            "content": "Пользователь обязуется оставаться вежливым и уважительным в своих отзывах и списках. Строго запрещены: высказывания ненависти, клеветнические или расистские, травля, а также спам или нежелательная коммерческая реклама. Издатель оставляет за собой право удалить любой контент, нарушающий эти правила, и заблокировать соответствующий аккаунт без предупреждения."
+          },
+          "child_safety": {
+            "label": "4. Защита несовершеннолетних",
+            "content": "{app} применяет строгую политику нулевой терпимости к любым формам сексуального насилия и эксплуатации детей («Child Sexual Abuse and Exploitation», или CSAE). Создание, загрузка, хранение, распространение, запрос или продвижение любого контента, который сексуализирует, эксплуатирует или иным образом ставит под угрозу несовершеннолетних, прямо и абсолютно запрещены в {app}. Любой аккаунт, нарушение этой политики которым будет установлено, будет немедленно и навсегда заблокирован, а Издатель сообщит о соответствующем контенте, вместе со всей доступной информацией о пользователе, в National Center for Missing & Exploited Children (NCMEC) и/или компетентным органам в соответствии с применимым законодательством. Любой пользователь, узнавший о контенте или поведении, которое может представлять случай CSAE, должен незамедлительно сообщить об этом на: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. Интеллектуальная собственность",
+            "content": "Пользователь остаётся владельцем отзывов, которые он пишет. Однако, публикуя в {app}, Пользователь предоставляет Издателю бесплатную неисключительную лицензию на отображение, воспроизведение и техническую адаптацию этого контента в рамках приложения. Визуальные элементы, код и дизайн {app} являются исключительной собственностью Издателя."
+          },
+          "privacy": {
+            "label": "6. Персональные данные",
+            "content": "Уважение твоей конфиденциальности — наш абсолютный приоритет. {app} не продаёт, не сдаёт в аренду и не передаёт никакие персональные данные коммерческим третьим лицам или рекламодателям. Собираемые данные (email, имя пользователя, активность в приложении) служат только для работы сервиса и управления твоим аккаунтом. Ты можешь реализовать свои права на доступ, изменение или удаление (GDPR), связавшись по адресу: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookie и трекеры",
+            "content": "{app} не использует никаких рекламных cookie и никаких сторонних поведенческих трекеров. Используются только два типа технических cookie: cookie аутентификации (чтобы ты оставался в аккаунте) и cookie языковых настроек (чтобы запомнить твой выбор). Поскольку эти cookie строго необходимы для сервиса, они не требуют предварительного согласия."
+          },
+          "ads": {
+            "label": "8. Реклама",
+            "content": "Приложение в настоящее время предоставляется полностью без рекламы. Если эта модель изменится, пользователи будут уведомлены через обновление настоящих Условий."
+          },
+          "liability": {
+            "label": "9. Ответственность",
+            "content": "Издатель стремится поддерживать доступность {app} круглосуточно, но не гарантирует отсутствие перебоев или ошибок. Информация о фильмах поступает из сторонних баз данных; Издатель не может быть привлечён к ответственности за возможные неточности в этих данных."
+          },
+          "law": {
+            "label": "10. Применимое право",
+            "content": "Настоящие Условия подчиняются французскому праву. В случае спора, который не удалось урегулировать мирно через адрес <email></email>, исключительной компетенцией обладают суды Парижа."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "Политика конфиденциальности",
+          "description": "Прочитай политику конфиденциальности {app}."
+        },
+        "sections": {
+          "intro": "Защита данных — в самом центре философии {app}. Эта политика подробно описывает, какие данные мы собираем, зачем мы их собираем и как мы их защищаем. Коротко: мы не продаём твои данные.",
+          "controller": {
+            "label": "1. Оператор данных",
+            "content": "Оператором обработки данных является Loup с местонахождением в Париже (Франция). По любым вопросам конфиденциальности можно обращаться: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. Собираемые данные",
+            "content": "Мы собираем только строго необходимые для работы приложения данные: твой email (для аутентификации), твоё имя пользователя и твои данные использования (оценённые фильмы, рецензии, списки). Твои пароли хранятся в зашифрованном (хешированном) и защищённом виде."
+          },
+          "purpose": {
+            "label": "3. Цель обработки",
+            "content": "Твои данные обрабатываются исключительно для того, чтобы: позволить тебе создать аккаунт и управлять им, отображать твои списки и оценки и обеспечивать техническую работу сервиса. Мы не используем твои данные для рекламного профилирования."
+          },
+          "sharing": {
+            "label": "4. Передача данных",
+            "content": "Твои персональные данные никогда не продаются, не сдаются в аренду и не передаются третьим лицам. Они могут размещаться у наших технических поставщиков (хостинг, сервис транзакционных писем), связанных строгой конфиденциальностью и соблюдающих GDPR."
+          },
+          "retention": {
+            "label": "5. Срок хранения",
+            "content": "Твои данные хранятся столько, сколько активен твой аккаунт. Если ты решишь удалить аккаунт, все твои персональные данные (email, имя пользователя, отзывы) будут окончательно стёрты из наших баз данных."
+          },
+          "rights": {
+            "label": "6. Твои права (GDPR)",
+            "content": "В соответствии с законодательством у тебя есть право на доступ, исправление, переносимость и удаление своих данных. Эти права можно реализовать в любой момент прямо в приложении или написав нам на: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookie",
+            "content": "Как указано в наших условиях использования, мы используем только необходимые технические cookie (сессия и язык). На твоё устройство не устанавливается ни один сторонний рекламный или отслеживающий cookie."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "Найди фильм, сериал, плейлист, человека или пользователя..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "Ты правда хочешь убрать это произведение из своего списка просмотренных? Если у тебя есть оценка или рецензия, они тоже будут удалены."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "Ты правда хочешь завершить сериал? Все эпизоды всех сезонов будут отмечены как просмотренные."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "Ты правда хочешь завершить сезон {seasonNumber}? Все эпизоды сезона будут отмечены как просмотренные."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "Чтобы здесь появилась активность, ты или пользователи, на которых ты подписан, должны оценивать фильмы, сериалы, ..."
+    },
+    "feed_person": {
+      "message": "Чтобы здесь появилась активность, нужно подписаться на людей, которые участвуют в фильмах или сериалах."
+    },
+    "playlists": {
+      "items": {
+        "empty": "В этом плейлисте нет фильмов и сериалов. Добавь несколько, чтобы его наполнить!"
+      },
+      "add_to": {
+        "empty": "У тебя нет ни одного плейлиста. Создай его, чтобы добавлять фильмы или сериалы и легко их находить!"
+      },
+      "saved": {
+        "empty": "У тебя нет сохранённых плейлистов. Сохрани плейлист, чтобы легко находить его в своей библиотеке!"
+      },
+      "members": {
+        "empty": "В этом плейлисте нет участников. Добавь их, чтобы работать над одним плейлистом вместе!",
+        "search": "Найди пользователей для добавления в плейлист..."
+      }
+    },
+    "follow-requests": {
+      "empty": "У тебя нет ожидающих запросов на подписку. Когда они появятся, ты увидишь их здесь!"
+    },
+    "recos": {
+      "empty": "У тебя нет рекомендаций. Когда они появятся, ты увидишь их здесь!",
+      "send_to": {
+        "empty": "Тебе некому отправить реко. Чтобы отправить реко, нужно быть друзьями (взаимная подписка)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "У тебя пока нет фильмов или сериалов, сохранённых на потом. Когда они появятся, ты увидишь их здесь!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> отправил тебе реко на фильм <movie></movie>"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> отправил тебе реко на сериал <tv_series></tv_series>"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> посмотрел <movie></movie>, который ты порекомендовал"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> посмотрел <tv_series></tv_series>, который ты порекомендовал"
+    },
+    "follower_created": {
+      "description": "<user></user> подписался на тебя"
+    },
+    "follower_accepted": {
+      "description": "<user></user> принял твой запрос на подписку"
+    },
+    "follower_request": {
+      "description": "<user></user> хочет подписаться на тебя"
+    },
+    "friend_created": {
+      "description": "<user></user> теперь твой друг"
+    }
+  }
+}

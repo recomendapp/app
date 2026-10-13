@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "映画と出会う、もうひとつの方法",
+    "description": "{app}は映画好きのためのソーシャルネットワークです。友達と一緒に映画やシリーズを見つけ、共有し、見てまわりましょう。"
+  },
+  "common": {
+    "messages": {
+      "welcome": "ようこそ",
+      "welcome_to_app": "{app}へようこそ",
+      "hello": "こんにちは",
+      "greeting_with_name": "{timeOfDay, select, morning {おはようございます、{name}さん} afternoon {こんにちは、{name}さん} evening {こんばんは、{name}さん} night {おやすみなさい、{name}さん} other {こんにちは、{name}さん}}",
+      "click_here": "ここをクリック",
+      "see_more": "もっと見る",
+      "see_more_details": "詳細をもっと見る",
+      "more": "もっと",
+      "view_profile": "プロフィールを見る",
+      "library": "ライブラリ",
+      "watchlist": "ウォッチリスト",
+      "for_later": "あとで見る",
+      "heart_pick": "心のお気に入り",
+      "add_to_heart_picks": "心のお気に入りに追加",
+      "remove_from_heart_picks": "心のお気に入りから削除",
+      "add_rating": "評価を追加",
+      "edit_rating": "評価を編集",
+      "remove_rating": "評価を削除",
+      "share_my_rating": "自分の評価をシェア",
+      "share_review": "レビューをシェア",
+      "show_likes_count": "いいねの数を表示",
+      "show_comments_count": "コメントの数を表示",
+      "add_to_watchlist": "ウォッチリストに追加",
+      "remove_from_watchlist": "ウォッチリストから削除",
+      "no_results": "結果がありません",
+      "no_results_for": "<strong>{query}</strong>の結果はありません",
+      "no_followees": "まだ誰もフォローしていません",
+      "no_followers": "フォロワーはいません",
+      "no_rating": "評価はありません",
+      "must_watch_to_review": "レビューを書くには、この作品を観る必要があります",
+      "review_cannot_be_empty": "レビューを空にはできません",
+      "no_activity": "アクティビティはありません",
+      "followers_ratings": "フォロワーの評価",
+      "added_by": "追加した人",
+      "sort_by": "並び替え",
+      "sort_order": "並び順",
+      "go_to_film": "映画へ移動",
+      "go_to_tv_series": "シリーズへ移動",
+      "go_to_user": "ユーザーへ移動",
+      "go_to_person": "人物へ移動",
+      "go_to_activity": "アクティビティへ移動",
+      "go_to_playlist": "プレイリストへ移動",
+      "go_to_review": "レビューへ移動",
+      "go_to_director": "監督へ移動",
+      "go_to_creator": "制作者へ移動",
+      "show_director": "監督を表示",
+      "show_creator": "制作者を表示",
+      "show_credit": "参加作品を表示",
+      "credits": "クレジット",
+      "view_recommendation": "recoを見る",
+      "view_directors": "監督を見る",
+      "no_director": "監督の情報がありません",
+      "view_comment": "コメントを見る",
+      "add_comment": "コメントを追加",
+      "edit_comment": "コメントを編集",
+      "delete_comment": "コメントを削除",
+      "do_you_really_want_to_delete_this_comment": "このコメントを削除しますか？",
+      "comment_deleted": "このコメントは削除されました",
+      "write_your_comment_here": "コメントを書く...",
+      "reply": "返信",
+      "replies_count": "返信{count}件",
+      "view_replies": "返信{count}件を見る",
+      "hide_replies": "返信を隠す",
+      "load_more_replies": "返信をもっと読み込む",
+      "get_started": "はじめる",
+      "get_started_its_free": "さあ始めよう 🎬 無料です！",
+      "import": "インポート",
+      "upgrade_to_plan": "{plan}にアップグレード",
+      "choose_subscription_recurrence": "サブスクリプションの請求サイクルを選んでください",
+      "compare_plans": "プランを比較",
+      "save_up_to_percent": "最大{percent}%お得",
+      "is_empty": "ここは少し寂しいですね",
+      "add_to_playlist": "プレイリストに追加",
+      "send_to_friend": "友達に送る",
+      "pin_to_profile": "プロフィールに固定",
+      "unpin_from_profile": "プロフィールの固定を解除",
+      "pinned": "固定しました",
+      "unpinned": "固定を解除しました",
+      "no_pinned": "固定されたアイテムはありません",
+      "pinned_limit_reached": "固定できる上限に達しました。新しく追加するには、どれかの固定を解除してください",
+      "custom_sort": "自分で並べ替え",
+      "quick_add": "すぐ追加",
+      "favorite_films": "お気に入りの映画",
+      "follow": "フォロー",
+      "followed": "フォロー中",
+      "request_sent": "リクエストを送信しました",
+      "follow_requests": "フォローリクエスト",
+      "no_follow_requests": "フォローリクエストはありません",
+      "follower": "フォロワー",
+      "follower_count": "フォロワー{count}人",
+      "see_followers": "フォロワーを見る",
+      "followee": "フォロー中",
+      "followee_count": "フォロー中{count}人",
+      "see_followees": "フォローしている人を見る",
+      "last_activities": "最近のアクティビティ",
+      "last_updated": "最終更新",
+      "last_updated_at_date": "最終更新 {date}",
+      "show_all": "すべて表示",
+      "this_account_is_private": "このアカウントは非公開です",
+      "follow_to_see_activities": "アクティビティを見るにはフォローしてください",
+      "review": "レビュー",
+      "no_overview": "あらすじがありません",
+      "cast": "キャスト",
+      "no_cast": "キャスト情報がありません",
+      "recent": "新着",
+      "popular": "人気",
+      "popularity": "人気度",
+      "no_reviews": "レビューはありません",
+      "no_playlists": "プレイリストはありません",
+      "no_playlists_found": "プレイリストが見つかりません",
+      "no_films": "映画はありません",
+      "no_tv_series": "シリーズはありません",
+      "view_activity": "アクティビティを見る",
+      "comment_count": "コメント{count}件",
+      "write_review": "レビューを書く",
+      "new_review": "新しいレビュー",
+      "edit_review": "レビューを編集",
+      "review_by": "{name}さんのレビュー",
+      "my_review": "自分のレビュー",
+      "add_review": "レビューを追加",
+      "tv_series": "シリーズ",
+      "film": "映画",
+      "movie": "映画",
+      "media": "作品",
+      "tv_season": "シーズン",
+      "tv_season_count": "シーズン{count}個",
+      "tv_season_value": "シーズン{number}",
+      "tv_season_short": "S{number}",
+      "tv_episode": "エピソード",
+      "tv_episode_count": "エピソード{count}本",
+      "tv_episode_value": "第{number}話",
+      "tv_episode_short": "S{seasonNumber}E{episodeNumber}",
+      "tv_special_episode": "特別編",
+      "first_air_date": "初回放送",
+      "last_air_date": "最終放送",
+      "see_film": "映画を見る",
+      "see_tv_series": "シリーズを見る",
+      "watch_film_title": "{title}を観る",
+      "watch_film_streaming_or_download": "<important>{title}</important>を配信または正規ダウンロードで観る",
+      "download": "ダウンロード",
+      "downloaded": "ダウンロード済み",
+      "person": "人物",
+      "top_result": "最有力の結果",
+      "user": "ユーザー",
+      "reco": "reco",
+      "my_recos": "自分のreco",
+      "item": "アイテム",
+      "item_count": "{count}件",
+      "type": "種類",
+      "complete": "完了にする",
+      "completed": "完了",
+      "collection": "コレクション",
+      "most_recent": "新しい順",
+      "most_popular": "人気順",
+      "most_old": "古い順",
+      "known_for": "代表作",
+      "release_date": "公開日",
+      "last_appearance_date": "最後の出演",
+      "vote_average": "平均評価",
+      "added": "追加済み",
+      "added_date": "追加日",
+      "added_at": "追加日時",
+      "add": "追加",
+      "playlist_name": "プレイリスト名",
+      "updated_at": "更新日時",
+      "created_at": "作成日時",
+      "likes": "いいね",
+      "likes_count": "いいねの数",
+      "search_media": "作品を検索",
+      "search_film": "映画を検索",
+      "start_typing_to_search_films": "入力すると映画を検索できます",
+      "search_tv_series": "シリーズを検索",
+      "start_typing_to_search_tv_series": "入力するとシリーズを検索できます",
+      "search_person": "人物を検索",
+      "start_typing_to_search_persons": "入力すると人物を検索できます",
+      "search_user": "ユーザーを検索",
+      "start_typing_to_search_users": "入力するとユーザーを検索できます",
+      "search_playlist": "プレイリストを検索",
+      "start_typing_to_search_playlists": "入力するとプレイリストを検索できます",
+      "search_film_or_tv_series": "映画またはシリーズを検索",
+      "watched_date": "視聴日",
+      "mark_as_watched": "視聴済みにする",
+      "remove_from_watched": "視聴済みから外す",
+      "rating": "評価",
+      "create_a_playlist": "プレイリストを作成",
+      "by_name": "{name}作",
+      "reset": "リセット",
+      "job": "担当",
+      "department": "部門",
+      "share_title_via": "<strong>{title}</strong>をシェアする方法",
+      "share_title": "<strong>{title}</strong>をシェア",
+      "link": "リンク",
+      "copy_link": "リンクをコピー",
+      "copied": "コピーしました",
+      "other": "その他",
+      "via": "経由",
+      "edit": "編集",
+      "guest": "ゲスト",
+      "are_u_sure": "本当によろしいですか？",
+      "backward": "戻る",
+      "forward": "進む",
+      "back": "戻る",
+      "next": "次へ",
+      "notification": "通知",
+      "see_notifications": "通知を見る",
+      "open_social_panel": "ソーシャルパネルを開く",
+      "cancel_change": "変更を取り消す",
+      "do_you_really_want_to_cancel_change": "変更を取り消してもよろしいですか？",
+      "continue_editing": "編集を続ける",
+      "confirm": "確認",
+      "terms_of_use": "利用規約",
+      "privacy_policy": "プライバシーポリシー",
+      "request_made": "リクエストを送信しました",
+      "request_canceled": "リクエストを取り消しました",
+      "cancel_request": "リクエストを取り消す",
+      "open_menu": "メニューを開く",
+      "feed": "フィード",
+      "about": "概要",
+      "home": "ホーム",
+      "search": "検索",
+      "explore": "さがす",
+      "shop": "ショップ",
+      "help": "ヘルプ",
+      "legal": "法的情報",
+      "setting": "設定",
+      "logout": "ログアウト",
+      "to_watch": "これから観る",
+      "reco_by_your_friends": "友達のreco",
+      "friends_playlists": "友達のプレイリスト",
+      "latest_activity": "最近のアクティビティ",
+      "discover_users": "ユーザーをさがす",
+      "most_recommended": "おすすめが多い順",
+      "archive": "アーカイブ",
+      "unarchive": "アーカイブから戻す",
+      "mark_as_read": "既読にする",
+      "mark_as_unread": "未読にする",
+      "accept": "承認",
+      "accepted": "承認しました",
+      "decline": "拒否",
+      "declined": "拒否しました",
+      "request_accepted": "リクエストを承認しました",
+      "request_declined": "リクエストを拒否しました",
+      "unread": "未読",
+      "archived": "アーカイブ済み",
+      "no_notifications": "通知はありません",
+      "all": "すべて",
+      "mark_all_as_read": "すべて既読にする",
+      "archive_all": "すべてアーカイブ",
+      "archive_all_read": "既読のものをすべてアーカイブ",
+      "please_login": "ログインしてください",
+      "like": "いいね",
+      "unlike": "いいねを取り消す",
+      "unfollow": "フォローを解除",
+      "name": "名前",
+      "add_a_name": "名前を入力",
+      "add_a_description": "説明を入力",
+      "visibility": "公開範囲",
+      "search_an_user": "ユーザーを検索",
+      "select_an_item_to_add_to_playlist": "プレイリストに追加するアイテムを選んでください",
+      "select_a_film_to_add_to_playlist": "プレイリストに追加する映画を選んでください",
+      "select_a_tv_series_to_add_to_playlist": "プレイリストに追加するシリーズを選んでください",
+      "add_one_or_more_items_to": "<important>{title}</important>にアイテムを1つ以上追加",
+      "add_one_or_more_films_to": "<important>{title}</important>に映画を1本以上追加",
+      "add_one_or_more_tv_series_to": "<important>{title}</important>にシリーズを1つ以上追加",
+      "manage_playlist_access_rights": "プレイリストのアクセス権限を管理",
+      "add_guest": "ゲストを追加",
+      "manage_members": "メンバーを管理",
+      "no_member": "メンバーはいません",
+      "add_member": "メンバーを追加",
+      "manage_guests": "ゲストを管理",
+      "add_guests_to_your_playlist": "プレイリストにゲストを追加",
+      "select_users_to_add_to_playlist": "プレイリストに追加するユーザーを選んでください",
+      "select_users_to_send_reco": "recoを送る相手を選んでください",
+      "select_playlists_to_add_the_item": "アイテムを追加するプレイリストを選んでください",
+      "send": "送信",
+      "sent": "送信しました",
+      "select_row": "行を選択",
+      "select_all": "すべて選択",
+      "no_selected_users": "ユーザーが選択されていません",
+      "selection_count": "{total}件中{number}件の{type}を選択中",
+      "about_title": "{title}について",
+      "detail": "詳細",
+      "genre": "ジャンル",
+      "male": "男性",
+      "female": "女性",
+      "non_binary": "ノンバイナリー",
+      "unspecified": "未設定",
+      "date_of_birth": "生年月日",
+      "date_of_death": "没年月日",
+      "place_of_birth": "出身地",
+      "age_years": "{count}歳",
+      "biography": "経歴",
+      "no_biography_available": "経歴はありません",
+      "no_information_available": "情報はありません",
+      "already_sent": "すでに送信済み",
+      "already_watched": "すでに視聴済み",
+      "already_added": "すでに追加済み",
+      "recommend_to_friend_to_discover": "まだ観ていない友達に<strong>{title}</strong>をおすすめしよう",
+      "add_to_one_or_more_playlists": "<strong>{title}</strong>を1つ以上のプレイリストに追加",
+      "my_playlist": "自分のプレイリスト",
+      "what_is_title": "<strong>{title}</strong>とは？",
+      "try_again": "もう一度お試しください",
+      "error": "エラー",
+      "not_logged_in": "ログインしていません",
+      "an_error_occurred": "エラーが発生しました",
+      "playlist_not_found": "プレイリストが見つかりません",
+      "user_not_found": "ユーザーが見つかりません",
+      "film_not_found": "映画が見つかりません",
+      "media_not_found": "作品が見つかりません",
+      "review_not_found": "レビューが見つかりません",
+      "person_not_found": "人物が見つかりません",
+      "tv_series_not_found": "シリーズが見つかりません",
+      "tv_episode_not_found": "エピソードが見つかりません",
+      "tv_season_not_found": "シーズンが見つかりません",
+      "wrong_arguments": "パラメータが正しくありません",
+      "no_media_found": "作品が見つかりません",
+      "unknown_action": "不明な操作",
+      "no_user_found": "ユーザーが見つかりません",
+      "no_tv_episodes": "エピソードはありません",
+      "save": "保存",
+      "saved": "保存しました",
+      "create": "作成",
+      "film_count": "映画{count}本",
+      "tv_series_count": "シリーズ{count}本",
+      "login": "ログイン",
+      "signup": "新規登録",
+      "navigation": "ナビゲーション",
+      "delete": "削除",
+      "remove": "外す",
+      "deleted": "削除しました",
+      "share": "シェア",
+      "duplicate": "複製",
+      "duplicated": "複製しました",
+      "cancel": "キャンセル",
+      "date": "日付",
+      "duration": "長さ",
+      "sort": "並び替え",
+      "show": "表示",
+      "column": "列",
+      "comment": "コメント",
+      "unknown": "不明",
+      "community": "コミュニティ",
+      "cast_and_crew": "キャストとスタッフ",
+      "soon": "近日",
+      "ios_app": "iOSアプリ",
+      "android_app": "Androidアプリ",
+      "coming_soon": "近日公開",
+      "new_mobile_app": "新しいモバイルアプリ！",
+      "manage": "管理",
+      "monthly": "月額",
+      "yearly": "年額",
+      "day": "日",
+      "week": "週",
+      "month": "月",
+      "year": "年",
+      "price": "価格",
+      "free": "無料",
+      "playlist": "プレイリスト",
+      "public": "公開",
+      "publish": "公開する",
+      "private": "非公開",
+      "description": "説明",
+      "details": "詳細",
+      "profile": "プロフィール",
+      "overview": "あらすじ",
+      "no_playlists_saved": "保存したプレイリストはありません",
+      "camera_permission_denied": "カメラへのアクセスが拒否されました",
+      "photo_library_permission_denied": "写真ライブラリへのアクセスが拒否されました",
+      "ignore": "無視",
+      "ok": "OK",
+      "title": "タイトル",
+      "skip": "スキップ",
+      "undo": "取り消す",
+      "date_published": "公開日",
+      "date_created": "作成日",
+      "date_updated": "更新日",
+      "alphabetical": "名前順",
+      "date_added": "追加日",
+      "number_of_likes": "いいねの数",
+      "number_of_seasons": "シーズン数",
+      "add_to_this_playlist": "このプレイリストに追加",
+      "save_to_library": "ライブラリに保存",
+      "remove_from_library": "ライブラリから削除",
+      "otp": "ワンタイムコード",
+      "ratings_from_followees": "フォロー中の人の評価",
+      "choose_from_the_library": "ライブラリから選ぶ",
+      "take_a_photo": "写真を撮る",
+      "delete_current_image": "現在の画像を削除",
+      "edit_image": "画像を編集",
+      "add_image": "画像を追加",
+      "verify_with_a_code": "コードで認証",
+      "order": "並び順",
+      "edit_order": "並び順を編集",
+      "done": "完了",
+      "can_edit": "編集できますか？",
+      "upgrade": "アップグレード",
+      "no_description": "説明はありません",
+      "no_comment": "コメントはありません",
+      "close": "閉じる",
+      "edit_playlist": "プレイリストを編集",
+      "universe": "ユニバース",
+      "cannot_be_changed": "変更できません",
+      "delete_review": "レビューを削除",
+      "do_you_really_want_to_delete_this_review": "このレビューを削除しますか？",
+      "user_liked_playlist": "<name></name>さんがプレイリストにいいねしました",
+      "user_liked_review": "<name></name>さんがレビューにいいねしました",
+      "runtime": "上映時間",
+      "ends_at": "{value}に終了",
+      "this_user_has_no_activity": "このユーザーのアクティビティはありません",
+      "notification_archived": "通知をアーカイブしました",
+      "notification_unarchived": "通知をアーカイブから戻しました",
+      "notification_marked_as_read": "通知を既読にしました",
+      "notification_marked_as_unread": "通知を未読にしました",
+      "or_continue_with": "または次で続ける",
+      "message": "メッセージ",
+      "story": "ストーリー",
+      "new_playlist": "新しいプレイリスト",
+      "select_a_type": "種類を選んでください",
+      "filter": "フィルター",
+      "hide_watched": "視聴済みを隠す",
+      "show_me_around": "ひと通り案内して",
+      "artwork_from": "イラスト：<important>{source}</important>",
+      "no_active_subscription": "有効なサブスクリプションはありません",
+      "manage_subscription": "サブスクリプションを管理",
+      "started_on_date": "{date}開始",
+      "last_renewed_on_date": "最終更新 {date}",
+      "version_value": "バージョン{value}",
+      "original_title": "原題",
+      "starring": "出演",
+      "write_your_review_here": "ここにレビューを書いてください...",
+      "insert": "挿入",
+      "trailer": "予告編",
+      "list": "リスト",
+      "grid": "グリッド",
+      "order_asc": "昇順",
+      "order_desc": "降順",
+      "menu": "メニュー",
+      "at_least_one_watched_date_required": "視聴日を少なくとも1つ入力してください",
+      "viewer": "閲覧者",
+      "editor": "編集者",
+      "admin": "管理者",
+      "owner": "オーナー",
+      "you_dont_have_permission_to_do_this_action": "この操作を行う権限がありません",
+      "in_progress": "進行中",
+      "give_up": "あきらめる",
+      "random": "ランダム",
+      "reset_password": "パスワードを再設定",
+      "password_reset": "パスワードを再設定しました",
+      "return_to_login": "ログインに戻る",
+      "invalid_code": "コードが正しくありません",
+      "no_token_found": "トークンが見つかりません",
+      "first_watched_at": "初めて観た日",
+      "watched_dates": "視聴日",
+      "no_watched_dates": "視聴日はありません",
+      "select_role": "役割を選んでください",
+      "select_format": "形式を選んでください",
+      "theater": "映画館",
+      "physical": "パッケージ",
+      "digital": "デジタル",
+      "streaming": "配信",
+      "you_must_be_premium_to_change_member_role": "メンバーの役割を変更するにはPremiumが必要です",
+      "already_member": "すでにメンバーです",
+      "email_already_used": "このメールアドレスはすでに使われています",
+      "email_confirmed": "メールアドレスを確認しました",
+      "confirmation_email_sent": "確認メールを送信しました",
+      "continue": "続ける",
+      "finish": "完了",
+      "forgot_password": "パスワードをお忘れですか",
+      "new_password": "新しいパスワード",
+      "confirm_password": "パスワードの確認",
+      "password_reseted": "パスワードを再設定しました",
+      "reset_your_password": "パスワードを再設定してください",
+      "invalid_token": "トークンが正しくありません",
+      "new_notification": "新しい通知",
+      "lets_go": "さあ行こう！",
+      "update_available": "アップデートがあります",
+      "update_available_description": "最新の改善を使うには、アプリをアップデートしてください。",
+      "update_required_title": "アップデートが必要です",
+      "update_required_description": "このバージョンのアプリはサポートが終了しました。Recomendを続けて使うにはアップデートしてください。",
+      "update_app": "アップデート",
+      "advertisement": "広告",
+      "pending": "待機中",
+      "processing": "処理中",
+      "awaiting_review": "確認待ち",
+      "failed": "失敗",
+      "data": "データ",
+      "restore": "復元",
+      "fix": "修正",
+      "not_found": "見つかりません",
+      "unavailable": "利用できません",
+      "star_on_github": "GitHubでスターをつける"
+    },
+    "form": {
+      "email": {
+        "label": "メールアドレス",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "メールアドレスの形式が正しくありません",
+          "unavailable": "このメールアドレスはすでに使われています"
+        },
+        "verified": "メールアドレスを確認しました"
+      },
+      "username": {
+        "label": "ユーザー名",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "最初の文字は英数字にしてください",
+          "double_dot": "ピリオドを2つ続けることはできません",
+          "ends_with_dot": "末尾にピリオドは使えません",
+          "format": "使えるのは英数字と「_」「.」のみです",
+          "unavailable": "このユーザー名はすでに使われています"
+        }
+      },
+      "full_name": {
+        "label": "名前",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "使えるのは英数字とスペースのみです"
+        }
+      },
+      "password": {
+        "label": "パスワード",
+        "placeholder": "パスワードを入力",
+        "schema": {
+          "uppercase": "大文字を1つ以上含めてください",
+          "lowercase": "小文字を1つ以上含めてください",
+          "number": "数字を1つ以上含めてください",
+          "special": "記号を1つ以上含めてください",
+          "match": "パスワードが一致しません"
+        },
+        "confirm": {
+          "label": "パスワードの確認",
+          "placeholder": "パスワードを再入力"
+        }
+      },
+      "length": {
+        "char_min": "{count}文字以上",
+        "char_max": "{count}文字以内"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "使えるのは英数字とスペースのみです"
+      },
+      "error": {
+        "too_many_attempts": "試行回数が多すぎます。しばらくしてからお試しください",
+        "not_received_code": "コードが届きませんか？",
+        "invalid_code": "コードが正しくありません",
+        "turnstile": "認証に失敗しました。もう一度お試しください"
+      },
+      "resend_code": "コードを再送",
+      "resend_email": "メールを再送",
+      "code_verified": "コードを確認しました",
+      "code_sent": "コードを送信しました"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "ページが見つかりません",
+        "description": "おっと、このページは存在しません..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "記録",
+        "description": "お気に入りの映画やシリーズを見つけて、評価して、シェアしよう。"
+      },
+      "recos": {
+        "label": "reco",
+        "description": "友達のrecoを送ったり受け取ったり。すべてひとつの場所で。"
+      },
+      "playlists": {
+        "label": "プレイリスト",
+        "description": "整理して、シェアして、みんなで一緒に作ろう。"
+      },
+      "feed": {
+        "label": "フィード",
+        "description": "友達をフォローすれば、何を観て、何にいいねして、何を書いたかがわかります。"
+      },
+      "social_sharing": {
+        "label": "SNSでシェア",
+        "description": "好きなものをInstagramやほかのSNSでシェアしよう。"
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "記録",
+          "description": "観た映画をしっかり把握"
+        },
+        "recos": {
+          "label": "Reco",
+          "description": "友達に映画のおすすめを送る"
+        },
+        "explore": {
+          "label": "さがす",
+          "description": "1400本以上の映画が並ぶインタラクティブな地図、Paradise Picturesで新しい映画を見つけよう"
+        },
+        "like": {
+          "label": "いいね",
+          "description": "お気に入りの映画、プレイリスト、レビューへの愛を示そう"
+        },
+        "rating": {
+          "label": "評価",
+          "description": "観た映画に評価をつける"
+        },
+        "watchlist": {
+          "label": "ウォッチリスト",
+          "description": "観たい映画を保存しておく"
+        },
+        "playlists": {
+          "label": "プレイリスト",
+          "description": "映画をプレイリストにまとめてシェアする"
+        },
+        "reviews": {
+          "label": "レビュー",
+          "description": "レビューを書いて、心の中の辛口シネフィルを解き放とう"
+        },
+        "feed": {
+          "label": "フィード",
+          "description": "友達のアクティビティをフォロー"
+        },
+        "adsFree": {
+          "label": "広告なし",
+          "description": "Recomendを広告なしで、ずっと"
+        }
+      }
+    },
+    "welcome": {
+      "title": "ご登録ありがとうございます！",
+      "description": "{app}でできることをざっと見てみましょう。",
+      "follow": {
+        "title": "人をフォローする",
+        "description": "友達をフォローすると、何を観ているかがわかります。"
+      },
+      "import": {
+        "title": "ほかのサービスから来ましたか？"
+      }
+    },
+    "collection": {
+      "label": "ライブラリ",
+      "my_recos": {
+        "label": "自分のreco",
+        "search": {
+          "placeholder": "自分のrecoを検索..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "自分のrecoから削除",
+            "description": "<important>{title}</important>をrecoから削除しますか？"
+          },
+          "complete_confirm": {
+            "title": "recoを完了にする",
+            "description": "reco「<important>{title}</important>」を完了にしますか？"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "ウォッチリストを検索..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "ウォッチリストから削除",
+            "description": "<important>{title}</important>をウォッチリストから削除しますか？"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "心のお気に入りを検索..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "心のお気に入りから削除",
+            "description": "<important>{title}</important>を心のお気に入りから削除しますか？"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name>さんが観ました",
+        "rated": "<name></name>さんが評価しました",
+        "liked": "<name></name>さんがいいねしました",
+        "rated_liked": "<name></name>さんがいいねして評価しました",
+        "reviewed": "<name></name>さんがレビューを書きました"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson>が<linkMedia>{titleMedia}</linkMedia>で<important>{roles}</important>を担当",
+        "label": "<linkPerson>{name}</linkPerson>は<important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "アプリを許可",
+        "description_generic": "あるアプリがあなたのアカウントへのアクセスを求めています。",
+        "description": "{client}があなたのアカウントへのアクセスを求めています。",
+        "scopes_label": "許可すると、アプリは次のことができます：",
+        "accept": "許可",
+        "deny": "拒否",
+        "error": {
+          "invalid_request": "リクエストが無効か期限切れです",
+          "invalid_request_description": "ここに来る前のアプリから、もう一度許可の手続きを始めてください。",
+          "client_not_found": "このアプリは見つかりませんでした。",
+          "submit_failed": "問題が発生しました。もう一度お試しください。"
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "{app}のアカウントにログインします。"
+        },
+        "label": "ログイン",
+        "description": "いちばんいい映画のおすすめを見つけよう。",
+        "or_continue_with": "または次で続ける",
+        "no_account_yet": "アカウントがまだありませんか？",
+        "form": {
+          "identifier": {
+            "label": "メールアドレスまたはユーザー名",
+            "placeholder": "メールアドレスまたはユーザー名を入力"
+          },
+          "password": {
+            "label": "パスワード",
+            "placeholder": "パスワードを入力"
+          },
+          "submit": "ログイン",
+          "forgot_password": "パスワードをお忘れですか？",
+          "wrong_credentials": "メールアドレスまたはパスワードが正しくありません"
+        },
+        "otp": {
+          "password_login": "パスワードでログインしますか？",
+          "form": {
+            "submit": "コードを受け取る",
+            "no_user_found": "このメールアドレスのユーザーは見つかりません",
+            "success": "ログインしました"
+          },
+          "confirm_form": {
+            "label": "コードを確認",
+            "description": "確認コードを{email}に送信しました"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "{app}に登録して、映画のおすすめを見つけてシェアしよう。"
+        },
+        "description": "いつもタイトルを忘れてしまう友達に映画をすすめるために、アカウントを作りましょう。",
+        "form": {
+          "success": "確認メールを{email}に送信しました"
+        },
+        "confirm_form": {
+          "label": "メールアドレスを確認",
+          "description": "確認リンクを{email}に送信しました"
+        },
+        "return_to_login": "おっと、すでにアカウントを持っています。"
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "パスワードをお忘れですか",
+          "description": "パスワードを再設定します。"
+        },
+        "label": "パスワードをお忘れですか",
+        "description": "パスワード管理アプリを使うといいですよ。本当に便利です。",
+        "return_to_login": "おっと、やっぱり思い出しました。",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "パスワードを再設定",
+          "code_sent": "リクエストを送信しました"
+        },
+        "confirm_form": {
+          "label": "コードを確認",
+          "description": "確認コードを{email}に送信しました"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "パスワードの再設定",
+          "description": "アカウントの新しいパスワードを選んでください。"
+        }
+      },
+      "error": {
+        "label": "エラー",
+        "description": "認証の途中でエラーが発生しました。",
+        "return_to_login": "安全な場所に戻る"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "概要",
+        "marquee": "インターネットで「概要」ページを読むより楽しいことが、人生にありませんか？",
+        "intro": "<strong>Recomend</strong>は、映画を見つけ、すすめ、整理するための場所です。口コミがようやく最良のデジタルな足場を得られるように、すべてを考えて作りました。わたしたちのやり方は、消費が自分自身を——というより「あなたへのおすすめ」を——中心に回る時代にあって、人と人のつながりを真ん中に置いています。",
+        "slogan": {
+          "1": "広告なし、怪しい約束もなし。🍆",
+          "2": "ソーシャルネットワークであり、道具でもあります。",
+          "3": "好きな人間たちの手づくりです。",
+          "4": "言葉のいちばん正直な意味で、アマチュアです。"
+        },
+        "last": "Recomendは一人でも誰かと一緒でも、公開でも非公開でも、昼でも夜でも使えます。ただし映画を観ている最中はやめてください。集中して！"
+      },
+      "team": {
+        "label": "チーム",
+        "intro": "Recomendは、映画に夢中な兄弟ふたりが作りました。日の目を見ないかもしれない、野心的すぎるプロジェクトに時間を注ぎこむのが好きな二人です。",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "ひとつの仕事では満足できない多動な建築家兼エンジニア（本物のスタートアップ・ネイション）。映画の地図というアイデアはYoannから生まれました。最初の野望は「自分のトイレに貼るポスター」という控えめなものでした。Loupの参加で目標は天井知らずになり、少し流れに押されつつも、地図とサイトのグラフィックすべて、そして広報も引き受けています（本人は好きではないのに）。さらにUX/UIにも意見を出し、コードにする難しさを十分わかっていないまま、たくさんの機能を提案してきます（この点はだいぶ上達しました）。"
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "完全な独学。それでも25歳になる前に「無給の無職」へたどり着く学業は修めました。生粋のなんでも屋で、Loupはウェブ側を担当し、できるかぎり使いやすいインターフェースを書いています。Loupは（とても）たくさんの質問に答えてくれたプログラミングのフォーラム、そしてこの数か月、育ての親のように導いてくれたインドのYouTuberたちに感謝しています。一方で母親は、このプロジェクトのために兄が彼を奴隷にしていると信じて疑いません（元気だよ、母さん）。"
+          }
+        },
+        "last": "わたしたちやコミュニティのほかのメンバーとつながるには、<link>Discord</link>に参加してください！"
+      },
+      "pricing": {
+        "label": "料金",
+        "intro": "このサブスクリプションは、まずプロジェクトを支え、成長を助けるためのものです。Premiumの機能はRecomendをより深く使う人へのおまけで、少額の金銭的な支えに見合うものです。広告もなく、制限を感じることもなく、無料でサイトを使える道はこれからも必ず残します。",
+        "subdescription": "*この笑ってしまうほど安いサブスクリプションすら手が届かない場合は、あなたの購買力を奪った自由主義的な政府にご相談ください。"
+      },
+      "legal": {
+        "label": "法的情報とプライバシー",
+        "description": "わたしたちはあなたのプライバシーを尊重します。ゲストユーザーに表示される広告はGoogleが管理しており、表示頻度の制限と不正防止のために技術的なクッキーを必要とします。",
+        "privacyPolicy": "プライバシーポリシーを読む",
+        "manageCookies": "広告の設定を管理（クッキー）"
+      },
+      "open-source": {
+        "label": "オープンソース",
+        "intro": "Recomendはオープンソースです。コードはGitHubで公開されています。覗いてみる、貢献する、あるいはスターをつけるだけでも歓迎です！",
+        "star": "GitHubでスターをつける"
+      },
+      "businessmodel": {
+        "label": "ビジネスモデル",
+        "paragraph": {
+          "1": "わたしたちのまったく商売向きでないプロフィールから察していただけると思いますが、いまのところビジネスモデルが何をしてくれるのか、よくわかっていません...",
+          "2": "Recomendの将来に必要になれば、ふさわしい人たち——少なくともわたしたちより関心のある人たち——に囲まれて考えます。",
+          "3": "それまでは、正直なところ、ほかにやることがあります。"
+        }
+      },
+      "roadmap": {
+        "label": "ロードマップ"
+      },
+      "data": {
+        "label": "データ",
+        "paragraph": {
+          "1": "Recomendで使われているメタデータはすべて、<link>The Movie Database (TMDb)</link>がプラットフォームのAPIを通じて提供しています。みんなと同じことをしています。いい羊のように。",
+          "2": "誤りや抜けている映画については<link>TMDb</link>にご連絡ください。"
+        }
+      },
+      "resources": {
+        "label": "リソース",
+        "intro": "映画とはあまり関係ありませんが、わたしたちの好きなサイトのリストです："
+      },
+      "contact-support": {
+        "label": "お問い合わせとサポート",
+        "help-center": "実存的な疑問の答えは、<link>ヘルプセンター</link>で見つけてください。",
+        "technical-support": "技術的な質問は：<email></email>",
+        "suggest-a-feature": "ご提案は：<email></email>",
+        "contact-us": "ただ連絡したいときは：<email></email>"
+      },
+      "quote": {
+        "label": "引用",
+        "quote": "「プロという言葉が嫌いだ。役者やそのほかの人たちが言う、私はプロだ、私はプロフェッショナルだ、と。それは何なんだ？ これより悲しい言葉があるか？ アマチュアという言葉は愛からできているのだから。ものごとは愛のためにやるべきだ。そうでなければ、われわれは愚か者だ。」",
+        "author": "オーソン・ウェルズ",
+        "date": "1972年",
+        "subdescription": "*載せるか迷いました。すぐ気取って聞こえてしまうからです。でもプロジェクトに対するわたしたちの気分をよく表しています。もしお好きでなければ外します。"
+      }
+    },
+    "settings": {
+      "label": "設定",
+      "description": "アカウントの設定を管理します。",
+      "profile": {
+        "label": "プロフィール",
+        "description": "ほかの人にはこのように表示されます。",
+        "avatar": {
+          "label": "アイコン",
+          "delete": "削除"
+        },
+        "full_name": {
+          "label": "名前",
+          "description": "プロフィールやメールに表示される名前です。",
+          "placeholder": "名前を入力",
+          "form": {
+            "min_length": "名前は1文字以上にしてください",
+            "max_length": "名前は50文字以内にしてください"
+          }
+        },
+        "bio": {
+          "label": "自己紹介",
+          "description": "自分のことを少し書いてください。プロフィールに表示されます。",
+          "placeholder": "自分について書く",
+          "form": {
+            "max_length": "自己紹介は150文字以内にしてください",
+            "format": "自己紹介に空行だけの行やスペースのみの内容は使えません。"
+          }
+        },
+        "favorite_films": {
+          "label": "お気に入りの映画",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "URLの形式が正しくありません"
+          }
+        }
+      },
+      "account": {
+        "label": "アカウント",
+        "description": "アカウントの設定を更新します。",
+        "username": {
+          "label": "ユーザー名",
+          "description": "ほかの人があなたを見つけ、プロフィールにアクセスするためのユーザー名です。変更は30日に1回だけできます。",
+          "placeholder": "ユーザー名を入力",
+          "form": {
+            "min_length": "ユーザー名は3文字以上にしてください",
+            "max_length": "ユーザー名は15文字以内にしてください",
+            "invalid": "ユーザー名に使えるのは英数字と「_」「.」のみです",
+            "unavailable": "このユーザー名はすでに使われています"
+          }
+        },
+        "private": {
+          "label": "非公開アカウント",
+          "description": "アカウントを非公開にすると、アクティビティは友達だけが見られます。"
+        },
+        "email": {
+          "description": "確認メールは現在のアドレスと新しいアドレスの両方に送られます。変更を有効にするには両方で確認してください。",
+          "change_pending": "<strong>{date}</strong>に確認メールを新しいアドレス<strong>{email}</strong>へ送信しました。リンクをクリックするか、確認コードを入力して変更を確定してください。",
+          "confirm_email_code": {
+            "description": "変更を確定するには、<strong>{email}</strong>に送られた確認コードを入力してください。"
+          },
+          "change_success": "メールアドレスを変更しました"
+        },
+        "delete_account": {
+          "button": "アカウントを削除",
+          "confirm": {
+            "description": "アカウントを削除しますか？ この操作は取り消せません。",
+            "confirm_email_sent": "確認メールをあなたのメールアドレスに送信しました"
+          }
+        }
+      },
+      "appearance": {
+        "label": "外観",
+        "description": "アプリの見た目をカスタマイズします。ライトとダークのテーマは自動で切り替わります。",
+        "language": {
+          "label": "言語",
+          "description": "言語を選んでください。変更はアプリを再起動したあとに反映されます",
+          "placeholder": "言語を選択",
+          "not_found": "言語が見つかりません"
+        },
+        "theme": {
+          "label": "テーマ",
+          "description": "画面のテーマを選んでください。",
+          "options": {
+            "light": "ライト",
+            "dark": "ダーク"
+          }
+        }
+      },
+      "subscription": {
+        "label": "サブスクリプション",
+        "description": "Premium機能を使うために、サブスクリプションを管理します。"
+      },
+      "security": {
+        "label": "セキュリティ",
+        "description": "パスワードを変更すると、いま使っている端末を除くすべての端末からログアウトされます。",
+        "current_password": {
+          "label": "現在のパスワード",
+          "placeholder": "現在のパスワードを入力",
+          "form": {
+            "required": "現在のパスワードを入力してください",
+            "invalid": "現在のパスワードが正しくありません"
+          }
+        },
+        "new_password": {
+          "label": "新しいパスワード",
+          "placeholder": "新しいパスワードを入力",
+          "form": {
+            "min_length": "パスワードは8文字以上にしてください",
+            "uppercase": "大文字を1つ以上含めてください",
+            "lowercase": "小文字を1つ以上含めてください",
+            "number": "数字を1つ以上含めてください",
+            "special": "記号を1つ以上含めてください"
+          }
+        },
+        "confirm_password": {
+          "label": "新しいパスワードの確認",
+          "placeholder": "新しいパスワードを再入力",
+          "form": {
+            "match": "パスワードが一致しません"
+          }
+        }
+      },
+      "notifications": {
+        "label": "通知",
+        "description": "通知の設定を管理します。",
+        "push_notifications": {
+          "label": "プッシュ通知",
+          "form": {
+            "enable": "プッシュ通知を有効にする"
+          },
+          "already_granted": "通知の許可はすでに求めています。変更するにはブラウザの設定を開いてください。",
+          "no_enabled": "プッシュ通知を受け取るには、端末の設定で通知を有効にしてください。",
+          "open_settings": "端末の設定を開く"
+        }
+      },
+      "data": {
+        "label": "データ",
+        "description": "データをインポートまたはエクスポートします。",
+        "importer": {
+          "label": "インポート",
+          "select_source": "取り込み元を選択",
+          "instructions_title": "手順",
+          "browse_prompt": "ファイルをここにドロップ、または<link>選択</link>",
+          "browse_prompt_mobile": "タップしてファイルを選択",
+          "uploading": "アップロード中…",
+          "processing": "ファイルを解析中…",
+          "upload_error": "アップロードに失敗しました。もう一度お試しください。",
+          "invalid_file_type": "この取り込み元では、このファイル形式は使えません。",
+          "review_title": "インポート内容を確認",
+          "review_summary": "{total}件中{matched}件が一致",
+          "validate": "インポートを確定",
+          "validate_confirm_description": "一致していてスキップされていないすべての項目をライブラリに取り込みます。取り消せません。",
+          "success_title": "インポート完了",
+          "success_description": "データを正常に取り込みました。",
+          "failed_title": "インポートに失敗しました",
+          "failed_description": "このインポートの処理中に問題が発生しました。",
+          "pending_description": "インポートは順番待ちです。まもなく開始します。",
+          "empty": "インポートはまだありません。",
+          "delete_confirm_description": "このインポートと準備済みのデータはすべて完全に削除されます。取り消せません。",
+          "keep_existing": "自分の方を残す",
+          "use_imported": "取り込んだ方を使う",
+          "merge": "統合",
+          "conflict": "競合",
+          "no_match": "一致なし",
+          "existing_rating": "現在：{rating}",
+          "log_column": "ログ",
+          "actions_column": "操作",
+          "categories": {
+            "log_movies": "映画",
+            "log_tv_series": "シリーズ",
+            "bookmarks": "ウォッチリスト",
+            "playlists": "リスト"
+          },
+          "status": {
+            "pending": "待機中",
+            "processing": "処理中",
+            "awaiting_review": "確認待ち",
+            "completed": "完了",
+            "failed": "失敗"
+          }
+        },
+        "exporter": {
+          "label": "エクスポート"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "Premiumにアップグレード",
+        "description": "{app}のすべての機能を使うには、Premiumアカウントにアップグレードしてください。"
+      },
+      "header": {
+        "title": "映画の世界を広げ、もっとシェアし、{app}を支える",
+        "subtitle": "1か月無料でお試し、その後は月{price}"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "アクティビティ",
+            "unlimited_activities": {
+              "label": "無制限のアクティビティ",
+              "description": "評価、いいね、レビュー、ウォッチリスト、おすすめ"
+            },
+            "favorites": {
+              "label": "お気に入り",
+              "description": "お気に入りの映画をプロフィールに追加"
+            }
+          },
+          "playlists": {
+            "label": "プレイリスト",
+            "unlimited_playlists": {
+              "label": "無制限",
+              "description": "プレイリストを数の制限なく作成"
+            },
+            "shared_playlists": {
+              "label": "共有",
+              "description": "プレイリストをほかのユーザーと共有"
+            },
+            "collaborative_playlists": {
+              "label": "共同編集",
+              "description": "ほかのユーザーと一緒にプレイリストを作成"
+            }
+          },
+          "feed": {
+            "label": "フィード",
+            "followees": {
+              "label": "フォロー中のユーザー",
+              "description": "フォローしているユーザーのアクティビティを見る"
+            },
+            "cast_and_crew": {
+              "label": "キャストとスタッフ",
+              "description": "映画に関わる人たちのアクティビティをフォロー"
+            }
+          },
+          "support": {
+            "label": "応援",
+            "team": {
+              "label": "{app}チームを応援する"
+            },
+            "credits": {
+              "label": "クレジット",
+              "description": "アプリのクレジットにあなたのプロフィールを掲載"
+            }
+          }
+        },
+        "success": {
+          "label": "応援ありがとうございます！"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} - @{username}のプレイリスト",
+        "description": "{app}で@{username}の映画プレイリストを見てみよう。"
+      },
+      "actions": {
+        "delete": {
+          "description": "<important>{title}</important>をプレイリストから完全に削除します。"
+        }
+      },
+      "search": {
+        "placeholder": "プレイリストを検索..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "<important>{title}</important>をプレイリストから削除しますか？"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "プレイリストのタイトルを入力"
+        },
+        "description": {
+          "placeholder": "プレイリストの説明を入力"
+        },
+        "error": {
+          "format": "説明に空行だけの行やスペースのみの内容は使えません。"
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name}（@{username}）",
+        "description": "{app}で@{username}のプロフィールを見てみよう。"
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title}（{year}）",
+        "description": "{title}は{directors}の映画で、{year}年公開。あらすじ：{overview}",
+        "description_no_director": "{title}は{year}年に公開された映画です。あらすじ：{overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title}（{year}）• プレイリスト",
+          "description": "映画{title}が入っているプレイリストをすべて見てみよう。"
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title}（{year}）• レビュー",
+          "description": "映画{title}のレビューをすべて見てみよう。"
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title}（{year}）",
+        "description": "{title}は{creators}のシリーズで、{year}年に初放送。あらすじ：{overview}",
+        "description_no_creator": "{title}は{year}年に初放送されたシリーズです。あらすじ：{overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title}（{year}）• プレイリスト",
+          "description": "シリーズ{title}が入っているプレイリストをすべて見てみよう。"
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title}（{year}）• レビュー",
+          "description": "シリーズ{title}のレビューをすべて見てみよう。"
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • シーズン",
+          "description": "シリーズ{title}のシーズンをすべて見てみよう。"
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • シーズン{number}",
+            "description": "シリーズ{title}のシーズン{number}のエピソードをすべて見てみよう。"
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • 映画",
+          "description": "{name}が出演または参加した映画をすべて見てみよう。"
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • シリーズ",
+          "description": "{name}が出演または参加したシリーズをすべて見てみよう。"
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "@{username}による{title}のレビュー"
+      },
+      "create": {
+        "metadata": {
+          "title": "{title}のレビューを書く",
+          "description": "{title}についての感想をシェアしよう。"
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Paradise Picturesをさがす",
+        "description": "島とその多彩な風景を見つける旅に出かけよう。そこに住む数々の映画は、それぞれの物語の世界の中に置かれています。すべての片隅まで巡れるでしょうか？"
+      }
+    },
+    "legal": {
+      "label": "法的情報",
+      "description": "{app}の法的文書を読む。",
+      "terms_of_use": {
+        "metadata": {
+          "title": "利用規約",
+          "description": "{app}の利用規約を読む。"
+        },
+        "sections": {
+          "intro": "本利用規約（以下「本規約」）は、アプリ{app}へのアクセスおよびその利用について定めます。本アプリはパリに拠点を置くLoup（以下「発行者」）が提供します。{app}への登録は、本規約を無条件で承諾したことを意味します。",
+          "presentation": {
+            "label": "1. サービスの紹介",
+            "content": "{app}は、映画の情報を閲覧し、レビューを公開し、作品を評価し、自分のリストを作成できる無料のアプリです。"
+          },
+          "account": {
+            "label": "2. アカウントとセキュリティ",
+            "content": "投稿機能を利用するにはアカウントの作成が必要です。ユーザーはログイン情報の秘密を守る責任を負います。不正利用や乗っ取りの疑いがある場合、ユーザーは直ちに次の窓口へ連絡してください：<email></email>。"
+          },
+          "conduct": {
+            "label": "3. 行動規範",
+            "content": "ユーザーは、レビューやリストにおいて礼儀と敬意を保つことに同意します。次の行為は厳しく禁止されます：憎悪をあおる発言、名誉を傷つける発言や人種差別的な発言、ハラスメント、ならびにスパムや望まれない商業的宣伝。発行者は、本規範に反するあらゆるコンテンツを削除し、該当するアカウントを予告なく停止する権利を留保します。"
+          },
+          "child_safety": {
+            "label": "4. 児童保護の方針",
+            "content": "{app}は、児童の性的虐待および搾取（CSAE）に対して厳格なゼロトレランスの方針をとります。未成年を性的に描写し、搾取し、またはその他の方法で危険にさらすいかなるコンテンツの作成、アップロード、保存、配布、要求、宣伝も、{app}上では明確かつ絶対的に禁止されます。本方針に違反したと判断されたアカウントは直ちに永久に停止され、発行者は該当するコンテンツを、入手可能な利用者情報とともに、適用法に従い、National Center for Missing & Exploited Children（NCMEC）および／または管轄の法執行機関に報告します。CSAEに該当しうるコンテンツや行為を知ったユーザーは、遅滞なく次の窓口へ報告しなければなりません：<email></email>。"
+          },
+          "intellectual_property": {
+            "label": "5. 知的財産",
+            "content": "ユーザーは自身が書いたレビューの権利者であり続けます。ただし{app}に公開することにより、ユーザーは発行者に対し、当該コンテンツをアプリ内で表示、複製および技術的に調整するための無償かつ非独占的な許諾を与えます。{app}の視覚要素、コード、デザインは発行者の専有財産です。"
+          },
+          "privacy": {
+            "label": "6. 個人データ",
+            "content": "あなたのプライバシーを尊重することは、わたしたちの最優先事項です。{app}は、いかなる個人データも商業目的または広告目的の第三者に販売、貸与、共有しません。収集するデータ（メールアドレス、ユーザー名、アプリ内のアクティビティ）は、サービスの運営とアカウント管理のためにのみ使用します。アクセス、修正、削除の権利（GDPR）は、次の窓口への連絡で行使できます：<email></email>。"
+          },
+          "cookies": {
+            "label": "7. クッキーとトラッカー",
+            "content": "{app}は、広告クッキーも第三者の行動トラッカーも使用しません。使用するのは2種類の技術的クッキーだけです。認証クッキー（ログイン状態を保つため）と、言語設定のクッキー（選択を覚えておくため）です。これらのクッキーはサービスに不可欠であるため、事前の同意は不要とされています。"
+          },
+          "ads": {
+            "label": "8. 広告",
+            "content": "本アプリは現在、広告なしで提供されています。この方針が変わる場合は、本規約の更新を通じてユーザーにお知らせします。"
+          },
+          "liability": {
+            "label": "9. 責任",
+            "content": "発行者は{app}を24時間いつでも利用できるよう努めますが、中断や不具合がないことを保証しません。映画の情報は第三者のデータベースに由来します。それらに含まれうる誤りについて、発行者は責任を負いません。"
+          },
+          "law": {
+            "label": "10. 適用法",
+            "content": "本規約にはフランス法が適用されます。<email></email>を通じて円満に解決できない紛争が生じた場合、パリの裁判所が専属的な管轄権を有します。"
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "プライバシーポリシー",
+          "description": "{app}のプライバシーポリシーを読む。"
+        },
+        "sections": {
+          "intro": "データの保護は{app}の考え方の中心にあります。本ポリシーでは、どのデータを集め、なぜ集め、どう守るのかを説明します。要するに、わたしたちはあなたのデータを売りません。",
+          "controller": {
+            "label": "1. データ管理者",
+            "content": "データ管理者は、パリ（フランス）に拠点を置くLoupです。プライバシーに関するお問い合わせは次の窓口へ：<email></email>。"
+          },
+          "collected_data": {
+            "label": "2. 収集するデータ",
+            "content": "アプリの動作に絶対に必要なデータのみを収集します：メールアドレス（認証のため）、ユーザー名、利用データ（評価した映画、レビュー、リスト）。パスワードは暗号化（ハッシュ化）して安全に保管します。"
+          },
+          "purpose": {
+            "label": "3. 利用目的",
+            "content": "あなたのデータは次の目的のためだけに処理します：アカウントの作成と管理、リストや評価の表示、サービスの技術的な動作の確保。広告プロファイリングには使用しません。"
+          },
+          "sharing": {
+            "label": "4. データの共有",
+            "content": "あなたの個人データを販売、貸与、第三者へ譲渡することは決してありません。厳しい守秘義務を負い、GDPRに準拠した技術提供者（ホスティング、トランザクションメールのサービス）が保管する場合があります。"
+          },
+          "retention": {
+            "label": "5. 保存期間",
+            "content": "データはアカウントが有効なあいだ保存されます。アカウントの削除を選んだ場合、個人データ（メールアドレス、ユーザー名、レビュー）はすべてデータベースから完全に消去されます。"
+          },
+          "rights": {
+            "label": "6. あなたの権利（GDPR）",
+            "content": "法令に従い、あなたは自分のデータへのアクセス、訂正、移転、削除を求める権利を持ちます。これらの権利は、アプリ内から直接、または次の宛先へのご連絡でいつでも行使できます：<email></email>。"
+          },
+          "cookies": {
+            "label": "7. クッキー",
+            "content": "利用規約に記載のとおり、使用するのは必要不可欠な技術的クッキー（セッションと言語）のみです。第三者の広告クッキーやトラッキングクッキーを端末に置くことはありません。"
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "映画、シリーズ、プレイリスト、人物、ユーザーを検索..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "この作品を視聴済みから外しますか？ 評価やレビューがある場合は、それらも削除されます。"
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "このシリーズを完了にしますか？ すべてのシーズンのすべてのエピソードが視聴済みになります。"
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "シーズン{seasonNumber}を完了にしますか？ このシーズンのすべてのエピソードが視聴済みになります。"
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "ここにアクティビティを表示するには、あなたかフォロー中のユーザーが映画やシリーズなどを評価する必要があります..."
+    },
+    "feed_person": {
+      "message": "ここにアクティビティを表示するには、映画やシリーズに関わる人物をフォローしてください。"
+    },
+    "playlists": {
+      "items": {
+        "empty": "このプレイリストには映画もシリーズもありません。追加して埋めていきましょう！"
+      },
+      "add_to": {
+        "empty": "プレイリストがありません。作成すれば映画やシリーズを入れて、すぐに見つけられます！"
+      },
+      "saved": {
+        "empty": "保存したプレイリストがありません。保存すればライブラリからすぐに見つけられます！"
+      },
+      "members": {
+        "empty": "このプレイリストにメンバーがいません。追加すれば同じプレイリストを一緒に編集できます！",
+        "search": "プレイリストに追加するユーザーを検索..."
+      }
+    },
+    "follow-requests": {
+      "empty": "保留中のフォローリクエストはありません。届いたらここに表示されます！"
+    },
+    "recos": {
+      "empty": "おすすめはまだありません。届いたらここに表示されます！",
+      "send_to": {
+        "empty": "おすすめを送る相手がいません。送るには友達（相互フォロー）になる必要があります！"
+      }
+    },
+    "bookmarks": {
+      "empty": "まだ何も保存していません。保存したらここに表示されます！"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user>さんが映画<movie></movie>をおすすめしました"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user>さんがシリーズ<tv_series></tv_series>をおすすめしました"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user>さんが、あなたのおすすめした映画<movie></movie>を観ました"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user>さんが、あなたのおすすめしたシリーズ<tv_series></tv_series>を観ました"
+    },
+    "follower_created": {
+      "description": "<user></user>さんがあなたをフォローしました"
+    },
+    "follower_accepted": {
+      "description": "<user></user>さんがあなたのフォローリクエストを承認しました"
+    },
+    "follower_request": {
+      "description": "<user></user>さんがあなたをフォローしたがっています"
+    },
+    "friend_created": {
+      "description": "<user></user>さんと友達になりました"
+    }
+  }
+}

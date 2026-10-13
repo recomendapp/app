@@ -1,0 +1,20 @@
+{
+  "liked": {
+    "subject": "{actorName} ने आपकी समीक्षा लाइक की!",
+    "body": "{actorName} ने {mediaTitle} पर आपकी समीक्षा लाइक की"
+  },
+  "commented": {
+    "subject": "आपकी समीक्षा पर नई टिप्पणी!",
+    "body": "{actorName} ने {mediaTitle} पर आपकी समीक्षा पर टिप्पणी की",
+    "body_with_comment": "{actorName}: {comment}"
+  },
+  "comment_liked": {
+    "subject": "{actorName} ने आपकी टिप्पणी लाइक की!",
+    "body": "{actorName} ने {mediaTitle} पर आपकी टिप्पणी लाइक की"
+  },
+  "comment_replied": {
+    "subject": "आपकी टिप्पणी पर नया जवाब!",
+    "body": "{actorName} ने {mediaTitle} पर आपकी टिप्पणी का जवाब दिया",
+    "body_with_comment": "{actorName}: {comment}"
+  }
+}

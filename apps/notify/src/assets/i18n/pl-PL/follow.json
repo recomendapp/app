@@ -1,0 +1,14 @@
+{
+  "new": {
+    "subject": "Nowy obserwujący!",
+    "body": "{actorName} zaczął Cię obserwować"
+  },
+  "request": {
+    "subject": "Nowa prośba o obserwowanie!",
+    "body": "{actorName} poprosił o możliwość obserwowania Cię"
+  },
+  "accepted": {
+    "subject": "Prośba o obserwowanie zaakceptowana!",
+    "body": "{actorName} zaakceptował Twoją prośbę o obserwowanie"
+  }
+}

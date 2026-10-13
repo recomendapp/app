@@ -9,7 +9,7 @@ import * as path from 'path';
 import { FcmModule } from './fcm/fcm.module';
 import { ApnsModule } from './apns/apns.module';
 import { DrizzleModule } from '../common/modules/drizzle.module';
-import { defaultSupportedLocale, SupportedLocale } from '@libs/i18n';
+import { defaultSupportedLocale, localeFallbacks } from '@libs/i18n';
 import { EnvModule, notifySchema } from '@libs/env';
 
 @Module({
@@ -17,10 +17,7 @@ import { EnvModule, notifySchema } from '@libs/env';
     EnvModule.forRoot(notifySchema),
     I18nModule.forRoot({
       fallbackLanguage: defaultSupportedLocale,
-      fallbacks: {
-        'en-*': 'en-US' as SupportedLocale,
-        'fr-*': 'fr-FR' as SupportedLocale,
-      },
+      fallbacks: localeFallbacks,
       loaderOptions: {
         path: path.join(__dirname, '/assets/i18n/'),
         watch: true,

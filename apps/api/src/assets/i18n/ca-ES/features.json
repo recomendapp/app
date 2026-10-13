@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "Seguiment",
+    "description": "Porta el compte de les pel·lícules i sèries que has vist"
+  },
+  "recos": {
+    "label": "Recos",
+    "description": "Envia recomanacions de pel·lícules i sèries als teus amics"
+  },
+  "playlists": {
+    "label": "Llistes",
+    "description": "Organitza les teves pel·lícules i sèries en llistes i comparteix-les"
+  },
+  "feed": {
+    "label": "Feed",
+    "description": "Segueix l'activitat dels teus amics"
+  },
+  "bookmarks": {
+    "label": "Per a més tard",
+    "description": "Guarda les pel·lícules i sèries que vols veure"
+  }
+}

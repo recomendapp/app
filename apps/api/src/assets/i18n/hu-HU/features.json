@@ -1,0 +1,22 @@
+{
+  "tracking": {
+    "label": "Követés",
+    "description": "Tartsd számon a filmeket és sorozatokat, amelyeket láttál"
+  },
+  "recos": {
+    "label": "Recók",
+    "description": "Küldj film- és sorozatajánlókat a barátaidnak"
+  },
+  "playlists": {
+    "label": "Listák",
+    "description": "Rendszerezd a filmjeidet és sorozataidat listákba, és oszd meg őket"
+  },
+  "feed": {
+    "label": "Feed",
+    "description": "Kövesd a barátaid aktivitását"
+  },
+  "bookmarks": {
+    "label": "Későbbre",
+    "description": "Mentsd el a filmeket és sorozatokat, amelyeket látni akarsz"
+  }
+}

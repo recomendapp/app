@@ -1,0 +1,14 @@
+{
+  "new": {
+    "subject": "Nou seguidor!",
+    "body": "{actorName} ha començat a seguir-te"
+  },
+  "request": {
+    "subject": "Nova sol·licitud de seguiment!",
+    "body": "{actorName} ha demanat seguir-te"
+  },
+  "accepted": {
+    "subject": "Sol·licitud de seguiment acceptada!",
+    "body": "{actorName} ha acceptat la teva sol·licitud de seguiment"
+  }
+}

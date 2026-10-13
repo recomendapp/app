@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "Un altro modo di scoprire il cinema",
+    "description": "{app} è un social network per gli appassionati di cinema. Scopri, condividi ed esplora film e serie con i tuoi amici."
+  },
+  "common": {
+    "messages": {
+      "welcome": "Benvenuto",
+      "welcome_to_app": "Benvenuto su {app}",
+      "hello": "Ciao",
+      "greeting_with_name": "{timeOfDay, select, morning {Buongiorno, {name}} afternoon {Buon pomeriggio, {name}} evening {Buonasera, {name}} night {Buonanotte, {name}} other {Ciao, {name}}}",
+      "click_here": "Clicca qui",
+      "see_more": "Vedi di più",
+      "see_more_details": "Vedi più dettagli",
+      "more": "Altro",
+      "view_profile": "Vedi il profilo",
+      "library": "Libreria",
+      "watchlist": "Watchlist",
+      "for_later": "Per dopo",
+      "heart_pick": "{count, plural, one {colpo di fulmine} other {colpi di fulmine}}",
+      "add_to_heart_picks": "Aggiungi ai colpi di fulmine",
+      "remove_from_heart_picks": "Rimuovi dai colpi di fulmine",
+      "add_rating": "Aggiungi un voto",
+      "edit_rating": "Modifica il voto",
+      "remove_rating": "Rimuovi il voto",
+      "share_my_rating": "Condividi il mio voto",
+      "share_review": "Condividi la recensione",
+      "show_likes_count": "Mostra il numero di like",
+      "show_comments_count": "Mostra il numero di commenti",
+      "add_to_watchlist": "aggiungi alla watchlist",
+      "remove_from_watchlist": "rimuovi dalla watchlist",
+      "no_results": "nessun risultato",
+      "no_results_for": "Nessun risultato per <strong>{query}</strong>",
+      "no_followees": "Non segui nessuno",
+      "no_followers": "Nessun follower",
+      "no_rating": "Nessun voto",
+      "must_watch_to_review": "devi aver visto questa opera per poterla votare",
+      "review_cannot_be_empty": "la recensione non può essere vuota",
+      "no_activity": "nessuna attività",
+      "followers_ratings": "voti dei follower",
+      "added_by": "aggiunto da",
+      "sort_by": "ordina per",
+      "sort_order": "ordine di ordinamento",
+      "go_to_film": "vai al film",
+      "go_to_tv_series": "vai alla serie",
+      "go_to_user": "vai all'utente",
+      "go_to_person": "vai alla persona",
+      "go_to_activity": "vai all'attività",
+      "go_to_playlist": "vai alla playlist",
+      "go_to_review": "vai alla recensione",
+      "go_to_director": "{count, plural, one {vai al regista} other {vai ai registi}}",
+      "go_to_creator": "{count, plural, one {vai al creatore} other {vai ai creatori}}",
+      "show_director": "{count, plural, one {mostra il regista} other {mostra i registi}}",
+      "show_creator": "{count, plural, one {mostra il creatore} other {mostra i creatori}}",
+      "show_credit": "{count, plural, one {mostra il credito} other {mostra i crediti}}",
+      "credits": "crediti",
+      "view_recommendation": "{count, plural, one {vedi la reco} other {vedi le reco}}",
+      "view_directors": "{count, plural, one {vedi il regista} other {vedi i registi}}",
+      "no_director": "nessun regista",
+      "view_comment": "{count, plural, one {vedi il commento} other {vedi i commenti}}",
+      "add_comment": "{count, plural, one {aggiungi un commento} other {aggiungi commenti}}",
+      "edit_comment": "{count, plural, one {modifica il commento} other {modifica i commenti}}",
+      "delete_comment": "Elimina il commento",
+      "do_you_really_want_to_delete_this_comment": "Vuoi davvero eliminare questo commento?",
+      "comment_deleted": "Questo commento è stato eliminato",
+      "write_your_comment_here": "Scrivi un commento...",
+      "reply": "Rispondi",
+      "replies_count": "{count, plural, one {# risposta} other {# risposte}}",
+      "view_replies": "Vedi {count, plural, one {# risposta} other {# risposte}}",
+      "hide_replies": "Nascondi le risposte",
+      "load_more_replies": "Vedi altre risposte",
+      "get_started": "inizia",
+      "get_started_its_free": "si parte 🎬, è gratis!",
+      "import": "Importa",
+      "upgrade_to_plan": "passa a {plan}",
+      "choose_subscription_recurrence": "scegli la frequenza del tuo abbonamento",
+      "compare_plans": "confronta i piani",
+      "save_up_to_percent": "risparmia fino al {percent}%",
+      "is_empty": "Qui è un po' vuoto",
+      "add_to_playlist": "aggiungi a una playlist",
+      "send_to_friend": "invia a un amico",
+      "pin_to_profile": "Fissa sul profilo",
+      "unpin_from_profile": "Rimuovi dal profilo",
+      "pinned": "Fissato",
+      "unpinned": "Non più fissato",
+      "no_pinned": "Nessun elemento fissato",
+      "pinned_limit_reached": "Hai raggiunto il numero massimo di elementi fissati — rimuovine uno per aggiungerne un altro",
+      "custom_sort": "ordinamento personalizzato",
+      "quick_add": "aggiunta rapida",
+      "favorite_films": "film preferiti",
+      "follow": "segui",
+      "followed": "seguito",
+      "request_sent": "Richiesta inviata",
+      "follow_requests": "richieste di seguirti",
+      "no_follow_requests": "nessuna richiesta di seguirti",
+      "follower": "{count, plural, one {follower} other {follower}}",
+      "follower_count": "{count} follower",
+      "see_followers": "vedi i follower",
+      "followee": "{count, plural, one {seguito} other {seguiti}}",
+      "followee_count": "{count} seguiti",
+      "see_followees": "vedi chi segui",
+      "last_activities": "ultime attività",
+      "last_updated": "ultimo aggiornamento",
+      "last_updated_at_date": "ultimo aggiornamento il {date}",
+      "show_all": "mostra tutto",
+      "this_account_is_private": "questo account è privato",
+      "follow_to_see_activities": "segui per vedere le attività",
+      "review": "{count, plural, one {recensione} other {recensioni}}",
+      "no_overview": "nessuna trama",
+      "cast": "cast",
+      "no_cast": "nessun cast",
+      "recent": "recente",
+      "popular": "{count, plural, one {popolare} other {popolari}}",
+      "popularity": "popolarità",
+      "no_reviews": "Nessuna recensione",
+      "no_playlists": "Nessuna playlist",
+      "no_playlists_found": "Nessuna playlist trovata",
+      "no_films": "Nessun film",
+      "no_tv_series": "Nessuna serie",
+      "view_activity": "vedi l'attività",
+      "comment_count": "{count, plural, one {# commento} other {# commenti}}",
+      "write_review": "scrivi una recensione",
+      "new_review": "nuova recensione",
+      "edit_review": "modifica la recensione",
+      "review_by": "recensione di {name}",
+      "my_review": "{count, plural, one {la mia recensione} other {le mie recensioni}}",
+      "add_review": "aggiungi una recensione",
+      "tv_series": "{count, plural, one {serie} other {serie}}",
+      "film": "{count, plural, one {film} other {film}}",
+      "movie": "{count, plural, one {film} other {film}}",
+      "media": "{count, plural, one {contenuto} other {contenuti}}",
+      "tv_season": "{count, plural, one {stagione} other {stagioni}}",
+      "tv_season_count": "{count, plural, one {# stagione} other {# stagioni}}",
+      "tv_season_value": "stagione {number}",
+      "tv_season_short": "S{number}",
+      "tv_episode": "{count, plural, one {episodio} other {episodi}}",
+      "tv_episode_count": "{count, plural, one {# episodio} other {# episodi}}",
+      "tv_episode_value": "episodio {number}",
+      "tv_episode_short": "S{seasonNumber}E{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {episodio speciale} other {episodi speciali}}",
+      "first_air_date": "prima trasmissione",
+      "last_air_date": "ultima trasmissione",
+      "see_film": "vedi il film",
+      "see_tv_series": "vedi la serie",
+      "watch_film_title": "guarda {title}",
+      "watch_film_streaming_or_download": "Guarda <important>{title}</important> in streaming o in download legale",
+      "download": "scarica",
+      "downloaded": "scaricato",
+      "person": "{count, plural, one {persona} other {persone}}",
+      "top_result": "miglior risultato",
+      "user": "{count, plural, one {utente} other {utenti}}",
+      "reco": "{count, plural, one {reco} other {reco}}",
+      "my_recos": "le mie reco",
+      "item": "{count, plural, one {elemento} other {elementi}}",
+      "item_count": "{count, plural, one {# elemento} other {# elementi}}",
+      "type": "tipo",
+      "complete": "completa",
+      "completed": "completato",
+      "collection": "{count, plural, one {collezione} other {collezioni}}",
+      "most_recent": "{count, plural, one {più recente} other {più recenti}}",
+      "most_popular": "{count, plural, one {più popolare} other {più popolari}}",
+      "most_old": "{count, plural, one {più vecchio} other {più vecchi}}",
+      "known_for": "Conosciuto per",
+      "release_date": "data di uscita",
+      "last_appearance_date": "ultima apparizione",
+      "vote_average": "voto medio",
+      "added": "aggiunto",
+      "added_date": "data di aggiunta",
+      "added_at": "aggiunto il",
+      "add": "aggiungi",
+      "playlist_name": "nome della playlist",
+      "updated_at": "aggiornato il",
+      "created_at": "creato il",
+      "likes": "like",
+      "likes_count": "numero di like",
+      "search_media": "cerca un contenuto",
+      "search_film": "cerca un film",
+      "start_typing_to_search_films": "inizia a scrivere per cercare film",
+      "search_tv_series": "cerca una serie",
+      "start_typing_to_search_tv_series": "inizia a scrivere per cercare serie",
+      "search_person": "cerca una persona",
+      "start_typing_to_search_persons": "inizia a scrivere per cercare persone",
+      "search_user": "{count, plural, one {cerca un utente} other {cerca utenti}}",
+      "start_typing_to_search_users": "inizia a scrivere per cercare utenti",
+      "search_playlist": "cerca una playlist",
+      "start_typing_to_search_playlists": "inizia a scrivere per cercare playlist",
+      "search_film_or_tv_series": "cerca un film o una serie",
+      "watched_date": "{count, plural, one {data di visione} other {date di visione}}",
+      "mark_as_watched": "segna come visto",
+      "remove_from_watched": "rimuovi dai visti",
+      "rating": "voto",
+      "create_a_playlist": "crea una playlist",
+      "by_name": "di {name}",
+      "reset": "reimposta",
+      "job": "{count, plural, one {mestiere} other {mestieri}}",
+      "department": "{count, plural, one {reparto} other {reparti}}",
+      "share_title_via": "Condividi <strong>{title}</strong> tramite",
+      "share_title": "Condividi <strong>{title}</strong>",
+      "link": "link",
+      "copy_link": "copia il link",
+      "copied": "Copiato",
+      "other": "{count, plural, one {Altro} other {Altri}}",
+      "via": "tramite",
+      "edit": "modifica",
+      "guest": "{count, plural, one {ospite} other {ospiti}}",
+      "are_u_sure": "Sei sicuro?",
+      "backward": "precedente",
+      "forward": "successivo",
+      "back": "indietro",
+      "next": "avanti",
+      "notification": "{count, plural, one {notifica} other {notifiche}}",
+      "see_notifications": "vedi le notifiche",
+      "open_social_panel": "apri il pannello social",
+      "cancel_change": "{count, plural, one {annulla la modifica} other {annulla le modifiche}}",
+      "do_you_really_want_to_cancel_change": "Vuoi davvero annullare {count, plural, one {la modifica} other {le modifiche}}?",
+      "continue_editing": "continua a modificare",
+      "confirm": "conferma",
+      "terms_of_use": "condizioni d'uso",
+      "privacy_policy": "informativa sulla privacy",
+      "request_made": "richiesta effettuata",
+      "request_canceled": "richiesta annullata",
+      "cancel_request": "annulla la richiesta",
+      "open_menu": "apri il menu",
+      "feed": "feed",
+      "about": "chi siamo",
+      "home": "home",
+      "search": "ricerca",
+      "explore": "esplora",
+      "shop": "shop",
+      "help": "aiuto",
+      "legal": "note legali",
+      "setting": "{count, plural, one {impostazione} other {impostazioni}}",
+      "logout": "esci",
+      "to_watch": "da vedere",
+      "reco_by_your_friends": "reco dai tuoi amici",
+      "friends_playlists": "playlist dei tuoi amici",
+      "latest_activity": "{count, plural, one {ultima attività} other {ultime attività}}",
+      "discover_users": "scopri utenti",
+      "most_recommended": "{count, plural, one {più consigliato} other {più consigliati}}",
+      "archive": "archivia",
+      "unarchive": "ripristina",
+      "mark_as_read": "{count, plural, one {segna come letta} other {segna come lette}}",
+      "mark_as_unread": "{count, plural, one {segna come non letta} other {segna come non lette}}",
+      "accept": "accetta",
+      "accepted": "accettato",
+      "decline": "rifiuta",
+      "declined": "rifiutato",
+      "request_accepted": "{count, plural, one {richiesta accettata} other {richieste accettate}}",
+      "request_declined": "{count, plural, one {richiesta rifiutata} other {richieste rifiutate}}",
+      "unread": "{count, plural, one {non letta} other {non lette}}",
+      "archived": "{count, plural, one {archiviata} other {archiviate}}",
+      "no_notifications": "nessuna notifica",
+      "all": "{count, plural, one {tutto} other {tutti}}",
+      "mark_all_as_read": "segna tutto come letto",
+      "archive_all": "archivia tutto",
+      "archive_all_read": "archivia tutto ciò che è letto",
+      "please_login": "accedi",
+      "like": "mi piace",
+      "unlike": "non mi piace più",
+      "unfollow": "smetti di seguire",
+      "name": "nome",
+      "add_a_name": "aggiungi un nome",
+      "add_a_description": "aggiungi una descrizione",
+      "visibility": "visibilità",
+      "search_an_user": "cerca un utente",
+      "select_an_item_to_add_to_playlist": "seleziona un elemento da aggiungere alla playlist",
+      "select_a_film_to_add_to_playlist": "seleziona un film da aggiungere alla playlist",
+      "select_a_tv_series_to_add_to_playlist": "seleziona una serie da aggiungere alla playlist",
+      "add_one_or_more_items_to": "Aggiungi uno o più elementi a <important>{title}</important>",
+      "add_one_or_more_films_to": "Aggiungi uno o più film a <important>{title}</important>",
+      "add_one_or_more_tv_series_to": "Aggiungi una o più serie a <important>{title}</important>",
+      "manage_playlist_access_rights": "gestisci i permessi della playlist",
+      "add_guest": "{count, plural, one {aggiungi un ospite} other {aggiungi ospiti}}",
+      "manage_members": "gestisci i membri",
+      "no_member": "nessun membro",
+      "add_member": "{count, plural, one {aggiungi un membro} other {aggiungi membri}}",
+      "manage_guests": "gestisci gli ospiti",
+      "add_guests_to_your_playlist": "aggiungi ospiti alla tua playlist",
+      "select_users_to_add_to_playlist": "seleziona gli utenti da aggiungere alla playlist",
+      "select_users_to_send_reco": "seleziona a chi inviare la reco",
+      "select_playlists_to_add_the_item": "seleziona le playlist a cui aggiungere l'elemento",
+      "send": "invia",
+      "sent": "inviato",
+      "select_row": "seleziona la riga",
+      "select_all": "seleziona tutto",
+      "no_selected_users": "nessun utente selezionato",
+      "selection_count": "{number} di {total} {type} selezionati",
+      "about_title": "su {title}",
+      "detail": "{count, plural, one {dettaglio} other {dettagli}}",
+      "genre": "{count, plural, one {genere} other {generi}}",
+      "male": "{count, plural, one {uomo} other {uomini}}",
+      "female": "{count, plural, one {donna} other {donne}}",
+      "non_binary": "{count, plural, one {non binario} other {non binari}}",
+      "unspecified": "non specificato",
+      "date_of_birth": "data di nascita",
+      "date_of_death": "data di morte",
+      "place_of_birth": "luogo di nascita",
+      "age_years": "{count} {count, plural, one {anno} other {anni}}",
+      "biography": "biografia",
+      "no_biography_available": "nessuna biografia disponibile",
+      "no_information_available": "nessuna informazione disponibile",
+      "already_sent": "già inviato",
+      "already_watched": "già visto",
+      "already_added": "già aggiunto",
+      "recommend_to_friend_to_discover": "Consiglia <strong>{title}</strong> a un amico per fargliela scoprire",
+      "add_to_one_or_more_playlists": "Aggiungi <strong>{title}</strong> a una o più delle tue playlist",
+      "my_playlist": "{count, plural, one {la mia playlist} other {le mie playlist}}",
+      "what_is_title": "Che cos'è <strong>{title}</strong>?",
+      "try_again": "Riprova",
+      "error": "errore",
+      "not_logged_in": "non hai effettuato l'accesso",
+      "an_error_occurred": "Si è verificato un errore",
+      "playlist_not_found": "playlist non trovata",
+      "user_not_found": "utente non trovato",
+      "film_not_found": "film non trovato",
+      "media_not_found": "contenuto non trovato",
+      "review_not_found": "recensione non trovata",
+      "person_not_found": "persona non trovata",
+      "tv_series_not_found": "serie non trovata",
+      "tv_episode_not_found": "episodio non trovato",
+      "tv_season_not_found": "stagione non trovata",
+      "wrong_arguments": "argomenti non validi",
+      "no_media_found": "nessun contenuto trovato",
+      "unknown_action": "azione sconosciuta",
+      "no_user_found": "nessun utente trovato",
+      "no_tv_episodes": "nessun episodio",
+      "save": "salva",
+      "saved": "salvato",
+      "create": "crea",
+      "film_count": "{count, plural, one {# film} other {# film}}",
+      "tv_series_count": "{count, plural, one {# serie} other {# serie}}",
+      "login": "accedi",
+      "signup": "registrati",
+      "navigation": "navigazione",
+      "delete": "Elimina",
+      "remove": "Rimuovi",
+      "deleted": "Eliminato",
+      "share": "condividi",
+      "duplicate": "duplica",
+      "duplicated": "duplicato",
+      "cancel": "Annulla",
+      "date": "data",
+      "duration": "durata",
+      "sort": "ordina",
+      "show": "mostra",
+      "column": "{count, plural, one {colonna} other {colonne}}",
+      "comment": "{count, plural, one {commento} other {commenti}}",
+      "unknown": "sconosciuto",
+      "community": "community",
+      "cast_and_crew": "cast e troupe",
+      "soon": "presto",
+      "ios_app": "App per iOS",
+      "android_app": "App per Android",
+      "coming_soon": "Disponibile a breve",
+      "new_mobile_app": "Nuova app mobile!",
+      "manage": "gestisci",
+      "monthly": "mensile",
+      "yearly": "annuale",
+      "day": "giorno",
+      "week": "settimana",
+      "month": "mese",
+      "year": "anno",
+      "price": "prezzo",
+      "free": "gratis",
+      "playlist": "{count, plural, one {playlist} other {playlist}}",
+      "public": "pubblica",
+      "publish": "pubblica",
+      "private": "privata",
+      "description": "descrizione",
+      "details": "dettagli",
+      "profile": "profilo",
+      "overview": "trama",
+      "no_playlists_saved": "nessuna playlist salvata",
+      "camera_permission_denied": "permesso della fotocamera negato",
+      "photo_library_permission_denied": "permesso della libreria foto negato",
+      "ignore": "ignora",
+      "ok": "ok",
+      "title": "titolo",
+      "skip": "Salta",
+      "undo": "Annulla",
+      "date_published": "data di pubblicazione",
+      "date_created": "data di creazione",
+      "date_updated": "data di modifica",
+      "alphabetical": "alfabetico",
+      "date_added": "data di aggiunta",
+      "number_of_likes": "numero di like",
+      "number_of_seasons": "numero di stagioni",
+      "add_to_this_playlist": "aggiungi a questa playlist",
+      "save_to_library": "salva nella libreria",
+      "remove_from_library": "rimuovi dalla libreria",
+      "otp": "OTP",
+      "ratings_from_followees": "voti di chi segui",
+      "choose_from_the_library": "scegli dalla libreria",
+      "take_a_photo": "scatta una foto",
+      "delete_current_image": "elimina l'immagine attuale",
+      "edit_image": "modifica l'immagine",
+      "add_image": "aggiungi un'immagine",
+      "verify_with_a_code": "verifica con un codice",
+      "order": "ordine",
+      "edit_order": "modifica l'ordine",
+      "done": "fatto",
+      "can_edit": "può modificare?",
+      "upgrade": "passa a premium",
+      "no_description": "Nessuna descrizione",
+      "no_comment": "Nessun commento",
+      "close": "chiudi",
+      "edit_playlist": "modifica la playlist",
+      "universe": "universo",
+      "cannot_be_changed": "non può essere modificato",
+      "delete_review": "elimina la recensione",
+      "do_you_really_want_to_delete_this_review": "Vuoi davvero eliminare questa recensione?",
+      "user_liked_playlist": "a <name></name> è piaciuta una playlist",
+      "user_liked_review": "a <name></name> è piaciuta una recensione",
+      "runtime": "durata",
+      "ends_at": "Finisce alle {value}",
+      "this_user_has_no_activity": "Questo utente non ha attività",
+      "notification_archived": "{count, plural, one {notifica archiviata} other {notifiche archiviate}}",
+      "notification_unarchived": "{count, plural, one {notifica ripristinata} other {notifiche ripristinate}}",
+      "notification_marked_as_read": "{count, plural, one {notifica segnata come letta} other {notifiche segnate come lette}}",
+      "notification_marked_as_unread": "{count, plural, one {notifica segnata come non letta} other {notifiche segnate come non lette}}",
+      "or_continue_with": "oppure continua con",
+      "message": "{count, plural, one {messaggio} other {messaggi}}",
+      "story": "{count, plural, one {story} other {story}}",
+      "new_playlist": "nuova playlist",
+      "select_a_type": "seleziona un tipo",
+      "filter": "{count, plural, one {filtro} other {filtri}}",
+      "hide_watched": "nascondi i visti",
+      "show_me_around": "fammi fare un giro",
+      "artwork_from": "Illustrazione di <important>{source}</important>",
+      "no_active_subscription": "nessun abbonamento attivo",
+      "manage_subscription": "gestisci l'abbonamento",
+      "started_on_date": "iniziato il: {date}",
+      "last_renewed_on_date": "ultimo rinnovo il: {date}",
+      "version_value": "versione {value}",
+      "original_title": "titolo originale",
+      "starring": "con",
+      "write_your_review_here": "scrivi qui la tua recensione...",
+      "insert": "inserisci",
+      "trailer": "{count, plural, one {trailer} other {trailer}}",
+      "list": "{count, plural, one {lista} other {liste}}",
+      "grid": "{count, plural, one {griglia} other {griglie}}",
+      "order_asc": "ordine crescente",
+      "order_desc": "ordine decrescente",
+      "menu": "menu",
+      "at_least_one_watched_date_required": "è richiesta almeno una data di visione",
+      "viewer": "{count, plural, one {Spettatore} other {Spettatori}}",
+      "editor": "{count, plural, one {Editore} other {Editori}}",
+      "admin": "{count, plural, one {Amministratore} other {Amministratori}}",
+      "owner": "{count, plural, one {Proprietario} other {Proprietari}}",
+      "you_dont_have_permission_to_do_this_action": "Non hai il permesso di eseguire questa azione",
+      "in_progress": "in corso",
+      "give_up": "rinuncia",
+      "random": "casuale",
+      "reset_password": "Reimposta la password",
+      "password_reset": "Password reimpostata",
+      "return_to_login": "Torna all'accesso",
+      "invalid_code": "Codice non valido",
+      "no_token_found": "Nessun token trovato",
+      "first_watched_at": "prima data di visione",
+      "watched_dates": "date di visione",
+      "no_watched_dates": "nessuna data di visione",
+      "select_role": "seleziona un ruolo",
+      "select_format": "seleziona un formato",
+      "theater": "Cinema",
+      "physical": "Supporto fisico",
+      "digital": "Digitale",
+      "streaming": "Streaming",
+      "you_must_be_premium_to_change_member_role": "Devi essere premium per cambiare il ruolo di un membro",
+      "already_member": "già membro",
+      "email_already_used": "Questa email è già in uso",
+      "email_confirmed": "Email confermata",
+      "confirmation_email_sent": "Email di conferma inviata",
+      "continue": "Continua",
+      "finish": "Termina",
+      "forgot_password": "Password dimenticata",
+      "new_password": "Nuova password",
+      "confirm_password": "Conferma la password",
+      "password_reseted": "Password reimpostata",
+      "reset_your_password": "Reimposta la tua password",
+      "invalid_token": "Token non valido",
+      "new_notification": "{count, plural, one {nuova notifica} other {nuove notifiche}}",
+      "lets_go": "Si parte!",
+      "update_available": "Aggiornamento disponibile",
+      "update_available_description": "Aggiorna l'app per goderti le ultime novità.",
+      "update_required_title": "Aggiornamento necessario",
+      "update_required_description": "Questa versione dell'app non è più supportata. Aggiornala per continuare a usare Recomend.",
+      "update_app": "Aggiorna",
+      "advertisement": "{count, plural, one {Pubblicità} other {Pubblicità}}",
+      "pending": "In attesa",
+      "processing": "In corso",
+      "awaiting_review": "Da verificare",
+      "failed": "Fallito",
+      "data": "{count, plural, one {Dato} other {Dati}}",
+      "restore": "Ripristina",
+      "fix": "Correggi",
+      "not_found": "Non trovato",
+      "unavailable": "Non disponibile",
+      "star_on_github": "Metti una stella su GitHub"
+    },
+    "form": {
+      "email": {
+        "label": "Indirizzo email",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "L'email non è valida",
+          "unavailable": "Questa email è già in uso"
+        },
+        "verified": "Email verificata"
+      },
+      "username": {
+        "label": "Nome utente",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "Il primo carattere deve essere una lettera o un numero",
+          "double_dot": "Due punti consecutivi non sono ammessi",
+          "ends_with_dot": "Un punto alla fine non è ammesso",
+          "format": "Sono ammesse solo lettere, numeri e i simboli '_' e '.'",
+          "unavailable": "Questo nome utente è già in uso"
+        }
+      },
+      "full_name": {
+        "label": "Nome",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "Sono ammessi solo lettere, numeri e spazi"
+        }
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Inserisci la tua password",
+        "schema": {
+          "uppercase": "È richiesta almeno una lettera maiuscola",
+          "lowercase": "È richiesta almeno una lettera minuscola",
+          "number": "È richiesto almeno un numero",
+          "special": "È richiesto almeno un carattere speciale",
+          "match": "Le password non corrispondono"
+        },
+        "confirm": {
+          "label": "Conferma la password",
+          "placeholder": "Conferma la tua password"
+        }
+      },
+      "length": {
+        "char_min": "minimo {count, plural, one {# carattere} other {# caratteri}}",
+        "char_max": "massimo {count, plural, one {# carattere} other {# caratteri}}"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "Sono ammessi solo lettere, numeri e spazi"
+      },
+      "error": {
+        "too_many_attempts": "Troppi tentativi, riprova più tardi",
+        "not_received_code": "Non hai ricevuto il codice?",
+        "invalid_code": "Codice non valido",
+        "turnstile": "Errore di verifica, riprova"
+      },
+      "resend_code": "Invia di nuovo il codice",
+      "resend_email": "Invia di nuovo l'email",
+      "code_verified": "Codice verificato",
+      "code_sent": "Codice inviato"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "pagina non trovata",
+        "description": "ops, questa pagina non esiste..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "tracciamento",
+        "description": "Scopri, vota e condividi i tuoi film e serie preferiti."
+      },
+      "recos": {
+        "label": "reco",
+        "description": "Invia e ricevi le reco dei tuoi amici. Tutto in un unico posto."
+      },
+      "playlists": {
+        "label": "playlist",
+        "description": "Organizza, condividi e crea playlist insieme agli altri."
+      },
+      "feed": {
+        "label": "feed",
+        "description": "Segui i tuoi amici per vedere cosa guardano, cosa amano e cosa votano."
+      },
+      "social_sharing": {
+        "label": "condivisione social",
+        "description": "Condividi ciò che ami su Instagram o su altri social."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "Tracciamento",
+          "description": "Tieni d'occhio i film che hai visto"
+        },
+        "recos": {
+          "label": "Reco",
+          "description": "Invia consigli sui film ai tuoi amici"
+        },
+        "explore": {
+          "label": "Esplora",
+          "description": "Scopri nuovi film su Paradise Pictures, una mappa interattiva con più di 1400 film"
+        },
+        "like": {
+          "label": "Like",
+          "description": "Mostra il tuo amore per i tuoi film, playlist e recensioni preferiti"
+        },
+        "rating": {
+          "label": "Voto",
+          "description": "Vota i film che hai visto"
+        },
+        "watchlist": {
+          "label": "Watchlist",
+          "description": "Salva i film che vuoi vedere"
+        },
+        "playlists": {
+          "label": "Playlist",
+          "description": "Organizza i tuoi film in playlist e condividile"
+        },
+        "reviews": {
+          "label": "Recensioni",
+          "description": "Scrivi recensioni per far uscire il cinefilo inacidito che è in te"
+        },
+        "feed": {
+          "label": "Feed",
+          "description": "Segui l'attività dei tuoi amici"
+        },
+        "adsFree": {
+          "label": "Senza pubblicità",
+          "description": "Goditi Recomend senza pubblicità, per sempre"
+        }
+      }
+    },
+    "welcome": {
+      "title": "Grazie per l'iscrizione!",
+      "description": "Ecco una rapida panoramica di ciò che puoi fare con {app}.",
+      "follow": {
+        "title": "Segui le persone",
+        "description": "Segui i tuoi amici per vedere cosa stanno guardando."
+      },
+      "import": {
+        "title": "Arrivi da un'altra piattaforma?"
+      }
+    },
+    "collection": {
+      "label": "libreria",
+      "my_recos": {
+        "label": "le mie reco",
+        "search": {
+          "placeholder": "cerca nelle mie reco..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "elimina dalle mie reco",
+            "description": "Vuoi davvero eliminare <important>{title}</important> dalle tue reco?"
+          },
+          "complete_confirm": {
+            "title": "completa la reco",
+            "description": "Vuoi davvero completare la reco <important>{title}</important>?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "cerca nella watchlist..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "elimina dalla watchlist",
+            "description": "Vuoi davvero eliminare <important>{title}</important> dalla tua watchlist?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "cerca nei colpi di fulmine..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "elimina dai colpi di fulmine",
+            "description": "Vuoi davvero eliminare <important>{title}</important> dai tuoi colpi di fulmine?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> ha visto",
+        "rated": "<name></name> ha votato",
+        "liked": "a <name></name> è piaciuto",
+        "rated_liked": "a <name></name> è piaciuto e l'ha votato",
+        "reviewed": "<name></name> ha scritto una recensione"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> è <important>{roles}</important> in <linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> è <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "Autorizza l'applicazione",
+        "description_generic": "Un'applicazione richiede l'accesso al tuo account.",
+        "description": "{client} vuole accedere al tuo account.",
+        "scopes_label": "Questo permetterà all'applicazione di:",
+        "accept": "Autorizza",
+        "deny": "Rifiuta",
+        "error": {
+          "invalid_request": "Richiesta non valida o scaduta",
+          "invalid_request_description": "Ricomincia la procedura dall'applicazione che ti ha portato qui.",
+          "client_not_found": "Questa applicazione non è stata trovata.",
+          "submit_failed": "Qualcosa è andato storto. Riprova."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "Accedi al tuo account {app}."
+        },
+        "label": "Accedi",
+        "description": "Scopri i migliori consigli sui film.",
+        "or_continue_with": "Oppure continua con",
+        "no_account_yet": "Non hai ancora un account?",
+        "form": {
+          "identifier": {
+            "label": "Email o nome utente",
+            "placeholder": "Inserisci la tua email o il tuo nome utente"
+          },
+          "password": {
+            "label": "Password",
+            "placeholder": "Inserisci la tua password"
+          },
+          "submit": "Accedi",
+          "forgot_password": "Password dimenticata?",
+          "wrong_credentials": "L'email o la password non sono corretti"
+        },
+        "otp": {
+          "password_login": "Preferisci accedere con una password?",
+          "form": {
+            "submit": "Ricevi il codice",
+            "no_user_found": "Nessun utente trovato con questa email",
+            "success": "Connesso"
+          },
+          "confirm_form": {
+            "label": "Conferma il codice",
+            "description": "Un codice di verifica è stato inviato all'indirizzo {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "Iscriviti a {app} per scoprire e condividere consigli sui film."
+        },
+        "description": "Crea un account per consigliare un film a quell'amico che si dimentica sempre i titoli.",
+        "form": {
+          "success": "Un'email di verifica è stata inviata a {email}"
+        },
+        "confirm_form": {
+          "label": "Conferma l'email",
+          "description": "Un link di verifica è stato inviato all'indirizzo {email}"
+        },
+        "return_to_login": "Ops, alla fine ho già un account."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "Password dimenticata",
+          "description": "Reimposta la tua password."
+        },
+        "label": "Password dimenticata",
+        "description": "Dovresti usare un gestore di password, è davvero comodo.",
+        "return_to_login": "Ops, alla fine la mia password me la ricordo.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "Reimposta la password",
+          "code_sent": "Richiesta inviata"
+        },
+        "confirm_form": {
+          "label": "Conferma il codice",
+          "description": "Un codice di verifica è stato inviato all'indirizzo {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "Reimpostazione della password",
+          "description": "Scegli una nuova password per il tuo account."
+        }
+      },
+      "error": {
+        "label": "Errore",
+        "description": "Si è verificato un errore durante la procedura di autenticazione.",
+        "return_to_login": "Torna al sicuro"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "Chi siamo",
+        "marquee": "Non c'è niente di più emozionante nella tua vita che guardare le pagine «Chi siamo» su Internet?",
+        "intro": "<strong>Recomend</strong> è uno spazio dedicato alla scoperta, al consiglio e all'organizzazione dei film. Tutto è pensato per offrire al passaparola il miglior supporto digitale possibile. Il nostro approccio è incentrato sulle persone e sulle loro relazioni nell'era del consumo autocentrato o, piuttosto, del «consigliato per te».",
+        "slogan": {
+          "1": "È senza pubblicità e senza promesse dubbie. 🍆",
+          "2": "È allo stesso tempo un social network e uno strumento.",
+          "3": "È fatto in casa, da appassionati.",
+          "4": "È amatoriale nel senso letterale del termine."
+        },
+        "last": "Recomend si può usare da soli o in compagnia, in pubblico o in privato, di giorno come di notte, ma mai davanti a un film: concentrati, per favore!"
+      },
+      "team": {
+        "label": "Il team",
+        "intro": "Recomend è stato creato da due fratelli appassionati di cinema che amano investire il loro tempo in progetti troppo ambiziosi che non è detto vedranno mai la luce.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "Architetto-Ingegnere iperattivo e incapace di accontentarsi di un solo lavoro (la start-up nation quella vera), Yoann è all'origine dell'idea di realizzare una mappa di film che all'inizio aveva solo la modesta ambizione di diventare un poster da appendere nel suo bagno. L'arrivo di Loup ha fatto esplodere gli obiettivi e, un po' travolto dagli eventi, si occupa di tutta la parte grafica della mappa e del sito oltre che di tutta la comunicazione (anche se non gli piace). Dà anche il suo parere su UX/UI e propone un sacco di funzionalità senza rendersi ben conto di quanto siano difficili da programmare (ha fatto qualche progresso)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "Autodidatta totale che ha comunque seguito studi che lo hanno portato alla disoccupazione non retribuita prima dei 25 anni. Vero coltellino svizzero, Loup si occupa del web design programmando un'interfaccia che immaginiamo il più ergonomica possibile. Loup vorrebbe ringraziare tutti i forum di codice che hanno risposto alle sue (tantissime) domande e tutti gli youtuber indiani che lo hanno accompagnato in questi mesi come padri adottivi. Sua madre, del resto, è convinta che suo fratello lo tenga schiavo per questo progetto (sto bene, mamma)."
+          }
+        },
+        "last": "Per parlare con noi o con altri membri della community, entra nel nostro <link>Discord</link>!"
+      },
+      "pricing": {
+        "label": "Prezzi",
+        "intro": "Questo modello di abbonamento è prima di tutto un sostegno per tenere in vita il progetto e continuare a svilupparlo. Le funzionalità premium sono extra destinati a un uso avanzato di Recomend, che giustificano un piccolo contributo economico. Manterremo sempre la possibilità di accedere al sito gratuitamente, senza pubblicità e senza sentirsi limitati.",
+        "subdescription": "*Se il prezzo estremamente basso di questo abbonamento resta al di sopra delle tue possibilità, rivolgiti al governo liberale responsabile della tua perdita di potere d'acquisto."
+      },
+      "legal": {
+        "label": "Note legali e privacy",
+        "description": "Rispettiamo la tua privacy. Le pubblicità mostrate agli utenti non connessi sono gestite da Google e richiedono cookie tecnici per limitare la frequenza di visualizzazione e prevenire le frodi.",
+        "privacyPolicy": "Leggi la nostra informativa sulla privacy",
+        "manageCookies": "Gestisci le mie preferenze pubblicitarie (cookie)"
+      },
+      "open-source": {
+        "label": "Open source",
+        "intro": "Recomend è open source: il codice è pubblico su GitHub. Dagli un'occhiata, contribuisci o lasciaci semplicemente una stella!",
+        "star": "Lasciaci una stella su GitHub"
+      },
+      "businessmodel": {
+        "label": "Business model",
+        "paragraph": {
+          "1": "Immagini che, con i nostri profili poco commerciali, non abbiamo capito bene a cosa possa servirci attualmente un business model...",
+          "2": "Se il futuro di Recomend lo richiederà, studieremo la questione circondandoci delle persone giuste o, in ogni caso, di persone a cui la cosa interessi più che a noi.",
+          "3": "Nel frattempo, diciamolo, ci sono altre cose da fare."
+        }
+      },
+      "roadmap": {
+        "label": "Roadmap"
+      },
+      "data": {
+        "label": "Dati",
+        "paragraph": {
+          "1": "Tutti i metadati usati su Recomend sono forniti da <link>The Movie Database (TMDb)</link> tramite l'API della piattaforma. Facciamo esattamente come tutti gli altri, come delle brave pecore.",
+          "2": "Per qualsiasi errore o film mancante, rivolgiti quindi a <link>TMDb</link>."
+        }
+      },
+      "resources": {
+        "label": "Risorse",
+        "intro": "Non è proprio legato al cinema, ma ecco un elenco di siti che ci piacciono:"
+      },
+      "contact-support": {
+        "label": "Contatti e supporto",
+        "help-center": "Trova le risposte alle tue domande esistenziali nel nostro <link>Centro assistenza</link>.",
+        "technical-support": "Per domande tecniche: <email></email>",
+        "suggest-a-feature": "Per suggerimenti: <email></email>",
+        "contact-us": "Per mettersi semplicemente in contatto con noi: <email></email>"
+      },
+      "quote": {
+        "label": "Citazione",
+        "quote": "« Odio la parola professionista. Tutti gli attori e gli altri che dicono: io sono professionista, io sono un pro! Che cos'è? Esiste una parola più triste? Perché amatore viene dalla parola amore. Bisogna fare le cose per amore, altrimenti siamo degli idioti. »",
+        "author": "Orson Wells",
+        "date": "1972",
+        "subdescription": "*Abbiamo esitato a metterla perché suona subito pretenziosa, ma riflette bene il nostro mood rispetto al progetto. Però se non ti piace la togliamo, eh."
+      }
+    },
+    "settings": {
+      "label": "Impostazioni",
+      "description": "Gestisci le impostazioni del tuo account.",
+      "profile": {
+        "label": "Profilo",
+        "description": "È così che gli altri ti vedranno sul sito.",
+        "avatar": {
+          "label": "Avatar",
+          "delete": "Elimina"
+        },
+        "full_name": {
+          "label": "Nome",
+          "description": "È il nome che verrà mostrato sul tuo profilo e nelle email.",
+          "placeholder": "Inserisci il tuo nome",
+          "form": {
+            "min_length": "Il nome deve contenere almeno 1 carattere",
+            "max_length": "Il nome non deve superare i 50 caratteri"
+          }
+        },
+        "bio": {
+          "label": "Bio",
+          "description": "Racconta qualcosa di te, apparirà sul tuo profilo.",
+          "placeholder": "Scrivi qualcosa su di te",
+          "form": {
+            "max_length": "La bio non deve superare i 150 caratteri",
+            "format": "La biografia non può contenere righe vuote né essere composta solo da spazi."
+          }
+        },
+        "favorite_films": {
+          "label": "Film preferiti",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "L'URL non è valido"
+          }
+        }
+      },
+      "account": {
+        "label": "Account",
+        "description": "Aggiorna le impostazioni del tuo account.",
+        "username": {
+          "label": "Nome utente",
+          "description": "Questo è il tuo nome utente, con cui le altre persone possono trovarti e accedere al tuo profilo. Puoi modificarlo solo una volta ogni 30 giorni.",
+          "placeholder": "Inserisci il tuo nome utente",
+          "form": {
+            "min_length": "Il nome utente deve contenere almeno 3 caratteri",
+            "max_length": "Il nome utente non deve superare i 15 caratteri",
+            "invalid": "Il nome utente può contenere solo lettere, numeri e i simboli '_' e '.'",
+            "unavailable": "Questo nome utente è già in uso"
+          }
+        },
+        "private": {
+          "label": "Account privato",
+          "description": "Quando il tuo account è privato, solo gli utenti che approvi possono vedere le tue attività."
+        },
+        "email": {
+          "description": "Un'email di verifica sarà inviata al tuo indirizzo attuale e al nuovo indirizzo. Devi confermarli entrambi perché la modifica sia effettiva.",
+          "change_pending": "Un'email di verifica è stata inviata il <strong>{date}</strong> al tuo nuovo indirizzo <strong>{email}</strong>. Clicca sul link o inserisci il codice di verifica per confermare la modifica.",
+          "confirm_email_code": {
+            "description": "Inserisci il codice di verifica inviato al tuo indirizzo <strong>{email}</strong>."
+          },
+          "change_success": "Il tuo indirizzo email è stato aggiornato con successo"
+        },
+        "delete_account": {
+          "button": "Elimina il mio account",
+          "confirm": {
+            "description": "Il tuo account sarà eliminato definitivamente e non potrai recuperarlo.",
+            "confirm_email_sent": "Un'email di verifica è stata inviata al tuo indirizzo email"
+          }
+        }
+      },
+      "appearance": {
+        "label": "Aspetto",
+        "description": "Personalizza l'aspetto dell'applicazione. Passa automaticamente tra i temi giorno e notte.",
+        "language": {
+          "label": "Lingua",
+          "description": "Scegli una lingua: le modifiche saranno applicate dopo il riavvio dell'app",
+          "placeholder": "Seleziona una lingua",
+          "not_found": "Lingua non trovata"
+        },
+        "theme": {
+          "label": "Tema",
+          "description": "Seleziona il tema dell'interfaccia.",
+          "options": {
+            "light": "Chiaro",
+            "dark": "Scuro"
+          }
+        }
+      },
+      "subscription": {
+        "label": "Abbonamento",
+        "description": "Gestisci il tuo abbonamento premium."
+      },
+      "security": {
+        "label": "Sicurezza",
+        "description": "La modifica della tua password ti disconnetterà da tutti i dispositivi tranne quello che stai usando.",
+        "current_password": {
+          "label": "Password attuale",
+          "placeholder": "Inserisci la tua password attuale",
+          "form": {
+            "required": "La password attuale è obbligatoria",
+            "invalid": "La password attuale non è corretta"
+          }
+        },
+        "new_password": {
+          "label": "Nuova password",
+          "placeholder": "Inserisci la tua nuova password",
+          "form": {
+            "min_length": "La password deve contenere almeno 8 caratteri",
+            "uppercase": "È richiesta almeno una lettera maiuscola",
+            "lowercase": "È richiesta almeno una lettera minuscola",
+            "number": "È richiesto almeno un numero",
+            "special": "È richiesto almeno un carattere speciale"
+          }
+        },
+        "confirm_password": {
+          "label": "Conferma la nuova password",
+          "placeholder": "Conferma la tua nuova password",
+          "form": {
+            "match": "Le password non corrispondono"
+          }
+        }
+      },
+      "notifications": {
+        "label": "Notifiche",
+        "description": "Personalizza le notifiche che ricevi.",
+        "push_notifications": {
+          "label": "Notifiche push",
+          "form": {
+            "enable": "Attiva le notifiche push"
+          },
+          "already_granted": "Una richiesta di notifica è già stata effettuata; per modificarla, vai nelle impostazioni del tuo browser.",
+          "no_enabled": "Attiva le notifiche nelle impostazioni del tuo dispositivo per ricevere le notifiche push.",
+          "open_settings": "Vai alle impostazioni del dispositivo"
+        }
+      },
+      "data": {
+        "label": "Dati",
+        "description": "Importa o esporta i tuoi dati.",
+        "importer": {
+          "label": "Importa",
+          "select_source": "Scegli una fonte",
+          "instructions_title": "Istruzioni",
+          "browse_prompt": "Trascina qui il tuo file, oppure <link>sfoglia</link>",
+          "browse_prompt_mobile": "Tocca per selezionare un file",
+          "uploading": "Caricamento in corso…",
+          "processing": "Analisi del tuo file…",
+          "upload_error": "Caricamento non riuscito, riprova.",
+          "invalid_file_type": "Questo tipo di file non è supportato per questa fonte.",
+          "review_title": "Verifica la tua importazione",
+          "review_summary": "{matched} su {total} trovati",
+          "validate": "Conferma l'importazione",
+          "validate_confirm_description": "Questo importerà nella tua libreria tutti gli elementi trovati e non ignorati. L'operazione non può essere annullata.",
+          "success_title": "Importazione completata",
+          "success_description": "I tuoi dati sono stati importati con successo.",
+          "failed_title": "Importazione non riuscita",
+          "failed_description": "Qualcosa è andato storto durante l'elaborazione di questa importazione.",
+          "pending_description": "La tua importazione è in coda e inizierà a breve.",
+          "empty": "Nessuna importazione per ora.",
+          "delete_confirm_description": "Questa importazione e tutti i suoi dati saranno eliminati definitivamente. L'operazione non può essere annullata.",
+          "keep_existing": "Tieni i miei",
+          "use_imported": "Usa l'importazione",
+          "merge": "Unisci",
+          "conflict": "Conflitto",
+          "no_match": "Nessuna corrispondenza",
+          "existing_rating": "Attualmente: {rating}",
+          "log_column": "Registro",
+          "actions_column": "Azioni",
+          "categories": {
+            "log_movies": "Film",
+            "log_tv_series": "Serie",
+            "bookmarks": "Watchlist",
+            "playlists": "Liste"
+          },
+          "status": {
+            "pending": "In attesa",
+            "processing": "In corso",
+            "awaiting_review": "Da verificare",
+            "completed": "Completata",
+            "failed": "Non riuscita"
+          }
+        },
+        "exporter": {
+          "label": "Esporta"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "passa a Premium",
+        "description": "Passa a un account premium per accedere a tutte le funzionalità di {app}."
+      },
+      "header": {
+        "title": "espandi il tuo cinema, condividi di più, sostieni {app}",
+        "subtitle": "prova 1 mese gratis, poi {price}/mese"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "attività",
+            "unlimited_activities": {
+              "label": "attività illimitate",
+              "description": "voti, like, recensioni, watchlist e consigli"
+            },
+            "favorites": {
+              "label": "preferiti",
+              "description": "aggiungi i tuoi film preferiti al tuo profilo"
+            }
+          },
+          "playlists": {
+            "label": "playlist",
+            "unlimited_playlists": {
+              "label": "illimitate",
+              "description": "crea un numero illimitato di playlist"
+            },
+            "shared_playlists": {
+              "label": "condivise",
+              "description": "condividi le tue playlist con altri utenti"
+            },
+            "collaborative_playlists": {
+              "label": "collaborative",
+              "description": "crea playlist collaborative con altri utenti"
+            }
+          },
+          "feed": {
+            "label": "feed",
+            "followees": {
+              "label": "utenti seguiti",
+              "description": "vedi le attività degli utenti che segui"
+            },
+            "cast_and_crew": {
+              "label": "cast e troupe",
+              "description": "segui le attività delle persone che lavorano ai film"
+            }
+          },
+          "support": {
+            "label": "sostegno",
+            "team": {
+              "label": "Sostieni il team di {app}"
+            },
+            "credits": {
+              "label": "titoli di coda",
+              "description": "il tuo profilo nei titoli di coda dell'app"
+            }
+          }
+        },
+        "success": {
+          "label": "Grazie per il tuo sostegno!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} - playlist di @{username}",
+        "description": "Scopri la playlist di film di @{username} su {app}."
+      },
+      "actions": {
+        "delete": {
+          "description": "Questo eliminerà definitivamente <important>{title}</important> dalle tue playlist."
+        }
+      },
+      "search": {
+        "placeholder": "cerca nella playlist..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "Vuoi davvero eliminare <important>{title}</important> dalla tua playlist?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "Inserisci il titolo della playlist"
+        },
+        "description": {
+          "placeholder": "Inserisci una descrizione della playlist"
+        },
+        "error": {
+          "format": "La descrizione non può contenere righe vuote né essere composta solo da spazi."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "Scopri il profilo di @{username} su {app}."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year}) • Film",
+        "description": "{title} è un film di {directors} uscito nel {year}. Trama: {overview}",
+        "description_no_director": "{title} è un film uscito nel {year}. Trama: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Playlist",
+          "description": "Scopri tutte le playlist che contengono il film {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Recensioni",
+          "description": "Scopri tutte le recensioni del film {title}."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} è una serie di {creators} trasmessa per la prima volta nel {year}. Trama: {overview}",
+        "description_no_creator": "{title} è una serie trasmessa per la prima volta nel {year}. Trama: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Playlist",
+          "description": "Scopri tutte le playlist che contengono la serie {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Recensioni",
+          "description": "Scopri tutte le recensioni della serie {title}."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • Stagioni",
+          "description": "Scopri tutte le stagioni della serie {title}."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • Stagione {number}",
+            "description": "Scopri tutti gli episodi della stagione {number} della serie {title}."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • Film",
+          "description": "Scopri tutti i film in cui {name} ha recitato o ha lavorato."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • Serie TV",
+          "description": "Scopri tutte le serie TV in cui {name} ha recitato o ha lavorato."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "Recensione di {title} di @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "Scrivere una recensione su {title}",
+          "description": "Condividi la tua opinione su {title}."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Esplora Paradise Pictures",
+        "description": "Parti alla scoperta dell'isola e dei suoi diversi scenari. I numerosi film che la popolano sono collocati nel loro ambiente diegetico. Riuscirai a esplorarne ogni angolo?"
+      }
+    },
+    "legal": {
+      "label": "Note legali",
+      "description": "Leggi i documenti legali di {app}.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "Condizioni Generali d'Uso",
+          "description": "Leggi le condizioni d'uso di {app}."
+        },
+        "sections": {
+          "intro": "Le presenti Condizioni Generali d'Uso (di seguito «CGU») disciplinano l'accesso e l'uso dell'applicazione {app}. L'applicazione è pubblicata da Loup (di seguito «l'Editore»), domiciliato a Parigi. L'iscrizione a {app} comporta l'accettazione senza riserve delle presenti CGU.",
+          "presentation": {
+            "label": "1. Presentazione del Servizio",
+            "content": "{app} è un'applicazione gratuita che consente ai suoi utenti di consultare informazioni sui film, pubblicare recensioni, votare opere e creare liste personalizzate."
+          },
+          "account": {
+            "label": "2. Account e Sicurezza",
+            "content": "L'accesso alle funzionalità di contributo richiede la creazione di un account. L'Utente è responsabile della riservatezza delle proprie credenziali. In caso di uso fraudolento o di sospetta violazione, l'Utente deve contattare immediatamente il supporto all'indirizzo: <email></email>."
+          },
+          "conduct": {
+            "label": "3. Regole di Condotta",
+            "content": "L'Utente si impegna a rimanere cortese e rispettoso nei propri giudizi e nelle proprie liste. Sono severamente vietati: i contenuti d'odio, diffamatori o razzisti, le molestie, nonché lo spam o la promozione commerciale non richiesta. L'Editore si riserva il diritto di eliminare qualsiasi contenuto che violi queste regole e di sospendere senza preavviso l'account interessato."
+          },
+          "child_safety": {
+            "label": "4. Tutela dei Minori",
+            "content": "{app} applica una politica di tolleranza zero verso qualsiasi forma di abuso e sfruttamento sessuale dei minori («Child Sexual Abuse and Exploitation», o CSAE). La creazione, il caricamento, la conservazione, la diffusione, la sollecitazione o la promozione di qualsiasi contenuto che sessualizzi, sfrutti o metta altrimenti in pericolo i minori sono espressamente e assolutamente vietati su {app}. Qualsiasi account riconosciuto colpevole di una violazione di questa politica sarà immediatamente e definitivamente bandito, e l'Editore segnalerà il contenuto in questione, insieme a tutte le informazioni disponibili sull'utente, al National Center for Missing & Exploited Children (NCMEC) e/o alle autorità competenti, conformemente alla legislazione applicabile. Qualsiasi utente che venga a conoscenza di un contenuto o di un comportamento che possa costituire un caso di CSAE deve segnalarlo senza indugio a: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. Proprietà Intellettuale",
+            "content": "L'Utente resta proprietario dei giudizi che redige. Tuttavia, pubblicando su {app}, concede all'Editore una licenza gratuita e non esclusiva per mostrare, riprodurre e adattare tecnicamente tale contenuto all'interno dell'applicazione. Gli elementi visivi, il codice e il design di {app} sono proprietà esclusiva dell'Editore."
+          },
+          "privacy": {
+            "label": "6. Dati Personali",
+            "content": "Il rispetto della tua privacy è la nostra priorità assoluta. {app} non rivende, non noleggia e non condivide alcun dato personale con terzi commerciali o pubblicitari. I dati raccolti (email, nome utente, attività nell'app) servono unicamente al funzionamento del servizio e alla gestione del tuo account. Puoi esercitare i tuoi diritti di accesso, modifica o cancellazione (GDPR) contattando: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookie e Tracker",
+            "content": "{app} non utilizza alcun cookie pubblicitario né alcun tracker comportamentale di terze parti. Vengono usati solo due tipi di cookie tecnici: un cookie di autenticazione (per mantenerti connesso) e un cookie di preferenza linguistica (per ricordare la tua scelta). Essendo questi cookie strettamente necessari al servizio, sono esenti dal consenso preventivo."
+          },
+          "ads": {
+            "label": "8. Pubblicità",
+            "content": "L'applicazione è attualmente offerta senza alcuna pubblicità. Se questo modello dovesse cambiare, gli utenti ne sarebbero informati tramite un aggiornamento delle presenti CGU."
+          },
+          "liability": {
+            "label": "9. Responsabilità",
+            "content": "L'Editore si impegna a mantenere {app} accessibile 24 ore su 24, ma non garantisce l'assenza di interruzioni o di bug. Le informazioni sui film provengono da banche dati di terzi; l'Editore non può essere ritenuto responsabile di eventuali inesattezze in tali schede."
+          },
+          "law": {
+            "label": "10. Diritto Applicabile",
+            "content": "Le presenti CGU sono soggette al diritto francese. In caso di controversia che non abbia potuto trovare una risoluzione amichevole tramite l'indirizzo <email></email>, i tribunali di Parigi saranno gli unici competenti."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "Informativa sulla Privacy",
+          "description": "Leggi l'informativa sulla privacy di {app}."
+        },
+        "sections": {
+          "intro": "La protezione dei tuoi dati è al centro della filosofia di {app}. Questa informativa descrive in dettaglio i dati che raccogliamo, perché li raccogliamo e come li proteggiamo. In breve: non vendiamo i tuoi dati.",
+          "controller": {
+            "label": "1. Titolare del trattamento",
+            "content": "Il titolare del trattamento dei dati è Loup, domiciliato a Parigi (Francia). Per qualsiasi domanda relativa alla privacy, puoi contattare: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. Dati raccolti",
+            "content": "Raccogliamo unicamente i dati strettamente necessari al funzionamento dell'applicazione: il tuo indirizzo email (per l'autenticazione), il tuo nome utente e i tuoi dati d'uso (film votati, recensioni, liste). Le tue password sono conservate in modo cifrato (hashate) e sicuro."
+          },
+          "purpose": {
+            "label": "3. Finalità del trattamento",
+            "content": "I tuoi dati sono trattati esclusivamente per: permetterti di creare e gestire il tuo account, mostrare le tue liste e i tuoi voti e garantire il corretto funzionamento tecnico del servizio. Non utilizziamo i tuoi dati per finalità di profilazione pubblicitaria."
+          },
+          "sharing": {
+            "label": "4. Condivisione dei dati",
+            "content": "I tuoi dati personali non sono mai venduti, noleggiati o ceduti a terzi. Possono essere ospitati dai nostri fornitori tecnici (hosting, servizio di invio di email transazionali) che sono tenuti a una stretta riservatezza e rispettano il GDPR."
+          },
+          "retention": {
+            "label": "5. Durata di conservazione",
+            "content": "I tuoi dati sono conservati per tutto il tempo in cui il tuo account resta attivo. Se decidi di eliminare il tuo account, tutti i tuoi dati personali (email, nome utente, giudizi) saranno definitivamente cancellati dalle nostre banche dati."
+          },
+          "rights": {
+            "label": "6. I tuoi diritti (GDPR)",
+            "content": "In conformità alla normativa, disponi di un diritto di accesso, rettifica, portabilità e cancellazione dei tuoi dati. Puoi esercitare questi diritti in qualsiasi momento direttamente nell'applicazione o scrivendoci a: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookie",
+            "content": "Come indicato nelle nostre CGU, utilizziamo solo cookie tecnici essenziali (sessione e lingua). Nessun cookie di terze parti pubblicitario o di tracciamento viene installato sul tuo dispositivo."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "Cerca un film, una serie, una playlist, una persona o un utente..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "Vuoi davvero rimuovere quest'opera dalla tua lista dei visti? Se hai un voto o una recensione, saranno eliminati anche quelli."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "Vuoi davvero completare la serie? Tutti gli episodi di tutte le stagioni saranno segnati come visti."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "Vuoi davvero completare la stagione {seasonNumber}? Tutti gli episodi della stagione saranno segnati come visti."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "Per vedere attività qui, tu o gli utenti che segui dovete votare film, serie, ..."
+    },
+    "feed_person": {
+      "message": "Per vedere attività qui, devi seguire persone che lavorano a film o serie."
+    },
+    "playlists": {
+      "items": {
+        "empty": "Nessun film o serie in questa playlist. Aggiungine qualcuno per riempirla!"
+      },
+      "add_to": {
+        "empty": "Non hai nessuna playlist. Creane una per aggiungerci film o serie e ritrovarli facilmente!"
+      },
+      "saved": {
+        "empty": "Non hai nessuna playlist salvata. Salva una playlist per ritrovarla facilmente nella tua libreria!"
+      },
+      "members": {
+        "empty": "Questa playlist non ha nessun membro. Aggiungine qualcuno per collaborare in più persone sulla stessa playlist!",
+        "search": "Cerca utenti da aggiungere alla playlist..."
+      }
+    },
+    "follow-requests": {
+      "empty": "Non hai nessuna richiesta di seguirti in attesa. Quando ne avrai, appariranno qui!"
+    },
+    "recos": {
+      "empty": "Non hai nessun consiglio. Quando ne avrai, appariranno qui!",
+      "send_to": {
+        "empty": "Non hai nessuno a cui inviare una reco. Devi essere amico di qualcuno per potergli inviare una reco (seguito reciproco)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "Non hai ancora nessun film o serie salvato per dopo. Quando ne avrai, appariranno qui!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> ti ha reco il film <movie></movie>"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> ti ha reco la serie <tv_series></tv_series>"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> ha visto <movie></movie> che gli avevi reco"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> ha visto <tv_series></tv_series> che gli avevi reco"
+    },
+    "follower_created": {
+      "description": "<user></user> ha iniziato a seguirti"
+    },
+    "follower_accepted": {
+      "description": "<user></user> ha accettato la tua richiesta di seguirlo"
+    },
+    "follower_request": {
+      "description": "<user></user> vuole seguirti"
+    },
+    "friend_created": {
+      "description": "<user></user> è ora tuo amico"
+    }
+  }
+}
