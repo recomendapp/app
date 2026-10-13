@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "Una altra manera de descobrir el cinema",
+    "description": "{app} és una xarxa social per als apassionats del cinema. Descobreix, comparteix i explora pel·lícules i sèries amb els teus amics."
+  },
+  "common": {
+    "messages": {
+      "welcome": "Benvingut",
+      "welcome_to_app": "Benvingut a {app}",
+      "hello": "Hola",
+      "greeting_with_name": "{timeOfDay, select, morning {Bon dia, {name}} afternoon {Bona tarda, {name}} evening {Bona tarda, {name}} night {Bona nit, {name}} other {Hola, {name}}}",
+      "click_here": "Fes clic aquí",
+      "see_more": "Veure més",
+      "see_more_details": "Veure més detalls",
+      "more": "Més",
+      "view_profile": "Veure el perfil",
+      "library": "Biblioteca",
+      "watchlist": "Watchlist",
+      "for_later": "Per a més endavant",
+      "heart_pick": "{count, plural, one {cop de cor} other {cops de cor}}",
+      "add_to_heart_picks": "Afegir als cops de cor",
+      "remove_from_heart_picks": "Treure dels cops de cor",
+      "add_rating": "Afegir una valoració",
+      "edit_rating": "Editar la valoració",
+      "remove_rating": "Treure la valoració",
+      "share_my_rating": "Compartir la meva valoració",
+      "share_review": "Compartir la crítica",
+      "show_likes_count": "Mostrar el nombre de likes",
+      "show_comments_count": "Mostrar el nombre de comentaris",
+      "add_to_watchlist": "afegir a la watchlist",
+      "remove_from_watchlist": "treure de la watchlist",
+      "no_results": "cap resultat",
+      "no_results_for": "Cap resultat per a <strong>{query}</strong>",
+      "no_followees": "No segueixes ningú",
+      "no_followers": "Cap seguidor",
+      "no_rating": "Cap valoració",
+      "must_watch_to_review": "has d'haver vist aquesta obra per poder valorar-la",
+      "review_cannot_be_empty": "la crítica no pot estar buida",
+      "no_activity": "cap activitat",
+      "followers_ratings": "valoracions dels seguidors",
+      "added_by": "afegit per",
+      "sort_by": "ordenar per",
+      "sort_order": "ordre de classificació",
+      "go_to_film": "anar a la pel·lícula",
+      "go_to_tv_series": "anar a la sèrie",
+      "go_to_user": "anar a l'usuari",
+      "go_to_person": "anar a la persona",
+      "go_to_activity": "anar a l'activitat",
+      "go_to_playlist": "anar a la playlist",
+      "go_to_review": "anar a la crítica",
+      "go_to_director": "{count, plural, one {anar al director} other {anar als directors}}",
+      "go_to_creator": "{count, plural, one {anar al creador} other {anar als creadors}}",
+      "show_director": "{count, plural, one {veure el director} other {veure els directors}}",
+      "show_creator": "{count, plural, one {veure el creador} other {veure els creadors}}",
+      "show_credit": "{count, plural, one {veure el crèdit} other {veure els crèdits}}",
+      "credits": "crèdits",
+      "view_recommendation": "{count, plural, one {veure la reco} other {veure les recos}}",
+      "view_directors": "{count, plural, one {veure el director} other {veure els directors}}",
+      "no_director": "cap director",
+      "view_comment": "{count, plural, one {veure el comentari} other {veure els comentaris}}",
+      "add_comment": "{count, plural, one {afegir un comentari} other {afegir comentaris}}",
+      "edit_comment": "{count, plural, one {editar el comentari} other {editar els comentaris}}",
+      "delete_comment": "Eliminar el comentari",
+      "do_you_really_want_to_delete_this_comment": "Segur que vols eliminar aquest comentari?",
+      "comment_deleted": "Aquest comentari s'ha eliminat",
+      "write_your_comment_here": "Escriu un comentari...",
+      "reply": "Respondre",
+      "replies_count": "{count, plural, one {# resposta} other {# respostes}}",
+      "view_replies": "Veure {count, plural, one {# resposta} other {# respostes}}",
+      "hide_replies": "Amagar les respostes",
+      "load_more_replies": "Veure més respostes",
+      "get_started": "començar",
+      "get_started_its_free": "som-hi 🎬, és gratis!",
+      "import": "Importar",
+      "upgrade_to_plan": "passar a {plan}",
+      "choose_subscription_recurrence": "tria la periodicitat de la teva subscripció",
+      "compare_plans": "comparar els plans",
+      "save_up_to_percent": "estalvia fins al {percent}%",
+      "is_empty": "Això està una mica buit",
+      "add_to_playlist": "afegir a una playlist",
+      "send_to_friend": "enviar a un amic",
+      "pin_to_profile": "Fixar al perfil",
+      "unpin_from_profile": "Treure del perfil",
+      "pinned": "Fixat",
+      "unpinned": "Ja no està fixat",
+      "no_pinned": "Cap element fixat",
+      "pinned_limit_reached": "Has arribat al nombre màxim d'elements fixats — treu-ne un per afegir-ne un altre",
+      "custom_sort": "ordenació personalitzada",
+      "quick_add": "addició ràpida",
+      "favorite_films": "pel·lícules preferides",
+      "follow": "seguir",
+      "followed": "seguit",
+      "request_sent": "Sol·licitud enviada",
+      "follow_requests": "sol·licituds de seguiment",
+      "no_follow_requests": "cap sol·licitud de seguiment",
+      "follower": "{count, plural, one {seguidor} other {seguidors}}",
+      "follower_count": "{count} seguidors",
+      "see_followers": "veure els seguidors",
+      "followee": "{count, plural, one {seguit} other {seguits}}",
+      "followee_count": "{count} seguits",
+      "see_followees": "veure qui segueixes",
+      "last_activities": "últimes activitats",
+      "last_updated": "última actualització",
+      "last_updated_at_date": "última actualització el {date}",
+      "show_all": "mostrar-ho tot",
+      "this_account_is_private": "aquest compte és privat",
+      "follow_to_see_activities": "segueix per veure les activitats",
+      "review": "{count, plural, one {crítica} other {crítiques}}",
+      "no_overview": "cap sinopsi",
+      "cast": "repartiment",
+      "no_cast": "cap repartiment",
+      "recent": "recent",
+      "popular": "popular",
+      "popularity": "popularitat",
+      "no_reviews": "Cap crítica",
+      "no_playlists": "Cap playlist",
+      "no_playlists_found": "No s'ha trobat cap playlist",
+      "no_films": "Cap pel·lícula",
+      "no_tv_series": "Cap sèrie",
+      "view_activity": "veure l'activitat",
+      "comment_count": "{count, plural, one {# comentari} other {# comentaris}}",
+      "write_review": "escriure una crítica",
+      "new_review": "nova crítica",
+      "edit_review": "editar la crítica",
+      "review_by": "crítica de {name}",
+      "my_review": "{count, plural, one {la meva crítica} other {les meves crítiques}}",
+      "add_review": "afegir una crítica",
+      "tv_series": "{count, plural, one {sèrie} other {sèries}}",
+      "film": "{count, plural, one {pel·lícula} other {pel·lícules}}",
+      "movie": "{count, plural, one {pel·lícula} other {pel·lícules}}",
+      "media": "{count, plural, one {contingut} other {continguts}}",
+      "tv_season": "{count, plural, one {temporada} other {temporades}}",
+      "tv_season_count": "{count, plural, one {# temporada} other {# temporades}}",
+      "tv_season_value": "temporada {number}",
+      "tv_season_short": "T{number}",
+      "tv_episode": "{count, plural, one {episodi} other {episodis}}",
+      "tv_episode_count": "{count, plural, one {# episodi} other {# episodis}}",
+      "tv_episode_value": "episodi {number}",
+      "tv_episode_short": "T{seasonNumber}E{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {episodi especial} other {episodis especials}}",
+      "first_air_date": "primera emissió",
+      "last_air_date": "última emissió",
+      "see_film": "veure la pel·lícula",
+      "see_tv_series": "veure la sèrie",
+      "watch_film_title": "veure {title}",
+      "watch_film_streaming_or_download": "Veure <important>{title}</important> en streaming o en descàrrega legal",
+      "download": "descarregar",
+      "downloaded": "descarregat",
+      "person": "{count, plural, one {persona} other {persones}}",
+      "top_result": "millor resultat",
+      "user": "{count, plural, one {usuari} other {usuaris}}",
+      "reco": "{count, plural, one {reco} other {recos}}",
+      "my_recos": "les meves recos",
+      "item": "{count, plural, one {element} other {elements}}",
+      "item_count": "{count, plural, one {# element} other {# elements}}",
+      "type": "tipus",
+      "complete": "completar",
+      "completed": "completat",
+      "collection": "{count, plural, one {col·lecció} other {col·leccions}}",
+      "most_recent": "{count, plural, one {més recent} other {més recents}}",
+      "most_popular": "{count, plural, one {més popular} other {més populars}}",
+      "most_old": "{count, plural, one {més antic} other {més antics}}",
+      "known_for": "Conegut per",
+      "release_date": "data d'estrena",
+      "last_appearance_date": "última aparició",
+      "vote_average": "nota mitjana",
+      "added": "afegit",
+      "added_date": "data d'addició",
+      "added_at": "afegit el",
+      "add": "afegir",
+      "playlist_name": "nom de la playlist",
+      "updated_at": "actualitzat el",
+      "created_at": "creat el",
+      "likes": "likes",
+      "likes_count": "nombre de likes",
+      "search_media": "buscar un contingut",
+      "search_film": "buscar una pel·lícula",
+      "start_typing_to_search_films": "comença a escriure per buscar pel·lícules",
+      "search_tv_series": "buscar una sèrie",
+      "start_typing_to_search_tv_series": "comença a escriure per buscar sèries",
+      "search_person": "buscar una persona",
+      "start_typing_to_search_persons": "comença a escriure per buscar persones",
+      "search_user": "{count, plural, one {buscar un usuari} other {buscar usuaris}}",
+      "start_typing_to_search_users": "comença a escriure per buscar usuaris",
+      "search_playlist": "buscar una playlist",
+      "start_typing_to_search_playlists": "comença a escriure per buscar playlists",
+      "search_film_or_tv_series": "buscar una pel·lícula o una sèrie",
+      "watched_date": "{count, plural, one {data de visualització} other {dates de visualització}}",
+      "mark_as_watched": "marcar com a vist",
+      "remove_from_watched": "treure dels vists",
+      "rating": "valoració",
+      "create_a_playlist": "crear una playlist",
+      "by_name": "per {name}",
+      "reset": "restablir",
+      "job": "{count, plural, one {ofici} other {oficis}}",
+      "department": "{count, plural, one {departament} other {departaments}}",
+      "share_title_via": "Compartir <strong>{title}</strong> per",
+      "share_title": "Compartir <strong>{title}</strong>",
+      "link": "enllaç",
+      "copy_link": "copiar l'enllaç",
+      "copied": "Copiat",
+      "other": "{count, plural, one {Altre} other {Altres}}",
+      "via": "via",
+      "edit": "editar",
+      "guest": "{count, plural, one {convidat} other {convidats}}",
+      "are_u_sure": "Segur?",
+      "backward": "anterior",
+      "forward": "següent",
+      "back": "tornar",
+      "next": "següent",
+      "notification": "{count, plural, one {notificació} other {notificacions}}",
+      "see_notifications": "veure les notificacions",
+      "open_social_panel": "obrir el panell social",
+      "cancel_change": "{count, plural, one {descartar el canvi} other {descartar els canvis}}",
+      "do_you_really_want_to_cancel_change": "Segur que vols descartar {count, plural, one {el canvi} other {els canvis}}?",
+      "continue_editing": "seguir editant",
+      "confirm": "confirmar",
+      "terms_of_use": "condicions d'ús",
+      "privacy_policy": "política de privacitat",
+      "request_made": "sol·licitud feta",
+      "request_canceled": "sol·licitud cancel·lada",
+      "cancel_request": "cancel·lar la sol·licitud",
+      "open_menu": "obrir el menú",
+      "feed": "feed",
+      "about": "qui som",
+      "home": "inici",
+      "search": "cerca",
+      "explore": "explorar",
+      "shop": "botiga",
+      "help": "ajuda",
+      "legal": "legal",
+      "setting": "{count, plural, one {configuració} other {configuracions}}",
+      "logout": "tancar la sessió",
+      "to_watch": "per veure",
+      "reco_by_your_friends": "recos dels teus amics",
+      "friends_playlists": "playlists dels teus amics",
+      "latest_activity": "{count, plural, one {última activitat} other {últimes activitats}}",
+      "discover_users": "descobrir usuaris",
+      "most_recommended": "{count, plural, one {més recomanat} other {més recomanats}}",
+      "archive": "arxivar",
+      "unarchive": "desarxivar",
+      "mark_as_read": "{count, plural, one {marcar com a llegida} other {marcar com a llegides}}",
+      "mark_as_unread": "{count, plural, one {marcar com a no llegida} other {marcar com a no llegides}}",
+      "accept": "acceptar",
+      "accepted": "acceptat",
+      "decline": "rebutjar",
+      "declined": "rebutjat",
+      "request_accepted": "{count, plural, one {sol·licitud acceptada} other {sol·licituds acceptades}}",
+      "request_declined": "{count, plural, one {sol·licitud rebutjada} other {sol·licituds rebutjades}}",
+      "unread": "{count, plural, one {no llegida} other {no llegides}}",
+      "archived": "{count, plural, one {arxivada} other {arxivades}}",
+      "no_notifications": "cap notificació",
+      "all": "{count, plural, one {tot} other {totes}}",
+      "mark_all_as_read": "marcar-ho tot com a llegit",
+      "archive_all": "arxivar-ho tot",
+      "archive_all_read": "arxivar tot el que està llegit",
+      "please_login": "inicia la sessió",
+      "like": "m'agrada",
+      "unlike": "ja no m'agrada",
+      "unfollow": "deixar de seguir",
+      "name": "nom",
+      "add_a_name": "afegir un nom",
+      "add_a_description": "afegir una descripció",
+      "visibility": "visibilitat",
+      "search_an_user": "buscar un usuari",
+      "select_an_item_to_add_to_playlist": "selecciona un element per afegir a la playlist",
+      "select_a_film_to_add_to_playlist": "selecciona una pel·lícula per afegir a la playlist",
+      "select_a_tv_series_to_add_to_playlist": "selecciona una sèrie per afegir a la playlist",
+      "add_one_or_more_items_to": "Afegir un o diversos elements a <important>{title}</important>",
+      "add_one_or_more_films_to": "Afegir una o diverses pel·lícules a <important>{title}</important>",
+      "add_one_or_more_tv_series_to": "Afegir una o diverses sèries a <important>{title}</important>",
+      "manage_playlist_access_rights": "gestionar els permisos de la playlist",
+      "add_guest": "{count, plural, one {afegir un convidat} other {afegir convidats}}",
+      "manage_members": "gestionar els membres",
+      "no_member": "cap membre",
+      "add_member": "{count, plural, one {afegir un membre} other {afegir membres}}",
+      "manage_guests": "gestionar els convidats",
+      "add_guests_to_your_playlist": "afegir convidats a la teva playlist",
+      "select_users_to_add_to_playlist": "selecciona els usuaris per afegir a la playlist",
+      "select_users_to_send_reco": "selecciona a qui enviar la reco",
+      "select_playlists_to_add_the_item": "selecciona les playlists on afegir l'element",
+      "send": "enviar",
+      "sent": "enviat",
+      "select_row": "seleccionar la fila",
+      "select_all": "seleccionar-ho tot",
+      "no_selected_users": "cap usuari seleccionat",
+      "selection_count": "{number} de {total} {type} seleccionats",
+      "about_title": "sobre {title}",
+      "detail": "{count, plural, one {detall} other {detalls}}",
+      "genre": "{count, plural, one {gènere} other {gèneres}}",
+      "male": "{count, plural, one {home} other {homes}}",
+      "female": "{count, plural, one {dona} other {dones}}",
+      "non_binary": "{count, plural, one {no binari} other {no binaris}}",
+      "unspecified": "no especificat",
+      "date_of_birth": "data de naixement",
+      "date_of_death": "data de defunció",
+      "place_of_birth": "lloc de naixement",
+      "age_years": "{count} {count, plural, one {any} other {anys}}",
+      "biography": "biografia",
+      "no_biography_available": "biografia no disponible",
+      "no_information_available": "informació no disponible",
+      "already_sent": "ja enviat",
+      "already_watched": "ja vist",
+      "already_added": "ja afegit",
+      "recommend_to_friend_to_discover": "Recomana <strong>{title}</strong> a un amic per fer-li-la descobrir",
+      "add_to_one_or_more_playlists": "Afegeix <strong>{title}</strong> a una o diverses de les teves playlists",
+      "my_playlist": "{count, plural, one {la meva playlist} other {les meves playlists}}",
+      "what_is_title": "Què és <strong>{title}</strong>?",
+      "try_again": "Tornar-ho a provar",
+      "error": "error",
+      "not_logged_in": "no has iniciat la sessió",
+      "an_error_occurred": "S'ha produït un error",
+      "playlist_not_found": "playlist no trobada",
+      "user_not_found": "usuari no trobat",
+      "film_not_found": "pel·lícula no trobada",
+      "media_not_found": "contingut no trobat",
+      "review_not_found": "crítica no trobada",
+      "person_not_found": "persona no trobada",
+      "tv_series_not_found": "sèrie no trobada",
+      "tv_episode_not_found": "episodi no trobat",
+      "tv_season_not_found": "temporada no trobada",
+      "wrong_arguments": "arguments incorrectes",
+      "no_media_found": "no s'ha trobat cap contingut",
+      "unknown_action": "acció desconeguda",
+      "no_user_found": "no s'ha trobat cap usuari",
+      "no_tv_episodes": "cap episodi",
+      "save": "guardar",
+      "saved": "guardat",
+      "create": "crear",
+      "film_count": "{count, plural, one {# pel·lícula} other {# pel·lícules}}",
+      "tv_series_count": "{count, plural, one {# sèrie} other {# sèries}}",
+      "login": "iniciar la sessió",
+      "signup": "registrar-se",
+      "navigation": "navegació",
+      "delete": "Eliminar",
+      "remove": "Treure",
+      "deleted": "Eliminat",
+      "share": "compartir",
+      "duplicate": "duplicar",
+      "duplicated": "duplicat",
+      "cancel": "Cancel·lar",
+      "date": "data",
+      "duration": "durada",
+      "sort": "ordenar",
+      "show": "mostrar",
+      "column": "{count, plural, one {columna} other {columnes}}",
+      "comment": "{count, plural, one {comentari} other {comentaris}}",
+      "unknown": "desconegut",
+      "community": "comunitat",
+      "cast_and_crew": "repartiment i equip",
+      "soon": "aviat",
+      "ios_app": "App per a iOS",
+      "android_app": "App per a Android",
+      "coming_soon": "Disponible aviat",
+      "new_mobile_app": "Nova app mòbil!",
+      "manage": "gestionar",
+      "monthly": "mensual",
+      "yearly": "anual",
+      "day": "dia",
+      "week": "setmana",
+      "month": "mes",
+      "year": "any",
+      "price": "preu",
+      "free": "gratis",
+      "playlist": "{count, plural, one {playlist} other {playlists}}",
+      "public": "pública",
+      "publish": "publicar",
+      "private": "privada",
+      "description": "descripció",
+      "details": "detalls",
+      "profile": "perfil",
+      "overview": "sinopsi",
+      "no_playlists_saved": "cap playlist guardada",
+      "camera_permission_denied": "permís de la càmera denegat",
+      "photo_library_permission_denied": "permís de la galeria de fotos denegat",
+      "ignore": "ignorar",
+      "ok": "ok",
+      "title": "títol",
+      "skip": "Ometre",
+      "undo": "Desfer",
+      "date_published": "data de publicació",
+      "date_created": "data de creació",
+      "date_updated": "data de modificació",
+      "alphabetical": "alfabètic",
+      "date_added": "data d'addició",
+      "number_of_likes": "nombre de likes",
+      "number_of_seasons": "nombre de temporades",
+      "add_to_this_playlist": "afegir a aquesta playlist",
+      "save_to_library": "guardar a la biblioteca",
+      "remove_from_library": "treure de la biblioteca",
+      "otp": "OTP",
+      "ratings_from_followees": "valoracions de qui segueixes",
+      "choose_from_the_library": "triar de la galeria",
+      "take_a_photo": "fer una foto",
+      "delete_current_image": "eliminar la imatge actual",
+      "edit_image": "editar la imatge",
+      "add_image": "afegir una imatge",
+      "verify_with_a_code": "verificar amb un codi",
+      "order": "ordre",
+      "edit_order": "editar l'ordre",
+      "done": "fet",
+      "can_edit": "pot editar?",
+      "upgrade": "millorar el pla",
+      "no_description": "Cap descripció",
+      "no_comment": "Cap comentari",
+      "close": "tancar",
+      "edit_playlist": "editar la playlist",
+      "universe": "univers",
+      "cannot_be_changed": "no es pot canviar",
+      "delete_review": "eliminar la crítica",
+      "do_you_really_want_to_delete_this_review": "Segur que vols eliminar aquesta crítica?",
+      "user_liked_playlist": "a <name></name> li ha agradat una playlist",
+      "user_liked_review": "a <name></name> li ha agradat una crítica",
+      "runtime": "durada",
+      "ends_at": "Acaba a les {value}",
+      "this_user_has_no_activity": "Aquest usuari no té activitat",
+      "notification_archived": "{count, plural, one {notificació arxivada} other {notificacions arxivades}}",
+      "notification_unarchived": "{count, plural, one {notificació desarxivada} other {notificacions desarxivades}}",
+      "notification_marked_as_read": "{count, plural, one {notificació marcada com a llegida} other {notificacions marcades com a llegides}}",
+      "notification_marked_as_unread": "{count, plural, one {notificació marcada com a no llegida} other {notificacions marcades com a no llegides}}",
+      "or_continue_with": "o continuar amb",
+      "message": "{count, plural, one {missatge} other {missatges}}",
+      "story": "{count, plural, one {story} other {stories}}",
+      "new_playlist": "nova playlist",
+      "select_a_type": "selecciona un tipus",
+      "filter": "{count, plural, one {filtre} other {filtres}}",
+      "hide_watched": "amagar els vists",
+      "show_me_around": "fes-me una volta",
+      "artwork_from": "Il·lustració de <important>{source}</important>",
+      "no_active_subscription": "cap subscripció activa",
+      "manage_subscription": "gestionar la subscripció",
+      "started_on_date": "iniciada el: {date}",
+      "last_renewed_on_date": "última renovació el: {date}",
+      "version_value": "versió {value}",
+      "original_title": "títol original",
+      "starring": "amb",
+      "write_your_review_here": "escriu aquí la teva crítica...",
+      "insert": "inserir",
+      "trailer": "{count, plural, one {tràiler} other {tràilers}}",
+      "list": "{count, plural, one {llista} other {llistes}}",
+      "grid": "{count, plural, one {graella} other {graelles}}",
+      "order_asc": "ordre ascendent",
+      "order_desc": "ordre descendent",
+      "menu": "menú",
+      "at_least_one_watched_date_required": "cal com a mínim una data de visualització",
+      "viewer": "{count, plural, one {Espectador} other {Espectadors}}",
+      "editor": "{count, plural, one {Editor} other {Editors}}",
+      "admin": "{count, plural, one {Administrador} other {Administradors}}",
+      "owner": "{count, plural, one {Propietari} other {Propietaris}}",
+      "you_dont_have_permission_to_do_this_action": "No tens permís per fer aquesta acció",
+      "in_progress": "en curs",
+      "give_up": "abandonar",
+      "random": "aleatori",
+      "reset_password": "Restablir la contrasenya",
+      "password_reset": "Contrasenya restablerta",
+      "return_to_login": "Tornar a l'inici de sessió",
+      "invalid_code": "Codi no vàlid",
+      "no_token_found": "No s'ha trobat cap token",
+      "first_watched_at": "primera data de visualització",
+      "watched_dates": "dates de visualització",
+      "no_watched_dates": "cap data de visualització",
+      "select_role": "selecciona un rol",
+      "select_format": "selecciona un format",
+      "theater": "Cinema",
+      "physical": "Suport físic",
+      "digital": "Digital",
+      "streaming": "Streaming",
+      "you_must_be_premium_to_change_member_role": "Has de ser premium per canviar el rol d'un membre",
+      "already_member": "ja és membre",
+      "email_already_used": "Aquest correu ja s'utilitza",
+      "email_confirmed": "Correu confirmat",
+      "confirmation_email_sent": "Correu de confirmació enviat",
+      "continue": "Continuar",
+      "finish": "Finalitzar",
+      "forgot_password": "Contrasenya oblidada",
+      "new_password": "Nova contrasenya",
+      "confirm_password": "Confirmar la contrasenya",
+      "password_reseted": "Contrasenya restablerta",
+      "reset_your_password": "Restableix la teva contrasenya",
+      "invalid_token": "Token no vàlid",
+      "new_notification": "{count, plural, one {nova notificació} other {noves notificacions}}",
+      "lets_go": "Som-hi!",
+      "update_available": "Actualització disponible",
+      "update_available_description": "Actualitza l'app per gaudir de les últimes millores.",
+      "update_required_title": "Actualització necessària",
+      "update_required_description": "Aquesta versió de l'app ja no té suport. Actualitza-la per continuar utilitzant Recomend.",
+      "update_app": "Actualitzar",
+      "advertisement": "{count, plural, one {Anunci} other {Anuncis}}",
+      "pending": "Pendent",
+      "processing": "En curs",
+      "awaiting_review": "Per revisar",
+      "failed": "Fallit",
+      "data": "{count, plural, one {Dada} other {Dades}}",
+      "restore": "Restaurar",
+      "fix": "Corregir",
+      "not_found": "No trobat",
+      "unavailable": "No disponible",
+      "star_on_github": "Posar una estrella a GitHub"
+    },
+    "form": {
+      "email": {
+        "label": "Adreça de correu",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "El correu no és vàlid",
+          "unavailable": "Aquest correu ja s'utilitza"
+        },
+        "verified": "Correu verificat"
+      },
+      "username": {
+        "label": "Nom d'usuari",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "El primer caràcter ha de ser una lletra o un número",
+          "double_dot": "No es permeten dos punts seguits",
+          "ends_with_dot": "No es permet un punt al final",
+          "format": "Només es permeten lletres, números i els símbols '_' i '.'",
+          "unavailable": "Aquest nom d'usuari ja està agafat"
+        }
+      },
+      "full_name": {
+        "label": "Nom",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "Només es permeten lletres, números i espais"
+        }
+      },
+      "password": {
+        "label": "Contrasenya",
+        "placeholder": "Introdueix la teva contrasenya",
+        "schema": {
+          "uppercase": "Cal com a mínim una lletra majúscula",
+          "lowercase": "Cal com a mínim una lletra minúscula",
+          "number": "Cal com a mínim un número",
+          "special": "Cal com a mínim un caràcter especial",
+          "match": "Les contrasenyes no coincideixen"
+        },
+        "confirm": {
+          "label": "Confirmar la contrasenya",
+          "placeholder": "Confirma la teva contrasenya"
+        }
+      },
+      "length": {
+        "char_min": "{count, plural, one {# caràcter} other {# caràcters}} com a mínim",
+        "char_max": "{count, plural, one {# caràcter} other {# caràcters}} com a màxim"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "Només es permeten lletres, números i espais"
+      },
+      "error": {
+        "too_many_attempts": "Massa intents, torna-ho a provar més tard",
+        "not_received_code": "No has rebut el codi?",
+        "invalid_code": "Codi no vàlid",
+        "turnstile": "Error de verificació, torna-ho a provar"
+      },
+      "resend_code": "Reenviar el codi",
+      "resend_email": "Reenviar el correu",
+      "code_verified": "Codi verificat",
+      "code_sent": "Codi enviat"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "pàgina no trobada",
+        "description": "ep, aquesta pàgina no existeix..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "seguiment",
+        "description": "Descobreix, valora i comparteix les teves pel·lícules i sèries preferides."
+      },
+      "recos": {
+        "label": "recomanacions",
+        "description": "Envia i rep les recos dels teus amics. Tot al mateix lloc."
+      },
+      "playlists": {
+        "label": "playlists",
+        "description": "Organitza, comparteix i crea playlists entre diversos."
+      },
+      "feed": {
+        "label": "feed",
+        "description": "Segueix els teus amics per veure què miren, què els agrada i què valoren."
+      },
+      "social_sharing": {
+        "label": "compartir a les xarxes",
+        "description": "Comparteix el que t'agrada a Instagram o a altres xarxes."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "Seguiment",
+          "description": "No perdis de vista les pel·lícules que has vist"
+        },
+        "recos": {
+          "label": "Recos",
+          "description": "Envia recomanacions de pel·lícules als teus amics"
+        },
+        "explore": {
+          "label": "Explorar",
+          "description": "Descobreix noves pel·lícules a Paradise Pictures, un mapa interactiu amb més de 1400 pel·lícules"
+        },
+        "like": {
+          "label": "Like",
+          "description": "Mostra el teu amor per les teves pel·lícules, playlists i crítiques preferides"
+        },
+        "rating": {
+          "label": "Valoració",
+          "description": "Valora les pel·lícules que has vist"
+        },
+        "watchlist": {
+          "label": "Watchlist",
+          "description": "Guarda les pel·lícules que vols veure"
+        },
+        "playlists": {
+          "label": "Playlists",
+          "description": "Organitza les teves pel·lícules en playlists i comparteix-les"
+        },
+        "reviews": {
+          "label": "Crítiques",
+          "description": "Escriu crítiques per fer sortir el cinèfil amargat que portes dins"
+        },
+        "feed": {
+          "label": "Feed",
+          "description": "Segueix l'activitat dels teus amics"
+        },
+        "adsFree": {
+          "label": "Sense anuncis",
+          "description": "Gaudeix de Recomend sense anuncis, per sempre"
+        }
+      }
+    },
+    "welcome": {
+      "title": "Gràcies per registrar-te!",
+      "description": "Aquí tens un cop d'ull ràpid al que pots fer amb {app}.",
+      "follow": {
+        "title": "Segueix gent",
+        "description": "Segueix els teus amics per veure què estan mirant."
+      },
+      "import": {
+        "title": "Véns d'una altra plataforma?"
+      }
+    },
+    "collection": {
+      "label": "biblioteca",
+      "my_recos": {
+        "label": "les meves recos",
+        "search": {
+          "placeholder": "buscar a les meves recos..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "eliminar de les meves recos",
+            "description": "Segur que vols eliminar <important>{title}</important> de les teves recos?"
+          },
+          "complete_confirm": {
+            "title": "completar la reco",
+            "description": "Segur que vols completar la reco <important>{title}</important>?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "buscar a la watchlist..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "eliminar de la watchlist",
+            "description": "Segur que vols eliminar <important>{title}</important> de la teva watchlist?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "buscar als cops de cor..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "eliminar dels cops de cor",
+            "description": "Segur que vols eliminar <important>{title}</important> dels teus cops de cor?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> ha vist",
+        "rated": "<name></name> ha valorat",
+        "liked": "a <name></name> li ha agradat",
+        "rated_liked": "a <name></name> li ha agradat i ho ha valorat",
+        "reviewed": "<name></name> ha escrit una crítica"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> és <important>{roles}</important> a <linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> és <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "Autoritzar l'aplicació",
+        "description_generic": "Una aplicació sol·licita accés al teu compte.",
+        "description": "{client} vol accedir al teu compte.",
+        "scopes_label": "Això permetrà a l'aplicació:",
+        "accept": "Autoritzar",
+        "deny": "Rebutjar",
+        "error": {
+          "invalid_request": "Sol·licitud no vàlida o caducada",
+          "invalid_request_description": "Torna a començar el procés des de l'aplicació que t'ha enviat aquí.",
+          "client_not_found": "No s'ha trobat aquesta aplicació.",
+          "submit_failed": "Alguna cosa ha anat malament. Torna-ho a provar."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "Inicia la sessió al teu compte de {app}."
+        },
+        "label": "Iniciar la sessió",
+        "description": "Descobreix les millors recomanacions de pel·lícules.",
+        "or_continue_with": "O continuar amb",
+        "no_account_yet": "Encara no tens compte?",
+        "form": {
+          "identifier": {
+            "label": "Correu o nom d'usuari",
+            "placeholder": "Introdueix el teu correu o nom d'usuari"
+          },
+          "password": {
+            "label": "Contrasenya",
+            "placeholder": "Introdueix la teva contrasenya"
+          },
+          "submit": "Iniciar la sessió",
+          "forgot_password": "Has oblidat la contrasenya?",
+          "wrong_credentials": "El correu o la contrasenya no són correctes"
+        },
+        "otp": {
+          "password_login": "Prefereixes iniciar la sessió amb una contrasenya?",
+          "form": {
+            "submit": "Rebre el codi",
+            "no_user_found": "No s'ha trobat cap usuari amb aquest correu",
+            "success": "Connectat"
+          },
+          "confirm_form": {
+            "label": "Confirmar el codi",
+            "description": "S'ha enviat un codi de verificació a l'adreça {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "Registra't a {app} per descobrir i compartir recomanacions de pel·lícules."
+        },
+        "description": "Crea un compte per recomanar una peli a aquell amic que sempre oblida els títols.",
+        "form": {
+          "success": "S'ha enviat un correu de verificació a {email}"
+        },
+        "confirm_form": {
+          "label": "Confirmar el correu",
+          "description": "S'ha enviat un enllaç de verificació a l'adreça {email}"
+        },
+        "return_to_login": "Ep, al final ja tinc compte."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "Contrasenya oblidada",
+          "description": "Restableix la teva contrasenya."
+        },
+        "label": "Contrasenya oblidada",
+        "description": "Hauries d'utilitzar un gestor de contrasenyes, va la mar de bé.",
+        "return_to_login": "Ep, al final sí que me'n recordo de la contrasenya.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "Restablir la contrasenya",
+          "code_sent": "Sol·licitud enviada"
+        },
+        "confirm_form": {
+          "label": "Confirmar el codi",
+          "description": "S'ha enviat un codi de verificació a l'adreça {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "Restabliment de la contrasenya",
+          "description": "Tria una nova contrasenya per al teu compte."
+        }
+      },
+      "error": {
+        "label": "Error",
+        "description": "S'ha produït un error durant el procés d'autenticació.",
+        "return_to_login": "Tornar a lloc segur"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "Qui som",
+        "marquee": "No hi ha res més emocionant a la teva vida que mirar pàgines de «Qui som» a Internet?",
+        "intro": "<strong>Recomend</strong> és un espai dedicat a descobrir, recomanar i organitzar pel·lícules. Tot està pensat per oferir al boca-orella el millor suport digital possible. El nostre enfocament se centra en les persones i les seves relacions en l'era del consum autocentrat o, més ben dit, del «recomanat per a tu».",
+        "slogan": {
+          "1": "És sense anuncis ni promeses dubtoses. 🍆",
+          "2": "És alhora una xarxa social i una eina.",
+          "3": "Està fet a casa, per apassionats.",
+          "4": "És amateur en el sentit literal de la paraula."
+        },
+        "last": "Recomend es pot fer servir sol o acompanyat, en públic o en privat, de dia o de nit, però mai davant d'una pel·lícula: concentra't, si us plau!"
+      },
+      "team": {
+        "label": "L'equip",
+        "intro": "Recomend l'han creat dos germans apassionats del cinema a qui els encanta invertir el seu temps en projectes massa ambiciosos que no se sap si arribaran a veure la llum.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "Arquitecte-Enginyer hiperactiu i incapaç d'acontentar-se amb una sola feina (la start-up nation de debò), en Yoann és l'origen de la idea de fer un mapa de pel·lícules que al principi només tenia la modesta ambició de convertir-se en un pòster per penjar al seu lavabo. L'arribada d'en Loup va fer esclatar completament els objectius i, una mica desbordat pels esdeveniments, s'encarrega de tota la part gràfica del mapa i del web, així com de tota la comunicació (tot i que no li agradi). També dóna la seva opinió sobre UX/UI i proposa un munt de funcionalitats sense ser gaire conscient de la dificultat que representen a l'hora de programar-les (ha fet alguns progressos)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "Autodidacta total que tot i això va fer uns estudis que el van portar a l'atur no remunerat abans dels 25. Veritable navalla suïssa, en Loup s'encarrega de la part de web design programant una interfície que imaginem com més ergonòmica millor. En Loup voldria agrair a tots els fòrums de codi que van respondre a les seves (moltíssimes) preguntes, així com a tots els youtubers indis que el van acompanyar durant aquests mesos com a pares adoptius. La seva mare, d'altra banda, està convençuda que el seu germà l'ha esclavitzat per a aquest projecte (estic bé, mama)."
+          }
+        },
+        "last": "Per xerrar amb nosaltres o amb altres membres de la comunitat, uneix-te al nostre <link>Discord</link>!"
+      },
+      "pricing": {
+        "label": "Preus",
+        "intro": "Aquest model de subscripció és sobretot un suport per mantenir viu el projecte i continuar desenvolupant-lo. Les funcionalitats premium són extres destinats a usos avançats de Recomend que justifiquen una petita aportació econòmica. Sempre mantindrem la possibilitat d'accedir al web gratis, sense anuncis i sense sentir-se limitat.",
+        "subdescription": "*Si el preu extremadament baix d'aquesta subscripció encara està per sobre de les teves possibilitats, dirigeix-te al govern liberal responsable de la teva pèrdua de poder adquisitiu."
+      },
+      "legal": {
+        "label": "Legal i privacitat",
+        "description": "Respectem la teva privacitat. Els anuncis que es mostren als usuaris no connectats els gestiona Google i necessiten galetes tècniques per limitar la freqüència de visualització i prevenir el frau.",
+        "privacyPolicy": "Llegeix la nostra política de privacitat",
+        "manageCookies": "Gestionar les meves preferències publicitàries (galetes)"
+      },
+      "open-source": {
+        "label": "Codi obert",
+        "intro": "Recomend és de codi obert: el codi és públic a GitHub. Fes-hi un cop d'ull, contribueix o simplement posa'ns una estrella!",
+        "star": "Posa'ns una estrella a GitHub"
+      },
+      "businessmodel": {
+        "label": "Model de negoci",
+        "paragraph": {
+          "1": "T'imagines que, amb els nostres perfils poc comercials, no hem entès gaire bé per a què ens podria servir ara mateix un model de negoci...",
+          "2": "Si el futur de Recomend ho requereix, estudiarem la qüestió envoltant-nos de les persones adequades o, si més no, de gent a qui això interessi més que a nosaltres.",
+          "3": "Mentrestant, no ens enganyem, hi ha altres coses a fer."
+        }
+      },
+      "roadmap": {
+        "label": "Full de ruta"
+      },
+      "data": {
+        "label": "Dades",
+        "paragraph": {
+          "1": "Totes les metadades que es fan servir a Recomend les proporciona <link>The Movie Database (TMDb)</link> fent servir l'API de la plataforma. Fem exactament com tothom, com bons xais.",
+          "2": "Per a qualsevol error o pel·lícula que falti, dirigeix-te doncs a <link>TMDb</link>."
+        }
+      },
+      "resources": {
+        "label": "Recursos",
+        "intro": "No té gaire a veure amb el cinema, però aquí tens una llista de webs que ens agraden:"
+      },
+      "contact-support": {
+        "label": "Contacte i suport",
+        "help-center": "Troba les respostes a les teves preguntes existencials al nostre <link>Centre d'ajuda</link>.",
+        "technical-support": "Per a qüestions tècniques: <email></email>",
+        "suggest-a-feature": "Per a suggeriments: <email></email>",
+        "contact-us": "Per simplement posar-te en contacte amb nosaltres: <email></email>"
+      },
+      "quote": {
+        "label": "Citació",
+        "quote": "« Odio la paraula professional. Tots els actors i els altres que diuen: jo sóc professional, jo sóc un pro! Què és això? Hi ha una paraula més trista? Perquè amateur ve de la paraula amor. Cal fer les coses per amor, si no som idiotes. »",
+        "author": "Orson Wells",
+        "date": "1972",
+        "subdescription": "*Hem dubtat a posar-la perquè queda pretensiosa de seguida, però reflecteix bé el nostre mood respecte al projecte. Això sí, si no t'agrada, la treiem."
+      }
+    },
+    "settings": {
+      "label": "Configuració",
+      "description": "Gestiona la configuració del teu compte.",
+      "profile": {
+        "label": "Perfil",
+        "description": "Així és com et veuran els altres al web.",
+        "avatar": {
+          "label": "Avatar",
+          "delete": "Eliminar"
+        },
+        "full_name": {
+          "label": "Nom",
+          "description": "És el nom que es mostrarà al teu perfil i als correus.",
+          "placeholder": "Introdueix el teu nom",
+          "form": {
+            "min_length": "El nom ha de tenir com a mínim 1 caràcter",
+            "max_length": "El nom no pot superar els 50 caràcters"
+          }
+        },
+        "bio": {
+          "label": "Bio",
+          "description": "Explica alguna cosa sobre tu, apareixerà al teu perfil.",
+          "placeholder": "Escriu alguna cosa sobre tu",
+          "form": {
+            "max_length": "La bio no pot superar els 150 caràcters",
+            "format": "La biografia no pot contenir línies buides ni estar composta només d'espais."
+          }
+        },
+        "favorite_films": {
+          "label": "Pel·lícules preferides",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "L'URL no és vàlid"
+          }
+        }
+      },
+      "account": {
+        "label": "Compte",
+        "description": "Actualitza la configuració del teu compte.",
+        "username": {
+          "label": "Nom d'usuari",
+          "description": "Aquest és el teu nom d'usuari, amb el qual les altres persones et poden trobar i accedir al teu perfil. Només el pots canviar un cop cada 30 dies.",
+          "placeholder": "Introdueix el teu nom d'usuari",
+          "form": {
+            "min_length": "El nom d'usuari ha de tenir com a mínim 3 caràcters",
+            "max_length": "El nom d'usuari no pot superar els 15 caràcters",
+            "invalid": "El nom d'usuari només pot contenir lletres, números i els símbols '_' i '.'",
+            "unavailable": "Aquest nom d'usuari ja està agafat"
+          }
+        },
+        "private": {
+          "label": "Compte privat",
+          "description": "Quan el teu compte és privat, només els usuaris que aproves poden veure les teves activitats."
+        },
+        "email": {
+          "description": "S'enviarà un correu de verificació a la teva adreça actual i a la nova adreça. Has de confirmar les dues perquè el canvi sigui efectiu.",
+          "change_pending": "El <strong>{date}</strong> s'ha enviat un correu de verificació a la teva nova adreça <strong>{email}</strong>. Fes clic a l'enllaç o introdueix el codi de verificació per confirmar el canvi.",
+          "confirm_email_code": {
+            "description": "Introdueix el codi de verificació enviat a la teva adreça <strong>{email}</strong>."
+          },
+          "change_success": "La teva adreça de correu s'ha actualitzat correctament"
+        },
+        "delete_account": {
+          "button": "Eliminar el meu compte",
+          "confirm": {
+            "description": "El teu compte s'eliminarà definitivament i no el podràs recuperar.",
+            "confirm_email_sent": "S'ha enviat un correu de verificació a la teva adreça de correu"
+          }
+        }
+      },
+      "appearance": {
+        "label": "Aparença",
+        "description": "Personalitza l'aparença de l'aplicació. Canvia automàticament entre els temes de dia i de nit.",
+        "language": {
+          "label": "Idioma",
+          "description": "Tria un idioma: els canvis s'aplicaran després de reiniciar l'app",
+          "placeholder": "Selecciona un idioma",
+          "not_found": "No s'ha trobat l'idioma"
+        },
+        "theme": {
+          "label": "Tema",
+          "description": "Selecciona el tema de la interfície.",
+          "options": {
+            "light": "Clar",
+            "dark": "Fosc"
+          }
+        }
+      },
+      "subscription": {
+        "label": "Subscripció",
+        "description": "Gestiona la teva subscripció premium."
+      },
+      "security": {
+        "label": "Seguretat",
+        "description": "Canviar la teva contrasenya tancarà la sessió a tots els dispositius excepte al que estàs utilitzant.",
+        "current_password": {
+          "label": "Contrasenya actual",
+          "placeholder": "Introdueix la teva contrasenya actual",
+          "form": {
+            "required": "La contrasenya actual és obligatòria",
+            "invalid": "La contrasenya actual no és correcta"
+          }
+        },
+        "new_password": {
+          "label": "Nova contrasenya",
+          "placeholder": "Introdueix la teva nova contrasenya",
+          "form": {
+            "min_length": "La contrasenya ha de tenir com a mínim 8 caràcters",
+            "uppercase": "Cal com a mínim una lletra majúscula",
+            "lowercase": "Cal com a mínim una lletra minúscula",
+            "number": "Cal com a mínim un número",
+            "special": "Cal com a mínim un caràcter especial"
+          }
+        },
+        "confirm_password": {
+          "label": "Confirmar la nova contrasenya",
+          "placeholder": "Confirma la teva nova contrasenya",
+          "form": {
+            "match": "Les contrasenyes no coincideixen"
+          }
+        }
+      },
+      "notifications": {
+        "label": "Notificacions",
+        "description": "Personalitza les notificacions que reps.",
+        "push_notifications": {
+          "label": "Notificacions push",
+          "form": {
+            "enable": "Activar les notificacions push"
+          },
+          "already_granted": "Ja s'ha fet una sol·licitud de notificacions; per modificar-la, ves a la configuració del teu navegador.",
+          "no_enabled": "Activa les notificacions a la configuració del teu dispositiu per rebre notificacions push.",
+          "open_settings": "Anar a la configuració del dispositiu"
+        }
+      },
+      "data": {
+        "label": "Dades",
+        "description": "Importa o exporta les teves dades.",
+        "importer": {
+          "label": "Importar",
+          "select_source": "Tria una font",
+          "instructions_title": "Instruccions",
+          "browse_prompt": "Deixa el teu fitxer aquí, o <link>explora</link>",
+          "browse_prompt_mobile": "Toca per seleccionar un fitxer",
+          "uploading": "Pujant…",
+          "processing": "Analitzant el teu fitxer…",
+          "upload_error": "La pujada ha fallat, torna-ho a provar.",
+          "invalid_file_type": "Aquest tipus de fitxer no és compatible amb aquesta font.",
+          "review_title": "Revisa la teva importació",
+          "review_summary": "{matched} de {total} trobats",
+          "validate": "Validar la importació",
+          "validate_confirm_description": "Això importarà a la teva biblioteca tots els elements trobats i no ignorats. Aquesta acció és irreversible.",
+          "success_title": "Importació completada",
+          "success_description": "Les teves dades s'han importat correctament.",
+          "failed_title": "La importació ha fallat",
+          "failed_description": "Alguna cosa ha anat malament en processar aquesta importació.",
+          "pending_description": "La teva importació està en cua i començarà aviat.",
+          "empty": "Encara no hi ha importacions.",
+          "delete_confirm_description": "Aquesta importació i totes les seves dades s'eliminaran definitivament. Aquesta acció és irreversible.",
+          "keep_existing": "Mantenir els meus",
+          "use_imported": "Fer servir la importació",
+          "merge": "Fusionar",
+          "conflict": "Conflicte",
+          "no_match": "Cap coincidència",
+          "existing_rating": "Actualment: {rating}",
+          "log_column": "Registre",
+          "actions_column": "Accions",
+          "categories": {
+            "log_movies": "Pel·lícules",
+            "log_tv_series": "Sèries",
+            "bookmarks": "Watchlist",
+            "playlists": "Llistes"
+          },
+          "status": {
+            "pending": "Pendent",
+            "processing": "En curs",
+            "awaiting_review": "Per revisar",
+            "completed": "Completada",
+            "failed": "Fallida"
+          }
+        },
+        "exporter": {
+          "label": "Exportar"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "passar a Premium",
+        "description": "Passa a un compte premium per accedir a totes les funcionalitats de {app}."
+      },
+      "header": {
+        "title": "amplia el teu cinema, comparteix més, dóna suport a {app}",
+        "subtitle": "prova 1 mes gratis i després {price}/mes"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "activitats",
+            "unlimited_activities": {
+              "label": "activitats il·limitades",
+              "description": "valoracions, likes, crítiques, watchlist i recomanacions"
+            },
+            "favorites": {
+              "label": "preferides",
+              "description": "afegeix les teves pel·lícules preferides al teu perfil"
+            }
+          },
+          "playlists": {
+            "label": "playlists",
+            "unlimited_playlists": {
+              "label": "il·limitades",
+              "description": "crea un nombre il·limitat de playlists"
+            },
+            "shared_playlists": {
+              "label": "compartides",
+              "description": "comparteix les teves playlists amb altres usuaris"
+            },
+            "collaborative_playlists": {
+              "label": "col·laboratives",
+              "description": "crea playlists col·laboratives amb altres usuaris"
+            }
+          },
+          "feed": {
+            "label": "feed",
+            "followees": {
+              "label": "usuaris seguits",
+              "description": "veu les activitats dels usuaris que segueixes"
+            },
+            "cast_and_crew": {
+              "label": "repartiment i equip",
+              "description": "segueix les activitats de les persones implicades a les pel·lícules"
+            }
+          },
+          "support": {
+            "label": "suport",
+            "team": {
+              "label": "Dóna suport a l'equip de {app}"
+            },
+            "credits": {
+              "label": "crèdits",
+              "description": "el teu perfil als crèdits de l'app"
+            }
+          }
+        },
+        "success": {
+          "label": "Gràcies pel teu suport!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} - playlist de @{username}",
+        "description": "Descobreix la playlist de pel·lícules de @{username} a {app}."
+      },
+      "actions": {
+        "delete": {
+          "description": "Això eliminarà <important>{title}</important> definitivament de les teves playlists."
+        }
+      },
+      "search": {
+        "placeholder": "buscar a la playlist..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "Segur que vols eliminar <important>{title}</important> de la teva playlist?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "Introdueix el títol de la playlist"
+        },
+        "description": {
+          "placeholder": "Introdueix una descripció de la playlist"
+        },
+        "error": {
+          "format": "La descripció no pot contenir línies buides ni estar composta només d'espais."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "Descobreix el perfil de @{username} a {app}."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year}) • Pel·lícula",
+        "description": "{title} és una pel·lícula de {directors} estrenada el {year}. Sinopsi: {overview}",
+        "description_no_director": "{title} és una pel·lícula estrenada el {year}. Sinopsi: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Playlists",
+          "description": "Descobreix totes les playlists que contenen la pel·lícula {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Crítiques",
+          "description": "Descobreix totes les crítiques de la pel·lícula {title}."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} és una sèrie de {creators} emesa per primera vegada el {year}. Sinopsi: {overview}",
+        "description_no_creator": "{title} és una sèrie emesa per primera vegada el {year}. Sinopsi: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Playlists",
+          "description": "Descobreix totes les playlists que contenen la sèrie {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Crítiques",
+          "description": "Descobreix totes les crítiques de la sèrie {title}."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • Temporades",
+          "description": "Descobreix totes les temporades de la sèrie {title}."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • Temporada {number}",
+            "description": "Descobreix tots els episodis de la temporada {number} de la sèrie {title}."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • Pel·lícules",
+          "description": "Descobreix totes les pel·lícules en què {name} ha actuat o ha participat."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • Sèries",
+          "description": "Descobreix totes les sèries en què {name} ha actuat o ha participat."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "Crítica de {title} per @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "Escriure una crítica sobre {title}",
+          "description": "Comparteix la teva opinió sobre {title}."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Explorar Paradise Pictures",
+        "description": "Posa't a descobrir l'illa i els seus diversos decorats. Les nombroses pel·lícules que la poblen estan situades al seu entorn diegètic. Aconseguiràs explorar cada un dels seus racons?"
+      }
+    },
+    "legal": {
+      "label": "Legal",
+      "description": "Llegeix els documents legals de {app}.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "Condicions Generals d'Ús",
+          "description": "Llegeix les condicions d'ús de {app}."
+        },
+        "sections": {
+          "intro": "Les presents Condicions Generals d'Ús (d'ara endavant «CGU») regeixen l'accés i l'ús de l'aplicació {app}. L'aplicació està editada per Loup (d'ara endavant «l'Editor»), domiciliat a París. El registre a {app} implica l'acceptació sense reserves de les presents CGU.",
+          "presentation": {
+            "label": "1. Presentació del Servei",
+            "content": "{app} és una aplicació gratuïta que permet als seus usuaris consultar informació sobre pel·lícules, publicar crítiques, valorar obres i crear llistes personalitzades."
+          },
+          "account": {
+            "label": "2. Compte i Seguretat",
+            "content": "L'accés a les funcionalitats de contribució requereix la creació d'un compte. L'Usuari és responsable de la confidencialitat de les seves credencials. En cas d'ús fraudulent o de sospita de pirateig, l'Usuari ha de contactar immediatament amb el suport a l'adreça: <email></email>."
+          },
+          "conduct": {
+            "label": "3. Normes de Conducta",
+            "content": "L'Usuari es compromet a mantenir-se cortès i respectuós en les seves opinions i llistes. Estan estrictament prohibits: els missatges d'odi, difamatoris o racistes, l'assetjament, així com l'spam o la promoció comercial no sol·licitada. L'Editor es reserva el dret d'eliminar qualsevol contingut que infringeixi aquestes normes i de suspendre el compte afectat sense preavís."
+          },
+          "child_safety": {
+            "label": "4. Protecció dels Menors",
+            "content": "{app} aplica una política de tolerància zero davant de qualsevol forma d'abús i explotació sexual infantil («Child Sexual Abuse and Exploitation», o CSAE). La creació, la pujada, l'emmagatzematge, la difusió, la sol·licitud o la promoció de qualsevol contingut que sexualitzi, exploti o posi en perill d'alguna altra manera els menors estan expressament i absolutament prohibits a {app}. Qualsevol compte que es comprovi que infringeix aquesta política serà immediatament i definitivament bloquejat, i l'Editor notificarà el contingut en qüestió, juntament amb qualsevol informació disponible sobre l'usuari, al National Center for Missing & Exploited Children (NCMEC) i/o a les autoritats competents, d'acord amb la legislació aplicable. Qualsevol usuari que tingui coneixement d'un contingut o d'un comportament que pugui constituir un cas de CSAE ho ha de comunicar sense demora a: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. Propietat Intel·lectual",
+            "content": "L'Usuari continua sent propietari de les opinions que redacta. Tanmateix, en publicar a {app}, concedeix a l'Editor una llicència gratuïta i no exclusiva per mostrar, reproduir i adaptar tècnicament aquest contingut dins de l'aplicació. Els elements visuals, el codi i el disseny de {app} són propietat exclusiva de l'Editor."
+          },
+          "privacy": {
+            "label": "6. Dades Personals",
+            "content": "El respecte de la teva privacitat és la nostra prioritat absoluta. {app} no ven, no lloga ni comparteix cap dada personal amb tercers comercials o publicitaris. Les dades recollides (correu, nom d'usuari, activitat a l'app) només serveixen per al funcionament del servei i la gestió del teu compte. Pots exercir els teus drets d'accés, modificació o supressió (RGPD) contactant amb: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Galetes i Rastrejadors",
+            "content": "{app} no fa servir cap galeta publicitària ni cap rastrejador de comportament de tercers. Només es fan servir dos tipus de galetes tècniques: una galeta d'autenticació (per mantenir-te connectat) i una galeta de preferència d'idioma (per recordar la teva tria). Com que aquestes galetes són estrictament necessàries per al servei, estan exemptes de consentiment previ."
+          },
+          "ads": {
+            "label": "8. Publicitat",
+            "content": "L'aplicació s'ofereix actualment sense cap publicitat. Si aquest model canviés, els usuaris en serien informats mitjançant una actualització de les presents CGU."
+          },
+          "liability": {
+            "label": "9. Responsabilitat",
+            "content": "L'Editor s'esforça a mantenir {app} accessible 24 hores al dia, però no garanteix l'absència d'interrupcions ni d'errors. La informació sobre les pel·lícules prové de bases de dades de tercers; l'Editor no pot ser considerat responsable d'eventuals inexactituds en aquestes fitxes."
+          },
+          "law": {
+            "label": "10. Dret Aplicable",
+            "content": "Les presents CGU estan sotmeses al dret francès. En cas de litigi que no hagi pogut resoldre's amistosament a través de l'adreça <email></email>, els tribunals de París seran els únics competents."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "Política de Privacitat",
+          "description": "Llegeix la política de privacitat de {app}."
+        },
+        "sections": {
+          "intro": "La protecció de les teves dades és al cor de la filosofia de {app}. Aquesta política detalla les dades que recollim, per què les recollim i com les protegim. En resum: no venem les teves dades.",
+          "controller": {
+            "label": "1. Responsable del tractament",
+            "content": "El responsable del tractament de les dades és Loup, domiciliat a París (França). Per a qualsevol qüestió relativa a la privacitat, pots contactar amb: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. Dades recollides",
+            "content": "Només recollim les dades estrictament necessàries per al funcionament de l'aplicació: la teva adreça de correu (per a l'autenticació), el teu nom d'usuari i les teves dades d'ús (pel·lícules valorades, crítiques, llistes). Les teves contrasenyes es desen de manera xifrada (amb hash) i segura."
+          },
+          "purpose": {
+            "label": "3. Finalitat del tractament",
+            "content": "Les teves dades es tracten exclusivament per: permetre't crear i gestionar el teu compte, mostrar les teves llistes i valoracions i assegurar el bon funcionament tècnic del servei. No fem servir les teves dades amb finalitats de perfilatge publicitari."
+          },
+          "sharing": {
+            "label": "4. Compartició de les dades",
+            "content": "Les teves dades personals no es venen, no es lloguen ni es cedeixen mai a tercers. Poden estar allotjades pels nostres proveïdors tècnics (allotjament, servei d'enviament de correus transaccionals), que estan subjectes a una estricta confidencialitat i respecten l'RGPD."
+          },
+          "retention": {
+            "label": "5. Termini de conservació",
+            "content": "Les teves dades es conserven mentre el teu compte es mantingui actiu. Si decideixes eliminar el teu compte, totes les teves dades personals (correu, nom d'usuari, opinions) s'esborraran definitivament de les nostres bases de dades."
+          },
+          "rights": {
+            "label": "6. Els teus drets (RGPD)",
+            "content": "D'acord amb la normativa, disposes d'un dret d'accés, rectificació, portabilitat i supressió de les teves dades. Pots exercir aquests drets en qualsevol moment directament a l'aplicació o escrivint-nos a: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Galetes",
+            "content": "Com s'indica a les nostres CGU, només fem servir galetes tècniques essencials (sessió i idioma). No s'instal·la al teu dispositiu cap galeta de tercers de publicitat o de seguiment."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "Busca una pel·lícula, una sèrie, una playlist, una persona o un usuari..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "Segur que vols treure aquesta obra de la teva llista de vistes? Si tens una valoració o una crítica, també s'eliminaran."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "Segur que vols completar la sèrie? Tots els episodis de totes les temporades es marcaran com a vistos."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "Segur que vols completar la temporada {seasonNumber}? Tots els episodis de la temporada es marcaran com a vistos."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "Per veure activitat aquí, tu o els usuaris que segueixes heu de valorar pel·lícules, sèries, ..."
+    },
+    "feed_person": {
+      "message": "Per veure activitat aquí, has de seguir persones implicades en pel·lícules o sèries."
+    },
+    "playlists": {
+      "items": {
+        "empty": "Cap pel·lícula ni sèrie en aquesta playlist. Afegeix-ne per omplir-la!"
+      },
+      "add_to": {
+        "empty": "No tens cap playlist. Crea'n una per afegir-hi pel·lícules o sèries i trobar-les fàcilment!"
+      },
+      "saved": {
+        "empty": "No tens cap playlist guardada. Guarda una playlist per trobar-la fàcilment a la teva biblioteca!"
+      },
+      "members": {
+        "empty": "Aquesta playlist no té cap membre. Afegeix-ne per col·laborar entre diversos en una mateixa playlist!",
+        "search": "Busca usuaris per afegir a la playlist..."
+      }
+    },
+    "follow-requests": {
+      "empty": "No tens cap sol·licitud de seguiment pendent. Quan en tinguis, apareixeran aquí!"
+    },
+    "recos": {
+      "empty": "No tens cap recomanació. Quan en tinguis, apareixeran aquí!",
+      "send_to": {
+        "empty": "No tens ningú a qui enviar una reco. Has de ser amic d'algú per poder-li enviar una reco (seguiment mutu)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "Encara no tens cap pel·lícula ni sèrie guardada per a més endavant. Quan en tinguis, apareixeran aquí!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> t'ha reco la pel·lícula <movie></movie>"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> t'ha reco la sèrie <tv_series></tv_series>"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> ha vist <movie></movie> que li havies reco"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> ha vist <tv_series></tv_series> que li havies reco"
+    },
+    "follower_created": {
+      "description": "<user></user> ha començat a seguir-te"
+    },
+    "follower_accepted": {
+      "description": "<user></user> ha acceptat la teva sol·licitud de seguiment"
+    },
+    "follower_request": {
+      "description": "<user></user> vol seguir-te"
+    },
+    "friend_created": {
+      "description": "<user></user> ja és el teu amic"
+    }
+  }
+}

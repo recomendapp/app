@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "Een andere manier om film te ontdekken",
+    "description": "{app} is een sociaal netwerk voor filmliefhebbers. Ontdek, deel en verken films en series met je vrienden."
+  },
+  "common": {
+    "messages": {
+      "welcome": "Welkom",
+      "welcome_to_app": "Welkom bij {app}",
+      "hello": "Hallo",
+      "greeting_with_name": "{timeOfDay, select, morning {Goedemorgen, {name}} afternoon {Goedemiddag, {name}} evening {Goedenavond, {name}} night {Goedenacht, {name}} other {Hallo, {name}}}",
+      "click_here": "Klik hier",
+      "see_more": "Meer bekijken",
+      "see_more_details": "Meer details bekijken",
+      "more": "Meer",
+      "view_profile": "Profiel bekijken",
+      "library": "Bibliotheek",
+      "watchlist": "Watchlist",
+      "for_later": "Voor later",
+      "heart_pick": "{count, plural, one {hartendief} other {hartendieven}}",
+      "add_to_heart_picks": "Toevoegen aan je hartendieven",
+      "remove_from_heart_picks": "Verwijderen uit je hartendieven",
+      "add_rating": "Beoordeling toevoegen",
+      "edit_rating": "Beoordeling wijzigen",
+      "remove_rating": "Beoordeling verwijderen",
+      "share_my_rating": "Mijn beoordeling delen",
+      "share_review": "Review delen",
+      "show_likes_count": "Aantal likes weergeven",
+      "show_comments_count": "Aantal reacties weergeven",
+      "add_to_watchlist": "aan watchlist toevoegen",
+      "remove_from_watchlist": "uit watchlist verwijderen",
+      "no_results": "geen resultaten",
+      "no_results_for": "Geen resultaten voor <strong>{query}</strong>",
+      "no_followees": "Je volgt niemand",
+      "no_followers": "Geen volgers",
+      "no_rating": "Geen beoordeling",
+      "must_watch_to_review": "je moet dit werk gezien hebben om het te kunnen beoordelen",
+      "review_cannot_be_empty": "de review mag niet leeg zijn",
+      "no_activity": "geen activiteit",
+      "followers_ratings": "beoordelingen van volgers",
+      "added_by": "toegevoegd door",
+      "sort_by": "sorteren op",
+      "sort_order": "sorteervolgorde",
+      "go_to_film": "naar de film",
+      "go_to_tv_series": "naar de serie",
+      "go_to_user": "naar de gebruiker",
+      "go_to_person": "naar de persoon",
+      "go_to_activity": "naar de activiteit",
+      "go_to_playlist": "naar de playlist",
+      "go_to_review": "naar de review",
+      "go_to_director": "{count, plural, one {naar de regisseur} other {naar de regisseurs}}",
+      "go_to_creator": "{count, plural, one {naar de bedenker} other {naar de bedenkers}}",
+      "show_director": "{count, plural, one {regisseur weergeven} other {regisseurs weergeven}}",
+      "show_creator": "{count, plural, one {bedenker weergeven} other {bedenkers weergeven}}",
+      "show_credit": "{count, plural, one {credit weergeven} other {credits weergeven}}",
+      "credits": "credits",
+      "view_recommendation": "{count, plural, one {reco bekijken} other {reco's bekijken}}",
+      "view_directors": "{count, plural, one {regisseur bekijken} other {regisseurs bekijken}}",
+      "no_director": "geen regisseur",
+      "view_comment": "{count, plural, one {reactie bekijken} other {reacties bekijken}}",
+      "add_comment": "{count, plural, one {een reactie toevoegen} other {reacties toevoegen}}",
+      "edit_comment": "{count, plural, one {reactie wijzigen} other {reacties wijzigen}}",
+      "delete_comment": "Reactie verwijderen",
+      "do_you_really_want_to_delete_this_comment": "Wil je deze reactie echt verwijderen?",
+      "comment_deleted": "Deze reactie is verwijderd",
+      "write_your_comment_here": "Schrijf een reactie...",
+      "reply": "Antwoorden",
+      "replies_count": "{count, plural, one {# antwoord} other {# antwoorden}}",
+      "view_replies": "{count, plural, one {# antwoord bekijken} other {# antwoorden bekijken}}",
+      "hide_replies": "Antwoorden verbergen",
+      "load_more_replies": "Meer antwoorden laden",
+      "get_started": "beginnen",
+      "get_started_its_free": "we gaan 🎬, het is gratis!",
+      "import": "Importeren",
+      "upgrade_to_plan": "overstappen naar {plan}",
+      "choose_subscription_recurrence": "kies de looptijd van je abonnement",
+      "compare_plans": "abonnementen vergelijken",
+      "save_up_to_percent": "bespaar tot {percent}%",
+      "is_empty": "Het is hier een beetje leeg",
+      "add_to_playlist": "aan een playlist toevoegen",
+      "send_to_friend": "naar een vriend sturen",
+      "pin_to_profile": "Vastmaken aan profiel",
+      "unpin_from_profile": "Losmaken van profiel",
+      "pinned": "Vastgemaakt",
+      "unpinned": "Losgemaakt",
+      "no_pinned": "Geen vastgemaakte items",
+      "pinned_limit_reached": "Je hebt het maximale aantal vastgemaakte items bereikt — maak er een los om een nieuw item toe te voegen",
+      "custom_sort": "eigen sortering",
+      "quick_add": "snel toevoegen",
+      "favorite_films": "favoriete films",
+      "follow": "volgen",
+      "followed": "gevolgd",
+      "request_sent": "Verzoek verstuurd",
+      "follow_requests": "volgverzoeken",
+      "no_follow_requests": "geen volgverzoeken",
+      "follower": "{count, plural, one {volger} other {volgers}}",
+      "follower_count": "{count} volgers",
+      "see_followers": "volgers bekijken",
+      "followee": "{count, plural, one {gevolgde} other {gevolgden}}",
+      "followee_count": "{count} gevolgden",
+      "see_followees": "bekijken wie je volgt",
+      "last_activities": "laatste activiteiten",
+      "last_updated": "laatst bijgewerkt",
+      "last_updated_at_date": "laatst bijgewerkt op {date}",
+      "show_all": "alles weergeven",
+      "this_account_is_private": "dit account is privé",
+      "follow_to_see_activities": "volg om de activiteiten te zien",
+      "review": "{count, plural, one {review} other {reviews}}",
+      "no_overview": "geen samenvatting",
+      "cast": "cast",
+      "no_cast": "geen cast",
+      "recent": "recent",
+      "popular": "populair",
+      "popularity": "populariteit",
+      "no_reviews": "Geen reviews",
+      "no_playlists": "Geen playlists",
+      "no_playlists_found": "Geen playlists gevonden",
+      "no_films": "Geen films",
+      "no_tv_series": "Geen series",
+      "view_activity": "activiteit bekijken",
+      "comment_count": "{count, plural, one {# reactie} other {# reacties}}",
+      "write_review": "een review schrijven",
+      "new_review": "nieuwe review",
+      "edit_review": "review wijzigen",
+      "review_by": "review van {name}",
+      "my_review": "{count, plural, one {mijn review} other {mijn reviews}}",
+      "add_review": "een review toevoegen",
+      "tv_series": "{count, plural, one {serie} other {series}}",
+      "film": "{count, plural, one {film} other {films}}",
+      "movie": "{count, plural, one {film} other {films}}",
+      "media": "{count, plural, one {titel} other {titels}}",
+      "tv_season": "{count, plural, one {seizoen} other {seizoenen}}",
+      "tv_season_count": "{count, plural, one {# seizoen} other {# seizoenen}}",
+      "tv_season_value": "seizoen {number}",
+      "tv_season_short": "S{number}",
+      "tv_episode": "{count, plural, one {aflevering} other {afleveringen}}",
+      "tv_episode_count": "{count, plural, one {# aflevering} other {# afleveringen}}",
+      "tv_episode_value": "aflevering {number}",
+      "tv_episode_short": "S{seasonNumber}E{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {special} other {specials}}",
+      "first_air_date": "eerste uitzending",
+      "last_air_date": "laatste uitzending",
+      "see_film": "film bekijken",
+      "see_tv_series": "serie bekijken",
+      "watch_film_title": "{title} bekijken",
+      "watch_film_streaming_or_download": "<important>{title}</important> streamen of legaal downloaden",
+      "download": "downloaden",
+      "downloaded": "gedownload",
+      "person": "{count, plural, one {persoon} other {personen}}",
+      "top_result": "beste resultaat",
+      "user": "{count, plural, one {gebruiker} other {gebruikers}}",
+      "reco": "{count, plural, one {reco} other {reco's}}",
+      "my_recos": "mijn reco's",
+      "item": "{count, plural, one {item} other {items}}",
+      "item_count": "{count, plural, one {# item} other {# items}}",
+      "type": "type",
+      "complete": "afronden",
+      "completed": "afgerond",
+      "collection": "{count, plural, one {collectie} other {collecties}}",
+      "most_recent": "nieuwste",
+      "most_popular": "populairste",
+      "most_old": "oudste",
+      "known_for": "Bekend van",
+      "release_date": "releasedatum",
+      "last_appearance_date": "laatste verschijning",
+      "vote_average": "gemiddelde score",
+      "added": "toegevoegd",
+      "added_date": "datum toegevoegd",
+      "added_at": "toegevoegd op",
+      "add": "toevoegen",
+      "playlist_name": "naam van de playlist",
+      "updated_at": "bijgewerkt op",
+      "created_at": "aangemaakt op",
+      "likes": "likes",
+      "likes_count": "aantal likes",
+      "search_media": "een titel zoeken",
+      "search_film": "een film zoeken",
+      "start_typing_to_search_films": "begin te typen om films te zoeken",
+      "search_tv_series": "een serie zoeken",
+      "start_typing_to_search_tv_series": "begin te typen om series te zoeken",
+      "search_person": "een persoon zoeken",
+      "start_typing_to_search_persons": "begin te typen om personen te zoeken",
+      "search_user": "{count, plural, one {een gebruiker zoeken} other {gebruikers zoeken}}",
+      "start_typing_to_search_users": "begin te typen om gebruikers te zoeken",
+      "search_playlist": "een playlist zoeken",
+      "start_typing_to_search_playlists": "begin te typen om playlists te zoeken",
+      "search_film_or_tv_series": "een film of serie zoeken",
+      "watched_date": "{count, plural, one {kijkdatum} other {kijkdata}}",
+      "mark_as_watched": "markeren als gezien",
+      "remove_from_watched": "uit gezien verwijderen",
+      "rating": "beoordeling",
+      "create_a_playlist": "een playlist maken",
+      "by_name": "door {name}",
+      "reset": "opnieuw instellen",
+      "job": "{count, plural, one {functie} other {functies}}",
+      "department": "{count, plural, one {afdeling} other {afdelingen}}",
+      "share_title_via": "<strong>{title}</strong> delen via",
+      "share_title": "<strong>{title}</strong> delen",
+      "link": "link",
+      "copy_link": "link kopiëren",
+      "copied": "Gekopieerd",
+      "other": "{count, plural, one {Andere} other {Andere}}",
+      "via": "via",
+      "edit": "wijzigen",
+      "guest": "{count, plural, one {gast} other {gasten}}",
+      "are_u_sure": "Weet je het zeker?",
+      "backward": "vorige",
+      "forward": "volgende",
+      "back": "terug",
+      "next": "volgende",
+      "notification": "{count, plural, one {melding} other {meldingen}}",
+      "see_notifications": "meldingen bekijken",
+      "open_social_panel": "sociaal paneel openen",
+      "cancel_change": "{count, plural, one {wijziging annuleren} other {wijzigingen annuleren}}",
+      "do_you_really_want_to_cancel_change": "Wil je {count, plural, one {de wijziging} other {de wijzigingen}} echt annuleren?",
+      "continue_editing": "verder bewerken",
+      "confirm": "bevestigen",
+      "terms_of_use": "gebruiksvoorwaarden",
+      "privacy_policy": "privacybeleid",
+      "request_made": "verzoek gedaan",
+      "request_canceled": "verzoek geannuleerd",
+      "cancel_request": "verzoek intrekken",
+      "open_menu": "menu openen",
+      "feed": "feed",
+      "about": "over ons",
+      "home": "home",
+      "search": "zoeken",
+      "explore": "verkennen",
+      "shop": "shop",
+      "help": "hulp",
+      "legal": "juridisch",
+      "setting": "{count, plural, one {instelling} other {instellingen}}",
+      "logout": "uitloggen",
+      "to_watch": "te zien",
+      "reco_by_your_friends": "reco's van je vrienden",
+      "friends_playlists": "playlists van je vrienden",
+      "latest_activity": "{count, plural, one {laatste activiteit} other {laatste activiteiten}}",
+      "discover_users": "gebruikers ontdekken",
+      "most_recommended": "meest aanbevolen",
+      "archive": "archiveren",
+      "unarchive": "terugzetten",
+      "mark_as_read": "{count, plural, one {markeren als gelezen} other {markeren als gelezen}}",
+      "mark_as_unread": "{count, plural, one {markeren als ongelezen} other {markeren als ongelezen}}",
+      "accept": "accepteren",
+      "accepted": "geaccepteerd",
+      "decline": "weigeren",
+      "declined": "geweigerd",
+      "request_accepted": "{count, plural, one {verzoek geaccepteerd} other {verzoeken geaccepteerd}}",
+      "request_declined": "{count, plural, one {verzoek geweigerd} other {verzoeken geweigerd}}",
+      "unread": "ongelezen",
+      "archived": "gearchiveerd",
+      "no_notifications": "geen meldingen",
+      "all": "alle",
+      "mark_all_as_read": "alles markeren als gelezen",
+      "archive_all": "alles archiveren",
+      "archive_all_read": "alles archiveren wat gelezen is",
+      "please_login": "log in",
+      "like": "liken",
+      "unlike": "like verwijderen",
+      "unfollow": "ontvolgen",
+      "name": "naam",
+      "add_a_name": "een naam toevoegen",
+      "add_a_description": "een beschrijving toevoegen",
+      "visibility": "zichtbaarheid",
+      "search_an_user": "een gebruiker zoeken",
+      "select_an_item_to_add_to_playlist": "selecteer een item om aan de playlist toe te voegen",
+      "select_a_film_to_add_to_playlist": "selecteer een film om aan de playlist toe te voegen",
+      "select_a_tv_series_to_add_to_playlist": "selecteer een serie om aan de playlist toe te voegen",
+      "add_one_or_more_items_to": "Een of meer items toevoegen aan <important>{title}</important>",
+      "add_one_or_more_films_to": "Een of meer films toevoegen aan <important>{title}</important>",
+      "add_one_or_more_tv_series_to": "Een of meer series toevoegen aan <important>{title}</important>",
+      "manage_playlist_access_rights": "rechten van de playlist beheren",
+      "add_guest": "{count, plural, one {een gast toevoegen} other {gasten toevoegen}}",
+      "manage_members": "leden beheren",
+      "no_member": "geen leden",
+      "add_member": "{count, plural, one {een lid toevoegen} other {leden toevoegen}}",
+      "manage_guests": "gasten beheren",
+      "add_guests_to_your_playlist": "gasten aan je playlist toevoegen",
+      "select_users_to_add_to_playlist": "selecteer gebruikers om aan de playlist toe te voegen",
+      "select_users_to_send_reco": "selecteer naar wie je de reco stuurt",
+      "select_playlists_to_add_the_item": "selecteer de playlists waaraan je het item toevoegt",
+      "send": "versturen",
+      "sent": "verstuurd",
+      "select_row": "rij selecteren",
+      "select_all": "alles selecteren",
+      "no_selected_users": "geen gebruikers geselecteerd",
+      "selection_count": "{number} van {total} {type} geselecteerd",
+      "about_title": "over {title}",
+      "detail": "{count, plural, one {detail} other {details}}",
+      "genre": "{count, plural, one {genre} other {genres}}",
+      "male": "{count, plural, one {man} other {mannen}}",
+      "female": "{count, plural, one {vrouw} other {vrouwen}}",
+      "non_binary": "{count, plural, one {non-binair} other {non-binair}}",
+      "unspecified": "niet opgegeven",
+      "date_of_birth": "geboortedatum",
+      "date_of_death": "overlijdensdatum",
+      "place_of_birth": "geboorteplaats",
+      "age_years": "{count} {count, plural, one {jaar} other {jaar}} oud",
+      "biography": "biografie",
+      "no_biography_available": "geen biografie beschikbaar",
+      "no_information_available": "geen informatie beschikbaar",
+      "already_sent": "al verstuurd",
+      "already_watched": "al gezien",
+      "already_added": "al toegevoegd",
+      "recommend_to_friend_to_discover": "Beveel <strong>{title}</strong> aan bij een vriend om te ontdekken",
+      "add_to_one_or_more_playlists": "Voeg <strong>{title}</strong> toe aan een of meer van je playlists",
+      "my_playlist": "{count, plural, one {mijn playlist} other {mijn playlists}}",
+      "what_is_title": "Wat is <strong>{title}</strong>?",
+      "try_again": "Opnieuw proberen",
+      "error": "fout",
+      "not_logged_in": "je bent niet ingelogd",
+      "an_error_occurred": "Er is een fout opgetreden",
+      "playlist_not_found": "playlist niet gevonden",
+      "user_not_found": "gebruiker niet gevonden",
+      "film_not_found": "film niet gevonden",
+      "media_not_found": "titel niet gevonden",
+      "review_not_found": "review niet gevonden",
+      "person_not_found": "persoon niet gevonden",
+      "tv_series_not_found": "serie niet gevonden",
+      "tv_episode_not_found": "aflevering niet gevonden",
+      "tv_season_not_found": "seizoen niet gevonden",
+      "wrong_arguments": "verkeerde argumenten",
+      "no_media_found": "geen titel gevonden",
+      "unknown_action": "onbekende actie",
+      "no_user_found": "geen gebruiker gevonden",
+      "no_tv_episodes": "geen afleveringen",
+      "save": "opslaan",
+      "saved": "opgeslagen",
+      "create": "maken",
+      "film_count": "{count, plural, one {# film} other {# films}}",
+      "tv_series_count": "{count, plural, one {# serie} other {# series}}",
+      "login": "inloggen",
+      "signup": "aanmelden",
+      "navigation": "navigatie",
+      "delete": "Verwijderen",
+      "remove": "Weghalen",
+      "deleted": "Verwijderd",
+      "share": "delen",
+      "duplicate": "dupliceren",
+      "duplicated": "gedupliceerd",
+      "cancel": "Annuleren",
+      "date": "datum",
+      "duration": "duur",
+      "sort": "sorteren",
+      "show": "weergeven",
+      "column": "{count, plural, one {kolom} other {kolommen}}",
+      "comment": "{count, plural, one {reactie} other {reacties}}",
+      "unknown": "onbekend",
+      "community": "community",
+      "cast_and_crew": "cast & crew",
+      "soon": "binnenkort",
+      "ios_app": "iOS-app",
+      "android_app": "Android-app",
+      "coming_soon": "Binnenkort beschikbaar",
+      "new_mobile_app": "Nieuwe mobiele app!",
+      "manage": "beheren",
+      "monthly": "maandelijks",
+      "yearly": "jaarlijks",
+      "day": "dag",
+      "week": "week",
+      "month": "maand",
+      "year": "jaar",
+      "price": "prijs",
+      "free": "gratis",
+      "playlist": "{count, plural, one {playlist} other {playlists}}",
+      "public": "openbaar",
+      "publish": "publiceren",
+      "private": "privé",
+      "description": "beschrijving",
+      "details": "details",
+      "profile": "profiel",
+      "overview": "samenvatting",
+      "no_playlists_saved": "geen playlists opgeslagen",
+      "camera_permission_denied": "toegang tot camera geweigerd",
+      "photo_library_permission_denied": "toegang tot fotobibliotheek geweigerd",
+      "ignore": "negeren",
+      "ok": "ok",
+      "title": "titel",
+      "skip": "Overslaan",
+      "undo": "Ongedaan maken",
+      "date_published": "publicatiedatum",
+      "date_created": "aanmaakdatum",
+      "date_updated": "wijzigingsdatum",
+      "alphabetical": "alfabetisch",
+      "date_added": "datum toegevoegd",
+      "number_of_likes": "aantal likes",
+      "number_of_seasons": "aantal seizoenen",
+      "add_to_this_playlist": "aan deze playlist toevoegen",
+      "save_to_library": "opslaan in de bibliotheek",
+      "remove_from_library": "uit de bibliotheek verwijderen",
+      "otp": "OTP",
+      "ratings_from_followees": "beoordelingen van wie je volgt",
+      "choose_from_the_library": "kiezen uit de bibliotheek",
+      "take_a_photo": "een foto maken",
+      "delete_current_image": "huidige afbeelding verwijderen",
+      "edit_image": "afbeelding wijzigen",
+      "add_image": "afbeelding toevoegen",
+      "verify_with_a_code": "verifiëren met een code",
+      "order": "volgorde",
+      "edit_order": "volgorde wijzigen",
+      "done": "klaar",
+      "can_edit": "mag bewerken?",
+      "upgrade": "upgraden",
+      "no_description": "Geen beschrijving",
+      "no_comment": "Geen reacties",
+      "close": "sluiten",
+      "edit_playlist": "playlist wijzigen",
+      "universe": "universum",
+      "cannot_be_changed": "kan niet worden gewijzigd",
+      "delete_review": "review verwijderen",
+      "do_you_really_want_to_delete_this_review": "Wil je deze review echt verwijderen?",
+      "user_liked_playlist": "<name></name> vindt een playlist leuk",
+      "user_liked_review": "<name></name> vindt een review leuk",
+      "runtime": "speelduur",
+      "ends_at": "Eindigt om {value}",
+      "this_user_has_no_activity": "Deze gebruiker heeft geen activiteit",
+      "notification_archived": "{count, plural, one {melding gearchiveerd} other {meldingen gearchiveerd}}",
+      "notification_unarchived": "{count, plural, one {melding teruggezet} other {meldingen teruggezet}}",
+      "notification_marked_as_read": "{count, plural, one {melding gemarkeerd als gelezen} other {meldingen gemarkeerd als gelezen}}",
+      "notification_marked_as_unread": "{count, plural, one {melding gemarkeerd als ongelezen} other {meldingen gemarkeerd als ongelezen}}",
+      "or_continue_with": "of ga verder met",
+      "message": "{count, plural, one {bericht} other {berichten}}",
+      "story": "{count, plural, one {story} other {stories}}",
+      "new_playlist": "nieuwe playlist",
+      "select_a_type": "selecteer een type",
+      "filter": "{count, plural, one {filter} other {filters}}",
+      "hide_watched": "geziene verbergen",
+      "show_me_around": "geef me een rondleiding",
+      "artwork_from": "Illustratie van <important>{source}</important>",
+      "no_active_subscription": "geen actief abonnement",
+      "manage_subscription": "abonnement beheren",
+      "started_on_date": "gestart op: {date}",
+      "last_renewed_on_date": "laatst verlengd op: {date}",
+      "version_value": "versie {value}",
+      "original_title": "originele titel",
+      "starring": "met",
+      "write_your_review_here": "schrijf hier je review...",
+      "insert": "invoegen",
+      "trailer": "{count, plural, one {trailer} other {trailers}}",
+      "list": "{count, plural, one {lijst} other {lijsten}}",
+      "grid": "{count, plural, one {raster} other {rasters}}",
+      "order_asc": "oplopende volgorde",
+      "order_desc": "aflopende volgorde",
+      "menu": "menu",
+      "at_least_one_watched_date_required": "er is minstens één kijkdatum vereist",
+      "viewer": "{count, plural, one {Kijker} other {Kijkers}}",
+      "editor": "{count, plural, one {Bewerker} other {Bewerkers}}",
+      "admin": "{count, plural, one {Beheerder} other {Beheerders}}",
+      "owner": "{count, plural, one {Eigenaar} other {Eigenaren}}",
+      "you_dont_have_permission_to_do_this_action": "Je hebt geen rechten om deze actie uit te voeren",
+      "in_progress": "bezig",
+      "give_up": "opgeven",
+      "random": "willekeurig",
+      "reset_password": "Wachtwoord opnieuw instellen",
+      "password_reset": "Wachtwoord opnieuw ingesteld",
+      "return_to_login": "Terug naar inloggen",
+      "invalid_code": "Ongeldige code",
+      "no_token_found": "Geen token gevonden",
+      "first_watched_at": "eerste kijkdatum",
+      "watched_dates": "kijkdata",
+      "no_watched_dates": "geen kijkdata",
+      "select_role": "selecteer een rol",
+      "select_format": "selecteer een formaat",
+      "theater": "Bioscoop",
+      "physical": "Fysieke drager",
+      "digital": "Digitaal",
+      "streaming": "Streaming",
+      "you_must_be_premium_to_change_member_role": "Je moet premium zijn om de rol van een lid te wijzigen",
+      "already_member": "al lid",
+      "email_already_used": "Dit e-mailadres is al in gebruik",
+      "email_confirmed": "E-mailadres bevestigd",
+      "confirmation_email_sent": "Bevestigingsmail verstuurd",
+      "continue": "Doorgaan",
+      "finish": "Afronden",
+      "forgot_password": "Wachtwoord vergeten",
+      "new_password": "Nieuw wachtwoord",
+      "confirm_password": "Wachtwoord bevestigen",
+      "password_reseted": "Wachtwoord opnieuw ingesteld",
+      "reset_your_password": "Stel je wachtwoord opnieuw in",
+      "invalid_token": "Ongeldig token",
+      "new_notification": "{count, plural, one {nieuwe melding} other {nieuwe meldingen}}",
+      "lets_go": "We gaan!",
+      "update_available": "Update beschikbaar",
+      "update_available_description": "Werk de app bij om de nieuwste verbeteringen te gebruiken.",
+      "update_required_title": "Update vereist",
+      "update_required_description": "Deze versie van de app wordt niet meer ondersteund. Werk hem bij om Recomend te blijven gebruiken.",
+      "update_app": "Bijwerken",
+      "advertisement": "{count, plural, one {Advertentie} other {Advertenties}}",
+      "pending": "In wachtrij",
+      "processing": "Bezig",
+      "awaiting_review": "Te controleren",
+      "failed": "Mislukt",
+      "data": "{count, plural, one {Gegeven} other {Gegevens}}",
+      "restore": "Herstellen",
+      "fix": "Corrigeren",
+      "not_found": "Niet gevonden",
+      "unavailable": "Niet beschikbaar",
+      "star_on_github": "Een ster geven op GitHub"
+    },
+    "form": {
+      "email": {
+        "label": "E-mailadres",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "Het e-mailadres is niet geldig",
+          "unavailable": "Dit e-mailadres is al in gebruik"
+        },
+        "verified": "E-mailadres geverifieerd"
+      },
+      "username": {
+        "label": "Gebruikersnaam",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "Het eerste teken moet een letter of een cijfer zijn",
+          "double_dot": "Twee punten achter elkaar zijn niet toegestaan",
+          "ends_with_dot": "Een punt aan het eind is niet toegestaan",
+          "format": "Alleen letters, cijfers en de tekens '_' en '.' zijn toegestaan",
+          "unavailable": "Deze gebruikersnaam is al in gebruik"
+        }
+      },
+      "full_name": {
+        "label": "Naam",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "Alleen letters, cijfers en spaties zijn toegestaan"
+        }
+      },
+      "password": {
+        "label": "Wachtwoord",
+        "placeholder": "Voer je wachtwoord in",
+        "schema": {
+          "uppercase": "Minstens één hoofdletter is vereist",
+          "lowercase": "Minstens één kleine letter is vereist",
+          "number": "Minstens één cijfer is vereist",
+          "special": "Minstens één speciaal teken is vereist",
+          "match": "De wachtwoorden komen niet overeen"
+        },
+        "confirm": {
+          "label": "Wachtwoord bevestigen",
+          "placeholder": "Bevestig je wachtwoord"
+        }
+      },
+      "length": {
+        "char_min": "minstens {count, plural, one {# teken} other {# tekens}}",
+        "char_max": "maximaal {count, plural, one {# teken} other {# tekens}}"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "Alleen letters, cijfers en spaties zijn toegestaan"
+      },
+      "error": {
+        "too_many_attempts": "Te veel pogingen, probeer het later opnieuw",
+        "not_received_code": "Geen code ontvangen?",
+        "invalid_code": "Ongeldige code",
+        "turnstile": "Verificatie mislukt, probeer het opnieuw"
+      },
+      "resend_code": "Code opnieuw versturen",
+      "resend_email": "E-mail opnieuw versturen",
+      "code_verified": "Code geverifieerd",
+      "code_sent": "Code verstuurd"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "pagina niet gevonden",
+        "description": "oeps, deze pagina bestaat niet..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "bijhouden",
+        "description": "Ontdek, beoordeel en deel je favoriete films en series."
+      },
+      "recos": {
+        "label": "reco's",
+        "description": "Stuur en ontvang de reco's van je vrienden. Alles op één plek."
+      },
+      "playlists": {
+        "label": "playlists",
+        "description": "Organiseer, deel en bouw samen playlists."
+      },
+      "feed": {
+        "label": "feed",
+        "description": "Volg je vrienden om te zien wat ze kijken, liken en beoordelen."
+      },
+      "social_sharing": {
+        "label": "delen op social",
+        "description": "Deel alles waar je van houdt op Instagram of andere netwerken."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "Bijhouden",
+          "description": "Houd de films bij die je hebt gezien"
+        },
+        "recos": {
+          "label": "Reco's",
+          "description": "Stuur filmaanbevelingen naar je vrienden"
+        },
+        "explore": {
+          "label": "Verkennen",
+          "description": "Ontdek nieuwe films op Paradise Pictures, een interactieve kaart met meer dan 1400 films"
+        },
+        "like": {
+          "label": "Like",
+          "description": "Laat zien hoeveel je houdt van je favoriete films, playlists en reviews"
+        },
+        "rating": {
+          "label": "Beoordeling",
+          "description": "Beoordeel de films die je hebt gezien"
+        },
+        "watchlist": {
+          "label": "Watchlist",
+          "description": "Bewaar films die je wil zien"
+        },
+        "playlists": {
+          "label": "Playlists",
+          "description": "Organiseer je films in playlists en deel ze"
+        },
+        "reviews": {
+          "label": "Reviews",
+          "description": "Schrijf reviews en laat de verzuurde cinefiel in je naar buiten komen"
+        },
+        "feed": {
+          "label": "Feed",
+          "description": "Volg de activiteit van je vrienden"
+        },
+        "adsFree": {
+          "label": "Zonder advertenties",
+          "description": "Geniet van Recomend zonder advertenties, voor altijd"
+        }
+      }
+    },
+    "welcome": {
+      "title": "Bedankt voor je aanmelding!",
+      "description": "Hier is een snelle blik op wat je met {app} kan doen.",
+      "follow": {
+        "title": "Volg mensen",
+        "description": "Volg vrienden om te zien wat ze kijken."
+      },
+      "import": {
+        "title": "Kom je van een ander platform?"
+      }
+    },
+    "collection": {
+      "label": "bibliotheek",
+      "my_recos": {
+        "label": "mijn reco's",
+        "search": {
+          "placeholder": "zoeken in mijn reco's..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "verwijderen uit mijn reco's",
+            "description": "Wil je <important>{title}</important> echt uit je reco's verwijderen?"
+          },
+          "complete_confirm": {
+            "title": "de reco afronden",
+            "description": "Wil je de reco <important>{title}</important> echt afronden?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "zoeken in de watchlist..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "verwijderen uit de watchlist",
+            "description": "Wil je <important>{title}</important> echt uit je watchlist verwijderen?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "zoeken in je hartendieven..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "verwijderen uit je hartendieven",
+            "description": "Wil je <important>{title}</important> echt uit je hartendieven verwijderen?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> heeft gezien",
+        "rated": "<name></name> heeft beoordeeld",
+        "liked": "<name></name> vindt dit leuk",
+        "rated_liked": "<name></name> vindt dit leuk en heeft het beoordeeld",
+        "reviewed": "<name></name> heeft een review geschreven"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> is <important>{roles}</important> in <linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> is <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "Applicatie toestaan",
+        "description_generic": "Een applicatie vraagt toegang tot je account.",
+        "description": "{client} wil toegang tot je account.",
+        "scopes_label": "Dit geeft de applicatie toestemming om:",
+        "accept": "Toestaan",
+        "deny": "Weigeren",
+        "error": {
+          "invalid_request": "Ongeldig of verlopen verzoek",
+          "invalid_request_description": "Start het proces opnieuw vanuit de applicatie die je hiernaartoe heeft gestuurd.",
+          "client_not_found": "Deze applicatie kon niet worden gevonden.",
+          "submit_failed": "Er is iets misgegaan. Probeer het opnieuw."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "Log in op je {app}-account."
+        },
+        "label": "Inloggen",
+        "description": "Ontdek de beste filmaanbevelingen.",
+        "or_continue_with": "Of ga verder met",
+        "no_account_yet": "Nog geen account?",
+        "form": {
+          "identifier": {
+            "label": "E-mailadres of gebruikersnaam",
+            "placeholder": "Voer je e-mailadres of gebruikersnaam in"
+          },
+          "password": {
+            "label": "Wachtwoord",
+            "placeholder": "Voer je wachtwoord in"
+          },
+          "submit": "Inloggen",
+          "forgot_password": "Wachtwoord vergeten?",
+          "wrong_credentials": "Het e-mailadres of wachtwoord is onjuist"
+        },
+        "otp": {
+          "password_login": "Log je liever in met een wachtwoord?",
+          "form": {
+            "submit": "Code ontvangen",
+            "no_user_found": "Geen gebruiker gevonden met dit e-mailadres",
+            "success": "Ingelogd"
+          },
+          "confirm_form": {
+            "label": "Code bevestigen",
+            "description": "Er is een verificatiecode verstuurd naar {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "Meld je aan bij {app} om filmaanbevelingen te ontdekken en te delen."
+        },
+        "description": "Maak een account om een film aan te bevelen bij die vriend die de titels altijd vergeet.",
+        "form": {
+          "success": "Er is een verificatiemail verstuurd naar {email}"
+        },
+        "confirm_form": {
+          "label": "E-mailadres bevestigen",
+          "description": "Er is een verificatielink verstuurd naar {email}"
+        },
+        "return_to_login": "Oeps, ik heb toch al een account."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "Wachtwoord vergeten",
+          "description": "Stel je wachtwoord opnieuw in."
+        },
+        "label": "Wachtwoord vergeten",
+        "description": "Je zou een wachtwoordmanager moeten gebruiken, dat is echt handig.",
+        "return_to_login": "Oeps, ik weet mijn wachtwoord toch nog.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "Wachtwoord opnieuw instellen",
+          "code_sent": "Verzoek verstuurd"
+        },
+        "confirm_form": {
+          "label": "Code bevestigen",
+          "description": "Er is een verificatiecode verstuurd naar {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "Wachtwoord opnieuw instellen",
+          "description": "Kies een nieuw wachtwoord voor je account."
+        }
+      },
+      "error": {
+        "label": "Fout",
+        "description": "Er is een fout opgetreden tijdens het inloggen.",
+        "return_to_login": "Terug naar veilig terrein"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "Over ons",
+        "marquee": "Is er niets spannenders in je leven dan 'Over ons'-pagina's op internet bekijken?",
+        "intro": "<strong>Recomend</strong> is een plek gewijd aan het ontdekken, aanbevelen en organiseren van films. Alles is bedacht om mond-tot-mondreclame de best mogelijke digitale vorm te geven. Onze aanpak draait om mensen en hun onderlinge relaties in het tijdperk van zelfgericht consumeren, of beter gezegd van 'aanbevolen voor jou'.",
+        "slogan": {
+          "1": "Zonder advertenties en zonder dubieuze beloftes. 🍆",
+          "2": "Het is een sociaal netwerk én een gereedschap.",
+          "3": "Het is zelfgemaakt, door liefhebbers.",
+          "4": "Het is amateur in de letterlijke zin van het woord."
+        },
+        "last": "Recomend kan je alleen of samen gebruiken, in het openbaar of privé, dag en nacht, maar nooit voor een film — concentreer je, alsjeblieft!"
+      },
+      "team": {
+        "label": "Het team",
+        "intro": "Recomend is gemaakt door twee filmgekke broers die hun tijd graag stoppen in veel te ambitieuze projecten waarvan niemand weet of ze ooit het daglicht zien.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "Hyperactieve Architect-Ingenieur die zich niet met één baan tevreden kan stellen (de échte start-up nation): Yoann bedacht het plan om een filmkaart te maken, die in het begin alleen de bescheiden ambitie had om een poster voor zijn wc te worden. Met de komst van Loup zijn de doelen volledig ontploft en, een beetje overrompeld door de gebeurtenissen, neemt hij het hele grafische deel van de kaart en de site op zich, plus alle communicatie (ook al vindt hij dat niet leuk). Hij geeft ook zijn mening over UX/UI en stelt bergen functies voor zonder goed te beseffen hoe moeilijk die te programmeren zijn (hij heeft wat vooruitgang geboekt)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "Volledig autodidact die toch een studie heeft gedaan die voor zijn 25e tot onbetaalde werkloosheid leidde. Een echt Zwitsers zakmes: Loup doet het webdesign en programmeert een interface die we ons zo gebruiksvriendelijk mogelijk voorstellen. Loup wil alle codeforums bedanken die zijn (zeer) talrijke vragen hebben beantwoord, en ook alle Indiase YouTubers die hem al die maanden als adoptievaders hebben begeleid. Zijn moeder is er intussen van overtuigd dat zijn broer hem voor dit project tot slaaf heeft gemaakt (het gaat goed, mam)."
+          }
+        },
+        "last": "Om met ons of met andere leden van de community te praten: kom naar onze <link>Discord</link>!"
+      },
+      "pricing": {
+        "label": "Prijzen",
+        "intro": "Dit abonnementsmodel is vooral een steun om het project in leven te houden en verder te ontwikkelen. De premium-functies zijn extra's voor intensief gebruik van Recomend, die een kleine financiële bijdrage rechtvaardigen. We houden altijd de mogelijkheid om de site gratis te gebruiken, zonder advertenties en zonder je beperkt te voelen.",
+        "subdescription": "*Als de extreem lage prijs van dit abonnement nog steeds boven je budget ligt, wend je dan tot de liberale regering die verantwoordelijk is voor je koopkrachtverlies."
+      },
+      "legal": {
+        "label": "Juridisch & privacy",
+        "description": "We respecteren je privacy. De advertenties die aan niet-ingelogde gebruikers worden getoond, worden beheerd door Google en vereisen technische cookies om de weergavefrequentie te beperken en fraude te voorkomen.",
+        "privacyPolicy": "Lees ons privacybeleid",
+        "manageCookies": "Mijn advertentievoorkeuren beheren (cookies)"
+      },
+      "open-source": {
+        "label": "Open source",
+        "intro": "Recomend is open source: de code staat publiek op GitHub. Neem een kijkje, draag bij, of laat ons simpelweg een sterretje achter!",
+        "star": "Geef ons een ster op GitHub"
+      },
+      "businessmodel": {
+        "label": "Businessmodel",
+        "paragraph": {
+          "1": "Je raadt het al: met onze weinig commerciële profielen hebben we niet echt begrepen waar een businessmodel ons nu voor zou dienen...",
+          "2": "Als de toekomst van Recomend het nodig maakt, kijken we ernaar met de juiste mensen om ons heen, of in elk geval mensen die er meer in geïnteresseerd zijn dan wij.",
+          "3": "Tot die tijd, laten we eerlijk zijn: er is genoeg anders te doen."
+        }
+      },
+      "roadmap": {
+        "label": "Roadmap"
+      },
+      "data": {
+        "label": "Data",
+        "paragraph": {
+          "1": "Alle metadata die op Recomend wordt gebruikt, komt van <link>The Movie Database (TMDb)</link> via de API van het platform. We doen het dus precies zoals alle anderen, als brave schapen.",
+          "2": "Voor fouten of ontbrekende films kan je dus terecht bij <link>TMDb</link>."
+        }
+      },
+      "resources": {
+        "label": "Bronnen",
+        "intro": "Dit heeft niet echt met film te maken, maar hier is een lijst met sites die we leuk vinden:"
+      },
+      "contact-support": {
+        "label": "Contact & support",
+        "help-center": "Vind de antwoorden op je existentiële vragen in ons <link>Helpcentrum</link>.",
+        "technical-support": "Voor technische vragen: <email></email>",
+        "suggest-a-feature": "Voor suggesties: <email></email>",
+        "contact-us": "Om simpelweg contact met ons op te nemen: <email></email>"
+      },
+      "quote": {
+        "label": "Citaat",
+        "quote": "« Ik haat het woord professional. Al die acteurs en al die anderen die zeggen: ik ben een professional, ik ben een pro! Wat is dat? Bestaat er een triester woord? Want amateur komt van het woord liefde. Je moet dingen uit liefde doen, anders zijn we idioten. »",
+        "author": "Orson Wells",
+        "date": "1972",
+        "subdescription": "*We twijfelden of we het zouden plaatsen, want het klinkt snel pretentieus, maar het geeft onze stemming over het project goed weer. Mocht je het niet mooi vinden, dan halen we het weg."
+      }
+    },
+    "settings": {
+      "label": "Instellingen",
+      "description": "Beheer de instellingen van je account.",
+      "profile": {
+        "label": "Profiel",
+        "description": "Zo zien anderen je op de site.",
+        "avatar": {
+          "label": "Avatar",
+          "delete": "Verwijderen"
+        },
+        "full_name": {
+          "label": "Naam",
+          "description": "Dit is de naam die op je profiel en in e-mails wordt weergegeven.",
+          "placeholder": "Voer je naam in",
+          "form": {
+            "min_length": "De naam moet minstens 1 teken bevatten",
+            "max_length": "De naam mag niet langer zijn dan 50 tekens"
+          }
+        },
+        "bio": {
+          "label": "Bio",
+          "description": "Vertel iets over jezelf, het komt op je profiel te staan.",
+          "placeholder": "Schrijf iets over jezelf",
+          "form": {
+            "max_length": "De bio mag niet langer zijn dan 150 tekens",
+            "format": "De biografie mag geen lege regels bevatten en niet alleen uit spaties bestaan."
+          }
+        },
+        "favorite_films": {
+          "label": "Favoriete films",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "De URL is niet geldig"
+          }
+        }
+      },
+      "account": {
+        "label": "Account",
+        "description": "Werk de instellingen van je account bij.",
+        "username": {
+          "label": "Gebruikersnaam",
+          "description": "Dit is je gebruikersnaam waarmee anderen je kunnen vinden en je profiel kunnen bekijken. Je kan hem maar één keer per 30 dagen wijzigen.",
+          "placeholder": "Voer je gebruikersnaam in",
+          "form": {
+            "min_length": "De gebruikersnaam moet minstens 3 tekens bevatten",
+            "max_length": "De gebruikersnaam mag niet langer zijn dan 15 tekens",
+            "invalid": "De gebruikersnaam mag alleen letters, cijfers en de tekens '_' en '.' bevatten",
+            "unavailable": "Deze gebruikersnaam is al in gebruik"
+          }
+        },
+        "private": {
+          "label": "Privéaccount",
+          "description": "Als je account privé is, kunnen alleen de gebruikers die je goedkeurt je activiteiten zien."
+        },
+        "email": {
+          "description": "Er wordt een verificatiemail verstuurd naar je huidige e-mailadres en naar het nieuwe e-mailadres. Je moet beide bevestigen voordat de wijziging ingaat.",
+          "change_pending": "Op <strong>{date}</strong> is er een verificatiemail verstuurd naar je nieuwe e-mailadres <strong>{email}</strong>. Klik op de link of voer de verificatiecode in om de wijziging te bevestigen.",
+          "confirm_email_code": {
+            "description": "Voer de verificatiecode in die naar je e-mailadres <strong>{email}</strong> is verstuurd."
+          },
+          "change_success": "Je e-mailadres is bijgewerkt"
+        },
+        "delete_account": {
+          "button": "Mijn account verwijderen",
+          "confirm": {
+            "description": "Je account wordt definitief verwijderd en je kan hem niet meer terughalen.",
+            "confirm_email_sent": "Er is een verificatiemail verstuurd naar je e-mailadres"
+          }
+        }
+      },
+      "appearance": {
+        "label": "Weergave",
+        "description": "Pas de weergave van de app aan. Wissel automatisch tussen het dag- en nachtthema.",
+        "language": {
+          "label": "Taal",
+          "description": "Kies een taal — de wijzigingen gaan in nadat je de app opnieuw opstart",
+          "placeholder": "Selecteer een taal",
+          "not_found": "Taal niet gevonden"
+        },
+        "theme": {
+          "label": "Thema",
+          "description": "Selecteer het thema voor de interface.",
+          "options": {
+            "light": "Licht",
+            "dark": "Donker"
+          }
+        }
+      },
+      "subscription": {
+        "label": "Abonnement",
+        "description": "Beheer je premium-abonnement."
+      },
+      "security": {
+        "label": "Beveiliging",
+        "description": "Als je je wachtwoord wijzigt, word je op alle apparaten uitgelogd behalve op het apparaat dat je nu gebruikt.",
+        "current_password": {
+          "label": "Huidig wachtwoord",
+          "placeholder": "Voer je huidige wachtwoord in",
+          "form": {
+            "required": "Het huidige wachtwoord is verplicht",
+            "invalid": "Het huidige wachtwoord is onjuist"
+          }
+        },
+        "new_password": {
+          "label": "Nieuw wachtwoord",
+          "placeholder": "Voer je nieuwe wachtwoord in",
+          "form": {
+            "min_length": "Het wachtwoord moet minstens 8 tekens bevatten",
+            "uppercase": "Minstens één hoofdletter is vereist",
+            "lowercase": "Minstens één kleine letter is vereist",
+            "number": "Minstens één cijfer is vereist",
+            "special": "Minstens één speciaal teken is vereist"
+          }
+        },
+        "confirm_password": {
+          "label": "Nieuw wachtwoord bevestigen",
+          "placeholder": "Bevestig je nieuwe wachtwoord",
+          "form": {
+            "match": "De wachtwoorden komen niet overeen"
+          }
+        }
+      },
+      "notifications": {
+        "label": "Meldingen",
+        "description": "Stel in welke meldingen je ontvangt.",
+        "push_notifications": {
+          "label": "Pushmeldingen",
+          "form": {
+            "enable": "Pushmeldingen aanzetten"
+          },
+          "already_granted": "Er is al een meldingsverzoek gedaan; ga naar de instellingen van je browser om het te wijzigen.",
+          "no_enabled": "Zet meldingen aan in de instellingen van je apparaat om pushmeldingen te ontvangen.",
+          "open_settings": "Naar de apparaatinstellingen"
+        }
+      },
+      "data": {
+        "label": "Data",
+        "description": "Importeer of exporteer je data.",
+        "importer": {
+          "label": "Importeren",
+          "select_source": "Kies een bron",
+          "instructions_title": "Instructies",
+          "browse_prompt": "Sleep je bestand hierheen, of <link>zoek</link>",
+          "browse_prompt_mobile": "Tik om een bestand te kiezen",
+          "uploading": "Uploaden…",
+          "processing": "Je bestand wordt geanalyseerd…",
+          "upload_error": "Uploaden mislukt, probeer het opnieuw.",
+          "invalid_file_type": "Dit bestandstype wordt niet ondersteund voor deze bron.",
+          "review_title": "Controleer je import",
+          "review_summary": "{matched} van {total} gevonden",
+          "validate": "Import bevestigen",
+          "validate_confirm_description": "Hiermee worden alle gevonden en niet-overgeslagen items in je bibliotheek geïmporteerd. Dit kan niet ongedaan worden gemaakt.",
+          "success_title": "Import voltooid",
+          "success_description": "Je data is succesvol geïmporteerd.",
+          "failed_title": "Import mislukt",
+          "failed_description": "Er is iets misgegaan bij het verwerken van deze import.",
+          "pending_description": "Je import staat in de wachtrij en begint binnenkort.",
+          "empty": "Nog geen imports.",
+          "delete_confirm_description": "Deze import en alle bijbehorende data worden definitief verwijderd. Dit kan niet ongedaan worden gemaakt.",
+          "keep_existing": "Die van mij houden",
+          "use_imported": "Import gebruiken",
+          "merge": "Samenvoegen",
+          "conflict": "Conflict",
+          "no_match": "Geen match",
+          "existing_rating": "Nu: {rating}",
+          "log_column": "Logboek",
+          "actions_column": "Acties",
+          "categories": {
+            "log_movies": "Films",
+            "log_tv_series": "Series",
+            "bookmarks": "Watchlist",
+            "playlists": "Lijsten"
+          },
+          "status": {
+            "pending": "In wachtrij",
+            "processing": "Bezig",
+            "awaiting_review": "Te controleren",
+            "completed": "Voltooid",
+            "failed": "Mislukt"
+          }
+        },
+        "exporter": {
+          "label": "Exporteren"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "overstappen naar Premium",
+        "description": "Stap over naar een premium-account om alle functies van {app} te gebruiken."
+      },
+      "header": {
+        "title": "verruim je cinema, deel meer, steun {app}",
+        "subtitle": "probeer 1 maand gratis, daarna {price}/maand"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "activiteiten",
+            "unlimited_activities": {
+              "label": "onbeperkte activiteiten",
+              "description": "beoordelingen, likes, reviews, watchlist en aanbevelingen"
+            },
+            "favorites": {
+              "label": "favorieten",
+              "description": "voeg je favoriete films toe aan je profiel"
+            }
+          },
+          "playlists": {
+            "label": "playlists",
+            "unlimited_playlists": {
+              "label": "onbeperkt",
+              "description": "maak een onbeperkt aantal playlists"
+            },
+            "shared_playlists": {
+              "label": "gedeeld",
+              "description": "deel je playlists met andere gebruikers"
+            },
+            "collaborative_playlists": {
+              "label": "samen",
+              "description": "maak samen met andere gebruikers playlists"
+            }
+          },
+          "feed": {
+            "label": "feed",
+            "followees": {
+              "label": "gevolgde gebruikers",
+              "description": "bekijk de activiteiten van de gebruikers die je volgt"
+            },
+            "cast_and_crew": {
+              "label": "cast & crew",
+              "description": "volg de activiteiten van de mensen die aan de films meewerken"
+            }
+          },
+          "support": {
+            "label": "steun",
+            "team": {
+              "label": "Steun het team van {app}"
+            },
+            "credits": {
+              "label": "aftiteling",
+              "description": "jouw profiel in de aftiteling van de app"
+            }
+          }
+        },
+        "success": {
+          "label": "Bedankt voor je steun!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} - playlist van @{username}",
+        "description": "Ontdek de filmplaylist van @{username} op {app}."
+      },
+      "actions": {
+        "delete": {
+          "description": "Hiermee wordt <important>{title}</important> definitief uit je playlists verwijderd."
+        }
+      },
+      "search": {
+        "placeholder": "zoeken in de playlist..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "Wil je <important>{title}</important> echt uit je playlist verwijderen?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "Voer de titel van de playlist in"
+        },
+        "description": {
+          "placeholder": "Voer een beschrijving van de playlist in"
+        },
+        "error": {
+          "format": "De beschrijving mag geen lege regels bevatten en niet alleen uit spaties bestaan."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "Ontdek het profiel van @{username} op {app}."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year}) • Film",
+        "description": "{title} is een film van {directors} uit {year}. Samenvatting: {overview}",
+        "description_no_director": "{title} is een film uit {year}. Samenvatting: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Playlists",
+          "description": "Ontdek alle playlists met de film {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Reviews",
+          "description": "Ontdek alle reviews van de film {title}."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} is een serie van {creators} die voor het eerst werd uitgezonden in {year}. Samenvatting: {overview}",
+        "description_no_creator": "{title} is een serie die voor het eerst werd uitgezonden in {year}. Samenvatting: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Playlists",
+          "description": "Ontdek alle playlists met de serie {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Reviews",
+          "description": "Ontdek alle reviews van de serie {title}."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • Seizoenen",
+          "description": "Ontdek alle seizoenen van de serie {title}."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • Seizoen {number}",
+            "description": "Ontdek alle afleveringen van seizoen {number} van de serie {title}."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • Films",
+          "description": "Ontdek alle films waarin {name} heeft gespeeld of aan heeft meegewerkt."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • Series",
+          "description": "Ontdek alle series waarin {name} heeft gespeeld of aan heeft meegewerkt."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "Review van {title} door @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "Een review schrijven over {title}",
+          "description": "Deel je mening over {title}."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Paradise Pictures verkennen",
+        "description": "Ga op ontdekkingsreis op het eiland en door zijn uiteenlopende decors. De vele films die het bevolken zijn geplaatst in hun diëgetische omgeving. Lukt het je om elk hoekje te verkennen?"
+      }
+    },
+    "legal": {
+      "label": "Juridisch",
+      "description": "Lees de juridische documenten van {app}.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "Algemene Gebruiksvoorwaarden",
+          "description": "Lees de gebruiksvoorwaarden van {app}."
+        },
+        "sections": {
+          "intro": "Deze Algemene Gebruiksvoorwaarden (hierna 'Voorwaarden') regelen de toegang tot en het gebruik van de applicatie {app}. De applicatie wordt uitgegeven door Loup (hierna 'de Uitgever'), gevestigd te Parijs. Door je bij {app} aan te melden aanvaard je deze Voorwaarden zonder voorbehoud.",
+          "presentation": {
+            "label": "1. Beschrijving van de dienst",
+            "content": "{app} is een gratis applicatie waarmee gebruikers informatie over films kunnen bekijken, reviews kunnen publiceren, werken kunnen beoordelen en persoonlijke lijsten kunnen maken."
+          },
+          "account": {
+            "label": "2. Account en beveiliging",
+            "content": "Toegang tot de functies om bij te dragen vereist het aanmaken van een account. De Gebruiker is verantwoordelijk voor de vertrouwelijkheid van de eigen inloggegevens. Bij frauduleus gebruik of een vermoeden van hacken moet de Gebruiker onmiddellijk contact opnemen met de support op: <email></email>."
+          },
+          "conduct": {
+            "label": "3. Gedragsregels",
+            "content": "De Gebruiker verbindt zich ertoe hoffelijk en respectvol te blijven in de eigen beoordelingen en lijsten. Strikt verboden zijn: haatdragende, lasterlijke of racistische uitlatingen, pesten, en spam of ongevraagde commerciële promotie. De Uitgever behoudt zich het recht voor om elke inhoud die deze regels overtreedt te verwijderen en het betreffende account zonder voorafgaande kennisgeving te schorsen."
+          },
+          "child_safety": {
+            "label": "4. Bescherming van minderjarigen",
+            "content": "{app} hanteert een strikt nultolerantiebeleid tegen elke vorm van seksueel misbruik en seksuele uitbuiting van kinderen ('Child Sexual Abuse and Exploitation', of CSAE). Het creëren, uploaden, opslaan, verspreiden, opvragen of promoten van elke inhoud die minderjarigen seksualiseert, uitbuit of op andere wijze in gevaar brengt, is op {app} uitdrukkelijk en absoluut verboden. Elk account dat dit beleid blijkt te overtreden, wordt onmiddellijk en definitief verbannen, en de Uitgever meldt de betreffende inhoud, samen met alle beschikbare gebruikersinformatie, aan het National Center for Missing & Exploited Children (NCMEC) en/of aan de bevoegde autoriteiten, in overeenstemming met de toepasselijke wetgeving. Elke gebruiker die kennis krijgt van inhoud of gedrag dat een geval van CSAE kan vormen, moet dit onverwijld melden op: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. Intellectueel eigendom",
+            "content": "De Gebruiker blijft eigenaar van de beoordelingen die de Gebruiker schrijft. Door op {app} te publiceren verleent de Gebruiker de Uitgever echter een gratis, niet-exclusieve licentie om deze inhoud binnen de applicatie weer te geven, te reproduceren en technisch aan te passen. De visuele elementen, de code en het ontwerp van {app} zijn het exclusieve eigendom van de Uitgever."
+          },
+          "privacy": {
+            "label": "6. Persoonsgegevens",
+            "content": "Respect voor je privacy is onze absolute prioriteit. {app} verkoopt, verhuurt en deelt geen persoonsgegevens met commerciële of advertentiepartners. De verzamelde gegevens (e-mailadres, gebruikersnaam, activiteit in de app) worden alleen gebruikt voor de werking van de dienst en het beheer van je account. Je kan je recht op inzage, wijziging of verwijdering (AVG) uitoefenen door contact op te nemen met: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookies en trackers",
+            "content": "{app} gebruikt geen advertentiecookies en geen gedragstrackers van derden. Er worden slechts twee soorten technische cookies gebruikt: een authenticatiecookie (om je ingelogd te houden) en een taalvoorkeurscookie (om je keuze te bewaren). Omdat deze cookies strikt noodzakelijk zijn voor de dienst, zijn ze vrijgesteld van voorafgaande toestemming."
+          },
+          "ads": {
+            "label": "8. Advertenties",
+            "content": "De applicatie wordt momenteel aangeboden zonder enige advertenties. Mocht dit model veranderen, dan worden gebruikers geïnformeerd via een update van deze Voorwaarden."
+          },
+          "liability": {
+            "label": "9. Aansprakelijkheid",
+            "content": "De Uitgever spant zich in om {app} 24 uur per dag toegankelijk te houden, maar garandeert niet dat er geen onderbrekingen of bugs zijn. De informatie over films komt uit databases van derden; de Uitgever kan niet aansprakelijk worden gesteld voor eventuele onjuistheden in die gegevens."
+          },
+          "law": {
+            "label": "10. Toepasselijk recht",
+            "content": "Deze Voorwaarden zijn onderworpen aan het Franse recht. Bij een geschil dat niet in onderling overleg via <email></email> kan worden opgelost, zijn uitsluitend de rechtbanken van Parijs bevoegd."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "Privacybeleid",
+          "description": "Lees het privacybeleid van {app}."
+        },
+        "sections": {
+          "intro": "Gegevensbescherming staat centraal in de filosofie van {app}. Dit beleid beschrijft welke gegevens we verzamelen, waarom we ze verzamelen en hoe we ze beschermen. Kort gezegd: we verkopen je gegevens niet.",
+          "controller": {
+            "label": "1. Verwerkingsverantwoordelijke",
+            "content": "De verwerkingsverantwoordelijke is Loup, gevestigd te Parijs (Frankrijk). Voor alle vragen over privacy kan je contact opnemen met: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. Verzamelde gegevens",
+            "content": "We verzamelen alleen de gegevens die strikt noodzakelijk zijn voor de werking van de applicatie: je e-mailadres (voor de authenticatie), je gebruikersnaam en je gebruiksgegevens (beoordeelde films, reviews, lijsten). Je wachtwoorden worden versleuteld (gehasht) en veilig opgeslagen."
+          },
+          "purpose": {
+            "label": "3. Doel van de verwerking",
+            "content": "Je gegevens worden uitsluitend verwerkt om: je in staat te stellen je account aan te maken en te beheren, je lijsten en beoordelingen weer te geven en de technische werking van de dienst te waarborgen. We gebruiken je gegevens niet voor advertentieprofilering."
+          },
+          "sharing": {
+            "label": "4. Delen van gegevens",
+            "content": "Je persoonsgegevens worden nooit verkocht, verhuurd of doorgegeven aan derden. Ze kunnen worden gehost bij onze technische dienstverleners (hosting, dienst voor transactionele e-mail) die gebonden zijn aan strikte vertrouwelijkheid en de AVG naleven."
+          },
+          "retention": {
+            "label": "5. Bewaartermijn",
+            "content": "Je gegevens worden bewaard zolang je account actief blijft. Als je besluit je account te verwijderen, worden al je persoonsgegevens (e-mailadres, gebruikersnaam, beoordelingen) definitief uit onze databases gewist."
+          },
+          "rights": {
+            "label": "6. Je rechten (AVG)",
+            "content": "In overeenstemming met de regelgeving heb je recht op inzage, rectificatie, overdraagbaarheid en verwijdering van je gegevens. Je kan deze rechten op elk moment direct in de applicatie uitoefenen of door ons te schrijven op: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookies",
+            "content": "Zoals aangegeven in onze gebruiksvoorwaarden gebruiken we alleen essentiële technische cookies (sessie en taal). Er worden geen advertentie- of trackingcookies van derden op je apparaat geplaatst."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "Zoek een film, serie, playlist, persoon of gebruiker..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "Wil je dit werk echt uit je lijst met geziene titels verwijderen? Als je een beoordeling of een review hebt, worden die ook verwijderd."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "Wil je de serie echt afronden? Alle afleveringen van alle seizoenen worden als gezien gemarkeerd."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "Wil je seizoen {seasonNumber} echt afronden? Alle afleveringen van het seizoen worden als gezien gemarkeerd."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "Om hier activiteit te zien, moeten jij of de gebruikers die je volgt films, series, ... beoordelen"
+    },
+    "feed_person": {
+      "message": "Om hier activiteit te zien, moet je mensen volgen die aan films of series meewerken."
+    },
+    "playlists": {
+      "items": {
+        "empty": "Geen films of series in deze playlist. Voeg er wat toe om hem te vullen!"
+      },
+      "add_to": {
+        "empty": "Je hebt nog geen playlist. Maak er een om films of series toe te voegen en ze makkelijk terug te vinden!"
+      },
+      "saved": {
+        "empty": "Je hebt geen opgeslagen playlists. Bewaar een playlist om hem makkelijk terug te vinden in je bibliotheek!"
+      },
+      "members": {
+        "empty": "Deze playlist heeft geen leden. Voeg er wat toe om samen aan dezelfde playlist te werken!",
+        "search": "Zoek gebruikers om aan de playlist toe te voegen..."
+      }
+    },
+    "follow-requests": {
+      "empty": "Je hebt geen openstaande volgverzoeken. Zodra je er hebt, verschijnen ze hier!"
+    },
+    "recos": {
+      "empty": "Je hebt geen aanbevelingen. Zodra je er hebt, verschijnen ze hier!",
+      "send_to": {
+        "empty": "Je hebt niemand om een reco naartoe te sturen. Je moet bevriend zijn met iemand om hem een reco te kunnen sturen (jullie moeten elkaar volgen)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "Je hebt nog geen films of series voor later bewaard. Zodra je er hebt, verschijnen ze hier!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> heeft je de film <movie></movie> gereco'd"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> heeft je de serie <tv_series></tv_series> gereco'd"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> heeft <movie></movie> gezien die je had gereco'd"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> heeft <tv_series></tv_series> gezien die je had gereco'd"
+    },
+    "follower_created": {
+      "description": "<user></user> volgt je nu"
+    },
+    "follower_accepted": {
+      "description": "<user></user> heeft je volgverzoek geaccepteerd"
+    },
+    "follower_request": {
+      "description": "<user></user> wil je volgen"
+    },
+    "friend_created": {
+      "description": "<user></user> is nu je vriend"
+    }
+  }
+}

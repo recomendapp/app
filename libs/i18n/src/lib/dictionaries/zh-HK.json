@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "發現電影的另一種方式",
+    "description": "{app} 是為影迷打造的社交網絡。和朋友一起發現、分享和逛遍電影與劇集。"
+  },
+  "common": {
+    "messages": {
+      "welcome": "歡迎",
+      "welcome_to_app": "歡迎來到 {app}",
+      "hello": "你好",
+      "greeting_with_name": "{timeOfDay, select, morning {早上好，{name}} afternoon {下午好，{name}} evening {晚上好，{name}} night {晚安，{name}} other {你好，{name}}}",
+      "click_here": "點擊這裏",
+      "see_more": "查看更多",
+      "see_more_details": "查看更多詳情",
+      "more": "更多",
+      "view_profile": "查看個人檔案",
+      "library": "片庫",
+      "watchlist": "想看",
+      "for_later": "留着以後看",
+      "heart_pick": "心頭好",
+      "add_to_heart_picks": "加入心頭好",
+      "remove_from_heart_picks": "從心頭好中移除",
+      "add_rating": "添加評分",
+      "edit_rating": "修改評分",
+      "remove_rating": "刪除評分",
+      "share_my_rating": "分享我的評分",
+      "share_review": "分享影評",
+      "show_likes_count": "顯示點讚數",
+      "show_comments_count": "顯示評論數",
+      "add_to_watchlist": "加入想看",
+      "remove_from_watchlist": "從想看中移除",
+      "no_results": "沒有結果",
+      "no_results_for": "沒有關於 <strong>{query}</strong> 的結果",
+      "no_followees": "你還沒有追蹤任何人",
+      "no_followers": "還沒有追蹤者",
+      "no_rating": "暫無評分",
+      "must_watch_to_review": "要寫影評，得先看過這部作品",
+      "review_cannot_be_empty": "影評不能為空",
+      "no_activity": "暫無動態",
+      "followers_ratings": "追蹤者的評分",
+      "added_by": "添加者",
+      "sort_by": "排序方式",
+      "sort_order": "排序順序",
+      "go_to_film": "前往電影",
+      "go_to_tv_series": "前往劇集",
+      "go_to_user": "前往用戶",
+      "go_to_person": "前往影人",
+      "go_to_activity": "前往動態",
+      "go_to_playlist": "前往片單",
+      "go_to_review": "前往影評",
+      "go_to_director": "前往導演",
+      "go_to_creator": "前往主創",
+      "show_director": "顯示導演",
+      "show_creator": "顯示主創",
+      "show_credit": "顯示參與作品",
+      "credits": "片尾名單",
+      "view_recommendation": "查看 reco",
+      "view_directors": "查看導演",
+      "no_director": "暫無導演資訊",
+      "view_comment": "查看評論",
+      "add_comment": "添加評論",
+      "edit_comment": "修改評論",
+      "delete_comment": "刪除評論",
+      "do_you_really_want_to_delete_this_comment": "確定要刪除這條評論嗎？",
+      "comment_deleted": "這條評論已被刪除",
+      "write_your_comment_here": "寫條評論...",
+      "reply": "回覆",
+      "replies_count": "{count} 條回覆",
+      "view_replies": "查看 {count} 條回覆",
+      "hide_replies": "收起回覆",
+      "load_more_replies": "載入更多回覆",
+      "get_started": "開始",
+      "get_started_its_free": "出發吧 🎬，免費的！",
+      "import": "匯入",
+      "upgrade_to_plan": "升級到 {plan}",
+      "choose_subscription_recurrence": "選擇你的訂閲計費周期",
+      "compare_plans": "對比套餐",
+      "save_up_to_percent": "最多省 {percent}%",
+      "is_empty": "這裏有點空",
+      "add_to_playlist": "加入片單",
+      "send_to_friend": "發給朋友",
+      "pin_to_profile": "置頂到個人檔案",
+      "unpin_from_profile": "取消個人檔案置頂",
+      "pinned": "已置頂",
+      "unpinned": "已取消置頂",
+      "no_pinned": "沒有置頂內容",
+      "pinned_limit_reached": "置頂數量已達上限——取消一個才能再加新的",
+      "custom_sort": "自訂排序",
+      "quick_add": "快速添加",
+      "favorite_films": "最愛的電影",
+      "follow": "追蹤",
+      "followed": "已追蹤",
+      "request_sent": "請求已發送",
+      "follow_requests": "追蹤請求",
+      "no_follow_requests": "沒有追蹤請求",
+      "follower": "追蹤者",
+      "follower_count": "{count} 位追蹤者",
+      "see_followers": "查看追蹤者",
+      "followee": "已追蹤",
+      "followee_count": "追蹤了 {count} 人",
+      "see_followees": "查看你追蹤的人",
+      "last_activities": "最近動態",
+      "last_updated": "最後更新",
+      "last_updated_at_date": "最後更新於 {date}",
+      "show_all": "顯示全部",
+      "this_account_is_private": "該帳號是私密的",
+      "follow_to_see_activities": "追蹤後即可查看動態",
+      "review": "影評",
+      "no_overview": "暫無簡介",
+      "cast": "演員",
+      "no_cast": "暫無演員資訊",
+      "recent": "最新",
+      "popular": "熱門",
+      "popularity": "熱度",
+      "no_reviews": "暫無影評",
+      "no_playlists": "暫無片單",
+      "no_playlists_found": "沒找到片單",
+      "no_films": "暫無電影",
+      "no_tv_series": "暫無劇集",
+      "view_activity": "查看動態",
+      "comment_count": "{count} 條評論",
+      "write_review": "寫影評",
+      "new_review": "新影評",
+      "edit_review": "修改影評",
+      "review_by": "{name} 的影評",
+      "my_review": "我的影評",
+      "add_review": "添加影評",
+      "tv_series": "劇集",
+      "film": "電影",
+      "movie": "電影",
+      "media": "作品",
+      "tv_season": "季",
+      "tv_season_count": "{count} 季",
+      "tv_season_value": "第 {number} 季",
+      "tv_season_short": "S{number}",
+      "tv_episode": "集",
+      "tv_episode_count": "{count} 集",
+      "tv_episode_value": "第 {number} 集",
+      "tv_episode_short": "S{seasonNumber}E{episodeNumber}",
+      "tv_special_episode": "特別篇",
+      "first_air_date": "首播",
+      "last_air_date": "最後播出",
+      "see_film": "查看電影",
+      "see_tv_series": "查看劇集",
+      "watch_film_title": "觀看 {title}",
+      "watch_film_streaming_or_download": "透過串流或正版下載觀看 <important>{title}</important>",
+      "download": "下載",
+      "downloaded": "已下載",
+      "person": "影人",
+      "top_result": "最佳匹配",
+      "user": "用戶",
+      "reco": "reco",
+      "my_recos": "我的 reco",
+      "item": "條目",
+      "item_count": "{count} 個條目",
+      "type": "類型",
+      "complete": "標記完成",
+      "completed": "已完成",
+      "collection": "合集",
+      "most_recent": "最新優先",
+      "most_popular": "最熱優先",
+      "most_old": "最早優先",
+      "known_for": "代表作",
+      "release_date": "上映日期",
+      "last_appearance_date": "最後出演",
+      "vote_average": "平均評分",
+      "added": "已添加",
+      "added_date": "添加日期",
+      "added_at": "添加於",
+      "add": "添加",
+      "playlist_name": "片單名稱",
+      "updated_at": "更新於",
+      "created_at": "建立於",
+      "likes": "點讚",
+      "likes_count": "點讚數",
+      "search_media": "搜尋作品",
+      "search_film": "搜尋電影",
+      "start_typing_to_search_films": "開始輸入即可搜尋電影",
+      "search_tv_series": "搜尋劇集",
+      "start_typing_to_search_tv_series": "開始輸入即可搜尋劇集",
+      "search_person": "搜尋影人",
+      "start_typing_to_search_persons": "開始輸入即可搜尋影人",
+      "search_user": "搜尋用戶",
+      "start_typing_to_search_users": "開始輸入即可搜尋用戶",
+      "search_playlist": "搜尋片單",
+      "start_typing_to_search_playlists": "開始輸入即可搜尋片單",
+      "search_film_or_tv_series": "搜尋電影或劇集",
+      "watched_date": "觀看日期",
+      "mark_as_watched": "標記為看過",
+      "remove_from_watched": "從看過中移除",
+      "rating": "評分",
+      "create_a_playlist": "建立片單",
+      "by_name": "{name} 作品",
+      "reset": "重置",
+      "job": "職務",
+      "department": "部門",
+      "share_title_via": "透過以下方式分享 <strong>{title}</strong>",
+      "share_title": "分享 <strong>{title}</strong>",
+      "link": "連結",
+      "copy_link": "複製連結",
+      "copied": "已複製",
+      "other": "其他",
+      "via": "透過",
+      "edit": "編輯",
+      "guest": "訪客",
+      "are_u_sure": "確定嗎？",
+      "backward": "後退",
+      "forward": "前進",
+      "back": "返回",
+      "next": "下一步",
+      "notification": "通知",
+      "see_notifications": "查看通知",
+      "open_social_panel": "打開社交面板",
+      "cancel_change": "取消更改",
+      "do_you_really_want_to_cancel_change": "確定要取消更改嗎？",
+      "continue_editing": "繼續編輯",
+      "confirm": "確認",
+      "terms_of_use": "使用條款",
+      "privacy_policy": "私隱政策",
+      "request_made": "請求已發送",
+      "request_canceled": "請求已取消",
+      "cancel_request": "取消請求",
+      "open_menu": "打開選單",
+      "feed": "動態",
+      "about": "關於",
+      "home": "首頁",
+      "search": "搜尋",
+      "explore": "探索",
+      "shop": "商店",
+      "help": "幫助",
+      "legal": "法律資訊",
+      "setting": "設定",
+      "logout": "登出",
+      "to_watch": "待看",
+      "reco_by_your_friends": "朋友們的 reco",
+      "friends_playlists": "朋友們的片單",
+      "latest_activity": "最近動態",
+      "discover_users": "發現用戶",
+      "most_recommended": "被推薦最多",
+      "archive": "封存",
+      "unarchive": "取消封存",
+      "mark_as_read": "標記為已讀",
+      "mark_as_unread": "標記為未讀",
+      "accept": "接受",
+      "accepted": "已接受",
+      "decline": "拒絕",
+      "declined": "已拒絕",
+      "request_accepted": "請求已接受",
+      "request_declined": "請求已拒絕",
+      "unread": "未讀",
+      "archived": "已封存",
+      "no_notifications": "暫無通知",
+      "all": "全部",
+      "mark_all_as_read": "全部標記為已讀",
+      "archive_all": "全部封存",
+      "archive_all_read": "封存所有已讀",
+      "please_login": "請先登入",
+      "like": "點讚",
+      "unlike": "取消點讚",
+      "unfollow": "取消追蹤",
+      "name": "名稱",
+      "add_a_name": "填個名稱",
+      "add_a_description": "寫點描述",
+      "visibility": "可見範圍",
+      "search_an_user": "搜尋用戶",
+      "select_an_item_to_add_to_playlist": "選擇要加入片單的條目",
+      "select_a_film_to_add_to_playlist": "選擇要加入片單的電影",
+      "select_a_tv_series_to_add_to_playlist": "選擇要加入片單的劇集",
+      "add_one_or_more_items_to": "向 <important>{title}</important> 添加一個或多個條目",
+      "add_one_or_more_films_to": "向 <important>{title}</important> 添加一部或多部電影",
+      "add_one_or_more_tv_series_to": "向 <important>{title}</important> 添加一部或多部劇集",
+      "manage_playlist_access_rights": "管理片單存取權限",
+      "add_guest": "添加訪客",
+      "manage_members": "管理成員",
+      "no_member": "暫無成員",
+      "add_member": "添加成員",
+      "manage_guests": "管理訪客",
+      "add_guests_to_your_playlist": "為你的片單添加訪客",
+      "select_users_to_add_to_playlist": "選擇要加入片單的用戶",
+      "select_users_to_send_reco": "選擇要發送 reco 的人",
+      "select_playlists_to_add_the_item": "選擇要添加該條目的片單",
+      "send": "發送",
+      "sent": "已發送",
+      "select_row": "選擇此行",
+      "select_all": "全選",
+      "no_selected_users": "未選擇用戶",
+      "selection_count": "已選擇 {total} 個{type}中的 {number} 個",
+      "about_title": "關於 {title}",
+      "detail": "詳情",
+      "genre": "類型",
+      "male": "男",
+      "female": "女",
+      "non_binary": "非二元",
+      "unspecified": "未指定",
+      "date_of_birth": "出生日期",
+      "date_of_death": "逝世日期",
+      "place_of_birth": "出生地",
+      "age_years": "{count} 歲",
+      "biography": "生平",
+      "no_biography_available": "暫無生平介紹",
+      "no_information_available": "暫無資訊",
+      "already_sent": "已發送過",
+      "already_watched": "已看過",
+      "already_added": "已添加過",
+      "recommend_to_friend_to_discover": "把 <strong>{title}</strong> 推薦給還沒看過的朋友",
+      "add_to_one_or_more_playlists": "把 <strong>{title}</strong> 加入一個或多個片單",
+      "my_playlist": "我的片單",
+      "what_is_title": "<strong>{title}</strong> 是什麼？",
+      "try_again": "再試一次",
+      "error": "錯誤",
+      "not_logged_in": "你尚未登入",
+      "an_error_occurred": "出錯了",
+      "playlist_not_found": "找不到該片單",
+      "user_not_found": "找不到該用戶",
+      "film_not_found": "找不到該電影",
+      "media_not_found": "找不到該作品",
+      "review_not_found": "找不到該影評",
+      "person_not_found": "找不到該影人",
+      "tv_series_not_found": "找不到該劇集",
+      "tv_episode_not_found": "找不到該集",
+      "tv_season_not_found": "找不到該季",
+      "wrong_arguments": "參數有誤",
+      "no_media_found": "沒找到任何作品",
+      "unknown_action": "未知操作",
+      "no_user_found": "沒找到任何用戶",
+      "no_tv_episodes": "暫無劇集單集",
+      "save": "儲存",
+      "saved": "已儲存",
+      "create": "建立",
+      "film_count": "{count} 部電影",
+      "tv_series_count": "{count} 部劇集",
+      "login": "登入",
+      "signup": "註冊",
+      "navigation": "導航",
+      "delete": "刪除",
+      "remove": "移除",
+      "deleted": "已刪除",
+      "share": "分享",
+      "duplicate": "複製一份",
+      "duplicated": "已複製一份",
+      "cancel": "取消",
+      "date": "日期",
+      "duration": "時長",
+      "sort": "排序",
+      "show": "顯示",
+      "column": "列",
+      "comment": "評論",
+      "unknown": "未知",
+      "community": "社羣",
+      "cast_and_crew": "演員與製作團隊",
+      "soon": "即將",
+      "ios_app": "iOS App",
+      "android_app": "Android App",
+      "coming_soon": "即將推出",
+      "new_mobile_app": "全新手機 App！",
+      "manage": "管理",
+      "monthly": "按月",
+      "yearly": "按年",
+      "day": "天",
+      "week": "周",
+      "month": "月",
+      "year": "年",
+      "price": "價格",
+      "free": "免費",
+      "playlist": "片單",
+      "public": "公開",
+      "publish": "發佈",
+      "private": "私密",
+      "description": "描述",
+      "details": "詳情",
+      "profile": "個人檔案",
+      "overview": "簡介",
+      "no_playlists_saved": "沒有收藏的片單",
+      "camera_permission_denied": "相機權限被拒絕",
+      "photo_library_permission_denied": "相簿權限被拒絕",
+      "ignore": "忽略",
+      "ok": "好",
+      "title": "標題",
+      "skip": "跳過",
+      "undo": "撤銷",
+      "date_published": "發佈日期",
+      "date_created": "建立日期",
+      "date_updated": "更新日期",
+      "alphabetical": "按名稱",
+      "date_added": "添加日期",
+      "number_of_likes": "點讚數",
+      "number_of_seasons": "季數",
+      "add_to_this_playlist": "加入這個片單",
+      "save_to_library": "儲存到片庫",
+      "remove_from_library": "從片庫中移除",
+      "otp": "一次性驗證碼",
+      "ratings_from_followees": "你追蹤的人的評分",
+      "choose_from_the_library": "從相簿選擇",
+      "take_a_photo": "拍照",
+      "delete_current_image": "刪除當前圖片",
+      "edit_image": "編輯圖片",
+      "add_image": "添加圖片",
+      "verify_with_a_code": "用驗證碼驗證",
+      "order": "順序",
+      "edit_order": "調整順序",
+      "done": "完成",
+      "can_edit": "可以編輯？",
+      "upgrade": "升級",
+      "no_description": "暫無描述",
+      "no_comment": "暫無評論",
+      "close": "關閉",
+      "edit_playlist": "編輯片單",
+      "universe": "世界觀",
+      "cannot_be_changed": "無法更改",
+      "delete_review": "刪除影評",
+      "do_you_really_want_to_delete_this_review": "確定要刪除這篇影評嗎？",
+      "user_liked_playlist": "<name></name> 讚了一個片單",
+      "user_liked_review": "<name></name> 讚了一篇影評",
+      "runtime": "片長",
+      "ends_at": "{value} 結束",
+      "this_user_has_no_activity": "該用戶暫無動態",
+      "notification_archived": "通知已封存",
+      "notification_unarchived": "通知已取消封存",
+      "notification_marked_as_read": "通知已標記為已讀",
+      "notification_marked_as_unread": "通知已標記為未讀",
+      "or_continue_with": "或使用以下方式繼續",
+      "message": "訊息",
+      "story": "限時動態",
+      "new_playlist": "新片單",
+      "select_a_type": "選擇一個類型",
+      "filter": "篩選",
+      "hide_watched": "隱藏看過的",
+      "show_me_around": "帶我逛一圈",
+      "artwork_from": "插畫：<important>{source}</important>",
+      "no_active_subscription": "沒有生效中的訂閲",
+      "manage_subscription": "管理訂閲",
+      "started_on_date": "開始於 {date}",
+      "last_renewed_on_date": "最後續訂於 {date}",
+      "version_value": "版本 {value}",
+      "original_title": "原名",
+      "starring": "主演",
+      "write_your_review_here": "在這裏寫下你的影評...",
+      "insert": "插入",
+      "trailer": "預告片",
+      "list": "列表",
+      "grid": "網格",
+      "order_asc": "升序",
+      "order_desc": "降序",
+      "menu": "選單",
+      "at_least_one_watched_date_required": "至少需要填一個觀看日期",
+      "viewer": "瀏覽者",
+      "editor": "編輯者",
+      "admin": "管理員",
+      "owner": "所有者",
+      "you_dont_have_permission_to_do_this_action": "你沒有權限執行此操作",
+      "in_progress": "進行中",
+      "give_up": "放棄",
+      "random": "隨機",
+      "reset_password": "重置密碼",
+      "password_reset": "密碼已重置",
+      "return_to_login": "返回登入",
+      "invalid_code": "驗證碼無效",
+      "no_token_found": "找不到權杖",
+      "first_watched_at": "初次觀看日期",
+      "watched_dates": "觀看日期",
+      "no_watched_dates": "暫無觀看日期",
+      "select_role": "選擇角色",
+      "select_format": "選擇形式",
+      "theater": "戲院",
+      "physical": "實體版",
+      "digital": "數碼版",
+      "streaming": "串流",
+      "you_must_be_premium_to_change_member_role": "需要 Premium 才能更改成員角色",
+      "already_member": "已是成員",
+      "email_already_used": "該電子郵件已被使用",
+      "email_confirmed": "電子郵件已確認",
+      "confirmation_email_sent": "確認郵件已發送",
+      "continue": "繼續",
+      "finish": "完成",
+      "forgot_password": "忘記密碼",
+      "new_password": "新密碼",
+      "confirm_password": "確認密碼",
+      "password_reseted": "密碼已重置",
+      "reset_your_password": "重置你的密碼",
+      "invalid_token": "權杖無效",
+      "new_notification": "新通知",
+      "lets_go": "走吧！",
+      "update_available": "有可用更新",
+      "update_available_description": "更新App，體驗最新改進。",
+      "update_required_title": "需要更新",
+      "update_required_description": "該版本的App已不再支援。請更新後繼續使用 Recomend。",
+      "update_app": "更新",
+      "advertisement": "廣告",
+      "pending": "等待中",
+      "processing": "處理中",
+      "awaiting_review": "待審核",
+      "failed": "失敗",
+      "data": "資料",
+      "restore": "恢復",
+      "fix": "修正",
+      "not_found": "未找到",
+      "unavailable": "不可用",
+      "star_on_github": "在 GitHub 上給我們點個 star"
+    },
+    "form": {
+      "email": {
+        "label": "電子郵件",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "電子郵件格式不正確",
+          "unavailable": "該電子郵件已被使用"
+        },
+        "verified": "電子郵件已驗證"
+      },
+      "username": {
+        "label": "用戶名稱",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "首字符必須是字母或數字",
+          "double_dot": "不能連續使用兩個點",
+          "ends_with_dot": "不能以點結尾",
+          "format": "只能使用字母、數字以及 '_' 和 '.'",
+          "unavailable": "該用戶名稱已被佔用"
+        }
+      },
+      "full_name": {
+        "label": "姓名",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "只能使用字母、數字和空格"
+        }
+      },
+      "password": {
+        "label": "密碼",
+        "placeholder": "輸入你的密碼",
+        "schema": {
+          "uppercase": "至少需要一個大寫字母",
+          "lowercase": "至少需要一個小寫字母",
+          "number": "至少需要一個數字",
+          "special": "至少需要一個特殊字符",
+          "match": "兩次輸入的密碼不一致"
+        },
+        "confirm": {
+          "label": "確認密碼",
+          "placeholder": "再次輸入你的密碼"
+        }
+      },
+      "length": {
+        "char_min": "至少 {count} 個字符",
+        "char_max": "最多 {count} 個字符"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "只能使用字母、數字和空格"
+      },
+      "error": {
+        "too_many_attempts": "嘗試次數過多，請稍後再試",
+        "not_received_code": "沒收到驗證碼？",
+        "invalid_code": "驗證碼無效",
+        "turnstile": "驗證失敗，請再試一次"
+      },
+      "resend_code": "重新發送驗證碼",
+      "resend_email": "重新發送郵件",
+      "code_verified": "驗證碼已透過",
+      "code_sent": "驗證碼已發送"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "頁面不存在",
+        "description": "哎呀，這個頁面不存在..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "記錄",
+        "description": "發現、評分並分享你最愛的電影和劇集。"
+      },
+      "recos": {
+        "label": "reco",
+        "description": "發出和收到朋友們的 reco，全都在一個地方。"
+      },
+      "playlists": {
+        "label": "片單",
+        "description": "整理、分享，和大家一起搭建片單。"
+      },
+      "feed": {
+        "label": "動態",
+        "description": "追蹤朋友，看看他們在看什麼、喜歡什麼、寫了什麼。"
+      },
+      "social_sharing": {
+        "label": "社交分享",
+        "description": "把喜歡的一切分享到 Instagram 或其他社交平台。"
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "記錄",
+          "description": "把看過的電影記得清清楚楚"
+        },
+        "recos": {
+          "label": "Reco",
+          "description": "給朋友發電影推薦"
+        },
+        "explore": {
+          "label": "探索",
+          "description": "在收錄 1400 多部電影的互動地圖 Paradise Pictures 上發現新片"
+        },
+        "like": {
+          "label": "點讚",
+          "description": "為你喜歡的電影、片單和影評表達愛意"
+        },
+        "rating": {
+          "label": "評分",
+          "description": "給看過的電影打分"
+        },
+        "watchlist": {
+          "label": "想看",
+          "description": "把想看的電影存起來"
+        },
+        "playlists": {
+          "label": "片單",
+          "description": "把電影整理成片單並分享出去"
+        },
+        "reviews": {
+          "label": "影評",
+          "description": "寫影評，放出你心裏那個嘴挑的影迷"
+        },
+        "feed": {
+          "label": "動態",
+          "description": "追蹤朋友們的動態"
+        },
+        "adsFree": {
+          "label": "無廣告",
+          "description": "永遠無廣告地使用 Recomend"
+        }
+      }
+    },
+    "welcome": {
+      "title": "感謝註冊！",
+      "description": "快速看看用 {app} 都能做些什麼。",
+      "follow": {
+        "title": "追蹤一些人",
+        "description": "追蹤朋友，看看他們在看什麼。"
+      },
+      "import": {
+        "title": "從別的平台過來的？"
+      }
+    },
+    "collection": {
+      "label": "片庫",
+      "my_recos": {
+        "label": "我的 reco",
+        "search": {
+          "placeholder": "在我的 reco 中搜尋..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "從我的 reco 中刪除",
+            "description": "確定要把 <important>{title}</important> 從你的 reco 中刪除嗎？"
+          },
+          "complete_confirm": {
+            "title": "完成這個 reco",
+            "description": "確定要完成 reco <important>{title}</important> 嗎？"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "在想看中搜尋..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "從想看中刪除",
+            "description": "確定要把 <important>{title}</important> 從想看中刪除嗎？"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "在心頭好中搜尋..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "從心頭好中刪除",
+            "description": "確定要把 <important>{title}</important> 從心頭好中刪除嗎？"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> 看了",
+        "rated": "<name></name> 評分了",
+        "liked": "<name></name> 讚了",
+        "rated_liked": "<name></name> 讚了並評分了",
+        "reviewed": "<name></name> 寫了影評"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> 在 <linkMedia>{titleMedia}</linkMedia> 中擔任<important>{roles}</important>",
+        "label": "<linkPerson>{name}</linkPerson> 擔任<important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "授權App",
+        "description_generic": "有App正在請求存取你的帳號。",
+        "description": "{client} 想要存取你的帳號。",
+        "scopes_label": "這將允許該App：",
+        "accept": "允許",
+        "deny": "拒絕",
+        "error": {
+          "invalid_request": "請求無效或已過期",
+          "invalid_request_description": "請回到把你帶到這裏的App，重新開始授權流程。",
+          "client_not_found": "找不到這個App。",
+          "submit_failed": "出了點問題，請再試一次。"
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "登入你的 {app} 帳號。"
+        },
+        "label": "登入",
+        "description": "發現最好的電影推薦。",
+        "or_continue_with": "或使用以下方式繼續",
+        "no_account_yet": "還沒有帳號？",
+        "form": {
+          "identifier": {
+            "label": "電子郵件或用戶名稱",
+            "placeholder": "輸入你的電子郵件或用戶名稱"
+          },
+          "password": {
+            "label": "密碼",
+            "placeholder": "輸入你的密碼"
+          },
+          "submit": "登入",
+          "forgot_password": "忘記密碼？",
+          "wrong_credentials": "電子郵件或密碼不正確"
+        },
+        "otp": {
+          "password_login": "想用密碼登入？",
+          "form": {
+            "submit": "獲取驗證碼",
+            "no_user_found": "沒有使用該電子郵件的用戶",
+            "success": "已登入"
+          },
+          "confirm_form": {
+            "label": "確認驗證碼",
+            "description": "驗證碼已發送至 {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "註冊 {app}，發現並分享電影推薦。"
+        },
+        "description": "註冊帳號，把電影推薦給那個總是記不住片名的朋友。",
+        "form": {
+          "success": "驗證郵件已發送至 {email}"
+        },
+        "confirm_form": {
+          "label": "確認電子郵件",
+          "description": "驗證連結已發送至 {email}"
+        },
+        "return_to_login": "哎呀，我已經有帳號了。"
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "忘記密碼",
+          "description": "重置你的密碼。"
+        },
+        "label": "忘記密碼",
+        "description": "建議用個密碼管理器，真的很省事。",
+        "return_to_login": "哎呀，我其實想起來了。",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "重置密碼",
+          "code_sent": "請求已發送"
+        },
+        "confirm_form": {
+          "label": "確認驗證碼",
+          "description": "驗證碼已發送至 {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "重置密碼",
+          "description": "為你的帳號設定新密碼。"
+        }
+      },
+      "error": {
+        "label": "錯誤",
+        "description": "認證過程中出錯了。",
+        "return_to_login": "回到安全的地方"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "關於",
+        "marquee": "你的生活裏沒有比在網上翻「關於」頁面更帶勁的事了？",
+        "intro": "<strong>Recomend</strong> 是一個專為發現、推薦和整理電影而生的空間。我們把一切都想過一遍，只為讓口口相傳終於擁有最好的數字依託。在消費圍着自己轉——更確切地説，圍着「為你推薦」轉——的年代裏，我們的做法把人和人與人的關係放在中心。",
+        "slogan": {
+          "1": "沒有廣告，也沒有可疑的承諾。🍆",
+          "2": "它既是社交網絡，也是一件工具。",
+          "3": "一羣愛電影的人手工做出來的。",
+          "4": "業餘，取這個詞最本真的意思。"
+        },
+        "last": "Recomend 可以一個人用，也可以和別人一起用；可以公開，也可以私下；白天黑夜都行，但別在看電影的時候用——專心點！"
+      },
+      "team": {
+        "label": "團隊",
+        "intro": "Recomend 由兩位痴迷電影的兄弟做出來。他們喜歡把時間投進過於野心勃勃、也許永遠見不到天日的專案裏。",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "一位多動的建築師兼工程師，一份工作滿足不了他（真正的「創業之國」）。電影地圖這個想法就來自 Yoann，最初的野心很樸素：做一張貼在自己廁所的海報。Loup 加入之後目標直衝天花板，他在略被潮水推著走的同時，接下了地圖和網站的全部圖形設計，還有全部對外溝通（儘管他並不喜歡）。此外他還對 UX/UI 發表意見，提出一大堆功能，卻沒完全意識到寫程式碼有多難（這方面已經有進步了）。"
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "徹底的自學者，卻還是念完了一段在 25 歲前把他送進「無薪失業」的學業。真正的萬事通，Loup 負責網頁這一側，寫着一個儘量好用的介面。Loup 想感謝所有回答過他（非常非常）多問題的程式設計論壇，也想感謝這些月裏像養父一樣帶他的印度 YouTuber 們。至於他媽媽，始終相信他是被哥哥抓來給這個專案當奴工的（我沒事，媽）。"
+          }
+        },
+        "last": "想聯絡我們或社羣裏的其他人，歡迎加入我們的 <link>Discord</link>！"
+      },
+      "pricing": {
+        "label": "價格",
+        "intro": "這個訂閲模式首先是一種支持專案、幫它繼續長大的方式。Premium 功能是給深度使用 Recomend 的人的額外部分，也對得起一點點經濟上的支持。免費、無廣告、不讓人覺得被限制地使用網站的那條路，我們會一直留着。",
+        "subdescription": "*如果這個低到有點可笑的訂閲價仍然超出你的能力，請去找讓你購買力縮水的那個自由派政府。"
+      },
+      "legal": {
+        "label": "法律與私隱",
+        "description": "我們尊重你的私隱。向訪客用戶展示的廣告由 Google 管理，需要使用技術性 Cookie 來限制展示頻率並防止欺詐。",
+        "privacyPolicy": "閲讀我們的私隱政策",
+        "manageCookies": "管理我的廣告偏好（Cookie）"
+      },
+      "open-source": {
+        "label": "開源",
+        "intro": "Recomend 是開源的：程式碼公開在 GitHub 上。來看看、來貢獻，或者只是給我們點個 star 也好！",
+        "star": "在 GitHub 上給我們點個 star"
+      },
+      "businessmodel": {
+        "label": "商業模式",
+        "paragraph": {
+          "1": "從我們一點都不商業的個人畫像裏你大概能猜到——我們還沒想清楚現在的商業模式能給我們帶來什麼...",
+          "2": "如果 Recomend 的未來需要，我們會去研究，並把合適的人請到身邊——至少是比我們更感興趣的人。",
+          "3": "在那之前，説實話，還有別的事要忙。"
+        }
+      },
+      "roadmap": {
+        "label": "路線圖"
+      },
+      "data": {
+        "label": "資料",
+        "paragraph": {
+          "1": "Recomend 上用到的所有元資料，都由 <link>The Movie Database (TMDb)</link> 透過平台 API 提供。我們和大家一樣，像聽話的羊。",
+          "2": "若有錯誤或缺失的電影，請聯絡 <link>TMDb</link>。"
+        }
+      },
+      "resources": {
+        "label": "資源",
+        "intro": "這和電影其實沒太大關係，但這是我們喜歡的網站清單："
+      },
+      "contact-support": {
+        "label": "聯絡與支援",
+        "help-center": "在我們的<link>幫助中心</link>裏找到那些關於存在的疑問的答案。",
+        "technical-support": "技術問題：<email></email>",
+        "suggest-a-feature": "建議：<email></email>",
+        "contact-us": "只想跟我們聊聊：<email></email>"
+      },
+      "quote": {
+        "label": "引用",
+        "quote": "「我討厭『專業』這個詞。那些演員和別的人説：我是專業的，我是 pro！這是什麼意思？還有比這更悲傷的詞嗎？因為『業餘』這個詞來自愛。做事要出於愛，否則我們就是傻子。」",
+        "author": "奧森·威爾斯",
+        "date": "1972 年",
+        "subdescription": "*我們猶豫過要不要放上來，因為它很容易顯得自大，但它確實寫出了我們對這個專案的心情。當然，如果你不喜歡，我們就撤下。"
+      }
+    },
+    "settings": {
+      "label": "設定",
+      "description": "管理你的帳號設定。",
+      "profile": {
+        "label": "個人檔案",
+        "description": "別人在站上會這樣看到你。",
+        "avatar": {
+          "label": "頭像",
+          "delete": "刪除"
+        },
+        "full_name": {
+          "label": "姓名",
+          "description": "這個名字會顯示在你的個人檔案和郵件裏。",
+          "placeholder": "輸入你的名字",
+          "form": {
+            "min_length": "名字至少要 1 個字符",
+            "max_length": "名字不能超過 50 個字符"
+          }
+        },
+        "bio": {
+          "label": "簡介",
+          "description": "説點關於你自己的事，它會出現在你的個人檔案上。",
+          "placeholder": "介紹一下你自己",
+          "form": {
+            "max_length": "簡介不能超過 150 個字符",
+            "format": "簡介不能包含空行，也不能只有空格。"
+          }
+        },
+        "favorite_films": {
+          "label": "最愛的電影",
+          "description": ""
+        },
+        "url": {
+          "label": "網址",
+          "description": "",
+          "form": {
+            "invalid": "網址無效"
+          }
+        }
+      },
+      "account": {
+        "label": "帳號",
+        "description": "更新你的帳號設定。",
+        "username": {
+          "label": "用戶名稱",
+          "description": "這是別人用來找到你、存取你個人檔案的用戶名稱。每 30 天只能改一次。",
+          "placeholder": "輸入你的用戶名稱",
+          "form": {
+            "min_length": "用戶名稱至少要 3 個字符",
+            "max_length": "用戶名稱不能超過 15 個字符",
+            "invalid": "用戶名稱只能包含字母、數字以及 '_' 和 '.'",
+            "unavailable": "該用戶名稱已被佔用"
+          }
+        },
+        "private": {
+          "label": "私密帳號",
+          "description": "當你的帳號為私密時，只有朋友能看到你的動態。"
+        },
+        "email": {
+          "description": "驗證郵件會同時發到你當前的電子郵件和新電子郵件。兩邊都確認後更改才會生效。",
+          "change_pending": "驗證郵件已發送至你的新電子郵件 <strong>{email}</strong>。點擊連結或輸入驗證碼來確認更改。",
+          "confirm_email_code": {
+            "description": "輸入發送到 <strong>{email}</strong> 的驗證碼，以確認此次更改。"
+          },
+          "change_success": "你的電子郵件已成功更改"
+        },
+        "delete_account": {
+          "button": "刪除我的帳號",
+          "confirm": {
+            "description": "確定要刪除你的帳號嗎？此操作無法撤銷。",
+            "confirm_email_sent": "驗證郵件已發送到你的電子郵件"
+          }
+        }
+      },
+      "appearance": {
+        "label": "外觀",
+        "description": "自訂App的外觀。日間與夜間主題會自動切換。",
+        "language": {
+          "label": "語言",
+          "description": "選擇語言——更改會在重啟App後生效",
+          "placeholder": "選擇語言",
+          "not_found": "找不到該語言"
+        },
+        "theme": {
+          "label": "主題",
+          "description": "選擇介面主題。",
+          "options": {
+            "light": "淺色",
+            "dark": "深色"
+          }
+        }
+      },
+      "subscription": {
+        "label": "訂閲",
+        "description": "管理訂閲，解鎖 Premium 功能。"
+      },
+      "security": {
+        "label": "安全",
+        "description": "更改密碼會讓你在除當前設備以外的所有設備上登出。",
+        "current_password": {
+          "label": "當前密碼",
+          "placeholder": "輸入你當前的密碼",
+          "form": {
+            "required": "請輸入你當前的密碼",
+            "invalid": "當前密碼不正確"
+          }
+        },
+        "new_password": {
+          "label": "新密碼",
+          "placeholder": "輸入你的新密碼",
+          "form": {
+            "min_length": "密碼至少要 8 個字符",
+            "uppercase": "至少需要一個大寫字母",
+            "lowercase": "至少需要一個小寫字母",
+            "number": "至少需要一個數字",
+            "special": "至少需要一個特殊字符"
+          }
+        },
+        "confirm_password": {
+          "label": "確認新密碼",
+          "placeholder": "再次輸入你的新密碼",
+          "form": {
+            "match": "兩次輸入的密碼不一致"
+          }
+        }
+      },
+      "notifications": {
+        "label": "通知",
+        "description": "管理你的通知設定。",
+        "push_notifications": {
+          "label": "推送通知",
+          "form": {
+            "enable": "開啟推送通知"
+          },
+          "already_granted": "通知權限已經請求過了；要修改請前往瀏覽器設定。",
+          "no_enabled": "請在設備設定中開啟通知，才能收到推送。",
+          "open_settings": "前往設備設定"
+        }
+      },
+      "data": {
+        "label": "資料",
+        "description": "匯入或匯出你的資料。",
+        "importer": {
+          "label": "匯入",
+          "select_source": "選擇來源",
+          "instructions_title": "説明",
+          "browse_prompt": "把檔案拖到這裏，或<link>瀏覽選擇</link>",
+          "browse_prompt_mobile": "點擊選擇檔案",
+          "uploading": "正在上傳…",
+          "processing": "正在分析你的檔案…",
+          "upload_error": "上傳失敗，請再試一次。",
+          "invalid_file_type": "該來源不支援這種檔案類型。",
+          "review_title": "檢查匯入內容",
+          "review_summary": "{total} 項中匹配 {matched} 項",
+          "validate": "確認匯入",
+          "validate_confirm_description": "這會把所有匹配且未跳過的條目匯入你的片庫。無法撤銷。",
+          "success_title": "匯入完成",
+          "success_description": "你的資料已成功匯入。",
+          "failed_title": "匯入失敗",
+          "failed_description": "處理這次匯入時出了問題。",
+          "pending_description": "你的匯入正在排隊，很快就會開始。",
+          "empty": "還沒有匯入記錄。",
+          "delete_confirm_description": "這次匯入以及它準備好的所有資料都會被永久刪除。無法撤銷。",
+          "keep_existing": "保留我的",
+          "use_imported": "使用匯入的",
+          "merge": "合併",
+          "conflict": "衝突",
+          "no_match": "無匹配",
+          "existing_rating": "當前：{rating}",
+          "log_column": "日誌",
+          "actions_column": "操作",
+          "categories": {
+            "log_movies": "電影",
+            "log_tv_series": "劇集",
+            "bookmarks": "想看",
+            "playlists": "片單"
+          },
+          "status": {
+            "pending": "等待中",
+            "processing": "處理中",
+            "awaiting_review": "待審核",
+            "completed": "已完成",
+            "failed": "失敗"
+          }
+        },
+        "exporter": {
+          "label": "匯出"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "升級到 Premium",
+        "description": "升級到 Premium 帳號，解鎖 {app} 的全部功能。"
+      },
+      "header": {
+        "title": "擴展你的電影世界，分享更多，支持 {app}",
+        "subtitle": "免費試用 1 個月，之後每月 {price}"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "動態",
+            "unlimited_activities": {
+              "label": "不限量動態",
+              "description": "評分、點讚、影評、想看和推薦"
+            },
+            "favorites": {
+              "label": "最愛",
+              "description": "把最愛的電影放到你的個人檔案上"
+            }
+          },
+          "playlists": {
+            "label": "片單",
+            "unlimited_playlists": {
+              "label": "不限數量",
+              "description": "建立數量不受限制的片單"
+            },
+            "shared_playlists": {
+              "label": "共享",
+              "description": "把你的片單分享給其他用戶"
+            },
+            "collaborative_playlists": {
+              "label": "協作",
+              "description": "和其他用戶一起建立片單"
+            }
+          },
+          "feed": {
+            "label": "動態",
+            "followees": {
+              "label": "你追蹤的用戶",
+              "description": "查看你追蹤的用戶的動態"
+            },
+            "cast_and_crew": {
+              "label": "演員與製作團隊",
+              "description": "追蹤參與電影的人的動態"
+            }
+          },
+          "support": {
+            "label": "支持",
+            "team": {
+              "label": "支持 {app} 團隊"
+            },
+            "credits": {
+              "label": "片尾名單",
+              "description": "你的個人檔案出現在App的片尾名單裏"
+            }
+          }
+        },
+        "success": {
+          "label": "感謝你的支持！"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} - @{username} 的片單",
+        "description": "來 {app} 看看 @{username} 的電影片單。"
+      },
+      "actions": {
+        "delete": {
+          "description": "這會把 <important>{title}</important> 從你的片單中永久刪除。"
+        }
+      },
+      "search": {
+        "placeholder": "在片單中搜尋..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "確定要把 <important>{title}</important> 從你的片單中刪除嗎？"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "輸入片單標題"
+        },
+        "description": {
+          "placeholder": "寫點片單的描述"
+        },
+        "error": {
+          "format": "描述不能包含空行，也不能只有空格。"
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name}（@{username}）",
+        "description": "來 {app} 看看 @{username} 的個人檔案。"
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title}（{year}）",
+        "description": "{title} 是 {directors} 執導的電影，{year} 年上映。劇情：{overview}",
+        "description_no_director": "{title} 是一部 {year} 年上映的電影。劇情：{overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title}（{year}）• 片單",
+          "description": "看看所有收錄了電影 {title} 的片單。"
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title}（{year}）• 影評",
+          "description": "看看電影 {title} 的所有影評。"
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title}（{year}）",
+        "description": "{title} 是 {creators} 創作的劇集，{year} 年首播。劇情：{overview}",
+        "description_no_creator": "{title} 是一部 {year} 年首播的劇集。劇情：{overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title}（{year}）• 片單",
+          "description": "看看所有收錄了劇集 {title} 的片單。"
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title}（{year}）• 影評",
+          "description": "看看劇集 {title} 的所有影評。"
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • 季",
+          "description": "看看劇集 {title} 的所有季。"
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • 第 {number} 季",
+            "description": "看看劇集 {title} 第 {number} 季的所有單集。"
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • 電影",
+          "description": "看看 {name} 出演或參與過的所有電影。"
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • 劇集",
+          "description": "看看 {name} 出演或參與過的所有劇集。"
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "@{username} 對 {title} 的影評"
+      },
+      "create": {
+        "metadata": {
+          "title": "寫一篇關於 {title} 的影評",
+          "description": "分享你對 {title} 的看法。"
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "探索 Paradise Pictures",
+        "description": "啟程去發現這座島和它豐富多樣的地貌。住在島上的眾多電影，都安放在各自故事的世界裏。你能把每個角落都走遍嗎？"
+      }
+    },
+    "legal": {
+      "label": "法律資訊",
+      "description": "閲讀 {app} 的法律檔案。",
+      "terms_of_use": {
+        "metadata": {
+          "title": "使用條款",
+          "description": "閲讀 {app} 的使用條款。"
+        },
+        "sections": {
+          "intro": "本使用條款（以下稱「條款」）規定對App {app} 的存取與使用。本App由位於巴黎的 Loup（以下稱「發行方」）發行。在 {app} 註冊即表示無保留地接受本條款。",
+          "presentation": {
+            "label": "1. 服務介紹",
+            "content": "{app} 是一款免費App，用戶可以查看電影資訊、發佈影評、為作品評分並建立個人片單。"
+          },
+          "account": {
+            "label": "2. 帳號與安全",
+            "content": "使用參與類功能需要建立帳號。用戶有責任保管好自己的登入資訊。若出現被冒用或疑似被盜的情況，用戶須立即聯絡客服：<email></email>。"
+          },
+          "conduct": {
+            "label": "3. 行為規範",
+            "content": "用戶承諾在影評和片單中保持禮貌與尊重。嚴格禁止：仇恨、誹謗或種族主義言論，騷擾行為，以及垃圾訊息或未經許可的商業推廣。發行方保留刪除任何違反上述規則的內容、並在不另行通知的情況下暫停相關帳號的權利。"
+          },
+          "child_safety": {
+            "label": "4. 兒童保護政策",
+            "content": "{app} 對兒童性虐待與性剝削（CSAE）採取嚴格的零容忍政策。在 {app} 上，明確且絕對禁止建立、上傳、儲存、傳播、索取或推廣任何將未成年人性化、對其進行剝削或以其他方式使其處於危險中的內容。任何被認定違反本政策的帳號都會被立即永久封鎖，發行方還會依照適用法律，將相關內容連同可獲得的用戶資訊一併報告給 National Center for Missing & Exploited Children（NCMEC）和/或主管執法機關。任何用戶若發現可能構成 CSAE 的內容或行為，須立即報告至：<email></email>。"
+          },
+          "intellectual_property": {
+            "label": "5. 知識產權",
+            "content": "用戶仍然是自己所寫影評的權利人。但在 {app} 上發佈，即表示授予發行方一項免費、非獨佔的許可，可在App內展示、複製並在技術上調整該內容。{app} 的視覺元素、程式碼與設計均為發行方的專有財產。"
+          },
+          "privacy": {
+            "label": "6. 個人資料",
+            "content": "尊重你的私隱是我們絕對優先的事。{app} 不會把任何個人資料出售、出租或分享給商業或廣告類第三方。所收集的資料（電子郵件、用戶名稱、App內動態）僅用於服務運作和帳號管理。你可以透過以下方式行使存取、修改或刪除（GDPR）的權利：<email></email>。"
+          },
+          "cookies": {
+            "label": "7. Cookie 與追蹤器",
+            "content": "{app} 不使用任何廣告 Cookie，也不使用任何第三方行為追蹤器。只使用兩種技術性 Cookie：一個用於身分驗證（讓你保持登入），一個用於語言偏好（記住你的選擇）。由於這些 Cookie 對服務而言必不可少，因此無需事先徵得同意。"
+          },
+          "ads": {
+            "label": "8. 廣告",
+            "content": "本App目前不含任何廣告。若此做法有變，我們會透過更新本條款告知用戶。"
+          },
+          "liability": {
+            "label": "9. 責任",
+            "content": "發行方會努力讓 {app} 全天候可用，但不保證不會出現中斷或故障。電影資訊來自第三方資料庫；對其中可能存在的不準確之處，發行方不承擔責任。"
+          },
+          "law": {
+            "label": "10. 適用法律",
+            "content": "本條款適用法國法律。若發生無法透過 <email></email> 友好解決的爭議，巴黎法院擁有專屬管轄權。"
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "私隱政策",
+          "description": "閲讀 {app} 的私隱政策。"
+        },
+        "sections": {
+          "intro": "資料保護位於 {app} 理念的中心。本政策説明我們收集哪些資料、為什麼收集，以及如何保護它們。簡單説：我們不賣你的資料。",
+          "controller": {
+            "label": "1. 資料控制者",
+            "content": "資料控制者為位於巴黎（法國）的 Loup。任何與私隱相關的問題，都可以聯絡：<email></email>。"
+          },
+          "collected_data": {
+            "label": "2. 收集的資料",
+            "content": "我們只收集App運作所必需的資料：你的電子郵件地址（用於身分驗證）、你的用戶名稱，以及你的使用資料（評分過的電影、影評、片單）。你的密碼以加密（雜湊）且安全的方式儲存。"
+          },
+          "purpose": {
+            "label": "3. 處理目的",
+            "content": "你的資料僅用於：讓你建立和管理帳號、顯示你的片單與評分、保障服務的技術運作。我們不會把你的資料用於廣告分析。"
+          },
+          "sharing": {
+            "label": "4. 資料分享",
+            "content": "你的個人資料絕不會被出售、出租或轉交給第三方。資料可能託管在我們的技術服務商處（主機託管、事務性郵件服務），他們受嚴格的保密義務約束並遵守 GDPR。"
+          },
+          "retention": {
+            "label": "5. 儲存期限",
+            "content": "只要你的帳號仍然活躍，資料就會保留。如果你決定刪除帳號，你的所有個人資料（電子郵件、用戶名稱、影評）都會從我們的資料庫中永久清除。"
+          },
+          "rights": {
+            "label": "6. 你的權利（GDPR）",
+            "content": "依照法規，你有權存取、更正、轉移和刪除自己的資料。你可以隨時在App內直接行使這些權利，或寫信給我們：<email></email>。"
+          },
+          "cookies": {
+            "label": "7. Cookie",
+            "content": "正如使用條款中所述，我們只使用必要的技術性 Cookie（會話與語言）。不會在你的設備上放置任何第三方廣告或追蹤 Cookie。"
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "搜尋電影、劇集、片單、影人或用戶..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "確定要把這部作品從看過中移除嗎？如果你有評分或影評，它們也會被刪除。"
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "確定要完成這部劇集嗎？所有季的所有單集都會標記為看過。"
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "確定要完成第 {seasonNumber} 季嗎？該季的所有單集都會標記為看過。"
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "想在這裏看到動態，你或你追蹤的用戶需要給電影、劇集等評分..."
+    },
+    "feed_person": {
+      "message": "想在這裏看到動態，你需要追蹤參與電影或劇集的影人。"
+    },
+    "playlists": {
+      "items": {
+        "empty": "這個片單裏還沒有電影或劇集。加幾部把它填滿吧！"
+      },
+      "add_to": {
+        "empty": "你還沒有片單。建立一個，把電影或劇集放進去，以後輕鬆找到！"
+      },
+      "saved": {
+        "empty": "你還沒有收藏片單。收藏一個，就能在片庫裏輕鬆找到！"
+      },
+      "members": {
+        "empty": "這個片單還沒有成員。加幾個人，一起打理同一個片單！",
+        "search": "搜尋要加入片單的用戶..."
+      }
+    },
+    "follow-requests": {
+      "empty": "你沒有待處理的追蹤請求。等有了，就會顯示在這裏！"
+    },
+    "recos": {
+      "empty": "你還沒有收到推薦。等有了，就會顯示在這裏！",
+      "send_to": {
+        "empty": "你還沒有可以發推薦的人。要互相追蹤成為朋友，才能給對方發推薦！"
+      }
+    },
+    "bookmarks": {
+      "empty": "你還沒有收藏任何內容。等收藏了，就會顯示在這裏！"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> 向你推薦了電影 <movie></movie>"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> 向你推薦了劇集 <tv_series></tv_series>"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> 看了你推薦的電影 <movie></movie>"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> 看了你推薦的劇集 <tv_series></tv_series>"
+    },
+    "follower_created": {
+      "description": "<user></user> 追蹤了你"
+    },
+    "follower_accepted": {
+      "description": "<user></user> 接受了你的追蹤請求"
+    },
+    "follower_request": {
+      "description": "<user></user> 想追蹤你"
+    },
+    "friend_created": {
+      "description": "<user></user> 現在是你的朋友了"
+    }
+  }
+}

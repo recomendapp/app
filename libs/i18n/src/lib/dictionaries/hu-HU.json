@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "Egy másik módja a film felfedezésének",
+    "description": "A {app} egy közösségi hálózat filmszeretőknek. Fedezd fel, oszd meg és böngészd a filmeket és sorozatokat a barátaiddal."
+  },
+  "common": {
+    "messages": {
+      "welcome": "Üdv",
+      "welcome_to_app": "Üdv a {app}-on",
+      "hello": "Szia",
+      "greeting_with_name": "{timeOfDay, select, morning {Jó reggelt, {name}} afternoon {Jó napot, {name}} evening {Jó estét, {name}} night {Jó éjt, {name}} other {Szia, {name}}}",
+      "click_here": "Kattints ide",
+      "see_more": "Több megjelenítése",
+      "see_more_details": "További részletek",
+      "more": "Több",
+      "view_profile": "Profil megtekintése",
+      "library": "Könyvtár",
+      "watchlist": "Megnézendők",
+      "for_later": "Későbbre",
+      "heart_pick": "{count, plural, one {szívügy} other {szívügyek}}",
+      "add_to_heart_picks": "Hozzáadás a szívügyekhez",
+      "remove_from_heart_picks": "Eltávolítás a szívügyek közül",
+      "add_rating": "Értékelés hozzáadása",
+      "edit_rating": "Értékelés szerkesztése",
+      "remove_rating": "Értékelés eltávolítása",
+      "share_my_rating": "Értékelésem megosztása",
+      "share_review": "Kritika megosztása",
+      "show_likes_count": "Like-ok számának megjelenítése",
+      "show_comments_count": "Hozzászólások számának megjelenítése",
+      "add_to_watchlist": "hozzáadás a megnézendőkhöz",
+      "remove_from_watchlist": "eltávolítás a megnézendők közül",
+      "no_results": "nincs találat",
+      "no_results_for": "Nincs találat erre: <strong>{query}</strong>",
+      "no_followees": "Nem követsz senkit",
+      "no_followers": "Nincsenek követők",
+      "no_rating": "Nincs értékelés",
+      "must_watch_to_review": "látnod kell ezt a művet, hogy értékelhesd",
+      "review_cannot_be_empty": "a kritika nem lehet üres",
+      "no_activity": "nincs aktivitás",
+      "followers_ratings": "a követők értékelései",
+      "added_by": "hozzáadta",
+      "sort_by": "rendezés",
+      "sort_order": "rendezési sorrend",
+      "go_to_film": "ugrás a filmhez",
+      "go_to_tv_series": "ugrás a sorozathoz",
+      "go_to_user": "ugrás a felhasználóhoz",
+      "go_to_person": "ugrás a személyhez",
+      "go_to_activity": "ugrás az aktivitáshoz",
+      "go_to_playlist": "ugrás a listához",
+      "go_to_review": "ugrás a kritikához",
+      "go_to_director": "{count, plural, one {ugrás a rendezőhöz} other {ugrás a rendezőkhöz}}",
+      "go_to_creator": "{count, plural, one {ugrás az alkotóhoz} other {ugrás az alkotókhoz}}",
+      "show_director": "{count, plural, one {rendező megjelenítése} other {rendezők megjelenítése}}",
+      "show_creator": "{count, plural, one {alkotó megjelenítése} other {alkotók megjelenítése}}",
+      "show_credit": "{count, plural, one {közreműködés megjelenítése} other {közreműködések megjelenítése}}",
+      "credits": "végefőcím",
+      "view_recommendation": "{count, plural, one {reco megtekintése} other {recók megtekintése}}",
+      "view_directors": "{count, plural, one {rendező megtekintése} other {rendezők megtekintése}}",
+      "no_director": "nincs rendező",
+      "view_comment": "{count, plural, one {hozzászólás megtekintése} other {hozzászólások megtekintése}}",
+      "add_comment": "{count, plural, one {hozzászólás írása} other {hozzászólások írása}}",
+      "edit_comment": "{count, plural, one {hozzászólás szerkesztése} other {hozzászólások szerkesztése}}",
+      "delete_comment": "Hozzászólás törlése",
+      "do_you_really_want_to_delete_this_comment": "Biztosan törölni akarod ezt a hozzászólást?",
+      "comment_deleted": "Ezt a hozzászólást törölték",
+      "write_your_comment_here": "Írj egy hozzászólást...",
+      "reply": "Válasz",
+      "replies_count": "{count, plural, one {# válasz} other {# válasz}}",
+      "view_replies": "{count, plural, one {# válasz} other {# válasz}} megtekintése",
+      "hide_replies": "Válaszok elrejtése",
+      "load_more_replies": "További válaszok",
+      "get_started": "kezdjük",
+      "get_started_its_free": "indulás 🎬, ingyenes!",
+      "import": "Importálás",
+      "upgrade_to_plan": "váltás erre: {plan}",
+      "choose_subscription_recurrence": "válaszd ki az előfizetésed számlázási időszakát",
+      "compare_plans": "csomagok összehasonlítása",
+      "save_up_to_percent": "spórolj akár {percent}%-ot",
+      "is_empty": "Kicsit üres itt",
+      "add_to_playlist": "hozzáadás egy listához",
+      "send_to_friend": "elküldés egy barátnak",
+      "pin_to_profile": "Kitűzés a profilra",
+      "unpin_from_profile": "Levétel a profilról",
+      "pinned": "Kitűzve",
+      "unpinned": "Levéve",
+      "no_pinned": "Nincsenek kitűzött elemek",
+      "pinned_limit_reached": "Elérted a kitűzött elemek maximális számát — vedd le az egyiket, hogy újat adhass hozzá",
+      "custom_sort": "saját rendezés",
+      "quick_add": "gyors hozzáadás",
+      "favorite_films": "kedvenc filmek",
+      "follow": "követés",
+      "followed": "követve",
+      "request_sent": "Kérés elküldve",
+      "follow_requests": "követési kérések",
+      "no_follow_requests": "nincsenek követési kérések",
+      "follower": "{count, plural, one {követő} other {követő}}",
+      "follower_count": "{count} követő",
+      "see_followers": "követők megtekintése",
+      "followee": "{count, plural, one {követett} other {követett}}",
+      "followee_count": "{count} követett",
+      "see_followees": "akiket követsz",
+      "last_activities": "legutóbbi aktivitások",
+      "last_updated": "legutóbb frissítve",
+      "last_updated_at_date": "legutóbb frissítve: {date}",
+      "show_all": "összes megjelenítése",
+      "this_account_is_private": "ez a fiók privát",
+      "follow_to_see_activities": "kövesd, hogy lásd az aktivitásokat",
+      "review": "{count, plural, one {kritika} other {kritika}}",
+      "no_overview": "nincs leírás",
+      "cast": "szereplők",
+      "no_cast": "nincsenek szereplők",
+      "recent": "legújabb",
+      "popular": "népszerű",
+      "popularity": "népszerűség",
+      "no_reviews": "Nincsenek kritikák",
+      "no_playlists": "Nincsenek listák",
+      "no_playlists_found": "Nem találtunk listát",
+      "no_films": "Nincsenek filmek",
+      "no_tv_series": "Nincsenek sorozatok",
+      "view_activity": "aktivitás megtekintése",
+      "comment_count": "{count, plural, one {# hozzászólás} other {# hozzászólás}}",
+      "write_review": "kritika írása",
+      "new_review": "új kritika",
+      "edit_review": "kritika szerkesztése",
+      "review_by": "kritika: {name}",
+      "my_review": "{count, plural, one {kritikám} other {kritikáim}}",
+      "add_review": "kritika hozzáadása",
+      "tv_series": "{count, plural, one {sorozat} other {sorozat}}",
+      "film": "{count, plural, one {film} other {film}}",
+      "movie": "{count, plural, one {film} other {film}}",
+      "media": "{count, plural, one {cím} other {cím}}",
+      "tv_season": "{count, plural, one {évad} other {évad}}",
+      "tv_season_count": "{count, plural, one {# évad} other {# évad}}",
+      "tv_season_value": "{number}. évad",
+      "tv_season_short": "É{number}",
+      "tv_episode": "{count, plural, one {epizód} other {epizód}}",
+      "tv_episode_count": "{count, plural, one {# epizód} other {# epizód}}",
+      "tv_episode_value": "{number}. epizód",
+      "tv_episode_short": "É{seasonNumber}E{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {különkiadás} other {különkiadás}}",
+      "first_air_date": "első adás",
+      "last_air_date": "utolsó adás",
+      "see_film": "film megtekintése",
+      "see_tv_series": "sorozat megtekintése",
+      "watch_film_title": "{title} megtekintése",
+      "watch_film_streaming_or_download": "<important>{title}</important> megtekintése streamingen vagy legális letöltéssel",
+      "download": "letöltés",
+      "downloaded": "letöltve",
+      "person": "{count, plural, one {személy} other {személy}}",
+      "top_result": "legjobb találat",
+      "user": "{count, plural, one {felhasználó} other {felhasználó}}",
+      "reco": "{count, plural, one {reco} other {reco}}",
+      "my_recos": "recóim",
+      "item": "{count, plural, one {elem} other {elem}}",
+      "item_count": "{count, plural, one {# elem} other {# elem}}",
+      "type": "típus",
+      "complete": "befejezés",
+      "completed": "befejezve",
+      "collection": "{count, plural, one {gyűjtemény} other {gyűjtemény}}",
+      "most_recent": "legújabbak",
+      "most_popular": "legnépszerűbbek",
+      "most_old": "legrégebbiek",
+      "known_for": "Ismert művei",
+      "release_date": "bemutató dátuma",
+      "last_appearance_date": "utolsó szereplés",
+      "vote_average": "átlagos értékelés",
+      "added": "hozzáadva",
+      "added_date": "hozzáadás dátuma",
+      "added_at": "hozzáadva",
+      "add": "hozzáadás",
+      "playlist_name": "lista neve",
+      "updated_at": "frissítve",
+      "created_at": "létrehozva",
+      "likes": "like-ok",
+      "likes_count": "like-ok száma",
+      "search_media": "cím keresése",
+      "search_film": "film keresése",
+      "start_typing_to_search_films": "kezdj el írni filmek kereséséhez",
+      "search_tv_series": "sorozat keresése",
+      "start_typing_to_search_tv_series": "kezdj el írni sorozatok kereséséhez",
+      "search_person": "személy keresése",
+      "start_typing_to_search_persons": "kezdj el írni személyek kereséséhez",
+      "search_user": "{count, plural, one {felhasználó keresése} other {felhasználók keresése}}",
+      "start_typing_to_search_users": "kezdj el írni felhasználók kereséséhez",
+      "search_playlist": "lista keresése",
+      "start_typing_to_search_playlists": "kezdj el írni listák kereséséhez",
+      "search_film_or_tv_series": "film vagy sorozat keresése",
+      "watched_date": "{count, plural, one {megtekintés dátuma} other {megtekintések dátumai}}",
+      "mark_as_watched": "megjelölés megtekintettként",
+      "remove_from_watched": "eltávolítás a megtekintettek közül",
+      "rating": "értékelés",
+      "create_a_playlist": "lista létrehozása",
+      "by_name": "{name} munkája",
+      "reset": "visszaállítás",
+      "job": "{count, plural, one {feladat} other {feladat}}",
+      "department": "{count, plural, one {osztály} other {osztály}}",
+      "share_title_via": "<strong>{title}</strong> megosztása ezen:",
+      "share_title": "<strong>{title}</strong> megosztása",
+      "link": "link",
+      "copy_link": "link másolása",
+      "copied": "Másolva",
+      "other": "{count, plural, one {Egyéb} other {Egyéb}}",
+      "via": "ezen:",
+      "edit": "szerkesztés",
+      "guest": "{count, plural, one {vendég} other {vendég}}",
+      "are_u_sure": "Biztos vagy benne?",
+      "backward": "előző",
+      "forward": "következő",
+      "back": "vissza",
+      "next": "tovább",
+      "notification": "{count, plural, one {értesítés} other {értesítés}}",
+      "see_notifications": "értesítések megtekintése",
+      "open_social_panel": "közösségi panel megnyitása",
+      "cancel_change": "{count, plural, one {módosítás elvetése} other {módosítások elvetése}}",
+      "do_you_really_want_to_cancel_change": "Biztosan el akarod vetni {count, plural, one {a módosítást} other {a módosításokat}}?",
+      "continue_editing": "szerkesztés folytatása",
+      "confirm": "megerősítés",
+      "terms_of_use": "használati feltételek",
+      "privacy_policy": "adatvédelmi szabályzat",
+      "request_made": "kérés elküldve",
+      "request_canceled": "kérés visszavonva",
+      "cancel_request": "kérés visszavonása",
+      "open_menu": "menü megnyitása",
+      "feed": "feed",
+      "about": "rólunk",
+      "home": "kezdőlap",
+      "search": "keresés",
+      "explore": "felfedezés",
+      "shop": "bolt",
+      "help": "segítség",
+      "legal": "jogi információk",
+      "setting": "{count, plural, one {beállítás} other {beállítások}}",
+      "logout": "kijelentkezés",
+      "to_watch": "megnézendő",
+      "reco_by_your_friends": "a barátaid recói",
+      "friends_playlists": "a barátaid listái",
+      "latest_activity": "{count, plural, one {legutóbbi aktivitás} other {legutóbbi aktivitások}}",
+      "discover_users": "felhasználók felfedezése",
+      "most_recommended": "legtöbbet ajánlott",
+      "archive": "archiválás",
+      "unarchive": "visszaállítás az archívumból",
+      "mark_as_read": "{count, plural, one {megjelölés olvasottként} other {megjelölés olvasottként}}",
+      "mark_as_unread": "{count, plural, one {megjelölés olvasatlanként} other {megjelölés olvasatlanként}}",
+      "accept": "elfogadás",
+      "accepted": "elfogadva",
+      "decline": "elutasítás",
+      "declined": "elutasítva",
+      "request_accepted": "{count, plural, one {kérés elfogadva} other {kérés elfogadva}}",
+      "request_declined": "{count, plural, one {kérés elutasítva} other {kérés elutasítva}}",
+      "unread": "{count, plural, one {olvasatlan} other {olvasatlan}}",
+      "archived": "{count, plural, one {archivált} other {archivált}}",
+      "no_notifications": "nincsenek értesítések",
+      "all": "összes",
+      "mark_all_as_read": "összes megjelölése olvasottként",
+      "archive_all": "összes archiválása",
+      "archive_all_read": "minden olvasott archiválása",
+      "please_login": "jelentkezz be",
+      "like": "like",
+      "unlike": "like visszavonása",
+      "unfollow": "követés megszüntetése",
+      "name": "név",
+      "add_a_name": "név hozzáadása",
+      "add_a_description": "leírás hozzáadása",
+      "visibility": "láthatóság",
+      "search_an_user": "felhasználó keresése",
+      "select_an_item_to_add_to_playlist": "válaszd ki a listához adandó elemet",
+      "select_a_film_to_add_to_playlist": "válaszd ki a listához adandó filmet",
+      "select_a_tv_series_to_add_to_playlist": "válaszd ki a listához adandó sorozatot",
+      "add_one_or_more_items_to": "Egy vagy több elem hozzáadása ehhez: <important>{title}</important>",
+      "add_one_or_more_films_to": "Egy vagy több film hozzáadása ehhez: <important>{title}</important>",
+      "add_one_or_more_tv_series_to": "Egy vagy több sorozat hozzáadása ehhez: <important>{title}</important>",
+      "manage_playlist_access_rights": "a lista hozzáférési jogainak kezelése",
+      "add_guest": "{count, plural, one {vendég hozzáadása} other {vendégek hozzáadása}}",
+      "manage_members": "tagok kezelése",
+      "no_member": "nincsenek tagok",
+      "add_member": "{count, plural, one {tag hozzáadása} other {tagok hozzáadása}}",
+      "manage_guests": "vendégek kezelése",
+      "add_guests_to_your_playlist": "vendégek hozzáadása a listádhoz",
+      "select_users_to_add_to_playlist": "válaszd ki a listához adandó felhasználókat",
+      "select_users_to_send_reco": "válaszd ki, kinek küldöd a recót",
+      "select_playlists_to_add_the_item": "válaszd ki a listákat, amelyekhez hozzáadod az elemet",
+      "send": "küldés",
+      "sent": "elküldve",
+      "select_row": "sor kiválasztása",
+      "select_all": "összes kiválasztása",
+      "no_selected_users": "nincs kiválasztott felhasználó",
+      "selection_count": "{number} / {total} {type} kiválasztva",
+      "about_title": "{title} részletei",
+      "detail": "{count, plural, one {részlet} other {részletek}}",
+      "genre": "{count, plural, one {műfaj} other {műfaj}}",
+      "male": "{count, plural, one {férfi} other {férfi}}",
+      "female": "{count, plural, one {nő} other {nő}}",
+      "non_binary": "{count, plural, one {nem bináris} other {nem bináris}}",
+      "unspecified": "nincs megadva",
+      "date_of_birth": "születési dátum",
+      "date_of_death": "halálozás dátuma",
+      "place_of_birth": "születési hely",
+      "age_years": "{count} {count, plural, one {éves} other {éves}}",
+      "biography": "életrajz",
+      "no_biography_available": "nincs elérhető életrajz",
+      "no_information_available": "nincs elérhető információ",
+      "already_sent": "már elküldve",
+      "already_watched": "már megtekintve",
+      "already_added": "már hozzáadva",
+      "recommend_to_friend_to_discover": "Ajánld a <strong>{title}</strong>-t egy barátnak, aki még nem látta",
+      "add_to_one_or_more_playlists": "Add hozzá a <strong>{title}</strong>-t egy vagy több listádhoz",
+      "my_playlist": "{count, plural, one {listám} other {listáim}}",
+      "what_is_title": "Mi az a <strong>{title}</strong>?",
+      "try_again": "Próbáld újra",
+      "error": "hiba",
+      "not_logged_in": "nem vagy bejelentkezve",
+      "an_error_occurred": "Hiba történt",
+      "playlist_not_found": "a lista nem található",
+      "user_not_found": "a felhasználó nem található",
+      "film_not_found": "a film nem található",
+      "media_not_found": "a cím nem található",
+      "review_not_found": "a kritika nem található",
+      "person_not_found": "a személy nem található",
+      "tv_series_not_found": "a sorozat nem található",
+      "tv_episode_not_found": "az epizód nem található",
+      "tv_season_not_found": "az évad nem található",
+      "wrong_arguments": "hibás argumentumok",
+      "no_media_found": "nem találtunk címet",
+      "unknown_action": "ismeretlen művelet",
+      "no_user_found": "nem találtunk felhasználót",
+      "no_tv_episodes": "nincsenek epizódok",
+      "save": "mentés",
+      "saved": "mentve",
+      "create": "létrehozás",
+      "film_count": "{count, plural, one {# film} other {# film}}",
+      "tv_series_count": "{count, plural, one {# sorozat} other {# sorozat}}",
+      "login": "bejelentkezés",
+      "signup": "regisztráció",
+      "navigation": "navigáció",
+      "delete": "Törlés",
+      "remove": "Eltávolítás",
+      "deleted": "Törölve",
+      "share": "megosztás",
+      "duplicate": "duplikálás",
+      "duplicated": "duplikálva",
+      "cancel": "Mégse",
+      "date": "dátum",
+      "duration": "hossz",
+      "sort": "rendezés",
+      "show": "megjelenítés",
+      "column": "{count, plural, one {oszlop} other {oszlop}}",
+      "comment": "{count, plural, one {hozzászólás} other {hozzászólás}}",
+      "unknown": "ismeretlen",
+      "community": "közösség",
+      "cast_and_crew": "szereplők és stáb",
+      "soon": "hamarosan",
+      "ios_app": "iOS-alkalmazás",
+      "android_app": "Android-alkalmazás",
+      "coming_soon": "Hamarosan elérhető",
+      "new_mobile_app": "Új mobilalkalmazás!",
+      "manage": "kezelés",
+      "monthly": "havi",
+      "yearly": "éves",
+      "day": "nap",
+      "week": "hét",
+      "month": "hónap",
+      "year": "év",
+      "price": "ár",
+      "free": "ingyenes",
+      "playlist": "{count, plural, one {lista} other {lista}}",
+      "public": "nyilvános",
+      "publish": "közzétenni",
+      "private": "privát",
+      "description": "leírás",
+      "details": "részletek",
+      "profile": "profil",
+      "overview": "leírás",
+      "no_playlists_saved": "nincsenek mentett listák",
+      "camera_permission_denied": "a kamera hozzáférése megtagadva",
+      "photo_library_permission_denied": "a fotókönyvtár hozzáférése megtagadva",
+      "ignore": "figyelmen kívül hagyás",
+      "ok": "ok",
+      "title": "cím",
+      "skip": "Kihagyás",
+      "undo": "Visszavonás",
+      "date_published": "közzététel dátuma",
+      "date_created": "létrehozás dátuma",
+      "date_updated": "módosítás dátuma",
+      "alphabetical": "ábécérend",
+      "date_added": "hozzáadás dátuma",
+      "number_of_likes": "like-ok száma",
+      "number_of_seasons": "évadok száma",
+      "add_to_this_playlist": "hozzáadás ehhez a listához",
+      "save_to_library": "mentés a könyvtárba",
+      "remove_from_library": "eltávolítás a könyvtárból",
+      "otp": "OTP",
+      "ratings_from_followees": "az általad követettek értékelései",
+      "choose_from_the_library": "választás a galériából",
+      "take_a_photo": "fotó készítése",
+      "delete_current_image": "jelenlegi kép törlése",
+      "edit_image": "kép szerkesztése",
+      "add_image": "kép hozzáadása",
+      "verify_with_a_code": "megerősítés kóddal",
+      "order": "sorrend",
+      "edit_order": "sorrend szerkesztése",
+      "done": "kész",
+      "can_edit": "szerkeszthet?",
+      "upgrade": "frissítés",
+      "no_description": "Nincs leírás",
+      "no_comment": "Nincsenek hozzászólások",
+      "close": "bezárás",
+      "edit_playlist": "lista szerkesztése",
+      "universe": "univerzum",
+      "cannot_be_changed": "nem módosítható",
+      "delete_review": "kritika törlése",
+      "do_you_really_want_to_delete_this_review": "Biztosan törölni akarod ezt a kritikát?",
+      "user_liked_playlist": "<name></name> like-olt egy listát",
+      "user_liked_review": "<name></name> like-olt egy kritikát",
+      "runtime": "játékidő",
+      "ends_at": "Vége: {value}",
+      "this_user_has_no_activity": "Ennek a felhasználónak nincs aktivitása",
+      "notification_archived": "{count, plural, one {értesítés archiválva} other {értesítés archiválva}}",
+      "notification_unarchived": "{count, plural, one {értesítés visszaállítva az archívumból} other {értesítés visszaállítva az archívumból}}",
+      "notification_marked_as_read": "{count, plural, one {értesítés olvasottként megjelölve} other {értesítés olvasottként megjelölve}}",
+      "notification_marked_as_unread": "{count, plural, one {értesítés olvasatlanként megjelölve} other {értesítés olvasatlanként megjelölve}}",
+      "or_continue_with": "vagy folytasd ezzel:",
+      "message": "{count, plural, one {üzenet} other {üzenet}}",
+      "story": "{count, plural, one {story} other {story}}",
+      "new_playlist": "új lista",
+      "select_a_type": "válassz típust",
+      "filter": "{count, plural, one {szűrő} other {szűrő}}",
+      "hide_watched": "megtekintettek elrejtése",
+      "show_me_around": "mutasd körbe",
+      "artwork_from": "Illusztráció: <important>{source}</important>",
+      "no_active_subscription": "nincs aktív előfizetés",
+      "manage_subscription": "előfizetés kezelése",
+      "started_on_date": "indult: {date}",
+      "last_renewed_on_date": "utolsó megújítás: {date}",
+      "version_value": "{value} verzió",
+      "original_title": "eredeti cím",
+      "starring": "főszereplők",
+      "write_your_review_here": "írd ide a kritikádat...",
+      "insert": "beszúrás",
+      "trailer": "{count, plural, one {előzetes} other {előzetes}}",
+      "list": "{count, plural, one {lista} other {lista}}",
+      "grid": "{count, plural, one {rács} other {rács}}",
+      "order_asc": "növekvő sorrend",
+      "order_desc": "csökkenő sorrend",
+      "menu": "menü",
+      "at_least_one_watched_date_required": "legalább egy megtekintési dátum szükséges",
+      "viewer": "{count, plural, one {Néző} other {Nézők}}",
+      "editor": "{count, plural, one {Szerkesztő} other {Szerkesztők}}",
+      "admin": "{count, plural, one {Rendszergazda} other {Rendszergazdák}}",
+      "owner": "{count, plural, one {Tulajdonos} other {Tulajdonosok}}",
+      "you_dont_have_permission_to_do_this_action": "Nincs engedélyed erre a műveletre",
+      "in_progress": "folyamatban",
+      "give_up": "feladás",
+      "random": "véletlenszerű",
+      "reset_password": "Jelszó visszaállítása",
+      "password_reset": "A jelszó visszaállítva",
+      "return_to_login": "Vissza a bejelentkezéshez",
+      "invalid_code": "Érvénytelen kód",
+      "no_token_found": "Nem találtunk tokent",
+      "first_watched_at": "első megtekintés dátuma",
+      "watched_dates": "megtekintések dátumai",
+      "no_watched_dates": "nincsenek megtekintési dátumok",
+      "select_role": "válassz szerepet",
+      "select_format": "válassz formátumot",
+      "theater": "Mozi",
+      "physical": "Fizikai hordozó",
+      "digital": "Digitális",
+      "streaming": "Streaming",
+      "you_must_be_premium_to_change_member_role": "Prémiumnak kell lenned, hogy módosíthasd egy tag szerepét",
+      "already_member": "már tag",
+      "email_already_used": "Ez az e-mail-cím már használatban van",
+      "email_confirmed": "E-mail megerősítve",
+      "confirmation_email_sent": "Megerősítő e-mail elküldve",
+      "continue": "Tovább",
+      "finish": "Befejezés",
+      "forgot_password": "Elfelejtett jelszó",
+      "new_password": "Új jelszó",
+      "confirm_password": "Jelszó megerősítése",
+      "password_reseted": "A jelszó visszaállítva",
+      "reset_your_password": "Állítsd vissza a jelszavad",
+      "invalid_token": "Érvénytelen token",
+      "new_notification": "{count, plural, one {új értesítés} other {új értesítés}}",
+      "lets_go": "Indulás!",
+      "update_available": "Frissítés elérhető",
+      "update_available_description": "Frissítsd az alkalmazást, hogy élvezhesd a legújabb fejlesztéseket.",
+      "update_required_title": "Frissítés szükséges",
+      "update_required_description": "Az alkalmazás ezen verziója már nem támogatott. Frissítsd, hogy továbbra is használhasd a Recomendet.",
+      "update_app": "Frissítés",
+      "advertisement": "{count, plural, one {Reklám} other {Reklám}}",
+      "pending": "Várakozik",
+      "processing": "Folyamatban",
+      "awaiting_review": "Ellenőrzésre vár",
+      "failed": "Sikertelen",
+      "data": "{count, plural, one {Adat} other {Adatok}}",
+      "restore": "Visszaállítás",
+      "fix": "Javítás",
+      "not_found": "Nem található",
+      "unavailable": "Nem elérhető",
+      "star_on_github": "Csillagozd meg a GitHubon"
+    },
+    "form": {
+      "email": {
+        "label": "E-mail-cím",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "Az e-mail-cím nem érvényes",
+          "unavailable": "Ez az e-mail-cím már használatban van"
+        },
+        "verified": "E-mail ellenőrizve"
+      },
+      "username": {
+        "label": "Felhasználónév",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "Az első karakternek betűnek vagy számnak kell lennie",
+          "double_dot": "Két pont egymás után nem engedélyezett",
+          "ends_with_dot": "A végén pont nem engedélyezett",
+          "format": "Csak betűk, számok és a '_' és '.' karakterek engedélyezettek",
+          "unavailable": "Ez a felhasználónév már foglalt"
+        }
+      },
+      "full_name": {
+        "label": "Név",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "Csak betűk, számok és szóközök engedélyezettek"
+        }
+      },
+      "password": {
+        "label": "Jelszó",
+        "placeholder": "Írd be a jelszavad",
+        "schema": {
+          "uppercase": "Legalább egy nagybetű szükséges",
+          "lowercase": "Legalább egy kisbetű szükséges",
+          "number": "Legalább egy szám szükséges",
+          "special": "Legalább egy speciális karakter szükséges",
+          "match": "A jelszavak nem egyeznek"
+        },
+        "confirm": {
+          "label": "Jelszó megerősítése",
+          "placeholder": "Erősítsd meg a jelszavad"
+        }
+      },
+      "length": {
+        "char_min": "legalább {count, plural, one {# karakter} other {# karakter}}",
+        "char_max": "legfeljebb {count, plural, one {# karakter} other {# karakter}}"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "Csak betűk, számok és szóközök engedélyezettek"
+      },
+      "error": {
+        "too_many_attempts": "Túl sok kísérlet, próbáld újra később",
+        "not_received_code": "Nem kaptad meg a kódot?",
+        "invalid_code": "Érvénytelen kód",
+        "turnstile": "Az ellenőrzés nem sikerült, próbáld újra"
+      },
+      "resend_code": "Kód újraküldése",
+      "resend_email": "E-mail újraküldése",
+      "code_verified": "A kód ellenőrizve",
+      "code_sent": "A kód elküldve"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "Az oldal nem található",
+        "description": "hopp, ez az oldal nem létezik..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "követés",
+        "description": "Fedezd fel, értékeld és oszd meg a kedvenc filmjeidet és sorozataidat."
+      },
+      "recos": {
+        "label": "recók",
+        "description": "Küldd és fogadd a barátaid recóit. Mind egy helyen."
+      },
+      "playlists": {
+        "label": "listák",
+        "description": "Rendszerezd, oszd meg és építsd együtt a listákat."
+      },
+      "feed": {
+        "label": "feed",
+        "description": "Kövesd a barátaidat, és láthatod, mit néznek, mit szeretnek és mit írnak."
+      },
+      "social_sharing": {
+        "label": "megosztás a közösségi médiában",
+        "description": "Oszd meg, amit szeretsz, Instagramon vagy máshol."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "Követés",
+          "description": "Tartsd szemmel a már látott filmeket"
+        },
+        "recos": {
+          "label": "Recók",
+          "description": "Küldj filmajánlókat a barátaidnak"
+        },
+        "explore": {
+          "label": "Felfedezés",
+          "description": "Fedezz fel új filmeket a Paradise Pictures interaktív térképén, több mint 1400 filmmel"
+        },
+        "like": {
+          "label": "Like",
+          "description": "Mutasd meg, mennyire szeretsz egy filmet, listát vagy kritikát"
+        },
+        "rating": {
+          "label": "Értékelés",
+          "description": "Értékeld a filmeket, amelyeket láttál"
+        },
+        "watchlist": {
+          "label": "Megnézendők",
+          "description": "Mentsd el a filmeket, amelyeket látni akarsz"
+        },
+        "playlists": {
+          "label": "Listák",
+          "description": "Rendszerezd a filmjeidet listákba, és oszd meg őket"
+        },
+        "reviews": {
+          "label": "Kritikák",
+          "description": "Írj kritikákat, és engedd ki a belső, kiérdemesült cinefilt"
+        },
+        "feed": {
+          "label": "Feed",
+          "description": "Kövesd a barátaid aktivitását"
+        },
+        "adsFree": {
+          "label": "Reklámmentes",
+          "description": "Használd a Recomendet reklámok nélkül, örökre"
+        }
+      }
+    },
+    "welcome": {
+      "title": "Köszönjük, hogy regisztráltál!",
+      "description": "Íme egy gyors áttekintés arról, mit tehetsz a {app}-on.",
+      "follow": {
+        "title": "Kövess másokat",
+        "description": "Kövesd a barátaidat, és láthatod, mit néznek."
+      },
+      "import": {
+        "title": "Másik platformról jössz?"
+      }
+    },
+    "collection": {
+      "label": "könyvtár",
+      "my_recos": {
+        "label": "recóim",
+        "search": {
+          "placeholder": "keresés a recóim között..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "törlés a recóim közül",
+            "description": "Biztosan törölni akarod a(z) <important>{title}</important> címet a recóid közül?"
+          },
+          "complete_confirm": {
+            "title": "a reco befejezése",
+            "description": "Biztosan befejezed a(z) <important>{title}</important> recót?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "keresés a megnézendők között..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "törlés a megnézendők közül",
+            "description": "Biztosan törölni akarod a(z) <important>{title}</important> címet a megnézendők közül?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "keresés a szívügyek között..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "törlés a szívügyek közül",
+            "description": "Biztosan törölni akarod a(z) <important>{title}</important> címet a szívügyeid közül?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> megnézte",
+        "rated": "<name></name> értékelte",
+        "liked": "<name></name> like-olta",
+        "rated_liked": "<name></name> like-olta és értékelte",
+        "reviewed": "<name></name> kritikát írt"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> <important>{roles}</important> ebben: <linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "Alkalmazás engedélyezése",
+        "description_generic": "Egy alkalmazás hozzáférést kér a fiókodhoz.",
+        "description": "A {client} hozzáférést kér a fiókodhoz.",
+        "scopes_label": "Ez a következőket engedi az alkalmazásnak:",
+        "accept": "Engedélyezés",
+        "deny": "Elutasítás",
+        "error": {
+          "invalid_request": "Érvénytelen vagy lejárt kérés",
+          "invalid_request_description": "Indítsd újra az engedélyezést abból az alkalmazásból, amely ide küldött.",
+          "client_not_found": "Ez az alkalmazás nem található.",
+          "submit_failed": "Valami hiba történt. Próbáld újra."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "Jelentkezz be a {app}-fiókodba."
+        },
+        "label": "Bejelentkezés",
+        "description": "Fedezd fel a legjobb filmajánlókat.",
+        "or_continue_with": "Vagy folytasd ezzel:",
+        "no_account_yet": "Még nincs fiókod?",
+        "form": {
+          "identifier": {
+            "label": "E-mail vagy felhasználónév",
+            "placeholder": "Írd be az e-mail-címed vagy a felhasználónevedet"
+          },
+          "password": {
+            "label": "Jelszó",
+            "placeholder": "Írd be a jelszavad"
+          },
+          "submit": "Bejelentkezés",
+          "forgot_password": "Elfelejtetted a jelszavad?",
+          "wrong_credentials": "Az e-mail-cím vagy a jelszó hibás"
+        },
+        "otp": {
+          "password_login": "Inkább jelszóval jelentkezel be?",
+          "form": {
+            "submit": "Kód kérése",
+            "no_user_found": "Ezzel az e-mail-címmel nem találtunk felhasználót",
+            "success": "Bejelentkezve"
+          },
+          "confirm_form": {
+            "label": "Kód megerősítése",
+            "description": "Egy ellenőrző kódot küldtünk erre a címre: {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "Regisztrálj a {app}-ra, hogy filmajánlókat fedezz fel és oszd meg a sajátjaidat."
+        },
+        "description": "Hozz létre fiókot, hogy ajánlhass egy filmet annak a barátodnak, aki mindig elfelejti a címeket.",
+        "form": {
+          "success": "Egy ellenőrző e-mailt küldtünk erre a címre: {email}"
+        },
+        "confirm_form": {
+          "label": "E-mail megerősítése",
+          "description": "Egy ellenőrző linket küldtünk erre a címre: {email}"
+        },
+        "return_to_login": "Hopp, már van fiókom."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "Elfelejtett jelszó",
+          "description": "Állítsd vissza a jelszavad."
+        },
+        "label": "Elfelejtett jelszó",
+        "description": "Használj jelszókezelőt, igazán kényelmes.",
+        "return_to_login": "Hopp, mégis eszembe jutott a jelszavam.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "Jelszó visszaállítása",
+          "code_sent": "Kérés elküldve"
+        },
+        "confirm_form": {
+          "label": "Kód megerősítése",
+          "description": "Egy ellenőrző kódot küldtünk erre a címre: {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "Jelszó visszaállítása",
+          "description": "Válassz új jelszót a fiókodhoz."
+        }
+      },
+      "error": {
+        "label": "Hiba",
+        "description": "Hiba történt a hitelesítés során.",
+        "return_to_login": "Vissza a biztonságba"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "Rólunk",
+        "marquee": "Nincs izgalmasabb az életedben, mint „Rólunk” oldalakat olvasni az interneten?",
+        "intro": "A <strong>Recomend</strong> egy tér, amely a filmek felfedezésének, ajánlásának és rendszerezésének szól. Mindent úgy találtunk ki, hogy a szájhagyomány végre a lehető legjobb digitális támaszt kapja. A mi megközelítésünk az embereket és a köztük lévő kapcsolatokat állítja a középpontba egy olyan korban, amelyben a fogyasztás önmagunk — vagy inkább a „neked ajánljuk” — körül forog.",
+        "slogan": {
+          "1": "Reklámmentes és kétes ígéretek nélküli. 🍆",
+          "2": "Egyszerre közösségi hálózat és eszköz.",
+          "3": "Rajongók készítik, házi módra.",
+          "4": "Amatőr, a szó legnemesebb értelmében."
+        },
+        "last": "A Recomendet használhatod egyedül vagy másokkal, nyilvánosan vagy titokban, éjjel vagy nappal, de film közben soha — arra koncentrálj!"
+      },
+      "team": {
+        "label": "A csapat",
+        "intro": "A Recomendet két filmbolond testvér hozta létre, akik szeretik túlságosan ambiciózus projektekbe fektetni az idejüket, amelyek talán soha nem látnak napvilágot.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "Hiperaktív építész-mérnök, akinek egy szakma soha nem elég (igazi start-up nation), Yoann-tól származik a filmtérkép ötlete, amelynek eredetileg az volt a szerény célja, hogy poszterként kerüljön a fürdőszobájába. Loup belépésével a tervek az égig szöktek, és bár kissé elsodorta a lendület, ő készíti a térkép és az oldal teljes grafikáját, valamint ő viszi a kommunikációt is (pedig nem szereti). Emellett véleményt formál a UX/UI-ról, és rengeteg funkciót javasol, nem egészen felmérve, mennyire nehéz őket lekódolni (azért már sokat fejlődött)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "Teljesen autodidakta, aki mégis elvégzett egy olyan képzést, amely 25 éves kora előtt fizetés nélküli munkanélküliséghez vezetett. Igazi ezermester: Loup viszi a web oldalát, és olyan felületet kódol, amely a lehető legkényelmesebb. Loup szeretne köszönetet mondani minden programozói fórumnak, amely válaszolt a (nagyon) sok kérdésére, és minden indiai YouTubernek, akik ezekben a hónapokban fogadott apaként vezették. Az édesanyja közben meg van róla győződve, hogy a bátyja rabszolgasorba vetette ezzel a projekttel (jól vagyok, anya)."
+          }
+        },
+        "last": "Ha kapcsolatba akarsz lépni velünk vagy a közösség többi tagjával, csatlakozz a <link>Discordunkhoz</link>!"
+      },
+      "pricing": {
+        "label": "Árak",
+        "intro": "Ez az előfizetési modell elsősorban arra szolgál, hogy támogassa a projektet, és segítse a növekedését. A prémium funkciók ráadások a Recomend haladó használatához, és ezek indokolnak egy apró pénzbeli hozzájárulást. Mindig meg fog maradni a lehetőség, hogy ingyen, reklámok nélkül és korlátok érzése nélkül használd az oldalt.",
+        "subdescription": "*Ha ennek az előfizetésnek a nevetségesen alacsony díja is meghaladja a lehetőségeidet, fordulj a vásárlóerőd elvesztéséért felelős liberális kormányodhoz."
+      },
+      "legal": {
+        "label": "Jogi és adatvédelmi információk",
+        "description": "Tiszteletben tartjuk a magánéletedet. A vendég felhasználóknak megjelenített reklámokat a Google kezeli, és technikai cookie-kat igényelnek a megjelenítés gyakoriságának korlátozásához és a csalás megelőzéséhez.",
+        "privacyPolicy": "Olvasd el az adatvédelmi szabályzatunkat",
+        "manageCookies": "Reklámbeállításaim kezelése (cookie-k)"
+      },
+      "open-source": {
+        "label": "Nyílt forráskód",
+        "intro": "A Recomend nyílt forráskódú: a kód nyilvános a GitHubon. Vess rá egy pillantást, járulj hozzá, vagy csak hagyj nekünk egy csillagot!",
+        "star": "Csillagozd meg a GitHubon"
+      },
+      "businessmodel": {
+        "label": "Üzleti modell",
+        "paragraph": {
+          "1": "Ahogy a nem túl kereskedelmi profilunkból sejthető, még nem igazán jöttünk rá, mit is kezdhetnénk most egy üzleti modellel...",
+          "2": "Ha a Recomend jövője megkívánja, utánajárunk, és körülvesszük magunkat a megfelelő emberekkel — vagy legalább olyanokkal, akiket ez jobban érdekel, mint minket.",
+          "3": "Addig pedig, legyünk őszinték, van más dolgunk is."
+        }
+      },
+      "roadmap": {
+        "label": "Útiterv"
+      },
+      "data": {
+        "label": "Adatok",
+        "paragraph": {
+          "1": "A Recomenden használt összes metaadatot <link>a The Movie Database (TMDb)</link> szolgáltatja a platform API-ján keresztül. Úgy teszünk, ahogy mindenki más, jó birkák módjára.",
+          "2": "Hibákkal vagy hiányzó filmekkel kapcsolatban fordulj a <link>TMDb</link>-hez."
+        }
+      },
+      "resources": {
+        "label": "Források",
+        "intro": "Ennek nem sok köze van a filmhez, de itt van néhány oldal, amelyet szeretünk:"
+      },
+      "contact-support": {
+        "label": "Kapcsolat és támogatás",
+        "help-center": "Találd meg a válaszokat az egzisztenciális kérdéseidre a <link>Súgóközpontunkban</link>.",
+        "technical-support": "Technikai kérdésekben: <email></email>",
+        "suggest-a-feature": "Javaslatokért: <email></email>",
+        "contact-us": "Ha csak kapcsolatba akarsz lépni velünk: <email></email>"
+      },
+      "quote": {
+        "label": "Idézet",
+        "quote": "„Gyűlölöm a profi szót. Azok a színészek és mások, akik azt mondják: én profi vagyok, én szakmabeli! Mi ez az egész? Van ennél szomorúbb szó? Mert az amatőr a szeretet szóból jön. A dolgokat szeretetből kell tenni, különben bolondok vagyunk.”",
+        "author": "Orson Welles",
+        "date": "1972",
+        "subdescription": "*Hezitáltunk, hogy betegyük-e, mert könnyen nagyképűen hangzik, de jól tükrözi, hogyan érzünk a projekt felé. Ha viszont nem tetszik, kiszedjük."
+      }
+    },
+    "settings": {
+      "label": "Beállítások",
+      "description": "Kezeld a fiókod beállításait.",
+      "profile": {
+        "label": "Profil",
+        "description": "Így látnak majd mások az oldalon.",
+        "avatar": {
+          "label": "Profilkép",
+          "delete": "Törlés"
+        },
+        "full_name": {
+          "label": "Név",
+          "description": "Ez a név jelenik meg a profilodon és az e-mailekben.",
+          "placeholder": "Írd be a nevedet",
+          "form": {
+            "min_length": "A névnek legalább 1 karakterből kell állnia",
+            "max_length": "A név nem lehet hosszabb 50 karakternél"
+          }
+        },
+        "bio": {
+          "label": "Bemutatkozás",
+          "description": "Mesélj valamit magadról, megjelenik a profilodon.",
+          "placeholder": "Mesélj magadról",
+          "form": {
+            "max_length": "A bemutatkozás nem lehet hosszabb 150 karakternél",
+            "format": "A bemutatkozás nem tartalmazhat üres sorokat, és nem állhat csak szóközökből."
+          }
+        },
+        "favorite_films": {
+          "label": "Kedvenc filmek",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "Érvénytelen URL"
+          }
+        }
+      },
+      "account": {
+        "label": "Fiók",
+        "description": "Frissítsd a fiókod beállításait.",
+        "username": {
+          "label": "Felhasználónév",
+          "description": "Ez az a felhasználónév, amelyen mások megtalálhatnak és elérhetik a profilodat. 30 naponta csak egyszer módosíthatod.",
+          "placeholder": "Írd be a felhasználónevedet",
+          "form": {
+            "min_length": "A felhasználónévnek legalább 3 karakterből kell állnia",
+            "max_length": "A felhasználónév nem lehet hosszabb 15 karakternél",
+            "invalid": "A felhasználónév csak betűket, számokat, valamint '_' és '.' karaktereket tartalmazhat",
+            "unavailable": "Ez a felhasználónév már foglalt"
+          }
+        },
+        "private": {
+          "label": "Privát fiók",
+          "description": "Ha a fiókod privát, csak a barátaid láthatják az aktivitásaidat."
+        },
+        "email": {
+          "description": "Ellenőrző e-mailt küldünk a jelenlegi és az új e-mail-címedre is. A módosítás csak akkor lép életbe, ha mindkettőt megerősíted.",
+          "change_pending": "Ellenőrző e-mailt küldtünk az új e-mail-címedre: <strong>{email}</strong>. Kattints a linkre, vagy írd be az ellenőrző kódot a módosítás megerősítéséhez.",
+          "confirm_email_code": {
+            "description": "Írd be a <strong>{email}</strong> címre küldött ellenőrző kódot a módosítás megerősítéséhez."
+          },
+          "change_success": "Az e-mail-címed sikeresen megváltozott"
+        },
+        "delete_account": {
+          "button": "Fiókom törlése",
+          "confirm": {
+            "description": "Biztosan törölni akarod a fiókodat? Ez a művelet nem visszafordítható.",
+            "confirm_email_sent": "Ellenőrző e-mailt küldtünk az e-mail-címedre"
+          }
+        }
+      },
+      "appearance": {
+        "label": "Megjelenés",
+        "description": "Szabd testre az alkalmazás megjelenését. Automatikus váltás a világos és a sötét téma között.",
+        "language": {
+          "label": "Nyelv",
+          "description": "Válassz nyelvet – a módosítás az alkalmazás újraindítása után lép életbe",
+          "placeholder": "Válassz nyelvet",
+          "not_found": "A nyelv nem található"
+        },
+        "theme": {
+          "label": "Téma",
+          "description": "Válaszd ki a felület témáját.",
+          "options": {
+            "light": "Világos",
+            "dark": "Sötét"
+          }
+        }
+      },
+      "subscription": {
+        "label": "Előfizetés",
+        "description": "Kezeld az előfizetésedet a prémium funkciók eléréséhez."
+      },
+      "security": {
+        "label": "Biztonság",
+        "description": "A jelszavad módosítása minden eszközön kiléptet, kivéve azt, amelyet most használsz.",
+        "current_password": {
+          "label": "Jelenlegi jelszó",
+          "placeholder": "Írd be a jelenlegi jelszavad",
+          "form": {
+            "required": "Írd be a jelenlegi jelszavad",
+            "invalid": "A jelenlegi jelszó hibás"
+          }
+        },
+        "new_password": {
+          "label": "Új jelszó",
+          "placeholder": "Írd be az új jelszavad",
+          "form": {
+            "min_length": "A jelszónak legalább 8 karakterből kell állnia",
+            "uppercase": "Legalább egy nagybetű szükséges",
+            "lowercase": "Legalább egy kisbetű szükséges",
+            "number": "Legalább egy szám szükséges",
+            "special": "Legalább egy speciális karakter szükséges"
+          }
+        },
+        "confirm_password": {
+          "label": "Új jelszó megerősítése",
+          "placeholder": "Erősítsd meg az új jelszavad",
+          "form": {
+            "match": "A jelszavak nem egyeznek"
+          }
+        }
+      },
+      "notifications": {
+        "label": "Értesítések",
+        "description": "Kezeld az értesítési beállításaidat.",
+        "push_notifications": {
+          "label": "Push értesítések",
+          "form": {
+            "enable": "Push értesítések bekapcsolása"
+          },
+          "already_granted": "Az értesítési kérés már megtörtént; a módosításhoz nyisd meg a böngésződ beállításait.",
+          "no_enabled": "Engedélyezd az értesítéseket az eszközöd beállításaiban, hogy push értesítéseket kapj.",
+          "open_settings": "Ugrás az eszköz beállításaihoz"
+        }
+      },
+      "data": {
+        "label": "Adatok",
+        "description": "Importáld vagy exportáld az adataidat.",
+        "importer": {
+          "label": "Importálás",
+          "select_source": "Válassz forrást",
+          "instructions_title": "Útmutató",
+          "browse_prompt": "Húzd ide a fájlt, vagy <link>válaszd ki</link>",
+          "browse_prompt_mobile": "Koppints a fájl kiválasztásához",
+          "uploading": "Feltöltés…",
+          "processing": "A fájl elemzése…",
+          "upload_error": "A feltöltés nem sikerült, próbáld újra.",
+          "invalid_file_type": "Ez a fájltípus nem támogatott ehhez a forráshoz.",
+          "review_title": "Ellenőrizd az importálást",
+          "review_summary": "{matched} / {total} egyeztetve",
+          "validate": "Importálás megerősítése",
+          "validate_confirm_description": "Ezzel minden egyeztetett, nem kihagyott elem bekerül a könyvtáradba. Ez nem visszafordítható.",
+          "success_title": "Az importálás befejeződött",
+          "success_description": "Az adataidat sikeresen importáltuk.",
+          "failed_title": "Az importálás nem sikerült",
+          "failed_description": "Hiba történt az importálás feldolgozása során.",
+          "pending_description": "Az importálás a sorban áll, és hamarosan elindul.",
+          "empty": "Még nincs importálás.",
+          "delete_confirm_description": "Ez az importálás és minden előkészített adata véglegesen törlődik. Ez nem visszafordítható.",
+          "keep_existing": "Az enyém maradjon",
+          "use_imported": "Az importált legyen",
+          "merge": "Összefűzés",
+          "conflict": "Ütközés",
+          "no_match": "Nincs találat",
+          "existing_rating": "Jelenleg: {rating}",
+          "log_column": "Napló",
+          "actions_column": "Műveletek",
+          "categories": {
+            "log_movies": "Filmek",
+            "log_tv_series": "Sorozatok",
+            "bookmarks": "Megnézendők",
+            "playlists": "Listák"
+          },
+          "status": {
+            "pending": "Várakozik",
+            "processing": "Folyamatban",
+            "awaiting_review": "Ellenőrzésre vár",
+            "completed": "Befejezve",
+            "failed": "Sikertelen"
+          }
+        },
+        "exporter": {
+          "label": "Exportálás"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "Váltás Prémiumra",
+        "description": "Válts prémium fiókra, hogy a {app} összes funkcióját elérhesd."
+      },
+      "header": {
+        "title": "nyisd ki a vásznat, ossz meg többet, támogasd a {app}-ot",
+        "subtitle": "próbáld ki 1 hónapig ingyen, utána {price}/hónap"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "aktivitások",
+            "unlimited_activities": {
+              "label": "korlátlan aktivitás",
+              "description": "értékelések, like-ok, kritikák, megnézendők és ajánlók"
+            },
+            "favorites": {
+              "label": "kedvencek",
+              "description": "tedd ki a kedvenc filmjeidet a profilodra"
+            }
+          },
+          "playlists": {
+            "label": "listák",
+            "unlimited_playlists": {
+              "label": "korlátlan",
+              "description": "hozz létre korlátlan számú listát"
+            },
+            "shared_playlists": {
+              "label": "megosztott",
+              "description": "oszd meg a listáidat más felhasználókkal"
+            },
+            "collaborative_playlists": {
+              "label": "közös",
+              "description": "hozz létre közös listákat más felhasználókkal"
+            }
+          },
+          "feed": {
+            "label": "feed",
+            "followees": {
+              "label": "követett felhasználók",
+              "description": "lásd az általad követett felhasználók aktivitásait"
+            },
+            "cast_and_crew": {
+              "label": "szereplők és stáb",
+              "description": "kövesd a filmekben közreműködő emberek aktivitását"
+            }
+          },
+          "support": {
+            "label": "támogatás",
+            "team": {
+              "label": "Támogasd a {app} csapatát"
+            },
+            "credits": {
+              "label": "végefőcím",
+              "description": "a profilod az alkalmazás végefőcímében"
+            }
+          }
+        },
+        "success": {
+          "label": "Köszönjük a támogatásodat!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} – @{username} listája",
+        "description": "Fedezd fel @{username} filmlistáját a {app}-on."
+      },
+      "actions": {
+        "delete": {
+          "description": "Ezzel véglegesen törlöd a(z) <important>{title}</important> listát a listáid közül."
+        }
+      },
+      "search": {
+        "placeholder": "keresés a listában..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "Biztosan törölni akarod a(z) <important>{title}</important> címet a listádból?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "Írd be a lista címét"
+        },
+        "description": {
+          "placeholder": "Írj egy leírást a listához"
+        },
+        "error": {
+          "format": "A leírás nem tartalmazhat üres sorokat, és nem állhat csak szóközökből."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "Fedezd fel @{username} profilját a {app}-on."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "A(z) {title} {directors} filmje, amely {year}-ban jelent meg. Tartalom: {overview}",
+        "description_no_director": "A(z) {title} egy {year}-ban bemutatott film. Tartalom: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Listák",
+          "description": "Fedezd fel az összes listát, amely tartalmazza a(z) {title} filmet."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Kritikák",
+          "description": "Fedezd fel a(z) {title} film összes kritikáját."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "A(z) {title} {creators} sorozata, amelyet először {year}-ban sugároztak. Tartalom: {overview}",
+        "description_no_creator": "A(z) {title} egy sorozat, amelyet először {year}-ban sugároztak. Tartalom: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Listák",
+          "description": "Fedezd fel az összes listát, amely tartalmazza a(z) {title} sorozatot."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Kritikák",
+          "description": "Fedezd fel a(z) {title} sorozat összes kritikáját."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • Évadok",
+          "description": "Fedezd fel a(z) {title} sorozat összes évadát."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • {number}. évad",
+            "description": "Fedezd fel a(z) {title} sorozat {number}. évadának összes epizódját."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • Filmek",
+          "description": "Fedezd fel az összes filmet, amelyben {name} játszott vagy közreműködött."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • Sorozatok",
+          "description": "Fedezd fel az összes sorozatot, amelyben {name} játszott vagy közreműködött."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "@{username} kritikája a(z) {title} címről"
+      },
+      "create": {
+        "metadata": {
+          "title": "Kritika írása a(z) {title} címről",
+          "description": "Oszd meg a véleményedet a(z) {title} címről."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "A Paradise Pictures felfedezése",
+        "description": "Indulj útnak, és fedezd fel a szigetet és sokszínű tájait. A rajta élő számos film a maga diegetikus környezetében tűnik fel. Sikerül majd minden szegletét bejárnod?"
+      }
+    },
+    "legal": {
+      "label": "Jogi információk",
+      "description": "Olvasd el a {app} jogi dokumentumait.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "Használati feltételek",
+          "description": "Olvasd el a {app} használati feltételeit."
+        },
+        "sections": {
+          "intro": "Ezek a Használati feltételek (a továbbiakban „Feltételek”) szabályozzák a {app} alkalmazáshoz való hozzáférést és annak használatát. Az alkalmazást Loup (a továbbiakban „a Kiadó”) adja ki, székhelye Párizs. A {app}-ra történő regisztráció a jelen Feltételek fenntartás nélküli elfogadását jelenti.",
+          "presentation": {
+            "label": "1. A szolgáltatás bemutatása",
+            "content": "A {app} egy ingyenes alkalmazás, amely lehetővé teszi a felhasználók számára, hogy filmekkel kapcsolatos információkat tekintsenek meg, kritikákat tegyenek közzé, műveket értékeljenek és személyes listákat hozzanak létre."
+          },
+          "account": {
+            "label": "2. Fiók és biztonság",
+            "content": "A közzétételi funkciók eléréséhez fiók létrehozása szükséges. A Felhasználó felelős a belépési adatai bizalmas kezeléséért. Csalárd használat vagy feltörés gyanúja esetén a Felhasználónak haladéktalanul kapcsolatba kell lépnie a támogatással itt: <email></email>."
+          },
+          "conduct": {
+            "label": "3. Magatartási szabályok",
+            "content": "A Felhasználó vállalja, hogy kritikáiban és listáiban udvarias és tiszteletteljes marad. Kifejezetten tilos: a gyűlölködő, becsületsértő vagy rasszista megnyilvánulás, a zaklatás, valamint a spam és a kéretlen kereskedelmi reklám. A Kiadó fenntartja a jogot, hogy a szabályokat sértő tartalmat törölje, és az érintett fiókot előzetes értesítés nélkül felfüggessze."
+          },
+          "child_safety": {
+            "label": "4. Gyermekvédelmi szabályzat",
+            "content": "A {app} szigorú zéró toleranciát hirdet a gyermekek szexuális bántalmazásával és kizsákmányolásával (CSAE) szemben. Kifejezetten és feltétel nélkül tilos a {app}-on minden olyan tartalom létrehozása, feltöltése, tárolása, terjesztése, kérése vagy népszerűsítése, amely kiskorúakat szexualizál, kizsákmányol vagy bármilyen más módon veszélybe sodor. Minden fiókot, amely megsérti ezt a szabályzatot, azonnal és véglegesen kizárunk, és a Kiadó az érintett tartalmat a rendelkezésre álló felhasználói adatokkal együtt bejelenti a National Center for Missing & Exploited Children (NCMEC) szervezetnek és/vagy az illetékes bűnüldöző hatóságoknak, a hatályos jogszabályoknak megfelelően. Minden felhasználó, aki CSAE-nek minősülő tartalomról vagy magatartásról szerez tudomást, köteles azt haladéktalanul bejelenteni itt: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. Szellemi tulajdon",
+            "content": "A Felhasználó marad az általa írt kritikák jogosultja. A {app}-on való közzététellel azonban ingyenes, nem kizárólagos felhasználási engedélyt ad a Kiadónak arra, hogy e tartalmat az alkalmazáson belül megjelenítse, többszörözze és műszakilag átalakítsa. A {app} vizuális elemei, kódja és arculata a Kiadó kizárólagos tulajdona."
+          },
+          "privacy": {
+            "label": "6. Személyes adatok",
+            "content": "A magánéleted tiszteletben tartása az elsődleges szempontunk. A {app} nem ad el, nem ad bérbe és nem oszt meg semmilyen személyes adatot kereskedelmi vagy reklámcélú harmadik felekkel. A gyűjtött adatokat (e-mail-cím, felhasználónév, alkalmazáson belüli aktivitás) kizárólag a szolgáltatás működtetéséhez és a fiók kezeléséhez használjuk. A hozzáféréshez, módosításhoz vagy törléshez (GDPR) való jogaidat itt gyakorolhatod: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookie-k és nyomkövetők",
+            "content": "A {app} nem használ reklámcélú cookie-kat és harmadik féltől származó viselkedéskövetőket. Mindössze kétféle technikai cookie-t használ: egy hitelesítési cookie-t (hogy bejelentkezve maradj) és egy nyelvi beállítást tároló cookie-t (hogy megjegyezze a választásodat). Mivel ezek a cookie-k a szolgáltatáshoz feltétlenül szükségesek, nem igényelnek előzetes hozzájárulást."
+          },
+          "ads": {
+            "label": "8. Reklám",
+            "content": "Az alkalmazás jelenleg mindenféle reklám nélkül érhető el. Ha ez a modell megváltozna, a felhasználókat a jelen Feltételek módosításával értesítjük."
+          },
+          "liability": {
+            "label": "9. Felelősség",
+            "content": "A Kiadó törekszik arra, hogy a {app} a hét minden napján, a nap 24 órájában elérhető legyen, de nem garantálja a fennakadások és hibák teljes hiányát. A filmekkel kapcsolatos információk harmadik felek adatbázisaiból származnak; a Kiadó nem vonható felelősségre az ezekben esetlegesen előforduló pontatlanságokért."
+          },
+          "law": {
+            "label": "10. Alkalmazandó jog",
+            "content": "A jelen Feltételekre a francia jog alkalmazandó. Olyan jogvita esetén, amely a <email></email> címen békés úton nem rendezhető, a párizsi bíróságok kizárólagos illetékességgel bírnak."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "Adatvédelmi szabályzat",
+          "description": "Olvasd el a {app} adatvédelmi szabályzatát."
+        },
+        "sections": {
+          "intro": "Az adatvédelem a {app} filozófiájának középpontjában áll. Ez a szabályzat részletezi, milyen adatokat gyűjtünk, miért gyűjtjük és hogyan védjük őket. Röviden: nem adjuk el az adataidat.",
+          "controller": {
+            "label": "1. Adatkezelő",
+            "content": "Az adatkezelő Loup, székhelye Párizs (Franciaország). Adatvédelmi kérdésekben itt veheted fel a kapcsolatot: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. Gyűjtött adatok",
+            "content": "Csak az alkalmazás működéséhez feltétlenül szükséges adatokat gyűjtjük: az e-mail-címedet (a hitelesítéshez), a felhasználónevedet és a használati adataidat (értékelt filmek, kritikák, listák). A jelszavaid titkosított (hashelt) és biztonságos formában vannak eltárolva."
+          },
+          "purpose": {
+            "label": "3. Az adatkezelés célja",
+            "content": "Az adataidat kizárólag a következőkre kezeljük: hogy létrehozhasd és kezelhesd a fiókodat, hogy megjeleníthessük a listáidat és az értékeléseidet, valamint hogy biztosítsuk a szolgáltatás műszaki működését. Az adataidat nem használjuk reklámcélú profilalkotásra."
+          },
+          "sharing": {
+            "label": "4. Adatok megosztása",
+            "content": "A személyes adataidat soha nem adjuk el, nem adjuk bérbe és nem adjuk át harmadik feleknek. Előfordulhat, hogy a műszaki szolgáltatóink (hosting, tranzakciós e-mail-szolgáltatás) tárolják őket, akiket szigorú titoktartás köt, és megfelelnek a GDPR-nak."
+          },
+          "retention": {
+            "label": "5. Megőrzési idő",
+            "content": "Az adataidat addig őrizzük meg, amíg a fiókod aktív. Ha úgy döntesz, hogy törlöd a fiókodat, minden személyes adatod (e-mail-cím, felhasználónév, kritikák) véglegesen törlődik az adatbázisainkból."
+          },
+          "rights": {
+            "label": "6. A te jogaid (GDPR)",
+            "content": "A szabályozásnak megfelelően jogod van hozzáférni az adataidhoz, javítani, továbbítani és törölni azokat. Ezeket a jogokat bármikor gyakorolhatod közvetlenül az alkalmazásban, vagy írhatsz nekünk ide: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookie-k",
+            "content": "Ahogy a Használati feltételekben is szerepel, csak feltétlenül szükséges technikai cookie-kat használunk (munkamenet és nyelv). Semmilyen harmadik féltől származó reklám- vagy nyomkövető cookie-t nem helyezünk el az eszközödön."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "Keress filmet, sorozatot, listát, személyt vagy felhasználót..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "Biztosan eltávolítod ezt a művet a megtekintettek közül? Ha van rá értékelésed vagy kritikád, azok is törlődnek."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "Biztosan befejezed a sorozatot? Minden évad minden epizódja megtekintettként lesz megjelölve."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "Biztosan befejezed a {seasonNumber}. évadot? Az évad minden epizódja megtekintettként lesz megjelölve."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "Ahhoz, hogy itt aktivitás jelenjen meg, neked vagy az általad követett felhasználóknak filmeket, sorozatokat stb. kell értékelnetek..."
+    },
+    "feed_person": {
+      "message": "Ahhoz, hogy itt aktivitás jelenjen meg, filmekben vagy sorozatokban közreműködő embereket kell követned."
+    },
+    "playlists": {
+      "items": {
+        "empty": "Ebben a listában nincs film vagy sorozat. Adj hozzá néhányat, hogy megtöltsd!"
+      },
+      "add_to": {
+        "empty": "Nincs listád. Hozz létre egyet, hogy filmeket vagy sorozatokat tegyél bele, és könnyen megtaláld őket!"
+      },
+      "saved": {
+        "empty": "Nincs mentett listád. Mentsd el egy listát, hogy könnyen megtaláld a könyvtáradban!"
+      },
+      "members": {
+        "empty": "Ennek a listának nincsenek tagjai. Adj hozzá néhányat, hogy másokkal együtt dolgozhass ugyanazon a listán!",
+        "search": "Keress felhasználókat, akiket hozzáadsz a listához..."
+      }
+    },
+    "follow-requests": {
+      "empty": "Nincs függőben lévő követési kérésed. Ha lesz, itt fog megjelenni!"
+    },
+    "recos": {
+      "empty": "Nincs ajánlód. Ha lesz, itt fog megjelenni!",
+      "send_to": {
+        "empty": "Nincs kinek ajánlót küldened. Barátoknak kell lennetek, hogy ajánlót küldhess neki (kétirányú követés)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "Még nincs elmentett elemed. Ha lesz, itt fog megjelenni!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> ajánlotta neked a(z) <movie></movie> filmet"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> ajánlotta neked a(z) <tv_series></tv_series> sorozatot"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> megnézte a(z) <movie></movie> filmet, amit ajánlottál neki"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> megnézte a(z) <tv_series></tv_series> sorozatot, amit ajánlottál neki"
+    },
+    "follower_created": {
+      "description": "<user></user> követni kezdett"
+    },
+    "follower_accepted": {
+      "description": "<user></user> elfogadta a követési kérésedet"
+    },
+    "follower_request": {
+      "description": "<user></user> követni szeretne"
+    },
+    "friend_created": {
+      "description": "<user></user> most már a barátod"
+    }
+  }
+}

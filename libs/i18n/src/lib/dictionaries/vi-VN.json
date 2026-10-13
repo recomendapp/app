@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "Một cách khác để khám phá điện ảnh",
+    "description": "{app} là mạng xã hội dành cho người yêu điện ảnh. Khám phá, chia sẻ và dạo quanh phim và phim bộ cùng bạn bè."
+  },
+  "common": {
+    "messages": {
+      "welcome": "Chào mừng",
+      "welcome_to_app": "Chào mừng bạn đến với {app}",
+      "hello": "Xin chào",
+      "greeting_with_name": "{timeOfDay, select, morning {Chào buổi sáng, {name}} afternoon {Chào buổi chiều, {name}} evening {Chào buổi tối, {name}} night {Chúc ngủ ngon, {name}} other {Xin chào, {name}}}",
+      "click_here": "Nhấn vào đây",
+      "see_more": "Xem thêm",
+      "see_more_details": "Xem thêm chi tiết",
+      "more": "Thêm",
+      "view_profile": "Xem trang cá nhân",
+      "library": "Thư viện",
+      "watchlist": "Danh sách cần xem",
+      "for_later": "Để sau",
+      "heart_pick": "tâm đắc",
+      "add_to_heart_picks": "Thêm vào mục tâm đắc",
+      "remove_from_heart_picks": "Bỏ khỏi mục tâm đắc",
+      "add_rating": "Thêm điểm",
+      "edit_rating": "Sửa điểm",
+      "remove_rating": "Bỏ điểm",
+      "share_my_rating": "Chia sẻ điểm của tôi",
+      "share_review": "Chia sẻ bài đánh giá",
+      "show_likes_count": "Hiện số lượt thích",
+      "show_comments_count": "Hiện số bình luận",
+      "add_to_watchlist": "thêm vào danh sách cần xem",
+      "remove_from_watchlist": "bỏ khỏi danh sách cần xem",
+      "no_results": "không có kết quả",
+      "no_results_for": "Không có kết quả cho <strong>{query}</strong>",
+      "no_followees": "Bạn chưa theo dõi ai",
+      "no_followers": "Chưa có người theo dõi",
+      "no_rating": "Chưa có điểm",
+      "must_watch_to_review": "bạn phải xem tác phẩm này mới viết đánh giá được",
+      "review_cannot_be_empty": "bài đánh giá không được để trống",
+      "no_activity": "không có hoạt động",
+      "followers_ratings": "điểm của những người theo dõi",
+      "added_by": "được thêm bởi",
+      "sort_by": "sắp xếp theo",
+      "sort_order": "thứ tự sắp xếp",
+      "go_to_film": "đến phim",
+      "go_to_tv_series": "đến phim bộ",
+      "go_to_user": "đến người dùng",
+      "go_to_person": "đến nhân vật",
+      "go_to_activity": "đến hoạt động",
+      "go_to_playlist": "đến danh sách",
+      "go_to_review": "đến bài đánh giá",
+      "go_to_director": "đến đạo diễn",
+      "go_to_creator": "đến người sáng tạo",
+      "show_director": "hiện đạo diễn",
+      "show_creator": "hiện người sáng tạo",
+      "show_credit": "hiện phần tham gia",
+      "credits": "danh đề",
+      "view_recommendation": "xem reco",
+      "view_directors": "xem đạo diễn",
+      "no_director": "không có đạo diễn",
+      "view_comment": "xem bình luận",
+      "add_comment": "thêm bình luận",
+      "edit_comment": "sửa bình luận",
+      "delete_comment": "Xóa bình luận",
+      "do_you_really_want_to_delete_this_comment": "Bạn có thật sự muốn xóa bình luận này?",
+      "comment_deleted": "Bình luận này đã bị xóa",
+      "write_your_comment_here": "Viết một bình luận...",
+      "reply": "Trả lời",
+      "replies_count": "{count} trả lời",
+      "view_replies": "Xem {count} trả lời",
+      "hide_replies": "Ẩn các trả lời",
+      "load_more_replies": "Tải thêm trả lời",
+      "get_started": "bắt đầu",
+      "get_started_its_free": "bắt đầu thôi 🎬, miễn phí!",
+      "import": "Nhập dữ liệu",
+      "upgrade_to_plan": "nâng cấp lên {plan}",
+      "choose_subscription_recurrence": "chọn kỳ thanh toán cho gói của bạn",
+      "compare_plans": "so sánh các gói",
+      "save_up_to_percent": "tiết kiệm tới {percent}%",
+      "is_empty": "Ở đây hơi trống trải",
+      "add_to_playlist": "thêm vào một danh sách",
+      "send_to_friend": "gửi cho một người bạn",
+      "pin_to_profile": "Ghim lên trang cá nhân",
+      "unpin_from_profile": "Bỏ ghim khỏi trang cá nhân",
+      "pinned": "Đã ghim",
+      "unpinned": "Đã bỏ ghim",
+      "no_pinned": "Không có mục nào được ghim",
+      "pinned_limit_reached": "Bạn đã ghim tối đa số mục — hãy bỏ ghim một mục để thêm mục mới",
+      "custom_sort": "sắp xếp tùy ý",
+      "quick_add": "thêm nhanh",
+      "favorite_films": "phim yêu thích",
+      "follow": "theo dõi",
+      "followed": "đang theo dõi",
+      "request_sent": "Đã gửi yêu cầu",
+      "follow_requests": "yêu cầu theo dõi",
+      "no_follow_requests": "không có yêu cầu theo dõi",
+      "follower": "người theo dõi",
+      "follower_count": "{count} người theo dõi",
+      "see_followers": "xem những người theo dõi",
+      "followee": "người được theo dõi",
+      "followee_count": "đang theo dõi {count}",
+      "see_followees": "xem những người bạn theo dõi",
+      "last_activities": "hoạt động gần đây",
+      "last_updated": "cập nhật lần cuối",
+      "last_updated_at_date": "cập nhật lần cuối ngày {date}",
+      "show_all": "hiện tất cả",
+      "this_account_is_private": "tài khoản này ở chế độ riêng tư",
+      "follow_to_see_activities": "theo dõi để xem các hoạt động",
+      "review": "bài đánh giá",
+      "no_overview": "không có nội dung tóm tắt",
+      "cast": "diễn viên",
+      "no_cast": "không có diễn viên",
+      "recent": "mới nhất",
+      "popular": "phổ biến",
+      "popularity": "độ phổ biến",
+      "no_reviews": "Chưa có bài đánh giá",
+      "no_playlists": "Chưa có danh sách",
+      "no_playlists_found": "Không tìm thấy danh sách nào",
+      "no_films": "Chưa có phim",
+      "no_tv_series": "Chưa có phim bộ",
+      "view_activity": "xem hoạt động",
+      "comment_count": "{count} bình luận",
+      "write_review": "viết đánh giá",
+      "new_review": "bài đánh giá mới",
+      "edit_review": "sửa bài đánh giá",
+      "review_by": "đánh giá của {name}",
+      "my_review": "bài đánh giá của tôi",
+      "add_review": "thêm bài đánh giá",
+      "tv_series": "phim bộ",
+      "film": "phim",
+      "movie": "phim",
+      "media": "tác phẩm",
+      "tv_season": "mùa",
+      "tv_season_count": "{count} mùa",
+      "tv_season_value": "Mùa {number}",
+      "tv_season_short": "M{number}",
+      "tv_episode": "tập",
+      "tv_episode_count": "{count} tập",
+      "tv_episode_value": "Tập {number}",
+      "tv_episode_short": "M{seasonNumber}T{episodeNumber}",
+      "tv_special_episode": "tập đặc biệt",
+      "first_air_date": "lần phát sóng đầu",
+      "last_air_date": "lần phát sóng cuối",
+      "see_film": "xem phim",
+      "see_tv_series": "xem phim bộ",
+      "watch_film_title": "xem {title}",
+      "watch_film_streaming_or_download": "Xem <important>{title}</important> trên nền tảng trực tuyến hoặc tải về hợp pháp",
+      "download": "tải về",
+      "downloaded": "đã tải về",
+      "person": "nhân vật",
+      "top_result": "kết quả nổi bật",
+      "user": "người dùng",
+      "reco": "reco",
+      "my_recos": "reco của tôi",
+      "item": "mục",
+      "item_count": "{count} mục",
+      "type": "loại",
+      "complete": "hoàn tất",
+      "completed": "đã hoàn tất",
+      "collection": "bộ sưu tập",
+      "most_recent": "mới nhất",
+      "most_popular": "phổ biến nhất",
+      "most_old": "cũ nhất",
+      "known_for": "Được biết đến qua",
+      "release_date": "ngày ra mắt",
+      "last_appearance_date": "lần xuất hiện cuối",
+      "vote_average": "điểm trung bình",
+      "added": "đã thêm",
+      "added_date": "ngày thêm",
+      "added_at": "thêm lúc",
+      "add": "thêm",
+      "playlist_name": "tên danh sách",
+      "updated_at": "cập nhật lúc",
+      "created_at": "tạo lúc",
+      "likes": "lượt thích",
+      "likes_count": "số lượt thích",
+      "search_media": "tìm tác phẩm",
+      "search_film": "tìm phim",
+      "start_typing_to_search_films": "bắt đầu nhập để tìm phim",
+      "search_tv_series": "tìm phim bộ",
+      "start_typing_to_search_tv_series": "bắt đầu nhập để tìm phim bộ",
+      "search_person": "tìm nhân vật",
+      "start_typing_to_search_persons": "bắt đầu nhập để tìm nhân vật",
+      "search_user": "tìm người dùng",
+      "start_typing_to_search_users": "bắt đầu nhập để tìm người dùng",
+      "search_playlist": "tìm danh sách",
+      "start_typing_to_search_playlists": "bắt đầu nhập để tìm danh sách",
+      "search_film_or_tv_series": "tìm phim hoặc phim bộ",
+      "watched_date": "ngày xem",
+      "mark_as_watched": "đánh dấu đã xem",
+      "remove_from_watched": "bỏ khỏi mục đã xem",
+      "rating": "điểm",
+      "create_a_playlist": "tạo danh sách",
+      "by_name": "của {name}",
+      "reset": "đặt lại",
+      "job": "vai trò",
+      "department": "bộ phận",
+      "share_title_via": "Chia sẻ <strong>{title}</strong> qua",
+      "share_title": "Chia sẻ <strong>{title}</strong>",
+      "link": "liên kết",
+      "copy_link": "sao chép liên kết",
+      "copied": "Đã sao chép",
+      "other": "Khác",
+      "via": "qua",
+      "edit": "sửa",
+      "guest": "khách",
+      "are_u_sure": "Bạn có chắc không?",
+      "backward": "lùi",
+      "forward": "tiến",
+      "back": "trở lại",
+      "next": "tiếp",
+      "notification": "thông báo",
+      "see_notifications": "xem thông báo",
+      "open_social_panel": "mở bảng xã hội",
+      "cancel_change": "hủy thay đổi",
+      "do_you_really_want_to_cancel_change": "Bạn có thật sự muốn hủy các thay đổi?",
+      "continue_editing": "tiếp tục sửa",
+      "confirm": "xác nhận",
+      "terms_of_use": "điều khoản sử dụng",
+      "privacy_policy": "chính sách bảo mật",
+      "request_made": "đã gửi yêu cầu",
+      "request_canceled": "đã hủy yêu cầu",
+      "cancel_request": "hủy yêu cầu",
+      "open_menu": "mở menu",
+      "feed": "bảng tin",
+      "about": "giới thiệu",
+      "home": "trang chủ",
+      "search": "tìm kiếm",
+      "explore": "khám phá",
+      "shop": "cửa hàng",
+      "help": "trợ giúp",
+      "legal": "pháp lý",
+      "setting": "cài đặt",
+      "logout": "đăng xuất",
+      "to_watch": "cần xem",
+      "reco_by_your_friends": "reco từ bạn bè của bạn",
+      "friends_playlists": "danh sách của bạn bè",
+      "latest_activity": "hoạt động gần đây",
+      "discover_users": "khám phá người dùng",
+      "most_recommended": "được đề xuất nhiều nhất",
+      "archive": "lưu trữ",
+      "unarchive": "bỏ lưu trữ",
+      "mark_as_read": "đánh dấu đã đọc",
+      "mark_as_unread": "đánh dấu chưa đọc",
+      "accept": "chấp nhận",
+      "accepted": "đã chấp nhận",
+      "decline": "từ chối",
+      "declined": "đã từ chối",
+      "request_accepted": "đã chấp nhận yêu cầu",
+      "request_declined": "đã từ chối yêu cầu",
+      "unread": "chưa đọc",
+      "archived": "đã lưu trữ",
+      "no_notifications": "không có thông báo",
+      "all": "tất cả",
+      "mark_all_as_read": "đánh dấu tất cả đã đọc",
+      "archive_all": "lưu trữ tất cả",
+      "archive_all_read": "lưu trữ tất cả thông báo đã đọc",
+      "please_login": "vui lòng đăng nhập",
+      "like": "thích",
+      "unlike": "bỏ thích",
+      "unfollow": "bỏ theo dõi",
+      "name": "tên",
+      "add_a_name": "thêm một tên",
+      "add_a_description": "thêm mô tả",
+      "visibility": "chế độ hiển thị",
+      "search_an_user": "tìm người dùng",
+      "select_an_item_to_add_to_playlist": "chọn mục để thêm vào danh sách",
+      "select_a_film_to_add_to_playlist": "chọn phim để thêm vào danh sách",
+      "select_a_tv_series_to_add_to_playlist": "chọn phim bộ để thêm vào danh sách",
+      "add_one_or_more_items_to": "Thêm một hoặc nhiều mục vào <important>{title}</important>",
+      "add_one_or_more_films_to": "Thêm một hoặc nhiều phim vào <important>{title}</important>",
+      "add_one_or_more_tv_series_to": "Thêm một hoặc nhiều phim bộ vào <important>{title}</important>",
+      "manage_playlist_access_rights": "quản lý quyền truy cập danh sách",
+      "add_guest": "thêm khách",
+      "manage_members": "quản lý thành viên",
+      "no_member": "không có thành viên",
+      "add_member": "thêm thành viên",
+      "manage_guests": "quản lý khách",
+      "add_guests_to_your_playlist": "thêm khách vào danh sách của bạn",
+      "select_users_to_add_to_playlist": "chọn người dùng để thêm vào danh sách",
+      "select_users_to_send_reco": "chọn người để gửi reco",
+      "select_playlists_to_add_the_item": "chọn các danh sách để thêm mục này",
+      "send": "gửi",
+      "sent": "đã gửi",
+      "select_row": "chọn hàng",
+      "select_all": "chọn tất cả",
+      "no_selected_users": "chưa chọn người dùng nào",
+      "selection_count": "đã chọn {number} trong {total} {type}",
+      "about_title": "về {title}",
+      "detail": "chi tiết",
+      "genre": "thể loại",
+      "male": "nam",
+      "female": "nữ",
+      "non_binary": "phi nhị nguyên",
+      "unspecified": "không rõ",
+      "date_of_birth": "ngày sinh",
+      "date_of_death": "ngày mất",
+      "place_of_birth": "nơi sinh",
+      "age_years": "{count} tuổi",
+      "biography": "tiểu sử",
+      "no_biography_available": "không có tiểu sử",
+      "no_information_available": "không có thông tin",
+      "already_sent": "đã gửi rồi",
+      "already_watched": "đã xem rồi",
+      "already_added": "đã thêm rồi",
+      "recommend_to_friend_to_discover": "Giới thiệu <strong>{title}</strong> cho người bạn chưa xem nó",
+      "add_to_one_or_more_playlists": "Thêm <strong>{title}</strong> vào một hoặc nhiều danh sách của bạn",
+      "my_playlist": "danh sách của tôi",
+      "what_is_title": "<strong>{title}</strong> là gì?",
+      "try_again": "Thử lại",
+      "error": "lỗi",
+      "not_logged_in": "bạn chưa đăng nhập",
+      "an_error_occurred": "Đã xảy ra lỗi",
+      "playlist_not_found": "không tìm thấy danh sách",
+      "user_not_found": "không tìm thấy người dùng",
+      "film_not_found": "không tìm thấy phim",
+      "media_not_found": "không tìm thấy tác phẩm",
+      "review_not_found": "không tìm thấy bài đánh giá",
+      "person_not_found": "không tìm thấy nhân vật",
+      "tv_series_not_found": "không tìm thấy phim bộ",
+      "tv_episode_not_found": "không tìm thấy tập",
+      "tv_season_not_found": "không tìm thấy mùa",
+      "wrong_arguments": "tham số không đúng",
+      "no_media_found": "không tìm thấy tác phẩm nào",
+      "unknown_action": "hành động không xác định",
+      "no_user_found": "không tìm thấy người dùng nào",
+      "no_tv_episodes": "không có tập nào",
+      "save": "lưu",
+      "saved": "đã lưu",
+      "create": "tạo",
+      "film_count": "{count} phim",
+      "tv_series_count": "{count} phim bộ",
+      "login": "đăng nhập",
+      "signup": "đăng ký",
+      "navigation": "điều hướng",
+      "delete": "Xóa",
+      "remove": "Bỏ",
+      "deleted": "Đã xóa",
+      "share": "chia sẻ",
+      "duplicate": "tạo bản sao",
+      "duplicated": "đã tạo bản sao",
+      "cancel": "Hủy",
+      "date": "ngày",
+      "duration": "thời lượng",
+      "sort": "sắp xếp",
+      "show": "hiện",
+      "column": "cột",
+      "comment": "bình luận",
+      "unknown": "không rõ",
+      "community": "cộng đồng",
+      "cast_and_crew": "diễn viên và đoàn làm phim",
+      "soon": "sắp tới",
+      "ios_app": "Ứng dụng iOS",
+      "android_app": "Ứng dụng Android",
+      "coming_soon": "Sắp ra mắt",
+      "new_mobile_app": "Ứng dụng di động mới!",
+      "manage": "quản lý",
+      "monthly": "hằng tháng",
+      "yearly": "hằng năm",
+      "day": "ngày",
+      "week": "tuần",
+      "month": "tháng",
+      "year": "năm",
+      "price": "giá",
+      "free": "miễn phí",
+      "playlist": "danh sách",
+      "public": "công khai",
+      "publish": "đăng",
+      "private": "riêng tư",
+      "description": "mô tả",
+      "details": "chi tiết",
+      "profile": "trang cá nhân",
+      "overview": "tóm tắt",
+      "no_playlists_saved": "chưa lưu danh sách nào",
+      "camera_permission_denied": "quyền truy cập camera bị từ chối",
+      "photo_library_permission_denied": "quyền truy cập thư viện ảnh bị từ chối",
+      "ignore": "bỏ qua",
+      "ok": "đồng ý",
+      "title": "tiêu đề",
+      "skip": "Bỏ qua",
+      "undo": "Hoàn tác",
+      "date_published": "ngày đăng",
+      "date_created": "ngày tạo",
+      "date_updated": "ngày cập nhật",
+      "alphabetical": "theo thứ tự chữ cái",
+      "date_added": "ngày thêm",
+      "number_of_likes": "số lượt thích",
+      "number_of_seasons": "số mùa",
+      "add_to_this_playlist": "thêm vào danh sách này",
+      "save_to_library": "lưu vào thư viện",
+      "remove_from_library": "bỏ khỏi thư viện",
+      "otp": "mã dùng một lần",
+      "ratings_from_followees": "điểm từ những người bạn theo dõi",
+      "choose_from_the_library": "chọn từ thư viện ảnh",
+      "take_a_photo": "chụp ảnh",
+      "delete_current_image": "xóa ảnh hiện tại",
+      "edit_image": "sửa ảnh",
+      "add_image": "thêm ảnh",
+      "verify_with_a_code": "xác minh bằng mã",
+      "order": "thứ tự",
+      "edit_order": "sửa thứ tự",
+      "done": "xong",
+      "can_edit": "có thể sửa?",
+      "upgrade": "nâng cấp",
+      "no_description": "Không có mô tả",
+      "no_comment": "Không có bình luận",
+      "close": "đóng",
+      "edit_playlist": "sửa danh sách",
+      "universe": "thế giới",
+      "cannot_be_changed": "không thể thay đổi",
+      "delete_review": "xóa bài đánh giá",
+      "do_you_really_want_to_delete_this_review": "Bạn có thật sự muốn xóa bài đánh giá này?",
+      "user_liked_playlist": "<name></name> đã thích một danh sách",
+      "user_liked_review": "<name></name> đã thích một bài đánh giá",
+      "runtime": "thời lượng",
+      "ends_at": "Kết thúc vào {value}",
+      "this_user_has_no_activity": "Người dùng này chưa có hoạt động nào",
+      "notification_archived": "đã lưu trữ thông báo",
+      "notification_unarchived": "đã bỏ lưu trữ thông báo",
+      "notification_marked_as_read": "đã đánh dấu thông báo là đã đọc",
+      "notification_marked_as_unread": "đã đánh dấu thông báo là chưa đọc",
+      "or_continue_with": "hoặc tiếp tục với",
+      "message": "tin nhắn",
+      "story": "story",
+      "new_playlist": "danh sách mới",
+      "select_a_type": "chọn một loại",
+      "filter": "bộ lọc",
+      "hide_watched": "ẩn những phim đã xem",
+      "show_me_around": "dẫn tôi đi một vòng",
+      "artwork_from": "Hình minh họa của <important>{source}</important>",
+      "no_active_subscription": "không có gói đang hoạt động",
+      "manage_subscription": "quản lý gói đăng ký",
+      "started_on_date": "bắt đầu ngày {date}",
+      "last_renewed_on_date": "gia hạn lần cuối ngày {date}",
+      "version_value": "phiên bản {value}",
+      "original_title": "tên gốc",
+      "starring": "với sự tham gia của",
+      "write_your_review_here": "viết bài đánh giá của bạn ở đây...",
+      "insert": "chèn",
+      "trailer": "trailer",
+      "list": "danh sách",
+      "grid": "dạng lưới",
+      "order_asc": "thứ tự tăng dần",
+      "order_desc": "thứ tự giảm dần",
+      "menu": "menu",
+      "at_least_one_watched_date_required": "cần ít nhất một ngày xem",
+      "viewer": "Người xem",
+      "editor": "Người biên tập",
+      "admin": "Quản trị viên",
+      "owner": "Chủ sở hữu",
+      "you_dont_have_permission_to_do_this_action": "Bạn không có quyền thực hiện hành động này",
+      "in_progress": "đang thực hiện",
+      "give_up": "bỏ cuộc",
+      "random": "ngẫu nhiên",
+      "reset_password": "Đặt lại mật khẩu",
+      "password_reset": "Mật khẩu đã được đặt lại",
+      "return_to_login": "Trở lại trang đăng nhập",
+      "invalid_code": "Mã không hợp lệ",
+      "no_token_found": "Không tìm thấy token",
+      "first_watched_at": "ngày xem đầu tiên",
+      "watched_dates": "các ngày đã xem",
+      "no_watched_dates": "không có ngày xem",
+      "select_role": "chọn vai trò",
+      "select_format": "chọn định dạng",
+      "theater": "Rạp",
+      "physical": "Bản vật lý",
+      "digital": "Bản số",
+      "streaming": "Trực tuyến",
+      "you_must_be_premium_to_change_member_role": "Bạn phải có Premium để thay đổi vai trò của thành viên",
+      "already_member": "đã là thành viên",
+      "email_already_used": "Email này đã được sử dụng",
+      "email_confirmed": "Email đã được xác nhận",
+      "confirmation_email_sent": "Đã gửi email xác nhận",
+      "continue": "Tiếp tục",
+      "finish": "Hoàn tất",
+      "forgot_password": "Quên mật khẩu",
+      "new_password": "Mật khẩu mới",
+      "confirm_password": "Xác nhận mật khẩu",
+      "password_reseted": "Mật khẩu đã được đặt lại",
+      "reset_your_password": "Đặt lại mật khẩu của bạn",
+      "invalid_token": "Token không hợp lệ",
+      "new_notification": "thông báo mới",
+      "lets_go": "Đi thôi!",
+      "update_available": "Có bản cập nhật",
+      "update_available_description": "Hãy cập nhật ứng dụng để dùng những cải tiến mới nhất.",
+      "update_required_title": "Cần cập nhật",
+      "update_required_description": "Phiên bản này của ứng dụng không còn được hỗ trợ. Hãy cập nhật để tiếp tục dùng Recomend.",
+      "update_app": "Cập nhật",
+      "advertisement": "Quảng cáo",
+      "pending": "Đang chờ",
+      "processing": "Đang xử lý",
+      "awaiting_review": "Đang chờ kiểm tra",
+      "failed": "Thất bại",
+      "data": "Dữ liệu",
+      "restore": "Khôi phục",
+      "fix": "Sửa",
+      "not_found": "Không tìm thấy",
+      "unavailable": "Không khả dụng",
+      "star_on_github": "Tặng chúng tôi một ngôi sao trên GitHub"
+    },
+    "form": {
+      "email": {
+        "label": "Email",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "Email không hợp lệ",
+          "unavailable": "Email này đã được sử dụng"
+        },
+        "verified": "Email đã được xác minh"
+      },
+      "username": {
+        "label": "Tên người dùng",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "Ký tự đầu tiên phải là chữ hoặc số",
+          "double_dot": "Không được dùng hai dấu chấm liền nhau",
+          "ends_with_dot": "Không được kết thúc bằng dấu chấm",
+          "format": "Chỉ được dùng chữ, số và các ký tự '_' và '.'",
+          "unavailable": "Tên người dùng này đã có người dùng"
+        }
+      },
+      "full_name": {
+        "label": "Tên",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "Chỉ được dùng chữ, số và dấu cách"
+        }
+      },
+      "password": {
+        "label": "Mật khẩu",
+        "placeholder": "Nhập mật khẩu của bạn",
+        "schema": {
+          "uppercase": "Cần ít nhất một chữ in hoa",
+          "lowercase": "Cần ít nhất một chữ in thường",
+          "number": "Cần ít nhất một chữ số",
+          "special": "Cần ít nhất một ký tự đặc biệt",
+          "match": "Mật khẩu không khớp"
+        },
+        "confirm": {
+          "label": "Xác nhận mật khẩu",
+          "placeholder": "Xác nhận mật khẩu của bạn"
+        }
+      },
+      "length": {
+        "char_min": "ít nhất {count} ký tự",
+        "char_max": "tối đa {count} ký tự"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "Chỉ được dùng chữ, số và dấu cách"
+      },
+      "error": {
+        "too_many_attempts": "Quá nhiều lần thử, hãy thử lại sau",
+        "not_received_code": "Bạn chưa nhận được mã?",
+        "invalid_code": "Mã không hợp lệ",
+        "turnstile": "Xác minh không thành công, hãy thử lại"
+      },
+      "resend_code": "Gửi lại mã",
+      "resend_email": "Gửi lại email",
+      "code_verified": "Mã đã được xác minh",
+      "code_sent": "Đã gửi mã"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "Không tìm thấy trang",
+        "description": "ồ, trang này không tồn tại..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "ghi lại",
+        "description": "Khám phá, cho điểm và chia sẻ những phim và phim bộ bạn yêu thích."
+      },
+      "recos": {
+        "label": "reco",
+        "description": "Gửi và nhận reco của bạn bè. Tất cả ở một nơi."
+      },
+      "playlists": {
+        "label": "danh sách",
+        "description": "Sắp xếp, chia sẻ và cùng nhau xây dựng các danh sách."
+      },
+      "feed": {
+        "label": "bảng tin",
+        "description": "Theo dõi bạn bè để xem họ xem gì, thích gì và viết gì."
+      },
+      "social_sharing": {
+        "label": "chia sẻ lên mạng xã hội",
+        "description": "Chia sẻ mọi thứ bạn yêu thích lên Instagram hoặc các mạng khác."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "Ghi lại",
+          "description": "Nhớ rõ những phim bạn đã xem"
+        },
+        "recos": {
+          "label": "Reco",
+          "description": "Gửi phim bạn muốn giới thiệu cho bạn bè"
+        },
+        "explore": {
+          "label": "Khám phá",
+          "description": "Khám phá phim mới trên Paradise Pictures, tấm bản đồ tương tác với hơn 1400 phim"
+        },
+        "like": {
+          "label": "Thích",
+          "description": "Bày tỏ tình cảm với những phim, danh sách và bài đánh giá bạn yêu thích"
+        },
+        "rating": {
+          "label": "Cho điểm",
+          "description": "Cho điểm những phim bạn đã xem"
+        },
+        "watchlist": {
+          "label": "Danh sách cần xem",
+          "description": "Lưu những phim bạn muốn xem"
+        },
+        "playlists": {
+          "label": "Danh sách",
+          "description": "Sắp xếp phim của bạn thành danh sách và chia sẻ"
+        },
+        "reviews": {
+          "label": "Bài đánh giá",
+          "description": "Viết đánh giá và để con người mê phim khó tính trong bạn lên tiếng"
+        },
+        "feed": {
+          "label": "Bảng tin",
+          "description": "Theo dõi hoạt động của bạn bè"
+        },
+        "adsFree": {
+          "label": "Không quảng cáo",
+          "description": "Dùng Recomend không quảng cáo, mãi mãi"
+        }
+      }
+    },
+    "welcome": {
+      "title": "Cảm ơn bạn đã đăng ký!",
+      "description": "Đây là lượt xem nhanh những gì bạn làm được với {app}.",
+      "follow": {
+        "title": "Theo dõi mọi người",
+        "description": "Theo dõi bạn bè để xem họ đang xem gì."
+      },
+      "import": {
+        "title": "Bạn đến từ một nền tảng khác?"
+      }
+    },
+    "collection": {
+      "label": "thư viện",
+      "my_recos": {
+        "label": "reco của tôi",
+        "search": {
+          "placeholder": "tìm trong reco của tôi..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "xóa khỏi reco của tôi",
+            "description": "Bạn có thật sự muốn xóa <important>{title}</important> khỏi reco của mình?"
+          },
+          "complete_confirm": {
+            "title": "hoàn tất reco",
+            "description": "Bạn có thật sự muốn hoàn tất reco <important>{title}</important>?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "tìm trong danh sách cần xem..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "xóa khỏi danh sách cần xem",
+            "description": "Bạn có thật sự muốn xóa <important>{title}</important> khỏi danh sách cần xem?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "tìm trong mục tâm đắc..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "xóa khỏi mục tâm đắc",
+            "description": "Bạn có thật sự muốn xóa <important>{title}</important> khỏi mục tâm đắc?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> đã xem",
+        "rated": "<name></name> đã cho điểm",
+        "liked": "<name></name> đã thích",
+        "rated_liked": "<name></name> đã thích và cho điểm",
+        "reviewed": "<name></name> đã viết đánh giá"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> là <important>{roles}</important> trong <linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> là <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "Cho phép ứng dụng",
+        "description_generic": "Một ứng dụng đang yêu cầu truy cập tài khoản của bạn.",
+        "description": "{client} muốn truy cập tài khoản của bạn.",
+        "scopes_label": "Điều này sẽ cho phép ứng dụng:",
+        "accept": "Cho phép",
+        "deny": "Từ chối",
+        "error": {
+          "invalid_request": "Yêu cầu không hợp lệ hoặc đã hết hạn",
+          "invalid_request_description": "Hãy bắt đầu lại quá trình cấp quyền từ ứng dụng đã dẫn bạn tới đây.",
+          "client_not_found": "Không tìm thấy ứng dụng này.",
+          "submit_failed": "Đã có gì không ổn. Hãy thử lại."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "Đăng nhập vào tài khoản {app} của bạn."
+        },
+        "label": "Đăng nhập",
+        "description": "Khám phá những phim được giới thiệu hay nhất.",
+        "or_continue_with": "Hoặc tiếp tục với",
+        "no_account_yet": "Chưa có tài khoản?",
+        "form": {
+          "identifier": {
+            "label": "Email hoặc tên người dùng",
+            "placeholder": "Nhập email hoặc tên người dùng của bạn"
+          },
+          "password": {
+            "label": "Mật khẩu",
+            "placeholder": "Nhập mật khẩu của bạn"
+          },
+          "submit": "Đăng nhập",
+          "forgot_password": "Quên mật khẩu?",
+          "wrong_credentials": "Email hoặc mật khẩu không đúng"
+        },
+        "otp": {
+          "password_login": "Bạn muốn đăng nhập bằng mật khẩu?",
+          "form": {
+            "submit": "Nhận mã",
+            "no_user_found": "Không tìm thấy người dùng với email này",
+            "success": "Đã đăng nhập"
+          },
+          "confirm_form": {
+            "label": "Xác nhận mã",
+            "description": "Một mã xác minh đã được gửi tới địa chỉ {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "Đăng ký {app} để khám phá và chia sẻ những phim được giới thiệu."
+        },
+        "description": "Tạo tài khoản để giới thiệu một phim cho người bạn lúc nào cũng quên tên phim.",
+        "form": {
+          "success": "Một email xác minh đã được gửi tới {email}"
+        },
+        "confirm_form": {
+          "label": "Xác nhận email",
+          "description": "Một liên kết xác minh đã được gửi tới địa chỉ {email}"
+        },
+        "return_to_login": "Ồ, tôi đã có tài khoản rồi."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "Quên mật khẩu",
+          "description": "Đặt lại mật khẩu của bạn."
+        },
+        "label": "Quên mật khẩu",
+        "description": "Bạn nên dùng trình quản lý mật khẩu, tiện lắm đấy.",
+        "return_to_login": "Ồ, hóa ra tôi vẫn nhớ mật khẩu.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "Đặt lại mật khẩu",
+          "code_sent": "Đã gửi yêu cầu"
+        },
+        "confirm_form": {
+          "label": "Xác nhận mã",
+          "description": "Một mã xác minh đã được gửi tới địa chỉ {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "Đặt lại mật khẩu",
+          "description": "Chọn mật khẩu mới cho tài khoản của bạn."
+        }
+      },
+      "error": {
+        "label": "Lỗi",
+        "description": "Đã xảy ra lỗi trong quá trình xác thực.",
+        "return_to_login": "Trở về nơi an toàn"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "Giới thiệu",
+        "marquee": "Trong đời bạn không có gì thú vị hơn việc đọc các trang 'Giới thiệu' trên mạng sao?",
+        "intro": "<strong>Recomend</strong> là không gian dành riêng cho việc khám phá, giới thiệu và sắp xếp phim. Chúng tôi thiết kế mọi thứ để lời truyền miệng cuối cùng cũng có được chỗ dựa số tốt nhất. Cách tiếp cận của chúng tôi đặt con người và các mối quan hệ giữa họ vào trung tâm, trong một thời đại mà việc tiêu thụ quay quanh chính bản thân ta, hay nói đúng hơn là quanh dòng chữ 'gợi ý cho bạn'.",
+        "slogan": {
+          "1": "Không quảng cáo và không hứa hẹn mơ hồ. 🍆",
+          "2": "Vừa là mạng xã hội, vừa là một công cụ.",
+          "3": "Làm thủ công, bởi những người say mê.",
+          "4": "Nghiệp dư, theo nghĩa đẹp nhất của từ này."
+        },
+        "last": "Recomend có thể dùng một mình hay cùng người khác, công khai hay riêng tư, ngày hay đêm, nhưng đừng bao giờ dùng khi đang xem phim — tập trung vào phim đi!"
+      },
+      "team": {
+        "label": "Đội ngũ",
+        "intro": "Recomend được tạo ra bởi hai người anh em say mê điện ảnh, thích dồn thời gian vào những dự án quá nhiều tham vọng mà có thể chẳng bao giờ thành hình.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "Một kiến trúc sư - kỹ sư tăng động mà một nghề thì chẳng bao giờ đủ (start-up nation thực thụ), Yoann là người nảy ra ý tưởng về tấm bản đồ phim, ban đầu chỉ với tham vọng khiêm tốn là làm poster treo trong nhà vệ sinh của mình. Khi Loup gia nhập, mục tiêu vọt lên trời, và trong lúc hơi bị dòng chảy cuốn đi, anh đảm nhận toàn bộ phần đồ họa của bản đồ và trang web, cùng toàn bộ phần truyền thông (dù chẳng thích). Anh cũng góp ý về UX/UI và đề xuất vô số tính năng mà không hình dung hết việc viết code chúng khó đến đâu (chuyện này thì đã tiến bộ)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "Hoàn toàn tự học, nhưng vẫn kịp hoàn thành một chương trình học dẫn tới cảnh thất nghiệp không lương trước tuổi 25. Một người thợ đủ nghề thực thụ, Loup lo phần web và viết một giao diện mà anh muốn nó dễ dùng nhất có thể. Loup muốn cảm ơn mọi diễn đàn lập trình đã trả lời (rất, rất) nhiều câu hỏi của anh, cùng tất cả các YouTuber người Ấn đã dẫn đường cho anh như những người cha nuôi suốt những tháng này. Còn mẹ anh thì tin chắc rằng anh trai đã bắt anh làm nô lệ cho dự án này (con ổn mà mẹ)."
+          }
+        },
+        "last": "Để liên lạc với chúng tôi hoặc các thành viên khác của cộng đồng, hãy vào <link>Discord</link> của chúng tôi!"
+      },
+      "pricing": {
+        "label": "Giá",
+        "intro": "Mô hình đăng ký này trước hết là cách để ủng hộ dự án và giúp nó lớn lên. Các tính năng Premium là phần thêm cho những ai dùng Recomend sâu hơn, và chúng xứng với một khoản góp nhỏ. Chúng tôi sẽ luôn giữ lựa chọn dùng trang web miễn phí, không quảng cáo và không cảm giác bị giới hạn.",
+        "subdescription": "*Nếu mức giá thấp đến mức đáng cười của gói này vẫn vượt khả năng của bạn, xin hãy hỏi chính phủ tự do của bạn, những người chịu trách nhiệm cho việc sức mua của bạn bị bốc hơi."
+      },
+      "legal": {
+        "label": "Pháp lý & Bảo mật",
+        "description": "Chúng tôi tôn trọng quyền riêng tư của bạn. Quảng cáo hiển thị cho người dùng khách do Google quản lý và cần dùng cookie kỹ thuật để giới hạn tần suất hiển thị và ngăn gian lận.",
+        "privacyPolicy": "Đọc chính sách bảo mật của chúng tôi",
+        "manageCookies": "Quản lý tùy chọn quảng cáo của tôi (Cookie)"
+      },
+      "open-source": {
+        "label": "Nguồn mở",
+        "intro": "Recomend là nguồn mở: mã nguồn công khai trên GitHub. Hãy ghé xem, góp sức, hoặc đơn giản là để lại cho chúng tôi một ngôi sao!",
+        "star": "Tặng chúng tôi một ngôi sao trên GitHub"
+      },
+      "businessmodel": {
+        "label": "Mô hình kinh doanh",
+        "paragraph": {
+          "1": "Như bạn có thể đoán từ hồ sơ chẳng mấy thương mại của chúng tôi, chúng tôi vẫn chưa hiểu một mô hình kinh doanh có thể làm gì cho mình lúc này...",
+          "2": "Nếu tương lai của Recomend cần đến điều đó, chúng tôi sẽ tìm hiểu và vây quanh mình bằng những người phù hợp — hoặc chí ít là những người quan tâm hơn chúng tôi.",
+          "3": "Còn bây giờ, nói thật, chúng tôi còn những việc khác phải lo."
+        }
+      },
+      "roadmap": {
+        "label": "Lộ trình"
+      },
+      "data": {
+        "label": "Dữ liệu",
+        "paragraph": {
+          "1": "Toàn bộ dữ liệu mô tả dùng trên Recomend do <link>The Movie Database (TMDb)</link> cung cấp qua API của nền tảng. Chúng tôi cũng làm như mọi người, như những con cừu ngoan.",
+          "2": "Với các sai sót hoặc phim còn thiếu, xin liên hệ <link>TMDb</link>."
+        }
+      },
+      "resources": {
+        "label": "Tài nguyên",
+        "intro": "Chuyện này không liên quan nhiều đến điện ảnh, nhưng đây là danh sách những trang chúng tôi thích:"
+      },
+      "contact-support": {
+        "label": "Liên hệ & Hỗ trợ",
+        "help-center": "Tìm câu trả lời cho những câu hỏi hiện sinh của bạn tại <link>Trung tâm trợ giúp</link> của chúng tôi.",
+        "technical-support": "Cho các câu hỏi kỹ thuật: <email></email>",
+        "suggest-a-feature": "Cho các đề xuất: <email></email>",
+        "contact-us": "Chỉ để liên lạc với chúng tôi: <email></email>"
+      },
+      "quote": {
+        "label": "Câu nói",
+        "quote": "« Tôi ghét từ chuyên nghiệp. Tất cả những diễn viên và những người khác nói rằng: tôi là người chuyên nghiệp, tôi là dân pro! Nghĩa là gì chứ? Có từ nào buồn hơn thế không? Bởi vì chữ nghiệp dư bắt nguồn từ chữ tình yêu. Phải làm mọi việc vì tình yêu, nếu không thì ta là những kẻ ngốc. »",
+        "author": "Orson Welles",
+        "date": "1972",
+        "subdescription": "*Chúng tôi đã do dự khi đưa nó vào, vì nó dễ nghe ra kiêu ngạo, nhưng nó phản ánh đúng tâm trạng của chúng tôi về dự án. Dù vậy, nếu bạn không thích, chúng tôi sẽ bỏ đi."
+      }
+    },
+    "settings": {
+      "label": "Cài đặt",
+      "description": "Quản lý cài đặt tài khoản của bạn.",
+      "profile": {
+        "label": "Trang cá nhân",
+        "description": "Đây là cách người khác thấy bạn trên trang web.",
+        "avatar": {
+          "label": "Ảnh đại diện",
+          "delete": "Xóa"
+        },
+        "full_name": {
+          "label": "Tên",
+          "description": "Đây là tên sẽ hiện trên trang cá nhân và trong các email của bạn.",
+          "placeholder": "Nhập tên của bạn",
+          "form": {
+            "min_length": "Tên phải có ít nhất 1 ký tự",
+            "max_length": "Tên không được vượt quá 50 ký tự"
+          }
+        },
+        "bio": {
+          "label": "Giới thiệu bản thân",
+          "description": "Kể cho chúng tôi chút gì về bạn, nó sẽ hiện trên trang cá nhân.",
+          "placeholder": "Kể về bạn",
+          "form": {
+            "max_length": "Phần giới thiệu không được vượt quá 150 ký tự",
+            "format": "Phần giới thiệu không được chứa dòng trống hay chỉ gồm dấu cách."
+          }
+        },
+        "favorite_films": {
+          "label": "Phim yêu thích",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "URL không hợp lệ"
+          }
+        }
+      },
+      "account": {
+        "label": "Tài khoản",
+        "description": "Cập nhật cài đặt tài khoản của bạn.",
+        "username": {
+          "label": "Tên người dùng",
+          "description": "Đây là tên người dùng để người khác tìm thấy bạn và vào trang cá nhân của bạn. Bạn chỉ có thể thay đổi nó một lần mỗi 30 ngày.",
+          "placeholder": "Nhập tên người dùng của bạn",
+          "form": {
+            "min_length": "Tên người dùng phải có ít nhất 3 ký tự",
+            "max_length": "Tên người dùng không được vượt quá 15 ký tự",
+            "invalid": "Tên người dùng chỉ được chứa chữ, số và các ký hiệu '_' và '.'",
+            "unavailable": "Tên người dùng này đã có người dùng"
+          }
+        },
+        "private": {
+          "label": "Tài khoản riêng tư",
+          "description": "Khi tài khoản của bạn ở chế độ riêng tư, chỉ bạn bè của bạn thấy được các hoạt động của bạn."
+        },
+        "email": {
+          "description": "Một email xác minh sẽ được gửi tới cả địa chỉ hiện tại và địa chỉ mới. Bạn phải xác nhận cả hai để thay đổi có hiệu lực.",
+          "change_pending": "Một email xác minh đã được gửi tới địa chỉ mới của bạn <strong>{email}</strong>. Hãy nhấn vào liên kết hoặc nhập mã xác minh để xác nhận thay đổi.",
+          "confirm_email_code": {
+            "description": "Nhập mã xác minh đã gửi tới địa chỉ <strong>{email}</strong> để xác nhận thay đổi."
+          },
+          "change_success": "Địa chỉ email của bạn đã được thay đổi"
+        },
+        "delete_account": {
+          "button": "Xóa tài khoản của tôi",
+          "confirm": {
+            "description": "Bạn có thật sự muốn xóa tài khoản của mình? Hành động này không thể hoàn tác.",
+            "confirm_email_sent": "Một email xác minh đã được gửi tới địa chỉ email của bạn"
+          }
+        }
+      },
+      "appearance": {
+        "label": "Hiển thị",
+        "description": "Tùy chỉnh diện mạo của ứng dụng. Tự động chuyển giữa chủ đề sáng và tối.",
+        "language": {
+          "label": "Ngôn ngữ",
+          "description": "Chọn ngôn ngữ – thay đổi sẽ có hiệu lực sau khi mở lại ứng dụng",
+          "placeholder": "Chọn ngôn ngữ",
+          "not_found": "Không tìm thấy ngôn ngữ"
+        },
+        "theme": {
+          "label": "Chủ đề",
+          "description": "Chọn chủ đề cho giao diện.",
+          "options": {
+            "light": "Sáng",
+            "dark": "Tối"
+          }
+        }
+      },
+      "subscription": {
+        "label": "Gói đăng ký",
+        "description": "Quản lý gói đăng ký để dùng các tính năng Premium."
+      },
+      "security": {
+        "label": "Bảo mật",
+        "description": "Thay đổi mật khẩu sẽ đăng xuất bạn khỏi mọi thiết bị, trừ thiết bị bạn đang dùng.",
+        "current_password": {
+          "label": "Mật khẩu hiện tại",
+          "placeholder": "Nhập mật khẩu hiện tại của bạn",
+          "form": {
+            "required": "Vui lòng nhập mật khẩu hiện tại của bạn",
+            "invalid": "Mật khẩu hiện tại không đúng"
+          }
+        },
+        "new_password": {
+          "label": "Mật khẩu mới",
+          "placeholder": "Nhập mật khẩu mới của bạn",
+          "form": {
+            "min_length": "Mật khẩu phải có ít nhất 8 ký tự",
+            "uppercase": "Cần ít nhất một chữ in hoa",
+            "lowercase": "Cần ít nhất một chữ in thường",
+            "number": "Cần ít nhất một chữ số",
+            "special": "Cần ít nhất một ký tự đặc biệt"
+          }
+        },
+        "confirm_password": {
+          "label": "Xác nhận mật khẩu mới",
+          "placeholder": "Xác nhận mật khẩu mới của bạn",
+          "form": {
+            "match": "Mật khẩu không khớp"
+          }
+        }
+      },
+      "notifications": {
+        "label": "Thông báo",
+        "description": "Quản lý cài đặt thông báo của bạn.",
+        "push_notifications": {
+          "label": "Thông báo đẩy",
+          "form": {
+            "enable": "Bật thông báo đẩy"
+          },
+          "already_granted": "Yêu cầu thông báo đã được thực hiện trước đó; để thay đổi, hãy vào cài đặt trình duyệt của bạn.",
+          "no_enabled": "Hãy bật thông báo trong cài đặt thiết bị để nhận thông báo đẩy.",
+          "open_settings": "Đến cài đặt thiết bị"
+        }
+      },
+      "data": {
+        "label": "Dữ liệu",
+        "description": "Nhập hoặc xuất dữ liệu của bạn.",
+        "importer": {
+          "label": "Nhập dữ liệu",
+          "select_source": "Chọn một nguồn",
+          "instructions_title": "Hướng dẫn",
+          "browse_prompt": "Kéo tệp của bạn vào đây, hoặc <link>chọn tệp</link>",
+          "browse_prompt_mobile": "Chạm để chọn tệp",
+          "uploading": "Đang tải lên…",
+          "processing": "Đang phân tích tệp của bạn…",
+          "upload_error": "Tải lên không thành công, hãy thử lại.",
+          "invalid_file_type": "Loại tệp này không được hỗ trợ cho nguồn này.",
+          "review_title": "Kiểm tra dữ liệu nhập của bạn",
+          "review_summary": "khớp {matched} trong {total}",
+          "validate": "Xác nhận nhập dữ liệu",
+          "validate_confirm_description": "Việc này sẽ nhập toàn bộ các mục khớp và không bị bỏ qua vào thư viện của bạn. Không thể hoàn tác.",
+          "success_title": "Nhập dữ liệu hoàn tất",
+          "success_description": "Dữ liệu của bạn đã được nhập thành công.",
+          "failed_title": "Nhập dữ liệu không thành công",
+          "failed_description": "Đã có gì không ổn khi xử lý lần nhập này.",
+          "pending_description": "Lần nhập của bạn đang trong hàng chờ và sẽ bắt đầu ngay.",
+          "empty": "Chưa có lần nhập nào.",
+          "delete_confirm_description": "Lần nhập này và toàn bộ dữ liệu đã chuẩn bị sẽ bị xóa vĩnh viễn. Không thể hoàn tác.",
+          "keep_existing": "Giữ của tôi",
+          "use_imported": "Dùng bản nhập",
+          "merge": "Gộp",
+          "conflict": "Xung đột",
+          "no_match": "Không khớp",
+          "existing_rating": "Hiện tại: {rating}",
+          "log_column": "Nhật ký",
+          "actions_column": "Hành động",
+          "categories": {
+            "log_movies": "Phim",
+            "log_tv_series": "Phim bộ",
+            "bookmarks": "Danh sách cần xem",
+            "playlists": "Danh sách"
+          },
+          "status": {
+            "pending": "Đang chờ",
+            "processing": "Đang xử lý",
+            "awaiting_review": "Đang chờ kiểm tra",
+            "completed": "Hoàn tất",
+            "failed": "Thất bại"
+          }
+        },
+        "exporter": {
+          "label": "Xuất dữ liệu"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "Nâng cấp lên Premium",
+        "description": "Nâng cấp lên tài khoản Premium để dùng mọi tính năng của {app}."
+      },
+      "header": {
+        "title": "mở rộng điện ảnh của bạn, chia sẻ nhiều hơn, ủng hộ {app}",
+        "subtitle": "dùng thử 1 tháng miễn phí, sau đó {price}/tháng"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "hoạt động",
+            "unlimited_activities": {
+              "label": "hoạt động không giới hạn",
+              "description": "điểm, lượt thích, bài đánh giá, danh sách cần xem và lời giới thiệu"
+            },
+            "favorites": {
+              "label": "yêu thích",
+              "description": "thêm những phim yêu thích vào trang cá nhân"
+            }
+          },
+          "playlists": {
+            "label": "danh sách",
+            "unlimited_playlists": {
+              "label": "không giới hạn",
+              "description": "tạo bao nhiêu danh sách cũng được"
+            },
+            "shared_playlists": {
+              "label": "chia sẻ",
+              "description": "chia sẻ danh sách của bạn với người dùng khác"
+            },
+            "collaborative_playlists": {
+              "label": "cùng làm",
+              "description": "tạo danh sách cùng với người dùng khác"
+            }
+          },
+          "feed": {
+            "label": "bảng tin",
+            "followees": {
+              "label": "người bạn theo dõi",
+              "description": "xem hoạt động của những người bạn theo dõi"
+            },
+            "cast_and_crew": {
+              "label": "diễn viên và đoàn làm phim",
+              "description": "theo dõi hoạt động của những người tham gia các phim"
+            }
+          },
+          "support": {
+            "label": "ủng hộ",
+            "team": {
+              "label": "Ủng hộ đội ngũ {app}"
+            },
+            "credits": {
+              "label": "danh đề",
+              "description": "trang cá nhân của bạn trong danh đề của ứng dụng"
+            }
+          }
+        },
+        "success": {
+          "label": "Cảm ơn bạn đã ủng hộ!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} – danh sách của @{username}",
+        "description": "Khám phá danh sách phim của @{username} trên {app}."
+      },
+      "actions": {
+        "delete": {
+          "description": "Việc này sẽ xóa vĩnh viễn <important>{title}</important> khỏi các danh sách của bạn."
+        }
+      },
+      "search": {
+        "placeholder": "tìm trong danh sách..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "Bạn có thật sự muốn xóa <important>{title}</important> khỏi danh sách của mình?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "Nhập tiêu đề của danh sách"
+        },
+        "description": {
+          "placeholder": "Nhập mô tả cho danh sách"
+        },
+        "error": {
+          "format": "Mô tả không được chứa dòng trống hay chỉ gồm dấu cách."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "Khám phá trang cá nhân của @{username} trên {app}."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} là phim của {directors}, ra mắt năm {year}. Nội dung: {overview}",
+        "description_no_director": "{title} là phim ra mắt năm {year}. Nội dung: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Danh sách",
+          "description": "Khám phá tất cả danh sách có phim {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Bài đánh giá",
+          "description": "Khám phá tất cả bài đánh giá về phim {title}."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} là phim bộ của {creators}, phát sóng lần đầu năm {year}. Nội dung: {overview}",
+        "description_no_creator": "{title} là phim bộ phát sóng lần đầu năm {year}. Nội dung: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Danh sách",
+          "description": "Khám phá tất cả danh sách có phim bộ {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Bài đánh giá",
+          "description": "Khám phá tất cả bài đánh giá về phim bộ {title}."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • Các mùa",
+          "description": "Khám phá tất cả các mùa của phim bộ {title}."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • Mùa {number}",
+            "description": "Khám phá tất cả các tập của mùa {number} trong phim bộ {title}."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • Phim",
+          "description": "Khám phá tất cả các phim mà {name} đã diễn hoặc tham gia."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • Phim bộ",
+          "description": "Khám phá tất cả các phim bộ mà {name} đã diễn hoặc tham gia."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "Bài đánh giá {title} của @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "Viết đánh giá về {title}",
+          "description": "Chia sẻ cảm nhận của bạn về {title}."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Khám phá Paradise Pictures",
+        "description": "Lên đường khám phá hòn đảo và những vùng đất đa dạng của nó. Hàng trăm bộ phim sống ở đây đều được đặt trong chính thế giới của chúng. Bạn có đi hết từng góc của đảo không?"
+      }
+    },
+    "legal": {
+      "label": "Pháp lý",
+      "description": "Đọc các văn bản pháp lý của {app}.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "Điều khoản sử dụng",
+          "description": "Đọc điều khoản sử dụng của {app}."
+        },
+        "sections": {
+          "intro": "Điều khoản sử dụng này (sau đây gọi là \"Điều khoản\") điều chỉnh việc truy cập và sử dụng ứng dụng {app}. Ứng dụng do Loup (sau đây gọi là \"Nhà phát hành\") phát hành, có trụ sở tại Paris. Việc đăng ký trên {app} đồng nghĩa với việc chấp nhận vô điều kiện Điều khoản này.",
+          "presentation": {
+            "label": "1. Giới thiệu dịch vụ",
+            "content": "{app} là ứng dụng miễn phí cho phép người dùng xem thông tin về phim, đăng bài đánh giá, cho điểm tác phẩm và tạo các danh sách cá nhân."
+          },
+          "account": {
+            "label": "2. Tài khoản và bảo mật",
+            "content": "Việc dùng các tính năng đóng góp nội dung yêu cầu tạo tài khoản. Người dùng chịu trách nhiệm bảo mật thông tin đăng nhập của mình. Trong trường hợp bị sử dụng gian lận hoặc nghi ngờ bị xâm nhập, người dùng phải liên hệ ngay với bộ phận hỗ trợ tại: <email></email>."
+          },
+          "conduct": {
+            "label": "3. Quy tắc ứng xử",
+            "content": "Người dùng cam kết giữ thái độ lịch sự và tôn trọng trong các bài đánh giá và danh sách của mình. Nghiêm cấm: những phát ngôn thù hận, vu khống hoặc phân biệt chủng tộc, hành vi quấy rối, cũng như thư rác hay quảng cáo thương mại không mong muốn. Nhà phát hành có quyền xóa mọi nội dung vi phạm các quy tắc này và tạm ngưng tài khoản liên quan mà không cần báo trước."
+          },
+          "child_safety": {
+            "label": "4. Chính sách bảo vệ trẻ em",
+            "content": "{app} áp dụng chính sách không khoan nhượng tuyệt đối đối với hành vi lạm dụng và bóc lột tình dục trẻ em (CSAE). Việc tạo, tải lên, lưu trữ, phân phối, yêu cầu hay cổ xúy bất kỳ nội dung nào mô tả trẻ vị thành niên theo cách tình dục, bóc lột các em hoặc đặt các em vào nguy hiểm theo bất kỳ cách nào khác đều bị cấm rõ ràng và tuyệt đối trên {app}. Mọi tài khoản bị phát hiện vi phạm chính sách này sẽ bị khóa ngay lập tức và vĩnh viễn, và Nhà phát hành sẽ báo cáo nội dung liên quan, cùng mọi thông tin người dùng có được, cho National Center for Missing & Exploited Children (NCMEC) và/hoặc các cơ quan thực thi pháp luật có thẩm quyền, theo pháp luật hiện hành. Người dùng nào biết về nội dung hoặc hành vi có thể cấu thành CSAE phải báo cáo ngay tại: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. Sở hữu trí tuệ",
+            "content": "Người dùng vẫn là chủ sở hữu các bài đánh giá do mình viết. Tuy nhiên, khi đăng trên {app}, người dùng cấp cho Nhà phát hành quyền sử dụng miễn phí, không độc quyền để hiển thị, sao chép và điều chỉnh về mặt kỹ thuật nội dung đó trong ứng dụng. Các thành phần hình ảnh, mã nguồn và thiết kế của {app} là tài sản riêng của Nhà phát hành."
+          },
+          "privacy": {
+            "label": "6. Dữ liệu cá nhân",
+            "content": "Tôn trọng quyền riêng tư của bạn là ưu tiên tuyệt đối của chúng tôi. {app} không bán, không cho thuê và không chia sẻ bất kỳ dữ liệu cá nhân nào với các bên thứ ba thương mại hay quảng cáo. Dữ liệu thu thập (email, tên người dùng, hoạt động trong ứng dụng) chỉ dùng cho việc vận hành dịch vụ và quản lý tài khoản. Bạn có thể thực hiện quyền truy cập, sửa đổi hoặc xóa dữ liệu (GDPR) bằng cách liên hệ: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookie và công cụ theo dõi",
+            "content": "{app} không dùng cookie quảng cáo và không dùng công cụ theo dõi hành vi của bên thứ ba. Chỉ có hai loại cookie kỹ thuật được dùng: một cookie xác thực (để bạn luôn đăng nhập) và một cookie ghi nhớ ngôn ngữ (để nhớ lựa chọn của bạn). Vì các cookie này là cần thiết tuyệt đối cho dịch vụ, chúng được miễn yêu cầu đồng ý trước."
+          },
+          "ads": {
+            "label": "8. Quảng cáo",
+            "content": "Hiện ứng dụng được cung cấp mà không có bất kỳ quảng cáo nào. Nếu mô hình này thay đổi, người dùng sẽ được thông báo qua một bản cập nhật của Điều khoản này."
+          },
+          "liability": {
+            "label": "9. Trách nhiệm",
+            "content": "Nhà phát hành cố gắng giữ {app} luôn truy cập được suốt ngày đêm, nhưng không bảo đảm không có gián đoạn hay lỗi. Thông tin về phim đến từ các cơ sở dữ liệu của bên thứ ba; Nhà phát hành không thể chịu trách nhiệm về những điểm không chính xác có thể có trong đó."
+          },
+          "law": {
+            "label": "10. Luật áp dụng",
+            "content": "Điều khoản này chịu sự điều chỉnh của pháp luật Pháp. Trong trường hợp có tranh chấp không thể giải quyết ôn hòa qua <email></email>, các tòa án tại Paris có thẩm quyền duy nhất."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "Chính sách bảo mật",
+          "description": "Đọc chính sách bảo mật của {app}."
+        },
+        "sections": {
+          "intro": "Bảo vệ dữ liệu là trung tâm trong triết lý của {app}. Chính sách này nêu rõ chúng tôi thu thập dữ liệu nào, vì sao thu thập và bảo vệ chúng ra sao. Ngắn gọn: chúng tôi không bán dữ liệu của bạn.",
+          "controller": {
+            "label": "1. Bên kiểm soát dữ liệu",
+            "content": "Bên kiểm soát dữ liệu là Loup, có trụ sở tại Paris (Pháp). Với mọi câu hỏi về quyền riêng tư, bạn có thể liên hệ: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. Dữ liệu được thu thập",
+            "content": "Chúng tôi chỉ thu thập dữ liệu cần thiết tuyệt đối cho hoạt động của ứng dụng: địa chỉ email của bạn (để xác thực), tên người dùng của bạn và dữ liệu sử dụng của bạn (phim đã cho điểm, bài đánh giá, danh sách). Mật khẩu của bạn được lưu dưới dạng mã hóa (băm) và an toàn."
+          },
+          "purpose": {
+            "label": "3. Mục đích xử lý",
+            "content": "Dữ liệu của bạn chỉ được xử lý để: cho phép bạn tạo và quản lý tài khoản, hiển thị các danh sách và điểm của bạn, và bảo đảm hoạt động kỹ thuật của dịch vụ. Chúng tôi không dùng dữ liệu của bạn để lập hồ sơ quảng cáo."
+          },
+          "sharing": {
+            "label": "4. Chia sẻ dữ liệu",
+            "content": "Dữ liệu cá nhân của bạn không bao giờ bị bán, cho thuê hay chuyển cho bên thứ ba. Dữ liệu có thể được lưu tại các nhà cung cấp kỹ thuật của chúng tôi (lưu trữ, dịch vụ email giao dịch), những bên bị ràng buộc bởi nghĩa vụ bảo mật nghiêm ngặt và tuân thủ GDPR."
+          },
+          "retention": {
+            "label": "5. Thời gian lưu giữ",
+            "content": "Dữ liệu của bạn được lưu trong thời gian tài khoản của bạn còn hoạt động. Nếu bạn quyết định xóa tài khoản, toàn bộ dữ liệu cá nhân của bạn (email, tên người dùng, bài đánh giá) sẽ bị xóa vĩnh viễn khỏi cơ sở dữ liệu của chúng tôi."
+          },
+          "rights": {
+            "label": "6. Quyền của bạn (GDPR)",
+            "content": "Theo quy định, bạn có quyền truy cập, chỉnh sửa, chuyển và xóa dữ liệu của mình. Bạn có thể thực hiện các quyền này bất cứ lúc nào, trực tiếp trong ứng dụng hoặc bằng cách viết cho chúng tôi tại: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookie",
+            "content": "Như đã nêu trong Điều khoản sử dụng, chúng tôi chỉ dùng các cookie kỹ thuật cần thiết (phiên làm việc và ngôn ngữ). Không có cookie quảng cáo hay theo dõi của bên thứ ba nào được đặt trên thiết bị của bạn."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "Tìm phim, phim bộ, danh sách, nhân vật hoặc người dùng..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "Bạn có thật sự muốn bỏ tác phẩm này khỏi mục đã xem? Nếu bạn có điểm hoặc bài đánh giá, chúng cũng sẽ bị xóa."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "Bạn có thật sự muốn hoàn tất phim bộ này? Tất cả các tập của mọi mùa sẽ được đánh dấu đã xem."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "Bạn có thật sự muốn hoàn tất mùa {seasonNumber}? Tất cả các tập trong mùa sẽ được đánh dấu đã xem."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "Để thấy hoạt động ở đây, bạn hoặc những người bạn theo dõi phải cho điểm phim, phim bộ, ..."
+    },
+    "feed_person": {
+      "message": "Để thấy hoạt động ở đây, bạn phải theo dõi những người tham gia các phim hoặc phim bộ."
+    },
+    "playlists": {
+      "items": {
+        "empty": "Danh sách này chưa có phim hay phim bộ nào. Hãy thêm vài mục cho đầy!"
+      },
+      "add_to": {
+        "empty": "Bạn chưa có danh sách nào. Hãy tạo một danh sách để thêm phim hoặc phim bộ và tìm lại dễ dàng!"
+      },
+      "saved": {
+        "empty": "Bạn chưa lưu danh sách nào. Hãy lưu một danh sách để tìm lại dễ dàng trong thư viện!"
+      },
+      "members": {
+        "empty": "Danh sách này chưa có thành viên. Hãy thêm vài người để cùng làm chung một danh sách!",
+        "search": "Tìm người dùng để thêm vào danh sách..."
+      }
+    },
+    "follow-requests": {
+      "empty": "Bạn chưa có yêu cầu theo dõi nào đang chờ. Khi có, chúng sẽ hiện ở đây!"
+    },
+    "recos": {
+      "empty": "Bạn chưa có lời giới thiệu nào. Khi có, chúng sẽ hiện ở đây!",
+      "send_to": {
+        "empty": "Bạn chưa có ai để gửi lời giới thiệu. Hai người phải là bạn bè mới gửi được (theo dõi lẫn nhau)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "Bạn chưa lưu gì cả. Khi lưu, nó sẽ hiện ở đây!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> đã giới thiệu cho bạn phim <movie></movie>"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> đã giới thiệu cho bạn phim bộ <tv_series></tv_series>"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> đã xem phim <movie></movie> mà bạn giới thiệu"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> đã xem phim bộ <tv_series></tv_series> mà bạn giới thiệu"
+    },
+    "follower_created": {
+      "description": "<user></user> đã bắt đầu theo dõi bạn"
+    },
+    "follower_accepted": {
+      "description": "<user></user> đã chấp nhận yêu cầu theo dõi của bạn"
+    },
+    "follower_request": {
+      "description": "<user></user> muốn theo dõi bạn"
+    },
+    "friend_created": {
+      "description": "<user></user> giờ đã là bạn của bạn"
+    }
+  }
+}

@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "Drugi način otkrivanja filma",
+    "description": "{app} je društvena mreža za ljubitelje filma. Otkrivaj, dijeli i istražuj filmove i serije s prijateljima."
+  },
+  "common": {
+    "messages": {
+      "welcome": "Dobro došao",
+      "welcome_to_app": "Dobro došao na {app}",
+      "hello": "Zdravo",
+      "greeting_with_name": "{timeOfDay, select, morning {Dobro jutro, {name}} afternoon {Dobar dan, {name}} evening {Dobra večer, {name}} night {Dobra noć, {name}} other {Zdravo, {name}}}",
+      "click_here": "Klikni ovdje",
+      "see_more": "Prikaži više",
+      "see_more_details": "Prikaži više detalja",
+      "more": "Više",
+      "view_profile": "Prikaži profil",
+      "library": "Knjižnica",
+      "watchlist": "Lista za gledanje",
+      "for_later": "Za poslije",
+      "heart_pick": "{count, plural, one {srčani odabir} few {srčana odabira} other {srčanih odabira}}",
+      "add_to_heart_picks": "Dodaj u srčane odabire",
+      "remove_from_heart_picks": "Ukloni iz srčanih odabira",
+      "add_rating": "Dodaj ocjenu",
+      "edit_rating": "Uredi ocjenu",
+      "remove_rating": "Ukloni ocjenu",
+      "share_my_rating": "Podijeli moju ocjenu",
+      "share_review": "Podijeli recenziju",
+      "show_likes_count": "Prikaži broj lajkova",
+      "show_comments_count": "Prikaži broj komentara",
+      "add_to_watchlist": "dodaj na listu za gledanje",
+      "remove_from_watchlist": "ukloni s liste za gledanje",
+      "no_results": "nema rezultata",
+      "no_results_for": "Nema rezultata za <strong>{query}</strong>",
+      "no_followees": "Nikoga ne pratiš",
+      "no_followers": "Nema pratitelja",
+      "no_rating": "Bez ocjene",
+      "must_watch_to_review": "moraš vidjeti ovo djelo da bi ga mogao ocijeniti",
+      "review_cannot_be_empty": "recenzija ne može biti prazna",
+      "no_activity": "nema aktivnosti",
+      "followers_ratings": "ocjene pratitelja",
+      "added_by": "dodao",
+      "sort_by": "poredaj po",
+      "sort_order": "redoslijed sortiranja",
+      "go_to_film": "idi na film",
+      "go_to_tv_series": "idi na seriju",
+      "go_to_user": "idi na korisnika",
+      "go_to_person": "idi na osobu",
+      "go_to_activity": "idi na aktivnost",
+      "go_to_playlist": "idi na listu",
+      "go_to_review": "idi na recenziju",
+      "go_to_director": "{count, plural, one {idi na redatelja} few {idi na redatelje} other {idi na redatelje}}",
+      "go_to_creator": "{count, plural, one {idi na autora} few {idi na autore} other {idi na autore}}",
+      "show_director": "{count, plural, one {prikaži redatelja} few {prikaži redatelje} other {prikaži redatelje}}",
+      "show_creator": "{count, plural, one {prikaži autora} few {prikaži autore} other {prikaži autore}}",
+      "show_credit": "{count, plural, one {prikaži zaslugu} few {prikaži zasluge} other {prikaži zasluge}}",
+      "credits": "odjavna špica",
+      "view_recommendation": "{count, plural, one {prikaži reco} few {prikaži reco} other {prikaži reco}}",
+      "view_directors": "{count, plural, one {prikaži redatelja} few {prikaži redatelje} other {prikaži redatelje}}",
+      "no_director": "bez redatelja",
+      "view_comment": "{count, plural, one {prikaži komentar} few {prikaži komentare} other {prikaži komentare}}",
+      "add_comment": "{count, plural, one {dodaj komentar} few {dodaj komentare} other {dodaj komentare}}",
+      "edit_comment": "{count, plural, one {uredi komentar} few {uredi komentare} other {uredi komentare}}",
+      "delete_comment": "Izbriši komentar",
+      "do_you_really_want_to_delete_this_comment": "Želiš li zaista izbrisati ovaj komentar?",
+      "comment_deleted": "Ovaj komentar je izbrisan",
+      "write_your_comment_here": "Napiši komentar...",
+      "reply": "Odgovori",
+      "replies_count": "{count, plural, one {# odgovor} few {# odgovora} other {# odgovora}}",
+      "view_replies": "Prikaži {count, plural, one {# odgovor} few {# odgovora} other {# odgovora}}",
+      "hide_replies": "Sakrij odgovore",
+      "load_more_replies": "Prikaži više odgovora",
+      "get_started": "počni",
+      "get_started_its_free": "idemo 🎬, besplatno je!",
+      "import": "Uvezi",
+      "upgrade_to_plan": "prebaci na {plan}",
+      "choose_subscription_recurrence": "odaberi obračunsko razdoblje svoje pretplate",
+      "compare_plans": "usporedi pakete",
+      "save_up_to_percent": "uštedi do {percent} %",
+      "is_empty": "Ovdje je malo prazno",
+      "add_to_playlist": "dodaj na listu",
+      "send_to_friend": "pošalji prijatelju",
+      "pin_to_profile": "Prikvači na profil",
+      "unpin_from_profile": "Otkvači s profila",
+      "pinned": "Prikvačeno",
+      "unpinned": "Otkvačeno",
+      "no_pinned": "Nema prikvačenih elemenata",
+      "pinned_limit_reached": "Dosegao si najveći broj prikvačenih elemenata — otkvači jedan da dodaš novi",
+      "custom_sort": "vlastito sortiranje",
+      "quick_add": "brzo dodavanje",
+      "favorite_films": "najdraži filmovi",
+      "follow": "prati",
+      "followed": "praćeno",
+      "request_sent": "Zahtjev poslan",
+      "follow_requests": "zahtjevi za praćenje",
+      "no_follow_requests": "nema zahtjeva za praćenje",
+      "follower": "{count, plural, one {pratitelj} few {pratitelja} other {pratitelja}}",
+      "follower_count": "{count} pratitelja",
+      "see_followers": "prikaži pratitelje",
+      "followee": "{count, plural, one {praćeni} few {praćena} other {praćenih}}",
+      "followee_count": "{count} praćenih",
+      "see_followees": "prikaži koga pratiš",
+      "last_activities": "posljednje aktivnosti",
+      "last_updated": "posljednje ažurirano",
+      "last_updated_at_date": "posljednje ažurirano {date}",
+      "show_all": "prikaži sve",
+      "this_account_is_private": "ovaj račun je privatan",
+      "follow_to_see_activities": "prati da vidiš aktivnosti",
+      "review": "{count, plural, one {recenzija} few {recenzije} other {recenzija}}",
+      "no_overview": "bez opisa",
+      "cast": "glumci",
+      "no_cast": "bez glumaca",
+      "recent": "najnovije",
+      "popular": "popularno",
+      "popularity": "popularnost",
+      "no_reviews": "Nema recenzija",
+      "no_playlists": "Nema lista",
+      "no_playlists_found": "Nije pronađena nijedna lista",
+      "no_films": "Nema filmova",
+      "no_tv_series": "Nema serija",
+      "view_activity": "prikaži aktivnost",
+      "comment_count": "{count, plural, one {# komentar} few {# komentara} other {# komentara}}",
+      "write_review": "napiši recenziju",
+      "new_review": "nova recenzija",
+      "edit_review": "uredi recenziju",
+      "review_by": "recenzija: {name}",
+      "my_review": "{count, plural, one {moja recenzija} few {moje recenzije} other {mojih recenzija}}",
+      "add_review": "dodaj recenziju",
+      "tv_series": "{count, plural, one {serija} few {serije} other {serija}}",
+      "film": "{count, plural, one {film} few {filma} other {filmova}}",
+      "movie": "{count, plural, one {film} few {filma} other {filmova}}",
+      "media": "{count, plural, one {naslov} few {naslova} other {naslova}}",
+      "tv_season": "{count, plural, one {sezona} few {sezone} other {sezona}}",
+      "tv_season_count": "{count, plural, one {# sezona} few {# sezone} other {# sezona}}",
+      "tv_season_value": "{number}. sezona",
+      "tv_season_short": "S{number}",
+      "tv_episode": "{count, plural, one {epizoda} few {epizode} other {epizoda}}",
+      "tv_episode_count": "{count, plural, one {# epizoda} few {# epizode} other {# epizoda}}",
+      "tv_episode_value": "{number}. epizoda",
+      "tv_episode_short": "S{seasonNumber}E{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {posebna epizoda} few {posebne epizode} other {posebnih epizoda}}",
+      "first_air_date": "prvo prikazivanje",
+      "last_air_date": "posljednje prikazivanje",
+      "see_film": "prikaži film",
+      "see_tv_series": "prikaži seriju",
+      "watch_film_title": "gledaj {title}",
+      "watch_film_streaming_or_download": "Gledaj <important>{title}</important> putem streama ili ga legalno preuzmi",
+      "download": "preuzmi",
+      "downloaded": "preuzeto",
+      "person": "{count, plural, one {osoba} few {osobe} other {osoba}}",
+      "top_result": "najbolji rezultat",
+      "user": "{count, plural, one {korisnik} few {korisnika} other {korisnika}}",
+      "reco": "{count, plural, one {reco} few {reco} other {reco}}",
+      "my_recos": "moji reco",
+      "item": "{count, plural, one {element} few {elementa} other {elemenata}}",
+      "item_count": "{count, plural, one {# element} few {# elementa} other {# elemenata}}",
+      "type": "vrsta",
+      "complete": "završi",
+      "completed": "završeno",
+      "collection": "{count, plural, one {kolekcija} few {kolekcije} other {kolekcija}}",
+      "most_recent": "najnovije",
+      "most_popular": "najpopularnije",
+      "most_old": "najstarije",
+      "known_for": "Poznat po",
+      "release_date": "datum premijere",
+      "last_appearance_date": "posljednje pojavljivanje",
+      "vote_average": "prosječna ocjena",
+      "added": "dodano",
+      "added_date": "datum dodavanja",
+      "added_at": "dodano",
+      "add": "dodaj",
+      "playlist_name": "naziv liste",
+      "updated_at": "ažurirano",
+      "created_at": "stvoreno",
+      "likes": "lajkovi",
+      "likes_count": "broj lajkova",
+      "search_media": "pretraži naslov",
+      "search_film": "pretraži film",
+      "start_typing_to_search_films": "počni tipkati za pretragu filmova",
+      "search_tv_series": "pretraži seriju",
+      "start_typing_to_search_tv_series": "počni tipkati za pretragu serija",
+      "search_person": "pretraži osobu",
+      "start_typing_to_search_persons": "počni tipkati za pretragu osoba",
+      "search_user": "{count, plural, one {pretraži korisnika} few {pretraži korisnike} other {pretraži korisnike}}",
+      "start_typing_to_search_users": "počni tipkati za pretragu korisnika",
+      "search_playlist": "pretraži listu",
+      "start_typing_to_search_playlists": "počni tipkati za pretragu lista",
+      "search_film_or_tv_series": "pretraži film ili seriju",
+      "watched_date": "{count, plural, one {datum gledanja} few {datumi gledanja} other {datuma gledanja}}",
+      "mark_as_watched": "označi kao odgledano",
+      "remove_from_watched": "ukloni iz odgledanih",
+      "rating": "ocjena",
+      "create_a_playlist": "stvori listu",
+      "by_name": "autor {name}",
+      "reset": "resetiraj",
+      "job": "{count, plural, one {funkcija} few {funkcije} other {funkcija}}",
+      "department": "{count, plural, one {odjel} few {odjela} other {odjela}}",
+      "share_title_via": "Podijeli <strong>{title}</strong> putem",
+      "share_title": "Podijeli <strong>{title}</strong>",
+      "link": "poveznica",
+      "copy_link": "kopiraj poveznicu",
+      "copied": "Kopirano",
+      "other": "{count, plural, one {Drugo} few {Druga} other {Drugih}}",
+      "via": "putem",
+      "edit": "uredi",
+      "guest": "{count, plural, one {gost} few {gosta} other {gostiju}}",
+      "are_u_sure": "Jesi li siguran?",
+      "backward": "prethodno",
+      "forward": "sljedeće",
+      "back": "natrag",
+      "next": "dalje",
+      "notification": "{count, plural, one {obavijest} few {obavijesti} other {obavijesti}}",
+      "see_notifications": "prikaži obavijesti",
+      "open_social_panel": "otvori društveni panel",
+      "cancel_change": "{count, plural, one {otkaži promjenu} few {otkaži promjene} other {otkaži promjene}}",
+      "do_you_really_want_to_cancel_change": "Želiš li zaista otkazati {count, plural, one {promjenu} few {promjene} other {promjene}}?",
+      "continue_editing": "nastavi uređivati",
+      "confirm": "potvrdi",
+      "terms_of_use": "uvjeti korištenja",
+      "privacy_policy": "politika privatnosti",
+      "request_made": "zahtjev poslan",
+      "request_canceled": "zahtjev otkazan",
+      "cancel_request": "otkaži zahtjev",
+      "open_menu": "otvori meni",
+      "feed": "feed",
+      "about": "o nama",
+      "home": "početna",
+      "search": "pretraga",
+      "explore": "istraži",
+      "shop": "trgovina",
+      "help": "pomoć",
+      "legal": "pravne informacije",
+      "setting": "{count, plural, one {postavka} few {postavke} other {postavki}}",
+      "logout": "odjava",
+      "to_watch": "za gledanje",
+      "reco_by_your_friends": "reco tvojih prijatelja",
+      "friends_playlists": "liste tvojih prijatelja",
+      "latest_activity": "{count, plural, one {posljednja aktivnost} few {posljednje aktivnosti} other {posljednjih aktivnosti}}",
+      "discover_users": "otkrij korisnike",
+      "most_recommended": "najviše preporučeno",
+      "archive": "arhiviraj",
+      "unarchive": "vrati iz arhive",
+      "mark_as_read": "{count, plural, one {označi kao pročitano} few {označi kao pročitane} other {označi kao pročitane}}",
+      "mark_as_unread": "{count, plural, one {označi kao nepročitano} few {označi kao nepročitane} other {označi kao nepročitane}}",
+      "accept": "prihvati",
+      "accepted": "prihvaćeno",
+      "decline": "odbij",
+      "declined": "odbijeno",
+      "request_accepted": "{count, plural, one {zahtjev prihvaćen} few {zahtjeva prihvaćena} other {zahtjeva prihvaćeno}}",
+      "request_declined": "{count, plural, one {zahtjev odbijen} few {zahtjeva odbijena} other {zahtjeva odbijeno}}",
+      "unread": "{count, plural, one {nepročitano} few {nepročitane} other {nepročitanih}}",
+      "archived": "{count, plural, one {arhivirano} few {arhivirane} other {arhiviranih}}",
+      "no_notifications": "nema obavijesti",
+      "all": "sve",
+      "mark_all_as_read": "označi sve kao pročitano",
+      "archive_all": "arhiviraj sve",
+      "archive_all_read": "arhiviraj sve pročitano",
+      "please_login": "prijavi se",
+      "like": "lajkaj",
+      "unlike": "ukloni lajk",
+      "unfollow": "prestani pratiti",
+      "name": "naziv",
+      "add_a_name": "dodaj naziv",
+      "add_a_description": "dodaj opis",
+      "visibility": "vidljivost",
+      "search_an_user": "pretraži korisnika",
+      "select_an_item_to_add_to_playlist": "odaberi element za dodavanje na listu",
+      "select_a_film_to_add_to_playlist": "odaberi film za dodavanje na listu",
+      "select_a_tv_series_to_add_to_playlist": "odaberi seriju za dodavanje na listu",
+      "add_one_or_more_items_to": "Dodaj jedan ili više elemenata na <important>{title}</important>",
+      "add_one_or_more_films_to": "Dodaj jedan ili više filmova na <important>{title}</important>",
+      "add_one_or_more_tv_series_to": "Dodaj jednu ili više serija na <important>{title}</important>",
+      "manage_playlist_access_rights": "upravljaj pravima pristupa listi",
+      "add_guest": "{count, plural, one {dodaj gosta} few {dodaj goste} other {dodaj goste}}",
+      "manage_members": "upravljaj članovima",
+      "no_member": "nema članova",
+      "add_member": "{count, plural, one {dodaj člana} few {dodaj članove} other {dodaj članove}}",
+      "manage_guests": "upravljaj gostima",
+      "add_guests_to_your_playlist": "dodaj goste na svoju listu",
+      "select_users_to_add_to_playlist": "odaberi korisnike za dodavanje na listu",
+      "select_users_to_send_reco": "odaberi komu poslati reco",
+      "select_playlists_to_add_the_item": "odaberi liste na koje dodaješ element",
+      "send": "pošalji",
+      "sent": "poslano",
+      "select_row": "odaberi red",
+      "select_all": "odaberi sve",
+      "no_selected_users": "nema odabranih korisnika",
+      "selection_count": "odabrano {number} od {total} {type}",
+      "about_title": "o {title}",
+      "detail": "{count, plural, one {detalj} few {detalja} other {detalja}}",
+      "genre": "{count, plural, one {žanr} few {žanra} other {žanrova}}",
+      "male": "{count, plural, one {muškarac} few {muškarca} other {muškaraca}}",
+      "female": "{count, plural, one {žena} few {žene} other {žena}}",
+      "non_binary": "{count, plural, one {nebinarna osoba} few {nebinarne osobe} other {nebinarnih osoba}}",
+      "unspecified": "nije navedeno",
+      "date_of_birth": "datum rođenja",
+      "date_of_death": "datum smrti",
+      "place_of_birth": "mjesto rođenja",
+      "age_years": "{count} {count, plural, one {godina} few {godine} other {godina}}",
+      "biography": "biografija",
+      "no_biography_available": "biografija nije dostupna",
+      "no_information_available": "informacije nisu dostupne",
+      "already_sent": "već poslano",
+      "already_watched": "već odgledano",
+      "already_added": "već dodano",
+      "recommend_to_friend_to_discover": "Preporuči <strong>{title}</strong> prijatelju koji to još nije vidio",
+      "add_to_one_or_more_playlists": "Dodaj <strong>{title}</strong> na jednu ili više svojih lista",
+      "my_playlist": "{count, plural, one {moja lista} few {moje liste} other {mojih lista}}",
+      "what_is_title": "Što je <strong>{title}</strong>?",
+      "try_again": "Pokušaj ponovno",
+      "error": "pogreška",
+      "not_logged_in": "nisi prijavljen",
+      "an_error_occurred": "Došlo je do pogreške",
+      "playlist_not_found": "lista nije pronađena",
+      "user_not_found": "korisnik nije pronađen",
+      "film_not_found": "film nije pronađen",
+      "media_not_found": "naslov nije pronađen",
+      "review_not_found": "recenzija nije pronađena",
+      "person_not_found": "osoba nije pronađena",
+      "tv_series_not_found": "serija nije pronađena",
+      "tv_episode_not_found": "epizoda nije pronađena",
+      "tv_season_not_found": "sezona nije pronađena",
+      "wrong_arguments": "neispravni argumenti",
+      "no_media_found": "nije pronađen nijedan naslov",
+      "unknown_action": "nepoznata radnja",
+      "no_user_found": "nije pronađen nijedan korisnik",
+      "no_tv_episodes": "nema epizoda",
+      "save": "spremi",
+      "saved": "spremljeno",
+      "create": "stvori",
+      "film_count": "{count, plural, one {# film} few {# filma} other {# filmova}}",
+      "tv_series_count": "{count, plural, one {# serija} few {# serije} other {# serija}}",
+      "login": "prijava",
+      "signup": "registracija",
+      "navigation": "navigacija",
+      "delete": "Izbriši",
+      "remove": "Ukloni",
+      "deleted": "Izbrisano",
+      "share": "podijeli",
+      "duplicate": "dupliciraj",
+      "duplicated": "duplicirano",
+      "cancel": "Otkaži",
+      "date": "datum",
+      "duration": "trajanje",
+      "sort": "poredaj",
+      "show": "prikaži",
+      "column": "{count, plural, one {stupac} few {stupca} other {stupaca}}",
+      "comment": "{count, plural, one {komentar} few {komentara} other {komentara}}",
+      "unknown": "nepoznato",
+      "community": "zajednica",
+      "cast_and_crew": "glumci i ekipa",
+      "soon": "uskoro",
+      "ios_app": "Aplikacija za iOS",
+      "android_app": "Aplikacija za Android",
+      "coming_soon": "Uskoro dostupno",
+      "new_mobile_app": "Nova mobilna aplikacija!",
+      "manage": "upravljaj",
+      "monthly": "mjesečno",
+      "yearly": "godišnje",
+      "day": "dan",
+      "week": "tjedan",
+      "month": "mjesec",
+      "year": "godina",
+      "price": "cijena",
+      "free": "besplatno",
+      "playlist": "{count, plural, one {lista} few {liste} other {lista}}",
+      "public": "javna",
+      "publish": "objavi",
+      "private": "privatna",
+      "description": "opis",
+      "details": "detalji",
+      "profile": "profil",
+      "overview": "opis",
+      "no_playlists_saved": "nema spremljenih lista",
+      "camera_permission_denied": "pristup kameri odbijen",
+      "photo_library_permission_denied": "pristup galeriji fotografija odbijen",
+      "ignore": "ignoriraj",
+      "ok": "ok",
+      "title": "naslov",
+      "skip": "Preskoči",
+      "undo": "Vrati",
+      "date_published": "datum objave",
+      "date_created": "datum stvaranja",
+      "date_updated": "datum promjene",
+      "alphabetical": "abecedno",
+      "date_added": "datum dodavanja",
+      "number_of_likes": "broj lajkova",
+      "number_of_seasons": "broj sezona",
+      "add_to_this_playlist": "dodaj na ovu listu",
+      "save_to_library": "spremi u knjižnicu",
+      "remove_from_library": "ukloni iz knjižnice",
+      "otp": "OTP",
+      "ratings_from_followees": "ocjene onih koje pratiš",
+      "choose_from_the_library": "odaberi iz knjižnice",
+      "take_a_photo": "snimi fotografiju",
+      "delete_current_image": "izbriši trenutnu sliku",
+      "edit_image": "uredi sliku",
+      "add_image": "dodaj sliku",
+      "verify_with_a_code": "potvrdi kodom",
+      "order": "redoslijed",
+      "edit_order": "uredi redoslijed",
+      "done": "gotovo",
+      "can_edit": "može uređivati?",
+      "upgrade": "nadogradi",
+      "no_description": "Bez opisa",
+      "no_comment": "Nema komentara",
+      "close": "zatvori",
+      "edit_playlist": "uredi listu",
+      "universe": "svemir",
+      "cannot_be_changed": "ne može se mijenjati",
+      "delete_review": "izbriši recenziju",
+      "do_you_really_want_to_delete_this_review": "Želiš li zaista izbrisati ovu recenziju?",
+      "user_liked_playlist": "<name></name> je lajkao listu",
+      "user_liked_review": "<name></name> je lajkao recenziju",
+      "runtime": "trajanje",
+      "ends_at": "Završava u {value}",
+      "this_user_has_no_activity": "Ovaj korisnik nema aktivnosti",
+      "notification_archived": "{count, plural, one {obavijest arhivirana} few {obavijesti arhivirane} other {obavijesti arhivirano}}",
+      "notification_unarchived": "{count, plural, one {obavijest vraćena iz arhive} few {obavijesti vraćene iz arhive} other {obavijesti vraćeno iz arhive}}",
+      "notification_marked_as_read": "{count, plural, one {obavijest označena kao pročitana} few {obavijesti označene kao pročitane} other {obavijesti označeno kao pročitano}}",
+      "notification_marked_as_unread": "{count, plural, one {obavijest označena kao nepročitana} few {obavijesti označene kao nepročitane} other {obavijesti označeno kao nepročitano}}",
+      "or_continue_with": "ili nastavi putem",
+      "message": "{count, plural, one {poruka} few {poruke} other {poruka}}",
+      "story": "{count, plural, one {story} few {story} other {story}}",
+      "new_playlist": "nova lista",
+      "select_a_type": "odaberi vrstu",
+      "filter": "{count, plural, one {filtar} few {filtra} other {filtara}}",
+      "hide_watched": "sakrij odgledane",
+      "show_me_around": "pokaži mi sve",
+      "artwork_from": "Ilustracija: <important>{source}</important>",
+      "no_active_subscription": "nema aktivne pretplate",
+      "manage_subscription": "upravljaj pretplatom",
+      "started_on_date": "započeto: {date}",
+      "last_renewed_on_date": "posljednja obnova: {date}",
+      "version_value": "verzija {value}",
+      "original_title": "originalni naslov",
+      "starring": "glume",
+      "write_your_review_here": "ovdje napiši svoju recenziju...",
+      "insert": "umetni",
+      "trailer": "{count, plural, one {trailer} few {trailera} other {trailera}}",
+      "list": "{count, plural, one {lista} few {liste} other {lista}}",
+      "grid": "{count, plural, one {mreža} few {mreže} other {mreža}}",
+      "order_asc": "rastući redoslijed",
+      "order_desc": "opadajući redoslijed",
+      "menu": "meni",
+      "at_least_one_watched_date_required": "potreban je najmanje jedan datum gledanja",
+      "viewer": "{count, plural, one {Gledatelj} few {Gledatelja} other {Gledatelja}}",
+      "editor": "{count, plural, one {Urednik} few {Urednika} other {Urednika}}",
+      "admin": "{count, plural, one {Administrator} few {Administratora} other {Administratora}}",
+      "owner": "{count, plural, one {Vlasnik} few {Vlasnika} other {Vlasnika}}",
+      "you_dont_have_permission_to_do_this_action": "Nemaš dopuštenje za ovu radnju",
+      "in_progress": "u tijeku",
+      "give_up": "odustani",
+      "random": "slučajno",
+      "reset_password": "Resetiraj lozinku",
+      "password_reset": "Lozinka resetirana",
+      "return_to_login": "Natrag na prijavu",
+      "invalid_code": "Neispravan kod",
+      "no_token_found": "Token nije pronađen",
+      "first_watched_at": "prvi datum gledanja",
+      "watched_dates": "datumi gledanja",
+      "no_watched_dates": "nema datuma gledanja",
+      "select_role": "odaberi rolu",
+      "select_format": "odaberi format",
+      "theater": "Kino",
+      "physical": "Fizički medij",
+      "digital": "Digitalno",
+      "streaming": "Streaming",
+      "you_must_be_premium_to_change_member_role": "Za promjenu role člana moraš imati premium",
+      "already_member": "već je član",
+      "email_already_used": "Ova e-pošta je već u upotrebi",
+      "email_confirmed": "E-pošta potvrđena",
+      "confirmation_email_sent": "Potvrdna e-pošta poslana",
+      "continue": "Nastavi",
+      "finish": "Završi",
+      "forgot_password": "Zaboravljena lozinka",
+      "new_password": "Nova lozinka",
+      "confirm_password": "Potvrdi lozinku",
+      "password_reseted": "Lozinka resetirana",
+      "reset_your_password": "Resetiraj svoju lozinku",
+      "invalid_token": "Neispravan token",
+      "new_notification": "{count, plural, one {nova obavijest} few {nove obavijesti} other {novih obavijesti}}",
+      "lets_go": "Idemo!",
+      "update_available": "Dostupno je ažuriranje",
+      "update_available_description": "Ažuriraj aplikaciju da iskoristiš najnovija poboljšanja.",
+      "update_required_title": "Potrebno je ažuriranje",
+      "update_required_description": "Ova verzija aplikacije više nije podržana. Ažuriraj je da nastaviš koristiti Recomend.",
+      "update_app": "Ažuriraj",
+      "advertisement": "{count, plural, one {Oglas} few {Oglasa} other {Oglasa}}",
+      "pending": "Na čekanju",
+      "processing": "U tijeku",
+      "awaiting_review": "Za provjeru",
+      "failed": "Nije uspjelo",
+      "data": "{count, plural, one {Podatak} few {Podatka} other {Podataka}}",
+      "restore": "Obnovi",
+      "fix": "Ispravi",
+      "not_found": "Nije pronađeno",
+      "unavailable": "Nedostupno",
+      "star_on_github": "Daj zvjezdicu na GitHubu"
+    },
+    "form": {
+      "email": {
+        "label": "Adresa e-pošte",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "E-pošta nije ispravna",
+          "unavailable": "Ova e-pošta je već u upotrebi"
+        },
+        "verified": "E-pošta potvrđena"
+      },
+      "username": {
+        "label": "Korisničko ime",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "Prvi znak mora biti slovo ili broj",
+          "double_dot": "Dvije točke u nizu nisu dopuštene",
+          "ends_with_dot": "Točka na kraju nije dopuštena",
+          "format": "Dopuštena su samo slova, brojevi i znakovi '_' i '.'",
+          "unavailable": "Ovo korisničko ime je već zauzeto"
+        }
+      },
+      "full_name": {
+        "label": "Ime",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "Dopušteni su samo slova, brojevi i razmaci"
+        }
+      },
+      "password": {
+        "label": "Lozinka",
+        "placeholder": "Unesi svoju lozinku",
+        "schema": {
+          "uppercase": "Potrebno je najmanje jedno veliko slovo",
+          "lowercase": "Potrebno je najmanje jedno malo slovo",
+          "number": "Potreban je najmanje jedan broj",
+          "special": "Potreban je najmanje jedan poseban znak",
+          "match": "Lozinke se ne poklapaju"
+        },
+        "confirm": {
+          "label": "Potvrdi lozinku",
+          "placeholder": "Potvrdi svoju lozinku"
+        }
+      },
+      "length": {
+        "char_min": "najmanje {count, plural, one {# znak} few {# znaka} other {# znakova}}",
+        "char_max": "najviše {count, plural, one {# znak} few {# znaka} other {# znakova}}"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "Dopušteni su samo slova, brojevi i razmaci"
+      },
+      "error": {
+        "too_many_attempts": "Previše pokušaja, pokušaj kasnije",
+        "not_received_code": "Nisi primio kod?",
+        "invalid_code": "Neispravan kod",
+        "turnstile": "Provjera nije uspjela, pokušaj ponovno"
+      },
+      "resend_code": "Pošalji kod ponovno",
+      "resend_email": "Pošalji e-poštu ponovno",
+      "code_verified": "Kod potvrđen",
+      "code_sent": "Kod poslan"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "stranica nije pronađena",
+        "description": "ups, ova stranica ne postoji..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "praćenje",
+        "description": "Otkrivaj, ocjenjuj i dijeli svoje najdraže filmove i serije."
+      },
+      "recos": {
+        "label": "reco",
+        "description": "Šalji i primaj reco od prijatelja. Sve na jednom mjestu."
+      },
+      "playlists": {
+        "label": "liste",
+        "description": "Organiziraj, dijeli i zajedno gradite liste."
+      },
+      "feed": {
+        "label": "feed",
+        "description": "Prati prijatelje i vidi što gledaju, lajkaju i ocjenjuju."
+      },
+      "social_sharing": {
+        "label": "dijeljenje na mrežama",
+        "description": "Podijeli sve što voliš na Instagramu ili drugim mrežama."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "Praćenje",
+          "description": "Imaj pregled nad filmovima koje si vidio"
+        },
+        "recos": {
+          "label": "Reco",
+          "description": "Šalji prijateljima filmske preporuke"
+        },
+        "explore": {
+          "label": "Istraži",
+          "description": "Otkrij nove filmove na Paradise Pictures — interaktivnoj karti s više od 1400 filmova"
+        },
+        "like": {
+          "label": "Lajk",
+          "description": "Pokaži ljubav prema svojim najdražim filmovima, listama i recenzijama"
+        },
+        "rating": {
+          "label": "Ocjena",
+          "description": "Ocijeni filmove koje si vidio"
+        },
+        "watchlist": {
+          "label": "Lista za gledanje",
+          "description": "Spremi filmove koje želiš vidjeti"
+        },
+        "playlists": {
+          "label": "Liste",
+          "description": "Organiziraj svoje filmove u liste i podijeli ih"
+        },
+        "reviews": {
+          "label": "Recenzije",
+          "description": "Piši recenzije i pusti na slobodu ogorčenog cinefila u sebi"
+        },
+        "feed": {
+          "label": "Feed",
+          "description": "Prati aktivnost svojih prijatelja"
+        },
+        "adsFree": {
+          "label": "Bez oglasa",
+          "description": "Uživaj u Recomendu bez oglasa, zauvijek"
+        }
+      }
+    },
+    "welcome": {
+      "title": "Hvala na registraciji!",
+      "description": "Ovdje je kratak pregled onoga što možeš raditi s {app}.",
+      "follow": {
+        "title": "Prati ljude",
+        "description": "Prati prijatelje i vidi što gledaju."
+      },
+      "import": {
+        "title": "Dolaziš s druge platforme?"
+      }
+    },
+    "collection": {
+      "label": "knjižnica",
+      "my_recos": {
+        "label": "moji reco",
+        "search": {
+          "placeholder": "traži u mojim reco..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "izbriši iz mojih reco",
+            "description": "Želiš li zaista izbrisati <important>{title}</important> iz svojih reco?"
+          },
+          "complete_confirm": {
+            "title": "završi reco",
+            "description": "Želiš li zaista završiti reco <important>{title}</important>?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "traži na listi za gledanje..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "izbriši s liste za gledanje",
+            "description": "Želiš li zaista izbrisati <important>{title}</important> sa svoje liste za gledanje?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "traži u srčanim odabirima..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "izbriši iz srčanih odabira",
+            "description": "Želiš li zaista izbrisati <important>{title}</important> iz svojih srčanih odabira?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> je gledao",
+        "rated": "<name></name> je ocijenio",
+        "liked": "<name></name> je lajkao",
+        "rated_liked": "<name></name> je lajkao i ocijenio",
+        "reviewed": "<name></name> je napisao recenziju"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> je <important>{roles}</important> u <linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> je <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "Autoriziraj aplikaciju",
+        "description_generic": "Aplikacija traži pristup tvojem računu.",
+        "description": "{client} želi pristupiti tvojem računu.",
+        "scopes_label": "To će aplikaciji omogućiti:",
+        "accept": "Dopusti",
+        "deny": "Odbij",
+        "error": {
+          "invalid_request": "Neispravan ili istekao zahtjev",
+          "invalid_request_description": "Započni postupak ponovno u aplikaciji koja te poslala ovamo.",
+          "client_not_found": "Ova aplikacija nije pronađena.",
+          "submit_failed": "Nešto je pošlo po zlu. Pokušaj ponovno."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "Prijavi se na svoj {app} račun."
+        },
+        "label": "Prijava",
+        "description": "Otkrij najbolje filmske preporuke.",
+        "or_continue_with": "Ili nastavi putem",
+        "no_account_yet": "Još nemaš račun?",
+        "form": {
+          "identifier": {
+            "label": "E-pošta ili korisničko ime",
+            "placeholder": "Unesi svoju e-poštu ili korisničko ime"
+          },
+          "password": {
+            "label": "Lozinka",
+            "placeholder": "Unesi svoju lozinku"
+          },
+          "submit": "Prijava",
+          "forgot_password": "Zaboravio si lozinku?",
+          "wrong_credentials": "E-pošta ili lozinka nije ispravna"
+        },
+        "otp": {
+          "password_login": "Želiš li se radije prijaviti lozinkom?",
+          "form": {
+            "submit": "Primi kod",
+            "no_user_found": "S ovom e-poštom nije pronađen nijedan korisnik",
+            "success": "Prijavljen"
+          },
+          "confirm_form": {
+            "label": "Potvrdi kod",
+            "description": "Kod za potvrdu poslan je na adresu {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "Registriraj se na {app} da otkrivaš i dijeliš filmske preporuke."
+        },
+        "description": "Napravi račun da preporučiš film onom prijatelju koji nikad ne pamti naslove.",
+        "form": {
+          "success": "E-pošta za potvrdu poslana je na {email}"
+        },
+        "confirm_form": {
+          "label": "Potvrdi e-poštu",
+          "description": "Poveznica za potvrdu poslana je na adresu {email}"
+        },
+        "return_to_login": "Ups, ipak već imam račun."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "Zaboravljena lozinka",
+          "description": "Resetiraj svoju lozinku."
+        },
+        "label": "Zaboravljena lozinka",
+        "description": "Trebao bi koristiti upravitelj lozinki, zaista je praktično.",
+        "return_to_login": "Ups, ipak se sjećam svoje lozinke.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "Resetiraj lozinku",
+          "code_sent": "Zahtjev poslan"
+        },
+        "confirm_form": {
+          "label": "Potvrdi kod",
+          "description": "Kod za potvrdu poslan je na adresu {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "Resetiranje lozinke",
+          "description": "Odaberi novu lozinku za svoj račun."
+        }
+      },
+      "error": {
+        "label": "Pogreška",
+        "description": "Došlo je do pogreške tijekom prijave.",
+        "return_to_login": "Natrag na sigurno"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "O nama",
+        "marquee": "Nema li u tvojem životu ništa uzbudljivije od pregledavanja stranica 'O nama' na internetu?",
+        "intro": "<strong>Recomend</strong> je prostor posvećen otkrivanju, preporučivanju i organiziranju filmova. Sve je osmišljeno tako da usmenoj preporuci pruži najbolji moguć digitalni oblik. Naš pristup usredotočen je na čovjeka i njegove odnose u doba samozadovoljne potrošnje — ili bolje rečeno 'preporučeno za tebe'.",
+        "slogan": {
+          "1": "Bez oglasa i bez sumnjivih obećanja. 🍆",
+          "2": "Istodobno je društvena mreža i alat.",
+          "3": "Domaće je, rad zaljubljenika.",
+          "4": "Amaterski je u pravom smislu riječi."
+        },
+        "last": "Recomend se može koristiti sam ili u društvu, javno ili privatno, danju i noću — ali nikad pred filmom, usredotoči se, molim te!"
+      },
+      "team": {
+        "label": "Ekipa",
+        "intro": "Recomend su stvorila dva brata zaluđena filmom koji rado ulažu svoje vrijeme u previše ambiciozne projekte za koje nije sigurno da će ikad ugledati svjetlo dana.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "Hiperaktivan arhitekt i inženjer koji se ne može zadovoljiti jednim poslom (ona prava start-up nation): Yoann je autor ideje da se napravi karta filmova, koja je na početku imala samo skromnu ambiciju postati poster na njegovom WC-u. S Loupovim dolaskom ciljevi su posve eksplodirali i, malo zatečen događajima, brine se o cijelom grafičkom dijelu karte i stranice te o svoj komunikaciji (iako mu to nije po volji). Daje i mišljenje o UX/UI i predlaže brdo funkcija, a da nije posve svjestan koliko ih je teško programirati (nešto je napredovao)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "Posvemašnji samouk koji je ipak završio studij koji ga je prije dvadeset pete doveo do neplaćene nezaposlenosti. Pravi švicarski nožić: Loup se brine o web dizajnu i programira sučelje koje zamišljamo što ergonomičnijim. Loup bi želio zahvaliti svim forumima o kodu koji su odgovorili na njegova (vrlo) brojna pitanja, kao i svim indijskim jutjuberima koji su ga tih mjeseci pratili kao posvojitelji. Njegova mama je, uostalom, uvjerena da ga je brat za ovaj projekt zarobio (dobro sam, mama)."
+          }
+        },
+        "last": "Ako želiš razgovarati s nama ili s drugim članovima zajednice, pridruži se našem <link>Discordu</link>!"
+      },
+      "pricing": {
+        "label": "Cijene",
+        "intro": "Ovaj model pretplate prije svega je podrška da projekt živi i da se može dalje razvijati. Premium funkcije su dodaci za napredno korištenje Recomenda koji opravdavaju mali financijski doprinos. Uvijek ćemo sačuvati mogućnost besplatnog korištenja stranice, bez oglasa i bez osjećaja ograničenosti.",
+        "subdescription": "*Ako je izuzetno niska cijena ove pretplate ipak iznad tvojih mogućnosti, obrati se liberalnoj vladi koja je odgovorna za gubitak tvoje kupovne moći."
+      },
+      "legal": {
+        "label": "Pravne informacije i privatnost",
+        "description": "Poštujemo tvoju privatnost. Oglasima koji se prikazuju neprijavljenim korisnicima upravlja Google i zahtijevaju tehničke kolačiće za ograničavanje učestalosti prikazivanja i sprječavanje prijevara.",
+        "privacyPolicy": "Pročitaj našu politiku privatnosti",
+        "manageCookies": "Upravljaj mojim postavkama oglašavanja (kolačići)"
+      },
+      "open-source": {
+        "label": "Otvoreni kod",
+        "intro": "Recomend je otvorenog koda: kod je javan na GitHubu. Pogledaj ga, doprinesi ili nam samo ostavi zvjezdicu!",
+        "star": "Daj nam zvjezdicu na GitHubu"
+      },
+      "businessmodel": {
+        "label": "Poslovni model",
+        "paragraph": {
+          "1": "Vjerojatno naslućuješ da s našim malo komercijalnim profilima nismo baš shvatili čemu bi nam trenutačno služio poslovni model...",
+          "2": "Ako budućnost Recomenda to zahtijeva, proučit ćemo to pitanje okružujući se pravim ljudima — ili barem ljudima koje to zanima više od nas.",
+          "3": "Do tada, budimo iskreni, ima i drugih stvari za raditi."
+        }
+      },
+      "roadmap": {
+        "label": "Plan razvoja"
+      },
+      "data": {
+        "label": "Podaci",
+        "paragraph": {
+          "1": "Sve metapodatke koji se koriste na Recomendu pruža <link>The Movie Database (TMDb)</link> putem API-ja platforme. Radimo, dakle, točno kao i svi ostali, kao dobre ovce.",
+          "2": "Za pogreške ili filmove koji nedostaju obrati se, dakle, <link>TMDb</link>-u."
+        }
+      },
+      "resources": {
+        "label": "Resursi",
+        "intro": "Nije baš vezano za film, ali ovdje je lista stranica koje volimo:"
+      },
+      "contact-support": {
+        "label": "Kontakt i podrška",
+        "help-center": "Pronađi odgovore na svoja egzistencijalna pitanja u našem <link>centru za pomoć</link>.",
+        "technical-support": "Za tehnička pitanja: <email></email>",
+        "suggest-a-feature": "Za predloge: <email></email>",
+        "contact-us": "Ako samo želiš doći u kontakt s nama: <email></email>"
+      },
+      "quote": {
+        "label": "Citat",
+        "quote": "« Mrzim riječ profesionalac. Svi ti glumci i ostali koji kažu: ja sam profesionalac, ja sam profi! Što je to? Postoji li tužnija riječ? Jer amater dolazi od riječi ljubav. Stvari treba raditi iz ljubavi, inače smo idioti. »",
+        "author": "Orson Wells",
+        "date": "1972",
+        "subdescription": "*Dvojili smo hoćemo li ga staviti jer brzo zvuči pretenciozno, ali dobro odražava naše raspoloženje o projektu. Ako ti se ne sviđa, skinut ćemo ga."
+      }
+    },
+    "settings": {
+      "label": "Postavke",
+      "description": "Upravljaj postavkama svog računa.",
+      "profile": {
+        "label": "Profil",
+        "description": "Tako će te drugi vidjeti na stranici.",
+        "avatar": {
+          "label": "Avatar",
+          "delete": "Izbriši"
+        },
+        "full_name": {
+          "label": "Ime",
+          "description": "To je ime koje će se prikazivati na tvojem profilu i u e-pošti.",
+          "placeholder": "Unesi svoje ime",
+          "form": {
+            "min_length": "Ime mora imati najmanje 1 znak",
+            "max_length": "Ime ne smije prelaziti 50 znakova"
+          }
+        },
+        "bio": {
+          "label": "Opis",
+          "description": "Reci nešto o sebi — pojavit će se na tvojem profilu.",
+          "placeholder": "Napiši nešto o sebi",
+          "form": {
+            "max_length": "Opis ne smije prelaziti 150 znakova",
+            "format": "Biografija ne smije sadržavati prazne redove ni se sastojati samo od razmaka."
+          }
+        },
+        "favorite_films": {
+          "label": "Najdraži filmovi",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "URL nije ispravan"
+          }
+        }
+      },
+      "account": {
+        "label": "Račun",
+        "description": "Ažuriraj postavke svog računa.",
+        "username": {
+          "label": "Korisničko ime",
+          "description": "Ovo je tvoje korisničko ime po kojem te drugi mogu naći i pristupiti tvojem profilu. Možeš ga promijeniti samo jednom u 30 dana.",
+          "placeholder": "Unesi svoje korisničko ime",
+          "form": {
+            "min_length": "Korisničko ime mora imati najmanje 3 znaka",
+            "max_length": "Korisničko ime ne smije prelaziti 15 znakova",
+            "invalid": "Korisničko ime može sadržavati samo slova, brojeve i znakove '_' i '.'",
+            "unavailable": "Ovo korisničko ime je već zauzeto"
+          }
+        },
+        "private": {
+          "label": "Privatni račun",
+          "description": "Kad je tvoj račun privatan, tvoje aktivnosti vide samo korisnici koje odobriš."
+        },
+        "email": {
+          "description": "E-pošta za potvrdu bit će poslana na tvoju trenutnu i na novu adresu. Moraš potvrditi obje da promjena stupi na snagu.",
+          "change_pending": "<strong>{date}</strong> poslana je e-pošta za potvrdu na tvoju novu adresu <strong>{email}</strong>. Klikni poveznicu ili unesi kod za potvrdu da potvrdiš promjenu.",
+          "confirm_email_code": {
+            "description": "Unesi kod za potvrdu poslan na tvoju adresu <strong>{email}</strong>."
+          },
+          "change_success": "Tvoja adresa e-pošte uspješno je ažurirana"
+        },
+        "delete_account": {
+          "button": "Izbriši moj račun",
+          "confirm": {
+            "description": "Tvoj račun bit će trajno izbrisan i nećeš ga moći vratiti.",
+            "confirm_email_sent": "E-pošta za potvrdu poslana je na tvoju adresu e-pošte"
+          }
+        }
+      },
+      "appearance": {
+        "label": "Izgled",
+        "description": "Prilagodi izgled aplikacije. Automatski prebacuj između dnevne i noćne teme.",
+        "language": {
+          "label": "Jezik",
+          "description": "Odaberi jezik — promjene će se primijeniti nakon ponovnog pokretanja aplikacije",
+          "placeholder": "Odaberi jezik",
+          "not_found": "Jezik nije pronađen"
+        },
+        "theme": {
+          "label": "Tema",
+          "description": "Odaberi temu sučelja.",
+          "options": {
+            "light": "Svjetla",
+            "dark": "Tamna"
+          }
+        }
+      },
+      "subscription": {
+        "label": "Pretplata",
+        "description": "Upravljaj svojom premium pretplatom."
+      },
+      "security": {
+        "label": "Sigurnost",
+        "description": "Promjena lozinke odjavit će te sa svih uređaja osim onog koji sada koristiš.",
+        "current_password": {
+          "label": "Trenutna lozinka",
+          "placeholder": "Unesi svoju trenutnu lozinku",
+          "form": {
+            "required": "Trenutna lozinka je obavezna",
+            "invalid": "Trenutna lozinka nije ispravna"
+          }
+        },
+        "new_password": {
+          "label": "Nova lozinka",
+          "placeholder": "Unesi svoju novu lozinku",
+          "form": {
+            "min_length": "Lozinka mora imati najmanje 8 znakova",
+            "uppercase": "Potrebno je najmanje jedno veliko slovo",
+            "lowercase": "Potrebno je najmanje jedno malo slovo",
+            "number": "Potreban je najmanje jedan broj",
+            "special": "Potreban je najmanje jedan poseban znak"
+          }
+        },
+        "confirm_password": {
+          "label": "Potvrdi novu lozinku",
+          "placeholder": "Potvrdi svoju novu lozinku",
+          "form": {
+            "match": "Lozinke se ne poklapaju"
+          }
+        }
+      },
+      "notifications": {
+        "label": "Obavijesti",
+        "description": "Prilagodi koje obavijesti primaš.",
+        "push_notifications": {
+          "label": "Push obavijesti",
+          "form": {
+            "enable": "Uključi push obavijesti"
+          },
+          "already_granted": "Zahtjev za obavijesti već je poslan; da ga promijeniš, idi u postavke svog pregledavača.",
+          "no_enabled": "Uključi obavijesti u postavkama svog uređaja da primaš push obavijesti.",
+          "open_settings": "Idi u postavke uređaja"
+        }
+      },
+      "data": {
+        "label": "Podaci",
+        "description": "Uvezi ili izvezi svoje podatke.",
+        "importer": {
+          "label": "Uvoz",
+          "select_source": "Odaberi izvor",
+          "instructions_title": "Upute",
+          "browse_prompt": "Ispusti datoteku ovdje ili <link>pregledaj</link>",
+          "browse_prompt_mobile": "Dotakni za odabir datoteke",
+          "uploading": "Prijenos…",
+          "processing": "Analiziramo tvoju datoteku…",
+          "upload_error": "Prijenos nije uspio, pokušaj ponovno.",
+          "invalid_file_type": "Ova vrsta datoteke nije podržana za ovaj izvor.",
+          "review_title": "Provjeri svoj uvoz",
+          "review_summary": "pronađeno {matched} od {total}",
+          "validate": "Potvrdi uvoz",
+          "validate_confirm_description": "Ovo će u tvoju knjižnicu uvesti sve pronađene i nepreskočene elemente. To se ne može vratiti.",
+          "success_title": "Uvoz završen",
+          "success_description": "Tvoji podaci su uspješno uvezeni.",
+          "failed_title": "Uvoz nije uspio",
+          "failed_description": "Nešto je pošlo po zlu tijekom obrade ovog uvoza.",
+          "pending_description": "Tvoj uvoz je u redu čekanja i počet će uskoro.",
+          "empty": "Još nema uvoza.",
+          "delete_confirm_description": "Ovaj uvoz i svi njegovi podaci bit će trajno izbrisani. To se ne može vratiti.",
+          "keep_existing": "Zadrži moje",
+          "use_imported": "Koristi uvezene",
+          "merge": "Spoji",
+          "conflict": "Konflikt",
+          "no_match": "Nema podudaranja",
+          "existing_rating": "Trenutno: {rating}",
+          "log_column": "Zapis",
+          "actions_column": "Radnje",
+          "categories": {
+            "log_movies": "Filmovi",
+            "log_tv_series": "Serije",
+            "bookmarks": "Lista za gledanje",
+            "playlists": "Liste"
+          },
+          "status": {
+            "pending": "Na čekanju",
+            "processing": "U tijeku",
+            "awaiting_review": "Za provjeru",
+            "completed": "Završeno",
+            "failed": "Nije uspjelo"
+          }
+        },
+        "exporter": {
+          "label": "Izvoz"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "prebaci na Premium",
+        "description": "Prebaci na premium račun da pristupiš svim funkcijama {app}."
+      },
+      "header": {
+        "title": "proširi svoj kino, dijeli više, podrži {app}",
+        "subtitle": "isprobaj 1 mjesec besplatno, zatim {price}/mjesec"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "aktivnosti",
+            "unlimited_activities": {
+              "label": "neograničene aktivnosti",
+              "description": "ocjene, lajkovi, recenzije, lista za gledanje i preporuke"
+            },
+            "favorites": {
+              "label": "najdraži",
+              "description": "dodaj svoje najdraže filmove na svoj profil"
+            }
+          },
+          "playlists": {
+            "label": "liste",
+            "unlimited_playlists": {
+              "label": "neograničene",
+              "description": "stvori neograničen broj lista"
+            },
+            "shared_playlists": {
+              "label": "dijeljene",
+              "description": "dijeli svoje liste s drugim korisnicima"
+            },
+            "collaborative_playlists": {
+              "label": "zajedničke",
+              "description": "stvaraj zajedničke liste s drugim korisnicima"
+            }
+          },
+          "feed": {
+            "label": "feed",
+            "followees": {
+              "label": "praćeni korisnici",
+              "description": "gledaj aktivnosti korisnika koje pratiš"
+            },
+            "cast_and_crew": {
+              "label": "glumci i ekipa",
+              "description": "prati aktivnosti ljudi koji rade na filmovima"
+            }
+          },
+          "support": {
+            "label": "podrška",
+            "team": {
+              "label": "Podrži ekipu {app}"
+            },
+            "credits": {
+              "label": "odjavna špica",
+              "description": "tvoj profil u odjavnoj špici aplikacije"
+            }
+          }
+        },
+        "success": {
+          "label": "Hvala na tvojoj podršci!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} - lista korisnika @{username}",
+        "description": "Otkrij filmsku listu korisnika @{username} na {app}."
+      },
+      "actions": {
+        "delete": {
+          "description": "Ovo će trajno izbrisati <important>{title}</important> s tvojih lista."
+        }
+      },
+      "search": {
+        "placeholder": "traži na listi..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "Želiš li zaista izbrisati <important>{title}</important> sa svoje liste?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "Unesi naslov liste"
+        },
+        "description": {
+          "placeholder": "Unesi opis liste"
+        },
+        "error": {
+          "format": "Opis ne smije sadržavati prazne redove ni se sastojati samo od razmaka."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "Otkrij profil korisnika @{username} na {app}."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year}) • Film",
+        "description": "{title} je film redatelja {directors} iz {year}. Opis: {overview}",
+        "description_no_director": "{title} je film iz {year}. Opis: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Liste",
+          "description": "Otkrij sve liste koje sadrže film {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Recenzije",
+          "description": "Otkrij sve recenzije filma {title}."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} je serija autora {creators}, prvi put prikazana {year}. Opis: {overview}",
+        "description_no_creator": "{title} je serija prvi put prikazana {year}. Opis: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Liste",
+          "description": "Otkrij sve liste koje sadrže seriju {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Recenzije",
+          "description": "Otkrij sve recenzije serije {title}."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • Sezone",
+          "description": "Otkrij sve sezone serije {title}."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • {number}. sezona",
+            "description": "Otkrij sve epizode {number}. sezone serije {title}."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • Filmovi",
+          "description": "Otkrij sve filmove u kojima je {name} igrao ili sudjelovao."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • Serije",
+          "description": "Otkrij sve serije u kojima je {name} igrao ili sudjelovao."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "Recenzija {title} od @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "Napiši recenziju o {title}",
+          "description": "Podijeli svoje mišljenje o {title}."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Istraži Paradise Pictures",
+        "description": "Kreni otkrivati otok i njegove raznovrsne kulise. Brojni filmovi koji ga naseljavaju smješteni su u svoje dijegetsko okruženje. Hoćeš li uspjeti istražiti svaki njegov kutak?"
+      }
+    },
+    "legal": {
+      "label": "Pravne informacije",
+      "description": "Pročitaj pravne dokumente {app}.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "Opći uvjeti korištenja",
+          "description": "Pročitaj uvjete korištenja {app}."
+        },
+        "sections": {
+          "intro": "Ovi opći uvjeti korištenja (dalje u tekstu 'Uvjeti') uređuju pristup aplikaciji {app} i njezino korištenje. Aplikaciju izdaje Loup (dalje u tekstu 'Izdavač') sa sjedištem u Parizu. Registracija na {app} znači bezrezervno prihvaćanje ovih Uvjeta.",
+          "presentation": {
+            "label": "1. Opis usluge",
+            "content": "{app} je besplatna aplikacija koja svojim korisnicima omogućuje pregled informacija o filmovima, objavljivanje recenzija, ocjenjivanje djela i stvaranje osobnih lista."
+          },
+          "account": {
+            "label": "2. Račun i sigurnost",
+            "content": "Pristup funkcijama za doprinos zahtijeva stvaranje računa. Korisnik je odgovoran za tajnost svojih podataka za prijavu. U slučaju prijevarnog korištenja ili sumnje na hakiranje Korisnik mora odmah kontaktirati podršku na adresi: <email></email>."
+          },
+          "conduct": {
+            "label": "3. Pravila ponašanja",
+            "content": "Korisnik se obvezuje ostati uljudan i pun poštovanja u svojim mišljenjima i listama. Strogo su zabranjeni: govor mrzilački, klevetnički ili rasistički, uznemiravanje, kao i neželjena pošta ili nezatražena komercijalna promocija. Izdavač zadržava pravo izbrisati svaki sadržaj koji krši ova pravila i bez prethodne obavijesti privremeno onemogućiti dotični račun."
+          },
+          "child_safety": {
+            "label": "4. Zaštita maloljetnika",
+            "content": "{app} primjenjuje strogu politiku nulte tolerancije prema svakom obliku seksualnog zlostavljanja i iskorištavanja djece ('Child Sexual Abuse and Exploitation' odnosno CSAE). Stvaranje, prijenos, pohrana, širenje, traženje ili promocija bilo kakvog sadržaja koji seksualizira, iskorištava ili na drugi način ugrožava maloljetnike izričito je i apsolutno zabranjeno na {app}. Svaki račun za koji se ustanovi kršenje ove politike bit će odmah i trajno blokiran, a Izdavač će prijaviti dotični sadržaj zajedno sa svim dostupnim informacijama o korisniku organizaciji National Center for Missing & Exploited Children (NCMEC) i/ili nadležnim tijelima u skladu s primjenjivim zakonom. Svaki korisnik koji sazna o sadržaju ili ponašanju koje bi moglo predstavljati slučaj CSAE mora to bez odgode prijaviti na: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. Intelektualno vlasništvo",
+            "content": "Korisnik ostaje vlasnik mišljenja koja piše. Objavom na {app} Korisnik, međutim, Izdavaču daje besplatnu neekskluzivnu licenciju za prikazivanje, reproduciranje i tehničko prilagođavanje tog sadržaja unutar aplikacije. Vizualni elementi, kod i dizajn {app} isključivo su vlasništvo Izdavača."
+          },
+          "privacy": {
+            "label": "6. Osobni podaci",
+            "content": "Poštovanje tvoje privatnosti naš je apsolutni prioritet. {app} ne prodaje, ne iznajmljuje i ne dijeli nikakve osobne podatke s komercijalnim trećim stranama ni oglašivačima. Prikupljeni podaci (e-pošta, korisničko ime, aktivnost u aplikaciji) služe isključivo za rad usluge i upravljanje tvojim računom. Svoja prava na pristup, izmjenu ili brisanje (GDPR) možeš ostvariti na adresi: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Kolačići i pratitelji",
+            "content": "{app} ne koristi nikakve oglasne kolačiće ni pratitelje ponašanja trećih strana. Koriste se samo dvije vrste tehničkih kolačića: kolačić za autentifikaciju (da ostaneš prijavljen) i kolačić jezične postavke (da se zapamti tvoj odabir). Budući da su ti kolačići strogo nužni za uslugu, izuzeti su od prethodne privole."
+          },
+          "ads": {
+            "label": "8. Oglašavanje",
+            "content": "Aplikacija se trenutačno nudi posve bez oglasa. Ako bi se taj model promijenio, korisnici bi o tome bili obaviješteni ažuriranjem ovih Uvjeta."
+          },
+          "liability": {
+            "label": "9. Odgovornost",
+            "content": "Izdavač se trudi održati {app} dostupnom 24 sata dnevno, ali ne jamči odsutnost prekida ili pogrešaka. Informacije o filmovima dolaze iz baza podataka trećih strana; Izdavač se ne može smatrati odgovornim za eventualne netočnosti u tim podacima."
+          },
+          "law": {
+            "label": "10. Primjenjivo pravo",
+            "content": "Ovi Uvjeti podliježu francuskom pravu. U slučaju spora koji se nije mogao mirno riješiti putem adrese <email></email>, isključivo su nadležni sudovi u Parizu."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "Politika privatnosti",
+          "description": "Pročitaj politiku privatnosti {app}."
+        },
+        "sections": {
+          "intro": "Zaštita podataka u srcu je filozofije {app}. Ova politika detaljno opisuje koje podatke prikupljamo, zašto ih prikupljamo i kako ih štitimo. Ukratko: tvoje podatke ne prodajemo.",
+          "controller": {
+            "label": "1. Nadzornik podataka",
+            "content": "Nadzornik obrade podataka je Loup sa sjedištem u Parizu (Francuska). Za svako pitanje vezano za privatnost možeš kontaktirati: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. Prikupljeni podaci",
+            "content": "Prikupljamo samo podatke koji su strogo nužni za rad aplikacije: tvoju adresu e-pošte (za autentifikaciju), tvoje korisničko ime i tvoje podatke o korištenju (ocijenjeni filmovi, recenzije, liste). Tvoje lozinke pohranjene su šifrirano (hashirano) i sigurno."
+          },
+          "purpose": {
+            "label": "3. Svrha obrade",
+            "content": "Tvoji podaci obrađuju se isključivo kako bi ti: omogućili stvaranje i upravljanje računom, prikazali tvoje liste i ocjene te osigurali tehnički rad usluge. Tvoje podatke ne koristimo za oglasno profiliranje."
+          },
+          "sharing": {
+            "label": "4. Dijeljenje podataka",
+            "content": "Tvoji osobni podaci nikada se ne prodaju, ne iznajmljuju i ne prenose trećim stranama. Mogu biti smješteni kod naših tehničkih pružatelja (hosting, usluga za slanje transakcijske e-pošte) koji su obvezani strogom tajnošću i poštuju GDPR."
+          },
+          "retention": {
+            "label": "5. Rok čuvanja",
+            "content": "Tvoji podaci čuvaju se dok je tvoj račun aktivan. Ako odlučiš izbrisati svoj račun, svi tvoji osobni podaci (e-pošta, korisničko ime, mišljenja) bit će trajno obrisani iz naših baza podataka."
+          },
+          "rights": {
+            "label": "6. Tvoja prava (GDPR)",
+            "content": "U skladu s propisima imaš pravo na pristup, ispravak, prenosivost i brisanje svojih podataka. Ta prava možeš ostvariti u svakom trenutku izravno u aplikaciji ili pišući nam na: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Kolačići",
+            "content": "Kao što je navedeno u našim uvjetima korištenja, koristimo samo nužne tehničke kolačiće (sesija i jezik). Na tvoj uređaj ne postavlja se nijedan oglasni ili prateći kolačić trećih strana."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "Traži film, seriju, listu, osobu ili korisnika..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "Želiš li zaista ukloniti ovo djelo sa svoje liste odgledanih? Ako imaš ocjenu ili recenziju, i one će biti izbrisane."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "Želiš li zaista završiti seriju? Sve epizode svih sezona bit će označene kao odgledane."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "Želiš li zaista završiti {seasonNumber}. sezonu? Sve epizode sezone bit će označene kao odgledane."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "Da bi ovdje vidio aktivnost, ti ili korisnici koje pratiš morate ocjenjivati filmove, serije, ..."
+    },
+    "feed_person": {
+      "message": "Da bi ovdje vidio aktivnost, moraš pratiti ljude koji rade na filmovima ili serijama."
+    },
+    "playlists": {
+      "items": {
+        "empty": "Na ovoj listi nema nijednog filma ni serije. Dodaj ih da je napuniš!"
+      },
+      "add_to": {
+        "empty": "Nemaš nijednu listu. Stvori jednu da dodaješ filmove ili serije i lako ih nađeš!"
+      },
+      "saved": {
+        "empty": "Nemaš nijednu spremljenu listu. Spremi listu da je lako nađeš u svojoj knjižnici!"
+      },
+      "members": {
+        "empty": "Ova lista nema nijednog člana. Dodaj ih da zajedno radite na istoj listi!",
+        "search": "Traži korisnike za dodavanje na listu..."
+      }
+    },
+    "follow-requests": {
+      "empty": "Nemaš nijedan zahtjev za praćenje na čekanju. Kad ih budeš imao, pojavit će se ovdje!"
+    },
+    "recos": {
+      "empty": "Nemaš nijednu preporuku. Kad ih budeš imao, pojavit će se ovdje!",
+      "send_to": {
+        "empty": "Nemaš nikoga komu bi poslao reco. Morate biti prijatelji da mu možeš poslati reco (uzajamno praćenje)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "Još nemaš nijedan film ni seriju spremljen za poslije. Kad ih budeš imao, pojavit će se ovdje!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> ti je poslao reco za film <movie></movie>"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> ti je poslao reco za seriju <tv_series></tv_series>"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> je gledao <movie></movie> koji si mu preporučio"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> je gledao <tv_series></tv_series> koju si mu preporučio"
+    },
+    "follower_created": {
+      "description": "<user></user> te je počeo pratiti"
+    },
+    "follower_accepted": {
+      "description": "<user></user> je prihvatio tvoj zahtjev za praćenje"
+    },
+    "follower_request": {
+      "description": "<user></user> te želi pratiti"
+    },
+    "friend_created": {
+      "description": "<user></user> je sada tvoj prijatelj"
+    }
+  }
+}

@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "דרך אחרת לגלות קולנוע",
+    "description": "{app} היא רשת חברתית לחובבי קולנוע. גלו, שתפו ועיינו בסרטים ובסדרות יחד עם החברים שלכם."
+  },
+  "common": {
+    "messages": {
+      "welcome": "ברוכים הבאים",
+      "welcome_to_app": "ברוכים הבאים ל{app}",
+      "hello": "שלום",
+      "greeting_with_name": "{timeOfDay, select, morning {בוקר טוב, {name}} afternoon {צהריים טובים, {name}} evening {ערב טוב, {name}} night {לילה טוב, {name}} other {שלום, {name}}}",
+      "click_here": "לחצו כאן",
+      "see_more": "הצגת עוד",
+      "see_more_details": "הצגת פרטים נוספים",
+      "more": "עוד",
+      "view_profile": "הצגת הפרופיל",
+      "library": "ספרייה",
+      "watchlist": "רשימת הצפייה",
+      "for_later": "לפעם אחרת",
+      "heart_pick": "{count, plural, one {בחירת לב} two {בחירות לב} other {בחירות לב}}",
+      "add_to_heart_picks": "הוספה לבחירות הלב",
+      "remove_from_heart_picks": "הסרה מבחירות הלב",
+      "add_rating": "הוספת דירוג",
+      "edit_rating": "עריכת הדירוג",
+      "remove_rating": "הסרת הדירוג",
+      "share_my_rating": "שיתוף הדירוג שלי",
+      "share_review": "שיתוף הביקורת",
+      "show_likes_count": "הצגת מספר הלייקים",
+      "show_comments_count": "הצגת מספר התגובות",
+      "add_to_watchlist": "הוספה לרשימת הצפייה",
+      "remove_from_watchlist": "הסרה מרשימת הצפייה",
+      "no_results": "אין תוצאות",
+      "no_results_for": "אין תוצאות עבור <strong>{query}</strong>",
+      "no_followees": "אינך עוקב אחרי אף אחד",
+      "no_followers": "אין עוקבים",
+      "no_rating": "אין דירוג",
+      "must_watch_to_review": "יש לראות את היצירה כדי לכתוב עליה ביקורת",
+      "review_cannot_be_empty": "הביקורת לא יכולה להיות ריקה",
+      "no_activity": "אין פעילות",
+      "followers_ratings": "הדירוגים של העוקבים",
+      "added_by": "נוסף על ידי",
+      "sort_by": "מיון לפי",
+      "sort_order": "סדר המיון",
+      "go_to_film": "מעבר לסרט",
+      "go_to_tv_series": "מעבר לסדרה",
+      "go_to_user": "מעבר למשתמש",
+      "go_to_person": "מעבר לאדם",
+      "go_to_activity": "מעבר לפעילות",
+      "go_to_playlist": "מעבר לרשימה",
+      "go_to_review": "מעבר לביקורת",
+      "go_to_director": "{count, plural, one {מעבר לבימוי} two {מעבר לבימוי} other {מעבר לבימוי}}",
+      "go_to_creator": "{count, plural, one {מעבר ליוצר} two {מעבר ליוצרים} other {מעבר ליוצרים}}",
+      "show_director": "{count, plural, one {הצגת הבימוי} two {הצגת הבימוי} other {הצגת הבימוי}}",
+      "show_creator": "{count, plural, one {הצגת היוצר} two {הצגת היוצרים} other {הצגת היוצרים}}",
+      "show_credit": "{count, plural, one {הצגת ההשתתפות} two {הצגת ההשתתפויות} other {הצגת ההשתתפויות}}",
+      "credits": "קרדיטים",
+      "view_recommendation": "{count, plural, one {הצגת ה-reco} two {הצגת ה-reco} other {הצגת ה-reco}}",
+      "view_directors": "{count, plural, one {הצגת הבמאי} two {הצגת הבמאים} other {הצגת הבמאים}}",
+      "no_director": "אין בימוי",
+      "view_comment": "{count, plural, one {הצגת התגובה} two {הצגת התגובות} other {הצגת התגובות}}",
+      "add_comment": "{count, plural, one {הוספת תגובה} two {הוספת תגובות} other {הוספת תגובות}}",
+      "edit_comment": "{count, plural, one {עריכת התגובה} two {עריכת התגובות} other {עריכת התגובות}}",
+      "delete_comment": "מחיקת התגובה",
+      "do_you_really_want_to_delete_this_comment": "למחוק את התגובה הזו?",
+      "comment_deleted": "התגובה הזו נמחקה",
+      "write_your_comment_here": "כתבו תגובה...",
+      "reply": "תשובה",
+      "replies_count": "{count, plural, one {תשובה אחת} two {# תשובות} other {# תשובות}}",
+      "view_replies": "{count, plural, one {הצגת תשובה אחת} two {הצגת # תשובות} other {הצגת # תשובות}}",
+      "hide_replies": "הסתרת התשובות",
+      "load_more_replies": "טעינת תשובות נוספות",
+      "get_started": "התחלה",
+      "get_started_its_free": "יוצאים לדרך 🎬, בחינם!",
+      "import": "ייבוא",
+      "upgrade_to_plan": "שדרוג ל{plan}",
+      "choose_subscription_recurrence": "בחרו את תקופת החיוב של המינוי",
+      "compare_plans": "השוואת המסלולים",
+      "save_up_to_percent": "חסכו עד {percent}%",
+      "is_empty": "קצת ריק כאן",
+      "add_to_playlist": "הוספה לרשימה",
+      "send_to_friend": "שליחה לחבר",
+      "pin_to_profile": "נעיצה בפרופיל",
+      "unpin_from_profile": "ביטול הנעיצה בפרופיל",
+      "pinned": "נעוץ",
+      "unpinned": "הנעיצה בוטלה",
+      "no_pinned": "אין פריטים נעוצים",
+      "pinned_limit_reached": "הגעתם למספר הפריטים הנעוצים המקסימלי — בטלו נעיצה של אחד כדי להוסיף חדש",
+      "custom_sort": "מיון אישי",
+      "quick_add": "הוספה מהירה",
+      "favorite_films": "סרטים אהובים",
+      "follow": "עקבו",
+      "followed": "עוקבים",
+      "request_sent": "הבקשה נשלחה",
+      "follow_requests": "בקשות מעקב",
+      "no_follow_requests": "אין בקשות מעקב",
+      "follower": "{count, plural, one {עוקב} two {עוקבים} other {עוקבים}}",
+      "follower_count": "{count} עוקבים",
+      "see_followers": "הצגת העוקבים",
+      "followee": "{count, plural, one {נעקב} two {נעקבים} other {נעקבים}}",
+      "followee_count": "עוקב אחרי {count}",
+      "see_followees": "הצגת מי שאתם עוקבים אחריו",
+      "last_activities": "הפעילויות האחרונות",
+      "last_updated": "עודכן לאחרונה",
+      "last_updated_at_date": "עודכן לאחרונה ב{date}",
+      "show_all": "הצגת הכול",
+      "this_account_is_private": "החשבון הזה פרטי",
+      "follow_to_see_activities": "עקבו כדי לראות את הפעילויות",
+      "review": "{count, plural, one {ביקורת} two {ביקורות} other {ביקורות}}",
+      "no_overview": "אין תקציר",
+      "cast": "שחקנים",
+      "no_cast": "אין שחקנים",
+      "recent": "חדשים",
+      "popular": "פופולריים",
+      "popularity": "פופולריות",
+      "no_reviews": "אין ביקורות",
+      "no_playlists": "אין רשימות",
+      "no_playlists_found": "לא נמצאה אף רשימה",
+      "no_films": "אין סרטים",
+      "no_tv_series": "אין סדרות",
+      "view_activity": "הצגת הפעילות",
+      "comment_count": "{count, plural, one {תגובה אחת} two {# תגובות} other {# תגובות}}",
+      "write_review": "כתיבת ביקורת",
+      "new_review": "ביקורת חדשה",
+      "edit_review": "עריכת הביקורת",
+      "review_by": "ביקורת מאת {name}",
+      "my_review": "{count, plural, one {הביקורת שלי} two {הביקורות שלי} other {הביקורות שלי}}",
+      "add_review": "הוספת ביקורת",
+      "tv_series": "{count, plural, one {סדרה} two {סדרות} other {סדרות}}",
+      "film": "{count, plural, one {סרט} two {סרטים} other {סרטים}}",
+      "movie": "{count, plural, one {סרט} two {סרטים} other {סרטים}}",
+      "media": "{count, plural, one {כותר} two {כותרים} other {כותרים}}",
+      "tv_season": "{count, plural, one {עונה} two {עונות} other {עונות}}",
+      "tv_season_count": "{count, plural, one {עונה אחת} two {# עונות} other {# עונות}}",
+      "tv_season_value": "עונה {number}",
+      "tv_season_short": "ע{number}",
+      "tv_episode": "{count, plural, one {פרק} two {פרקים} other {פרקים}}",
+      "tv_episode_count": "{count, plural, one {פרק אחד} two {# פרקים} other {# פרקים}}",
+      "tv_episode_value": "פרק {number}",
+      "tv_episode_short": "ע{seasonNumber}פ{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {פרק מיוחד} two {פרקים מיוחדים} other {פרקים מיוחדים}}",
+      "first_air_date": "שידור ראשון",
+      "last_air_date": "שידור אחרון",
+      "see_film": "הצגת הסרט",
+      "see_tv_series": "הצגת הסדרה",
+      "watch_film_title": "צפייה ב{title}",
+      "watch_film_streaming_or_download": "צפו ב<important>{title}</important> בסטרימינג או בהורדה חוקית",
+      "download": "הורדה",
+      "downloaded": "הורד",
+      "person": "{count, plural, one {אדם} two {אנשים} other {אנשים}}",
+      "top_result": "התוצאה המובילה",
+      "user": "{count, plural, one {משתמש} two {משתמשים} other {משתמשים}}",
+      "reco": "{count, plural, one {reco} two {reco} other {reco}}",
+      "my_recos": "ה-reco שלי",
+      "item": "{count, plural, one {פריט} two {פריטים} other {פריטים}}",
+      "item_count": "{count, plural, one {פריט אחד} two {# פריטים} other {# פריטים}}",
+      "type": "סוג",
+      "complete": "השלמה",
+      "completed": "הושלם",
+      "collection": "{count, plural, one {אוסף} two {אוספים} other {אוספים}}",
+      "most_recent": "החדשים ביותר",
+      "most_popular": "הפופולריים ביותר",
+      "most_old": "הוותיקים ביותר",
+      "known_for": "מוכר בעיקר מ",
+      "release_date": "תאריך יציאה",
+      "last_appearance_date": "הופעה אחרונה",
+      "vote_average": "דירוג ממוצע",
+      "added": "נוסף",
+      "added_date": "תאריך ההוספה",
+      "added_at": "נוסף ב",
+      "add": "הוספה",
+      "playlist_name": "שם הרשימה",
+      "updated_at": "עודכן ב",
+      "created_at": "נוצר ב",
+      "likes": "לייקים",
+      "likes_count": "מספר הלייקים",
+      "search_media": "חיפוש כותר",
+      "search_film": "חיפוש סרט",
+      "start_typing_to_search_films": "התחילו להקליד כדי לחפש סרטים",
+      "search_tv_series": "חיפוש סדרה",
+      "start_typing_to_search_tv_series": "התחילו להקליד כדי לחפש סדרות",
+      "search_person": "חיפוש אדם",
+      "start_typing_to_search_persons": "התחילו להקליד כדי לחפש אנשים",
+      "search_user": "{count, plural, one {חיפוש משתמש} two {חיפוש משתמשים} other {חיפוש משתמשים}}",
+      "start_typing_to_search_users": "התחילו להקליד כדי לחפש משתמשים",
+      "search_playlist": "חיפוש רשימה",
+      "start_typing_to_search_playlists": "התחילו להקליד כדי לחפש רשימות",
+      "search_film_or_tv_series": "חיפוש סרט או סדרה",
+      "watched_date": "{count, plural, one {תאריך הצפייה} two {תאריכי הצפייה} other {תאריכי הצפייה}}",
+      "mark_as_watched": "סימון כנצפה",
+      "remove_from_watched": "הסרה מהנצפים",
+      "rating": "דירוג",
+      "create_a_playlist": "יצירת רשימה",
+      "by_name": "מאת {name}",
+      "reset": "איפוס",
+      "job": "{count, plural, one {תפקיד} two {תפקידים} other {תפקידים}}",
+      "department": "{count, plural, one {מחלקה} two {מחלקות} other {מחלקות}}",
+      "share_title_via": "שתפו את <strong>{title}</strong> באמצעות",
+      "share_title": "שיתוף <strong>{title}</strong>",
+      "link": "קישור",
+      "copy_link": "העתקת הקישור",
+      "copied": "הועתק",
+      "other": "{count, plural, one {אחר} two {אחרים} other {אחרים}}",
+      "via": "באמצעות",
+      "edit": "עריכה",
+      "guest": "{count, plural, one {אורח} two {אורחים} other {אורחים}}",
+      "are_u_sure": "בטוחים?",
+      "backward": "אחורה",
+      "forward": "קדימה",
+      "back": "חזרה",
+      "next": "הבא",
+      "notification": "{count, plural, one {התראה} two {התראות} other {התראות}}",
+      "see_notifications": "הצגת ההתראות",
+      "open_social_panel": "פתיחת הפאנל החברתי",
+      "cancel_change": "{count, plural, one {ביטול השינוי} two {ביטול השינויים} other {ביטול השינויים}}",
+      "do_you_really_want_to_cancel_change": "לבטל {count, plural, one {את השינוי} two {את השינויים} other {את השינויים}}?",
+      "continue_editing": "המשך העריכה",
+      "confirm": "אישור",
+      "terms_of_use": "תנאי השימוש",
+      "privacy_policy": "מדיניות הפרטיות",
+      "request_made": "הבקשה נשלחה",
+      "request_canceled": "הבקשה בוטלה",
+      "cancel_request": "ביטול הבקשה",
+      "open_menu": "פתיחת התפריט",
+      "feed": "פיד",
+      "about": "אודות",
+      "home": "בית",
+      "search": "חיפוש",
+      "explore": "גילוי",
+      "shop": "חנות",
+      "help": "עזרה",
+      "legal": "מידע משפטי",
+      "setting": "{count, plural, one {הגדרה} two {הגדרות} other {הגדרות}}",
+      "logout": "התנתקות",
+      "to_watch": "לצפייה",
+      "reco_by_your_friends": "ה-reco של החברים שלכם",
+      "friends_playlists": "הרשימות של החברים שלכם",
+      "latest_activity": "{count, plural, one {הפעילות האחרונה} two {הפעילויות האחרונות} other {הפעילויות האחרונות}}",
+      "discover_users": "גילוי משתמשים",
+      "most_recommended": "המומלצים ביותר",
+      "archive": "ארכיון",
+      "unarchive": "הוצאה מהארכיון",
+      "mark_as_read": "{count, plural, one {סימון כנקרא} two {סימון כנקראו} other {סימון כנקראו}}",
+      "mark_as_unread": "{count, plural, one {סימון כלא נקרא} two {סימון כלא נקראו} other {סימון כלא נקראו}}",
+      "accept": "אישור",
+      "accepted": "אושר",
+      "decline": "דחייה",
+      "declined": "נדחה",
+      "request_accepted": "{count, plural, one {הבקשה אושרה} two {הבקשות אושרו} other {הבקשות אושרו}}",
+      "request_declined": "{count, plural, one {הבקשה נדחתה} two {הבקשות נדחו} other {הבקשות נדחו}}",
+      "unread": "{count, plural, one {לא נקרא} two {לא נקראו} other {לא נקראו}}",
+      "archived": "{count, plural, one {בארכיון} two {בארכיון} other {בארכיון}}",
+      "no_notifications": "אין התראות",
+      "all": "הכול",
+      "mark_all_as_read": "סימון הכול כנקרא",
+      "archive_all": "העברת הכול לארכיון",
+      "archive_all_read": "העברת כל הנקראים לארכיון",
+      "please_login": "התחברו",
+      "like": "לייק",
+      "unlike": "ביטול הלייק",
+      "unfollow": "הפסקת המעקב",
+      "name": "שם",
+      "add_a_name": "הוסיפו שם",
+      "add_a_description": "הוסיפו תיאור",
+      "visibility": "נראות",
+      "search_an_user": "חיפוש משתמש",
+      "select_an_item_to_add_to_playlist": "בחרו את הפריט להוספה לרשימה",
+      "select_a_film_to_add_to_playlist": "בחרו את הסרט להוספה לרשימה",
+      "select_a_tv_series_to_add_to_playlist": "בחרו את הסדרה להוספה לרשימה",
+      "add_one_or_more_items_to": "הוסיפו פריט אחד או יותר ל<important>{title}</important>",
+      "add_one_or_more_films_to": "הוסיפו סרט אחד או יותר ל<important>{title}</important>",
+      "add_one_or_more_tv_series_to": "הוסיפו סדרה אחת או יותר ל<important>{title}</important>",
+      "manage_playlist_access_rights": "ניהול הרשאות הגישה לרשימה",
+      "add_guest": "{count, plural, one {הוספת אורח} two {הוספת אורחים} other {הוספת אורחים}}",
+      "manage_members": "ניהול החברים",
+      "no_member": "אין חברים",
+      "add_member": "{count, plural, one {הוספת חבר} two {הוספת חברים} other {הוספת חברים}}",
+      "manage_guests": "ניהול האורחים",
+      "add_guests_to_your_playlist": "הוסיפו אורחים לרשימה שלכם",
+      "select_users_to_add_to_playlist": "בחרו את המשתמשים להוספה לרשימה",
+      "select_users_to_send_reco": "בחרו למי לשלוח את ה-reco",
+      "select_playlists_to_add_the_item": "בחרו את הרשימות שאליהן יתווסף הפריט",
+      "send": "שליחה",
+      "sent": "נשלח",
+      "select_row": "בחירת שורה",
+      "select_all": "בחירת הכול",
+      "no_selected_users": "לא נבחרו משתמשים",
+      "selection_count": "{number} מתוך {total} {type} נבחרו",
+      "about_title": "אודות {title}",
+      "detail": "{count, plural, one {פרט} two {פרטים} other {פרטים}}",
+      "genre": "{count, plural, one {ז'אנר} two {ז'אנרים} other {ז'אנרים}}",
+      "male": "{count, plural, one {גבר} two {גברים} other {גברים}}",
+      "female": "{count, plural, one {אישה} two {נשים} other {נשים}}",
+      "non_binary": "{count, plural, one {א-בינארי} two {א-בינאריים} other {א-בינאריים}}",
+      "unspecified": "לא צוין",
+      "date_of_birth": "תאריך הלידה",
+      "date_of_death": "תאריך הפטירה",
+      "place_of_birth": "מקום הלידה",
+      "age_years": "{count, plural, one {בן שנה} two {בן {count}} other {בן {count}}}",
+      "biography": "ביוגרפיה",
+      "no_biography_available": "אין ביוגרפיה זמינה",
+      "no_information_available": "אין מידע זמין",
+      "already_sent": "נשלח כבר",
+      "already_watched": "נצפה כבר",
+      "already_added": "נוסף כבר",
+      "recommend_to_friend_to_discover": "המליצו על <strong>{title}</strong> לחבר שעוד לא ראה אותו",
+      "add_to_one_or_more_playlists": "הוסיפו את <strong>{title}</strong> לרשימה אחת או יותר",
+      "my_playlist": "{count, plural, one {הרשימה שלי} two {הרשימות שלי} other {הרשימות שלי}}",
+      "what_is_title": "מה זה <strong>{title}</strong>?",
+      "try_again": "נסו שוב",
+      "error": "שגיאה",
+      "not_logged_in": "אינך מחובר",
+      "an_error_occurred": "אירעה שגיאה",
+      "playlist_not_found": "הרשימה לא נמצאה",
+      "user_not_found": "המשתמש לא נמצא",
+      "film_not_found": "הסרט לא נמצא",
+      "media_not_found": "הכותר לא נמצא",
+      "review_not_found": "הביקורת לא נמצאה",
+      "person_not_found": "האדם לא נמצא",
+      "tv_series_not_found": "הסדרה לא נמצאה",
+      "tv_episode_not_found": "הפרק לא נמצא",
+      "tv_season_not_found": "העונה לא נמצאה",
+      "wrong_arguments": "פרמטרים שגויים",
+      "no_media_found": "לא נמצא אף כותר",
+      "unknown_action": "פעולה לא מוכרת",
+      "no_user_found": "לא נמצא אף משתמש",
+      "no_tv_episodes": "אין פרקים",
+      "save": "שמירה",
+      "saved": "נשמר",
+      "create": "יצירה",
+      "film_count": "{count, plural, one {סרט אחד} two {# סרטים} other {# סרטים}}",
+      "tv_series_count": "{count, plural, one {סדרה אחת} two {# סדרות} other {# סדרות}}",
+      "login": "התחברות",
+      "signup": "הרשמה",
+      "navigation": "ניווט",
+      "delete": "מחיקה",
+      "remove": "הסרה",
+      "deleted": "נמחק",
+      "share": "שיתוף",
+      "duplicate": "שכפול",
+      "duplicated": "שוכפל",
+      "cancel": "ביטול",
+      "date": "תאריך",
+      "duration": "משך",
+      "sort": "מיון",
+      "show": "הצגה",
+      "column": "{count, plural, one {עמודה} two {עמודות} other {עמודות}}",
+      "comment": "{count, plural, one {תגובה} two {תגובות} other {תגובות}}",
+      "unknown": "לא ידוע",
+      "community": "קהילה",
+      "cast_and_crew": "שחקנים וצוות",
+      "soon": "בקרוב",
+      "ios_app": "אפליקציית iOS",
+      "android_app": "אפליקציית Android",
+      "coming_soon": "בקרוב",
+      "new_mobile_app": "אפליקציה חדשה לנייד!",
+      "manage": "ניהול",
+      "monthly": "חודשי",
+      "yearly": "שנתי",
+      "day": "יום",
+      "week": "שבוע",
+      "month": "חודש",
+      "year": "שנה",
+      "price": "מחיר",
+      "free": "חינם",
+      "playlist": "{count, plural, one {רשימה} two {רשימות} other {רשימות}}",
+      "public": "ציבורית",
+      "publish": "פרסום",
+      "private": "פרטית",
+      "description": "תיאור",
+      "details": "פרטים",
+      "profile": "פרופיל",
+      "overview": "תקציר",
+      "no_playlists_saved": "אין רשימות שמורות",
+      "camera_permission_denied": "הגישה למצלמה נדחתה",
+      "photo_library_permission_denied": "הגישה לספריית התמונות נדחתה",
+      "ignore": "התעלמות",
+      "ok": "אישור",
+      "title": "כותרת",
+      "skip": "דילוג",
+      "undo": "ביטול הפעולה",
+      "date_published": "תאריך הפרסום",
+      "date_created": "תאריך היצירה",
+      "date_updated": "תאריך העדכון",
+      "alphabetical": "לפי האלפבית",
+      "date_added": "תאריך ההוספה",
+      "number_of_likes": "מספר הלייקים",
+      "number_of_seasons": "מספר העונות",
+      "add_to_this_playlist": "הוספה לרשימה הזו",
+      "save_to_library": "שמירה בספרייה",
+      "remove_from_library": "הסרה מהספרייה",
+      "otp": "קוד חד-פעמי",
+      "ratings_from_followees": "הדירוגים של מי שאתם עוקבים אחריו",
+      "choose_from_the_library": "בחירה מהגלריה",
+      "take_a_photo": "צילום תמונה",
+      "delete_current_image": "מחיקת התמונה הנוכחית",
+      "edit_image": "עריכת התמונה",
+      "add_image": "הוספת תמונה",
+      "verify_with_a_code": "אימות באמצעות קוד",
+      "order": "סדר",
+      "edit_order": "עריכת הסדר",
+      "done": "סיום",
+      "can_edit": "יכול לערוך?",
+      "upgrade": "שדרוג",
+      "no_description": "אין תיאור",
+      "no_comment": "אין תגובות",
+      "close": "סגירה",
+      "edit_playlist": "עריכת הרשימה",
+      "universe": "יוניברס",
+      "cannot_be_changed": "לא ניתן לשינוי",
+      "delete_review": "מחיקת הביקורת",
+      "do_you_really_want_to_delete_this_review": "למחוק את הביקורת הזו?",
+      "user_liked_playlist": "<name></name> עשה לייק לרשימה",
+      "user_liked_review": "<name></name> עשה לייק לביקורת",
+      "runtime": "אורך",
+      "ends_at": "מסתיים ב{value}",
+      "this_user_has_no_activity": "למשתמש הזה אין פעילות",
+      "notification_archived": "{count, plural, one {ההתראה הועברה לארכיון} two {ההתראות הועברו לארכיון} other {ההתראות הועברו לארכיון}}",
+      "notification_unarchived": "{count, plural, one {ההתראה הוצאה מהארכיון} two {ההתראות הוצאו מהארכיון} other {ההתראות הוצאו מהארכיון}}",
+      "notification_marked_as_read": "{count, plural, one {ההתראה סומנה כנקראה} two {ההתראות סומנו כנקראו} other {ההתראות סומנו כנקראו}}",
+      "notification_marked_as_unread": "{count, plural, one {ההתראה סומנה כלא נקראה} two {ההתראות סומנו כלא נקראו} other {ההתראות סומנו כלא נקראו}}",
+      "or_continue_with": "או המשיכו עם",
+      "message": "{count, plural, one {הודעה} two {הודעות} other {הודעות}}",
+      "story": "{count, plural, one {סטורי} two {סטוריז} other {סטוריז}}",
+      "new_playlist": "רשימה חדשה",
+      "select_a_type": "בחרו סוג",
+      "filter": "{count, plural, one {מסנן} two {מסננים} other {מסננים}}",
+      "hide_watched": "הסתרת הנצפים",
+      "show_me_around": "סיור קצר",
+      "artwork_from": "איור: <important>{source}</important>",
+      "no_active_subscription": "אין מינוי פעיל",
+      "manage_subscription": "ניהול המינוי",
+      "started_on_date": "התחיל ב{date}",
+      "last_renewed_on_date": "חודש לאחרונה ב{date}",
+      "version_value": "גרסה {value}",
+      "original_title": "הכותרת המקורית",
+      "starring": "בכיכובם",
+      "write_your_review_here": "כתבו כאן את הביקורת שלכם...",
+      "insert": "הוספה",
+      "trailer": "{count, plural, one {טריילר} two {טריילרים} other {טריילרים}}",
+      "list": "{count, plural, one {רשימה} two {רשימות} other {רשימות}}",
+      "grid": "{count, plural, one {רשת} two {רשתות} other {רשתות}}",
+      "order_asc": "סדר עולה",
+      "order_desc": "סדר יורד",
+      "menu": "תפריט",
+      "at_least_one_watched_date_required": "נדרש לפחות תאריך צפייה אחד",
+      "viewer": "{count, plural, one {צופה} two {צופים} other {צופים}}",
+      "editor": "{count, plural, one {עורך} two {עורכים} other {עורכים}}",
+      "admin": "{count, plural, one {מנהל} two {מנהלים} other {מנהלים}}",
+      "owner": "{count, plural, one {בעלים} two {בעלים} other {בעלים}}",
+      "you_dont_have_permission_to_do_this_action": "אין לכם הרשאה לבצע את הפעולה הזו",
+      "in_progress": "בתהליך",
+      "give_up": "ויתור",
+      "random": "אקראי",
+      "reset_password": "איפוס הסיסמה",
+      "password_reset": "הסיסמה אופסה",
+      "return_to_login": "חזרה להתחברות",
+      "invalid_code": "קוד שגוי",
+      "no_token_found": "לא נמצא טוקן",
+      "first_watched_at": "תאריך הצפייה הראשונה",
+      "watched_dates": "תאריכי הצפייה",
+      "no_watched_dates": "אין תאריכי צפייה",
+      "select_role": "בחרו תפקיד",
+      "select_format": "בחרו פורמט",
+      "theater": "קולנוע",
+      "physical": "עותק פיזי",
+      "digital": "דיגיטלי",
+      "streaming": "סטרימינג",
+      "you_must_be_premium_to_change_member_role": "נדרש מינוי Premium כדי לשנות את התפקיד של חבר",
+      "already_member": "חבר כבר",
+      "email_already_used": "כתובת האימייל הזו בשימוש",
+      "email_confirmed": "האימייל אומת",
+      "confirmation_email_sent": "אימייל אימות נשלח",
+      "continue": "המשך",
+      "finish": "סיום",
+      "forgot_password": "שכחתי סיסמה",
+      "new_password": "סיסמה חדשה",
+      "confirm_password": "אימות הסיסמה",
+      "password_reseted": "הסיסמה אופסה",
+      "reset_your_password": "אפסו את הסיסמה",
+      "invalid_token": "טוקן שגוי",
+      "new_notification": "{count, plural, one {התראה חדשה} two {התראות חדשות} other {התראות חדשות}}",
+      "lets_go": "יוצאים לדרך!",
+      "update_available": "יש עדכון זמין",
+      "update_available_description": "עדכנו את האפליקציה כדי ליהנות מהשיפורים האחרונים.",
+      "update_required_title": "נדרש עדכון",
+      "update_required_description": "הגרסה הזו של האפליקציה אינה נתמכת עוד. עדכנו אותה כדי להמשיך להשתמש ב-Recomend.",
+      "update_app": "עדכון",
+      "advertisement": "{count, plural, one {פרסומת} two {פרסומות} other {פרסומות}}",
+      "pending": "ממתין",
+      "processing": "בעיבוד",
+      "awaiting_review": "ממתין לבדיקה",
+      "failed": "נכשל",
+      "data": "{count, plural, one {נתון} two {נתונים} other {נתונים}}",
+      "restore": "שחזור",
+      "fix": "תיקון",
+      "not_found": "לא נמצא",
+      "unavailable": "לא זמין",
+      "star_on_github": "תנו לנו כוכב ב-GitHub"
+    },
+    "form": {
+      "email": {
+        "label": "אימייל",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "כתובת האימייל אינה תקינה",
+          "unavailable": "כתובת האימייל הזו בשימוש"
+        },
+        "verified": "האימייל אומת"
+      },
+      "username": {
+        "label": "שם משתמש",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "התו הראשון חייב להיות אות או ספרה",
+          "double_dot": "אסור להשתמש בשתי נקודות רצופות",
+          "ends_with_dot": "אסור לסיים בנקודה",
+          "format": "מותר להשתמש רק באותיות, בספרות ובתווים '_' ו-'.'",
+          "unavailable": "שם המשתמש הזה תפוס"
+        }
+      },
+      "full_name": {
+        "label": "שם",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "מותר להשתמש רק באותיות, בספרות וברווחים"
+        }
+      },
+      "password": {
+        "label": "סיסמה",
+        "placeholder": "הזינו את הסיסמה",
+        "schema": {
+          "uppercase": "נדרשת לפחות אות גדולה אחת",
+          "lowercase": "נדרשת לפחות אות קטנה אחת",
+          "number": "נדרשת לפחות ספרה אחת",
+          "special": "נדרש לפחות תו מיוחד אחד",
+          "match": "הסיסמאות אינן תואמות"
+        },
+        "confirm": {
+          "label": "אימות הסיסמה",
+          "placeholder": "אמתו את הסיסמה"
+        }
+      },
+      "length": {
+        "char_min": "{count, plural, one {תו אחד} two {# תווים} other {# תווים}} לפחות",
+        "char_max": "{count, plural, one {תו אחד} two {# תווים} other {# תווים}} לכל היותר"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "מותר להשתמש רק באותיות, בספרות וברווחים"
+      },
+      "error": {
+        "too_many_attempts": "יותר מדי ניסיונות, נסו שוב מאוחר יותר",
+        "not_received_code": "לא קיבלתם את הקוד?",
+        "invalid_code": "קוד שגוי",
+        "turnstile": "האימות נכשל, נסו שוב"
+      },
+      "resend_code": "שליחת הקוד מחדש",
+      "resend_email": "שליחת האימייל מחדש",
+      "code_verified": "הקוד אומת",
+      "code_sent": "הקוד נשלח"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "הדף לא נמצא",
+        "description": "אופס, הדף הזה לא קיים..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "מעקב",
+        "description": "גלו, דרגו ושתפו את הסרטים והסדרות האהובים עליכם."
+      },
+      "recos": {
+        "label": "reco",
+        "description": "שלחו וקבלו reco מחברים. הכול במקום אחד."
+      },
+      "playlists": {
+        "label": "רשימות",
+        "description": "סדרו, שתפו ובנו רשימות ביחד."
+      },
+      "feed": {
+        "label": "פיד",
+        "description": "עקבו אחרי החברים שלכם כדי לראות במה הם צופים, מה הם אוהבים ועל מה הם כותבים."
+      },
+      "social_sharing": {
+        "label": "שיתוף חברתי",
+        "description": "שתפו כל מה שאתם אוהבים באינסטגרם או ברשתות אחרות."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "מעקב",
+          "description": "שימרו עין על הסרטים שראיתם"
+        },
+        "recos": {
+          "label": "Reco",
+          "description": "שלחו המלצות על סרטים לחברים שלכם"
+        },
+        "explore": {
+          "label": "גילוי",
+          "description": "גלו סרטים חדשים ב-Paradise Pictures, מפה אינטראקטיבית עם יותר מ-1400 סרטים"
+        },
+        "like": {
+          "label": "לייק",
+          "description": "הביעו אהבה לסרטים, לרשימות ולביקורות האהובים עליכם"
+        },
+        "rating": {
+          "label": "דירוג",
+          "description": "דרגו את הסרטים שראיתם"
+        },
+        "watchlist": {
+          "label": "רשימת צפייה",
+          "description": "שמרו את הסרטים שאתם רוצים לראות"
+        },
+        "playlists": {
+          "label": "רשימות",
+          "description": "סדרו את הסרטים שלכם ברשימות ושתפו אותן"
+        },
+        "reviews": {
+          "label": "ביקורות",
+          "description": "כתבו ביקורות ותנו לחובב הקולנוע הציני שבכם לצאת"
+        },
+        "feed": {
+          "label": "פיד",
+          "description": "עקבו אחרי הפעילות של החברים שלכם"
+        },
+        "adsFree": {
+          "label": "בלי פרסומות",
+          "description": "תיהנו מ-Recomend בלי פרסומות, לתמיד"
+        }
+      }
+    },
+    "welcome": {
+      "title": "תודה שנרשמתם!",
+      "description": "הצצה מהירה למה שאפשר לעשות עם {app}.",
+      "follow": {
+        "title": "עקבו אחרי אנשים",
+        "description": "עקבו אחרי חברים כדי לראות במה הם צופים."
+      },
+      "import": {
+        "title": "באים מפלטפורמה אחרת?"
+      }
+    },
+    "collection": {
+      "label": "ספרייה",
+      "my_recos": {
+        "label": "ה-reco שלי",
+        "search": {
+          "placeholder": "חיפוש ב-reco שלי..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "מחיקה מה-reco שלי",
+            "description": "למחוק את <important>{title}</important> מה-reco שלכם?"
+          },
+          "complete_confirm": {
+            "title": "השלמת ה-reco",
+            "description": "להשלים את ה-reco <important>{title}</important>?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "חיפוש ברשימת הצפייה..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "מחיקה מרשימת הצפייה",
+            "description": "למחוק את <important>{title}</important> מרשימת הצפייה שלכם?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "חיפוש בבחירות הלב..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "מחיקה מבחירות הלב",
+            "description": "למחוק את <important>{title}</important> מבחירות הלב שלכם?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> צפה",
+        "rated": "<name></name> דירג",
+        "liked": "<name></name> עשה לייק",
+        "rated_liked": "<name></name> עשה לייק ודירג",
+        "reviewed": "<name></name> כתב ביקורת"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> הוא <important>{roles}</important> ב<linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> הוא <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "אישור האפליקציה",
+        "description_generic": "אפליקציה מבקשת גישה לחשבון שלכם.",
+        "description": "{client} מבקש גישה לחשבון שלכם.",
+        "scopes_label": "זה יאפשר לאפליקציה:",
+        "accept": "לאפשר",
+        "deny": "לדחות",
+        "error": {
+          "invalid_request": "בקשה שגויה או שתוקפה פג",
+          "invalid_request_description": "התחילו את תהליך האישור מחדש מהאפליקציה ששלחה אתכם לכאן.",
+          "client_not_found": "האפליקציה הזו לא נמצאה.",
+          "submit_failed": "משהו השתבש. נסו שוב."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "התחברו לחשבון {app} שלכם."
+        },
+        "label": "התחברות",
+        "description": "גלו את המלצות הסרטים הטובות ביותר.",
+        "or_continue_with": "או המשיכו עם",
+        "no_account_yet": "עדיין אין לכם חשבון?",
+        "form": {
+          "identifier": {
+            "label": "אימייל או שם משתמש",
+            "placeholder": "הזינו אימייל או שם משתמש"
+          },
+          "password": {
+            "label": "סיסמה",
+            "placeholder": "הזינו את הסיסמה"
+          },
+          "submit": "התחברות",
+          "forgot_password": "שכחתם סיסמה?",
+          "wrong_credentials": "האימייל או הסיסמה שגויים"
+        },
+        "otp": {
+          "password_login": "מעדיפים להתחבר עם סיסמה?",
+          "form": {
+            "submit": "קבלת קוד",
+            "no_user_found": "לא נמצא משתמש עם האימייל הזה",
+            "success": "מחובר"
+          },
+          "confirm_form": {
+            "label": "אימות הקוד",
+            "description": "קוד אימות נשלח לכתובת {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "הירשמו ל{app} כדי לגלות ולשתף המלצות על סרטים."
+        },
+        "description": "פתחו חשבון כדי להמליץ על סרט לחבר ששוכח תמיד את השמות.",
+        "form": {
+          "success": "אימייל אימות נשלח לכתובת {email}"
+        },
+        "confirm_form": {
+          "label": "אימות האימייל",
+          "description": "קישור אימות נשלח לכתובת {email}"
+        },
+        "return_to_login": "אופס, יש לי כבר חשבון."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "שכחתי סיסמה",
+          "description": "אפסו את הסיסמה שלכם."
+        },
+        "label": "שכחתי סיסמה",
+        "description": "כדאי להשתמש במנהל סיסמאות, זה ממש נוח.",
+        "return_to_login": "אופס, בעצם אני כן זוכר את הסיסמה.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "איפוס הסיסמה",
+          "code_sent": "הבקשה נשלחה"
+        },
+        "confirm_form": {
+          "label": "אימות הקוד",
+          "description": "קוד אימות נשלח לכתובת {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "איפוס הסיסמה",
+          "description": "בחרו סיסמה חדשה לחשבון שלכם."
+        }
+      },
+      "error": {
+        "label": "שגיאה",
+        "description": "אירעה שגיאה בתהליך ההתחברות.",
+        "return_to_login": "חזרה לקרקע בטוחה"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "אודות",
+        "marquee": "אין בחיים שלכם משהו מרגש יותר מלקרוא דפי 'אודות' באינטרנט?",
+        "intro": "<strong>Recomend</strong> הוא מרחב שמוקדש לגילוי סרטים, להמלצה עליהם ולסידור שלהם. תכננו כאן הכול כדי שההמלצה מפה לאוזן תקבל סוף־סוף את התמיכה הדיגיטלית הטובה ביותר. הגישה שלנו מעמידה במרכז את האנשים ואת הקשרים ביניהם, בעידן שבו הצריכה סובבת סביב עצמנו — או יותר נכון, סביב 'מומלץ בשבילך'.",
+        "slogan": {
+          "1": "בלי פרסומות ובלי הבטחות מפוקפקות. 🍆",
+          "2": "זו גם רשת חברתית וגם כלי עבודה.",
+          "3": "תוצרת בית, בידי חובבים.",
+          "4": "חובבני, במובן הטהור של המילה."
+        },
+        "last": "אפשר להשתמש ב-Recomend לבד או עם אחרים, בפומבי או בפרטי, ביום או בלילה, אבל בבקשה לא מול סרט — תתרכזו!"
+      },
+      "team": {
+        "label": "הצוות",
+        "intro": "Recomend נוצר על ידי שני אחים חולי קולנוע, שאוהבים להשקיע את הזמן שלהם בפרויקטים שאפתניים מדי שאולי לא יראו אור מעולם.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "אדריכל-מהנדס היפראקטיבי שעבודה אחת לא מספיקה לו (אומת הסטארט-אפ האמיתית), Yoann הוא זה שחשב על מפת הסרטים, שבתחילה הייתה לה שאיפה צנועה אחת: להיות פוסטר בשירותים שלו. עם הצטרפותו של Loup היעדים זינקו לשמיים, ומתוך תחושה שהוא נסחף מעט, הוא לקח על עצמו את כל הגרפיקה של המפה ושל האתר, וגם את כל התקשורת (אף שהוא לא אוהב את זה). בנוסף הוא משתף דעות על UX/UI ומציע המון פיצ'רים בלי להבין לגמרי כמה קשה לכתוב אותם בקוד (הוא התקדם בעניין)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "אוטודידקט מוחלט, שהצליח בכל זאת ללמוד לימודים שהובילו אותו לאבטלה ללא שכר לפני גיל 25. איש אשכולות אמיתי, Loup אחראי על צד הווב ומתכנת ממשק שמנסה להיות נוח כמה שאפשר. Loup רוצה להודות לכל פורומי התכנות שענו על השאלות (הרבות מאוד) שלו, וגם לכל היוטיוברים ההודים שהנחו אותו כמו אבות מאמצים לאורך החודשים האלה. אמא שלו, מצידה, משוכנעת שאחיו שיעבד אותו בשביל הפרויקט הזה (אני בסדר, אמא)."
+          }
+        },
+        "last": "כדי ליצור קשר איתנו או עם חברי קהילה אחרים, הצטרפו ל<link>Discord</link> שלנו!"
+      },
+      "pricing": {
+        "label": "מחירים",
+        "intro": "מודל המינוי הזה הוא קודם כול דרך לתמוך בפרויקט ולעזור לו לגדול. הפיצ'רים של Premium הם תוספות לשימוש מתקדם ב-Recomend, והם מצדיקים תרומה כספית קטנה. אנחנו נשמור תמיד על האפשרות להשתמש באתר בחינם, בלי פרסומות ובלי הרגשה של הגבלה.",
+        "subdescription": "*אם גם המחיר הנמוך עד גיחוך של המינוי הזה עדיין מעל ליכולת שלכם, אנא פנו לממשלה הליברלית שלכם, האחראית לאובדן כוח הקנייה שלכם."
+      },
+      "legal": {
+        "label": "מידע משפטי ופרטיות",
+        "description": "אנחנו מכבדים את הפרטיות שלכם. הפרסומות שמוצגות למשתמשים אורחים מנוהלות על ידי Google ודורשות שימוש בקובצי Cookie טכניים כדי להגביל את תכיפות ההצגה ולמנוע הונאות.",
+        "privacyPolicy": "קראו את מדיניות הפרטיות שלנו",
+        "manageCookies": "ניהול העדפות הפרסום שלי (Cookies)"
+      },
+      "open-source": {
+        "label": "קוד פתוח",
+        "intro": "Recomend הוא קוד פתוח: הקוד ציבורי ב-GitHub. הציצו, תרמו, או פשוט השאירו לנו כוכב!",
+        "star": "תנו לנו כוכב ב-GitHub"
+      },
+      "businessmodel": {
+        "label": "מודל עסקי",
+        "paragraph": {
+          "1": "כמו שאפשר לנחש מהפרופילים הלא-מסחריים שלנו, עוד לא הבנו מה מודל עסקי היה יכול לעשות בשבילנו כרגע...",
+          "2": "אם העתיד של Recomend ידרוש את זה, נבדוק את העניין ונקיף את עצמנו באנשים הנכונים — או לפחות באנשים שזה מעניין אותם יותר מאיתנו.",
+          "3": "בינתיים, בואו נהיה כנים, יש דברים אחרים שחשוב להתרכז בהם."
+        }
+      },
+      "roadmap": {
+        "label": "מפת דרכים"
+      },
+      "data": {
+        "label": "נתונים",
+        "paragraph": {
+          "1": "כל המטא-נתונים שבשימוש ב-Recomend מסופקים על ידי <link>The Movie Database (TMDb)</link> דרך ה-API של הפלטפורמה. אנחנו עושים כמו כולם, כמו כבשים טובות.",
+          "2": "לגבי שגיאות או סרטים חסרים, פנו ל<link>TMDb</link>."
+        }
+      },
+      "resources": {
+        "label": "משאבים",
+        "intro": "זה לא ממש קשור לקולנוע, אבל הנה רשימה של אתרים שאנחנו אוהבים:"
+      },
+      "contact-support": {
+        "label": "קשר ותמיכה",
+        "help-center": "מצאו תשובות לשאלות הקיומיות שלכם ב<link>מרכז העזרה</link> שלנו.",
+        "technical-support": "לשאלות טכניות: <email></email>",
+        "suggest-a-feature": "להצעות: <email></email>",
+        "contact-us": "כדי פשוט ליצור איתנו קשר: <email></email>"
+      },
+      "quote": {
+        "label": "ציטוט",
+        "quote": "« אני שונא את המילה מקצועי. כל השחקנים והאחרים שאומרים: אני מקצועי, אני פרו! מה זה בכלל? יש מילה עצובה יותר? כי 'חובב' בא מהמילה אהבה. צריך לעשות דברים מאהבה, אחרת אנחנו טיפשים. »",
+        "author": "אורסון וולס",
+        "date": "1972",
+        "subdescription": "*היססנו אם לשים אותו, כי זה עלול להישמע מתנשא, אבל הוא משקף את מצב הרוח שלנו לגבי הפרויקט. ובכל זאת, אם לא אהבתם, נסיר אותו."
+      }
+    },
+    "settings": {
+      "label": "הגדרות",
+      "description": "נהלו את הגדרות החשבון שלכם.",
+      "profile": {
+        "label": "פרופיל",
+        "description": "כך אחרים יראו אתכם באתר.",
+        "avatar": {
+          "label": "תמונת פרופיל",
+          "delete": "מחיקה"
+        },
+        "full_name": {
+          "label": "שם",
+          "description": "זה השם שיוצג בפרופיל שלכם ובאימיילים.",
+          "placeholder": "הזינו את השם שלכם",
+          "form": {
+            "min_length": "השם חייב לכלול תו אחד לפחות",
+            "max_length": "השם לא יכול לעלות על 50 תווים"
+          }
+        },
+        "bio": {
+          "label": "ביו",
+          "description": "ספרו לנו משהו על עצמכם, זה יופיע בפרופיל שלכם.",
+          "placeholder": "ספרו לנו על עצמכם",
+          "form": {
+            "max_length": "הביו לא יכול לעלות על 150 תווים",
+            "format": "הביו לא יכול לכלול שורות ריקות או להיות מורכב מרווחים בלבד."
+          }
+        },
+        "favorite_films": {
+          "label": "סרטים אהובים",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "כתובת URL שגויה"
+          }
+        }
+      },
+      "account": {
+        "label": "חשבון",
+        "description": "עדכנו את הגדרות החשבון שלכם.",
+        "username": {
+          "label": "שם משתמש",
+          "description": "זה שם המשתמש שבאמצעותו אחרים יכולים למצוא אתכם ולהיכנס לפרופיל שלכם. אפשר לשנות אותו פעם אחת בלבד בכל 30 יום.",
+          "placeholder": "הזינו את שם המשתמש שלכם",
+          "form": {
+            "min_length": "שם המשתמש חייב לכלול 3 תווים לפחות",
+            "max_length": "שם המשתמש לא יכול לעלות על 15 תווים",
+            "invalid": "שם המשתמש יכול לכלול רק אותיות, ספרות והסימנים '_' ו-'.'",
+            "unavailable": "שם המשתמש הזה תפוס"
+          }
+        },
+        "private": {
+          "label": "חשבון פרטי",
+          "description": "כשהחשבון שלכם פרטי, רק החברים שלכם רואים את הפעילויות שלכם."
+        },
+        "email": {
+          "description": "אימייל אימות יישלח גם לכתובת הנוכחית וגם לכתובת החדשה. יש לאשר את שתיהן כדי שהשינוי ייכנס לתוקף.",
+          "change_pending": "אימייל אימות נשלח לכתובת החדשה שלכם <strong>{email}</strong>. לחצו על הקישור או הזינו את קוד האימות כדי לאשר את השינוי.",
+          "confirm_email_code": {
+            "description": "הזינו את קוד האימות שנשלח לכתובת <strong>{email}</strong> כדי לאשר את השינוי."
+          },
+          "change_success": "כתובת האימייל שלכם שונתה בהצלחה"
+        },
+        "delete_account": {
+          "button": "מחיקת החשבון שלי",
+          "confirm": {
+            "description": "למחוק את החשבון שלכם? הפעולה הזו בלתי הפיכה.",
+            "confirm_email_sent": "אימייל אימות נשלח לכתובת שלכם"
+          }
+        }
+      },
+      "appearance": {
+        "label": "מראה",
+        "description": "התאימו את מראה האפליקציה. מעבר אוטומטי בין ערכת יום לערכת לילה.",
+        "language": {
+          "label": "שפה",
+          "description": "בחרו שפה – השינוי יחול לאחר הפעלה מחדש של האפליקציה",
+          "placeholder": "בחרו שפה",
+          "not_found": "השפה לא נמצאה"
+        },
+        "theme": {
+          "label": "ערכת נושא",
+          "description": "בחרו את ערכת הנושא של הממשק.",
+          "options": {
+            "light": "בהירה",
+            "dark": "כהה"
+          }
+        }
+      },
+      "subscription": {
+        "label": "מינוי",
+        "description": "נהלו את המינוי שלכם כדי לקבל גישה לפיצ'רים של Premium."
+      },
+      "security": {
+        "label": "אבטחה",
+        "description": "שינוי הסיסמה ינתק אתכם מכל המכשירים, חוץ מזה שאתם משתמשים בו עכשיו.",
+        "current_password": {
+          "label": "הסיסמה הנוכחית",
+          "placeholder": "הזינו את הסיסמה הנוכחית",
+          "form": {
+            "required": "נא להזין את הסיסמה הנוכחית",
+            "invalid": "הסיסמה הנוכחית שגויה"
+          }
+        },
+        "new_password": {
+          "label": "סיסמה חדשה",
+          "placeholder": "הזינו את הסיסמה החדשה",
+          "form": {
+            "min_length": "הסיסמה חייבת לכלול 8 תווים לפחות",
+            "uppercase": "נדרשת לפחות אות גדולה אחת",
+            "lowercase": "נדרשת לפחות אות קטנה אחת",
+            "number": "נדרשת לפחות ספרה אחת",
+            "special": "נדרש לפחות תו מיוחד אחד"
+          }
+        },
+        "confirm_password": {
+          "label": "אימות הסיסמה החדשה",
+          "placeholder": "אמתו את הסיסמה החדשה",
+          "form": {
+            "match": "הסיסמאות אינן תואמות"
+          }
+        }
+      },
+      "notifications": {
+        "label": "התראות",
+        "description": "נהלו את הגדרות ההתראות שלכם.",
+        "push_notifications": {
+          "label": "התראות דחיפה",
+          "form": {
+            "enable": "הפעלת התראות דחיפה"
+          },
+          "already_granted": "בקשת ההתראות כבר בוצעה; כדי לשנות אותה, עברו להגדרות הדפדפן.",
+          "no_enabled": "הפעילו התראות בהגדרות המכשיר כדי לקבל התראות דחיפה.",
+          "open_settings": "מעבר להגדרות המכשיר"
+        }
+      },
+      "data": {
+        "label": "נתונים",
+        "description": "ייבאו או ייצאו את הנתונים שלכם.",
+        "importer": {
+          "label": "ייבוא",
+          "select_source": "בחרו מקור",
+          "instructions_title": "הוראות",
+          "browse_prompt": "גררו את הקובץ לכאן, או <link>בחרו קובץ</link>",
+          "browse_prompt_mobile": "הקישו כדי לבחור קובץ",
+          "uploading": "מעלה…",
+          "processing": "מנתח את הקובץ שלכם…",
+          "upload_error": "ההעלאה נכשלה, נסו שוב.",
+          "invalid_file_type": "סוג הקובץ הזה אינו נתמך עבור המקור הזה.",
+          "review_title": "בדקו את הייבוא שלכם",
+          "review_summary": "{matched} מתוך {total} הותאמו",
+          "validate": "אישור הייבוא",
+          "validate_confirm_description": "הפעולה תייבא לספרייה שלכם את כל הפריטים שהותאמו ולא דולגו. אי אפשר לבטל את זה.",
+          "success_title": "הייבוא הושלם",
+          "success_description": "הנתונים שלכם יובאו בהצלחה.",
+          "failed_title": "הייבוא נכשל",
+          "failed_description": "משהו השתבש בעיבוד הייבוא הזה.",
+          "pending_description": "הייבוא שלכם בתור ויתחיל בקרוב.",
+          "empty": "עדיין אין ייבוא.",
+          "delete_confirm_description": "הייבוא הזה וכל הנתונים שהוכנו בו יימחקו לצמיתות. אי אפשר לבטל את זה.",
+          "keep_existing": "להשאיר את שלי",
+          "use_imported": "להשתמש במיובא",
+          "merge": "מיזוג",
+          "conflict": "התנגשות",
+          "no_match": "אין התאמה",
+          "existing_rating": "כרגע: {rating}",
+          "log_column": "יומן",
+          "actions_column": "פעולות",
+          "categories": {
+            "log_movies": "סרטים",
+            "log_tv_series": "סדרות",
+            "bookmarks": "רשימת הצפייה",
+            "playlists": "רשימות"
+          },
+          "status": {
+            "pending": "ממתין",
+            "processing": "בעיבוד",
+            "awaiting_review": "ממתין לבדיקה",
+            "completed": "הושלם",
+            "failed": "נכשל"
+          }
+        },
+        "exporter": {
+          "label": "ייצוא"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "שדרוג ל-Premium",
+        "description": "שדרגו לחשבון Premium כדי לקבל גישה לכל הפיצ'רים של {app}."
+      },
+      "header": {
+        "title": "הרחיבו את הקולנוע שלכם, שתפו יותר, תמכו ב{app}",
+        "subtitle": "נסו חודש אחד בחינם, אחר כך {price} לחודש"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "פעילויות",
+            "unlimited_activities": {
+              "label": "פעילויות בלי הגבלה",
+              "description": "דירוגים, לייקים, ביקורות, רשימת צפייה והמלצות"
+            },
+            "favorites": {
+              "label": "אהובים",
+              "description": "הוסיפו את הסרטים האהובים עליכם לפרופיל"
+            }
+          },
+          "playlists": {
+            "label": "רשימות",
+            "unlimited_playlists": {
+              "label": "בלי הגבלה",
+              "description": "צרו מספר בלתי מוגבל של רשימות"
+            },
+            "shared_playlists": {
+              "label": "משותפות",
+              "description": "שתפו את הרשימות שלכם עם משתמשים אחרים"
+            },
+            "collaborative_playlists": {
+              "label": "שיתופיות",
+              "description": "צרו רשימות שיתופיות עם משתמשים אחרים"
+            }
+          },
+          "feed": {
+            "label": "פיד",
+            "followees": {
+              "label": "משתמשים שאתם עוקבים אחריהם",
+              "description": "ראו את הפעילויות של המשתמשים שאתם עוקבים אחריהם"
+            },
+            "cast_and_crew": {
+              "label": "שחקנים וצוות",
+              "description": "עקבו אחרי הפעילות של האנשים שמשתתפים בסרטים"
+            }
+          },
+          "support": {
+            "label": "תמיכה",
+            "team": {
+              "label": "תמכו בצוות של {app}"
+            },
+            "credits": {
+              "label": "קרדיטים",
+              "description": "הפרופיל שלכם בקרדיטים של האפליקציה"
+            }
+          }
+        },
+        "success": {
+          "label": "תודה על התמיכה!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} – רשימה של @{username}",
+        "description": "גלו את רשימת הסרטים של @{username} ב{app}."
+      },
+      "actions": {
+        "delete": {
+          "description": "הפעולה תמחק לצמיתות את <important>{title}</important> מהרשימות שלכם."
+        }
+      },
+      "search": {
+        "placeholder": "חיפוש ברשימה..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "למחוק את <important>{title}</important> מהרשימה שלכם?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "הזינו את שם הרשימה"
+        },
+        "description": {
+          "placeholder": "הזינו תיאור לרשימה"
+        },
+        "error": {
+          "format": "התיאור לא יכול לכלול שורות ריקות או להיות מורכב מרווחים בלבד."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "גלו את הפרופיל של @{username} ב{app}."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} הוא סרט של {directors} שיצא ב{year}. תקציר: {overview}",
+        "description_no_director": "{title} הוא סרט שיצא ב{year}. תקציר: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • רשימות",
+          "description": "גלו את כל הרשימות שכוללות את הסרט {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • ביקורות",
+          "description": "גלו את כל הביקורות על הסרט {title}."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} היא סדרה של {creators} ששודרה לראשונה ב{year}. תקציר: {overview}",
+        "description_no_creator": "{title} היא סדרה ששודרה לראשונה ב{year}. תקציר: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • רשימות",
+          "description": "גלו את כל הרשימות שכוללות את הסדרה {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • ביקורות",
+          "description": "גלו את כל הביקורות על הסדרה {title}."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • עונות",
+          "description": "גלו את כל העונות של הסדרה {title}."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • עונה {number}",
+            "description": "גלו את כל הפרקים של עונה {number} בסדרה {title}."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • סרטים",
+          "description": "גלו את כל הסרטים שבהם {name} שיחק או השתתף."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • סדרות",
+          "description": "גלו את כל הסדרות שבהן {name} שיחק או השתתף."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "ביקורת על {title} מאת @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "כתיבת ביקורת על {title}",
+          "description": "שתפו את דעתכם על {title}."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "גלו את Paradise Pictures",
+        "description": "צאו למסע כדי לגלות את האי ואת הנופים המגוונים שלו. הסרטים הרבים שמאכלסים אותו ממוקמים בתוך העולם שלהם. תצליחו לחקור כל פינה שבו?"
+      }
+    },
+    "legal": {
+      "label": "מידע משפטי",
+      "description": "קראו את המסמכים המשפטיים של {app}.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "תנאי השימוש",
+          "description": "קראו את תנאי השימוש של {app}."
+        },
+        "sections": {
+          "intro": "תנאי שימוש אלה (להלן \"התנאים\") מסדירים את הגישה לאפליקציה {app} ואת השימוש בה. האפליקציה מתפרסמת על ידי Loup (להלן \"המפרסם\"), שמקום מושבו בפריז. ההרשמה ל{app} מהווה הסכמה מלאה וללא תנאי לתנאים אלה.",
+          "presentation": {
+            "label": "1. הצגת השירות",
+            "content": "{app} היא אפליקציה חינמית המאפשרת למשתמשיה לעיין במידע על סרטים, לפרסם ביקורות, לדרג יצירות וליצור רשימות אישיות."
+          },
+          "account": {
+            "label": "2. חשבון ואבטחה",
+            "content": "הגישה לפיצ'רים של תרומת תוכן מחייבת יצירת חשבון. המשתמש אחראי לסודיות פרטי ההתחברות שלו. במקרה של שימוש מתחזה או חשד לפריצה, על המשתמש לפנות מיד לתמיכה בכתובת: <email></email>."
+          },
+          "conduct": {
+            "label": "3. כללי התנהגות",
+            "content": "המשתמש מתחייב להישאר מנומס ומכבד בביקורות וברשימות שלו. אסורים בהחלט: התבטאויות שטנה, לשון הרע או הערות גזעניות, הטרדה, וכן ספאם או קידום מסחרי לא מבוקש. המפרסם שומר לעצמו את הזכות למחוק כל תוכן שמפר כללים אלה ולהשעות את החשבון הנוגע בדבר ללא הודעה מוקדמת."
+          },
+          "child_safety": {
+            "label": "4. מדיניות הגנת ילדים",
+            "content": "ב{app} נוהגת מדיניות של אפס סובלנות כלפי התעללות מינית בילדים וניצולם (CSAE). אסורים במפורש ובאופן מוחלט ב{app} יצירה, העלאה, אחסון, הפצה, בקשה או קידום של כל תוכן שמייצג קטינים באופן מיני, מנצל אותם או מסכן אותם בכל דרך אחרת. כל חשבון שיימצא מפר מדיניות זו ייחסם לאלתר ולצמיתות, והמפרסם ידווח על התוכן הרלוונטי, יחד עם כל פרטי המשתמש הזמינים, ל-National Center for Missing & Exploited Children (NCMEC) ו/או לרשויות אכיפת החוק המוסמכות, בהתאם לדין החל. כל משתמש שנתקל בתוכן או בהתנהגות שעלולים להוות CSAE חייב לדווח על כך ללא דיחוי בכתובת: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. קניין רוחני",
+            "content": "המשתמש נותר הבעלים של הביקורות שהוא כותב. עם זאת, בפרסום ב{app} הוא מעניק למפרסם רישיון חינמי ולא ייחודי להציג, לשחזר ולהתאים טכנית תוכן זה בתוך האפליקציה. הרכיבים החזותיים, הקוד והעיצוב של {app} הם קניינו הבלעדי של המפרסם."
+          },
+          "privacy": {
+            "label": "6. נתונים אישיים",
+            "content": "הכבוד לפרטיות שלכם הוא העדיפות המוחלטת שלנו. {app} אינה מוכרת, משכירה או משתפת נתונים אישיים כלשהם עם צדדים שלישיים מסחריים או פרסומיים. הנתונים שנאספים (אימייל, שם משתמש, פעילות באפליקציה) משמשים אך ורק להפעלת השירות ולניהול החשבון. תוכלו לממש את זכויות העיון, התיקון או המחיקה (GDPR) בפנייה לכתובת: <email></email>."
+          },
+          "cookies": {
+            "label": "7. קובצי Cookie וכלי מעקב",
+            "content": "{app} אינה משתמשת בקובצי Cookie פרסומיים ולא בכלי מעקב התנהגותיים של צדדים שלישיים. נעשה שימוש בשני סוגים של קובצי Cookie טכניים בלבד: קובץ אימות (כדי שתישארו מחוברים) וקובץ העדפת שפה (כדי לזכור את הבחירה שלכם). מכיוון שקובצי Cookie אלה נחוצים בהכרח לשירות, הם פטורים מהסכמה מוקדמת."
+          },
+          "ads": {
+            "label": "8. פרסום",
+            "content": "האפליקציה מוצעת כיום ללא כל פרסום. אם המודל הזה ישתנה, המשתמשים יקבלו הודעה באמצעות עדכון של תנאים אלה."
+          },
+          "liability": {
+            "label": "9. אחריות",
+            "content": "המפרסם שואף לשמור על {app} נגישה בכל שעות היממה, אך אינו מתחייב להיעדר הפרעות או תקלות. המידע על הסרטים מגיע ממסדי נתונים של צדדים שלישיים; לא ניתן להטיל על המפרסם אחריות לאי-דיוקים אפשריים ברשומות אלה."
+          },
+          "law": {
+            "label": "10. הדין החל",
+            "content": "תנאים אלה כפופים לדין הצרפתי. במקרה של מחלוקת שלא ניתן ליישב בדרכי שלום באמצעות <email></email>, לבתי המשפט בפריז תהיה הסמכות הייחודית."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "מדיניות הפרטיות",
+          "description": "קראו את מדיניות הפרטיות של {app}."
+        },
+        "sections": {
+          "intro": "הגנת הנתונים נמצאת בלב הפילוסופיה של {app}. המדיניות הזו מפרטת אילו נתונים אנחנו אוספים, למה אנחנו אוספים אותם ואיך אנחנו מגנים עליהם. בקצרה: אנחנו לא מוכרים את הנתונים שלכם.",
+          "controller": {
+            "label": "1. בעל השליטה בנתונים",
+            "content": "בעל השליטה בנתונים הוא Loup, שמקום מושבו בפריז (צרפת). לכל שאלה בנושא פרטיות תוכלו לפנות לכתובת: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. הנתונים שנאספים",
+            "content": "אנחנו אוספים רק נתונים הנחוצים בהכרח לתפעול האפליקציה: כתובת האימייל שלכם (לאימות), שם המשתמש שלכם ונתוני השימוש שלכם (סרטים שדורגו, ביקורות, רשימות). הסיסמאות שלכם נשמרות בצורה מוצפנת (hashed) ומאובטחת."
+          },
+          "purpose": {
+            "label": "3. מטרות העיבוד",
+            "content": "הנתונים שלכם מעובדים אך ורק כדי: לאפשר לכם ליצור ולנהל את החשבון שלכם, להציג את הרשימות והדירוגים שלכם ולהבטיח את התפעול הטכני של השירות. אנחנו לא משתמשים בנתונים שלכם לצורכי פרופיילינג פרסומי."
+          },
+          "sharing": {
+            "label": "4. שיתוף נתונים",
+            "content": "הנתונים האישיים שלכם לא נמכרים, לא מושכרים ולא מועברים לצדדים שלישיים. הם עשויים להיות מאוחסנים אצל ספקי השירות הטכניים שלנו (אחסון, שירות אימיילים תפעוליים), המחויבים בסודיות מוחלטת ועומדים בדרישות ה-GDPR."
+          },
+          "retention": {
+            "label": "5. תקופת השמירה",
+            "content": "הנתונים שלכם נשמרים כל זמן שהחשבון שלכם פעיל. אם תחליטו למחוק את החשבון, כל הנתונים האישיים שלכם (אימייל, שם משתמש, ביקורות) יימחקו לצמיתות ממסדי הנתונים שלנו."
+          },
+          "rights": {
+            "label": "6. הזכויות שלכם (GDPR)",
+            "content": "בהתאם לרגולציה, יש לכם זכות לעיין בנתונים שלכם, לתקן אותם, להעביר אותם ולמחוק אותם. תוכלו לממש את הזכויות האלה בכל עת ישירות באפליקציה או בפנייה אלינו בכתובת: <email></email>."
+          },
+          "cookies": {
+            "label": "7. קובצי Cookie",
+            "content": "כפי שנאמר בתנאי השימוש שלנו, אנחנו משתמשים רק בקובצי Cookie טכניים הכרחיים (הפעלה ושפה). לא מוצבים במכשיר שלכם קובצי Cookie פרסומיים או קובצי מעקב של צדדים שלישיים."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "חפשו סרט, סדרה, רשימה, אדם או משתמש..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "להסיר את היצירה הזו מהנצפים? אם יש לכם דירוג או ביקורת, גם הם יימחקו."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "להשלים את הסדרה? כל הפרקים בכל העונות יסומנו כנצפו."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "להשלים את עונה {seasonNumber}? כל הפרקים בעונה יסומנו כנצפו."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "כדי לראות כאן פעילות, אתם או המשתמשים שאתם עוקבים אחריהם צריכים לדרג סרטים, סדרות, ..."
+    },
+    "feed_person": {
+      "message": "כדי לראות כאן פעילות, עליכם לעקוב אחרי אנשים שמשתתפים בסרטים או בסדרות."
+    },
+    "playlists": {
+      "items": {
+        "empty": "אין סרטים או סדרות ברשימה הזו. הוסיפו כמה כדי למלא אותה!"
+      },
+      "add_to": {
+        "empty": "אין לכם רשימות. צרו אחת כדי להוסיף סרטים או סדרות ולמצוא אותם בקלות!"
+      },
+      "saved": {
+        "empty": "אין לכם רשימות שמורות. שמרו רשימה כדי למצוא אותה בקלות בספרייה שלכם!"
+      },
+      "members": {
+        "empty": "לרשימה הזו אין חברים. הוסיפו כמה כדי לעבוד עם אחרים על אותה רשימה!",
+        "search": "חפשו משתמשים להוספה לרשימה..."
+      }
+    },
+    "follow-requests": {
+      "empty": "אין לכם בקשות מעקב ממתינות. כשיהיו, הן יופיעו כאן!"
+    },
+    "recos": {
+      "empty": "אין לכם המלצות. כשיהיו, הן יופיעו כאן!",
+      "send_to": {
+        "empty": "אין לכם למי לשלוח המלצה. צריך להיות חברים כדי לשלוח המלצה (מעקב הדדי)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "עדיין לא שמרתם כלום. כשתשמרו, זה יופיע כאן!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> המליץ לכם על הסרט <movie></movie>"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> המליץ לכם על הסדרה <tv_series></tv_series>"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> צפה בסרט <movie></movie> שהמלצתם עליו"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> צפה בסדרה <tv_series></tv_series> שהמלצתם עליה"
+    },
+    "follower_created": {
+      "description": "<user></user> התחיל לעקוב אחריכם"
+    },
+    "follower_accepted": {
+      "description": "<user></user> אישר את בקשת המעקב שלכם"
+    },
+    "follower_request": {
+      "description": "<user></user> רוצה לעקוב אחריכם"
+    },
+    "friend_created": {
+      "description": "<user></user> הוא עכשיו חבר שלכם"
+    }
+  }
+}

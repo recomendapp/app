@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "อีกวิธีในการค้นพบภาพยนตร์",
+    "description": "{app} คือโซเชียลเน็ตเวิร์กสำหรับคนรักภาพยนตร์ ค้นพบ แบ่งปัน และสำรวจภาพยนตร์กับซีรีส์ไปพร้อมกับเพื่อนของคุณ"
+  },
+  "common": {
+    "messages": {
+      "welcome": "ยินดีต้อนรับ",
+      "welcome_to_app": "ยินดีต้อนรับสู่ {app}",
+      "hello": "สวัสดี",
+      "greeting_with_name": "{timeOfDay, select, morning {สวัสดีตอนเช้า คุณ{name}} afternoon {สวัสดีตอนบ่าย คุณ{name}} evening {สวัสดีตอนเย็น คุณ{name}} night {ฝันดีนะ คุณ{name}} other {สวัสดี คุณ{name}}}",
+      "click_here": "คลิกที่นี่",
+      "see_more": "ดูเพิ่มเติม",
+      "see_more_details": "ดูรายละเอียดเพิ่มเติม",
+      "more": "เพิ่มเติม",
+      "view_profile": "ดูโปรไฟล์",
+      "library": "คลัง",
+      "watchlist": "รายการที่อยากดู",
+      "for_later": "ไว้ดูภายหลัง",
+      "heart_pick": "ของโปรดในใจ",
+      "add_to_heart_picks": "เพิ่มในของโปรดในใจ",
+      "remove_from_heart_picks": "นำออกจากของโปรดในใจ",
+      "add_rating": "ให้คะแนน",
+      "edit_rating": "แก้ไขคะแนน",
+      "remove_rating": "ลบคะแนน",
+      "share_my_rating": "แบ่งปันคะแนนของฉัน",
+      "share_review": "แบ่งปันรีวิว",
+      "show_likes_count": "แสดงจำนวนไลก์",
+      "show_comments_count": "แสดงจำนวนความคิดเห็น",
+      "add_to_watchlist": "เพิ่มในรายการที่อยากดู",
+      "remove_from_watchlist": "นำออกจากรายการที่อยากดู",
+      "no_results": "ไม่มีผลลัพธ์",
+      "no_results_for": "ไม่มีผลลัพธ์สำหรับ <strong>{query}</strong>",
+      "no_followees": "คุณยังไม่ติดตามใคร",
+      "no_followers": "ยังไม่มีผู้ติดตาม",
+      "no_rating": "ไม่มีคะแนน",
+      "must_watch_to_review": "คุณต้องดูผลงานนี้ก่อนจึงจะรีวิวได้",
+      "review_cannot_be_empty": "รีวิวต้องไม่ว่างเปล่า",
+      "no_activity": "ไม่มีกิจกรรม",
+      "followers_ratings": "คะแนนจากผู้ติดตาม",
+      "added_by": "เพิ่มโดย",
+      "sort_by": "เรียงตาม",
+      "sort_order": "ลำดับการเรียง",
+      "go_to_film": "ไปที่ภาพยนตร์",
+      "go_to_tv_series": "ไปที่ซีรีส์",
+      "go_to_user": "ไปที่ผู้ใช้",
+      "go_to_person": "ไปที่บุคคล",
+      "go_to_activity": "ไปที่กิจกรรม",
+      "go_to_playlist": "ไปที่เพลย์ลิสต์",
+      "go_to_review": "ไปที่รีวิว",
+      "go_to_director": "ไปที่ผู้กำกับ",
+      "go_to_creator": "ไปที่ผู้สร้าง",
+      "show_director": "แสดงผู้กำกับ",
+      "show_creator": "แสดงผู้สร้าง",
+      "show_credit": "แสดงผลงานที่ร่วมงาน",
+      "credits": "เครดิต",
+      "view_recommendation": "ดู reco",
+      "view_directors": "ดูผู้กำกับ",
+      "no_director": "ไม่มีผู้กำกับ",
+      "view_comment": "ดูความคิดเห็น",
+      "add_comment": "เพิ่มความคิดเห็น",
+      "edit_comment": "แก้ไขความคิดเห็น",
+      "delete_comment": "ลบความคิดเห็น",
+      "do_you_really_want_to_delete_this_comment": "ต้องการลบความคิดเห็นนี้จริงหรือไม่",
+      "comment_deleted": "ความคิดเห็นนี้ถูกลบแล้ว",
+      "write_your_comment_here": "เขียนความคิดเห็น...",
+      "reply": "ตอบกลับ",
+      "replies_count": "{count} การตอบกลับ",
+      "view_replies": "ดู {count} การตอบกลับ",
+      "hide_replies": "ซ่อนการตอบกลับ",
+      "load_more_replies": "โหลดการตอบกลับเพิ่ม",
+      "get_started": "เริ่มต้น",
+      "get_started_its_free": "ไปกันเลย 🎬 ฟรี!",
+      "import": "นำเข้า",
+      "upgrade_to_plan": "อัปเกรดเป็น {plan}",
+      "choose_subscription_recurrence": "เลือกรอบการเรียกเก็บเงินของการสมัครสมาชิก",
+      "compare_plans": "เปรียบเทียบแพ็กเกจ",
+      "save_up_to_percent": "ประหยัดได้ถึง {percent}%",
+      "is_empty": "ที่นี่ยังว่างอยู่หน่อย",
+      "add_to_playlist": "เพิ่มในเพลย์ลิสต์",
+      "send_to_friend": "ส่งให้เพื่อน",
+      "pin_to_profile": "ปักหมุดไว้บนโปรไฟล์",
+      "unpin_from_profile": "เลิกปักหมุดจากโปรไฟล์",
+      "pinned": "ปักหมุดแล้ว",
+      "unpinned": "เลิกปักหมุดแล้ว",
+      "no_pinned": "ไม่มีรายการที่ปักหมุด",
+      "pinned_limit_reached": "คุณปักหมุดครบจำนวนสูงสุดแล้ว — เลิกปักหมุดหนึ่งรายการเพื่อเพิ่มรายการใหม่",
+      "custom_sort": "เรียงเอง",
+      "quick_add": "เพิ่มด่วน",
+      "favorite_films": "ภาพยนตร์ที่ชอบ",
+      "follow": "ติดตาม",
+      "followed": "ติดตามแล้ว",
+      "request_sent": "ส่งคำขอแล้ว",
+      "follow_requests": "คำขอติดตาม",
+      "no_follow_requests": "ไม่มีคำขอติดตาม",
+      "follower": "ผู้ติดตาม",
+      "follower_count": "ผู้ติดตาม {count} คน",
+      "see_followers": "ดูผู้ติดตาม",
+      "followee": "ผู้ที่ติดตาม",
+      "followee_count": "กำลังติดตาม {count} คน",
+      "see_followees": "ดูคนที่คุณติดตาม",
+      "last_activities": "กิจกรรมล่าสุด",
+      "last_updated": "อัปเดตล่าสุด",
+      "last_updated_at_date": "อัปเดตล่าสุดเมื่อ {date}",
+      "show_all": "แสดงทั้งหมด",
+      "this_account_is_private": "บัญชีนี้เป็นบัญชีส่วนตัว",
+      "follow_to_see_activities": "ติดตามเพื่อดูกิจกรรม",
+      "review": "รีวิว",
+      "no_overview": "ไม่มีเรื่องย่อ",
+      "cast": "นักแสดง",
+      "no_cast": "ไม่มีข้อมูลนักแสดง",
+      "recent": "ใหม่ล่าสุด",
+      "popular": "ยอดนิยม",
+      "popularity": "ความนิยม",
+      "no_reviews": "ไม่มีรีวิว",
+      "no_playlists": "ไม่มีเพลย์ลิสต์",
+      "no_playlists_found": "ไม่พบเพลย์ลิสต์",
+      "no_films": "ไม่มีภาพยนตร์",
+      "no_tv_series": "ไม่มีซีรีส์",
+      "view_activity": "ดูกิจกรรม",
+      "comment_count": "{count} ความคิดเห็น",
+      "write_review": "เขียนรีวิว",
+      "new_review": "รีวิวใหม่",
+      "edit_review": "แก้ไขรีวิว",
+      "review_by": "รีวิวโดย {name}",
+      "my_review": "รีวิวของฉัน",
+      "add_review": "เพิ่มรีวิว",
+      "tv_series": "ซีรีส์",
+      "film": "ภาพยนตร์",
+      "movie": "ภาพยนตร์",
+      "media": "เรื่อง",
+      "tv_season": "ซีซัน",
+      "tv_season_count": "{count} ซีซัน",
+      "tv_season_value": "ซีซัน {number}",
+      "tv_season_short": "ซ{number}",
+      "tv_episode": "ตอน",
+      "tv_episode_count": "{count} ตอน",
+      "tv_episode_value": "ตอนที่ {number}",
+      "tv_episode_short": "ซ{seasonNumber}ต{episodeNumber}",
+      "tv_special_episode": "ตอนพิเศษ",
+      "first_air_date": "ออกอากาศครั้งแรก",
+      "last_air_date": "ออกอากาศครั้งล่าสุด",
+      "see_film": "ดูภาพยนตร์",
+      "see_tv_series": "ดูซีรีส์",
+      "watch_film_title": "ดู {title}",
+      "watch_film_streaming_or_download": "ดู <important>{title}</important> แบบสตรีมมิงหรือดาวน์โหลดอย่างถูกกฎหมาย",
+      "download": "ดาวน์โหลด",
+      "downloaded": "ดาวน์โหลดแล้ว",
+      "person": "บุคคล",
+      "top_result": "ผลลัพธ์ที่ตรงที่สุด",
+      "user": "ผู้ใช้",
+      "reco": "reco",
+      "my_recos": "reco ของฉัน",
+      "item": "รายการ",
+      "item_count": "{count} รายการ",
+      "type": "ประเภท",
+      "complete": "ทำให้ครบ",
+      "completed": "เสร็จสิ้น",
+      "collection": "คอลเลกชัน",
+      "most_recent": "ใหม่สุด",
+      "most_popular": "นิยมสุด",
+      "most_old": "เก่าสุด",
+      "known_for": "เป็นที่รู้จักจาก",
+      "release_date": "วันที่เข้าฉาย",
+      "last_appearance_date": "ปรากฏตัวครั้งล่าสุด",
+      "vote_average": "คะแนนเฉลี่ย",
+      "added": "เพิ่มแล้ว",
+      "added_date": "วันที่เพิ่ม",
+      "added_at": "เพิ่มเมื่อ",
+      "add": "เพิ่ม",
+      "playlist_name": "ชื่อเพลย์ลิสต์",
+      "updated_at": "อัปเดตเมื่อ",
+      "created_at": "สร้างเมื่อ",
+      "likes": "ไลก์",
+      "likes_count": "จำนวนไลก์",
+      "search_media": "ค้นหาเรื่อง",
+      "search_film": "ค้นหาภาพยนตร์",
+      "start_typing_to_search_films": "เริ่มพิมพ์เพื่อค้นหาภาพยนตร์",
+      "search_tv_series": "ค้นหาซีรีส์",
+      "start_typing_to_search_tv_series": "เริ่มพิมพ์เพื่อค้นหาซีรีส์",
+      "search_person": "ค้นหาบุคคล",
+      "start_typing_to_search_persons": "เริ่มพิมพ์เพื่อค้นหาบุคคล",
+      "search_user": "ค้นหาผู้ใช้",
+      "start_typing_to_search_users": "เริ่มพิมพ์เพื่อค้นหาผู้ใช้",
+      "search_playlist": "ค้นหาเพลย์ลิสต์",
+      "start_typing_to_search_playlists": "เริ่มพิมพ์เพื่อค้นหาเพลย์ลิสต์",
+      "search_film_or_tv_series": "ค้นหาภาพยนตร์หรือซีรีส์",
+      "watched_date": "วันที่ดู",
+      "mark_as_watched": "ทำเครื่องหมายว่าดูแล้ว",
+      "remove_from_watched": "นำออกจากรายการที่ดูแล้ว",
+      "rating": "คะแนน",
+      "create_a_playlist": "สร้างเพลย์ลิสต์",
+      "by_name": "โดย {name}",
+      "reset": "รีเซ็ต",
+      "job": "หน้าที่",
+      "department": "แผนก",
+      "share_title_via": "แบ่งปัน <strong>{title}</strong> ผ่าน",
+      "share_title": "แบ่งปัน <strong>{title}</strong>",
+      "link": "ลิงก์",
+      "copy_link": "คัดลอกลิงก์",
+      "copied": "คัดลอกแล้ว",
+      "other": "อื่น ๆ",
+      "via": "ผ่าน",
+      "edit": "แก้ไข",
+      "guest": "ผู้ร่วมดู",
+      "are_u_sure": "แน่ใจหรือไม่",
+      "backward": "ย้อนกลับ",
+      "forward": "ไปข้างหน้า",
+      "back": "กลับ",
+      "next": "ถัดไป",
+      "notification": "การแจ้งเตือน",
+      "see_notifications": "ดูการแจ้งเตือน",
+      "open_social_panel": "เปิดแผงโซเชียล",
+      "cancel_change": "ยกเลิกการเปลี่ยนแปลง",
+      "do_you_really_want_to_cancel_change": "ต้องการยกเลิกการเปลี่ยนแปลงจริงหรือไม่",
+      "continue_editing": "แก้ไขต่อ",
+      "confirm": "ยืนยัน",
+      "terms_of_use": "เงื่อนไขการใช้งาน",
+      "privacy_policy": "นโยบายความเป็นส่วนตัว",
+      "request_made": "ส่งคำขอแล้ว",
+      "request_canceled": "ยกเลิกคำขอแล้ว",
+      "cancel_request": "ยกเลิกคำขอ",
+      "open_menu": "เปิดเมนู",
+      "feed": "ฟีด",
+      "about": "เกี่ยวกับ",
+      "home": "หน้าแรก",
+      "search": "ค้นหา",
+      "explore": "สำรวจ",
+      "shop": "ร้านค้า",
+      "help": "ความช่วยเหลือ",
+      "legal": "ข้อมูลทางกฎหมาย",
+      "setting": "การตั้งค่า",
+      "logout": "ออกจากระบบ",
+      "to_watch": "รอดู",
+      "reco_by_your_friends": "reco จากเพื่อนของคุณ",
+      "friends_playlists": "เพลย์ลิสต์ของเพื่อนคุณ",
+      "latest_activity": "กิจกรรมล่าสุด",
+      "discover_users": "ค้นพบผู้ใช้",
+      "most_recommended": "แนะนำมากที่สุด",
+      "archive": "เก็บเข้าคลัง",
+      "unarchive": "นำออกจากคลังที่เก็บ",
+      "mark_as_read": "ทำเครื่องหมายว่าอ่านแล้ว",
+      "mark_as_unread": "ทำเครื่องหมายว่ายังไม่อ่าน",
+      "accept": "ยอมรับ",
+      "accepted": "ยอมรับแล้ว",
+      "decline": "ปฏิเสธ",
+      "declined": "ปฏิเสธแล้ว",
+      "request_accepted": "ยอมรับคำขอแล้ว",
+      "request_declined": "ปฏิเสธคำขอแล้ว",
+      "unread": "ยังไม่อ่าน",
+      "archived": "เก็บเข้าคลังแล้ว",
+      "no_notifications": "ไม่มีการแจ้งเตือน",
+      "all": "ทั้งหมด",
+      "mark_all_as_read": "ทำเครื่องหมายทั้งหมดว่าอ่านแล้ว",
+      "archive_all": "เก็บทั้งหมดเข้าคลัง",
+      "archive_all_read": "เก็บรายการที่อ่านแล้วทั้งหมดเข้าคลัง",
+      "please_login": "กรุณาเข้าสู่ระบบ",
+      "like": "ไลก์",
+      "unlike": "เลิกไลก์",
+      "unfollow": "เลิกติดตาม",
+      "name": "ชื่อ",
+      "add_a_name": "ใส่ชื่อ",
+      "add_a_description": "ใส่คำอธิบาย",
+      "visibility": "การมองเห็น",
+      "search_an_user": "ค้นหาผู้ใช้",
+      "select_an_item_to_add_to_playlist": "เลือกรายการที่จะเพิ่มในเพลย์ลิสต์",
+      "select_a_film_to_add_to_playlist": "เลือกภาพยนตร์ที่จะเพิ่มในเพลย์ลิสต์",
+      "select_a_tv_series_to_add_to_playlist": "เลือกซีรีส์ที่จะเพิ่มในเพลย์ลิสต์",
+      "add_one_or_more_items_to": "เพิ่มรายการหนึ่งรายการหรือมากกว่าใน <important>{title}</important>",
+      "add_one_or_more_films_to": "เพิ่มภาพยนตร์หนึ่งเรื่องหรือมากกว่าใน <important>{title}</important>",
+      "add_one_or_more_tv_series_to": "เพิ่มซีรีส์หนึ่งเรื่องหรือมากกว่าใน <important>{title}</important>",
+      "manage_playlist_access_rights": "จัดการสิทธิ์การเข้าถึงเพลย์ลิสต์",
+      "add_guest": "เพิ่มผู้ร่วมดู",
+      "manage_members": "จัดการสมาชิก",
+      "no_member": "ไม่มีสมาชิก",
+      "add_member": "เพิ่มสมาชิก",
+      "manage_guests": "จัดการผู้ร่วมดู",
+      "add_guests_to_your_playlist": "เพิ่มผู้ร่วมดูในเพลย์ลิสต์ของคุณ",
+      "select_users_to_add_to_playlist": "เลือกผู้ใช้ที่จะเพิ่มในเพลย์ลิสต์",
+      "select_users_to_send_reco": "เลือกคนที่จะส่ง reco ให้",
+      "select_playlists_to_add_the_item": "เลือกเพลย์ลิสต์ที่จะเพิ่มรายการนี้",
+      "send": "ส่ง",
+      "sent": "ส่งแล้ว",
+      "select_row": "เลือกแถว",
+      "select_all": "เลือกทั้งหมด",
+      "no_selected_users": "ไม่ได้เลือกผู้ใช้",
+      "selection_count": "เลือกแล้ว {number} จาก {total} {type}",
+      "about_title": "เกี่ยวกับ {title}",
+      "detail": "รายละเอียด",
+      "genre": "แนว",
+      "male": "ชาย",
+      "female": "หญิง",
+      "non_binary": "นอน-ไบนารี",
+      "unspecified": "ไม่ระบุ",
+      "date_of_birth": "วันเกิด",
+      "date_of_death": "วันเสียชีวิต",
+      "place_of_birth": "สถานที่เกิด",
+      "age_years": "{count} ปี",
+      "biography": "ประวัติ",
+      "no_biography_available": "ไม่มีประวัติ",
+      "no_information_available": "ไม่มีข้อมูล",
+      "already_sent": "ส่งไปแล้ว",
+      "already_watched": "ดูไปแล้ว",
+      "already_added": "เพิ่มไปแล้ว",
+      "recommend_to_friend_to_discover": "แนะนำ <strong>{title}</strong> ให้เพื่อนที่ยังไม่ได้ดู",
+      "add_to_one_or_more_playlists": "เพิ่ม <strong>{title}</strong> ในเพลย์ลิสต์หนึ่งรายการหรือมากกว่า",
+      "my_playlist": "เพลย์ลิสต์ของฉัน",
+      "what_is_title": "<strong>{title}</strong> คืออะไร",
+      "try_again": "ลองอีกครั้ง",
+      "error": "ข้อผิดพลาด",
+      "not_logged_in": "คุณยังไม่ได้เข้าสู่ระบบ",
+      "an_error_occurred": "เกิดข้อผิดพลาด",
+      "playlist_not_found": "ไม่พบเพลย์ลิสต์",
+      "user_not_found": "ไม่พบผู้ใช้",
+      "film_not_found": "ไม่พบภาพยนตร์",
+      "media_not_found": "ไม่พบเรื่องนี้",
+      "review_not_found": "ไม่พบรีวิว",
+      "person_not_found": "ไม่พบบุคคล",
+      "tv_series_not_found": "ไม่พบซีรีส์",
+      "tv_episode_not_found": "ไม่พบตอนนี้",
+      "tv_season_not_found": "ไม่พบซีซันนี้",
+      "wrong_arguments": "พารามิเตอร์ไม่ถูกต้อง",
+      "no_media_found": "ไม่พบเรื่องใดเลย",
+      "unknown_action": "การกระทำที่ไม่รู้จัก",
+      "no_user_found": "ไม่พบผู้ใช้เลย",
+      "no_tv_episodes": "ไม่มีตอน",
+      "save": "บันทึก",
+      "saved": "บันทึกแล้ว",
+      "create": "สร้าง",
+      "film_count": "{count} เรื่อง",
+      "tv_series_count": "{count} เรื่อง",
+      "login": "เข้าสู่ระบบ",
+      "signup": "สมัครสมาชิก",
+      "navigation": "การนำทาง",
+      "delete": "ลบ",
+      "remove": "นำออก",
+      "deleted": "ลบแล้ว",
+      "share": "แบ่งปัน",
+      "duplicate": "ทำสำเนา",
+      "duplicated": "ทำสำเนาแล้ว",
+      "cancel": "ยกเลิก",
+      "date": "วันที่",
+      "duration": "ความยาว",
+      "sort": "เรียง",
+      "show": "แสดง",
+      "column": "คอลัมน์",
+      "comment": "ความคิดเห็น",
+      "unknown": "ไม่ทราบ",
+      "community": "ชุมชน",
+      "cast_and_crew": "นักแสดงและทีมงาน",
+      "soon": "เร็ว ๆ นี้",
+      "ios_app": "แอป iOS",
+      "android_app": "แอป Android",
+      "coming_soon": "กำลังจะมา",
+      "new_mobile_app": "แอปมือถือใหม่!",
+      "manage": "จัดการ",
+      "monthly": "รายเดือน",
+      "yearly": "รายปี",
+      "day": "วัน",
+      "week": "สัปดาห์",
+      "month": "เดือน",
+      "year": "ปี",
+      "price": "ราคา",
+      "free": "ฟรี",
+      "playlist": "เพลย์ลิสต์",
+      "public": "สาธารณะ",
+      "publish": "เผยแพร่",
+      "private": "ส่วนตัว",
+      "description": "คำอธิบาย",
+      "details": "รายละเอียด",
+      "profile": "โปรไฟล์",
+      "overview": "เรื่องย่อ",
+      "no_playlists_saved": "ไม่มีเพลย์ลิสต์ที่บันทึกไว้",
+      "camera_permission_denied": "ไม่ได้รับอนุญาตให้ใช้กล้อง",
+      "photo_library_permission_denied": "ไม่ได้รับอนุญาตให้ใช้คลังรูปภาพ",
+      "ignore": "ไม่สนใจ",
+      "ok": "ตกลง",
+      "title": "ชื่อเรื่อง",
+      "skip": "ข้าม",
+      "undo": "เลิกทำ",
+      "date_published": "วันที่เผยแพร่",
+      "date_created": "วันที่สร้าง",
+      "date_updated": "วันที่อัปเดต",
+      "alphabetical": "ตามตัวอักษร",
+      "date_added": "วันที่เพิ่ม",
+      "number_of_likes": "จำนวนไลก์",
+      "number_of_seasons": "จำนวนซีซัน",
+      "add_to_this_playlist": "เพิ่มในเพลย์ลิสต์นี้",
+      "save_to_library": "บันทึกลงคลัง",
+      "remove_from_library": "นำออกจากคลัง",
+      "otp": "รหัสใช้ครั้งเดียว",
+      "ratings_from_followees": "คะแนนจากคนที่คุณติดตาม",
+      "choose_from_the_library": "เลือกจากคลังรูปภาพ",
+      "take_a_photo": "ถ่ายรูป",
+      "delete_current_image": "ลบรูปปัจจุบัน",
+      "edit_image": "แก้ไขรูป",
+      "add_image": "เพิ่มรูป",
+      "verify_with_a_code": "ยืนยันด้วยรหัส",
+      "order": "ลำดับ",
+      "edit_order": "แก้ไขลำดับ",
+      "done": "เสร็จแล้ว",
+      "can_edit": "แก้ไขได้หรือไม่",
+      "upgrade": "อัปเกรด",
+      "no_description": "ไม่มีคำอธิบาย",
+      "no_comment": "ไม่มีความคิดเห็น",
+      "close": "ปิด",
+      "edit_playlist": "แก้ไขเพลย์ลิสต์",
+      "universe": "จักรวาล",
+      "cannot_be_changed": "เปลี่ยนไม่ได้",
+      "delete_review": "ลบรีวิว",
+      "do_you_really_want_to_delete_this_review": "ต้องการลบรีวิวนี้จริงหรือไม่",
+      "user_liked_playlist": "<name></name> ไลก์เพลย์ลิสต์หนึ่ง",
+      "user_liked_review": "<name></name> ไลก์รีวิวหนึ่ง",
+      "runtime": "ความยาวเรื่อง",
+      "ends_at": "สิ้นสุด {value}",
+      "this_user_has_no_activity": "ผู้ใช้นี้ยังไม่มีกิจกรรม",
+      "notification_archived": "เก็บการแจ้งเตือนเข้าคลังแล้ว",
+      "notification_unarchived": "นำการแจ้งเตือนออกจากคลังแล้ว",
+      "notification_marked_as_read": "ทำเครื่องหมายการแจ้งเตือนว่าอ่านแล้ว",
+      "notification_marked_as_unread": "ทำเครื่องหมายการแจ้งเตือนว่ายังไม่อ่าน",
+      "or_continue_with": "หรือดำเนินการต่อด้วย",
+      "message": "ข้อความ",
+      "story": "สตอรี",
+      "new_playlist": "เพลย์ลิสต์ใหม่",
+      "select_a_type": "เลือกประเภท",
+      "filter": "ตัวกรอง",
+      "hide_watched": "ซ่อนเรื่องที่ดูแล้ว",
+      "show_me_around": "พาชมรอบ ๆ",
+      "artwork_from": "ภาพประกอบโดย <important>{source}</important>",
+      "no_active_subscription": "ไม่มีการสมัครสมาชิกที่ใช้งานอยู่",
+      "manage_subscription": "จัดการการสมัครสมาชิก",
+      "started_on_date": "เริ่มเมื่อ {date}",
+      "last_renewed_on_date": "ต่ออายุครั้งล่าสุด {date}",
+      "version_value": "เวอร์ชัน {value}",
+      "original_title": "ชื่อเรื่องดั้งเดิม",
+      "starring": "นำแสดงโดย",
+      "write_your_review_here": "เขียนรีวิวของคุณที่นี่...",
+      "insert": "แทรก",
+      "trailer": "ตัวอย่าง",
+      "list": "รายการ",
+      "grid": "ตาราง",
+      "order_asc": "เรียงจากน้อยไปมาก",
+      "order_desc": "เรียงจากมากไปน้อย",
+      "menu": "เมนู",
+      "at_least_one_watched_date_required": "ต้องมีวันที่ดูอย่างน้อยหนึ่งวัน",
+      "viewer": "ผู้ชม",
+      "editor": "ผู้แก้ไข",
+      "admin": "ผู้ดูแล",
+      "owner": "เจ้าของ",
+      "you_dont_have_permission_to_do_this_action": "คุณไม่มีสิทธิ์ทำสิ่งนี้",
+      "in_progress": "กำลังดำเนินการ",
+      "give_up": "ยอมแพ้",
+      "random": "สุ่ม",
+      "reset_password": "ตั้งรหัสผ่านใหม่",
+      "password_reset": "ตั้งรหัสผ่านใหม่แล้ว",
+      "return_to_login": "กลับไปหน้าเข้าสู่ระบบ",
+      "invalid_code": "รหัสไม่ถูกต้อง",
+      "no_token_found": "ไม่พบโทเคน",
+      "first_watched_at": "วันที่ดูครั้งแรก",
+      "watched_dates": "วันที่ดู",
+      "no_watched_dates": "ไม่มีวันที่ดู",
+      "select_role": "เลือกบทบาท",
+      "select_format": "เลือกรูปแบบ",
+      "theater": "โรงภาพยนตร์",
+      "physical": "แผ่น/สื่อจริง",
+      "digital": "ดิจิทัล",
+      "streaming": "สตรีมมิง",
+      "you_must_be_premium_to_change_member_role": "คุณต้องเป็นสมาชิก Premium เพื่อเปลี่ยนบทบาทของสมาชิก",
+      "already_member": "เป็นสมาชิกอยู่แล้ว",
+      "email_already_used": "อีเมลนี้ถูกใช้แล้ว",
+      "email_confirmed": "ยืนยันอีเมลแล้ว",
+      "confirmation_email_sent": "ส่งอีเมลยืนยันแล้ว",
+      "continue": "ต่อไป",
+      "finish": "เสร็จสิ้น",
+      "forgot_password": "ลืมรหัสผ่าน",
+      "new_password": "รหัสผ่านใหม่",
+      "confirm_password": "ยืนยันรหัสผ่าน",
+      "password_reseted": "ตั้งรหัสผ่านใหม่แล้ว",
+      "reset_your_password": "ตั้งรหัสผ่านใหม่",
+      "invalid_token": "โทเคนไม่ถูกต้อง",
+      "new_notification": "การแจ้งเตือนใหม่",
+      "lets_go": "ไปกันเลย!",
+      "update_available": "มีอัปเดตใหม่",
+      "update_available_description": "อัปเดตแอปเพื่อใช้การปรับปรุงล่าสุด",
+      "update_required_title": "ต้องอัปเดต",
+      "update_required_description": "แอปเวอร์ชันนี้ไม่รองรับอีกต่อไป อัปเดตเพื่อใช้ Recomend ต่อ",
+      "update_app": "อัปเดต",
+      "advertisement": "โฆษณา",
+      "pending": "รอดำเนินการ",
+      "processing": "กำลังประมวลผล",
+      "awaiting_review": "รอการตรวจสอบ",
+      "failed": "ไม่สำเร็จ",
+      "data": "ข้อมูล",
+      "restore": "กู้คืน",
+      "fix": "แก้ไข",
+      "not_found": "ไม่พบ",
+      "unavailable": "ไม่พร้อมใช้งาน",
+      "star_on_github": "ให้ดาวเราบน GitHub"
+    },
+    "form": {
+      "email": {
+        "label": "อีเมล",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "อีเมลไม่ถูกต้อง",
+          "unavailable": "อีเมลนี้ถูกใช้แล้ว"
+        },
+        "verified": "ยืนยันอีเมลแล้ว"
+      },
+      "username": {
+        "label": "ชื่อผู้ใช้",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "ตัวอักษรแรกต้องเป็นตัวอักษรหรือตัวเลข",
+          "double_dot": "ใช้จุดสองจุดติดกันไม่ได้",
+          "ends_with_dot": "ลงท้ายด้วยจุดไม่ได้",
+          "format": "ใช้ได้เฉพาะตัวอักษร ตัวเลข และอักขระ '_' กับ '.'",
+          "unavailable": "ชื่อผู้ใช้นี้ถูกใช้แล้ว"
+        }
+      },
+      "full_name": {
+        "label": "ชื่อ",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "ใช้ได้เฉพาะตัวอักษร ตัวเลข และการเว้นวรรค"
+        }
+      },
+      "password": {
+        "label": "รหัสผ่าน",
+        "placeholder": "กรอกรหัสผ่านของคุณ",
+        "schema": {
+          "uppercase": "ต้องมีตัวพิมพ์ใหญ่อย่างน้อยหนึ่งตัว",
+          "lowercase": "ต้องมีตัวพิมพ์เล็กอย่างน้อยหนึ่งตัว",
+          "number": "ต้องมีตัวเลขอย่างน้อยหนึ่งตัว",
+          "special": "ต้องมีอักขระพิเศษอย่างน้อยหนึ่งตัว",
+          "match": "รหัสผ่านไม่ตรงกัน"
+        },
+        "confirm": {
+          "label": "ยืนยันรหัสผ่าน",
+          "placeholder": "ยืนยันรหัสผ่านของคุณ"
+        }
+      },
+      "length": {
+        "char_min": "อย่างน้อย {count} อักขระ",
+        "char_max": "ไม่เกิน {count} อักขระ"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "ใช้ได้เฉพาะตัวอักษร ตัวเลข และการเว้นวรรค"
+      },
+      "error": {
+        "too_many_attempts": "ลองหลายครั้งเกินไป กรุณาลองใหม่ภายหลัง",
+        "not_received_code": "ไม่ได้รับรหัสหรือ",
+        "invalid_code": "รหัสไม่ถูกต้อง",
+        "turnstile": "การยืนยันไม่สำเร็จ ลองอีกครั้ง"
+      },
+      "resend_code": "ส่งรหัสอีกครั้ง",
+      "resend_email": "ส่งอีเมลอีกครั้ง",
+      "code_verified": "ยืนยันรหัสแล้ว",
+      "code_sent": "ส่งรหัสแล้ว"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "ไม่พบหน้านี้",
+        "description": "อุ๊ย หน้านี้ไม่มีอยู่..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "บันทึกการดู",
+        "description": "ค้นพบ ให้คะแนน และแบ่งปันภาพยนตร์กับซีรีส์ที่คุณชอบ"
+      },
+      "recos": {
+        "label": "reco",
+        "description": "ส่งและรับ reco จากเพื่อน ๆ ทั้งหมดอยู่ในที่เดียว"
+      },
+      "playlists": {
+        "label": "เพลย์ลิสต์",
+        "description": "จัดระเบียบ แบ่งปัน และสร้างเพลย์ลิสต์ด้วยกัน"
+      },
+      "feed": {
+        "label": "ฟีด",
+        "description": "ติดตามเพื่อนเพื่อดูว่าพวกเขาดูอะไร ชอบอะไร และรีวิวอะไร"
+      },
+      "social_sharing": {
+        "label": "แบ่งปันบนโซเชียล",
+        "description": "แบ่งปันทุกอย่างที่คุณรักบน Instagram หรือโซเชียลอื่น ๆ"
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "บันทึกการดู",
+          "description": "เก็บรายการภาพยนตร์ที่คุณดูแล้วไว้ดูย้อนหลัง"
+        },
+        "recos": {
+          "label": "Reco",
+          "description": "ส่งภาพยนตร์ที่แนะนำให้เพื่อนของคุณ"
+        },
+        "explore": {
+          "label": "สำรวจ",
+          "description": "ค้นพบภาพยนตร์ใหม่บน Paradise Pictures แผนที่แบบอินเทอร์แอกทีฟที่มีภาพยนตร์มากกว่า 1400 เรื่อง"
+        },
+        "like": {
+          "label": "ไลก์",
+          "description": "แสดงความรักต่อภาพยนตร์ เพลย์ลิสต์ และรีวิวที่คุณชอบ"
+        },
+        "rating": {
+          "label": "คะแนน",
+          "description": "ให้คะแนนภาพยนตร์ที่คุณดูแล้ว"
+        },
+        "watchlist": {
+          "label": "รายการที่อยากดู",
+          "description": "บันทึกภาพยนตร์ที่คุณอยากดู"
+        },
+        "playlists": {
+          "label": "เพลย์ลิสต์",
+          "description": "จัดภาพยนตร์ของคุณเป็นเพลย์ลิสต์แล้วแบ่งปัน"
+        },
+        "reviews": {
+          "label": "รีวิว",
+          "description": "เขียนรีวิวและปล่อยให้คอหนังจอมจิกในตัวคุณออกมา"
+        },
+        "feed": {
+          "label": "ฟีด",
+          "description": "ติดตามกิจกรรมของเพื่อนคุณ"
+        },
+        "adsFree": {
+          "label": "ไม่มีโฆษณา",
+          "description": "ใช้ Recomend แบบไม่มีโฆษณา ตลอดไป"
+        }
+      }
+    },
+    "welcome": {
+      "title": "ขอบคุณที่สมัครสมาชิก!",
+      "description": "มาดูอย่างรวดเร็วว่าคุณทำอะไรได้บ้างกับ {app}",
+      "follow": {
+        "title": "ติดตามผู้คน",
+        "description": "ติดตามเพื่อนเพื่อดูว่าพวกเขาดูอะไรอยู่"
+      },
+      "import": {
+        "title": "ย้ายมาจากแพลตฟอร์มอื่นหรือ"
+      }
+    },
+    "collection": {
+      "label": "คลัง",
+      "my_recos": {
+        "label": "reco ของฉัน",
+        "search": {
+          "placeholder": "ค้นหาใน reco ของฉัน..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "ลบออกจาก reco ของฉัน",
+            "description": "ต้องการลบ <important>{title}</important> ออกจาก reco ของคุณจริงหรือไม่"
+          },
+          "complete_confirm": {
+            "title": "ปิด reco นี้",
+            "description": "ต้องการปิด reco <important>{title}</important> จริงหรือไม่"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "ค้นหาในรายการที่อยากดู..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "ลบออกจากรายการที่อยากดู",
+            "description": "ต้องการลบ <important>{title}</important> ออกจากรายการที่อยากดูจริงหรือไม่"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "ค้นหาในของโปรดในใจ..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "ลบออกจากของโปรดในใจ",
+            "description": "ต้องการลบ <important>{title}</important> ออกจากของโปรดในใจจริงหรือไม่"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> ดู",
+        "rated": "<name></name> ให้คะแนน",
+        "liked": "<name></name> ไลก์",
+        "rated_liked": "<name></name> ไลก์และให้คะแนน",
+        "reviewed": "<name></name> เขียนรีวิว"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> เป็น <important>{roles}</important> ใน <linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> เป็น <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "อนุญาตแอป",
+        "description_generic": "มีแอปขอเข้าถึงบัญชีของคุณ",
+        "description": "{client} ขอเข้าถึงบัญชีของคุณ",
+        "scopes_label": "การอนุญาตนี้จะให้แอปสามารถ:",
+        "accept": "อนุญาต",
+        "deny": "ไม่อนุญาต",
+        "error": {
+          "invalid_request": "คำขอไม่ถูกต้องหรือหมดอายุ",
+          "invalid_request_description": "เริ่มขั้นตอนการอนุญาตใหม่จากแอปที่พาคุณมาที่นี่",
+          "client_not_found": "ไม่พบแอปนี้",
+          "submit_failed": "มีอะไรผิดพลาด ลองอีกครั้ง"
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "เข้าสู่ระบบบัญชี {app} ของคุณ"
+        },
+        "label": "เข้าสู่ระบบ",
+        "description": "ค้นพบคำแนะนำภาพยนตร์ที่ดีที่สุด",
+        "or_continue_with": "หรือดำเนินการต่อด้วย",
+        "no_account_yet": "ยังไม่มีบัญชี",
+        "form": {
+          "identifier": {
+            "label": "อีเมลหรือชื่อผู้ใช้",
+            "placeholder": "กรอกอีเมลหรือชื่อผู้ใช้ของคุณ"
+          },
+          "password": {
+            "label": "รหัสผ่าน",
+            "placeholder": "กรอกรหัสผ่านของคุณ"
+          },
+          "submit": "เข้าสู่ระบบ",
+          "forgot_password": "ลืมรหัสผ่าน",
+          "wrong_credentials": "อีเมลหรือรหัสผ่านไม่ถูกต้อง"
+        },
+        "otp": {
+          "password_login": "อยากเข้าสู่ระบบด้วยรหัสผ่านไหม",
+          "form": {
+            "submit": "รับรหัส",
+            "no_user_found": "ไม่พบผู้ใช้ที่ใช้อีเมลนี้",
+            "success": "เข้าสู่ระบบแล้ว"
+          },
+          "confirm_form": {
+            "label": "ยืนยันรหัส",
+            "description": "ส่งรหัสยืนยันไปที่ {email} แล้ว"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "สมัคร {app} เพื่อค้นพบและแบ่งปันคำแนะนำภาพยนตร์"
+        },
+        "description": "สร้างบัญชีเพื่อแนะนำภาพยนตร์ให้เพื่อนที่จำชื่อเรื่องไม่ได้เสมอ",
+        "form": {
+          "success": "ส่งอีเมลยืนยันไปที่ {email} แล้ว"
+        },
+        "confirm_form": {
+          "label": "ยืนยันอีเมล",
+          "description": "ส่งลิงก์ยืนยันไปที่ {email} แล้ว"
+        },
+        "return_to_login": "อุ๊ย ฉันมีบัญชีอยู่แล้ว"
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "ลืมรหัสผ่าน",
+          "description": "ตั้งรหัสผ่านใหม่"
+        },
+        "label": "ลืมรหัสผ่าน",
+        "description": "ใช้โปรแกรมจัดการรหัสผ่านดีกว่า สะดวกจริง ๆ",
+        "return_to_login": "อุ๊ย ที่จริงฉันจำรหัสผ่านได้แล้ว",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "ตั้งรหัสผ่านใหม่",
+          "code_sent": "ส่งคำขอแล้ว"
+        },
+        "confirm_form": {
+          "label": "ยืนยันรหัส",
+          "description": "ส่งรหัสยืนยันไปที่ {email} แล้ว"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "ตั้งรหัสผ่านใหม่",
+          "description": "เลือกรหัสผ่านใหม่สำหรับบัญชีของคุณ"
+        }
+      },
+      "error": {
+        "label": "ข้อผิดพลาด",
+        "description": "เกิดข้อผิดพลาดระหว่างการยืนยันตัวตน",
+        "return_to_login": "กลับไปที่ปลอดภัย"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "เกี่ยวกับ",
+        "marquee": "ชีวิตคุณไม่มีอะไรน่าตื่นเต้นกว่าการอ่านหน้า 'เกี่ยวกับ' บนอินเทอร์เน็ตแล้วหรือ",
+        "intro": "<strong>Recomend</strong> คือพื้นที่ที่อุทิศให้กับการค้นพบ แนะนำ และจัดระเบียบภาพยนตร์ เราออกแบบทุกอย่างเพื่อให้การบอกต่อแบบปากต่อปากได้ที่พึ่งทางดิจิทัลที่ดีที่สุดในที่สุด แนวทางของเราให้ผู้คนและความสัมพันธ์ระหว่างกันเป็นศูนย์กลาง ในยุคที่การเสพสื่อหมุนรอบตัวเราเอง หรือพูดให้ตรงกว่า หมุนรอบคำว่า 'แนะนำสำหรับคุณ'",
+        "slogan": {
+          "1": "ไม่มีโฆษณาและไม่มีคำสัญญาน่าสงสัย 🍆",
+          "2": "เป็นทั้งโซเชียลเน็ตเวิร์กและเครื่องมือ",
+          "3": "ทำเองที่บ้านโดยคนที่หลงรักมันจริง",
+          "4": "เป็นมือสมัครเล่น ในความหมายที่แท้จริงที่สุดของคำนี้"
+        },
+        "last": "Recomend ใช้คนเดียวหรือใช้กับคนอื่นก็ได้ แบบสาธารณะหรือส่วนตัวก็ได้ กลางวันหรือกลางคืนก็ได้ แต่อย่าใช้ตอนดูหนังนะ ตั้งใจดูหน่อย!"
+      },
+      "team": {
+        "label": "ทีมงาน",
+        "intro": "Recomend สร้างขึ้นโดยพี่น้องสองคนที่คลั่งไคล้ภาพยนตร์ และชอบทุ่มเวลาให้โปรเจกต์ที่ทะเยอทะยานเกินตัวซึ่งอาจไม่ได้เกิดขึ้นจริงเลย",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "สถาปนิก-วิศวกรจอมไฮเปอร์ที่ทำงานเดียวไม่พอใจ (start-up nation ของจริง) Yoann คือคนที่คิดแผนที่ภาพยนตร์ขึ้นมา โดยตอนแรกตั้งใจแค่จะทำโปสเตอร์ไปติดห้องน้ำตัวเอง เมื่อ Loup เข้ามาร่วม เป้าหมายก็พุ่งทะลุเพดาน และระหว่างที่รู้สึกว่าตัวเองถูกกระแสพัดไปเล็กน้อย เขาก็รับงานกราฟิกทั้งหมดของแผนที่และเว็บไซต์ รวมทั้งงานสื่อสารทั้งหมด (แม้จะไม่ชอบเลย) นอกจากนี้เขายังออกความเห็นเรื่อง UX/UI และเสนอฟีเจอร์เป็นกอง โดยยังไม่เข้าใจเต็มที่ว่าเขียนโค้ดยากแค่ไหน (เรื่องนี้ดีขึ้นแล้ว)"
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "เรียนรู้ด้วยตัวเองทั้งหมด แต่ก็ยังเรียนจบหลักสูตรที่พาเขาไปสู่การว่างงานแบบไม่มีเงินเดือนก่อนอายุ 25 เป็นคนทำได้ทุกอย่างจริง ๆ Loup ดูแลฝั่งเว็บและเขียนอินเทอร์เฟซที่ตั้งใจให้ใช้ง่ายที่สุด Loup อยากขอบคุณฟอรัมเขียนโค้ดทุกแห่งที่ตอบคำถาม (จำนวนมหาศาล) ของเขา และ YouTuber อินเดียทุกคนที่คอยชี้ทางให้เขาเหมือนพ่อบุญธรรมตลอดหลายเดือนนี้ ส่วนแม่ของเขาเชื่อสนิทใจว่าพี่ชายจับเขามาเป็นแรงงานทาสเพื่อโปรเจกต์นี้ (ผมสบายดีครับแม่)"
+          }
+        },
+        "last": "ถ้าอยากติดต่อเราหรือสมาชิกชุมชนคนอื่น มาเข้า <link>Discord</link> ของเราได้เลย!"
+      },
+      "pricing": {
+        "label": "ราคา",
+        "intro": "รูปแบบการสมัครสมาชิกนี้คือวิธีสนับสนุนโปรเจกต์และช่วยให้มันเติบโตต่อไปเป็นอันดับแรก ฟีเจอร์ Premium เป็นของแถมสำหรับการใช้ Recomend แบบลงลึก ซึ่งคุ้มกับเงินสนับสนุนเล็กน้อย เราจะคงทางเลือกให้ใช้เว็บไซต์ได้ฟรี ไม่มีโฆษณา และไม่รู้สึกถูกจำกัดเสมอ",
+        "subdescription": "*ถ้าค่าสมัครที่ต่ำจนน่าขันนี้ยังเกินกำลังของคุณ กรุณาไปคุยกับรัฐบาลเสรีนิยมของคุณที่ทำให้กำลังซื้อของคุณหายไป"
+      },
+      "legal": {
+        "label": "กฎหมายและความเป็นส่วนตัว",
+        "description": "เราเคารพความเป็นส่วนตัวของคุณ โฆษณาที่แสดงให้ผู้ใช้ทั่วไปที่ยังไม่ล็อกอินนั้น Google เป็นผู้จัดการ และต้องใช้คุกกี้ทางเทคนิคเพื่อจำกัดความถี่ในการแสดงและป้องกันการฉ้อโกง",
+        "privacyPolicy": "อ่านนโยบายความเป็นส่วนตัวของเรา",
+        "manageCookies": "จัดการการตั้งค่าโฆษณาของฉัน (คุกกี้)"
+      },
+      "open-source": {
+        "label": "โอเพนซอร์ส",
+        "intro": "Recomend เป็นโอเพนซอร์ส: โค้ดเปิดให้ดูได้บน GitHub แวะไปดู ช่วยพัฒนา หรือแค่ให้ดาวเราก็ได้!",
+        "star": "ให้ดาวเราบน GitHub"
+      },
+      "businessmodel": {
+        "label": "โมเดลธุรกิจ",
+        "paragraph": {
+          "1": "อย่างที่เดาได้จากโปรไฟล์ที่ไม่ค่อยเป็นการค้าของเรา เรายังไม่ค่อยเข้าใจว่าโมเดลธุรกิจจะทำอะไรให้เราได้ในตอนนี้...",
+          "2": "ถ้าอนาคตของ Recomend ต้องการมัน เราจะลองดูโดยหาคนที่เหมาะมาอยู่รอบตัว หรืออย่างน้อยก็คนที่สนใจเรื่องนี้มากกว่าเรา",
+          "3": "ระหว่างนี้ พูดกันตรง ๆ เรามีเรื่องอื่นที่ต้องใส่ใจ"
+        }
+      },
+      "roadmap": {
+        "label": "แผนพัฒนา"
+      },
+      "data": {
+        "label": "ข้อมูล",
+        "paragraph": {
+          "1": "ข้อมูลเมตาทั้งหมดที่ใช้บน Recomend มาจาก <link>The Movie Database (TMDb)</link> ผ่าน API ของแพลตฟอร์ม เราก็ทำเหมือนคนอื่น ๆ เหมือนแกะว่าง่าย",
+          "2": "หากพบข้อผิดพลาดหรือภาพยนตร์ที่ขาดไป กรุณาติดต่อ <link>TMDb</link>"
+        }
+      },
+      "resources": {
+        "label": "แหล่งข้อมูล",
+        "intro": "เรื่องนี้ไม่ค่อยเกี่ยวกับภาพยนตร์ แต่นี่คือรายชื่อเว็บไซต์ที่เราชอบ:"
+      },
+      "contact-support": {
+        "label": "ติดต่อและช่วยเหลือ",
+        "help-center": "หาคำตอบของคำถามเชิงอัตถิภาวนิยมได้ที่ <link>ศูนย์ช่วยเหลือ</link> ของเรา",
+        "technical-support": "สำหรับคำถามทางเทคนิค: <email></email>",
+        "suggest-a-feature": "สำหรับข้อเสนอแนะ: <email></email>",
+        "contact-us": "ถ้าอยากทักทายเราเฉย ๆ: <email></email>"
+      },
+      "quote": {
+        "label": "คำคม",
+        "quote": "« ผมเกลียดคำว่ามืออาชีพ นักแสดงและคนอื่น ๆ ที่พูดว่า ผมเป็นมืออาชีพ ผมเป็นโปร! มันคืออะไรกัน มีคำไหนเศร้ากว่านี้อีกไหม เพราะคำว่าสมัครเล่นนั้นมาจากคำว่าความรัก เราต้องทำสิ่งต่าง ๆ ด้วยความรัก ไม่อย่างนั้นเราก็เป็นคนโง่ »",
+        "author": "ออร์สัน เวลส์",
+        "date": "1972",
+        "subdescription": "*เราลังเลที่จะใส่ไว้ เพราะมันฟังดูอวดตัวได้ง่าย ๆ แต่มันสะท้อนความรู้สึกของเราต่อโปรเจกต์นี้ได้ดี ถ้าคุณไม่ชอบ เราจะเอาออกก็ได้"
+      }
+    },
+    "settings": {
+      "label": "การตั้งค่า",
+      "description": "จัดการการตั้งค่าบัญชีของคุณ",
+      "profile": {
+        "label": "โปรไฟล์",
+        "description": "คนอื่นจะเห็นคุณบนเว็บไซต์แบบนี้",
+        "avatar": {
+          "label": "รูปโปรไฟล์",
+          "delete": "ลบ"
+        },
+        "full_name": {
+          "label": "ชื่อ",
+          "description": "ชื่อนี้จะแสดงบนโปรไฟล์ของคุณและในอีเมล",
+          "placeholder": "กรอกชื่อของคุณ",
+          "form": {
+            "min_length": "ชื่อต้องมีอย่างน้อย 1 อักขระ",
+            "max_length": "ชื่อต้องไม่เกิน 50 อักขระ"
+          }
+        },
+        "bio": {
+          "label": "แนะนำตัว",
+          "description": "เล่าอะไรเกี่ยวกับตัวคุณหน่อย ข้อความนี้จะปรากฏบนโปรไฟล์",
+          "placeholder": "เล่าเรื่องตัวคุณให้เราฟัง",
+          "form": {
+            "max_length": "ข้อความแนะนำตัวต้องไม่เกิน 150 อักขระ",
+            "format": "ข้อความแนะนำตัวต้องไม่มีบรรทัดว่างและต้องไม่ประกอบด้วยช่องว่างเพียงอย่างเดียว"
+          }
+        },
+        "favorite_films": {
+          "label": "ภาพยนตร์ที่ชอบ",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "URL ไม่ถูกต้อง"
+          }
+        }
+      },
+      "account": {
+        "label": "บัญชี",
+        "description": "อัปเดตการตั้งค่าบัญชีของคุณ",
+        "username": {
+          "label": "ชื่อผู้ใช้",
+          "description": "นี่คือชื่อผู้ใช้ที่คนอื่นใช้ค้นหาคุณและเข้าถึงโปรไฟล์ของคุณ เปลี่ยนได้เพียงครั้งเดียวทุก 30 วัน",
+          "placeholder": "กรอกชื่อผู้ใช้ของคุณ",
+          "form": {
+            "min_length": "ชื่อผู้ใช้ต้องมีอย่างน้อย 3 อักขระ",
+            "max_length": "ชื่อผู้ใช้ต้องไม่เกิน 15 อักขระ",
+            "invalid": "ชื่อผู้ใช้ใช้ได้เฉพาะตัวอักษร ตัวเลข และสัญลักษณ์ '_' กับ '.'",
+            "unavailable": "ชื่อผู้ใช้นี้ถูกใช้แล้ว"
+          }
+        },
+        "private": {
+          "label": "บัญชีส่วนตัว",
+          "description": "เมื่อบัญชีของคุณเป็นส่วนตัว มีแต่เพื่อนของคุณที่เห็นกิจกรรมของคุณ"
+        },
+        "email": {
+          "description": "เราจะส่งอีเมลยืนยันไปทั้งที่อยู่ปัจจุบันและที่อยู่ใหม่ คุณต้องยืนยันทั้งสองที่อยู่เพื่อให้การเปลี่ยนแปลงมีผล",
+          "change_pending": "ส่งอีเมลยืนยันไปที่อีเมลใหม่ของคุณ <strong>{email}</strong> แล้ว คลิกลิงก์หรือกรอกรหัสยืนยันเพื่อยืนยันการเปลี่ยนแปลง",
+          "confirm_email_code": {
+            "description": "กรอกรหัสยืนยันที่ส่งไปที่ <strong>{email}</strong> เพื่อยืนยันการเปลี่ยนแปลง"
+          },
+          "change_success": "เปลี่ยนอีเมลของคุณเรียบร้อยแล้ว"
+        },
+        "delete_account": {
+          "button": "ลบบัญชีของฉัน",
+          "confirm": {
+            "description": "ต้องการลบบัญชีของคุณจริงหรือไม่ การกระทำนี้ย้อนกลับไม่ได้",
+            "confirm_email_sent": "ส่งอีเมลยืนยันไปที่อีเมลของคุณแล้ว"
+          }
+        }
+      },
+      "appearance": {
+        "label": "รูปลักษณ์",
+        "description": "ปรับรูปลักษณ์ของแอป สลับธีมสว่างและมืดอัตโนมัติ",
+        "language": {
+          "label": "ภาษา",
+          "description": "เลือกภาษา – การเปลี่ยนแปลงจะมีผลหลังเปิดแอปใหม่",
+          "placeholder": "เลือกภาษา",
+          "not_found": "ไม่พบภาษา"
+        },
+        "theme": {
+          "label": "ธีม",
+          "description": "เลือกธีมของอินเทอร์เฟซ",
+          "options": {
+            "light": "สว่าง",
+            "dark": "มืด"
+          }
+        }
+      },
+      "subscription": {
+        "label": "การสมัครสมาชิก",
+        "description": "จัดการการสมัครสมาชิกเพื่อใช้ฟีเจอร์ Premium"
+      },
+      "security": {
+        "label": "ความปลอดภัย",
+        "description": "การเปลี่ยนรหัสผ่านจะทำให้คุณออกจากระบบทุกอุปกรณ์ ยกเว้นอุปกรณ์ที่คุณใช้อยู่ตอนนี้",
+        "current_password": {
+          "label": "รหัสผ่านปัจจุบัน",
+          "placeholder": "กรอกรหัสผ่านปัจจุบันของคุณ",
+          "form": {
+            "required": "กรุณากรอกรหัสผ่านปัจจุบันของคุณ",
+            "invalid": "รหัสผ่านปัจจุบันไม่ถูกต้อง"
+          }
+        },
+        "new_password": {
+          "label": "รหัสผ่านใหม่",
+          "placeholder": "กรอกรหัสผ่านใหม่ของคุณ",
+          "form": {
+            "min_length": "รหัสผ่านต้องมีอย่างน้อย 8 อักขระ",
+            "uppercase": "ต้องมีตัวพิมพ์ใหญ่อย่างน้อยหนึ่งตัว",
+            "lowercase": "ต้องมีตัวพิมพ์เล็กอย่างน้อยหนึ่งตัว",
+            "number": "ต้องมีตัวเลขอย่างน้อยหนึ่งตัว",
+            "special": "ต้องมีอักขระพิเศษอย่างน้อยหนึ่งตัว"
+          }
+        },
+        "confirm_password": {
+          "label": "ยืนยันรหัสผ่านใหม่",
+          "placeholder": "ยืนยันรหัสผ่านใหม่ของคุณ",
+          "form": {
+            "match": "รหัสผ่านไม่ตรงกัน"
+          }
+        }
+      },
+      "notifications": {
+        "label": "การแจ้งเตือน",
+        "description": "จัดการการตั้งค่าการแจ้งเตือนของคุณ",
+        "push_notifications": {
+          "label": "การแจ้งเตือนแบบพุช",
+          "form": {
+            "enable": "เปิดการแจ้งเตือนแบบพุช"
+          },
+          "already_granted": "มีการขออนุญาตแจ้งเตือนไปแล้ว หากต้องการเปลี่ยน กรุณาไปที่การตั้งค่าเบราว์เซอร์ของคุณ",
+          "no_enabled": "เปิดการแจ้งเตือนในการตั้งค่าอุปกรณ์เพื่อรับการแจ้งเตือนแบบพุช",
+          "open_settings": "ไปที่การตั้งค่าอุปกรณ์"
+        }
+      },
+      "data": {
+        "label": "ข้อมูล",
+        "description": "นำเข้าหรือส่งออกข้อมูลของคุณ",
+        "importer": {
+          "label": "นำเข้า",
+          "select_source": "เลือกแหล่งข้อมูล",
+          "instructions_title": "คำแนะนำ",
+          "browse_prompt": "ลากไฟล์มาวางที่นี่ หรือ <link>เลือกไฟล์</link>",
+          "browse_prompt_mobile": "แตะเพื่อเลือกไฟล์",
+          "uploading": "กำลังอัปโหลด…",
+          "processing": "กำลังวิเคราะห์ไฟล์ของคุณ…",
+          "upload_error": "อัปโหลดไม่สำเร็จ ลองอีกครั้ง",
+          "invalid_file_type": "ไฟล์ประเภทนี้ไม่รองรับสำหรับแหล่งข้อมูลนี้",
+          "review_title": "ตรวจทานการนำเข้าของคุณ",
+          "review_summary": "จับคู่ได้ {matched} จาก {total}",
+          "validate": "ยืนยันการนำเข้า",
+          "validate_confirm_description": "การนี้จะนำรายการที่จับคู่ได้และไม่ได้ข้ามทั้งหมดเข้าคลังของคุณ ย้อนกลับไม่ได้",
+          "success_title": "นำเข้าเสร็จสิ้น",
+          "success_description": "นำเข้าข้อมูลของคุณสำเร็จแล้ว",
+          "failed_title": "นำเข้าไม่สำเร็จ",
+          "failed_description": "เกิดข้อผิดพลาดระหว่างประมวลผลการนำเข้านี้",
+          "pending_description": "การนำเข้าของคุณอยู่ในคิวและจะเริ่มในไม่ช้า",
+          "empty": "ยังไม่มีการนำเข้า",
+          "delete_confirm_description": "การนำเข้านี้และข้อมูลที่เตรียมไว้ทั้งหมดจะถูกลบอย่างถาวร ย้อนกลับไม่ได้",
+          "keep_existing": "เก็บของฉันไว้",
+          "use_imported": "ใช้ข้อมูลที่นำเข้า",
+          "merge": "รวมเข้าด้วยกัน",
+          "conflict": "ขัดแย้ง",
+          "no_match": "ไม่มีรายการที่ตรงกัน",
+          "existing_rating": "ปัจจุบัน: {rating}",
+          "log_column": "บันทึก",
+          "actions_column": "การกระทำ",
+          "categories": {
+            "log_movies": "ภาพยนตร์",
+            "log_tv_series": "ซีรีส์",
+            "bookmarks": "รายการที่อยากดู",
+            "playlists": "เพลย์ลิสต์"
+          },
+          "status": {
+            "pending": "รอดำเนินการ",
+            "processing": "กำลังประมวลผล",
+            "awaiting_review": "รอการตรวจสอบ",
+            "completed": "เสร็จสิ้น",
+            "failed": "ไม่สำเร็จ"
+          }
+        },
+        "exporter": {
+          "label": "ส่งออก"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "อัปเกรดเป็น Premium",
+        "description": "อัปเกรดเป็นบัญชี Premium เพื่อใช้ฟีเจอร์ทั้งหมดของ {app}"
+      },
+      "header": {
+        "title": "ขยายโลกภาพยนตร์ของคุณ แบ่งปันมากขึ้น สนับสนุน {app}",
+        "subtitle": "ทดลองฟรี 1 เดือน หลังจากนั้น {price}/เดือน"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "กิจกรรม",
+            "unlimited_activities": {
+              "label": "กิจกรรมไม่จำกัด",
+              "description": "คะแนน ไลก์ รีวิว รายการที่อยากดู และคำแนะนำ"
+            },
+            "favorites": {
+              "label": "รายการโปรด",
+              "description": "เพิ่มภาพยนตร์ที่คุณชอบไว้บนโปรไฟล์"
+            }
+          },
+          "playlists": {
+            "label": "เพลย์ลิสต์",
+            "unlimited_playlists": {
+              "label": "ไม่จำกัด",
+              "description": "สร้างเพลย์ลิสต์ได้ไม่จำกัดจำนวน"
+            },
+            "shared_playlists": {
+              "label": "แบ่งปัน",
+              "description": "แบ่งปันเพลย์ลิสต์ของคุณกับผู้ใช้คนอื่น"
+            },
+            "collaborative_playlists": {
+              "label": "ทำร่วมกัน",
+              "description": "สร้างเพลย์ลิสต์ร่วมกับผู้ใช้คนอื่น"
+            }
+          },
+          "feed": {
+            "label": "ฟีด",
+            "followees": {
+              "label": "ผู้ใช้ที่คุณติดตาม",
+              "description": "ดูกิจกรรมของผู้ใช้ที่คุณติดตาม"
+            },
+            "cast_and_crew": {
+              "label": "นักแสดงและทีมงาน",
+              "description": "ติดตามกิจกรรมของผู้ที่ร่วมงานในภาพยนตร์"
+            }
+          },
+          "support": {
+            "label": "สนับสนุน",
+            "team": {
+              "label": "สนับสนุนทีม {app}"
+            },
+            "credits": {
+              "label": "เครดิต",
+              "description": "โปรไฟล์ของคุณในเครดิตของแอป"
+            }
+          }
+        },
+        "success": {
+          "label": "ขอบคุณที่สนับสนุน!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} – เพลย์ลิสต์ของ @{username}",
+        "description": "ชมเพลย์ลิสต์ภาพยนตร์ของ @{username} บน {app}"
+      },
+      "actions": {
+        "delete": {
+          "description": "การนี้จะลบ <important>{title}</important> ออกจากเพลย์ลิสต์ของคุณอย่างถาวร"
+        }
+      },
+      "search": {
+        "placeholder": "ค้นหาในเพลย์ลิสต์..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "ต้องการลบ <important>{title}</important> ออกจากเพลย์ลิสต์ของคุณจริงหรือไม่"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "กรอกชื่อเพลย์ลิสต์"
+        },
+        "description": {
+          "placeholder": "กรอกคำอธิบายของเพลย์ลิสต์"
+        },
+        "error": {
+          "format": "คำอธิบายต้องไม่มีบรรทัดว่างและต้องไม่ประกอบด้วยช่องว่างเพียงอย่างเดียว"
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "ชมโปรไฟล์ของ @{username} บน {app}"
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} เป็นภาพยนตร์โดย {directors} ออกฉายในปี {year} เรื่องย่อ: {overview}",
+        "description_no_director": "{title} เป็นภาพยนตร์ที่ออกฉายในปี {year} เรื่องย่อ: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • เพลย์ลิสต์",
+          "description": "ชมเพลย์ลิสต์ทั้งหมดที่มีภาพยนตร์ {title} อยู่"
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • รีวิว",
+          "description": "อ่านรีวิวทั้งหมดของภาพยนตร์ {title}"
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} เป็นซีรีส์โดย {creators} ออกอากาศครั้งแรกในปี {year} เรื่องย่อ: {overview}",
+        "description_no_creator": "{title} เป็นซีรีส์ที่ออกอากาศครั้งแรกในปี {year} เรื่องย่อ: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • เพลย์ลิสต์",
+          "description": "ชมเพลย์ลิสต์ทั้งหมดที่มีซีรีส์ {title} อยู่"
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • รีวิว",
+          "description": "อ่านรีวิวทั้งหมดของซีรีส์ {title}"
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • ซีซัน",
+          "description": "ชมทุกซีซันของซีรีส์ {title}"
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • ซีซัน {number}",
+            "description": "ชมทุกตอนของซีซัน {number} ในซีรีส์ {title}"
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • ภาพยนตร์",
+          "description": "ชมภาพยนตร์ทั้งหมดที่ {name} แสดงหรือร่วมงาน"
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • ซีรีส์",
+          "description": "ชมซีรีส์ทั้งหมดที่ {name} แสดงหรือร่วมงาน"
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "รีวิว {title} โดย @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "เขียนรีวิว {title}",
+          "description": "แบ่งปันความเห็นของคุณเกี่ยวกับ {title}"
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "สำรวจ Paradise Pictures",
+        "description": "ออกเดินทางไปค้นพบเกาะและภูมิประเทศหลากหลายของมัน ภาพยนตร์จำนวนมากที่อยู่บนเกาะนี้ถูกวางไว้ในโลกของเรื่องตัวเอง คุณจะสำรวจได้ทุกมุมหรือไม่"
+      }
+    },
+    "legal": {
+      "label": "ข้อมูลทางกฎหมาย",
+      "description": "อ่านเอกสารทางกฎหมายของ {app}",
+      "terms_of_use": {
+        "metadata": {
+          "title": "เงื่อนไขการใช้งาน",
+          "description": "อ่านเงื่อนไขการใช้งานของ {app}"
+        },
+        "sections": {
+          "intro": "เงื่อนไขการใช้งานนี้ (ต่อไปเรียกว่า \"เงื่อนไข\") กำกับการเข้าถึงและการใช้แอป {app} แอปนี้เผยแพร่โดย Loup (ต่อไปเรียกว่า \"ผู้เผยแพร่\") ซึ่งมีที่ตั้งอยู่ในปารีส การลงทะเบียนบน {app} ถือเป็นการยอมรับเงื่อนไขนี้โดยไม่มีข้อสงวน",
+          "presentation": {
+            "label": "1. ภาพรวมของบริการ",
+            "content": "{app} เป็นแอปฟรีที่ให้ผู้ใช้ดูข้อมูลเกี่ยวกับภาพยนตร์ เผยแพร่รีวิว ให้คะแนนผลงาน และสร้างรายการส่วนตัวได้"
+          },
+          "account": {
+            "label": "2. บัญชีและความปลอดภัย",
+            "content": "การใช้ฟีเจอร์ที่ต้องมีส่วนร่วมจำเป็นต้องสร้างบัญชี ผู้ใช้มีหน้าที่รักษาความลับของข้อมูลเข้าสู่ระบบของตน ในกรณีที่มีการใช้โดยทุจริตหรือสงสัยว่าบัญชีถูกเจาะ ผู้ใช้ต้องติดต่อฝ่ายช่วยเหลือทันทีที่: <email></email>"
+          },
+          "conduct": {
+            "label": "3. กฎการปฏิบัติตน",
+            "content": "ผู้ใช้ตกลงที่จะสุภาพและให้เกียรติผู้อื่นในรีวิวและรายการของตน สิ่งที่ห้ามโดยเด็ดขาด: ถ้อยคำสร้างความเกลียดชัง หมิ่นประมาท หรือเหยียดเชื้อชาติ การคุกคาม รวมถึงสแปมหรือการโฆษณาเชิงพาณิชย์ที่ไม่ได้รับเชิญ ผู้เผยแพร่ขอสงวนสิทธิ์ในการลบเนื้อหาที่ละเมิดกฎเหล่านี้และระงับบัญชีที่เกี่ยวข้องโดยไม่ต้องแจ้งล่วงหน้า"
+          },
+          "child_safety": {
+            "label": "4. นโยบายคุ้มครองเด็ก",
+            "content": "{app} ใช้นโยบายไม่ยอมรับโดยสิ้นเชิงต่อการล่วงละเมิดและแสวงประโยชน์ทางเพศจากเด็ก (CSAE) การสร้าง อัปโหลด จัดเก็บ เผยแพร่ ร้องขอ หรือส่งเสริมเนื้อหาใด ๆ ที่ทำให้ผู้เยาว์เป็นวัตถุทางเพศ แสวงประโยชน์จากผู้เยาว์ หรือทำให้ผู้เยาว์เสี่ยงอันตรายในทางใดก็ตาม เป็นสิ่งที่ห้ามอย่างชัดแจ้งและเด็ดขาดบน {app} บัญชีใดที่พบว่าละเมิดนโยบายนี้จะถูกระงับอย่างถาวรทันที และผู้เผยแพร่จะรายงานเนื้อหาที่เกี่ยวข้องพร้อมข้อมูลผู้ใช้ที่มีอยู่ ต่อ National Center for Missing & Exploited Children (NCMEC) และ/หรือหน่วยงานบังคับใช้กฎหมายที่มีอำนาจ ตามกฎหมายที่ใช้บังคับ ผู้ใช้ที่พบเนื้อหาหรือพฤติกรรมที่อาจเข้าข่าย CSAE ต้องรายงานโดยไม่ชักช้าที่: <email></email>"
+          },
+          "intellectual_property": {
+            "label": "5. ทรัพย์สินทางปัญญา",
+            "content": "ผู้ใช้ยังคงเป็นเจ้าของรีวิวที่ตนเขียน อย่างไรก็ดี การเผยแพร่บน {app} ถือเป็นการให้สิทธิ์แก่ผู้เผยแพร่โดยไม่มีค่าใช้จ่ายและไม่ผูกขาด ในการแสดง ทำซ้ำ และปรับรูปแบบทางเทคนิคของเนื้อหานั้นภายในแอป องค์ประกอบภาพ โค้ด และการออกแบบของ {app} เป็นทรัพย์สินเฉพาะของผู้เผยแพร่"
+          },
+          "privacy": {
+            "label": "6. ข้อมูลส่วนบุคคล",
+            "content": "การเคารพความเป็นส่วนตัวของคุณคือสิ่งที่เราให้ความสำคัญที่สุด {app} ไม่ขาย ไม่ให้เช่า และไม่แบ่งปันข้อมูลส่วนบุคคลใด ๆ กับบุคคลที่สามเชิงพาณิชย์หรือเพื่อการโฆษณา ข้อมูลที่เก็บรวบรวม (อีเมล ชื่อผู้ใช้ กิจกรรมในแอป) ใช้เพื่อการทำงานของบริการและการจัดการบัญชีเท่านั้น คุณสามารถใช้สิทธิ์ในการเข้าถึง แก้ไข หรือลบข้อมูล (GDPR) ได้โดยติดต่อ: <email></email>"
+          },
+          "cookies": {
+            "label": "7. คุกกี้และตัวติดตาม",
+            "content": "{app} ไม่ใช้คุกกี้โฆษณาและไม่ใช้ตัวติดตามพฤติกรรมของบุคคลที่สาม เราใช้คุกกี้ทางเทคนิคเพียงสองประเภท: คุกกี้ยืนยันตัวตน (เพื่อให้คุณยังล็อกอินอยู่) และคุกกี้การตั้งค่าภาษา (เพื่อจำตัวเลือกของคุณ) เนื่องจากคุกกี้เหล่านี้จำเป็นอย่างยิ่งต่อบริการ จึงได้รับการยกเว้นจากการขอความยินยอมล่วงหน้า"
+          },
+          "ads": {
+            "label": "8. โฆษณา",
+            "content": "ปัจจุบันแอปให้บริการโดยไม่มีโฆษณาใด ๆ หากรูปแบบนี้เปลี่ยนไป ผู้ใช้จะได้รับแจ้งผ่านการปรับปรุงเงื่อนไขนี้"
+          },
+          "liability": {
+            "label": "9. ความรับผิด",
+            "content": "ผู้เผยแพร่พยายามให้ {app} ใช้งานได้ตลอด 24 ชั่วโมง แต่ไม่รับประกันว่าจะไม่มีการหยุดให้บริการหรือข้อบกพร่อง ข้อมูลภาพยนตร์มาจากฐานข้อมูลของบุคคลที่สาม ผู้เผยแพร่จึงไม่สามารถรับผิดต่อความไม่ถูกต้องที่อาจมีในข้อมูลเหล่านั้น"
+          },
+          "law": {
+            "label": "10. กฎหมายที่ใช้บังคับ",
+            "content": "เงื่อนไขนี้อยู่ภายใต้กฎหมายฝรั่งเศส ในกรณีที่มีข้อพิพาทซึ่งไม่สามารถยุติได้ด้วยดีผ่าน <email></email> ศาลแห่งกรุงปารีสมีเขตอำนาจเฉพาะ"
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "นโยบายความเป็นส่วนตัว",
+          "description": "อ่านนโยบายความเป็นส่วนตัวของ {app}"
+        },
+        "sections": {
+          "intro": "การคุ้มครองข้อมูลอยู่ที่ใจกลางปรัชญาของ {app} นโยบายนี้อธิบายว่าเราเก็บข้อมูลอะไร เก็บไปทำอะไร และปกป้องข้อมูลนั้นอย่างไร สรุปสั้น ๆ: เราไม่ขายข้อมูลของคุณ",
+          "controller": {
+            "label": "1. ผู้ควบคุมข้อมูล",
+            "content": "ผู้ควบคุมข้อมูลคือ Loup ซึ่งมีที่ตั้งอยู่ในปารีส (ฝรั่งเศส) หากมีคำถามเกี่ยวกับความเป็นส่วนตัว ติดต่อได้ที่: <email></email>"
+          },
+          "collected_data": {
+            "label": "2. ข้อมูลที่เก็บรวบรวม",
+            "content": "เราเก็บเฉพาะข้อมูลที่จำเป็นอย่างยิ่งต่อการทำงานของแอป: อีเมลของคุณ (เพื่อยืนยันตัวตน) ชื่อผู้ใช้ของคุณ และข้อมูลการใช้งานของคุณ (ภาพยนตร์ที่ให้คะแนน รีวิว รายการ) รหัสผ่านของคุณถูกจัดเก็บแบบเข้ารหัส (แฮช) และปลอดภัย"
+          },
+          "purpose": {
+            "label": "3. วัตถุประสงค์ของการประมวลผล",
+            "content": "ข้อมูลของคุณถูกประมวลผลเพื่อการต่อไปนี้เท่านั้น: ให้คุณสร้างและจัดการบัญชีของคุณ แสดงรายการและคะแนนของคุณ และทำให้บริการทำงานได้ทางเทคนิค เราไม่ใช้ข้อมูลของคุณเพื่อสร้างโปรไฟล์โฆษณา"
+          },
+          "sharing": {
+            "label": "4. การแบ่งปันข้อมูล",
+            "content": "ข้อมูลส่วนบุคคลของคุณไม่เคยถูกขาย ให้เช่า หรือส่งต่อให้บุคคลที่สาม ข้อมูลอาจถูกจัดเก็บไว้กับผู้ให้บริการทางเทคนิคของเรา (โฮสติง บริการอีเมลธุรกรรม) ซึ่งผูกพันด้วยข้อตกลงรักษาความลับอย่างเข้มงวดและปฏิบัติตาม GDPR"
+          },
+          "retention": {
+            "label": "5. ระยะเวลาเก็บรักษา",
+            "content": "ข้อมูลของคุณถูกเก็บไว้ตลอดเวลาที่บัญชีของคุณยังใช้งานอยู่ หากคุณตัดสินใจลบบัญชี ข้อมูลส่วนบุคคลทั้งหมดของคุณ (อีเมล ชื่อผู้ใช้ รีวิว) จะถูกลบออกจากฐานข้อมูลของเราอย่างถาวร"
+          },
+          "rights": {
+            "label": "6. สิทธิ์ของคุณ (GDPR)",
+            "content": "ตามข้อกำหนด คุณมีสิทธิ์เข้าถึง แก้ไข โอนย้าย และลบข้อมูลของคุณ คุณใช้สิทธิ์เหล่านี้ได้ทุกเมื่อ ทั้งในแอปโดยตรงหรือเขียนมาที่: <email></email>"
+          },
+          "cookies": {
+            "label": "7. คุกกี้",
+            "content": "ตามที่ระบุไว้ในเงื่อนไขการใช้งาน เราใช้เฉพาะคุกกี้ทางเทคนิคที่จำเป็น (เซสชันและภาษา) ไม่มีการวางคุกกี้โฆษณาหรือคุกกี้ติดตามของบุคคลที่สามบนอุปกรณ์ของคุณ"
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "ค้นหาภาพยนตร์ ซีรีส์ เพลย์ลิสต์ บุคคล หรือผู้ใช้..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "ต้องการนำผลงานนี้ออกจากรายการที่ดูแล้วจริงหรือไม่ ถ้าคุณมีคะแนนหรือรีวิว รายการเหล่านั้นจะถูกลบด้วย"
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "ต้องการทำให้ซีรีส์นี้ครบจริงหรือไม่ ทุกตอนในทุกซีซันจะถูกทำเครื่องหมายว่าดูแล้ว"
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "ต้องการทำให้ซีซัน {seasonNumber} ครบจริงหรือไม่ ทุกตอนในซีซันนี้จะถูกทำเครื่องหมายว่าดูแล้ว"
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "หากต้องการเห็นกิจกรรมที่นี่ คุณหรือผู้ใช้ที่คุณติดตามต้องให้คะแนนภาพยนตร์ ซีรีส์ ฯลฯ..."
+    },
+    "feed_person": {
+      "message": "หากต้องการเห็นกิจกรรมที่นี่ คุณต้องติดตามผู้ที่ร่วมงานในภาพยนตร์หรือซีรีส์"
+    },
+    "playlists": {
+      "items": {
+        "empty": "เพลย์ลิสต์นี้ยังไม่มีภาพยนตร์หรือซีรีส์ เพิ่มเข้าไปให้เต็มเลย!"
+      },
+      "add_to": {
+        "empty": "คุณยังไม่มีเพลย์ลิสต์ สร้างหนึ่งรายการเพื่อเพิ่มภาพยนตร์หรือซีรีส์แล้วค้นหาได้ง่าย!"
+      },
+      "saved": {
+        "empty": "คุณยังไม่มีเพลย์ลิสต์ที่บันทึกไว้ บันทึกเพลย์ลิสต์ไว้เพื่อหาเจอง่ายในคลังของคุณ!"
+      },
+      "members": {
+        "empty": "เพลย์ลิสต์นี้ยังไม่มีสมาชิก เพิ่มสมาชิกเพื่อร่วมทำเพลย์ลิสต์เดียวกันกับคนอื่น!",
+        "search": "ค้นหาผู้ใช้เพื่อเพิ่มในเพลย์ลิสต์..."
+      }
+    },
+    "follow-requests": {
+      "empty": "คุณยังไม่มีคำขอติดตามที่รออยู่ เมื่อมีแล้วจะแสดงที่นี่!"
+    },
+    "recos": {
+      "empty": "คุณยังไม่มีคำแนะนำ เมื่อมีแล้วจะแสดงที่นี่!",
+      "send_to": {
+        "empty": "คุณยังไม่มีใครให้ส่งคำแนะนำ ต้องเป็นเพื่อนกันก่อนจึงจะส่งคำแนะนำได้ (ติดตามกันทั้งสองฝ่าย)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "คุณยังไม่ได้บันทึกอะไรไว้ เมื่อบันทึกแล้วจะแสดงที่นี่!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> แนะนำภาพยนตร์ <movie></movie> ให้คุณ"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> แนะนำซีรีส์ <tv_series></tv_series> ให้คุณ"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> ดูภาพยนตร์ <movie></movie> ที่คุณแนะนำแล้ว"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> ดูซีรีส์ <tv_series></tv_series> ที่คุณแนะนำแล้ว"
+    },
+    "follower_created": {
+      "description": "<user></user> เริ่มติดตามคุณ"
+    },
+    "follower_accepted": {
+      "description": "<user></user> ยอมรับคำขอติดตามของคุณ"
+    },
+    "follower_request": {
+      "description": "<user></user> ต้องการติดตามคุณ"
+    },
+    "friend_created": {
+      "description": "<user></user> เป็นเพื่อนของคุณแล้ว"
+    }
+  }
+}

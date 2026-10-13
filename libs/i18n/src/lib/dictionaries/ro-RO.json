@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "Un alt mod de a descoperi cinemaul",
+    "description": "{app} este o rețea socială pentru pasionații de cinema. Descoperă, împarte și explorează filme și seriale cu prietenii tăi."
+  },
+  "common": {
+    "messages": {
+      "welcome": "Bine ai venit",
+      "welcome_to_app": "Bine ai venit pe {app}",
+      "hello": "Salut",
+      "greeting_with_name": "{timeOfDay, select, morning {Bună dimineața, {name}} afternoon {Bună ziua, {name}} evening {Bună seara, {name}} night {Noapte bună, {name}} other {Salut, {name}}}",
+      "click_here": "Dă clic aici",
+      "see_more": "Vezi mai mult",
+      "see_more_details": "Vezi mai multe detalii",
+      "more": "Mai mult",
+      "view_profile": "Vezi profilul",
+      "library": "Bibliotecă",
+      "watchlist": "Listă de vizionat",
+      "for_later": "Pentru mai târziu",
+      "heart_pick": "{count, plural, one {favorit de suflet} few {favorite de suflet} other {favorite de suflet}}",
+      "add_to_heart_picks": "Adaugă la favoritele de suflet",
+      "remove_from_heart_picks": "Scoate din favoritele de suflet",
+      "add_rating": "Adaugă o notă",
+      "edit_rating": "Modifică nota",
+      "remove_rating": "Scoate nota",
+      "share_my_rating": "Împarte nota mea",
+      "share_review": "Împarte recenzia",
+      "show_likes_count": "Arată numărul de like-uri",
+      "show_comments_count": "Arată numărul de comentarii",
+      "add_to_watchlist": "adaugă la lista de vizionat",
+      "remove_from_watchlist": "scoate din lista de vizionat",
+      "no_results": "niciun rezultat",
+      "no_results_for": "Niciun rezultat pentru <strong>{query}</strong>",
+      "no_followees": "Nu urmărești pe nimeni",
+      "no_followers": "Niciun urmăritor",
+      "no_rating": "Fără notă",
+      "must_watch_to_review": "trebuie să fi văzut această operă pentru a o putea nota",
+      "review_cannot_be_empty": "recenzia nu poate fi goală",
+      "no_activity": "nicio activitate",
+      "followers_ratings": "notele urmăritorilor",
+      "added_by": "adăugat de",
+      "sort_by": "sortează după",
+      "sort_order": "ordinea sortării",
+      "go_to_film": "mergi la film",
+      "go_to_tv_series": "mergi la serial",
+      "go_to_user": "mergi la utilizator",
+      "go_to_person": "mergi la persoană",
+      "go_to_activity": "mergi la activitate",
+      "go_to_playlist": "mergi la playlist",
+      "go_to_review": "mergi la recenzie",
+      "go_to_director": "{count, plural, one {mergi la regizor} few {mergi la regizori} other {mergi la regizori}}",
+      "go_to_creator": "{count, plural, one {mergi la creator} few {mergi la creatori} other {mergi la creatori}}",
+      "show_director": "{count, plural, one {arată regizorul} few {arată regizorii} other {arată regizorii}}",
+      "show_creator": "{count, plural, one {arată creatorul} few {arată creatorii} other {arată creatorii}}",
+      "show_credit": "{count, plural, one {arată creditul} few {arată creditele} other {arată creditele}}",
+      "credits": "generic final",
+      "view_recommendation": "{count, plural, one {vezi reco} few {vezi reco} other {vezi reco}}",
+      "view_directors": "{count, plural, one {vezi regizorul} few {vezi regizorii} other {vezi regizorii}}",
+      "no_director": "fără regizor",
+      "view_comment": "{count, plural, one {vezi comentariul} few {vezi comentariile} other {vezi comentariile}}",
+      "add_comment": "{count, plural, one {adaugă un comentariu} few {adaugă comentarii} other {adaugă comentarii}}",
+      "edit_comment": "{count, plural, one {modifică comentariul} few {modifică comentariile} other {modifică comentariile}}",
+      "delete_comment": "Șterge comentariul",
+      "do_you_really_want_to_delete_this_comment": "Chiar vrei să ștergi acest comentariu?",
+      "comment_deleted": "Acest comentariu a fost șters",
+      "write_your_comment_here": "Scrie un comentariu...",
+      "reply": "Răspunde",
+      "replies_count": "{count, plural, one {# răspuns} few {# răspunsuri} other {# de răspunsuri}}",
+      "view_replies": "Vezi {count, plural, one {# răspuns} few {# răspunsuri} other {# de răspunsuri}}",
+      "hide_replies": "Ascunde răspunsurile",
+      "load_more_replies": "Vezi mai multe răspunsuri",
+      "get_started": "începe",
+      "get_started_its_free": "hai să mergem 🎬, e gratis!",
+      "import": "Importă",
+      "upgrade_to_plan": "trece la {plan}",
+      "choose_subscription_recurrence": "alege perioada de facturare a abonamentului tău",
+      "compare_plans": "compară planurile",
+      "save_up_to_percent": "economisește până la {percent}%",
+      "is_empty": "Pe aici e cam gol",
+      "add_to_playlist": "adaugă la un playlist",
+      "send_to_friend": "trimite unui prieten",
+      "pin_to_profile": "Fixează pe profil",
+      "unpin_from_profile": "Scoate de pe profil",
+      "pinned": "Fixat",
+      "unpinned": "Nemai fixat",
+      "no_pinned": "Niciun element fixat",
+      "pinned_limit_reached": "Ai atins numărul maxim de elemente fixate — scoate unul pentru a adăuga altul",
+      "custom_sort": "sortare proprie",
+      "quick_add": "adăugare rapidă",
+      "favorite_films": "filme favorite",
+      "follow": "urmărește",
+      "followed": "urmărit",
+      "request_sent": "Cerere trimisă",
+      "follow_requests": "cereri de urmărire",
+      "no_follow_requests": "nicio cerere de urmărire",
+      "follower": "{count, plural, one {urmăritor} few {urmăritori} other {de urmăritori}}",
+      "follower_count": "{count} urmăritori",
+      "see_followers": "vezi urmăritorii",
+      "followee": "{count, plural, one {urmărit} few {urmăriți} other {de urmăriți}}",
+      "followee_count": "{count} urmăriți",
+      "see_followees": "vezi pe cine urmărești",
+      "last_activities": "ultimele activități",
+      "last_updated": "ultima actualizare",
+      "last_updated_at_date": "ultima actualizare pe {date}",
+      "show_all": "arată tot",
+      "this_account_is_private": "acest cont este privat",
+      "follow_to_see_activities": "urmărește pentru a vedea activitățile",
+      "review": "{count, plural, one {recenzie} few {recenzii} other {de recenzii}}",
+      "no_overview": "fără sinopsis",
+      "cast": "distribuție",
+      "no_cast": "fără distribuție",
+      "recent": "recent",
+      "popular": "popular",
+      "popularity": "popularitate",
+      "no_reviews": "Nicio recenzie",
+      "no_playlists": "Niciun playlist",
+      "no_playlists_found": "Nu s-a găsit niciun playlist",
+      "no_films": "Niciun film",
+      "no_tv_series": "Niciun serial",
+      "view_activity": "vezi activitatea",
+      "comment_count": "{count, plural, one {# comentariu} few {# comentarii} other {# de comentarii}}",
+      "write_review": "scrie o recenzie",
+      "new_review": "recenzie nouă",
+      "edit_review": "modifică recenzia",
+      "review_by": "recenzie de {name}",
+      "my_review": "{count, plural, one {recenzia mea} few {recenziile mele} other {recenziile mele}}",
+      "add_review": "adaugă o recenzie",
+      "tv_series": "{count, plural, one {serial} few {seriale} other {de seriale}}",
+      "film": "{count, plural, one {film} few {filme} other {de filme}}",
+      "movie": "{count, plural, one {film} few {filme} other {de filme}}",
+      "media": "{count, plural, one {titlu} few {titluri} other {de titluri}}",
+      "tv_season": "{count, plural, one {sezon} few {sezoane} other {de sezoane}}",
+      "tv_season_count": "{count, plural, one {# sezon} few {# sezoane} other {# de sezoane}}",
+      "tv_season_value": "sezonul {number}",
+      "tv_season_short": "S{number}",
+      "tv_episode": "{count, plural, one {episod} few {episoade} other {de episoade}}",
+      "tv_episode_count": "{count, plural, one {# episod} few {# episoade} other {# de episoade}}",
+      "tv_episode_value": "episodul {number}",
+      "tv_episode_short": "S{seasonNumber}E{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {episod special} few {episoade speciale} other {de episoade speciale}}",
+      "first_air_date": "prima difuzare",
+      "last_air_date": "ultima difuzare",
+      "see_film": "vezi filmul",
+      "see_tv_series": "vezi serialul",
+      "watch_film_title": "vezi {title}",
+      "watch_film_streaming_or_download": "Vezi <important>{title}</important> în streaming sau descarcă-l legal",
+      "download": "descarcă",
+      "downloaded": "descărcat",
+      "person": "{count, plural, one {persoană} few {persoane} other {de persoane}}",
+      "top_result": "cel mai bun rezultat",
+      "user": "{count, plural, one {utilizator} few {utilizatori} other {de utilizatori}}",
+      "reco": "{count, plural, one {reco} few {reco} other {reco}}",
+      "my_recos": "reco-urile mele",
+      "item": "{count, plural, one {element} few {elemente} other {de elemente}}",
+      "item_count": "{count, plural, one {# element} few {# elemente} other {# de elemente}}",
+      "type": "tip",
+      "complete": "finalizează",
+      "completed": "finalizat",
+      "collection": "{count, plural, one {colecție} few {colecții} other {de colecții}}",
+      "most_recent": "cele mai recente",
+      "most_popular": "cele mai populare",
+      "most_old": "cele mai vechi",
+      "known_for": "Cunoscut pentru",
+      "release_date": "data premierei",
+      "last_appearance_date": "ultima apariție",
+      "vote_average": "nota medie",
+      "added": "adăugat",
+      "added_date": "data adăugării",
+      "added_at": "adăugat pe",
+      "add": "adaugă",
+      "playlist_name": "numele playlistului",
+      "updated_at": "actualizat pe",
+      "created_at": "creat pe",
+      "likes": "like-uri",
+      "likes_count": "numărul de like-uri",
+      "search_media": "caută un titlu",
+      "search_film": "caută un film",
+      "start_typing_to_search_films": "începe să scrii pentru a căuta filme",
+      "search_tv_series": "caută un serial",
+      "start_typing_to_search_tv_series": "începe să scrii pentru a căuta seriale",
+      "search_person": "caută o persoană",
+      "start_typing_to_search_persons": "începe să scrii pentru a căuta persoane",
+      "search_user": "{count, plural, one {caută un utilizator} few {caută utilizatori} other {caută utilizatori}}",
+      "start_typing_to_search_users": "începe să scrii pentru a căuta utilizatori",
+      "search_playlist": "caută un playlist",
+      "start_typing_to_search_playlists": "începe să scrii pentru a căuta playlisturi",
+      "search_film_or_tv_series": "caută un film sau un serial",
+      "watched_date": "{count, plural, one {data vizionării} few {datele vizionării} other {datele vizionării}}",
+      "mark_as_watched": "marchează ca văzut",
+      "remove_from_watched": "scoate din cele văzute",
+      "rating": "notă",
+      "create_a_playlist": "creează un playlist",
+      "by_name": "de {name}",
+      "reset": "resetează",
+      "job": "{count, plural, one {funcție} few {funcții} other {de funcții}}",
+      "department": "{count, plural, one {departament} few {departamente} other {de departamente}}",
+      "share_title_via": "Împarte <strong>{title}</strong> prin",
+      "share_title": "Împarte <strong>{title}</strong>",
+      "link": "link",
+      "copy_link": "copiază linkul",
+      "copied": "Copiat",
+      "other": "{count, plural, one {Altul} few {Altele} other {Altele}}",
+      "via": "prin",
+      "edit": "modifică",
+      "guest": "{count, plural, one {invitat} few {invitați} other {de invitați}}",
+      "are_u_sure": "Ești sigur?",
+      "backward": "anterior",
+      "forward": "următor",
+      "back": "înapoi",
+      "next": "înainte",
+      "notification": "{count, plural, one {notificare} few {notificări} other {de notificări}}",
+      "see_notifications": "vezi notificările",
+      "open_social_panel": "deschide panoul social",
+      "cancel_change": "{count, plural, one {anulează modificarea} few {anulează modificările} other {anulează modificările}}",
+      "do_you_really_want_to_cancel_change": "Chiar vrei să anulezi {count, plural, one {modificarea} few {modificările} other {modificările}}?",
+      "continue_editing": "continuă editarea",
+      "confirm": "confirmă",
+      "terms_of_use": "condiții de utilizare",
+      "privacy_policy": "politica de confidențialitate",
+      "request_made": "cerere trimisă",
+      "request_canceled": "cerere anulată",
+      "cancel_request": "anulează cererea",
+      "open_menu": "deschide meniul",
+      "feed": "feed",
+      "about": "despre noi",
+      "home": "acasă",
+      "search": "căutare",
+      "explore": "explorează",
+      "shop": "magazin",
+      "help": "ajutor",
+      "legal": "informații legale",
+      "setting": "{count, plural, one {setare} few {setări} other {de setări}}",
+      "logout": "deconectare",
+      "to_watch": "de văzut",
+      "reco_by_your_friends": "reco de la prietenii tăi",
+      "friends_playlists": "playlisturile prietenilor tăi",
+      "latest_activity": "{count, plural, one {ultima activitate} few {ultimele activități} other {ultimele activități}}",
+      "discover_users": "descoperă utilizatori",
+      "most_recommended": "cele mai recomandate",
+      "archive": "arhivează",
+      "unarchive": "scoate din arhivă",
+      "mark_as_read": "{count, plural, one {marchează ca citită} few {marchează ca citite} other {marchează ca citite}}",
+      "mark_as_unread": "{count, plural, one {marchează ca necitită} few {marchează ca necitite} other {marchează ca necitite}}",
+      "accept": "acceptă",
+      "accepted": "acceptat",
+      "decline": "refuză",
+      "declined": "refuzat",
+      "request_accepted": "{count, plural, one {cerere acceptată} few {cereri acceptate} other {de cereri acceptate}}",
+      "request_declined": "{count, plural, one {cerere refuzată} few {cereri refuzate} other {de cereri refuzate}}",
+      "unread": "{count, plural, one {necitită} few {necitite} other {necitite}}",
+      "archived": "{count, plural, one {arhivată} few {arhivate} other {arhivate}}",
+      "no_notifications": "nicio notificare",
+      "all": "toate",
+      "mark_all_as_read": "marchează tot ca citit",
+      "archive_all": "arhivează tot",
+      "archive_all_read": "arhivează tot ce e citit",
+      "please_login": "conectează-te",
+      "like": "dă like",
+      "unlike": "scoate like-ul",
+      "unfollow": "nu mai urmări",
+      "name": "nume",
+      "add_a_name": "adaugă un nume",
+      "add_a_description": "adaugă o descriere",
+      "visibility": "vizibilitate",
+      "search_an_user": "caută un utilizator",
+      "select_an_item_to_add_to_playlist": "selectează un element de adăugat în playlist",
+      "select_a_film_to_add_to_playlist": "selectează un film de adăugat în playlist",
+      "select_a_tv_series_to_add_to_playlist": "selectează un serial de adăugat în playlist",
+      "add_one_or_more_items_to": "Adaugă unul sau mai multe elemente la <important>{title}</important>",
+      "add_one_or_more_films_to": "Adaugă unul sau mai multe filme la <important>{title}</important>",
+      "add_one_or_more_tv_series_to": "Adaugă unul sau mai multe seriale la <important>{title}</important>",
+      "manage_playlist_access_rights": "gestionează drepturile de acces la playlist",
+      "add_guest": "{count, plural, one {adaugă un invitat} few {adaugă invitați} other {adaugă invitați}}",
+      "manage_members": "gestionează membrii",
+      "no_member": "niciun membru",
+      "add_member": "{count, plural, one {adaugă un membru} few {adaugă membri} other {adaugă membri}}",
+      "manage_guests": "gestionează invitații",
+      "add_guests_to_your_playlist": "adaugă invitați la playlistul tău",
+      "select_users_to_add_to_playlist": "selectează utilizatorii de adăugat în playlist",
+      "select_users_to_send_reco": "selectează cui să trimiți reco",
+      "select_playlists_to_add_the_item": "selectează playlisturile în care să adaugi elementul",
+      "send": "trimite",
+      "sent": "trimis",
+      "select_row": "selectează rândul",
+      "select_all": "selectează tot",
+      "no_selected_users": "niciun utilizator selectat",
+      "selection_count": "{number} din {total} {type} selectate",
+      "about_title": "despre {title}",
+      "detail": "{count, plural, one {detaliu} few {detalii} other {de detalii}}",
+      "genre": "{count, plural, one {gen} few {genuri} other {de genuri}}",
+      "male": "{count, plural, one {bărbat} few {bărbați} other {de bărbați}}",
+      "female": "{count, plural, one {femeie} few {femei} other {de femei}}",
+      "non_binary": "{count, plural, one {non-binar} few {non-binari} other {de non-binari}}",
+      "unspecified": "nespecificat",
+      "date_of_birth": "data nașterii",
+      "date_of_death": "data decesului",
+      "place_of_birth": "locul nașterii",
+      "age_years": "{count} {count, plural, one {an} few {ani} other {de ani}}",
+      "biography": "biografie",
+      "no_biography_available": "biografie indisponibilă",
+      "no_information_available": "informații indisponibile",
+      "already_sent": "deja trimis",
+      "already_watched": "deja văzut",
+      "already_added": "deja adăugat",
+      "recommend_to_friend_to_discover": "Recomandă <strong>{title}</strong> unui prieten care nu l-a văzut încă",
+      "add_to_one_or_more_playlists": "Adaugă <strong>{title}</strong> la unul sau mai multe playlisturi ale tale",
+      "my_playlist": "{count, plural, one {playlistul meu} few {playlisturile mele} other {playlisturile mele}}",
+      "what_is_title": "Ce este <strong>{title}</strong>?",
+      "try_again": "Încearcă din nou",
+      "error": "eroare",
+      "not_logged_in": "nu ești conectat",
+      "an_error_occurred": "A apărut o eroare",
+      "playlist_not_found": "playlistul nu a fost găsit",
+      "user_not_found": "utilizatorul nu a fost găsit",
+      "film_not_found": "filmul nu a fost găsit",
+      "media_not_found": "titlul nu a fost găsit",
+      "review_not_found": "recenzia nu a fost găsită",
+      "person_not_found": "persoana nu a fost găsită",
+      "tv_series_not_found": "serialul nu a fost găsit",
+      "tv_episode_not_found": "episodul nu a fost găsit",
+      "tv_season_not_found": "sezonul nu a fost găsit",
+      "wrong_arguments": "argumente incorecte",
+      "no_media_found": "nu s-a găsit niciun titlu",
+      "unknown_action": "acțiune necunoscută",
+      "no_user_found": "nu s-a găsit niciun utilizator",
+      "no_tv_episodes": "niciun episod",
+      "save": "salvează",
+      "saved": "salvat",
+      "create": "creează",
+      "film_count": "{count, plural, one {# film} few {# filme} other {# de filme}}",
+      "tv_series_count": "{count, plural, one {# serial} few {# seriale} other {# de seriale}}",
+      "login": "conectare",
+      "signup": "înregistrare",
+      "navigation": "navigare",
+      "delete": "Șterge",
+      "remove": "Scoate",
+      "deleted": "Șters",
+      "share": "împarte",
+      "duplicate": "duplică",
+      "duplicated": "duplicat",
+      "cancel": "Anulează",
+      "date": "dată",
+      "duration": "durată",
+      "sort": "sortează",
+      "show": "arată",
+      "column": "{count, plural, one {coloană} few {coloane} other {de coloane}}",
+      "comment": "{count, plural, one {comentariu} few {comentarii} other {de comentarii}}",
+      "unknown": "necunoscut",
+      "community": "comunitate",
+      "cast_and_crew": "distribuție și echipă",
+      "soon": "curând",
+      "ios_app": "Aplicație pentru iOS",
+      "android_app": "Aplicație pentru Android",
+      "coming_soon": "Disponibil curând",
+      "new_mobile_app": "Aplicație mobilă nouă!",
+      "manage": "gestionează",
+      "monthly": "lunar",
+      "yearly": "anual",
+      "day": "zi",
+      "week": "săptămână",
+      "month": "lună",
+      "year": "an",
+      "price": "preț",
+      "free": "gratis",
+      "playlist": "{count, plural, one {playlist} few {playlisturi} other {de playlisturi}}",
+      "public": "public",
+      "publish": "publică",
+      "private": "privat",
+      "description": "descriere",
+      "details": "detalii",
+      "profile": "profil",
+      "overview": "sinopsis",
+      "no_playlists_saved": "niciun playlist salvat",
+      "camera_permission_denied": "accesul la cameră a fost refuzat",
+      "photo_library_permission_denied": "accesul la galeria de fotografii a fost refuzat",
+      "ignore": "ignoră",
+      "ok": "ok",
+      "title": "titlu",
+      "skip": "Sari",
+      "undo": "Anulează",
+      "date_published": "data publicării",
+      "date_created": "data creării",
+      "date_updated": "data modificării",
+      "alphabetical": "alfabetic",
+      "date_added": "data adăugării",
+      "number_of_likes": "numărul de like-uri",
+      "number_of_seasons": "numărul de sezoane",
+      "add_to_this_playlist": "adaugă la acest playlist",
+      "save_to_library": "salvează în bibliotecă",
+      "remove_from_library": "scoate din bibliotecă",
+      "otp": "OTP",
+      "ratings_from_followees": "notele celor pe care îi urmărești",
+      "choose_from_the_library": "alege din galerie",
+      "take_a_photo": "fă o fotografie",
+      "delete_current_image": "șterge imaginea actuală",
+      "edit_image": "modifică imaginea",
+      "add_image": "adaugă o imagine",
+      "verify_with_a_code": "verifică cu un cod",
+      "order": "ordine",
+      "edit_order": "modifică ordinea",
+      "done": "gata",
+      "can_edit": "poate edita?",
+      "upgrade": "upgradează",
+      "no_description": "Fără descriere",
+      "no_comment": "Niciun comentariu",
+      "close": "închide",
+      "edit_playlist": "modifică playlistul",
+      "universe": "univers",
+      "cannot_be_changed": "nu poate fi schimbat",
+      "delete_review": "șterge recenzia",
+      "do_you_really_want_to_delete_this_review": "Chiar vrei să ștergi această recenzie?",
+      "user_liked_playlist": "<name></name> a dat like unui playlist",
+      "user_liked_review": "<name></name> a dat like unei recenzii",
+      "runtime": "durată",
+      "ends_at": "Se termină la {value}",
+      "this_user_has_no_activity": "Acest utilizator nu are activitate",
+      "notification_archived": "{count, plural, one {notificare arhivată} few {notificări arhivate} other {de notificări arhivate}}",
+      "notification_unarchived": "{count, plural, one {notificare scoasă din arhivă} few {notificări scoase din arhivă} other {de notificări scoase din arhivă}}",
+      "notification_marked_as_read": "{count, plural, one {notificare marcată ca citită} few {notificări marcate ca citite} other {de notificări marcate ca citite}}",
+      "notification_marked_as_unread": "{count, plural, one {notificare marcată ca necitită} few {notificări marcate ca necitite} other {de notificări marcate ca necitite}}",
+      "or_continue_with": "sau continuă cu",
+      "message": "{count, plural, one {mesaj} few {mesaje} other {de mesaje}}",
+      "story": "{count, plural, one {story} few {story} other {story}}",
+      "new_playlist": "playlist nou",
+      "select_a_type": "selectează un tip",
+      "filter": "{count, plural, one {filtru} few {filtre} other {de filtre}}",
+      "hide_watched": "ascunde cele văzute",
+      "show_me_around": "arată-mi tot",
+      "artwork_from": "Ilustrație de <important>{source}</important>",
+      "no_active_subscription": "niciun abonament activ",
+      "manage_subscription": "gestionează abonamentul",
+      "started_on_date": "început pe: {date}",
+      "last_renewed_on_date": "ultima reînnoire pe: {date}",
+      "version_value": "versiunea {value}",
+      "original_title": "titlu original",
+      "starring": "cu",
+      "write_your_review_here": "scrie recenzia ta aici...",
+      "insert": "inserează",
+      "trailer": "{count, plural, one {trailer} few {trailere} other {de trailere}}",
+      "list": "{count, plural, one {listă} few {liste} other {de liste}}",
+      "grid": "{count, plural, one {grilă} few {grile} other {de grile}}",
+      "order_asc": "ordine crescătoare",
+      "order_desc": "ordine descrescătoare",
+      "menu": "meniu",
+      "at_least_one_watched_date_required": "este nevoie de cel puțin o dată a vizionării",
+      "viewer": "{count, plural, one {Spectator} few {Spectatori} other {de Spectatori}}",
+      "editor": "{count, plural, one {Editor} few {Editori} other {de Editori}}",
+      "admin": "{count, plural, one {Administrator} few {Administratori} other {de Administratori}}",
+      "owner": "{count, plural, one {Proprietar} few {Proprietari} other {de Proprietari}}",
+      "you_dont_have_permission_to_do_this_action": "Nu ai permisiunea de a face această acțiune",
+      "in_progress": "în curs",
+      "give_up": "renunță",
+      "random": "aleatoriu",
+      "reset_password": "Resetează parola",
+      "password_reset": "Parolă resetată",
+      "return_to_login": "Înapoi la conectare",
+      "invalid_code": "Cod invalid",
+      "no_token_found": "Niciun token găsit",
+      "first_watched_at": "prima dată a vizionării",
+      "watched_dates": "datele vizionării",
+      "no_watched_dates": "nicio dată a vizionării",
+      "select_role": "selectează un rol",
+      "select_format": "selectează un format",
+      "theater": "Cinema",
+      "physical": "Suport fizic",
+      "digital": "Digital",
+      "streaming": "Streaming",
+      "you_must_be_premium_to_change_member_role": "Trebuie să fii premium pentru a schimba rolul unui membru",
+      "already_member": "deja membru",
+      "email_already_used": "Acest email este deja folosit",
+      "email_confirmed": "Email confirmat",
+      "confirmation_email_sent": "Email de confirmare trimis",
+      "continue": "Continuă",
+      "finish": "Termină",
+      "forgot_password": "Parolă uitată",
+      "new_password": "Parolă nouă",
+      "confirm_password": "Confirmă parola",
+      "password_reseted": "Parolă resetată",
+      "reset_your_password": "Resetează-ți parola",
+      "invalid_token": "Token invalid",
+      "new_notification": "{count, plural, one {notificare nouă} few {notificări noi} other {de notificări noi}}",
+      "lets_go": "Hai să mergem!",
+      "update_available": "Actualizare disponibilă",
+      "update_available_description": "Actualizează aplicația pentru a profita de cele mai noi îmbunătățiri.",
+      "update_required_title": "Actualizare necesară",
+      "update_required_description": "Această versiune a aplicației nu mai este susținută. Actualizează-o pentru a continua să folosești Recomend.",
+      "update_app": "Actualizează",
+      "advertisement": "{count, plural, one {Reclamă} few {Reclame} other {de Reclame}}",
+      "pending": "În așteptare",
+      "processing": "În curs",
+      "awaiting_review": "De verificat",
+      "failed": "Eșuat",
+      "data": "{count, plural, one {Dată} few {Date} other {de Date}}",
+      "restore": "Restaurează",
+      "fix": "Corectează",
+      "not_found": "Nu a fost găsit",
+      "unavailable": "Indisponibil",
+      "star_on_github": "Dă o stea pe GitHub"
+    },
+    "form": {
+      "email": {
+        "label": "Adresă de email",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "Emailul nu este valid",
+          "unavailable": "Acest email este deja folosit"
+        },
+        "verified": "Email verificat"
+      },
+      "username": {
+        "label": "Nume de utilizator",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "Primul caracter trebuie să fie o literă sau o cifră",
+          "double_dot": "Două puncte consecutive nu sunt permise",
+          "ends_with_dot": "Un punct la final nu este permis",
+          "format": "Sunt permise doar litere, cifre și simbolurile '_' și '.'",
+          "unavailable": "Acest nume de utilizator este deja luat"
+        }
+      },
+      "full_name": {
+        "label": "Nume",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "Sunt permise doar litere, cifre și spații"
+        }
+      },
+      "password": {
+        "label": "Parolă",
+        "placeholder": "Introdu parola ta",
+        "schema": {
+          "uppercase": "Este nevoie de cel puțin o literă mare",
+          "lowercase": "Este nevoie de cel puțin o literă mică",
+          "number": "Este nevoie de cel puțin o cifră",
+          "special": "Este nevoie de cel puțin un caracter special",
+          "match": "Parolele nu corespund"
+        },
+        "confirm": {
+          "label": "Confirmă parola",
+          "placeholder": "Confirmă parola ta"
+        }
+      },
+      "length": {
+        "char_min": "minimum {count, plural, one {# caracter} few {# caractere} other {# de caractere}}",
+        "char_max": "maximum {count, plural, one {# caracter} few {# caractere} other {# de caractere}}"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "Sunt permise doar litere, cifre și spații"
+      },
+      "error": {
+        "too_many_attempts": "Prea multe încercări, încearcă mai târziu",
+        "not_received_code": "Nu ai primit codul?",
+        "invalid_code": "Cod invalid",
+        "turnstile": "Verificarea a eșuat, încearcă din nou"
+      },
+      "resend_code": "Trimite codul din nou",
+      "resend_email": "Trimite emailul din nou",
+      "code_verified": "Cod verificat",
+      "code_sent": "Cod trimis"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "pagina nu a fost găsită",
+        "description": "oops, această pagină nu există..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "urmărire",
+        "description": "Descoperă, notează și împarte filmele și serialele tale preferate."
+      },
+      "recos": {
+        "label": "reco",
+        "description": "Trimite și primește reco de la prietenii tăi. Totul într-un singur loc."
+      },
+      "playlists": {
+        "label": "playlisturi",
+        "description": "Organizează, împarte și construiți playlisturi împreună."
+      },
+      "feed": {
+        "label": "feed",
+        "description": "Urmărește-ți prietenii ca să vezi ce privesc, ce le place și ce notează."
+      },
+      "social_sharing": {
+        "label": "partajare socială",
+        "description": "Împarte tot ce iubești pe Instagram sau pe alte rețele."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "Urmărire",
+          "description": "Ține minte filmele pe care le-ai văzut"
+        },
+        "recos": {
+          "label": "Reco",
+          "description": "Trimite recomandări de filme prietenilor tăi"
+        },
+        "explore": {
+          "label": "Explorează",
+          "description": "Descoperă filme noi pe Paradise Pictures, o hartă interactivă cu peste 1400 de filme"
+        },
+        "like": {
+          "label": "Like",
+          "description": "Arată-ți dragostea pentru filmele, playlisturile și recenziile tale preferate"
+        },
+        "rating": {
+          "label": "Notă",
+          "description": "Notează filmele pe care le-ai văzut"
+        },
+        "watchlist": {
+          "label": "Listă de vizionat",
+          "description": "Salvează filmele pe care vrei să le vezi"
+        },
+        "playlists": {
+          "label": "Playlisturi",
+          "description": "Organizează-ți filmele în playlisturi și împarte-le"
+        },
+        "reviews": {
+          "label": "Recenzii",
+          "description": "Scrie recenzii ca să scoți la lumină cinefilul acrit din tine"
+        },
+        "feed": {
+          "label": "Feed",
+          "description": "Urmărește activitatea prietenilor tăi"
+        },
+        "adsFree": {
+          "label": "Fără reclame",
+          "description": "Bucură-te de Recomend fără reclame, pentru totdeauna"
+        }
+      }
+    },
+    "welcome": {
+      "title": "Mulțumim că te-ai înscris!",
+      "description": "Iată o privire rapidă asupra a ce poți face cu {app}.",
+      "follow": {
+        "title": "Urmărește oameni",
+        "description": "Urmărește-ți prietenii ca să vezi ce privesc."
+      },
+      "import": {
+        "title": "Vii de pe altă platformă?"
+      }
+    },
+    "collection": {
+      "label": "bibliotecă",
+      "my_recos": {
+        "label": "reco-urile mele",
+        "search": {
+          "placeholder": "caută în reco-urile mele..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "șterge din reco-urile mele",
+            "description": "Chiar vrei să ștergi <important>{title}</important> din reco-urile tale?"
+          },
+          "complete_confirm": {
+            "title": "finalizează reco",
+            "description": "Chiar vrei să finalizezi reco <important>{title}</important>?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "caută în lista de vizionat..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "șterge din lista de vizionat",
+            "description": "Chiar vrei să ștergi <important>{title}</important> din lista ta de vizionat?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "caută în favoritele de suflet..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "șterge din favoritele de suflet",
+            "description": "Chiar vrei să ștergi <important>{title}</important> din favoritele tale de suflet?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> a văzut",
+        "rated": "<name></name> a notat",
+        "liked": "<name></name> a dat like",
+        "rated_liked": "<name></name> a dat like și a notat",
+        "reviewed": "<name></name> a scris o recenzie"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> este <important>{roles}</important> în <linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> este <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "Autorizează aplicația",
+        "description_generic": "O aplicație cere acces la contul tău.",
+        "description": "{client} vrea să acceseze contul tău.",
+        "scopes_label": "Asta va permite aplicației să:",
+        "accept": "Permite",
+        "deny": "Refuză",
+        "error": {
+          "invalid_request": "Cerere invalidă sau expirată",
+          "invalid_request_description": "Reia procesul din aplicația care te-a trimis aici.",
+          "client_not_found": "Această aplicație nu a putut fi găsită.",
+          "submit_failed": "Ceva a mers prost. Încearcă din nou."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "Conectează-te la contul tău {app}."
+        },
+        "label": "Conectare",
+        "description": "Descoperă cele mai bune recomandări de filme.",
+        "or_continue_with": "Sau continuă cu",
+        "no_account_yet": "Încă nu ai cont?",
+        "form": {
+          "identifier": {
+            "label": "Email sau nume de utilizator",
+            "placeholder": "Introdu emailul sau numele tău de utilizator"
+          },
+          "password": {
+            "label": "Parolă",
+            "placeholder": "Introdu parola ta"
+          },
+          "submit": "Conectare",
+          "forgot_password": "Ai uitat parola?",
+          "wrong_credentials": "Emailul sau parola este incorectă"
+        },
+        "otp": {
+          "password_login": "Preferi să te conectezi cu o parolă?",
+          "form": {
+            "submit": "Primește codul",
+            "no_user_found": "Niciun utilizator găsit cu acest email",
+            "success": "Conectat"
+          },
+          "confirm_form": {
+            "label": "Confirmă codul",
+            "description": "Un cod de verificare a fost trimis la adresa {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "Înscrie-te pe {app} pentru a descoperi și împărți recomandări de filme."
+        },
+        "description": "Creează un cont ca să recomanzi un film prietenului care uită mereu titlurile.",
+        "form": {
+          "success": "Un email de verificare a fost trimis la {email}"
+        },
+        "confirm_form": {
+          "label": "Confirmă emailul",
+          "description": "Un link de verificare a fost trimis la adresa {email}"
+        },
+        "return_to_login": "Oops, am deja un cont."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "Parolă uitată",
+          "description": "Resetează-ți parola."
+        },
+        "label": "Parolă uitată",
+        "description": "Ar trebui să folosești un manager de parole, e chiar practic.",
+        "return_to_login": "Oops, îmi amintesc totuși parola.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "Resetează parola",
+          "code_sent": "Cerere trimisă"
+        },
+        "confirm_form": {
+          "label": "Confirmă codul",
+          "description": "Un cod de verificare a fost trimis la adresa {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "Resetarea parolei",
+          "description": "Alege o parolă nouă pentru contul tău."
+        }
+      },
+      "error": {
+        "label": "Eroare",
+        "description": "A apărut o eroare în timpul autentificării.",
+        "return_to_login": "Întoarce-te în siguranță"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "Despre noi",
+        "marquee": "Nu e nimic mai palpitant în viața ta decât să te uiți la pagini «Despre noi» pe internet?",
+        "intro": "<strong>Recomend</strong> este un spațiu dedicat descoperirii, recomandării și organizării filmelor. Totul e gândit ca să ofere vorbei din gură în gură cel mai bun suport digital posibil. Abordarea noastră e centrată pe om și pe relațiile lui în era consumului autocentrat sau, mai bine zis, a «recomandat pentru tine».",
+        "slogan": {
+          "1": "E fără reclame și fără promisiuni dubioase. 🍆",
+          "2": "E în același timp o rețea socială și un instrument.",
+          "3": "E făcut în casă, de pasionați.",
+          "4": "E amator în sensul propriu al cuvântului."
+        },
+        "last": "Recomend poate fi folosit singur sau în compania altora, în public sau în privat, ziua ca noaptea, dar niciodată în fața unui film — concentrează-te, te rog!"
+      },
+      "team": {
+        "label": "Echipa",
+        "intro": "Recomend a fost creat de doi frați pasionați de cinema cărora le place să investească timpul în proiecte mult prea ambițioase despre care nu se știe dacă vor vedea vreodată lumina zilei.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "Arhitect-Inginer hiperactiv și incapabil să se mulțumească cu o singură slujbă (start-up nation adevărată), Yoann e la originea ideii de a face o hartă de filme care la început avea doar ambiția modestă de a deveni un poster de pus în baia lui. Venirea lui Loup a făcut să explodeze complet obiectivele și, cam depășit de evenimente, se ocupă de toată partea grafică a hărții și a site-ului, precum și de toată comunicarea (chiar dacă nu-i place). Își dă și părerea despre UX/UI și propune o grămadă de funcționalități fără să-și dea prea bine seama cât de greu sunt de programat (a făcut unele progrese)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "Autodidact complet care totuși a urmat studii ce l-au dus la șomaj neplătit înainte de 25 de ani. Adevărat briceag elvețian, Loup se ocupă de partea de web design, programând o interfață pe care ne-o imaginăm cât mai ergonomică. Loup ar vrea să mulțumească tuturor forumurilor de cod care au răspuns la întrebările lui (foarte) numeroase, precum și tuturor youtuberilor indieni care l-au însoțit în aceste luni ca niște tați adoptivi. Mama lui, de altfel, e convinsă că fratele l-a făcut sclav pentru acest proiect (sunt bine, mamă)."
+          }
+        },
+        "last": "Ca să discuți cu noi sau cu alți membri ai comunității, intră pe <link>Discord</link>-ul nostru!"
+      },
+      "pricing": {
+        "label": "Prețuri",
+        "intro": "Acest model de abonament e înainte de toate un sprijin ca proiectul să trăiască și să continue să se dezvolte. Funcționalitățile premium sunt bonusuri pentru utilizări avansate ale Recomend, care justifică o mică contribuție financiară. Vom păstra mereu posibilitatea de a folosi site-ul gratuit, fără reclame și fără să te simți limitat.",
+        "subdescription": "*Dacă prețul extrem de mic al acestui abonament rămâne totuși peste posibilitățile tale, adresează-te guvernului liberal responsabil pentru pierderea puterii tale de cumpărare."
+      },
+      "legal": {
+        "label": "Legal și confidențialitate",
+        "description": "Respectăm confidențialitatea ta. Reclamele afișate utilizatorilor neconectați sunt gestionate de Google și necesită cookie-uri tehnice pentru a limita frecvența afișării și a preveni fraudele.",
+        "privacyPolicy": "Citește politica noastră de confidențialitate",
+        "manageCookies": "Gestionează preferințele mele publicitare (cookie-uri)"
+      },
+      "open-source": {
+        "label": "Open source",
+        "intro": "Recomend este open source: codul e public pe GitHub. Aruncă o privire, contribuie sau lasă-ne pur și simplu o stea!",
+        "star": "Lasă-ne o stea pe GitHub"
+      },
+      "businessmodel": {
+        "label": "Model de business",
+        "paragraph": {
+          "1": "Îți imaginezi că, cu profilurile noastre puțin comerciale, nu am înțeles prea bine la ce ne-ar putea servi în acest moment un model de business...",
+          "2": "Dacă viitorul Recomend o cere, vom studia chestiunea înconjurându-ne de oamenii potriviți sau cel puțin de oameni pe care îi interesează mai mult decât pe noi.",
+          "3": "Până atunci, să fim sinceri, mai sunt și alte lucruri de făcut."
+        }
+      },
+      "roadmap": {
+        "label": "Roadmap"
+      },
+      "data": {
+        "label": "Date",
+        "paragraph": {
+          "1": "Toate metadatele folosite pe Recomend sunt furnizate de <link>The Movie Database (TMDb)</link> prin API-ul platformei. Facem exact ca toți ceilalți, ca niște oi cuminți.",
+          "2": "Pentru orice eroare sau film lipsă, adresează-te deci <link>TMDb</link>."
+        }
+      },
+      "resources": {
+        "label": "Resurse",
+        "intro": "Nu e chiar legat de cinema, dar iată o listă de site-uri care ne plac:"
+      },
+      "contact-support": {
+        "label": "Contact și suport",
+        "help-center": "Găsește răspunsurile la întrebările tale existențiale în <link>Centrul nostru de ajutor</link>.",
+        "technical-support": "Pentru întrebări tehnice: <email></email>",
+        "suggest-a-feature": "Pentru sugestii: <email></email>",
+        "contact-us": "Dacă vrei pur și simplu să iei legătura cu noi: <email></email>"
+      },
+      "quote": {
+        "label": "Citat",
+        "quote": "« Urăsc cuvântul profesionist. Toți actorii și ceilalți care spun: eu sunt profesionist, eu sunt un pro! Ce e asta? Există un cuvânt mai trist? Pentru că amator vine din cuvântul dragoste. Lucrurile trebuie făcute din dragoste, altfel suntem idioți. »",
+        "author": "Orson Wells",
+        "date": "1972",
+        "subdescription": "*Am ezitat să-l punem pentru că sună repede pretențios, dar reflectă bine mood-ul nostru față de proiect. Totuși, dacă nu-ți place, îl scoatem."
+      }
+    },
+    "settings": {
+      "label": "Setări",
+      "description": "Gestionează setările contului tău.",
+      "profile": {
+        "label": "Profil",
+        "description": "Așa te vor vedea ceilalți pe site.",
+        "avatar": {
+          "label": "Avatar",
+          "delete": "Șterge"
+        },
+        "full_name": {
+          "label": "Nume",
+          "description": "Acesta e numele care va fi afișat pe profilul tău și în emailuri.",
+          "placeholder": "Introdu numele tău",
+          "form": {
+            "min_length": "Numele trebuie să aibă cel puțin 1 caracter",
+            "max_length": "Numele nu trebuie să depășească 50 de caractere"
+          }
+        },
+        "bio": {
+          "label": "Bio",
+          "description": "Spune ceva despre tine, va apărea pe profilul tău.",
+          "placeholder": "Scrie ceva despre tine",
+          "form": {
+            "max_length": "Bio nu trebuie să depășească 150 de caractere",
+            "format": "Biografia nu poate conține linii goale și nu poate fi compusă doar din spații."
+          }
+        },
+        "favorite_films": {
+          "label": "Filme favorite",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "URL-ul nu este valid"
+          }
+        }
+      },
+      "account": {
+        "label": "Cont",
+        "description": "Actualizează setările contului tău.",
+        "username": {
+          "label": "Nume de utilizator",
+          "description": "Acesta e numele tău de utilizator prin care ceilalți te pot găsi și pot accesa profilul tău. Îl poți schimba doar o dată la 30 de zile.",
+          "placeholder": "Introdu numele tău de utilizator",
+          "form": {
+            "min_length": "Numele de utilizator trebuie să aibă cel puțin 3 caractere",
+            "max_length": "Numele de utilizator nu trebuie să depășească 15 caractere",
+            "invalid": "Numele de utilizator poate conține doar litere, cifre și simbolurile '_' și '.'",
+            "unavailable": "Acest nume de utilizator este deja luat"
+          }
+        },
+        "private": {
+          "label": "Cont privat",
+          "description": "Când contul tău e privat, doar utilizatorii pe care îi aprobi pot vedea activitățile tale."
+        },
+        "email": {
+          "description": "Un email de verificare va fi trimis la adresa ta actuală și la noua adresă. Trebuie să le confirmi pe amândouă pentru ca schimbarea să aibă efect.",
+          "change_pending": "Pe <strong>{date}</strong> a fost trimis un email de verificare la noua ta adresă <strong>{email}</strong>. Dă clic pe link sau introdu codul de verificare pentru a confirma schimbarea.",
+          "confirm_email_code": {
+            "description": "Introdu codul de verificare trimis la adresa ta <strong>{email}</strong>."
+          },
+          "change_success": "Adresa ta de email a fost actualizată cu succes"
+        },
+        "delete_account": {
+          "button": "Șterge contul meu",
+          "confirm": {
+            "description": "Contul tău va fi șters definitiv și nu îl vei mai putea recupera.",
+            "confirm_email_sent": "Un email de verificare a fost trimis la adresa ta de email"
+          }
+        }
+      },
+      "appearance": {
+        "label": "Aspect",
+        "description": "Personalizează aspectul aplicației. Comută automat între temele de zi și de noapte.",
+        "language": {
+          "label": "Limbă",
+          "description": "Alege o limbă — schimbările vor fi aplicate după repornirea aplicației",
+          "placeholder": "Selectează o limbă",
+          "not_found": "Limba nu a fost găsită"
+        },
+        "theme": {
+          "label": "Temă",
+          "description": "Selectează tema interfeței.",
+          "options": {
+            "light": "Luminoasă",
+            "dark": "Întunecată"
+          }
+        }
+      },
+      "subscription": {
+        "label": "Abonament",
+        "description": "Gestionează abonamentul tău premium."
+      },
+      "security": {
+        "label": "Securitate",
+        "description": "Schimbarea parolei te va deconecta de pe toate dispozitivele în afară de cel pe care îl folosești acum.",
+        "current_password": {
+          "label": "Parola actuală",
+          "placeholder": "Introdu parola ta actuală",
+          "form": {
+            "required": "Parola actuală este obligatorie",
+            "invalid": "Parola actuală este incorectă"
+          }
+        },
+        "new_password": {
+          "label": "Parolă nouă",
+          "placeholder": "Introdu noua ta parolă",
+          "form": {
+            "min_length": "Parola trebuie să aibă cel puțin 8 caractere",
+            "uppercase": "Este nevoie de cel puțin o literă mare",
+            "lowercase": "Este nevoie de cel puțin o literă mică",
+            "number": "Este nevoie de cel puțin o cifră",
+            "special": "Este nevoie de cel puțin un caracter special"
+          }
+        },
+        "confirm_password": {
+          "label": "Confirmă noua parolă",
+          "placeholder": "Confirmă noua ta parolă",
+          "form": {
+            "match": "Parolele nu corespund"
+          }
+        }
+      },
+      "notifications": {
+        "label": "Notificări",
+        "description": "Personalizează notificările pe care le primești.",
+        "push_notifications": {
+          "label": "Notificări push",
+          "form": {
+            "enable": "Activează notificările push"
+          },
+          "already_granted": "O cerere de notificări a fost deja făcută; pentru a o modifica, mergi în setările browserului tău.",
+          "no_enabled": "Activează notificările în setările dispozitivului tău pentru a primi notificări push.",
+          "open_settings": "Mergi la setările dispozitivului"
+        }
+      },
+      "data": {
+        "label": "Date",
+        "description": "Importă sau exportă datele tale.",
+        "importer": {
+          "label": "Import",
+          "select_source": "Alege o sursă",
+          "instructions_title": "Instrucțiuni",
+          "browse_prompt": "Lasă fișierul aici sau <link>răsfoiește</link>",
+          "browse_prompt_mobile": "Atinge pentru a selecta un fișier",
+          "uploading": "Se încarcă…",
+          "processing": "Analizăm fișierul tău…",
+          "upload_error": "Încărcarea a eșuat, încearcă din nou.",
+          "invalid_file_type": "Acest tip de fișier nu este acceptat pentru această sursă.",
+          "review_title": "Verifică importul tău",
+          "review_summary": "{matched} din {total} găsite",
+          "validate": "Validează importul",
+          "validate_confirm_description": "Asta va importa în biblioteca ta toate elementele găsite și neomise. Acțiunea este ireversibilă.",
+          "success_title": "Import finalizat",
+          "success_description": "Datele tale au fost importate cu succes.",
+          "failed_title": "Importul a eșuat",
+          "failed_description": "Ceva a mers prost la procesarea acestui import.",
+          "pending_description": "Importul tău este în așteptare și va începe în curând.",
+          "empty": "Încă niciun import.",
+          "delete_confirm_description": "Acest import și toate datele lui vor fi șterse definitiv. Acțiunea este ireversibilă.",
+          "keep_existing": "Păstrează-le pe ale mele",
+          "use_imported": "Folosește importul",
+          "merge": "Combină",
+          "conflict": "Conflict",
+          "no_match": "Nicio potrivire",
+          "existing_rating": "Acum: {rating}",
+          "log_column": "Jurnal",
+          "actions_column": "Acțiuni",
+          "categories": {
+            "log_movies": "Filme",
+            "log_tv_series": "Seriale",
+            "bookmarks": "Listă de vizionat",
+            "playlists": "Liste"
+          },
+          "status": {
+            "pending": "În așteptare",
+            "processing": "În curs",
+            "awaiting_review": "De verificat",
+            "completed": "Finalizat",
+            "failed": "Eșuat"
+          }
+        },
+        "exporter": {
+          "label": "Export"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "trece la Premium",
+        "description": "Trece la un cont premium pentru a accesa toate funcționalitățile {app}."
+      },
+      "header": {
+        "title": "extinde-ți cinemaul, împarte mai mult, susține {app}",
+        "subtitle": "încearcă 1 lună gratuit, apoi {price}/lună"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "activități",
+            "unlimited_activities": {
+              "label": "activități nelimitate",
+              "description": "note, like-uri, recenzii, listă de vizionat și recomandări"
+            },
+            "favorites": {
+              "label": "favorite",
+              "description": "adaugă filmele tale favorite pe profilul tău"
+            }
+          },
+          "playlists": {
+            "label": "playlisturi",
+            "unlimited_playlists": {
+              "label": "nelimitate",
+              "description": "creează un număr nelimitat de playlisturi"
+            },
+            "shared_playlists": {
+              "label": "partajate",
+              "description": "împarte playlisturile tale cu alți utilizatori"
+            },
+            "collaborative_playlists": {
+              "label": "colaborative",
+              "description": "creează playlisturi colaborative cu alți utilizatori"
+            }
+          },
+          "feed": {
+            "label": "feed",
+            "followees": {
+              "label": "utilizatori urmăriți",
+              "description": "vezi activitățile utilizatorilor pe care îi urmărești"
+            },
+            "cast_and_crew": {
+              "label": "distribuție și echipă",
+              "description": "urmărește activitățile oamenilor implicați în filme"
+            }
+          },
+          "support": {
+            "label": "susținere",
+            "team": {
+              "label": "Susține echipa {app}"
+            },
+            "credits": {
+              "label": "generic",
+              "description": "profilul tău în genericul aplicației"
+            }
+          }
+        },
+        "success": {
+          "label": "Mulțumim pentru susținere!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} - playlist de @{username}",
+        "description": "Descoperă playlistul de filme al lui @{username} pe {app}."
+      },
+      "actions": {
+        "delete": {
+          "description": "Asta va șterge <important>{title}</important> definitiv din playlisturile tale."
+        }
+      },
+      "search": {
+        "placeholder": "caută în playlist..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "Chiar vrei să ștergi <important>{title}</important> din playlistul tău?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "Introdu titlul playlistului"
+        },
+        "description": {
+          "placeholder": "Introdu o descriere a playlistului"
+        },
+        "error": {
+          "format": "Descrierea nu poate conține linii goale și nu poate fi compusă doar din spații."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "Descoperă profilul lui @{username} pe {app}."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year}) • Film",
+        "description": "{title} este un film de {directors} lansat în {year}. Sinopsis: {overview}",
+        "description_no_director": "{title} este un film lansat în {year}. Sinopsis: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Playlisturi",
+          "description": "Descoperă toate playlisturile care conțin filmul {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Recenzii",
+          "description": "Descoperă toate recenziile filmului {title}."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} este un serial de {creators} difuzat pentru prima dată în {year}. Sinopsis: {overview}",
+        "description_no_creator": "{title} este un serial difuzat pentru prima dată în {year}. Sinopsis: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Playlisturi",
+          "description": "Descoperă toate playlisturile care conțin serialul {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Recenzii",
+          "description": "Descoperă toate recenziile serialului {title}."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • Sezoane",
+          "description": "Descoperă toate sezoanele serialului {title}."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • Sezonul {number}",
+            "description": "Descoperă toate episoadele sezonului {number} al serialului {title}."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • Filme",
+          "description": "Descoperă toate filmele în care {name} a jucat sau a fost implicat."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • Seriale",
+          "description": "Descoperă toate serialele în care {name} a jucat sau a fost implicat."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "Recenzie a {title} de @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "Scrie o recenzie despre {title}",
+          "description": "Împarte părerea ta despre {title}."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Explorează Paradise Pictures",
+        "description": "Pornește în descoperirea insulei și a decorurilor ei variate. Numeroasele filme care o populează sunt plasate în mediul lor diegetic. Vei reuși să explorezi fiecare colț al ei?"
+      }
+    },
+    "legal": {
+      "label": "Legal",
+      "description": "Citește documentele legale ale {app}.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "Condiții Generale de Utilizare",
+          "description": "Citește condițiile de utilizare ale {app}."
+        },
+        "sections": {
+          "intro": "Prezentele Condiții Generale de Utilizare (denumite în continuare «CGU») reglementează accesul la aplicația {app} și utilizarea acesteia. Aplicația este editată de Loup (denumit în continuare «Editorul»), cu domiciliul la Paris. Înscrierea pe {app} înseamnă acceptarea fără rezerve a prezentelor CGU.",
+          "presentation": {
+            "label": "1. Prezentarea Serviciului",
+            "content": "{app} este o aplicație gratuită care permite utilizatorilor săi să consulte informații despre filme, să publice recenzii, să noteze opere și să creeze liste personalizate."
+          },
+          "account": {
+            "label": "2. Cont și Securitate",
+            "content": "Accesul la funcționalitățile de contribuție necesită crearea unui cont. Utilizatorul este responsabil pentru confidențialitatea datelor sale de autentificare. În caz de utilizare frauduloasă sau de suspiciune de piratare, Utilizatorul trebuie să contacteze imediat suportul la adresa: <email></email>."
+          },
+          "conduct": {
+            "label": "3. Reguli de Conduită",
+            "content": "Utilizatorul se angajează să rămână politicos și respectuos în părerile și listele sale. Sunt strict interzise: mesajele de ură, defăimătoare sau rasiste, hărțuirea, precum și spamul sau promovarea comercială nesolicitată. Editorul își rezervă dreptul de a șterge orice conținut care încalcă aceste reguli și de a suspenda contul în cauză fără preaviz."
+          },
+          "child_safety": {
+            "label": "4. Protecția Minorilor",
+            "content": "{app} aplică o politică de toleranță zero față de orice formă de abuz și exploatare sexuală a copiilor («Child Sexual Abuse and Exploitation», sau CSAE). Crearea, încărcarea, stocarea, difuzarea, solicitarea sau promovarea oricărui conținut care sexualizează, exploatează sau pune altfel în pericol minorii sunt expres și absolut interzise pe {app}. Orice cont găsit vinovat de încălcarea acestei politici va fi imediat și definitiv blocat, iar Editorul va raporta conținutul în cauză, împreună cu orice informație disponibilă despre utilizator, la National Center for Missing & Exploited Children (NCMEC) și/sau autorităților competente, în conformitate cu legislația aplicabilă. Orice utilizator care află de un conținut sau un comportament care ar putea constitui un caz de CSAE trebuie să îl raporteze fără întârziere la: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. Proprietate Intelectuală",
+            "content": "Utilizatorul rămâne proprietarul părerilor pe care le scrie. Totuși, publicând pe {app}, acordă Editorului o licență gratuită și neexclusivă de a afișa, reproduce și adapta tehnic acest conținut în cadrul aplicației. Elementele vizuale, codul și designul {app} sunt proprietatea exclusivă a Editorului."
+          },
+          "privacy": {
+            "label": "6. Date Personale",
+            "content": "Respectarea vieții tale private este prioritatea noastră absolută. {app} nu vinde, nu închiriază și nu împarte nicio dată personală cu terți comerciali sau publicitari. Datele colectate (email, nume de utilizator, activitate în aplicație) servesc exclusiv funcționării serviciului și gestionării contului tău. Îți poți exercita drepturile de acces, modificare sau ștergere (GDPR) contactând: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookie-uri și Trackere",
+            "content": "{app} nu folosește niciun cookie publicitar și niciun tracker comportamental terț. Se folosesc doar două tipuri de cookie-uri tehnice: un cookie de autentificare (ca să rămâi conectat) și un cookie de preferință lingvistică (ca să rețină alegerea ta). Deoarece aceste cookie-uri sunt strict necesare serviciului, sunt scutite de consimțământ prealabil."
+          },
+          "ads": {
+            "label": "8. Publicitate",
+            "content": "Aplicația este oferită în prezent fără nicio publicitate. Dacă acest model ar evolua, utilizatorii ar fi informați printr-o actualizare a prezentelor CGU."
+          },
+          "liability": {
+            "label": "9. Răspundere",
+            "content": "Editorul se străduiește să mențină {app} accesibilă 24 de ore pe zi, dar nu garantează absența întreruperilor sau a erorilor. Informațiile despre filme provin din baze de date terțe; Editorul nu poate fi tras la răspundere pentru eventualele inexactități din aceste fișe."
+          },
+          "law": {
+            "label": "10. Legea Aplicabilă",
+            "content": "Prezentele CGU sunt supuse dreptului francez. În caz de litigiu care nu a putut fi rezolvat amiabil prin adresa <email></email>, tribunalele din Paris vor fi singurele competente."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "Politica de Confidențialitate",
+          "description": "Citește politica de confidențialitate a {app}."
+        },
+        "sections": {
+          "intro": "Protecția datelor se află în centrul filozofiei {app}. Această politică detaliază datele pe care le colectăm, de ce le colectăm și cum le protejăm. În rezumat: nu vindem datele tale.",
+          "controller": {
+            "label": "1. Operatorul de date",
+            "content": "Operatorul de date este Loup, cu domiciliul la Paris (Franța). Pentru orice întrebare legată de viața privată, poți contacta: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. Date colectate",
+            "content": "Colectăm doar datele strict necesare funcționării aplicației: adresa ta de email (pentru autentificare), numele tău de utilizator și datele tale de utilizare (filme notate, recenzii, liste). Parolele tale sunt stocate criptat (cu hash) și în siguranță."
+          },
+          "purpose": {
+            "label": "3. Scopul prelucrării",
+            "content": "Datele tale sunt prelucrate exclusiv pentru: a-ți permite să creezi și să gestionezi contul, a afișa listele și notele tale și a asigura buna funcționare tehnică a serviciului. Nu folosim datele tale în scopuri de profilare publicitară."
+          },
+          "sharing": {
+            "label": "4. Partajarea datelor",
+            "content": "Datele tale personale nu sunt niciodată vândute, închiriate sau cedate unor terți. Pot fi găzduite de prestatorii noștri tehnici (găzduire, serviciu de trimitere de emailuri tranzacționale) care sunt ținuți la o confidențialitate strictă și respectă GDPR."
+          },
+          "retention": {
+            "label": "5. Durata de păstrare",
+            "content": "Datele tale sunt păstrate atât timp cât contul tău rămâne activ. Dacă decizi să-ți ștergi contul, toate datele tale personale (email, nume de utilizator, păreri) vor fi șterse definitiv din bazele noastre de date."
+          },
+          "rights": {
+            "label": "6. Drepturile tale (GDPR)",
+            "content": "În conformitate cu reglementările, dispui de un drept de acces, rectificare, portabilitate și ștergere a datelor tale. Poți exercita aceste drepturi oricând direct în aplicație sau scriindu-ne la: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookie-uri",
+            "content": "Așa cum se arată în CGU, folosim doar cookie-uri tehnice esențiale (sesiune și limbă). Niciun cookie terț de publicitate sau de urmărire nu este plasat pe dispozitivul tău."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "Caută un film, un serial, un playlist, o persoană sau un utilizator..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "Chiar vrei să scoți această operă din lista ta de filme văzute? Dacă ai o notă sau o recenzie, vor fi șterse și ele."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "Chiar vrei să finalizezi serialul? Toate episoadele din toate sezoanele vor fi marcate ca văzute."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "Chiar vrei să finalizezi sezonul {seasonNumber}? Toate episoadele sezonului vor fi marcate ca văzute."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "Pentru a vedea activitate aici, tu sau utilizatorii pe care îi urmărești trebuie să notați filme, seriale, ..."
+    },
+    "feed_person": {
+      "message": "Pentru a vedea activitate aici, trebuie să urmărești persoane implicate în filme sau seriale."
+    },
+    "playlists": {
+      "items": {
+        "empty": "Niciun film sau serial în acest playlist. Adaugă câteva ca să-l umpli!"
+      },
+      "add_to": {
+        "empty": "Nu ai niciun playlist. Creează unul ca să adaugi filme sau seriale și să le regăsești ușor!"
+      },
+      "saved": {
+        "empty": "Nu ai niciun playlist salvat. Salvează un playlist ca să-l regăsești ușor în biblioteca ta!"
+      },
+      "members": {
+        "empty": "Acest playlist nu are niciun membru. Adaugă câțiva ca să colaborați împreună la același playlist!",
+        "search": "Caută utilizatori de adăugat în playlist..."
+      }
+    },
+    "follow-requests": {
+      "empty": "Nu ai nicio cerere de urmărire în așteptare. Când vei avea, vor apărea aici!"
+    },
+    "recos": {
+      "empty": "Nu ai nicio recomandare. Când vei avea, vor apărea aici!",
+      "send_to": {
+        "empty": "Nu ai cui să trimiți o reco. Trebuie să fii prieten cu cineva ca să îi poți trimite o reco (urmărire reciprocă)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "Nu ai încă niciun film sau serial salvat pentru mai târziu. Când vei avea, vor apărea aici!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> ți-a trimis reco la filmul <movie></movie>"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> ți-a trimis reco la serialul <tv_series></tv_series>"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> a văzut <movie></movie>, pe care i l-ai recomandat"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> a văzut <tv_series></tv_series>, pe care i l-ai recomandat"
+    },
+    "follower_created": {
+      "description": "<user></user> a început să te urmărească"
+    },
+    "follower_accepted": {
+      "description": "<user></user> a acceptat cererea ta de urmărire"
+    },
+    "follower_request": {
+      "description": "<user></user> vrea să te urmărească"
+    },
+    "friend_created": {
+      "description": "<user></user> este acum prietenul tău"
+    }
+  }
+}

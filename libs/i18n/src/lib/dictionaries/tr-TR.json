@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "Sinemayı keşfetmenin başka bir yolu",
+    "description": "{app}, sinema tutkunları için bir sosyal ağ. Arkadaşlarınla film ve dizileri keşfet, paylaş ve gez."
+  },
+  "common": {
+    "messages": {
+      "welcome": "Hoş geldin",
+      "welcome_to_app": "{app} dünyasına hoş geldin",
+      "hello": "Merhaba",
+      "greeting_with_name": "{timeOfDay, select, morning {Günaydın, {name}} afternoon {İyi günler, {name}} evening {İyi akşamlar, {name}} night {İyi geceler, {name}} other {Merhaba, {name}}}",
+      "click_here": "Buraya tıkla",
+      "see_more": "Daha fazla gör",
+      "see_more_details": "Daha fazla ayrıntı gör",
+      "more": "Daha fazla",
+      "view_profile": "Profili gör",
+      "library": "Kitaplık",
+      "watchlist": "İzleme listesi",
+      "for_later": "Sonrası için",
+      "heart_pick": "{count, plural, one {gönül seçkisi} other {gönül seçkileri}}",
+      "add_to_heart_picks": "Gönül seçkilerine ekle",
+      "remove_from_heart_picks": "Gönül seçkilerinden çıkar",
+      "add_rating": "Puan ekle",
+      "edit_rating": "Puanı düzenle",
+      "remove_rating": "Puanı kaldır",
+      "share_my_rating": "Puanımı paylaş",
+      "share_review": "İncelemeyi paylaş",
+      "show_likes_count": "Beğeni sayısını göster",
+      "show_comments_count": "Yorum sayısını göster",
+      "add_to_watchlist": "izleme listesine ekle",
+      "remove_from_watchlist": "izleme listesinden çıkar",
+      "no_results": "sonuç yok",
+      "no_results_for": "<strong>{query}</strong> için sonuç yok",
+      "no_followees": "Kimseyi takip etmiyorsun",
+      "no_followers": "Takipçi yok",
+      "no_rating": "Puan yok",
+      "must_watch_to_review": "inceleme yazmak için bu yapımı izlemelisin",
+      "review_cannot_be_empty": "inceleme boş olamaz",
+      "no_activity": "etkinlik yok",
+      "followers_ratings": "takipçilerin puanları",
+      "added_by": "ekleyen",
+      "sort_by": "sıralama ölçütü",
+      "sort_order": "sıralama yönü",
+      "go_to_film": "filme git",
+      "go_to_tv_series": "diziye git",
+      "go_to_user": "kullanıcıya git",
+      "go_to_person": "kişiye git",
+      "go_to_activity": "etkinliğe git",
+      "go_to_playlist": "listeye git",
+      "go_to_review": "incelemeye git",
+      "go_to_director": "{count, plural, one {yönetmene git} other {yönetmenlere git}}",
+      "go_to_creator": "{count, plural, one {yapımcıya git} other {yapımcılara git}}",
+      "show_director": "{count, plural, one {yönetmeni göster} other {yönetmenleri göster}}",
+      "show_creator": "{count, plural, one {yapımcıyı göster} other {yapımcıları göster}}",
+      "show_credit": "{count, plural, one {katkıyı göster} other {katkıları göster}}",
+      "credits": "jenerik",
+      "view_recommendation": "{count, plural, one {reco'yu gör} other {reco'ları gör}}",
+      "view_directors": "{count, plural, one {yönetmeni gör} other {yönetmenleri gör}}",
+      "no_director": "yönetmen yok",
+      "view_comment": "{count, plural, one {yorumu gör} other {yorumları gör}}",
+      "add_comment": "{count, plural, one {yorum ekle} other {yorum ekle}}",
+      "edit_comment": "{count, plural, one {yorumu düzenle} other {yorumları düzenle}}",
+      "delete_comment": "Yorumu sil",
+      "do_you_really_want_to_delete_this_comment": "Bu yorumu silmek istediğine emin misin?",
+      "comment_deleted": "Bu yorum silindi",
+      "write_your_comment_here": "Bir yorum yaz...",
+      "reply": "Yanıtla",
+      "replies_count": "{count, plural, one {# yanıt} other {# yanıt}}",
+      "view_replies": "{count, plural, one {# yanıtı gör} other {# yanıtı gör}}",
+      "hide_replies": "Yanıtları gizle",
+      "load_more_replies": "Daha fazla yanıt yükle",
+      "get_started": "başla",
+      "get_started_its_free": "hadi başlayalım 🎬, ücretsiz!",
+      "import": "İçe aktar",
+      "upgrade_to_plan": "{plan} paketine geç",
+      "choose_subscription_recurrence": "aboneliğinin faturalandırma sıklığını seç",
+      "compare_plans": "paketleri karşılaştır",
+      "save_up_to_percent": "%{percent} kadar tasarruf et",
+      "is_empty": "Burası biraz boş",
+      "add_to_playlist": "bir listeye ekle",
+      "send_to_friend": "bir arkadaşına gönder",
+      "pin_to_profile": "Profile sabitle",
+      "unpin_from_profile": "Profilden kaldır",
+      "pinned": "Sabitlendi",
+      "unpinned": "Sabitleme kaldırıldı",
+      "no_pinned": "Sabitlenmiş öğe yok",
+      "pinned_limit_reached": "Sabitlenmiş öğe sınırına ulaştın — yenisini eklemek için birini kaldır",
+      "custom_sort": "özel sıralama",
+      "quick_add": "hızlı ekle",
+      "favorite_films": "favori filmler",
+      "follow": "takip et",
+      "followed": "takip ediliyor",
+      "request_sent": "İstek gönderildi",
+      "follow_requests": "takip istekleri",
+      "no_follow_requests": "takip isteği yok",
+      "follower": "{count, plural, one {takipçi} other {takipçi}}",
+      "follower_count": "{count} takipçi",
+      "see_followers": "takipçileri gör",
+      "followee": "{count, plural, one {takip edilen} other {takip edilen}}",
+      "followee_count": "{count} takip edilen",
+      "see_followees": "takip ettiklerini gör",
+      "last_activities": "son etkinlikler",
+      "last_updated": "son güncelleme",
+      "last_updated_at_date": "son güncelleme: {date}",
+      "show_all": "tümünü göster",
+      "this_account_is_private": "bu hesap gizli",
+      "follow_to_see_activities": "etkinlikleri görmek için takip et",
+      "review": "{count, plural, one {inceleme} other {inceleme}}",
+      "no_overview": "özet yok",
+      "cast": "oyuncular",
+      "no_cast": "oyuncu yok",
+      "recent": "yeniler",
+      "popular": "popüler",
+      "popularity": "popülerlik",
+      "no_reviews": "İnceleme yok",
+      "no_playlists": "Liste yok",
+      "no_playlists_found": "Hiç liste bulunamadı",
+      "no_films": "Film yok",
+      "no_tv_series": "Dizi yok",
+      "view_activity": "etkinliği gör",
+      "comment_count": "{count, plural, one {# yorum} other {# yorum}}",
+      "write_review": "inceleme yaz",
+      "new_review": "yeni inceleme",
+      "edit_review": "incelemeyi düzenle",
+      "review_by": "inceleme: {name}",
+      "my_review": "{count, plural, one {incelemem} other {incelemelerim}}",
+      "add_review": "inceleme ekle",
+      "tv_series": "{count, plural, one {dizi} other {dizi}}",
+      "film": "{count, plural, one {film} other {film}}",
+      "movie": "{count, plural, one {film} other {film}}",
+      "media": "{count, plural, one {yapım} other {yapım}}",
+      "tv_season": "{count, plural, one {sezon} other {sezon}}",
+      "tv_season_count": "{count, plural, one {# sezon} other {# sezon}}",
+      "tv_season_value": "{number}. sezon",
+      "tv_season_short": "S{number}",
+      "tv_episode": "{count, plural, one {bölüm} other {bölüm}}",
+      "tv_episode_count": "{count, plural, one {# bölüm} other {# bölüm}}",
+      "tv_episode_value": "{number}. bölüm",
+      "tv_episode_short": "S{seasonNumber}B{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {özel bölüm} other {özel bölüm}}",
+      "first_air_date": "ilk yayın tarihi",
+      "last_air_date": "son yayın tarihi",
+      "see_film": "filmi gör",
+      "see_tv_series": "diziyi gör",
+      "watch_film_title": "{title} adlı yapımı izle",
+      "watch_film_streaming_or_download": "<important>{title}</important> adlı yapımı internetten izle ya da yasal olarak indir",
+      "download": "indir",
+      "downloaded": "indirildi",
+      "person": "{count, plural, one {kişi} other {kişi}}",
+      "top_result": "en iyi sonuç",
+      "user": "{count, plural, one {kullanıcı} other {kullanıcı}}",
+      "reco": "{count, plural, one {reco} other {reco}}",
+      "my_recos": "reco'larım",
+      "item": "{count, plural, one {öğe} other {öğe}}",
+      "item_count": "{count, plural, one {# öğe} other {# öğe}}",
+      "type": "tür",
+      "complete": "tamamla",
+      "completed": "tamamlandı",
+      "collection": "{count, plural, one {koleksiyon} other {koleksiyon}}",
+      "most_recent": "en yeniler",
+      "most_popular": "en popülerler",
+      "most_old": "en eskiler",
+      "known_for": "Bilinen yapımları",
+      "release_date": "vizyon tarihi",
+      "last_appearance_date": "son görünme",
+      "vote_average": "ortalama puan",
+      "added": "eklendi",
+      "added_date": "ekleme tarihi",
+      "added_at": "eklenme",
+      "add": "ekle",
+      "playlist_name": "liste adı",
+      "updated_at": "güncellenme",
+      "created_at": "oluşturulma",
+      "likes": "beğeniler",
+      "likes_count": "beğeni sayısı",
+      "search_media": "yapım ara",
+      "search_film": "film ara",
+      "start_typing_to_search_films": "film aramak için yazmaya başla",
+      "search_tv_series": "dizi ara",
+      "start_typing_to_search_tv_series": "dizi aramak için yazmaya başla",
+      "search_person": "kişi ara",
+      "start_typing_to_search_persons": "kişi aramak için yazmaya başla",
+      "search_user": "{count, plural, one {kullanıcı ara} other {kullanıcı ara}}",
+      "start_typing_to_search_users": "kullanıcı aramak için yazmaya başla",
+      "search_playlist": "liste ara",
+      "start_typing_to_search_playlists": "liste aramak için yazmaya başla",
+      "search_film_or_tv_series": "film ya da dizi ara",
+      "watched_date": "{count, plural, one {izleme tarihi} other {izleme tarihleri}}",
+      "mark_as_watched": "izlendi olarak işaretle",
+      "remove_from_watched": "izlenenlerden çıkar",
+      "rating": "puan",
+      "create_a_playlist": "liste oluştur",
+      "by_name": "{name} imzasıyla",
+      "reset": "sıfırla",
+      "job": "{count, plural, one {görev} other {görev}}",
+      "department": "{count, plural, one {departman} other {departman}}",
+      "share_title_via": "<strong>{title}</strong> adlı yapımı şununla paylaş:",
+      "share_title": "<strong>{title}</strong> adlı yapımı paylaş",
+      "link": "bağlantı",
+      "copy_link": "bağlantıyı kopyala",
+      "copied": "Kopyalandı",
+      "other": "{count, plural, one {Diğer} other {Diğer}}",
+      "via": "şununla:",
+      "edit": "düzenle",
+      "guest": "{count, plural, one {konuk} other {konuk}}",
+      "are_u_sure": "Emin misin?",
+      "backward": "geri",
+      "forward": "ileri",
+      "back": "geri dön",
+      "next": "sonraki",
+      "notification": "{count, plural, one {bildirim} other {bildirim}}",
+      "see_notifications": "bildirimleri gör",
+      "open_social_panel": "sosyal paneli aç",
+      "cancel_change": "{count, plural, one {değişikliği iptal et} other {değişiklikleri iptal et}}",
+      "do_you_really_want_to_cancel_change": "{count, plural, one {Değişikliği} other {Değişiklikleri}} iptal etmek istediğine emin misin?",
+      "continue_editing": "düzenlemeye devam et",
+      "confirm": "onayla",
+      "terms_of_use": "kullanım koşulları",
+      "privacy_policy": "gizlilik politikası",
+      "request_made": "istek gönderildi",
+      "request_canceled": "istek iptal edildi",
+      "cancel_request": "isteği iptal et",
+      "open_menu": "menüyü aç",
+      "feed": "akış",
+      "about": "hakkında",
+      "home": "ana sayfa",
+      "search": "ara",
+      "explore": "keşfet",
+      "shop": "mağaza",
+      "help": "yardım",
+      "legal": "yasal",
+      "setting": "{count, plural, one {ayar} other {ayarlar}}",
+      "logout": "çıkış yap",
+      "to_watch": "izlenecekler",
+      "reco_by_your_friends": "arkadaşlarının reco'ları",
+      "friends_playlists": "arkadaşlarının listeleri",
+      "latest_activity": "{count, plural, one {son etkinlik} other {son etkinlikler}}",
+      "discover_users": "kullanıcıları keşfet",
+      "most_recommended": "en çok önerilenler",
+      "archive": "arşivle",
+      "unarchive": "arşivden çıkar",
+      "mark_as_read": "{count, plural, one {okundu olarak işaretle} other {okundu olarak işaretle}}",
+      "mark_as_unread": "{count, plural, one {okunmadı olarak işaretle} other {okunmadı olarak işaretle}}",
+      "accept": "kabul et",
+      "accepted": "kabul edildi",
+      "decline": "reddet",
+      "declined": "reddedildi",
+      "request_accepted": "{count, plural, one {istek kabul edildi} other {istekler kabul edildi}}",
+      "request_declined": "{count, plural, one {istek reddedildi} other {istekler reddedildi}}",
+      "unread": "{count, plural, one {okunmamış} other {okunmamış}}",
+      "archived": "{count, plural, one {arşivlenmiş} other {arşivlenmiş}}",
+      "no_notifications": "bildirim yok",
+      "all": "tümü",
+      "mark_all_as_read": "tümünü okundu olarak işaretle",
+      "archive_all": "tümünü arşivle",
+      "archive_all_read": "okunanların tümünü arşivle",
+      "please_login": "giriş yap",
+      "like": "beğen",
+      "unlike": "beğenmekten vazgeç",
+      "unfollow": "takibi bırak",
+      "name": "ad",
+      "add_a_name": "bir ad ekle",
+      "add_a_description": "bir açıklama ekle",
+      "visibility": "görünürlük",
+      "search_an_user": "kullanıcı ara",
+      "select_an_item_to_add_to_playlist": "listeye eklenecek öğeyi seç",
+      "select_a_film_to_add_to_playlist": "listeye eklenecek filmi seç",
+      "select_a_tv_series_to_add_to_playlist": "listeye eklenecek diziyi seç",
+      "add_one_or_more_items_to": "<important>{title}</important> adlı listeye bir ya da daha fazla öğe ekle",
+      "add_one_or_more_films_to": "<important>{title}</important> adlı listeye bir ya da daha fazla film ekle",
+      "add_one_or_more_tv_series_to": "<important>{title}</important> adlı listeye bir ya da daha fazla dizi ekle",
+      "manage_playlist_access_rights": "listenin erişim izinlerini yönet",
+      "add_guest": "{count, plural, one {konuk ekle} other {konuk ekle}}",
+      "manage_members": "üyeleri yönet",
+      "no_member": "üye yok",
+      "add_member": "{count, plural, one {üye ekle} other {üye ekle}}",
+      "manage_guests": "konukları yönet",
+      "add_guests_to_your_playlist": "listene konuk ekle",
+      "select_users_to_add_to_playlist": "listeye eklenecek kullanıcıları seç",
+      "select_users_to_send_reco": "reco'yu göndereceğin kullanıcıları seç",
+      "select_playlists_to_add_the_item": "öğenin ekleneceği listeleri seç",
+      "send": "gönder",
+      "sent": "gönderildi",
+      "select_row": "satırı seç",
+      "select_all": "tümünü seç",
+      "no_selected_users": "seçili kullanıcı yok",
+      "selection_count": "{total} {type} içinden {number} seçili",
+      "about_title": "{title} hakkında",
+      "detail": "{count, plural, one {ayrıntı} other {ayrıntılar}}",
+      "genre": "{count, plural, one {tür} other {tür}}",
+      "male": "{count, plural, one {erkek} other {erkek}}",
+      "female": "{count, plural, one {kadın} other {kadın}}",
+      "non_binary": "{count, plural, one {ikili olmayan} other {ikili olmayan}}",
+      "unspecified": "belirtilmemiş",
+      "date_of_birth": "doğum tarihi",
+      "date_of_death": "ölüm tarihi",
+      "place_of_birth": "doğum yeri",
+      "age_years": "{count} {count, plural, one {yaşında} other {yaşında}}",
+      "biography": "biyografi",
+      "no_biography_available": "biyografi bulunmuyor",
+      "no_information_available": "bilgi bulunmuyor",
+      "already_sent": "zaten gönderildi",
+      "already_watched": "zaten izlendi",
+      "already_added": "zaten eklendi",
+      "recommend_to_friend_to_discover": "<strong>{title}</strong> adlı yapımı henüz izlemeyen bir arkadaşına öner",
+      "add_to_one_or_more_playlists": "<strong>{title}</strong> adlı yapımı bir ya da daha fazla listene ekle",
+      "my_playlist": "{count, plural, one {listem} other {listelerim}}",
+      "what_is_title": "<strong>{title}</strong> nedir?",
+      "try_again": "Tekrar dene",
+      "error": "hata",
+      "not_logged_in": "giriş yapmadın",
+      "an_error_occurred": "Bir hata oluştu",
+      "playlist_not_found": "liste bulunamadı",
+      "user_not_found": "kullanıcı bulunamadı",
+      "film_not_found": "film bulunamadı",
+      "media_not_found": "yapım bulunamadı",
+      "review_not_found": "inceleme bulunamadı",
+      "person_not_found": "kişi bulunamadı",
+      "tv_series_not_found": "dizi bulunamadı",
+      "tv_episode_not_found": "bölüm bulunamadı",
+      "tv_season_not_found": "sezon bulunamadı",
+      "wrong_arguments": "hatalı parametreler",
+      "no_media_found": "hiç yapım bulunamadı",
+      "unknown_action": "bilinmeyen işlem",
+      "no_user_found": "hiç kullanıcı bulunamadı",
+      "no_tv_episodes": "bölüm yok",
+      "save": "kaydet",
+      "saved": "kaydedildi",
+      "create": "oluştur",
+      "film_count": "{count, plural, one {# film} other {# film}}",
+      "tv_series_count": "{count, plural, one {# dizi} other {# dizi}}",
+      "login": "giriş yap",
+      "signup": "kayıt ol",
+      "navigation": "gezinme",
+      "delete": "Sil",
+      "remove": "Çıkar",
+      "deleted": "Silindi",
+      "share": "paylaş",
+      "duplicate": "çoğalt",
+      "duplicated": "çoğaltıldı",
+      "cancel": "İptal",
+      "date": "tarih",
+      "duration": "süre",
+      "sort": "sırala",
+      "show": "göster",
+      "column": "{count, plural, one {sütun} other {sütun}}",
+      "comment": "{count, plural, one {yorum} other {yorum}}",
+      "unknown": "bilinmiyor",
+      "community": "topluluk",
+      "cast_and_crew": "oyuncular ve ekip",
+      "soon": "yakında",
+      "ios_app": "iOS uygulaması",
+      "android_app": "Android uygulaması",
+      "coming_soon": "Çok yakında",
+      "new_mobile_app": "Yeni mobil uygulama!",
+      "manage": "yönet",
+      "monthly": "aylık",
+      "yearly": "yıllık",
+      "day": "gün",
+      "week": "hafta",
+      "month": "ay",
+      "year": "yıl",
+      "price": "fiyat",
+      "free": "ücretsiz",
+      "playlist": "{count, plural, one {liste} other {liste}}",
+      "public": "herkese açık",
+      "publish": "yayımla",
+      "private": "gizli",
+      "description": "açıklama",
+      "details": "ayrıntılar",
+      "profile": "profil",
+      "overview": "özet",
+      "no_playlists_saved": "kaydedilmiş liste yok",
+      "camera_permission_denied": "kamera erişimi reddedildi",
+      "photo_library_permission_denied": "fotoğraf galerisi erişimi reddedildi",
+      "ignore": "yoksay",
+      "ok": "tamam",
+      "title": "başlık",
+      "skip": "Atla",
+      "undo": "Geri al",
+      "date_published": "yayımlanma tarihi",
+      "date_created": "oluşturulma tarihi",
+      "date_updated": "güncellenme tarihi",
+      "alphabetical": "alfabetik",
+      "date_added": "ekleme tarihi",
+      "number_of_likes": "beğeni sayısı",
+      "number_of_seasons": "sezon sayısı",
+      "add_to_this_playlist": "bu listeye ekle",
+      "save_to_library": "kitaplığa kaydet",
+      "remove_from_library": "kitaplıktan çıkar",
+      "otp": "OTP",
+      "ratings_from_followees": "takip ettiklerinin puanları",
+      "choose_from_the_library": "galeriden seç",
+      "take_a_photo": "fotoğraf çek",
+      "delete_current_image": "mevcut görseli sil",
+      "edit_image": "görseli düzenle",
+      "add_image": "görsel ekle",
+      "verify_with_a_code": "kodla doğrula",
+      "order": "sıra",
+      "edit_order": "sırayı düzenle",
+      "done": "tamam",
+      "can_edit": "düzenleyebilir mi?",
+      "upgrade": "yükselt",
+      "no_description": "Açıklama yok",
+      "no_comment": "Yorum yok",
+      "close": "kapat",
+      "edit_playlist": "listeyi düzenle",
+      "universe": "evren",
+      "cannot_be_changed": "değiştirilemez",
+      "delete_review": "incelemeyi sil",
+      "do_you_really_want_to_delete_this_review": "Bu incelemeyi silmek istediğine emin misin?",
+      "user_liked_playlist": "<name></name> bir listeyi beğendi",
+      "user_liked_review": "<name></name> bir incelemeyi beğendi",
+      "runtime": "süre",
+      "ends_at": "Bitiş: {value}",
+      "this_user_has_no_activity": "Bu kullanıcının hiç etkinliği yok",
+      "notification_archived": "{count, plural, one {bildirim arşivlendi} other {bildirim arşivlendi}}",
+      "notification_unarchived": "{count, plural, one {bildirim arşivden çıkarıldı} other {bildirim arşivden çıkarıldı}}",
+      "notification_marked_as_read": "{count, plural, one {bildirim okundu olarak işaretlendi} other {bildirim okundu olarak işaretlendi}}",
+      "notification_marked_as_unread": "{count, plural, one {bildirim okunmadı olarak işaretlendi} other {bildirim okunmadı olarak işaretlendi}}",
+      "or_continue_with": "ya da şununla devam et",
+      "message": "{count, plural, one {mesaj} other {mesaj}}",
+      "story": "{count, plural, one {story} other {story}}",
+      "new_playlist": "yeni liste",
+      "select_a_type": "bir tür seç",
+      "filter": "{count, plural, one {filtre} other {filtre}}",
+      "hide_watched": "izlenenleri gizle",
+      "show_me_around": "bana etrafı gezdir",
+      "artwork_from": "Çizim: <important>{source}</important>",
+      "no_active_subscription": "etkin abonelik yok",
+      "manage_subscription": "aboneliği yönet",
+      "started_on_date": "başlangıç: {date}",
+      "last_renewed_on_date": "son yenileme: {date}",
+      "version_value": "sürüm {value}",
+      "original_title": "özgün başlık",
+      "starring": "başrollerde",
+      "write_your_review_here": "incelemeni buraya yaz...",
+      "insert": "ekle",
+      "trailer": "{count, plural, one {fragman} other {fragman}}",
+      "list": "{count, plural, one {liste} other {liste}}",
+      "grid": "{count, plural, one {ızgara} other {ızgara}}",
+      "order_asc": "artan sıra",
+      "order_desc": "azalan sıra",
+      "menu": "menü",
+      "at_least_one_watched_date_required": "en az bir izleme tarihi gerekli",
+      "viewer": "{count, plural, one {İzleyici} other {İzleyiciler}}",
+      "editor": "{count, plural, one {Düzenleyici} other {Düzenleyiciler}}",
+      "admin": "{count, plural, one {Yönetici} other {Yöneticiler}}",
+      "owner": "{count, plural, one {Sahip} other {Sahipler}}",
+      "you_dont_have_permission_to_do_this_action": "Bu işlemi yapma iznin yok",
+      "in_progress": "devam ediyor",
+      "give_up": "vazgeç",
+      "random": "rastgele",
+      "reset_password": "Şifreyi sıfırla",
+      "password_reset": "Şifre sıfırlandı",
+      "return_to_login": "Girişe dön",
+      "invalid_code": "Geçersiz kod",
+      "no_token_found": "Token bulunamadı",
+      "first_watched_at": "ilk izleme tarihi",
+      "watched_dates": "izleme tarihleri",
+      "no_watched_dates": "izleme tarihi yok",
+      "select_role": "bir rol seç",
+      "select_format": "bir biçim seç",
+      "theater": "Sinema",
+      "physical": "Fiziksel",
+      "digital": "Dijital",
+      "streaming": "İnternetten",
+      "you_must_be_premium_to_change_member_role": "Bir üyenin rolünü değiştirmek için Premium olman gerekiyor",
+      "already_member": "zaten üye",
+      "email_already_used": "Bu e-posta adresi zaten kullanılıyor",
+      "email_confirmed": "E-posta doğrulandı",
+      "confirmation_email_sent": "Doğrulama e-postası gönderildi",
+      "continue": "Devam et",
+      "finish": "Bitir",
+      "forgot_password": "Şifremi unuttum",
+      "new_password": "Yeni şifre",
+      "confirm_password": "Şifreyi doğrula",
+      "password_reseted": "Şifre sıfırlandı",
+      "reset_your_password": "Şifreni sıfırla",
+      "invalid_token": "Geçersiz token",
+      "new_notification": "{count, plural, one {yeni bildirim} other {yeni bildirim}}",
+      "lets_go": "Hadi başlayalım!",
+      "update_available": "Güncelleme mevcut",
+      "update_available_description": "En yeni iyileştirmelerden yararlanmak için uygulamayı güncelle.",
+      "update_required_title": "Güncelleme gerekli",
+      "update_required_description": "Uygulamanın bu sürümü artık desteklenmiyor. Recomend'i kullanmaya devam etmek için güncelle.",
+      "update_app": "Güncelle",
+      "advertisement": "{count, plural, one {Reklam} other {Reklam}}",
+      "pending": "Beklemede",
+      "processing": "İşleniyor",
+      "awaiting_review": "İncelenmeyi bekliyor",
+      "failed": "Başarısız",
+      "data": "{count, plural, one {Veri} other {Veriler}}",
+      "restore": "Geri yükle",
+      "fix": "Düzelt",
+      "not_found": "Bulunamadı",
+      "unavailable": "Kullanılamıyor",
+      "star_on_github": "GitHub'da yıldız ver"
+    },
+    "form": {
+      "email": {
+        "label": "E-posta",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "E-posta adresi geçerli değil",
+          "unavailable": "Bu e-posta adresi zaten kullanılıyor"
+        },
+        "verified": "E-posta doğrulandı"
+      },
+      "username": {
+        "label": "Kullanıcı adı",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "İlk karakter bir harf ya da sayı olmalı",
+          "double_dot": "Üst üste iki nokta kullanılamaz",
+          "ends_with_dot": "Sonda nokta kullanılamaz",
+          "format": "Yalnızca harf, sayı ve '_' ile '.' karakterleri kullanılabilir",
+          "unavailable": "Bu kullanıcı adı zaten alınmış"
+        }
+      },
+      "full_name": {
+        "label": "Ad",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "Yalnızca harf, sayı ve boşluk kullanılabilir"
+        }
+      },
+      "password": {
+        "label": "Şifre",
+        "placeholder": "Şifreni gir",
+        "schema": {
+          "uppercase": "En az bir büyük harf gerekli",
+          "lowercase": "En az bir küçük harf gerekli",
+          "number": "En az bir sayı gerekli",
+          "special": "En az bir özel karakter gerekli",
+          "match": "Şifreler eşleşmiyor"
+        },
+        "confirm": {
+          "label": "Şifreyi doğrula",
+          "placeholder": "Şifreni doğrula"
+        }
+      },
+      "length": {
+        "char_min": "en az {count, plural, one {# karakter} other {# karakter}}",
+        "char_max": "en fazla {count, plural, one {# karakter} other {# karakter}}"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "Yalnızca harf, sayı ve boşluk kullanılabilir"
+      },
+      "error": {
+        "too_many_attempts": "Çok fazla deneme, daha sonra tekrar dene",
+        "not_received_code": "Kod gelmedi mi?",
+        "invalid_code": "Geçersiz kod",
+        "turnstile": "Doğrulama başarısız oldu, tekrar dene"
+      },
+      "resend_code": "Kodu tekrar gönder",
+      "resend_email": "E-postayı tekrar gönder",
+      "code_verified": "Kod doğrulandı",
+      "code_sent": "Kod gönderildi"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "Sayfa bulunamadı",
+        "description": "hoppala, bu sayfa yok..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "takip",
+        "description": "Favori film ve dizilerini keşfet, puanla ve paylaş."
+      },
+      "recos": {
+        "label": "reco'lar",
+        "description": "Arkadaşlarının reco'larını gönder ve al. Hepsi tek yerde."
+      },
+      "playlists": {
+        "label": "listeler",
+        "description": "Listeleri düzenle, paylaş ve birlikte oluştur."
+      },
+      "feed": {
+        "label": "akış",
+        "description": "Arkadaşlarını takip et; ne izlediklerini, neyi beğendiklerini ve ne yazdıklarını gör."
+      },
+      "social_sharing": {
+        "label": "sosyal paylaşım",
+        "description": "Sevdiğin her şeyi Instagram'da ya da diğer sosyal ağlarda paylaş."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "Takip",
+          "description": "İzlediğin filmleri gözden kaçırma"
+        },
+        "recos": {
+          "label": "Reco'lar",
+          "description": "Arkadaşlarına film önerileri gönder"
+        },
+        "explore": {
+          "label": "Keşfet",
+          "description": "1400'den fazla filmi barındıran etkileşimli harita Paradise Pictures'ta yeni filmler keşfet"
+        },
+        "like": {
+          "label": "Beğeni",
+          "description": "Favori filmlerine, listelerine ve incelemelerine olan sevgini göster"
+        },
+        "rating": {
+          "label": "Puan",
+          "description": "İzlediğin filmleri puanla"
+        },
+        "watchlist": {
+          "label": "İzleme listesi",
+          "description": "İzlemek istediğin filmleri kaydet"
+        },
+        "playlists": {
+          "label": "Listeler",
+          "description": "Filmlerini listeler hâlinde düzenle ve paylaş"
+        },
+        "reviews": {
+          "label": "İncelemeler",
+          "description": "İnceleme yaz, içindeki huysuz sinefili ortaya çıkar"
+        },
+        "feed": {
+          "label": "Akış",
+          "description": "Arkadaşlarının etkinliklerini takip et"
+        },
+        "adsFree": {
+          "label": "Reklamsız",
+          "description": "Recomend'i sonsuza dek reklamsız kullan"
+        }
+      }
+    },
+    "welcome": {
+      "title": "Kaydolduğun için teşekkürler!",
+      "description": "{app} ile neler yapabileceğine hızlı bir bakış.",
+      "follow": {
+        "title": "İnsanları takip et",
+        "description": "Arkadaşlarını takip et, ne izlediklerini gör."
+      },
+      "import": {
+        "title": "Başka bir platformdan mı geliyorsun?"
+      }
+    },
+    "collection": {
+      "label": "kitaplık",
+      "my_recos": {
+        "label": "reco'larım",
+        "search": {
+          "placeholder": "reco'larımda ara..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "reco'larımdan sil",
+            "description": "<important>{title}</important> adlı yapımı reco'larından silmek istediğine emin misin?"
+          },
+          "complete_confirm": {
+            "title": "reco'yu tamamla",
+            "description": "<important>{title}</important> reco'sunu tamamlamak istediğine emin misin?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "izleme listesinde ara..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "izleme listesinden sil",
+            "description": "<important>{title}</important> adlı yapımı izleme listenden silmek istediğine emin misin?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "gönül seçkilerinde ara..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "gönül seçkilerinden sil",
+            "description": "<important>{title}</important> adlı yapımı gönül seçkilerinden silmek istediğine emin misin?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> izledi",
+        "rated": "<name></name> puanladı",
+        "liked": "<name></name> beğendi",
+        "rated_liked": "<name></name> beğendi ve puanladı",
+        "reviewed": "<name></name> inceleme yazdı"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson>, <linkMedia>{titleMedia}</linkMedia> yapımında <important>{roles}</important>",
+        "label": "<linkPerson>{name}</linkPerson>, <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "Uygulamayı yetkilendir",
+        "description_generic": "Bir uygulama hesabına erişim istiyor.",
+        "description": "{client} hesabına erişmek istiyor.",
+        "scopes_label": "Bu, uygulamanın şunları yapmasına izin verir:",
+        "accept": "İzin ver",
+        "deny": "Reddet",
+        "error": {
+          "invalid_request": "Geçersiz ya da süresi dolmuş istek",
+          "invalid_request_description": "Yetkilendirmeyi seni buraya yönlendiren uygulamadan yeniden başlat.",
+          "client_not_found": "Bu uygulama bulunamadı.",
+          "submit_failed": "Bir şeyler ters gitti. Tekrar dene."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "{app} hesabına giriş yap."
+        },
+        "label": "Giriş",
+        "description": "En iyi film önerilerini keşfet.",
+        "or_continue_with": "Ya da şununla devam et",
+        "no_account_yet": "Hesabın yok mu?",
+        "form": {
+          "identifier": {
+            "label": "E-posta ya da kullanıcı adı",
+            "placeholder": "E-postanı ya da kullanıcı adını gir"
+          },
+          "password": {
+            "label": "Şifre",
+            "placeholder": "Şifreni gir"
+          },
+          "submit": "Giriş yap",
+          "forgot_password": "Şifreni mi unuttun?",
+          "wrong_credentials": "E-posta ya da şifre hatalı"
+        },
+        "otp": {
+          "password_login": "Şifreyle giriş yapmayı mı tercih edersin?",
+          "form": {
+            "submit": "Kod gönder",
+            "no_user_found": "Bu e-posta ile kayıtlı kullanıcı bulunamadı",
+            "success": "Giriş yapıldı"
+          },
+          "confirm_form": {
+            "label": "Kodu doğrula",
+            "description": "{email} adresine bir doğrulama kodu gönderildi"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "Film önerileri keşfetmek ve paylaşmak için {app}'e kaydol."
+        },
+        "description": "Film adlarını her seferinde unutan arkadaşına film önermek için bir hesap oluştur.",
+        "form": {
+          "success": "{email} adresine bir doğrulama e-postası gönderildi"
+        },
+        "confirm_form": {
+          "label": "E-postayı doğrula",
+          "description": "{email} adresine bir doğrulama bağlantısı gönderildi"
+        },
+        "return_to_login": "Hoppala, zaten hesabım var."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "Şifremi unuttum",
+          "description": "Şifreni sıfırla."
+        },
+        "label": "Şifremi unuttum",
+        "description": "Bir şifre yöneticisi kullanmalısın, gerçekten çok pratik.",
+        "return_to_login": "Hoppala, aslında şifremi hatırlıyorum.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "Şifreyi sıfırla",
+          "code_sent": "İstek gönderildi"
+        },
+        "confirm_form": {
+          "label": "Kodu doğrula",
+          "description": "{email} adresine bir doğrulama kodu gönderildi"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "Şifreyi sıfırla",
+          "description": "Hesabın için yeni bir şifre seç."
+        }
+      },
+      "error": {
+        "label": "Hata",
+        "description": "Kimlik doğrulama sırasında bir hata oluştu.",
+        "return_to_login": "Güvenli bölgeye dön"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "Hakkında",
+        "marquee": "Hayatında internette 'Hakkında' sayfaları gezmekten daha heyecanlı bir şey yok mu?",
+        "intro": "<strong>Recomend</strong>, filmleri keşfetmeye, önermeye ve düzenlemeye adanmış bir alan. Her şeyi, kulaktan kulağa yayılan önerilere mümkün olan en iyi dijital zemini sunmak için tasarladık. Yaklaşımımız, tüketimin kendi etrafımızda —ya da daha doğrusu 'sana özel öneriler' etrafında— döndüğü bir dönemde insanları ve aralarındaki ilişkileri merkeze alıyor.",
+        "slogan": {
+          "1": "Reklamsız ve şüpheli vaatlerden uzak. 🍆",
+          "2": "Hem bir sosyal ağ hem de bir araç.",
+          "3": "Meraklıların elinden çıkmış, ev yapımı.",
+          "4": "Kelimenin en gerçek anlamıyla amatör."
+        },
+        "last": "Recomend'i tek başına ya da başkalarıyla, herkese açık ya da gizli, gündüz ya da gece kullanabilirsin; ama asla film izlerken değil, lütfen filme odaklan!"
+      },
+      "team": {
+        "label": "Ekip",
+        "intro": "Recomend, sinemaya tutkuyla bağlı, hiç gün yüzü görmeyebilecek fazlasıyla iddialı projelere zaman ayırmayı seven iki kardeş tarafından yaratıldı.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "Tek bir işle yetinemeyen hiperaktif bir mimar-mühendis olan Yoann (işte gerçek start-up ruhu), başlangıçta banyosuna poster olma gibi mütevazı bir hedefi olan film haritası fikrinin mimarı. Loup'nun katılmasıyla hedefler tavan yaptı ve biraz da akışa kapılmış hâlde haritanın ve sitenin tüm grafik tasarımını, ayrıca tüm iletişimi üstlendi (sevmese de). Bir yandan UX/UI üzerine görüşlerini paylaşıyor ve kodlamanın ne kadar zor olduğunu tam kavramadan bir sürü özellik öneriyor (bu konuda biraz yol aldı)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "Tamamen kendi kendini yetiştirmiş biri olmasına rağmen, 25 yaşından önce ücretsiz işsizliğe götüren bir eğitim almayı da başardı. Gerçek bir on parmağında on marifet olan Loup, mümkün olduğunca kullanıcı dostu olmayı hedefleyen bir arayüz kodlayarak web tarafını yürütüyor. Loup, (çok ama çok) sayıda sorusunu yanıtlayan tüm yazılım forumlarına ve bu aylar boyunca ona üvey babalar gibi yol gösteren tüm Hintli YouTuber'lara teşekkür etmek istiyor. Annesi ise bu proje için ağabeyi tarafından köleleştirildiğine ikna olmuş durumda (iyiyim anne)."
+          }
+        },
+        "last": "Bizimle ya da topluluğun diğer üyeleriyle iletişime geçmek için <link>Discord</link> sunucumuza katıl!"
+      },
+      "pricing": {
+        "label": "Fiyatlar",
+        "intro": "Bu abonelik modeli her şeyden önce projeyi desteklemenin ve büyümesine yardım etmenin bir yolu. Premium özellikler, Recomend'i daha ileri düzeyde kullananlar için ek olanaklar ve küçük bir maddi katkıyı hak ediyorlar. Siteye ücretsiz, reklamsız ve kısıtlanmış hissetmeden erişme olanağını her zaman koruyacağız.",
+        "subdescription": "*Bu aboneliğin gülünç derecede düşük ücreti bile bütçeni aşıyorsa, satın alma gücünü kaybetmenden sorumlu liberal hükümetine başvurabilirsin."
+      },
+      "legal": {
+        "label": "Yasal & Gizlilik",
+        "description": "Gizliliğine saygı duyuyoruz. Konuk kullanıcılara gösterilen reklamlar Google tarafından yönetiliyor ve gösterim sıklığını sınırlamak ve dolandırıcılığı önlemek için teknik çerezler gerektiriyor.",
+        "privacyPolicy": "Gizlilik politikamızı oku",
+        "manageCookies": "Reklam tercihlerimi yönet (Çerezler)"
+      },
+      "open-source": {
+        "label": "Açık kaynak",
+        "intro": "Recomend açık kaynak: kod GitHub'da herkese açık. Bir göz at, katkıda bulun ya da sadece bir yıldız bırak!",
+        "star": "GitHub'da yıldız ver"
+      },
+      "businessmodel": {
+        "label": "İş modeli",
+        "paragraph": {
+          "1": "Hiç de ticari olmayan profillerimizden tahmin edebileceğin gibi, şu an bir iş modelinin bize ne kazandıracağını henüz tam çözemedik...",
+          "2": "Recomend'in geleceği gerektirirse, doğru insanlarla —ya da en azından bu işe bizden daha meraklı insanlarla— çevrelenerek bu konuya bakacağız.",
+          "3": "O zamana kadar, dürüst olalım, odaklanacak başka şeyler var."
+        }
+      },
+      "roadmap": {
+        "label": "Yol haritası"
+      },
+      "data": {
+        "label": "Veriler",
+        "paragraph": {
+          "1": "Recomend'de kullanılan tüm üst veriler, platformun API'si aracılığıyla <link>The Movie Database (TMDb)</link> tarafından sağlanıyor. Herkes gibi yapıyoruz, uslu koyunlar olarak.",
+          "2": "Hatalar ya da eksik filmler için <link>TMDb</link>'ye başvur."
+        }
+      },
+      "resources": {
+        "label": "Kaynaklar",
+        "intro": "Sinemayla pek ilgisi yok ama işte sevdiğimiz sitelerin listesi:"
+      },
+      "contact-support": {
+        "label": "İletişim & Destek",
+        "help-center": "Varoluşsal sorularının yanıtlarını <link>Yardım Merkezimizde</link> bul.",
+        "technical-support": "Teknik sorular için: <email></email>",
+        "suggest-a-feature": "Öneriler için: <email></email>",
+        "contact-us": "Sadece bize ulaşmak için: <email></email>"
+      },
+      "quote": {
+        "label": "Alıntı",
+        "quote": "« Profesyonel kelimesinden nefret ediyorum. Bütün o oyuncular ve diğerleri: ben profesyonelim, ben profim, diyorlar! Nedir bu? Bundan daha hüzünlü bir kelime var mı? Çünkü amatör kelimesi sevgi kökünden gelir. İşleri sevgiyle yapmak gerek, yoksa aptalız. »",
+        "author": "Orson Welles",
+        "date": "1972",
+        "subdescription": "*Koymakta tereddüt ettik, çünkü kolayca kendini beğenmiş gibi duyulabiliyor; ama projeye dair ruh hâlimizi iyi anlatıyor. Yine de sevmezsen kaldırırız."
+      }
+    },
+    "settings": {
+      "label": "Ayarlar",
+      "description": "Hesap ayarlarını yönet.",
+      "profile": {
+        "label": "Profil",
+        "description": "Sitede başkaları seni böyle görecek.",
+        "avatar": {
+          "label": "Profil fotoğrafı",
+          "delete": "Sil"
+        },
+        "full_name": {
+          "label": "Ad",
+          "description": "Bu ad profilinde ve e-postalarda görünecek.",
+          "placeholder": "Adını gir",
+          "form": {
+            "min_length": "Ad en az 1 karakter olmalı",
+            "max_length": "Ad 50 karakteri geçmemeli"
+          }
+        },
+        "bio": {
+          "label": "Biyografi",
+          "description": "Kendinden bir şeyler anlat, profilinde görünecek.",
+          "placeholder": "Bize kendinden bahset",
+          "form": {
+            "max_length": "Biyografi 150 karakteri geçmemeli",
+            "format": "Biyografi boş satır içeremez ve yalnızca boşluklardan oluşamaz."
+          }
+        },
+        "favorite_films": {
+          "label": "Favori filmler",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "Geçersiz URL"
+          }
+        }
+      },
+      "account": {
+        "label": "Hesap",
+        "description": "Hesap ayarlarını güncelle.",
+        "username": {
+          "label": "Kullanıcı adı",
+          "description": "Bu, başkalarının seni bulup profiline ulaşmasını sağlayan kullanıcı adın. 30 günde yalnızca bir kez değiştirebilirsin.",
+          "placeholder": "Kullanıcı adını gir",
+          "form": {
+            "min_length": "Kullanıcı adı en az 3 karakter olmalı",
+            "max_length": "Kullanıcı adı 15 karakteri geçmemeli",
+            "invalid": "Kullanıcı adı yalnızca harf, sayı ve '_' ile '.' sembollerini içerebilir",
+            "unavailable": "Bu kullanıcı adı zaten alınmış"
+          }
+        },
+        "private": {
+          "label": "Gizli hesap",
+          "description": "Hesabın gizli olduğunda etkinliklerini yalnızca arkadaşların görebilir."
+        },
+        "email": {
+          "description": "Hem mevcut hem de yeni e-posta adresine bir doğrulama e-postası gönderilecek. Değişikliğin geçerli olması için ikisini de onaylaman gerekiyor.",
+          "change_pending": "Yeni e-posta adresine <strong>{email}</strong> bir doğrulama e-postası gönderildi. Değişikliği onaylamak için bağlantıya tıkla ya da doğrulama kodunu gir.",
+          "confirm_email_code": {
+            "description": "Değişikliği onaylamak için <strong>{email}</strong> adresine gönderilen doğrulama kodunu gir."
+          },
+          "change_success": "E-posta adresin başarıyla değiştirildi"
+        },
+        "delete_account": {
+          "button": "Hesabımı sil",
+          "confirm": {
+            "description": "Hesabını silmek istediğine emin misin? Bu işlem geri alınamaz.",
+            "confirm_email_sent": "E-posta adresine bir doğrulama e-postası gönderildi"
+          }
+        }
+      },
+      "appearance": {
+        "label": "Görünüm",
+        "description": "Uygulamanın görünümünü özelleştir. Gündüz ve gece temaları arasında otomatik geçiş.",
+        "language": {
+          "label": "Dil",
+          "description": "Dil seç – değişiklik uygulama yeniden başlatıldıktan sonra uygulanacak",
+          "placeholder": "Dil seç",
+          "not_found": "Dil bulunamadı"
+        },
+        "theme": {
+          "label": "Tema",
+          "description": "Arayüzün temasını seç.",
+          "options": {
+            "light": "Açık",
+            "dark": "Koyu"
+          }
+        }
+      },
+      "subscription": {
+        "label": "Abonelik",
+        "description": "Premium özelliklere erişmek için aboneliğini yönet."
+      },
+      "security": {
+        "label": "Güvenlik",
+        "description": "Şifreni değiştirmek, şu an kullandığın cihaz dışındaki tüm cihazlardan çıkış yapmanı sağlar.",
+        "current_password": {
+          "label": "Mevcut şifre",
+          "placeholder": "Mevcut şifreni gir",
+          "form": {
+            "required": "Lütfen mevcut şifreni gir",
+            "invalid": "Mevcut şifre hatalı"
+          }
+        },
+        "new_password": {
+          "label": "Yeni şifre",
+          "placeholder": "Yeni şifreni gir",
+          "form": {
+            "min_length": "Şifre en az 8 karakter olmalı",
+            "uppercase": "En az bir büyük harf gerekli",
+            "lowercase": "En az bir küçük harf gerekli",
+            "number": "En az bir sayı gerekli",
+            "special": "En az bir özel karakter gerekli"
+          }
+        },
+        "confirm_password": {
+          "label": "Yeni şifreyi doğrula",
+          "placeholder": "Yeni şifreni doğrula",
+          "form": {
+            "match": "Şifreler eşleşmiyor"
+          }
+        }
+      },
+      "notifications": {
+        "label": "Bildirimler",
+        "description": "Bildirim ayarlarını yönet.",
+        "push_notifications": {
+          "label": "Anlık bildirimler",
+          "form": {
+            "enable": "Anlık bildirimleri etkinleştir"
+          },
+          "already_granted": "Bildirim izni daha önce istendi; değiştirmek için tarayıcı ayarlarına git.",
+          "no_enabled": "Anlık bildirim alabilmek için cihaz ayarlarından bildirimleri etkinleştir.",
+          "open_settings": "Cihaz ayarlarına git"
+        }
+      },
+      "data": {
+        "label": "Veriler",
+        "description": "Verilerini içe ya da dışa aktar.",
+        "importer": {
+          "label": "İçe aktarma",
+          "select_source": "Bir kaynak seç",
+          "instructions_title": "Yönergeler",
+          "browse_prompt": "Dosyanı buraya bırak ya da <link>gözat</link>",
+          "browse_prompt_mobile": "Dosya seçmek için dokun",
+          "uploading": "Yükleniyor…",
+          "processing": "Dosyan inceleniyor…",
+          "upload_error": "Yükleme başarısız oldu, tekrar dene.",
+          "invalid_file_type": "Bu dosya türü bu kaynak için desteklenmiyor.",
+          "review_title": "İçe aktarmanı gözden geçir",
+          "review_summary": "{total} öğeden {matched} tanesi eşleşti",
+          "validate": "İçe aktarmayı onayla",
+          "validate_confirm_description": "Bu işlem, atlanmayan tüm eşleşen öğeleri kitaplığına aktaracak. Geri alınamaz.",
+          "success_title": "İçe aktarma tamamlandı",
+          "success_description": "Verilerin başarıyla içe aktarıldı.",
+          "failed_title": "İçe aktarma başarısız oldu",
+          "failed_description": "Bu içe aktarma işlenirken bir şeyler ters gitti.",
+          "pending_description": "İçe aktarman sırada, kısa süre içinde başlayacak.",
+          "empty": "Henüz içe aktarma yok.",
+          "delete_confirm_description": "Bu içe aktarma ve hazırlanmış tüm verileri kalıcı olarak silinecek. Geri alınamaz.",
+          "keep_existing": "Benimki kalsın",
+          "use_imported": "İçe aktarılanı kullan",
+          "merge": "Birleştir",
+          "conflict": "Çakışma",
+          "no_match": "Eşleşme yok",
+          "existing_rating": "Şu an: {rating}",
+          "log_column": "Günlük",
+          "actions_column": "İşlemler",
+          "categories": {
+            "log_movies": "Filmler",
+            "log_tv_series": "Diziler",
+            "bookmarks": "İzleme listesi",
+            "playlists": "Listeler"
+          },
+          "status": {
+            "pending": "Beklemede",
+            "processing": "İşleniyor",
+            "awaiting_review": "İncelenmeyi bekliyor",
+            "completed": "Tamamlandı",
+            "failed": "Başarısız"
+          }
+        },
+        "exporter": {
+          "label": "Dışa aktarma"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "Premium'a geç",
+        "description": "{app} uygulamasının tüm özelliklerine erişmek için premium hesaba geç."
+      },
+      "header": {
+        "title": "sinemanı genişlet, daha fazla paylaş, {app}'i destekle",
+        "subtitle": "1 ay ücretsiz dene, sonra ayda {price}"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "etkinlikler",
+            "unlimited_activities": {
+              "label": "sınırsız etkinlik",
+              "description": "puanlar, beğeniler, incelemeler, izleme listesi ve öneriler"
+            },
+            "favorites": {
+              "label": "favoriler",
+              "description": "favori filmlerini profiline ekle"
+            }
+          },
+          "playlists": {
+            "label": "listeler",
+            "unlimited_playlists": {
+              "label": "sınırsız",
+              "description": "sınırsız sayıda liste oluştur"
+            },
+            "shared_playlists": {
+              "label": "paylaşılan",
+              "description": "listelerini diğer kullanıcılarla paylaş"
+            },
+            "collaborative_playlists": {
+              "label": "ortak",
+              "description": "diğer kullanıcılarla ortak listeler oluştur"
+            }
+          },
+          "feed": {
+            "label": "akış",
+            "followees": {
+              "label": "takip edilen kullanıcılar",
+              "description": "takip ettiğin kullanıcıların etkinliklerini gör"
+            },
+            "cast_and_crew": {
+              "label": "oyuncular ve ekip",
+              "description": "filmlerde yer alan kişilerin etkinliklerini takip et"
+            }
+          },
+          "support": {
+            "label": "destek",
+            "team": {
+              "label": "{app} ekibini destekle"
+            },
+            "credits": {
+              "label": "jenerik",
+              "description": "profilin uygulamanın jeneriğinde"
+            }
+          }
+        },
+        "success": {
+          "label": "Desteğin için teşekkürler!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} – @{username} kullanıcısının listesi",
+        "description": "@{username} kullanıcısının {app} üzerindeki film listesini keşfet."
+      },
+      "actions": {
+        "delete": {
+          "description": "Bu işlem <important>{title}</important> adlı listeyi listelerinden kalıcı olarak silecek."
+        }
+      },
+      "search": {
+        "placeholder": "listede ara..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "<important>{title}</important> adlı yapımı listenden silmek istediğine emin misin?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "Listenin başlığını gir"
+        },
+        "description": {
+          "placeholder": "Liste için bir açıklama gir"
+        },
+        "error": {
+          "format": "Açıklama boş satır içeremez ve yalnızca boşluklardan oluşamaz."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "@{username} kullanıcısının {app} profilini keşfet."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title}, {directors} imzalı ve {year} yılında vizyona giren bir film. Konusu: {overview}",
+        "description_no_director": "{title}, {year} yılında vizyona giren bir film. Konusu: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Listeler",
+          "description": "{title} filmini içeren tüm listeleri keşfet."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • İncelemeler",
+          "description": "{title} filminin tüm incelemelerini keşfet."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title}, {creators} imzalı ve ilk kez {year} yılında yayınlanan bir dizi. Konusu: {overview}",
+        "description_no_creator": "{title}, ilk kez {year} yılında yayınlanan bir dizi. Konusu: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Listeler",
+          "description": "{title} dizisini içeren tüm listeleri keşfet."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • İncelemeler",
+          "description": "{title} dizisinin tüm incelemelerini keşfet."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • Sezonlar",
+          "description": "{title} dizisinin tüm sezonlarını keşfet."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • {number}. sezon",
+            "description": "{title} dizisinin {number}. sezonundaki tüm bölümleri keşfet."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • Filmler",
+          "description": "{name} adlı kişinin oynadığı ya da katkıda bulunduğu tüm filmleri keşfet."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • Diziler",
+          "description": "{name} adlı kişinin oynadığı ya da katkıda bulunduğu tüm dizileri keşfet."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "@{username} kullanıcısının {title} incelemesi"
+      },
+      "create": {
+        "metadata": {
+          "title": "{title} hakkında inceleme yaz",
+          "description": "{title} hakkındaki görüşünü paylaş."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Paradise Pictures'ı keşfet",
+        "description": "Adayı ve çeşit çeşit manzarasını keşfetmek için yola çık. Adada yaşayan sayısız film, kendi anlatı dünyalarının içinde duruyor. Her köşesini gezmeyi başarabilecek misin?"
+      }
+    },
+    "legal": {
+      "label": "Yasal",
+      "description": "{app} uygulamasının yasal belgelerini oku.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "Kullanım koşulları",
+          "description": "{app} uygulamasının kullanım koşullarını oku."
+        },
+        "sections": {
+          "intro": "Bu Kullanım Koşulları (bundan sonra \"Koşullar\"), {app} uygulamasına erişimi ve uygulamanın kullanımını düzenler. Uygulama, merkezi Paris'te bulunan Loup (bundan sonra \"Yayıncı\") tarafından yayımlanır. {app} uygulamasına kaydolmak, bu Koşulların kayıtsız şartsız kabul edildiği anlamına gelir.",
+          "presentation": {
+            "label": "1. Hizmetin tanıtımı",
+            "content": "{app}, kullanıcılarının filmler hakkındaki bilgileri görüntülemesine, inceleme yayımlamasına, yapımları puanlamasına ve kişisel listeler oluşturmasına olanak tanıyan ücretsiz bir uygulamadır."
+          },
+          "account": {
+            "label": "2. Hesap ve güvenlik",
+            "content": "Katkı özelliklerine erişim bir hesap oluşturulmasını gerektirir. Kullanıcı, giriş bilgilerinin gizliliğinden sorumludur. Hileli kullanım ya da hesabın ele geçirildiği şüphesi hâlinde Kullanıcı, derhâl şu adresten destekle iletişime geçmelidir: <email></email>."
+          },
+          "conduct": {
+            "label": "3. Davranış kuralları",
+            "content": "Kullanıcı, incelemelerinde ve listelerinde nazik ve saygılı kalmayı kabul eder. Kesinlikle yasaktır: nefret söylemi, iftira niteliğinde ya da ırkçı ifadeler, taciz, ayrıca spam ve istenmeyen ticari tanıtım. Yayıncı, bu kuralları ihlal eden her içeriği silme ve ilgili hesabı bildirimde bulunmaksızın askıya alma hakkını saklı tutar."
+          },
+          "child_safety": {
+            "label": "4. Çocuk güvenliği politikası",
+            "content": "{app}, çocukların cinsel istismarı ve sömürüsü (CSAE) konusunda kesin bir sıfır tolerans politikası uygular. Reşit olmayanları cinselleştiren, sömüren ya da başka herhangi bir şekilde tehlikeye atan her türlü içeriğin oluşturulması, yüklenmesi, saklanması, dağıtılması, talep edilmesi ya da tanıtılması {app} üzerinde açıkça ve kesin olarak yasaktır. Bu politikayı ihlal ettiği belirlenen her hesap derhâl ve kalıcı olarak kapatılır; Yayıncı, ilgili içeriği mevcut kullanıcı bilgileriyle birlikte, yürürlükteki mevzuata uygun olarak National Center for Missing & Exploited Children (NCMEC) kuruluşuna ve/veya yetkili kolluk makamlarına bildirir. CSAE kapsamına girebilecek içerik ya da davranıştan haberdar olan her kullanıcı, bunu gecikmeksizin şu adrese bildirmelidir: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. Fikrî mülkiyet",
+            "content": "Kullanıcı, yazdığı incelemelerin sahibi olmaya devam eder. Ancak {app} üzerinde yayımlayarak, Yayıncıya bu içeriği uygulama içinde görüntüleme, çoğaltma ve teknik olarak uyarlama konusunda ücretsiz ve münhasır olmayan bir lisans verir. {app} uygulamasının görsel öğeleri, kodu ve tasarımı Yayıncının münhasır mülkiyetindedir."
+          },
+          "privacy": {
+            "label": "6. Kişisel veriler",
+            "content": "Gizliliğine saygı duymak en büyük önceliğimiz. {app}, hiçbir kişisel veriyi ticari ya da reklam amaçlı üçüncü taraflara satmaz, kiralamaz ve paylaşmaz. Toplanan veriler (e-posta, kullanıcı adı, uygulama içi etkinlik) yalnızca hizmetin işleyişi ve hesap yönetimi için kullanılır. Erişim, düzeltme ya da silme (GDPR) haklarını şu adrese yazarak kullanabilirsin: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Çerezler ve izleyiciler",
+            "content": "{app}, hiçbir reklam çerezi ve hiçbir üçüncü taraf davranışsal izleyici kullanmaz. Yalnızca iki tür teknik çerez kullanılır: bir kimlik doğrulama çerezi (oturumun açık kalması için) ve bir dil tercihi çerezi (seçimini hatırlamak için). Bu çerezler hizmet için kesinlikle gerekli olduğundan, önceden onay alınması gerekliliğinden muaftır."
+          },
+          "ads": {
+            "label": "8. Reklam",
+            "content": "Uygulama şu anda hiçbir reklam içermeden sunulmaktadır. Bu modelin değişmesi hâlinde kullanıcılar, bu Koşulların güncellenmesiyle bilgilendirilecektir."
+          },
+          "liability": {
+            "label": "9. Sorumluluk",
+            "content": "Yayıncı, {app} uygulamasını günün her saati erişilebilir tutmaya çalışır, ancak kesinti ya da hata olmayacağını garanti etmez. Filmlere ilişkin bilgiler üçüncü taraf veritabanlarından gelir; Yayıncı bu kayıtlardaki olası yanlışlıklardan sorumlu tutulamaz."
+          },
+          "law": {
+            "label": "10. Uygulanacak hukuk",
+            "content": "Bu Koşullar Fransız hukukuna tabidir. <email></email> aracılığıyla dostane yolla çözülemeyen bir uyuşmazlık hâlinde, Paris mahkemeleri münhasıran yetkilidir."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "Gizlilik politikası",
+          "description": "{app} uygulamasının gizlilik politikasını oku."
+        },
+        "sections": {
+          "intro": "Veri koruma, {app} felsefesinin tam merkezinde yer alır. Bu politika hangi verileri topladığımızı, neden topladığımızı ve nasıl koruduğumuzu ayrıntılandırır. Kısacası: verilerini satmıyoruz.",
+          "controller": {
+            "label": "1. Veri sorumlusu",
+            "content": "Veri sorumlusu, merkezi Paris (Fransa) olan Loup'dur. Gizlilikle ilgili her soru için şu adresten iletişime geçebilirsin: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. Toplanan veriler",
+            "content": "Yalnızca uygulamanın çalışması için kesinlikle gerekli verileri topluyoruz: e-posta adresin (kimlik doğrulama için), kullanıcı adın ve kullanım verilerin (puanladığın filmler, incelemeler, listeler). Şifrelerin şifrelenmiş (hash'lenmiş) ve güvenli biçimde saklanır."
+          },
+          "purpose": {
+            "label": "3. İşleme amacı",
+            "content": "Verilerin yalnızca şu amaçlarla işlenir: hesabını oluşturup yönetebilmen, listelerinin ve puanlarının görüntülenmesi ve hizmetin teknik olarak çalışmasının sağlanması. Verilerini reklam amaçlı profil oluşturmak için kullanmıyoruz."
+          },
+          "sharing": {
+            "label": "4. Verilerin paylaşımı",
+            "content": "Kişisel verilerin asla satılmaz, kiralanmaz ya da üçüncü taraflara aktarılmaz. Veriler, sıkı gizlilik yükümlülüğü altında olan ve GDPR'a uyan teknik sağlayıcılarımız (barındırma, işlem e-postası hizmeti) tarafından barındırılabilir."
+          },
+          "retention": {
+            "label": "5. Saklama süresi",
+            "content": "Verilerin, hesabın etkin kaldığı sürece saklanır. Hesabını silmeye karar verirsen, tüm kişisel verilerin (e-posta, kullanıcı adı, incelemeler) veritabanlarımızdan kalıcı olarak silinir."
+          },
+          "rights": {
+            "label": "6. Hakların (GDPR)",
+            "content": "Mevzuata uygun olarak verilerine erişme, onları düzeltme, taşıma ve silme hakkına sahipsin. Bu hakları dilediğin zaman doğrudan uygulama içinden ya da şu adrese yazarak kullanabilirsin: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Çerezler",
+            "content": "Kullanım Koşullarımızda belirtildiği gibi, yalnızca zorunlu teknik çerezler (oturum ve dil) kullanıyoruz. Cihazına hiçbir üçüncü taraf reklam ya da izleme çerezi yerleştirilmez."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "Film, dizi, liste, kişi ya da kullanıcı ara..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "Bu yapımı izlediklerin arasından çıkarmak istediğine emin misin? Varsa puanın ve incelemen de silinecek."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "Diziyi tamamlamak istediğine emin misin? Tüm sezonlardaki tüm bölümler izlendi olarak işaretlenecek."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "{seasonNumber}. sezonu tamamlamak istediğine emin misin? Sezondaki tüm bölümler izlendi olarak işaretlenecek."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "Burada etkinlik görmek için senin ya da takip ettiğin kullanıcıların film, dizi vb. puanlaması gerekiyor..."
+    },
+    "feed_person": {
+      "message": "Burada etkinlik görmek için filmlerde ya da dizilerde yer alan kişileri takip etmen gerekiyor."
+    },
+    "playlists": {
+      "items": {
+        "empty": "Bu listede film ya da dizi yok. Doldurmak için birkaç tane ekle!"
+      },
+      "add_to": {
+        "empty": "Hiç listen yok. Film ya da dizi ekleyip onları kolayca bulmak için bir liste oluştur!"
+      },
+      "saved": {
+        "empty": "Kaydedilmiş listen yok. Kitaplığında kolayca bulmak için bir liste kaydet!"
+      },
+      "members": {
+        "empty": "Bu listenin üyesi yok. Aynı listede başkalarıyla birlikte çalışmak için birkaç üye ekle!",
+        "search": "Listeye eklemek için kullanıcı ara..."
+      }
+    },
+    "follow-requests": {
+      "empty": "Bekleyen takip isteğin yok. Olduğunda burada görünecek!"
+    },
+    "recos": {
+      "empty": "Hiç önerin yok. Olduğunda burada görünecek!",
+      "send_to": {
+        "empty": "Öneri gönderecek kimsen yok. Birine öneri gönderebilmek için arkadaş olmanız gerekiyor (karşılıklı takip)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "Henüz kaydettiğin bir şey yok. Olduğunda burada görünecek!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> sana <movie></movie> filmini önerdi"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> sana <tv_series></tv_series> dizisini önerdi"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user>, önerdiğin <movie></movie> filmini izledi"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user>, önerdiğin <tv_series></tv_series> dizisini izledi"
+    },
+    "follower_created": {
+      "description": "<user></user> seni takip etmeye başladı"
+    },
+    "follower_accepted": {
+      "description": "<user></user> takip isteğini kabul etti"
+    },
+    "follower_request": {
+      "description": "<user></user> seni takip etmek istiyor"
+    },
+    "friend_created": {
+      "description": "<user></user> artık arkadaşın"
+    }
+  }
+}

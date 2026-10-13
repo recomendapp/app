@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "Toinen tapa löytää elokuvia",
+    "description": "{app} on sosiaalinen verkosto elokuvien rakastajille. Löydä, jaa ja tutki elokuvia ja sarjoja ystäviesi kanssa."
+  },
+  "common": {
+    "messages": {
+      "welcome": "Tervetuloa",
+      "welcome_to_app": "Tervetuloa {app}iin",
+      "hello": "Hei",
+      "greeting_with_name": "{timeOfDay, select, morning {Hyvää huomenta, {name}} afternoon {Hyvää päivää, {name}} evening {Hyvää iltaa, {name}} night {Hyvää yötä, {name}} other {Hei, {name}}}",
+      "click_here": "Klikkaa tästä",
+      "see_more": "Näytä lisää",
+      "see_more_details": "Näytä lisätietoja",
+      "more": "Lisää",
+      "view_profile": "Näytä profiili",
+      "library": "Kirjasto",
+      "watchlist": "Katselulista",
+      "for_later": "Myöhemmäksi",
+      "heart_pick": "{count, plural, one {sydänsuosikki} other {sydänsuosikit}}",
+      "add_to_heart_picks": "Lisää sydänsuosikkeihin",
+      "remove_from_heart_picks": "Poista sydänsuosikeista",
+      "add_rating": "Lisää arvosana",
+      "edit_rating": "Muokkaa arvosanaa",
+      "remove_rating": "Poista arvosana",
+      "share_my_rating": "Jaa arvosanani",
+      "share_review": "Jaa arvostelu",
+      "show_likes_count": "Näytä tykkäysten määrä",
+      "show_comments_count": "Näytä kommenttien määrä",
+      "add_to_watchlist": "lisää katselulistalle",
+      "remove_from_watchlist": "poista katselulistalta",
+      "no_results": "ei tuloksia",
+      "no_results_for": "Ei tuloksia haulle <strong>{query}</strong>",
+      "no_followees": "Et seuraa ketään",
+      "no_followers": "Ei seuraajia",
+      "no_rating": "Ei arvosanaa",
+      "must_watch_to_review": "sinun on pitänyt nähdä tämä teos voidaksesi arvioida sen",
+      "review_cannot_be_empty": "arvostelu ei voi olla tyhjä",
+      "no_activity": "ei toimintaa",
+      "followers_ratings": "seuraajien arvosanat",
+      "added_by": "lisännyt",
+      "sort_by": "järjestä",
+      "sort_order": "järjestyssuunta",
+      "go_to_film": "siirry elokuvaan",
+      "go_to_tv_series": "siirry sarjaan",
+      "go_to_user": "siirry käyttäjään",
+      "go_to_person": "siirry henkilöön",
+      "go_to_activity": "siirry toimintaan",
+      "go_to_playlist": "siirry soittolistaan",
+      "go_to_review": "siirry arvosteluun",
+      "go_to_director": "{count, plural, one {siirry ohjaajaan} other {siirry ohjaajiin}}",
+      "go_to_creator": "{count, plural, one {siirry tekijään} other {siirry tekijöihin}}",
+      "show_director": "{count, plural, one {näytä ohjaaja} other {näytä ohjaajat}}",
+      "show_creator": "{count, plural, one {näytä tekijä} other {näytä tekijät}}",
+      "show_credit": "{count, plural, one {näytä tekijämerkintä} other {näytä tekijämerkinnät}}",
+      "credits": "lopputekstit",
+      "view_recommendation": "{count, plural, one {näytä reco} other {näytä recot}}",
+      "view_directors": "{count, plural, one {näytä ohjaaja} other {näytä ohjaajat}}",
+      "no_director": "ei ohjaajaa",
+      "view_comment": "{count, plural, one {näytä kommentti} other {näytä kommentit}}",
+      "add_comment": "{count, plural, one {lisää kommentti} other {lisää kommentteja}}",
+      "edit_comment": "{count, plural, one {muokkaa kommenttia} other {muokkaa kommentteja}}",
+      "delete_comment": "Poista kommentti",
+      "do_you_really_want_to_delete_this_comment": "Haluatko varmasti poistaa tämän kommentin?",
+      "comment_deleted": "Tämä kommentti on poistettu",
+      "write_your_comment_here": "Kirjoita kommentti...",
+      "reply": "Vastaa",
+      "replies_count": "{count, plural, one {# vastaus} other {# vastausta}}",
+      "view_replies": "Näytä {count, plural, one {# vastaus} other {# vastausta}}",
+      "hide_replies": "Piilota vastaukset",
+      "load_more_replies": "Näytä lisää vastauksia",
+      "get_started": "aloita",
+      "get_started_its_free": "mennään 🎬, se on ilmaista!",
+      "import": "Tuo",
+      "upgrade_to_plan": "vaihda {plan}iin",
+      "choose_subscription_recurrence": "valitse tilauksesi laskutusvälin",
+      "compare_plans": "vertaa tilauksia",
+      "save_up_to_percent": "säästä jopa {percent} %",
+      "is_empty": "Täällä on vähän tyhjää",
+      "add_to_playlist": "lisää soittolistalle",
+      "send_to_friend": "lähetä ystävälle",
+      "pin_to_profile": "Kiinnitä profiiliin",
+      "unpin_from_profile": "Irrota profiilista",
+      "pinned": "Kiinnitetty",
+      "unpinned": "Irrotettu",
+      "no_pinned": "Ei kiinnitettyjä kohteita",
+      "pinned_limit_reached": "Olet saavuttanut kiinnitettyjen kohteiden enimmäismäärän — irrota yksi lisätäksesi uuden",
+      "custom_sort": "oma järjestys",
+      "quick_add": "pikalisäys",
+      "favorite_films": "suosikkielokuvat",
+      "follow": "seuraa",
+      "followed": "seurataan",
+      "request_sent": "Pyyntö lähetetty",
+      "follow_requests": "seurauspyynnöt",
+      "no_follow_requests": "ei seurauspyyntöjä",
+      "follower": "{count, plural, one {seuraaja} other {seuraajaa}}",
+      "follower_count": "{count} seuraajaa",
+      "see_followers": "näytä seuraajat",
+      "followee": "{count, plural, one {seurattu} other {seurattua}}",
+      "followee_count": "{count} seurattua",
+      "see_followees": "näytä keitä seuraat",
+      "last_activities": "viimeisimmät toiminnot",
+      "last_updated": "viimeksi päivitetty",
+      "last_updated_at_date": "viimeksi päivitetty {date}",
+      "show_all": "näytä kaikki",
+      "this_account_is_private": "tämä tili on yksityinen",
+      "follow_to_see_activities": "seuraa nähdäksesi toiminnot",
+      "review": "{count, plural, one {arvostelu} other {arvostelua}}",
+      "no_overview": "ei kuvausta",
+      "cast": "näyttelijät",
+      "no_cast": "ei näyttelijöitä",
+      "recent": "uusin",
+      "popular": "suosittu",
+      "popularity": "suosio",
+      "no_reviews": "Ei arvosteluja",
+      "no_playlists": "Ei soittolistoja",
+      "no_playlists_found": "Soittolistoja ei löytynyt",
+      "no_films": "Ei elokuvia",
+      "no_tv_series": "Ei sarjoja",
+      "view_activity": "näytä toiminto",
+      "comment_count": "{count, plural, one {# kommentti} other {# kommenttia}}",
+      "write_review": "kirjoita arvostelu",
+      "new_review": "uusi arvostelu",
+      "edit_review": "muokkaa arvostelua",
+      "review_by": "arvostelun kirjoitti {name}",
+      "my_review": "{count, plural, one {arvosteluni} other {arvosteluni}}",
+      "add_review": "lisää arvostelu",
+      "tv_series": "{count, plural, one {sarja} other {sarjaa}}",
+      "film": "{count, plural, one {elokuva} other {elokuvaa}}",
+      "movie": "{count, plural, one {elokuva} other {elokuvaa}}",
+      "media": "{count, plural, one {nimike} other {nimikettä}}",
+      "tv_season": "{count, plural, one {kausi} other {kautta}}",
+      "tv_season_count": "{count, plural, one {# kausi} other {# kautta}}",
+      "tv_season_value": "kausi {number}",
+      "tv_season_short": "K{number}",
+      "tv_episode": "{count, plural, one {jakso} other {jaksoa}}",
+      "tv_episode_count": "{count, plural, one {# jakso} other {# jaksoa}}",
+      "tv_episode_value": "jakso {number}",
+      "tv_episode_short": "K{seasonNumber}J{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {erikoisjakso} other {erikoisjaksoa}}",
+      "first_air_date": "ensiesitys",
+      "last_air_date": "viimeisin esitys",
+      "see_film": "katso elokuva",
+      "see_tv_series": "katso sarja",
+      "watch_film_title": "katso {title}",
+      "watch_film_streaming_or_download": "Katso <important>{title}</important> suoratoistona tai lataa laillisesti",
+      "download": "lataa",
+      "downloaded": "ladattu",
+      "person": "{count, plural, one {henkilö} other {henkilöä}}",
+      "top_result": "paras tulos",
+      "user": "{count, plural, one {käyttäjä} other {käyttäjää}}",
+      "reco": "{count, plural, one {reco} other {recoa}}",
+      "my_recos": "omat recot",
+      "item": "{count, plural, one {kohde} other {kohdetta}}",
+      "item_count": "{count, plural, one {# kohde} other {# kohdetta}}",
+      "type": "tyyppi",
+      "complete": "merkitse valmiiksi",
+      "completed": "valmis",
+      "collection": "{count, plural, one {kokoelma} other {kokoelmaa}}",
+      "most_recent": "uusimmat",
+      "most_popular": "suosituimmat",
+      "most_old": "vanhimmat",
+      "known_for": "Tunnettu teoksista",
+      "release_date": "ensi-ilta",
+      "last_appearance_date": "viimeisin esiintyminen",
+      "vote_average": "keskiarvo",
+      "added": "lisätty",
+      "added_date": "lisäyspäivä",
+      "added_at": "lisätty",
+      "add": "lisää",
+      "playlist_name": "soittolistan nimi",
+      "updated_at": "päivitetty",
+      "created_at": "luotu",
+      "likes": "tykkäykset",
+      "likes_count": "tykkäysten määrä",
+      "search_media": "etsi nimike",
+      "search_film": "etsi elokuva",
+      "start_typing_to_search_films": "ala kirjoittaa etsiäksesi elokuvia",
+      "search_tv_series": "etsi sarja",
+      "start_typing_to_search_tv_series": "ala kirjoittaa etsiäksesi sarjoja",
+      "search_person": "etsi henkilö",
+      "start_typing_to_search_persons": "ala kirjoittaa etsiäksesi henkilöitä",
+      "search_user": "{count, plural, one {etsi käyttäjä} other {etsi käyttäjiä}}",
+      "start_typing_to_search_users": "ala kirjoittaa etsiäksesi käyttäjiä",
+      "search_playlist": "etsi soittolista",
+      "start_typing_to_search_playlists": "ala kirjoittaa etsiäksesi soittolistoja",
+      "search_film_or_tv_series": "etsi elokuva tai sarja",
+      "watched_date": "{count, plural, one {katselupäivä} other {katselupäivät}}",
+      "mark_as_watched": "merkitse nähdyksi",
+      "remove_from_watched": "poista nähdyistä",
+      "rating": "arvosana",
+      "create_a_playlist": "luo soittolista",
+      "by_name": "tekijä {name}",
+      "reset": "palauta",
+      "job": "{count, plural, one {tehtävä} other {tehtävää}}",
+      "department": "{count, plural, one {osasto} other {osastoa}}",
+      "share_title_via": "Jaa <strong>{title}</strong> palvelussa",
+      "share_title": "Jaa <strong>{title}</strong>",
+      "link": "linkki",
+      "copy_link": "kopioi linkki",
+      "copied": "Kopioitu",
+      "other": "{count, plural, one {Muu} other {Muut}}",
+      "via": "kautta",
+      "edit": "muokkaa",
+      "guest": "{count, plural, one {vieras} other {vierasta}}",
+      "are_u_sure": "Oletko varma?",
+      "backward": "edellinen",
+      "forward": "seuraava",
+      "back": "takaisin",
+      "next": "seuraava",
+      "notification": "{count, plural, one {ilmoitus} other {ilmoitusta}}",
+      "see_notifications": "näytä ilmoitukset",
+      "open_social_panel": "avaa sosiaalinen paneeli",
+      "cancel_change": "{count, plural, one {hylkää muutos} other {hylkää muutokset}}",
+      "do_you_really_want_to_cancel_change": "Haluatko varmasti hylätä {count, plural, one {muutoksen} other {muutokset}}?",
+      "continue_editing": "jatka muokkaamista",
+      "confirm": "vahvista",
+      "terms_of_use": "käyttöehdot",
+      "privacy_policy": "tietosuojakäytäntö",
+      "request_made": "pyyntö tehty",
+      "request_canceled": "pyyntö peruttu",
+      "cancel_request": "peru pyyntö",
+      "open_menu": "avaa valikko",
+      "feed": "syöte",
+      "about": "tietoa",
+      "home": "etusivu",
+      "search": "haku",
+      "explore": "tutki",
+      "shop": "kauppa",
+      "help": "apua",
+      "legal": "oikeudellista",
+      "setting": "{count, plural, one {asetus} other {asetukset}}",
+      "logout": "kirjaudu ulos",
+      "to_watch": "katsottavaksi",
+      "reco_by_your_friends": "ystäviesi recot",
+      "friends_playlists": "ystäviesi soittolistat",
+      "latest_activity": "{count, plural, one {viimeisin toiminto} other {viimeisimmät toiminnot}}",
+      "discover_users": "löydä käyttäjiä",
+      "most_recommended": "suositellut",
+      "archive": "arkistoi",
+      "unarchive": "palauta arkistosta",
+      "mark_as_read": "{count, plural, one {merkitse luetuksi} other {merkitse luetuiksi}}",
+      "mark_as_unread": "{count, plural, one {merkitse lukemattomaksi} other {merkitse lukemattomiksi}}",
+      "accept": "hyväksy",
+      "accepted": "hyväksytty",
+      "decline": "hylkää",
+      "declined": "hylätty",
+      "request_accepted": "{count, plural, one {pyyntö hyväksytty} other {pyynnöt hyväksytty}}",
+      "request_declined": "{count, plural, one {pyyntö hylätty} other {pyynnöt hylätty}}",
+      "unread": "{count, plural, one {lukematon} other {lukemattomat}}",
+      "archived": "{count, plural, one {arkistoitu} other {arkistoidut}}",
+      "no_notifications": "ei ilmoituksia",
+      "all": "kaikki",
+      "mark_all_as_read": "merkitse kaikki luetuiksi",
+      "archive_all": "arkistoi kaikki",
+      "archive_all_read": "arkistoi kaikki luetut",
+      "please_login": "kirjaudu sisään",
+      "like": "tykkää",
+      "unlike": "poista tykkäys",
+      "unfollow": "lopeta seuraaminen",
+      "name": "nimi",
+      "add_a_name": "lisää nimi",
+      "add_a_description": "lisää kuvaus",
+      "visibility": "näkyvyys",
+      "search_an_user": "etsi käyttäjä",
+      "select_an_item_to_add_to_playlist": "valitse soittolistalle lisättävä kohde",
+      "select_a_film_to_add_to_playlist": "valitse soittolistalle lisättävä elokuva",
+      "select_a_tv_series_to_add_to_playlist": "valitse soittolistalle lisättävä sarja",
+      "add_one_or_more_items_to": "Lisää yksi tai useampi kohde listaan <important>{title}</important>",
+      "add_one_or_more_films_to": "Lisää yksi tai useampi elokuva listaan <important>{title}</important>",
+      "add_one_or_more_tv_series_to": "Lisää yksi tai useampi sarja listaan <important>{title}</important>",
+      "manage_playlist_access_rights": "hallitse soittolistan käyttöoikeuksia",
+      "add_guest": "{count, plural, one {lisää vieras} other {lisää vieraita}}",
+      "manage_members": "hallitse jäseniä",
+      "no_member": "ei jäseniä",
+      "add_member": "{count, plural, one {lisää jäsen} other {lisää jäseniä}}",
+      "manage_guests": "hallitse vieraita",
+      "add_guests_to_your_playlist": "lisää vieraita soittolistallesi",
+      "select_users_to_add_to_playlist": "valitse soittolistalle lisättävät käyttäjät",
+      "select_users_to_send_reco": "valitse kenelle reco lähetetään",
+      "select_playlists_to_add_the_item": "valitse soittolistat joihin kohde lisätään",
+      "send": "lähetä",
+      "sent": "lähetetty",
+      "select_row": "valitse rivi",
+      "select_all": "valitse kaikki",
+      "no_selected_users": "ei valittuja käyttäjiä",
+      "selection_count": "{number}/{total} {type} valittu",
+      "about_title": "tietoa teoksesta {title}",
+      "detail": "{count, plural, one {tieto} other {tiedot}}",
+      "genre": "{count, plural, one {genre} other {genret}}",
+      "male": "{count, plural, one {mies} other {miestä}}",
+      "female": "{count, plural, one {nainen} other {naista}}",
+      "non_binary": "{count, plural, one {muunsukupuolinen} other {muunsukupuolista}}",
+      "unspecified": "ei määritelty",
+      "date_of_birth": "syntymäaika",
+      "date_of_death": "kuolinaika",
+      "place_of_birth": "syntymäpaikka",
+      "age_years": "{count} {count, plural, one {vuotta} other {vuotta}}",
+      "biography": "elämäkerta",
+      "no_biography_available": "elämäkertaa ei ole saatavilla",
+      "no_information_available": "tietoja ei ole saatavilla",
+      "already_sent": "jo lähetetty",
+      "already_watched": "jo nähty",
+      "already_added": "jo lisätty",
+      "recommend_to_friend_to_discover": "Suosittele <strong>{title}</strong> ystävälle, joka ei ole vielä nähnyt sitä",
+      "add_to_one_or_more_playlists": "Lisää <strong>{title}</strong> yhdelle tai useammalle soittolistallesi",
+      "my_playlist": "{count, plural, one {soittolistani} other {soittolistani}}",
+      "what_is_title": "Mikä on <strong>{title}</strong>?",
+      "try_again": "Yritä uudelleen",
+      "error": "virhe",
+      "not_logged_in": "et ole kirjautunut sisään",
+      "an_error_occurred": "Tapahtui virhe",
+      "playlist_not_found": "soittolistaa ei löytynyt",
+      "user_not_found": "käyttäjää ei löytynyt",
+      "film_not_found": "elokuvaa ei löytynyt",
+      "media_not_found": "nimikettä ei löytynyt",
+      "review_not_found": "arvostelua ei löytynyt",
+      "person_not_found": "henkilöä ei löytynyt",
+      "tv_series_not_found": "sarjaa ei löytynyt",
+      "tv_episode_not_found": "jaksoa ei löytynyt",
+      "tv_season_not_found": "kautta ei löytynyt",
+      "wrong_arguments": "virheelliset argumentit",
+      "no_media_found": "nimikkeitä ei löytynyt",
+      "unknown_action": "tuntematon toiminto",
+      "no_user_found": "käyttäjiä ei löytynyt",
+      "no_tv_episodes": "ei jaksoja",
+      "save": "tallenna",
+      "saved": "tallennettu",
+      "create": "luo",
+      "film_count": "{count, plural, one {# elokuva} other {# elokuvaa}}",
+      "tv_series_count": "{count, plural, one {# sarja} other {# sarjaa}}",
+      "login": "kirjaudu sisään",
+      "signup": "luo tili",
+      "navigation": "navigointi",
+      "delete": "Poista",
+      "remove": "Poista",
+      "deleted": "Poistettu",
+      "share": "jaa",
+      "duplicate": "kopioi",
+      "duplicated": "kopioitu",
+      "cancel": "Peruuta",
+      "date": "päivä",
+      "duration": "kesto",
+      "sort": "järjestä",
+      "show": "näytä",
+      "column": "{count, plural, one {sarake} other {saraketta}}",
+      "comment": "{count, plural, one {kommentti} other {kommenttia}}",
+      "unknown": "tuntematon",
+      "community": "yhteisö",
+      "cast_and_crew": "näyttelijät & työryhmä",
+      "soon": "pian",
+      "ios_app": "iOS-sovellus",
+      "android_app": "Android-sovellus",
+      "coming_soon": "Tulossa pian",
+      "new_mobile_app": "Uusi mobiilisovellus!",
+      "manage": "hallitse",
+      "monthly": "kuukausittain",
+      "yearly": "vuosittain",
+      "day": "päivä",
+      "week": "viikko",
+      "month": "kuukausi",
+      "year": "vuosi",
+      "price": "hinta",
+      "free": "ilmainen",
+      "playlist": "{count, plural, one {soittolista} other {soittolistaa}}",
+      "public": "julkinen",
+      "publish": "julkaise",
+      "private": "yksityinen",
+      "description": "kuvaus",
+      "details": "tiedot",
+      "profile": "profiili",
+      "overview": "kuvaus",
+      "no_playlists_saved": "ei tallennettuja soittolistoja",
+      "camera_permission_denied": "kameran käyttöoikeus evätty",
+      "photo_library_permission_denied": "kuvakirjaston käyttöoikeus evätty",
+      "ignore": "ohita",
+      "ok": "ok",
+      "title": "nimi",
+      "skip": "Ohita",
+      "undo": "Kumoa",
+      "date_published": "julkaisupäivä",
+      "date_created": "luontipäivä",
+      "date_updated": "muokkauspäivä",
+      "alphabetical": "aakkosjärjestys",
+      "date_added": "lisäyspäivä",
+      "number_of_likes": "tykkäysten määrä",
+      "number_of_seasons": "kausien määrä",
+      "add_to_this_playlist": "lisää tälle soittolistalle",
+      "save_to_library": "tallenna kirjastoon",
+      "remove_from_library": "poista kirjastosta",
+      "otp": "OTP",
+      "ratings_from_followees": "seuraamiesi arvosanat",
+      "choose_from_the_library": "valitse kirjastosta",
+      "take_a_photo": "ota kuva",
+      "delete_current_image": "poista nykyinen kuva",
+      "edit_image": "muokkaa kuvaa",
+      "add_image": "lisää kuva",
+      "verify_with_a_code": "vahvista koodilla",
+      "order": "järjestys",
+      "edit_order": "muokkaa järjestystä",
+      "done": "valmis",
+      "can_edit": "voi muokata?",
+      "upgrade": "päivitä",
+      "no_description": "Ei kuvausta",
+      "no_comment": "Ei kommentteja",
+      "close": "sulje",
+      "edit_playlist": "muokkaa soittolistaa",
+      "universe": "universumi",
+      "cannot_be_changed": "ei voi muuttaa",
+      "delete_review": "poista arvostelu",
+      "do_you_really_want_to_delete_this_review": "Haluatko varmasti poistaa tämän arvostelun?",
+      "user_liked_playlist": "<name></name> tykkäsi soittolistasta",
+      "user_liked_review": "<name></name> tykkäsi arvostelusta",
+      "runtime": "kesto",
+      "ends_at": "Päättyy klo {value}",
+      "this_user_has_no_activity": "Tällä käyttäjällä ei ole toimintaa",
+      "notification_archived": "{count, plural, one {ilmoitus arkistoitu} other {ilmoitukset arkistoitu}}",
+      "notification_unarchived": "{count, plural, one {ilmoitus palautettu arkistosta} other {ilmoitukset palautettu arkistosta}}",
+      "notification_marked_as_read": "{count, plural, one {ilmoitus merkittiin luetuksi} other {ilmoitukset merkittiin luetuiksi}}",
+      "notification_marked_as_unread": "{count, plural, one {ilmoitus merkittiin lukemattomaksi} other {ilmoitukset merkittiin lukemattomiksi}}",
+      "or_continue_with": "tai jatka palvelulla",
+      "message": "{count, plural, one {viesti} other {viestiä}}",
+      "story": "{count, plural, one {story} other {storyä}}",
+      "new_playlist": "uusi soittolista",
+      "select_a_type": "valitse tyyppi",
+      "filter": "{count, plural, one {suodatin} other {suodatinta}}",
+      "hide_watched": "piilota nähdyt",
+      "show_me_around": "esittele minulle",
+      "artwork_from": "Kuvitus: <important>{source}</important>",
+      "no_active_subscription": "ei aktiivista tilausta",
+      "manage_subscription": "hallitse tilausta",
+      "started_on_date": "alkoi: {date}",
+      "last_renewed_on_date": "viimeisin uusiminen: {date}",
+      "version_value": "versio {value}",
+      "original_title": "alkuperäinen nimi",
+      "starring": "pääosissa",
+      "write_your_review_here": "kirjoita arvostelusi tähän...",
+      "insert": "lisää",
+      "trailer": "{count, plural, one {traileri} other {traileria}}",
+      "list": "{count, plural, one {lista} other {listaa}}",
+      "grid": "{count, plural, one {ruudukko} other {ruudukkoa}}",
+      "order_asc": "nouseva järjestys",
+      "order_desc": "laskeva järjestys",
+      "menu": "valikko",
+      "at_least_one_watched_date_required": "vähintään yksi katselupäivä vaaditaan",
+      "viewer": "{count, plural, one {Katsoja} other {Katsojat}}",
+      "editor": "{count, plural, one {Muokkaaja} other {Muokkaajat}}",
+      "admin": "{count, plural, one {Ylläpitäjä} other {Ylläpitäjät}}",
+      "owner": "{count, plural, one {Omistaja} other {Omistajat}}",
+      "you_dont_have_permission_to_do_this_action": "Sinulla ei ole oikeutta tehdä tätä toimintoa",
+      "in_progress": "käynnissä",
+      "give_up": "luovuta",
+      "random": "satunnainen",
+      "reset_password": "Vaihda salasana",
+      "password_reset": "Salasana vaihdettu",
+      "return_to_login": "Takaisin kirjautumiseen",
+      "invalid_code": "Virheellinen koodi",
+      "no_token_found": "Tokenia ei löytynyt",
+      "first_watched_at": "ensimmäinen katselupäivä",
+      "watched_dates": "katselupäivät",
+      "no_watched_dates": "ei katselupäiviä",
+      "select_role": "valitse rooli",
+      "select_format": "valitse muoto",
+      "theater": "Elokuvateatteri",
+      "physical": "Fyysinen tallenne",
+      "digital": "Digitaalinen",
+      "streaming": "Suoratoisto",
+      "you_must_be_premium_to_change_member_role": "Sinun on oltava premium-käyttäjä muuttaaksesi jäsenen roolia",
+      "already_member": "on jo jäsen",
+      "email_already_used": "Tämä sähköpostiosoite on jo käytössä",
+      "email_confirmed": "Sähköposti vahvistettu",
+      "confirmation_email_sent": "Vahvistussähköposti lähetetty",
+      "continue": "Jatka",
+      "finish": "Valmis",
+      "forgot_password": "Salasana unohtui",
+      "new_password": "Uusi salasana",
+      "confirm_password": "Vahvista salasana",
+      "password_reseted": "Salasana vaihdettu",
+      "reset_your_password": "Vaihda salasanasi",
+      "invalid_token": "Virheellinen token",
+      "new_notification": "{count, plural, one {uusi ilmoitus} other {uutta ilmoitusta}}",
+      "lets_go": "Mennään!",
+      "update_available": "Päivitys saatavilla",
+      "update_available_description": "Päivitä sovellus, niin saat uusimmat parannukset.",
+      "update_required_title": "Päivitys vaaditaan",
+      "update_required_description": "Tätä sovellusversiota ei enää tueta. Päivitä se, niin voit jatkaa Recomendin käyttöä.",
+      "update_app": "Päivitä",
+      "advertisement": "{count, plural, one {Mainos} other {Mainokset}}",
+      "pending": "Odottaa",
+      "processing": "Käynnissä",
+      "awaiting_review": "Tarkistettava",
+      "failed": "Epäonnistui",
+      "data": "{count, plural, one {Tieto} other {Tiedot}}",
+      "restore": "Palauta",
+      "fix": "Korjaa",
+      "not_found": "Ei löytynyt",
+      "unavailable": "Ei saatavilla",
+      "star_on_github": "Anna tähti GitHubissa"
+    },
+    "form": {
+      "email": {
+        "label": "Sähköpostiosoite",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "Sähköpostiosoite ei kelpaa",
+          "unavailable": "Tämä sähköpostiosoite on jo käytössä"
+        },
+        "verified": "Sähköposti vahvistettu"
+      },
+      "username": {
+        "label": "Käyttäjänimi",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "Ensimmäisen merkin on oltava kirjain tai numero",
+          "double_dot": "Kaksi pistettä peräkkäin ei ole sallittua",
+          "ends_with_dot": "Piste lopussa ei ole sallittua",
+          "format": "Vain kirjaimet, numerot ja merkit '_' ja '.' ovat sallittuja",
+          "unavailable": "Tämä käyttäjänimi on jo varattu"
+        }
+      },
+      "full_name": {
+        "label": "Nimi",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "Vain kirjaimet, numerot ja välilyönnit ovat sallittuja"
+        }
+      },
+      "password": {
+        "label": "Salasana",
+        "placeholder": "Syötä salasanasi",
+        "schema": {
+          "uppercase": "Vaaditaan vähintään yksi iso kirjain",
+          "lowercase": "Vaaditaan vähintään yksi pieni kirjain",
+          "number": "Vaaditaan vähintään yksi numero",
+          "special": "Vaaditaan vähintään yksi erikoismerkki",
+          "match": "Salasanat eivät täsmää"
+        },
+        "confirm": {
+          "label": "Vahvista salasana",
+          "placeholder": "Vahvista salasanasi"
+        }
+      },
+      "length": {
+        "char_min": "vähintään {count, plural, one {# merkki} other {# merkkiä}}",
+        "char_max": "enintään {count, plural, one {# merkki} other {# merkkiä}}"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "Vain kirjaimet, numerot ja välilyönnit ovat sallittuja"
+      },
+      "error": {
+        "too_many_attempts": "Liian monta yritystä, yritä myöhemmin uudelleen",
+        "not_received_code": "Etkö saanut koodia?",
+        "invalid_code": "Virheellinen koodi",
+        "turnstile": "Vahvistus epäonnistui, yritä uudelleen"
+      },
+      "resend_code": "Lähetä koodi uudelleen",
+      "resend_email": "Lähetä sähköposti uudelleen",
+      "code_verified": "Koodi vahvistettu",
+      "code_sent": "Koodi lähetetty"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "sivua ei löytynyt",
+        "description": "oho, tätä sivua ei ole olemassa..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "seuranta",
+        "description": "Löydä, arvioi ja jaa suosikkielokuvasi ja -sarjasi."
+      },
+      "recos": {
+        "label": "recot",
+        "description": "Lähetä ja vastaanota ystäviesi recoja. Kaikki samassa paikassa."
+      },
+      "playlists": {
+        "label": "soittolistat",
+        "description": "Järjestä, jaa ja rakenna soittolistoja yhdessä."
+      },
+      "feed": {
+        "label": "syöte",
+        "description": "Seuraa ystäviäsi ja näe mitä he katsovat, tykkäävät ja arvioivat."
+      },
+      "social_sharing": {
+        "label": "jakaminen someen",
+        "description": "Jaa kaikki mistä pidät Instagramissa tai muissa verkostoissa."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "Seuranta",
+          "description": "Pidä kirjaa näkemistäsi elokuvista"
+        },
+        "recos": {
+          "label": "Recot",
+          "description": "Lähetä elokuvasuosituksia ystävillesi"
+        },
+        "explore": {
+          "label": "Tutki",
+          "description": "Löydä uusia elokuvia Paradise Picturesista, interaktiivisesta kartasta, jolla on yli 1400 elokuvaa"
+        },
+        "like": {
+          "label": "Tykkäys",
+          "description": "Näytä rakkautesi suosikkielokuvillesi, -soittolistoillesi ja -arvosteluillesi"
+        },
+        "rating": {
+          "label": "Arvosana",
+          "description": "Arvioi näkemäsi elokuvat"
+        },
+        "watchlist": {
+          "label": "Katselulista",
+          "description": "Tallenna elokuvat jotka haluat nähdä"
+        },
+        "playlists": {
+          "label": "Soittolistat",
+          "description": "Järjestä elokuvasi soittolistoiksi ja jaa ne"
+        },
+        "reviews": {
+          "label": "Arvostelut",
+          "description": "Kirjoita arvosteluja ja päästä sisäinen katkeroitunut elokuvafriikkisi valloilleen"
+        },
+        "feed": {
+          "label": "Syöte",
+          "description": "Seuraa ystäviesi toimintaa"
+        },
+        "adsFree": {
+          "label": "Ilman mainoksia",
+          "description": "Nauti Recomendista ilman mainoksia, ikuisesti"
+        }
+      }
+    },
+    "welcome": {
+      "title": "Kiitos, että liityit!",
+      "description": "Tässä on nopea katsaus siihen, mitä voit tehdä {app}illa.",
+      "follow": {
+        "title": "Seuraa ihmisiä",
+        "description": "Seuraa ystäviäsi ja näe mitä he katsovat."
+      },
+      "import": {
+        "title": "Tuletko toiselta alustalta?"
+      }
+    },
+    "collection": {
+      "label": "kirjasto",
+      "my_recos": {
+        "label": "omat recot",
+        "search": {
+          "placeholder": "hae omista recoista..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "poista omista recoista",
+            "description": "Haluatko varmasti poistaa <important>{title}</important> recoistasi?"
+          },
+          "complete_confirm": {
+            "title": "merkitse reco valmiiksi",
+            "description": "Haluatko varmasti merkitä recon <important>{title}</important> valmiiksi?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "hae katselulistalta..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "poista katselulistalta",
+            "description": "Haluatko varmasti poistaa <important>{title}</important> katselulistaltasi?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "hae sydänsuosikeista..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "poista sydänsuosikeista",
+            "description": "Haluatko varmasti poistaa <important>{title}</important> sydänsuosikeistasi?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> katsoi",
+        "rated": "<name></name> arvioi",
+        "liked": "<name></name> tykkäsi",
+        "rated_liked": "<name></name> tykkäsi ja arvioi",
+        "reviewed": "<name></name> kirjoitti arvostelun"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> on <important>{roles}</important> teoksessa <linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> on <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "Salli sovellus",
+        "description_generic": "Sovellus pyytää käyttöoikeutta tiliisi.",
+        "description": "{client} haluaa käyttää tiliäsi.",
+        "scopes_label": "Tämä antaa sovellukselle oikeuden:",
+        "accept": "Salli",
+        "deny": "Hylkää",
+        "error": {
+          "invalid_request": "Virheellinen tai vanhentunut pyyntö",
+          "invalid_request_description": "Aloita prosessi uudelleen siitä sovelluksesta, joka lähetti sinut tänne.",
+          "client_not_found": "Tätä sovellusta ei löytynyt.",
+          "submit_failed": "Jokin meni vikaan. Yritä uudelleen."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "Kirjaudu {app}-tilillesi."
+        },
+        "label": "Kirjaudu sisään",
+        "description": "Löydä parhaat elokuvasuositukset.",
+        "or_continue_with": "Tai jatka palvelulla",
+        "no_account_yet": "Eikö sinulla ole vielä tiliä?",
+        "form": {
+          "identifier": {
+            "label": "Sähköposti tai käyttäjänimi",
+            "placeholder": "Syötä sähköpostisi tai käyttäjänimesi"
+          },
+          "password": {
+            "label": "Salasana",
+            "placeholder": "Syötä salasanasi"
+          },
+          "submit": "Kirjaudu sisään",
+          "forgot_password": "Unohtuiko salasana?",
+          "wrong_credentials": "Sähköposti tai salasana on virheellinen"
+        },
+        "otp": {
+          "password_login": "Kirjautuisitko mieluummin salasanalla?",
+          "form": {
+            "submit": "Hanki koodi",
+            "no_user_found": "Tällä sähköpostilla ei löytynyt käyttäjää",
+            "success": "Kirjauduttu sisään"
+          },
+          "confirm_form": {
+            "label": "Vahvista koodi",
+            "description": "Vahvistuskoodi on lähetetty osoitteeseen {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "Liity {app}iin löytääksesi ja jakaaksesi elokuvasuosituksia."
+        },
+        "description": "Luo tili, niin voit suositella elokuvaa sille kaverille, joka ei koskaan muista nimiä.",
+        "form": {
+          "success": "Vahvistussähköposti on lähetetty osoitteeseen {email}"
+        },
+        "confirm_form": {
+          "label": "Vahvista sähköposti",
+          "description": "Vahvistuslinkki on lähetetty osoitteeseen {email}"
+        },
+        "return_to_login": "Oho, minulla onkin jo tili."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "Salasana unohtui",
+          "description": "Vaihda salasanasi."
+        },
+        "label": "Salasana unohtui",
+        "description": "Sinun kannattaisi käyttää salasanojen hallintaohjelmaa, se on todella kätevä.",
+        "return_to_login": "Oho, muistankin salasanani.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "Vaihda salasana",
+          "code_sent": "Pyyntö lähetetty"
+        },
+        "confirm_form": {
+          "label": "Vahvista koodi",
+          "description": "Vahvistuskoodi on lähetetty osoitteeseen {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "Salasanan vaihto",
+          "description": "Valitse tilillesi uusi salasana."
+        }
+      },
+      "error": {
+        "label": "Virhe",
+        "description": "Kirjautumisen aikana tapahtui virhe.",
+        "return_to_login": "Takaisin turvaan"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "Tietoa",
+        "marquee": "Eikö elämässäsi ole mitään jännittävämpää kuin katsella 'Tietoa'-sivuja internetissä?",
+        "intro": "<strong>Recomend</strong> on paikka, joka on omistettu elokuvien löytämiselle, suosittelulle ja järjestämiselle. Kaikki on suunniteltu antamaan puskaradiolle paras mahdollinen digitaalinen muoto. Lähestymistapamme keskittyy ihmisiin ja heidän suhteisiinsa itsekeskeisen kuluttamisen aikakaudella — tai paremminkin 'sinulle suositellun' aikakaudella.",
+        "slogan": {
+          "1": "Se on ilman mainoksia ja ilman epäilyttäviä lupauksia. 🍆",
+          "2": "Se on sekä sosiaalinen verkosto että työkalu.",
+          "3": "Se on kotitekoista, intohimoisten tekemää.",
+          "4": "Se on amatöörimäistä sanan varsinaisessa merkityksessä."
+        },
+        "last": "Recomendia voi käyttää yksin tai yhdessä, julkisesti tai yksityisesti, päivällä kuin yöllä — mutta ei koskaan elokuvan edessä, keskity nyt!"
+      },
+      "team": {
+        "label": "Tiimi",
+        "intro": "Recomendin loi kaksi elokuvahullua veljestä, jotka rakastavat upottaa aikansa aivan liian kunnianhimoisiin projekteihin, joiden kohtalosta ei ole mitään varmuutta.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "Hyperaktiivinen arkkitehti-insinööri, joka ei pysty tyytymään yhteen työhön (se oikea start-up nation): Yoann on idean takana, että tehtäisiin elokuvakartta, jonka alkuperäinen vaatimaton tavoite oli päätyä julisteeksi hänen vessansa seinälle. Loupin saapuminen räjäytti tavoitteet täysin, ja hieman tapahtumien ylittämänä hän huolehtii kartan ja sivuston koko graafisesta puolesta sekä kaikesta viestinnästä (vaikka ei siitä pidäkään). Hän kertoo myös mielipiteensä UX/UI:sta ja ehdottaa kasoittain ominaisuuksia ilman selvää käsitystä siitä, miten vaikeita ne ovat koodattavia (jotain edistystä on tapahtunut)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "Täysi itseoppinut, joka kuitenkin sai suoritettua tutkinnon, joka johti palkattomaan työttömyyteen ennen 25 vuoden ikää. Aito linkkuveitsi: Loup huolehtii web-suunnittelusta ja koodaa käyttöliittymän, jonka kuvittelemme mahdollisimman ergonomiseksi. Loup haluaa kiittää kaikkia koodifoorumeita, jotka vastasivat hänen (hyvin) moniin kysymyksiinsä, sekä kaikkia intialaisia tubettajia, jotka seurasivat häntä näiden kuukausien ajan kuin adoptioisät. Hänen äitinsä on muuten vakuuttunut siitä, että veli on orjuuttanut hänet tähän projektiin (kaikki hyvin, äiti)."
+          }
+        },
+        "last": "Jos haluat jutella kanssamme tai muiden yhteisön jäsenten kanssa, liity <link>Discordiimme</link>!"
+      },
+      "pricing": {
+        "label": "Hinnat",
+        "intro": "Tämä tilausmalli on ennen kaikkea tukea, jolla projekti pidetään elossa ja jonka avulla sitä voi kehittää edelleen. Premium-ominaisuudet ovat lisiä Recomendin edistyneeseen käyttöön, ja ne oikeuttavat pienen taloudellisen osallistumisen. Säilytämme aina mahdollisuuden käyttää sivustoa ilmaiseksi, ilman mainoksia ja ilman rajoittunutta oloa.",
+        "subdescription": "*Jos tämän tilauksen äärimmäisen matala hinta on silti yli varojesi, käänny sen liberaalin hallituksen puoleen, joka on vastuussa ostovoimasi heikkenemisestä."
+      },
+      "legal": {
+        "label": "Oikeudellista & tietosuoja",
+        "description": "Kunnioitamme yksityisyyttäsi. Kirjautumattomille käyttäjille näytettävät mainokset hallinnoi Google, ja ne vaativat teknisiä evästeitä näyttötiheyden rajoittamiseen ja petosten estämiseen.",
+        "privacyPolicy": "Lue tietosuojakäytäntömme",
+        "manageCookies": "Hallitse mainosasetuksiani (evästeet)"
+      },
+      "open-source": {
+        "label": "Avoin lähdekoodi",
+        "intro": "Recomend on avointa lähdekoodia: koodi on julkisesti GitHubissa. Käy katsomassa, osallistu — tai jätä meille vain tähti!",
+        "star": "Anna meille tähti GitHubissa"
+      },
+      "businessmodel": {
+        "label": "Liiketoimintamalli",
+        "paragraph": {
+          "1": "Voit arvata, että meidän vähän kaupallisilla profiileillamme emme ole oikein ymmärtäneet, mitä hyötyä liiketoimintamallista meille tällä hetkellä olisi...",
+          "2": "Jos Recomendin tulevaisuus sitä vaatii, tutkimme asiaa ympäröimällä itsemme oikeilla ihmisillä — tai vähintään ihmisillä, joita se kiinnostaa enemmän kuin meitä.",
+          "3": "Siihen asti, ollaan rehellisiä, on muutakin tekemistä."
+        }
+      },
+      "roadmap": {
+        "label": "Tiekartta"
+      },
+      "data": {
+        "label": "Data",
+        "paragraph": {
+          "1": "Kaikki Recomendissa käytettävä metadata tulee <link>The Movie Databasesta (TMDb)</link> alustan API:n kautta. Teemme siis täsmälleen samoin kuin kaikki muut, kuin kiltit lampaat.",
+          "2": "Virheissä tai puuttuvissa elokuvissa käänny siis <link>TMDb</link>:n puoleen."
+        }
+      },
+      "resources": {
+        "label": "Resurssit",
+        "intro": "Tällä ei oikeastaan ole tekemistä elokuvien kanssa, mutta tässä lista sivustoista joista pidämme:"
+      },
+      "contact-support": {
+        "label": "Yhteystiedot & tuki",
+        "help-center": "Löydä vastaukset eksistentiaalisiin kysymyksiisi <link>ohjekeskuksestamme</link>.",
+        "technical-support": "Teknisiin kysymyksiin: <email></email>",
+        "suggest-a-feature": "Ehdotuksiin: <email></email>",
+        "contact-us": "Jos haluat vain ottaa meihin yhteyttä: <email></email>"
+      },
+      "quote": {
+        "label": "Lainaus",
+        "quote": "« Vihaan sanaa ammattilainen. Kaikki ne näyttelijät ja muut, jotka sanovat: minä olen ammattilainen, minä olen proffa! Mitä se on? Onko surullisempaa sanaa? Sillä amatööri tulee sanasta rakkaus. Asiat on tehtävä rakkaudesta, muuten olemme idiootteja. »",
+        "author": "Orson Wells",
+        "date": "1972",
+        "subdescription": "*Epäröimme laittaa sitä, koska se kuulostaa heti teennäiseltä, mutta se kuvaa hyvin tunnelmaamme projektista. Jos et kuitenkaan pidä siitä, otamme sen pois."
+      }
+    },
+    "settings": {
+      "label": "Asetukset",
+      "description": "Hallitse tilisi asetuksia.",
+      "profile": {
+        "label": "Profiili",
+        "description": "Näin muut näkevät sinut sivustolla.",
+        "avatar": {
+          "label": "Profiilikuva",
+          "delete": "Poista"
+        },
+        "full_name": {
+          "label": "Nimi",
+          "description": "Tämä nimi näytetään profiilissasi ja sähköposteissa.",
+          "placeholder": "Syötä nimesi",
+          "form": {
+            "min_length": "Nimessä on oltava vähintään 1 merkki",
+            "max_length": "Nimi ei voi olla yli 50 merkkiä"
+          }
+        },
+        "bio": {
+          "label": "Esittely",
+          "description": "Kerro jotain itsestäsi, se näkyy profiilissasi.",
+          "placeholder": "Kirjoita jotain itsestäsi",
+          "form": {
+            "max_length": "Esittely ei voi olla yli 150 merkkiä",
+            "format": "Esittely ei voi sisältää tyhjiä rivejä eikä koostua pelkistä välilyönneistä."
+          }
+        },
+        "favorite_films": {
+          "label": "Suosikkielokuvat",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "URL ei kelpaa"
+          }
+        }
+      },
+      "account": {
+        "label": "Tili",
+        "description": "Päivitä tilisi asetuksia.",
+        "username": {
+          "label": "Käyttäjänimi",
+          "description": "Tämä on käyttäjänimesi, jolla muut voivat löytää sinut ja päästä profiiliisi. Voit vaihtaa sen vain kerran 30 päivässä.",
+          "placeholder": "Syötä käyttäjänimesi",
+          "form": {
+            "min_length": "Käyttäjänimessä on oltava vähintään 3 merkkiä",
+            "max_length": "Käyttäjänimi ei voi olla yli 15 merkkiä",
+            "invalid": "Käyttäjänimi voi sisältää vain kirjaimia, numeroita ja merkit '_' ja '.'",
+            "unavailable": "Tämä käyttäjänimi on jo varattu"
+          }
+        },
+        "private": {
+          "label": "Yksityinen tili",
+          "description": "Kun tilisi on yksityinen, vain hyväksymäsi käyttäjät näkevät toimintasi."
+        },
+        "email": {
+          "description": "Vahvistussähköposti lähetetään nykyiseen sähköpostiosoitteeseesi ja uuteen osoitteeseen. Sinun on vahvistettava molemmat, jotta muutos tulee voimaan.",
+          "change_pending": "<strong>{date}</strong> lähetettiin vahvistussähköposti uuteen sähköpostiosoitteeseesi <strong>{email}</strong>. Klikkaa linkkiä tai syötä vahvistuskoodi vahvistaaksesi muutoksen.",
+          "confirm_email_code": {
+            "description": "Syötä vahvistuskoodi, joka lähetettiin osoitteeseen <strong>{email}</strong>."
+          },
+          "change_success": "Sähköpostiosoitteesi on päivitetty"
+        },
+        "delete_account": {
+          "button": "Poista tilini",
+          "confirm": {
+            "description": "Tilisi poistetaan lopullisesti, eikä sitä voi palauttaa.",
+            "confirm_email_sent": "Vahvistussähköposti on lähetetty sähköpostiosoitteeseesi"
+          }
+        }
+      },
+      "appearance": {
+        "label": "Ulkoasu",
+        "description": "Muokkaa sovelluksen ulkoasua. Vaihda automaattisesti päivä- ja yöteeman välillä.",
+        "language": {
+          "label": "Kieli",
+          "description": "Valitse kieli — muutokset tulevat voimaan kun käynnistät sovelluksen uudelleen",
+          "placeholder": "Valitse kieli",
+          "not_found": "Kieltä ei löytynyt"
+        },
+        "theme": {
+          "label": "Teema",
+          "description": "Valitse käyttöliittymän teema.",
+          "options": {
+            "light": "Vaalea",
+            "dark": "Tumma"
+          }
+        }
+      },
+      "subscription": {
+        "label": "Tilaus",
+        "description": "Hallitse premium-tilaustasi."
+      },
+      "security": {
+        "label": "Turvallisuus",
+        "description": "Salasanan vaihtaminen kirjaa sinut ulos kaikilta laitteilta paitsi siltä, jota käytät nyt.",
+        "current_password": {
+          "label": "Nykyinen salasana",
+          "placeholder": "Syötä nykyinen salasanasi",
+          "form": {
+            "required": "Nykyinen salasana vaaditaan",
+            "invalid": "Nykyinen salasana on virheellinen"
+          }
+        },
+        "new_password": {
+          "label": "Uusi salasana",
+          "placeholder": "Syötä uusi salasanasi",
+          "form": {
+            "min_length": "Salasanassa on oltava vähintään 8 merkkiä",
+            "uppercase": "Vaaditaan vähintään yksi iso kirjain",
+            "lowercase": "Vaaditaan vähintään yksi pieni kirjain",
+            "number": "Vaaditaan vähintään yksi numero",
+            "special": "Vaaditaan vähintään yksi erikoismerkki"
+          }
+        },
+        "confirm_password": {
+          "label": "Vahvista uusi salasana",
+          "placeholder": "Vahvista uusi salasanasi",
+          "form": {
+            "match": "Salasanat eivät täsmää"
+          }
+        }
+      },
+      "notifications": {
+        "label": "Ilmoitukset",
+        "description": "Valitse mitä ilmoituksia saat.",
+        "push_notifications": {
+          "label": "Push-ilmoitukset",
+          "form": {
+            "enable": "Ota push-ilmoitukset käyttöön"
+          },
+          "already_granted": "Ilmoituspyyntö on jo tehty. Muuta sitä selaimesi asetuksista.",
+          "no_enabled": "Ota ilmoitukset käyttöön laitteesi asetuksista saadaksesi push-ilmoituksia.",
+          "open_settings": "Siirry laitteen asetuksiin"
+        }
+      },
+      "data": {
+        "label": "Data",
+        "description": "Tuo tai vie tietosi.",
+        "importer": {
+          "label": "Tuonti",
+          "select_source": "Valitse lähde",
+          "instructions_title": "Ohjeet",
+          "browse_prompt": "Pudota tiedostosi tähän, tai <link>selaa</link>",
+          "browse_prompt_mobile": "Napauta valitaksesi tiedoston",
+          "uploading": "Lähetetään…",
+          "processing": "Analysoidaan tiedostoasi…",
+          "upload_error": "Lähetys epäonnistui, yritä uudelleen.",
+          "invalid_file_type": "Tätä tiedostotyyppiä ei tueta tälle lähteelle.",
+          "review_title": "Tarkista tuontisi",
+          "review_summary": "{matched}/{total} löytyi",
+          "validate": "Vahvista tuonti",
+          "validate_confirm_description": "Tämä tuo kirjastoosi kaikki löytyneet kohteet, joita ei ole ohitettu. Tätä ei voi kumota.",
+          "success_title": "Tuonti valmis",
+          "success_description": "Tietosi on tuotu onnistuneesti.",
+          "failed_title": "Tuonti epäonnistui",
+          "failed_description": "Jokin meni vikaan tämän tuonnin käsittelyssä.",
+          "pending_description": "Tuontisi on jonossa ja alkaa pian.",
+          "empty": "Ei vielä tuonteja.",
+          "delete_confirm_description": "Tämä tuonti ja kaikki sen tiedot poistetaan lopullisesti. Tätä ei voi kumota.",
+          "keep_existing": "Säilytä omat",
+          "use_imported": "Käytä tuotua",
+          "merge": "Yhdistä",
+          "conflict": "Ristiriita",
+          "no_match": "Ei osumaa",
+          "existing_rating": "Nyt: {rating}",
+          "log_column": "Loki",
+          "actions_column": "Toiminnot",
+          "categories": {
+            "log_movies": "Elokuvat",
+            "log_tv_series": "Sarjat",
+            "bookmarks": "Katselulista",
+            "playlists": "Listat"
+          },
+          "status": {
+            "pending": "Odottaa",
+            "processing": "Käynnissä",
+            "awaiting_review": "Tarkistettava",
+            "completed": "Valmis",
+            "failed": "Epäonnistui"
+          }
+        },
+        "exporter": {
+          "label": "Vienti"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "vaihda Premiumiin",
+        "description": "Vaihda premium-tiliin käyttääksesi kaikkia {app}in ominaisuuksia."
+      },
+      "header": {
+        "title": "laajenna elokuvamaailmaasi, jaa enemmän, tue {app}ia",
+        "subtitle": "kokeile 1 kuukausi ilmaiseksi, sitten {price}/kk"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "toiminnot",
+            "unlimited_activities": {
+              "label": "rajattomat toiminnot",
+              "description": "arvosanat, tykkäykset, arvostelut, katselulista ja suositukset"
+            },
+            "favorites": {
+              "label": "suosikit",
+              "description": "lisää suosikkielokuvasi profiiliisi"
+            }
+          },
+          "playlists": {
+            "label": "soittolistat",
+            "unlimited_playlists": {
+              "label": "rajattomat",
+              "description": "luo rajaton määrä soittolistoja"
+            },
+            "shared_playlists": {
+              "label": "jaetut",
+              "description": "jaa soittolistasi muiden käyttäjien kanssa"
+            },
+            "collaborative_playlists": {
+              "label": "yhteiset",
+              "description": "luo yhteisiä soittolistoja muiden käyttäjien kanssa"
+            }
+          },
+          "feed": {
+            "label": "syöte",
+            "followees": {
+              "label": "seuratut käyttäjät",
+              "description": "näe seuraamiesi käyttäjien toiminnot"
+            },
+            "cast_and_crew": {
+              "label": "näyttelijät & työryhmä",
+              "description": "seuraa elokuvien tekijöiden toimintaa"
+            }
+          },
+          "support": {
+            "label": "tuki",
+            "team": {
+              "label": "Tue {app}in tiimiä"
+            },
+            "credits": {
+              "label": "lopputekstit",
+              "description": "profiilisi sovelluksen lopputeksteissä"
+            }
+          }
+        },
+        "success": {
+          "label": "Kiitos tuestasi!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} - soittolista: @{username}",
+        "description": "Tutustu käyttäjän @{username} elokuvasoittolistaan {app}issa."
+      },
+      "actions": {
+        "delete": {
+          "description": "Tämä poistaa <important>{title}</important> lopullisesti soittolistoistasi."
+        }
+      },
+      "search": {
+        "placeholder": "hae soittolistalta..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "Haluatko varmasti poistaa <important>{title}</important> soittolistaltasi?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "Syötä soittolistan nimi"
+        },
+        "description": {
+          "placeholder": "Syötä soittolistan kuvaus"
+        },
+        "error": {
+          "format": "Kuvaus ei voi sisältää tyhjiä rivejä eikä koostua pelkistä välilyönneistä."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "Tutustu käyttäjän @{username} profiiliin {app}issa."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year}) • Elokuva",
+        "description": "{title} on {directors}in elokuva vuodelta {year}. Kuvaus: {overview}",
+        "description_no_director": "{title} on elokuva vuodelta {year}. Kuvaus: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Soittolistat",
+          "description": "Tutustu kaikkiin soittolistoihin, joilla on elokuva {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Arvostelut",
+          "description": "Tutustu kaikkiin elokuvan {title} arvosteluihin."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} on {creators}in sarja, joka esitettiin ensimmäisen kerran vuonna {year}. Kuvaus: {overview}",
+        "description_no_creator": "{title} on sarja, joka esitettiin ensimmäisen kerran vuonna {year}. Kuvaus: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Soittolistat",
+          "description": "Tutustu kaikkiin soittolistoihin, joilla on sarja {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Arvostelut",
+          "description": "Tutustu kaikkiin sarjan {title} arvosteluihin."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • Kaudet",
+          "description": "Tutustu kaikkiin sarjan {title} kausiin."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • Kausi {number}",
+            "description": "Tutustu kaikkiin sarjan {title} kauden {number} jaksoihin."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • Elokuvat",
+          "description": "Tutustu kaikkiin elokuviin, joissa {name} on näytellyt tai ollut mukana."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • Sarjat",
+          "description": "Tutustu kaikkiin sarjoihin, joissa {name} on näytellyt tai ollut mukana."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "Arvostelu teoksesta {title}, kirjoittaja @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "Kirjoita arvostelu teoksesta {title}",
+          "description": "Jaa mielipiteesi teoksesta {title}."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Tutki Paradise Picturesia",
+        "description": "Lähde tutkimaan saarta ja sen moninaisia lavasteita. Lukuisat saarta asuttavat elokuvat on sijoitettu diegeettiseen ympäristöönsä. Onnistutko tutkimaan sen joka kolkan?"
+      }
+    },
+    "legal": {
+      "label": "Oikeudellista",
+      "description": "Lue {app}in oikeudelliset asiakirjat.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "Yleiset käyttöehdot",
+          "description": "Lue {app}in käyttöehdot."
+        },
+        "sections": {
+          "intro": "Nämä yleiset käyttöehdot (jäljempänä 'Ehdot') säätelevät sovelluksen {app} käyttöä ja siihen pääsyä. Sovelluksen julkaisee Loup (jäljempänä 'Julkaisija'), kotipaikka Pariisi. Rekisteröityminen {app}iin tarkoittaa näiden Ehtojen hyväksymistä varauksetta.",
+          "presentation": {
+            "label": "1. Palvelun kuvaus",
+            "content": "{app} on ilmainen sovellus, jossa käyttäjät voivat katsella tietoja elokuvista, julkaista arvosteluja, arvioida teoksia ja luoda omia listoja."
+          },
+          "account": {
+            "label": "2. Tili ja turvallisuus",
+            "content": "Sisällöntuotannon ominaisuuksien käyttö edellyttää tilin luomista. Käyttäjä on vastuussa kirjautumistietojensa luottamuksellisuudesta. Petollisen käytön tai murtoepäilyn tapauksessa Käyttäjän on otettava välittömästi yhteyttä tukeen osoitteessa: <email></email>."
+          },
+          "conduct": {
+            "label": "3. Käyttäytymissäännöt",
+            "content": "Käyttäjä sitoutuu pysymään kohteliaana ja kunnioittavana arvioissaan ja listoissaan. Ehdottomasti kiellettyä on: vihamielinen, kunniaa loukkaava tai rasistinen sisältö, häirintä sekä roskaposti tai pyytämätön kaupallinen mainonta. Julkaisija pidättää oikeuden poistaa kaiken näitä sääntöjä rikkovan sisällön ja sulkea kyseisen tilin ilman ennakkoilmoitusta."
+          },
+          "child_safety": {
+            "label": "4. Alaikäisten suojelu",
+            "content": "{app} noudattaa tiukkaa nollatoleranssia kaikkia lasten seksuaalisen hyväksikäytön ja riiston muotoja ('Child Sexual Abuse and Exploitation', eli CSAE) kohtaan. Minkä tahansa alaikäisiä seksualisoivan, hyväksikäyttävän tai muutoin vaarantavan sisällön luominen, lataaminen, säilyttäminen, levittäminen, pyytäminen tai edistäminen on {app}issa nimenomaisesti ja ehdottomasti kielletty. Jokainen tili, joka todetaan rikkovan tätä käytäntöä, suljetaan välittömästi ja pysyvästi, ja Julkaisija ilmoittaa kyseisestä sisällöstä sekä kaikista saatavilla olevista käyttäjätiedoista National Center for Missing & Exploited Children -järjestölle (NCMEC) ja/tai toimivaltaisille viranomaisille sovellettavan lain mukaisesti. Jokaisen käyttäjän, joka saa tietoonsa sisältöä tai käyttäytymistä, joka voi olla CSAE-tapaus, on ilmoitettava siitä viipymättä osoitteeseen: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. Immateriaalioikeudet",
+            "content": "Käyttäjä pysyy kirjoittamiensa arvioiden omistajana. Julkaisemalla {app}issa Käyttäjä kuitenkin myöntää Julkaisijalle maksuttoman, ei-yksinomaisen lisenssin näyttää, jäljentää ja teknisesti sovittaa tätä sisältöä sovelluksen sisällä. {app}in visuaaliset elementit, koodi ja muotoilu ovat Julkaisijan yksinomaista omaisuutta."
+          },
+          "privacy": {
+            "label": "6. Henkilötiedot",
+            "content": "Yksityisyytesi kunnioittaminen on ehdoton ensisijainen tavoitteemme. {app} ei myy, vuokraa eikä jaa mitään henkilötietoja kaupallisille kolmansille osapuolille tai mainostajille. Kerätyt tiedot (sähköposti, käyttäjänimi, toiminta sovelluksessa) palvelevat vain palvelun toimintaa ja tilisi hallintaa. Voit käyttää oikeuksiasi tietojen tarkastamiseen, muuttamiseen tai poistamiseen (GDPR) ottamalla yhteyttä: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Evästeet ja jäljittimet",
+            "content": "{app} ei käytä mainosevästeitä eikä kolmansien osapuolten käyttäytymisjäljittimiä. Käytössä on vain kaksi teknisten evästeiden tyyppiä: tunnistautumiseväste (pitääksesi sinut kirjautuneena) ja kielivalintaeväste (muistaakseen valintasi). Koska nämä evästeet ovat ehdottoman välttämättömiä palvelulle, ne eivät vaadi ennakkosuostumusta."
+          },
+          "ads": {
+            "label": "8. Mainonta",
+            "content": "Sovellus tarjotaan tällä hetkellä täysin ilman mainoksia. Jos tämä malli muuttuisi, käyttäjille ilmoitettaisiin siitä näiden Ehtojen päivityksellä."
+          },
+          "liability": {
+            "label": "9. Vastuu",
+            "content": "Julkaisija pyrkii pitämään {app}in saatavilla ympäri vuorokauden, mutta ei takaa katkojen tai virheiden puuttumista. Elokuvia koskevat tiedot tulevat kolmansien osapuolten tietokannoista; Julkaisijaa ei voida pitää vastuussa näiden tietojen mahdollisista epätarkkuuksista."
+          },
+          "law": {
+            "label": "10. Sovellettava laki",
+            "content": "Näihin Ehtoihin sovelletaan Ranskan lakia. Jos riitaa ei saada sovinnollisesti ratkaistua osoitteen <email></email> kautta, Pariisin tuomioistuimet ovat yksin toimivaltaisia."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "Tietosuojakäytäntö",
+          "description": "Lue {app}in tietosuojakäytäntö."
+        },
+        "sections": {
+          "intro": "Tietosuoja on {app}in filosofian ydin. Tämä käytäntö kertoo tarkemmin, mitä tietoja keräämme, miksi keräämme niitä ja miten suojaamme niitä. Lyhyesti: emme myy tietojasi.",
+          "controller": {
+            "label": "1. Rekisterinpitäjä",
+            "content": "Tietojen rekisterinpitäjä on Loup, kotipaikka Pariisi (Ranska). Kaikissa yksityisyyttä koskevissa kysymyksissä voit ottaa yhteyttä: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. Kerätyt tiedot",
+            "content": "Keräämme vain sovelluksen toiminnan kannalta ehdottoman välttämättömät tiedot: sähköpostiosoitteesi (tunnistautumiseen), käyttäjänimesi ja käyttötietosi (arvioidut elokuvat, arvostelut, listat). Salasanasi tallennetaan salattuina (tiivisteenä) ja turvallisesti."
+          },
+          "purpose": {
+            "label": "3. Käsittelyn tarkoitus",
+            "content": "Tietojasi käsitellään vain, jotta: voit luoda ja hallita tiliäsi, listasi ja arvosanasi voidaan näyttää, ja palvelun tekninen toiminta voidaan varmistaa. Emme käytä tietojasi mainosprofilointiin."
+          },
+          "sharing": {
+            "label": "4. Tietojen jakaminen",
+            "content": "Henkilötietojasi ei koskaan myydä, vuokrata eikä luovuteta kolmansille osapuolille. Niitä voidaan säilyttää teknisten palveluntarjoajiemme (konesali, transaktiosähköpostipalvelu) palvelimilla, joita sitoo tiukka luottamuksellisuus ja jotka noudattavat GDPR:ää."
+          },
+          "retention": {
+            "label": "5. Säilytysaika",
+            "content": "Tietojasi säilytetään niin kauan kuin tilisi on aktiivinen. Jos päätät poistaa tilisi, kaikki henkilötietosi (sähköposti, käyttäjänimi, arviot) poistetaan lopullisesti tietokannoistamme."
+          },
+          "rights": {
+            "label": "6. Oikeutesi (GDPR)",
+            "content": "Lainsäädännön mukaisesti sinulla on oikeus tarkastaa, oikaista, siirtää ja poistaa tietosi. Voit käyttää näitä oikeuksia milloin tahansa suoraan sovelluksessa tai kirjoittamalla meille: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Evästeet",
+            "content": "Kuten käyttöehdoissamme todetaan, käytämme vain välttämättömiä teknisiä evästeitä (istunto ja kieli). Laitteellesi ei aseteta kolmansien osapuolten mainos- tai seurantaevästeitä."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "Hae elokuvaa, sarjaa, soittolistaa, henkilöä tai käyttäjää..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "Haluatko varmasti poistaa tämän teoksen nähtyjen listaltasi? Jos sinulla on arvosana tai arvostelu, myös ne poistetaan."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "Haluatko varmasti merkitä sarjan valmiiksi? Kaikki kaikkien kausien jaksot merkitään nähdyiksi."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "Haluatko varmasti merkitä kauden {seasonNumber} valmiiksi? Kaikki kauden jaksot merkitään nähdyiksi."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "Jotta täällä näkyisi toimintaa, sinun tai seuraamiesi käyttäjien on arvioitava elokuvia, sarjoja, ..."
+    },
+    "feed_person": {
+      "message": "Jotta täällä näkyisi toimintaa, sinun on seurattava elokuvien tai sarjojen tekijöitä."
+    },
+    "playlists": {
+      "items": {
+        "empty": "Tällä soittolistalla ei ole elokuvia eikä sarjoja. Lisää niitä täyttääksesi sen!"
+      },
+      "add_to": {
+        "empty": "Sinulla ei ole yhtään soittolistaa. Luo yksi, niin voit lisätä elokuvia tai sarjoja ja löytää ne helposti!"
+      },
+      "saved": {
+        "empty": "Sinulla ei ole tallennettuja soittolistoja. Tallenna soittolista, niin löydät sen helposti kirjastostasi!"
+      },
+      "members": {
+        "empty": "Tällä soittolistalla ei ole jäseniä. Lisää niitä, niin voitte tehdä samaa soittolistaa yhdessä!",
+        "search": "Hae käyttäjiä soittolistalle lisättäväksi..."
+      }
+    },
+    "follow-requests": {
+      "empty": "Sinulla ei ole odottavia seurauspyyntöjä. Kun niitä tulee, ne näkyvät täällä!"
+    },
+    "recos": {
+      "empty": "Sinulla ei ole suosituksia. Kun niitä tulee, ne näkyvät täällä!",
+      "send_to": {
+        "empty": "Sinulla ei ole ketään, jolle lähettäisit recon. Teidän on oltava kavereita, jotta voit lähettää recon (molemminpuolinen seuraaminen)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "Sinulla ei ole vielä myöhemmäksi tallennettuja elokuvia tai sarjoja. Kun niitä tulee, ne näkyvät täällä!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> recosi sinulle elokuvan <movie></movie>"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> recosi sinulle sarjan <tv_series></tv_series>"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> katsoi elokuvan <movie></movie>, jonka olit reconnut"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> katsoi sarjan <tv_series></tv_series>, jonka olit reconnut"
+    },
+    "follower_created": {
+      "description": "<user></user> alkoi seurata sinua"
+    },
+    "follower_accepted": {
+      "description": "<user></user> hyväksyi seurauspyyntösi"
+    },
+    "follower_request": {
+      "description": "<user></user> haluaa seurata sinua"
+    },
+    "friend_created": {
+      "description": "<user></user> on nyt kaverisi"
+    }
+  }
+}

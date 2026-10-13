@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "सिनेमा को खोजने का एक और तरीका",
+    "description": "{app} सिनेमा प्रेमियों के लिए एक सोशल नेटवर्क है। अपने दोस्तों के साथ फ़िल्में और सीरीज़ खोजें, साझा करें और देखें।"
+  },
+  "common": {
+    "messages": {
+      "welcome": "स्वागत है",
+      "welcome_to_app": "{app} पर स्वागत है",
+      "hello": "नमस्ते",
+      "greeting_with_name": "{timeOfDay, select, morning {सुप्रभात, {name}} afternoon {नमस्कार, {name}} evening {शुभ संध्या, {name}} night {शुभ रात्रि, {name}} other {नमस्ते, {name}}}",
+      "click_here": "यहाँ क्लिक करें",
+      "see_more": "और देखें",
+      "see_more_details": "और विवरण देखें",
+      "more": "और",
+      "view_profile": "प्रोफ़ाइल देखें",
+      "library": "लाइब्रेरी",
+      "watchlist": "देखने की सूची",
+      "for_later": "बाद के लिए",
+      "heart_pick": "{count, plural, one {दिल की पसंद} other {दिल की पसंदें}}",
+      "add_to_heart_picks": "दिल की पसंदों में जोड़ें",
+      "remove_from_heart_picks": "दिल की पसंदों से हटाएँ",
+      "add_rating": "रेटिंग जोड़ें",
+      "edit_rating": "रेटिंग बदलें",
+      "remove_rating": "रेटिंग हटाएँ",
+      "share_my_rating": "मेरी रेटिंग साझा करें",
+      "share_review": "समीक्षा साझा करें",
+      "show_likes_count": "लाइक की संख्या दिखाएँ",
+      "show_comments_count": "टिप्पणियों की संख्या दिखाएँ",
+      "add_to_watchlist": "देखने की सूची में जोड़ें",
+      "remove_from_watchlist": "देखने की सूची से हटाएँ",
+      "no_results": "कोई परिणाम नहीं",
+      "no_results_for": "<strong>{query}</strong> के लिए कोई परिणाम नहीं",
+      "no_followees": "आप किसी को फ़ॉलो नहीं करते",
+      "no_followers": "कोई फ़ॉलोअर नहीं",
+      "no_rating": "कोई रेटिंग नहीं",
+      "must_watch_to_review": "समीक्षा लिखने के लिए यह कृति देखनी होगी",
+      "review_cannot_be_empty": "समीक्षा खाली नहीं हो सकती",
+      "no_activity": "कोई गतिविधि नहीं",
+      "followers_ratings": "फ़ॉलोअर्स की रेटिंग",
+      "added_by": "जोड़ा गया",
+      "sort_by": "इसके अनुसार क्रमबद्ध करें",
+      "sort_order": "क्रम",
+      "go_to_film": "फ़िल्म पर जाएँ",
+      "go_to_tv_series": "सीरीज़ पर जाएँ",
+      "go_to_user": "यूज़र पर जाएँ",
+      "go_to_person": "व्यक्ति पर जाएँ",
+      "go_to_activity": "गतिविधि पर जाएँ",
+      "go_to_playlist": "सूची पर जाएँ",
+      "go_to_review": "समीक्षा पर जाएँ",
+      "go_to_director": "{count, plural, one {निर्देशक पर जाएँ} other {निर्देशकों पर जाएँ}}",
+      "go_to_creator": "{count, plural, one {रचनाकार पर जाएँ} other {रचनाकारों पर जाएँ}}",
+      "show_director": "{count, plural, one {निर्देशक दिखाएँ} other {निर्देशक दिखाएँ}}",
+      "show_creator": "{count, plural, one {रचनाकार दिखाएँ} other {रचनाकार दिखाएँ}}",
+      "show_credit": "{count, plural, one {योगदान दिखाएँ} other {योगदान दिखाएँ}}",
+      "credits": "क्रेडिट",
+      "view_recommendation": "{count, plural, one {reco देखें} other {reco देखें}}",
+      "view_directors": "{count, plural, one {निर्देशक देखें} other {निर्देशक देखें}}",
+      "no_director": "कोई निर्देशक नहीं",
+      "view_comment": "{count, plural, one {टिप्पणी देखें} other {टिप्पणियाँ देखें}}",
+      "add_comment": "{count, plural, one {टिप्पणी जोड़ें} other {टिप्पणियाँ जोड़ें}}",
+      "edit_comment": "{count, plural, one {टिप्पणी बदलें} other {टिप्पणियाँ बदलें}}",
+      "delete_comment": "टिप्पणी हटाएँ",
+      "do_you_really_want_to_delete_this_comment": "क्या आप वाकई यह टिप्पणी हटाना चाहते हैं?",
+      "comment_deleted": "यह टिप्पणी हटा दी गई",
+      "write_your_comment_here": "एक टिप्पणी लिखें...",
+      "reply": "जवाब",
+      "replies_count": "{count, plural, one {# जवाब} other {# जवाब}}",
+      "view_replies": "{count, plural, one {# जवाब देखें} other {# जवाब देखें}}",
+      "hide_replies": "जवाब छिपाएँ",
+      "load_more_replies": "और जवाब लोड करें",
+      "get_started": "शुरू करें",
+      "get_started_its_free": "चलिए शुरू करें 🎬, यह मुफ़्त है!",
+      "import": "आयात",
+      "upgrade_to_plan": "{plan} में अपग्रेड करें",
+      "choose_subscription_recurrence": "अपनी सदस्यता का बिलिंग चक्र चुनें",
+      "compare_plans": "प्लान की तुलना करें",
+      "save_up_to_percent": "{percent}% तक बचाएँ",
+      "is_empty": "यहाँ थोड़ा खाली है",
+      "add_to_playlist": "किसी सूची में जोड़ें",
+      "send_to_friend": "किसी दोस्त को भेजें",
+      "pin_to_profile": "प्रोफ़ाइल पर पिन करें",
+      "unpin_from_profile": "प्रोफ़ाइल से अनपिन करें",
+      "pinned": "पिन किया गया",
+      "unpinned": "अनपिन किया गया",
+      "no_pinned": "कोई पिन किया आइटम नहीं",
+      "pinned_limit_reached": "आप पिन किए आइटम की सीमा तक पहुँच गए — नया जोड़ने के लिए किसी एक को अनपिन करें",
+      "custom_sort": "मनचाहा क्रम",
+      "quick_add": "तेज़ी से जोड़ें",
+      "favorite_films": "पसंदीदा फ़िल्में",
+      "follow": "फ़ॉलो करें",
+      "followed": "फ़ॉलो किया",
+      "request_sent": "अनुरोध भेजा गया",
+      "follow_requests": "फ़ॉलो अनुरोध",
+      "no_follow_requests": "कोई फ़ॉलो अनुरोध नहीं",
+      "follower": "{count, plural, one {फ़ॉलोअर} other {फ़ॉलोअर}}",
+      "follower_count": "{count} फ़ॉलोअर",
+      "see_followers": "फ़ॉलोअर देखें",
+      "followee": "{count, plural, one {फ़ॉलो किया} other {फ़ॉलो किए}}",
+      "followee_count": "{count} को फ़ॉलो करते हैं",
+      "see_followees": "देखें आप किसे फ़ॉलो करते हैं",
+      "last_activities": "हाल की गतिविधियाँ",
+      "last_updated": "अंतिम अपडेट",
+      "last_updated_at_date": "अंतिम अपडेट {date} को",
+      "show_all": "सब दिखाएँ",
+      "this_account_is_private": "यह अकाउंट निजी है",
+      "follow_to_see_activities": "गतिविधियाँ देखने के लिए फ़ॉलो करें",
+      "review": "{count, plural, one {समीक्षा} other {समीक्षाएँ}}",
+      "no_overview": "कोई सारांश नहीं",
+      "cast": "कलाकार",
+      "no_cast": "कोई कलाकार नहीं",
+      "recent": "नए",
+      "popular": "लोकप्रिय",
+      "popularity": "लोकप्रियता",
+      "no_reviews": "कोई समीक्षा नहीं",
+      "no_playlists": "कोई सूची नहीं",
+      "no_playlists_found": "कोई सूची नहीं मिली",
+      "no_films": "कोई फ़िल्म नहीं",
+      "no_tv_series": "कोई सीरीज़ नहीं",
+      "view_activity": "गतिविधि देखें",
+      "comment_count": "{count, plural, one {# टिप्पणी} other {# टिप्पणियाँ}}",
+      "write_review": "समीक्षा लिखें",
+      "new_review": "नई समीक्षा",
+      "edit_review": "समीक्षा बदलें",
+      "review_by": "{name} की समीक्षा",
+      "my_review": "{count, plural, one {मेरी समीक्षा} other {मेरी समीक्षाएँ}}",
+      "add_review": "समीक्षा जोड़ें",
+      "tv_series": "{count, plural, one {सीरीज़} other {सीरीज़}}",
+      "film": "{count, plural, one {फ़िल्म} other {फ़िल्में}}",
+      "movie": "{count, plural, one {फ़िल्म} other {फ़िल्में}}",
+      "media": "{count, plural, one {शीर्षक} other {शीर्षक}}",
+      "tv_season": "{count, plural, one {सीज़न} other {सीज़न}}",
+      "tv_season_count": "{count, plural, one {# सीज़न} other {# सीज़न}}",
+      "tv_season_value": "सीज़न {number}",
+      "tv_season_short": "सी{number}",
+      "tv_episode": "{count, plural, one {एपिसोड} other {एपिसोड}}",
+      "tv_episode_count": "{count, plural, one {# एपिसोड} other {# एपिसोड}}",
+      "tv_episode_value": "एपिसोड {number}",
+      "tv_episode_short": "सी{seasonNumber}ए{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {विशेष एपिसोड} other {विशेष एपिसोड}}",
+      "first_air_date": "पहला प्रसारण",
+      "last_air_date": "अंतिम प्रसारण",
+      "see_film": "फ़िल्म देखें",
+      "see_tv_series": "सीरीज़ देखें",
+      "watch_film_title": "{title} देखें",
+      "watch_film_streaming_or_download": "<important>{title}</important> को स्ट्रीमिंग पर या वैध डाउनलोड से देखें",
+      "download": "डाउनलोड",
+      "downloaded": "डाउनलोड हो गया",
+      "person": "{count, plural, one {व्यक्ति} other {व्यक्ति}}",
+      "top_result": "सर्वोत्तम परिणाम",
+      "user": "{count, plural, one {यूज़र} other {यूज़र}}",
+      "reco": "{count, plural, one {reco} other {reco}}",
+      "my_recos": "मेरे reco",
+      "item": "{count, plural, one {आइटम} other {आइटम}}",
+      "item_count": "{count, plural, one {# आइटम} other {# आइटम}}",
+      "type": "प्रकार",
+      "complete": "पूरा करें",
+      "completed": "पूरा हुआ",
+      "collection": "{count, plural, one {संग्रह} other {संग्रह}}",
+      "most_recent": "सबसे नए",
+      "most_popular": "सबसे लोकप्रिय",
+      "most_old": "सबसे पुराने",
+      "known_for": "इसके लिए जाने जाते हैं",
+      "release_date": "रिलीज़ की तारीख",
+      "last_appearance_date": "अंतिम उपस्थिति",
+      "vote_average": "औसत रेटिंग",
+      "added": "जोड़ा गया",
+      "added_date": "जोड़ने की तारीख",
+      "added_at": "जोड़ा गया",
+      "add": "जोड़ें",
+      "playlist_name": "सूची का नाम",
+      "updated_at": "अपडेट हुआ",
+      "created_at": "बनाया गया",
+      "likes": "लाइक",
+      "likes_count": "लाइक की संख्या",
+      "search_media": "शीर्षक खोजें",
+      "search_film": "फ़िल्म खोजें",
+      "start_typing_to_search_films": "फ़िल्में खोजने के लिए लिखना शुरू करें",
+      "search_tv_series": "सीरीज़ खोजें",
+      "start_typing_to_search_tv_series": "सीरीज़ खोजने के लिए लिखना शुरू करें",
+      "search_person": "व्यक्ति खोजें",
+      "start_typing_to_search_persons": "व्यक्ति खोजने के लिए लिखना शुरू करें",
+      "search_user": "{count, plural, one {यूज़र खोजें} other {यूज़र खोजें}}",
+      "start_typing_to_search_users": "यूज़र खोजने के लिए लिखना शुरू करें",
+      "search_playlist": "सूची खोजें",
+      "start_typing_to_search_playlists": "सूचियाँ खोजने के लिए लिखना शुरू करें",
+      "search_film_or_tv_series": "फ़िल्म या सीरीज़ खोजें",
+      "watched_date": "{count, plural, one {देखने की तारीख} other {देखने की तारीखें}}",
+      "mark_as_watched": "देखा हुआ चिह्नित करें",
+      "remove_from_watched": "देखे हुओं से हटाएँ",
+      "rating": "रेटिंग",
+      "create_a_playlist": "सूची बनाएँ",
+      "by_name": "{name} द्वारा",
+      "reset": "रीसेट",
+      "job": "{count, plural, one {भूमिका} other {भूमिकाएँ}}",
+      "department": "{count, plural, one {विभाग} other {विभाग}}",
+      "share_title_via": "<strong>{title}</strong> को इसके ज़रिए साझा करें:",
+      "share_title": "<strong>{title}</strong> साझा करें",
+      "link": "लिंक",
+      "copy_link": "लिंक कॉपी करें",
+      "copied": "कॉपी हो गया",
+      "other": "{count, plural, one {अन्य} other {अन्य}}",
+      "via": "के ज़रिए",
+      "edit": "बदलें",
+      "guest": "{count, plural, one {अतिथि} other {अतिथि}}",
+      "are_u_sure": "क्या आप निश्चित हैं?",
+      "backward": "पीछे",
+      "forward": "आगे",
+      "back": "वापस",
+      "next": "अगला",
+      "notification": "{count, plural, one {सूचना} other {सूचनाएँ}}",
+      "see_notifications": "सूचनाएँ देखें",
+      "open_social_panel": "सोशल पैनल खोलें",
+      "cancel_change": "{count, plural, one {बदलाव रद्द करें} other {बदलाव रद्द करें}}",
+      "do_you_really_want_to_cancel_change": "क्या आप वाकई {count, plural, one {बदलाव} other {बदलाव}} रद्द करना चाहते हैं?",
+      "continue_editing": "संपादन जारी रखें",
+      "confirm": "पुष्टि करें",
+      "terms_of_use": "उपयोग की शर्तें",
+      "privacy_policy": "गोपनीयता नीति",
+      "request_made": "अनुरोध भेजा गया",
+      "request_canceled": "अनुरोध रद्द हुआ",
+      "cancel_request": "अनुरोध रद्द करें",
+      "open_menu": "मेन्यू खोलें",
+      "feed": "फ़ीड",
+      "about": "परिचय",
+      "home": "होम",
+      "search": "खोज",
+      "explore": "खोजबीन",
+      "shop": "स्टोर",
+      "help": "सहायता",
+      "legal": "कानूनी",
+      "setting": "{count, plural, one {सेटिंग} other {सेटिंग्स}}",
+      "logout": "लॉग आउट",
+      "to_watch": "देखने के लिए",
+      "reco_by_your_friends": "आपके दोस्तों के reco",
+      "friends_playlists": "आपके दोस्तों की सूचियाँ",
+      "latest_activity": "{count, plural, one {हाल की गतिविधि} other {हाल की गतिविधियाँ}}",
+      "discover_users": "यूज़र खोजें",
+      "most_recommended": "सबसे ज़्यादा सुझाए गए",
+      "archive": "संग्रह में डालें",
+      "unarchive": "संग्रह से निकालें",
+      "mark_as_read": "{count, plural, one {पढ़ा हुआ चिह्नित करें} other {पढ़े हुए चिह्नित करें}}",
+      "mark_as_unread": "{count, plural, one {अपठित चिह्नित करें} other {अपठित चिह्नित करें}}",
+      "accept": "स्वीकार करें",
+      "accepted": "स्वीकार हुआ",
+      "decline": "अस्वीकार करें",
+      "declined": "अस्वीकार हुआ",
+      "request_accepted": "{count, plural, one {अनुरोध स्वीकार हुआ} other {अनुरोध स्वीकार हुए}}",
+      "request_declined": "{count, plural, one {अनुरोध अस्वीकार हुआ} other {अनुरोध अस्वीकार हुए}}",
+      "unread": "{count, plural, one {अपठित} other {अपठित}}",
+      "archived": "{count, plural, one {संग्रहित} other {संग्रहित}}",
+      "no_notifications": "कोई सूचना नहीं",
+      "all": "सभी",
+      "mark_all_as_read": "सभी को पढ़ा हुआ चिह्नित करें",
+      "archive_all": "सभी को संग्रह में डालें",
+      "archive_all_read": "सभी पढ़े हुओं को संग्रह में डालें",
+      "please_login": "लॉग इन करें",
+      "like": "लाइक",
+      "unlike": "लाइक हटाएँ",
+      "unfollow": "अनफ़ॉलो करें",
+      "name": "नाम",
+      "add_a_name": "एक नाम जोड़ें",
+      "add_a_description": "एक विवरण जोड़ें",
+      "visibility": "दृश्यता",
+      "search_an_user": "यूज़र खोजें",
+      "select_an_item_to_add_to_playlist": "सूची में जोड़ने के लिए आइटम चुनें",
+      "select_a_film_to_add_to_playlist": "सूची में जोड़ने के लिए फ़िल्म चुनें",
+      "select_a_tv_series_to_add_to_playlist": "सूची में जोड़ने के लिए सीरीज़ चुनें",
+      "add_one_or_more_items_to": "<important>{title}</important> में एक या अधिक आइटम जोड़ें",
+      "add_one_or_more_films_to": "<important>{title}</important> में एक या अधिक फ़िल्में जोड़ें",
+      "add_one_or_more_tv_series_to": "<important>{title}</important> में एक या अधिक सीरीज़ जोड़ें",
+      "manage_playlist_access_rights": "सूची के एक्सेस अधिकार प्रबंधित करें",
+      "add_guest": "{count, plural, one {अतिथि जोड़ें} other {अतिथि जोड़ें}}",
+      "manage_members": "सदस्य प्रबंधित करें",
+      "no_member": "कोई सदस्य नहीं",
+      "add_member": "{count, plural, one {सदस्य जोड़ें} other {सदस्य जोड़ें}}",
+      "manage_guests": "अतिथि प्रबंधित करें",
+      "add_guests_to_your_playlist": "अपनी सूची में अतिथि जोड़ें",
+      "select_users_to_add_to_playlist": "सूची में जोड़ने के लिए यूज़र चुनें",
+      "select_users_to_send_reco": "चुनें कि reco किसे भेजना है",
+      "select_playlists_to_add_the_item": "वे सूचियाँ चुनें जिनमें आइटम जोड़ना है",
+      "send": "भेजें",
+      "sent": "भेज दिया",
+      "select_row": "पंक्ति चुनें",
+      "select_all": "सभी चुनें",
+      "no_selected_users": "कोई यूज़र नहीं चुना गया",
+      "selection_count": "{total} में से {number} {type} चुने गए",
+      "about_title": "{title} के बारे में",
+      "detail": "{count, plural, one {विवरण} other {विवरण}}",
+      "genre": "{count, plural, one {शैली} other {शैलियाँ}}",
+      "male": "{count, plural, one {पुरुष} other {पुरुष}}",
+      "female": "{count, plural, one {महिला} other {महिलाएँ}}",
+      "non_binary": "{count, plural, one {नॉन-बाइनरी} other {नॉन-बाइनरी}}",
+      "unspecified": "निर्दिष्ट नहीं",
+      "date_of_birth": "जन्म तिथि",
+      "date_of_death": "निधन की तिथि",
+      "place_of_birth": "जन्म स्थान",
+      "age_years": "{count} {count, plural, one {वर्ष} other {वर्ष}}",
+      "biography": "जीवनी",
+      "no_biography_available": "कोई जीवनी उपलब्ध नहीं",
+      "no_information_available": "कोई जानकारी उपलब्ध नहीं",
+      "already_sent": "पहले ही भेजा गया",
+      "already_watched": "पहले ही देखा गया",
+      "already_added": "पहले ही जोड़ा गया",
+      "recommend_to_friend_to_discover": "<strong>{title}</strong> को उस दोस्त को सुझाएँ जिसने इसे नहीं देखा",
+      "add_to_one_or_more_playlists": "<strong>{title}</strong> को अपनी एक या अधिक सूचियों में जोड़ें",
+      "my_playlist": "{count, plural, one {मेरी सूची} other {मेरी सूचियाँ}}",
+      "what_is_title": "<strong>{title}</strong> क्या है?",
+      "try_again": "फिर कोशिश करें",
+      "error": "त्रुटि",
+      "not_logged_in": "आप लॉग इन नहीं हैं",
+      "an_error_occurred": "कोई त्रुटि हुई",
+      "playlist_not_found": "सूची नहीं मिली",
+      "user_not_found": "यूज़र नहीं मिला",
+      "film_not_found": "फ़िल्म नहीं मिली",
+      "media_not_found": "शीर्षक नहीं मिला",
+      "review_not_found": "समीक्षा नहीं मिली",
+      "person_not_found": "व्यक्ति नहीं मिला",
+      "tv_series_not_found": "सीरीज़ नहीं मिली",
+      "tv_episode_not_found": "एपिसोड नहीं मिला",
+      "tv_season_not_found": "सीज़न नहीं मिला",
+      "wrong_arguments": "ग़लत पैरामीटर",
+      "no_media_found": "कोई शीर्षक नहीं मिला",
+      "unknown_action": "अज्ञात कार्रवाई",
+      "no_user_found": "कोई यूज़र नहीं मिला",
+      "no_tv_episodes": "कोई एपिसोड नहीं",
+      "save": "सहेजें",
+      "saved": "सहेजा गया",
+      "create": "बनाएँ",
+      "film_count": "{count, plural, one {# फ़िल्म} other {# फ़िल्में}}",
+      "tv_series_count": "{count, plural, one {# सीरीज़} other {# सीरीज़}}",
+      "login": "लॉग इन",
+      "signup": "साइन अप",
+      "navigation": "नेविगेशन",
+      "delete": "हटाएँ",
+      "remove": "निकालें",
+      "deleted": "हटा दिया",
+      "share": "साझा करें",
+      "duplicate": "प्रतिलिपि बनाएँ",
+      "duplicated": "प्रतिलिपि बन गई",
+      "cancel": "रद्द करें",
+      "date": "तारीख",
+      "duration": "अवधि",
+      "sort": "क्रमबद्ध करें",
+      "show": "दिखाएँ",
+      "column": "{count, plural, one {स्तंभ} other {स्तंभ}}",
+      "comment": "{count, plural, one {टिप्पणी} other {टिप्पणियाँ}}",
+      "unknown": "अज्ञात",
+      "community": "समुदाय",
+      "cast_and_crew": "कलाकार और टीम",
+      "soon": "जल्द ही",
+      "ios_app": "iOS ऐप",
+      "android_app": "Android ऐप",
+      "coming_soon": "जल्द आ रहा है",
+      "new_mobile_app": "नया मोबाइल ऐप!",
+      "manage": "प्रबंधित करें",
+      "monthly": "मासिक",
+      "yearly": "वार्षिक",
+      "day": "दिन",
+      "week": "सप्ताह",
+      "month": "माह",
+      "year": "वर्ष",
+      "price": "कीमत",
+      "free": "मुफ़्त",
+      "playlist": "{count, plural, one {सूची} other {सूचियाँ}}",
+      "public": "सार्वजनिक",
+      "publish": "प्रकाशित करें",
+      "private": "निजी",
+      "description": "विवरण",
+      "details": "विवरण",
+      "profile": "प्रोफ़ाइल",
+      "overview": "सारांश",
+      "no_playlists_saved": "कोई सहेजी गई सूची नहीं",
+      "camera_permission_denied": "कैमरे की अनुमति नहीं मिली",
+      "photo_library_permission_denied": "फ़ोटो लाइब्रेरी की अनुमति नहीं मिली",
+      "ignore": "नज़रअंदाज़ करें",
+      "ok": "ठीक",
+      "title": "शीर्षक",
+      "skip": "छोड़ें",
+      "undo": "पूर्ववत करें",
+      "date_published": "प्रकाशन की तारीख",
+      "date_created": "बनाने की तारीख",
+      "date_updated": "अपडेट की तारीख",
+      "alphabetical": "वर्णानुक्रम",
+      "date_added": "जोड़ने की तारीख",
+      "number_of_likes": "लाइक की संख्या",
+      "number_of_seasons": "सीज़न की संख्या",
+      "add_to_this_playlist": "इस सूची में जोड़ें",
+      "save_to_library": "लाइब्रेरी में सहेजें",
+      "remove_from_library": "लाइब्रेरी से हटाएँ",
+      "otp": "वन-टाइम कोड",
+      "ratings_from_followees": "आप जिन्हें फ़ॉलो करते हैं उनकी रेटिंग",
+      "choose_from_the_library": "गैलरी से चुनें",
+      "take_a_photo": "फ़ोटो लें",
+      "delete_current_image": "मौजूदा छवि हटाएँ",
+      "edit_image": "छवि बदलें",
+      "add_image": "छवि जोड़ें",
+      "verify_with_a_code": "कोड से सत्यापित करें",
+      "order": "क्रम",
+      "edit_order": "क्रम बदलें",
+      "done": "हो गया",
+      "can_edit": "संपादित कर सकता है?",
+      "upgrade": "अपग्रेड",
+      "no_description": "कोई विवरण नहीं",
+      "no_comment": "कोई टिप्पणी नहीं",
+      "close": "बंद करें",
+      "edit_playlist": "सूची बदलें",
+      "universe": "दुनिया",
+      "cannot_be_changed": "बदला नहीं जा सकता",
+      "delete_review": "समीक्षा हटाएँ",
+      "do_you_really_want_to_delete_this_review": "क्या आप वाकई यह समीक्षा हटाना चाहते हैं?",
+      "user_liked_playlist": "<name></name> ने एक सूची लाइक की",
+      "user_liked_review": "<name></name> ने एक समीक्षा लाइक की",
+      "runtime": "अवधि",
+      "ends_at": "{value} को समाप्त",
+      "this_user_has_no_activity": "इस यूज़र की कोई गतिविधि नहीं है",
+      "notification_archived": "{count, plural, one {सूचना संग्रहित हुई} other {सूचनाएँ संग्रहित हुईं}}",
+      "notification_unarchived": "{count, plural, one {सूचना संग्रह से निकली} other {सूचनाएँ संग्रह से निकलीं}}",
+      "notification_marked_as_read": "{count, plural, one {सूचना पढ़ी हुई चिह्नित हुई} other {सूचनाएँ पढ़ी हुई चिह्नित हुईं}}",
+      "notification_marked_as_unread": "{count, plural, one {सूचना अपठित चिह्नित हुई} other {सूचनाएँ अपठित चिह्नित हुईं}}",
+      "or_continue_with": "या इसके साथ जारी रखें",
+      "message": "{count, plural, one {संदेश} other {संदेश}}",
+      "story": "{count, plural, one {स्टोरी} other {स्टोरी}}",
+      "new_playlist": "नई सूची",
+      "select_a_type": "एक प्रकार चुनें",
+      "filter": "{count, plural, one {फ़िल्टर} other {फ़िल्टर}}",
+      "hide_watched": "देखे हुए छिपाएँ",
+      "show_me_around": "मुझे घुमाकर दिखाएँ",
+      "artwork_from": "चित्रांकन: <important>{source}</important>",
+      "no_active_subscription": "कोई सक्रिय सदस्यता नहीं",
+      "manage_subscription": "सदस्यता प्रबंधित करें",
+      "started_on_date": "{date} को शुरू हुई",
+      "last_renewed_on_date": "अंतिम नवीनीकरण {date} को",
+      "version_value": "वर्शन {value}",
+      "original_title": "मूल शीर्षक",
+      "starring": "मुख्य भूमिका में",
+      "write_your_review_here": "अपनी समीक्षा यहाँ लिखें...",
+      "insert": "डालें",
+      "trailer": "{count, plural, one {ट्रेलर} other {ट्रेलर}}",
+      "list": "{count, plural, one {सूची} other {सूचियाँ}}",
+      "grid": "{count, plural, one {ग्रिड} other {ग्रिड}}",
+      "order_asc": "आरोही क्रम",
+      "order_desc": "अवरोही क्रम",
+      "menu": "मेन्यू",
+      "at_least_one_watched_date_required": "कम से कम एक देखने की तारीख ज़रूरी है",
+      "viewer": "{count, plural, one {दर्शक} other {दर्शक}}",
+      "editor": "{count, plural, one {संपादक} other {संपादक}}",
+      "admin": "{count, plural, one {व्यवस्थापक} other {व्यवस्थापक}}",
+      "owner": "{count, plural, one {स्वामी} other {स्वामी}}",
+      "you_dont_have_permission_to_do_this_action": "आपको यह कार्रवाई करने की अनुमति नहीं है",
+      "in_progress": "जारी है",
+      "give_up": "छोड़ दें",
+      "random": "यादृच्छिक",
+      "reset_password": "पासवर्ड रीसेट करें",
+      "password_reset": "पासवर्ड रीसेट हो गया",
+      "return_to_login": "लॉग इन पर वापस जाएँ",
+      "invalid_code": "अमान्य कोड",
+      "no_token_found": "कोई टोकन नहीं मिला",
+      "first_watched_at": "पहली बार देखने की तारीख",
+      "watched_dates": "देखने की तारीखें",
+      "no_watched_dates": "कोई देखने की तारीख नहीं",
+      "select_role": "भूमिका चुनें",
+      "select_format": "फ़ॉर्मैट चुनें",
+      "theater": "सिनेमाघर",
+      "physical": "भौतिक प्रति",
+      "digital": "डिजिटल",
+      "streaming": "स्ट्रीमिंग",
+      "you_must_be_premium_to_change_member_role": "किसी सदस्य की भूमिका बदलने के लिए Premium होना ज़रूरी है",
+      "already_member": "पहले से सदस्य",
+      "email_already_used": "यह ईमेल पहले से इस्तेमाल में है",
+      "email_confirmed": "ईमेल की पुष्टि हो गई",
+      "confirmation_email_sent": "पुष्टि वाला ईमेल भेजा गया",
+      "continue": "जारी रखें",
+      "finish": "समाप्त",
+      "forgot_password": "पासवर्ड भूल गए",
+      "new_password": "नया पासवर्ड",
+      "confirm_password": "पासवर्ड की पुष्टि करें",
+      "password_reseted": "पासवर्ड रीसेट हो गया",
+      "reset_your_password": "अपना पासवर्ड रीसेट करें",
+      "invalid_token": "अमान्य टोकन",
+      "new_notification": "{count, plural, one {नई सूचना} other {नई सूचनाएँ}}",
+      "lets_go": "चलिए!",
+      "update_available": "अपडेट उपलब्ध है",
+      "update_available_description": "नवीनतम सुधारों का लाभ लेने के लिए ऐप अपडेट करें।",
+      "update_required_title": "अपडेट ज़रूरी है",
+      "update_required_description": "ऐप का यह वर्शन अब समर्थित नहीं है। Recomend का उपयोग जारी रखने के लिए इसे अपडेट करें।",
+      "update_app": "अपडेट करें",
+      "advertisement": "{count, plural, one {विज्ञापन} other {विज्ञापन}}",
+      "pending": "प्रतीक्षा में",
+      "processing": "प्रक्रिया में",
+      "awaiting_review": "समीक्षा की प्रतीक्षा में",
+      "failed": "विफल",
+      "data": "{count, plural, one {डेटा} other {डेटा}}",
+      "restore": "पुनर्स्थापित करें",
+      "fix": "सुधारें",
+      "not_found": "नहीं मिला",
+      "unavailable": "अनुपलब्ध",
+      "star_on_github": "GitHub पर हमें स्टार दें"
+    },
+    "form": {
+      "email": {
+        "label": "ईमेल",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "ईमेल मान्य नहीं है",
+          "unavailable": "यह ईमेल पहले से इस्तेमाल में है"
+        },
+        "verified": "ईमेल सत्यापित हुआ"
+      },
+      "username": {
+        "label": "यूज़रनेम",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "पहला अक्षर एक अक्षर या अंक होना चाहिए",
+          "double_dot": "लगातार दो बिंदु मान्य नहीं हैं",
+          "ends_with_dot": "अंत में बिंदु मान्य नहीं है",
+          "format": "सिर्फ़ अक्षर, अंक और '_' तथा '.' चिह्न मान्य हैं",
+          "unavailable": "यह यूज़रनेम पहले से लिया गया है"
+        }
+      },
+      "full_name": {
+        "label": "नाम",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "सिर्फ़ अक्षर, अंक और खाली जगह मान्य हैं"
+        }
+      },
+      "password": {
+        "label": "पासवर्ड",
+        "placeholder": "अपना पासवर्ड डालें",
+        "schema": {
+          "uppercase": "कम से कम एक बड़ा अक्षर ज़रूरी है",
+          "lowercase": "कम से कम एक छोटा अक्षर ज़रूरी है",
+          "number": "कम से कम एक अंक ज़रूरी है",
+          "special": "कम से कम एक विशेष चिह्न ज़रूरी है",
+          "match": "पासवर्ड मेल नहीं खाते"
+        },
+        "confirm": {
+          "label": "पासवर्ड की पुष्टि करें",
+          "placeholder": "अपने पासवर्ड की पुष्टि करें"
+        }
+      },
+      "length": {
+        "char_min": "कम से कम {count, plural, one {# अक्षर} other {# अक्षर}}",
+        "char_max": "अधिकतम {count, plural, one {# अक्षर} other {# अक्षर}}"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "सिर्फ़ अक्षर, अंक और खाली जगह मान्य हैं"
+      },
+      "error": {
+        "too_many_attempts": "बहुत ज़्यादा कोशिशें, बाद में फिर कोशिश करें",
+        "not_received_code": "कोड नहीं मिला?",
+        "invalid_code": "अमान्य कोड",
+        "turnstile": "सत्यापन विफल हुआ, फिर कोशिश करें"
+      },
+      "resend_code": "कोड फिर भेजें",
+      "resend_email": "ईमेल फिर भेजें",
+      "code_verified": "कोड सत्यापित हुआ",
+      "code_sent": "कोड भेजा गया"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "पेज नहीं मिला",
+        "description": "ओह, यह पेज मौजूद नहीं है..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "ट्रैकिंग",
+        "description": "अपनी पसंदीदा फ़िल्में और सीरीज़ खोजें, रेटिंग दें और साझा करें।"
+      },
+      "recos": {
+        "label": "reco",
+        "description": "दोस्तों के reco भेजें और पाएँ। सब एक ही जगह।"
+      },
+      "playlists": {
+        "label": "सूचियाँ",
+        "description": "सूचियाँ व्यवस्थित करें, साझा करें और मिलकर बनाएँ।"
+      },
+      "feed": {
+        "label": "फ़ीड",
+        "description": "दोस्तों को फ़ॉलो करें और देखें वे क्या देखते हैं, क्या पसंद करते हैं और क्या लिखते हैं।"
+      },
+      "social_sharing": {
+        "label": "सोशल पर साझा करना",
+        "description": "जो पसंद है उसे Instagram या अन्य सोशल पर साझा करें।"
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "ट्रैकिंग",
+          "description": "जो फ़िल्में देखी हैं उन पर नज़र रखें"
+        },
+        "recos": {
+          "label": "Reco",
+          "description": "दोस्तों को फ़िल्मों के सुझाव भेजें"
+        },
+        "explore": {
+          "label": "खोजबीन",
+          "description": "Paradise Pictures पर नई फ़िल्में खोजें — 1400 से ज़्यादा फ़िल्मों वाला एक इंटरैक्टिव नक्शा"
+        },
+        "like": {
+          "label": "लाइक",
+          "description": "अपनी पसंदीदा फ़िल्मों, सूचियों और समीक्षाओं के लिए प्यार जताएँ"
+        },
+        "rating": {
+          "label": "रेटिंग",
+          "description": "जो फ़िल्में देखी हैं उन्हें रेटिंग दें"
+        },
+        "watchlist": {
+          "label": "देखने की सूची",
+          "description": "जो फ़िल्में देखना चाहते हैं उन्हें सहेजें"
+        },
+        "playlists": {
+          "label": "सूचियाँ",
+          "description": "अपनी फ़िल्मों को सूचियों में सजाएँ और साझा करें"
+        },
+        "reviews": {
+          "label": "समीक्षाएँ",
+          "description": "समीक्षाएँ लिखें और अपने भीतर के तीखे सिनेमा-प्रेमी को बाहर आने दें"
+        },
+        "feed": {
+          "label": "फ़ीड",
+          "description": "अपने दोस्तों की गतिविधि फ़ॉलो करें"
+        },
+        "adsFree": {
+          "label": "विज्ञापन-मुक्त",
+          "description": "Recomend का आनंद बिना विज्ञापन लें, हमेशा के लिए"
+        }
+      }
+    },
+    "welcome": {
+      "title": "साइन अप करने के लिए धन्यवाद!",
+      "description": "यहाँ एक झलक है कि {app} के साथ आप क्या कर सकते हैं।",
+      "follow": {
+        "title": "लोगों को फ़ॉलो करें",
+        "description": "दोस्तों को फ़ॉलो करें और देखें वे क्या देख रहे हैं।"
+      },
+      "import": {
+        "title": "किसी दूसरे प्लैटफ़ॉर्म से आए हैं?"
+      }
+    },
+    "collection": {
+      "label": "लाइब्रेरी",
+      "my_recos": {
+        "label": "मेरे reco",
+        "search": {
+          "placeholder": "मेरे reco में खोजें..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "मेरे reco से हटाएँ",
+            "description": "क्या आप वाकई <important>{title}</important> को अपने reco से हटाना चाहते हैं?"
+          },
+          "complete_confirm": {
+            "title": "reco पूरा करें",
+            "description": "क्या आप वाकई reco <important>{title}</important> पूरा करना चाहते हैं?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "देखने की सूची में खोजें..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "देखने की सूची से हटाएँ",
+            "description": "क्या आप वाकई <important>{title}</important> को अपनी देखने की सूची से हटाना चाहते हैं?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "दिल की पसंदों में खोजें..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "दिल की पसंदों से हटाएँ",
+            "description": "क्या आप वाकई <important>{title}</important> को अपनी दिल की पसंदों से हटाना चाहते हैं?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> ने देखा",
+        "rated": "<name></name> ने रेटिंग दी",
+        "liked": "<name></name> ने लाइक किया",
+        "rated_liked": "<name></name> ने लाइक किया और रेटिंग दी",
+        "reviewed": "<name></name> ने समीक्षा लिखी"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> <linkMedia>{titleMedia}</linkMedia> में <important>{roles}</important> हैं",
+        "label": "<linkPerson>{name}</linkPerson> <important>{roles}</important> हैं"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "ऐप को अनुमति दें",
+        "description_generic": "एक ऐप आपके अकाउंट तक पहुँच माँग रहा है।",
+        "description": "{client} आपके अकाउंट तक पहुँच चाहता है।",
+        "scopes_label": "इससे ऐप यह कर सकेगा:",
+        "accept": "अनुमति दें",
+        "deny": "मना करें",
+        "error": {
+          "invalid_request": "अनुरोध अमान्य है या उसकी अवधि बीत गई",
+          "invalid_request_description": "जिस ऐप ने आपको यहाँ भेजा था, वहीं से अनुमति की प्रक्रिया फिर शुरू करें।",
+          "client_not_found": "यह ऐप नहीं मिला।",
+          "submit_failed": "कुछ ग़लत हो गया। फिर कोशिश करें।"
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "अपने {app} अकाउंट में लॉग इन करें।"
+        },
+        "label": "लॉग इन",
+        "description": "फ़िल्मों के सबसे अच्छे सुझाव खोजें।",
+        "or_continue_with": "या इसके साथ जारी रखें",
+        "no_account_yet": "अभी अकाउंट नहीं है?",
+        "form": {
+          "identifier": {
+            "label": "ईमेल या यूज़रनेम",
+            "placeholder": "अपना ईमेल या यूज़रनेम डालें"
+          },
+          "password": {
+            "label": "पासवर्ड",
+            "placeholder": "अपना पासवर्ड डालें"
+          },
+          "submit": "लॉग इन",
+          "forgot_password": "पासवर्ड भूल गए?",
+          "wrong_credentials": "ईमेल या पासवर्ड ग़लत है"
+        },
+        "otp": {
+          "password_login": "पासवर्ड से लॉग इन करना चाहेंगे?",
+          "form": {
+            "submit": "कोड पाएँ",
+            "no_user_found": "इस ईमेल से कोई यूज़र नहीं मिला",
+            "success": "लॉग इन हो गए"
+          },
+          "confirm_form": {
+            "label": "कोड की पुष्टि करें",
+            "description": "{email} पते पर एक सत्यापन कोड भेजा गया है"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "फ़िल्मों के सुझाव खोजने और साझा करने के लिए {app} पर साइन अप करें।"
+        },
+        "description": "उस दोस्त को फ़िल्म सुझाने के लिए अकाउंट बनाएँ जो नाम हमेशा भूल जाता है।",
+        "form": {
+          "success": "{email} पर एक सत्यापन ईमेल भेजा गया है"
+        },
+        "confirm_form": {
+          "label": "ईमेल की पुष्टि करें",
+          "description": "{email} पते पर एक सत्यापन लिंक भेजा गया है"
+        },
+        "return_to_login": "ओह, मेरा अकाउंट तो पहले से है।"
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "पासवर्ड भूल गए",
+          "description": "अपना पासवर्ड रीसेट करें।"
+        },
+        "label": "पासवर्ड भूल गए",
+        "description": "पासवर्ड मैनेजर इस्तेमाल करें, वाकई बहुत सुविधाजनक है।",
+        "return_to_login": "ओह, पासवर्ड तो मुझे याद आ गया।",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "पासवर्ड रीसेट करें",
+          "code_sent": "अनुरोध भेजा गया"
+        },
+        "confirm_form": {
+          "label": "कोड की पुष्टि करें",
+          "description": "{email} पते पर एक सत्यापन कोड भेजा गया है"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "पासवर्ड रीसेट करें",
+          "description": "अपने अकाउंट के लिए नया पासवर्ड चुनें।"
+        }
+      },
+      "error": {
+        "label": "त्रुटि",
+        "description": "प्रमाणीकरण की प्रक्रिया में कोई त्रुटि हुई।",
+        "return_to_login": "सुरक्षित जगह पर वापस जाएँ"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "परिचय",
+        "marquee": "आपकी ज़िंदगी में इंटरनेट पर 'परिचय' पेज पढ़ने से ज़्यादा रोमांचक कुछ नहीं है?",
+        "intro": "<strong>Recomend</strong> एक ऐसी जगह है जो फ़िल्में खोजने, सुझाने और सहेजने के लिए बनी है। हमने सब कुछ इस तरह सोचा कि मुँहज़बानी सिफ़ारिश को आख़िरकार सबसे अच्छा डिजिटल सहारा मिल जाए। हमारा नज़रिया लोगों और उनके रिश्तों को केंद्र में रखता है — उस दौर में, जब खपत हमारे ही इर्द-गिर्द घूमती है, या कहें 'आपके लिए सुझाया गया' के इर्द-गिर्द।",
+        "slogan": {
+          "1": "विज्ञापन नहीं, और कोई संदिग्ध वादा भी नहीं। 🍆",
+          "2": "यह सोशल नेटवर्क भी है और एक औज़ार भी।",
+          "3": "घर पर, शौक़ीनों के हाथों बना।",
+          "4": "शब्द के सच्चे अर्थ में शौक़िया।"
+        },
+        "last": "Recomend अकेले या दूसरों के साथ, सार्वजनिक रूप से या निजी तौर पर, दिन में या रात में इस्तेमाल किया जा सकता है — लेकिन फ़िल्म के सामने कभी नहीं, कृपया ध्यान फ़िल्म पर रखें!"
+      },
+      "team": {
+        "label": "टीम",
+        "intro": "Recomend को सिनेमा के दीवाने दो भाइयों ने बनाया है, जिन्हें अपना समय ऐसी बहुत महत्वाकांक्षी परियोजनाओं में लगाना पसंद है जो कभी पूरी भी न हों।",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "एक अतिसक्रिय आर्किटेक्ट-इंजीनियर, जिसे एक नौकरी से संतोष नहीं होता (असली स्टार्ट-अप नेशन) — फ़िल्मों के नक्शे का विचार Yoann का ही है, जिसकी शुरुआती महत्वाकांक्षा बस इतनी थी कि वह उनके बाथरूम का पोस्टर बन जाए। Loup के आने के बाद लक्ष्य आसमान पर पहुँच गए और बहाव में बहते हुए उन्होंने नक्शे और साइट का पूरा ग्राफ़िक काम, साथ ही सारा संवाद-प्रचार भी सँभाल लिया (भले यह उन्हें पसंद नहीं)। इसके अलावा वे UX/UI पर अपनी राय देते हैं और ऐसे ढेरों फ़ीचर सुझाते हैं जिनकी कोडिंग की कठिनाई वे पूरी तरह नहीं समझते (इस मामले में सुधार हुआ है)।"
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "पूरी तरह स्वयं-शिक्षित, फिर भी उन्होंने ऐसी पढ़ाई पूरी कर ली जो 25 की उम्र से पहले बिना वेतन की बेरोज़गारी तक ले गई। सच्चे हरफ़नमौला, Loup वेब का पक्ष सँभालते हैं और ऐसा इंटरफ़ेस कोड करते हैं जो जितना हो सके आसान हो। Loup उन सभी प्रोग्रामिंग फ़ोरमों को धन्यवाद कहना चाहते हैं जिन्होंने उनके (बहुत-बहुत) सारे सवालों के जवाब दिए, और उन सभी भारतीय YouTubers को भी, जिन्होंने इन महीनों में गोद लिए पिता की तरह उनका मार्गदर्शन किया। उनकी माँ को तो यकीन है कि इस प्रोजेक्ट के लिए उनके भाई ने उन्हें ग़ुलाम बना लिया है (मैं ठीक हूँ, माँ)।"
+          }
+        },
+        "last": "हमसे या समुदाय के दूसरे सदस्यों से जुड़ने के लिए हमारे <link>Discord</link> में आइए!"
+      },
+      "pricing": {
+        "label": "कीमतें",
+        "intro": "यह सदस्यता मॉडल सबसे पहले इस प्रोजेक्ट को सहारा देने और उसे बढ़ने में मदद करने का तरीका है। Premium फ़ीचर Recomend के ज़्यादा गहरे इस्तेमाल के लिए अतिरिक्त सुविधाएँ हैं और एक छोटे आर्थिक योगदान को जायज़ ठहराते हैं। साइट को मुफ़्त में, बिना विज्ञापन और बिना किसी बंदिश के इस्तेमाल करने का रास्ता हम हमेशा खुला रखेंगे।",
+        "subdescription": "*अगर इस सदस्यता की हँसी-मज़ाक़ जितनी कम कीमत भी आपकी पहुँच से बाहर है, तो कृपया अपनी उदारवादी सरकार से बात करें, जो आपकी क्रय-शक्ति घटने के लिए ज़िम्मेदार है।"
+      },
+      "legal": {
+        "label": "कानूनी और गोपनीयता",
+        "description": "हम आपकी गोपनीयता का सम्मान करते हैं। अतिथि यूज़र को दिखाए जाने वाले विज्ञापन Google संभालता है और उन्हें दिखने की बारंबारता सीमित रखने तथा धोखाधड़ी रोकने के लिए तकनीकी कुकीज़ चाहिए।",
+        "privacyPolicy": "हमारी गोपनीयता नीति पढ़ें",
+        "manageCookies": "मेरी विज्ञापन पसंद प्रबंधित करें (कुकीज़)"
+      },
+      "open-source": {
+        "label": "ओपन सोर्स",
+        "intro": "Recomend ओपन सोर्स है: कोड GitHub पर सार्वजनिक है। एक नज़र डालें, योगदान करें, या बस हमें एक स्टार दे दें!",
+        "star": "GitHub पर हमें स्टार दें"
+      },
+      "businessmodel": {
+        "label": "बिज़नेस मॉडल",
+        "paragraph": {
+          "1": "हमारी बिल्कुल ग़ैर-व्यापारिक प्रोफ़ाइलों से आप अंदाज़ा लगा सकते हैं — हमें अभी तक समझ नहीं आया कि इस वक़्त कोई बिज़नेस मॉडल हमारे किस काम आएगा...",
+          "2": "अगर Recomend के भविष्य के लिए ज़रूरी हुआ, तो हम इस पर ध्यान देंगे और सही लोगों को साथ लाएँगे — या कम से कम उन लोगों को, जिन्हें इसमें हमसे ज़्यादा दिलचस्पी है।",
+          "3": "तब तक, सच कहें तो, ध्यान देने लायक दूसरी चीज़ें भी हैं।"
+        }
+      },
+      "roadmap": {
+        "label": "रोडमैप"
+      },
+      "data": {
+        "label": "डेटा",
+        "paragraph": {
+          "1": "Recomend पर इस्तेमाल होने वाला सारा मेटाडेटा <link>The Movie Database (TMDb)</link> अपने प्लैटफ़ॉर्म के API से देता है। हम भी सबकी तरह ही कर रहे हैं, सीधी-सादी भेड़ों की तरह।",
+          "2": "किसी ग़लती या छूटी फ़िल्म के लिए <link>TMDb</link> से संपर्क करें।"
+        }
+      },
+      "resources": {
+        "label": "संसाधन",
+        "intro": "इसका सिनेमा से बहुत लेना-देना नहीं है, लेकिन यह उन साइटों की सूची है जो हमें पसंद हैं:"
+      },
+      "contact-support": {
+        "label": "संपर्क और सहायता",
+        "help-center": "अपने अस्तित्वगत सवालों के जवाब हमारे <link>सहायता केंद्र</link> में पाएँ।",
+        "technical-support": "तकनीकी सवालों के लिए: <email></email>",
+        "suggest-a-feature": "सुझावों के लिए: <email></email>",
+        "contact-us": "बस हमसे जुड़ने के लिए: <email></email>"
+      },
+      "quote": {
+        "label": "उद्धरण",
+        "quote": "« मुझे 'पेशेवर' शब्द से नफ़रत है। वे सब अभिनेता और बाकी लोग जो कहते हैं: मैं पेशेवर हूँ, मैं प्रो हूँ! यह क्या है? इससे उदास शब्द कोई और है? क्योंकि 'शौक़िया' शब्द प्रेम से बना है। चीज़ें प्रेम से करनी चाहिए, वरना हम मूर्ख हैं। »",
+        "author": "ऑर्सन वेल्स",
+        "date": "1972",
+        "subdescription": "*इसे लगाने में हमें हिचक हुई, क्योंकि यह जल्दी ही घमंडी लगने लगता है, पर यह प्रोजेक्ट के बारे में हमारे मन का हाल ठीक बताता है। फिर भी अगर आपको पसंद न आए, तो हम इसे हटा देंगे।"
+      }
+    },
+    "settings": {
+      "label": "सेटिंग्स",
+      "description": "अपने अकाउंट की सेटिंग्स प्रबंधित करें।",
+      "profile": {
+        "label": "प्रोफ़ाइल",
+        "description": "साइट पर दूसरे लोग आपको इस तरह देखेंगे।",
+        "avatar": {
+          "label": "अवतार",
+          "delete": "हटाएँ"
+        },
+        "full_name": {
+          "label": "नाम",
+          "description": "यही नाम आपकी प्रोफ़ाइल और ईमेल में दिखेगा।",
+          "placeholder": "अपना नाम डालें",
+          "form": {
+            "min_length": "नाम में कम से कम 1 अक्षर होना चाहिए",
+            "max_length": "नाम 50 अक्षरों से ज़्यादा नहीं हो सकता"
+          }
+        },
+        "bio": {
+          "label": "परिचय",
+          "description": "अपने बारे में कुछ बताएँ, यह आपकी प्रोफ़ाइल पर दिखेगा।",
+          "placeholder": "अपने बारे में बताएँ",
+          "form": {
+            "max_length": "परिचय 150 अक्षरों से ज़्यादा नहीं हो सकता",
+            "format": "परिचय में खाली पंक्तियाँ नहीं हो सकतीं और वह सिर्फ़ खाली जगहों से नहीं बन सकता।"
+          }
+        },
+        "favorite_films": {
+          "label": "पसंदीदा फ़िल्में",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "अमान्य URL"
+          }
+        }
+      },
+      "account": {
+        "label": "अकाउंट",
+        "description": "अपने अकाउंट की सेटिंग्स अपडेट करें।",
+        "username": {
+          "label": "यूज़रनेम",
+          "description": "इसी यूज़रनेम से दूसरे लोग आपको ढूँढ़ सकते हैं और आपकी प्रोफ़ाइल तक पहुँच सकते हैं। आप इसे हर 30 दिन में सिर्फ़ एक बार बदल सकते हैं।",
+          "placeholder": "अपना यूज़रनेम डालें",
+          "form": {
+            "min_length": "यूज़रनेम में कम से कम 3 अक्षर होने चाहिए",
+            "max_length": "यूज़रनेम 15 अक्षरों से ज़्यादा नहीं हो सकता",
+            "invalid": "यूज़रनेम में सिर्फ़ अक्षर, अंक और '_' तथा '.' चिह्न हो सकते हैं",
+            "unavailable": "यह यूज़रनेम पहले से लिया गया है"
+          }
+        },
+        "private": {
+          "label": "निजी अकाउंट",
+          "description": "जब आपका अकाउंट निजी होता है, तो आपकी गतिविधियाँ सिर्फ़ आपके दोस्त देख सकते हैं।"
+        },
+        "email": {
+          "description": "एक सत्यापन ईमेल आपके मौजूदा और नए, दोनों पतों पर भेजा जाएगा। बदलाव लागू होने के लिए दोनों की पुष्टि करनी होगी।",
+          "change_pending": "आपके नए ईमेल पते <strong>{email}</strong> पर एक सत्यापन ईमेल भेजा गया है। बदलाव की पुष्टि के लिए लिंक पर क्लिक करें या सत्यापन कोड डालें।",
+          "confirm_email_code": {
+            "description": "बदलाव की पुष्टि के लिए <strong>{email}</strong> पते पर भेजा गया सत्यापन कोड डालें।"
+          },
+          "change_success": "आपका ईमेल पता सफलतापूर्वक बदल गया"
+        },
+        "delete_account": {
+          "button": "मेरा अकाउंट हटाएँ",
+          "confirm": {
+            "description": "क्या आप वाकई अपना अकाउंट हटाना चाहते हैं? यह कार्रवाई पलटी नहीं जा सकती।",
+            "confirm_email_sent": "आपके ईमेल पते पर एक सत्यापन ईमेल भेजा गया है"
+          }
+        }
+      },
+      "appearance": {
+        "label": "रूप-रंग",
+        "description": "ऐप का रूप अपने हिसाब से तय करें। दिन और रात की थीम के बीच अपने-आप बदलाव।",
+        "language": {
+          "label": "भाषा",
+          "description": "भाषा चुनें – बदलाव ऐप फिर शुरू करने के बाद लागू होगा",
+          "placeholder": "भाषा चुनें",
+          "not_found": "भाषा नहीं मिली"
+        },
+        "theme": {
+          "label": "थीम",
+          "description": "इंटरफ़ेस की थीम चुनें।",
+          "options": {
+            "light": "हल्की",
+            "dark": "गहरी"
+          }
+        }
+      },
+      "subscription": {
+        "label": "सदस्यता",
+        "description": "Premium फ़ीचर पाने के लिए अपनी सदस्यता प्रबंधित करें।"
+      },
+      "security": {
+        "label": "सुरक्षा",
+        "description": "पासवर्ड बदलने पर आप सभी डिवाइस से लॉग आउट हो जाएँगे, सिर्फ़ इस डिवाइस को छोड़कर जिसे आप अभी इस्तेमाल कर रहे हैं।",
+        "current_password": {
+          "label": "मौजूदा पासवर्ड",
+          "placeholder": "अपना मौजूदा पासवर्ड डालें",
+          "form": {
+            "required": "कृपया अपना मौजूदा पासवर्ड डालें",
+            "invalid": "मौजूदा पासवर्ड ग़लत है"
+          }
+        },
+        "new_password": {
+          "label": "नया पासवर्ड",
+          "placeholder": "अपना नया पासवर्ड डालें",
+          "form": {
+            "min_length": "पासवर्ड में कम से कम 8 अक्षर होने चाहिए",
+            "uppercase": "कम से कम एक बड़ा अक्षर ज़रूरी है",
+            "lowercase": "कम से कम एक छोटा अक्षर ज़रूरी है",
+            "number": "कम से कम एक अंक ज़रूरी है",
+            "special": "कम से कम एक विशेष चिह्न ज़रूरी है"
+          }
+        },
+        "confirm_password": {
+          "label": "नए पासवर्ड की पुष्टि करें",
+          "placeholder": "अपने नए पासवर्ड की पुष्टि करें",
+          "form": {
+            "match": "पासवर्ड मेल नहीं खाते"
+          }
+        }
+      },
+      "notifications": {
+        "label": "सूचनाएँ",
+        "description": "अपनी सूचनाओं की सेटिंग्स प्रबंधित करें।",
+        "push_notifications": {
+          "label": "पुश सूचनाएँ",
+          "form": {
+            "enable": "पुश सूचनाएँ चालू करें"
+          },
+          "already_granted": "सूचनाओं की अनुमति पहले ही माँगी जा चुकी है; बदलने के लिए अपने ब्राउज़र की सेटिंग्स में जाएँ।",
+          "no_enabled": "पुश सूचनाएँ पाने के लिए अपने डिवाइस की सेटिंग्स में सूचनाएँ चालू करें।",
+          "open_settings": "डिवाइस की सेटिंग्स में जाएँ"
+        }
+      },
+      "data": {
+        "label": "डेटा",
+        "description": "अपना डेटा आयात या निर्यात करें।",
+        "importer": {
+          "label": "आयात",
+          "select_source": "एक स्रोत चुनें",
+          "instructions_title": "निर्देश",
+          "browse_prompt": "अपनी फ़ाइल यहाँ छोड़ें, या <link>चुनें</link>",
+          "browse_prompt_mobile": "फ़ाइल चुनने के लिए टैप करें",
+          "uploading": "अपलोड हो रहा है…",
+          "processing": "आपकी फ़ाइल जाँची जा रही है…",
+          "upload_error": "अपलोड विफल रहा, फिर कोशिश करें।",
+          "invalid_file_type": "इस स्रोत के लिए यह फ़ाइल प्रकार समर्थित नहीं है।",
+          "review_title": "अपने आयात की जाँच करें",
+          "review_summary": "{total} में से {matched} का मेल हुआ",
+          "validate": "आयात की पुष्टि करें",
+          "validate_confirm_description": "इससे सभी मेल खाए और न छोड़े गए आइटम आपकी लाइब्रेरी में आ जाएँगे। यह पलटा नहीं जा सकता।",
+          "success_title": "आयात पूरा हुआ",
+          "success_description": "आपका डेटा सफलतापूर्वक आयात हो गया।",
+          "failed_title": "आयात विफल रहा",
+          "failed_description": "इस आयात की प्रक्रिया में कुछ ग़लत हो गया।",
+          "pending_description": "आपका आयात कतार में है और जल्द शुरू होगा।",
+          "empty": "अभी कोई आयात नहीं।",
+          "delete_confirm_description": "यह आयात और इसका सारा तैयार डेटा हमेशा के लिए हट जाएगा। यह पलटा नहीं जा सकता।",
+          "keep_existing": "मेरा ही रखें",
+          "use_imported": "आयात किया हुआ लें",
+          "merge": "मिलाएँ",
+          "conflict": "टकराव",
+          "no_match": "कोई मेल नहीं",
+          "existing_rating": "अभी: {rating}",
+          "log_column": "लॉग",
+          "actions_column": "कार्रवाइयाँ",
+          "categories": {
+            "log_movies": "फ़िल्में",
+            "log_tv_series": "सीरीज़",
+            "bookmarks": "देखने की सूची",
+            "playlists": "सूचियाँ"
+          },
+          "status": {
+            "pending": "प्रतीक्षा में",
+            "processing": "प्रक्रिया में",
+            "awaiting_review": "समीक्षा की प्रतीक्षा में",
+            "completed": "पूरा हुआ",
+            "failed": "विफल"
+          }
+        },
+        "exporter": {
+          "label": "निर्यात"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "Premium में अपग्रेड करें",
+        "description": "{app} के सभी फ़ीचर पाने के लिए Premium अकाउंट में अपग्रेड करें।"
+      },
+      "header": {
+        "title": "अपने सिनेमा को बढ़ाएँ, और ज़्यादा साझा करें, {app} को सहारा दें",
+        "subtitle": "1 महीना मुफ़्त आज़माएँ, फिर {price}/महीना"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "गतिविधियाँ",
+            "unlimited_activities": {
+              "label": "असीमित गतिविधियाँ",
+              "description": "रेटिंग, लाइक, समीक्षाएँ, देखने की सूची और सुझाव"
+            },
+            "favorites": {
+              "label": "पसंदीदा",
+              "description": "अपनी पसंदीदा फ़िल्में प्रोफ़ाइल पर लगाएँ"
+            }
+          },
+          "playlists": {
+            "label": "सूचियाँ",
+            "unlimited_playlists": {
+              "label": "असीमित",
+              "description": "जितनी चाहें उतनी सूचियाँ बनाएँ"
+            },
+            "shared_playlists": {
+              "label": "साझा",
+              "description": "अपनी सूचियाँ दूसरे यूज़र के साथ साझा करें"
+            },
+            "collaborative_playlists": {
+              "label": "सहयोगी",
+              "description": "दूसरे यूज़र के साथ मिलकर सूचियाँ बनाएँ"
+            }
+          },
+          "feed": {
+            "label": "फ़ीड",
+            "followees": {
+              "label": "फ़ॉलो किए गए यूज़र",
+              "description": "जिन यूज़र को आप फ़ॉलो करते हैं उनकी गतिविधियाँ देखें"
+            },
+            "cast_and_crew": {
+              "label": "कलाकार और टीम",
+              "description": "फ़िल्मों में शामिल लोगों की गतिविधि फ़ॉलो करें"
+            }
+          },
+          "support": {
+            "label": "सहयोग",
+            "team": {
+              "label": "{app} की टीम को सहारा दें"
+            },
+            "credits": {
+              "label": "क्रेडिट",
+              "description": "ऐप के क्रेडिट में आपकी प्रोफ़ाइल"
+            }
+          }
+        },
+        "success": {
+          "label": "आपके सहयोग के लिए धन्यवाद!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} – @{username} की सूची",
+        "description": "{app} पर @{username} की फ़िल्मों की सूची देखें।"
+      },
+      "actions": {
+        "delete": {
+          "description": "इससे <important>{title}</important> आपकी सूचियों से हमेशा के लिए हट जाएगी।"
+        }
+      },
+      "search": {
+        "placeholder": "सूची में खोजें..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "क्या आप वाकई <important>{title}</important> को अपनी सूची से हटाना चाहते हैं?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "सूची का शीर्षक डालें"
+        },
+        "description": {
+          "placeholder": "सूची का विवरण डालें"
+        },
+        "error": {
+          "format": "विवरण में खाली पंक्तियाँ नहीं हो सकतीं और वह सिर्फ़ खाली जगहों से नहीं बन सकता।"
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "{app} पर @{username} की प्रोफ़ाइल देखें।"
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} {directors} की फ़िल्म है, जो {year} में रिलीज़ हुई। कहानी: {overview}",
+        "description_no_director": "{title} एक फ़िल्म है, जो {year} में रिलीज़ हुई। कहानी: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • सूचियाँ",
+          "description": "वे सभी सूचियाँ देखें जिनमें फ़िल्म {title} शामिल है।"
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • समीक्षाएँ",
+          "description": "फ़िल्म {title} की सभी समीक्षाएँ देखें।"
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} {creators} की सीरीज़ है, जिसका पहला प्रसारण {year} में हुआ। कहानी: {overview}",
+        "description_no_creator": "{title} एक सीरीज़ है, जिसका पहला प्रसारण {year} में हुआ। कहानी: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • सूचियाँ",
+          "description": "वे सभी सूचियाँ देखें जिनमें सीरीज़ {title} शामिल है।"
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • समीक्षाएँ",
+          "description": "सीरीज़ {title} की सभी समीक्षाएँ देखें।"
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • सीज़न",
+          "description": "सीरीज़ {title} के सभी सीज़न देखें।"
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • सीज़न {number}",
+            "description": "सीरीज़ {title} के सीज़न {number} के सभी एपिसोड देखें।"
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • फ़िल्में",
+          "description": "वे सभी फ़िल्में देखें जिनमें {name} ने अभिनय किया या योगदान दिया।"
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • सीरीज़",
+          "description": "वे सभी सीरीज़ देखें जिनमें {name} ने अभिनय किया या योगदान दिया।"
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "@{username} की {title} पर समीक्षा"
+      },
+      "create": {
+        "metadata": {
+          "title": "{title} पर समीक्षा लिखें",
+          "description": "{title} पर अपनी राय साझा करें।"
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Paradise Pictures की खोज करें",
+        "description": "इस द्वीप और उसके विविध नज़ारों को खोजने के लिए सफ़र पर निकलें। यहाँ बसी अनगिनत फ़िल्में अपनी ही दुनिया में रखी हुई हैं। क्या आप इसका हर कोना घूम पाएँगे?"
+      }
+    },
+    "legal": {
+      "label": "कानूनी",
+      "description": "{app} के कानूनी दस्तावेज़ पढ़ें।",
+      "terms_of_use": {
+        "metadata": {
+          "title": "उपयोग की शर्तें",
+          "description": "{app} के उपयोग की शर्तें पढ़ें।"
+        },
+        "sections": {
+          "intro": "ये उपयोग की शर्तें (आगे \"शर्तें\") {app} ऐप तक पहुँच और उसके उपयोग को नियंत्रित करती हैं। ऐप को Loup (आगे \"प्रकाशक\") प्रकाशित करता है, जिसका ठिकाना पेरिस में है। {app} पर पंजीकरण का अर्थ है इन शर्तों की बिना शर्त स्वीकृति।",
+          "presentation": {
+            "label": "1. सेवा का परिचय",
+            "content": "{app} एक मुफ़्त ऐप है, जो अपने यूज़र को फ़िल्मों की जानकारी देखने, समीक्षाएँ प्रकाशित करने, कृतियों को रेटिंग देने और निजी सूचियाँ बनाने की सुविधा देता है।"
+          },
+          "account": {
+            "label": "2. अकाउंट और सुरक्षा",
+            "content": "योगदान से जुड़े फ़ीचर के लिए अकाउंट बनाना ज़रूरी है। यूज़र अपने लॉग इन विवरण की गोपनीयता के लिए ज़िम्मेदार है। धोखाधड़ी से उपयोग या हैकिंग के संदेह की स्थिति में यूज़र को तुरंत सहायता से संपर्क करना चाहिए: <email></email>।"
+          },
+          "conduct": {
+            "label": "3. आचरण के नियम",
+            "content": "यूज़र अपनी समीक्षाओं और सूचियों में शिष्ट और सम्मानजनक रहने का वचन देता है। पूरी तरह निषिद्ध है: नफ़रत फैलाने वाली, मानहानिकारक या नस्लवादी बातें, उत्पीड़न, तथा स्पैम या अवांछित व्यापारिक प्रचार। प्रकाशक इन नियमों का उल्लंघन करने वाली कोई भी सामग्री हटाने और संबंधित अकाउंट को बिना सूचना निलंबित करने का अधिकार रखता है।"
+          },
+          "child_safety": {
+            "label": "4. बाल सुरक्षा नीति",
+            "content": "{app} बच्चों के यौन शोषण और दुरुपयोग (CSAE) के प्रति सख़्त शून्य-सहनशीलता की नीति रखता है। {app} पर ऐसी किसी भी सामग्री को बनाना, अपलोड करना, सहेजना, बाँटना, माँगना या बढ़ावा देना स्पष्ट रूप से और पूरी तरह निषिद्ध है जो नाबालिगों को यौन रूप में दिखाती है, उनका शोषण करती है या उन्हें किसी भी तरह ख़तरे में डालती है। इस नीति का उल्लंघन करने वाला हर अकाउंट तुरंत और स्थायी रूप से प्रतिबंधित किया जाएगा, और प्रकाशक संबंधित सामग्री को, यूज़र की उपलब्ध जानकारी के साथ, लागू कानून के अनुसार National Center for Missing & Exploited Children (NCMEC) और/या सक्षम कानून-प्रवर्तन अधिकारियों को सूचित करेगा। जिस किसी यूज़र को ऐसी सामग्री या व्यवहार का पता चले जो CSAE हो सकता है, उसे बिना देरी यहाँ सूचित करना चाहिए: <email></email>।"
+          },
+          "intellectual_property": {
+            "label": "5. बौद्धिक संपदा",
+            "content": "यूज़र अपनी लिखी समीक्षाओं का स्वामी बना रहता है। हालाँकि {app} पर प्रकाशित करने से वह प्रकाशक को यह सामग्री ऐप के भीतर दिखाने, पुनरुत्पादित करने और तकनीकी रूप से अनुकूलित करने का निःशुल्क, ग़ैर-एकाधिकार लाइसेंस देता है। {app} के दृश्य तत्व, कोड और डिज़ाइन प्रकाशक की अनन्य संपत्ति हैं।"
+          },
+          "privacy": {
+            "label": "6. व्यक्तिगत डेटा",
+            "content": "आपकी गोपनीयता का सम्मान हमारी सर्वोच्च प्राथमिकता है। {app} कोई भी व्यक्तिगत डेटा व्यापारिक या विज्ञापन संबंधी तीसरे पक्षों को न बेचता है, न किराए पर देता है, न साझा करता है। जुटाया गया डेटा (ईमेल, यूज़रनेम, ऐप में गतिविधि) सिर्फ़ सेवा के संचालन और अकाउंट प्रबंधन के लिए इस्तेमाल होता है। पहुँच, सुधार या मिटाने (GDPR) के अपने अधिकार इस पते पर संपर्क करके लागू कर सकते हैं: <email></email>।"
+          },
+          "cookies": {
+            "label": "7. कुकीज़ और ट्रैकर",
+            "content": "{app} कोई विज्ञापन कुकी और तीसरे पक्ष का कोई व्यवहार-ट्रैकर इस्तेमाल नहीं करता। सिर्फ़ दो तरह की तकनीकी कुकीज़ का उपयोग होता है: एक प्रमाणीकरण कुकी (जिससे आप लॉग इन रहें) और एक भाषा-पसंद कुकी (जिससे आपकी पसंद याद रहे)। ये कुकीज़ सेवा के लिए नितांत आवश्यक हैं, इसलिए इन पर पूर्व सहमति की ज़रूरत नहीं है।"
+          },
+          "ads": {
+            "label": "8. विज्ञापन",
+            "content": "ऐप अभी किसी भी विज्ञापन के बिना उपलब्ध है। अगर यह मॉडल बदलेगा, तो यूज़र को इन शर्तों के अपडेट के ज़रिए सूचित किया जाएगा।"
+          },
+          "liability": {
+            "label": "9. उत्तरदायित्व",
+            "content": "प्रकाशक {app} को चौबीसों घंटे उपलब्ध रखने का प्रयास करता है, लेकिन रुकावटों या गड़बड़ियों के न होने की गारंटी नहीं देता। फ़िल्मों की जानकारी तीसरे पक्ष के डेटाबेस से आती है; उनमें संभावित अशुद्धियों के लिए प्रकाशक को ज़िम्मेदार नहीं ठहराया जा सकता।"
+          },
+          "law": {
+            "label": "10. लागू कानून",
+            "content": "ये शर्तें फ़्रांसीसी कानून के अधीन हैं। किसी ऐसे विवाद की स्थिति में जो <email></email> के ज़रिए सौहार्दपूर्ण ढंग से हल न हो सके, पेरिस की अदालतों का अनन्य क्षेत्राधिकार होगा।"
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "गोपनीयता नीति",
+          "description": "{app} की गोपनीयता नीति पढ़ें।"
+        },
+        "sections": {
+          "intro": "डेटा की सुरक्षा {app} के दर्शन के केंद्र में है। यह नीति बताती है कि हम कौन-सा डेटा जुटाते हैं, क्यों जुटाते हैं और उसकी रक्षा कैसे करते हैं। संक्षेप में: हम आपका डेटा नहीं बेचते।",
+          "controller": {
+            "label": "1. डेटा नियंत्रक",
+            "content": "डेटा नियंत्रक Loup हैं, जिनका ठिकाना पेरिस (फ़्रांस) है। गोपनीयता से जुड़े किसी भी सवाल के लिए आप यहाँ संपर्क कर सकते हैं: <email></email>।"
+          },
+          "collected_data": {
+            "label": "2. जुटाया गया डेटा",
+            "content": "हम सिर्फ़ वही डेटा जुटाते हैं जो ऐप के काम करने के लिए नितांत आवश्यक है: आपका ईमेल पता (प्रमाणीकरण के लिए), आपका यूज़रनेम और आपके उपयोग का डेटा (रेटिंग दी गई फ़िल्में, समीक्षाएँ, सूचियाँ)। आपके पासवर्ड एन्क्रिप्टेड (हैश किए हुए) और सुरक्षित रूप में सहेजे जाते हैं।"
+          },
+          "purpose": {
+            "label": "3. प्रसंस्करण का उद्देश्य",
+            "content": "आपका डेटा सिर्फ़ इन कामों के लिए प्रसंस्कृत होता है: आपको अकाउंट बनाने और प्रबंधित करने देना, आपकी सूचियाँ और रेटिंग दिखाना, और सेवा का तकनीकी संचालन सुनिश्चित करना। हम आपका डेटा विज्ञापन-प्रोफ़ाइलिंग के लिए इस्तेमाल नहीं करते।"
+          },
+          "sharing": {
+            "label": "4. डेटा साझा करना",
+            "content": "आपका व्यक्तिगत डेटा कभी बेचा, किराए पर दिया या तीसरे पक्षों को नहीं सौंपा जाता। यह हमारे तकनीकी सेवा-प्रदाताओं (होस्टिंग, ट्रांज़ैक्शनल ईमेल सेवा) के पास रखा जा सकता है, जो सख़्त गोपनीयता से बँधे हैं और GDPR का पालन करते हैं।"
+          },
+          "retention": {
+            "label": "5. डेटा रखने की अवधि",
+            "content": "आपका डेटा तब तक रखा जाता है जब तक आपका अकाउंट सक्रिय है। अगर आप अपना अकाउंट हटाने का फ़ैसला करते हैं, तो आपका सारा व्यक्तिगत डेटा (ईमेल, यूज़रनेम, समीक्षाएँ) हमारे डेटाबेस से हमेशा के लिए मिटा दिया जाएगा।"
+          },
+          "rights": {
+            "label": "6. आपके अधिकार (GDPR)",
+            "content": "नियमों के अनुसार आपको अपना डेटा देखने, सुधारने, स्थानांतरित करने और मिटाने का अधिकार है। आप इन अधिकारों का उपयोग कभी भी सीधे ऐप में या हमें यहाँ लिखकर कर सकते हैं: <email></email>।"
+          },
+          "cookies": {
+            "label": "7. कुकीज़",
+            "content": "जैसा हमारी उपयोग की शर्तों में कहा गया है, हम सिर्फ़ ज़रूरी तकनीकी कुकीज़ (सेशन और भाषा) इस्तेमाल करते हैं। आपके डिवाइस पर तीसरे पक्ष की कोई विज्ञापन या ट्रैकिंग कुकी नहीं रखी जाती।"
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "फ़िल्म, सीरीज़, सूची, व्यक्ति या यूज़र खोजें..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "क्या आप वाकई इस कृति को देखे हुओं में से हटाना चाहते हैं? अगर आपकी रेटिंग या समीक्षा है, तो वह भी हट जाएगी।"
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "क्या आप वाकई सीरीज़ पूरी करना चाहते हैं? सभी सीज़न के सभी एपिसोड देखे हुए चिह्नित हो जाएँगे।"
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "क्या आप वाकई सीज़न {seasonNumber} पूरा करना चाहते हैं? इस सीज़न के सभी एपिसोड देखे हुए चिह्नित हो जाएँगे।"
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "यहाँ गतिविधि देखने के लिए आपको या आपके फ़ॉलो किए यूज़र को फ़िल्मों, सीरीज़ आदि को रेटिंग देनी होगी..."
+    },
+    "feed_person": {
+      "message": "यहाँ गतिविधि देखने के लिए आपको फ़िल्मों या सीरीज़ में शामिल लोगों को फ़ॉलो करना होगा।"
+    },
+    "playlists": {
+      "items": {
+        "empty": "इस सूची में कोई फ़िल्म या सीरीज़ नहीं है। कुछ जोड़कर इसे भरें!"
+      },
+      "add_to": {
+        "empty": "आपकी कोई सूची नहीं है। एक बनाएँ, फ़िल्में या सीरीज़ जोड़ें और उन्हें आसानी से पाएँ!"
+      },
+      "saved": {
+        "empty": "आपकी कोई सहेजी हुई सूची नहीं है। कोई सूची सहेजें और उसे अपनी लाइब्रेरी में आसानी से पाएँ!"
+      },
+      "members": {
+        "empty": "इस सूची में कोई सदस्य नहीं है। कुछ जोड़ें और एक ही सूची पर दूसरों के साथ मिलकर काम करें!",
+        "search": "सूची में जोड़ने के लिए यूज़र खोजें..."
+      }
+    },
+    "follow-requests": {
+      "empty": "आपका कोई लंबित फ़ॉलो अनुरोध नहीं है। जब आएगा, यहीं दिखेगा!"
+    },
+    "recos": {
+      "empty": "आपके पास कोई सुझाव नहीं है। जब आएगा, यहीं दिखेगा!",
+      "send_to": {
+        "empty": "आपके पास सुझाव भेजने के लिए कोई नहीं है। किसी को सुझाव भेजने के लिए आप दोनों दोस्त होने चाहिए (आपसी फ़ॉलो)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "आपने अभी कुछ सहेजा नहीं है। जब सहेजेंगे, यहीं दिखेगा!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> ने आपको फ़िल्म <movie></movie> सुझाई"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> ने आपको सीरीज़ <tv_series></tv_series> सुझाई"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> ने आपकी सुझाई फ़िल्म <movie></movie> देखी"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> ने आपकी सुझाई सीरीज़ <tv_series></tv_series> देखी"
+    },
+    "follower_created": {
+      "description": "<user></user> ने आपको फ़ॉलो करना शुरू किया"
+    },
+    "follower_accepted": {
+      "description": "<user></user> ने आपका फ़ॉलो अनुरोध स्वीकार किया"
+    },
+    "follower_request": {
+      "description": "<user></user> आपको फ़ॉलो करना चाहते हैं"
+    },
+    "friend_created": {
+      "description": "<user></user> अब आपके दोस्त हैं"
+    }
+  }
+}

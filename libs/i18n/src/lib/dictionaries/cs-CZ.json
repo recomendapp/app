@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "Jiný způsob, jak objevovat kino",
+    "description": "{app} je sociální síť pro milovníky filmu. Objevuj, sdílej a prozkoumávej filmy a seriály se svými přáteli."
+  },
+  "common": {
+    "messages": {
+      "welcome": "Vítej",
+      "welcome_to_app": "Vítej na {app}",
+      "hello": "Ahoj",
+      "greeting_with_name": "{timeOfDay, select, morning {Dobré ráno, {name}} afternoon {Dobrý den, {name}} evening {Dobrý večer, {name}} night {Dobrou noc, {name}} other {Ahoj, {name}}}",
+      "click_here": "Klikni sem",
+      "see_more": "Zobrazit více",
+      "see_more_details": "Zobrazit více podrobností",
+      "more": "Více",
+      "view_profile": "Zobrazit profil",
+      "library": "Knihovna",
+      "watchlist": "Watchlist",
+      "for_later": "Na později",
+      "heart_pick": "{count, plural, one {srdcovka} few {srdcovky} many {srdcovky} other {srdcovek}}",
+      "add_to_heart_picks": "Přidat mezi srdcovky",
+      "remove_from_heart_picks": "Odebrat ze srdcovek",
+      "add_rating": "Přidat hodnocení",
+      "edit_rating": "Upravit hodnocení",
+      "remove_rating": "Odebrat hodnocení",
+      "share_my_rating": "Sdílet mé hodnocení",
+      "share_review": "Sdílet recenzi",
+      "show_likes_count": "Zobrazit počet lajků",
+      "show_comments_count": "Zobrazit počet komentářů",
+      "add_to_watchlist": "přidat do watchlistu",
+      "remove_from_watchlist": "odebrat z watchlistu",
+      "no_results": "žádné výsledky",
+      "no_results_for": "Žádné výsledky pro <strong>{query}</strong>",
+      "no_followees": "Nikoho nesleduješ",
+      "no_followers": "Žádní sledující",
+      "no_rating": "Bez hodnocení",
+      "must_watch_to_review": "abys to mohl ohodnotit, musíš to dílo vidět",
+      "review_cannot_be_empty": "recenze nemůže být prázdná",
+      "no_activity": "žádná aktivita",
+      "followers_ratings": "hodnocení sledujících",
+      "added_by": "přidal",
+      "sort_by": "seřadit podle",
+      "sort_order": "pořadí řazení",
+      "go_to_film": "přejít na film",
+      "go_to_tv_series": "přejít na seriál",
+      "go_to_user": "přejít na uživatele",
+      "go_to_person": "přejít na osobu",
+      "go_to_activity": "přejít na aktivitu",
+      "go_to_playlist": "přejít na playlist",
+      "go_to_review": "přejít na recenzi",
+      "go_to_director": "{count, plural, one {přejít na režiséra} few {přejít na režiséry} many {přejít na režiséry} other {přejít na režiséry}}",
+      "go_to_creator": "{count, plural, one {přejít na tvůrce} few {přejít na tvůrce} many {přejít na tvůrce} other {přejít na tvůrce}}",
+      "show_director": "{count, plural, one {zobrazit režiséra} few {zobrazit režiséry} many {zobrazit režiséry} other {zobrazit režiséry}}",
+      "show_creator": "{count, plural, one {zobrazit tvůrce} few {zobrazit tvůrce} many {zobrazit tvůrce} other {zobrazit tvůrce}}",
+      "show_credit": "{count, plural, one {zobrazit podíl} few {zobrazit podíly} many {zobrazit podíly} other {zobrazit podíly}}",
+      "credits": "závěrečné titulky",
+      "view_recommendation": "{count, plural, one {zobrazit reco} few {zobrazit reco} many {zobrazit reco} other {zobrazit reco}}",
+      "view_directors": "{count, plural, one {zobrazit režiséra} few {zobrazit režiséry} many {zobrazit režiséry} other {zobrazit režiséry}}",
+      "no_director": "bez režiséra",
+      "view_comment": "{count, plural, one {zobrazit komentář} few {zobrazit komentáře} many {zobrazit komentáře} other {zobrazit komentáře}}",
+      "add_comment": "{count, plural, one {přidat komentář} few {přidat komentáře} many {přidat komentáře} other {přidat komentáře}}",
+      "edit_comment": "{count, plural, one {upravit komentář} few {upravit komentáře} many {upravit komentáře} other {upravit komentáře}}",
+      "delete_comment": "Smazat komentář",
+      "do_you_really_want_to_delete_this_comment": "Opravdu chceš smazat tento komentář?",
+      "comment_deleted": "Tento komentář byl smazán",
+      "write_your_comment_here": "Napiš komentář...",
+      "reply": "Odpovědět",
+      "replies_count": "{count, plural, one {# odpověď} few {# odpovědi} many {# odpovědi} other {# odpovědí}}",
+      "view_replies": "Zobrazit {count, plural, one {# odpověď} few {# odpovědi} many {# odpovědi} other {# odpovědí}}",
+      "hide_replies": "Skrýt odpovědi",
+      "load_more_replies": "Zobrazit další odpovědi",
+      "get_started": "začít",
+      "get_started_its_free": "jdeme na to 🎬, je to zdarma!",
+      "import": "Importovat",
+      "upgrade_to_plan": "přejít na {plan}",
+      "choose_subscription_recurrence": "vyber si fakturační období svého předplatného",
+      "compare_plans": "porovnat plány",
+      "save_up_to_percent": "ušetři až {percent} %",
+      "is_empty": "Je tu trochu prázdno",
+      "add_to_playlist": "přidat do playlistu",
+      "send_to_friend": "poslat kamarádovi",
+      "pin_to_profile": "Připnout na profil",
+      "unpin_from_profile": "Odepnout z profilu",
+      "pinned": "Připnuto",
+      "unpinned": "Odepnuto",
+      "no_pinned": "Žádné připnuté položky",
+      "pinned_limit_reached": "Dosáhl jsi maximálního počtu připnutých položek — odepni jednu, abys mohl přidat novou",
+      "custom_sort": "vlastní řazení",
+      "quick_add": "rychlé přidání",
+      "favorite_films": "oblíbené filmy",
+      "follow": "sledovat",
+      "followed": "sledováno",
+      "request_sent": "Žádost odeslána",
+      "follow_requests": "žádosti o sledování",
+      "no_follow_requests": "žádné žádosti o sledování",
+      "follower": "{count, plural, one {sledující} few {sledující} many {sledujících} other {sledujících}}",
+      "follower_count": "{count} sledujících",
+      "see_followers": "zobrazit sledující",
+      "followee": "{count, plural, one {sledovaný} few {sledovaní} many {sledovaných} other {sledovaných}}",
+      "followee_count": "{count} sledovaných",
+      "see_followees": "zobrazit, koho sleduješ",
+      "last_activities": "poslední aktivity",
+      "last_updated": "naposledy aktualizováno",
+      "last_updated_at_date": "naposledy aktualizováno {date}",
+      "show_all": "zobrazit vše",
+      "this_account_is_private": "tento účet je soukromý",
+      "follow_to_see_activities": "sleduj, abys viděl aktivity",
+      "review": "{count, plural, one {recenze} few {recenze} many {recenze} other {recenzí}}",
+      "no_overview": "bez popisu",
+      "cast": "obsazení",
+      "no_cast": "bez obsazení",
+      "recent": "nejnovější",
+      "popular": "populární",
+      "popularity": "popularita",
+      "no_reviews": "Žádné recenze",
+      "no_playlists": "Žádné playlisty",
+      "no_playlists_found": "Nebyly nalezeny žádné playlisty",
+      "no_films": "Žádné filmy",
+      "no_tv_series": "Žádné seriály",
+      "view_activity": "zobrazit aktivitu",
+      "comment_count": "{count, plural, one {# komentář} few {# komentáře} many {# komentáře} other {# komentářů}}",
+      "write_review": "napsat recenzi",
+      "new_review": "nová recenze",
+      "edit_review": "upravit recenzi",
+      "review_by": "recenze od {name}",
+      "my_review": "{count, plural, one {moje recenze} few {moje recenze} many {moje recenze} other {mých recenzí}}",
+      "add_review": "přidat recenzi",
+      "tv_series": "{count, plural, one {seriál} few {seriály} many {seriálu} other {seriálů}}",
+      "film": "{count, plural, one {film} few {filmy} many {filmu} other {filmů}}",
+      "movie": "{count, plural, one {film} few {filmy} many {filmu} other {filmů}}",
+      "media": "{count, plural, one {titul} few {tituly} many {titulu} other {titulů}}",
+      "tv_season": "{count, plural, one {série} few {série} many {série} other {sérií}}",
+      "tv_season_count": "{count, plural, one {# série} few {# série} many {# série} other {# sérií}}",
+      "tv_season_value": "{number}. série",
+      "tv_season_short": "S{number}",
+      "tv_episode": "{count, plural, one {epizoda} few {epizody} many {epizody} other {epizod}}",
+      "tv_episode_count": "{count, plural, one {# epizoda} few {# epizody} many {# epizody} other {# epizod}}",
+      "tv_episode_value": "{number}. epizoda",
+      "tv_episode_short": "S{seasonNumber}E{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {speciální epizoda} few {speciální epizody} many {speciální epizody} other {speciálních epizod}}",
+      "first_air_date": "první vysílání",
+      "last_air_date": "poslední vysílání",
+      "see_film": "zobrazit film",
+      "see_tv_series": "zobrazit seriál",
+      "watch_film_title": "zhlédnout {title}",
+      "watch_film_streaming_or_download": "Zhlédni <important>{title}</important> ve streamu nebo si ho legálně stáhni",
+      "download": "stáhnout",
+      "downloaded": "staženo",
+      "person": "{count, plural, one {osoba} few {osoby} many {osoby} other {osob}}",
+      "top_result": "nejlepší výsledek",
+      "user": "{count, plural, one {uživatel} few {uživatelé} many {uživatele} other {uživatelů}}",
+      "reco": "{count, plural, one {reco} few {reco} many {reco} other {reco}}",
+      "my_recos": "moje reco",
+      "item": "{count, plural, one {položka} few {položky} many {položky} other {položek}}",
+      "item_count": "{count, plural, one {# položka} few {# položky} many {# položky} other {# položek}}",
+      "type": "typ",
+      "complete": "dokončit",
+      "completed": "dokončeno",
+      "collection": "{count, plural, one {kolekce} few {kolekce} many {kolekce} other {kolekcí}}",
+      "most_recent": "nejnovější",
+      "most_popular": "nejpopulárnější",
+      "most_old": "nejstarší",
+      "known_for": "Známý díky",
+      "release_date": "datum premiéry",
+      "last_appearance_date": "poslední výskyt",
+      "vote_average": "průměrné hodnocení",
+      "added": "přidáno",
+      "added_date": "datum přidání",
+      "added_at": "přidáno",
+      "add": "přidat",
+      "playlist_name": "název playlistu",
+      "updated_at": "aktualizováno",
+      "created_at": "vytvořeno",
+      "likes": "lajky",
+      "likes_count": "počet lajků",
+      "search_media": "hledat titul",
+      "search_film": "hledat film",
+      "start_typing_to_search_films": "začni psát pro vyhledání filmů",
+      "search_tv_series": "hledat seriál",
+      "start_typing_to_search_tv_series": "začni psát pro vyhledání seriálů",
+      "search_person": "hledat osobu",
+      "start_typing_to_search_persons": "začni psát pro vyhledání osob",
+      "search_user": "{count, plural, one {hledat uživatele} few {hledat uživatele} many {hledat uživatele} other {hledat uživatele}}",
+      "start_typing_to_search_users": "začni psát pro vyhledání uživatelů",
+      "search_playlist": "hledat playlist",
+      "start_typing_to_search_playlists": "začni psát pro vyhledání playlistů",
+      "search_film_or_tv_series": "hledat film nebo seriál",
+      "watched_date": "{count, plural, one {datum zhlédnutí} few {data zhlédnutí} many {data zhlédnutí} other {dat zhlédnutí}}",
+      "mark_as_watched": "označit jako zhlédnuté",
+      "remove_from_watched": "odebrat ze zhlédnutých",
+      "rating": "hodnocení",
+      "create_a_playlist": "vytvořit playlist",
+      "by_name": "od {name}",
+      "reset": "resetovat",
+      "job": "{count, plural, one {profese} few {profese} many {profese} other {profesí}}",
+      "department": "{count, plural, one {oddělení} few {oddělení} many {oddělení} other {oddělení}}",
+      "share_title_via": "Sdílet <strong>{title}</strong> přes",
+      "share_title": "Sdílet <strong>{title}</strong>",
+      "link": "odkaz",
+      "copy_link": "kopírovat odkaz",
+      "copied": "Zkopírováno",
+      "other": "{count, plural, one {Jiné} few {Jiné} many {Jiné} other {Jiných}}",
+      "via": "přes",
+      "edit": "upravit",
+      "guest": "{count, plural, one {host} few {hosté} many {hosta} other {hostů}}",
+      "are_u_sure": "Jsi si jistý?",
+      "backward": "předchozí",
+      "forward": "další",
+      "back": "zpět",
+      "next": "další",
+      "notification": "{count, plural, one {oznámení} few {oznámení} many {oznámení} other {oznámení}}",
+      "see_notifications": "zobrazit oznámení",
+      "open_social_panel": "otevřít sociální panel",
+      "cancel_change": "{count, plural, one {zrušit změnu} few {zrušit změny} many {zrušit změny} other {zrušit změny}}",
+      "do_you_really_want_to_cancel_change": "Opravdu chceš zrušit {count, plural, one {změnu} few {změny} many {změny} other {změny}}?",
+      "continue_editing": "pokračovat v úpravách",
+      "confirm": "potvrdit",
+      "terms_of_use": "podmínky použití",
+      "privacy_policy": "zásady ochrany soukromí",
+      "request_made": "žádost podána",
+      "request_canceled": "žádost zrušena",
+      "cancel_request": "zrušit žádost",
+      "open_menu": "otevřít menu",
+      "feed": "feed",
+      "about": "o nás",
+      "home": "domů",
+      "search": "hledat",
+      "explore": "objevovat",
+      "shop": "obchod",
+      "help": "nápověda",
+      "legal": "právní informace",
+      "setting": "{count, plural, one {nastavení} few {nastavení} many {nastavení} other {nastavení}}",
+      "logout": "odhlásit se",
+      "to_watch": "ke zhlédnutí",
+      "reco_by_your_friends": "reco od přátel",
+      "friends_playlists": "playlisty přátel",
+      "latest_activity": "{count, plural, one {poslední aktivita} few {poslední aktivity} many {poslední aktivity} other {posledních aktivit}}",
+      "discover_users": "objevovat uživatele",
+      "most_recommended": "nejvíce doporučované",
+      "archive": "archivovat",
+      "unarchive": "obnovit z archivu",
+      "mark_as_read": "{count, plural, one {označit jako přečtené} few {označit jako přečtené} many {označit jako přečtené} other {označit jako přečtené}}",
+      "mark_as_unread": "{count, plural, one {označit jako nepřečtené} few {označit jako nepřečtené} many {označit jako nepřečtené} other {označit jako nepřečtené}}",
+      "accept": "přijmout",
+      "accepted": "přijato",
+      "decline": "odmítnout",
+      "declined": "odmítnuto",
+      "request_accepted": "{count, plural, one {žádost přijata} few {žádosti přijaty} many {žádosti přijaty} other {žádostí přijato}}",
+      "request_declined": "{count, plural, one {žádost odmítnuta} few {žádosti odmítnuty} many {žádosti odmítnuty} other {žádostí odmítnuto}}",
+      "unread": "{count, plural, one {nepřečtené} few {nepřečtené} many {nepřečtené} other {nepřečtených}}",
+      "archived": "{count, plural, one {archivované} few {archivované} many {archivované} other {archivovaných}}",
+      "no_notifications": "žádná oznámení",
+      "all": "vše",
+      "mark_all_as_read": "označit vše jako přečtené",
+      "archive_all": "archivovat vše",
+      "archive_all_read": "archivovat vše přečtené",
+      "please_login": "přihlas se",
+      "like": "lajknout",
+      "unlike": "zrušit lajk",
+      "unfollow": "přestat sledovat",
+      "name": "název",
+      "add_a_name": "přidat název",
+      "add_a_description": "přidat popis",
+      "visibility": "viditelnost",
+      "search_an_user": "hledat uživatele",
+      "select_an_item_to_add_to_playlist": "vyber položku pro přidání do playlistu",
+      "select_a_film_to_add_to_playlist": "vyber film pro přidání do playlistu",
+      "select_a_tv_series_to_add_to_playlist": "vyber seriál pro přidání do playlistu",
+      "add_one_or_more_items_to": "Přidat jednu nebo více položek do <important>{title}</important>",
+      "add_one_or_more_films_to": "Přidat jeden nebo více filmů do <important>{title}</important>",
+      "add_one_or_more_tv_series_to": "Přidat jeden nebo více seriálů do <important>{title}</important>",
+      "manage_playlist_access_rights": "spravovat přístupová práva playlistu",
+      "add_guest": "{count, plural, one {přidat hosta} few {přidat hosty} many {přidat hosty} other {přidat hosty}}",
+      "manage_members": "spravovat členy",
+      "no_member": "žádní členové",
+      "add_member": "{count, plural, one {přidat člena} few {přidat členy} many {přidat členy} other {přidat členy}}",
+      "manage_guests": "spravovat hosty",
+      "add_guests_to_your_playlist": "přidat hosty do svého playlistu",
+      "select_users_to_add_to_playlist": "vyber uživatele pro přidání do playlistu",
+      "select_users_to_send_reco": "vyber, komu poslat reco",
+      "select_playlists_to_add_the_item": "vyber playlisty, do kterých položku přidat",
+      "send": "odeslat",
+      "sent": "odesláno",
+      "select_row": "vybrat řádek",
+      "select_all": "vybrat vše",
+      "no_selected_users": "žádní vybraní uživatelé",
+      "selection_count": "vybráno {number} z {total} {type}",
+      "about_title": "o {title}",
+      "detail": "{count, plural, one {detail} few {detaily} many {detailu} other {detailů}}",
+      "genre": "{count, plural, one {žánr} few {žánry} many {žánru} other {žánrů}}",
+      "male": "{count, plural, one {muž} few {muži} many {muže} other {mužů}}",
+      "female": "{count, plural, one {žena} few {ženy} many {ženy} other {žen}}",
+      "non_binary": "{count, plural, one {nebinární} few {nebinární} many {nebinární} other {nebinárních}}",
+      "unspecified": "neuvedeno",
+      "date_of_birth": "datum narození",
+      "date_of_death": "datum úmrtí",
+      "place_of_birth": "místo narození",
+      "age_years": "{count} {count, plural, one {rok} few {roky} many {roku} other {let}}",
+      "biography": "biografie",
+      "no_biography_available": "biografie není k dispozici",
+      "no_information_available": "informace nejsou k dispozici",
+      "already_sent": "už odesláno",
+      "already_watched": "už zhlédnuto",
+      "already_added": "už přidáno",
+      "recommend_to_friend_to_discover": "Doporuč <strong>{title}</strong> kamarádovi, který to ještě neviděl",
+      "add_to_one_or_more_playlists": "Přidej <strong>{title}</strong> do jednoho nebo více svých playlistů",
+      "my_playlist": "{count, plural, one {můj playlist} few {mé playlisty} many {mé playlisty} other {mých playlistů}}",
+      "what_is_title": "Co je <strong>{title}</strong>?",
+      "try_again": "Zkusit znovu",
+      "error": "chyba",
+      "not_logged_in": "nejsi přihlášený",
+      "an_error_occurred": "Došlo k chybě",
+      "playlist_not_found": "playlist nebyl nalezen",
+      "user_not_found": "uživatel nebyl nalezen",
+      "film_not_found": "film nebyl nalezen",
+      "media_not_found": "titul nebyl nalezen",
+      "review_not_found": "recenze nebyla nalezena",
+      "person_not_found": "osoba nebyla nalezena",
+      "tv_series_not_found": "seriál nebyl nalezen",
+      "tv_episode_not_found": "epizoda nebyla nalezena",
+      "tv_season_not_found": "série nebyla nalezena",
+      "wrong_arguments": "neplatné argumenty",
+      "no_media_found": "nebyl nalezen žádný titul",
+      "unknown_action": "neznámá akce",
+      "no_user_found": "nebyl nalezen žádný uživatel",
+      "no_tv_episodes": "žádné epizody",
+      "save": "uložit",
+      "saved": "uloženo",
+      "create": "vytvořit",
+      "film_count": "{count, plural, one {# film} few {# filmy} many {# filmu} other {# filmů}}",
+      "tv_series_count": "{count, plural, one {# seriál} few {# seriály} many {# seriálu} other {# seriálů}}",
+      "login": "přihlásit se",
+      "signup": "zaregistrovat se",
+      "navigation": "navigace",
+      "delete": "Smazat",
+      "remove": "Odebrat",
+      "deleted": "Smazáno",
+      "share": "sdílet",
+      "duplicate": "duplikovat",
+      "duplicated": "duplikováno",
+      "cancel": "Zrušit",
+      "date": "datum",
+      "duration": "délka",
+      "sort": "seřadit",
+      "show": "zobrazit",
+      "column": "{count, plural, one {sloupec} few {sloupce} many {sloupce} other {sloupců}}",
+      "comment": "{count, plural, one {komentář} few {komentáře} many {komentáře} other {komentářů}}",
+      "unknown": "neznámé",
+      "community": "komunita",
+      "cast_and_crew": "obsazení a štáb",
+      "soon": "brzy",
+      "ios_app": "Aplikace pro iOS",
+      "android_app": "Aplikace pro Android",
+      "coming_soon": "Brzy k dispozici",
+      "new_mobile_app": "Nová mobilní aplikace!",
+      "manage": "spravovat",
+      "monthly": "měsíčně",
+      "yearly": "ročně",
+      "day": "den",
+      "week": "týden",
+      "month": "měsíc",
+      "year": "rok",
+      "price": "cena",
+      "free": "zdarma",
+      "playlist": "{count, plural, one {playlist} few {playlisty} many {playlistu} other {playlistů}}",
+      "public": "veřejný",
+      "publish": "publikovat",
+      "private": "soukromý",
+      "description": "popis",
+      "details": "podrobnosti",
+      "profile": "profil",
+      "overview": "popis",
+      "no_playlists_saved": "žádné uložené playlisty",
+      "camera_permission_denied": "přístup ke kameře zamítnut",
+      "photo_library_permission_denied": "přístup k fotogalerii zamítnut",
+      "ignore": "ignorovat",
+      "ok": "ok",
+      "title": "název",
+      "skip": "Přeskočit",
+      "undo": "Zpět",
+      "date_published": "datum publikace",
+      "date_created": "datum vytvoření",
+      "date_updated": "datum změny",
+      "alphabetical": "abecedně",
+      "date_added": "datum přidání",
+      "number_of_likes": "počet lajků",
+      "number_of_seasons": "počet sérií",
+      "add_to_this_playlist": "přidat do tohoto playlistu",
+      "save_to_library": "uložit do knihovny",
+      "remove_from_library": "odebrat z knihovny",
+      "otp": "OTP",
+      "ratings_from_followees": "hodnocení sledovaných",
+      "choose_from_the_library": "vybrat z knihovny",
+      "take_a_photo": "vyfotit",
+      "delete_current_image": "smazat současný obrázek",
+      "edit_image": "upravit obrázek",
+      "add_image": "přidat obrázek",
+      "verify_with_a_code": "ověřit kódem",
+      "order": "pořadí",
+      "edit_order": "upravit pořadí",
+      "done": "hotovo",
+      "can_edit": "může upravovat?",
+      "upgrade": "upgradovat",
+      "no_description": "Bez popisu",
+      "no_comment": "Žádné komentáře",
+      "close": "zavřít",
+      "edit_playlist": "upravit playlist",
+      "universe": "univerzum",
+      "cannot_be_changed": "nelze změnit",
+      "delete_review": "smazat recenzi",
+      "do_you_really_want_to_delete_this_review": "Opravdu chceš smazat tuto recenzi?",
+      "user_liked_playlist": "<name></name> lajkl playlist",
+      "user_liked_review": "<name></name> lajkl recenzi",
+      "runtime": "stopáž",
+      "ends_at": "Končí v {value}",
+      "this_user_has_no_activity": "Tento uživatel nemá žádnou aktivitu",
+      "notification_archived": "{count, plural, one {oznámení archivováno} few {oznámení archivována} many {oznámení archivována} other {oznámení archivováno}}",
+      "notification_unarchived": "{count, plural, one {oznámení obnoveno z archivu} few {oznámení obnovena z archivu} many {oznámení obnovena z archivu} other {oznámení obnoveno z archivu}}",
+      "notification_marked_as_read": "{count, plural, one {oznámení označeno jako přečtené} few {oznámení označena jako přečtená} many {oznámení označena jako přečtená} other {oznámení označeno jako přečtené}}",
+      "notification_marked_as_unread": "{count, plural, one {oznámení označeno jako nepřečtené} few {oznámení označena jako nepřečtená} many {oznámení označena jako nepřečtená} other {oznámení označeno jako nepřečtené}}",
+      "or_continue_with": "nebo pokračuj přes",
+      "message": "{count, plural, one {zpráva} few {zprávy} many {zprávy} other {zpráv}}",
+      "story": "{count, plural, one {story} few {story} many {story} other {story}}",
+      "new_playlist": "nový playlist",
+      "select_a_type": "vyber typ",
+      "filter": "{count, plural, one {filtr} few {filtry} many {filtru} other {filtrů}}",
+      "hide_watched": "skrýt zhlédnuté",
+      "show_me_around": "proveď mě",
+      "artwork_from": "Ilustrace: <important>{source}</important>",
+      "no_active_subscription": "žádné aktivní předplatné",
+      "manage_subscription": "spravovat předplatné",
+      "started_on_date": "zahájeno: {date}",
+      "last_renewed_on_date": "poslední obnovení: {date}",
+      "version_value": "verze {value}",
+      "original_title": "původní název",
+      "starring": "hrají",
+      "write_your_review_here": "napiš sem svou recenzi...",
+      "insert": "vložit",
+      "trailer": "{count, plural, one {trailer} few {trailery} many {traileru} other {trailerů}}",
+      "list": "{count, plural, one {seznam} few {seznamy} many {seznamu} other {seznamů}}",
+      "grid": "{count, plural, one {mřížka} few {mřížky} many {mřížky} other {mřížek}}",
+      "order_asc": "vzestupné pořadí",
+      "order_desc": "sestupné pořadí",
+      "menu": "menu",
+      "at_least_one_watched_date_required": "je vyžadováno alespoň jedno datum zhlédnutí",
+      "viewer": "{count, plural, one {Divák} few {Diváci} many {Diváka} other {Diváků}}",
+      "editor": "{count, plural, one {Editor} few {Editoři} many {Editora} other {Editorů}}",
+      "admin": "{count, plural, one {Administrátor} few {Administrátoři} many {Administrátora} other {Administrátorů}}",
+      "owner": "{count, plural, one {Vlastník} few {Vlastníci} many {Vlastníka} other {Vlastníků}}",
+      "you_dont_have_permission_to_do_this_action": "Nemáš oprávnění provést tuto akci",
+      "in_progress": "probíhá",
+      "give_up": "vzdát to",
+      "random": "náhodně",
+      "reset_password": "Resetovat heslo",
+      "password_reset": "Heslo resetováno",
+      "return_to_login": "Zpět na přihlášení",
+      "invalid_code": "Neplatný kód",
+      "no_token_found": "Token nebyl nalezen",
+      "first_watched_at": "první datum zhlédnutí",
+      "watched_dates": "data zhlédnutí",
+      "no_watched_dates": "žádná data zhlédnutí",
+      "select_role": "vyber roli",
+      "select_format": "vyber formát",
+      "theater": "Kino",
+      "physical": "Fyzický nosič",
+      "digital": "Digitální",
+      "streaming": "Streaming",
+      "you_must_be_premium_to_change_member_role": "Pro změnu role člena musíš mít premium",
+      "already_member": "už je členem",
+      "email_already_used": "Tento e-mail se už používá",
+      "email_confirmed": "E-mail potvrzen",
+      "confirmation_email_sent": "Potvrzovací e-mail odeslán",
+      "continue": "Pokračovat",
+      "finish": "Dokončit",
+      "forgot_password": "Zapomenuté heslo",
+      "new_password": "Nové heslo",
+      "confirm_password": "Potvrdit heslo",
+      "password_reseted": "Heslo resetováno",
+      "reset_your_password": "Resetuj své heslo",
+      "invalid_token": "Neplatný token",
+      "new_notification": "{count, plural, one {nové oznámení} few {nová oznámení} many {nová oznámení} other {nových oznámení}}",
+      "lets_go": "Jdeme na to!",
+      "update_available": "K dispozici je aktualizace",
+      "update_available_description": "Aktualizuj aplikaci, abys mohl využívat nejnovější vylepšení.",
+      "update_required_title": "Vyžadována aktualizace",
+      "update_required_description": "Tato verze aplikace už není podporována. Aktualizuj ji, abys mohl dál používat Recomend.",
+      "update_app": "Aktualizovat",
+      "advertisement": "{count, plural, one {Reklama} few {Reklamy} many {Reklamy} other {Reklam}}",
+      "pending": "Čeká",
+      "processing": "Probíhá",
+      "awaiting_review": "Ke kontrole",
+      "failed": "Selhalo",
+      "data": "{count, plural, one {Data} few {Data} many {Data} other {Dat}}",
+      "restore": "Obnovit",
+      "fix": "Opravit",
+      "not_found": "Nenalezeno",
+      "unavailable": "Nedostupné",
+      "star_on_github": "Dát hvězdičku na GitHubu"
+    },
+    "form": {
+      "email": {
+        "label": "E-mailová adresa",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "E-mail není platný",
+          "unavailable": "Tento e-mail se už používá"
+        },
+        "verified": "E-mail ověřen"
+      },
+      "username": {
+        "label": "Uživatelské jméno",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "První znak musí být písmeno nebo číslice",
+          "double_dot": "Dvě tečky za sebou nejsou povoleny",
+          "ends_with_dot": "Tečka na konci není povolena",
+          "format": "Povolena jsou pouze písmena, číslice a znaky '_' a '.'",
+          "unavailable": "Toto uživatelské jméno je už obsazené"
+        }
+      },
+      "full_name": {
+        "label": "Jméno",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "Povolena jsou pouze písmena, číslice a mezery"
+        }
+      },
+      "password": {
+        "label": "Heslo",
+        "placeholder": "Zadej své heslo",
+        "schema": {
+          "uppercase": "Je vyžadováno alespoň jedno velké písmeno",
+          "lowercase": "Je vyžadováno alespoň jedno malé písmeno",
+          "number": "Je vyžadována alespoň jedna číslice",
+          "special": "Je vyžadován alespoň jeden speciální znak",
+          "match": "Hesla se neshodují"
+        },
+        "confirm": {
+          "label": "Potvrdit heslo",
+          "placeholder": "Potvrď své heslo"
+        }
+      },
+      "length": {
+        "char_min": "minimálně {count, plural, one {# znak} few {# znaky} many {# znaku} other {# znaků}}",
+        "char_max": "maximálně {count, plural, one {# znak} few {# znaky} many {# znaku} other {# znaků}}"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "Povolena jsou pouze písmena, číslice a mezery"
+      },
+      "error": {
+        "too_many_attempts": "Příliš mnoho pokusů, zkus to později",
+        "not_received_code": "Nedostal jsi kód?",
+        "invalid_code": "Neplatný kód",
+        "turnstile": "Ověření selhalo, zkus to znovu"
+      },
+      "resend_code": "Odeslat kód znovu",
+      "resend_email": "Odeslat e-mail znovu",
+      "code_verified": "Kód ověřen",
+      "code_sent": "Kód odeslán"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "stránka nenalezena",
+        "description": "jejda, tahle stránka neexistuje..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "přehled",
+        "description": "Objevuj, hodnoť a sdílej své oblíbené filmy a seriály."
+      },
+      "recos": {
+        "label": "reco",
+        "description": "Posílej a přijímej reco od přátel. Všechno na jednom místě."
+      },
+      "playlists": {
+        "label": "playlisty",
+        "description": "Organizuj, sdílej a tvořte playlisty společně."
+      },
+      "feed": {
+        "label": "feed",
+        "description": "Sleduj přátele a uvidíš, co koukají, co lajkují a co hodnotí."
+      },
+      "social_sharing": {
+        "label": "sdílení na sítích",
+        "description": "Sdílej vše, co miluješ, na Instagramu nebo jiných sítích."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "Přehled",
+          "description": "Měj přehled o filmech, které jsi viděl"
+        },
+        "recos": {
+          "label": "Reco",
+          "description": "Posílej přátelům filmová doporučení"
+        },
+        "explore": {
+          "label": "Objevovat",
+          "description": "Objevuj nové filmy na Paradise Pictures — interaktivní mapě s více než 1400 filmy"
+        },
+        "like": {
+          "label": "Lajk",
+          "description": "Ukaž lásku ke svým oblíbeným filmům, playlistům a recenzím"
+        },
+        "rating": {
+          "label": "Hodnocení",
+          "description": "Hodnoť filmy, které jsi viděl"
+        },
+        "watchlist": {
+          "label": "Watchlist",
+          "description": "Ulož si filmy, které chceš vidět"
+        },
+        "playlists": {
+          "label": "Playlisty",
+          "description": "Organizuj své filmy do playlistů a sdílej je"
+        },
+        "reviews": {
+          "label": "Recenze",
+          "description": "Piš recenze a pusť ven zahořklého cinefila, co v tobě dřímá"
+        },
+        "feed": {
+          "label": "Feed",
+          "description": "Sleduj aktivitu svých přátel"
+        },
+        "adsFree": {
+          "label": "Bez reklam",
+          "description": "Užívej si Recomend bez reklam, navždy"
+        }
+      }
+    },
+    "welcome": {
+      "title": "Díky za registraci!",
+      "description": "Tady je rychlý přehled toho, co můžeš s {app} dělat.",
+      "follow": {
+        "title": "Sleduj lidi",
+        "description": "Sleduj přátele a uvidíš, co koukají."
+      },
+      "import": {
+        "title": "Přicházíš z jiné platformy?"
+      }
+    },
+    "collection": {
+      "label": "knihovna",
+      "my_recos": {
+        "label": "moje reco",
+        "search": {
+          "placeholder": "hledat v mých reco..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "smazat z mých reco",
+            "description": "Opravdu chceš smazat <important>{title}</important> ze svých reco?"
+          },
+          "complete_confirm": {
+            "title": "dokončit reco",
+            "description": "Opravdu chceš dokončit reco <important>{title}</important>?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "hledat ve watchlistu..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "smazat z watchlistu",
+            "description": "Opravdu chceš smazat <important>{title}</important> ze svého watchlistu?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "hledat ve srdcovkách..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "smazat ze srdcovek",
+            "description": "Opravdu chceš smazat <important>{title}</important> ze svých srdcovek?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> zhlédl",
+        "rated": "<name></name> ohodnotil",
+        "liked": "<name></name> lajkl",
+        "rated_liked": "<name></name> lajkl a ohodnotil",
+        "reviewed": "<name></name> napsal recenzi"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> je <important>{roles}</important> v <linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> je <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "Autorizovat aplikaci",
+        "description_generic": "Aplikace žádá o přístup k tvému účtu.",
+        "description": "{client} chce získat přístup k tvému účtu.",
+        "scopes_label": "To aplikaci umožní:",
+        "accept": "Povolit",
+        "deny": "Odmítnout",
+        "error": {
+          "invalid_request": "Neplatná nebo vypršená žádost",
+          "invalid_request_description": "Začni proces znovu v aplikaci, která tě sem poslala.",
+          "client_not_found": "Tato aplikace nebyla nalezena.",
+          "submit_failed": "Něco se pokazilo. Zkus to znovu."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "Přihlas se ke svému účtu {app}."
+        },
+        "label": "Přihlásit se",
+        "description": "Objev nejlepší filmová doporučení.",
+        "or_continue_with": "Nebo pokračuj přes",
+        "no_account_yet": "Ještě nemáš účet?",
+        "form": {
+          "identifier": {
+            "label": "E-mail nebo uživatelské jméno",
+            "placeholder": "Zadej svůj e-mail nebo uživatelské jméno"
+          },
+          "password": {
+            "label": "Heslo",
+            "placeholder": "Zadej své heslo"
+          },
+          "submit": "Přihlásit se",
+          "forgot_password": "Zapomněl jsi heslo?",
+          "wrong_credentials": "E-mail nebo heslo je nesprávné"
+        },
+        "otp": {
+          "password_login": "Chceš se raději přihlásit heslem?",
+          "form": {
+            "submit": "Získat kód",
+            "no_user_found": "S tímto e-mailem nebyl nalezen žádný uživatel",
+            "success": "Přihlášeno"
+          },
+          "confirm_form": {
+            "label": "Potvrdit kód",
+            "description": "Ověřovací kód byl odeslán na adresu {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "Zaregistruj se na {app} a objevuj a sdílej filmová doporučení."
+        },
+        "description": "Vytvoř si účet, abys mohl doporučit film tomu kamarádovi, co si nikdy nepamatuje názvy.",
+        "form": {
+          "success": "Ověřovací e-mail byl odeslán na {email}"
+        },
+        "confirm_form": {
+          "label": "Potvrdit e-mail",
+          "description": "Ověřovací odkaz byl odeslán na adresu {email}"
+        },
+        "return_to_login": "Jejda, já už účet mám."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "Zapomenuté heslo",
+          "description": "Resetuj své heslo."
+        },
+        "label": "Zapomenuté heslo",
+        "description": "Měl bys používat správce hesel, je to fakt praktické.",
+        "return_to_login": "Jejda, heslo si nakonec pamatuju.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "Resetovat heslo",
+          "code_sent": "Žádost odeslána"
+        },
+        "confirm_form": {
+          "label": "Potvrdit kód",
+          "description": "Ověřovací kód byl odeslán na adresu {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "Reset hesla",
+          "description": "Zvol si nové heslo ke svému účtu."
+        }
+      },
+      "error": {
+        "label": "Chyba",
+        "description": "Během ověřování došlo k chybě.",
+        "return_to_login": "Zpět do bezpečí"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "O nás",
+        "marquee": "Není v tvém životě nic vzrušujícího než prohlížet si na internetu stránky 'O nás'?",
+        "intro": "<strong>Recomend</strong> je prostor věnovaný objevování, doporučování a organizování filmů. Všechno je navrženo tak, aby dalo ústnímu šíření tu nejlepší možnou digitální podobu. Náš přístup se soustředí na člověka a jeho vztahy v éře sebestředné konzumace — nebo spíš 'doporučeno pro tebe'.",
+        "slogan": {
+          "1": "Je to bez reklam a bez pochybných slibů. 🍆",
+          "2": "Je to zároveň sociální síť i nástroj.",
+          "3": "Je to domácí výroba, od nadšenců.",
+          "4": "Je to amatérské v pravém slova smyslu."
+        },
+        "last": "Recomend se dá používat sám nebo ve více lidech, veřejně i soukromě, ve dne i v noci — ale nikdy před filmem, soustřeď se, prosím!"
+      },
+      "team": {
+        "label": "Tým",
+        "intro": "Recomend vytvořili dva bratři posedlí filmem, kteří rádi investují svůj čas do příliš ambiciózních projektů, u kterých není jisté, jestli vůbec někdy spatří světlo světa.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "Hyperaktivní architekt a inženýr, který se nedokáže spokojit s jednou prací (ta pravá start-up nation): Yoann stojí za nápadem udělat filmovou mapu, která měla zpočátku jen skromnou ambici stát se plakátem na jeho záchodě. S příchodem Loupa cíle úplně explodovaly a, trochu zavalen událostmi, se stará o celou grafickou část mapy i webu a taky o veškerou komunikaci (i když ho to nebaví). Taky se vyjadřuje k UX/UI a navrhuje hromadu funkcí, aniž by si pořádně uvědomoval, jak těžké je je naprogramovat (nějaký pokrok udělal)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "Naprostý samouk, který si přesto odbyl studia vedoucí k neplacené nezaměstnanosti před pětadvacítkou. Skutečný švýcarský nůž: Loup se stará o webdesign a programuje rozhraní, které si představujeme co nejergonomičtější. Loup by rád poděkoval všem kódovacím fórům, která odpověděla na jeho (velmi) četné dotazy, a taky všem indickým youtuberům, kteří ho během těch měsíců provázeli jako adoptivní otcové. Jeho máma je mimochodem přesvědčená, že si z něj bratr udělal otroka tohohle projektu (jsem v pohodě, mami)."
+          }
+        },
+        "last": "Jestli si chceš popovídat s námi nebo s dalšími členy komunity, přidej se na náš <link>Discord</link>!"
+      },
+      "pricing": {
+        "label": "Ceník",
+        "intro": "Tenhle model předplatného je především podpora, díky které projekt žije a může se dál rozvíjet. Prémiové funkce jsou bonusy pro pokročilé používání Recomend, které ospravedlňují malý finanční příspěvek. Vždycky zachováme možnost používat web zdarma, bez reklam a bez pocitu omezení.",
+        "subdescription": "*Pokud je extrémně nízká cena tohoto předplatného přesto nad tvoje možnosti, obrať se na liberální vládu, která je zodpovědná za ztrátu tvé kupní síly."
+      },
+      "legal": {
+        "label": "Právní informace a soukromí",
+        "description": "Respektujeme tvé soukromí. Reklamy zobrazované nepřihlášeným uživatelům spravuje Google a vyžadují technické cookies, aby se omezila frekvence zobrazování a předešlo podvodům.",
+        "privacyPolicy": "Přečti si naše zásady ochrany soukromí",
+        "manageCookies": "Spravovat mé reklamní předvolby (cookies)"
+      },
+      "open-source": {
+        "label": "Open source",
+        "intro": "Recomend je open source: kód je veřejný na GitHubu. Mrkni na něj, přispěj, nebo nám prostě nech hvězdičku!",
+        "star": "Dej nám hvězdičku na GitHubu"
+      },
+      "businessmodel": {
+        "label": "Byznys model",
+        "paragraph": {
+          "1": "Tušíš, že s našimi málo komerčními profily jsme úplně nepochopili, k čemu by nám teď byl byznys model...",
+          "2": "Jestli si to budoucnost Recomend vyžádá, prozkoumáme tu otázku a obklopíme se správnými lidmi — nebo aspoň lidmi, které to zajímá víc než nás.",
+          "3": "Zatím, buďme upřímní, je na práci něco jiného."
+        }
+      },
+      "roadmap": {
+        "label": "Roadmapa"
+      },
+      "data": {
+        "label": "Data",
+        "paragraph": {
+          "1": "Všechna metadata používaná na Recomend poskytuje <link>The Movie Database (TMDb)</link> přes API platformy. Děláme to tedy přesně jako všichni ostatní, jako hodné ovečky.",
+          "2": "S chybami nebo chybějícími filmy se tedy obrať na <link>TMDb</link>."
+        }
+      },
+      "resources": {
+        "label": "Zdroje",
+        "intro": "S kinem to zase tolik nesouvisí, ale tady je seznam webů, které máme rádi:"
+      },
+      "contact-support": {
+        "label": "Kontakt a podpora",
+        "help-center": "Najdi odpovědi na své existenciální otázky v našem <link>centru nápovědy</link>.",
+        "technical-support": "Pro technické dotazy: <email></email>",
+        "suggest-a-feature": "Pro návrhy: <email></email>",
+        "contact-us": "Pokud se s námi chceš jen spojit: <email></email>"
+      },
+      "quote": {
+        "label": "Citát",
+        "quote": "« Nenávidím slovo profesionál. Všichni ti herci a ostatní, co říkají: já jsem profesionál, já jsem profík! Co to je? Existuje smutnější slovo? Protože amatér pochází od slova láska. Věci se musí dělat z lásky, jinak jsme idioti. »",
+        "author": "Orson Wells",
+        "date": "1972",
+        "subdescription": "*Váhali jsme, jestli to sem dát, protože to rychle zní nabubřele, ale dobře to vystihuje naši náladu kolem projektu. Jestli se ti to nelíbí, tak to sundáme."
+      }
+    },
+    "settings": {
+      "label": "Nastavení",
+      "description": "Spravuj nastavení svého účtu.",
+      "profile": {
+        "label": "Profil",
+        "description": "Takhle tě na webu uvidí ostatní.",
+        "avatar": {
+          "label": "Avatar",
+          "delete": "Smazat"
+        },
+        "full_name": {
+          "label": "Jméno",
+          "description": "Tohle jméno se bude zobrazovat na tvém profilu a v e-mailech.",
+          "placeholder": "Zadej své jméno",
+          "form": {
+            "min_length": "Jméno musí mít alespoň 1 znak",
+            "max_length": "Jméno nesmí přesáhnout 50 znaků"
+          }
+        },
+        "bio": {
+          "label": "Bio",
+          "description": "Řekni něco o sobě — objeví se to na tvém profilu.",
+          "placeholder": "Napiš něco o sobě",
+          "form": {
+            "max_length": "Bio nesmí přesáhnout 150 znaků",
+            "format": "Biografie nesmí obsahovat prázdné řádky ani se skládat jen z mezer."
+          }
+        },
+        "favorite_films": {
+          "label": "Oblíbené filmy",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "URL není platná"
+          }
+        }
+      },
+      "account": {
+        "label": "Účet",
+        "description": "Aktualizuj nastavení svého účtu.",
+        "username": {
+          "label": "Uživatelské jméno",
+          "description": "Tohle je tvé uživatelské jméno, podle kterého tě ostatní najdou a dostanou se na tvůj profil. Můžeš ho změnit jen jednou za 30 dní.",
+          "placeholder": "Zadej své uživatelské jméno",
+          "form": {
+            "min_length": "Uživatelské jméno musí mít alespoň 3 znaky",
+            "max_length": "Uživatelské jméno nesmí přesáhnout 15 znaků",
+            "invalid": "Uživatelské jméno může obsahovat jen písmena, číslice a znaky '_' a '.'",
+            "unavailable": "Toto uživatelské jméno je už obsazené"
+          }
+        },
+        "private": {
+          "label": "Soukromý účet",
+          "description": "Když je tvůj účet soukromý, tvé aktivity vidí jen uživatelé, které schválíš."
+        },
+        "email": {
+          "description": "Ověřovací e-mail bude odeslán na tvou současnou i na novou e-mailovou adresu. Abys změnu provedl, musíš potvrdit obě.",
+          "change_pending": "<strong>{date}</strong> byl odeslán ověřovací e-mail na tvou novou adresu <strong>{email}</strong>. Klikni na odkaz nebo zadej ověřovací kód, abys změnu potvrdil.",
+          "confirm_email_code": {
+            "description": "Zadej ověřovací kód odeslaný na tvou adresu <strong>{email}</strong>."
+          },
+          "change_success": "Tvá e-mailová adresa byla úspěšně změněna"
+        },
+        "delete_account": {
+          "button": "Smazat můj účet",
+          "confirm": {
+            "description": "Tvůj účet bude trvale smazán a nebude možné ho obnovit.",
+            "confirm_email_sent": "Ověřovací e-mail byl odeslán na tvou e-mailovou adresu"
+          }
+        }
+      },
+      "appearance": {
+        "label": "Vzhled",
+        "description": "Přizpůsob si vzhled aplikace. Automaticky přepínej mezi denním a nočním motivem.",
+        "language": {
+          "label": "Jazyk",
+          "description": "Vyber jazyk — změny se projeví po restartu aplikace",
+          "placeholder": "Vyber jazyk",
+          "not_found": "Jazyk nebyl nalezen"
+        },
+        "theme": {
+          "label": "Motiv",
+          "description": "Vyber motiv rozhraní.",
+          "options": {
+            "light": "Světlý",
+            "dark": "Tmavý"
+          }
+        }
+      },
+      "subscription": {
+        "label": "Předplatné",
+        "description": "Spravuj své prémiové předplatné."
+      },
+      "security": {
+        "label": "Zabezpečení",
+        "description": "Změna hesla tě odhlásí ze všech zařízení kromě toho, které právě používáš.",
+        "current_password": {
+          "label": "Současné heslo",
+          "placeholder": "Zadej své současné heslo",
+          "form": {
+            "required": "Současné heslo je povinné",
+            "invalid": "Současné heslo je nesprávné"
+          }
+        },
+        "new_password": {
+          "label": "Nové heslo",
+          "placeholder": "Zadej své nové heslo",
+          "form": {
+            "min_length": "Heslo musí mít alespoň 8 znaků",
+            "uppercase": "Je vyžadováno alespoň jedno velké písmeno",
+            "lowercase": "Je vyžadováno alespoň jedno malé písmeno",
+            "number": "Je vyžadována alespoň jedna číslice",
+            "special": "Je vyžadován alespoň jeden speciální znak"
+          }
+        },
+        "confirm_password": {
+          "label": "Potvrdit nové heslo",
+          "placeholder": "Potvrď své nové heslo",
+          "form": {
+            "match": "Hesla se neshodují"
+          }
+        }
+      },
+      "notifications": {
+        "label": "Oznámení",
+        "description": "Nastav si, jaká oznámení dostáváš.",
+        "push_notifications": {
+          "label": "Push oznámení",
+          "form": {
+            "enable": "Zapnout push oznámení"
+          },
+          "already_granted": "Žádost o oznámení už byla podána; pokud ji chceš změnit, jdi do nastavení svého prohlížeče.",
+          "no_enabled": "Zapni oznámení v nastavení svého zařízení, abys dostával push oznámení.",
+          "open_settings": "Přejít do nastavení zařízení"
+        }
+      },
+      "data": {
+        "label": "Data",
+        "description": "Importuj nebo exportuj svá data.",
+        "importer": {
+          "label": "Import",
+          "select_source": "Vyber zdroj",
+          "instructions_title": "Pokyny",
+          "browse_prompt": "Přetáhni sem svůj soubor nebo <link>procházej</link>",
+          "browse_prompt_mobile": "Klepni pro výběr souboru",
+          "uploading": "Nahrávání…",
+          "processing": "Analyzujeme tvůj soubor…",
+          "upload_error": "Nahrávání selhalo, zkus to znovu.",
+          "invalid_file_type": "Tento typ souboru není pro tento zdroj podporován.",
+          "review_title": "Zkontroluj svůj import",
+          "review_summary": "nalezeno {matched} z {total}",
+          "validate": "Potvrdit import",
+          "validate_confirm_description": "Tím se do tvé knihovny naimportují všechny nalezené a nepřeskočené položky. Tohle nejde vrátit zpět.",
+          "success_title": "Import dokončen",
+          "success_description": "Tvá data byla úspěšně naimportována.",
+          "failed_title": "Import selhal",
+          "failed_description": "Při zpracování tohoto importu se něco pokazilo.",
+          "pending_description": "Tvůj import je ve frontě a brzy začne.",
+          "empty": "Zatím žádné importy.",
+          "delete_confirm_description": "Tento import a všechna jeho data budou trvale smazána. Tohle nejde vrátit zpět.",
+          "keep_existing": "Ponechat moje",
+          "use_imported": "Použít importované",
+          "merge": "Sloučit",
+          "conflict": "Konflikt",
+          "no_match": "Bez shody",
+          "existing_rating": "Aktuálně: {rating}",
+          "log_column": "Záznam",
+          "actions_column": "Akce",
+          "categories": {
+            "log_movies": "Filmy",
+            "log_tv_series": "Seriály",
+            "bookmarks": "Watchlist",
+            "playlists": "Seznamy"
+          },
+          "status": {
+            "pending": "Čeká",
+            "processing": "Probíhá",
+            "awaiting_review": "Ke kontrole",
+            "completed": "Dokončeno",
+            "failed": "Selhalo"
+          }
+        },
+        "exporter": {
+          "label": "Export"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "přejít na Premium",
+        "description": "Přejdi na prémiový účet a získej přístup ke všem funkcím {app}."
+      },
+      "header": {
+        "title": "rozšiř své kino, sdílej víc, podpoř {app}",
+        "subtitle": "vyzkoušej 1 měsíc zdarma, pak {price}/měsíc"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "aktivity",
+            "unlimited_activities": {
+              "label": "neomezené aktivity",
+              "description": "hodnocení, lajky, recenze, watchlist a doporučení"
+            },
+            "favorites": {
+              "label": "oblíbené",
+              "description": "přidej své oblíbené filmy na svůj profil"
+            }
+          },
+          "playlists": {
+            "label": "playlisty",
+            "unlimited_playlists": {
+              "label": "neomezené",
+              "description": "vytvoř neomezený počet playlistů"
+            },
+            "shared_playlists": {
+              "label": "sdílené",
+              "description": "sdílej své playlisty s dalšími uživateli"
+            },
+            "collaborative_playlists": {
+              "label": "společné",
+              "description": "vytvářej společné playlisty s dalšími uživateli"
+            }
+          },
+          "feed": {
+            "label": "feed",
+            "followees": {
+              "label": "sledovaní uživatelé",
+              "description": "sleduj aktivity uživatelů, které sleduješ"
+            },
+            "cast_and_crew": {
+              "label": "obsazení a štáb",
+              "description": "sleduj aktivity lidí, kteří se podílejí na filmech"
+            }
+          },
+          "support": {
+            "label": "podpora",
+            "team": {
+              "label": "Podpoř tým {app}"
+            },
+            "credits": {
+              "label": "titulky",
+              "description": "tvůj profil v závěrečných titulcích aplikace"
+            }
+          }
+        },
+        "success": {
+          "label": "Díky za tvou podporu!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} - playlist od @{username}",
+        "description": "Objev filmový playlist od @{username} na {app}."
+      },
+      "actions": {
+        "delete": {
+          "description": "Tím se <important>{title}</important> trvale smaže z tvých playlistů."
+        }
+      },
+      "search": {
+        "placeholder": "hledat v playlistu..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "Opravdu chceš smazat <important>{title}</important> ze svého playlistu?"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "Zadej název playlistu"
+        },
+        "description": {
+          "placeholder": "Zadej popis playlistu"
+        },
+        "error": {
+          "format": "Popis nesmí obsahovat prázdné řádky ani se skládat jen z mezer."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "Objev profil @{username} na {app}."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year}) • Film",
+        "description": "{title} je film od {directors} z roku {year}. Popis: {overview}",
+        "description_no_director": "{title} je film z roku {year}. Popis: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Playlisty",
+          "description": "Objev všechny playlisty obsahující film {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Recenze",
+          "description": "Objev všechny recenze filmu {title}."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} je seriál od {creators}, poprvé vysílaný v roce {year}. Popis: {overview}",
+        "description_no_creator": "{title} je seriál poprvé vysílaný v roce {year}. Popis: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Playlisty",
+          "description": "Objev všechny playlisty obsahující seriál {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Recenze",
+          "description": "Objev všechny recenze seriálu {title}."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • Série",
+          "description": "Objev všechny série seriálu {title}."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • {number}. série",
+            "description": "Objev všechny epizody {number}. série seriálu {title}."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • Filmy",
+          "description": "Objev všechny filmy, ve kterých {name} hrál nebo se na nich podílel."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • Seriály",
+          "description": "Objev všechny seriály, ve kterých {name} hrál nebo se na nich podílel."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "Recenze {title} od @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "Napsat recenzi na {title}",
+          "description": "Poděl se o svůj názor na {title}."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Objevuj Paradise Pictures",
+        "description": "Vydej se objevovat ostrov a jeho rozmanité kulisy. Mnoho filmů, které ho obývají, je umístěno ve svém diegetickém prostředí. Podaří se ti prozkoumat každý jeho kout?"
+      }
+    },
+    "legal": {
+      "label": "Právní informace",
+      "description": "Přečti si právní dokumenty {app}.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "Všeobecné podmínky použití",
+          "description": "Přečti si podmínky použití {app}."
+        },
+        "sections": {
+          "intro": "Tyto všeobecné podmínky použití (dále jen 'Podmínky') upravují přístup k aplikaci {app} a její používání. Aplikaci vydává Loup (dále jen 'Vydavatel') se sídlem v Paříži. Registrace na {app} znamená bezvýhradné přijetí těchto Podmínek.",
+          "presentation": {
+            "label": "1. Popis služby",
+            "content": "{app} je bezplatná aplikace, která svým uživatelům umožňuje prohlížet informace o filmech, publikovat recenze, hodnotit díla a vytvářet vlastní seznamy."
+          },
+          "account": {
+            "label": "2. Účet a zabezpečení",
+            "content": "Přístup k funkcím pro přispívání vyžaduje vytvoření účtu. Uživatel odpovídá za důvěrnost svých přihlašovacích údajů. V případě podvodného použití nebo podezření na napadení musí Uživatel okamžitě kontaktovat podporu na adrese: <email></email>."
+          },
+          "conduct": {
+            "label": "3. Pravidla chování",
+            "content": "Uživatel se zavazuje zůstat ve svých názorech a seznamech zdvořilý a uctivý. Přísně zakázány jsou: nenávistné, pomlouvačné nebo rasistické projevy, obtěžování, a také spam či nevyžádaná komerční propagace. Vydavatel si vyhrazuje právo smazat jakýkoli obsah porušující tato pravidla a bez předchozího upozornění pozastavit dotčený účet."
+          },
+          "child_safety": {
+            "label": "4. Ochrana nezletilých",
+            "content": "{app} uplatňuje přísnou politiku nulové tolerance vůči jakékoli formě sexuálního zneužívání a vykořisťování dětí ('Child Sexual Abuse and Exploitation', tedy CSAE). Vytváření, nahrávání, uchovávání, šíření, vyžadování nebo propagace jakéhokoli obsahu, který sexualizuje, vykořisťuje nebo jinak ohrožuje nezletilé, je na {app} výslovně a absolutně zakázáno. Každý účet, u kterého bude porušení této politiky zjištěno, bude okamžitě a trvale zablokován a Vydavatel nahlásí dotčený obsah spolu se všemi dostupnými informacemi o uživateli organizaci National Center for Missing & Exploited Children (NCMEC) a/nebo příslušným orgánům v souladu s platnými právními předpisy. Každý uživatel, který se dozví o obsahu nebo chování, jež by mohlo představovat případ CSAE, to musí neprodleně nahlásit na: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. Duševní vlastnictví",
+            "content": "Uživatel zůstává vlastníkem názorů, které píše. Publikováním na {app} však Uživatel uděluje Vydavateli bezplatnou nevýhradní licenci k zobrazování, rozmnožování a technickému přizpůsobení tohoto obsahu v rámci aplikace. Vizuální prvky, kód a design {app} jsou výhradním vlastnictvím Vydavatele."
+          },
+          "privacy": {
+            "label": "6. Osobní údaje",
+            "content": "Respektování tvého soukromí je naší absolutní prioritou. {app} neprodává, nepronajímá ani nesdílí žádné osobní údaje s komerčními třetími stranami ani inzerenty. Shromažďované údaje (e-mail, uživatelské jméno, aktivita v aplikaci) slouží výhradně k provozu služby a ke správě tvého účtu. Svá práva na přístup, změnu nebo výmaz (GDPR) můžeš uplatnit na adrese: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookies a sledovače",
+            "content": "{app} nepoužívá žádné reklamní cookies ani žádné sledovače chování třetích stran. Používají se pouze dva typy technických cookies: ověřovací cookie (aby zůstal přihlášený) a cookie jazykové předvolby (aby si zapamatovala tvoji volbu). Protože jsou tyto cookies pro službu nezbytně nutné, nevyžadují předchozí souhlas."
+          },
+          "ads": {
+            "label": "8. Reklama",
+            "content": "Aplikace je momentálně nabízena zcela bez reklam. Pokud by se tento model změnil, byli by uživatelé informováni aktualizací těchto Podmínek."
+          },
+          "liability": {
+            "label": "9. Odpovědnost",
+            "content": "Vydavatel se snaží udržet {app} dostupnou 24 hodin denně, ale nezaručuje, že nedojde k výpadkům nebo chybám. Informace o filmech pocházejí z databází třetích stran; Vydavatele nelze činit odpovědným za případné nepřesnosti v těchto údajích."
+          },
+          "law": {
+            "label": "10. Rozhodné právo",
+            "content": "Tyto Podmínky se řídí francouzským právem. V případě sporu, který se nepodaří vyřešit smírně přes adresu <email></email>, jsou výlučně příslušné soudy v Paříži."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "Zásady ochrany soukromí",
+          "description": "Přečti si zásady ochrany soukromí {app}."
+        },
+        "sections": {
+          "intro": "Ochrana dat je jádrem filozofie {app}. Tyto zásady podrobně popisují, jaká data shromažďujeme, proč je shromažďujeme a jak je chráníme. Stručně: tvá data neprodáváme.",
+          "controller": {
+            "label": "1. Správce údajů",
+            "content": "Správcem údajů je Loup se sídlem v Paříži (Francie). S jakýmkoli dotazem ohledně soukromí se můžeš obrátit na: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. Shromažďované údaje",
+            "content": "Shromažďujeme pouze údaje nezbytně nutné pro fungování aplikace: tvou e-mailovou adresu (pro ověření), tvé uživatelské jméno a tvá data o používání (ohodnocené filmy, recenze, seznamy). Tvá hesla jsou uložena zašifrovaně (hashovaně) a bezpečně."
+          },
+          "purpose": {
+            "label": "3. Účel zpracování",
+            "content": "Tvá data jsou zpracovávána výhradně k tomu, aby: ti umožnila vytvořit a spravovat účet, zobrazila tvé seznamy a hodnocení a zajistila technický provoz služby. Tvá data nepoužíváme k reklamnímu profilování."
+          },
+          "sharing": {
+            "label": "4. Sdílení údajů",
+            "content": "Tvé osobní údaje nikdy neprodáváme, nepronajímáme ani nepředáváme třetím stranám. Mohou být uloženy u našich technických poskytovatelů (hosting, služba pro odesílání transakčních e-mailů), kteří jsou vázáni přísnou mlčenlivostí a dodržují GDPR."
+          },
+          "retention": {
+            "label": "5. Doba uchovávání",
+            "content": "Tvá data uchováváme, dokud je tvůj účet aktivní. Pokud se rozhodneš účet smazat, budou všechna tvá osobní data (e-mail, uživatelské jméno, názory) trvale vymazána z našich databází."
+          },
+          "rights": {
+            "label": "6. Tvá práva (GDPR)",
+            "content": "V souladu s předpisy máš právo na přístup, opravu, přenositelnost a výmaz svých dat. Tato práva můžeš uplatnit kdykoli přímo v aplikaci nebo nám napsat na: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookies",
+            "content": "Jak je uvedeno v našich podmínkách použití, používáme pouze nezbytné technické cookies (relace a jazyk). Na tvé zařízení se neukládají žádné reklamní ani sledovací cookies třetích stran."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "Hledej film, seriál, playlist, osobu nebo uživatele..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "Opravdu chceš odebrat toto dílo ze svého seznamu zhlédnutých? Pokud k němu máš hodnocení nebo recenzi, budou také smazány."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "Opravdu chceš dokončit seriál? Všechny epizody všech sérií budou označeny jako zhlédnuté."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "Opravdu chceš dokončit {seasonNumber}. sérii? Všechny epizody série budou označeny jako zhlédnuté."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "Abys tu viděl aktivitu, musíš ty nebo uživatelé, které sleduješ, hodnotit filmy, seriály, ..."
+    },
+    "feed_person": {
+      "message": "Abys tu viděl aktivitu, musíš sledovat lidi, kteří se podílejí na filmech nebo seriálech."
+    },
+    "playlists": {
+      "items": {
+        "empty": "V tomto playlistu nejsou žádné filmy ani seriály. Přidej nějaké, ať ho zaplníš!"
+      },
+      "add_to": {
+        "empty": "Nemáš žádný playlist. Vytvoř si jeden, abys do něj mohl přidávat filmy nebo seriály a snadno je našel!"
+      },
+      "saved": {
+        "empty": "Nemáš žádný uložený playlist. Ulož si playlist, abys ho snadno našel ve své knihovně!"
+      },
+      "members": {
+        "empty": "Tento playlist nemá žádné členy. Přidej nějaké, abyste na stejném playlistu mohli spolupracovat!",
+        "search": "Hledej uživatele, které chceš přidat do playlistu..."
+      }
+    },
+    "follow-requests": {
+      "empty": "Nemáš žádné čekající žádosti o sledování. Až nějaké budeš mít, objeví se tady!"
+    },
+    "recos": {
+      "empty": "Nemáš žádná doporučení. Až nějaká budeš mít, objeví se tady!",
+      "send_to": {
+        "empty": "Nemáš komu poslat reco. Abys někomu mohl poslat reco, musíte být kamarádi (vzájemné sledování)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "Zatím nemáš žádný film ani seriál uložený na později. Až nějaký budeš mít, objeví se tady!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> ti poslal reco na film <movie></movie>"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> ti poslal reco na seriál <tv_series></tv_series>"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> zhlédl <movie></movie>, který jsi mu doporučil"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> zhlédl <tv_series></tv_series>, který jsi mu doporučil"
+    },
+    "follower_created": {
+      "description": "<user></user> tě začal sledovat"
+    },
+    "follower_accepted": {
+      "description": "<user></user> přijal tvou žádost o sledování"
+    },
+    "follower_request": {
+      "description": "<user></user> tě chce sledovat"
+    },
+    "friend_created": {
+      "description": "<user></user> je teď tvůj kamarád"
+    }
+  }
+}

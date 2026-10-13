@@ -1,0 +1,1434 @@
+{
+  "site": {
+    "tagline": "Ένας άλλος τρόπος να ανακαλύπτεις ταινίες",
+    "description": "Το {app} είναι ένα κοινωνικό δίκτυο για τους λάτρεις του σινεμά. Ανακάλυψε, μοιράσου και εξερεύνησε ταινίες και σειρές με τους φίλους σου."
+  },
+  "common": {
+    "messages": {
+      "welcome": "Καλώς όρισες",
+      "welcome_to_app": "Καλώς όρισες στο {app}",
+      "hello": "Γεια",
+      "greeting_with_name": "{timeOfDay, select, morning {Καλημέρα, {name}} afternoon {Καλό απόγευμα, {name}} evening {Καλό βράδυ, {name}} night {Καληνύχτα, {name}} other {Γεια σου, {name}}}",
+      "click_here": "Κάνε κλικ εδώ",
+      "see_more": "Δες περισσότερα",
+      "see_more_details": "Δες περισσότερες λεπτομέρειες",
+      "more": "Περισσότερα",
+      "view_profile": "Δες το προφίλ",
+      "library": "Βιβλιοθήκη",
+      "watchlist": "Λίστα παρακολούθησης",
+      "for_later": "Για αργότερα",
+      "heart_pick": "{count, plural, one {επιλογή καρδιάς} other {επιλογές καρδιάς}}",
+      "add_to_heart_picks": "Προσθήκη στις επιλογές καρδιάς",
+      "remove_from_heart_picks": "Αφαίρεση από τις επιλογές καρδιάς",
+      "add_rating": "Προσθήκη βαθμολογίας",
+      "edit_rating": "Επεξεργασία βαθμολογίας",
+      "remove_rating": "Αφαίρεση βαθμολογίας",
+      "share_my_rating": "Μοιράσου τη βαθμολογία μου",
+      "share_review": "Μοιράσου την κριτική",
+      "show_likes_count": "Εμφάνιση αριθμού like",
+      "show_comments_count": "Εμφάνιση αριθμού σχολίων",
+      "add_to_watchlist": "προσθήκη στη λίστα παρακολούθησης",
+      "remove_from_watchlist": "αφαίρεση από τη λίστα παρακολούθησης",
+      "no_results": "κανένα αποτέλεσμα",
+      "no_results_for": "Κανένα αποτέλεσμα για <strong>{query}</strong>",
+      "no_followees": "Δεν ακολουθείς κανέναν",
+      "no_followers": "Κανένας ακόλουθος",
+      "no_rating": "Καμία βαθμολογία",
+      "must_watch_to_review": "πρέπει να δεις αυτό το έργο για να το κρίνεις",
+      "review_cannot_be_empty": "η κριτική δεν μπορεί να είναι κενή",
+      "no_activity": "καμία δραστηριότητα",
+      "followers_ratings": "οι βαθμολογίες των ακολούθων",
+      "added_by": "προστέθηκε από",
+      "sort_by": "ταξινόμηση κατά",
+      "sort_order": "σειρά ταξινόμησης",
+      "go_to_film": "μετάβαση στην ταινία",
+      "go_to_tv_series": "μετάβαση στη σειρά",
+      "go_to_user": "μετάβαση στον χρήστη",
+      "go_to_person": "μετάβαση στο πρόσωπο",
+      "go_to_activity": "μετάβαση στη δραστηριότητα",
+      "go_to_playlist": "μετάβαση στη λίστα",
+      "go_to_review": "μετάβαση στην κριτική",
+      "go_to_director": "{count, plural, one {μετάβαση στη σκηνοθεσία} other {μετάβαση στη σκηνοθεσία}}",
+      "go_to_creator": "{count, plural, one {μετάβαση στη δημιουργία} other {μετάβαση στη δημιουργία}}",
+      "show_director": "{count, plural, one {εμφάνιση σκηνοθεσίας} other {εμφάνιση σκηνοθεσίας}}",
+      "show_creator": "{count, plural, one {εμφάνιση δημιουργίας} other {εμφάνιση δημιουργίας}}",
+      "show_credit": "{count, plural, one {εμφάνιση συμμετοχής} other {εμφάνιση συμμετοχών}}",
+      "credits": "συντελεστές",
+      "view_recommendation": "{count, plural, one {δες το reco} other {δες τα reco}}",
+      "view_directors": "{count, plural, one {δες τη σκηνοθεσία} other {δες τη σκηνοθεσία}}",
+      "no_director": "καμία σκηνοθεσία",
+      "view_comment": "{count, plural, one {δες το σχόλιο} other {δες τα σχόλια}}",
+      "add_comment": "{count, plural, one {προσθήκη σχολίου} other {προσθήκη σχολίων}}",
+      "edit_comment": "{count, plural, one {επεξεργασία σχολίου} other {επεξεργασία σχολίων}}",
+      "delete_comment": "Διαγραφή σχολίου",
+      "do_you_really_want_to_delete_this_comment": "Σίγουρα θέλεις να διαγράψεις αυτό το σχόλιο;",
+      "comment_deleted": "Αυτό το σχόλιο διαγράφηκε",
+      "write_your_comment_here": "Γράψε ένα σχόλιο...",
+      "reply": "Απάντηση",
+      "replies_count": "{count, plural, one {# απάντηση} other {# απαντήσεις}}",
+      "view_replies": "Δες {count, plural, one {# απάντηση} other {# απαντήσεις}}",
+      "hide_replies": "Απόκρυψη απαντήσεων",
+      "load_more_replies": "Φόρτωσε κι άλλες απαντήσεις",
+      "get_started": "ξεκίνα",
+      "get_started_its_free": "πάμε 🎬, είναι δωρεάν!",
+      "import": "Εισαγωγή",
+      "upgrade_to_plan": "αναβάθμιση σε {plan}",
+      "choose_subscription_recurrence": "διάλεξε τη συχνότητα χρέωσης της συνδρομής σου",
+      "compare_plans": "σύγκριση πακέτων",
+      "save_up_to_percent": "εξοικονόμησε έως {percent}%",
+      "is_empty": "Λίγο άδειο εδώ μέσα",
+      "add_to_playlist": "προσθήκη σε λίστα",
+      "send_to_friend": "στείλ' το σε έναν φίλο",
+      "pin_to_profile": "Καρφίτσωμα στο προφίλ",
+      "unpin_from_profile": "Ξεκαρφίτσωμα από το προφίλ",
+      "pinned": "Καρφιτσώθηκε",
+      "unpinned": "Ξεκαρφιτσώθηκε",
+      "no_pinned": "Κανένα καρφιτσωμένο στοιχείο",
+      "pinned_limit_reached": "Έφτασες στο μέγιστο των καρφιτσωμένων στοιχείων — ξεκαρφίτσωσε ένα για να προσθέσεις άλλο",
+      "custom_sort": "προσαρμοσμένη ταξινόμηση",
+      "quick_add": "γρήγορη προσθήκη",
+      "favorite_films": "αγαπημένες ταινίες",
+      "follow": "ακολούθησε",
+      "followed": "ακολουθείς",
+      "request_sent": "Το αίτημα στάλθηκε",
+      "follow_requests": "αιτήματα παρακολούθησης",
+      "no_follow_requests": "κανένα αίτημα παρακολούθησης",
+      "follower": "{count, plural, one {ακόλουθος} other {ακόλουθοι}}",
+      "follower_count": "{count} ακόλουθοι",
+      "see_followers": "δες τους ακόλουθους",
+      "followee": "{count, plural, one {ακολουθεί} other {ακολουθεί}}",
+      "followee_count": "ακολουθεί {count}",
+      "see_followees": "δες ποιους ακολουθείς",
+      "last_activities": "πρόσφατες δραστηριότητες",
+      "last_updated": "τελευταία ενημέρωση",
+      "last_updated_at_date": "τελευταία ενημέρωση στις {date}",
+      "show_all": "εμφάνιση όλων",
+      "this_account_is_private": "αυτός ο λογαριασμός είναι ιδιωτικός",
+      "follow_to_see_activities": "ακολούθησε για να δεις τις δραστηριότητες",
+      "review": "{count, plural, one {κριτική} other {κριτικές}}",
+      "no_overview": "καμία περιγραφή",
+      "cast": "ηθοποιοί",
+      "no_cast": "κανένας ηθοποιός",
+      "recent": "πρόσφατα",
+      "popular": "δημοφιλή",
+      "popularity": "δημοτικότητα",
+      "no_reviews": "Καμία κριτική",
+      "no_playlists": "Καμία λίστα",
+      "no_playlists_found": "Δεν βρέθηκε καμία λίστα",
+      "no_films": "Καμία ταινία",
+      "no_tv_series": "Καμία σειρά",
+      "view_activity": "δες τη δραστηριότητα",
+      "comment_count": "{count, plural, one {# σχόλιο} other {# σχόλια}}",
+      "write_review": "γράψε κριτική",
+      "new_review": "νέα κριτική",
+      "edit_review": "επεξεργασία κριτικής",
+      "review_by": "κριτική από {name}",
+      "my_review": "{count, plural, one {η κριτική μου} other {οι κριτικές μου}}",
+      "add_review": "προσθήκη κριτικής",
+      "tv_series": "{count, plural, one {σειρά} other {σειρές}}",
+      "film": "{count, plural, one {ταινία} other {ταινίες}}",
+      "movie": "{count, plural, one {ταινία} other {ταινίες}}",
+      "media": "{count, plural, one {τίτλος} other {τίτλοι}}",
+      "tv_season": "{count, plural, one {κύκλος} other {κύκλοι}}",
+      "tv_season_count": "{count, plural, one {# κύκλος} other {# κύκλοι}}",
+      "tv_season_value": "Κύκλος {number}",
+      "tv_season_short": "Κ{number}",
+      "tv_episode": "{count, plural, one {επεισόδιο} other {επεισόδια}}",
+      "tv_episode_count": "{count, plural, one {# επεισόδιο} other {# επεισόδια}}",
+      "tv_episode_value": "Επεισόδιο {number}",
+      "tv_episode_short": "Κ{seasonNumber}Ε{episodeNumber}",
+      "tv_special_episode": "{count, plural, one {ειδικό επεισόδιο} other {ειδικά επεισόδια}}",
+      "first_air_date": "πρώτη μετάδοση",
+      "last_air_date": "τελευταία μετάδοση",
+      "see_film": "δες την ταινία",
+      "see_tv_series": "δες τη σειρά",
+      "watch_film_title": "δες το {title}",
+      "watch_film_streaming_or_download": "Δες το <important>{title}</important> σε streaming ή με νόμιμη λήψη",
+      "download": "λήψη",
+      "downloaded": "έγινε λήψη",
+      "person": "{count, plural, one {πρόσωπο} other {πρόσωπα}}",
+      "top_result": "κορυφαίο αποτέλεσμα",
+      "user": "{count, plural, one {χρήστης} other {χρήστες}}",
+      "reco": "{count, plural, one {reco} other {reco}}",
+      "my_recos": "τα reco μου",
+      "item": "{count, plural, one {στοιχείο} other {στοιχεία}}",
+      "item_count": "{count, plural, one {# στοιχείο} other {# στοιχεία}}",
+      "type": "τύπος",
+      "complete": "ολοκλήρωση",
+      "completed": "ολοκληρώθηκε",
+      "collection": "{count, plural, one {συλλογή} other {συλλογές}}",
+      "most_recent": "πιο πρόσφατα",
+      "most_popular": "πιο δημοφιλή",
+      "most_old": "πιο παλιά",
+      "known_for": "Γνωστά έργα",
+      "release_date": "ημερομηνία κυκλοφορίας",
+      "last_appearance_date": "τελευταία εμφάνιση",
+      "vote_average": "μέση βαθμολογία",
+      "added": "προστέθηκε",
+      "added_date": "ημερομηνία προσθήκης",
+      "added_at": "προστέθηκε στις",
+      "add": "προσθήκη",
+      "playlist_name": "όνομα λίστας",
+      "updated_at": "ενημερώθηκε στις",
+      "created_at": "δημιουργήθηκε στις",
+      "likes": "like",
+      "likes_count": "αριθμός like",
+      "search_media": "αναζήτηση τίτλου",
+      "search_film": "αναζήτηση ταινίας",
+      "start_typing_to_search_films": "άρχισε να γράφεις για να αναζητήσεις ταινίες",
+      "search_tv_series": "αναζήτηση σειράς",
+      "start_typing_to_search_tv_series": "άρχισε να γράφεις για να αναζητήσεις σειρές",
+      "search_person": "αναζήτηση προσώπου",
+      "start_typing_to_search_persons": "άρχισε να γράφεις για να αναζητήσεις πρόσωπα",
+      "search_user": "{count, plural, one {αναζήτηση χρήστη} other {αναζήτηση χρηστών}}",
+      "start_typing_to_search_users": "άρχισε να γράφεις για να αναζητήσεις χρήστες",
+      "search_playlist": "αναζήτηση λίστας",
+      "start_typing_to_search_playlists": "άρχισε να γράφεις για να αναζητήσεις λίστες",
+      "search_film_or_tv_series": "αναζήτηση ταινίας ή σειράς",
+      "watched_date": "{count, plural, one {ημερομηνία προβολής} other {ημερομηνίες προβολής}}",
+      "mark_as_watched": "σήμανση ως προβεβλημένο",
+      "remove_from_watched": "αφαίρεση από τα προβεβλημένα",
+      "rating": "βαθμολογία",
+      "create_a_playlist": "δημιουργία λίστας",
+      "by_name": "από {name}",
+      "reset": "επαναφορά",
+      "job": "{count, plural, one {ρόλος} other {ρόλοι}}",
+      "department": "{count, plural, one {τμήμα} other {τμήματα}}",
+      "share_title_via": "Μοιράσου το <strong>{title}</strong> μέσω",
+      "share_title": "Μοιράσου το <strong>{title}</strong>",
+      "link": "σύνδεσμος",
+      "copy_link": "αντιγραφή συνδέσμου",
+      "copied": "Αντιγράφηκε",
+      "other": "{count, plural, one {Άλλο} other {Άλλα}}",
+      "via": "μέσω",
+      "edit": "επεξεργασία",
+      "guest": "{count, plural, one {προσκεκλημένος} other {προσκεκλημένοι}}",
+      "are_u_sure": "Σίγουρα;",
+      "backward": "πίσω",
+      "forward": "μπροστά",
+      "back": "επιστροφή",
+      "next": "επόμενο",
+      "notification": "{count, plural, one {ειδοποίηση} other {ειδοποιήσεις}}",
+      "see_notifications": "δες τις ειδοποιήσεις",
+      "open_social_panel": "άνοιγμα κοινωνικού πάνελ",
+      "cancel_change": "{count, plural, one {ακύρωση αλλαγής} other {ακύρωση αλλαγών}}",
+      "do_you_really_want_to_cancel_change": "Σίγουρα θέλεις να ακυρώσεις {count, plural, one {την αλλαγή} other {τις αλλαγές}};",
+      "continue_editing": "συνέχιση επεξεργασίας",
+      "confirm": "επιβεβαίωση",
+      "terms_of_use": "όροι χρήσης",
+      "privacy_policy": "πολιτική απορρήτου",
+      "request_made": "το αίτημα στάλθηκε",
+      "request_canceled": "το αίτημα ακυρώθηκε",
+      "cancel_request": "ακύρωση αιτήματος",
+      "open_menu": "άνοιγμα μενού",
+      "feed": "ροή",
+      "about": "σχετικά",
+      "home": "αρχική",
+      "search": "αναζήτηση",
+      "explore": "εξερεύνηση",
+      "shop": "κατάστημα",
+      "help": "βοήθεια",
+      "legal": "νομικά",
+      "setting": "{count, plural, one {ρύθμιση} other {ρυθμίσεις}}",
+      "logout": "αποσύνδεση",
+      "to_watch": "για να δεις",
+      "reco_by_your_friends": "τα reco των φίλων σου",
+      "friends_playlists": "οι λίστες των φίλων σου",
+      "latest_activity": "{count, plural, one {πρόσφατη δραστηριότητα} other {πρόσφατες δραστηριότητες}}",
+      "discover_users": "ανακάλυψε χρήστες",
+      "most_recommended": "τα πιο προτεινόμενα",
+      "archive": "αρχειοθέτηση",
+      "unarchive": "επαναφορά από το αρχείο",
+      "mark_as_read": "{count, plural, one {σήμανση ως αναγνωσμένη} other {σήμανση ως αναγνωσμένες}}",
+      "mark_as_unread": "{count, plural, one {σήμανση ως μη αναγνωσμένη} other {σήμανση ως μη αναγνωσμένες}}",
+      "accept": "αποδοχή",
+      "accepted": "έγινε αποδεκτό",
+      "decline": "απόρριψη",
+      "declined": "απορρίφθηκε",
+      "request_accepted": "{count, plural, one {το αίτημα έγινε αποδεκτό} other {τα αιτήματα έγιναν αποδεκτά}}",
+      "request_declined": "{count, plural, one {το αίτημα απορρίφθηκε} other {τα αιτήματα απορρίφθηκαν}}",
+      "unread": "{count, plural, one {μη αναγνωσμένη} other {μη αναγνωσμένες}}",
+      "archived": "{count, plural, one {αρχειοθετημένη} other {αρχειοθετημένες}}",
+      "no_notifications": "καμία ειδοποίηση",
+      "all": "όλα",
+      "mark_all_as_read": "σήμανση όλων ως αναγνωσμένων",
+      "archive_all": "αρχειοθέτηση όλων",
+      "archive_all_read": "αρχειοθέτηση όλων των αναγνωσμένων",
+      "please_login": "συνδέσου",
+      "like": "like",
+      "unlike": "αφαίρεση like",
+      "unfollow": "διακοπή παρακολούθησης",
+      "name": "όνομα",
+      "add_a_name": "πρόσθεσε ένα όνομα",
+      "add_a_description": "πρόσθεσε μια περιγραφή",
+      "visibility": "ορατότητα",
+      "search_an_user": "αναζήτηση χρήστη",
+      "select_an_item_to_add_to_playlist": "διάλεξε το στοιχείο που θα προσθέσεις στη λίστα",
+      "select_a_film_to_add_to_playlist": "διάλεξε την ταινία που θα προσθέσεις στη λίστα",
+      "select_a_tv_series_to_add_to_playlist": "διάλεξε τη σειρά που θα προσθέσεις στη λίστα",
+      "add_one_or_more_items_to": "Πρόσθεσε ένα ή περισσότερα στοιχεία στο <important>{title}</important>",
+      "add_one_or_more_films_to": "Πρόσθεσε μία ή περισσότερες ταινίες στο <important>{title}</important>",
+      "add_one_or_more_tv_series_to": "Πρόσθεσε μία ή περισσότερες σειρές στο <important>{title}</important>",
+      "manage_playlist_access_rights": "διαχείριση δικαιωμάτων πρόσβασης στη λίστα",
+      "add_guest": "{count, plural, one {προσθήκη προσκεκλημένου} other {προσθήκη προσκεκλημένων}}",
+      "manage_members": "διαχείριση μελών",
+      "no_member": "κανένα μέλος",
+      "add_member": "{count, plural, one {προσθήκη μέλους} other {προσθήκη μελών}}",
+      "manage_guests": "διαχείριση προσκεκλημένων",
+      "add_guests_to_your_playlist": "πρόσθεσε προσκεκλημένους στη λίστα σου",
+      "select_users_to_add_to_playlist": "διάλεξε τους χρήστες που θα προσθέσεις στη λίστα",
+      "select_users_to_send_reco": "διάλεξε σε ποιους θα στείλεις το reco",
+      "select_playlists_to_add_the_item": "διάλεξε τις λίστες στις οποίες θα προσθέσεις το στοιχείο",
+      "send": "αποστολή",
+      "sent": "στάλθηκε",
+      "select_row": "επιλογή γραμμής",
+      "select_all": "επιλογή όλων",
+      "no_selected_users": "κανένας επιλεγμένος χρήστης",
+      "selection_count": "{number} από {total} {type} επιλεγμένα",
+      "about_title": "σχετικά με το {title}",
+      "detail": "{count, plural, one {λεπτομέρεια} other {λεπτομέρειες}}",
+      "genre": "{count, plural, one {είδος} other {είδη}}",
+      "male": "{count, plural, one {άνδρας} other {άνδρες}}",
+      "female": "{count, plural, one {γυναίκα} other {γυναίκες}}",
+      "non_binary": "{count, plural, one {μη δυαδικό} other {μη δυαδικά}}",
+      "unspecified": "μη καθορισμένο",
+      "date_of_birth": "ημερομηνία γέννησης",
+      "date_of_death": "ημερομηνία θανάτου",
+      "place_of_birth": "τόπος γέννησης",
+      "age_years": "{count} {count, plural, one {έτος} other {ετών}}",
+      "biography": "βιογραφία",
+      "no_biography_available": "δεν υπάρχει διαθέσιμη βιογραφία",
+      "no_information_available": "δεν υπάρχει διαθέσιμη πληροφορία",
+      "already_sent": "έχει σταλεί ήδη",
+      "already_watched": "το έχεις δει ήδη",
+      "already_added": "έχει προστεθεί ήδη",
+      "recommend_to_friend_to_discover": "Πρότεινε το <strong>{title}</strong> σε έναν φίλο που δεν το έχει δει",
+      "add_to_one_or_more_playlists": "Πρόσθεσε το <strong>{title}</strong> σε μία ή περισσότερες λίστες σου",
+      "my_playlist": "{count, plural, one {η λίστα μου} other {οι λίστες μου}}",
+      "what_is_title": "Τι είναι το <strong>{title}</strong>;",
+      "try_again": "Προσπάθησε ξανά",
+      "error": "σφάλμα",
+      "not_logged_in": "δεν έχεις συνδεθεί",
+      "an_error_occurred": "Παρουσιάστηκε σφάλμα",
+      "playlist_not_found": "η λίστα δεν βρέθηκε",
+      "user_not_found": "ο χρήστης δεν βρέθηκε",
+      "film_not_found": "η ταινία δεν βρέθηκε",
+      "media_not_found": "ο τίτλος δεν βρέθηκε",
+      "review_not_found": "η κριτική δεν βρέθηκε",
+      "person_not_found": "το πρόσωπο δεν βρέθηκε",
+      "tv_series_not_found": "η σειρά δεν βρέθηκε",
+      "tv_episode_not_found": "το επεισόδιο δεν βρέθηκε",
+      "tv_season_not_found": "ο κύκλος δεν βρέθηκε",
+      "wrong_arguments": "λανθασμένα ορίσματα",
+      "no_media_found": "δεν βρέθηκε κανένας τίτλος",
+      "unknown_action": "άγνωστη ενέργεια",
+      "no_user_found": "δεν βρέθηκε κανένας χρήστης",
+      "no_tv_episodes": "κανένα επεισόδιο",
+      "save": "αποθήκευση",
+      "saved": "αποθηκεύτηκε",
+      "create": "δημιουργία",
+      "film_count": "{count, plural, one {# ταινία} other {# ταινίες}}",
+      "tv_series_count": "{count, plural, one {# σειρά} other {# σειρές}}",
+      "login": "σύνδεση",
+      "signup": "εγγραφή",
+      "navigation": "πλοήγηση",
+      "delete": "Διαγραφή",
+      "remove": "Αφαίρεση",
+      "deleted": "Διαγράφηκε",
+      "share": "κοινοποίηση",
+      "duplicate": "αντίγραφο",
+      "duplicated": "δημιουργήθηκε αντίγραφο",
+      "cancel": "Ακύρωση",
+      "date": "ημερομηνία",
+      "duration": "διάρκεια",
+      "sort": "ταξινόμηση",
+      "show": "εμφάνιση",
+      "column": "{count, plural, one {στήλη} other {στήλες}}",
+      "comment": "{count, plural, one {σχόλιο} other {σχόλια}}",
+      "unknown": "άγνωστο",
+      "community": "κοινότητα",
+      "cast_and_crew": "ηθοποιοί και συντελεστές",
+      "soon": "σύντομα",
+      "ios_app": "Εφαρμογή iOS",
+      "android_app": "Εφαρμογή Android",
+      "coming_soon": "Έρχεται σύντομα",
+      "new_mobile_app": "Νέα εφαρμογή για κινητά!",
+      "manage": "διαχείριση",
+      "monthly": "μηνιαία",
+      "yearly": "ετήσια",
+      "day": "ημέρα",
+      "week": "εβδομάδα",
+      "month": "μήνας",
+      "year": "έτος",
+      "price": "τιμή",
+      "free": "δωρεάν",
+      "playlist": "{count, plural, one {λίστα} other {λίστες}}",
+      "public": "δημόσια",
+      "publish": "δημοσίευση",
+      "private": "ιδιωτική",
+      "description": "περιγραφή",
+      "details": "λεπτομέρειες",
+      "profile": "προφίλ",
+      "overview": "σύνοψη",
+      "no_playlists_saved": "καμία αποθηκευμένη λίστα",
+      "camera_permission_denied": "η πρόσβαση στην κάμερα απορρίφθηκε",
+      "photo_library_permission_denied": "η πρόσβαση στη συλλογή φωτογραφιών απορρίφθηκε",
+      "ignore": "παράβλεψη",
+      "ok": "εντάξει",
+      "title": "τίτλος",
+      "skip": "Παράλειψη",
+      "undo": "Αναίρεση",
+      "date_published": "ημερομηνία δημοσίευσης",
+      "date_created": "ημερομηνία δημιουργίας",
+      "date_updated": "ημερομηνία ενημέρωσης",
+      "alphabetical": "αλφαβητικά",
+      "date_added": "ημερομηνία προσθήκης",
+      "number_of_likes": "αριθμός like",
+      "number_of_seasons": "αριθμός κύκλων",
+      "add_to_this_playlist": "προσθήκη σε αυτή τη λίστα",
+      "save_to_library": "αποθήκευση στη βιβλιοθήκη",
+      "remove_from_library": "αφαίρεση από τη βιβλιοθήκη",
+      "otp": "OTP",
+      "ratings_from_followees": "οι βαθμολογίες όσων ακολουθείς",
+      "choose_from_the_library": "διάλεξε από τη συλλογή",
+      "take_a_photo": "βγάλε μια φωτογραφία",
+      "delete_current_image": "διαγραφή τρέχουσας εικόνας",
+      "edit_image": "επεξεργασία εικόνας",
+      "add_image": "προσθήκη εικόνας",
+      "verify_with_a_code": "επαλήθευση με κωδικό",
+      "order": "σειρά",
+      "edit_order": "επεξεργασία σειράς",
+      "done": "έτοιμο",
+      "can_edit": "μπορεί να επεξεργαστεί;",
+      "upgrade": "αναβάθμιση",
+      "no_description": "Καμία περιγραφή",
+      "no_comment": "Κανένα σχόλιο",
+      "close": "κλείσιμο",
+      "edit_playlist": "επεξεργασία λίστας",
+      "universe": "σύμπαν",
+      "cannot_be_changed": "δεν μπορεί να αλλάξει",
+      "delete_review": "διαγραφή κριτικής",
+      "do_you_really_want_to_delete_this_review": "Σίγουρα θέλεις να διαγράψεις αυτή την κριτική;",
+      "user_liked_playlist": "<name></name> έκανε like σε μια λίστα",
+      "user_liked_review": "<name></name> έκανε like σε μια κριτική",
+      "runtime": "διάρκεια",
+      "ends_at": "Λήγει στις {value}",
+      "this_user_has_no_activity": "Αυτός ο χρήστης δεν έχει καμία δραστηριότητα",
+      "notification_archived": "{count, plural, one {η ειδοποίηση αρχειοθετήθηκε} other {οι ειδοποιήσεις αρχειοθετήθηκαν}}",
+      "notification_unarchived": "{count, plural, one {η ειδοποίηση επανήλθε από το αρχείο} other {οι ειδοποιήσεις επανήλθαν από το αρχείο}}",
+      "notification_marked_as_read": "{count, plural, one {η ειδοποίηση σημάνθηκε ως αναγνωσμένη} other {οι ειδοποιήσεις σημάνθηκαν ως αναγνωσμένες}}",
+      "notification_marked_as_unread": "{count, plural, one {η ειδοποίηση σημάνθηκε ως μη αναγνωσμένη} other {οι ειδοποιήσεις σημάνθηκαν ως μη αναγνωσμένες}}",
+      "or_continue_with": "ή συνέχισε με",
+      "message": "{count, plural, one {μήνυμα} other {μηνύματα}}",
+      "story": "{count, plural, one {story} other {stories}}",
+      "new_playlist": "νέα λίστα",
+      "select_a_type": "διάλεξε τύπο",
+      "filter": "{count, plural, one {φίλτρο} other {φίλτρα}}",
+      "hide_watched": "απόκρυψη όσων έχεις δει",
+      "show_me_around": "κάνε μου μια ξενάγηση",
+      "artwork_from": "Εικονογράφηση από <important>{source}</important>",
+      "no_active_subscription": "καμία ενεργή συνδρομή",
+      "manage_subscription": "διαχείριση συνδρομής",
+      "started_on_date": "ξεκίνησε στις {date}",
+      "last_renewed_on_date": "τελευταία ανανέωση στις {date}",
+      "version_value": "έκδοση {value}",
+      "original_title": "αρχικός τίτλος",
+      "starring": "πρωταγωνιστούν",
+      "write_your_review_here": "γράψε εδώ την κριτική σου...",
+      "insert": "εισαγωγή",
+      "trailer": "{count, plural, one {τρέιλερ} other {τρέιλερ}}",
+      "list": "{count, plural, one {λίστα} other {λίστες}}",
+      "grid": "{count, plural, one {πλέγμα} other {πλέγματα}}",
+      "order_asc": "αύξουσα σειρά",
+      "order_desc": "φθίνουσα σειρά",
+      "menu": "μενού",
+      "at_least_one_watched_date_required": "απαιτείται τουλάχιστον μία ημερομηνία προβολής",
+      "viewer": "{count, plural, one {Θεατής} other {Θεατές}}",
+      "editor": "{count, plural, one {Συντάκτης} other {Συντάκτες}}",
+      "admin": "{count, plural, one {Διαχειριστής} other {Διαχειριστές}}",
+      "owner": "{count, plural, one {Κάτοχος} other {Κάτοχοι}}",
+      "you_dont_have_permission_to_do_this_action": "Δεν έχεις άδεια για αυτή την ενέργεια",
+      "in_progress": "σε εξέλιξη",
+      "give_up": "τα παρατώ",
+      "random": "τυχαίο",
+      "reset_password": "Επαναφορά κωδικού",
+      "password_reset": "Ο κωδικός επανήλθε",
+      "return_to_login": "Επιστροφή στη σύνδεση",
+      "invalid_code": "Μη έγκυρος κωδικός",
+      "no_token_found": "Δεν βρέθηκε token",
+      "first_watched_at": "πρώτη προβολή στις",
+      "watched_dates": "ημερομηνίες προβολής",
+      "no_watched_dates": "καμία ημερομηνία προβολής",
+      "select_role": "διάλεξε ρόλο",
+      "select_format": "διάλεξε μορφή",
+      "theater": "Αίθουσα",
+      "physical": "Φυσικό μέσο",
+      "digital": "Ψηφιακό",
+      "streaming": "Streaming",
+      "you_must_be_premium_to_change_member_role": "Πρέπει να έχεις Premium για να αλλάξεις τον ρόλο ενός μέλους",
+      "already_member": "είναι ήδη μέλος",
+      "email_already_used": "Αυτή η διεύθυνση email χρησιμοποιείται ήδη",
+      "email_confirmed": "Το email επιβεβαιώθηκε",
+      "confirmation_email_sent": "Το email επιβεβαίωσης στάλθηκε",
+      "continue": "Συνέχεια",
+      "finish": "Τέλος",
+      "forgot_password": "Ξέχασα τον κωδικό",
+      "new_password": "Νέος κωδικός",
+      "confirm_password": "Επιβεβαίωση κωδικού",
+      "password_reseted": "Ο κωδικός επανήλθε",
+      "reset_your_password": "Επανέφερε τον κωδικό σου",
+      "invalid_token": "Μη έγκυρο token",
+      "new_notification": "{count, plural, one {νέα ειδοποίηση} other {νέες ειδοποιήσεις}}",
+      "lets_go": "Πάμε!",
+      "update_available": "Διαθέσιμη ενημέρωση",
+      "update_available_description": "Ενημέρωσε την εφαρμογή για να απολαύσεις τις τελευταίες βελτιώσεις.",
+      "update_required_title": "Απαιτείται ενημέρωση",
+      "update_required_description": "Αυτή η έκδοση της εφαρμογής δεν υποστηρίζεται πλέον. Ενημέρωσέ την για να συνεχίσεις να χρησιμοποιείς το Recomend.",
+      "update_app": "Ενημέρωση",
+      "advertisement": "{count, plural, one {Διαφήμιση} other {Διαφημίσεις}}",
+      "pending": "Σε εκκρεμότητα",
+      "processing": "Σε επεξεργασία",
+      "awaiting_review": "Αναμένει έλεγχο",
+      "failed": "Απέτυχε",
+      "data": "{count, plural, one {Δεδομένο} other {Δεδομένα}}",
+      "restore": "Επαναφορά",
+      "fix": "Διόρθωση",
+      "not_found": "Δεν βρέθηκε",
+      "unavailable": "Μη διαθέσιμο",
+      "star_on_github": "Δώσε μας ένα αστέρι στο GitHub"
+    },
+    "form": {
+      "email": {
+        "label": "Email",
+        "placeholder": "jeanluc.godard@gmail.com",
+        "error": {
+          "invalid": "Το email δεν είναι έγκυρο",
+          "unavailable": "Αυτή η διεύθυνση email χρησιμοποιείται ήδη"
+        },
+        "verified": "Το email επαληθεύτηκε"
+      },
+      "username": {
+        "label": "Όνομα χρήστη",
+        "placeholder": "@jlgodard",
+        "schema": {
+          "first_char": "Ο πρώτος χαρακτήρας πρέπει να είναι γράμμα ή αριθμός",
+          "double_dot": "Δεν επιτρέπονται δύο διαδοχικές τελείες",
+          "ends_with_dot": "Δεν επιτρέπεται τελεία στο τέλος",
+          "format": "Επιτρέπονται μόνο γράμματα, αριθμοί και οι χαρακτήρες '_' και '.'",
+          "unavailable": "Αυτό το όνομα χρήστη χρησιμοποιείται ήδη"
+        }
+      },
+      "full_name": {
+        "label": "Όνομα",
+        "placeholder": "Jean-Luc Godard",
+        "schema": {
+          "format": "Επιτρέπονται μόνο γράμματα, αριθμοί και κενά"
+        }
+      },
+      "password": {
+        "label": "Κωδικός",
+        "placeholder": "Γράψε τον κωδικό σου",
+        "schema": {
+          "uppercase": "Απαιτείται τουλάχιστον ένα κεφαλαίο γράμμα",
+          "lowercase": "Απαιτείται τουλάχιστον ένα μικρό γράμμα",
+          "number": "Απαιτείται τουλάχιστον ένας αριθμός",
+          "special": "Απαιτείται τουλάχιστον ένας ειδικός χαρακτήρας",
+          "match": "Οι κωδικοί δεν ταιριάζουν"
+        },
+        "confirm": {
+          "label": "Επιβεβαίωση κωδικού",
+          "placeholder": "Επιβεβαίωσε τον κωδικό σου"
+        }
+      },
+      "length": {
+        "char_min": "τουλάχιστον {count, plural, one {# χαρακτήρας} other {# χαρακτήρες}}",
+        "char_max": "το ανώτερο {count, plural, one {# χαρακτήρας} other {# χαρακτήρες}}"
+      },
+      "format": {
+        "only_letters_numbers_spaces": "Επιτρέπονται μόνο γράμματα, αριθμοί και κενά"
+      },
+      "error": {
+        "too_many_attempts": "Πολλές προσπάθειες, δοκίμασε ξανά αργότερα",
+        "not_received_code": "Δεν έλαβες τον κωδικό;",
+        "invalid_code": "Μη έγκυρος κωδικός",
+        "turnstile": "Η επαλήθευση απέτυχε, δοκίμασε ξανά"
+      },
+      "resend_code": "Ξαναστείλε τον κωδικό",
+      "resend_email": "Ξαναστείλε το email",
+      "code_verified": "Ο κωδικός επαληθεύτηκε",
+      "code_sent": "Ο κωδικός στάλθηκε"
+    }
+  },
+  "pages": {
+    "errors": {
+      "404": {
+        "label": "Η σελίδα δεν βρέθηκε",
+        "description": "ουπς, αυτή η σελίδα δεν υπάρχει..."
+      }
+    },
+    "onboarding": {
+      "tracking": {
+        "label": "καταγραφή",
+        "description": "Ανακάλυψε, βαθμολόγησε και μοιράσου τις αγαπημένες σου ταινίες και σειρές."
+      },
+      "recos": {
+        "label": "reco",
+        "description": "Στείλε και λάβε τα reco των φίλων σου. Όλα σε ένα μέρος."
+      },
+      "playlists": {
+        "label": "λίστες",
+        "description": "Οργάνωσε, μοιράσου και φτιάξε λίστες μαζί με άλλους."
+      },
+      "feed": {
+        "label": "ροή",
+        "description": "Ακολούθησε τους φίλους σου για να δεις τι βλέπουν, τι τους αρέσει και τι κρίνουν."
+      },
+      "social_sharing": {
+        "label": "κοινοποίηση στα social",
+        "description": "Μοιράσου ό,τι αγαπάς στο Instagram ή σε άλλα social."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "Καταγραφή",
+          "description": "Κράτα το βλέμμα σου στις ταινίες που έχεις δει"
+        },
+        "recos": {
+          "label": "Reco",
+          "description": "Στείλε προτάσεις ταινιών στους φίλους σου"
+        },
+        "explore": {
+          "label": "Εξερεύνηση",
+          "description": "Ανακάλυψε νέες ταινίες στο Paradise Pictures, έναν διαδραστικό χάρτη με πάνω από 1400 ταινίες"
+        },
+        "like": {
+          "label": "Like",
+          "description": "Δείξε την αγάπη σου για τις αγαπημένες σου ταινίες, λίστες και κριτικές"
+        },
+        "rating": {
+          "label": "Βαθμολογία",
+          "description": "Βαθμολόγησε τις ταινίες που έχεις δει"
+        },
+        "watchlist": {
+          "label": "Λίστα παρακολούθησης",
+          "description": "Αποθήκευσε τις ταινίες που θέλεις να δεις"
+        },
+        "playlists": {
+          "label": "Λίστες",
+          "description": "Οργάνωσε τις ταινίες σου σε λίστες και μοιράσου τις"
+        },
+        "reviews": {
+          "label": "Κριτικές",
+          "description": "Γράψε κριτικές και βγάλε προς τα έξω τον πικρόχολο σινεφίλ μέσα σου"
+        },
+        "feed": {
+          "label": "Ροή",
+          "description": "Ακολούθησε τη δραστηριότητα των φίλων σου"
+        },
+        "adsFree": {
+          "label": "Χωρίς διαφημίσεις",
+          "description": "Απόλαυσε το Recomend χωρίς διαφημίσεις, για πάντα"
+        }
+      }
+    },
+    "welcome": {
+      "title": "Ευχαριστούμε για την εγγραφή!",
+      "description": "Μια γρήγορη ματιά σε όσα μπορείς να κάνεις με το {app}.",
+      "follow": {
+        "title": "Ακολούθησε κόσμο",
+        "description": "Ακολούθησε φίλους για να δεις τι βλέπουν."
+      },
+      "import": {
+        "title": "Έρχεσαι από άλλη πλατφόρμα;"
+      }
+    },
+    "collection": {
+      "label": "βιβλιοθήκη",
+      "my_recos": {
+        "label": "τα reco μου",
+        "search": {
+          "placeholder": "αναζήτηση στα reco μου..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "διαγραφή από τα reco μου",
+            "description": "Σίγουρα θέλεις να διαγράψεις το <important>{title}</important> από τα reco σου;"
+          },
+          "complete_confirm": {
+            "title": "ολοκλήρωση του reco",
+            "description": "Σίγουρα θέλεις να ολοκληρώσεις το reco <important>{title}</important>;"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "αναζήτηση στη λίστα παρακολούθησης..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "διαγραφή από τη λίστα παρακολούθησης",
+            "description": "Σίγουρα θέλεις να διαγράψεις το <important>{title}</important> από τη λίστα παρακολούθησής σου;"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "αναζήτηση στις επιλογές καρδιάς..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "διαγραφή από τις επιλογές καρδιάς",
+            "description": "Σίγουρα θέλεις να διαγράψεις το <important>{title}</important> από τις επιλογές καρδιάς σου;"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> είδε",
+        "rated": "<name></name> βαθμολόγησε",
+        "liked": "<name></name> έκανε like",
+        "rated_liked": "<name></name> έκανε like και βαθμολόγησε",
+        "reviewed": "<name></name> έγραψε κριτική"
+      },
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> συμμετέχει ως <important>{roles}</important> στο <linkMedia>{titleMedia}</linkMedia>",
+        "label": "<linkPerson>{name}</linkPerson> συμμετέχει ως <important>{roles}</important>"
+      }
+    },
+    "auth": {
+      "consent": {
+        "label": "Εξουσιοδότηση εφαρμογής",
+        "description_generic": "Μια εφαρμογή ζητά πρόσβαση στον λογαριασμό σου.",
+        "description": "Το {client} ζητά πρόσβαση στον λογαριασμό σου.",
+        "scopes_label": "Αυτό θα επιτρέψει στην εφαρμογή να:",
+        "accept": "Επιτρέπω",
+        "deny": "Απορρίπτω",
+        "error": {
+          "invalid_request": "Μη έγκυρο ή ληγμένο αίτημα",
+          "invalid_request_description": "Ξεκίνα ξανά τη διαδικασία εξουσιοδότησης από την εφαρμογή που σε έστειλε εδώ.",
+          "client_not_found": "Αυτή η εφαρμογή δεν βρέθηκε.",
+          "submit_failed": "Κάτι πήγε στραβά. Δοκίμασε ξανά."
+        }
+      },
+      "login": {
+        "metadata": {
+          "description": "Συνδέσου στον λογαριασμό σου στο {app}."
+        },
+        "label": "Σύνδεση",
+        "description": "Ανακάλυψε τις καλύτερες προτάσεις ταινιών.",
+        "or_continue_with": "Ή συνέχισε με",
+        "no_account_yet": "Δεν έχεις λογαριασμό;",
+        "form": {
+          "identifier": {
+            "label": "Email ή όνομα χρήστη",
+            "placeholder": "Γράψε το email ή το όνομα χρήστη σου"
+          },
+          "password": {
+            "label": "Κωδικός",
+            "placeholder": "Γράψε τον κωδικό σου"
+          },
+          "submit": "Σύνδεση",
+          "forgot_password": "Ξέχασες τον κωδικό;",
+          "wrong_credentials": "Το email ή ο κωδικός είναι λάθος"
+        },
+        "otp": {
+          "password_login": "Προτιμάς να συνδεθείς με κωδικό;",
+          "form": {
+            "submit": "Λήψη κωδικού",
+            "no_user_found": "Δεν βρέθηκε χρήστης με αυτό το email",
+            "success": "Συνδέθηκες"
+          },
+          "confirm_form": {
+            "label": "Επιβεβαίωση κωδικού",
+            "description": "Ένας κωδικός επαλήθευσης στάλθηκε στη διεύθυνση {email}"
+          }
+        }
+      },
+      "signup": {
+        "metadata": {
+          "description": "Κάνε εγγραφή στο {app} για να ανακαλύψεις και να μοιραστείς προτάσεις ταινιών."
+        },
+        "description": "Δημιούργησε λογαριασμό για να προτείνεις μια ταινία στον φίλο σου που ξεχνάει πάντα τους τίτλους.",
+        "form": {
+          "success": "Ένα email επαλήθευσης στάλθηκε στο {email}"
+        },
+        "confirm_form": {
+          "label": "Επιβεβαίωση email",
+          "description": "Ένας σύνδεσμος επαλήθευσης στάλθηκε στη διεύθυνση {email}"
+        },
+        "return_to_login": "Ουπς, έχω ήδη λογαριασμό."
+      },
+      "forgot_password": {
+        "metadata": {
+          "title": "Ξέχασα τον κωδικό",
+          "description": "Επανέφερε τον κωδικό σου."
+        },
+        "label": "Ξέχασα τον κωδικό",
+        "description": "Καλύτερα να χρησιμοποιήσεις έναν διαχειριστή κωδικών, είναι όντως πολύ βολικός.",
+        "return_to_login": "Ουπς, τελικά τον θυμήθηκα.",
+        "form": {
+          "email": {
+            "placeholder": "jason.bourne@cia.com"
+          },
+          "submit": "Επαναφορά κωδικού",
+          "code_sent": "Το αίτημα στάλθηκε"
+        },
+        "confirm_form": {
+          "label": "Επιβεβαίωση κωδικού",
+          "description": "Ένας κωδικός επαλήθευσης στάλθηκε στη διεύθυνση {email}"
+        }
+      },
+      "reset_password": {
+        "metadata": {
+          "title": "Επαναφορά κωδικού",
+          "description": "Διάλεξε νέο κωδικό για τον λογαριασμό σου."
+        }
+      },
+      "error": {
+        "label": "Σφάλμα",
+        "description": "Παρουσιάστηκε σφάλμα κατά τη διαδικασία σύνδεσης.",
+        "return_to_login": "Επιστροφή σε ασφαλές έδαφος"
+      }
+    },
+    "about": {
+      "about": {
+        "label": "Σχετικά",
+        "marquee": "Δεν έχεις κάτι πιο συναρπαστικό στη ζωή σου από το να διαβάζεις σελίδες «Σχετικά» στο διαδίκτυο;",
+        "intro": "Το <strong>Recomend</strong> είναι ένας χώρος αφιερωμένος στην ανακάλυψη, την πρόταση και την οργάνωση ταινιών. Τα έχουμε σχεδιάσει όλα ώστε η διάδοση από στόμα σε στόμα να αποκτήσει επιτέλους το καλύτερο δυνατό ψηφιακό στήριγμα. Η προσέγγισή μας είναι επικεντρωμένη στους ανθρώπους και στις σχέσεις τους, σε μια εποχή κατανάλωσης που στρέφεται γύρω από τον εαυτό μας, ή μάλλον γύρω από το «προτεινόμενο για εσένα».",
+        "slogan": {
+          "1": "Είναι χωρίς διαφημίσεις και χωρίς ύποπτες υποσχέσεις. 🍆",
+          "2": "Είναι ταυτόχρονα κοινωνικό δίκτυο και εργαλείο.",
+          "3": "Είναι σπιτικό, φτιαγμένο από ερασιτέχνες με πάθος.",
+          "4": "Είναι ερασιτεχνικό, με την πιο κυριολεκτική σημασία της λέξης."
+        },
+        "last": "Το Recomend μπορεί να χρησιμοποιηθεί μόνος σου ή με άλλους, δημόσια ή ιδιωτικά, μέρα ή νύχτα, αλλά ποτέ μπροστά σε μια ταινία, συγκεντρώσου!"
+      },
+      "team": {
+        "label": "Η ομάδα",
+        "intro": "Το Recomend δημιουργήθηκε από δύο αδέρφια με πάθος για το σινεμά, που αγαπούν να επενδύουν τον χρόνο τους σε υπερβολικά φιλόδοξα εγχειρήματα τα οποία μπορεί και να μην δουν ποτέ το φως.",
+        "members": {
+          "yoann": {
+            "name": "Yoann",
+            "description": "Υπερκινητικός αρχιτέκτονας-μηχανικός που δεν του αρκεί μια δουλειά (η πραγματική start-up nation), ο Yoann είναι εκείνος που σκέφτηκε τον χάρτη των ταινιών, ο οποίος αρχικά είχε τη μέτρια φιλοδοξία να γίνει αφίσα για το μπάνιο του. Με την άφιξη του Loup, οι στόχοι εκτοξεύτηκαν και, νιώθοντας λίγο να τον παρασύρει το ρεύμα, ανέλαβε όλο το γραφιστικό κομμάτι του χάρτη και του σάιτ, καθώς και όλη την επικοινωνία (αν και δεν του αρέσει). Μοιράζεται επίσης τις απόψεις του για το UX/UI και προτείνει αμέτρητες λειτουργίες, χωρίς να συνειδητοποιεί πλήρως πόσο δύσκολο είναι να κωδικοποιηθούν (έχει βελτιωθεί πάντως)."
+          },
+          "loup": {
+            "name": "Loup",
+            "description": "Εντελώς αυτοδίδακτος, κατάφερε παρ' όλα αυτά να κάνει σπουδές που τον οδήγησαν σε άμισθη ανεργία πριν τα 25. Αυθεντικός πολυτεχνίτης, ο Loup έχει αναλάβει το web, κωδικοποιώντας μια διεπαφή που θέλει να είναι όσο πιο φιλική γίνεται. Ο Loup θα ήθελε να ευχαριστήσει όλα τα φόρουμ προγραμματισμού που απάντησαν στις (πάρα πολλές) ερωτήσεις του, καθώς και όλους τους Ινδούς YouTubers που τον οδήγησαν σαν θετοί πατέρες όλους αυτούς τους μήνες. Η μητέρα του, από την πλευρά της, είναι πεπεισμένη ότι ο αδελφός του τον έχει υποδουλώσει για αυτό το εγχείρημα (καλά είμαι, μαμά)."
+          }
+        },
+        "last": "Για να έρθεις σε επαφή με εμάς ή με άλλα μέλη της κοινότητας, μπες στο <link>Discord</link> μας!"
+      },
+      "pricing": {
+        "label": "Τιμές",
+        "intro": "Αυτό το μοντέλο συνδρομής είναι πρώτα απ' όλα ένας τρόπος να στηρίξεις το εγχείρημα και να το βοηθήσεις να μεγαλώσει. Οι premium λειτουργίες είναι έξτρα για πιο προχωρημένη χρήση του Recomend και δικαιολογούν μια μικρή οικονομική συμβολή. Θα διατηρούμε πάντα τη δυνατότητα να μπαίνεις στο σάιτ δωρεάν, χωρίς διαφημίσεις και χωρίς να νιώθεις κανέναν περιορισμό.",
+        "subdescription": "*Αν η εξωφρενικά χαμηλή τιμή αυτής της συνδρομής ξεπερνά παρ' όλα αυτά τις δυνατότητές σου, στρέψου στη νεοφιλελεύθερη κυβέρνησή σου, που ευθύνεται για την απώλεια της αγοραστικής σου δύναμης."
+      },
+      "legal": {
+        "label": "Νομικά & Απόρρητο",
+        "description": "Σεβόμαστε το απόρρητό σου. Οι διαφημίσεις που εμφανίζονται στους επισκέπτες διαχειρίζονται από την Google και απαιτούν τεχνικά cookies για τον περιορισμό της συχνότητας εμφάνισης και την πρόληψη της απάτης.",
+        "privacyPolicy": "Διάβασε την πολιτική απορρήτου μας",
+        "manageCookies": "Διαχείριση των διαφημιστικών προτιμήσεών μου (Cookies)"
+      },
+      "open-source": {
+        "label": "Ανοιχτός κώδικας",
+        "intro": "Το Recomend είναι ανοιχτού κώδικα: ο κώδικας είναι δημόσιος στο GitHub. Ρίξε μια ματιά, συνεισφέρε ή απλώς άσε μας ένα αστέρι!",
+        "star": "Δώσε μας ένα αστέρι στο GitHub"
+      },
+      "businessmodel": {
+        "label": "Επιχειρηματικό μοντέλο",
+        "paragraph": {
+          "1": "Όπως μαντεύεις από τα καθόλου εμπορικά προφίλ μας, δεν έχουμε καταλάβει ακόμα τι θα μπορούσε να μας προσφέρει ένα επιχειρηματικό μοντέλο αυτή τη στιγμή...",
+          "2": "Αν το μέλλον του Recomend το απαιτήσει, θα το δούμε, περιτριγυρίζοντας τον εαυτό μας με τους σωστούς ανθρώπους — ή τουλάχιστον με ανθρώπους που ενδιαφέρονται πιο πολύ από εμάς.",
+          "3": "Στο μεταξύ, ας είμαστε ειλικρινείς, έχουμε κι άλλα να κάνουμε."
+        }
+      },
+      "roadmap": {
+        "label": "Σχέδιο πορείας"
+      },
+      "data": {
+        "label": "Δεδομένα",
+        "paragraph": {
+          "1": "Όλα τα μεταδεδομένα που χρησιμοποιούνται στο Recomend παρέχονται από <link>το The Movie Database (TMDb)</link> μέσω του API της πλατφόρμας. Κάνουμε ό,τι κάνουν όλοι, σαν καλά προβατάκια.",
+          "2": "Για λάθη ή ταινίες που λείπουν, απευθύνσου στο <link>TMDb</link>."
+        }
+      },
+      "resources": {
+        "label": "Πηγές",
+        "intro": "Δεν έχει πολλή σχέση με το σινεμά, αλλά να μια λίστα με σάιτ που μας αρέσουν:"
+      },
+      "contact-support": {
+        "label": "Επικοινωνία & Υποστήριξη",
+        "help-center": "Βρες απαντήσεις στις υπαρξιακές σου ερωτήσεις στο <link>Κέντρο Βοήθειας</link> μας.",
+        "technical-support": "Για τεχνικά ζητήματα: <email></email>",
+        "suggest-a-feature": "Για προτάσεις: <email></email>",
+        "contact-us": "Για να επικοινωνήσεις απλώς μαζί μας: <email></email>"
+      },
+      "quote": {
+        "label": "Απόφθεγμα",
+        "quote": "« Μισώ τη λέξη επαγγελματίας. Όλοι αυτοί οι ηθοποιοί και οι άλλοι που λένε: είμαι επαγγελματίας, είμαι προφέσιονα! Τι είναι αυτό; Υπάρχει πιο θλιβερή λέξη; Γιατί το amateur βγαίνει από τη λέξη αγάπη. Τα πράγματα πρέπει να τα κάνεις από αγάπη, αλλιώς είμαστε βλάκες. »",
+        "author": "Orson Welles",
+        "date": "1972",
+        "subdescription": "*Διστάσαμε να το βάλουμε, γιατί ακούγεται εύκολα αλαζονικό, αλλά αποδίδει τη διάθεσή μας για το εγχείρημα. Αν πάντως δεν σου αρέσει, το βγάζουμε."
+      }
+    },
+    "settings": {
+      "label": "Ρυθμίσεις",
+      "description": "Διαχειρίσου τις ρυθμίσεις του λογαριασμού σου.",
+      "profile": {
+        "label": "Προφίλ",
+        "description": "Έτσι θα σε βλέπουν οι άλλοι στο σάιτ.",
+        "avatar": {
+          "label": "Εικόνα προφίλ",
+          "delete": "Διαγραφή"
+        },
+        "full_name": {
+          "label": "Όνομα",
+          "description": "Αυτό είναι το όνομα που θα εμφανίζεται στο προφίλ σου και στα email.",
+          "placeholder": "Γράψε το όνομά σου",
+          "form": {
+            "min_length": "Το όνομα πρέπει να έχει τουλάχιστον 1 χαρακτήρα",
+            "max_length": "Το όνομα δεν πρέπει να ξεπερνά τους 50 χαρακτήρες"
+          }
+        },
+        "bio": {
+          "label": "Βιογραφικό",
+          "description": "Πες μας κάτι για εσένα, θα εμφανιστεί στο προφίλ σου.",
+          "placeholder": "Μίλησέ μας για εσένα",
+          "form": {
+            "max_length": "Το βιογραφικό δεν πρέπει να ξεπερνά τους 150 χαρακτήρες",
+            "format": "Το βιογραφικό δεν μπορεί να περιέχει κενές γραμμές ούτε να αποτελείται μόνο από κενά."
+          }
+        },
+        "favorite_films": {
+          "label": "Αγαπημένες ταινίες",
+          "description": ""
+        },
+        "url": {
+          "label": "URL",
+          "description": "",
+          "form": {
+            "invalid": "Μη έγκυρο URL"
+          }
+        }
+      },
+      "account": {
+        "label": "Λογαριασμός",
+        "description": "Ενημέρωσε τις ρυθμίσεις του λογαριασμού σου.",
+        "username": {
+          "label": "Όνομα χρήστη",
+          "description": "Αυτό είναι το όνομα χρήστη με το οποίο σε βρίσκουν οι άλλοι και μπαίνουν στο προφίλ σου. Μπορείς να το αλλάξεις μόνο μία φορά κάθε 30 ημέρες.",
+          "placeholder": "Γράψε το όνομα χρήστη σου",
+          "form": {
+            "min_length": "Το όνομα χρήστη πρέπει να έχει τουλάχιστον 3 χαρακτήρες",
+            "max_length": "Το όνομα χρήστη δεν πρέπει να ξεπερνά τους 15 χαρακτήρες",
+            "invalid": "Το όνομα χρήστη μπορεί να περιέχει μόνο γράμματα, αριθμούς και τα σύμβολα '_' και '.'",
+            "unavailable": "Αυτό το όνομα χρήστη χρησιμοποιείται ήδη"
+          }
+        },
+        "private": {
+          "label": "Ιδιωτικός λογαριασμός",
+          "description": "Όταν ο λογαριασμός σου είναι ιδιωτικός, μόνο οι φίλοι σου βλέπουν τις δραστηριότητές σου."
+        },
+        "email": {
+          "description": "Ένα email επαλήθευσης θα σταλεί στην τρέχουσα και στη νέα διεύθυνση email. Πρέπει να επιβεβαιώσεις και τις δύο για να ισχύσει η αλλαγή.",
+          "change_pending": "Ένα email επαλήθευσης στάλθηκε στη νέα διεύθυνσή σου <strong>{email}</strong>. Κάνε κλικ στον σύνδεσμο ή γράψε τον κωδικό επαλήθευσης για να επιβεβαιώσεις την αλλαγή.",
+          "confirm_email_code": {
+            "description": "Γράψε τον κωδικό επαλήθευσης που στάλθηκε στη διεύθυνση <strong>{email}</strong> για να επιβεβαιώσεις την αλλαγή."
+          },
+          "change_success": "Η διεύθυνση email σου άλλαξε με επιτυχία"
+        },
+        "delete_account": {
+          "button": "Διαγραφή του λογαριασμού μου",
+          "confirm": {
+            "description": "Σίγουρα θέλεις να διαγράψεις τον λογαριασμό σου; Αυτή η ενέργεια είναι μη αναστρέψιμη.",
+            "confirm_email_sent": "Ένα email επαλήθευσης στάλθηκε στη διεύθυνση email σου"
+          }
+        }
+      },
+      "appearance": {
+        "label": "Εμφάνιση",
+        "description": "Προσάρμοσε την εμφάνιση της εφαρμογής. Αυτόματη εναλλαγή μεταξύ φωτεινού και σκοτεινού θέματος.",
+        "language": {
+          "label": "Γλώσσα",
+          "description": "Διάλεξε γλώσσα – η αλλαγή θα εφαρμοστεί μετά την επανεκκίνηση της εφαρμογής",
+          "placeholder": "Διάλεξε γλώσσα",
+          "not_found": "Η γλώσσα δεν βρέθηκε"
+        },
+        "theme": {
+          "label": "Θέμα",
+          "description": "Διάλεξε το θέμα της διεπαφής.",
+          "options": {
+            "light": "Φωτεινό",
+            "dark": "Σκοτεινό"
+          }
+        }
+      },
+      "subscription": {
+        "label": "Συνδρομή",
+        "description": "Διαχειρίσου τη συνδρομή σου για να έχεις πρόσβαση στις premium λειτουργίες."
+      },
+      "security": {
+        "label": "Ασφάλεια",
+        "description": "Η αλλαγή του κωδικού σου θα σε αποσυνδέσει από όλες τις συσκευές, εκτός από αυτή που χρησιμοποιείς τώρα.",
+        "current_password": {
+          "label": "Τρέχων κωδικός",
+          "placeholder": "Γράψε τον τρέχοντα κωδικό σου",
+          "form": {
+            "required": "Γράψε τον τρέχοντα κωδικό σου",
+            "invalid": "Ο τρέχων κωδικός είναι λάθος"
+          }
+        },
+        "new_password": {
+          "label": "Νέος κωδικός",
+          "placeholder": "Γράψε τον νέο κωδικό σου",
+          "form": {
+            "min_length": "Ο κωδικός πρέπει να έχει τουλάχιστον 8 χαρακτήρες",
+            "uppercase": "Απαιτείται τουλάχιστον ένα κεφαλαίο γράμμα",
+            "lowercase": "Απαιτείται τουλάχιστον ένα μικρό γράμμα",
+            "number": "Απαιτείται τουλάχιστον ένας αριθμός",
+            "special": "Απαιτείται τουλάχιστον ένας ειδικός χαρακτήρας"
+          }
+        },
+        "confirm_password": {
+          "label": "Επιβεβαίωση νέου κωδικού",
+          "placeholder": "Επιβεβαίωσε τον νέο κωδικό σου",
+          "form": {
+            "match": "Οι κωδικοί δεν ταιριάζουν"
+          }
+        }
+      },
+      "notifications": {
+        "label": "Ειδοποιήσεις",
+        "description": "Διαχειρίσου τις ρυθμίσεις των ειδοποιήσεών σου.",
+        "push_notifications": {
+          "label": "Push ειδοποιήσεις",
+          "form": {
+            "enable": "Ενεργοποίηση push ειδοποιήσεων"
+          },
+          "already_granted": "Έχει γίνει ήδη αίτημα για ειδοποιήσεις· για να το αλλάξεις, πήγαινε στις ρυθμίσεις του browser σου.",
+          "no_enabled": "Ενεργοποίησε τις ειδοποιήσεις στις ρυθμίσεις της συσκευής σου για να λαμβάνεις push ειδοποιήσεις.",
+          "open_settings": "Πήγαινε στις ρυθμίσεις της συσκευής"
+        }
+      },
+      "data": {
+        "label": "Δεδομένα",
+        "description": "Εισήγαγε ή εξήγαγε τα δεδομένα σου.",
+        "importer": {
+          "label": "Εισαγωγή",
+          "select_source": "Διάλεξε πηγή",
+          "instructions_title": "Οδηγίες",
+          "browse_prompt": "Σύρε το αρχείο σου εδώ, ή <link>αναζήτησέ το</link>",
+          "browse_prompt_mobile": "Πάτα για να διαλέξεις αρχείο",
+          "uploading": "Μεταφόρτωση…",
+          "processing": "Ανάλυση του αρχείου σου…",
+          "upload_error": "Η μεταφόρτωση απέτυχε, δοκίμασε ξανά.",
+          "invalid_file_type": "Αυτός ο τύπος αρχείου δεν υποστηρίζεται για αυτή την πηγή.",
+          "review_title": "Έλεγξε την εισαγωγή σου",
+          "review_summary": "{matched} από {total} ταιριάζουν",
+          "validate": "Επικύρωση εισαγωγής",
+          "validate_confirm_description": "Αυτό θα εισαγάγει στη βιβλιοθήκη σου όλα τα στοιχεία που ταιριάζουν και δεν έχουν παραλειφθεί. Δεν μπορεί να αναιρεθεί.",
+          "success_title": "Η εισαγωγή ολοκληρώθηκε",
+          "success_description": "Τα δεδομένα σου εισήχθησαν με επιτυχία.",
+          "failed_title": "Η εισαγωγή απέτυχε",
+          "failed_description": "Κάτι πήγε στραβά κατά την επεξεργασία αυτής της εισαγωγής.",
+          "pending_description": "Η εισαγωγή σου είναι στη σειρά και θα ξεκινήσει σύντομα.",
+          "empty": "Καμία εισαγωγή ακόμα.",
+          "delete_confirm_description": "Αυτή η εισαγωγή και όλα τα προετοιμασμένα δεδομένα της θα διαγραφούν οριστικά. Δεν μπορεί να αναιρεθεί.",
+          "keep_existing": "Κράτα τα δικά μου",
+          "use_imported": "Χρήση των εισαγόμενων",
+          "merge": "Συγχώνευση",
+          "conflict": "Σύγκρουση",
+          "no_match": "Καμία αντιστοιχία",
+          "existing_rating": "Τώρα: {rating}",
+          "log_column": "Αρχείο καταγραφής",
+          "actions_column": "Ενέργειες",
+          "categories": {
+            "log_movies": "Ταινίες",
+            "log_tv_series": "Σειρές",
+            "bookmarks": "Λίστα παρακολούθησης",
+            "playlists": "Λίστες"
+          },
+          "status": {
+            "pending": "Σε εκκρεμότητα",
+            "processing": "Σε επεξεργασία",
+            "awaiting_review": "Αναμένει έλεγχο",
+            "completed": "Ολοκληρώθηκε",
+            "failed": "Απέτυχε"
+          }
+        },
+        "exporter": {
+          "label": "Εξαγωγή"
+        }
+      }
+    },
+    "upgrade": {
+      "metadata": {
+        "title": "Αναβάθμιση σε Premium",
+        "description": "Αναβάθμισε σε premium λογαριασμό για να έχεις πρόσβαση σε όλες τις λειτουργίες του {app}."
+      },
+      "header": {
+        "title": "μεγάλωσε το σινεμά σου, μοιράσου περισσότερα, στήριξε το {app}",
+        "subtitle": "δοκίμασε 1 μήνα δωρεάν, μετά {price}/μήνα"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "δραστηριότητες",
+            "unlimited_activities": {
+              "label": "απεριόριστες δραστηριότητες",
+              "description": "βαθμολογίες, like, κριτικές, λίστα παρακολούθησης και προτάσεις"
+            },
+            "favorites": {
+              "label": "αγαπημένα",
+              "description": "πρόσθεσε τις αγαπημένες σου ταινίες στο προφίλ σου"
+            }
+          },
+          "playlists": {
+            "label": "λίστες",
+            "unlimited_playlists": {
+              "label": "απεριόριστες",
+              "description": "δημιούργησε απεριόριστες λίστες"
+            },
+            "shared_playlists": {
+              "label": "κοινές",
+              "description": "μοιράσου τις λίστες σου με άλλους χρήστες"
+            },
+            "collaborative_playlists": {
+              "label": "συνεργατικές",
+              "description": "δημιούργησε συνεργατικές λίστες με άλλους χρήστες"
+            }
+          },
+          "feed": {
+            "label": "ροή",
+            "followees": {
+              "label": "χρήστες που ακολουθείς",
+              "description": "δες τις δραστηριότητες των χρηστών που ακολουθείς"
+            },
+            "cast_and_crew": {
+              "label": "ηθοποιοί και συντελεστές",
+              "description": "ακολούθησε τη δραστηριότητα των ανθρώπων που συμμετέχουν στις ταινίες"
+            }
+          },
+          "support": {
+            "label": "στήριξη",
+            "team": {
+              "label": "Στήριξε την ομάδα του {app}"
+            },
+            "credits": {
+              "label": "συντελεστές",
+              "description": "το προφίλ σου στους συντελεστές της εφαρμογής"
+            }
+          }
+        },
+        "success": {
+          "label": "Ευχαριστούμε για τη στήριξη!"
+        }
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} – λίστα του @{username}",
+        "description": "Ανακάλυψε τη λίστα ταινιών του @{username} στο {app}."
+      },
+      "actions": {
+        "delete": {
+          "description": "Αυτό θα διαγράψει οριστικά το <important>{title}</important> από τις λίστες σου."
+        }
+      },
+      "search": {
+        "placeholder": "αναζήτηση στη λίστα..."
+      },
+      "modal": {
+        "delete_item_confirm": {
+          "description": "Σίγουρα θέλεις να διαγράψεις το <important>{title}</important> από τη λίστα σου;"
+        }
+      },
+      "form": {
+        "title": {
+          "placeholder": "Γράψε τον τίτλο της λίστας"
+        },
+        "description": {
+          "placeholder": "Γράψε μια περιγραφή για τη λίστα"
+        },
+        "error": {
+          "format": "Η περιγραφή δεν μπορεί να περιέχει κενές γραμμές ούτε να αποτελείται μόνο από κενά."
+        }
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "Ανακάλυψε το προφίλ του @{username} στο {app}."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "Το {title} είναι ταινία του {directors} που κυκλοφόρησε το {year}. Υπόθεση: {overview}",
+        "description_no_director": "Το {title} είναι ταινία που κυκλοφόρησε το {year}. Υπόθεση: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Λίστες",
+          "description": "Ανακάλυψε όλες τις λίστες που περιέχουν την ταινία {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Κριτικές",
+          "description": "Ανακάλυψε όλες τις κριτικές της ταινίας {title}."
+        }
+      }
+    },
+    "tv_series": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "Το {title} είναι σειρά του {creators} που προβλήθηκε πρώτη φορά το {year}. Υπόθεση: {overview}",
+        "description_no_creator": "Το {title} είναι σειρά που προβλήθηκε πρώτη φορά το {year}. Υπόθεση: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Λίστες",
+          "description": "Ανακάλυψε όλες τις λίστες που περιέχουν τη σειρά {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Κριτικές",
+          "description": "Ανακάλυψε όλες τις κριτικές της σειράς {title}."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • Κύκλοι",
+          "description": "Ανακάλυψε όλους τους κύκλους της σειράς {title}."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • Κύκλος {number}",
+            "description": "Ανακάλυψε όλα τα επεισόδια του κύκλου {number} της σειράς {title}."
+          }
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • Ταινίες",
+          "description": "Ανακάλυψε όλες τις ταινίες στις οποίες έχει παίξει ή συμμετάσχει ο/η {name}."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • Σειρές",
+          "description": "Ανακάλυψε όλες τις σειρές στις οποίες έχει παίξει ή συμμετάσχει ο/η {name}."
+        }
+      }
+    },
+    "review": {
+      "metadata": {
+        "title": "Κριτική του {title} από τον/την @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "Γράψε κριτική για το {title}",
+          "description": "Μοιράσου τη γνώμη σου για το {title}."
+        }
+      }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Εξερεύνησε το Paradise Pictures",
+        "description": "Ξεκίνα ένα ταξίδι για να ανακαλύψεις το νησί και τα πολλά του τοπία. Οι πολυάριθμες ταινίες που το κατοικούν βρίσκονται στο διηγητικό τους περιβάλλον. Θα καταφέρεις να εξερευνήσεις κάθε γωνιά του;"
+      }
+    },
+    "legal": {
+      "label": "Νομικά",
+      "description": "Διάβασε τα νομικά έγγραφα του {app}.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "Όροι χρήσης",
+          "description": "Διάβασε τους όρους χρήσης του {app}."
+        },
+        "sections": {
+          "intro": "Οι παρόντες Όροι χρήσης (στο εξής «Όροι») ρυθμίζουν την πρόσβαση στην εφαρμογή {app} και τη χρήση της. Η εφαρμογή εκδίδεται από τον Loup (στο εξής «ο Εκδότης»), με έδρα στο Παρίσι. Η εγγραφή στο {app} συνεπάγεται την ανεπιφύλακτη αποδοχή των παρόντων Όρων.",
+          "presentation": {
+            "label": "1. Παρουσίαση της υπηρεσίας",
+            "content": "Το {app} είναι μια δωρεάν εφαρμογή που επιτρέπει στους χρήστες της να βλέπουν πληροφορίες για ταινίες, να δημοσιεύουν κριτικές, να βαθμολογούν έργα και να δημιουργούν εξατομικευμένες λίστες."
+          },
+          "account": {
+            "label": "2. Λογαριασμός και ασφάλεια",
+            "content": "Η πρόσβαση στις λειτουργίες συμμετοχής απαιτεί τη δημιουργία λογαριασμού. Ο Χρήστης είναι υπεύθυνος για την εμπιστευτικότητα των στοιχείων σύνδεσής του. Σε περίπτωση δόλιας χρήσης ή υποψίας παραβίασης, ο Χρήστης πρέπει να επικοινωνήσει αμέσως με την υποστήριξη στο: <email></email>."
+          },
+          "conduct": {
+            "label": "3. Κανόνες συμπεριφοράς",
+            "content": "Ο Χρήστης δεσμεύεται να παραμένει ευγενικός και να σέβεται τους άλλους στις κριτικές και τις λίστες του. Απαγορεύονται αυστηρά: οι εκφράσεις μίσους, οι συκοφαντικές ή ρατσιστικές δηλώσεις, η παρενόχληση, καθώς και το spam και η ανεπιθύμητη εμπορική προώθηση. Ο Εκδότης διατηρεί το δικαίωμα να διαγράψει κάθε περιεχόμενο που παραβιάζει αυτούς τους κανόνες και να αναστείλει τον σχετικό λογαριασμό χωρίς προειδοποίηση."
+          },
+          "child_safety": {
+            "label": "4. Πολιτική προστασίας των παιδιών",
+            "content": "Το {app} εφαρμόζει πολιτική αυστηρής μηδενικής ανοχής απέναντι στη σεξουαλική κακοποίηση και εκμετάλλευση παιδιών (CSAE). Απαγορεύεται ρητά και απολύτως στο {app} η δημιουργία, η μεταφόρτωση, η αποθήκευση, η διανομή, η αναζήτηση ή η προώθηση οποιουδήποτε περιεχομένου που σεξουαλικοποιεί, εκμεταλλεύεται ή με οποιονδήποτε άλλο τρόπο θέτει σε κίνδυνο ανηλίκους. Κάθε λογαριασμός που διαπιστώνεται ότι παραβιάζει αυτή την πολιτική αποκλείεται αμέσως και οριστικά, και ο Εκδότης αναφέρει το σχετικό περιεχόμενο, μαζί με κάθε διαθέσιμη πληροφορία χρήστη, στο National Center for Missing & Exploited Children (NCMEC) και/ή στις αρμόδιες διωκτικές αρχές, σύμφωνα με την ισχύουσα νομοθεσία. Κάθε χρήστης που αντιληφθεί περιεχόμενο ή συμπεριφορά που μπορεί να αποτελεί CSAE οφείλει να το αναφέρει αμελλητί στο: <email></email>."
+          },
+          "intellectual_property": {
+            "label": "5. Πνευματική ιδιοκτησία",
+            "content": "Ο Χρήστης παραμένει κύριος των κριτικών που γράφει. Ωστόσο, με τη δημοσίευση στο {app}, παραχωρεί στον Εκδότη δωρεάν, μη αποκλειστική άδεια προβολής, αναπαραγωγής και τεχνικής προσαρμογής αυτού του περιεχομένου εντός της εφαρμογής. Τα οπτικά στοιχεία, ο κώδικας και ο σχεδιασμός του {app} αποτελούν αποκλειστική ιδιοκτησία του Εκδότη."
+          },
+          "privacy": {
+            "label": "6. Προσωπικά δεδομένα",
+            "content": "Ο σεβασμός του απορρήτου σου είναι η απόλυτη προτεραιότητά μας. Το {app} δεν πουλά, δεν ενοικιάζει και δεν κοινοποιεί κανένα προσωπικό δεδομένο σε εμπορικούς ή διαφημιστικούς τρίτους. Τα δεδομένα που συλλέγονται (email, όνομα χρήστη, δραστηριότητα στην εφαρμογή) χρησιμοποιούνται αποκλειστικά για τη λειτουργία της υπηρεσίας και τη διαχείριση του λογαριασμού. Μπορείς να ασκήσεις τα δικαιώματά σου πρόσβασης, τροποποίησης ή διαγραφής (GDPR) επικοινωνώντας στο: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookies και ιχνηλάτες",
+            "content": "Το {app} δεν χρησιμοποιεί διαφημιστικά cookies ούτε ιχνηλάτες συμπεριφοράς τρίτων. Χρησιμοποιούνται μόνο δύο είδη τεχνικών cookies: ένα cookie ταυτοποίησης (για να παραμένεις συνδεδεμένος) και ένα cookie προτίμησης γλώσσας (για να θυμάται την επιλογή σου). Καθώς αυτά τα cookies είναι απολύτως απαραίτητα για την υπηρεσία, εξαιρούνται από την απαίτηση προηγούμενης συναίνεσης."
+          },
+          "ads": {
+            "label": "8. Διαφήμιση",
+            "content": "Η εφαρμογή προσφέρεται προς το παρόν χωρίς καμία διαφήμιση. Αν αυτό το μοντέλο αλλάξει, οι χρήστες θα ενημερωθούν μέσω επικαιροποίησης των παρόντων Όρων."
+          },
+          "liability": {
+            "label": "9. Ευθύνη",
+            "content": "Ο Εκδότης προσπαθεί να διατηρεί το {app} προσβάσιμο όλο το εικοσιτετράωρο, κάθε μέρα, αλλά δεν εγγυάται την απουσία διακοπών ή σφαλμάτων. Οι πληροφορίες για τις ταινίες προέρχονται από βάσεις δεδομένων τρίτων· ο Εκδότης δεν φέρει ευθύνη για τυχόν ανακρίβειες σε αυτές."
+          },
+          "law": {
+            "label": "10. Εφαρμοστέο δίκαιο",
+            "content": "Οι παρόντες Όροι υπόκεινται στο γαλλικό δίκαιο. Σε περίπτωση διαφοράς που δεν μπορεί να επιλυθεί φιλικά μέσω <email></email>, αποκλειστικά αρμόδια είναι τα δικαστήρια του Παρισιού."
+          }
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "Πολιτική απορρήτου",
+          "description": "Διάβασε την πολιτική απορρήτου του {app}."
+        },
+        "sections": {
+          "intro": "Η προστασία των δεδομένων βρίσκεται στην καρδιά της φιλοσοφίας του {app}. Αυτή η πολιτική περιγράφει ποια δεδομένα συλλέγουμε, γιατί τα συλλέγουμε και πώς τα προστατεύουμε. Με λίγα λόγια: δεν πουλάμε τα δεδομένα σου.",
+          "controller": {
+            "label": "1. Υπεύθυνος επεξεργασίας",
+            "content": "Υπεύθυνος επεξεργασίας είναι ο Loup, με έδρα στο Παρίσι (Γαλλία). Για κάθε ζήτημα απορρήτου, μπορείς να επικοινωνήσεις στο: <email></email>."
+          },
+          "collected_data": {
+            "label": "2. Δεδομένα που συλλέγονται",
+            "content": "Συλλέγουμε μόνο τα δεδομένα που είναι απολύτως απαραίτητα για τη λειτουργία της εφαρμογής: τη διεύθυνση email σου (για την ταυτοποίηση), το όνομα χρήστη σου και τα δεδομένα χρήσης σου (ταινίες που βαθμολόγησες, κριτικές, λίστες). Οι κωδικοί σου αποθηκεύονται κρυπτογραφημένοι (hashed) και με ασφάλεια."
+          },
+          "purpose": {
+            "label": "3. Σκοπός της επεξεργασίας",
+            "content": "Τα δεδομένα σου επεξεργάζονται αποκλειστικά για να: μπορείς να δημιουργήσεις και να διαχειρίζεσαι τον λογαριασμό σου, να εμφανίζονται οι λίστες και οι βαθμολογίες σου και να εξασφαλίζεται η τεχνική λειτουργία της υπηρεσίας. Δεν χρησιμοποιούμε τα δεδομένα σου για διαφημιστική κατάρτιση προφίλ."
+          },
+          "sharing": {
+            "label": "4. Κοινοποίηση δεδομένων",
+            "content": "Τα προσωπικά δεδομένα σου δεν πωλούνται, δεν ενοικιάζονται και δεν μεταβιβάζονται ποτέ σε τρίτους. Μπορεί να φιλοξενούνται από τους τεχνικούς παρόχους μας (hosting, υπηρεσία συναλλακτικών email), οι οποίοι δεσμεύονται από αυστηρή εμπιστευτικότητα και συμμορφώνονται με τον GDPR."
+          },
+          "retention": {
+            "label": "5. Διάρκεια διατήρησης",
+            "content": "Τα δεδομένα σου διατηρούνται για όσο ο λογαριασμός σου παραμένει ενεργός. Αν αποφασίσεις να διαγράψεις τον λογαριασμό σου, όλα τα προσωπικά δεδομένα σου (email, όνομα χρήστη, κριτικές) διαγράφονται οριστικά από τις βάσεις δεδομένων μας."
+          },
+          "rights": {
+            "label": "6. Τα δικαιώματά σου (GDPR)",
+            "content": "Σύμφωνα με τη νομοθεσία, έχεις δικαίωμα πρόσβασης, διόρθωσης, φορητότητας και διαγραφής των δεδομένων σου. Μπορείς να ασκήσεις αυτά τα δικαιώματα ανά πάσα στιγμή απευθείας μέσα στην εφαρμογή ή γράφοντάς μας στο: <email></email>."
+          },
+          "cookies": {
+            "label": "7. Cookies",
+            "content": "Όπως αναφέρεται στους Όρους χρήσης μας, χρησιμοποιούμε μόνο απολύτως απαραίτητα τεχνικά cookies (συνεδρίας και γλώσσας). Κανένα διαφημιστικό cookie ή cookie παρακολούθησης τρίτων δεν τοποθετείται στη συσκευή σου."
+          }
+        }
+      }
+    },
+    "search": {
+      "placeholder": "Αναζήτησε ταινία, σειρά, λίστα, πρόσωπο ή χρήστη..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "Σίγουρα θέλεις να αφαιρέσεις αυτό το έργο από όσα έχεις δει; Αν έχεις βαθμολογία ή κριτική, θα διαγραφούν κι αυτές."
+          }
+        }
+      }
+    },
+    "tv_series": {
+      "actions": {
+        "watch": {
+          "complete": {
+            "description": "Σίγουρα θέλεις να ολοκληρώσεις τη σειρά; Όλα τα επεισόδια όλων των κύκλων θα σημανθούν ως προβεβλημένα."
+          }
+        }
+      },
+      "season": {
+        "actions": {
+          "watch": {
+            "complete": {
+              "description": "Σίγουρα θέλεις να ολοκληρώσεις τον κύκλο {seasonNumber}; Όλα τα επεισόδια του κύκλου θα σημανθούν ως προβεβλημένα."
+            }
+          }
+        }
+      }
+    }
+  },
+  "help_hints": {
+    "feed": {
+      "message": "Για να εμφανιστεί δραστηριότητα εδώ, εσύ ή οι χρήστες που ακολουθείς πρέπει να βαθμολογήσετε ταινίες, σειρές, ..."
+    },
+    "feed_person": {
+      "message": "Για να εμφανιστεί δραστηριότητα εδώ, πρέπει να ακολουθήσεις πρόσωπα που συμμετέχουν σε ταινίες ή σειρές."
+    },
+    "playlists": {
+      "items": {
+        "empty": "Καμία ταινία ή σειρά σε αυτή τη λίστα. Πρόσθεσε μερικές για να τη γεμίσεις!"
+      },
+      "add_to": {
+        "empty": "Δεν έχεις καμία λίστα. Δημιούργησε μία για να προσθέσεις ταινίες ή σειρές και να τις βρίσκεις εύκολα!"
+      },
+      "saved": {
+        "empty": "Δεν έχεις αποθηκευμένες λίστες. Αποθήκευσε μια λίστα για να τη βρίσκεις εύκολα στη βιβλιοθήκη σου!"
+      },
+      "members": {
+        "empty": "Αυτή η λίστα δεν έχει μέλη. Πρόσθεσε μερικά για να συνεργαστείς με άλλους στην ίδια λίστα!",
+        "search": "Αναζήτησε χρήστες για να προσθέσεις στη λίστα..."
+      }
+    },
+    "follow-requests": {
+      "empty": "Δεν έχεις αιτήματα παρακολούθησης σε εκκρεμότητα. Όταν έχεις, θα εμφανίζονται εδώ!"
+    },
+    "recos": {
+      "empty": "Δεν έχεις προτάσεις. Όταν έχεις, θα εμφανίζονται εδώ!",
+      "send_to": {
+        "empty": "Δεν έχεις σε ποιον να στείλεις πρόταση. Πρέπει να είστε φίλοι για να μπορείς να του στείλεις πρόταση (αμοιβαία παρακολούθηση)!"
+      }
+    },
+    "bookmarks": {
+      "empty": "Δεν έχεις ακόμα αποθηκευμένα στοιχεία. Όταν έχεις, θα εμφανίζονται εδώ!"
+    }
+  },
+  "notifications": {
+    "reco_sent_movie": {
+      "description": "<user></user> σου πρότεινε την ταινία <movie></movie>"
+    },
+    "reco_sent_tv_series": {
+      "description": "<user></user> σου πρότεινε τη σειρά <tv_series></tv_series>"
+    },
+    "reco_completed_movie": {
+      "description": "<user></user> είδε την ταινία <movie></movie> που πρότεινες"
+    },
+    "reco_completed_tv_series": {
+      "description": "<user></user> είδε τη σειρά <tv_series></tv_series> που πρότεινες"
+    },
+    "follower_created": {
+      "description": "<user></user> άρχισε να σε ακολουθεί"
+    },
+    "follower_accepted": {
+      "description": "<user></user> αποδέχτηκε το αίτημα παρακολούθησής σου"
+    },
+    "follower_request": {
+      "description": "<user></user> θέλει να σε ακολουθήσει"
+    },
+    "friend_created": {
+      "description": "<user></user> είναι τώρα φίλος σου"
+    }
+  }
+}
