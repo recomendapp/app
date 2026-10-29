@@ -3,6 +3,7 @@ import { Link } from '@/lib/i18n/navigation';
 import { SupportedLocale } from '@libs/i18n';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
+import { generateStaticAlternates } from '@/lib/i18n/routing';
 
 export async function generateMetadata(props: {
   params: Promise<{
@@ -14,6 +15,7 @@ export async function generateMetadata(props: {
   return {
     title: t('pages.legal.terms_of_use.metadata.title'),
     description: t('pages.legal.terms_of_use.metadata.description', { app: siteConfig.name }),
+    alternates: generateStaticAlternates(params.lang, '/legal/terms-of-use'),
   };
 }
 

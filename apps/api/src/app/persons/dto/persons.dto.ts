@@ -23,7 +23,9 @@ export class PersonDto {
     example: '/person/525-christopher-nolan',
   })
   @Expose()
-  @Transform(({ obj }) => personPath(obj.id, obj.name))
+  // `toClassOnly`: see `MovieDto.path`. The outbound serializer pass has no `id` or
+  // name left to rebuild this from.
+  @Transform(({ obj }) => personPath(obj.id, obj.name), { toClassOnly: true })
   @IsString()
   path?: string;
 
@@ -33,7 +35,7 @@ export class PersonDto {
     deprecated: true,
   })
   @Expose()
-  @Transform(({ obj }) => personPath(obj.id, obj.name))
+  @Transform(({ obj }) => personPath(obj.id, obj.name), { toClassOnly: true })
   @IsString()
   url?: string;
 
@@ -152,7 +154,7 @@ export class PersonDto {
 
   @ApiProperty({ description: "The person's slug", example: '525-christopher-nolan' })
   @Expose()
-  @Transform(({ obj }) => mediaSlug(obj.id, obj.name))
+  @Transform(({ obj }) => mediaSlug(obj.id, obj.name), { toClassOnly: true })
   @IsString()
   slug?: string;
 }

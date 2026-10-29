@@ -37,7 +37,13 @@ export class MovieDto {
     example: '/film/157336-interstellar',
   })
   @Expose()
-  @Transform(({ obj }) => moviePath(obj.id, obj.title ?? obj.originalTitle ?? null))
+  // `toClassOnly` because a global ClassSerializerInterceptor (see `main.ts`) runs a
+  // second, outbound pass over the built DTO. `obj` is then the instance, so a DTO
+  // exposing a derived path without the `id` and title it is built from -- any
+  // `PickType` of the two -- rebuilt it from nothing and served `/film/undefined`.
+  @Transform(({ obj }) => moviePath(obj.id, obj.title ?? obj.originalTitle ?? null), {
+    toClassOnly: true,
+  })
   @IsString()
   path?: string;
 
@@ -47,7 +53,9 @@ export class MovieDto {
     deprecated: true,
   })
   @Expose()
-  @Transform(({ obj }) => moviePath(obj.id, obj.title ?? obj.originalTitle ?? null))
+  @Transform(({ obj }) => moviePath(obj.id, obj.title ?? obj.originalTitle ?? null), {
+    toClassOnly: true,
+  })
   @IsString()
   url?: string;
 
@@ -237,7 +245,9 @@ export class MovieDto {
 
   @ApiProperty({ description: 'Slug of the movie', example: '157336-interstellar' })
   @Expose()
-  @Transform(({ obj }) => mediaSlug(obj.id, obj.title ?? obj.originalTitle ?? null))
+  @Transform(({ obj }) => mediaSlug(obj.id, obj.title ?? obj.originalTitle ?? null), {
+    toClassOnly: true,
+  })
   @IsString()
   slug?: string;
 

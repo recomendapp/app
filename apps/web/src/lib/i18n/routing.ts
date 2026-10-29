@@ -19,8 +19,15 @@ export const routing = defineRouting({
 const normalize = (endpoint: string) => (endpoint.startsWith('/') ? endpoint : `/${endpoint}`);
 
 /** Absolute URL of `endpoint` as `locale` serves it. The default locale is unprefixed. */
-export const localeUrl = (locale: string, endpoint: string) =>
-  `${siteConfig.url}${locale === routing.defaultLocale ? '' : `/${locale}`}${normalize(endpoint)}`;
+export const localeUrl = (locale: string, endpoint: string) => {
+  const prefix = locale === routing.defaultLocale ? '' : `/${locale}`;
+  const path = normalize(endpoint);
+
+  // A prefixed home page is served at `/fr-FR`, and `/fr-FR/` 308s to it. Naming the
+  // redirecting form in a canonical or an hreflang makes Google resolve the annotation
+  // away -- the unprefixed root is the one case where the slash is the served URL.
+  return `${siteConfig.url}${prefix}${prefix && path === '/' ? '' : path}`;
+};
 
 /**
  * For pages whose content is identical whatever the locale -- a profile, a playlist, a
@@ -90,3 +97,21 @@ export const localeAlternates = (endpoint: string, locales: readonly string[]) =
 });
 
 export const sitemapLocales = (endpoint: string) => localeAlternates(endpoint, supportedLocales);
+
+/**
+ * For the UI-only pages -- the home, `/explore`, `/about`, `/upgrade`, the legal ones.
+ * Every locale translates them, all at the same path, so the whole supported set is a
+ * genuine hreflang cluster. The statics sitemap already advertises exactly these URLs, so
+ * emitting them here adds nothing crawlable -- it stops the page and the sitemap
+ * contradicting each other, and gives the page a canonical of its own.
+ *
+ * A page that sets no `alternates` at all inherits the root layout's, which is the home's:
+ * `/about` was telling Google it was a duplicate of `/`.
+ */
+export const generateStaticAlternates = (
+  currentLocale: string,
+  endpoint: string,
+): AlternateURLs => ({
+  canonical: localeUrl(currentLocale, endpoint),
+  languages: localeAlternates(endpoint, supportedLocales),
+});

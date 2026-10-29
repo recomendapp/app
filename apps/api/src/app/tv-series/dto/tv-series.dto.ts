@@ -36,7 +36,11 @@ export class TvSeriesDto {
     example: '/tv-series/1396-breaking-bad',
   })
   @Expose()
-  @Transform(({ obj }) => tvSeriesPath(obj.id, obj.name ?? obj.originalName ?? null))
+  // `toClassOnly`: see `MovieDto.path`. The outbound serializer pass has no `id` or
+  // name left to rebuild this from.
+  @Transform(({ obj }) => tvSeriesPath(obj.id, obj.name ?? obj.originalName ?? null), {
+    toClassOnly: true,
+  })
   @IsString()
   path?: string;
 
@@ -46,7 +50,9 @@ export class TvSeriesDto {
     deprecated: true,
   })
   @Expose()
-  @Transform(({ obj }) => tvSeriesPath(obj.id, obj.name ?? obj.originalName ?? null))
+  @Transform(({ obj }) => tvSeriesPath(obj.id, obj.name ?? obj.originalName ?? null), {
+    toClassOnly: true,
+  })
   @IsString()
   url?: string;
 
@@ -248,7 +254,9 @@ export class TvSeriesDto {
 
   @ApiProperty({ description: 'Slug of the TV series', example: '1399-game-of-thrones' })
   @Expose()
-  @Transform(({ obj }) => mediaSlug(obj.id, obj.name ?? obj.originalName ?? null))
+  @Transform(({ obj }) => mediaSlug(obj.id, obj.name ?? obj.originalName ?? null), {
+    toClassOnly: true,
+  })
   @IsString()
   slug?: string;
 

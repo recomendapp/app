@@ -11,6 +11,11 @@ import { TvSeriesMinimalDto } from '../app/tv-series/dto/tv-series.dto';
 import { PersonCompactDto } from '../app/persons/dto/persons.dto';
 import { PlaylistItemWithMovieDto } from '../app/playlists/items/playlist-items.dto';
 import { parseResponseDto } from './parse-response-dto';
+import { instanceToPlain } from 'class-transformer';
+import { MovieMetadataDto } from '../app/movies/metadata/movie-metadata.dto';
+import { PersonMetadataDto } from '../app/persons/metadata/person-metadata.dto';
+import { TvSeriesMetadataDto } from '../app/tv-series/metadata/tv-series-metadata.dto';
+import { TvSeasonCompactDto } from '../app/tv-series/seasons/tv-seasons.dto';
 
 describe('media paths', () => {
   it('uses a normalized localized title when one is available', () => {
@@ -104,6 +109,89 @@ describe('media paths', () => {
       slug: '157336-interstellar',
       path: '/film/157336-interstellar',
       url: '/film/157336-interstellar',
+    });
+  });
+
+  // Postgres returns `bigint` columns as strings, so a tv series id reaches the slug as
+  // `'342719183'` where a movie id reaches it as a number.
+  it('accepts the numeric string a bigint column returns', () => {
+    expect(mediaSlug('342719183', 'Game of Thrones')).toBe('342719183-game-of-thrones');
+    expect(mediaSlug('342719183', null)).toBe('342719183');
+  });
+
+  it('refuses an id it cannot build a slug from', () => {
+    const missing = undefined as unknown as number;
+
+    expect(() => mediaSlug(missing, 'Interstellar')).toThrow(TypeError);
+    expect(() => moviePath(missing, 'Interstellar')).toThrow(TypeError);
+    expect(() => personPath(missing, 'Christopher Nolan')).toThrow(TypeError);
+    expect(() => mediaSlug('', 'Interstellar')).toThrow(TypeError);
+    expect(() => mediaSlug('not-an-id', 'Interstellar')).toThrow(TypeError);
+  });
+});
+
+/*
+ * A global ClassSerializerInterceptor re-runs every `@Transform` on the way out, with the
+ * built instance as `obj` instead of the database row. Asserting the DTO -- which is all
+ * the service specs do -- passes while the client receives `/film/undefined`, so these
+ * assert what `instanceToPlain` produces: the response as it leaves the API.
+ */
+describe('derived paths through the outbound serializer', () => {
+  it('keeps the slug of a movie alternate', () => {
+    const metadata = parseResponseDto(MovieMetadataDto, {
+      alternates: [
+        { locale: 'fr-FR', id: 550, title: 'Le Fight Club', originalTitle: 'Fight Club' },
+      ],
+    });
+
+    expect(instanceToPlain(metadata)).toEqual({
+      alternates: [{ locale: 'fr-FR', slug: '550-le-fight-club', path: '/film/550-le-fight-club' }],
+    });
+  });
+
+  it('keeps the slug of a person alternate', () => {
+    const metadata = parseResponseDto(PersonMetadataDto, {
+      alternates: [{ locale: 'fr-FR', id: 525, name: 'Christopher Nolan' }],
+    });
+
+    expect(instanceToPlain(metadata)).toEqual({
+      alternates: [
+        { locale: 'fr-FR', slug: '525-christopher-nolan', path: '/person/525-christopher-nolan' },
+      ],
+    });
+  });
+
+  it('keeps the slug of a TV series alternate', () => {
+    const metadata = parseResponseDto(TvSeriesMetadataDto, {
+      alternates: [
+        { locale: 'fr-FR', id: 1399, name: 'Le Trone de fer', originalName: 'Game of Thrones' },
+      ],
+    });
+
+    expect(instanceToPlain(metadata)).toEqual({
+      alternates: [
+        { locale: 'fr-FR', slug: '1399-le-trone-de-fer', path: '/tv-series/1399-le-trone-de-fer' },
+      ],
+    });
+  });
+
+  // Same shape, one step subtler: `tvSeriesName` feeds the path but is never exposed, so
+  // the outbound pass rebuilt the path without it -- no `undefined` in sight, just a URL
+  // the series page itself canonicalises away from.
+  it('keeps the series slug in a season path', () => {
+    const season = parseResponseDto(TvSeasonCompactDto, {
+      id: 3624,
+      tvSeriesId: 1399,
+      seasonNumber: 1,
+      posterPath: null,
+      episodeCount: 10,
+      voteAverage: 8.4,
+      voteCount: 0,
+      tvSeriesName: 'Game of Thrones',
+    });
+
+    expect(instanceToPlain(season)).toMatchObject({
+      path: '/tv-series/1399-game-of-thrones/season/1',
     });
   });
 });
