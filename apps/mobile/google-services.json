@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "413826532912",
+    "project_id": "recomend-b6aab",
+    "storage_bucket": "recomend-b6aab.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:413826532912:android:ef7a03e0a5a745c03a8ff5",
+        "android_client_info": {
+          "package_name": "com.recomend.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUzDOaIqExbrtHODbOpqluPvrlnS966EY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "413826532912-mlkfhenna3dnebmsr1dm81qlhvuehsib.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "413826532912-vt9h8pp36bbk9akq5lshsmf3joqoapmn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.recomend.app",
+                "app_store_id": "6749225891"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
