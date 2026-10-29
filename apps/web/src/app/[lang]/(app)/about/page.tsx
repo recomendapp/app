@@ -7,6 +7,7 @@ import { SupportedLocale } from '@libs/i18n';
 import { ConsentButton } from '@/components/Ads/ConsentButton';
 import { Icons } from '@/config/icons';
 import { siteConfig } from '@/config/site';
+import { generateStaticAlternates } from '@/lib/i18n/routing';
 
 export const generateMetadata = async (props: {
   params: Promise<{
@@ -17,6 +18,7 @@ export const generateMetadata = async (props: {
   const t = await getTranslations({ locale: params.lang as SupportedLocale, namespace: 'common' });
   return {
     title: upperFirst(t('messages.about')),
+    alternates: generateStaticAlternates(params.lang, '/about'),
   };
 };
 

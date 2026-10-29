@@ -5,7 +5,7 @@ import { fontSans } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
 import { Providers } from '@/context/Providers';
 import Script from 'next/script';
-import { generateLocalizedAlternates } from '@/lib/i18n/routing';
+import { generateStaticAlternates } from '@/lib/i18n/routing';
 import { SupportedLocale } from '@libs/i18n';
 import { getTranslations } from 'next-intl/server';
 
@@ -34,7 +34,7 @@ export async function generateMetadata({
     },
     metadataBase: new URL(siteConfig.url),
     description: t('site.description', { app: siteConfig.name }),
-    alternates: generateLocalizedAlternates(lang, '/'),
+    alternates: generateStaticAlternates(lang, '/'),
     manifest: '/manifest.webmanifest',
     icons: {
       apple: '/assets/icons/ios/512.png',

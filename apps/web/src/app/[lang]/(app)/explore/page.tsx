@@ -3,7 +3,7 @@ import { Map } from '@/components/Map/Map';
 import { getTranslations } from 'next-intl/server';
 import { truncate } from 'lodash';
 import { siteConfig } from '@/config/site';
-import { generateLocalizedAlternates } from '@/lib/i18n/routing';
+import { generateStaticAlternates } from '@/lib/i18n/routing';
 import { SupportedLocale } from '@libs/i18n';
 
 export async function generateMetadata(props: {
@@ -18,7 +18,7 @@ export async function generateMetadata(props: {
     description: truncate(t('pages.explore.metadata.description'), {
       length: siteConfig.seo.description.limit,
     }),
-    alternates: generateLocalizedAlternates(params.lang, '/explore'),
+    alternates: generateStaticAlternates(params.lang, '/explore'),
     openGraph: {
       siteName: siteConfig.name,
       title: `${t('pages.explore.metadata.title')} • ${siteConfig.name}`,

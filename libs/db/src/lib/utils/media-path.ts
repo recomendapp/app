@@ -7,7 +7,18 @@ function normalizeSegment(value: string): string {
     .replace(/^-|-$/g, '');
 }
 
-export function mediaSlug(id: number, title: string | null | undefined): string {
+export function mediaSlug(id: number | string, title: string | null | undefined): string {
+  // `string` is not defensive typing: Postgres returns `bigint` columns as strings, so a
+  // tv series id arrives as `'342719183'` while a movie id arrives as a number. What must
+  // never get through is an absent one -- it used to stringify to the literal
+  // `"undefined"` and ship as a real URL (`/film/undefined`), which nothing downstream
+  // can tell from a legitimate slug. An id is a primary key at every call site, so there
+  // is no case to degrade to.
+  const numericId = typeof id === 'string' && id.trim() !== '' ? Number(id) : id;
+  if (typeof numericId !== 'number' || !Number.isFinite(numericId)) {
+    throw new TypeError(`mediaSlug needs a numeric id, received ${String(id)}`);
+  }
+
   const normalizedTitle = title ? normalizeSegment(title) : '';
   return normalizedTitle ? `${id}-${normalizedTitle}` : String(id);
 }

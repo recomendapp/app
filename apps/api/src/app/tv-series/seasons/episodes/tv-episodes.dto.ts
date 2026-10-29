@@ -130,8 +130,12 @@ export class TvEpisodeDto {
     type: String,
   })
   @Expose()
-  @Transform(({ obj }) =>
-    tvEpisodePath(obj.tvSeriesId, obj.seasonNumber, obj.episodeNumber, obj.tvSeriesName),
+  // `toClassOnly`: see `MovieDto.path`. The outbound serializer pass has no `id` or
+  // name left to rebuild this from.
+  @Transform(
+    ({ obj }) =>
+      tvEpisodePath(obj.tvSeriesId, obj.seasonNumber, obj.episodeNumber, obj.tvSeriesName),
+    { toClassOnly: true },
   )
   @IsString()
   path?: string;
