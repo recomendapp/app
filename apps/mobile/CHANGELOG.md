@@ -1,5 +1,12 @@
 # mobile
 
+## [1.8.0](https://github.com/recomendapp/app/compare/mobile@v1.7.0...mobile@v1.8.0) (2026-10-29)
+
+
+### Features
+
+* **repo:** 43 locales, per-language fallbacks and a translation CI gate ([#87](https://github.com/recomendapp/app/issues/87)) ([99438d7](https://github.com/recomendapp/app/commit/99438d78b5c3e8c2fa3bdfe28c803c7e85a43a95))
+
 ## [1.7.0](https://github.com/recomendapp/app/compare/mobile@v1.6.0...mobile@v1.7.0) (2026-10-11)
 
 
