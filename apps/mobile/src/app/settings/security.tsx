@@ -120,7 +120,7 @@ const SettingsSecurityScreen = () => {
                 variant="ghost"
                 size="fit"
                 loading={isLoading}
-                onPress={form.handleSubmit(handleSubmit)}
+                onPress={() => void form.handleSubmit(handleSubmit)()}
                 disabled={!form.formState.isValid || isLoading}
               >
                 {upperFirst(t('common.messages.save'))}
@@ -130,7 +130,7 @@ const SettingsSecurityScreen = () => {
               {
                 type: 'button',
                 label: upperFirst(t('common.messages.save')),
-                onPress: form.handleSubmit(handleSubmit),
+                onPress: () => void form.handleSubmit(handleSubmit)(),
                 tintColor: props.tintColor,
                 disabled: !form.formState.isValid || isLoading,
                 icon: {

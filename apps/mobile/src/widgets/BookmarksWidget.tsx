@@ -32,7 +32,8 @@ const BookmarksWidget = (
     if (environment.configuration?.order !== 'random') return items;
 
     let hash = 0;
-    const seedSource = `${environment.date.getFullYear()}-${environment.date.getMonth()}-${environment.date.getDate()}`;
+    const date = environment.date ?? new Date();
+    const seedSource = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
     for (let i = 0; i < seedSource.length; i++) {
       hash = (hash << 5) - hash + seedSource.charCodeAt(i);
       hash |= 0;

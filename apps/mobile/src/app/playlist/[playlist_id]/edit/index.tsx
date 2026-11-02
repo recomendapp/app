@@ -274,7 +274,7 @@ const ModalPlaylistEdit = () => {
               variant="ghost"
               size="fit"
               loading={isPending}
-              onPress={form.handleSubmit(handleSubmit)}
+              onPress={() => void form.handleSubmit(handleSubmit)()}
               disabled={!canSave || isPending}
             >
               {upperFirst(t('common.messages.save'))}
@@ -284,7 +284,7 @@ const ModalPlaylistEdit = () => {
             {
               type: 'button',
               label: upperFirst(t('common.messages.save')),
-              onPress: form.handleSubmit(handleSubmit),
+              onPress: () => void form.handleSubmit(handleSubmit)(),
               tintColor: props.tintColor,
               disabled: !canSave || isPending,
               icon: {

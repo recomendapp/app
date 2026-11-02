@@ -411,7 +411,7 @@ const SignupScreen = () => {
                       </GroupedInput>
                       {/* SUBMIT BUTTON */}
                       <Button
-                        onPress={form.handleSubmit(handleSubmit)}
+                        onPress={() => void form.handleSubmit(handleSubmit)()}
                         loading={isLoading}
                         style={tw.style('w-full rounded-xl')}
                       >
