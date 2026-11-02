@@ -136,7 +136,7 @@ export const BottomSheetBookmarkComment = forwardRef<
       />
       <Button
         loading={isPending}
-        onPress={handleSubmit(handleUpdateComment)}
+        onPress={() => void handleSubmit(handleUpdateComment)()}
         disabled={isPending || !isValid}
       >
         {upperFirst(t('common.messages.save'))}

@@ -3,12 +3,15 @@ import { Stack } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 
+export const unstable_settings = {
+  anchor: 'index',
+};
+
 const AuthLayout = () => {
   const t = useTranslations();
   const { defaultScreenOptions } = useTheme();
   return (
     <Stack
-      initialRouteName="index"
       screenOptions={{
         ...defaultScreenOptions,
         headerTransparent: true,

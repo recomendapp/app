@@ -149,7 +149,7 @@ export const BottomSheetComment = React.forwardRef<
             />
             <Button
               loading={isLoading}
-              onPress={form.handleSubmit(handleSave)}
+              onPress={() => void form.handleSubmit(handleSave)()}
               disabled={isLoading || !form.formState.isValid}
             >
               {upperFirst(t('common.messages.save'))}

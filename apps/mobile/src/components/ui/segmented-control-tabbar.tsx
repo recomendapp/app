@@ -8,18 +8,19 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 export const SegmentedControlTabBar = ({
   state,
   descriptors,
-  navigation,
+  emitter,
+  navigateToTab,
 }: MaterialTopTabBarProps) => {
   const insets = useSafeAreaInsets();
   const onPressTab = (item: (typeof state.routes)[number], index: number, isFocused: boolean) => {
-    const event = navigation.emit({
+    const event = emitter.emit({
       type: 'tabPress',
       target: item.key,
       canPreventDefault: true,
     });
 
     if (!isFocused && !event.defaultPrevented) {
-      navigation.navigate(item.name);
+      navigateToTab(item.key);
     }
   };
   return (

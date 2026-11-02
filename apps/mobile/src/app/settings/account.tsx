@@ -217,7 +217,7 @@ const SettingsAccountScreen = () => {
               variant="ghost"
               size="fit"
               loading={isLoading}
-              onPress={form.handleSubmit(handleOnSubmit)}
+              onPress={() => void form.handleSubmit(handleOnSubmit)()}
               disabled={!hasUnsavedChanges || !form.formState.isValid || isLoading}
             >
               {upperFirst(t('common.messages.save'))}
@@ -227,7 +227,7 @@ const SettingsAccountScreen = () => {
             {
               type: 'button',
               label: upperFirst(t('common.messages.save')),
-              onPress: form.handleSubmit(handleOnSubmit),
+              onPress: () => void form.handleSubmit(handleOnSubmit)(),
               tintColor: props.tintColor,
               disabled: !hasUnsavedChanges || !form.formState.isValid || isLoading,
               icon: {

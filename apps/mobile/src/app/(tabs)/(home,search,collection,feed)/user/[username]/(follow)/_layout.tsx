@@ -1,27 +1,18 @@
 import { View } from '../../../../../../components/ui/view';
 import tw from '../../../../../../lib/tw';
 import { useTheme } from '../../../../../../providers/ThemeProvider';
-import {
-  createMaterialTopTabNavigator,
-  MaterialTopTabNavigationEventMap,
-  MaterialTopTabNavigationOptions,
-} from 'expo-router/js-top-tabs';
-import { HeaderTitle, ParamListBase, TabNavigationState } from 'expo-router/react-navigation';
-import { Stack, useLocalSearchParams, withLayoutContext } from 'expo-router';
+import { TopTabs } from 'expo-router/js-top-tabs';
+import { HeaderTitle } from 'expo-router/react-navigation';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 import { Icons } from '../../../../../../constants/Icons';
 import { useQuery } from '@tanstack/react-query';
 import { userByUsernameOptions } from '@libs/query-client';
 
-const Tab = createMaterialTopTabNavigator();
-
-const MaterialTopTabs = withLayoutContext<
-  MaterialTopTabNavigationOptions,
-  typeof Tab.Navigator,
-  TabNavigationState<ParamListBase>,
-  MaterialTopTabNavigationEventMap
->(Tab.Navigator);
+export const unstable_settings = {
+  anchor: 'followers',
+};
 
 const ProfileFollowLayout = () => {
   const { username } = useLocalSearchParams<{ username: string }>();
@@ -42,8 +33,7 @@ const ProfileFollowLayout = () => {
           headerBackButtonDisplayMode: 'minimal',
         }}
       />
-      <MaterialTopTabs
-        initialRouteName="followers"
+      <TopTabs
         screenOptions={{
           tabBarIndicatorStyle: {
             backgroundColor: colors.accentBlue,
@@ -56,25 +46,23 @@ const ProfileFollowLayout = () => {
           },
         }}
       >
-        <MaterialTopTabs.Screen
+        <TopTabs.Screen
           name="followers"
-          initialParams={{ username }}
           options={{
             title: upperFirst(
               t('common.messages.follower_count', { count: profile?.followersCount || 0 }),
             ),
           }}
         />
-        <MaterialTopTabs.Screen
+        <TopTabs.Screen
           name="followees"
-          initialParams={{ username }}
           options={{
             title: upperFirst(
               t('common.messages.followee_count', { count: profile?.followingCount || 0 }),
             ),
           }}
         />
-      </MaterialTopTabs>
+      </TopTabs>
     </>
   );
 };

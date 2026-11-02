@@ -1,40 +1,25 @@
-import {
-  createMaterialTopTabNavigator,
-  MaterialTopTabBarProps,
-  MaterialTopTabNavigationEventMap,
-  MaterialTopTabNavigationOptions,
-} from 'expo-router/js-top-tabs';
-import { ParamListBase, TabNavigationState } from 'expo-router/react-navigation';
-import { withLayoutContext } from 'expo-router';
+import { MaterialTopTabBarProps, TopTabs } from 'expo-router/js-top-tabs';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 import { SegmentedControlTabBar } from '../../../../components/ui/segmented-control-tabbar';
 
-const Tab = createMaterialTopTabNavigator();
-
-const MaterialTopTabs = withLayoutContext<
-  MaterialTopTabNavigationOptions,
-  typeof Tab.Navigator,
-  TabNavigationState<ParamListBase>,
-  MaterialTopTabNavigationEventMap
->(Tab.Navigator);
+export const unstable_settings = {
+  anchor: 'index',
+};
 
 const FeedLayout = () => {
   const t = useTranslations();
   return (
-    <MaterialTopTabs
-      initialRouteName="index"
-      tabBar={(props: MaterialTopTabBarProps) => <SegmentedControlTabBar {...props} />}
-    >
-      <MaterialTopTabs.Screen
+    <TopTabs tabBar={(props: MaterialTopTabBarProps) => <SegmentedControlTabBar {...props} />}>
+      <TopTabs.Screen
         name="index"
         options={{ title: upperFirst(t('common.messages.community')) }}
       />
-      <MaterialTopTabs.Screen
+      <TopTabs.Screen
         name="persons"
         options={{ title: upperFirst(t('common.messages.cast_and_crew')) }}
       />
-    </MaterialTopTabs>
+    </TopTabs>
   );
 };
 

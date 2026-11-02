@@ -1,5 +1,6 @@
 import { createContext, use, useCallback, useEffect, useRef, useState } from 'react';
 import * as Notifications from 'expo-notifications';
+import { AndroidImportance } from 'expo-notifications';
 import { useAuth } from './AuthProvider';
 import { Platform } from 'react-native';
 import * as Device from 'expo-device';
@@ -44,7 +45,7 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
     if (Platform.OS === 'android') {
       await Notifications.setNotificationChannelAsync('default', {
         name: 'default',
-        importance: Notifications.AndroidImportance.MAX,
+        importance: AndroidImportance.MAX,
         vibrationPattern: [0, 250, 250, 250],
         lightColor: '#FF231F7C',
       });

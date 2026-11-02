@@ -21,6 +21,10 @@ import { useTranslations } from 'use-intl';
 import { Platform } from 'react-native';
 import { osName } from 'expo-device';
 
+export const unstable_settings = {
+  anchor: '(tabs)',
+};
+
 export { ErrorBoundary } from '../providers/ErrorBoundaryProvider';
 
 enableScreens(true);
@@ -38,7 +42,7 @@ const RootLayoutNav = () => {
   const { defaultScreenOptions, isLiquidGlassAvailable } = useTheme();
   useHomeWidgetsSync();
   return (
-    <Stack initialRouteName="(tabs)" screenOptions={defaultScreenOptions}>
+    <Stack screenOptions={defaultScreenOptions}>
       <Stack.Protected guard={isUpdateRequired}>
         <Stack.Screen
           name="update-required"

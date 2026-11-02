@@ -2,13 +2,16 @@ import { useTheme } from '../../../providers/ThemeProvider';
 import { Stack } from 'expo-router';
 import { useTranslations } from 'use-intl';
 
+export const unstable_settings = {
+  anchor: 'forgot-password',
+};
+
 const AuthPasswordLayout = () => {
   const { defaultScreenOptions } = useTheme();
   const t = useTranslations();
   return (
     <>
       <Stack
-        initialRouteName="forgot-password"
         screenOptions={{
           ...defaultScreenOptions,
           headerTransparent: true,

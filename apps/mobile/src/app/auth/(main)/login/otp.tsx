@@ -192,7 +192,7 @@ const LoginOtpScreen = () => {
                 {/* SUBMIT BUTTON */}
                 <Button
                   loading={isLoading}
-                  onPress={form.handleSubmit(handleSubmit)}
+                  onPress={() => void form.handleSubmit(handleSubmit)()}
                   style={tw`w-full rounded-xl`}
                 >
                   {t('pages.auth.login.otp.form.submit')}
@@ -231,7 +231,7 @@ const LoginOtpScreen = () => {
                   variant="ghost"
                   style={tw`p-0`}
                   disabled={isLoading}
-                  onPress={form.handleSubmit(handleSubmit)}
+                  onPress={() => void form.handleSubmit(handleSubmit)()}
                 >
                   {t('common.form.resend_code')}
                 </Button>

@@ -1,16 +1,17 @@
 import { TColors } from '../constants/Colors';
 import { useTheme } from '../providers/ThemeProvider';
 import { useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import type { ImageStyle, TextStyle, ViewStyle } from 'react-native';
 
-interface Styles<T extends StyleSheet.NamedStyles<T>> {
+// React Native's strict type API no longer exports `StyleSheet.NamedStyles`.
+type NamedStyles<T> = { [P in keyof T]: ViewStyle | TextStyle | ImageStyle };
+
+interface Styles<T extends NamedStyles<T>> {
   colors: TColors;
   styles: T;
 }
 
-export default function <T extends StyleSheet.NamedStyles<T>>(
-  createStyle: (colors: TColors) => T,
-): Styles<T> {
+export default function <T extends NamedStyles<T>>(createStyle: (colors: TColors) => T): Styles<T> {
   const { colors } = useTheme();
 
   return {
