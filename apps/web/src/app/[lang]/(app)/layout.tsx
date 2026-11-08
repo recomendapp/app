@@ -1,4 +1,5 @@
 import { AppLayout } from '@/layouts/app-layout/AppLayout';
+import { SupportBanner } from '@/components/SupportBanner';
 import { routing } from '@/lib/i18n/routing';
 import { SupportedLocale } from '@libs/i18n';
 import { notFound } from 'next/navigation';
@@ -15,9 +16,12 @@ export default async function RootLayout({ children, modal, params }: AppLayoutP
     notFound();
   }
   return (
-    <AppLayout>
-      {children}
-      {modal}
-    </AppLayout>
+    <>
+      <SupportBanner />
+      <AppLayout>
+        {children}
+        {modal}
+      </AppLayout>
+    </>
   );
 }

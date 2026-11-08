@@ -1351,6 +1351,11 @@
         }
       }
     },
+    "support_banner": {
+      "message": "{app} reikia finansinės paramos, kad galėtų toliau egzistuoti.",
+      "cta": "Prenumeruok ir paremk",
+      "dismiss": "Uždaryti"
+    },
     "tv_series": {
       "actions": {
         "watch": {

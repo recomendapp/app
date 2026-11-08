@@ -1351,6 +1351,11 @@
         }
       }
     },
+    "support_banner": {
+      "message": "{app} var olmaya devam etmek için maddi desteğe ihtiyaç duyuyor.",
+      "cta": "Abone olarak destekle",
+      "dismiss": "Kapat"
+    },
     "tv_series": {
       "actions": {
         "watch": {

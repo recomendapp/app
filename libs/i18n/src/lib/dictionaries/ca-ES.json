@@ -1351,6 +1351,11 @@
         }
       }
     },
+    "support_banner": {
+      "message": "{app} necessita suport econòmic per continuar existint.",
+      "cta": "Subscriu-t'hi per donar-hi suport",
+      "dismiss": "Tanca"
+    },
     "tv_series": {
       "actions": {
         "watch": {

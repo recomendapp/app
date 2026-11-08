@@ -1351,6 +1351,11 @@
         }
       }
     },
+    "support_banner": {
+      "message": "{app} precisa de apoio financeiro para continuar existindo.",
+      "cta": "Assine para apoiar",
+      "dismiss": "Fechar"
+    },
     "tv_series": {
       "actions": {
         "watch": {

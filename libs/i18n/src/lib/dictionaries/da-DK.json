@@ -1351,6 +1351,11 @@
         }
       }
     },
+    "support_banner": {
+      "message": "{app} har brug for økonomisk støtte for at blive ved med at findes.",
+      "cta": "Abonnér og støt",
+      "dismiss": "Luk"
+    },
     "tv_series": {
       "actions": {
         "watch": {
