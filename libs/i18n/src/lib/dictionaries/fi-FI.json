@@ -1351,6 +1351,11 @@
         }
       }
     },
+    "support_banner": {
+      "message": "{app} tarvitsee rahallista tukea pysyäkseen pystyssä.",
+      "cta": "Tilaa ja tue",
+      "dismiss": "Sulje"
+    },
     "tv_series": {
       "actions": {
         "watch": {

@@ -1351,6 +1351,11 @@
         }
       }
     },
+    "support_banner": {
+      "message": "{app} 需要你的资金支持才能继续运营。",
+      "cta": "订阅以支持我们",
+      "dismiss": "关闭"
+    },
     "tv_series": {
       "actions": {
         "watch": {

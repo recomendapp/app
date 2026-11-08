@@ -1351,6 +1351,11 @@
         }
       }
     },
+    "support_banner": {
+      "message": "{app} működéséhez pénzügyi támogatásra van szükség.",
+      "cta": "Fizess elő, hogy támogasd",
+      "dismiss": "Bezárás"
+    },
     "tv_series": {
       "actions": {
         "watch": {
