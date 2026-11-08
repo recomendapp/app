@@ -5,6 +5,7 @@ import { Navbar } from '../../components/Navbar';
 import { SidebarInset, SidebarProvider } from '@libs/ui/components/sidebar';
 import { SidebarLeft } from './sidebars/sidebar-left/SidebarLeft';
 import { SidebarRight } from './sidebars/sidebar-right/SidebarRight';
+import { SupportBanner } from '@/components/SupportBanner';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const {
@@ -31,6 +32,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       <SidebarInset
         className={`@container/main ${device === 'mobile' ? 'pb-(--navbar-height) md:pb-0' : ''}`}
       >
+        <SupportBanner />
         <Header className={`${device === 'mobile' ? 'hidden' : ''}`} />
         {children}
       </SidebarInset>
