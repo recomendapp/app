@@ -307,7 +307,7 @@ const RecoSend = () => {
             disabled={!canSave || isSendingReco}
             variant="outline"
             size="lg"
-            onPress={form.handleSubmit(handleSubmit)}
+            onPress={() => void form.handleSubmit(handleSubmit)()}
           >
             {upperFirst(t('common.messages.send'))}
           </Button>

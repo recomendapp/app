@@ -1,11 +1,5 @@
-import {
-  createMaterialTopTabNavigator,
-  MaterialTopTabBarProps,
-  MaterialTopTabNavigationEventMap,
-  MaterialTopTabNavigationOptions,
-} from 'expo-router/js-top-tabs';
-import { ParamListBase, TabNavigationState } from 'expo-router/react-navigation';
-import { Stack, usePathname, useRouter, withLayoutContext } from 'expo-router';
+import { MaterialTopTabBarProps, TopTabs } from 'expo-router/js-top-tabs';
+import { Stack, usePathname, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 import { SegmentedControlTabBar } from '../../../../components/ui/segmented-control-tabbar';
@@ -14,14 +8,9 @@ import { Icons } from '../../../../constants/Icons';
 import tw from '../../../../lib/tw';
 import { useMemo } from 'react';
 
-const Tab = createMaterialTopTabNavigator();
-
-const MaterialTopTabs = withLayoutContext<
-  MaterialTopTabNavigationOptions,
-  typeof Tab.Navigator,
-  TabNavigationState<ParamListBase>,
-  MaterialTopTabNavigationEventMap
->(Tab.Navigator);
+export const unstable_settings = {
+  anchor: 'imports',
+};
 
 const SettingsDataLayout = ({ segment }: { segment: string }) => {
   const t = useTranslations();
@@ -67,19 +56,16 @@ const SettingsDataLayout = ({ segment }: { segment: string }) => {
               : [],
         }}
       />
-      <MaterialTopTabs
-        initialRouteName="imports"
-        tabBar={(props: MaterialTopTabBarProps) => <SegmentedControlTabBar {...props} />}
-      >
-        <MaterialTopTabs.Screen
+      <TopTabs tabBar={(props: MaterialTopTabBarProps) => <SegmentedControlTabBar {...props} />}>
+        <TopTabs.Screen
           name="imports"
           options={{ title: upperFirst(t('pages.settings.data.importer.label')) }}
         />
-        <MaterialTopTabs.Screen
+        <TopTabs.Screen
           name="exports"
           options={{ title: upperFirst(t('pages.settings.data.exporter.label')) }}
         />
-      </MaterialTopTabs>
+      </TopTabs>
     </>
   );
 };

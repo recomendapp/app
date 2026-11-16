@@ -1,4 +1,8 @@
-import { StyleSheet, View, FlatList, ViewToken, Platform } from 'react-native';
+import { StyleSheet, View, FlatList, Platform, type FlatListProps } from 'react-native';
+
+type ViewableItems = Parameters<
+  NonNullable<FlatListProps<unknown>['onViewableItemsChanged']>
+>[0]['viewableItems'];
 import React from 'react';
 import Animated, {
   useSharedValue,
@@ -22,7 +26,7 @@ const OnboardingScreen = () => {
   const shouldInsetsAware = !(Platform.OS === 'ios' && router.canDismiss());
   const insets = useSafeAreaInsets();
 
-  const onViewableItemsChanged = ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+  const onViewableItemsChanged = ({ viewableItems }: { viewableItems: ViewableItems }) => {
     if (viewableItems.length > 0 && viewableItems[0].index !== null) {
       flatListIndex.value = viewableItems[0].index;
     }

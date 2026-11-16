@@ -363,7 +363,7 @@ const PlaylistAddTo = () => {
             disabled={!canSave || isAddingToPlaylist}
             variant="outline"
             size="lg"
-            onPress={form.handleSubmit(handleSubmit)}
+            onPress={() => void form.handleSubmit(handleSubmit)()}
           >
             {upperFirst(t('common.messages.add', { count: selected.length }))}
           </Button>

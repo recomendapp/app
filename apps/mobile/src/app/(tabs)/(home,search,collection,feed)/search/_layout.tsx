@@ -6,6 +6,10 @@ import { upperFirst } from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslations } from 'use-intl';
 
+export const unstable_settings = {
+  anchor: '(tabs)',
+};
+
 const SearchLayout = () => {
   const t = useTranslations();
   const pathname = usePathname();
@@ -79,7 +83,7 @@ const SearchLayout = () => {
           ...headerSearchBar,
         }}
       />
-      <Stack initialRouteName="(tabs)" />
+      <Stack />
     </>
   );
 };

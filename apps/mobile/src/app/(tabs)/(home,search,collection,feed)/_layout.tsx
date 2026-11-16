@@ -2,30 +2,24 @@ import { useAuth } from '../../../providers/AuthProvider';
 import { useTheme } from '../../../providers/ThemeProvider';
 import { Stack } from 'expo-router';
 import { upperFirst } from 'lodash';
-import { useMemo } from 'react';
 import { useTranslations } from 'use-intl';
+
+export const unstable_settings = {
+  // One anchor per segment of the shared route. The former value also branched on `user`,
+  // which `Stack.Protected` below now decides on its own: an unauthenticated visitor never
+  // gets `feed` or `collection/(tabs)` registered, so there is nothing to anchor to.
+  anchor: 'index',
+  search: { anchor: 'search' },
+  collection: { anchor: 'collection/(tabs)' },
+  feed: { anchor: 'feed' },
+};
 
 const AppLayout = ({ segment }: { segment: string }) => {
   const { defaultScreenOptions } = useTheme();
   const t = useTranslations();
   const { user } = useAuth();
-  const initialRouteName = useMemo(() => {
-    switch (segment) {
-      case '(search)':
-        return 'search';
-      case '(feed)':
-        // 'feed' is only registered in the Stack when guard={!!user} passes (see below).
-        return user ? 'feed' : 'index';
-      case '(collection)':
-        // 'collection/(tabs)' is only registered in the Stack when guard={!!user} passes (see below).
-        return user ? 'collection/(tabs)' : 'index';
-      default:
-        return 'index';
-    }
-  }, [segment, user]);
-
   return (
-    <Stack initialRouteName={initialRouteName} screenOptions={defaultScreenOptions}>
+    <Stack screenOptions={defaultScreenOptions}>
       <Stack.Protected guard={!!user}>
         <Stack.Screen
           name="feed"
