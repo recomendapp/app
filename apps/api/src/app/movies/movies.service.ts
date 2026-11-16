@@ -57,11 +57,14 @@ export class MoviesService {
           personId: tmdbMovieCredit.personId,
           order: sql<number>`MIN(${tmdbMovieRole.order})`.as('min_order'),
           roles: sql<Pick<typeof tmdbMovieRole.$inferSelect, 'character' | 'order'>[]>`
-            jsonb_agg(
-              jsonb_build_object(
-                'character', ${tmdbMovieRole.character},
-                'order', ${tmdbMovieRole.order}
-              ) ORDER BY ${tmdbMovieRole.order} ASC
+            COALESCE(
+              jsonb_agg(
+                jsonb_build_object(
+                  'character', ${tmdbMovieRole.character},
+                  'order', ${tmdbMovieRole.order}
+                ) ORDER BY ${tmdbMovieRole.order} ASC
+              ) FILTER (WHERE ${tmdbMovieRole.creditId} IS NOT NULL),
+              '[]'::jsonb
             )
           `.as('roles_agg'),
         })

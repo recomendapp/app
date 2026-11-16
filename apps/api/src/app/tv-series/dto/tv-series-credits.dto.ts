@@ -30,10 +30,14 @@ export class TvSeriesCastingDto {
   @IsInt()
   personId!: number;
 
-  @ApiProperty({ description: 'The primary ordering index for this actor' })
+  @ApiProperty({
+    description: 'The primary ordering index for this actor',
+    nullable: true,
+  })
   @Expose()
+  @IsNullable()
   @IsInt()
-  order!: number;
+  order!: number | null;
 
   @ApiProperty({ type: () => PersonCompactDto })
   @Expose()
