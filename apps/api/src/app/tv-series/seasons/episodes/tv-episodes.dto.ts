@@ -8,6 +8,7 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
+import { IsNullable } from '../../../../common/decorators/is-nullable.decorator';
 import { Expose, Transform, Type } from 'class-transformer';
 import { PaginatedResponseDto, PaginationQueryDto } from '../../../../common/dto/pagination.dto';
 import { SortOrder } from '../../../../common/dto/sort.dto';
@@ -84,10 +85,11 @@ export class TvEpisodeDto {
   @IsString()
   overview!: string | null;
 
-  @ApiProperty({ example: 60 })
+  @ApiProperty({ example: 60, nullable: true })
   @Expose()
+  @IsNullable()
   @IsInt()
-  runtime!: number;
+  runtime!: number | null;
 
   @ApiProperty({ example: '101', nullable: true })
   @Expose()
