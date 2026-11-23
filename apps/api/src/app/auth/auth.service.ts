@@ -204,6 +204,8 @@ const createBetterAuth = async ({
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: true,
+      minPasswordLength: USER_RULES.PASSWORD.MIN,
+      maxPasswordLength: USER_RULES.PASSWORD.MAX,
       password: {
         hash: async (password) => {
           return await bcrypt.hash(password, 10);
