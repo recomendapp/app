@@ -18,7 +18,8 @@ import { useCallback, useMemo } from 'react';
 import { Alert, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFormatter, useTranslations } from 'use-intl';
-import SwipeableMonoActionRow from '../../../../components/ui/swippeable/SwipeableMonoActionRow';
+import { SwipeableActionsRow } from '../../../../components/ui/swippeable/SwipeableActionsRow';
+import { NativeIcons } from '../../../../constants/native-icons';
 import Animated, { LinearTransition, SlideOutLeft } from 'react-native-reanimated';
 import { AnimatedLegendList } from '@legendapp/list/reanimated';
 import { parseApiDate } from '../../../../utils/parseApiDate';
@@ -82,16 +83,15 @@ const SettingsDataImportsScreen = () => {
   const renderItem = useCallback(
     ({ item }: { item: ImportJob }) => (
       <Animated.View exiting={SlideOutLeft.duration(250)}>
-        <SwipeableMonoActionRow
-          rightAction={{
-            type: 'open',
-            icon: <Icons.Delete color={colors.destructiveForeground} />,
-            backgroundColor: colors.destructive,
-            onOpen: () => handleDelete(item),
-          }}
-          childrenContainerStyle={{
-            paddingHorizontal: PADDING_HORIZONTAL,
-          }}
+        <SwipeableActionsRow
+          actionsRight={[
+            {
+              label: t('common.messages.delete'),
+              icon: NativeIcons.trash,
+              onPress: () => handleDelete(item),
+            },
+          ]}
+          style={{ paddingHorizontal: PADDING_HORIZONTAL }}
         >
           <Pressable
             onPress={() => handleOpen(item)}
@@ -121,7 +121,7 @@ const SettingsDataImportsScreen = () => {
               </Badge>
             </View>
           </Pressable>
-        </SwipeableMonoActionRow>
+        </SwipeableActionsRow>
       </Animated.View>
     ),
     [

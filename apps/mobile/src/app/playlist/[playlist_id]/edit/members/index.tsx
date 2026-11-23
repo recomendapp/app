@@ -11,12 +11,12 @@ import { View } from '../../../../../components/ui/view';
 import Fuse from 'fuse.js';
 import { CardUser } from '../../../../../components/cards/CardUser';
 import app from '../../../../../constants/app';
-import Swipeable, { SwipeableMethods } from 'react-native-gesture-handler/ReanimatedSwipeable';
-import Animated, { interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanimated';
+import { SwipeableActionsRow } from '../../../../../components/ui/swippeable/SwipeableActionsRow';
+import { NativeIcons } from '../../../../../constants/native-icons';
 import { PADDING_HORIZONTAL } from '../../../../../theme/globals';
 import { useToast } from '../../../../../components/Toast';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { PlaylistMemberWithUser, UserSummary } from '@libs/api-js';
+import { PlaylistMemberWithUser } from '@libs/api-js';
 import { useQuery } from '@tanstack/react-query';
 import {
   playlistMembersAllOptions,
@@ -32,52 +32,6 @@ import { LegendListRef } from '@legendapp/list/react-native';
 import { RefreshableStateContainer } from '../../../../../components/ui/RefreshableStateContainer';
 import { CardError } from '../../../../../components/cards/CardError';
 import { CardEmpty } from '../../../../../components/cards/CardEmpty';
-
-const RightActions = ({
-  drag,
-  item,
-  swipeable,
-  onDelete,
-}: {
-  drag: SharedValue<number>;
-  item: UserSummary;
-  swipeable: SwipeableMethods;
-  onDelete: (userId: string) => void;
-}) => {
-  const actionWidth = 50;
-  const swipeActions = [
-    {
-      icon: Icons.X,
-      onPress: () => onDelete(item.id!),
-    },
-  ];
-  const styleAnimation = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { translateX: (drag.value - PADDING_HORIZONTAL + actionWidth) * swipeActions.length },
-      ],
-      opacity: interpolate(drag.value, [0, -actionWidth * swipeActions.length], [0, 1]),
-    };
-  });
-
-  return (
-    <Animated.View style={[tw`rounded-r-md overflow-hidden flex-row`, styleAnimation]}>
-      {swipeActions.map((action, index) => (
-        <Button
-          key={index}
-          variant={'ghost'}
-          icon={action.icon}
-          style={[tw`h-full rounded-none`, { width: actionWidth }]}
-          size="icon"
-          onPress={() => {
-            action.onPress();
-            swipeable.close();
-          }}
-        />
-      ))}
-    </Animated.View>
-  );
-};
 
 const ModalPlaylistEditMembers = () => {
   const { user } = useAuth();
@@ -226,18 +180,15 @@ const ModalPlaylistEditMembers = () => {
   const renderItem = useCallback(
     ({ item }: { item: PlaylistMemberWithUser }) => {
       return (
-        <Swipeable
-          friction={2}
-          enableTrackpadTwoFingerGesture
-          renderRightActions={(_, drag, swipeable) => (
-            <RightActions
-              drag={drag}
-              item={item.user}
-              swipeable={swipeable}
-              onDelete={handleDeleteMember}
-            />
-          )}
-          containerStyle={[{ paddingHorizontal: PADDING_HORIZONTAL }]}
+        <SwipeableActionsRow
+          actionsRight={[
+            {
+              label: t('common.messages.remove'),
+              icon: NativeIcons.close,
+              onPress: () => handleDeleteMember(item.user.id!),
+            },
+          ]}
+          style={{ paddingHorizontal: PADDING_HORIZONTAL }}
         >
           <View style={tw`flex-row items-center justify-between gap-2 w-full`}>
             <CardUser
@@ -251,10 +202,10 @@ const ModalPlaylistEditMembers = () => {
               </Button>
             </View>
           </View>
-        </Swipeable>
+        </SwipeableActionsRow>
       );
     },
-    [handleDeleteMember, handleSelectRole, playlistMembersRoleValues],
+    [handleDeleteMember, handleSelectRole, playlistMembersRoleValues, t],
   );
 
   return (
