@@ -203,7 +203,7 @@ const PlaylistSortScreen = () => {
             paddingLeft: insets.left + theme.spaces.horizontal,
             paddingRight: insets.right + theme.spaces.horizontal,
             paddingBottom: theme.spaces.md + insets.bottom,
-            paddingTop: headerHeight,
+            paddingTop: headerHeight + theme.spaces.vertical,
           }}
         />
       ) : (
