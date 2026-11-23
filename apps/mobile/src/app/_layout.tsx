@@ -14,7 +14,7 @@ import { Stack } from 'expo-router';
 import { enableFreeze, enableScreens } from 'react-native-screens';
 import { useTheme } from '../providers/ThemeProvider';
 import { useAuth } from '../providers/AuthProvider';
-import { useVersionPolicy } from '../providers/VersionPolicyProvider';
+import { useGuard } from '../providers/GuardProvider';
 import { useHomeWidgetsSync } from '../hooks/useHomeWidgetsSync';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
@@ -38,18 +38,18 @@ configureReanimatedLogger({
 const RootLayoutNav = () => {
   const t = useTranslations();
   const { user } = useAuth();
-  const { isUpdateRequired } = useVersionPolicy();
+  const { activeGuard, activeRoute } = useGuard();
   const { defaultScreenOptions, isLiquidGlassAvailable } = useTheme();
   useHomeWidgetsSync();
   return (
     <Stack screenOptions={defaultScreenOptions}>
-      <Stack.Protected guard={isUpdateRequired}>
+      <Stack.Protected guard={activeGuard === 'version'} redirectTo="/">
         <Stack.Screen
           name="update-required"
-          options={{ headerShown: false, gestureEnabled: false }}
+          options={{ headerShown: false, gestureEnabled: false, animation: 'none' }}
         />
       </Stack.Protected>
-      <Stack.Protected guard={!isUpdateRequired}>
+      <Stack.Protected guard={activeGuard === null} redirectTo={activeRoute ?? undefined}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         {/* PLAYLISTS */}
         <Stack.Protected guard={!!user}>
