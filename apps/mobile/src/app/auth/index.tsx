@@ -1,8 +1,8 @@
-import { Button } from '../../../components/ui/Button';
-import { View } from '../../../components/ui/view';
-import { Icons } from '../../../constants/Icons';
-import tw from '../../../lib/tw';
-import { useTheme } from '../../../providers/ThemeProvider';
+import { Button } from '../../components/ui/Button';
+import { View } from '../../components/ui/view';
+import { Icons } from '../../constants/Icons';
+import tw from '../../lib/tw';
+import { useTheme } from '../../providers/ThemeProvider';
 import { Href, Link, Stack } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { ScrollView, useWindowDimensions } from 'react-native';
@@ -10,16 +10,16 @@ import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { useTranslations } from 'use-intl';
 import { LinearGradient } from 'expo-linear-gradient';
 import Color from 'color';
-import { Text } from '../../../components/ui/text';
-import { getMediaDetails } from '../../../components/utils/getMediaDetails';
+import { Text } from '../../components/ui/text';
+import { getMediaDetails } from '../../components/utils/getMediaDetails';
 import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useMemo, useState } from 'react';
-import { LoopCarousel } from '../../../components/ui/LoopCarousel';
+import { LoopCarousel } from '../../components/ui/LoopCarousel';
 import { Image } from 'expo-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery } from '@tanstack/react-query';
-import { uiBackgroundsOptions } from '../../../api/ui/uiOptions';
-import { useModalHeaderOptions } from '../../../hooks/useModalHeaderOptions';
+import { uiBackgroundsOptions } from '../../api/ui/uiOptions';
+import { useModalHeaderOptions } from '../../hooks/useModalHeaderOptions';
 import { UiBackground } from '@libs/api-js';
 
 const AuthHeader = ({
@@ -80,7 +80,7 @@ const AuthScreen = () => {
   const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const [activeBackground, setActiveBackground] = useState<UiBackground | null>(null);
-  const modalHeaderOptions = useModalHeaderOptions();
+  const modalHeaderOptions = useModalHeaderOptions({ forceCross: true });
   const activeDetails = useMemo(() => {
     switch (activeBackground?.type) {
       case 'movie':

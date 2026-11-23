@@ -258,9 +258,11 @@ const RootLayoutNav = () => {
         {/* AUTH */}
         <Stack.Protected guard={!user}>
           <Stack.Screen
-            name="auth/(main)"
+            name="auth/index"
             options={{
-              headerShown: false,
+              title: upperFirst(t('common.messages.welcome')),
+              headerTransparent: true,
+              headerStyle: { backgroundColor: 'transparent' },
               presentation: Platform.select({
                 ios: 'modal',
                 android: 'formSheet',
@@ -269,15 +271,61 @@ const RootLayoutNav = () => {
             }}
           />
           <Stack.Screen
-            name="auth/(password)"
+            name="auth/login/index"
             options={{
-              title: t('common.messages.forgot_password'),
-              headerShown: false,
-              presentation: Platform.select({
-                ios: 'modal',
-                android: 'formSheet',
-                default: 'modal',
-              }),
+              headerTitle: upperFirst(t('common.messages.login')),
+              headerTransparent: true,
+              headerStyle: { backgroundColor: 'transparent' },
+              presentation: 'formSheet',
+              sheetGrabberVisible: false,
+              sheetAllowedDetents: 'fitToContents',
+              sheetInitialDetentIndex: 0,
+            }}
+          />
+          <Stack.Screen
+            name="auth/login/otp"
+            options={{
+              headerTitle: upperFirst(t('common.messages.otp')),
+              headerTransparent: true,
+              headerStyle: { backgroundColor: 'transparent' },
+              presentation: 'formSheet',
+              sheetGrabberVisible: false,
+              gestureEnabled: false,
+              sheetAllowedDetents: 'fitToContents',
+              sheetInitialDetentIndex: 0,
+            }}
+          />
+          <Stack.Screen
+            name="auth/signup"
+            options={{
+              headerTitle: upperFirst(t('common.messages.signup')),
+              presentation: 'modal',
+            }}
+          />
+          <Stack.Screen
+            name="auth/forgot-password"
+            options={{
+              headerTitle: upperFirst(t('common.messages.forgot_password')),
+              headerTransparent: true,
+              headerStyle: { backgroundColor: 'transparent' },
+              presentation: 'formSheet',
+              sheetGrabberVisible: false,
+              gestureEnabled: false,
+              sheetAllowedDetents: 'fitToContents',
+              sheetInitialDetentIndex: 0,
+            }}
+          />
+          <Stack.Screen
+            name="auth/reset-password"
+            options={{
+              headerTitle: upperFirst(t('common.messages.reset_your_password')),
+              headerTransparent: true,
+              headerStyle: { backgroundColor: 'transparent' },
+              presentation: 'formSheet',
+              sheetGrabberVisible: false,
+              gestureEnabled: false,
+              sheetAllowedDetents: 'fitToContents',
+              sheetInitialDetentIndex: 0,
             }}
           />
         </Stack.Protected>
