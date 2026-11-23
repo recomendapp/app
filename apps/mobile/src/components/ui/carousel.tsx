@@ -391,10 +391,7 @@ const PaginationDot = ({
     return { width: interpolate(active, [0, 1], [DOT_SIZE, ACTIVE_DOT_WIDTH]) };
   });
 
-  // Gated on the settled index, not on `progress`: the dot being swiped towards
-  // shows an empty track and only starts filling once the carousel lands on it.
   const fillStyle = useAnimatedStyle(() => {
-    if (activeIndex.get() !== index) return { width: 0, opacity: 0 };
     const active = interpolate(
       Math.abs(slideDelta(progress.get(), index, count)),
       [0, 1],
@@ -402,7 +399,11 @@ const PaginationDot = ({
       Extrapolation.CLAMP,
     );
     const trackWidth = interpolate(active, [0, 1], [DOT_SIZE, ACTIVE_DOT_WIDTH]);
-    return { width: trackWidth * autoPlayProgress.get(), opacity: active };
+    const elapsed = activeIndex.get() === index ? autoPlayProgress.get() : 0;
+    return {
+      width: interpolate(elapsed, [0, 1], [DOT_SIZE, trackWidth], Extrapolation.CLAMP),
+      opacity: active,
+    };
   });
 
   return (
