@@ -4,8 +4,8 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "android": "expo run:android",
-    "ios": "expo run:ios",
+    "android": "expo run:android --port 19004",
+    "ios": "expo run:ios --port 19004",
     "lint": "expo lint"
   },
   "dependencies": {

@@ -84,7 +84,7 @@ describe('commonSchema', () => {
     const result = commonSchema.parse({});
     expect(result.NODE_ENV).toBe('development');
     expect(result.LOG_LEVEL).toBe('info');
-    expect(result.WEB_APP_URL).toBe('http://localhost:3000');
+    expect(result.WEB_APP_URL).toBe('http://localhost:19000');
   });
 
   it('rejects an unsupported NODE_ENV', () => {

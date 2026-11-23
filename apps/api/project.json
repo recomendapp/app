@@ -86,11 +86,11 @@
       "continuous": true,
       "executor": "nx:run-commands",
       "options": {
-        "command": "HOST=localhost bunx @modelcontextprotocol/inspector --web --transport http --server-url http://localhost:9000/mcp"
+        "command": "HOST=localhost bunx @modelcontextprotocol/inspector --web --transport http --server-url http://localhost:19001/mcp"
       },
       "configurations": {
         "cli": {
-          "command": "HOST=localhost bunx @modelcontextprotocol/inspector --cli --transport http --server-url http://localhost:9000/mcp"
+          "command": "HOST=localhost bunx @modelcontextprotocol/inspector --cli --transport http --server-url http://localhost:19001/mcp"
         }
       }
     },
