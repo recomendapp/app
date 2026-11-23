@@ -14,7 +14,7 @@
     "serve": {
       "dependsOn": ["^build", "api:serve"],
       "options": {
-        "command": "bun --bun next dev"
+        "command": "bun --bun next dev -p 19000"
       }
     },
     "start": {

@@ -44,7 +44,7 @@ export function toISO8601Duration(minutes: number): string {
 }
 
 const PRODUCTION_URL = 'https://recomend.app';
-const DEVELOPMENT_URL = 'http://localhost:3000';
+const DEVELOPMENT_URL = 'http://localhost:19000';
 
 /**
  * The site's own origin, never with a trailing slash.

@@ -17,6 +17,9 @@
         "command": "tsc --noEmit -p apps/mobile/tsconfig.app.json"
       }
     },
+    "start": {
+      "options": { "port": 19004 }
+    },
     "dev": {
       "executor": "nx:run-commands",
       "options": {
@@ -26,13 +29,13 @@
     "dev-ios": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "APP_VARIANT=development nx run-ios mobile"
+        "command": "APP_VARIANT=development nx run-ios mobile --port 19004"
       }
     },
     "dev-android": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "APP_VARIANT=development nx run-android mobile"
+        "command": "APP_VARIANT=development nx run-android mobile --port 19004"
       }
     },
     "prebuild": {
