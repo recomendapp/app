@@ -5,12 +5,14 @@ import { Stack, usePathname, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslations } from 'use-intl';
+import { useTheme } from '../../../../providers/ThemeProvider';
 
 export const unstable_settings = {
   anchor: '(tabs)',
 };
 
 const SearchLayout = () => {
+  const { statusBarStyle } = useTheme();
   const t = useTranslations();
   const pathname = usePathname();
   const router = useRouter();
@@ -83,7 +85,7 @@ const SearchLayout = () => {
           ...headerSearchBar,
         }}
       />
-      <Stack />
+      <Stack screenOptions={{ statusBarStyle }} />
     </>
   );
 };

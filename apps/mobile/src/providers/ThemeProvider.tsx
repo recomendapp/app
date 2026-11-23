@@ -4,16 +4,19 @@ import { createContext, use, useCallback, useEffect, useMemo, useState } from 'r
 import { setBackgroundColorAsync } from 'expo-system-ui';
 import { Appearance, Platform } from 'react-native';
 import { isLiquidGlassAvailable as utilsIsLiquidGlassAvailable } from 'expo-glass-effect';
-import { setStyle as setNavigationBarStyle } from 'expo-navigation-bar';
+import { NavigationBar } from 'expo-navigation-bar';
 import { getModeFromColor } from '../utils/getModeFromColor';
 import { NativeStackNavigationOptions } from 'expo-router';
 import { theme as staticTheme, type Theme } from '../theme';
 
 type ThemeMode = 'light' | 'dark';
 
+type StatusBarStyle = NonNullable<NativeStackNavigationOptions['statusBarStyle']>;
+
 type ThemeContextType = {
   colors: TColors;
   theme: Theme;
+  statusBarStyle: StatusBarStyle;
   applyColors: (theme: keyof typeof Colors) => void;
   defaultScreenOptions: NativeStackNavigationOptions;
   mode: ThemeMode;
@@ -34,9 +37,12 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     setColors(Colors[theme]);
   }, []);
 
+  const statusBarStyle: StatusBarStyle = mode === 'dark' ? 'light' : 'dark';
+
   const defaultScreenOptions = useMemo<NativeStackNavigationOptions>(
     () => ({
       animation: 'ios_from_right',
+      statusBarStyle,
       headerShown: true,
       headerTintColor: colors.foreground,
       headerStyle: {
@@ -51,13 +57,13 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
       headerTitleAlign: 'center',
       headerBackButtonDisplayMode: 'minimal',
     }),
-    [colors],
+    [colors, statusBarStyle],
   );
 
   useEffect(() => {
     Appearance.setColorScheme(mode);
     if (Platform.OS === 'android') {
-      setNavigationBarStyle(mode);
+      NavigationBar.setStyle(mode);
     }
   }, [mode]);
 
@@ -86,6 +92,7 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
           applyColors,
           colors,
           theme: staticTheme,
+          statusBarStyle,
           defaultScreenOptions,
           mode,
           isLiquidGlassAvailable,

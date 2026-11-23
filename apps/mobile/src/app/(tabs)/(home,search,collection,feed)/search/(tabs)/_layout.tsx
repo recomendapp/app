@@ -78,6 +78,7 @@ const Filter = (props: NativeStackHeaderProps) => {
 };
 
 const SearchTabsLayout = () => {
+  const { statusBarStyle } = useTheme();
   return (
     <>
       <Stack.Screen
@@ -86,7 +87,7 @@ const SearchTabsLayout = () => {
           header: (props) => <Filter {...props} />,
         }}
       />
-      <Stack screenOptions={{ headerShown: false, animation: 'fade' }} />
+      <Stack screenOptions={{ headerShown: false, animation: 'fade', statusBarStyle }} />
     </>
   );
 };
