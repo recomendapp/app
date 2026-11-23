@@ -25,6 +25,7 @@ import { getIdFromSlug } from '../../../../../../../utils/getIdFromSlug';
 import tw from '../../../../../../../lib/tw';
 import { Divider } from '../../../../../../../components/ui/Divider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { isIpad } from '../../../../../../../platform/detection';
 
 // Same shape as season/[season_number]/log.tsx, minus status states and the like/review actions
 // — an episode log is a plain watched/not-watched record with an optional rating (see
@@ -45,6 +46,7 @@ const TvEpisodeLogScreen = () => {
   const t = useTranslations();
   const toast = useToast();
   const insets = useSafeAreaInsets();
+  const paddingBottom = isIpad ? theme.spaces.vertical : 0;
 
   const { data: season } = useQuery(tvSeasonOptions({ tvSeriesId, seasonNumber }));
   const { data: log } = useQuery(
@@ -208,7 +210,7 @@ const TvEpisodeLogScreen = () => {
           style={{
             paddingLeft: insets.left + theme.spaces.horizontal,
             paddingRight: insets.right + theme.spaces.horizontal,
-            paddingBottom: theme.spaces.md,
+            paddingBottom: paddingBottom,
           }}
         >
           <Button variant="outline" onPress={() => router.dismiss()}>

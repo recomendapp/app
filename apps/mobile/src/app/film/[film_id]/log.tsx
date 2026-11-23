@@ -25,6 +25,7 @@ import { getIdFromSlug } from '../../../utils/getIdFromSlug';
 import tw from '../../../lib/tw';
 import { Divider } from '../../../components/ui/Divider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { isIpad } from '../../../platform/detection';
 
 const FilmLogScreen = () => {
   const { film_id } = useLocalSearchParams<{ film_id: string }>();
@@ -36,6 +37,7 @@ const FilmLogScreen = () => {
   const formatter = useFormatter();
   const toast = useToast();
   const insets = useSafeAreaInsets();
+  const paddingBottom = isIpad ? theme.spaces.vertical : 0;
 
   const { data: movie } = useQuery(movieOptions({ movieId }));
   const { data: log } = useQuery(movieLogOptions({ userId: user?.id, movieId }));
@@ -213,7 +215,7 @@ const FilmLogScreen = () => {
           style={{
             paddingLeft: insets.left + theme.spaces.horizontal,
             paddingRight: insets.right + theme.spaces.horizontal,
-            paddingBottom: theme.spaces.md,
+            paddingBottom: paddingBottom,
           }}
         >
           <Button variant="outline" onPress={() => router.dismiss()}>

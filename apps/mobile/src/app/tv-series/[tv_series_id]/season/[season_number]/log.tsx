@@ -25,6 +25,7 @@ import { getIdFromSlug } from '../../../../../utils/getIdFromSlug';
 import tw from '../../../../../lib/tw';
 import { Divider } from '../../../../../components/ui/Divider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { isIpad } from '../../../../../platform/detection';
 
 // Same shape as tv-series/[tv_series_id]/log.tsx, minus like and review — seasons have neither
 // (see ButtonLogTvSeasonWatch.tsx / ButtonLogTvSeasonRating.tsx on web).
@@ -41,6 +42,7 @@ const TvSeasonLogScreen = () => {
   const t = useTranslations();
   const toast = useToast();
   const insets = useSafeAreaInsets();
+  const paddingBottom = isIpad ? theme.spaces.vertical : 0;
 
   const { data: season } = useQuery(tvSeasonOptions({ tvSeriesId, seasonNumber }));
   const { data: log } = useQuery(
@@ -263,7 +265,7 @@ const TvSeasonLogScreen = () => {
           style={{
             paddingLeft: insets.left + theme.spaces.horizontal,
             paddingRight: insets.right + theme.spaces.horizontal,
-            paddingBottom: theme.spaces.md,
+            paddingBottom: paddingBottom,
           }}
         >
           <Button variant="outline" onPress={() => router.dismiss()}>

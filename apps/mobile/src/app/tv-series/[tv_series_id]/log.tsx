@@ -25,6 +25,7 @@ import { getIdFromSlug } from '../../../utils/getIdFromSlug';
 import tw from '../../../lib/tw';
 import { Divider } from '../../../components/ui/Divider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { isIpad } from '../../../platform/detection';
 
 const TvSeriesLogScreen = () => {
   const { tv_series_id } = useLocalSearchParams<{ tv_series_id: string }>();
@@ -36,6 +37,7 @@ const TvSeriesLogScreen = () => {
   const formatter = useFormatter();
   const toast = useToast();
   const insets = useSafeAreaInsets();
+  const paddingBottom = isIpad ? theme.spaces.vertical : 0;
 
   const { data: tvSeries } = useQuery(tvSeriesOptions({ tvSeriesId }));
   const { data: log } = useQuery(tvSeriesLogOptions({ userId: user?.id, tvSeriesId }));
@@ -283,7 +285,7 @@ const TvSeriesLogScreen = () => {
           style={{
             paddingLeft: insets.left + theme.spaces.horizontal,
             paddingRight: insets.right + theme.spaces.horizontal,
-            paddingBottom: theme.spaces.md,
+            paddingBottom: paddingBottom,
           }}
         >
           <Button variant="outline" onPress={() => router.dismiss()}>
