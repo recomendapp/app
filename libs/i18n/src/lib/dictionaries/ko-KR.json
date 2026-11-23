@@ -1351,6 +1351,11 @@
         }
       }
     },
+    "support_banner": {
+      "message": "{app} 운영에는 여러분의 후원이 필요합니다.",
+      "cta": "구독으로 후원하기",
+      "dismiss": "닫기"
+    },
     "tv_series": {
       "actions": {
         "watch": {

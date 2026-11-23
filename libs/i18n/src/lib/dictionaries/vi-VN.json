@@ -1351,6 +1351,11 @@
         }
       }
     },
+    "support_banner": {
+      "message": "{app} cần sự hỗ trợ tài chính để tiếp tục tồn tại.",
+      "cta": "Đăng ký để ủng hộ",
+      "dismiss": "Đóng"
+    },
     "tv_series": {
       "actions": {
         "watch": {

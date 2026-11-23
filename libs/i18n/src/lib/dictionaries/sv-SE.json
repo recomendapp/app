@@ -1351,6 +1351,11 @@
         }
       }
     },
+    "support_banner": {
+      "message": "{app} behöver ekonomiskt stöd för att finnas kvar.",
+      "cta": "Prenumerera och stötta",
+      "dismiss": "Stäng"
+    },
     "tv_series": {
       "actions": {
         "watch": {

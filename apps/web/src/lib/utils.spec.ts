@@ -61,6 +61,6 @@ describe('getURL', () => {
         NEXT_PUBLIC_VERCEL_URL: undefined,
         NODE_ENV: 'development',
       }),
-    ).toBe('http://localhost:3000');
+    ).toBe('http://localhost:19000');
   });
 });

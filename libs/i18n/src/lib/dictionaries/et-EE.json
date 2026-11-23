@@ -1351,6 +1351,11 @@
         }
       }
     },
+    "support_banner": {
+      "message": "{app} vajab püsimiseks rahalist tuge.",
+      "cta": "Telli ja toeta",
+      "dismiss": "Sulge"
+    },
     "tv_series": {
       "actions": {
         "watch": {

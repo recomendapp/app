@@ -1351,6 +1351,11 @@
         }
       }
     },
+    "support_banner": {
+      "message": "{app} ir vajadzīgs finansiāls atbalsts, lai turpinātu pastāvēt.",
+      "cta": "Abonē un atbalsti",
+      "dismiss": "Aizvērt"
+    },
     "tv_series": {
       "actions": {
         "watch": {

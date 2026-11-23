@@ -97,11 +97,14 @@ export class TvSeriesService {
           personId: tmdbTvSeriesCredit.personId,
           order: sql<number>`MIN(${tmdbTvSeriesRole.order})`.as('min_order'),
           roles: sql<Pick<typeof tmdbTvSeriesRole.$inferSelect, 'character' | 'order'>[]>`
-            jsonb_agg(
-              jsonb_build_object(
-                'character', ${tmdbTvSeriesRole.character},
-                'order', ${tmdbTvSeriesRole.order}
-              ) ORDER BY ${tmdbTvSeriesRole.order} ASC
+            COALESCE(
+              jsonb_agg(
+                jsonb_build_object(
+                  'character', ${tmdbTvSeriesRole.character},
+                  'order', ${tmdbTvSeriesRole.order}
+                ) ORDER BY ${tmdbTvSeriesRole.order} ASC
+              ) FILTER (WHERE ${tmdbTvSeriesRole.creditId} IS NOT NULL),
+              '[]'::jsonb
             )
           `.as('roles_agg'),
         })

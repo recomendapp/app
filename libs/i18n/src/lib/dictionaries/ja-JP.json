@@ -1351,6 +1351,11 @@
         }
       }
     },
+    "support_banner": {
+      "message": "{app} の運営には、皆さまの支援が必要です。",
+      "cta": "購読して支援する",
+      "dismiss": "閉じる"
+    },
     "tv_series": {
       "actions": {
         "watch": {

@@ -30,7 +30,7 @@ export const extensionSchema = redisSchema;
 export const commonSchema = extensionSchema.extend({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
-  WEB_APP_URL: z.url().default('http://localhost:3000'),
+  WEB_APP_URL: z.url().default('http://localhost:19000'),
 });
 
 // Static assets served from RustFS/S3 (see libs/assets)

@@ -1351,6 +1351,11 @@
         }
       }
     },
+    "support_banner": {
+      "message": "{app} heeft financiële steun nodig om te blijven bestaan.",
+      "cta": "Neem een abonnement",
+      "dismiss": "Sluiten"
+    },
     "tv_series": {
       "actions": {
         "watch": {

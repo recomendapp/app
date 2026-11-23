@@ -1351,6 +1351,11 @@
         }
       }
     },
+    "support_banner": {
+      "message": "{app} potřebuje finanční podporu, aby mohl dál existovat.",
+      "cta": "Předplať si a podpoř nás",
+      "dismiss": "Zavřít"
+    },
     "tv_series": {
       "actions": {
         "watch": {

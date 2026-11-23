@@ -1351,6 +1351,11 @@
         }
       }
     },
+    "support_banner": {
+      "message": "{app} are nevoie de sprijin financiar pentru a continua să existe.",
+      "cta": "Abonează-te pentru a susține",
+      "dismiss": "Închide"
+    },
     "tv_series": {
       "actions": {
         "watch": {

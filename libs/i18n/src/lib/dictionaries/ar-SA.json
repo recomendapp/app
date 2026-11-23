@@ -1351,6 +1351,11 @@
         }
       }
     },
+    "support_banner": {
+      "message": "{app} بحاجة إلى دعم مالي للاستمرار.",
+      "cta": "اشترك لدعمنا",
+      "dismiss": "إغلاق"
+    },
     "tv_series": {
       "actions": {
         "watch": {

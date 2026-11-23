@@ -94,8 +94,8 @@ it explicitly, e.g. `apps/notify/project.json`:
 }
 ```
 
-Locally, `${ASSETS_BASE_URL}` resolves to `http://localhost:9900/medias/static`,
-so the example above resolves to `http://localhost:9900/medias/static/app/icon.png`.
+Locally, `${ASSETS_BASE_URL}` resolves to `http://localhost:19013/medias/static`,
+so the example above resolves to `http://localhost:19013/medias/static/app/icon.png`.
 
 ## Local dev
 
