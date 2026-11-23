@@ -13,6 +13,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { playlistFeaturedInfiniteOptions } from '@libs/query-client';
 import { PlaylistWithOwner } from '@libs/api-js';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useKeyboardState } from 'react-native-keyboard-controller';
 
 interface FeaturedPlaylistsProps {
   contentContainerStyle?: StyleProp<ViewStyle>;
@@ -23,6 +24,7 @@ const FeaturedPlaylists = ({ contentContainerStyle }: FeaturedPlaylistsProps) =>
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
+  const { isVisible: keyboardVisible, height: keyboardHeight } = useKeyboardState((state) => state);
   const { data, isLoading, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery(
     playlistFeaturedInfiniteOptions(),
   );
@@ -61,7 +63,9 @@ const FeaturedPlaylists = ({ contentContainerStyle }: FeaturedPlaylistsProps) =>
       contentContainerStyle={[
         {
           gap: theme.spaces.md,
-          paddingBottom: insets.bottom + theme.spaces.md,
+          paddingBottom: keyboardVisible
+            ? keyboardHeight + theme.spaces.md
+            : insets.bottom + theme.spaces.md,
           paddingLeft: insets.left + theme.spaces.horizontal,
           paddingRight: insets.right + theme.spaces.horizontal,
         },

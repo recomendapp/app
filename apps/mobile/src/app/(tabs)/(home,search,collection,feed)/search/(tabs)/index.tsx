@@ -16,10 +16,9 @@ import { Link } from 'expo-router';
 import { clamp, upperFirst } from 'lodash';
 import { useRef } from 'react';
 import { useWindowDimensions, ScrollView, RefreshControl } from 'react-native';
-import { KeyboardAwareScrollView } from '../../../../../components/ui/KeyboardAwareScrollView';
 import { useTranslations } from 'use-intl';
 import ErrorMessage from '../../../../../components/ErrorMessage';
-import { KeyboardAwareScrollViewRef, useKeyboardState } from 'react-native-keyboard-controller';
+import { useKeyboardState } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery } from '@tanstack/react-query';
 import { searchGlobalOptions } from '@libs/query-client';
@@ -61,16 +60,18 @@ export const SearchResults = ({ search, ...props }: SearchResultsProps) => {
   );
 
   const loading = data === undefined || isLoading;
-  const scrollRef = useRef<KeyboardAwareScrollViewRef>(null);
+  const scrollRef = useRef<ScrollView>(null);
 
   useScrollToTop(scrollRef);
 
   return (
-    <KeyboardAwareScrollView
+    <ScrollView
       ref={scrollRef}
       contentContainerStyle={{
         gap: theme.spaces.md,
-        paddingBottom: insets.bottom + theme.spaces.md,
+        paddingBottom: keyboardVisible
+          ? keyboardHeight + theme.spaces.md
+          : insets.bottom + theme.spaces.md,
       }}
       keyboardShouldPersistTaps="handled"
       scrollIndicatorInsets={{
@@ -111,7 +112,7 @@ export const SearchResults = ({ search, ...props }: SearchResultsProps) => {
             ) : null)}
         </>
       )}
-    </KeyboardAwareScrollView>
+    </ScrollView>
   );
 };
 
