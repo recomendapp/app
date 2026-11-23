@@ -17,6 +17,7 @@ const TabsLayout = () => {
 
   return (
     <NativeTabs
+      tintColor={colors.primary}
       iconColor={{
         default: colors.foreground,
         selected: isIOS ? colors.primary : colors.foreground,
