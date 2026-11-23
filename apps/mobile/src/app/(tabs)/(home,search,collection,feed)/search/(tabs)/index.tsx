@@ -74,7 +74,7 @@ export const SearchResults = ({ search, ...props }: SearchResultsProps) => {
       }}
       keyboardShouldPersistTaps="handled"
       scrollIndicatorInsets={{
-        bottom: keyboardVisible ? keyboardHeight - insets.bottom : insets.bottom,
+        bottom: keyboardVisible ? keyboardHeight - insets.bottom : 0,
       }}
       refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
       {...props}

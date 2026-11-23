@@ -75,9 +75,6 @@ const ProfileFollowersScreen = () => {
         paddingRight: insets.right + theme.spaces.horizontal,
         paddingBottom: insets.bottom + theme.spaces.md,
       }}
-      scrollIndicatorInsets={{
-        bottom: insets.bottom,
-      }}
       keyExtractor={(item) => item.id}
       onEndReached={hasNextPage ? () => fetchNextPage() : undefined}
       onRefresh={refetch}

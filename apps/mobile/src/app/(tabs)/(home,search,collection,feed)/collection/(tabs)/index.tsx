@@ -99,7 +99,6 @@ const CollectionScreen = () => {
         paddingRight: insets.right + theme.spaces.horizontal,
         paddingBottom: insets.bottom + theme.spaces.md,
       }}
-      scrollIndicatorInsets={{ bottom: insets.bottom }}
       keyExtractor={(item) =>
         item.type === 'static' ? `static-${item.data.label}` : item.data.id.toString()
       }

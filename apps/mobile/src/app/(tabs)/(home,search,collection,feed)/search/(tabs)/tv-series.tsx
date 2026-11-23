@@ -124,7 +124,7 @@ const SearchTvSeriesScreen = () => {
           gap: theme.spaces.md,
         }}
         scrollIndicatorInsets={{
-          bottom: keyboardVisible ? keyboardHeight - insets.bottom : insets.bottom,
+          bottom: keyboardVisible ? keyboardHeight - insets.bottom : 0,
         }}
         keyExtractor={(item) => item.id.toString()}
         ListEmptyComponent={

@@ -95,7 +95,6 @@ const CollectionSavedScreen = () => {
         paddingBottom: insets.bottom + theme.spaces.md,
       }}
       maintainVisibleContentPosition={false}
-      scrollIndicatorInsets={{ bottom: insets.bottom }}
       keyExtractor={(item) => item.id.toString()}
       onEndReached={hasNextPage ? () => fetchNextPage() : undefined}
       onEndReachedThreshold={0.3}

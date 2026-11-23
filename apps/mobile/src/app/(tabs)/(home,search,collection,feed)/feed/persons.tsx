@@ -188,9 +188,6 @@ const CastCrewFeedScreen = () => {
           gap: theme.spaces.md,
           flexGrow: 1,
         }}
-        scrollIndicatorInsets={{
-          bottom: insets.bottom,
-        }}
         keyExtractor={keyExtractor}
         onEndReached={onEndReached}
         onEndReachedThreshold={0.3}
