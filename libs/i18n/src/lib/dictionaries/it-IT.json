@@ -731,7 +731,7 @@
           },
           "submit": "Accedi",
           "forgot_password": "Password dimenticata?",
-          "wrong_credentials": "L'email o la password non sono corretti"
+          "wrong_credentials": "L'identificativo o la password non sono corretti"
         },
         "otp": {
           "password_login": "Preferisci accedere con una password?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Conferma il codice",
-          "description": "Un codice di verifica è stato inviato all'indirizzo {email}"
+          "description": "Un link per reimpostare la password è stato inviato all'indirizzo {email}"
         }
       },
       "reset_password": {

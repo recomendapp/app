@@ -731,7 +731,7 @@
           },
           "submit": "Zaloguj się",
           "forgot_password": "Nie pamiętasz hasła?",
-          "wrong_credentials": "E-mail lub hasło jest nieprawidłowe"
+          "wrong_credentials": "Login lub hasło jest nieprawidłowe"
         },
         "otp": {
           "password_login": "Wolisz zalogować się hasłem?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Potwierdź kod",
-          "description": "Kod weryfikacyjny został wysłany na adres {email}"
+          "description": "Link do zresetowania hasła został wysłany na adres {email}"
         }
       },
       "reset_password": {

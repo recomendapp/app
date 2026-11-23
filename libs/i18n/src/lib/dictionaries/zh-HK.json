@@ -731,7 +731,7 @@
           },
           "submit": "登入",
           "forgot_password": "忘記密碼？",
-          "wrong_credentials": "電子郵件或密碼不正確"
+          "wrong_credentials": "帳號或密碼不正確"
         },
         "otp": {
           "password_login": "想用密碼登入？",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "確認驗證碼",
-          "description": "驗證碼已發送至 {email}"
+          "description": "密碼重設連結已發送至 {email}"
         }
       },
       "reset_password": {

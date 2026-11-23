@@ -731,7 +731,7 @@
           },
           "submit": "ログイン",
           "forgot_password": "パスワードをお忘れですか？",
-          "wrong_credentials": "メールアドレスまたはパスワードが正しくありません"
+          "wrong_credentials": "ログインIDまたはパスワードが正しくありません"
         },
         "otp": {
           "password_login": "パスワードでログインしますか？",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "コードを確認",
-          "description": "確認コードを{email}に送信しました"
+          "description": "パスワード再設定用のリンクを{email}に送信しました"
         }
       },
       "reset_password": {

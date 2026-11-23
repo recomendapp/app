@@ -731,7 +731,7 @@
           },
           "submit": "Přihlásit se",
           "forgot_password": "Zapomněl jsi heslo?",
-          "wrong_credentials": "E-mail nebo heslo je nesprávné"
+          "wrong_credentials": "Přihlašovací jméno nebo heslo je nesprávné"
         },
         "otp": {
           "password_login": "Chceš se raději přihlásit heslem?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Potvrdit kód",
-          "description": "Ověřovací kód byl odeslán na adresu {email}"
+          "description": "Odkaz pro obnovení hesla byl odeslán na adresu {email}"
         }
       },
       "reset_password": {

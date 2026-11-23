@@ -731,7 +731,7 @@
           },
           "submit": "Logg inn",
           "forgot_password": "Glemt passordet?",
-          "wrong_credentials": "E-postadressen eller passordet er feil"
+          "wrong_credentials": "Innloggingen eller passordet er feil"
         },
         "otp": {
           "password_login": "Vil du heller logge inn med et passord?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Bekreft koden",
-          "description": "En bekreftelseskode er sendt til adressen {email}"
+          "description": "En lenke for å nullstille passordet er sendt til adressen {email}"
         }
       },
       "reset_password": {

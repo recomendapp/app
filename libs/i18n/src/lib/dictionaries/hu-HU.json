@@ -731,7 +731,7 @@
           },
           "submit": "Bejelentkezés",
           "forgot_password": "Elfelejtetted a jelszavad?",
-          "wrong_credentials": "Az e-mail-cím vagy a jelszó hibás"
+          "wrong_credentials": "A bejelentkezési azonosító vagy a jelszó hibás"
         },
         "otp": {
           "password_login": "Inkább jelszóval jelentkezel be?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Kód megerősítése",
-          "description": "Egy ellenőrző kódot küldtünk erre a címre: {email}"
+          "description": "Egy jelszó-visszaállítási linket küldtünk erre a címre: {email}"
         }
       },
       "reset_password": {

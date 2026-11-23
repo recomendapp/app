@@ -731,7 +731,7 @@
           },
           "submit": "Logga in",
           "forgot_password": "Glömt lösenordet?",
-          "wrong_credentials": "E-postadressen eller lösenordet är felaktigt"
+          "wrong_credentials": "Inloggningsnamnet eller lösenordet är felaktigt"
         },
         "otp": {
           "password_login": "Vill du hellre logga in med ett lösenord?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Bekräfta koden",
-          "description": "En verifieringskod har skickats till adressen {email}"
+          "description": "En länk för att återställa lösenordet har skickats till adressen {email}"
         }
       },
       "reset_password": {

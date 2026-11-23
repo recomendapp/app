@@ -731,7 +731,7 @@
           },
           "submit": "Войти",
           "forgot_password": "Забыл пароль?",
-          "wrong_credentials": "Email или пароль неверны"
+          "wrong_credentials": "Логин или пароль неверны"
         },
         "otp": {
           "password_login": "Предпочитаешь войти с паролем?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Подтвердить код",
-          "description": "Код подтверждения отправлен на адрес {email}"
+          "description": "Ссылка для сброса пароля отправлена на адрес {email}"
         }
       },
       "reset_password": {

@@ -731,7 +731,7 @@
           },
           "submit": "Prijava",
           "forgot_password": "Si pozabil geslo?",
-          "wrong_credentials": "E-pošta ali geslo je napačno"
+          "wrong_credentials": "Prijavno ime ali geslo je napačno"
         },
         "otp": {
           "password_login": "Bi se raje prijavil z geslom?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Potrdi kodo",
-          "description": "Potrditvena koda je bila poslana na naslov {email}"
+          "description": "Povezava za ponastavitev gesla je bila poslana na naslov {email}"
         }
       },
       "reset_password": {

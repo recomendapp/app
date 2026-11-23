@@ -731,7 +731,7 @@
           },
           "submit": "Pierakstīties",
           "forgot_password": "Aizmirsi paroli?",
-          "wrong_credentials": "E-pasts vai parole ir nepareiza"
+          "wrong_credentials": "Lietotāja identifikators vai parole ir nepareiza"
         },
         "otp": {
           "password_login": "Vai labāk pierakstīties ar paroli?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Apstiprināt kodu",
-          "description": "Apstiprinājuma kods nosūtīts uz adresi {email}"
+          "description": "Paroles atiestatīšanas saite nosūtīta uz adresi {email}"
         }
       },
       "reset_password": {

@@ -731,7 +731,7 @@
           },
           "submit": "Prisijungti",
           "forgot_password": "Pamiršai slaptažodį?",
-          "wrong_credentials": "El. paštas arba slaptažodis neteisingas"
+          "wrong_credentials": "Prisijungimo vardas arba slaptažodis neteisingas"
         },
         "otp": {
           "password_login": "Gal nori prisijungti su slaptažodžiu?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Patvirtinti kodą",
-          "description": "Patvirtinimo kodas išsiųstas adresu {email}"
+          "description": "Slaptažodžio atstatymo nuoroda išsiųsta adresu {email}"
         }
       },
       "reset_password": {

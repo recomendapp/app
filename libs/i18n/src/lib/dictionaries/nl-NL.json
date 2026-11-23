@@ -731,7 +731,7 @@
           },
           "submit": "Inloggen",
           "forgot_password": "Wachtwoord vergeten?",
-          "wrong_credentials": "Het e-mailadres of wachtwoord is onjuist"
+          "wrong_credentials": "De inlognaam of het wachtwoord is onjuist"
         },
         "otp": {
           "password_login": "Log je liever in met een wachtwoord?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Code bevestigen",
-          "description": "Er is een verificatiecode verstuurd naar {email}"
+          "description": "Er is een link om je wachtwoord opnieuw in te stellen verstuurd naar {email}"
         }
       },
       "reset_password": {

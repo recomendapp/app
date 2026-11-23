@@ -731,7 +731,7 @@
           },
           "submit": "लॉग इन",
           "forgot_password": "पासवर्ड भूल गए?",
-          "wrong_credentials": "ईमेल या पासवर्ड ग़लत है"
+          "wrong_credentials": "लॉगिन या पासवर्ड ग़लत है"
         },
         "otp": {
           "password_login": "पासवर्ड से लॉग इन करना चाहेंगे?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "कोड की पुष्टि करें",
-          "description": "{email} पते पर एक सत्यापन कोड भेजा गया है"
+          "description": "{email} पते पर पासवर्ड रीसेट लिंक भेजा गया है"
         }
       },
       "reset_password": {
