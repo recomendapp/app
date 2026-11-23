@@ -14,7 +14,6 @@ import { HeaderTitle, useHeaderHeight } from 'expo-router/react-navigation';
 import { View } from '../../../../../components/ui/view';
 import ProfileWidgetPlaylists from '../../../../../components/screens/user/ProfileWidgetPlaylists';
 import { Skeleton } from '../../../../../components/ui/Skeleton';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import ProfileWidgetLogMovie from '../../../../../components/screens/user/ProfileWidgetLogMovie';
 import ProfileWidgetLogTvSeries from '../../../../../components/screens/user/ProfileWidgetLogTvSeries';
 import { ActivityIndicator, Pressable, RefreshControl } from 'react-native';
@@ -40,7 +39,7 @@ const ProfileHeader = ({
   const router = useRouter();
   const { user } = useAuth();
   const insets = useSafeAreaInsets();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const t = useTranslations();
   const routesFollow = useMemo(
     () => [
@@ -61,8 +60,8 @@ const ProfileHeader = ({
         style={[
           tw`flex-row gap-4 shrink-0 items-start justify-between`,
           {
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
           },
         ]}
       >
@@ -146,7 +145,7 @@ const ProfileScreen = () => {
   const t = useTranslations();
   const { username } = useLocalSearchParams<{ username: string }>();
   const { user } = useAuth();
-  const { colors, isLiquidGlassAvailable } = useTheme();
+  const { colors, isLiquidGlassAvailable, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
   const router = useRouter();
@@ -266,9 +265,9 @@ const ProfileScreen = () => {
       <Animated.ScrollView
         refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refresh} />}
         contentContainerStyle={{
-          gap: GAP,
-          paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
-          paddingBottom: insets.bottom + PADDING_VERTICAL,
+          gap: theme.spaces.md,
+          paddingTop: navigationHeaderHeight + theme.spaces.md,
+          paddingBottom: insets.bottom + theme.spaces.md,
           flexGrow: 1,
         }}
       >
@@ -288,34 +287,34 @@ const ProfileScreen = () => {
             <ProfileWidgetLogMovie
               profile={profile}
               labelStyle={{
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
+                paddingLeft: insets.left + theme.spaces.horizontal,
+                paddingRight: insets.right + theme.spaces.horizontal,
               }}
               containerStyle={{
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
+                paddingLeft: insets.left + theme.spaces.horizontal,
+                paddingRight: insets.right + theme.spaces.horizontal,
               }}
             />
             <ProfileWidgetLogTvSeries
               profile={profile}
               labelStyle={{
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
+                paddingLeft: insets.left + theme.spaces.horizontal,
+                paddingRight: insets.right + theme.spaces.horizontal,
               }}
               containerStyle={{
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
+                paddingLeft: insets.left + theme.spaces.horizontal,
+                paddingRight: insets.right + theme.spaces.horizontal,
               }}
             />
             <ProfileWidgetPlaylists
               profile={profile}
               labelStyle={{
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
+                paddingLeft: insets.left + theme.spaces.horizontal,
+                paddingRight: insets.right + theme.spaces.horizontal,
               }}
               containerStyle={{
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
+                paddingLeft: insets.left + theme.spaces.horizontal,
+                paddingRight: insets.right + theme.spaces.horizontal,
               }}
             />
           </>

@@ -15,13 +15,6 @@ import TvSeriesWidgetSeasons from '../../../../../components/screens/tv-series/T
 import { useTranslations } from 'use-intl';
 import { Text, TextProps } from '../../../../../components/ui/text';
 import AnimatedStackScreen from '../../../../../components/ui/AnimatedStackScreen';
-import {
-  BORDER_RADIUS_FULL,
-  GAP,
-  GAP_XS,
-  PADDING_HORIZONTAL,
-  PADDING_VERTICAL,
-} from '../../../../../theme/globals';
 import { useTvSeriesHeaderMenu } from '../../../../../components/header-menus/useTvSeriesHeaderMenu';
 import TvSeriesHeader from '../../../../../components/screens/tv-series/TvSeriesHeader';
 import TvSeriesWidgetPlaylists from '../../../../../components/screens/tv-series/TvSeriesWidgetPlaylists';
@@ -45,6 +38,7 @@ import ButtonUserRecoSend from '../../../../../components/buttons/ButtonUserReco
 import ButtonUserLogTvSeries from '../../../../../components/buttons/tv-series/ButtonUserLogTvSeries';
 
 const TvSeriesScreen = () => {
+  const { theme } = useTheme();
   const { tv_series_id } = useLocalSearchParams<{ tv_series_id: string }>();
   const { id: seriesId } = getIdFromSlug(tv_series_id);
   const { user } = useAuth();
@@ -74,7 +68,7 @@ const TvSeriesScreen = () => {
 
   const animatedContentContainerStyle = useAnimatedStyle(() => {
     return {
-      paddingBottom: withTiming(insets.bottom + PADDING_VERTICAL * 2 + floatingBarHeight.value, {
+      paddingBottom: withTiming(insets.bottom + theme.spaces.md * 2 + floatingBarHeight.value, {
         duration: 300,
       }),
     };
@@ -108,20 +102,20 @@ const TvSeriesScreen = () => {
         {series && (
           <View style={tw`flex-col gap-4`}>
             {/* DETAILS */}
-            <View style={{ gap: GAP }}>
-              <View style={{ gap: GAP_XS }}>
+            <View style={{ gap: theme.spaces.md }}>
+              <View style={{ gap: theme.spaces.sm }}>
                 <TvSeriesSynopsis
                   tvSeries={series}
                   containerStyle={{
-                    paddingLeft: insets.left + PADDING_HORIZONTAL,
-                    paddingRight: insets.right + PADDING_HORIZONTAL,
+                    paddingLeft: insets.left + theme.spaces.horizontal,
+                    paddingRight: insets.right + theme.spaces.horizontal,
                   }}
                 />
                 <TvSeriesOriginalTitle
                   tvSeries={series}
                   style={{
-                    marginLeft: insets.left + PADDING_HORIZONTAL,
-                    marginRight: insets.right + PADDING_HORIZONTAL,
+                    marginLeft: insets.left + theme.spaces.horizontal,
+                    marginRight: insets.right + theme.spaces.horizontal,
                   }}
                 />
               </View>
@@ -129,12 +123,12 @@ const TvSeriesScreen = () => {
               <TvSeriesWidgetSeasons
                 tvSeries={series}
                 containerStyle={{
-                  paddingLeft: insets.left + PADDING_HORIZONTAL,
-                  paddingRight: insets.right + PADDING_HORIZONTAL,
+                  paddingLeft: insets.left + theme.spaces.horizontal,
+                  paddingRight: insets.right + theme.spaces.horizontal,
                 }}
                 labelStyle={{
-                  paddingLeft: insets.left + PADDING_HORIZONTAL,
-                  paddingRight: insets.right + PADDING_HORIZONTAL,
+                  paddingLeft: insets.left + theme.spaces.horizontal,
+                  paddingRight: insets.right + theme.spaces.horizontal,
                 }}
               />
               <Link
@@ -147,8 +141,8 @@ const TvSeriesScreen = () => {
                 <Button
                   variant="outline"
                   style={{
-                    marginLeft: insets.left + PADDING_HORIZONTAL,
-                    marginRight: insets.right + PADDING_HORIZONTAL,
+                    marginLeft: insets.left + theme.spaces.horizontal,
+                    marginRight: insets.right + theme.spaces.horizontal,
                   }}
                 >
                   {upperFirst(t('common.messages.see_more_details'))}
@@ -163,12 +157,12 @@ const TvSeriesScreen = () => {
                 params: { tv_series_id: series.id },
               }}
               containerStyle={{
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
+                paddingLeft: insets.left + theme.spaces.horizontal,
+                paddingRight: insets.right + theme.spaces.horizontal,
               }}
               labelStyle={{
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
+                paddingLeft: insets.left + theme.spaces.horizontal,
+                paddingRight: insets.right + theme.spaces.horizontal,
               }}
             />
             <TvSeriesWidgetReviews
@@ -178,12 +172,12 @@ const TvSeriesScreen = () => {
                 params: { tv_series_id: series.id },
               }}
               containerStyle={{
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
+                paddingLeft: insets.left + theme.spaces.horizontal,
+                paddingRight: insets.right + theme.spaces.horizontal,
               }}
               labelStyle={{
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
+                paddingLeft: insets.left + theme.spaces.horizontal,
+                paddingRight: insets.right + theme.spaces.horizontal,
               }}
             />
           </View>
@@ -197,8 +191,8 @@ const TvSeriesScreen = () => {
             contentContainerStyle={[
               tw`items-center gap-2`,
               {
-                paddingHorizontal: PADDING_HORIZONTAL,
-                paddingVertical: PADDING_VERTICAL,
+                paddingHorizontal: theme.spaces.horizontal,
+                paddingVertical: theme.spaces.md,
               },
             ]}
           >
@@ -280,12 +274,12 @@ const TvSeriesOriginalTitle = ({
 };
 
 const TvSeriesTrailers = ({ tvSeries }: { tvSeries: TvSeries }) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const t = useTranslations();
   const insets = useSafeAreaInsets();
   // UI
   const { width } = useWindowDimensions();
-  const playerWidth = width - PADDING_HORIZONTAL * 2;
+  const playerWidth = width - theme.spaces.horizontal * 2;
   const playerHeight = (playerWidth * 9) / 16;
   // States
   const [selectedTrailer, setSelectedTrailer] = useState<TvSeriesTrailer | null>(
@@ -301,24 +295,24 @@ const TvSeriesTrailers = ({ tvSeries }: { tvSeries: TvSeries }) => {
         <Button
           variant={item.id === selectedTrailer?.id ? 'accent-yellow' : 'outline'}
           onPress={() => setSelectedTrailer(item)}
-          style={{ borderRadius: BORDER_RADIUS_FULL }}
+          style={{ borderRadius: theme.border.radius.full }}
         >
           {label}
         </Button>
       );
     },
-    [selectedTrailer, tvSeries.originalLanguage],
+    [selectedTrailer, tvSeries.originalLanguage, theme],
   );
   if (!tvSeries.trailers?.length || !selectedTrailer) return null;
   return (
-    <View style={{ gap: GAP }}>
+    <View style={{ gap: theme.spaces.md }}>
       <View
         style={[
           tw`flex-row items-center`,
           {
-            gap: GAP,
-            marginLeft: insets.left + PADDING_HORIZONTAL,
-            marginRight: insets.right + PADDING_HORIZONTAL,
+            gap: theme.spaces.md,
+            marginLeft: insets.left + theme.spaces.horizontal,
+            marginRight: insets.right + theme.spaces.horizontal,
           },
         ]}
       >
@@ -329,8 +323,8 @@ const TvSeriesTrailers = ({ tvSeries }: { tvSeries: TvSeries }) => {
       </View>
       <View
         style={{
-          marginLeft: insets.left + PADDING_HORIZONTAL,
-          marginRight: insets.right + PADDING_HORIZONTAL,
+          marginLeft: insets.left + theme.spaces.horizontal,
+          marginRight: insets.right + theme.spaces.horizontal,
         }}
       >
         {normalizedSite === 'youtube' ? (
@@ -361,9 +355,9 @@ const TvSeriesTrailers = ({ tvSeries }: { tvSeries: TvSeries }) => {
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
-          gap: GAP,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
+          gap: theme.spaces.md,
         }}
       />
     </View>

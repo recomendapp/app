@@ -18,11 +18,11 @@ import Animated, {
 } from 'react-native-reanimated';
 import tw from '../../lib/tw';
 import * as Haptics from 'expo-haptics';
-import { GAP } from '../../theme/globals';
 import { LayoutChangeEvent, FlatList, StyleProp, ViewStyle, Pressable } from 'react-native';
 import useDebounce from '../../hooks/useDebounce';
 import { scheduleOnRN } from 'react-native-worklets';
 import { View } from './view';
+import { useTheme } from '../../providers/ThemeProvider';
 
 interface WheelSelectorItemProps<T> {
   index: number;
@@ -122,7 +122,7 @@ function WheelSelectorInner<T>(
     horizontal = true,
     showsHorizontalScrollIndicator = false,
     itemWidth,
-    itemSpacing = GAP,
+    itemSpacing: itemSpacingProp,
     wheelAngle = 0,
     wheelIntensity = 0,
     style,
@@ -134,6 +134,8 @@ function WheelSelectorInner<T>(
   }: WheelSelectorProps<T>,
   ref: React.ForwardedRef<WheelSelectorRef>,
 ) {
+  const { theme } = useTheme();
+  const itemSpacing = itemSpacingProp ?? theme.spaces.md;
   const scrollRef = useRef<FlatList>(null);
   const scrollX = useSharedValue(initialIndex);
   const activeIndex = useSharedValue(initialIndex);

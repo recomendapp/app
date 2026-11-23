@@ -28,10 +28,11 @@ import { AnimatedLegendList } from '@legendapp/list/reanimated';
 import { Card } from '../../../components/ui/card';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useWatchedDateFormats } from '../../../hooks/useWatchedDateFormats';
-import { PADDING_HORIZONTAL } from '../../../theme/globals';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../../../providers/ThemeProvider';
 
 const FilmWatchedDatesScreen = () => {
+  const { theme } = useTheme();
   const { user } = useAuth();
   const t = useTranslations();
   const now = useNow();
@@ -183,7 +184,7 @@ const FilmWatchedDatesScreen = () => {
                 onPress: () => handleDeleteWatchedDate(item),
               },
             ]}
-            style={{ paddingHorizontal: PADDING_HORIZONTAL }}
+            style={{ paddingHorizontal: theme.spaces.horizontal }}
           >
             <View>
               <Card style={tw`flex-row items-center justify-between gap-2`}>
@@ -202,6 +203,7 @@ const FilmWatchedDatesScreen = () => {
       );
     },
     [
+      theme,
       handleDeleteWatchedDate,
       handleSelectDate,
       handleSelectFormat,

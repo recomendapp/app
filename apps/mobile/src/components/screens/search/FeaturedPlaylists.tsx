@@ -5,7 +5,6 @@ import { StyleProp, useWindowDimensions, View, ViewStyle } from 'react-native';
 import { LegendList, LegendListRef } from '@legendapp/list/react-native';
 import { useCallback, useMemo, useRef } from 'react';
 import { useScrollToTop } from 'expo-router/react-navigation';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import { Icons } from '../../../constants/Icons';
 import { Text } from '../../ui/text';
 import { upperFirst } from 'lodash';
@@ -22,7 +21,7 @@ interface FeaturedPlaylistsProps {
 const FeaturedPlaylists = ({ contentContainerStyle }: FeaturedPlaylistsProps) => {
   const t = useTranslations();
   const { width: SCREEN_WIDTH } = useWindowDimensions();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { data, isLoading, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery(
     playlistFeaturedInfiniteOptions(),
@@ -61,10 +60,10 @@ const FeaturedPlaylists = ({ contentContainerStyle }: FeaturedPlaylistsProps) =>
       onEndReachedThreshold={0.3}
       contentContainerStyle={[
         {
-          gap: GAP,
-          paddingBottom: insets.bottom + PADDING_VERTICAL,
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
+          gap: theme.spaces.md,
+          paddingBottom: insets.bottom + theme.spaces.md,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
         },
         contentContainerStyle,
       ]}

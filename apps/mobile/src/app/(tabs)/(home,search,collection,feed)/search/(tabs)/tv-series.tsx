@@ -6,7 +6,6 @@ import { View } from '../../../../../components/ui/view';
 import { Icons } from '../../../../../constants/Icons';
 import tw from '../../../../../lib/tw';
 import useSearchStore from '../../../../../stores/useSearchStore';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { LegendList, LegendListRef } from '@legendapp/list/react-native';
 import { TrueSheet as RNTrueSheet } from '@lodev09/react-native-true-sheet';
 import { useScrollToTop } from 'expo-router/react-navigation';
@@ -19,13 +18,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslations } from 'use-intl';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { searchTvSeriesInfiniteOptions } from '@libs/query-client';
+import { useTheme } from '../../../../../providers/ThemeProvider';
 
 // const FiltersButton = ({ onPress }: { onPress: () => void }) => {
 // 	return (
 // 		<View
 // 		style={[
 // 			tw`flex-row items-center`,
-// 			{ gap: GAP }
+// 			{ gap: theme.spaces.md }
 // 		]}
 // 		>
 // 			<Button
@@ -39,6 +39,7 @@ import { searchTvSeriesInfiniteOptions } from '@libs/query-client';
 // };
 
 const FiltersSheet = forwardRef<RNTrueSheet>((_, ref) => {
+  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const t = useTranslations();
 
@@ -47,9 +48,9 @@ const FiltersSheet = forwardRef<RNTrueSheet>((_, ref) => {
       <ScrollView
         bounces={false}
         contentContainerStyle={{
-          paddingTop: PADDING_VERTICAL,
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
+          paddingTop: theme.spaces.md,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
           backgroundColor: 'red', // TODO: Remove debug style
         }}
       >
@@ -67,6 +68,7 @@ const FiltersSheet = forwardRef<RNTrueSheet>((_, ref) => {
 FiltersSheet.displayName = 'FiltersSheet';
 
 const SearchTvSeriesScreen = () => {
+  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { isVisible: keyboardVisible, height: keyboardHeight } = useKeyboardState((state) => state);
   // const navigation = useNavigation();
@@ -114,12 +116,12 @@ const SearchTvSeriesScreen = () => {
         data={tvSeries}
         renderItem={({ item }) => <CardTvSeries variant="list" tvSeries={item} />}
         contentContainerStyle={{
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
           paddingBottom: keyboardVisible
-            ? keyboardHeight + PADDING_VERTICAL
-            : insets.bottom + PADDING_VERTICAL,
-          gap: GAP,
+            ? keyboardHeight + theme.spaces.md
+            : insets.bottom + theme.spaces.md,
+          gap: theme.spaces.md,
         }}
         scrollIndicatorInsets={{
           bottom: keyboardVisible ? keyboardHeight - insets.bottom : insets.bottom,

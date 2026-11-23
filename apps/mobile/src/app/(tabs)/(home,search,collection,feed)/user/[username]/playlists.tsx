@@ -10,7 +10,6 @@ import { useMemo, useState } from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import { useTranslations } from 'use-intl';
 import { HeaderTitle, useHeaderHeight } from 'expo-router/react-navigation';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { userByUsernameOptions, userPlaylistsInfiniteOptions } from '@libs/query-client';
 import { CardError } from '../../../../../components/cards/CardError';
@@ -31,7 +30,7 @@ const UserPlaylistsScreen = () => {
   const { data: profile } = useQuery(userByUsernameOptions({ username: username }));
   const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
-  const { isLiquidGlassAvailable } = useTheme();
+  const { isLiquidGlassAvailable, theme } = useTheme();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(
@@ -181,10 +180,10 @@ const UserPlaylistsScreen = () => {
         onEndReachedThreshold={0.5}
         contentContainerStyle={[
           {
-            paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
-            paddingBottom: insets.bottom + PADDING_VERTICAL,
+            paddingTop: navigationHeaderHeight + theme.spaces.md,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
+            paddingBottom: insets.bottom + theme.spaces.md,
             flexGrow: 1,
           },
         ]}

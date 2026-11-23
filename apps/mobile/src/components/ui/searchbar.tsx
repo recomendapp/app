@@ -3,7 +3,6 @@ import { Text } from './text';
 import { View } from './view';
 import tw from '../../lib/tw';
 import { useTheme } from '../../providers/ThemeProvider';
-import { CORNERS, FONT_SIZE, HEIGHT } from '../../theme/globals';
 import { Search, X } from 'lucide-react-native';
 import { useCallback, useRef, useState } from 'react';
 import {
@@ -51,7 +50,7 @@ export function SearchBar({
   const inputRef = useRef<TextInput>(null);
 
   // Theme colors
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const cardColor = colors.card;
   const textColor = colors.foreground;
   const muted = colors.mutedForeground;
@@ -95,14 +94,14 @@ export function SearchBar({
     backgroundColor: cardColor,
     borderColor: colors.border,
     borderWidth: 1,
-    minHeight: HEIGHT,
+    minHeight: theme.input.height.md,
     paddingHorizontal: 16,
     ...tw`rounded-lg`,
   };
 
   const baseInputStyle = {
     flex: 1,
-    fontSize: FONT_SIZE,
+    fontSize: theme.fonts.sizes.md,
     color: textColor,
     marginHorizontal: 8,
   };
@@ -140,7 +139,7 @@ export function SearchBar({
           style={{
             backgroundColor: icon,
             padding: 4,
-            borderRadius: CORNERS,
+            borderRadius: theme.border.radius.full,
             opacity: 0.6,
           }}
           activeOpacity={0.7}

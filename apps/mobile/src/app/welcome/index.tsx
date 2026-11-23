@@ -8,7 +8,6 @@ import { Button } from '../../components/ui/Button';
 import { FloatingFooter } from '../../components/ui/FloatingFooter';
 import { useTheme } from '../../providers/ThemeProvider';
 import tw from '../../lib/tw';
-import { BORDER_RADIUS_FULL, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import Color from 'color';
 import { useQuery } from '@tanstack/react-query';
 import { uiFeaturesOptions } from '@libs/query-client';
@@ -61,6 +60,7 @@ const FeatureSlide = ({
   width: number;
   height: number;
 }) => {
+  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const player = useVideoPlayer(feature.video.mobile, (p) => {
     p.loop = true;
@@ -75,8 +75,8 @@ const FeatureSlide = ({
         {
           width,
           height,
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
         },
       ]}
     >
@@ -110,7 +110,7 @@ const FeatureSlide = ({
 const WelcomeCarouselScreen = () => {
   const t = useTranslations();
   const router = useRouter();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
 
@@ -153,10 +153,10 @@ const WelcomeCarouselScreen = () => {
         <WelcomeBackground />
         <View
           style={{
-            paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
-            paddingBottom: PADDING_VERTICAL,
+            paddingTop: navigationHeaderHeight + theme.spaces.md,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
+            paddingBottom: theme.spaces.md,
           }}
         >
           <Text style={tw`text-3xl font-bold text-center`}>
@@ -194,16 +194,16 @@ const WelcomeCarouselScreen = () => {
         <Pagination.Basic
           progress={progress}
           data={features ?? []}
-          dotStyle={{ backgroundColor: colors.muted, borderRadius: BORDER_RADIUS_FULL }}
+          dotStyle={{ backgroundColor: colors.muted, borderRadius: theme.border.radius.full }}
           activeDotStyle={{
             backgroundColor: colors.accentYellow,
-            borderRadius: BORDER_RADIUS_FULL,
+            borderRadius: theme.border.radius.full,
           }}
           containerStyle={{
             gap: 5,
-            paddingBottom: PADDING_VERTICAL,
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
+            paddingBottom: theme.spaces.md,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
           }}
           onPress={onPressPagination}
         />

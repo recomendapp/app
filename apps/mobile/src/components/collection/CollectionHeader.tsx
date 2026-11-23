@@ -20,7 +20,6 @@ import { View } from '../ui/view';
 import { AnimatedImageWithFallback } from '../ui/AnimatedImageWithFallback';
 import { ImageType } from '../utils/ImageWithFallback';
 import { useTranslations } from 'use-intl';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface CollectionHeaderBaseProps extends React.ComponentPropsWithoutRef<typeof Animated.View> {
@@ -74,7 +73,7 @@ const CollectionHeader = forwardRef<
     },
     ref,
   ) => {
-    const { colors } = useTheme();
+    const { colors, theme } = useTheme();
     const { hslToRgb } = useColorConverter();
     const t = useTranslations();
     const insets = useSafeAreaInsets();
@@ -132,7 +131,7 @@ const CollectionHeader = forwardRef<
         <Animated.View
           style={[
             tw`absolute inset-0`,
-            { left: -PADDING_HORIZONTAL, width: Dimensions.get('window').width },
+            { left: -theme.spaces.horizontal, width: Dimensions.get('window').width },
             bgAnim,
           ]}
         >
@@ -156,9 +155,9 @@ const CollectionHeader = forwardRef<
           style={[
             tw`items-center justify-center min-h-40 gap-2`,
             {
-              paddingLeft: insets.left + PADDING_HORIZONTAL,
-              paddingRight: insets.right + PADDING_HORIZONTAL,
-              paddingBottom: PADDING_VERTICAL,
+              paddingLeft: insets.left + theme.spaces.horizontal,
+              paddingRight: insets.right + theme.spaces.horizontal,
+              paddingBottom: theme.spaces.md,
             },
             marginTopAnim,
           ]}

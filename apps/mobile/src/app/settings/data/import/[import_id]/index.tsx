@@ -26,7 +26,6 @@ import tw from '../../../../../lib/tw';
 import { useModalHeaderOptions } from '../../../../../hooks/useModalHeaderOptions';
 import { ImportJob } from '@libs/api-js';
 import { LegendList } from '@legendapp/list/react-native';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FloatingFooter } from '../../../../../components/ui/FloatingFooter';
 import { Card } from '../../../../../components/ui/card';
@@ -44,7 +43,7 @@ const ImportList = ({ job }: { job: ImportJob }) => {
   const router = useRouter();
   const toast = useToast();
   const navigationHeaderHeight = useHeaderHeight();
-  const { colors, mode } = useTheme();
+  const { colors, mode, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { mutate: validateImport, isPending: isValidating } = useImportValidateMutation();
   const hasFooter = useMemo(() => job.status === 'awaiting_review', [job.status]);
@@ -130,9 +129,9 @@ const ImportList = ({ job }: { job: ImportJob }) => {
         onPress={() => router.push(item.href)}
         style={[
           {
-            paddingVertical: PADDING_HORIZONTAL,
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
+            paddingVertical: theme.spaces.horizontal,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
           },
         ]}
       >
@@ -145,7 +144,7 @@ const ImportList = ({ job }: { job: ImportJob }) => {
         </View>
       </Button>
     ),
-    [colors.mutedForeground, router, insets.left, insets.right],
+    [colors.mutedForeground, router, insets.left, insets.right, theme],
   );
 
   const handleValidate = useCallback(() => {
@@ -185,7 +184,7 @@ const ImportList = ({ job }: { job: ImportJob }) => {
         )}
         ListHeaderComponent={() =>
           job.status === 'completed' ? (
-            <View style={{ paddingHorizontal: PADDING_HORIZONTAL }}>
+            <View style={{ paddingHorizontal: theme.spaces.horizontal }}>
               <Card style={tw`items-center gap-2`}>
                 <Icons.SuccessCircle color={colors.accentGreen} size={48} />
                 <Text textColor="muted" style={tw`text-center max-w-xs`}>
@@ -196,8 +195,8 @@ const ImportList = ({ job }: { job: ImportJob }) => {
           ) : null
         }
         contentContainerStyle={{
-          paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
-          paddingBottom: !hasFooter ? insets.bottom + PADDING_VERTICAL : 0,
+          paddingTop: navigationHeaderHeight + theme.spaces.md,
+          paddingBottom: !hasFooter ? insets.bottom + theme.spaces.md : 0,
         }}
       />
       {hasFooter && (

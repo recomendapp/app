@@ -12,7 +12,6 @@ import app from '../../../../constants/app';
 import { useTranslations } from 'use-intl';
 import { Text } from '../../../../components/ui/text';
 import { View } from '../../../../components/ui/view';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../theme/globals';
 import { KeyboardToolbar } from '../../../../components/ui/KeyboardToolbar';
 import { OAuthProviders } from '../../../../components/OAuth/OAuthProviders';
 import { useToast } from '../../../../components/Toast';
@@ -31,7 +30,7 @@ const EmailSchema = z.email();
 const LoginScreen = () => {
   const { login } = useAuth();
   const insets = useSafeAreaInsets();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const router = useRouter();
   const toast = useToast();
   const t = useTranslations();
@@ -90,16 +89,16 @@ const LoginScreen = () => {
           contentContainerStyle={[
             tw`flex-1 flex-grow justify-end items-center`,
             {
-              gap: GAP,
-              paddingLeft: insets.left + PADDING_HORIZONTAL,
-              paddingRight: insets.right + PADDING_HORIZONTAL,
-              paddingBottom: insets.bottom + PADDING_VERTICAL,
+              gap: theme.spaces.md,
+              paddingLeft: insets.left + theme.spaces.horizontal,
+              paddingRight: insets.right + theme.spaces.horizontal,
+              paddingBottom: insets.bottom + theme.spaces.md,
             },
           ]}
           keyboardShouldPersistTaps="handled"
           extraKeyboardSpace={-180}
         >
-          <View style={[tw`w-full`, { gap: GAP }]}>
+          <View style={[tw`w-full`, { gap: theme.spaces.md }]}>
             <GroupedInput
               title={t('pages.auth.login.label', { app: app.name })}
               titleStyle={tw`text-center text-xl font-bold`}
@@ -138,7 +137,7 @@ const LoginScreen = () => {
               {t('pages.auth.login.form.submit')}
             </Button>
           </View>
-          <View style={[tw`w-full`, { gap: GAP }]}>
+          <View style={[tw`w-full`, { gap: theme.spaces.md }]}>
             <Text style={tw`text-center`} textColor="muted">
               {upperFirst(t('common.messages.or_continue_with'))}
             </Text>

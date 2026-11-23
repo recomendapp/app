@@ -3,7 +3,6 @@ import { ButtonSpinner, SpinnerVariant } from './spinner';
 import { Text } from './text';
 import tw from '../../lib/tw';
 import { useTheme } from '../../providers/ThemeProvider';
-import { HEIGHT } from '../../theme/globals';
 import * as Haptics from 'expo-haptics';
 import { LucideProps } from 'lucide-react-native';
 import { forwardRef } from 'react';
@@ -65,7 +64,7 @@ export const Button = forwardRef<View, ButtonProps>(
     },
     ref,
   ) => {
-    const { colors } = useTheme();
+    const { colors, theme } = useTheme();
     const primaryColor = colors.primary;
     const primaryForegroundColor = colors.primaryForeground;
     const mutedColor = colors.muted;
@@ -97,8 +96,8 @@ export const Button = forwardRef<View, ButtonProps>(
           break;
         case 'icon':
           Object.assign(baseStyle, {
-            height: HEIGHT,
-            width: HEIGHT,
+            height: theme.input.height.md,
+            width: theme.input.height.md,
             paddingHorizontal: 0,
           });
           break;
@@ -106,7 +105,7 @@ export const Button = forwardRef<View, ButtonProps>(
           Object.assign(baseStyle, { height: 'auto', paddingHorizontal: 0 });
           break;
         default:
-          Object.assign(baseStyle, { height: HEIGHT, ...tw`px-4` });
+          Object.assign(baseStyle, { height: theme.input.height.md, ...tw`px-4` });
       }
 
       // Variant styles
@@ -321,7 +320,7 @@ export const Button = forwardRef<View, ButtonProps>(
         : flexValue !== null
           ? {
               flex: flexValue,
-              maxHeight: size === 'sm' ? 44 : size === 'lg' ? 54 : HEIGHT,
+              maxHeight: size === 'sm' ? 44 : size === 'lg' ? 54 : theme.input.height.md,
             }
           : {};
     };

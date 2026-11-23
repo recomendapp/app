@@ -14,7 +14,6 @@ import { GroupedInput, GroupedInputItem } from '../../../components/ui/Input';
 import { upperFirst } from 'lodash';
 import { Text } from '../../../components/ui/text';
 import { useLocale, useTranslations } from 'use-intl';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import { View } from '../../../components/ui/view';
 import { KeyboardToolbar } from '../../../components/ui/KeyboardToolbar';
 import { OAuthProviders } from '../../../components/OAuth/OAuthProviders';
@@ -44,7 +43,7 @@ const verifiedSchema = z.object({
 });
 
 const SignupScreen = () => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
@@ -267,10 +266,10 @@ const SignupScreen = () => {
           contentContainerStyle={[
             tw`flex-1 flex-grow justify-end items-center`,
             {
-              gap: GAP,
-              paddingLeft: insets.left + PADDING_HORIZONTAL,
-              paddingRight: insets.right + PADDING_HORIZONTAL,
-              paddingBottom: insets.bottom + PADDING_VERTICAL,
+              gap: theme.spaces.md,
+              paddingLeft: insets.left + theme.spaces.horizontal,
+              paddingRight: insets.right + theme.spaces.horizontal,
+              paddingBottom: insets.bottom + theme.spaces.md,
             },
           ]}
           keyboardShouldPersistTaps="handled"
@@ -281,7 +280,7 @@ const SignupScreen = () => {
               case STEPS.EMAIL:
                 return (
                   <>
-                    <View style={[tw`w-full`, { gap: GAP }]}>
+                    <View style={[tw`w-full`, { gap: theme.spaces.md }]}>
                       <GroupedInput
                         title={upperFirst(t('common.messages.signup'))}
                         titleStyle={tw`text-center text-xl font-bold`}
@@ -418,7 +417,7 @@ const SignupScreen = () => {
                         {upperFirst(t('common.messages.signup'))}
                       </Button>
                     </View>
-                    <View style={[tw`w-full`, { gap: GAP }]}>
+                    <View style={[tw`w-full`, { gap: theme.spaces.md }]}>
                       <Text style={tw`text-center`} textColor="muted">
                         {upperFirst(t('common.messages.or_continue_with'))}
                       </Text>

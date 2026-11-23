@@ -5,7 +5,6 @@ import { Button } from '../../ui/Button';
 import TrueSheet from '../../ui/TrueSheet';
 import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import { Input } from '../../ui/Input';
 import { Text } from '../../ui/text';
 import { z } from 'zod';
@@ -32,7 +31,7 @@ export const BottomSheetBookmarkComment = forwardRef<
   BottomSheetBookmarkCommentProps
 >(({ id, data, ...props }, ref) => {
   const toast = useToast();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const closeSheet = useBottomSheetStore((state) => state.closeSheet);
   const t = useTranslations();
@@ -104,9 +103,9 @@ export const BottomSheetBookmarkComment = forwardRef<
     <TrueSheet
       ref={ref}
       style={{
-        gap: GAP,
-        paddingTop: PADDING_VERTICAL * 2,
-        paddingHorizontal: PADDING_HORIZONTAL,
+        gap: theme.spaces.md,
+        paddingTop: theme.spaces.md * 2,
+        paddingHorizontal: theme.spaces.horizontal,
         paddingBottom: bottomInset,
       }}
       {...props}

@@ -8,7 +8,6 @@ import { ImageWithFallback } from '../../../../../components/utils/ImageWithFall
 import { useToast } from '../../../../../components/Toast';
 import { Icons } from '../../../../../constants/Icons';
 import { useTheme } from '../../../../../providers/ThemeProvider';
-import { GAP, GAP_LG, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import tw from '../../../../../lib/tw';
 import { importSourcesListAllOptions, useImportCreateMutation } from '@libs/query-client';
 import { useQuery } from '@tanstack/react-query';
@@ -35,7 +34,7 @@ const SettingsDataImportAddSourceScreen = () => {
   const t = useTranslations();
   const router = useRouter();
   const toast = useToast();
-  const { colors, mode, isLiquidGlassAvailable } = useTheme();
+  const { colors, mode, isLiquidGlassAvailable, theme } = useTheme();
   const { source: sourceParam } = useLocalSearchParams<{ source: string }>();
   const modalHeaderOptions = useModalHeaderOptions();
   const navigationHeaderHeight = useHeaderHeight();
@@ -131,8 +130,8 @@ const SettingsDataImportAddSourceScreen = () => {
       />
       <ScrollView
         contentContainerStyle={{
-          paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
-          paddingBottom: insets.bottom + PADDING_VERTICAL,
+          paddingTop: navigationHeaderHeight + theme.spaces.md,
+          paddingBottom: insets.bottom + theme.spaces.md,
         }}
       >
         {step === 'success' ? (
@@ -146,10 +145,10 @@ const SettingsDataImportAddSourceScreen = () => {
           step === 'upload' && (
             <View
               style={{
-                gap: GAP_LG,
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
-                paddingVertical: PADDING_VERTICAL,
+                gap: theme.spaces.lg,
+                paddingLeft: insets.left + theme.spaces.horizontal,
+                paddingRight: insets.right + theme.spaces.horizontal,
+                paddingVertical: theme.spaces.md,
               }}
             >
               <View style={tw`flex-row items-center gap-2`}>
@@ -172,14 +171,14 @@ const SettingsDataImportAddSourceScreen = () => {
                   title={upperFirst(t('pages.settings.data.importer.instructions_title'))}
                   containerStyle={[tw`rounded-xl border px-4 py-3`, { borderColor: colors.border }]}
                 >
-                  <View style={{ paddingBottom: PADDING_VERTICAL }}>
+                  <View style={{ paddingBottom: theme.spaces.md }}>
                     <EnrichedMarkdownText markdown={selectedSource.instructions} />
                   </View>
                 </Accordion>
               )}
 
               {isUploading ? (
-                <View style={{ gap: GAP }}>
+                <View style={{ gap: theme.spaces.md }}>
                   <ProgressBar progress={progress} />
                   <Text textColor="muted" style={tw`text-center text-xs`}>
                     {t('pages.settings.data.importer.uploading')}

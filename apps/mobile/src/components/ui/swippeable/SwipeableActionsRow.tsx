@@ -18,7 +18,6 @@ import Animated, {
 import { scheduleOnRN } from 'react-native-worklets';
 import { useTheme } from '../../../providers/ThemeProvider';
 import { extractStyleKeys } from '../../../utils/extract-style-keys';
-import { BORDER_RADIUS_LG, GAP_XS } from '../../../theme/globals';
 import { Text } from '../text';
 import { AnimatedPressable } from '../AnimatedPressable';
 import tw from '../../../lib/tw';
@@ -126,11 +125,11 @@ export const SwipeableActionsRow = ({
   style,
   borderRadius: borderRadiusProp,
 }: SwipeableActionsRowProps) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const translateX = useSharedValue(0);
   const startX = useSharedValue(0);
   const velocityX = useSharedValue(0);
-  const borderRadius = borderRadiusProp ?? BORDER_RADIUS_LG;
+  const borderRadius = borderRadiusProp ?? theme.border.radius.xl;
 
   const { extracted: contentPadding, restStyle: containerStyle } = extractStyleKeys(style, [
     'paddingHorizontal',
@@ -154,7 +153,7 @@ export const SwipeableActionsRow = ({
       : undefined) ??
     0;
 
-  const gap = GAP_XS;
+  const gap = theme.spaces.sm;
   const right = getSideGeometry(actionsRight, rightEdgeInset, gap);
   const left = getSideGeometry(actionsLeft, leftEdgeInset, gap);
 
@@ -348,11 +347,11 @@ const SwipeActionButton = ({
   revealStart: number;
   onPress: () => void;
 }) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const width = action.width ?? DEFAULT_ACTION_WIDTH;
   const revealEnd = revealStart + width;
 
-  const verticalPadding = GAP_XS;
+  const verticalPadding = theme.spaces.sm;
   const maxBumpScale = 1 + ((verticalPadding * 2) / PILL_HEIGHT) * BUMP_INTENSITY;
   const bumpScale = useSharedValue(1);
   const armed = useSharedValue(true);

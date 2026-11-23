@@ -7,11 +7,13 @@ import { isLiquidGlassAvailable as utilsIsLiquidGlassAvailable } from 'expo-glas
 import { setStyle as setNavigationBarStyle } from 'expo-navigation-bar';
 import { getModeFromColor } from '../utils/getModeFromColor';
 import { NativeStackNavigationOptions } from 'expo-router';
+import { theme as staticTheme, type Theme } from '../theme';
 
 type ThemeMode = 'light' | 'dark';
 
 type ThemeContextType = {
   colors: TColors;
+  theme: Theme;
   applyColors: (theme: keyof typeof Colors) => void;
   defaultScreenOptions: NativeStackNavigationOptions;
   mode: ThemeMode;
@@ -83,6 +85,7 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
         value={{
           applyColors,
           colors,
+          theme: staticTheme,
           defaultScreenOptions,
           mode,
           isLiquidGlassAvailable,

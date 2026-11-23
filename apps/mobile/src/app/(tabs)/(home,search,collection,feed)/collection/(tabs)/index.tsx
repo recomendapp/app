@@ -7,15 +7,16 @@ import tw from '../../../../../lib/tw';
 import { Link } from 'expo-router';
 import { useWindowDimensions, View } from 'react-native';
 import { LegendList } from '@legendapp/list/react-native';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { Text } from '../../../../../components/ui/text';
 import { useCallback, useMemo } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { userPlaylistsInfiniteOptions } from '@libs/query-client';
 import { Playlist } from '@libs/api-js';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../../../../../providers/ThemeProvider';
 
 const CollectionScreen = () => {
+  const { theme } = useTheme();
   const { user } = useAuth();
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const insets = useSafeAreaInsets();
@@ -93,10 +94,10 @@ const CollectionScreen = () => {
                 : 6
       }
       contentContainerStyle={{
-        paddingTop: PADDING_VERTICAL,
-        paddingLeft: insets.left + PADDING_HORIZONTAL,
-        paddingRight: insets.right + PADDING_HORIZONTAL,
-        paddingBottom: insets.bottom + PADDING_VERTICAL,
+        paddingTop: theme.spaces.md,
+        paddingLeft: insets.left + theme.spaces.horizontal,
+        paddingRight: insets.right + theme.spaces.horizontal,
+        paddingBottom: insets.bottom + theme.spaces.md,
       }}
       scrollIndicatorInsets={{ bottom: insets.bottom }}
       keyExtractor={(item) =>

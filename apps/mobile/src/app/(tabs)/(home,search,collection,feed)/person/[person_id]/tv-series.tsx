@@ -12,7 +12,6 @@ import { Icons } from '../../../../../constants/Icons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useTheme } from '../../../../../providers/ThemeProvider';
 import { Text } from '../../../../../components/ui/text';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { CardTvSeries } from '../../../../../components/cards/CardTvSeries';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { personOptions, personTvSeriesInfiniteOptions } from '@libs/query-client';
@@ -30,7 +29,7 @@ const PersonTvSeriesScreen = () => {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const { person_id } = useLocalSearchParams<{ person_id: string }>();
   const { id: personId } = getIdFromSlug(person_id);
-  const { colors, isLiquidGlassAvailable } = useTheme();
+  const { colors, isLiquidGlassAvailable, theme } = useTheme();
   const navigationHeaderHeight = useHeaderHeight();
   const insets = useSafeAreaInsets();
   const { showActionSheetWithOptions } = useActionSheet();
@@ -194,11 +193,11 @@ const PersonTvSeriesScreen = () => {
         onEndReached={() => hasNextPage && fetchNextPage()}
         onEndReachedThreshold={0.5}
         contentContainerStyle={{
-          gap: GAP,
-          paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
-          paddingBottom: insets.bottom + PADDING_VERTICAL,
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
+          gap: theme.spaces.md,
+          paddingTop: navigationHeaderHeight + theme.spaces.md,
+          paddingBottom: insets.bottom + theme.spaces.md,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
         }}
         keyExtractor={(item) => item.tvSeries.id.toString()}
         refreshing={isRefetching}

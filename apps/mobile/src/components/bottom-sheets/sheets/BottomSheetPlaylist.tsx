@@ -16,7 +16,6 @@ import { Text } from '../../ui/text';
 import richTextToPlainString from '../../../utils/richTextToPlainString';
 import { useToast } from '../../Toast';
 import BottomSheetSharePlaylist from './share/BottomSheetSharePlaylist';
-import { GAP } from '../../../theme/globals';
 import { View } from '../../ui/view';
 import ButtonActionPlaylistLike from '../../buttons/ButtonActionPlaylistLike';
 import ButtonActionPlaylistSaved from '../../buttons/ButtonActionPlaylistSaved';
@@ -54,7 +53,7 @@ const BottomSheetPlaylist = forwardRef<
   const { user } = useAuth();
   const toast = useToast();
   const { closeSheet, openSheet } = useBottomSheetStore((state) => state);
-  const { colors, mode, isLiquidGlassAvailable } = useTheme();
+  const { colors, mode, isLiquidGlassAvailable, theme } = useTheme();
   const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations();
@@ -276,12 +275,12 @@ const BottomSheetPlaylist = forwardRef<
                 {
                   backgroundColor: isLiquidGlassAvailable ? 'transparent' : colors.muted,
                   borderColor: colors.mutedForeground,
-                  gap: GAP,
+                  gap: theme.spaces.md,
                 },
                 tw`flex-row items-center justify-between border-b p-4`,
               ]}
             >
-              <View style={[tw`flex-row items-center`, { gap: GAP }]}>
+              <View style={[tw`flex-row items-center`, { gap: theme.spaces.md }]}>
                 <ImageWithFallback
                   alt={playlist.title}
                   source={{ uri: playlist.poster ?? '' }}

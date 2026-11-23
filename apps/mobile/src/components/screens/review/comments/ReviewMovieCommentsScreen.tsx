@@ -30,13 +30,6 @@ import { useToast } from '../../../Toast';
 import { CardEmpty } from '../../../cards/CardEmpty';
 import { CardError } from '../../../cards/CardError';
 import { useModalHeaderOptions } from '../../../../hooks/useModalHeaderOptions';
-import {
-  BORDER_RADIUS_LG,
-  GAP,
-  GAP_LG,
-  PADDING_HORIZONTAL,
-  PADDING_VERTICAL,
-} from '../../../../theme/globals';
 import tw from '../../../../lib/tw';
 import { CommentItem, ReviewComment } from './CommentItem';
 import { CommentRepliesLoader, RepliesState } from './CommentReplies';
@@ -63,7 +56,7 @@ export const ReviewMovieCommentsScreen = ({
   const t = useTranslations();
   const { user } = useAuth();
   const navigationHeaderHeight = useHeaderHeight();
-  const { colors, isLiquidGlassAvailable } = useTheme();
+  const { colors, isLiquidGlassAvailable, theme } = useTheme();
   const toast = useToast();
   const insets = useSafeAreaInsets();
   const modalHeaderOptions = useModalHeaderOptions({ forceCross: true });
@@ -81,7 +74,7 @@ export const ReviewMovieCommentsScreen = ({
     useKeyboardChatComposerInset(listRef, composerRef, 60);
   const { freeze } = useKeyboardScrollToEnd({ listRef });
   const listBottomInset = useDerivedValue(
-    () => insets.bottom + composerHeight.value + PADDING_VERTICAL * 2,
+    () => insets.bottom + composerHeight.value + theme.spaces.md * 2,
   );
 
   const { data: profile } = useQuery(userByUsernameOptions({ username }));
@@ -278,7 +271,7 @@ export const ReviewMovieCommentsScreen = ({
           data={flatData}
           renderItem={renderItem}
           keyExtractor={(item) => item.key}
-          ItemSeparatorComponent={() => <View style={{ height: GAP_LG }} />}
+          ItemSeparatorComponent={() => <View style={{ height: theme.spaces.lg }} />}
           ListEmptyComponent={
             <View style={tw`flex-1 items-center justify-center`}>
               {isLoading ? (
@@ -300,11 +293,11 @@ export const ReviewMovieCommentsScreen = ({
           onEndReached={() => hasNextPage && fetchNextPage()}
           onEndReachedThreshold={0.5}
           contentContainerStyle={{
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
           }}
           contentInset={{
-            top: navigationHeaderHeight + PADDING_VERTICAL,
+            top: navigationHeaderHeight + theme.spaces.md,
           }}
           refreshing={isRefetching}
           onRefresh={refetch}
@@ -319,19 +312,19 @@ export const ReviewMovieCommentsScreen = ({
 
       {user && (
         <KeyboardStickyView
-          offset={{ closed: -(GAP + insets.bottom), opened: -GAP }}
+          offset={{ closed: -(theme.spaces.md + insets.bottom), opened: -theme.spaces.md }}
           style={[tw`absolute left-0 right-0 overflow-hidden`, { bottom: 0 }]}
         >
           <RNView ref={composerRef} onLayout={onComposerLayout}>
             <GlassView
               style={[
                 {
-                  borderRadius: BORDER_RADIUS_LG,
-                  paddingVertical: PADDING_VERTICAL,
-                  paddingHorizontal: PADDING_HORIZONTAL,
-                  marginLeft: insets.left + PADDING_HORIZONTAL,
-                  marginRight: insets.right + PADDING_HORIZONTAL,
-                  gap: GAP,
+                  borderRadius: theme.border.radius.xl,
+                  paddingVertical: theme.spaces.md,
+                  paddingHorizontal: theme.spaces.horizontal,
+                  marginLeft: insets.left + theme.spaces.horizontal,
+                  marginRight: insets.right + theme.spaces.horizontal,
+                  gap: theme.spaces.md,
                   backgroundColor: !isLiquidGlassAvailable ? colors.muted : 'transparent',
                   borderWidth: !isLiquidGlassAvailable ? 1 : 0,
                   borderColor: !isLiquidGlassAvailable ? colors.border : 'transparent',

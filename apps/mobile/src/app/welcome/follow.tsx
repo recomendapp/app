@@ -15,7 +15,6 @@ import { Icons } from '../../constants/Icons';
 import ButtonUserFollow from '../../components/buttons/ButtonUserFollow';
 import useDebounce from '../../hooks/useDebounce';
 import tw from '../../lib/tw';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { useTheme } from '../../providers/ThemeProvider';
 import { KeyboardAwareLegendList } from '@legendapp/list/keyboard';
 import { useHeaderHeight } from 'expo-router/react-navigation';
@@ -23,7 +22,7 @@ import { useHeaderHeight } from 'expo-router/react-navigation';
 const WelcomeFollowScreen = () => {
   const t = useTranslations();
   const router = useRouter();
-  const { mode, colors, isLiquidGlassAvailable } = useTheme();
+  const { mode, colors, isLiquidGlassAvailable, theme } = useTheme();
   const navigationHeaderHeight = useHeaderHeight();
   const insets = useSafeAreaInsets();
   const [search, setSearch] = useState('');
@@ -80,11 +79,11 @@ const WelcomeFollowScreen = () => {
         keyExtractor={(item) => item.id.toString()}
         ItemSeparatorComponent={() => <View style={tw`h-2`} />}
         contentContainerStyle={{
-          gap: GAP,
-          paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
-          paddingBottom: insets.bottom + PADDING_VERTICAL,
+          gap: theme.spaces.md,
+          paddingTop: navigationHeaderHeight + theme.spaces.md,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
+          paddingBottom: insets.bottom + theme.spaces.md,
         }}
         ListEmptyComponent={() =>
           isLoading ? (

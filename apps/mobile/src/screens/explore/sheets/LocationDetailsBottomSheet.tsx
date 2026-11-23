@@ -6,13 +6,6 @@ import { Text } from '../../../components/ui/text';
 import { Button } from '../../../components/ui/Button';
 import { View } from '../../../components/ui/view';
 import tw from '../../../lib/tw';
-import {
-  BORDER_RADIUS_FULL,
-  GAP,
-  GAP_LG,
-  PADDING_HORIZONTAL,
-  PADDING_VERTICAL,
-} from '../../../theme/globals';
 import { Icons } from '../../../constants/Icons';
 import { ImageWithFallback } from '../../../components/utils/ImageWithFallback';
 import { MovieHeaderInfo } from '../../../components/screens/film/MovieHeaderInfo';
@@ -48,7 +41,7 @@ export const LocationDetailsBottomSheet = forwardRef<
   LocationDetailsBottomSheetMethods,
   LocationDetailsBottomSheetProps
 >(({ index, position, onClose }, ref) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const t = useTranslations();
   const { user } = useAuth();
@@ -103,29 +96,29 @@ export const LocationDetailsBottomSheet = forwardRef<
     >
       <BottomSheetScrollView
         contentContainerStyle={{
-          paddingHorizontal: PADDING_HORIZONTAL,
-          gap: GAP,
+          paddingHorizontal: theme.spaces.horizontal,
+          gap: theme.spaces.md,
           paddingBottom: insets.bottom,
         }}
         bounces={false}
       >
-        <View style={[tw`flex-row justify-between items-center`, { gap: GAP }]}>
+        <View style={[tw`flex-row justify-between items-center`, { gap: theme.spaces.md }]}>
           {movie ? (
             <MovieHeaderInfo movie={movie} />
           ) : (
             <Skeleton color={colors.background} style={tw`w-32 h-8`} />
           )}
-          <View style={[tw`flex-row items-center`, { gap: GAP }]}>
+          <View style={[tw`flex-row items-center`, { gap: theme.spaces.md }]}>
             <Button
               onPress={handleCloseLocationDetails}
               variant="muted"
               icon={Icons.X}
               size="icon"
-              style={{ borderRadius: BORDER_RADIUS_FULL, backgroundColor: colors.background }}
+              style={{ borderRadius: theme.border.radius.full, backgroundColor: colors.background }}
             />
           </View>
         </View>
-        <View style={[tw`flex-row items-center`, { gap: GAP }]}>
+        <View style={[tw`flex-row items-center`, { gap: theme.spaces.md }]}>
           {movie ? (
             <ImageWithFallback
               alt={movie.title || 'Movie Poster'}
@@ -160,16 +153,16 @@ export const LocationDetailsBottomSheet = forwardRef<
           <View
             style={[
               tw`flex-row items-center justify-between`,
-              { gap: GAP_LG, paddingVertical: PADDING_VERTICAL },
+              { gap: theme.spaces.lg, paddingVertical: theme.spaces.md },
             ]}
           >
-            <View style={[tw`flex-row items-center`, { gap: GAP_LG }]}>
+            <View style={[tw`flex-row items-center`, { gap: theme.spaces.lg }]}>
               <ButtonUserLogMovieRating movie={movie} />
               <ButtonUserLogMovieLike movie={movie} />
               <ButtonUserLogMovieWatch movie={movie} />
               <ButtonUserBookmark mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
             </View>
-            <View style={[tw`flex-row items-center`, { gap: GAP_LG }]}>
+            <View style={[tw`flex-row items-center`, { gap: theme.spaces.lg }]}>
               <ButtonPlaylistAdd mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
               <ButtonUserRecoSend mediaId={movie.id} mediaType="movie" mediaTitle={movie.title} />
             </View>
@@ -180,9 +173,9 @@ export const LocationDetailsBottomSheet = forwardRef<
             style={[
               {
                 backgroundColor: colors.background,
-                paddingHorizontal: PADDING_HORIZONTAL,
-                paddingVertical: PADDING_VERTICAL,
-                gap: GAP,
+                paddingHorizontal: theme.spaces.horizontal,
+                paddingVertical: theme.spaces.md,
+                gap: theme.spaces.md,
               },
               tw`rounded-md`,
             ]}

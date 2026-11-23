@@ -14,7 +14,6 @@ import { Button } from '../../ui/Button';
 import { CardMovie } from '../../cards/CardMovie';
 import { CardTvSeries } from '../../cards/CardTvSeries';
 import { View } from '../../ui/view';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Toolbar } from '../../RichText/Toolbar';
 import { Input } from '../../ui/Input';
@@ -73,7 +72,7 @@ const ReviewForm = ({
   const toast = useToast();
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const t = useTranslations();
   const [title, setTitle] = useState(review?.title ?? '');
   const [body, setBody] = useState<string | null>(null);
@@ -126,9 +125,9 @@ const ReviewForm = ({
   }, [onDelete]);
 
   const scrollViewStyle = useAnimatedStyle(() => {
-    const closedPadding = insets.bottom + PADDING_VERTICAL;
+    const closedPadding = insets.bottom + theme.spaces.md;
 
-    const openPadding = -keyboardHeight.value + toolbarHeight.value + PADDING_VERTICAL * 2;
+    const openPadding = -keyboardHeight.value + toolbarHeight.value + theme.spaces.md * 2;
 
     const animatedPadding = interpolate(
       progress.value,
@@ -234,16 +233,16 @@ const ReviewForm = ({
         style={[
           {
             flex: 1,
-            gap: GAP,
-            paddingTop: PADDING_VERTICAL,
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
+            gap: theme.spaces.md,
+            paddingTop: theme.spaces.md,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
           },
           scrollViewStyle,
         ]}
       >
         <View
-          style={{ gap: GAP }}
+          style={{ gap: theme.spaces.md }}
           onLayout={(e) => {
             headerHeight.value = e.nativeEvent.layout.height + 8;
           }}

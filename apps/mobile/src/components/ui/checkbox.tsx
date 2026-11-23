@@ -1,7 +1,6 @@
 import { Text } from './text';
 import { View } from './view';
 import { useTheme } from '../../providers/ThemeProvider';
-import { HEIGHT } from '../../theme/globals';
 import { Check } from 'lucide-react-native';
 import React from 'react';
 import { TextStyle, TouchableOpacity } from 'react-native';
@@ -26,7 +25,7 @@ export function Checkbox({
   onCheckedChange,
   haptic = true,
 }: CheckboxProps) {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const primary = colors.primary;
   const primaryForegroundColor = colors.primaryForeground;
   const danger = colors.destructive;
@@ -61,9 +60,9 @@ export function Checkbox({
     >
       <View
         style={{
-          width: HEIGHT / 2,
-          height: HEIGHT / 2,
-          borderRadius: HEIGHT / 2,
+          width: theme.input.height.md / 2,
+          height: theme.input.height.md / 2,
+          borderRadius: theme.input.height.md / 2,
           borderWidth: 1.5,
           borderColor: checked ? primary : borderColor,
           backgroundColor: checked ? primary : 'transparent',
@@ -74,7 +73,7 @@ export function Checkbox({
       >
         {checked && (
           <Check
-            size={HEIGHT / 3}
+            size={theme.input.height.md / 3}
             color={primaryForegroundColor}
             strokeWidth={3}
             strokeLinecap="round"

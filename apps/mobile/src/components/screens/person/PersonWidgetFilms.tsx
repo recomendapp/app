@@ -8,7 +8,6 @@ import { useTranslations } from 'use-intl';
 import { Text } from '../../ui/text';
 import { CardMovie } from '../../cards/CardMovie';
 import { MultiRowHorizontalList } from '../../ui/MultiRowHorizontalList';
-import { GAP, PADDING_HORIZONTAL } from '../../../theme/globals';
 import { useMemo } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { personMoviesInfiniteOptions } from '@libs/query-client';
@@ -21,13 +20,13 @@ interface PersonWidgetFilmsProps extends React.ComponentPropsWithoutRef<typeof V
 }
 
 const PersonWidgetFilms = ({ personId, url, style }: PersonWidgetFilmsProps) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const t = useTranslations();
   const insets = useSafeAreaInsets();
   const { width: screenWidth } = useWindowDimensions();
   const width = useMemo(
-    () => clamp(screenWidth - (PADDING_HORIZONTAL * 2 + GAP * 2), 400),
-    [screenWidth],
+    () => clamp(screenWidth - (theme.spaces.horizontal * 2 + theme.spaces.md * 2), 400),
+    [screenWidth, theme],
   );
   const { data, isLoading, fetchNextPage, hasNextPage } = useInfiniteQuery(
     personMoviesInfiniteOptions({
@@ -41,8 +40,8 @@ const PersonWidgetFilms = ({ personId, url, style }: PersonWidgetFilmsProps) => 
       <Link
         href={url}
         style={{
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
         }}
       >
         <View style={tw`flex-row items-center`}>
@@ -74,15 +73,15 @@ const PersonWidgetFilms = ({ personId, url, style }: PersonWidgetFilmsProps) => 
         }
         keyExtractor={(item, index) => (loading ? index.toString() : item.movie.id.toString())}
         contentContainerStyle={{
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
-          gap: GAP,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
+          gap: theme.spaces.md,
         }}
         columnStyle={{
           width: width,
-          gap: GAP,
+          gap: theme.spaces.md,
         }}
-        snapToInterval={width + GAP}
+        snapToInterval={width + theme.spaces.md}
         decelerationRate={'fast'}
         onEndReached={() => hasNextPage && fetchNextPage()}
         onEndReachedThreshold={0.5}

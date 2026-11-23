@@ -7,7 +7,6 @@ import { RefreshableStateContainer } from '../../../../components/ui/Refreshable
 import { useToast } from '../../../../components/Toast';
 import { Icons } from '../../../../constants/Icons';
 import { useTheme } from '../../../../providers/ThemeProvider';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../theme/globals';
 import tw from '../../../../lib/tw';
 import { ImportJob } from '@libs/api-js';
 import { importsListInfiniteOptions, useImportDeleteMutation } from '@libs/query-client';
@@ -30,7 +29,7 @@ const SettingsDataImportsScreen = () => {
   const format = useFormatter();
   const router = useRouter();
   const toast = useToast();
-  const { colors, mode } = useTheme();
+  const { colors, mode, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { getImporterStatusBadgeVariant, getImporterStatusLabel } = useImporter();
 
@@ -91,7 +90,7 @@ const SettingsDataImportsScreen = () => {
               onPress: () => handleDelete(item),
             },
           ]}
-          style={{ paddingHorizontal: PADDING_HORIZONTAL }}
+          style={{ paddingHorizontal: theme.spaces.horizontal }}
         >
           <Pressable
             onPress={() => handleOpen(item)}
@@ -125,6 +124,7 @@ const SettingsDataImportsScreen = () => {
       </Animated.View>
     ),
     [
+      theme,
       colors,
       format,
       handleOpen,
@@ -160,11 +160,11 @@ const SettingsDataImportsScreen = () => {
           onEndReached={() => hasNextPage && fetchNextPage()}
           contentContainerStyle={[
             {
-              gap: GAP,
-              paddingTop: PADDING_VERTICAL,
+              gap: theme.spaces.md,
+              paddingTop: theme.spaces.md,
               paddingLeft: insets.left,
               paddingRight: insets.right,
-              paddingBottom: insets.bottom + PADDING_VERTICAL,
+              paddingBottom: insets.bottom + theme.spaces.md,
             },
           ]}
         />

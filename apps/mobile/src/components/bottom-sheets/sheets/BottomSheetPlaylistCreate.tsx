@@ -11,13 +11,13 @@ import TrueSheet from '../../ui/TrueSheet';
 import { useTranslations } from 'use-intl';
 import { useToast } from '../../Toast';
 import { Input } from '../../ui/Input';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import { Label } from '../../ui/Label';
 import { forwardRef, useCallback } from 'react';
 import { Text } from '../../ui/text';
 import { Playlist } from '@libs/api-js';
 import { usePlaylistInsertMutation } from '@libs/query-client';
 import { PLAYLIST_RULES } from '@libs/rules';
+import { useTheme } from '../../../providers/ThemeProvider';
 
 interface BottomSheetPlaylistCreateProps extends BottomSheetProps {
   onCreate?: (playlist: Playlist) => void;
@@ -28,6 +28,7 @@ const BottomSheetPlaylistCreate = forwardRef<
   React.ComponentRef<typeof TrueSheet>,
   BottomSheetPlaylistCreateProps
 >(({ id, onCreate, placeholder, ...props }, ref) => {
+  const { theme } = useTheme();
   const toast = useToast();
   const closeSheet = useBottomSheetStore((state) => state.closeSheet);
   const t = useTranslations();
@@ -85,9 +86,9 @@ const BottomSheetPlaylistCreate = forwardRef<
     <TrueSheet
       ref={ref}
       style={{
-        gap: GAP,
-        paddingTop: PADDING_VERTICAL * 2,
-        paddingHorizontal: PADDING_HORIZONTAL,
+        gap: theme.spaces.md,
+        paddingTop: theme.spaces.md * 2,
+        paddingHorizontal: theme.spaces.horizontal,
       }}
       {...props}
     >
@@ -98,7 +99,7 @@ const BottomSheetPlaylistCreate = forwardRef<
         name="title"
         control={form.control}
         render={({ field: { onChange, onBlur, value } }) => (
-          <View style={[tw`w-full`, { gap: GAP }]}>
+          <View style={[tw`w-full`, { gap: theme.spaces.md }]}>
             <Label>{upperFirst(t('common.messages.title'))}</Label>
             <Input
               variant="outline"

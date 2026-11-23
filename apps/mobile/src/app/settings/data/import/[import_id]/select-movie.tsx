@@ -16,14 +16,13 @@ import { useSelectionResolver } from '../../../../../stores/useSelectionStore/us
 import { getTmdbImage } from '../../../../../lib/tmdb/getTmdbImage';
 import useDebounce from '../../../../../hooks/useDebounce';
 import tw from '../../../../../lib/tw';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { KeyboardAwareLegendList } from '@legendapp/list/keyboard';
 import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useModalHeaderOptions } from '../../../../../hooks/useModalHeaderOptions';
 
 const SettingsDataImportSelectMovieScreen = () => {
   const t = useTranslations();
-  const { colors, mode, isLiquidGlassAvailable } = useTheme();
+  const { colors, mode, isLiquidGlassAvailable, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
   const modalHeaderOptions = useModalHeaderOptions();
@@ -101,11 +100,11 @@ const SettingsDataImportSelectMovieScreen = () => {
         keyExtractor={(item) => item.id.toString()}
         ItemSeparatorComponent={() => <View style={tw`h-2`} />}
         contentContainerStyle={{
-          gap: GAP,
-          paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
-          paddingBottom: insets.bottom + PADDING_VERTICAL,
+          gap: theme.spaces.md,
+          paddingTop: navigationHeaderHeight + theme.spaces.md,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
+          paddingBottom: insets.bottom + theme.spaces.md,
         }}
         ListEmptyComponent={() =>
           isLoading ? (

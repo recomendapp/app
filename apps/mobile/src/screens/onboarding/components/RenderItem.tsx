@@ -9,13 +9,8 @@ import Animated, {
 import { OnboardingData } from '../data';
 import tw from '../../../lib/tw';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import {
-  BORDER_RADIUS_LG,
-  GAP_LG,
-  PADDING_HORIZONTAL,
-  PADDING_VERTICAL,
-} from '../../../theme/globals';
 import { Image } from 'expo-image';
+import { useTheme } from '../../../providers/ThemeProvider';
 
 type Props = {
   index: number;
@@ -24,6 +19,7 @@ type Props = {
 };
 
 const RenderItem = ({ index, x, item }: Props) => {
+  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = useWindowDimensions();
 
@@ -56,7 +52,7 @@ const RenderItem = ({ index, x, item }: Props) => {
       style={[
         styles.itemContainer,
         tw`w-full`,
-        { width: SCREEN_WIDTH, paddingTop: insets.top + PADDING_VERTICAL },
+        { width: SCREEN_WIDTH, paddingTop: insets.top + theme.spaces.md },
       ]}
     >
       <View style={tw`absolute inset-0 items-center justify-end`}>
@@ -75,7 +71,7 @@ const RenderItem = ({ index, x, item }: Props) => {
       <Animated.View
         style={[
           tw`items-center justify-center w-full`,
-          { gap: GAP_LG, paddingLeft: insets.left, paddingRight: insets.right },
+          { gap: theme.spaces.lg, paddingLeft: insets.left, paddingRight: insets.right },
         ]}
       >
         <Image
@@ -85,7 +81,7 @@ const RenderItem = ({ index, x, item }: Props) => {
             tw`w-full h-full max-w-lg`,
             {
               maxHeight: SCREEN_HEIGHT * 0.6,
-              borderRadius: BORDER_RADIUS_LG,
+              borderRadius: theme.border.radius.xl,
             },
           ]}
           contentFit={'contain'}
@@ -93,7 +89,7 @@ const RenderItem = ({ index, x, item }: Props) => {
         <Animated.Text
           style={[
             tw`text-center text-xl font-bold`,
-            { color: item.textColor, marginHorizontal: PADDING_HORIZONTAL },
+            { color: item.textColor, marginHorizontal: theme.spaces.horizontal },
             textAnimationStyle,
           ]}
         >

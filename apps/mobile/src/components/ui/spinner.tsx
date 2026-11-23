@@ -1,6 +1,6 @@
 import { Text } from './text';
 import { useTheme } from '../../providers/ThemeProvider';
-import { BORDER_RADIUS, CORNERS, FONT_SIZE } from '../../theme/globals';
+import { theme } from '../../theme';
 import { Loader2 } from 'lucide-react-native';
 import React, { useEffect, useMemo } from 'react';
 import { ActivityIndicator, Animated, StyleSheet, View, ViewStyle } from 'react-native';
@@ -42,13 +42,13 @@ const sizeConfig: Record<SpinnerSize, SpinnerConfig> = {
   default: {
     size: 24,
     iconSize: 24,
-    fontSize: FONT_SIZE,
+    fontSize: theme.fonts.sizes.md,
     gap: 8,
     thickness: 2,
   },
   lg: { size: 32, iconSize: 32, fontSize: 16, gap: 10, thickness: 3 },
-  icon: { size: 24, iconSize: 24, fontSize: FONT_SIZE, gap: 8, thickness: 2 },
-  fit: { size: 24, iconSize: 24, fontSize: FONT_SIZE, gap: 8, thickness: 2 },
+  icon: { size: 24, iconSize: 24, fontSize: theme.fonts.sizes.md, gap: 8, thickness: 2 },
+  fit: { size: 24, iconSize: 24, fontSize: theme.fonts.sizes.md, gap: 8, thickness: 2 },
 };
 
 const speedConfig = {
@@ -400,7 +400,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   bar: {
-    borderRadius: CORNERS,
+    borderRadius: theme.border.radius.full,
   },
   label: {
     textAlign: 'center',
@@ -418,7 +418,7 @@ const styles = StyleSheet.create({
   },
   overlayContent: {
     padding: 60,
-    borderRadius: BORDER_RADIUS,
+    borderRadius: theme.border.radius.md,
   },
   inlineLoader: {
     minHeight: 0,

@@ -4,7 +4,6 @@ import { Button } from '../../ui/Button';
 import TrueSheet from '../../ui/TrueSheet';
 import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import { View } from '../../ui/view';
 import { useTheme } from '../../../providers/ThemeProvider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -25,7 +24,7 @@ export const BottomSheetSelectDate = React.forwardRef<
   React.ComponentRef<typeof TrueSheet>,
   BottomSheetSelectDateProps
 >(({ id, defaultDate, onSave, saveLabel, minDate, maxDate, ...props }, ref) => {
-  const { colors, mode } = useTheme();
+  const { colors, mode, theme } = useTheme();
   const closeSheet = useBottomSheetStore((state) => state.closeSheet);
   const t = useTranslations();
   const insets = useSafeAreaInsets();
@@ -50,17 +49,17 @@ export const BottomSheetSelectDate = React.forwardRef<
     <TrueSheet
       ref={ref}
       style={{
-        gap: GAP,
-        paddingTop: PADDING_VERTICAL * 2,
-        paddingHorizontal: PADDING_HORIZONTAL,
+        gap: theme.spaces.md,
+        paddingTop: theme.spaces.md * 2,
+        paddingHorizontal: theme.spaces.horizontal,
       }}
       footer={
         <View
           style={{
             paddingBottom: insets.bottom,
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
-            paddingTop: PADDING_VERTICAL,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
+            paddingTop: theme.spaces.md,
             borderTopColor: colors.border,
             borderTopWidth: 1,
           }}

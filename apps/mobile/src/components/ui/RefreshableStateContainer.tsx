@@ -1,8 +1,8 @@
 import React from 'react';
 import { ScrollView, RefreshControl } from 'react-native';
 import tw from '../../lib/tw';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../../providers/ThemeProvider';
 
 interface RefreshableStateContainerProps extends React.ComponentProps<typeof ScrollView> {
   children: React.ReactNode;
@@ -19,6 +19,7 @@ export const RefreshableStateContainer = ({
   bottomOffset: bottomOffsetProp,
   ...props
 }: RefreshableStateContainerProps) => {
+  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const computedBottomOffset = bottomOffsetProp !== undefined ? bottomOffsetProp : insets.bottom;
   return (
@@ -26,9 +27,9 @@ export const RefreshableStateContainer = ({
       contentContainerStyle={[
         tw`flex-grow items-center justify-center`,
         {
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
-          paddingBottom: computedBottomOffset + PADDING_VERTICAL,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
+          paddingBottom: computedBottomOffset + theme.spaces.md,
         },
         contentContainerStyle,
       ]}

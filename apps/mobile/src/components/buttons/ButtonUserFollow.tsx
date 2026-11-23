@@ -5,7 +5,6 @@ import upperFirst from 'lodash/upperFirst';
 import { Alert, ViewStyle } from 'react-native';
 import tw from '../../lib/tw';
 import { useTranslations } from 'use-intl';
-import { CORNERS } from '../../theme/globals';
 import { useToast } from '../Toast';
 import { useTheme } from '../../providers/ThemeProvider';
 import { forwardRef, useCallback } from 'react';
@@ -34,7 +33,7 @@ const ButtonUserFollow = forwardRef<React.ComponentRef<typeof Button>, ButtonUse
     const t = useTranslations();
     const toast = useToast();
     const { user } = useAuth();
-    const { mode } = useTheme();
+    const { mode, theme } = useTheme();
 
     const { data: isFollow, isLoading } = useQuery(
       userFollowOptions({
@@ -104,7 +103,7 @@ const ButtonUserFollow = forwardRef<React.ComponentRef<typeof Button>, ButtonUse
     if (!user || user.id === profileId) return null;
 
     if (loading) {
-      return <Skeleton borderRadius={CORNERS} style={[tw`h-10 w-full`, style]} />;
+      return <Skeleton borderRadius={theme.border.radius.full} style={[tw`h-10 w-full`, style]} />;
     }
 
     return (

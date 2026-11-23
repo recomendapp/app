@@ -4,7 +4,6 @@ import { Text } from '../../../../../components/ui/text';
 import { View } from '../../../../../components/ui/view';
 import { Icons } from '../../../../../constants/Icons';
 import tw from '../../../../../lib/tw';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -42,7 +41,7 @@ const ModalPlaylistEditGuestsAdd = () => {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const headerHeight = useHeaderHeight();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
 
   // Refs
   const searchBarRef = useRef<SearchBarCommands>(null);
@@ -222,9 +221,9 @@ const ModalPlaylistEditGuestsAdd = () => {
             contentContainerStyle={[
               tw`gap-2 flex-grow`,
               {
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
-                paddingBottom: PADDING_VERTICAL,
+                paddingLeft: insets.left + theme.spaces.horizontal,
+                paddingRight: insets.right + theme.spaces.horizontal,
+                paddingBottom: theme.spaces.md,
                 paddingTop: headerHeight,
               },
             ]}
@@ -237,10 +236,10 @@ const ModalPlaylistEditGuestsAdd = () => {
             tw`gap-2 border-t`,
             {
               borderColor: colors.border,
-              paddingLeft: insets.left + PADDING_HORIZONTAL,
-              paddingRight: insets.right + PADDING_HORIZONTAL,
-              paddingTop: PADDING_VERTICAL,
-              paddingBottom: insets.bottom + PADDING_VERTICAL,
+              paddingLeft: insets.left + theme.spaces.horizontal,
+              paddingRight: insets.right + theme.spaces.horizontal,
+              paddingTop: theme.spaces.md,
+              paddingBottom: insets.bottom + theme.spaces.md,
             },
           ]}
         >
@@ -259,7 +258,7 @@ const ModalPlaylistEditGuestsAdd = () => {
             )}
             keyExtractor={(item) => item.id.toString()}
             showsHorizontalScrollIndicator={false}
-            ItemSeparatorComponent={() => <View style={{ width: GAP / 2 }} />}
+            ItemSeparatorComponent={() => <View style={{ width: theme.spaces.md / 2 }} />}
           />
           <Button
             disabled={!canSave || isPending}

@@ -20,7 +20,6 @@ import tw from '../../../../lib/tw';
 import { IconMediaRating } from '../../../medias/IconMediaRating';
 import { useTranslations } from 'use-intl';
 import { Text } from '../../../ui/text';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../theme/globals';
 import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useImagePalette } from '../../../../hooks/useImagePalette';
 import AnimatedImage from '../../../ui/AnimatedImage';
@@ -44,7 +43,7 @@ export const ProfileTvSeriesHeader: React.FC<ProfileTvSeriesHeaderProps> = ({
 }) => {
   const t = useTranslations();
   const { hslToRgb } = useColorConverter();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
   const bgColor = hslToRgb(colors.background);
@@ -134,14 +133,14 @@ export const ProfileTvSeriesHeader: React.FC<ProfileTvSeriesHeaderProps> = ({
         style={[
           tw`flex-row justify-between items-center gap-4`,
           {
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
-            paddingVertical: PADDING_VERTICAL,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
+            paddingVertical: theme.spaces.md,
           },
           textAnim,
         ]}
       >
-        <Animated.View style={{ gap: GAP, flexShrink: 1 }}>
+        <Animated.View style={{ gap: theme.spaces.md, flexShrink: 1 }}>
           <CardUser variant="inline" {...(log ? { user: log.user } : { skeleton: true })} />
           {!loading ? (
             <Link

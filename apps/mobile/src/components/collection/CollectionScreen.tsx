@@ -27,7 +27,6 @@ import { ButtonProps } from '../ui/Button';
 import { UseQueryResult } from '@tanstack/react-query';
 import { CollectionItem } from './CollectionItem';
 import { ImageType } from '../utils/ImageWithFallback';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { LegendListRenderItemProps } from '@legendapp/list/react-native';
 import { useWindowDimensions } from 'react-native';
 import { useReanimatedHeaderHeight } from 'react-native-screens/reanimated';
@@ -39,6 +38,7 @@ import { CardError } from '../cards/CardError';
 import { CardEmpty } from '../cards/CardEmpty';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { isIOS } from '../../platform/detection';
+import { useTheme } from '../../providers/ThemeProvider';
 
 export interface SortByOption<T> {
   label: string;
@@ -140,6 +140,7 @@ const CollectionScreen = <T extends Record<string, any>>({
   fuseThreshold = 0.5,
   ...props
 }: CollectionScreenConfig<T>) => {
+  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useReanimatedHeaderHeight();
   const t = useTranslations();
@@ -230,7 +231,7 @@ const CollectionScreen = <T extends Record<string, any>>({
   // Reserves insets.bottom as a footer that shrinks to 0 in sync with the keyboard's own
   // animation curve — passing an animated value through contentContainerStyle directly isn't
   // supported by this (non-Reanimated) list variant, so a genuine Animated.View footer is used
-  // instead, keeping the static PADDING_VERTICAL always applied via contentContainerStyle.
+  // instead, keeping the static theme.spaces.md always applied via contentContainerStyle.
   const keyboardFooterStyle = useAnimatedStyle(() => ({
     height: interpolate(keyboardProgress.value, [0, 1], [insets.bottom, 0], Extrapolation.CLAMP),
   }));
@@ -438,10 +439,10 @@ const CollectionScreen = <T extends Record<string, any>>({
         refreshing={isRefetching}
         onRefresh={refetch}
         contentContainerStyle={{
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
-          paddingBottom: PADDING_VERTICAL,
-          gap: GAP,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
+          paddingBottom: theme.spaces.md,
+          gap: theme.spaces.md,
         }}
         maintainVisibleContentPosition={maintainVisibleContentPosition}
         numColumns={

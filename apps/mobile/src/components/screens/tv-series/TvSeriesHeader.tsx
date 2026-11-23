@@ -22,7 +22,6 @@ import { IconMediaRating } from '../../medias/IconMediaRating';
 import useBottomSheetStore from '../../../stores/useBottomSheetStore';
 import { useLocale, useTranslations } from 'use-intl';
 import { Text, TextProps } from '../../ui/text';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import BottomSheetTvSeriesFollowersRating from '../../bottom-sheets/sheets/BottomSheetTvSeriesFollowersRating';
 import { useHeaderHeight } from 'expo-router/react-navigation';
 import { TvSeriesHeaderInfo } from './TvSeriesHeaderInfo';
@@ -48,7 +47,7 @@ const TvSeriesHeader: React.FC<TvSeriesHeaderProps> = ({
   const openSheet = useBottomSheetStore((state) => state.openSheet);
   const t = useTranslations();
   const { hslToRgb } = useColorConverter();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
   const bgColor = hslToRgb(colors.background);
@@ -151,9 +150,9 @@ const TvSeriesHeader: React.FC<TvSeriesHeaderProps> = ({
         style={[
           tw.style('items-center gap-4'),
           {
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
-            paddingVertical: PADDING_VERTICAL,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
+            paddingVertical: theme.spaces.md,
           },
         ]}
       >
@@ -199,7 +198,9 @@ const TvSeriesHeader: React.FC<TvSeriesHeaderProps> = ({
             />
           )}
         </Animated.View>
-        <Animated.View style={[tw.style('w-full items-center'), { gap: GAP }, textAnim]}>
+        <Animated.View
+          style={[tw.style('w-full items-center'), { gap: theme.spaces.md }, textAnim]}
+        >
           <View>
             {!loading ? (
               <Text

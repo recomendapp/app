@@ -1,9 +1,9 @@
 import { Skeleton } from '../ui/Skeleton';
 import Avatar from '../ui/Avatar';
-import { CORNERS } from '../../theme/globals';
 import { forwardRef } from 'react';
 import { ViewProps } from 'react-native';
 import { ImageSource } from 'expo-image';
+import { useTheme } from '../../providers/ThemeProvider';
 
 interface UserAvatarBaseProps extends Omit<React.ComponentPropsWithRef<typeof Avatar.Root>, 'alt'> {
   alt?: string;
@@ -24,6 +24,7 @@ export type UserAvatarProps = UserAvatarBaseProps & (UserAvatarSkeletonProps | U
 
 const UserAvatar = forwardRef<React.ComponentRef<typeof Avatar.Root>, UserAvatarProps>(
   ({ full_name, avatar_url, skeleton, style, ...props }, ref) => {
+    const { theme } = useTheme();
     const baseStyle: ViewProps['style'] = [
       { height: 'auto', width: 40, aspectRatio: 1 / 1 },
       style,
@@ -34,7 +35,7 @@ const UserAvatar = forwardRef<React.ComponentRef<typeof Avatar.Root>, UserAvatar
     };
 
     if (skeleton) {
-      return <Skeleton borderRadius={CORNERS} style={baseStyle} />;
+      return <Skeleton borderRadius={theme.border.radius.full} style={baseStyle} />;
     }
 
     return (

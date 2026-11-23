@@ -3,7 +3,6 @@ import { Button } from '../components/ui/Button';
 import { View } from '../components/ui/view';
 import { Icons } from '../constants/Icons';
 import tw from '../lib/tw';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../theme/globals';
 import { LegendList } from '@legendapp/list/react-native';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
@@ -23,8 +22,10 @@ import { RefreshableStateContainer } from '../components/ui/RefreshableStateCont
 import { CardError } from '../components/cards/CardError';
 import { CardEmpty } from '../components/cards/CardEmpty';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../providers/ThemeProvider';
 
 const FollowRequestsScreen = () => {
+  const { theme } = useTheme();
   const t = useTranslations();
   const toast = useToast();
   const { user } = useAuth();
@@ -143,11 +144,11 @@ const FollowRequestsScreen = () => {
           onEndReached={() => hasNextPage && fetchNextPage()}
           contentContainerStyle={[
             {
-              gap: GAP,
-              paddingLeft: insets.left + PADDING_HORIZONTAL,
-              paddingRight: insets.right + PADDING_HORIZONTAL,
-              paddingTop: PADDING_VERTICAL,
-              paddingBottom: insets.bottom + PADDING_VERTICAL,
+              gap: theme.spaces.md,
+              paddingLeft: insets.left + theme.spaces.horizontal,
+              paddingRight: insets.right + theme.spaces.horizontal,
+              paddingTop: theme.spaces.md,
+              paddingBottom: insets.bottom + theme.spaces.md,
               flexGrow: 1,
             },
           ]}

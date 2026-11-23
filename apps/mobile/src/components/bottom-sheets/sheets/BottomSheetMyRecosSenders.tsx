@@ -10,7 +10,6 @@ import TrueSheet from '../../ui/TrueSheet';
 import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import { RecoSender } from '@libs/api-js';
 
 interface BottomSheetMyRecosSendersProps extends BottomSheetProps {
@@ -22,7 +21,7 @@ const BottomSheetMyRecosSenders = React.forwardRef<
   BottomSheetMyRecosSendersProps
 >(({ id, comments, ...props }, ref) => {
   const insets = useSafeAreaInsets();
-  const { colors, mode } = useTheme();
+  const { colors, mode, theme } = useTheme();
   const t = useTranslations();
   const renderItem = useCallback(
     ({ item }: { item: RecoSender }) => {
@@ -52,9 +51,9 @@ const BottomSheetMyRecosSenders = React.forwardRef<
           style={[
             tw`text-center text-xl font-bold`,
             {
-              paddingTop: PADDING_VERTICAL * 2,
-              paddingHorizontal: PADDING_HORIZONTAL,
-              paddingBottom: PADDING_VERTICAL,
+              paddingTop: theme.spaces.md * 2,
+              paddingHorizontal: theme.spaces.horizontal,
+              paddingBottom: theme.spaces.md,
             },
           ]}
         >
@@ -69,8 +68,8 @@ const BottomSheetMyRecosSenders = React.forwardRef<
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={{
-          paddingHorizontal: PADDING_HORIZONTAL,
-          paddingBottom: insets.bottom + PADDING_VERTICAL,
+          paddingHorizontal: theme.spaces.horizontal,
+          paddingBottom: insets.bottom + theme.spaces.md,
         }}
         indicatorStyle={mode === 'dark' ? 'white' : 'black'}
         ItemSeparatorComponent={() => <View style={tw`h-2`} />}

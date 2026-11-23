@@ -10,7 +10,6 @@ import { IconMediaRating } from '../medias/IconMediaRating';
 import { Skeleton } from '../ui/Skeleton';
 import BottomSheetTvSeries from '../bottom-sheets/sheets/BottomSheetTvSeries';
 import { Text } from '../ui/text';
-import { GAP } from '../../theme/globals';
 import { getTmdbImage } from '../../lib/tmdb/getTmdbImage';
 import {
   LogTvSeries,
@@ -219,6 +218,7 @@ const CardTvSeriesList = React.forwardRef<
     },
     ref,
   ) => {
+    const { theme } = useTheme();
     return (
       <Animated.View
         ref={ref}
@@ -261,7 +261,7 @@ const CardTvSeriesList = React.forwardRef<
           </View>
         </View>
         {!hideReleaseDate && (
-          <View style={[tw`flex-row items-center`, { gap: GAP }]}>
+          <View style={[tw`flex-row items-center`, { gap: theme.spaces.md }]}>
             {skeleton ? (
               <Skeleton style={tw`h-5 w-12`} />
             ) : (

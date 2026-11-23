@@ -5,10 +5,10 @@ import { LegendList } from '@legendapp/list/react-native';
 import { useTranslations } from 'use-intl';
 import { upperFirst } from 'lodash';
 import { Text } from '../ui/text';
-import { GAP } from '../../theme/globals';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { userPlaylistsFollowingInfiniteOptions } from '@libs/query-client';
 import { useAuth } from '../../providers/AuthProvider';
+import { useTheme } from '../../providers/ThemeProvider';
 
 interface WidgetUserFriendsPlaylistsProps extends React.ComponentPropsWithoutRef<typeof View> {
   labelStyle?: StyleProp<TextStyle>;
@@ -20,6 +20,7 @@ export const WidgetUserFriendsPlaylists = ({
   labelStyle,
   containerStyle,
 }: WidgetUserFriendsPlaylistsProps) => {
+  const { theme } = useTheme();
   const t = useTranslations();
   const { user } = useAuth();
   const {
@@ -53,7 +54,7 @@ export const WidgetUserFriendsPlaylists = ({
         onEndReached={() => hasNextPage && fetchNextPage()}
         horizontal
         showsHorizontalScrollIndicator={false}
-        ItemSeparatorComponent={() => <View style={{ width: GAP }} />}
+        ItemSeparatorComponent={() => <View style={{ width: theme.spaces.md }} />}
         contentContainerStyle={containerStyle}
         nestedScrollEnabled
       />

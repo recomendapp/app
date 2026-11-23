@@ -13,7 +13,6 @@ import { CardUser } from '../../../../../components/cards/CardUser';
 import app from '../../../../../constants/app';
 import { SwipeableActionsRow } from '../../../../../components/ui/swippeable/SwipeableActionsRow';
 import { NativeIcons } from '../../../../../constants/native-icons';
-import { PADDING_HORIZONTAL } from '../../../../../theme/globals';
 import { useToast } from '../../../../../components/Toast';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PlaylistMemberWithUser } from '@libs/api-js';
@@ -32,8 +31,10 @@ import { LegendListRef } from '@legendapp/list/react-native';
 import { RefreshableStateContainer } from '../../../../../components/ui/RefreshableStateContainer';
 import { CardError } from '../../../../../components/cards/CardError';
 import { CardEmpty } from '../../../../../components/cards/CardEmpty';
+import { useTheme } from '../../../../../providers/ThemeProvider';
 
 const ModalPlaylistEditMembers = () => {
+  const { theme } = useTheme();
   const { user } = useAuth();
   const { playlist_id } = useLocalSearchParams<{ playlist_id: string }>();
   const playlistId = Number(playlist_id);
@@ -188,7 +189,7 @@ const ModalPlaylistEditMembers = () => {
               onPress: () => handleDeleteMember(item.user.id!),
             },
           ]}
-          style={{ paddingHorizontal: PADDING_HORIZONTAL }}
+          style={{ paddingHorizontal: theme.spaces.horizontal }}
         >
           <View style={tw`flex-row items-center justify-between gap-2 w-full`}>
             <CardUser
@@ -205,7 +206,7 @@ const ModalPlaylistEditMembers = () => {
         </SwipeableActionsRow>
       );
     },
-    [handleDeleteMember, handleSelectRole, playlistMembersRoleValues, t],
+    [handleDeleteMember, handleSelectRole, playlistMembersRoleValues, t, theme],
   );
 
   return (

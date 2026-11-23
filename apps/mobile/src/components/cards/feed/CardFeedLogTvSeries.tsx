@@ -14,7 +14,6 @@ import useBottomSheetStore from '../../../stores/useBottomSheetStore';
 import BottomSheetTvSeries from '../../bottom-sheets/sheets/BottomSheetTvSeries';
 import { CardUser } from '../CardUser';
 import { CardReviewTvSeries } from '../reviews/CardReviewTvSeries';
-import { GAP } from '../../../theme/globals';
 import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
 import { FeedItemLogTvSeries } from '@libs/api-js';
 import { FixedOmit } from '../../../utils/fixed-omit';
@@ -44,10 +43,14 @@ const CardFeedLogTvSeriesDefault = React.forwardRef<
   React.ComponentRef<typeof Animated.View>,
   FixedOmit<CardFeedLogTvSeriesProps, 'variant' | 'onPress' | 'onLongPress'>
 >(({ style, children, data, footer, skeleton, ...props }, ref) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const t = useTranslations();
   return (
-    <Animated.View ref={ref} style={[{ gap: GAP }, tw`flex-row rounded-xl`, style]} {...props}>
+    <Animated.View
+      ref={ref}
+      style={[{ gap: theme.spaces.md }, tw`flex-row rounded-xl`, style]}
+      {...props}
+    >
       {!skeleton ? (
         <ImageWithFallback
           source={{

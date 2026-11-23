@@ -9,7 +9,6 @@ import { upperFirst } from 'lodash';
 import { useCallback, useMemo, useState } from 'react';
 import { Text, useWindowDimensions, View } from 'react-native';
 import { useTranslations } from 'use-intl';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../theme/globals';
 import { CardTvSeries } from '../../../cards/CardTvSeries';
 import { FadeInDown } from 'react-native-reanimated';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
@@ -27,7 +26,7 @@ const UserCollectionTvSeries = () => {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const { username } = useLocalSearchParams<{ username: string }>();
   const { data: profile } = useQuery(userByUsernameOptions({ username: username }));
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
@@ -139,10 +138,10 @@ const UserCollectionTvSeries = () => {
         )}
         onEndReachedThreshold={0.5}
         contentContainerStyle={{
-          gap: GAP,
-          paddingBottom: insets.bottom + PADDING_VERTICAL,
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
+          gap: theme.spaces.md,
+          paddingBottom: insets.bottom + theme.spaces.md,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
         }}
         keyExtractor={useCallback(
           (item: LogTvSeriesWithTvSeriesNoReview) => item.id.toString(),

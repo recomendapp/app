@@ -29,7 +29,6 @@ import { LucideIcon } from 'lucide-react-native';
 import { Icons } from '../../../../constants/Icons';
 import { KeyboardToolbar } from '../../../../components/ui/KeyboardToolbar';
 import { useToast } from '../../../../components/Toast';
-import { PADDING_VERTICAL } from '../../../../theme/globals';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery } from '@tanstack/react-query';
 import { playlistOptions, usePlaylistUpdateMutation } from '@libs/query-client';
@@ -43,7 +42,7 @@ const ModalPlaylistEdit = () => {
   const playlistId = Number(playlist_id);
   const toast = useToast();
   const insets = useSafeAreaInsets();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const router = useRouter();
   const { showActionSheetWithOptions } = useActionSheet();
   const t = useTranslations();
@@ -297,7 +296,7 @@ const ModalPlaylistEdit = () => {
       />
       <KeyboardAwareScrollView
         bounces={false}
-        contentContainerStyle={[tw`gap-2 p-4`, { paddingBottom: insets.bottom + PADDING_VERTICAL }]}
+        contentContainerStyle={[tw`gap-2 p-4`, { paddingBottom: insets.bottom + theme.spaces.md }]}
         nestedScrollEnabled
         bottomOffset={headerHeight}
       >

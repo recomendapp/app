@@ -4,11 +4,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller';
 import { Icons } from '../../constants/Icons';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { KeyboardAwareScrollView } from './KeyboardAwareScrollView';
 import tw from '../../lib/tw';
 import { Button } from './Button';
 import { useTranslations } from 'use-intl';
+import { useTheme } from '../../providers/ThemeProvider';
 
 interface MultiStepScreenProps {
   children: React.ReactNode;
@@ -36,6 +36,7 @@ export const MultiStepScreen = ({
   nextLabel: nextLabelProp,
   nextIcon = Icons.ChevronRight,
 }: MultiStepScreenProps) => {
+  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const t = useTranslations();
   const nextLabel = nextLabelProp || t('common.messages.continue');
@@ -46,16 +47,16 @@ export const MultiStepScreen = ({
 
   const paddingBottom = useMemo(() => footerHeight, [footerHeight]);
 
-  const paddingLeft = useMemo(() => insets.left + PADDING_HORIZONTAL, [insets.left]);
+  const paddingLeft = useMemo(() => insets.left + theme.spaces.horizontal, [insets.left, theme]);
 
-  const paddingRight = useMemo(() => insets.right + PADDING_HORIZONTAL, [insets.right]);
+  const paddingRight = useMemo(() => insets.right + theme.spaces.horizontal, [insets.right, theme]);
 
   const animatedFooterStyle = useAnimatedStyle(() => {
     const kbHeight = Math.abs(keyboardHeight.value);
 
     return {
       bottom: kbHeight,
-      paddingBottom: (kbHeight > 0 ? 0 : insets.bottom) + PADDING_VERTICAL,
+      paddingBottom: (kbHeight > 0 ? 0 : insets.bottom) + theme.spaces.md,
     };
   });
 
@@ -67,14 +68,14 @@ export const MultiStepScreen = ({
             paddingLeft: paddingLeft,
             paddingRight: paddingRight,
             paddingBottom: paddingBottom,
-            gap: GAP,
+            gap: theme.spaces.md,
             flexGrow: 1,
           },
           contentContainerStyle,
         ]}
         bounces={false}
         keyboardShouldPersistTaps="handled"
-        bottomOffset={footerHeight + PADDING_VERTICAL}
+        bottomOffset={footerHeight + theme.spaces.md}
       >
         <React.Fragment key={currentStepKey}>{children}</React.Fragment>
       </KeyboardAwareScrollView>
@@ -86,10 +87,10 @@ export const MultiStepScreen = ({
         style={[
           tw`absolute flex-row items-center justify-center left-0 right-0`,
           {
-            gap: GAP,
+            gap: theme.spaces.md,
             paddingLeft: paddingLeft,
             paddingRight: paddingRight,
-            paddingTop: PADDING_VERTICAL,
+            paddingTop: theme.spaces.md,
           },
           animatedFooterStyle,
         ]}

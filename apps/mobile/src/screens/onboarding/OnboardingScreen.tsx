@@ -14,10 +14,11 @@ import CustomButton from './components/CustomButton';
 import RenderItem from './components/RenderItem';
 import useOnboardingData, { OnboardingData } from './data';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { PADDING_VERTICAL } from '../../theme/globals';
 import { useRouter } from 'expo-router';
+import { useTheme } from '../../providers/ThemeProvider';
 
 const OnboardingScreen = () => {
+  const { theme } = useTheme();
   const flatListRef = useAnimatedRef<FlatList<OnboardingData>>();
   const x = useSharedValue(0);
   const flatListIndex = useSharedValue(0);
@@ -59,8 +60,8 @@ const OnboardingScreen = () => {
           viewAreaCoveragePercentThreshold: 10,
         }}
         style={{
-          paddingTop: shouldInsetsAware ? insets.top + PADDING_VERTICAL : PADDING_VERTICAL,
-          paddingBottom: insets.bottom + PADDING_VERTICAL + 50,
+          paddingTop: shouldInsetsAware ? insets.top + theme.spaces.md : theme.spaces.md,
+          paddingBottom: insets.bottom + theme.spaces.md + 50,
         }}
       />
       <View

@@ -15,7 +15,6 @@ import { z } from 'zod';
 import { ImageWithFallback } from '../../../../components/utils/ImageWithFallback';
 import tw from '../../../../lib/tw';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../theme/globals';
 import Fuse from 'fuse.js';
 import { Icons } from '../../../../constants/Icons';
 import { Badge } from '../../../../components/ui/Badge';
@@ -38,7 +37,7 @@ import { PLAYLIST_ITEM_RULES } from '@libs/rules';
 const PlaylistAddTo = () => {
   const t = useTranslations();
   const router = useRouter();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const toast = useToast();
   const insets = useSafeAreaInsets();
   const headerHeight = useHeaderHeight();
@@ -302,12 +301,12 @@ const PlaylistAddTo = () => {
             refreshing={isRefetching}
             onRefresh={refetch}
             maintainVisibleContentPosition={false}
-            ItemSeparatorComponent={() => <View style={{ height: GAP }} />}
+            ItemSeparatorComponent={() => <View style={{ height: theme.spaces.md }} />}
             contentContainerStyle={[
               {
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
-                paddingBottom: PADDING_VERTICAL,
+                paddingLeft: insets.left + theme.spaces.horizontal,
+                paddingRight: insets.right + theme.spaces.horizontal,
+                paddingBottom: theme.spaces.md,
                 paddingTop: headerHeight,
               },
             ]}
@@ -320,10 +319,10 @@ const PlaylistAddTo = () => {
             tw`gap-2 border-t`,
             {
               borderColor: colors.border,
-              paddingLeft: insets.left + PADDING_HORIZONTAL,
-              paddingRight: insets.right + PADDING_HORIZONTAL,
-              paddingTop: PADDING_VERTICAL,
-              paddingBottom: insets.bottom + PADDING_VERTICAL,
+              paddingLeft: insets.left + theme.spaces.horizontal,
+              paddingRight: insets.right + theme.spaces.horizontal,
+              paddingTop: theme.spaces.md,
+              paddingBottom: insets.bottom + theme.spaces.md,
             },
           ]}
         >
@@ -342,7 +341,7 @@ const PlaylistAddTo = () => {
             )}
             keyExtractor={(item) => item.id.toString()}
             showsHorizontalScrollIndicator={false}
-            ItemSeparatorComponent={() => <View style={{ width: GAP / 2 }} />}
+            ItemSeparatorComponent={() => <View style={{ width: theme.spaces.md / 2 }} />}
           />
           <Controller
             name="comment"

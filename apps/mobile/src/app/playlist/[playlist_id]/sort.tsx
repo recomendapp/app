@@ -26,14 +26,13 @@ import { getMediaDetails } from '../../../components/utils/getMediaDetails';
 import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
 import { Text } from '../../../components/ui/text';
 import { Button } from '../../../components/ui/Button';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 
 const PlaylistSortScreen = () => {
   const toast = useToast();
   const insets = useSafeAreaInsets();
   const t = useTranslations();
   const router = useRouter();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const headerHeight = useHeaderHeight();
   const { playlist_id } = useLocalSearchParams();
   const playlistId = Number(playlist_id);
@@ -201,9 +200,9 @@ const PlaylistSortScreen = () => {
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={{
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
-            paddingBottom: PADDING_VERTICAL + insets.bottom,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
+            paddingBottom: theme.spaces.md + insets.bottom,
             paddingTop: headerHeight,
           }}
         />

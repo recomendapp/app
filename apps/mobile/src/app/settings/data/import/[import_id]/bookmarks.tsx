@@ -20,14 +20,13 @@ import { useTheme } from '../../../../../providers/ThemeProvider';
 import { useSelectionField } from '../../../../../stores/useSelectionStore/useSelectionField';
 import { getTmdbImage } from '../../../../../lib/tmdb/getTmdbImage';
 import tw from '../../../../../lib/tw';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { useHeaderHeight } from 'expo-router/react-navigation';
 import { LegendList } from '@legendapp/list/react-native';
 import { Accordion } from '../../../../../components/ui/accordion';
 
 const SettingsDataImportBookmarksScreen = () => {
   const t = useTranslations();
-  const { isLiquidGlassAvailable } = useTheme();
+  const { isLiquidGlassAvailable, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
   const { import_id } = useLocalSearchParams<{ import_id: string }>();
@@ -76,11 +75,11 @@ const SettingsDataImportBookmarksScreen = () => {
           onRefresh={refetch}
           onEndReached={() => hasNextPage && fetchNextPage()}
           contentContainerStyle={{
-            gap: GAP,
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
-            paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
-            paddingBottom: insets.bottom + PADDING_VERTICAL,
+            gap: theme.spaces.md,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
+            paddingTop: navigationHeaderHeight + theme.spaces.md,
+            paddingBottom: insets.bottom + theme.spaces.md,
           }}
         />
       )}

@@ -8,7 +8,6 @@ import useBottomSheetStore from '../../stores/useBottomSheetStore';
 import { Skeleton } from '../ui/Skeleton';
 import { Text } from '../ui/text';
 import BottomSheetPerson from '../bottom-sheets/sheets/BottomSheetPerson';
-import { GAP } from '../../theme/globals';
 import UserAvatar, { UserAvatarProps } from '../user/UserAvatar';
 import { PersonCompact } from '@libs/api-js';
 import { FixedOmit } from '../../utils/fixed-omit';
@@ -155,10 +154,11 @@ const CardPersonList = forwardRef<
   React.ComponentRef<typeof Animated.View>,
   FixedOmit<VariantMap['list'], 'variant' | 'linked' | 'onPress' | 'onLongPress'>
 >(({ style, person, skeleton, children, ...props }, ref) => {
+  const { theme } = useTheme();
   return (
     <Animated.View
       ref={ref}
-      style={[{ gap: GAP }, tw`flex-row justify-between items-center p-1 h-20`, style]}
+      style={[{ gap: theme.spaces.md }, tw`flex-row justify-between items-center p-1 h-20`, style]}
       {...props}
     >
       <View style={tw`flex-1 flex-row items-center gap-2`}>

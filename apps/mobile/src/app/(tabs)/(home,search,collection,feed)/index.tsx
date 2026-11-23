@@ -18,7 +18,6 @@ import AnimatedStackScreen from '../../../components/ui/AnimatedStackScreen';
 import { View } from '../../../components/ui/view';
 import { AnimatedScrollView } from 'react-native-reanimated/lib/typescript/component/ScrollView';
 import { useRef, useState } from 'react';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import { Pressable, RefreshControl } from 'react-native';
 import { WidgetMostPopular } from '../../../components/widgets/WidgetMostPopular';
 import { useHeaderHeight, useScrollToTop } from 'expo-router/react-navigation';
@@ -28,6 +27,7 @@ import { userKeys, widgetKeys } from '@libs/query-client';
 import { useUpdates, reloadAsync } from 'expo-updates';
 import { NativeStackHeaderItem, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../../../providers/ThemeProvider';
 
 const HeaderLeft = () => {
   const { user } = useAuth();
@@ -106,47 +106,48 @@ const HeaderRight = () => {
 };
 
 const AuthenticatedWidgets = () => {
+  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   return (
     <>
       <WidgetUserRecos
         labelStyle={{
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
         }}
         containerStyle={{
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
         }}
       />
       <WidgetUserBookmarks
         labelStyle={{
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
         }}
         containerStyle={{
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
         }}
       />
       <WidgetUserFriendsPlaylists
         labelStyle={{
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
         }}
         containerStyle={{
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
         }}
       />
       <WidgetUserDiscovery
         labelStyle={{
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
         }}
         containerStyle={{
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
         }}
       />
     </>
@@ -158,6 +159,7 @@ const UnauthenticatedContent = () => {
 };
 
 const HomeScreen = () => {
+  const { theme } = useTheme();
   const t = useTranslations();
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -324,8 +326,8 @@ const HomeScreen = () => {
         ref={scrollRef}
         onScroll={scrollHandler}
         contentContainerStyle={{
-          gap: GAP,
-          paddingBottom: insets.bottom + PADDING_VERTICAL,
+          gap: theme.spaces.md,
+          paddingBottom: insets.bottom + theme.spaces.md,
         }}
         refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
         nestedScrollEnabled
@@ -340,12 +342,12 @@ const HomeScreen = () => {
         />
         <WidgetMostPopular
           labelStyle={{
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
           }}
           containerStyle={{
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
           }}
         />
         {user ? <AuthenticatedWidgets /> : <UnauthenticatedContent />}

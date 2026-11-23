@@ -1,7 +1,6 @@
 import { LegendList, LegendListProps } from '@legendapp/list/react-native';
 import { Button } from '../ui/Button';
 import { Text } from '../ui/text';
-import { GAP } from '../../theme/globals';
 import { useCallback, useMemo } from 'react';
 import { useAuth } from '../../providers/AuthProvider';
 import { useTheme } from '../../providers/ThemeProvider';
@@ -27,7 +26,7 @@ export const OAuthProviders = ({
   ...props
 }: OAuthProvidersProps) => {
   const { loginWithOAuth } = useAuth();
-  const { colors, mode } = useTheme();
+  const { colors, mode, theme } = useTheme();
 
   const providers = useMemo(
     (): Provider[] =>
@@ -73,7 +72,7 @@ export const OAuthProviders = ({
       keyExtractor={(item) => item.name}
       numColumns={numColumns}
       style={[{ overflow: 'visible' }, style]}
-      contentContainerStyle={[{ gap: GAP }, contentContainerStyle]}
+      contentContainerStyle={[{ gap: theme.spaces.md }, contentContainerStyle]}
       {...props}
     />
   );

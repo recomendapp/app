@@ -1,6 +1,5 @@
 import { Text } from './text';
 import { useTheme } from '../../providers/ThemeProvider';
-import { CORNERS, FONT_SIZE } from '../../theme/globals';
 import React, { forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
 import {
   Pressable,
@@ -72,7 +71,7 @@ export const InputOTP = forwardRef<InputOTPRef, InputOTPProps>(
     const inputRef = useRef<TextInput>(null);
 
     // Theme colors
-    const { colors } = useTheme();
+    const { colors, theme } = useTheme();
     const cardColor = colors.card;
     const textColor = colors.foreground;
     const muted = colors.mutedForeground;
@@ -165,7 +164,7 @@ export const InputOTP = forwardRef<InputOTPRef, InputOTPProps>(
               {
                 width: 58,
                 height: 58,
-                borderRadius: CORNERS,
+                borderRadius: theme.border.radius.full,
                 borderWidth: 1,
                 borderColor: error
                   ? danger
@@ -184,7 +183,7 @@ export const InputOTP = forwardRef<InputOTPRef, InputOTPProps>(
           >
             <Text
               style={{
-                fontSize: FONT_SIZE + 2,
+                fontSize: theme.fonts.sizes.md + 2,
                 fontWeight: '600',
                 color: error ? danger : hasValue ? textColor : muted,
               }}

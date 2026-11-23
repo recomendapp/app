@@ -14,7 +14,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Text } from '../../../../components/ui/text';
 import { InputOTP } from '../../../../components/ui/input-otp';
 import { KeyboardAwareScrollView } from '../../../../components/ui/KeyboardAwareScrollView';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../theme/globals';
 import { View } from '../../../../components/ui/view';
 import { KeyboardToolbar } from '../../../../components/ui/KeyboardToolbar';
 import { useToast } from '../../../../components/Toast';
@@ -28,7 +27,7 @@ import { authClient } from '../../../../lib/auth/client';
 import { useModalHeaderOptions } from '../../../../hooks/useModalHeaderOptions';
 
 const LoginOtpScreen = () => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const queryClient = useQueryClient();
   const insets = useSafeAreaInsets();
   const toast = useToast();
@@ -154,17 +153,17 @@ const LoginOtpScreen = () => {
           contentContainerStyle={[
             tw`flex-1 justify-end items-center`,
             {
-              gap: GAP,
-              paddingLeft: insets.left + PADDING_HORIZONTAL,
-              paddingRight: insets.right + PADDING_HORIZONTAL,
-              paddingBottom: insets.bottom + PADDING_VERTICAL,
+              gap: theme.spaces.md,
+              paddingLeft: insets.left + theme.spaces.horizontal,
+              paddingRight: insets.right + theme.spaces.horizontal,
+              paddingBottom: insets.bottom + theme.spaces.md,
             },
           ]}
           keyboardShouldPersistTaps="handled"
         >
           {!showOtp ? (
             <>
-              <View style={[tw`w-full`, { gap: GAP }]}>
+              <View style={[tw`w-full`, { gap: theme.spaces.md }]}>
                 <GroupedInput
                   title={t('common.messages.otp')}
                   titleStyle={tw`text-center text-xl font-bold`}

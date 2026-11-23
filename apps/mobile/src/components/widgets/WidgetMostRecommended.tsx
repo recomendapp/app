@@ -25,7 +25,6 @@ import Color from 'color';
 import { useTheme } from '../../providers/ThemeProvider';
 import { Text } from '../ui/text';
 import { useHeaderHeight } from 'expo-router/react-navigation';
-import { BORDER_RADIUS_FULL, GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { BadgeMedia } from '../badges/BadgeMedia';
 import { useTranslations } from 'use-intl';
 import { useRouter } from 'expo-router';
@@ -43,7 +42,7 @@ interface WidgetMostRecommendedProps extends ViewProps {
 }
 
 const WidgetMostRecommended = ({ scrollY, style, ...props }: WidgetMostRecommendedProps) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const navigationHeaderHeight = useHeaderHeight();
   // Dimensions
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
@@ -69,7 +68,7 @@ const WidgetMostRecommended = ({ scrollY, style, ...props }: WidgetMostRecommend
     return <View style={[{ height: navigationHeaderHeight }, tw`w-full`, style]} />;
   return (
     <View
-      style={[{ borderColor: colors.border, paddingBottom: PADDING_VERTICAL }, tw`border-b`]}
+      style={[{ borderColor: colors.border, paddingBottom: theme.spaces.md }, tw`border-b`]}
       {...props}
     >
       <Carousel
@@ -95,8 +94,11 @@ const WidgetMostRecommended = ({ scrollY, style, ...props }: WidgetMostRecommend
       <Pagination.Basic
         progress={progress}
         data={flattenRecos}
-        dotStyle={{ backgroundColor: colors.muted, borderRadius: BORDER_RADIUS_FULL }}
-        activeDotStyle={{ backgroundColor: colors.accentYellow, borderRadius: BORDER_RADIUS_FULL }}
+        dotStyle={{ backgroundColor: colors.muted, borderRadius: theme.border.radius.full }}
+        activeDotStyle={{
+          backgroundColor: colors.accentYellow,
+          borderRadius: theme.border.radius.full,
+        }}
         containerStyle={{ gap: 5, marginTop: 10 }}
         onPress={onPressPagination}
       />
@@ -127,7 +129,7 @@ const WidgetMostRecommendedItem = ({
 }) => {
   const openSheet = useBottomSheetStore((state) => state.openSheet);
   const router = useRouter();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const t = useTranslations();
   const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
@@ -204,23 +206,23 @@ const WidgetMostRecommendedItem = ({
           style={[
             tw`flex-1 justify-end`,
             {
-              gap: GAP,
-              paddingLeft: insets.left + PADDING_HORIZONTAL,
-              paddingRight: insets.right + PADDING_HORIZONTAL,
-              paddingBottom: PADDING_VERTICAL,
+              gap: theme.spaces.md,
+              paddingLeft: insets.left + theme.spaces.horizontal,
+              paddingRight: insets.right + theme.spaces.horizontal,
+              paddingBottom: theme.spaces.md,
             },
           ]}
         >
-          <View style={[{ gap: GAP * 2 }, tw`flex-row items-center justify-between`]}>
+          <View style={[{ gap: theme.spaces.md * 2 }, tw`flex-row items-center justify-between`]}>
             <Text style={tw`font-bold`}>
               {upperFirst(t('common.messages.most_recommended', { count: 2 }))}
             </Text>
-            <View style={[tw`flex-row items-center shrink-0`, { gap: GAP }]}>
+            <View style={[tw`flex-row items-center shrink-0`, { gap: theme.spaces.md }]}>
               <BadgeMedia type={item.type} />
               <Text style={tw`text-xl font-bold`}># {position}</Text>
             </View>
           </View>
-          <View style={[{ gap: GAP }]}>
+          <View style={[{ gap: theme.spaces.md }]}>
             <Text
               onPress={handleOnPress}
               onLongPress={handleOnLongPress}
