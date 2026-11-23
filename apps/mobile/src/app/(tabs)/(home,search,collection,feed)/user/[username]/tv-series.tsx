@@ -197,7 +197,7 @@ const UserCollectionTvSeries = () => {
                   ? 5
                   : 6
         }
-        onEndReachedThreshold={0.5}
+        onEndReachedThreshold={1}
         contentContainerStyle={{
           gap: theme.spaces.md,
           paddingTop: navigationHeaderHeight + theme.spaces.md,

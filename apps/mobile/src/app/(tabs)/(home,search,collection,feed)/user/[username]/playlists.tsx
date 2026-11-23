@@ -177,7 +177,7 @@ const UserPlaylistsScreen = () => {
                   : 6
         }
         onEndReached={() => hasNextPage && fetchNextPage()}
-        onEndReachedThreshold={0.5}
+        onEndReachedThreshold={1}
         contentContainerStyle={[
           {
             paddingTop: navigationHeaderHeight + theme.spaces.md,
