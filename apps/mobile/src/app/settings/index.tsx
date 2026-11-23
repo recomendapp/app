@@ -102,7 +102,7 @@ const SettingsScreen = () => {
         icon: Icons.CreditCard,
         authOnly: true,
         rightComponent:
-          customerInfo?.activeSubscriptions.length === 0 ? (
+          customerInfo?.activeSubscriptions.length === 0 && user?.isPremium !== true ? (
             <Pressable onPress={() => router.push({ pathname: '/upgrade' })}>
               <Badge variant="accent-yellow">
                 {upperFirst(t('common.messages.upgrade_to_plan', { plan: 'Premium' }))}
