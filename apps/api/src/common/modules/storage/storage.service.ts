@@ -5,7 +5,12 @@ import {
   BadRequestException,
   Inject,
 } from '@nestjs/common';
-import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+  CopyObjectCommand,
+} from '@aws-sdk/client-s3';
 import { randomUUID } from 'crypto';
 import { extname } from 'path';
 import { type EnvService, ENV_SERVICE } from '@libs/env';
@@ -91,6 +96,37 @@ export class StorageService {
     } catch (error) {
       this.logger.error(`Failed to upload file to ${folder}:`, error);
       throw new InternalServerErrorException('Could not upload file');
+    }
+  }
+
+  /**
+   * Duplicates a stored file, returning the name of the copy. The bytes are
+   * copied by the bucket itself -- nothing travels through here.
+   *
+   * An external file is a URL rather than an object of ours, and a URL can be
+   * handed to a second owner as it is, so it comes back unchanged.
+   */
+  async copyFile(filenameOrUrl: string, folder: StorageFolder): Promise<string> {
+    if (this.isAbsoluteUrl(filenameOrUrl)) {
+      return filenameOrUrl;
+    }
+
+    const filename = this.generateFilename(filenameOrUrl);
+    const sourceKey = `${folder}/${filenameOrUrl}`;
+
+    const command = new CopyObjectCommand({
+      Bucket: this.bucketName,
+      CopySource: `${this.bucketName}/${sourceKey}`,
+      Key: `${folder}/${filename}`,
+    });
+
+    try {
+      await this.s3Client.send(command);
+
+      return filename;
+    } catch (error) {
+      this.logger.error(`Failed to copy file ${sourceKey}:`, error);
+      throw new InternalServerErrorException('Could not copy file');
     }
   }
 
