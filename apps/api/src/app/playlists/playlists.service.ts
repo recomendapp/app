@@ -160,7 +160,7 @@ export class PlaylistsService {
     await assertPremium(this.db, user.id);
     await assertPlaylistVisible(this.db, user, playlistId);
 
-    const duplicatedPlaylist = await this.db.transaction(async (tx) => {
+    const { duplicatedPlaylist, sourcePoster } = await this.db.transaction(async (tx) => {
       const sourcePlaylist = await tx.query.playlist.findFirst({
         where: eq(playlist.id, playlistId),
       });
@@ -202,23 +202,71 @@ export class PlaylistsService {
         .from(playlist)
         .where(eq(playlist.id, insertedPlaylist.id));
 
-      return refreshedPlaylist;
+      return { duplicatedPlaylist: refreshedPlaylist, sourcePoster: sourcePlaylist.poster };
     });
+
+    const finalPlaylist = sourcePoster
+      ? await this.copyPoster({ playlistId: duplicatedPlaylist.id, sourcePoster })
+      : duplicatedPlaylist;
 
     this.workerClient
       .emit('search:sync-playlist', {
-        playlistId: duplicatedPlaylist.id,
+        playlistId: finalPlaylist.id,
         action: 'upsert',
       })
       .catch((err) =>
-        this.logger.error(`Failed to emit search sync for playlist ${duplicatedPlaylist.id}`, err),
+        this.logger.error(`Failed to emit search sync for playlist ${finalPlaylist.id}`, err),
       );
 
-    const playlistDto = parseResponseDto(PlaylistDto, duplicatedPlaylist);
+    const playlistDto = parseResponseDto(PlaylistDto, finalPlaylist);
 
     this.playlistsRealtimeService.broadcastPlaylistCreated(playlistDto);
 
     return playlistDto;
+  }
+
+  /**
+   * Gives a freshly duplicated playlist its own copy of the source's poster,
+   * and returns the row as it stands afterwards.
+   *
+   * The two playlists cannot share the stored file: either owner can replace or
+   * delete their poster, and both paths delete the object behind it, which
+   * would take the other's poster with it.
+   *
+   * The copy is made after the duplication is committed, so a rolled back
+   * duplication leaves no orphan object behind, and a bucket that refuses the
+   * copy costs the duplicate its poster rather than the duplication itself.
+   */
+  private async copyPoster({
+    playlistId,
+    sourcePoster,
+  }: {
+    playlistId: number;
+    sourcePoster: string;
+  }) {
+    try {
+      const poster = await this.storageService.copyFile(
+        sourcePoster,
+        StorageFolders.PLAYLIST_POSTERS,
+      );
+
+      const [playlistWithPoster] = await this.db
+        .update(playlist)
+        .set({ poster })
+        .where(eq(playlist.id, playlistId))
+        .returning();
+
+      return playlistWithPoster;
+    } catch (err) {
+      this.logger.error(`Failed to copy poster ${sourcePoster} for playlist ${playlistId}`, err);
+
+      const [playlistWithoutPoster] = await this.db
+        .select()
+        .from(playlist)
+        .where(eq(playlist.id, playlistId));
+
+      return playlistWithoutPoster;
+    }
   }
 
   async delete({ user, playlistId }: { user: User; playlistId: number }): Promise<PlaylistDto> {

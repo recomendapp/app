@@ -38,6 +38,7 @@ describe('PlaylistsService', () => {
   const fakeStorage = () =>
     ({
       uploadFile: mock(),
+      copyFile: mock().mockResolvedValue('copied-poster.jpg'),
       deleteFile: mock().mockResolvedValue(undefined),
       getFileUrl: mock(),
     }) as unknown as Mocked<StorageService>;
@@ -322,6 +323,64 @@ describe('PlaylistsService', () => {
         userId: duplicator.id,
       });
       expect(result.itemsCount).toBe(1);
+    });
+
+    it('gives the duplicate its own copy of the poster', async () => {
+      const { user: owner } = await createTestUser(testDb.db);
+      const { user: duplicator } = await createTestUser(testDb.db);
+      await makePremium(duplicator.id);
+      const source = await createTestPlaylist(
+        testDb.db,
+        { userId: owner.id },
+        { poster: 'source-poster.jpg' },
+      );
+      const { service, storage } = buildService();
+
+      const result = await service.duplicate({ user: asUser(duplicator), playlistId: source.id });
+
+      expect(storage.copyFile).toHaveBeenCalledWith('source-poster.jpg', 'playlist-posters');
+      const [duplicated] = await testDb.db
+        .select()
+        .from(playlist)
+        .where(eq(playlist.id, result.id));
+      expect(duplicated.poster).toBe('copied-poster.jpg');
+    });
+
+    it('copies nothing when the source has no poster', async () => {
+      const { user: owner } = await createTestUser(testDb.db);
+      const { user: duplicator } = await createTestUser(testDb.db);
+      await makePremium(duplicator.id);
+      const source = await createTestPlaylist(testDb.db, { userId: owner.id }, { poster: null });
+      const { service, storage } = buildService();
+
+      const result = await service.duplicate({ user: asUser(duplicator), playlistId: source.id });
+
+      expect(storage.copyFile).not.toHaveBeenCalled();
+      expect(result.poster).toBeNull();
+    });
+
+    it('keeps the duplicate when the poster cannot be copied', async () => {
+      const { user: owner } = await createTestUser(testDb.db);
+      const { user: duplicator } = await createTestUser(testDb.db);
+      await makePremium(duplicator.id);
+      const source = await createTestPlaylist(
+        testDb.db,
+        { userId: owner.id },
+        { title: 'Source', poster: 'source-poster.jpg' },
+      );
+      const storage = fakeStorage();
+      storage.copyFile = mock().mockRejectedValue(new Error('bucket is down')) as never;
+      const { service } = buildService({ storage });
+
+      const result = await service.duplicate({ user: asUser(duplicator), playlistId: source.id });
+
+      expect(result.title).toBe('Source');
+      expect(result.poster).toBeNull();
+      const [duplicated] = await testDb.db
+        .select()
+        .from(playlist)
+        .where(eq(playlist.id, result.id));
+      expect(duplicated.poster).toBeNull();
     });
 
     it('throws when the source playlist does not exist', async () => {
