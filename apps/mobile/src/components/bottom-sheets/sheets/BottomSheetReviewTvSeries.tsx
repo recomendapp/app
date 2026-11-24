@@ -1,4 +1,4 @@
-import { forwardRef, useMemo } from 'react';
+import { forwardRef, useMemo, useRef } from 'react';
 import tw from '../../../lib/tw';
 import { Icons } from '../../../constants/Icons';
 import { usePathname, useRouter } from 'expo-router';
@@ -13,7 +13,7 @@ import { Button } from '../../ui/Button';
 import { useAuth } from '../../../providers/AuthProvider';
 import { Alert } from 'react-native';
 import { useToast } from '../../Toast';
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, FlashListRef } from '@shopify/flash-list';
 import { ReviewTvSeries, UserSummary } from '@libs/api-js';
 import { useTvSeriesReviewDeleteMutation } from '@libs/query-client';
 
@@ -155,14 +155,16 @@ export const BottomSheetReviewTvSeries = forwardRef<
       deleteReview,
     ],
   );
+  const scrollableRef = useRef<FlashListRef<NonNullable<typeof items>[number]>>(null);
+
   return (
-    <TrueSheet ref={ref} scrollable {...props}>
+    <TrueSheet ref={ref} scrollableRef={scrollableRef} {...props}>
       <FlashList
+        ref={scrollableRef}
         contentContainerStyle={{ paddingTop: theme.spaces.md }}
         data={items}
         bounces={false}
         keyExtractor={(_, i) => i.toString()}
-        stickyHeaderIndices={[0]}
         renderItem={({ item }) => (
           <Button
             variant="ghost"
