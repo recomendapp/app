@@ -19,6 +19,7 @@ import { useToast } from '../components/Toast';
 import { SocialProvider } from 'better-auth/types';
 import { defaultSupportedLocale, SupportedLocale, supportedLocales } from '@libs/i18n';
 import { makeRedirectUri } from 'expo-auth-session';
+import { useRouter } from 'expo-router';
 import { LoginManager, AccessToken, AuthenticationToken } from 'react-native-fbsdk-next';
 import { logger } from '../logger';
 import { authSessionOptions } from '../api/auth/authOptions';
@@ -54,6 +55,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const t = useTranslations();
   const toast = useToast();
   const queryClient = useQueryClient();
+  const router = useRouter();
   const { setLocale } = useLocaleContext();
   const [pushToken, setPushToken] = useState<string | null>(null);
   const { data: session } = useQuery(authSessionOptions());
@@ -72,6 +74,45 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     enabled: !!initCustomerInfo,
     initialData: initCustomerInfo,
   });
+
+  /**
+   * Closes whatever is presented, before the session is published.
+   *
+   * Publishing it unregisters the auth screens, and react-native-screens
+   * refuses to have a modal taken away from under a presented one -- a sheet
+   * opened over the auth modal is exactly that pair. Dismissing here, while
+   * they are all still registered, leaves the guard nothing to take away.
+   *
+   * `dismissAll` and not a counted `dismiss`: it dispatches one `POP_TO_TOP`,
+   * which empties the presented modals in a single action. A counted `POP`
+   * leaves the crash in place. The cost is its reach -- it returns to the
+   * stack's first screen, so anything the reader had opened underneath goes
+   * with it.
+   */
+  const dismissAuthScreens = useCallback(() => {
+    if (router.canDismiss()) router.dismissAll();
+  }, [router]);
+
+  /**
+   * The hosted flow: the expo client opens it in a browser session and stores
+   * the session cookie the redirect carries back. It is the way in for every
+   * provider with no native SDK on this platform.
+   */
+  const signInWithBrowser = useCallback(
+    async (provider: SocialProvider) => {
+      const { error } = await authClient.signIn.social({
+        provider,
+        callbackURL: makeRedirectUri({ path: '/' }),
+      });
+      if (error) {
+        toast.error(upperFirst(t('common.messages.an_error_occurred')), {
+          description: error.message,
+        });
+        throw error;
+      }
+    },
+    [t, toast],
+  );
 
   // Handlers
   const login = useCallback(
@@ -123,9 +164,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
           throw error;
         }
       }
+      dismissAuthScreens();
       await queryClient.resetQueries();
     },
-    [t, queryClient, toast],
+    [t, queryClient, toast, dismissAuthScreens],
   );
 
   const loginWithOAuth = useCallback(
@@ -157,50 +199,59 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
             break;
           }
           case 'apple': {
-            if (Platform.OS === 'ios') {
-              try {
-                const rawNone = randomUUID();
-                const credential = await AppleAuthentication.signInAsync({
-                  requestedScopes: [
-                    AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-                    AppleAuthentication.AppleAuthenticationScope.EMAIL,
-                  ],
-                  state: rawNone,
-                });
-                if (credential.state !== rawNone) {
-                  toast.error(upperFirst(t('common.messages.an_error_occurred')));
-                  throw new Error('State does not match');
-                }
-                const { identityToken } = credential;
-                if (!identityToken) {
-                  toast.error(upperFirst(t('common.messages.an_error_occurred')));
-                  throw new Error('No identity token provided');
-                }
-                const { error: appleError } = await authClient.signIn.social({
-                  provider: 'apple',
-                  idToken: {
-                    token: identityToken,
-                  },
-                });
-                if (appleError) {
-                  switch (appleError.code) {
-                    default:
-                      toast.error(upperFirst(t('common.messages.an_error_occurred')), {
-                        description: appleError.message,
-                      });
-                      break;
-                  }
-                  throw appleError;
-                }
-              } catch (error) {
-                if (error instanceof Error) {
-                  if (!('code' in error && error.code === 'ERR_REQUEST_CANCELED')) {
-                    throw error;
-                  }
-                } else {
-                  throw error;
-                }
+            // No native Apple SDK off iOS. Nothing used to run here at all:
+            // the case broke straight to the success path below, which
+            // reported a sign-in, dismissed the sheet and refetched -- without
+            // ever asking Apple anything.
+            if (Platform.OS !== 'ios') {
+              await signInWithBrowser(provider);
+              break;
+            }
+            try {
+              const rawNone = randomUUID();
+              const credential = await AppleAuthentication.signInAsync({
+                requestedScopes: [
+                  AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+                  AppleAuthentication.AppleAuthenticationScope.EMAIL,
+                ],
+                state: rawNone,
+              });
+              if (credential.state !== rawNone) {
+                toast.error(upperFirst(t('common.messages.an_error_occurred')));
+                throw new Error('State does not match');
               }
+              const { identityToken } = credential;
+              if (!identityToken) {
+                toast.error(upperFirst(t('common.messages.an_error_occurred')));
+                throw new Error('No identity token provided');
+              }
+              const { error: appleError } = await authClient.signIn.social({
+                provider: 'apple',
+                idToken: {
+                  token: identityToken,
+                },
+              });
+              if (appleError) {
+                switch (appleError.code) {
+                  default:
+                    toast.error(upperFirst(t('common.messages.an_error_occurred')), {
+                      description: appleError.message,
+                    });
+                    break;
+                }
+                throw appleError;
+              }
+            } catch (error) {
+              // A cancelled request is not a sign-in: returning keeps it off
+              // the success path, the way the Google branch does.
+              if (
+                error instanceof Error &&
+                'code' in error &&
+                error.code === 'ERR_REQUEST_CANCELED'
+              ) {
+                return;
+              }
+              throw error;
             }
             break;
           }
@@ -249,27 +300,12 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
             break;
           }
           default: {
-            const { error } = await authClient.signIn.social({
-              provider: provider,
-              callbackURL: makeRedirectUri({
-                path: '/',
-              }),
-            });
-            if (error) {
-              switch (error.code) {
-                default:
-                  toast.error(upperFirst(t('common.messages.an_error_occurred')), {
-                    description: error.message,
-                  });
-                  break;
-              }
-              throw error;
-            }
-
+            await signInWithBrowser(provider);
             break;
           }
         }
         logger.metric('account:loggedInWithOAuth', { logContext: 'LoginForm', provider });
+        dismissAuthScreens();
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: meOptions().queryKey }),
           queryClient.invalidateQueries({ queryKey: authSessionOptions().queryKey }),
@@ -278,7 +314,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         logger.error('oauth login error', { error, provider });
       }
     },
-    [queryClient, t, toast],
+    [queryClient, t, toast, dismissAuthScreens, signInWithBrowser],
   );
 
   const logout = useCallback(async () => {
