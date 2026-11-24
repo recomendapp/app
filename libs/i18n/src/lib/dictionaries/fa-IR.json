@@ -731,7 +731,7 @@
           },
           "submit": "ورود",
           "forgot_password": "گذرواژه را فراموش کردی؟",
-          "wrong_credentials": "ایمیل یا گذرواژه نادرست است"
+          "wrong_credentials": "شناسه یا گذرواژه نادرست است"
         },
         "otp": {
           "password_login": "ترجیح می‌دهی با گذرواژه وارد شوی؟",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "تأیید کد",
-          "description": "یک کد تأیید به نشانی {email} فرستاده شد"
+          "description": "یک لینک بازنشانی گذرواژه به نشانی {email} فرستاده شد"
         }
       },
       "reset_password": {

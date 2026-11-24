@@ -12,7 +12,6 @@ import useBottomSheetStore from '../../../stores/useBottomSheetStore';
 import { CardReviewMovie } from '../reviews/CardReviewMovie';
 import BottomSheetMovie from '../../bottom-sheets/sheets/BottomSheetMovie';
 import { CardUser } from '../CardUser';
-import { GAP } from '../../../theme/globals';
 import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
 import { FeedItemReviewMovieLike } from '@libs/api-js';
 import { FixedOmit } from '../../../utils/fixed-omit';
@@ -42,10 +41,14 @@ const CardFeedReviewMovieLikeDefault = React.forwardRef<
   React.ComponentRef<typeof Animated.View>,
   FixedOmit<CardFeedReviewMovieLikeProps, 'variant' | 'onPress' | 'onLongPress'>
 >(({ style, children, data, footer, skeleton, ...props }, ref) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const t = useTranslations();
   return (
-    <Animated.View ref={ref} style={[{ gap: GAP }, tw`flex-row rounded-xl`, style]} {...props}>
+    <Animated.View
+      ref={ref}
+      style={[{ gap: theme.spaces.md }, tw`flex-row rounded-xl`, style]}
+      {...props}
+    >
       {!skeleton ? (
         <ImageWithFallback
           source={{

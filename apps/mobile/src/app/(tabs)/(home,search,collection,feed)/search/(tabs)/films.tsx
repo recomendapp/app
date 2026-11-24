@@ -6,7 +6,6 @@ import { View } from '../../../../../components/ui/view';
 import { Icons } from '../../../../../constants/Icons';
 import tw from '../../../../../lib/tw';
 import useSearchStore from '../../../../../stores/useSearchStore';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { LegendList, LegendListRef } from '@legendapp/list/react-native';
 import { useScrollToTop } from 'expo-router/react-navigation';
 import { upperFirst } from 'lodash';
@@ -18,8 +17,10 @@ import ErrorMessage from '../../../../../components/ErrorMessage';
 import { useKeyboardState } from 'react-native-keyboard-controller';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { searchMoviesInfiniteOptions } from '@libs/query-client';
+import { useTheme } from '../../../../../providers/ThemeProvider';
 
 const FiltersSheet = forwardRef<RNTrueSheet>((_, ref) => {
+  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const t = useTranslations();
 
@@ -28,9 +29,9 @@ const FiltersSheet = forwardRef<RNTrueSheet>((_, ref) => {
       <ScrollView
         bounces={false}
         contentContainerStyle={{
-          paddingTop: PADDING_VERTICAL,
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
+          paddingTop: theme.spaces.md,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
           backgroundColor: 'red', // TODO: Remove debug style
         }}
       >
@@ -48,6 +49,7 @@ const FiltersSheet = forwardRef<RNTrueSheet>((_, ref) => {
 FiltersSheet.displayName = 'FiltersSheet';
 
 const SearchFilmsScreen = () => {
+  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { isVisible: keyboardVisible, height: keyboardHeight } = useKeyboardState((state) => state);
   // const navigation = useNavigation();
@@ -101,15 +103,15 @@ const SearchFilmsScreen = () => {
         data={movies}
         renderItem={({ item }) => <CardMovie variant="list" movie={item} />}
         contentContainerStyle={{
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
           paddingBottom: keyboardVisible
-            ? keyboardHeight + PADDING_VERTICAL
-            : insets.bottom + PADDING_VERTICAL,
-          gap: GAP,
+            ? keyboardHeight + theme.spaces.md
+            : insets.bottom + theme.spaces.md,
+          gap: theme.spaces.md,
         }}
         scrollIndicatorInsets={{
-          bottom: keyboardVisible ? keyboardHeight - insets.bottom : insets.bottom,
+          bottom: keyboardVisible ? keyboardHeight - insets.bottom : 0,
         }}
         keyExtractor={(item) => item.id.toString()}
         ListEmptyComponent={

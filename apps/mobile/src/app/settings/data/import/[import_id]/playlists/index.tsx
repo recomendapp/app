@@ -15,14 +15,13 @@ import { RefreshableStateContainer } from '../../../../../../components/ui/Refre
 import { Icons } from '../../../../../../constants/Icons';
 import { useTheme } from '../../../../../../providers/ThemeProvider';
 import tw from '../../../../../../lib/tw';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../../theme/globals';
 import { LegendList } from '@legendapp/list/react-native';
 import { useHeaderHeight } from 'expo-router/react-navigation';
 
 const SettingsDataImportPlaylistsScreen = () => {
   const t = useTranslations();
   const router = useRouter();
-  const { colors, isLiquidGlassAvailable } = useTheme();
+  const { colors, isLiquidGlassAvailable, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
   const patchMutation = useImportPatchPlaylistMutation();
@@ -58,7 +57,10 @@ const SettingsDataImportPlaylistsScreen = () => {
               })
             }
             containerStyle={tw`shrink flex-1`}
-            style={{ paddingVertical: PADDING_HORIZONTAL, paddingHorizontal: PADDING_HORIZONTAL }}
+            style={{
+              paddingVertical: theme.spaces.horizontal,
+              paddingHorizontal: theme.spaces.horizontal,
+            }}
           >
             <View style={tw`flex-1 flex-row items-center justify-between gap-2`}>
               <Text numberOfLines={1} style={isSkipped ? { opacity: 0.5 } : undefined}>
@@ -79,7 +81,7 @@ const SettingsDataImportPlaylistsScreen = () => {
         </View>
       );
     },
-    [router, import_id, colors.mutedForeground, handleToggleSkip],
+    [router, import_id, colors.mutedForeground, handleToggleSkip, theme],
   );
 
   return (
@@ -119,8 +121,8 @@ const SettingsDataImportPlaylistsScreen = () => {
             <View style={[{ backgroundColor: colors.muted, height: 1 }, tw`w-full`]} />
           )}
           contentContainerStyle={{
-            paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
-            paddingBottom: insets.bottom + PADDING_VERTICAL,
+            paddingTop: navigationHeaderHeight + theme.spaces.md,
+            paddingBottom: insets.bottom + theme.spaces.md,
           }}
         />
       )}

@@ -21,19 +21,19 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useCallback, useMemo } from 'react';
 import { useFormatter, useNow, useTranslations } from 'use-intl';
-import SwipeableMonoActionRow from '../../../components/ui/swippeable/SwipeableMonoActionRow';
-import { useTheme } from '../../../providers/ThemeProvider';
+import { SwipeableActionsRow } from '../../../components/ui/swippeable/SwipeableActionsRow';
+import { NativeIcons } from '../../../constants/native-icons';
 import Animated, { LinearTransition, SlideOutLeft } from 'react-native-reanimated';
 import { AnimatedLegendList } from '@legendapp/list/reanimated';
 import { Card } from '../../../components/ui/card';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useWatchedDateFormats } from '../../../hooks/useWatchedDateFormats';
-import { PADDING_HORIZONTAL } from '../../../theme/globals';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../../../providers/ThemeProvider';
 
 const FilmWatchedDatesScreen = () => {
+  const { theme } = useTheme();
   const { user } = useAuth();
-  const { colors } = useTheme();
   const t = useTranslations();
   const now = useNow();
   const formatter = useFormatter();
@@ -176,16 +176,17 @@ const FilmWatchedDatesScreen = () => {
     ({ item }: { item: WatchedDate }) => {
       return (
         <Animated.View exiting={SlideOutLeft.duration(250)}>
-          <SwipeableMonoActionRow
-            rightAction={{
-              type: 'open',
-              icon: <Icons.Delete color={colors.destructiveForeground} />,
-              backgroundColor: 'transparent',
-              onOpen: () => handleDeleteWatchedDate(item),
-              autoClose: false,
-            }}
+          <SwipeableActionsRow
+            actionsRight={[
+              {
+                label: t('common.messages.delete'),
+                icon: NativeIcons.trash,
+                onPress: () => handleDeleteWatchedDate(item),
+              },
+            ]}
+            style={{ paddingHorizontal: theme.spaces.horizontal }}
           >
-            <View style={{ paddingHorizontal: PADDING_HORIZONTAL }}>
+            <View>
               <Card style={tw`flex-row items-center justify-between gap-2`}>
                 <Button variant="outline" onPress={() => handleSelectDate(item)}>
                   <Text>
@@ -197,17 +198,18 @@ const FilmWatchedDatesScreen = () => {
                 </Button>
               </Card>
             </View>
-          </SwipeableMonoActionRow>
+          </SwipeableActionsRow>
         </Animated.View>
       );
     },
     [
+      theme,
       handleDeleteWatchedDate,
       handleSelectDate,
       handleSelectFormat,
       getWatchedDateFormatLabel,
-      colors,
       formatter,
+      t,
     ],
   );
 

@@ -20,7 +20,6 @@ import { Label } from '../../components/ui/Label';
 import Switch from '../../components/ui/Switch';
 import { Separator } from '../../components/ui/separator';
 import { KeyboardAwareScrollView } from '../../components/ui/KeyboardAwareScrollView';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { KeyboardToolbar } from '../../components/ui/KeyboardToolbar';
 import { useToast } from '../../components/Toast';
 import { meOptions, useMeUpdateMutation } from '@libs/query-client';
@@ -43,7 +42,7 @@ const SettingsAccountScreen = () => {
   const format = useFormatter();
   const t = useTranslations();
   const toast = useToast();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { mutateAsync: updateProfile } = useMeUpdateMutation();
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -217,7 +216,7 @@ const SettingsAccountScreen = () => {
               variant="ghost"
               size="fit"
               loading={isLoading}
-              onPress={form.handleSubmit(handleOnSubmit)}
+              onPress={() => void form.handleSubmit(handleOnSubmit)()}
               disabled={!hasUnsavedChanges || !form.formState.isValid || isLoading}
             >
               {upperFirst(t('common.messages.save'))}
@@ -227,7 +226,7 @@ const SettingsAccountScreen = () => {
             {
               type: 'button',
               label: upperFirst(t('common.messages.save')),
-              onPress: form.handleSubmit(handleOnSubmit),
+              onPress: () => void form.handleSubmit(handleOnSubmit)(),
               tintColor: props.tintColor,
               disabled: !hasUnsavedChanges || !form.formState.isValid || isLoading,
               icon: {
@@ -240,11 +239,11 @@ const SettingsAccountScreen = () => {
       />
       <KeyboardAwareScrollView
         contentContainerStyle={{
-          gap: GAP,
-          paddingTop: PADDING_VERTICAL,
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
-          paddingBottom: insets.bottom + PADDING_VERTICAL,
+          gap: theme.spaces.md,
+          paddingTop: theme.spaces.md,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
+          paddingBottom: insets.bottom + theme.spaces.md,
         }}
       >
         <Controller

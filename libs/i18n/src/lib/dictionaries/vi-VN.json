@@ -731,7 +731,7 @@
           },
           "submit": "Đăng nhập",
           "forgot_password": "Quên mật khẩu?",
-          "wrong_credentials": "Email hoặc mật khẩu không đúng"
+          "wrong_credentials": "Tên đăng nhập hoặc mật khẩu không đúng"
         },
         "otp": {
           "password_login": "Bạn muốn đăng nhập bằng mật khẩu?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Xác nhận mã",
-          "description": "Một mã xác minh đã được gửi tới địa chỉ {email}"
+          "description": "Một liên kết đặt lại mật khẩu đã được gửi tới địa chỉ {email}"
         }
       },
       "reset_password": {

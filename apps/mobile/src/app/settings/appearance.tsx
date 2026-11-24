@@ -14,7 +14,6 @@ import { Picker } from '@react-native-picker/picker';
 import useLocalizedLanguageName from '../../hooks/useLocalizedLanguageName';
 import { useAuth } from '../../providers/AuthProvider';
 import { KeyboardAwareScrollView } from '../../components/ui/KeyboardAwareScrollView';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { KeyboardToolbar } from '../../components/ui/KeyboardToolbar';
 import { useToast } from '../../components/Toast';
 import { Platform } from 'react-native';
@@ -29,7 +28,7 @@ const SettingsAppearanceScreen = () => {
   const toast = useToast();
   const queryClient = useQueryClient();
   const insets = useSafeAreaInsets();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const t = useTranslations();
   const [isLoading, setIsLoading] = useState(false);
   const locales = useLocalizedLanguageName(locale);
@@ -91,7 +90,7 @@ const SettingsAppearanceScreen = () => {
               variant="ghost"
               size="fit"
               loading={isLoading}
-              onPress={form.handleSubmit(handleSubmit)}
+              onPress={() => void form.handleSubmit(handleSubmit)()}
               disabled={!form.formState.isDirty || !form.formState.isValid || isLoading}
             >
               {upperFirst(t('common.messages.save'))}
@@ -101,7 +100,7 @@ const SettingsAppearanceScreen = () => {
             {
               type: 'button',
               label: upperFirst(t('common.messages.save')),
-              onPress: form.handleSubmit(handleSubmit),
+              onPress: () => void form.handleSubmit(handleSubmit)(),
               tintColor: props.tintColor,
               disabled: !form.formState.isDirty || !form.formState.isValid || isLoading,
               icon: {
@@ -114,18 +113,18 @@ const SettingsAppearanceScreen = () => {
       />
       <KeyboardAwareScrollView
         contentContainerStyle={{
-          gap: GAP,
-          paddingTop: PADDING_VERTICAL,
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
-          paddingBottom: insets.bottom + PADDING_VERTICAL,
+          gap: theme.spaces.md,
+          paddingTop: theme.spaces.md,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
+          paddingBottom: insets.bottom + theme.spaces.md,
         }}
       >
         <Controller
           name="locale"
           control={form.control}
           render={({ field: { onChange, onBlur, value } }) => (
-            <View style={{ gap: GAP }}>
+            <View style={{ gap: theme.spaces.md }}>
               <Label>{upperFirst(t('pages.settings.appearance.language.label'))}</Label>
               <Picker
                 key={`selected-${locale}`}

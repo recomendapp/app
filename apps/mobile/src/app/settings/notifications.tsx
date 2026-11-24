@@ -4,7 +4,6 @@ import { useTranslations } from 'use-intl';
 import { useNotifications } from '../../providers/NotificationsProvider';
 import { View } from '../../components/ui/view';
 import { Linking, Platform, Pressable, ScrollView } from 'react-native';
-import { GAP, GAP_LG, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { Text } from '../../components/ui/text';
 import { Icons } from '../../constants/Icons';
 import { Separator } from '../../components/ui/separator';
@@ -15,7 +14,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const SettingsNotificationsScreen = () => {
   const t = useTranslations();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { permissionStatus } = useNotifications();
   const openAppSettings = useCallback(async () => {
@@ -52,11 +51,11 @@ const SettingsNotificationsScreen = () => {
       <ScrollView
         contentContainerStyle={[
           {
-            gap: GAP,
-            paddingTop: PADDING_VERTICAL,
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
-            paddingBottom: insets.bottom + PADDING_VERTICAL,
+            gap: theme.spaces.md,
+            paddingTop: theme.spaces.md,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
+            paddingBottom: insets.bottom + theme.spaces.md,
           },
         ]}
       >
@@ -64,7 +63,7 @@ const SettingsNotificationsScreen = () => {
           <>
             <Pressable
               onPress={openAppSettings}
-              style={[tw`flex-row items-center`, { gap: GAP_LG }]}
+              style={[tw`flex-row items-center`, { gap: theme.spaces.lg }]}
             >
               <Icons.Bell color={colors.foreground} />
               <View>

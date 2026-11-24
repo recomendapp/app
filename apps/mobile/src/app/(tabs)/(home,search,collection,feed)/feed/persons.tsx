@@ -9,12 +9,6 @@ import { Icons } from '../../../../constants/Icons';
 import tw from '../../../../lib/tw';
 import { useAuth } from '../../../../providers/AuthProvider';
 import { useTheme } from '../../../../providers/ThemeProvider';
-import {
-  BORDER_RADIUS,
-  GAP,
-  PADDING_HORIZONTAL,
-  PADDING_VERTICAL,
-} from '../../../../theme/globals';
 import { LegendList } from '@legendapp/list/react-native';
 import Color from 'color';
 import { Image } from 'expo-image';
@@ -36,7 +30,7 @@ const CastCrewFeedScreen = () => {
   const t = useTranslations();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const { user } = useAuth();
   const { data: backgrounds } = useQuery(uiBackgroundsOptions());
   const { data, isLoading, fetchNextPage, hasNextPage, refetch, isRefetching, isError } =
@@ -61,9 +55,9 @@ const CastCrewFeedScreen = () => {
               style={[
                 { backgroundColor: colors.muted },
                 {
-                  borderRadius: BORDER_RADIUS,
-                  paddingVertical: PADDING_VERTICAL,
-                  paddingHorizontal: PADDING_HORIZONTAL,
+                  borderRadius: theme.border.radius.md,
+                  paddingVertical: theme.spaces.md,
+                  paddingHorizontal: theme.spaces.horizontal,
                 },
               ]}
             >
@@ -74,7 +68,7 @@ const CastCrewFeedScreen = () => {
           );
       }
     },
-    [colors.muted],
+    [colors.muted, theme],
   );
   const keyExtractor = useCallback(
     (item: FeedPersonItem) => `${item.media.id}:${item.type}-${item.person.id}`,
@@ -91,7 +85,7 @@ const CastCrewFeedScreen = () => {
       <View
         style={[
           tw`flex-1 items-center justify-center`,
-          { paddingTop: PADDING_VERTICAL, paddingBottom: insets.bottom + PADDING_VERTICAL },
+          { paddingTop: theme.spaces.md, paddingBottom: insets.bottom + theme.spaces.md },
         ]}
       >
         <Icons.Loader />
@@ -103,7 +97,7 @@ const CastCrewFeedScreen = () => {
       <View
         style={[
           tw`flex-1 items-center justify-center`,
-          { paddingTop: PADDING_VERTICAL, paddingBottom: insets.bottom + PADDING_VERTICAL },
+          { paddingTop: theme.spaces.md, paddingBottom: insets.bottom + theme.spaces.md },
         ]}
       >
         {backgrounds && (
@@ -150,7 +144,7 @@ const CastCrewFeedScreen = () => {
       <RefreshableStateContainer
         onRefresh={refetch}
         refreshing={isRefetching}
-        contentContainerStyle={{ paddingBottom: insets.bottom + PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + theme.spaces.md }}
       >
         <Icons.Loader />
       </RefreshableStateContainer>
@@ -162,7 +156,7 @@ const CastCrewFeedScreen = () => {
       <RefreshableStateContainer
         onRefresh={refetch}
         refreshing={isRefetching}
-        contentContainerStyle={{ paddingBottom: insets.bottom + PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + theme.spaces.md }}
       >
         <CardError />
       </RefreshableStateContainer>
@@ -174,7 +168,7 @@ const CastCrewFeedScreen = () => {
       <RefreshableStateContainer
         onRefresh={refetch}
         refreshing={isRefetching}
-        contentContainerStyle={{ paddingBottom: insets.bottom + PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + theme.spaces.md }}
       >
         <CardEmpty icon={'⚡️'} label={t('help_hints.feed_person.message')} />
       </RefreshableStateContainer>
@@ -187,15 +181,12 @@ const CastCrewFeedScreen = () => {
         data={feed}
         renderItem={renderItem}
         contentContainerStyle={{
-          paddingTop: PADDING_VERTICAL,
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
-          paddingBottom: insets.bottom + PADDING_VERTICAL,
-          gap: GAP,
+          paddingTop: theme.spaces.md,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
+          paddingBottom: insets.bottom + theme.spaces.md,
+          gap: theme.spaces.md,
           flexGrow: 1,
-        }}
-        scrollIndicatorInsets={{
-          bottom: insets.bottom,
         }}
         keyExtractor={keyExtractor}
         onEndReached={onEndReached}

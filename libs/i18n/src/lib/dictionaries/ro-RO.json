@@ -731,7 +731,7 @@
           },
           "submit": "Conectare",
           "forgot_password": "Ai uitat parola?",
-          "wrong_credentials": "Emailul sau parola este incorectă"
+          "wrong_credentials": "Identificatorul sau parola este incorectă"
         },
         "otp": {
           "password_login": "Preferi să te conectezi cu o parolă?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Confirmă codul",
-          "description": "Un cod de verificare a fost trimis la adresa {email}"
+          "description": "Un link pentru resetarea parolei a fost trimis la adresa {email}"
         }
       },
       "reset_password": {

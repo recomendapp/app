@@ -731,7 +731,7 @@
           },
           "submit": "Giriş yap",
           "forgot_password": "Şifreni mi unuttun?",
-          "wrong_credentials": "E-posta ya da şifre hatalı"
+          "wrong_credentials": "Giriş bilgisi ya da şifre hatalı"
         },
         "otp": {
           "password_login": "Şifreyle giriş yapmayı mı tercih edersin?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Kodu doğrula",
-          "description": "{email} adresine bir doğrulama kodu gönderildi"
+          "description": "{email} adresine şifre sıfırlama bağlantısı gönderildi"
         }
       },
       "reset_password": {

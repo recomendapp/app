@@ -8,7 +8,6 @@ import { useTranslations } from 'use-intl';
 import { upperFirst } from 'lodash';
 import { CardMovie } from '../cards/CardMovie';
 import { CardTvSeries } from '../cards/CardTvSeries';
-import { GAP } from '../../theme/globals';
 import { GridView } from '../ui/GridView';
 import { Text } from '../ui/text';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -56,6 +55,7 @@ export const WidgetUserBookmarks = ({
   labelStyle,
   containerStyle,
 }: WidgetUserBookmarksProps) => {
+  const { theme } = useTheme();
   const { user } = useAuth();
   const { data: watchlist } = useInfiniteQuery(
     userBookmarksInfiniteOptions({
@@ -75,7 +75,7 @@ export const WidgetUserBookmarks = ({
   }
 
   return (
-    <View style={[{ gap: GAP }, style]}>
+    <View style={[{ gap: theme.spaces.md }, style]}>
       <WidgetHeader labelStyle={labelStyle} />
       <View style={containerStyle}>
         <GridView data={flattendWatchlist} renderItem={(item) => <WatchlistItem item={item} />} />

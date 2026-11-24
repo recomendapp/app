@@ -731,7 +731,7 @@
           },
           "submit": "Prijava",
           "forgot_password": "Zaboravio si lozinku?",
-          "wrong_credentials": "E-pošta ili lozinka nije ispravna"
+          "wrong_credentials": "Prijavni podaci ili lozinka nisu ispravni"
         },
         "otp": {
           "password_login": "Želiš li se radije prijaviti lozinkom?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Potvrdi kod",
-          "description": "Kod za potvrdu poslan je na adresu {email}"
+          "description": "Link za resetiranje lozinke poslan je na adresu {email}"
         }
       },
       "reset_password": {

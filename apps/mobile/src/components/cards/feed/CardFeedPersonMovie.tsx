@@ -13,7 +13,6 @@ import { Skeleton } from '../../ui/Skeleton';
 import useBottomSheetStore from '../../../stores/useBottomSheetStore';
 import BottomSheetMovie from '../../bottom-sheets/sheets/BottomSheetMovie';
 import { BadgeMedia } from '../../badges/BadgeMedia';
-import { GAP } from '../../../theme/globals';
 import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
 import { PersonFeedWithMovie } from '@libs/api-js';
 import { FixedOmit } from '../../../utils/fixed-omit';
@@ -41,11 +40,15 @@ const CardFeedPersonMovieDefault = React.forwardRef<
   React.ComponentRef<typeof Animated.View>,
   FixedOmit<CardFeedPersonMovieProps, 'variant' | 'onPress'>
 >(({ style, children, data, onLongPress, skeleton, ...props }, ref) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const t = useTranslations();
   const router = useRouter();
   return (
-    <Animated.View ref={ref} style={[{ gap: GAP * 2 }, tw`flex-row rounded-xl`, style]} {...props}>
+    <Animated.View
+      ref={ref}
+      style={[{ gap: theme.spaces.md * 2 }, tw`flex-row rounded-xl`, style]}
+      {...props}
+    >
       {!skeleton ? (
         <ImageWithFallback
           source={{ uri: getTmdbImage({ path: data.media.posterPath, size: 'w342' }) ?? '' }}

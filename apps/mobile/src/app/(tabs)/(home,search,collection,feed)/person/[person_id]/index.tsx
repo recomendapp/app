@@ -10,15 +10,16 @@ import { Button } from '../../../../../components/ui/Button';
 import { Icons } from '../../../../../constants/Icons';
 import tw from '../../../../../lib/tw';
 import { useAuth } from '../../../../../providers/AuthProvider';
-import { GAP, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { getIdFromSlug } from '../../../../../utils/getIdFromSlug';
 import { useLocalSearchParams } from 'expo-router';
 import { useMemo } from 'react';
 import { View } from 'react-native';
 import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../../../../../providers/ThemeProvider';
 
 const PersonScreen = () => {
+  const { theme } = useTheme();
   const { person_id } = useLocalSearchParams<{ person_id: string }>();
   const { id: personId } = getIdFromSlug(person_id);
   const insets = useSafeAreaInsets();
@@ -70,8 +71,8 @@ const PersonScreen = () => {
         scrollToOverflowEnabled
         contentContainerStyle={[
           {
-            paddingBottom: insets.bottom + PADDING_VERTICAL,
-            gap: GAP,
+            paddingBottom: insets.bottom + theme.spaces.md,
+            gap: theme.spaces.md,
           },
         ]}
       >

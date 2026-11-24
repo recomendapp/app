@@ -1,7 +1,6 @@
 import { TextStyle, ViewStyle } from 'react-native';
 import { useTheme } from '../../providers/ThemeProvider';
 import { View } from './view';
-import { BORDER_RADIUS } from '../../theme/globals';
 import { Text } from './text';
 
 interface CardProps {
@@ -10,7 +9,7 @@ interface CardProps {
 }
 
 export function Card({ children, style }: CardProps) {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
 
   return (
     <View
@@ -18,7 +17,7 @@ export function Card({ children, style }: CardProps) {
         {
           width: '100%',
           backgroundColor: colors.card,
-          borderRadius: BORDER_RADIUS,
+          borderRadius: theme.border.radius.md,
           borderWidth: 1,
           borderColor: colors.border,
           padding: 18,

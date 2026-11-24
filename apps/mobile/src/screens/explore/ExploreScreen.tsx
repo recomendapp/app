@@ -11,7 +11,6 @@ import {
 import { NativeSyntheticEvent, useWindowDimensions } from 'react-native';
 import styleJSON from '../../assets/map/style.json';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { useQuery } from '@tanstack/react-query';
 import { exploreGenresOptions, useExplore, useExploreItemsAll } from '@libs/query-client';
 import { ExploreItemWithMovie, ExploreItemWithTvSeries } from '@libs/api-js';
@@ -39,7 +38,7 @@ type ExploreItem = ExploreItemWithMovie | ExploreItemWithTvSeries;
 
 const ExploreScreen = () => {
   const filters = useExploreStore((state) => state.filters);
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
 
   const headerHeight = useHeaderHeight();
@@ -183,13 +182,13 @@ const ExploreScreen = () => {
       animatedPOIDetailsPosition.get(),
       animatedFiltersPosition.get(),
     );
-    const B = insets.bottom + PADDING_VERTICAL; // bottom safe area + padding
+    const B = insets.bottom + theme.spaces.md; // bottom safe area + padding
     const H = optionsHeight.get(); // Options height
     const top0 = screenHeight - (B + H); //
     const bottomOffset = screenHeight - activeSheetY; // hauteur visible de la sheet
 
-    const dDesired = bottomOffset - B + PADDING_VERTICAL; // coller au-dessus de la sheet
-    const dMax = top0 - (headerHeight + PADDING_VERTICAL); // ne pas dépasser le header
+    const dDesired = bottomOffset - B + theme.spaces.md; // coller au-dessus de la sheet
+    const dMax = top0 - (headerHeight + theme.spaces.md); // ne pas dépasser le header
     const d = Math.max(0, Math.min(dDesired, dMax)); // clamp
 
     return { transform: [{ translateY: -d }] };
@@ -360,9 +359,9 @@ const ExploreScreen = () => {
         style={[
           {
             position: 'absolute',
-            bottom: insets.bottom + PADDING_VERTICAL,
-            right: PADDING_HORIZONTAL,
-            gap: GAP,
+            bottom: insets.bottom + theme.spaces.md,
+            right: theme.spaces.horizontal,
+            gap: theme.spaces.md,
           },
           animatedOptionsStyle,
         ]}

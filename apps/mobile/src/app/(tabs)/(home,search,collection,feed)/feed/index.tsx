@@ -4,7 +4,6 @@ import { View } from '../../../../components/ui/view';
 import { Text } from '../../../../components/ui/text';
 import { useTranslations } from 'use-intl';
 import { useTheme } from '../../../../providers/ThemeProvider';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../theme/globals';
 import { CardFeedLogMovie } from '../../../../components/cards/feed/CardFeedLogMovie';
 import { CardFeedPlaylistLike } from '../../../../components/cards/feed/CardFeedPlaylistLike';
 import { CardFeedReviewMovieLike } from '../../../../components/cards/feed/CardFeedReviewMovieLike';
@@ -25,7 +24,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const FeedScreen = () => {
   const t = useTranslations();
   const { user } = useAuth();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { data, isLoading, fetchNextPage, hasNextPage, refetch, isRefetching, isError } =
     useInfiniteQuery(
@@ -70,7 +69,7 @@ const FeedScreen = () => {
       <RefreshableStateContainer
         onRefresh={refetch}
         refreshing={isRefetching}
-        contentContainerStyle={{ paddingBottom: insets.bottom + PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + theme.spaces.md }}
       >
         <Icons.Loader />
       </RefreshableStateContainer>
@@ -82,7 +81,7 @@ const FeedScreen = () => {
       <RefreshableStateContainer
         onRefresh={refetch}
         refreshing={isRefetching}
-        contentContainerStyle={{ paddingBottom: insets.bottom + PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + theme.spaces.md }}
       >
         <CardError />
       </RefreshableStateContainer>
@@ -94,7 +93,7 @@ const FeedScreen = () => {
       <RefreshableStateContainer
         onRefresh={refetch}
         refreshing={isRefetching}
-        contentContainerStyle={{ paddingBottom: insets.bottom + PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + theme.spaces.md }}
       >
         <CardEmpty icon={'⚡️'} label={t('help_hints.feed.message')} />
       </RefreshableStateContainer>
@@ -107,15 +106,12 @@ const FeedScreen = () => {
       data={feed}
       renderItem={renderItem}
       contentContainerStyle={{
-        paddingTop: PADDING_VERTICAL,
-        paddingLeft: insets.left + PADDING_HORIZONTAL,
-        paddingRight: insets.right + PADDING_HORIZONTAL,
-        paddingBottom: insets.bottom + PADDING_VERTICAL,
-        gap: GAP,
+        paddingTop: theme.spaces.md,
+        paddingLeft: insets.left + theme.spaces.horizontal,
+        paddingRight: insets.right + theme.spaces.horizontal,
+        paddingBottom: insets.bottom + theme.spaces.md,
+        gap: theme.spaces.md,
         flexGrow: 1,
-      }}
-      scrollIndicatorInsets={{
-        bottom: insets.bottom,
       }}
       keyExtractor={(item) => item.id.toString()}
       onEndReached={hasNextPage ? () => fetchNextPage() : undefined}

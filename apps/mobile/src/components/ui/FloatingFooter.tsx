@@ -4,7 +4,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller';
 import { useTheme } from '../../providers/ThemeProvider';
 import tw from '../../lib/tw';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 
 interface FloatingFooterProps extends ViewProps {
   defaultFooterHeight?: number;
@@ -20,7 +19,7 @@ export const FloatingFooter = ({
   keyboardAware = true,
   ...props
 }: FloatingFooterProps) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { height: keyboardHeight } = useReanimatedKeyboardAnimation();
   const internalFooterHeight = useSharedValue(0);
@@ -33,7 +32,7 @@ export const FloatingFooter = ({
   const animatedFooterStyle = useAnimatedStyle(() => {
     const kbHeight = Math.abs(keyboardHeight.value);
     return {
-      paddingBottom: (kbHeight > 0 && keyboardAware ? 0 : insets.bottom) + PADDING_VERTICAL,
+      paddingBottom: (kbHeight > 0 && keyboardAware ? 0 : insets.bottom) + theme.spaces.md,
       bottom: keyboardAware ? kbHeight : 0,
     };
   });
@@ -49,14 +48,14 @@ export const FloatingFooter = ({
         style={[
           tw`absolute bottom-0 flex-row items-center justify-center overflow-hidden left-0 right-0`,
           {
-            paddingBottom: insets.bottom + PADDING_VERTICAL,
-            paddingTop: PADDING_VERTICAL,
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
+            paddingBottom: insets.bottom + theme.spaces.md,
+            paddingTop: theme.spaces.md,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
             borderColor: colors.border,
             borderTopWidth: 1,
             backgroundColor: colors.background,
-            gap: GAP,
+            gap: theme.spaces.md,
           },
           style,
           animatedFooterStyle,

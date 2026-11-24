@@ -731,7 +731,7 @@
           },
           "submit": "Iniciar sesión",
           "forgot_password": "¿Has olvidado la contraseña?",
-          "wrong_credentials": "El correo o la contraseña no son correctos"
+          "wrong_credentials": "El identificador o la contraseña no son correctos"
         },
         "otp": {
           "password_login": "¿Prefieres iniciar sesión con una contraseña?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Confirmar el código",
-          "description": "Se ha enviado un código de verificación a la dirección {email}"
+          "description": "Se ha enviado un enlace para restablecer la contraseña a la dirección {email}"
         }
       },
       "reset_password": {

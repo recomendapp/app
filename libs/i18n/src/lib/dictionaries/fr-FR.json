@@ -731,7 +731,7 @@
           },
           "submit": "Se connecter",
           "forgot_password": "Mot de passe oublié ?",
-          "wrong_credentials": "L'email ou le mot de passe est incorrect"
+          "wrong_credentials": "L'identifiant ou le mot de passe est incorrect"
         },
         "otp": {
           "password_login": "Vous préférez vous connecter avec un mot de passe ?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Confirmer le code",
-          "description": "Un code de vérification a été envoyé à l'adresse {email}"
+          "description": "Un lien de réinitialisation du mot de passe a été envoyé à l'adresse {email}"
         }
       },
       "reset_password": {

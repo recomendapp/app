@@ -6,7 +6,6 @@ import { Button } from '../../ui/Button';
 import TrueSheet from '../../ui/TrueSheet';
 import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
-import { BORDER_RADIUS, GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import { Input } from '../../ui/Input';
 import { Text } from '../../ui/text';
 import { z } from 'zod';
@@ -42,7 +41,7 @@ export const BottomSheetComment = React.forwardRef<
     },
     ref,
   ) => {
-    const { colors } = useTheme();
+    const { colors, theme } = useTheme();
     const closeSheet = useBottomSheetStore((state) => state.closeSheet);
     const t = useTranslations();
     const insets = useSafeAreaInsets();
@@ -112,9 +111,9 @@ export const BottomSheetComment = React.forwardRef<
       <TrueSheet
         ref={ref}
         style={{
-          gap: GAP,
-          paddingTop: PADDING_VERTICAL * 2,
-          paddingHorizontal: PADDING_HORIZONTAL,
+          gap: theme.spaces.md,
+          paddingTop: theme.spaces.md * 2,
+          paddingHorizontal: theme.spaces.horizontal,
           paddingBottom: bottomInset,
         }}
         {...props}
@@ -149,7 +148,7 @@ export const BottomSheetComment = React.forwardRef<
             />
             <Button
               loading={isLoading}
-              onPress={form.handleSubmit(handleSave)}
+              onPress={() => void form.handleSubmit(handleSave)()}
               disabled={isLoading || !form.formState.isValid}
             >
               {upperFirst(t('common.messages.save'))}
@@ -161,8 +160,8 @@ export const BottomSheetComment = React.forwardRef<
             style={{
               position: 'relative',
               backgroundColor: colors.background,
-              padding: GAP,
-              borderRadius: BORDER_RADIUS,
+              padding: theme.spaces.md,
+              borderRadius: theme.border.radius.md,
             }}
           >
             {internalComment ? (

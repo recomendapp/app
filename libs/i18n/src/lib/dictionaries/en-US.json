@@ -731,7 +731,7 @@
           },
           "submit": "Login",
           "forgot_password": "Forgot password?",
-          "wrong_credentials": "Email or password is incorrect"
+          "wrong_credentials": "Login or password is incorrect"
         },
         "otp": {
           "password_login": "You prefer to log in with a password?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Confirm code",
-          "description": "A verification code has been sent to the address {email}"
+          "description": "A password reset link has been sent to the address {email}"
         }
       },
       "reset_password": {

@@ -731,7 +731,7 @@
           },
           "submit": "Увійти",
           "forgot_password": "Забув пароль?",
-          "wrong_credentials": "Email або пароль невірні"
+          "wrong_credentials": "Логін або пароль невірні"
         },
         "otp": {
           "password_login": "Хочеш увійти з паролем?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Підтвердити код",
-          "description": "Код підтвердження надіслано на адресу {email}"
+          "description": "Посилання для скидання пароля надіслано на адресу {email}"
         }
       },
       "reset_password": {

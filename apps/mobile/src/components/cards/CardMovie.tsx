@@ -10,7 +10,6 @@ import { IconMediaRating } from '../medias/IconMediaRating';
 import { Skeleton } from '../ui/Skeleton';
 import BottomSheetMovie from '../bottom-sheets/sheets/BottomSheetMovie';
 import { Text } from '../ui/text';
-import { GAP } from '../../theme/globals';
 import { getTmdbImage } from '../../lib/tmdb/getTmdbImage';
 import { LogMovie, LogMovieWithMovieNoReview, MovieCompact, UserSummary } from '@libs/api-js';
 import { FixedOmit } from '../../utils/fixed-omit';
@@ -204,10 +203,15 @@ const CardMovieList = React.forwardRef<
     },
     ref,
   ) => {
+    const { theme } = useTheme();
     return (
       <Animated.View
         ref={ref}
-        style={[{ gap: GAP }, tw`flex-row justify-between items-center p-1 h-20`, style]}
+        style={[
+          { gap: theme.spaces.md },
+          tw`flex-row justify-between items-center p-1 h-20`,
+          style,
+        ]}
         {...props}
       >
         <View style={tw`flex-1 flex-row items-center gap-2`}>
@@ -246,7 +250,7 @@ const CardMovieList = React.forwardRef<
           </View>
         </View>
         {!hideReleaseDate && (
-          <View style={[tw`flex-row items-center`, { gap: GAP }]}>
+          <View style={[tw`flex-row items-center`, { gap: theme.spaces.md }]}>
             {skeleton ? (
               <Skeleton style={tw`h-5 w-12`} />
             ) : (

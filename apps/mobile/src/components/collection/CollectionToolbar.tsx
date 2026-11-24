@@ -4,12 +4,12 @@ import { Button } from '../ui/Button';
 import { FlashList } from '@shopify/flash-list';
 import { LucideIcon } from 'lucide-react-native';
 import { FlatList, FlatListProps, useWindowDimensions } from 'react-native';
-import { GAP, PADDING_HORIZONTAL } from '../../theme/globals';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 import { ViewType } from '@libs/api-js';
 import { SFSymbol } from 'expo-symbols';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../../providers/ThemeProvider';
 
 interface CollectionToolbarItem {
   label?: string;
@@ -43,6 +43,7 @@ const CollectionToolbar = forwardRef<React.ComponentRef<typeof FlashList>, Colle
     },
     ref,
   ) => {
+    const { theme } = useTheme();
     const t = useTranslations();
     const insets = useSafeAreaInsets();
     const { width: SCREEN_WIDTH } = useWindowDimensions();
@@ -82,14 +83,14 @@ const CollectionToolbar = forwardRef<React.ComponentRef<typeof FlashList>, Colle
         renderItem={renderItem}
         showsHorizontalScrollIndicator={false}
         style={{
-          marginLeft: -PADDING_HORIZONTAL,
+          marginLeft: -theme.spaces.horizontal,
           width: SCREEN_WIDTH,
         }}
         contentContainerStyle={[
           {
-            gap: GAP,
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
+            gap: theme.spaces.md,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
           },
           contentContainerStyle,
         ]}

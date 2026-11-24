@@ -5,14 +5,6 @@ import tw from '../../../../lib/tw';
 import Share, { Social } from 'react-native-share';
 import Constants from 'expo-constants';
 import { Text } from '../../../ui/text';
-import {
-  GAP,
-  GAP_XL,
-  GAP_XS,
-  HEIGHT,
-  PADDING_HORIZONTAL,
-  PADDING_VERTICAL,
-} from '../../../../theme/globals';
 import { Button } from '../../../ui/Button';
 import { Separator } from '../../../ui/separator';
 import { Icons } from '../../../../constants/Icons';
@@ -55,7 +47,7 @@ const BottomSheetShareLayout = forwardRef<
 >(({ id, path, contentRef, children, ...props }, ref) => {
   const toast = useToast();
   const t = useTranslations();
-  const { colors, mode } = useTheme();
+  const { colors, mode, theme } = useTheme();
   const stringPath = useMemo(() => Link.resolveHref(path), [path]);
   const url = `https://${Constants.expoConfig?.extra?.webDomain}${stringPath}`;
 
@@ -252,13 +244,17 @@ const BottomSheetShareLayout = forwardRef<
         onPress={handlePlatformPress(item, index)}
         loading={loadingPlatform === index}
       >
-        <View style={[tw`items-center justify-center`, { gap: GAP_XS }]}>
-          <item.icon.component width={HEIGHT} height={HEIGHT} {...item.icon.props} />
+        <View style={[tw`items-center justify-center`, { gap: theme.spaces.sm }]}>
+          <item.icon.component
+            width={theme.input.height.md}
+            height={theme.input.height.md}
+            {...item.icon.props}
+          />
           <Text style={tw`mt-1 text-sm`}>{item.label}</Text>
         </View>
       </Button>
     ),
-    [handlePlatformPress, loadingPlatform],
+    [handlePlatformPress, loadingPlatform, theme],
   );
 
   return (
@@ -269,7 +265,7 @@ const BottomSheetShareLayout = forwardRef<
     >
       <ScrollView
         bounces={false}
-        contentContainerStyle={{ gap: GAP, paddingTop: PADDING_VERTICAL * 2 }}
+        contentContainerStyle={{ gap: theme.spaces.md, paddingTop: theme.spaces.md * 2 }}
         nestedScrollEnabled
       >
         <Text variant="title" style={tw`text-center`}>
@@ -283,9 +279,9 @@ const BottomSheetShareLayout = forwardRef<
           renderItem={renderItem}
           extraData={loadingPlatform}
           contentContainerStyle={{
-            paddingHorizontal: PADDING_HORIZONTAL * 2,
+            paddingHorizontal: theme.spaces.horizontal * 2,
           }}
-          ItemSeparatorComponent={() => <View style={{ width: GAP_XL }} />}
+          ItemSeparatorComponent={() => <View style={{ width: theme.spaces['3xl'] }} />}
           keyExtractor={useCallback((item: SharePlatform, index: number) => index.toString(), [])}
           horizontal
           showsHorizontalScrollIndicator={false}

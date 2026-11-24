@@ -16,6 +16,7 @@ import { ToastProvider } from '../components/Toast';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { ApiProvider } from './ApiProvider';
 import { VersionPolicyProvider } from './VersionPolicyProvider';
+import { GuardProvider } from './GuardProvider';
 import { useQuery } from '@tanstack/react-query';
 import { uiBackgroundsOptions } from '../api/ui/uiOptions';
 import { Splash } from '../components/Splash/Splash';
@@ -38,18 +39,20 @@ const Providers = ({ children }: ProvidersProps) => {
                       <ReactQueryProvider>
                         <VersionPolicyProvider>
                           <AuthProvider>
-                            <ApiProvider>
-                              <BottomSheetModalProvider>
-                                <NotificationsProvider>
-                                  <RealtimeProvider>
-                                    <Splash>
-                                      <ProvidersInner>{children}</ProvidersInner>
-                                      <BottomSheetManager />
-                                    </Splash>
-                                  </RealtimeProvider>
-                                </NotificationsProvider>
-                              </BottomSheetModalProvider>
-                            </ApiProvider>
+                            <GuardProvider>
+                              <ApiProvider>
+                                <BottomSheetModalProvider>
+                                  <NotificationsProvider>
+                                    <RealtimeProvider>
+                                      <Splash>
+                                        <ProvidersInner>{children}</ProvidersInner>
+                                        <BottomSheetManager />
+                                      </Splash>
+                                    </RealtimeProvider>
+                                  </NotificationsProvider>
+                                </BottomSheetModalProvider>
+                              </ApiProvider>
+                            </GuardProvider>
                           </AuthProvider>
                         </VersionPolicyProvider>
                       </ReactQueryProvider>

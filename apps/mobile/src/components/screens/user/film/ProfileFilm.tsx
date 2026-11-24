@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 import AnimatedContentContainer from '../../../ui/AnimatedContentContainer';
 import AnimatedStackScreen from '../../../ui/AnimatedStackScreen';
 import { useTheme } from '../../../../providers/ThemeProvider';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../theme/globals';
 import {
   useAnimatedScrollHandler,
   useAnimatedStyle,
@@ -29,7 +28,7 @@ import { formatCompactCount } from '../../../../utils/formatCompactCount';
 import { AnimatedPressable } from '../../../ui/AnimatedPressable';
 
 export const ProfileFilm = ({ username, movieId }: { username: string; movieId: number }) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const t = useTranslations();
   const router = useRouter();
@@ -63,7 +62,7 @@ export const ProfileFilm = ({ username, movieId }: { username: string; movieId: 
   });
   const animatedContentContainerStyle = useAnimatedStyle(() => {
     return {
-      paddingBottom: withTiming(insets.bottom + PADDING_VERTICAL, { duration: 300 }),
+      paddingBottom: withTiming(insets.bottom + theme.spaces.md, { duration: 300 }),
     };
   });
   return (
@@ -125,9 +124,9 @@ export const ProfileFilm = ({ username, movieId }: { username: string; movieId: 
         {log && (
           <View
             style={{
-              paddingLeft: insets.left + PADDING_HORIZONTAL,
-              paddingRight: insets.right + PADDING_HORIZONTAL,
-              paddingVertical: PADDING_VERTICAL,
+              paddingLeft: insets.left + theme.spaces.horizontal,
+              paddingRight: insets.right + theme.spaces.horizontal,
+              paddingVertical: theme.spaces.md,
             }}
           >
             {log.review ? (

@@ -16,7 +16,6 @@ import { useTranslations } from 'use-intl';
 import { Button } from '../../ui/Button';
 import { Text } from '../../ui/text';
 import { useAuth } from '../../../providers/AuthProvider';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import BottomSheetShareTvSeries from './share/BottomSheetShareTvSeries';
 import { FlashList } from '@shopify/flash-list';
 import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
@@ -47,7 +46,7 @@ const BottomSheetTvSeries = React.forwardRef<
 >(({ id, tvSeries, log, additionalItemsTop = [], additionalItemsBottom = [], ...props }, ref) => {
   const openSheet = useBottomSheetStore((state) => state.openSheet);
   const closeSheet = useBottomSheetStore((state) => state.closeSheet);
-  const { colors, mode, isLiquidGlassAvailable } = useTheme();
+  const { colors, mode, isLiquidGlassAvailable, theme } = useTheme();
   const { user } = useAuth();
   const router = useRouter();
   const t = useTranslations();
@@ -273,7 +272,10 @@ const BottomSheetTvSeries = React.forwardRef<
                   });
                 }}
                 style={[
-                  { paddingVertical: PADDING_HORIZONTAL, paddingHorizontal: PADDING_HORIZONTAL },
+                  {
+                    paddingVertical: theme.spaces.horizontal,
+                    paddingHorizontal: theme.spaces.horizontal,
+                  },
                 ]}
               >
                 <View style={tw`flex-1 flex-row items-center gap-2 justify-between`}>
@@ -286,7 +288,7 @@ const BottomSheetTvSeries = React.forwardRef<
             nestedScrollEnabled
             keyExtractor={(item) => item.id.toString()}
             contentContainerStyle={{
-              paddingTop: PADDING_VERTICAL,
+              paddingTop: theme.spaces.md,
             }}
           />
         </BottomSheetDefaultView>

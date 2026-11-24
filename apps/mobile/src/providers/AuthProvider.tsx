@@ -106,6 +106,16 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         });
         if (error) {
           switch (error.code) {
+            // An unknown username, a too short/long one and a wrong password
+            // all land here: on a sign-in form they are the same mistake, and
+            // the username plugin only tells them apart to the extent that
+            // saying so would leak which usernames exist.
+            case 'INVALID_USERNAME_OR_PASSWORD':
+            case 'USERNAME_TOO_SHORT':
+            case 'USERNAME_TOO_LONG':
+            case 'INVALID_USERNAME':
+              toast.error(t('pages.auth.login.form.wrong_credentials'));
+              break;
             default:
               toast.error(upperFirst(t('common.messages.an_error_occurred')));
               break;

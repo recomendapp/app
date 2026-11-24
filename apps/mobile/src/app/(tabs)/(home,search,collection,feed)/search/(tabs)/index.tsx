@@ -11,16 +11,14 @@ import { Icons } from '../../../../../constants/Icons';
 import tw from '../../../../../lib/tw';
 import { useTheme } from '../../../../../providers/ThemeProvider';
 import useSearchStore from '../../../../../stores/useSearchStore';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { useScrollToTop } from 'expo-router/react-navigation';
 import { Link } from 'expo-router';
 import { clamp, upperFirst } from 'lodash';
 import { useRef } from 'react';
 import { useWindowDimensions, ScrollView, RefreshControl } from 'react-native';
-import { KeyboardAwareScrollView } from '../../../../../components/ui/KeyboardAwareScrollView';
 import { useTranslations } from 'use-intl';
 import ErrorMessage from '../../../../../components/ErrorMessage';
-import { KeyboardAwareScrollViewRef, useKeyboardState } from 'react-native-keyboard-controller';
+import { useKeyboardState } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery } from '@tanstack/react-query';
 import { searchGlobalOptions } from '@libs/query-client';
@@ -48,6 +46,7 @@ interface SearchResultsProps extends React.ComponentPropsWithoutRef<typeof Scrol
 }
 
 export const SearchResults = ({ search, ...props }: SearchResultsProps) => {
+  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const t = useTranslations();
   const { isVisible: keyboardVisible, height: keyboardHeight } = useKeyboardState((state) => state);
@@ -61,20 +60,22 @@ export const SearchResults = ({ search, ...props }: SearchResultsProps) => {
   );
 
   const loading = data === undefined || isLoading;
-  const scrollRef = useRef<KeyboardAwareScrollViewRef>(null);
+  const scrollRef = useRef<ScrollView>(null);
 
   useScrollToTop(scrollRef);
 
   return (
-    <KeyboardAwareScrollView
+    <ScrollView
       ref={scrollRef}
       contentContainerStyle={{
-        gap: GAP,
-        paddingBottom: insets.bottom + PADDING_VERTICAL,
+        gap: theme.spaces.md,
+        paddingBottom: keyboardVisible
+          ? keyboardHeight + theme.spaces.md
+          : insets.bottom + theme.spaces.md,
       }}
       keyboardShouldPersistTaps="handled"
       scrollIndicatorInsets={{
-        bottom: keyboardVisible ? keyboardHeight - insets.bottom : insets.bottom,
+        bottom: keyboardVisible ? keyboardHeight - insets.bottom : 0,
       }}
       refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
       {...props}
@@ -111,20 +112,21 @@ export const SearchResults = ({ search, ...props }: SearchResultsProps) => {
             ) : null)}
         </>
       )}
-    </KeyboardAwareScrollView>
+    </ScrollView>
   );
 };
 
 /* --------------------------------- WIDGETS -------------------------------- */
 const SearchBestResult = ({ best }: { best: SearchBestResultItem | null }) => {
+  const { theme } = useTheme();
   const t = useTranslations();
   const insets = useSafeAreaInsets();
   return (
     <View
       style={{
-        marginLeft: insets.left + PADDING_HORIZONTAL,
-        marginRight: insets.right + PADDING_HORIZONTAL,
-        gap: GAP,
+        marginLeft: insets.left + theme.spaces.horizontal,
+        marginRight: insets.right + theme.spaces.horizontal,
+        gap: theme.spaces.md,
       }}
     >
       <Text style={tw`font-semibold text-xl`}>{upperFirst(t('common.messages.top_result'))}</Text>
@@ -158,21 +160,21 @@ const SearchResultSection = <T,>({
   renderItem: (item: T) => React.ReactElement;
   keyExtractor: (item: T) => string;
 }) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { width: screenWidth } = useWindowDimensions();
-  const width = clamp(screenWidth - (PADDING_HORIZONTAL * 2 + GAP * 2), 400);
+  const width = clamp(screenWidth - (theme.spaces.horizontal * 2 + theme.spaces.md * 2), 400);
 
   return (
-    <View style={{ gap: GAP }}>
+    <View style={{ gap: theme.spaces.md }}>
       <Link
         href={{
           pathname: pathname as any,
           params: { query: search },
         }}
         style={{
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
         }}
       >
         <View style={tw`flex-row items-center`}>
@@ -187,13 +189,13 @@ const SearchResultSection = <T,>({
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         contentContainerStyle={{
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
-          gap: GAP,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
+          gap: theme.spaces.md,
         }}
         keyboardShouldPersistTaps="handled"
-        columnStyle={{ width: width, gap: GAP }}
-        snapToInterval={width + GAP}
+        columnStyle={{ width: width, gap: theme.spaces.md }}
+        snapToInterval={width + theme.spaces.md}
         decelerationRate="fast"
       />
     </View>

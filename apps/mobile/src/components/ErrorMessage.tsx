@@ -5,7 +5,6 @@ import { useTheme } from '../providers/ThemeProvider';
 import { Text, TextProps } from './ui/text';
 import { Icons } from '../constants/Icons';
 import { upperFirst } from 'lodash';
-import { PADDING_VERTICAL } from '../theme/globals';
 import tw from '../lib/tw';
 
 interface ErrorMessageProps extends React.ComponentProps<typeof View> {
@@ -16,7 +15,7 @@ interface ErrorMessageProps extends React.ComponentProps<typeof View> {
 const ErrorMessage = forwardRef<React.ComponentRef<typeof View>, ErrorMessageProps>(
   ({ message, style, textStyle }, ref) => {
     const t = useTranslations();
-    const { colors } = useTheme();
+    const { colors, theme } = useTheme();
     return (
       <View ref={ref} style={[tw`items-center justify-center flex-1`, style]}>
         <Icons.AlertCircle color={colors.mutedForeground} />
@@ -27,7 +26,7 @@ const ErrorMessage = forwardRef<React.ComponentRef<typeof View>, ErrorMessagePro
           <Text
             style={[
               {
-                padding: PADDING_VERTICAL,
+                padding: theme.spaces.md,
                 color: colors.mutedForeground,
                 textAlign: 'center',
               },

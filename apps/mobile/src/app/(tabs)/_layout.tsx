@@ -4,7 +4,7 @@ import { useTheme } from '../../providers/ThemeProvider';
 import { useTranslations } from 'use-intl';
 import { upperFirst } from 'lodash';
 import { useAppGates } from '../../hooks/gates/useAppGates';
-import { NativeTabs } from 'expo-router/unstable-native-tabs';
+import { NativeTabs } from 'expo-router/native-tabs';
 import { isIOS } from '../../platform/detection';
 
 const TabsLayout = () => {
@@ -17,6 +17,7 @@ const TabsLayout = () => {
 
   return (
     <NativeTabs
+      tintColor={colors.primary}
       iconColor={{
         default: colors.foreground,
         selected: isIOS ? colors.primary : colors.foreground,

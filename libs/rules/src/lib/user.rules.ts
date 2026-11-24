@@ -16,5 +16,6 @@ export const USER_RULES = {
   },
   PASSWORD: {
     MIN: 8,
+    MAX: 128,
   },
 };

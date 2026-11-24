@@ -14,14 +14,7 @@ import ViewShot, { type ViewShotRef } from 'react-native-view-shot';
 import { Text } from '../ui/text';
 import { Icons } from '../../constants/Icons';
 import { Button } from '../ui/Button';
-import {
-  BORDER_RADIUS,
-  GAP,
-  PADDING,
-  PADDING_HORIZONTAL,
-  PADDING_VERTICAL,
-  SOCIAL_CARD_WIDTH,
-} from '../../theme/globals';
+import { SOCIAL_CARD_WIDTH } from '../../theme/globals';
 import WheelSelector from '../ui/WheelSelector';
 import Animated, {
   FadeInDown,
@@ -104,7 +97,7 @@ const ShareReviewMovieDefault = ({
   showComments: boolean;
   scale?: number;
 }) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const t = useTranslations();
   const year = useMemo(
     () => (movie.releaseDate ? new Date(movie.releaseDate).getFullYear() : undefined),
@@ -125,10 +118,10 @@ const ShareReviewMovieDefault = ({
       style={[
         tw`w-full`,
         {
-          borderRadius: BORDER_RADIUS * scale,
+          borderRadius: theme.border.radius.md * scale,
           backgroundColor: Color(colors.muted).alpha(0.95).string(),
-          gap: GAP * 0.6 * scale,
-          padding: PADDING * 0.85 * scale,
+          gap: theme.spaces.md * 0.6 * scale,
+          padding: theme.spaces.xl * 0.85 * scale,
         },
       ]}
     >
@@ -327,7 +320,7 @@ export const ShareReviewMovie = forwardRef<ShareViewRef, ShareReviewMovieProps>(
   ({ movie, review, author, rating, variant = 'default', isPremium, ...props }, ref) => {
     const viewShotRef = useRef<ViewShotRef>(null);
     const { height: screenHeight } = useWindowDimensions();
-    const { colors } = useTheme();
+    const { colors, theme } = useTheme();
     const t = useTranslations();
     const hasRating = typeof rating === 'number' && rating !== null;
     const [showRating, setShowRating] = useState(hasRating);
@@ -360,8 +353,8 @@ export const ShareReviewMovie = forwardRef<ShareViewRef, ShareReviewMovieProps>(
     // Box layout: a fixed 9:16 box the card must fit inside.
     const boxHeight = clamp(400, screenHeight * 0.7);
     const boxWidth = boxHeight * (9 / 16);
-    const availableHeight = boxHeight - PADDING_VERTICAL * 2;
-    const contentWidth = boxWidth - PADDING_HORIZONTAL * 2;
+    const availableHeight = boxHeight - theme.spaces.md * 2;
+    const contentWidth = boxWidth - theme.spaces.horizontal * 2;
 
     // Measures the card at scale=1 (invisibly) so it can be shrunk to fit availableHeight,
     // letting a long review always render in full without a numberOfLines cap.
@@ -453,12 +446,12 @@ export const ShareReviewMovie = forwardRef<ShareViewRef, ShareReviewMovieProps>(
 
     const EditButtons = useMemo(
       () => (
-        <View style={[tw`absolute top-2 right-2 flex-row items-center`, { gap: GAP }]}>
+        <View style={[tw`absolute top-2 right-2 flex-row items-center`, { gap: theme.spaces.md }]}>
           {editing && (
             <Animated.View
               entering={FadeInRight}
               exiting={FadeOutRight}
-              style={[tw`flex-row items-center`, { gap: GAP }]}
+              style={[tw`flex-row items-center`, { gap: theme.spaces.md }]}
             >
               {backdropUrl && (
                 <Button
@@ -481,7 +474,7 @@ export const ShareReviewMovie = forwardRef<ShareViewRef, ShareReviewMovieProps>(
           />
         </View>
       ),
-      [editing, backdropUrl, handleEnableEditing, bgType, bgColor],
+      [editing, backdropUrl, handleEnableEditing, bgType, bgColor, theme],
     );
 
     const EditOptions = useMemo(() => {
@@ -498,8 +491,8 @@ export const ShareReviewMovie = forwardRef<ShareViewRef, ShareReviewMovieProps>(
           />
         ) : null;
       if (!content) return null;
-      return <View style={[tw`absolute w-full`, { bottom: PADDING_VERTICAL }]}>{content}</View>;
-    }, [editing, bgType, palette, bgColor, backdropUrl, movie, backdrop]);
+      return <View style={[tw`absolute w-full`, { bottom: theme.spaces.md }]}>{content}</View>;
+    }, [editing, bgType, palette, bgColor, backdropUrl, movie, backdrop, theme]);
 
     const toggles = useMemo(
       () => [
@@ -540,13 +533,13 @@ export const ShareReviewMovie = forwardRef<ShareViewRef, ShareReviewMovieProps>(
     const Toggles = useMemo(() => {
       if (toggles.length === 0) return null;
       return (
-        <View style={{ gap: GAP }}>
+        <View style={{ gap: theme.spaces.md }}>
           {toggles.map((toggle) => (
             <View
               key={toggle.key}
               style={[
                 tw`flex-row items-center justify-between`,
-                { paddingHorizontal: PADDING_HORIZONTAL, gap: GAP },
+                { paddingHorizontal: theme.spaces.horizontal, gap: theme.spaces.md },
               ]}
             >
               <Text>{toggle.label}</Text>
@@ -555,7 +548,7 @@ export const ShareReviewMovie = forwardRef<ShareViewRef, ShareReviewMovieProps>(
           ))}
         </View>
       );
-    }, [toggles]);
+    }, [toggles, theme]);
 
     // useEffects
     // Resets bgColor from the async palette; bgColor stays independently user-editable afterward.
@@ -570,15 +563,15 @@ export const ShareReviewMovie = forwardRef<ShareViewRef, ShareReviewMovieProps>(
     /* eslint-enable react-hooks/set-state-in-effect */
 
     return (
-      <View style={{ gap: GAP }} {...props}>
+      <View style={{ gap: theme.spaces.md }} {...props}>
         <View style={tw`items-center`}>
           <View
             style={[
               {
                 aspectRatio: 9 / 16,
-                paddingHorizontal: PADDING_HORIZONTAL,
-                paddingVertical: PADDING_VERTICAL,
-                borderRadius: BORDER_RADIUS,
+                paddingHorizontal: theme.spaces.horizontal,
+                paddingVertical: theme.spaces.md,
+                borderRadius: theme.border.radius.md,
                 height: boxHeight,
                 backgroundColor: colors.background,
               },

@@ -73,13 +73,13 @@ const FilmDetailsScreen = () => {
   // 	switch (item.type) {
   // 		case 'department':
   // 			return (
-  // 			<Text style={[tw`text-2xl font-bold`, { backgroundColor: colors.muted, paddingHorizontal: PADDING_HORIZONTAL }]}>
+  // 			<Text style={[tw`text-2xl font-bold`, { backgroundColor: colors.muted, paddingHorizontal: theme.spaces.horizontal }]}>
   // 				{item.department}
   // 			</Text>
   // 			);
   // 		case 'job':
   // 			return (
-  // 			<Text textColor="muted" style={[tw`font-semibold`, { paddingHorizontal: PADDING_HORIZONTAL }]}>
+  // 			<Text textColor="muted" style={[tw`font-semibold`, { paddingHorizontal: theme.spaces.horizontal }]}>
   // 				{item.job}
   // 			</Text>
   // 			);
@@ -89,7 +89,7 @@ const FilmDetailsScreen = () => {
   // 				variant="list"
   // 				person={item.person}
   // 				hideKnownForDepartment
-  // 				style={{ marginHorizontal: PADDING_HORIZONTAL, marginBottom: GAP }}
+  // 				style={{ marginHorizontal: theme.spaces.horizontal, marginBottom: theme.spaces.md }}
   // 			/>
   // 			);
   // 		default:
@@ -115,7 +115,7 @@ const FilmDetailsScreen = () => {
 			return `person-${item.department}-${item.job}-${item.person.id}`;
 		}, [])}
 		contentContainerStyle={{
-			paddingBottom: insets.bottom + PADDING_VERTICAL
+			paddingBottom: insets.bottom + theme.spaces.md
 		}}
 		ListEmptyComponent={
 			loading ? <Icons.Loader />

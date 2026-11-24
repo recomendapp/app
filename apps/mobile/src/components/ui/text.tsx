@@ -1,5 +1,4 @@
 import { useTheme } from '../../providers/ThemeProvider';
-import { FONT_SIZE } from '../../theme/globals';
 import React, { forwardRef, useMemo } from 'react'; // Importer useMemo
 import { Text as RNText, TextProps as RNTextProps, TextStyle } from 'react-native';
 
@@ -24,7 +23,7 @@ export interface TextProps extends RNTextProps {
  */
 export const Text = forwardRef<RNText, TextProps>(
   ({ variant = 'body', textColor, style, children, ...props }, ref) => {
-    const { colors } = useTheme();
+    const { colors, theme } = useTheme();
 
     const textStyle = useMemo((): TextStyle => {
       const sharedStyles: TextStyle = {
@@ -39,11 +38,15 @@ export const Text = forwardRef<RNText, TextProps>(
           case 'subtitle':
             return { fontSize: 19, fontWeight: '600' };
           case 'caption':
-            return { fontSize: FONT_SIZE, fontWeight: '400' };
+            return { fontSize: theme.fonts.sizes.md, fontWeight: '400' };
           case 'link':
-            return { fontSize: FONT_SIZE, fontWeight: '500', textDecorationLine: 'underline' };
+            return {
+              fontSize: theme.fonts.sizes.md,
+              fontWeight: '500',
+              textDecorationLine: 'underline',
+            };
           default: // 'body'
-            return { fontSize: FONT_SIZE, fontWeight: '400' };
+            return { fontSize: theme.fonts.sizes.md, fontWeight: '400' };
         }
       })();
 
@@ -72,7 +75,7 @@ export const Text = forwardRef<RNText, TextProps>(
         }
       }
       return { ...sharedStyles, ...variantStyles, ...colorStyle };
-    }, [variant, textColor, colors]);
+    }, [variant, textColor, colors, theme]);
 
     return (
       <RNText ref={ref} style={[textStyle, style]} {...props}>

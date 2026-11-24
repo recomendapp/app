@@ -731,7 +731,7 @@
           },
           "submit": "Log ind",
           "forgot_password": "Glemt adgangskoden?",
-          "wrong_credentials": "E-mailen eller adgangskoden er forkert"
+          "wrong_credentials": "Login eller adgangskode er forkert"
         },
         "otp": {
           "password_login": "Vil du helst logge ind med en adgangskode?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Bekræft koden",
-          "description": "Der er sendt en bekræftelseskode til adressen {email}"
+          "description": "Der er sendt et link til nulstilling af adgangskoden til adressen {email}"
         }
       },
       "reset_password": {

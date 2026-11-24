@@ -5,9 +5,9 @@ import { LegendList } from '@legendapp/list/react-native';
 import { useTranslations } from 'use-intl';
 import { upperFirst } from 'lodash';
 import { Text } from '../ui/text';
-import { GAP } from '../../theme/globals';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { usersInfiniteOptions } from '@libs/query-client';
+import { useTheme } from '../../providers/ThemeProvider';
 
 interface WidgetUserDiscoveryProps extends React.ComponentPropsWithoutRef<typeof View> {
   labelStyle?: StyleProp<TextStyle>;
@@ -19,6 +19,7 @@ export const WidgetUserDiscovery = ({
   labelStyle,
   containerStyle,
 }: WidgetUserDiscoveryProps) => {
+  const { theme } = useTheme();
   const t = useTranslations();
   const { data: users, fetchNextPage, hasNextPage } = useInfiniteQuery(usersInfiniteOptions());
 
@@ -47,7 +48,7 @@ export const WidgetUserDiscovery = ({
         showsHorizontalScrollIndicator={false}
         onEndReached={() => hasNextPage && fetchNextPage()}
         onEndReachedThreshold={0.2}
-        ItemSeparatorComponent={() => <View style={{ width: GAP }} />}
+        ItemSeparatorComponent={() => <View style={{ width: theme.spaces.md }} />}
         contentContainerStyle={containerStyle}
         nestedScrollEnabled
       />

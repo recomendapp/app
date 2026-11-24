@@ -4,7 +4,6 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 import tw from '../../../../../lib/tw';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { LegendList } from '@legendapp/list/react-native';
 import { useCallback, useMemo, useState } from 'react';
@@ -35,7 +34,7 @@ const FilmReviews = () => {
   const { id: movieId } = getIdFromSlug(film_id);
   const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
-  const { isLiquidGlassAvailable } = useTheme();
+  const { isLiquidGlassAvailable, theme } = useTheme();
   const { showActionSheetWithOptions } = useActionSheet();
   // States
   const sortByOptions = useMemo(
@@ -248,11 +247,11 @@ const FilmReviews = () => {
         )}
         onEndReachedThreshold={0.5}
         contentContainerStyle={{
-          paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
-          paddingBottom: insets.bottom + PADDING_VERTICAL,
-          gap: GAP,
+          paddingTop: navigationHeaderHeight + theme.spaces.md,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
+          paddingBottom: insets.bottom + theme.spaces.md,
+          gap: theme.spaces.md,
           flexGrow: 1,
         }}
         maintainVisibleContentPosition={false}

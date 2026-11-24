@@ -124,7 +124,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         ios: {
           deploymentTarget: '16.4',
           useFrameworks: 'static',
-          enableSceneSupport: true,
         },
       },
     ],

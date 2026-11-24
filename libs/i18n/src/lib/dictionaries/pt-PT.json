@@ -731,7 +731,7 @@
           },
           "submit": "Iniciar sessão",
           "forgot_password": "Esqueceste-te da palavra-passe?",
-          "wrong_credentials": "O email ou a palavra-passe estão incorretos"
+          "wrong_credentials": "O identificador ou a palavra-passe estão incorretos"
         },
         "otp": {
           "password_login": "Preferes iniciar sessão com uma palavra-passe?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Confirmar o código",
-          "description": "Foi enviado um código de verificação para o endereço {email}"
+          "description": "Foi enviado um link para redefinir a palavra-passe para o endereço {email}"
         }
       },
       "reset_password": {

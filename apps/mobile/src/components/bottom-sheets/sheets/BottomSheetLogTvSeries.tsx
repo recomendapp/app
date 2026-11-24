@@ -11,7 +11,6 @@ import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
 import { Button } from '../../ui/Button';
 import { useAuth } from '../../../providers/AuthProvider';
-import { PADDING_VERTICAL } from '../../../theme/globals';
 import { FlashList } from '@shopify/flash-list';
 import { UserTvSeriesWithUserTvSeries, UserSummary } from '@libs/api-js';
 import BottomSheetShareReviewTvSeries from './share/BottomSheetShareReviewTvSeries';
@@ -38,7 +37,7 @@ export const BottomSheetLogTvSeries = forwardRef<
 >(({ id, log, profile, additionalItemsTop = [], additionalItemsBottom = [], ...props }, ref) => {
   const closeSheet = useBottomSheetStore((state) => state.closeSheet);
   const openSheet = useBottomSheetStore((state) => state.openSheet);
-  const { colors, mode } = useTheme();
+  const { colors, mode, theme } = useTheme();
   const { user } = useAuth();
   const router = useRouter();
   const t = useTranslations();
@@ -135,7 +134,7 @@ export const BottomSheetLogTvSeries = forwardRef<
     <TrueSheet ref={ref} scrollable {...props}>
       <FlashList
         data={items}
-        contentContainerStyle={{ paddingTop: PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingTop: theme.spaces.md }}
         bounces={false}
         keyExtractor={(_, i) => i.toString()}
         stickyHeaderIndices={[0]}

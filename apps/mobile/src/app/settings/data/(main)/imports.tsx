@@ -7,7 +7,6 @@ import { RefreshableStateContainer } from '../../../../components/ui/Refreshable
 import { useToast } from '../../../../components/Toast';
 import { Icons } from '../../../../constants/Icons';
 import { useTheme } from '../../../../providers/ThemeProvider';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../theme/globals';
 import tw from '../../../../lib/tw';
 import { ImportJob } from '@libs/api-js';
 import { importsListInfiniteOptions, useImportDeleteMutation } from '@libs/query-client';
@@ -18,7 +17,8 @@ import { useCallback, useMemo } from 'react';
 import { Alert, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFormatter, useTranslations } from 'use-intl';
-import SwipeableMonoActionRow from '../../../../components/ui/swippeable/SwipeableMonoActionRow';
+import { SwipeableActionsRow } from '../../../../components/ui/swippeable/SwipeableActionsRow';
+import { NativeIcons } from '../../../../constants/native-icons';
 import Animated, { LinearTransition, SlideOutLeft } from 'react-native-reanimated';
 import { AnimatedLegendList } from '@legendapp/list/reanimated';
 import { parseApiDate } from '../../../../utils/parseApiDate';
@@ -29,7 +29,7 @@ const SettingsDataImportsScreen = () => {
   const format = useFormatter();
   const router = useRouter();
   const toast = useToast();
-  const { colors, mode } = useTheme();
+  const { colors, mode, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { getImporterStatusBadgeVariant, getImporterStatusLabel } = useImporter();
 
@@ -82,16 +82,15 @@ const SettingsDataImportsScreen = () => {
   const renderItem = useCallback(
     ({ item }: { item: ImportJob }) => (
       <Animated.View exiting={SlideOutLeft.duration(250)}>
-        <SwipeableMonoActionRow
-          rightAction={{
-            type: 'open',
-            icon: <Icons.Delete color={colors.destructiveForeground} />,
-            backgroundColor: colors.destructive,
-            onOpen: () => handleDelete(item),
-          }}
-          childrenContainerStyle={{
-            paddingHorizontal: PADDING_HORIZONTAL,
-          }}
+        <SwipeableActionsRow
+          actionsRight={[
+            {
+              label: t('common.messages.delete'),
+              icon: NativeIcons.trash,
+              onPress: () => handleDelete(item),
+            },
+          ]}
+          style={{ paddingHorizontal: theme.spaces.horizontal }}
         >
           <Pressable
             onPress={() => handleOpen(item)}
@@ -121,10 +120,11 @@ const SettingsDataImportsScreen = () => {
               </Badge>
             </View>
           </Pressable>
-        </SwipeableMonoActionRow>
+        </SwipeableActionsRow>
       </Animated.View>
     ),
     [
+      theme,
       colors,
       format,
       handleOpen,
@@ -160,11 +160,11 @@ const SettingsDataImportsScreen = () => {
           onEndReached={() => hasNextPage && fetchNextPage()}
           contentContainerStyle={[
             {
-              gap: GAP,
-              paddingTop: PADDING_VERTICAL,
+              gap: theme.spaces.md,
+              paddingTop: theme.spaces.md,
               paddingLeft: insets.left,
               paddingRight: insets.right,
-              paddingBottom: insets.bottom + PADDING_VERTICAL,
+              paddingBottom: insets.bottom + theme.spaces.md,
             },
           ]}
         />

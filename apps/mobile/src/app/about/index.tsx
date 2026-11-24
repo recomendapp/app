@@ -4,21 +4,13 @@ import { View } from '../../components/ui/view';
 import { Icons } from '../../constants/Icons';
 import tw from '../../lib/tw';
 import { useTheme } from '../../providers/ThemeProvider';
-import {
-  GAP,
-  GAP_LG,
-  GAP_XL,
-  GAP_XS,
-  PADDING_HORIZONTAL,
-  PADDING_VERTICAL,
-} from '../../theme/globals';
 import { ExternalPathString, Link } from 'expo-router';
 import { useMemo } from 'react';
 import { ScrollView } from 'react-native';
 import { useTranslations } from 'use-intl';
 
 const AboutScreen = () => {
-  const { colors, mode } = useTheme();
+  const { colors, mode, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const t = useTranslations('pages.about');
 
@@ -97,13 +89,13 @@ const AboutScreen = () => {
       {
         title: t('about.label'),
         content: (
-          <View style={{ gap: GAP_LG }}>
+          <View style={{ gap: theme.spaces.lg }}>
             <Text>
               {t.rich('about.intro', {
                 strong: (chunks) => <Text style={tw`font-semibold`}>{chunks}</Text>,
               })}
             </Text>
-            <View style={[tw`items-center`, { gap: GAP_XS }]}>
+            <View style={[tw`items-center`, { gap: theme.spaces.sm }]}>
               <Text>{t('about.slogan.1')}</Text>
               <Text>{t('about.slogan.2')}</Text>
               <Text>{t('about.slogan.3')}</Text>
@@ -116,9 +108,9 @@ const AboutScreen = () => {
       {
         title: t('team.label'),
         content: (
-          <View style={{ gap: GAP }}>
+          <View style={{ gap: theme.spaces.md }}>
             <Text>{t('team.intro')}</Text>
-            <View style={{ gap: GAP }}>
+            <View style={{ gap: theme.spaces.md }}>
               <View style={[{ backgroundColor: colors.muted }, tw`rounded-md p-4`]}>
                 <Text style={tw`text-lg font-semibold`}>{t('team.members.loup.name')}</Text>
                 <Text>{t('team.members.loup.description')}</Text>
@@ -147,7 +139,7 @@ const AboutScreen = () => {
       {
         title: t('pricing.label'),
         content: (
-          <View style={{ gap: GAP }}>
+          <View style={{ gap: theme.spaces.md }}>
             <Text>{t('pricing.intro')}</Text>
             {/* <Pricing
             session={session}
@@ -164,9 +156,9 @@ const AboutScreen = () => {
       {
         title: t('open-source.label'),
         content: (
-          <View style={{ gap: GAP }}>
+          <View style={{ gap: theme.spaces.md }}>
             <Text>{t('open-source.intro')}</Text>
-            <View style={[tw`flex-row items-center justify-center`, { gap: GAP_XS }]}>
+            <View style={[tw`flex-row items-center justify-center`, { gap: theme.spaces.sm }]}>
               <Icons.brands.github size={16} variant={mode === 'dark' ? 'dark' : 'light'} />
               <Link
                 href="https://github.com/recomendapp/app"
@@ -182,7 +174,7 @@ const AboutScreen = () => {
       {
         title: t('businessmodel.label'),
         content: (
-          <View style={{ gap: GAP }}>
+          <View style={{ gap: theme.spaces.md }}>
             <Text>{t('businessmodel.paragraph.1')}</Text>
             <Text>{t('businessmodel.paragraph.2')}</Text>
             <Text>{t('businessmodel.paragraph.3')}</Text>
@@ -192,7 +184,7 @@ const AboutScreen = () => {
       {
         title: t('roadmap.label'),
         content: (
-          <View style={{ gap: GAP }}>
+          <View style={{ gap: theme.spaces.md }}>
             <View style={[{ backgroundColor: colors.muted }, tw`p-4 rounded-md`, tw`items-center`]}>
               <Text style={{ color: colors.mutedForeground }}>Coming soon...</Text>
             </View>
@@ -202,7 +194,7 @@ const AboutScreen = () => {
       {
         title: t('data.label'),
         content: (
-          <View style={{ gap: GAP }}>
+          <View style={{ gap: theme.spaces.md }}>
             <Text>
               {t.rich('data.paragraph.1', {
                 link: (chunks) => (
@@ -222,15 +214,15 @@ const AboutScreen = () => {
       {
         title: t('resources.label'),
         content: (
-          <View style={{ gap: GAP }}>
+          <View style={{ gap: theme.spaces.md }}>
             <Text>{t('resources.intro')}</Text>
-            <View style={{ gap: GAP_XS }}>
+            <View style={{ gap: theme.spaces.sm }}>
               {resources.map((resource, index) => (
                 <Link
                   key={index}
                   href={resource.link}
                   target="_blank"
-                  style={{ paddingLeft: GAP, color: colors.foreground }}
+                  style={{ paddingLeft: theme.spaces.md, color: colors.foreground }}
                 >
                   • <Text style={{ color: colors.accentPink }}>{resource.name}</Text>
                 </Link>
@@ -242,7 +234,7 @@ const AboutScreen = () => {
       {
         title: t('contact-support.label'),
         content: (
-          <View style={{ gap: GAP }}>
+          <View style={{ gap: theme.spaces.md }}>
             <Text>
               {t.rich('contact-support.technical-support', {
                 email: (chunks) => (
@@ -275,7 +267,7 @@ const AboutScreen = () => {
       },
       {
         content: (
-          <View style={{ gap: GAP, marginTop: GAP_LG }}>
+          <View style={{ gap: theme.spaces.md, marginTop: theme.spaces.lg }}>
             <Icons.Quote size={40} color={colors.muted} style={tw`absolute left-0 -top-6`} />
             <Text style={tw`italic text-center`}>{t('quote.quote')}</Text>
             <Text style={[tw`text-center`, { color: colors.accentYellow }]}>
@@ -289,6 +281,7 @@ const AboutScreen = () => {
       },
     ],
     [
+      theme,
       t,
       resources,
       colors.accentPink,
@@ -303,9 +296,9 @@ const AboutScreen = () => {
   return (
     <ScrollView
       contentContainerStyle={{
-        paddingBottom: insets.bottom + PADDING_VERTICAL,
-        paddingTop: PADDING_VERTICAL,
-        gap: GAP_XL,
+        paddingBottom: insets.bottom + theme.spaces.md,
+        paddingTop: theme.spaces.md,
+        gap: theme.spaces['3xl'],
         justifyContent: 'center',
         alignItems: 'center',
       }}
@@ -316,9 +309,9 @@ const AboutScreen = () => {
           style={[
             tw`flex flex-col max-w-xl`,
             {
-              paddingLeft: insets.left + PADDING_HORIZONTAL,
-              paddingRight: insets.right + PADDING_HORIZONTAL,
-              gap: GAP,
+              paddingLeft: insets.left + theme.spaces.horizontal,
+              paddingRight: insets.right + theme.spaces.horizontal,
+              gap: theme.spaces.md,
             },
           ]}
         >

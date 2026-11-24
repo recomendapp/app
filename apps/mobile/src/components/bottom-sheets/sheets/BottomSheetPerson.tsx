@@ -15,7 +15,6 @@ import { Button } from '../../ui/Button';
 import { Text } from '../../ui/text';
 import BottomSheetSharePerson from './share/BottomSheetSharePerson';
 import { FlashList } from '@shopify/flash-list';
-import { PADDING_VERTICAL } from '../../../theme/globals';
 import { PersonCompact } from '@libs/api-js';
 import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
 import { usePinnedItem } from '../../../hooks/usePinnedItem';
@@ -43,7 +42,7 @@ const BottomSheetPerson = React.forwardRef<
   const { user } = useAuth();
   const openSheet = useBottomSheetStore((state) => state.openSheet);
   const closeSheet = useBottomSheetStore((state) => state.closeSheet);
-  const { colors, mode, isLiquidGlassAvailable } = useTheme();
+  const { colors, mode, isLiquidGlassAvailable, theme } = useTheme();
   const router = useRouter();
   const t = useTranslations();
   const pathname = usePathname();
@@ -108,7 +107,7 @@ const BottomSheetPerson = React.forwardRef<
     <TrueSheet ref={ref} scrollable {...props}>
       <FlashList
         data={['header', ...items]}
-        contentContainerStyle={{ paddingTop: PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingTop: theme.spaces.md }}
         bounces={false}
         keyExtractor={(_, i) => i.toString()}
         stickyHeaderIndices={[0]}

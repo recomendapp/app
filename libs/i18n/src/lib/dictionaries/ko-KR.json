@@ -731,7 +731,7 @@
           },
           "submit": "로그인",
           "forgot_password": "비밀번호를 잊으셨나요?",
-          "wrong_credentials": "이메일 또는 비밀번호가 올바르지 않습니다"
+          "wrong_credentials": "로그인 정보 또는 비밀번호가 올바르지 않습니다"
         },
         "otp": {
           "password_login": "비밀번호로 로그인하시겠어요?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "코드 확인",
-          "description": "{email} 주소로 인증 코드를 보냈습니다"
+          "description": "{email} 주소로 비밀번호 재설정 링크를 보냈습니다"
         }
       },
       "reset_password": {

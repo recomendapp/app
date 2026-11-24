@@ -11,7 +11,6 @@ import { ImageWithFallback } from '../../components/utils/ImageWithFallback';
 import { useTheme } from '../../providers/ThemeProvider';
 import { useWelcomeFinish } from './_layout';
 import tw from '../../lib/tw';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { LegendList } from '@legendapp/list/react-native';
 import { useCallback, useMemo } from 'react';
 import { ImportSource } from '@libs/api-js';
@@ -20,7 +19,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const WelcomeImportScreen = () => {
   const t = useTranslations();
   const router = useRouter();
-  const { mode } = useTheme();
+  const { mode, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const finish = useWelcomeFinish();
 
@@ -81,9 +80,9 @@ const WelcomeImportScreen = () => {
         style={[
           tw`items-center shrink-0`,
           {
-            paddingVertical: PADDING_VERTICAL,
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
+            paddingVertical: theme.spaces.md,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
           },
         ]}
       >
@@ -97,15 +96,15 @@ const WelcomeImportScreen = () => {
         keyExtractor={(item) => item.provider.slug}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
-          paddingTop: PADDING_VERTICAL,
-          paddingBottom: PADDING_VERTICAL,
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
-          gap: GAP,
+          paddingTop: theme.spaces.md,
+          paddingBottom: theme.spaces.md,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
+          gap: theme.spaces.md,
         }}
       />
       <FloatingFooter>
-        <View style={{ width: '100%', gap: GAP }}>
+        <View style={{ width: '100%', gap: theme.spaces.md }}>
           <Button size="lg" containerStyle={tw`w-full`} onPress={handleImport}>
             {upperFirst(t('common.messages.import'))}
           </Button>

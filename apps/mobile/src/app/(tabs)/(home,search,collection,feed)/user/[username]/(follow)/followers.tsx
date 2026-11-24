@@ -1,5 +1,4 @@
 import { CardUser } from '../../../../../../components/cards/CardUser';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../../theme/globals';
 import { LegendList } from '@legendapp/list/react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useCallback, useMemo } from 'react';
@@ -12,8 +11,10 @@ import { CardError } from '../../../../../../components/cards/CardError';
 import { Icons } from '../../../../../../constants/Icons';
 import { CardEmpty } from '../../../../../../components/cards/CardEmpty';
 import { useTranslations } from 'use-intl';
+import { useTheme } from '../../../../../../providers/ThemeProvider';
 
 const ProfileFollowersScreen = () => {
+  const { theme } = useTheme();
   const { username } = useLocalSearchParams<{ username: string }>();
   const { data: profile } = useQuery(userByUsernameOptions({ username: username }));
   const insets = useSafeAreaInsets();
@@ -34,7 +35,7 @@ const ProfileFollowersScreen = () => {
       <RefreshableStateContainer
         onRefresh={refetch}
         refreshing={isRefetching}
-        contentContainerStyle={{ paddingBottom: insets.bottom + PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + theme.spaces.md }}
       >
         <Icons.Loader />
       </RefreshableStateContainer>
@@ -46,7 +47,7 @@ const ProfileFollowersScreen = () => {
       <RefreshableStateContainer
         onRefresh={refetch}
         refreshing={isRefetching}
-        contentContainerStyle={{ paddingBottom: insets.bottom + PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + theme.spaces.md }}
       >
         <CardError />
       </RefreshableStateContainer>
@@ -58,7 +59,7 @@ const ProfileFollowersScreen = () => {
       <RefreshableStateContainer
         onRefresh={refetch}
         refreshing={isRefetching}
-        contentContainerStyle={{ paddingBottom: insets.bottom + PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + theme.spaces.md }}
       >
         <CardEmpty icon={'👥'} label={t('common.messages.no_followers')} />
       </RefreshableStateContainer>
@@ -69,13 +70,10 @@ const ProfileFollowersScreen = () => {
       data={followers}
       renderItem={renderItem}
       contentContainerStyle={{
-        paddingTop: PADDING_VERTICAL,
-        paddingLeft: insets.left + PADDING_HORIZONTAL,
-        paddingRight: insets.right + PADDING_HORIZONTAL,
-        paddingBottom: insets.bottom + PADDING_VERTICAL,
-      }}
-      scrollIndicatorInsets={{
-        bottom: insets.bottom,
+        paddingTop: theme.spaces.md,
+        paddingLeft: insets.left + theme.spaces.horizontal,
+        paddingRight: insets.right + theme.spaces.horizontal,
+        paddingBottom: insets.bottom + theme.spaces.md,
       }}
       keyExtractor={(item) => item.id}
       onEndReached={hasNextPage ? () => fetchNextPage() : undefined}

@@ -10,7 +10,6 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
 import tw from '../../lib/tw';
 import { useTheme } from '../../providers/ThemeProvider';
-import { BORDER_RADIUS } from '../../theme/globals';
 import * as Haptics from 'expo-haptics';
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
@@ -65,7 +64,7 @@ const SliderRange = forwardRef<SliderRangeRef, SliderRangeProps>(
     },
     ref,
   ) => {
-    const { colors } = useTheme();
+    const { colors, theme } = useTheme();
 
     // Shared values
     const sliderWidth = useSharedValue(0);
@@ -216,7 +215,7 @@ const SliderRange = forwardRef<SliderRangeRef, SliderRangeProps>(
         top: -40,
         bottom: 20,
         backgroundColor: colors.background,
-        borderRadius: BORDER_RADIUS,
+        borderRadius: theme.border.radius.md,
       },
     ];
 

@@ -1,4 +1,3 @@
-import { BORDER_RADIUS } from '../../theme/globals';
 import { Href } from 'expo-router';
 import {
   Movie,
@@ -11,6 +10,7 @@ import {
   TvSeriesCompact,
 } from '@libs/api-js';
 import { StyleProp, ViewStyle } from 'react-native';
+import { theme } from '../../theme';
 
 type MediaType = 'movie' | 'tv_series' | 'tv_season' | 'tv_episode' | 'person';
 
@@ -95,7 +95,7 @@ const getMediaDetails = ({ type, media }: MediaDetailsProps) => {
       case 'movie':
       case 'tv_series':
       case 'person':
-        return { aspectRatio: 2 / 3, borderRadius: BORDER_RADIUS };
+        return { aspectRatio: 2 / 3, borderRadius: theme.border.radius.md };
       default:
         return {};
     }

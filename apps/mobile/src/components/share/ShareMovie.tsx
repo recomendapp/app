@@ -14,15 +14,7 @@ import ViewShot, { type ViewShotRef } from 'react-native-view-shot';
 import { Text } from '../ui/text';
 import { Icons } from '../../constants/Icons';
 import { Button } from '../ui/Button';
-import {
-  BORDER_RADIUS,
-  GAP,
-  HEIGHT,
-  PADDING,
-  PADDING_HORIZONTAL,
-  PADDING_VERTICAL,
-  SOCIAL_CARD_WIDTH,
-} from '../../theme/globals';
+import { SOCIAL_CARD_WIDTH } from '../../theme/globals';
 import WheelSelector from '../ui/WheelSelector';
 import Animated, {
   FadeInDown,
@@ -75,7 +67,7 @@ const EditOptionsSelector = ({
   activeEditingOption: EditType;
   setActiveEditingOption: (value: EditType) => void;
 }) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const renderEditItem = useCallback(
     (item: EditOption, isActive: boolean) => {
       return (
@@ -120,9 +112,9 @@ const EditOptionsSelector = ({
       onSelectionChange={handleSelectionChange}
       initialIndex={initialIndex}
       enableHaptics={true}
-      itemWidth={HEIGHT}
+      itemWidth={theme.input.height.md}
       style={{
-        marginVertical: PADDING_VERTICAL,
+        marginVertical: theme.spaces.md,
       }}
     />
   );
@@ -189,7 +181,7 @@ const ShareMovieDefault = ({
   rating?: ShareRating | null;
   scale?: number;
 }) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const directorsText = useMemo(
     () => movie.directors?.map((d) => d.name!).join(', '),
     [movie.directors],
@@ -197,10 +189,10 @@ const ShareMovieDefault = ({
   return (
     <View
       style={{
-        borderRadius: BORDER_RADIUS * scale,
+        borderRadius: theme.border.radius.md * scale,
         backgroundColor: Color(colors.muted).alpha(0.95).string(),
-        gap: GAP * scale,
-        padding: (PADDING / 2) * scale,
+        gap: theme.spaces.md * scale,
+        padding: (theme.spaces.xl / 2) * scale,
       }}
     >
       <View style={tw`relative`}>
@@ -211,7 +203,7 @@ const ShareMovieDefault = ({
           style={[
             {
               aspectRatio: 2 / 3,
-              borderRadius: BORDER_RADIUS * scale,
+              borderRadius: theme.border.radius.md * scale,
             },
             tw`w-full h-auto`,
           ]}
@@ -438,7 +430,7 @@ export const ShareMovie = forwardRef<ShareViewRef, ShareMovieProps>(
   ({ movie, variant = 'default', isPremium, ...props }, ref) => {
     const viewShotRef = useRef<ViewShotRef>(null);
     const { height: screenHeight } = useWindowDimensions();
-    const { colors } = useTheme();
+    const { colors, theme } = useTheme();
     const t = useTranslations();
     const { user } = useAuth();
     const { data: log } = useQuery(
@@ -552,12 +544,12 @@ export const ShareMovie = forwardRef<ShareViewRef, ShareMovieProps>(
 
     const EditButtons = useMemo(
       () => (
-        <View style={[tw`absolute top-2 right-2 flex-row items-center`, { gap: GAP }]}>
+        <View style={[tw`absolute top-2 right-2 flex-row items-center`, { gap: theme.spaces.md }]}>
           {editing && (
             <Animated.View
               entering={FadeInRight}
               exiting={FadeOutRight}
-              style={[tw`flex-row items-center`, { gap: GAP }]}
+              style={[tw`flex-row items-center`, { gap: theme.spaces.md }]}
             >
               {backdropUrl && activeEditingOption === 'background' && (
                 <Button
@@ -580,7 +572,7 @@ export const ShareMovie = forwardRef<ShareViewRef, ShareMovieProps>(
           />
         </View>
       ),
-      [editing, backdrop, activeEditingOption, handleEnableEditing, bgType, bgColor],
+      [editing, backdrop, activeEditingOption, handleEnableEditing, bgType, bgColor, theme],
     );
 
     const EditOptions = useMemo(() => {
@@ -606,8 +598,8 @@ export const ShareMovie = forwardRef<ShareViewRef, ShareMovieProps>(
             return null;
         }
       })();
-      return <View style={[tw`absolute w-full`, { bottom: PADDING_VERTICAL }]}>{content}</View>;
-    }, [editing, activeEditingOption, bgType, palette, bgColor, movie, poster, backdrop]);
+      return <View style={[tw`absolute w-full`, { bottom: theme.spaces.md }]}>{content}</View>;
+    }, [editing, activeEditingOption, bgType, palette, bgColor, movie, poster, backdrop, theme]);
 
     const RatingToggle = useMemo(() => {
       if (!hasRating) return null;
@@ -615,14 +607,14 @@ export const ShareMovie = forwardRef<ShareViewRef, ShareMovieProps>(
         <View
           style={[
             tw`flex-row items-center justify-between`,
-            { paddingHorizontal: PADDING_HORIZONTAL, gap: GAP },
+            { paddingHorizontal: theme.spaces.horizontal, gap: theme.spaces.md },
           ]}
         >
           <Text>{t('common.messages.share_my_rating')}</Text>
           <Switch value={showRating} onValueChange={setShowRating} />
         </View>
       );
-    }, [hasRating, showRating, t]);
+    }, [hasRating, showRating, t, theme]);
 
     // useEffects
     // Resets bgColor from the async palette; bgColor stays independently user-editable afterward.
@@ -637,15 +629,15 @@ export const ShareMovie = forwardRef<ShareViewRef, ShareMovieProps>(
     /* eslint-enable react-hooks/set-state-in-effect */
 
     return (
-      <View style={{ gap: GAP }} {...props}>
+      <View style={{ gap: theme.spaces.md }} {...props}>
         <View style={tw`items-center`}>
           <View
             style={[
               {
                 aspectRatio: 9 / 16,
-                paddingHorizontal: PADDING_HORIZONTAL,
-                paddingVertical: PADDING_VERTICAL,
-                borderRadius: BORDER_RADIUS,
+                paddingHorizontal: theme.spaces.horizontal,
+                paddingVertical: theme.spaces.md,
+                borderRadius: theme.border.radius.md,
                 height: clamp(400, screenHeight * 0.7),
                 backgroundColor: colors.background,
               },

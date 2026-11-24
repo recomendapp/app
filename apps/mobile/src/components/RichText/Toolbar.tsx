@@ -12,7 +12,6 @@ import { Icons } from '../../constants/Icons';
 import { useTheme } from '../../providers/ThemeProvider';
 import { FlashList } from '@shopify/flash-list';
 import tw from '../../lib/tw';
-import { BORDER_RADIUS_FULL, GAP, GAP_XS } from '../../theme/globals';
 import { View } from 'react-native';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
@@ -39,7 +38,7 @@ interface ToolbarProps extends KeyboardToolbarProps {
 export const Toolbar = forwardRef<React.ComponentRef<typeof KeyboardToolbar>, ToolbarProps>(
   ({ editorRef, stylesState, selectionState, linkState, ...props }, ref) => {
     const t = useTranslations();
-    const { colors } = useTheme();
+    const { colors, theme } = useTheme();
     const [isLinkMode, setIsLinkMode] = useState(false);
     const [linkUrl, setLinkUrl] = useState('');
 
@@ -103,7 +102,7 @@ export const Toolbar = forwardRef<React.ComponentRef<typeof KeyboardToolbar>, To
         {!isLinkMode && <KeyboardToolbar.Done />}
         <KeyboardToolbar.Content>
           {isLinkMode ? (
-            <View style={{ paddingHorizontal: GAP_XS }}>
+            <View style={{ paddingHorizontal: theme.spaces.sm }}>
               <Input
                 autoFocus
                 placeholder="https://example.com"
@@ -111,9 +110,9 @@ export const Toolbar = forwardRef<React.ComponentRef<typeof KeyboardToolbar>, To
                 onChangeText={setLinkUrl}
                 icon={Icons.Link}
                 autoCapitalize="none"
-                inputContainerStyle={{ borderRadius: BORDER_RADIUS_FULL }}
+                inputContainerStyle={{ borderRadius: theme.border.radius.full }}
                 rightComponent={
-                  <View style={[tw`flex-row items-center`, { gap: GAP }]}>
+                  <View style={[tw`flex-row items-center`, { gap: theme.spaces.md }]}>
                     <Button
                       variant="ghost"
                       size="fit"
@@ -139,7 +138,7 @@ export const Toolbar = forwardRef<React.ComponentRef<typeof KeyboardToolbar>, To
           ) : (
             <FlashList
               data={items}
-              contentContainerStyle={[{ paddingHorizontal: GAP_XS }]}
+              contentContainerStyle={[{ paddingHorizontal: theme.spaces.sm }]}
               horizontal
               renderItem={({ item }) => (
                 <Button
@@ -157,7 +156,7 @@ export const Toolbar = forwardRef<React.ComponentRef<typeof KeyboardToolbar>, To
                 />
               )}
               keyExtractor={(item, index) => item.title + index}
-              ItemSeparatorComponent={() => <View style={{ width: GAP_XS }} />}
+              ItemSeparatorComponent={() => <View style={{ width: theme.spaces.sm }} />}
             />
           )}
         </KeyboardToolbar.Content>

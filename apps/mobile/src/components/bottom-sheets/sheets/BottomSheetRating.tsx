@@ -21,7 +21,6 @@ import useBottomSheetStore from '../../../stores/useBottomSheetStore';
 import TrueSheet from '../../ui/TrueSheet';
 import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import { Text } from '../../ui/text';
 
 const { width } = Dimensions.get('screen');
@@ -91,7 +90,7 @@ const BottomSheetRating = React.forwardRef<
   React.ComponentRef<typeof TrueSheet>,
   BottomSheetRatingProps
 >(({ id, media, rating, onRatingChange, ...props }, ref) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const t = useTranslations();
   const closeSheet = useBottomSheetStore((state) => state.closeSheet);
   const scrollRef = React.useRef<FlatList>(null);
@@ -153,11 +152,11 @@ const BottomSheetRating = React.forwardRef<
   }, []);
 
   return (
-    <TrueSheet ref={ref} style={{ paddingTop: PADDING_VERTICAL * 2 }} {...props}>
+    <TrueSheet ref={ref} style={{ paddingTop: theme.spaces.md * 2 }} {...props}>
       <View
         style={[
           tw`flex-row items-center justify-center`,
-          { paddingHorizontal: PADDING_HORIZONTAL },
+          { paddingHorizontal: theme.spaces.horizontal },
         ]}
       >
         <AnimatedTouchableOpacity
@@ -245,7 +244,7 @@ const BottomSheetRating = React.forwardRef<
         scrollEventThrottle={1000 / 60} // ~16ms
         snapToInterval={ITEM_TOTAL_SIZE}
       />
-      <View style={{ paddingHorizontal: PADDING_HORIZONTAL }}>
+      <View style={{ paddingHorizontal: theme.spaces.horizontal }}>
         {rating ? (
           <View style={tw`flex-row gap-2 justify-between`}>
             <Button variant="destructive" onPress={handleDeleteRating} style={{ flex: 1 }}>

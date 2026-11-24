@@ -23,20 +23,21 @@ import { useTheme } from '../../../providers/ThemeProvider';
 import { useToast } from '../../../components/Toast';
 import { getIdFromSlug } from '../../../utils/getIdFromSlug';
 import tw from '../../../lib/tw';
-import { GAP, GAP_LG, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
 import { Divider } from '../../../components/ui/Divider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { isIpad } from '../../../platform/detection';
 
 const TvSeriesLogScreen = () => {
   const { tv_series_id } = useLocalSearchParams<{ tv_series_id: string }>();
   const { id: tvSeriesId } = getIdFromSlug(tv_series_id);
   const { user } = useAuth();
-  const { colors, mode } = useTheme();
+  const { colors, mode, theme } = useTheme();
   const router = useRouter();
   const t = useTranslations();
   const formatter = useFormatter();
   const toast = useToast();
   const insets = useSafeAreaInsets();
+  const paddingBottom = isIpad ? theme.spaces.vertical : 0;
 
   const { data: tvSeries } = useQuery(tvSeriesOptions({ tvSeriesId }));
   const { data: log } = useQuery(tvSeriesLogOptions({ userId: user?.id, tvSeriesId }));
@@ -189,14 +190,14 @@ const TvSeriesLogScreen = () => {
           ),
         }}
       />
-      <View style={[tw`flex-1 justify-between`, { gap: GAP_LG }]}>
-        <View style={{ gap: GAP_LG, paddingTop: PADDING_VERTICAL }}>
+      <View style={[tw`flex-1 justify-between`, { gap: theme.spaces.lg }]}>
+        <View style={{ gap: theme.spaces.lg, paddingTop: theme.spaces.md }}>
           <View
             style={[
               tw`flex-row items-center justify-center gap-2`,
               {
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
+                paddingLeft: insets.left + theme.spaces.horizontal,
+                paddingRight: insets.right + theme.spaces.horizontal,
               },
             ]}
           >
@@ -238,11 +239,11 @@ const TvSeriesLogScreen = () => {
             />
           </View>
           <Divider />
-          <Animated.View style={[{ gap: GAP }, ratingOpacityStyle]}>
+          <Animated.View style={[{ gap: theme.spaces.md }, ratingOpacityStyle]}>
             <View
               style={{
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
+                paddingLeft: insets.left + theme.spaces.horizontal,
+                paddingRight: insets.right + theme.spaces.horizontal,
               }}
             >
               <Text variant="title" style={tw`font-medium text-center`}>
@@ -262,8 +263,8 @@ const TvSeriesLogScreen = () => {
                 style={[
                   tw`flex-col items-center justify-center gap-2`,
                   {
-                    paddingLeft: insets.left + PADDING_HORIZONTAL,
-                    paddingRight: insets.right + PADDING_HORIZONTAL,
+                    paddingLeft: insets.left + theme.spaces.horizontal,
+                    paddingRight: insets.right + theme.spaces.horizontal,
                   },
                 ]}
               >
@@ -282,9 +283,9 @@ const TvSeriesLogScreen = () => {
         </View>
         <View
           style={{
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
-            paddingBottom: PADDING_VERTICAL,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
+            paddingBottom: paddingBottom,
           }}
         >
           <Button variant="outline" onPress={() => router.dismiss()}>

@@ -731,7 +731,7 @@
           },
           "submit": "התחברות",
           "forgot_password": "שכחתם סיסמה?",
-          "wrong_credentials": "האימייל או הסיסמה שגויים"
+          "wrong_credentials": "המזהה או הסיסמה שגויים"
         },
         "otp": {
           "password_login": "מעדיפים להתחבר עם סיסמה?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "אימות הקוד",
-          "description": "קוד אימות נשלח לכתובת {email}"
+          "description": "קישור לאיפוס הסיסמה נשלח לכתובת {email}"
         }
       },
       "reset_password": {

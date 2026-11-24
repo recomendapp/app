@@ -12,6 +12,7 @@
     "@bacons/apple-targets": "catalog:",
     "@better-auth/core": "catalog:",
     "@better-auth/expo": "catalog:",
+    "@expo/material-symbols": "catalog:",
     "@expo/react-native-action-sheet": "catalog:",
     "@expo/ui": "catalog:",
     "@expo/vector-icons": "catalog:",

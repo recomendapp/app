@@ -6,7 +6,6 @@ import { Icons } from '../../constants/Icons';
 import tw from '../../lib/tw';
 import { useAuth } from '../../providers/AuthProvider';
 import { useTheme } from '../../providers/ThemeProvider';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { LegendList } from '@legendapp/list/react-native';
 import { AuthError } from 'expo-auth-session';
 import { Href, useRouter } from 'expo-router';
@@ -43,7 +42,7 @@ type Route = BaseRoute &
 
 const SettingsScreen = () => {
   const { user, customerInfo, logout, forceLogout } = useAuth();
-  const { colors, mode } = useTheme();
+  const { colors, mode, theme } = useTheme();
   const toast = useToast();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -103,7 +102,7 @@ const SettingsScreen = () => {
         icon: Icons.CreditCard,
         authOnly: true,
         rightComponent:
-          customerInfo?.activeSubscriptions.length === 0 ? (
+          customerInfo?.activeSubscriptions.length === 0 && user?.isPremium !== true ? (
             <Pressable onPress={() => router.push({ pathname: '/upgrade' })}>
               <Badge variant="accent-yellow">
                 {upperFirst(t('common.messages.upgrade_to_plan', { plan: 'Premium' }))}
@@ -174,9 +173,9 @@ const SettingsScreen = () => {
         }}
         style={[
           {
-            paddingVertical: PADDING_HORIZONTAL,
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
+            paddingVertical: theme.spaces.horizontal,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
           },
         ]}
       >
@@ -189,7 +188,7 @@ const SettingsScreen = () => {
         </View>
       </Button>
     ),
-    [colors.foreground, colors.mutedForeground, router, insets.left, insets.right],
+    [colors.foreground, colors.mutedForeground, router, insets.left, insets.right, theme],
   );
 
   const renderFooter = useCallback(
@@ -199,9 +198,9 @@ const SettingsScreen = () => {
         style={[
           tw`items-center justify-center`,
           {
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
-            paddingVertical: PADDING_VERTICAL * 2,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
+            paddingVertical: theme.spaces.md * 2,
           },
         ]}
       >
@@ -211,7 +210,7 @@ const SettingsScreen = () => {
         </Text>
       </Pressable>
     ),
-    [appVersion, t, insets.left, insets.right],
+    [appVersion, t, insets.left, insets.right, theme],
   );
 
   return (
@@ -220,7 +219,7 @@ const SettingsScreen = () => {
         data={routes}
         renderItem={renderItem}
         contentContainerStyle={{
-          paddingBottom: insets.bottom + PADDING_VERTICAL,
+          paddingBottom: insets.bottom + theme.spaces.md,
         }}
         ItemSeparatorComponent={() => (
           <View style={[{ backgroundColor: colors.muted, height: 1 }, tw` w-full`]} />

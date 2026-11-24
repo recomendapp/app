@@ -14,12 +14,16 @@ import { Stack } from 'expo-router';
 import { enableFreeze, enableScreens } from 'react-native-screens';
 import { useTheme } from '../providers/ThemeProvider';
 import { useAuth } from '../providers/AuthProvider';
-import { useVersionPolicy } from '../providers/VersionPolicyProvider';
+import { useGuard } from '../providers/GuardProvider';
 import { useHomeWidgetsSync } from '../hooks/useHomeWidgetsSync';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 import { Platform } from 'react-native';
 import { osName } from 'expo-device';
+
+export const unstable_settings = {
+  anchor: '(tabs)',
+};
 
 export { ErrorBoundary } from '../providers/ErrorBoundaryProvider';
 
@@ -34,18 +38,18 @@ configureReanimatedLogger({
 const RootLayoutNav = () => {
   const t = useTranslations();
   const { user } = useAuth();
-  const { isUpdateRequired } = useVersionPolicy();
+  const { activeGuard, activeRoute } = useGuard();
   const { defaultScreenOptions, isLiquidGlassAvailable } = useTheme();
   useHomeWidgetsSync();
   return (
-    <Stack initialRouteName="(tabs)" screenOptions={defaultScreenOptions}>
-      <Stack.Protected guard={isUpdateRequired}>
+    <Stack screenOptions={defaultScreenOptions}>
+      <Stack.Protected guard={activeGuard === 'version'} redirectTo="/">
         <Stack.Screen
           name="update-required"
-          options={{ headerShown: false, gestureEnabled: false }}
+          options={{ headerShown: false, gestureEnabled: false, animation: 'none' }}
         />
       </Stack.Protected>
-      <Stack.Protected guard={!isUpdateRequired}>
+      <Stack.Protected guard={activeGuard === null} redirectTo={activeRoute ?? undefined}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         {/* PLAYLISTS */}
         <Stack.Protected guard={!!user}>
@@ -254,9 +258,11 @@ const RootLayoutNav = () => {
         {/* AUTH */}
         <Stack.Protected guard={!user}>
           <Stack.Screen
-            name="auth/(main)"
+            name="auth/index"
             options={{
-              headerShown: false,
+              title: upperFirst(t('common.messages.welcome')),
+              headerTransparent: true,
+              headerStyle: { backgroundColor: 'transparent' },
               presentation: Platform.select({
                 ios: 'modal',
                 android: 'formSheet',
@@ -265,15 +271,61 @@ const RootLayoutNav = () => {
             }}
           />
           <Stack.Screen
-            name="auth/(password)"
+            name="auth/login/index"
             options={{
-              title: t('common.messages.forgot_password'),
-              headerShown: false,
-              presentation: Platform.select({
-                ios: 'modal',
-                android: 'formSheet',
-                default: 'modal',
-              }),
+              headerTitle: upperFirst(t('common.messages.login')),
+              headerTransparent: true,
+              headerStyle: { backgroundColor: 'transparent' },
+              presentation: 'formSheet',
+              sheetGrabberVisible: false,
+              sheetAllowedDetents: 'fitToContents',
+              sheetInitialDetentIndex: 0,
+            }}
+          />
+          <Stack.Screen
+            name="auth/login/otp"
+            options={{
+              headerTitle: upperFirst(t('common.messages.otp')),
+              headerTransparent: true,
+              headerStyle: { backgroundColor: 'transparent' },
+              presentation: 'formSheet',
+              sheetGrabberVisible: false,
+              gestureEnabled: false,
+              sheetAllowedDetents: 'fitToContents',
+              sheetInitialDetentIndex: 0,
+            }}
+          />
+          <Stack.Screen
+            name="auth/signup"
+            options={{
+              headerTitle: upperFirst(t('common.messages.signup')),
+              presentation: 'modal',
+            }}
+          />
+          <Stack.Screen
+            name="auth/forgot-password"
+            options={{
+              headerTitle: upperFirst(t('common.messages.forgot_password')),
+              headerTransparent: true,
+              headerStyle: { backgroundColor: 'transparent' },
+              presentation: 'formSheet',
+              sheetGrabberVisible: false,
+              gestureEnabled: false,
+              sheetAllowedDetents: 'fitToContents',
+              sheetInitialDetentIndex: 0,
+            }}
+          />
+          <Stack.Screen
+            name="auth/reset-password"
+            options={{
+              headerTitle: upperFirst(t('common.messages.reset_your_password')),
+              headerTransparent: true,
+              headerStyle: { backgroundColor: 'transparent' },
+              presentation: 'formSheet',
+              sheetGrabberVisible: false,
+              gestureEnabled: false,
+              sheetAllowedDetents: 'fitToContents',
+              sheetInitialDetentIndex: 0,
             }}
           />
         </Stack.Protected>

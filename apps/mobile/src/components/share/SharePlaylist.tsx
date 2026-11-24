@@ -14,15 +14,7 @@ import ViewShot, { type ViewShotRef } from 'react-native-view-shot';
 import { Text } from '../ui/text';
 import { Icons } from '../../constants/Icons';
 import { Button } from '../ui/Button';
-import {
-  BORDER_RADIUS,
-  GAP,
-  HEIGHT,
-  PADDING,
-  PADDING_HORIZONTAL,
-  PADDING_VERTICAL,
-  SOCIAL_CARD_WIDTH,
-} from '../../theme/globals';
+import { SOCIAL_CARD_WIDTH } from '../../theme/globals';
 import WheelSelector from '../ui/WheelSelector';
 import { FadeInDown, FadeOutDown } from 'react-native-reanimated';
 import { useTheme } from '../../providers/ThemeProvider';
@@ -64,7 +56,7 @@ const EditOptionsSelector = ({
   activeEditingOption: EditType;
   setActiveEditingOption: (value: EditType) => void;
 }) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const renderEditItem = useCallback((item: EditOption, isActive: boolean) => {
     return (
       <View
@@ -106,9 +98,9 @@ const EditOptionsSelector = ({
       onSelectionChange={handleSelectionChange}
       initialIndex={initialIndex}
       enableHaptics={true}
-      itemWidth={HEIGHT}
+      itemWidth={theme.input.height.md}
       style={{
-        marginVertical: PADDING_VERTICAL,
+        marginVertical: theme.spaces.md,
       }}
     />
   );
@@ -127,14 +119,14 @@ const SharePlaylistDefault = ({
   scale?: number;
 }) => {
   const t = useTranslations();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   return (
     <View
       style={{
-        borderRadius: BORDER_RADIUS * scale,
+        borderRadius: theme.border.radius.md * scale,
         backgroundColor: Color(colors.muted).alpha(0.95).string(),
-        gap: GAP * scale,
-        padding: (PADDING / 2) * scale,
+        gap: theme.spaces.md * scale,
+        padding: (theme.spaces.xl / 2) * scale,
       }}
     >
       <ImageWithFallback
@@ -144,7 +136,7 @@ const SharePlaylistDefault = ({
         style={[
           {
             aspectRatio: 1 / 1,
-            borderRadius: BORDER_RADIUS * scale,
+            borderRadius: theme.border.radius.md * scale,
           },
           tw`w-full h-auto`,
         ]}
@@ -228,7 +220,7 @@ export const SharePlaylist = forwardRef<ShareViewRef, SharePlaylistProps>(
   ({ playlist, owner, variant = 'default', isPremium, ...props }, ref) => {
     const viewShotRef = useRef<ViewShotRef>(null);
     const { height: screenHeight } = useWindowDimensions();
-    const { colors } = useTheme();
+    const { colors, theme } = useTheme();
     // States
     const [poster] = useState(playlist.poster || undefined);
     const { palette } = useImagePalette(poster);
@@ -287,7 +279,7 @@ export const SharePlaylist = forwardRef<ShareViewRef, SharePlaylistProps>(
 
     const EditButtons = useMemo(
       () => (
-        <View style={[tw`absolute top-2 right-2 flex-row items-center`, { gap: GAP }]}>
+        <View style={[tw`absolute top-2 right-2 flex-row items-center`, { gap: theme.spaces.md }]}>
           <Button
             variant="muted"
             icon={editing ? Icons.Check : Icons.Edit}
@@ -297,7 +289,7 @@ export const SharePlaylist = forwardRef<ShareViewRef, SharePlaylistProps>(
           />
         </View>
       ),
-      [editing, activeEditingOption, bgType, bgColor],
+      [editing, activeEditingOption, bgType, bgColor, theme],
     );
 
     const EditOptions = useMemo(() => {
@@ -313,8 +305,8 @@ export const SharePlaylist = forwardRef<ShareViewRef, SharePlaylistProps>(
             return null;
         }
       })();
-      return <View style={[tw`absolute w-full`, { bottom: PADDING_VERTICAL }]}>{content}</View>;
-    }, [editing, activeEditingOption]);
+      return <View style={[tw`absolute w-full`, { bottom: theme.spaces.md }]}>{content}</View>;
+    }, [editing, activeEditingOption, theme]);
 
     // useEffects
     // Resets bgColor from the async palette; bgColor stays independently user-editable afterward.
@@ -329,15 +321,15 @@ export const SharePlaylist = forwardRef<ShareViewRef, SharePlaylistProps>(
     /* eslint-enable react-hooks/set-state-in-effect */
 
     return (
-      <View style={{ gap: GAP }} {...props}>
+      <View style={{ gap: theme.spaces.md }} {...props}>
         <View style={tw`items-center`}>
           <View
             style={[
               {
                 aspectRatio: 9 / 16,
-                paddingHorizontal: PADDING_HORIZONTAL,
-                paddingVertical: PADDING_VERTICAL,
-                borderRadius: BORDER_RADIUS,
+                paddingHorizontal: theme.spaces.horizontal,
+                paddingVertical: theme.spaces.md,
+                borderRadius: theme.border.radius.md,
                 height: clamp(400, screenHeight * 0.7),
                 backgroundColor: colors.background,
               },

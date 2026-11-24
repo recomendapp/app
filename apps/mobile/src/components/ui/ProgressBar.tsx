@@ -1,7 +1,6 @@
 import { View } from './view';
 import tw from '../../lib/tw';
 import { useTheme } from '../../providers/ThemeProvider';
-import { BORDER_RADIUS_FULL } from '../../theme/globals';
 import Animated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import { StyleProp, ViewStyle } from 'react-native';
 
@@ -13,7 +12,7 @@ interface ProgressBarProps {
 }
 
 export const ProgressBar = ({ progress, color, trackColor, style }: ProgressBarProps) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
 
   const fillStyle = useAnimatedStyle(() => ({
     width: `${progress.value}%`,
@@ -23,14 +22,14 @@ export const ProgressBar = ({ progress, color, trackColor, style }: ProgressBarP
     <View
       style={[
         tw`w-full h-2 overflow-hidden`,
-        { borderRadius: BORDER_RADIUS_FULL, backgroundColor: trackColor ?? colors.muted },
+        { borderRadius: theme.border.radius.full, backgroundColor: trackColor ?? colors.muted },
         style,
       ]}
     >
       <Animated.View
         style={[
           tw`h-full`,
-          { borderRadius: BORDER_RADIUS_FULL, backgroundColor: color ?? colors.accentYellow },
+          { borderRadius: theme.border.radius.full, backgroundColor: color ?? colors.accentYellow },
           fillStyle,
         ]}
       />

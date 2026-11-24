@@ -2,13 +2,14 @@ import { Href, NativeStackHeaderProps, Stack, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
 import { SegmentedControl } from '../../../../../components/ui/SegmentedControl';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { useMemo } from 'react';
 import useSearchStore, { SearchType } from '../../../../../stores/useSearchStore';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../../../../../providers/ThemeProvider';
 
 const Filter = (props: NativeStackHeaderProps) => {
+  const { theme } = useTheme();
   const { search, isFocused, type } = useSearchStore((state) => state);
   const t = useTranslations();
   const router = useRouter();
@@ -59,9 +60,9 @@ const Filter = (props: NativeStackHeaderProps) => {
     <Animated.View
       entering={FadeInUp}
       style={{
-        paddingLeft: insets.left + PADDING_HORIZONTAL,
-        paddingRight: insets.right + PADDING_HORIZONTAL,
-        paddingBottom: PADDING_VERTICAL,
+        paddingLeft: insets.left + theme.spaces.horizontal,
+        paddingRight: insets.right + theme.spaces.horizontal,
+        paddingBottom: theme.spaces.md,
       }}
     >
       <SegmentedControl
@@ -77,6 +78,7 @@ const Filter = (props: NativeStackHeaderProps) => {
 };
 
 const SearchTabsLayout = () => {
+  const { statusBarStyle } = useTheme();
   return (
     <>
       <Stack.Screen
@@ -85,7 +87,7 @@ const SearchTabsLayout = () => {
           header: (props) => <Filter {...props} />,
         }}
       />
-      <Stack screenOptions={{ headerShown: false, animation: 'fade' }} />
+      <Stack screenOptions={{ headerShown: false, animation: 'fade', statusBarStyle }} />
     </>
   );
 };

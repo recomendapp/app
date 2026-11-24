@@ -8,14 +8,8 @@ import {
   Pressable,
 } from 'react-native';
 import { Skeleton } from '../ui/Skeleton';
-import { useRef } from 'react';
-import Carousel, { ICarouselInstance, Pagination } from 'react-native-reanimated-carousel';
-import Animated, {
-  SharedValue,
-  useAnimatedStyle,
-  useSharedValue,
-  interpolate,
-} from 'react-native-reanimated';
+import { Carousel } from '../ui/carousel';
+import Animated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import tw from '../../lib/tw';
 import { Image } from 'expo-image';
 import { getMediaDetails } from '../utils/getMediaDetails';
@@ -25,7 +19,6 @@ import Color from 'color';
 import { useTheme } from '../../providers/ThemeProvider';
 import { Text } from '../ui/text';
 import { useHeaderHeight } from 'expo-router/react-navigation';
-import { BORDER_RADIUS_FULL, GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { BadgeMedia } from '../badges/BadgeMedia';
 import { useTranslations } from 'use-intl';
 import { useRouter } from 'expo-router';
@@ -43,7 +36,7 @@ interface WidgetMostRecommendedProps extends ViewProps {
 }
 
 const WidgetMostRecommended = ({ scrollY, style, ...props }: WidgetMostRecommendedProps) => {
-  const { colors } = useTheme();
+  const { theme } = useTheme();
   const navigationHeaderHeight = useHeaderHeight();
   // Dimensions
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
@@ -51,15 +44,6 @@ const WidgetMostRecommended = ({ scrollY, style, ...props }: WidgetMostRecommend
   const { data, isLoading, isError } = useInfiniteQuery(widgetRecosTrendingInfiniteOptions());
   const flattenRecos = data?.pages.flatMap((page) => page.data) || [];
 
-  const ref = useRef<ICarouselInstance>(null);
-  const progress = useSharedValue<number>(0);
-
-  const onPressPagination = (index: number) => {
-    ref.current?.scrollTo({
-      count: index - progress.value,
-      animated: true,
-    });
-  };
   const height = clamp(screenHeight / 2, 200, 400);
 
   if (data === undefined || isLoading) {
@@ -68,16 +52,11 @@ const WidgetMostRecommended = ({ scrollY, style, ...props }: WidgetMostRecommend
   if (!flattenRecos.length || isError)
     return <View style={[{ height: navigationHeaderHeight }, tw`w-full`, style]} />;
   return (
-    <View
-      style={[{ borderColor: colors.border, paddingBottom: PADDING_VERTICAL }, tw`border-b`]}
-      {...props}
-    >
+    <View style={{ paddingBottom: theme.spaces.md }} {...props}>
       <Carousel
-        ref={ref}
+        data={flattenRecos}
         width={screenWidth}
         height={height}
-        data={flattenRecos}
-        onProgressChange={progress}
         renderItem={({ item, index }) => (
           <WidgetMostRecommendedItem
             item={item}
@@ -85,20 +64,8 @@ const WidgetMostRecommended = ({ scrollY, style, ...props }: WidgetMostRecommend
             style={[style]}
             scrollY={scrollY}
             baseHeight={height}
-            carouselProgress={progress}
           />
         )}
-        autoPlay={true}
-        autoPlayInterval={6000}
-        style={{ overflow: 'visible' }}
-      />
-      <Pagination.Basic
-        progress={progress}
-        data={flattenRecos}
-        dotStyle={{ backgroundColor: colors.muted, borderRadius: BORDER_RADIUS_FULL }}
-        activeDotStyle={{ backgroundColor: colors.accentYellow, borderRadius: BORDER_RADIUS_FULL }}
-        containerStyle={{ gap: 5, marginTop: 10 }}
-        onPress={onPressPagination}
       />
     </View>
   );
@@ -110,7 +77,6 @@ const WidgetMostRecommendedItem = ({
   style,
   scrollY,
   baseHeight,
-  carouselProgress,
 }: {
   item:
     | ({
@@ -123,11 +89,10 @@ const WidgetMostRecommendedItem = ({
   style?: StyleProp<ViewStyle>;
   scrollY?: SharedValue<number>;
   baseHeight: number;
-  carouselProgress: SharedValue<number>;
 }) => {
   const openSheet = useBottomSheetStore((state) => state.openSheet);
   const router = useRouter();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const t = useTranslations();
   const insets = useSafeAreaInsets();
   const navigationHeaderHeight = useHeaderHeight();
@@ -159,24 +124,9 @@ const WidgetMostRecommendedItem = ({
     const scale = 1 + stretch / base;
     const clampedScale = Math.min(scale, 3);
     const translateY = -stretch / 2;
-    const itemIndex = position - 1;
-
-    const itemScale = interpolate(
-      carouselProgress.value,
-      [itemIndex - 1, itemIndex, itemIndex + 1],
-      [1, clampedScale, 1],
-      'clamp',
-    );
-
-    const itemTranslateY = interpolate(
-      carouselProgress.value,
-      [itemIndex - 1, itemIndex, itemIndex + 1],
-      [0, translateY, 0],
-      'clamp',
-    );
 
     return {
-      transform: [{ translateY: itemTranslateY }, { scaleY: itemScale }, { scaleX: itemScale }],
+      transform: [{ translateY }, { scaleY: clampedScale }, { scaleX: clampedScale }],
     };
   });
   return (
@@ -204,23 +154,23 @@ const WidgetMostRecommendedItem = ({
           style={[
             tw`flex-1 justify-end`,
             {
-              gap: GAP,
-              paddingLeft: insets.left + PADDING_HORIZONTAL,
-              paddingRight: insets.right + PADDING_HORIZONTAL,
-              paddingBottom: PADDING_VERTICAL,
+              gap: theme.spaces.md,
+              paddingLeft: insets.left + theme.spaces.horizontal,
+              paddingRight: insets.right + theme.spaces.horizontal,
+              paddingBottom: theme.spaces.md,
             },
           ]}
         >
-          <View style={[{ gap: GAP * 2 }, tw`flex-row items-center justify-between`]}>
+          <View style={[{ gap: theme.spaces.md * 2 }, tw`flex-row items-center justify-between`]}>
             <Text style={tw`font-bold`}>
               {upperFirst(t('common.messages.most_recommended', { count: 2 }))}
             </Text>
-            <View style={[tw`flex-row items-center shrink-0`, { gap: GAP }]}>
+            <View style={[tw`flex-row items-center shrink-0`, { gap: theme.spaces.md }]}>
               <BadgeMedia type={item.type} />
               <Text style={tw`text-xl font-bold`}># {position}</Text>
             </View>
           </View>
-          <View style={[{ gap: GAP }]}>
+          <View style={[{ gap: theme.spaces.md }]}>
             <Text
               onPress={handleOnPress}
               onLongPress={handleOnLongPress}

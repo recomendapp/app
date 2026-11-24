@@ -731,7 +731,7 @@
           },
           "submit": "Kirjaudu sisään",
           "forgot_password": "Unohtuiko salasana?",
-          "wrong_credentials": "Sähköposti tai salasana on virheellinen"
+          "wrong_credentials": "Tunnus tai salasana on virheellinen"
         },
         "otp": {
           "password_login": "Kirjautuisitko mieluummin salasanalla?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Vahvista koodi",
-          "description": "Vahvistuskoodi on lähetetty osoitteeseen {email}"
+          "description": "Salasanan palautuslinkki on lähetetty osoitteeseen {email}"
         }
       },
       "reset_password": {

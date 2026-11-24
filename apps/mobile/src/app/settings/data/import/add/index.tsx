@@ -3,7 +3,6 @@ import { View } from '../../../../../components/ui/view';
 import { ImageWithFallback } from '../../../../../components/utils/ImageWithFallback';
 import { useModalHeaderOptions } from '../../../../../hooks/useModalHeaderOptions';
 import { useTheme } from '../../../../../providers/ThemeProvider';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import tw from '../../../../../lib/tw';
 import { LegendList } from '@legendapp/list/react-native';
 import { ImportSource } from '@libs/api-js';
@@ -20,7 +19,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const SettingsDataImportAddIndexScreen = () => {
   const t = useTranslations();
   const router = useRouter();
-  const { mode, isLiquidGlassAvailable } = useTheme();
+  const { mode, isLiquidGlassAvailable, theme } = useTheme();
   const navigationHeaderHeight = useHeaderHeight();
   const insets = useSafeAreaInsets();
   const modalHeaderOptions = useModalHeaderOptions();
@@ -80,18 +79,18 @@ const SettingsDataImportAddIndexScreen = () => {
             : {}),
         }}
       />
-      <View style={{ paddingVertical: PADDING_VERTICAL }}>
+      <View style={{ paddingVertical: theme.spaces.md }}>
         <LegendList
           data={sortedSources}
           renderItem={renderSource}
           keyExtractor={(item) => item.provider.slug}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{
-            paddingTop: navigationHeaderHeight + insets.top + PADDING_VERTICAL,
-            paddingBottom: insets.bottom + PADDING_VERTICAL,
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
-            gap: GAP,
+            paddingTop: navigationHeaderHeight + insets.top + theme.spaces.md,
+            paddingBottom: insets.bottom + theme.spaces.md,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
+            gap: theme.spaces.md,
           }}
         />
       </View>

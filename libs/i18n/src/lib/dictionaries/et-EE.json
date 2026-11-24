@@ -731,7 +731,7 @@
           },
           "submit": "Logi sisse",
           "forgot_password": "Kas unustasid parooli?",
-          "wrong_credentials": "E-post või parool on vale"
+          "wrong_credentials": "Kasutajatunnus või parool on vale"
         },
         "otp": {
           "password_login": "Kas eelistad sisse logida parooliga?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Kinnita kood",
-          "description": "Kinnituskood saadeti aadressile {email}"
+          "description": "Parooli lähtestamise link saadeti aadressile {email}"
         }
       },
       "reset_password": {

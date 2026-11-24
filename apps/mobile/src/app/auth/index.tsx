@@ -1,9 +1,8 @@
-import { Button } from '../../../components/ui/Button';
-import { View } from '../../../components/ui/view';
-import { Icons } from '../../../constants/Icons';
-import tw from '../../../lib/tw';
-import { useTheme } from '../../../providers/ThemeProvider';
-import { GAP, GAP_XL, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../theme/globals';
+import { Button } from '../../components/ui/Button';
+import { View } from '../../components/ui/view';
+import { Icons } from '../../constants/Icons';
+import tw from '../../lib/tw';
+import { useTheme } from '../../providers/ThemeProvider';
 import { Href, Link, Stack } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { ScrollView, useWindowDimensions } from 'react-native';
@@ -11,16 +10,16 @@ import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { useTranslations } from 'use-intl';
 import { LinearGradient } from 'expo-linear-gradient';
 import Color from 'color';
-import { Text } from '../../../components/ui/text';
-import { getMediaDetails } from '../../../components/utils/getMediaDetails';
+import { Text } from '../../components/ui/text';
+import { getMediaDetails } from '../../components/utils/getMediaDetails';
 import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useMemo, useState } from 'react';
-import { LoopCarousel } from '../../../components/ui/LoopCarousel';
+import { LoopCarousel } from '../../components/ui/LoopCarousel';
 import { Image } from 'expo-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery } from '@tanstack/react-query';
-import { uiBackgroundsOptions } from '../../../api/ui/uiOptions';
-import { useModalHeaderOptions } from '../../../hooks/useModalHeaderOptions';
+import { uiBackgroundsOptions } from '../../api/ui/uiOptions';
+import { useModalHeaderOptions } from '../../hooks/useModalHeaderOptions';
 import { UiBackground } from '@libs/api-js';
 
 const AuthHeader = ({
@@ -28,7 +27,7 @@ const AuthHeader = ({
 }: {
   onBackgroundChange: (background: UiBackground | null) => void;
 }) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const headerHeight = useHeaderHeight();
   const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = useWindowDimensions();
@@ -39,9 +38,9 @@ const AuthHeader = ({
       style={[
         tw`items-center justify-end`,
         {
-          paddingVertical: PADDING_VERTICAL,
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
+          paddingVertical: theme.spaces.md,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
           paddingTop: headerHeight,
           height: SCREEN_HEIGHT * 0.5,
         },
@@ -78,10 +77,10 @@ const AuthHeader = ({
 
 const AuthScreen = () => {
   const t = useTranslations();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const [activeBackground, setActiveBackground] = useState<UiBackground | null>(null);
-  const modalHeaderOptions = useModalHeaderOptions();
+  const modalHeaderOptions = useModalHeaderOptions({ forceCross: true });
   const activeDetails = useMemo(() => {
     switch (activeBackground?.type) {
       case 'movie':
@@ -116,7 +115,9 @@ const AuthScreen = () => {
       />
       <ScrollView
         style={tw`flex-1`}
-        contentContainerStyle={[{ gap: GAP_XL, paddingBottom: insets.bottom + PADDING_VERTICAL }]}
+        contentContainerStyle={[
+          { gap: theme.spaces['3xl'], paddingBottom: insets.bottom + theme.spaces.md },
+        ]}
         stickyHeaderIndices={[0]}
         bounces={false}
         showsVerticalScrollIndicator={false}
@@ -124,9 +125,9 @@ const AuthScreen = () => {
         <AuthHeader onBackgroundChange={setActiveBackground} />
         <View
           style={{
-            gap: GAP,
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
+            gap: theme.spaces.md,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
           }}
         >
           {routes.map((route, index) => (
@@ -139,8 +140,8 @@ const AuthScreen = () => {
         </View>
         <View
           style={{
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
           }}
         >
           {activeDetails && (

@@ -11,7 +11,6 @@ import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
 import { Button } from '../../ui/Button';
 import { useAuth } from '../../../providers/AuthProvider';
-import { PADDING_VERTICAL } from '../../../theme/globals';
 import { Alert } from 'react-native';
 import { useToast } from '../../Toast';
 import { FlashList } from '@shopify/flash-list';
@@ -40,7 +39,7 @@ export const BottomSheetReviewTvSeries = forwardRef<
 >(({ id, review, author, additionalItemsTop = [], additionalItemsBottom = [], ...props }, ref) => {
   const toast = useToast();
   const closeSheet = useBottomSheetStore((state) => state.closeSheet);
-  const { colors, mode } = useTheme();
+  const { colors, mode, theme } = useTheme();
   const { user } = useAuth();
   const router = useRouter();
   const t = useTranslations();
@@ -159,7 +158,7 @@ export const BottomSheetReviewTvSeries = forwardRef<
   return (
     <TrueSheet ref={ref} scrollable {...props}>
       <FlashList
-        contentContainerStyle={{ paddingTop: PADDING_VERTICAL }}
+        contentContainerStyle={{ paddingTop: theme.spaces.md }}
         data={items}
         bounces={false}
         keyExtractor={(_, i) => i.toString()}

@@ -4,7 +4,6 @@ import { Text } from '../../../../../components/ui/text';
 import { Icons } from '../../../../../constants/Icons';
 import tw from '../../../../../lib/tw';
 import useSearchStore from '../../../../../stores/useSearchStore';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../theme/globals';
 import { LegendList, LegendListRef } from '@legendapp/list/react-native';
 import { useScrollToTop } from 'expo-router/react-navigation';
 import { upperFirst } from 'lodash';
@@ -14,8 +13,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslations } from 'use-intl';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { searchPlaylistsInfiniteOptions } from '@libs/query-client';
+import { useTheme } from '../../../../../providers/ThemeProvider';
 
 const SearchPlaylistsScreen = () => {
+  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { isVisible: keyboardVisible, height: keyboardHeight } = useKeyboardState((state) => state);
   const t = useTranslations();
@@ -46,15 +47,15 @@ const SearchPlaylistsScreen = () => {
         <CardPlaylist variant="list" playlist={playlist} owner={owner} />
       )}
       contentContainerStyle={{
-        paddingLeft: insets.left + PADDING_HORIZONTAL,
-        paddingRight: insets.right + PADDING_HORIZONTAL,
+        paddingLeft: insets.left + theme.spaces.horizontal,
+        paddingRight: insets.right + theme.spaces.horizontal,
         paddingBottom: keyboardVisible
-          ? keyboardHeight + PADDING_VERTICAL
-          : insets.bottom + PADDING_VERTICAL,
-        gap: GAP,
+          ? keyboardHeight + theme.spaces.md
+          : insets.bottom + theme.spaces.md,
+        gap: theme.spaces.md,
       }}
       scrollIndicatorInsets={{
-        bottom: keyboardVisible ? keyboardHeight - insets.bottom : insets.bottom,
+        bottom: keyboardVisible ? keyboardHeight - insets.bottom : 0,
       }}
       keyExtractor={(item) => item.id.toString()}
       ListEmptyComponent={

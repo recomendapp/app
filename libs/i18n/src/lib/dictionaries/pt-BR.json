@@ -731,7 +731,7 @@
           },
           "submit": "Entrar",
           "forgot_password": "Esqueceu a senha?",
-          "wrong_credentials": "O e-mail ou a senha está incorreto"
+          "wrong_credentials": "O identificador ou a senha está incorreto"
         },
         "otp": {
           "password_login": "Você prefere entrar com uma senha?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Confirmar o código",
-          "description": "Um código de verificação foi enviado para o endereço {email}"
+          "description": "Um link para redefinir a senha foi enviado para o endereço {email}"
         }
       },
       "reset_password": {

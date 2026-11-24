@@ -2,7 +2,6 @@ import { Icon } from './icon';
 import { Icons } from '../../constants/Icons';
 import tw from '../../lib/tw';
 import { useTheme } from '../../providers/ThemeProvider';
-import { BORDER_RADIUS, FONT_SIZE, HEIGHT } from '../../theme/globals';
 import { upperFirst } from 'lodash';
 import { LucideProps } from 'lucide-react-native';
 import React, { forwardRef, ReactElement, useState } from 'react';
@@ -68,7 +67,7 @@ export const Input = forwardRef<TextInput, InputProps>(
     const t = useTranslations();
 
     // Theme colors
-    const { colors } = useTheme();
+    const { colors, theme } = useTheme();
     const cardColor = colors.card;
     const textColor = colors.foreground;
     const muted = colors.mutedForeground;
@@ -103,13 +102,13 @@ export const Input = forwardRef<TextInput, InputProps>(
       if (type === 'textarea') {
         return rows * 20 + 32; // Approximate line height + padding
       }
-      return HEIGHT;
+      return theme.input.height.md;
     };
 
     // Variant styles
     const getVariantStyle = (): ViewStyle => {
       const baseStyle: ViewStyle = {
-        borderRadius: BORDER_RADIUS,
+        borderRadius: theme.border.radius.md,
         flexDirection: type === 'textarea' ? 'column' : 'row',
         alignItems: type === 'textarea' ? 'stretch' : 'center',
         minHeight: getHeight(),
@@ -138,7 +137,7 @@ export const Input = forwardRef<TextInput, InputProps>(
 
     const getInputStyle = (): TextStyle => ({
       flex: 1,
-      fontSize: FONT_SIZE,
+      fontSize: theme.fonts.sizes.md,
       lineHeight: type === 'textarea' ? 20 : undefined,
       color: disabled ? muted : error ? danger : textColor,
       paddingVertical: 0, // Remove default padding
@@ -339,7 +338,7 @@ export const GroupedInput = ({
   titleStyle,
   showErrors = false,
 }: GroupedInputProps) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const border = colors.border;
   const background = colors.card;
   const danger = colors.destructive;
@@ -362,7 +361,7 @@ export const GroupedInput = ({
           backgroundColor: background,
           borderColor: border,
           borderWidth: 1,
-          borderRadius: BORDER_RADIUS,
+          borderRadius: theme.border.radius.md,
           overflow: 'hidden',
         }}
       >
@@ -370,7 +369,7 @@ export const GroupedInput = ({
           <View
             key={index}
             style={{
-              minHeight: HEIGHT,
+              minHeight: theme.input.height.md,
               paddingVertical: 12,
               paddingHorizontal: 16,
               justifyContent: 'center',
@@ -444,7 +443,7 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
     const [showPassword, setShowPassword] = useState(false);
     const [, setIsFocused] = useState(false);
 
-    const { colors } = useTheme();
+    const { colors, theme } = useTheme();
     const text = colors.foreground;
     const muted = colors.mutedForeground;
     const primary = colors.accentYellow;
@@ -555,7 +554,7 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
                   numberOfLines={rows}
                   style={[
                     {
-                      fontSize: FONT_SIZE,
+                      fontSize: theme.fonts.sizes.md,
                       lineHeight: 20,
                       color: disabled ? muted : error ? danger : text,
                       textAlignVertical: 'top',
@@ -619,7 +618,7 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
                     style={[
                       {
                         flex: 1,
-                        fontSize: FONT_SIZE,
+                        fontSize: theme.fonts.sizes.md,
                         color: disabled ? muted : error ? danger : text,
                         paddingVertical: 0,
                       },

@@ -731,7 +731,7 @@
           },
           "submit": "Anmelden",
           "forgot_password": "Passwort vergessen?",
-          "wrong_credentials": "E-Mail oder Passwort ist falsch"
+          "wrong_credentials": "Anmeldename oder Passwort ist falsch"
         },
         "otp": {
           "password_login": "Du möchtest dich lieber mit einem Passwort anmelden?",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "Code bestätigen",
-          "description": "Ein Bestätigungscode wurde an die Adresse {email} gesendet"
+          "description": "Ein Link zum Zurücksetzen des Passworts wurde an die Adresse {email} gesendet"
         }
       },
       "reset_password": {

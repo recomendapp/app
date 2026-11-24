@@ -1,14 +1,9 @@
 import { Button } from '../../../../../components/ui/Button';
 import { UserNav } from '../../../../../components/user/UserNav';
 import tw from '../../../../../lib/tw';
-import {
-  createMaterialTopTabNavigator,
-  MaterialTopTabBarProps,
-  MaterialTopTabNavigationEventMap,
-  MaterialTopTabNavigationOptions,
-} from 'expo-router/js-top-tabs';
-import { HeaderTitle, ParamListBase, TabNavigationState } from 'expo-router/react-navigation';
-import { Stack, useRouter, withLayoutContext } from 'expo-router';
+import { MaterialTopTabBarProps, TopTabs } from 'expo-router/js-top-tabs';
+import { HeaderTitle } from 'expo-router/react-navigation';
+import { Stack, useRouter } from 'expo-router';
 import { upperFirst } from 'lodash';
 import { useCallback } from 'react';
 import { View, Pressable } from 'react-native';
@@ -20,15 +15,6 @@ import useBottomSheetStore from '../../../../../stores/useBottomSheetStore';
 import BottomSheetPlaylistCreate from '../../../../../components/bottom-sheets/sheets/BottomSheetPlaylistCreate';
 import { Icons } from '../../../../../constants/Icons';
 import { SegmentedControlTabBar } from '../../../../../components/ui/segmented-control-tabbar';
-
-const Tab = createMaterialTopTabNavigator();
-
-const MaterialTopTabs = withLayoutContext<
-  MaterialTopTabNavigationOptions,
-  typeof Tab.Navigator,
-  TabNavigationState<ParamListBase>,
-  MaterialTopTabNavigationEventMap
->(Tab.Navigator);
 
 const CollectionLayout = () => {
   const t = useTranslations();
@@ -136,17 +122,15 @@ const CollectionLayout = () => {
           ],
         }}
       />
-      <MaterialTopTabs
-        tabBar={(props: MaterialTopTabBarProps) => <SegmentedControlTabBar {...props} />}
-      >
-        <MaterialTopTabs.Screen name="index" options={{ title: 'perso' }} />
-        <MaterialTopTabs.Screen
+      <TopTabs tabBar={(props: MaterialTopTabBarProps) => <SegmentedControlTabBar {...props} />}>
+        <TopTabs.Screen name="index" options={{ title: 'perso' }} />
+        <TopTabs.Screen
           name="saved"
           options={{
             title: upperFirst(t('common.messages.saved', { gender: 'female', count: 2 })),
           }}
         />
-      </MaterialTopTabs>
+      </TopTabs>
     </>
   );
 };

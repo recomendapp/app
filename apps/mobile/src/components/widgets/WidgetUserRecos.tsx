@@ -10,7 +10,6 @@ import { useTranslations } from 'use-intl';
 import { upperFirst } from 'lodash';
 import { CardMovie } from '../cards/CardMovie';
 import { CardTvSeries } from '../cards/CardTvSeries';
-import { GAP } from '../../theme/globals';
 import { GridView } from '../ui/GridView';
 import { Text } from '../ui/text';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -95,6 +94,7 @@ WidgetHeader.displayName = 'WidgetHeader';
 const MAX_RECOS = 6;
 
 export const WidgetUserRecos = ({ style, labelStyle, containerStyle }: WidgetUserRecosProps) => {
+  const { theme } = useTheme();
   const { user } = useAuth();
   const { data: recos } = useInfiniteQuery(
     userRecosInfiniteOptions({
@@ -113,7 +113,7 @@ export const WidgetUserRecos = ({ style, labelStyle, containerStyle }: WidgetUse
   }
 
   return (
-    <View style={[{ gap: GAP }, style]}>
+    <View style={[{ gap: theme.spaces.md }, style]}>
       <WidgetHeader labelStyle={labelStyle} />
       <View style={containerStyle}>
         <GridView

@@ -1,33 +1,35 @@
 import type { MaterialTopTabBarProps } from 'expo-router/js-top-tabs';
 import { upperFirst } from 'lodash';
 import { View } from 'react-native';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { SegmentedControl } from './SegmentedControl';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../../providers/ThemeProvider';
 
 export const SegmentedControlTabBar = ({
   state,
   descriptors,
-  navigation,
+  emitter,
+  navigateToTab,
 }: MaterialTopTabBarProps) => {
+  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const onPressTab = (item: (typeof state.routes)[number], index: number, isFocused: boolean) => {
-    const event = navigation.emit({
+    const event = emitter.emit({
       type: 'tabPress',
       target: item.key,
       canPreventDefault: true,
     });
 
     if (!isFocused && !event.defaultPrevented) {
-      navigation.navigate(item.name);
+      navigateToTab(item.key);
     }
   };
   return (
     <View
       style={{
-        paddingLeft: insets.left + PADDING_HORIZONTAL,
-        paddingRight: insets.right + PADDING_HORIZONTAL,
-        paddingBottom: PADDING_VERTICAL,
+        paddingLeft: insets.left + theme.spaces.horizontal,
+        paddingRight: insets.right + theme.spaces.horizontal,
+        paddingBottom: theme.spaces.md,
       }}
     >
       <SegmentedControl

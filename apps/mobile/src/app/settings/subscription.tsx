@@ -1,10 +1,11 @@
-import { GAP, PADDING_VERTICAL } from '../../theme/globals';
 import RevenueCatUI from 'react-native-purchases-ui';
 import { Stack, useRouter } from 'expo-router';
 import { useCallback } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../../providers/ThemeProvider';
 
 const SettingsSubscriptionScreen = () => {
+  const { theme } = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const onDimiss = useCallback(() => {
@@ -19,8 +20,8 @@ const SettingsSubscriptionScreen = () => {
         onDismiss={onDimiss}
         style={{
           flex: 1,
-          gap: GAP,
-          paddingBottom: insets.bottom + PADDING_VERTICAL,
+          gap: theme.spaces.md,
+          paddingBottom: insets.bottom + theme.spaces.md,
         }}
       />
     </>

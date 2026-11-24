@@ -23,7 +23,6 @@ import { Icons } from '../../../../../../../constants/Icons';
 import { ImageWithFallback } from '../../../../../../../components/utils/ImageWithFallback';
 import { IconMediaRating } from '../../../../../../../components/medias/IconMediaRating';
 import { useFormatter, useTranslations } from 'use-intl';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../../../../../../theme/globals';
 import AnimatedStackScreen from '../../../../../../../components/ui/AnimatedStackScreen';
 import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useCallback, useMemo, useState } from 'react';
@@ -56,7 +55,7 @@ const TvSeriesSeasonHeader: React.FC<MediaHeaderProps> = ({
   const t = useTranslations();
   const navigationHeaderHeight = useHeaderHeight();
   const { hslToRgb } = useColorConverter();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const title = useMemo(
     () =>
@@ -116,10 +115,10 @@ const TvSeriesSeasonHeader: React.FC<MediaHeaderProps> = ({
         /* eslint-enable react-hooks/immutability */
       }}
       style={{
-        paddingLeft: insets.left + PADDING_HORIZONTAL,
-        paddingRight: insets.right + PADDING_HORIZONTAL,
-        paddingBottom: PADDING_VERTICAL,
-        paddingTop: navigationHeaderHeight + PADDING_VERTICAL,
+        paddingLeft: insets.left + theme.spaces.horizontal,
+        paddingRight: insets.right + theme.spaces.horizontal,
+        paddingBottom: theme.spaces.md,
+        paddingTop: navigationHeaderHeight + theme.spaces.md,
       }}
     >
       <Animated.View style={[tw`absolute inset-0`, bgAnim]}>
@@ -165,7 +164,7 @@ const TvSeriesSeasonHeader: React.FC<MediaHeaderProps> = ({
         ) : (
           <Skeleton style={[{ aspectRatio: 2 / 3 }, tw`w-24`]} />
         )}
-        <Animated.View style={[{ gap: GAP }, tw`w-full`]}>
+        <Animated.View style={[{ gap: theme.spaces.md }, tw`w-full`]}>
           {season ? (
             <Text>
               <Text style={{ color: colors.accentYellow }}>
@@ -216,7 +215,7 @@ const TvSeriesSeasonScreen = () => {
   }>();
   const { id: seriesId } = getIdFromSlug(tv_series_id);
   const { user } = useAuth();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const insets = useSafeAreaInsets();
   const formatter = useFormatter();
   const t = useTranslations();
@@ -272,8 +271,8 @@ const TvSeriesSeasonScreen = () => {
           {
             backgroundColor: colors.card,
             borderColor: colors.border,
-            marginLeft: insets.left + PADDING_HORIZONTAL,
-            marginRight: insets.right + PADDING_HORIZONTAL,
+            marginLeft: insets.left + theme.spaces.horizontal,
+            marginRight: insets.right + theme.spaces.horizontal,
           },
           tw`flex-row justify-between items-center rounded-xl h-24 gap-2 border overflow-hidden`,
         ]}
@@ -328,7 +327,7 @@ const TvSeriesSeasonScreen = () => {
         </View>
       </Animated.View>
     ),
-    [colors, season, t, formatter, insets],
+    [colors, season, t, formatter, insets, theme],
   );
 
   return (
@@ -363,9 +362,9 @@ const TvSeriesSeasonScreen = () => {
               style={[
                 tw`flex-1 items-center justify-center`,
                 {
-                  paddingLeft: insets.left + PADDING_HORIZONTAL,
-                  paddingRight: insets.right + PADDING_HORIZONTAL,
-                  paddingVertical: PADDING_VERTICAL,
+                  paddingLeft: insets.left + theme.spaces.horizontal,
+                  paddingRight: insets.right + theme.spaces.horizontal,
+                  paddingVertical: theme.spaces.md,
                 },
               ]}
             >
@@ -376,9 +375,8 @@ const TvSeriesSeasonScreen = () => {
           )
         }
         contentContainerStyle={{
-          gap: GAP,
-          paddingBottom:
-            insets.bottom + PADDING_VERTICAL + (user && season ? floatingBarHeight : 0),
+          gap: theme.spaces.md,
+          paddingBottom: insets.bottom + theme.spaces.md + (user && season ? floatingBarHeight : 0),
         }}
         keyExtractor={(item) => item.id.toString()}
         refreshing={isRefetching}
@@ -399,8 +397,8 @@ const TvSeriesSeasonScreen = () => {
             contentContainerStyle={[
               tw`items-center gap-2`,
               {
-                paddingHorizontal: PADDING_HORIZONTAL,
-                paddingVertical: PADDING_VERTICAL,
+                paddingHorizontal: theme.spaces.horizontal,
+                paddingVertical: theme.spaces.md,
               },
             ]}
           >

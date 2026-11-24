@@ -14,13 +14,6 @@ import { useState, useCallback, useMemo } from 'react';
 import { useTranslations } from 'use-intl';
 import { Text, TextProps } from '../../../../../components/ui/text';
 import AnimatedStackScreen from '../../../../../components/ui/AnimatedStackScreen';
-import {
-  BORDER_RADIUS_FULL,
-  GAP,
-  GAP_XS,
-  PADDING_HORIZONTAL,
-  PADDING_VERTICAL,
-} from '../../../../../theme/globals';
 import MovieHeader from '../../../../../components/screens/film/MovieHeader';
 import { useMovieHeaderMenu } from '../../../../../components/header-menus/useMovieHeaderMenu';
 import MovieWidgetReviews from '../../../../../components/screens/film/MovieWidgetReviews';
@@ -45,6 +38,7 @@ import ButtonUserRecoSend from '../../../../../components/buttons/ButtonUserReco
 import ButtonUserLogMovie from '../../../../../components/buttons/movies/ButtonUserLogMovie';
 
 const FilmScreen = () => {
+  const { theme } = useTheme();
   const { film_id } = useLocalSearchParams<{ film_id: string }>();
   const { id: movieId } = getIdFromSlug(film_id);
   const { user } = useAuth();
@@ -75,7 +69,7 @@ const FilmScreen = () => {
 
   const animatedContentContainerStyle = useAnimatedStyle(() => {
     return {
-      paddingBottom: withTiming(insets.bottom + PADDING_VERTICAL * 2 + floatingBarHeight.value, {
+      paddingBottom: withTiming(insets.bottom + theme.spaces.md * 2 + floatingBarHeight.value, {
         duration: 300,
       }),
     };
@@ -109,20 +103,20 @@ const FilmScreen = () => {
         {movie && (
           <View style={tw`flex-col gap-4`}>
             {/* DETAILS */}
-            <View style={{ gap: GAP }}>
-              <View style={{ gap: GAP_XS }}>
+            <View style={{ gap: theme.spaces.md }}>
+              <View style={{ gap: theme.spaces.sm }}>
                 <FilmSynopsis
                   movie={movie}
                   containerStyle={{
-                    paddingLeft: insets.left + PADDING_HORIZONTAL,
-                    paddingRight: insets.right + PADDING_HORIZONTAL,
+                    paddingLeft: insets.left + theme.spaces.horizontal,
+                    paddingRight: insets.right + theme.spaces.horizontal,
                   }}
                 />
                 <FilmOriginalTitle
                   movie={movie}
                   style={{
-                    marginLeft: insets.left + PADDING_HORIZONTAL,
-                    marginRight: insets.right + PADDING_HORIZONTAL,
+                    marginLeft: insets.left + theme.spaces.horizontal,
+                    marginRight: insets.right + theme.spaces.horizontal,
                   }}
                 />
               </View>
@@ -134,8 +128,8 @@ const FilmScreen = () => {
                 <Button
                   variant="outline"
                   style={{
-                    marginLeft: insets.left + PADDING_HORIZONTAL,
-                    marginRight: insets.right + PADDING_HORIZONTAL,
+                    marginLeft: insets.left + theme.spaces.horizontal,
+                    marginRight: insets.right + theme.spaces.horizontal,
                   }}
                 >
                   {upperFirst(t('common.messages.see_more_details'))}
@@ -150,12 +144,12 @@ const FilmScreen = () => {
                 params: { film_id: movie.id },
               }}
               containerStyle={{
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
+                paddingLeft: insets.left + theme.spaces.horizontal,
+                paddingRight: insets.right + theme.spaces.horizontal,
               }}
               labelStyle={{
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
+                paddingLeft: insets.left + theme.spaces.horizontal,
+                paddingRight: insets.right + theme.spaces.horizontal,
               }}
             />
             <MovieWidgetReviews
@@ -165,12 +159,12 @@ const FilmScreen = () => {
                 params: { film_id: movie.id },
               }}
               containerStyle={{
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
+                paddingLeft: insets.left + theme.spaces.horizontal,
+                paddingRight: insets.right + theme.spaces.horizontal,
               }}
               labelStyle={{
-                paddingLeft: insets.left + PADDING_HORIZONTAL,
-                paddingRight: insets.right + PADDING_HORIZONTAL,
+                paddingLeft: insets.left + theme.spaces.horizontal,
+                paddingRight: insets.right + theme.spaces.horizontal,
               }}
             />
           </View>
@@ -184,8 +178,8 @@ const FilmScreen = () => {
             contentContainerStyle={[
               tw`items-center gap-2`,
               {
-                paddingHorizontal: PADDING_HORIZONTAL,
-                paddingVertical: PADDING_VERTICAL,
+                paddingHorizontal: theme.spaces.horizontal,
+                paddingVertical: theme.spaces.md,
               },
             ]}
           >
@@ -260,12 +254,12 @@ const FilmOriginalTitle = ({
 };
 
 const FilmTrailers = ({ movie }: { movie: Movie }) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const t = useTranslations();
   const insets = useSafeAreaInsets();
   // UI
   const { width } = useWindowDimensions();
-  const playerWidth = width - PADDING_HORIZONTAL * 2;
+  const playerWidth = width - theme.spaces.horizontal * 2;
   const playerHeight = (playerWidth * 9) / 16;
   // States
   const [selectedTrailer, setSelectedTrailer] = useState<MovieTrailer | null>(
@@ -281,24 +275,24 @@ const FilmTrailers = ({ movie }: { movie: Movie }) => {
         <Button
           variant={item.id === selectedTrailer?.id ? 'accent-yellow' : 'outline'}
           onPress={() => setSelectedTrailer(item)}
-          style={{ borderRadius: BORDER_RADIUS_FULL }}
+          style={{ borderRadius: theme.border.radius.full }}
         >
           {label}
         </Button>
       );
     },
-    [selectedTrailer, movie.originalLanguage],
+    [selectedTrailer, movie.originalLanguage, theme],
   );
   if (!movie.trailers?.length || !selectedTrailer) return null;
   return (
-    <View style={{ gap: GAP }}>
+    <View style={{ gap: theme.spaces.md }}>
       <View
         style={[
           tw`flex-row items-center`,
           {
-            gap: GAP,
-            marginLeft: insets.left + PADDING_HORIZONTAL,
-            marginRight: insets.right + PADDING_HORIZONTAL,
+            gap: theme.spaces.md,
+            marginLeft: insets.left + theme.spaces.horizontal,
+            marginRight: insets.right + theme.spaces.horizontal,
           },
         ]}
       >
@@ -309,8 +303,8 @@ const FilmTrailers = ({ movie }: { movie: Movie }) => {
       </View>
       <View
         style={{
-          marginLeft: insets.left + PADDING_HORIZONTAL,
-          marginRight: insets.right + PADDING_HORIZONTAL,
+          marginLeft: insets.left + theme.spaces.horizontal,
+          marginRight: insets.right + theme.spaces.horizontal,
         }}
       >
         {normalizedSite === 'youtube' ? (
@@ -341,9 +335,9 @@ const FilmTrailers = ({ movie }: { movie: Movie }) => {
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
-          gap: GAP,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
+          gap: theme.spaces.md,
         }}
       />
     </View>

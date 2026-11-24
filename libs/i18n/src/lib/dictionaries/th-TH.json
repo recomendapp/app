@@ -731,7 +731,7 @@
           },
           "submit": "เข้าสู่ระบบ",
           "forgot_password": "ลืมรหัสผ่าน",
-          "wrong_credentials": "อีเมลหรือรหัสผ่านไม่ถูกต้อง"
+          "wrong_credentials": "ข้อมูลเข้าสู่ระบบหรือรหัสผ่านไม่ถูกต้อง"
         },
         "otp": {
           "password_login": "อยากเข้าสู่ระบบด้วยรหัสผ่านไหม",
@@ -777,7 +777,7 @@
         },
         "confirm_form": {
           "label": "ยืนยันรหัส",
-          "description": "ส่งรหัสยืนยันไปที่ {email} แล้ว"
+          "description": "ส่งลิงก์รีเซ็ตรหัสผ่านไปที่ {email} แล้ว"
         }
       },
       "reset_password": {

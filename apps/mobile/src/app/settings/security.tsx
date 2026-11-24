@@ -12,14 +12,15 @@ import { Stack } from 'expo-router';
 import { Text } from '../../components/ui/text';
 import { View } from '../../components/ui/view';
 import { KeyboardAwareScrollView } from '../../components/ui/KeyboardAwareScrollView';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { KeyboardToolbar } from '../../components/ui/KeyboardToolbar';
 import { useToast } from '../../components/Toast';
 import { authClient } from '../../lib/auth/client';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { USER_RULES } from '@libs/rules';
+import { useTheme } from '../../providers/ThemeProvider';
 
 const SettingsSecurityScreen = () => {
+  const { theme } = useTheme();
   const toast = useToast();
   const t = useTranslations();
   const insets = useSafeAreaInsets();
@@ -120,7 +121,7 @@ const SettingsSecurityScreen = () => {
                 variant="ghost"
                 size="fit"
                 loading={isLoading}
-                onPress={form.handleSubmit(handleSubmit)}
+                onPress={() => void form.handleSubmit(handleSubmit)()}
                 disabled={!form.formState.isValid || isLoading}
               >
                 {upperFirst(t('common.messages.save'))}
@@ -130,7 +131,7 @@ const SettingsSecurityScreen = () => {
               {
                 type: 'button',
                 label: upperFirst(t('common.messages.save')),
-                onPress: form.handleSubmit(handleSubmit),
+                onPress: () => void form.handleSubmit(handleSubmit)(),
                 tintColor: props.tintColor,
                 disabled: !form.formState.isValid || isLoading,
                 icon: {
@@ -145,11 +146,11 @@ const SettingsSecurityScreen = () => {
       />
       <KeyboardAwareScrollView
         contentContainerStyle={{
-          gap: GAP,
-          paddingTop: PADDING_VERTICAL,
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
-          paddingBottom: insets.bottom + PADDING_VERTICAL,
+          gap: theme.spaces.md,
+          paddingTop: theme.spaces.md,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
+          paddingBottom: insets.bottom + theme.spaces.md,
         }}
       >
         <Text textColor="muted" style={tw`text-sm text-justify`}>

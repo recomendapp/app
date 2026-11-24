@@ -1,4 +1,8 @@
-import { StyleSheet, View, FlatList, ViewToken, Platform } from 'react-native';
+import { StyleSheet, View, FlatList, Platform, type FlatListProps } from 'react-native';
+
+type ViewableItems = Parameters<
+  NonNullable<FlatListProps<unknown>['onViewableItemsChanged']>
+>[0]['viewableItems'];
 import React from 'react';
 import Animated, {
   useSharedValue,
@@ -10,10 +14,11 @@ import CustomButton from './components/CustomButton';
 import RenderItem from './components/RenderItem';
 import useOnboardingData, { OnboardingData } from './data';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { PADDING_VERTICAL } from '../../theme/globals';
 import { useRouter } from 'expo-router';
+import { useTheme } from '../../providers/ThemeProvider';
 
 const OnboardingScreen = () => {
+  const { theme } = useTheme();
   const flatListRef = useAnimatedRef<FlatList<OnboardingData>>();
   const x = useSharedValue(0);
   const flatListIndex = useSharedValue(0);
@@ -22,7 +27,7 @@ const OnboardingScreen = () => {
   const shouldInsetsAware = !(Platform.OS === 'ios' && router.canDismiss());
   const insets = useSafeAreaInsets();
 
-  const onViewableItemsChanged = ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+  const onViewableItemsChanged = ({ viewableItems }: { viewableItems: ViewableItems }) => {
     if (viewableItems.length > 0 && viewableItems[0].index !== null) {
       flatListIndex.value = viewableItems[0].index;
     }
@@ -55,8 +60,8 @@ const OnboardingScreen = () => {
           viewAreaCoveragePercentThreshold: 10,
         }}
         style={{
-          paddingTop: shouldInsetsAware ? insets.top + PADDING_VERTICAL : PADDING_VERTICAL,
-          paddingBottom: insets.bottom + PADDING_VERTICAL + 50,
+          paddingTop: shouldInsetsAware ? insets.top + theme.spaces.md : theme.spaces.md,
+          paddingBottom: insets.bottom + theme.spaces.md + 50,
         }}
       />
       <View

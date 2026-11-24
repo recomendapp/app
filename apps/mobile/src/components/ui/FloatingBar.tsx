@@ -10,7 +10,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useTheme } from '../../providers/ThemeProvider';
 import tw from '../../lib/tw';
-import { PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { scheduleOnRN } from 'react-native-worklets';
 import { GlassView } from 'expo-glass-effect';
@@ -55,7 +54,7 @@ export const FloatingBar = forwardRef<FloatingBarRef, FloatingBarProps>(
     ref,
   ) => {
     const insets = useSafeAreaInsets();
-    const { colors, isLiquidGlassAvailable } = useTheme();
+    const { colors, isLiquidGlassAvailable, theme } = useTheme();
 
     const shouldAnimateOnMount = initialVisible && initialAnimation;
     const isVisible = useSharedValue(initialVisible);
@@ -114,7 +113,7 @@ export const FloatingBar = forwardRef<FloatingBarRef, FloatingBarProps>(
     });
 
     const finalBottomOffset =
-      bottomOffset !== undefined ? bottomOffset : insets.bottom + PADDING_VERTICAL;
+      bottomOffset !== undefined ? bottomOffset : insets.bottom + theme.spaces.md;
 
     return (
       <Animated.View
@@ -122,8 +121,8 @@ export const FloatingBar = forwardRef<FloatingBarRef, FloatingBarProps>(
           tw`absolute left-0 right-0 items-center`,
           {
             bottom: finalBottomOffset,
-            paddingLeft: insets.left + PADDING_HORIZONTAL,
-            paddingRight: insets.right + PADDING_HORIZONTAL,
+            paddingLeft: insets.left + theme.spaces.horizontal,
+            paddingRight: insets.right + theme.spaces.horizontal,
           },
           containerStyle,
           animatedStyle,

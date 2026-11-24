@@ -22,7 +22,6 @@ import {
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import UserAvatar from '../../components/user/UserAvatar';
 import { Separator } from '../../components/ui/separator';
-import { GAP, PADDING_HORIZONTAL, PADDING_VERTICAL } from '../../theme/globals';
 import { KeyboardToolbar } from '../../components/ui/KeyboardToolbar';
 import { useToast } from '../../components/Toast';
 import { Pressable } from 'react-native';
@@ -32,8 +31,10 @@ import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 import { File as ExpoFile } from 'expo-file-system';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { USER_RULES } from '@libs/rules';
+import { useTheme } from '../../providers/ThemeProvider';
 
 const SettingsProfileScreen = () => {
+  const { theme } = useTheme();
   const { user } = useAuth();
   const toast = useToast();
   const insets = useSafeAreaInsets();
@@ -236,7 +237,7 @@ const SettingsProfileScreen = () => {
               variant="ghost"
               size="fit"
               loading={isPending}
-              onPress={form.handleSubmit(handleSubmit)}
+              onPress={() => void form.handleSubmit(handleSubmit)()}
               disabled={!canSave || isPending}
             >
               {upperFirst(t('common.messages.save'))}
@@ -246,7 +247,7 @@ const SettingsProfileScreen = () => {
             {
               type: 'button',
               label: upperFirst(t('common.messages.save')),
-              onPress: form.handleSubmit(handleSubmit),
+              onPress: () => void form.handleSubmit(handleSubmit)(),
               tintColor: props.tintColor,
               disabled: !canSave || isPending,
               icon: {
@@ -259,11 +260,11 @@ const SettingsProfileScreen = () => {
       />
       <KeyboardAwareScrollView
         contentContainerStyle={{
-          gap: GAP,
-          paddingTop: PADDING_VERTICAL,
-          paddingLeft: insets.left + PADDING_HORIZONTAL,
-          paddingRight: insets.right + PADDING_HORIZONTAL,
-          paddingBottom: insets.bottom + PADDING_VERTICAL,
+          gap: theme.spaces.md,
+          paddingTop: theme.spaces.md,
+          paddingLeft: insets.left + theme.spaces.horizontal,
+          paddingRight: insets.right + theme.spaces.horizontal,
+          paddingBottom: insets.bottom + theme.spaces.md,
         }}
       >
         <Pressable onPress={handleAvatarOptions} style={tw`items-center justify-center gap-2`}>
