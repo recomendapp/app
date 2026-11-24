@@ -12,7 +12,16 @@
           "package_name": "com.recomend.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "413826532912-t72msd9qmivj8nfd6t8plutssfmp610u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.recomend.app",
+            "certificate_hash": "7e8cca985ff85e1afbe13d6c70ddac1e177d5e8e"
+          }
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCUzDOaIqExbrtHODbOpqluPvrlnS966EY"
