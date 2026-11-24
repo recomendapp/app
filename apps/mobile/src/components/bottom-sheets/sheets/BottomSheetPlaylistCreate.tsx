@@ -109,6 +109,7 @@ const BottomSheetPlaylistCreate = forwardRef<
               placeholder={placeholder ?? upperFirst(t('pages.playlist.form.title.placeholder'))}
               autoCorrect={false}
               disabled={isPending}
+              autoFocus
               error={form.formState.errors.title?.message}
             />
           </View>
