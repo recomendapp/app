@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useLocalSearchParams, useRouter, Stack } from 'expo-router';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Link, useRouter, Stack } from 'expo-router';
 import { z } from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,7 +8,6 @@ import { useUsernameAvailability } from '../../hooks/useUsernameAvailability';
 import { Icons } from '../../constants/Icons';
 import tw from '../../lib/tw';
 import { useTheme } from '../../providers/ThemeProvider';
-import { useAuth } from '../../providers/AuthProvider';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { upperFirst } from 'lodash';
@@ -20,6 +19,7 @@ import { OAuthProviders } from '../../components/OAuth/OAuthProviders';
 import { logger } from '../../logger';
 import { authClient } from '../../lib/auth/client';
 import { makeRedirectUri } from 'expo-auth-session';
+import { issueEmailHandoverToken } from '../../lib/auth/emailHandover';
 import { MultiStepScreen } from '../../components/ui/MultistepScreen';
 import { useModalHeaderOptions } from '../../hooks/useModalHeaderOptions';
 import { useConfirmLeave } from '../../hooks/useConfirmLeave';
@@ -37,19 +37,21 @@ enum STEPS {
 // Before the verification email can be asked for again.
 const RESEND_COOLDOWN_SECONDS = 30;
 
-const verifiedSchema = z.object({
-  verified: z
-    .enum(['true', 'false'])
-    .transform((val) => val === 'true')
-    .optional()
-    .catch(false),
-});
-
-const verificationCallbackURL = () =>
-  makeRedirectUri({
-    path: '/auth/signup',
-    queryParams: { verified: 'true' },
+const verificationCallbackURL = async () => {
+  // The link comes back on an unauthenticated channel, so it carries a nonce
+  // this device issued -- see `lib/auth/emailHandover`. Failing to issue one
+  // only costs the sign-in on arrival, so the mail still goes out without it.
+  let handover: string | null = null;
+  try {
+    handover = await issueEmailHandoverToken();
+  } catch (error) {
+    logger.error('could not issue the email handover token', { error });
+  }
+  return makeRedirectUri({
+    path: '/auth/email-confirmed',
+    queryParams: handover ? { handover } : undefined,
   });
+};
 
 const SignupScreen = () => {
   const { colors, theme } = useTheme();
@@ -58,11 +60,7 @@ const SignupScreen = () => {
   const locale = useLocale();
   const t = useTranslations();
   const router = useRouter();
-  const { login } = useAuth();
   const modalHeaderOptions = useModalHeaderOptions({ forceCross: true });
-
-  const rawParams = useLocalSearchParams();
-  const { verified: isVerified } = useMemo(() => verifiedSchema.parse(rawParams), [rawParams]);
 
   /* ------------------------------- FORM SCHEMA ------------------------------ */
   const signupSchema = useMemo(
@@ -256,7 +254,7 @@ const SignupScreen = () => {
         username: data.username,
         password: data.password,
         language: locale,
-        callbackURL: verificationCallbackURL(),
+        callbackURL: await verificationCallbackURL(),
       });
       if (error) {
         const fieldError = error.code ? fieldErrorByCode[error.code] : undefined;
@@ -312,7 +310,7 @@ const SignupScreen = () => {
       setIsLoading(true);
       const { error } = await authClient.sendVerificationEmail({
         email: formGetValues('email'),
-        callbackURL: verificationCallbackURL(),
+        callbackURL: await verificationCallbackURL(),
       });
       if (error) {
         toast.error(upperFirst(t('common.messages.an_error_occurred')));
@@ -355,40 +353,6 @@ const SignupScreen = () => {
     const interval = setInterval(tick, 250);
     return () => clearInterval(interval);
   }, [cooldownEndsAt]);
-
-  const hasHandledVerification = useRef(false);
-  useEffect(() => {
-    if (!isVerified || hasHandledVerification.current) return;
-    hasHandledVerification.current = true;
-    setCurrentStep(STEPS.EMAIL_VERIFICATION);
-
-    const { email, password } = formGetValues();
-    if (email && password) {
-      // The address is verified by the time the link lands back here, so the
-      // credentials typed a moment ago are all it takes to open the session.
-      // The session cookie the deep link carries cannot be used: the expo
-      // client has no API to install one it did not fetch itself.
-      void login({ email, password })
-        .then(() =>
-          logger.metric('account:loggedIn', {
-            logContext: 'SignupForm',
-            withPassword: true,
-          }),
-        )
-        .catch((error: unknown) => {
-          // `login` has already said what went wrong.
-          logger.error('auto login after email verification error', { error });
-          handleFinish();
-        });
-      return;
-    }
-
-    // Verified from another device, or after the app was restarted: there is
-    // nothing left in the form to sign in with.
-    toast.success(upperFirst(t('common.messages.email_confirmed')), { duration: 3000 });
-    const timer = setTimeout(handleFinish, 3000);
-    return () => clearTimeout(timer);
-  }, [isVerified, formGetValues, login, handleFinish, t, toast]);
 
   return (
     <>
@@ -608,34 +572,26 @@ const SignupScreen = () => {
                 return (
                   <View style={[tw`flex-1 justify-center items-center`, { gap: theme.spaces.md }]}>
                     <Icons.Mail color={colors.foreground} size={theme.icons.sizes.xl} />
-                    {isVerified ? (
+                    <View style={[tw`items-center`, { gap: theme.spaces.sm }]}>
                       <Text variant="title" style={tw`text-center`}>
-                        {upperFirst(t('common.messages.email_confirmed'))}
+                        {t('pages.auth.signup.confirm_form.label')}
                       </Text>
-                    ) : (
-                      <>
-                        <View style={[tw`items-center`, { gap: theme.spaces.sm }]}>
-                          <Text variant="title" style={tw`text-center`}>
-                            {t('pages.auth.signup.confirm_form.label')}
-                          </Text>
-                          <Text textColor="muted" style={tw`text-center`}>
-                            {t('pages.auth.signup.confirm_form.description', {
-                              email: formGetValues('email'),
-                            })}
-                          </Text>
-                        </View>
-                        <Button
-                          variant="outline"
-                          onPress={handleResendEmail}
-                          loading={isLoading}
-                          disabled={resendIn > 0}
-                        >
-                          {resendIn > 0
-                            ? `${t('common.form.resend_email')} (${resendIn}s)`
-                            : t('common.form.resend_email')}
-                        </Button>
-                      </>
-                    )}
+                      <Text textColor="muted" style={tw`text-center`}>
+                        {t('pages.auth.signup.confirm_form.description', {
+                          email: formGetValues('email'),
+                        })}
+                      </Text>
+                    </View>
+                    <Button
+                      variant="outline"
+                      onPress={handleResendEmail}
+                      loading={isLoading}
+                      disabled={resendIn > 0}
+                    >
+                      {resendIn > 0
+                        ? `${t('common.form.resend_email')} (${resendIn}s)`
+                        : t('common.form.resend_email')}
+                    </Button>
                   </View>
                 );
 

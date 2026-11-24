@@ -303,6 +303,17 @@ const RootLayoutNav = () => {
             }}
           />
           <Stack.Screen
+            name="auth/email-confirmed"
+            options={{
+              headerShown: false,
+              gestureEnabled: false,
+              presentation: 'formSheet',
+              sheetGrabberVisible: false,
+              sheetAllowedDetents: 'fitToContents',
+              sheetInitialDetentIndex: 0,
+            }}
+          />
+          <Stack.Screen
             name="auth/forgot-password"
             options={{
               headerTitle: upperFirst(t('common.messages.forgot_password')),
