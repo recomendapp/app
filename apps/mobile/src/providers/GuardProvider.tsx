@@ -1,6 +1,8 @@
 import { createContext, use, useMemo } from 'react';
 import type { Href } from 'expo-router';
 import { useVersionGuard } from '../guards/useVersionGuard';
+import { useOnboardingGuard } from '../guards/useOnboardingGuard';
+import { useWelcomeGuard } from '../guards/useWelcomeGuard';
 import type { Guard, GuardId } from '../guards/types';
 
 type GuardContextValue = {
@@ -27,9 +29,14 @@ const GuardContext = createContext<GuardContextValue | undefined>(undefined);
  */
 const GuardProvider = ({ children }: { children: React.ReactNode }) => {
   const version = useVersionGuard();
+  const onboarding = useOnboardingGuard();
+  const welcome = useWelcomeGuard();
 
   // Order = priority.
-  const guards = useMemo<Guard[]>(() => [version], [version]);
+  const guards = useMemo<Guard[]>(
+    () => [version, onboarding, welcome],
+    [version, onboarding, welcome],
+  );
 
   const active = useMemo(() => guards.find((guard) => guard.isNeeded) ?? null, [guards]);
 

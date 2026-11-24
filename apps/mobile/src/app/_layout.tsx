@@ -15,6 +15,7 @@ import { enableFreeze, enableScreens } from 'react-native-screens';
 import { useTheme } from '../providers/ThemeProvider';
 import { useAuth } from '../providers/AuthProvider';
 import { useGuard } from '../providers/GuardProvider';
+import { useAppNudges } from '../hooks/nudges/useAppNudges';
 import { useHomeWidgetsSync } from '../hooks/useHomeWidgetsSync';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'use-intl';
@@ -39,18 +40,147 @@ const RootLayoutNav = () => {
   const t = useTranslations();
   const { user } = useAuth();
   const { activeGuard, activeRoute } = useGuard();
-  const { defaultScreenOptions, isLiquidGlassAvailable } = useTheme();
+  const { theme, defaultScreenOptions, isLiquidGlassAvailable } = useTheme();
   useHomeWidgetsSync();
+  useAppNudges();
+  // Where a reader goes when the block they are in stops being registered: the
+  // guard that holds the app now, since releasing one can hand straight over
+  // to the next, and home when none of them does. A block never reads this
+  // while it is the active one, so the two cases cannot cross.
+  const guardRedirect = activeRoute ?? '/';
   return (
     <Stack screenOptions={defaultScreenOptions}>
-      <Stack.Protected guard={activeGuard === 'version'} redirectTo="/">
+      {/* GUARD DESTINATIONS - each is registered only while its own guard holds
+          the app, and `activeRoute` below is what sends the reader here. None
+          of them is ever pushed: a push would land the screen on top of
+          whatever is on screen, and dismissing a modal from under a presented
+          one is what react-native-screens refuses outright. */}
+      <Stack.Protected guard={activeGuard === 'version'} redirectTo={guardRedirect}>
         <Stack.Screen
           name="update-required"
-          options={{ headerShown: false, gestureEnabled: false, animation: 'none' }}
+          options={{
+            headerShown: false,
+            gestureEnabled: false,
+            animation: 'fade',
+            animationDuration: theme.animations.durations.lg,
+          }}
         />
       </Stack.Protected>
-      <Stack.Protected guard={activeGuard === null} redirectTo={activeRoute ?? undefined}>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Protected guard={activeGuard === 'onboarding'} redirectTo={guardRedirect}>
+        <Stack.Screen
+          name="onboarding"
+          options={{
+            headerShown: false,
+            animation: 'slide_from_bottom',
+            animationDuration: theme.animations.durations.lg,
+          }}
+        />
+      </Stack.Protected>
+      <Stack.Protected guard={activeGuard === 'welcome'} redirectTo={guardRedirect}>
+        <Stack.Screen
+          name="welcome"
+          options={{
+            headerShown: false,
+            gestureEnabled: false,
+            animation: 'fade',
+            animationDuration: theme.animations.durations.lg,
+          }}
+        />
+      </Stack.Protected>
+      {/* AUTH - outside the block below, so signing in stays reachable while
+          the tour holds the app, which is where it sends a reader with no
+          account. A required update is the one guard that lets nobody
+          through. */}
+      <Stack.Protected guard={!user && activeGuard !== 'version'}>
+        <Stack.Screen
+          name="auth/index"
+          options={{
+            title: upperFirst(t('common.messages.welcome')),
+            headerTransparent: true,
+            headerStyle: { backgroundColor: 'transparent' },
+            presentation: 'modal',
+            animation: 'slide_from_bottom',
+            animationDuration: theme.animations.durations.lg,
+          }}
+        />
+        <Stack.Screen
+          name="auth/login/index"
+          options={{
+            headerTitle: upperFirst(t('common.messages.login')),
+            headerTransparent: true,
+            headerStyle: { backgroundColor: 'transparent' },
+            presentation: 'formSheet',
+            sheetGrabberVisible: false,
+            sheetAllowedDetents: 'fitToContents',
+            sheetInitialDetentIndex: 0,
+          }}
+        />
+        <Stack.Screen
+          name="auth/login/otp"
+          options={{
+            headerTitle: upperFirst(t('common.messages.otp')),
+            headerTransparent: true,
+            headerStyle: { backgroundColor: 'transparent' },
+            presentation: 'formSheet',
+            sheetGrabberVisible: false,
+            sheetAllowedDetents: 'fitToContents',
+            sheetInitialDetentIndex: 0,
+          }}
+        />
+        <Stack.Screen
+          name="auth/signup"
+          options={{
+            headerTitle: upperFirst(t('common.messages.signup')),
+            presentation: 'modal',
+          }}
+        />
+        <Stack.Screen
+          name="auth/email-confirmed"
+          options={{
+            headerShown: false,
+            // Nothing to dismiss by hand: it signs the reader in and the
+            // router takes it away, or it bows out on its own.
+            gestureEnabled: false,
+            presentation: 'formSheet',
+            sheetGrabberVisible: false,
+            sheetAllowedDetents: 'fitToContents',
+            sheetInitialDetentIndex: 0,
+          }}
+        />
+        <Stack.Screen
+          name="auth/forgot-password"
+          options={{
+            headerTitle: upperFirst(t('common.messages.forgot_password')),
+            headerTransparent: true,
+            headerStyle: { backgroundColor: 'transparent' },
+            presentation: 'formSheet',
+            sheetGrabberVisible: true,
+            sheetAllowedDetents: 'fitToContents',
+            sheetInitialDetentIndex: 0,
+          }}
+        />
+        <Stack.Screen
+          name="auth/reset-password"
+          options={{
+            headerTitle: upperFirst(t('common.messages.reset_your_password')),
+            headerTransparent: true,
+            headerStyle: { backgroundColor: 'transparent' },
+            presentation: 'formSheet',
+            sheetGrabberVisible: true,
+            sheetAllowedDetents: 'fitToContents',
+            sheetInitialDetentIndex: 0,
+          }}
+        />
+      </Stack.Protected>
+      <Stack.Protected guard={activeGuard === null} redirectTo={guardRedirect}>
+        <Stack.Screen
+          name="(tabs)"
+          options={{
+            headerShown: false,
+            animation: 'fade',
+            animationDuration: theme.animations.durations.lg,
+          }}
+        />
         {/* PLAYLISTS */}
         <Stack.Protected guard={!!user}>
           <Stack.Screen
@@ -255,101 +385,6 @@ const RootLayoutNav = () => {
             }}
           />
         </Stack.Protected>
-        {/* AUTH */}
-        <Stack.Protected guard={!user}>
-          <Stack.Screen
-            name="auth/index"
-            options={{
-              title: upperFirst(t('common.messages.welcome')),
-              headerTransparent: true,
-              headerStyle: { backgroundColor: 'transparent' },
-              presentation: Platform.select({
-                ios: 'modal',
-                android: 'formSheet',
-                default: 'modal',
-              }),
-            }}
-          />
-          <Stack.Screen
-            name="auth/login/index"
-            options={{
-              headerTitle: upperFirst(t('common.messages.login')),
-              headerTransparent: true,
-              headerStyle: { backgroundColor: 'transparent' },
-              presentation: 'formSheet',
-              sheetGrabberVisible: false,
-              sheetAllowedDetents: 'fitToContents',
-              sheetInitialDetentIndex: 0,
-            }}
-          />
-          <Stack.Screen
-            name="auth/login/otp"
-            options={{
-              headerTitle: upperFirst(t('common.messages.otp')),
-              headerTransparent: true,
-              headerStyle: { backgroundColor: 'transparent' },
-              presentation: 'formSheet',
-              sheetGrabberVisible: false,
-              gestureEnabled: false,
-              sheetAllowedDetents: 'fitToContents',
-              sheetInitialDetentIndex: 0,
-            }}
-          />
-          <Stack.Screen
-            name="auth/signup"
-            options={{
-              headerTitle: upperFirst(t('common.messages.signup')),
-              presentation: 'modal',
-            }}
-          />
-          <Stack.Screen
-            name="auth/email-confirmed"
-            options={{
-              headerShown: false,
-              gestureEnabled: false,
-              presentation: 'formSheet',
-              sheetGrabberVisible: false,
-              sheetAllowedDetents: 'fitToContents',
-              sheetInitialDetentIndex: 0,
-            }}
-          />
-          <Stack.Screen
-            name="auth/forgot-password"
-            options={{
-              headerTitle: upperFirst(t('common.messages.forgot_password')),
-              headerTransparent: true,
-              headerStyle: { backgroundColor: 'transparent' },
-              presentation: 'formSheet',
-              sheetGrabberVisible: false,
-              gestureEnabled: false,
-              sheetAllowedDetents: 'fitToContents',
-              sheetInitialDetentIndex: 0,
-            }}
-          />
-          <Stack.Screen
-            name="auth/reset-password"
-            options={{
-              headerTitle: upperFirst(t('common.messages.reset_your_password')),
-              headerTransparent: true,
-              headerStyle: { backgroundColor: 'transparent' },
-              presentation: 'formSheet',
-              sheetGrabberVisible: false,
-              gestureEnabled: false,
-              sheetAllowedDetents: 'fitToContents',
-              sheetInitialDetentIndex: 0,
-            }}
-          />
-        </Stack.Protected>
-        {/* WELCOME */}
-        <Stack.Protected guard={!!user}>
-          <Stack.Screen
-            name="welcome"
-            options={{
-              headerShown: false,
-              presentation: 'fullScreenModal',
-            }}
-          />
-        </Stack.Protected>
         {/* NOTIFICATIONS */}
         <Stack.Protected guard={!!user}>
           <Stack.Screen
@@ -463,11 +498,9 @@ const RootLayoutNav = () => {
             headerStyle: { backgroundColor: 'transparent' },
           }}
         />
-        <Stack.Screen name="upgrade" options={{ presentation: 'fullScreenModal' }} />
-        <Stack.Screen
-          name="onboarding"
-          options={{ headerShown: false, animation: 'slide_from_bottom', animationDuration: 250 }}
-        />
+        <Stack.Protected guard={!!user} redirectTo={{ pathname: '/auth/login' }}>
+          <Stack.Screen name="upgrade" options={{ presentation: 'fullScreenModal' }} />
+        </Stack.Protected>
       </Stack.Protected>
     </Stack>
   );
