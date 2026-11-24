@@ -43,9 +43,12 @@ const FiltersSheet = forwardRef<RNTrueSheet>((_, ref) => {
   const insets = useSafeAreaInsets();
   const t = useTranslations();
 
+  const scrollableRef = useRef<ScrollView>(null);
+
   return (
-    <TrueSheet ref={ref} detents={['auto']} scrollable>
+    <TrueSheet ref={ref} detents={['auto']} scrollableRef={scrollableRef}>
       <ScrollView
+        ref={scrollableRef}
         bounces={false}
         contentContainerStyle={{
           paddingTop: theme.spaces.md,

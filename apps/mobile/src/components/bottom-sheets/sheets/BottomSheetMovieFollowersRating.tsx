@@ -47,9 +47,12 @@ const BottomSheetMovieFollowersRating = React.forwardRef<
     }));
   }, [followersRating]);
 
+  const scrollableRef = React.useRef<FlatList<NonNullable<typeof followersRating>[number]>>(null);
+
   return (
-    <TrueSheet ref={ref} detents={detents} scrollable {...props}>
+    <TrueSheet ref={ref} detents={detents} scrollableRef={scrollableRef} {...props}>
       <FlatList
+        ref={scrollableRef}
         data={followersRating}
         renderItem={({ item }) => (
           <CardUser user={item.user!} style={tw`h-auto`}>

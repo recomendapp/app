@@ -1,5 +1,5 @@
-import { forwardRef, useCallback, useMemo } from 'react';
-import { FlashList } from '@shopify/flash-list';
+import { forwardRef, useCallback, useMemo, useRef } from 'react';
+import { FlashList, FlashListRef } from '@shopify/flash-list';
 import { Text } from '../../ui/text';
 import { Button } from '../../ui/Button';
 import TrueSheet from '../../ui/TrueSheet';
@@ -76,9 +76,12 @@ const BottomSheetSort = forwardRef<React.ComponentRef<typeof TrueSheet>, BottomS
       [closeSheet, colors, id, order],
     );
 
+    const scrollableRef = useRef<FlashListRef<(typeof items)[number]>>(null);
+
     return (
-      <TrueSheet ref={ref} scrollable {...props}>
+      <TrueSheet ref={ref} scrollableRef={scrollableRef} {...props}>
         <FlashList
+          ref={scrollableRef}
           data={items}
           contentContainerStyle={tw`pt-4`}
           bounces={false}
