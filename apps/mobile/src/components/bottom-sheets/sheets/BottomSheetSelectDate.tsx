@@ -9,7 +9,6 @@ import { useTheme } from '../../../providers/ThemeProvider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { upperFirst } from 'lodash';
 import { DateTimePicker } from '@expo/ui/community/datetime-picker';
-import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { isIOS } from '../../../platform/detection';
 
 interface BottomSheetSelectDateProps extends BottomSheetProps {
@@ -29,7 +28,6 @@ export const BottomSheetSelectDate = React.forwardRef<
   const t = useTranslations();
   const insets = useSafeAreaInsets();
 
-  const footerHeight = useSharedValue(0);
   const [selectedDate, setSelectedDate] = React.useState<Date>(defaultDate || new Date());
 
   // Handlers
@@ -40,10 +38,6 @@ export const BottomSheetSelectDate = React.forwardRef<
     }
     closeSheet(id);
   }, [closeSheet, id, onSave, selectedDate]);
-
-  const footerOffsetStyle = useAnimatedStyle(() => ({
-    height: footerHeight.value,
-  }));
 
   return (
     <TrueSheet
@@ -56,7 +50,6 @@ export const BottomSheetSelectDate = React.forwardRef<
       footer={
         <View
           style={{
-            paddingBottom: insets.bottom,
             paddingLeft: insets.left + theme.spaces.horizontal,
             paddingRight: insets.right + theme.spaces.horizontal,
             paddingTop: theme.spaces.md,
@@ -64,15 +57,7 @@ export const BottomSheetSelectDate = React.forwardRef<
             borderTopWidth: 1,
           }}
         >
-          <Button
-            onLayout={(e) => {
-              footerHeight.value = e.nativeEvent.layout.height;
-            }}
-            disabled={!selectedDate}
-            variant="outline"
-            size="lg"
-            onPress={handleSave}
-          >
+          <Button disabled={!selectedDate} variant="outline" size="lg" onPress={handleSave}>
             {saveLabel || upperFirst(t('common.messages.save'))}
           </Button>
         </View>
@@ -90,7 +75,6 @@ export const BottomSheetSelectDate = React.forwardRef<
         maximumDate={maxDate}
         themeVariant={mode === 'dark' ? 'dark' : 'light'}
       />
-      <Animated.View style={footerOffsetStyle} />
     </TrueSheet>
   );
 });

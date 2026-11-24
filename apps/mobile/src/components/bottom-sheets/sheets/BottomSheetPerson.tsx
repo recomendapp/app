@@ -14,7 +14,7 @@ import { useTranslations } from 'use-intl';
 import { Button } from '../../ui/Button';
 import { Text } from '../../ui/text';
 import BottomSheetSharePerson from './share/BottomSheetSharePerson';
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, FlashListRef } from '@shopify/flash-list';
 import { PersonCompact } from '@libs/api-js';
 import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
 import { usePinnedItem } from '../../../hooks/usePinnedItem';
@@ -103,62 +103,61 @@ const BottomSheetPerson = React.forwardRef<
     ],
   );
 
+  const scrollableRef = React.useRef<FlashListRef<(typeof items)[number]>>(null);
+
+  const header = (
+    <View
+      style={[
+        {
+          backgroundColor: isLiquidGlassAvailable ? 'transparent' : colors.muted,
+          borderColor: colors.mutedForeground,
+        },
+        tw`border-b p-4`,
+      ]}
+    >
+      <View style={tw`flex-row items-center gap-2 `}>
+        <ImageWithFallback
+          alt={person.name ?? ''}
+          source={{ uri: getTmdbImage({ path: person.profilePath, size: 'w92' }) ?? '' }}
+          style={[{ aspectRatio: 2 / 3, height: 'fit-content' }, tw.style('rounded-md w-12')]}
+          type={'person'}
+        />
+        <View style={tw`shrink`}>
+          <Text numberOfLines={2} style={tw`shrink`}>
+            {person.name}
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
+
   return (
-    <TrueSheet ref={ref} scrollable {...props}>
+    <TrueSheet ref={ref} scrollableRef={scrollableRef} header={header} {...props}>
       <FlashList
-        data={['header', ...items]}
+        ref={scrollableRef}
+        data={items}
         contentContainerStyle={{ paddingTop: theme.spaces.md }}
         bounces={false}
         keyExtractor={(_, i) => i.toString()}
-        stickyHeaderIndices={[0]}
-        renderItem={({ item }) =>
-          typeof item === 'string' ? (
-            <View
-              style={[
-                {
-                  backgroundColor: isLiquidGlassAvailable ? 'transparent' : colors.muted,
-                  borderColor: colors.mutedForeground,
-                },
-                tw`border-b p-4`,
-              ]}
-            >
-              <View style={tw`flex-row items-center gap-2 `}>
-                <ImageWithFallback
-                  alt={person.name ?? ''}
-                  source={{ uri: getTmdbImage({ path: person.profilePath, size: 'w92' }) ?? '' }}
-                  style={[
-                    { aspectRatio: 2 / 3, height: 'fit-content' },
-                    tw.style('rounded-md w-12'),
-                  ]}
-                  type={'person'}
-                />
-                <View style={tw`shrink`}>
-                  <Text numberOfLines={2} style={tw`shrink`}>
-                    {person.name}
-                  </Text>
-                </View>
-              </View>
-            </View>
-          ) : (
-            <Button
-              variant="ghost"
-              icon={item.icon}
-              iconProps={{
-                color: colors.mutedForeground,
-              }}
-              disabled={item.disabled}
-              style={tw`justify-start h-auto py-4`}
-              onPress={() => {
-                if (item.closeOnPress || item.closeOnPress === undefined) {
-                  closeSheet(id);
-                }
-                item.onPress?.();
-              }}
-            >
-              {item.label}
-            </Button>
-          )
-        }
+        renderItem={({ item }) => (
+          <Button
+            variant="ghost"
+            icon={item.icon}
+            iconProps={{
+              color: colors.mutedForeground,
+            }}
+            disabled={item.disabled}
+            style={tw`justify-start h-auto py-4`}
+            onPress={() => {
+              if (item.closeOnPress || item.closeOnPress === undefined) {
+                closeSheet(id);
+              }
+              item.onPress?.();
+            }}
+          >
+            {item.label}
+          </Button>
+        )}
         indicatorStyle={mode === 'dark' ? 'white' : 'black'}
         nestedScrollEnabled
       />

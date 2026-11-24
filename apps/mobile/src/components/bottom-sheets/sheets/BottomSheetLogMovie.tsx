@@ -1,4 +1,4 @@
-import { forwardRef, useMemo } from 'react';
+import { forwardRef, useMemo, useRef } from 'react';
 import tw from '../../../lib/tw';
 import { Icons } from '../../../constants/Icons';
 import { usePathname, useRouter } from 'expo-router';
@@ -11,7 +11,7 @@ import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
 import { Button } from '../../ui/Button';
 import { useAuth } from '../../../providers/AuthProvider';
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, FlashListRef } from '@shopify/flash-list';
 import { UserMovieWithUserMovie, UserSummary } from '@libs/api-js';
 import BottomSheetShareReviewMovie from './share/BottomSheetShareReviewMovie';
 
@@ -130,14 +130,16 @@ export const BottomSheetLogMovie = forwardRef<
     ],
   );
 
+  const scrollableRef = useRef<FlashListRef<NonNullable<typeof items>[number]>>(null);
+
   return (
-    <TrueSheet ref={ref} scrollable {...props}>
+    <TrueSheet ref={ref} scrollableRef={scrollableRef} {...props}>
       <FlashList
+        ref={scrollableRef}
         data={items}
         contentContainerStyle={{ paddingTop: theme.spaces.md }}
         bounces={false}
         keyExtractor={(_, i) => i.toString()}
-        stickyHeaderIndices={[0]}
         renderItem={({ item }) => (
           <Button
             variant="ghost"

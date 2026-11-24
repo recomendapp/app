@@ -14,7 +14,7 @@ import { Button } from '../../ui/Button';
 import { Text } from '../../ui/text';
 import UserAvatar from '../../user/UserAvatar';
 import BottomSheetShareUser from './share/BottomSheetShareUser';
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, FlashListRef } from '@shopify/flash-list';
 import { UserSummary } from '@libs/api-js';
 
 interface BottomSheetUserProps extends BottomSheetProps {
@@ -71,56 +71,58 @@ const BottomSheetUser = React.forwardRef<
     [user, additionalItemsTop, additionalItemsBottom, openSheet, router, t, pathname],
   );
 
+  const scrollableRef = React.useRef<FlashListRef<(typeof items)[number]>>(null);
+
+  const header = (
+    <View
+      style={[
+        {
+          backgroundColor: isLiquidGlassAvailable ? 'transparent' : colors.muted,
+          borderColor: colors.mutedForeground,
+        },
+        tw`border-b p-4`,
+      ]}
+    >
+      <View style={tw`flex-row items-center gap-2 `}>
+        <UserAvatar full_name={user.name} avatar_url={user.avatar} style={tw`w-12 h-12`} />
+        <View style={tw`shrink`}>
+          <Text numberOfLines={2} style={tw`shrink`}>
+            {user.name}
+          </Text>
+          <Text numberOfLines={1} style={[{ color: colors.mutedForeground }, tw`shrink`]}>
+            @{user.username}
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
+
   return (
-    <TrueSheet ref={ref} scrollable {...props}>
+    <TrueSheet ref={ref} scrollableRef={scrollableRef} header={header} {...props}>
       <FlashList
-        data={['header', ...items]}
+        ref={scrollableRef}
+        data={items}
         bounces={false}
         keyExtractor={(_, i) => i.toString()}
-        stickyHeaderIndices={[0]}
-        renderItem={({ item }) =>
-          typeof item === 'string' ? (
-            <View
-              style={[
-                {
-                  backgroundColor: isLiquidGlassAvailable ? 'transparent' : colors.muted,
-                  borderColor: colors.mutedForeground,
-                },
-                tw`border-b p-4`,
-              ]}
-            >
-              <View style={tw`flex-row items-center gap-2 `}>
-                <UserAvatar full_name={user.name} avatar_url={user.avatar} style={tw`w-12 h-12`} />
-                <View style={tw`shrink`}>
-                  <Text numberOfLines={2} style={tw`shrink`}>
-                    {user.name}
-                  </Text>
-                  <Text numberOfLines={1} style={[{ color: colors.mutedForeground }, tw`shrink`]}>
-                    @{user.username}
-                  </Text>
-                </View>
-              </View>
-            </View>
-          ) : (
-            <Button
-              variant="ghost"
-              icon={item.icon}
-              iconProps={{
-                color: colors.mutedForeground,
-              }}
-              disabled={item.disabled}
-              style={tw`justify-start h-auto py-4`}
-              onPress={() => {
-                if (item.closeOnPress || item.closeOnPress === undefined) {
-                  closeSheet(id);
-                }
-                item.onPress();
-              }}
-            >
-              {item.label}
-            </Button>
-          )
-        }
+        renderItem={({ item }) => (
+          <Button
+            variant="ghost"
+            icon={item.icon}
+            iconProps={{
+              color: colors.mutedForeground,
+            }}
+            disabled={item.disabled}
+            style={tw`justify-start h-auto py-4`}
+            onPress={() => {
+              if (item.closeOnPress || item.closeOnPress === undefined) {
+                closeSheet(id);
+              }
+              item.onPress();
+            }}
+          >
+            {item.label}
+          </Button>
+        )}
         indicatorStyle={mode === 'dark' ? 'white' : 'black'}
         nestedScrollEnabled
       />

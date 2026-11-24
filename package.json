@@ -439,7 +439,7 @@
     "@grpc/proto-loader": "^0.8.0",
     "@hookform/resolvers": "^5.9.1",
     "@legendapp/list": "3.3.5",
-    "@lodev09/react-native-true-sheet": "^3.11.11",
+    "@lodev09/react-native-true-sheet": "^4.1.2",
     "@maplibre/maplibre-react-native": "^11.5.1",
     "@modelcontextprotocol/core": "2.1.0",
     "@modelcontextprotocol/node": "2.1.0",

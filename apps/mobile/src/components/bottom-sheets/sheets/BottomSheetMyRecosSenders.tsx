@@ -5,7 +5,7 @@ import { Text } from '../../ui/text';
 import { upperFirst } from 'lodash';
 import { View } from 'react-native';
 import { CardUser } from '../../cards/CardUser';
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, FlashListRef } from '@shopify/flash-list';
 import TrueSheet from '../../ui/TrueSheet';
 import { BottomSheetProps } from '../BottomSheetManager';
 import { useTranslations } from 'use-intl';
@@ -43,6 +43,8 @@ const BottomSheetMyRecosSenders = React.forwardRef<
     },
     [colors.muted, colors.background],
   );
+  const scrollableRef = React.useRef<FlashListRef<NonNullable<typeof comments>[number]>>(null);
+
   return (
     <TrueSheet
       ref={ref}
@@ -60,10 +62,11 @@ const BottomSheetMyRecosSenders = React.forwardRef<
           {upperFirst(t('common.messages.reco', { count: comments.length }))}
         </Text>
       }
-      scrollable
+      scrollableRef={scrollableRef}
       {...props}
     >
       <FlashList
+        ref={scrollableRef}
         data={comments}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}

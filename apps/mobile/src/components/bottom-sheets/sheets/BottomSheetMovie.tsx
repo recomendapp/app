@@ -17,7 +17,7 @@ import { Button } from '../../ui/Button';
 import { Text } from '../../ui/text';
 import { useAuth } from '../../../providers/AuthProvider';
 import BottomSheetShareMovie from './share/BottomSheetShareMovie';
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, FlashListRef } from '@shopify/flash-list';
 import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
 import { LogMovieWithMovieNoReview, MovieCompact, UserSummary } from '@libs/api-js';
 import { usePinnedItem } from '../../../hooks/usePinnedItem';
@@ -29,16 +29,14 @@ interface BottomSheetMovieProps extends BottomSheetProps {
   additionalItemsBottom?: Item[];
 }
 
-type Item =
-  | {
-      icon: LucideIcon;
-      label: string;
-      onPress?: () => void;
-      submenu?: Item[];
-      closeOnPress?: boolean;
-      disabled?: boolean;
-    }
-  | string;
+type Item = {
+  icon: LucideIcon;
+  label: string;
+  onPress?: () => void;
+  submenu?: Item[];
+  closeOnPress?: boolean;
+  disabled?: boolean;
+};
 
 const BottomSheetMovie = React.forwardRef<
   React.ComponentRef<typeof TrueSheet>,
@@ -65,7 +63,6 @@ const BottomSheetMovie = React.forwardRef<
   // States
   const items: Item[] = React.useMemo(
     () => [
-      'header',
       ...additionalItemsTop,
       {
         icon: Icons.Share,
@@ -181,41 +178,39 @@ const BottomSheetMovie = React.forwardRef<
     ],
   );
 
+  const header = (
+    <View
+      style={[
+        {
+          backgroundColor: isLiquidGlassAvailable ? 'transparent' : colors.muted,
+          borderColor: colors.mutedForeground,
+        },
+        tw`border-b p-4`,
+      ]}
+    >
+      <View style={tw`flex-row items-center gap-2 `}>
+        <ImageWithFallback
+          alt={movie.title ?? ''}
+          source={{ uri: getTmdbImage({ path: movie.posterPath, size: 'w342' }) ?? '' }}
+          style={[{ aspectRatio: 2 / 3, height: 'fit-content' }, tw.style('rounded-md w-12')]}
+          type={'movie'}
+        />
+        <View style={tw`shrink`}>
+          <Text numberOfLines={2} style={tw`shrink`}>
+            {movie.title}
+          </Text>
+          {movie.directors && movie.directors.length > 0 && (
+            <Text numberOfLines={1} style={[{ color: colors.mutedForeground }, tw`shrink`]}>
+              {movie.directors?.map((director) => director.name).join(', ')}
+            </Text>
+          )}
+        </View>
+      </View>
+    </View>
+  );
+
   const renderItem = useCallback(
     ({ item }: { item: Item }) => {
-      if (typeof item === 'string') {
-        return (
-          <View
-            style={[
-              {
-                backgroundColor: isLiquidGlassAvailable ? 'transparent' : colors.muted,
-                borderColor: colors.mutedForeground,
-              },
-              tw`border-b p-4`,
-            ]}
-          >
-            <View style={tw`flex-row items-center gap-2 `}>
-              <ImageWithFallback
-                alt={movie.title ?? ''}
-                source={{ uri: getTmdbImage({ path: movie.posterPath, size: 'w342' }) ?? '' }}
-                style={[{ aspectRatio: 2 / 3, height: 'fit-content' }, tw.style('rounded-md w-12')]}
-                type={'movie'}
-              />
-              <View style={tw`shrink`}>
-                <Text numberOfLines={2} style={tw`shrink`}>
-                  {movie.title}
-                </Text>
-                {movie.directors && movie.directors.length > 0 && (
-                  <Text numberOfLines={1} style={[{ color: colors.mutedForeground }, tw`shrink`]}>
-                    {movie.directors?.map((director) => director.name).join(', ')}
-                  </Text>
-                )}
-              </View>
-            </View>
-          </View>
-        );
-      }
-
       return (
         <Button
           variant="ghost"
@@ -236,23 +231,32 @@ const BottomSheetMovie = React.forwardRef<
         </Button>
       );
     },
-    [colors.mutedForeground, colors.muted, closeSheet, id, movie, isLiquidGlassAvailable],
+    [colors.mutedForeground, closeSheet, id],
   );
 
+  const scrollableRef = React.useRef<FlashListRef<NonNullable<typeof items>[number]>>(null);
+  const creditsScrollableRef =
+    React.useRef<FlashListRef<NonNullable<typeof movie.directors>[number]>>(null);
+
   return (
-    <TrueSheet ref={ref} scrollable {...props}>
+    <TrueSheet ref={ref} scrollableRef={scrollableRef} header={header} {...props}>
       <FlashList
+        ref={scrollableRef}
         data={items}
         bounces={false}
         keyExtractor={(_, i) => i.toString()}
-        stickyHeaderIndices={[0]}
         renderItem={renderItem}
         indicatorStyle={mode === 'dark' ? 'white' : 'black'}
         nestedScrollEnabled
       />
       {movie.directors && (
-        <BottomSheetDefaultView ref={BottomSheetMainCreditsRef} id={`${id}-credits`} scrollable>
+        <BottomSheetDefaultView
+          ref={BottomSheetMainCreditsRef}
+          id={`${id}-credits`}
+          scrollableRef={creditsScrollableRef}
+        >
           <FlashList
+            ref={creditsScrollableRef}
             data={movie.directors || []}
             bounces={false}
             renderItem={({ item }) => (

@@ -17,7 +17,7 @@ import { Button } from '../../ui/Button';
 import { Text } from '../../ui/text';
 import { useAuth } from '../../../providers/AuthProvider';
 import BottomSheetShareTvSeries from './share/BottomSheetShareTvSeries';
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, FlashListRef } from '@shopify/flash-list';
 import { getTmdbImage } from '../../../lib/tmdb/getTmdbImage';
 import { LogTvSeriesWithTvSeriesNoReview, TvSeriesCompact, UserSummary } from '@libs/api-js';
 import { usePinnedItem } from '../../../hooks/usePinnedItem';
@@ -29,16 +29,14 @@ interface BottomSheetTvSeriesProps extends BottomSheetProps {
   additionalItemsBottom?: Item[];
 }
 
-type Item =
-  | {
-      icon: LucideIcon;
-      label: string;
-      onPress?: () => void;
-      submenu?: Item[];
-      closeOnPress?: boolean;
-      disabled?: boolean;
-    }
-  | string;
+type Item = {
+  icon: LucideIcon;
+  label: string;
+  onPress?: () => void;
+  submenu?: Item[];
+  closeOnPress?: boolean;
+  disabled?: boolean;
+};
 
 const BottomSheetTvSeries = React.forwardRef<
   React.ComponentRef<typeof TrueSheet>,
@@ -65,7 +63,6 @@ const BottomSheetTvSeries = React.forwardRef<
   // States
   const items: Item[] = React.useMemo(
     () => [
-      'header',
       ...additionalItemsTop,
       {
         icon: Icons.Share,
@@ -185,41 +182,39 @@ const BottomSheetTvSeries = React.forwardRef<
     ],
   );
 
+  const header = (
+    <View
+      style={[
+        {
+          backgroundColor: isLiquidGlassAvailable ? 'transparent' : colors.muted,
+          borderColor: colors.mutedForeground,
+        },
+        tw`border-b p-4`,
+      ]}
+    >
+      <View style={tw`flex-row items-center gap-2 `}>
+        <ImageWithFallback
+          alt={tvSeries.name ?? ''}
+          source={{ uri: getTmdbImage({ path: tvSeries.posterPath, size: 'w342' }) ?? '' }}
+          style={[{ aspectRatio: 2 / 3, height: 'fit-content' }, tw.style('rounded-md w-12')]}
+          type={'tv_series'}
+        />
+        <View style={tw`shrink`}>
+          <Text numberOfLines={2} style={tw`shrink`}>
+            {tvSeries.name}
+          </Text>
+          {tvSeries.createdBy && tvSeries.createdBy.length > 0 && (
+            <Text numberOfLines={1} style={[{ color: colors.mutedForeground }, tw`shrink`]}>
+              {tvSeries.createdBy?.map((creator) => creator.name).join(', ')}
+            </Text>
+          )}
+        </View>
+      </View>
+    </View>
+  );
+
   const renderItem = useCallback(
     ({ item }: { item: Item }) => {
-      if (typeof item === 'string') {
-        return (
-          <View
-            style={[
-              {
-                backgroundColor: isLiquidGlassAvailable ? 'transparent' : colors.muted,
-                borderColor: colors.mutedForeground,
-              },
-              tw`border-b p-4`,
-            ]}
-          >
-            <View style={tw`flex-row items-center gap-2 `}>
-              <ImageWithFallback
-                alt={tvSeries.name ?? ''}
-                source={{ uri: getTmdbImage({ path: tvSeries.posterPath, size: 'w342' }) ?? '' }}
-                style={[{ aspectRatio: 2 / 3, height: 'fit-content' }, tw.style('rounded-md w-12')]}
-                type={'tv_series'}
-              />
-              <View style={tw`shrink`}>
-                <Text numberOfLines={2} style={tw`shrink`}>
-                  {tvSeries.name}
-                </Text>
-                {tvSeries.createdBy && tvSeries.createdBy.length > 0 && (
-                  <Text numberOfLines={1} style={[{ color: colors.mutedForeground }, tw`shrink`]}>
-                    {tvSeries.createdBy?.map((creator) => creator.name).join(', ')}
-                  </Text>
-                )}
-              </View>
-            </View>
-          </View>
-        );
-      }
-
       return (
         <Button
           variant="ghost"
@@ -240,23 +235,32 @@ const BottomSheetTvSeries = React.forwardRef<
         </Button>
       );
     },
-    [colors.mutedForeground, colors.muted, closeSheet, id, tvSeries, isLiquidGlassAvailable],
+    [colors.mutedForeground, closeSheet, id],
   );
 
+  const scrollableRef = React.useRef<FlashListRef<NonNullable<typeof items>[number]>>(null);
+  const creditsScrollableRef =
+    React.useRef<FlashListRef<NonNullable<typeof tvSeries.createdBy>[number]>>(null);
+
   return (
-    <TrueSheet ref={ref} scrollable {...props}>
+    <TrueSheet ref={ref} scrollableRef={scrollableRef} header={header} {...props}>
       <FlashList
+        ref={scrollableRef}
         data={items}
         bounces={false}
-        stickyHeaderIndices={[0]}
         keyExtractor={(_, i) => i.toString()}
         renderItem={renderItem}
         indicatorStyle={mode === 'dark' ? 'white' : 'black'}
         nestedScrollEnabled
       />
       {tvSeries.createdBy && (
-        <BottomSheetDefaultView ref={BottomSheetMainCreditsRef} id={`${id}-credits`} scrollable>
+        <BottomSheetDefaultView
+          ref={BottomSheetMainCreditsRef}
+          id={`${id}-credits`}
+          scrollableRef={creditsScrollableRef}
+        >
           <FlashList
+            ref={creditsScrollableRef}
             data={tvSeries.createdBy}
             bounces={false}
             renderItem={({ item }) => (

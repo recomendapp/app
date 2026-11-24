@@ -19,8 +19,8 @@ import BottomSheetSharePlaylist from './share/BottomSheetSharePlaylist';
 import { View } from '../../ui/view';
 import ButtonActionPlaylistLike from '../../buttons/ButtonActionPlaylistLike';
 import ButtonActionPlaylistSaved from '../../buttons/ButtonActionPlaylistSaved';
-import { forwardRef, useMemo } from 'react';
-import { FlashList } from '@shopify/flash-list';
+import { forwardRef, useMemo, useRef } from 'react';
+import { FlashList, FlashListRef } from '@shopify/flash-list';
 import { Playlist, UserSummary } from '@libs/api-js';
 import {
   usePlaylistDeleteMutation,
@@ -261,69 +261,71 @@ const BottomSheetPlaylist = forwardRef<
     ],
   );
 
+  const scrollableRef = useRef<FlashListRef<(typeof items)[number]>>(null);
+
+  const header = (
+    <View
+      style={[
+        {
+          backgroundColor: isLiquidGlassAvailable ? 'transparent' : colors.muted,
+          borderColor: colors.mutedForeground,
+          gap: theme.spaces.md,
+        },
+        tw`flex-row items-center justify-between border-b p-4`,
+      ]}
+    >
+      <View style={[tw`flex-row items-center`, { gap: theme.spaces.md }]}>
+        <ImageWithFallback
+          alt={playlist.title}
+          source={{ uri: playlist.poster ?? '' }}
+          style={[{ aspectRatio: 1 / 1 }, tw.style('rounded-md w-12')]}
+          type={'playlist'}
+        />
+        <View>
+          <Text numberOfLines={2}>{playlist.title}</Text>
+          {owner && (
+            <Text textColor="muted" numberOfLines={1}>
+              {t('common.messages.by_name', { name: owner.username })}
+            </Text>
+          )}
+        </View>
+      </View>
+      <View style={tw`flex-row items-center`}>
+        <ButtonActionPlaylistLike playlist={playlist} />
+        <ButtonActionPlaylistSaved playlist={playlist} />
+      </View>
+    </View>
+  );
+
   return (
-    <TrueSheet ref={ref} scrollable {...props}>
+    <TrueSheet ref={ref} scrollableRef={scrollableRef} header={header} {...props}>
       <FlashList
-        data={['header', ...items]}
+        ref={scrollableRef}
+        data={items}
         bounces={false}
         keyExtractor={(_, i) => i.toString()}
-        stickyHeaderIndices={[0]}
-        renderItem={({ item }) =>
-          typeof item === 'string' ? (
-            <View
-              style={[
-                {
-                  backgroundColor: isLiquidGlassAvailable ? 'transparent' : colors.muted,
-                  borderColor: colors.mutedForeground,
-                  gap: theme.spaces.md,
-                },
-                tw`flex-row items-center justify-between border-b p-4`,
-              ]}
-            >
-              <View style={[tw`flex-row items-center`, { gap: theme.spaces.md }]}>
-                <ImageWithFallback
-                  alt={playlist.title}
-                  source={{ uri: playlist.poster ?? '' }}
-                  style={[{ aspectRatio: 1 / 1 }, tw.style('rounded-md w-12')]}
-                  type={'playlist'}
-                />
-                <View>
-                  <Text numberOfLines={2}>{playlist.title}</Text>
-                  {owner && (
-                    <Text textColor="muted" numberOfLines={1}>
-                      {t('common.messages.by_name', { name: owner.username })}
-                    </Text>
-                  )}
-                </View>
-              </View>
-              <View style={tw`flex-row items-center`}>
-                <ButtonActionPlaylistLike playlist={playlist} />
-                <ButtonActionPlaylistSaved playlist={playlist} />
-              </View>
-            </View>
-          ) : (
-            <Button
-              variant="ghost"
-              icon={item.icon}
-              iconProps={{
-                color: item.destructive ? colors.destructive : colors.mutedForeground,
-              }}
-              disabled={item.disabled}
-              style={[tw`justify-start h-auto py-4`]}
-              textStyle={{
-                color: item.destructive ? colors.destructive : colors.foreground,
-              }}
-              onPress={() => {
-                if (item.closeSheet === undefined || item.closeSheet === true) {
-                  closeSheet(id);
-                }
-                item.onPress?.();
-              }}
-            >
-              {item.label}
-            </Button>
-          )
-        }
+        renderItem={({ item }) => (
+          <Button
+            variant="ghost"
+            icon={item.icon}
+            iconProps={{
+              color: item.destructive ? colors.destructive : colors.mutedForeground,
+            }}
+            disabled={item.disabled}
+            style={[tw`justify-start h-auto py-4`]}
+            textStyle={{
+              color: item.destructive ? colors.destructive : colors.foreground,
+            }}
+            onPress={() => {
+              if (item.closeSheet === undefined || item.closeSheet === true) {
+                closeSheet(id);
+              }
+              item.onPress?.();
+            }}
+          >
+            {item.label}
+          </Button>
+        )}
         indicatorStyle={mode === 'dark' ? 'white' : 'black'}
         nestedScrollEnabled
       />
