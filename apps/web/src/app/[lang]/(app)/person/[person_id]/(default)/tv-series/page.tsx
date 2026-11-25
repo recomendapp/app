@@ -1,6 +1,6 @@
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getTranslations } from 'next-intl/server';
-import { truncate } from 'lodash';
+import { truncate, upperFirst } from 'lodash';
 import { siteConfig } from '@/config/site';
 import { generateLocalizedAlternates, withSubPath } from '@/lib/i18n/routing';
 import { enforceCanonicalSlug } from '@/lib/seo/canonical-slug';
@@ -88,6 +88,7 @@ export default async function TvSeriesPage(props: {
   }>;
 }) {
   const { lang, person_id } = await props.params;
+  const t = await getTranslations({ locale: lang });
   const { id } = getIdFromSlug(person_id);
   const searchParams = await props.searchParams;
   const [facets, person] = await Promise.all([getPersonTvSeriesFacets(id), getPerson(lang, id)]);
@@ -108,7 +109,10 @@ export default async function TvSeriesPage(props: {
     job: job,
   });
 
-  if (page > tvSeries.meta.total_pages) {
+  // A page past the end is sent back to the first one. Nothing to show has no
+  // pages at all, though, and page 1 is past the end of zero: the first page
+  // would redirect to itself, which the browser reports as a redirect loop.
+  if (tvSeries.meta.total_pages > 0 && page > tvSeries.meta.total_pages) {
     return redirect({ href: `/person/${person_id}/tv-series`, locale: lang });
   }
 
@@ -126,13 +130,15 @@ export default async function TvSeriesPage(props: {
               department={department}
               job={job}
             />
-            <Pagination
-              page={page}
-              perPage={tvSeries.meta.per_page}
-              total={tvSeries.meta.total_results}
-              searchParams={new URLSearchParams(searchParams as Record<string, string>)}
-              className="@md/person-tv-series:mx-0 @md/person-tv-series:w-fit"
-            />
+            {tvSeries.meta.total_results > 0 && (
+              <Pagination
+                page={page}
+                perPage={tvSeries.meta.per_page}
+                total={tvSeries.meta.total_results}
+                searchParams={new URLSearchParams(searchParams as Record<string, string>)}
+                className="@md/person-tv-series:mx-0 @md/person-tv-series:w-fit"
+              />
+            )}
           </div>
           <ActiveFilters department={department} job={job} />
         </div>
@@ -148,30 +154,38 @@ export default async function TvSeriesPage(props: {
 				job: job,
 			}}
 			/> */}
-        <div
-          className={` gap-2
-				${
-          display == 'row'
-            ? 'flex flex-col'
-            : 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-8 2xl:grid-cols-10'
-        }
-			`}
-        >
-          {tvSeries.data.map(({ tvSeries }, index) => (
-            <CardTvSeries
-              key={index}
-              variant={display === 'grid' ? 'poster' : 'row'}
-              tvSeries={tvSeries}
-              className="w-full"
-            />
-          ))}
-        </div>
-        <Pagination
-          page={page}
-          perPage={tvSeries.meta.per_page}
-          total={tvSeries.meta.total_results}
-          searchParams={new URLSearchParams(searchParams as Record<string, string>)}
-        />
+        {tvSeries.data.length === 0 ? (
+          <div className="text-center text-muted-foreground">
+            {upperFirst(t('common.messages.no_tv_series'))}
+          </div>
+        ) : (
+          <div
+            className={` gap-2
+  				${
+            display == 'row'
+              ? 'flex flex-col'
+              : 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-8 2xl:grid-cols-10'
+          }
+  			`}
+          >
+            {tvSeries.data.map(({ tvSeries }, index) => (
+              <CardTvSeries
+                key={index}
+                variant={display === 'grid' ? 'poster' : 'row'}
+                tvSeries={tvSeries}
+                className="w-full"
+              />
+            ))}
+          </div>
+        )}
+        {tvSeries.meta.total_results > 0 && (
+          <Pagination
+            page={page}
+            perPage={tvSeries.meta.per_page}
+            total={tvSeries.meta.total_results}
+            searchParams={new URLSearchParams(searchParams as Record<string, string>)}
+          />
+        )}
       </div>
     </div>
   );

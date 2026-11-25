@@ -1,6 +1,6 @@
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getTranslations } from 'next-intl/server';
-import { truncate } from 'lodash';
+import { truncate, upperFirst } from 'lodash';
 import { Pagination } from './_components/Pagination';
 import { Filters } from './_components/Filters';
 import { Metadata } from 'next';
@@ -86,6 +86,7 @@ export default async function PersonFilmsPage(props: {
   }>;
 }) {
   const { lang, person_id } = await props.params;
+  const t = await getTranslations({ locale: lang });
   const { id } = getIdFromSlug(person_id);
   const searchParams = await props.searchParams;
   const [facets, person] = await Promise.all([getPersonFilmsFacets(id), getPerson(lang, id)]);
@@ -106,7 +107,10 @@ export default async function PersonFilmsPage(props: {
     job: job,
   });
 
-  if (page > movies.meta.total_pages) {
+  // A page past the end is sent back to the first one. Nothing to show has no
+  // pages at all, though, and page 1 is past the end of zero: the first page
+  // would redirect to itself, which the browser reports as a redirect loop.
+  if (movies.meta.total_pages > 0 && page > movies.meta.total_pages) {
     return redirect({ href: `/person/${person_id}/films`, locale: lang });
   }
 
@@ -124,40 +128,50 @@ export default async function PersonFilmsPage(props: {
               department={department}
               job={job}
             />
-            <Pagination
-              page={page}
-              perPage={movies.meta.per_page}
-              total={movies.meta.total_results}
-              searchParams={new URLSearchParams(searchParams as Record<string, string>)}
-              className="@md/person-films:mx-0 @md/person-films:w-fit"
-            />
+            {movies.meta.total_results > 0 && (
+              <Pagination
+                page={page}
+                perPage={movies.meta.per_page}
+                total={movies.meta.total_results}
+                searchParams={new URLSearchParams(searchParams as Record<string, string>)}
+                className="@md/person-films:mx-0 @md/person-films:w-fit"
+              />
+            )}
           </div>
           <ActiveFilters department={department} job={job} />
         </div>
-        <div
-          className={` gap-2
-					${
-            display == 'row'
-              ? 'flex flex-col'
-              : 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-8 2xl:grid-cols-10'
-          }
-				`}
-        >
-          {movies.data.map(({ movie }, index) => (
-            <CardMovie
-              key={index}
-              variant={display === 'grid' ? 'poster' : 'row'}
-              movie={movie}
-              className="w-full"
-            />
-          ))}
-        </div>
-        <Pagination
-          page={page}
-          perPage={movies.meta.per_page}
-          total={movies.meta.total_results}
-          searchParams={new URLSearchParams(searchParams as Record<string, string>)}
-        />
+        {movies.data.length === 0 ? (
+          <div className="text-center text-muted-foreground">
+            {upperFirst(t('common.messages.no_films'))}
+          </div>
+        ) : (
+          <div
+            className={` gap-2
+  					${
+              display == 'row'
+                ? 'flex flex-col'
+                : 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-8 2xl:grid-cols-10'
+            }
+  				`}
+          >
+            {movies.data.map(({ movie }, index) => (
+              <CardMovie
+                key={index}
+                variant={display === 'grid' ? 'poster' : 'row'}
+                movie={movie}
+                className="w-full"
+              />
+            ))}
+          </div>
+        )}
+        {movies.meta.total_results > 0 && (
+          <Pagination
+            page={page}
+            perPage={movies.meta.per_page}
+            total={movies.meta.total_results}
+            searchParams={new URLSearchParams(searchParams as Record<string, string>)}
+          />
+        )}
       </div>
     </div>
   );
