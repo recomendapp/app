@@ -162,6 +162,8 @@ const UserCollectionTvSeries = () => {
           paddingLeft: insets.left + theme.spaces.horizontal,
           paddingRight: insets.right + theme.spaces.horizontal,
           paddingBottom: insets.bottom + theme.spaces.md,
+          // So the empty state has the screen to centre itself in.
+          flexGrow: 1,
         }}
         maintainVisibleContentPosition={false}
         keyExtractor={(item) => item.id.toString()}
