@@ -50,11 +50,12 @@ const RootLayoutNav = () => {
   const guardRedirect = activeRoute ?? '/';
   return (
     <Stack screenOptions={defaultScreenOptions}>
-      {/* GUARD DESTINATIONS - each is registered only while its own guard holds
-          the app, and `activeRoute` below is what sends the reader here. None
-          of them is ever pushed: a push would land the screen on top of
+      {/* GUARD DESTINATIONS - `activeRoute` below is what sends a reader to
+          one of these, never a push: a push would land the screen on top of
           whatever is on screen, and dismissing a modal from under a presented
-          one is what react-native-screens refuses outright. */}
+          one is what react-native-screens refuses outright. The ones a reader
+          has no business reaching on their own are registered only while their
+          guard holds the app. */}
       <Stack.Protected guard={activeGuard === 'version'} redirectTo={guardRedirect}>
         <Stack.Screen
           name="update-required"
@@ -66,16 +67,19 @@ const RootLayoutNav = () => {
           }}
         />
       </Stack.Protected>
-      <Stack.Protected guard={activeGuard === 'onboarding'} redirectTo={guardRedirect}>
-        <Stack.Screen
-          name="onboarding"
-          options={{
-            headerShown: false,
-            animation: 'slide_from_bottom',
-            animationDuration: theme.animations.durations.lg,
-          }}
-        />
-      </Stack.Protected>
+      {/* The tour is the one destination that stays registered: a first launch
+          is held on it by the block below going away, not by a guard of its
+          own, and it is worth seeing again. It is also the only one a reader
+          may push, which is why its own screen sees itself out -- the guard
+          releasing is no longer what takes it off screen. */}
+      <Stack.Screen
+        name="onboarding"
+        options={{
+          headerShown: false,
+          animation: 'slide_from_bottom',
+          animationDuration: theme.animations.durations.lg,
+        }}
+      />
       <Stack.Protected guard={activeGuard === 'welcome'} redirectTo={guardRedirect}>
         <Stack.Screen
           name="welcome"

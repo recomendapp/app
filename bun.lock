@@ -951,7 +951,7 @@
     "@grpc/proto-loader": "^0.8.0",
     "@hey-api/openapi-ts": "0.91.0",
     "@hookform/resolvers": "^5.9.1",
-    "@legendapp/list": "3.3.5",
+    "@legendapp/list": "3.9.0",
     "@lodev09/react-native-true-sheet": "^4.1.2",
     "@maplibre/maplibre-react-native": "^11.5.1",
     "@modelcontextprotocol/core": "2.1.0",
@@ -2280,7 +2280,7 @@
 
     "@kwsites/file-exists": ["@kwsites/file-exists@1.1.1", "", { "dependencies": { "debug": "4.4.3" } }, "sha512-m9/5YGR18lIwxSFDwfE3oA7bWuq9kdau6ugN4H2rJeyhFQZcG9AgSHkQtSD15a8WvTgfz9aikZMrKPHvbpqFiw=="],
 
-    "@legendapp/list": ["@legendapp/list@3.3.5", "", { "dependencies": { "use-sync-external-store": "1.6.0" }, "peerDependencies": { "react": "*", "react-dom": "*", "react-native": "*" }, "optionalPeers": ["react-dom", "react-native"] }, "sha512-XTsLYtpg41SVb5uLBYA+YcDSA3w0tgoPq/W8ZggQ2tx+3lrC/rf+ehTP9KYHea9oFaZIuePAgzACs5/auVMJlQ=="],
+    "@legendapp/list": ["@legendapp/list@3.9.0", "", { "dependencies": { "use-sync-external-store": "^1.5.0" }, "peerDependencies": { "react": "*", "react-dom": "*", "react-native": "*" }, "optionalPeers": ["react-dom", "react-native"] }, "sha512-gMLdgX0TzCtD1VGlrPZ423Npq7CtkQK8oWNRWvtO0AYkAFt5MP+knzaxnojbifHW82817QVc5lmit9JU2xKsaQ=="],
 
     "@libs/api-js": ["@libs/api-js@workspace:libs/api-js"],
 
