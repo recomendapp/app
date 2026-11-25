@@ -87,7 +87,7 @@ const UserCollectionTvSeries = () => {
         };
       }),
     }),
-    [sortBy.value, sortByOptions, sortOrder, t],
+    [setSortBy, setSortOrder, sortBy.value, sortByOptions, sortOrder, t],
   );
 
   const listRef = useRef<LegendListRef>(null);
