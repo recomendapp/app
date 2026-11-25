@@ -1,8 +1,7 @@
 import { ActivityIndicator } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { GestureDetector, GestureStateManager, usePanGesture } from 'react-native-gesture-handler';
 import Animated, {
   cancelAnimation,
-  runOnJS,
   scrollTo,
   useAnimatedReaction,
   useAnimatedStyle,
@@ -11,6 +10,7 @@ import Animated, {
   withDecay,
   withTiming,
 } from 'react-native-reanimated';
+import { scheduleOnRN } from 'react-native-worklets';
 import type { MaterialTopTabBarProps } from 'expo-router/js-top-tabs';
 import { useTheme } from '../../../../providers/ThemeProvider';
 import ProfileHeader from './ProfileHeader';
@@ -69,58 +69,61 @@ const ProfileTabsOverlay = (tabBarProps: MaterialTopTabBarProps) => {
     },
   );
 
-  const pan = Gesture.Pan()
+  const pan = usePanGesture({
     // Claimed by hand: the pinned row and the tab buttons are touch targets of
     // their own, and a gesture that activated on its own would take every touch
     // that lands on them. This one only claims a touch once it has moved
     // further down than sideways, so taps and the pinned row's own scrolling
     // are left alone.
-    .manualActivation(true)
-    .onTouchesDown((event) => {
+    manualActivation: true,
+    onTouchesDown: (event) => {
       const touch = event.changedTouches[0];
-      touchStart.value = { x: touch.x, y: touch.y };
-    })
-    .onTouchesMove((event, manager) => {
+      touchStart.set({ x: touch.x, y: touch.y });
+    },
+    onTouchesMove: (event) => {
       const touch = event.changedTouches[0];
       const sideways = Math.abs(touch.x - touchStart.value.x);
       const vertical = Math.abs(touch.y - touchStart.value.y);
 
       if (vertical > DRAG_SLOP && vertical > sideways) {
-        manager.activate();
+        GestureStateManager.activate(event.handlerTag);
       } else if (sideways > SIDEWAYS_SLOP) {
-        manager.fail();
+        GestureStateManager.fail(event.handlerTag);
       }
-    })
-    .onStart((event) => {
+    },
+    onActivate: (event) => {
       cancelAnimation(dragOffset);
-      dragOrigin.value = Math.max(focusedOffset.value, 0);
-      dragOffset.value = dragOrigin.value;
-      dragStart.value = event.translationY;
-      isDragging.value = true;
-    })
-    .onUpdate((event) => {
+      dragOrigin.set(Math.max(focusedOffset.value, 0));
+      dragOffset.set(dragOrigin.value);
+      dragStart.set(event.translationY);
+      isDragging.set(true);
+    },
+    onUpdate: (event) => {
       const travelled = event.translationY - dragStart.value;
       const next = dragOrigin.value - travelled;
 
       // Past the top there is nothing left to scroll, so the drag turns into a
       // pull: a programmatic scroll cannot enter the list's own bounce.
-      dragOffset.value = Math.max(0, next);
-      dragPull.value = next < 0 ? -next * PULL_RESISTANCE : 0;
-    })
-    .onEnd((event) => {
-      if (dragPull.value >= PULL_THRESHOLD) runOnJS(requestRefresh)();
-      dragPull.value = withTiming(0, { duration: 200 });
+      dragOffset.set(Math.max(0, next));
+      dragPull.set(next < 0 ? -next * PULL_RESISTANCE : 0);
+    },
+    onDeactivate: (event) => {
+      if (dragPull.value >= PULL_THRESHOLD) scheduleOnRN(requestRefresh);
+      dragPull.set(withTiming(0, { duration: 200 }));
 
-      dragOffset.value = withDecay(
-        { velocity: -event.velocityY, clamp: [0, Math.max(collapseRange.value, 0)] },
-        () => {
-          isDragging.value = false;
-          // A drag that brought the header back has to reach the other lists
-          // too, the same way the end of a scroll does.
-          runOnJS(syncOffsets)();
-        },
+      dragOffset.set(
+        withDecay(
+          { velocity: -event.velocityY, clamp: [0, Math.max(collapseRange.value, 0)] },
+          () => {
+            isDragging.set(false);
+            // A drag that brought the header back has to reach the other lists
+            // too, the same way the end of a scroll does.
+            scheduleOnRN(syncOffsets);
+          },
+        ),
       );
-    });
+    },
+  });
 
   // Two ways down, which never happen at once: the list's own bounce, which
   // moves the list by itself, and `contentShift`, which is what the lists are
