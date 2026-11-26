@@ -1,12 +1,5 @@
 import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Animated, {
-  useAnimatedRef,
-  useDerivedValue,
-  useSharedValue,
-  withTiming,
-  type AnimatedRef,
-  type SharedValue,
-} from 'react-native-reanimated';
+import { useDerivedValue, useSharedValue, type SharedValue } from 'react-native-reanimated';
 import type { Profile } from '@libs/api-js';
 import type { ContextMenuItem } from '../../../ui/context-menu';
 
@@ -16,17 +9,10 @@ type ProfileTabMenu = { title?: string; items: ContextMenuItem[] };
 /** The tab routes of `user/[username]/(profile)`, in the order they are shown. */
 const PROFILE_TABS = ['index', 'films', 'tv-series', 'playlists'] as const;
 
-/** How far the reader has to pull past the top to ask for a refresh. */
-const PULL_THRESHOLD = 80;
-
-/** The room the overlay keeps for the spinner while a refresh runs. */
-const REFRESH_BAND = 44;
-
 type ProfileTab = (typeof PROFILE_TABS)[number];
 
 type ProfileTabHandle = {
   scrollToOffset: (params: { offset: number; animated?: boolean }) => void;
-  refresh: () => Promise<unknown> | unknown;
 };
 
 type ProfileTabsContextValue = {
@@ -48,8 +34,6 @@ type ProfileTabsContextValue = {
   setTabMenu: (tab: ProfileTab, menu: ProfileTabMenu | undefined) => void;
   /** Each tab's own scroll offset, so every tab keeps its place. */
   offsets: Record<ProfileTab, SharedValue<number>>;
-  /** The scrollables themselves, so a drag on the header can scroll one. */
-  scrollRefs: Record<ProfileTab, AnimatedRef<Animated.ScrollView>>;
   focusedTab: SharedValue<ProfileTab>;
   /** The focused tab's offset -- what the header follows. */
   focusedOffset: SharedValue<number>;
@@ -57,28 +41,15 @@ type ProfileTabsContextValue = {
   collapseRange: SharedValue<number>;
   /** Everything the overlay covers: the profile header and the tab bar. */
   overlayHeight: number;
-  /** How far a drag on the header has pulled past the top of the list. */
-  dragPull: SharedValue<number>;
-  /**
-   * What the focused list has to move by to stay with the header: a pull the
-   * list never saw, plus the room the spinner keeps while a refresh runs. The
-   * list's own bounce is not in here -- it moves itself.
-   */
-  contentShift: SharedValue<number>;
-  isRefreshing: SharedValue<boolean>;
   measureOverlay: (height: number) => void;
   measureTabBar: (height: number) => void;
   registerTab: (tab: ProfileTab, handle: ProfileTabHandle | null) => void;
   focusTab: (tab: ProfileTab) => void;
-  /** Called when a list is let go, to decide whether the pull asked for a refresh. */
-  releasePull: () => void;
   /**
    * Brings the other tabs to where the focused one left the header, so every
    * tab agrees on how much of it is showing.
    */
   syncOffsets: (offset?: number) => void;
-  /** Refreshes the focused tab, for a pull the list itself never saw. */
-  requestRefresh: () => void;
 };
 
 const ProfileTabsContext = createContext<ProfileTabsContextValue | undefined>(undefined);
@@ -108,11 +79,6 @@ const ProfileTabsProvider = ({
   const tvSeriesOffset = useSharedValue(0);
   const playlistsOffset = useSharedValue(0);
 
-  const indexRef = useAnimatedRef<Animated.ScrollView>();
-  const filmsRef = useAnimatedRef<Animated.ScrollView>();
-  const tvSeriesRef = useAnimatedRef<Animated.ScrollView>();
-  const playlistsRef = useAnimatedRef<Animated.ScrollView>();
-
   const offsets = useMemo<Record<ProfileTab, SharedValue<number>>>(
     () => ({
       index: indexOffset,
@@ -121,16 +87,6 @@ const ProfileTabsProvider = ({
       playlists: playlistsOffset,
     }),
     [indexOffset, filmsOffset, tvSeriesOffset, playlistsOffset],
-  );
-
-  const scrollRefs = useMemo<Record<ProfileTab, AnimatedRef<Animated.ScrollView>>>(
-    () => ({
-      index: indexRef,
-      films: filmsRef,
-      'tv-series': tvSeriesRef,
-      playlists: playlistsRef,
-    }),
-    [indexRef, filmsRef, tvSeriesRef, playlistsRef],
   );
 
   const focusedTab = useSharedValue<ProfileTab>('index');
@@ -151,14 +107,6 @@ const ProfileTabsProvider = ({
     setMenus((current) => (current[tab] === menu ? current : { ...current, [tab]: menu }));
   }, []);
 
-  const dragPull = useSharedValue(0);
-  const isRefreshing = useSharedValue(false);
-  // While a refresh runs, the header stays pushed down, the way a native pull
-  // keeps its spinner on screen after the finger is gone.
-  const refreshBand = useDerivedValue(() =>
-    withTiming(isRefreshing.value ? REFRESH_BAND : 0, { duration: 180 }),
-  );
-  const contentShift = useDerivedValue(() => dragPull.value + refreshBand.value);
   const handles = useRef(new Map<ProfileTab, ProfileTabHandle>());
 
   const measureOverlay = useCallback((height: number) => {
@@ -227,19 +175,6 @@ const ProfileTabsProvider = ({
     [collapseRange, focusedTab, offsets, syncOffsets],
   );
 
-  const requestRefresh = useCallback(() => {
-    const handle = handles.current.get(focusedTab.get());
-    if (isRefreshing.get() || !handle) return;
-
-    isRefreshing.set(true);
-    Promise.resolve(handle.refresh()).finally(() => isRefreshing.set(false));
-  }, [focusedTab, isRefreshing]);
-
-  const releasePull = useCallback(() => {
-    if (offsets[focusedTab.get()].get() > -PULL_THRESHOLD) return;
-    requestRefresh();
-  }, [focusedTab, offsets, requestRefresh]);
-
   const value = useMemo<ProfileTabsContextValue>(
     () => ({
       profile,
@@ -248,21 +183,15 @@ const ProfileTabsProvider = ({
       menus,
       setTabMenu,
       offsets,
-      scrollRefs,
       focusedTab,
       focusedOffset,
       collapseRange,
       overlayHeight,
-      dragPull,
-      contentShift,
-      isRefreshing,
       measureOverlay,
       measureTabBar,
       registerTab,
       focusTab,
-      releasePull,
       syncOffsets,
-      requestRefresh,
     }),
     [
       profile,
@@ -271,21 +200,15 @@ const ProfileTabsProvider = ({
       menus,
       setTabMenu,
       offsets,
-      scrollRefs,
       focusedTab,
       focusedOffset,
       collapseRange,
       overlayHeight,
-      dragPull,
-      contentShift,
-      isRefreshing,
       measureOverlay,
       measureTabBar,
       registerTab,
       focusTab,
-      releasePull,
       syncOffsets,
-      requestRefresh,
     ],
   );
 
@@ -309,13 +232,11 @@ const useProfileTab = (
   tab: ProfileTab,
   handle: {
     scrollToOffset: ProfileTabHandle['scrollToOffset'];
-    refresh: () => unknown;
     /** Memoize it: the tab bar re-renders whenever its identity changes. */
     menu?: ProfileTabMenu;
   },
 ) => {
-  const { offsets, scrollRefs, overlayHeight, registerTab, releasePull, syncOffsets, setTabMenu } =
-    useProfileTabs();
+  const { offsets, overlayHeight, registerTab, syncOffsets, setTabMenu } = useProfileTabs();
 
   const { menu } = handle;
   useEffect(() => {
@@ -330,28 +251,16 @@ const useProfileTab = (
     latest.current = handle;
   });
   useEffect(() => {
-    registerTab(tab, {
-      scrollToOffset: (params) => latest.current.scrollToOffset(params),
-      refresh: () => latest.current.refresh(),
-    });
+    registerTab(tab, { scrollToOffset: (params) => latest.current.scrollToOffset(params) });
     return () => registerTab(tab, null);
   }, [registerTab, tab]);
 
   return {
     scrollOffset: offsets[tab],
-    scrollRef: scrollRefs[tab],
     overlayHeight,
-    releasePull,
     syncOffsets,
   };
 };
 
-export {
-  PROFILE_TABS,
-  PULL_THRESHOLD,
-  REFRESH_BAND,
-  ProfileTabsProvider,
-  useProfileTab,
-  useProfileTabs,
-};
+export { PROFILE_TABS, ProfileTabsProvider, useProfileTab, useProfileTabs };
 export type { ProfileTab, ProfileTabMenu };

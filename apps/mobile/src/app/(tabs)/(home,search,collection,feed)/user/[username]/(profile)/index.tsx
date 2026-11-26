@@ -1,5 +1,4 @@
-import { useCallback, useMemo, useRef } from 'react';
-import { RefreshControl } from 'react-native';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { AnimatedLegendList } from '@legendapp/list/reanimated';
 import type { LegendListRef } from '@legendapp/list/react-native';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -14,7 +13,6 @@ import { CardFeedLogTvSeries } from '../../../../../../components/cards/feed/Car
 import { CardFeedPlaylistLike } from '../../../../../../components/cards/feed/CardFeedPlaylistLike';
 import { CardFeedReviewMovieLike } from '../../../../../../components/cards/feed/CardFeedReviewMovieLike';
 import { CardFeedReviewTvSeriesLike } from '../../../../../../components/cards/feed/CardFeedReviewTvSeriesLike';
-import ProfileTabContent from '../../../../../../components/screens/user/profile/ProfileTabContent';
 import {
   useProfileTab,
   useProfileTabs,
@@ -32,8 +30,9 @@ const ProfileFeedScreen = () => {
   const { colors, theme } = useTheme();
   const { profile, refreshProfile } = useProfileTabs();
 
-  const { data, isLoading, isError, isRefetching, refetch, fetchNextPage, hasNextPage } =
-    useInfiniteQuery(userFeedInfiniteOptions({ userId: profile?.id }));
+  const { data, isLoading, isError, refetch, fetchNextPage, hasNextPage } = useInfiniteQuery(
+    userFeedInfiniteOptions({ userId: profile?.id }),
+  );
   const feed = useMemo(() => data?.pages.flatMap((page) => page.data) ?? [], [data]);
 
   const refresh = useCallback(
@@ -41,15 +40,24 @@ const ProfileFeedScreen = () => {
     [refetch, refreshProfile],
   );
 
+  // Only a pull by hand turns the indicator on. `isRefetching` is true for any
+  // refetch -- a tab coming back into focus, a query going stale -- and the
+  // control would then show itself already spinning, so the next small drag
+  // would read as a refresh that has just finished.
+  const [isPulling, setIsPulling] = useState(false);
+  const onPullToRefresh = useCallback(async () => {
+    setIsPulling(true);
+    try {
+      await refresh();
+    } finally {
+      setIsPulling(false);
+    }
+  }, [refresh]);
+
   const listRef = useRef<LegendListRef>(null);
-  const { scrollOffset, scrollRef, overlayHeight, releasePull, syncOffsets } = useProfileTab(
-    'index',
-    {
-      scrollToOffset: ({ offset, animated }) =>
-        listRef.current?.scrollToOffset({ offset, animated }),
-      refresh,
-    },
-  );
+  const { scrollOffset, overlayHeight, syncOffsets } = useProfileTab('index', {
+    scrollToOffset: ({ offset, animated }) => listRef.current?.scrollToOffset({ offset, animated }),
+  });
 
   const renderItem = useCallback(
     ({ item }: { item: FeedItem }) => {
@@ -78,55 +86,49 @@ const ProfileFeedScreen = () => {
   );
 
   return (
-    <ProfileTabContent>
-      <AnimatedLegendList
-        ref={listRef}
-        sharedValues={{ scrollOffset }}
-        refScrollView={scrollRef}
-        scrollIndicatorInsets={{ top: overlayHeight, bottom: insets.bottom }}
-        automaticallyAdjustsScrollIndicatorInsets={false}
-        data={feed}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        ListEmptyComponent={
-          <View style={tw`flex-1 items-center justify-center`}>
-            {isLoading ? (
-              <Icons.Loader />
-            ) : isError ? (
-              <CardError />
-            ) : (
-              <CardEmpty icon={'⚡️'} label={t('common.messages.this_user_has_no_activity')} />
-            )}
-          </View>
-        }
-        refreshControl={
-          isAndroid ? (
-            <RefreshControl
-              refreshing={isRefetching}
-              onRefresh={refresh}
-              progressViewOffset={overlayHeight}
-            />
-          ) : undefined
-        }
-        onScrollEndDrag={() => {
-          releasePull();
-          syncOffsets();
-        }}
-        onMomentumScrollEnd={() => syncOffsets()}
-        onEndReached={() => hasNextPage && fetchNextPage()}
-        onEndReachedThreshold={0.3}
-        maintainVisibleContentPosition={false}
-        contentContainerStyle={{
-          gap: theme.spaces.md,
-          paddingTop: overlayHeight + theme.spaces.md,
-          paddingLeft: insets.left + theme.spaces.horizontal,
-          paddingRight: insets.right + theme.spaces.horizontal,
-          paddingBottom: insets.bottom + theme.spaces.md,
-          flexGrow: 1,
-        }}
-        nestedScrollEnabled
-      />
-    </ProfileTabContent>
+    <AnimatedLegendList
+      ref={listRef}
+      sharedValues={{ scrollOffset }}
+      scrollIndicatorInsets={{ top: overlayHeight, bottom: insets.bottom }}
+      automaticallyAdjustsScrollIndicatorInsets={false}
+      data={feed}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id.toString()}
+      ListEmptyComponent={
+        <View style={tw`flex-1 items-center justify-center`}>
+          {isLoading ? (
+            <Icons.Loader />
+          ) : isError ? (
+            <CardError />
+          ) : (
+            <CardEmpty icon={'⚡️'} label={t('common.messages.this_user_has_no_activity')} />
+          )}
+        </View>
+      }
+      // The list adds its own top padding to the indicator's offset. On iOS
+      // that would drop the indicator below the profile header, so the padding
+      // is cancelled and it sits at the top of the list, coming into view in
+      // the gap the header leaves as it follows the bounce down. Android has
+      // no bounce and nothing moves, so the padding is what keeps its circle
+      // from coming down behind the header.
+      progressViewOffset={isAndroid ? 0 : -(overlayHeight + theme.spaces.md)}
+      refreshing={isPulling}
+      onRefresh={onPullToRefresh}
+      onScrollEndDrag={() => syncOffsets()}
+      onMomentumScrollEnd={() => syncOffsets()}
+      onEndReached={() => hasNextPage && fetchNextPage()}
+      onEndReachedThreshold={0.3}
+      maintainVisibleContentPosition={false}
+      contentContainerStyle={{
+        gap: theme.spaces.md,
+        paddingTop: overlayHeight + theme.spaces.md,
+        paddingLeft: insets.left + theme.spaces.horizontal,
+        paddingRight: insets.right + theme.spaces.horizontal,
+        paddingBottom: insets.bottom + theme.spaces.md,
+        flexGrow: 1,
+      }}
+      nestedScrollEnabled
+    />
   );
 };
 

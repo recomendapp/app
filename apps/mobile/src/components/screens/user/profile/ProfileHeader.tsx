@@ -37,8 +37,12 @@ const ProfileHeader = ({
     [profile?.username, router, t],
   );
   return (
-    <View style={tw`gap-2 py-4`}>
+    // Touches fall through to the list underneath, so a drag anywhere but on
+    // a control of its own scrolls it -- natively, with the bounce and the
+    // refresh that belong to it. `box-none` lets the controls keep theirs.
+    <View pointerEvents="box-none" style={tw`gap-2 py-4`}>
       <View
+        pointerEvents="box-none"
         style={[
           tw`flex-row gap-4 shrink-0 items-start justify-between`,
           {
@@ -47,19 +51,21 @@ const ProfileHeader = ({
           },
         ]}
       >
-        <UserAvatar
-          {...(!skeleton
-            ? {
-                avatar_url: profile.avatar,
-                full_name: profile.name,
-              }
-            : {
-                skeleton: true,
-              })}
-          style={tw`w-24 h-24 rounded-full`}
-        />
-        <View style={tw`flex-1 gap-2`}>
-          <View style={tw`flex-row items-center justify-between gap-4`}>
+        <View pointerEvents="none">
+          <UserAvatar
+            {...(!skeleton
+              ? {
+                  avatar_url: profile.avatar,
+                  full_name: profile.name,
+                }
+              : {
+                  skeleton: true,
+                })}
+            style={tw`w-24 h-24 rounded-full`}
+          />
+        </View>
+        <View pointerEvents="box-none" style={tw`flex-1 gap-2`}>
+          <View pointerEvents="box-none" style={tw`flex-row items-center justify-between gap-4`}>
             {!skeleton ? (
               <Text style={tw`font-semibold`} numberOfLines={3}>
                 {profile.name}
@@ -67,7 +73,7 @@ const ProfileHeader = ({
             ) : (
               <Skeleton style={tw`w-12 h-5`} />
             )}
-            <View style={tw`flex-row items-center gap-4`}>
+            <View pointerEvents="box-none" style={tw`flex-row items-center gap-4`}>
               {routesFollow.map((item, index) => (
                 <Pressable key={index} style={tw`gap-0.5`} onPress={item.onPress}>
                   {!skeleton ? (
@@ -79,7 +85,7 @@ const ProfileHeader = ({
               ))}
             </View>
           </View>
-          <View>
+          <View pointerEvents="none">
             {profile?.bio && (
               <Text style={tw`text-sm`} numberOfLines={3}>
                 {profile.bio}
