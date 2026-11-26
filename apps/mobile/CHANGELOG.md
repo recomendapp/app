@@ -1,5 +1,21 @@
 # mobile
 
+## [1.8.0](https://github.com/recomendapp/app/compare/mobile@v1.7.0...mobile@v1.8.0) (2026-11-26)
+
+
+### Features
+
+* **auth:** hand the verified email's session over to the app ([#97](https://github.com/recomendapp/app/issues/97)) ([e51275c](https://github.com/recomendapp/app/commit/e51275cc1ee4a19ad68dba59c95f1cab667e0665))
+* **mobile:** move to Expo SDK 58 and rebuild the auth flow on form sheets ([#92](https://github.com/recomendapp/app/issues/92)) ([b2c9790](https://github.com/recomendapp/app/commit/b2c9790c18975c44e6b173efe869cd68cfc3a022))
+* **mobile:** rebuild the user profile as tabs under a shared collapsing header ([#102](https://github.com/recomendapp/app/issues/102)) ([00a5eed](https://github.com/recomendapp/app/commit/00a5eed2d942661102ccc88693473010660ec542))
+* **repo:** 43 locales, per-language fallbacks and a translation CI gate ([#87](https://github.com/recomendapp/app/issues/87)) ([99438d7](https://github.com/recomendapp/app/commit/99438d78b5c3e8c2fa3bdfe28c803c7e85a43a95))
+
+
+### Bug Fixes
+
+* **auth:** stop a sign-in from aborting the app, and redirect gates instead of pushing them ([#99](https://github.com/recomendapp/app/issues/99)) ([f72261e](https://github.com/recomendapp/app/commit/f72261ed30fc6b5cb51e1f82cdbe8783a397a5ce))
+* **mobile:** give the profile the system's own scrolling ([#104](https://github.com/recomendapp/app/issues/104)) ([4a4f775](https://github.com/recomendapp/app/commit/4a4f7757ef32c2b68618c685e10f0995874e153a))
+
 ## [1.7.0](https://github.com/recomendapp/app/compare/mobile@v1.6.0...mobile@v1.7.0) (2026-10-11)
 
 
